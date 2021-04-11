@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import { useFullscreen } from '@vueuse/core'
+import { isDark, toggleDark } from '~/logic'
+import { useNavigateControls } from '~/logic/controls'
+
+const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
+const { hasNext, hasPrev, prev, next } = useNavigateControls()
+</script>
+
+<template>
+  <nav class="opacity-25 py-4 px-4 transition right-4 bottom-4 rounded text-2xl flex gap-4 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
+    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+      <carbon:arrow-left />
+    </button>
+
+    <button class="icon-btn" :class="{ disabled: !hasNext }" @click="next">
+      <carbon:arrow-right />
+    </button>
+
+    <button class="icon-btn" @click="toggleFullscreen">
+      <carbon:minimize v-if="isFullscreen" />
+      <carbon:maximize v-else />
+    </button>
+
+    <button class="icon-btn" @click="toggleDark">
+      <carbon-moon v-if="isDark" />
+      <carbon-sun v-else />
+    </button>
+  </nav>
+</template>
