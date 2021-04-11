@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useFullscreen } from '@vueuse/core'
-import { isDark, toggleDark } from '~/logic'
-import { useNavigateControls } from '~/logic/controls'
+import { isDark, toggleDark, useNavigateControls } from '~/logic'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const { hasNext, hasPrev, prev, next } = useNavigateControls()

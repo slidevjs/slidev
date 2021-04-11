@@ -3,8 +3,7 @@
   "scripts": {
     "dev": "vite --port 3333 --open",
     "build": "cross-env NODE_ENV=production vite build",
-    "preview": "vite preview",
-    "preview-https": "serve dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@vueuse/core": "^4.8.1",
@@ -23,12 +22,9 @@
     "@types/nprogress": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@vitejs/plugin-vue": "^1.2.1",
-    "@vue/compiler-sfc": "^3.0.11",
-    "@vue/server-renderer": "^3.0.11",
     "cross-env": "^7.0.3",
     "eslint": "^7.24.0",
     "fs-extra": "^9.1.0",
-    "https-localhost": "^4.6.4",
     "markdown-it-prism": "^2.1.6",
     "pnpm": "^6.0.1",
     "typescript": "^4.2.4",
