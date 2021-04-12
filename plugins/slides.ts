@@ -20,15 +20,19 @@ function parse(raw: string) {
     if (line === '---')
       dividers += 1
 
-    if (dividers === 3) {
-      pages.push(lines.slice(start, i).join('\n'))
+    const isHardDivider = line === '------'
+
+    if (dividers >= 3 || isHardDivider) {
+      pages.push(lines.slice(start, isHardDivider ? i - 1 : i).join('\n'))
       dividers = 1
-      start = i
+      start = isHardDivider ? i + 1 : i
     }
   })
 
   if (start !== lines.length - 1)
     pages.push(lines.slice(start).join('\n'))
+
+  pages.push('---\nlayout: end\n---')
 
   return pages
 }

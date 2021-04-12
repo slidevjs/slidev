@@ -10,8 +10,7 @@ Pattens and tips to write good composable functions for Vue.
 Anthony Fu
 </div>
 
----
----
+------
 
 # Markdown
 
@@ -24,9 +23,7 @@ Anthony Fu
   - Prism syntax highlighting
   - Built-in Moncoa Editor
 
----
----
-
+------
 
 # Table
 
@@ -36,8 +33,7 @@ Anthony Fu
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 
----
----
+------
 
 # Code Snippet Example
 
@@ -58,8 +54,7 @@ import { useFullscreen } from '@vueuse/core'
 </template>
 ```
 
----
----
+------
 
 # Monaco Example
 
@@ -67,13 +62,8 @@ Live coding in your presentation! 😎
 
 <Monaco />
 
----
----
+------
 
 # Twitter Example
 
 <Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />
-
----
-layout: end
----
