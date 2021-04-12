@@ -1,6 +1,6 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef } from 'vue'
 import { Fn, useMagicKeys, whenever } from '@vueuse/core'
-import { Router, RouteRecordRaw } from 'vue-router'
+import { Router } from 'vue-router'
 
 export interface NavigateControls {
   next: Fn
@@ -12,8 +12,9 @@ export interface NavigateControls {
 
 export const NavigateControlsInjection = Symbol('navigate-controls') as InjectionKey<NavigateControls>
 
-export function createNavigateControls(router: Router, routes: RouteRecordRaw[]) {
+export function createNavigateControls(router: Router) {
   const route = router.currentRoute
+  const routes = router.options.routes.filter(i => !i.redirect)
   const path = computed(() => route.value.path)
 
   const counter = ref(parseInt(path.value.split(/\//g)[1]) || 0)
@@ -27,12 +28,12 @@ export function createNavigateControls(router: Router, routes: RouteRecordRaw[])
 
   function next() {
     counter.value = Math.min(routes.length - 1, counter.value + 1)
-    router.push(`/${counter.value.toString().padStart(2, '0')}`)
+    router.push(`/${counter.value}`)
   }
 
   function prev() {
     counter.value = Math.max(0, counter.value - 1)
-    router.push(`/${counter.value.toString().padStart(2, '0')}`)
+    router.push(`/${counter.value}`)
   }
 
   const { space, right, left } = useMagicKeys()

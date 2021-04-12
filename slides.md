@@ -1,3 +1,18 @@
+---
+layout: cover
+---
+
+# Composable Vue
+
+Pattens and tips to write good composable functions for Vue.
+
+<div class="mt-5">
+Anthony Fu
+</div>
+
+---
+---
+
 # Code Snippet Example
 
 It, just works
@@ -19,4 +34,11 @@ import { useFullscreen } from '@vueuse/core'
 </template>
 ```
 
-</Transform> 
+</Transform>
+
+---
+---
+
+# Twitter Example
+
+<Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />

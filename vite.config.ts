@@ -1,15 +1,12 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import fs from 'fs-extra'
-import matter from 'gray-matter'
 import Vue from '@vitejs/plugin-vue'
-import Pages from 'vite-plugin-pages'
-import Layouts from 'vite-plugin-vue-layouts'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
+import { createSlidesLoader } from './plugins/loader'
 
 export default defineConfig({
   resolve: {
@@ -22,25 +19,8 @@ export default defineConfig({
       include: [/\.vue$/, /\.md$/],
     }),
 
-    Pages({
-      extensions: ['vue', 'md'],
-      extendRoute(route) {
-        const path = resolve(__dirname, route.component.slice(1))
-        const md = fs.readFileSync(path, 'utf-8')
-        const { data } = matter(md)
-        route.meta = Object.assign(route.meta || {}, data)
-
-        return route
-      },
-      importMode: () => 'sync',
-    }),
-
-    Layouts({
-      importMode: () => 'sync',
-    }),
-
     Markdown({
-      wrapperClasses: 'prose prose-sm m-auto text-left',
+      wrapperClasses: '',
       headEnabled: true,
       markdownItSetup(md) {
         // https://prismjs.com/
@@ -63,6 +43,8 @@ export default defineConfig({
         }),
       ],
     }),
+
+    createSlidesLoader(),
 
     ViteIcons(),
 

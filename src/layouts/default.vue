@@ -1,6 +1,6 @@
 <template>
   <main class="master default">
-    <RouterView />
+    <slot />
   </main>
 </template>
 
