@@ -44,5 +44,12 @@ import { useFullscreen } from '@vueuse/core'
 <Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />
 
 ---
+---
+
+# Monaco Example
+
+<Monaco />
+
+---
 layout: end
 ---

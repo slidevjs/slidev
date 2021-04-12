@@ -6,7 +6,8 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
-import { createSlidesLoader } from './plugins/loader'
+import { createSlidesLoader } from './plugins/slides'
+import { createMonacoLoader } from './plugins/monaco'
 
 export default defineConfig({
   resolve: {
@@ -45,6 +46,7 @@ export default defineConfig({
     }),
 
     createSlidesLoader(),
+    createMonacoLoader(),
 
     ViteIcons(),
 

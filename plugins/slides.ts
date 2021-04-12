@@ -45,17 +45,24 @@ export function createSlidesLoader(): Plugin {
       items = parse(raw)
     },
 
+    configureServer(server) {
+      server.watcher.add(filepath)
+    },
+
     async handleHotUpdate(ctx) {
       if (ctx.file === filepath) {
-        raw = await ctx.read()
+        raw = await read()
         items = parse(raw)
 
-        return [
+        const modules = [
           '/@vite-slides/routes',
           ...items.map((i, idx) => `/@vite-slides/slides/${idx}.md`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(isNotNull)
+
+        modules.map(m => ctx.server.moduleGraph.invalidateModule(m))
+        return modules
       }
     },
 

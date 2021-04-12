@@ -1,10 +1,11 @@
-import { computed, App, InjectionKey, inject, ref, ComputedRef } from 'vue'
+import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { Fn, useMagicKeys, whenever } from '@vueuse/core'
 import { Router } from 'vue-router'
 
 export interface NavigateControls {
   next: Fn
   prev: Fn
+  paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
   install(app: App): void
@@ -18,6 +19,7 @@ export function createNavigateControls(router: Router) {
   const path = computed(() => route.value.path)
 
   const counter = ref(parseInt(path.value.split(/\//g)[1]) || 0)
+  const paused = ref(false)
 
   router.afterEach(() => {
     counter.value = parseInt(path.value.split(/\//g)[1]) || 0
@@ -38,13 +40,14 @@ export function createNavigateControls(router: Router) {
 
   const { space, right, left } = useMagicKeys()
 
-  whenever(space, next)
-  whenever(right, next)
-  whenever(left, prev)
+  whenever(() => space.value && !paused.value, next)
+  whenever(() => right.value && !paused.value, next)
+  whenever(() => left.value && !paused.value, prev)
 
   const navigateControls: NavigateControls = {
     next,
     prev,
+    paused,
     hasNext,
     hasPrev,
     install(app: App) {
