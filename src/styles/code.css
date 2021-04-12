@@ -2,12 +2,15 @@
 @import 'prism-theme-vars/base.css';
 
 :root {
-  --prism-font-family: 'Input Mono', monospace;
+  --prism-font-family: 'Fira Code', monospace;
+  --prism-font-size: 2rem;
+  --prism-block-padding-x: 0;
+  --prism-block-padding-y: 0;
 }
 
 html:not(.dark) {
   --prism-foreground: #393a34;
-  --prism-background: #fbfbfb;
+  --prism-background: transparent;
   --prism-comment: #a0ada0;
   --prism-string: #b56959;
   --prism-literal: #2f8a89;
@@ -29,7 +32,7 @@ html:not(.dark) {
 
 html.dark {
   --prism-foreground: #d4cfbf;
-  --prism-background: #151515;
+  --prism-background: transparent;
   --prism-comment: #758575;
   --prism-string: #d48372;
   --prism-literal: #429988;

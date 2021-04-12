@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { Plugin } from 'vite'
 import fs from 'fs-extra'
-import { isNotNull } from '@antfu/utils'
+import { notNullish } from '@antfu/utils'
 import matter from 'gray-matter'
 
 const filepath = resolve(__dirname, '../slides.md')
@@ -54,15 +54,15 @@ export function createSlidesLoader(): Plugin {
         raw = await read()
         items = parse(raw)
 
-        const modules = [
+        const moduleEntries = [
           '/@vite-slides/routes',
-          ...items.map((i, idx) => `/@vite-slides/slides/${idx}.md`),
+          ...items.map((i, idx) => `/@vite-slides/slide/${idx}.md`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
-          .filter(isNotNull)
+          .filter(notNullish)
 
-        modules.map(m => ctx.server.moduleGraph.invalidateModule(m))
-        return modules
+        moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
+        return moduleEntries
       }
     },
 

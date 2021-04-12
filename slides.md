@@ -13,11 +13,35 @@ Anthony Fu
 ---
 ---
 
+# Markdown
+
+## List
+
+- All slides in one file
+- HMR supported
+- Light / Dark mode toggle
+- Code snippets
+  - Prism syntax highlighting
+  - Built-in Moncoa Editor
+
+---
+---
+
+
+# Table
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+---
+---
+
 # Code Snippet Example
 
 It, just works
-
-<Transform scale='0.8'>
 
 ```html
 <script setup lang="ts">
@@ -34,7 +58,14 @@ import { useFullscreen } from '@vueuse/core'
 </template>
 ```
 
-</Transform>
+---
+---
+
+# Monaco Example
+
+Live coding in your presentation! 😎
+
+<Monaco />
 
 ---
 ---
@@ -42,13 +73,6 @@ import { useFullscreen } from '@vueuse/core'
 # Twitter Example
 
 <Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />
-
----
----
-
-# Monaco Example
-
-<Monaco />
 
 ---
 layout: end

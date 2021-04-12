@@ -2,11 +2,12 @@ lockfileVersion: 5.3
 
 specifiers:
   '@antfu/eslint-config': ^0.6.2
-  '@antfu/utils': ^0.0.3
+  '@antfu/utils': ^0.0.5
   '@iconify/json': ^1.1.328
-  '@types/fs-extra': ^9.0.10
+  '@types/fs-extra': ^9.0.11
   '@types/node': ^14.14.37
   '@types/nprogress': ^0.2.0
+  '@types/prettier': ^2.2.3
   '@typescript-eslint/eslint-plugin': ^4.21.0
   '@vitejs/plugin-vue': ^1.2.1
   '@vue/compiler-sfc': ^3.0.11
@@ -19,6 +20,7 @@ specifiers:
   monaco-editor: ^0.23.0
   nprogress: ^0.2.0
   pnpm: ^6.0.1
+  prettier: ^2.2.1
   prism-theme-vars: ^0.2.2
   theme-vitesse: ^0.1.8
   typescript: ^4.2.4
@@ -41,11 +43,12 @@ dependencies:
 
 devDependencies:
   '@antfu/eslint-config': 0.6.2_eslint@7.24.0+typescript@4.2.4
-  '@antfu/utils': 0.0.3
+  '@antfu/utils': 0.0.5
   '@iconify/json': 1.1.328
-  '@types/fs-extra': 9.0.10
+  '@types/fs-extra': 9.0.11
   '@types/node': 14.14.37
   '@types/nprogress': 0.2.0
+  '@types/prettier': 2.2.3
   '@typescript-eslint/eslint-plugin': 4.21.0_eslint@7.24.0+typescript@4.2.4
   '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
   '@vue/compiler-sfc': 3.0.11_vue@3.0.11
@@ -55,6 +58,7 @@ devDependencies:
   markdown-it-prism: 2.1.6
   monaco-editor: 0.23.0
   pnpm: 6.0.1
+  prettier: 2.2.1
   theme-vitesse: 0.1.8
   typescript: 4.2.4
   vite: 2.1.5
@@ -141,8 +145,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/utils/0.0.3:
-    resolution: {integrity: sha512-OMIf1VA83SZtJHHC2fAN9ZId6vNAeiymGkZZD32n9TT0pxiLvOH1RQc6KRRZyPVkcQ6WPJth4cwzMqscDfy1ew==}
+  /@antfu/utils/0.0.5:
+    resolution: {integrity: sha512-FbR3C0oXyNIo+YDPOVLKk3kg2FSy8oFbZUIaz9PRxc2x8g/Niysqa54pweswC6TF0FxmI0MfyhOL7cJd1DMrSg==}
     dev: true
 
   /@babel/code-frame/7.12.11:
@@ -394,8 +398,8 @@ packages:
       fastq: 1.11.0
     dev: true
 
-  /@types/fs-extra/9.0.10:
-    resolution: {integrity: sha512-O9T2LLkRDiTlalOBdjEkcnT0MRdT2+wglCl7pJUJ3mkWkR8hX4K+5bg2raQNJcLv4V8zGuTXe7Ud3wSqkTyuyQ==}
+  /@types/fs-extra/9.0.11:
+    resolution: {integrity: sha512-mZsifGG4QeQ7hlkhO56u7zt/ycBgGxSVsFI/6lGTU34VtwkiqrrSDgw0+ygs8kFGWcXnFQWMrzF2h7TtDFNixA==}
     dependencies:
       '@types/node': 14.14.37
     dev: true
@@ -418,6 +422,10 @@ packages:
 
   /@types/nprogress/0.2.0:
     resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
+    dev: true
+
+  /@types/prettier/2.2.3:
+    resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/4.21.0_bb1772e1f887ed78c68f06416685750e:
@@ -665,7 +673,7 @@ packages:
       magic-string: 0.25.7
       micromatch: 4.0.4
       pirates: 4.0.1
-      sucrase: 3.17.1
+      sucrase: 3.18.1
       windicss: 2.5.14
     transitivePeerDependencies:
       - supports-color
@@ -701,8 +709,8 @@ packages:
     hasBin: true
     dev: true
 
-  /acorn/8.1.0:
-    resolution: {integrity: sha512-LWCF/Wn0nfHOmJ9rzQApGnxnvgfROzGilS8936rqN/lfcYkY9MYZzdMqN+2NJ4SlTc+m5HiSa+kNfDtI64dwUA==}
+  /acorn/8.1.1:
+    resolution: {integrity: sha512-xYiIVjNuqtKXMxlRMDc6mZUhXehod4a3gbZ1qRlM7icK4EbxUFNLhWoPblCvFtB2Y9CIqHP3CF/rdxLItaQv8g==}
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
@@ -716,8 +724,8 @@ packages:
       uri-js: 4.4.1
     dev: true
 
-  /ajv/8.0.5:
-    resolution: {integrity: sha512-RkiLa/AeJx7+9OvniQ/qeWu0w74A8DiPPBclQ6ji3ZQkv5KamO+QGpqmi7O4JIw3rHGUXZ6CoP9tsAkn3gyazg==}
+  /ajv/8.1.0:
+    resolution: {integrity: sha512-B/Sk2Ix7A36fs/ZkuGLIR86EdjbgR6fsAcbx9lOP/QBSXujDNbVmIS/U4Itz5k8fPFDeVZl/zQ/gJW4Jrq6XjQ==}
     dependencies:
       fast-deep-equal: 3.1.3
       json-schema-traverse: 1.0.0
@@ -1956,7 +1964,7 @@ packages:
       he: 1.2.0
       param-case: 2.1.1
       relateurl: 0.2.7
-      uglify-js: 3.13.3
+      uglify-js: 3.13.4
     dev: true
 
   /htmlparser2/6.1.0:
@@ -2180,8 +2188,8 @@ packages:
     resolution: {integrity: sha1-peZUwuWi3rXyAdls77yoDA7y9RM=}
     dev: true
 
-  /jsdom/16.5.2:
-    resolution: {integrity: sha512-JxNtPt9C1ut85boCbJmffaQ06NBnzkQY/MWO3YxPW8IWS38A26z+B1oBvA9LwKrytewdfymnhi4UNH3/RAgZrg==}
+  /jsdom/16.5.3:
+    resolution: {integrity: sha512-Qj1H+PEvUsOtdPJ056ewXM4UJPCi4hhLA8wpiz9F2YvsRBhuFsXxtrIFAgGBDynQA9isAMGE91PfUYbdMPXuTA==}
     engines: {node: '>=10'}
     peerDependencies:
       canvas: ^2.5.0
@@ -2190,7 +2198,7 @@ packages:
         optional: true
     dependencies:
       abab: 2.0.5
-      acorn: 8.1.0
+      acorn: 8.1.1
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -2862,15 +2870,6 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /postcss/8.2.9:
-    resolution: {integrity: sha512-b+TmuIL4jGtCHtoLi+G/PisuIl9avxs8IZMSmlABRwNz5RLUUACrC+ws81dcomz1nRezm5YPdXiMEzBEKgYn+Q==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      colorette: 1.2.2
-      nanoid: 3.1.22
-      source-map: 0.6.1
-    dev: true
-
   /prelude-ls/1.1.2:
     resolution: {integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=}
     engines: {node: '>= 0.8.0'}
@@ -3318,8 +3317,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /sucrase/3.17.1:
-    resolution: {integrity: sha512-04cNLFAhS4NBG2Z/MTkLY6HdoBsqErv3wCncymFlfFtnpMthurlWYML2RlID4M2BbiJSu1eZdQnE8Lcz4PCe2g==}
+  /sucrase/3.18.1:
+    resolution: {integrity: sha512-TRyO38wwOPhLLlM8QLOG3TgMj0FKk+arlTrS9pRAanF8cAcHvgRPKIYWGO25mPSp/Rj87zMMTjFfkqIZGI6ZdA==}
     engines: {node: '>=8'}
     hasBin: true
     dependencies:
@@ -3353,7 +3352,7 @@ packages:
     resolution: {integrity: sha512-F3cLs9a3hL1Z7N4+EkSscsel3z55XT950AvB05bwayrNg5T1/gykXtigioTAjbltvbMSJvvhFCbnf6mX+ntnJQ==}
     engines: {node: '>=10.0.0'}
     dependencies:
-      ajv: 8.0.5
+      ajv: 8.1.0
       is-boolean-object: 1.1.0
       is-number-object: 1.0.4
       is-string: 1.0.5
@@ -3502,8 +3501,8 @@ packages:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}
     dev: true
 
-  /uglify-js/3.13.3:
-    resolution: {integrity: sha512-otIc7O9LyxpUcQoXzj2hL4LPWKklO6LJWoJUzNa8A17Xgi4fOeDC8FBDOLHnC/Slo1CQgsZMcM6as0M76BZaig==}
+  /uglify-js/3.13.4:
+    resolution: {integrity: sha512-kv7fCkIXyQIilD5/yQy8O+uagsYIOt5cZvs890W40/e/rvjMSzJw81o9Bg0tkURxzZBROtDQhW2LFjOGoK3RZw==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: true
@@ -3638,7 +3637,7 @@ packages:
       chalk: 4.1.0
       fs-extra: 9.1.0
       html-minifier: 4.0.0
-      jsdom: 16.5.2
+      jsdom: 16.5.3
       prettier: 2.2.1
       vite: 2.1.5
       vue: 3.0.11
@@ -3656,7 +3655,7 @@ packages:
     hasBin: true
     dependencies:
       esbuild: 0.9.7
-      postcss: 8.2.9
+      postcss: 8.2.10
       resolve: 1.20.0
       rollup: 2.45.1
     optionalDependencies:

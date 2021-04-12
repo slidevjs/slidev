@@ -1,9 +1,12 @@
 <template>
-  <div ref="el" class="monaco-editor text-base" :style="{ height, width }"></div>
+  <Transform :scale="scale">
+    <div ref="el" class="monaco-editor text-base" :style="{ height, width }"></div>
+  </Transform>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, defineProps, watch } from 'vue'
+import { formatCode } from '../logic/prettier'
 import { monaco } from './MonacoEnv'
 import { isDark, useNavigateControls } from '~/logic'
 
@@ -17,9 +20,6 @@ const counter = ref(0)
 const doubled = computed(() => counter.value * 2)
 `.trim(),
   },
-  fontSize: {
-    default: 20,
-  },
   lang: {
     default: 'typescript',
   },
@@ -31,6 +31,9 @@ const doubled = computed(() => counter.value * 2)
   },
   height: {
     default: '600px',
+  },
+  scale: {
+    default: '2',
   },
 })
 
@@ -46,11 +49,11 @@ onMounted(() => {
     insertSpaces: true,
     detectIndentation: false,
     folding: false,
-    lineDecorationsWidth: 4,
+    fontFamily: '\'Fira Code\', monospace',
+    lineDecorationsWidth: 0,
     lineNumbersMinChars: 0,
     theme: isDark.value ? 'vitesse-dark' : 'vitesse-light',
     lineNumbers: props.lineNumbers as any,
-    fontSize: props.fontSize,
     glyphMargin: false,
     scrollbar: {
       useShadows: false,
@@ -64,23 +67,23 @@ onMounted(() => {
   editor.onDidFocusEditorText(() => controls.paused.value = true)
   editor.onDidBlurEditorText(() => controls.paused.value = false)
 
-  // @ts-expect-error
-  editor._themeService._theme.getTokenStyleMetadata = (type, modifiers) => {
-    console.log(type, modifiers)
-    if (type === 'keyword') {
-      return {
-        foreground: 5, // color id 5
-        bold: true,
-        underline: true,
-        italic: true,
-      }
-    }
+  async function format() {
+    const selection = editor.getSelection()
+    editor.setValue(await formatCode(editor.getValue(), props.lang))
+    if (selection)
+      editor.setSelection(selection)
   }
+
+  // ctrl+s to format
+  editor.onKeyDown((e) => {
+    if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+      e.preventDefault()
+      format()
+    }
+  })
 })
 
 watch(isDark, () => monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vitesse-light'))
 
-onUnmounted(() => {
-  editor.dispose()
-})
+onUnmounted(() => editor.dispose())
 </script>
