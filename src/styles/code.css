@@ -3,7 +3,7 @@
 
 :root {
   --prism-font-family: 'Fira Code', monospace;
-  --prism-font-size: 2rem;
+  --prism-font-size: 0.8rem;
   --prism-block-padding-x: 0;
   --prism-block-padding-y: 0;
 }

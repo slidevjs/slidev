@@ -6,18 +6,18 @@
 
 <style>
 .master {
-  @apply px-30 py-12 text-5xl;
+  @apply px-14 py-6 text-[1.2rem];
 
   h1 {
-    @apply text-8xl leading-40 -ml-[0.05em];
+    @apply text-5xl leading-20 -ml-[0.05em];
   }
 
   h2 {
-    @apply text-6xl mt-4 mb-6 font-500 opacity-75;
+    @apply text-3xl mt-2 mb-4 font-500 opacity-75;
   }
 
   p ~ h2, ul ~ h2, table ~ h2 {
-    @apply mt-15;
+    @apply mt-10;
   }
 
   ul {
@@ -41,13 +41,13 @@
   }
 
   td, th {
-    @apply p-4 py-6;
+    @apply p-2 py-3;
   }
 }
 
 .master.default {
   h1 ~ p {
-    @apply mb-10 -mt-4;
+    @apply mb-5 -mt-2;
   }
 }
 </style>

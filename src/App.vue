@@ -9,7 +9,7 @@ useHead({
 })
 
 const apsect = 16 / 9
-const targetWidth = 1920
+const targetWidth = 1920 / 2.2
 const targetHeight = targetWidth / apsect
 
 const screen = reactive(useElementSize(document.body))

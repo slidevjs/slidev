@@ -11,11 +11,11 @@
   @apply h-full flex;
 
   h1 {
-    @apply text-9xl leading-50;
+    @apply text-6xl leading-20;
   }
 
   h1 ~ p {
-    @apply opacity-40 mb-20 text-5xl;
+    @apply opacity-40 mb-10 text-2xl;
   }
 }
 </style>

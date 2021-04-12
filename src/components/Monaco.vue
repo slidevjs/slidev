@@ -33,7 +33,7 @@ const doubled = computed(() => counter.value * 2)
     default: '600px',
   },
   scale: {
-    default: '2',
+    default: '1',
   },
 })
 
@@ -87,3 +87,8 @@ watch(isDark, () => monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vite
 
 onUnmounted(() => editor.dispose())
 </script>
+<style>
+.monaco-editor .monaco-hover {
+  @apply rounded overflow-hidden shadow border-none outline-none;
+}
+</style>

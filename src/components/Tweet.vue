@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Transform :scale="scale || 1.2" class="tweet">
+  <Transform :scale="scale || 0.7" class="tweet">
     <blockquote class="twitter-tweet" :data-theme="isDark ? 'dark': 'light'">
       <slot>
         <a :href="url" />
