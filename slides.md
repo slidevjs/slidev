@@ -42,3 +42,7 @@ import { useFullscreen } from '@vueuse/core'
 # Twitter Example
 
 <Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />
+
+---
+layout: end
+---

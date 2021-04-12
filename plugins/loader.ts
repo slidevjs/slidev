@@ -50,8 +50,11 @@ export function createSlidesLoader(): Plugin {
         raw = await ctx.read()
         items = parse(raw)
 
-        return items
-          .map((i, idx) => ctx.server.moduleGraph.getModuleById(`/@vite-slides/slides/${idx}.md`))
+        return [
+          '/@vite-slides/routes',
+          ...items.map((i, idx) => `/@vite-slides/slides/${idx}.md`),
+        ]
+          .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(isNotNull)
       }
     },

@@ -7,7 +7,7 @@ const { hasNext, hasPrev, prev, next } = useNavigateControls()
 </script>
 
 <template>
-  <nav class="opacity-25 py-4 px-4 transition right-4 bottom-4 rounded text-2xl flex gap-4 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
+  <nav class="opacity-0 pb-4 pt-5 pl-6 pr-4 transition right-0 bottom-0 rounded-tl text-xl flex gap-4 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
     <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
       <carbon:arrow-left />
     </button>
