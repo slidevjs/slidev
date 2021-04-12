@@ -1,7 +1,5 @@
 <template>
-  <Transform :scale="scale">
-    <div ref="el" class="monaco-editor text-base" :style="{ height, width }"></div>
-  </Transform>
+  <div ref="el" class="editor text-base" :style="{ height, width }"></div>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +28,7 @@ const doubled = computed(() => counter.value * 2)
     default: '800px',
   },
   height: {
-    default: '600px',
+    default: '300px',
   },
   scale: {
     default: '1',
@@ -44,7 +42,7 @@ let editor: monaco.editor.IStandaloneCodeEditor
 onMounted(() => {
   editor = monaco.editor.create(el.value!, {
     language: props.lang,
-    value: props.code,
+    value: `${props.code}\n\n`,
     tabSize: 2,
     insertSpaces: true,
     detectIndentation: false,
@@ -61,7 +59,6 @@ onMounted(() => {
       horizontal: 'hidden',
     },
     overviewRulerLanes: 0,
-    hideCursorInOverviewRuler: true,
     minimap: { enabled: false },
   })
   editor.onDidFocusEditorText(() => controls.paused.value = true)
@@ -69,7 +66,7 @@ onMounted(() => {
 
   async function format() {
     const selection = editor.getSelection()
-    editor.setValue(await formatCode(editor.getValue(), props.lang))
+    editor.setValue(`${await formatCode(editor.getValue(), props.lang)}\n\n`)
     if (selection)
       editor.setSelection(selection)
   }
@@ -90,5 +87,11 @@ onUnmounted(() => editor.dispose())
 <style>
 .monaco-editor .monaco-hover {
   @apply rounded overflow-hidden shadow border-none outline-none;
+}
+
+.monaco-editor .lines-content,
+.monaco-editor .view-line,
+.monaco-editor .view-lines {
+  @apply select-none;
 }
 </style>
