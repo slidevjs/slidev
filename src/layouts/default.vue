@@ -18,6 +18,14 @@
     @apply text-3xl mt-2 mb-4 font-500 opacity-75;
   }
 
+  h3 {
+    @apply text-2xl;
+  }
+
+  p {
+    @apply my-4;
+  }
+
   p ~ h2, ul ~ h2, table ~ h2 {
     @apply mt-10;
   }
@@ -44,17 +52,6 @@
 
   td, th {
     @apply p-2 py-3;
-  }
-
-  *:not(pre) > code {
-    font-size: 0.9em;
-    @apply font-light bg-gray-400 bg-opacity-15 px-1.5 py-0.5 rounded opacity-75;
-  }
-}
-
-.master.default {
-  h1 ~ p {
-    @apply mb-5 -mt-2;
   }
 }
 </style>

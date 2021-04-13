@@ -3,14 +3,14 @@
 
 :root {
   --prism-font-family: 'Fira Code', monospace;
-  --prism-font-size: 0.8rem;
+  --prism-font-size: 0.9rem;
   --prism-block-padding-x: 0;
   --prism-block-padding-y: 0;
 }
 
 html:not(.dark) {
   --prism-foreground: #393a34;
-  --prism-background: transparent;
+  --prism-background: #fafafa;
   --prism-comment: #a0ada0;
   --prism-string: #b56959;
   --prism-literal: #2f8a89;
@@ -32,7 +32,7 @@ html:not(.dark) {
 
 html.dark {
   --prism-foreground: #d4cfbf;
-  --prism-background: transparent;
+  --prism-background: #191919;
   --prism-comment: #758575;
   --prism-string: #d48372;
   --prism-literal: #429988;
@@ -54,4 +54,14 @@ html.dark {
   --prism-line-number-gutter: #eeeeee;
   --prism-line-highlight-background: #444444;
   --prism-selection-background: #444444;
+}
+
+pre[class*='language-'] {
+  @apply p-2;
+}
+
+:not(pre) > code {
+  font-size: 0.9em;
+  background: var(--prism-background);
+  @apply font-light px-1.5 py-0.5 rounded;
 }

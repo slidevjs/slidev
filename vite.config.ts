@@ -27,6 +27,15 @@ export default defineConfig({
         // https://prismjs.com/
         md.use(Prism)
       },
+      transforms: {
+        before(code) {
+          // transform monaco
+          return code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
+            options = options || ''
+            return `<Monaco :code="'${code.replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'" :lang="${lang}" :readonly="${options.includes('readonly')}" />`
+          })
+        },
+      },
     }),
 
     // https://github.com/antfu/vite-plugin-components

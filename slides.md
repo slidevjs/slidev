@@ -56,12 +56,81 @@ layout: center
 
 ------
 
-# `ref` vs `reactive`
+<div class="grid grid-cols-2 gap-x-4"><div>
 
-## Return an object of refs 
+### Ref
+
+```ts{monaco}
+import { ref } from 'vue'
+
+let foo = 0
+const bar = ref(0)
+
+foo = 1
+bar = 1 // ts-error
+```
+
+- More explicitly, with type checking
+- Less caveats
+
+</div><div>
+
+
+### Reactive
+
+```ts{monaco:readonly}
+import { reactive } from 'vue'
+
+const foo = { prop: 0 }
+const bar = reactive({ prop: 0 })
+
+foo.prop = 1
+bar.prop = 1
+```
+
+- Auto unwrapping (a.k.a `.value` free)
+- Same as object on types
+- No destructure
+- Need to use callback for `watch`
+
+</div></div>
+
+------
+
+# `.value`
+
+<div class="grid grid-cols-2 gap-x-4">
+
+```ts
+const foo = ref(0)
+
+watch(foo, (num) => {
+  console.log(num)
+  console.log(foo.value) // the same
+})
+
+console.log(unref(foo))
+```
+
+
+```ts
+const foo = reactive({ a: })
+
+watch(foo, (num) => {
+  console.log(num)
+  console.log(foo.value) // the same
+})
+
+console.log(unref(foo))
+```
+
+</div>
+
+------
+
+# Return an object of refs 
 
 - destructurable
-- less caveats
 - convert to reactive when needed
 
 ------

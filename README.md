@@ -40,7 +40,7 @@ npx vite-slides export talk.pdf
 - [ ] Preload next slide
 - [ ] Shiki + TwoSlash
 - [ ] Export PDF
-- [ ] Monaco as markdown
+- [x] Monaco as markdown
 - [ ] Standalone package
 - [ ] Configurable themes
 

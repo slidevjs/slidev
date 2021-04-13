@@ -11,6 +11,9 @@ import '/@monaco-types/@vueuse/core'
 import dark from 'theme-vitesse/themes/vitesse-dark.json'
 import light from 'theme-vitesse/themes/vitesse-light.json'
 
+light.colors['editor.background'] = '#00000000'
+dark.colors['editor.background'] = '#00000000'
+
 monaco.editor.defineTheme('vitesse-light', light as any)
 monaco.editor.defineTheme('vitesse-dark', dark as any)
 
@@ -28,5 +31,16 @@ self.MonacoEnvironment = {
     return new EditorWorker()
   },
 }
+
+console.log(monaco.languages.typescript.typescriptDefaults.getCompilerOptions())
+
+monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+  ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
+  noUnusedLocals: false,
+  noUnusedParameters: false,
+  allowUnreachableCode: true,
+  allowUnusedLabels: true,
+  strict: true,
+})
 
 export { monaco }
