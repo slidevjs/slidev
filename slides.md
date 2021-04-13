@@ -10,13 +10,34 @@ Pattens and tips for writing good composable logic in Vue
 Anthony Fu
 </div>
 
-------
+---
+layout: cover
+---
 
 # Anthony Fu
 
-> TODO:
+<div class="leading-8 opacity-80">
+Vue core team member and Vite team member.<br>
+Creator of VueUse, i18n Ally and Type Challenges.<br>
+A fanatical full-time open sourceror.<br>
+</div>
+
+<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4 all-child:block all-child:my-auto">
+  <ri-github-line class="opacity-50"/>
+  <a href="https://github.com/antfu" target="_blank">antfu</a>
+  <ri-twitter-line class="opacity-50"/>
+  <a href="https://twitter.com/antfu7" target="_blank">antfu7</a>
+  <ri-user-3-line class="opacity-50"/>
+  <a href="https://antfu.me" target="_blank">antfu.me</a>
+</div>
 
 <img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12"/>
+
+---
+layout: center
+---
+
+<img class="h-100" src="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png" />
 
 ---
 layout: center

@@ -1,6 +1,8 @@
 <template>
   <main class="master default">
-    <slot />
+    <KeepAlive>
+      <slot />
+    </KeepAlive>
   </main>
 </template>
 

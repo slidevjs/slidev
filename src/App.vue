@@ -18,9 +18,7 @@ const style = computed(() => ({
 <template>
   <div class="page">
     <div class="slide-container" :style="style">
-      <KeepAlive>
-        <RouterView />
-      </KeepAlive>
+      <RouterView />
     </div>
   </div>
   <SlideControls />

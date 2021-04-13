@@ -1,7 +1,9 @@
 <template>
   <div class="master center">
     <div class="my-auto">
-      <slot />
+      <KeepAlive>
+        <slot />
+      </KeepAlive>
     </div>
   </div>
 </template>
