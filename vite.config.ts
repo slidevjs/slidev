@@ -30,13 +30,24 @@ export default defineConfig({
       transforms: {
         before(code) {
           // transform monaco
-          return code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
+          code = code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
             options = options || ''
             return `<Monaco :code="'${code.replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'" :lang="${lang}" :readonly="${options.includes('readonly')}" />`
           })
+
+          return code
         },
       },
     }),
+
+    {
+      name: 'vue-escape',
+      enforce: 'post',
+      transform(code, id) {
+        if (id.endsWith('.md'))
+          return code.replace(/\\{/g, '{')
+      },
+    },
 
     // https://github.com/antfu/vite-plugin-components
     ViteComponents({

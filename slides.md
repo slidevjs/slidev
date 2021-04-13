@@ -94,7 +94,7 @@ layout: center
 
 <div class="grid grid-cols-2 gap-x-4"><div>
 
-## Ref
+# Ref
 
 ```ts{monaco}
 import { ref } from 'vue'
@@ -117,7 +117,7 @@ bar = 1 // ts-error
 
 </div><div>
 
-## Reactive
+# Reactive
 
 ```ts{monaco}
 import { reactive } from 'vue'
@@ -143,19 +143,37 @@ bar.prop = 1
 
 ------
 
-# `.value`
+# Ref Auto Unwrapping
+
+Get rid of `.value` for most of the time.
 
 <div class="grid grid-cols-2 gap-x-4">
 
+- `watch` accept ref for the watch target, and returns the unwrapped value in the callback
+
 ```ts
-const foo = ref(0)
+const counter = ref(0)
 
-watch(foo, (num) => {
-  console.log(num)
-  console.log(foo.value) // the same
+watch(counter, count => {
+  console.log(count) // same as `counter.value`
 })
+```
 
-console.log(unref(foo))
+- Ref is auto unwrapped in the template
+
+```html
+<template>
+  <button @click="counter += 1">
+    Counter is {\{ counter }}
+  </button>
+</template>
+```
+
+- Use `unref`
+
+```ts
+import { unref } from 'vue'
+unref(counter) // same as `counter.value`
 ```
 
 </div>
@@ -194,13 +212,6 @@ mouse.x === x.value // true
 
 ------
 
-# Auto dedup
-
-- assigning the same value to a ref/reactive won't trigger effects 
-- `triggerRef`
-
-------
-
 # Effects (Watchers)
 
 - computed `sync` `immediate` `lazy-evaluate` `auto-collect`
@@ -230,10 +241,54 @@ layout: center
 
 ------
 
-# Passing ref as arguments
+# Make it Flexible
+
+Take the `useTitle` function from VueUse as an example
+
+<div class="grid grid-cols-2 gap-x-4">
+
+### Create a "Special" Ref
+
+### Binding an existing ref
+
+```ts{monaco}
+import { useTitle } from '@vueuse/core'
+
+const title = useTitle()
+
+title.value = 'Hello World'
+// now the page's title changed
+```
+
+```ts{monaco}
+import { ref, computed } from 'vue'
+import { useTitle } from '@vueuse/core'
+
+const name = ref('Hello')
+const title = computed(() => {
+  return `${name.value} - World`
+})
+
+useTitle(title) // Hello - World
+
+name.value = 'Hi' // Hi - World
+```
+
+</div>
+
+------
+
+# Passing Refs as Arguments
+
+```ts
+
+```
 
 - `MaybeRef<T>` + `unref`
 
+```ts
+type MaybeRef<T> = T | Ref<T> 
+```
 
 ------
 

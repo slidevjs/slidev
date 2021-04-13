@@ -5,17 +5,15 @@ Markdown to Slides, powered by Vite and Windi CSS
 ## Motivation
 
 
-I am making this because preparing slides in PowerPoint /Keynote / Google Slides is just painful to me as I need to highlight my code snippet and paste them as images. Layouting and updating code is auto laborious and time-consuming. 
+I am making this because preparing slides in PowerPoint / Keynote / Google Slides is just painful to me as I need to highlight my code snippet and paste them as images. Layouting and updating code is also laborious and time-consuming. 
 
-So as a frontend developer, why not solve it the way that fits better what I am good that?
-
-Vite Slides, a Vite + Vue + Windi CSS powered slides maker in Vue powered markdown.
+So as a frontend developer, why not solve it the way that fits better with what I am good that?
 
 ## Status
 
 Status: **Prototype**
 
-Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. I will make this a standalone tool like VitePress where all you need is a command with a markdown file after I finish my talk.
+Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. After finishing my talk, I will make this a standalone tool like VitePress where all you need is a command with a markdown file.
 
 Ideal usage:
 
