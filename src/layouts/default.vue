@@ -6,7 +6,7 @@
 
 <style>
 .master {
-  @apply px-14 py-10 text-[1.2rem];
+  @apply px-14 py-12 text-[1.2rem];
 
   h1 {
     @apply text-5xl leading-20 -ml-[0.05em];
@@ -42,6 +42,11 @@
 
   td, th {
     @apply p-2 py-3;
+  }
+
+  *:not(pre) > code {
+    font-size: 0.9em;
+    @apply font-light bg-gray-400 bg-opacity-15 px-1.5 py-0.5 rounded opacity-75;
   }
 }
 

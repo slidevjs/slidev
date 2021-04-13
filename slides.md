@@ -4,64 +4,165 @@ layout: cover
 
 # Composable Vue
 
-Pattens and tips to write good composable functions for Vue.
+Pattens and tips for writing good composable logic in Vue
 
-<div class="mt-5">
+<div class="uppercase text-sm tracking-widest">
 Anthony Fu
 </div>
 
 ------
 
-# Markdown
+# Anthony Fu
 
-## List
+> TODO:
 
-- All slides in one file
-- HMR supported
-- Light / Dark mode toggle
-- Code snippets
-  - Prism syntax highlighting
-  - Built-in Moncoa Editor
+<img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12"/>
 
-------
+---
+layout: center
+---
 
-# Table
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+# Composition API
 
 ------
 
-# Code Snippet Example
+# Store
 
-It, just works
-
-```html
-<script setup lang="ts">
-import { useFullscreen } from '@vueuse/core'
-</script>
-
-<template>
-  <nav class="opacity-25 py-2 px-4 transition">
-    <button class="mx-2 icon-btn" @click="toggleDark">
-      <carbon-moon v-if="isDark" />
-      <carbon-sun v-else />
-    </button>
-  </nav>
-</template>
-```
+- `ref`
+- `shallowRef`
+- `reactive`
+- `shallowReactive`
 
 ------
 
-# Monaco Example
+# `ref` vs `reactive`
 
-Live coding in your presentation! 😎
+## Return an object of refs 
+
+- destructurable
+- less caveats
+- convert to reactive when needed
 
 ------
 
-# Twitter Example
+# Auto dedup
 
-<Tweet url="https://twitter.com/antfu7/status/1362676666221268995" />
+- assigning the same value to a ref/reactive won't trigger effects 
+- `triggerRef`
+
+------
+
+# Effects (Watchers)
+
+- computed `sync` `immediate` `lazy-evaluate` `auto-collect`
+- watch `buffered` `auto-unregister` `lazy`
+- watchEffect `buffered` `immediate` `auto-collect`
+
+------
+
+# Flush?
+
+- Computed
+- Watch pre / sync
+- Effect collecting
+
+---
+layout: center
+---
+
+# Patterns
+
+------
+
+# Think as "Connections"
+
+- Input -> Output
+- Spreadsheet formuala
+
+------
+
+# Passing ref as arguments
+
+- `MaybeRef<T>` + `unref`
+
+
+------
+
+# Reactify normal functions
+
+- `reactify`
+- Vue Chemistry
+
+------
+
+# Async to "Sync"
+
+- Access dom element
+- Instead of `onMounted`, we can just use `watch`
+- `asyncComputed`
+- `useFetch().json()`
+
+------
+
+# One at a time
+
+- Divide huge function into a set of small one
+- Each with a clear name
+- Just same as how you program 
+
+------
+
+# Side-effects self cleanup
+
+- useEventLisener
+
+------
+
+# effectScope RFC
+
+---
+layout: center
+---
+
+# Tips
+
+------
+
+# useVModel
+
+- A helper to make props/emit easier
+
+------
+
+# Typed Inject / Provide
+
+- hello
+
+------
+
+# App Level Singleton
+
+- lazy inject / provide
+
+------
+
+# Ending
+
+All of them, work for both Vue 2 and 3.
+
+- vue-demi
+- Vue 2.7
+
+------
+
+# Recap:
+
+- Think as "Connections"
+- Accepting ref as arguments
+- Side-effect self clean up
+
+---
+layout: center
+---
+
+# Thanks

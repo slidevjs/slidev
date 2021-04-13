@@ -1,6 +1,12 @@
 import { defineConfig } from 'vite-plugin-windicss'
 
 export default defineConfig({
+  extract: {
+    include: [
+      'src/**/*.{vue,ts}',
+      'slides.md',
+    ],
+  },
   darkMode: 'class',
   preflight: {
     includeAll: true,

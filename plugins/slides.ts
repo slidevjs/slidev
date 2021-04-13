@@ -17,6 +17,8 @@ function parse(raw: string) {
   let dividers = 0
 
   lines.forEach((line, i) => {
+    line = line.trimRight()
+
     if (line === '---')
       dividers += 1
 
@@ -24,7 +26,7 @@ function parse(raw: string) {
 
     if (dividers >= 3 || isHardDivider) {
       pages.push(lines.slice(start, isHardDivider ? i - 1 : i).join('\n'))
-      dividers = 1
+      dividers = isHardDivider ? 2 : 1
       start = isHardDivider ? i + 1 : i
     }
   })
