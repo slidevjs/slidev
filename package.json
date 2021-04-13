@@ -1,5 +1,7 @@
 {
-  "private": true,
+  "name": "vite-slides",
+  "version": "0.0.0-wip.0",
+  "files": [],
   "scripts": {
     "dev": "vite --port 3333 --open",
     "build": "cross-env NODE_ENV=production vite build",

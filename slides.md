@@ -60,8 +60,6 @@ import { useFullscreen } from '@vueuse/core'
 
 Live coding in your presentation! 😎
 
-<Monaco />
-
 ------
 
 # Twitter Example

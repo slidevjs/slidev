@@ -6,7 +6,7 @@
 
 <style>
 .master {
-  @apply px-14 py-6 text-[1.2rem];
+  @apply px-14 py-10 text-[1.2rem];
 
   h1 {
     @apply text-5xl leading-20 -ml-[0.05em];
