@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, defineProps, watch, computed, defineEmit } from 'vue'
-import { useVModel } from '@vueuse/core'
+import { ignorableWatch, useVModel } from '@vueuse/core'
 import { formatCode } from '../logic/prettier'
 import { monaco } from './MonacoEnv'
 import { isDark, useNavigateControls } from '~/logic'
@@ -12,13 +12,7 @@ import { isDark, useNavigateControls } from '~/logic'
 const emit = defineEmit()
 const props = defineProps({
   code: {
-    default:
-`
-import { ref, computed } from 'vue'
-
-const counter = ref(0)
-const doubled = computed(() => counter.value * 2)
-`.trim(),
+    default: '// monaco',
   },
   lang: {
     default: 'typescript',
@@ -38,7 +32,7 @@ const doubled = computed(() => counter.value * 2)
 })
 
 const code = useVModel(props, 'code', emit, { passive: true })
-const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 1.5}em` : props.height)
+const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 16}px` : props.height)
 
 const el = ref<HTMLElement>()
 const controls = useNavigateControls()
@@ -63,7 +57,7 @@ onMounted(() => {
     insertSpaces: true,
     detectIndentation: false,
     folding: false,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: '\'Fira Code\', monospace',
     lineDecorationsWidth: 0,
     lineNumbersMinChars: 0,
@@ -89,17 +83,17 @@ onMounted(() => {
     code.value = (await formatCode(code.value, lang.value)).trim()
   }
 
-  watch(code, (v) => {
+  const { ignoreUpdates } = ignorableWatch(code, (v) => {
     const selection = editor.getSelection()
     editor.setValue(v)
     if (selection)
       editor.setSelection(selection)
   })
 
-  editor.getModel()?.onDidChangeContent((e) => {
-    const v = editor.getValue()
+  editor.getModel()?.onDidChangeContent(() => {
+    const v = editor.getValue().toString()
     if (v !== code.value)
-      code.value = v
+      ignoreUpdates(() => code.value = v)
   })
 
   // ctrl+s to format

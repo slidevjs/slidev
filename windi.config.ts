@@ -12,7 +12,7 @@ export default defineConfig({
     includeAll: true,
   },
   shortcuts: {
-    'bg-main': 'bg-white text-[#121212] dark:(bg-[#121212] text-[#ddd])',
+    'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
     'icon-btn': `
       inline-block cursor-pointer select-none !outline-none
       opacity-75 transition duration-200 ease-in-out align-middle
