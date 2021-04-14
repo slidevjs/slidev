@@ -8,7 +8,7 @@
 
 <style>
 .master {
-  @apply px-14 py-12 text-[1.1rem];
+  @apply px-14 py-10 text-[1.1rem];
 
   h1 {
     @apply text-4xl mb-4 -ml-[0.05em];
@@ -19,7 +19,7 @@
   }
 
   h3 {
-    @apply text-sm pt-2 opacity-40 uppercase tracking-widest font-500 -ml-[0.1em];
+    @apply text-sm pt-2 opacity-40 uppercase tracking-widest font-500 -ml-[0.05em];
   }
 
   p {

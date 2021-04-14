@@ -45,6 +45,12 @@ layout: center
 </div>
 
 ---
+layout: center
+---
+
+# Composable Vue
+
+---
 name: VueUse
 layout: center
 ---
@@ -135,7 +141,7 @@ bar.prop = 1
 
 ### Cons
 
-- Same as plain object on types
+- Same as plain objects on types
 - Destructure loses reactivity
 - Need to use callback for `watch`
 
@@ -143,13 +149,13 @@ bar.prop = 1
 
 ------
 
-# Ref Auto Unwrapping
+# Ref Auto Unwrapping <MarkerCore />
 
 Get rid of `.value` for most of the time.
 
 <div class="grid grid-cols-2 gap-x-4">
 
-- `watch` accept ref for the watch target, and returns the unwrapped value in the callback
+- `watch` accepts ref as the watch target, and returns the unwrapped value in the callback
 
 ```ts
 const counter = ref(0)
@@ -180,7 +186,7 @@ unref(counter) // same as `counter.value`
 
 ------
 
-# Object of Refs
+# Object of Refs <MarkerPattern />
 
 Getting benefits from both `ref` and `reactive` for authoring compsosable functions
 
@@ -241,7 +247,111 @@ layout: center
 
 ------
 
-# Make it Flexible
+# `unref` - Oppsite of Ref <MarkerCore />
+
+- If it gets a Ref, returns the value of it.
+- Otherwise, returns as-is.
+
+
+### Implementation
+
+```ts
+function unref<T>(r: Ref<T> | T): T {
+  return isRef(r) ? r.value : r
+}
+```
+
+### Example
+
+```ts{monaco}
+import { unref, ref } from 'vue'
+
+const foo = ref('foo')
+console.log(unref(foo)) // 'foo'
+
+const bar = 'bar'
+console.log(unref(bar)) // 'bar'
+```
+
+------
+
+# Passing Refs as Arguments <MarkerPattern />
+
+<div class="grid grid-cols-[160px,1fr,180px] gap-x-4">
+
+<div />
+
+### Implementation
+
+### Usage
+
+<div class="my-auto leading-6 text-base opacity-75">
+Plain function
+</div>
+
+```ts
+function add(a: number, b: number) {
+  return a + b
+}
+```
+
+```ts
+add(1, 2) // 3
+```
+
+<div class="my-auto leading-6 text-base opacity-75">
+Accpets refs,<br>
+returns a reactive result.
+</div>
+
+```ts
+function add(a: Ref<number>, b: Ref<number>) {
+  return computed(() => a.value + b.value)
+}
+```
+
+```ts
+const a = ref(1)
+const b = ref(2)
+
+const c = add(a, b)
+c.value // 3
+```
+
+<div class="my-auto leading-6 text-base opacity-75">
+Accpets both refs and plain values.
+</div>
+
+```ts
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+```
+
+```ts
+const a = ref(1)
+
+const c = add(a, 5)
+c.value // 6
+```
+
+
+</div>
+
+------
+
+- `MaybeRef<T>` + `unref`
+
+```ts
+type MaybeRef<T> = Ref<T> | T
+```
+
+------
+
+# Make it Flexible <MarkerPattern />
 
 Take the `useTitle` function from VueUse as an example
 
@@ -249,7 +359,7 @@ Take the `useTitle` function from VueUse as an example
 
 ### Create a "Special" Ref
 
-### Binding an existing ref
+### Binding an Existing Ref
 
 ```ts{monaco}
 import { useTitle } from '@vueuse/core'
@@ -278,28 +388,14 @@ name.value = 'Hi' // Hi - World
 
 ------
 
-# Passing Refs as Arguments
-
-```ts
-
-```
-
-- `MaybeRef<T>` + `unref`
-
-```ts
-type MaybeRef<T> = T | Ref<T> 
-```
-
-------
-
-# Reactify normal functions
+# Reactify Normal Functions <MarkerTips />
 
 - `reactify`
 - Vue Chemistry
 
 ------
 
-# Async to "Sync"
+# Async to "Sync" <MarkerTips />
 
 - Access dom element
 - Instead of `onMounted`, we can just use `watch`
@@ -308,21 +404,16 @@ type MaybeRef<T> = T | Ref<T>
 
 ------
 
-# One at a time
+# Side-effects Self Cleanup <MarkerTips />
 
-- Divide huge function into a set of small one
-- Each with a clear name
-- Just same as how you program 
+- `useEventListener`
 
-------
-
-# Side-effects self cleanup
-
-- useEventLisener
 
 ------
 
 # effectScope RFC
+
+https://github.com/vuejs/rfcs/pull/212
 
 ---
 layout: center
