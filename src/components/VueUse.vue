@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import { defineProps } from 'vue'
+
+defineProps<{
+  name: string
+}>()
+</script>
+
+<template>
+  <div class="px-2 -mx-2 mt-4 py-2">
+    <img src="/vueuse.svg" class="h-1em -mb-0.5 mr-2 inline-block align-baseline" />
+    <span class="opacity-75">Avaliable in VueUse: </span><a class="font-mono text-green-500" :href="`https://vueuse.org/${name}`">{{ name }}</a>
+  </div>
+</template>

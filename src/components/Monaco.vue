@@ -49,10 +49,26 @@ const lang = computed(() => {
   }
 })
 
+const ext = computed(() => {
+  switch (lang.value) {
+    case 'typescript':
+      return 'ts'
+    case 'javascript':
+      return 'js'
+    default:
+      return lang.value
+  }
+})
+
 onMounted(() => {
+  const model = monaco.editor.createModel(
+    props.code,
+    lang.value,
+    monaco.Uri.parse(`file:///root/${Date.now()}.${ext.value}`),
+  )
+
   editor = monaco.editor.create(el.value!, {
-    language: lang.value,
-    value: props.code,
+    model,
     tabSize: 2,
     insertSpaces: true,
     detectIndentation: false,
@@ -90,7 +106,7 @@ onMounted(() => {
       editor.setSelection(selection)
   })
 
-  editor.getModel()?.onDidChangeContent(() => {
+  model.onDidChangeContent(() => {
     const v = editor.getValue().toString()
     if (v !== code.value)
       ignoreUpdates(() => code.value = v)

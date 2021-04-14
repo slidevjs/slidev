@@ -19,8 +19,10 @@ export default defineConfig({
       hover:(opacity-100 text-teal-600)
     `,
     'disabled': 'opacity-25 pointer-events-none',
+    'abs-t': 'absolute bottom-0 left-0 right-0',
     'abs-tl': 'absolute top-0 left-0',
     'abs-tr': 'absolute top-0 right-0',
+    'abs-b': 'absolute bottom-0 left-0 right-0',
     'abs-bl': 'absolute bottom-0 left-0',
     'abs-br': 'absolute bottom-0 right-0',
   },

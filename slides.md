@@ -175,46 +175,48 @@ watch(counter, count => {
 </template>
 ```
 
-- Use `unref`
+- Reactive will auto-unwrap nested refs.
 
-```ts
-import { unref } from 'vue'
-unref(counter) // same as `counter.value`
+<div>
+
+```ts{monaco}
+import { ref, reactive } from 'vue'
+const foo = ref('bar')
+const data = reactive({ foo, id: 10 })
+data.foo // 'bar'
 ```
+
+</div>
 
 </div>
 
 ------
 
-# Object of Refs <MarkerPattern />
+# `unref` - Oppsite of Ref <MarkerCore />
 
-Getting benefits from both `ref` and `reactive` for authoring compsosable functions
+- If it gets a Ref, returns the value of it.
+- Otherwise, returns as-is.
 
-<div class="mt-1" />
-<div class="grid grid-cols-2 gap-x-4">
 
-```ts{monaco}
-import { ref, reactive } from 'vue'
+### Implementation
 
-function useMouse() {
-  return { 
-    x: ref(0),
-    y: ref(0)
-  }
+```ts
+function unref<T>(r: Ref<T> | T): T {
+  return isRef(r) ? r.value : r
 }
-
-const { x, y } = useMouse()
-const mouse = reactive(useMouse())
-
-mouse.x === x.value // true
 ```
 
-<div class="px-2 py-4">
+### Example
 
-- Destructurable as Ref
-- Convert to reactive object to get the auto-unwrapping when needed
+```ts{monaco}
+import { unref, ref } from 'vue'
 
-</div></div>
+const foo = ref('foo')
+console.log(unref(foo)) // 'foo'
+
+const bar = 'bar'
+console.log(unref(bar)) // 'bar'
+```
 
 ------
 
@@ -247,31 +249,9 @@ layout: center
 
 ------
 
-# `unref` - Oppsite of Ref <MarkerCore />
+# One Thing at a Time
 
-- If it gets a Ref, returns the value of it.
-- Otherwise, returns as-is.
-
-
-### Implementation
-
-```ts
-function unref<T>(r: Ref<T> | T): T {
-  return isRef(r) ? r.value : r
-}
-```
-
-### Example
-
-```ts{monaco}
-import { unref, ref } from 'vue'
-
-const foo = ref('foo')
-console.log(unref(foo)) // 'foo'
-
-const bar = 'bar'
-console.log(unref(bar)) // 'bar'
-```
+- 
 
 ------
 
@@ -343,7 +323,9 @@ c.value // 6
 
 ------
 
-- `MaybeRef<T>` + `unref`
+# MaybeRef <MarkerTips/>
+
+A custom type helper
 
 ```ts
 type MaybeRef<T> = Ref<T> | T
@@ -386,12 +368,49 @@ name.value = 'Hi' // Hi - World
 
 </div>
 
+
+------
+
+# Object of Refs <MarkerPattern />
+
+Getting benefits from both `ref` and `reactive` for authoring compsosable functions
+
+<div class="mt-1" />
+<div class="grid grid-cols-2 gap-x-4">
+
+```ts{monaco}
+import { ref, reactive } from 'vue'
+
+function useMouse() {
+  return { 
+    x: ref(0),
+    y: ref(0)
+  }
+}
+
+const { x, y } = useMouse()
+const mouse = reactive(useMouse())
+
+mouse.x === x.value // true
+```
+
+<div class="px-2 py-4">
+
+- Destructurable as Ref
+- Convert to reactive object to get the auto-unwrapping when needed
+
+</div></div>
+
 ------
 
 # Reactify Normal Functions <MarkerTips />
 
 - `reactify`
 - Vue Chemistry
+
+<div class="abs-b mx-14 my-12">
+<VueUse name="reactify"/>
+</div>
 
 ------
 
@@ -423,15 +442,77 @@ layout: center
 
 ------
 
-# useVModel
+# Typed Provide / Inject <MarkerCore/>
+Use the `InjectionKey<T>` helper from Vue to share types across context.
 
-- A helper to make props/emit easier
+<div>
+
+```ts{monaco}
+// context.ts
+import { InjectionKey } from 'vue'
+
+export interface UserInfo {
+  id: number
+  name: string
+}
+
+export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
+```
+
+</div>
 
 ------
 
-# Typed Inject / Provide
+# Typed Provide / Inject <MarkerCore/>
+Use the `InjectionKey<T>` helper from Vue to share types across context.
 
-- hello
+<div class="grid grid-cols-2 gap-4">
+
+```ts{monaco}
+// parent.vue
+import { provide } from 'vue' 
+import { injectKeyUser } from './context'
+
+export default {
+  setup() {
+    provide(injectKeyUser, {
+      id: '7', // type error: should be number
+      name: 'Anthony'
+    })
+  }
+}
+```
+
+```ts{monaco}
+// child.vue
+import { inject } from 'vue' 
+import { injectKeyUser } from './context'
+
+export default {
+  setup() {
+    const user = inject(injectKeyUser) 
+    // UserInfo | undefined
+
+    if (user)
+      console.log(user.name) // Anthony
+  }
+}
+```
+
+</div>
+
+<script setup>
+import * as monaco from 'monaco-editor'
+
+monaco.languages.typescript.typescriptDefaults.addExtraLib(
+`
+import { InjectionKey } from 'vue'
+export interface UserInfo { id: number; name: string }
+export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
+`,
+  'file:///root/context.ts'
+);
+</script>
 
 ------
 
@@ -439,11 +520,21 @@ layout: center
 
 - lazy inject / provide
 
+
 ------
 
-# Ending
+# useVModel
 
-All of them, work for both Vue 2 and 3.
+- A helper to make props/emit easier
+
+
+---
+layout: center
+---
+
+# All of them, work for both Vue 2 and 3
+
+------
 
 - vue-demi
 - Vue 2.7

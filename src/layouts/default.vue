@@ -6,7 +6,7 @@
   </main>
 </template>
 
-<style>
+<style lang="postcss">
 .master {
   @apply px-14 py-10 text-[1.1rem];
 
@@ -43,11 +43,11 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background rounded;
+    @apply text-sm px-2 py-1 bg-$prism-background border-green-400 border-left rounded;
   }
 
   blockquote > * {
-    @apply my-0 opacity-50;
+    @apply my-0;
   }
 
   table {

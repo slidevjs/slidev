@@ -10,7 +10,7 @@
 
 html:not(.dark) {
   --prism-foreground: #393a34;
-  --prism-background: #fafafa;
+  --prism-background: #f8f8f8;
   --prism-comment: #a0ada0;
   --prism-string: #b56959;
   --prism-literal: #2f8a89;
@@ -32,7 +32,7 @@ html:not(.dark) {
 
 html.dark {
   --prism-foreground: #d4cfbf;
-  --prism-background: #191919;
+  --prism-background: #1b1b1b;
   --prism-comment: #758575;
   --prism-string: #d48372;
   --prism-literal: #429988;
