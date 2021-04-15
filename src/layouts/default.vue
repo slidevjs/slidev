@@ -8,6 +8,14 @@
 .master {
   @apply px-14 py-10 text-[1.1rem];
 
+  h1, h2, h3, h4, p, div {
+    @apply select-none;
+  }
+
+  pre, code {
+    @apply select-text;
+  }
+
   h1 {
     @apply text-4xl mb-4 -ml-[0.05em];
   }

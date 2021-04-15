@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { computed } from 'vue'
+import { useNavigateControls } from './logic'
 import { scale, targetHeight, targetWidth } from './logic/scale'
 
 useHead({
@@ -8,15 +9,22 @@ useHead({
   meta: [],
 })
 
+const controls = useNavigateControls()
 const style = computed(() => ({
   height: `${targetHeight}px`,
   width: `${targetWidth}px`,
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
+
+function onClick(e: MouseEvent) {
+  const classList = (e.target as HTMLElement)?.classList
+  if (classList?.contains('page-root'))
+    controls.next()
+}
 </script>
 
 <template>
-  <div class="page">
+  <div class="page-root" @click="onClick">
     <div class="slide-container" :style="style">
       <RouterView />
     </div>
@@ -24,9 +32,9 @@ const style = computed(() => ({
   <SlideControls />
 </template>
 
-<style>
-.page {
-  @apply w-screen h-screen relative overflow-hidden bg-black;
+<style lang="postcss">
+.page-root {
+  @apply w-screen h-screen relative overflow-hidden bg-black select-none;
 }
 
 .slide-container {
