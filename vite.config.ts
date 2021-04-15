@@ -6,6 +6,7 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
+import base64 from 'js-base64'
 import { createSlidesLoader } from './plugins/slides'
 import { createMonacoLoader } from './plugins/monaco'
 
@@ -23,6 +24,12 @@ export default defineConfig({
     Markdown({
       wrapperClasses: '',
       headEnabled: true,
+      markdownItOptions: {
+        quotes: '""\'\'',
+        html: true,
+        xhtmlOut: true,
+        linkify: true,
+      },
       markdownItSetup(md) {
         // https://prismjs.com/
         md.use(Prism)
@@ -32,7 +39,8 @@ export default defineConfig({
           // transform monaco
           code = code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
             options = options || ''
-            return `<Monaco :code="'${code.replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'" :lang="'${lang}'" :readonly="${options.includes('readonly')}" />`
+            code = base64.encode(code, true)
+            return `<Monaco :code="'${code}'" :lang="'${lang}'" :readonly="${options.includes('readonly')}" />`
           })
 
           return code

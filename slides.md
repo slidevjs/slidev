@@ -26,7 +26,7 @@ Creator of VueUse, i18n Ally and Type Challenges.<br>
 A fanatical full-time open sourceror.<br>
 </div>
 
-<div v-click class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4 all-child:block all-child:my-auto">
+<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4 all-child:block all-child:my-auto">
   <ri-github-line class="opacity-50"/>
   <div><a href="https://github.com/antfu" target="_blank">antfu</a></div>
   <ri-twitter-line class="opacity-50"/>
@@ -549,6 +549,44 @@ layout: center
 
 # Template Ref <MarkerTips />
 
+To get DOM element, you can pass a ref to it, and it will be avaliable 
+
+```ts
+export default defineComponent({
+  setup() {
+    const element = ref<HTMLElement | undefined>()
+
+    onMounted(() => {
+      element.value // now you have it
+    })
+
+    return { element }
+  } 
+})
+```
+
+```html{monaco}
+<template>
+  <div ref="element"><!-- ... --></div>
+</template>
+```
+
+------
+
+# Template Ref <MarkerTips />
+
+Use `watch` to unify the handling.
+
+```ts
+const element = ref<HTMLElement | undefined>()
+
+watch(element, (el) => {
+  if (!el) return
+  element.value // now you have it
+})
+```
+
+
 > TODO:
 
 ------
@@ -639,8 +677,36 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 
 A helper to make props/emit easier
 
-> TODO:
+```ts
+export function useVModel(props, name) {
+  const emit = getCurrentInstance().emit
 
+  return computed({
+    get() {
+      return props[name]
+    },
+    set(v) {
+      emit(`update:${name}`, v)
+    }
+  })
+}
+```
+
+```ts
+export default defineComponent({
+  setup(props) {
+    const value = useVModel(props, 'value')
+
+    return { value }
+  }
+})
+```
+
+```html
+<template>
+  <input v-model="value" />
+</template>
+```
 
 <div class="abs-b mx-14 my-12">
 <VueUse name="useVModel"/>

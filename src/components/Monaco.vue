@@ -3,16 +3,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, defineProps, watch, computed, defineEmit } from 'vue'
-import { ignorableWatch, useVModel } from '@vueuse/core'
+import { ref, onMounted, onUnmounted, defineProps, watch, computed } from 'vue'
+import { ignorableWatch } from '@vueuse/core'
+import { decode } from 'js-base64'
 import { formatCode } from '../logic/prettier'
 import { monaco } from './MonacoEnv'
 import { isDark, useNavigateControls } from '~/logic'
 
-const emit = defineEmit()
 const props = defineProps({
   code: {
-    default: '// monaco',
+    default: '',
   },
   lang: {
     default: 'typescript',
@@ -31,7 +31,7 @@ const props = defineProps({
   },
 })
 
-const code = useVModel(props, 'code', emit, { passive: true })
+const code = ref(decode(props.code))
 const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 16}px` : props.height)
 
 const el = ref<HTMLElement>()
@@ -62,7 +62,7 @@ const ext = computed(() => {
 
 onMounted(() => {
   const model = monaco.editor.createModel(
-    props.code,
+    code.value,
     lang.value,
     monaco.Uri.parse(`file:///root/${Date.now()}.${ext.value}`),
   )
@@ -125,7 +125,7 @@ watch(isDark, () => monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vite
 
 onUnmounted(() => editor.dispose())
 </script>
-<style>
+<style lang="postcss">
 .vue-monaco {
   background: var(--prism-background);
   padding: var(--prism-block-padding-y) var(--prism-block-padding-x);
