@@ -1,10 +1,13 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { Fn, useMagicKeys, whenever } from '@vueuse/core'
 import { Router } from 'vue-router'
+import { clickCurrent, clickElements } from '~/modules/directives'
 
 export interface NavigateControls {
   next: Fn
   prev: Fn
+  nextSlide: Fn
+  prevSlide: Fn
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
@@ -29,11 +32,29 @@ export function createNavigateControls(router: Router) {
   const hasPrev = computed(() => counter.value > 0)
 
   function next() {
+    if (clickElements.value.length <= clickCurrent.value)
+      nextSlide()
+    else
+      clickCurrent.value += 1
+  }
+
+  function prev() {
+    if (clickCurrent.value <= 0)
+      prevSlide()
+    else
+      clickCurrent.value -= 1
+  }
+
+  function nextSlide() {
+    clickCurrent.value = 0
+    clickElements.value = []
     counter.value = Math.min(routes.length - 1, counter.value + 1)
     router.push(`/${counter.value}`)
   }
 
-  function prev() {
+  function prevSlide() {
+    clickCurrent.value = 0
+    clickElements.value = []
     counter.value = Math.max(0, counter.value - 1)
     router.push(`/${counter.value}`)
   }
@@ -47,6 +68,8 @@ export function createNavigateControls(router: Router) {
   const navigateControls: NavigateControls = {
     next,
     prev,
+    nextSlide,
+    prevSlide,
     paused,
     hasNext,
     hasPrev,

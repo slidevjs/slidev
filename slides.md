@@ -89,15 +89,6 @@ layout: center
 
 ------
 
-# Store
-
-- `ref`
-- `shallowRef`
-- `reactive`
-- `shallowReactive`
-
-------
-
 <div class="grid grid-cols-2 gap-x-4"><div>
 
 # Ref
@@ -197,6 +188,9 @@ data.foo // 'bar'
 - If it gets a Ref, returns the value of it.
 - Otherwise, returns as-is.
 
+<div class="grid grid-cols-2 gap-x-4 mt-4">
+
+<div>
 
 ### Implementation
 
@@ -206,17 +200,27 @@ function unref<T>(r: Ref<T> | T): T {
 }
 ```
 
-### Example
+</div><div>
+
+### Usage
 
 ```ts{monaco}
 import { unref, ref } from 'vue'
 
 const foo = ref('foo')
-console.log(unref(foo)) // 'foo'
+unref(foo) // 'foo'
 
 const bar = 'bar'
-console.log(unref(bar)) // 'bar'
+unref(bar) // 'bar'
 ```
+
+</div></div>
+
+------
+
+# Shallow
+
+> TODO:
 
 ------
 
@@ -226,6 +230,8 @@ console.log(unref(bar)) // 'bar'
 - watch `buffered` `auto-unregister` `lazy`
 - watchEffect `buffered` `immediate` `auto-collect`
 
+> TODO:
+
 ------
 
 # Flush?
@@ -233,6 +239,8 @@ console.log(unref(bar)) // 'bar'
 - Computed
 - Watch pre / sync
 - Effect collecting
+
+> TODO:
 
 ---
 layout: center
@@ -247,11 +255,13 @@ layout: center
 - Input -> Output
 - Spreadsheet formuala
 
+> TODO:
+
 ------
 
 # One Thing at a Time
 
-- 
+> TODO:
 
 ------
 
@@ -265,9 +275,12 @@ layout: center
 
 ### Usage
 
+<v-click>
+
 <div class="my-auto leading-6 text-base opacity-75">
 Plain function
 </div>
+
 
 ```ts
 function add(a: number, b: number) {
@@ -318,18 +331,9 @@ const c = add(a, 5)
 c.value // 6
 ```
 
+</v-click>
 
 </div>
-
-------
-
-# MaybeRef <MarkerTips/>
-
-A custom type helper
-
-```ts
-type MaybeRef<T> = Ref<T> | T
-```
 
 ------
 
@@ -339,9 +343,9 @@ Take the `useTitle` function from VueUse as an example
 
 <div class="grid grid-cols-2 gap-x-4">
 
-### Create a "Special" Ref
+<div v-click>
 
-### Binding an Existing Ref
+### Create a "Special" Ref
 
 ```ts{monaco}
 import { useTitle } from '@vueuse/core'
@@ -351,6 +355,10 @@ const title = useTitle()
 title.value = 'Hello World'
 // now the page's title changed
 ```
+
+</div><div v-click>
+
+### Binding an Existing Ref
 
 ```ts{monaco}
 import { ref, computed } from 'vue'
@@ -366,10 +374,28 @@ useTitle(title) // Hello - World
 name.value = 'Hi' // Hi - World
 ```
 
+</div></div>
+
+<div class="abs-b mx-14 my-12">
+<VueUse name="useTitle"/>
 </div>
 
+------
+
+# MaybeRef <MarkerTips/>
+
+A custom type helper
+
+```ts
+type MaybeRef<T> = Ref<T> | T
+```
+
+<br>
+
+In VueUse, we use this helper heavily to support 
 
 ------
+
 
 # Object of Refs <MarkerPattern />
 
@@ -423,22 +449,70 @@ mouse.x === x.value // true
 
 ------
 
-# Side-effects Self Cleanup <MarkerTips />
+# Side-effects Self Cleanup <MarkerPattern />
 
-- `useEventListener`
+The `watch` and `computed` will stop themselves on components unmounted. <br>We'd recommend following the same pattern for your custom composable functions.
 
+<div>
+
+```ts{monaco}
+import { onUnmounted } from 'vue'
+
+export function useEventListener(target: EventTarget, name: string, fn: any) {
+  target.addEventListener(name, fn)
+
+  const stop = () => target.removeEventListener(name, fn)
+
+  onUnmounted(stop) // <--
+
+  return stop
+}
+```
+
+</div>
+
+<div class="abs-b mx-14 my-12">
+<VueUse name="useEventListener"/>
+</div>
+
+<!--
+Lower the mental burden
+-->
 
 ------
 
-# effectScope RFC
+# `effectScope` RFC
 
+A new API to collect the side effects automatically. Likely to be shipped with Vue 3.1<br>
 https://github.com/vuejs/rfcs/pull/212
+
+
+```ts
+// effect, computed, watch, watchEffect created inside the scope will be collected
+
+const scope = effectScope(() => {
+  const doubled = computed(() => counter.value * 2)
+
+  watch(doubled, () => console.log(double.value))
+
+  watchEffect(() => console.log('Count: ', double.value))
+})
+
+// to dispose all effects in the scope
+stop(scope)
+```
 
 ---
 layout: center
 ---
 
 # Tips
+
+------
+
+# Template Ref <MarkerTips />
+
+> TODO:
 
 ------
 
@@ -520,24 +594,44 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 
 - lazy inject / provide
 
+> TODO:
 
 ------
 
 # useVModel
 
-- A helper to make props/emit easier
+A helper to make props/emit easier
 
+> TODO:
+
+
+<div class="abs-b mx-14 my-12">
+<VueUse name="useVModel"/>
+</div>
 
 ---
 layout: center
 ---
 
-# All of them, work for both Vue 2 and 3
+# All of them work for both Vue 2 and 3
 
 ------
 
-- vue-demi
-- Vue 2.7
+# `@vue/composition-api`
+
+> TODO:
+
+------
+
+# Vue 2.7
+
+> TODO:
+
+------
+
+# Vue Demi
+
+> TODO:
 
 ------
 
@@ -546,6 +640,8 @@ layout: center
 - Think as "Connections"
 - Accepting ref as arguments
 - Side-effect self clean up
+
+> TODO:
 
 ---
 layout: center

@@ -1,14 +1,12 @@
 <template>
   <div class="master center">
     <div class="my-auto">
-      <KeepAlive>
-        <slot />
-      </KeepAlive>
+      <slot />
     </div>
   </div>
 </template>
 
-<style>
+<style labg="postcss">
 .master.center {
   @apply h-full grid place-content-center;
 }

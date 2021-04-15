@@ -39,6 +39,9 @@ npx vite-slides export talk.pdf
 - [ ] Shiki + TwoSlash
 - [ ] Export PDF
 - [x] Monaco as markdown
+- [ ] Slides Overview
+- [ ] Foot notes
+- [x] `v-click` directive
 - [ ] Standalone package
 - [ ] Configurable themes
 

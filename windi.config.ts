@@ -7,6 +7,7 @@ export default defineConfig({
       'slides.md',
     ],
   },
+  safelist: 'hidden',
   darkMode: 'class',
   preflight: {
     includeAll: true,
@@ -30,6 +31,11 @@ export default defineConfig({
     extend: {
       fontFamily: {
         sans: '"Avenir Next"',
+      },
+      colors: {
+        primary: {
+          DEFAULT: '#42b883',
+        },
       },
     },
   },

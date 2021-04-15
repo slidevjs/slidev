@@ -1,8 +1,6 @@
 <template>
   <main class="master default">
-    <KeepAlive>
-      <slot />
-    </KeepAlive>
+    <slot />
   </main>
 </template>
 
@@ -23,14 +21,14 @@
   }
 
   p {
-    @apply my-4;
+    @apply my-4 leading-6;
   }
 
-  h1 ~ p {
+  h1 + p {
     @apply -mt-2 opacity-50 mb-6;
   }
 
-  p ~ h2, ul ~ h2, table ~ h2 {
+  p + h2, ul + h2, table + h2 {
     @apply mt-10;
   }
 
@@ -43,7 +41,7 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background border-green-400 border-left rounded;
+    @apply text-sm px-2 py-1 bg-$prism-background border-primary border-left rounded;
   }
 
   blockquote > * {
@@ -63,7 +61,7 @@
   }
 
   a {
-    @apply border-current border-b border-dashed hover:(text-green-600 border-solid);
+    @apply border-current border-b border-dashed hover:(text-primary border-solid);
   }
 
   td, th {

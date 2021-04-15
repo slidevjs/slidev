@@ -32,7 +32,7 @@ export default defineConfig({
           // transform monaco
           code = code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
             options = options || ''
-            return `<Monaco :code="'${code.replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'" :lang="${lang}" :readonly="${options.includes('readonly')}" />`
+            return `<Monaco :code="'${code.replace(/'/g, '\\\'').replace(/\n/g, '\\n')}'" :lang="'${lang}'" :readonly="${options.includes('readonly')}" />`
           })
 
           return code
@@ -52,7 +52,7 @@ export default defineConfig({
     // https://github.com/antfu/vite-plugin-components
     ViteComponents({
       // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md'],
+      extensions: ['vue', 'md', 'ts'],
 
       // allow auto import and register components used in markdown
       customLoaderMatcher: id => id.endsWith('.md'),

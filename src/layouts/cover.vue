@@ -1,14 +1,12 @@
 <template>
   <div class="master cover">
     <div class="my-auto">
-      <KeepAlive>
-        <slot />
-      </KeepAlive>
+      <slot />
     </div>
   </div>
 </template>
 
-<style>
+<style lang="postcss">
 .master.cover {
   @apply h-full flex;
 
