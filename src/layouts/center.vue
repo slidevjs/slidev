@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<style labg="postcss">
+<style lang="postcss">
 .master.center {
   @apply h-full grid place-content-center;
 }

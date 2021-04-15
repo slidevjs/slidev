@@ -434,7 +434,6 @@ const timeString = useTimeAgo(time) // Today
 
 ------
 
-
 # Object of Refs <MarkerPattern />
 
 Getting benefits from both `ref` and `reactive` for authoring compsosable functions
@@ -519,7 +518,7 @@ Lower the mental burden
 
 ------
 
-# `effectScope` RFC
+# `effectScope` RFC <Marker class="text-green-500">Core?</Marker>
 
 A new API to collect the side effects automatically. Likely to be shipped with Vue 3.1<br>
 https://github.com/vuejs/rfcs/pull/212
