@@ -10,6 +10,10 @@ Pattens and tips for writing good composable logic in Vue
 Anthony Fu
 </div>
 
+<div class="abs-bl m-14 text-sm opacity-50">
+Apr. 28th, 2021.
+</div>
+
 ---
 layout: cover
 ---
@@ -22,7 +26,7 @@ Creator of VueUse, i18n Ally and Type Challenges.<br>
 A fanatical full-time open sourceror.<br>
 </div>
 
-<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4 all-child:block all-child:my-auto">
+<div v-click class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4 all-child:block all-child:my-auto">
   <ri-github-line class="opacity-50"/>
   <div><a href="https://github.com/antfu" target="_blank">antfu</a></div>
   <ri-twitter-line class="opacity-50"/>
@@ -103,6 +107,8 @@ foo = 1
 bar = 1 // ts-error
 ```
 
+<div v-click>
+
 ### Pros
 
 - More explicit, with type checking
@@ -111,6 +117,8 @@ bar = 1 // ts-error
 ### Cons
 
 - `.value`
+
+</div>
 
 </div><div>
 
@@ -126,6 +134,8 @@ foo.prop = 1
 bar.prop = 1
 ```
 
+<div v-click>
+
 ### Pros
 
 - Auto unwrapping (a.k.a `.value` free)
@@ -136,6 +146,7 @@ bar.prop = 1
 - Destructure loses reactivity
 - Need to use callback for `watch`
 
+</div>
 </div></div>
 
 ------
@@ -145,6 +156,8 @@ bar.prop = 1
 Get rid of `.value` for most of the time.
 
 <div class="grid grid-cols-2 gap-x-4">
+
+<v-clicks :every='2'>
 
 - `watch` accepts ref as the watch target, and returns the unwrapped value in the callback
 
@@ -178,6 +191,8 @@ data.foo // 'bar'
 ```
 
 </div>
+
+</v-clicks>
 
 </div>
 
@@ -252,6 +267,8 @@ layout: center
 
 # Think as "Connections"
 
+The `setup()` only runs **once** on component initialization, to construct the relations between your state and logic.
+
 - Input -> Output
 - Spreadsheet formuala
 
@@ -275,7 +292,7 @@ layout: center
 
 ### Usage
 
-<v-click>
+<v-clicks :every='3'>
 
 <div class="my-auto leading-6 text-base opacity-75">
 Plain function
@@ -289,7 +306,10 @@ function add(a: number, b: number) {
 ```
 
 ```ts
-add(1, 2) // 3
+let a = 1
+let b = 2
+
+let c = add(a, b) // 3
 ```
 
 <div class="my-auto leading-6 text-base opacity-75">
@@ -331,7 +351,7 @@ const c = add(a, 5)
 c.value // 6
 ```
 
-</v-click>
+</v-clicks>
 
 </div>
 
@@ -376,7 +396,7 @@ name.value = 'Hi' // Hi - World
 
 </div></div>
 
-<div class="abs-b mx-14 my-12">
+<div v-click class="abs-b mx-14 my-12">
 <VueUse name="useTitle"/>
 </div>
 
@@ -390,9 +410,27 @@ A custom type helper
 type MaybeRef<T> = Ref<T> | T
 ```
 
-<br>
+<v-click>
 
-In VueUse, we use this helper heavily to support 
+In VueUse, we use this helper heavily to support optional reactive arguments
+
+```ts
+export function useTimeAgo(
+  time: MaybeRef<Date | number | string>,
+  options: TimeAgoOptions = {},
+) {
+  return computed(() => someFormating(unref(time)))
+}
+```
+
+```ts
+useTimeAgo(1618478282830) // 5 mins ago
+
+const time = ref('2021-04-28')
+const timeString = useTimeAgo(time) // Today
+```
+
+</v-click>
 
 ------
 

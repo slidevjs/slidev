@@ -7,7 +7,7 @@ export default defineConfig({
       'slides.md',
     ],
   },
-  safelist: 'hidden',
+  safelist: '!opacity-0',
   darkMode: 'class',
   preflight: {
     includeAll: true,

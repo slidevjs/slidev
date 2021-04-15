@@ -67,5 +67,9 @@
   td, th {
     @apply p-2 py-3;
   }
+
+  b, strong {
+    @apply font-600;
+  }
 }
 </style>

@@ -23,7 +23,7 @@ export const install: UserModule = ({ app }) => {
         clickCurrent,
         () => {
           const show = clickCurrent.value > prev
-          el.classList.toggle('hidden', !show)
+          el.classList.toggle('!opacity-0', !show)
         },
         { immediate: true },
       )
@@ -43,8 +43,8 @@ export const install: UserModule = ({ app }) => {
       watch(
         clickCurrent,
         () => {
-          const show = clickCurrent.value > prev
-          el.classList.toggle('hidden', !show)
+          const show = clickCurrent.value >= prev
+          el.classList.toggle('!opacity-0', !show)
         },
         { immediate: true },
       )
