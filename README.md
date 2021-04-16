@@ -34,6 +34,8 @@ npm init vite-slides
 
 Still, it's working but not ready yet. It might have some big refactor or even stacks changes in the future. Feel free to play with it and have a preview first.
 
+For a full example, you can check the [demo](./demo) folder, which is a draft for my next talk 😉.
+
 ## Getting Started
 
 Under your project root, you will have a markdown file `slides.md`. The format will be like several mardown files with frontmatters concating together.
@@ -150,7 +152,6 @@ This also works:
 ### Theme
 
 > Not ready yet. See [packages/theme-default](./packages/theme-default) first if you are interested.
-
 
 ### Command
 
