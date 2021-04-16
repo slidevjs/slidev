@@ -276,6 +276,8 @@ The `setup()` only runs **once** on component initialization, to construct the r
 - Input -> Output
 - Spreadsheet formuala
 
+<Connections />
+
 > TODO:
 
 ------
