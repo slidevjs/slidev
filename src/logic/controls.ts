@@ -1,7 +1,7 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { Fn, useMagicKeys, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
-import { clickCurrent, clickElements } from '~/modules/directives'
+import { clickCurrent, clickElements } from '../modules/directives'
 
 export interface NavigateControls {
   next: Fn

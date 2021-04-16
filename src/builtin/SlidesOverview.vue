@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { computed, defineEmit, defineProps } from 'vue'
-import { useNavigateControls } from '~/logic/controls'
-import { targetWidth, targetHeight } from '~/logic/scale'
+import { useNavigateControls } from '../logic/controls'
+import { targetWidth, targetHeight } from '../logic/scale'
 
 const emit = defineEmit()
 const props = defineProps<{ modelValue: boolean }>()

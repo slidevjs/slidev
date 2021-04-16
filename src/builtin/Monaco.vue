@@ -8,7 +8,7 @@ import { ignorableWatch } from '@vueuse/core'
 import { decode } from 'js-base64'
 import { formatCode } from '../logic/prettier'
 import { monaco } from '../builtin/MonacoEnv'
-import { isDark, useNavigateControls } from '~/logic'
+import { isDark, useNavigateControls } from '../logic'
 
 const props = defineProps({
   code: {

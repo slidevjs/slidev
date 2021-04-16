@@ -2,7 +2,7 @@ import { Plugin, resolvePackageData } from 'vite'
 
 export function createMonacoLoader(): Plugin {
   return {
-    name: 'monaco-types-loader',
+    name: 'vite-slides:monaco-types-loader',
 
     resolveId(id) {
       if (id.startsWith('/@monaco-types/'))

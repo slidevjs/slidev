@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, onMounted } from 'vue'
-import { isDark } from '~/logic'
+import { isDark } from '../logic'
 
 defineProps<{
   url?: string

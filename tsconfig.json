@@ -16,10 +16,7 @@
     "types": [
       "vite/client",
       "vite-plugin-vue-layouts/client"
-    ],
-    "paths": {
-      "~/*": ["src/*"]
-    }
+    ]
   },
   "exclude": ["dist", "node_modules"]
 }

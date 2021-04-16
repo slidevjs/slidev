@@ -1,6 +1,6 @@
 import { DirectiveBinding, InjectionKey, ref, watch } from 'vue'
 import { remove } from '@antfu/utils'
-import { UserModule } from '~/types'
+import { UserModule } from '../types'
 
 export const injectClickDisabled: InjectionKey<boolean> = Symbol('v-click-disabled')
 

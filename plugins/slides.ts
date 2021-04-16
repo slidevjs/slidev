@@ -44,7 +44,7 @@ export function createSlidesLoader(): Plugin {
   let items: string[] = []
 
   return {
-    name: 'slides-loader',
+    name: 'vite-slides:loader',
 
     async configResolved() {
       raw = await read()
