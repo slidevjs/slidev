@@ -4,12 +4,16 @@ layout: cover
 
 # Vite Slides
 
-Making slides with Markdown and Vite!
+Making slides with Markdown in Vite!
 
 -------
 
-# Hello World
+# Page 2
 
-Good morning!!!
+```ts
+import { ref } from 'vue'
+
+const counter = ref(0)
+```
 
 See [GitHub Repo](https://github.com/antfu-sponsors/vite-slides) for more details.

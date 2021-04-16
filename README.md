@@ -2,8 +2,17 @@
 
 Opinionated markdown slides maker, powered by Vite and Windi CSS.
 
-## Motivation
+## Features
 
+- Single markdown entry for composing your slides. Embedded Vue components support.
+- Powered by [Vite](https://github.com/vitejs/vite) - instant content updating
+- Built-in syntax highlighting supported (via[Prism](https://github.com/PrismJS/prism))
+- Built-in [Monaco editor](https://github.com/Microsoft/monaco-editor) support for live coding in your presentations (with TypeScript!)
+- Fully themeable
+- Styling powered by [Windi CSS](https://github.com/windicss/windicss)
+- Reuses [Vite's huge ecosystems](https://github.com/vitejs/awesome-vite)
+
+## Motivation
 
 I am making this because preparing slides in PowerPoint / Keynote / Google Slides is just painful to me as I need to highlight my code snippet and paste them as images. Layouting and updating code is also laborious and time-consuming. 
 
@@ -11,24 +20,155 @@ So as a frontend developer, why not solve it the way that fits better with what 
 
 ## Status
 
-Status: **Prototype**
+Status: **Alpha**
 
-Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. After finishing my talk, I will make this a standalone tool like VitePress where all you need is a command with a markdown file.
+~~Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. After finishing my talk, I will make this a standalone tool like VitePress where all you need is a command with a markdown file.~~
 
-Ideal usage:
+Alright, I broke my words again, it's now available as an standalone tool 🎉
 
-```bash
-vim slides.md
-npx vite-slides
-```
+Try it now with
 
 ```bash
-npx vite-slides build
+npm init vite-slides
 ```
 
-```bash
-npx vite-slides export talk.pdf
+Still, it's working but not ready yet. It might have some big refactor or even stacks changes in the future. Feel free to play with it and have a preview first.
+
+## Getting Started
+
+Under your project root, you will have a markdown file `slides.md`. The format will be like several mardown files with frontmatters concating together.
+
+```md
+---
+layout: cover
+---
+
+# Vite Slides
+
+Hello World
+
+<!-- Second page --->
+---
+layout: default
+---
+
+# Page 2
+
+`​``ts
+console.log('HelloWorld')
+`​``
+
+<!-- Third page --->
+------
+
+# Page 3
+
+If there is no frontmatter needed, you can omit them and simply use 6 dashes.
 ```
+
+They will split auto into slides automatically.
+
+### Code Snippet
+
+A big reason I am making this is that I need to make code looks right in the slides. So just as you expected, you can use markdown favored code block to hightlight your code.
+
+```md
+`​``ts
+console.log('HelloWorld')
+`​``
+```
+
+Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it will turns the block into a full featured Monaco editor!
+
+```md
+`​``ts{monaco}
+console.log('HelloWorld')
+`​``
+```
+
+### Styling
+
+Since Markdown naturally supports embedded HTML markups. You can actually style your contents the way you want. To provide some convenience, we have [Windi CSS](https://github.com/windicss/windicss) built-in, where you can style directly with class utilities, for example
+
+```html
+<div class="grid grids-cols-[100px,1fr] gap-4 pt-4">
+
+### Name
+
+- Item 1
+- Item 2
+
+</div>
+```
+
+Check out [Windi CSS's docs](https://windicss.org) for more details.
+
+### Object Animations
+
+To apply "click animations" for elements, you can use the `v-click` directive or `<v-click>` components
+
+```md
+# Hello
+
+<!-- this will be invisible until you press next -->
+<v-click>
+
+Hello World
+
+</v-click>
+
+<!-- this will be invisible until you press next the second time -->
+<v-click>
+
+Hey!
+
+</v-click>
+```
+
+### Components
+
+Create a directory `components/` under your project root, and simply put your favorite Vue components under it, then you can use it with the same name in your markdown file!
+
+```
+components/
+  MyComponent.vue
+  FooBar.vue
+```
+
+```md
+<!-- slides.md -->
+
+Use your component: 
+
+<MyComponent :prop="1"/>
+
+This also works:
+
+<foo-bar />
+```
+
+### Theme
+
+> Not ready yet. See [packages/theme-default](./packages/theme-default) first if you are interested.
+
+
+### Command
+
+**Dev**
+
+```bash
+vite-slides
+```
+
+**Build**
+
+```bash
+vite-slides build
+```
+
+**Export**
+
+> Not yet.
 
 ## TODO
 
@@ -43,9 +183,9 @@ npx vite-slides export talk.pdf
 - [x] `v-click` directive
 - [ ] Standalone package
   - [x] Dev Mode
-  - [ ] Build Mode
+  - [x] Build Mode
   - [ ] Export PDF
-  - [ ] Configurable themes
+  - [x] Configurable themes
 
 ## Sponsors
 
