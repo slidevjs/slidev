@@ -10,8 +10,12 @@ Pattens and tips for writing good composable logic in Vue
 Anthony Fu
 </div>
 
-<div class="abs-bl m-14 text-sm opacity-50">
-Apr. 28th, 2021.
+<div class="abs-bl mx-14 my-12 flex">
+  <img src="https://2020.vueday.it/img/themes/vueday/vueday-logo.png" class="h-8">
+  <div class="ml-3 flex flex-col">
+    <div><b>Vue</b>Day</div>
+    <div class="text-sm opacity-50">Apr. 28th, 2021</div>
+  </div>
 </div>
 
 ---
@@ -725,6 +729,8 @@ console.log(state.foo) // 2
 
 # Shared State (SSR friendly) <MarkerPattern />
 
+Use `provide` and `inject` to share the app-level state
+
 <div class="grid grid-cols-[max-content,1fr] gap-4">
 
 <v-click>
@@ -767,6 +773,12 @@ app.use(createMyState())
 // use everywhere in your app
 const state = useMyState()
 ```
+
+<div class="my-3">
+
+- [Vue Router v4](https://github.com/vuejs/vue-router-next) is using the similar approach
+
+</div>
 
 </v-clicks>
 </div>
@@ -910,6 +922,9 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 
 ---
 layout: center
+class: 'text-center pb-5'
 ---
 
-# Thanks
+# Thank You!
+
+Slides can be found on [antfu.me](https://antfu.me)

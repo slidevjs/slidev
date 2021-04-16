@@ -1,12 +1,18 @@
 
+import { existsSync } from 'fs'
+import { join, resolve, basename } from 'path'
 import { mergeConfig, Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
+import fg from 'fast-glob'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
 import base64 from 'js-base64'
+import { getPackageRoot, getThemeRoot } from '../env'
+import { getDefultWindiConfig } from '../windicss'
+import { getIndexHtml } from '../common'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader } from './monaco'
 
@@ -29,9 +35,12 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
     icons: iconsOptions = {},
   } = options
 
+  const packageRoot = getPackageRoot()
+  const mainEntry = resolve(packageRoot, 'client/main.ts')
+
   return [
     {
-      name: 'vite-slides:config',
+      name: 'vite-slides:entry',
       config(config) {
         return mergeConfig(config, {
           optimizeDeps: {
@@ -39,12 +48,79 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
               'vue',
               'vue-router',
               '@vueuse/core',
+              'monaco-editor',
+              'js-base64',
+              '@vueuse/head',
+              '@antfu/utils',
+              'prettier',
+              'prettier/esm/parser-html',
+              'prettier/esm/parser-babel',
+              'prettier/esm/parser-typescript',
             ],
             exclude: [
               'vue-demi',
+              '@iconify/json',
+              '@vitejs/plugin-vue',
+              '@vue/compiler-sfc',
+              'cac',
+              'markdown-it-prism',
+              'vite',
+              'vite-ssg',
+              'vite-plugin-components',
+              'vite-plugin-icons',
+              'vite-plugin-md',
+              'vite-plugin-windicss',
+              'vue-router',
             ],
           },
         })
+      },
+      configureServer(server) {
+        // serve our index.html after vite history fallback
+        return () => {
+          server.middlewares.use(async(req, res, next) => {
+            if (req.url!.endsWith('.html')) {
+              res.statusCode = 200
+              res.end(await getIndexHtml())
+              return
+            }
+            next()
+          })
+        }
+      },
+
+    },
+
+    {
+      name: 'vite-slides:transform',
+      enforce: 'pre',
+      async transform(code, id) {
+        if (id === mainEntry) {
+          const themeRoot = getThemeRoot()
+          const styleIndex = join(themeRoot, 'styles/index.ts')
+          const imports: string[] = []
+          const layouts: Record<string, string> = {}
+
+          if (existsSync(styleIndex))
+            imports.push(`import "/@fs${styleIndex}"`)
+
+          const layoutPaths = await fg('layouts/*.{vue,ts}', {
+            cwd: themeRoot,
+            absolute: true,
+          })
+
+          for (const layoutPath of layoutPaths) {
+            const layout = basename(layoutPath).replace(/\.\w+$/, '')
+            imports.push(`import __layout_${layout} from "/@fs${layoutPath}"`)
+            layouts[layout] = `__layout_${layout}`
+          }
+
+          code = code.replace('/* __imports__ */', imports.join('\n'))
+          code = code.replace('/* __layouts__ */', `{${Object.entries(layouts).map(([k, v]) => `"${k}": ${v}`).join(',\n')}}`)
+          return code
+        }
+
+        return null
       },
     },
 
@@ -93,7 +169,9 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
       extensions: ['vue', 'md', 'ts'],
 
       dirs: [
-        'src/builtin',
+        `${packageRoot}/client/builtin`,
+        `${packageRoot}/client/components`,
+        `${getThemeRoot()}/components`,
         'src/components',
       ],
 
@@ -113,6 +191,7 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
     }),
 
     ...WindiCSS({
+      config: getDefultWindiConfig(),
       ...windicssOptions,
     }),
 

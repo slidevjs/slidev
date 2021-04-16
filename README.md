@@ -1,6 +1,6 @@
 # vite-slides
 
-Markdown to Slides, powered by Vite and Windi CSS
+Opinionated markdown slides maker, powered by Vite and Windi CSS.
 
 ## Motivation
 
@@ -37,13 +37,15 @@ npx vite-slides export talk.pdf
 - [x] Embedded Monaco
 - [ ] Preload next slide
 - [ ] Shiki + TwoSlash
-- [ ] Export PDF
 - [x] Monaco as markdown
 - [x] Slides Overview
 - [ ] Foot notes
 - [x] `v-click` directive
 - [ ] Standalone package
-- [ ] Configurable themes
+  - [x] Dev Mode
+  - [ ] Build Mode
+  - [ ] Export PDF
+  - [ ] Configurable themes
 
 ## Sponsors
 

@@ -3,8 +3,8 @@
   NODE_VERSION = "14"
 
 [build]
-  publish = "dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
+  publish = "packages/demo/dist"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build && npx pnpm run demo:build"
 
 [[redirects]]
   from = "/*"

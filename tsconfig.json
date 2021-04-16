@@ -6,16 +6,13 @@
     "lib": ["DOM", "ESNext"],
     "strict": true,
     "esModuleInterop": true,
-    "incremental": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "noUnusedLocals": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "types": [
       "vite/client",
-      "vite-plugin-vue-layouts/client"
     ]
   },
   "exclude": ["dist", "node_modules"]

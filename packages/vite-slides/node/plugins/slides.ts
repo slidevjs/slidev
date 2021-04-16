@@ -1,64 +1,14 @@
 import { resolve } from 'path'
+import { promises as fs } from 'fs'
 import { Plugin } from 'vite'
-import fs from 'fs-extra'
 import { notNullish } from '@antfu/utils'
 import matter from 'gray-matter'
+import { SlidesMarkdownInfo, parseSlidesMarkdown } from '../parser'
 
-const filepath = resolve(__dirname, '../slides.md')
+let filepath = resolve(__dirname, '../slides.md')
 
 async function read() {
-  return await fs.readFile(resolve(__dirname, '../slides.md'), 'utf-8')
-}
-
-export interface SlidesMarkdownInfo {
-  start: number
-  end: number
-  content: string
-  note?: string
-}
-
-export function parseSlidesMarkdown(raw: string): SlidesMarkdownInfo[] {
-  const lines = raw.split(/\n/g)
-  const pages: SlidesMarkdownInfo[] = []
-  let start = 0
-  let dividers = 0
-
-  lines.forEach((line, i) => {
-    line = line.trimRight()
-
-    if (line === '---')
-      dividers += 1
-
-    // more than than 4 dashes
-    const isHardDivider = !!line.match(/^----+$/)
-
-    if (dividers >= 3 || isHardDivider) {
-      const end = isHardDivider ? i - 1 : i
-      pages.push({
-        start,
-        end,
-        content: lines.slice(start, end).join('\n'),
-      })
-      dividers = isHardDivider ? 2 : 1
-      start = isHardDivider ? i + 1 : i
-    }
-  })
-
-  if (start !== lines.length - 1) {
-    pages.push({
-      start,
-      end: lines.length,
-      content: lines.slice(start).join('\n'),
-    })
-  }
-
-  pages.push({
-    start: lines.length,
-    end: lines.length,
-    content: '---\nlayout: end\n---',
-  })
-
-  return pages
+  return await fs.readFile(filepath, 'utf-8')
 }
 
 export function createSlidesLoader(): Plugin {
@@ -68,7 +18,8 @@ export function createSlidesLoader(): Plugin {
   return {
     name: 'vite-slides:loader',
 
-    async configResolved() {
+    async configResolved(_config) {
+      filepath = resolve(_config.root, 'slides.md')
       raw = await read()
       items = parseSlidesMarkdown(raw)
     },

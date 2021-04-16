@@ -21,12 +21,13 @@ function onClick(e: MouseEvent) {
   if (classList?.contains('page-root'))
     controls.next()
 }
+
 </script>
 
 <template>
   <div class="page-root" @click="onClick">
     <div class="slide-container" :style="style">
-      <RouterView />
+      <RouterView :class="controls.current.value?.meta?.class || ''" />
     </div>
   </div>
   <SlideControls />
