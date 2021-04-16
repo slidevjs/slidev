@@ -4,7 +4,7 @@ import { UserModule } from '../types'
 
 export const injectClickDisabled: InjectionKey<boolean> = Symbol('v-click-disabled')
 
-export const clickElements = ref<Element[]>([])
+export const clickElements = ref<HTMLElement[]>([])
 export const clickCurrent = ref(0)
 
 export function dirProvide<T>(dir: DirectiveBinding<any>, key: InjectionKey<T>, v: T) {
@@ -34,6 +34,7 @@ export const install: UserModule = ({ app }) => {
         () => {
           const show = clickCurrent.value > prev
           el.classList.toggle('!opacity-0', !show)
+          el.classList.toggle('!pointer-events-none', !show)
         },
         { immediate: true },
       )
@@ -58,6 +59,7 @@ export const install: UserModule = ({ app }) => {
         () => {
           const show = clickCurrent.value >= prev
           el.classList.toggle('!opacity-0', !show)
+          el.classList.toggle('!pointer-events-none', !show)
         },
         { immediate: true },
       )

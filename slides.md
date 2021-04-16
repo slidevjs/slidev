@@ -545,7 +545,10 @@ stop(scope)
 
 To get DOM element, you can pass a ref to it, and it will be available after component mounted
 
-```ts
+<div v-click>
+
+```ts{monaco}
+import { defineComponent, ref, onMounted } from 'vue'
 export default defineComponent({
   setup() {
     const element = ref<HTMLElement | undefined>()
@@ -555,7 +558,7 @@ export default defineComponent({
     })
 
     return { element }
-  } 
+  }
 })
 ```
 
@@ -565,25 +568,37 @@ export default defineComponent({
 </template>
 ```
 
+</div>
+
 ------
 
 # Template Ref <MarkerTips />
 
 Use `watch` instead of `onMounted` to unify the handling for template ref changes.
 
-```ts
-const element = ref<HTMLElement | undefined>()
+<div>
+<v-click>
 
-watch(element, (el) => {
-  // clean up previous side effect
-  if (el) {
-    // use the DOM element
+```ts{monaco}
+import { defineComponent, ref, watch } from 'vue'
+export default defineComponent({
+  setup() {
+    const element = ref<HTMLElement | undefined>()
+
+    watch(element, (el) => {
+      // clean up previous side effect
+      if (el) {
+        // use the DOM element
+      }
+    })
+
+    return { element }
   }
 })
 ```
 
-
-> TODO:
+</v-click>
+</div>
 
 ------
 

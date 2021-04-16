@@ -65,11 +65,13 @@ export function createNavigateControls(router: Router) {
     router.push(`/${counter.value}`)
   }
 
-  const { space, right, left } = useMagicKeys()
+  const { space, right, left, up, down } = useMagicKeys()
 
   whenever(() => space.value && !paused.value, next)
   whenever(() => right.value && !paused.value, next)
   whenever(() => left.value && !paused.value, prev)
+  whenever(() => up.value && !paused.value, prevSlide)
+  whenever(() => down.value && !paused.value, nextSlide)
 
   const navigateControls: NavigateControls = {
     next,
