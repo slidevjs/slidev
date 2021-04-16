@@ -57,15 +57,14 @@ export default defineConfig({
       },
     },
 
-    // https://github.com/antfu/vite-plugin-components
     ViteComponents({
-      // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md', 'ts'],
+      extensions: ['vue', 'ts'],
 
-      // allow auto import and register components used in markdown
-      customLoaderMatcher: id => id.endsWith('.md'),
+      dirs: [
+        'src/components',
+        'src/builtin',
+      ],
 
-      // auto import icons
       customComponentResolvers: [
         ViteIconsResolver({
           componentPrefix: '',

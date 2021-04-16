@@ -518,7 +518,7 @@ Lower the mental burden
 
 ------
 
-# `effectScope` RFC <Marker class="text-green-500">Core?</Marker>
+# `effectScope` RFC <Marker class="text-purple-400">Upcoming</Marker>
 
 A new API to collect the side effects automatically. Likely to be shipped with Vue 3.1<br>
 https://github.com/vuejs/rfcs/pull/212
@@ -535,7 +535,7 @@ const scope = effectScope(() => {
   watchEffect(() => console.log('Count: ', double.value))
 })
 
-// to dispose all effects in the scope
+// dispose all effects in the scope
 stop(scope)
 ```
 
@@ -549,7 +549,7 @@ layout: center
 
 # Template Ref <MarkerTips />
 
-To get DOM element, you can pass a ref to it, and it will be avaliable 
+To get DOM element, you can pass a ref to it, and it will be available after component mounted
 
 ```ts
 export default defineComponent({
@@ -575,14 +575,16 @@ export default defineComponent({
 
 # Template Ref <MarkerTips />
 
-Use `watch` to unify the handling.
+Use `watch` instead of `onMounted` to unify the handling for template ref changes.
 
 ```ts
 const element = ref<HTMLElement | undefined>()
 
 watch(element, (el) => {
-  if (!el) return
-  element.value // now you have it
+  // clean up previous side effect
+  if (el) {
+    // use the DOM element
+  }
 })
 ```
 
@@ -613,7 +615,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 ------
 
 # Typed Provide / Inject <MarkerCore/>
-Use the `InjectionKey<T>` helper from Vue to share types across context.
+Import the key from the same module for `provide` and `inject`.
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -667,15 +669,46 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 
 # App Level Singleton
 
-- lazy inject / provide
+<div class="grid grid-cols-2 gap-4">
+
+```ts
+export const keyMyTool: InjectionKey<MyTool> = Symbol()
+
+export function createMyTool() {
+  const state = {
+    /* ... */
+  }
+
+  return {
+    install(app: App) {
+      app.provide(keyMyTool, state)
+    }
+  }
+}
+
+export function useMyTool(): MyTool {
+  return inject(keyMyTool)!
+}
+```
+
+```ts
+const App = createApp(App)
+
+app.use(createMyTool())
+```
+
+</div>
 
 > TODO:
 
 ------
 
-# useVModel
+# useVModel <MarkerTips />
 
 A helper to make props/emit easier
+
+<div class="grid grid-cols-2 gap-4">
+
 
 ```ts
 export function useVModel(props, name) {
@@ -692,6 +725,8 @@ export function useVModel(props, name) {
 }
 ```
 
+<div>
+
 ```ts
 export default defineComponent({
   setup(props) {
@@ -702,15 +737,46 @@ export default defineComponent({
 })
 ```
 
+<br>
+
 ```html
 <template>
   <input v-model="value" />
 </template>
 ```
 
+</div>
+</div>
+
 <div class="abs-b mx-14 my-12">
 <VueUse name="useVModel"/>
 </div>
+
+
+------
+
+# useVModel (Passive) <MarkerTips />
+
+Make the model able to be updated **independently** from the parent logic 
+
+```ts
+export function usePassiveVModel(props, name) {
+  const emit = getCurrentInstance().emit
+  const data = ref(props[name])                     // store the value in a ref
+
+  watch(() => props.value, (v) => data.value = v)   // sync the ref whenever the prop changes
+
+  return computed({
+    get() {
+      return data.value
+    },
+    set(v) {
+      data.value = v                                 // when setting value, update the ref directly
+      emit(`update:${name}`, v)                      // then emit out the changes
+    }
+  })
+}
+```
 
 ---
 layout: center
@@ -720,21 +786,45 @@ layout: center
 
 ------
 
-# `@vue/composition-api`
+# `@vue/composition-api` <Marker class="text-teal-400">Lib</Marker>
 
-> TODO:
+Composition API support for Vue 2.<br><carbon-logo-github class="inline-block"/> [vuejs/composition-api](https://github.com/vuejs/composition-api)
+
+```ts
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
+
+Vue.use(VueCompositionAPI)
+```
+
+```ts
+import { ref, reactive } from '@vue/composition-api'
+```
 
 ------
 
-# Vue 2.7
+# Vue 2.7 <Marker class="text-purple-400">Upcoming</Marker>
 
-> TODO:
+[Plans in Vue 2.7](https://github.com/vuejs/rfcs/blob/ie11/active-rfcs/0000-vue3-ie11-support.md#for-those-who-absolutely-need-ie11-support)
+
+- Backport `@vue/composition-api` into Vue 2's core.
+- `<script setup>` syntax in Single-File Components.
+- Migrate codebase to TypeScript.
+- IE11 support.
+- LTS.
 
 ------
 
-# Vue Demi
+# Vue Demi <Marker class="text-teal-400">Lib</Marker>
 
-> TODO:
+Creates Universal Library for Vue 2 & 3<br><carbon-logo-github class="inline-block"/> [vueuse/vue-demi](https://github.com/vueuse/vue-demi)
+
+```ts
+// same syntax for both Vue 2 and 3
+import { ref, reactive, defineComponent } from 'vue-demi'
+```
+
+<img class="h-50 mx-auto" src="https://raw.githubusercontent.com/vueuse/vue-demi/master/assets/banner.png" />
 
 ------
 
