@@ -63,7 +63,6 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
         linkify: true,
       },
       markdownItSetup(md) {
-      // https://prismjs.com/
         md.use(Prism)
       },
       transforms: {
@@ -109,9 +108,6 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
       ...componentsOptions,
     }),
 
-    createSlidesLoader(),
-    createMonacoLoader(),
-
     ViteIcons({
       ...iconsOptions,
     }),
@@ -119,5 +115,8 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
     ...WindiCSS({
       ...windicssOptions,
     }),
+
+    createSlidesLoader(),
+    createMonacoLoader(),
   ]
 }

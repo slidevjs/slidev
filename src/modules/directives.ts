@@ -11,8 +11,8 @@ export function dirProvide<T>(dir: DirectiveBinding<any>, key: InjectionKey<T>, 
   (dir.instance?.$ as any).provides[key as any] = v
 }
 
-export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string): T | undefined {
-  return (dir.instance?.$ as any).provides[key as any]
+export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
+  return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
 }
 
 export const install: UserModule = ({ app }) => {
@@ -21,7 +21,7 @@ export const install: UserModule = ({ app }) => {
     name: 'v-click',
 
     mounted(el: HTMLElement, dir) {
-      if (dirInject(dir, injectClickDisabled))
+      if (dirInject(dir, injectClickDisabled, false))
         return
 
       const prev = clickElements.value.length
@@ -48,7 +48,7 @@ export const install: UserModule = ({ app }) => {
     name: 'v-after',
 
     mounted(el: HTMLElement, dir) {
-      if (dirInject(dir, injectClickDisabled))
+      if (dirInject(dir, injectClickDisabled, false))
         return
 
       const prev = clickElements.value.length
