@@ -1,12 +1,10 @@
 {
-  "name": "vite-slides",
-  "version": "0.0.0-beta.1",
-  "files": [],
+  "private": true,
   "scripts": {
     "dev": "npm -C packages/demo run dev",
     "demo:build": "npm -C packages/demo run build",
     "build": "pnpm -r run build",
-    "release": "npx bumpp package.json packages/*/package.json --commit --tag --push && pnpm -r publish"
+    "release": "npx bumpp packages/*/package.json --commit --tag --push && pnpm -r publish"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.2",

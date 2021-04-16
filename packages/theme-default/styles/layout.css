@@ -1,11 +1,4 @@
-<template>
-  <main class="master default">
-    <slot />
-  </main>
-</template>
-
-<style lang="postcss">
-.master {
+.layout-master {
   @apply px-14 py-10 text-[1.1rem];
 
   h1, h2, h3, h4, p, div {
@@ -84,4 +77,19 @@
     @apply font-600;
   }
 }
-</style>
+
+.layout-master.cover {
+  @apply h-full flex;
+
+  h1 {
+    @apply text-6xl leading-20;
+  }
+
+  h1 ~ p {
+    @apply opacity-40 mb-10 text-2xl;
+  }
+}
+
+.layout-master.center {
+  @apply h-full grid place-content-center;
+}

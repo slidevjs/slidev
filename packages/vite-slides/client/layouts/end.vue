@@ -1,11 +1,11 @@
 <template>
-  <main class="master end">
+  <main class="layout-master end">
     END
   </main>
 </template>
 
 <style lang="postcss">
-.master.end {
+.layout-master.end {
   @apply text-white text-opacity-85 text-xl tracking-widest bg-black h-full text-center grid place-content-center select-none;
 }
 </style>

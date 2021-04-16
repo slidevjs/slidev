@@ -1,7 +1,11 @@
 import { ViteSSG } from 'vite-ssg'
 import { getRoutes } from './routes'
 import App from './App.vue'
+import 'virtual:windi-base.css'
+import 'virtual:windi-components.css'
 /* __imports__ */
+import 'virtual:windi-utilities.css'
+import 'virtual:windi-devtools'
 
 const routes = getRoutes(/* __layouts__ */)
 

@@ -10,7 +10,7 @@ export function getDefultWindiConfig() {
       include: [
         resolve(getPackageRoot(), 'client/**/*.{vue,ts}'),
         resolve(getThemeRoot(), '**/*.{vue,ts}'),
-        'src/**/*.{vue,ts}',
+        '**/*.{vue,ts}',
         'slides.md',
       ],
     },

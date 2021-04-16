@@ -1,12 +1,9 @@
 
-import { existsSync } from 'fs'
-import { join, resolve, basename } from 'path'
 import { mergeConfig, Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
-import fg from 'fast-glob'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
 import base64 from 'js-base64'
@@ -15,6 +12,7 @@ import { getDefultWindiConfig } from '../windicss'
 import { getIndexHtml } from '../common'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader } from './monaco'
+import { createEntryPlugin } from './entry'
 
 export type ArgumentsType<T> = T extends ((...args: infer A) => void) ? A : never
 
@@ -36,11 +34,10 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
   } = options
 
   const packageRoot = getPackageRoot()
-  const mainEntry = resolve(packageRoot, 'client/main.ts')
 
   return [
     {
-      name: 'vite-slides:entry',
+      name: 'vite-slides:config',
       config(config) {
         return mergeConfig(config, {
           optimizeDeps: {
@@ -89,39 +86,6 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
         }
       },
 
-    },
-
-    {
-      name: 'vite-slides:transform',
-      enforce: 'pre',
-      async transform(code, id) {
-        if (id === mainEntry) {
-          const themeRoot = getThemeRoot()
-          const styleIndex = join(themeRoot, 'styles/index.ts')
-          const imports: string[] = []
-          const layouts: Record<string, string> = {}
-
-          if (existsSync(styleIndex))
-            imports.push(`import "/@fs${styleIndex}"`)
-
-          const layoutPaths = await fg('layouts/*.{vue,ts}', {
-            cwd: themeRoot,
-            absolute: true,
-          })
-
-          for (const layoutPath of layoutPaths) {
-            const layout = basename(layoutPath).replace(/\.\w+$/, '')
-            imports.push(`import __layout_${layout} from "/@fs${layoutPath}"`)
-            layouts[layout] = `__layout_${layout}`
-          }
-
-          code = code.replace('/* __imports__ */', imports.join('\n'))
-          code = code.replace('/* __layouts__ */', `{${Object.entries(layouts).map(([k, v]) => `"${k}": ${v}`).join(',\n')}}`)
-          return code
-        }
-
-        return null
-      },
     },
 
     Vue({
@@ -173,6 +137,7 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
         `${packageRoot}/client/components`,
         `${getThemeRoot()}/components`,
         'src/components',
+        'components',
       ],
 
       customLoaderMatcher: id => id.endsWith('.md'),
@@ -195,6 +160,7 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
       ...windicssOptions,
     }),
 
+    createEntryPlugin(),
     createSlidesLoader(),
     createMonacoLoader(),
   ]
