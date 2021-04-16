@@ -1,7 +1,7 @@
 {
-  "name": "@vite-slides/theme-default",
+  "name": "create-vite-slides",
   "version": "0.0.0-beta.4",
-  "description": "Default theme for Vite Slides",
+  "description": "Create starter template for Vite slides",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
@@ -10,5 +10,9 @@
     "url": "https://github.com/antfu/vite-slides"
   },
   "homepage": "https://github.com/antfu/vite-slides",
-  "bugs": "https://github.com/antfu/vite-slides/issues"
+  "bugs": "https://github.com/antfu/vite-slides/issues",
+  "dependencies": {
+    "enquirer": "^2.3.6",
+    "minimist": "^1.2.5"
+  }
 }
