@@ -2,7 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'windicss/helpers'
 import { Config as WindiConfig } from 'windicss/types/interfaces'
 import { deepMerge } from '@antfu/utils'
-import { getPackageRoot, getThemeRoot } from './env'
+import { getPackageRoot, getThemeRoot } from '../env'
 
 export function getDefultWindiConfig() {
   return defineConfig({
@@ -10,11 +10,18 @@ export function getDefultWindiConfig() {
       include: [
         resolve(getPackageRoot(), 'client/**/*.{vue,ts}'),
         resolve(getThemeRoot(), '**/*.{vue,ts}'),
-        '**/*.{vue,ts}',
+        'src/**/*.{vue,ts}',
+        'components/**/*.{vue,ts}',
         'slides.md',
       ],
+      exclude: [
+        '.git/**',
+        resolve(getThemeRoot(), 'node_modules/*'),
+      ],
     },
-    safelist: '!opacity-0',
+    safelist: [
+      '!opacity-0',
+    ],
     darkMode: 'class',
     preflight: {
       includeAll: true,

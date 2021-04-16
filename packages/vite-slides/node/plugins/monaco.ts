@@ -1,4 +1,5 @@
 import { Plugin, resolvePackageData } from 'vite'
+import base64 from 'js-base64'
 
 export function createMonacoLoader(): Plugin {
   return {
@@ -30,4 +31,15 @@ export function createMonacoLoader(): Plugin {
       }
     },
   }
+}
+
+export function transformMarkdownMonaco(code: string) {
+  // transform monaco
+  code = code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
+    options = options || ''
+    code = base64.encode(code, true)
+    return `<Monaco :code="'${code}'" :lang="'${lang}'" :readonly="${options.includes('readonly')}" />`
+  })
+
+  return code
 }
