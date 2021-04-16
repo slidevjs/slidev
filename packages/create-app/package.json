@@ -9,6 +9,10 @@
     "type": "git",
     "url": "https://github.com/antfu/vite-slides"
   },
+  "main": "index.js",
+  "bin": {
+    "create-vite-slides": "index.js"
+  },
   "homepage": "https://github.com/antfu/vite-slides",
   "bugs": "https://github.com/antfu/vite-slides/issues",
   "dependencies": {
