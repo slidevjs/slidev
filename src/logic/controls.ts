@@ -9,6 +9,8 @@ export interface NavigateControls {
   nextSlide: Fn
   prevSlide: Fn
   routes: RouteRecordRaw[]
+  current: ComputedRef<RouteRecordRaw | undefined>
+  currentPath: ComputedRef<string>
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
@@ -31,6 +33,9 @@ export function createNavigateControls(router: Router) {
 
   const hasNext = computed(() => counter.value < routes.length - 1)
   const hasPrev = computed(() => counter.value > 0)
+
+  const currentPath = computed(() => `/${counter.value}`)
+  const current = computed(() => routes.find(i => i.path === currentPath.value))
 
   function next() {
     if (clickElements.value.length <= clickCurrent.value)
@@ -71,6 +76,8 @@ export function createNavigateControls(router: Router) {
     prev,
     nextSlide,
     prevSlide,
+    current,
+    currentPath,
     paused,
     hasNext,
     hasPrev,

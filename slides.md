@@ -885,7 +885,7 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 
 ------
 
-# Recap:
+# Recap
 
 - Think as "Connections"
 - Accepting ref as arguments

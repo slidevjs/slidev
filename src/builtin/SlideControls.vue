@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { useFullscreen } from '@vueuse/core'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
-const { hasNext, hasPrev, prev, next } = useNavigateControls()
+const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
 
 const showOverview = ref(false)
+
+// @ts-ignore
+const editorLink = computed(() => `vscode-insiders://file/${current.value.meta.slide.file}:${current.value.meta.slide.start}`)
 </script>
 
 <template>
   <SlidesOverview v-model="showOverview" />
   <nav class="opacity-0 pb-4 pt-5 pl-6 pr-4 transition right-0 bottom-0 rounded-tl text-xl flex gap-4 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
+    <a class="icon-btn" :href="editorLink">
+      <simple-icons:visualstudiocode />
+    </a>
+
     <button class="icon-btn" @click="showOverview = !showOverview">
       <carbon:apps />
     </button>
