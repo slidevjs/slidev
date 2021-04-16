@@ -72,7 +72,7 @@ importers:
       vite-plugin-components: ^0.8.3
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.3
-      vite-plugin-windicss: ^0.14.2
+      vite-plugin-windicss: ^0.14.5
       vite-ssg: ^0.9.2
       vue: ^3.0.11
       vue-router: ^4.0.6
@@ -98,7 +98,7 @@ importers:
       vite-plugin-components: 0.8.3_vite@2.1.5
       vite-plugin-icons: 0.5.0_faa3cf5b1c35d6750b84d3fcf4f1d55a
       vite-plugin-md: 0.6.3_vite@2.1.5
-      vite-plugin-windicss: 0.14.2_vite@2.1.5
+      vite-plugin-windicss: 0.14.5_vite@2.1.5
       vite-ssg: 0.9.2_739f33510a3b0b49419638d624cd84f4
       vue: 3.0.11
       vue-router: 4.0.6_vue@3.0.11
@@ -733,8 +733,8 @@ packages:
       - vue
     dev: false
 
-  /@windicss/plugin-utils/0.14.2:
-    resolution: {integrity: sha512-eL7ULKM+NmKFYSbePFoY6ar/qUzhXsCVc45ezzV9R/zJMU/6JjqleShJQ5CifoQ7BuEKvjrHt3p7cBLxMCcmzA==}
+  /@windicss/plugin-utils/0.14.5:
+    resolution: {integrity: sha512-5BFPFGFskNBm9JudAlWJSgk0Pq5H9fmbhY2O2WZzvy0eZCJ9fY3f9lJrUxZElLSP9Tp72r08kV+9x/39X63bsQ==}
     dependencies:
       debug: 4.3.2
       fast-glob: 3.2.5
@@ -3918,12 +3918,12 @@ packages:
       vite: 2.1.5
     dev: false
 
-  /vite-plugin-windicss/0.14.2_vite@2.1.5:
-    resolution: {integrity: sha512-FFS0Q8306p5gR2dNZVQ6E7wwtcNIKIc+bi5+cIahSrzCNPrt0Vy/74xgAui+fKcO0EXbbN6sdeo6IvT0MBMI1w==}
+  /vite-plugin-windicss/0.14.5_vite@2.1.5:
+    resolution: {integrity: sha512-TOYb4Bz5FpWfJavzAtvjuhGew6tJnjx1ZxRmEBOG7RUFFdclWG0CRcHXSVvwpigYHl2TaNwkpHmpM8dyhN6Scw==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.14.2
+      '@windicss/plugin-utils': 0.14.5
       chalk: 4.1.0
       debug: 4.3.2
       vite: 2.1.5

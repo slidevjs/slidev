@@ -1,36 +1,33 @@
-import { resolve } from 'path'
 import { promises as fs } from 'fs'
 import { Plugin } from 'vite'
 import { notNullish } from '@antfu/utils'
 import matter from 'gray-matter'
 import { SlidesMarkdownInfo, parseSlidesMarkdown } from '../parser'
+import { ResolvedViteSlidesOptions } from './options'
 
-let filepath = resolve(__dirname, '../slides.md')
-
-async function read() {
+async function read(filepath: string) {
   return await fs.readFile(filepath, 'utf-8')
 }
 
-export function createSlidesLoader(): Plugin {
+export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin {
   let raw: string | undefined
   let items: SlidesMarkdownInfo[] = []
 
   return {
     name: 'vite-slides:loader',
 
-    async configResolved(_config) {
-      filepath = resolve(_config.root, 'slides.md')
-      raw = await read()
+    async configResolved() {
+      raw = await read(entry)
       items = parseSlidesMarkdown(raw)
     },
 
     configureServer(server) {
-      server.watcher.add(filepath)
+      server.watcher.add(entry)
     },
 
     async handleHotUpdate(ctx) {
-      if (ctx.file === filepath) {
-        raw = await read()
+      if (ctx.file === entry) {
+        raw = await read(entry)
         items = parseSlidesMarkdown(raw)
 
         const moduleEntries = [
@@ -70,7 +67,7 @@ export function createSlidesLoader(): Plugin {
                   start: i.start,
                   end: i.end,
                   note: i.note,
-                  file: filepath,
+                  file: entry,
                 },
               }
               return `{ path: '/${idx}', name: 'page-${idx}', component: n${idx}, meta: ${JSON.stringify(Object.assign(meta, additions))} },\n`

@@ -6,24 +6,14 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
-import { getPackageRoot, getThemeRoot } from '../env'
 import { getDefultWindiConfig } from './windicss'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
+import { resolveOptions, ViteSlidesPluginOptions } from './options'
 
-export type ArgumentsType<T> = T extends ((...args: infer A) => void) ? A : never
-
-export interface ViteSlidesOptions {
-  vue?: ArgumentsType<typeof Vue>[0]
-  markdown?: ArgumentsType<typeof Markdown>[0]
-  components?: ArgumentsType<typeof ViteComponents>[0]
-  windicss?: ArgumentsType<typeof WindiCSS>[0]
-  icons?: ArgumentsType<typeof ViteIcons>[0]
-}
-
-export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
+export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},
@@ -32,7 +22,8 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
     icons: iconsOptions = {},
   } = options
 
-  const packageRoot = getPackageRoot()
+  const slidesOptions = resolveOptions(options)
+  const { themeRoot, packageRoot } = slidesOptions
 
   return [
     Vue({
@@ -73,7 +64,7 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
       dirs: [
         `${packageRoot}/client/builtin`,
         `${packageRoot}/client/components`,
-        `${getThemeRoot()}/components`,
+        `${themeRoot}/components`,
         'src/components',
         'components',
       ],
@@ -95,13 +86,13 @@ export function ViteSlides(options: ViteSlidesOptions = {}): Plugin[] {
 
     ...WindiCSS({
       // TODO: merge with theme/user config
-      config: getDefultWindiConfig(),
+      config: getDefultWindiConfig(slidesOptions),
       ...windicssOptions,
     }),
 
     createConfigPlugin(),
-    createEntryPlugin(),
-    createSlidesLoader(),
+    createEntryPlugin(slidesOptions),
+    createSlidesLoader(slidesOptions),
     createMonacoLoader(),
   ]
 }

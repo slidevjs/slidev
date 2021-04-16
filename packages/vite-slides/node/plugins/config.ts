@@ -27,6 +27,8 @@ export function createConfigPlugin(): Plugin {
             '@vue/compiler-sfc',
             'markdown-it-prism',
             'minimist',
+            'chalk',
+            'fast-glob',
             'vite-plugin-components',
             'vite-plugin-icons',
             'vite-plugin-md',

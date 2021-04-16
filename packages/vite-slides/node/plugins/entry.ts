@@ -2,13 +2,10 @@ import { existsSync } from 'fs'
 import { join, resolve, basename } from 'path'
 import { Plugin } from 'vite'
 import fg from 'fast-glob'
-import { getPackageRoot, getThemeRoot } from '../env'
+import { ResolvedViteSlidesOptions } from './options'
 
-export function createEntryPlugin(): Plugin {
-  const packageRoot = getPackageRoot()
-  const themeRoot = getThemeRoot()
+export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: ResolvedViteSlidesOptions): Plugin {
   const mainEntry = resolve(packageRoot, 'client/main.ts')
-  const userRoot = process.cwd()
 
   return {
     name: 'vite-slides:entry',

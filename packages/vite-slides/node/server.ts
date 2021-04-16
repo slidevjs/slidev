@@ -7,7 +7,9 @@ export async function createServer(entry: string, config: InlineConfig = {}) {
       config,
       {
         plugins: [
-          ViteSlides(),
+          ViteSlides({
+            entry,
+          }),
         ],
       },
     ),

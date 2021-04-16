@@ -10,7 +10,9 @@ export async function build(entry: string, config: InlineConfig = {}) {
       config,
       {
         plugins: [
-          ViteSlides(),
+          ViteSlides({
+            entry,
+          }),
         ],
       },
     ),

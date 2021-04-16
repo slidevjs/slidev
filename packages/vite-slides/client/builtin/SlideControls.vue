@@ -42,3 +42,11 @@ const editorLink = computed(() => `vscode-insiders://file/${current.value.meta.s
     </button>
   </nav>
 </template>
+
+<style scoped lang="postcss">
+.icon-btn {
+  @apply inline-block cursor-pointer select-none !outline-none;
+  @apply opacity-75 transition duration-200 ease-in-out align-middle;
+  @apply hover:(opacity-100 text-teal-600);
+}
+</style>

@@ -1,22 +1,20 @@
 import { resolve } from 'path'
 import { defineConfig } from 'windicss/helpers'
-import { Config as WindiConfig } from 'windicss/types/interfaces'
-import { deepMerge } from '@antfu/utils'
-import { getPackageRoot, getThemeRoot } from '../env'
+import { ResolvedViteSlidesOptions } from './options'
 
-export function getDefultWindiConfig() {
+export function getDefultWindiConfig({ packageRoot, themeRoot }: ResolvedViteSlidesOptions) {
   return defineConfig({
     extract: {
       include: [
-        resolve(getPackageRoot(), 'client/**/*.{vue,ts}'),
-        resolve(getThemeRoot(), '**/*.{vue,ts}'),
+        resolve(packageRoot, 'client/**/*.{vue,ts}'),
+        resolve(themeRoot, '**/*.{vue,ts}'),
         'src/**/*.{vue,ts}',
         'components/**/*.{vue,ts}',
         'slides.md',
       ],
       exclude: [
         '.git/**',
-        resolve(getThemeRoot(), 'node_modules/*'),
+        resolve(themeRoot, 'node_modules/*'),
       ],
     },
     safelist: [
@@ -28,11 +26,6 @@ export function getDefultWindiConfig() {
     },
     shortcuts: {
       'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
-      'icon-btn': `
-        inline-block cursor-pointer select-none !outline-none
-        opacity-75 transition duration-200 ease-in-out align-middle
-        hover:(opacity-100 text-teal-600)
-      `,
       'disabled': 'opacity-25 pointer-events-none',
       'abs-t': 'absolute bottom-0 left-0 right-0',
       'abs-tl': 'absolute top-0 left-0',
@@ -54,8 +47,4 @@ export function getDefultWindiConfig() {
       },
     },
   })
-}
-
-export function extendWindiConfig(a: WindiConfig) {
-  return deepMerge(getDefultWindiConfig(), a)
 }
