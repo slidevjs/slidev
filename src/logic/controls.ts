@@ -1,6 +1,6 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { Fn, useMagicKeys, whenever } from '@vueuse/core'
-import { Router } from 'vue-router'
+import { Router, RouteRecordRaw } from 'vue-router'
 import { clickCurrent, clickElements } from '~/modules/directives'
 
 export interface NavigateControls {
@@ -8,6 +8,7 @@ export interface NavigateControls {
   prev: Fn
   nextSlide: Fn
   prevSlide: Fn
+  routes: RouteRecordRaw[]
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
@@ -73,6 +74,7 @@ export function createNavigateControls(router: Router) {
     paused,
     hasNext,
     hasPrev,
+    routes,
     install(app: App) {
       app.provide(NavigateControlsInjection, navigateControls)
     },

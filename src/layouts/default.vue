@@ -25,7 +25,11 @@
   }
 
   h3 {
-    @apply text-sm pt-2 opacity-40 uppercase tracking-widest font-500 -ml-[0.05em];
+    @apply text-sm pt-2 uppercase tracking-widest font-500 -ml-[0.05em];
+  }
+
+  h3:not(.opacity-100) {
+    @apply opacity-40;
   }
 
   p {

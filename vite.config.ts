@@ -58,12 +58,14 @@ export default defineConfig({
     },
 
     ViteComponents({
-      extensions: ['vue', 'ts'],
+      extensions: ['vue', 'md', 'ts'],
 
       dirs: [
-        'src/components',
         'src/builtin',
+        'src/components',
       ],
+
+      customLoaderMatcher: id => id.endsWith('.md'),
 
       customComponentResolvers: [
         ViteIconsResolver({

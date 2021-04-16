@@ -490,7 +490,7 @@ mouse.x === x.value // true
 
 The `watch` and `computed` will stop themselves on components unmounted. <br>We'd recommend following the same pattern for your custom composable functions.
 
-<div>
+<div v-click>
 
 ```ts{monaco}
 import { onUnmounted } from 'vue'
@@ -508,7 +508,7 @@ export function useEventListener(target: EventTarget, name: string, fn: any) {
 
 </div>
 
-<div class="abs-b mx-14 my-12">
+<div v-click class="abs-b mx-14 my-12">
 <VueUse name="useEventListener"/>
 </div>
 
@@ -538,12 +538,6 @@ const scope = effectScope(() => {
 // dispose all effects in the scope
 stop(scope)
 ```
-
----
-layout: center
----
-
-# Tips
 
 ------
 
@@ -594,6 +588,7 @@ watch(element, (el) => {
 ------
 
 # Typed Provide / Inject <MarkerCore/>
+
 Use the `InjectionKey<T>` helper from Vue to share types across context.
 
 <div>
@@ -615,6 +610,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 ------
 
 # Typed Provide / Inject <MarkerCore/>
+
 Import the key from the same module for `provide` and `inject`.
 
 <div class="grid grid-cols-2 gap-4">
@@ -667,39 +663,100 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 
 ------
 
-# App Level Singleton
+# Shared State <MarkerPattern />
+
+By the nature of Composition API, states can be created and used independently.
 
 <div class="grid grid-cols-2 gap-4">
 
-```ts
-export const keyMyTool: InjectionKey<MyTool> = Symbol()
+<v-click>
 
-export function createMyTool() {
+```ts
+// shared.ts
+import { reactive } from 'vue'
+
+export const state = reactive({
+  foo: 1,
+  bar: 'Hello'
+})
+```
+
+</v-click>
+
+<div>
+<v-clicks>
+
+```ts
+// A.vue
+import { state } from './shared.ts'
+
+state.foo += 1
+```
+
+```ts
+// B.vue
+import { state } from './shared.ts'
+
+console.log(state.foo) // 2
+```
+
+</v-clicks>
+</div>
+</div>
+
+<h3 v-click class="opacity-100">⚠️ But it's not SSR compatible!</h3>
+
+------
+
+# Shared State (SSR friendly) <MarkerPattern />
+
+<div class="grid grid-cols-[max-content,1fr] gap-4">
+
+<v-click>
+
+```ts
+export const myStateKey: InjectionKey<MyState> = Symbol()
+
+export function createMyState() {
   const state = {
     /* ... */
   }
 
   return {
     install(app: App) {
-      app.provide(keyMyTool, state)
+      app.provide(myStateKey, state)
     }
   }
 }
 
-export function useMyTool(): MyTool {
-  return inject(keyMyTool)!
+export function useMyState(): MyState {
+  return inject(myStateKey)!
 }
 ```
 
+</v-click>
+
+<div>
+<v-clicks>
+
 ```ts
+// main.ts
 const App = createApp(App)
 
-app.use(createMyTool())
+app.use(createMyState())
 ```
 
+```ts
+// A.vue
+
+// use everywhere in your app
+const state = useMyState()
+```
+
+</v-clicks>
 </div>
 
-> TODO:
+</div>
 
 ------
 

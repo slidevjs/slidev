@@ -5,7 +5,7 @@ specifiers:
   '@antfu/utils': ^0.0.8
   '@iconify/json': ^1.1.329
   '@types/fs-extra': ^9.0.11
-  '@types/node': ^14.14.40
+  '@types/node': ^14.14.41
   '@types/prettier': ^2.2.3
   '@typescript-eslint/eslint-plugin': ^4.22.0
   '@vitejs/plugin-vue': ^1.2.1
@@ -19,7 +19,7 @@ specifiers:
   js-base64: ^3.6.0
   markdown-it-prism: ^2.1.6
   monaco-editor: ^0.23.0
-  pnpm: ^6.0.2
+  pnpm: ^6.1.0
   prettier: ^2.2.1
   prism-theme-vars: ^0.2.2
   theme-vitesse: ^0.1.9
@@ -46,7 +46,7 @@ devDependencies:
   '@antfu/utils': 0.0.8
   '@iconify/json': 1.1.329
   '@types/fs-extra': 9.0.11
-  '@types/node': 14.14.40
+  '@types/node': 14.14.41
   '@types/prettier': 2.2.3
   '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.24.0+typescript@4.2.4
   '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
@@ -57,7 +57,7 @@ devDependencies:
   js-base64: 3.6.0
   markdown-it-prism: 2.1.6
   monaco-editor: 0.23.0
-  pnpm: 6.0.2
+  pnpm: 6.1.0
   prettier: 2.2.1
   theme-vitesse: 0.1.9
   typescript: 4.2.4
@@ -406,7 +406,7 @@ packages:
   /@types/fs-extra/9.0.11:
     resolution: {integrity: sha512-mZsifGG4QeQ7hlkhO56u7zt/ycBgGxSVsFI/6lGTU34VtwkiqrrSDgw0+ygs8kFGWcXnFQWMrzF2h7TtDFNixA==}
     dependencies:
-      '@types/node': 14.14.40
+      '@types/node': 14.14.41
     dev: true
 
   /@types/json-schema/7.0.7:
@@ -417,8 +417,8 @@ packages:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: true
 
-  /@types/node/14.14.40:
-    resolution: {integrity: sha512-2HoZZGylcnz19ZSbvWhgWHqvprw1ZGHanxIrDWYykPD4CauLW4gcyLzCVfUN2kv/1t1F3CurQIdi+s1l9+XgEA==}
+  /@types/node/14.14.41:
+    resolution: {integrity: sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==}
     dev: true
 
   /@types/normalize-package-data/2.4.0:
@@ -2959,8 +2959,8 @@ packages:
     dev: false
     optional: true
 
-  /pnpm/6.0.2:
-    resolution: {integrity: sha512-Zg1wbTjGu2dcQKzKq4IZSshK6zIEedEvlmE/EpujnFcbzJHXCAuyHZR2GuhR1887qc41dHs/bxnXEOol2/sapQ==}
+  /pnpm/6.1.0:
+    resolution: {integrity: sha512-KOhVnHGsvo0EzlDUGdNCCpju3wPKZ9R31gkCnNITM4KMH7zD/mO7UAOu5lGx6WHK+ZSCeijGYqJNM8MRT7M9AQ==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
