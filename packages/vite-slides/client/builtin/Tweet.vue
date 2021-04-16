@@ -1,30 +1,28 @@
 <script setup lang="ts">
-import { defineProps, onMounted } from 'vue'
+import { defineProps, onMounted, ref } from 'vue'
 import { isDark } from '../logic'
 
-defineProps<{
-  url?: string
+const props = defineProps<{
+  id: string | number
   scale?: string | number
 }>()
 
+const tweet = ref<HTMLElement | null>()
+
 onMounted(() => {
   // @ts-ignore
-  window?.twttr.widgets.load()
+  window?.twttr.widgets.createTweet(
+    props.id.toString(),
+    tweet.value,
+    {
+      theme: isDark.value ? 'dark' : 'light',
+    },
+  )
 })
 </script>
 
 <template>
-  <Transform :scale="scale || 0.7" class="tweet">
-    <blockquote class="twitter-tweet" :data-theme="isDark ? 'dark': 'light'">
-      <slot>
-        <a :href="url" />
-      </slot>
-    </blockquote>
+  <Transform :scale="scale || 0.7">
+    <div ref="tweet"></div>
   </Transform>
 </template>
-
-<style>
-.tweet blockquote {
-  opacity: 0;
-}
-</style>

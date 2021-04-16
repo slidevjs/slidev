@@ -89,7 +89,3 @@
     @apply opacity-40 mb-10 text-2xl;
   }
 }
-
-.layout-master.center {
-  @apply h-full grid place-content-center;
-}

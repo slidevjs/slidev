@@ -10,5 +10,11 @@
     "url": "https://github.com/antfu/vite-slides"
   },
   "homepage": "https://github.com/antfu/vite-slides",
-  "bugs": "https://github.com/antfu/vite-slides/issues"
+  "bugs": "https://github.com/antfu/vite-slides/issues",
+  "peerDependencies": {
+    "vite-slides": "*"
+  },
+  "devDependencies": {
+    "vite-slides": "workspace:*"
+  }
 }

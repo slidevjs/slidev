@@ -2,13 +2,16 @@
   "name": "vite-slides",
   "description": "Opinionated markdown slides maker, powered by Vite and Windi CSS",
   "version": "0.0.0-beta.7",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm",
     "dev": "nr build --watch",
     "start": "esno node/cli.ts",
     "prepublishOnly": "npm run build"
   },
-  "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "repository": {
@@ -28,7 +31,6 @@
   "dependencies": {
     "@antfu/utils": "^0.0.9",
     "@iconify/json": "^1.1.330",
-    "@vite-slides/theme-default": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
     "@vueuse/core": "^4.8.1",

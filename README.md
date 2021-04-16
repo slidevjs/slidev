@@ -6,11 +6,11 @@ Opinionated markdown slides maker, powered by Vite and Windi CSS.
 
 - Single markdown entry for composing your slides. Embedded Vue components support.
 - Powered by [Vite](https://github.com/vitejs/vite) - instant content updating
-- Built-in syntax highlighting supported (via[Prism](https://github.com/PrismJS/prism))
+- Built-in syntax highlighting supported via [Prism](https://github.com/PrismJS/prism)
 - Built-in [Monaco editor](https://github.com/Microsoft/monaco-editor) support for live coding in your presentations (with TypeScript!)
 - Fully themeable
 - Styling powered by [Windi CSS](https://github.com/windicss/windicss)
-- Reuses [Vite's huge ecosystems](https://github.com/vitejs/awesome-vite)
+- Reuses [Vite's huge ecosystem](https://github.com/vitejs/awesome-vite)
 
 ## Motivation
 

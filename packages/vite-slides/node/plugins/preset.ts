@@ -1,12 +1,13 @@
 
+import { resolve } from 'path'
+import { existsSync } from 'fs'
 import { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
-import WindiCSS from 'vite-plugin-windicss'
+import WindiCSS, { loadConfiguration } from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
-import { getDefultWindiConfig } from './windicss'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
@@ -85,8 +86,23 @@ export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
     }),
 
     ...WindiCSS({
-      // TODO: merge with theme/user config
-      config: getDefultWindiConfig(slidesOptions),
+      async onConfigResolved(config, filepath) {
+        if (filepath)
+          return
+
+        // if the user does not provide windi.config
+        const themeConfig = resolve(themeRoot, 'windi.config.ts')
+        if (existsSync(themeConfig)) {
+          return (
+            await loadConfiguration({ config: themeConfig })
+          ).resolved
+        }
+        else {
+          return (
+            await loadConfiguration({ config: resolve(packageRoot, 'client/windi.config.ts') })
+          ).resolved
+        }
+      },
       ...windicssOptions,
     }),
 

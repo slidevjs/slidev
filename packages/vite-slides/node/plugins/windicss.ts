@@ -1,50 +1,19 @@
-import { resolve } from 'path'
-import { defineConfig } from 'windicss/helpers'
-import { ResolvedViteSlidesOptions } from './options'
+import { isObject } from '@antfu/utils'
+import { Config as WindiCssConfig } from 'windicss/types/interfaces'
 
-export function getDefultWindiConfig({ packageRoot, themeRoot }: ResolvedViteSlidesOptions) {
-  return defineConfig({
-    extract: {
-      include: [
-        resolve(packageRoot, 'client/**/*.{vue,ts}'),
-        resolve(themeRoot, '**/*.{vue,ts}'),
-        'src/**/*.{vue,ts}',
-        'components/**/*.{vue,ts}',
-        'slides.md',
-      ],
-      exclude: [
-        '.git/**',
-        resolve(themeRoot, 'node_modules/*'),
-      ],
-    },
-    safelist: [
-      '!opacity-0',
-    ],
-    darkMode: 'class',
-    preflight: {
-      includeAll: true,
-    },
-    shortcuts: {
-      'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
-      'disabled': 'opacity-25 pointer-events-none',
-      'abs-t': 'absolute bottom-0 left-0 right-0',
-      'abs-tl': 'absolute top-0 left-0',
-      'abs-tr': 'absolute top-0 right-0',
-      'abs-b': 'absolute bottom-0 left-0 right-0',
-      'abs-bl': 'absolute bottom-0 left-0',
-      'abs-br': 'absolute bottom-0 right-0',
-    },
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: '"Avenir Next"',
-        },
-        colors: {
-          primary: {
-            DEFAULT: '#42b883',
-          },
-        },
-      },
-    },
+function deepMerge(a: any, b: any, rootPath: string) {
+  a = { ...a }
+  Object.keys(b).forEach((key) => {
+    if (isObject(a[key]))
+      a[key] = deepMerge(a[key], b[key], rootPath ? `${rootPath}.${key}` : key)
+    else if (Array.isArray(a[key]))
+      a[key] = [...a[key], ...b[key]]
+    else
+      a[key] = b[key]
   })
+  return a
+}
+
+export function mergeWindicssConfig(a: WindiCssConfig, b: WindiCssConfig) {
+  return deepMerge(a, b, '')
 }

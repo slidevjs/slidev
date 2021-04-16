@@ -30,8 +30,10 @@ importers:
 
   demo:
     specifiers:
+      '@vite-slides/theme-default': ^0.0.0-beta.4
       vite-slides: workspace:*
     dependencies:
+      '@vite-slides/theme-default': link:../packages/theme-default
       vite-slides: link:../packages/vite-slides
 
   packages/create-app:
@@ -43,7 +45,10 @@ importers:
       minimist: 1.2.5
 
   packages/theme-default:
-    specifiers: {}
+    specifiers:
+      vite-slides: workspace:*
+    devDependencies:
+      vite-slides: link:../vite-slides
 
   packages/vite-slides:
     specifiers:
@@ -55,7 +60,6 @@ importers:
       '@types/node': ^14.14.41
       '@types/prettier': ^2.2.3
       '@typescript-eslint/eslint-plugin': ^4.22.0
-      '@vite-slides/theme-default': workspace:*
       '@vitejs/plugin-vue': ^1.2.1
       '@vue/compiler-sfc': ^3.0.11
       '@vueuse/core': ^4.8.1
@@ -88,7 +92,6 @@ importers:
     dependencies:
       '@antfu/utils': 0.0.9
       '@iconify/json': 1.1.330
-      '@vite-slides/theme-default': link:../theme-default
       '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
       '@vueuse/core': 4.8.1_vue@3.0.11
