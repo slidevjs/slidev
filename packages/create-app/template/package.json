@@ -5,7 +5,7 @@
     "build": "vite-slides build"
   },
   "dependencies": {
-    "@vite-slides/theme-default": "^0.0.0-beta.4",
-    "vite-slides": "^0.0.0-beta.4"
+    "@vite-slides/theme-default": "0.0.0-beta.10",
+    "vite-slides": "0.0.0-beta.10"
   }
 }
