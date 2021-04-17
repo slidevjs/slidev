@@ -277,13 +277,43 @@ The `setup()` only runs **once** on component initialization, to construct the r
 
 <Connections class="mt-4"/>
 
-> TODO:
-
 ------
 
 # One Thing at a Time
 
 > TODO:
+
+------
+
+# Object of Refs <MarkerPattern />
+
+Getting benefits from both `ref` and `reactive` for authoring compsosable functions
+
+<div class="mt-1" />
+<div class="grid grid-cols-2 gap-x-4">
+
+```ts{monaco}
+import { ref, reactive } from 'vue'
+
+function useMouse() {
+  return { 
+    x: ref(0),
+    y: ref(0)
+  }
+}
+
+const { x, y } = useMouse()
+const mouse = reactive(useMouse())
+
+mouse.x === x.value // true
+```
+
+<div class="px-2 py-4">
+
+- Destructurable as Ref
+- Convert to reactive object to get the auto-unwrapping when needed
+
+</div></div>
 
 ------
 
@@ -503,38 +533,6 @@ Extremely useful in composable functions that takes uncertain argument types.
 
 ------
 
-# Object of Refs <MarkerPattern />
-
-Getting benefits from both `ref` and `reactive` for authoring compsosable functions
-
-<div class="mt-1" />
-<div class="grid grid-cols-2 gap-x-4">
-
-```ts{monaco}
-import { ref, reactive } from 'vue'
-
-function useMouse() {
-  return { 
-    x: ref(0),
-    y: ref(0)
-  }
-}
-
-const { x, y } = useMouse()
-const mouse = reactive(useMouse())
-
-mouse.x === x.value // true
-```
-
-<div class="px-2 py-4">
-
-- Destructurable as Ref
-- Convert to reactive object to get the auto-unwrapping when needed
-
-</div></div>
-
-------
-
 # Async to "Sync" <MarkerTips />
 
 With Composition API, we can actually turn async data into "sync"
@@ -564,7 +562,7 @@ const user_url = computed(() => data.value?.user_url)
 
 </div>
 
-We can establish the "Connections" first, then wait data to be filled up. Which is similar to SWR (stale-while-revalidate).
+Establish the "Connections" first, then wait data to be filled up. The idea is similar to SWR (stale-while-revalidate)
 
 </v-clicks>
 
