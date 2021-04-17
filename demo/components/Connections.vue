@@ -21,13 +21,8 @@ watch([a2, b2], () => cc.value = true)
 
 <template>
   <div>
-    <div class="px-4 pt-4 text-xl">
-      <b>
-        𝒛=𝒙
-        <sup>2</sup>+𝒚
-        <sup>2</sup>
-      </b>
-      ={{ a }}x{{ a }}+{{ b }}x{{ b }}={{ c }}
+    <div class="px-6 pt-4 text-xl">
+      <b>𝒛=𝒙²+𝒚²</b>={{ a }}x{{ a }}+{{ b }}x{{ b }}={{ c }}
     </div>
     <div class="relative w-100 h-100">
       <NumBox

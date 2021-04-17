@@ -96,7 +96,7 @@ class: text-center
 
 # Composition API
 
-brief go through
+a brief go-through
 
 ------
 
@@ -238,26 +238,6 @@ unref(bar) // 'bar'
 
 </div></div>
 
-------
-
-# Effects (Watchers)
-
-- computed `sync` `immediate` `lazy-evaluate` `auto-collect`
-- watch `buffered` `auto-unregister` `lazy`
-- watchEffect `buffered` `immediate` `auto-collect`
-
-> TODO:
-
-------
-
-# Flush?
-
-- Computed
-- Watch pre / sync
-- Effect collecting
-
-> TODO:
-
 ---
 layout: center
 class: 'text-center'
@@ -269,51 +249,65 @@ of writing composable functions
 
 ------
 
+# What's Composable Functions
+
+Sets of reusable logic, separation of concerns.
+
+<v-click>
+
+```ts
+export function useDark(options: UseDarkOptions = {}) {
+  const preferredDark = usePreferredDark()         // <--
+  const store = useStorage('vueuse-dark', 'auto')  // <--
+
+  return computed<boolean>({
+    get() {
+      return store.value === 'auto'
+        ? preferredDark.value
+        : store.value === 'dark'
+    },
+    set(v) {
+      store.value = v === preferredDark.value 
+        ? 'auto' : v ? 'dark' : 'light'
+    },
+  })
+}
+```
+
+</v-click>
+
+<div v-click class="abs-b mx-14 my-12">
+<VueUse name="useDark"/>
+</div>
+
+------
+
 # Think as "Connections"
 
 The `setup()` only runs **once** on component initialization, to construct the relations between your state and logic.
 
-- Input -> Output<sup class="ml-1 opacity-50">Effects</sup>
+- Input → Output<sup class="ml-1 opacity-50">Effects</sup>
+- Output reflects to input's changes automatically
 
-<Connections class="mt-4"/>
+<div class="grid grid-cols-[auto,1fr] gap-4">
+  <Connections v-click class="mt-4"/>
+  <div v-click class="p-4">
+    <h3 class="pb-2">SpreadSheet Formula</h3>
+    <img class="h-40" src="https://cdn.wallstreetmojo.com/wp-content/uploads/2019/01/Division-Formula-in-Excel-Example-1-1.png">
+  </div>
+</div>
 
 ------
 
 # One Thing at a Time
 
-> TODO:
+Just the same as authoring JavaScript functions.
 
-------
-
-# Object of Refs <MarkerPattern />
-
-Getting benefits from both `ref` and `reactive` for authoring compsosable functions
-
-<div class="mt-1" />
-<div class="grid grid-cols-2 gap-x-4">
-
-```ts{monaco}
-import { ref, reactive } from 'vue'
-
-function useMouse() {
-  return { 
-    x: ref(0),
-    y: ref(0)
-  }
-}
-
-const { x, y } = useMouse()
-const mouse = reactive(useMouse())
-
-mouse.x === x.value // true
-```
-
-<div class="px-2 py-4">
-
-- Destructurable as Ref
-- Convert to reactive object to get the auto-unwrapping when needed
-
-</div></div>
+- Extract duplicated logics into composable functions
+- Have meaningful names
+- Consistent naming conversions - `useXX` `createXX` `onXX`
+- Keep function small and simple
+- "Do one thing, and do it well"
 
 ------
 
@@ -530,6 +524,43 @@ function useFoo(foo: string | Ref<string>) {
 Extremely useful in composable functions that takes uncertain argument types.
 
 </v-clicks>
+
+------
+
+# Object of Refs <MarkerPattern />
+
+Getting benefits from both `ref` and `reactive` for authoring compsosable functions
+
+<div class="mt-1" />
+<div class="grid grid-cols-2 gap-x-4">
+<v-clicks>
+
+```ts{monaco}
+import { ref, reactive } from 'vue'
+
+function useMouse() {
+  return { 
+    x: ref(0),
+    y: ref(0)
+  }
+}
+
+const { x, y } = useMouse()
+const mouse = reactive(useMouse())
+
+mouse.x === x.value // true
+```
+
+<div class="px-2 py-4">
+
+- Destructurable as Ref
+- Convert to reactive object to get the auto-unwrapping when needed
+
+</div>
+
+</v-clicks>
+</div>
+
 
 ------
 
@@ -1020,10 +1051,13 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 # Recap
 
 - Think as "Connections"
+- One thing as a time
 - Accepting ref as arguments
+- Returns an object of refs
+- Make functions flexible
+- Async to "sync"
 - Side-effect self clean up
-
-> TODO:
+- Shared state
 
 ---
 layout: center
