@@ -12,6 +12,7 @@ importers:
       bumpp: ^6.0.6
       cross-env: ^7.0.3
       eslint: ^7.24.0
+      esno: ^0.5.0
       pnpm: ^6.1.0
       typescript: ^4.2.4
       vite-ssg: ^0.9.2
@@ -24,6 +25,7 @@ importers:
       bumpp: 6.0.6
       cross-env: 7.0.3
       eslint: 7.24.0
+      esno: 0.5.0
       pnpm: 6.1.0
       typescript: 4.2.4
       vite-ssg: 0.9.2
@@ -1493,7 +1495,7 @@ packages:
   /esbuild-register/2.4.0:
     resolution: {integrity: sha512-1mWroad5Mz8fqMxd0GfmEWoAuRBSsBObLVp5rpFOQSavUNgyhR5NoVlECrDcE2iineekoTsBeNS9QxKvqKvNjw==}
     dependencies:
-      esbuild: 0.11.11
+      esbuild: 0.11.12
       jsonc-parser: 3.0.0
     dev: true
 
@@ -1503,8 +1505,8 @@ packages:
     requiresBuild: true
     dev: true
 
-  /esbuild/0.11.11:
-    resolution: {integrity: sha512-iq5YdV63vY/nUAFIvY92BXVkYjMbOchnofLKoLKMPZIa4uuIJAJG9WRA+ZRjQBZbrsORUwvZcANeG2d3p46PJQ==}
+  /esbuild/0.11.12:
+    resolution: {integrity: sha512-c8cso/1RwVj+fbDvLtUgSG4ZJQ0y9Zdrl6Ot/GAjyy4pdMCHaFnDMts5gqFnWRPLajWtEnI+3hlET4R9fVoZng==}
     hasBin: true
     requiresBuild: true
     dev: true
