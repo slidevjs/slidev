@@ -8,3 +8,4 @@ node_modules
 # intellij stuff
 .idea/
 *.pdf
+.cache-remote

@@ -56,6 +56,7 @@ importers:
       '@antfu/ni': ^0.5.7
       '@antfu/utils': ^0.0.9
       '@iconify/json': ^1.1.330
+      '@types/blueimp-md5': ^2.7.0
       '@types/minimist': ^1.2.1
       '@types/node': ^14.14.41
       '@types/prettier': ^2.2.3
@@ -64,6 +65,8 @@ importers:
       '@vue/compiler-sfc': ^3.0.11
       '@vueuse/core': ^4.8.2
       '@vueuse/head': ^0.5.1
+      axios: ^0.21.1
+      blueimp-md5: ^2.18.0
       chalk: ^4.1.0
       cross-env: ^7.0.3
       eslint: ^7.24.0
@@ -98,6 +101,7 @@ importers:
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
       '@vueuse/core': 4.8.2_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
+      axios: 0.21.1
       chalk: 4.1.0
       fast-glob: 3.2.5
       js-base64: 3.6.0
@@ -120,10 +124,12 @@ importers:
     devDependencies:
       '@antfu/eslint-config': 0.6.2_eslint@7.24.0+typescript@4.2.4
       '@antfu/ni': 0.5.7
+      '@types/blueimp-md5': 2.7.0
       '@types/minimist': 1.2.1
       '@types/node': 14.14.41
       '@types/prettier': 2.2.3
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.24.0+typescript@4.2.4
+      blueimp-md5: 2.18.0
       cross-env: 7.0.3
       eslint: 7.24.0
       esno: 0.5.0
@@ -491,6 +497,10 @@ packages:
     dependencies:
       pako: 1.0.11
     dev: false
+
+  /@types/blueimp-md5/2.7.0:
+    resolution: {integrity: sha1-QEIigGgAR4yieC6K1GWQq6fxRic=}
+    dev: true
 
   /@types/json-schema/7.0.7:
     resolution: {integrity: sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==}
@@ -952,6 +962,14 @@ packages:
   /aws4/1.11.0:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
 
+  /axios/0.21.1:
+    resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
+    dependencies:
+      follow-redirects: 1.13.3
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -971,6 +989,10 @@ packages:
   /bluebird/3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
     dev: false
+
+  /blueimp-md5/2.18.0:
+    resolution: {integrity: sha512-vE52okJvzsVWhcgUHOv+69OG3Mdg151xyn41aVQN/5W5S+S43qZhxECtYLAEHMSFWX6Mv5IZrzj3T5+JqXfj5Q==}
+    dev: true
 
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -1994,6 +2016,16 @@ packages:
   /flatted/3.1.1:
     resolution: {integrity: sha512-zAoAQiudy+r5SvnSw3KJy5os/oRJYHzrzja/tBDqrZtNhUw8bt6y8OBzMWcjWr+8liV8Eb6yOhw8WZ7VFZ5ZzA==}
     dev: true
+
+  /follow-redirects/1.13.3:
+    resolution: {integrity: sha512-DUgl6+HDzB0iEptNQEXLx/KhTmDb8tZUHSeLqpnjpknR70H0nC2t9N73BK6fN4hOvJ84pKlIQVQ4k5FFlBedKA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /forever-agent/0.6.1:
     resolution: {integrity: sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=}

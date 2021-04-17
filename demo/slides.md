@@ -65,7 +65,7 @@ layout: center
 
 <div class="grid grid-cols-[3fr,2fr] gap-4">
   <div class="text-center pb-4">
-    <img class="h-50 inline-block" src="https://github.com/vueuse/vueuse/blob/main/packages/public/logo-vertical.png?raw=true">
+    <img class="h-50 inline-block" src="https://raw.githubusercontent.com/vueuse/vueuse/main/packages/public/logo-vertical.png">
     <div class="opacity-50 mb-2 text-sm">
       Collection of essential Vue Composition Utilities
     </div>

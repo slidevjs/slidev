@@ -13,6 +13,7 @@ import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
 import { resolveOptions, ViteSlidesPluginOptions } from './options'
+import { cacheRemoteAssets } from './remoteCache'
 
 export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
   const {
@@ -110,5 +111,6 @@ export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),
     createMonacoLoader(),
+    cacheRemoteAssets(),
   ]
 }
