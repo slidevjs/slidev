@@ -15,7 +15,7 @@ const value = useVModel(props, 'value', emit)
 
 <template>
   <div
-    class="w-16 h-16 rounded-xl shadow text-white overflow-hidden"
+    class="w-16 h-16 rounded-xl text-white overflow-hidden"
     style="background-image: radial-gradient(farthest-corner at 0 0, var(--tw-gradient-from) 30%, var(--tw-gradient-to))"
   >
     <div

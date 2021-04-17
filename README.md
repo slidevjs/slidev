@@ -169,7 +169,10 @@ vite-slides build
 
 **Export**
 
-> Not yet.
+```bash
+npm i -D playwright
+vite-slides export
+```
 
 ## TODO
 
@@ -182,10 +185,10 @@ vite-slides build
 - [x] Slides Overview
 - [ ] Foot notes
 - [x] `v-click` directive
-- [ ] Standalone package
+- [x] Standalone package
   - [x] Dev Mode
   - [x] Build Mode
-  - [ ] Export PDF
+  - [x] Export PDF
   - [x] Configurable themes
 
 ## Sponsors

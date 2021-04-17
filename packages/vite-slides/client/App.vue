@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { useNavigateControls } from './logic'
 import { scale, targetHeight, targetWidth } from './logic/scale'
+import { injectClickDisabled } from './modules/directives'
 
 useHead({
   title: 'Vite Slides',
@@ -16,21 +17,26 @@ const style = computed(() => ({
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
 
+const query = new URLSearchParams(location.search)
+if (query.has('print'))
+  provide(injectClickDisabled, true)
+
 function onClick(e: MouseEvent) {
   const classList = (e.target as HTMLElement)?.classList
   if (classList?.contains('page-root'))
     controls.next()
 }
-
 </script>
 
 <template>
-  <div class="page-root" @click="onClick">
-    <div class="slide-container" :style="style">
-      <RouterView :class="controls.current.value?.meta?.class || ''" />
+  <div>
+    <div class="page-root" @click="onClick">
+      <div class="slide-container" :style="style">
+        <RouterView :class="controls.current.value?.meta?.class || ''" />
+      </div>
     </div>
+    <SlideControls v-if="!query.has('print')" />
   </div>
-  <SlideControls />
 </template>
 
 <style lang="postcss">

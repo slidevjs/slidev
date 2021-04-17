@@ -28,6 +28,14 @@
     "client",
     "dist"
   ],
+  "peerDependencies": {
+    "playwright": "^1.10.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@antfu/utils": "^0.0.9",
     "@iconify/json": "^1.1.330",
@@ -41,6 +49,7 @@
     "markdown-it-prism": "^2.1.6",
     "minimist": "^1.2.5",
     "monaco-editor": "^0.23.0",
+    "pdf-lib": "^1.16.0",
     "prettier": "^2.2.1",
     "prism-theme-vars": "^0.2.2",
     "theme-vitesse": "^0.1.9",
@@ -64,6 +73,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.24.0",
     "esno": "^0.5.0",
+    "playwright": "^1.10.0",
     "pnpm": "^6.1.0",
     "rimraf": "^3.0.2",
     "tsup": "^4.8.21",

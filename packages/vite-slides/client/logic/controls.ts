@@ -55,14 +55,14 @@ export function createNavigateControls(router: Router) {
     clickCurrent.value = 0
     clickElements.value = []
     counter.value = Math.min(routes.length - 1, counter.value + 1)
-    router.push(`/${counter.value}`)
+    router.push(`/${counter.value}${location.search}`)
   }
 
   function prevSlide() {
     clickCurrent.value = 0
     clickElements.value = []
     counter.value = Math.max(0, counter.value - 1)
-    router.push(`/${counter.value}`)
+    router.push(`/${counter.value}${location.search}`)
   }
 
   const { space, right, left, up, down } = useMagicKeys()

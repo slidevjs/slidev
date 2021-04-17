@@ -1,11 +1,11 @@
-import { useElementSize } from '@vueuse/core'
+import { useWindowSize } from '@vueuse/core'
 import { reactive, computed } from 'vue'
 
 export const aspect = 16 / 9
-export const targetWidth = 1920 / 2.2
+export const targetWidth = 980
 export const targetHeight = targetWidth / aspect
 
-const screen = reactive(useElementSize(document.body))
+const screen = reactive(useWindowSize())
 const screenAspect = computed(() => screen.width / screen.height)
 
 export const scale = computed(() => {

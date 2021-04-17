@@ -75,7 +75,7 @@ export const install: UserModule = ({ app }) => {
     },
 
     beforeUnmount(el, dir) {
-      dirProvide(dir, injectClickDisabled, false)
+      dirProvide(dir, injectClickDisabled, true)
     },
   })
 }
