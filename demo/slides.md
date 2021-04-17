@@ -273,10 +273,9 @@ of writing composable functions
 
 The `setup()` only runs **once** on component initialization, to construct the relations between your state and logic.
 
-- Input -> Output
-- Spreadsheet formuala
+- Input -> Output<sup class="ml-1 opacity-50">Effects</sup>
 
-<Connections />
+<Connections class="mt-4"/>
 
 > TODO:
 
