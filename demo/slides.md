@@ -91,9 +91,12 @@ layout: center
 
 ---
 layout: center
+class: text-center
 ---
 
 # Composition API
+
+brief go through
 
 ------
 
@@ -237,12 +240,6 @@ unref(bar) // 'bar'
 
 ------
 
-# Shallow
-
-> TODO:
-
-------
-
 # Effects (Watchers)
 
 - computed `sync` `immediate` `lazy-evaluate` `auto-collect`
@@ -263,9 +260,12 @@ unref(bar) // 'bar'
 
 ---
 layout: center
+class: 'text-center'
 ---
 
-# Patterns
+# Patterns & Tips
+
+of writing composable functions
 
 ------
 
@@ -363,9 +363,42 @@ c.value // 6
 
 ------
 
+# MaybeRef <MarkerTips/>
+
+A custom type helper
+
+```ts
+type MaybeRef<T> = Ref<T> | T
+```
+
+<v-click>
+
+In VueUse, we use this helper heavily to support optional reactive arguments
+
+```ts
+export function useTimeAgo(
+  time: MaybeRef<Date | number | string>,
+  options: TimeAgoOptions = {},
+) {
+  return computed(() => someFormating(unref(time)))
+}
+```
+
+```ts
+useTimeAgo(1618478282830) // 5 mins ago
+
+const time = ref('2021-04-28')
+const timeString = useTimeAgo(time) // Today
+```
+
+</v-click>
+
+
+------
+
 # Make it Flexible <MarkerPattern />
 
-Take the `useTitle` function from VueUse as an example
+Make your functions like LEGO, can be used with different components in different ways.
 
 <div class="grid grid-cols-2 gap-x-4">
 
@@ -408,35 +441,66 @@ name.value = 'Hi' // Hi - World
 
 ------
 
-# MaybeRef <MarkerTips/>
+# `useTitle` <Marker class="text-blue-400">Case</Marker>
 
-A custom type helper
-
-```ts
-type MaybeRef<T> = Ref<T> | T
-```
+Take a look at `useTitle`'s implementation
 
 <v-click>
 
-In VueUse, we use this helper heavily to support optional reactive arguments
-
 ```ts
-export function useTimeAgo(
-  time: MaybeRef<Date | number | string>,
-  options: TimeAgoOptions = {},
+export function useTitle(
+  newTitle?: MaybeRef<string | null | undefined>
 ) {
-  return computed(() => someFormating(unref(time)))
+  // create or use the user provided ref
+  const title = ref(newTitle ?? document.title)
+
+  // sync ref changes to the document title
+  watch(
+    title,
+    (t) => {
+      if (t != null)
+        document.title = t
+    },
+    { immediate: true },
+  )
+
+  return title
 }
 ```
 
-```ts
-useTimeAgo(1618478282830) // 5 mins ago
+</v-click>
 
-const time = ref('2021-04-28')
-const timeString = useTimeAgo(time) // Today
+------
+
+# "Reuse" Ref <MarkerCore />
+
+<v-clicks>
+
+If you pass a `ref` into `ref()`, it will return the original ref as-is.
+
+```ts
+const foo = ref(1)   // Ref<1>
+const bar = ref(foo) // Ref<1>
+
+foo === bar // true
 ```
 
-</v-click>
+
+```ts
+function useFoo(foo: string | Ref<string>) {
+  // no need!
+  const bar = isRef(foo) ? foo : ref(foo)
+
+  // they are the same
+  const bar = ref(foo)
+
+  /* ... */
+}
+```
+
+Extremely useful in composable functions that takes uncertain argument types.
+
+</v-clicks>
 
 ------
 
@@ -472,29 +536,74 @@ mouse.x === x.value // true
 
 ------
 
-# Reactify Normal Functions <MarkerTips />
+# Async to "Sync" <MarkerTips />
 
-- `reactify`
-- Vue Chemistry
+With Composition API, we can actually turn async data into "sync"
 
-<div class="abs-b mx-14 my-12">
-<VueUse name="reactify"/>
+<v-clicks>
+
+<div>
+
+### Async
+
+```ts
+const data = await fetch('https://api.github.com/').then(r => r.json())
+
+// use data
+```
+
 </div>
+<div>
+
+### Composition API
+
+```ts
+const { data } = useFetch('https://api.github.com/').json()
+
+const user_url = computed(() => data.value?.user_url)
+```
+
+</div>
+
+We can establish the "Connections" first, then wait data to be filled up. Which is similar to SWR (stale-while-revalidate).
+
+</v-clicks>
 
 ------
 
-# Async to "Sync" <MarkerTips />
+# `useFetch` <Marker class="text-blue-400">Case</Marker>
 
-- Access dom element
-- Instead of `onMounted`, we can just use `watch`
-- `asyncComputed`
-- `useFetch().json()`
+<v-click>
+
+```ts
+export function useFetch<R>(url: MaybeRef<string>) {
+  const data = ref<T | undefined>()
+  const error = ref<Error | undefined>()
+
+  fetch(unref(url))
+    .then(r => r.json())
+    .then(r => data.value = r)
+    .catch(e => error.value = e)
+
+  return {
+    data,
+    error
+  }
+}
+```
+
+</v-click>
+
+<div v-click class="abs-b mx-14 my-12">
+<VueUse name="useFetch"/>
+</div>
 
 ------
 
 # Side-effects Self Cleanup <MarkerPattern />
 
-The `watch` and `computed` will stop themselves on components unmounted. <br>We'd recommend following the same pattern for your custom composable functions.
+The `watch` and `computed` will stop themselves on components unmounted.<br>
+We'd recommend following the same pattern for your custom composable functions.
 
 <div v-click>
 
@@ -504,11 +613,9 @@ import { onUnmounted } from 'vue'
 export function useEventListener(target: EventTarget, name: string, fn: any) {
   target.addEventListener(name, fn)
 
-  const stop = () => target.removeEventListener(name, fn)
-
-  onUnmounted(stop) // <--
-
-  return stop
+  onUnmounted(() => {
+    target.removeEventListener(name, fn) // <--
+  })
 }
 ```
 
@@ -528,7 +635,6 @@ Lower the mental burden
 
 A new API to collect the side effects automatically. Likely to be shipped with Vue 3.1<br>
 https://github.com/vuejs/rfcs/pull/212
-
 
 ```ts
 // effect, computed, watch, watchEffect created inside the scope will be collected

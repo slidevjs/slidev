@@ -47,9 +47,7 @@ const style = computed(() => ({
           @click="value = false"
         >
           <div :style="innerStyle" class="pointer-events-none">
-            <KeepAlive>
-              <component :is="route.component" v-click-disabled />
-            </KeepAlive>
+            <component :is="route.component" v-click-disabled />
           </div>
         </RouterLink>
         <div class="absolute top-0 left-225px opacity-50">

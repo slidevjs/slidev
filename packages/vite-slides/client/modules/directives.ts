@@ -73,5 +73,9 @@ export const install: UserModule = ({ app }) => {
     mounted(el: HTMLElement, dir) {
       dirProvide(dir, injectClickDisabled, true)
     },
+
+    beforeUnmount(el, dir) {
+      dirProvide(dir, injectClickDisabled, false)
+    },
   })
 }
