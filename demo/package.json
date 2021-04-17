@@ -3,10 +3,11 @@
   "version": "0.0.0-beta.1",
   "scripts": {
     "dev": "vite-slides",
-    "build": "vite-slides build"
+    "build": "vite-slides build",
+    "export": "vite-slides export"
   },
   "dependencies": {
-    "@vite-slides/theme-default": "^0.0.0-beta.4",
+    "@vite-slides/theme-default": "workspace:*",
     "vite-slides": "workspace:*"
   }
 }
