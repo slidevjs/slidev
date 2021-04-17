@@ -11,7 +11,8 @@ const value = useVModel(props, 'modelValue', emit)
 
 const { routes } = useNavigateControls()
 
-const scale = 0.25
+const scale = 0.3
+const cardWidth = targetWidth * scale
 const innerStyle = computed(() => ({
   height: `${targetHeight}px`,
   width: `${targetWidth}px`,
@@ -32,7 +33,7 @@ const style = computed(() => ({
   >
     <div
       class="grid gap-y-4 gap-x-8 w-full"
-      style="grid-template-columns: repeat(auto-fit,minmax(220px,1fr));"
+      :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
     >
       <div
         v-for="(route, idx) of routes.slice(0, -1)"
@@ -50,7 +51,10 @@ const style = computed(() => ({
             <component :is="route.component" v-click-disabled />
           </div>
         </RouterLink>
-        <div class="absolute top-0 left-225px opacity-50">
+        <div
+          class="absolute top-0 opacity-50"
+          :style="`left: ${cardWidth + 5}px`"
+        >
           {{ idx }}
         </div>
       </div>

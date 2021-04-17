@@ -1,13 +1,45 @@
+import { promises as fs } from 'fs'
+
 export interface SlidesMarkdownInfo {
   start: number
   end: number
+  raw: string
   content: string
   note?: string
+  frontmatter?: string
 }
 
-export function parseSlidesMarkdown(raw: string): SlidesMarkdownInfo[] {
-  const lines = raw.split(/\n/g)
-  const pages: SlidesMarkdownInfo[] = []
+export interface ParseOptions {
+  /**
+   * Transform Monaco block
+   *
+   * @default true
+   */
+  enabledMonaco?: boolean
+}
+
+export interface SlidesMarkdown {
+  filepath?: string
+  slides: SlidesMarkdownInfo[]
+  options: ParseOptions
+}
+
+export async function loadSlidesMarkdown(
+  filepath: string,
+  options?: ParseOptions,
+) {
+  const markdown = await fs.readFile(filepath, 'utf-8')
+
+  return parseSlidesMarkdown(markdown, filepath, options)
+}
+
+export function parseSlidesMarkdown(
+  markdown: string,
+  filepath?: string,
+  options: ParseOptions = {},
+): SlidesMarkdown {
+  const lines = markdown.split(/\n/g)
+  const slides: SlidesMarkdownInfo[] = []
   let start = 0
   let dividers = 0
 
@@ -22,10 +54,12 @@ export function parseSlidesMarkdown(raw: string): SlidesMarkdownInfo[] {
 
     if (dividers >= 3 || isHardDivider) {
       const end = isHardDivider ? i - 1 : i
-      pages.push({
+      const raw = lines.slice(start, end).join('\n')
+      slides.push({
         start,
         end,
-        content: lines.slice(start, end).join('\n'),
+        raw,
+        content: raw,
       })
       dividers = isHardDivider ? 2 : 1
       start = isHardDivider ? i + 1 : i
@@ -33,18 +67,18 @@ export function parseSlidesMarkdown(raw: string): SlidesMarkdownInfo[] {
   })
 
   if (start !== lines.length - 1) {
-    pages.push({
+    const raw = lines.slice(start).join('\n')
+    slides.push({
       start,
       end: lines.length,
-      content: lines.slice(start).join('\n'),
+      content: raw,
+      raw,
     })
   }
 
-  pages.push({
-    start: lines.length,
-    end: lines.length,
-    content: '---\nlayout: end\n---',
-  })
-
-  return pages
+  return {
+    filepath,
+    slides,
+    options,
+  }
 }

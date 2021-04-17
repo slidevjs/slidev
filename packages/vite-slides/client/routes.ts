@@ -36,5 +36,12 @@ export function getRoutes(layouts: Record<string, Component> = {}): RouteRecordR
       })
       return i
     }),
+    {
+      path: `/${generatedRoutes.length}`,
+      component: layouts.end,
+      meta: {
+        layout: 'end',
+      },
+    },
   ]
 }

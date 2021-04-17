@@ -4,10 +4,10 @@ import { InlineConfig } from 'vite'
 import { PDFDocument } from 'pdf-lib'
 import { green } from 'chalk'
 import { createServer } from './server'
-import { parseSlidesMarkdown } from './parser'
+import { loadSlidesMarkdown } from './parser'
 
 export async function genratePDF(entry = 'slides.md', config: InlineConfig = {}) {
-  const pages = parseSlidesMarkdown(await fs.readFile(entry, 'utf-8'))
+  const { slides } = await loadSlidesMarkdown(entry)
   const server = await createServer(entry, {
     ...config,
     logLevel: 'silent',
@@ -27,7 +27,7 @@ export async function genratePDF(entry = 'slides.md', config: InlineConfig = {})
   const page = await context.newPage()
 
   const buffers: Buffer[] = []
-  const pagesCount = pages.length - 1
+  const pagesCount = slides.length
   for (let i = 0; i < pagesCount; i++) {
     console.log(`Exporting: ${i + 1} / ${pagesCount}`)
     await page.goto(`http://localhost:${port}/${i}?print`, {

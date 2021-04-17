@@ -8,14 +8,18 @@ const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
 
 const showOverview = ref(false)
 
-// @ts-ignore
-const editorLink = computed(() => `vscode-insiders://file/${current.value.meta.slide.file}:${current.value.meta.slide.start}`)
+const editorLink = computed(() => {
+  const slide = current.value?.meta?.slide as any
+  return (slide?.file && slide?.start)
+    ? `vscode-insiders://file/${slide.file}:${slide.start}`
+    : undefined
+})
 </script>
 
 <template>
   <SlidesOverview v-model="showOverview" />
   <nav class="opacity-0 pb-4 pt-5 pl-6 pr-4 transition right-0 bottom-0 rounded-tl text-xl flex gap-4 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
-    <a class="icon-btn" :href="editorLink">
+    <a v-if="editorLink" class="icon-btn" :href="editorLink">
       <simple-icons:visualstudiocode />
     </a>
 
