@@ -176,14 +176,19 @@ vite-slides export
 
 ## TODO
 
+- [ ] Foot notes
+- [ ] Custom Monaco setup
+- [ ] Configuration in header
+- [ ] Preload next slide
+- [ ] Shiki + TwoSlash
+- [ ] Embedded editor
+- [ ] Hide dev buttons on build
+- [ ] VS Code extension
 - [x] Markdown to Slides
 - [x] Prism hightlighting 
 - [x] Embedded Monaco
-- [ ] Preload next slide
-- [ ] Shiki + TwoSlash
 - [x] Monaco as markdown
 - [x] Slides Overview
-- [ ] Foot notes
 - [x] `v-click` directive
 - [x] Standalone package
   - [x] Dev Mode
