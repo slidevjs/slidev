@@ -1,9 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm -C packages/demo run dev",
-    "demo:build": "npm -C packages/demo run build",
-    "build": "pnpm -r run build",
+    "dev": "pnpm -r --filter ./packages --parallel run dev",
+    "build": "pnpm -r --filter ./packages run build",
+    "demo:dev": "npm -C demo run dev",
+    "demo:build": "npm -C demo run build",
     "release": "esno scripts/release.ts"
   },
   "devDependencies": {
