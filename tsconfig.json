@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "module": "ESNext",
     "target": "es2016",
     "lib": ["DOM", "ESNext"],
@@ -13,7 +12,9 @@
     "forceConsistentCasingInFileNames": true,
     "types": [
       "vite/client",
+      "node",
+      "jest"
     ]
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["**/dist/**", "node_modules"]
 }

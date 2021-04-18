@@ -1,18 +1,17 @@
 import { Plugin } from 'vite'
 import { notNullish } from '@antfu/utils'
 import matter from 'gray-matter'
-import { SlidesMarkdown } from 'packages/vite-slides/dist'
-import { loadSlidesMarkdown } from '../parser'
+import * as parser from '../parser'
 import { ResolvedViteSlidesOptions } from './options'
 
 export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin {
-  let data: SlidesMarkdown
+  let data: parser.SlidesMarkdown
 
   return {
     name: 'vite-slides:loader',
 
     async configResolved() {
-      data = await loadSlidesMarkdown(entry)
+      data = await parser.load(entry)
     },
 
     configureServer(server) {
@@ -21,7 +20,7 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
 
     async handleHotUpdate(ctx) {
       if (ctx.file === entry) {
-        data = await loadSlidesMarkdown(entry)
+        data = await parser.load(entry)
 
         const moduleEntries = [
           '/@vite-slides/routes',

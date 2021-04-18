@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`md parser frontmatter.md: formatted 1`] = `
+"---
+layout: cover
+---
+
+# Hi
+
+
+---
+meta:
+  title: FooBar
+  duration: 12
+layout: center
+---
+
+# Hello
+
+
+------
+
+# Morning
+
+
+---
+layout: text
+---
+
+Hey
+"
+`;
+
+exports[`md parser minimal.md: formatted 1`] = `
+"# H1
+## H2
+### H3
+
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`
+
+
+------
+
+# Hello
+
+- Hello
+- Hi
+- Hey
+- Yo
+
+
+------
+
+Nice to meet you
+"
+`;

@@ -4,10 +4,10 @@ import { InlineConfig } from 'vite'
 import { PDFDocument } from 'pdf-lib'
 import { green } from 'chalk'
 import { createServer } from './server'
-import { loadSlidesMarkdown } from './parser'
+import { load } from './parser'
 
 export async function genratePDF(entry = 'slides.md', config: InlineConfig = {}) {
-  const { slides } = await loadSlidesMarkdown(entry)
+  const { slides } = await load(entry)
   const server = await createServer(entry, {
     ...config,
     logLevel: 'silent',

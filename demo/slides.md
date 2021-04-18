@@ -18,6 +18,7 @@ Anthony Fu
   </div>
 </div>
 
+
 ---
 layout: cover
 ---
@@ -41,6 +42,7 @@ A fanatical full-time open sourceror.<br>
 
 <img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12"/>
 
+
 ---
 layout: center
 ---
@@ -52,11 +54,13 @@ layout: center
   </a>
 </div>
 
+
 ---
 layout: center
 ---
 
 # Composable Vue
+
 
 ---
 name: VueUse
@@ -89,6 +93,7 @@ layout: center
   </div>
 </div>
 
+
 ---
 layout: center
 class: text-center
@@ -97,6 +102,7 @@ class: text-center
 # Composition API
 
 a brief go-through
+
 
 ------
 
@@ -156,6 +162,7 @@ bar.prop = 1
 </div>
 </div></div>
 
+
 ------
 
 # Ref Auto Unwrapping <MarkerCore />
@@ -203,6 +210,7 @@ data.foo // 'bar'
 
 </div>
 
+
 ------
 
 # `unref` - Oppsite of Ref <MarkerCore />
@@ -212,7 +220,7 @@ data.foo // 'bar'
 
 <div class="grid grid-cols-2 gap-x-4 mt-4">
 
-<div>
+<div v-click>
 
 ### Implementation
 
@@ -222,7 +230,7 @@ function unref<T>(r: Ref<T> | T): T {
 }
 ```
 
-</div><div>
+</div><div v-click>
 
 ### Usage
 
@@ -238,14 +246,16 @@ unref(bar) // 'bar'
 
 </div></div>
 
+
 ---
 layout: center
-class: 'text-center'
+class: text-center
 ---
 
 # Patterns & Tips
 
 of writing composable functions
+
 
 ------
 
@@ -280,6 +290,7 @@ export function useDark(options: UseDarkOptions = {}) {
 <VueUse name="useDark"/>
 </div>
 
+
 ------
 
 # Think as "Connections"
@@ -297,6 +308,7 @@ The `setup()` only runs **once** on component initialization, to construct the r
   </div>
 </div>
 
+
 ------
 
 # One Thing at a Time
@@ -308,6 +320,7 @@ Just the same as authoring JavaScript functions.
 - Consistent naming conversions - `useXX` `createXX` `onXX`
 - Keep function small and simple
 - "Do one thing, and do it well"
+
 
 ------
 
@@ -383,6 +396,7 @@ c.value // 6
 </v-clicks>
 
 </div>
+
 
 ------
 
@@ -462,6 +476,7 @@ name.value = 'Hi' // Hi - World
 <VueUse name="useTitle"/>
 </div>
 
+
 ------
 
 # `useTitle` <Marker class="text-blue-400">Case</Marker>
@@ -492,6 +507,7 @@ export function useTitle(
 ```
 
 </v-click>
+
 
 ------
 
@@ -524,6 +540,7 @@ function useFoo(foo: string | Ref<string>) {
 Extremely useful in composable functions that takes uncertain argument types.
 
 </v-clicks>
+
 
 ------
 
@@ -597,6 +614,7 @@ Establish the "Connections" first, then wait data to be filled up. The idea is s
 
 </v-clicks>
 
+
 ------
 
 # `useFetch` <Marker class="text-blue-400">Case</Marker>
@@ -625,6 +643,7 @@ export function useFetch<R>(url: MaybeRef<string>) {
 <div v-click class="abs-b mx-14 my-12">
 <VueUse name="useFetch"/>
 </div>
+
 
 ------
 
@@ -657,6 +676,7 @@ export function useEventListener(target: EventTarget, name: string, fn: any) {
 Lower the mental burden
 -->
 
+
 ------
 
 # `effectScope` RFC <Marker class="text-purple-400">Upcoming</Marker>
@@ -678,6 +698,7 @@ const scope = effectScope(() => {
 // dispose all effects in the scope
 stop(scope)
 ```
+
 
 ------
 
@@ -710,6 +731,7 @@ export default defineComponent({
 
 </div>
 
+
 ------
 
 # Template Ref <MarkerTips />
@@ -740,6 +762,7 @@ export default defineComponent({
 </v-click>
 </div>
 
+
 ------
 
 # Typed Provide / Inject <MarkerCore/>
@@ -761,6 +784,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 ```
 
 </div>
+
 
 ------
 
@@ -816,6 +840,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 );
 </script>
 
+
 ------
 
 # Shared State <MarkerPattern />
@@ -860,6 +885,7 @@ console.log(state.foo) // 2
 </div>
 
 <h3 v-click class="opacity-100">⚠️ But it's not SSR compatible!</h3>
+
 
 ------
 
@@ -920,6 +946,7 @@ const state = useMyState()
 </div>
 
 </div>
+
 
 ------
 
@@ -998,11 +1025,13 @@ export function usePassiveVModel(props, name) {
 }
 ```
 
+
 ---
 layout: center
 ---
 
 # All of them work for both Vue 2 and 3
+
 
 ------
 
@@ -1021,6 +1050,7 @@ Vue.use(VueCompositionAPI)
 import { ref, reactive } from '@vue/composition-api'
 ```
 
+
 ------
 
 # Vue 2.7 <Marker class="text-purple-400">Upcoming</Marker>
@@ -1032,6 +1062,7 @@ import { ref, reactive } from '@vue/composition-api'
 - Migrate codebase to TypeScript.
 - IE11 support.
 - LTS.
+
 
 ------
 
@@ -1046,6 +1077,7 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 
 <img class="h-50 mx-auto" src="https://raw.githubusercontent.com/vueuse/vue-demi/master/assets/banner.png" />
 
+
 ------
 
 # Recap
@@ -1059,9 +1091,10 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 - Side-effect self clean up
 - Shared state
 
+
 ---
 layout: center
-class: 'text-center pb-5'
+class: 'text-center pb-5 :'
 ---
 
 # Thank You!

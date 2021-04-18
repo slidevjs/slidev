@@ -1,4 +1,6 @@
 import { promises as fs } from 'fs'
+import matter from 'gray-matter'
+import YAML from 'js-yaml'
 
 export interface SlidesMarkdownInfo {
   start: number
@@ -6,7 +8,7 @@ export interface SlidesMarkdownInfo {
   raw: string
   content: string
   note?: string
-  frontmatter?: string
+  frontmatter?: Record<string, any>
 }
 
 export interface ParseOptions {
@@ -22,18 +24,45 @@ export interface SlidesMarkdown {
   filepath?: string
   slides: SlidesMarkdownInfo[]
   options: ParseOptions
+  raw: string
 }
 
-export async function loadSlidesMarkdown(
+export async function load(
   filepath: string,
   options?: ParseOptions,
 ) {
   const markdown = await fs.readFile(filepath, 'utf-8')
 
-  return parseSlidesMarkdown(markdown, filepath, options)
+  return parse(markdown, filepath, options)
 }
 
-export function parseSlidesMarkdown(
+export async function save(data: SlidesMarkdown, filepath?: string) {
+  filepath = filepath || data.filepath!
+
+  await fs.writeFile(filepath, stringify(data), 'utf-8')
+}
+
+export function stringify(data: SlidesMarkdown) {
+  return `${
+    data.slides
+      .map((i, idx) => i.raw.startsWith('---') || idx === 0 ? i.raw : `------\n${i.raw}`)
+      .join('\n')
+      .trim()
+  }\n`
+}
+
+export function prettify(data: SlidesMarkdown) {
+  data.slides.forEach((i) => {
+    i.content = `\n${i.content.trim()}\n\n`
+    i.raw = Object.keys(i.frontmatter || {}).length
+      ? `---\n${YAML.safeDump(i.frontmatter).trim()}\n---\n${i.content}`
+      : i.content
+  })
+
+  return data
+}
+
+export function parse(
   markdown: string,
   filepath?: string,
   options: ParseOptions = {},
@@ -42,6 +71,15 @@ export function parseSlidesMarkdown(
   const slides: SlidesMarkdownInfo[] = []
   let start = 0
   let dividers = 0
+
+  function parseContent(raw: string) {
+    const { data: frontmatter, content } = matter(raw)
+    return {
+      raw,
+      frontmatter,
+      content,
+    }
+  }
 
   lines.forEach((line, i) => {
     line = line.trimRight()
@@ -53,13 +91,12 @@ export function parseSlidesMarkdown(
     const isHardDivider = !!line.match(/^----+$/)
 
     if (dividers >= 3 || isHardDivider) {
-      const end = isHardDivider ? i - 1 : i
+      const end = i
       const raw = lines.slice(start, end).join('\n')
       slides.push({
         start,
         end,
-        raw,
-        content: raw,
+        ...parseContent(raw),
       })
       dividers = isHardDivider ? 2 : 1
       start = isHardDivider ? i + 1 : i
@@ -71,12 +108,12 @@ export function parseSlidesMarkdown(
     slides.push({
       start,
       end: lines.length,
-      content: raw,
-      raw,
+      ...parseContent(raw),
     })
   }
 
   return {
+    raw: markdown,
     filepath,
     slides,
     options,

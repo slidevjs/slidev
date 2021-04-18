@@ -8,7 +8,7 @@ console.log(chalk.green`vite-slides v${require('../package.json').version}`)
 console.log(chalk.cyan`vite        v${require('vite/package.json').version}`)
 
 const command = argv._[0]
-const entry = argv._[command ? 1 : 0]
+const entry = argv._[command ? 1 : 0] || 'slides.md'
 
 if (!command || command === 'dev') {
   import('./server')
@@ -30,6 +30,18 @@ else if (command === 'build') {
 else if (command === 'export') {
   import('./export')
     .then(i => i.genratePDF(entry, argv))
+    .catch((err) => {
+      console.error(chalk.red('export error:\n'), err)
+      process.exit(1)
+    })
+}
+else if (command === 'format') {
+  import('./parser')
+    .then(async({ load, prettify, save }) => {
+      const data = await load(entry)
+      prettify(data)
+      await save(data)
+    })
     .catch((err) => {
       console.error(chalk.red('export error:\n'), err)
       process.exit(1)
