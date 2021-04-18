@@ -31,7 +31,7 @@ function onClick(e: MouseEvent) {
 <template>
   <div>
     <div class="page-root" @click="onClick">
-      <div class="slide-container" :style="style">
+      <div class="slide-container" id="slide-container" :style="style">
         <RouterView :class="controls.current.value?.meta?.class || ''" />
       </div>
     </div>
