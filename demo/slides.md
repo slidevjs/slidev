@@ -14,7 +14,7 @@ Anthony Fu
   <img src="https://2020.vueday.it/img/themes/vueday/vueday-logo.png" class="h-8">
   <div class="ml-3 flex flex-col">
     <div><b>Vue</b>Day</div>
-    <div class="text-sm opacity-50">Apr. 28th, 2021</div>
+    <div class="text-sm opacity-50">Apr. 29th, 2021</div>
   </div>
 </div>
 
@@ -427,7 +427,7 @@ export function useTimeAgo(
 ```ts
 useTimeAgo(1618478282830) // 5 mins ago
 
-const time = ref('2021-04-28')
+const time = ref('2021-04-29')
 useTimeAgo(time) // Today
 ```
 
@@ -660,8 +660,8 @@ Establish the "Connections" first, then wait data to be filled up. The idea is s
 
 ```ts
 export function useFetch<R>(url: MaybeRef<string>) {
-  const data = ref<T | undefined>()
-  const error = ref<Error | undefined>()
+  const data = shallowRef<T | undefined>()
+  const error = shallowRef<Error | undefined>()
 
   fetch(unref(url))
     .then(r => r.json())
@@ -737,7 +737,9 @@ stop(scope)
 ```
 
 
-------
+---
+disabled: true
+---
 
 # Template Ref <MarkerTips />
 
@@ -769,7 +771,9 @@ export default defineComponent({
 </div>
 
 
-------
+---
+disabled: true
+---
 
 # Template Ref <MarkerTips />
 
@@ -806,7 +810,7 @@ export default defineComponent({
 
 Use the `InjectionKey<T>` helper from Vue to share types across context.
 
-<div>
+<div v-click>
 
 ```ts{monaco}
 // context.ts

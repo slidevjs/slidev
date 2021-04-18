@@ -58,6 +58,7 @@
     "vite-plugin-components": "^0.8.4",
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.3",
+    "vite-plugin-remote-assets": "^0.0.4",
     "vite-plugin-windicss": "^0.14.6",
     "vite-ssg": "^0.9.2",
     "vue": "^3.0.11",
@@ -66,7 +67,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.2",
-    "@antfu/ni": "^0.5.7",
+    "@antfu/ni": "^0.5.8",
     "@types/blueimp-md5": "^2.7.0",
     "@types/js-yaml": "^3",
     "@types/minimist": "^1.2.1",

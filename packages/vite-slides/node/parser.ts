@@ -68,7 +68,7 @@ export function parse(
   options: ParseOptions = {},
 ): SlidesMarkdown {
   const lines = markdown.split(/\n/g)
-  const slides: SlidesMarkdownInfo[] = []
+  let slides: SlidesMarkdownInfo[] = []
   let start = 0
   let dividers = 0
 
@@ -111,6 +111,8 @@ export function parse(
       ...parseContent(raw),
     })
   }
+
+  slides = slides.filter(i => !i.frontmatter?.disabled)
 
   return {
     raw: markdown,

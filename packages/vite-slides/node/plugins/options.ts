@@ -4,6 +4,7 @@ import ViteIcons from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
+import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
 
 export interface ViteSlidesOptions {
@@ -27,6 +28,7 @@ export interface ViteSlidesPluginOptions extends ViteSlidesOptions {
   components?: ArgumentsType<typeof ViteComponents>[0]
   windicss?: ArgumentsType<typeof WindiCSS>[0]
   icons?: ArgumentsType<typeof ViteIcons>[0]
+  remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
 }
 
 export interface ResolvedViteSlidesOptions {

@@ -1,0 +1,6 @@
+{
+  "exclude": [
+    "js-yaml",
+    "@types/js-yaml"
+  ]
+}

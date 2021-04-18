@@ -1,6 +1,5 @@
 import { Plugin } from 'vite'
 import { notNullish } from '@antfu/utils'
-import matter from 'gray-matter'
 import * as parser from '../parser'
 import { ResolvedViteSlidesOptions } from './options'
 
