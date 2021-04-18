@@ -36,6 +36,7 @@ function onClick(e: MouseEvent) {
       </div>
     </div>
     <SlideControls v-if="!query.has('print')" />
+    <WebCamera />
   </div>
 </template>
 

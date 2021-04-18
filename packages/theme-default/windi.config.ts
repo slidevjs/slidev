@@ -16,7 +16,6 @@ export default mergeWindicssConfig(
     },
     shortcuts: {
       'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
-      'disabled': 'opacity-25 pointer-events-none',
       'abs-t': 'absolute bottom-0 left-0 right-0',
       'abs-tl': 'absolute top-0 left-0',
       'abs-tr': 'absolute top-0 right-0',
