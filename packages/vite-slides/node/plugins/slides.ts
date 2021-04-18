@@ -44,7 +44,7 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
       const match = id.match(/^\/\@vite-slides\/slide\/(\d+).md$/)
       if (match) {
         const pageNo = parseInt(match[1])
-        return data.slides[pageNo].content
+        return data.slides[pageNo].raw
       }
       else if (id === '/@vite-slides/routes') {
         const imports: string[] = []
@@ -53,7 +53,6 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
           data.slides
             .map((i, idx) => {
               imports.push(`import n${idx} from '/@vite-slides/slide/${idx}.md'`)
-              const { data: meta } = matter(i.content)
               const additions = {
                 slide: {
                   start: i.start,
@@ -62,7 +61,7 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
                   file: entry,
                 },
               }
-              return `{ path: '/${idx}', name: 'page-${idx}', component: n${idx}, meta: ${JSON.stringify(Object.assign(meta, additions))} },\n`
+              return `{ path: '/${idx}', name: 'page-${idx}', component: n${idx}, meta: ${JSON.stringify(Object.assign({}, i.frontmatter, additions))} },\n`
             })
             .join('')
         }]`

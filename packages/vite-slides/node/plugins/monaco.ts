@@ -19,12 +19,13 @@ export function createMonacoLoader(): Plugin {
         if (!info)
           return
 
-        if (!info.data.types)
+        const typePath = info.data.types || info.data.typings
+        if (!typePath)
           return ''
 
         return [
           'import * as monaco from \'monaco-editor\'',
-          `import Type from "${info.dir}/${info.data.types}?raw"`,
+          `import Type from "${info.dir}/${typePath}?raw"`,
           ...Object.keys(info.data.dependencies || {}).map(i => `import "/@monaco-types/${i}"`),
           `monaco.languages.typescript.typescriptDefaults.addExtraLib(\`declare module "${pkg}" { \$\{Type\} }\`)`,
         ].join('\n')

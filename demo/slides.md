@@ -412,10 +412,13 @@ type MaybeRef<T> = Ref<T> | T
 
 In VueUse, we use this helper heavily to support optional reactive arguments
 
-```ts
+```ts{monaco}
+import { computed, unref, Ref } from 'vue'
+
+type MaybeRef<T> = Ref<T> | T
+
 export function useTimeAgo(
-  time: MaybeRef<Date | number | string>,
-  options: TimeAgoOptions = {},
+  time: Ref<Date | number | string> | Date | number | string,
 ) {
   return computed(() => someFormating(unref(time)))
 }
@@ -425,7 +428,7 @@ export function useTimeAgo(
 useTimeAgo(1618478282830) // 5 mins ago
 
 const time = ref('2021-04-28')
-const timeString = useTimeAgo(time) // Today
+useTimeAgo(time) // Today
 ```
 
 </v-click>
@@ -483,30 +486,42 @@ name.value = 'Hi' // Hi - World
 
 Take a look at `useTitle`'s implementation
 
-<v-click>
+<div class="grid grid-cols-2 gap-4">
+<v-clicks>
 
-```ts
+```ts{monaco}
+import { ref, watch } from 'vue'
+import { MaybeRef } from '@vueuse/core'
+
 export function useTitle(
-  newTitle?: MaybeRef<string | null | undefined>
+  newTitle: MaybeRef<string | null | undefined>
 ) {
-  // create or use the user provided ref
-  const title = ref(newTitle ?? document.title)
+  const title = ref(newTitle || document.title)
 
-  // sync ref changes to the document title
-  watch(
-    title,
-    (t) => {
-      if (t != null)
-        document.title = t
-    },
-    { immediate: true },
-  )
+  watch(title, (t) => {
+    if (t != null)
+      document.title = t
+  }, { immediate: true })
 
   return title
 }
 ```
 
-</v-click>
+```html 
+
+
+
+
+
+
+<-- 1. use the user provided ref or create a new one
+
+<-- 2. sync ref changes to the document title
+
+```
+
+</v-clicks>
+</div>
 
 
 ------
@@ -526,7 +541,7 @@ foo === bar // true
 
 
 ```ts
-function useFoo(foo: string | Ref<string>) {
+function useFoo(foo: Ref<string> | string) {
   // no need!
   const bar = isRef(foo) ? foo : ref(foo)
 
@@ -537,10 +552,32 @@ function useFoo(foo: string | Ref<string>) {
 }
 ```
 
-Extremely useful in composable functions that takes uncertain argument types.
+Extremely useful in composable functions that take uncertain argument types.
 
 </v-clicks>
 
+------
+
+# `ref` / `unref` <MarkerTips />
+
+<div v-click>
+
+- `MaybeRef<T>` works well with `ref` and `unref`.
+- Use `ref()` when you want to normalized it as a Ref.
+- Use `unref()` when you want to have the value.
+
+<br>
+
+```ts
+type MaybeRef<T> = Ref<T> | T
+
+function useBala<T>(arg: MaybeRef<T>) {
+  const reference = ref(arg) // get the ref
+  const value = unref(arg)   // get the value
+}
+```
+
+</div>
 
 ------
 
