@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { defineProps, onMounted } from 'vue'
-import { cameras, microphones, getDevices, currentCamera, currentMic } from '../logic/recording'
-
-onMounted(() => {
-  getDevices()
-})
+import { cameras, microphones, currentCamera, currentMic } from '../logic/recording'
 </script>
 
 <template>

@@ -1,26 +1,32 @@
-import { computed, Ref, ref, shallowRef, watch } from 'vue'
+import { computed, readonly, Ref, ref, shallowRef, watch } from 'vue'
 import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { useEventListener, useStorage } from '@vueuse/core'
 
-export const devices = ref<MediaDeviceInfo[]>([])
+export const devices = useDevices()
 export const cameras = computed(() => devices.value.filter(i => i.kind === 'videoinput'))
 export const microphones = computed(() => devices.value.filter(i => i.kind === 'audioinput'))
 
 export const currentCamera = useStorage<string>('vite-slide-camera', 'default')
 export const currentMic = useStorage<string>('vite-slide-mic', 'default')
 
-export async function getDevices() {
-  devices.value = await navigator.mediaDevices.enumerateDevices()
-  if (currentCamera.value !== 'none') {
-    if (!cameras.value.find(i => i.deviceId === currentCamera.value))
-      currentCamera.value = cameras.value[0]?.deviceId || 'default'
+export function useDevices() {
+  const devices = ref<MediaDeviceInfo[]>([])
+  async function update() {
+    devices.value = await navigator.mediaDevices.enumerateDevices()
+    // update invalid values
+    if (currentCamera.value !== 'none') {
+      if (!cameras.value.find(i => i.deviceId === currentCamera.value))
+        currentCamera.value = cameras.value[0]?.deviceId || 'default'
+    }
+    if (currentMic.value !== 'none') {
+      if (!microphones.value.find(i => i.deviceId === currentMic.value))
+        currentMic.value = microphones.value[0]?.deviceId || 'default'
+    }
   }
-  if (currentMic.value !== 'none') {
-    if (!microphones.value.find(i => i.deviceId === currentMic.value))
-      currentMic.value = microphones.value[0]?.deviceId || 'default'
-  }
-  return devices.value
+  useEventListener(navigator.mediaDevices, 'devicechange', update)
+  update()
+  return readonly(devices)
 }
 
 export function download(name: string, url: string) {
@@ -107,7 +113,6 @@ export function useRecording() {
   }
 
   async function startRecording() {
-    await getDevices()
     await startCameraStream()
 
     // @ts-expect-error

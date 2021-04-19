@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onClickOutside, useFullscreen } from '@vueuse/core'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
-import { recorder, getDevices, currentCamera } from '../logic/recording'
+import { recorder, currentCamera } from '../logic/recording'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
@@ -23,10 +23,6 @@ const {
   toggleRecording,
   toggleAvatar,
 } = recorder
-
-onMounted(() => {
-  getDevices()
-})
 
 const devicesList = ref()
 const showDevicesList = ref(false)
