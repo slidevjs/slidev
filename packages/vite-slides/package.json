@@ -1,33 +1,33 @@
 {
   "name": "vite-slides",
-  "description": "Opinionated markdown slides maker, powered by Vite and Windi CSS",
   "version": "0.0.0-beta.12",
+  "description": "Opinionated markdown slides maker, powered by Vite and Windi CSS",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antfu/vite-slides"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "files": [
+    "bin",
+    "client",
+    "dist"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "bin": {
+    "vite-slides": "./bin/vite-slides.js"
+  },
   "scripts": {
     "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm",
     "dev": "nr build --watch",
     "start": "esno node/cli.ts",
     "prepublishOnly": "npm run build"
   },
-  "funding": "https://github.com/sponsors/antfu",
-  "author": "antfu <anthonyfu117@hotmail.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/antfu/vite-slides"
-  },
   "homepage": "https://github.com/antfu/vite-slides",
   "bugs": "https://github.com/antfu/vite-slides/issues",
-  "bin": {
-    "vite-slides": "./bin/vite-slides.js"
-  },
-  "files": [
-    "bin",
-    "client",
-    "dist"
-  ],
   "peerDependencies": {
     "playwright": "^1.10.0"
   },
@@ -55,7 +55,7 @@
     "prism-theme-vars": "^0.2.2",
     "recordrtc": "^5.6.2",
     "theme-vitesse": "^0.1.9",
-    "vite": "^2.1.5",
+    "vite": "^2.2.1",
     "vite-plugin-components": "^0.8.4",
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.3",
@@ -67,9 +67,9 @@
     "windicss": "^2.5.14"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.6.2",
+    "@antfu/eslint-config": "^0.6.3",
     "@antfu/ni": "^0.5.8",
-    "@types/blueimp-md5": "^2.7.0",
+    "@types/blueimp-md5": "^2.18.0",
     "@types/js-yaml": "^3",
     "@types/minimist": "^1.2.1",
     "@types/node": "^14.14.41",
@@ -83,7 +83,7 @@
     "playwright": "^1.10.0",
     "pnpm": "^6.1.0",
     "rimraf": "^3.0.2",
-    "tsup": "^4.8.21",
+    "tsup": "^4.9.1",
     "typescript": "^4.2.4"
   }
 }

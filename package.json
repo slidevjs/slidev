@@ -11,7 +11,7 @@
     "release": "esno scripts/release.ts"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.6.2",
+    "@antfu/eslint-config": "^0.6.3",
     "@antfu/utils": "^0.0.9",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.41",
