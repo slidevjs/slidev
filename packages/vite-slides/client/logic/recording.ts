@@ -1,5 +1,4 @@
-import { computed, Ref, ref, shallowRef, unref, watch } from 'vue'
-
+import { computed, Ref, ref, shallowRef, watch } from 'vue'
 import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { useEventListener, useStorage } from '@vueuse/core'
@@ -168,11 +167,11 @@ export function useRecording() {
   }
 
   function closeStream(stream: Ref<MediaStream | undefined>) {
-    const s = unref(stream)
+    const s = stream.value
     if (!s)
       return
     s.getTracks().forEach((i) => {
-      i.clone()
+      i.stop()
       s.removeTrack(i)
     })
     stream.value = undefined

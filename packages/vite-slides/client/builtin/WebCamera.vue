@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEventListener, useStorage } from '@vueuse/core'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { recorder, currentCamera } from '../logic/recording'
 
 const size = useStorage('webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
@@ -12,9 +12,9 @@ const video = ref<HTMLVideoElement | undefined>()
 
 const { streamCamera, showAvatar } = recorder
 
-watch([streamCamera, video], () => {
-  if (video.value && streamCamera.value)
-    video.value.srcObject = streamCamera.value
+watchEffect(() => {
+  if (video.value)
+    video.value.srcObject = streamCamera.value!
 }, { flush: 'post' })
 
 const containerStyle = computed(() => ({
