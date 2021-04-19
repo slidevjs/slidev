@@ -412,23 +412,25 @@ type MaybeRef<T> = Ref<T> | T
 
 In VueUse, we use this helper heavily to support optional reactive arguments
 
+
+```ts
+export function useTimeAgo(
+  time: Date | number | string | Ref<Date | number | string>,
+) {
+  return computed(() => someFormating(unref(time)))
+}
+```
+
 ```ts{monaco}
 import { computed, unref, Ref } from 'vue'
 
 type MaybeRef<T> = Ref<T> | T
 
 export function useTimeAgo(
-  time: Ref<Date | number | string> | Date | number | string,
+  time: MaybeRef<Date | number | string>,
 ) {
   return computed(() => someFormating(unref(time)))
 }
-```
-
-```ts
-useTimeAgo(1618478282830) // 5 mins ago
-
-const time = ref('2021-04-29')
-useTimeAgo(time) // Today
 ```
 
 </v-click>

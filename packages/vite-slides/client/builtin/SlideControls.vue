@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { onClickOutside, useFullscreen } from '@vueuse/core'
+import { computed, onMounted, ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
-import { recorder } from '../logic/recording'
+import { recorder, getDevices, currentCamera } from '../logic/recording'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
@@ -19,8 +19,21 @@ const editorLink = computed(() => {
 const {
   recording,
   showAvatar,
+  streamCamera,
   toggleRecording,
+  toggleAvatar,
 } = recorder
+
+onMounted(() => {
+  getDevices()
+})
+
+const devicesList = ref()
+const showDevicesList = ref(false)
+
+onClickOutside(devicesList, () => {
+  showDevicesList.value = false
+})
 </script>
 
 <template>
@@ -30,18 +43,35 @@ const {
       <carbon:edit />
     </a>
 
-    <button class="icon-btn" :class="{'text-red-500': recording}" @click="toggleRecording">
-      <carbon:stop-outline v-if="recording" />
-      <carbon:video v-else />
-    </button>
-
     <button
+      v-if="currentCamera !== 'none'"
       class="icon-btn"
-      :class="{'text-blue-500': showAvatar && recording, disabled: !recording}"
-      @click="showAvatar = !showAvatar"
+      :class="{'text-green-500': Boolean(showAvatar && streamCamera)}"
+      @click="toggleAvatar"
     >
       <carbon:user-avatar />
     </button>
+
+    <div
+      ref="devicesList"
+      class="flex relative"
+    >
+      <button class="icon-btn" :class="{'text-red-500': recording}" @click="toggleRecording">
+        <carbon:stop-outline v-if="recording" />
+        <carbon:video v-else />
+      </button>
+      <button
+        class="icon-btn !text-sm !px-0"
+        :class="{disabled:recording}"
+        @click="showDevicesList = !showDevicesList"
+      >
+        <carbon:chevron-up class="opacity-50" />
+      </button>
+      <DevicesList
+        v-if="showDevicesList && !recording"
+        class="absolute right-0 bottom-10 bg-main rounded shadow z-20"
+      />
+    </div>
 
     <button class="icon-btn" @click="showOverview = !showOverview">
       <carbon:apps />

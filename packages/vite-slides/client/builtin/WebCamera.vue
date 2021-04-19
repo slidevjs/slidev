@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEventListener, useStorage } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
-import { recorder } from '../logic/recording'
+import { computed, onMounted, ref, watch } from 'vue'
+import { recorder, currentCamera } from '../logic/recording'
 
 const size = useStorage('webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
 const x = useStorage('webcam-x', window.innerWidth - size.value - 30)
@@ -27,10 +27,26 @@ const frameStyle = computed(() => ({
   height: `${size.value}px`,
 }))
 
+const handleStyle = computed(() => ({
+  width: '14px',
+  height: '14px',
+  bottom: `${size.value / 2 * 0.3 - 7}px`,
+  right: `${size.value / 2 * 0.3 - 7}px`,
+  cursor: 'nwse-resize',
+}))
+
 const frameDown = ref(false)
 const handlerDown = ref(false)
 let deletaX = 0
 let deletaY = 0
+
+function fixPosistion() {
+// move back if the camera is outside of the canvas
+  if (x.value >= window.innerWidth)
+    x.value = window.innerWidth - size.value - 30
+  if (y.value >= window.innerHeight)
+    y.value = window.innerHeight - size.value - 30
+}
 
 useEventListener(frame, 'mousedown', (e: MouseEvent) => {
   if (frame.value) {
@@ -62,15 +78,19 @@ useEventListener(window, 'mousemove', (e: MouseEvent) => {
   }
   if (handlerDown.value && frame.value) {
     const box = frame.value.getBoundingClientRect()
-    size.value = Math.min(e.screenX - box.x, e.screenY - box.y)
+    size.value = Math.max(10, Math.min(e.clientX - box.x, e.clientY - box.y))
   }
 })
+
+useEventListener('resize', fixPosistion)
+
+onMounted(fixPosistion)
 </script>
 
 <template>
   <div
-    v-if="streamCamera && showAvatar"
-    class="fixed z-50"
+    v-if="streamCamera && showAvatar && currentCamera !== 'none'"
+    class="fixed z-10"
     :style="containerStyle"
   >
     <div
@@ -90,8 +110,8 @@ useEventListener(window, 'mousemove', (e: MouseEvent) => {
 
     <div
       ref="handler"
-      class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-gray-400 opacity-0 shadow hover:opacity-100"
-      style="cursor: nwse-resize"
+      class="absolute bottom-0 right-0 rounded-full bg-main shadow opacity-0 shadow z-30 hover:opacity-100 dark:(border border-true-gray-700)"
+      :style="handleStyle"
       :class="handlerDown ? '!opacity-100' : ''"
     >
     </div>
