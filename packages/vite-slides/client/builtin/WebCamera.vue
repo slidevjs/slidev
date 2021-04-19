@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { recorder } from '../logic/recording'
 
-const size = ref(Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
-const x = ref(window.innerWidth - size.value - 30)
-const y = ref(window.innerHeight - size.value - 30)
+const size = useStorage('webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
+const x = useStorage('webcam-x', window.innerWidth - size.value - 30)
+const y = useStorage('webcam-y', window.innerHeight - size.value - 30)
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()

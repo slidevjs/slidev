@@ -834,6 +834,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 Import the key from the same module for `provide` and `inject`.
 
 <div class="grid grid-cols-2 gap-4">
+<v-clicks>
 
 ```ts{monaco}
 // parent.vue
@@ -866,6 +867,7 @@ export default {
 }
 ```
 
+</v-clicks>
 </div>
 
 <script setup>
@@ -997,6 +999,7 @@ A helper to make props/emit easier
 
 <div class="grid grid-cols-2 gap-4">
 
+<v-click>
 
 ```ts
 export function useVModel(props, name) {
@@ -1013,7 +1016,11 @@ export function useVModel(props, name) {
 }
 ```
 
+</v-click>
+
 <div>
+
+<v-click>
 
 ```ts
 export default defineComponent({
@@ -1025,7 +1032,9 @@ export default defineComponent({
 })
 ```
 
+</v-click>
 <br>
+<v-click>
 
 ```html
 <template>
@@ -1033,19 +1042,24 @@ export default defineComponent({
 </template>
 ```
 
+</v-click>
 </div>
 </div>
 
-<div class="abs-b mx-14 my-12">
+<div v-click class="abs-b mx-14 my-12">
 <VueUse name="useVModel"/>
 </div>
 
 
-------
+---
+disabled: true
+---
 
 # useVModel (Passive) <MarkerTips />
 
 Make the model able to be updated **independently** from the parent logic 
+
+<v-click>
 
 ```ts
 export function usePassiveVModel(props, name) {
@@ -1066,6 +1080,7 @@ export function usePassiveVModel(props, name) {
 }
 ```
 
+</v-click>
 
 ---
 layout: center

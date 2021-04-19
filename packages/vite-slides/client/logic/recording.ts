@@ -2,7 +2,7 @@ import { Ref, ref, shallowRef, unref } from 'vue'
 
 import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
-import { MaybeRef } from '@vueuse/core'
+import { MaybeRef, useEventListener } from '@vueuse/core'
 
 export function useRecording() {
   const recording = ref(false)
@@ -30,7 +30,11 @@ export function useRecording() {
   async function startRecording() {
     streamCamera.value = await navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: true,
+      audio: {
+        deviceId: {
+          exact: '5d446bf64a1e9b67ef2da996e2a777cf744be03562cdd39099b20ba80f42db0a',
+        },
+      },
     })
     // @ts-expect-error
     streamSlides.value = await navigator.mediaDevices.getDisplayMedia({
@@ -64,7 +68,7 @@ export function useRecording() {
     recorderCamera.value?.stopRecording(() => {
       const blob = recorderCamera.value!.getBlob()
       const url = URL.createObjectURL(blob)
-      download('camera.webm', url)
+      download(`camera-${new Date().toLocaleTimeString().replace(/[:\s_]/g, '-')}.webm`, url)
       window.URL.revokeObjectURL(url)
       closeStream(streamCamera)
       recorderCamera.value = undefined
@@ -73,7 +77,7 @@ export function useRecording() {
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
       const url = URL.createObjectURL(blob)
-      download('screen.webm', url)
+      download(`slides-${new Date().toLocaleTimeString().replace(/[:\s_]/g, '-')}.webm`, url)
       window.URL.revokeObjectURL(url)
       closeStream(streamSlides)
       recorderSlides.value = undefined
@@ -100,6 +104,15 @@ export function useRecording() {
     else
       startRecording()
   }
+
+  useEventListener('beforeunload', (event) => {
+    if (!recording.value)
+      return
+    if (confirm('Recording is not saved yet, do you want to leave?'))
+      return
+    event.preventDefault()
+    event.returnValue = ''
+  })
 
   return {
     recording,
