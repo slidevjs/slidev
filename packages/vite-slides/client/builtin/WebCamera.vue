@@ -30,8 +30,9 @@ const frameStyle = computed(() => ({
 const handleStyle = computed(() => ({
   width: '14px',
   height: '14px',
-  bottom: `${size.value / 2 * 0.3 - 7}px`,
-  right: `${size.value / 2 * 0.3 - 7}px`,
+  // 0.5 + 0.5 / sqrt(2)
+  top: `${size.value * 0.8536 - 7}px`,
+  left: `${size.value * 0.8536 - 7}px`,
   cursor: 'nwse-resize',
 }))
 
@@ -78,7 +79,7 @@ useEventListener(window, 'mousemove', (e: MouseEvent) => {
   }
   if (handlerDown.value && frame.value) {
     const box = frame.value.getBoundingClientRect()
-    size.value = Math.max(10, Math.min(e.clientX - box.x, e.clientY - box.y))
+    size.value = Math.max(10, Math.min(e.clientX - box.x, e.clientY - box.y) / 0.8536)
   }
 })
 
