@@ -6,7 +6,7 @@
     "export": "vite-slides export"
   },
   "dependencies": {
-    "@vite-slides/theme-default": "^0.0.0-beta.11",
-    "vite-slides": "^0.0.0-beta.11"
+    "@vite-slides/theme-default": "^0.0.0-beta.12",
+    "vite-slides": "^0.0.0-beta.12"
   }
 }
