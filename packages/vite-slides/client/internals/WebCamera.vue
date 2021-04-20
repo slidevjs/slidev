@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEventListener, useStorage } from '@vueuse/core'
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { recorder, currentCamera } from '../logic/recording'
 
 const size = useStorage('webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))

@@ -4,6 +4,7 @@ import { computed, provide } from 'vue'
 import { useNavigateControls } from './logic'
 import { scale, targetHeight, targetWidth } from './logic/scale'
 import { injectClickDisabled } from './modules/directives'
+import Controls from './internals/Controls.vue'
 
 useHead({
   title: 'Vite Slides',
@@ -35,8 +36,7 @@ function onClick(e: MouseEvent) {
         <RouterView :class="controls.current.value?.meta?.class || ''" />
       </div>
     </div>
-    <SlideControls v-if="!query.has('print')" />
-    <WebCamera />
+    <Controls v-if="!query.has('print')" />
   </div>
 </template>
 

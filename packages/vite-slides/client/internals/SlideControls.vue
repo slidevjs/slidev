@@ -3,15 +3,15 @@ import { onClickOutside, useFullscreen } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
 import { recorder, currentCamera } from '../logic/recording'
+import { showOverview } from '../logic/state'
+import DevicesList from './DevicesList.vue'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
 
-const showOverview = ref(false)
-
 const editorLink = computed(() => {
   const slide = current.value?.meta?.slide as any
-  return (slide?.file && slide?.start)
+  return (slide?.file)
     ? `vscode-insiders://file/${slide.file}:${slide.start}`
     : undefined
 })
@@ -30,12 +30,13 @@ const showDevicesList = ref(false)
 onClickOutside(devicesList, () => {
   showDevicesList.value = false
 })
+
+const dev = import.meta.env.DEV
 </script>
 
 <template>
-  <SlidesOverview v-model="showOverview" />
   <nav class="opacity-0 py-2 pl-4 pr-2 transition right-0 bottom-0 rounded-tl text-xl flex gap-1 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
-    <a v-if="editorLink" class="icon-btn" :href="editorLink">
+    <a v-if="dev && editorLink" class="icon-btn" :href="editorLink">
       <carbon:edit />
     </a>
 
