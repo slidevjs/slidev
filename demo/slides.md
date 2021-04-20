@@ -263,7 +263,7 @@ of writing composable functions
 
 Sets of reusable logic, separation of concerns.
 
-<v-click>
+<div v-click class="grid grid-cols-[1fr,130px]">
 
 ```ts
 export function useDark(options: UseDarkOptions = {}) {
@@ -284,7 +284,11 @@ export function useDark(options: UseDarkOptions = {}) {
 }
 ```
 
-</v-click>
+<div class="grid">
+<DarkToggle class="m-auto"/>
+</div>
+
+</div>
 
 <div v-click class="abs-b mx-14 my-12">
 <VueUse name="useDark"/>
