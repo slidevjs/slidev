@@ -1,14 +1,15 @@
 # vite-slides
 
-Opinionated markdown slides maker, powered by Vite and Windi CSS.
+Slides for developers 🧑‍💻👩‍💻👨‍💻
 
 ## Features
 
-- Single markdown entry for composing your slides. Embedded Vue components support.
-- Powered by [Vite](https://github.com/vitejs/vite) - instant content updating
+- Single markdown entry for composing your slides. Embedded Vue components support
+- Powered by [Vite](https://github.com/vitejs/vite) - instant content updating ⚡️
 - Built-in syntax highlighting supported via [Prism](https://github.com/PrismJS/prism)
 - Built-in [Monaco editor](https://github.com/Microsoft/monaco-editor) support for live coding in your presentations (with TypeScript!)
-- Fully themeable
+- Built-in camera and recording support
+- Fully customizable and themeable
 - Styling powered by [Windi CSS](https://github.com/windicss/windicss)
 - Reuses [Vite's huge ecosystem](https://github.com/vitejs/awesome-vite)
 
@@ -184,6 +185,8 @@ vite-slides export
 - [ ] Embedded editor
 - [ ] Hide dev buttons on build
 - [ ] VS Code extension
+- [x] Camera view
+- [x] Recording!
 - [x] Markdown to Slides
 - [x] Prism hightlighting 
 - [x] Embedded Monaco
