@@ -35,7 +35,7 @@ const dev = import.meta.env.DEV
 </script>
 
 <template>
-  <nav class="opacity-0 py-2 pl-4 pr-2 transition right-0 bottom-0 rounded-tl text-xl flex gap-1 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
+  <nav class="opacity-0 py-2 pl-4 pr-2 transition right-0 top-0 rounded-bl text-xl flex gap-1 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
     <a v-if="dev && editorLink" class="icon-btn" :href="editorLink">
       <carbon:edit />
     </a>
@@ -62,11 +62,11 @@ const dev = import.meta.env.DEV
         :class="{disabled:recording}"
         @click="showDevicesList = !showDevicesList"
       >
-        <carbon:chevron-up class="opacity-50" />
+        <carbon:chevron-down class="opacity-50" />
       </button>
       <DevicesList
         v-if="showDevicesList && !recording"
-        class="absolute right-0 bottom-10 bg-main rounded shadow z-20"
+        class="absolute right-0 top-10 bg-main rounded shadow z-20"
       />
     </div>
 

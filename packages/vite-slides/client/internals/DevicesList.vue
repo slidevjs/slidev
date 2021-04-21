@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { cameras, microphones, currentCamera, currentMic } from '../logic/recording'
+import { cameras, microphones, currentCamera, currentMic, ensureDevicesListPermissions } from '../logic/recording'
+
+ensureDevicesListPermissions()
 </script>
 
 <template>

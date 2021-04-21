@@ -1,20 +1,18 @@
-import { computed, readonly, Ref, ref, shallowRef, watch } from 'vue'
+import { Ref, ref, shallowRef, watch } from 'vue'
 import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
-import { useEventListener, useStorage } from '@vueuse/core'
-
-export const devices = useDevices()
-export const cameras = computed(() => devices.value.filter(i => i.kind === 'videoinput'))
-export const microphones = computed(() => devices.value.filter(i => i.kind === 'audioinput'))
+import { useEventListener, useStorage, useDevicesList } from '@vueuse/core'
 
 export const currentCamera = useStorage<string>('vite-slide-camera', 'default')
 export const currentMic = useStorage<string>('vite-slide-mic', 'default')
 
-export function useDevices() {
-  const devices = ref<MediaDeviceInfo[]>([])
-  async function update() {
-    devices.value = await navigator.mediaDevices.enumerateDevices()
-    // update invalid values
+export const {
+  devices,
+  videoInputs: cameras,
+  audioInputs: microphones,
+  ensurePermissions: ensureDevicesListPermissions,
+} = useDevicesList({
+  onUpdated() {
     if (currentCamera.value !== 'none') {
       if (!cameras.value.find(i => i.deviceId === currentCamera.value))
         currentCamera.value = cameras.value[0]?.deviceId || 'default'
@@ -23,11 +21,8 @@ export function useDevices() {
       if (!microphones.value.find(i => i.deviceId === currentMic.value))
         currentMic.value = microphones.value[0]?.deviceId || 'default'
     }
-  }
-  useEventListener(navigator.mediaDevices, 'devicechange', update)
-  update()
-  return readonly(devices)
-}
+  },
+})
 
 export function download(name: string, url: string) {
   const a = document.createElement('a')

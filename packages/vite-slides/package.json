@@ -44,11 +44,11 @@
     }
   },
   "dependencies": {
-    "@antfu/utils": "^0.0.9",
-    "@iconify/json": "^1.1.330",
+    "@antfu/utils": "^0.1.0",
+    "@iconify/json": "^1.1.331",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
-    "@vueuse/core": "^4.8.2",
+    "@vueuse/core": "^4.8.4",
     "@vueuse/head": "^0.5.1",
     "chalk": "^4.1.0",
     "fast-glob": "^3.2.5",
@@ -74,7 +74,7 @@
     "windicss": "^2.5.14"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.6.3",
+    "@antfu/eslint-config": "^0.6.4",
     "@antfu/ni": "^0.5.8",
     "@types/blueimp-md5": "^2.18.0",
     "@types/js-yaml": "^3",
