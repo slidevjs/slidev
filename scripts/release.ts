@@ -6,7 +6,7 @@ function run(command: string) {
   execSync(command, { stdio: 'inherit' })
 }
 
-run('npx bumpp package.json packages/*/package.json')
+run('npx bumpp package.json packages/*/package.json --preid alpha')
 const version = require('../package.json').version
 
 const pkg = JSON.parse(readFileSync('packages/create-app/template/package.json', 'utf-8'))
