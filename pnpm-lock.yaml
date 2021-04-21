@@ -53,6 +53,7 @@ importers:
       '@antfu/utils': ^0.1.0
       '@iconify/json': ^1.1.331
       '@types/blueimp-md5': ^2.18.0
+      '@types/codemirror': ^0.0.109
       '@types/js-yaml': ^3
       '@types/minimist': ^1.2.1
       '@types/node': ^14.14.41
@@ -65,6 +66,7 @@ importers:
       '@vueuse/head': ^0.5.1
       blueimp-md5: ^2.18.0
       chalk: ^4.1.0
+      codemirror: ^5.61.0
       cross-env: ^7.0.3
       eslint: ^7.24.0
       esno: ^0.5.0
@@ -78,7 +80,6 @@ importers:
       playwright: ^1.10.0
       pnpm: ^6.1.0
       prettier: ^2.2.1
-      prism-theme-vars: ^0.2.2
       recordrtc: ^5.6.2
       rimraf: ^3.0.2
       theme-vitesse: ^0.1.9
@@ -102,6 +103,7 @@ importers:
       '@vueuse/core': 4.8.4_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
       chalk: 4.1.0
+      codemirror: 5.61.0
       fast-glob: 3.2.5
       js-base64: 3.6.0
       js-yaml: 3.14.1
@@ -110,7 +112,6 @@ importers:
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
       prettier: 2.2.1
-      prism-theme-vars: 0.2.2
       recordrtc: 5.6.2
       theme-vitesse: 0.1.9
       vite: 2.2.1
@@ -127,6 +128,7 @@ importers:
       '@antfu/eslint-config': 0.6.4_eslint@7.24.0+typescript@4.2.4
       '@antfu/ni': 0.5.8
       '@types/blueimp-md5': 2.18.0
+      '@types/codemirror': 0.0.109
       '@types/js-yaml': 3.12.6
       '@types/minimist': 1.2.1
       '@types/node': 14.14.41
@@ -154,6 +156,11 @@ importers:
   packages/theme-default:
     specifiers:
       aslide: workspace:*
+      codemirror-theme-vars: ^0.1.0
+      prism-theme-vars: ^0.2.2
+    dependencies:
+      codemirror-theme-vars: 0.1.0
+      prism-theme-vars: 0.2.2
     devDependencies:
       aslide: link:../aslide
 
@@ -1033,6 +1040,16 @@ packages:
     resolution: {integrity: sha512-f4A+++lGZGJvVSgeyMkqA7BEf2BVQli6F+qEykKb49c5ieWQBkfpn6CP5c1IZr2Yi2Ofl6Fj+v0e1fN18Z8Cnw==}
     dev: true
 
+  /@types/codemirror/0.0.109:
+    resolution: {integrity: sha512-cSdiHeeLjvGn649lRTNeYrVCDOgDrtP+bDDSFDd1TF+i0jKGPDRozno2NOJ9lTniso+taiv4kiVS8dgM8Jm5lg==}
+    dependencies:
+      '@types/tern': 0.23.3
+    dev: true
+
+  /@types/estree/0.0.47:
+    resolution: {integrity: sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==}
+    dev: true
+
   /@types/graceful-fs/4.1.5:
     resolution: {integrity: sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==}
     dependencies:
@@ -1100,6 +1117,12 @@ packages:
 
   /@types/stack-utils/2.0.0:
     resolution: {integrity: sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==}
+    dev: true
+
+  /@types/tern/0.23.3:
+    resolution: {integrity: sha512-imDtS4TAoTcXk0g7u4kkWqedB3E4qpjXzCpD2LU5M5NAXHzCDsypyvXSaG7mM8DKYkCRa7tFp4tS/lp/Wo7Q3w==}
+    dependencies:
+      '@types/estree': 0.0.47
     dev: true
 
   /@types/yargs-parser/20.2.0:
@@ -2009,6 +2032,14 @@ packages:
     resolution: {integrity: sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
     dev: true
+
+  /codemirror-theme-vars/0.1.0:
+    resolution: {integrity: sha512-gcBzs+Tt+/hD3Dg+kwfFrotSpLkPzXuttj8KKWP+J3Ova8bHf7jNL4QytmRDPEi/LFqmxo/jox3PCU2FnWs+xw==}
+    dev: false
+
+  /codemirror/5.61.0:
+    resolution: {integrity: sha512-D3wYH90tYY1BsKlUe0oNj2JAhQ9TepkD51auk3N7q+4uz7A/cgJ5JsWHreT0PqieW1QhOuqxQ2reCXV1YXzecg==}
+    dev: false
 
   /collect-v8-coverage/1.0.1:
     resolution: {integrity: sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg==}

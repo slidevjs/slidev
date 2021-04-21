@@ -3,6 +3,7 @@ import { getRoutes } from './routes'
 import App from './App.vue'
 import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
+import './style/index.css'
 /* __imports__ */
 import 'virtual:windi-utilities.css'
 import 'virtual:windi-devtools'

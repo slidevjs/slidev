@@ -6,8 +6,8 @@
 import { ref, onMounted, onUnmounted, defineProps, watch, computed } from 'vue'
 import { ignorableWatch } from '@vueuse/core'
 import { decode } from 'js-base64'
-import { formatCode } from '../logic/prettier'
-import { monaco } from '../setup/MonacoEnv'
+import { formatCode } from '../setup/prettier'
+import { monaco } from '../setup/monaco'
 import { isDark, useNavigateControls } from '../logic'
 
 const props = defineProps({

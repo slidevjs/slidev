@@ -1,5 +1,6 @@
-/* https://github.com/antfu/prism-theme-vars */
 @import 'prism-theme-vars/base.css';
+@import 'codemirror-theme-vars/base.css';
+@import 'prism-theme-vars/to-codemirror.css';
 
 :root {
   --prism-font-family: 'Fira Code', monospace;

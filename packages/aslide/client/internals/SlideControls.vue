@@ -97,15 +97,3 @@ const dev = import.meta.env.DEV
     </button>
   </nav>
 </template>
-
-<style scoped lang="postcss">
-.icon-btn {
-  @apply inline-block cursor-pointer select-none !outline-none;
-  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-2;
-  @apply hover:(opacity-100 bg-$prism-background);
-}
-
-.icon-btn.disabled {
-  @apply opacity-25 pointer-events-none;
-}
-</style>
