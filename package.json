@@ -4,6 +4,8 @@
   "scripts": {
     "dev": "pnpm -r --filter ./packages --parallel run dev",
     "build": "pnpm -r --filter ./packages run build",
+    "docs": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
     "demo:dev": "npm -C demo run dev",
     "demo:build": "npm -C demo run build",
     "test": "jest",
@@ -25,6 +27,7 @@
     "jest": "^26.6.3",
     "pnpm": "^6.1.0",
     "ts-jest": "^26.5.5",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "vitepress": "^0.13.0"
   }
 }

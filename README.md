@@ -1,6 +1,6 @@
-# aslide
+# Aslide
 
-Slides for developers 🧑‍💻👩‍💻👨‍💻
+Presentation slides for developers 🧑‍💻👩‍💻👨‍💻
 
 ## Features
 
@@ -181,10 +181,12 @@ aslide export
 - [ ] Custom Monaco setup
 - [ ] Configuration in header
 - [ ] Preload next slide
-- [ ] Shiki + TwoSlash
+- [ ] Shiki + TwoSlash?
 - [ ] Embedded editor
 - [ ] Hide dev buttons on build
 - [ ] VS Code extension
+- [ ] Timer
+- [ ] A few more themes
 - [x] Camera view
 - [x] Recording!
 - [x] Markdown to Slides
