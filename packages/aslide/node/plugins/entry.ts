@@ -2,9 +2,9 @@ import { existsSync } from 'fs'
 import { join, resolve, basename } from 'path'
 import { Plugin } from 'vite'
 import fg from 'fast-glob'
-import { ResolvedViteSlidesOptions } from './options'
+import { ResolvedAslideOptions } from './options'
 
-export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: ResolvedViteSlidesOptions): Plugin {
+export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: ResolvedAslideOptions): Plugin {
   const mainEntry = resolve(packageRoot, 'client/main.ts')
 
   return {

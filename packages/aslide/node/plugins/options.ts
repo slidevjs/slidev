@@ -7,7 +7,7 @@ import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
 
-export interface ViteSlidesOptions {
+export interface AslideOptions {
   /**
    * Markdown entry
    *
@@ -22,7 +22,7 @@ export interface ViteSlidesOptions {
   theme?: string
 }
 
-export interface ViteSlidesPluginOptions extends ViteSlidesOptions {
+export interface AslidePluginOptions extends AslideOptions {
   vue?: ArgumentsType<typeof Vue>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]
   components?: ArgumentsType<typeof ViteComponents>[0]
@@ -31,7 +31,7 @@ export interface ViteSlidesPluginOptions extends ViteSlidesOptions {
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
 }
 
-export interface ResolvedViteSlidesOptions {
+export interface ResolvedAslideOptions {
   entry: string
   userRoot: string
   packageRoot: string
@@ -39,7 +39,7 @@ export interface ResolvedViteSlidesOptions {
   themeRoot: string
 }
 
-export function resolveOptions(options: ViteSlidesOptions): ResolvedViteSlidesOptions {
+export function resolveOptions(options: AslideOptions): ResolvedAslideOptions {
   const userRoot = process.cwd()
   const {
     entry = 'slides.md',

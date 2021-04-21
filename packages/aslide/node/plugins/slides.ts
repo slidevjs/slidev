@@ -1,9 +1,28 @@
 import { Plugin } from 'vite'
 import { notNullish } from '@antfu/utils'
+import type { Connect } from 'vite'
 import * as parser from '../parser'
-import { ResolvedViteSlidesOptions } from './options'
+import { ResolvedAslideOptions } from './options'
 
-export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin {
+const regexId = /^\/\@aslide\/slide\/(\d+)\.(md|json)(?:\?import)?$/
+
+function getBodyJson(req: Connect.IncomingMessage) {
+  return new Promise<any>((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => body += chunk)
+    req.on('error', reject)
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body) || {})
+      }
+      catch (e) {
+        reject(e)
+      }
+    })
+  })
+}
+
+export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
   let data: parser.SlidesMarkdown
 
   return {
@@ -15,6 +34,30 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
 
     configureServer(server) {
       server.watcher.add(entry)
+
+      server.middlewares.use(async(req, res, next) => {
+        const match = req.url?.match(regexId)
+        if (!match)
+          return next()
+
+        const [, no, type] = match
+        if (type === 'json' && req.method === 'GET') {
+          res.write(JSON.stringify(data.slides[parseInt(no)]))
+          return res.end()
+        }
+        if (type === 'json' && req.method === 'POST') {
+          const body = await getBodyJson(req)
+          // console.log(req.url, body)
+          Object.assign(data.slides[parseInt(no)], body)
+          await parser.save(data, entry)
+          res.statusCode = 200
+          return res.end()
+        }
+
+        // console.log(`Hello from ${req.url} ${req.method}`)
+
+        next()
+      })
     },
 
     async handleHotUpdate(ctx) {
@@ -24,6 +67,7 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
         const moduleEntries = [
           '/@aslide/routes',
           ...data.slides.map((i, idx) => `/@aslide/slide/${idx}.md`),
+          ...data.slides.map((i, idx) => `/@aslide/slide/${idx}.json`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
@@ -40,10 +84,12 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
     },
 
     load(id) {
-      const match = id.match(/^\/\@aslide\/slide\/(\d+).md$/)
+      const match = id.match(regexId)
       if (match) {
-        const pageNo = parseInt(match[1])
-        return data.slides[pageNo].raw
+        const [, id, type] = match
+        const pageNo = parseInt(id)
+        if (type === 'md')
+          return data.slides[pageNo].raw
       }
       else if (id === '/@aslide/routes') {
         const imports: string[] = []
@@ -51,6 +97,8 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
         const routes = `export default [\n${
           data.slides
             .map((i, idx) => {
+              if (i.frontmatter?.disabled)
+                return ''
               imports.push(`import n${idx} from '/@aslide/slide/${idx}.md'`)
               const additions = {
                 slide: {

@@ -45,20 +45,36 @@ export async function save(data: SlidesMarkdown, filepath?: string) {
 export function stringify(data: SlidesMarkdown) {
   return `${
     data.slides
-      .map((i, idx) => i.raw.startsWith('---') || idx === 0 ? i.raw : `------\n${i.raw}`)
+      .map(stringifySlide)
       .join('\n')
       .trim()
   }\n`
 }
 
-export function prettify(data: SlidesMarkdown) {
-  data.slides.forEach((i) => {
-    i.content = `\n${i.content.trim()}\n\n`
-    i.raw = Object.keys(i.frontmatter || {}).length
-      ? `---\n${YAML.safeDump(i.frontmatter).trim()}\n---\n${i.content}`
-      : i.content
-  })
+export function filterDisabled(data: SlidesMarkdown) {
+  data.slides = data.slides.filter(i => !i.frontmatter?.disabled)
+  return data
+}
 
+function stringifySlide(data: SlidesMarkdownInfo, idx = 1) {
+  if (!data.raw)
+    prettifySlide(data)
+
+  return (data.raw.startsWith('---') || idx === 0)
+    ? data.raw
+    : `------\n${data.raw}`
+}
+
+function prettifySlide(data: SlidesMarkdownInfo) {
+  data.content = `\n${data.content.trim()}\n\n`
+  data.raw = Object.keys(data.frontmatter || {}).length
+    ? `---\n${YAML.safeDump(data.frontmatter).trim()}\n---\n${data.content}`
+    : data.content
+  return data
+}
+
+export function prettify(data: SlidesMarkdown) {
+  data.slides.forEach(prettifySlide)
   return data
 }
 
@@ -68,7 +84,7 @@ export function parse(
   options: ParseOptions = {},
 ): SlidesMarkdown {
   const lines = markdown.split(/\n/g)
-  let slides: SlidesMarkdownInfo[] = []
+  const slides: SlidesMarkdownInfo[] = []
   let start = 0
   let dividers = 0
 
@@ -111,8 +127,6 @@ export function parse(
       ...parseContent(raw),
     })
   }
-
-  slides = slides.filter(i => !i.frontmatter?.disabled)
 
   return {
     raw: markdown,

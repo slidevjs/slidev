@@ -13,9 +13,9 @@ import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
-import { resolveOptions, ViteSlidesPluginOptions } from './options'
+import { resolveOptions, AslidePluginOptions } from './options'
 
-export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
+export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},

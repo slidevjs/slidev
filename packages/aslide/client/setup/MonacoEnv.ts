@@ -32,8 +32,6 @@ self.MonacoEnvironment = {
   },
 }
 
-// console.log(monaco.languages.typescript.typescriptDefaults.getCompilerOptions())
-
 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
   ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
   noUnusedLocals: false,

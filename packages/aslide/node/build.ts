@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import { build as viteBuild, InlineConfig, mergeConfig } from 'vite'
-import { ViteSlides } from './plugins/preset'
+import { ViteAslidePlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
 
 export async function build(entry: string, config: InlineConfig = {}) {
@@ -10,7 +10,7 @@ export async function build(entry: string, config: InlineConfig = {}) {
       config,
       {
         plugins: [
-          ViteSlides({
+          ViteAslidePlugin({
             entry,
           }),
         ],
