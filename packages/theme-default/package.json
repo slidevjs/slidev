@@ -1,20 +1,20 @@
 {
-  "name": "@vite-slides/theme-default",
+  "name": "@aslide/theme-default",
   "version": "0.0.0-beta.12",
   "description": "Default theme for Vite Slides",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/vite-slides"
+    "url": "https://github.com/antfu/aslide"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "homepage": "https://github.com/antfu/vite-slides",
-  "bugs": "https://github.com/antfu/vite-slides/issues",
+  "homepage": "https://github.com/antfu/aslide",
+  "bugs": "https://github.com/antfu/aslide/issues",
   "peerDependencies": {
-    "vite-slides": "*"
+    "aslide": "*"
   },
   "devDependencies": {
-    "vite-slides": "workspace:*"
+    "aslide": "workspace:*"
   }
 }

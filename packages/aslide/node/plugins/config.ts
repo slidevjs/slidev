@@ -3,7 +3,7 @@ import { getIndexHtml } from '../common'
 
 export function createConfigPlugin(): Plugin {
   return {
-    name: 'vite-slides:config',
+    name: 'aslide:config',
     config(config) {
       return mergeConfig(config, {
         optimizeDeps: {

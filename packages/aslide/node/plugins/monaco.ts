@@ -3,7 +3,7 @@ import base64 from 'js-base64'
 
 export function createMonacoLoader(): Plugin {
   return {
-    name: 'vite-slides:monaco-types-loader',
+    name: 'aslide:monaco-types-loader',
 
     resolveId(id) {
       if (id.startsWith('/@monaco-types/'))

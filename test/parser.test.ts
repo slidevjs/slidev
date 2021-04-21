@@ -1,6 +1,6 @@
 import { resolve, basename } from 'path'
 import fg from 'fast-glob'
-import { prettify, load, stringify } from '../packages/vite-slides/node'
+import { prettify, load, stringify } from '../packages/aslide/node'
 
 describe('md parser', () => {
   const files = fg.sync('*.md', {

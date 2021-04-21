@@ -53,7 +53,7 @@ export function ViteSlides(options: ViteSlidesPluginOptions = {}): Plugin[] {
     }),
 
     {
-      name: 'vite-slides:vue-escape',
+      name: 'aslide:vue-escape',
       enforce: 'post',
       transform(code, id) {
         if (id.endsWith('.md'))

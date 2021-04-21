@@ -17,7 +17,7 @@ export interface ViteSlidesOptions {
   /**
    * Theme name
    *
-   * @default `@vite-slides/theme-default`
+   * @default `@aslide/theme-default`
    */
   theme?: string
 }
@@ -43,7 +43,7 @@ export function resolveOptions(options: ViteSlidesOptions): ResolvedViteSlidesOp
   const userRoot = process.cwd()
   const {
     entry = 'slides.md',
-    theme = '@vite-slides/theme-default',
+    theme = '@aslide/theme-default',
   } = options
 
   return {

@@ -2,7 +2,7 @@
 import { Component, createBlock, createVNode, defineComponent, withCtx } from 'vue'
 import { RouteRecordRaw } from 'vue-router'
 // @ts-expect-error
-import generatedRoutes from '/@vite-slides/routes'
+import generatedRoutes from '/@aslide/routes'
 
 // export function parseLayouts(...imports: Record<string, any>[]): Record<string, Component> {
 //   return Object.assign({

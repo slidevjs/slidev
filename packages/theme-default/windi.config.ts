@@ -1,7 +1,7 @@
 import { resolve } from 'path'
-import { mergeWindicssConfig } from 'vite-slides'
+import { mergeWindicssConfig } from 'aslide'
 import { defineConfig } from 'windicss/helpers'
-import BaseConfig from 'vite-slides/client/windi.config'
+import BaseConfig from 'aslide/client/windi.config'
 
 export default mergeWindicssConfig(
   BaseConfig,

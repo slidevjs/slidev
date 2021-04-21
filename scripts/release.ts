@@ -10,12 +10,12 @@ run('npx bumpp package.json packages/*/package.json')
 const version = require('../package.json').version
 
 const pkg = JSON.parse(readFileSync('packages/create-app/template/package.json', 'utf-8'))
-pkg.dependencies['@vite-slides/theme-default'] = `^${version}`
-pkg.dependencies['vite-slides'] = `^${version}`
+pkg.dependencies['@aslide/theme-default'] = `^${version}`
+pkg.dependencies.aslide = `^${version}`
 writeFileSync('packages/create-app/template/package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
 run('git add .')
 run(`git commit -m "chore: release v${version}"`)
 run(`git tag "v${version}"`)
 run('git push --follow-tags')
-run('pnpm -r publish')
+run('pnpm -r publish --access public')

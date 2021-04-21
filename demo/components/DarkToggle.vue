@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isDark, toggleDark } from 'vite-slides/client/logic/dark'
+import { isDark, toggleDark } from 'aslide/client/logic/dark'
 </script>
 
 <template>

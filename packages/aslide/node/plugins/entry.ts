@@ -8,7 +8,7 @@ export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: Resolved
   const mainEntry = resolve(packageRoot, 'client/main.ts')
 
   return {
-    name: 'vite-slides:entry',
+    name: 'aslide:entry',
     enforce: 'pre',
     async transform(code, id) {
       if (id === mainEntry) {

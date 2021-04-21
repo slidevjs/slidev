@@ -1,12 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "vite-slides",
-    "build": "vite-slides build",
-    "export": "vite-slides export"
+    "dev": "aslide",
+    "build": "aslide build",
+    "export": "aslide export"
   },
   "dependencies": {
-    "@vite-slides/theme-default": "^0.0.0-beta.12",
-    "vite-slides": "^0.0.0-beta.12"
+    "@aslide/theme-default": "^0.0.0-beta.12",
+    "aslide": "^0.0.0-beta.12"
   }
 }

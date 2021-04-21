@@ -23,7 +23,7 @@ async function init() {
       type: 'input',
       name: 'projectName',
       message: 'Project name:',
-      initial: 'vite-slides',
+      initial: 'aslide',
     })
     targetDir = projectName
   }

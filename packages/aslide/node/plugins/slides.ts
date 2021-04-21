@@ -7,7 +7,7 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
   let data: parser.SlidesMarkdown
 
   return {
-    name: 'vite-slides:loader',
+    name: 'aslide:loader',
 
     async configResolved() {
       data = await parser.load(entry)
@@ -22,8 +22,8 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
         data = await parser.load(entry)
 
         const moduleEntries = [
-          '/@vite-slides/routes',
-          ...data.slides.map((i, idx) => `/@vite-slides/slide/${idx}.md`),
+          '/@aslide/routes',
+          ...data.slides.map((i, idx) => `/@aslide/slide/${idx}.md`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
@@ -34,24 +34,24 @@ export function createSlidesLoader({ entry }: ResolvedViteSlidesOptions): Plugin
     },
 
     resolveId(id) {
-      if (id.startsWith('/@vite-slides/'))
+      if (id.startsWith('/@aslide/'))
         return id
       return null
     },
 
     load(id) {
-      const match = id.match(/^\/\@vite-slides\/slide\/(\d+).md$/)
+      const match = id.match(/^\/\@aslide\/slide\/(\d+).md$/)
       if (match) {
         const pageNo = parseInt(match[1])
         return data.slides[pageNo].raw
       }
-      else if (id === '/@vite-slides/routes') {
+      else if (id === '/@aslide/routes') {
         const imports: string[] = []
 
         const routes = `export default [\n${
           data.slides
             .map((i, idx) => {
-              imports.push(`import n${idx} from '/@vite-slides/slide/${idx}.md'`)
+              imports.push(`import n${idx} from '/@aslide/slide/${idx}.md'`)
               const additions = {
                 slide: {
                   start: i.start,

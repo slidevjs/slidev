@@ -38,11 +38,11 @@ importers:
 
   demo:
     specifiers:
-      '@vite-slides/theme-default': workspace:*
-      vite-slides: workspace:*
+      '@aslide/theme-default': workspace:*
+      aslide: workspace:*
     dependencies:
-      '@vite-slides/theme-default': link:../packages/theme-default
-      vite-slides: link:../packages/vite-slides
+      '@aslide/theme-default': link:../packages/theme-default
+      aslide: link:../packages/aslide
 
   packages/create-app:
     specifiers:
@@ -54,11 +54,11 @@ importers:
 
   packages/theme-default:
     specifiers:
-      vite-slides: workspace:*
+      aslide: workspace:*
     devDependencies:
-      vite-slides: link:../vite-slides
+      aslide: link:../aslide
 
-  packages/vite-slides:
+  packages/aslide:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
       '@antfu/ni': ^0.5.8

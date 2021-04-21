@@ -1,4 +1,4 @@
-# vite-slides
+# aslide
 
 Slides for developers 🧑‍💻👩‍💻👨‍💻
 
@@ -30,7 +30,7 @@ Alright, I broke my words again, it's now available as an standalone tool 🎉
 Try it now with
 
 ```bash
-npm init vite-slides
+npm init aslide
 ```
 
 Still, it's working but not ready yet. It might have some big refactor or even stacks changes in the future. Feel free to play with it and have a preview first.
@@ -159,20 +159,20 @@ This also works:
 **Dev**
 
 ```bash
-vite-slides
+aslide
 ```
 
 **Build**
 
 ```bash
-vite-slides build
+aslide build
 ```
 
 **Export**
 
 ```bash
 npm i -D playwright
-vite-slides export
+aslide export
 ```
 
 ## TODO
