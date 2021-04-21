@@ -1,7 +1,8 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
-import { Fn, useMagicKeys, whenever } from '@vueuse/core'
+import { and, Fn, not, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
 import { clickCurrent, clickElements } from '../modules/directives'
+import { activeElement, magicKeys } from './state'
 
 export interface NavigateControls {
   next: Fn
@@ -9,8 +10,9 @@ export interface NavigateControls {
   nextSlide: Fn
   prevSlide: Fn
   routes: RouteRecordRaw[]
-  current: ComputedRef<RouteRecordRaw | undefined>
+  currentRoute: ComputedRef<RouteRecordRaw | undefined>
   currentPath: ComputedRef<string>
+  currentPage: ComputedRef<number>
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
@@ -22,20 +24,14 @@ export const NavigateControlsInjection = Symbol('navigate-controls') as Injectio
 export function createNavigateControls(router: Router) {
   const route = router.currentRoute
   const routes = router.options.routes.filter(i => !i.redirect)
-  const path = computed(() => route.value.path)
-
-  const counter = ref(parseInt(path.value.split(/\//g)[1]) || 0)
   const paused = ref(false)
 
-  router.afterEach(() => {
-    counter.value = parseInt(path.value.split(/\//g)[1]) || 0
-  })
-
-  const hasNext = computed(() => counter.value < routes.length - 1)
-  const hasPrev = computed(() => counter.value > 0)
-
-  const currentPath = computed(() => `/${counter.value}`)
-  const current = computed(() => routes.find(i => i.path === currentPath.value))
+  const path = computed(() => route.value.path)
+  const currentPage = computed(() => parseInt(path.value.split(/\//g)[1]) || 0)
+  const currentPath = computed(() => `/${currentPage.value}`)
+  const currentRoute = computed(() => routes.find(i => i.path === currentPath.value))
+  const hasNext = computed(() => currentPage.value < routes.length - 1)
+  const hasPrev = computed(() => currentPage.value > 0)
 
   function next() {
     if (clickElements.value.length <= clickCurrent.value)
@@ -54,36 +50,38 @@ export function createNavigateControls(router: Router) {
   function nextSlide() {
     clickCurrent.value = 0
     clickElements.value = []
-    counter.value = Math.min(routes.length - 1, counter.value + 1)
-    router.push(`/${counter.value}${location.search}`)
+    const next = Math.min(routes.length - 1, currentPage.value + 1)
+    router.push(`/${next}${location.search}`)
   }
 
   function prevSlide() {
     clickCurrent.value = 0
     clickElements.value = []
-    counter.value = Math.max(0, counter.value - 1)
-    router.push(`/${counter.value}${location.search}`)
+    const next = Math.max(0, currentPage.value - 1)
+    router.push(`/${next}${location.search}`)
   }
 
-  const { space, right, left, up, down } = useMagicKeys()
+  const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
+  const shortcutEnabled = and(not(paused), not(isInputing))
 
-  whenever(() => space.value && !paused.value, next)
-  whenever(() => right.value && !paused.value, next)
-  whenever(() => left.value && !paused.value, prev)
-  whenever(() => up.value && !paused.value, prevSlide)
-  whenever(() => down.value && !paused.value, nextSlide)
+  whenever(and(magicKeys.space, shortcutEnabled), next)
+  whenever(and(magicKeys.right, shortcutEnabled), next)
+  whenever(and(magicKeys.left, shortcutEnabled), prev)
+  whenever(and(magicKeys.up, shortcutEnabled), prevSlide)
+  whenever(and(magicKeys.down, shortcutEnabled), nextSlide)
 
   const navigateControls: NavigateControls = {
     next,
     prev,
     nextSlide,
     prevSlide,
-    current,
+    currentRoute,
     currentPath,
     paused,
     hasNext,
     hasPrev,
     routes,
+    currentPage,
     install(app: App) {
       app.provide(NavigateControlsInjection, navigateControls)
     },

@@ -3,14 +3,14 @@ import { onClickOutside, useFullscreen } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
 import { recorder, currentCamera } from '../logic/recording'
-import { showOverview } from '../logic/state'
+import { showOverview, showEditor } from '../logic/state'
 import DevicesList from './DevicesList.vue'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
-const { hasNext, hasPrev, prev, next, current } = useNavigateControls()
+const { hasNext, hasPrev, prev, next, currentRoute } = useNavigateControls()
 
 const editorLink = computed(() => {
-  const slide = current.value?.meta?.slide as any
+  const slide = currentRoute.value?.meta?.slide as any
   return (slide?.file)
     ? `vscode-insiders://file/${slide.file}:${slide.start}`
     : undefined
@@ -36,9 +36,13 @@ const dev = import.meta.env.DEV
 
 <template>
   <nav class="opacity-0 py-2 pl-4 pr-2 transition right-0 top-0 rounded-bl text-xl flex gap-1 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
-    <a v-if="dev && editorLink" class="icon-btn" :href="editorLink">
+    <button
+      v-if="dev && editorLink"
+      class="icon-btn"
+      @click="showEditor = !showEditor"
+    >
       <carbon:edit />
-    </a>
+    </button>
 
     <button
       v-if="currentCamera !== 'none'"

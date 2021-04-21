@@ -33,7 +33,7 @@ function onClick(e: MouseEvent) {
   <div>
     <div class="page-root" @click="onClick">
       <div class="slide-container" id="slide-container" :style="style">
-        <RouterView :class="controls.current.value?.meta?.class || ''" />
+        <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
       </div>
     </div>
     <Controls v-if="!query.has('print')" />
