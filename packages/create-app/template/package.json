@@ -6,7 +6,7 @@
     "export": "aslide export"
   },
   "dependencies": {
-    "@aslide/theme-default": "^0.0.0-beta.12",
-    "aslide": "^0.0.0-beta.12"
+    "@aslide/theme-default": "^0.0.0-alpha.1",
+    "aslide": "^0.0.0-alpha.1"
   }
 }

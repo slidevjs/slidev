@@ -1,6 +1,6 @@
 {
   "name": "create-aslide",
-  "version": "0.0.0-beta.12",
+  "version": "0.0.0-alpha.1",
   "description": "Create starter template for Vite slides",
   "license": "MIT",
   "repository": {
