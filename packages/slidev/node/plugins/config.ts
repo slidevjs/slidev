@@ -1,11 +1,17 @@
 import { mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
+import { getClientRoot } from './options'
 
 export function createConfigPlugin(): Plugin {
   return {
     name: 'slidev:config',
     config(config) {
       return mergeConfig(config, {
+        resolve: {
+          alias: {
+            '@slidev/client/': `${getClientRoot()}/`,
+          },
+        },
         optimizeDeps: {
           include: [
             '@antfu/utils',

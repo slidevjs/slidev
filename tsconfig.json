@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "ESNext",
+    "baseUrl": ".",
     "target": "es2016",
     "lib": ["DOM", "ESNext"],
     "strict": true,
@@ -16,7 +17,7 @@
       "jest"
     ],
     "paths": {
-      "@slidev/client/*": ["packages/client/*"]
+      "@slidev/client/*": ["./packages/client/*"]
     }
   },
   "exclude": ["**/dist/**", "node_modules"]

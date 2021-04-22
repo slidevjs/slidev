@@ -4,19 +4,7 @@ import { RouteRecordRaw } from 'vue-router'
 // @ts-expect-error
 import generatedRoutes from '/@slidev/routes'
 
-// export function parseLayouts(...imports: Record<string, any>[]): Record<string, Component> {
-//   return Object.assign({
-//     ...imports.map(i => objectMap(
-//       i,
-//       (k, v) => [k.split(/[\\\/]/g).slice(-1)[0].replace(/\.\w+$/, ''), v.default as Component],
-//     ),
-//     ),
-//   })
-// }
-
 export function getRoutes(layouts: Record<string, Component> = {}): RouteRecordRaw[] {
-  // const layouts = parseLayouts(...layoutImports)
-
   return [
     { path: '/', redirect: { path: '/0' } },
     ...generatedRoutes.map((i: RouteRecordRaw) => {

@@ -4,8 +4,8 @@ import { Plugin } from 'vite'
 import fg from 'fast-glob'
 import { ResolvedSlidevOptions } from './options'
 
-export function createEntryPlugin({ cliRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
-  const mainEntry = resolve(cliRoot, 'client/main.ts')
+export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
+  const mainEntry = resolve(clientRoot, 'main.ts')
 
   return {
     name: 'slidev:entry',
@@ -50,7 +50,7 @@ export function createEntryPlugin({ cliRoot, themeRoot, userRoot }: ResolvedSlid
         await scanStyle(themeRoot)
         await scanStyle(userRoot)
 
-        await scanLayouts(join(cliRoot, 'client'))
+        await scanLayouts(clientRoot)
         await scanLayouts(themeRoot)
         await scanLayouts(userRoot)
 

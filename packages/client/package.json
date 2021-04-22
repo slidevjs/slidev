@@ -9,10 +9,6 @@
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "exports": {
-    "./": "./",
-    "./*": "./*"
-  },
   "homepage": "https://github.com/antfu/slidev",
   "bugs": "https://github.com/antfu/slidev/issues",
   "dependencies": {
