@@ -1,5 +1,6 @@
+<br>
 <p align="center">
-<img src="./docs/public/logo.svg" height="130" width="130"/>
+<img src="./docs/public/logo.png" height="130" width="130"/>
 </p>
 
 <h1 align="center"><b>Sli</b>dev</h1>
