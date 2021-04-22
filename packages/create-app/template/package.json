@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "@slidev/cli": "^0.0.0-alpha.1",
-    "@slidev/theme-default": "^0.0.0-alpha.3",
-    "slidev": "^0.0.0-alpha.3"
+    "@slidev/theme-default": "^0.0.0-alpha.3"
   }
 }
