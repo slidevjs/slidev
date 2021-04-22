@@ -16,4 +16,4 @@ import { ref } from 'vue'
 const counter = ref(0)
 ```
 
-See [GitHub Repo](https://github.com/antfu-sponsors/aslide) for more details.
+See [GitHub Repo](https://github.com/antfu-sponsors/slidev) for more details.

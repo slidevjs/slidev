@@ -1,6 +1,6 @@
-# Aslide
+# Slidev
 
-Presentation slides for developers 🧑‍💻👩‍💻👨‍💻
+Presentation **slide**s for **dev**elopers 🧑‍💻👩‍💻👨‍💻
 
 ## Features
 
@@ -30,7 +30,7 @@ Alright, I broke my words again, it's now available as an standalone tool 🎉
 Try it now with
 
 ```bash
-npm init aslide
+npm init slidev
 ```
 
 Still, it's working but not ready yet. It might have some big refactor or even stacks changes in the future. Feel free to play with it and have a preview first.
@@ -159,20 +159,20 @@ This also works:
 **Dev**
 
 ```bash
-aslide
+slidev
 ```
 
 **Build**
 
 ```bash
-aslide build
+slidev build
 ```
 
 **Export**
 
 ```bash
 npm i -D playwright
-aslide export
+slidev export
 ```
 
 ## TODO

@@ -1,7 +1,7 @@
 import { resolve } from 'path'
-import { mergeWindicssConfig } from 'aslide'
+import { mergeWindicssConfig } from '@slidev/cli'
 import { defineConfig } from 'windicss/helpers'
-import BaseConfig from 'aslide/client/windi.config'
+import BaseConfig from '@slidev/client/windi.config'
 
 export default mergeWindicssConfig(
   BaseConfig,

@@ -7,7 +7,7 @@ import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
 
-export interface AslideOptions {
+export interface SlidevOptions {
   /**
    * Markdown entry
    *
@@ -17,12 +17,12 @@ export interface AslideOptions {
   /**
    * Theme name
    *
-   * @default `@aslide/theme-default`
+   * @default `@slidev/theme-default`
    */
   theme?: string
 }
 
-export interface AslidePluginOptions extends AslideOptions {
+export interface SlidevPluginOptions extends SlidevOptions {
   vue?: ArgumentsType<typeof Vue>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]
   components?: ArgumentsType<typeof ViteComponents>[0]
@@ -31,26 +31,40 @@ export interface AslidePluginOptions extends AslideOptions {
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
 }
 
-export interface ResolvedAslideOptions {
+export interface ResolvedSlidevOptions {
   entry: string
   userRoot: string
-  packageRoot: string
+  cliRoot: string
+  clientRoot: string
   theme: string
   themeRoot: string
 }
 
-export function resolveOptions(options: AslideOptions): ResolvedAslideOptions {
+export function getClientRoot() {
+  return dirname(require.resolve('@slidev/client/package.json'))
+}
+
+export function getCLIRoot() {
+  return resolve(__dirname, '..')
+}
+
+export function getThemeRoot(name: string) {
+  return dirname(require.resolve(`${name}/package.json`))
+}
+
+export function resolveOptions(options: SlidevOptions): ResolvedSlidevOptions {
   const userRoot = process.cwd()
   const {
     entry = 'slides.md',
-    theme = '@aslide/theme-default',
+    theme = '@slidev/theme-default',
   } = options
 
   return {
     entry: resolve(userRoot, entry),
     theme,
     userRoot,
-    packageRoot: resolve(__dirname, '..'),
-    themeRoot: dirname(require.resolve(`${theme}/package.json`)),
+    clientRoot: getClientRoot(),
+    cliRoot: getCLIRoot(),
+    themeRoot: getThemeRoot(theme),
   }
 }

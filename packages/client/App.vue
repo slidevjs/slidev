@@ -7,7 +7,7 @@ import { injectClickDisabled } from './modules/directives'
 import Controls from './internals/Controls.vue'
 
 useHead({
-  title: 'Aslide',
+  title: 'Slidev',
   meta: [],
 })
 

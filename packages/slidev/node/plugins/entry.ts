@@ -2,13 +2,13 @@ import { existsSync } from 'fs'
 import { join, resolve, basename } from 'path'
 import { Plugin } from 'vite'
 import fg from 'fast-glob'
-import { ResolvedAslideOptions } from './options'
+import { ResolvedSlidevOptions } from './options'
 
-export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: ResolvedAslideOptions): Plugin {
-  const mainEntry = resolve(packageRoot, 'client/main.ts')
+export function createEntryPlugin({ cliRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
+  const mainEntry = resolve(cliRoot, 'client/main.ts')
 
   return {
-    name: 'aslide:entry',
+    name: 'slidev:entry',
     enforce: 'pre',
     async transform(code, id) {
       if (id === mainEntry) {
@@ -50,7 +50,7 @@ export function createEntryPlugin({ packageRoot, themeRoot, userRoot }: Resolved
         await scanStyle(themeRoot)
         await scanStyle(userRoot)
 
-        await scanLayouts(join(packageRoot, 'client'))
+        await scanLayouts(join(cliRoot, 'client'))
         await scanLayouts(themeRoot)
         await scanLayouts(userRoot)
 

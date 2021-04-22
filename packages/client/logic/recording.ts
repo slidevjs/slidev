@@ -3,8 +3,8 @@ import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { useEventListener, useStorage, useDevicesList } from '@vueuse/core'
 
-export const currentCamera = useStorage<string>('aslide-camera', 'default')
-export const currentMic = useStorage<string>('aslide-mic', 'default')
+export const currentCamera = useStorage<string>('slidev-camera', 'default')
+export const currentMic = useStorage<string>('slidev-mic', 'default')
 
 export const {
   devices,

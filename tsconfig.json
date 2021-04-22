@@ -14,7 +14,10 @@
       "vite/client",
       "node",
       "jest"
-    ]
+    ],
+    "paths": {
+      "@slidev/client/*": ["packages/client/*"]
+    }
   },
   "exclude": ["**/dist/**", "node_modules"]
 }

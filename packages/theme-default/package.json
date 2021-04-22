@@ -1,24 +1,26 @@
 {
-  "name": "@aslide/theme-default",
+  "name": "@slidev/theme-default",
   "version": "0.0.0-alpha.1",
-  "description": "Default theme for Vite Slides",
+  "description": "Default theme for Slidev",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/aslide"
+    "url": "https://github.com/antfu/slidev"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "homepage": "https://github.com/antfu/aslide",
-  "bugs": "https://github.com/antfu/aslide/issues",
+  "homepage": "https://github.com/antfu/slidev",
+  "bugs": "https://github.com/antfu/slidev/issues",
   "peerDependencies": {
-    "aslide": "*"
+    "@slidev/cli": "*",
+    "@slidev/client": "*"
   },
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",
     "prism-theme-vars": "^0.2.2"
   },
   "devDependencies": {
-    "aslide": "workspace:*"
+    "@slidev/cli": "workspace:*",
+    "@slidev/client": "workspace:*"
   }
 }

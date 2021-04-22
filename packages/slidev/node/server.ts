@@ -1,5 +1,5 @@
 import { createServer as createViteServer, InlineConfig, mergeConfig } from 'vite'
-import { ViteAslidePlugin } from './plugins/preset'
+import { ViteSlidevPlugin } from './plugins/preset'
 
 export async function createServer(entry?: string, config: InlineConfig = {}) {
   return await createViteServer(
@@ -7,7 +7,7 @@ export async function createServer(entry?: string, config: InlineConfig = {}) {
       config,
       {
         plugins: [
-          ViteAslidePlugin({
+          ViteSlidevPlugin({
             entry,
           }),
         ],

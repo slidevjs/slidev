@@ -1,0 +1,35 @@
+{
+  "name": "@slidev/client",
+  "version": "0.0.0-alpha.1",
+  "description": "Presentation slides for developers",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antfu/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "exports": {
+    "./": "./",
+    "./*": "./*"
+  },
+  "homepage": "https://github.com/antfu/slidev",
+  "bugs": "https://github.com/antfu/slidev/issues",
+  "dependencies": {
+    "@antfu/utils": "^0.1.0",
+    "@vueuse/core": "^4.9.0",
+    "@vueuse/head": "^0.5.1",
+    "codemirror": "^5.61.0",
+    "js-base64": "^3.6.0",
+    "js-yaml": "^3.14.1",
+    "monaco-editor": "^0.23.0",
+    "pdf-lib": "^1.16.0",
+    "prettier": "^2.2.1",
+    "recordrtc": "^5.6.2",
+    "theme-vitesse": "^0.1.9",
+    "vite-ssg": "^0.9.2",
+    "vue": "^3.0.11",
+    "vue-router": "^4.0.6",
+    "windicss": "^2.5.14"
+  }
+}

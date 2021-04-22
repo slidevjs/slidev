@@ -2,9 +2,9 @@ import { ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { notNullish } from '@antfu/utils'
 import type { Connect } from 'vite'
 import * as parser from '../parser'
-import { ResolvedAslideOptions } from './options'
+import { ResolvedSlidevOptions } from './options'
 
-const regexId = /^\/\@aslide\/slide\/(\d+)\.(md|json)(?:\?import)?$/
+const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 
 function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -38,12 +38,12 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
+export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
   let data: parser.SlidesMarkdown
   let skipNext = false
 
   return {
-    name: 'aslide:loader',
+    name: 'slidev:loader',
 
     async configResolved() {
       data = await parser.load(entry)
@@ -73,8 +73,8 @@ export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
           sendHmrReload(
             server,
             [
-              `/@aslide/slide/${idx}.md`,
-              `/@aslide/slide/${idx}.json`,
+              `/@slidev/slide/${idx}.md`,
+              `/@slidev/slide/${idx}.json`,
             ]
               .map(id => server.moduleGraph.getModuleById(id))
               .filter(notNullish),
@@ -99,9 +99,9 @@ export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
         data = await parser.load(entry)
 
         const moduleEntries = [
-          '/@aslide/routes',
-          ...data.slides.map((i, idx) => `/@aslide/slide/${idx}.md`),
-          ...data.slides.map((i, idx) => `/@aslide/slide/${idx}.json`),
+          '/@slidev/routes',
+          ...data.slides.map((i, idx) => `/@slidev/slide/${idx}.md`),
+          ...data.slides.map((i, idx) => `/@slidev/slide/${idx}.json`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
@@ -112,7 +112,7 @@ export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
     },
 
     resolveId(id) {
-      if (id.startsWith('/@aslide/'))
+      if (id.startsWith('/@slidev/'))
         return id
       return null
     },
@@ -125,7 +125,7 @@ export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
         if (type === 'md')
           return data.slides[pageNo].raw
       }
-      else if (id === '/@aslide/routes') {
+      else if (id === '/@slidev/routes') {
         const imports: string[] = []
 
         const routes = `export default [\n${
@@ -133,7 +133,7 @@ export function createSlidesLoader({ entry }: ResolvedAslideOptions): Plugin {
             .map((i, idx) => {
               if (i.frontmatter?.disabled)
                 return ''
-              imports.push(`import n${idx} from '/@aslide/slide/${idx}.md'`)
+              imports.push(`import n${idx} from '/@slidev/slide/${idx}.md'`)
               const additions = {
                 slide: {
                   start: i.start,

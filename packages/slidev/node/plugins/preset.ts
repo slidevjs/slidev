@@ -13,9 +13,9 @@ import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
-import { resolveOptions, AslidePluginOptions } from './options'
+import { resolveOptions, SlidevPluginOptions } from './options'
 
-export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
+export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},
@@ -26,7 +26,7 @@ export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
   } = options
 
   const slidesOptions = resolveOptions(options)
-  const { themeRoot, packageRoot } = slidesOptions
+  const { themeRoot, clientRoot } = slidesOptions
 
   return [
     Vue({
@@ -53,7 +53,7 @@ export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
     }),
 
     {
-      name: 'aslide:vue-escape',
+      name: 'slidev:vue-escape',
       enforce: 'post',
       transform(code, id) {
         if (id.endsWith('.md'))
@@ -65,8 +65,8 @@ export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
       extensions: ['vue', 'md', 'ts'],
 
       dirs: [
-        `${packageRoot}/client/builtin`,
-        `${packageRoot}/client/components`,
+        `${clientRoot}/builtin`,
+        `${clientRoot}/components`,
         `${themeRoot}/components`,
         'src/components',
         'components',
@@ -101,7 +101,7 @@ export function ViteAslidePlugin(options: AslidePluginOptions = {}): Plugin[] {
         }
         else {
           return (
-            await loadConfiguration({ config: resolve(packageRoot, 'client/windi.config.ts') })
+            await loadConfiguration({ config: resolve(clientRoot, 'windi.config.ts') })
           ).resolved
         }
       },

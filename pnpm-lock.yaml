@@ -40,18 +40,61 @@ importers:
 
   demo:
     specifiers:
-      '@aslide/theme-default': workspace:*
-      aslide: workspace:*
+      '@slidev/cli': workspace:*
+      '@slidev/theme-default': workspace:*
     dependencies:
-      '@aslide/theme-default': link:../packages/theme-default
-      aslide: link:../packages/aslide
+      '@slidev/cli': link:../packages/slidev
+      '@slidev/theme-default': link:../packages/theme-default
 
-  packages/aslide:
+  packages/client:
+    specifiers:
+      '@antfu/utils': ^0.1.0
+      '@vueuse/core': ^4.9.0
+      '@vueuse/head': ^0.5.1
+      codemirror: ^5.61.0
+      js-base64: ^3.6.0
+      js-yaml: ^3.14.1
+      monaco-editor: ^0.23.0
+      pdf-lib: ^1.16.0
+      prettier: ^2.2.1
+      recordrtc: ^5.6.2
+      theme-vitesse: ^0.1.9
+      vite-ssg: ^0.9.2
+      vue: ^3.0.11
+      vue-router: ^4.0.6
+      windicss: ^2.5.14
+    dependencies:
+      '@antfu/utils': 0.1.0
+      '@vueuse/core': 4.9.0_vue@3.0.11
+      '@vueuse/head': 0.5.1_vue@3.0.11
+      codemirror: 5.61.0
+      js-base64: 3.6.0
+      js-yaml: 3.14.1
+      monaco-editor: 0.23.0
+      pdf-lib: 1.16.0
+      prettier: 2.2.1
+      recordrtc: 5.6.2
+      theme-vitesse: 0.1.9
+      vite-ssg: 0.9.2_ef9cc87636da3635eea1dec8cccd7c9c
+      vue: 3.0.11
+      vue-router: 4.0.6_vue@3.0.11
+      windicss: 2.5.14
+
+  packages/create-app:
+    specifiers:
+      enquirer: ^2.3.6
+      minimist: ^1.2.5
+    dependencies:
+      enquirer: 2.3.6
+      minimist: 1.2.5
+
+  packages/slidev:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
       '@antfu/ni': ^0.5.8
       '@antfu/utils': ^0.1.0
       '@iconify/json': ^1.1.331
+      '@slidev/client': workspace:*
       '@types/blueimp-md5': ^2.18.0
       '@types/codemirror': ^0.0.109
       '@types/js-yaml': ^3
@@ -62,11 +105,8 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vitejs/plugin-vue': ^1.2.1
       '@vue/compiler-sfc': ^3.0.11
-      '@vueuse/core': ^4.9.0
-      '@vueuse/head': ^0.5.1
       blueimp-md5: ^2.18.0
       chalk: ^4.1.1
-      codemirror: ^5.61.0
       cross-env: ^7.0.3
       eslint: ^7.24.0
       esno: ^0.5.0
@@ -79,8 +119,6 @@ importers:
       pdf-lib: ^1.16.0
       playwright: ^1.10.0
       pnpm: ^6.1.0
-      prettier: ^2.2.1
-      recordrtc: ^5.6.2
       rimraf: ^3.0.2
       theme-vitesse: ^0.1.9
       tsup: ^4.9.1
@@ -98,12 +136,10 @@ importers:
     dependencies:
       '@antfu/utils': 0.1.0
       '@iconify/json': 1.1.331
+      '@slidev/client': link:../client
       '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
-      '@vueuse/core': 4.9.0_vue@3.0.11
-      '@vueuse/head': 0.5.1_vue@3.0.11
       chalk: 4.1.1
-      codemirror: 5.61.0
       fast-glob: 3.2.5
       js-base64: 3.6.0
       js-yaml: 3.14.1
@@ -111,8 +147,6 @@ importers:
       minimist: 1.2.5
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
-      prettier: 2.2.1
-      recordrtc: 5.6.2
       theme-vitesse: 0.1.9
       vite: 2.2.1
       vite-plugin-components: 0.8.4_vite@2.2.1
@@ -120,7 +154,7 @@ importers:
       vite-plugin-md: 0.6.3_vite@2.2.1
       vite-plugin-remote-assets: 0.0.4_vite@2.2.1
       vite-plugin-windicss: 0.14.6_vite@2.2.1
-      vite-ssg: 0.9.2_8bff4cb48b766c8cbf5d8ef80681878f
+      vite-ssg: 0.9.2_0f2dcd174040a81360179bf09fb57e7e
       vue: 3.0.11
       vue-router: 4.0.6_vue@3.0.11
       windicss: 2.5.14
@@ -145,24 +179,18 @@ importers:
       tsup: 4.9.1_typescript@4.2.4
       typescript: 4.2.4
 
-  packages/create-app:
-    specifiers:
-      enquirer: ^2.3.6
-      minimist: ^1.2.5
-    dependencies:
-      enquirer: 2.3.6
-      minimist: 1.2.5
-
   packages/theme-default:
     specifiers:
-      aslide: workspace:*
+      '@slidev/cli': workspace:*
+      '@slidev/client': workspace:*
       codemirror-theme-vars: ^0.1.0
       prism-theme-vars: ^0.2.2
     dependencies:
       codemirror-theme-vars: 0.1.0
       prism-theme-vars: 0.2.2
     devDependencies:
-      aslide: link:../aslide
+      '@slidev/cli': link:../slidev
+      '@slidev/client': link:../client
 
 packages:
 
@@ -1926,6 +1954,7 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+    dev: true
 
   /chalk/4.1.1:
     resolution: {integrity: sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==}
@@ -1933,7 +1962,6 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-    dev: false
 
   /char-regex/1.0.2:
     resolution: {integrity: sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==}
@@ -6267,7 +6295,7 @@ packages:
         optional: true
     dependencies:
       cac: 6.7.2
-      chalk: 4.1.0
+      chalk: 4.1.1
       chokidar: 3.5.1
       debug: 4.3.1
       esbuild: 0.11.12
@@ -6520,7 +6548,7 @@ packages:
       vite: ^2.0.1
     dependencies:
       '@windicss/plugin-utils': 0.14.6
-      chalk: 4.1.0
+      chalk: 4.1.1
       debug: 4.3.2
       vite: 2.2.1
       windicss: 2.5.14
@@ -6528,7 +6556,7 @@ packages:
       - supports-color
     dev: false
 
-  /vite-ssg/0.9.2_8bff4cb48b766c8cbf5d8ef80681878f:
+  /vite-ssg/0.9.2_0f2dcd174040a81360179bf09fb57e7e:
     resolution: {integrity: sha512-iOYuagPYjJxKdD0gHENqsdg9nUGlAE1uzfeT4vbSX8/xpwKKZe1cA/VjgsyXwvmaB1wO10jlyzBt2w4l7vSy/g==}
     engines: {node: '>=14.0.0'}
     hasBin: true
@@ -6541,13 +6569,39 @@ packages:
       vue-router: ^4.0.1
     dependencies:
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
-      '@vueuse/head': 0.5.1_vue@3.0.11
-      chalk: 4.1.0
+      chalk: 4.1.1
       fs-extra: 9.1.0
       html-minifier: 4.0.0
       jsdom: 16.5.3
       prettier: 2.2.1
       vite: 2.2.1
+      vue: 3.0.11
+      vue-router: 4.0.6_vue@3.0.11
+      yargs: 16.2.0
+    transitivePeerDependencies:
+      - bufferutil
+      - canvas
+      - utf-8-validate
+    dev: false
+
+  /vite-ssg/0.9.2_ef9cc87636da3635eea1dec8cccd7c9c:
+    resolution: {integrity: sha512-iOYuagPYjJxKdD0gHENqsdg9nUGlAE1uzfeT4vbSX8/xpwKKZe1cA/VjgsyXwvmaB1wO10jlyzBt2w4l7vSy/g==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@vue/compiler-sfc': ^3.0.4
+      '@vue/server-renderer': ^3.0.4
+      '@vueuse/head': ^0.5.1
+      vite: ^2.0.0
+      vue: ^3.0.4
+      vue-router: ^4.0.1
+    dependencies:
+      '@vueuse/head': 0.5.1_vue@3.0.11
+      chalk: 4.1.1
+      fs-extra: 9.1.0
+      html-minifier: 4.0.0
+      jsdom: 16.5.3
+      prettier: 2.2.1
       vue: 3.0.11
       vue-router: 4.0.6_vue@3.0.11
       yargs: 16.2.0

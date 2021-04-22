@@ -1,12 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "dev": "aslide",
-    "build": "aslide build",
-    "export": "aslide export"
+    "dev": "slidev",
+    "build": "slidev build",
+    "export": "slidev export"
   },
   "dependencies": {
-    "@aslide/theme-default": "^0.0.0-alpha.1",
-    "aslide": "^0.0.0-alpha.1"
+    "@slidev/cli": "^0.0.0-alpha.1",
+    "@slidev/theme-default": "^0.0.0-alpha.1"
   }
 }

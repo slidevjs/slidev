@@ -2,12 +2,12 @@
   "private": true,
   "version": "0.0.0-beta.1",
   "scripts": {
-    "dev": "aslide",
-    "build": "aslide build",
-    "export": "aslide export"
+    "dev": "slidev",
+    "build": "slidev build",
+    "export": "slidev export"
   },
   "dependencies": {
-    "@aslide/theme-default": "workspace:*",
-    "aslide": "workspace:*"
+    "@slidev/cli": "workspace:*",
+    "@slidev/theme-default": "workspace:*"
   }
 }

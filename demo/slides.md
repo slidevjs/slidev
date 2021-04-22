@@ -589,7 +589,7 @@ function useBala<T>(arg: MaybeRef<T>) {
 
 # Object of Refs <MarkerPattern />
 
-Getting benefits from both `ref` and `reactive` for authoring compsosable functions
+Getting benefits from both `ref` and `reactive` for authoring composable functions
 
 <div class="mt-1" />
 <div class="grid grid-cols-2 gap-x-4">

@@ -1,11 +1,11 @@
 {
-  "name": "aslide",
+  "name": "@slidev/cli",
   "version": "0.0.0-alpha.1",
   "description": "Presentation slides for developers",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/aslide"
+    "url": "https://github.com/antfu/slidev"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
@@ -25,16 +25,16 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "aslide": "./bin/aslide.js"
+    "slidev": "./bin/slidev.js"
   },
   "scripts": {
-    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm",
+    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --external @slidev/client/package.json",
     "dev": "nr build --watch",
     "start": "esno node/cli.ts",
     "prepublishOnly": "npm run build"
   },
-  "homepage": "https://github.com/antfu/aslide",
-  "bugs": "https://github.com/antfu/aslide/issues",
+  "homepage": "https://github.com/antfu/slidev",
+  "bugs": "https://github.com/antfu/slidev/issues",
   "peerDependencies": {
     "playwright": "^1.10.0"
   },
@@ -46,12 +46,10 @@
   "dependencies": {
     "@antfu/utils": "^0.1.0",
     "@iconify/json": "^1.1.331",
+    "@slidev/client": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
-    "@vueuse/core": "^4.9.0",
-    "@vueuse/head": "^0.5.1",
     "chalk": "^4.1.1",
-    "codemirror": "^5.61.0",
     "fast-glob": "^3.2.5",
     "js-base64": "^3.6.0",
     "js-yaml": "^3.14.1",
@@ -59,8 +57,6 @@
     "minimist": "^1.2.5",
     "monaco-editor": "^0.23.0",
     "pdf-lib": "^1.16.0",
-    "prettier": "^2.2.1",
-    "recordrtc": "^5.6.2",
     "theme-vitesse": "^0.1.9",
     "vite": "^2.2.1",
     "vite-plugin-components": "^0.8.4",

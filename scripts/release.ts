@@ -10,8 +10,8 @@ run('npx bumpp package.json packages/*/package.json --preid alpha')
 const version = require('../package.json').version
 
 const pkg = JSON.parse(readFileSync('packages/create-app/template/package.json', 'utf-8'))
-pkg.dependencies['@aslide/theme-default'] = `^${version}`
-pkg.dependencies.aslide = `^${version}`
+pkg.dependencies['@slidev/theme-default'] = `^${version}`
+pkg.dependencies.slidev = `^${version}`
 writeFileSync('packages/create-app/template/package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
 run('git add .')

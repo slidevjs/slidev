@@ -12,7 +12,7 @@ const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 
 const controls = useNavigateControls()
-const url = computed(() => `/@aslide/slide/${controls.currentPage.value}.json`)
+const url = computed(() => `/@slidev/slide/${controls.currentPage.value}.json`)
 const { data } = useFetch(
   url,
   { refetch: true },

@@ -3,7 +3,7 @@ import { getIndexHtml } from '../common'
 
 export function createConfigPlugin(): Plugin {
   return {
-    name: 'aslide:config',
+    name: 'slidev:config',
     config(config) {
       return mergeConfig(config, {
         optimizeDeps: {
