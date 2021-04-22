@@ -2,7 +2,7 @@ import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { and, Fn, not, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
 import { clickCurrent, clickElements } from '../modules/directives'
-import { activeElement, magicKeys } from './state'
+import { isInputing, magicKeys } from './state'
 
 export interface NavigateControls {
   next: Fn
@@ -61,7 +61,6 @@ export function createNavigateControls(router: Router) {
     router.push(`/${next}${location.search}`)
   }
 
-  const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
   const shortcutEnabled = and(not(paused), not(isInputing))
 
   whenever(and(magicKeys.space, shortcutEnabled), next)

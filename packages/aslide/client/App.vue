@@ -2,7 +2,7 @@
 import { useHead } from '@vueuse/head'
 import { computed, provide } from 'vue'
 import { useNavigateControls } from './logic'
-import { scale, targetHeight, targetWidth } from './logic/scale'
+import { scale, targetHeight, targetWidth, offsetRight } from './logic/scale'
 import { injectClickDisabled } from './modules/directives'
 import Controls from './internals/Controls.vue'
 
@@ -15,7 +15,7 @@ const controls = useNavigateControls()
 const style = computed(() => ({
   height: `${targetHeight}px`,
   width: `${targetWidth}px`,
-  transform: `translate(-50%, -50%) scale(${scale.value})`,
+  transform: `translate(-50%, -50%) translateX(${-offsetRight.value / 2}px) scale(${scale.value})`,
 }))
 
 const query = new URLSearchParams(location.search)
@@ -30,8 +30,9 @@ function onClick(e: MouseEvent) {
 </script>
 
 <template>
-  <div>
-    <div class="page-root" @click="onClick">
+  <div class="page-root">
+    <div class="slide-root"
+     @click="onClick">
       <div class="slide-container" id="slide-container" :style="style">
         <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
       </div>
@@ -41,8 +42,8 @@ function onClick(e: MouseEvent) {
 </template>
 
 <style lang="postcss">
-.page-root {
-  @apply w-screen h-screen relative overflow-hidden bg-black select-none;
+.slide-root {
+  @apply w-full h-full relative overflow-hidden bg-black select-none;
 }
 
 .slide-container {

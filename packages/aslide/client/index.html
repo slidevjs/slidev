@@ -6,14 +6,6 @@
 </head>
 <body>
   <div id="app"></div>
-  <script>
-    (function() {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      const setting = localStorage.getItem('color-schema') || 'auto'
-      if (setting === 'dark' || (prefersDark && setting !== 'light'))
-        document.documentElement.classList.toggle('dark', true)
-    })()
-  </script>
   <script type="module" src="__ENTRY__"></script>
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>

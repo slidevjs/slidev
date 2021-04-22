@@ -49,7 +49,7 @@ function fixPosistion() {
     y.value = window.innerHeight - size.value - 30
 }
 
-useEventListener(frame, 'mousedown', (e: MouseEvent) => {
+useEventListener(frame, 'pointerdown', (e: MouseEvent) => {
   if (frame.value) {
     frameDown.value = true
     const box = frame.value.getBoundingClientRect()
@@ -58,7 +58,7 @@ useEventListener(frame, 'mousedown', (e: MouseEvent) => {
   }
 })
 
-useEventListener(handler, 'mousedown', (e: MouseEvent) => {
+useEventListener(handler, 'pointerdown', (e: MouseEvent) => {
   if (frame.value) {
     handlerDown.value = true
     const box = frame.value.getBoundingClientRect()
@@ -67,12 +67,12 @@ useEventListener(handler, 'mousedown', (e: MouseEvent) => {
   }
 })
 
-useEventListener(window, 'mouseup', (e: MouseEvent) => {
+useEventListener(window, 'pointerup', (e: MouseEvent) => {
   frameDown.value = false
   handlerDown.value = false
 })
 
-useEventListener(window, 'mousemove', (e: MouseEvent) => {
+useEventListener(window, 'pointermove', (e: MouseEvent) => {
   if (frameDown.value) {
     x.value = e.screenX - deletaX
     y.value = e.screenY - deletaY

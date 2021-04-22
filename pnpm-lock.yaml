@@ -62,10 +62,10 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vitejs/plugin-vue': ^1.2.1
       '@vue/compiler-sfc': ^3.0.11
-      '@vueuse/core': ^4.8.4
+      '@vueuse/core': ^4.9.0
       '@vueuse/head': ^0.5.1
       blueimp-md5: ^2.18.0
-      chalk: ^4.1.0
+      chalk: ^4.1.1
       codemirror: ^5.61.0
       cross-env: ^7.0.3
       eslint: ^7.24.0
@@ -100,9 +100,9 @@ importers:
       '@iconify/json': 1.1.331
       '@vitejs/plugin-vue': 1.2.1_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
-      '@vueuse/core': 4.8.4_vue@3.0.11
+      '@vueuse/core': 4.9.0_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
-      chalk: 4.1.0
+      chalk: 4.1.1
       codemirror: 5.61.0
       fast-glob: 3.2.5
       js-base64: 3.6.0
@@ -1356,10 +1356,10 @@ packages:
   /@vue/shared/3.0.11:
     resolution: {integrity: sha512-b+zB8A2so8eCE0JsxjL24J7vdGl8rzPQ09hZNhystm+KqSbKcAej1A+Hbva1rCMmTTqA+hFnUSDc5kouEo0JzA==}
 
-  /@vueuse/core/4.8.4_vue@3.0.11:
-    resolution: {integrity: sha512-qo5xWC93MxJqHuT19XfFqOUCHppU988yZWoPko3jy/oBDaZRzZakibahpCuPmiZSAWViJCcNGTqH3gAHeH5c4w==}
+  /@vueuse/core/4.9.0_vue@3.0.11:
+    resolution: {integrity: sha512-vkGB6T9IgsdvbEyEVLaNu+JlMXonqx/mUX5El1u252ZTOa9khsVIAWWEMfxFyXz245V2hJi+O+TZv6rwyHbOLg==}
     dependencies:
-      '@vueuse/shared': 4.8.4_vue@3.0.11
+      '@vueuse/shared': 4.9.0_vue@3.0.11
       vue-demi: 0.7.5_vue@3.0.11
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -1374,8 +1374,8 @@ packages:
       vue: 3.0.11
     dev: false
 
-  /@vueuse/shared/4.8.4_vue@3.0.11:
-    resolution: {integrity: sha512-dN5qZnC3hTJppUL8fFqkfJvgcfKT5agyYtr8nyO47kWTdNKYq7S/yXUvcA1W/OBY95erdpo4s2vlcy0aV2CdgA==}
+  /@vueuse/shared/4.9.0_vue@3.0.11:
+    resolution: {integrity: sha512-u5bSe39llw2DjGerZjFK/jv04sF3G1BX5t4aRat1s+9hzm8mEB55uorqA3VxCgTFMNyc0sactZhj6YIzYdG0dg==}
     dependencies:
       vue-demi: 0.7.5_vue@3.0.11
     transitivePeerDependencies:
@@ -1926,6 +1926,14 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+
+  /chalk/4.1.1:
+    resolution: {integrity: sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==}
+    engines: {node: '>=10'}
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
+    dev: false
 
   /char-regex/1.0.2:
     resolution: {integrity: sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==}

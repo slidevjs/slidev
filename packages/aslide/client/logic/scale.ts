@@ -1,18 +1,24 @@
 import { useWindowSize } from '@vueuse/core'
-import { reactive, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export const aspect = 16 / 9
 export const targetWidth = 980
 export const targetHeight = targetWidth / aspect
 
-const screen = reactive(useWindowSize())
-const screenAspect = computed(() => screen.width / screen.height)
+export const offsetRight = ref(0)
+export const offsetBottom = ref(0)
+
+const { width: winWidth, height: winHeight } = useWindowSize()
+
+const width = computed(() => winWidth.value - offsetRight.value)
+const height = computed(() => winHeight.value - offsetBottom.value)
+const screenAspect = computed(() => width.value / height.value)
 
 export const scale = computed(() => {
   if (screenAspect.value < aspect)
-    return screen.width / targetWidth
-  return screen.height * aspect / targetWidth
+    return width.value / targetWidth
+  return height.value * aspect / targetWidth
 })
 
-export const marginTop = computed(() => (screen.height - targetHeight * scale.value) / 2)
-export const marginLeft = computed(() => (screen.width - targetWidth * scale.value) / 2)
+export const marginTop = computed(() => (height.value - targetHeight * scale.value) / 2)
+export const marginLeft = computed(() => (width.value - targetWidth * scale.value) / 2)

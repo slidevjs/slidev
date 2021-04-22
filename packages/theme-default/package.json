@@ -14,11 +14,11 @@
   "peerDependencies": {
     "aslide": "*"
   },
+  "dependencies": {
+    "codemirror-theme-vars": "^0.1.0",
+    "prism-theme-vars": "^0.2.2"
+  },
   "devDependencies": {
     "aslide": "workspace:*"
-  },
-  "dependencies": {
-    "prism-theme-vars": "^0.2.2",
-    "codemirror-theme-vars": "^0.1.0"
   }
 }
