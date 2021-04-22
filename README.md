@@ -1,11 +1,17 @@
-# Slidev
+<p align="center">
+<img src="./docs/public/logo.svg" height="130" width="130"/>
+</p>
 
-Presentation **slide**s for **dev**elopers 🧑‍💻👩‍💻👨‍💻
+<h1 align="center"><b>Sli</b>dev</h1>
+
+<p align="center">
+Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
+</p>
 
 ## Features
 
-- Single markdown entry for composing your slides. Embedded Vue components support
-- Powered by [Vite](https://github.com/vitejs/vite) - instant content updating ⚡️
+- Single markdown entry for composing your slides. With embedded Vue components support.
+- Powered by [Vite](https://github.com/vitejs/vite) - instant reloading & updating ⚡️
 - Built-in syntax highlighting supported via [Prism](https://github.com/PrismJS/prism)
 - Built-in [Monaco editor](https://github.com/Microsoft/monaco-editor) support for live coding in your presentations (with TypeScript!)
 - Built-in camera and recording support
