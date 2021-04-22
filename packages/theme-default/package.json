@@ -12,8 +12,8 @@
   "homepage": "https://github.com/antfu/slidev",
   "bugs": "https://github.com/antfu/slidev/issues",
   "peerDependencies": {
-    "@slidev/cli": "^0.0.0-alpha.0",
-    "@slidev/client": "^0.0.0-alpha.0"
+    "@slidev/client": "^0.0.0-alpha.0",
+    "vite-plugin-windicss": "^0.15.6"
   },
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",

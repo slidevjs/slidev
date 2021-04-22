@@ -1,12 +1,11 @@
 
 import { resolve } from 'path'
-import { existsSync } from 'fs'
 import { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
-import WindiCSS, { loadConfiguration } from 'vite-plugin-windicss'
+import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { createConfigPlugin } from './config'
@@ -20,7 +19,6 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     vue: vueOptions = {},
     markdown: mdOptions = {},
     components: componentsOptions = {},
-    windicss: windicssOptions = {},
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
   } = options
@@ -88,24 +86,15 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     }),
 
     ...WindiCSS({
-      async onConfigResolved(config, filepath) {
-        if (filepath)
-          return
-
-        // if the user does not provide windi.config
-        const themeConfig = resolve(themeRoot, 'windi.config.ts')
-        if (existsSync(themeConfig)) {
-          return (
-            await loadConfiguration({ config: themeConfig })
-          ).resolved
-        }
-        else {
-          return (
-            await loadConfiguration({ config: resolve(clientRoot, 'windi.config.ts') })
-          ).resolved
-        }
+      configFiles: [
+        ...defaultConfigureFiles,
+        resolve(themeRoot, 'windi.config.ts'),
+        resolve(clientRoot, 'windi.config.ts'),
+      ],
+    }, {
+      hookOptions: {
+        ignoreNodeModules: true,
       },
-      ...windicssOptions,
     }),
 
     RemoteAssets({

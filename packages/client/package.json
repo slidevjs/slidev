@@ -19,7 +19,6 @@
     "js-base64": "^3.6.0",
     "js-yaml": "^3.14.1",
     "monaco-editor": "^0.23.0",
-    "pdf-lib": "^1.16.0",
     "prettier": "^2.2.1",
     "recordrtc": "^5.6.2",
     "theme-vitesse": "^0.1.9",

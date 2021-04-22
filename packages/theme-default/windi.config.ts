@@ -1,6 +1,5 @@
 import { resolve } from 'path'
-import { mergeWindicssConfig } from '@slidev/cli'
-import { defineConfig } from 'windicss/helpers'
+import { mergeWindicssConfig, defineConfig } from 'vite-plugin-windicss'
 import BaseConfig from '@slidev/client/windi.config'
 
 export default mergeWindicssConfig(

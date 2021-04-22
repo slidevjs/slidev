@@ -1,6 +1,11 @@
 import { mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
+import { dependencies } from '../../../client/package.json'
 import { getClientRoot } from './options'
+
+const EXCLUDE = [
+  'theme-vitesse',
+]
 
 export function createConfigPlugin(): Plugin {
   return {
@@ -14,32 +19,12 @@ export function createConfigPlugin(): Plugin {
         },
         optimizeDeps: {
           include: [
-            '@antfu/utils',
-            '@vueuse/core',
-            '@vueuse/head',
-            'js-base64',
-            'monaco-editor',
-            'prettier',
+            ...Object.keys(dependencies).filter(i => !EXCLUDE.includes(i)),
             'prettier/esm/parser-babel',
             'prettier/esm/parser-html',
             'prettier/esm/parser-typescript',
-            'vite-ssg',
-            'vue-router',
-            'vue',
           ],
           exclude: [
-            '@iconify/json',
-            '@vitejs/plugin-vue',
-            '@vue/compiler-sfc',
-            'markdown-it-prism',
-            'minimist',
-            'chalk',
-            'fast-glob',
-            'vite-plugin-components',
-            'vite-plugin-icons',
-            'vite-plugin-md',
-            'vite-plugin-windicss',
-            'vite',
             'vue-demi',
           ],
         },
