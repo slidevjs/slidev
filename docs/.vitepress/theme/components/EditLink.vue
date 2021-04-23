@@ -1,7 +1,7 @@
 <template>
   <div class="edit-link">
     <a v-if="url" class="link" :href="url" target="_blank" rel="noopener noreferrer">
-      <carbon-edit style="opacity:0.6" /> {{ text }}
+      <carbon-edit class="align-middle" style="opacity:0.6" /> {{ text }}
     </a>
   </div>
 </template>
@@ -17,20 +17,23 @@ const { url, text } = useEditLink()
 .link {
   display: inline-block;
   font-size: 1rem;
-  color: var(--c-text-light);
+  color: var(--c-text);
 }
 
 .link:hover {
   text-decoration: none;
-  color: var(--c-brand);
 }
 
 .edit-link {
-  opacity: 0.8;
+  opacity: 0.5;
   font-weight: 400;
 }
 
 .edit-link:hover {
   opacity: 1;
+}
+
+.edit-link:hover a {
+  color: var(--c-text) !important;
 }
 </style>

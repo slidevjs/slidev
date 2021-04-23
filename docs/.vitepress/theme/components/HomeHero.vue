@@ -1,16 +1,5 @@
 <template>
   <header v-if="showHero" class="home-hero">
-    <!-- <figure v-if="$frontmatter.heroImage" class="figure">
-      <img class="image" :src="$withBase($frontmatter.heroImage)" :alt="$frontmatter.heroAlt">
-    </figure>
-
-    <h1 v-if="hasHeroText" class="title">
-      {{ heroText }}
-    </h1>
-    <p v-if="hasTagline" class="description">
-      {{ tagline }}
-    </p> -->
-
     <p align="center">
       <a href="https://github.com/antfu/slidev">
         <img src="/logo-title.png" alt="Slidev" height="300">
@@ -64,7 +53,7 @@ const showHero = computed(() => {
 <style scoped>
 .home-hero {
   margin: 0rem 0 2.75rem;
-  padding: 0 1.5rem;
+  padding: 3rem 1.5rem;
   text-align: center;
 }
 
