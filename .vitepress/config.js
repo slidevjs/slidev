@@ -9,8 +9,8 @@ module.exports = {
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
     ['link', { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }],
-  ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
-  ['link', { href: 'https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@200;400;500;600&display=swap', rel: 'stylesheet' }],
+    ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
+    ['link', { href: 'https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@200;400;500;600&display=swap', rel: 'stylesheet' }],
   ],
   themeConfig: {
     repo: 'antfu/slidev',
@@ -25,7 +25,71 @@ module.exports = {
     ],
 
     sidebar: {
-      
-    }
-  }
+      '/guide/': [
+        {
+          text: 'Guide',
+          children: [
+            {
+              text: 'Why Slidev',
+              link: '/guide/why',
+            },
+            {
+              text: 'Getting Started',
+              link: '/guide/',
+            },
+            {
+              text: 'Slides Syntax',
+              link: '/guide/syntax',
+            },
+            {
+              text: 'Directory Structure',
+              link: '/guide/structure',
+            },
+            {
+              text: 'Export to PDF',
+              link: '/guide/export',
+            },
+            {
+              text: 'Record Presentation',
+              link: '/guide/record',
+            },
+          ],
+        },
+        {
+          text: 'Themes',
+          children: [
+            {
+              text: 'Use a Theme',
+              link: '/guide/use-a-theme',
+            },
+            {
+              text: 'Theme Gallery',
+              link: '/guide/theme-gallery',
+            },
+            {
+              text: 'Write a Theme',
+              link: '/guide/write-a-theme',
+            },
+          ],
+        },
+        {
+          text: 'Customizations',
+          children: [
+            {
+              text: 'Customization',
+              link: '/guide/config',
+            },
+            {
+              text: 'Configure Vite',
+              link: '/guide/config-vite',
+            },
+            {
+              text: 'Configure WindiCSS',
+              link: '/guide/config-windicss',
+            },
+          ],
+        },
+      ],
+    },
+  },
 }
