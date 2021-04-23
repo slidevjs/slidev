@@ -42,8 +42,8 @@ module.exports = {
               link: '/guide/syntax',
             },
             {
-              text: 'Directory Structure',
-              link: '/guide/structure',
+              text: 'Animations',
+              link: '/guide/animations',
             },
             {
               text: 'Export to PDF',
@@ -78,6 +78,14 @@ module.exports = {
             {
               text: 'Customization',
               link: '/guide/config',
+            },
+            {
+              text: 'Use Components',
+              link: '/guide/components',
+            },
+            {
+              text: 'Directory Structure',
+              link: '/guide/structure',
             },
             {
               text: 'Configure Vite',
