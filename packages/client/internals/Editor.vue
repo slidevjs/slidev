@@ -72,6 +72,7 @@ onMounted(() => {
     }),
     {
       mode: 'markdown',
+      lineWrapping: true,
       // @ts-expect-error
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
@@ -92,14 +93,26 @@ const handlerDown = ref(false)
 function onHandlerDown() {
   handlerDown.value = true
 }
+function updateWidth(v: number) {
+  width.value = Math.min(Math.max(200, v), window.innerWidth - 200)
+  offsetRight.value = width.value
+}
 useEventListener('pointermove', (e) => {
-  if (handlerDown.value) {
-    width.value = window.innerWidth - e.pageX
-    offsetRight.value = width.value
-  }
+  if (handlerDown.value)
+    updateWidth(window.innerWidth - e.pageX)
 }, { passive: true })
 useEventListener('pointerup', () => {
   handlerDown.value = false
+})
+useEventListener('resize', () => {
+  updateWidth(width.value)
+})
+
+const editorLink = computed(() => {
+  const slide = controls.currentRoute.value?.meta?.slide
+  return (slide?.file)
+    ? `vscode-insiders://file/${slide.file}:${slide.start}`
+    : undefined
 })
 </script>
 
@@ -121,6 +134,11 @@ useEventListener('pointerup', () => {
       <div class="flex-auto"></div>
       <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
         <carbon:save />
+      </button>
+      <button class="icon-btn">
+        <a :href="editorLink" target="_blank">
+          <carbon:launch />
+        </a>
       </button>
       <button class="icon-btn" @click="close">
         <carbon:close />

@@ -8,7 +8,10 @@ declare module 'vue-router' {
   interface RouteMeta {
     layout: string
     slide?: {
+      start: number
+      end: number
       id: number
+      file: string
     }
   }
 }
