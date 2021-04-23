@@ -1,9 +1,10 @@
 import { getCurrentInstance, onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
+import { createSingletonPromise } from '@antfu/utils'
 
 /* __imports__ */
 
-export default async function setupMonaco() {
+const setup = createSingletonPromise(async() => {
   monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
     noUnusedLocals: false,
@@ -57,4 +58,8 @@ export default async function setupMonaco() {
     await new Promise<void>(resolve => onMounted(resolve))
 
   return { monaco }
-}
+})
+
+export default setup
+
+setup()

@@ -63,14 +63,14 @@ export function createNavigateControls(router: Router) {
     clickCurrent.value = 0
     clickElements.value = []
     const next = Math.min(routes.length - 1, currentPage.value + 1)
-    router.push(`/${next}${location.search}`)
+    router.push(`/${next}`)
   }
 
   function prevSlide() {
     clickCurrent.value = 0
     clickElements.value = []
     const next = Math.max(0, currentPage.value - 1)
-    router.push(`/${next}${location.search}`)
+    router.push(`/${next}`)
   }
 
   const shortcutEnabled = and(not(paused), not(isInputing))

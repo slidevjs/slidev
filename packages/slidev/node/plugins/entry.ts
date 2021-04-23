@@ -1,7 +1,6 @@
 import { existsSync } from 'fs'
-import { join, resolve, basename } from 'path'
+import { join, resolve } from 'path'
 import { Plugin } from 'vite'
-import fg from 'fast-glob'
 import { ResolvedSlidevOptions } from './options'
 
 export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
@@ -13,7 +12,6 @@ export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedS
     async transform(code, id) {
       if (id === mainEntry) {
         const imports: string[] = []
-        const layouts: Record<string, string> = {}
 
         async function scanStyle(root: string) {
           const styles = [
@@ -32,30 +30,10 @@ export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedS
           }
         }
 
-        async function scanLayouts(root: string) {
-          const layoutPaths = await fg('layouts/*.{vue,ts}', {
-            cwd: root,
-            absolute: true,
-          })
-
-          for (const layoutPath of layoutPaths) {
-            const layout = basename(layoutPath).replace(/\.\w+$/, '')
-            if (layouts[layout])
-              continue
-            imports.push(`import __layout_${layout} from "/@fs${layoutPath}"`)
-            layouts[layout] = `__layout_${layout}`
-          }
-        }
-
         await scanStyle(themeRoot)
         await scanStyle(userRoot)
 
-        await scanLayouts(clientRoot)
-        await scanLayouts(themeRoot)
-        await scanLayouts(userRoot)
-
         code = code.replace('/* __imports__ */', imports.join('\n'))
-        code = code.replace('/* __layouts__ */', `{${Object.entries(layouts).map(([k, v]) => `"${k}": ${v}`).join(',\n')}}`)
         return code
       }
 

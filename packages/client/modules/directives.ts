@@ -1,11 +1,23 @@
-import { DirectiveBinding, InjectionKey, ref, watch } from 'vue'
+import { computed, DirectiveBinding, InjectionKey, ref, watch } from 'vue'
 import { remove } from '@antfu/utils'
+import { useUrlSearchParams } from '@vueuse/core'
 import { UserModule } from '../types'
 
 export const injectClickDisabled: InjectionKey<boolean> = Symbol('v-click-disabled')
 
 export const clickElements = ref<HTMLElement[]>([])
-export const clickCurrent = ref(0)
+const hash = useUrlSearchParams('hash')
+export const clickCurrent = computed<number>({
+  get() {
+    let tab = +hash.tab || 0
+    if (isNaN(tab))
+      tab = 0
+    return tab
+  },
+  set(v) {
+    hash.tab = v.toString()
+  },
+})
 
 export function dirProvide<T>(dir: DirectiveBinding<any>, key: InjectionKey<T>, v: T) {
   (dir.instance?.$ as any).provides[key as any] = v

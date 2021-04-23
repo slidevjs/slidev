@@ -1,14 +1,13 @@
 import { ViteSSG } from 'vite-ssg'
-import { getRoutes } from './routes'
 import App from './App.vue'
+// @ts-expect-error
+import routes from '/@slidev/routes'
 import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
 import './style/index.css'
 /* __imports__ */
 import 'virtual:windi-utilities.css'
 import 'virtual:windi-devtools'
-
-const routes = getRoutes(/* __layouts__ */)
 
 export const createApp = ViteSSG(
   App,
