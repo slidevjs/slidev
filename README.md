@@ -1,12 +1,10 @@
 <br>
 <p align="center">
-<img src="./docs/public/logo.png" height="130" width="130"/>
+<img src="./docs/public/logo-title.png" alt="Slidev" height="250" width="250"/>
 </p>
 
-<h1 align="center"><b>Sli</b>dev</h1>
-
 <p align="center">
-Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
+Presentation & <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
 </p>
 
 ## Features
@@ -15,7 +13,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 - Powered by [Vite](https://github.com/vitejs/vite) - instant reloading & updating ⚡️
 - Built-in syntax highlighting supported via [Prism](https://github.com/PrismJS/prism)
 - Built-in [Monaco editor](https://github.com/Microsoft/monaco-editor) support for live coding in your presentations (with TypeScript!)
-- Built-in camera and recording support
+- Built-in recording and camera view support
 - Fully customizable and themeable
 - Styling powered by [Windi CSS](https://github.com/windicss/windicss)
 - Reuses [Vite's huge ecosystem](https://github.com/vitejs/awesome-vite)
