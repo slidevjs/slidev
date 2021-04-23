@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener, useFetch, useIntervalFn, useRafFn, useTransition } from '@vueuse/core'
+import { useEventListener, useFetch } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
 import { useNavigateControls } from '../logic'
 import { offsetRight } from '../logic/scale'
@@ -12,7 +12,7 @@ const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 
 const controls = useNavigateControls()
-const url = computed(() => `/@slidev/slide/${controls.currentPage.value}.json`)
+const url = computed(() => `/@slidev/slide/${controls.currentRoute.value?.meta?.slide?.id}.json`)
 const { data } = useFetch(
   url,
   { refetch: true },

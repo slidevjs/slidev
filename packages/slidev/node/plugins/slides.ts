@@ -122,21 +122,26 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
       if (id === '/@slidev/routes') {
         const imports: string[] = []
 
+        let no = 0
         const routes = `export default [\n${
           data.slides
             .map((i, idx) => {
               if (i.frontmatter?.disabled)
                 return ''
-              imports.push(`import n${idx} from '${entry}?id=${idx}.md'`)
+              imports.push(`import n${no} from '${entry}?id=${idx}.md'`)
               const additions = {
                 slide: {
                   start: i.start,
                   end: i.end,
                   note: i.note,
                   file: entry,
+                  id: idx,
+                  no,
                 },
               }
-              return `{ path: '/${idx}', name: 'page-${idx}', component: n${idx}, meta: ${JSON.stringify(Object.assign({}, i.frontmatter, additions))} },\n`
+              const route = `{ path: '/${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(Object.assign({}, i.frontmatter, additions))} },\n`
+              no += 1
+              return route
             })
             .join('')
         }]`

@@ -4,6 +4,15 @@ import { Router, RouteRecordRaw } from 'vue-router'
 import { clickCurrent, clickElements } from '../modules/directives'
 import { isInputing, magicKeys } from './state'
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    layout: string
+    slide?: {
+      id: number
+    }
+  }
+}
+
 export interface NavigateControls {
   next: Fn
   prev: Fn
