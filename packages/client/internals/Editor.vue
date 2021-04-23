@@ -2,10 +2,10 @@
 import { useEventListener, useFetch } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
 import { useNavigateControls } from '../logic'
-import { offsetRight } from '../logic/scale'
 import { activeElement, showEditor } from '../logic/state'
 import { useCodeMirror } from '../setup/codemirror'
 
+const offsetRight = ref(0)
 const content = ref('')
 const dirty = ref(false)
 const frontmatter = ref<any>({})

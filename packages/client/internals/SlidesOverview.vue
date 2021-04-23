@@ -2,7 +2,8 @@
 import { useVModel } from '@vueuse/core'
 import { computed, defineEmit, defineProps } from 'vue'
 import { useNavigateControls } from '../logic/controls'
-import { targetWidth, targetHeight } from '../logic/scale'
+import { slideWidth, slideHeight } from '../constants'
+import SlideContainer from './SlideContainer.vue'
 
 const emit = defineEmit()
 const props = defineProps<{ modelValue: boolean }>()
@@ -12,16 +13,10 @@ const value = useVModel(props, 'modelValue', emit)
 const { routes } = useNavigateControls()
 
 const scale = 0.3
-const cardWidth = targetWidth * scale
-const innerStyle = computed(() => ({
-  height: `${targetHeight}px`,
-  width: `${targetWidth}px`,
-  transformOrigin: 'top left',
-  transform: `scale(${scale})`,
-}))
+const cardWidth = slideWidth * scale
 const style = computed(() => ({
-  height: `${targetHeight * scale}px`,
-  width: `${targetWidth * scale}px`,
+  height: `${slideHeight * scale}px`,
+  width: `${slideWidth * scale}px`,
 }))
 </script>
 
@@ -38,7 +33,6 @@ const style = computed(() => ({
       <div
         v-for="(route, idx) of routes.slice(0, -1)"
         :key="route.path"
-        :style="style"
         class="relative"
       >
         <RouterLink
@@ -47,9 +41,9 @@ const style = computed(() => ({
           class="block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-primary)"
           @click="value = false"
         >
-          <div :style="innerStyle" class="pointer-events-none" v-click-disabled>
-            <component :is="route.component"/>
-          </div>
+          <SlideContainer v-click-disabled class="w-full h-full pointer-events-none">
+            <component :is="route.component" />
+          </SlideContainer>
         </RouterLink>
         <div
           class="absolute top-0 opacity-50"

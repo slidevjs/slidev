@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside, useFullscreen } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
 import { recorder, currentCamera } from '../logic/recording'
 import { showOverview, showEditor } from '../logic/state'
