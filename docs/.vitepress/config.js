@@ -23,5 +23,9 @@ module.exports = {
     nav: [
       { text: 'Guide', link: '/guide/' },
     ],
+
+    sidebar: {
+      
+    }
   }
 }
