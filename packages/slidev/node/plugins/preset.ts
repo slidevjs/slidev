@@ -21,6 +21,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     components: componentsOptions = {},
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
+    windicss: windiOptions = {},
   } = options
 
   const slidesOptions = resolveOptions(options)
@@ -85,17 +86,21 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
       ...iconsOptions,
     }),
 
-    ...WindiCSS({
-      configFiles: [
-        ...defaultConfigureFiles,
-        resolve(themeRoot, 'windi.config.ts'),
-        resolve(clientRoot, 'windi.config.ts'),
-      ],
-    }, {
-      hookOptions: {
-        ignoreNodeModules: true,
+    ...WindiCSS(
+      {
+        configFiles: [
+          ...defaultConfigureFiles,
+          resolve(themeRoot, 'windi.config.ts'),
+          resolve(clientRoot, 'windi.config.ts'),
+        ],
+        ...windiOptions,
       },
-    }),
+      {
+        hookOptions: {
+          ignoreNodeModules: false,
+        },
+      },
+    ),
 
     RemoteAssets({
       ...remoteAssetsOptions,
