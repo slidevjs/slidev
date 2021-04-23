@@ -3,7 +3,7 @@
 @import 'prism-theme-vars/to-codemirror.css';
 
 :root {
-  --prism-font-family: 'Fira Code', monospace;
+  --prism-font-family: theme('fontFamily.mono');
   --prism-font-size: 12px;
   --prism-block-padding-x: 0;
   --prism-block-padding-y: 0;

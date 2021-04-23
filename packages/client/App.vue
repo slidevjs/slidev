@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { useHead } from '@vueuse/head'
 import { computed, provide } from 'vue'
 import { useNavigateControls } from './logic'
 import { scale, targetHeight, targetWidth, offsetRight } from './logic/scale'
 import { injectClickDisabled } from './modules/directives'
 import Controls from './internals/Controls.vue'
+import setupHead from './setup/head'
 
-useHead({
-  title: 'Slidev',
-  meta: [],
-})
+setupHead()
 
 const controls = useNavigateControls()
 const style = computed(() => ({
@@ -31,9 +28,11 @@ function onClick(e: MouseEvent) {
 
 <template>
   <div class="page-root">
-    <div class="slide-root"
-     @click="onClick">
-      <div class="slide-container" id="slide-container" :style="style">
+    <div
+      class="slide-root"
+      @click="onClick"
+    >
+      <div id="slide-container" class="slide-container" :style="style">
         <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
       </div>
     </div>

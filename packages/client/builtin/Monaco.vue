@@ -3,11 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, defineProps, watch, computed } from 'vue'
+import { ref, onUnmounted, defineProps, watch, computed } from 'vue'
 import { ignorableWatch } from '@vueuse/core'
 import { decode } from 'js-base64'
+import type * as monaco from 'monaco-editor'
 import { formatCode } from '../setup/prettier'
-import { monaco } from '../setup/monaco'
+import setupMonaco from '../setup/monaco'
 import { isDark, useNavigateControls } from '../logic'
 
 const props = defineProps({
@@ -60,70 +61,71 @@ const ext = computed(() => {
   }
 })
 
-onMounted(() => {
-  const model = monaco.editor.createModel(
-    code.value,
-    lang.value,
-    monaco.Uri.parse(`file:///root/${Date.now()}.${ext.value}`),
-  )
+setupMonaco()
+  .then(({ monaco }) => {
+    const model = monaco.editor.createModel(
+      code.value,
+      lang.value,
+      monaco.Uri.parse(`file:///root/${Date.now()}.${ext.value}`),
+    )
 
-  editor = monaco.editor.create(el.value!, {
-    model,
-    tabSize: 2,
-    insertSpaces: true,
-    detectIndentation: false,
-    folding: false,
-    fontSize: 12,
-    fontFamily: '\'Fira Code\', monospace',
-    lineDecorationsWidth: 0,
-    lineNumbersMinChars: 0,
-    scrollBeyondLastLine: false,
-    scrollBeyondLastColumn: 0,
-    automaticLayout: true,
-    readOnly: props.readonly,
-    theme: isDark.value ? 'vitesse-dark' : 'vitesse-light',
-    lineNumbers: props.lineNumbers as any,
-    glyphMargin: false,
-    scrollbar: {
-      useShadows: false,
-      vertical: 'hidden',
-      horizontal: 'hidden',
-    },
-    overviewRulerLanes: 0,
-    minimap: { enabled: false },
-  })
-  editor.onDidFocusEditorText(() => controls.paused.value = true)
-  editor.onDidBlurEditorText(() => controls.paused.value = false)
+    editor = monaco.editor.create(el.value!, {
+      model,
+      tabSize: 2,
+      insertSpaces: true,
+      detectIndentation: false,
+      folding: false,
+      fontSize: 12,
+      fontFamily: '\'Fira Code\', monospace',
+      lineDecorationsWidth: 0,
+      lineNumbersMinChars: 0,
+      scrollBeyondLastLine: false,
+      scrollBeyondLastColumn: 0,
+      automaticLayout: true,
+      readOnly: props.readonly,
+      theme: isDark.value ? 'vitesse-dark' : 'vitesse-light',
+      lineNumbers: props.lineNumbers as any,
+      glyphMargin: false,
+      scrollbar: {
+        useShadows: false,
+        vertical: 'hidden',
+        horizontal: 'hidden',
+      },
+      overviewRulerLanes: 0,
+      minimap: { enabled: false },
+    })
+    editor.onDidFocusEditorText(() => controls.paused.value = true)
+    editor.onDidBlurEditorText(() => controls.paused.value = false)
 
-  async function format() {
-    code.value = (await formatCode(code.value, lang.value)).trim()
-  }
-
-  const { ignoreUpdates } = ignorableWatch(code, (v) => {
-    const selection = editor.getSelection()
-    editor.setValue(v)
-    if (selection)
-      editor.setSelection(selection)
-  })
-
-  model.onDidChangeContent(() => {
-    const v = editor.getValue().toString()
-    if (v !== code.value)
-      ignoreUpdates(() => code.value = v)
-  })
-
-  // ctrl+s to format
-  editor.onKeyDown((e) => {
-    if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
-      e.preventDefault()
-      format()
+    async function format() {
+      code.value = (await formatCode(code.value, lang.value)).trim()
     }
+
+    const { ignoreUpdates } = ignorableWatch(code, (v) => {
+      const selection = editor.getSelection()
+      editor.setValue(v)
+      if (selection)
+        editor.setSelection(selection)
+    })
+
+    model.onDidChangeContent(() => {
+      const v = editor.getValue().toString()
+      if (v !== code.value)
+        ignoreUpdates(() => code.value = v)
+    })
+
+    // ctrl+s to format
+    editor.onKeyDown((e) => {
+      if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+        e.preventDefault()
+        format()
+      }
+    })
+
+    watch(isDark, () => monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vitesse-light'))
   })
-})
 
-watch(isDark, () => monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vitesse-light'))
-
-onUnmounted(() => editor.dispose())
+onUnmounted(() => editor?.dispose())
 </script>
 <style lang="postcss">
 .vue-monaco {

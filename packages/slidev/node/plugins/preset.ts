@@ -13,6 +13,7 @@ import { createSlidesLoader } from './slides'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
 import { resolveOptions, SlidevPluginOptions } from './options'
+import { createSetupPlugin } from './setups'
 
 export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
   const {
@@ -109,6 +110,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     createConfigPlugin(),
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),
+    createSetupPlugin(slidesOptions),
     createMonacoLoader(),
   ]
 }

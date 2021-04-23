@@ -11,7 +11,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ## Motivation
 
-I am making this because I found myself spend too much on layouting and styling slides when using apps like PowerPoint / Keynote / Google Slides. When sharing code snippets, I would also need to use other tools to generate the highlighted code as images over and over again. Which are just not ideal to me.
+I am making this because I found myself spending too much on layouting and styling slides when using apps like PowerPoint / Keynote / Google Slides. When sharing code snippets, I would also need to use other tools to generate the highlighted code as images over and over again. Which are just not ideal to me.
 
 So as a frontend developer, why not solve it the way that fits better with what I am good that?
 
@@ -23,7 +23,7 @@ Status: **Alpha**
 
 ~~Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. After finishing my talk, I will make this a standalone tool like VitePress where all you need is a command with a markdown file.~~
 
-Alright, I broke my words again, it's now available as an standalone tool 🎉
+Alright, I broke my words again. It's now available as a standalone tool 🎉
 
 **Docs and guides on [slidev.antfu.me](https://slidev.antfu.me)**
 
@@ -34,15 +34,18 @@ For a full example, you can check the [demo](./demo) folder, which is a draft fo
 ## TODO
 
 - [ ] Foot notes
-- [ ] Custom Monaco setup
 - [ ] Configuration in header
 - [ ] Preload next slide
 - [ ] Shiki + TwoSlash?
-- [ ] Embedded editor
-- [ ] Hide dev buttons on build
 - [ ] VS Code extension
+- [ ] Presentor View
 - [ ] Timer
 - [ ] A few more themes
+- [ ] Dialog before recording
+- [ ] Docs
+- [x] Hide dev buttons on build
+- [x] Embedded editor
+- [x] Custom Monaco setup
 - [x] Camera view
 - [x] Recording!
 - [x] Markdown to Slides
