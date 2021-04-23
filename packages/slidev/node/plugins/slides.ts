@@ -73,8 +73,8 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
           sendHmrReload(
             server,
             [
-              `/@slidev/slide/${idx}.md`,
-              `/@slidev/slide/${idx}.json`,
+              `${entry}?id=${idx}.md`,
+              `${entry}?id=${idx}.json`,
             ]
               .map(id => server.moduleGraph.getModuleById(id))
               .filter(notNullish),
@@ -100,8 +100,8 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
 
         const moduleEntries = [
           '/@slidev/routes',
-          ...data.slides.map((i, idx) => `/@slidev/slide/${idx}.md`),
-          ...data.slides.map((i, idx) => `/@slidev/slide/${idx}.json`),
+          ...data.slides.map((i, idx) => `${entry}?id=${idx}.md`),
+          ...data.slides.map((i, idx) => `${entry}?id=${idx}.json`),
         ]
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
@@ -112,20 +112,14 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
     },
 
     resolveId(id) {
-      if (id.startsWith('/@slidev/'))
+      if (id.startsWith(entry) || id.startsWith('/@slidev/'))
         return id
       return null
     },
 
     load(id) {
-      const match = id.match(regexId)
-      if (match) {
-        const [, id, type] = match
-        const pageNo = parseInt(id)
-        if (type === 'md')
-          return data.slides[pageNo].raw
-      }
-      else if (id === '/@slidev/routes') {
+      // routes
+      if (id === '/@slidev/routes') {
         const imports: string[] = []
 
         const routes = `export default [\n${
@@ -133,7 +127,7 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
             .map((i, idx) => {
               if (i.frontmatter?.disabled)
                 return ''
-              imports.push(`import n${idx} from '/@slidev/slide/${idx}.md'`)
+              imports.push(`import n${idx} from '${entry}?id=${idx}.md'`)
               const additions = {
                 slide: {
                   start: i.start,
@@ -148,6 +142,19 @@ export function createSlidesLoader({ entry }: ResolvedSlidevOptions): Plugin {
         }]`
 
         return [...imports, routes].join('\n')
+      }
+
+      // pages
+      if (id.startsWith(entry)) {
+        const remaning = id.slice(entry.length + 1)
+        const match = remaning.match(/id=(\d+?)\.(md|json)$/)
+        if (match) {
+          const [, no, type] = match
+          const pageNo = parseInt(no)
+          if (type === 'md')
+            return data.slides[pageNo].raw
+        }
+        return ''
       }
     },
   }
