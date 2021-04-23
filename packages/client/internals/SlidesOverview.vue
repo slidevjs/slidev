@@ -47,8 +47,8 @@ const style = computed(() => ({
           class="block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-primary)"
           @click="value = false"
         >
-          <div :style="innerStyle" class="pointer-events-none">
-            <component :is="route.component" v-click-disabled />
+          <div :style="innerStyle" class="pointer-events-none" v-click-disabled>
+            <component :is="route.component"/>
           </div>
         </RouterLink>
         <div
