@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { provide } from 'vue'
+import { showEditor } from './state'
 import { useNavigateControls } from './logic'
 import { injectClickDisabled } from './modules/directives'
 import Controls from './internals/Controls.vue'
 import setupHead from './setup/head'
 import SlideContainer from './internals/SlideContainer.vue'
+import Editor from './internals/Editor.vue'
+import NavControls from './internals/NavControls.vue'
 
 setupHead()
 
 const controls = useNavigateControls()
 
 const query = new URLSearchParams(location.search)
-if (query.has('print'))
+const isPrint = query.has('print')
+if (isPrint)
   provide(injectClickDisabled, true)
 
 function onClick(e: MouseEvent) {
@@ -26,10 +30,14 @@ function onClick(e: MouseEvent) {
 </script>
 
 <template>
-  <div id="page-root">
+  <div id="page-root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer class="w-full h-full bg-black" @click="onClick">
       <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
+      <template #controls v-if="!isPrint">
+        <NavControls />
+      </template>
     </SlideContainer>
-    <Controls v-if="!query.has('print')" />
+    <Editor v-if="showEditor && !isPrint" />
   </div>
+  <Controls v-if="!isPrint" />
 </template>

@@ -25,6 +25,7 @@ const style = computed(() => ({
     <div id="slide-content" :style="style">
       <slot />
     </div>
+    <slot name="controls" />
   </div>
 </template>
 

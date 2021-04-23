@@ -2,8 +2,8 @@
 import { onClickOutside, useFullscreen } from '@vueuse/core'
 import { ref } from 'vue'
 import { isDark, toggleDark, useNavigateControls } from '../logic'
-import { recorder, currentCamera } from '../logic/recording'
-import { showOverview, showEditor } from '../logic/state'
+import { recorder } from '../logic'
+import { showOverview, showEditor, currentCamera } from '../state'
 import DevicesList from './DevicesList.vue'
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
@@ -28,7 +28,7 @@ const dev = import.meta.env.DEV
 </script>
 
 <template>
-  <nav class="opacity-0 py-2 pl-4 pr-2 transition right-0 top-0 rounded-bl text-xl flex gap-1 text-gray-400 bg-transparent duration-300 fixed hover:(shadow bg-main opacity-100)">
+  <nav class="bg-transparent rounded-bl flex text-xl opacity-0 py-2 pr-2 pl-4 transition top-0 right-0 text-gray-400 gap-1 duration-300 absolute hover:(shadow bg-main opacity-100)">
     <button
       v-if="dev"
       class="icon-btn"
@@ -63,7 +63,7 @@ const dev = import.meta.env.DEV
       </button>
       <DevicesList
         v-if="showDevicesList && !recording"
-        class="absolute right-0 top-10 bg-main rounded shadow z-20"
+        class="bg-main rounded shadow top-10 right-0 z-20 absolute"
       />
     </div>
 

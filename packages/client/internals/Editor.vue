@@ -2,7 +2,7 @@
 import { useEventListener, useFetch } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
 import { useNavigateControls } from '../logic'
-import { activeElement, showEditor } from '../logic/state'
+import { activeElement, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 
 const offsetRight = ref(0)
@@ -118,13 +118,13 @@ const editorLink = computed(() => {
 
 <template>
   <div
-    class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-10"
+    class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
     :class="{'!opacity-30': handlerDown}"
     :style="{right: `${width - 5}px`, cursor: 'col-resize'}"
     @pointerdown="onHandlerDown"
   ></div>
   <div
-    class="fixed top-0 right-0 bottom-0 shadow bg-main p-4 grid grid-rows-[max-content,auto] h-full overflow-hidden"
+    class="shadow bg-main p-4 grid grid-rows-[max-content,auto] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
     :style="{width: `${width}px`}"
   >
     <div class="flex pb-2 text-xl -mt-1">
