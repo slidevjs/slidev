@@ -20,6 +20,11 @@ export function createConfigPlugin(): Plugin {
         optimizeDeps: {
           include: [
             ...Object.keys(dependencies).filter(i => !EXCLUDE.includes(i)),
+            'codemirror/mode/javascript/javascript',
+            'codemirror/mode/css/css',
+            'codemirror/mode/markdown/markdown',
+            'codemirror/mode/xml/xml',
+            'codemirror/mode/htmlmixed/htmlmixed',
             'prettier/esm/parser-babel',
             'prettier/esm/parser-html',
             'prettier/esm/parser-typescript',
