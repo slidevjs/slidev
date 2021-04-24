@@ -41,7 +41,8 @@ export default function createDirectives() {
         },
         unmounted(el, dir) {
           const elements = dirInject(dir, injectionTabElements)!
-          remove(elements.value, el)
+          if (elements?.value)
+            remove(elements.value, el)
         },
       })
 
