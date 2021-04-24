@@ -1,7 +1,7 @@
 <template>
   <header v-if="showHero" class="home-hero">
     <p align="center">
-      <a href="https://github.com/antfu/slidev">
+      <a href="https://github.com/slidevjs/slidev">
         <img src="/logo-title.png" alt="Slidev" height="300">
       </a>
       <br>

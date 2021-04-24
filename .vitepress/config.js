@@ -13,7 +13,7 @@ module.exports = {
     ['link', { href: 'https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@200;400;500;600', rel: 'stylesheet' }],
   ],
   themeConfig: {
-    repo: 'antfu/slidev',
+    repo: 'slidevjs/slidev',
     logo: '/logo.svg',
     docsDir: 'docs',
     docsBranch: 'main',
