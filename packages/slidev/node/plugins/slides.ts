@@ -9,7 +9,7 @@ import { ResolvedSlidevOptions } from './options'
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /id=(\d+?)\.(md|json)$/
 
-function getBodyJson(req: Connect.IncomingMessage) {
+export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
     let body = ''
     req.on('data', chunk => body += chunk)

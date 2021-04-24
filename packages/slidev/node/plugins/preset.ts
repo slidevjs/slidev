@@ -15,6 +15,7 @@ import { createEntryPlugin } from './entry'
 import { resolveOptions, SlidevPluginOptions } from './options'
 import { createSetupPlugin } from './setups'
 import VitePluginVueFactory, { VueFactoryResolver } from './factory'
+import VitePluginServerRef from './server-ref'
 
 export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
   const {
@@ -110,6 +111,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     }),
 
     VitePluginVueFactory(),
+    VitePluginServerRef(),
     createConfigPlugin(slidesOptions),
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),

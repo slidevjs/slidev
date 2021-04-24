@@ -16,6 +16,9 @@ const controls = useNavigateControls()
 <template>
   <div class="grid-container">
     <div class="grid-section top flex">
+      <div class="px-6 my-auto">
+        {{ controls.currentPage.value + 1}} / {{ controls.routes.length }}
+      </div>
       <div class="flex-auto" />
       <NavControls mode="persist" />
     </div>
