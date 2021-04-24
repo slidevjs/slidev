@@ -20,11 +20,17 @@ export interface ParseOptions {
   enabledMonaco?: boolean
 }
 
+export interface SlidevConfig {
+  title: string
+  theme: string
+}
+
 export interface SlidesMarkdown {
   filepath?: string
   slides: SlidesMarkdownInfo[]
   options: ParseOptions
   raw: string
+  config: SlidevConfig
 }
 
 export async function load(
@@ -128,14 +134,17 @@ export function parse(
     })
   }
 
-  // make the first slide use cover layout by default
-  if (slides[0])
-    slides[0].frontmatter.layout ||= 'cover'
+  const headmatter = slides?.[0].frontmatter || {}
+  const config: SlidevConfig = Object.assign({}, headmatter.config || {})
+
+  config.theme ||= headmatter.theme || '@slidev/theme-default'
+  config.title ||= headmatter.title || (markdown.match(/^# (.*)$/m)?.[1] || '').trim()
 
   return {
     raw: markdown,
     filepath,
     slides,
     options,
+    config,
   }
 }

@@ -88,8 +88,6 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
             return res.end()
           }
 
-          // console.log(`Hello from ${req.url} ${req.method}`)
-
           next()
         })
       },
@@ -104,6 +102,7 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
 
           const moduleEntries = [
             '/@slidev/routes',
+            '/@slidev/configs',
             ...data.slides.map((i, idx) => `${entry}?id=${idx}.md`),
             ...data.slides.map((i, idx) => `${entry}?id=${idx}.json`),
           ]
@@ -126,9 +125,13 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
         if (id === '/@slidev/routes')
           return generateRoutes()
 
-        // routes
+        // layouts
         if (id === '/@slidev/layouts')
           return generateLayouts()
+
+        // configs
+        if (id === '/@slidev/configs')
+          return `export default ${JSON.stringify(data.config)}`
 
         // pages
         if (id.startsWith(entry)) {
@@ -160,7 +163,7 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
 
           const layouts = await getLayouts()
           const pageNo = parseInt(no)
-          const layoutName = data.slides[pageNo].frontmatter?.layout || 'default'
+          const layoutName = data.slides[pageNo].frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
           if (!layouts[layoutName])
             throw new Error(`Unknown layout "${layoutName}"`)
 
@@ -229,7 +232,6 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
 
     let no = 0
     const routes = [
-      '{ path: "", redirect: { path: "/0" } }',
       ...data.slides
         .map((i, idx) => {
           if (i.frontmatter?.disabled)

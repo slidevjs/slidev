@@ -5,9 +5,11 @@ import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
+// @ts-expect-error
+import configs from '/@slidev/configs'
 
 useHead({
-  title: 'Presenter Mode',
+  title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
 })
 
 const controls = useNavigateControls()
@@ -17,7 +19,7 @@ const controls = useNavigateControls()
   <div class="grid-container">
     <div class="grid-section top flex">
       <div class="px-6 my-auto">
-        {{ controls.currentPage.value + 1}} / {{ controls.routes.length }}
+        {{ controls.currentPage.value + 1 }} / {{ controls.routes.length }}
       </div>
       <div class="flex-auto" />
       <NavControls mode="persist" />

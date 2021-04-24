@@ -20,4 +20,6 @@ export const routes: RouteRecordRaw[] = [
       ...rawRoutes,
     ],
   },
+  { path: '', redirect: { path: '/0' } },
+  { path: '/presenter', redirect: { path: '/presenter/0' } },
 ]
