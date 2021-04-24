@@ -2,9 +2,9 @@
 
 ## Overview
 
-Slidev is a web-based slides maker and presenetor. It's designed for developers to focus on writting content in Markdown while have the power of HTML and Vue components to deliver the pixel perfect layout designs and embedded interactive demos in your presentations.
+Slidev is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown while having the power of HTML and Vue components to deliver the pixel-perfect layout designs and embedded interactive demos in your presentations.
 
-Slidev uses a feature-rich markdown file generate the beautiful slides with instant reloading experience. Along with many built-in support like live coding, PDF exporting, presentation recording, and so on. And since it's powered by web, you can actually do anything on that - the possibility is unlimited.
+It uses a feature-rich markdown file to generate beautiful slides with an instant reloading experience. Along with many built-in integrations like live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can actually do anything on that - the possibility is unlimited.
 
 You can learn more about the rationale behind the project in the [Why Slidev](/guide/why) section.
 
@@ -19,7 +19,7 @@ Slidev is made possible by combining these tools and technologies.
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family - [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
 
-### Scaffolding Your First Slidev
+### Scaffolding Your First Presentation
 
 With NPM:
 
@@ -33,7 +33,7 @@ With Yarn:
 $ yarn create slidev
 ```
 
-Follow the prompts and start making your slides now!
+Follow the prompts and start making your slides now! To get more details of the markdown syntax, [read more here](/guide/syntax).
 
 ### Command Line Interface
 

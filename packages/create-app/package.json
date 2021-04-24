@@ -1,7 +1,7 @@
 {
   "name": "create-slidev",
   "version": "0.0.0-alpha.10",
-  "description": "Create starter template for Vite slides",
+  "description": "Create starter template for Slidev",
   "license": "MIT",
   "repository": {
     "type": "git",

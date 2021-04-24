@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, onMounted, ref } from 'vue'
-import { isDark } from '../logic'
+import { isDark } from '../logic/dark'
 
 const props = defineProps<{
   id: string | number
@@ -11,7 +11,7 @@ const tweet = ref<HTMLElement | null>()
 
 onMounted(() => {
   // @ts-ignore
-  window?.twttr.widgets.createTweet(
+  window?.twttr?.widgets?.createTweet(
     props.id.toString(),
     tweet.value,
     {
@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Transform :scale="scale || 0.7">
+  <Transform :scale="scale || 1">
     <div ref="tweet"></div>
   </Transform>
 </template>

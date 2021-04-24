@@ -2,7 +2,7 @@
 layout: cover
 ---
 
-# Vite Slides
+# Slidev
 
 Making slides with Markdown in Vite!
 
