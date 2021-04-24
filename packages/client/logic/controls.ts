@@ -1,7 +1,6 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref, watch } from 'vue'
 import { and, Fn, not, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
-import { clickCurrent, clickElements } from '../logic'
 import { isInputing, magicKeys } from '../state'
 import { rawRoutes } from '../routes'
 // @ts-expect-error
@@ -30,6 +29,8 @@ export interface NavigateControls {
   currentPath: ComputedRef<string>
   currentPage: ComputedRef<number>
   isPresenter: ComputedRef<boolean>
+  tab: Ref<number>
+  tabElements: Ref<Element[]>
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
@@ -54,12 +55,15 @@ export function createNavigateControls(router: Router) {
   const hasPrev = computed(() => currentPage.value > 0)
   const nextRoute = computed(() => routes.find(i => i.path === `${Math.min(routes.length - 1, currentPage.value + 1)}`))
 
+  const tab = ref(0)
+  const tabElements = ref<HTMLElement[]>([])
+
   router.isReady().then(() => {
     watch(serverState,
       () => {
         if (+serverState.value.page !== +currentPage.value)
           router.replace(getPath(serverState.value.page))
-        clickCurrent.value = serverState.value.tab || 0
+        tab.value = serverState.value.tab || 0
       },
       { deep: true },
     )
@@ -68,24 +72,24 @@ export function createNavigateControls(router: Router) {
   function updateState() {
     if (isPresenter.value) {
       serverState.value.page = +currentPage.value
-      serverState.value.tab = clickCurrent.value
+      serverState.value.tab = tab.value
     }
   }
 
-  watch(clickCurrent, updateState)
+  watch(tab, updateState)
 
   function next() {
-    if (clickElements.value.length <= clickCurrent.value)
+    if (tabElements.value.length <= tab.value)
       nextSlide()
     else
-      clickCurrent.value += 1
+      tab.value += 1
   }
 
   async function prev() {
-    if (clickCurrent.value <= 0)
+    if (tab.value <= 0)
       prevSlide()
     else
-      clickCurrent.value -= 1
+      tab.value -= 1
   }
 
   function getPath(no: number | string) {
@@ -103,8 +107,8 @@ export function createNavigateControls(router: Router) {
   }
 
   async function go(page: number) {
-    clickCurrent.value = 0
-    clickElements.value = []
+    tab.value = 0
+    tabElements.value = []
     await router.push(getPath(page))
     updateState()
   }
@@ -131,6 +135,8 @@ export function createNavigateControls(router: Router) {
     routes,
     isPresenter,
     currentPage,
+    tab,
+    tabElements,
     go,
     install(app: App) {
       app.provide(NavigateControlsInjection, navigateControls)

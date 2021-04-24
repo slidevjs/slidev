@@ -10,14 +10,14 @@ const props = defineProps<{ modelValue: boolean }>()
 
 const value = useVModel(props, 'modelValue', emit)
 
-const { go: _go, routes } = useNavigateControls()
+const { go: goSlide, routes } = useNavigateControls()
 
 function close() {
   value.value = false
 }
 
 function go(page: number) {
-  _go(page)
+  goSlide(page)
   close()
 }
 
@@ -55,11 +55,10 @@ const cardWidth = computed(() => {
           @click="go(+route.path)"
         >
           <SlideContainer
-            v-click-disabled
             :width="cardWidth"
             class="pointer-events-none"
           >
-            <component :is="route.component" />
+            <component :is="route.component" :tab-disabled="true" />
           </SlideContainer>
         </div>
         <div

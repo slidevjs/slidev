@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { isPrintMode, showEditor, windowSize } from '../state'
 import { useNavigateControls } from '../logic'
 import Controls from './Controls.vue'
@@ -6,17 +7,19 @@ import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
 
-const controls = useNavigateControls()
+const { next, prev, currentRoute, tab, tabElements } = useNavigateControls()
 
 function onClick(e: MouseEvent) {
   if ((e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previouse
     if ((e.screenX / window.innerWidth) > 0.6)
-      controls.next()
+      next()
     else
-      controls.prev()
+      prev()
   }
 }
+
+const component = computed(() => currentRoute.value?.component)
 </script>
 
 <template>
@@ -26,7 +29,13 @@ function onClick(e: MouseEvent) {
       :width="isPrintMode ? windowSize.width.value : undefined"
       @click="onClick"
     >
-      <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
+      <component
+        :is="component"
+        v-model:tab="tab"
+        v-model:tabElements="tabElements"
+        :tabDisabled="false"
+        :class="currentRoute?.meta?.class || ''"
+      />
       <template #controls>
         <NavControls />
       </template>

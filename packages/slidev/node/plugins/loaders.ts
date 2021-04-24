@@ -168,10 +168,12 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
             throw new Error(`Unknown layout "${layoutName}"`)
 
           code = code.replace('export default _sfc_main', '')
+          code = `import __wrapper from '/@fs${clientRoot}/internals/SlideWrapper'\n${code}`
           code = `import __layout from "${layouts[layoutName]}"\n${code}`
+          code = `import { h } from 'vue'\n${code}`
           code += `\nexport default {
             name: "layout-${layoutName}",
-            render: () => _createBlock(__layout, null, { default: () => [_createVNode(_sfc_main)], _: 1 }),
+            render: () => h(__wrapper, null, () => h(__layout, null, () => h(_sfc_main))),
             __file: __layout.__file,
           }`
 
