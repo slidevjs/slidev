@@ -6,7 +6,7 @@ import { isPrintMode } from './state'
 
 setupApp()
 
-if (isPrintMode)
+if (isPrintMode.value)
   provide(injectClickDisabled, true)
 </script>
 
