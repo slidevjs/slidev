@@ -1,13 +1,13 @@
 import { mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
-import { getClientRoot } from './options'
+import { getClientRoot, ResolvedSlidevOptions } from './options'
 
 const EXCLUDE = [
   'theme-vitesse',
 ]
 
-export function createConfigPlugin(): Plugin {
+export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:config',
     config(config) {
@@ -41,7 +41,7 @@ export function createConfigPlugin(): Plugin {
         server.middlewares.use(async(req, res, next) => {
           if (req.url!.endsWith('.html')) {
             res.statusCode = 200
-            res.end(await getIndexHtml())
+            res.end(await getIndexHtml(options))
             return
           }
           next()

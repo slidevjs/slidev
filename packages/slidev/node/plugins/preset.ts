@@ -25,7 +25,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     windicss: windiOptions = {},
   } = options
 
-  const slidesOptions = resolveOptions(options)
+  const slidesOptions = resolveOptions()
   const { themeRoot, clientRoot } = slidesOptions
 
   return [
@@ -59,7 +59,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
         if (id.endsWith('.md'))
           return code.replace(/\\{/g, '{')
       },
-    },
+    } as Plugin,
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],
@@ -87,7 +87,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
       ...iconsOptions,
     }),
 
-    ...WindiCSS(
+    WindiCSS(
       {
         configFiles: [
           ...defaultConfigureFiles,
@@ -107,10 +107,10 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
       ...remoteAssetsOptions,
     }),
 
-    createConfigPlugin(),
+    createConfigPlugin(slidesOptions),
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),
     createSetupPlugin(slidesOptions),
     createMonacoLoader(),
-  ]
+  ].flat()
 }

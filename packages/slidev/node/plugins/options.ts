@@ -52,13 +52,8 @@ export function getThemeRoot(name: string) {
   return dirname(require.resolve(`${name}/package.json`))
 }
 
-export function resolveOptions(options: SlidevOptions): ResolvedSlidevOptions {
-  const userRoot = process.cwd()
-  const {
-    entry = 'slides.md',
-    theme = '@slidev/theme-default',
-  } = options
-
+export function resolveOptions(entry = 'slides.md', userRoot = process.cwd()): ResolvedSlidevOptions {
+  const theme = '@slidev/theme-default'
   return {
     entry: resolve(userRoot, entry),
     theme,
