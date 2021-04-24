@@ -21,3 +21,5 @@ $ slidev build
 ```
 
 The dist will be avaliable under `dist/` and then you can host them on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. And share your slides to the world with a single link.
+
+> Please note there are some issues on build mode with the Monaco integrations. We will focus on the overall features of Slidev and deal with it later.

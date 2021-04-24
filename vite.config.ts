@@ -21,6 +21,7 @@ const config: UserConfig = {
     Components({
       dirs: [
         '.vitepress/theme/components',
+        '../packages/client/builtin',
       ],
       customLoaderMatcher: id => id.endsWith('.md'),
       customComponentResolvers: [

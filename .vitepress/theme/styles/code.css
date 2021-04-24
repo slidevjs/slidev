@@ -59,6 +59,11 @@ html.dark {
   --prism-inline-background: theme('colors.dark.300');
 }
 
+
+.token.title {
+  color: var(--prism-keyword);
+}
+
 /* Overrides */
 
 :not(pre) > code {

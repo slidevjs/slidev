@@ -11,6 +11,7 @@ module.exports = {
     ['link', { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }],
     ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
     ['link', { href: 'https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@200;400;500;600', rel: 'stylesheet' }],
+    ['script', { async: true, src: 'https://platform.twitter.com/widgets.js', charset: 'utf-8' }],
   ],
   themeConfig: {
     repo: 'slidevjs/slidev',
@@ -38,7 +39,7 @@ module.exports = {
               link: '/guide/',
             },
             {
-              text: 'Slides Syntax',
+              text: 'Markdown Syntax',
               link: '/guide/syntax',
             },
             {
@@ -46,12 +47,16 @@ module.exports = {
               link: '/guide/animations',
             },
             {
-              text: 'Export to PDF',
+              text: 'Exporting',
               link: '/guide/export',
             },
             {
               text: 'Record Presentation',
               link: '/guide/record',
+            },
+            {
+              text: 'Presenter Mode',
+              link: '/guide/presenter-mode',
             },
           ],
         },
