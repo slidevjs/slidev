@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { useNavigateControls } from '../logic'
+import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
+import NavControls from './NavControls.vue'
+import SlidesOverview from './SlidesOverview.vue'
 
 useHead({
   title: 'Presenter Mode',
@@ -12,7 +15,10 @@ const controls = useNavigateControls()
 
 <template>
   <div class="grid-container">
-    <div class="grid-section top"></div>
+    <div class="grid-section top flex">
+      <div class="flex-auto" />
+      <NavControls mode="persist" />
+    </div>
     <div class="grid-section main flex flex-col p-4 bg-gray-400 bg-opacity-10">
       <SlideContainer class="h-full w-full ">
         <component :is="controls.currentRoute.value?.component" />
@@ -26,6 +32,7 @@ const controls = useNavigateControls()
     <div class="grid-section note"></div>
     <div class="grid-section bottom"></div>
   </div>
+  <SlidesOverview v-model="showOverview" />
 </template>
 
 <style lang="postcss" scoped>
@@ -34,7 +41,7 @@ const controls = useNavigateControls()
 }
 
 .grid-container {
-  @apply h-full w-full bg-gray-400 bg-opacity-50;
+  @apply h-full w-full bg-gray-400 bg-opacity-15;
   display: grid;
   grid-template-columns: 1fr 1.1fr 0.9fr;
   grid-template-rows: 0.2fr 1.5fr 1.7fr 0.9fr;

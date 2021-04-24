@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { onClickOutside, useFullscreen } from '@vueuse/core'
-import { ref } from 'vue'
-import { isDark, toggleDark, useNavigateControls } from '../logic'
-import { recorder } from '../logic'
+import { defineProps, ref } from 'vue'
+import { isDark, toggleDark, useNavigateControls, recorder } from '../logic'
+
 import { showOverview, showEditor, currentCamera } from '../state'
 import DevicesList from './DevicesList.vue'
+
+const props = defineProps({
+  mode: {
+    default: 'fixed',
+  },
+})
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const { hasNext, hasPrev, prev, next, currentRoute } = useNavigateControls()
@@ -28,7 +34,10 @@ const dev = import.meta.env.DEV
 </script>
 
 <template>
-  <nav class="bg-transparent rounded-bl flex text-xl opacity-0 py-2 pr-2 pl-4 transition top-0 right-0 text-gray-400 gap-1 duration-300 absolute hover:(shadow bg-main opacity-100)">
+  <nav
+    class="bg-transparent rounded-bl flex text-xl py-2 pr-2 pl-4 transition text-gray-400 gap-1 duration-300"
+    :class="mode === 'fixed' ? 'absolute top-0 right-0 opacity-0 hover:(shadow bg-main opacity-100)' : ''"
+  >
     <button
       v-if="dev"
       class="icon-btn"
