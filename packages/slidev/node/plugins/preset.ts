@@ -14,6 +14,7 @@ import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
 import { createEntryPlugin } from './entry'
 import { resolveOptions, SlidevPluginOptions } from './options'
 import { createSetupPlugin } from './setups'
+import VitePluginVueFactory, { VueFactoryResolver } from './factory'
 
 export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
   const {
@@ -78,6 +79,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
         ViteIconsResolver({
           componentPrefix: '',
         }),
+        VueFactoryResolver,
       ],
 
       ...componentsOptions,
@@ -107,6 +109,7 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
       ...remoteAssetsOptions,
     }),
 
+    VitePluginVueFactory(),
     createConfigPlugin(slidesOptions),
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),
