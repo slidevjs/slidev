@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { isPrintMode, showEditor, windowSize } from '../state'
 import { next, prev, currentRoute, tab, tabElements } from '../logic/nav'
 import Controls from './Controls.vue'
@@ -16,24 +15,19 @@ function onClick(e: MouseEvent) {
       prev()
   }
 }
-
-const component = computed(() => currentRoute.value?.component)
 </script>
 
 <template>
   <div id="page-root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer
+      v-model:tab="tab"
+      v-model:tab-elements="tabElements"
       class="w-full h-full bg-black"
       :width="isPrintMode ? windowSize.width.value : undefined"
+      :route="currentRoute"
+      :tab-disabled="false"
       @click="onClick"
     >
-      <component
-        :is="component"
-        v-model:tab="tab"
-        v-model:tabElements="tabElements"
-        :tab-disabled="false"
-        :class="currentRoute?.meta?.class || ''"
-      />
       <template #controls>
         <NavControls />
       </template>

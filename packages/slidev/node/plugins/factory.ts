@@ -38,11 +38,9 @@ export function VitePluginVueFactory(): Plugin {
       const classes = (params.get('class') || '').split(',').join(' ')
       const tag = params.get('tag') || 'div'
 
-      console.log({ classes, tag })
+      // console.log({ classes, tag })
 
       const content = `<template><${tag} class="${classes}"><slot/></${tag}></template>`
-
-      console.log(windi?.api)
 
       windi?.api?.extractFile(content)
 

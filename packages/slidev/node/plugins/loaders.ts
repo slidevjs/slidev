@@ -69,7 +69,6 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
           }
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
-            // console.log(req.url, body)
             Object.assign(data.slides[idx], body)
             skipNext = true
             await parser.save(data, entry)
@@ -168,12 +167,11 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
             throw new Error(`Unknown layout "${layoutName}"`)
 
           code = code.replace('export default _sfc_main', '')
-          code = `import __wrapper from '/@fs${clientRoot}/internals/SlideWrapper'\n${code}`
           code = `import __layout from "${layouts[layoutName]}"\n${code}`
           code = `import { h } from 'vue'\n${code}`
           code += `\nexport default {
             name: "layout-${layoutName}",
-            render: () => h(__wrapper, null, () => h(__layout, null, () => h(_sfc_main))),
+            render: () => h(__layout, null, () => h(_sfc_main)),
             __file: __layout.__file,
           }`
 

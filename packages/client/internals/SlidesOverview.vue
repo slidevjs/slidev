@@ -3,7 +3,6 @@ import { useVModel } from '@vueuse/core'
 import { computed, defineEmit, defineProps, provide, ref } from 'vue'
 import { breakpoints, windowSize } from '../state'
 import { go as goSlide, rawRoutes } from '../logic/nav'
-import { injectionTabDisabled } from '../modules/directives'
 import SlideContainer from './SlideContainer.vue'
 
 const emit = defineEmit()
@@ -32,8 +31,6 @@ const cardWidth = computed(() => {
     return (windowSize.width.value - padding - gap) / 2
   return 300
 })
-
-provide(injectionTabDisabled, ref(true))
 </script>
 
 <template>
@@ -56,11 +53,12 @@ provide(injectionTabDisabled, ref(true))
           @click="go(+route.path)"
         >
           <SlideContainer
+            :key="route.path"
             :width="cardWidth"
+            :route="route"
+            :tab-disabled="true"
             class="pointer-events-none"
-          >
-            <component :is="route.component" />
-          </SlideContainer>
+          />
         </div>
         <div
           class="absolute top-0 opacity-50"

@@ -1,4 +1,4 @@
-import { defineComponent, Directive, resolveDirective, VNode, withDirectives } from 'vue'
+import { defineComponent, Directive, h, resolveDirective, VNode, withDirectives } from 'vue'
 
 export default defineComponent({
   props: {
@@ -11,10 +11,6 @@ export default defineComponent({
     const after = resolveDirective('after')!
 
     function applyDirective(node: VNode, directive: Directive) {
-      // console.log(node.dirs)
-      // // @ts-expect-error
-      // if (node.dirs?.find(i => i.dir.name && ['v-click', 'v-after'].includes(i.dir.name)))
-      //   return node
       return withDirectives(node, [[directive]])
     }
 
@@ -24,8 +20,8 @@ export default defineComponent({
       return
 
     if (Array.isArray(defaults))
-      return defaults.map((i, idx) => applyDirective(i, idx % this.every === 0 ? click : after))
+      return defaults.map((i, idx) => applyDirective(h(i), idx % this.every === 0 ? click : after))
 
-    return applyDirective(defaults, click)
+    return applyDirective(h(defaults), click)
   },
 })

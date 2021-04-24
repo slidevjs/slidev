@@ -19,6 +19,8 @@ export default function setupApp() {
   router.isReady().then(() => {
     watch(serverState,
       () => {
+        if (isPresenter.value)
+          return
         if (+serverState.value.page !== +currentPage.value)
           router.replace(getPath(serverState.value.page))
         tab.value = serverState.value.tab || 0

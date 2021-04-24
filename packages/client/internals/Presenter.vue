@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { total, currentPage, currentRoute } from '../logic/nav'
+import { ref, computed, watchEffect } from 'vue'
+import { total, currentPage, currentRoute, nextRoute, tab, tabElements, route } from '../logic/nav'
 import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -12,6 +13,25 @@ useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
 })
 
+watchEffect(() => {
+  console.log(tabElements.value.length)
+})
+
+const nextTabElements = ref([])
+const nextSlide = computed(() => {
+  if (tab.value < tabElements.value.length) {
+    return {
+      route: currentRoute.value,
+      tab: tab.value + 1,
+    }
+  }
+  else {
+    return {
+      route: nextRoute.value,
+      tab: 0,
+    }
+  }
+})
 </script>
 
 <template>
@@ -24,14 +44,24 @@ useHead({
       <NavControls mode="persist" />
     </div>
     <div class="grid-section main flex flex-col p-4 bg-gray-400 bg-opacity-10">
-      <SlideContainer class="h-full w-full ">
-        <component :is="currentRoute?.component" />
-      </SlideContainer>
+      <SlideContainer
+        key="main"
+        v-model:tab="tab"
+        v-model:tab-elements="tabElements"
+        class="h-full w-full"
+        :route="currentRoute"
+        :tab-disabled="false"
+      />
     </div>
     <div class="grid-section next flex flex-col p-4 bg-gray-400 bg-opacity-10">
-      <!-- <SlideContainer class="h-full w-full">
-        <component :is="controls.nextRoute.value?.component" />
-      </SlideContainer> -->
+      <SlideContainer
+        key="next"
+        v-model:tab-elements="nextTabElements"
+        class="h-full w-full"
+        :tab="nextSlide.tab"
+        :route="nextSlide.route"
+        :tab-disabled="false"
+      />
     </div>
     <div class="grid-section note"></div>
     <div class="grid-section bottom"></div>

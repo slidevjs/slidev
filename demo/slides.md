@@ -628,9 +628,7 @@ mouse.x === x.value // true
 
 With Composition API, we can actually turn async data into "sync"
 
-<v-clicks>
-
-<div>
+<div v-click>
 
 ### Async
 
@@ -641,7 +639,7 @@ const data = await fetch('https://api.github.com/').then(r => r.json())
 ```
 
 </div>
-<div>
+<div v-click>
 
 ### Composition API
 
@@ -652,11 +650,11 @@ const user_url = computed(() => data.value?.user_url)
 ```
 
 </div>
+<div v-click> 
 
 Establish the "Connections" first, then wait data to be filled up. The idea is similar to SWR (stale-while-revalidate)
 
-</v-clicks>
-
+</div>
 
 ------
 

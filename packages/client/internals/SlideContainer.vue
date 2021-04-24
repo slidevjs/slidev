@@ -1,13 +1,41 @@
 <script setup lang="ts">
-import { useElementSize } from '@vueuse/core'
-import { computed, defineProps, ref, watchEffect } from 'vue'
+import { useElementSize, useVModel } from '@vueuse/core'
+import { computed, defineProps, ref, watchEffect, inject, provide, defineEmit } from 'vue'
+import type { RouteRecordRaw } from 'vue-router'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
+import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'
 
+const emit = defineEmit()
 const props = defineProps({
   width: {
     type: Number,
   },
+  tab: {
+    default: 0,
+  },
+  tabElements: {
+    default: () => [] as Element[],
+  },
+  tabDisabled: {
+    default: false,
+  },
+  meta: {
+    default: () => ({}) as any,
+  },
+  route: {
+    default: () => ({}) as any as RouteRecordRaw,
+  },
 })
+
+const tab = useVModel(props, 'tab', emit)
+const tabElements = useVModel(props, 'tabElements', emit)
+const tabDisabled = useVModel(props, 'tabDisabled', emit)
+
+tabElements.value = []
+
+provide(injectionTab, tab)
+provide(injectionTabElements, tabElements)
+provide(injectionTabDisabled, tabDisabled)
 
 const root = ref<HTMLDivElement>()
 const element = useElementSize(root)
@@ -42,7 +70,10 @@ const style = computed(() => ({
 <template>
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
-      <slot />
+      <component
+        :is="route.component"
+        :class="route.meta?.class"
+      />
     </div>
     <slot name="controls" />
   </div>
