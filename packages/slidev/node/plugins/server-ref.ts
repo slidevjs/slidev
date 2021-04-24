@@ -13,7 +13,7 @@ export interface ServerRefOptions<T extends Record<string, unknown>> {
 export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin {
   const {
     dataMap = {},
-    debounceMs = 300,
+    debounceMs = 10,
     debug = true,
   } = options
 

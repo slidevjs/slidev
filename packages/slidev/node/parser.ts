@@ -8,7 +8,7 @@ export interface SlidesMarkdownInfo {
   raw: string
   content: string
   note?: string
-  frontmatter?: Record<string, any>
+  frontmatter: Record<string, any>
 }
 
 export interface ParseOptions {
@@ -89,7 +89,7 @@ export function parse(
   let dividers = 0
 
   function parseContent(raw: string) {
-    const { data: frontmatter, content } = matter(raw)
+    const { data: frontmatter = {}, content } = matter(raw)
     return {
       raw,
       frontmatter,
@@ -127,6 +127,10 @@ export function parse(
       ...parseContent(raw),
     })
   }
+
+  // make the first slide use cover layout by default
+  if (slides[0])
+    slides[0].frontmatter.layout ||= 'cover'
 
   return {
     raw: markdown,
