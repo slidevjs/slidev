@@ -17,12 +17,15 @@ export default defineComponent({
     },
   },
   setup(props, { emit, slots }) {
-    if (!inject(injectionTab))
-      provide(injectionTab, useVModel(props, 'tab', emit))
-    if (!inject(injectionTabElements))
-      provide(injectionTabElements, useVModel(props, 'tabElements', emit))
-    if (!inject(injectionTabDisabled))
-      provide(injectionTabDisabled, useVModel(props, 'tabDisabled', emit, { passive: true }))
+    const tab = inject(injectionTab, useVModel(props, 'tab', emit, { passive: true }))
+    const tabElements = inject(injectionTabElements, useVModel(props, 'tabElements', emit, { passive: true }))
+    const tabDisabled = inject(injectionTabDisabled, useVModel(props, 'tabDisabled', emit, { passive: true }))
+
+    tabElements.value = []
+
+    provide(injectionTab, tab)
+    provide(injectionTabElements, tabElements)
+    provide(injectionTabDisabled, tabDisabled)
 
     return () => slots.default?.()[0]
   },

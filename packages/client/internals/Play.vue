@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+import { computed } from 'vue'
 import { isPrintMode, showEditor, windowSize } from '../state'
-import { useNavigateControls } from '../logic'
-import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'
+import { next, prev, currentRoute, tab, tabElements } from '../logic/nav'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
-
-const { next, prev, currentRoute, tab, tabElements } = useNavigateControls()
 
 function onClick(e: MouseEvent) {
   if ((e.target as HTMLElement)?.id === 'slide-container') {
@@ -21,10 +18,6 @@ function onClick(e: MouseEvent) {
 }
 
 const component = computed(() => currentRoute.value?.component)
-
-provide(injectionTab, tab)
-provide(injectionTabElements, tabElements)
-provide(injectionTabDisabled, ref(false))
 </script>
 
 <template>

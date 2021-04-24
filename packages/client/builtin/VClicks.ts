@@ -11,9 +11,10 @@ export default defineComponent({
     const after = resolveDirective('after')!
 
     function applyDirective(node: VNode, directive: Directive) {
-      // @ts-expect-error
-      if (node.dirs?.find(i => i.dir.name && ['v-click', 'v-after'].includes(i.dir.name)))
-        return node
+      // console.log(node.dirs)
+      // // @ts-expect-error
+      // if (node.dirs?.find(i => i.dir.name && ['v-click', 'v-after'].includes(i.dir.name)))
+      //   return node
       return withDirectives(node, [[directive]])
     }
 

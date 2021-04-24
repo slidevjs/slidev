@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router'
+import { createRouter, RouteRecordRaw, createWebHistory } from 'vue-router'
 import Presenter from './internals/Presenter.vue'
 import Play from './internals/Play.vue'
 // @ts-expect-error
@@ -23,3 +23,20 @@ export const routes: RouteRecordRaw[] = [
   { path: '', redirect: { path: '/0' } },
   { path: '/presenter', redirect: { path: '/presenter/0' } },
 ]
+
+export const router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    layout: string
+    slide?: {
+      start: number
+      end: number
+      id: number
+      file: string
+    }
+  }
+}

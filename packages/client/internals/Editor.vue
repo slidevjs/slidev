@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useEventListener, useFetch } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
-import { useNavigateControls } from '../logic'
 import { activeElement, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
+import { currentRoute } from '../logic/nav'
 
 const offsetRight = ref(0)
 const content = ref('')
@@ -11,8 +11,7 @@ const dirty = ref(false)
 const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 
-const controls = useNavigateControls()
-const url = computed(() => `/@slidev/slide/${controls.currentRoute.value?.meta?.slide?.id}.json`)
+const url = computed(() => `/@slidev/slide/${currentRoute.value?.meta?.slide?.id}.json`)
 const { data } = useFetch(
   url,
   { refetch: true },
@@ -109,7 +108,7 @@ useEventListener('resize', () => {
 })
 
 const editorLink = computed(() => {
-  const slide = controls.currentRoute.value?.meta?.slide
+  const slide = currentRoute.value?.meta?.slide
   return (slide?.file)
     ? `vscode-insiders://file/${slide.file}:${slide.start}`
     : undefined

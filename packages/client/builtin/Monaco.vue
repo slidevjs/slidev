@@ -9,7 +9,8 @@ import { decode } from 'js-base64'
 import type * as monaco from 'monaco-editor'
 import { formatCode } from '../setup/prettier'
 import setupMonaco from '../setup/monaco'
-import { isDark, useNavigateControls } from '../logic'
+import { isDark } from '../logic/dark'
+import { paused } from '../logic/nav'
 
 const props = defineProps({
   code: {
@@ -36,7 +37,6 @@ const code = ref(decode(props.code))
 const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 16}px` : props.height)
 
 const el = ref<HTMLElement>()
-const controls = useNavigateControls()
 let editor: monaco.editor.IStandaloneCodeEditor
 
 const lang = computed(() => {
@@ -94,8 +94,8 @@ setupMonaco()
       overviewRulerLanes: 0,
       minimap: { enabled: false },
     })
-    editor.onDidFocusEditorText(() => controls.paused.value = true)
-    editor.onDidBlurEditorText(() => controls.paused.value = false)
+    // editor.onDidFocusEditorText(() => paused.value = true)
+    // editor.onDidBlurEditorText(() => paused.value = false)
 
     async function format() {
       code.value = (await formatCode(code.value, lang.value)).trim()

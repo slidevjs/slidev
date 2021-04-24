@@ -2,7 +2,7 @@
 import { useVModel } from '@vueuse/core'
 import { computed, defineEmit, defineProps, provide, ref } from 'vue'
 import { breakpoints, windowSize } from '../state'
-import { useNavigateControls } from '../logic'
+import { go as goSlide, rawRoutes } from '../logic/nav'
 import { injectionTabDisabled } from '../modules/directives'
 import SlideContainer from './SlideContainer.vue'
 
@@ -10,8 +10,6 @@ const emit = defineEmit()
 const props = defineProps<{ modelValue: boolean }>()
 
 const value = useVModel(props, 'modelValue', emit)
-
-const { go: goSlide, routes } = useNavigateControls()
 
 function close() {
   value.value = false
@@ -49,7 +47,7 @@ provide(injectionTabDisabled, ref(true))
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
     >
       <div
-        v-for="(route, idx) of routes.slice(0, -1)"
+        v-for="(route, idx) of rawRoutes.slice(0, -1)"
         :key="route.path"
         class="relative"
       >

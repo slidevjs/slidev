@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { onClickOutside, useFullscreen } from '@vueuse/core'
 import { defineProps, ref } from 'vue'
-import { isDark, toggleDark, useNavigateControls, recorder } from '../logic'
-
+import { isDark, toggleDark } from '../logic/dark'
+import { recorder } from '../logic/recording'
+import { hasNext, hasPrev, prev, next } from '../logic/nav'
 import { showOverview, showEditor, currentCamera } from '../state'
 import DevicesList from './DevicesList.vue'
 
-const props = defineProps({
+defineProps({
   mode: {
     default: 'fixed',
   },
 })
 
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
-const { hasNext, hasPrev, prev, next, currentRoute } = useNavigateControls()
 
 const {
   recording,

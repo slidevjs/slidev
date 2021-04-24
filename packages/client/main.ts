@@ -1,7 +1,9 @@
-import { ViteSSG } from 'vite-ssg'
+import { createApp } from 'vue'
+import { createHead } from '@vueuse/head'
 import App from './App.vue'
 import setup from './setup/main'
-import { routes } from './routes'
+import { router } from './routes'
+import createDirectives from './modules/directives'
 
 import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
@@ -10,11 +12,11 @@ import './style/index.css'
 import 'virtual:windi-utilities.css'
 import 'virtual:windi-devtools'
 
-export const createApp = ViteSSG(
-  App,
-  { routes },
-  (ctx) => {
-    setup()
-    Object.values(import.meta.globEager('./modules/*.ts')).map(i => i.install?.(ctx))
-  },
-)
+const app = createApp(App)
+app.use(router)
+app.use(createHead())
+app.use(createDirectives())
+
+setup()
+
+app.mount('#app')

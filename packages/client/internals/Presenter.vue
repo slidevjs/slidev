@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { useNavigateControls } from '../logic'
+import { total, currentPage, currentRoute } from '../logic/nav'
 import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -12,21 +12,20 @@ useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
 })
 
-const controls = useNavigateControls()
 </script>
 
 <template>
   <div class="grid-container">
     <div class="grid-section top flex">
       <div class="px-6 my-auto">
-        {{ controls.currentPage.value + 1 }} / {{ controls.routes.length }}
+        {{ currentPage + 1 }} / {{ total }}
       </div>
       <div class="flex-auto" />
       <NavControls mode="persist" />
     </div>
     <div class="grid-section main flex flex-col p-4 bg-gray-400 bg-opacity-10">
       <SlideContainer class="h-full w-full ">
-        <component :is="controls.currentRoute.value?.component" />
+        <component :is="currentRoute?.component" />
       </SlideContainer>
     </div>
     <div class="grid-section next flex flex-col p-4 bg-gray-400 bg-opacity-10">
