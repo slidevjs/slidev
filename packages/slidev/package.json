@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/slidev"
+    "url": "https://github.com/slidevjs/slidev"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
@@ -33,8 +33,8 @@
     "start": "esno node/cli.ts",
     "prepublishOnly": "npm run build"
   },
-  "homepage": "https://github.com/antfu/slidev",
-  "bugs": "https://github.com/antfu/slidev/issues",
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
   "peerDependencies": {
     "playwright": "^1.10.0"
   },
