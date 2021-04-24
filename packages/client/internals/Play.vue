@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { showEditor } from '../state'
+import { isPrintMode, showEditor, windowSize } from '../state'
 import { useNavigateControls } from '../logic'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
@@ -21,7 +21,11 @@ function onClick(e: MouseEvent) {
 
 <template>
   <div id="page-root" class="grid grid-cols-[1fr,max-content]">
-    <SlideContainer class="w-full h-full bg-black" @click="onClick">
+    <SlideContainer
+      class="w-full h-full bg-black"
+      :width="isPrintMode ? windowSize.width.value : undefined"
+      @click="onClick"
+    >
       <RouterView :class="controls.currentRoute.value?.meta?.class || ''" />
       <template #controls>
         <NavControls />
@@ -29,5 +33,5 @@ function onClick(e: MouseEvent) {
     </SlideContainer>
     <Editor v-if="showEditor" />
   </div>
-  <Controls/>
+  <Controls />
 </template>

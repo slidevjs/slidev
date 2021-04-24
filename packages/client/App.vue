@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { provide } from 'vue'
-import Play from './internals/Play.vue'
 import { injectClickDisabled } from './modules/directives'
+import Play from './internals/Play.vue'
 import setupHead from './setup/head'
-import { query } from './state'
+import { isPrintMode } from './state'
 
 setupHead()
 
-if (query.print)
+if (isPrintMode)
   provide(injectClickDisabled, true)
 </script>
 

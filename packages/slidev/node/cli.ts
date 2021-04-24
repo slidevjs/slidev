@@ -4,8 +4,7 @@ import minimist from 'minimist'
 
 const argv: any = minimist(process.argv.slice(2))
 
-console.log(chalk.green`slidev v${require('../package.json').version}`)
-console.log(chalk.cyan`vite        v${require('vite/package.json').version}`)
+console.log(chalk.cyan`Slidev  ` + chalk.yellow`v${require('../package.json').version}`)
 
 const command = argv._[0]
 const entry = argv._[command ? 1 : 0] || 'slides.md'

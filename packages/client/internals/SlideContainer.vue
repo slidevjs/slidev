@@ -1,10 +1,29 @@
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, defineProps, onMounted, ref, watch, watchEffect } from 'vue'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
 
+const props = defineProps({
+  width: {
+    type: Number,
+  },
+})
+
 const root = ref<HTMLDivElement>()
-const { width, height } = useElementSize(root)
+const element = useElementSize(root)
+
+const width = computed(() => props.width ? props.width : element.width.value)
+const height = computed(() => props.width ? props.width / slideAspect : element.height.value)
+
+if (props.width) {
+  watchEffect(() => {
+    if (root.value) {
+      root.value.style.width = `${width.value}px`
+      root.value.style.height = `${height.value}px`
+    }
+  })
+}
+
 const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
