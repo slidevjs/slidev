@@ -1,7 +1,7 @@
 import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
 import { and, Fn, not, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
-import { clickCurrent, clickElements } from '../modules/directives'
+import { clickCurrent, clickElements } from '../logic'
 import { isInputing, magicKeys } from '../state'
 
 declare module 'vue-router' {
