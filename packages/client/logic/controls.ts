@@ -108,9 +108,10 @@ export function createNavigateControls(router: Router) {
 
   async function go(page: number) {
     tab.value = 0
-    tabElements.value = []
+    // tabElements.value = []
     await router.push(getPath(page))
     updateState()
+    console.log(tab.value, tabElements.value)
   }
 
   const shortcutEnabled = and(not(paused), not(isInputing))

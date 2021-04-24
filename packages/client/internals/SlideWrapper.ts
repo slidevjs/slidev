@@ -1,6 +1,6 @@
 
 import { useVModel } from '@vueuse/core'
-import { defineComponent, provide } from 'vue'
+import { defineComponent, inject, provide } from 'vue'
 import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'
 
 export default defineComponent({
@@ -17,13 +17,12 @@ export default defineComponent({
     },
   },
   setup(props, { emit, slots }) {
-    const tab = useVModel(props, 'tab', emit, { passive: true })
-    const tabElements = useVModel(props, 'tabElements', emit, { passive: true })
-    const tabDisabled = useVModel(props, 'tabDisabled', emit, { passive: true })
-
-    provide(injectionTab, tab)
-    provide(injectionTabElements, tabElements)
-    provide(injectionTabDisabled, tabDisabled)
+    if (!inject(injectionTab))
+      provide(injectionTab, useVModel(props, 'tab', emit))
+    if (!inject(injectionTabElements))
+      provide(injectionTabElements, useVModel(props, 'tabElements', emit))
+    if (!inject(injectionTabDisabled))
+      provide(injectionTabDisabled, useVModel(props, 'tabDisabled', emit, { passive: true }))
 
     return () => slots.default?.()[0]
   },

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { computed, defineEmit, defineProps } from 'vue'
+import { computed, defineEmit, defineProps, provide, ref } from 'vue'
 import { breakpoints, windowSize } from '../state'
 import { useNavigateControls } from '../logic'
+import { injectionTabDisabled } from '../modules/directives'
 import SlideContainer from './SlideContainer.vue'
 
 const emit = defineEmit()
@@ -33,6 +34,8 @@ const cardWidth = computed(() => {
     return (windowSize.width.value - padding - gap) / 2
   return 300
 })
+
+provide(injectionTabDisabled, ref(true))
 </script>
 
 <template>
@@ -58,7 +61,7 @@ const cardWidth = computed(() => {
             :width="cardWidth"
             class="pointer-events-none"
           >
-            <component :is="route.component" :tab-disabled="true" />
+            <component :is="route.component" />
           </SlideContainer>
         </div>
         <div

@@ -32,6 +32,8 @@ export const install: UserModule = ({ app }) => {
       if (!elements.value.includes(el))
         elements.value.push(el)
 
+      console.log('mount', prev, '->', elements.value.length)
+
       watch(
         tab,
         () => {
@@ -65,6 +67,7 @@ export const install: UserModule = ({ app }) => {
         tab,
         () => {
           const show = tab.value >= prev
+          // console.log('watch v-after', prev, tab.value, show, el.className)
           el.classList.toggle('!opacity-0', !show)
           el.classList.toggle('!pointer-events-none', !show)
         },

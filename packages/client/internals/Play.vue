@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { isPrintMode, showEditor, windowSize } from '../state'
 import { useNavigateControls } from '../logic'
+import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
@@ -20,6 +21,10 @@ function onClick(e: MouseEvent) {
 }
 
 const component = computed(() => currentRoute.value?.component)
+
+provide(injectionTab, tab)
+provide(injectionTabElements, tabElements)
+provide(injectionTabDisabled, ref(false))
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const component = computed(() => currentRoute.value?.component)
         :is="component"
         v-model:tab="tab"
         v-model:tabElements="tabElements"
-        :tabDisabled="false"
+        :tab-disabled="false"
         :class="currentRoute?.meta?.class || ''"
       />
       <template #controls>
