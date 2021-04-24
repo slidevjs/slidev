@@ -28,9 +28,9 @@ const controls = useNavigateControls()
       </SlideContainer>
     </div>
     <div class="grid-section next flex flex-col p-4 bg-gray-400 bg-opacity-10">
-      <SlideContainer class="h-full w-full">
+      <!-- <SlideContainer class="h-full w-full">
         <component :is="controls.nextRoute.value?.component" />
-      </SlideContainer>
+      </SlideContainer> -->
     </div>
     <div class="grid-section note"></div>
     <div class="grid-section bottom"></div>

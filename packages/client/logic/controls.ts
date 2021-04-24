@@ -1,9 +1,11 @@
-import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref } from 'vue'
+import { computed, App, InjectionKey, inject, ref, ComputedRef, Ref, watch } from 'vue'
 import { and, Fn, not, whenever } from '@vueuse/core'
 import { Router, RouteRecordRaw } from 'vue-router'
 import { clickCurrent, clickElements } from '../logic'
 import { isInputing, magicKeys } from '../state'
 import { rawRoutes } from '../routes'
+// @ts-expect-error
+import serverState from '/@server-ref/state'
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -31,6 +33,7 @@ export interface NavigateControls {
   paused: Ref<boolean>
   hasNext: ComputedRef<boolean>
   hasPrev: ComputedRef<boolean>
+  go(page: number): void
   install(app: App): void
 }
 
@@ -51,6 +54,26 @@ export function createNavigateControls(router: Router) {
   const hasPrev = computed(() => currentPage.value > 0)
   const nextRoute = computed(() => routes.find(i => i.path === `${Math.min(routes.length - 1, currentPage.value + 1)}`))
 
+  router.isReady().then(() => {
+    watch(serverState,
+      () => {
+        if (+serverState.value.page !== +currentPage.value)
+          router.replace(getPath(serverState.value.page))
+        clickCurrent.value = serverState.value.tab || 0
+      },
+      { deep: true },
+    )
+  })
+
+  function updateState() {
+    if (isPresenter.value) {
+      serverState.value.page = +currentPage.value
+      serverState.value.tab = clickCurrent.value
+    }
+  }
+
+  watch(clickCurrent, updateState)
+
   function next() {
     if (clickElements.value.length <= clickCurrent.value)
       nextSlide()
@@ -58,7 +81,7 @@ export function createNavigateControls(router: Router) {
       clickCurrent.value += 1
   }
 
-  function prev() {
+  async function prev() {
     if (clickCurrent.value <= 0)
       prevSlide()
     else
@@ -69,18 +92,21 @@ export function createNavigateControls(router: Router) {
     return isPresenter.value ? `/presenter/${no}` : `/${no}`
   }
 
-  function nextSlide() {
-    clickCurrent.value = 0
-    clickElements.value = []
+  async function nextSlide() {
     const next = Math.min(routes.length - 1, currentPage.value + 1)
-    router.push(getPath(next))
+    go(next)
   }
 
-  function prevSlide() {
+  async function prevSlide() {
+    const next = Math.max(0, currentPage.value - 1)
+    go(next)
+  }
+
+  async function go(page: number) {
     clickCurrent.value = 0
     clickElements.value = []
-    const next = Math.max(0, currentPage.value - 1)
-    router.push(getPath(next))
+    await router.push(getPath(page))
+    updateState()
   }
 
   const shortcutEnabled = and(not(paused), not(isInputing))
@@ -105,6 +131,7 @@ export function createNavigateControls(router: Router) {
     routes,
     isPresenter,
     currentPage,
+    go,
     install(app: App) {
       app.provide(NavigateControlsInjection, navigateControls)
     },

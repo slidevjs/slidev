@@ -111,7 +111,15 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     }),
 
     VitePluginVueFactory(),
-    VitePluginServerRef(),
+    VitePluginServerRef({
+      dataMap: {
+        sync: false,
+        state: {
+          page: 0,
+          tab: 0,
+        },
+      },
+    }),
     createConfigPlugin(slidesOptions),
     createEntryPlugin(slidesOptions),
     createSlidesLoader(slidesOptions),

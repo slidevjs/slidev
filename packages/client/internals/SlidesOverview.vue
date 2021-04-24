@@ -10,10 +10,15 @@ const props = defineProps<{ modelValue: boolean }>()
 
 const value = useVModel(props, 'modelValue', emit)
 
-const { routes } = useNavigateControls()
+const { go: _go, routes } = useNavigateControls()
 
 function close() {
   value.value = false
+}
+
+function go(page: number) {
+  _go(page)
+  close()
 }
 
 const sm = breakpoints.smaller('sm')
@@ -45,10 +50,9 @@ const cardWidth = computed(() => {
         :key="route.path"
         class="relative"
       >
-        <RouterLink
-          :to="route.path"
+        <div
           class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-primary)"
-          @click="close"
+          @click="go(+route.path)"
         >
           <SlideContainer
             v-click-disabled
@@ -57,7 +61,7 @@ const cardWidth = computed(() => {
           >
             <component :is="route.component" />
           </SlideContainer>
-        </RouterLink>
+        </div>
         <div
           class="absolute top-0 opacity-50"
           :style="`left: ${cardWidth + 5}px`"
