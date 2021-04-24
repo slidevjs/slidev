@@ -17,7 +17,8 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <td align="center">
 <img width="2000" height="0"><br>
 Status: <b>Closed Alpha</b><br>
-<a href="https://github.com/sponsors/antfu">Early access available for Sponsors</a><br>
+<a href="https://github.com/sponsors/antfu">Early access available for Sponsors 💖</a><br>
+<sub><a href="https://github.com/antfu-sponsors/slidev">Source Repo</a></sub><br>
 <img width="2000" height="0">
 </td>
 </tbody>
@@ -39,7 +40,7 @@ Status: <b>Closed Alpha</b><br>
 
 - [Vite](https://vitejs.dev) - An extremely fast frontend tooling
 - [Vue](https://v3.vuejs.org/) powered [Markdown](https://daringfireball.net/projects/markdown/syntax) - Focus on the content while having the power of HTML and Vue components whenever needed
-- [WindiCSS](https://github.com/windicss/windicss) - On-demand utility-first CSS framework, style your slides at ease
+- [Windi CSS](https://github.com/windicss/windicss) - On-demand utility-first CSS framework, style your slides at ease
 - [Prism](https://github.com/PrismJS/prism) + [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family - [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
