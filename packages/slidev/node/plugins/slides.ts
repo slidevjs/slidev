@@ -229,11 +229,11 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
 
     let no = 0
     const routes = [
-      '{ path: "/", redirect: { path: "/0" } }',
+      '{ path: "", redirect: { path: "/0" } }',
       ...data.slides
         .map((i, idx) => {
           if (i.frontmatter?.disabled)
-            return ''
+            return undefined
           imports.push(`import n${no} from '${entry}?id=${idx}.md'`)
           const additions = {
             slide: {
@@ -246,11 +246,12 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
             },
           }
           const meta = Object.assign({}, i.frontmatter, additions)
-          const route = `{ path: '/${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
+          const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
           no += 1
           return route
-        }),
-      `{ path: "/${no}", component: __layout__end, meta: { layout: "end" } }`,
+        })
+        .filter(notNullish),
+      `{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`,
     ]
 
     const routesStr = `export default [\n${routes.join(',\n')}\n]`
