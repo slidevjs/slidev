@@ -2,11 +2,11 @@ import { promises as fs } from 'fs'
 import { chromium } from 'playwright'
 import { InlineConfig } from 'vite'
 import { PDFDocument } from 'pdf-lib'
-import { green } from 'chalk'
+import { yellow } from 'kolorist'
 import { createServer } from './server'
 import { filterDisabled, load } from './parser'
 
-export async function genratePDF(entry = 'slides.md', config: InlineConfig = {}) {
+export async function genratePDF(entry = 'slides.md', output = 'slides.pdf', config: InlineConfig = {}) {
   const { slides } = filterDisabled(await load(entry))
   const server = await createServer(entry, {
     ...config,
@@ -29,7 +29,7 @@ export async function genratePDF(entry = 'slides.md', config: InlineConfig = {})
   const buffers: Buffer[] = []
   const pagesCount = slides.length
   for (let i = 0; i < pagesCount; i++) {
-    console.log(`Exporting: ${i + 1} / ${pagesCount}`)
+    console.log(yellow(`Rendering page ${i + 1} / ${pagesCount}`))
     await page.goto(`http://localhost:${port}/${i}?print`, {
       waitUntil: 'networkidle',
     })
@@ -60,10 +60,8 @@ export async function genratePDF(entry = 'slides.md', config: InlineConfig = {})
   }
 
   const buffer = await mergedPdf.save()
-  await fs.writeFile('slides.pdf', buffer)
-  console.log(green`Exporting finished: ./slides.pdf`)
-
+  await fs.writeFile(output, buffer)
   browser.close()
   server.close()
-  process.exit(0)
+  return output
 }
