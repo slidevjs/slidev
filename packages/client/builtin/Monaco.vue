@@ -10,7 +10,6 @@ import type * as monaco from 'monaco-editor'
 import { formatCode } from '../setup/prettier'
 import setupMonaco from '../setup/monaco'
 import { isDark } from '../logic/dark'
-import { paused } from '../logic/nav'
 
 const props = defineProps({
   code: {
@@ -127,16 +126,19 @@ setupMonaco()
 
 onUnmounted(() => editor?.dispose())
 </script>
+
 <style lang="postcss">
 .vue-monaco {
   background: var(--prism-background);
   padding: var(--prism-block-padding-y) var(--prism-block-padding-x);
   margin: var(--prism-block-margin-y) var(--prism-block-margin-x);
-  @apply rounded p-2;
+  border-radius: var(--prism-block-radius);
+  @apply p-2;
 }
 
 .monaco-editor .monaco-hover {
-  @apply rounded overflow-hidden shadow border-none outline-none;
+  border-radius: var(--prism-block-radius);
+  @apply overflow-hidden shadow border-none outline-none;
 }
 
 .monaco-editor .lines-content,

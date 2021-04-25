@@ -14,17 +14,18 @@ export default mergeWindicssConfig(
       ],
     },
     shortcuts: {
-      'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
+      'bg-main': 'bg-white text-[#555]',
     },
     theme: {
       extend: {
         fontFamily: {
-          sans: '"Avenir Next","Nunito Sans",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-          mono: '"Fira Code", monospace',
+          sans: '"PT Serif",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+          serif: '"PT Serif",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
+          mono: '"PT Mono", monospace',
         },
         colors: {
           primary: {
-            DEFAULT: '#42b883',
+            DEFAULT: '#5d8392',
           },
         },
       },

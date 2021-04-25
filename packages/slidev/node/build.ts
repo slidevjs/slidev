@@ -5,15 +5,16 @@ import { getIndexHtml } from './common'
 import { resolveOptions } from './plugins/options'
 
 export async function build(entry: string, config: InlineConfig = {}) {
-  await fs.writeFile('index.html', await getIndexHtml(resolveOptions(entry)), 'utf-8')
+  const options = await resolveOptions(entry)
+  await fs.writeFile('index.html', await getIndexHtml(options), 'utf-8')
   try {
     await viteBuild(
       mergeConfig(
         config,
         {
           plugins: [
-            ViteSlidevPlugin({
-              entry,
+            await ViteSlidevPlugin({
+              resolved: options,
             }),
           ],
         },

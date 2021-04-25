@@ -1,5 +1,6 @@
 ---
 layout: cover
+theme: '@slidev/theme-default'
 ---
 
 # Composable Vue
@@ -12,7 +13,7 @@ Anthony Fu
 
 <div class="abs-bl mx-14 my-12 flex">
   <img src="https://2020.vueday.it/img/themes/vueday/vueday-logo.png" class="h-8">
-  <div class="ml-3 flex flex-col">
+  <div class="ml-3 flex flex-col text-left">
     <div><b>Vue</b>Day</div>
     <div class="text-sm opacity-50">Apr. 29th, 2021</div>
   </div>
@@ -20,7 +21,7 @@ Anthony Fu
 
 
 ---
-layout: cover
+layout: intro
 ---
 
 # Anthony Fu

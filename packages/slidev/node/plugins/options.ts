@@ -6,6 +6,7 @@ import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
+import * as parser from '../parser'
 
 export interface SlidevOptions {
   /**
@@ -22,6 +23,16 @@ export interface SlidevOptions {
   theme?: string
 }
 
+export interface ResolvedSlidevOptions {
+  data: parser.SlidesMarkdown
+  entry: string
+  userRoot: string
+  cliRoot: string
+  clientRoot: string
+  theme: string
+  themeRoot: string
+}
+
 export interface SlidevPluginOptions extends SlidevOptions {
   vue?: ArgumentsType<typeof Vue>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]
@@ -29,15 +40,7 @@ export interface SlidevPluginOptions extends SlidevOptions {
   windicss?: ArgumentsType<typeof WindiCSS>[0]
   icons?: ArgumentsType<typeof ViteIcons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
-}
-
-export interface ResolvedSlidevOptions {
-  entry: string
-  userRoot: string
-  cliRoot: string
-  clientRoot: string
-  theme: string
-  themeRoot: string
+  resolved?: ResolvedSlidevOptions
 }
 
 export function getClientRoot() {
@@ -52,9 +55,12 @@ export function getThemeRoot(name: string) {
   return dirname(require.resolve(`${name}/package.json`))
 }
 
-export function resolveOptions(entry = 'slides.md', userRoot = process.cwd()): ResolvedSlidevOptions {
-  const theme = '@slidev/theme-default'
+export async function resolveOptions(entry = 'slides.md', userRoot = process.cwd()): Promise<ResolvedSlidevOptions> {
+  const data = await parser.load(entry)
+  const theme = data.config.theme
+
   return {
+    data,
     entry: resolve(userRoot, entry),
     theme,
     userRoot,

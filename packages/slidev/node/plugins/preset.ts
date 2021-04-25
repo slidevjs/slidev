@@ -7,7 +7,7 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
-import RemoteAssets from 'vite-plugin-remote-assets'
+import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
@@ -17,7 +17,7 @@ import { createSetupPlugin } from './setups'
 import VitePluginVueFactory, { VueFactoryResolver } from './factory'
 import VitePluginServerRef from './server-ref'
 
-export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
+export async function ViteSlidevPlugin(pluginOptions: SlidevPluginOptions = {}): Promise<Plugin[]> {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},
@@ -25,10 +25,13 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
     windicss: windiOptions = {},
-  } = options
+  } = pluginOptions
 
-  const slidesOptions = resolveOptions()
-  const { themeRoot, clientRoot } = slidesOptions
+  const options = pluginOptions.resolved || await resolveOptions(pluginOptions.entry)
+  const {
+    themeRoot,
+    clientRoot,
+  } = options
 
   return [
     Vue({
@@ -107,6 +110,14 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
     ),
 
     RemoteAssets({
+      rules: [
+        ...DefaultRules,
+        {
+          match: /\b(https?:\/\/\w+\.unsplash\.com.*?)(?=[`'")\]])/ig,
+          ext: '.png',
+        },
+      ],
+      resolveMode: '@fs',
       ...remoteAssetsOptions,
     }),
 
@@ -120,10 +131,10 @@ export function ViteSlidevPlugin(options: SlidevPluginOptions = {}): Plugin[] {
         },
       },
     }),
-    createConfigPlugin(slidesOptions),
-    createEntryPlugin(slidesOptions),
-    createSlidesLoader(slidesOptions),
-    createSetupPlugin(slidesOptions),
+    createConfigPlugin(options),
+    createEntryPlugin(options),
+    createSlidesLoader(options),
+    createSetupPlugin(options),
     createMonacoLoader(),
   ].flat()
 }

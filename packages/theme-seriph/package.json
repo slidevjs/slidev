@@ -1,18 +1,18 @@
 {
-  "name": "@slidev/theme-default",
+  "name": "@slidev/theme-seriph",
   "version": "0.0.0-alpha.13",
-  "description": "Default theme for Slidev",
+  "description": "Seriph theme for Slidev",
   "keywords": [
     "slidev-theme",
     "slidev"
   ],
   "license": "MIT",
+  "slidev": {
+    "color": "light"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/slidevjs/slidev"
-  },
-  "slidev": {
-    "color": "duo"
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",

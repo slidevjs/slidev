@@ -1,6 +1,6 @@
 import { basename } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
-import { notNullish, objectMap } from '@antfu/utils'
+import { isTruthy, notNullish, objectMap } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import * as parser from '../parser'
@@ -41,17 +41,12 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin[] {
-  let data: parser.SlidesMarkdown
+export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin[] {
   let skipNext = false
 
   return [
     {
       name: 'slidev:loader',
-
-      async configResolved() {
-        data = await parser.load(entry)
-      },
 
       configureServer(server) {
         server.watcher.add(entry)
@@ -97,16 +92,23 @@ export function createSlidesLoader({ entry, clientRoot, themeRoot, userRoot }: R
             skipNext = false
             return
           }
-          data = await parser.load(entry)
+          const newData = await parser.load(entry)
+
+          if (data.config.theme !== newData.config.theme)
+            console.log('Theme changed')
+            // TODO: restart the server
 
           const moduleEntries = [
-            '/@slidev/routes',
-            '/@slidev/configs',
+            data.slides.length !== newData.slides.length && '/@slidev/routes',
+            JSON.stringify(data.config) !== JSON.stringify(newData.config) && '/@slidev/configs',
             ...data.slides.map((i, idx) => `${entry}?id=${idx}.md`),
             ...data.slides.map((i, idx) => `${entry}?id=${idx}.json`),
           ]
-            .map(id => ctx.server.moduleGraph.getModuleById(id))
+            .filter(isTruthy)
+            .map(id => ctx.server.moduleGraph.getModuleById(id as string))
             .filter(notNullish)
+
+          data = newData
 
           moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
           return moduleEntries

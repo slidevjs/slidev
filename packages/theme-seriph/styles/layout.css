@@ -78,6 +78,12 @@
   }
 }
 
+.layout-master:not(.cover) {
+  h1 {
+    @apply text-primary;
+  }
+}
+
 .layout-master.cover,
 .layout-master.intro {
   @apply h-full flex;
