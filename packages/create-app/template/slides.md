@@ -1,6 +1,8 @@
 ---
+# try also '@slidev/theme-default' to start simple
 theme: '@slidev/theme-seriph'
-background: 'https://images.unsplash.com/photo-1619191163166-07a53b7a8f30?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'
+# random image from a curated Unsplash collection by Anthony
+background: 'https://source.unsplash.com/collection/94734566/1920x1080'
 ---
 
 # Welcome to Slidev

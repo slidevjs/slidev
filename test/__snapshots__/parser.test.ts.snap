@@ -17,6 +17,9 @@ layout: center
 
 # Hello
 
+<!--
+This is notes
+-->
 
 ------
 
@@ -27,6 +30,7 @@ layout: center
 layout: text
 ---
 
+<!-- This is not notes -->
 Hey
 "
 `;

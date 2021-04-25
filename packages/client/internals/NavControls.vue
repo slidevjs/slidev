@@ -77,7 +77,7 @@ const dev = import.meta.env.DEV
     </button>
 
     <button
-      v-if="dev"
+      v-if="dev && !isPresenter"
       class="icon-btn"
       @click="showEditor = !showEditor"
     >

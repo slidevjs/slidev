@@ -23,6 +23,7 @@ export interface ParseOptions {
 export interface SlidevConfig {
   title: string
   theme: string
+  remoteAssets: boolean
 }
 
 export interface SlidevMarkdown {
@@ -72,10 +73,14 @@ function stringifySlide(data: SlideInfo, idx = 1) {
 }
 
 function prettifySlide(data: SlideInfo) {
-  data.content = `\n${data.content.trim()}\n\n`
+  data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
     ? `---\n${YAML.safeDump(data.frontmatter).trim()}\n---\n${data.content}`
     : data.content
+  if (data.note)
+    data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
+  else
+    data.raw += '\n'
   return data
 }
 
@@ -95,11 +100,19 @@ export function parse(
   let dividers = 0
 
   function parseContent(raw: string) {
-    const { data: frontmatter = {}, content } = matter(raw)
+    const result = matter(raw)
+    let note: string | undefined
+    const content = result.content
+      .trim()
+      .replace(/<!--([\s\S]*)-->$/g, (_, v = '') => {
+        note = v.trim()
+        return ''
+      })
     return {
       raw,
-      frontmatter,
       content,
+      frontmatter: result.data || {},
+      note,
     }
   }
 
@@ -139,6 +152,7 @@ export function parse(
 
   config.theme ||= headmatter.theme || '@slidev/theme-default'
   config.title ||= headmatter.title || (markdown.match(/^# (.*)$/m)?.[1] || '').trim()
+  config.remoteAssets ??= headmatter.remoteAssets ?? true
 
   return {
     raw: markdown,

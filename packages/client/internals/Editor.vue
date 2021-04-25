@@ -5,22 +5,24 @@ import { activeElement, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute } from '../logic/nav'
 
+const tab = ref<'content' | 'note'>('content')
 const offsetRight = ref(0)
 const content = ref('')
+const note = ref('')
 const dirty = ref(false)
 const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
+const noteInput = ref<HTMLTextAreaElement>()
+
 
 const url = computed(() => `/@slidev/slide/${currentRoute.value?.meta?.slide?.id}.json`)
-const { data } = useFetch(
-  url,
-  { refetch: true },
-).get().json()
+const { data } = useFetch(url, { refetch: true }).get().json()
 
 watch(
   data,
   () => {
     content.value = (data.value?.content || '').trim()
+    note.value = (data.value?.note || '').trim()
     frontmatter.value = data.value?.frontmatter || {}
     dirty.value = false
   },
@@ -38,6 +40,7 @@ async function save() {
       },
       body: JSON.stringify({
         raw: null,
+        note: note.value || undefined,
         content: content.value,
         frontmatter: frontmatter.value,
       }),
@@ -61,11 +64,27 @@ onMounted(() => {
   useCodeMirror(
     contentInput,
     computed({
-      get() {
-        return content.value
-      },
+      get() { return content.value },
       set(v) {
         content.value = v
+        dirty.value = true
+      },
+    }),
+    {
+      mode: 'markdown',
+      lineWrapping: true,
+      // @ts-expect-error
+      highlightFormatting: true,
+      fencedCodeBlockDefaultMode: 'javascript',
+    },
+  )
+
+  useCodeMirror(
+    noteInput,
+    computed({
+      get() { return note.value },
+      set(v) {
+        note.value = v
         dirty.value = true
       },
     }),
@@ -123,12 +142,20 @@ const editorLink = computed(() => {
     @pointerdown="onHandlerDown"
   ></div>
   <div
-    class="shadow bg-main p-4 grid grid-rows-[max-content,auto] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
+    class="shadow bg-main p-4 grid grid-rows-[max-content,1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
     :style="{width: `${width}px`}"
   >
     <div class="flex pb-2 text-xl -mt-1">
+      <div class="mr-4 rounded flex">
+        <button class="icon-btn" @click="tab='content'" :class="tab === 'content' ? 'text-primary' : ''">
+          <carbon:account />
+        </button>
+        <button class="icon-btn" @click="tab='note'" :class="tab === 'note' ? 'text-primary' : ''">
+          <carbon:align-box-bottom-right />
+        </button>
+      </div>
       <span class="text-2xl pt-1">
-        Slide Editor
+        {{ tab === 'content' ? 'Slide' : 'Note' }}
       </span>
       <div class="flex-auto"></div>
       <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
@@ -143,12 +170,19 @@ const editorLink = computed(() => {
         <carbon:close />
       </button>
     </div>
-    <textarea ref="contentInput" />
+    <div class="h-full overflow-auto">
+      <div class="h-full overflow-auto" v-show="tab === 'content'">
+        <textarea ref="contentInput" />
+      </div>
+      <div class="h-full overflow-auto" v-show="tab === 'note'">
+        <textarea ref="noteInput" />
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="postcss">
 .CodeMirror {
-  @apply px-3 py-2 h-auto bg-transparent font-mono text-sm;
+  @apply px-3 py-2 h-full overflow-auto bg-transparent font-mono text-sm;
 }
 </style>

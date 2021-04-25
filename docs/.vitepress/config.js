@@ -64,8 +64,8 @@ module.exports = {
           text: 'Themes',
           children: [
             {
-              text: 'Use a Theme',
-              link: '/guide/use-a-theme',
+              text: 'Use Theme',
+              link: '/guide/use-theme',
             },
             {
               text: 'Theme Gallery',

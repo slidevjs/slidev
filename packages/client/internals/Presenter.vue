@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
+import { useFetch } from '@vueuse/core'
 import { ref, computed, watchEffect } from 'vue'
 import { total, currentPage, currentRoute, nextRoute, tab, tabElements, route } from '../logic/nav'
 import { showOverview } from '../state'
@@ -32,12 +33,15 @@ const nextSlide = computed(() => {
     }
   }
 })
+
+const url = computed(() => `/@slidev/slide/${currentRoute.value?.meta?.slide?.id}.json`)
+const { data } = useFetch(url, { refetch: true }).get().json()
 </script>
 
 <template>
   <div class="grid-container">
     <div class="grid-section top flex">
-      <img src="../assets/logo-title-horizontal.png" class="h-11 ml-2 my-auto"/>
+      <img src="../assets/logo-title-horizontal.png" class="h-11 ml-2 my-auto" />
       <div class="flex-auto" />
       <div class="px-4 my-auto">
         {{ currentPage + 1 }} / {{ total }}
@@ -64,7 +68,14 @@ const nextSlide = computed(() => {
         :tab-disabled="false"
       />
     </div>
-    <div class="grid-section note"></div>
+    <div class="grid-section note">
+      <textarea
+        class="w-full h-full p-4 resize-none overflow-auto outline-none"
+        readonly
+        :value="data?.note"
+        placeholder="No notes for this slide"
+      />
+    </div>
     <div class="grid-section bottom"></div>
   </div>
   <SlidesOverview v-model="showOverview" />

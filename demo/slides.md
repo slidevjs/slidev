@@ -94,7 +94,6 @@ layout: center
   </div>
 </div>
 
-
 ---
 layout: center
 class: text-center

@@ -10,6 +10,7 @@ import Prism from 'markdown-it-prism'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
+import { notNullish } from '@slidev/client/node_modules/@antfu/utils/dist'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
@@ -33,6 +34,7 @@ export function ViteSlidevPlugin(pluginOptions: SlidevPluginOptions): Plugin[] {
   const {
     themeRoot,
     clientRoot,
+    data: { config },
   } = options
 
   return [
@@ -117,17 +119,19 @@ export function ViteSlidevPlugin(pluginOptions: SlidevPluginOptions): Plugin[] {
       },
     ),
 
-    RemoteAssets({
-      rules: [
-        ...DefaultRules,
-        {
-          match: /\b(https?:\/\/\w+\.unsplash\.com.*?)(?=[`'")\]])/ig,
-          ext: '.png',
-        },
-      ],
-      resolveMode: '@fs',
-      ...remoteAssetsOptions,
-    }),
+    config.remoteAssets
+      ? RemoteAssets({
+        rules: [
+          ...DefaultRules,
+          {
+            match: /\b(https?:\/\/image.unsplash\.com.*?)(?=[`'")\]])/ig,
+            ext: '.png',
+          },
+        ],
+        resolveMode: '@fs',
+        ...remoteAssetsOptions,
+      })
+      : null,
 
     VitePluginVueFactory(),
     VitePluginServerRef({
@@ -144,5 +148,5 @@ export function ViteSlidevPlugin(pluginOptions: SlidevPluginOptions): Plugin[] {
     createSlidesLoader(options, pluginOptions),
     createSetupPlugin(options),
     createMonacoLoader(),
-  ].flat()
+  ].flat().filter(notNullish)
 }
