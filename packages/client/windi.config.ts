@@ -7,7 +7,7 @@ export default defineConfig({
       resolve(__dirname, '**/*.{vue,ts}'),
       'src/**/*.{vue,ts}',
       'components/**/*.{vue,ts}',
-      'slides.md',
+      '*.md',
     ],
     exclude: [
       '.git/**',

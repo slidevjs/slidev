@@ -181,7 +181,12 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
           if (!layouts[layoutName])
             throw new Error(`Unknown layout "${layoutName}"`)
 
-          code = code.replace(/(<script setup.*>)/g, `$1\nimport InjectedLayout from "/@fs${layouts[layoutName]}"`)
+          const imports = [
+            `import InjectedLayout from "/@fs${layouts[layoutName]}"`,
+            `import { next, nextSlide, prev, prevSlide } from "/@fs${clientRoot}/logic/nav"`,
+          ]
+
+          code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)
           code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
           return code
         }

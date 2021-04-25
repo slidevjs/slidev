@@ -111,6 +111,7 @@ importers:
       '@vue/compiler-sfc': ^3.0.11
       blueimp-md5: ^2.18.0
       chalk: ^4.1.1
+      codemirror: ^5.61.0
       cross-env: ^7.0.3
       eslint: ^7.25.0
       esno: ^0.5.0
@@ -142,6 +143,7 @@ importers:
       '@vitejs/plugin-vue': 1.2.2_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
       chalk: 4.1.1
+      codemirror: 5.61.0
       fast-glob: 3.2.5
       js-base64: 3.6.0
       js-yaml: 3.14.1

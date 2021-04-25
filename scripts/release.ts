@@ -11,6 +11,7 @@ const version = require('../package.json').version
 
 const pkg = JSON.parse(readFileSync('packages/create-app/template/package.json', 'utf-8'))
 pkg.dependencies['@slidev/theme-default'] = `^${version}`
+pkg.dependencies['@slidev/theme-seriph'] = `^${version}`
 pkg.dependencies['@slidev/cli'] = `^${version}`
 writeFileSync('packages/create-app/template/package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 

@@ -30,7 +30,7 @@
   }
 
   h1 + p {
-    @apply -mt-2 opacity-50 mb-4;
+    @apply -mt-3 opacity-50 mb-4;
   }
 
   p + h2, ul + h2, table + h2 {
@@ -93,6 +93,6 @@
   }
 
   h1 ~ p {
-    @apply opacity-40 mb-10 text-2xl;
+    @apply opacity-70 mb-10 text-2xl;
   }
 }
