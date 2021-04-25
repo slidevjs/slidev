@@ -10,7 +10,7 @@ import Prism from 'markdown-it-prism'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
-import { notNullish } from '@slidev/client/node_modules/@antfu/utils/dist'
+import { notNullish } from '@antfu/utils'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
