@@ -3,6 +3,7 @@
   "version": "0.0.0-beta.1",
   "scripts": {
     "dev": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev'",
+    "starter": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev starter.md'",
     "build": "slidev build",
     "export": "slidev export"
   },

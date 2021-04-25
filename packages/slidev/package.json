@@ -56,6 +56,7 @@
     "js-base64": "^3.6.0",
     "js-yaml": "^3.14.1",
     "kolorist": "^1.4.1",
+    "markdown-it-link-attributes": "^3.0.0",
     "markdown-it-prism": "^2.1.6",
     "monaco-editor": "^0.23.0",
     "pdf-lib": "^1.16.0",

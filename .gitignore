@@ -7,3 +7,5 @@ node_modules
 .idea/
 *.pdf
 demo/index.html
+demo/starter.md
+demo/public

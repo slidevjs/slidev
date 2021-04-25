@@ -120,6 +120,7 @@ importers:
       js-base64: ^3.6.0
       js-yaml: ^3.14.1
       kolorist: ^1.4.1
+      markdown-it-link-attributes: ^3.0.0
       markdown-it-prism: ^2.1.6
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
@@ -150,6 +151,7 @@ importers:
       js-base64: 3.6.0
       js-yaml: 3.14.1
       kolorist: 1.4.1
+      markdown-it-link-attributes: 3.0.0
       markdown-it-prism: 2.1.6
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
@@ -5781,6 +5783,10 @@ packages:
   /markdown-it-emoji/1.4.0:
     resolution: {integrity: sha1-m+4OmpkKljupbfaYDE/dsF37Tcw=}
     dev: true
+
+  /markdown-it-link-attributes/3.0.0:
+    resolution: {integrity: sha512-B34ySxVeo6MuEGSPCWyIYryuXINOvngNZL87Mp7YYfKIf6DcD837+lXA8mo6EBbauKsnGz22ZH0zsbOiQRWTNg==}
+    dev: false
 
   /markdown-it-prism/2.1.6:
     resolution: {integrity: sha512-fuo5lq36A6kzb882vCsvdyh4HUzpwdfNkAl92cr+MjUO0Q9foz/7MZ/RpKRBlZSwt86LmPlW7ubaEwf4C+0b3g==}

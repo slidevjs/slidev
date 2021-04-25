@@ -8,6 +8,7 @@ import Markdown from 'vite-plugin-md'
 import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
+import mila from 'markdown-it-link-attributes'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
 import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
@@ -50,6 +51,12 @@ export async function ViteSlidevPlugin(pluginOptions: SlidevPluginOptions = {}):
       },
       markdownItSetup(md) {
         md.use(Prism)
+        md.use(mila({
+          attrs: {
+            target: '_blank',
+            rel: 'noopener',
+          },
+        }))
       },
       transforms: {
         before: transformMarkdownMonaco,

@@ -35,9 +35,31 @@ const dev = import.meta.env.DEV
 
 <template>
   <nav
-    class="bg-transparent rounded-bl flex text-xl py-2 pr-2 pl-4 transition text-gray-400 gap-1 duration-300"
-    :class="mode === 'fixed' ? 'absolute top-0 right-0 opacity-0 hover:(shadow bg-main opacity-100)' : ''"
+    class="bg-transparent flex text-xl py-2 pr-4 pl-2 transition text-gray-400 gap-1 duration-300"
+    :class="mode === 'fixed' ? 'absolute bottom-0 left-0 rounded-tr opacity-0 hover:(shadow bg-main opacity-100)' : ''"
   >
+    <button class="icon-btn" @click="toggleFullscreen">
+      <carbon:minimize v-if="isFullscreen" />
+      <carbon:maximize v-else />
+    </button>
+
+    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+      <carbon:arrow-left />
+    </button>
+
+    <button class="icon-btn" :class="{ disabled: !hasNext }" @click="next">
+      <carbon:arrow-right />
+    </button>
+
+    <button class="icon-btn" @click="showOverview = !showOverview">
+      <carbon:apps />
+    </button>
+
+    <button class="icon-btn" @click="toggleDark">
+      <carbon-moon v-if="isDark" />
+      <carbon-sun v-else />
+    </button>
+
     <button
       v-if="dev"
       class="icon-btn"
@@ -75,27 +97,5 @@ const dev = import.meta.env.DEV
         class="bg-main rounded shadow top-10 right-0 z-20 absolute"
       />
     </div>
-
-    <button class="icon-btn" @click="showOverview = !showOverview">
-      <carbon:apps />
-    </button>
-
-    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
-      <carbon:arrow-left />
-    </button>
-
-    <button class="icon-btn" :class="{ disabled: !hasNext }" @click="next">
-      <carbon:arrow-right />
-    </button>
-
-    <button class="icon-btn" @click="toggleFullscreen">
-      <carbon:minimize v-if="isFullscreen" />
-      <carbon:maximize v-else />
-    </button>
-
-    <button class="icon-btn" @click="toggleDark">
-      <carbon-moon v-if="isDark" />
-      <carbon-sun v-else />
-    </button>
   </nav>
 </template>

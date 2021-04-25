@@ -58,11 +58,11 @@
   }
 
   tr {
-    @apply border-b border-gray-400;
+    @apply border-b border-gray-400 border-opacity-20;
   }
 
   th {
-    @apply text-left font-600;
+    @apply text-left font-400;
   }
 
   a {
@@ -70,11 +70,15 @@
   }
 
   td, th {
-    @apply p-2 py-3;
+    @apply p-2 py-2;
   }
 
   b, strong {
     @apply font-600;
+  }
+
+  kbd {
+    @apply border border-gray-400 rounded border-b-2 border-opacity-50 py-0.5 px-1 text-sm;
   }
 }
 
