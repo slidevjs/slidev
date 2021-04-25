@@ -2,7 +2,7 @@
 
 ## Basic
 
-All your slides can be written within a single markdown file (`./slides.md`). 
+Slides can be written within **a single markdown file** (by default `./slides.md`). 
 
 You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional inlined HTML and Vue Components support. Use `----` (four dashes or more) to separate your slides. 
 
@@ -81,3 +81,51 @@ Whenever you want to do some modification in the presentation, simply add `{mona
 console.log('HelloWorld')
 `​``
 ~~~
+
+### Notes
+
+You can take notes for each slide. They will show up on [Presenter Mode](/guide/presenter-mode) for you to reference in presentations.
+
+In Markdown, the last comment block in each slide will be treated as notes.
+
+~~~md
+---
+layout: cover
+---
+
+# Slidev
+
+This is the cover page.
+
+<!-- This is a note -->
+
+---
+
+# Page 2
+
+<!-- This is NOT a note -->
+
+The second page
+
+<!--
+This is another note
+-->
+~~~
+
+### Configurations
+
+All the configurations needed can also be defined in the Markdown file. For example:
+
+```md
+---
+theme: '@slidev/theme-seriph'
+layout: cover
+background: 'https://source.unsplash.com/1600x900/?nature,water'
+---
+
+# Slidev
+
+This is the cover page.
+```
+
+For more details about using a theme, refer to [this section](/guide/use-theme).
