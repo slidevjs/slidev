@@ -10,6 +10,11 @@ Presentation slides for developers
   Press Space for next page <carbon:arrow-right class="inline"/>
 </div>
 
+<a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
+  class="abs-br m-6 text-xl icon-btn opacity-50 !hover:text-white !border-none">
+  <carbon-logo-github />
+</a>
+
 ----
 
 # What is Slidev?

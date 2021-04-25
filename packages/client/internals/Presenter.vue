@@ -37,10 +37,11 @@ const nextSlide = computed(() => {
 <template>
   <div class="grid-container">
     <div class="grid-section top flex">
-      <div class="px-6 my-auto">
+      <img src="../assets/logo-title-horizontal.png" class="h-11 ml-2 my-auto"/>
+      <div class="flex-auto" />
+      <div class="px-4 my-auto">
         {{ currentPage + 1 }} / {{ total }}
       </div>
-      <div class="flex-auto" />
       <NavControls mode="persist" />
     </div>
     <div class="grid-section main flex flex-col p-4 bg-gray-400 bg-opacity-10">

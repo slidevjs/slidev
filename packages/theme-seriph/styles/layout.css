@@ -78,7 +78,8 @@
   }
 
   kbd {
-    @apply border border-gray-400 rounded border-b-2 border-opacity-50 py-0.5 px-1 text-sm;
+    @apply border border-gray-400 border-b-2 border-opacity-20 rounded;
+    @apply bg-gray-400 bg-opacity-5 py-0.5 px-1 text-sm font-mono;
   }
 }
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onClickOutside, useFullscreen } from '@vueuse/core'
-import { defineProps, ref } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
 import { recorder } from '../logic/recording'
-import { hasNext, hasPrev, prev, next } from '../logic/nav'
+import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
 import { showOverview, showEditor, currentCamera } from '../state'
 import DevicesList from './DevicesList.vue'
 
@@ -30,6 +30,9 @@ onClickOutside(devicesList, () => {
   showDevicesList.value = false
 })
 
+const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
+const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
+
 const dev = import.meta.env.DEV
 </script>
 
@@ -47,15 +50,28 @@ const dev = import.meta.env.DEV
       <carbon:arrow-left />
     </button>
 
-    <button class="icon-btn" :class="{ disabled: !hasNext }" @click="next">
+    <button
+      class="icon-btn"
+      :class="{ disabled: !hasNext }"
+      title="Next"
+      @click="next"
+    >
       <carbon:arrow-right />
     </button>
 
-    <button class="icon-btn" @click="showOverview = !showOverview">
+    <button
+      class="icon-btn"
+      title="Slides overview"
+      @click="showOverview = !showOverview"
+    >
       <carbon:apps />
     </button>
 
-    <button class="icon-btn" @click="toggleDark">
+    <button
+      class="icon-btn"
+      title="Toggle dark mode"
+      @click="toggleDark"
+    >
       <carbon-moon v-if="isDark" />
       <carbon-sun v-else />
     </button>
@@ -68,10 +84,29 @@ const dev = import.meta.env.DEV
       <carbon:edit />
     </button>
 
+    <a
+      v-if="dev && !isPresenter"
+      :href="presenterLink"
+      class="icon-btn"
+      title="Presenter Mode"
+    >
+      <carbon:user-speaker />
+    </a>
+
+    <a
+      v-if="isPresenter"
+      :href="nonPresenterLink"
+      class="icon-btn"
+      title="Play Mode"
+    >
+      <carbon:presentation-file />
+    </a>
+
     <button
       v-if="currentCamera !== 'none'"
       class="icon-btn"
       :class="{'text-green-500': Boolean(showAvatar && streamCamera)}"
+      title="Show camera view"
       @click="toggleAvatar"
     >
       <carbon:user-avatar />
@@ -81,7 +116,12 @@ const dev = import.meta.env.DEV
       ref="devicesList"
       class="flex relative"
     >
-      <button class="icon-btn" :class="{'text-red-500': recording}" @click="toggleRecording">
+      <button
+        class="icon-btn"
+        :class="{'text-red-500': recording}"
+        title="Recording"
+        @click="toggleRecording"
+      >
         <carbon:stop-outline v-if="recording" />
         <carbon:video v-else />
       </button>

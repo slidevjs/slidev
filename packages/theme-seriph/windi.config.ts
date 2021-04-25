@@ -14,7 +14,7 @@ export default mergeWindicssConfig(
       ],
     },
     shortcuts: {
-      'bg-main': 'bg-white text-[#555]',
+      'bg-main': 'bg-white text-[#555] dark:(bg-[#121212] text-[#ddd])',
     },
     theme: {
       extend: {
