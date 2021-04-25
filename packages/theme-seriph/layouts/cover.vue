@@ -9,16 +9,18 @@ const props = defineProps({
 })
 
 const style = computed(() => ({
-  backgroundImage: `linear-gradient(#0005, #0008), url(${props.background})`,
+  background: !props.background && 'white',
+  color: props.background && 'white',
+  backgroundImage: props.background && `linear-gradient(#0005, #0008), url(${props.background})`,
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center',
   backgroundSize: 'cover',
-}))
+}) as any)
 </script>
 
 <template>
   <div
-    class="layout-master cover text-white text-center"
+    class="layout-master cover text-center"
     :style="style"
   >
     <div class="my-auto w-full">
