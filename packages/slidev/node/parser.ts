@@ -2,7 +2,7 @@ import { promises as fs } from 'fs'
 import matter from 'gray-matter'
 import YAML from 'js-yaml'
 
-export interface SlidesMarkdownInfo {
+export interface SlideInfo {
   start: number
   end: number
   raw: string
@@ -25,9 +25,9 @@ export interface SlidevConfig {
   theme: string
 }
 
-export interface SlidesMarkdown {
+export interface SlidevMarkdown {
   filepath?: string
-  slides: SlidesMarkdownInfo[]
+  slides: SlideInfo[]
   options: ParseOptions
   raw: string
   config: SlidevConfig
@@ -42,13 +42,13 @@ export async function load(
   return parse(markdown, filepath, options)
 }
 
-export async function save(data: SlidesMarkdown, filepath?: string) {
+export async function save(data: SlidevMarkdown, filepath?: string) {
   filepath = filepath || data.filepath!
 
   await fs.writeFile(filepath, stringify(data), 'utf-8')
 }
 
-export function stringify(data: SlidesMarkdown) {
+export function stringify(data: SlidevMarkdown) {
   return `${
     data.slides
       .map(stringifySlide)
@@ -57,12 +57,12 @@ export function stringify(data: SlidesMarkdown) {
   }\n`
 }
 
-export function filterDisabled(data: SlidesMarkdown) {
+export function filterDisabled(data: SlidevMarkdown) {
   data.slides = data.slides.filter(i => !i.frontmatter?.disabled)
   return data
 }
 
-function stringifySlide(data: SlidesMarkdownInfo, idx = 1) {
+function stringifySlide(data: SlideInfo, idx = 1) {
   if (!data.raw)
     prettifySlide(data)
 
@@ -71,7 +71,7 @@ function stringifySlide(data: SlidesMarkdownInfo, idx = 1) {
     : `------\n${data.raw}`
 }
 
-function prettifySlide(data: SlidesMarkdownInfo) {
+function prettifySlide(data: SlideInfo) {
   data.content = `\n${data.content.trim()}\n\n`
   data.raw = Object.keys(data.frontmatter || {}).length
     ? `---\n${YAML.safeDump(data.frontmatter).trim()}\n---\n${data.content}`
@@ -79,7 +79,7 @@ function prettifySlide(data: SlidesMarkdownInfo) {
   return data
 }
 
-export function prettify(data: SlidesMarkdown) {
+export function prettify(data: SlidevMarkdown) {
   data.slides.forEach(prettifySlide)
   return data
 }
@@ -88,9 +88,9 @@ export function parse(
   markdown: string,
   filepath?: string,
   options: ParseOptions = {},
-): SlidesMarkdown {
+): SlidevMarkdown {
   const lines = markdown.split(/\n/g)
-  const slides: SlidesMarkdownInfo[] = []
+  const slides: SlideInfo[] = []
   let start = 0
   let dividers = 0
 

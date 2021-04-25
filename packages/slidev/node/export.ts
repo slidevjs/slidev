@@ -1,21 +1,9 @@
 import { promises as fs } from 'fs'
 import { chromium } from 'playwright'
-import { InlineConfig } from 'vite'
 import { PDFDocument } from 'pdf-lib'
 import { yellow } from 'kolorist'
-import { createServer } from './server'
-import { filterDisabled, load } from './parser'
 
-export async function genratePDF(entry = 'slides.md', output = 'slides.pdf', config: InlineConfig = {}) {
-  const { slides } = filterDisabled(await load(entry))
-  const server = await createServer(entry, {
-    ...config,
-    logLevel: 'silent',
-    clearScreen: false,
-  })
-  const port = 18724
-  await server.listen(port)
-
+export async function genratePDF(port = 18724, pages = 0, output = 'slides.pdf') {
   const browser = await chromium.launch()
   const context = await browser.newContext({
     viewport: {
@@ -27,9 +15,8 @@ export async function genratePDF(entry = 'slides.md', output = 'slides.pdf', con
   const page = await context.newPage()
 
   const buffers: Buffer[] = []
-  const pagesCount = slides.length
-  for (let i = 0; i < pagesCount; i++) {
-    console.log(yellow(`Rendering page ${i + 1} / ${pagesCount}`))
+  for (let i = 0; i < pages; i++) {
+    console.log(`${yellow('Rendering')} page ${i + 1} / ${pages}`)
     await page.goto(`http://localhost:${port}/${i}?print`, {
       waitUntil: 'networkidle',
     })
@@ -62,6 +49,5 @@ export async function genratePDF(entry = 'slides.md', output = 'slides.pdf', con
   const buffer = await mergedPdf.save()
   await fs.writeFile(output, buffer)
   browser.close()
-  server.close()
   return output
 }

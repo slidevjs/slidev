@@ -4,7 +4,7 @@ import { isTruthy, notNullish, objectMap } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import * as parser from '../parser'
-import { ResolvedSlidevOptions } from './options'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
@@ -41,7 +41,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin[] {
+export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrNextModuleIds: string[] = []
 
@@ -87,10 +87,6 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
 
         const newData = await parser.load(entry)
 
-        if (data.config.theme !== newData.config.theme)
-          console.log('Theme changed')
-        // TODO: restart the server
-
         const moduleIds: (string | false)[] = [
           ...hmrNextModuleIds,
         ]
@@ -117,10 +113,13 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
             `${slidePrefix}${i}.json`,
           )
         }
+
         const moduleEntries = moduleIds
           .filter(isTruthy)
           .map(id => ctx.server.moduleGraph.getModuleById(id as string))
           .filter(notNullish)
+
+        pluginOptions.onDataReload?.(newData, data)
 
         data = newData
 

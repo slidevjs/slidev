@@ -2,7 +2,8 @@ import path from 'path'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import { prompt } from 'enquirer'
-import { blue } from 'kolorist'
+import { green, yellow } from 'kolorist'
+import { ViteDevServer } from 'vite'
 import { version } from '../package.json'
 import { build } from './build'
 import { createServer } from './server'
@@ -15,7 +16,7 @@ function commonOptions(args: Argv<{}>) {
       type: 'string',
       describe: 'path to the slides markdown entry',
     })
-    .option('template', {
+    .option('theme', {
       alias: 't',
       type: 'string',
       describe: 'overide theme',
@@ -47,7 +48,7 @@ cli.command(
       describe: 'open in browser',
     })
     .help(),
-  async({ entry, port, open }) => {
+  async({ entry, theme, port, open }) => {
     if (!fs.existsSync(entry)) {
       const { create } = await prompt<{create: boolean}>({
         name: 'create',
@@ -60,14 +61,35 @@ cli.command(
         process.exit(0)
     }
 
-    const server = await createServer(entry, {
-      server: {
-        port,
-        open,
-      },
-    })
-    server.listen()
-    server.watcher.add(entry)
+    let server: ViteDevServer | undefined
+
+    async function initServer() {
+      if (server)
+        await server.close()
+      server = (await createServer(
+        {
+          entry,
+          theme,
+        },
+        {
+          onDataReload(newData, data) {
+            if (!theme && newData.config.theme !== data.config.theme) {
+              console.log(yellow('Slidev reloaded on theme change'))
+              initServer()
+            }
+          },
+        },
+        {
+          server: {
+            port,
+            open,
+          },
+        },
+      )).server
+      await server.listen()
+    }
+
+    initServer()
   },
 )
 
@@ -76,8 +98,8 @@ cli.command(
   'Build hostable SPA',
   args => commonOptions(args)
     .help(),
-  async({ entry }) => {
-    await build(entry)
+  async(args) => {
+    await build(args)
   },
 )
 
@@ -102,12 +124,25 @@ cli.command(
       describe: 'path to the the port output',
     })
     .help(),
-  async({ entry, output }) => {
+  async({ entry, theme, output }) => {
     output = output || `${path.basename(entry, '.md')}.pdf`
     process.env.NODE_ENV = 'production'
     const { genratePDF } = await import('./export')
-    await genratePDF(entry, output, { logLevel: 'error' })
-    console.log(blue(`PDF Exported: ./${output}`))
+    const port = 12445
+    const { server, resolved } = await createServer(
+      { entry, theme },
+      {},
+      {
+        server: { port },
+        logLevel: 'error',
+        clearScreen: true,
+      },
+    )
+    await server.listen()
+    parser.filterDisabled(resolved.data)
+    await genratePDF(port, resolved.data.slides.length, output)
+    console.log(green(`PDF Exported: ./${output}`))
+    server.close()
     process.exit(0)
   },
 )
