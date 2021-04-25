@@ -53,6 +53,7 @@ cli.command(
       const { create } = await prompt<{create: boolean}>({
         name: 'create',
         type: 'confirm',
+        initial: 'Y',
         message: `Entry file ${entry} does not exist, do you want to create it?`,
       })
       if (create)

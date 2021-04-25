@@ -151,7 +151,7 @@ export function parse(
   const config: SlidevConfig = Object.assign({}, headmatter.config || {})
 
   config.theme ||= headmatter.theme || '@slidev/theme-default'
-  config.title ||= headmatter.title || (markdown.match(/^# (.*)$/m)?.[1] || '').trim()
+  config.title ||= headmatter.title || (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
   config.remoteAssets ??= headmatter.remoteAssets ?? true
 
   return {

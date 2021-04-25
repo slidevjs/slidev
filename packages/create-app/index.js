@@ -6,11 +6,13 @@ const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv.slice(2))
 const { prompt } = require('enquirer')
+const execa = require('execa')
 
 const cwd = process.cwd()
 
 const renameFiles = {
   _gitignore: '.gitignore',
+  _npmrc: '.npmrc',
 }
 
 async function init() {
@@ -83,13 +85,31 @@ async function init() {
     ? 'pnpm'
     : /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm'
 
-  console.log('\nDone. Now run:\n')
-  if (root !== cwd)
-    console.log(`  cd ${path.relative(cwd, root)}`)
+  const related = path.relative(cwd, root)
 
-  console.log(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`)
-  console.log(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`)
-  console.log()
+  /**
+   * @type {{ yes: boolean }}
+   */
+  const { yes } = await prompt({
+    type: 'confirm',
+    name: 'yes',
+    initial: 'Y',
+    message: 'Done. Do you want to install the dependency and start the server now?',
+  })
+
+  if (yes) {
+    await execa(pkgManager, ['-C', related, 'install'], { stdio: 'inherit' })
+    await execa(pkgManager, ['-C', related, 'run', 'dev'], { stdio: 'inherit' })
+  }
+  else {
+    console.log('\nNow run:\n')
+    if (root !== cwd)
+      console.log(`  cd ${related}`)
+
+    console.log(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`)
+    console.log(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`)
+    console.log()
+  }
 }
 
 function copy(src, dest) {
