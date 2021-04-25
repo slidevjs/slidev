@@ -58,11 +58,11 @@
   }
 
   tr {
-    @apply border-b border-gray-400;
+    @apply border-b border-gray-400 border-opacity-20;
   }
 
   th {
-    @apply text-left font-600;
+    @apply text-left font-400;
   }
 
   a {
@@ -76,6 +76,11 @@
   b, strong {
     @apply font-600;
   }
+
+  kbd {
+    @apply border border-gray-400 border-b-2 border-opacity-20 rounded;
+    @apply bg-gray-400 bg-opacity-5 py-0.5 px-1 text-sm font-mono;
+  }
 }
 
 .layout-master.cover,
@@ -86,7 +91,7 @@
     @apply text-6xl leading-20;
   }
 
-  h1 ~ p {
-    @apply opacity-40 mb-10 text-2xl;
+  h1 + p {
+    @apply opacity-40 -mt-4 mb-16 text-2xl;
   }
 }

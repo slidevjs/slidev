@@ -70,8 +70,7 @@ const { data } = useFetch(url, { refetch: true }).get().json()
     </div>
     <div class="grid-section note">
       <textarea
-        class="w-full h-full p-4 resize-none overflow-auto outline-none"
-        readonly
+        class="w-full h-full p-4 resize-none overflow-auto outline-none bg-transparent"
         :value="data?.note"
         placeholder="No notes for this slide"
       />

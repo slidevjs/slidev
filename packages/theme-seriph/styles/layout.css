@@ -94,10 +94,10 @@
   @apply h-full flex;
 
   h1 {
-    @apply text-6xl leading-20;
+    @apply text-6xl leading-20 font-400;
   }
 
-  h1 ~ p {
-    @apply opacity-70 mb-10 text-2xl;
+  h1 + p {
+    @apply opacity-40 -mt-4 mb-16 text-2xl;
   }
 }

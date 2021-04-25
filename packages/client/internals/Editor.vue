@@ -14,7 +14,6 @@ const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 const noteInput = ref<HTMLTextAreaElement>()
 
-
 const url = computed(() => `/@slidev/slide/${currentRoute.value?.meta?.slide?.id}.json`)
 const { data } = useFetch(url, { refetch: true }).get().json()
 
@@ -147,10 +146,10 @@ const editorLink = computed(() => {
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" @click="tab='content'" :class="tab === 'content' ? 'text-primary' : ''">
+        <button class="icon-btn" :class="tab === 'content' ? 'text-primary' : ''" @click="tab='content'">
           <carbon:account />
         </button>
-        <button class="icon-btn" @click="tab='note'" :class="tab === 'note' ? 'text-primary' : ''">
+        <button class="icon-btn" :class="tab === 'note' ? 'text-primary' : ''" @click="tab='note'">
           <carbon:align-box-bottom-right />
         </button>
       </div>
@@ -171,10 +170,10 @@ const editorLink = computed(() => {
       </button>
     </div>
     <div class="h-full overflow-auto">
-      <div class="h-full overflow-auto" v-show="tab === 'content'">
+      <div v-show="tab === 'content'" class="h-full overflow-auto">
         <textarea ref="contentInput" />
       </div>
-      <div class="h-full overflow-auto" v-show="tab === 'note'">
+      <div v-show="tab === 'note'" class="h-full overflow-auto">
         <textarea ref="noteInput" />
       </div>
     </div>

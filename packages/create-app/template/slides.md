@@ -3,13 +3,15 @@
 theme: '@slidev/theme-seriph'
 # random image from a curated Unsplash collection by Anthony
 background: 'https://source.unsplash.com/collection/94734566/1920x1080'
+# apply any windi css classes to the current slide
+class: 'text-center'
 ---
 
 # Welcome to Slidev
 
 Presentation slides for developers
 
-<div @click="next" class="px-2 p-1 rounded inline cursor-pointer hover:bg-white hover:bg-opacity-10">
+<div @click="next" class="px-2 p-1 -mb-4 rounded inline cursor-pointer hover:bg-white hover:bg-opacity-10">
   Press Space for next page <carbon:arrow-right class="inline"/>
 </div>
 
