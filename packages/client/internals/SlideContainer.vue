@@ -70,10 +70,7 @@ const style = computed(() => ({
 <template>
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
-      <component
-        :is="route.component"
-        :class="route.meta?.class"
-      />
+      <component :is="route.component"/>
     </div>
     <slot name="controls" />
   </div>

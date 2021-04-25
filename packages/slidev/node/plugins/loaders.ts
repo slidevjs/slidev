@@ -7,7 +7,7 @@ import * as parser from '../parser'
 import { ResolvedSlidevOptions } from './options'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
-const regexIdQuery = /id=(\d+?)\.(md|json)$/
+const regexIdQuery = /(\d+?)\.(md|json)$/
 
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -34,7 +34,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
     type: 'update',
     updates: modules.map<Update>(m => ({
       acceptedPath: m.id || m.file!,
-      path: m.id || m.file!,
+      path: m.file!,
       timestamp,
       type: 'js-update',
     })),
@@ -42,7 +42,8 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
 }
 
 export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin[] {
-  let skipNext = false
+  const slidePrefix = '/@slidev/slides/'
+  const hmrNextModuleIds: string[] = []
 
   return [
     {
@@ -65,18 +66,12 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
             Object.assign(data.slides[idx], body)
-            skipNext = true
-            await parser.save(data, entry)
-
-            sendHmrReload(
-              server,
-              [
-                `${entry}?id=${idx}.md`,
-                `${entry}?id=${idx}.json`,
-              ]
-                .map(id => server.moduleGraph.getModuleById(id))
-                .filter(notNullish),
+            hmrNextModuleIds.push(
+              `${slidePrefix}${idx}.md`,
+              `${slidePrefix}${idx}.json`,
             )
+
+            await parser.save(data, entry)
 
             res.statusCode = 200
             return res.end()
@@ -87,36 +82,54 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
       },
 
       async handleHotUpdate(ctx) {
-        if (ctx.file === entry) {
-          if (skipNext) {
-            skipNext = false
-            return
-          }
-          const newData = await parser.load(entry)
+        if (ctx.file !== entry)
+          return
 
-          if (data.config.theme !== newData.config.theme)
-            console.log('Theme changed')
-            // TODO: restart the server
+        const newData = await parser.load(entry)
 
-          const moduleEntries = [
-            data.slides.length !== newData.slides.length && '/@slidev/routes',
-            JSON.stringify(data.config) !== JSON.stringify(newData.config) && '/@slidev/configs',
-            ...data.slides.map((i, idx) => `${entry}?id=${idx}.md`),
-            ...data.slides.map((i, idx) => `${entry}?id=${idx}.json`),
-          ]
-            .filter(isTruthy)
-            .map(id => ctx.server.moduleGraph.getModuleById(id as string))
-            .filter(notNullish)
+        if (data.config.theme !== newData.config.theme)
+          console.log('Theme changed')
+        // TODO: restart the server
 
-          data = newData
+        const moduleIds: (string | false)[] = [
+          ...hmrNextModuleIds,
+        ]
 
-          moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
-          return moduleEntries
+        hmrNextModuleIds.length = 0
+
+        if (data.slides.length !== newData.slides.length)
+          moduleIds.push('/@slidev/routes')
+
+        if (JSON.stringify(data.config) !== JSON.stringify(newData.config))
+          moduleIds.push('/@slidev/configs')
+
+        const length = Math.max(data.slides.length, newData.slides.length)
+
+        for (let i = 0; i < length; i++) {
+          const a = data.slides[i]
+          const b = newData.slides[i]
+
+          if (a?.raw === b?.raw)
+            continue
+
+          moduleIds.push(
+            `${slidePrefix}${i}.md`,
+            `${slidePrefix}${i}.json`,
+          )
         }
+        const moduleEntries = moduleIds
+          .filter(isTruthy)
+          .map(id => ctx.server.moduleGraph.getModuleById(id as string))
+          .filter(notNullish)
+
+        data = newData
+
+        moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
+        return moduleEntries
       },
 
       resolveId(id) {
-        if (id.startsWith(entry) || id.startsWith('/@slidev/'))
+        if (id.startsWith(slidePrefix) || id.startsWith('/@slidev/'))
           return id
         return null
       },
@@ -135,8 +148,8 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
           return `export default ${JSON.stringify(data.config)}`
 
         // pages
-        if (id.startsWith(entry)) {
-          const remaning = id.slice(entry.length + 1)
+        if (id.startsWith(slidePrefix)) {
+          const remaning = id.slice(slidePrefix.length)
           const match = remaning.match(regexIdQuery)
           if (match) {
             const [, no, type] = match
@@ -149,11 +162,11 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
       },
     },
     {
-      name: 'slidev:layout-transform',
-      enforce: 'post',
+      name: 'slidev:layout-transform:pre',
+      enforce: 'pre',
       async transform(code, id) {
-        if (id.startsWith(entry)) {
-          const remaning = id.slice(entry.length + 1)
+        if (id.startsWith(slidePrefix)) {
+          const remaning = id.slice(slidePrefix.length)
           const match = remaning.match(regexIdQuery)
           if (!match)
             return
@@ -162,26 +175,18 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
           if (type !== 'md')
             return
 
-          const layouts = await getLayouts()
           const pageNo = parseInt(no)
+          const layouts = await getLayouts()
           const layoutName = data.slides[pageNo].frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
           if (!layouts[layoutName])
             throw new Error(`Unknown layout "${layoutName}"`)
 
-          code = code.replace('export default _sfc_main', '')
-          code = `import __layout from "${layouts[layoutName]}"\n${code}`
-          code = `import { h } from 'vue'\n${code}`
-          code += `\nexport default {
-            name: "layout-${layoutName}",
-            render: () => h(__layout, null, () => h(_sfc_main)),
-            __file: __layout.__file,
-          }`
-
+          code = code.replace(/(<script setup.*>)/g, `$1\nimport InjectedLayout from "/@fs${layouts[layoutName]}"`)
+          code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
           return code
         }
       },
     },
-
   ]
 
   async function getLayouts() {
@@ -238,7 +243,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
         .map((i, idx) => {
           if (i.frontmatter?.disabled)
             return undefined
-          imports.push(`import n${no} from '${entry}?id=${idx}.md'`)
+          imports.push(`import n${no} from '${slidePrefix}${idx}.md'`)
           const additions = {
             slide: {
               start: i.start,
