@@ -59,7 +59,10 @@ Hover on the bottom-left corner to see the navigation's controls panel
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
 
-----
+---
+layout: image-right
+image: 'https://source.unsplash.com/collection/94734566/1920x1080'
+---
 
 # Code
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { handleBackground } from '@slidev/client/layoutHelper'
 import { defineProps, computed } from 'vue'
 
 const props = defineProps({
@@ -8,14 +9,7 @@ const props = defineProps({
   },
 })
 
-const style = computed(() => ({
-  background: !props.background && 'white',
-  color: props.background && 'white',
-  backgroundImage: props.background && `linear-gradient(#0005, #0008), url(${props.background})`,
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'center',
-  backgroundSize: 'cover',
-}) as any)
+const style = computed(() => handleBackground(props.background, true))
 </script>
 
 <template>
