@@ -130,11 +130,11 @@ const dev = import.meta.env.DEV
         :class="{disabled:recording}"
         @click="showDevicesList = !showDevicesList"
       >
-        <carbon:chevron-down class="opacity-50" />
+        <carbon:chevron-up class="opacity-50" />
       </button>
       <DevicesList
         v-if="showDevicesList && !recording"
-        class="bg-main rounded shadow top-10 right-0 z-20 absolute"
+        class="bg-main rounded shadow bottom-10 left-0 z-20 absolute"
       />
     </div>
   </nav>

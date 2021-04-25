@@ -2,7 +2,7 @@
 import { useHead } from '@vueuse/head'
 import { useFetch } from '@vueuse/core'
 import { ref, computed, watchEffect } from 'vue'
-import { total, currentPage, currentRoute, nextRoute, tab, tabElements, route } from '../logic/nav'
+import { total, currentPage, currentRoute, nextRoute, tab, tabElements } from '../logic/nav'
 import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -41,14 +41,11 @@ const { data } = useFetch(url, { refetch: true }).get().json()
 <template>
   <div class="grid-container">
     <div class="grid-section top flex">
-      <img src="../assets/logo-title-horizontal.png" class="h-11 ml-2 my-auto" />
+      <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
       <div class="flex-auto" />
-      <div class="px-4 my-auto">
-        {{ currentPage + 1 }} / {{ total }}
-      </div>
-      <NavControls mode="persist" />
+      <div class="px-4 my-auto">{{ currentPage + 1 }} / {{ total }}</div>
     </div>
-    <div class="grid-section main flex flex-col p-4 bg-gray-400 bg-opacity-10">
+    <div class="grid-section main flex flex-col p-4">
       <SlideContainer
         key="main"
         v-model:tab="tab"
@@ -58,7 +55,7 @@ const { data } = useFetch(url, { refetch: true }).get().json()
         :tab-disabled="false"
       />
     </div>
-    <div class="grid-section next flex flex-col p-4 bg-gray-400 bg-opacity-10">
+    <div class="grid-section next flex flex-col p-4">
       <SlideContainer
         key="next"
         v-model:tab-elements="nextTabElements"
@@ -75,7 +72,9 @@ const { data } = useFetch(url, { refetch: true }).get().json()
         placeholder="No notes for this slide"
       />
     </div>
-    <div class="grid-section bottom"></div>
+    <div class="grid-section bottom">
+      <NavControls mode="persist" />
+    </div>
   </div>
   <SlidesOverview v-model="showOverview" />
 </template>
@@ -89,7 +88,7 @@ const { data } = useFetch(url, { refetch: true }).get().json()
   @apply h-full w-full bg-gray-400 bg-opacity-15;
   display: grid;
   grid-template-columns: 1fr 1.1fr 0.9fr;
-  grid-template-rows: 0.2fr 1.5fr 1.7fr 0.9fr;
+  grid-template-rows: min-content 1fr 2fr min-content;
   gap: 1px 1px;
   grid-template-areas:
     "top top top"

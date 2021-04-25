@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { and, not, whenever } from '@vueuse/core'
 import { isInputing, magicKeys, query } from '../state'
-import { rawRoutes, router, routes } from '../routes'
+import { rawRoutes, router } from '../routes'
 
 export { rawRoutes }
 
@@ -10,7 +10,7 @@ export const paused = ref(false)
 
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 
-export const total = computed(() => routes.length)
+export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
 export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 0)
 export const currentPath = computed(() => getPath(currentPage.value))
