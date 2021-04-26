@@ -9,8 +9,13 @@ defineProps<{
 
 <template>
   <div>
-    <a :href="theme.id ? theme.previews[0] : '/themes/write-a-theme#submit'" target="_blank" class="block mb-1.5">
-      <img :src="theme.previews[0]" class="w-full block rounded" />
+    <a
+      :href="theme.id ? theme.previews[0] : '/themes/write-a-theme#submit'"
+      target="_blank"
+      class="block mb-1.5 w-full rounded overflow-hidden relative"
+      style="padding-top: 56.25%"
+    >
+      <img :src="theme.previews[0]" class="absolute top-0 bottom-0 left-0 right-0" />
     </a>
     <div class="font-bold">{{ theme.name }}</div>
     <div
@@ -25,10 +30,20 @@ defineProps<{
       >{{ theme.author.name }}</a>
       <div v-else class="text-current text-sm opacity-50">{{ theme.author.name }}</div>
       <div class="flex-auto"></div>
-      <a v-if="theme.id" :href="`https://npmjs.com/package/${theme.id}`" class="ml-2 text-current opacity-20 text-sm hover:opacity-100 hover:text-[#cb3837]" target="_blank">
+      <a
+        v-if="theme.id"
+        :href="`https://npmjs.com/package/${theme.id}`"
+        class="ml-2 text-current opacity-20 text-sm hover:opacity-100 hover:text-[#cb3837]"
+        target="_blank"
+      >
         <simple-icons-npm />
       </a>
-      <a v-if="theme.repo" :href="theme.repo" class="ml-2 text-current opacity-20 text-sm hover:opacity-100" target="_blank">
+      <a
+        v-if="theme.repo"
+        :href="theme.repo"
+        class="ml-2 text-current opacity-20 text-sm hover:opacity-100"
+        target="_blank"
+      >
         <simple-icons-github />
       </a>
     </div>

@@ -35,7 +35,11 @@ import NextAndPrevLinks from './NextAndPrevLinks.vue'
 .container {
   margin: 0 auto;
   padding: 0 1.5rem 4rem;
-  max-width: 52rem;
+  max-width: 60rem;
+}
+
+.container.widder {
+  max-width: 90rem;
 }
 
 .content {
