@@ -10,7 +10,8 @@ layout: center
 ---
 # Hello
 <!-- This is notes -->
-------
+---
+
 # Morning
 ---
 layout: text

@@ -8,7 +8,7 @@ Sample Text
 console.log('Hello World')
 ```
 
-------
+---
 
 # Hello
 
@@ -16,5 +16,6 @@ console.log('Hello World')
 - Hi
 - Hey
 - Yo
-------
+---
+
 Nice to meet you

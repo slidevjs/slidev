@@ -21,7 +21,7 @@ layout: center
 This is notes
 -->
 
-------
+---
 
 # Morning
 
@@ -47,7 +47,7 @@ console.log('Hello World')
 \`\`\`
 
 
-------
+---
 
 # Hello
 
@@ -57,7 +57,7 @@ console.log('Hello World')
 - Yo
 
 
-------
+---
 
 Nice to meet you
 "

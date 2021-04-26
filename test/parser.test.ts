@@ -1,6 +1,6 @@
 import { resolve, basename } from 'path'
 import fg from 'fast-glob'
-import { prettify, load, stringify } from '../packages/slidev/node'
+import { prettify, load, stringify, parse } from '../packages/slidev/node'
 
 describe('md parser', () => {
   const files = fg.sync('*.md', {
@@ -19,4 +19,33 @@ describe('md parser', () => {
       expect(stringify(data)).toMatchSnapshot('formatted')
     })
   }
+
+  it('parse', () => {
+    const data = parse(`
+a
+
+---
+
+b
+
+---
+layout: z
+---
+c
+----
+d
+----
+e
+
+---
+
+f
+
+---
+`)
+    expect(data.slides.map(i => i.content.trim()))
+      .toEqual(Array.from('abcdef'))
+    expect(data.slides[2].frontmatter)
+      .toEqual({ layout: 'z' })
+  })
 })

@@ -69,7 +69,7 @@ function stringifySlide(data: SlideInfo, idx = 1) {
 
   return (data.raw.startsWith('---') || idx === 0)
     ? data.raw
-    : `------\n${data.raw}`
+    : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
 }
 
 function prettifySlide(data: SlideInfo) {
@@ -96,8 +96,6 @@ export function parse(
 ): SlidevMarkdown {
   const lines = markdown.split(/\n/g)
   const slides: SlideInfo[] = []
-  let start = 0
-  let dividers = 0
 
   function parseContent(raw: string) {
     const result = matter(raw)
@@ -116,36 +114,39 @@ export function parse(
     }
   }
 
-  lines.forEach((line, i) => {
-    line = line.trimRight()
+  let start = 0
 
-    if (line === '---')
-      dividers += 1
-
-    // more than than 4 dashes
-    const isHardDivider = !!line.match(/^----+$/)
-
-    if (dividers >= 3 || isHardDivider) {
-      const end = i
-      const raw = lines.slice(start, end).join('\n')
-      slides.push({
-        start,
-        end,
-        ...parseContent(raw),
-      })
-      dividers = isHardDivider ? 2 : 1
-      start = isHardDivider ? i + 1 : i
-    }
-  })
-
-  if (start !== lines.length - 1) {
-    const raw = lines.slice(start).join('\n')
+  function slice(end: number) {
+    if (start === end)
+      return
+    const raw = lines.slice(start, end).join('\n')
     slides.push({
       start,
-      end: lines.length,
+      end,
       ...parseContent(raw),
     })
+    start = end + 1
   }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trimRight()
+    if (line.match(/^---+$/)) {
+      slice(i)
+
+      const next = lines[i + 1]
+      // found frontmatter, skip next dash
+      if (line.length === 3 && !next?.match(/^\s*$/)) {
+        start = i
+        for (i += 1; i < lines.length; i++) {
+          if (lines[i].trimRight().match(/^---$/))
+            break
+        }
+      }
+    }
+  }
+
+  if (start !== lines.length - 1)
+    slice(lines.length - 1)
 
   const headmatter = slides?.[0].frontmatter || {}
   const config: SlidevConfig = Object.assign({}, headmatter.config || {})
