@@ -20,5 +20,9 @@
       "@slidev/client/*": ["./packages/client/*"]
     }
   },
+  "include": [
+    "docs/.vitepress/**/*.ts",
+    "docs/.vitepress/**/*.vue",
+  ],
   "exclude": ["**/dist/**", "node_modules"]
 }
