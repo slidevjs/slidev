@@ -1,6 +1,4 @@
-import { bold, cyan, dim, green, yellow } from 'kolorist'
 import { createServer as createViteServer, InlineConfig, mergeConfig } from 'vite'
-import { version } from '../package.json'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './plugins/options'
 import { ViteSlidevPlugin } from './plugins/preset'
 

@@ -31,7 +31,7 @@ export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: 
   } = pluginOptions
 
   const {
-    themeRoot,
+    themeRoots,
     clientRoot,
     data: { config },
   } = options
@@ -81,7 +81,7 @@ export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: 
       dirs: [
         `${clientRoot}/builtin`,
         `${clientRoot}/components`,
-        `${themeRoot}/components`,
+        ...themeRoots.map(i => `${i}/components`),
         'src/components',
         'components',
       ],
@@ -106,7 +106,7 @@ export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: 
       {
         configFiles: [
           ...defaultConfigureFiles,
-          resolve(themeRoot, 'windi.config.ts'),
+          ...themeRoots.map(i => `${i}/windi.config.ts`),
           resolve(clientRoot, 'windi.config.ts'),
         ],
         ...windiOptions,

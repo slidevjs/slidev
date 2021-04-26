@@ -3,7 +3,7 @@ import { join, resolve } from 'path'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from './options'
 
-export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
+export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const mainEntry = resolve(clientRoot, 'main.ts')
 
   return {
@@ -29,9 +29,13 @@ export function createEntryPlugin({ clientRoot, themeRoot, userRoot }: ResolvedS
             }
           }
         }
+        const roots = [
+          ...themeRoots,
+          userRoot,
+        ]
 
-        await scanStyle(themeRoot)
-        await scanStyle(userRoot)
+        for (const root of roots)
+          await scanStyle(root)
 
         code = code.replace('/* __imports__ */', imports.join('\n'))
         return code

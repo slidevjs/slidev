@@ -38,7 +38,7 @@ export interface ResolvedSlidevOptions {
   cliRoot: string
   clientRoot: string
   theme: string
-  themeRoot: string
+  themeRoots: string[]
 }
 
 export interface SlidevPluginOptions extends SlidevEntryOptions {
@@ -59,8 +59,13 @@ export function getCLIRoot() {
   return resolve(__dirname, '..')
 }
 
-export function getThemeRoot(name: string) {
-  return dirname(require.resolve(`${name}/package.json`))
+export function getThemeRoots(name: string) {
+  if (!name)
+    return []
+
+  return [
+    dirname(require.resolve(`${name}/package.json`)),
+  ]
 }
 
 export async function resolveOptions(options: SlidevEntryOptions, promptForInstallation = true): Promise<ResolvedSlidevOptions> {
@@ -89,6 +94,6 @@ export async function resolveOptions(options: SlidevEntryOptions, promptForInsta
     userRoot,
     clientRoot: getClientRoot(),
     cliRoot: getCLIRoot(),
-    themeRoot: getThemeRoot(theme),
+    themeRoots: getThemeRoots(theme),
   }
 }

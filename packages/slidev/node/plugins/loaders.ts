@@ -41,7 +41,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
+export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrNextModuleIds: string[] = []
 
@@ -198,7 +198,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoot, userRoo
 
     const roots = [
       userRoot,
-      themeRoot,
+      ...themeRoots,
       clientRoot,
     ]
 

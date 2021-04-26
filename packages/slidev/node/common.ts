@@ -2,13 +2,13 @@ import { promises as fs, existsSync } from 'fs'
 import { join, posix } from 'path'
 import { ResolvedSlidevOptions } from './plugins/options'
 
-export async function getIndexHtml({ clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
 
   const roots = [
-    themeRoot,
+    ...themeRoots,
     userRoot,
   ]
 

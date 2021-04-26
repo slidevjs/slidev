@@ -4,7 +4,7 @@ import { slash } from '@antfu/utils'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from './options'
 
-export function createSetupPlugin({ clientRoot, themeRoot, userRoot }: ResolvedSlidevOptions): Plugin {
+export function createSetupPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const setupEntry = slash(resolve(clientRoot, 'setup'))
 
   return {
@@ -18,9 +18,9 @@ export function createSetupPlugin({ clientRoot, themeRoot, userRoot }: ResolvedS
         const asyncInjections: string[] = []
 
         const setups = [
-          join(themeRoot, 'setup', name),
-          join(userRoot, 'setup', name),
-        ]
+          ...themeRoots,
+          userRoot,
+        ].map(i => join(i, 'setup', name))
 
         setups.forEach((path, idx) => {
           if (!existsSync(path))
