@@ -2,12 +2,14 @@
   <header v-if="showHero" class="home-hero">
     <p align="center">
       <a href="https://github.com/slidevjs/slidev">
-        <img src="/logo-title.png" alt="Slidev" height="300">
+        <img src="/logo-title.png" alt="Slidev" height="300" />
       </a>
-      <br>
+      <br />
     </p>
     <div class="description !-mt-4">
-      Presentation <b>Sli</b>des for <b>Dev</b>elopers
+      Presentation
+      <b>Sli</b>des for
+      <b>Dev</b>elopers
     </div>
 
     <NavLink
@@ -21,6 +23,15 @@
       :item="{ link: data.altActionLink, text: data.altActionText }"
       class="action alt mx-2 rounded-tr-2xl rounded-tl-3xl rounded-br-4xl rounded-bl-4xl"
     />
+
+    <div class="mt-5 flex">
+      <div class="mx-auto">
+        <p>or try it now</p>
+        <div class="language-bash mt-2">
+          <pre><code><span class="opacity-50">$ </span><span class="token function">npm init</span> <span class="token text-[#408c9e] font-500">slidev</span></code></pre>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 

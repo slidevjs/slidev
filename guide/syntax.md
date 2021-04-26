@@ -1,7 +1,5 @@
 # Markdown Syntax
 
-## Basic
-
 Slides can be written within **a single markdown file** (by default `./slides.md`). 
 
 You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional inlined HTML and Vue Components support. Use `----` (four dashes or more) to separate your slides. 
@@ -32,7 +30,7 @@ You can directly use Windi CSS and Vue components to style and enrich your slide
 <div>
 ~~~
 
-### Front Matter & Layouts
+## Front Matter & Layouts
 
 You can specify layouts and other metadata for each slide by converting the separators into [front matter blocks](https://jekyllrb.com/docs/front-matter/). Each front matter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
@@ -64,7 +62,7 @@ This is a default page without any additional metadata.
 
 Refer to [supported frontmatter fields](/guide/frontmatter-fields) for more details.
 
-### Code Snippet
+## Code Snippet
 
 A big reason I am making this is that I need to make my code looks just right in the slides. So just as you expected, you can use Markdown favored code block to highlight your code.
 
@@ -82,7 +80,7 @@ console.log('HelloWorld')
 `​``
 ~~~
 
-### Notes
+## Notes
 
 You can take notes for each slide. They will show up on [Presenter Mode](/guide/presenter-mode) for you to reference in presentations.
 
@@ -112,7 +110,7 @@ This is another note
 -->
 ~~~
 
-### Configurations
+## Configurations
 
 All the configurations needed can also be defined in the Markdown file. For example:
 
