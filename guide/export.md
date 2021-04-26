@@ -8,9 +8,19 @@ Exporting your slides into PDF by the following command
 $ slidev export
 ```
 
-After a few seconds, your slides will be ready at `./slides.pdf`.
+After a few seconds, your slides will be ready at `./slides-exports.pdf`.
+
+## PNGs
+
+Passing the `--format png` option, it will export PNG images for each slide.
+
+```bash
+$ slidev export --format png
+```
 
 ## Single-Page Application (SPA)
+
+> ⚗️ Experimental
 
 Since Slidev is a web app, there is no reason you can't host it.
 

@@ -66,7 +66,7 @@ Refer to [supported frontmatter fields](/guide/frontmatter-fields) for more deta
 
 ### Code Snippet
 
-A big reason I am making this is that I need to make code looks right in the slides. So just as you expected, you can use markdown favored code block to highlight your code.
+A big reason I am making this is that I need to make my code looks just right in the slides. So just as you expected, you can use Markdown favored code block to highlight your code.
 
 ~~~md
 ```ts
@@ -74,7 +74,7 @@ console.log('HelloWorld')
 `​``
 ~~~
 
-Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it will turn the block into a full-featured Monaco editor!
+Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it turns the block into a full-featured Monaco editor!
 
 ~~~md
 ```ts{monaco}
@@ -118,7 +118,7 @@ All the configurations needed can also be defined in the Markdown file. For exam
 
 ```md
 ---
-theme: '@slidev/theme-seriph'
+theme: seriph
 layout: cover
 background: 'https://source.unsplash.com/1600x900/?nature,water'
 ---
@@ -128,4 +128,4 @@ background: 'https://source.unsplash.com/1600x900/?nature,water'
 This is the cover page.
 ```
 
-For more details about using a theme, refer to [this section](/guide/use-theme).
+For more details about using a theme, refer to [this section](/themes/).
