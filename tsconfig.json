@@ -23,6 +23,8 @@
   "include": [
     "docs/.vitepress/**/*.ts",
     "docs/.vitepress/**/*.vue",
+    "packages/**/*.ts",
+    "packages/**/*.vue"
   ],
   "exclude": ["**/dist/**", "node_modules"]
 }

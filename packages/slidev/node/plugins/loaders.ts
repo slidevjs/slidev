@@ -71,6 +71,15 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
               `${slidePrefix}${idx}.json`,
             )
 
+            server.ws.send({
+              type: 'custom',
+              event: 'slidev-update',
+              data: {
+                id: idx,
+                data: data.slides[idx],
+              },
+            })
+
             await parser.save(data, entry)
 
             res.statusCode = 200

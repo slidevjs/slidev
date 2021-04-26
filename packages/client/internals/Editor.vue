@@ -3,7 +3,8 @@ import { useEventListener, useFetch } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
 import { activeElement, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
-import { currentRoute } from '../logic/nav'
+import { currentRoute, currentSlideId } from '../logic/nav'
+import { useDynamicSlideInfo } from '../logic/note'
 
 const tab = ref<'content' | 'note'>('content')
 const offsetRight = ref(0)
@@ -14,38 +15,27 @@ const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 const noteInput = ref<HTMLTextAreaElement>()
 
-const url = computed(() => `/@slidev/slide/${currentRoute.value?.meta?.slide?.id}.json`)
-const { data } = useFetch(url, { refetch: true }).get().json()
+const { info, update } = useDynamicSlideInfo(currentSlideId)
 
 watch(
-  data,
-  () => {
-    content.value = (data.value?.content || '').trim()
-    note.value = (data.value?.note || '').trim()
-    frontmatter.value = data.value?.frontmatter || {}
+  info,
+  (v) => {
+    content.value = (v?.content || '').trim()
+    note.value = (v?.note || '').trim()
+    frontmatter.value = v?.frontmatter || {}
     dirty.value = false
   },
   { immediate: true },
 )
 
 async function save() {
-  await fetch(
-    url.value,
-    {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        raw: null,
-        note: note.value || undefined,
-        content: content.value,
-        frontmatter: frontmatter.value,
-      }),
-    },
-  )
   dirty.value = false
+  await update({
+    raw: null!,
+    note: note.value || undefined,
+    content: content.value,
+    frontmatter: frontmatter.value,
+  })
 }
 
 function close() {

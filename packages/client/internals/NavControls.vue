@@ -103,7 +103,7 @@ const dev = import.meta.env.DEV
     </a>
 
     <button
-      v-if="currentCamera !== 'none'"
+      v-if="currentCamera !== 'none' && !isPresenter"
       class="icon-btn"
       :class="{'text-green-500': Boolean(showAvatar && streamCamera)}"
       title="Show camera view"
@@ -113,6 +113,7 @@ const dev = import.meta.env.DEV
     </button>
 
     <div
+      v-if="!isPresenter"
       ref="devicesList"
       class="flex relative"
     >

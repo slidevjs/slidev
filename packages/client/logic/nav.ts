@@ -12,9 +12,12 @@ export const isPresenter = computed(() => route.value.path.startsWith('/presente
 
 export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
+
 export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 0)
 export const currentPath = computed(() => getPath(currentPage.value))
 export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
+export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
+
 export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1)
 export const hasPrev = computed(() => currentPage.value > 0)
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length - 1, currentPage.value + 1)}`))
