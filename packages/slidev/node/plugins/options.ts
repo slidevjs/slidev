@@ -8,6 +8,7 @@ import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
 import * as parser from '../parser'
 import { SlidevMarkdown } from '../parser'
+import { packageExists, promptForThemeInstallation, resolveThemeName } from '../themes'
 
 export interface SlidevEntryOptions {
   /**
@@ -47,7 +48,6 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
   windicss?: ArgumentsType<typeof WindiCSS>[0]
   icons?: ArgumentsType<typeof ViteIcons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
-  slidev: ResolvedSlidevOptions
   onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
 }
 
@@ -63,13 +63,24 @@ export function getThemeRoot(name: string) {
   return dirname(require.resolve(`${name}/package.json`))
 }
 
-export async function resolveOptions(options: SlidevEntryOptions): Promise<ResolvedSlidevOptions> {
+export async function resolveOptions(options: SlidevEntryOptions, promptForInstallation = true): Promise<ResolvedSlidevOptions> {
   const {
     entry = 'slides.md',
     userRoot = process.cwd(),
   } = options
   const data = await parser.load(entry)
-  const theme = options.theme || data.config.theme
+  const theme = resolveThemeName(options.theme || data.config.theme)
+
+  if (promptForInstallation) {
+    if (await promptForThemeInstallation(theme) === false)
+      process.exit(1)
+  }
+  else {
+    if (!packageExists(theme)) {
+      console.error(`Theme "${theme}" not found, have you installed it?`)
+      process.exit(1)
+    }
+  }
 
   return {
     data,

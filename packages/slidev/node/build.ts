@@ -2,25 +2,21 @@ import { promises as fs } from 'fs'
 import { build as viteBuild, InlineConfig, mergeConfig } from 'vite'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
-import { resolveOptions, SlidevEntryOptions, SlidevPluginOptions } from './plugins/options'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from './plugins/options'
 
 export async function build(
-  entry: SlidevEntryOptions = {},
-  pluginOptions: Omit<SlidevPluginOptions, 'slidev'> = {},
+  options: ResolvedSlidevOptions,
+  pluginOptions: SlidevPluginOptions = {},
   viteConfig: InlineConfig = {},
 ) {
-  const resolved = await resolveOptions(entry)
-  await fs.writeFile('index.html', await getIndexHtml(resolved), 'utf-8')
+  await fs.writeFile('index.html', await getIndexHtml(options), 'utf-8')
   try {
     await viteBuild(
       mergeConfig(
         viteConfig,
         {
           plugins: [
-            ViteSlidevPlugin({
-              ...pluginOptions,
-              slidev: resolved,
-            }),
+            ViteSlidevPlugin(options, pluginOptions),
           ],
         },
       ),

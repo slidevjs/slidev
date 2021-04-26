@@ -1,6 +1,6 @@
 ---
-# try also '@slidev/theme-default' to start simple
-theme: '@slidev/theme-seriph'
+# try also 'default' to start simple
+theme: seriph
 # random image from a curated Unsplash collection by Anthony
 background: 'https://source.unsplash.com/collection/94734566/1920x1080'
 # apply any windi css classes to the current slide

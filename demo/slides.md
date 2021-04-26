@@ -1,6 +1,5 @@
 ---
 layout: cover
-theme: '@slidev/theme-default'
 ---
 
 # Composable Vue

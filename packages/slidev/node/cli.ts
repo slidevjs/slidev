@@ -2,26 +2,13 @@ import path from 'path'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import { prompt } from 'enquirer'
-import { green, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 import { ViteDevServer } from 'vite'
 import { version } from '../package.json'
 import { build } from './build'
 import { createServer } from './server'
 import * as parser from './parser'
-
-function commonOptions(args: Argv<{}>) {
-  return args
-    .positional('entry', {
-      default: 'slides.md',
-      type: 'string',
-      describe: 'path to the slides markdown entry',
-    })
-    .option('theme', {
-      alias: 't',
-      type: 'string',
-      describe: 'overide theme',
-    })
-}
+import { ResolvedSlidevOptions, resolveOptions } from './plugins/options'
 
 const cli = yargs
   .scriptName('slidev')
@@ -67,11 +54,9 @@ cli.command(
     async function initServer() {
       if (server)
         await server.close()
+      const options = await resolveOptions({ entry, theme })
       server = (await createServer(
-        {
-          entry,
-          theme,
-        },
+        options,
         {
           onDataReload(newData, data) {
             if (!theme && newData.config.theme !== data.config.theme) {
@@ -86,8 +71,9 @@ cli.command(
             open,
           },
         },
-      )).server
+      ))
       await server.listen()
+      printVersion(options)
     }
 
     initServer()
@@ -100,7 +86,11 @@ cli.command(
   args => commonOptions(args)
     .help(),
   async(args) => {
-    await build(args)
+    console.log(yellow('[Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
+
+    const options = await resolveOptions(args)
+    printVersion(options)
+    await build(options)
   },
 )
 
@@ -147,8 +137,9 @@ cli.command(
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
     const port = 12445
-    const { server, resolved } = await createServer(
-      { entry, theme },
+    const options = await resolveOptions({ entry, theme })
+    const server = await createServer(
+      options,
       {},
       {
         server: { port },
@@ -157,10 +148,10 @@ cli.command(
       },
     )
     await server.listen()
-    parser.filterDisabled(resolved.data)
+    parser.filterDisabled(options.data)
     output = await exportSlides({
       port,
-      pages: resolved.data.slides.length,
+      pages: options.data.slides.length,
       format: format as any,
       output,
       timeout,
@@ -172,3 +163,27 @@ cli.command(
 )
 
 cli.help().parse()
+
+function commonOptions(args: Argv<{}>) {
+  return args
+    .positional('entry', {
+      default: 'slides.md',
+      type: 'string',
+      describe: 'path to the slides markdown entry',
+    })
+    .option('theme', {
+      alias: 't',
+      type: 'string',
+      describe: 'overide theme',
+    })
+}
+
+function printVersion(options: ResolvedSlidevOptions) {
+  console.log()
+  console.log(`  ${cyan('●')}${blue('■')}${yellow('▲')}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
+  console.log()
+  console.log(`${dim('  theme   ')}${green(options.theme)}`)
+  console.log(`${dim('  entry   ')}${dim(options.entry)}`)
+  console.log()
+}
