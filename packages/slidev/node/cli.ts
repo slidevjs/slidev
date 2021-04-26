@@ -182,6 +182,7 @@ function commonOptions(args: Argv<{}>) {
 
 function printInfo(options: ResolvedSlidevOptions, port?: number) {
   console.log()
+  console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
   console.log()

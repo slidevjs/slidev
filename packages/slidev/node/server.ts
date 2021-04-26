@@ -14,7 +14,6 @@ export async function createServer(
         plugins: [
           ViteSlidevPlugin(options, pluginConfig),
         ],
-        clearScreen: false,
         logLevel: 'warn',
       }),
     ),

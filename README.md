@@ -27,7 +27,11 @@ Alright, I broke my words again. It's now available as a standalone tool 🎉
 
 **Docs and guides on [slidev.antfu.me](https://slidev.antfu.me)**
 
-Still, it's working but not ready yet. It might have some big refactor or even stacks changes in the future. Feel free to play with it and have a preview first.
+The best way to understand it is to try it, one command away:
+
+```bash
+npm init slidev
+```
 
 For a full example, you can check the [demo](./demo) folder, which is a draft for my next talk 😉.
 
