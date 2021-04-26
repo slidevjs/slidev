@@ -85,13 +85,13 @@
 
 .layout-master.cover,
 .layout-master.intro {
-  @apply h-full flex;
+  @apply h-full grid;
 
   h1 {
     @apply text-6xl leading-20;
   }
 
   h1 + p {
-    @apply opacity-40 -mt-4 mb-16 text-2xl;
+    @apply opacity-40 -mt-4 text-2xl;
   }
 }
