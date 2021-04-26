@@ -110,6 +110,7 @@ importers:
       '@types/codemirror': ^0.0.109
       '@types/fs-extra': ^9.0.11
       '@types/js-yaml': ^3
+      '@types/markdown-it': ^12.0.1
       '@types/minimist': ^1.2.1
       '@types/node': ^14.14.41
       '@types/prettier': ^2.2.3
@@ -129,6 +130,7 @@ importers:
       js-base64: ^3.6.0
       js-yaml: ^3.14.1
       kolorist: ^1.4.1
+      markdown-it: ^12.0.6
       markdown-it-link-attributes: ^3.0.0
       markdown-it-prism: ^2.1.6
       monaco-editor: ^0.23.0
@@ -161,6 +163,7 @@ importers:
       js-base64: 3.6.0
       js-yaml: 3.14.1
       kolorist: 1.4.1
+      markdown-it: 12.0.6
       markdown-it-link-attributes: 3.0.0
       markdown-it-prism: 2.1.6
       monaco-editor: 0.23.0
@@ -181,6 +184,7 @@ importers:
       '@types/codemirror': 0.0.109
       '@types/fs-extra': 9.0.11
       '@types/js-yaml': 3.12.6
+      '@types/markdown-it': 12.0.1
       '@types/minimist': 1.2.1
       '@types/node': 14.14.41
       '@types/prettier': 2.2.3
@@ -2088,6 +2092,10 @@ packages:
       '@types/node': 14.14.41
     dev: true
 
+  /@types/highlight.js/9.12.4:
+    resolution: {integrity: sha512-t2szdkwmg2JJyuCM20e8kR2X59WCE5Zkl4bzm1u1Oukjm79zpbiAv+QjnwLnuuV0WHEcX2NgUItu0pAMKuOPww==}
+    dev: true
+
   /@types/istanbul-lib-coverage/2.0.3:
     resolution: {integrity: sha512-sz7iLqvVUg1gIedBOvlkxPlc8/uVzyS5OwGz1cKjXzkl3FpL3al0crU8YGU1WoHkxn0Wxbw5tyi6hvzJKNzFsw==}
     dev: true
@@ -2121,6 +2129,22 @@ packages:
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
+    dev: true
+
+  /@types/linkify-it/3.0.1:
+    resolution: {integrity: sha512-pQv3Sygwxxh6jYQzXaiyWDAHevJqWtqDUv6t11Sa9CPGiXny66II7Pl6PR8QO5OVysD6HYOkHMeBgIjLnk9SkQ==}
+    dev: true
+
+  /@types/markdown-it/12.0.1:
+    resolution: {integrity: sha512-mHfT8j/XkPb1uLEfs0/C3se6nd+webC2kcqcy8tgcVr0GDEONv/xaQzAN+aQvkxQXk/jC0Q6mPS+0xhFwRF35g==}
+    dependencies:
+      '@types/highlight.js': 9.12.4
+      '@types/linkify-it': 3.0.1
+      '@types/mdurl': 1.0.2
+    dev: true
+
+  /@types/mdurl/1.0.2:
+    resolution: {integrity: sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==}
     dev: true
 
   /@types/minimist/1.2.1:
@@ -6085,6 +6109,17 @@ packages:
 
   /markdown-it/12.0.5:
     resolution: {integrity: sha512-9KB992Yy2TedaoKETgZPL2n3bmqqZxzUsZ4fxe2ho+/AYuQUz+iDKpfjLgKbg/lHcG6cGOj+L3gDrn9S2CxoRg==}
+    hasBin: true
+    dependencies:
+      argparse: 2.0.1
+      entities: 2.1.0
+      linkify-it: 3.0.2
+      mdurl: 1.0.1
+      uc.micro: 1.0.6
+    dev: false
+
+  /markdown-it/12.0.6:
+    resolution: {integrity: sha512-qv3sVLl4lMT96LLtR7xeRJX11OUFjsaD5oVat2/SNBIb21bJXwal2+SklcRbTwGwqWpWH/HRtYavOoJE+seL8w==}
     hasBin: true
     dependencies:
       argparse: 2.0.1

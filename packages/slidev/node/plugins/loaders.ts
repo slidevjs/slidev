@@ -3,6 +3,9 @@ import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
 import { isTruthy, notNullish, objectMap } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
+import Markdown from 'markdown-it'
+// @ts-expect-error
+import mila from 'markdown-it-link-attributes'
 import * as parser from '../parser'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 
@@ -41,6 +44,21 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
+const md = Markdown()
+md.use(mila, {
+  attrs: {
+    target: '_blank',
+    rel: 'noopener',
+  },
+})
+
+function prepareSlideInfo(data: parser.SlideInfo): parser.SlideInfoExtended {
+  return {
+    ...data,
+    notesHTML: md.render(data.note || ''),
+  }
+}
+
 export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrNextModuleIds: string[] = []
@@ -60,7 +78,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           const [, no, type] = match
           const idx = parseInt(no)
           if (type === 'json' && req.method === 'GET') {
-            res.write(JSON.stringify(data.slides[idx]))
+            res.write(JSON.stringify(prepareSlideInfo(data.slides[idx])))
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
@@ -77,7 +95,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
               event: 'slidev-update',
               data: {
                 id: idx,
-                data: data.slides[idx],
+                data: prepareSlideInfo(data.slides[idx]),
               },
             })
 

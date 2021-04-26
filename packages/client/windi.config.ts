@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig } from 'windicss/helpers'
+import typography from 'windicss/plugin/typography'
 
 export default defineConfig({
   extract: {
@@ -13,6 +14,9 @@ export default defineConfig({
       '.git/**',
     ],
   },
+  plugins: [
+    typography,
+  ],
   safelist: [
     '!opacity-0',
   ],

@@ -11,6 +11,10 @@ export interface SlideInfo {
   frontmatter: Record<string, any>
 }
 
+export interface SlideInfoExtended extends SlideInfo {
+  notesHTML: string
+}
+
 export interface ParseOptions {
   /**
    * Transform Monaco block

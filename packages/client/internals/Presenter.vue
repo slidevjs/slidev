@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ignorableWatch } from '@vueuse/core'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { total, currentPage, currentRoute, nextRoute, tab, tabElements, currentSlideId } from '../logic/nav'
 import { showOverview } from '../state'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
-import { useDynamicSlideInfo } from '../logic/note'
 import SlidesOverview from './SlidesOverview.vue'
+import NoteEditor from './NoteEditor.vue'
 // @ts-expect-error
 import configs from '/@slidev/configs'
 
@@ -30,33 +29,6 @@ const nextSlide = computed(() => {
     }
   }
 })
-
-const { info, update } = useDynamicSlideInfo(currentSlideId)
-
-const note = ref('')
-let timer: any
-
-const { ignoreUpdates } = ignorableWatch(
-  note,
-  (v) => {
-    const id = currentSlideId.value
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      update({ raw: null!, note: v }, id)
-    }, 500)
-  },
-)
-
-watch(
-  info,
-  (v) => {
-    clearTimeout(timer)
-    ignoreUpdates(() => {
-      note.value = v?.note || ''
-    })
-  },
-  { immediate: true, flush: 'sync' },
-)
 </script>
 
 <template>
@@ -64,9 +36,7 @@ watch(
     <div class="grid-section top flex">
       <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
       <div class="flex-auto" />
-      <div class="px-4 my-auto">
-        {{ currentPage + 1 }} / {{ total }}
-      </div>
+      <div class="px-4 my-auto">{{ currentPage + 1 }} / {{ total }}</div>
     </div>
     <div class="grid-section main flex flex-col p-4">
       <SlideContainer
@@ -89,11 +59,7 @@ watch(
       />
     </div>
     <div class="grid-section note">
-      <textarea
-        v-model="note"
-        class="w-full h-full p-4 resize-none overflow-auto outline-none bg-transparent"
-        placeholder="No notes for this slide"
-      />
+     <NoteEditor class="w-full h-full p-4 overflow-auto"/>
     </div>
     <div class="grid-section bottom">
       <NavControls mode="persist" />

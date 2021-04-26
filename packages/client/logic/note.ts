@@ -1,21 +1,21 @@
 import { MaybeRef, useFetch } from '@vueuse/core'
 import { computed, ref, Ref, unref } from 'vue'
-import type { SlideInfo } from '../../slidev/node/parser'
+import type { SlideInfo, SlideInfoExtended } from '../../slidev/node/parser'
 
 export interface UseSlideInfo{
-  info: Ref<SlideInfo | undefined>
+  info: Ref<SlideInfoExtended | undefined>
   update: (data: Partial<SlideInfo>) => Promise<void>
 }
 
 export function useSlideInfo(id: number | undefined): UseSlideInfo {
   if (id == null) {
     return {
-      info: ref() as Ref<SlideInfo | undefined>,
+      info: ref() as Ref<SlideInfoExtended | undefined>,
       update: async() => {},
     }
   }
   const url = `/@slidev/slide/${id}.json`
-  const { data: info, execute } = useFetch<SlideInfo>(url).get().json()
+  const { data: info, execute } = useFetch(url).get().json()
 
   execute()
 
