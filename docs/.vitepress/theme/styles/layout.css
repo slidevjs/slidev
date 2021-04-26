@@ -18,11 +18,14 @@
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--c-divider-light);
+  background: transparent;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--c-divider-dark);
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: var(--c-divider-light);
 }
 
 html {

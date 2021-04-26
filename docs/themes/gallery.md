@@ -1,6 +1,6 @@
 # Themes Gallery
 
-Browser awesome themes available from the official and community here.
+Browser awesome themes available for Slidev here.
 
 Read more about [how to use a theme](/themes/), or [write one your own](/themes/write-a-theme) and share with the community!
 
@@ -10,7 +10,7 @@ Read more about [how to use a theme](/themes/), or [write one your own](/themes/
 
 ## Community Themes
 
-Here are the curated themes from the community.
+Here are the curated themes made by the community.
 
 <ThemeGallery collection="community"/>
 
