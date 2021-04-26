@@ -103,7 +103,7 @@ class: text-center
 a brief go-through
 
 
-------
+---
 
 <div class="grid grid-cols-2 gap-x-4"><div>
 
@@ -162,7 +162,7 @@ bar.prop = 1
 </div></div>
 
 
-------
+---
 
 # Ref Auto Unwrapping <MarkerCore />
 
@@ -210,7 +210,7 @@ data.foo // 'bar'
 </div>
 
 
-------
+---
 
 # `unref` - Oppsite of Ref <MarkerCore />
 
@@ -256,7 +256,7 @@ class: text-center
 of writing composable functions
 
 
-------
+---
 
 # What's Composable Functions
 
@@ -294,7 +294,7 @@ export function useDark(options: UseDarkOptions = {}) {
 </div>
 
 
-------
+---
 
 # Think as "Connections"
 
@@ -312,7 +312,7 @@ The `setup()` only runs **once** on component initialization, to construct the r
 </div>
 
 
-------
+---
 
 # One Thing at a Time
 
@@ -325,7 +325,7 @@ Just the same as authoring JavaScript functions.
 - "Do one thing, and do it well"
 
 
-------
+---
 
 # Passing Refs as Arguments <MarkerPattern />
 
@@ -401,7 +401,7 @@ c.value // 6
 </div>
 
 
-------
+---
 
 # MaybeRef <MarkerTips/>
 
@@ -439,7 +439,7 @@ export function useTimeAgo(
 </v-click>
 
 
-------
+---
 
 # Make it Flexible <MarkerPattern />
 
@@ -485,7 +485,7 @@ name.value = 'Hi' // Hi - World
 </div>
 
 
-------
+---
 
 # `useTitle` <Marker class="text-blue-400">Case</Marker>
 
@@ -529,7 +529,7 @@ export function useTitle(
 </div>
 
 
-------
+---
 
 # "Reuse" Ref <MarkerCore />
 
@@ -561,7 +561,7 @@ Extremely useful in composable functions that take uncertain argument types.
 
 </v-clicks>
 
-------
+---
 
 # `ref` / `unref` <MarkerTips />
 
@@ -584,7 +584,7 @@ function useBala<T>(arg: MaybeRef<T>) {
 
 </div>
 
-------
+---
 
 # Object of Refs <MarkerPattern />
 
@@ -621,7 +621,7 @@ mouse.x === x.value // true
 </div>
 
 
-------
+---
 
 # Async to "Sync" <MarkerTips />
 
@@ -655,7 +655,7 @@ Establish the "Connections" first, then wait data to be filled up. The idea is s
 
 </div>
 
-------
+---
 
 # `useFetch` <Marker class="text-blue-400">Case</Marker>
 
@@ -685,7 +685,7 @@ export function useFetch<R>(url: MaybeRef<string>) {
 </div>
 
 
-------
+---
 
 # Side-effects Self Cleanup <MarkerPattern />
 
@@ -717,7 +717,7 @@ Lower the mental burden
 -->
 
 
-------
+---
 
 # `effectScope` RFC <Marker class="text-purple-400">Upcoming</Marker>
 
@@ -807,7 +807,7 @@ export default defineComponent({
 </div>
 
 
-------
+---
 
 # Typed Provide / Inject <MarkerCore/>
 
@@ -830,7 +830,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 </div>
 
 
-------
+---
 
 # Typed Provide / Inject <MarkerCore/>
 
@@ -887,7 +887,7 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
 </script>
 
 
-------
+---
 
 # Shared State <MarkerPattern />
 
@@ -933,7 +933,7 @@ console.log(state.foo) // 2
 <h3 v-click class="opacity-100">⚠️ But it's not SSR compatible!</h3>
 
 
-------
+---
 
 # Shared State (SSR friendly) <MarkerPattern />
 
@@ -994,7 +994,7 @@ const state = useMyState()
 </div>
 
 
-------
+---
 
 # useVModel <MarkerTips />
 
@@ -1092,7 +1092,7 @@ layout: center
 # All of them work for both Vue 2 and 3
 
 
-------
+---
 
 # `@vue/composition-api` <Marker class="text-teal-400">Lib</Marker>
 
@@ -1110,7 +1110,7 @@ import { ref, reactive } from '@vue/composition-api'
 ```
 
 
-------
+---
 
 # Vue 2.7 <Marker class="text-purple-400">Upcoming</Marker>
 
@@ -1123,7 +1123,7 @@ import { ref, reactive } from '@vue/composition-api'
 - LTS.
 
 
-------
+---
 
 # Vue Demi <Marker class="text-teal-400">Lib</Marker>
 
@@ -1137,7 +1137,7 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 <img class="h-50 mx-auto" src="https://raw.githubusercontent.com/vueuse/vue-demi/master/assets/banner.png" />
 
 
-------
+---
 
 # Recap
 

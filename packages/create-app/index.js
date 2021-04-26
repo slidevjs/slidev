@@ -7,6 +7,8 @@ const path = require('path')
 const argv = require('minimist')(process.argv.slice(2))
 const { prompt } = require('enquirer')
 const execa = require('execa')
+const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
+const { version } = require('./package.json')
 
 const cwd = process.cwd()
 
@@ -16,6 +18,11 @@ const renameFiles = {
 }
 
 async function init() {
+  console.log()
+  console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
+  console.log(`${bold('  Slidev') + dim(' Creator')}  ${blue(`v${version}`)}`)
+  console.log()
+
   let targetDir = argv._[0]
   if (!targetDir) {
     /**
@@ -31,7 +38,6 @@ async function init() {
   }
   const packageName = await getValidPackageName(targetDir)
   const root = path.join(cwd, targetDir)
-  console.log(`\nScaffolding project in ${root}...`)
 
   if (!fs.existsSync(root)) {
     fs.mkdirSync(root, { recursive: true })
@@ -39,6 +45,7 @@ async function init() {
   else {
     const existing = fs.readdirSync(root)
     if (existing.length) {
+      console.log(yellow(`  Target directory "${targetDir}" is not empty.`))
       /**
        * @type {{ yes: boolean }}
        */
@@ -46,9 +53,7 @@ async function init() {
         type: 'confirm',
         name: 'yes',
         initial: 'Y',
-        message:
-          `Target directory ${targetDir} is not empty.\n`
-          + 'Remove existing files and continue?',
+        message: 'Remove existing files and continue?',
       })
       if (yes)
         emptyDir(root)
@@ -57,6 +62,8 @@ async function init() {
         return
     }
   }
+
+  console.log(dim('  Scaffolding project in ') + targetDir + dim(' ...'))
 
   const templateDir = path.join(__dirname, 'template')
 
@@ -87,6 +94,8 @@ async function init() {
 
   const related = path.relative(cwd, root)
 
+  console.log(green('  Done.\n'))
+
   /**
    * @type {{ yes: boolean }}
    */
@@ -94,7 +103,7 @@ async function init() {
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
-    message: 'Done. Do you want to install the dependency and start the server now?',
+    message: 'Install and start it now?',
   })
 
   if (yes) {
@@ -102,12 +111,14 @@ async function init() {
     await execa(pkgManager, ['-C', related, 'run', 'dev'], { stdio: 'inherit' })
   }
   else {
-    console.log('\nNow run:\n')
+    console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
-      console.log(`  cd ${related}`)
+      console.log(blue(`  cd ${bold(related)}`))
 
-    console.log(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`)
-    console.log(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`)
+    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
+    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+    console.log()
+    console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
   }
 }

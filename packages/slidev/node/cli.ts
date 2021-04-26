@@ -9,6 +9,7 @@ import { build } from './build'
 import { createServer } from './server'
 import * as parser from './parser'
 import { ResolvedSlidevOptions, resolveOptions } from './plugins/options'
+import { resolveThemeName } from './themes'
 
 const cli = yargs
   .scriptName('slidev')
@@ -59,7 +60,7 @@ cli.command(
         options,
         {
           onDataReload(newData, data) {
-            if (!theme && newData.config.theme !== data.config.theme) {
+            if (!theme && resolveThemeName(newData.config.theme) !== data.config.theme) {
               console.log(yellow('Slidev reloaded on theme change'))
               initServer()
             }
@@ -73,7 +74,7 @@ cli.command(
         },
       ))
       await server.listen()
-      printInfo(options)
+      printInfo(options, port)
     }
 
     initServer()
@@ -179,12 +180,18 @@ function commonOptions(args: Argv<{}>) {
     })
 }
 
-function printInfo(options: ResolvedSlidevOptions) {
+function printInfo(options: ResolvedSlidevOptions, port?: number) {
   console.log()
-  console.log(`  ${cyan('●')}${blue('■')}${yellow('▲')}`)
+  console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
   console.log()
-  console.log(`${dim('  theme   ')}${green(options.theme)}`)
-  console.log(`${dim('  entry   ')}${dim(options.entry)}`)
+  console.log(dim('  theme   ') + green(options.theme))
+  console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+  if (port) {
+    console.log()
+    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}/presenter`)}`)
+    console.log(`${dim('  slide show     ')} > ${cyan(`http://localhost:${bold(port)}/`)}`)
+  }
+  console.log()
   console.log()
 }

@@ -12,11 +12,13 @@ export async function createServer(
   const server = await createViteServer(
     mergeConfig(
       viteConfig,
-      {
+      <InlineConfig>({
         plugins: [
           ViteSlidevPlugin(options, pluginConfig),
         ],
-      },
+        clearScreen: false,
+        logLevel: 'warn',
+      }),
     ),
   )
 

@@ -22,7 +22,7 @@ Presentation slides for developers
   <carbon-logo-github />
 </a>
 
-----
+---
 
 # What is Slidev?
 
@@ -41,7 +41,7 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 
 Read more about [Why Slidev?](https://slidev.antfu.me/guide/why)
 
-----
+---
 
 # Navigation
 
