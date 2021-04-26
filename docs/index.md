@@ -10,4 +10,8 @@ altActionLink: /guide/why
 footer: MIT Licensed | Copyright © 2021-PRESENT Anthony Fu
 ---
 
+or directly try it yourself:
 
+```bash
+npm init slidev
+```

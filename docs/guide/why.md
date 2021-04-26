@@ -6,7 +6,7 @@ There are a lot of feature-rich, general-purpose, WYSIWYG slides makers like [Mi
 
 Slidev is trying to provide the flexibility and interactivity for developers to make their presentation even more interesting, expressive, and attractive by using the tools and technologies they are already familiar with. Slidev separates the content and visuals. This allows you to focus on one thing at a time, while being able to reuse the themes from the community.
 
-While Slidev will never tend to replace those slides apps and being beginner-friendly, here is a few notions and highlights of Slidev: 
+While Slidev will never tend to replace those slides apps and being beginner-friendly, here is a few notions and highlights of Slidev:
 
 ## Slidev
 
@@ -36,8 +36,16 @@ Learn more about the [recording here](/guide/recording).
 
 ### Portable
 
-Export your slides into PDF, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere.
+Export your slides into PDF, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere. Learn more about [exporting](/guide/exporting).
 
 ### Hackable
 
 Since Slidev is powered by web technologies, anything that can be done with web apps are also possible with Slidev. For example, WebGL, API requesting, iframes, or even live sharing, it's up to your imaginations!
+
+### Give it a Try
+
+Give it a play more than a thousand words. You are just one command a way:
+
+```bash
+npm init slidev
+```

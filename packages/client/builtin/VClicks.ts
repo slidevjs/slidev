@@ -1,4 +1,5 @@
-import { defineComponent, Directive, h, resolveDirective, VNode, withDirectives } from 'vue'
+import { toArray } from '@antfu/utils'
+import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, withDirectives } from 'vue'
 
 export default defineComponent({
   props: {
@@ -14,14 +15,19 @@ export default defineComponent({
       return withDirectives(node, [[directive]])
     }
 
-    const defaults = this.$slots.default?.()
+    let defaults = this.$slots.default?.()
 
     if (!defaults)
       return
 
-    if (Array.isArray(defaults))
-      return defaults.map((i, idx) => applyDirective(h(i), idx % this.every === 0 ? click : after))
+    defaults = toArray(defaults)
 
-    return applyDirective(h(defaults), click)
+    // handle ul list
+    if (defaults.length === 1 && defaults[0].type === 'ul' && Array.isArray(defaults[0].children)) {
+      defaults[0].children = defaults[0].children.map((i, idx) => isVNode(i) ? applyDirective(h(i), idx % this.every === 0 ? click : after) : i)
+      return defaults
+    }
+
+    return defaults.map((i, idx) => applyDirective(h(i), idx % this.every === 0 ? click : after))
   },
 })

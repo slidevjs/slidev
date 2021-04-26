@@ -66,10 +66,11 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
             Object.assign(data.slides[idx], body)
-            hmrNextModuleIds.push(
-              `${slidePrefix}${idx}.md`,
-              `${slidePrefix}${idx}.json`,
-            )
+
+            hmrNextModuleIds.push(`${slidePrefix}${idx}.md`)
+
+            if (body.content != null)
+              hmrNextModuleIds.push(`${slidePrefix}${idx}.md`)
 
             server.ws.send({
               type: 'custom',
@@ -114,7 +115,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           const a = data.slides[i]
           const b = newData.slides[i]
 
-          if (a?.raw === b?.raw)
+          if (a?.content.trim() === b?.content.trim())
             continue
 
           moduleIds.push(

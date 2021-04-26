@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import { prompt } from 'enquirer'
 import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
-import { ViteDevServer } from 'vite'
+import { LogLevel, ViteDevServer } from 'vite'
 import { version } from '../package.json'
 import { build } from './build'
 import { createServer } from './server'
@@ -35,8 +35,14 @@ cli.command(
       type: 'boolean',
       describe: 'open in browser',
     })
+    .option('log', {
+      default: 'warn',
+      type: 'string',
+      choices: ['error', 'warn', 'info', 'silent'],
+      describe: 'log level',
+    })
     .help(),
-  async({ entry, theme, port, open }) => {
+  async({ entry, theme, port, open, log }) => {
     if (!fs.existsSync(entry)) {
       const { create } = await prompt<{create: boolean}>({
         name: 'create',
@@ -60,8 +66,8 @@ cli.command(
         options,
         {
           onDataReload(newData, data) {
-            if (!theme && resolveThemeName(newData.config.theme) !== data.config.theme) {
-              console.log(yellow('Slidev reloaded on theme change'))
+            if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
+              console.log(yellow('\n  reloaded on theme change\n'))
               initServer()
             }
           },
@@ -71,6 +77,7 @@ cli.command(
             port,
             open,
           },
+          logLevel: log as LogLevel,
         },
       ))
       await server.listen()
@@ -145,7 +152,7 @@ cli.command(
       {
         server: { port },
         logLevel: 'error',
-        clearScreen: true,
+        clearScreen: false,
       },
     )
     await server.listen()

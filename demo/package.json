@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev --open=false'",
-    "starter": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev starter.md --open=false'",
+    "dev": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev --open=false --log=info'",
+    "starter": "nodemon -w '../packages/slidev/dist/*.js' --exec 'slidev starter.md --open=false --log=info'",
     "build": "slidev build",
     "export": "slidev export"
   },
