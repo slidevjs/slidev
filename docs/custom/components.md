@@ -32,4 +32,4 @@ This also works:
 
 > TODO:
 
-Check more in the [directory structure](/guide/dir-structure) section.
+Check more in the [directory structure](/custom/dir-structure) section.

@@ -37,16 +37,15 @@ For a full example, you can check the [demo](./demo) folder, which is a draft fo
 
 ## TODO
 
-- [ ] Foot notes
-- [ ] Configuration in header
-- [ ] Preload next slide
 - [ ] Shiki + TwoSlash?
 - [ ] VS Code extension
-- [ ] Presentor View
 - [ ] Timer
 - [ ] A few more themes
 - [ ] Dialog before recording
 - [ ] Docs
+- [x] Presentor Mode
+- [x] Foot notes
+- [x] Configuration in header
 - [x] Hide dev buttons on build
 - [x] Embedded editor
 - [x] Custom Monaco setup
@@ -62,6 +61,8 @@ For a full example, you can check the [demo](./demo) folder, which is a draft fo
   - [x] Dev Mode
   - [x] Build Mode
   - [x] Export PDF
+  - [x] Export PNG
+  - [x] Better CLI
   - [x] Configurable themes
 
 ## Sponsors

@@ -26,7 +26,7 @@ const slidebars = [
       },
       {
         text: 'Record Presentation',
-        link: '/guide/record',
+        link: '/guide/recording',
       },
       {
         text: 'Presenter Mode',
