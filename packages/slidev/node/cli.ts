@@ -124,11 +124,28 @@ cli.command(
       type: 'string',
       describe: 'path to the the port output',
     })
+    .option('format', {
+      default: 'pdf',
+      type: 'string',
+      choices: ['pdf', 'png'],
+      describe: 'output format',
+    })
+    .option('timeout', {
+      default: 100,
+      type: 'number',
+      describe: 'timeout for rendering each page',
+    })
     .help(),
-  async({ entry, theme, output }) => {
-    output = output || `${path.basename(entry, '.md')}.pdf`
+  async({
+    entry,
+    theme,
+    output,
+    format,
+    timeout,
+  }) => {
+    output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
-    const { genratePDF } = await import('./export')
+    const { exportSlides } = await import('./export')
     const port = 12445
     const { server, resolved } = await createServer(
       { entry, theme },
@@ -141,8 +158,14 @@ cli.command(
     )
     await server.listen()
     parser.filterDisabled(resolved.data)
-    await genratePDF(port, resolved.data.slides.length, output)
-    console.log(green(`PDF Exported: ./${output}`))
+    output = await exportSlides({
+      port,
+      pages: resolved.data.slides.length,
+      format: format as any,
+      output,
+      timeout,
+    })
+    console.log(green(`Exported: ./${output}`))
     server.close()
     process.exit(0)
   },
