@@ -106,6 +106,7 @@ importers:
       '@antfu/utils': ^0.1.0
       '@iconify/json': ^1.1.333
       '@slidev/client': workspace:*
+      '@types/cli-progress': ^3.9.1
       '@types/codemirror': ^0.0.109
       '@types/fs-extra': ^9.0.11
       '@types/js-yaml': ^3
@@ -117,6 +118,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vitejs/plugin-vue': ^1.2.2
       '@vue/compiler-sfc': ^3.0.11
+      cli-progress: ^3.9.0
       codemirror: ^5.61.0
       cross-env: ^7.0.3
       enquirer: ^2.3.6
@@ -151,6 +153,7 @@ importers:
       '@slidev/client': link:../client
       '@vitejs/plugin-vue': 1.2.2_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
+      cli-progress: 3.9.0
       codemirror: 5.61.0
       enquirer: 2.3.6
       fast-glob: 3.2.5
@@ -174,6 +177,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
       '@antfu/ni': 0.5.8
+      '@types/cli-progress': 3.9.1
       '@types/codemirror': 0.0.109
       '@types/fs-extra': 9.0.11
       '@types/js-yaml': 3.12.6
@@ -2052,6 +2056,12 @@ packages:
       '@babel/types': 7.13.14
     dev: true
 
+  /@types/cli-progress/3.9.1:
+    resolution: {integrity: sha512-X/tKJv/GoYlCBS9wwJTLrVSxzIOI/Cj1cCatYOAAoQne3aT1QbHBptBS5+zLe2ToSljAijHU1N/ouBNFvZ2H/g==}
+    dependencies:
+      '@types/node': 14.14.41
+    dev: true
+
   /@types/codemirror/0.0.109:
     resolution: {integrity: sha512-cSdiHeeLjvGn649lRTNeYrVCDOgDrtP+bDDSFDd1TF+i0jKGPDRozno2NOJ9lTniso+taiv4kiVS8dgM8Jm5lg==}
     dependencies:
@@ -3173,6 +3183,14 @@ packages:
       restore-cursor: 3.1.0
     dev: true
 
+  /cli-progress/3.9.0:
+    resolution: {integrity: sha512-g7rLWfhAo/7pF+a/STFH/xPyosaL1zgADhI0OM83hl3c7S43iGvJWEAV2QuDOnQ8i6EMBj/u4+NTd0d5L+4JfA==}
+    engines: {node: '>=4'}
+    dependencies:
+      colors: 1.4.0
+      string-width: 4.2.2
+    dev: false
+
   /cli-spinners/2.6.0:
     resolution: {integrity: sha512-t+4/y50K/+4xcCRosKkA7W4gTr1MySvLV0q+PxmG7FJ5g+66ChKurYjxBCjHggHH3HA5Hh9cy+lcUGWDqVH+4Q==}
     engines: {node: '>=6'}
@@ -3264,6 +3282,11 @@ packages:
 
   /colorette/1.2.2:
     resolution: {integrity: sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==}
+
+  /colors/1.4.0:
+    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
+    engines: {node: '>=0.1.90'}
+    dev: false
 
   /combined-stream/1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}

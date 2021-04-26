@@ -73,7 +73,7 @@ cli.command(
         },
       ))
       await server.listen()
-      printVersion(options)
+      printInfo(options)
     }
 
     initServer()
@@ -89,7 +89,7 @@ cli.command(
     console.log(yellow('[Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
 
     const options = await resolveOptions(args)
-    printVersion(options)
+    printInfo(options)
     await build(options)
   },
 )
@@ -148,6 +148,7 @@ cli.command(
       },
     )
     await server.listen()
+    printInfo(options)
     parser.filterDisabled(options.data)
     output = await exportSlides({
       port,
@@ -156,7 +157,7 @@ cli.command(
       output,
       timeout,
     })
-    console.log(green(`Exported: ./${output}`))
+    console.log(`${green('  ✓ ')}exported to ./${output}\n`)
     server.close()
     process.exit(0)
   },
@@ -178,7 +179,7 @@ function commonOptions(args: Argv<{}>) {
     })
 }
 
-function printVersion(options: ResolvedSlidevOptions) {
+function printInfo(options: ResolvedSlidevOptions) {
   console.log()
   console.log(`  ${cyan('●')}${blue('■')}${yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)

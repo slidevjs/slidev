@@ -2,7 +2,8 @@ import path from 'path'
 import fs from 'fs-extra'
 import { chromium } from 'playwright'
 import { PDFDocument } from 'pdf-lib'
-import { yellow } from 'kolorist'
+import { blue, cyan, green, yellow } from 'kolorist'
+import { Presets, SingleBar } from 'cli-progress'
 
 export interface ExportOptions {
   pages: number
@@ -10,6 +11,42 @@ export interface ExportOptions {
   format?: 'pdf' | 'png'
   output?: string
   timeout?: number
+}
+
+function createSlidevProgress() {
+  function getSpinner(n = 0) {
+    return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
+  }
+  let current = 0
+  let spinner = 0
+  let timer: any
+
+  const progress = new SingleBar({
+    clearOnComplete: true,
+    hideCursor: true,
+    format: `  {spin} ${yellow('rendering')} {bar} {value}/{total}`,
+    linewrap: false,
+    barsize: 30,
+  }, Presets.shades_grey)
+
+  return {
+    bar: progress,
+    start(total: number) {
+      progress.start(total, 0, { spin: getSpinner(spinner) })
+      timer = setInterval(() => {
+        spinner += 1
+        progress.update(current, { spin: getSpinner(spinner) })
+      }, 200)
+    },
+    update(v: number) {
+      current = v
+      progress.update(v, { spin: getSpinner(spinner) })
+    },
+    stop() {
+      clearInterval(timer)
+      progress.stop()
+    },
+  }
 }
 
 export async function exportSlides({
@@ -28,9 +65,10 @@ export async function exportSlides({
     deviceScaleFactor: 1,
   })
   const page = await context.newPage()
+  const progress = createSlidevProgress()
 
   async function go(no: number) {
-    console.log(`${yellow('Rendering')} page ${no + 1} / ${pages} ...`)
+    progress.update(no + 1)
     await page.goto(`http://localhost:${port}/${no}?print`, {
       waitUntil: 'networkidle',
     })
@@ -38,6 +76,8 @@ export async function exportSlides({
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ media: 'screen' })
   }
+
+  progress.start(pages)
 
   if (format === 'pdf') {
     const buffers: Buffer[] = []
@@ -87,6 +127,7 @@ export async function exportSlides({
     throw new Error(`Unsupported exporting format "${format}"`)
   }
 
+  progress.stop()
   browser.close()
   return output
 }

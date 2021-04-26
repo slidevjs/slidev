@@ -49,6 +49,7 @@
     "@slidev/client": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
+    "cli-progress": "^3.9.0",
     "codemirror": "^5.61.0",
     "enquirer": "^2.3.6",
     "fast-glob": "^3.2.5",
@@ -73,6 +74,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
     "@antfu/ni": "^0.5.8",
+    "@types/cli-progress": "^3.9.1",
     "@types/codemirror": "^0.0.109",
     "@types/fs-extra": "^9.0.11",
     "@types/js-yaml": "^3",
