@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.1.0",
-    "@iconify/json": "^1.1.333",
+    "@iconify/json": "^1.1.334",
     "@slidev/client": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
@@ -62,11 +62,11 @@
     "markdown-it-prism": "^2.1.6",
     "monaco-editor": "^0.23.0",
     "pdf-lib": "^1.16.0",
-    "vite": "^2.2.2",
+    "vite": "^2.2.3",
     "vite-plugin-components": "^0.8.4",
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.3",
-    "vite-plugin-remote-assets": "^0.1.4",
+    "vite-plugin-remote-assets": "^0.1.5",
     "vite-plugin-windicss": "^0.15.7",
     "vue": "^3.0.11",
     "windicss": "^2.5.14",
@@ -81,7 +81,7 @@
     "@types/js-yaml": "^3",
     "@types/markdown-it": "^12.0.1",
     "@types/minimist": "^1.2.1",
-    "@types/node": "^14.14.41",
+    "@types/node": "^15.0.0",
     "@types/prettier": "^2.2.3",
     "@types/recordrtc": "^5.6.5",
     "@types/yargs": "^16.0.1",
@@ -92,7 +92,7 @@
     "playwright": "^1.10.0",
     "pnpm": "^6.2.1",
     "rimraf": "^3.0.2",
-    "tsup": "^4.9.2",
+    "tsup": "^4.10.0",
     "typescript": "^4.2.4"
   }
 }
