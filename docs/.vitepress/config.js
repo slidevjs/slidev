@@ -22,7 +22,7 @@ const slidebars = [
       },
       {
         text: 'Exporting',
-        link: '/guide/export',
+        link: '/guide/exporting',
       },
       {
         text: 'Record Presentation',
@@ -59,20 +59,29 @@ const slidebars = [
         link: '/custom/',
       },
       {
-        text: 'Use Components',
-        link: '/custom/components',
-      },
-      {
-        text: 'Directory Structure',
-        link: '/custom/structure',
-      },
-      {
         text: 'Configure Vite',
         link: '/custom/config-vite',
       },
       {
-        text: 'Configure WindiCSS',
+        text: 'Configure Windi CSS',
         link: '/custom/config-windicss',
+      },
+      {
+        text: 'Configure Monaco',
+        link: '/custom/config-monaco',
+      },
+    ],
+  },
+  {
+    text: 'Built-in',
+    children: [
+      {
+        text: 'Components',
+        link: '/builtin/components',
+      },
+      {
+        text: 'Layouts',
+        link: '/builtin/layouts',
       },
     ],
   },
@@ -109,6 +118,7 @@ module.exports = {
       '/guide/': slidebars,
       '/themes/': slidebars,
       '/custom/': slidebars,
+      '/': slidebars,
     },
   },
 }
