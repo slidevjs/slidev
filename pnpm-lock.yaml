@@ -1,8 +1,5 @@
 lockfileVersion: 5.3
 
-overrides:
-  esbuild: 0.9.7
-
 importers:
 
   .:
@@ -10,7 +7,7 @@ importers:
       '@antfu/eslint-config': ^0.6.4
       '@antfu/utils': ^0.1.0
       '@types/jest': ^26.0.23
-      '@types/node': ^15.0.0
+      '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vueuse/core': ^4.9.0
@@ -30,7 +27,7 @@ importers:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
       '@antfu/utils': 0.1.0
       '@types/jest': 26.0.23
-      '@types/node': 15.0.0
+      '@types/node': 15.0.1
       '@types/prettier': 2.2.3
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
       '@vueuse/core': 4.9.0
@@ -118,7 +115,7 @@ importers:
       '@types/js-yaml': ^3
       '@types/markdown-it': ^12.0.1
       '@types/minimist': ^1.2.1
-      '@types/node': ^15.0.0
+      '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
       '@types/recordrtc': ^5.6.5
       '@types/yargs': ^16.0.1
@@ -193,7 +190,7 @@ importers:
       '@types/js-yaml': 3.12.6
       '@types/markdown-it': 12.0.1
       '@types/minimist': 1.2.1
-      '@types/node': 15.0.0
+      '@types/node': 15.0.1
       '@types/prettier': 2.2.3
       '@types/recordrtc': 5.6.5
       '@types/yargs': 16.0.1
@@ -2165,8 +2162,8 @@ packages:
     resolution: {integrity: sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==}
     dev: true
 
-  /@types/node/15.0.0:
-    resolution: {integrity: sha512-YN1d+ae2MCb4U0mMa+Zlb5lWTdpFShbAj5nmte6lel27waMMBfivrm0prC16p/Di3DyTrmerrYUT8/145HXxVw==}
+  /@types/node/15.0.1:
+    resolution: {integrity: sha512-TMkXt0Ck1y0KKsGr9gJtWGjttxlZnnvDtphxUOSd0bfaR6Q1jle+sPvrzNR1urqYTWMinoKvjKfXUGsumaO1PA==}
     dev: true
 
   /@types/normalize-package-data/2.4.0:
@@ -3817,8 +3814,14 @@ packages:
   /esbuild-register/2.4.0:
     resolution: {integrity: sha512-1mWroad5Mz8fqMxd0GfmEWoAuRBSsBObLVp5rpFOQSavUNgyhR5NoVlECrDcE2iineekoTsBeNS9QxKvqKvNjw==}
     dependencies:
-      esbuild: 0.9.7
+      esbuild: 0.11.15
       jsonc-parser: 3.0.0
+    dev: true
+
+  /esbuild/0.11.15:
+    resolution: {integrity: sha512-Hh40byWZZgYbiLhcoOWiOUIy8yUYQeCEA4F9feWytToD2jGfJ1X4VPf5dsqj6vRL29H3YmFqZsxIJa5q0ifB3g==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /esbuild/0.9.7:
@@ -8034,7 +8037,7 @@ packages:
       chalk: 4.1.1
       chokidar: 3.5.1
       debug: 4.3.1
-      esbuild: 0.9.7
+      esbuild: 0.11.15
       execa: 5.0.0
       globby: 11.0.3
       joycon: 3.0.1

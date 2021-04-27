@@ -16,7 +16,7 @@
     "@antfu/eslint-config": "^0.6.4",
     "@antfu/utils": "^0.1.0",
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.0.0",
+    "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@vueuse/core": "^4.9.0",
@@ -32,10 +32,5 @@
     "vite-plugin-pwa": "^0.7.2",
     "vite-plugin-windicss": "^0.15.7",
     "vitepress": "^0.13.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "esbuild": "0.9.7"
-    }
   }
 }
