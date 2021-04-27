@@ -10,26 +10,10 @@
 
 Create a directory `components/` under your project root, and simply put your custom Vue components under it, then you can use it with the same name in your markdown file!
 
-```
-components/
-  MyComponent.vue
-  FooBar.vue
-```
-
-```md
-<!-- slides.md -->
-
-Use your component: 
-
-<MyComponent :prop="1"/>
-
-This also works:
-
-<foo-bar />
-```
+Read more in the [Customization](/custom/index#components) section.
 
 ## Theme-provided Components
 
 > TODO:
 
-Check more in the [directory structure](/custom/dir-structure) section.
+Check more in the [directory structure](/custom/#directory-structure) section.
