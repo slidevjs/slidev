@@ -122,7 +122,7 @@ export function parse(
 
   config.theme ??= headmatter.theme ?? 'default'
   config.title ??= headmatter.title ?? (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
-  config.remoteAssets ??= headmatter.remoteAssets ?? true
+  config.remoteAssets ??= headmatter.remoteAssets ?? 'dev-only'
   config.monaco ??= headmatter.monaco ?? 'dev-only'
 
   return {

@@ -101,13 +101,18 @@ cli.command(
       default: false,
       describe: 'build watch',
     })
+    .option('base', {
+      type: 'string',
+      describe: 'output base',
+    })
     .help(),
-  async({ entry, theme, watch }) => {
+  async({ entry, theme, watch, base }) => {
     console.log(yellow('  [Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
 
     const options = await resolveOptions({ entry, theme }, 'build')
     printInfo(options)
     await build(options, {}, {
+      base,
       build: {
         watch: watch ? {} : undefined,
       },

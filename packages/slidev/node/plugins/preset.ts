@@ -135,7 +135,7 @@ export function ViteSlidevPlugin(
       },
     ),
 
-    config.remoteAssets
+    ((config.remoteAssets === true) || (config.remoteAssets === 'dev-only' && mode === 'dev'))
       ? RemoteAssets({
         rules: [
           ...DefaultRules,

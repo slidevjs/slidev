@@ -1,4 +1,5 @@
 import { promises as fs } from 'fs'
+import { resolve } from 'path'
 import { build as viteBuild, InlineConfig, mergeConfig } from 'vite'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
@@ -9,7 +10,8 @@ export async function build(
   pluginOptions: SlidevPluginOptions = {},
   viteConfig: InlineConfig = {},
 ) {
-  await fs.writeFile('index.html', await getIndexHtml(options), 'utf-8')
+  const indexPath = resolve(options.userRoot, 'index.html')
+  await fs.writeFile(indexPath, await getIndexHtml(options), 'utf-8')
   try {
     await viteBuild(
       mergeConfig(
@@ -23,6 +25,6 @@ export async function build(
     )
   }
   finally {
-    await fs.unlink('index.html')
+    await fs.unlink(indexPath)
   }
 }

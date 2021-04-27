@@ -11,6 +11,6 @@ run('npm run build')
 
 run('cp packages/create-app/template/slides.md demo/build.md')
 
-run('npx slidev build build.md --base /demo', path.resolve(__dirname, '../demo'))
+run('npx slidev build build.md --base /demo/', path.resolve(__dirname, '../demo'))
 
 run('cp -R demo/dist docs/.vitepress/dist/demo')
