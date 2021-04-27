@@ -6,7 +6,6 @@ importers:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
       '@antfu/utils': ^0.1.0
-      '@slidev/types': workspace:*
       '@types/jest': ^26.0.23
       '@types/node': ^15.0.0
       '@types/prettier': ^2.2.3
@@ -27,7 +26,6 @@ importers:
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
       '@antfu/utils': 0.1.0
-      '@slidev/types': link:packages/types
       '@types/jest': 26.0.23
       '@types/node': 15.0.0
       '@types/prettier': 2.2.3
