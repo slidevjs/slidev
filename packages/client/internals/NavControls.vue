@@ -4,7 +4,7 @@ import { computed, defineProps, ref } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
 import { recorder } from '../logic/recording'
 import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
-import { showOverview, showEditor, currentCamera } from '../state'
+import { showOverview, showEditor, currentCamera, showRecordingDialog } from '../state'
 import DevicesList from './DevicesList.vue'
 
 defineProps({
@@ -19,7 +19,7 @@ const {
   recording,
   showAvatar,
   streamCamera,
-  toggleRecording,
+  stopRecording,
   toggleAvatar,
 } = recorder
 
@@ -34,6 +34,13 @@ const presenterLink = computed(() => `${location.origin}/presenter/${currentPage
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
 
 const dev = import.meta.env.DEV
+
+function toggleRecording() {
+  if (recording.value)
+    stopRecording()
+  else
+    showRecordingDialog.value = true
+}
 </script>
 
 <template>

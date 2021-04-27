@@ -2,7 +2,21 @@ import { Ref, ref, shallowRef, watch } from 'vue'
 import Recorder from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { useEventListener, useDevicesList } from '@vueuse/core'
+import { isTruthy } from '@antfu/utils'
 import { currentCamera, currentMic } from '../state'
+
+export const recordingName = ref('')
+export const recordCamera = ref(true)
+
+export function getFilename(media?: string) {
+  const d = new Date()
+
+  const pad = (v: number) => `${v}`.padStart(2, '0')
+
+  const date = `${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`
+
+  return `${[media, recordingName.value, date].filter(isTruthy).join('-')}.webm`
+}
 
 export const {
   devices,
@@ -66,7 +80,7 @@ export function useRecording() {
         return
 
       streamCamera.value = await navigator.mediaDevices.getUserMedia({
-        video: currentCamera.value === 'none'
+        video: currentCamera.value === 'none' || recordCamera.value === false
           ? false
           : {
             deviceId: currentCamera.value,
@@ -147,7 +161,7 @@ export function useRecording() {
     recorderCamera.value?.stopRecording(() => {
       const blob = recorderCamera.value!.getBlob()
       const url = URL.createObjectURL(blob)
-      download(`camera-${new Date().toLocaleTimeString().replace(/[:\s_]/g, '-')}.webm`, url)
+      download(getFilename('camera'), url)
       window.URL.revokeObjectURL(url)
       closeStream(streamCamera)
       recorderCamera.value = undefined
@@ -155,7 +169,7 @@ export function useRecording() {
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
       const url = URL.createObjectURL(blob)
-      download(`slides-${new Date().toLocaleTimeString().replace(/[:\s_]/g, '-')}.webm`, url)
+      download(getFilename('screen'), url)
       window.URL.revokeObjectURL(url)
       closeCameraStream()
       recorderSlides.value = undefined

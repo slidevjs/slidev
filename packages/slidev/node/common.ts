@@ -1,5 +1,6 @@
 import { promises as fs, existsSync } from 'fs'
 import { join, posix } from 'path'
+import { uniq } from '@antfu/utils'
 import { ResolvedSlidevOptions } from './plugins/options'
 
 export async function getIndexHtml({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Promise<string> {
@@ -7,10 +8,10 @@ export async function getIndexHtml({ clientRoot, themeRoots, userRoot }: Resolve
   let head = ''
   let body = ''
 
-  const roots = [
+  const roots = uniq([
     ...themeRoots,
     userRoot,
-  ]
+  ])
 
   for (const root of roots) {
     const path = join(root, 'index.html')
