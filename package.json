@@ -5,7 +5,7 @@
     "dev": "pnpm -r --filter ./packages --parallel run dev",
     "build": "pnpm -r --filter ./packages run build",
     "docs": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:build": "esno ./scripts/docs.ts",
     "demo:dev": "npm -C demo run dev",
     "demo:build": "npm -C demo run build",
     "test": "jest",
