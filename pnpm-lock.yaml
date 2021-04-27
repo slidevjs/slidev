@@ -1,5 +1,8 @@
 lockfileVersion: 5.3
 
+overrides:
+  esbuild: 0.9.7
+
 importers:
 
   .:
@@ -3814,14 +3817,8 @@ packages:
   /esbuild-register/2.4.0:
     resolution: {integrity: sha512-1mWroad5Mz8fqMxd0GfmEWoAuRBSsBObLVp5rpFOQSavUNgyhR5NoVlECrDcE2iineekoTsBeNS9QxKvqKvNjw==}
     dependencies:
-      esbuild: 0.11.12
+      esbuild: 0.9.7
       jsonc-parser: 3.0.0
-    dev: true
-
-  /esbuild/0.11.12:
-    resolution: {integrity: sha512-c8cso/1RwVj+fbDvLtUgSG4ZJQ0y9Zdrl6Ot/GAjyy4pdMCHaFnDMts5gqFnWRPLajWtEnI+3hlET4R9fVoZng==}
-    hasBin: true
-    requiresBuild: true
     dev: true
 
   /esbuild/0.9.7:
@@ -8037,7 +8034,7 @@ packages:
       chalk: 4.1.1
       chokidar: 3.5.1
       debug: 4.3.1
-      esbuild: 0.11.12
+      esbuild: 0.9.7
       execa: 5.0.0
       globby: 11.0.3
       joycon: 3.0.1

@@ -32,5 +32,10 @@
     "vite-plugin-pwa": "^0.7.2",
     "vite-plugin-windicss": "^0.15.7",
     "vitepress": "^0.13.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.9.7"
+    }
   }
 }
