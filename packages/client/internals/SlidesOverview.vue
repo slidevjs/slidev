@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { computed, defineEmit, defineProps, provide, ref } from 'vue'
+import { computed, defineEmit, defineProps } from 'vue'
 import { breakpoints, windowSize } from '../state'
 import { go as goSlide, rawRoutes } from '../logic/nav'
 import SlideContainer from './SlideContainer.vue'

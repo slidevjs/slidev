@@ -1,0 +1,16 @@
+{
+  "name": "@slidev/types",
+  "version": "0.0.0-alpha.23",
+  "description": "Shared types declerations for Slidev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues"
+}

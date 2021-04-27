@@ -7,6 +7,8 @@ import RecordingDialog from './RecordingDialog.vue'
 
 <template>
   <SlidesOverview v-model="showOverview" />
-  <WebCamera />
-  <RecordingDialog v-model="showRecordingDialog"/>
+  <template v-if="__DEV__">
+    <WebCamera/>
+    <RecordingDialog v-model="showRecordingDialog" />
+  </template>
 </template>

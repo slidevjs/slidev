@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { defineEmit, defineProps, nextTick, ref } from 'vue'
+import { defineEmit, defineProps, nextTick } from 'vue'
 import { recorder, recordingName, recordCamera, getFilename } from '../logic/recording'
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'

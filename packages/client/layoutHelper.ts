@@ -8,7 +8,7 @@ export function handleBackground(background?: string, dim = false): CSSPropertie
       ? background
       : background
         ? undefined
-        : 'white',
+        : 'transparent',
     color: (background && !isColor)
       ? 'white'
       : undefined,

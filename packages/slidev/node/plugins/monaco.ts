@@ -44,3 +44,7 @@ export function transformMarkdownMonaco(code: string) {
 
   return code
 }
+
+export function truncateMancoMark(code: string) {
+  return code.replace(/{monaco.*?}/g, '')
+}

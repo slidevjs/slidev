@@ -13,14 +13,17 @@ import mila from 'markdown-it-link-attributes'
 import { notNullish } from '@antfu/utils'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
-import { createMonacoLoader, transformMarkdownMonaco } from './monaco'
+import { createMonacoLoader, transformMarkdownMonaco, truncateMancoMark } from './monaco'
 import { createEntryPlugin } from './entry'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 import { createSetupPlugin } from './setups'
 import VitePluginVueFactory, { VueFactoryResolver } from './factory'
 import VitePluginServerRef from './server-ref'
 
-export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
+export function ViteSlidevPlugin(
+  options: ResolvedSlidevOptions,
+  pluginOptions: SlidevPluginOptions,
+): Plugin[] {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},
@@ -31,12 +34,24 @@ export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: 
   } = pluginOptions
 
   const {
+    mode,
     themeRoots,
     clientRoot,
     data: { config },
   } = options
 
+  const DEV = mode === 'dev' ? 'true' : 'false'
+
   return [
+    <Plugin>{
+      name: 'transform',
+      enforce: 'pre',
+      transform(code, id) {
+        if (id.endsWith('.vue'))
+          return code.replaceAll('__DEV__', DEV)
+      },
+    },
+
     Vue({
       include: [/\.vue$/, /\.md$/],
       ...vueOptions,
@@ -61,19 +76,21 @@ export function ViteSlidevPlugin(options: ResolvedSlidevOptions, pluginOptions: 
         md.use(Prism)
       },
       transforms: {
-        before: transformMarkdownMonaco,
+        before: (config.monaco === true || (config.monaco === 'dev-only' && mode === 'dev'))
+          ? transformMarkdownMonaco
+          : truncateMancoMark,
       },
       ...mdOptions,
     }),
 
-    {
+    <Plugin>{
       name: 'slidev:vue-escape',
       enforce: 'post',
       transform(code, id) {
         if (id.endsWith('.md'))
           return code.replace(/\\{/g, '{')
       },
-    } as Plugin,
+    },
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],

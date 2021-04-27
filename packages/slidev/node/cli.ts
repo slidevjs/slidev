@@ -61,13 +61,17 @@ cli.command(
     async function initServer() {
       if (server)
         await server.close()
-      const options = await resolveOptions({ entry, theme })
+      const options = await resolveOptions({ entry, theme }, 'dev')
       server = (await createServer(
         options,
         {
           onDataReload(newData, data) {
             if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
-              console.log(yellow('\n  reloaded on theme change\n'))
+              console.log(yellow('\n  restarting on theme change\n'))
+              initServer()
+            }
+            else if (newData.config.monaco !== data.config.monaco) {
+              console.log(yellow('\n  restarting on config change\n'))
               initServer()
             }
           },
@@ -92,13 +96,22 @@ cli.command(
   'build [entry]',
   'Build hostable SPA',
   args => commonOptions(args)
+    .option('watch', {
+      alias: 'w',
+      default: false,
+      describe: 'build watch',
+    })
     .help(),
-  async(args) => {
-    console.log(yellow('[Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
+  async({ entry, theme, watch }) => {
+    console.log(yellow('  [Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
 
-    const options = await resolveOptions(args)
+    const options = await resolveOptions({ entry, theme }, 'build')
     printInfo(options)
-    await build(options)
+    await build(options, {}, {
+      build: {
+        watch: watch ? {} : undefined,
+      },
+    })
   },
 )
 
@@ -145,7 +158,7 @@ cli.command(
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
     const port = 12445
-    const options = await resolveOptions({ entry, theme })
+    const options = await resolveOptions({ entry, theme }, 'build')
     const server = await createServer(
       options,
       {},

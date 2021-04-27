@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed } from 'vue'
-import { total, currentPage, currentRoute, nextRoute, tab, tabElements, currentSlideId } from '../logic/nav'
+import { total, currentPage, currentRoute, nextRoute, tab, tabElements } from '../logic/nav'
 import { showOverview } from '../state'
+import { configs } from '../env'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
-// @ts-expect-error
-import configs from '/@slidev/configs'
 
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
@@ -36,7 +35,9 @@ const nextSlide = computed(() => {
     <div class="grid-section top flex">
       <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
       <div class="flex-auto" />
-      <div class="px-4 my-auto">{{ currentPage + 1 }} / {{ total }}</div>
+      <div class="px-4 my-auto">
+        {{ currentPage + 1 }} / {{ total }}
+      </div>
     </div>
     <div class="grid-section main flex flex-col p-4">
       <SlideContainer
@@ -59,7 +60,7 @@ const nextSlide = computed(() => {
       />
     </div>
     <div class="grid-section note">
-     <NoteEditor class="w-full h-full p-4 overflow-auto"/>
+      <NoteEditor class="w-full h-full p-4 overflow-auto" />
     </div>
     <div class="grid-section bottom">
       <NavControls mode="persist" />

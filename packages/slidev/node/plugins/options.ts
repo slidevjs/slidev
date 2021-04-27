@@ -6,8 +6,8 @@ import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType } from '@antfu/utils'
+import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '../parser'
-import { SlidevMarkdown } from '../parser'
 import { packageExists, promptForThemeInstallation, resolveThemeName } from '../themes'
 
 export interface SlidevEntryOptions {
@@ -39,6 +39,7 @@ export interface ResolvedSlidevOptions {
   clientRoot: string
   theme: string
   themeRoots: string[]
+  mode: 'dev' | 'build'
 }
 
 export interface SlidevPluginOptions extends SlidevEntryOptions {
@@ -68,7 +69,11 @@ export function getThemeRoots(name: string) {
   ]
 }
 
-export async function resolveOptions(options: SlidevEntryOptions, promptForInstallation = true): Promise<ResolvedSlidevOptions> {
+export async function resolveOptions(
+  options: SlidevEntryOptions,
+  mode: ResolvedSlidevOptions['mode'],
+  promptForInstallation = true,
+): Promise<ResolvedSlidevOptions> {
   const {
     entry = 'slides.md',
     userRoot = process.cwd(),
@@ -89,6 +94,7 @@ export async function resolveOptions(options: SlidevEntryOptions, promptForInsta
 
   return {
     data,
+    mode,
     entry: resolve(userRoot, entry),
     theme,
     userRoot,

@@ -32,7 +32,10 @@ function onClick(e: MouseEvent) {
         <NavControls />
       </template>
     </SlideContainer>
-    <Editor v-if="showEditor" />
+
+    <template v-if="__DEV__">
+      <Editor v-if="showEditor" />
+    </template>
   </div>
   <Controls />
 </template>

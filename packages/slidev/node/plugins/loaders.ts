@@ -6,6 +6,7 @@ import fg from 'fast-glob'
 import Markdown from 'markdown-it'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
+import { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '../parser'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 
@@ -52,7 +53,7 @@ md.use(mila, {
   },
 })
 
-function prepareSlideInfo(data: parser.SlideInfo): parser.SlideInfoExtended {
+function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
   return {
     ...data,
     notesHTML: md.render(data.note || ''),

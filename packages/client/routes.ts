@@ -1,5 +1,4 @@
 import { createRouter, RouteRecordRaw, createWebHistory } from 'vue-router'
-import Presenter from './internals/Presenter.vue'
 import Play from './internals/Play.vue'
 // @ts-expect-error
 import _rawRoutes from '/@slidev/routes'
@@ -7,11 +6,6 @@ import _rawRoutes from '/@slidev/routes'
 export const rawRoutes = _rawRoutes as RouteRecordRaw[]
 
 export const routes: RouteRecordRaw[] = [
-  {
-    name: 'presenter',
-    path: '/presenter/:no',
-    component: Presenter,
-  },
   {
     name: 'play',
     path: '/',
@@ -21,8 +15,21 @@ export const routes: RouteRecordRaw[] = [
     ],
   },
   { path: '', redirect: { path: '/0' } },
-  { path: '/presenter', redirect: { path: '/presenter/0' } },
 ]
+
+if (import.meta.env.DEV) {
+  routes.push(
+    {
+      name: 'presenter',
+      path: '/presenter/:no',
+      component: () => import('./internals/Presenter.vue'),
+    },
+    {
+      path: '/presenter',
+      redirect: { path: '/presenter/0' },
+    },
+  )
+}
 
 export const router = createRouter({
   history: createWebHistory(),

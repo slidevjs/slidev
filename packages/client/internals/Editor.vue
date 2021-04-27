@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener, useFetch } from '@vueuse/core'
+import { useEventListener } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
 import { activeElement, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'

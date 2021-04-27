@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useElementSize, useVModel } from '@vueuse/core'
-import { computed, defineProps, ref, watchEffect, inject, provide, defineEmit } from 'vue'
+import { computed, defineProps, ref, watchEffect, provide, defineEmit } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
 import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'

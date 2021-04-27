@@ -11,9 +11,7 @@ declare module '*.md' {
   export default component
 }
 
-// declare vue files as components
-declare module '*.vue' {
-  import { ComponentOptions } from 'vue'
-  const component: ComponentOptions
-  export default component
+declare module '/@slidev/configs' {
+  import { SlidevConfig } from '@slidev/types'
+  export default SlidevConfig
 }

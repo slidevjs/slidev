@@ -13,6 +13,7 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
     "@antfu/utils": "^0.1.0",
+    "@slidev/types": "workspace:*",
     "@vueuse/core": "^4.9.0",
     "@vueuse/head": "^0.5.1",
     "codemirror": "^5.61.0",

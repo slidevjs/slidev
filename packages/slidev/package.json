@@ -47,6 +47,7 @@
     "@antfu/utils": "^0.1.0",
     "@iconify/json": "^1.1.334",
     "@slidev/client": "workspace:*",
+    "@slidev/types": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
     "cli-progress": "^3.9.0",

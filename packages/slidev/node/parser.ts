@@ -1,42 +1,7 @@
 import { promises as fs } from 'fs'
 import matter from 'gray-matter'
 import YAML from 'js-yaml'
-
-export interface SlideInfo {
-  start: number
-  end: number
-  raw: string
-  content: string
-  note?: string
-  frontmatter: Record<string, any>
-}
-
-export interface SlideInfoExtended extends SlideInfo {
-  notesHTML: string
-}
-
-export interface ParseOptions {
-  /**
-   * Transform Monaco block
-   *
-   * @default true
-   */
-  enabledMonaco?: boolean
-}
-
-export interface SlidevConfig {
-  title: string
-  theme: string
-  remoteAssets: boolean
-}
-
-export interface SlidevMarkdown {
-  filepath?: string
-  slides: SlideInfo[]
-  options: ParseOptions
-  raw: string
-  config: SlidevConfig
-}
+import { ParseOptions, SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
 
 export async function load(
   filepath: string,
@@ -155,9 +120,10 @@ export function parse(
   const headmatter = slides?.[0].frontmatter || {}
   const config: SlidevConfig = Object.assign({}, headmatter.config || {})
 
-  config.theme ||= headmatter.theme || '@slidev/theme-default'
-  config.title ||= headmatter.title || (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
+  config.theme ??= headmatter.theme ?? 'default'
+  config.title ??= headmatter.title ?? (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
   config.remoteAssets ??= headmatter.remoteAssets ?? true
+  config.monaco ??= headmatter.monaco ?? 'dev-only'
 
   return {
     raw: markdown,

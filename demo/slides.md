@@ -873,20 +873,6 @@ export default {
 </v-clicks>
 </div>
 
-<script setup>
-import * as monaco from 'monaco-editor'
-
-monaco.languages.typescript.typescriptDefaults.addExtraLib(
-`
-import { InjectionKey } from 'vue'
-export interface UserInfo { id: number; name: string }
-export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
-`,
-  'file:///root/context.ts'
-);
-</script>
-
-
 ---
 
 # Shared State <MarkerPattern />

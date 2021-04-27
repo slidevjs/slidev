@@ -14,11 +14,11 @@ export async function build(
     await viteBuild(
       mergeConfig(
         viteConfig,
-        {
+        <InlineConfig>({
           plugins: [
             ViteSlidevPlugin(options, pluginOptions),
           ],
-        },
+        }),
       ),
     )
   }
