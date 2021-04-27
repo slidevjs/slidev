@@ -48,7 +48,7 @@ export function ViteSlidevPlugin(
       enforce: 'pre',
       transform(code, id) {
         if (id.endsWith('.vue'))
-          return code.replaceAll('__DEV__', DEV)
+          return code.replace(/__DEV__/g, DEV)
       },
     },
 
