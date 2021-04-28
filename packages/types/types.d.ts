@@ -11,15 +11,6 @@ export interface SlideInfoExtended extends SlideInfo {
   notesHTML: string
 }
 
-export interface ParseOptions {
-  /**
-   * Transform Monaco block
-   *
-   * @default true
-   */
-  enabledMonaco?: boolean
-}
-
 export interface SlidevConfig {
   title: string
   /**
@@ -39,7 +30,6 @@ export interface SlidevConfig {
 export interface SlidevMarkdown {
   filepath?: string
   slides: SlideInfo[]
-  options: ParseOptions
   raw: string
   config: SlidevConfig
 }

@@ -1,15 +1,12 @@
 import { promises as fs } from 'fs'
 import matter from 'gray-matter'
 import YAML from 'js-yaml'
-import { ParseOptions, SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
+import { SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
 
-export async function load(
-  filepath: string,
-  options?: ParseOptions,
-) {
+export async function load(filepath: string) {
   const markdown = await fs.readFile(filepath, 'utf-8')
 
-  return parse(markdown, filepath, options)
+  return parse(markdown, filepath)
 }
 
 export async function save(data: SlidevMarkdown, filepath?: string) {
@@ -61,7 +58,6 @@ export function prettify(data: SlidevMarkdown) {
 export function parse(
   markdown: string,
   filepath?: string,
-  options: ParseOptions = {},
 ): SlidevMarkdown {
   const lines = markdown.split(/\n/g)
   const slides: SlideInfo[] = []
@@ -129,7 +125,6 @@ export function parse(
     raw: markdown,
     filepath,
     slides,
-    options,
     config,
   }
 }
