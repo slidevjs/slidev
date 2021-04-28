@@ -1,5 +1,6 @@
 export * from './server'
 export * from './parser'
+export * from './utils'
 export * from './plugins/preset'
 export * from './plugins/options'
 export * from './plugins/windicss'

@@ -4,9 +4,11 @@ import { chromium } from 'playwright'
 import { PDFDocument } from 'pdf-lib'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
+import { getPagesByRange } from './utils'
 
 export interface ExportOptions {
-  pages: number
+  total: number
+  range?: string
   port?: number
   format?: 'pdf' | 'png'
   output?: string
@@ -51,10 +53,11 @@ function createSlidevProgress() {
 
 export async function exportSlides({
   port = 18724,
-  pages = 0,
+  total = 0,
+  range,
   format = 'pdf',
   output = 'slides',
-  timeout = 100,
+  timeout = 500,
 }: ExportOptions) {
   const browser = await chromium.launch()
   const context = await browser.newContext({
@@ -77,11 +80,13 @@ export async function exportSlides({
     await page.emulateMedia({ media: 'screen' })
   }
 
-  progress.start(pages)
+  const pages = getPagesByRange(total, range)
+
+  progress.start(pages.length)
 
   if (format === 'pdf') {
     const buffers: Buffer[] = []
-    for (let i = 0; i < pages; i++) {
+    for (const i of pages) {
       await go(i)
       const pdf = await page.pdf({
         width: 1920,
@@ -115,7 +120,7 @@ export async function exportSlides({
   }
   else if (format === 'png') {
     await fs.emptyDir(output)
-    for (let i = 0; i < pages; i++) {
+    for (const i of pages) {
       await go(i)
       await page.screenshot({
         omitBackground: false,

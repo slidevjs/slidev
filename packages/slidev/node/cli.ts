@@ -151,6 +151,10 @@ cli.command(
       type: 'number',
       describe: 'timeout for rendering each page',
     })
+    .option('range', {
+      type: 'string',
+      describe: 'page ranges to export, for example "1,4-5,6"',
+    })
     .help(),
   async({
     entry,
@@ -158,6 +162,7 @@ cli.command(
     output,
     format,
     timeout,
+    range,
   }) => {
     output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
@@ -178,12 +183,13 @@ cli.command(
     parser.filterDisabled(options.data)
     output = await exportSlides({
       port,
-      pages: options.data.slides.length,
+      total: options.data.slides.length,
+      range,
       format: format as any,
       output,
       timeout,
     })
-    console.log(`${green('  ✓ ')}exported to ./${output}\n`)
+    console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
     process.exit(0)
   },
