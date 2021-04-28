@@ -39,7 +39,7 @@ const slidebars = [
     children: [
       {
         text: 'Use Theme',
-        link: '/themes/',
+        link: '/themes/use',
       },
       {
         text: 'Theme Gallery',
@@ -110,8 +110,25 @@ module.exports = {
 
     nav: [
       { text: 'Guide', link: '/guide/' },
-      { text: 'Theme', link: '/themes/' },
+      {
+        text: 'Theme',
+        items: [
+          {
+            text: 'Use Theme',
+            link: '/themes/use',
+          },
+          {
+            text: 'Theme Gallery',
+            link: '/themes/gallery',
+          },
+          {
+            text: 'Write a Theme',
+            link: '/themes/write-a-theme',
+          },
+        ],
+      },
       { text: 'Customize', link: '/custom/' },
+      { text: 'Showcases', link: '/showcases' },
     ],
 
     sidebar: {
