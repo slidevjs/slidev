@@ -20,10 +20,6 @@ $ slidev export --format png
 
 ## Single-Page Application (SPA)
 
-> ⚗️ Experimental
-
-Since Slidev is a web app, there is no reason you can't host it.
-
 You can build the slides into a self hostable SPA by:
 
 ```bash
@@ -32,4 +28,10 @@ $ slidev build
 
 The dist will be available under `dist/` and then you can host them on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. And share your slides with the world with a single link.
 
-> Please note there are some issues on build mode with the Monaco integrations. We will focus on the overall features of Slidev and deal with it later.
+By default, it also generates a pdf file along with the build. And in the SPA, there will be a button for viewers to download the slides as PDF. If you don't want that, you can disable it by:
+
+```md
+---
+allow-download: false
+---
+```

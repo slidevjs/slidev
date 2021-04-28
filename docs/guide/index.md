@@ -49,6 +49,14 @@ In a project where Slidev is installed, you can use the `slidev` binary in your 
 }
 ```
 
+Or you can use it with [`npx`](https://www.npmjs.com/package/npx)
+
+```bash
+$ npx slidev
+```
+
+Run `slidev -h` for more options avaliable.
+
 ### Markdown Syntax
 
 Slidev reads your `slides.md` file under your project root and convert them into slides. Whenever you made changes to it, the content of slides will be updated immediately.
