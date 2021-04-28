@@ -28,9 +28,9 @@ async function start() {
 </script>
 
 <template>
-  <Modal v-model="value" class="p-4 recording-dialog flex flex-col gap-2">
-    <div class="flex leading-5 gap-2">
-      <carbon:video />Recording
+  <Modal v-model="value" class="px-6 py-4 recording-dialog flex flex-col gap-2">
+    <div class="flex gap-2 text-xl">
+      <carbon:video class="my-auto"/>Recording
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="flex flex-col gap-2 py-2">
@@ -66,7 +66,7 @@ async function start() {
       </div>
       <DevicesList />
     </div>
-    <div class="flex">
+    <div class="flex my-1">
       <button class="cancel" @click="close">
         Cancel
       </button>

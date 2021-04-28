@@ -29,7 +29,9 @@ function onClick(e: MouseEvent) {
       @click="onClick"
     >
       <template #controls>
-        <NavControls />
+        <div class="absolute bottom-0 left-0 p-2 transition duration-300 opacity-0 hover:opacity-100">
+          <NavControls class="rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)"/>
+        </div>
       </template>
     </SlideContainer>
 

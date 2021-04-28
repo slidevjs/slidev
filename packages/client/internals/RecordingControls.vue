@@ -61,7 +61,7 @@ function toggleRecording() {
     </button>
     <DevicesList
       v-if="showDevicesList && !recording"
-      class="bg-main rounded shadow bottom-10 left-0 z-20 absolute"
+      class="bottom-10 left-0 z-20 absolute rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)"
     />
   </div>
 </template>

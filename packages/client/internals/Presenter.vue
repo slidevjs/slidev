@@ -63,7 +63,7 @@ const nextSlide = computed(() => {
       <NoteEditor class="w-full h-full p-4 overflow-auto" />
     </div>
     <div class="grid-section bottom">
-      <NavControls mode="persist" />
+      <NavControls/>
     </div>
   </div>
   <SlidesOverview v-model="showOverview" />

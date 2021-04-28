@@ -25,10 +25,7 @@ function downloadPDF() {
 </script>
 
 <template>
-  <nav
-    class="bg-transparent flex text-xl py-2 pr-4 pl-2 transition text-gray-400 gap-1 duration-300"
-    :class="mode === 'fixed' ? 'absolute bottom-0 left-0 rounded-tr opacity-0 hover:(shadow bg-main opacity-100)' : ''"
-  >
+  <nav class="flex text-xl p-2 text-gray-600 dark:text-gray-300 gap-1">
     <button class="icon-btn" @click="toggleFullscreen">
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
@@ -51,20 +48,24 @@ function downloadPDF() {
       <carbon-sun v-else />
     </button>
 
+    <div class="w-1px m-2 opacity-10 bg-current"></div>
+
     <template v-if="__DEV__">
-      <button v-if="!isPresenter" class="icon-btn" @click="showEditor = !showEditor">
-        <carbon:edit />
-      </button>
-
-      <a v-if="!isPresenter" :href="presenterLink" class="icon-btn" title="Presenter Mode">
-        <carbon:user-speaker />
-      </a>
-
       <a v-if="isPresenter" :href="nonPresenterLink" class="icon-btn" title="Play Mode">
         <carbon:presentation-file />
       </a>
 
       <RecordingControls v-if="!isPresenter" />
+
+      <div class="w-1px m-2 opacity-10 bg-current"></div>
+
+      <a v-if="!isPresenter" :href="presenterLink" class="icon-btn" title="Presenter Mode">
+        <carbon:user-speaker />
+      </a>
+
+      <button v-if="!isPresenter" class="icon-btn" @click="showEditor = !showEditor">
+        <carbon:edit />
+      </button>
     </template>
     <template v-else>
       <button v-if="configs.allowDownload" class="icon-btn" @click="downloadPDF">

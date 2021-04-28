@@ -29,7 +29,7 @@ function onClick(e: MouseEvent) {
     @click="onClick"
   >
     <div
-      class="m-auto bg-main rounded shadow"
+      class="m-auto rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)w"
       :class="props.class"
     >
       <slot />

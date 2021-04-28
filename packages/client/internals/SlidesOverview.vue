@@ -64,7 +64,7 @@ const cardWidth = computed(() => {
           class="absolute top-0 opacity-50"
           :style="`left: ${cardWidth + 5}px`"
         >
-          {{ idx }}
+          {{ idx + 1 }}
         </div>
       </div>
     </div>
