@@ -4,7 +4,7 @@
 
 [build]
   publish = "docs/.vitepress/dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx esno ./scripts/netlify.ts && npx pnpm run docs:build"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm i --store=node_modules/.pnpm-store -D chromium && npx esno ./scripts/netlify.ts && npx pnpm run docs:build"
 
 [[redirects]]
   from = "/demo/compsoable-vue/*"
