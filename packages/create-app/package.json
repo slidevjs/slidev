@@ -16,9 +16,9 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "enquirer": "^2.3.6",
     "execa": "^5.0.0",
     "kolorist": "^1.4.1",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "prompts": "^2.4.1"
   }
 }

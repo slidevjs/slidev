@@ -5,7 +5,7 @@
 const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv.slice(2))
-const { prompt } = require('enquirer')
+const prompts = require('prompts')
 const execa = require('execa')
 const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
 const { version } = require('./package.json')
@@ -28,7 +28,7 @@ async function init() {
     /**
      * @type {{ projectName: string }}
      */
-    const { projectName } = await prompt({
+    const { projectName } = await prompts({
       type: 'input',
       name: 'projectName',
       message: 'Project name:',
@@ -49,7 +49,7 @@ async function init() {
       /**
        * @type {{ yes: boolean }}
        */
-      const { yes } = await prompt({
+      const { yes } = await prompts({
         type: 'confirm',
         name: 'yes',
         initial: 'Y',
@@ -99,7 +99,7 @@ async function init() {
   /**
    * @type {{ yes: boolean }}
    */
-  const { yes } = await prompt({
+  const { yes } = await prompts({
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
@@ -133,6 +133,7 @@ function copy(src, dest) {
 }
 
 async function getValidPackageName(projectName) {
+  projectName = path.basename(projectName)
   const packageNameRegExp = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
   if (packageNameRegExp.test(projectName)) {
     return projectName
@@ -148,8 +149,8 @@ async function getValidPackageName(projectName) {
     /**
      * @type {{ inputPackageName: string }}
      */
-    const { inputPackageName } = await prompt({
-      type: 'input',
+    const { inputPackageName } = await prompts({
+      type: 'text',
       name: 'inputPackageName',
       message: 'Package name:',
       initial: suggestedPackageName,

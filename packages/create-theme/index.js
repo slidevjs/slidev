@@ -5,10 +5,9 @@
 const fs = require('fs')
 const path = require('path')
 const argv = require('minimist')(process.argv.slice(2))
-const { prompt } = require('enquirer')
+const prompts = require('prompts')
 const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
 const { version } = require('./package.json')
-const { basename } = require('path')
 
 const cwd = process.cwd()
 
@@ -28,7 +27,7 @@ async function init() {
     /**
      * @type {{ name: string }}
      */
-    const { name } = await prompt({
+    const { name } = await prompts({
       type: 'input',
       name: 'name',
       message: 'Theme name:',
@@ -49,7 +48,7 @@ async function init() {
       /**
        * @type {{ yes: boolean }}
        */
-      const { yes } = await prompt({
+      const { yes } = await prompts({
         type: 'confirm',
         name: 'yes',
         initial: 'Y',
@@ -130,7 +129,7 @@ function copy(src, dest) {
 }
 
 function getValidPackageName(projectName) {
-  projectName = basename(projectName)
+  projectName = path.basename(projectName)
   if (!projectName.startsWith('slidev-theme-'))
     return `slidev-theme-${projectName}`
   return projectName

@@ -91,25 +91,25 @@ importers:
 
   packages/create-app:
     specifiers:
-      enquirer: ^2.3.6
       execa: ^5.0.0
       kolorist: ^1.4.1
       minimist: ^1.2.5
+      prompts: ^2.4.1
     dependencies:
-      enquirer: 2.3.6
       execa: 5.0.0
       kolorist: 1.4.1
       minimist: 1.2.5
+      prompts: 2.4.1
 
   packages/create-theme:
     specifiers:
-      enquirer: ^2.3.6
       kolorist: ^1.4.1
       minimist: ^1.2.5
+      prompts: ^2.4.1
     dependencies:
-      enquirer: 2.3.6
       kolorist: 1.4.1
       minimist: 1.2.5
+      prompts: 2.4.1
 
   packages/slidev:
     specifiers:
@@ -4827,7 +4827,6 @@ packages:
   /kleur/3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
-    dev: true
 
   /kolorist/1.4.1:
     resolution: {integrity: sha512-jucnNxW4qfamxkbT4hCLRk/WyAQD/aS0KIkY8z5VoQI5K9QF65nj7vTeuFcySO7eibxPQwVWM+mby1Hm9TyokQ==}
@@ -5827,7 +5826,6 @@ packages:
     dependencies:
       kleur: 3.0.3
       sisteransi: 1.0.5
-    dev: true
 
   /prop-types/15.7.2:
     resolution: {integrity: sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==}
@@ -6323,7 +6321,6 @@ packages:
 
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
-    dev: true
 
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
