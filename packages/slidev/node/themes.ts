@@ -21,7 +21,7 @@ export function resolveThemeName(name: string) {
     return ''
   if (name.startsWith('@slidev/theme-') || name.startsWith('slidev-theme-'))
     return name
-  if (officialThemes[name])
+  if (officialThemes[name] !== null)
     return officialThemes[name]
 
   return `slidev-theme-${name}`

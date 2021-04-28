@@ -101,6 +101,16 @@ importers:
       kolorist: 1.4.1
       minimist: 1.2.5
 
+  packages/create-theme:
+    specifiers:
+      enquirer: ^2.3.6
+      kolorist: ^1.4.1
+      minimist: ^1.2.5
+    dependencies:
+      enquirer: 2.3.6
+      kolorist: 1.4.1
+      minimist: 1.2.5
+
   packages/slidev:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
