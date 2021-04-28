@@ -5,6 +5,7 @@ import { getClientRoot, ResolvedSlidevOptions } from './options'
 
 const EXCLUDE = [
   'theme-vitesse',
+  '@slidev/types',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {

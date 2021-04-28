@@ -7,8 +7,13 @@
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run docs:build"
 
 [[redirects]]
-  from = "/demo/*"
-  to = "/demo/index.html"
+  from = "/demo/compsoable-vue/*"
+  to = "/demo/compsoable-vue/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo/starter/*"
+  to = "/demo/starter/index.html"
   status = 200
 
 [[redirects]]

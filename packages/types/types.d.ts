@@ -23,8 +23,8 @@ export interface ParseOptions {
 export interface SlidevConfig {
   title: string
   theme: string
-  remoteAssets: boolean | 'dev-only'
-  monaco: boolean | 'dev-only'
+  remoteAssets: boolean | 'dev'
+  monaco: boolean | 'dev'
 }
 
 export interface SlidevMarkdown {

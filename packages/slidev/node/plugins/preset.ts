@@ -44,11 +44,20 @@ export function ViteSlidevPlugin(
 
   return [
     <Plugin>{
-      name: 'transform',
+      name: 'slidev:flags',
       enforce: 'pre',
       transform(code, id) {
         if (id.endsWith('.vue'))
           return code.replace(/__DEV__/g, DEV)
+      },
+    },
+
+    <Plugin>{
+      name: 'slidev:vue-escape',
+      enforce: 'post',
+      transform(code, id) {
+        if (id.endsWith('.md'))
+          return code.replace(/\\{/g, '{')
       },
     },
 
@@ -76,21 +85,12 @@ export function ViteSlidevPlugin(
         md.use(Prism)
       },
       transforms: {
-        before: (config.monaco === true || (config.monaco === 'dev-only' && mode === 'dev'))
+        before: (config.monaco === true || config.monaco === mode)
           ? transformMarkdownMonaco
           : truncateMancoMark,
       },
       ...mdOptions,
     }),
-
-    <Plugin>{
-      name: 'slidev:vue-escape',
-      enforce: 'post',
-      transform(code, id) {
-        if (id.endsWith('.md'))
-          return code.replace(/\\{/g, '{')
-      },
-    },
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],
@@ -135,7 +135,7 @@ export function ViteSlidevPlugin(
       },
     ),
 
-    ((config.remoteAssets === true) || (config.remoteAssets === 'dev-only' && mode === 'dev'))
+    (config.remoteAssets === true || config.remoteAssets === mode)
       ? RemoteAssets({
         rules: [
           ...DefaultRules,
