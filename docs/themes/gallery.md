@@ -1,8 +1,12 @@
+---
+sidebar: false
+---
+
 # Themes Gallery
 
 Browser awesome themes available for Slidev here.
 
-Read more about [how to use a theme](/themes/), or [write one your own](/themes/write-a-theme) and share with the community!
+Read more about [how to use a theme](/themes/use), or [write one your own](/themes/write-a-theme) and share with the community!
 
 ## Official Themes
 

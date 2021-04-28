@@ -126,4 +126,4 @@ background: 'https://source.unsplash.com/1600x900/?nature,water'
 This is the cover page.
 ```
 
-For more details about using a theme, refer to [this section](/themes/).
+For more details about using a theme, refer to [this section](/themes/use).

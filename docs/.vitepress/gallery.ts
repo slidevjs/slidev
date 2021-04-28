@@ -25,6 +25,7 @@ export const official: ThemeInfo[] = [
     description: 'The minimalism default theme for Slidev',
     author: {
       name: 'Anthony Fu',
+      link: 'https://github.com/antfu',
     },
     repo: 'https://github.com/slidevjs/slidev/tree/main/packages/theme-default',
     previews: [
@@ -43,6 +44,7 @@ export const official: ThemeInfo[] = [
     description: 'A more formal looking theme using Serif fonts',
     author: {
       name: 'Anthony Fu',
+      link: 'https://github.com/antfu',
     },
     repo: 'https://github.com/slidevjs/slidev/tree/main/packages/theme-seriph',
     previews: [

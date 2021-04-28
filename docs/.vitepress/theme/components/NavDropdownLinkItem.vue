@@ -1,8 +1,8 @@
 <template>
   <div class="nav-dropdown-link-item">
     <a class="item" v-bind="linkProps">
-      <span class="arrow" />
-      <span class="text">{{ item.text }}</span>
+      <!-- <span class="arrow" /> -->
+      <span class="text md:ml-2">{{ item.text }}</span>
       <span class="icon"><OutboundLink v-if="isExternal" /></span>
     </a>
   </div>
@@ -30,6 +30,7 @@ const { props: linkProps, isExternal } = useNavLink(propsRefs.item)
   line-height: 32px;
   font-size: 0.9rem;
   font-weight: 500;
+  color: var(--c-text);
   white-space: nowrap;
 }
 
@@ -39,12 +40,13 @@ const { props: linkProps, isExternal } = useNavLink(propsRefs.item)
     line-height: 32px;
     font-size: 0.85rem;
     font-weight: 500;
+    color: var(--c-text);
     white-space: nowrap;
   }
 
-  /* .item.active .arrow {
+  .item.active .arrow {
     opacity: 1;
-  } */
+  }
 }
 
 .item:hover,
@@ -55,6 +57,7 @@ const { props: linkProps, isExternal } = useNavLink(propsRefs.item)
 
 .item.external:hover {
   border-bottom-color: transparent;
+  color: var(--c-text);
 }
 
 @media (min-width: 720px) {
