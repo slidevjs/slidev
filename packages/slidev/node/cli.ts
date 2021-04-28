@@ -1,11 +1,10 @@
 import path from 'path'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
-import { prompt } from 'enquirer'
+import prompts from 'prompts'
 import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import { version } from '../package.json'
-import { build } from './build'
 import { createServer } from './server'
 import * as parser from './parser'
 import { ResolvedSlidevOptions, resolveOptions } from './plugins/options'
@@ -43,12 +42,15 @@ cli.command(
     })
     .help(),
   async({ entry, theme, port, open, log }) => {
+    if (!fs.existsSync(entry) && !entry.endsWith('.md'))
+      entry = `${entry}.md`
+
     if (!fs.existsSync(entry)) {
-      const { create } = await prompt<{create: boolean}>({
+      const { create } = await prompts({
         name: 'create',
         type: 'confirm',
         initial: 'Y',
-        message: `Entry file ${entry} does not exist, do you want to create it?`,
+        message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
       })
       if (create)
         await fs.copyFile(path.resolve(__dirname, '../template.md'), entry)
@@ -112,6 +114,8 @@ cli.command(
     })
     .help(),
   async({ entry, theme, watch, base, allowDownload }) => {
+    const { build } = await import('./build')
+
     const options = await resolveOptions({ entry, theme }, 'build')
     if (allowDownload)
       options.data.config.allowDownload = allowDownload

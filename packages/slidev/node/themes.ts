@@ -1,4 +1,4 @@
-import { prompt } from 'enquirer'
+import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 
 const officialThemes: Record<string, string> = {
@@ -35,7 +35,7 @@ export async function promptForThemeInstallation(name: string) {
   if (packageExists(name))
     return name
 
-  const { confirm } = await prompt<{ confirm: boolean }>({
+  const { confirm } = await prompts({
     name: 'confirm',
     initial: 'Y',
     type: 'confirm',

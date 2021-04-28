@@ -11,6 +11,7 @@ export interface ExportOptions {
   total: number
   range?: string
   port?: number
+  base?: string
   format?: 'pdf' | 'png'
   output?: string
   timeout?: number
@@ -58,6 +59,7 @@ export async function exportSlides({
   range,
   format = 'pdf',
   output = 'slides',
+  base = '/',
   timeout = 500,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
@@ -76,7 +78,7 @@ export async function exportSlides({
 
   async function go(no: number) {
     progress.update(no + 1)
-    await page.goto(`http://localhost:${port}/${no}?print`, {
+    await page.goto(`http://localhost:${port}${base}${no}?print`, {
       waitUntil: 'networkidle',
     })
     await page.waitForTimeout(timeout)

@@ -134,6 +134,7 @@ importers:
       '@types/minimist': ^1.2.1
       '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
+      '@types/prompts': ^2.0.10
       '@types/recordrtc': ^5.6.5
       '@types/yargs': ^16.0.1
       '@typescript-eslint/eslint-plugin': ^4.22.0
@@ -143,7 +144,6 @@ importers:
       codemirror: ^5.61.0
       connect: ^3.7.0
       cross-env: ^7.0.3
-      enquirer: ^2.3.6
       eslint: ^7.25.0
       esno: ^0.5.0
       fast-glob: ^3.2.5
@@ -158,6 +158,7 @@ importers:
       pdf-lib: ^1.16.0
       playwright-chromium: ^1.10.0
       pnpm: ^6.2.2
+      prompts: ^2.4.1
       rimraf: ^3.0.2
       sirv: ^1.0.11
       tsup: ^4.10.1
@@ -181,7 +182,6 @@ importers:
       cli-progress: 3.9.0
       codemirror: 5.61.0
       connect: 3.7.0
-      enquirer: 2.3.6
       fast-glob: 3.2.5
       fs-extra: 9.1.0
       js-base64: 3.6.0
@@ -192,6 +192,7 @@ importers:
       markdown-it-prism: 2.1.6
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
+      prompts: 2.4.1
       sirv: 1.0.11
       vite: 2.2.3
       vite-plugin-components: 0.8.4_vite@2.2.3
@@ -214,6 +215,7 @@ importers:
       '@types/minimist': 1.2.1
       '@types/node': 15.0.1
       '@types/prettier': 2.2.3
+      '@types/prompts': 2.0.10
       '@types/recordrtc': 5.6.5
       '@types/yargs': 16.0.1
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
@@ -1255,6 +1257,12 @@ packages:
     resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
     dev: true
 
+  /@types/prompts/2.0.10:
+    resolution: {integrity: sha512-W3PEl3l4vmxdgfY6LUG7ysh+mLJOTOFYmSpiLe6MCo1OdEm8b5s6ZJfuTQgEpYNwcMiiaRzJespPS5Py2tqLlQ==}
+    dependencies:
+      '@types/node': 15.0.1
+    dev: true
+
   /@types/recordrtc/5.6.5:
     resolution: {integrity: sha512-4FF77kV/VTnEM7lB018sr70IKl1e1rbRpXuv1G3t7Ty7Z5HGRDehH2xq9cxvTNn18DDSkm0D5gwU5CpfwiPuDQ==}
     dev: true
@@ -1668,6 +1676,7 @@ packages:
   /ansi-colors/4.1.1:
     resolution: {integrity: sha512-JoX0apGbHaUJBNl6yF+p6JAFYZ666/hhCGKN5t9QFjbJQKUU/g8MNbFDbvfrgKXvI1QpZplPOnwIo99lX/AAmA==}
     engines: {node: '>=6'}
+    dev: true
 
   /ansi-escapes/4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}
@@ -2769,6 +2778,7 @@ packages:
     engines: {node: '>=8.6'}
     dependencies:
       ansi-colors: 4.1.1
+    dev: true
 
   /entities/2.0.3:
     resolution: {integrity: sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==}

@@ -57,6 +57,7 @@ export async function build(
       total: options.data.slides.length,
       format: 'pdf',
       output: join(config.build.outDir, 'slidev-exported.pdf'),
+      base: config.base,
     })
     server.close()
   }
