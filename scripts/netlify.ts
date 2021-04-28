@@ -40,7 +40,7 @@ try {
 }
 catch (requireError) {
   console.log('Chromium is not available, attempting to download')
-  run(`npx ni -D ${PACKAGE_NAME}`)
+  run(`npx pnpm i --store=node_modules/.pnpm-store -D ${PACKAGE_NAME}`)
   chromiumPath = getChromiumPath()
 }
 
