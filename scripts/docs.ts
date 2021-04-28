@@ -9,7 +9,7 @@ run('mkdir docs/public/demo')
 
 run('npm run build')
 
-run('npx slidev build build.md --base /demo/composable-vue/', path.resolve(__dirname, '../demo'))
+run('npx slidev build slides.md --base /demo/composable-vue/', path.resolve(__dirname, '../demo'))
 run('cp -R demo/dist docs/public/demo/composable-vue')
 
 run('cp packages/create-app/template/slides.md demo/build.md')
