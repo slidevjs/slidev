@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { execSync } from 'child_process'
 import { readFileSync, writeFileSync } from 'fs'
-
-function run(command: string) {
-  execSync(command, { stdio: 'inherit' })
-}
+import { run } from './run'
 
 run('npx bumpp package.json packages/*/package.json --preid alpha')
 const version = require('../package.json').version
