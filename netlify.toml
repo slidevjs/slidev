@@ -6,9 +6,6 @@
   publish = "docs/.vitepress/dist"
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run docs:build"
 
-[[plugins]]
-  package = "netlify-plugin-cache"
-
 [[redirects]]
   from = "/demo/compsoable-vue*"
   to = "/demo/compsoable-vue/index.html"
