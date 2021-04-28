@@ -36,10 +36,10 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "peerDependencies": {
-    "playwright": "^1.10.0"
+    "playwright-chromium": "^1.10.0"
   },
   "peerDependenciesMeta": {
-    "playwright": {
+    "playwright-chromium": {
       "optional": true
     }
   },
@@ -93,7 +93,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.25.0",
     "esno": "^0.5.0",
-    "playwright": "^1.10.0",
+    "playwright-chromium": "^1.10.0",
     "pnpm": "^6.2.2",
     "rimraf": "^3.0.2",
     "tsup": "^4.10.1",

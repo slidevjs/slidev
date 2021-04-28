@@ -105,11 +105,17 @@ cli.command(
       type: 'string',
       describe: 'output base',
     })
+    .option('allowDownload', {
+      alias: 'd',
+      type: 'boolean',
+      describe: 'allow download as PDF',
+    })
     .help(),
-  async({ entry, theme, watch, base }) => {
-    console.log(yellow('  [Slidev] the SPA build is experimental, recommend to use dev server instead at this moment.'))
-
+  async({ entry, theme, watch, base, allowDownload }) => {
     const options = await resolveOptions({ entry, theme }, 'build')
+    if (allowDownload)
+      options.data.config.allowDownload = allowDownload
+
     printInfo(options)
     await build(options, {}, {
       base,

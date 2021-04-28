@@ -19,7 +19,7 @@ importers:
       esno: ^0.5.0
       execa: ^5.0.0
       jest: ^26.6.3
-      playwright: ^1.10.0
+      playwright-chromium: ^1.10.0
       pnpm: ^6.2.2
       ts-jest: ^26.5.5
       typescript: ^4.2.4
@@ -41,7 +41,7 @@ importers:
       esno: 0.5.0
       execa: 5.0.0
       jest: 26.6.3
-      playwright: 1.10.0
+      playwright-chromium: 1.10.0
       pnpm: 6.2.2
       ts-jest: 26.5.5_jest@26.6.3+typescript@4.2.4
       typescript: 4.2.4
@@ -156,7 +156,7 @@ importers:
       markdown-it-prism: ^2.1.6
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
-      playwright: ^1.10.0
+      playwright-chromium: ^1.10.0
       pnpm: ^6.2.2
       rimraf: ^3.0.2
       sirv: ^1.0.11
@@ -220,7 +220,7 @@ importers:
       cross-env: 7.0.3
       eslint: 7.25.0
       esno: 0.5.0
-      playwright: 1.10.0
+      playwright-chromium: 1.10.0
       pnpm: 6.2.2
       rimraf: 3.0.2
       tsup: 4.10.1_typescript@4.2.4
@@ -5705,8 +5705,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /playwright/1.10.0:
-    resolution: {integrity: sha512-b7SGBcCPq4W3pb4ImEDmNXtO0ZkJbZMuWiShsaNJd+rGfY/6fqwgllsAojmxGSgFmijYw7WxCoPiAIEDIH16Kw==}
+  /playwright-chromium/1.10.0:
+    resolution: {integrity: sha512-ry/60/YKGJfrnaS7j5C3+xmA2DAMv6pBE351FoTHe4Llq0WU92IL0rBYK3TkK3PzSHYtp1KdCRsRjDnJhImA3g==}
     engines: {node: '>=10.17.0'}
     hasBin: true
     requiresBuild: true
