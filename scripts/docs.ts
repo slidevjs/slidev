@@ -1,8 +1,8 @@
-import { execSync } from 'child_process'
 import path from 'path'
+import execa from 'execa'
 
 function run(command: string, cwd?: string) {
-  execSync(command, { stdio: 'inherit', cwd })
+  execa.commandSync(command, { stdio: 'inherit', cwd })
 }
 
 run('npx vitepress build docs')
@@ -10,6 +10,7 @@ run('npx vitepress build docs')
 run('npm run build')
 
 run('cp packages/create-app/template/slides.md demo/build.md')
+run('cp -R packages/create-app/template/public demo')
 
 run('npx slidev build build.md --base /demo/', path.resolve(__dirname, '../demo'))
 
