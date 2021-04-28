@@ -43,9 +43,6 @@
     </Page>
   </div>
 
-  <ClientOnly>
-    <ReloadPrompt />
-  </ClientOnly>
   <!-- <Debug /> -->
 </template>
 
@@ -70,7 +67,6 @@ const route = useRoute()
 const siteData = useSiteData<DefaultTheme.Config>()
 const siteRouteData = useSiteDataByRoute()
 const theme = computed(() => siteData.value.themeConfig)
-const page = usePageData()
 
 const AlgoliaSearchBox = defineAsyncComponent(
   () => import('./components/AlgoliaSearchBox.vue'),
