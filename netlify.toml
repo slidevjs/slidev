@@ -1,6 +1,7 @@
 [build.environment]
   NPM_FLAGS = "--prefix=/dev/null"
   NODE_VERSION = "14"
+  PLAYWRIGHT_BROWSERS_PATH = 0
 
 [build]
   publish = "docs/.vitepress/dist"

@@ -1,9 +1,5 @@
 import path from 'path'
-import execa from 'execa'
-
-function run(command: string, cwd?: string) {
-  execa.commandSync(command, { stdio: 'inherit', cwd })
-}
+import { run } from './run'
 
 run('mkdir docs/public/demo')
 
