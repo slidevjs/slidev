@@ -1,5 +1,5 @@
-import { execSync } from 'child_process'
+import execa from 'execa'
 
 export function run(command: string) {
-  execSync(command, { stdio: 'inherit' })
+  execa.commandSync(command, { stdio: 'inherit' })
 }
