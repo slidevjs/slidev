@@ -22,8 +22,17 @@ export interface ParseOptions {
 
 export interface SlidevConfig {
   title: string
+  /**
+   * @defult 'default'
+   */
   theme: string
-  remoteAssets: boolean | 'dev'
+  /**
+   * @defult true
+   */
+  remoteAssets: boolean | 'dev' | 'build'
+  /**
+   * @defult 'dev'
+   */
   monaco: boolean | 'dev'
 }
 

@@ -145,6 +145,7 @@ export function ViteSlidevPlugin(
           },
         ],
         resolveMode: '@fs',
+        awaitDownload: mode === 'build',
         ...remoteAssetsOptions,
       })
       : null,

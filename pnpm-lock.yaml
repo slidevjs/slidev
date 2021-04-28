@@ -151,13 +151,13 @@ importers:
       playwright: ^1.10.0
       pnpm: ^6.2.2
       rimraf: ^3.0.2
-      tsup: ^4.10.0
+      tsup: ^4.10.1
       typescript: ^4.2.4
       vite: ^2.2.3
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.3
-      vite-plugin-remote-assets: ^0.1.5
+      vite-plugin-remote-assets: ^0.2.0
       vite-plugin-windicss: ^0.15.7
       vue: ^3.0.11
       windicss: ^2.5.14
@@ -186,7 +186,7 @@ importers:
       vite-plugin-components: 0.8.4_vite@2.2.3
       vite-plugin-icons: 0.5.0_68285259574601e84c8dff0f86e760ff
       vite-plugin-md: 0.6.3_vite@2.2.3
-      vite-plugin-remote-assets: 0.1.5_vite@2.2.3
+      vite-plugin-remote-assets: 0.2.0_vite@2.2.3
       vite-plugin-windicss: 0.15.7_vite@2.2.3
       vue: 3.0.11
       windicss: 2.5.14
@@ -211,7 +211,7 @@ importers:
       playwright: 1.10.0
       pnpm: 6.2.2
       rimraf: 3.0.2
-      tsup: 4.10.0_typescript@4.2.4
+      tsup: 4.10.1_typescript@4.2.4
       typescript: 4.2.4
 
   packages/theme-default:
@@ -1805,6 +1805,14 @@ packages:
   /aws4/1.11.0:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
     dev: true
+
+  /axios/0.21.1_debug@4.3.2:
+    resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
+    dependencies:
+      follow-redirects: 1.13.3_debug@4.3.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /babel-jest/26.6.3_@babel+core@7.13.15:
     resolution: {integrity: sha512-pl4Q+GAVOHwvjrck6jKjvmGhnO3jHX/xuB9d27f+EJZ/6k+6nMuPjorrYp7s++bKKdANwzElBWnLWaObvTnaZA==}
@@ -6820,8 +6828,8 @@ packages:
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
-  /tsup/4.10.0_typescript@4.2.4:
-    resolution: {integrity: sha512-tD1htOPqqKr5VBAy4U9qtbNUDck8wrPoEcACZFH9djDnPWMRwUnSkleUk/vAJAO0igrWv2BlsIGvyWMPIi5dqA==}
+  /tsup/4.10.1_typescript@4.2.4:
+    resolution: {integrity: sha512-QP4Hg48V/0Vosts5FK72CN3ERves0cXhVy5zKWKYxZO7mN/uuWOqUUF1cvAxqTKt17dpLaKFvlZ/OD7x1L2T/g==}
     hasBin: true
     peerDependencies:
       typescript: ^4.2.3
@@ -7102,13 +7110,13 @@ packages:
       vite: 2.2.3
     dev: false
 
-  /vite-plugin-remote-assets/0.1.5_vite@2.2.3:
-    resolution: {integrity: sha512-DHJwf4GeY3xe63BGixCwMbDoBbvTlO5yt2C2ckOX+ak8jXEKoqmmcLzCWNi8mdZt+9qH9nmCT5fEmIECiNXkxg==}
+  /vite-plugin-remote-assets/0.2.0_vite@2.2.3:
+    resolution: {integrity: sha512-wfU2IHzh61fQS0L6MZh0PEr/af2x/01gaN5m7GQ6CTrMJ2ieJqKNMhDqtrJzIGhpiyz/nPtTKeOnNxU+3SE7MA==}
     peerDependencies:
       vite: ^2.0.0
     dependencies:
+      axios: 0.21.1_debug@4.3.2
       debug: 4.3.2
-      follow-redirects: 1.13.3_debug@4.3.2
       fs-extra: 9.1.0
       magic-string: 0.25.7
       vite: 2.2.3
