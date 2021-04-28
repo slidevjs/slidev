@@ -144,7 +144,7 @@ export function ViteSlidevPlugin(
             ext: '.png',
           },
         ],
-        resolveMode: '@fs',
+        resolveMode: id => id.endsWith('index.html') ? 'relative' : '@fs',
         awaitDownload: mode === 'build',
         ...remoteAssetsOptions,
       })

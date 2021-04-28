@@ -4,6 +4,7 @@ import { computed, defineProps } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
 import { showOverview, showEditor } from '../state'
+import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 
 defineProps({
@@ -16,6 +17,11 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
+
+function downloadPDF() {
+  import('file-saver')
+    .then(i => i.saveAs(`${import.meta.env.BASE_URL}slidev-exported.pdf`, `${configs.title}.pdf`))
+}
 </script>
 
 <template>
@@ -59,6 +65,11 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
       </a>
 
       <RecordingControls v-if="!isPresenter" />
+    </template>
+    <template v-else>
+      <button v-if="configs.allowDownload" class="icon-btn" @click="downloadPDF">
+        <carbon:download />
+      </button>
     </template>
   </nav>
 </template>

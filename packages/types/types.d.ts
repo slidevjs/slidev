@@ -25,6 +25,10 @@ export interface SlidevConfig {
    * @defult 'dev'
    */
   monaco: boolean | 'dev'
+  /**
+   * @default true
+   */
+  allowDownload: boolean
 }
 
 export interface SlidevMarkdown {

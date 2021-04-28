@@ -17,6 +17,7 @@
     "@vueuse/core": "^4.9.0",
     "@vueuse/head": "^0.5.1",
     "codemirror": "^5.61.0",
+    "file-saver": "^2.0.5",
     "js-base64": "^3.6.0",
     "js-yaml": "^3.14.1",
     "monaco-editor": "^0.23.0",

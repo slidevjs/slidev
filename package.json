@@ -15,6 +15,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
     "@antfu/utils": "^0.1.1",
+    "@types/file-saver": "^2.0.2",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
