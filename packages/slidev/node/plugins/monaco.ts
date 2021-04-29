@@ -1,6 +1,6 @@
 import { Plugin, resolvePackageData } from 'vite'
 import base64 from 'js-base64'
-import { isTruthy } from '@slidev/client/node_modules/@antfu/utils/dist'
+import { isTruthy } from '@antfu/utils'
 
 export function createMonacoLoader(): Plugin {
   return {
