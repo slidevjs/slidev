@@ -12,7 +12,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "@antfu/utils": "^0.1.1",
+    "@antfu/utils": "^0.1.2",
     "@slidev/types": "workspace:*",
     "@vueuse/core": "^4.9.1",
     "@vueuse/head": "^0.5.1",

@@ -19,7 +19,8 @@
     ],
     "paths": {
       "@slidev/client/*": ["./packages/client/*"],
-      "@slidev/types": ["./packages/types/index.d.ts"]
+      "@slidev/types": ["./packages/types/index.d.ts"],
+      "@slidev/parser": ["./packages/parser/src/index.ts"]
     }
   },
   "include": [

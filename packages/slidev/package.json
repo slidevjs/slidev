@@ -44,9 +44,10 @@
     }
   },
   "dependencies": {
-    "@antfu/utils": "^0.1.1",
+    "@antfu/utils": "^0.1.2",
     "@iconify/json": "^1.1.335",
     "@slidev/client": "workspace:*",
+    "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.11",
@@ -70,34 +71,9 @@
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.3",
     "vite-plugin-remote-assets": "^0.2.0",
-    "vite-plugin-windicss": "^0.16.0-beta.3",
+    "vite-plugin-windicss": "^0.16.0-beta.4",
     "vue": "^3.0.11",
     "windicss": "^2.5.14",
     "yargs": "^16.2.0"
-  },
-  "devDependencies": {
-    "@antfu/eslint-config": "^0.6.4",
-    "@antfu/ni": "^0.5.8",
-    "@types/cli-progress": "^3.9.1",
-    "@types/codemirror": "^0.0.109",
-    "@types/connect": "^3.4.34",
-    "@types/fs-extra": "^9.0.11",
-    "@types/js-yaml": "^3",
-    "@types/markdown-it": "^12.0.1",
-    "@types/minimist": "^1.2.1",
-    "@types/node": "^15.0.1",
-    "@types/prettier": "^2.2.3",
-    "@types/prompts": "^2.4.0",
-    "@types/recordrtc": "^5.6.5",
-    "@types/yargs": "^16.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^7.25.0",
-    "esno": "^0.5.0",
-    "playwright-chromium": "^1.10.0",
-    "pnpm": "^6.2.3",
-    "rimraf": "^3.0.2",
-    "tsup": "^4.10.1",
-    "typescript": "^4.2.4"
   }
 }

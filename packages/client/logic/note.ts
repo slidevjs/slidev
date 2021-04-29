@@ -1,6 +1,6 @@
 import { MaybeRef, useFetch } from '@vueuse/core'
 import { computed, ref, Ref, unref } from 'vue'
-import type { SlideInfo, SlideInfoExtended } from '../../slidev/node/parser'
+import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 
 export interface UseSlideInfo{
   info: Ref<SlideInfoExtended | undefined>

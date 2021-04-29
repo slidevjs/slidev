@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import matter from 'gray-matter'
 import YAML from 'js-yaml'
+import { objectPick } from '@antfu/utils'
 import { SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
 
 export async function load(filepath: string) {
@@ -121,7 +122,19 @@ export function parse(
     slice(lines.length - 1)
 
   const headmatter = slides?.[0].frontmatter || {}
-  const config: SlidevConfig = Object.assign({}, headmatter.config || {})
+  const defaultConfig: SlidevConfig = {
+    theme: 'default',
+    title: (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim(),
+    remoteAssets: true,
+    monaco: 'dev',
+    download: false,
+    info: true,
+  }
+  const config: SlidevConfig = Object.assign(
+    defaultConfig,
+    headmatter.config || {},
+    objectPick(headmatter, Object.keys(defaultConfig)),
+  )
 
   config.theme ??= headmatter.theme ?? 'default'
   config.title ??= headmatter.title ?? (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()

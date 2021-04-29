@@ -14,11 +14,17 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
-    "@antfu/utils": "^0.1.1",
+    "@antfu/ni": "^0.5.8",
+    "@antfu/utils": "^0.1.2",
+    "@types/cli-progress": "^3.9.1",
     "@types/file-saver": "^2.0.2",
+    "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",
+    "@types/js-yaml": "^3.0.0",
+    "@types/markdown-it": "^12.0.1",
     "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
+    "@types/prompts": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@vueuse/core": "^4.9.1",
     "bumpp": "^6.0.6",
@@ -30,9 +36,11 @@
     "jest": "^26.6.3",
     "playwright-chromium": "^1.10.0",
     "pnpm": "^6.2.3",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.5.5",
+    "tsup": "^4.10.1",
     "typescript": "^4.2.4",
-    "vite-plugin-windicss": "^0.16.0-beta.3",
+    "vite-plugin-windicss": "^0.16.0-beta.4",
     "vitepress": "^0.13.2"
   }
 }

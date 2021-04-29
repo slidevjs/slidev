@@ -5,11 +5,17 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
-      '@antfu/utils': ^0.1.1
+      '@antfu/ni': ^0.5.8
+      '@antfu/utils': ^0.1.2
+      '@types/cli-progress': ^3.9.1
       '@types/file-saver': ^2.0.2
+      '@types/fs-extra': ^9.0.11
       '@types/jest': ^26.0.23
+      '@types/js-yaml': ^3.0.0
+      '@types/markdown-it': ^12.0.1
       '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
+      '@types/prompts': ^2.0.10
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vueuse/core': ^4.9.1
       bumpp: ^6.0.6
@@ -21,17 +27,25 @@ importers:
       jest: ^26.6.3
       playwright-chromium: ^1.10.0
       pnpm: ^6.2.3
+      rimraf: ^3.0.2
       ts-jest: ^26.5.5
+      tsup: ^4.10.1
       typescript: ^4.2.4
-      vite-plugin-windicss: ^0.16.0-beta.3
+      vite-plugin-windicss: ^0.16.0-beta.4
       vitepress: ^0.13.2
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
-      '@antfu/utils': 0.1.1
+      '@antfu/ni': 0.5.8
+      '@antfu/utils': 0.1.2
+      '@types/cli-progress': 3.9.1
       '@types/file-saver': 2.0.2
+      '@types/fs-extra': 9.0.11
       '@types/jest': 26.0.23
+      '@types/js-yaml': 3.12.6
+      '@types/markdown-it': 12.0.1
       '@types/node': 15.0.1
       '@types/prettier': 2.2.3
+      '@types/prompts': 2.0.10
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
       '@vueuse/core': 4.9.1
       bumpp: 6.0.6
@@ -43,9 +57,11 @@ importers:
       jest: 26.6.3
       playwright-chromium: 1.10.0
       pnpm: 6.2.3
+      rimraf: 3.0.2
       ts-jest: 26.5.5_jest@26.6.3+typescript@4.2.4
+      tsup: 4.10.1_typescript@4.2.4
       typescript: 4.2.4
-      vite-plugin-windicss: 0.16.0-beta.3
+      vite-plugin-windicss: 0.16.0-beta.4
       vitepress: 0.13.2
 
   demo:
@@ -63,7 +79,7 @@ importers:
 
   packages/client:
     specifiers:
-      '@antfu/utils': ^0.1.1
+      '@antfu/utils': ^0.1.2
       '@slidev/types': workspace:*
       '@vueuse/core': ^4.9.1
       '@vueuse/head': ^0.5.1
@@ -79,7 +95,7 @@ importers:
       vue-router: ^4.0.6
       windicss: ^2.5.14
     dependencies:
-      '@antfu/utils': 0.1.1
+      '@antfu/utils': 0.1.2
       '@slidev/types': link:../types
       '@vueuse/core': 4.9.1_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
@@ -117,35 +133,26 @@ importers:
       minimist: 1.2.5
       prompts: 2.4.1
 
+  packages/parser:
+    specifiers:
+      gray-matter: ^4.0.3
+      js-yaml: ^3.14.1
+    dependencies:
+      gray-matter: 4.0.3
+      js-yaml: 3.14.1
+
   packages/slidev:
     specifiers:
-      '@antfu/eslint-config': ^0.6.4
-      '@antfu/ni': ^0.5.8
-      '@antfu/utils': ^0.1.1
+      '@antfu/utils': ^0.1.2
       '@iconify/json': ^1.1.335
       '@slidev/client': workspace:*
+      '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
-      '@types/cli-progress': ^3.9.1
-      '@types/codemirror': ^0.0.109
-      '@types/connect': ^3.4.34
-      '@types/fs-extra': ^9.0.11
-      '@types/js-yaml': ^3
-      '@types/markdown-it': ^12.0.1
-      '@types/minimist': ^1.2.1
-      '@types/node': ^15.0.1
-      '@types/prettier': ^2.2.3
-      '@types/prompts': ^2.4.0
-      '@types/recordrtc': ^5.6.5
-      '@types/yargs': ^16.0.1
-      '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vitejs/plugin-vue': ^1.2.2
       '@vue/compiler-sfc': ^3.0.11
       cli-progress: ^3.9.0
       codemirror: ^5.61.0
       connect: ^3.7.0
-      cross-env: ^7.0.3
-      eslint: ^7.25.0
-      esno: ^0.5.0
       fast-glob: ^3.2.5
       fs-extra: ^9.1.0
       js-base64: ^3.6.0
@@ -156,26 +163,22 @@ importers:
       markdown-it-prism: ^2.1.6
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
-      playwright-chromium: ^1.10.0
-      pnpm: ^6.2.3
       prompts: ^2.4.1
-      rimraf: ^3.0.2
       sirv: ^1.0.11
-      tsup: ^4.10.1
-      typescript: ^4.2.4
       vite: ^2.2.3
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.3
       vite-plugin-remote-assets: ^0.2.0
-      vite-plugin-windicss: ^0.16.0-beta.3
+      vite-plugin-windicss: ^0.16.0-beta.4
       vue: ^3.0.11
       windicss: ^2.5.14
       yargs: ^16.2.0
     dependencies:
-      '@antfu/utils': 0.1.1
+      '@antfu/utils': 0.1.2
       '@iconify/json': 1.1.335
       '@slidev/client': link:../client
+      '@slidev/parser': link:../parser
       '@slidev/types': link:../types
       '@vitejs/plugin-vue': 1.2.2_@vue+compiler-sfc@3.0.11
       '@vue/compiler-sfc': 3.0.11_vue@3.0.11
@@ -199,34 +202,10 @@ importers:
       vite-plugin-icons: 0.5.0_68285259574601e84c8dff0f86e760ff
       vite-plugin-md: 0.6.3_vite@2.2.3
       vite-plugin-remote-assets: 0.2.0_vite@2.2.3
-      vite-plugin-windicss: 0.16.0-beta.3_vite@2.2.3
+      vite-plugin-windicss: 0.16.0-beta.4_vite@2.2.3
       vue: 3.0.11
       windicss: 2.5.14
       yargs: 16.2.0
-    devDependencies:
-      '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
-      '@antfu/ni': 0.5.8
-      '@types/cli-progress': 3.9.1
-      '@types/codemirror': 0.0.109
-      '@types/connect': 3.4.34
-      '@types/fs-extra': 9.0.11
-      '@types/js-yaml': 3.12.6
-      '@types/markdown-it': 12.0.1
-      '@types/minimist': 1.2.1
-      '@types/node': 15.0.1
-      '@types/prettier': 2.2.3
-      '@types/prompts': 2.4.0
-      '@types/recordrtc': 5.6.5
-      '@types/yargs': 16.0.1
-      '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
-      cross-env: 7.0.3
-      eslint: 7.25.0
-      esno: 0.5.0
-      playwright-chromium: 1.10.0
-      pnpm: 6.2.3
-      rimraf: 3.0.2
-      tsup: 4.10.1_typescript@4.2.4
-      typescript: 4.2.4
 
   packages/theme-default:
     specifiers:
@@ -429,8 +408,8 @@ packages:
     hasBin: true
     dev: true
 
-  /@antfu/utils/0.1.1:
-    resolution: {integrity: sha512-dX7MxgC0ySyeOcqLFU1Pd6QNr/aa3vn/vuyESFb3OmMsUPQrUdrCzfno1tvWpsRW4sKfzAI8Wb51zcxguaKLjA==}
+  /@antfu/utils/0.1.2:
+    resolution: {integrity: sha512-K0/7dm3+egRIGlQeykgfBbPCs6WDgmKLWvmqY5dWj4aZTRqPy3ViTq7n3YDjRICkad+NAedQD8GmabNsXXScSw==}
 
   /@arr/every/1.0.1:
     resolution: {integrity: sha512-UQFQ6SgyJ6LX42W8rHCs8KVc0JS0tzVL9ct4XYedJukskYVWTo49tNiMEK9C2HTyarbNiT/RVIRSY82vH+6sTg==}
@@ -1143,23 +1122,7 @@ packages:
   /@types/cli-progress/3.9.1:
     resolution: {integrity: sha512-X/tKJv/GoYlCBS9wwJTLrVSxzIOI/Cj1cCatYOAAoQne3aT1QbHBptBS5+zLe2ToSljAijHU1N/ouBNFvZ2H/g==}
     dependencies:
-      '@types/node': 14.14.41
-    dev: true
-
-  /@types/codemirror/0.0.109:
-    resolution: {integrity: sha512-cSdiHeeLjvGn649lRTNeYrVCDOgDrtP+bDDSFDd1TF+i0jKGPDRozno2NOJ9lTniso+taiv4kiVS8dgM8Jm5lg==}
-    dependencies:
-      '@types/tern': 0.23.3
-    dev: true
-
-  /@types/connect/3.4.34:
-    resolution: {integrity: sha512-ePPA/JuI+X0vb+gSWlPKOY0NdNAie/rPUqX2GUPpbZwiKTkSPhjXWuee47E4MtE54QVzGCQMQkAL6JhV2E1+cQ==}
-    dependencies:
       '@types/node': 15.0.1
-    dev: true
-
-  /@types/estree/0.0.47:
-    resolution: {integrity: sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==}
     dev: true
 
   /@types/file-saver/2.0.2:
@@ -1169,7 +1132,7 @@ packages:
   /@types/fs-extra/9.0.11:
     resolution: {integrity: sha512-mZsifGG4QeQ7hlkhO56u7zt/ycBgGxSVsFI/6lGTU34VtwkiqrrSDgw0+ygs8kFGWcXnFQWMrzF2h7TtDFNixA==}
     dependencies:
-      '@types/node': 14.14.41
+      '@types/node': 15.0.1
     dev: true
 
   /@types/graceful-fs/4.1.5:
@@ -1233,10 +1196,6 @@ packages:
     resolution: {integrity: sha512-eC4U9MlIcu2q0KQmXszyn5Akca/0jrQmwDRgpAMJai7qBWq4amIQhZyNau4VYGtCeALvW1/NtjzJJ567aZxfKA==}
     dev: true
 
-  /@types/minimist/1.2.1:
-    resolution: {integrity: sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==}
-    dev: true
-
   /@types/node/14.14.41:
     resolution: {integrity: sha512-dueRKfaJL4RTtSa7bWeTK1M+VH+Gns73oCgzvYfHZywRCoPSd8EkXBL0mZ9unPTveBn+D9phZBaxuzpwjWkW0g==}
     dev: true
@@ -1257,22 +1216,14 @@ packages:
     resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
     dev: true
 
-  /@types/prompts/2.4.0:
-    resolution: {integrity: sha512-7th8Opn+0XlN0O6qzO7dXOPwL6rigq/EwRS2DntaTHwSw8cLaYKeAPt5dWEKHSL+ffVSUl1itTPUC06+FlsV4Q==}
-    dev: true
-
-  /@types/recordrtc/5.6.5:
-    resolution: {integrity: sha512-4FF77kV/VTnEM7lB018sr70IKl1e1rbRpXuv1G3t7Ty7Z5HGRDehH2xq9cxvTNn18DDSkm0D5gwU5CpfwiPuDQ==}
+  /@types/prompts/2.0.10:
+    resolution: {integrity: sha512-W3PEl3l4vmxdgfY6LUG7ysh+mLJOTOFYmSpiLe6MCo1OdEm8b5s6ZJfuTQgEpYNwcMiiaRzJespPS5Py2tqLlQ==}
+    dependencies:
+      '@types/node': 15.0.1
     dev: true
 
   /@types/stack-utils/2.0.0:
     resolution: {integrity: sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==}
-    dev: true
-
-  /@types/tern/0.23.3:
-    resolution: {integrity: sha512-imDtS4TAoTcXk0g7u4kkWqedB3E4qpjXzCpD2LU5M5NAXHzCDsypyvXSaG7mM8DKYkCRa7tFp4tS/lp/Wo7Q3w==}
-    dependencies:
-      '@types/estree': 0.0.47
     dev: true
 
   /@types/yargs-parser/20.2.0:
@@ -1281,12 +1232,6 @@ packages:
 
   /@types/yargs/15.0.13:
     resolution: {integrity: sha512-kQ5JNTrbDv3Rp5X2n/iUu37IJBDU2gsZ5R/g1/KHOOEc5IKfUFjXT6DENPGduh08I/pamwtEq4oul7gUqKTQDQ==}
-    dependencies:
-      '@types/yargs-parser': 20.2.0
-    dev: true
-
-  /@types/yargs/16.0.1:
-    resolution: {integrity: sha512-x4HABGLyzr5hKUzBC9dvjciOTm11WVH1NWonNjGgxapnTHu5SWUqyqn0zQ6Re0yQU0lsQ6ztLCoMAKDGZflyxA==}
     dependencies:
       '@types/yargs-parser': 20.2.0
     dev: true
@@ -1558,8 +1503,8 @@ packages:
       - vue
     dev: false
 
-  /@windicss/plugin-utils/0.16.0-beta.3:
-    resolution: {integrity: sha512-77v4h4d3aBlqqLEPwiotp/MDUGZvZxQuEkh4GtjhCYg5TL0dWQUiZudgWetFXencmqq8++l548Y+NowXg6nb3g==}
+  /@windicss/plugin-utils/0.16.0-beta.4:
+    resolution: {integrity: sha512-hyI0iIyznrpWI3O+HDi6YGVi+O5/1B2ekXKMAa+CNBYBKsJWxgXDXNJwOz6mzT8PO4vVHkgIbcUo0MAbQJIvwA==}
     dependencies:
       debug: 4.3.2
       fast-glob: 3.2.5
@@ -1567,7 +1512,7 @@ packages:
       micromatch: 4.0.4
       pirates: 4.0.1
       sucrase: 3.18.1
-      windicss: 3.0.0-beta.1
+      windicss: 3.0.0-beta.3
     transitivePeerDependencies:
       - supports-color
 
@@ -2065,8 +2010,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /cac/6.7.2:
-    resolution: {integrity: sha512-w0bH1IF9rEjdi0a6lTtlXYT+vBZEJL9oytaXXRdsD68MH6+SrZGOGsu7s2saHQvYXqwo/wBdkW75tt8wFpj+mw==}
+  /cac/6.7.3:
+    resolution: {integrity: sha512-ECVqVZh74qgSuZG9YOt2OJPI3wGcf+EwwuF/XIOYqZBD0KZYLtgPWqFPxmDPQ6joxI1nOlvVgRV6VT53Ooyocg==}
     engines: {node: '>=8'}
     dev: true
 
@@ -2827,15 +2772,15 @@ packages:
       is-symbol: 1.0.3
     dev: true
 
-  /esbuild-register/2.4.0:
-    resolution: {integrity: sha512-1mWroad5Mz8fqMxd0GfmEWoAuRBSsBObLVp5rpFOQSavUNgyhR5NoVlECrDcE2iineekoTsBeNS9QxKvqKvNjw==}
+  /esbuild-register/2.5.0:
+    resolution: {integrity: sha512-5a8W3rH7IQbIPR9pPXJFkC3+CRMtm/OSpBz3hkWUUU63oPZ3NU6dVDGfaIjKnRizCTIRoGjNE6KEDt5p1sLwEw==}
     dependencies:
-      esbuild: 0.11.15
+      esbuild: 0.11.16
       jsonc-parser: 3.0.0
     dev: true
 
-  /esbuild/0.11.15:
-    resolution: {integrity: sha512-Hh40byWZZgYbiLhcoOWiOUIy8yUYQeCEA4F9feWytToD2jGfJ1X4VPf5dsqj6vRL29H3YmFqZsxIJa5q0ifB3g==}
+  /esbuild/0.11.16:
+    resolution: {integrity: sha512-34ZWjo4ouvM5cDe7uRoM9GFuMyEmpH9fnVYmomvS1cq9ED9d/0ZG1r+p4P2VbX7ihjv36zA2SWTmP8Zmt/EANA==}
     hasBin: true
     requiresBuild: true
     dev: true
@@ -3173,7 +3118,7 @@ packages:
     hasBin: true
     dependencies:
       esbuild: 0.9.7
-      esbuild-register: 2.4.0
+      esbuild-register: 2.5.0
     dev: true
 
   /espree/6.2.1:
@@ -3694,6 +3639,16 @@ packages:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
+
+  /gray-matter/4.0.3:
+    resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
+    engines: {node: '>=6.0'}
+    dependencies:
+      js-yaml: 3.14.1
+      kind-of: 6.0.3
+      section-matter: 1.0.0
+      strip-bom-string: 1.0.0
+    dev: false
 
   /growly/1.3.0:
     resolution: {integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=}
@@ -6226,6 +6181,14 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
+  /rollup/2.46.0:
+    resolution: {integrity: sha512-qPGoUBNl+Z8uNu0z7pD3WPTABWRbcOwIrO/5ccDJzmrtzn0LVf6Lj91+L5CcWhXl6iWf23FQ6m8Jkl2CmN1O7Q==}
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /rsvp/4.8.5:
     resolution: {integrity: sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==}
     engines: {node: 6.* || >= 7.*}
@@ -6910,17 +6873,17 @@ packages:
       typescript:
         optional: true
     dependencies:
-      cac: 6.7.2
+      cac: 6.7.3
       chalk: 4.1.1
       chokidar: 3.5.1
       debug: 4.3.1
-      esbuild: 0.11.15
+      esbuild: 0.11.16
       execa: 5.0.0
       globby: 11.0.3
       joycon: 3.0.1
       postcss-load-config: 3.0.1
       resolve-from: 5.0.0
-      rollup: 2.45.2
+      rollup: 2.46.0
       sucrase: 3.18.1
       tree-kill: 1.2.2
       typescript: 4.2.4
@@ -7207,29 +7170,29 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss/0.16.0-beta.3:
-    resolution: {integrity: sha512-U2h9KHdzZ85UzUNnPXLFNe6QA2a2g87iGeRWAecspL2Co6Nyc9q/kVe0YNPUYzgmxoOLeSKdrp+6+t34lpuUcg==}
+  /vite-plugin-windicss/0.16.0-beta.4:
+    resolution: {integrity: sha512-SIaUeLoQCvPhFzN/KJ7cm9hg4zNH+OwAGhVjUpQG0EyMwVD0x4PtUvwnLi/tq4kBhhhO9at0bSpfm13wO5rDvA==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.16.0-beta.3
+      '@windicss/plugin-utils': 0.16.0-beta.4
       chalk: 4.1.1
       debug: 4.3.2
-      windicss: 3.0.0-beta.1
+      windicss: 3.0.0-beta.3
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite-plugin-windicss/0.16.0-beta.3_vite@2.2.3:
-    resolution: {integrity: sha512-U2h9KHdzZ85UzUNnPXLFNe6QA2a2g87iGeRWAecspL2Co6Nyc9q/kVe0YNPUYzgmxoOLeSKdrp+6+t34lpuUcg==}
+  /vite-plugin-windicss/0.16.0-beta.4_vite@2.2.3:
+    resolution: {integrity: sha512-SIaUeLoQCvPhFzN/KJ7cm9hg4zNH+OwAGhVjUpQG0EyMwVD0x4PtUvwnLi/tq4kBhhhO9at0bSpfm13wO5rDvA==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.16.0-beta.3
+      '@windicss/plugin-utils': 0.16.0-beta.4
       chalk: 4.1.1
       debug: 4.3.2
       vite: 2.2.3
-      windicss: 3.0.0-beta.1
+      windicss: 3.0.0-beta.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -7440,8 +7403,8 @@ packages:
     hasBin: true
     dev: false
 
-  /windicss/3.0.0-beta.1:
-    resolution: {integrity: sha512-06fFMIj+OeW76snT8MVxcHH254nk5sDcm9Z26nJpi/Veau8NkML3QQy/IT1GgyGwy//j4IBJCX5uV/2ftjBCOQ==}
+  /windicss/3.0.0-beta.3:
+    resolution: {integrity: sha512-oA7/yL2BiQalQff0e4lbLMCpVUGzMH3jdQpQecnSpkqeOrB9U74fiJWJtkkiEqvg2iQvzk+FBA9qFVAtwftUSA==}
     engines: {node: '>= 12'}
     hasBin: true
 
