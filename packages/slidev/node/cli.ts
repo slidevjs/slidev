@@ -1,4 +1,5 @@
 import path from 'path'
+import http from 'http'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import prompts from 'prompts'
@@ -24,7 +25,6 @@ cli.command(
   args => commonOptions(args)
     .option('port', {
       alias: 'p',
-      default: 3030,
       type: 'number',
       describe: 'port',
     })
@@ -64,6 +64,7 @@ cli.command(
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, theme }, 'dev')
+      port = port || await findFreePort(3030)
       server = (await createServer(
         options,
         {
@@ -184,7 +185,7 @@ cli.command(
     output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
-    const port = 12445
+    const port = await findFreePort(12445)
     const options = await resolveOptions({ entry, theme }, 'build')
     const server = await createServer(
       options,
@@ -195,7 +196,7 @@ cli.command(
         clearScreen: false,
       },
     )
-    await server.listen()
+    await server.listen(port)
     printInfo(options)
     parser.filterDisabled(options.data)
     output = await exportSlides({
@@ -243,4 +244,23 @@ function printInfo(options: ResolvedSlidevOptions, port?: number) {
   }
   console.log()
   console.log()
+}
+
+function isPortFree(port: number) {
+  return new Promise((resolve) => {
+    const server = http.createServer()
+      .listen(port, () => {
+        server.close()
+        resolve(true)
+      })
+      .on('error', () => {
+        resolve(false)
+      })
+  })
+}
+
+async function findFreePort(start: number): Promise<number> {
+  if (await isPortFree(start))
+    return start
+  return findFreePort(start + 1)
 }
