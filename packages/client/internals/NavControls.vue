@@ -4,7 +4,7 @@ import { computed, defineProps } from 'vue'
 import { isString } from '@antfu/utils'
 import { isDark, toggleDark } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
-import { showOverview, showEditor } from '../state'
+import { showOverview, showEditor, showInfoDialog } from '../state'
 import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 
@@ -76,6 +76,9 @@ async function downloadPDF() {
     <template v-else>
       <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
         <carbon:download />
+      </button>
+      <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
+        <carbon:information />
       </button>
     </template>
   </nav>

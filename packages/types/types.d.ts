@@ -26,9 +26,16 @@ export interface SlidevConfig {
    */
   monaco: boolean | 'dev'
   /**
+   * Show a download button in the SPA build,
+   * could also be a link to custom pdf
+   *
    * @default true
    */
   download: boolean | string
+  /**
+   * @default true
+   */
+  info: boolean
 }
 
 export interface SlidevMarkdown {

@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 export const showOverview = ref(false)
 export const showEditor = ref(false)
 export const showRecordingDialog = ref(false)
+export const showInfoDialog = ref(true)
 
 export const query = useUrlSearchParams()
 export const breakpoints = useBreakpoints(breakpointsTailwind)
