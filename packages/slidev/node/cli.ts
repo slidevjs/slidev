@@ -1,5 +1,6 @@
 import path from 'path'
 import http from 'http'
+import os from 'os'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import prompts from 'prompts'
@@ -239,8 +240,16 @@ function printInfo(options: ResolvedSlidevOptions, port?: number) {
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
   if (port) {
     console.log()
-    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}/presenter`)}`)
     console.log(`${dim('  slide show     ')} > ${cyan(`http://localhost:${bold(port)}/`)}`)
+    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}/presenter`)}`)
+
+    Object.values(os.networkInterfaces())
+      .forEach(v => (v || [])
+        .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
+        .forEach(({ address }) => {
+          console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}/presenter`)}`)
+        }),
+      )
   }
   console.log()
   console.log()
