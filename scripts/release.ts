@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { readFileSync, writeFileSync } from 'fs'
-import { run } from './run'
+import { run, runArgs } from './run'
 
 run('npx bumpp package.json packages/*/package.json --preid alpha')
 const version = require('../package.json').version
@@ -12,7 +12,7 @@ pkg.dependencies['@slidev/cli'] = `^${version}`
 writeFileSync('packages/create-app/template/package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
 run('git add .')
-run(`git commit -m 'chore: release v${version}'`)
+runArgs('git', ['commit', '-m', `chore: release v${version}`])
 // run(`git tag "v${version}"`)
 // run('git push --follow-tags')
 run('git push')
