@@ -121,7 +121,7 @@ export function parse(
   config.remoteAssets ??= headmatter.remoteAssets ?? true
   config.monaco ??= headmatter.monaco ?? 'dev'
   config.download ??= headmatter.download ?? false
-  config.info ??= headmatter.info ?? false
+  config.info ??= headmatter.info ?? true
 
   return {
     raw: markdown,
