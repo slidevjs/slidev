@@ -108,6 +108,13 @@ export function parse(
         }
       }
     }
+    // skip code block
+    else if (line.startsWith('```')) {
+      for (i += 1; i < lines.length; i++) {
+        if (lines[i].startsWith('```'))
+          break
+      }
+    }
   }
 
   if (start !== lines.length - 1)

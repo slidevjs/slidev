@@ -98,7 +98,6 @@ module.exports = {
     ['link', { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }],
     ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
     ['link', { href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;400;500&family=Inter:wght@200;400;500;600', rel: 'stylesheet' }],
-    ['script', { async: true, src: 'https://platform.twitter.com/widgets.js', charset: 'utf-8' }],
   ],
   themeConfig: {
     repo: 'slidevjs/slidev',

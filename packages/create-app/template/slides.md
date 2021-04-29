@@ -93,6 +93,62 @@ function updateUser(id: number, update: Partial<User>) {
 ```
 
 ---
+
+# Components
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+You can use Vue components directly inside your slides.
+
+We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly use. And add your custom components are also super easy.
+
+Check out [the guides](https://slidev.antfu.me/custom/#components) for more.
+
+</div>
+<div>
+
+```html
+<Tweet id="1385774635015307265" />
+```
+
+<Tweet id="1385774635015307265" scale="0.65" />
+
+</div>
+</div>
+
+---
+class: "px-20"
+---
+
+# Themes
+
+Slidev come with a powerful theming support. Themes are able to provide styles, layouts, components or even tools configurations. Switching between themes by just **one edit** in your frontmatter:
+
+<div grid="~ cols-2 gap-2" m="-t-2">
+
+```yml
+---
+theme: default
+---
+```
+
+```yml
+---
+theme: seriph
+---
+```
+
+<img border="rounded" src="https://slidev.antfu.me/themes/default.png">
+
+<img border="rounded" src="https://slidev.antfu.me/themes/seriph.png">
+
+</div>
+
+Read more about [How to use a theme](https://slidev.antfu.me/themes/use.html) and
+check out the [Awesome Themes Gallery](https://slidev.antfu.me/themes/gallery.html).
+
+---
 layout: center
 class: "text-center"
 ---
