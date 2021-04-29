@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, defineProps, watch, computed } from 'vue'
+import { ref, onUnmounted, defineProps, watch, computed, getCurrentInstance, onMounted } from 'vue'
 import { ignorableWatch } from '@vueuse/core'
 import { decode } from 'js-base64'
 import type * as monaco from 'monaco-editor'
@@ -60,8 +60,15 @@ const ext = computed(() => {
   }
 })
 
+const vm = getCurrentInstance()!
+
 setupMonaco()
   .then(({ monaco }) => {
+    if (!vm.isMounted)
+      return new Promise<typeof monaco>(resolve => onMounted(() => resolve(monaco)))
+    return monaco
+  })
+  .then((monaco) => {
     const model = monaco.editor.createModel(
       code.value,
       lang.value,

@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue'
-import { and, not, whenever } from '@vueuse/core'
+import { computed, Ref, ref } from 'vue'
+import { and, not, SwipeDirection, timestamp, useSwipe, whenever } from '@vueuse/core'
 import { isInputing, magicKeys, query } from '../state'
 import { rawRoutes, router } from '../routes'
 
@@ -75,3 +75,30 @@ whenever(and(magicKeys.right, shortcutEnabled), next)
 whenever(and(magicKeys.left, shortcutEnabled), prev)
 whenever(and(magicKeys.up, shortcutEnabled), prevSlide)
 whenever(and(magicKeys.down, shortcutEnabled), nextSlide)
+
+export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
+  const swipeBegin = ref(0)
+  const { direction, lengthX, lengthY } = useSwipe(root, {
+    onSwipeStart() {
+      swipeBegin.value = timestamp()
+    },
+    onSwipeEnd() {
+      if (!swipeBegin.value)
+        return
+      const x = Math.abs(lengthX.value)
+      const y = Math.abs(lengthY.value)
+      if (x / window.innerWidth > 0.3 || x > 100) {
+        if (direction.value === SwipeDirection.LEFT)
+          next()
+        else
+          prev()
+      }
+      else if (y / window.innerHeight > 0.4 || y > 200) {
+        if (direction.value === SwipeDirection.DOWN)
+          prevSlide()
+        else
+          nextSlide()
+      }
+    },
+  })
+}
