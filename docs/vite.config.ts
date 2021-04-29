@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { UserConfig } from 'vite'
 import Icons, { ViteIconsResolver } from 'vite-plugin-icons'
 import Components from 'vite-plugin-components'
@@ -11,6 +12,7 @@ const config: UserConfig = {
       '@vueuse/core',
     ],
   },
+  publicDir: resolve(__dirname, '../assets'),
   server: {
     hmr: {
       overlay: false,
