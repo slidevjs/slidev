@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SwipeDirection, useSwipe } from '@vueuse/core'
+import { SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
 import { ref } from 'vue'
 import { isPrintMode, showEditor, windowSize, isScreenVertical } from '../state'
 import { next, prev, currentRoute, tab, tabElements, prevSlide, nextSlide } from '../logic/nav'
@@ -19,11 +19,17 @@ function onClick(e: MouseEvent) {
   }
 }
 
+const swipeBegin = ref(0)
 const { direction, lengthX, lengthY } = useSwipe(root, {
+  onSwipeStart() {
+    swipeBegin.value = timestamp()
+  },
   onSwipeEnd() {
+    if (!swipeBegin.value)
+      return
     const x = Math.abs(lengthX.value)
     const y = Math.abs(lengthY.value)
-    if (x / window.innerWidth > 0.3 || x > 200) {
+    if (x / window.innerWidth > 0.3 || x > 100) {
       if (direction.value === SwipeDirection.LEFT)
         next()
       else
