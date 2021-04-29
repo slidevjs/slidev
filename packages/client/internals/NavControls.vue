@@ -31,7 +31,7 @@ async function downloadPDF() {
 </script>
 
 <template>
-  <nav class="flex text-xl p-2 text-gray-600 dark:text-gray-300 gap-1">
+  <nav class="flex flex-wrap-reverse text-xl p-2 gap-1">
     <button class="icon-btn" @click="toggleFullscreen">
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
@@ -69,7 +69,7 @@ async function downloadPDF() {
         <carbon:user-speaker />
       </a>
 
-      <button v-if="!isPresenter" class="icon-btn" @click="showEditor = !showEditor">
+      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
         <carbon:edit />
       </button>
     </template>

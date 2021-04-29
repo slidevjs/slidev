@@ -106,6 +106,7 @@ cli.command(
     .option('out', {
       alias: 'o',
       type: 'string',
+      default: 'dist',
       describe: 'output dir',
     })
     .option('base', {

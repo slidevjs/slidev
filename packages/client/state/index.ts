@@ -10,6 +10,7 @@ export const query = useUrlSearchParams()
 export const breakpoints = useBreakpoints(breakpointsTailwind)
 export const windowSize = useWindowSize()
 export const magicKeys = useMagicKeys()
+export const isScreenVertical = computed(() => windowSize.width.value <= windowSize.height.value)
 
 export const activeElement = useActiveElement()
 export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
