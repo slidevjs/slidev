@@ -28,7 +28,7 @@ export interface SlidevConfig {
   /**
    * @default true
    */
-  allowDownload: boolean
+  download: boolean | string
 }
 
 export interface SlidevMarkdown {

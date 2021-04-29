@@ -107,18 +107,18 @@ cli.command(
       type: 'string',
       describe: 'output base',
     })
-    .option('allowDownload', {
+    .option('download', {
       alias: 'd',
       type: 'boolean',
       describe: 'allow download as PDF',
     })
     .help(),
-  async({ entry, theme, watch, base, allowDownload }) => {
+  async({ entry, theme, watch, base, download }) => {
     const { build } = await import('./build')
 
     const options = await resolveOptions({ entry, theme }, 'build')
-    if (allowDownload)
-      options.data.config.allowDownload = allowDownload
+    if (download && !options.data.config.download)
+      options.data.config.download = download
 
     printInfo(options)
     await build(options, {}, {

@@ -1,5 +1,6 @@
 ---
 layout: cover
+download: https://antfu.me/talks/2021-04-29
 ---
 
 # Composable Vue

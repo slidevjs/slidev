@@ -40,7 +40,7 @@ export async function build(
     await fs.unlink(indexPath)
   }
 
-  if (options.data.config.allowDownload) {
+  if (options.data.config.download === true || options.data.config.download === 'auto') {
     const port = 12445
     const app = connect()
     const server = http.createServer(app)

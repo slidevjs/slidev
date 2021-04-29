@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFullscreen } from '@vueuse/core'
 import { computed, defineProps } from 'vue'
+import { isString } from '@antfu/utils'
 import { isDark, toggleDark } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
 import { showOverview, showEditor } from '../state'
@@ -18,9 +19,14 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
 
-function downloadPDF() {
-  import('file-saver')
-    .then(i => i.saveAs(`${import.meta.env.BASE_URL}slidev-exported.pdf`, `${configs.title}.pdf`))
+async function downloadPDF() {
+  const { saveAs } = await import('file-saver')
+  saveAs(
+    isString(configs.download)
+      ? configs.download
+      : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
+    `${configs.title}.pdf`,
+  )
 }
 </script>
 
@@ -68,7 +74,7 @@ function downloadPDF() {
       </button>
     </template>
     <template v-else>
-      <button v-if="configs.allowDownload" class="icon-btn" @click="downloadPDF">
+      <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
         <carbon:download />
       </button>
     </template>

@@ -120,7 +120,7 @@ export function parse(
   config.title ??= headmatter.title ?? (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
   config.remoteAssets ??= headmatter.remoteAssets ?? true
   config.monaco ??= headmatter.monaco ?? 'dev'
-  config.allowDownload ??= (<any>config)['allow-download'] ?? headmatter.allowDownload ?? headmatter['allow-download'] ?? true
+  config.download ??= headmatter.download ?? false
 
   return {
     raw: markdown,
