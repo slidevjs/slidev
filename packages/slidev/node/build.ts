@@ -7,7 +7,6 @@ import sirv from 'sirv'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './plugins/options'
-import { exportSlides } from './export'
 
 export async function build(
   options: ResolvedSlidevOptions,
@@ -41,6 +40,8 @@ export async function build(
   }
 
   if (options.data.config.download === true || options.data.config.download === 'auto') {
+    const { exportSlides } = await import('./export')
+
     const port = 12445
     const app = connect()
     const server = http.createServer(app)
