@@ -1,5 +1,6 @@
 import { Plugin, resolvePackageData } from 'vite'
 import base64 from 'js-base64'
+import { isTruthy } from '@slidev/client/node_modules/@antfu/utils/dist'
 
 export function createMonacoLoader(): Plugin {
   return {
@@ -34,15 +35,28 @@ export function createMonacoLoader(): Plugin {
   }
 }
 
-export function transformMarkdownMonaco(code: string) {
+export function transformMarkdownMonaco(md: string) {
+  const typeModules = new Set<string>()
+
   // transform monaco
-  code = code.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
+  md = md.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
     options = options || ''
-    code = base64.encode(code, true)
-    return `<Monaco :code="'${code}'" :lang="'${lang}'" :readonly="${options.includes('readonly')}" />`
+    lang = lang.trim()
+    if (lang === 'ts' || lang === 'typescript') {
+      Array.from(code.matchAll(/\s+from\s+(["'])([\/\w@-]+)\1/g))
+        .map(i => i[2])
+        .filter(isTruthy)
+        .map(i => typeModules.add(i))
+    }
+    const encoded = base64.encode(code, true)
+    return `<Monaco :code="'${encoded}'" lang="${lang}" :readonly="${options.includes('readonly')}" />`
   })
 
-  return code
+  // types auto discovery for TypeScript monaco
+  if (typeModules.size)
+    md += `\n<script setup>\n${Array.from(typeModules).map(i => `import('/@monaco-types/${i}')`).join('\n')}\n</script>\n`
+
+  return md
 }
 
 export function truncateMancoMark(code: string) {

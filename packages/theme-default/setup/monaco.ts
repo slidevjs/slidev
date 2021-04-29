@@ -2,10 +2,6 @@ import * as monaco from 'monaco-editor'
 
 export default async function setupMonaco() {
   await Promise.all([
-    // @ts-expect-error
-    import('/@monaco-types/vue'),
-    // @ts-expect-error
-    import('/@monaco-types/@vueuse/core'),
     // load theme
     (async() => {
       const { default: dark } = await import('theme-vitesse/themes/vitesse-dark.json')

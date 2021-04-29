@@ -15,10 +15,6 @@ const setup = createSingletonPromise(async() => {
   })
 
   await Promise.all([
-    // @ts-expect-error
-    import('/@monaco-types/vue'),
-    // @ts-expect-error
-    import('/@monaco-types/@vueuse/core'),
     // load workers
     (async() => {
       const [
