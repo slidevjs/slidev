@@ -14,7 +14,7 @@
   "dependencies": {
     "@antfu/utils": "^0.1.1",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^4.9.0",
+    "@vueuse/core": "^4.9.1",
     "@vueuse/head": "^0.5.1",
     "codemirror": "^5.61.0",
     "file-saver": "^2.0.5",

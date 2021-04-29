@@ -20,7 +20,7 @@
     "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@vueuse/core": "^4.9.0",
+    "@vueuse/core": "^4.9.1",
     "bumpp": "^6.0.6",
     "cross-env": "^7.0.3",
     "eslint": "^7.25.0",
