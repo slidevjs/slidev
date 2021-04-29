@@ -12,7 +12,7 @@ pkg.dependencies['@slidev/cli'] = `^${version}`
 writeFileSync('packages/create-app/template/package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
 run('git add .')
-run(`git commit -m "chore: release v${version}"`)
+run(`git commit -m 'chore: release v${version}'`)
 // run(`git tag "v${version}"`)
 // run('git push --follow-tags')
 run('git push')
