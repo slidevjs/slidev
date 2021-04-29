@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { SwipeDirection, useSwipe } from '@vueuse/core'
+import { ref } from 'vue'
 import { isPrintMode, showEditor, windowSize } from '../state'
-import { next, prev, currentRoute, tab, tabElements } from '../logic/nav'
+import { next, prev, currentRoute, tab, tabElements, prevSlide, nextSlide } from '../logic/nav'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
 
+const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {
   if ((e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previouse
@@ -15,10 +18,29 @@ function onClick(e: MouseEvent) {
       prev()
   }
 }
+
+const { direction, lengthX, lengthY } = useSwipe(root, {
+  onSwipeEnd() {
+    const x = Math.abs(lengthX.value)
+    const y = Math.abs(lengthY.value)
+    if (x / window.innerWidth > 0.3 || x > 200) {
+      if (direction.value === SwipeDirection.LEFT)
+        next()
+      else
+        prev()
+    }
+    else if (y / window.innerHeight > 0.4 || y > 200) {
+      if (direction.value === SwipeDirection.DOWN)
+        prevSlide()
+      else
+        nextSlide()
+    }
+  },
+})
 </script>
 
 <template>
-  <div id="page-root" class="grid grid-cols-[1fr,max-content]">
+  <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer
       v-model:tab="tab"
       v-model:tab-elements="tabElements"
@@ -30,7 +52,7 @@ function onClick(e: MouseEvent) {
     >
       <template #controls>
         <div class="absolute bottom-0 left-0 p-2 transition duration-300 opacity-0 hover:opacity-100">
-          <NavControls class="rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)"/>
+          <NavControls class="rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)" />
         </div>
       </template>
     </SlideContainer>
