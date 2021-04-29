@@ -20,7 +20,7 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "peerDependencies": {
     "@slidev/client": "^0.0.0-alpha.0",
-    "vite-plugin-windicss": "^0.15.6"
+    "vite-plugin-windicss": "^0.16.0-beta.1"
   },
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",

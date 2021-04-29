@@ -28,6 +28,7 @@ export default defineConfig({
     'abs-bl': 'absolute bottom-0 left-0',
     'abs-br': 'absolute bottom-0 right-0',
   },
+  attributify: true,
   darkMode: 'class',
   preflight: {
     includeAll: true,

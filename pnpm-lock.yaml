@@ -20,10 +20,10 @@ importers:
       execa: ^5.0.0
       jest: ^26.6.3
       playwright-chromium: ^1.10.0
-      pnpm: ^6.2.2
+      pnpm: ^6.2.3
       ts-jest: ^26.5.5
       typescript: ^4.2.4
-      vite-plugin-windicss: ^0.15.7
+      vite-plugin-windicss: ^0.16.0-beta.3
       vitepress: ^0.13.2
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
@@ -42,10 +42,10 @@ importers:
       execa: 5.0.0
       jest: 26.6.3
       playwright-chromium: 1.10.0
-      pnpm: 6.2.2
+      pnpm: 6.2.3
       ts-jest: 26.5.5_jest@26.6.3+typescript@4.2.4
       typescript: 4.2.4
-      vite-plugin-windicss: 0.15.7
+      vite-plugin-windicss: 0.16.0-beta.3
       vitepress: 0.13.2
 
   demo:
@@ -134,7 +134,7 @@ importers:
       '@types/minimist': ^1.2.1
       '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
-      '@types/prompts': ^2.0.10
+      '@types/prompts': ^2.4.0
       '@types/recordrtc': ^5.6.5
       '@types/yargs': ^16.0.1
       '@typescript-eslint/eslint-plugin': ^4.22.0
@@ -157,7 +157,7 @@ importers:
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
       playwright-chromium: ^1.10.0
-      pnpm: ^6.2.2
+      pnpm: ^6.2.3
       prompts: ^2.4.1
       rimraf: ^3.0.2
       sirv: ^1.0.11
@@ -168,7 +168,7 @@ importers:
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.3
       vite-plugin-remote-assets: ^0.2.0
-      vite-plugin-windicss: ^0.15.7
+      vite-plugin-windicss: ^0.16.0-beta.3
       vue: ^3.0.11
       windicss: ^2.5.14
       yargs: ^16.2.0
@@ -199,7 +199,7 @@ importers:
       vite-plugin-icons: 0.5.0_68285259574601e84c8dff0f86e760ff
       vite-plugin-md: 0.6.3_vite@2.2.3
       vite-plugin-remote-assets: 0.2.0_vite@2.2.3
-      vite-plugin-windicss: 0.15.7_vite@2.2.3
+      vite-plugin-windicss: 0.16.0-beta.3_vite@2.2.3
       vue: 3.0.11
       windicss: 2.5.14
       yargs: 16.2.0
@@ -215,7 +215,7 @@ importers:
       '@types/minimist': 1.2.1
       '@types/node': 15.0.1
       '@types/prettier': 2.2.3
-      '@types/prompts': 2.0.10
+      '@types/prompts': 2.4.0
       '@types/recordrtc': 5.6.5
       '@types/yargs': 16.0.1
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
@@ -223,7 +223,7 @@ importers:
       eslint: 7.25.0
       esno: 0.5.0
       playwright-chromium: 1.10.0
-      pnpm: 6.2.2
+      pnpm: 6.2.3
       rimraf: 3.0.2
       tsup: 4.10.1_typescript@4.2.4
       typescript: 4.2.4
@@ -1257,10 +1257,8 @@ packages:
     resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
     dev: true
 
-  /@types/prompts/2.0.10:
-    resolution: {integrity: sha512-W3PEl3l4vmxdgfY6LUG7ysh+mLJOTOFYmSpiLe6MCo1OdEm8b5s6ZJfuTQgEpYNwcMiiaRzJespPS5Py2tqLlQ==}
-    dependencies:
-      '@types/node': 15.0.1
+  /@types/prompts/2.4.0:
+    resolution: {integrity: sha512-7th8Opn+0XlN0O6qzO7dXOPwL6rigq/EwRS2DntaTHwSw8cLaYKeAPt5dWEKHSL+ffVSUl1itTPUC06+FlsV4Q==}
     dev: true
 
   /@types/recordrtc/5.6.5:
@@ -1560,8 +1558,8 @@ packages:
       - vue
     dev: false
 
-  /@windicss/plugin-utils/0.15.7:
-    resolution: {integrity: sha512-++2POqhrvL589Xv8X6ZX7sCG2Jb9rzbbGQCvClhoOxhPFFkPuLnZtGB+KIa2l1QarPXUQCaSjQ+zxFiu6IgI/g==}
+  /@windicss/plugin-utils/0.16.0-beta.3:
+    resolution: {integrity: sha512-77v4h4d3aBlqqLEPwiotp/MDUGZvZxQuEkh4GtjhCYg5TL0dWQUiZudgWetFXencmqq8++l548Y+NowXg6nb3g==}
     dependencies:
       debug: 4.3.2
       fast-glob: 3.2.5
@@ -1569,7 +1567,7 @@ packages:
       micromatch: 4.0.4
       pirates: 4.0.1
       sucrase: 3.18.1
-      windicss: 2.5.14
+      windicss: 3.0.0-beta.1
     transitivePeerDependencies:
       - supports-color
 
@@ -5750,8 +5748,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /pnpm/6.2.2:
-    resolution: {integrity: sha512-Gb8tXUDurgjYuJ8cJDReHVxlFyk6+Q0kN9j/UABiWrVQRiwCMCKeMplWnlwdeI9DvVnf3qwjkgEZdVHAL5gxVw==}
+  /pnpm/6.2.3:
+    resolution: {integrity: sha512-qYRrxYyN14tqeMGu7E3P+INXDiYbGojn5mitVfUxidO9OsSnTGSqT85nkslfKW8YfChlzFVN0XdG+1Tj86tKhA==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
@@ -7209,29 +7207,29 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss/0.15.7:
-    resolution: {integrity: sha512-RYASJYA6l2p3MgQ6M6GU44zP0iC5cBkuTJhhrmHaRREleL9fNpblBwdS0lbvcr5Q4LT6AGpmmTlF50iIwo3JkQ==}
+  /vite-plugin-windicss/0.16.0-beta.3:
+    resolution: {integrity: sha512-U2h9KHdzZ85UzUNnPXLFNe6QA2a2g87iGeRWAecspL2Co6Nyc9q/kVe0YNPUYzgmxoOLeSKdrp+6+t34lpuUcg==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.15.7
+      '@windicss/plugin-utils': 0.16.0-beta.3
       chalk: 4.1.1
       debug: 4.3.2
-      windicss: 2.5.14
+      windicss: 3.0.0-beta.1
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite-plugin-windicss/0.15.7_vite@2.2.3:
-    resolution: {integrity: sha512-RYASJYA6l2p3MgQ6M6GU44zP0iC5cBkuTJhhrmHaRREleL9fNpblBwdS0lbvcr5Q4LT6AGpmmTlF50iIwo3JkQ==}
+  /vite-plugin-windicss/0.16.0-beta.3_vite@2.2.3:
+    resolution: {integrity: sha512-U2h9KHdzZ85UzUNnPXLFNe6QA2a2g87iGeRWAecspL2Co6Nyc9q/kVe0YNPUYzgmxoOLeSKdrp+6+t34lpuUcg==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.15.7
+      '@windicss/plugin-utils': 0.16.0-beta.3
       chalk: 4.1.1
       debug: 4.3.2
       vite: 2.2.3
-      windicss: 2.5.14
+      windicss: 3.0.0-beta.1
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -7438,6 +7436,12 @@ packages:
 
   /windicss/2.5.14:
     resolution: {integrity: sha512-8Lm7U1M5AzJPbiaVSVz7qWdETRzlkv//5LBMICBBAojos1jo09lUGhNZ5rBzHeldB9JmqYMDOGgrrXHExu0EAg==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: false
+
+  /windicss/3.0.0-beta.1:
+    resolution: {integrity: sha512-06fFMIj+OeW76snT8MVxcHH254nk5sDcm9Z26nJpi/Veau8NkML3QQy/IT1GgyGwy//j4IBJCX5uV/2ftjBCOQ==}
     engines: {node: '>= 12'}
     hasBin: true
 

@@ -25,11 +25,13 @@ function onClick(e: MouseEvent) {
   <div
     v-show="value"
     ref="container"
-    class="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-80 grid"
+    class="fixed top-0 bottom-0 left-0 right-0 grid"
+    bg="black opacity-80"
     @click="onClick"
   >
     <div
-      class="m-auto rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)w"
+      class="m-auto rounded-md bg-main shadow"
+      dark:border="~ gray-400 opacity-10"
       :class="props.class"
     >
       <slot />
