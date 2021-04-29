@@ -103,6 +103,11 @@ cli.command(
       default: false,
       describe: 'build watch',
     })
+    .option('out', {
+      alias: 'o',
+      type: 'string',
+      describe: 'output dir',
+    })
     .option('base', {
       type: 'string',
       describe: 'output base',
@@ -113,7 +118,7 @@ cli.command(
       describe: 'allow download as PDF',
     })
     .help(),
-  async({ entry, theme, watch, base, download }) => {
+  async({ entry, theme, watch, base, download, out }) => {
     const { build } = await import('./build')
 
     const options = await resolveOptions({ entry, theme }, 'build')
@@ -125,6 +130,7 @@ cli.command(
       base,
       build: {
         watch: watch ? {} : undefined,
+        outDir: out,
       },
     })
   },
