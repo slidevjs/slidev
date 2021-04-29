@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.0.0-alpha.28",
+  "version": "0.0.0-alpha.29",
   "description": "Shared types declerations for Slidev",
   "license": "MIT",
   "repository": {
