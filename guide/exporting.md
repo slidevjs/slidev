@@ -1,5 +1,8 @@
 # Exporting
 
+> Exporting is relying on [Playwright](https://playwright.dev) to do the rendering, you will need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) for using this feature.
+> If you are doing exporting in a CI environment, [this guide](https://playwright.dev/docs/ci) could also be helpful.
+
 ## PDF
 
 Exporting your slides into PDF by the following command
@@ -35,11 +38,16 @@ You can provide a downloadable PDF to the viewers of your SPA. You can enable it
 
 ```md
 ---
-allow-download: true
+download: true
 ---
 ```
 
 It will generate a pdf file along with the build. And a download button will appear in the SPA.
 
-If you are building it in a CI environment, you might need to have [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) installed as well. Learn more [here](https://playwright.dev/docs/ci)
+You can also provide a custom url to the PDF. And if so the rendering process will be skipped.
 
+```md
+---
+download: 'https://myside.com/my-talk.pdf'
+---
+```
