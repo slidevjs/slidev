@@ -1,81 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`md parser frontmatter.md: data 1`] = `
+exports[`md parser frontmatter.md: config 1`] = `
 Object {
-  "config": Object {
-    "download": false,
-    "info": true,
-    "monaco": "dev",
-    "remoteAssets": true,
-    "theme": "default",
+  "download": false,
+  "info": true,
+  "monaco": "dev",
+  "remoteAssets": true,
+  "theme": "default",
+  "title": "Hi",
+}
+`;
+
+exports[`md parser frontmatter.md: slides 1`] = `
+Array [
+  Object {
+    "content": "
+# Hi
+",
+    "end": 4,
+    "frontmatter": Object {
+      "layout": "cover",
+    },
+    "index": 0,
+    "note": undefined,
+    "raw": "---
+layout: cover
+---
+
+# Hi
+
+",
+    "start": 0,
     "title": "Hi",
   },
-  "filepath": "/Users/antfu/i/slidev/test/fixtures/markdown/frontmatter.md",
-  "raw": "---
-layout: cover
----
-# Hi
----
-meta:
-  title: FooBar
-  duration: 12
-layout: center
----
+  Object {
+    "content": "
 # Hello
-<!-- This is notes -->
----
-
-# Morning
----
-layout: text
----
-<!-- This is not notes -->
-Hey
----
-
-\`\`\`md
----
-this should be treated as code block
----
-----
-\`\`\`
 ",
-  "slides": Array [
-    Object {
-      "content": "
-# Hi
-",
-      "end": 4,
-      "frontmatter": Object {
-        "layout": "cover",
+    "end": 12,
+    "frontmatter": Object {
+      "layout": "center",
+      "meta": Object {
+        "duration": 12,
+        "title": "FooBar",
       },
-      "index": 0,
-      "note": undefined,
-      "raw": "---
-layout: cover
----
-
-# Hi
-
-",
-      "start": 0,
-      "title": "Hi",
     },
-    Object {
-      "content": "
-# Hello
-",
-      "end": 12,
-      "frontmatter": Object {
-        "layout": "center",
-        "meta": Object {
-          "duration": 12,
-          "title": "FooBar",
-        },
-      },
-      "index": 1,
-      "note": "This is notes",
-      "raw": "---
+    "index": 1,
+    "note": "This is notes",
+    "raw": "---
 meta:
   title: FooBar
   duration: 12
@@ -88,36 +60,36 @@ layout: center
 This is notes
 -->
 ",
-      "start": 4,
-      "title": "Hello",
-    },
-    Object {
-      "content": "
+    "start": 4,
+    "title": "Hello",
+  },
+  Object {
+    "content": "
 # Morning
 ",
-      "end": 15,
-      "frontmatter": Object {},
-      "index": 2,
-      "note": undefined,
-      "raw": "
+    "end": 15,
+    "frontmatter": Object {},
+    "index": 2,
+    "note": undefined,
+    "raw": "
 # Morning
 
 ",
-      "start": 13,
-      "title": "Morning",
-    },
-    Object {
-      "content": "
+    "start": 13,
+    "title": "Morning",
+  },
+  Object {
+    "content": "
 <!-- This is not notes -->
 Hey
 ",
-      "end": 20,
-      "frontmatter": Object {
-        "layout": "text",
-      },
-      "index": 3,
-      "note": undefined,
-      "raw": "---
+    "end": 20,
+    "frontmatter": Object {
+      "layout": "text",
+    },
+    "index": 3,
+    "note": undefined,
+    "raw": "---
 layout: text
 ---
 
@@ -125,11 +97,11 @@ layout: text
 Hey
 
 ",
-      "start": 15,
-      "title": undefined,
-    },
-    Object {
-      "content": "
+    "start": 15,
+    "title": undefined,
+  },
+  Object {
+    "content": "
 \`\`\`md
 ---
 this should be treated as code block
@@ -137,11 +109,11 @@ this should be treated as code block
 ----
 \`\`\`
 ",
-      "end": 28,
-      "frontmatter": Object {},
-      "index": 4,
-      "note": undefined,
-      "raw": "
+    "end": 28,
+    "frontmatter": Object {},
+    "index": 4,
+    "note": undefined,
+    "raw": "
 \`\`\`md
 ---
 this should be treated as code block
@@ -150,125 +122,58 @@ this should be treated as code block
 \`\`\`
 
 ",
-      "start": 21,
-      "title": undefined,
-    },
-  ],
+    "start": 21,
+    "title": undefined,
+  },
+]
+`;
+
+exports[`md parser minimal.md: config 1`] = `
+Object {
+  "download": false,
+  "info": true,
+  "monaco": "dev",
+  "remoteAssets": true,
+  "theme": "default",
+  "title": "H1",
 }
 `;
 
-exports[`md parser frontmatter.md: formatted 1`] = `
-"---
-layout: cover
----
+exports[`md parser minimal.md: slides 1`] = `
+Array [
+  Object {
+    "content": "
+# H1
+## H2
+### H3
 
-# Hi
+Sample Text
 
-
----
-meta:
-  title: FooBar
-  duration: 12
-layout: center
----
-
-# Hello
-
-<!--
-This is notes
--->
-
----
-
-# Morning
-
-
----
-layout: text
----
-
-<!-- This is not notes -->
-Hey
-
-
----
-
-\`\`\`md
----
-this should be treated as code block
----
-----
+\`\`\`ts
+console.log('Hello World')
 \`\`\`
-"
-`;
+",
+    "end": 10,
+    "frontmatter": Object {},
+    "index": 0,
+    "note": undefined,
+    "raw": "
+# H1
+## H2
+### H3
 
-exports[`md parser minimal.md: data 1`] = `
-Object {
-  "config": Object {
-    "download": false,
-    "info": true,
-    "monaco": "dev",
-    "remoteAssets": true,
-    "theme": "default",
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`
+
+",
+    "start": 0,
     "title": "H1",
   },
-  "filepath": "/Users/antfu/i/slidev/test/fixtures/markdown/minimal.md",
-  "raw": "# H1
-## H2
-### H3
-
-Sample Text
-
-\`\`\`ts
-console.log('Hello World')
-\`\`\`
-
----
-
-# Hello
-
-- Hello
-- Hi
-- Hey
-- Yo
----
-
-Nice to meet you
-",
-  "slides": Array [
-    Object {
-      "content": "
-# H1
-## H2
-### H3
-
-Sample Text
-
-\`\`\`ts
-console.log('Hello World')
-\`\`\`
-",
-      "end": 10,
-      "frontmatter": Object {},
-      "index": 0,
-      "note": undefined,
-      "raw": "
-# H1
-## H2
-### H3
-
-Sample Text
-
-\`\`\`ts
-console.log('Hello World')
-\`\`\`
-
-",
-      "start": 0,
-      "title": "H1",
-    },
-    Object {
-      "content": "
+  Object {
+    "content": "
 # Hello
 
 - Hello
@@ -276,11 +181,11 @@ console.log('Hello World')
 - Hey
 - Yo
 ",
-      "end": 18,
-      "frontmatter": Object {},
-      "index": 1,
-      "note": undefined,
-      "raw": "
+    "end": 18,
+    "frontmatter": Object {},
+    "index": 1,
+    "note": undefined,
+    "raw": "
 # Hello
 
 - Hello
@@ -289,52 +194,23 @@ console.log('Hello World')
 - Yo
 
 ",
-      "start": 11,
-      "title": "Hello",
-    },
-    Object {
-      "content": "
+    "start": 11,
+    "title": "Hello",
+  },
+  Object {
+    "content": "
 Nice to meet you
 ",
-      "end": 21,
-      "frontmatter": Object {},
-      "index": 2,
-      "note": undefined,
-      "raw": "
+    "end": 21,
+    "frontmatter": Object {},
+    "index": 2,
+    "note": undefined,
+    "raw": "
 Nice to meet you
 
 ",
-      "start": 19,
-      "title": undefined,
-    },
-  ],
-}
-`;
-
-exports[`md parser minimal.md: formatted 1`] = `
-"# H1
-## H2
-### H3
-
-Sample Text
-
-\`\`\`ts
-console.log('Hello World')
-\`\`\`
-
-
----
-
-# Hello
-
-- Hello
-- Hi
-- Hey
-- Yo
-
-
----
-
-Nice to meet you
-"
+    "start": 19,
+    "title": undefined,
+  },
+]
 `;
