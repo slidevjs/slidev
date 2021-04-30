@@ -66,6 +66,7 @@ export function parse(
   function parseContent(raw: string) {
     const result = matter(raw)
     let note: string | undefined
+    const frontmatter = result.data || {}
     const content = result.content
       .trim()
       .replace(/<!--([\s\S]*)-->$/g, (_, v = '') => {
@@ -73,13 +74,13 @@ export function parse(
         return ''
       })
 
-    const title = content.match(/^#+ (.*)$/m)?.[1]?.trim()
+    const title = frontmatter.title || frontmatter.name || content.match(/^#+ (.*)$/m)?.[1]?.trim()
 
     return {
       raw,
       title,
       content,
-      frontmatter: result.data || {},
+      frontmatter,
       note,
     }
   }
@@ -126,10 +127,10 @@ export function parse(
   if (start !== lines.length - 1)
     slice(lines.length - 1)
 
-  const headmatter = slides?.[0].frontmatter || {}
+  const headmatter = slides[0]?.frontmatter || {}
   const defaultConfig: SlidevConfig = {
     theme: 'default',
-    title: (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim(),
+    title: slides[0]?.title || 'Slidev',
     remoteAssets: true,
     monaco: 'dev',
     download: false,
@@ -140,13 +141,6 @@ export function parse(
     headmatter.config || {},
     objectPick(headmatter, Object.keys(defaultConfig)),
   )
-
-  config.theme ??= headmatter.theme ?? 'default'
-  config.title ??= headmatter.title ?? slides[0].title ?? 'Slidev'
-  config.remoteAssets ??= headmatter.remoteAssets ?? true
-  config.monaco ??= headmatter.monaco ?? 'dev'
-  config.download ??= headmatter.download ?? false
-  config.info ??= headmatter.info ?? true
 
   return {
     raw: markdown,
