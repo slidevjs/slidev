@@ -17,6 +17,7 @@ describe('md parser', () => {
       prettify(data)
 
       expect(stringify(data)).toMatchSnapshot('formatted')
+      expect(data).toMatchSnapshot('data')
     })
   }
 

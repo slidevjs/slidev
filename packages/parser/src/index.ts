@@ -72,8 +72,12 @@ export function parse(
         note = v.trim()
         return ''
       })
+
+    const title = content.match(/^#+ (.*)$/m)?.[1]?.trim()
+
     return {
       raw,
+      title,
       content,
       frontmatter: result.data || {},
       note,
@@ -87,6 +91,7 @@ export function parse(
       return
     const raw = lines.slice(start, end).join('\n')
     slides.push({
+      index: slides.length,
       start,
       end,
       ...parseContent(raw),
@@ -137,7 +142,7 @@ export function parse(
   )
 
   config.theme ??= headmatter.theme ?? 'default'
-  config.title ??= headmatter.title ?? (slides[0].content.match(/^# (.*)$/m)?.[1] || '').trim()
+  config.title ??= headmatter.title ?? slides[0].title ?? 'Slidev'
   config.remoteAssets ??= headmatter.remoteAssets ?? true
   config.monaco ??= headmatter.monaco ?? 'dev'
   config.download ??= headmatter.download ?? false

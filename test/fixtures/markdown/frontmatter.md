@@ -18,3 +18,11 @@ layout: text
 ---
 <!-- This is not notes -->
 Hey
+---
+
+```md
+---
+this should be treated as code block
+---
+----
+```

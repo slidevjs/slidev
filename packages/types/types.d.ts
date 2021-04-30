@@ -1,10 +1,12 @@
 export interface SlideInfo {
+  index: number
   start: number
   end: number
   raw: string
   content: string
   note?: string
   frontmatter: Record<string, any>
+  title?: string
 }
 
 export interface SlideInfoExtended extends SlideInfo {
