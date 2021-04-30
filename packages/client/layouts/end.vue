@@ -1,7 +1,7 @@
 <template>
-  <main class="layout-master end">
+  <div class="layout-master end">
     END
-  </main>
+  </div>
 </template>
 
 <style scopde lang="postcss">

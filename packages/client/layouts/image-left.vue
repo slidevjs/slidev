@@ -15,10 +15,10 @@ const style = computed(() => handleBackground(props.image))
 </script>
 
 <template>
-  <main class="grid grid-cols-2 w-full h-full">
+  <div class="grid grid-cols-2 w-full h-full">
     <div class="w-full w-full" :style="style"></div>
     <div class="layout-master default" :class="props.class">
       <slot />
     </div>
-  </main>
+  </div>
 </template>

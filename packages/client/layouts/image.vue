@@ -6,19 +6,13 @@ const props = defineProps({
   image: {
     type: String,
   },
-  class: {
-    type: String,
-  },
 })
 
 const style = computed(() => handleBackground(props.image))
 </script>
 
 <template>
-  <div class="grid grid-cols-2 w-full h-full">
-    <div class="layout-master default" :class="props.class">
-      <slot />
-    </div>
-    <div class="w-full w-full" :style="style"></div>
+  <div class="layout-master w-full h-full" :style="style">
+    <slot />
   </div>
 </template>

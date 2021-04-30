@@ -1,12 +1,12 @@
 <template>
-  <main class="home" aria-labelledby="main-title">
+  <div class="home" aria-labelledby="main-title">
     <HomeHero />
     <slot name="hero" />
     <HomeFeatures />
     <slot name="features" />
     <HomeFooter />
     <slot name="footer" />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
