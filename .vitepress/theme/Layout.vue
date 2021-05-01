@@ -51,7 +51,6 @@ import { ref, computed, watch, defineAsyncComponent } from 'vue'
 import {
   useRoute,
   useSiteData,
-  usePageData,
   useSiteDataByRoute,
 } from 'vitepress'
 import type { DefaultTheme } from './config'

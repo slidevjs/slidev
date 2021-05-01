@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useSiteDataByRoute, useFrontmatter } from 'vitepress'
+import { useFrontmatter } from 'vitepress'
 
 const data = useFrontmatter()
 

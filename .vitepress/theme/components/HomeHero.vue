@@ -1,54 +1,54 @@
 <template>
   <header v-if="showHero" class="home-hero">
-    <p align="center">
-      <a href="https://github.com/slidevjs/slidev">
-        <img src="/logo-title.png" alt="Slidev" height="300" />
-      </a>
-      <br />
-    </p>
-    <div class="description !-mt-4">
-      Presentation
-      <b>Sli</b>des for
-      <b>Dev</b>elopers
-    </div>
+    <div class="grid lg:grid-cols-[minmax(400px,600px),minmax(500px,1fr)] gap-4">
+      <div>
+        <p align="center">
+          <a href="https://github.com/slidevjs/slidev">
+            <img src="/logo-title.png" alt="Slidev" height="300" />
+          </a>
+          <br />
+        </p>
+        <div class="description !-mt-4">
+          Presentation
+          <b>Sli</b>des for
+          <b>Dev</b>elopers
+        </div>
 
-    <NavLink
-      v-if="hasAction"
-      :item="{ link: data.actionLink, text: data.actionText }"
-      class="action mx-2 rounded-tr-4xl rounded-tl-2xl rounded-br-2xl rounded-bl-3xl"
-    />
+        <NavLink
+          v-if="hasAction"
+          :item="{ link: data.actionLink, text: data.actionText }"
+          class="action mx-2 rounded-tr-4xl rounded-tl-2xl rounded-br-2xl rounded-bl-3xl"
+        />
 
-    <NavLink
-      v-if="hasAltAction"
-      :item="{ link: data.altActionLink, text: data.altActionText }"
-      class="action alt mx-2 rounded-tr-2xl rounded-tl-3xl rounded-br-4xl rounded-bl-4xl"
-    />
+        <NavLink
+          v-if="hasAltAction"
+          :item="{ link: data.altActionLink, text: data.altActionText }"
+          class="action alt mx-2 rounded-tr-2xl rounded-tl-3xl rounded-br-4xl rounded-bl-4xl"
+        />
 
-    <div class="mt-5 flex">
-      <div class="mx-auto">
-        <p>or try it now</p>
-        <div class="language-bash mt-2">
-          <pre><code><span class="opacity-50">$ </span><span class="token function">npm init</span> <span class="token text-[#408c9e] font-500">slidev</span></code></pre>
+        <div class="mt-5 flex">
+          <div class="mx-auto">
+            <p>or try it now</p>
+            <div class="language-bash mt-2">
+              <pre><code><span class="opacity-50">$ </span><span class="token function">npm init</span> <span class="token text-[#408c9e] font-500">slidev</span></code></pre>
+            </div>
+          </div>
         </div>
       </div>
+      <Demo />
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useSiteDataByRoute, useFrontmatter } from 'vitepress'
-import { isDark } from '../composables/dark'
+import { useFrontmatter } from 'vitepress'
 import NavLink from './NavLink.vue'
 
-const site = useSiteDataByRoute()
 const data = useFrontmatter()
 
 const hasHeroText = computed(() => data.value.heroText !== null)
-const heroText = computed(() => data.value.heroText || site.value.title)
-
 const hasTagline = computed(() => data.value.tagline !== null)
-const tagline = computed(() => data.value.tagline || site.value.description)
 
 const hasAction = computed(() => data.value.actionLink && data.value.actionText)
 const hasAltAction = computed(() => data.value.altActionLink && data.value.altActionText)
@@ -70,13 +70,13 @@ const showHero = computed(() => {
 
 @media (min-width: 420px) {
   .home-hero {
-    margin: 0rem 0;
+    margin: 0;
   }
 }
 
 @media (min-width: 720px) {
   .home-hero {
-    margin: 0rem 0 4.25rem;
+    margin: 0 3rem;
   }
 }
 
