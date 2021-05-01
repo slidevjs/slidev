@@ -9,6 +9,10 @@
 Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
 </p>
 
+<p align="center">
+  <a href="https://twitter.com/antfu7/status/1388529647428636675">Video Preview</a>
+</p>
+
 <br>
 
 <p align="center">
