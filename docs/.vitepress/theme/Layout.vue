@@ -48,6 +48,8 @@
   </div>
 
   <!-- <Debug /> -->
+
+  <WorkingInProgress/>
 </template>
 
 <script setup lang="ts">

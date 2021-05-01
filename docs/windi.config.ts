@@ -11,6 +11,7 @@ export default defineConfig({
       '../packages/@theme-default/layouts/*.vue',
     ],
   },
+  attributify: true,
   plugins: [
     aspectRatio,
   ],
