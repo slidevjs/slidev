@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, shallowRef } from 'vue'
+import { ref, onMounted, watch, shallowRef, computed } from 'vue'
 // @ts-ignore
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
@@ -14,7 +14,7 @@ import '../../../../../packages/theme-default/styles/layout.css'
 const paused = ref(false)
 const code = ref('')
 const html = ref('')
-let info: SlidevMarkdown
+const info = ref<SlidevMarkdown>()
 const block = ref<HTMLPreElement>()
 const layout = shallowRef<any>(Default)
 
@@ -24,9 +24,9 @@ watch([code, paused], () => {
   if (paused.value)
     return
   try {
-    info = parse(code.value)
-    html.value = markdown.render(info.slides[0].content)
-    const name = info?.slides?.[0]?.frontmatter?.layout || 'default'
+    info.value = parse(code.value)
+    html.value = markdown.render(info.value.slides[0].content)
+    const name = info.value?.slides?.[0]?.frontmatter?.layout || 'default'
     layout.value = name === 'cover'
       ? Cover
       : name === 'center'
@@ -37,6 +37,19 @@ watch([code, paused], () => {
 
   }
 })
+
+const attrs = computed(() => info.value?.slides?.[0]?.frontmatter)
+
+function pause() {
+  paused.value = true
+}
+function resume() {
+  paused.value = false
+}
+
+const COVER_URL = 'https://slidev.antfu.me/demo-cover.png'
+const img1 = new Image()
+img1.src = COVER_URL
 
 onMounted(() => {
   new TypeIt(block.value, {
@@ -51,20 +64,23 @@ onMounted(() => {
     .move('START', { speed: 0 })
     .type('<br>')
     .move('START')
-    .exec(() => paused.value = true)
+    .exec(pause)
     .type('<span class="token punctuation">---<br><br>---</span>')
     .move(-4)
     .type('<span class="token tag">layout:</span> center')
-    .exec(() => paused.value = false)
+    .exec(resume)
     .pause(1000)
-    .exec(() => paused.value = true)
+    .exec(pause)
     .delete(6, { delay: 100, speed: 50 })
     .type('cover')
-    .exec(() => paused.value = false)
+    .exec(resume)
+    .exec(pause)
     .pause(1000)
     .type('<br>')
-    .type('<span class="token tag">background:</span> ', { delay: 500 })
-    .type('https://slidev.antfu.me/demo-cover.png', { speed: 0, delay: 1000 })
+    .type('<span class="token tag">background:</span> ', { delay: 200 })
+    .type(COVER_URL, { speed: 0 })
+    .exec(resume)
+    .pause(1000)
     .move('END', { speed: 0 })
     .type('<br><br><span class="token punctuation">---</span><br><br>', { delay: 400 })
     .type('<span class="token title"># Page 2</span><br><br>', { delay: 400 })
@@ -92,7 +108,7 @@ onMounted(() => {
 
     <DemoSlide class="text-left">
       <SlideContainer class="w-full h-full">
-        <component :is="layout" v-bind="info?.slides?.[0]?.frontmatter">
+        <component :is="layout" v-bind="{...attrs}">
           <div v-html="html"></div>
         </component>
       </SlideContainer>
