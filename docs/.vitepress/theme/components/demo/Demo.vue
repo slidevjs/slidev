@@ -82,7 +82,9 @@ onMounted(() => {
     .exec(resume)
     .pause(1000)
     .move('END', { speed: 0 })
+    .exec(pause)
     .type('<br><br><span class="token punctuation">---</span><br><br>', { delay: 400 })
+    .exec(resume)
     .type('<span class="token title"># Page 2</span><br><br>', { delay: 400 })
     .type('- 📄 Write sldies in a simple Markdown file<br>', { delay: 800 })
     .type('- 🌈 Themes, code blocks, interactive components<br>', { delay: 800 })
@@ -107,7 +109,7 @@ onMounted(() => {
     </DemoEditor>
 
     <DemoSlide class="text-left">
-      <SlideContainer class="w-full h-full">
+      <SlideContainer class="w-full h-full dark:bg-[#181819]">
         <component :is="layout" v-bind="{...attrs}">
           <div v-html="html"></div>
         </component>

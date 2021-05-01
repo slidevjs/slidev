@@ -25,7 +25,5 @@ export function handleBackground(background?: string, dim = false): CSSPropertie
   if (!style.background)
     delete style.background
 
-  console.log(style)
-
   return style
 }
