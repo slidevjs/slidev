@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmit, toRef } from 'vue'
+import { defineEmit } from 'vue'
 import { useRepo } from '../composables/repo'
 import NavBarTitle from './NavBarTitle.vue'
 import NavLinks from './NavLinks.vue'

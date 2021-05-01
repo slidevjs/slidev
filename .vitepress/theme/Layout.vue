@@ -1,6 +1,10 @@
 <template>
   <div class="theme" :class="pageClasses">
-    <NavBar v-if="showNavbar" @toggle="toggleSidebar">
+    <NavBar
+      v-if="showNavbar"
+      :class="isHome ? '!border-transparent !bg-transparent' : ''"
+      @toggle="toggleSidebar"
+    >
       <template #search>
         <slot name="navbar-search">
           <AlgoliaSearchBox v-if="theme.algolia" :options="theme.algolia" />
@@ -90,6 +94,8 @@ const showNavbar = computed(() => {
     || themeConfig.nav
   )
 })
+
+const isHome = computed(() => route.path === '/')
 
 // sidebar
 const openSideBar = ref(false)

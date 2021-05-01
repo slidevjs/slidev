@@ -1,7 +1,7 @@
 <template>
   <header v-if="showHero" class="home-hero">
     <div class="grid lg:grid-cols-[minmax(400px,600px),minmax(500px,1fr)] gap-4">
-      <div>
+      <div class="my-auto pb-15">
         <p align="center">
           <a href="https://github.com/slidevjs/slidev">
             <img src="/logo-title.png" alt="Slidev" height="300" />
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <Demo />
+      <Demo class="-mt-10 -mb-25"/>
     </div>
   </header>
 </template>
