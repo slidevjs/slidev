@@ -11,34 +11,44 @@ import SlideContainer from '../../../../../packages/client/internals/SlideContai
 import Cover from '../../../../../packages/theme-default/layouts/cover.vue'
 import '../../../../../packages/theme-default/styles/layout.css'
 
+const page = ref(0)
 const paused = ref(false)
 const code = ref('')
-const html = ref('')
 const info = ref<SlidevMarkdown>()
 const block = ref<HTMLPreElement>()
-const layout = shallowRef<any>(Default)
 
 const markdown = new Markdown()
+
+function getLayout(id: number) {
+  const name = info.value?.slides?.[id]?.frontmatter?.layout || 'default'
+  return name === 'cover'
+    ? Cover
+    : name === 'center'
+      ? Center
+      : Default
+}
 
 watch([code, paused], () => {
   if (paused.value)
     return
   try {
     info.value = parse(code.value)
-    html.value = markdown.render(info.value.slides[0].content)
-    const name = info.value?.slides?.[0]?.frontmatter?.layout || 'default'
-    layout.value = name === 'cover'
-      ? Cover
-      : name === 'center'
-        ? Center
-        : Default
   }
   catch (e) {
 
   }
 })
 
-const attrs = computed(() => info.value?.slides?.[0]?.frontmatter)
+function getAttrs(id: number) {
+  return info.value?.slides?.[id]?.frontmatter
+}
+
+function getHTML(id: number) {
+  const content = info?.value?.slides?.[id]?.content
+  if (!content)
+    return ''
+  return markdown.render(content)
+}
 
 function pause() {
   paused.value = true
@@ -85,10 +95,12 @@ onMounted(() => {
     .exec(pause)
     .type('<br><br><span class="token punctuation">---</span><br><br>', { delay: 400 })
     .exec(resume)
+    .exec(() => setTimeout(() => page.value = 1))
     .type('<span class="token title"># Page 2</span><br><br>', { delay: 400 })
-    .type('- 📄 Write sldies in a simple Markdown file<br>', { delay: 800 })
+    .type('- 📄 Write slides in a single Markdown file<br>', { delay: 800 })
     .type('- 🌈 Themes, code blocks, interactive components<br>', { delay: 800 })
     .type('- 😎 Read the docs to learn more!', { delay: 800 })
+    .exec(() => setTimeout(() => page.value = 0))
     .go()
 })
 </script>
@@ -101,19 +113,28 @@ onMounted(() => {
       </div>
 
       <div class="language-md !bg-transparent">
-        <pre
-          ref="block"
-          class="text-left whitespace-normal font-mono bg-transparent"
-        ></pre>
+        <pre ref="block" class="text-left whitespace-normal font-mono bg-transparent"></pre>
       </div>
     </DemoEditor>
 
     <DemoSlide class="text-left">
-      <SlideContainer class="w-full h-full dark:bg-[#181819]">
-        <component :is="layout" v-bind="{...attrs}">
-          <div v-html="html"></div>
-        </component>
-      </SlideContainer>
+      <div
+        class="flex h-full dark:bg-[#181819] transition-transform transform duration-500"
+        style="width: 200%"
+        :class="page === 1 ? '-translate-x-1/2': ''"
+      >
+        <SlideContainer class="w-full h-full">
+          <component :is="getLayout(0)" v-bind="getAttrs(0)">
+            <div v-html="getHTML(0)"></div>
+          </component>
+        </SlideContainer>
+        <SlideContainer class="w-full h-full">
+          <component :is="getLayout(1)" v-bind="getAttrs(1)">
+            <div v-html="getHTML(1)"></div>
+          </component>
+        </SlideContainer>
+      </div>
+      <div class="l"></div>
     </DemoSlide>
   </div>
 </template>
