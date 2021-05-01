@@ -28,13 +28,14 @@ Status: <b>Closed Alpha</b><br>
 
 ## Features
 
-- 📝 **Text-based** - focus on the content and then style them later
+- 📝 **Markdown-based** - use your favorite editors and workflow
 - 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding editors
-- 🤹 **Interactive** - embeds components 
+- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding
+- 🤹 **Interactive** - embedding Vue components seamlessly
 - 🎥 **Recording** - built-in recording and camera view
 - 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+- ⚡️ **Fast** - instant reloading powered by Vite
+- 🛠 **Hackable** - using Vite plugins and any npm packages
 
 ## Tech Stacks
 
