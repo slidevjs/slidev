@@ -3,12 +3,10 @@ import { CSSProperties } from 'vue'
 export function handleBackground(background?: string, dim = false): CSSProperties {
   const isColor = background && background[0] === '#' && background.startsWith('rgb')
 
-  return {
+  const style = {
     background: isColor
       ? background
-      : background
-        ? undefined
-        : 'transparent',
+      : undefined,
     color: (background && !isColor)
       ? 'white'
       : undefined,
@@ -17,10 +15,17 @@ export function handleBackground(background?: string, dim = false): CSSPropertie
       : background
         ? dim
           ? `linear-gradient(#0005, #0008), url(${background})`
-          : `url(${background})`
+          : `url("${background}")`
         : undefined,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
   }
+
+  if (!style.background)
+    delete style.background
+
+  console.log(style)
+
+  return style
 }
