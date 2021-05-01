@@ -15,7 +15,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
     "@antfu/ni": "^0.5.8",
-    "@antfu/utils": "^0.1.3",
+    "@antfu/utils": "^0.1.4",
     "@slidev/cli": "workspace:*",
     "@types/cli-progress": "^3.9.1",
     "@types/file-saver": "^2.0.2",
@@ -40,8 +40,10 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.5",
     "tsup": "^4.10.1",
+    "typeit": "^7.0.4",
     "typescript": "^4.2.4",
-    "vite-plugin-windicss": "^0.16.0-beta.5",
+    "typewriter-effect": "^2.17.0",
+    "vite-plugin-windicss": "^0.16.0-beta.6",
     "vitepress": "^0.13.2"
   }
 }

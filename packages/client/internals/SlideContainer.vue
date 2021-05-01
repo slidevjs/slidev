@@ -25,6 +25,9 @@ const props = defineProps({
   route: {
     default: () => ({}) as any as RouteRecordRaw,
   },
+  is: {
+    type: Object,
+  },
 })
 
 const tab = useVModel(props, 'tab', emit)
@@ -70,7 +73,9 @@ const style = computed(() => ({
 <template>
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
-      <component :is="route.component"/>
+      <slot>
+        <component :is="props.is || route.component" />
+      </slot>
     </div>
     <slot name="controls" />
   </div>

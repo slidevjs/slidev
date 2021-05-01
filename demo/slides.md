@@ -45,7 +45,8 @@ A fanatical full-time open sourceror.<br>
 
 
 ---
-layout: center
+title: Sponsors
+layout: image
 ---
 
 <img class="h-100 -mt-10" src="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png" /><br>
