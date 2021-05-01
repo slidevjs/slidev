@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, shallowRef, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 // @ts-ignore
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
