@@ -28,7 +28,7 @@ async function init() {
      * @type {{ name: string }}
      */
     const { name } = await prompts({
-      type: 'input',
+      type: 'text',
       name: 'name',
       message: 'Theme name:',
       initial: 'slidev-theme-starter',

@@ -29,7 +29,7 @@ async function init() {
      * @type {{ projectName: string }}
      */
     const { projectName } = await prompts({
-      type: 'input',
+      type: 'text',
       name: 'projectName',
       message: 'Project name:',
       initial: 'slidev',
