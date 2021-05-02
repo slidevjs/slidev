@@ -1,5 +1,5 @@
 <template>
-  <button aria-label="Toggle Theme" class="icon-button" @click="toggle">
+  <button aria-label="Toggle Theme" class="nav-btn" @click="toggle">
     <carbon-moon v-show="isDark" />
     <carbon-sun v-show="!isDark" />
   </button>
