@@ -6,4 +6,5 @@ sidebar: false
 
 Talks / Presentations using Slidev.
 
+<!-- Edit in ./docs/.vitepress/showcases.ts -->
 <ShowCases />
