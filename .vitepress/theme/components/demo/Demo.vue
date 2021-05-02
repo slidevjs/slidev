@@ -58,8 +58,10 @@ function resume() {
 }
 
 const COVER_URL = 'https://slidev.antfu.me/demo-cover.png'
-const img1 = new Image()
-img1.src = COVER_URL
+if (typeof window !== 'undefined') {
+  const img1 = new Image()
+  img1.src = COVER_URL
+}
 
 onMounted(() => {
   new TypeIt(block.value, {
@@ -138,10 +140,10 @@ onMounted(() => {
         class="absolute left-2 bottom-1 flex text-gray-400"
         opacity="0 hover:100"
       >
-        <div class="icon-btn" @click="page = 0" :class="{ disabled: page === 0 }">
+        <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">
           <carbon:chevron-left />
         </div>
-        <div class="icon-btn" @click="page = 1" :class="{ disabled: page === 1 }">
+        <div class="icon-btn" :class="{ disabled: page === 1 }" @click="page = 1">
           <carbon:chevron-right />
         </div>
       </div>
