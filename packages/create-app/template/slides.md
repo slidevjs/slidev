@@ -127,13 +127,13 @@ Slidev comes with powerful theming support. Themes are able to provide styles, l
 
 <div grid="~ cols-2 gap-2" m="-t-2">
 
-```yml
+```yaml
 ---
 theme: default
 ---
 ```
 
-```yml
+```yaml
 ---
 theme: seriph
 ---

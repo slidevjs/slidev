@@ -2,7 +2,7 @@
 
 Change the theme in Slidev is surprisingly easy. All you need to do is to add the `theme:` field in your frontmatter.
 
-```yml
+```yaml
 ---
 theme: seriph
 ---
