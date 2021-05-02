@@ -17,7 +17,7 @@ Directly use code blocks for highlighting
 
 ```ts
 console.log('Helle World')
-`​``
+```
 
 ---
 
@@ -60,7 +60,7 @@ This is a page with the layout `center` and a background image.
 This is a default page without any additional metadata.
 ~~~
 
-Refer to [supported frontmatter fields](/guide/frontmatter-fields) for more details.
+Refer to [customization](/custom/) for more details.
 
 ## Code Snippet
 
@@ -69,7 +69,7 @@ A big reason I am making this is that I need to make my code looks just right in
 ~~~md
 ```ts
 console.log('HelloWorld')
-`​``
+```
 ~~~
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it turns the block into a full-featured Monaco editor!
@@ -77,7 +77,7 @@ Whenever you want to do some modification in the presentation, simply add `{mona
 ~~~md
 ```ts{monaco}
 console.log('HelloWorld')
-`​``
+```
 ~~~
 
 ## Notes

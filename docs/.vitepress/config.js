@@ -10,6 +10,10 @@ const Guide = [
     link: '/guide/',
   },
   {
+    text: 'Installation',
+    link: '/guide/install',
+  },
+  {
     text: 'Markdown Syntax',
     link: '/guide/syntax',
   },
