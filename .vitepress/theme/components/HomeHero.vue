@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <Demo class="-mt-10 -mb-25"/>
+      <Demo class="-mt-10 -mb-25" />
     </div>
   </header>
 </template>

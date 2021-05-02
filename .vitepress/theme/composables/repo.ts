@@ -38,7 +38,7 @@ function getRepoText(url: string, text?: string): string {
   if (!hosts)
     return 'Source'
 
-  const platform = platforms.find(([_p, re]) => re.test(hosts[0]))
+  const platform = platforms.find(([, re]) => re.test(hosts[0]))
 
   if (platform && platform[0])
     return platform[0]

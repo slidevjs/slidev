@@ -17,10 +17,14 @@ defineProps<{
     >
       <img :src="theme.previews[0]" class="absolute top-0 bottom-0 left-0 right-0" />
     </a>
-    <div class="font-bold">{{ theme.name }}</div>
+    <div class="font-bold">
+      {{ theme.name }}
+    </div>
     <div
       class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
-    >{{ theme.description }}</div>
+    >
+      {{ theme.description }}
+    </div>
     <div class="mt-2 flex">
       <a
         v-if="theme.author.link"
@@ -28,7 +32,9 @@ defineProps<{
         class="text-current text-sm opacity-50"
         target="_blank"
       >{{ theme.author.name }}</a>
-      <div v-else class="text-current text-sm opacity-50">{{ theme.author.name }}</div>
+      <div v-else class="text-current text-sm opacity-50">
+        {{ theme.author.name }}
+      </div>
       <div class="flex-auto"></div>
       <a
         v-if="theme.id"

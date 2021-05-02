@@ -7,8 +7,8 @@ import '@docsearch/css'
 import { useRoute, useRouter } from 'vitepress'
 import { defineProps, getCurrentInstance, onMounted, watch } from 'vue'
 import docsearch from '@docsearch/js'
-import type { DefaultTheme } from '../config'
 import type { DocSearchHit } from '@docsearch/react/dist/esm/types'
+import type { DefaultTheme } from '../config'
 
 const props = defineProps<{
   options: DefaultTheme.AlgoliaSearchOptions

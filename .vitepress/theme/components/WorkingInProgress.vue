@@ -29,7 +29,7 @@ const dismissed = useStorage('sldiev-docs-wip-dismissed', false)
       hover:bg="orange-400 opacity-10"
       @click="dismissed = true"
     >
-      <carbon:checkmark class="m-auto"/>
+      <carbon:checkmark class="m-auto" />
     </div>
   </div>
 </template>

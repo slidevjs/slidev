@@ -1,6 +1,6 @@
 import { computed } from 'vue-demi'
 import { useSiteDataByRoute, usePageData } from 'vitepress'
-import { isArray, ensureStartingSlash, removeExtention } from '../utils'
+import { isArray, ensureStartingSlash } from '../utils'
 import { getSideBarConfig, getFlatSideBarLinks } from '../support/sideBar'
 
 export function useNextAndPrevLinks() {
