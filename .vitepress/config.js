@@ -32,6 +32,10 @@ const slidebars = [
         text: 'Presenter Mode',
         link: '/guide/presenter-mode',
       },
+      {
+        text: 'Editor Integrations',
+        link: '/guide/editors',
+      },
     ],
   },
   {
