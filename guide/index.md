@@ -59,6 +59,26 @@ Run `slidev -h` for more options avaliable.
 
 ### Markdown Syntax
 
-Slidev reads your `slides.md` file under your project root and convert them into slides. Whenever you made changes to it, the content of slides will be updated immediately.
+Slidev reads your `slides.md` file under your project root and converts them into slides. Whenever you made changes to it, the content of the slides will be updated immediately. For example:
 
-// TODO:
+~~~md
+# Slidev
+
+Hello World
+
+---
+
+# Page 2
+
+Directly use code blocks for highlighting
+
+```ts
+console.log('Helle World')
+`​``
+
+---
+
+# Page 3
+~~~
+
+Read more about [the Markdown syntax](/guide/syntax).
