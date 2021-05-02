@@ -17,13 +17,15 @@
         <NavLink
           v-if="hasAction"
           :item="{ link: data.actionLink, text: data.actionText }"
-          class="action mx-2 rounded-tr-4xl rounded-tl-2xl rounded-br-2xl rounded-bl-3xl"
+          class="action mx-2"
+          rounded="tr-4xl tl-2xl br-2xl bl-3xl"
         />
 
         <NavLink
           v-if="hasAltAction"
           :item="{ link: data.altActionLink, text: data.altActionText }"
-          class="action alt mx-2 rounded-tr-2xl rounded-tl-3xl rounded-br-4xl rounded-bl-4xl"
+          class="action alt mx-2"
+          rounded="tr-2xl tl-3xl br-4xl bl-4xl"
         />
 
         <div class="mt-5 flex">
@@ -61,7 +63,7 @@ const showHero = computed(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 .home-hero {
   margin: 0rem 0 2.75rem;
   padding: 3rem 1.5rem;
@@ -134,8 +136,8 @@ const showHero = computed(() => {
   line-height: 40px;
   border: 0;
   color: #ffffff;
-  background-color: var(--c-brand);
   transition: background-color 0.1s ease;
+  @apply bg-primary cursor-pointer;
 }
 
 .action :deep(.item) {
@@ -149,6 +151,10 @@ const showHero = computed(() => {
 .action:hover :deep(.item) {
   text-decoration: none;
   color: #ffffff;
+}
+
+.action:hover {
+  @apply bg-primary-deep;
 }
 
 .action.alt {

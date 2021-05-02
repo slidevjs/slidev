@@ -35,7 +35,7 @@ const cardWidth = computed(() => {
 
 <template>
   <div
-    v-if="value"
+    v-show="value"
     class="slides-overview bg-main !bg-opacity-75 p-16 overflow-y-auto"
   >
     <div

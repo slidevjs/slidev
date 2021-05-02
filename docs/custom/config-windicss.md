@@ -13,7 +13,7 @@ Since Markdown naturally supports embedded HTML markups. You can style your cont
 </div>
 ```
 
-## Configure Windi CSS 
+## Configurations
 
 To configure the Windi CSS configuration, you will need to extend it by
 
