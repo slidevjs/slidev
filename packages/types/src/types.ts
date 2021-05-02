@@ -26,7 +26,7 @@ export interface SlidevConfig {
   /**
    * @defult 'dev'
    */
-  monaco: boolean | 'dev'
+  monaco: boolean | 'dev' | 'build'
   /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf

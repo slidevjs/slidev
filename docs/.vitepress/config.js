@@ -1,80 +1,94 @@
 // @ts-check
 
+const Guide = [
+  {
+    text: 'Why Slidev',
+    link: '/guide/why',
+  },
+  {
+    text: 'Getting Started',
+    link: '/guide/',
+  },
+  {
+    text: 'Markdown Syntax',
+    link: '/guide/syntax',
+  },
+  {
+    text: 'Animations',
+    link: '/guide/animations',
+  },
+  {
+    text: 'Exporting',
+    link: '/guide/exporting',
+  },
+  {
+    text: 'Record Presentation',
+    link: '/guide/recording',
+  },
+  {
+    text: 'Presenter Mode',
+    link: '/guide/presenter-mode',
+  },
+  {
+    text: 'Editor Integrations',
+    link: '/guide/editors',
+  },
+]
+
+const Theme = [
+  {
+    text: 'Use Theme',
+    link: '/themes/use',
+  },
+  {
+    text: 'Theme Gallery',
+    link: '/themes/gallery',
+  },
+  {
+    text: 'Write a Theme',
+    link: '/themes/write-a-theme',
+  },
+]
+
+const Customizations = [
+  {
+    text: 'Customizations',
+    link: '/custom/',
+  },
+  {
+    text: 'Directory Structure',
+    link: '/custom/directory-structure',
+  },
+  {
+    text: 'Highlighter',
+    link: '/custom/highlighter',
+  },
+  {
+    text: 'Configure Vite',
+    link: '/custom/config-vite',
+  },
+  {
+    text: 'Configure Windi CSS',
+    link: '/custom/config-windicss',
+  },
+  {
+    text: 'Configure Monaco',
+    link: '/custom/config-monaco',
+  },
+]
+
 const slidebars = [
   {
     text: 'Guide',
-    children: [
-      {
-        text: 'Why Slidev',
-        link: '/guide/why',
-      },
-      {
-        text: 'Getting Started',
-        link: '/guide/',
-      },
-      {
-        text: 'Markdown Syntax',
-        link: '/guide/syntax',
-      },
-      {
-        text: 'Animations',
-        link: '/guide/animations',
-      },
-      {
-        text: 'Exporting',
-        link: '/guide/exporting',
-      },
-      {
-        text: 'Record Presentation',
-        link: '/guide/recording',
-      },
-      {
-        text: 'Presenter Mode',
-        link: '/guide/presenter-mode',
-      },
-      {
-        text: 'Editor Integrations',
-        link: '/guide/editors',
-      },
-    ],
+    children: Guide,
   },
   {
     text: 'Themes',
-    children: [
-      {
-        text: 'Use Theme',
-        link: '/themes/use',
-      },
-      {
-        text: 'Theme Gallery',
-        link: '/themes/gallery',
-      },
-      {
-        text: 'Write a Theme',
-        link: '/themes/write-a-theme',
-      },
-    ],
+    children: Theme,
   },
   {
     text: 'Customizations',
-    children: [
-      {
-        text: 'Customizations',
-        link: '/custom/',
-      },
-      {
-        text: 'Configure Vite',
-        link: '/custom/config-vite',
-      },
-      {
-        text: 'Configure Windi CSS',
-        link: '/custom/config-windicss',
-      },
-      {
-        text: 'Configure Monaco',
-        link: '/custom/config-monaco',
-      },
-    ],
+    children: Customizations,
   },
   {
     text: 'Built-in',
@@ -112,25 +126,18 @@ module.exports = {
     editLinkText: 'Suggest changes to this page',
 
     nav: [
-      { text: 'Guide', link: '/guide/' },
+      {
+        text: 'Guide',
+        items: Guide,
+      },
       {
         text: 'Theme',
-        items: [
-          {
-            text: 'Use Theme',
-            link: '/themes/use',
-          },
-          {
-            text: 'Theme Gallery',
-            link: '/themes/gallery',
-          },
-          {
-            text: 'Write a Theme',
-            link: '/themes/write-a-theme',
-          },
-        ],
+        items: Theme,
       },
-      { text: 'Customize', link: '/custom/' },
+      {
+        text: 'Customize',
+        items: Customizations,
+      },
       { text: 'Showcases', link: '/showcases' },
     ],
 

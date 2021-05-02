@@ -1,9 +1,8 @@
 import path from 'path'
-import { invoke } from '@antfu/utils'
 import { installBrowsersWithProgressBar } from 'playwright-chromium/lib/install/installer'
 import { run } from './run'
 
-invoke(async() => {
+;(async() => {
   await installBrowsersWithProgressBar()
 
   run('npm run build')
@@ -14,4 +13,8 @@ invoke(async() => {
   run('cp packages/create-app/template/slides.md demo/build.md')
   run('cp -R packages/create-app/template/public demo')
   run('npx slidev build build.md -d --base /demo/starter/ --out ../docs/.vitepress/dist/demo/starter', path.resolve(__dirname, '../demo'))
-})
+})()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })

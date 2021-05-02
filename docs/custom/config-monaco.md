@@ -1,1 +1,3 @@
-# WIP
+# Configure Monaco
+
+> TODO:
