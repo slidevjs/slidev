@@ -2,14 +2,14 @@
 
 Slides can be written within **a single markdown file** (by default `./slides.md`). 
 
-You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional inlined HTML and Vue Components support. Use `----` (four dashes or more) to separate your slides. 
+You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional inlined HTML and Vue Components support. Use `---` with a new line after to separate your slides. 
 
 ~~~md
 # Slidev
 
 Hello World
 
-----
+---
 
 # Page 2
 
@@ -19,7 +19,7 @@ Directly use code blocks for highlighting
 console.log('Helle World')
 `​``
 
-----
+---
 
 # Page 3
 
@@ -53,7 +53,7 @@ class: 'text-white'
 
 This is a page with the layout `center` and a background image.
 
-----
+---
 
 # Page 3
 
