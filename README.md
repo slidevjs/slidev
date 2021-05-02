@@ -1,12 +1,22 @@
 <br>
 <p align="center">
 <a href="https://slidev.antfu.me" target="_blank">
-<img src="./docs/public/logo-title.png" alt="Slidev" height="250" width="250"/>
+<img src="./assets/logo-title.png" alt="Slidev" height="250" width="250"/>
 </a>
 </p>
 
 <p align="center">
 Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
+</p>
+
+
+<p align="center">
+<a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img src="https://img.shields.io/npm/v/@slidev/cli?color=2B90B6&label=" alt="NPM version"></a>
+<a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@slidev/cli?color=349dbe&label="></a>
+<a href="https://slidev.antfu.me/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
+<a href="https://slidev.antfu.me/themes/gallery.html" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=themes&color=4ec5d4" alt="Themes"></a>
+<br>
+<a href="https://github.com/slidevjs/slidev" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
 </p>
 
 ## Motivation
@@ -34,36 +44,6 @@ npm init slidev
 ```
 
 For a full example, you can check the [demo](./demo) folder, which is a draft for my next talk 😉.
-
-## TODO
-
-- [ ] Shiki + TwoSlash?
-- [ ] VS Code extension
-- [ ] Timer
-- [ ] A few more themes
-- [ ] Dialog before recording
-- [ ] Docs
-- [x] Presentor Mode
-- [x] Foot notes
-- [x] Configuration in header
-- [x] Hide dev buttons on build
-- [x] Embedded editor
-- [x] Custom Monaco setup
-- [x] Camera view
-- [x] Recording!
-- [x] Markdown to Slides
-- [x] Prism hightlighting 
-- [x] Embedded Monaco
-- [x] Monaco as markdown
-- [x] Slides Overview
-- [x] `v-click` directive
-- [x] Standalone package
-  - [x] Dev Mode
-  - [x] Build Mode
-  - [x] Export PDF
-  - [x] Export PNG
-  - [x] Better CLI
-  - [x] Configurable themes
 
 ## Sponsors
 
