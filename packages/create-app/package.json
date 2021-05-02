@@ -16,6 +16,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
+    "@antfu/ni": "^0.5.8",
     "execa": "^5.0.0",
     "kolorist": "^1.4.1",
     "minimist": "^1.2.5",

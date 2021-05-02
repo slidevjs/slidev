@@ -8,6 +8,7 @@ const argv = require('minimist')(process.argv.slice(2))
 const prompts = require('prompts')
 const execa = require('execa')
 const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
+const { parseNi, run } = require('@antfu/ni')
 const { version } = require('./package.json')
 
 const cwd = process.cwd()
@@ -107,7 +108,8 @@ async function init() {
   })
 
   if (yes) {
-    await execa(pkgManager, ['-C', related, 'install'], { stdio: 'inherit' })
+    await run(parseNi, ['-C', related, 'install'])
+    // await execa(pkgManager, ['-C', related, 'install'], { stdio: 'inherit' })
     await execa(pkgManager, ['-C', related, 'run', 'dev'], { stdio: 'inherit' })
   }
   else {
