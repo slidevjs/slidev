@@ -1,5 +1,6 @@
 import { resolve } from 'path'
-import { defineConfig } from 'vite-plugin-windicss'
+import { isTruthy } from '@antfu/utils'
+import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
 
 export default defineConfig({
@@ -12,6 +13,25 @@ export default defineConfig({
     ],
     exclude: [
       '.git/**',
+    ],
+    extractors: [
+      {
+        extensions: ['md'],
+        extractor(code, id) {
+          const data = DefaultExtractor(code, id)
+
+          const frontmatterClasses = Array.from(code.matchAll(/^class:\s+(.*)$/gm)).flatMap(i => i[1].split(/[\s'"`]/g)).filter(isTruthy)
+          const classes = [
+            ...data.classes || [],
+            ...frontmatterClasses,
+          ]
+
+          return {
+            ...data,
+            classes,
+          }
+        },
+      },
     ],
   },
   plugins: [

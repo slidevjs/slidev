@@ -1,6 +1,6 @@
 ---
 layout: cover
-download: https://antfu.me/talks/2021-04-29
+download: 'https://antfu.me/talks/2021-04-29'
 highlighter: shiki
 ---
 
@@ -95,6 +95,7 @@ layout: center
 
   </div>
 </div>
+
 
 ---
 layout: center
@@ -564,6 +565,7 @@ Extremely useful in composable functions that take uncertain argument types.
 
 </v-clicks>
 
+
 ---
 
 # `ref` / `unref` <MarkerTips />
@@ -586,6 +588,7 @@ function useBala<T>(arg: MaybeRef<T>) {
 ```
 
 </div>
+
 
 ---
 
@@ -658,6 +661,7 @@ Establish the "Connections" first, then wait data to be filled up. The idea is s
 
 </div>
 
+
 ---
 
 # `useFetch` <Marker class="text-blue-400">Case</Marker>
@@ -718,7 +722,6 @@ export function useEventListener(target: EventTarget, name: string, fn: any) {
 <!--
 Lower the mental burden
 -->
-
 
 ---
 
@@ -875,6 +878,7 @@ export default {
 
 </v-clicks>
 </div>
+
 
 ---
 
@@ -1073,6 +1077,7 @@ export function usePassiveVModel(props, name) {
 ```
 
 </v-click>
+
 
 ---
 layout: center

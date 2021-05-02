@@ -68,6 +68,7 @@ Hover on the bottom-left corner to see the navigation's controls panel
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
 
+
 ---
 layout: image-right
 image: 'https://source.unsplash.com/collection/94734566/1920x1080'
@@ -91,6 +92,7 @@ function updateUser(id: number, update: Partial<User>) {
   saveUser(id, newUser)
 }
 ```
+
 
 ---
 
@@ -117,8 +119,9 @@ Check out [the guides](https://slidev.antfu.me/custom/#components) for more.
 </div>
 </div>
 
+
 ---
-class: "px-20"
+class: px-20
 ---
 
 # Themes
@@ -148,9 +151,10 @@ theme: seriph
 Read more about [How to use a theme](https://slidev.antfu.me/themes/use.html) and
 check out the [Awesome Themes Gallery](https://slidev.antfu.me/themes/gallery.html).
 
+
 ---
 layout: center
-class: "text-center"
+class: text-center
 ---
 
 # Learn More
