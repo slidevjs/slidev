@@ -134,6 +134,7 @@ module.exports = {
       '/guide/': slidebars,
       '/themes/': slidebars,
       '/custom/': slidebars,
+      '/builtin/': slidebars,
       '/': slidebars,
     },
   },
