@@ -17,6 +17,7 @@ import HomeFooter from './HomeFooter.vue'
 
 <style scoped>
 .home {
+  @apply overflow-x-hidden;
   padding-top: var(--header-height);
 }
 </style>
