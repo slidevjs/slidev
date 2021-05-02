@@ -1,7 +1,6 @@
 import { getCurrentInstance, onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
 import { createSingletonPromise } from '@antfu/utils'
-
 /* __imports__ */
 
 const setup = createSingletonPromise(async() => {

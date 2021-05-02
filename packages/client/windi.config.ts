@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
@@ -12,7 +12,8 @@ export default defineConfig({
       '*.md',
     ],
     exclude: [
-      '.git/**',
+      '.git',
+      dirname(require.resolve('monaco-editor/package.json')),
     ],
     extractors: [
       {

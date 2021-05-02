@@ -1,10 +1,9 @@
-import { mergeConfig, Plugin } from 'vite'
+import { InlineConfig, mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import { getClientRoot, ResolvedSlidevOptions } from '../options'
 
 const EXCLUDE = [
-  'theme-vitesse',
   '@slidev/types',
 ]
 
@@ -12,7 +11,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:config',
     config(config) {
-      return mergeConfig(config, {
+      const injection: InlineConfig = {
         resolve: {
           alias: {
             '@slidev/client/': `${getClientRoot()}/`,
@@ -34,7 +33,26 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'vue-demi',
           ],
         },
-      })
+
+      }
+      if (options.data.config.monaco) {
+        // fix for monaco workers
+        // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
+        injection.build = {
+          rollupOptions: {
+            output: {
+              manualChunks: {
+                jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
+                cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
+                htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
+                tsWorker: ['monaco-editor/esm/vs/language/typescript/ts.worker'],
+                editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
+              },
+            },
+          },
+        }
+      }
+      return mergeConfig(config, injection)
     },
     configureServer(server) {
       // serve our index.html after vite history fallback
