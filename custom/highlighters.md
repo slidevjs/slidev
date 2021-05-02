@@ -1,4 +1,4 @@
-# Highlighter
+# Highlighters
 
 Slidev comes with two syntax highlighter for you to choose:
 

@@ -64,8 +64,8 @@ const Customizations = [
     link: '/custom/directory-structure',
   },
   {
-    text: 'Highlighter',
-    link: '/custom/highlighter',
+    text: 'Highlighters',
+    link: '/custom/highlighters',
   },
   {
     text: 'Configure Vite',
