@@ -9,8 +9,17 @@
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "index.d.ts",
   "homepage": "https://github.com/slidevjs/slidev",
-  "bugs": "https://github.com/slidevjs/slidev/issues"
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "nr build --watch"
+  },
+  "devDependencies": {
+    "@antfu/utils": "^0.1.4",
+    "markdown-it-shiki": "^0.2.2"
+  }
 }

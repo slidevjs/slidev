@@ -1,6 +1,6 @@
-import * as monaco from 'monaco-editor'
+import { defineMonacoSetup } from '@slidev/types'
 
-export default function setupMonaco() {
+export default defineMonacoSetup((monaco) => {
   monaco.languages.typescript.typescriptDefaults.addExtraLib(
     `
     import { InjectionKey } from 'vue'
@@ -9,4 +9,4 @@ export default function setupMonaco() {
     `,
     'file:///root/context.ts',
   )
-}
+})

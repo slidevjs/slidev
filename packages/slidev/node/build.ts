@@ -23,7 +23,7 @@ export async function build(
         viteConfig,
         <InlineConfig>({
           plugins: [
-            ViteSlidevPlugin(options, pluginOptions),
+            await ViteSlidevPlugin(options, pluginOptions),
             {
               name: 'resolve-config',
               configResolved(_config) {

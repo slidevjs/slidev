@@ -133,6 +133,7 @@ export function parse(
     monaco: 'dev',
     download: false,
     info: true,
+    highlighter: 'prism',
   }
   const config: SlidevConfig = Object.assign(
     defaultConfig,

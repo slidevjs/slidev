@@ -38,6 +38,10 @@ export interface SlidevConfig {
    * @default true
    */
   info: boolean
+  /**
+   * @default prism
+   */
+  highlighter: 'prism' | 'shiki'
 }
 
 export interface SlidevMarkdown {

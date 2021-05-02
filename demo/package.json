@@ -12,6 +12,7 @@
     "@slidev/theme-seriph": "workspace:*"
   },
   "devDependencies": {
+    "@slidev/types": "workspace:^0.0.0-alpha.42",
     "nodemon": "^2.0.7"
   }
 }

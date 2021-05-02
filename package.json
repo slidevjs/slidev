@@ -18,10 +18,11 @@
     "@antfu/utils": "^0.1.4",
     "@slidev/cli": "workspace:*",
     "@types/cli-progress": "^3.9.1",
+    "@types/connect": "^3.4.34",
     "@types/file-saver": "^2.0.2",
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",
-    "@types/js-yaml": "^3.0.0",
+    "@types/js-yaml": "^3.12.6",
     "@types/markdown-it": "^12.0.1",
     "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
@@ -43,7 +44,7 @@
     "typeit": "^7.0.4",
     "typescript": "^4.2.4",
     "typewriter-effect": "^2.17.0",
-    "vite-plugin-windicss": "^0.16.0-beta.6",
+    "vite-plugin-windicss": "^0.16.0-beta.7",
     "vitepress": "^0.13.2"
   }
 }

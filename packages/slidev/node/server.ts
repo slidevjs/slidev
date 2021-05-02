@@ -12,7 +12,7 @@ export async function createServer(
       viteConfig,
       <InlineConfig>({
         plugins: [
-          ViteSlidevPlugin(options, pluginConfig),
+          await ViteSlidevPlugin(options, pluginConfig),
         ],
       }),
     ),

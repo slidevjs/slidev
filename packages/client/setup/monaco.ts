@@ -48,6 +48,10 @@ const setup = createSingletonPromise(async() => {
     })(),
   ])
 
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const injection_arg = monaco
+
   /* __async_injections__ */
 
   if (getCurrentInstance())

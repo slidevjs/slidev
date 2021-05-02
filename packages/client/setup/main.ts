@@ -9,5 +9,9 @@ export default function setupMain() {
   setMaxHeight()
   window.addEventListener('resize', setMaxHeight)
 
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const injection_arg = undefined
+
   /* __injections__ */
 }

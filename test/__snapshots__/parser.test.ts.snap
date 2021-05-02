@@ -3,6 +3,7 @@
 exports[`md parser frontmatter.md: config 1`] = `
 Object {
   "download": false,
+  "highlighter": "prism",
   "info": true,
   "monaco": "dev",
   "remoteAssets": true,
@@ -109,7 +110,7 @@ this should be treated as code block
 ----
 \`\`\`
 ",
-    "end": 28,
+    "end": 29,
     "frontmatter": Object {},
     "index": 4,
     "note": undefined,
@@ -131,6 +132,7 @@ this should be treated as code block
 exports[`md parser minimal.md: config 1`] = `
 Object {
   "download": false,
+  "highlighter": "prism",
   "info": true,
   "monaco": "dev",
   "remoteAssets": true,
@@ -201,7 +203,7 @@ console.log('Hello World')
     "content": "
 Nice to meet you
 ",
-    "end": 21,
+    "end": 22,
     "frontmatter": Object {},
     "index": 2,
     "note": undefined,

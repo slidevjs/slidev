@@ -33,7 +33,7 @@ export function createSetupPlugin({ clientRoot, themeRoots, userRoot }: Resolved
           )
           asyncInjections.push(
             `// ${path}`,
-            `await __n${idx}()`,
+            `await __n${idx}(injection_arg)`,
           )
         })
 

@@ -1,6 +1,6 @@
-import * as monaco from 'monaco-editor'
+import { defineMonacoSetup } from '@slidev/types'
 
-export default async function setupMonaco() {
+export default defineMonacoSetup(async(monaco) => {
   await Promise.all([
     // load theme
     (async() => {
@@ -14,4 +14,4 @@ export default async function setupMonaco() {
       monaco.editor.defineTheme('vitesse-dark', dark as any)
     })(),
   ])
-}
+})

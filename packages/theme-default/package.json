@@ -23,10 +23,12 @@
   },
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",
-    "prism-theme-vars": "^0.2.2"
+    "prism-theme-vars": "^0.2.2",
+    "theme-vitesse": "^0.1.9"
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/client": "workspace:*"
+    "@slidev/client": "workspace:*",
+    "@slidev/types": "workspace:*"
   }
 }

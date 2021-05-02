@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { defineConfig } from 'windicss/helpers'
+import { defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
 
 export default defineConfig({

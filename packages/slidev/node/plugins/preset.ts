@@ -1,5 +1,6 @@
 
 import { resolve } from 'path'
+import { existsSync } from 'fs'
 import { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
@@ -7,10 +8,12 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import Prism from 'markdown-it-prism'
+import Shiki, { Options as ShikiOptions } from 'markdown-it-shiki'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
-import { notNullish } from '@antfu/utils'
+import { deepMerge, notNullish, uniq } from '@antfu/utils'
+import { registerSucrase } from '../utils/register'
 import { createConfigPlugin } from './config'
 import { createSlidesLoader } from './loaders'
 import { createMonacoLoader, transformMarkdownMonaco, truncateMancoMark } from './monaco'
@@ -20,10 +23,29 @@ import { createSetupPlugin } from './setups'
 import VitePluginVueFactory, { VueFactoryResolver } from './factory'
 import VitePluginServerRef from './server-ref'
 
-export function ViteSlidevPlugin(
+async function loadSetups<T, R extends object>(roots: string[], name: string, arg: T, initial: R, merge = true): Promise<R> {
+  let returns = initial
+  const revert = registerSucrase()
+  for (const root of roots) {
+    const path = resolve(root, 'setup', name)
+    if (existsSync(path)) {
+      const { default: setup } = await import(path)
+      const result = await setup(arg)
+      if (result !== null) {
+        returns = merge
+          ? deepMerge(returns, result)
+          : result
+      }
+    }
+  }
+  revert()
+  return returns
+}
+
+export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
-): Plugin[] {
+): Promise<Plugin[]> {
   const {
     vue: vueOptions = {},
     markdown: mdOptions = {},
@@ -37,10 +59,24 @@ export function ViteSlidevPlugin(
     mode,
     themeRoots,
     clientRoot,
+    userRoot,
     data: { config },
   } = options
 
+  const roots = uniq([clientRoot, ...themeRoots, userRoot])
+
   const DEV = mode === 'dev' ? 'true' : 'false'
+
+  let shikiOptions: ShikiOptions = undefined!
+
+  if (config.highlighter === 'shiki') {
+    shikiOptions = await loadSetups(roots, 'shiki.ts', {}, {
+      theme: {
+        dark: 'min-dark',
+        light: 'min-light',
+      },
+    }, false)
+  }
 
   return [
     <Plugin>{
@@ -82,7 +118,11 @@ export function ViteSlidevPlugin(
             rel: 'noopener',
           },
         })
-        md.use(Prism)
+        if (config.highlighter === 'shiki')
+          md.use(Shiki, shikiOptions)
+
+        else
+          md.use(Prism)
       },
       transforms: {
         before: (config.monaco === true || config.monaco === mode)

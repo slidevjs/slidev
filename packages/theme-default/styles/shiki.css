@@ -1,0 +1,25 @@
+.shiki {
+  font-family: theme('fontFamily.mono');
+  font-size: 12px;
+  padding: .5rem;
+  border-radius: 0.3em;
+  line-height: 1.5em;
+  overflow: auto;
+  margin: 0.5em 0;
+}
+
+html.dark .shiki-light {
+  display: none;
+}
+
+html:not(.dark) .shiki-dark {
+  display: none;
+}
+
+.shiki-light {
+  background: #f8f8f8 !important;
+}
+
+.shiki-dark {
+  background: #1b1b1b !important;
+}

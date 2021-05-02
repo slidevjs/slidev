@@ -1,3 +1,4 @@
 import './main.css'
 import './layout.css'
-import './code.css'
+import './prism.css'
+import './shiki.css'

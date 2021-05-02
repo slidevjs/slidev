@@ -42,7 +42,6 @@ e
 
 f
 
----
 `)
     expect(data.slides.map(i => i.content.trim()))
       .toEqual(Array.from('abcdef'))

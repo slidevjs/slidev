@@ -1,6 +1,7 @@
 ---
 layout: cover
 download: https://antfu.me/talks/2021-04-29
+highlighter: shiki
 ---
 
 # Composable Vue
@@ -46,7 +47,7 @@ A fanatical full-time open sourceror.<br>
 
 ---
 title: Sponsors
-layout: image
+layout: center
 ---
 
 <img class="h-100 -mt-10" src="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png" /><br>

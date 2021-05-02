@@ -74,7 +74,7 @@ cli.command(
               console.log(yellow('\n  restarting on theme change\n'))
               initServer()
             }
-            else if (newData.config.monaco !== data.config.monaco) {
+            else if (newData.config.monaco !== data.config.monaco || newData.config.highlighter !== data.config.highlighter) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
             }
