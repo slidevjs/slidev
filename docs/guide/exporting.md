@@ -51,3 +51,10 @@ You can also provide a custom url to the PDF. And if so the rendering process wi
 download: 'https://myside.com/my-talk.pdf'
 ---
 ```
+
+### Examples
+
+Here are a few examples of the exported SPA:
+
+- [Starter Template](/demo/starter)
+- [Composable Vue](https://talks.antfu.me/2021/composable-vue) by [Anthony Fu](https://github.com/antfu)
