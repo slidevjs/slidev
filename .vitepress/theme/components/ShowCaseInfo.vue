@@ -10,8 +10,8 @@ defineProps<{
 <template>
   <div>
     <div
-      class="block mb-1.5 w-full rounded overflow-hidden relative"
-      style="padding-top: 56.25%"
+      class="block mb-1.5 w-full overflow-hidden relative aspect-9/16"
+      border="~ rounded gray-400 opacity-20"
     >
       <img :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
     </div>

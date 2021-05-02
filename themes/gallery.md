@@ -1,7 +1,3 @@
----
-sidebar: false
----
-
 # Themes Gallery
 
 Browser awesome themes available for Slidev here.

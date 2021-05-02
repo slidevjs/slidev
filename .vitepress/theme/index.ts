@@ -8,7 +8,6 @@ import './styles/layout.css'
 import './styles/code.css'
 import './styles/custom-blocks.css'
 import './styles/sidebar-links.css'
-import './styles/utils.css'
 import 'windi-utilities.css'
 
 const theme = {
