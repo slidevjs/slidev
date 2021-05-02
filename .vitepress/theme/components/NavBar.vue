@@ -11,6 +11,12 @@
     </div>
 
     <div class="nav-icons">
+      <div class="item mr-2">
+        <a class="nav-btn" href="https://twitter.com/Slidevjs" target="_blank" aria-label="Twitter">
+          <mdi-twitter />
+        </a>
+      </div>
+
       <div v-if="repo" class="item">
         <a class="nav-btn" :href="repo.link" target="_blank" aria-label="View GitHub Repo">
           <carbon-logo-github />
