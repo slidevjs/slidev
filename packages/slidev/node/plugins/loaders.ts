@@ -134,7 +134,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           const a = data.slides[i]
           const b = newData.slides[i]
 
-          if (a?.content.trim() === b?.content.trim())
+          if (a?.content.trim() === b?.content.trim() && JSON.stringify(a.frontmatter) === JSON.stringify(b.frontmatter))
             continue
 
           moduleIds.push(

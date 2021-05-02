@@ -79,6 +79,22 @@ export async function ViteSlidevPlugin(
   }
 
   return [
+    WindiCSS(
+      {
+        configFiles: [
+          ...defaultConfigureFiles,
+          ...themeRoots.map(i => `${i}/windi.config.ts`),
+          resolve(clientRoot, 'windi.config.ts'),
+        ],
+        ...windiOptions,
+      },
+      {
+        hookOptions: {
+          ignoreNodeModules: false,
+        },
+      },
+    ),
+
     <Plugin>{
       name: 'slidev:flags',
       enforce: 'pre',
@@ -158,22 +174,6 @@ export async function ViteSlidevPlugin(
     ViteIcons({
       ...iconsOptions,
     }),
-
-    WindiCSS(
-      {
-        configFiles: [
-          ...defaultConfigureFiles,
-          ...themeRoots.map(i => `${i}/windi.config.ts`),
-          resolve(clientRoot, 'windi.config.ts'),
-        ],
-        ...windiOptions,
-      },
-      {
-        hookOptions: {
-          ignoreNodeModules: false,
-        },
-      },
-    ),
 
     (config.remoteAssets === true || config.remoteAssets === mode)
       ? RemoteAssets({
