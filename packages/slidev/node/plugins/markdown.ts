@@ -36,7 +36,7 @@ export async function createMarkdownPlugin(
 
   return Markdown({
     wrapperClasses: '',
-    headEnabled: true,
+    headEnabled: false,
     markdownItOptions: {
       quotes: '""\'\'',
       html: true,

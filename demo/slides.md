@@ -22,7 +22,7 @@ Anthony Fu
 
 
 ---
-layout: intro
+layout: 'intro'
 ---
 
 # Anthony Fu
@@ -33,7 +33,7 @@ Creator of VueUse, i18n Ally and Type Challenges.<br>
 A fanatical full-time open sourceror.<br>
 </div>
 
-<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4" children="block my-auto">
+<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4">
   <ri-github-line class="opacity-50"/>
   <div><a href="https://github.com/antfu" target="_blank">antfu</a></div>
   <ri-twitter-line class="opacity-50"/>
@@ -46,7 +46,7 @@ A fanatical full-time open sourceror.<br>
 
 
 ---
-title: Sponsors
+name: Sponsors
 layout: center
 ---
 
