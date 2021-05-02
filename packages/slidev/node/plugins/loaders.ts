@@ -8,7 +8,7 @@ import Markdown from 'markdown-it'
 import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '@slidev/parser'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/

@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
-    "@antfu/ni": "^0.5.8",
+    "@antfu/ni": "^0.5.9",
     "@antfu/utils": "^0.1.4",
     "@slidev/cli": "workspace:*",
     "@types/cli-progress": "^3.9.1",

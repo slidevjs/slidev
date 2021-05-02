@@ -6,7 +6,7 @@ import connect from 'connect'
 import sirv from 'sirv'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from './plugins/options'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 
 export async function build(
   options: ResolvedSlidevOptions,

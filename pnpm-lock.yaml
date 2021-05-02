@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
-      '@antfu/ni': ^0.5.8
+      '@antfu/ni': ^0.5.9
       '@antfu/utils': ^0.1.4
       '@slidev/cli': workspace:*
       '@types/cli-progress': ^3.9.1
@@ -40,7 +40,7 @@ importers:
       vitepress: ^0.13.2
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
-      '@antfu/ni': 0.5.8
+      '@antfu/ni': 0.5.9
       '@antfu/utils': 0.1.4
       '@slidev/cli': link:packages/slidev
       '@types/cli-progress': 3.9.1
@@ -122,13 +122,13 @@ importers:
 
   packages/create-app:
     specifiers:
-      '@antfu/ni': ^0.5.8
+      '@antfu/ni': ^0.5.9
       execa: ^5.0.0
       kolorist: ^1.4.1
       minimist: ^1.2.5
       prompts: ^2.4.1
     dependencies:
-      '@antfu/ni': 0.5.8
+      '@antfu/ni': 0.5.9
       execa: 5.0.0
       kolorist: 1.4.1
       minimist: 1.2.5
@@ -172,7 +172,7 @@ importers:
       markdown-it: ^12.0.6
       markdown-it-link-attributes: ^3.0.0
       markdown-it-prism: ^2.1.6
-      markdown-it-shiki: ^0.2.2
+      markdown-it-shiki: ^0.2.3
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
       pirates: ^4.0.1
@@ -208,7 +208,7 @@ importers:
       markdown-it: 12.0.6
       markdown-it-link-attributes: 3.0.0
       markdown-it-prism: 2.1.6
-      markdown-it-shiki: 0.2.2
+      markdown-it-shiki: 0.2.3
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
       pirates: 4.0.1
@@ -263,10 +263,10 @@ importers:
   packages/types:
     specifiers:
       '@antfu/utils': ^0.1.4
-      markdown-it-shiki: ^0.2.2
+      markdown-it-shiki: ^0.2.3
     devDependencies:
       '@antfu/utils': 0.1.4
-      markdown-it-shiki: 0.2.2
+      markdown-it-shiki: 0.2.3
 
 packages:
 
@@ -435,8 +435,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/ni/0.5.8:
-    resolution: {integrity: sha512-x4y93JuiJZTdbV+xfVbZ10XUx58t1pjbeqLo/0+25BttXgWqx1QA+5T4NStJhffSzcGWf8uGTjRWOUSIlNrhtA==}
+  /@antfu/ni/0.5.9:
+    resolution: {integrity: sha512-FSrcy0l8KeXu9WtsFC8j5KrziEyy4Ikz2cA+F1+H/8WMqhrcl7qr1e78jNQCPjuDrlsufbU8vrDTZH5pTs+wzQ==}
     hasBin: true
 
   /@antfu/utils/0.1.4:
@@ -5073,8 +5073,8 @@ packages:
       prismjs: 1.23.0
     dev: false
 
-  /markdown-it-shiki/0.2.2:
-    resolution: {integrity: sha512-7kQ5KEdEoeM9V4CV9xofjsp5l1dQg3kF7CXlq4Tz7c1zGYg3QZjzBcLe17tCdE+zXYLh5hApCU0zE5Umxd97/A==}
+  /markdown-it-shiki/0.2.3:
+    resolution: {integrity: sha512-CvwLRlB6pvZ1VDtcpvMVwWavpkUNb9Dg+lj4dLTUB9p/5oXtk/7cDH+hQlBVHoz568HNcul4zRiX05+tpJOcAA==}
     dependencies:
       deasync: 0.1.21
       debug: 4.3.2

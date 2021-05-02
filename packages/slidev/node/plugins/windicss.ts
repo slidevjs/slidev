@@ -1,19 +1,24 @@
-import { isObject } from '@antfu/utils'
-import { Config as WindiCssConfig } from 'windicss/types/interfaces'
+import { resolve } from 'path'
+import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 
-function deepMerge(a: any, b: any, rootPath: string) {
-  a = { ...a }
-  Object.keys(b).forEach((key) => {
-    if (isObject(a[key]))
-      a[key] = deepMerge(a[key], b[key], rootPath ? `${rootPath}.${key}` : key)
-    else if (Array.isArray(a[key]))
-      a[key] = [...a[key], ...b[key]]
-    else
-      a[key] = b[key]
-  })
-  return a
-}
-
-export function mergeWindicssConfig(a: WindiCssConfig, b: WindiCssConfig) {
-  return deepMerge(a, b, '')
+export function createWindiCSSPlugin(
+  { themeRoots, clientRoot }: ResolvedSlidevOptions,
+  { windicss: windiOptions }: SlidevPluginOptions,
+) {
+  return WindiCSS(
+    {
+      configFiles: [
+        ...defaultConfigureFiles,
+        ...themeRoots.map(i => `${i}/windi.config.ts`),
+        resolve(clientRoot, 'windi.config.ts'),
+      ],
+      ...windiOptions,
+    },
+    {
+      hookOptions: {
+        ignoreNodeModules: false,
+      },
+    },
+  )
 }

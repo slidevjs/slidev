@@ -2,9 +2,9 @@ import { existsSync } from 'fs'
 import { join, resolve } from 'path'
 import { slash } from '@antfu/utils'
 import { Plugin } from 'vite'
-import { ResolvedSlidevOptions } from './options'
+import { ResolvedSlidevOptions } from '../options'
 
-export function createSetupPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
+export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const setupEntry = slash(resolve(clientRoot, 'setup'))
 
   return {

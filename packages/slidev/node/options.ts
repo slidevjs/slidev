@@ -5,10 +5,10 @@ import ViteComponents from 'vite-plugin-components'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
-import { ArgumentsType } from '@antfu/utils'
+import { ArgumentsType, uniq } from '@antfu/utils'
 import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser'
-import { packageExists, promptForThemeInstallation, resolveThemeName } from '../themes'
+import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
 
 export interface SlidevEntryOptions {
   /**
@@ -39,6 +39,7 @@ export interface ResolvedSlidevOptions {
   clientRoot: string
   theme: string
   themeRoots: string[]
+  roots: string[]
   mode: 'dev' | 'build'
 }
 
@@ -92,14 +93,20 @@ export async function resolveOptions(
     }
   }
 
+  const clientRoot = getClientRoot()
+  const cliRoot = getCLIRoot()
+  const themeRoots = getThemeRoots(theme)
+  const roots = uniq([clientRoot, ...themeRoots, userRoot])
+
   return {
     data,
     mode,
     entry: resolve(userRoot, entry),
     theme,
     userRoot,
-    clientRoot: getClientRoot(),
-    cliRoot: getCLIRoot(),
-    themeRoots: getThemeRoots(theme),
+    clientRoot,
+    cliRoot,
+    themeRoots,
+    roots,
   }
 }

@@ -1,7 +1,7 @@
 import { existsSync } from 'fs'
 import { join, resolve } from 'path'
 import { Plugin } from 'vite'
-import { ResolvedSlidevOptions } from './options'
+import { ResolvedSlidevOptions } from '../options'
 
 export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const mainEntry = resolve(clientRoot, 'main.ts')

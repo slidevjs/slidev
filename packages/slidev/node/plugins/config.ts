@@ -1,7 +1,7 @@
 import { mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
-import { getClientRoot, ResolvedSlidevOptions } from './options'
+import { getClientRoot, ResolvedSlidevOptions } from '../options'
 
 const EXCLUDE = [
   'theme-vitesse',

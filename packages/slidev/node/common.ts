@@ -1,7 +1,7 @@
 import { promises as fs, existsSync } from 'fs'
 import { join, posix } from 'path'
 import { uniq } from '@antfu/utils'
-import { ResolvedSlidevOptions } from './plugins/options'
+import { ResolvedSlidevOptions } from './options'
 
 export async function getIndexHtml({ clientRoot, themeRoots }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')

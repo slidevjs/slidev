@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.1.4",
-    "markdown-it-shiki": "^0.2.2"
+    "markdown-it-shiki": "^0.2.3"
   }
 }

@@ -9,7 +9,7 @@ import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser'
 import { version } from '../package.json'
 import { createServer } from './server'
-import { ResolvedSlidevOptions, resolveOptions } from './plugins/options'
+import { ResolvedSlidevOptions, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
 
 const cli = yargs

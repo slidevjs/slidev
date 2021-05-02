@@ -1,5 +1,5 @@
 import { createServer as createViteServer, InlineConfig, mergeConfig } from 'vite'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from './plugins/options'
+import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
 import { ViteSlidevPlugin } from './plugins/preset'
 
 export async function createServer(
