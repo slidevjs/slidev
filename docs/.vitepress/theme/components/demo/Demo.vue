@@ -134,7 +134,17 @@ onMounted(() => {
           </component>
         </SlideContainer>
       </div>
-      <div class="l"></div>
+      <div
+        class="absolute left-2 bottom-1 flex text-gray-400"
+        opacity="0 hover:100"
+      >
+        <div class="icon-btn" @click="page = 0" :class="{ disabled: page === 0 }">
+          <carbon:chevron-left />
+        </div>
+        <div class="icon-btn" @click="page = 1" :class="{ disabled: page === 1 }">
+          <carbon:chevron-right />
+        </div>
+      </div>
     </DemoSlide>
   </div>
 </template>

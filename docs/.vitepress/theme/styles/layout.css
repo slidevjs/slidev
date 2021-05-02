@@ -264,7 +264,7 @@ form {
   height: 100vh;
 }
 
-.icon-button {
+.nav-btn {
   display: flex;
   font-size: 1.05rem;
   border: 0;
@@ -274,13 +274,29 @@ form {
   opacity: 0.8;
   cursor: pointer;
 }
-.icon-button:hover {
+.nav-btn:hover {
   opacity: 1;
 }
-.icon-button svg {
+.nav-btn svg {
   margin: auto;
 }
 .external-link {
   font-size: 0.95rem;
   opacity: 0.7;
+}
+
+.icon-btn {
+  @apply inline-block cursor-pointer select-none !outline-none;
+  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-2;
+  @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
+}
+
+.icon-btn.disabled {
+  @apply opacity-25 pointer-events-none;
+}
+
+.inline-icon-btn {
+  @apply text-primary-deep;
+  @apply inline-block rounded p-0.5 text-2xl align-middle;
+  @apply border border-primary border-opacity-20 border-solid;
 }
