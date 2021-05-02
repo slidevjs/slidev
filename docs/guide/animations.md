@@ -51,3 +51,7 @@ When you click the "next" button, both `Hello` and `World` will show up together
 ```
 
 An item will become visible accordingly whenever you click "next".
+
+## Transitions
+
+The built-in support for slides and elements transitions is NOT provided in the current version. We are planned add it in the next major version. Before that, you can still use your custom styles and libraries to do that.

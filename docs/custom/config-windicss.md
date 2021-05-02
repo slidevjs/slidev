@@ -15,4 +15,26 @@ Since Markdown naturally supports embedded HTML markups. You can style your cont
 
 ## Configure Windi CSS 
 
-> TODO:
+To configure the Windi CSS configuration, you will need to extend it by
+
+```ts
+import { mergeWindicssConfig, defineConfig } from 'vite-plugin-windicss'
+import BaseConfig from '@slidev/client/windi.config'
+// or extending from the theme:
+/* import BaseConfig from '@slidev/theme-seriph/windi.config' */
+
+export default mergeWindicssConfig(
+  BaseConfig,
+  defineConfig({
+    theme: {
+      extend: {
+        colors: {
+          primary: {
+            DEFAULT: '#42b883'
+          }
+        }
+      }
+    }
+  })
+)
+```

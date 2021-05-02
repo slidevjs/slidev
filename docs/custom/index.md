@@ -60,20 +60,40 @@ Slidev also provides some [built-in components](/builtin/components) for you to 
 
 Conventions: `./layouts/*.{vue,js,ts,jsx,tsx}`
 
-> TODO:
+```
+your-slidev/
+  ├── ...
+  └── layouts/
+      ├── cover.vue
+      └── my-cool-theme.vue
+```
 
+You can put those components in any name and use it as the same name in your markdown.
+
+```md
+---
+layout: my-cool-theme
+---
+```
+
+When you provide the layouts with the same name as the layouts provided by Slidev built-in or the theme, it will be override with yours. The priority list is `local > theme > built-in`.
+
+In the layout component, use `<slot/>` for placing the slide content. For example:
+
+```html
+<!-- default.vue -->
+<template>
+  <div class="layout-master default">
+    <slot />
+  </div>
+</template>
+```
 
 ### Public
 
 Conventions: `./public/*`
 
 Assets in this directory will be served at root path `/` during dev, and copied to the root of the dist directory as-is. Read more about [Vite's `public` directory](https://vitejs.dev/guide/assets.html#the-public-directory).
-
-### Setup
-
-Conventions: `./setup/*.ts`
-
-> TODO:
 
 ### Style
 
@@ -98,6 +118,28 @@ import './base.css'
 import './code.css'
 import './layouts.css'
 ```
+
+Styles will be processed by [Windi CSS](http://windicss.org/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://windicss.org/features/directives.html) out-of-box. For example:
+
+```less
+.layout-master {
+  @apply px-14 py-10 text-[1.1rem];
+
+  h1, h2, h3, h4, p, div {
+    @apply select-none;
+  }
+
+  pre, code {
+    @apply select-text;
+  }
+
+  a {
+    color: theme('colors.primary');
+  }
+}
+```
+
+[Learn more about the syntax](https://windicss.org/features/directives.html).
 
 ### `index.html`
 
@@ -140,6 +182,12 @@ The finial hosted html will be like:
 </body>
 </html>
 ```
+
+### Setup
+
+Conventions: `./setup/*.ts`
+
+> TODO:
 
 ## `vite.config.ts`
 

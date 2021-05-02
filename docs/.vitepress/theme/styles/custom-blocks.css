@@ -65,3 +65,9 @@
 .custom-block-title {
   display: none;
 }
+
+.inline-icon-button {
+  @apply text-primary-deep;
+  @apply inline-block rounded p-0.5 text-2xl align-middle;
+  @apply border border-primary border-opacity-20 border-solid;
+}
