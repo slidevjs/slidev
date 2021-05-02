@@ -6,13 +6,11 @@
     "build": "slidev build",
     "export": "slidev export"
   },
-  "dependencies": {
+  "devDependencies": {
     "@slidev/cli": "workspace:*",
     "@slidev/theme-default": "workspace:*",
-    "@slidev/theme-seriph": "workspace:*"
-  },
-  "devDependencies": {
-    "@slidev/types": "workspace:^0.0.0-alpha.42",
+    "@slidev/theme-seriph": "workspace:*",
+    "@slidev/types": "workspace:*",
     "nodemon": "^2.0.7"
   }
 }

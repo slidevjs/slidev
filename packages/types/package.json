@@ -9,6 +9,11 @@
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
+  "files": [
+    "dist",
+    "client.d.ts",
+    "index.d.ts"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "index.d.ts",

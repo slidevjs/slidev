@@ -23,7 +23,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "gray-matter": "^4.0.3",
+    "@slidev/types": "workspace:*",
     "js-yaml": "^3.14.1"
   }
 }

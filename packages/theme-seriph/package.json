@@ -8,7 +8,8 @@
   ],
   "license": "MIT",
   "slidev": {
-    "color": "duo"
+    "colorSchema": "both",
+    "highlighter": "all"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "peerDependencies": {
-    "@slidev/client": "^0.0.0-alpha.0"
+    "@slidev/client": "workspace:*"
   },
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",
