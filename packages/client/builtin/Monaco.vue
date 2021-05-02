@@ -100,9 +100,6 @@ setupMonaco()
       overviewRulerLanes: 0,
       minimap: { enabled: false },
     })
-    // editor.onDidFocusEditorText(() => paused.value = true)
-    // editor.onDidBlurEditorText(() => paused.value = false)
-
     async function format() {
       code.value = (await formatCode(code.value, lang.value)).trim()
     }

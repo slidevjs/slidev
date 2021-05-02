@@ -1,12 +1,11 @@
 import { computed, Ref, ref } from 'vue'
-import { and, not, SwipeDirection, timestamp, useSwipe, whenever } from '@vueuse/core'
-import { isInputing, magicKeys, query } from '../state'
+import { SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
+import { shortcut, query, showOverview } from '../state'
 import { rawRoutes, router } from '../routes'
 
 export { rawRoutes }
 
 export const route = computed(() => router.currentRoute.value)
-export const paused = ref(false)
 
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 
@@ -68,13 +67,12 @@ export function go(page: number) {
   return router.push(getPath(page))
 }
 
-const shortcutEnabled = and(not(paused), not(isInputing))
-
-whenever(and(magicKeys.space, shortcutEnabled), next)
-whenever(and(magicKeys.right, shortcutEnabled), next)
-whenever(and(magicKeys.left, shortcutEnabled), prev)
-whenever(and(magicKeys.up, shortcutEnabled), prevSlide)
-whenever(and(magicKeys.down, shortcutEnabled), nextSlide)
+shortcut('space', next)
+shortcut('right', next)
+shortcut('left', prev)
+shortcut('up', prevSlide)
+shortcut('down', nextSlide)
+shortcut('escape', () => showOverview.value = !showOverview.value)
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   const swipeBegin = ref(0)

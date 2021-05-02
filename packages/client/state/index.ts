@@ -1,4 +1,4 @@
-import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize } from '@vueuse/core'
+import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize, Fn, not, and, whenever } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 export const showOverview = ref(false)
@@ -19,3 +19,9 @@ export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
 
 export const isPrintMode = computed(() => query.print != null)
+
+export const shortcutEnabled = not(isInputing)
+
+export function shortcut(key: string, fn: Fn) {
+  return whenever(and(magicKeys[key], shortcutEnabled), fn)
+}
