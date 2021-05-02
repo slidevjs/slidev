@@ -8,8 +8,8 @@ import { isDark, toggleDark } from '@slidev/client/logic/dark'
     @click="toggleDark"
   >
     <div class="flex">
-      <carbon:moon v-if="isDark"/>
-      <carbon:sun v-else/>
+      <carbon:moon v-if="isDark" />
+      <carbon:sun v-else />
       <span class="mr-1 ml-2">{{ isDark ? 'Dark' : 'Light' }}</span>
     </div>
   </button>

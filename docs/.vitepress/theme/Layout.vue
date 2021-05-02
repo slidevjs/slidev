@@ -49,7 +49,7 @@
 
   <!-- <Debug /> -->
 
-  <WorkingInProgress/>
+  <WorkingInProgress />
 </template>
 
 <script setup lang="ts">

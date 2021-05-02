@@ -199,6 +199,7 @@ export function useRecording() {
   useEventListener('beforeunload', (event) => {
     if (!recording.value)
       return
+    // eslint-disable-next-line no-alert
     if (confirm('Recording is not saved yet, do you want to leave?'))
       return
     event.preventDefault()

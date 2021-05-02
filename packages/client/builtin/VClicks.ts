@@ -4,6 +4,7 @@ import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, withDi
 export default defineComponent({
   props: {
     every: {
+      type: Number,
       default: 1,
     },
   },

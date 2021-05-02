@@ -64,7 +64,14 @@ watch([a2, b2], () => cc.value = true)
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <line x1="-3.75678e-10" y1="0.5" x2="62" y2="0.5" stroke="#888888" stroke-dasharray="5 2" />
+        <line
+          x1="-3.75678e-10"
+          y1="0.5"
+          x2="62"
+          y2="0.5"
+          stroke="#888888"
+          stroke-dasharray="5 2"
+        />
       </svg>
       <!--Line2-->
       <svg
@@ -75,7 +82,14 @@ watch([a2, b2], () => cc.value = true)
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <line x1="-3.75678e-10" y1="0.5" x2="62" y2="0.5" stroke="#888888" stroke-dasharray="5 2" />
+        <line
+          x1="-3.75678e-10"
+          y1="0.5"
+          x2="62"
+          y2="0.5"
+          stroke="#888888"
+          stroke-dasharray="5 2"
+        />
       </svg>
       <!--Arc1-->
       <svg

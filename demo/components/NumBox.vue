@@ -25,7 +25,7 @@ const value = useVModel(props, 'value', emit)
     ></div>
     <slot>
       <div class="absolute left-0 top-0 px-2 py-0.5 opacity-40">
-        {{label}}
+        {{ label }}
       </div>
       <div class="absolute w-full h-full flex z-10">
         <div class="m-auto text-2xl leading-0.8em" :class="controls ? 'pl-2' : ''">

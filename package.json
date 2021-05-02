@@ -8,6 +8,8 @@
     "docs:build": "esno ./scripts/docs.ts",
     "demo:dev": "npm -C demo run dev",
     "demo:build": "npm -C demo run build",
+    "lint": "eslint '**/*.{js,ts,vue,json}'",
+    "lint:fix": "nr lint --fix",
     "test": "jest",
     "test:update": "jest -u",
     "release": "esno scripts/release.ts"

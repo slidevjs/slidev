@@ -1,4 +1,4 @@
-import { computed, Ref, ref } from 'vue-demi'
+import { computed, Ref } from 'vue-demi'
 import { useRoute } from 'vitepress'
 import type { DefaultTheme } from '../config'
 import { isExternal as isExternalCheck } from '../utils'
@@ -49,10 +49,4 @@ function normalizePath(path: string): string {
     .replace(/\?.*$/, '')
     .replace(/\.(html|md)$/, '')
     .replace(/\/index$/, '/')
-}
-
-function normalizePathWithHash(path: string): string {
-  const hash = path.match(/#.*$/)?.[0] || ''
-  path = normalizePath(path) + hash
-  return path
 }

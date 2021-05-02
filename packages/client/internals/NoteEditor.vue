@@ -68,11 +68,11 @@ onClickOutside(input, () => {
   />
   <textarea
     v-show="editing || !note"
-    @focus="editing = true"
     ref="input"
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent"
     :class="props.class"
     :placeholder="placeholder"
+    @focus="editing = true"
   />
 </template>

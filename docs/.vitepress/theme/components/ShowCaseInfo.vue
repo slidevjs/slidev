@@ -15,10 +15,14 @@ defineProps<{
     >
       <img :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
     </div>
-    <div class="font-bold">{{ info.title }}</div>
+    <div class="font-bold">
+      {{ info.title }}
+    </div>
     <div
       class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
-    >{{ info.at }}</div>
+    >
+      {{ info.at }}
+    </div>
     <div class="mt-2 flex">
       <a
         v-if="info.author.link"
@@ -26,7 +30,9 @@ defineProps<{
         class="text-current text-sm opacity-50"
         target="_blank"
       >{{ info.author.name }}</a>
-      <div v-else class="text-current text-sm opacity-50">{{ info.author.name }}</div>
+      <div v-else class="text-current text-sm opacity-50">
+        {{ info.author.name }}
+      </div>
       <div class="flex-auto"></div>
       <a
         v-if="info.videoLink"
