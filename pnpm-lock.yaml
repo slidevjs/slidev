@@ -18,6 +18,7 @@ importers:
       '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
       '@types/prompts': ^2.4.0
+      '@types/recordrtc': ^5.6.5
       '@typescript-eslint/eslint-plugin': ^4.22.0
       '@vueuse/core': ^4.9.1
       bumpp: ^6.0.6
@@ -52,6 +53,7 @@ importers:
       '@types/node': 15.0.1
       '@types/prettier': 2.2.3
       '@types/prompts': 2.4.0
+      '@types/recordrtc': 5.6.5
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
       '@vueuse/core': 4.9.1
       bumpp: 6.0.6
@@ -1236,6 +1238,10 @@ packages:
 
   /@types/prompts/2.4.0:
     resolution: {integrity: sha512-7th8Opn+0XlN0O6qzO7dXOPwL6rigq/EwRS2DntaTHwSw8cLaYKeAPt5dWEKHSL+ffVSUl1itTPUC06+FlsV4Q==}
+    dev: true
+
+  /@types/recordrtc/5.6.5:
+    resolution: {integrity: sha512-4FF77kV/VTnEM7lB018sr70IKl1e1rbRpXuv1G3t7Ty7Z5HGRDehH2xq9cxvTNn18DDSkm0D5gwU5CpfwiPuDQ==}
     dev: true
 
   /@types/stack-utils/2.0.0:
