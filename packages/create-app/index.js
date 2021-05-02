@@ -108,7 +108,7 @@ async function init() {
   })
 
   if (yes) {
-    await run(parseNi, ['-C', related, 'install'])
+    await run(parseNi, ['-C', related])
     // await execa(pkgManager, ['-C', related, 'install'], { stdio: 'inherit' })
     await execa(pkgManager, ['-C', related, 'run', 'dev'], { stdio: 'inherit' })
   }
