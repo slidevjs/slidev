@@ -24,6 +24,6 @@ for (const template of templates) {
 
 run('git add .')
 runArgs('git', ['commit', '-m', `chore: release v${version}`])
-run(`git tag "v${version}"`)
+run(`git tag v${version}`)
 run('git push')
 run('git push origin --tags')
