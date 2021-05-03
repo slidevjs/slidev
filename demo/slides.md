@@ -1136,7 +1136,7 @@ import { ref, reactive, defineComponent } from 'vue-demi'
 # Recap
 
 - Think as "Connections"
-- One thing as a time
+- One thing at a time
 - Accepting ref as arguments
 - Returns an object of refs
 - Make functions flexible

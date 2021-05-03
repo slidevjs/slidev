@@ -166,6 +166,7 @@ importers:
       connect: ^3.7.0
       fast-glob: ^3.2.5
       fs-extra: ^9.1.0
+      jiti: ^1.9.1
       js-base64: ^3.6.0
       js-yaml: ^3.14.1
       kolorist: ^1.4.1
@@ -175,11 +176,9 @@ importers:
       markdown-it-shiki: ^0.2.3
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
-      pirates: ^4.0.1
       prompts: ^2.4.1
       shiki: ^0.9.3
       sirv: ^1.0.11
-      sucrase: ^3.18.1
       vite: ^2.2.3
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
@@ -202,6 +201,7 @@ importers:
       connect: 3.7.0
       fast-glob: 3.2.5
       fs-extra: 9.1.0
+      jiti: 1.9.1
       js-base64: 3.6.0
       js-yaml: 3.14.1
       kolorist: 1.4.1
@@ -211,11 +211,9 @@ importers:
       markdown-it-shiki: 0.2.3
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
-      pirates: 4.0.1
       prompts: 2.4.1
       shiki: 0.9.3
       sirv: 1.0.11
-      sucrase: 3.18.1
       vite: 2.2.3
       vite-plugin-components: 0.8.4_vite@2.2.3
       vite-plugin-icons: 0.5.0_e650ddc391fb9681c71b66ede7499a16
@@ -4689,6 +4687,11 @@ packages:
       - ts-node
       - utf-8-validate
     dev: true
+
+  /jiti/1.9.1:
+    resolution: {integrity: sha512-AhYrAxJ/IW2257nHkJasUjtxHhmYIUEHEjsofJtGYsPWk8pTjqjbPFlJfOwfY+WX8YBiKHM1l0ViDC/mye2SWg==}
+    hasBin: true
+    dev: false
 
   /joycon/3.0.1:
     resolution: {integrity: sha512-SJcJNBg32dGgxhPtM0wQqxqV0ax9k/9TaUskGDSJkSFSQOEWWvQ3zzWdGQRIUry2j1zA5+ReH13t0Mf3StuVZA==}
