@@ -5,6 +5,7 @@ export const showOverview = ref(false)
 export const showEditor = ref(false)
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
+export const showGotoDialog = ref(false)
 
 export const shortcutsEnabled = ref(true)
 export const query = useUrlSearchParams()

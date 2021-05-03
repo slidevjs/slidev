@@ -1,5 +1,5 @@
 import { Fn, not, and, whenever } from '@vueuse/core'
-import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview } from '../state'
+import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview, showGotoDialog, showOverview } from '../state'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 
@@ -19,5 +19,6 @@ shortcut('shift_left', prevSlide)
 shortcut('shift_right', nextSlide)
 shortcut('d', toggleDark)
 shortcut('f', () => fullscreen.toggle())
-shortcut('escape', toggleOverview)
 shortcut('o', toggleOverview)
+shortcut('escape', () => showOverview.value = false)
+shortcut('g', () => showGotoDialog.value = !showGotoDialog.value)
