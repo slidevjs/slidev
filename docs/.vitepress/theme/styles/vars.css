@@ -63,7 +63,7 @@
 
   --header-height: 3.6rem;
   --sidebar-width: 17.5rem;
-  --scrollbar-width: 6px;
+  --scrollbar-width: 0;
 }
 
 html.dark {

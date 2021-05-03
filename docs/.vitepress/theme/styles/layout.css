@@ -6,7 +6,7 @@
   border-style: solid;
   border-color: #e5e7eb;
 }
-
+/* 
 * {
   scrollbar-color: var(--c-divider-light) var(--c-bg);
 }
@@ -23,13 +23,14 @@
 ::-webkit-scrollbar-thumb {
   background: transparent;
   border-radius: 10px;
+  background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--c-divider-dark);
 }
 *:hover::-webkit-scrollbar-thumb {
   background: var(--c-divider-light);
-}
+} */
 
 html {
   line-height: 1.4;
