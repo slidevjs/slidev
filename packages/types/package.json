@@ -20,6 +20,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "nr build --watch"
   },

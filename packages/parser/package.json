@@ -16,9 +16,9 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "rimraf dist && tsup src/index.ts --format cjs,esm --dts",
-    "dev": "nr build --watch",
-    "prepublishOnly": "npm run build"
+    "dev": "nr build --watch"
   },
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",

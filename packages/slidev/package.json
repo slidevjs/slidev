@@ -30,6 +30,7 @@
   "homepage": "https://github.com/slidevjs/slidev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --external @slidev/client/package.json",
     "dev": "nr build --watch",
     "start": "esno node/cli.ts"
