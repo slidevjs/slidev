@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
-      '@antfu/ni': ^0.5.9
+      '@antfu/ni': ^0.6.1
       '@antfu/utils': ^0.1.4
       '@slidev/cli': workspace:*
       '@types/cli-progress': ^3.9.1
@@ -40,7 +40,7 @@ importers:
       vitepress: ^0.13.2
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
-      '@antfu/ni': 0.5.9
+      '@antfu/ni': 0.6.1
       '@antfu/utils': 0.1.4
       '@slidev/cli': link:packages/slidev
       '@types/cli-progress': 3.9.1
@@ -122,13 +122,13 @@ importers:
 
   packages/create-app:
     specifiers:
-      '@antfu/ni': ^0.5.9
+      '@antfu/ni': ^0.6.1
       execa: ^5.0.0
       kolorist: ^1.4.1
       minimist: ^1.2.5
       prompts: ^2.4.1
     dependencies:
-      '@antfu/ni': 0.5.9
+      '@antfu/ni': 0.6.1
       execa: 5.0.0
       kolorist: 1.4.1
       minimist: 1.2.5
@@ -188,7 +188,7 @@ importers:
       vite-plugin-windicss: ^0.16.0-beta.8
       vue: ^3.0.11
       windicss: ^3.0.0-beta.5
-      yargs: ^16.2.0
+      yargs: ^17.0.0
     dependencies:
       '@antfu/utils': 0.1.4
       '@iconify/json': 1.1.337
@@ -224,7 +224,7 @@ importers:
       vite-plugin-windicss: 0.16.0-beta.8_vite@2.2.3
       vue: 3.0.11
       windicss: 3.0.0-beta.5
-      yargs: 16.2.0
+      yargs: 17.0.0
 
   packages/theme-default:
     specifiers:
@@ -435,8 +435,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/ni/0.5.9:
-    resolution: {integrity: sha512-FSrcy0l8KeXu9WtsFC8j5KrziEyy4Ikz2cA+F1+H/8WMqhrcl7qr1e78jNQCPjuDrlsufbU8vrDTZH5pTs+wzQ==}
+  /@antfu/ni/0.6.1:
+    resolution: {integrity: sha512-58tmfo36gOGRmlEI/1I1QIxuARAuzaMnQmkwOSwMau/l4466XAlvvShAQ7WGBr/LstPWPh7OGyrSTxTe8GYzOA==}
     hasBin: true
 
   /@antfu/utils/0.1.4:
@@ -7594,9 +7594,9 @@ packages:
       yargs-parser: 18.1.3
     dev: true
 
-  /yargs/16.2.0:
-    resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
-    engines: {node: '>=10'}
+  /yargs/17.0.0:
+    resolution: {integrity: sha512-gbtedDPfBgG40iLbaRXhqYJycUYqFVZQLIxl1cG5Ez/xZL/47TetSYzPSIixkWa36GKHr9D/o/oSG1vHXF4zTw==}
+    engines: {node: '>=12'}
     dependencies:
       cliui: 7.0.4
       escalade: 3.1.1

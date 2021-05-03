@@ -28,7 +28,7 @@ whenever(showGotoDialog, async() => {
 <template>
   <div
     class="fixed right-5 bg-main transform transition-all"
-    :class="showGotoDialog ? 'top-5' : '-top-10'"
+    :class="showGotoDialog ? 'top-5' : '-top-20'"
     shadow="~"
     p="x-4 y-2"
     border="~ transparent rounded dark:(gray-400 opacity-25)"

@@ -9,16 +9,18 @@ export function shortcut(key: string, fn: Fn) {
   return whenever(and(magicKeys[key], _shortcut), fn)
 }
 
-// global shortcuts
-shortcut('space', next)
-shortcut('right', next)
-shortcut('left', prev)
-shortcut('up', prevSlide)
-shortcut('down', nextSlide)
-shortcut('shift_left', prevSlide)
-shortcut('shift_right', nextSlide)
-shortcut('d', toggleDark)
-shortcut('f', () => fullscreen.toggle())
-shortcut('o', toggleOverview)
-shortcut('escape', () => showOverview.value = false)
-shortcut('g', () => showGotoDialog.value = !showGotoDialog.value)
+export function registerShotcuts() {
+  // global shortcuts
+  shortcut('space', next)
+  shortcut('right', next)
+  shortcut('left', prev)
+  shortcut('up', prevSlide)
+  shortcut('down', nextSlide)
+  shortcut('shift_left', prevSlide)
+  shortcut('shift_right', nextSlide)
+  shortcut('d', toggleDark)
+  shortcut('f', () => fullscreen.toggle())
+  shortcut('o', toggleOverview)
+  shortcut('escape', () => showOverview.value = false)
+  shortcut('g', () => showGotoDialog.value = !showGotoDialog.value)
+}

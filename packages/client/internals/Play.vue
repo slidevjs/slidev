@@ -2,10 +2,13 @@
 import { ref } from 'vue'
 import { isPrintMode, showEditor, windowSize, isScreenVertical } from '../state'
 import { next, prev, currentRoute, tab, tabElements, useSwipeControls } from '../logic/nav'
+import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
+
+registerShotcuts()
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {

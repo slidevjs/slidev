@@ -4,10 +4,13 @@ import { ref, computed } from 'vue'
 import { total, currentPage, currentRoute, nextRoute, tab, tabElements, useSwipeControls } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
+import { registerShotcuts } from '../logic/shortcuts'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
+
+registerShotcuts()
 
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
