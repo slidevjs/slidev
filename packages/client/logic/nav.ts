@@ -72,6 +72,8 @@ shortcut('right', next)
 shortcut('left', prev)
 shortcut('up', prevSlide)
 shortcut('down', nextSlide)
+shortcut('shift_left', prevSlide)
+shortcut('shift_right', nextSlide)
 shortcut('escape', () => showOverview.value = !showOverview.value)
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
