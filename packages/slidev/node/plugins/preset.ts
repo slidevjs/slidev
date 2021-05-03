@@ -36,12 +36,14 @@ export async function ViteSlidevPlugin(
 
   return [
     createWindiCSSPlugin(options, pluginOptions),
-    await createMarkdownPlugin(options, pluginOptions),
 
     Vue({
       include: [/\.vue$/, /\.md$/],
+      exclude: [],
       ...vueOptions,
     }),
+
+    await createMarkdownPlugin(options, pluginOptions),
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],

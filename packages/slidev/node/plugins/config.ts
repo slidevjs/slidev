@@ -1,7 +1,7 @@
 import { InlineConfig, mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
-import { getClientRoot, ResolvedSlidevOptions } from '../options'
+import { ResolvedSlidevOptions } from '../options'
 
 const EXCLUDE = [
   '@slidev/types',
@@ -14,7 +14,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       const injection: InlineConfig = {
         resolve: {
           alias: {
-            '@slidev/client/': `${getClientRoot()}/`,
+            '@slidev/client/': `${options.clientRoot}/`,
           },
         },
         optimizeDeps: {
