@@ -13,7 +13,7 @@
     "test": "jest",
     "test:update": "jest -u",
     "release": "esno scripts/release.ts",
-    "ci:publish": "pnpm -r publish --access public"
+    "ci:publish": "pnpm -r publish --access public --no-git-checks"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.6.4",
