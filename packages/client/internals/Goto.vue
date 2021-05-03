@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { whenever } from '@vueuse/core'
-import { nextTick, ref } from 'vue'
-import { go } from '../logic/nav'
+import { computed, nextTick, ref } from 'vue'
+import { go, total } from '../logic/nav'
 import { showGotoDialog } from '../state'
 
 const input = ref<HTMLInputElement>()
-const num = ref('')
+const text = ref('')
+const num = computed(() => +text.value)
+const valid = computed(() => !isNaN(num.value) && num.value > 0 && num.value <= total.value)
 
 function goTo() {
-  const n = +num.value
-  if (!isNaN(n))
-    go(n - 1)
+  if (valid.value)
+    go(num.value)
   close()
 }
 
@@ -19,7 +20,7 @@ function close() {
 }
 
 whenever(showGotoDialog, async() => {
-  num.value = ''
+  text.value = ''
   await nextTick()
   input.value?.focus()
 })
@@ -35,11 +36,12 @@ whenever(showGotoDialog, async() => {
   >
     <input
       ref="input"
-      v-model="num"
+      v-model="text"
       type="number"
       :disabled="!showGotoDialog"
       class="outline-none bg-transparent"
       placeholder="Goto..."
+      :class="{ 'text-red-400': !valid && text }"
       @keydown.enter="goTo"
       @keydown.escape="close"
       @blur="close"

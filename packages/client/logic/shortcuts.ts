@@ -6,7 +6,7 @@ import { next, nextSlide, prev, prevSlide } from './nav'
 const _shortcut = and(not(isInputing), shortcutsEnabled)
 
 export function shortcut(key: string, fn: Fn) {
-  return whenever(and(magicKeys[key], _shortcut), fn)
+  return whenever(and(magicKeys[key], _shortcut), fn, { flush: 'sync' })
 }
 
 export function registerShotcuts() {
