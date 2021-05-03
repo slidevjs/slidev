@@ -1,7 +1,8 @@
 import { computed, Ref, ref } from 'vue'
-import { SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
-import { shortcut, query, showOverview } from '../state'
+import { isString, SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
+import { query } from '../state'
 import { rawRoutes, router } from '../routes'
+import { configs } from '../env'
 
 export { rawRoutes }
 
@@ -67,15 +68,6 @@ export function go(page: number) {
   return router.push(getPath(page))
 }
 
-shortcut('space', next)
-shortcut('right', next)
-shortcut('left', prev)
-shortcut('up', prevSlide)
-shortcut('down', nextSlide)
-shortcut('shift_left', prevSlide)
-shortcut('shift_right', nextSlide)
-shortcut('escape', () => showOverview.value = !showOverview.value)
-
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   const swipeBegin = ref(0)
   const { direction, lengthX, lengthY } = useSwipe(root, {
@@ -101,4 +93,14 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
       }
     },
   })
+}
+
+export async function downloadPDF() {
+  const { saveAs } = await import('file-saver')
+  saveAs(
+    isString(configs.download)
+      ? configs.download
+      : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
+    `${configs.title}.pdf`,
+  )
 }

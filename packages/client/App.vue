@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import setupApp from './setup/app'
+import setupRoot from './setup/root'
+import './logic/shortcuts'
 
-setupApp()
+setupRoot()
 </script>
 
 <template>

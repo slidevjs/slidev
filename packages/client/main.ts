@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createHead } from '@vueuse/head'
 import App from './App.vue'
-import setup from './setup/main'
+import setupMain from './setup/main'
 import { router } from './routes'
 import createDirectives from './modules/directives'
 
@@ -17,6 +17,6 @@ app.use(router)
 app.use(createHead())
 app.use(createDirectives())
 
-setup()
+setupMain({ app, router })
 
 app.mount('#app')

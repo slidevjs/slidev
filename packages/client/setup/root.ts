@@ -1,7 +1,6 @@
 /* __imports__ */
 import { useHead } from '@vueuse/head'
 import { watch } from 'vue'
-import { AppContext } from '@slidev/types'
 import { currentPage, getPath, tab, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 // @ts-expect-error
@@ -9,10 +8,10 @@ import configs from '/@slidev/configs'
 // @ts-expect-error
 import serverState from '/@server-ref/state'
 
-export default function setupApp(context: AppContext) {
+export default function setupRoot() {
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const injection_arg = context
+  const injection_arg = undefined
 
   /* __injections__ */
 

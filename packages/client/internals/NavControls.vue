@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core'
 import { computed, defineProps } from 'vue'
-import { isString } from '@antfu/utils'
 import { isDark, toggleDark } from '../logic/dark'
-import { hasNext, hasPrev, prev, next, isPresenter, currentPage } from '../logic/nav'
-import { showOverview, showEditor, showInfoDialog } from '../state'
+import { hasNext, hasPrev, prev, next, isPresenter, currentPage, downloadPDF } from '../logic/nav'
+import { toggleOverview, showEditor, showInfoDialog, fullscreen } from '../state'
 import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 
@@ -14,20 +12,10 @@ defineProps({
   },
 })
 
-const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(document.body)
+const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
-
-async function downloadPDF() {
-  const { saveAs } = await import('file-saver')
-  saveAs(
-    isString(configs.download)
-      ? configs.download
-      : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
-    `${configs.title}.pdf`,
-  )
-}
 </script>
 
 <template>
@@ -45,7 +33,7 @@ async function downloadPDF() {
       <carbon:arrow-right />
     </button>
 
-    <button class="icon-btn" title="Slides overview" @click="showOverview = !showOverview">
+    <button class="icon-btn" title="Slides overview" @click="toggleOverview">
       <carbon:apps />
     </button>
 
