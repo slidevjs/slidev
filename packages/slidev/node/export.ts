@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs-extra'
-import { chromium } from 'playwright-chromium'
 import { PDFDocument } from 'pdf-lib'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
@@ -65,6 +64,7 @@ export async function exportSlides({
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
 
+  const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch()
   const context = await browser.newContext({
     viewport: {
