@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { onClickOutside } from '@vueuse/core'
-import { ref } from 'vue'
 import { recorder } from '../logic/recording'
 import { currentCamera, showRecordingDialog } from '../state'
 import DevicesList from './DevicesList.vue'
-
-const devicesList = ref()
-const showDevicesList = ref(false)
-
-onClickOutside(devicesList, () => {
-  showDevicesList.value = false
-})
+import MenuButton from './MenuButton.vue'
 
 const {
   recording,
@@ -39,29 +31,23 @@ function toggleRecording() {
     <carbon:user-avatar />
   </button>
 
-  <div
-    ref="devicesList"
-    class="flex relative"
+  <button
+    class="icon-btn"
+    :class="{'text-red-500': recording}"
+    title="Recording"
+    @click="toggleRecording"
   >
-    <button
-      class="icon-btn"
-      :class="{'text-red-500': recording}"
-      title="Recording"
-      @click="toggleRecording"
-    >
-      <carbon:stop-outline v-if="recording" />
-      <carbon:video v-else />
-    </button>
-    <button
-      class="icon-btn !text-sm !px-0"
-      :class="{disabled:recording}"
-      @click="showDevicesList = !showDevicesList"
-    >
-      <carbon:chevron-up class="opacity-50" />
-    </button>
-    <DevicesList
-      v-if="showDevicesList && !recording"
-      class="bottom-10 left-0 z-20 absolute rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)"
-    />
-  </div>
+    <carbon:stop-outline v-if="recording" />
+    <carbon:video v-else />
+  </button>
+  <MenuButton :disabled="recording">
+    <template #button>
+      <button class="icon-btn h-full !text-sm !px-0">
+        <carbon:chevron-up class="opacity-50" />
+      </button>
+    </template>
+    <template #menu>
+      <DevicesList />
+    </template>
+  </MenuButton>
 </template>

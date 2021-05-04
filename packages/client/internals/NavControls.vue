@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue'
+import { computed, defineProps } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints } from '../state'
 import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 import Settings from './Settings.vue'
+import MenuButton from './MenuButton.vue'
 
 defineProps({
   mode: {
     default: 'fixed',
   },
 })
-
-const showSettings = ref(false)
 
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
@@ -77,15 +76,16 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
     </template>
 
     <template v-if="!isPresenter">
-      <div class="flex relative">
-        <button class="icon-btn" @click="showSettings = !showSettings">
-          <carbon:settings-adjust />
-        </button>
-        <Settings
-          v-if="showSettings"
-          class="bottom-10 left-0 z-20 absolute rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)"
-        />
-      </div>
+      <MenuButton>
+        <template #button>
+          <button class="icon-btn">
+            <carbon:settings-adjust />
+          </button>
+        </template>
+        <template #menu>
+          <Settings />
+        </template>
+      </MenuButton>
     </template>
 
     <div class="w-1px m-2 opacity-10 bg-current"></div>
