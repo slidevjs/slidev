@@ -100,8 +100,8 @@ export function truncateMancoMark(code: string) {
 
 export function transformHighlighter(md: string) {
   // transform monaco
-  return md.replace(/\n```(\w+?)\s*{([\w,\|-]+)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = '', rangeStr: string, code: string) => {
-    const ranges = rangeStr.split('|').map(i => i.trim())
-    return `<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
+  return md.replace(/\n```(\w+?)\s*{([\d\w*,\|-]+)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = '', rangeStr: string, code: string) => {
+    const ranges = rangeStr.split(/\|/g).map(i => i.trim())
+    return `\n<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
   })
 }

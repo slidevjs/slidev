@@ -25,6 +25,12 @@ html:not(.dark) .shiki-dark {
   overflow: auto;
 }
 
+.slidev-code .line.highlighted {
+}
+.slidev-code .line.dishonored {
+  opacity: 0.3;
+}
+
 .shiki-container {
   @apply relative flex flex-col;
 }

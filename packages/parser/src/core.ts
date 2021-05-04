@@ -153,7 +153,7 @@ export function parse(
  * 1,3-5,8 => [1, 3, 4, 5, 8]
  */
 export function parseRangeString(total: number, rangeStr?: string) {
-  if (!rangeStr || rangeStr === 'all')
+  if (!rangeStr || rangeStr === 'all' || rangeStr === '*')
     return range(total)
 
   const pages: number[] = []
