@@ -1,4 +1,4 @@
-import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle } from '@vueuse/core'
+import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle, isClient } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 export const showOverview = ref(false)
@@ -13,7 +13,7 @@ export const breakpoints = useBreakpoints(breakpointsTailwind)
 export const windowSize = useWindowSize()
 export const magicKeys = useMagicKeys()
 export const isScreenVertical = computed(() => windowSize.width.value <= windowSize.height.value)
-export const fullscreen = useFullscreen(document.body)
+export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
 export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
