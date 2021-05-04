@@ -14,8 +14,8 @@ export const routes: RouteRecordRaw[] = [
       ...rawRoutes,
     ],
   },
-  { path: '', redirect: { path: '/0' } },
-  { path: '/:pathMatch(.*)', redirect: { path: '/0' } },
+  { path: '', redirect: { path: '/1' } },
+  { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
 
 if (import.meta.env.DEV) {
@@ -27,7 +27,7 @@ if (import.meta.env.DEV) {
     },
     {
       path: '/presenter',
-      redirect: { path: '/presenter/0' },
+      redirect: { path: '/presenter/1' },
     },
   )
 }

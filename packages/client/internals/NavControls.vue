@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, defineProps } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
-import { hasNext, hasPrev, prev, next, isPresenter, currentPage, downloadPDF } from '../logic/nav'
-import { toggleOverview, showEditor, showInfoDialog, fullscreen } from '../state'
+import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF } from '../logic/nav'
+import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints } from '../state'
 import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 
@@ -12,6 +12,7 @@ defineProps({
   },
 })
 
+const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
@@ -49,9 +50,11 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
         <carbon:presentation-file />
       </a>
 
-      <RecordingControls v-if="!isPresenter" />
+      <template v-if="!isPresenter && !md">
+        <RecordingControls />
 
-      <div class="w-1px m-2 opacity-10 bg-current"></div>
+        <div class="w-1px m-2 opacity-10 bg-current"></div>
+      </template>
 
       <a v-if="!isPresenter" :href="presenterLink" class="icon-btn" title="Presenter Mode">
         <carbon:user-speaker />
@@ -69,5 +72,14 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
         <carbon:information />
       </button>
     </template>
+
+    <div class="w-1px m-2 opacity-10 bg-current"></div>
+
+    <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
+      <div class="my-auto">
+        {{ currentPage }}
+        <span class="opacity-50">/ {{ total }}</span>
+      </div>
+    </div>
   </nav>
 </template>

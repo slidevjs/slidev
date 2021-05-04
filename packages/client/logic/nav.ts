@@ -10,17 +10,17 @@ export const route = computed(() => router.currentRoute.value)
 
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 
-export const total = computed(() => rawRoutes.length)
+export const total = computed(() => rawRoutes.length - 1)
 export const path = computed(() => route.value.path)
 
-export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 0)
+export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
 export const currentPath = computed(() => getPath(currentPage.value))
 export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
 export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
 
 export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1)
-export const hasPrev = computed(() => currentPage.value > 0)
-export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length - 1, currentPage.value + 1)}`))
+export const hasPrev = computed(() => currentPage.value > 1)
+export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 
 export const clicksElements = ref<HTMLElement[]>([])
 export const clicks = computed<number>({
@@ -56,12 +56,12 @@ export function getPath(no: number | string) {
 }
 
 export function nextSlide() {
-  const next = Math.min(rawRoutes.length - 1, currentPage.value + 1)
+  const next = Math.min(rawRoutes.length, currentPage.value + 1)
   return go(next)
 }
 
 export function prevSlide() {
-  const next = Math.max(0, currentPage.value - 1)
+  const next = Math.max(1, currentPage.value - 1)
   return go(next)
 }
 

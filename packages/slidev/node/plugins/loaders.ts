@@ -138,8 +138,8 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
             continue
 
           moduleIds.push(
-            `${slidePrefix}${i}.md`,
-            `${slidePrefix}${i}.json`,
+            `${slidePrefix}${i + 1}.md`,
+            `${slidePrefix}${i + 1}.json`,
           )
         }
 
@@ -181,9 +181,9 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           const match = remaning.match(regexIdQuery)
           if (match) {
             const [, no, type] = match
-            const pageNo = parseInt(no)
+            const pageNo = parseInt(no) - 1
             if (type === 'md')
-              return data.slides[pageNo].raw
+              return data.slides[pageNo]?.raw
           }
           return ''
         }
@@ -203,9 +203,9 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           if (type !== 'md')
             return
 
-          const pageNo = parseInt(no)
+          const pageNo = parseInt(no) - 1
           const layouts = await getLayouts()
-          const layoutName = data.slides[pageNo].frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+          const layoutName = data.slides[pageNo]?.frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
           if (!layouts[layoutName])
             throw new Error(`Unknown layout "${layoutName}"`)
 
@@ -270,13 +270,13 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
 
     imports.push(`import __layout__end from '${layouts.end}'`)
 
-    let no = 0
+    let no = 1
     const routes = [
       ...data.slides
         .map((i, idx) => {
           if (i.frontmatter?.disabled)
             return undefined
-          imports.push(`import n${no} from '${slidePrefix}${idx}.md'`)
+          imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
           const additions = {
             slide: {
               start: i.start,

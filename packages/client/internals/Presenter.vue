@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed } from 'vue'
-import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal } from '../logic/nav'
+import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
@@ -9,6 +9,7 @@ import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
+import Goto from './Goto.vue'
 
 registerShotcuts()
 
@@ -26,9 +27,14 @@ const nextSlide = computed(() => {
     }
   }
   else {
-    return {
-      route: nextRoute.value,
-      clicks: 0,
+    if (hasNext.value) {
+      return {
+        route: nextRoute.value,
+        clicks: 0,
+      }
+    }
+    else {
+      return null
     }
   }
 })
@@ -42,9 +48,6 @@ useSwipeControls(main)
       <div class="grid-section top flex">
         <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
         <div class="flex-auto" />
-        <div class="px-4 my-auto">
-          {{ currentPage + 1 }} / {{ total }}
-        </div>
       </div>
       <div ref="main" class="grid-section main flex flex-col p-4">
         <SlideContainer
@@ -58,6 +61,7 @@ useSwipeControls(main)
       </div>
       <div class="grid-section next flex flex-col p-4">
         <SlideContainer
+          v-if="nextSlide"
           key="next"
           v-model:clicks-elements="nextTabElements"
           class="h-full w-full"
@@ -74,9 +78,10 @@ useSwipeControls(main)
       </div>
     </div>
     <div class="progress-bar">
-      <div class="progress h-2px bg-primary transition-all" :style="{width: `${currentPage + 1 / total}%`}"></div>
+      <div class="progress h-2px bg-primary transition-all" :style="{width: `${(currentPage - 1) / (total - 1) * 100}%`}"></div>
     </div>
   </div>
+  <Goto />
   <SlidesOverview v-model="showOverview" />
 </template>
 
@@ -111,7 +116,7 @@ useSwipeControls(main)
 }
 
 .progress-bar {
-  @apply fixed left-0 right-0 top-0;
+  @apply fixed left-0 right-0 bottom-0;
 }
 
 .grid-section {
