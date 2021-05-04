@@ -56,9 +56,16 @@ export async function createMarkdownPlugin(
       setups.forEach(i => i(md))
     },
     transforms: {
-      before: (config.monaco === true || config.monaco === mode)
-        ? transformMarkdownMonaco
-        : truncateMancoMark,
+      before(code) {
+        const monaco = (config.monaco === true || config.monaco === mode)
+          ? transformMarkdownMonaco
+          : truncateMancoMark
+
+        code = monaco(code)
+        code = transformHighlighter(code)
+
+        return code
+      },
     },
     ...mdOptions,
   })
@@ -90,4 +97,12 @@ export function transformMarkdownMonaco(md: string) {
 
 export function truncateMancoMark(code: string) {
   return code.replace(/{monaco.*?}/g, '')
+}
+
+export function transformHighlighter(md: string) {
+  // transform monaco
+  return md.replace(/\n```(\w+?)\s*{([\w,\|-]+)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = '', rangeStr: string, code: string) => {
+    const ranges = rangeStr.split('|').map(i => i.trim())
+    return `<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
+  })
 }

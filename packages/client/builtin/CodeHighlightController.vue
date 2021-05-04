@@ -26,7 +26,11 @@ function makeid(length = 5) {
 }
 
 const prev = elements.value.length
-const index = computed(() => Math.min(Math.max(0, clicks.value - prev), props.ranges.length - 1))
+const index = computed(() => {
+  if (disabled.value)
+    return props.ranges.length - 1
+  return Math.min(Math.max(0, clicks.value - prev), props.ranges.length - 1)
+})
 const rangeStr = computed(() => props.ranges[index.value] || '')
 if (props.ranges.length >= 2 && !disabled.value) {
   const id = makeid()
@@ -43,12 +47,16 @@ onMounted(() => {
   watchEffect(() => {
     if (!el.value)
       return
-    const lines = Array.from(el.value.querySelectorAll('.line'))
-    const hightlights: number[] = parseRangeString(lines.length, rangeStr.value)
-    // console.log(hightlights, rangeStr.value)
-    lines.forEach((line, idx) => {
-      line.classList.toggle('opacity-30', !hightlights.includes(idx))
-    })
+    const duoTone = el.value.querySelector('.shiki-dark')
+    const targets = duoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
+    for (const target of targets) {
+      const lines = Array.from(target.querySelectorAll('.line'))
+      const hightlights: number[] = parseRangeString(lines.length, rangeStr.value)
+      // console.log(hightlights, rangeStr.value)
+      lines.forEach((line, idx) => {
+        line.classList.toggle('opacity-30', !hightlights.includes(idx))
+      })
+    }
   })
 })
 </script>

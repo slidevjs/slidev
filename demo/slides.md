@@ -1,7 +1,7 @@
 ---
 layout: cover
 download: 'https://antfu.me/talks/2021-04-29'
-# highlighter: shiki
+highlighter: shiki
 ---
 
 # Composable Vue
@@ -140,9 +140,7 @@ bar = 1 // ts-error
 
 # Reactive
 
-<CodeHighlightController :ranges="['1,6', '2,7']">
-
-```ts
+```ts {1,6|3,7}
 import { reactive } from 'vue'
 
 const foo = { prop: 0 }
@@ -151,8 +149,6 @@ const bar = reactive({ prop: 0 })
 foo.prop = 1
 bar.prop = 1
 ```
-
-</CodeHighlightController>
 
 <div v-click>
 
