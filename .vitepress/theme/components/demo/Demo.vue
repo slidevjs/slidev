@@ -9,6 +9,7 @@ import Default from '../../../../../packages/client/layouts/default.vue'
 import Center from '../../../../../packages/client/layouts/center.vue'
 import SlideContainer from '../../../../../packages/client/internals/SlideContainer.vue'
 import Cover from '../../../../../packages/theme-default/layouts/cover.vue'
+import '../../../../../packages/client/styles/layouts-base.css'
 import '../../../../../packages/theme-default/styles/layouts.css'
 
 const page = ref(0)
