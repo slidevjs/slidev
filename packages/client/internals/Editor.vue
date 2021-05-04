@@ -62,7 +62,6 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
-      // @ts-expect-error
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
     },
@@ -80,7 +79,6 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
-      // @ts-expect-error
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
     },

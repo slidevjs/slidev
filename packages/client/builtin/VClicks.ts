@@ -1,5 +1,5 @@
 import { toArray } from '@antfu/utils'
-import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, withDirectives } from 'vue'
+import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, VNodeArrayChildren, withDirectives } from 'vue'
 
 export default defineComponent({
   props: {
@@ -7,12 +7,17 @@ export default defineComponent({
       type: Number,
       default: 1,
     },
+    at: {
+      type: [Number, String],
+    },
   },
   render() {
     const click = resolveDirective('click')!
     const after = resolveDirective('after')!
 
-    function applyDirective(node: VNode, directive: Directive) {
+    const applyDirective = (node: VNode, directive: Directive, delta: number) => {
+      if (this.at != null)
+        return withDirectives(node, [[directive, +this.at + delta]])
       return withDirectives(node, [[directive]])
     }
 
@@ -23,12 +28,24 @@ export default defineComponent({
 
     defaults = toArray(defaults)
 
+    const mapChildren = (children: VNodeArrayChildren) => {
+      return children.map((i, idx) =>
+        isVNode(i)
+          ? applyDirective(
+            h(i),
+            idx % this.every === 0 ? click : after,
+            Math.floor(idx / this.every),
+          )
+          : i,
+      )
+    }
+
     // handle ul list
     if (defaults.length === 1 && defaults[0].type === 'ul' && Array.isArray(defaults[0].children)) {
-      defaults[0].children = defaults[0].children.map((i, idx) => isVNode(i) ? applyDirective(h(i), idx % this.every === 0 ? click : after) : i)
+      defaults[0].children = mapChildren(defaults[0].children)
       return defaults
     }
 
-    return defaults.map((i, idx) => applyDirective(h(i), idx % this.every === 0 ? click : after))
+    return mapChildren(defaults)
   },
 })
