@@ -6,6 +6,7 @@ export const showEditor = ref(false)
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
+export const slideScale = ref<number>()
 
 export const shortcutsEnabled = ref(true)
 export const query = useUrlSearchParams()

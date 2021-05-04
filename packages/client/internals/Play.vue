@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { isPrintMode, showEditor, windowSize, isScreenVertical } from '../state'
+import { isPrintMode, showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { next, prev, currentRoute, clicks, clicksElements, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
@@ -33,6 +33,7 @@ useSwipeControls(root)
       :width="isPrintMode ? windowSize.width.value : undefined"
       :route="currentRoute"
       :clicks-disabled="false"
+      :scale="slideScale"
       @click="onClick"
     >
       <template #controls>

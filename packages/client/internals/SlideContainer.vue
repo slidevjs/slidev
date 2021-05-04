@@ -25,6 +25,9 @@ const props = defineProps({
   route: {
     default: () => ({}) as any as RouteRecordRaw,
   },
+  scale: {
+    type: Number,
+  },
   is: {
     type: Object,
   },
@@ -58,6 +61,8 @@ if (props.width) {
 const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
+  if (props.scale != null)
+    return props.scale
   if (screenAspect.value < slideAspect)
     return width.value / slideWidth
   return height.value * slideAspect / slideWidth
