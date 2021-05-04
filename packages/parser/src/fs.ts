@@ -2,6 +2,8 @@ import { promises as fs } from 'fs'
 import { SlidevMarkdown } from '@slidev/types'
 import { parse, stringify } from './core'
 
+export * from './core'
+
 export async function load(filepath: string) {
   const markdown = await fs.readFile(filepath, 'utf-8')
 

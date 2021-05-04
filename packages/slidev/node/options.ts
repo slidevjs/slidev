@@ -7,7 +7,7 @@ import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType, uniq } from '@antfu/utils'
 import { SlidevMarkdown } from '@slidev/types'
-import * as parser from '@slidev/parser'
+import * as parser from '@slidev/parser/fs'
 import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
 
 export interface SlidevEntryOptions {

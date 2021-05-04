@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import { PDFDocument } from 'pdf-lib'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
-import { getPagesByRange } from './utils'
+import { parseRangeString } from '@slidev/parser/core'
 import { packageExists } from './themes'
 
 export interface ExportOptions {
@@ -86,7 +86,7 @@ export async function exportSlides({
     await page.emulateMedia({ media: 'screen' })
   }
 
-  const pages = getPagesByRange(total, range)
+  const pages = parseRangeString(total, range)
 
   progress.start(pages.length)
 

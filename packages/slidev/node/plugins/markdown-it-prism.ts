@@ -107,7 +107,9 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {
   const [langToUse, prismLang] = selectLanguage(options, lang)
-  const code = text.split(/\r?\n/g)
+  const code = text
+    .trimEnd()
+    .split(/\r?\n/g)
     .map(line => prismLang
       ? Prism.highlight(line, prismLang, langToUse)
       : markdownit.utils.escapeHtml(line))

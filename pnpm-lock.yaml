@@ -8,6 +8,7 @@ importers:
       '@antfu/ni': ^0.6.1
       '@antfu/utils': ^0.1.4
       '@slidev/cli': workspace:*
+      '@slidev/parser': workspace:*
       '@types/cli-progress': ^3.9.1
       '@types/connect': ^3.4.34
       '@types/file-saver': ^2.0.2
@@ -44,6 +45,7 @@ importers:
       '@antfu/ni': 0.6.1
       '@antfu/utils': 0.1.4
       '@slidev/cli': link:packages/slidev
+      '@slidev/parser': link:packages/parser
       '@types/cli-progress': 3.9.1
       '@types/connect': 3.4.34
       '@types/file-saver': 2.0.2
@@ -93,6 +95,7 @@ importers:
   packages/client:
     specifiers:
       '@antfu/utils': ^0.1.4
+      '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
       '@vueuse/core': ^4.9.1
       '@vueuse/head': ^0.5.1
@@ -108,6 +111,7 @@ importers:
       windicss: ^2.5.14
     dependencies:
       '@antfu/utils': 0.1.4
+      '@slidev/parser': link:../parser
       '@slidev/types': link:../types
       '@vueuse/core': 4.9.1_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
@@ -174,7 +178,6 @@ importers:
       kolorist: ^1.4.1
       markdown-it: ^12.0.6
       markdown-it-link-attributes: ^3.0.0
-      markdown-it-prism: ^2.1.6
       markdown-it-shiki: ^0.2.3
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
@@ -210,7 +213,6 @@ importers:
       kolorist: 1.4.1
       markdown-it: 12.0.6
       markdown-it-link-attributes: 3.0.0
-      markdown-it-prism: 2.1.6
       markdown-it-shiki: 0.2.3
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
@@ -5075,13 +5077,6 @@ packages:
 
   /markdown-it-link-attributes/3.0.0:
     resolution: {integrity: sha512-B34ySxVeo6MuEGSPCWyIYryuXINOvngNZL87Mp7YYfKIf6DcD837+lXA8mo6EBbauKsnGz22ZH0zsbOiQRWTNg==}
-    dev: false
-
-  /markdown-it-prism/2.1.6:
-    resolution: {integrity: sha512-fuo5lq36A6kzb882vCsvdyh4HUzpwdfNkAl92cr+MjUO0Q9foz/7MZ/RpKRBlZSwt86LmPlW7ubaEwf4C+0b3g==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      prismjs: 1.23.0
     dev: false
 
   /markdown-it-shiki/0.2.3:

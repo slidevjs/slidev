@@ -20,6 +20,7 @@
     "@antfu/ni": "^0.6.1",
     "@antfu/utils": "^0.1.4",
     "@slidev/cli": "workspace:*",
+    "@slidev/parser": "workspace:*",
     "@types/cli-progress": "^3.9.1",
     "@types/connect": "^3.4.34",
     "@types/file-saver": "^2.0.2",

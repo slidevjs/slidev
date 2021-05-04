@@ -61,6 +61,11 @@ html.dark {
 
 pre[class*='language-'] {
   @apply p-2;
+
+  .line {
+    line-height: 1.5em;
+    height: 1.5em;
+  }
 }
 
 :not(pre) > code {

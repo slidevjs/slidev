@@ -3,7 +3,7 @@ import { remove } from '@antfu/utils'
 import { isPrintMode } from '../state'
 
 export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
-export const injectionClicksElements: InjectionKey<Ref<Element[]>> = Symbol('v-click-clicks-elements')
+export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
 export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {

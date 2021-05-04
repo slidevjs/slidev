@@ -7,7 +7,7 @@ import Markdown from 'markdown-it'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended } from '@slidev/types'
-import * as parser from '@slidev/parser'
+import * as parser from '@slidev/parser/fs'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
