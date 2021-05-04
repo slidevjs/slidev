@@ -6,7 +6,6 @@ export const showEditor = ref(false)
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
-export const slideScale = ref<number>()
 
 export const shortcutsEnabled = ref(true)
 export const query = useUrlSearchParams()
@@ -21,6 +20,7 @@ export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeEl
 
 export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
+export const slideScale = useStorage<number>('slidev-scale', null)
 
 export const isPrintMode = computed(() => query.print != null)
 

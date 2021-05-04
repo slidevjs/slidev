@@ -116,7 +116,7 @@ useEventListener('resize', () => {
 const editorLink = computed(() => {
   const slide = currentRoute.value?.meta?.slide
   return (slide?.file)
-    ? `vscode-insiders://file/${slide.file}:${slide.start}`
+    ? `vscode://file/${slide.file}:${slide.start}`
     : undefined
 })
 </script>
