@@ -17,6 +17,7 @@ importers:
       '@types/markdown-it': ^12.0.1
       '@types/node': ^15.0.1
       '@types/prettier': ^2.2.3
+      '@types/prismjs': ^1.16.5
       '@types/prompts': ^2.4.0
       '@types/recordrtc': ^5.6.5
       '@typescript-eslint/eslint-plugin': ^4.22.0
@@ -52,6 +53,7 @@ importers:
       '@types/markdown-it': 12.0.1
       '@types/node': 15.0.1
       '@types/prettier': 2.2.3
+      '@types/prismjs': 1.16.5
       '@types/prompts': 2.4.0
       '@types/recordrtc': 5.6.5
       '@typescript-eslint/eslint-plugin': 4.22.0_eslint@7.25.0+typescript@4.2.4
@@ -176,6 +178,7 @@ importers:
       markdown-it-shiki: ^0.2.3
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
+      prismjs: ^1.23.0
       prompts: ^2.4.1
       shiki: ^0.9.3
       sirv: ^1.0.11
@@ -211,6 +214,7 @@ importers:
       markdown-it-shiki: 0.2.3
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
+      prismjs: 1.23.0
       prompts: 2.4.1
       shiki: 0.9.3
       sirv: 1.0.11
@@ -1231,6 +1235,10 @@ packages:
 
   /@types/prettier/2.2.3:
     resolution: {integrity: sha512-PijRCG/K3s3w1We6ynUKdxEc5AcuuH3NBmMDP8uvKVp6X43UY7NQlTzczakXP3DJR0F4dfNQIGjU2cUeRYs2AA==}
+    dev: true
+
+  /@types/prismjs/1.16.5:
+    resolution: {integrity: sha512-nSU7U6FQDJJCraFNwaHmH5YDsd/VA9rTnJ7B7AGFdn+m+VSt3FjLWN7+AbqxZ67dbFazqtrDFUto3HK4ljrHIg==}
     dev: true
 
   /@types/prompts/2.4.0:

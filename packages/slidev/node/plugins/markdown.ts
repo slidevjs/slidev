@@ -8,6 +8,7 @@ import base64 from 'js-base64'
 import { isTruthy } from '@antfu/utils'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { loadSetups } from './setupNode'
+import Prism from './markdown-it-prism'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {
@@ -32,7 +33,6 @@ export async function createMarkdownPlugin(
     setups.push(md => md.use(Shiki, shikiOptions))
   }
   else {
-    const { default: Prism } = await import('markdown-it-prism')
     setups.push(md => md.use(Prism))
   }
 
