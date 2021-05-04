@@ -113,12 +113,12 @@ function highlight(markdownit: MarkdownIt, options: Options, text: string, lang:
     .map(line => prismLang
       ? Prism.highlight(line, prismLang, langToUse)
       : markdownit.utils.escapeHtml(line))
-    .map(line => `<div class="line">${line}</div>`)
-    .join('')
+    .map(line => `<span class="line">${line}</span>`)
+    .join('\n')
   const classAttribute = langToUse
-    ? ` class="${markdownit.options.langPrefix}${markdownit.utils.escapeHtml(langToUse)}"`
+    ? ` class="slidev-code ${markdownit.options.langPrefix}${markdownit.utils.escapeHtml(langToUse)}"`
     : ''
-  return `<pre${classAttribute}><code${classAttribute}>${code}</code></pre>`
+  return `<pre${classAttribute}><code>${code}</code></pre>`
 }
 
 /**

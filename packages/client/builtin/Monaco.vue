@@ -8,8 +8,8 @@ import { ignorableWatch } from '@vueuse/core'
 import { decode } from 'js-base64'
 import type * as monaco from 'monaco-editor'
 import { formatCode } from '../setup/prettier'
-import setupMonaco from '../setup/monaco'
 import { isDark } from '../logic/dark'
+import setupMonaco from '../setup/monaco'
 
 const props = defineProps({
   code: {
@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 const code = ref(decode(props.code))
-const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 16}px` : props.height)
+const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 20}px` : props.height)
 
 const el = ref<HTMLElement>()
 let editor: monaco.editor.IStandaloneCodeEditor
@@ -75,14 +75,17 @@ setupMonaco()
       monaco.Uri.parse(`file:///root/${Date.now()}.${ext.value}`),
     )
 
+    const style = getComputedStyle(document.documentElement)
+
     editor = monaco.editor.create(el.value!, {
       model,
       tabSize: 2,
       insertSpaces: true,
       detectIndentation: false,
       folding: false,
-      fontSize: 12,
-      fontFamily: '\'Fira Code\', monospace',
+      fontSize: +style.getPropertyValue('--slidev-code-font-size').replace(/px/g, ''),
+      fontFamily: style.getPropertyValue('--slidev-code-font-family'),
+      lineHeight: +style.getPropertyValue('--slidev-code-line-height').replace(/px/g, ''),
       lineDecorationsWidth: 0,
       lineNumbersMinChars: 0,
       scrollBeyondLastLine: false,
@@ -134,14 +137,13 @@ onUnmounted(() => editor?.dispose())
 <style lang="postcss">
 .vue-monaco {
   background: var(--prism-background);
-  padding: var(--prism-block-padding-y) var(--prism-block-padding-x);
-  margin: var(--prism-block-margin-y) var(--prism-block-margin-x);
-  border-radius: var(--prism-block-radius);
-  @apply p-2;
+  padding: var(--slidev-code-padding);
+  margin: var(--slidev-code-margin);
+  border-radius: var(--slidev-code-radius);
 }
 
 .monaco-editor .monaco-hover {
-  border-radius: var(--prism-block-radius);
+  border-radius: var(--slidev-code-radius);
   @apply overflow-hidden shadow border-none outline-none;
 }
 

@@ -26,6 +26,9 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.1.4",
-    "markdown-it-shiki": "^0.2.3"
+    "monaco-editor": "^0.23.0",
+    "shiki": "^0.9.3",
+    "vue": "^3.0.11",
+    "vue-router": "^4.0.6"
   }
 }

@@ -8,7 +8,7 @@ import createDirectives from './modules/directives'
 import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
 import './styles/index.css'
-import './styles/shiki.css'
+import './styles/code.css'
 /* __imports__ */
 import 'virtual:windi-utilities.css'
 import 'virtual:windi-devtools'

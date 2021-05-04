@@ -3,11 +3,7 @@
 @import 'prism-theme-vars/to-codemirror.css';
 
 :root {
-  --prism-font-family: theme('fontFamily.mono');
-  --prism-font-size: 12px;
-  --prism-block-radius: 0;
-  --prism-block-padding-x: 0;
-  --prism-block-padding-y: 0;
+  --prism-font-family: var(--slidev-code-font-family);
 }
 
 html:not(.dark) {
@@ -58,22 +54,11 @@ html.dark {
   --prism-selection-background: #444444;
 }
 
-
-pre[class*='language-'] {
-  @apply p-2;
-
-  .line {
-    line-height: 1.5em;
-    height: 1.5em;
-  }
-}
-
 :not(pre) > code {
   font-size: 0.9em;
   background: var(--prism-background);
   @apply font-light py-0.5;
 }
-
 
 :not(pre) > code:before,
 :not(pre) > code:after {

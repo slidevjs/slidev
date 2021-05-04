@@ -1,0 +1,34 @@
+html.dark .shiki-light {
+  display: none;
+}
+
+html:not(.dark) .shiki-dark {
+  display: none;
+}
+
+:root {
+  --slidev-code-font-family: theme('fontFamily.mono');
+  --slidev-code-padding: 8px;
+  --slidev-code-font-size: 12px;
+  --slidev-code-line-height: 18px;
+  --slidev-code-radius: 4px;
+  --slidev-code-margin: 4px 0;
+}
+
+.slidev-code {
+  font-family: var(--slidev-code-font-family) !important;
+  padding: var(--slidev-code-padding) !important;
+  font-size: var(--slidev-code-font-size) !important;
+  line-height: var(--slidev-code-line-height) !important;
+  border-radius: var(--slidev-code-radius) !important;
+  margin: var(--slidev-code-margin) !important;
+  overflow: auto;
+}
+
+.shiki-container {
+  @apply relative flex flex-col;
+}
+
+.shiki-container > .shiki {
+  @apply h-full;
+}

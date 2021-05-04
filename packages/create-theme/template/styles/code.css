@@ -3,10 +3,7 @@
 @import 'prism-theme-vars/to-codemirror.css';
 
 :root {
-  --prism-font-family: theme('fontFamily.mono');
-  --prism-font-size: 12px;
-  --prism-block-padding-x: 0;
-  --prism-block-padding-y: 0;
+  --prism-font-family: var(--slidev-code-font-family);
 }
 
 html:not(.dark) {

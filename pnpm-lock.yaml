@@ -178,7 +178,6 @@ importers:
       kolorist: ^1.4.1
       markdown-it: ^12.0.6
       markdown-it-link-attributes: ^3.0.0
-      markdown-it-shiki: ^0.2.3
       monaco-editor: ^0.23.0
       pdf-lib: ^1.16.0
       prismjs: ^1.23.0
@@ -213,7 +212,6 @@ importers:
       kolorist: 1.4.1
       markdown-it: 12.0.6
       markdown-it-link-attributes: 3.0.0
-      markdown-it-shiki: 0.2.3
       monaco-editor: 0.23.0
       pdf-lib: 1.16.0
       prismjs: 1.23.0
@@ -267,10 +265,16 @@ importers:
   packages/types:
     specifiers:
       '@antfu/utils': ^0.1.4
-      markdown-it-shiki: ^0.2.3
+      monaco-editor: ^0.23.0
+      shiki: ^0.9.3
+      vue: ^3.0.11
+      vue-router: ^4.0.6
     devDependencies:
       '@antfu/utils': 0.1.4
-      markdown-it-shiki: 0.2.3
+      monaco-editor: 0.23.0
+      shiki: 0.9.3
+      vue: 3.0.11
+      vue-router: 4.0.6_vue@3.0.11
 
 packages:
 
@@ -1922,11 +1926,6 @@ packages:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
 
-  /bindings/1.5.0:
-    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
-    dependencies:
-      file-uri-to-path: 1.0.0
-
   /bl/4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
     dependencies:
@@ -2489,14 +2488,6 @@ packages:
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.5.0
     dev: true
-
-  /deasync/0.1.21:
-    resolution: {integrity: sha512-kUmM8Y+PZpMpQ+B4AuOW9k2Pfx/mSupJtxOsLzmnHY2WqZUYRFccFn2RhzPAqt3Xb+sorK/badW2D4zNzqZz5w==}
-    engines: {node: '>=0.11.0'}
-    requiresBuild: true
-    dependencies:
-      bindings: 1.5.0
-      node-addon-api: 1.7.2
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -3403,9 +3394,6 @@ packages:
   /file-saver/2.0.5:
     resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
     dev: false
-
-  /file-uri-to-path/1.0.0:
-    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
 
   /fill-range/4.0.0:
     resolution: {integrity: sha1-1USBHUKPmOsGpj3EAtJAPDKMOPc=}
@@ -5079,15 +5067,6 @@ packages:
     resolution: {integrity: sha512-B34ySxVeo6MuEGSPCWyIYryuXINOvngNZL87Mp7YYfKIf6DcD837+lXA8mo6EBbauKsnGz22ZH0zsbOiQRWTNg==}
     dev: false
 
-  /markdown-it-shiki/0.2.3:
-    resolution: {integrity: sha512-CvwLRlB6pvZ1VDtcpvMVwWavpkUNb9Dg+lj4dLTUB9p/5oXtk/7cDH+hQlBVHoz568HNcul4zRiX05+tpJOcAA==}
-    dependencies:
-      deasync: 0.1.21
-      debug: 4.3.2
-      shiki: 0.9.3
-    transitivePeerDependencies:
-      - supports-color
-
   /markdown-it-table-of-contents/0.4.4:
     resolution: {integrity: sha512-TAIHTHPwa9+ltKvKPWulm/beozQU41Ab+FIefRaQV1NRnpzwcV9QOe6wXQS5WLivm5Q/nlo0rl6laGkMDZE7Gw==}
     engines: {node: '>6.4.0'}
@@ -5224,7 +5203,6 @@ packages:
 
   /monaco-editor/0.23.0:
     resolution: {integrity: sha512-q+CP5zMR/aFiMTE9QlIavGyGicKnG2v/H8qVvybLzeFsARM8f6G9fL0sMST2tyVYCwDKkGamZUI6647A0jR/Lg==}
-    dev: false
 
   /ms/2.0.0:
     resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
@@ -5285,9 +5263,6 @@ packages:
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
     dev: true
-
-  /node-addon-api/1.7.2:
-    resolution: {integrity: sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==}
 
   /node-int64/0.4.0:
     resolution: {integrity: sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=}
@@ -7368,7 +7343,6 @@ packages:
       vue: ^3.0.0
     dependencies:
       vue: 3.0.11
-    dev: false
 
   /vue-template-es2015-compiler/1.9.1:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
