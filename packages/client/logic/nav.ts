@@ -22,31 +22,33 @@ export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1)
 export const hasPrev = computed(() => currentPage.value > 0)
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length - 1, currentPage.value + 1)}`))
 
-export const tabElements = ref<HTMLElement[]>([])
-export const tab = computed<number>({
+export const clicksElements = ref<HTMLElement[]>([])
+export const clicks = computed<number>({
   get() {
-    let tab = +query.tab || 0
-    if (isNaN(tab))
-      tab = 0
-    return tab
+    let clicks = +query.clicks || 0
+    if (isNaN(clicks))
+      clicks = 0
+    return clicks
   },
   set(v) {
-    query.tab = v.toString()
+    query.clicks = v.toString()
   },
 })
 
+export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? clicksElements.value.length))
+
 export function next() {
-  if (tabElements.value.length <= tab.value)
+  if (clicksTotal.value <= clicks.value)
     nextSlide()
   else
-    tab.value += 1
+    clicks.value += 1
 }
 
 export async function prev() {
-  if (tab.value <= 0)
+  if (clicks.value <= 0)
     prevSlide()
   else
-    tab.value -= 1
+    clicks.value -= 1
 }
 
 export function getPath(no: number | string) {
@@ -64,7 +66,7 @@ export function prevSlide() {
 }
 
 export function go(page: number) {
-  tab.value = 0
+  clicks.value = 0
   return router.push(getPath(page))
 }
 

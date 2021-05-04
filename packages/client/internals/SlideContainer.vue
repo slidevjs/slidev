@@ -3,20 +3,20 @@ import { useElementSize, useVModel } from '@vueuse/core'
 import { computed, defineProps, ref, watchEffect, provide, defineEmit } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
-import { injectionTab, injectionTabDisabled, injectionTabElements } from '../modules/directives'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../modules/directives'
 
 const emit = defineEmit()
 const props = defineProps({
   width: {
     type: Number,
   },
-  tab: {
+  clicks: {
     default: 0,
   },
-  tabElements: {
+  clicksElements: {
     default: () => [] as Element[],
   },
-  tabDisabled: {
+  clicksDisabled: {
     default: false,
   },
   meta: {
@@ -30,15 +30,15 @@ const props = defineProps({
   },
 })
 
-const tab = useVModel(props, 'tab', emit)
-const tabElements = useVModel(props, 'tabElements', emit)
-const tabDisabled = useVModel(props, 'tabDisabled', emit)
+const clicks = useVModel(props, 'clicks', emit)
+const clicksElements = useVModel(props, 'clicksElements', emit)
+const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
 
-tabElements.value = []
+clicksElements.value = []
 
-provide(injectionTab, tab)
-provide(injectionTabElements, tabElements)
-provide(injectionTabDisabled, tabDisabled)
+provide(injectionClicks, clicks)
+provide(injectionClicksDisabled, clicksDisabled)
+provide(injectionClicksElements, clicksElements)
 
 const root = ref<HTMLDivElement>()
 const element = useElementSize(root)

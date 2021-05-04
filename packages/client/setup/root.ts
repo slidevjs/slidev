@@ -1,7 +1,7 @@
 /* __imports__ */
 import { useHead } from '@vueuse/head'
 import { watch } from 'vue'
-import { currentPage, getPath, tab, isPresenter } from '../logic/nav'
+import { currentPage, getPath, clicks, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 // @ts-expect-error
 import configs from '/@slidev/configs'
@@ -28,7 +28,7 @@ export default function setupRoot() {
           return
         if (+serverState.value.page !== +currentPage.value)
           router.replace(getPath(serverState.value.page))
-        tab.value = serverState.value.tab || 0
+        clicks.value = serverState.value.clicks || 0
       },
       { deep: true },
     )
@@ -38,9 +38,9 @@ export default function setupRoot() {
   function updateServerState() {
     if (isPresenter.value) {
       serverState.value.page = +currentPage.value
-      serverState.value.tab = tab.value
+      serverState.value.clicks = clicks.value
     }
   }
 
-  watch(tab, updateServerState)
+  watch(clicks, updateServerState)
 }

@@ -23,3 +23,7 @@ html {
 .icon-btn.disabled {
   @apply opacity-25 pointer-events-none;
 }
+
+.v-click-hidden:not(.v-click-reveal) {
+  @apply !opacity-0 !pointer-events-none;
+}

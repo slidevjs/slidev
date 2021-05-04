@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed } from 'vue'
-import { total, currentPage, currentRoute, nextRoute, tab, tabElements, useSwipeControls } from '../logic/nav'
+import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
@@ -19,16 +19,16 @@ useHead({
 const main = ref<HTMLDivElement>()
 const nextTabElements = ref([])
 const nextSlide = computed(() => {
-  if (tab.value < tabElements.value.length) {
+  if (clicks.value < clicksTotal.value) {
     return {
       route: currentRoute.value,
-      tab: tab.value + 1,
+      clicks: clicks.value + 1,
     }
   }
   else {
     return {
       route: nextRoute.value,
-      tab: 0,
+      clicks: 0,
     }
   }
 })
@@ -49,21 +49,21 @@ useSwipeControls(main)
       <div ref="main" class="grid-section main flex flex-col p-4">
         <SlideContainer
           key="main"
-          v-model:tab="tab"
-          v-model:tab-elements="tabElements"
+          v-model:clicks="clicks"
+          v-model:clicks-elements="clicksElements"
           class="h-full w-full"
           :route="currentRoute"
-          :tab-disabled="false"
+          :clicks-disabled="false"
         />
       </div>
       <div class="grid-section next flex flex-col p-4">
         <SlideContainer
           key="next"
-          v-model:tab-elements="nextTabElements"
+          v-model:clicks-elements="nextTabElements"
           class="h-full w-full"
-          :tab="nextSlide.tab"
+          :clicks="nextSlide.clicks"
           :route="nextSlide.route"
-          :tab-disabled="false"
+          :clicks-disabled="false"
         />
       </div>
       <div class="grid-section note">

@@ -2,9 +2,9 @@ import { App, DirectiveBinding, InjectionKey, Ref, watch } from 'vue'
 import { remove } from '@antfu/utils'
 import { isPrintMode } from '../state'
 
-export const injectionTab: InjectionKey<Ref<number>> = Symbol('v-click-tab')
-export const injectionTabElements: InjectionKey<Ref<Element[]>> = Symbol('v-click-tab-elements')
-export const injectionTabDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-tab-disabled')
+export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
+export const injectionClicksElements: InjectionKey<Ref<Element[]>> = Symbol('v-click-clicks-elements')
+export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -18,11 +18,11 @@ export default function createDirectives() {
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionTabDisabled)!.value)
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
             return
 
-          const elements = dirInject(dir, injectionTabElements)!
-          const tab = dirInject(dir, injectionTab)!
+          const elements = dirInject(dir, injectionClicksElements)!
+          const clicks = dirInject(dir, injectionClicks)!
 
           const prev = elements.value.length
 
@@ -30,17 +30,19 @@ export default function createDirectives() {
             elements.value.push(el)
 
           watch(
-            tab,
+            clicks,
             () => {
-              const show = tab.value > prev
-              el.classList.toggle('!opacity-0', !show)
-              el.classList.toggle('!pointer-events-none', !show)
+              const show = dir.value != null
+                ? clicks.value >= dir.value
+                : clicks.value > prev
+              if (!el.classList.contains('v-click-hidden-explicitly'))
+                el.classList.toggle('v-click-hidden', !show)
             },
             { immediate: true },
           )
         },
         unmounted(el, dir) {
-          const elements = dirInject(dir, injectionTabElements)!
+          const elements = dirInject(dir, injectionClicksElements)!
           if (elements?.value)
             remove(elements.value, el)
         },
@@ -51,23 +53,50 @@ export default function createDirectives() {
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionTabDisabled)!.value)
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
             return
 
-          const elements = dirInject(dir, injectionTabElements)!
-          const tab = dirInject(dir, injectionTab)!
+          const elements = dirInject(dir, injectionClicksElements)!
+          const clicks = dirInject(dir, injectionClicks)!
 
           const prev = elements.value.length
 
           watch(
-            tab,
+            clicks,
             () => {
-              const show = tab.value >= prev
-              el.classList.toggle('!opacity-0', !show)
-              el.classList.toggle('!pointer-events-none', !show)
+              const show = clicks.value >= (dir.value ?? prev)
+              if (!el.classList.contains('v-click-hidden-explicitly'))
+                el.classList.toggle('v-click-hidden', !show)
             },
             { immediate: true },
           )
+        },
+      })
+
+      app.directive('click-hide', {
+        // @ts-expect-error
+        name: 'v-click-hide',
+
+        mounted(el: HTMLElement, dir) {
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
+            return
+
+          const clicks = dirInject(dir, injectionClicks)!
+
+          watch(
+            clicks,
+            () => {
+              const hide = clicks.value > dir.value
+              el.classList.toggle('v-click-hidden', hide)
+              el.classList.toggle('v-click-hidden-explicitly', hide)
+            },
+            { immediate: true },
+          )
+        },
+        unmounted(el, dir) {
+          const elements = dirInject(dir, injectionClicksElements)!
+          if (elements?.value)
+            remove(elements.value, el)
         },
       })
     },

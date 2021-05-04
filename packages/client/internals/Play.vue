@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { isPrintMode, showEditor, windowSize, isScreenVertical } from '../state'
-import { next, prev, currentRoute, tab, tabElements, useSwipeControls } from '../logic/nav'
+import { next, prev, currentRoute, clicks, clicksElements, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
@@ -27,12 +27,12 @@ useSwipeControls(root)
 <template>
   <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer
-      v-model:tab="tab"
-      v-model:tab-elements="tabElements"
+      v-model:clicks="clicks"
+      v-model:clicks-elements="clicksElements"
       class="w-full h-full bg-black"
       :width="isPrintMode ? windowSize.width.value : undefined"
       :route="currentRoute"
-      :tab-disabled="false"
+      :clicks-disabled="false"
       @click="onClick"
     >
       <template #controls>

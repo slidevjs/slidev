@@ -55,7 +55,7 @@ const cardWidth = computed(() => {
             :key="route.path"
             :width="cardWidth"
             :route="route"
-            :tab-disabled="true"
+            :clicks-disabled="true"
             class="pointer-events-none"
           />
         </div>

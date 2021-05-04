@@ -6,7 +6,7 @@ import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute, currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 
-const tab = ref<'content' | 'note'>('content')
+const clicks = ref<'content' | 'note'>('content')
 const offsetRight = ref(0)
 const content = ref('')
 const note = ref('')
@@ -136,15 +136,15 @@ const editorLink = computed(() => {
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" :class="tab === 'content' ? 'text-primary' : ''" @click="tab='content'">
+        <button class="icon-btn" :class="clicks === 'content' ? 'text-primary' : ''" @click="clicks='content'">
           <carbon:account />
         </button>
-        <button class="icon-btn" :class="tab === 'note' ? 'text-primary' : ''" @click="tab='note'">
+        <button class="icon-btn" :class="clicks === 'note' ? 'text-primary' : ''" @click="clicks='note'">
           <carbon:align-box-bottom-right />
         </button>
       </div>
       <span class="text-2xl pt-1">
-        {{ tab === 'content' ? 'Slide' : 'Note' }}
+        {{ clicks === 'content' ? 'Slide' : 'Note' }}
       </span>
       <div class="flex-auto"></div>
       <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
@@ -160,10 +160,10 @@ const editorLink = computed(() => {
       </button>
     </div>
     <div class="h-full overflow-auto">
-      <div v-show="tab === 'content'" class="h-full overflow-auto">
+      <div v-show="clicks === 'content'" class="h-full overflow-auto">
         <textarea ref="contentInput" />
       </div>
-      <div v-show="tab === 'note'" class="h-full overflow-auto">
+      <div v-show="clicks === 'note'" class="h-full overflow-auto">
         <textarea ref="noteInput" />
       </div>
     </div>

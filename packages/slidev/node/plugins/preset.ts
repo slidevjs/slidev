@@ -91,7 +91,7 @@ export async function ViteSlidevPlugin(
         sync: false,
         state: {
           page: 0,
-          tab: 0,
+          clicks: 0,
         },
       },
     }),
