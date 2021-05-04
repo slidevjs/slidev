@@ -24,6 +24,6 @@ html {
   @apply opacity-25 pointer-events-none;
 }
 
-.v-click-hidden:not(.v-click-reveal) {
+.v-click-hidden {
   @apply !opacity-0 !pointer-events-none;
 }

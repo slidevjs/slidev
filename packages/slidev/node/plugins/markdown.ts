@@ -2,12 +2,19 @@ import Markdown from 'vite-plugin-md'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
 import { Plugin } from 'vite'
-import type { Options as ShikiOption } from 'markdown-it-shiki'
+import type { Options as ShikiOptions } from 'markdown-it-shiki'
 import type MarkdownIt from 'markdown-it'
 import base64 from 'js-base64'
 import { isTruthy } from '@antfu/utils'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { loadSetups } from './setupNode'
+
+const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
+  theme: {
+    dark: 'min-dark',
+    light: 'min-light',
+  },
+}
 
 export async function createMarkdownPlugin(
   { data: { config }, roots, mode }: ResolvedSlidevOptions,
@@ -18,12 +25,7 @@ export async function createMarkdownPlugin(
   if (config.highlighter === 'shiki') {
     const { default: Shiki, resolveOptions } = await import('markdown-it-shiki')
     const { getHighlighter } = await import('shiki')
-    const shikiOptions: ShikiOption = await loadSetups(roots, 'shiki.ts', {}, {
-      theme: {
-        dark: 'min-dark',
-        light: 'min-light',
-      },
-    }, false)
+    const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', {}, DEFAULT_SHIKI_OPTIONS, false)
     const { langs, themes } = resolveOptions(shikiOptions)
     shikiOptions.highlighter = await getHighlighter({ themes, langs })
 

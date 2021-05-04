@@ -2,9 +2,9 @@
 
 Presentation slides for developers
 
-> Press Space to next page
+> Press <kbd>Space</kbd> to next page
 
-----
+---
 
 # Getting Started
 

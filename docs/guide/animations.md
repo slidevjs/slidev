@@ -68,24 +68,28 @@ clicks: 10
 Passing the click index to your directives, you can customize the order of the revealing
 
 ```md
-<!-- "1" go first -->
+<!-- "1" goes first -->
 <div v-click>1</div>
 <div v-click>2</div>
 <div v-click>3</div>
 ```
 
 ```md
-<!-- "3" go first, then "2" -->
+<!-- "3" goes first, then "2" -->
 <div v-click="3">1</div>
 <div v-click="2">2</div>
 <div v-click="1">3</div>
 ```
 
 ```md
+---
+clicks: 3
+---
+
 <!-- visible after 3 clicks -->
-<v-click at="3">
+<v-clicks at="3">
   <div>Hi</div>
-</v-click>
+</v-clicks>
 ```
 
 ## Transitions
