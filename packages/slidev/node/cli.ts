@@ -16,6 +16,7 @@ const cli = yargs
   .scriptName('slidev')
   .usage('$0 [args]')
   .version(version)
+  .strict()
   .showHelpOnFail(false)
   .alias('h', 'help')
   .alias('v', 'version')
@@ -41,6 +42,7 @@ cli.command(
       choices: ['error', 'warn', 'info', 'silent'],
       describe: 'log level',
     })
+    .strict()
     .help(),
   async({ entry, theme, port, open, log }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
@@ -120,6 +122,7 @@ cli.command(
       type: 'boolean',
       describe: 'allow download as PDF',
     })
+    .strict()
     .help(),
   async({ entry, theme, watch, base, download, out }) => {
     const { build } = await import('./build')
@@ -143,6 +146,7 @@ cli.command(
   'format [entry]',
   'Format the markdown file',
   args => commonOptions(args)
+    .strict()
     .help(),
   async({ entry }) => {
     const data = await parser.load(entry)
@@ -174,6 +178,7 @@ cli.command(
       type: 'string',
       describe: 'page ranges to export, for example "1,4-5,6"',
     })
+    .strict()
     .help(),
   async({
     entry,
@@ -214,7 +219,9 @@ cli.command(
   },
 )
 
-cli.help().parse()
+cli
+  .help()
+  .parse()
 
 function commonOptions(args: Argv<{}>) {
   return args
