@@ -49,7 +49,9 @@
 
   <!-- <Debug /> -->
 
-  <WorkingInProgress />
+  <ClientOnly>
+    <WorkingInProgress />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -97,7 +99,7 @@ const showNavbar = computed(() => {
   )
 })
 
-const isHome = computed(() => route.path === '/')
+const isHome = computed(() => route.path === '/' || route.path === '/index.html')
 
 // sidebar
 const openSideBar = ref(false)
