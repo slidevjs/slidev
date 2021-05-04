@@ -65,7 +65,7 @@ clicks: 10
 
 ### Ordering
 
-By passing the click index to your directives, you can customize the order of the revealing
+Passing the click index to your directives, you can customize the order of the revealing
 
 ```md
 <!-- "1" go first -->
@@ -81,6 +81,13 @@ By passing the click index to your directives, you can customize the order of th
 <div v-click="1">3</div>
 ```
 
+```md
+<!-- visible after 3 clicks -->
+<v-click at="3">
+  <div>Hi</div>
+</v-click>
+```
+
 ## Transitions
 
-The built-in support for slides and elements transitions is NOT provided in the current version. We are planned add it in the next major version. Before that, you can still use your custom styles and libraries to do that.
+The built-in support for slides and elements transitions is NOT provided in the current version. We are have planned to add it in the next major version. Before that, you can still use your custom styles and libraries to do that.
