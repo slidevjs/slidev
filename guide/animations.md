@@ -52,6 +52,35 @@ When you click the "next" button, both `Hello` and `World` will show up together
 
 An item will become visible accordingly whenever you click "next".
 
+### Custom Clicks Count
+
+By default, Slidev can smartly count how many steps are needed before going next slide. And you can override it by passing the `clicks` frontmatter option:
+
+```yaml
+---
+# 10 clicks in this slide, before going to the next
+clicks: 10
+---
+```
+
+### Ordering
+
+By passing the click index to your directives, you can customize the order of the revealing
+
+```md
+<!-- "1" go first -->
+<div v-click>1</div>
+<div v-click>2</div>
+<div v-click>3</div>
+```
+
+```md
+<!-- "3" go first, then "2" -->
+<div v-click="3">1</div>
+<div v-click="2">2</div>
+<div v-click="1">3</div>
+```
+
 ## Transitions
 
 The built-in support for slides and elements transitions is NOT provided in the current version. We are planned add it in the next major version. Before that, you can still use your custom styles and libraries to do that.
