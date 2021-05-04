@@ -75,7 +75,7 @@ console.log('HelloWorld')
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it turns the block into a full-featured Monaco editor!
 
 ~~~md
-```ts{monaco}
+```ts {monaco}
 console.log('HelloWorld')
 ```
 ~~~
