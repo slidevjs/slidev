@@ -68,7 +68,7 @@ export function transformMarkdownMonaco(md: string) {
   const typeModules = new Set<string>()
 
   // transform monaco
-  md = md.replace(/\n```(\w+?){monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
+  md = md.replace(/\n```(\w+?)\s*{monaco([\w:,-]*)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = 'ts', options: string, code: string) => {
     options = options || ''
     lang = lang.trim()
     if (lang === 'ts' || lang === 'typescript') {
