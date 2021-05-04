@@ -1,5 +1,5 @@
 import type { Awaitable } from '@antfu/utils'
-import type { IThemeRegistration, ILanguageRegistration, ShikiHighlighter } from 'shiki'
+import type { IThemeRegistration, ILanguageRegistration, Highlighter as ShikiHighlighter } from 'shiki'
 import type * as monaco from 'monaco-editor'
 import type { App } from 'vue'
 import type { Router } from 'vue-router'
