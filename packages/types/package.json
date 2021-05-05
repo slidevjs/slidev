@@ -17,7 +17,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "index.d.ts",
-  "homepage": "https://github.com/slidevjs/slidev",
+  "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
     "prepublishOnly": "npm run build",

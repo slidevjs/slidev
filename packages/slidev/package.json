@@ -27,7 +27,7 @@
   "bin": {
     "slidev": "./bin/slidev.js"
   },
-  "homepage": "https://github.com/slidevjs/slidev",
+  "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
     "prepublishOnly": "npm run build",

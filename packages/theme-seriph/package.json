@@ -17,7 +17,7 @@
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "homepage": "https://github.com/slidevjs/slidev",
+  "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "peerDependencies": {
     "@slidev/client": "workspace:*"
