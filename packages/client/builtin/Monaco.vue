@@ -33,7 +33,7 @@ const props = defineProps({
 })
 
 const code = ref(decode(props.code))
-const height = computed(() => props.height === 'auto' ? `${code.value.split('\n').length * 18 + 20}px` : props.height)
+const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * 18 + 20}px` : props.height)
 
 const el = ref<HTMLElement>()
 let editor: monaco.editor.IStandaloneCodeEditor
