@@ -1,6 +1,6 @@
 {
   "name": "create-slidev",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Create starter template for Slidev",
   "license": "MIT",
   "repository": {
@@ -16,7 +16,7 @@
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "@antfu/ni": "^0.6.1",
+    "@antfu/ni": "^0.7.0",
     "execa": "^5.0.0",
     "kolorist": "^1.4.1",
     "minimist": "^1.2.5",

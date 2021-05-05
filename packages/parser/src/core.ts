@@ -58,7 +58,7 @@ export function parse(
   markdown: string,
   filepath?: string,
 ): SlidevMarkdown {
-  const lines = markdown.split(/\n/g)
+  const lines = markdown.split(/\r?\n/g)
   const slides: SlideInfo[] = []
 
   function parseContent(raw: string) {

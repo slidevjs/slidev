@@ -1,6 +1,6 @@
 {
   "name": "@slidev/theme-seriph",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Seriph theme for Slidev",
   "keywords": [
     "slidev-theme",
@@ -25,7 +25,7 @@
   "dependencies": {
     "codemirror-theme-vars": "^0.1.0",
     "prism-theme-vars": "^0.2.2",
-    "theme-vitesse": "^0.1.9"
+    "theme-vitesse": "^0.1.10"
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",

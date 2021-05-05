@@ -18,11 +18,16 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 14.x]
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # os: [ubuntu-latest, macos-latest]
       fail-fast: false
 
     steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
       - uses: actions/checkout@v2
 
       - name: Use Node.js ${{ matrix.node-version }}
