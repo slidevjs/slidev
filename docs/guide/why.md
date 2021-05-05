@@ -36,7 +36,6 @@ Slidev is powered by [Vite](https://vitejs.dev/), [Vue 3](https://v3.vuejs.org/)
 
 Find more about [our tech stack](/guide/#tech-stack).
 
-
 ## Interactive & Expressive
 
 You can write custom Vue components and use them directly inside your markdown file. You can also interact with them inside the presentation to express your idea in a more interserting and intuitive way.
