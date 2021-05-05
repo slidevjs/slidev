@@ -72,6 +72,8 @@ console.log('Hello, World!')
 //```
 ~~~
 
+### Line Highlighting
+
 To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1.
 
 ~~~ts
@@ -100,6 +102,8 @@ function add(
 
 This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
 
+### Monaco Editor
+
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
 ~~~ts
@@ -107,6 +111,8 @@ Whenever you want to do some modification in the presentation, simply add `{mona
 console.log('HelloWorld')
 //```
 ~~~
+
+Learn more about [configuring Monaco](/custom/config-monaco).
 
 ## Notes
 

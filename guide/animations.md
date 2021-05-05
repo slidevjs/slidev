@@ -91,6 +91,53 @@ clicks: 3
 </v-clicks>
 ```
 
-## Transitions
+## Element Transitions
 
-The built-in support for slides and elements transitions is NOT YET provided in the current version. We are planning to add support for them in the next major version. Before that, you can still use your custom styles and libraries to do that.
+When you apply the `v-click` directive to your elements, it will attach the class name `slidev-vclick-target` to it. When the elements are hidden, the class name `slidev-vclick-hidden` will also be attached. For example:
+
+```html
+<div class="slidev-vclick-target slidev-vclick-hidden">Text</div>
+```
+
+After a click, it will become
+
+```html
+<div class="slidev-vclick-target">Text</div>
+```
+
+By default, a subtle opacity transition is applied to those classes:
+
+```css
+// the default
+
+.slidev-vclick-target {
+  transition: opacity 100ms ease;
+}
+
+.slidev-vclick-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+```
+
+You can override them to customize the transition effects in your custom stylesheets. 
+
+For example, you can achieve the scale up transitions by: 
+
+```css
+// styles.css
+
+.slidev-vclick-target {
+  transition: all 500ms ease;
+}
+
+.slidev-vclick-hidden {
+  transform: scale(0);
+}
+```
+
+Learn more about [customizing styles](/custom/directory-structure#style).
+
+## Pages Transitions
+
+The built-in support for slides is NOT YET provided in the current version. We are planning to add support for them in the next major version. Before that, you can still use your custom styles and libraries to do that.
