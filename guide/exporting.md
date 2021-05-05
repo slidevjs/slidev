@@ -1,14 +1,19 @@
 # Exporting
 
-> Exporting is relying on [Playwright](https://playwright.dev) to do the rendering, you will need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) for using this feature.
-> If you are doing exporting in a CI environment, [this guide](https://playwright.dev/docs/ci) could also be helpful.
+> Exporting relies on [Playwright](https://playwright.dev) to do the rendering. You will therefore need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) to use this feature.
+> If you are doing exporting in a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
 
 ## PDF
 
-Exporting your slides into PDF by the following command
+Install `playwright-chromium`
 
 ```bash
 $ npm i -D playwright-chromium
+```
+
+Now export your slides to PDF using the following command
+
+```bash
 $ slidev export
 ```
 
@@ -16,7 +21,7 @@ After a few seconds, your slides will be ready at `./slides-exports.pdf`.
 
 ## PNGs
 
-Passing the `--format png` option, it will export PNG images for each slide.
+When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF.
 
 ```bash
 $ slidev export --format png
@@ -24,13 +29,13 @@ $ slidev export --format png
 
 ## Single-Page Application (SPA)
 
-You can build the slides into a self hostable SPA by:
+You can also build the slides into a self-hostable SPA:
 
 ```bash
 $ slidev build
 ```
 
-The dist will be available under `dist/` and then you can host them on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. And share your slides with the world with a single link.
+The generated application will be available under `dist/` and then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. Now you can share your slides with the rest of the world with a single link.
 
 ### Provide Downloadable PDF
 
@@ -42,9 +47,9 @@ download: true
 ---
 ```
 
-It will generate a pdf file along with the build. And a download button will appear in the SPA.
+Now, Slidev will generate a pdf file along with the build and a download button will appear in the SPA.
 
-You can also provide a custom url to the PDF. And if so the rendering process will be skipped.
+You can also provide a custom url to the PDF. In that case, the rendering process will be skipped.
 
 ```md
 ---
