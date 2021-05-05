@@ -1,11 +1,12 @@
 import { existsSync } from 'fs'
 import { join, resolve } from 'path'
+import { slash } from '@antfu/utils'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from '../options'
 import { toAtFS } from '../utils'
 
 export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
-  const mainEntry = resolve(clientRoot, 'main.ts')
+  const mainEntry = slash(resolve(clientRoot, 'main.ts'))
 
   return {
     name: 'slidev:entry',
@@ -16,9 +17,9 @@ export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: Resolved
 
         async function scanStyle(root: string) {
           const styles = [
-            join(root, 'styles/index.ts'),
-            join(root, 'styles/index.js'),
-            join(root, 'styles/index.css'),
+            join(root, 'styles', 'index.ts'),
+            join(root, 'styles', 'index.js'),
+            join(root, 'styles', 'index.css'),
             join(root, 'styles.css'),
             join(root, 'style.css'),
           ]
