@@ -15,7 +15,7 @@ export interface ShowCaseInfo {
 export const showcases: ShowCaseInfo[] = [
   {
     title: 'Composable Vue',
-    cover: `${import.meta.env.BASE_URL}assets/composable-vue.png`,
+    cover: `${import.meta.env.BASE_URL}showcases/composable-vue.png`,
     author: {
       name: 'Anthony Fu',
       link: 'https://github.com/antfu',
