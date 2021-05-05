@@ -186,7 +186,7 @@ importers:
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.3
-      vite-plugin-remote-assets: ^0.2.1
+      vite-plugin-remote-assets: ^0.2.2
       vite-plugin-windicss: ^0.16.0-beta.8
       vue: ^3.0.11
       windicss: ^3.0.0-beta.5
@@ -220,7 +220,7 @@ importers:
       vite-plugin-components: 0.8.4_vite@2.2.4
       vite-plugin-icons: 0.5.0_3a062f62dd9e0ad9a7cb2ae18cd865f0
       vite-plugin-md: 0.6.3_vite@2.2.4
-      vite-plugin-remote-assets: 0.2.1_vite@2.2.4
+      vite-plugin-remote-assets: 0.2.2_vite@2.2.4
       vite-plugin-windicss: 0.16.0-beta.8_vite@2.2.4
       vue: 3.0.11
       windicss: 3.0.0-beta.5
@@ -7273,8 +7273,8 @@ packages:
       vite: 2.2.4
     dev: false
 
-  /vite-plugin-remote-assets/0.2.1_vite@2.2.4:
-    resolution: {integrity: sha512-k/rmzpmmBNtuxvsYcVCE2QQQ8DU2+JWT4lRQF3AA6kg3W3z6NhBQ/LAn+mXO2dUO+uYK2rAUZ2O/FI1Jg7A0EQ==}
+  /vite-plugin-remote-assets/0.2.2_vite@2.2.4:
+    resolution: {integrity: sha512-Hl2g1EGJW7jHjNKQ0hf96LJEbfmintfQLBIgKJkyFPyjO1NH3gNUheFgBoxi6G4/nbE9hHzpIIr30iwm1NxLlQ==}
     peerDependencies:
       vite: ^2.0.0
     dependencies:
