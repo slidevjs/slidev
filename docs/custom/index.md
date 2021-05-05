@@ -25,7 +25,7 @@ Check out the [type definition](https://github.com/slidevjs/slidev/blob/main/pac
 
 ## Directory Structure
 
-Slidev uses some directory stricture conventions to minimalize the configure surface and make the functionality extensions flexible and intuitive.
+Slidev uses directory structure conventions to minimalize the configuration surface and make extensions in functionality flexible and intuitive.
 
 Refer to the [Directory Structure](/custom/directory-structure) section.
 

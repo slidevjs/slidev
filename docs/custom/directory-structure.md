@@ -1,8 +1,8 @@
 # Directory Structure
 
-Slidev uses some directory stricture conventions to minimalize the configure surface and make the functionality extensions flexible and intuitive.
+Slidev uses directory structure conventions to minimalize the configuration surface and make extensions in functionality flexible and intuitive.
 
-The basic structure will be like
+The basic structure will be:
 
 ```bash
 your-slidev/
