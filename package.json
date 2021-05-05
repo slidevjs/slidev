@@ -50,7 +50,7 @@
     "typeit": "^7.0.4",
     "typescript": "^4.2.4",
     "typewriter-effect": "^2.17.0",
-    "vite-plugin-windicss": "^0.16.0-beta.8",
+    "vite-plugin-windicss": "^0.16.0-beta.10",
     "vitepress": "^0.13.2"
   }
 }
