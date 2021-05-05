@@ -1,6 +1,6 @@
 import { resolve, basename } from 'path'
 import fg from 'fast-glob'
-import { prettify, load, stringify, parse } from '../packages/parser/src'
+import { prettify, load, stringify, parse } from '../packages/parser/src/fs'
 
 describe('md parser', () => {
   const files = fg.sync('*.md', {
