@@ -2,12 +2,12 @@
 
 Slides can be written within **a single markdown file** (by default `./slides.md`). 
 
-You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional inlined HTML and Vue Components support. Use `---` with a new line after to separate your slides. 
+You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [Windi CSS](https://windicss.org) is also supported. Use `---` padded with a new line to separate your slides. 
 
 ~~~md
 # Slidev
 
-Hello World
+Hello, World!
 
 ---
 
@@ -16,7 +16,7 @@ Hello World
 Directly use code blocks for highlighting
 
 ```ts
-console.log('Helle World')
+console.log('Hello, World!')
 ```
 
 ---
@@ -64,15 +64,15 @@ Refer to [customization](/custom/) for more details.
 
 ## Code Snippet
 
-A big reason I am making this is that I need to make my code looks just right in the slides. So just as you expected, you can use Markdown favored code block to highlight your code.
+A big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
 ~~~md
 ```ts
-console.log('HelloWorld')
+console.log('Hello, World!')
 ```
 ~~~
 
-To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start count from 1.
+To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1.
 
 ~~~md
 ```ts {2,3}
@@ -98,9 +98,9 @@ function add(
 ```
 ~~~
 
-This will highlight on `a` and `b` first, then goes to the `computed` line after one click, and then, the whole block. Learn more about the [clicks animations here](/guide/animations).
+This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
 
-Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id, it turns the block into a full-featured Monaco editor!
+Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
 ~~~md
 ```ts {monaco}
@@ -110,16 +110,16 @@ console.log('HelloWorld')
 
 ## Notes
 
-You can take notes for each slide. They will show up on [Presenter Mode](/guide/presenter-mode) for you to reference in presentations.
+You can also take notes for each slide. They will show up in [Presenter Mode](/guide/presenter-mode) for you to reference during presentations.
 
-In Markdown, the last comment block in each slide will be treated as notes.
+In Markdown, the last comment block in each slide will be treated as a note.
 
 ~~~md
 ---
 layout: cover
 ---
 
-# Slidev
+# Page 1
 
 This is the cover page.
 
@@ -129,7 +129,7 @@ This is the cover page.
 
 # Page 2
 
-<!-- This is NOT a note -->
+<!-- This is NOT a note because it precedes the content of the slide -->
 
 The second page
 
@@ -140,7 +140,7 @@ This is another note
 
 ## Configurations
 
-All the configurations needed can also be defined in the Markdown file. For example:
+All configurations needed can be defined in the Markdown file. For example:
 
 ```md
 ---
@@ -154,4 +154,4 @@ background: 'https://source.unsplash.com/1600x900/?nature,water'
 This is the cover page.
 ```
 
-For more details about using a theme, refer to [this section](/themes/use).
+For more details about using a theme, refer to the [themes usage section](/themes/use).
