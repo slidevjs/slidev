@@ -1,17 +1,17 @@
 # Highlighters
 
-Slidev comes with two syntax highlighter for you to choose:
+Slidev comes with two syntax highlighter for you to choose from:
 
 - [Prism](https://prismjs.com/)
 - [Shiki](https://github.com/shikijs/shiki)
 
-**Prism** is one of the most popular syntax highlighters, the highlighting is done by adding token classes to the code and colorized using CSS. You can search for their [official themes](https://github.com/PrismJS/prism-themes) or customize one with [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) very easily.
+**Prism** is one of the most popular syntax highlighters. The highlighting is done by adding token classes to the code and it's colored using CSS. You can browse through their [official themes](https://github.com/PrismJS/prism-themes), or create/customize one yourself very easily using [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars).
 
-**Shiki** on the other hand, is a TextMate grammar-powered syntax highlighter. It generates colored tokens where there is not additional CSS needed. Since it has great grammar support, the generated colors are very accurate, just like what you will see in VS Code. Shiki also comes with [a bunch of themes built-in](https://github.com/shikijs/shiki/blob/master/docs/themes.md) you can directly use. The downside of it is that it also requires TextMate themes (compatible with VS Code theme) to do the highlighting, which could be a bit hard to customize.
+**Shiki**, on the other hand, is a TextMate grammar-powered syntax highlighter. It generates colored tokens, so there is no additional CSS needed. Since it has great grammar support, the generated colors are very accurate, just like what you will see in VS Code. Shiki also comes with [a bunch of built-in themes](https://github.com/shikijs/shiki/blob/master/docs/themes.md). The downside of Shiki is that it also requires TextMate themes (compatible with VS Code theme) to do the highlighting, which can be a bit harder to customize.
 
-Depends on the theme you are using, it might support both or only one of them.
+Slidev themes usually support both Prism and Shiki, but depending on the theme you are using, it might only support one of them.
 
-But when you have the choice, the tradeoff is basically:
+When you have the choice, the tradeoff is basically:
 
 - **Prism** for easier customization
 - **Shiki** for more accurate highlighting
@@ -26,7 +26,7 @@ highlighter: shiki
 
 ## Configure Prism
 
-To configure your Prism, you can just import the theme css or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to it's docs for more details.
+To configure your Prism, you can just import the theme css or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to its docs for more details.
 
 ## Configure Shiki
 
@@ -65,5 +65,3 @@ export default defineShikiSetup(async() => {
   }
 })
 ```
-
-
