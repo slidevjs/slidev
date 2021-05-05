@@ -31,7 +31,7 @@ export const showcases: ShowCaseInfo[] = [
     author: {
       name: '',
     },
-    at: 'Sumbit your talk/presentation to be list here!',
+    at: 'Submit your talk/presentation to be list here!',
     cover: `${import.meta.env.BASE_URL}themes/placeholder.png`,
     datetime: '2021-04-29',
   },
