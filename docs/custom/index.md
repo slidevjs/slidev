@@ -1,10 +1,10 @@
 # Customizations
 
-Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the underneath tools like [Vite](/custom/config-vite), [Windi CSS](/custom/config-windicss), [Monaco](/custom/config-monaco), and so on.
+Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [Windi CSS](/custom/config-windicss), [Monaco](/custom/config-monaco), etc.)
 
 ## Frontmatter Configures
 
-You can configure Slidev in the frontmatter of your first slide, the following show the default value of them.
+You can configure Slidev in the frontmatter of your first slide, the following shows the default value for each option.
 
 ```yaml
 ---
@@ -21,11 +21,11 @@ monaco: 'dev'
 ---
 ```
 
-Check out the [type definition](https://github.com/slidevjs/slidev/blob/main/packages/types/src/types.ts#L16) for more options.
+Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/types.ts#L16) for more options.
 
 ## Directory Structure
 
-Slidev uses some directory stricture conventions to minimalize the configure surface and make the functionality extensions flexible and intuitive.
+Slidev uses some directory structure conventions to minimize the configure surface and make the functionality extensions flexible and intuitive.
 
 Refer to the [Directory Structure](/custom/directory-structure) section.
 

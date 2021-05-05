@@ -1,9 +1,11 @@
 # Configure Windi CSS
 
-Since Markdown naturally supports embedded HTML markups. You can style your content the way you want. To provide some convenience, we have [Windi CSS](https://github.com/windicss/windicss) built-in, where you can style directly with class utilities, for example
+Markdown naturally supports embedded HTML markups. You can therefore style your content the way you want. To provide some convenience, we have [Windi CSS](https://github.com/windicss/windicss) built-in, so you can style markup directly using class utilities. 
+
+For example:
 
 ```html
-<div class="grid grids-cols-[100px,1fr] gap-4 pt-4">
+<div class="grid pt-4 gap-4 grids-cols-[100px,1fr]">
 
 ### Name
 
@@ -17,7 +19,7 @@ The [Attributify Mode](https://windicss.org/posts/v30.html#attributify-mode) in 
 
 ## Configurations
 
-To configure the Windi CSS configuration, you will need to extend it by
+To configure Windi CSS, you will need to extend the Windi CSS base configuration.
 
 ```ts
 import { mergeWindicssConfig, defineConfig } from 'vite-plugin-windicss'
