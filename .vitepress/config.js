@@ -117,6 +117,13 @@ module.exports = {
   description: 'Presentation slides for developers',
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+    ['meta', { name: 'author', content: 'Slidev' }],
+    ['meta', { property: 'og:title', content: 'VueUse' }],
+    ['meta', { property: 'og:image', content: 'https://sli.dev/og-image.png' }],
+    ['meta', { property: 'og:description', content: 'Presentation slides for developers' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:creator', content: '@slidevjs' }],
+    ['meta', { name: 'twitter:image', content: 'https://sli.dev/og-image.png' }],
     ['link', { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' }],
     ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
     ['link', { href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;400;500&family=Inter:wght@200;400;500;600', rel: 'stylesheet' }],
