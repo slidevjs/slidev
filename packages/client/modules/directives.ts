@@ -6,6 +6,11 @@ export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks
 export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
 export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
 
+export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
+export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
+export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
+export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
+
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
 }
@@ -29,19 +34,22 @@ export default function createDirectives() {
           if (!elements.value.includes(el))
             elements.value.push(el)
 
+          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
+
           watch(
             clicks,
             () => {
               const show = dir.value != null
                 ? clicks.value >= dir.value
                 : clicks.value > prev
-              if (!el.classList.contains('v-click-hidden-explicitly'))
-                el.classList.toggle('v-click-hidden', !show)
+              if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
+                el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
             },
             { immediate: true },
           )
         },
-        unmounted(el, dir) {
+        unmounted(el: HTMLElement, dir) {
+          el?.classList.toggle(CLASS_VCLICK_TARGET, false)
           const elements = dirInject(dir, injectionClicksElements)!
           if (elements?.value)
             remove(elements.value, el)
@@ -61,15 +69,20 @@ export default function createDirectives() {
 
           const prev = elements.value.length
 
+          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
+
           watch(
             clicks,
             () => {
               const show = clicks.value >= (dir.value ?? prev)
-              if (!el.classList.contains('v-click-hidden-explicitly'))
-                el.classList.toggle('v-click-hidden', !show)
+              if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
+                el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
             },
             { immediate: true },
           )
+        },
+        unmounted(el: HTMLElement) {
+          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
         },
       })
 
@@ -83,17 +96,20 @@ export default function createDirectives() {
 
           const clicks = dirInject(dir, injectionClicks)!
 
+          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
+
           watch(
             clicks,
             () => {
               const hide = clicks.value > dir.value
-              el.classList.toggle('v-click-hidden', hide)
-              el.classList.toggle('v-click-hidden-explicitly', hide)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
             },
             { immediate: true },
           )
         },
         unmounted(el, dir) {
+          el?.classList.toggle(CLASS_VCLICK_TARGET, false)
           const elements = dirInject(dir, injectionClicksElements)!
           if (elements?.value)
             remove(elements.value, el)

@@ -2,7 +2,7 @@
 import { range, remove } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { computed, defineProps, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import { injectionClicks, injectionClicksElements, injectionClicksDisabled } from '../modules/directives'
+import { injectionClicks, injectionClicksElements, injectionClicksDisabled, CLASS_VCLICK_TARGET } from '../modules/directives'
 
 const props = defineProps({
   ranges: {
@@ -18,10 +18,8 @@ function makeid(length = 5) {
   const result = []
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result.push(characters.charAt(Math.floor(Math.random()
- * charactersLength)))
-  }
+  for (let i = 0; i < length; i++)
+    result.push(characters.charAt(Math.floor(Math.random() * charactersLength)))
   return result.join('')
 }
 
@@ -40,21 +38,20 @@ onMounted(() => {
     const id = makeid()
     const ids = range(props.ranges.length - 1).map(i => id + i)
     elements.value.push(...ids)
-    onUnmounted(() => {
-      ids.forEach(i => remove(elements.value, i))
-    }, vm)
+    onUnmounted(() => ids.forEach(i => remove(elements.value, i)), vm)
   }
 
   watchEffect(() => {
     if (!el.value)
       return
-    const duoTone = el.value.querySelector('.shiki-dark')
-    const targets = duoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
+    const isDuoTone = el.value.querySelector('.shiki-dark')
+    const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
     for (const target of targets) {
       const lines = Array.from(target.querySelectorAll('.line'))
       const highlights: number[] = parseRangeString(lines.length, rangeStr.value)
       lines.forEach((line, idx) => {
         const highlighted = highlights.includes(idx)
+        line.classList.toggle(CLASS_VCLICK_TARGET, true)
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)
       })
