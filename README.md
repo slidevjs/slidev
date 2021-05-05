@@ -9,7 +9,6 @@
 Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍💻
 </p>
 
-
 <p align="center">
 <a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img src="https://img.shields.io/npm/v/@slidev/cli?color=2B90B6&label=" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@slidev/cli?color=349dbe&label="></a>
@@ -19,36 +18,73 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <a href="https://github.com/slidevjs/slidev" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
 </p>
 
+
+<p align="center">
+  Video Previews:
+  <a href="https://twitter.com/antfu7/status/1388529647428636675">one</a> |
+  <a href="https://twitter.com/antfu7/status/1389604687502995457">two</a>
+</p>
+
+<p align="center">
+<table>
+<tbody>
+<td align="center">
+<img width="2000" height="0"><br>
+Status: <b>Public Beta 🎉</b><br>
+<sub>Made possible from my <a href="https://github.com/sponsors/antfu">Sponsor Program 💖</a></sub><br>
+<img width="2000" height="0">
+</td>
+</tbody>
+</table>
+</p>
+
+
 ## Motivation
 
-I am making this because I found myself spending too much on layouting and styling slides when using apps like PowerPoint / Keynote / Google Slides. When sharing code snippets, I would also need to use other tools to generate the highlighted code as images over and over again. Which are just not ideal to me.
+I always found myself spending too much time styling and layouting slides when using apps like PowerPoint / Keynote / Google Slides. Whenever I need to share code snippets, I would also need to use other tools to generate the highlighted code as images over and over again.
 
 So as a frontend developer, why not solve it the way that fits better with what I am good that?
 
-See also: [**Why Slidev?**](https://sli.dev/guide/why)
+Learn more: [**Why Slidev?**](https://sli.dev/guide/why)
 
-## Status
+## Features
 
-Status: **Alpha**
+- 📝 **Markdown-based** - use your favorite editors and workflow
+- 🎨 **Themable** - theme can be shared and used with npm packages
+- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding
+- 🤹 **Interactive** - embedding Vue components seamlessly
+- 🎥 **Recording** - built-in recording and camera view
+- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
+- ⚡️ **Fast** - instant reloading powered by Vite
+- 🛠 **Hackable** - using Vite plugins and any npm packages
 
-~~Currently, I will focus more on the content of the slides I need myself. I will update the slides of my next talk with it (you can also have a preview of it :P). **Think it as a template for making slides at this moment**. After finishing my talk, I will make this a standalone tool like VitePress where all you need is a command with a markdown file.~~
+## Documentations
 
-Alright, I broke my words again. It's now available as a standalone tool 🎉
+Docs and guides on **[sli.dev](https://sli.dev)**
 
-**Docs and guides on [sli.dev](https://sli.dev)**
-
-The best way to understand it is to try it, one command away:
+The best way to understand it is to try it, just one command away:
 
 ```bash
 npm init slidev
 ```
 
-For a full example, you can check the [demo](./demo) folder, which is a draft for my next talk 😉.
+For a full example, you can check the [demo](./demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
+
+## Tech Stacks
+
+- [Vite](https://vitejs.dev) - An extremely fast frontend tooling
+- [Vue](https://v3.vuejs.org/) powered [Markdown](https://daringfireball.net/projects/markdown/syntax) - Focus on the content while having the power of HTML and Vue components whenever needed
+- [Windi CSS](https://github.com/windicss/windicss) - On-demand utility-first CSS framework, style your slides at ease
+- [Prism](https://github.com/PrismJS/prism), [Shiki](https://github.com/shikijs/shiki), [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
+- [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
+- [VueUse](https://vueuse.org) family - [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
 
 ## Sponsors
 
+This project is made possible by all the sponsors supporting my work:
+
 <p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
+  <a href="https://github.com/sponsors/antfu">
     <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg'/>
   </a>
 </p>
