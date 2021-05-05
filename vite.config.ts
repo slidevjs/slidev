@@ -41,7 +41,7 @@ const config: UserConfig = {
       transform(code, id) {
         if (!id.endsWith('.md'))
           return
-        return code.replace(/\\```/g, '```')
+        return code.replace(/\/\/```/mg, '```')
       },
     },
   ],
