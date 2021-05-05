@@ -69,7 +69,7 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 
 Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/) and [Shiki](https://github.com/shikijs/shiki). For more information please refer to [the syntax highlighting docs](/custom/highlighters).
 
-You can support either one of them, or both. Refer to the default theme for configurations examples [prism.css](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/styles/prism.css) / [shiki.ts](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/setup/shiki.ts).
+You can support either one of them, or both. Refer to the default theme for configurations examples [`./styles/prism.css`](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/styles/prism.css) / [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/setup/shiki.ts).
 
 Also, remember to specify the supported highlighters in your `package.json`
 

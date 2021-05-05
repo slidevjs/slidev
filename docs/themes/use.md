@@ -10,9 +10,11 @@ theme: seriph
 
 You can either directly start the server and it will show up the prompt to install the theme automatically for you
 
-```
-? The theme was not found in your project, would you like to install it now? › (Y/n)
-```
+<div class="language-md">
+<pre>
+<span class="token keyword">?</span> Does not found theme <span class="token string">"@slidev/theme-seriph"</span> in your project, do you want to install it now? › (Y/n)
+</pre>
+</div>
 
 or you can install the theme manually via
 
