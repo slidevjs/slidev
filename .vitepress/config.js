@@ -117,8 +117,8 @@ module.exports = {
   description: 'Presentation slides for developers',
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
-    ['meta', { name: 'author', content: 'Slidev' }],
-    ['meta', { property: 'og:title', content: 'VueUse' }],
+    ['meta', { name: 'author', content: 'Anthony Fu' }],
+    ['meta', { property: 'og:title', content: 'Slidev' }],
     ['meta', { property: 'og:image', content: 'https://sli.dev/og-image.png' }],
     ['meta', { property: 'og:description', content: 'Presentation slides for developers' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
