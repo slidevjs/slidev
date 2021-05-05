@@ -72,9 +72,9 @@ Hello World
 
 Directly use code blocks for highlighting
 
-```ts
+//```ts
 console.log('Helle World')
-`​``
+//```
 
 ---
 
