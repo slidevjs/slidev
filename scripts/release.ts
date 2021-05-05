@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { objectMap } from '@antfu/utils'
-import { version } from '../package.json'
 import { run, runArgs } from './run'
 
 run('npx bumpp package.json packages/*/package.json')
@@ -10,6 +10,8 @@ const templates = [
   'packages/create-app/template',
   'packages/create-theme/template',
 ]
+
+const { version } = require('../package.json')
 
 for (const template of templates) {
   const path = join(template, 'package.json')
