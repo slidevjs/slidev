@@ -170,6 +170,6 @@ const editorLink = computed(() => {
 
 <style lang="postcss">
 .CodeMirror {
-  @apply px-3 py-2 h-full overflow-auto bg-transparent font-mono text-sm;
+  @apply px-3 py-2 h-full overflow-auto bg-transparent font-mono text-sm z-0;
 }
 </style>
