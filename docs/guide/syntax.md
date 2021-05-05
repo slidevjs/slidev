@@ -66,7 +66,7 @@ Refer to [customization](/custom/) for more details.
 
 A big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
-~~~md
+~~~ts
 //```ts
 console.log('Hello, World!')
 //```
