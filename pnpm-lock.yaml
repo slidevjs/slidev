@@ -128,13 +128,11 @@ importers:
 
   packages/create-app:
     specifiers:
-      '@antfu/ni': ^0.7.0
       execa: ^5.0.0
       kolorist: ^1.4.1
       minimist: ^1.2.5
       prompts: ^2.4.1
     dependencies:
-      '@antfu/ni': 0.7.0
       execa: 5.0.0
       kolorist: 1.4.1
       minimist: 1.2.5
@@ -446,6 +444,7 @@ packages:
   /@antfu/ni/0.7.0:
     resolution: {integrity: sha512-wXtpUOMu3l5QWVXBrsaxCbgD2dbKQ1N/5ji7Xl3FTrfSb96+BElRhmaLyZd1A5U4TXz6S/FLR8jQQ3XJ78aHIQ==}
     hasBin: true
+    dev: true
 
   /@antfu/utils/0.1.4:
     resolution: {integrity: sha512-y2hGnzi4rQuS5WamCpfeqRLQ4uWpoibpXVETpDyw3VhaKpgACWIGGgS9CxuHe6IiAbNrT7izyGXXXCm78/WHyg==}

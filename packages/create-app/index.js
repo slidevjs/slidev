@@ -8,7 +8,6 @@ const argv = require('minimist')(process.argv.slice(2))
 const prompts = require('prompts')
 const execa = require('execa')
 const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
-const { parseNi, run } = require('@antfu/ni')
 const { version } = require('./package.json')
 
 const cwd = process.cwd()
@@ -108,9 +107,18 @@ async function init() {
   })
 
   if (yes) {
-    await run(parseNi, ['-C', related])
-    // await execa(pkgManager, ['-C', related, 'install'], { stdio: 'inherit' })
-    await execa(pkgManager, ['-C', related, 'run', 'dev'], { stdio: 'inherit' })
+    const { agent } = await prompts({
+      name: 'agent',
+      type: 'select',
+      message: 'Choose the agent',
+      choices: ['npm', 'yarn', 'pnpm'].map(i => ({ value: i, title: i })),
+    })
+
+    if (!agent)
+      return
+
+    await execa(agent, ['install'], { stdio: 'inherit', cwd: root })
+    await execa(agent, ['run', 'dev'], { stdio: 'inherit', cwd: root })
   }
   else {
     console.log(dim('\n  start it later by:\n'))
