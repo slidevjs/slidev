@@ -1,6 +1,9 @@
 {
   "name": "@slidev/theme-default",
   "version": "0.1.5",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "description": "Default theme for Slidev",
   "keywords": [
     "slidev-theme",

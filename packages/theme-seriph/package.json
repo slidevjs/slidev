@@ -1,6 +1,9 @@
 {
   "name": "@slidev/theme-seriph",
   "version": "0.1.5",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "description": "Seriph theme for Slidev",
   "keywords": [
     "slidev-theme",

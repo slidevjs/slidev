@@ -1,6 +1,9 @@
 {
   "name": "@slidev/types",
   "version": "0.1.5",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "description": "Shared types declerations for Slidev",
   "license": "MIT",
   "repository": {

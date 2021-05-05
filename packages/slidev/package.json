@@ -1,6 +1,9 @@
 {
   "name": "@slidev/cli",
   "version": "0.1.5",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "description": "Presentation slides for developers",
   "license": "MIT",
   "repository": {
