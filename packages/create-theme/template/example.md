@@ -29,7 +29,7 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 <br>
 <br>
 
-Read more about [Why Slidev?](https://slidev.antfu.me/guide/why)
+Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 
 ---
@@ -78,4 +78,4 @@ class: "text-center"
 
 # Learn More
 
-[Documentations](https://slidev.antfu.me) / [GitHub Repo](https://github.com/slidevjs/slidev)
+[Documentations](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)

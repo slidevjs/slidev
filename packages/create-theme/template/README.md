@@ -22,7 +22,7 @@ Add the following frontmatter to your `slides.md`. Start Slidev then it will pro
 
 <pre><code>---<br>theme: <b>{{name}}</b><br>---</code></pre>
 
-Learn more about [how to use a theme](https://slidev.antfu.me/themes/use).
+Learn more about [how to use a theme](https://sli.dev/themes/use).
 
 ## Layouts
 

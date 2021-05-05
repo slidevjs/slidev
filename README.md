@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-<a href="https://slidev.antfu.me" target="_blank">
+<a href="https://sli.dev" target="_blank">
 <img src="./assets/logo-title.png" alt="Slidev" height="250" width="250"/>
 </a>
 </p>
@@ -13,8 +13,8 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <p align="center">
 <a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img src="https://img.shields.io/npm/v/@slidev/cli?color=2B90B6&label=" alt="NPM version"></a>
 <a href="https://www.npmjs.com/package/@slidev/cli" target="__blank"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/@slidev/cli?color=349dbe&label="></a>
-<a href="https://slidev.antfu.me/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
-<a href="https://slidev.antfu.me/themes/gallery.html" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=themes&color=4ec5d4" alt="Themes"></a>
+<a href="https://sli.dev/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
+<a href="https://sli.dev/themes/gallery.html" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=themes&color=4ec5d4" alt="Themes"></a>
 <br>
 <a href="https://github.com/slidevjs/slidev" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
 </p>
@@ -25,7 +25,7 @@ I am making this because I found myself spending too much on layouting and styli
 
 So as a frontend developer, why not solve it the way that fits better with what I am good that?
 
-See also: [**Why Slidev?**](https://slidev.antfu.me/guide/why)
+See also: [**Why Slidev?**](https://sli.dev/guide/why)
 
 ## Status
 
@@ -35,7 +35,7 @@ Status: **Alpha**
 
 Alright, I broke my words again. It's now available as a standalone tool 🎉
 
-**Docs and guides on [slidev.antfu.me](https://slidev.antfu.me)**
+**Docs and guides on [sli.dev](https://sli.dev)**
 
 The best way to understand it is to try it, one command away:
 

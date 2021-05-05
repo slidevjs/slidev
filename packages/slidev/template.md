@@ -8,4 +8,4 @@ Presentation slides for developers
 
 # Getting Started
 
-Read the [documentations](https://slidev.antfu.me) to get started.
+Read the [documentations](https://sli.dev) to get started.

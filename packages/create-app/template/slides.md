@@ -23,7 +23,7 @@ Presentation slides for developers
 </a>
 
 <!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://slidev.antfu.me/guide/syntax.html#notes)
+The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
 
 ---
@@ -43,7 +43,7 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 <br>
 <br>
 
-Read more about [Why Slidev?](https://slidev.antfu.me/guide/why)
+Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 
 ---
@@ -105,7 +105,7 @@ You can use Vue components directly inside your slides.
 
 We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly use. And add your custom components are also super easy.
 
-Check out [the guides](https://slidev.antfu.me/custom/#components) for more.
+Check out [the guides](https://sli.dev/custom/#components) for more.
 
 </div>
 <div>
@@ -142,14 +142,14 @@ theme: seriph
 ---
 ```
 
-<img border="rounded" src="https://slidev.antfu.me/themes/default.png">
+<img border="rounded" src="https://sli.dev/themes/default.png">
 
-<img border="rounded" src="https://slidev.antfu.me/themes/seriph.png">
+<img border="rounded" src="https://sli.dev/themes/seriph.png">
 
 </div>
 
-Read more about [How to use a theme](https://slidev.antfu.me/themes/use.html) and
-check out the [Awesome Themes Gallery](https://slidev.antfu.me/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/themes/use.html) and
+check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
 
 
 ---
@@ -159,4 +159,4 @@ class: text-center
 
 # Learn More
 
-[Documentations](https://slidev.antfu.me) / [GitHub Repo](https://github.com/slidevjs/slidev)
+[Documentations](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)

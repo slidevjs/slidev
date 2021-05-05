@@ -58,7 +58,7 @@ function resume() {
   paused.value = false
 }
 
-const COVER_URL = 'https://slidev.antfu.me/demo-cover.png'
+const COVER_URL = 'https://sli.dev/demo-cover.png'
 if (typeof window !== 'undefined') {
   const img1 = new Image()
   img1.src = COVER_URL
