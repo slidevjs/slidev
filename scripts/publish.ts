@@ -3,4 +3,4 @@ import { run } from './run'
 
 fs.copyFileSync('README.md', 'packages/slidev/README.md')
 
-run('npx pnpm publish --access public --no-git-checks')
+run('npx pnpm -r publish --access public --no-git-checks')

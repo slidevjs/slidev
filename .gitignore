@@ -12,3 +12,4 @@ demo/public
 demo/*-export
 demo/build.md
 assets/demo
+packages/slidev/README.md
