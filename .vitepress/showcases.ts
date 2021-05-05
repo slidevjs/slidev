@@ -20,7 +20,7 @@ export const showcases: ShowCaseInfo[] = [
       name: 'Anthony Fu',
       link: 'https://github.com/antfu',
     },
-    slidesLink: 'https://slidev.antfu.me/demo/composable-vue',
+    slidesLink: 'https://sli.dev/demo/composable-vue',
     sourceLink: 'https://github.com/antfu/talks/tree/master/2021-04-29',
     at: 'VueDay 2021',
     datetime: '2021-04-29',

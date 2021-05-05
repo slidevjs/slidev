@@ -56,5 +56,5 @@ download: 'https://myside.com/my-talk.pdf'
 
 Here are a few examples of the exported SPA:
 
-- [Starter Template](https://slidev.antfu.me/demo/starter)
+- [Starter Template](https://sli.dev/demo/starter)
 - [Composable Vue](https://talks.antfu.me/2021/composable-vue) by [Anthony Fu](https://github.com/antfu)
