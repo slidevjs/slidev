@@ -22,6 +22,6 @@ or you can install the theme manually via
 $ npm install @slidev/theme-seriph
 ```
 
-And let's all, enjoy the new theme! Refer to the theme's readme for more details about the usage.
+And that's all, enjoy the new theme! For more details about the usage, you can refer to the theme's README.
 
-Want to share your theme? Read more about [how to write a theme](/themes/write-a-theme).
+Want to share your theme? Learn about [how to write a theme](/themes/write-a-theme).

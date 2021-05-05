@@ -1,8 +1,8 @@
 # Themes Gallery
 
-Browser awesome themes available for Slidev here.
+Browse awesome themes available for Slidev here.
 
-Read more about [how to use a theme](/themes/use), or [write one your own](/themes/write-a-theme) and share with the community!
+Read more about [how to use a theme](/themes/use), or [how to write your own](/themes/write-a-theme) and share with the community!
 
 ## Official Themes
 

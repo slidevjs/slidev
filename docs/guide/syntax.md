@@ -15,9 +15,9 @@ Hello, World!
 
 Directly use code blocks for highlighting
 
-```ts
+//```ts
 console.log('Hello, World!')
-```
+//```
 
 ---
 
@@ -67,45 +67,45 @@ Refer to [customization](/custom/) for more details.
 A big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
 ~~~md
-```ts
+//```ts
 console.log('Hello, World!')
-```
+//```
 ~~~
 
 To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1.
 
-~~~md
-```ts {2,3}
+~~~ts
+//```ts {2,3}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-```
+//```
 ~~~
 
 To change the highlight in multiple steps, you can use `|` to separate them. For example
 
-~~~md
-```ts {2-3|5|all}
+~~~ts
+//```ts {2-3|5|all}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-```
+//```
 ~~~
 
 This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
-~~~md
-```ts {monaco}
+~~~ts
+//```ts {monaco}
 console.log('HelloWorld')
-```
+//```
 ~~~
 
 ## Notes
