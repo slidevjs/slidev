@@ -19,6 +19,13 @@ A theme can contribute to the following points:
 - Extend Windi CSS configurations
 - Configure tools like Monaco and Prism
 
+## Conventions
+
+Themes are published to npm registry, and they should following the conventions below:
+
+- Package name should starts with `slidev-theme-`, for example: `slidev-theme-awesome`
+- Add `slidev-theme` and `slidev` in the `keywords` field of your `package.json`
+
 ## Setup
 
 To set up the testing playground for your theme, you can create `example.md` with the following frontmatter, to tell Slidev you are not inheriting from any existing theme.
