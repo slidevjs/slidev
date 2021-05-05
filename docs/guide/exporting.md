@@ -5,7 +5,7 @@
 
 ## PDF
 
-Install `playwright-chromium` if you haven't already
+Install `playwright-chromium`
 
 ```bash
 $ npm i -D playwright-chromium
