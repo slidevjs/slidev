@@ -6,7 +6,7 @@ importers:
     specifiers:
       '@antfu/eslint-config': ^0.6.4
       '@antfu/ni': ^0.7.0
-      '@antfu/utils': ^0.1.4
+      '@antfu/utils': ^0.1.5
       '@slidev/cli': workspace:*
       '@slidev/parser': workspace:*
       '@types/cli-progress': ^3.9.1
@@ -43,7 +43,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config': 0.6.4_eslint@7.25.0+typescript@4.2.4
       '@antfu/ni': 0.7.0
-      '@antfu/utils': 0.1.4
+      '@antfu/utils': 0.1.5
       '@slidev/cli': link:packages/slidev
       '@slidev/parser': link:packages/parser
       '@types/cli-progress': 3.9.1
@@ -94,7 +94,7 @@ importers:
 
   packages/client:
     specifiers:
-      '@antfu/utils': ^0.1.4
+      '@antfu/utils': ^0.1.5
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
       '@vueuse/core': ^4.9.1
@@ -110,7 +110,7 @@ importers:
       vue-router: ^4.0.6
       windicss: ^2.5.14
     dependencies:
-      '@antfu/utils': 0.1.4
+      '@antfu/utils': 0.1.5
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
       '@vueuse/core': 4.9.1_vue@3.0.11
@@ -158,7 +158,7 @@ importers:
 
   packages/slidev:
     specifiers:
-      '@antfu/utils': ^0.1.4
+      '@antfu/utils': ^0.1.5
       '@iconify/json': ^1.1.338
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
@@ -192,7 +192,7 @@ importers:
       windicss: ^3.0.0-beta.5
       yargs: ^17.0.1
     dependencies:
-      '@antfu/utils': 0.1.4
+      '@antfu/utils': 0.1.5
       '@iconify/json': 1.1.338
       '@slidev/client': link:../client
       '@slidev/parser': link:../parser
@@ -262,13 +262,13 @@ importers:
 
   packages/types:
     specifiers:
-      '@antfu/utils': ^0.1.4
+      '@antfu/utils': ^0.1.5
       monaco-editor: ^0.23.0
       shiki: ^0.9.3
       vue: ^3.0.11
       vue-router: ^4.0.6
     devDependencies:
-      '@antfu/utils': 0.1.4
+      '@antfu/utils': 0.1.5
       monaco-editor: 0.23.0
       shiki: 0.9.3
       vue: 3.0.11
@@ -446,8 +446,8 @@ packages:
     hasBin: true
     dev: true
 
-  /@antfu/utils/0.1.4:
-    resolution: {integrity: sha512-y2hGnzi4rQuS5WamCpfeqRLQ4uWpoibpXVETpDyw3VhaKpgACWIGGgS9CxuHe6IiAbNrT7izyGXXXCm78/WHyg==}
+  /@antfu/utils/0.1.5:
+    resolution: {integrity: sha512-yhiJF0NtcND5513OjEhnhKZWH+sAswC/six0X2oNDfmMunhXWQ3LOVVXBjdbx7bUD1vSEiHoY91rXY9Vs7KfLA==}
 
   /@arr/every/1.0.1:
     resolution: {integrity: sha512-UQFQ6SgyJ6LX42W8rHCs8KVc0JS0tzVL9ct4XYedJukskYVWTo49tNiMEK9C2HTyarbNiT/RVIRSY82vH+6sTg==}

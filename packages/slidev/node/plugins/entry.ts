@@ -2,6 +2,7 @@ import { existsSync } from 'fs'
 import { join, resolve } from 'path'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from '../options'
+import { toAtFS } from '../utils'
 
 export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const mainEntry = resolve(clientRoot, 'main.ts')
@@ -24,7 +25,7 @@ export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: Resolved
 
           for (const style of styles) {
             if (existsSync(style)) {
-              imports.push(`import "/@fs${style}"`)
+              imports.push(`import "${toAtFS(style)}"`)
               return
             }
           }

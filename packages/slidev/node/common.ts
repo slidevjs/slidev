@@ -1,7 +1,8 @@
 import { promises as fs, existsSync } from 'fs'
-import { join, posix } from 'path'
+import { join } from 'path'
 import { uniq } from '@antfu/utils'
 import { ResolvedSlidevOptions } from './options'
+import { toAtFS } from './utils'
 
 export async function getIndexHtml({ clientRoot, themeRoots }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
@@ -25,7 +26,7 @@ export async function getIndexHtml({ clientRoot, themeRoots }: ResolvedSlidevOpt
   }
 
   main = main
-    .replace('__ENTRY__', `/@fs${posix.join(clientRoot, 'main.ts')}`)
+    .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
     .replace('<!-- head -->', head)
     .replace('<!-- body -->', body)
 

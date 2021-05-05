@@ -25,7 +25,7 @@
     "dev": "nr build --watch"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.1.4",
+    "@antfu/utils": "^0.1.5",
     "monaco-editor": "^0.23.0",
     "shiki": "^0.9.3",
     "vue": "^3.0.11",

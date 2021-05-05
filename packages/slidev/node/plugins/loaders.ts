@@ -9,6 +9,7 @@ import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
+import { toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
@@ -210,8 +211,8 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
             throw new Error(`Unknown layout "${layoutName}"`)
 
           const imports = [
-            `import InjectedLayout from "/@fs${layouts[layoutName]}"`,
-            `import { next, nextSlide, prev, prevSlide } from "/@fs${clientRoot}/logic/nav"`,
+            `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
+            `import { next, nextSlide, prev, prevSlide } from "${toAtFS(clientRoot)}/logic/nav"`,
           ]
 
           code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)
@@ -253,7 +254,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
     const layouts = objectMap(
       await getLayouts(),
       (k, v) => {
-        imports.push(`import __layout_${k} from "/@fs${v}"`)
+        imports.push(`import __layout_${k} from "${toAtFS(v)}"`)
         return [k, `__layout_${k}`]
       },
     )

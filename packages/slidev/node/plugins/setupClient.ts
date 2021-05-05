@@ -3,6 +3,7 @@ import { join, resolve } from 'path'
 import { slash } from '@antfu/utils'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from '../options'
+import { toAtFS } from '../utils'
 
 export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const setupEntry = slash(resolve(clientRoot, 'setup'))
@@ -26,7 +27,7 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: Re
           if (!existsSync(path))
             return
 
-          imports.push(`import __n${idx} from '/@fs${slash(path)}'`)
+          imports.push(`import __n${idx} from '${toAtFS(path)}'`)
           injections.push(
             `// ${path}`,
             `__n${idx}()`,
