@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.0.0-alpha.58",
+  "version": "0.1.0",
   "description": "Presentation slides for developers",
   "license": "MIT",
   "repository": {

@@ -4,7 +4,7 @@ import { objectMap } from '@antfu/utils'
 import { version } from '../package.json'
 import { run, runArgs } from './run'
 
-run('npx bumpp package.json packages/*/package.json --preid alpha')
+run('npx bumpp package.json packages/*/package.json')
 
 const templates = [
   'packages/create-app/template',
