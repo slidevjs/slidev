@@ -64,7 +64,7 @@ export const community: ThemeInfo[] = [
   {
     id: '',
     name: 'Yours?',
-    description: 'Sumbit your theme to be list here!',
+    description: 'Submit your theme to be list here!',
     author: {
       name: '',
     },
