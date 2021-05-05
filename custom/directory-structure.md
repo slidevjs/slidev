@@ -1,8 +1,8 @@
 # Directory Structure
 
-Slidev uses directory structure conventions to minimalize the configuration surface and make extensions in functionality flexible and intuitive.
+Slidev employs some directory structure conventions to minimize the configuration surface and to make the functionality extensions flexible and intuitive.
 
-The basic structure will be:
+The basic structure is as follows:
 
 ```bash
 your-slidev/
@@ -17,13 +17,13 @@ your-slidev/
   └── windi.config.ts   # extending windicss config
 ```
 
-All of them are optional, you can use
+All of them are optional.
 
 ## Components
 
 Conventions: `./components/*.{vue,js,ts,jsx,tsx}`
 
-Components in side this directory can be directly used in the slides Markdown with the same component name as the file name.
+Components inside this directory can be directly used in the slides Markdown with the same component name as the file name.
 
 For example:
 
@@ -42,7 +42,8 @@ your-slidev/
 
 <MyComponent :count="4"/>
 
-<!-- both works -->
+<!-- both namings work -->
+
 <hello-world foo="bar">
   Slot
 </hello-world>
@@ -64,17 +65,17 @@ your-slidev/
       └── my-cool-theme.vue
 ```
 
-You can put those components in any name and use it as the same name in your markdown.
+You can use any filename for your layout. You then reference your layout in you YAML header using the filename.
 
-```md
+```yaml
 ---
 layout: my-cool-theme
 ---
 ```
 
-When you provide the layouts with the same name as the layouts provided by Slidev built-in or the theme, it will be override with yours. The priority list is `local > theme > built-in`.
+If the layout you provide has the same name as a built-in layout or a theme layout, your custom layout will take precedence over the built-in/theme layout. The priority order is `local > theme > built-in`.
 
-In the layout component, use `<slot/>` for placing the slide content. For example:
+In the layout component, use `<slot/>` for the slide content. For example:
 
 ```html
 <!-- default.vue -->
@@ -95,7 +96,7 @@ Assets in this directory will be served at root path `/` during dev, and copied 
 
 Conventions: `./style.css` | `./styles/index.{css,js,ts}`
 
-Files follow this convention will be injected to the App root. When you need to import multiple css entries, you can create the following structure and managing the import order yourself.
+Files following this convention will be injected to the App root. If you need to import multiple css entries, you can create the following structure and managing the import order yourself.
 
 ```bash
 your-slidev/
@@ -141,9 +142,9 @@ Styles will be processed by [Windi CSS](http://windicss.org/) and [PostCSS](http
 
 Conventions: `index.html`
 
-The `index.html` provides the ability to inject some meta tags or scripts to the main `index.html`
+The `index.html` provides the ability to inject meta tags and/or scripts to the main `index.html`
 
-For example, define your `index.html` like this:
+For example, for the following custom `index.html`:
 
 ```html
 <!-- ./index.html -->
@@ -157,7 +158,7 @@ For example, define your `index.html` like this:
 </body>
 ```
 
-The finial hosted html will be like:
+The final hosted `index.html` will be:
 
 ```html
 <!DOCTYPE html>
