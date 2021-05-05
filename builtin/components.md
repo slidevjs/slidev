@@ -2,9 +2,7 @@
 
 ## Built-in Components
 
-> TODO:
-
-<Tweet :id="20" />
+> The documentations of this section is still working in progress. Before that, you can take a look at the [source code](https://github.com/slidevjs/slidev/blob/main/packages/client/builtin) directly.
 
 ## Custom Components
 
@@ -14,6 +12,6 @@ Read more in the [Customization](/custom/directory-structure#components) section
 
 ## Theme-provided Components
 
-> TODO:
+Themes can provide components as well. Please read their documentations for what they have provided.
 
 Check more in the [directory structure](/custom/directory-structure) section.
