@@ -1,6 +1,6 @@
 # Use Theme
 
-Change the theme in Slidev is surprisingly easy. All you need to do is to add the `theme:` field in your frontmatter.
+Changing the theme in Slidev is surprisingly easy. All you need to do is to add the `theme:` field in your frontmatter.
 
 ```yaml
 ---
@@ -8,7 +8,7 @@ theme: seriph
 ---
 ```
 
-You can either directly start the server and it will show up the prompt to install the theme automatically for you
+You can start the server, which will prompt you to install the theme automatically
 
 <div class="language-md">
 <pre>
@@ -16,7 +16,7 @@ You can either directly start the server and it will show up the prompt to insta
 </pre>
 </div>
 
-or you can install the theme manually via
+or install the theme manually via
 
 ```bash
 $ npm install @slidev/theme-seriph

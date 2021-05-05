@@ -1,6 +1,6 @@
 # Markdown Syntax
 
-Slides can be written within **a single markdown file** (by default `./slides.md`). 
+Slides are written within **a single markdown file** (by default `./slides.md`). 
 
 You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [Windi CSS](https://windicss.org) is also supported. Use `---` padded with a new line to separate your slides. 
 
