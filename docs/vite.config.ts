@@ -35,6 +35,15 @@ const config: UserConfig = {
     WindiCSS({
       preflight: false,
     }),
+    {
+      name: 'code-block-escape',
+      enforce: 'post',
+      transform(code, id) {
+        if (!id.endsWith('.md'))
+          return
+        return code.replace(/\\```/g, '```')
+      },
+    },
   ],
 }
 
