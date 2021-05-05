@@ -1,0 +1,218 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`md parser frontmatter.md: config 1`] = `
+Object {
+  "download": false,
+  "highlighter": "prism",
+  "info": true,
+  "monaco": "dev",
+  "remoteAssets": true,
+  "theme": "default",
+  "title": "Hi",
+}
+`;
+
+exports[`md parser frontmatter.md: slides 1`] = `
+Array [
+  Object {
+    "content": "
+# Hi
+",
+    "end": 4,
+    "frontmatter": Object {
+      "layout": "cover",
+    },
+    "index": 0,
+    "note": undefined,
+    "raw": "---
+layout: cover
+---
+
+# Hi
+
+",
+    "start": 0,
+    "title": "Hi",
+  },
+  Object {
+    "content": "
+# Hello
+",
+    "end": 12,
+    "frontmatter": Object {
+      "layout": "center",
+      "meta": Object {
+        "duration": 12,
+        "title": "FooBar",
+      },
+    },
+    "index": 1,
+    "note": "This is notes",
+    "raw": "---
+meta:
+  title: FooBar
+  duration: 12
+layout: center
+---
+
+# Hello
+
+<!--
+This is notes
+-->
+",
+    "start": 4,
+    "title": "Hello",
+  },
+  Object {
+    "content": "
+# Morning
+",
+    "end": 15,
+    "frontmatter": Object {},
+    "index": 2,
+    "note": undefined,
+    "raw": "
+# Morning
+
+",
+    "start": 13,
+    "title": "Morning",
+  },
+  Object {
+    "content": "
+<!-- This is not notes -->
+Hey
+",
+    "end": 20,
+    "frontmatter": Object {
+      "layout": "text",
+    },
+    "index": 3,
+    "note": undefined,
+    "raw": "---
+layout: text
+---
+
+<!-- This is not notes -->
+Hey
+
+",
+    "start": 15,
+    "title": undefined,
+  },
+  Object {
+    "content": "
+\`\`\`md
+---
+this should be treated as code block
+---
+----
+\`\`\`
+",
+    "end": 29,
+    "frontmatter": Object {},
+    "index": 4,
+    "note": undefined,
+    "raw": "
+\`\`\`md
+---
+this should be treated as code block
+---
+----
+\`\`\`
+
+",
+    "start": 21,
+    "title": undefined,
+  },
+]
+`;
+
+exports[`md parser minimal.md: config 1`] = `
+Object {
+  "download": false,
+  "highlighter": "prism",
+  "info": true,
+  "monaco": "dev",
+  "remoteAssets": true,
+  "theme": "default",
+  "title": "H1",
+}
+`;
+
+exports[`md parser minimal.md: slides 1`] = `
+Array [
+  Object {
+    "content": "
+# H1
+## H2
+### H3
+
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`
+",
+    "end": 10,
+    "frontmatter": Object {},
+    "index": 0,
+    "note": undefined,
+    "raw": "
+# H1
+## H2
+### H3
+
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`
+
+",
+    "start": 0,
+    "title": "H1",
+  },
+  Object {
+    "content": "
+# Hello
+
+- Hello
+- Hi
+- Hey
+- Yo
+",
+    "end": 18,
+    "frontmatter": Object {},
+    "index": 1,
+    "note": undefined,
+    "raw": "
+# Hello
+
+- Hello
+- Hi
+- Hey
+- Yo
+
+",
+    "start": 11,
+    "title": "Hello",
+  },
+  Object {
+    "content": "
+Nice to meet you
+",
+    "end": 22,
+    "frontmatter": Object {},
+    "index": 2,
+    "note": undefined,
+    "raw": "
+Nice to meet you
+
+",
+    "start": 19,
+    "title": undefined,
+  },
+]
+`;

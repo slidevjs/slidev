@@ -1,0 +1,29 @@
+html,
+body,
+#app,
+#page-root {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden;
+}
+
+html {
+  background: black;
+}
+
+.icon-btn {
+  @apply inline-block cursor-pointer select-none !outline-none;
+  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-2;
+  @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
+}
+
+.icon-btn.disabled {
+  @apply opacity-25 pointer-events-none;
+}
+
+.v-click-hidden {
+  @apply !opacity-0 !pointer-events-none;
+}

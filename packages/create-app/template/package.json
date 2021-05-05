@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.0.0-alpha.57",
+    "@slidev/theme-default": "^0.0.0-alpha.57",
+    "@slidev/theme-seriph": "^0.0.0-alpha.57"
+  }
+}

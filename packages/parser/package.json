@@ -1,0 +1,44 @@
+{
+  "name": "@slidev/parser",
+  "version": "0.0.0-alpha.58",
+  "description": "Markdown parser for Slidev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./core": {
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.js"
+    },
+    "./fs": {
+      "import": "./dist/fs.mjs",
+      "require": "./dist/fs.js"
+    }
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts --format cjs,esm --dts",
+    "dev": "nr build --watch"
+  },
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "dependencies": {
+    "@slidev/types": "workspace:*",
+    "js-yaml": "^3.14.1"
+  }
+}

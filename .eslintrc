@@ -1,0 +1,8 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": "@antfu",
+  "plugins": ["jest"]
+}

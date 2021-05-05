@@ -1,0 +1,51 @@
+import { toArray } from '@antfu/utils'
+import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, VNodeArrayChildren, withDirectives } from 'vue'
+
+export default defineComponent({
+  props: {
+    every: {
+      type: Number,
+      default: 1,
+    },
+    at: {
+      type: [Number, String],
+    },
+  },
+  render() {
+    const click = resolveDirective('click')!
+    const after = resolveDirective('after')!
+
+    const applyDirective = (node: VNode, directive: Directive, delta: number) => {
+      if (this.at != null)
+        return withDirectives(node, [[directive, +this.at + delta]])
+      return withDirectives(node, [[directive]])
+    }
+
+    let defaults = this.$slots.default?.()
+
+    if (!defaults)
+      return
+
+    defaults = toArray(defaults)
+
+    const mapChildren = (children: VNodeArrayChildren) => {
+      return children.map((i, idx) =>
+        isVNode(i)
+          ? applyDirective(
+            h(i),
+            idx % this.every === 0 ? click : after,
+            Math.floor(idx / this.every),
+          )
+          : i,
+      )
+    }
+
+    // handle ul list
+    if (defaults.length === 1 && defaults[0].type === 'ul' && Array.isArray(defaults[0].children)) {
+      defaults[0].children = mapChildren(defaults[0].children)
+      return defaults
+    }
+
+    return mapChildren(defaults)
+  },
+})

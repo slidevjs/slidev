@@ -1,0 +1,16 @@
+{
+  "keywords": [
+    "slidev-theme",
+    "slidev"
+  ],
+  "scripts": {
+    "dev": "slidev example.md",
+    "build": "slidev build example.md",
+    "export": "slidev export example.md",
+    "screenshot": "slidev export example.md --format png"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.0.0-alpha.57",
+    "@slidev/theme-default": "^0.0.0-alpha.57"
+  }
+}

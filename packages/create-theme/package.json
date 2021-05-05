@@ -1,0 +1,23 @@
+{
+  "name": "create-slidev-theme",
+  "version": "0.0.0-alpha.58",
+  "description": "Create starter theme template for Slidev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "main": "index.js",
+  "bin": {
+    "create-slidev-theme": "index.js"
+  },
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "dependencies": {
+    "kolorist": "^1.4.1",
+    "minimist": "^1.2.5",
+    "prompts": "^2.4.1"
+  }
+}

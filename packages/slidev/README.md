@@ -1,7 +1,7 @@
 <br>
 <p align="center">
 <a href="https://sli.dev" target="_blank">
-<img src="https://sli.dev/logo-title.png" alt="Slidev" height="250" width="250"/>
+<img src="./assets/logo-title.png" alt="Slidev" height="250" width="250"/>
 </a>
 </p>
 
@@ -68,7 +68,7 @@ The best way to understand it is to try it, just one command away:
 npm init slidev
 ```
 
-For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
+For a full example, you can check the [demo](./demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
 
 ## Tech Stacks
 

@@ -1,0 +1,81 @@
+{
+  "name": "@slidev/cli",
+  "version": "0.0.0-alpha.58",
+  "description": "Presentation slides for developers",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "files": [
+    "bin",
+    "client",
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./": "./"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "slidev": "./bin/slidev.js"
+  },
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --external @slidev/client/package.json",
+    "dev": "nr build --watch",
+    "start": "esno node/cli.ts"
+  },
+  "peerDependencies": {
+    "playwright-chromium": "^1.10.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright-chromium": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@antfu/utils": "^0.1.4",
+    "@iconify/json": "^1.1.337",
+    "@slidev/client": "workspace:*",
+    "@slidev/parser": "workspace:*",
+    "@slidev/types": "workspace:*",
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.11",
+    "cli-progress": "^3.9.0",
+    "codemirror": "^5.61.0",
+    "connect": "^3.7.0",
+    "fast-glob": "^3.2.5",
+    "fs-extra": "^9.1.0",
+    "jiti": "^1.9.1",
+    "js-base64": "^3.6.0",
+    "js-yaml": "^3.14.1",
+    "kolorist": "^1.4.1",
+    "markdown-it": "^12.0.6",
+    "markdown-it-link-attributes": "^3.0.0",
+    "monaco-editor": "^0.23.0",
+    "pdf-lib": "^1.16.0",
+    "prismjs": "^1.23.0",
+    "prompts": "^2.4.1",
+    "shiki": "^0.9.3",
+    "sirv": "^1.0.11",
+    "vite": "^2.2.3",
+    "vite-plugin-components": "^0.8.4",
+    "vite-plugin-icons": "^0.5.0",
+    "vite-plugin-md": "^0.6.3",
+    "vite-plugin-remote-assets": "^0.2.0",
+    "vite-plugin-windicss": "^0.16.0-beta.8",
+    "vue": "^3.0.11",
+    "windicss": "^3.0.0-beta.5",
+    "yargs": "^17.0.0"
+  }
+}

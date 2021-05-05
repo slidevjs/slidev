@@ -1,0 +1,35 @@
+{
+  "name": "@slidev/theme-default",
+  "version": "0.0.0-alpha.58",
+  "description": "Default theme for Slidev",
+  "keywords": [
+    "slidev-theme",
+    "slidev"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "slidev": {
+    "colorSchema": "both",
+    "highlighter": "all"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "peerDependencies": {
+    "@slidev/client": "workspace:*"
+  },
+  "dependencies": {
+    "codemirror-theme-vars": "^0.1.0",
+    "prism-theme-vars": "^0.2.2",
+    "theme-vitesse": "^0.1.9"
+  },
+  "devDependencies": {
+    "@slidev/cli": "workspace:*",
+    "@slidev/client": "workspace:*",
+    "@slidev/types": "workspace:*"
+  }
+}

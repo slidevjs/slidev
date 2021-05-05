@@ -1,0 +1,14 @@
+.DS_Store
+*.local
+dist
+dist-ssr
+node_modules
+# intellij stuff
+.idea/
+*.pdf
+demo/index.html
+demo/starter.md
+demo/public
+demo/*-export
+demo/build.md
+assets/demo

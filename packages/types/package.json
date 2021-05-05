@@ -1,0 +1,34 @@
+{
+  "name": "@slidev/types",
+  "version": "0.0.0-alpha.58",
+  "description": "Shared types declerations for Slidev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "files": [
+    "dist",
+    "client.d.ts",
+    "index.d.ts"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "index.d.ts",
+  "homepage": "https://github.com/slidevjs/slidev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "nr build --watch"
+  },
+  "devDependencies": {
+    "@antfu/utils": "^0.1.4",
+    "monaco-editor": "^0.23.0",
+    "shiki": "^0.9.3",
+    "vue": "^3.0.11",
+    "vue-router": "^4.0.6"
+  }
+}
