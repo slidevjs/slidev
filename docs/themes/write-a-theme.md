@@ -1,12 +1,12 @@
 # Write a Theme
 
-To get started, we recommend you use our generator to scaffolding your first theme
+To get started, we recommend you use our generator for scaffolding your first theme
 
 ```bash
 $ npm init slidev-theme
 ```
 
-Then you can modify and play with it. Also, refer to the [official themes](/themes/gallery) as examples.
+Then you can modify and play with it. You can also refer to the [official themes](/themes/gallery) as examples.
 
 ## Capability
 
@@ -43,13 +43,13 @@ Optionally, you can also add some scripts to your `packages.json`
 }
 ```
 
-To publish your theme, simply run `npm publish` and you are good to go. There is not build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
+To publish your theme, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
 
 Theme contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/). 
 
 ## Color Schema
 
-By default, Slidev assumes themes are supporting both light mode and dark mode. If you only want your theme be presented in a designed color schema, you will need to specify it explicitly in `package.json`
+By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme be presented in a designed color schema, you will need to specify it explicitly in `package.json`
 
 ```json
 // package.json
@@ -67,11 +67,11 @@ By default, Slidev assumes themes are supporting both light mode and dark mode. 
 
 ## Highlighter
 
-Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/) and [Shiki](https://github.com/shikijs/shiki), [read more here](/custom/highlighters).
+Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/) and [Shiki](https://github.com/shikijs/shiki). For more information please refer to [the syntax highlighting docs](/custom/highlighters).
 
-You can support one of them or both. Refer to the default theme for configurations examples [prism.css](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/styles/prism.css) / [setup/shiki.ts](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/setup/shiki.ts).
+You can support either one of them, or both. Refer to the default theme for configurations examples [`./styles/prism.css`](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/styles/prism.css) / [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/theme-default/setup/shiki.ts).
 
-Also, remember to provide the information in `package.json`
+Also, remember to specify the supported highlighters in your `package.json`
 
 ```json
 // package.json
