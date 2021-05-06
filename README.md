@@ -48,7 +48,7 @@ I always found myself spending too much time styling and layouting slides when u
 
 So as a frontend developer, why not solve it the way that fits better with what I am good that?
 
-Learn more: [**Why Slidev?**](https://sli.dev/guide/why)
+Learn more at [sli.dev](https://sli.dev)
 
 ## Features
 
@@ -63,7 +63,7 @@ Learn more: [**Why Slidev?**](https://sli.dev/guide/why)
 
 ## Documentations
 
-Docs and guides on **[sli.dev](https://sli.dev)**
+Docs and guides at **[sli.dev](https://sli.dev)**
 
 The best way to understand it is to try it, just one command away:
 

@@ -29,3 +29,5 @@ The VS Code extension provides some features to help you better organize your sl
 - Re-ordering slides
 - Folding for slide blocks
 - Convert Markdown to HTML
+
+![](https://user-images.githubusercontent.com/11247099/116809994-cc2caa00-ab73-11eb-879f-60585747c3c9.png)
