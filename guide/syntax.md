@@ -194,4 +194,4 @@ $$
 $$
 ```
 
-Learn more: [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex).
+Learn more: [Demo](https://sli.dev/demo/starter/6) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex).
