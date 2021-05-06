@@ -1,0 +1,4 @@
+/* override border-color */
+*, ::before, ::after {
+  border-color: currentColor;
+}
