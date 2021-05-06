@@ -38,6 +38,9 @@ Status: <b>Public Beta 🎉</b><br>
 </table>
 </p>
 
+<p align="center">
+<a href="https://www.producthunt.com/posts/slidev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slidev" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908&theme=dark" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200"/></a>
+</p>
 
 ## Motivation
 
