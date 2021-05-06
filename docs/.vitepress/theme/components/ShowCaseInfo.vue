@@ -17,7 +17,7 @@ defineProps<{
         :href="info.slidesLink"
         target="_blank"
       >
-        <img height="100%" :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
+        <img :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
       </a>
     </div>
     <div class="font-bold">
