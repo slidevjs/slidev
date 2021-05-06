@@ -54,6 +54,14 @@ function matter(code: string) {
   return { data, content }
 }
 
+export function detectFeatures(code: string) {
+  return {
+    katex: !!code.match(/\$.*?\$/) || !!code.match(/$\$\$/),
+    monaco: !!code.match(/{monaco.*}/),
+    tweet: !!code.match(/<Tweet\b/),
+  }
+}
+
 export function parse(
   markdown: string,
   filepath?: string,
@@ -146,6 +154,7 @@ export function parse(
     filepath,
     slides,
     config,
+    features: detectFeatures(markdown),
   }
 }
 

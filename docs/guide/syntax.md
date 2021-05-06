@@ -161,3 +161,37 @@ This is the cover page.
 ```
 
 For more details about using a theme, refer to the [themes usage section](/themes/use).
+
+## LaTeX
+
+Slidev comes with LaTeX support out-of-box, powered by [KaTeX](https://katex.org/).
+
+### Inline
+
+Surround your LaTeX with a single `$` on each side for inline rendering.
+
+```md
+$\sqrt{3x-1}+(1+x)^2$
+```
+
+### Block
+
+Use two (`$$`) for block rendering. This mode uses bigger symbols and centers
+the result.
+
+```md
+$$
+\begin{array}{c}
+
+\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
+= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+
+\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+
+\nabla \cdot \vec{\mathbf{B}} & = 0
+
+\end{array}
+$$
+```
+
+Learn more: [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex).

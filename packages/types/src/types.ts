@@ -44,9 +44,16 @@ export interface SlidevConfig {
   highlighter: 'prism' | 'shiki'
 }
 
+export interface SlidevFeatureFlags {
+  katex: boolean
+  monaco: boolean
+  tweet: boolean
+}
+
 export interface SlidevMarkdown {
   filepath?: string
   slides: SlideInfo[]
   raw: string
   config: SlidevConfig
+  features: SlidevFeatureFlags
 }

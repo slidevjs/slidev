@@ -8,6 +8,7 @@ import Markdown from 'markdown-it'
 import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
+import equal from 'fast-deep-equal'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { toAtFS } from '../utils'
 
@@ -128,8 +129,14 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
         if (data.slides.length !== newData.slides.length)
           moduleIds.push('/@slidev/routes')
 
-        if (JSON.stringify(data.config) !== JSON.stringify(newData.config))
+        if (!equal(data.config, newData.config))
           moduleIds.push('/@slidev/configs')
+
+        if (!equal(data.features, newData.features)) {
+          setTimeout(() => {
+            ctx.server.ws.send({ type: 'full-reload' })
+          }, 1)
+        }
 
         const length = Math.max(data.slides.length, newData.slides.length)
 
@@ -153,7 +160,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
 
         pluginOptions.onDataReload?.(newData, data)
 
-        data = newData
+        Object.assign(data, newData)
 
         moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
         return moduleEntries

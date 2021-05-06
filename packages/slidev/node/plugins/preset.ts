@@ -16,6 +16,24 @@ import { createMarkdownPlugin } from './markdown'
 import { createWindiCSSPlugin } from './windicss'
 import { createFixPlugins } from './fix'
 
+const customElements = new Set([
+  // katex
+  'annotation',
+  'math',
+  'mrow',
+  'mcol',
+  'mfrac',
+  'mi',
+  'mn',
+  'mo',
+  'mover',
+  'mspace',
+  'mtable',
+  'mtd',
+  'mtr',
+  'semantics',
+])
+
 export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
@@ -40,6 +58,13 @@ export async function ViteSlidevPlugin(
     Vue({
       include: [/\.vue$/, /\.md$/],
       exclude: [],
+      template: {
+        compilerOptions: {
+          isCustomElement(tag) {
+            return customElements.has(tag)
+          },
+        },
+      },
       ...vueOptions,
     }),
 

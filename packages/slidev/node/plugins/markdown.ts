@@ -6,6 +6,8 @@ import type { ShikiOptions } from '@slidev/types'
 import type MarkdownIt from 'markdown-it'
 import base64 from 'js-base64'
 import { isTruthy } from '@antfu/utils'
+// @ts-expect-error
+import Katex from 'markdown-it-katex'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
@@ -51,6 +53,8 @@ export async function createMarkdownPlugin(
           rel: 'noopener',
         },
       })
+
+      md.use(Katex)
 
       setups.forEach(i => i(md))
     },
