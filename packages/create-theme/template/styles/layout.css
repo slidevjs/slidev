@@ -1,4 +1,4 @@
-.layout-master {
+.slidev-layout {
   @apply px-14 py-10 text-[1.1rem];
 
   h1, h2, h3, h4, p, div {
@@ -83,8 +83,8 @@
   }
 }
 
-.layout-master.cover,
-.layout-master.intro {
+.slidev-layout.cover,
+.slidev-layout.intro {
   @apply h-full grid;
 
   h1 {

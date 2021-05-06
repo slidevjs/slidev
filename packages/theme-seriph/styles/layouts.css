@@ -1,11 +1,11 @@
-.layout-master:not(.cover) {
+.slidev-layout:not(.cover) {
   h1 {
     @apply text-primary;
   }
 }
 
-.layout-master.cover,
-.layout-master.intro {
+.slidev-layout.cover,
+.slidev-layout.intro {
   @apply h-full grid;
 
   h1 {

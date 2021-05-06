@@ -12,7 +12,7 @@ const style = computed(() => handleBackground(props.image))
 </script>
 
 <template>
-  <div class="layout-master w-full h-full" :style="style">
+  <div class="slidev-layout w-full h-full" :style="style">
     <slot />
   </div>
 </template>

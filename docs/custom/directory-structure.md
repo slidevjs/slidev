@@ -80,7 +80,7 @@ In the layout component, use `<slot/>` for the slide content. For example:
 ```html
 <!-- default.vue -->
 <template>
-  <div class="layout-master default">
+  <div class="slidev-layout default">
     <slot />
   </div>
 </template>
@@ -119,7 +119,7 @@ import './layouts.css'
 Styles will be processed by [Windi CSS](http://windicss.org/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://windicss.org/features/directives.html) out-of-box. For example:
 
 ```less
-.layout-master {
+.slidev-layout {
   @apply px-14 py-10 text-[1.1rem];
 
   h1, h2, h3, h4, p, div {

@@ -1,5 +1,5 @@
-.layout-master.cover,
-.layout-master.intro {
+.slidev-layout.cover,
+.slidev-layout.intro {
   @apply h-full grid;
 
   h1 {

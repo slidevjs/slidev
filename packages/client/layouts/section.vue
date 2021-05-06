@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-master section">
+  <div class="slidev-layout section">
     <slot />
   </div>
 </template>
