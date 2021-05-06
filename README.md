@@ -51,7 +51,7 @@ Learn more: [**Why Slidev?**](https://sli.dev/guide/why)
 
 - 📝 **Markdown-based** - use your favorite editors and workflow
 - 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding
+- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding, LaTex, etc.
 - 🤹 **Interactive** - embedding Vue components seamlessly
 - 🎥 **Recording** - built-in recording and camera view
 - 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
@@ -70,7 +70,7 @@ npm init slidev
 
 For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
 
-## Tech Stacks
+## Tech Stack
 
 - [Vite](https://vitejs.dev) - An extremely fast frontend tooling
 - [Vue](https://v3.vuejs.org/) powered [Markdown](https://daringfireball.net/projects/markdown/syntax) - Focus on the content while having the power of HTML and Vue components whenever needed
@@ -78,6 +78,7 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 - [Prism](https://github.com/PrismJS/prism), [Shiki](https://github.com/shikijs/shiki), [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family - [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
+- [KaTeX](https://katex.org/) - LaTeX math rendering.
 
 ## Sponsors
 
