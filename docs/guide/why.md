@@ -32,7 +32,7 @@ Learn more about [highlighters](/custom/highlighters) and [Monaco configuration]
 
 ## Fast
 
-Slidev is powered by [Vite](https://vitejs.dev/), [Vue 3](https://v3.vuejs.org/) and [Windi CSS](https://windicss.org/), which give you the most wonderful authoring expirenice. Every change you made will reflect to your slides **instantly**.
+Slidev is powered by [Vite](https://vitejs.dev/), [Vue 3](https://v3.vuejs.org/) and [Windi CSS](https://windicss.org/), which give you the most wonderful authoring experience. Every change you made will reflect to your slides **instantly**.
 
 Find more about [our tech stack](/guide/#tech-stack).
 
