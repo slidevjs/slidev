@@ -1,6 +1,7 @@
 {
   "exclude": [
     "js-yaml",
-    "@types/js-yaml"
+    "@types/js-yaml",
+    "husky"
   ]
 }
