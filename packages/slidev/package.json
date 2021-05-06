@@ -15,7 +15,8 @@
   "files": [
     "bin",
     "client",
-    "dist"
+    "dist",
+    "template.md"
   ],
   "exports": {
     ".": {
