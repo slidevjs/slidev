@@ -51,7 +51,7 @@ Learn more: [**Why Slidev?**](https://sli.dev/guide/why)
 
 - 📝 **Markdown-based** - use your favorite editors and workflow
 - 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding, LaTex, etc.
+- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding, LaTeX, etc.
 - 🤹 **Interactive** - embedding Vue components seamlessly
 - 🎥 **Recording** - built-in recording and camera view
 - 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA

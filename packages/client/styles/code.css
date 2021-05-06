@@ -38,3 +38,10 @@ html:not(.dark) .shiki-dark {
 .shiki-container > .shiki {
   @apply h-full;
 }
+
+// revert windicss preflight for katex
+.katex,
+.katex :after,
+.katex :before {
+  border-color: currentColor;
+}
