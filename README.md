@@ -46,7 +46,7 @@ Status: <b>Public Beta 🎉</b><br>
 
 I always found myself spending too much time styling and layouting slides when using apps like PowerPoint / Keynote / Google Slides. Whenever I need to share code snippets, I would also need to use other tools to generate the highlighted code as images over and over again.
 
-So as a frontend developer, why not solve it the way that fits better with what I am good that?
+So as a frontend developer, why not solve it the way that fits better with what I am good at?
 
 Learn more at [sli.dev](https://sli.dev)
 
