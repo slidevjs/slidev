@@ -28,6 +28,9 @@ const props = defineProps({
   scale: {
     type: Number,
   },
+  no: {
+    type: Number,
+  },
   is: {
     type: Object,
   },
@@ -73,13 +76,20 @@ const style = computed(() => ({
   width: `${slideWidth}px`,
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
+
+const classes = computed(() => {
+  const no = props.no ?? props.route?.meta?.slide?.no
+  if (no != null)
+    return `slidev-page-${no}`
+  return ''
+})
 </script>
 
 <template>
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
       <slot>
-        <component :is="props.is || route.component" />
+        <component :is="props.is || route.component" :classes="classes" />
       </slot>
     </div>
     <slot name="controls" />

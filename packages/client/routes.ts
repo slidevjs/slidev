@@ -47,6 +47,7 @@ declare module 'vue-router' {
       start: number
       end: number
       id: number
+      no: number
       file: string
     }
   }

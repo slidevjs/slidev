@@ -122,7 +122,7 @@ By default, a subtle opacity transition is applied to those classes:
 
 You can override them to customize the transition effects in your custom stylesheets. 
 
-For example, you can achieve the scale up transitions by: 
+For example, you can achieve the scaling up transitions by: 
 
 ```css
 // styles.css
@@ -133,6 +133,21 @@ For example, you can achieve the scale up transitions by:
 
 .slidev-vclick-hidden {
   transform: scale(0);
+}
+```
+
+To specify animations for only certain slide or layout
+
+```scss
+.slidev-page-7,
+.slidev-layout.my-custom-layout {
+  .slidev-vclick-target {
+    transition: all 500ms ease;
+  }
+
+  .slidev-vclick-hidden {
+    transform: scale(0);
+  }
 }
 ```
 
