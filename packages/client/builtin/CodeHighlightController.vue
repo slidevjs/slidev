@@ -1,3 +1,11 @@
+<!--
+Usage:
+
+```ts {1,3-5|2,4}
+const your_code = 'here'
+```
+-->
+
 <script setup lang="ts">
 import { range, remove } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'

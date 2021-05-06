@@ -1,3 +1,11 @@
+<!--
+Usage:
+
+```ts {monaco}
+const your_code = 'here'
+```
+-->
+
 <template>
   <div ref="el" class="vue-monaco text-base" :style="{ height }"></div>
 </template>

@@ -1,3 +1,13 @@
+<!--
+Apply scaling or transforming to elements.
+
+Usage:
+
+<Transform :scale="0.5">
+  <YourElements />
+</Transform>
+-->
+
 <script setup lang="ts">
 import { computed, defineProps } from 'vue'
 
