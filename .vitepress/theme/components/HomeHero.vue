@@ -38,12 +38,14 @@
           </div>
         </div>
 
-        <p align="center" m="t-6">
-          <a href="https://www.producthunt.com/posts/slidev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slidev" target="_blank">
-            <img v-if="isDark" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908&theme=dark" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
-            <img v-else src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
-          </a>
-        </p>
+        <ClientOnly>
+          <p align="center" m="t-6">
+            <a href="https://www.producthunt.com/posts/slidev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slidev" target="_blank">
+              <img v-if="isDark" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908&theme=dark" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
+              <img v-else src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
+            </a>
+          </p>
+        </ClientOnly>
       </div>
       <ClientOnly>
         <Demo class="-mt-10 -mb-25" />
