@@ -13,7 +13,12 @@ defineProps<{
       class="block mb-1.5 w-full overflow-hidden relative aspect-9/16"
       border="~ rounded gray-400 opacity-20"
     >
-      <img :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
+      <a
+        :href="info.slidesLink"
+        target="_blank"
+      >
+        <img height="100%" :src="info.cover" class="absolute top-0 bottom-0 left-0 right-0" />
+      </a>
     </div>
     <div class="font-bold">
       {{ info.title }}
