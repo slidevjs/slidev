@@ -1,6 +1,6 @@
 import { basename } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
-import { isTruthy, notNullish, objectMap } from '@antfu/utils'
+import { isTruthy, notNullish, objectMap, slash } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import Markdown from 'markdown-it'
@@ -65,6 +65,8 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
   const slidePrefix = '/@slidev/slides/'
   const hmrNextModuleIds: string[] = []
 
+  const entryId = slash(entry)
+
   return [
     {
       name: 'slidev:loader',
@@ -112,7 +114,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
       },
 
       async handleHotUpdate(ctx) {
-        if (ctx.file !== entry)
+        if (ctx.file !== entryId)
           return
 
         const newData = await parser.load(entry)
