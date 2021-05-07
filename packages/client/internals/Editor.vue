@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
 import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
-import { activeElement, showEditor } from '../state'
+import { activeElement, showEditor, editorWidth } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute, currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
@@ -85,10 +85,8 @@ onMounted(() => {
   )
 })
 
-const width = ref(window.innerWidth * 0.4)
-
 onMounted(() => {
-  offsetRight.value = width.value
+  offsetRight.value = editorWidth.value
 })
 onUnmounted(() => {
   offsetRight.value = 0
@@ -99,8 +97,8 @@ function onHandlerDown() {
   handlerDown.value = true
 }
 function updateWidth(v: number) {
-  width.value = Math.min(Math.max(200, v), window.innerWidth - 200)
-  offsetRight.value = width.value
+  editorWidth.value = Math.min(Math.max(200, v), window.innerWidth - 200)
+  offsetRight.value = editorWidth.value
 }
 useEventListener('pointermove', (e) => {
   if (handlerDown.value)
@@ -110,7 +108,7 @@ useEventListener('pointerup', () => {
   handlerDown.value = false
 })
 useEventListener('resize', () => {
-  updateWidth(width.value)
+  updateWidth(editorWidth.value)
 })
 
 const editorLink = computed(() => {
@@ -125,12 +123,12 @@ const editorLink = computed(() => {
   <div
     class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
     :class="{'!opacity-30': handlerDown}"
-    :style="{right: `${width - 5}px`, cursor: 'col-resize'}"
+    :style="{right: `${editorWidth - 5}px`, cursor: 'col-resize'}"
     @pointerdown="onHandlerDown"
   ></div>
   <div
     class="shadow bg-main p-4 grid grid-rows-[max-content,1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
-    :style="{width: `${width}px`}"
+    :style="{width: `${editorWidth}px`}"
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { isPrintMode, showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { next, prev, currentRoute, clicks, clicksElements, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
@@ -22,6 +22,8 @@ function onClick(e: MouseEvent) {
 }
 
 useSwipeControls(root)
+
+const presistNav = computed(() => isScreenVertical.value || showEditor.value)
 </script>
 
 <template>
@@ -39,11 +41,11 @@ useSwipeControls(root)
       <template #controls>
         <div
           class="absolute bottom-0 left-0 transition duration-300 opacity-0 hover:opacity-100"
-          :class="isScreenVertical ? 'opacity-100 right-0' : 'oapcity-0 p-2'"
+          :class="presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2'"
         >
           <NavControls
             class="m-auto"
-            :class="isScreenVertical
+            :class="presistNav
               ? 'text-white bg-transparent'
               : 'rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)'"
           />

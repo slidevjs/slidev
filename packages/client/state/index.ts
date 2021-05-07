@@ -2,7 +2,6 @@ import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBrea
 import { computed, ref } from 'vue'
 
 export const showOverview = ref(false)
-export const showEditor = ref(false)
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
@@ -21,6 +20,9 @@ export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeEl
 export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
 export const slideScale = useStorage<number>('slidev-scale', null)
+
+export const showEditor = useStorage('slidev-show-editor', false)
+export const editorWidth = useStorage('slidev-editor-width', window.innerWidth * 0.4)
 
 export const isPrintMode = computed(() => query.print != null)
 
