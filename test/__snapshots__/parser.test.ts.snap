@@ -4,7 +4,7 @@ exports[`md parser frontmatter.md: config 1`] = `
 Object {
   "download": false,
   "highlighter": "prism",
-  "info": true,
+  "info": false,
   "monaco": "dev",
   "remoteAssets": true,
   "theme": "default",
@@ -133,7 +133,7 @@ exports[`md parser minimal.md: config 1`] = `
 Object {
   "download": false,
   "highlighter": "prism",
-  "info": true,
+  "info": false,
   "monaco": "dev",
   "remoteAssets": true,
   "theme": "default",
