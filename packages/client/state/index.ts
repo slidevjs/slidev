@@ -22,7 +22,7 @@ export const currentMic = useStorage<string>('slidev-mic', 'default')
 export const slideScale = useStorage<number>('slidev-scale', null)
 
 export const showEditor = useStorage('slidev-show-editor', false)
-export const editorWidth = useStorage('slidev-editor-width', window.innerWidth * 0.4)
+export const editorWidth = useStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 100)
 
 export const isPrintMode = computed(() => query.print != null)
 
