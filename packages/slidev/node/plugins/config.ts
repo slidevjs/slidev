@@ -36,7 +36,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         },
 
       }
-      if (options.data.config.monaco) {
+      if (options.data.features.monaco) {
         // fix for monaco workers
         // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
         injection.build = {
