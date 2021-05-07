@@ -62,7 +62,12 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
   }
 }
 
-export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions, VuePlugin: Plugin): Plugin[] {
+export function createSlidesLoader(
+  { data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions,
+  pluginOptions: SlidevPluginOptions,
+  VuePlugin: Plugin,
+  MarkdownPlugin: Plugin,
+): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrPages = new Set<number>()
 
@@ -154,9 +159,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
                   ...ctx,
                   modules: Array.from(module?.importedModules || []),
                   file: id,
-                  read() {
-                    return newData.slides[i - 1]?.raw
-                  },
+                  read: () => (<any>MarkdownPlugin.transform)(newData.slides[i]?.raw, id),
                 },
                 )
               }),

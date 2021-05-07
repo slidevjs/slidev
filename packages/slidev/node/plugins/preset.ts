@@ -67,13 +67,14 @@ export async function ViteSlidevPlugin(
     ...vueOptions,
   })
 
+  const MarkdownPlugin = await createMarkdownPlugin(options, pluginOptions)
+
   return [
     createWindiCSSPlugin(options, pluginOptions),
-    await createMarkdownPlugin(options, pluginOptions),
-
+    MarkdownPlugin,
     VuePlugin,
 
-    createSlidesLoader(options, pluginOptions, VuePlugin),
+    createSlidesLoader(options, pluginOptions, VuePlugin, MarkdownPlugin),
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],

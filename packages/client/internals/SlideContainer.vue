@@ -89,7 +89,7 @@ const classes = computed(() => {
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
       <slot>
-        <component :is="props.is || route.component" :classes="classes" />
+        <component :is="props.is || route.component" :class="classes" />
       </slot>
     </div>
     <slot name="controls" />

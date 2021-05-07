@@ -1,4 +1,4 @@
-.slidev-layout:not(.cover) {
+.slidev-layout {
   h1 {
     @apply text-primary;
   }
@@ -9,6 +9,7 @@
   @apply h-full grid;
 
   h1 {
+    color: inherit;
     @apply text-6xl leading-20;
   }
 

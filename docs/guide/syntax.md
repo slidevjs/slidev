@@ -114,6 +114,42 @@ console.log('HelloWorld')
 
 Learn more about [configuring Monaco](/custom/config-monaco).
 
+## Embedded Styles
+
+You can use `<style>` tag in your Markdown directly to override styles for the **current slide**.
+
+```md
+# This is Red
+
+<style>
+h1 {
+  color: red
+}
+</style>
+
+---
+
+# Next slide is not affected
+```
+
+`<style>` tag in Markdown is always [scoped](https://vue-loader.vuejs.org/guide/scoped-css.html). To have global style overrides, check out the [customization section](/custom/directory-structure#style).
+
+Powered by [Windi CSS](https://windicss.org), you can directly use nested css and [directives](https://windicss.org/features/directives.html) (e.g. `@apply`)
+
+```md
+# Slidev
+
+> Hello `world`
+
+<style>
+blockquote {
+  code {
+    @apply text-teal-500 dark:text-teal-400;
+  }
+}
+</style>
+```
+
 ## Notes
 
 You can also take notes for each slide. They will show up in [Presenter Mode](/guide/presenter-mode) for you to reference during presentations.

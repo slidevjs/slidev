@@ -5,7 +5,7 @@ import { Plugin } from 'vite'
 import type { ShikiOptions } from '@slidev/types'
 import type MarkdownIt from 'markdown-it'
 import base64 from 'js-base64'
-import { isTruthy } from '@antfu/utils'
+import { isTruthy, slash } from '@antfu/utils'
 // @ts-expect-error
 import Katex from 'markdown-it-katex'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
@@ -21,10 +21,11 @@ const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
 }
 
 export async function createMarkdownPlugin(
-  { data: { config }, roots, mode }: ResolvedSlidevOptions,
+  { data: { config }, roots, mode, entry }: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
   const setups: ((md: MarkdownIt) => void)[] = []
+  const entryPath = slash(entry)
 
   if (config.highlighter === 'shiki') {
     const { getHighlighter } = await import('shiki')
@@ -59,13 +60,17 @@ export async function createMarkdownPlugin(
       setups.forEach(i => i(md))
     },
     transforms: {
-      before(code) {
+      before(code, id) {
+        if (id === entryPath)
+          return ''
+
         const monaco = (config.monaco === true || config.monaco === mode)
           ? transformMarkdownMonaco
           : truncateMancoMark
 
         code = monaco(code)
         code = transformHighlighter(code)
+        code = transformPageCSS(code, id)
 
         return code
       },
@@ -102,10 +107,32 @@ export function truncateMancoMark(code: string) {
   return code.replace(/{monaco.*?}/g, '')
 }
 
+/**
+ * Transform Monaco code block to component
+ */
 export function transformHighlighter(md: string) {
-  // transform monaco
   return md.replace(/\n```(\w+?)\s*{([\d\w*,\|-]+)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = '', rangeStr: string, code: string) => {
     const ranges = rangeStr.split(/\|/g).map(i => i.trim())
     return `\n<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
   })
+}
+
+/**
+ * Transform <style> in markdown to scoped style with page selector
+ */
+export function transformPageCSS(md: string, id: string) {
+  const page = id.match(/(\d+)\.md$/)?.[1]
+  if (!page)
+    return md
+
+  const result = md.replace(
+    /(\n<style[^>]*?>)([\s\S]+?)(<\/style>)/g,
+    (full, start, css, end) => {
+      if (!start.includes('scoped'))
+        start = start.replace('<style', '<style scoped')
+      return `${start}\n.slidev-page-${page}{${css}}${end}`
+    },
+  )
+
+  return result
 }
