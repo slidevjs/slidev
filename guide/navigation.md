@@ -2,4 +2,4 @@
 
 > TODO:
 
-![](/screenshots/slides-overview.md)
+![](/screenshots/slides-overview.png)
