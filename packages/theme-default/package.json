@@ -1,6 +1,6 @@
 {
   "name": "@slidev/theme-default",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "engines": {
     "node": ">=14.0.0"
   },
