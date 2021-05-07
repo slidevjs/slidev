@@ -1,5 +1,5 @@
 <template>
-  <header v-if="showHero" class="home-hero">
+  <header v-if="showHero" class="home-hero flex">
     <div class="mx-auto grid lg:grid-cols-[minmax(400px,600px),minmax(500px,800px)] gap-4">
       <div class="my-auto pb-40 <md:pb-20">
         <p align="center">
