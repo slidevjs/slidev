@@ -1,6 +1,6 @@
 <template>
   <header v-if="showHero" class="home-hero">
-    <div class="grid lg:grid-cols-[minmax(400px,600px),minmax(500px,1fr)] gap-4">
+    <div class="mx-auto grid lg:grid-cols-[minmax(400px,600px),minmax(500px,800px)] gap-4">
       <div class="my-auto pb-40 <md:pb-20">
         <p align="center">
           <a href="https://github.com/slidevjs/slidev">
