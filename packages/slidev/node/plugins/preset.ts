@@ -30,6 +30,8 @@ const customElements = new Set([
   'mspace',
   'mtable',
   'mtd',
+  'msup',
+  'msqrt',
   'mtr',
   'semantics',
 ])

@@ -16,7 +16,7 @@ export function filterDisabled(data: SlidevMarkdown) {
   return data
 }
 
-function stringifySlide(data: SlideInfo, idx = 1) {
+export function stringifySlide(data: SlideInfo, idx = 1) {
   if (!data.raw)
     prettifySlide(data)
 
@@ -25,7 +25,7 @@ function stringifySlide(data: SlideInfo, idx = 1) {
     : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
 }
 
-function prettifySlide(data: SlideInfo) {
+export function prettifySlide(data: SlideInfo) {
   data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
     ? `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`

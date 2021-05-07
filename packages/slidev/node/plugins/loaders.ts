@@ -90,10 +90,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
             const body = await getBodyJson(req)
             Object.assign(data.slides[idx], body)
 
-            hmrNextModuleIds.push(`${slidePrefix}${idx}.md`)
-
-            if (body.content != null)
-              hmrNextModuleIds.push(`${slidePrefix}${idx}.md`)
+            hmrNextModuleIds.push(`${slidePrefix}${idx + 1}.md`)
 
             server.ws.send({
               type: 'custom',

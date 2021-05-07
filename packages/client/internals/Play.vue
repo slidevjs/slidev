@@ -12,6 +12,9 @@ registerShotcuts()
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {
+  if (showEditor.value)
+    return
+
   if ((e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previouse
     if ((e.screenX / window.innerWidth) > 0.6)
