@@ -54,4 +54,25 @@ export default defineConfig({
   preflight: {
     includeAll: true,
   },
+  theme: {
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            color: 'inherit',
+            a: { color: 'inherit' },
+            b: { color: 'inherit' },
+            code: { color: 'inherit' },
+            strong: { color: 'inherit' },
+            em: { color: 'inherit' },
+            h1: { color: 'inherit' },
+            h2: { color: 'inherit' },
+            h3: { color: 'inherit' },
+            h4: { color: 'inherit' },
+            blockquote: { color: 'inherit' },
+          },
+        },
+      },
+    },
+  },
 })
