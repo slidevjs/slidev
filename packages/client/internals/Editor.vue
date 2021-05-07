@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
-import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
+import { useEventListener, throttledWatch } from '@vueuse/core'
+import { computed, watch, ref, onMounted } from 'vue'
 import { activeElement, showEditor, editorWidth } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute, currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 
-const clicks = ref<'content' | 'note'>('content')
-const offsetRight = ref(0)
+const tab = ref<'content' | 'note'>('content')
 const content = ref('')
 const note = ref('')
 const dirty = ref(false)
@@ -85,20 +84,12 @@ onMounted(() => {
   )
 })
 
-onMounted(() => {
-  offsetRight.value = editorWidth.value
-})
-onUnmounted(() => {
-  offsetRight.value = 0
-})
-
 const handlerDown = ref(false)
 function onHandlerDown() {
   handlerDown.value = true
 }
 function updateWidth(v: number) {
   editorWidth.value = Math.min(Math.max(200, v), window.innerWidth - 200)
-  offsetRight.value = editorWidth.value
 }
 useEventListener('pointermove', (e) => {
   if (handlerDown.value)
@@ -117,6 +108,15 @@ const editorLink = computed(() => {
     ? `vscode://file/${slide.file}:${slide.start}`
     : undefined
 })
+
+throttledWatch(
+  [content, note],
+  () => {
+    if (dirty.value)
+      save()
+  },
+  { throttle: 500 },
+)
 </script>
 
 <template>
@@ -132,20 +132,20 @@ const editorLink = computed(() => {
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" :class="clicks === 'content' ? 'text-primary' : ''" @click="clicks='content'">
+        <button class="icon-btn" :class="tab === 'content' ? 'text-primary' : ''" @click="tab='content'">
           <carbon:account />
         </button>
-        <button class="icon-btn" :class="clicks === 'note' ? 'text-primary' : ''" @click="clicks='note'">
+        <button class="icon-btn" :class="tab === 'note' ? 'text-primary' : ''" @click="tab='note'">
           <carbon:align-box-bottom-right />
         </button>
       </div>
       <span class="text-2xl pt-1">
-        {{ clicks === 'content' ? 'Slide' : 'Note' }}
+        {{ tab === 'content' ? 'Slide' : 'Note' }}
       </span>
       <div class="flex-auto"></div>
-      <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
+      <!-- <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
         <carbon:save />
-      </button>
+      </button> -->
       <button class="icon-btn">
         <a :href="editorLink" target="_blank">
           <carbon:launch />
@@ -156,10 +156,10 @@ const editorLink = computed(() => {
       </button>
     </div>
     <div class="h-full overflow-auto">
-      <div v-show="clicks === 'content'" class="h-full overflow-auto">
+      <div v-show="tab === 'content'" class="h-full overflow-auto">
         <textarea ref="contentInput" />
       </div>
-      <div v-show="clicks === 'note'" class="h-full overflow-auto">
+      <div v-show="tab === 'note'" class="h-full overflow-auto">
         <textarea ref="noteInput" />
       </div>
     </div>
