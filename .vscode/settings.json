@@ -9,5 +9,7 @@
   "files.associations": {
     "*.css": "postcss",
   },
-  "vite.devCommand": "nr docs"
+  "vite.devCommand": "nr docs",
+  "vite.notifyOnStarted": false,
+  "vite.open": false,
 }

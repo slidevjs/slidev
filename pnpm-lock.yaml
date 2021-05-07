@@ -236,11 +236,11 @@ importers:
       '@slidev/cli': workspace:*
       '@slidev/client': workspace:*
       '@slidev/types': workspace:*
-      codemirror-theme-vars: ^0.1.0
+      codemirror-theme-vars: ^0.1.1
       prism-theme-vars: ^0.2.2
       theme-vitesse: ^0.1.11
     dependencies:
-      codemirror-theme-vars: 0.1.0
+      codemirror-theme-vars: 0.1.1
       prism-theme-vars: 0.2.2
       theme-vitesse: 0.1.11
     devDependencies:
@@ -253,11 +253,11 @@ importers:
       '@slidev/cli': workspace:*
       '@slidev/client': workspace:*
       '@slidev/types': workspace:*
-      codemirror-theme-vars: ^0.1.0
+      codemirror-theme-vars: ^0.1.1
       prism-theme-vars: ^0.2.2
       theme-vitesse: ^0.1.11
     dependencies:
-      codemirror-theme-vars: 0.1.0
+      codemirror-theme-vars: 0.1.1
       prism-theme-vars: 0.2.2
       theme-vitesse: 0.1.11
     devDependencies:
@@ -2348,8 +2348,8 @@ packages:
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
     dev: true
 
-  /codemirror-theme-vars/0.1.0:
-    resolution: {integrity: sha512-gcBzs+Tt+/hD3Dg+kwfFrotSpLkPzXuttj8KKWP+J3Ova8bHf7jNL4QytmRDPEi/LFqmxo/jox3PCU2FnWs+xw==}
+  /codemirror-theme-vars/0.1.1:
+    resolution: {integrity: sha512-Au0Ysn6tUMZB/1Jd5S8g4Or1kZxTuTnNx6MVs9H46Ad7w8IEjkHusH+4oyia/FBcVuAJO4DIlkDnPM8Qnnf1rg==}
     dev: false
 
   /codemirror/5.61.0:
