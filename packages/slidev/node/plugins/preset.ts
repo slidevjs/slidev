@@ -54,23 +54,26 @@ export async function ViteSlidevPlugin(
     data: { config },
   } = options
 
-  return [
-    createWindiCSSPlugin(options, pluginOptions),
-
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-      exclude: [],
-      template: {
-        compilerOptions: {
-          isCustomElement(tag) {
-            return customElements.has(tag)
-          },
+  const VuePlugin = Vue({
+    include: [/\.vue$/, /\.md$/],
+    exclude: [],
+    template: {
+      compilerOptions: {
+        isCustomElement(tag) {
+          return customElements.has(tag)
         },
       },
-      ...vueOptions,
-    }),
+    },
+    ...vueOptions,
+  })
 
+  return [
+    createWindiCSSPlugin(options, pluginOptions),
     await createMarkdownPlugin(options, pluginOptions),
+
+    VuePlugin,
+
+    createSlidesLoader(options, pluginOptions, VuePlugin),
 
     ViteComponents({
       extensions: ['vue', 'md', 'ts'],
@@ -124,7 +127,6 @@ export async function ViteSlidevPlugin(
     }),
     createConfigPlugin(options),
     createEntryPlugin(options),
-    createSlidesLoader(options, pluginOptions),
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),
     createFixPlugins(options),

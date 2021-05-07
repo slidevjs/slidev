@@ -62,16 +62,15 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
   }
 }
 
-export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions): Plugin[] {
+export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions, pluginOptions: SlidevPluginOptions, VuePlugin: Plugin): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
-  const hmrNextModuleIds: string[] = []
+  const hmrPages = new Set<number>()
 
   const entryId = slash(entry)
 
   return [
     {
       name: 'slidev:loader',
-
       configureServer(server) {
         server.watcher.add(entry)
 
@@ -90,7 +89,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
             const body = await getBodyJson(req)
             Object.assign(data.slides[idx], body)
 
-            hmrNextModuleIds.push(`${slidePrefix}${idx + 1}.md`)
+            hmrPages.add(idx)
 
             server.ws.send({
               type: 'custom',
@@ -117,11 +116,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
 
         const newData = await parser.load(entry)
 
-        const moduleIds: (string | false)[] = [
-          ...hmrNextModuleIds,
-        ]
-
-        hmrNextModuleIds.length = 0
+        const moduleIds: string[] = []
 
         if (data.slides.length !== newData.slides.length)
           moduleIds.push('/@slidev/routes')
@@ -138,28 +133,47 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
         const length = Math.max(data.slides.length, newData.slides.length)
 
         for (let i = 0; i < length; i++) {
-          const a = data.slides[i]
-          const b = newData.slides[i]
-
-          if (a?.content.trim() === b?.content.trim() && JSON.stringify(a.frontmatter) === JSON.stringify(b.frontmatter))
+          if (hmrPages.has(i))
             continue
 
-          moduleIds.push(
-            `${slidePrefix}${i + 1}.md`,
-            `${slidePrefix}${i + 1}.json`,
-          )
+          const a = data.slides[i]
+          const b = newData.slides[i]
+          if (a?.content.trim() === b?.content.trim() && JSON.stringify(a.frontmatter) === JSON.stringify(b.frontmatter))
+            continue
+          hmrPages.add(i)
         }
+
+        const modules = (
+          await Promise.all(
+            Array.from(hmrPages)
+              .map(async(i) => {
+                const id = `${slidePrefix}${i + 1}.md`
+                const module = ctx.server.moduleGraph.getModuleById(id)
+
+                return await VuePlugin.handleHotUpdate!({
+                  ...ctx,
+                  modules: Array.from(module?.importedModules || []),
+                  file: id,
+                  read() {
+                    return newData.slides[i - 1]?.raw
+                  },
+                },
+                )
+              }),
+          )
+        ).flatMap(i => i || [])
+
+        hmrPages.clear()
 
         const moduleEntries = moduleIds
           .filter(isTruthy)
-          .map(id => ctx.server.moduleGraph.getModuleById(id as string))
+          .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
+          .concat(modules)
 
         pluginOptions.onDataReload?.(newData, data)
-
         Object.assign(data, newData)
 
-        moduleEntries.map(m => ctx.server.moduleGraph.invalidateModule(m))
         return moduleEntries
       },
 
@@ -225,6 +239,13 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
           code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
           return code
         }
+      },
+    },
+    {
+      name: 'xxx',
+      handleHotUpdate(i) {
+        if (i.file.endsWith('.vue'))
+          console.dir(i.modules)
       },
     },
   ]
