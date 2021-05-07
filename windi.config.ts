@@ -15,6 +15,9 @@ export default defineConfig({
   plugins: [
     aspectRatio,
   ],
+  shortcuts: {
+    'bg-main': 'bg-white dark:bg-[#111]',
+  },
   theme: {
     extend: {
       colors: {

@@ -58,7 +58,7 @@ defineEmit(['toggle'])
   border-bottom: 1px solid var(--c-divider);
   padding: 0.7rem 1.5rem 0.7rem 4rem;
   height: var(--header-height);
-  background-color: var(--c-bg);
+  @apply bg-main;
 }
 
 .nav-bar.root {
