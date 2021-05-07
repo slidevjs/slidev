@@ -160,7 +160,7 @@ background: 'https://source.unsplash.com/1600x900/?nature,water'
 This is the cover page.
 ```
 
-For more details about using a theme, refer to the [themes usage section](/themes/use).
+Learn more about [frontmatter configurations](/custom/#frontmatter-configures).
 
 ## LaTeX
 

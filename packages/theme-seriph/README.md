@@ -8,7 +8,9 @@ An offical theme for [Slidev](https://github.com/slidevjs/slidev) using serif fo
 
 Add the following frontmatter to your `slides.md`. Start Slidev then it will prompt you to install the theme automatically.
 
-<pre><code>---<br>theme: <b>seriph</b><br>---</code></pre>
+<pre><code>---
+theme: <b>seriph</b>
+---</code></pre>
 
 Learn more about [how to use a theme](https://sli.dev/themes/use).
 
