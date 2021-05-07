@@ -38,6 +38,7 @@ async function start() {
           <label for="title">Recording Name</label>
           <input
             v-model="recordingName"
+            class="bg-transparent text-current"
             name="title"
             type="text"
             placeholder="Enter the title..."
