@@ -1,9 +1,14 @@
 <!--
+Line highlighting for code blocks.
+(auto transformed, you don't need to use this component directly)
+
 Usage:
 
 ```ts {1,3-5|2,4}
 const your_code = 'here'
 ```
+
+Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">

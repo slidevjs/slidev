@@ -1,3 +1,11 @@
+<!--
+A simple wrapper for embeded Tweet
+
+Usage:
+
+<Tweet id="20" />
+-->
+
 <script setup lang="ts">
 import { useScriptTag } from '@vueuse/core'
 import { defineProps, getCurrentInstance, onMounted, ref } from 'vue'

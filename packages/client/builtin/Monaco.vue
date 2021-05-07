@@ -1,9 +1,14 @@
 <!--
+Monaco Editor
+(auto transformed, you don't need to use this component directly)
+
 Usage:
 
 ```ts {monaco}
 const your_code = 'here'
 ```
+
+Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <template>

@@ -1,3 +1,11 @@
+<!--
+A simple wrapper for embeded YouTube videos
+
+Usage:
+
+<YouTube id="luoMHjh-XcQ" />
+-->
+
 <script setup lang="ts">
 import { defineProps } from 'vue'
 
