@@ -31,7 +31,7 @@ const value = useVModel(props, 'modelValue', emit)
           <div class="opacity-50 text-sm mr-2">Powered by</div>
           <img
             class="w-5 h-5"
-            src="https://raw.githubusercontent.com/slidevjs/slidev/main/assets/logo.png"
+            src="../assets/logo.png"
             alt="Slidev"
           />
           <div style="color: #2082A6">
