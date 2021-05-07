@@ -37,6 +37,16 @@ $ slidev build
 
 The generated application will be available under `dist/` and then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. Now you can share your slides with the rest of the world with a single link.
 
+## Base Path
+
+To deploy your slides under sub-routes, you will need to pass the `--base` option. For example:
+
+```bash
+$ slidev build --base /talks/my-cool-talk/
+```
+
+Refer to [Vite's docuemantions](https://vitejs.dev/guide/build.html#public-base-path) for more details.
+
 ### Provide Downloadable PDF
 
 You can provide a downloadable PDF to the viewers of your SPA. You can enable it by the following config:
