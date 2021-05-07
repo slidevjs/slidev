@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed } from 'vue'
+import { useTimestamp } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
@@ -16,6 +17,21 @@ registerShotcuts()
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
 })
+
+const tsStart = ref(Date.now())
+const { timestamp: now } = useTimestamp({
+  interval: 1000,
+})
+const timer = computed(() => {
+  const passed = (now.value - tsStart.value) / 1000
+  const sec = Math.floor(passed % 60).toString().padStart(2, '0')
+  const min = Math.floor(passed / 60).toString().padStart(2, '0')
+  return `${min}:${sec}`
+})
+
+function resetTimer() {
+  tsStart.value = now.value
+}
 
 const main = ref<HTMLDivElement>()
 const nextTabElements = ref([])
@@ -48,6 +64,17 @@ useSwipeControls(main)
       <div class="grid-section top flex">
         <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
         <div class="flex-auto" />
+        <div
+          class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
+          opacity="50 hover:100"
+          @click="resetTimer"
+        >
+          <carbon:time class="absolute" />
+          <carbon:renew class="absolute opacity-0" />
+        </div>
+        <div class="text-2xl pl-2 pr-6 my-auto">
+          {{ timer }}
+        </div>
       </div>
       <div ref="main" class="grid-section main flex flex-col p-4">
         <SlideContainer
@@ -78,7 +105,10 @@ useSwipeControls(main)
       </div>
     </div>
     <div class="progress-bar">
-      <div class="progress h-2px bg-primary transition-all" :style="{width: `${(currentPage - 1) / (total - 1) * 100}%`}"></div>
+      <div
+        class="progress h-2px bg-primary transition-all"
+        :style="{ width: `${(currentPage - 1) / (total - 1) * 100}%` }"
+      ></div>
     </div>
   </div>
   <Goto />
@@ -86,6 +116,15 @@ useSwipeControls(main)
 </template>
 
 <style lang="postcss" scoped>
+.timer-btn:hover {
+  & > :first-child {
+    @apply opacity-0;
+  }
+  & > :last-child {
+    @apply opacity-100;
+  }
+}
+
 .section-title {
   @apply px-4 py-2 font-xl;
 }
