@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { defineEmit, defineProps } from 'vue'
+import { configs } from '../env'
 import Modal from './Modal.vue'
 
 const emit = defineEmit()
@@ -14,24 +15,36 @@ const value = useVModel(props, 'modelValue', emit)
 </script>
 
 <template>
-  <Modal v-model="value" class="px-10 py-6">
-    <div class="flex flex-col gap-2 children:mx-auto">
-      <div class="opacity-50 text-sm mb-4">
-        Slides powered by
-      </div>
-      <img class="w-25 h-25" src="https://raw.githubusercontent.com/slidevjs/slidev/main/assets/logo.png" alt="Slidev" />
-      <div class="text-3xl" style="color: #2082A6">
-        <b>Sli</b>dev
-      </div>
-      <div class="opacity-50 -mt-2 text-sm">
-        Presentation Slides for Developers
-      </div>
+  <Modal v-model="value" class="px-6 py-4">
+    <div class="slidev-info-dialog slidev-layout flex flex-col gap-4 text-base">
+      <div
+        v-if="typeof configs.info === 'string'"
+        class="mb-4"
+        v-html="configs.info"
+      ></div>
       <a
         href="https://github.com/slidevjs/slidev"
         target="_blank"
-        class="opacity-75 mt-4"
-        hover="opacity-100 text-[#2082A6]"
-      >Learn More</a>
+        class="!opacity-100 !border-none !text-current"
+      >
+        <div class="flex gap-1 children:my-auto">
+          <div class="opacity-50 text-sm mr-2">Powered by</div>
+          <img
+            class="w-5 h-5"
+            src="https://raw.githubusercontent.com/slidevjs/slidev/main/assets/logo.png"
+            alt="Slidev"
+          />
+          <div style="color: #2082A6">
+            <b>Sli</b>dev
+          </div>
+        </div>
+      </a>
     </div>
   </Modal>
 </template>
+
+<style lang="postcss">
+.slidev-info-dialog {
+  @apply !p-4 max-w-150;
+}
+</style>

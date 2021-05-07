@@ -28,7 +28,7 @@ function stringifySlide(data: SlideInfo, idx = 1) {
 function prettifySlide(data: SlideInfo) {
   data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
-    ? `---\n${YAML.safeDump(data.frontmatter).trim()}\n---\n${data.content}`
+    ? `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
     data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
@@ -46,7 +46,7 @@ function matter(code: string) {
   let data: any = {}
   const content = code.replace(/^---([\s\S]*?)---/,
     (_, d) => {
-      data = YAML.safeLoad(d)
+      data = YAML.load(d)
       if (!isObject(data))
         data = {}
       return ''
@@ -140,7 +140,7 @@ export function parse(
     remoteAssets: true,
     monaco: 'dev',
     download: false,
-    info: true,
+    info: false,
     highlighter: 'prism',
   }
   const config: SlidevConfig = Object.assign(

@@ -2,6 +2,16 @@
 layout: cover
 download: 'https://antfu.me/talks/2021-04-29'
 highlighter: shiki
+info: |
+  ## Composable Vue
+
+  Pattens and tips for writing good composable logic in Vue
+
+  [Anthony Fu](https://antfu.me/) at [VueDay 2021](https://2021.vueday.it/)
+
+  - [Recording](https://www.youtube.com/watch?v=IMJjP6edHd0)
+  - [Transcript](https://antfu.me/posts/composable-vue-vueday-2021)
+  - [Source code](https://github.com/antfu/talks/tree/master/2021-04-29)
 ---
 
 # Composable Vue
@@ -140,7 +150,7 @@ bar = 1 // ts-error
 
 # Reactive
 
-```ts {1,6|3,7}
+```ts {monaco}
 import { reactive } from 'vue'
 
 const foo = { prop: 0 }

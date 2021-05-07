@@ -70,10 +70,11 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
       <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
         <carbon:download />
       </button>
-      <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
-        <carbon:information />
-      </button>
     </template>
+
+    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
+      <carbon:information />
+    </button>
 
     <template v-if="!isPresenter">
       <MenuButton>

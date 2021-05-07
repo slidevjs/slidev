@@ -22,7 +22,9 @@ const value = useVModel(props, 'modelValue', emit, { passive: true })
 
 <template>
   <div class="select-list">
-    <div class="title">{{ title }}</div>
+    <div class="title">
+      {{ title }}
+    </div>
     <div class="items">
       <div
         v-for="item of items"

@@ -22,7 +22,7 @@ onClickOutside(el, () => {
 
 <template>
   <div ref="el" class="flex relative">
-    <div @click="value = !value" :class="{ disabled }">
+    <div :class="{ disabled }" @click="value = !value">
       <slot name="button" :class="{ disabled }" />
     </div>
     <div

@@ -42,6 +42,6 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
     "@slidev/types": "workspace:*",
-    "js-yaml": "^3.14.1"
+    "js-yaml": "^4.1.0"
   }
 }

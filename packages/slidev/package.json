@@ -62,7 +62,6 @@
     "fs-extra": "^10.0.0",
     "jiti": "^1.9.1",
     "js-base64": "^3.6.0",
-    "js-yaml": "^3.14.1",
     "kolorist": "^1.4.1",
     "markdown-it": "^12.0.6",
     "markdown-it-katex": "^2.0.3",
@@ -78,9 +77,9 @@
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.3",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-windicss": "^0.16.0-beta.10",
+    "vite-plugin-windicss": "^0.16.0-beta.14",
     "vue": "^3.0.11",
-    "windicss": "^3.0.0-beta.5",
+    "windicss": "^3.0.0-beta.6",
     "yargs": "^17.0.1"
   },
   "devDependencies": {

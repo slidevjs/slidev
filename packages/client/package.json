@@ -23,7 +23,7 @@
     "codemirror": "^5.61.0",
     "file-saver": "^2.0.5",
     "js-base64": "^3.6.0",
-    "js-yaml": "^3.14.1",
+    "js-yaml": "^4.1.0",
     "monaco-editor": "^0.23.0",
     "prettier": "^2.2.1",
     "recordrtc": "^5.6.2",

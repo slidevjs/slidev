@@ -19,7 +19,9 @@ const counter = ref(props.count)
       outline="!none"
       hover:bg="gray-400 opacity-20"
       @click="counter -= 1"
-    >-</button>
+    >
+      -
+    </button>
     <span m="auto" p="2">{{ counter }}</span>
     <button
       border="l gray-400 opacity-50"
@@ -28,6 +30,8 @@ const counter = ref(props.count)
       outline="!none"
       hover:bg="gray-400 opacity-20"
       @click="counter += 1"
-    >+</button>
+    >
+      +
+    </button>
   </div>
 </template>

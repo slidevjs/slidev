@@ -25,7 +25,7 @@
     }
   },
   "lint-staged": {
-    "{packages,.vitepress,scripts}/**/*.{js,ts,tsx,vue,md}": [
+    "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
       "eslint --fix"
     ]
   },
@@ -40,7 +40,7 @@
     "@types/file-saver": "^2.0.2",
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",
-    "@types/js-yaml": "^3.12.6",
+    "@types/js-yaml": "^4.0.1",
     "@types/markdown-it": "^12.0.1",
     "@types/node": "^15.0.2",
     "@types/prettier": "^2.2.3",
@@ -61,11 +61,11 @@
     "playwright-chromium": "^1.10.0",
     "pnpm": "^6.2.5",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.5.5",
+    "ts-jest": "^26.5.6",
     "tsup": "^4.10.1",
     "typeit": "^7.0.4",
     "typescript": "^4.2.4",
-    "vite-plugin-windicss": "^0.16.0-beta.10",
+    "vite-plugin-windicss": "^0.16.0-beta.14",
     "vitepress": "^0.13.2"
   }
 }

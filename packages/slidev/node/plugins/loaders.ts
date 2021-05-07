@@ -1,6 +1,6 @@
 import { basename } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
-import { isTruthy, notNullish, objectMap, slash } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, slash } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import Markdown from 'markdown-it'
@@ -183,7 +183,7 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
 
         // configs
         if (id === '/@slidev/configs')
-          return `export default ${JSON.stringify(data.config)}`
+          return generateConfigs()
 
         // pages
         if (id.startsWith(slidePrefix)) {
@@ -309,5 +309,13 @@ export function createSlidesLoader({ data, entry, clientRoot, themeRoots, userRo
     const routesStr = `export default [\n${routes.join(',\n')}\n]`
 
     return [...imports, routesStr].join('\n')
+  }
+
+  function generateConfigs() {
+    const config = { ...data.config }
+    if (isString(config.info))
+      config.info = md.render(config.info)
+
+    return `export default ${JSON.stringify(config)}`
   }
 }
