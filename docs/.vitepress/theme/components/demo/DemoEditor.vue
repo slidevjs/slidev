@@ -14,7 +14,7 @@
   border-radius: 7px;
   position: relative;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 30px 1px rgba(0, 0, 0, 0.15);
-  @apply dark:(bg-[#141414]);
+  @apply dark:(bg-[#141414] border border-gray-400 border-opacity-10);
 }
 .terminal::after {
   content: "";
