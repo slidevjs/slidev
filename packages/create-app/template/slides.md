@@ -3,6 +3,7 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 background: 'https://source.unsplash.com/collection/94734566/1920x1080'
+highlighter: shiki
 # apply any windi css classes to the current slide
 class: 'text-center'
 # some information about the slides, markdown enabled

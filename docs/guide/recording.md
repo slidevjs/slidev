@@ -11,3 +11,5 @@ Click the <carbon-user-avatar class="inline-icon-btn"/> button in the navigation
 Clicking the <carbon-video class="inline-icon-btn"/> button in the navigation panel will bring up a dialog for you. Here you can choose to either record your camera embedded in your slides or to separate them into two video files.
 
 This feature is powered by [RecordRTC](https://github.com/muaz-khan/RecordRTC) and uses the [WebRTC API](https://webrtc.org/).
+
+![](/screenshots/recording.png)

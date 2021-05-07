@@ -20,9 +20,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 
 <p align="center">
-  Video Previews:
-  <a href="https://twitter.com/antfu7/status/1388529647428636675">one</a> |
-  <a href="https://twitter.com/antfu7/status/1389604687502995457">two</a>
+  <a href="https://twitter.com/antfu7/status/1389604687502995457">Video Preview</a>
 </p>
 
 <p align="center">
@@ -31,7 +29,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <td align="center">
 <img width="2000" height="0"><br>
 Status: <b>Public Beta 🎉</b><br>
-<sub>Made possible from my <a href="https://github.com/sponsors/antfu">Sponsor Program 💖</a></sub><br>
+<sub>Made possible by my <a href="https://github.com/sponsors/antfu">Sponsor Program 💖</a></sub><br>
 <img width="2000" height="0">
 </td>
 </tbody>
@@ -48,22 +46,24 @@ I always found myself spending too much time styling and layouting slides when u
 
 So as a frontend developer, why not solve it the way that fits better with what I am good at?
 
-Learn more at [sli.dev](https://sli.dev)
+Documentations and guides on **[Sli.dev](https://sli.dev)**
 
 ## Features
 
-- 📝 **Markdown-based** - use your favorite editors and workflow
-- 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - built-in code highlighting, live coding, LaTeX, etc.
-- 🤹 **Interactive** - embedding Vue components seamlessly
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- ⚡️ **Fast** - instant reloading powered by Vite
-- 🛠 **Hackable** - using Vite plugins and any npm packages
+- 📝 [**Markdown-based**](https://sli.dev/guide/syntax.html) - use your favorite editors and workflow
+- 🧑‍💻 [**Developer Friendly**](https://sli.dev/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
+- 🎨 [**Themable**](https://sli.dev/themes/gallery.html) - theme can be shared and used with npm packages
+- 🌈 [**Stylish**](https://sli.dev/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets
+- 🤹 [**Interactive**](https://sli.dev/custom/directory-structure.html#components) - embedding Vue components seamlessly
+- 🎙 [**Presenter Mode**](https://sli.dev/guide/presenter-mode.html) - use another window, or even your phone to control your slides
+- 🧮 [**LaTeX**](https://sli.dev/demo/starter/6) - Built-in LaTeX math equations support
+- 💻 [**Editors**](https://sli.dev/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
+- 🎥 [**Recording**](https://sli.dev/guide/recording.html) - built-in recording and camera view
+- 📤 [**Portable**](https://sli.dev/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
+- ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
+- 🛠 [**Hackable**](https://sli.dev/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages
 
-## Documentations
-
-Docs and guides at **[sli.dev](https://sli.dev)**
+## Get Started
 
 The best way to understand it is to try it, just one command away:
 
@@ -76,7 +76,7 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 ## Tech Stack
 
 - [Vite](https://vitejs.dev) - An extremely fast frontend tooling
-- [Vue](https://v3.vuejs.org/) powered [Markdown](https://daringfireball.net/projects/markdown/syntax) - Focus on the content while having the power of HTML and Vue components whenever needed
+- [Vue 3](https://v3.vuejs.org/) powered [Markdown](https://daringfireball.net/projects/markdown/syntax) - Focus on the content while having the power of HTML and Vue components whenever needed
 - [Windi CSS](https://github.com/windicss/windicss) - On-demand utility-first CSS framework, style your slides at ease
 - [Prism](https://github.com/PrismJS/prism), [Shiki](https://github.com/shikijs/shiki), [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
