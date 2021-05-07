@@ -39,7 +39,7 @@ export async function promptForThemeInstallation(name: string) {
     name: 'confirm',
     initial: 'Y',
     type: 'confirm',
-    message: `Does not found theme "${name}" in your project, do you want to install it now?`,
+    message: `The theme "${name}" was not found in your project, do you want to install it now?`,
   })
 
   if (!confirm)
