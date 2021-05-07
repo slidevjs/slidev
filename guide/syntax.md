@@ -62,9 +62,9 @@ This is a default page without any additional metadata.
 
 Refer to [customization](/custom/) for more details.
 
-## Code Snippet
+## Code Blocks
 
-A big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
+One big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
 ~~~ts
 //```ts
