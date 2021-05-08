@@ -18,7 +18,7 @@ download: true
 highlighter: 'prism'
 # enable monaco editor, default to dev only
 monaco: 'dev'
-# infomation for your slides, can be a markdown string
+# information for your slides, can be a markdown string
 info: |
   ## Slidev
 
