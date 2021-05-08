@@ -18,6 +18,10 @@ const Guide = [
     link: '/guide/syntax',
   },
   {
+    text: 'Navigation',
+    link: '/guide/navigation',
+  },
+  {
     text: 'Animations',
     link: '/guide/animations',
   },
