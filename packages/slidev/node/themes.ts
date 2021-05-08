@@ -1,5 +1,6 @@
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
+import { isRelative } from './options'
 
 const officialThemes: Record<string, string> = {
   none: '',
@@ -21,6 +22,8 @@ export function resolveThemeName(name: string) {
     return ''
   if (name.startsWith('@slidev/theme-') || name.startsWith('slidev-theme-'))
     return name
+  if (name.startsWith('.'))
+    return name
   if (officialThemes[name] !== null)
     return officialThemes[name]
 
@@ -32,7 +35,7 @@ export async function promptForThemeInstallation(name: string) {
   if (!name)
     return name
 
-  if (packageExists(name))
+  if (isRelative(name) || packageExists(name))
     return name
 
   const { confirm } = await prompts({

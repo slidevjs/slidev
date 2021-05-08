@@ -61,13 +61,25 @@ export function getCLIRoot() {
   return resolve(__dirname, '..')
 }
 
-export function getThemeRoots(name: string) {
+export function isRelative(name: string) {
+  return /^\.\.?[\/\\]/.test(name)
+}
+
+export function getThemeRoots(name: string, entry: string) {
   if (!name)
     return []
 
-  return [
-    dirname(require.resolve(`${name}/package.json`)),
-  ]
+  // TODO: handle theme inherit
+  if (isRelative(name)) {
+    return [
+      resolve(dirname(entry), name),
+    ]
+  }
+  else {
+    return [
+      dirname(require.resolve(`${name}/package.json`)),
+    ]
+  }
 }
 
 export async function resolveOptions(
@@ -95,7 +107,7 @@ export async function resolveOptions(
 
   const clientRoot = getClientRoot()
   const cliRoot = getCLIRoot()
-  const themeRoots = getThemeRoots(theme)
+  const themeRoots = getThemeRoots(theme, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
 
   return {
