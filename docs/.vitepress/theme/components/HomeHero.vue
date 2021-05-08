@@ -46,6 +46,9 @@
             </a>
           </p>
         </ClientOnly>
+        <a href="https://github.com/slidevjs/slidev" class="-mt-2 block filter dark:invert" target="__blank">
+          <img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social">
+        </a>
       </div>
       <ClientOnly>
         <Demo class="-mt-10 -mb-25" />
