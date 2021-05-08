@@ -55,7 +55,7 @@ Otherwise, you can use it with [`npx`](https://www.npmjs.com/package/npx)
 $ npx slidev
 ```
 
-Run `slidev -h` for more options available.
+Run `slidev --help` for more options available.
 
 ### Markdown Syntax
 
