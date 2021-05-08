@@ -301,3 +301,7 @@ form {
   @apply inline-block rounded p-0.5 text-2xl align-middle;
   @apply border border-primary border-opacity-20 border-solid;
 }
+
+p > img {
+  @apply rounded-2xl
+}

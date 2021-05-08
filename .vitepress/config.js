@@ -85,6 +85,17 @@ const Customizations = [
   },
 ]
 
+const Resources = [
+  {
+    text: 'Showcases',
+    link: '/showcases',
+  },
+  {
+    text: 'Curated Covers',
+    link: '/resources/covers',
+  },
+]
+
 const slidebars = [
   {
     text: 'Guide',
@@ -153,7 +164,10 @@ module.exports = {
         text: 'Customize',
         items: Customizations,
       },
-      { text: 'Showcases', link: '/showcases' },
+      {
+        text: 'Resources',
+        items: Resources,
+      },
     ],
 
     sidebar: {
@@ -161,6 +175,7 @@ module.exports = {
       '/themes/': slidebars,
       '/custom/': slidebars,
       '/builtin/': slidebars,
+      '/resources/': slidebars,
       '/': slidebars,
     },
   },
