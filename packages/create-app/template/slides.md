@@ -142,10 +142,10 @@ Check out [the guides](https://sli.dev/custom/#components) for more.
 <div>
 
 ```html
-<Tweet id="1385774635015307265" />
+<Tweet id="1390115482657726468" />
 ```
 
-<Tweet id="1385774635015307265" scale="0.65" />
+<Tweet id="1390115482657726468" scale="0.65" />
 
 </div>
 </div>
