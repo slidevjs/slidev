@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEventListener, throttledWatch } from '@vueuse/core'
 import { computed, watch, ref, onMounted } from 'vue'
-import { activeElement, showEditor, editorWidth } from '../state'
+import { activeElement, showEditor, editorWidth, isInputing } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute, currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
@@ -13,17 +13,16 @@ const dirty = ref(false)
 const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 const noteInput = ref<HTMLTextAreaElement>()
-const focused = ref(false)
 
 const { info, update } = useDynamicSlideInfo(currentSlideId)
 
 watch(
   info,
   (v) => {
-    note.value = (v?.note || '').trim()
     frontmatter.value = v?.frontmatter || {}
 
-    if (!focused.value) {
+    if (!isInputing.value) {
+      note.value = (v?.note || '').trim()
       content.value = (v?.content || '').trim()
       dirty.value = false
     }
@@ -67,14 +66,9 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
+      // @ts-ignore
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
-      onfocus() {
-        focused.value = true
-      },
-      onblur() {
-        focused.value = false
-      },
     },
   )
 
@@ -90,14 +84,9 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
+      // @ts-ignore
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
-      onfocus() {
-        focused.value = true
-      },
-      onblur() {
-        focused.value = false
-      },
     },
   )
 })
