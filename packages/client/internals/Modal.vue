@@ -25,7 +25,7 @@ function onClick(e: MouseEvent) {
   <div
     v-show="value"
     ref="container"
-    class="fixed top-0 bottom-0 left-0 right-0 grid"
+    class="fixed top-0 bottom-0 left-0 right-0 grid z-20"
     bg="black opacity-80"
     @click="onClick"
   >
