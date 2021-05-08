@@ -9,7 +9,7 @@ import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { version } from '../package.json'
 import { createServer } from './server'
-import { ResolvedSlidevOptions, resolveOptions } from './options'
+import { getThemeRoots, isRelative, ResolvedSlidevOptions, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
 
 const cli = yargs
@@ -152,6 +152,56 @@ cli.command(
     const data = await parser.load(entry)
     parser.prettify(data)
     await parser.save(data)
+  },
+)
+
+cli.command(
+  'theme [subcommand]',
+  'Theme related operations',
+  (command) => {
+    return command
+      .command(
+        'eject',
+        'Eject current theme into local file system',
+        args => commonOptions(args)
+          .option('dir', {
+            type: 'string',
+            default: 'theme',
+          }),
+        async({ entry, dir, theme: themeInput }) => {
+          const data = await parser.load(entry)
+          const theme = resolveThemeName(themeInput || data.config.theme)
+          if (theme === 'none') {
+            console.error('Can not eject theme "none"')
+            process.exit(1)
+          }
+          if (isRelative(theme)) {
+            console.error('Theme is already ejected')
+            process.exit(1)
+          }
+          const roots = getThemeRoots(theme, entry)
+          if (!roots.length) {
+            console.error(`Does not found theme "${theme}"`)
+            process.exit(1)
+          }
+          const root = roots[0]
+
+          await fs.copy(root, path.resolve(dir), {
+            filter: i => !/node_modules|.git/.test(path.relative(root, i)),
+          })
+
+          const dirPath = `./${dir}`
+          data.slides[0].frontmatter.theme = dirPath
+          data.slides[0].raw = ''
+          await parser.save(data)
+
+          console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
+        },
+      )
+  },
+  () => {
+    cli.showHelp()
+    process.exit(1)
   },
 )
 
