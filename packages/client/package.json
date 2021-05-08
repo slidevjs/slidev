@@ -18,7 +18,7 @@
     "@antfu/utils": "^0.1.5",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^4.9.1",
+    "@vueuse/core": "^4.9.2",
     "@vueuse/head": "^0.5.1",
     "codemirror": "^5.61.0",
     "file-saver": "^2.0.5",
