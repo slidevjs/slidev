@@ -10,7 +10,7 @@
     "docs": "vitepress dev docs",
     "docs:build": "esno ./scripts/docs.ts",
     "demo:dev": "pnpm -C demo/starter run dev",
-    "demo:compoable-vue": "pnpm -C demo/compoable-vue run dev",
+    "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
     "lint": "eslint '**/*.{js,ts,vue,json}'",
     "lint:fix": "nr lint --fix",
     "test": "jest",
