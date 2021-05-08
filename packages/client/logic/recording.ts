@@ -65,7 +65,8 @@ export function useRecording() {
 
     if (showAvatar.value) {
       showAvatar.value = false
-      closeCameraStream()
+      if (!recording.value)
+        closeStream(streamCamera)
     }
     else {
       await startCameraStream()
@@ -96,28 +97,18 @@ export function useRecording() {
 
   watch(currentCamera, async(v) => {
     if (v === 'none') {
-      closeCameraStream()
+      closeStream(streamCamera)
     }
     else {
       if (recording.value)
         return
       // restart camera stream
       if (streamCamera.value) {
-        await closeCameraStream()
+        closeStream(streamCamera)
         await startCameraStream()
       }
     }
   })
-
-  async function closeCameraStream() {
-    if (recording.value)
-      return
-
-    if (streamCamera.value) {
-      closeStream(streamCamera)
-      streamCamera.value = undefined
-    }
-  }
 
   async function startRecording() {
     await startCameraStream()
@@ -163,19 +154,18 @@ export function useRecording() {
       const url = URL.createObjectURL(blob)
       download(getFilename('camera'), url)
       window.URL.revokeObjectURL(url)
-      closeStream(streamCamera)
       recorderCamera.value = undefined
+      if (!showAvatar.value)
+        closeStream(streamCamera)
     })
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
       const url = URL.createObjectURL(blob)
       download(getFilename('screen'), url)
       window.URL.revokeObjectURL(url)
-      closeCameraStream()
+      closeStream(streamSlides)
       recorderSlides.value = undefined
     })
-
-    console.log('stopped')
   }
 
   function closeStream(stream: Ref<MediaStream | undefined>) {
