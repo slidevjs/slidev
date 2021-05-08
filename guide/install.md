@@ -2,7 +2,7 @@
 
 ## Starter Template
 
-The best way to get started is using our official stater template.
+The best way to get started is using our official starter template.
 
 With NPM:
 
