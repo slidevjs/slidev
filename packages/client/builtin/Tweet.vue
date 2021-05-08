@@ -20,10 +20,11 @@ const props = defineProps<{
 const tweet = ref<HTMLElement | null>()
 
 const vm = getCurrentInstance()!
+const loaded = ref(false)
 
-function create() {
+async function create() {
   // @ts-ignore
-  window?.twttr?.widgets?.createTweet(
+  await window.twttr.widgets.createTweet(
     props.id.toString(),
     tweet.value,
     {
@@ -31,22 +32,35 @@ function create() {
       conversation: props.conversation || 'none',
     },
   )
+  loaded.value = true
 }
 
-useScriptTag(
-  'https://platform.twitter.com/widgets.js',
-  () => {
-    if (vm.isMounted)
-      create()
-    else
-      onMounted(create, vm)
-  },
-  { async: true },
-)
+// @ts-ignore
+if (window?.twttr?.widgets) {
+  onMounted(create)
+}
+else {
+  useScriptTag(
+    'https://platform.twitter.com/widgets.js',
+    () => {
+      if (vm.isMounted)
+        create()
+      else
+        onMounted(create, vm)
+    },
+    { async: true },
+  )
+}
 </script>
 
 <template>
   <Transform :scale="scale || 1">
-    <div ref="tweet"></div>
+    <div ref="tweet">
+      <div v-if="!loaded" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
+        <div class="m-auto animate-pulse text-4xl">
+          <carbon:logo-twitter />
+        </div>
+      </div>
+    </div>
   </Transform>
 </template>
