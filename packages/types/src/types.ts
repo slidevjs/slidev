@@ -35,7 +35,7 @@ export interface SlidevConfig {
    */
   download: boolean | string
   /**
-   * Infomation shows on the built SPA
+   * Information shows on the built SPA
    * Can be a markdown string
    *
    * @default true
