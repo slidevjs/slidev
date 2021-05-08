@@ -102,11 +102,13 @@ importers:
       '@slidev/theme-default': workspace:*
       '@slidev/theme-seriph': workspace:*
       '@slidev/types': workspace:*
-    dependencies:
+      nodemon: ^2.0.7
+    devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': link:../../packages/theme-default
       '@slidev/theme-seriph': link:../../packages/theme-seriph
       '@slidev/types': link:../../packages/types
+      nodemon: 2.0.7
 
   demo/starter:
     specifiers:
@@ -7574,19 +7576,6 @@ packages:
       - supports-color
     dev: false
 
-  /vite/2.2.3:
-    resolution: {integrity: sha512-PtjyBL4GtACM+uT5q5hi2+AlMBbb6YI2b2bam6QI8ZdZt4FezseF0yZHQx0G+b3po9jIJ/GS5N9gc5Yq9Rue7g==}
-    engines: {node: '>=12.0.0'}
-    hasBin: true
-    dependencies:
-      esbuild: 0.9.7
-      postcss: 8.2.13
-      resolve: 1.20.0
-      rollup: 2.46.0
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
   /vite/2.2.4:
     resolution: {integrity: sha512-vnIwSNci+phFMp6krhy+FbYzKL0R67Sdt9mVZ96S27AewrApSJjTqncJcalk8sf60BgcbW4+1C6DFIWkxquO9g==}
     engines: {node: '>=12.0.0'}
@@ -7598,7 +7587,6 @@ packages:
       rollup: 2.46.0
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
 
   /vitepress/0.13.2:
     resolution: {integrity: sha512-Y5gN7QAXh2Dd3+e59FWnLuszudg7sO/0//9qUKg84cAX/cZrjvhUgxcAh8MqfCFw8K5m2/0D445FzuwBcqHQLw==}
@@ -7629,7 +7617,7 @@ packages:
       polka: 0.5.2
       prismjs: 1.23.0
       sirv: 1.0.11
-      vite: 2.2.3
+      vite: 2.2.4
       vue: 3.0.11
     transitivePeerDependencies:
       - react
