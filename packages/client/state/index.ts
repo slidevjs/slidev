@@ -1,5 +1,5 @@
 import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle, isClient } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 export const showOverview = ref(false)
 export const showRecordingDialog = ref(false)
@@ -15,7 +15,7 @@ export const isScreenVertical = computed(() => windowSize.width.value <= windowS
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
-export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
+export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
 
 export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
@@ -27,3 +27,5 @@ export const editorWidth = useStorage('slidev-editor-width', isClient ? window.i
 export const isPrintMode = computed(() => query.print != null)
 
 export const toggleOverview = useToggle(showOverview)
+
+watch(activeElement, () => console.log(activeElement.value))

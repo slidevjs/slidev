@@ -13,16 +13,20 @@ const dirty = ref(false)
 const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 const noteInput = ref<HTMLTextAreaElement>()
+const focused = ref(false)
 
 const { info, update } = useDynamicSlideInfo(currentSlideId)
 
 watch(
   info,
   (v) => {
-    content.value = (v?.content || '').trim()
     note.value = (v?.note || '').trim()
     frontmatter.value = v?.frontmatter || {}
-    dirty.value = false
+
+    if (!focused.value) {
+      content.value = (v?.content || '').trim()
+      dirty.value = false
+    }
   },
   { immediate: true },
 )
@@ -54,8 +58,10 @@ onMounted(() => {
     computed({
       get() { return content.value },
       set(v) {
-        content.value = v
-        dirty.value = true
+        if (content.value.trim() !== v.trim()) {
+          content.value = v
+          dirty.value = true
+        }
       },
     }),
     {
@@ -63,6 +69,12 @@ onMounted(() => {
       lineWrapping: true,
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
+      onfocus() {
+        focused.value = true
+      },
+      onblur() {
+        focused.value = false
+      },
     },
   )
 
@@ -80,6 +92,12 @@ onMounted(() => {
       lineWrapping: true,
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
+      onfocus() {
+        focused.value = true
+      },
+      onblur() {
+        focused.value = false
+      },
     },
   )
 })
