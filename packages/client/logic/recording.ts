@@ -143,7 +143,6 @@ export function useRecording() {
     )
 
     recorderSlides.value.startRecording()
-    console.log('started')
     recording.value = true
   }
 

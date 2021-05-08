@@ -148,24 +148,23 @@ export function createSlidesLoader(
           hmrPages.add(i)
         }
 
+        pluginOptions.onDataReload?.(newData, data)
+        Object.assign(data, newData)
+
         const modules = (
           await Promise.all(
             Array.from(hmrPages)
               .map(async(i) => {
-                const id = `${slidePrefix}${i + 1}.md`
-                const module = ctx.server.moduleGraph.getModuleById(id)
-
+                const file = `${slidePrefix}${i + 1}.md`
                 return await VuePlugin.handleHotUpdate!({
                   ...ctx,
-                  modules: Array.from(module?.importedModules || []),
-                  file: id,
-                  read: () => (<any>MarkdownPlugin.transform)(newData.slides[i]?.raw, id),
-                },
-                )
+                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
+                  file,
+                  read: () => (<any>MarkdownPlugin.transform)(newData.slides[i]?.raw, file),
+                })
               }),
           )
         ).flatMap(i => i || [])
-
         hmrPages.clear()
 
         const moduleEntries = moduleIds
@@ -173,9 +172,7 @@ export function createSlidesLoader(
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
           .concat(modules)
-
-        pluginOptions.onDataReload?.(newData, data)
-        Object.assign(data, newData)
+          .filter(i => !i.id?.startsWith('/@id/@vite-icons'))
 
         return moduleEntries
       },
@@ -235,7 +232,6 @@ export function createSlidesLoader(
 
           const imports = [
             `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-            `import { next, nextSlide, prev, prevSlide } from "${toAtFS(clientRoot)}/logic/nav"`,
           ]
 
           code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)

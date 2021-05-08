@@ -1,5 +1,5 @@
 import { useMagicKeys, useActiveElement, useStorage, useUrlSearchParams, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle, isClient } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 export const showOverview = ref(false)
 export const showRecordingDialog = ref(false)
@@ -27,5 +27,3 @@ export const editorWidth = useStorage('slidev-editor-width', isClient ? window.i
 export const isPrintMode = computed(() => query.print != null)
 
 export const toggleOverview = useToggle(showOverview)
-
-watch(activeElement, () => console.log(activeElement.value))
