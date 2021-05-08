@@ -192,24 +192,19 @@ li > ol {
 }
 
 table {
-  display: block;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  overflow-x: auto;
+  @apply w-full;
 }
 
 tr {
-  border-top: 1px solid var(--c-divider-light);
+  @apply border-b border-gray-400 border-opacity-20;
 }
 
-tr:nth-child(2n) {
-  background-color: var(--code-inline-bg-color);
+th {
+  @apply text-left font-600;
 }
 
-th,
-td {
-  border: 1px solid var(--c-divider-light);
-  padding: 0.6em 1em;
+td, th {
+  @apply p-1 py-2;
 }
 
 blockquote {
@@ -219,6 +214,11 @@ blockquote {
   font-size: 1rem;
   color: var(--c-text);
   @apply bg-gray-400 bg-opacity-10;
+}
+
+kbd {
+  @apply border border-gray-400 border-b-2 border-opacity-20 rounded;
+  @apply bg-gray-400 bg-opacity-5 py-0.5 px-2 text-sm text-center font-mono;
 }
 
 blockquote > p {
