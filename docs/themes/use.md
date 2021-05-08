@@ -25,3 +25,33 @@ $ npm install @slidev/theme-seriph
 And that's all, enjoy the new theme! For more details about the usage, you can refer to the theme's README.
 
 Want to share your theme? Learn about [how to write a theme](/themes/write-a-theme).
+
+## Eject Theme
+
+If you want to get full control of the current theme, you can **eject** it to your local file system and modify it as you want. By running the following command
+
+```bash
+$ slidev theme eject
+```
+
+It will eject the theme you are using currently into `./theme`, and changed your frontmatter to 
+
+```yaml
+---
+theme: ./theme
+---
+```
+
+This could also be helpful if you want to make a theme based on an existing one. If you do, remember to mention the original theme and the author :)
+
+## Local Theme
+
+As you probably found out from the previous section, you can have a local theme for your project. By having a **relative path** in your theme field.
+
+```yaml
+---
+theme: ./path/to/theme
+---
+```
+
+Refer to [how to write a theme](/themes/write-a-theme) for more details.
