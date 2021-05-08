@@ -38,10 +38,10 @@ To run Slidev locally, you can run
 pnpm demo:dev
 ```
 
-Or with the stater template
+Or with the starter template
 
 ```bash
-pnpm demo:stater
+pnpm demo:starter
 ```
 
 The server will restart automatically every time the builds get updated.
