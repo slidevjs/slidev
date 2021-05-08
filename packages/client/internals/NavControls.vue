@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, defineProps } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import { isDark, toggleDark } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF } from '../logic/nav'
-import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints } from '../state'
+import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'
 import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 import Settings from './Settings.vue'
@@ -19,10 +19,16 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
+
+const root = ref<HTMLDivElement>()
+const onMouseLeave = () => {
+  if (root.value && activeElement.value && root.value.contains(activeElement.value))
+    activeElement.value.blur()
+}
 </script>
 
 <template>
-  <nav class="flex flex-wrap-reverse text-xl p-2 gap-1">
+  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1" @mouseleave="onMouseLeave">
     <button class="icon-btn" @click="toggleFullscreen">
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
