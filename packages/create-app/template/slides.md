@@ -2,6 +2,7 @@
 # try also 'default' to start simple
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
+# like them? see https://unsplash.com/collections/94734566/slidev
 background: 'https://source.unsplash.com/collection/94734566/1920x1080'
 highlighter: shiki
 # apply any windi css classes to the current slide
@@ -74,13 +75,13 @@ h1 {
 
 # Navigation
 
-Hover on the bottom-left corner to see the navigation's controls panel
+Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
 
 ### Keyboard Shortcuts
 
 |     |     |
 | --- | --- |
-| <kbd>space</kbd> / <kbd>tab</kbd> / <kbd>right</kbd> | next animation or slide |
+| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
 | <kbd>left</kbd> | previous animation or slide |
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
