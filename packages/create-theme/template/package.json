@@ -4,7 +4,7 @@
     "slidev"
   ],
   "scripts": {
-    "dev": "slidev example.md",
+    "dev": "slidev example.md --open",
     "build": "slidev build example.md",
     "export": "slidev export example.md",
     "screenshot": "slidev export example.md --format png"
