@@ -32,7 +32,7 @@ cli.command(
     })
     .option('open', {
       alias: 'o',
-      default: true,
+      default: false,
       type: 'boolean',
       describe: 'open in browser',
     })
