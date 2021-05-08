@@ -12,4 +12,4 @@ Read more in the [Customization](/custom/directory-structure#layouts) section.
 
 ## Theme-provided Layouts
 
-Themes can provide layouts or override existing ones. Please read their documentations for what they have provided.
+Themes can provide layouts or override existing ones. Please read their documentation for what they have provided.
