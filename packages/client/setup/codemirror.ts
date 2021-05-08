@@ -35,7 +35,9 @@ export async function useCodeMirror(
     (v) => {
       if (v !== cm.getValue()) {
         skip = true
+        const selections = cm.listSelections()
         cm.replaceRange(v, cm.posFromIndex(0), cm.posFromIndex(Infinity))
+        cm.setSelections(selections)
       }
     },
     { immediate: true },

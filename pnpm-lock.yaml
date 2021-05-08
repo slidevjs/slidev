@@ -10,6 +10,7 @@ importers:
       '@slidev/cli': workspace:*
       '@slidev/parser': workspace:*
       '@types/cli-progress': ^3.9.1
+      '@types/codemirror': ^5.60.0
       '@types/connect': ^3.4.34
       '@types/file-saver': ^2.0.2
       '@types/fs-extra': ^9.0.11
@@ -48,6 +49,7 @@ importers:
       '@slidev/cli': link:packages/slidev
       '@slidev/parser': link:packages/parser
       '@types/cli-progress': 3.9.1
+      '@types/codemirror': 5.60.0
       '@types/connect': 3.4.34
       '@types/file-saver': 2.0.2
       '@types/fs-extra': 9.0.11
@@ -1180,10 +1182,20 @@ packages:
       '@types/node': 15.0.1
     dev: true
 
+  /@types/codemirror/5.60.0:
+    resolution: {integrity: sha512-xgzXZyCzedLRNC67/Nn8rpBtTFnAsX2C+Q/LGoH6zgcpF/LqdNHJMHEOhqT1bwUcSp6kQdOIuKzRbeW9DYhEhg==}
+    dependencies:
+      '@types/tern': 0.23.3
+    dev: true
+
   /@types/connect/3.4.34:
     resolution: {integrity: sha512-ePPA/JuI+X0vb+gSWlPKOY0NdNAie/rPUqX2GUPpbZwiKTkSPhjXWuee47E4MtE54QVzGCQMQkAL6JhV2E1+cQ==}
     dependencies:
       '@types/node': 15.0.1
+    dev: true
+
+  /@types/estree/0.0.47:
+    resolution: {integrity: sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==}
     dev: true
 
   /@types/file-saver/2.0.2:
@@ -1291,6 +1303,12 @@ packages:
 
   /@types/stack-utils/2.0.0:
     resolution: {integrity: sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==}
+    dev: true
+
+  /@types/tern/0.23.3:
+    resolution: {integrity: sha512-imDtS4TAoTcXk0g7u4kkWqedB3E4qpjXzCpD2LU5M5NAXHzCDsypyvXSaG7mM8DKYkCRa7tFp4tS/lp/Wo7Q3w==}
+    dependencies:
+      '@types/estree': 0.0.47
     dev: true
 
   /@types/yargs-parser/20.2.0:
