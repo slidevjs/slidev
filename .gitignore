@@ -6,10 +6,8 @@ node_modules
 # intellij stuff
 .idea/
 *.pdf
-demo/index.html
-demo/starter.md
-demo/public
-demo/*-export
-demo/build.md
+*-export
+demo/starter/slides.md
 assets/demo
 packages/slidev/README.md
+composable-vue-cn
