@@ -38,10 +38,10 @@ To run Slidev locally, you can run
 pnpm demo:dev
 ```
 
-Or with the starter template
+Or with the real-world example `Composable Vue`:
 
 ```bash
-pnpm demo:starter
+pnpm demo:composable-vue
 ```
 
 The server will restart automatically every time the builds get updated.
