@@ -20,33 +20,28 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
 
-const root = ref<HTMLDivElement>()
-const onMouseLeave = () => {
-  if (root.value && activeElement.value && root.value.contains(activeElement.value))
-    activeElement.value.blur()
-}
 </script>
 
 <template>
-  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1" @mouseleave="onMouseLeave">
-    <button class="icon-btn" @click="toggleFullscreen">
+  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1">
+    <button class="icon-btn" @click="toggleFullscreen" @keyup.space.prevent>
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
     </button>
 
-    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev" @keyup.space.prevent>
       <carbon:arrow-left />
     </button>
 
-    <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
+    <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next" @keyup.space.prevent>
       <carbon:arrow-right />
     </button>
 
-    <button class="icon-btn" title="Slides overview" @click="toggleOverview">
+    <button class="icon-btn" title="Slides overview" @click="toggleOverview" @keyup.space.prevent>
       <carbon:apps />
     </button>
 
-    <button class="icon-btn" title="Toggle dark mode" @click="toggleDark">
+    <button class="icon-btn" title="Toggle dark mode" @click="toggleDark" @keyup.space.prevent>
       <carbon-moon v-if="isDark" />
       <carbon-sun v-else />
     </button>
@@ -68,17 +63,17 @@ const onMouseLeave = () => {
         <carbon:user-speaker />
       </a>
 
-      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
+      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor" @keyup.space.prevent>
         <carbon:edit />
       </button>
     </template>
     <template v-else>
-      <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
+      <button v-if="configs.download" class="icon-btn" @click="downloadPDF" @keyup.space.prevent>
         <carbon:download />
       </button>
     </template>
 
-    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
+    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog" @keyup.space.prevent>
       <carbon:information />
     </button>
 
