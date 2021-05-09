@@ -45,7 +45,7 @@ To deploy your slides under sub-routes, you will need to pass the `--base` optio
 $ slidev build --base /talks/my-cool-talk/
 ```
 
-Refer to [Vite's docuemantions](https://vitejs.dev/guide/build.html#public-base-path) for more details.
+Refer to [Vite's documentation](https://vitejs.dev/guide/build.html#public-base-path) for more details.
 
 ### Provide Downloadable PDF
 
