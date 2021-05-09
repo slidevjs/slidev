@@ -95,7 +95,7 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
     <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
       <div class="my-auto">
         {{ currentPage }}
-        <span class="opacity-50">/ {{ total }}</span>
+        <span class="opacity-50">/ {{ total + 1 }}</span>
       </div>
     </div>
   </nav>
