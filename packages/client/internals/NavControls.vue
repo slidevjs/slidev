@@ -7,41 +7,42 @@ import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
-
 defineProps({
   mode: {
     default: 'fixed',
   },
 })
-
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
-
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
-
+const root = ref<HTMLDivElement>()
+const onMouseLeave = () => {
+  if (root.value && activeElement.value && root.value.contains(activeElement.value))
+    activeElement.value.blur()
+}
 </script>
 
 <template>
-  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1">
-    <button class="icon-btn" @click="toggleFullscreen" @keyup.space.prevent>
+  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1" @mouseleave="onMouseLeave">
+    <button class="icon-btn" @click="toggleFullscreen">
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
     </button>
 
-    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev" @keyup.space.prevent>
+    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
       <carbon:arrow-left />
     </button>
 
-    <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next" @keyup.space.prevent>
+    <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
       <carbon:arrow-right />
     </button>
 
-    <button class="icon-btn" title="Slides overview" @click="toggleOverview" @keyup.space.prevent>
+    <button class="icon-btn" title="Slides overview" @click="toggleOverview">
       <carbon:apps />
     </button>
 
-    <button class="icon-btn" title="Toggle dark mode" @click="toggleDark" @keyup.space.prevent>
+    <button class="icon-btn" title="Toggle dark mode" @click="toggleDark">
       <carbon-moon v-if="isDark" />
       <carbon-sun v-else />
     </button>
@@ -63,17 +64,17 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
         <carbon:user-speaker />
       </a>
 
-      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor" @keyup.space.prevent>
+      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
         <carbon:edit />
       </button>
     </template>
     <template v-else>
-      <button v-if="configs.download" class="icon-btn" @click="downloadPDF" @keyup.space.prevent>
+      <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
         <carbon:download />
       </button>
     </template>
 
-    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog" @keyup.space.prevent>
+    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
       <carbon:information />
     </button>
 
@@ -95,7 +96,7 @@ const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}
     <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
       <div class="my-auto">
         {{ currentPage }}
-        <span class="opacity-50">/ {{ total + 1 }}</span>
+        <span class="opacity-50">/ {{ total }}</span>
       </div>
     </div>
   </nav>

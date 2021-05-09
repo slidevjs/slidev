@@ -15,7 +15,7 @@ export const isScreenVertical = computed(() => windowSize.width.value <= windowS
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
-export const isInputing = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
+export const isInputing = computed(() => ['INPUT', 'TEXTAREA', 'BUTTON', 'A'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
 
 export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
