@@ -7,15 +7,19 @@ import { configs } from '../env'
 import RecordingControls from './RecordingControls.vue'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
+
 defineProps({
   mode: {
     default: 'fixed',
   },
 })
+
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
+
 const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
 const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
+
 const root = ref<HTMLDivElement>()
 const onMouseLeave = () => {
   if (root.value && activeElement.value && root.value.contains(activeElement.value))
