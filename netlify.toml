@@ -14,8 +14,8 @@
   force = true
 
 [[redirects]]
-  from = "/demo/compsoable-vue/*"
-  to = "/demo/compsoable-vue/index.html"
+  from = "/demo/composable-vue/*"
+  to = "/demo/composable-vue/index.html"
   status = 200
 
 [[redirects]]
