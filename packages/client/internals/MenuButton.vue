@@ -22,9 +22,9 @@ onClickOutside(el, () => {
 
 <template>
   <div ref="el" class="flex relative">
-    <div :class="{ disabled }" @click="value = !value">
+    <button :class="{ disabled }" @click="value = !value">
       <slot name="button" :class="{ disabled }" />
-    </div>
+    </button>
     <div
       v-show="value"
       class="rounded-md bg-main shadow absolute bottom-10 left-0 z-20"
