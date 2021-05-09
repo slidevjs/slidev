@@ -59,4 +59,5 @@ export interface SlidevMarkdown {
   raw: string
   config: SlidevConfig
   features: SlidevFeatureFlags
+  headmatter: Record<string, unknown>
 }

@@ -155,6 +155,7 @@ export function parse(
     slides,
     config,
     features: detectFeatures(markdown),
+    headmatter,
   }
 }
 

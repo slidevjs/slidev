@@ -1,12 +1,12 @@
 import { basename } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, slash } from '@antfu/utils'
+import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import Markdown from 'markdown-it'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
-import { SlideInfo, SlideInfoExtended } from '@slidev/types'
+import { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
@@ -121,13 +121,18 @@ export function createSlidesLoader(
 
         const newData = await parser.load(entry)
 
-        const moduleIds: string[] = []
+        const moduleIds = new Set<string>()
 
         if (data.slides.length !== newData.slides.length)
-          moduleIds.push('/@slidev/routes')
+          moduleIds.add('/@slidev/routes')
+
+        if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
+          moduleIds.add('/@slidev/routes')
+          range(data.slides.length).map(i => hmrPages.add(i))
+        }
 
         if (!equal(data.config, newData.config))
-          moduleIds.push('/@slidev/configs')
+          moduleIds.add('/@slidev/configs')
 
         if (!equal(data.features, newData.features)) {
           setTimeout(() => {
@@ -151,27 +156,26 @@ export function createSlidesLoader(
         pluginOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
-        const modules = (
-          await Promise.all(
-            Array.from(hmrPages)
-              .map(async(i) => {
-                const file = `${slidePrefix}${i + 1}.md`
-                return await VuePlugin.handleHotUpdate!({
-                  ...ctx,
-                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-                  file,
-                  read: () => (<any>MarkdownPlugin.transform)(newData.slides[i]?.raw, file),
-                })
-              }),
+        const vueModules = (
+          await Promise.all(Array.from(hmrPages).map(async(i) => {
+            const file = `${slidePrefix}${i + 1}.md`
+            return await VuePlugin.handleHotUpdate!({
+              ...ctx,
+              modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
+              file,
+              async read() {
+                return await transformMarkdown((<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
+              },
+            })
+          }),
           )
         ).flatMap(i => i || [])
         hmrPages.clear()
 
-        const moduleEntries = moduleIds
-          .filter(isTruthy)
+        const moduleEntries = Array.from(moduleIds)
           .map(id => ctx.server.moduleGraph.getModuleById(id))
           .filter(notNullish)
-          .concat(modules)
+          .concat(vueModules)
           .filter(i => !i.id?.startsWith('/@id/@vite-icons'))
 
         return moduleEntries
@@ -204,7 +208,7 @@ export function createSlidesLoader(
             const [, no, type] = match
             const pageNo = parseInt(no) - 1
             if (type === 'md')
-              return data.slides[pageNo]?.raw
+              return data.slides[pageNo]?.content
           }
           return ''
         }
@@ -214,40 +218,41 @@ export function createSlidesLoader(
       name: 'slidev:layout-transform:pre',
       enforce: 'pre',
       async transform(code, id) {
-        if (id.startsWith(slidePrefix)) {
-          const remaning = id.slice(slidePrefix.length)
-          const match = remaning.match(regexIdQuery)
-          if (!match)
-            return
+        if (!id.startsWith(slidePrefix))
+          return
+        const remaning = id.slice(slidePrefix.length)
+        const match = remaning.match(regexIdQuery)
+        if (!match)
+          return
+        const [, no, type] = match
+        if (type !== 'md')
+          return
 
-          const [, no, type] = match
-          if (type !== 'md')
-            return
-
-          const pageNo = parseInt(no) - 1
-          const layouts = await getLayouts()
-          const layoutName = data.slides[pageNo]?.frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
-          if (!layouts[layoutName])
-            throw new Error(`Unknown layout "${layoutName}"`)
-
-          const imports = [
-            `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-          ]
-
-          code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)
-          code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
-          return code
-        }
-      },
-    },
-    {
-      name: 'xxx',
-      handleHotUpdate(i) {
-        if (i.file.endsWith('.vue'))
-          console.dir(i.modules)
+        const pageNo = parseInt(no) - 1
+        return transformMarkdown(code, pageNo, data)
       },
     },
   ]
+
+  async function transformMarkdown(code: string, pageNo: number, data: SlidevMarkdown) {
+    const layouts = await getLayouts()
+    const frontmatter = {
+      ...(data.headmatter?.defaults as object || {}),
+      ...(data.slides[pageNo]?.frontmatter || {}),
+    }
+    const layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+    if (!layouts[layoutName])
+      throw new Error(`Unknown layout "${layoutName}"`)
+
+    const imports = [
+      `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
+      `const frontmatter = ${JSON.stringify(frontmatter)}`,
+    ]
+
+    code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)
+    code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
+    return code
+  }
 
   async function getLayouts() {
     const layouts: Record<string, string> = {}
