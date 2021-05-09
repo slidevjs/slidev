@@ -21,7 +21,7 @@ A theme can contribute to the following points:
 
 ## Conventions
 
-Themes are published to npm registry, and they should following the conventions below:
+Themes are published to npm registry, and they should follow the conventions below:
 
 - Package name should starts with `slidev-theme-`, for example: `slidev-theme-awesome`
 - Add `slidev-theme` and `slidev` in the `keywords` field of your `package.json`
