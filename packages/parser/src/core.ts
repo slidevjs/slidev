@@ -164,20 +164,20 @@ export function parse(
  */
 export function parseRangeString(total: number, rangeStr?: string) {
   if (!rangeStr || rangeStr === 'all' || rangeStr === '*')
-    return range(total)
+    return range(1, total + 1)
 
   const pages: number[] = []
   for (const part of rangeStr.split(/[,;]/g)) {
     if (!part.includes('-')) {
-      pages.push(+part - 1)
+      pages.push(+part)
     }
     else {
       const [start, end] = part.split('-', 2)
       pages.push(
-        ...range(+start - 1, end === '' ? total : +end),
+        ...range(+start, !end ? (total + 1) : (+end + 1)),
       )
     }
   }
 
-  return uniq(pages).sort().filter(i => i < total)
+  return uniq(pages).filter(i => i <= total).sort((a, b) => a - b)
 }

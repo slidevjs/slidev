@@ -63,7 +63,7 @@ onMounted(() => {
       const lines = Array.from(target.querySelectorAll('.line'))
       const highlights: number[] = parseRangeString(lines.length, rangeStr.value)
       lines.forEach((line, idx) => {
-        const highlighted = highlights.includes(idx)
+        const highlighted = highlights.includes(idx + 1)
         line.classList.toggle(CLASS_VCLICK_TARGET, true)
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)

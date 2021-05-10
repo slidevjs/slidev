@@ -77,7 +77,7 @@ export async function exportSlides({
   const progress = createSlidevProgress()
 
   async function go(no: number) {
-    progress.update(no + 1)
+    progress.update(no)
     await page.goto(`http://localhost:${port}${base}${no}?print`, {
       waitUntil: 'networkidle',
     })
@@ -130,7 +130,7 @@ export async function exportSlides({
       await go(i)
       await page.screenshot({
         omitBackground: false,
-        path: path.join(output, `${(i + 1).toString().padStart(2, '0')}.png`),
+        path: path.join(output, `${i.toString().padStart(2, '0')}.png`),
       })
     }
   }
