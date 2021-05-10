@@ -29,7 +29,6 @@ importers:
       eslint: ^7.26.0
       eslint-plugin-jest: ^24.3.6
       esno: ^0.5.0
-      execa: ^5.0.0
       husky: 4.3.7
       jest: ^26.6.3
       lint-staged: ^11.0.0
@@ -70,7 +69,6 @@ importers:
       eslint: 7.26.0
       eslint-plugin-jest: 24.3.6_349aff0699b9d4a8ff4e5c6da6dc1c9b
       esno: 0.5.0
-      execa: 5.0.0
       husky: 4.3.7
       jest: 26.6.3
       lint-staged: 11.0.0
@@ -219,7 +217,7 @@ importers:
       prompts: ^2.4.1
       shiki: ^0.9.3
       sirv: ^1.0.11
-      vite: link:../../../vite/packages/vite
+      vite: ^2.2.4
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
       vite-plugin-md: ^0.6.6
@@ -253,12 +251,12 @@ importers:
       prompts: 2.4.1
       shiki: 0.9.3
       sirv: 1.0.11
-      vite: link:../../../vite/packages/vite
-      vite-plugin-components: 0.8.4
+      vite: 2.2.4
+      vite-plugin-components: 0.8.4_vite@2.2.4
       vite-plugin-icons: 0.5.0_3a062f62dd9e0ad9a7cb2ae18cd865f0
-      vite-plugin-md: 0.6.6
-      vite-plugin-remote-assets: 0.2.2
-      vite-plugin-windicss: 0.16.0-beta.14
+      vite-plugin-md: 0.6.6_vite@2.2.4
+      vite-plugin-remote-assets: 0.2.2_vite@2.2.4
+      vite-plugin-windicss: 0.16.0-beta.14_vite@2.2.4
       vue: 3.0.11
       windicss: 3.0.0-beta.7
       yargs: 17.0.1
@@ -2967,7 +2965,6 @@ packages:
     resolution: {integrity: sha512-VtUf6aQ89VTmMLKrWHYG50uByMF4JQlVysb8dmg6cOgW8JnFCipmz7p+HNBl+RR3LLCuBxFGVauAe2wfnF9bLg==}
     hasBin: true
     requiresBuild: true
-    dev: true
 
   /escalade/3.1.1:
     resolution: {integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==}
@@ -3694,7 +3691,6 @@ packages:
 
   /function-bind/1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
-    dev: true
 
   /functional-red-black-tree/1.0.1:
     resolution: {integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=}
@@ -3928,7 +3924,6 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
-    dev: true
 
   /hash-sum/2.0.0:
     resolution: {integrity: sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==}
@@ -4202,7 +4197,6 @@ packages:
     resolution: {integrity: sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==}
     dependencies:
       has: 1.0.3
-    dev: true
 
   /is-data-descriptor/0.1.4:
     resolution: {integrity: sha1-C17mSDiOLIYCgueT8YVv7D8wG1Y=}
@@ -5961,7 +5955,6 @@ packages:
 
   /path-parse/1.0.6:
     resolution: {integrity: sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==}
-    dev: true
 
   /path-type/2.0.0:
     resolution: {integrity: sha1-8BLMuEFbcJb8LaoQVMPXI4lZTHM=}
@@ -6173,7 +6166,6 @@ packages:
       colorette: 1.2.2
       nanoid: 3.1.22
       source-map: 0.6.1
-    dev: true
 
   /preact/10.5.13:
     resolution: {integrity: sha512-q/vlKIGNwzTLu+jCcvywgGrt+H/1P/oIRSD6mV4ln3hmlC+Aa34C7yfPI4+5bzW8pONyVXYS7SvXosy2dKKtWQ==}
@@ -6507,7 +6499,6 @@ packages:
     dependencies:
       is-core-module: 2.4.0
       path-parse: 1.0.6
-    dev: true
 
   /resolve/2.0.0-next.3:
     resolution: {integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==}
@@ -6565,7 +6556,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /rsvp/4.8.5:
     resolution: {integrity: sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==}
@@ -7540,7 +7530,7 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-components/0.8.4:
+  /vite-plugin-components/0.8.4_vite@2.2.4:
     resolution: {integrity: sha512-h6/FNBKBXc4TIcHxnFYxa4+aBGDZusqp/6Ra3LBvwolwFuX6k8qPsBbXkBP0I+UwOkyHw9iU2xJ4rdYBGyN+0Q==}
     peerDependencies:
       vite: ^2.0.0-beta.69
@@ -7549,6 +7539,7 @@ packages:
       debug: 4.3.2
       fast-glob: 3.2.5
       minimatch: 3.0.4
+      vite: 2.2.4
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -7566,16 +7557,17 @@ packages:
       vue-template-es2015-compiler: 1.9.1
     dev: false
 
-  /vite-plugin-md/0.6.6:
+  /vite-plugin-md/0.6.6_vite@2.2.4:
     resolution: {integrity: sha512-Kju5KxQeDJ5HP5N2AaYzE4IxE6Bx65PiUhfDrnWCDYdLsdlqMDyGPzfbmB8QqM1o0PHclzDFgUMMcOCm/Snpfw==}
     peerDependencies:
       vite: ^2.0.0
     dependencies:
       gray-matter: 4.0.3
       markdown-it: 12.0.6
+      vite: 2.2.4
     dev: false
 
-  /vite-plugin-remote-assets/0.2.2:
+  /vite-plugin-remote-assets/0.2.2_vite@2.2.4:
     resolution: {integrity: sha512-Hl2g1EGJW7jHjNKQ0hf96LJEbfmintfQLBIgKJkyFPyjO1NH3gNUheFgBoxi6G4/nbE9hHzpIIr30iwm1NxLlQ==}
     peerDependencies:
       vite: ^2.0.0
@@ -7584,19 +7576,7 @@ packages:
       debug: 4.3.2
       fs-extra: 9.1.0
       magic-string: 0.25.7
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /vite-plugin-windicss/0.16.0-beta.14:
-    resolution: {integrity: sha512-AA6Zv2AKo7mmq9EkaMKevgjvwBwUo0xja6susni/+QpHVjxfpY8aNJlKjkPzBNzdZWS48uRURUhzW7vGi/PDNg==}
-    peerDependencies:
-      vite: ^2.0.1
-    dependencies:
-      '@windicss/plugin-utils': 0.16.0-beta.14
-      chalk: 4.1.1
-      debug: 4.3.2
-      windicss: 3.0.0-beta.6
+      vite: 2.2.4
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -7613,7 +7593,6 @@ packages:
       windicss: 3.0.0-beta.6
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /vite/2.2.4:
     resolution: {integrity: sha512-vnIwSNci+phFMp6krhy+FbYzKL0R67Sdt9mVZ96S27AewrApSJjTqncJcalk8sf60BgcbW4+1C6DFIWkxquO9g==}
@@ -7626,7 +7605,6 @@ packages:
       rollup: 2.47.0
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vitepress/0.13.2:
     resolution: {integrity: sha512-Y5gN7QAXh2Dd3+e59FWnLuszudg7sO/0//9qUKg84cAX/cZrjvhUgxcAh8MqfCFw8K5m2/0D445FzuwBcqHQLw==}
