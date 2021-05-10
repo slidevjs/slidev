@@ -180,6 +180,35 @@ This is another note
 -->
 ~~~
 
+## Icons
+
+Slidev allows you to have the accessing to almost all the popular open-source iconsets directly in your markdown.Powered by [`vite-plugin-icons`](https://github.com/antfu/vite-plugin-icons) and [Iconify](https://iconify.design/).
+
+The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-name}-{icon-name}`. For example:
+
+- `<mdi-account-circle />` - <mdi-account-circle /> from [Material Design Icons](https://github.com/Templarian/MaterialDesign)
+- `<carbon-badge />` - <carbon-badge /> from [Carbon](https://github.com/carbon-design-system/carbon/tree/main/packages/icons)
+- `<uim-rocket />` - <uim-rocket /> from [Unicons Monochrome](https://github.com/Iconscout/unicons)
+- `<twemoji-cat-with-tears-of-joy />` - <twemoji-cat-with-tears-of-joy /> from [Twemoji](https://github.com/twitter/twemoji)
+- `<logos-vue />` - <logos-vue /> from [SVG Logos](https://github.com/gilbarbara/logos)
+- And much more...
+
+You can browse all the icons available and copy their ID with [Icônes](https://icones.js.org/).
+
+### Styling Icons
+
+You can style the icons just like other HTML elements. For example:
+
+```html
+<uim-rocket />
+<uim-rocket class="text-3xl text-red-400 mx-2" />
+<uim-rocket class="text-3xl text-orange-400 animate-ping" />
+```
+
+<uim-rocket />
+<uim-rocket class="text-3xl text-red-400 mx-2" />
+<uim-rocket class="text-3xl text-orange-400 animate-ping" />
+
 ## Configurations
 
 All configurations needed can be defined in the Markdown file. For example:
