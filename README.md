@@ -2,6 +2,7 @@
 <p align="center">
 <a href="https://sli.dev" target="_blank">
 <img src="https://sli.dev/logo-title.png" alt="Slidev" height="250" width="250"/>
+  <br>
 </a>
 </p>
 
