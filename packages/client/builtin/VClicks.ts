@@ -15,6 +15,7 @@ export default defineComponent({
     },
     at: {
       type: [Number, String],
+      default: null,
     },
   },
   render() {

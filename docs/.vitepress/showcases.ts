@@ -27,7 +27,7 @@ export const showcases: ShowCaseInfo[] = [
   },
   {
     title: 'Developer Seonglae',
-    cover: `https://seonglae-slides.vercel.app/og.png`,
+    cover: 'https://seonglae-slides.vercel.app/og.png',
     author: {
       name: 'Seonglae Cho',
       link: 'https://github.com/seonglae',
