@@ -226,7 +226,7 @@ data.foo // 'bar'
 
 ---
 
-# `unref` - Oppsite of Ref <MarkerCore />
+# `unref` - Opposite of Ref <MarkerCore />
 
 - If it gets a Ref, returns the value of it.
 - Otherwise, returns as-is.
@@ -290,7 +290,7 @@ export function useDark(options: UseDarkOptions = {}) {
         : store.value === 'dark'
     },
     set(v) {
-      store.value = v === preferredDark.value 
+      store.value = v === preferredDark.value
         ? 'auto' : v ? 'dark' : 'light'
     },
   })
@@ -372,7 +372,7 @@ let c = add(a, b) // 3
 ```
 
 <div class="my-auto leading-6 text-base opacity-75">
-Accpets refs,<br>
+Accepts refs,<br>
 returns a reactive result.
 </div>
 
@@ -391,7 +391,7 @@ c.value // 3
 ```
 
 <div class="my-auto leading-6 text-base opacity-75">
-Accpets both refs and plain values.
+Accepts both refs and plain values.
 </div>
 
 ```ts
@@ -526,7 +526,7 @@ export function useTitle(
 }
 ```
 
-```html 
+```html
 
 
 
@@ -614,7 +614,7 @@ Getting benefits from both `ref` and `reactive` for authoring composable functio
 import { ref, reactive } from 'vue'
 
 function useMouse() {
-  return { 
+  return {
     x: ref(0),
     y: ref(0)
   }
@@ -665,7 +665,7 @@ const user_url = computed(() => data.value?.user_url)
 ```
 
 </div>
-<div v-click> 
+<div v-click>
 
 Establish the "Connections" first, then wait for data to be filled up. The idea is similar to SWR (stale-while-revalidate)
 
@@ -857,7 +857,7 @@ Import the key from the same module for `provide` and `inject`.
 
 ```ts {monaco}
 // parent.vue
-import { provide } from 'vue' 
+import { provide } from 'vue'
 import { injectKeyUser } from './context'
 
 export default {
@@ -872,12 +872,12 @@ export default {
 
 ```ts {monaco}
 // child.vue
-import { inject } from 'vue' 
+import { inject } from 'vue'
 import { injectKeyUser } from './context'
 
 export default {
   setup() {
-    const user = inject(injectKeyUser) 
+    const user = inject(injectKeyUser)
     // UserInfo | undefined
 
     if (user)
@@ -1063,7 +1063,7 @@ disabled: true
 
 # useVModel (Passive) <MarkerTips />
 
-Make the model able to be updated **independently** from the parent logic 
+Make the model able to be updated **independently** from the parent logic
 
 <v-click>
 
