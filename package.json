@@ -8,15 +8,15 @@
     "dev": "pnpm -r --filter ./packages --parallel run dev",
     "build": "pnpm -r --filter ./packages run build",
     "docs": "vitepress dev docs",
-    "docs:build": "esno ./scripts/docs.ts",
+    "docs:build": "zx ./scripts/docs.mjs",
     "demo:dev": "pnpm -C demo/starter run dev",
     "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
     "lint": "eslint '**/*.{js,ts,vue,json}'",
     "lint:fix": "nr lint --fix",
     "test": "jest",
     "test:update": "jest -u",
-    "release": "esno scripts/release.ts",
-    "ci:publish": "esno scripts/publish.ts"
+    "release": "zx scripts/release.mjs",
+    "ci:publish": "zx scripts/publish.mjs"
   },
   "husky": {
     "hooks": {
@@ -54,7 +54,6 @@
     "eslint": "^7.26.0",
     "eslint-plugin-jest": "^24.3.6",
     "esno": "^0.5.0",
-    "execa": "^5.0.0",
     "husky": "4.3.7",
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
@@ -65,7 +64,9 @@
     "tsup": "^4.10.1",
     "typeit": "^7.0.4",
     "typescript": "^4.2.4",
+    "vite": "^2.2.4",
     "vite-plugin-windicss": "^0.16.0-beta.14",
-    "vitepress": "^0.13.2"
+    "vitepress": "^0.13.2",
+    "zx": "^1.2.2"
   }
 }
