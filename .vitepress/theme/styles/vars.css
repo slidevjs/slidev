@@ -98,3 +98,7 @@ html.dark {
   --code-font-family: var(--font-family-mono);
   --code-font-size: 14px;
 }
+
+.no-sidebar {
+  --sidebar-width: 0;
+}
