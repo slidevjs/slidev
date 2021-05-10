@@ -26,7 +26,7 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2021-04-29',
   },
   {
-    title: 'Seongland',
+    title: 'Developer Seonglae',
     cover: `https://seonglae-slides.vercel.app/og.png`,
     author: {
       name: 'Seonglae Cho',
