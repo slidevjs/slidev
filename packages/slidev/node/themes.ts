@@ -18,13 +18,13 @@ export function packageExists(name: string) {
 }
 
 export function resolveThemeName(name: string) {
-  if (!name)
+  if (!name || name === 'none')
     return ''
   if (name.startsWith('@slidev/theme-') || name.startsWith('slidev-theme-'))
     return name
-  if (name.startsWith('.'))
+  if (isRelative(name))
     return name
-  if (officialThemes[name] !== null)
+  if (officialThemes[name] != null)
     return officialThemes[name]
 
   return `slidev-theme-${name}`
