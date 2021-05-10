@@ -305,3 +305,8 @@ form {
 p > img {
   @apply rounded-2xl
 }
+
+li svg {
+  vertical-align: middle;
+  transform: translateY(-10%);
+}

@@ -57,6 +57,7 @@ Documentations and guides on **[Sli.dev](https://sli.dev)**
 - 🤹 [**Interactive**](https://sli.dev/custom/directory-structure.html#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](https://sli.dev/guide/presenter-mode.html) - use another window, or even your phone to control your slides
 - 🧮 [**LaTeX**](https://sli.dev/demo/starter/6) - Built-in LaTeX math equations support
+- 🌟 [**Icons**](https://sli.dev/guide/syntax.html#icons) - Access to icons from any iconset directly
 - 💻 [**Editors**](https://sli.dev/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](https://sli.dev/guide/recording.html) - built-in recording and camera view
 - 📤 [**Portable**](https://sli.dev/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
@@ -80,7 +81,8 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 - [Windi CSS](https://github.com/windicss/windicss) - On-demand utility-first CSS framework, style your slides at ease
 - [Prism](https://github.com/PrismJS/prism), [Shiki](https://github.com/shikijs/shiki), [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
-- [VueUse](https://vueuse.org) family - [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
+- [VueUse](https://vueuse.org) family -  [`@vueuse/core`](https://github.com/vueuse/vueuse), [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
+- [Iconify](https://iconify.design/) - Iconsets collection.
 - [KaTeX](https://katex.org/) - LaTeX math rendering.
 
 ## Sponsors
