@@ -16,7 +16,7 @@ You can learn more about the rationale behind the project in the [Why Slidev](/g
 - 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets
 - 🤹 [**Interactive**](/custom/directory-structure.html#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🧮 [**LaTeX**](/demo/starter/6) - Built-in LaTeX math equations support
+- 🧮 [**LaTeX**](https://sli.dev/demo/starter/6) - Built-in LaTeX math equations support
 - 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any iconset directly
 - 💻 [**Editors**](/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
