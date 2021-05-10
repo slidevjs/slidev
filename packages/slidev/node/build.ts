@@ -1,6 +1,6 @@
-import { promises as fs } from 'fs'
 import { resolve, join } from 'path'
 import http from 'http'
+import fs from 'fs-extra'
 import { build as viteBuild, InlineConfig, mergeConfig, ResolvedConfig } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
@@ -14,6 +14,11 @@ export async function build(
   viteConfig: InlineConfig = {},
 ) {
   const indexPath = resolve(options.userRoot, 'index.html')
+
+  let originalIndexHTML: string | undefined
+  if (fs.existsSync(indexPath))
+    originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
+
   await fs.writeFile(indexPath, await getIndexHtml(options), 'utf-8')
   let config: ResolvedConfig = undefined!
 
@@ -36,7 +41,10 @@ export async function build(
     )
   }
   finally {
-    await fs.unlink(indexPath)
+    if (originalIndexHTML != null)
+      await fs.writeFile(indexPath, originalIndexHTML, 'utf-8')
+    else
+      await fs.unlink(indexPath)
   }
 
   if (options.data.config.download === true || options.data.config.download === 'auto') {

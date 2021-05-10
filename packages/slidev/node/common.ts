@@ -4,14 +4,14 @@ import { uniq } from '@antfu/utils'
 import { ResolvedSlidevOptions } from './options'
 import { toAtFS } from './utils'
 
-export async function getIndexHtml({ clientRoot, themeRoots, data }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
 
   const roots = uniq([
     ...themeRoots,
-    // userRoot,
+    userRoot,
   ])
 
   for (const root of roots) {
