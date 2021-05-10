@@ -125,7 +125,6 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
   else if (format === 'png') {
-    await fs.emptyDir(output)
     for (const i of pages) {
       await go(i)
       await page.screenshot({
