@@ -1,21 +1,37 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
+import { useIntervalFn } from '@vueuse/core'
 import type { ThemeInfo } from '../../themes'
 
-defineProps<{
+const props = defineProps<{
   theme: ThemeInfo
 }>()
+
+const index = ref(0)
+
+if (props.theme.previews.length > 1) {
+  const { resume } = useIntervalFn(() => {
+    index.value = (index.value + 1) % props.theme.previews.length
+  }, 3000, false)
+  setTimeout(resume, Math.round(1000 * Math.random()))
+}
 </script>
 
 <template>
   <div>
     <a
-      :href="theme.id ? theme.previews[0] : '/themes/write-a-theme#submit'"
+      :href="theme.link || theme.repo"
       target="_blank"
       class="block mb-1.5 w-full overflow-hidden relative aspect-9/16"
       border="~ rounded gray-400 opacity-20"
     >
-      <img :src="theme.previews[0]" class="absolute top-0 bottom-0 left-0 right-0" />
+      <img
+        v-for="url, idx in theme.previews"
+        :key="idx"
+        :src="url"
+        class="absolute top-0 bottom-0 left-0 right-0 transition-transform transform duration-500"
+        :class="{ 'translate-x-1/1': idx > index }"
+      />
     </a>
     <div class="font-bold">
       {{ theme.name }}
