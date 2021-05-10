@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import type { ThemeInfo } from '../../gallery'
+import type { ThemeInfo } from '../../themes'
 
 defineProps<{
   theme: ThemeInfo
