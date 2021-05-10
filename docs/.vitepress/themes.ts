@@ -15,6 +15,7 @@ export interface ThemeInfo {
     name: string
     link?: string
   }
+  link?: string
   tags?: Tag[]
 }
 
@@ -83,7 +84,7 @@ export const community: ThemeInfo[] = [
   // Add yours here!
   {
     id: '',
-    repo: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Yours?',
     description: 'Submit your theme to be list here!',
     author: {
