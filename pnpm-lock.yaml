@@ -87,42 +87,42 @@ importers:
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': workspace:*
-      '@slidev/theme-seriph': workspace:*
+      '@slidev/theme-default': ^0.6.7
+      '@slidev/theme-seriph': ^0.6.7
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': link:../../packages/theme-default
-      '@slidev/theme-seriph': link:../../packages/theme-seriph
+      '@slidev/theme-default': 0.6.7
+      '@slidev/theme-seriph': 0.6.7
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
   demo/composable-vue-cn:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': workspace:*
-      '@slidev/theme-seriph': workspace:*
+      '@slidev/theme-default': ^0.6.7
+      '@slidev/theme-seriph': ^0.6.7
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': link:../../packages/theme-default
-      '@slidev/theme-seriph': link:../../packages/theme-seriph
+      '@slidev/theme-default': 0.6.7
+      '@slidev/theme-seriph': 0.6.7
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
   demo/starter:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': workspace:*
-      '@slidev/theme-seriph': workspace:*
+      '@slidev/theme-default': ^0.6.7
+      '@slidev/theme-seriph': ^0.6.7
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': link:../../packages/theme-default
-      '@slidev/theme-seriph': link:../../packages/theme-seriph
+      '@slidev/theme-default': 0.6.7
+      '@slidev/theme-seriph': 0.6.7
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -262,40 +262,6 @@ importers:
       yargs: 17.0.1
     devDependencies:
       fast-deep-equal: 3.1.3
-
-  packages/theme-default:
-    specifiers:
-      '@slidev/cli': workspace:*
-      '@slidev/client': workspace:*
-      '@slidev/types': workspace:*
-      codemirror-theme-vars: ^0.1.1
-      prism-theme-vars: ^0.2.2
-      theme-vitesse: ^0.1.11
-    dependencies:
-      codemirror-theme-vars: 0.1.1
-      prism-theme-vars: 0.2.2
-      theme-vitesse: 0.1.11
-    devDependencies:
-      '@slidev/cli': link:../slidev
-      '@slidev/client': link:../client
-      '@slidev/types': link:../types
-
-  packages/theme-seriph:
-    specifiers:
-      '@slidev/cli': workspace:*
-      '@slidev/client': workspace:*
-      '@slidev/types': workspace:*
-      codemirror-theme-vars: ^0.1.1
-      prism-theme-vars: ^0.2.2
-      theme-vitesse: ^0.1.11
-    dependencies:
-      codemirror-theme-vars: 0.1.1
-      prism-theme-vars: 0.2.2
-      theme-vitesse: 0.1.11
-    devDependencies:
-      '@slidev/cli': link:../slidev
-      '@slidev/client': link:../client
-      '@slidev/types': link:../types
 
   packages/types:
     specifiers:
@@ -1142,6 +1108,28 @@ packages:
     resolution: {integrity: sha512-MZPUxrmFubI36XS1DI3qmI0YdN1gks62JtFZvxR67ljjSNCeK6U08Zx4msEWOXuofgqUt6zPHSi1H9fbjR/NRA==}
     dependencies:
       '@sinonjs/commons': 1.8.3
+    dev: true
+
+  /@slidev/theme-default/0.6.7:
+    resolution: {integrity: sha512-uagGOadkBnnnu1fbJUs3w9iGohK+kLK/DMs+Gg6wB1TqY7WvJwZTsfaaG4NBQoFt8wLkgREUCOlXCugOxbIw9A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@slidev/client': 0.6.7
+    dependencies:
+      codemirror-theme-vars: 0.1.1
+      prism-theme-vars: 0.2.2
+      theme-vitesse: 0.1.11
+    dev: true
+
+  /@slidev/theme-seriph/0.6.7:
+    resolution: {integrity: sha512-41ATQgghTtWtLQQfZt49sZ74mzQDIEZ+C2Lrcgj8rEgC93xPflzRgVnDZQzFq7tq6yBDffas//XV0QNGAy8Drg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@slidev/client': 0.6.7
+    dependencies:
+      codemirror-theme-vars: 0.1.1
+      prism-theme-vars: 0.2.2
+      theme-vitesse: 0.1.11
     dev: true
 
   /@szmarczak/http-timer/1.1.2:
@@ -2398,7 +2386,7 @@ packages:
 
   /codemirror-theme-vars/0.1.1:
     resolution: {integrity: sha512-Au0Ysn6tUMZB/1Jd5S8g4Or1kZxTuTnNx6MVs9H46Ad7w8IEjkHusH+4oyia/FBcVuAJO4DIlkDnPM8Qnnf1rg==}
-    dev: false
+    dev: true
 
   /codemirror/5.61.0:
     resolution: {integrity: sha512-D3wYH90tYY1BsKlUe0oNj2JAhQ9TepkD51auk3N7q+4uz7A/cgJ5JsWHreT0PqieW1QhOuqxQ2reCXV1YXzecg==}
@@ -6204,7 +6192,7 @@ packages:
 
   /prism-theme-vars/0.2.2:
     resolution: {integrity: sha512-EL9ifuU/F8tEldoCa2sspiiLWysCL54xDbf2gN/ubwdtbuJROqOGopG5kSwunapwaioT+jLUQ/Ky+7jnv62xJA==}
-    dev: false
+    dev: true
 
   /prismjs/1.23.0:
     resolution: {integrity: sha512-c29LVsqOaLbBHuIbsTxaKENh1N2EQBOHaWv7gkHN4dgRbxSREqDnDbtFJYdpPauS4YCplMSNCABQ6Eeor69bAA==}
@@ -7108,7 +7096,7 @@ packages:
   /theme-vitesse/0.1.11:
     resolution: {integrity: sha512-idEaB1XEndDEGY6qsRNw69WCU22bfNPmHjDsaxcPOdn5c427FNtvdypxQte87Azh03tsWda57c0C65lvMebSnA==}
     engines: {vscode: ^1.43.0}
-    dev: false
+    dev: true
 
   /thenify-all/1.6.0:
     resolution: {integrity: sha1-GhkY1ALY/D+Y+/I02wvMjMEOlyY=}
