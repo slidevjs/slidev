@@ -182,7 +182,7 @@ This is another note
 
 ## Icons
 
-Slidev allows you to have the accessing to almost all the popular open-source iconsets directly in your markdown.Powered by [`vite-plugin-icons`](https://github.com/antfu/vite-plugin-icons) and [Iconify](https://iconify.design/).
+Slidev allows you to have the accessing to almost all the popular open-source iconsets **directly** in your markdown. Powered by [`vite-plugin-icons`](https://github.com/antfu/vite-plugin-icons) and [Iconify](https://iconify.design/).
 
 The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-name}-{icon-name}`. For example:
 
@@ -193,7 +193,7 @@ The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-
 - `<logos-vue />` - <logos-vue /> from [SVG Logos](https://github.com/gilbarbara/logos)
 - And much more...
 
-You can browse all the icons available and copy their ID with [Icônes](https://icones.js.org/).
+You can browse and search for all the icons available with [Icônes](https://icones.js.org/).
 
 ### Styling Icons
 
@@ -207,7 +207,7 @@ You can style the icons just like other HTML elements. For example:
 
 <uim-rocket />
 <uim-rocket class="text-3xl text-red-400 mx-2" />
-<uim-rocket class="text-3xl text-orange-400 animate-ping" />
+<uim-rocket class="text-3xl text-orange-400 animate-ping ml-2" />
 
 ## Configurations
 
