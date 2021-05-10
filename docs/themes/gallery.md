@@ -12,6 +12,7 @@ Read more about [how to use a theme](/themes/use), or [how to write your own](/t
 
 Here are the curated themes made by the community.
 
+<!-- Edit in ./docs/.vitepress/themes.ts -->
 <ThemeGallery collection="community"/>
 
 ## More Themes
