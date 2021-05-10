@@ -60,6 +60,26 @@ export const official: ThemeInfo[] = [
 ]
 
 export const community: ThemeInfo[] = [
+  {
+    id: 'slidev-theme-apple-basic',
+    name: 'Apple Basic',
+    description: 'Inspired by the Basic Black/White theme from Apple Keynote',
+    author: {
+      name: 'Jeremy Meissner',
+      link: 'https://github.com/JeremyMeissner',
+    },
+    repo: 'https://github.com/JeremyMeissner/slidev-theme-apple-basic',
+    previews: [
+      'https://i.imgur.com/976e8Hu.png',
+      'https://i.imgur.com/dE1r2bg.png',
+      'https://i.imgur.com/gnB4oa8.png',
+    ],
+    tags: [
+      'minimalism',
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',

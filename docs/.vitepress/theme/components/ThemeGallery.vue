@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, computed } from 'vue'
-import { official, community } from '../../gallery'
+import { official, community } from '../../themes'
 
 const props = defineProps({
   collection: {
