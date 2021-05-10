@@ -31,6 +31,8 @@ export const official: ThemeInfo[] = [
     repo: 'https://github.com/slidevjs/slidev/tree/main/packages/theme-default',
     previews: [
       '/themes/default.png',
+      '/themes/default-1.png',
+      '/themes/default-2.png',
     ],
     tags: [
       'official',
