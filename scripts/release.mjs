@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { join } from 'path'
+import { execSync } from 'child_process'
 import fs from 'fs-extra'
 import { objectMap } from '@antfu/utils'
 import { $ } from 'zx'
 
-await $`npx bumpp package.json packages/*/package.json`
+execSync('npx bumpp package.json packages/*/package.json', { stdio: 'inherit' })
 
 const templates = [
   'packages/create-app/template',
   'packages/create-theme/template',
 ]
 
-const { version } = await import('../package.json')
+const { version } = await fs.readJSON('package.json')
 
 for (const template of templates) {
   const path = join(template, 'package.json')
   const pkg = await fs.readJSON(path)
   pkg.dependencies = objectMap(pkg.dependencies, (k, v) => {
-    if (k.startsWith('@slidev/'))
+    if (k.startsWith('@slidev/') && !k.startsWith('@slidev/theme'))
       return [k, `^${version}`]
     return [k, v]
   })
