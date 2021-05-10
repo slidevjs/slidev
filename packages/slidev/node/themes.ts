@@ -3,9 +3,10 @@ import { parseNi, run } from '@antfu/ni'
 import { isRelative } from './options'
 
 const officialThemes: Record<string, string> = {
-  none: '',
-  default: '@slidev/theme-default',
-  seriph: '@slidev/theme-seriph',
+  'none': '',
+  'default': '@slidev/theme-default',
+  'seriph': '@slidev/theme-seriph',
+  'apple-basic': '@slidev/theme-apple-basic',
 }
 
 export function packageExists(name: string) {

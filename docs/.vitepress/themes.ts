@@ -28,7 +28,7 @@ export const official: ThemeInfo[] = [
       name: 'Anthony Fu',
       link: 'https://github.com/antfu',
     },
-    repo: 'https://github.com/slidevjs/slidev/tree/main/packages/theme-default',
+    repo: 'https://github.com/slidevjs/themes/tree/main/packages/theme-default',
     previews: [
       '/themes/default.png',
       '/themes/default-1.png',
@@ -49,7 +49,7 @@ export const official: ThemeInfo[] = [
       name: 'Anthony Fu',
       link: 'https://github.com/antfu',
     },
-    repo: 'https://github.com/slidevjs/slidev/tree/main/packages/theme-seriph',
+    repo: 'https://github.com/slidevjs/themes/tree/main/packages/theme-seriph',
     previews: [
       '/themes/seriph.png',
     ],
@@ -60,18 +60,15 @@ export const official: ThemeInfo[] = [
       'light',
     ],
   },
-]
-
-export const community: ThemeInfo[] = [
   {
-    id: 'slidev-theme-apple-basic',
+    id: '@slidev/theme-apple-basic',
     name: 'Apple Basic',
     description: 'Inspired by the Basic Black/White theme from Apple Keynote',
     author: {
       name: 'Jeremy Meissner',
       link: 'https://github.com/JeremyMeissner',
     },
-    repo: 'https://github.com/JeremyMeissner/slidev-theme-apple-basic',
+    repo: 'https://github.com/slidevjs/themes/tree/main/packages/theme-apple-basic',
     previews: [
       'https://i.imgur.com/976e8Hu.png',
       'https://i.imgur.com/dE1r2bg.png',
@@ -83,6 +80,9 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+]
+
+export const community: ThemeInfo[] = [
   // Add yours here!
   {
     id: '',

@@ -5,6 +5,12 @@ import Components from 'vite-plugin-components'
 import WindiCSS from 'vite-plugin-windicss'
 
 const config: UserConfig = {
+  resolve: {
+    alias: {
+      '@slidev/client': resolve(__dirname, '../packages/client'),
+      '@slidev/parser': resolve(__dirname, '../packages/parser'),
+    },
+  },
   optimizeDeps: {
     exclude: [
       'vue-demi',

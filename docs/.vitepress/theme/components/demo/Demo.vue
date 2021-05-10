@@ -4,13 +4,14 @@ import { ref, onMounted, watch } from 'vue'
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
-import { parse } from '../../../../../packages/parser/src/core'
-import Default from '../../../../../packages/client/layouts/default.vue'
-import Center from '../../../../../packages/client/layouts/center.vue'
-import SlideContainer from '../../../../../packages/client/internals/SlideContainer.vue'
-import Cover from '../../../../../packages/theme-default/layouts/cover.vue'
-import '../../../../../packages/client/styles/layouts-base.css'
-import '../../../../../packages/theme-default/styles/layouts.css'
+// @ts-ignore
+import Cover from '@slidev/theme-default/layouts/cover.vue'
+import { parse } from '@slidev/parser'
+import Default from '@slidev/client/layouts/default.vue'
+import Center from '@slidev/client/layouts/center.vue'
+import SlideContainer from '@slidev/client/internals/SlideContainer.vue'
+import '@slidev/client/styles/layouts-base.css'
+import '@slidev/theme-default/styles/layouts.css'
 
 const page = ref(0)
 const paused = ref(false)
