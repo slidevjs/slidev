@@ -6,14 +6,18 @@ Read more about [how to use a theme](/themes/use), or [how to write your own](/t
 
 ## Official Themes
 
-<ThemeGallery collection="official"/>
+<ClientOnly>
+  <ThemeGallery collection="official"/>
+</ClientOnly>
 
 ## Community Themes
 
 Here are the curated themes made by the community.
 
 <!-- Edit in ./docs/.vitepress/themes.ts -->
-<ThemeGallery collection="community"/>
+<ClientOnly>
+  <ThemeGallery collection="community"/>
+</ClientOnly>
 
 ## More Themes
 
