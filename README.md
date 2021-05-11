@@ -56,7 +56,8 @@ Documentations and guides on **[Sli.dev](https://sli.dev)**
 - 🌈 [**Stylish**](https://sli.dev/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets
 - 🤹 [**Interactive**](https://sli.dev/custom/directory-structure.html#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](https://sli.dev/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🧮 [**LaTeX**](https://sli.dev/demo/starter/6) - Built-in LaTeX math equations support
+- 🧮 [**LaTeX**](https://sli.dev/guide/syntax.html#latex) - Built-in LaTeX math equations support
+- 📰 [**Diagrams**](https://sli.dev/guide/syntax.html#diagrams) - Creates diagrams with textual descriptions 
 - 🌟 [**Icons**](https://sli.dev/guide/syntax.html#icons) - Access to icons from any iconset directly
 - 💻 [**Editors**](https://sli.dev/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](https://sli.dev/guide/recording.html) - built-in recording and camera view
@@ -84,6 +85,7 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 - [VueUse](https://vueuse.org) family -  [`@vueuse/core`](https://github.com/vueuse/vueuse), [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
 - [Iconify](https://iconify.design/) - Iconsets collection.
 - [KaTeX](https://katex.org/) - LaTeX math rendering.
+- [Mermaid](https://mermaid-js.github.io/mermaid) - Textual Diagrams.
 
 ## Sponsors
 

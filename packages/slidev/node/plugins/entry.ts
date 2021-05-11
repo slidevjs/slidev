@@ -14,6 +14,7 @@ export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: Resolved
     async transform(code, id) {
       if (id === mainEntry) {
         const imports: string[] = []
+        const body: string[] = []
 
         async function scanStyle(root: string) {
           const styles = [
@@ -40,6 +41,7 @@ export function createEntryPlugin({ clientRoot, themeRoots, userRoot }: Resolved
           await scanStyle(root)
 
         code = code.replace('/* __imports__ */', imports.join('\n'))
+        code = code.replace('/* __body__ */', body.join('\n'))
         return code
       }
 

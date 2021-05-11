@@ -59,6 +59,7 @@ export function detectFeatures(code: string) {
     katex: !!code.match(/\$.*?\$/) || !!code.match(/$\$\$/),
     monaco: !!code.match(/{monaco.*}/),
     tweet: !!code.match(/<Tweet\b/),
+    mermaid: !!code.match(/^```mermaid/m),
   }
 }
 
