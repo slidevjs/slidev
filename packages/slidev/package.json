@@ -66,7 +66,6 @@
     "markdown-it": "^12.0.6",
     "markdown-it-katex": "^2.0.3",
     "markdown-it-link-attributes": "^3.0.0",
-    "mermaid": "8.5.0",
     "monaco-editor": "^0.23.0",
     "nanoid": "^3.1.23",
     "pdf-lib": "^1.16.0",

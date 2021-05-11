@@ -1,6 +1,8 @@
 {
   "exclude": [
     "@iconify/json",
-    "husky"
+    "husky",
+    "mermaid",
+    "vite-plugin-components"
   ]
 }

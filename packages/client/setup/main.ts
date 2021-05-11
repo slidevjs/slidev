@@ -1,6 +1,7 @@
 /* __imports__ */
 
 import { AppContext } from '@slidev/types'
+import { MotionPlugin } from '@vueuse/motion'
 
 export default function setupMain(context: AppContext) {
   function setMaxHeight() {
@@ -10,6 +11,8 @@ export default function setupMain(context: AppContext) {
   }
   setMaxHeight()
   window.addEventListener('resize', setMaxHeight)
+
+  context.app.use(MotionPlugin)
 
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

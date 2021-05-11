@@ -6,6 +6,7 @@ import { toAtFS } from '../utils'
 
 const EXCLUDE = [
   '@slidev/types',
+  'mermaid',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
@@ -29,9 +30,11 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'prettier/esm/parser-babel',
             'prettier/esm/parser-html',
             'prettier/esm/parser-typescript',
+            'mermaid/dist/mermaid.min',
           ],
           exclude: [
             'vue-demi',
+            'mermaid',
           ],
         },
 
