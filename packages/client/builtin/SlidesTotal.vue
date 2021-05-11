@@ -1,3 +1,3 @@
 <template>
-  <span>{{ $slidev.nav.total.value }}</span>
+  <span>{{ $slidev.nav.total }}</span>
 </template>

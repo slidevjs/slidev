@@ -1,3 +1,3 @@
 <template>
-  <span>{{ $slidev.nav.currentPage.value }}</span>
+  <span>{{ $slidev.nav.currentPage }}</span>
 </template>
