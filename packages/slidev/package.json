@@ -73,7 +73,7 @@
     "shiki": "^0.9.3",
     "sirv": "^1.0.11",
     "vite": "^2.3.0",
-    "vite-plugin-components": "^0.8.4",
+    "vite-plugin-components": "^0.9.0",
     "vite-plugin-icons": "^0.5.0",
     "vite-plugin-md": "^0.6.6",
     "vite-plugin-remote-assets": "^0.2.2",

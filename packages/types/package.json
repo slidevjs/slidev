@@ -24,14 +24,7 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "pnpx tsup src/index.ts --format cjs,esm --dts",
     "dev": "nr build --watch"
-  },
-  "devDependencies": {
-    "@antfu/utils": "^0.1.5",
-    "monaco-editor": "^0.23.0",
-    "shiki": "^0.9.3",
-    "vue": "^3.0.11",
-    "vue-router": "^4.0.6"
   }
 }
