@@ -2,6 +2,7 @@
   <div class="theme" :class="pageClasses">
     <NavBar
       v-if="showNavbar"
+      :show-sidebar="showSidebar"
       :class="isHome ? '!border-transparent !bg-opacity-50 !md:bg-transparent <md:(backdrop-filter backdrop-blur)' : ''"
       @toggle="toggleSidebar"
     >
