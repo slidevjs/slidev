@@ -42,6 +42,7 @@ export async function formatCode(code: string, lang: string) {
     })
   }
   catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e)
     return code
   }
