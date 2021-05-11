@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path'
 import http from 'http'
 import os from 'os'
@@ -36,6 +37,11 @@ cli.command(
       type: 'boolean',
       describe: 'open in browser',
     })
+    .option('remote', {
+      default: false,
+      type: 'boolean',
+      describe: 'listen public host and enable remote control',
+    })
     .option('log', {
       default: 'warn',
       type: 'string',
@@ -44,7 +50,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, port, open, log }) => {
+  async({ entry, theme, port, open, log, remote }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -86,12 +92,14 @@ cli.command(
           server: {
             port,
             open,
+            host: remote ? '0.0.0.0' : false,
           },
           logLevel: log as LogLevel,
         },
       ))
+
       await server.listen()
-      printInfo(options, port)
+      printInfo(options, port, remote)
     }
 
     initServer()
@@ -287,26 +295,31 @@ function commonOptions(args: Argv<{}>) {
     })
 }
 
-function printInfo(options: ResolvedSlidevOptions, port?: number) {
+function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string | boolean) {
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
   console.log()
-  console.log(dim('  theme   ') + options.theme ? green(options.theme) : gray('none'))
+  console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
   if (port) {
     console.log()
     console.log(`${dim('  slide show     ')} > ${cyan(`http://localhost:${bold(port)}/`)}`)
     console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}/presenter`)}`)
 
-    Object.values(os.networkInterfaces())
-      .forEach(v => (v || [])
-        .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
-        .forEach(({ address }) => {
-          console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}/presenter`)}`)
-        }),
-      )
+    if (remote) {
+      Object.values(os.networkInterfaces())
+        .forEach(v => (v || [])
+          .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
+          .forEach(({ address }) => {
+            console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}/presenter`)}`)
+          }),
+        )
+    }
+    else {
+      console.log(`${dim('  remote control ')} > ${dim('pass --remote to enable')}`)
+    }
   }
   console.log()
   console.log()
