@@ -25,7 +25,7 @@
     "js-base64": "^3.6.0",
     "js-yaml": "^4.1.0",
     "monaco-editor": "^0.23.0",
-    "prettier": "^2.2.1",
+    "prettier": "^2.3.0",
     "recordrtc": "^5.6.2",
     "vue": "^3.0.11",
     "vue-router": "^4.0.6",
