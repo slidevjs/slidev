@@ -23,10 +23,13 @@ const props = defineProps({
   scale: {
     default: 1,
   },
+  theme: {
+    defualt: 'base',
+  },
 })
 
 const vm = getCurrentInstance()
-const html = computed(() => renderMermaid(props.code, vm?.attrs || {}))
+const html = computed(() => renderMermaid(props.code, Object.assign({ theme: props.theme }, vm.attrs)))
 </script>
 
 <template>
