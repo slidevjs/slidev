@@ -95,18 +95,7 @@ export function createSlidesLoader(
             Object.assign(data.slides[idx], body)
 
             hmrPages.add(idx)
-
-            server.ws.send({
-              type: 'custom',
-              event: 'slidev-update',
-              data: {
-                id: idx,
-                data: prepareSlideInfo(data.slides[idx]),
-              },
-            })
-
             await parser.save(data, entry)
-
             res.statusCode = 200
             return res.end()
           }
@@ -148,8 +137,18 @@ export function createSlidesLoader(
 
           const a = data.slides[i]
           const b = newData.slides[i]
+
           if (a?.content.trim() === b?.content.trim() && JSON.stringify(a.frontmatter) === JSON.stringify(b.frontmatter))
             continue
+
+          ctx.server.ws.send({
+            type: 'custom',
+            event: 'slidev-update',
+            data: {
+              id: i,
+              data: prepareSlideInfo(newData.slides[i]),
+            },
+          })
           hmrPages.add(i)
         }
 
