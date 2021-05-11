@@ -102,6 +102,6 @@ const classes = computed(() => {
 }
 
 #slide-content {
-  @apply relative overflow-hidden m-auto bg-main absolute left-1/2 top-1/2;
+  @apply relative overflow-hidden bg-main absolute left-1/2 top-1/2;
 }
 </style>
