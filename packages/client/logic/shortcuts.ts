@@ -1,9 +1,9 @@
 import { Fn, not, and, whenever } from '@vueuse/core'
-import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview, showGotoDialog, showOverview } from '../state'
+import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 
-const _shortcut = and(not(isInputing), shortcutsEnabled)
+const _shortcut = and(not(isInputing), not(isOnFocus), shortcutsEnabled)
 
 export function shortcut(key: string, fn: Fn) {
   return whenever(and(magicKeys[key], _shortcut), fn, { flush: 'sync' })
