@@ -144,8 +144,10 @@ export function transformPageCSS(md: string, id: string) {
  */
 export default function transformMermaid(md: string): string {
   return md
-    .replace(/^```mermaid\s*(.*?)\s*$([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
+    .replace(/^```mermaid\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
+      code = code.trim()
+      options = options.trim() || '{}'
       const encoded = base64.encode(code, true)
-      return `<Mermaid :code="'${encoded}'" v-bind="${options.trim()} || {}" />`
+      return `<Mermaid :code="'${encoded}'" v-bind="${options}" />`
     })
 }
