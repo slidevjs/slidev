@@ -198,7 +198,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
 </div>
 ```
 
-<div class="w-60 h-60 relative mt-6">
+<div class="w-60 relative mt-6">
   <div class="relative w-40 h-40">
     <img
       v-motion
@@ -248,7 +248,14 @@ const final = {
 }
 </script>
 
+<div 
+  v-motion
+  :initial="{ x:35, y: 40, opacity: 0}"
+  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
+  
 [Learn More](https://sli.dev/guide/animations.html#motion)
+
+</div>
 
 ---
 
@@ -302,6 +309,7 @@ C -->|Two| E[Result 2]
 </div>
 
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
+
 
 ---
 layout: center
