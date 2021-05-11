@@ -1,6 +1,6 @@
 <template>
-  <header class="nav-bar">
-    <ToggleSideBarButton @toggle="$emit('toggle')" />
+  <header class="nav-bar" :class="{'no-toggle-btn': !showSidebar}">
+    <ToggleSideBarButton v-if="showSidebar" @toggle="$emit('toggle')" />
 
     <NavBarTitle />
 
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmit } from 'vue'
+import { defineEmit, defineProps } from 'vue'
 import { useRepo } from '../composables/repo'
 import NavBarTitle from './NavBarTitle.vue'
 import NavLinks from './NavLinks.vue'
@@ -43,6 +43,10 @@ import DarkModeSwitch from './DarkModeSwitch.vue'
 const repo = useRepo()
 
 defineEmit(['toggle'])
+
+defineProps({
+  showSidebar: { type: Boolean, required: true },
+})
 </script>
 
 <style scoped>
@@ -59,6 +63,10 @@ defineEmit(['toggle'])
   padding: 0.7rem 1.5rem 0.7rem 4rem;
   height: var(--header-height);
   @apply bg-main;
+}
+
+.nav-bar.no-toggle-btn {
+  padding-left: 1.5rem;
 }
 
 .nav-bar.root {
