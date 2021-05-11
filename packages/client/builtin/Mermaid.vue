@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
+import { defineProps, computed, getCurrentInstance } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps({
@@ -23,12 +23,10 @@ const props = defineProps({
   scale: {
     default: 1,
   },
-  theme: {
-    default: 'base',
-  },
 })
 
-const html = computed(() => renderMermaid(props.code))
+const vm = getCurrentInstance()
+const html = computed(() => renderMermaid(props.code, vm?.attrs || {}))
 </script>
 
 <template>
