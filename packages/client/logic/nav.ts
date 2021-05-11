@@ -46,7 +46,8 @@ export function next() {
 
 export async function prev() {
   if (clicks.value <= 0)
-    prevSlide()
+    await prevSlide()
+
   else
     clicks.value -= 1
 }
@@ -60,9 +61,11 @@ export function nextSlide() {
   return go(next)
 }
 
-export function prevSlide() {
+export async function prevSlide(lastClicks = true) {
   const next = Math.max(1, currentPage.value - 1)
-  return go(next)
+  await go(next)
+  if (lastClicks)
+    clicks.value = clicksTotal.value
 }
 
 export function go(page: number) {
