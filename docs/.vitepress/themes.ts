@@ -30,9 +30,10 @@ export const official: ThemeInfo[] = [
     },
     repo: 'https://github.com/slidevjs/themes/tree/main/packages/theme-default',
     previews: [
-      '/themes/default.png',
-      '/themes/default-1.png',
-      '/themes/default-2.png',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/02.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/06.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/08.png?raw=true',
     ],
     tags: [
       'official',
@@ -51,7 +52,10 @@ export const official: ThemeInfo[] = [
     },
     repo: 'https://github.com/slidevjs/themes/tree/main/packages/theme-seriph',
     previews: [
-      '/themes/seriph.png',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/02.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/03.png?raw=true',
+      'https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/08.png?raw=true',
     ],
     tags: [
       'official',

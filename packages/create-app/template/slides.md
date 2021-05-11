@@ -201,9 +201,9 @@ theme: seriph
 ---
 ```
 
-<img border="rounded" src="https://sli.dev/themes/default.png">
+<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
 
-<img border="rounded" src="https://sli.dev/themes/seriph.png">
+<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
 
 </div>
 
