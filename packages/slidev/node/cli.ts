@@ -4,7 +4,7 @@ import os from 'os'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
 import prompts from 'prompts'
-import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, gray, green, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { version } from '../package.json'
@@ -293,7 +293,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number) {
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
   console.log()
-  console.log(dim('  theme   ') + green(options.theme))
+  console.log(dim('  theme   ') + options.theme ? green(options.theme) : gray('none'))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
   if (port) {
     console.log()

@@ -25,9 +25,16 @@ export function resolveThemeName(name: string) {
     return name
   if (isRelative(name))
     return name
+
+  // search for local packages first
+  if (packageExists(`@slidev/theme-${name}`))
+    return `@slidev/theme-${name}`
+  if (packageExists(`slidev-theme-${name}`))
+    return `slidev-theme-${name}`
+
+  // fallback to prompt install
   if (officialThemes[name] != null)
     return officialThemes[name]
-
   return `slidev-theme-${name}`
 }
 
