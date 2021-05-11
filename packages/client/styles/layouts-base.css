@@ -41,6 +41,10 @@
     list-style: square;
   }
 
+  ol {
+    list-style: decimal;
+  }
+
   li {
     @apply ml-1.1em pl-0.2em leading-1.8em;
   }
