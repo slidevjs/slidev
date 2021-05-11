@@ -51,6 +51,7 @@ export interface SlidevFeatureFlags {
   katex: boolean
   monaco: boolean
   tweet: boolean
+  mermaid: boolean
 }
 
 export interface SlidevMarkdown {

@@ -180,6 +180,18 @@ $$
 [Learn more](https://sli.dev/guide/syntax#latex)
 
 ---
+
+# Graph
+
+```mermaid {theme:base, scale:0.7}
+graph TD;
+  A-->B;
+  A-->C;
+  B-->D;
+  C-->D;
+```
+
+---
 class: px-20
 ---
 

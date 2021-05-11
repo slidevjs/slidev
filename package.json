@@ -42,6 +42,7 @@
     "@types/jest": "^26.0.23",
     "@types/js-yaml": "^4.0.1",
     "@types/markdown-it": "^12.0.1",
+    "@types/mermaid": "^8.2.5",
     "@types/node": "^15.0.2",
     "@types/prettier": "^2.2.3",
     "@types/prismjs": "^1.16.5",

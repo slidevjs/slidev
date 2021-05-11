@@ -69,6 +69,7 @@ export async function createMarkdownPlugin(
           ? transformMarkdownMonaco
           : truncateMancoMark
 
+        code = transformMermaid(code)
         code = monaco(code)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
@@ -136,4 +137,15 @@ export function transformPageCSS(md: string, id: string) {
   )
 
   return result
+}
+
+/**
+ * Transform Mermaid code blocks (render done on client side)
+ */
+export default function transformMermaid(md: string): string {
+  return md
+    .replace(/^```mermaid\s*(.*?)\s*$([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
+      const encoded = base64.encode(code, true)
+      return `<Mermaid :code="'${encoded}'" v-bind="${options.trim()} || {}" />`
+    })
 }
