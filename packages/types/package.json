@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "engines": {
     "node": ">=14.0.0"
   },
