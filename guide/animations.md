@@ -91,7 +91,7 @@ clicks: 3
 </v-clicks>
 ```
 
-## Element Transitions
+### Element Transitions
 
 When you apply the `v-click` directive to your elements, it will attach the class name `slidev-vclick-target` to it. When the elements are hidden, the class name `slidev-vclick-hidden` will also be attached. For example:
 
@@ -153,6 +153,23 @@ To specify animations for only certain slide or layout
 
 Learn more about [customizing styles](/custom/directory-structure#style).
 
+## Motion
+
+Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to make apply motion on them. For example
+
+```html
+<div
+  v-motion
+  :initial="{ x: -80 }"
+  :enter="{ x: 0 }">
+  Slidev
+</div>
+```
+
+The text `Slidev` will move from `-80px` to its original position on revealing.
+
+Learn mode: [Demo](https://sli.dev/demo/starter/7) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/directive-usage.html) | [Presets](https://motion.vueuse.org/presets.html)
+
 ## Pages Transitions
 
-The built-in support for slides is NOT YET provided in the current version. We are planning to add support for them in the next major version. Before that, you can still use your custom styles and libraries to do that.
+> Built-in support for slides is NOT YET provided in the current version. We are planning to add support for them in the next major version. Before that, you can still use your custom styles and libraries to do that.
