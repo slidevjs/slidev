@@ -92,7 +92,7 @@ cli.command(
           server: {
             port,
             open,
-            host: remote ? '0.0.0.0' : false,
+            host: remote ? '0.0.0.0' : 'localhost',
           },
           logLevel: log as LogLevel,
         },
