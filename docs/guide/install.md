@@ -47,21 +47,23 @@ If you need a rapid way to run a presentation, you can use the prebuilt (or even
 Pull the image :
 
 ```bash
-$ docker pull stig124/slidev:v1
+$ docker pull stig124/slidev:latest
 ```
 
 > [podman](https://podman.io/) users can pull the image using the complete URL
 >
 > ```bash
-> $ podman pull docker.io/stig124/slidev:v1
+> $ podman pull docker.io/stig124/slidev:latest
 > ```
 
 
 Go into a directory with a `slides.md` file and run it :
 
 ```bash
-$ docker run --rm -v .:/root/slides -p 3000:3030 stig124/slidev:v1
+$ docker run --rm -v .:/root/slides -p 3000:3030 stig124/slidev:latest
 ```
+
+> You can change the port that will face outside by changing the number left of the port declaration => `3000:3030`
 
 Open a browser on `localhost:3000` and you're ready to go, you can leave at any time using `Ctrl` + `C`
 
