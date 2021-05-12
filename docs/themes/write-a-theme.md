@@ -72,17 +72,21 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 }
 ```
 
-To access the dark mode when creating you theme styles, you can wrap the dark-mode-specific css inside a `dark` class:
+To access the dark mode when creating your theme styles, you can wrap the dark-mode-specific css inside a `dark` class:
 
 ```css
-/* regular css here */
+/* general css here */
 
-.dark {
+html:not(.dark) {
+  /* light mode css here */
+}
+
+html.dark {
   /* dark mode css here */
 }
 ```
 
-This works because Slidev toggles a `dark` class on the page's `html` element.
+Slidev toggles a `dark` class on the page's `html` element for switching color schema.
 
 ## Highlighter
 
