@@ -236,6 +236,11 @@ cli.command(
       type: 'string',
       describe: 'page ranges to export, for example "1,4-5,6"',
     })
+    .option('dark', {
+      default: false,
+      type: 'boolean',
+      describe: 'export as dark theme',
+    })
     .strict()
     .help(),
   async({
@@ -245,6 +250,7 @@ cli.command(
     format,
     timeout,
     range,
+    dark,
   }) => {
     output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
@@ -270,6 +276,7 @@ cli.command(
       format: format as any,
       output,
       timeout,
+      dark,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()

@@ -14,6 +14,7 @@ export interface ExportOptions {
   format?: 'pdf' | 'png'
   output?: string
   timeout?: number
+  dark?: boolean
 }
 
 function createSlidevProgress() {
@@ -60,6 +61,7 @@ export async function exportSlides({
   output = 'slides',
   base = '/',
   timeout = 500,
+  dark = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
@@ -78,6 +80,9 @@ export async function exportSlides({
 
   async function go(no: number) {
     progress.update(no)
+
+    if (dark)
+      await page.emulateMedia({ colorScheme: 'dark' })
     await page.goto(`http://localhost:${port}${base}${no}?print`, {
       waitUntil: 'networkidle',
     })
