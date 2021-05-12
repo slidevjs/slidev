@@ -48,14 +48,11 @@ Pull the image :
 
 ```bash
 $ docker pull stig124/slidev:latest
+
+or
+
+$ podman pull docker.io/stig124/slidev:latest
 ```
-
-> [podman](https://podman.io/) users can pull the image using the complete URL
->
-> ```bash
-> $ podman pull docker.io/stig124/slidev:latest
-> ```
-
 
 Go into a directory with a `slides.md` file and run it :
 
@@ -63,27 +60,26 @@ Go into a directory with a `slides.md` file and run it :
 $ docker run --rm -v .:/root/slides -p 3000:3030 stig124/slidev:latest
 ```
 
-> You can change the port that will face outside by changing the number left of the port declaration => `3000:3030`
+**WARNING** : If you have a `node_modules` folder within the folder with the `slides.md` file, It will be **deleted** *(You can add `-e KEEP=1` next to `--rm` in the command to revert this behaviour)* as it may blocks the starting of the container
 
-Open a browser on `localhost:3000` and you're ready to go, you can leave at any time using `Ctrl` + `C`
+You can :
 
-> Please note that if you have a `node_modules` folder within the folder with the `slides.md` file, It will be **deleted** *(You can add `-e KEEP=1` next to `--rm` in the command to revert this behaviour)* as it may blocks the starting of the container
+- Run it in the backgroud by adding `-d`
+- Change the default port by replacing the `3000` in the port declaration
+
+Open a browser on `localhost:3000` *(or your public IP)* and you're ready to go, you can leave at any time using `Ctrl` + `C`
+
+> Containers in the background can be stopped using `docker stop <id>` then `docker rm <id>`(`id` you can find using `docker ps -a`)
 
 ### Build the docker image
 
 If you want to build the image by yourself, you can :
 
-Clone the repo
+Clone the `container` repo and build the image :
 
 ```bash
-$ git clone https://github.com/slidevjs/slidev.git
-```
-
-> As the image downloads `slidev` from npm, you can also just download the `Dockerfile` and `entrypoint.sh` from the `Github` website
-
-Go to the folder where you have the `Dockerfile` and `entrypoint.sh` file
-
-```bash
+$ git clone https://github.com/slidevjs/container.git
+$ cd container
 $ docker build -t <tag> .
 ```
 
