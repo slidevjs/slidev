@@ -171,10 +171,11 @@ export function createSlidesLoader(
         ).flatMap(i => i || [])
         hmrPages.clear()
 
-        const moduleEntries = Array.from(moduleIds)
-          .map(id => ctx.server.moduleGraph.getModuleById(id))
+        const moduleEntries = [
+          ...vueModules,
+          ...Array.from(moduleIds).map(id => ctx.server.moduleGraph.getModuleById(id)),
+        ]
           .filter(notNullish)
-          .concat(vueModules)
           .filter(i => !i.id?.startsWith('/@id/@vite-icons'))
 
         return moduleEntries
