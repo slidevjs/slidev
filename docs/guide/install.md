@@ -42,52 +42,14 @@ $ npx slidev
 
 If you need a rapid way to run a presentation, you can use the prebuilt (or even build your own) [docker](https://hub.docker.com/r/stig124/slidev) image (maintained by [stig124](https://github.com/Stig124))
 
-##### *this is not meant to be a developing environment, it uses only npm-fetched distributions*
+### NOTE
 
-Pull the image :
+This container docs are now in the [container repo](https://github.com/slidevjs/container)
 
-```bash
-$ docker pull stig124/slidev:latest
+### TL;DR
 
-or
-
-$ podman pull docker.io/stig124/slidev:latest
-```
-
-Go into a directory with a `slides.md` file and run it :
+In a folder with `slides.md` :
 
 ```bash
 $ docker run --rm -v .:/root/slides -p 3000:3030 stig124/slidev:latest
-```
-
-**WARNING** : If you have a `node_modules` folder within the folder with the `slides.md` file, It will be **deleted** *(You can add `-e KEEP=1` next to `--rm` in the command to revert this behaviour)* as it may blocks the starting of the container
-
-You can :
-
-- Run it in the backgroud by adding `-d`
-- Change the default port by replacing the `3000` in the port declaration
-
-Open a browser on `localhost:3000` *(or your public IP)* and you're ready to go, you can leave at any time using `Ctrl` + `C`
-
-> Containers in the background can be stopped using `docker stop <id>` then `docker rm <id>`(`id` you can find using `docker ps -a`)
-
-### Build the docker image
-
-If you want to build the image by yourself, you can :
-
-Clone the `container` repo and build the image :
-
-```bash
-$ git clone https://github.com/slidevjs/container.git
-$ cd container
-$ docker build -t <tag> .
-```
-
-> The tag syntax is as follows `username`/`image_name`:`version`  
-> *`username` is mandatory only if you want to push to remote registry*
-
-Then run it as you want :
-
-```bash
-$ docker run --rm -v .:/root/slides -p 3000:3030 <whatever tag you have set>
 ```
