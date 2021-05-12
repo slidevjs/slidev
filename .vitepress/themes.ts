@@ -108,6 +108,25 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-geist',
+    name: 'Vercel',
+    description: 'A theme based on Vercel\'s design system.',
+    author: {
+      name: 'Nico Bachner',
+      link: 'https://github.com/nico-bachner',
+    },
+    repo: 'https://github.com/nico-bachner/slidev-theme-geist',
+    previews: [
+      'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/01.png?raw=true',
+      'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/05.png?raw=true',
+    ],
+    tags: [
+      'vercel',
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
