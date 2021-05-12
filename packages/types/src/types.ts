@@ -45,6 +45,10 @@ export interface SlidevConfig {
    * @default prism
    */
   highlighter: 'prism' | 'shiki'
+  /**
+   * @default 'auto'
+   */
+  colorSchema: 'dark' | 'light' | 'all' | 'auto'
 }
 
 export interface SlidevFeatureFlags {

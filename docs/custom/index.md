@@ -18,6 +18,8 @@ download: true
 highlighter: 'prism'
 # enable monaco editor, default to dev only
 monaco: 'dev'
+# force color schema for the slides (could be 'auto', 'light', or 'dark')
+colorSchema: 'auto'
 # information for your slides, can be a markdown string
 info: |
   ## Slidev

@@ -143,12 +143,15 @@ export function parse(
     download: false,
     info: false,
     highlighter: 'prism',
+    colorSchema: 'auto',
   }
   const config: SlidevConfig = Object.assign(
     defaultConfig,
     headmatter.config || {},
     objectPick(headmatter, Object.keys(defaultConfig)),
   )
+  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+    config.colorSchema = 'auto'
 
   return {
     raw: markdown,
