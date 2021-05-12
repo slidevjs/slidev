@@ -37,3 +37,9 @@ $ npx slidev
 > ```bash
 > echo 'shamefully-flatten=true' >> .npmrc
 > ```
+
+## Install on Docker
+
+If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker](https://hub.docker.com/r/stig124/slidev) image maintained by [stig124](https://github.com/Stig124), or build your own.
+
+Refer to the [slidevjs/container repo](https://github.com/slidevjs/container) for more details.

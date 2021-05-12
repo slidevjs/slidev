@@ -75,6 +75,8 @@ npm init slidev
 
 For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
 
+Learn more with the [Installation Guide](https://sli.dev/guide/install.html).
+
 ## Tech Stack
 
 - [Vite](https://vitejs.dev) - An extremely fast frontend tooling
