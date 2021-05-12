@@ -72,6 +72,18 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 }
 ```
 
+To access the dark mode when creating you theme styles, you can wrap the dark-mode-specific css inside a `dark` class:
+
+```css
+/* regular css here */
+
+.dark {
+  /* dark mode css here */
+}
+```
+
+This works because Slidev toggles a `dark` class on the page's `html` element.
+
 ## Highlighter
 
 Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/) and [Shiki](https://github.com/shikijs/shiki). For more information please refer to [the syntax highlighting docs](/custom/highlighters).
