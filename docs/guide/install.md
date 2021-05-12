@@ -42,7 +42,7 @@ $ npx slidev
 
 If you need a rapid way to run a presentation, you can use the prebuilt (or even build your own) [docker](https://hub.docker.com/r/stig124/slidev) image (maintained by [stig124](https://github.com/Stig124))
 
-##### *(this is not meant as a developper environnement, as it uses only npm-fetched binaries)*
+##### *this is not meant to be a developing environment, it uses only npm-fetched distributions*
 
 Pull the image :
 
