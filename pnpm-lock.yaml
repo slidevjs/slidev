@@ -24,7 +24,7 @@ importers:
       '@types/prompts': ^2.4.0
       '@types/recordrtc': ^5.6.5
       '@typescript-eslint/eslint-plugin': ^4.23.0
-      '@vueuse/core': ^4.9.3
+      '@vueuse/core': ^4.9.4
       bumpp: ^6.0.6
       cross-env: ^7.0.3
       eslint: ^7.26.0
@@ -65,7 +65,7 @@ importers:
       '@types/prompts': 2.4.0
       '@types/recordrtc': 5.6.5
       '@typescript-eslint/eslint-plugin': 4.23.0_eslint@7.26.0+typescript@4.2.4
-      '@vueuse/core': 4.9.3
+      '@vueuse/core': 4.9.4
       bumpp: 6.0.6
       cross-env: 7.0.3
       eslint: 7.26.0
@@ -133,7 +133,7 @@ importers:
       '@antfu/utils': ^0.1.5
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
-      '@vueuse/core': ^4.9.3
+      '@vueuse/core': ^4.9.4
       '@vueuse/head': ^0.5.1
       '@vueuse/motion': ^1.5.5
       codemirror: ^5.61.0
@@ -152,7 +152,7 @@ importers:
       '@antfu/utils': 0.1.5
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
-      '@vueuse/core': 4.9.3_vue@3.0.11
+      '@vueuse/core': 4.9.4_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
       '@vueuse/motion': 1.5.5_vue@3.0.11
       codemirror: 5.61.0
@@ -1537,20 +1537,30 @@ packages:
   /@vue/shared/3.0.11:
     resolution: {integrity: sha512-b+zB8A2so8eCE0JsxjL24J7vdGl8rzPQ09hZNhystm+KqSbKcAej1A+Hbva1rCMmTTqA+hFnUSDc5kouEo0JzA==}
 
-  /@vueuse/core/4.9.3:
+  /@vueuse/core/4.9.3_vue@3.0.11:
     resolution: {integrity: sha512-Ro9rsziMaZUSVMUVhOO4GvykebSjDHnx2pC78tmIiYBGjF9e6RW6zXQdRxk2Ro9SqOw7J4Gc2dlv3J2I/2mNkg==}
     dependencies:
-      '@vueuse/shared': 4.9.3
+      '@vueuse/shared': 4.9.3_vue@3.0.11
+      vue-demi: 0.7.5_vue@3.0.11
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vueuse/core/4.9.4:
+    resolution: {integrity: sha512-G0RKYnMyEUaHPZu696ZSei9XLWdiJf49tCz9gDHLkM8GMYqfAn5DMBa7XITLpQGWwYAtrcNunMsTdWxd/EuHjA==}
+    dependencies:
+      '@vueuse/shared': 4.9.4
       vue-demi: 0.7.5
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
     dev: true
 
-  /@vueuse/core/4.9.3_vue@3.0.11:
-    resolution: {integrity: sha512-Ro9rsziMaZUSVMUVhOO4GvykebSjDHnx2pC78tmIiYBGjF9e6RW6zXQdRxk2Ro9SqOw7J4Gc2dlv3J2I/2mNkg==}
+  /@vueuse/core/4.9.4_vue@3.0.11:
+    resolution: {integrity: sha512-G0RKYnMyEUaHPZu696ZSei9XLWdiJf49tCz9gDHLkM8GMYqfAn5DMBa7XITLpQGWwYAtrcNunMsTdWxd/EuHjA==}
     dependencies:
-      '@vueuse/shared': 4.9.3_vue@3.0.11
+      '@vueuse/shared': 4.9.4_vue@3.0.11
       vue-demi: 0.7.5_vue@3.0.11
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -1580,8 +1590,17 @@ packages:
       vue-demi: 0.7.4_vue@3.0.11
     dev: false
 
-  /@vueuse/shared/4.9.3:
+  /@vueuse/shared/4.9.3_vue@3.0.11:
     resolution: {integrity: sha512-PNnMx3OLsIHLYuhh38y/A+RrFKFwCPR2wNNl76/OaSkn89MqXJKtR4yb0BbfebaNi1hMBorl29wxPziNAeARrA==}
+    dependencies:
+      vue-demi: 0.7.5_vue@3.0.11
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vueuse/shared/4.9.4:
+    resolution: {integrity: sha512-bt9gMGX919UQSMrNJ00Hvc4SyiRwI5NVjrkUgXgrGCLdvYtcYv2EHHx6lbFanIcfuZxGDbNJGqOfuDteaLI9UA==}
     dependencies:
       vue-demi: 0.7.5
     transitivePeerDependencies:
@@ -1589,8 +1608,8 @@ packages:
       - vue
     dev: true
 
-  /@vueuse/shared/4.9.3_vue@3.0.11:
-    resolution: {integrity: sha512-PNnMx3OLsIHLYuhh38y/A+RrFKFwCPR2wNNl76/OaSkn89MqXJKtR4yb0BbfebaNi1hMBorl29wxPziNAeARrA==}
+  /@vueuse/shared/4.9.4_vue@3.0.11:
+    resolution: {integrity: sha512-bt9gMGX919UQSMrNJ00Hvc4SyiRwI5NVjrkUgXgrGCLdvYtcYv2EHHx6lbFanIcfuZxGDbNJGqOfuDteaLI9UA==}
     dependencies:
       vue-demi: 0.7.5_vue@3.0.11
     transitivePeerDependencies:
