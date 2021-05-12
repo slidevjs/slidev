@@ -40,16 +40,6 @@ $ npx slidev
 
 ## Install on Docker
 
-If you need a rapid way to run a presentation, you can use the prebuilt (or even build your own) [docker](https://hub.docker.com/r/stig124/slidev) image (maintained by [stig124](https://github.com/Stig124))
+If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker](https://hub.docker.com/r/stig124/slidev) image maintained by [stig124](https://github.com/Stig124), or build your own.
 
-### NOTE
-
-This container docs are now in the [container repo](https://github.com/slidevjs/container)
-
-### TL;DR
-
-In a folder with `slides.md` :
-
-```bash
-$ docker run --rm -v .:/root/slides -p 3000:3030 stig124/slidev:latest
-```
+Refer to the [slidevjs/container repo](https://github.com/slidevjs/container) for more details.
