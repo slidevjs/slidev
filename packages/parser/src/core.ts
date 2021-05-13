@@ -125,6 +125,9 @@ export function parse(
     // skip code block
     else if (line.startsWith('```')) {
       for (i += 1; i < lines.length; i++) {
+        if (lines[i]?.includes('<style'))
+          lines[i] = lines[i].replace('<style', '<style ___in-code-block___')
+
         if (lines[i].startsWith('```'))
           break
       }

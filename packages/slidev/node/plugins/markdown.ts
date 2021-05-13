@@ -118,6 +118,10 @@ export function transformPageCSS(md: string, id: string) {
   const result = md.replace(
     /(\n<style[^>]*?>)([\s\S]+?)(<\/style>)/g,
     (full, start, css, end) => {
+      if (start.includes('in-code-block')) {
+        start = start.replace('<style ___in-code-block___', '<style')
+        return `${start}${css}${end}`
+      }
       if (!start.includes('scoped'))
         start = start.replace('<style', '<style scoped')
       return `${start}\n.slidev-page-${page}{${css}}${end}`
