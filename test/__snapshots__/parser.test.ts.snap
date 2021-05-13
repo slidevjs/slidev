@@ -2,6 +2,7 @@
 
 exports[`md parser frontmatter.md: config 1`] = `
 Object {
+  "colorSchema": "auto",
   "download": false,
   "highlighter": "prism",
   "info": false,
@@ -131,6 +132,7 @@ this should be treated as code block
 
 exports[`md parser minimal.md: config 1`] = `
 Object {
+  "colorSchema": "auto",
   "download": false,
   "highlighter": "prism",
   "info": false,
