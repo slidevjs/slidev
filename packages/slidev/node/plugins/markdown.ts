@@ -141,5 +141,5 @@ export function transformMermaid(md: string): string {
 }
 
 export function escapeVueInCode(md: string) {
-  return md.replace(/{({.*}})/g, '{\\$1')
+  return md.replace(/{{(.*)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
 }
