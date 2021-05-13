@@ -198,7 +198,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
 </div>
 ```
 
-<div class="w-60 relative mt-6">
+<div class="w-60 relative mt-6" v-if="$slidev.nav.currentPage === 7">
   <div class="relative w-40 h-40">
     <img
       v-motion
