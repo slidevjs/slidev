@@ -55,7 +55,7 @@ export async function build(
           root: join(options.clientRoot, 'iframes/monaco'),
           base: `${config.base}iframes/monaco/`,
           build: {
-            outDir: resolve(options.userRoot, 'dist/iframes/monaco'),
+            outDir: resolve(config.build.outDir, 'iframes/monaco'),
             // fix for monaco workers
             // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
             rollupOptions: {
