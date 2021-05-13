@@ -119,6 +119,9 @@ export const community: ThemeInfo[] = [
     repo: 'https://github.com/nico-bachner/slidev-theme-geist',
     previews: [
       'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/01.png?raw=true',
+      'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/02.png?raw=true',
+      'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/03.png?raw=true',
+      'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/04.png?raw=true',
       'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/05.png?raw=true',
     ],
     tags: [
