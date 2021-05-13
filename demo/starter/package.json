@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "^0.7.2",
+    "@slidev/theme-default": "^0.7.3",
     "@slidev/theme-seriph": "^0.7.0",
     "@slidev/types": "workspace:*",
     "nodemon": "^2.0.7"
