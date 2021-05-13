@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useTimestamp } from '@vueuse/core'
-import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
+import type { RouteRecordRaw } from 'vue-router'
+import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal, hasNext, rawRoutes } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
@@ -11,8 +12,17 @@ import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
 import Goto from './Goto.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 registerShotcuts()
+
+// preload next route
+watch(currentRoute, () => {
+  if (currentRoute.value?.meta)
+    currentRoute.value.meta.loaded = true
+  if (nextRoute.value?.meta)
+    nextRoute.value.meta.loaded = true
+}, { immediate: true })
 
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
@@ -56,6 +66,13 @@ const nextSlide = computed(() => {
 })
 
 useSwipeControls(main)
+
+const getClass = (route: RouteRecordRaw) => {
+  const no = route?.meta?.slide?.no
+  if (no != null)
+    return `slidev-page-${no}`
+  return ''
+}
 </script>
 
 <template>
@@ -79,23 +96,37 @@ useSwipeControls(main)
       <div ref="main" class="grid-section main flex flex-col p-4">
         <SlideContainer
           key="main"
-          v-model:clicks="clicks"
-          v-model:clicks-elements="clicksElements"
           class="h-full w-full"
-          :route="currentRoute"
-          :clicks-disabled="false"
-        />
+        >
+          <template #>
+            <template v-for="route of rawRoutes" :key="route.path">
+              <SlideWrapper
+                :is="route?.component"
+                v-if="route.meta.loaded"
+                :style="{ display: route === currentRoute ? null : 'none' }"
+                :clicks="route === currentRoute ? clicks : 0"
+                :clicks-elements="route.meta.clicksElements"
+                :clicks-disabled="false"
+                :class="getClass(route)"
+              />
+            </template>
+          </template>
+        </SlideContainer>
       </div>
       <div class="grid-section next flex flex-col p-4">
         <SlideContainer
           v-if="nextSlide"
           key="next"
-          v-model:clicks-elements="nextTabElements"
           class="h-full w-full"
-          :clicks="nextSlide.clicks"
-          :route="nextSlide.route"
-          :clicks-disabled="false"
-        />
+        >
+          <SlideWrapper
+            :is="nextSlide.route?.component"
+            v-model:clicks-elements="nextTabElements"
+            :clicks="nextSlide.clicks"
+            :clicks-disabled="false"
+            :class="getClass(nextSlide.route)"
+          />
+        </SlideContainer>
       </div>
       <div class="grid-section note">
         <NoteEditor class="w-full h-full p-4 overflow-auto" />

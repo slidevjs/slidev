@@ -361,6 +361,8 @@ export function createSlidesLoader(
               id: idx,
               no,
             },
+            clicksElements: [],
+            loaded: false,
           }
           const meta = Object.assign({}, i.frontmatter, additions)
           const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`

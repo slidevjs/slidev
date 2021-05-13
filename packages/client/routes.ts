@@ -40,6 +40,8 @@ export const router = createRouter({
 declare module 'vue-router' {
   interface RouteMeta {
     layout: string
+    clicksElements: HTMLElement[]
+    loaded?: boolean
     name?: string
     class?: string
     clicks?: number

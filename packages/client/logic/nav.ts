@@ -22,7 +22,7 @@ export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1)
 export const hasPrev = computed(() => currentPage.value > 1)
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 
-export const clicksElements = ref<HTMLElement[]>([])
+export const clicksElements = computed<HTMLElement[]>(() => currentRoute.value?.meta?.clicksElements || [])
 export const clicks = computed<number>({
   get() {
     let clicks = +query.clicks || 0

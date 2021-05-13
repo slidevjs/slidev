@@ -4,26 +4,15 @@ import { computed, defineProps, ref, watchEffect, provide, defineEmit } from 'vu
 import type { RouteRecordRaw } from 'vue-router'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
 import { injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../modules/directives'
+import SlideWrapper from './SlideWrapper.vue'
 
 const emit = defineEmit()
 const props = defineProps({
   width: {
     type: Number,
   },
-  clicks: {
-    default: 0,
-  },
-  clicksElements: {
-    default: () => [] as Element[],
-  },
-  clicksDisabled: {
-    default: false,
-  },
   meta: {
     default: () => ({}) as any,
-  },
-  route: {
-    default: () => ({}) as any as RouteRecordRaw,
   },
   scale: {
     type: Number,
@@ -35,16 +24,6 @@ const props = defineProps({
     type: Object,
   },
 })
-
-const clicks = useVModel(props, 'clicks', emit)
-const clicksElements = useVModel(props, 'clicksElements', emit)
-const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-
-clicksElements.value = []
-
-provide(injectionClicks, clicks)
-provide(injectionClicksDisabled, clicksDisabled)
-provide(injectionClicksElements, clicksElements)
 
 const root = ref<HTMLDivElement>()
 const element = useElementSize(root)
@@ -78,7 +57,7 @@ const style = computed(() => ({
 }))
 
 const classes = computed(() => {
-  const no = props.no ?? props.route?.meta?.slide?.no
+  const no = props.no
   if (no != null)
     return `slidev-page-${no}`
   return ''
@@ -89,7 +68,7 @@ const classes = computed(() => {
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
       <slot>
-        <component :is="props.is || route.component" :class="classes" />
+        <SlideWrapper :is="props.is" :class="classes" :clicks-disabled="true" />
       </slot>
     </div>
     <slot name="controls" />

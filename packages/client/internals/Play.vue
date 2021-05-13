@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import type { RouteRecordRaw } from 'vue-router'
 import { isPrintMode, showEditor, windowSize, isScreenVertical, slideScale } from '../state'
-import { next, prev, currentRoute, clicks, clicksElements, useSwipeControls } from '../logic/nav'
+import { next, prev, currentRoute, clicks, clicksElements, useSwipeControls, rawRoutes, nextRoute } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 registerShotcuts()
+
+// preload next route
+watch(currentRoute, () => {
+  if (currentRoute.value?.meta)
+    currentRoute.value.meta.loaded = true
+  if (nextRoute.value?.meta)
+    nextRoute.value.meta.loaded = true
+}, { immediate: true })
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {
@@ -27,20 +37,36 @@ function onClick(e: MouseEvent) {
 useSwipeControls(root)
 
 const presistNav = computed(() => isScreenVertical.value || showEditor.value)
+
+const getClass = (route: RouteRecordRaw) => {
+  const no = route?.meta?.slide?.no
+  if (no != null)
+    return `slidev-page-${no}`
+  return ''
+}
 </script>
 
 <template>
   <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer
-      v-model:clicks="clicks"
-      v-model:clicks-elements="clicksElements"
       class="w-full h-full bg-black"
       :width="isPrintMode ? windowSize.width.value : undefined"
-      :route="currentRoute"
-      :clicks-disabled="false"
       :scale="slideScale"
       @click="onClick"
     >
+      <template #>
+        <template v-for="route of rawRoutes" :key="route.path">
+          <SlideWrapper
+            :is="route?.component"
+            v-show="route === currentRoute"
+            v-if="route.meta.loaded"
+            :clicks="route === currentRoute ? clicks : 0"
+            :clicks-elements="route.meta.clicksElements"
+            :clicks-disabled="false"
+            :class="getClass(route)"
+          />
+        </template>
+      </template>
       <template #controls>
         <div
           class="absolute bottom-0 left-0 transition duration-300 opacity-0 hover:opacity-100"

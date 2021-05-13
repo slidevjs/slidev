@@ -52,9 +52,10 @@ const cardWidth = computed(() => {
           @click="go(+route.path)"
         >
           <SlideContainer
+            :is="route?.component"
             :key="route.path"
             :width="cardWidth"
-            :route="route"
+            :no="route?.meta?.slide?.no"
             :clicks-disabled="true"
             class="pointer-events-none"
           />

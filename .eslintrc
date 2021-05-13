@@ -4,5 +4,8 @@
     "jest": true
   },
   "extends": "@antfu",
-  "plugins": ["jest"]
+  "plugins": ["jest"],
+  "rules": {
+    "vue/no-lone-template": "off"
+  }
 }
