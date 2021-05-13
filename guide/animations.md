@@ -166,7 +166,27 @@ Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use th
 </div>
 ```
 
-The text `Slidev` will move from `-80px` to its original position on revealing.
+The text `Slidev` will move from `-80px` to its original position on initialization.
+
+> Note: Slidev preloads the next slide for performance, which means the animations might start before you navigate to the page. To get it works properly, you can disable the preloading for the particular slide
+>
+> ```md
+> ---
+> preload: false
+> ---
+> ```
+>
+> Or control the element life-cycle with `v-if` to have fine-grained controls
+>
+> ```html
+> <div
+>   v-if="$slidev.nav.currentPage === 7"
+>   v-motion
+>   :initial="{ x: -80 }"
+>   :enter="{ x: 0 }">
+>   Slidev
+> </div>
+> ```
 
 Learn mode: [Demo](https://sli.dev/demo/starter/7) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/directive-usage.html) | [Presets](https://motion.vueuse.org/presets.html)
 
