@@ -8,13 +8,9 @@ import createSlidevContext from './modules/context'
 
 import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
-import './styles/index.css'
-import './styles/code.css'
-/* __imports__ */
+import '/@slidev/styles'
 import 'virtual:windi-utilities.css'
 import 'virtual:windi-devtools'
-
-/* __body__ */
 
 const app = createApp(App)
 app.use(router)

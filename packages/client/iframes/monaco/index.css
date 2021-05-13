@@ -1,0 +1,29 @@
+html,
+body,
+#container {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+#container {
+  background: var(--slidev-code-background);
+  padding: var(--slidev-code-padding);
+  margin: var(--slidev-code-margin);
+  border-radius: var(--slidev-code-radius);
+}
+
+.monaco-editor .monaco-hover {
+  border-radius: var(--slidev-code-radius);
+  overflow: hidden;
+  border: none;
+  outline: none;
+}
+
+.monaco-editor .lines-content,
+.monaco-editor .view-line,
+.monaco-editor .view-lines {
+  user-select: none;
+}

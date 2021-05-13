@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import { resolve, join } from 'path'
 import http from 'http'
 import fs from 'fs-extra'
 import { build as viteBuild, InlineConfig, mergeConfig, ResolvedConfig } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
+import { blue, yellow } from 'kolorist'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
@@ -23,22 +25,55 @@ export async function build(
   let config: ResolvedConfig = undefined!
 
   try {
-    await viteBuild(
-      mergeConfig(
-        viteConfig,
+    const inlineConfig = mergeConfig(
+      viteConfig,
+      <InlineConfig>({
+        plugins: [
+          await ViteSlidevPlugin(options, pluginOptions),
+          {
+            name: 'resolve-config',
+            configResolved(_config) {
+              config = _config
+            },
+          },
+        ],
+      }),
+    )
+
+    await viteBuild(inlineConfig)
+
+    if (options.data.features.monaco) {
+      if (options.data.config.monaco === 'dev') {
+        console.log(yellow('  Monaco is disabled in the build, to enabled it, set `monaco: true` in the frontmatter'))
+      }
+      else {
+        console.log(blue('  building for Monaco...\n'))
+
+        await viteBuild(
+          mergeConfig(inlineConfig,
         <InlineConfig>({
-          plugins: [
-            await ViteSlidevPlugin(options, pluginOptions),
-            {
-              name: 'resolve-config',
-              configResolved(_config) {
-                config = _config
+          root: join(options.clientRoot, 'iframes/monaco'),
+          base: `${config.base}iframes/monaco/`,
+          build: {
+            outDir: resolve(options.userRoot, 'dist/iframes/monaco'),
+            // fix for monaco workers
+            // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
+            rollupOptions: {
+              output: {
+                manualChunks: {
+                  jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
+                  cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
+                  htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
+                  tsWorker: ['monaco-editor/esm/vs/language/typescript/ts.worker'],
+                  editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
+                },
               },
             },
-          ],
-        }),
-      ),
-    )
+          },
+        })),
+        )
+      }
+    }
   }
   finally {
     if (originalIndexHTML != null)
@@ -67,6 +102,7 @@ export async function build(
       format: 'pdf',
       output: join(config.build.outDir, 'slidev-exported.pdf'),
       base: config.base,
+      dark: options.data.config.colorSchema === 'dark',
     })
     server.close()
   }

@@ -14,6 +14,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
     name: 'slidev:config',
     config(config) {
       const injection: InlineConfig = {
+        define: {
+          __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
+        },
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
@@ -37,24 +40,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'mermaid',
           ],
         },
-
-      }
-      if (options.data.features.monaco && (options.data.config.monaco === true || options.data.config.monaco === 'build')) {
-        // fix for monaco workers
-        // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
-        injection.build = {
-          rollupOptions: {
-            output: {
-              manualChunks: {
-                jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
-                cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
-                htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
-                tsWorker: ['monaco-editor/esm/vs/language/typescript/ts.worker'],
-                editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
-              },
-            },
-          },
-        }
       }
       return mergeConfig(config, injection)
     },

@@ -1,4 +1,4 @@
-import { basename } from 'path'
+import { basename, join } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
 import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
 import type { Connect } from 'vite'
@@ -9,6 +9,7 @@ import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
+import { existsSync } from 'fs-extra'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { toAtFS } from '../utils'
 
@@ -196,6 +197,10 @@ export function createSlidesLoader(
         if (id === '/@slidev/layouts')
           return generateLayouts()
 
+        // styles
+        if (id === '/@slidev/styles')
+          return generateUserStyles()
+
         // configs
         if (id === '/@slidev/configs')
           return generateConfigs()
@@ -278,6 +283,36 @@ export function createSlidesLoader(
     }
 
     return layouts
+  }
+
+  async function generateUserStyles() {
+    const imports: string[] = [
+      `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
+      `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
+    ]
+    const roots = [
+      ...themeRoots,
+      userRoot,
+    ]
+
+    for (const root of roots) {
+      const styles = [
+        join(root, 'styles', 'index.ts'),
+        join(root, 'styles', 'index.js'),
+        join(root, 'styles', 'index.css'),
+        join(root, 'styles.css'),
+        join(root, 'style.css'),
+      ]
+
+      for (const style of styles) {
+        if (existsSync(style)) {
+          imports.push(`import "${toAtFS(style)}"`)
+          continue
+        }
+      }
+    }
+
+    return imports.join('\n')
   }
 
   async function generateLayouts() {

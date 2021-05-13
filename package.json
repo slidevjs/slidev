@@ -34,6 +34,7 @@
     "@antfu/utils": "^0.1.5",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
+    "@slidev/types": "workspace:*",
     "@types/cli-progress": "^3.9.1",
     "@types/codemirror": "^5.60.0",
     "@types/connect": "^3.4.34",
