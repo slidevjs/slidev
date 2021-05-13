@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useTimestamp } from '@vueuse/core'
 import type { RouteRecordRaw } from 'vue-router'
-import { total, currentPage, currentRoute, nextRoute, clicks, clicksElements, useSwipeControls, clicksTotal, hasNext, rawRoutes } from '../logic/nav'
+import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
@@ -12,17 +12,10 @@ import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
 import Goto from './Goto.vue'
+import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper.vue'
 
 registerShotcuts()
-
-// preload next route
-watch(currentRoute, () => {
-  if (currentRoute.value?.meta)
-    currentRoute.value.meta.loaded = true
-  if (nextRoute.value?.meta)
-    nextRoute.value.meta.loaded = true
-}, { immediate: true })
 
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
@@ -67,7 +60,7 @@ const nextSlide = computed(() => {
 
 useSwipeControls(main)
 
-const getClass = (route: RouteRecordRaw) => {
+const getClass = (route?: RouteRecordRaw) => {
   const no = route?.meta?.slide?.no
   if (no != null)
     return `slidev-page-${no}`
@@ -99,17 +92,7 @@ const getClass = (route: RouteRecordRaw) => {
           class="h-full w-full"
         >
           <template #>
-            <template v-for="route of rawRoutes" :key="route.path">
-              <SlideWrapper
-                :is="route?.component"
-                v-if="route.meta.loaded"
-                :style="{ display: route === currentRoute ? null : 'none' }"
-                :clicks="route === currentRoute ? clicks : 0"
-                :clicks-elements="route.meta.clicksElements"
-                :clicks-disabled="false"
-                :class="getClass(route)"
-              />
-            </template>
+            <SlidesShow />
           </template>
         </SlideContainer>
       </div>

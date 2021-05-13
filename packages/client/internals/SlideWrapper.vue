@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useElementSize, useVModel } from '@vueuse/core'
-import { computed, defineProps, ref, watchEffect, provide, defineEmit } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
-import { slideAspect, slideWidth, slideHeight } from '../constants'
+import { useVModel } from '@vueuse/core'
+import { defineProps, provide, defineEmit } from 'vue'
 import { injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../modules/directives'
 
 const emit = defineEmit()
@@ -18,6 +16,7 @@ const props = defineProps({
   },
   is: {
     type: Object,
+    default: undefined,
   },
 })
 

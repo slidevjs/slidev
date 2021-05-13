@@ -40,8 +40,6 @@ export const router = createRouter({
 declare module 'vue-router' {
   interface RouteMeta {
     layout: string
-    clicksElements: HTMLElement[]
-    loaded?: boolean
     name?: string
     class?: string
     clicks?: number
@@ -52,5 +50,9 @@ declare module 'vue-router' {
       no: number
       file: string
     }
+
+    // private fields
+    __clicksElements: HTMLElement[]
+    __preloaded?: boolean
   }
 }
