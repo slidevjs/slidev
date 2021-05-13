@@ -201,6 +201,10 @@ export function createSlidesLoader(
         if (id === '/@slidev/styles')
           return generateUserStyles()
 
+        // styles
+        if (id === '/@slidev/monaco-types')
+          return generateMonacoTypes()
+
         // configs
         if (id === '/@slidev/configs')
           return generateConfigs()
@@ -313,6 +317,10 @@ export function createSlidesLoader(
     }
 
     return imports.join('\n')
+  }
+
+  async function generateMonacoTypes() {
+    return `void 0; ${parser.scanMonacoModules(data.raw).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
   }
 
   async function generateLayouts() {

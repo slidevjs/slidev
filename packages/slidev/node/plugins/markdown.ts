@@ -1,11 +1,11 @@
 import Markdown from 'vite-plugin-md'
-// @ts-expect-error
-import mila from 'markdown-it-link-attributes'
 import { Plugin } from 'vite'
 import type { ShikiOptions } from '@slidev/types'
 import type MarkdownIt from 'markdown-it'
 import base64 from 'js-base64'
-import { isTruthy, slash } from '@antfu/utils'
+import { slash } from '@antfu/utils'
+// @ts-expect-error
+import mila from 'markdown-it-link-attributes'
 // @ts-expect-error
 import Katex from 'markdown-it-katex'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
@@ -82,25 +82,13 @@ export async function createMarkdownPlugin(
 }
 
 export function transformMarkdownMonaco(md: string) {
-  const typeModules = new Set<string>()
-
   // transform monaco
   md = md.replace(/^```(\w+?)\s*{monaco([\w:,-]*)}[\s\n]*([\s\S]+?)^```/mg, (full, lang = 'ts', options: string, code: string) => {
     options = options || ''
     lang = lang.trim()
-    if (lang === 'ts' || lang === 'typescript') {
-      Array.from(code.matchAll(/\s+from\s+(["'])([\/\w@-]+)\1/g))
-        .map(i => i[2])
-        .filter(isTruthy)
-        .map(i => typeModules.add(i))
-    }
     const encoded = base64.encode(code, true)
     return `<Monaco :code="'${encoded}'" lang="${lang}" :readonly="${options.includes('readonly')}" />`
   })
-
-  // types auto discovery for TypeScript monaco
-  if (typeModules.size)
-    md += `\n<script setup>\n${Array.from(typeModules).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}\n</script>\n`
 
   return md
 }

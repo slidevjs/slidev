@@ -1,8 +1,10 @@
+import '/@slidev/styles'
+import './index.css'
+
 import type * as monaco from 'monaco-editor'
 import { formatCode } from '../../setup/prettier'
 import setupMonaco from '../../setup/monaco'
-import '/@slidev/styles'
-import './index.css'
+import '/@slidev/monaco-types'
 
 const props = {
   id: Math.random().toString(),

@@ -41,7 +41,7 @@ const props = defineProps({
 })
 
 const id = nanoid()
-const code = ref(decode(props.code))
+const code = ref(decode(props.code).trimEnd())
 const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * 18 + 20}px` : props.height)
 const isReady = ref(false)
 
