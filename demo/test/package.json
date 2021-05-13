@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "nodemon -w '../../packages/slidev/dist/*.js' --exec 'slidev --log=info'",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "devDependencies": {
+    "@slidev/cli": "workspace:*",
+    "@slidev/theme-default": "^0.7.3",
+    "@slidev/theme-seriph": "^0.7.0",
+    "@slidev/types": "workspace:*",
+    "nodemon": "^2.0.7"
+  }
+}

@@ -1,0 +1,1 @@
+../../packages/create-app/template/slides.md

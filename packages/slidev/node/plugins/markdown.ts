@@ -101,7 +101,7 @@ export function truncateMancoMark(code: string) {
  * Transform Monaco code block to component
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/\n```(\w+?)\s*{([\d\w*,\|-]+)}[\s\n]*([\s\S]+?)\n```/mg, (full, lang = '', rangeStr: string, code: string) => {
+  return md.replace(/^```(\w+?)\s*{([\d\w*,\|-]+)}[\s\n]*([\s\S]+?)^```/mg, (full, lang = '', rangeStr: string, code: string) => {
     const ranges = rangeStr.split(/\|/g).map(i => i.trim())
     return `\n<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
   })
@@ -115,9 +115,16 @@ export function transformPageCSS(md: string, id: string) {
   if (!page)
     return md
 
+  const codeblocks = Array.from(md.matchAll(/^```[\s\S]*?^```/mg))
+    .map(m => ([m.index!, m.index! + m[0].length]))
+
   const result = md.replace(
     /(\n<style[^>]*?>)([\s\S]+?)(<\/style>)/g,
     (full, start, css, end) => {
+      const index = md.search(full)
+      // don't replace `<style>` inside code blocks, #101
+      if (index < 0 || codeblocks.some(([s, e]) => s <= index && index <= e))
+        return full
       if (!start.includes('scoped'))
         start = start.replace('<style', '<style scoped')
       return `${start}\n.slidev-page-${page}{${css}}${end}`
@@ -140,6 +147,9 @@ export function transformMermaid(md: string): string {
     })
 }
 
+/**
+ * Escape `{{}}` in code block to prevent Vue interpret it, #99
+ */
 export function escapeVueInCode(md: string) {
   return md.replace(/{{(.*)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
 }

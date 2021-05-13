@@ -130,6 +130,20 @@ importers:
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
+  demo/test:
+    specifiers:
+      '@slidev/cli': workspace:*
+      '@slidev/theme-default': ^0.7.3
+      '@slidev/theme-seriph': ^0.7.0
+      '@slidev/types': workspace:*
+      nodemon: ^2.0.7
+    devDependencies:
+      '@slidev/cli': link:../../packages/slidev
+      '@slidev/theme-default': 0.7.3
+      '@slidev/theme-seriph': 0.7.0
+      '@slidev/types': link:../../packages/types
+      nodemon: 2.0.7
+
   packages/client:
     specifiers:
       '@antfu/utils': ^0.1.5
