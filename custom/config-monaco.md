@@ -1,6 +1,6 @@
 # Configure Monaco
 
-> Monaco support is experimental. There is a known issue that Monaco's elements will be misplaced when the slide scales. We are working on it and trying to find a solution. Before that, the workaround there is to set the scale to `1:1` and use the browser's zoom to manually scale to the size of your screen.
+> By default, Monaco only is enabled only on dev mode. To make it work on SPA build, add `monaco: true` to your frontmatter configs.
 
 Create `./setup/monaco.ts` with the following content:
 
