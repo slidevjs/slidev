@@ -202,7 +202,7 @@ watch(counter, count => {
 ```html
 <template>
   <button @click="counter += 1">
-    Counter is {\{ counter }}
+    Counter is {{ counter }}
   </button>
 </template>
 ```

@@ -107,7 +107,6 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  *  (markdown-it’s langPrefix + lang). If Prism knows {@code lang}, {@code text} will be highlighted by it.
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {
-  text = escapeVueInCode(text)
   const [langToUse, prismLang] = selectLanguage(options, lang)
   const code = text
     .trimEnd()
@@ -120,7 +119,7 @@ function highlight(markdownit: MarkdownIt, options: Options, text: string, lang:
   const classAttribute = langToUse
     ? ` class="slidev-code ${markdownit.options.langPrefix}${markdownit.utils.escapeHtml(langToUse)}"`
     : ''
-  return `<pre${classAttribute}><code>${code}</code></pre>`
+  return escapeVueInCode(`<pre${classAttribute}><code>${code}</code></pre>`)
 }
 
 /**
