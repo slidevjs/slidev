@@ -1,7 +1,8 @@
-import type { ShikiHighlighter, IShikiTheme, IThemeRegistration } from 'shiki'
+import type { Highlighter as ShikiHighlighter, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import { ShikiDarkModeThemes } from 'packages/types'
+import { escapeVueInCode } from './markdown'
 
 function getThemeName(theme: IThemeRegistration) {
   if (typeof theme === 'string')
@@ -48,6 +49,7 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<ShikiOptions> = (markdownit,
   const { darkModeThemes } = resolveShikiOptions(options!)
 
   markdownit.options.highlight = (code, lang) => {
+    code = escapeVueInCode(code)
     if (darkModeThemes) {
       const dark = _highlighter
         .codeToHtml(code, lang || 'text', darkModeThemes.dark)

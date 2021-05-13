@@ -4,6 +4,7 @@
 import Prism, { Grammar } from 'prismjs'
 import loadLanguages from 'prismjs/components/'
 import MarkdownIt from 'markdown-it'
+import { escapeVueInCode } from './markdown'
 
 interface Options {
   plugins: string[]
@@ -106,6 +107,7 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  *  (markdown-it’s langPrefix + lang). If Prism knows {@code lang}, {@code text} will be highlighted by it.
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {
+  text = escapeVueInCode(text)
   const [langToUse, prismLang] = selectLanguage(options, lang)
   const code = text
     .trimEnd()

@@ -16,7 +16,7 @@ export function createFixPlugins(
       },
     },
     {
-      name: 'slidev:vue-escape',
+      name: 'slidev:vue-escape-post',
       enforce: 'post',
       transform(code, id) {
         if (id.endsWith('.md'))

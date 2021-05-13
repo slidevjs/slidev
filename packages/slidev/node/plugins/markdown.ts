@@ -130,7 +130,7 @@ export function transformPageCSS(md: string, id: string) {
 /**
  * Transform Mermaid code blocks (render done on client side)
  */
-export default function transformMermaid(md: string): string {
+export function transformMermaid(md: string): string {
   return md
     .replace(/^```mermaid\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
       code = code.trim()
@@ -138,4 +138,8 @@ export default function transformMermaid(md: string): string {
       const encoded = base64.encode(code, true)
       return `<Mermaid :code="'${encoded}'" v-bind="${options}" />`
     })
+}
+
+export function escapeVueInCode(md: string) {
+  return md.replace(/{({.*}})/g, '{\\$1')
 }
