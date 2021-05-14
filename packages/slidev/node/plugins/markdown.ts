@@ -103,6 +103,7 @@ export function truncateMancoMark(code: string) {
 export function transformHighlighter(md: string) {
   return md.replace(/^```(\w+?)\s*{([\d\w*,\|-]+)}\s*({.*?})[\s\n]*([\s\S]+?)^```/mg, (full, lang = '', rangeStr: string, options = '', code: string) => {
     const ranges = rangeStr.split(/\|/g).map(i => i.trim())
+    code = code.trimEnd()
     options = options.trim() || '{}'
     return `\n<CodeHighlightController v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
   })
