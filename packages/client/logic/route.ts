@@ -1,4 +1,4 @@
-import { computed, nextTick, unref } from 'vue-demi'
+import { computed, nextTick, unref } from 'vue'
 import { router } from '../routes'
 
 export function useRouteQuery<T extends string | string[]>(
