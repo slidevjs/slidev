@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, defineProps, ref } from 'vue'
+import { computed, defineProps, ref, shallowRef } from 'vue'
 import { isDark, toggleDark, isColorSchemaAuto } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'
 import { configs } from '../env'
-import RecordingControls from './RecordingControls.vue'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 
@@ -25,6 +24,10 @@ const onMouseLeave = () => {
   if (root.value && activeElement.value && root.value.contains(activeElement.value))
     activeElement.value.blur()
 }
+
+const RecordingControls = shallowRef<any>()
+if (__DEV__)
+  import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
 </script>
 
 <template>

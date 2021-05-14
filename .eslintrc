@@ -3,6 +3,9 @@
     "node": true,
     "jest": true
   },
+  "globals": {
+    "__DEV__": true
+  },
   "extends": "@antfu",
   "plugins": ["jest"],
   "rules": {

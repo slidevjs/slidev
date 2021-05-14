@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
-import Editor from './Editor.vue'
 import NavControls from './NavControls.vue'
 import SlidesShow from './SlidesShow.vue'
 
@@ -28,6 +27,10 @@ function onClick(e: MouseEvent) {
 useSwipeControls(root)
 
 const presistNav = computed(() => isScreenVertical.value || showEditor.value)
+
+const Editor = shallowRef<any>()
+if (__DEV__)
+  import('./Editor.vue').then(v => Editor.value = v.default)
 </script>
 
 <template>

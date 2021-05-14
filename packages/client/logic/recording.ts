@@ -1,5 +1,6 @@
 import { Ref, ref, shallowRef, watch } from 'vue'
-import Recorder from 'recordrtc'
+// import Recorder from 'recordrtc'
+import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { useEventListener, useDevicesList } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
@@ -49,8 +50,8 @@ export function useRecording() {
   const recording = ref(false)
   const showAvatar = ref(false)
 
-  const recorderCamera: Ref<Recorder | undefined> = shallowRef()
-  const recorderSlides: Ref<Recorder | undefined> = shallowRef()
+  const recorderCamera: Ref<RecorderType | undefined> = shallowRef()
+  const recorderSlides: Ref<RecorderType | undefined> = shallowRef()
   const streamCamera: Ref<MediaStream | undefined> = shallowRef()
   const streamSlides: Ref<MediaStream | undefined> = shallowRef()
 
@@ -111,6 +112,7 @@ export function useRecording() {
   })
 
   async function startRecording() {
+    const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
     // @ts-expect-error

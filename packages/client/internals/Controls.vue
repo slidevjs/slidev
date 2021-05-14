@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { shallowRef } from 'vue'
 import { showOverview, showRecordingDialog, showInfoDialog } from '../state'
 import { configs } from '../env'
 import SlidesOverview from './SlidesOverview.vue'
-import WebCamera from './WebCamera.vue'
-import RecordingDialog from './RecordingDialog.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
+
+const WebCamera = shallowRef<any>()
+const RecordingDialog = shallowRef<any>()
+if (__DEV__) {
+  import('./WebCamera.vue').then(v => WebCamera.value = v.default)
+  import('./RecordingDialog.vue').then(v => RecordingDialog.value = v.default)
+}
 </script>
 
 <template>
