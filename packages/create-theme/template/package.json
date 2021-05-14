@@ -10,7 +10,7 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
-    "@slidev/cli": "^0.9.5",
+    "@slidev/cli": "^0.9.6",
     "@slidev/theme-default": "^0.7.3"
   }
 }
