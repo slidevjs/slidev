@@ -353,7 +353,7 @@ export function createSlidesLoader(
           if (i.frontmatter?.disabled)
             return undefined
           imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-          const additions: RouteMeta = {
+          const additions: Partial<RouteMeta> = {
             slide: {
               start: i.start,
               end: i.end,

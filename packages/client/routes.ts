@@ -46,6 +46,7 @@ declare module 'vue-router' {
     slide?: {
       start: number
       end: number
+      note?: string
       id: number
       no: number
       file: string
