@@ -63,7 +63,9 @@ export function nextSlide() {
 
 export async function prevSlide(lastClicks = true) {
   const next = Math.max(1, currentPage.value - 1)
-  await go(next, (lastClicks && clicksTotal.value) ? clicksTotal.value : undefined)
+  await go(next)
+  if (lastClicks && clicksTotal.value)
+    router.replace({ query: { ...route.value.query, clicks: clicksTotal.value } })
 }
 
 export function go(page: number, clicks?: number) {
