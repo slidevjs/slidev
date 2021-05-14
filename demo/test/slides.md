@@ -31,3 +31,24 @@ p {
 ```
 
 Current Page: {{$slidev.nav.currentPage}}
+
+---
+
+# Page 3
+
+<v-clicks>
+
+- A
+- B
+- C
+
+</v-clicks>
+
+
+<v-clicks>
+
+1. C
+2. B
+3. A
+
+</v-clicks>

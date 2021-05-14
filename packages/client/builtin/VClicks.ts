@@ -47,11 +47,9 @@ export default defineComponent({
       )
     }
 
-    // handle ul list
-    if (defaults.length === 1 && defaults[0].type === 'ul' && Array.isArray(defaults[0].children)) {
-      defaults[0].children = mapChildren(defaults[0].children)
-      return defaults
-    }
+    // handle ul, ol list
+    if (defaults.length === 1 && ['ul', 'ol'].includes(defaults[0].type as string) && Array.isArray(defaults[0].children))
+      return h(defaults[0], {}, [mapChildren(defaults[0].children)])
 
     return mapChildren(defaults)
   },
