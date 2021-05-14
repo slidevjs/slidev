@@ -83,6 +83,14 @@ const Customizations = [
     text: 'Configure Monaco',
     link: '/custom/config-monaco',
   },
+  {
+    text: 'Configure KaTeX',
+    link: '/custom/config-katex',
+  },
+  {
+    text: 'Configure Mermaid',
+    link: '/custom/config-mermaid',
+  },
 ]
 
 const Resources = [
