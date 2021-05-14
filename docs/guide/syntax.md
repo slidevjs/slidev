@@ -26,8 +26,8 @@ console.log('Hello, World!')
 You can directly use Windi CSS and Vue components to style and enrich your slides.
 
 <div class="p-3">
-  <Tweet :id="20" />
-<div>
+  <Tweet id="20" />
+</div>
 ~~~
 
 ## Front Matter & Layouts
