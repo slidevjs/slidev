@@ -8,6 +8,7 @@ Object {
   "info": false,
   "monaco": "dev",
   "remoteAssets": true,
+  "routerMode": "history",
   "theme": "default",
   "title": "Hi",
 }
@@ -138,6 +139,7 @@ Object {
   "info": false,
   "monaco": "dev",
   "remoteAssets": true,
+  "routerMode": "history",
   "theme": "default",
   "title": "H1",
 }
