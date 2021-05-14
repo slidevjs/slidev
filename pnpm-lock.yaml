@@ -25,7 +25,7 @@ importers:
       '@types/prompts': ^2.4.0
       '@types/recordrtc': ^5.6.5
       '@typescript-eslint/eslint-plugin': ^4.23.0
-      '@vueuse/core': ^4.10.0
+      '@vueuse/core': ^4.11.0
       bumpp: ^6.0.6
       cross-env: ^7.0.3
       eslint: ^7.26.0
@@ -44,7 +44,7 @@ importers:
       vite: ^2.3.2
       vite-plugin-windicss: ^0.16.0-beta.17
       vitepress: ^0.13.2
-      zx: ^1.5.0
+      zx: ^1.6.0
     devDependencies:
       '@antfu/eslint-config': 0.6.5_eslint@7.26.0+typescript@4.2.4
       '@antfu/ni': 0.7.0
@@ -67,7 +67,7 @@ importers:
       '@types/prompts': 2.4.0
       '@types/recordrtc': 5.6.5
       '@typescript-eslint/eslint-plugin': 4.23.0_eslint@7.26.0+typescript@4.2.4
-      '@vueuse/core': 4.10.0
+      '@vueuse/core': 4.11.0
       bumpp: 6.0.6
       cross-env: 7.0.3
       eslint: 7.26.0
@@ -86,19 +86,19 @@ importers:
       vite: 2.3.2
       vite-plugin-windicss: 0.16.0-beta.17_vite@2.3.2
       vitepress: 0.13.2
-      zx: 1.5.0
+      zx: 1.6.0
 
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
       '@slidev/theme-default': ^0.7.3
-      '@slidev/theme-seriph': ^0.7.0
+      '@slidev/theme-seriph': ^0.7.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': 0.7.3
-      '@slidev/theme-seriph': 0.7.0
+      '@slidev/theme-seriph': 0.7.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -106,13 +106,13 @@ importers:
     specifiers:
       '@slidev/cli': workspace:*
       '@slidev/theme-default': ^0.7.3
-      '@slidev/theme-seriph': ^0.7.0
+      '@slidev/theme-seriph': ^0.7.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': 0.7.3
-      '@slidev/theme-seriph': 0.7.0
+      '@slidev/theme-seriph': 0.7.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -120,13 +120,13 @@ importers:
     specifiers:
       '@slidev/cli': workspace:*
       '@slidev/theme-default': ^0.7.3
-      '@slidev/theme-seriph': ^0.7.0
+      '@slidev/theme-seriph': ^0.7.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': 0.7.3
-      '@slidev/theme-seriph': 0.7.0
+      '@slidev/theme-seriph': 0.7.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -134,13 +134,13 @@ importers:
     specifiers:
       '@slidev/cli': workspace:*
       '@slidev/theme-default': ^0.7.3
-      '@slidev/theme-seriph': ^0.7.0
+      '@slidev/theme-seriph': ^0.7.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': 0.7.3
-      '@slidev/theme-seriph': 0.7.0
+      '@slidev/theme-seriph': 0.7.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -149,7 +149,7 @@ importers:
       '@antfu/utils': ^0.1.5
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
-      '@vueuse/core': ^4.10.0
+      '@vueuse/core': ^4.11.0
       '@vueuse/head': ^0.5.1
       '@vueuse/motion': ^1.5.5
       codemirror: ^5.61.0
@@ -163,12 +163,12 @@ importers:
       recordrtc: ^5.6.2
       vue: ^3.0.11
       vue-router: ^4.0.8
-      windicss: ^3.0.2
+      windicss: ^3.0.4
     dependencies:
       '@antfu/utils': 0.1.5
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
-      '@vueuse/core': 4.10.0_vue@3.0.11
+      '@vueuse/core': 4.11.0_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
       '@vueuse/motion': 1.5.5_vue@3.0.11
       codemirror: 5.61.0
@@ -182,7 +182,7 @@ importers:
       recordrtc: 5.6.2
       vue: 3.0.11
       vue-router: 4.0.8_vue@3.0.11
-      windicss: 3.0.2
+      windicss: 3.0.4
 
   packages/create-app:
     specifiers:
@@ -245,11 +245,11 @@ importers:
       vite: ^2.3.2
       vite-plugin-components: ^0.8.4
       vite-plugin-icons: ^0.5.0
-      vite-plugin-md: ^0.6.6
+      vite-plugin-md: ^0.6.7
       vite-plugin-remote-assets: ^0.2.2
       vite-plugin-windicss: ^0.16.0-beta.17
       vue: ^3.0.11
-      windicss: ^3.0.2
+      windicss: ^3.0.4
       yargs: ^17.0.1
     dependencies:
       '@antfu/utils': 0.1.5
@@ -280,11 +280,11 @@ importers:
       vite: 2.3.2
       vite-plugin-components: 0.8.4_vite@2.3.2
       vite-plugin-icons: 0.5.0_3a062f62dd9e0ad9a7cb2ae18cd865f0
-      vite-plugin-md: 0.6.6_vite@2.3.2
+      vite-plugin-md: 0.6.7_vite@2.3.2
       vite-plugin-remote-assets: 0.2.2_vite@2.3.2
       vite-plugin-windicss: 0.16.0-beta.17_vite@2.3.2
       vue: 3.0.11
-      windicss: 3.0.2
+      windicss: 3.0.4
       yargs: 17.0.1
     devDependencies:
       fast-deep-equal: 3.1.3
@@ -1140,8 +1140,8 @@ packages:
       theme-vitesse: 0.1.11
     dev: true
 
-  /@slidev/theme-seriph/0.7.0:
-    resolution: {integrity: sha512-DAGpvokiHiisfZKSaxSdmtJfHTd6nlqvVSsndHdFNrL5E39yYaxcp+azA5ZqQWuF4Wsz6eL1oQWZ1VVbvhCgXA==}
+  /@slidev/theme-seriph/0.7.1:
+    resolution: {integrity: sha512-w3nCFsjxhZirRK4JBzDN8y1NAjwLniyThxC5G2S9fnQ3C6hQtHQD1ywDB7/GhkgIevT3W3RYwvuNYa8NBHDVaQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@slidev/client': ^0.6.7
@@ -1561,21 +1561,21 @@ packages:
   /@vue/shared/3.0.11:
     resolution: {integrity: sha512-b+zB8A2so8eCE0JsxjL24J7vdGl8rzPQ09hZNhystm+KqSbKcAej1A+Hbva1rCMmTTqA+hFnUSDc5kouEo0JzA==}
 
-  /@vueuse/core/4.10.0:
-    resolution: {integrity: sha512-MEJKnp5ZQFTtQnHoUvP/yi6nRbr6S1NcaNe3L6PZi4n9Gm4JiAd5Rx0fS/xhaTKMOzsTbN1gTzoM1Gl3BDbjtA==}
+  /@vueuse/core/4.11.0:
+    resolution: {integrity: sha512-a2/NHE3LjZ73LKGU1Ef2mz11ilIxs4pRIv1OUf98Sfvg6+GqA3R2VzIExswVlU3555GYIErmmJDywEHLsyii6w==}
     dependencies:
-      '@vueuse/shared': 4.10.0
-      vue-demi: 0.7.5
+      '@vueuse/shared': 4.11.0
+      vue-demi: 0.9.0
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
     dev: true
 
-  /@vueuse/core/4.10.0_vue@3.0.11:
-    resolution: {integrity: sha512-MEJKnp5ZQFTtQnHoUvP/yi6nRbr6S1NcaNe3L6PZi4n9Gm4JiAd5Rx0fS/xhaTKMOzsTbN1gTzoM1Gl3BDbjtA==}
+  /@vueuse/core/4.11.0_vue@3.0.11:
+    resolution: {integrity: sha512-a2/NHE3LjZ73LKGU1Ef2mz11ilIxs4pRIv1OUf98Sfvg6+GqA3R2VzIExswVlU3555GYIErmmJDywEHLsyii6w==}
     dependencies:
-      '@vueuse/shared': 4.10.0_vue@3.0.11
-      vue-demi: 0.7.5_vue@3.0.11
+      '@vueuse/shared': 4.11.0_vue@3.0.11
+      vue-demi: 0.9.0_vue@3.0.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -1614,8 +1614,8 @@ packages:
       vue-demi: 0.7.4_vue@3.0.11
     dev: false
 
-  /@vueuse/shared/4.10.0:
-    resolution: {integrity: sha512-zomWAt6Q2RNa9Wu3POUDJJqyAo6zlf4trsUu9goOQKNKE+G95kTKHQJoj4K3XOkjMktND24xrkvyOVGbp3lqVw==}
+  /@vueuse/shared/4.11.0:
+    resolution: {integrity: sha512-WKyOxTWuAiOLTp9Eg6RYabtZBSiJyt9EgFZEMD8fSlZ1FAckg0Ntya3HLfTDkPBjOqVe3pMdOsAbLwsU+7Fwyw==}
     dependencies:
       vue-demi: 0.9.0
     transitivePeerDependencies:
@@ -1623,8 +1623,8 @@ packages:
       - vue
     dev: true
 
-  /@vueuse/shared/4.10.0_vue@3.0.11:
-    resolution: {integrity: sha512-zomWAt6Q2RNa9Wu3POUDJJqyAo6zlf4trsUu9goOQKNKE+G95kTKHQJoj4K3XOkjMktND24xrkvyOVGbp3lqVw==}
+  /@vueuse/shared/4.11.0_vue@3.0.11:
+    resolution: {integrity: sha512-WKyOxTWuAiOLTp9Eg6RYabtZBSiJyt9EgFZEMD8fSlZ1FAckg0Ntya3HLfTDkPBjOqVe3pMdOsAbLwsU+7Fwyw==}
     dependencies:
       vue-demi: 0.9.0_vue@3.0.11
     transitivePeerDependencies:
@@ -7961,8 +7961,8 @@ packages:
       vue-template-es2015-compiler: 1.9.1
     dev: false
 
-  /vite-plugin-md/0.6.6_vite@2.3.2:
-    resolution: {integrity: sha512-Kju5KxQeDJ5HP5N2AaYzE4IxE6Bx65PiUhfDrnWCDYdLsdlqMDyGPzfbmB8QqM1o0PHclzDFgUMMcOCm/Snpfw==}
+  /vite-plugin-md/0.6.7_vite@2.3.2:
+    resolution: {integrity: sha512-R9i61r1y6gfelJKtHiHkw6NOkucFzGRgy7VL7bqMufiSh1UNyYKZrpiQtagzavpBlJSVk34lfEyfyKpQyeuocQ==}
     peerDependencies:
       vite: ^2.0.0
     dependencies:
@@ -8077,18 +8077,6 @@ packages:
     dependencies:
       vue: 3.0.11
     dev: false
-
-  /vue-demi/0.7.5:
-    resolution: {integrity: sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==}
-    hasBin: true
-    requiresBuild: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-beta.1
-      vue: ^2.6.0 || >=3.0.0-rc.1
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-    dev: true
 
   /vue-demi/0.7.5_vue@3.0.11:
     resolution: {integrity: sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==}
@@ -8265,6 +8253,12 @@ packages:
     engines: {node: '>= 12'}
     hasBin: true
 
+  /windicss/3.0.4:
+    resolution: {integrity: sha512-sB0SQxEOOmGn0+ZzWBNpsZg0D36nmBvAk8uuxuVyYiQMzISbI+2Jv6R7dWi5qQqIncs9DUHleJmqNk+z98EG8Q==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: false
+
   /word-wrap/1.2.3:
     resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}
     engines: {node: '>=0.10.0'}
@@ -8415,8 +8409,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zx/1.5.0:
-    resolution: {integrity: sha512-Nya5XwXtOUob9qrY102d70gpaKp5ZjJpeLL9GQF0hPC904AzNZLni/8Vh+f4w9tDq1HnAlT5uA3qjyS/Vi3E1g==}
+  /zx/1.6.0:
+    resolution: {integrity: sha512-wRtHCW024oXXX5ny6OZI2gFjPBBYU1UisscOERdGIJHBpPBwk5FDapjRZxJ6Fda74xC5iwPJugsn1gccYuIb8g==}
     engines: {node: '>= 14.8.0'}
     hasBin: true
     dependencies:
