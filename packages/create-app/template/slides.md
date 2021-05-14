@@ -12,7 +12,7 @@ highlighter: shiki
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
-  
+
   Learn more at [Sli.dev](https://sli.dev)
 ---
 
@@ -40,7 +40,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 # What is Slidev?
 
 Slidev is a slides maker and presenter designed for developers, consist of the following features
-  
+
 - 📝 **Text-based** - focus on the content with Markdown, and then style them later
 - 🎨 **Themable** - theme can be shared and used with npm packages
 - 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
@@ -71,7 +71,6 @@ h1 {
 }
 </style>
 
-
 ---
 
 # Navigation
@@ -93,7 +92,6 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
   src="https://sli.dev/assets/arrow-bottom-left.svg"
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
 
 ---
 layout: image-right
@@ -137,7 +135,7 @@ We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that
 <!-- ./components/Counter.vue -->
 <Counter :count="10" m="t-4" />
 
-Check out [the guides](https://sli.dev/custom/#components) for more.
+Check out [the guides](https://sli.dev/builtin/components.html) for more.
 
 </div>
 <div>
@@ -250,11 +248,11 @@ const final = {
 }
 </script>
 
-<div 
+<div
   v-motion
   :initial="{ x:35, y: 40, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-  
+
 [Learn More](https://sli.dev/guide/animations.html#motion)
 
 </div>
