@@ -37,6 +37,15 @@ export async function build(
             },
           },
         ],
+        build: {
+          rollupOptions: {
+            output: {
+              manualChunks: {
+                motion: ['@vueuse/motion'],
+              },
+            },
+          },
+        },
       }),
     )
 
@@ -61,6 +70,7 @@ export async function build(
             rollupOptions: {
               output: {
                 manualChunks: {
+
                   jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
                   cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
                   htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
