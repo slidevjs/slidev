@@ -101,9 +101,10 @@ export function truncateMancoMark(code: string) {
  * Transform Monaco code block to component
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/^```(\w+?)\s*{([\d\w*,\|-]+)}[\s\n]*([\s\S]+?)^```/mg, (full, lang = '', rangeStr: string, code: string) => {
+  return md.replace(/^```(\w+?)\s*{([\d\w*,\|-]+)}\s*({.*?})[\s\n]*([\s\S]+?)^```/mg, (full, lang = '', rangeStr: string, options = '', code: string) => {
     const ranges = rangeStr.split(/\|/g).map(i => i.trim())
-    return `\n<CodeHighlightController :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
+    options = options.trim() || '{}'
+    return `\n<CodeHighlightController v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
   })
 }
 
