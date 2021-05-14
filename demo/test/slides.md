@@ -52,3 +52,9 @@ Current Page: {{$slidev.nav.currentPage}}
 3. A
 
 </v-clicks>
+
+---
+
+<div>
+Hi
+</div>

@@ -75,6 +75,9 @@ export function createSlidesLoader(
 
   const entryId = slash(entry)
 
+  let _layouts_cache_time = 0
+  let _layouts_cache: Record<string, string> = {}
+
   return [
     {
       name: 'slidev:loader',
@@ -140,7 +143,7 @@ export function createSlidesLoader(
           const a = data.slides[i]
           const b = newData.slides[i]
 
-          if (a?.content.trim() === b?.content.trim() && JSON.stringify(a.frontmatter) === JSON.stringify(b.frontmatter))
+          if (a?.content.trim() === b?.content.trim() && equal(a.frontmatter, b.frontmatter))
             continue
 
           ctx.server.ws.send({
@@ -160,14 +163,16 @@ export function createSlidesLoader(
         const vueModules = (
           await Promise.all(Array.from(hmrPages).map(async(i) => {
             const file = `${slidePrefix}${i + 1}.md`
-            return await VuePlugin.handleHotUpdate!({
-              ...ctx,
-              modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-              file,
-              async read() {
-                return await transformMarkdown((<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
-              },
-            })
+            try {
+              const md = await transformMarkdown((<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
+              return await VuePlugin.handleHotUpdate!({
+                ...ctx,
+                modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
+                file,
+                read() { return md },
+              })
+            }
+            catch {}
           }),
           )
         ).flatMap(i => i || [])
@@ -202,7 +207,7 @@ export function createSlidesLoader(
         if (id === '/@slidev/styles')
           return generateUserStyles()
 
-        // styles
+        // monaco-types
         if (id === '/@slidev/monaco-types')
           return generateMonacoTypes()
 
@@ -265,6 +270,10 @@ export function createSlidesLoader(
   }
 
   async function getLayouts() {
+    const now = Date.now()
+    if (now - _layouts_cache_time < 2000)
+      return _layouts_cache
+
     const layouts: Record<string, string> = {}
 
     const roots = [
@@ -286,6 +295,9 @@ export function createSlidesLoader(
         layouts[layout] = layoutPath
       }
     }
+
+    _layouts_cache_time = now
+    _layouts_cache = layouts
 
     return layouts
   }
