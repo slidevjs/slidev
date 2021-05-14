@@ -15,6 +15,7 @@ export interface ExportOptions {
   output?: string
   timeout?: number
   dark?: boolean
+  routerMode?: 'hash' | 'history'
 }
 
 function createSlidevProgress() {
@@ -62,6 +63,7 @@ export async function exportSlides({
   base = '/',
   timeout = 500,
   dark = false,
+  routerMode = 'history',
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
@@ -83,7 +85,10 @@ export async function exportSlides({
 
     if (dark)
       await page.emulateMedia({ colorScheme: 'dark' })
-    await page.goto(`http://localhost:${port}${base}${no}?print`, {
+    const url = routerMode === 'hash'
+      ? `http://localhost:${port}/#${base}${no}?print`
+      : `http://localhost:${port}${base}${no}?print`
+    await page.goto(url, {
       waitUntil: 'networkidle',
     })
     await page.waitForTimeout(timeout)

@@ -1,6 +1,6 @@
 import { App, DirectiveBinding, InjectionKey, Ref, watch } from 'vue'
 import { remove } from '@antfu/utils'
-import { isPrintMode } from '../state'
+import { isPrintMode } from '../logic/nav'
 
 export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
 export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')

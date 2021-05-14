@@ -144,6 +144,7 @@ export function parse(
     info: false,
     highlighter: 'prism',
     colorSchema: 'auto',
+    routerMode: 'history',
   }
   const config: SlidevConfig = Object.assign(
     defaultConfig,

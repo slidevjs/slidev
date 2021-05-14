@@ -49,6 +49,10 @@ export interface SlidevConfig {
    * @default 'auto'
    */
   colorSchema: 'dark' | 'light' | 'all' | 'auto'
+  /**
+   * @default 'hash'
+   */
+  routerMode: 'hash' | 'history'
 }
 
 export interface SlidevFeatureFlags {

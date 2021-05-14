@@ -8,10 +8,17 @@ import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
+import { SlidevConfig } from '@slidev/types'
 import { version } from '../package.json'
 import { createServer } from './server'
 import { getThemeRoots, isRelative, ResolvedSlidevOptions, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
+
+const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
+  'highlighter',
+  'monaco',
+  'routerMode',
+]
 
 const cli = yargs
   .scriptName('slidev')
@@ -82,7 +89,7 @@ cli.command(
               console.log(yellow('\n  restarting on theme change\n'))
               initServer()
             }
-            else if (newData.config.monaco !== data.config.monaco || newData.config.highlighter !== data.config.highlighter) {
+            else if (CONFIG_RESTART_FIELDS.some(i => newData.config[i] !== data.config[i])) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
             }
@@ -277,6 +284,7 @@ cli.command(
       output,
       timeout,
       dark,
+      routerMode: options.data.config.routerMode,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()

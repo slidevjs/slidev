@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { isPrintMode, showEditor, windowSize, isScreenVertical, slideScale } from '../state'
-import { next, prev, useSwipeControls } from '../logic/nav'
+import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
+import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'

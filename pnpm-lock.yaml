@@ -1617,7 +1617,7 @@ packages:
   /@vueuse/shared/4.10.0:
     resolution: {integrity: sha512-zomWAt6Q2RNa9Wu3POUDJJqyAo6zlf4trsUu9goOQKNKE+G95kTKHQJoj4K3XOkjMktND24xrkvyOVGbp3lqVw==}
     dependencies:
-      vue-demi: 0.7.5
+      vue-demi: 0.9.0
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -1626,7 +1626,7 @@ packages:
   /@vueuse/shared/4.10.0_vue@3.0.11:
     resolution: {integrity: sha512-zomWAt6Q2RNa9Wu3POUDJJqyAo6zlf4trsUu9goOQKNKE+G95kTKHQJoj4K3XOkjMktND24xrkvyOVGbp3lqVw==}
     dependencies:
-      vue-demi: 0.7.5_vue@3.0.11
+      vue-demi: 0.9.0_vue@3.0.11
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -8092,6 +8092,32 @@ packages:
 
   /vue-demi/0.7.5_vue@3.0.11:
     resolution: {integrity: sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-beta.1
+      vue: ^2.6.0 || >=3.0.0-rc.1
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.0.11
+    dev: false
+
+  /vue-demi/0.9.0:
+    resolution: {integrity: sha512-f8vVUpC726YXv99fF/3zHaw5CUYbP5H/DVWBN+pncXM8P2Uz88kkffwj9yD7MukuVzPICDHNrgS3VC2ursaP7g==}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-beta.1
+      vue: ^2.6.0 || >=3.0.0-rc.1
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dev: true
+
+  /vue-demi/0.9.0_vue@3.0.11:
+    resolution: {integrity: sha512-f8vVUpC726YXv99fF/3zHaw5CUYbP5H/DVWBN+pncXM8P2Uz88kkffwj9yD7MukuVzPICDHNrgS3VC2ursaP7g==}
     hasBin: true
     requiresBuild: true
     peerDependencies:

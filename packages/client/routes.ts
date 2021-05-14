@@ -1,4 +1,4 @@
-import { createRouter, RouteRecordRaw, createWebHistory } from 'vue-router'
+import { createRouter, RouteRecordRaw, createWebHistory, createWebHashHistory } from 'vue-router'
 import Play from './internals/Play.vue'
 // @ts-expect-error
 import _rawRoutes from '/@slidev/routes'
@@ -33,7 +33,7 @@ if (import.meta.env.DEV) {
 }
 
 export const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: __SLIDEV_HASH_ROUTE__ ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
 

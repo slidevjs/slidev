@@ -16,6 +16,8 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       const injection: InlineConfig = {
         define: {
           __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
+          __SLIDEV_HASH_ROUTE__: options.data.config.routerMode === 'hash',
+          __DEV__: options.mode === 'dev',
         },
         resolve: {
           alias: {
