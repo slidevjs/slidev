@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, clicks, rawRoutes, nextRoute } from '../logic/nav'
+import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper.vue'
 
 // preload next route
@@ -11,13 +11,6 @@ watch(currentRoute, () => {
   if (nextRoute.value?.meta && nextRoute.value.meta.preload !== false)
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
-
-const getClass = (route: RouteRecordRaw) => {
-  const no = route?.meta?.slide?.no
-  if (no != null)
-    return `slidev-page-${no}`
-  return ''
-}
 </script>
 
 <template>
@@ -29,7 +22,7 @@ const getClass = (route: RouteRecordRaw) => {
       :clicks="route === currentRoute ? clicks : 0"
       :clicks-elements="route.meta?.__clicksElements || []"
       :clicks-disabled="false"
-      :class="getClass(route)"
+      :class="getSlideClass(route)"
     />
   </template>
 </template>

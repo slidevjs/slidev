@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { useElementSize, useVModel } from '@vueuse/core'
-import { computed, defineProps, ref, watchEffect, provide, defineEmit } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
+import { useElementSize } from '@vueuse/core'
+import { computed, defineProps, ref, watchEffect } from 'vue'
 import { slideAspect, slideWidth, slideHeight } from '../constants'
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../modules/directives'
-import SlideWrapper from './SlideWrapper.vue'
 
-const emit = defineEmit()
 const props = defineProps({
   width: {
     type: Number,
@@ -16,12 +12,6 @@ const props = defineProps({
   },
   scale: {
     type: Number,
-  },
-  no: {
-    type: Number,
-  },
-  is: {
-    type: Object,
   },
 })
 
@@ -56,20 +46,12 @@ const style = computed(() => ({
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
 
-const classes = computed(() => {
-  const no = props.no
-  if (no != null)
-    return `slidev-page-${no}`
-  return ''
-})
 </script>
 
 <template>
   <div id="slide-container" ref="root">
     <div id="slide-content" :style="style">
-      <slot>
-        <SlideWrapper :is="props.is" :class="classes" :clicks-disabled="true" />
-      </slot>
+      <slot />
     </div>
     <slot name="controls" />
   </div>

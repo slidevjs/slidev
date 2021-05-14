@@ -3,7 +3,9 @@ import { useVModel } from '@vueuse/core'
 import { computed, defineEmit, defineProps } from 'vue'
 import { breakpoints, windowSize } from '../state'
 import { go as goSlide, rawRoutes } from '../logic/nav'
+import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 const emit = defineEmit()
 const props = defineProps<{ modelValue: boolean }>()
@@ -52,13 +54,17 @@ const cardWidth = computed(() => {
           @click="go(+route.path)"
         >
           <SlideContainer
-            :is="route?.component"
             :key="route.path"
             :width="cardWidth"
-            :no="route?.meta?.slide?.no"
             :clicks-disabled="true"
             class="pointer-events-none"
-          />
+          >
+            <SlideWrapper
+              :is="route?.component"
+              :clicks-disabled="true"
+              :class="getSlideClass(route)"
+            />
+          </SlideContainer>
         </div>
         <div
           class="absolute top-0 opacity-50"

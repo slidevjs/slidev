@@ -2,11 +2,11 @@
 import { useHead } from '@vueuse/head'
 import { ref, computed } from 'vue'
 import { useTimestamp } from '@vueuse/core'
-import type { RouteRecordRaw } from 'vue-router'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
+import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
@@ -59,13 +59,6 @@ const nextSlide = computed(() => {
 })
 
 useSwipeControls(main)
-
-const getClass = (route?: RouteRecordRaw) => {
-  const no = route?.meta?.slide?.no
-  if (no != null)
-    return `slidev-page-${no}`
-  return ''
-}
 </script>
 
 <template>
@@ -107,7 +100,7 @@ const getClass = (route?: RouteRecordRaw) => {
             v-model:clicks-elements="nextTabElements"
             :clicks="nextSlide.clicks"
             :clicks-disabled="false"
-            :class="getClass(nextSlide.route)"
+            :class="getSlideClass(nextSlide.route)"
           />
         </SlideContainer>
       </div>
