@@ -16,6 +16,7 @@ export interface SlideInfoExtended extends SlideInfo {
 export interface SlidevConfig {
   title: string
   /**
+   * @see https://sli.dev/themes/use.html
    * @defult 'default'
    */
   theme: string
@@ -24,6 +25,9 @@ export interface SlidevConfig {
    */
   remoteAssets: boolean | 'dev' | 'build'
   /**
+   * Enable Monaco
+   *
+   * @see https://sli.dev/custom/config-monaco.html
    * @defult 'dev'
    */
   monaco: boolean | 'dev' | 'build'
@@ -42,14 +46,21 @@ export interface SlidevConfig {
    */
   info: string | boolean
   /**
+   * Prefer highlighter
+   *
+   * @see https://sli.dev/custom/highlighters.html
    * @default prism
    */
   highlighter: 'prism' | 'shiki'
   /**
+   * Force slides color schema
+   *
    * @default 'auto'
    */
   colorSchema: 'dark' | 'light' | 'all' | 'auto'
   /**
+   * Router mode for vue-router
+   *
    * @default 'hash'
    */
   routerMode: 'hash' | 'history'
