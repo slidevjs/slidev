@@ -22,6 +22,7 @@ const props = defineProps({
     default: () => [],
   },
   at: {
+    type: Number,
     default: undefined,
   },
 })
