@@ -1,5 +1,14 @@
 import { CSSProperties } from 'vue'
 
+/**
+ * Resolve urls from frontmatter and append with the base url
+ */
+export function resolveAssetUrl(url: string) {
+  if (url.startsWith('/'))
+    return import.meta.env.BASE_URL + url.slice(1)
+  return url
+}
+
 export function handleBackground(background?: string, dim = false): CSSProperties {
   const isColor = background && background[0] === '#' && background.startsWith('rgb')
 
@@ -14,8 +23,8 @@ export function handleBackground(background?: string, dim = false): CSSPropertie
       ? undefined
       : background
         ? dim
-          ? `linear-gradient(#0005, #0008), url(${background})`
-          : `url("${background}")`
+          ? `linear-gradient(#0005, #0008), url(${resolveAssetUrl(background)})`
+          : `url("${resolveAssetUrl(background)}")`
         : undefined,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
