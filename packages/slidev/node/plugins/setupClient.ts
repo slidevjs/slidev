@@ -30,7 +30,7 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: Re
           imports.push(`import __n${idx} from '${toAtFS(path)}'`)
           injections.push(
             `// ${path}`,
-            `__n${idx}()`,
+            `injection_return = __n${idx}()`,
           )
           asyncInjections.push(
             `// ${path}`,

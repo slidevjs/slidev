@@ -16,24 +16,18 @@ pie
 import { defineProps, computed, getCurrentInstance } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
-const props = defineProps({
-  code: {
-    default: '',
-  },
-  scale: {
-    default: 1,
-  },
-  theme: {
-    defualt: 'base',
-  },
-})
+const props = defineProps<{
+  code: string
+  scale?: number
+  theme?: string
+}>()
 
 const vm = getCurrentInstance()
-const html = computed(() => renderMermaid(props.code, Object.assign({ theme: props.theme }, vm.attrs)))
+const html = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
 </script>
 
 <template>
-  <Transform :scale="scale">
+  <Transform :scale="scale || 1">
     <div v-html="html"></div>
   </Transform>
 </template>

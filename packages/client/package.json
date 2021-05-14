@@ -15,7 +15,7 @@
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "@antfu/utils": "^0.1.5",
+    "@antfu/utils": "^0.1.6",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vueuse/core": "^4.11.0",

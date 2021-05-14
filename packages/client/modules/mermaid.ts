@@ -2,6 +2,8 @@
 import mermaid from 'mermaid/dist/mermaid.min'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
+import { clearUndefined } from '@antfu/utils'
+import setupMermaid from '../setup/mermaid'
 
 mermaid.startOnLoad = false
 mermaid.initialize({ startOnLoad: false })
@@ -17,8 +19,8 @@ export function renderMermaid(encoded: string, options: any) {
 
   mermaid.initialize({
     startOnLoad: false,
-    theme: 'forest',
-    ...options,
+    ...clearUndefined(setupMermaid() || {}),
+    ...clearUndefined(options),
   })
   const code = decode(encoded)
   const id = nanoid()

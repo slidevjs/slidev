@@ -8,6 +8,7 @@ import { slash } from '@antfu/utils'
 import mila from 'markdown-it-link-attributes'
 // @ts-expect-error
 import Katex from 'markdown-it-katex'
+import type { KatexOptions } from 'katex'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
@@ -38,6 +39,8 @@ export async function createMarkdownPlugin(
     setups.push(md => md.use(Prism))
   }
 
+  const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, {}, false)
+
   return Markdown({
     wrapperClasses: '',
     headEnabled: false,
@@ -56,7 +59,7 @@ export async function createMarkdownPlugin(
         },
       })
 
-      md.use(Katex)
+      md.use(Katex, KatexOptions)
 
       setups.forEach(i => i(md))
     },
