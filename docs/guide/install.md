@@ -2,21 +2,25 @@
 
 ## Starter Template
 
+> Slidev requires [**Node.js >=14.0**](https://nodejs.org/)
+
 The best way to get started is using our official starter template.
 
 With NPM:
 
 ```bash
-$ npm init slidev
+$ npm init slidev@latest
 ```
 
 With Yarn:
 
 ```bash
-$ yarn create slidev
+$ yarn create slidev@latest
 ```
 
-It contains the setup and a short demo with instructions on how to use it. You should definitely give it a try.
+Follow the prompts and it will open up the slideshow at http://localhost:3030/ automatically for you.
+
+It also contains the basic setup and a short demo with instructions on how to get started with Slidev.
 
 ## Install Manually
 

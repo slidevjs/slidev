@@ -1,9 +1,9 @@
 # Exporting
 
-> Exporting relies on [Playwright](https://playwright.dev) to do the rendering. You will therefore need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) to use this feature.
-> If you are doing exporting in a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
-
 ## PDF
+
+> Exporting to PDF or PNG relies on [Playwright](https://playwright.dev) for rendering. You will therefore need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) to use this feature.
+> If you are doing exporting in a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
 
 Install `playwright-chromium`
 
@@ -37,7 +37,7 @@ $ slidev build
 
 The generated application will be available under `dist/` and then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. Now you can share your slides with the rest of the world with a single link.
 
-## Base Path
+### Base Path
 
 To deploy your slides under sub-routes, you will need to pass the `--base` option. For example:
 

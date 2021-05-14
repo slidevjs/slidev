@@ -18,8 +18,10 @@ download: true
 highlighter: 'prism'
 # enable monaco editor, default to dev only
 monaco: 'dev'
-# force color schema for the slides (could be 'auto', 'light', or 'dark')
+# force color schema for the slides, could be 'auto', 'light', or 'dark'
 colorSchema: 'auto'
+# router mode for vue-router, could be "history" or "hash"
+routerMode: 'history'
 # information for your slides, can be a markdown string
 info: |
   ## Slidev
