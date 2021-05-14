@@ -4,6 +4,7 @@ import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
 import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import Markdown from 'markdown-it'
+import { RouteMeta } from 'vue-router'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
@@ -352,7 +353,7 @@ export function createSlidesLoader(
           if (i.frontmatter?.disabled)
             return undefined
           imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-          const additions = {
+          const additions: RouteMeta = {
             slide: {
               start: i.start,
               end: i.end,
@@ -361,8 +362,8 @@ export function createSlidesLoader(
               id: idx,
               no,
             },
-            clicksElements: [],
-            loaded: false,
+            __clicksElements: [],
+            __preloaded: false,
           }
           const meta = Object.assign({}, i.frontmatter, additions)
           const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
