@@ -18,8 +18,8 @@ if (__DEV__) {
   <SlidesOverview v-model="showOverview" />
   <Goto />
   <template v-if="__DEV__">
-    <WebCamera />
-    <RecordingDialog v-model="showRecordingDialog" />
+    <WebCamera v-if="WebCamera" />
+    <RecordingDialog v-if="RecordingDialog" v-model="showRecordingDialog" />
   </template>
   <InfoDialog v-if="configs.info" v-model="showInfoDialog" />
 </template>

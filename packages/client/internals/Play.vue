@@ -60,7 +60,7 @@ if (__DEV__)
     </SlideContainer>
 
     <template v-if="__DEV__">
-      <Editor v-if="showEditor" />
+      <Editor v-if="Editor && showEditor" />
     </template>
   </div>
   <Controls />

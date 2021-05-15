@@ -61,7 +61,7 @@ if (__DEV__)
         <carbon:presentation-file />
       </a>
 
-      <template v-if="!isPresenter && !md">
+      <template v-if="!isPresenter && !md && RecordingControls">
         <RecordingControls />
 
         <div class="w-1px m-2 opacity-10 bg-current"></div>
