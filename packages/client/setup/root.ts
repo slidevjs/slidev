@@ -26,9 +26,12 @@ export default function setupRoot() {
       () => {
         if (isPresenter.value)
           return
-        if (+serverState.value.page !== +currentPage.value)
-          router.replace(getPath(serverState.value.page))
-        clicks.value = serverState.value.clicks || 0
+        if (+serverState.value.page !== +currentPage.value || clicks.value !== serverState.value.clicks) {
+          router.replace({
+            path: getPath(serverState.value.page),
+            query: { ...router.currentRoute.query, clicks: serverState.value.clicks || 0 },
+          })
+        }
       },
       { deep: true },
     )
