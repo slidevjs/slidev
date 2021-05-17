@@ -1,24 +1,29 @@
-import { Fn, not, and, whenever } from '@vueuse/core'
+import { Fn, not, and } from '@vueuse/core'
+import { watch } from 'vue'
 import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 
 const _shortcut = and(not(isInputing), not(isOnFocus), shortcutsEnabled)
 
-export function shortcut(key: string, fn: Fn, autoRepeat: boolean = false) {
-  let count = 0;
-  const f = () => {
-    if (autoRepeat && magicKeys.current.has(key)) {
-      setTimeout(() => f(), Math.max(1000 - count * 40, 200))
-      count++
-    }
-    else {
+export function shortcut(key: string, fn: Fn, autoRepeat = false) {
+  const source = and(magicKeys[key], _shortcut)
+  let count = 0
+  let timer: any
+  const trigger = () => {
+    clearTimeout(timer)
+    if (!source.value) {
       count = 0
+      return
+    }
+    if (autoRepeat) {
+      timer = setTimeout(trigger, Math.max(1000 - count * 250, 150))
+      count++
     }
     fn()
   }
-  if (!autoRepeat)
-    return whenever(and(magicKeys[key], _shortcut), f, { flush: 'sync' })
+
+  return watch(source, trigger, { flush: 'sync' })
 }
 
 export function registerShotcuts() {
