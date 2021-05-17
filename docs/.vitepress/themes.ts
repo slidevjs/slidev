@@ -130,6 +130,31 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-light-icons',
+    name: 'Light Icons',
+    description: 'A simple, light and elegant theme for Slidev, combined together with creative layouts, custom components & fonts',
+    author: {
+      name: 'Pulkit Aggarwal',
+      link: 'https://github.com/BashCloud',
+    },
+    repo: 'https://github.com/lightvue/slidev-theme-light-icons',
+    previews: [
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/1-layout-intro.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/2-layout-image-header-intro-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/3-layout-dynamic-image-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/5-layout-dynamic-image-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/7-layout-dynamic-image-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/8-layout-center-image-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/9-layout-dynamic-image-light.png?raw=true',
+      'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/10-layout-left-image-light.png?raw=true',
+    ],
+    tags: [
+      'light-icons',
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
