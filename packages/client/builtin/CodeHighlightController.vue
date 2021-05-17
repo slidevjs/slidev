@@ -27,9 +27,9 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicks)!
-const elements = inject(injectionClicksElements)!
-const disabled = inject(injectionClicksDisabled)!
+const clicks = inject(injectionClicks)
+const elements = inject(injectionClicksElements)
+const disabled = inject(injectionClicksDisabled)
 
 function makeid(length = 5) {
   const result = []
@@ -44,18 +44,20 @@ const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  const prev = props.at == null ? elements.value.length : props.at
+  const prev = props.at == null ? elements?.value.length : props.at
   const index = computed(() => {
-    if (disabled.value)
+    if (disabled?.value)
       return props.ranges.length - 1
-    return Math.min(Math.max(0, clicks.value - prev), props.ranges.length - 1)
+    return Math.min(Math.max(0, (clicks?.value || 0) - (prev || 0)), props.ranges.length - 1)
   })
   const rangeStr = computed(() => props.ranges[index.value] || '')
-  if (props.ranges.length >= 2 && !disabled.value) {
+  if (props.ranges.length >= 2 && !disabled?.value) {
     const id = makeid()
     const ids = range(props.ranges.length - 1).map(i => id + i)
-    elements.value.push(...ids)
-    onUnmounted(() => ids.forEach(i => remove(elements.value, i)), vm)
+    if (elements?.value) {
+      elements.value.push(...ids)
+      onUnmounted(() => ids.forEach(i => remove(elements.value, i)), vm)
+    }
   }
 
   watchEffect(() => {
