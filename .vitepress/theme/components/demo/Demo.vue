@@ -152,3 +152,12 @@ onMounted(() => {
     </DemoSlide>
   </div>
 </template>
+
+<style>
+.slidev-layout ul {
+  padding: 0;
+}
+.slidev-layout li {
+  line-height: 2.4em;
+}
+</style>
