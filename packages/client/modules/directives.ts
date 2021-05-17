@@ -23,15 +23,15 @@ export default function createDirectives() {
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
-          const elements = dirInject(dir, injectionClicksElements)!
-          const clicks = dirInject(dir, injectionClicks)!
+          const elements = dirInject(dir, injectionClicksElements)
+          const clicks = dirInject(dir, injectionClicks)
 
-          const prev = elements.value.length
+          const prev = elements?.value?.length || 0
 
-          if (!elements.value.includes(el))
+          if (!elements?.value?.includes(el))
             elements.value.push(el)
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
@@ -39,9 +39,10 @@ export default function createDirectives() {
           watch(
             clicks,
             () => {
+              const c = clicks?.value ?? 0
               const show = dir.value != null
-                ? clicks.value >= dir.value
-                : clicks.value > prev
+                ? c >= dir.value
+                : c > prev
               if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                 el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
             },
@@ -61,20 +62,20 @@ export default function createDirectives() {
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
-          const elements = dirInject(dir, injectionClicksElements)!
-          const clicks = dirInject(dir, injectionClicks)!
+          const elements = dirInject(dir, injectionClicksElements)
+          const clicks = dirInject(dir, injectionClicks)
 
-          const prev = elements.value.length
+          const prev = elements?.value.length
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           watch(
             clicks,
             () => {
-              const show = clicks.value >= (dir.value ?? prev)
+              const show = (clicks.value ?? 0) >= (dir.value ?? prev ?? 0)
               if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                 el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
             },
@@ -91,17 +92,17 @@ export default function createDirectives() {
         name: 'v-click-hide',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)!.value)
+          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
-          const clicks = dirInject(dir, injectionClicks)!
+          const clicks = dirInject(dir, injectionClicks)
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           watch(
             clicks,
             () => {
-              const hide = clicks.value > dir.value
+              const hide = (clicks?.value || 0) > dir.value
               el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
             },
@@ -110,7 +111,7 @@ export default function createDirectives() {
         },
         unmounted(el, dir) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, false)
-          const elements = dirInject(dir, injectionClicksElements)!
+          const elements = dirInject(dir, injectionClicksElements)
           if (elements?.value)
             remove(elements.value, el)
         },
