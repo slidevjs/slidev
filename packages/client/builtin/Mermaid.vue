@@ -28,6 +28,6 @@ const html = computed(() => renderMermaid(props.code || '', Object.assign({ them
 
 <template>
   <Transform :scale="scale || 1">
-    <div v-html="html"></div>
+    <div class="mermaid" v-html="html"></div>
   </Transform>
 </template>
