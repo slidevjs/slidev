@@ -31,6 +31,8 @@ export function registerShotcuts() {
   shortcut('space', next, true)
   shortcut('right', next, true)
   shortcut('left', prev, true)
+  shortcut('pageDown', next, true)
+  shortcut('pageUp', prev, true)
   shortcut('up', () => prevSlide(false), true)
   shortcut('down', nextSlide, true)
   shortcut('shift_left', () => prevSlide(false), true)
