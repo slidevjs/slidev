@@ -155,6 +155,27 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-purplin',
+    name: 'Purplin',
+    description: 'Theme with bar bottom component. Based on purple color',
+    author: {
+      name: 'Mauricio Martínez',
+      link: 'https://github.com/moudev',
+    },
+    repo: 'https://github.com/moudev/slidev-theme-purplin',
+    previews: [
+      'https://i.imgur.com/BX3TpEc.png',
+      'https://i.imgur.com/mqqRi1F.png',
+      'https://i.imgur.com/fwm2785.png',
+      'https://i.imgur.com/m8eemKt.png',
+    ],
+    tags: [
+      'purplin',
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
