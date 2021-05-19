@@ -1,5 +1,7 @@
 # Configure Vite
 
+<Environment type="node" />
+
 Slidev is powered by [Vite](http://vitejs.dev/) under the hood. This means you can leverage Vite's great plugin system to customize your slides even further.
 
 The `vite.config.ts` will be respected if you have one.

@@ -1,5 +1,7 @@
 # Configure KaTeX
 
+<Environment type="node" />
+
 Create `./setup/katex.ts` with the following content:
 
 ```ts

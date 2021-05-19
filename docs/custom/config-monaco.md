@@ -1,5 +1,7 @@
 # Configure Monaco
 
+<Environment type="client" />
+
 > By default, Monaco only is enabled only on dev mode. To make it work on SPA build, add `monaco: true` to your frontmatter configs.
 
 Create `./setup/monaco.ts` with the following content:

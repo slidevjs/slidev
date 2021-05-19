@@ -1,5 +1,7 @@
 # Configure Mermaid
 
+<Environment type="client" />
+
 Create `./setup/mermaid.ts` with the following content:
 
 ```ts
