@@ -7,9 +7,7 @@ export default defineConfig({
   extract: {
     include: [
       resolve(__dirname, '**/*.{vue,ts}'),
-      'src/**/*.{vue,ts}',
-      'components/**/*.{vue,ts}',
-      '*.md',
+      '**/*.{vue,ts,tsx,jsx,md}',
     ],
     exclude: [
       '.git',
