@@ -1,5 +1,7 @@
 # Configure Windi CSS
 
+<Environment type="node" />
+
 Markdown naturally supports embedded HTML markups. You can therefore style your content the way you want. To provide some convenience, we have [Windi CSS](https://github.com/windicss/windicss) built-in, so you can style markup directly using class utilities. 
 
 For example:

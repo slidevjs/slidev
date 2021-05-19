@@ -30,6 +30,8 @@ To configure your Prism, you can just import the theme css or use [`prism-theme-
 
 ## Configure Shiki
 
+<Environment type="node" />
+
 Create `./setup/shiki.ts` file with the following content
 
 ```ts
