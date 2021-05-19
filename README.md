@@ -18,7 +18,6 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <a href="https://github.com/slidevjs/slidev" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
 </p>
 
-
 <p align="center">
   <a href="https://twitter.com/antfu7/status/1389604687502995457">Video Preview</a>
 </p>
@@ -36,17 +35,13 @@ Status: <b>Public Beta 🎉</b><br>
 </table>
 </p>
 
-<p align="center">
-<a href="https://www.producthunt.com/posts/slidev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slidev" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908&theme=dark" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200"/></a>
-</p>
-
 ## Motivation
 
 I always found myself spending too much time styling and layouting slides when using apps like PowerPoint / Keynote / Google Slides. Whenever I need to share code snippets, I would also need to use other tools to generate the highlighted code as images over and over again.
 
 So as a frontend developer, why not solve it the way that fits better with what I am good at?
 
-Documentations and guides on **[Sli.dev](https://sli.dev)**
+Documentations and guides on **[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev)
 
 ## Features
 
