@@ -1,7 +1,7 @@
 <template>
   <header v-if="showHero" class="home-hero flex">
     <div class="mx-auto grid lg:grid-cols-[minmax(400px,600px),minmax(500px,800px)] gap-4">
-      <div class="my-auto pb-40 <md:pb-20">
+      <div class="my-auto pb-40 <md:pb-26">
         <p align="center">
           <a href="https://github.com/slidevjs/slidev">
             <img src="/logo-title.png" alt="Slidev" height="300" />
@@ -38,16 +38,8 @@
           </div>
         </div>
 
-        <ClientOnly>
-          <p align="center" m="t-6">
-            <a href="https://www.producthunt.com/posts/slidev?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-slidev" target="_blank">
-              <img v-if="isDark" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908&theme=dark" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
-              <img v-else src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=294908" alt="Slidev - Presentation Slides for Developers | Product Hunt" width="200" />
-            </a>
-          </p>
-        </ClientOnly>
-        <a href="https://github.com/slidevjs/slidev" class="-mt-2 block filter dark:invert" target="__blank">
-          <img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social">
+        <a href="https://github.com/slidevjs/slidev" class="mt-3 block filter dark:invert" target="__blank">
+          <img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social" />
         </a>
       </div>
       <ClientOnly>
@@ -60,7 +52,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useFrontmatter } from 'vitepress'
-import { isDark } from '../composables/dark'
 import NavLink from './NavLink.vue'
 
 const data = useFrontmatter()
