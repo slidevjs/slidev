@@ -10,6 +10,9 @@ Simple Arrow
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('abcedfghicklmn', 10)
 
 defineProps<{
   x1: number | string
@@ -19,6 +22,8 @@ defineProps<{
   width?: number | string
   color?: string
 }>()
+
+const id = nanoid()
 </script>
 
 <template>
@@ -29,7 +34,7 @@ defineProps<{
   >
     <defs>
       <marker
-        id="arrowhead"
+        :id="id"
         markerUnits="strokeWidth"
         :markerWidth="10"
         :markerHeight="7"
@@ -47,7 +52,7 @@ defineProps<{
       :y2="+y2"
       :stroke="color || 'currentColor'"
       :stroke-width="width || 2"
-      marker-end="url(#arrowhead)"
+      :marker-end="`url(#${id})`"
     />
   </svg>
 </template>
