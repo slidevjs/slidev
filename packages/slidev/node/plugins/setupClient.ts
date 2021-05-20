@@ -30,11 +30,13 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: Re
           imports.push(`import __n${idx} from '${toAtFS(path)}'`)
           injections.push(
             `// ${path}`,
-            `injection_return = __n${idx}()`,
+            (code.includes('injection_return'))
+              ? `injection_return = __n${idx}();`
+              : `__n${idx}();`,
           )
           asyncInjections.push(
             `// ${path}`,
-            `await __n${idx}(injection_arg)`,
+            `await __n${idx}(injection_arg);`,
           )
         })
 

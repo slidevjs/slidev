@@ -31,23 +31,25 @@ export default function createDirectives() {
 
           const prev = elements?.value?.length || 0
 
-          if (!elements?.value?.includes(el))
+          if (elements && !elements?.value?.includes(el))
             elements.value.push(el)
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watch(
-            clicks,
-            () => {
-              const c = clicks?.value ?? 0
-              const show = dir.value != null
-                ? c >= dir.value
-                : c > prev
-              if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
-            },
-            { immediate: true },
-          )
+          if (clicks) {
+            watch(
+              clicks,
+              () => {
+                const c = clicks?.value ?? 0
+                const show = dir.value != null
+                  ? c >= dir.value
+                  : c > prev
+                if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
+                  el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+              },
+              { immediate: true },
+            )
+          }
         },
         unmounted(el: HTMLElement, dir) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, false)
@@ -72,15 +74,17 @@ export default function createDirectives() {
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watch(
-            clicks,
-            () => {
-              const show = (clicks.value ?? 0) >= (dir.value ?? prev ?? 0)
-              if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
-            },
-            { immediate: true },
-          )
+          if (clicks) {
+            watch(
+              clicks,
+              () => {
+                const show = (clicks.value ?? 0) >= (dir.value ?? prev ?? 0)
+                if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
+                  el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+              },
+              { immediate: true },
+            )
+          }
         },
         unmounted(el: HTMLElement) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
@@ -99,15 +103,17 @@ export default function createDirectives() {
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watch(
-            clicks,
-            () => {
-              const hide = (clicks?.value || 0) > dir.value
-              el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
-              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
-            },
-            { immediate: true },
-          )
+          if (clicks) {
+            watch(
+              clicks,
+              () => {
+                const hide = (clicks?.value || 0) > dir.value
+                el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+                el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
+              },
+              { immediate: true },
+            )
+          }
         },
         unmounted(el, dir) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, false)

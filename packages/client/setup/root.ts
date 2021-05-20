@@ -29,7 +29,7 @@ export default function setupRoot() {
         if (+serverState.value.page !== +currentPage.value || clicks.value !== serverState.value.clicks) {
           router.replace({
             path: getPath(serverState.value.page),
-            query: { ...router.currentRoute.query, clicks: serverState.value.clicks || 0 },
+            query: { ...router.currentRoute.value.query, clicks: serverState.value.clicks || 0 },
           })
         }
       },
