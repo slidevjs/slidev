@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 
 /**
  * Resolve urls from frontmatter and append with the base url
