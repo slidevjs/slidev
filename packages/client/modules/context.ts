@@ -19,9 +19,28 @@ export default function createSlidevContext() {
           // @ts-expect-error
           navObj[key] = nav[key]
       }
-      app.config.globalProperties.$slidev = reactive({
+      const context = reactive({
         nav: navObj,
       })
+      app.config.globalProperties.$slidev = context
+
+      // allows controls from postMessages
+      if (__DEV__) {
+        // @ts-expect-error
+        window.__slidev__ = context
+        window.addEventListener('message', ({ data }) => {
+          if (data && data.target === 'slidev') {
+            if (data.type === 'navigate') {
+              context.nav.go(+data.no, +data.clicks || 0)
+            }
+            else if (data.type === 'css-vars') {
+              const root = document.documentElement
+              for (const [key, value] of Object.entries(data.vars || {}))
+                root.style.setProperty(key, value as any)
+            }
+          }
+        })
+      }
     },
   }
 }

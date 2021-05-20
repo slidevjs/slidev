@@ -1,0 +1,10 @@
+:root {
+  --slidev-code-background: rgba(125,125,125,0.03);
+  --slidev-code-font-family: theme('fontFamily.mono');
+  --slidev-code-padding: 8px;
+  --slidev-code-font-size: 12px;
+  --slidev-code-line-height: 18px;
+  --slidev-code-radius: 4px;
+  --slidev-code-margin: 4px 0;
+  --slidev-slide-container-background: black;
+}

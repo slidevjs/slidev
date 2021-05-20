@@ -36,7 +36,8 @@ if (__DEV__)
 <template>
   <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]">
     <SlideContainer
-      class="w-full h-full bg-black"
+      class="w-full h-full"
+      :style="{ background: 'var(--slidev-slide-container-background, black)'}"
       :width="isPrintMode ? windowSize.width.value : undefined"
       :scale="slideScale"
       @click="onClick"

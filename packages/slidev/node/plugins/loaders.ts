@@ -304,6 +304,7 @@ export function createSlidesLoader(
 
   async function generateUserStyles() {
     const imports: string[] = [
+      `import "${toAtFS(join(clientRoot, 'styles/vars.css'))}"`,
       `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
       `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
     ]
