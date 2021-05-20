@@ -41,7 +41,7 @@ I always found myself spending too much time styling and layouting slides when u
 
 So as a frontend developer, why not solve it the way that fits better with what I am good at?
 
-Documentations and guides on **[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev)
+Documentations and guides on **[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev)
 
 ## Features
 
@@ -65,7 +65,7 @@ Documentations and guides on **[Sli.dev](https://sli.dev)** | [中文文档](htt
 The best way to understand it is to try it, just one command away:
 
 ```bash
-npm init slidev
+npm init slidev@latest
 ```
 
 For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
