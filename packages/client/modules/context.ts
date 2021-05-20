@@ -2,6 +2,7 @@ import { App, reactive } from 'vue'
 import type { UnwrapNestedRefs } from '@vue/reactivity'
 import { objectKeys } from '@antfu/utils'
 import * as nav from '../logic/nav'
+import { isDark } from '../logic/dark'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -37,6 +38,9 @@ export default function createSlidevContext() {
               const root = document.documentElement
               for (const [key, value] of Object.entries(data.vars || {}))
                 root.style.setProperty(key, value as any)
+            }
+            else if (data.type === 'color-schema') {
+              isDark.value = data.color === 'dark'
             }
           }
         })

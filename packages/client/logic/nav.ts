@@ -8,6 +8,8 @@ export { rawRoutes }
 
 export const route = computed(() => router.currentRoute.value)
 
+export const isPrintMode = computed(() => route.value.query.print !== undefined)
+export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 
 export const queryClicks = useRouteQuery('clicks', '0')
@@ -108,5 +110,3 @@ export async function downloadPDF() {
     `${configs.title}.pdf`,
   )
 }
-
-export const isPrintMode = computed(() => route.value.query.print !== undefined)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineProps, ref, shallowRef } from 'vue'
 import { isDark, toggleDark, isColorSchemaAuto } from '../logic/dark'
-import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF } from '../logic/nav'
+import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'
 import { configs } from '../env'
 import Settings from './Settings.vue'
@@ -32,7 +32,7 @@ if (__DEV__)
 
 <template>
   <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1" @mouseleave="onMouseLeave">
-    <button class="icon-btn" @click="toggleFullscreen">
+    <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
       <carbon:minimize v-if="isFullscreen" />
       <carbon:maximize v-else />
     </button>
@@ -45,7 +45,7 @@ if (__DEV__)
       <carbon:arrow-right />
     </button>
 
-    <button class="icon-btn" title="Slides overview" @click="toggleOverview">
+    <button v-if="!isEmbedded" class="icon-btn" title="Slides overview" @click="toggleOverview">
       <carbon:apps />
     </button>
 
@@ -56,7 +56,7 @@ if (__DEV__)
 
     <div class="w-1px m-2 opacity-10 bg-current"></div>
 
-    <template v-if="__DEV__">
+    <template v-if="__DEV__ && !isEmbedded">
       <a v-if="isPresenter" :href="nonPresenterLink" class="icon-btn" title="Play Mode">
         <carbon:presentation-file />
       </a>
@@ -81,11 +81,11 @@ if (__DEV__)
       </button>
     </template>
 
-    <button v-if="configs.info" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
+    <button v-if="configs.info && !isEmbedded" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
       <carbon:information />
     </button>
 
-    <template v-if="!isPresenter">
+    <template v-if="!isPresenter && !isEmbedded">
       <MenuButton>
         <template #button>
           <button class="icon-btn">
@@ -98,7 +98,7 @@ if (__DEV__)
       </MenuButton>
     </template>
 
-    <div class="w-1px m-2 opacity-10 bg-current"></div>
+    <div v-if="!isEmbedded" class="w-1px m-2 opacity-10 bg-current"></div>
 
     <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
       <div class="my-auto">
