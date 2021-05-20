@@ -21,4 +21,4 @@ Here are the curated themes made by the community.
 
 ## More Themes
 
-Find all the [themes available on NPM](https://www.npmjs.com/search?q=keywords%3Aslidev-theme).
+Find all the [themes available on npm](https://www.npmjs.com/search?q=keywords%3Aslidev-theme).
