@@ -194,7 +194,7 @@ module.exports = {
         items: Resources,
       },
       {
-        text: 'Translations',
+        text: 'English',
         items: Translations,
       },
     ],
