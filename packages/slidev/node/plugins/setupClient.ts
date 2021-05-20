@@ -28,15 +28,30 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: Re
             return
 
           imports.push(`import __n${idx} from '${toAtFS(path)}'`)
+
+          let fn = `__n${idx}`
+          let awaitFn = `await __n${idx}`
+
+          if (/\binjection_return\b/g.test(code)) {
+            fn = `injection_return = ${fn}`
+            awaitFn = `injection_return = ${awaitFn}`
+          }
+          if (/\binjection_arg\b/g.test(code)) {
+            fn += ('(injection_arg)')
+            awaitFn += ('(injection_arg)')
+          }
+          else {
+            fn += ('()')
+            awaitFn += ('()')
+          }
+
           injections.push(
             `// ${path}`,
-            (code.includes('injection_return'))
-              ? `injection_return = __n${idx}();`
-              : `__n${idx}();`,
+            fn,
           )
           asyncInjections.push(
             `// ${path}`,
-            `await __n${idx}(injection_arg);`,
+            awaitFn,
           )
         })
 
