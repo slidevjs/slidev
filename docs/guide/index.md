@@ -41,7 +41,7 @@ Slidev is made possible by combining these tools and technologies.
 
 ### Scaffolding Your First Presentation
 
-With NPM:
+With npm:
 
 ```bash
 $ npm init slidev
