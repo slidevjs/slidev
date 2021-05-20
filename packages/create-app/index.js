@@ -32,10 +32,9 @@ async function init() {
     const { projectName } = await prompts({
       type: 'text',
       name: 'projectName',
-      message: 'Project name:',
-      initial: 'slidev',
+      message: 'Project name: (slidev)',
     })
-    targetDir = projectName.trim()
+    targetDir = projectName.trim() || 'slidev'
   }
   const packageName = await getValidPackageName(targetDir)
   const root = path.join(cwd, targetDir)
