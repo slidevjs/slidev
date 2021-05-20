@@ -186,7 +186,7 @@ export const community: ThemeInfo[] = [
       name: '',
     },
     previews: [
-      '/themes/placeholder.png',
+      '/theme-placeholder.png',
     ],
   },
 ]

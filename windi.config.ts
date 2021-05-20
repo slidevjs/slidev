@@ -4,12 +4,12 @@ import aspectRatio from 'windicss/plugin/aspect-ratio'
 export default defineConfig({
   extract: {
     include: [
-      '**/*.{md,vue}',
-      '.vitepress/**/*.{ts,md,vue}',
-      '../packages/client/internals/SlideContainer.vue',
-      '../packages/client/layouts/*.vue',
-      '../packages/@theme-default/layouts/*.vue',
-    ],
+      // '**/*.{md}',
+      '.vitepress/theme/**/*.{md,vue}',
+      '.vitepress/@slidev/client/internals/SlideContainer.vue',
+      '.vitepress/@slidev/client/layouts/*.vue',
+      '.vitepress/@slidev/theme-default/layouts/*.vue',
+    ]
   },
   attributify: true,
   plugins: [

@@ -7,8 +7,9 @@ import WindiCSS from 'vite-plugin-windicss'
 const config: UserConfig = {
   resolve: {
     alias: {
-      '@slidev/client': resolve(__dirname, '../packages/client'),
-      '@slidev/parser': resolve(__dirname, '../packages/parser'),
+      '@slidev/client': resolve(__dirname, '.vitepress/@slidev/client'),
+      '@slidev/parser': resolve(__dirname, '.vitepress/@slidev/parser'),
+      '@slidev/theme-default': resolve(__dirname, '.vitepress/@slidev/theme-default'),
     },
   },
   optimizeDeps: {
@@ -18,7 +19,6 @@ const config: UserConfig = {
       '@vueuse/core',
     ],
   },
-  publicDir: resolve(__dirname, '../assets'),
   server: {
     hmr: {
       overlay: false,
@@ -28,7 +28,7 @@ const config: UserConfig = {
     Components({
       dirs: [
         '.vitepress/theme/components',
-        '../packages/client/builtin',
+        '.vitepress/@slidev/client/builtin',
       ],
       customLoaderMatcher: id => id.endsWith('.md'),
       customComponentResolvers: [

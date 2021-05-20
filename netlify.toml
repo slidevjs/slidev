@@ -1,0 +1,31 @@
+[build.environment]
+  NPM_FLAGS = "--prefix=/dev/null"
+  NODE_VERSION = "14"
+  PLAYWRIGHT_BROWSERS_PATH = "0"
+
+[build]
+  publish = ".vitepress/dist"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
+
+[[redirects]]
+  from = "https://slidev.antfu.me/*"
+  to = "https://sli.dev/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/demo/composable-vue/*"
+  to = "https://demo.sli.dev/composable-vue"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/demo/starter/*"
+  to = "https://demo.sli.dev/starter"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
