@@ -172,7 +172,6 @@ module.exports = {
   themeConfig: {
     repo: 'slidevjs/docs',
     logo: '/logo.svg',
-    docsDir: 'docs',
     docsBranch: 'main',
     editLinks: true,
     editLinkText: 'Suggest changes to this page',
