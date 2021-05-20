@@ -10,14 +10,12 @@ const __dirname = path.dirname(__filename)
 await installBrowsersWithProgressBar()
 
 await $`npm run build`
-cd(path.resolve(__dirname, '../docs'))
-await $`npx vitepress build`
 
 const starterMd = path.resolve(__dirname, '../demo/starter/slides.md')
 if (!fs.existsSync(starterMd))
   await fs.copyFile(path.resolve(__dirname, '../packages/create-app/template/slides.md'), starterMd)
 
 cd(path.resolve(__dirname, '../demo/composable-vue'))
-await $`npx slidev build -d --base /demo/composable-vue/ --out ../../docs/.vitepress/dist/demo/composable-vue`
+await $`npx slidev build -d --base /demo/composable-vue/ --out ../../dist/composable-vue`
 cd(path.resolve(__dirname, '../demo/starter'))
-await $`npx slidev build -d --base /demo/starter/ --out ../../docs/.vitepress/dist/demo/starter`
+await $`npx slidev build -d --base /demo/starter/ --out ../../dist/starter`

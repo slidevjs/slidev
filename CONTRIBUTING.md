@@ -2,6 +2,10 @@
 
 Excited to hear that you are interested in contributing to this project! Thanks!
 
+## Documentations 
+
+Documentations are now moved to [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
+
 ## Setup
 
 This project uses [`pnpm`](https://pnpm.io/) to manage the dependencies, install it if you haven't via
@@ -53,10 +57,6 @@ The server will restart automatically every time the builds get updated.
 We use monorepo to manage multiple packages
 
 ```
-docs/              - The documentation site powered by VitePress
-  .vitepress/      - VitePress related configurations
-assets/            - Static assets will be hosted under https://sli.dev/*
-
 packages
   slidev/          - main package entry, holds the code on Node.js side
   client/          - main frontend app

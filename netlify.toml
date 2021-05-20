@@ -4,26 +4,21 @@
   PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [build]
-  publish = "docs/.vitepress/dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run docs:build"
+  publish = "dist"
+  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run demo:build"
 
 [[redirects]]
-  from = "https://slidev.antfu.me/*"
-  to = "https://sli.dev/:splat"
+  from = "/composable-vue/*"
+  to = "/composable-vue/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/starter/*"
+  to = "/starter/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/"
+  to = "https://sli.dev/"
   status = 301
   force = true
-
-[[redirects]]
-  from = "/demo/composable-vue/*"
-  to = "/demo/composable-vue/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/demo/starter/*"
-  to = "/demo/starter/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "pnpm -r --filter ./packages --parallel run dev",
     "build": "pnpm -r --filter ./packages run build",
-    "docs": "vitepress dev docs",
-    "docs:build": "zx ./scripts/docs.mjs",
+    "demo:build": "zx ./scripts/demo.mjs",
     "demo:dev": "pnpm -C demo/starter run dev",
     "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
     "lint": "eslint '**/*.{js,ts,vue,json}'",
