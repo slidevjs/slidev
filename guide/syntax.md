@@ -231,6 +231,8 @@ Learn more about [frontmatter configurations](/custom/#frontmatter-configures).
 
 Slidev comes with LaTeX support out-of-box, powered by [KaTeX](https://katex.org/).
 
+<Tweet id="1392246507793915904" />
+
 ### Inline
 
 Surround your LaTeX with a single `$` on each side for inline rendering.
