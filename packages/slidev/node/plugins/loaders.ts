@@ -1,7 +1,6 @@
 import { basename, join } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
 import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
-import type { Connect } from 'vite'
 import fg from 'fast-glob'
 import Markdown from 'markdown-it'
 import { RouteMeta } from 'vue-router'
@@ -13,6 +12,7 @@ import equal from 'fast-deep-equal'
 import { existsSync } from 'fs-extra'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { toAtFS } from '../utils'
+import type { Connect } from 'vite'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/

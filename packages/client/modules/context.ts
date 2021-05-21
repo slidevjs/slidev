@@ -1,8 +1,8 @@
 import { App, reactive } from 'vue'
-import type { UnwrapNestedRefs } from '@vue/reactivity'
 import { objectKeys } from '@antfu/utils'
 import * as nav from '../logic/nav'
 import { isDark } from '../logic/dark'
+import type { UnwrapNestedRefs } from '@vue/reactivity'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
