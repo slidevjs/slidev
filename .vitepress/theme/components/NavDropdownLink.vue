@@ -112,7 +112,7 @@ function toggle() {
   margin: 0;
   padding: 0;
   list-style: none;
-  @apply dark:(border border-gray-400 border-opacity-20);
+  @apply md:dark:(border border-gray-400 border-opacity-20);
 }
 
 @media (min-width: 720px) {
