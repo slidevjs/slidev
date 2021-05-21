@@ -25,9 +25,6 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
     body += `\n${(index.match(/<body>([\s\S]*?)<\/body>/im)?.[1] || '').trim()}`
   }
 
-  if (data.features.katex)
-    head += '\n<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">'
-
   if (data.features.tweet)
     body += '\n<script src="https://platform.twitter.com/widgets.js"></script>'
 

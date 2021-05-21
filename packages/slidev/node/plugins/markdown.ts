@@ -6,10 +6,9 @@ import base64 from 'js-base64'
 import { slash } from '@antfu/utils'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
-// @ts-expect-error
-import Katex from 'markdown-it-katex'
 import type { KatexOptions } from 'katex'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
+import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import Shiki, { resolveShikiOptions } from './markdown-it-shiki'

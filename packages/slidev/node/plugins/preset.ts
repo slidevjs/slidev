@@ -33,6 +33,8 @@ const customElements = new Set([
   'msqrt',
   'mtr',
   'semantics',
+  'mstyle',
+  'mtext',
 ])
 
 export async function ViteSlidevPlugin(

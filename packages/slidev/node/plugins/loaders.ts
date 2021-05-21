@@ -330,6 +330,9 @@ export function createSlidesLoader(
       }
     }
 
+    if (data.features.katex)
+      imports.push('import "katex/dist/katex.min.css"')
+
     return imports.join('\n')
   }
 

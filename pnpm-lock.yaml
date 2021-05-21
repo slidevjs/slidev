@@ -158,6 +158,7 @@ importers:
       file-saver: ^2.0.5
       js-base64: ^3.6.0
       js-yaml: ^4.1.0
+      katex: ^0.13.11
       mermaid: 8.5.0
       monaco-editor: ^0.24.0
       nanoid: ^3.1.23
@@ -177,6 +178,7 @@ importers:
       file-saver: 2.0.5
       js-base64: 3.6.0
       js-yaml: 4.1.0
+      katex: 0.13.11
       mermaid: 8.5.0
       monaco-editor: 0.24.0
       nanoid: 3.1.23
@@ -233,9 +235,9 @@ importers:
       fs-extra: ^10.0.0
       jiti: ^1.9.2
       js-base64: ^3.6.0
+      katex: ^0.13.11
       kolorist: ^1.4.1
       markdown-it: ^12.0.6
-      markdown-it-katex: ^2.0.3
       markdown-it-link-attributes: ^3.0.0
       monaco-editor: ^0.24.0
       nanoid: ^3.1.23
@@ -268,9 +270,9 @@ importers:
       fs-extra: 10.0.0
       jiti: 1.9.2
       js-base64: 3.6.0
+      katex: 0.13.11
       kolorist: 1.4.1
       markdown-it: 12.0.6
-      markdown-it-katex: 2.0.3
       markdown-it-link-attributes: 3.0.0
       monaco-editor: 0.24.0
       nanoid: 3.1.23
@@ -2290,7 +2292,6 @@ packages:
   /commander/6.2.1:
     resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
     engines: {node: '>= 6'}
-    dev: true
 
   /commander/7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -5116,11 +5117,11 @@ packages:
       commander: 6.2.1
     dev: true
 
-  /katex/0.6.0:
-    resolution: {integrity: sha1-EkGOCRIcBckgQbazuftrqyE8tvM=}
+  /katex/0.13.11:
+    resolution: {integrity: sha512-yJBHVIgwlAaapzlbvTpVF/ZOs8UkTj/sd46Fl8+qAf2/UiituPYVeapVD8ADZtqyRg/qNWUKt7gJoyYVWLrcXw==}
     hasBin: true
     dependencies:
-      match-at: 0.1.1
+      commander: 6.2.1
     dev: false
 
   /keyv/3.1.0:
@@ -5383,12 +5384,6 @@ packages:
       object-visit: 1.0.1
     dev: true
 
-  /markdown-it-katex/2.0.3:
-    resolution: {integrity: sha1-17hqGuoLnWSW+rTnkZoY/e9YnDk=}
-    dependencies:
-      katex: 0.6.0
-    dev: false
-
   /markdown-it-link-attributes/3.0.0:
     resolution: {integrity: sha512-B34ySxVeo6MuEGSPCWyIYryuXINOvngNZL87Mp7YYfKIf6DcD837+lXA8mo6EBbauKsnGz22ZH0zsbOiQRWTNg==}
     dev: false
@@ -5402,10 +5397,6 @@ packages:
       linkify-it: 3.0.2
       mdurl: 1.0.1
       uc.micro: 1.0.6
-    dev: false
-
-  /match-at/0.1.1:
-    resolution: {integrity: sha512-h4Yd392z9mST+dzc+yjuybOGFNOZjmXIPKWjxBd1Bb23r4SmDOsk2NYCU2BMUBGbSpZqwVsZYNq26QS3xfaT3Q==}
     dev: false
 
   /mdurl/1.0.1:
