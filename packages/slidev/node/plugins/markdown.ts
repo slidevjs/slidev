@@ -86,11 +86,11 @@ export async function createMarkdownPlugin(
 
 export function transformMarkdownMonaco(md: string) {
   // transform monaco
-  md = md.replace(/^```(\w+?)\s*{monaco([\w:,-]*)}[\s\n]*([\s\S]+?)^```/mg, (full, lang = 'ts', options: string, code: string) => {
-    options = options || ''
+  md = md.replace(/^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string) => {
     lang = lang.trim()
+    options = options.trim() || '{}'
     const encoded = base64.encode(code, true)
-    return `<Monaco :code="'${encoded}'" lang="${lang}" :readonly="${options.includes('readonly')}" />`
+    return `<Monaco :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
   })
 
   return md
