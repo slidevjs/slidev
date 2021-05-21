@@ -11,7 +11,8 @@ const officialThemes: Record<string, string> = {
 
 export function packageExists(name: string) {
   try {
-    if (require.resolve(`${name}/package.json`))
+    // eslint-disable-next-line no-eval
+    if (eval('require').resolve(`${name}/package.json`))
       return true
   }
   catch {}

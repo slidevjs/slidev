@@ -11,7 +11,8 @@ export default defineConfig({
     ],
     exclude: [
       '.git',
-      dirname(require.resolve('monaco-editor/package.json')),
+      // eslint-disable-next-line no-eval
+      dirname(eval('require').resolve('monaco-editor/package.json')),
     ],
     extractors: [
       {

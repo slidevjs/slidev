@@ -54,7 +54,8 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export function getClientRoot() {
-  return dirname(require.resolve('@slidev/client/package.json'))
+  // eslint-disable-next-line no-eval
+  return dirname(eval('require').resolve('@slidev/client/package.json'))
 }
 
 export function getCLIRoot() {
@@ -77,7 +78,8 @@ export function getThemeRoots(name: string, entry: string) {
   }
   else {
     return [
-      dirname(require.resolve(`${name}/package.json`)),
+      // eslint-disable-next-line no-eval
+      dirname(eval('require').resolve(`${name}/package.json`)),
     ]
   }
 }
