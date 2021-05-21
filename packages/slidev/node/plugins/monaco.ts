@@ -1,3 +1,5 @@
+import { join } from 'path'
+import { slash } from '@antfu/utils'
 import { Plugin, resolvePackageData } from 'vite'
 
 export function createMonacoTypesLoader(): Plugin {
@@ -24,7 +26,7 @@ export function createMonacoTypesLoader(): Plugin {
 
         return [
           'import * as monaco from \'monaco-editor\'',
-          `import Type from "${info.dir}/${typePath}?raw"`,
+          `import Type from "${slash(join(info.dir, typePath))}?raw"`,
           ...Object.keys(info.data.dependencies || {}).map(i => `import "/@slidev-monaco-types/${i}"`),
           `monaco.languages.typescript.typescriptDefaults.addExtraLib(\`declare module "${pkg}" { \$\{Type\} }\`)`,
         ].join('\n')
