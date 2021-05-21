@@ -9,9 +9,9 @@ import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import Shiki, { resolveShikiOptions } from './markdown-it-shiki'
-import type { KatexOptions } from 'katex'
-import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
+import type MarkdownIt from 'markdown-it'
+import type { KatexOptions } from 'katex'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {
@@ -155,5 +155,5 @@ export function transformMermaid(md: string): string {
  * Escape `{{}}` in code block to prevent Vue interpret it, #99
  */
 export function escapeVueInCode(md: string) {
-  return md.replace(/{{(.*)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
+  return md.replace(/{{(.*?)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
 }
