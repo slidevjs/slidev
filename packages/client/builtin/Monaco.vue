@@ -12,7 +12,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <template>
-  <iframe ref="iframe" class="text-base w-full" :style="{ height }"></iframe>
+  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }"></iframe>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +42,8 @@ const props = defineProps({
 
 const id = nanoid()
 const code = ref(decode(props.code).trimEnd())
-const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * 18 + 20}px` : props.height)
+const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
+const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * lineHeight + 20}px` : props.height)
 const isReady = ref(false)
 
 const iframe = ref<HTMLIFrameElement>()
