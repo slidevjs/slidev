@@ -9,9 +9,9 @@ import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import Shiki, { resolveShikiOptions } from './markdown-it-shiki'
-import type { ShikiOptions } from '@slidev/types'
-import type MarkdownIt from 'markdown-it'
 import type { KatexOptions } from 'katex'
+import type MarkdownIt from 'markdown-it'
+import type { ShikiOptions } from '@slidev/types'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {
@@ -38,7 +38,7 @@ export async function createMarkdownPlugin(
     setups.push(md => md.use(Prism))
   }
 
-  const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, {}, false)
+  const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, { strict: false }, false)
 
   return Markdown({
     wrapperClasses: '',
