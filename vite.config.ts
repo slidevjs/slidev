@@ -50,6 +50,17 @@ const config: UserConfig = {
         return code.replace(/\/\/```/mg, '```')
       },
     },
+    {
+      name: 'virtual-modules',
+      resolveId(id){
+        return id === '/@slidev/configs' ? id : null
+      },
+      load(id) {
+        if(id !== '/@slidev/configs')
+        return
+        return 'export default {}'
+      }
+    },
   ],
 }
 

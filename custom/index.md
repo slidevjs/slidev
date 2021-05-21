@@ -12,20 +12,31 @@ You can configure Slidev in the frontmatter of your first slide, the following s
 theme: 'default'
 # title of your slide, will auto infer from the first header if not specified
 title: ''
+
 # enabled pdf downloading in SPA build, can also be a custom url
 download: true
 # syntax highlighter, can be 'prism' or 'shiki'
 highlighter: 'prism'
 # enable monaco editor, default to dev only
 monaco: 'dev'
+
 # force color schema for the slides, could be 'auto', 'light', or 'dark'
 colorSchema: 'auto'
 # router mode for vue-router, could be "history" or "hash"
 routerMode: 'history'
+# aspect ratio for the slides
+aspectRatio: '16/9'
+# real width of the canvas, unit in px
+canvasWidth: 980
+
+# default frontmatter applies to all slides
+defaults:
+  layout: 'default'
+  # ...
+
 # information for your slides, can be a markdown string
 info: |
   ## Slidev
-
   My first [Slidev](http://sli.dev/) presentations!
 ---
 ```

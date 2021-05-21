@@ -18,7 +18,7 @@ html:not(.dark) {
   --prism-number: #296aa3;
   --prism-keyword: #1c6b48;
   --prism-function: #6c7834;
-  --prism-boolean: #1c6b48;
+  --prism-boolean: #296aa3;
   --prism-constant: #a65e2b;
   --prism-deleted: #a14f55;
   --prism-class: #2993a3;
@@ -39,7 +39,7 @@ html.dark {
   --prism-string: #d48372;
   --prism-literal: #429988;
   --prism-keyword: #4d9375;
-  --prism-boolean: #1c6b48;
+  --prism-boolean: #6394bf;
   --prism-number: #6394bf;
   --prism-variable: #c2b36e;
   --prism-function: #a1b567;
@@ -88,6 +88,10 @@ div[class*='language-'] pre {
 div[class*='language-'] code {
   font-size: var(--prism-font-size);
   font-family: var(--prism-font-family);
+}
+
+.token.important {
+  font-weight: normal;
 }
 
 /* Line highlighting */
