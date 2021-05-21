@@ -35,7 +35,7 @@ async function init() {
       message: 'Project name:',
       initial: 'slidev',
     })
-    targetDir = projectName
+    targetDir = projectName.trim()
   }
   const packageName = await getValidPackageName(targetDir)
   const root = path.join(cwd, targetDir)
