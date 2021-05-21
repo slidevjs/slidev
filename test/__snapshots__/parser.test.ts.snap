@@ -2,6 +2,8 @@
 
 exports[`md parser frontmatter.md: config 1`] = `
 Object {
+  "aspectRatio": 1.7777777777777777,
+  "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
   "highlighter": "prism",
@@ -133,6 +135,8 @@ this should be treated as code block
 
 exports[`md parser minimal.md: config 1`] = `
 Object {
+  "aspectRatio": 1.7777777777777777,
+  "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
   "highlighter": "prism",

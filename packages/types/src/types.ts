@@ -64,6 +64,20 @@ export interface SlidevConfig {
    * @default 'hash'
    */
   routerMode: 'hash' | 'history'
+  /**
+   * Aspect ratio for slides
+   * should be like `16/9` or `1:1`
+   *
+   * @default '16/9'
+   */
+  aspectRatio: number
+  /**
+   * The actual width fro slides canvas.
+   * unit in px.
+   *
+   * @default '980'
+   */
+  canvasWidth: number
 }
 
 export interface SlidevFeatureFlags {

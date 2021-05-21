@@ -117,7 +117,7 @@ export function useRecording() {
     // @ts-expect-error
     streamSlides.value = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        aspectRatio: 1.6,
+        // aspectRatio: 1.6,
         frameRate: 15,
         width: 3840,
         height: 2160,

@@ -1,6 +1,7 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectPick, range, uniq } from '@antfu/utils'
+import { isObject, isTruthy, objectPick } from '@antfu/utils'
 import { SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
+import { parseAspectRatio } from './utils'
 
 export function stringify(data: SlidevMarkdown) {
   return `${
@@ -145,6 +146,8 @@ export function parse(
     highlighter: 'prism',
     colorSchema: 'auto',
     routerMode: 'history',
+    aspectRatio: 16 / 9,
+    canvasWidth: 980,
   }
   const config: SlidevConfig = Object.assign(
     defaultConfig,
@@ -153,6 +156,7 @@ export function parse(
   )
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
+  config.aspectRatio = parseAspectRatio(config.aspectRatio)
 
   return {
     raw: markdown,
@@ -162,29 +166,6 @@ export function parse(
     features: detectFeatures(markdown),
     headmatter,
   }
-}
-
-/**
- * 1,3-5,8 => [1, 3, 4, 5, 8]
- */
-export function parseRangeString(total: number, rangeStr?: string) {
-  if (!rangeStr || rangeStr === 'all' || rangeStr === '*')
-    return range(1, total + 1)
-
-  const pages: number[] = []
-  for (const part of rangeStr.split(/[,;]/g)) {
-    if (!part.includes('-')) {
-      pages.push(+part)
-    }
-    else {
-      const [start, end] = part.split('-', 2)
-      pages.push(
-        ...range(+start, !end ? (total + 1) : (+end + 1)),
-      )
-    }
-  }
-
-  return uniq(pages).filter(i => i <= total).sort((a, b) => a - b)
 }
 
 // types auto discovery for TypeScript monaco
@@ -205,3 +186,5 @@ export function scanMonacoModules(md: string) {
 
   return Array.from(typeModules)
 }
+
+export * from './utils'
