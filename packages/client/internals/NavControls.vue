@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineProps, ref, shallowRef } from 'vue'
-import { isDark, toggleDark, isColorSchemaAuto } from '../logic/dark'
+import { isDark, toggleDark, isColorSchemaConfigured } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'
 import { configs } from '../env'
@@ -49,7 +49,7 @@ if (__DEV__)
       <carbon:apps />
     </button>
 
-    <button v-if="isColorSchemaAuto" class="icon-btn" title="Toggle dark mode" @click="toggleDark">
+    <button v-if="!isColorSchemaConfigured" class="icon-btn" title="Toggle dark mode" @click="toggleDark">
       <carbon-moon v-if="isDark" />
       <carbon-sun v-else />
     </button>

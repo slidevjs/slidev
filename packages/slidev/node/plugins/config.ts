@@ -38,6 +38,8 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'mermaid/dist/mermaid.min',
           ],
           exclude: [
+            '@vueuse/core',
+            '@vueuse/shared',
             'vue-demi',
             'mermaid',
           ],

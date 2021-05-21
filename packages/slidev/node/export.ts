@@ -87,8 +87,6 @@ export async function exportSlides({
   async function go(no: number) {
     progress.update(no)
 
-    if (dark)
-      await page.emulateMedia({ colorScheme: 'dark' })
     const url = routerMode === 'hash'
       ? `http://localhost:${port}/#${base}${no}?print`
       : `http://localhost:${port}${base}${no}?print`
@@ -97,7 +95,7 @@ export async function exportSlides({
     })
     await page.waitForTimeout(timeout)
     await page.waitForLoadState('networkidle')
-    await page.emulateMedia({ media: 'screen' })
+    await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
   }
 
   const pages = parseRangeString(total, range)
