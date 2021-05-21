@@ -113,6 +113,8 @@ export async function build(
       output: join(config.build.outDir, 'slidev-exported.pdf'),
       base: config.base,
       dark: options.data.config.colorSchema === 'dark',
+      width: 1920,
+      height: Math.round(1920 / options.data.config.aspectRatio),
     })
     server.close()
   }

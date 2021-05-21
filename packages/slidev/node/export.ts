@@ -16,6 +16,8 @@ export interface ExportOptions {
   timeout?: number
   dark?: boolean
   routerMode?: 'hash' | 'history'
+  width?: number
+  height?: number
 }
 
 function createSlidevProgress() {
@@ -64,6 +66,8 @@ export async function exportSlides({
   timeout = 500,
   dark = false,
   routerMode = 'history',
+  width = 1920,
+  height = 1080,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
@@ -72,8 +76,8 @@ export async function exportSlides({
   const browser = await chromium.launch()
   const context = await browser.newContext({
     viewport: {
-      width: 1920,
-      height: 1080,
+      width,
+      height,
     },
     deviceScaleFactor: 1,
   })
@@ -105,8 +109,8 @@ export async function exportSlides({
     for (const i of pages) {
       await go(i)
       const pdf = await page.pdf({
-        width: 1920,
-        height: 1080,
+        width,
+        height,
         margin: {
           left: 0,
           top: 0,

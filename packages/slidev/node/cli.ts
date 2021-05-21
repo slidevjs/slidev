@@ -276,6 +276,8 @@ cli.command(
     await server.listen(port)
     printInfo(options)
     parser.filterDisabled(options.data)
+    const width = 1920
+    const height = Math.round(width / options.data.config.aspectRatio)
     output = await exportSlides({
       port,
       total: options.data.slides.length,
@@ -285,6 +287,8 @@ cli.command(
       timeout,
       dark,
       routerMode: options.data.config.routerMode,
+      width,
+      height,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
