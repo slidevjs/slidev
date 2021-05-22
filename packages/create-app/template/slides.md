@@ -86,6 +86,7 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
 
+<!-- https://sli.dev/guide/animations.html#click-animations -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
@@ -101,6 +102,8 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 # Code
 
 Use code snippets and get the highlighting directly!
+
+<!-- https://sli.dev/guide/syntax.html#line-highlighting -->
 
 ```ts {all|2|1-6|9|all}
 interface User {
