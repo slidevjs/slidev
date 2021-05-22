@@ -16,7 +16,7 @@ defineProps<{ type: 'node' | 'client' }>()
         This setup function will only run on Node.js environment, you can have access to Node's API.
       </span>
       <span v-else>
-        This setup function will only run on client side. Make sure the browser compacitblity when importing packages.
+        This setup function will only run on client side. Make sure the browser compatibility when importing packages.
       </span>
     </div>
   </details>
