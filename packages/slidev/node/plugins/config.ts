@@ -7,6 +7,9 @@ import { toAtFS } from '../utils'
 const EXCLUDE = [
   '@slidev/types',
   'mermaid',
+  '@vueuse/core',
+  '@vueuse/shared',
+  'vue-demi',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
@@ -37,12 +40,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'prettier/esm/parser-typescript',
             'mermaid/dist/mermaid.min',
           ],
-          exclude: [
-            '@vueuse/core',
-            '@vueuse/shared',
-            'vue-demi',
-            'mermaid',
-          ],
+          exclude: EXCLUDE,
         },
       }
       return mergeConfig(config, injection)
