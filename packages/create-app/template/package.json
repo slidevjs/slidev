@@ -6,7 +6,7 @@
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^0.13.7",
+    "@slidev/cli": "^0.13.8",
     "@slidev/theme-default": "*",
     "@slidev/theme-seriph": "*"
   }
