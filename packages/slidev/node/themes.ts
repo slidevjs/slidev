@@ -1,6 +1,7 @@
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { isRelative } from './options'
+import { resolveImportPath } from './utils'
 
 const officialThemes: Record<string, string> = {
   'none': '',
@@ -11,8 +12,7 @@ const officialThemes: Record<string, string> = {
 
 export function packageExists(name: string) {
   try {
-    // eslint-disable-next-line no-eval
-    if (eval('require').resolve(`${name}/package.json`))
+    if (resolveImportPath(`${name}/package.json`))
       return true
   }
   catch {}

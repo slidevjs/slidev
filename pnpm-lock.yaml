@@ -225,6 +225,7 @@ importers:
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
+      '@types/resolve': ^1.20.0
       '@vitejs/plugin-vue': ^1.2.2
       '@vue/compiler-sfc': ^3.0.11
       cli-progress: ^3.9.0
@@ -244,6 +245,7 @@ importers:
       pdf-lib: ^1.16.0
       prismjs: ^1.23.0
       prompts: ^2.4.1
+      resolve: ^1.20.0
       shiki: ^0.9.4
       sirv: ^1.0.11
       vite: ^2.3.3
@@ -279,6 +281,7 @@ importers:
       pdf-lib: 1.16.0
       prismjs: 1.23.0
       prompts: 2.4.1
+      resolve: 1.20.0
       shiki: 0.9.4
       sirv: 1.0.11
       vite: 2.3.3
@@ -291,6 +294,7 @@ importers:
       windicss: 3.0.9
       yargs: 17.0.1
     devDependencies:
+      '@types/resolve': 1.20.0
       fast-deep-equal: 3.1.3
 
   packages/types:
@@ -1200,6 +1204,10 @@ packages:
 
   /@types/recordrtc/5.6.5:
     resolution: {integrity: sha512-4FF77kV/VTnEM7lB018sr70IKl1e1rbRpXuv1G3t7Ty7Z5HGRDehH2xq9cxvTNn18DDSkm0D5gwU5CpfwiPuDQ==}
+    dev: true
+
+  /@types/resolve/1.20.0:
+    resolution: {integrity: sha512-SFT3jdUNlLkjxUWwH/0QjLiEsV38hjdDX8oMcX9jZAD8KWNzRLdg6INZE7UMz9O86b2BOHzA3dR8nF+DbonX2Q==}
     dev: true
 
   /@types/stack-utils/2.0.0:
