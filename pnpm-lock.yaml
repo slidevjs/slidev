@@ -2,11 +2,11 @@ lockfileVersion: 5.3
 
 specifiers:
   '@antfu/utils': ^0.1.6
-  '@iconify/json': ^1.1.346
-  '@slidev/client': ^0.13.0
-  '@slidev/parser': ^0.13.0
+  '@iconify/json': ^1.1.347
+  '@slidev/client': ^0.13.4
+  '@slidev/parser': ^0.13.4
   '@slidev/theme-default': ^0.7.4
-  '@slidev/types': ^0.13.0
+  '@slidev/types': ^0.13.4
   '@types/fs-extra': ^9.0.11
   '@types/node': ^15.6.0
   '@vueuse/core': ^4.11.0
@@ -25,17 +25,17 @@ dependencies:
   typeit: 7.0.4
 
 devDependencies:
-  '@iconify/json': 1.1.346
-  '@slidev/client': 0.13.0
-  '@slidev/parser': 0.13.0
-  '@slidev/theme-default': 0.7.4_@slidev+client@0.13.0
-  '@slidev/types': 0.13.0
+  '@iconify/json': 1.1.347
+  '@slidev/client': 0.13.4
+  '@slidev/parser': 0.13.4
+  '@slidev/theme-default': 0.7.4_@slidev+client@0.13.4
+  '@slidev/types': 0.13.4
   '@types/fs-extra': 9.0.11
   '@types/node': 15.6.0
   fs-extra: 10.0.0
   typescript: 4.2.4
   vite-plugin-components: 0.9.1
-  vite-plugin-icons: 0.5.1_@iconify+json@1.1.346
+  vite-plugin-icons: 0.5.1_@iconify+json@1.1.347
   vite-plugin-windicss: 0.16.0-beta.22
   vitepress: 0.13.2
   windicss: 3.0.9
@@ -199,8 +199,8 @@ packages:
     resolution: {integrity: sha512-LFelJDOLZ6JHlmlAkgrvmcu4hpNPB91KYcr4f60D/exzU1eNOb4/KCVHIydGHIQFaOacIOD+Xy+B7P1z812cZg==}
     dev: true
 
-  /@iconify/json/1.1.346:
-    resolution: {integrity: sha512-RFYxTAnXW7W/QJrFCrqBPzX6MgYNa+xNxUv62jXdbOn0f81ZQGep3UZtduv+IQSrl2tl3a88mjkyK6sMQKe+Xw==}
+  /@iconify/json/1.1.347:
+    resolution: {integrity: sha512-tXd8zM1eczMJlQgR3CRVqIIgKJkV8MfMJh7qllOdoyHkDv3t6eeWxqc4ZTRMCgC6uF21lyPs5t2Gw3k4AMKAHQ==}
     dev: true
 
   /@nodelib/fs.scandir/2.1.4:
@@ -232,13 +232,13 @@ packages:
     resolution: {integrity: sha512-6RglhutqrGFMO1MNUXp95RBuYIuc8wTnMAV5MUhLmjTOy78ncwOw7RgeQ/HeymkKXRhZd0s2DNrM1rL7unk3MQ==}
     dev: true
 
-  /@slidev/client/0.13.0:
-    resolution: {integrity: sha512-4PHZyFltsGGBwqTf1WOD5m01mxDiYxsn+An36FISKRlWWOKaa0esFHxnsPMgO1jQlq/9r7PjLumhNIwzB/boqQ==}
+  /@slidev/client/0.13.4:
+    resolution: {integrity: sha512-tB797wOfAgFsRzxsMvD3siZaAPQ2nh5I0yIfmamSFR704WqOyoscgDe4NmyMo+r9hzoY+zNiPZTJIJHqLUOz7g==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@antfu/utils': 0.1.6
-      '@slidev/parser': 0.13.0
-      '@slidev/types': 0.13.0
+      '@slidev/parser': 0.13.4
+      '@slidev/types': 0.13.4
       '@vueuse/core': 4.11.0_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
       '@vueuse/motion': 1.5.5_vue@3.0.11
@@ -260,28 +260,28 @@ packages:
       - supports-color
     dev: true
 
-  /@slidev/parser/0.13.0:
-    resolution: {integrity: sha512-YTDfcTNWWKMnH7ZivsahVDRcA/GVNgFvz0xkxBCU5yEiDzTDSiua9vVvTd6+0Q/Mi/aHemMa20gZ1Zs+X+TVbQ==}
+  /@slidev/parser/0.13.4:
+    resolution: {integrity: sha512-l4o18OjH5JqI21q4Z1FmFOEWq0jCUGgDRmX5fK/Hqn5VTwJc8zjf8UKRgDJWQ/VSe0sNoEs8909XeTAU2sNeZQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      '@slidev/types': 0.13.0
+      '@slidev/types': 0.13.4
       js-yaml: 4.1.0
     dev: true
 
-  /@slidev/theme-default/0.7.4_@slidev+client@0.13.0:
+  /@slidev/theme-default/0.7.4_@slidev+client@0.13.4:
     resolution: {integrity: sha512-WdfWjIFmJoQB1+iD9LvEU6c/I2gyiQP9277Z9fvchKfDKl3d43XJYG5HawEhLsUnXMV/s3RKVcY/MpRSuVFFMg==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@slidev/client': ^0.6.7
     dependencies:
-      '@slidev/client': 0.13.0
+      '@slidev/client': 0.13.4
       codemirror-theme-vars: 0.1.1
       prism-theme-vars: 0.2.2
       theme-vitesse: 0.1.11
     dev: true
 
-  /@slidev/types/0.13.0:
-    resolution: {integrity: sha512-L6e1CCx8kPk0H+MNT6qozHKb3VT19kk0w3TPdp7NVWr9T1JayCtlH9w2UBvXGZqgc5d3mQ8fVaUTpxq9GlNfyQ==}
+  /@slidev/types/0.13.4:
+    resolution: {integrity: sha512-/8vkL55SUbxnl8LYZikrHVL2v539d3IeioyZEwoHMBo1oPLC8LFcxgPHVM+fyPmITxZ2Acr6Vwr7j2mxczDGhQ==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -2042,14 +2042,14 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-icons/0.5.1_@iconify+json@1.1.346:
+  /vite-plugin-icons/0.5.1_@iconify+json@1.1.347:
     resolution: {integrity: sha512-snEQYVnZ7NFEShFpki3vL9vj8k7M60PO6SXQTZgzIgrwlVsTsGzgsLw8B73v4DzEygPS7wuw3q6XqlZDVUMSiQ==}
     peerDependencies:
       '@iconify/json': '*'
       '@vue/compiler-sfc': ^3.0.2
       vue-template-compiler: ^2.6.12
     dependencies:
-      '@iconify/json': 1.1.346
+      '@iconify/json': 1.1.347
       '@iconify/json-tools': 1.0.10
       vue-template-es2015-compiler: 1.9.1
     dev: true

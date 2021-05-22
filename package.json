@@ -6,11 +6,11 @@
     "postinstall": "node .vitepress/scripts/prepare.js"
   },
   "devDependencies": {
-    "@iconify/json": "^1.1.346",
-    "@slidev/client": "^0.13.0",
-    "@slidev/parser": "^0.13.0",
+    "@iconify/json": "^1.1.347",
+    "@slidev/client": "^0.13.4",
+    "@slidev/parser": "^0.13.4",
     "@slidev/theme-default": "^0.7.4",
-    "@slidev/types": "^0.13.0",
+    "@slidev/types": "^0.13.4",
     "@types/fs-extra": "^9.0.11",
     "@types/node": "^15.6.0",
     "fs-extra": "^10.0.0",
