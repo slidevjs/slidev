@@ -21,7 +21,7 @@ All of them are optional.
 
 ## Components
 
-Conventions: `./components/*.{vue,js,ts,jsx,tsx}`
+Conventions: `./components/*.{vue,js,ts,jsx,tsx,md}`
 
 Components inside this directory can be directly used in the slides Markdown with the same component name as the file name.
 

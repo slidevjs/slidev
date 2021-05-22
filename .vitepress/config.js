@@ -41,6 +41,10 @@ const Guide = [
     text: 'Editor Integrations',
     link: '/guide/editors',
   },
+  {
+    text: 'FAQ',
+    link: '/guide/faq',
+  },
 ]
 
 const Theme = [
