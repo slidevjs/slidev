@@ -1,4 +1,4 @@
-import { Ref, ref, shallowRef, watch } from 'vue'
+import { nextTick, Ref, ref, shallowRef, watch } from 'vue'
 import { useEventListener, useDevicesList } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
 import RecorderType from 'recordrtc'
@@ -76,6 +76,8 @@ export function useRecording() {
   }
 
   async function startCameraStream() {
+    await ensureDevicesListPermissions()
+    await nextTick()
     if (!streamCamera.value) {
       if (currentCamera.value === 'none' && currentMic.value === 'none')
         return
@@ -111,6 +113,7 @@ export function useRecording() {
   })
 
   async function startRecording() {
+    await ensureDevicesListPermissions()
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
