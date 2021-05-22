@@ -151,6 +151,7 @@ importers:
       '@antfu/utils': ^0.1.6
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
+      '@types/resolve': ^1.20.0
       '@vueuse/core': ^4.11.0
       '@vueuse/head': ^0.5.1
       '@vueuse/motion': ^1.5.5
@@ -164,6 +165,7 @@ importers:
       nanoid: ^3.1.23
       prettier: ^2.3.0
       recordrtc: ^5.6.2
+      resolve: ^1.20.0
       vue: ^3.0.11
       vue-router: ^4.0.8
       windicss: ^3.0.9
@@ -184,9 +186,12 @@ importers:
       nanoid: 3.1.23
       prettier: 2.3.0
       recordrtc: 5.6.2
+      resolve: 1.20.0
       vue: 3.0.11
       vue-router: 4.0.8_vue@3.0.11
       windicss: 3.0.9
+    devDependencies:
+      '@types/resolve': 1.20.0
 
   packages/create-app:
     specifiers:
@@ -1200,6 +1205,10 @@ packages:
 
   /@types/recordrtc/5.6.5:
     resolution: {integrity: sha512-4FF77kV/VTnEM7lB018sr70IKl1e1rbRpXuv1G3t7Ty7Z5HGRDehH2xq9cxvTNn18DDSkm0D5gwU5CpfwiPuDQ==}
+    dev: true
+
+  /@types/resolve/1.20.0:
+    resolution: {integrity: sha512-SFT3jdUNlLkjxUWwH/0QjLiEsV38hjdDX8oMcX9jZAD8KWNzRLdg6INZE7UMz9O86b2BOHzA3dR8nF+DbonX2Q==}
     dev: true
 
   /@types/stack-utils/2.0.0:
