@@ -20,7 +20,6 @@ export default defineConfig({
     exclude: [
       '.git',
       'dist',
-      'node_modules',
       // @slidev/client/node_modules
       resolve(__dirname, 'node_modules'),
       resolve(__dirname, 'windi.config.ts'),
