@@ -13,7 +13,9 @@ export function resolveImportPath(importName: string) {
 export default defineConfig({
   extract: {
     include: [
-      '**/*.{vue,ts,tsx,js,jsx,md}',
+      '*.{md,html}',
+      'components/*.{vue,ts,tsx,js,jsx,md}',
+      'layouts/*.{vue,ts,tsx,js,jsx,md}',
       // @slidev/client/**/*.{vue,ts}
       resolve(__dirname, '**/*.{vue,ts}'),
     ],
