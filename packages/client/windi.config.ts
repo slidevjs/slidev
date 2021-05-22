@@ -6,7 +6,8 @@ import typography from 'windicss/plugin/typography'
 export default defineConfig({
   extract: {
     include: [
-      resolve(__dirname, '**/*.{vue,ts}'),
+      '*.md',
+      resolve(__dirname, '**/*.{vue,ts,js,md}'),
       '**/*.{vue,ts,tsx,jsx,md}',
     ],
     exclude: [
