@@ -173,6 +173,7 @@ importers:
       '@antfu/utils': 0.1.6
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
+      '@types/resolve': 1.20.0
       '@vueuse/core': 4.11.0_vue@3.0.11
       '@vueuse/head': 0.5.1_vue@3.0.11
       '@vueuse/motion': 1.5.5_vue@3.0.11
@@ -190,8 +191,6 @@ importers:
       vue: 3.0.11
       vue-router: 4.0.8_vue@3.0.11
       windicss: 3.0.9
-    devDependencies:
-      '@types/resolve': 1.20.0
 
   packages/create-app:
     specifiers:
@@ -1209,7 +1208,7 @@ packages:
 
   /@types/resolve/1.20.0:
     resolution: {integrity: sha512-SFT3jdUNlLkjxUWwH/0QjLiEsV38hjdDX8oMcX9jZAD8KWNzRLdg6INZE7UMz9O86b2BOHzA3dR8nF+DbonX2Q==}
-    dev: true
+    dev: false
 
   /@types/stack-utils/2.0.0:
     resolution: {integrity: sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==}
