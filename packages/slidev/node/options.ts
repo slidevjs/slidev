@@ -9,6 +9,7 @@ import { ArgumentsType, uniq } from '@antfu/utils'
 import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
+import { resolveImportPath } from './utils'
 
 export interface SlidevEntryOptions {
   /**
@@ -54,8 +55,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export function getClientRoot() {
-  // eslint-disable-next-line no-eval
-  return dirname(eval('require').resolve('@slidev/client/package.json'))
+  return dirname(resolveImportPath('@slidev/client/package.json'))
 }
 
 export function getCLIRoot() {
@@ -78,8 +78,7 @@ export function getThemeRoots(name: string, entry: string) {
   }
   else {
     return [
-      // eslint-disable-next-line no-eval
-      dirname(eval('require').resolve(`${name}/package.json`)),
+      dirname(resolveImportPath(`${name}/package.json`)),
     ]
   }
 }
