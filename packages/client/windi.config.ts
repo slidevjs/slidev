@@ -1,4 +1,4 @@
-import { resolve, dirname } from 'path'
+import { resolve } from 'path'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
@@ -6,16 +6,15 @@ import typography from 'windicss/plugin/typography'
 export default defineConfig({
   extract: {
     include: [
-      '*.md',
-      resolve(__dirname, '**/*.{vue,ts,js,md}'),
-      '**/*.{vue,ts,tsx,jsx,md}',
+      '**/*.{vue,ts,tsx,js,jsx,md}',
+      // @slidev/client/**/*.{vue,ts}
+      resolve(__dirname, '**/*.{vue,ts}'),
     ],
     exclude: [
       '.git',
-      // eslint-disable-next-line no-eval
-      dirname(eval('require').resolve('monaco-editor/package.json')),
-      // eslint-disable-next-line no-eval
-      dirname(eval('require').resolve('katex/package.json')),
+      'node_modules',
+      // @slidev/client/node_modules
+      resolve(__dirname, 'node_modules'),
     ],
     extractors: [
       {
