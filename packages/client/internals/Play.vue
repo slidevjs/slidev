@@ -3,6 +3,7 @@ import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { registerShotcuts } from '../logic/shortcuts'
+import { themeVars } from '../env'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -34,7 +35,7 @@ if (__DEV__)
 </script>
 
 <template>
-  <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]">
+  <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]" :style="themeVars">
     <SlideContainer
       class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)'}"

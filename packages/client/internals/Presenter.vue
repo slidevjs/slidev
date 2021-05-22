@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 import { useTimestamp } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
-import { configs } from '../env'
+import { configs, themeVars } from '../env'
 import { registerShotcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
@@ -79,7 +79,7 @@ useSwipeControls(main)
           {{ timer }}
         </div>
       </div>
-      <div ref="main" class="grid-section main flex flex-col p-4">
+      <div ref="main" class="grid-section main flex flex-col p-4" :style="themeVars">
         <SlideContainer
           key="main"
           class="h-full w-full"

@@ -13,6 +13,8 @@ export interface SlideInfoExtended extends SlideInfo {
   notesHTML: string
 }
 
+export type SlidevThemeConfig = Record<string, string | number>
+
 export interface SlidevConfig {
   title: string
   /**
@@ -78,6 +80,17 @@ export interface SlidevConfig {
    * @default '980'
    */
   canvasWidth: number
+
+  /**
+   * Configure for themes, will inject intro root styles as
+   * `--slidev-theme-x` for attribute `x`
+   *
+   * This allows themes to have customization options in frontmatter
+   * Refer to themes' document for options avaliable
+   *
+   * @default {}
+   */
+  themeConfig: SlidevThemeConfig
 }
 
 export interface SlidevFeatureFlags {
