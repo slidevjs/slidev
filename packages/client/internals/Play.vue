@@ -54,7 +54,7 @@ if (__DEV__)
           <NavControls
             class="m-auto"
             :class="presistNav
-              ? 'text-white bg-transparent'
+              ? 'text-$slidev-controls-foreground bg-transparent'
               : 'rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)'"
           />
         </div>

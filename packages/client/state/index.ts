@@ -1,5 +1,6 @@
 import { useMagicKeys, useActiveElement, useStorage, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle, isClient } from '@vueuse/core'
 import { computed, ref } from 'vue'
+import { slideAspect } from '../env'
 
 export const showOverview = ref(false)
 export const showRecordingDialog = ref(false)
@@ -10,7 +11,7 @@ export const shortcutsEnabled = ref(true)
 export const breakpoints = useBreakpoints(breakpointsTailwind)
 export const windowSize = useWindowSize()
 export const magicKeys = useMagicKeys()
-export const isScreenVertical = computed(() => windowSize.width.value <= windowSize.height.value)
+export const isScreenVertical = computed(() => windowSize.height.value - windowSize.width.value / slideAspect > 180)
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
