@@ -50,7 +50,7 @@ const cardWidth = computed(() => {
         class="relative"
       >
         <div
-          class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-primary)"
+          class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-$slidev-theme-primary)"
           @click="go(+route.path)"
         >
           <SlideContainer

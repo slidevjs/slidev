@@ -50,7 +50,7 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background border-primary border-left rounded;
+    @apply text-sm px-2 py-1 bg-$prism-background border-$slidev-theme-primary border-l rounded;
   }
 
   blockquote > * {

@@ -139,10 +139,10 @@ throttledWatch(
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" :class="tab === 'content' ? 'text-primary' : ''" @click="tab='content'">
+        <button class="icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="tab='content'">
           <carbon:account />
         </button>
-        <button class="icon-btn" :class="tab === 'note' ? 'text-primary' : ''" @click="tab='note'">
+        <button class="icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="tab='note'">
           <carbon:align-box-bottom-right />
         </button>
       </div>
