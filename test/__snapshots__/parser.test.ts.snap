@@ -12,6 +12,7 @@ Object {
   "remoteAssets": true,
   "routerMode": "history",
   "theme": "default",
+  "themeConfig": Object {},
   "title": "Hi",
 }
 `;
@@ -145,6 +146,7 @@ Object {
   "remoteAssets": true,
   "routerMode": "history",
   "theme": "default",
+  "themeConfig": Object {},
   "title": "H1",
 }
 `;
