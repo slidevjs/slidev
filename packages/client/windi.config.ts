@@ -13,14 +13,15 @@ export function resolveImportPath(importName: string) {
 export default defineConfig({
   extract: {
     include: [
-      '**/*.{vue,ts,tsx,js,jsx,md}',
+      '*.{md,html}',
+      'components/*.{vue,ts,tsx,js,jsx,md}',
+      'layouts/*.{vue,ts,tsx,js,jsx,md}',
       // @slidev/client/**/*.{vue,ts}
       resolve(__dirname, '**/*.{vue,ts}'),
     ],
     exclude: [
       '.git',
       'dist',
-      'node_modules',
       // @slidev/client/node_modules
       resolve(__dirname, 'node_modules'),
       resolve(__dirname, 'windi.config.ts'),
