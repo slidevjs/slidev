@@ -85,7 +85,6 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "@types/resolve": "^1.20.0",
     "fast-deep-equal": "^3.1.3"
   }
 }
