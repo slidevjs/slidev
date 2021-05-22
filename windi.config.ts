@@ -4,7 +4,7 @@ import aspectRatio from 'windicss/plugin/aspect-ratio'
 export default defineConfig({
   extract: {
     include: [
-      // '**/*.{md}',
+      '**/*.{md}',
       '.vitepress/theme/**/*.{md,vue}',
       '.vitepress/@slidev/client/internals/SlideContainer.vue',
       '.vitepress/@slidev/client/layouts/*.vue',
