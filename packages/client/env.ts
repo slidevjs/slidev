@@ -1,5 +1,5 @@
 import { SlidevConfig } from '@slidev/types'
-import { computed } from '@vue/runtime-core'
+import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
 // @ts-ignore
 import _configs from '/@slidev/configs'
