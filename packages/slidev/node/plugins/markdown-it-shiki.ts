@@ -1,8 +1,8 @@
 import { ShikiDarkModeThemes } from 'packages/types'
-import { escapeVueInCode } from './markdown'
 import type { Highlighter as ShikiHighlighter, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
+import { escapeVueInCode } from './markdown'
 
 function getThemeName(theme: IThemeRegistration) {
   if (typeof theme === 'string')

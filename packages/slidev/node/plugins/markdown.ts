@@ -4,14 +4,14 @@ import base64 from 'js-base64'
 import { slash } from '@antfu/utils'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
+import type { KatexOptions } from 'katex'
+import type MarkdownIt from 'markdown-it'
+import type { ShikiOptions } from '@slidev/types'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import Shiki, { resolveShikiOptions } from './markdown-it-shiki'
-import type { KatexOptions } from 'katex'
-import type MarkdownIt from 'markdown-it'
-import type { ShikiOptions } from '@slidev/types'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {

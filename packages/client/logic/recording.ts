@@ -2,8 +2,8 @@ import { nextTick, Ref, ref, shallowRef, watch } from 'vue'
 import { useEventListener, useDevicesList } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
 import RecorderType from 'recordrtc'
-import { currentCamera, currentMic } from '../state'
 import type { Options as RecorderOptions } from 'recordrtc'
+import { currentCamera, currentMic } from '../state'
 
 export const recordingName = ref('')
 export const recordCamera = ref(true)

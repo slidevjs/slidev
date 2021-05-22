@@ -1,5 +1,5 @@
-import { getBodyJson } from './loaders'
 import type { Plugin } from 'vite'
+import { getBodyJson } from './loaders'
 
 const PREFIX = '/@server-ref/'
 
