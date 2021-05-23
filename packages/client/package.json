@@ -23,7 +23,7 @@
     "@vueuse/motion": "^1.5.5",
     "codemirror": "^5.61.1",
     "file-saver": "^2.0.5",
-    "js-base64": "^3.6.0",
+    "js-base64": "^3.6.1",
     "js-yaml": "^4.1.0",
     "katex": "^0.13.11",
     "mermaid": "8.5.0",
