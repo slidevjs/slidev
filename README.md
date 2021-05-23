@@ -41,7 +41,8 @@ I always found myself spending too much time styling and layouting slides when u
 
 So as a frontend developer, why not solve it the way that fits better with what I am good at?
 
-Documentations and guides on **[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev)
+Documentations and guides:
+**[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev) | [Español](https://es.sli.dev)
 
 ## Features
 
