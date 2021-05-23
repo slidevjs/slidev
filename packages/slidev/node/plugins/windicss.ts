@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+import { slash } from '@antfu/utils'
 import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 
@@ -14,7 +15,7 @@ export function createWindiCSSPlugin(
         resolve(clientRoot, 'windi.config.ts'),
       ],
       onOptionsResolved(config) {
-        config.scanOptions.include.push(`!${resolve(userRoot, 'node_modules')}`)
+        config.scanOptions.include.push(`!${slash(resolve(userRoot, 'node_modules'))}`)
       },
       ...windiOptions,
     },
