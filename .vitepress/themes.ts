@@ -103,7 +103,6 @@ export const community: ThemeInfo[] = [
       'https://i.imgur.com/41QWv3c.png',
     ],
     tags: [
-      'flayyer',
       'dark',
       'light',
     ],
@@ -125,7 +124,6 @@ export const community: ThemeInfo[] = [
       'https://github.com/nico-bachner/slidev-theme-geist/blob/main/example-export/05.png?raw=true',
     ],
     tags: [
-      'vercel',
       'dark',
       'light',
     ],
@@ -150,7 +148,6 @@ export const community: ThemeInfo[] = [
       'https://github.com/lightvue/slidev-theme-light-icons/blob/master/screenshot/10-layout-left-image-light.png?raw=true',
     ],
     tags: [
-      'light-icons',
       'dark',
       'light',
     ],
@@ -171,7 +168,6 @@ export const community: ThemeInfo[] = [
       'https://i.imgur.com/m8eemKt.png',
     ],
     tags: [
-      'purplin',
       'dark',
       'light',
     ],
@@ -192,7 +188,27 @@ export const community: ThemeInfo[] = [
       'https://raw.githubusercontent.com/Dawntraoz/slidev-theme-unicorn/master/screenshots/dark-theme-center-without-header-footer.png',
     ],
     tags: [
-      'unicorn',
+      'dark',
+      'light',
+    ],
+  },
+  {
+    id: 'slidev-theme-zhozhoba',
+    name: 'Zhozhoba',
+    description: 'A zhozhoba theme for Slidev',
+    author: {
+      name: 'Bogenbai Bayzharassov',
+      link: 'https://github.com/thatoranzhevyy',
+    },
+    repo: 'https://github.com/thatoranzhevyy/slidev-theme-zhozhoban',
+    previews: [
+      'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/slides-export/01.png?raw=true',
+      'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/.github/dark.png?raw=true',
+      'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/slides-export/02.png?raw=true',
+      'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/slides-export/03.png?raw=true',
+      'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/slides-export/04.png?raw=true',
+    ],
+    tags: [
       'dark',
       'light',
     ],
