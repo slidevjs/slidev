@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "ln -sF ../../packages/create-app/template/slides.md slides.md && nodemon -w '../../packages/slidev/dist/*.js' --exec 'slidev ./slides.md --open=false --log=info'",
+    "dev": "ln -sFf ../../packages/create-app/template/slides.md slides.md && nodemon -w '../../packages/slidev/dist/*.js' --exec 'slidev ./slides.md --open=false --log=info'",
     "build": "slidev build",
     "export": "slidev export"
   },
