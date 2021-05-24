@@ -176,10 +176,31 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-unicorn',
+    name: 'Unicorn',
+    description: 'Based on Dawntraoz website design',
+    author: {
+      name: 'Alba Silvente (dawntraoz)',
+      link: 'https://github.com/dawntraoz',
+    },
+    repo: 'https://github.com/dawntraoz/slidev-theme-unicorn',
+    previews: [
+      'https://raw.githubusercontent.com/Dawntraoz/slidev-theme-unicorn/master/screenshots/dark-theme-intro.png',
+      'https://raw.githubusercontent.com/Dawntraoz/slidev-theme-unicorn/master/screenshots/light-theme-cover.png',
+      'https://raw.githubusercontent.com/Dawntraoz/slidev-theme-unicorn/master/screenshots/dark-theme-image-centered.png',
+      'https://raw.githubusercontent.com/Dawntraoz/slidev-theme-unicorn/master/screenshots/dark-theme-center-without-header-footer.png',
+    ],
+    tags: [
+      'unicorn',
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
-    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
+    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/themes.ts',
     name: 'Yours?',
     description: 'Submit your theme to be list here!',
     author: {
