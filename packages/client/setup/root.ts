@@ -7,6 +7,7 @@ import { router } from '../routes'
 import configs from '/@slidev/configs'
 // @ts-expect-error
 import serverState from '/@server-ref/state'
+import { stripMarkdownHTMLTags } from '../utils'
 
 export default function setupRoot() {
   // @ts-expect-error
@@ -16,7 +17,7 @@ export default function setupRoot() {
   /* __injections__ */
 
   useHead({
-    title: configs.title ? `${configs.title} - Slidev` : 'Slidev',
+    title: configs.title ? `${stripMarkdownHTMLTags(configs.title)} - Slidev` : 'Slidev',
   })
 
   // sync with server state
