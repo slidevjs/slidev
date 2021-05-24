@@ -79,9 +79,9 @@
     "vite-plugin-icons": "^0.5.1",
     "vite-plugin-md": "^0.6.7",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-windicss": "^0.16.0-beta.23",
+    "vite-plugin-windicss": "^0.16.0",
     "vue": "^3.0.11",
-    "windicss": "^3.0.9",
+    "windicss": "^3.0.12",
     "yargs": "^17.0.1"
   },
   "devDependencies": {
