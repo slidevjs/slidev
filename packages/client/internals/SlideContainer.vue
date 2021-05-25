@@ -33,7 +33,7 @@ if (props.width) {
 const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
-  if (props.scale != null)
+  if (props.scale)
     return props.scale
   if (screenAspect.value < slideAspect)
     return width.value / slideWidth
