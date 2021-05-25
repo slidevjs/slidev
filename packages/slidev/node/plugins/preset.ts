@@ -89,7 +89,6 @@ export async function ViteSlidevPlugin(
       ],
 
       customLoaderMatcher: id => id.endsWith('.md'),
-
       customComponentResolvers: [
         ViteIconsResolver({
           componentPrefix: '',

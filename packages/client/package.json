@@ -20,7 +20,7 @@
     "@slidev/types": "workspace:*",
     "@vueuse/core": "^4.11.1",
     "@vueuse/head": "^0.5.1",
-    "@vueuse/motion": "^1.5.5",
+    "@vueuse/motion": "^1.5.6",
     "codemirror": "^5.61.1",
     "file-saver": "^2.0.5",
     "js-base64": "^3.6.1",

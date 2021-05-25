@@ -11,3 +11,4 @@ demo/starter/slides.md
 assets/demo
 packages/slidev/README.md
 composable-vue-cn
+components.d.ts
