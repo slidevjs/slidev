@@ -3,10 +3,10 @@ import { slideScale } from '../state'
 import SelectList from './SelectList.vue'
 import type { SelectionItem } from './types'
 
-const items: SelectionItem<number | null>[] = [
+const items: SelectionItem<number>[] = [
   {
     display: 'Fit',
-    value: null,
+    value: 0,
   },
   {
     display: '1:1',
