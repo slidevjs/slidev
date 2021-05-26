@@ -1,6 +1,6 @@
 {
   "name": "create-slidev",
-  "version": "0.14.0-beta.3",
+  "version": "0.14.0-beta.4",
   "engines": {
     "node": ">=14.0.0"
   },
