@@ -12,7 +12,7 @@ import equal from 'fast-deep-equal'
 import { existsSync } from 'fs-extra'
 import type { Connect } from 'vite'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
-import { toAtFS } from '../utils'
+import { resolveImportPath, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
@@ -331,7 +331,7 @@ export function createSlidesLoader(
     }
 
     if (data.features.katex)
-      imports.push('import "katex/dist/katex.min.css"')
+      imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
 
     return imports.join('\n')
   }
