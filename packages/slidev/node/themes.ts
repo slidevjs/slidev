@@ -1,5 +1,7 @@
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
+import isInstalledGlobally from 'is-installed-globally'
+import { underline } from 'kolorist'
 import { resolveImportPath } from './utils'
 import { isRelative } from './options'
 
@@ -48,13 +50,16 @@ export async function promptForThemeInstallation(name: string) {
     name: 'confirm',
     initial: 'Y',
     type: 'confirm',
-    message: `The theme "${name}" was not found in your project, do you want to install it now?`,
+    message: `The theme "${name}" was not found ${underline(isInstalledGlobally ? 'globally' : 'in your project')}, do you want to install it now?`,
   })
 
   if (!confirm)
     return false
 
-  await run(parseNi, [name])
+  if (isInstalledGlobally)
+    await run(parseNi, ['-g', name])
+  else
+    await run(parseNi, [name])
 
   return name
 }
