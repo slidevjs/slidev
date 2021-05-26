@@ -26,7 +26,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
-            'vue': `${toAtFS(resolveImportPath('vue', true))}`,
+            'vue': `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`,
           },
         },
         optimizeDeps: {

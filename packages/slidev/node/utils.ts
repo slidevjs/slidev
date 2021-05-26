@@ -1,4 +1,5 @@
 import { ensurePrefix, slash } from '@antfu/utils'
+import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'
 import resolveFrom from 'resolve-from'
 import resolveGlobal from 'resolve-global'
@@ -22,10 +23,12 @@ export function resolveImportPath(importName: string, ensure = false) {
   }
   catch {}
 
-  try {
-    return resolveGlobal(importName)
+  if (isInstalledGlobally) {
+    try {
+      return resolveGlobal(importName)
+    }
+    catch {}
   }
-  catch {}
 
   if (ensure)
     throw new Error(`Failed to resolve package "${importName}"`)

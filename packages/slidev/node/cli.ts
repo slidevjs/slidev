@@ -9,6 +9,7 @@ import { blue, bold, cyan, dim, gray, green, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { SlidevConfig } from '@slidev/types'
+import isInstalledGlobally from 'is-installed-globally'
 import { version } from '../package.json'
 import { createServer } from './server'
 import { getThemeRoots, isRelative, ResolvedSlidevOptions, resolveOptions } from './options'
@@ -318,7 +319,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally ? yellow('(global)') : ''}`)
   console.log()
   console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
