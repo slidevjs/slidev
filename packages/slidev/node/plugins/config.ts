@@ -2,7 +2,7 @@ import { InlineConfig, mergeConfig, Plugin } from 'vite'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import { ResolvedSlidevOptions } from '../options'
-import { toAtFS } from '../utils'
+import { resolveImportPath, toAtFS } from '../utils'
 
 const EXCLUDE = [
   '@slidev/types',
@@ -26,6 +26,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
+            'vue': `${toAtFS(resolveImportPath('vue', true))}`,
           },
         },
         optimizeDeps: {
