@@ -2,10 +2,10 @@ import { resolve, dirname } from 'path'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
-import { sync } from 'resolve'
+import { sync as resolvePkg } from 'resolve'
 
 export function resolveImportPath(importName: string) {
-  return sync(importName, {
+  return resolvePkg(importName, {
     preserveSymlinks: false,
   })
 }

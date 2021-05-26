@@ -6,6 +6,7 @@ import { toAtFS } from '../utils'
 
 const EXCLUDE = [
   '@slidev/types',
+  '@slidev/shared',
   'mermaid',
   '@vueuse/core',
   '@vueuse/shared',

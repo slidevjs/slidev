@@ -8,8 +8,8 @@ import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType, uniq } from '@antfu/utils'
 import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
-import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
 import { resolveImportPath } from './utils'
+import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
 
 export interface SlidevEntryOptions {
   /**
@@ -55,7 +55,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export function getClientRoot() {
-  return dirname(resolveImportPath('@slidev/client/package.json'))
+  return dirname(resolveImportPath('@slidev/client/package.json', true))
 }
 
 export function getCLIRoot() {
@@ -78,7 +78,7 @@ export function getThemeRoots(name: string, entry: string) {
   }
   else {
     return [
-      dirname(resolveImportPath(`${name}/package.json`)),
+      dirname(resolveImportPath(`${name}/package.json`, true)),
     ]
   }
 }

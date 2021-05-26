@@ -11,7 +11,7 @@ const props = defineProps({
     default: () => ({}) as any,
   },
   scale: {
-    type: Number,
+    type: [Number, String],
   },
 })
 
