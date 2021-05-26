@@ -21,8 +21,6 @@ export const currentPath = computed(() => getPath(currentPage.value))
 export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
 export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
 
-export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1)
-export const hasPrev = computed(() => currentPage.value > 1)
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 
 export const clicksElements = computed<HTMLElement[]>(() => currentRoute.value?.meta?.__clicksElements || [])
@@ -39,6 +37,9 @@ export const clicks = computed<number>({
 })
 
 export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? clicksElements.value.length))
+
+export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1 || clicks.value < clicksTotal.value)
+export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
 
 export function next() {
   if (clicksTotal.value <= clicks.value)
