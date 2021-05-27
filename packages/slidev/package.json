@@ -23,7 +23,7 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./": "./"
+    "./*": "./*"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -61,6 +61,7 @@
     "debug": "^4.3.2",
     "fast-glob": "^3.2.5",
     "fs-extra": "^10.0.0",
+    "import-from": "^3.0.0",
     "is-installed-globally": "^0.4.0",
     "jiti": "^1.9.2",
     "js-base64": "^3.6.1",
