@@ -49,10 +49,12 @@ Slidev uses directory structure conventions to minimalize the configuration surf
 
 Refer to the [Directory Structure](/custom/directory-structure) section.
 
-## `vite.config.ts`
+## Config Tools
 
-Refer to the [Configure Vite](/custom/config-vite) section.
-
-## `windicss.config.ts`
-
-Refer to the [Configure Windi CSS](/custom/config-windicss) section.
+- [Highlighters](/custom/highlighters)
+- [Configure Vue](/custom/config-vue)
+- [Configure Vite](/custom/config-vite)
+- [Configure Windi CSS](/custom/config-windicss)
+- [Configure Monaco](/custom/config-monaco)
+- [Configure KaTeX](/custom/config-katex)
+- [Configure Mermaid](/custom/config-mermaid)

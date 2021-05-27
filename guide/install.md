@@ -42,6 +42,22 @@ $ npx slidev
 > echo 'shamefully-flatten=true' >> .npmrc
 > ```
 
+## Install Globally
+
+From v0.14.0, we shipped **experimental** global installation support. You can install it with the following command 
+
+```bash
+$ npm i -g @slidev/cli
+```
+
+And then use `slidev` everywhere without creating a project every time.
+
+```bash
+$ slidev
+```
+
+This command will also try to use local `@slidev/cli` if it has been found in the `node_modules`.
+
 ## Install on Docker
 
 If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker](https://hub.docker.com/r/stig124/slidev) image maintained by [stig124](https://github.com/Stig124), or build your own.
