@@ -46,7 +46,7 @@ importers:
       tsup: 4.11.1
       typescript: ^4.3.2
       vite: ^2.3.4
-      vite-plugin-windicss: ^0.16.2
+      vite-plugin-windicss: ^0.16.3
       zx: ^1.14.0
     devDependencies:
       '@antfu/eslint-config': 0.6.5_eslint@7.27.0+typescript@4.3.2
@@ -91,7 +91,7 @@ importers:
       tsup: 4.11.1_typescript@4.3.2
       typescript: 4.3.2
       vite: 2.3.4
-      vite-plugin-windicss: 0.16.2_vite@2.3.4
+      vite-plugin-windicss: 0.16.3_vite@2.3.4
       zx: 1.14.0
 
   demo/composable-vue:
@@ -264,7 +264,7 @@ importers:
       vite-plugin-icons: ^0.5.1
       vite-plugin-md: ^0.6.7
       vite-plugin-remote-assets: ^0.2.2
-      vite-plugin-windicss: ^0.16.2
+      vite-plugin-windicss: ^0.16.3
       vue: ^3.0.11
       windicss: ^3.0.12
       yargs: ^17.0.1
@@ -304,7 +304,7 @@ importers:
       vite-plugin-icons: 0.5.1_3a062f62dd9e0ad9a7cb2ae18cd865f0
       vite-plugin-md: 0.6.7_vite@2.3.4
       vite-plugin-remote-assets: 0.2.2_vite@2.3.4
-      vite-plugin-windicss: 0.16.2_vite@2.3.4
+      vite-plugin-windicss: 0.16.3_vite@2.3.4
       vue: 3.0.11
       windicss: 3.0.12
       yargs: 17.0.1
@@ -1645,8 +1645,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@windicss/plugin-utils/0.16.2:
-    resolution: {integrity: sha512-da9QnPFz2dbLe5Fo5E12Ft/5tKvMivDcQs1GVUo3QqmQ/ElrcbwUd5pamoWPqmAlJ/r1lJSInp5ihIbFbOeSCg==}
+  /@windicss/plugin-utils/0.16.3:
+    resolution: {integrity: sha512-FUjXBcEtT6E6DOXEgsgFl6Xt3RMG70AcjO4SQzCbsdsSgphrtUe1pcSTyY+2N/COnmsdvBQN6C4myXjTfT68ng==}
     dependencies:
       '@antfu/utils': 0.1.6
       debug: 4.3.2
@@ -7653,12 +7653,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /vite-plugin-windicss/0.16.2_vite@2.3.4:
-    resolution: {integrity: sha512-jD0W0jKO554azoZNhP6KGsIMjcj4VDQsvmNvgOiMEwhS06QX3c0VO2gYktWhSAD/Sn9qTDxNCmex7ZITRFUmVQ==}
+  /vite-plugin-windicss/0.16.3_vite@2.3.4:
+    resolution: {integrity: sha512-/Dp8R+ByzqCJiFvpKIYU+gF9FGCV+3PTn5Gfvzeg9QYMq+CXQcEHr9fSnBjR5jrGfNWKxOqsJ7mkh8wXnrDUWw==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 0.16.2
+      '@windicss/plugin-utils': 0.16.3
       chalk: 4.1.1
       debug: 4.3.2
       vite: 2.3.4

@@ -56,9 +56,15 @@ cli.command(
       choices: ['error', 'warn', 'info', 'silent'],
       describe: 'log level',
     })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      type: 'boolean',
+      describe: 'force the optimizer to ignore the cache and re-bundle  ',
+    })
     .strict()
     .help(),
-  async({ entry, theme, port, open, log, remote }) => {
+  async({ entry, theme, port, open, log, remote, force }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -101,6 +107,7 @@ cli.command(
             port,
             open,
             host: remote ? '0.0.0.0' : 'localhost',
+            force,
           },
           logLevel: log as LogLevel,
         },

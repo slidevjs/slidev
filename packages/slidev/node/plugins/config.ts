@@ -7,11 +7,12 @@ import { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, toAtFS } from '../utils'
 
 const EXCLUDE = [
-  '@slidev/types',
   '@slidev/shared',
-  'mermaid',
+  '@slidev/types',
   '@vueuse/core',
   '@vueuse/shared',
+  'mermaid',
+  'vite-plugin-windicss',
   'vue-demi',
 ]
 
@@ -28,7 +29,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
-            'vue': `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`,
           },
         },
         optimizeDeps: {
@@ -51,6 +51,8 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
+        // @ts-expect-error
+        injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
       }
 
       return mergeConfig(config, injection)
