@@ -97,56 +97,56 @@ importers:
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.7.9
-      '@slidev/theme-seriph': ^0.7.10
+      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.7.9
-      '@slidev/theme-seriph': 0.7.10
+      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
   demo/composable-vue-cn:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.7.9
-      '@slidev/theme-seriph': ^0.7.10
+      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.7.9
-      '@slidev/theme-seriph': 0.7.10
+      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
   demo/starter:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.7.9
-      '@slidev/theme-seriph': ^0.7.10
+      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.7.9
-      '@slidev/theme-seriph': 0.7.10
+      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
   demo/test:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.7.9
-      '@slidev/theme-seriph': ^0.7.10
+      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.7.9
-      '@slidev/theme-seriph': 0.7.10
+      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
 
@@ -1055,38 +1055,28 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@slidev/theme-default/0.7.9:
-    resolution: {integrity: sha512-11+yoDYNiFcp0z5DCVUJK+apxdP25el1YI54Y5IfGNouk9UIjf0wZzDc5m73jF1dzQsHJkCMnqkMo3529TfuSQ==}
+  /@slidev/theme-default/0.14.1:
+    resolution: {integrity: sha512-CKjk80oA9Y/exJppc+mGBbiGLcWOzvmX49C512LDRprLRVqpO2layh80v3G8ASeeu24w5pNU3XWNruIIz2ce4A==}
     engines: {node: '>=14.0.0'}
-    peerDependencies:
-      '@slidev/client': '*'
-      shiki: '*'
     dependencies:
-      '@slidev/types': 0.13.13
+      '@slidev/types': 0.14.0
       codemirror-theme-vars: 0.1.1
       prism-theme-vars: 0.2.2
       theme-vitesse: 0.1.11
     dev: true
 
-  /@slidev/theme-seriph/0.7.10:
-    resolution: {integrity: sha512-cBM8qLC+I81zLGLXXgUjAkebUbwLVS1E8TiKQ14RQ6IYU6LNfQcO9Gf4MY7YpOjh98mfZc0NJMuafNiPgKkhUg==}
+  /@slidev/theme-seriph/0.14.1:
+    resolution: {integrity: sha512-+NxFhu0qh68pe21ggNrnkgyWx5+dZ8DXn3unvtDRQkP24YPGgeq+mr6/e7p0KWsU11vbWFd1qeSXqM9AjbZo2A==}
     engines: {node: '>=14.0.0'}
-    peerDependencies:
-      '@slidev/client': '*'
     dependencies:
-      '@slidev/types': 0.13.13
+      '@slidev/types': 0.14.0
       codemirror-theme-vars: 0.1.1
       prism-theme-vars: 0.2.2
-      shiki: 0.9.4
       theme-vitesse: 0.1.11
-      vite-plugin-windicss: 0.16.4
-    transitivePeerDependencies:
-      - supports-color
-      - vite
     dev: true
 
-  /@slidev/types/0.13.13:
-    resolution: {integrity: sha512-PdYByaK2yCFNP0J5UFonGXbjuIWSiNwaZklOe9QTZDClUOye6YprSffJpEHPPXb2ktyTf6BZIPd4YNhpTda70w==}
+  /@slidev/types/0.14.0:
+    resolution: {integrity: sha512-6JksbALyqN8ECi7Y7Rlphts6mlDGtX5N8/ZEgX4OlPqjEU9957LwZGwdwXbT0zrHrp9w/l823UjRErurP5/Azg==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -1656,20 +1646,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
-
-  /@windicss/plugin-utils/0.16.4:
-    resolution: {integrity: sha512-jw/RyxNz5M2l0Xo6bg4F1KBpwPSVgGs/ZzbxoT9O8QTDF8rsLNvrSuZPQlyEF0vR/Q0svkxLQlEfvEus1giRVA==}
-    dependencies:
-      '@antfu/utils': 0.1.6
-      debug: 4.3.2
-      fast-glob: 3.2.5
-      jiti: 1.9.2
-      magic-string: 0.25.7
-      micromatch: 4.0.4
-      windicss: 3.0.12
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
 
   /@windicss/plugin-utils/0.16.5:
     resolution: {integrity: sha512-APDpVtol2RJLiHaGdn+VaBksaFWFk27LWjc51X1e+mkiPbHcepV+aBXLylNoTrIKzMjtVpsrUHRC+afGMBVgpw==}
@@ -5061,6 +5037,7 @@ packages:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
     dependencies:
       yallist: 3.1.1
+    dev: false
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
@@ -5416,6 +5393,7 @@ packages:
     resolution: {integrity: sha512-F+th54mPc0l1lp1ZcFMyL/jTs2Tlq4SqIHKIXGZOR/VkHkF9A7Fr5rRr5+ZG/lWeRsyrClLYRq7s/yFQ/XhWCA==}
     dependencies:
       lru-cache: 5.1.1
+    dev: false
 
   /opencollective-postinstall/2.0.3:
     resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
@@ -6229,6 +6207,7 @@ packages:
       json5: 2.2.0
       onigasm: 2.2.5
       vscode-textmate: 5.2.0
+    dev: false
 
   /shq/1.0.2:
     resolution: {integrity: sha512-8AvNyHL75DHlkbLmzF7nzTzT2F0qEfSewwxHjH79Ww8S+hGpIZVlf8b0TcdOwv4HqIkOVBInu9n+wqhUSl9Wag==}
@@ -6976,19 +6955,6 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss/0.16.4:
-    resolution: {integrity: sha512-m35lII56FW18uLDFnHAmtXJwfunJ+qCPaGZM9whNpqvFJqZsY9YT3pmlOPw2J7uDHSeOs9InX/MtisyUSfh+xA==}
-    peerDependencies:
-      vite: ^2.0.1
-    dependencies:
-      '@windicss/plugin-utils': 0.16.4
-      chalk: 4.1.1
-      debug: 4.3.2
-      windicss: 3.0.12
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /vite-plugin-windicss/0.16.5_vite@2.3.4:
     resolution: {integrity: sha512-OevEU9W1mEemyY2kLgOu04MEBr0FZKiNCWe6FZwal5SqteZzr+5K99crQuRRxnB+hhtZ+d+QydKyUnqjuKx8Fw==}
     peerDependencies:
@@ -7016,6 +6982,7 @@ packages:
 
   /vscode-textmate/5.2.0:
     resolution: {integrity: sha512-Uw5ooOQxRASHgu6C7GVvUxisKXfSgW4oFlO+aa+PAkgmH89O3CXxEEzNRNtHSqtXFTl0nAC1uYj0GMSH27uwtQ==}
+    dev: false
 
   /vue-demi/0.9.0:
     resolution: {integrity: sha512-f8vVUpC726YXv99fF/3zHaw5CUYbP5H/DVWBN+pncXM8P2Uz88kkffwj9yD7MukuVzPICDHNrgS3VC2ursaP7g==}
@@ -7229,6 +7196,7 @@ packages:
 
   /yallist/3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
+    dev: false
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
