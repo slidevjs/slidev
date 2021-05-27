@@ -6,13 +6,15 @@ import typography from 'windicss/plugin/typography'
 export default defineConfig({
   extract: {
     include: [
-      '**/*.{vue,ts,tsx,js,jsx,md}',
+      resolve(process.cwd(), '**/*.{vue,ts,tsx,js,jsx,md}'),
       // @slidev/client/**/*.{vue,ts}
       resolve(__dirname, '**/*.{vue,ts}'),
     ],
     exclude: [
       '.git',
       'dist',
+      resolve(process.cwd(), '.git'),
+      resolve(process.cwd(), 'dist'),
       // @slidev/client/node_modules
       resolve(__dirname, 'node_modules'),
       resolve(__dirname, 'windi.config.ts'),
