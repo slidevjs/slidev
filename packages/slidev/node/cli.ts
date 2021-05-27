@@ -64,7 +64,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, port, open, log, remote, force }) => {
+  async({ entry, theme, port: userPort, open, log, remote, force }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -87,7 +87,7 @@ cli.command(
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, theme }, 'dev')
-      port = port || await findFreePort(3030)
+      const port = userPort || await findFreePort(3030)
       server = (await createServer(
         options,
         {
@@ -105,6 +105,7 @@ cli.command(
         {
           server: {
             port,
+            strictPort: true,
             open,
             host: remote ? '0.0.0.0' : 'localhost',
             force,
