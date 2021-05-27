@@ -169,6 +169,7 @@ importers:
       prettier: ^2.3.0
       recordrtc: ^5.6.2
       resolve: ^1.20.0
+      vite-plugin-windicss: '*'
       vue: ^3.0.11
       vue-router: ^4.0.8
       windicss: ^3.0.12
@@ -190,6 +191,7 @@ importers:
       prettier: 2.3.0
       recordrtc: 5.6.2
       resolve: 1.20.0
+      vite-plugin-windicss: 0.16.0
       vue: 3.0.11
       vue-router: 4.0.8_vue@3.0.11
       windicss: 3.0.12
@@ -7572,6 +7574,19 @@ packages:
       fs-extra: 9.1.0
       magic-string: 0.25.7
       vite: 2.3.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /vite-plugin-windicss/0.16.0:
+    resolution: {integrity: sha512-XaYnPNKsq2yZ5Ph39ZmPvtsTheyVsGSXibTOq/kWCKcXyLxIinTL6xQvLsagjF8QzHpHPF4NbsFvvGtO81gxgA==}
+    peerDependencies:
+      vite: ^2.0.1
+    dependencies:
+      '@windicss/plugin-utils': 0.16.0
+      chalk: 4.1.1
+      debug: 4.3.2
+      windicss: 3.0.12
     transitivePeerDependencies:
       - supports-color
     dev: false
