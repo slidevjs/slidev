@@ -1,31 +1,23 @@
-import { resolve, dirname } from 'path'
+import { resolve } from 'path'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
-import { sync } from 'resolve'
-
-export function resolveImportPath(importName: string) {
-  return sync(importName, {
-    preserveSymlinks: false,
-  })
-}
 
 export default defineConfig({
   extract: {
     include: [
-      '**/*.{vue,ts,tsx,js,jsx,md}',
+      resolve(process.cwd(), '**/*.{vue,ts,tsx,js,jsx,md}'),
       // @slidev/client/**/*.{vue,ts}
       resolve(__dirname, '**/*.{vue,ts}'),
     ],
     exclude: [
       '.git',
       'dist',
+      resolve(process.cwd(), '.git'),
+      resolve(process.cwd(), 'dist'),
       // @slidev/client/node_modules
       resolve(__dirname, 'node_modules'),
       resolve(__dirname, 'windi.config.ts'),
-      // for monorepo like demo folder
-      dirname(resolveImportPath('monaco-editor/package.json')),
-      dirname(resolveImportPath('katex/package.json')),
     ],
     extractors: [
       {
@@ -54,7 +46,7 @@ export default defineConfig({
     '!opacity-0',
   ],
   shortcuts: {
-    'abs-t': 'absolute bottom-0 left-0 right-0',
+    'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
     'abs-tl': 'absolute top-0 left-0',
     'abs-tr': 'absolute top-0 right-0',
     'abs-b': 'absolute bottom-0 left-0 right-0',

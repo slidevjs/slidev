@@ -12,7 +12,7 @@ highlighter: shiki
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
-  
+
   Learn more at [Sli.dev](https://sli.dev)
 ---
 
@@ -40,7 +40,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 # What is Slidev?
 
 Slidev is a slides maker and presenter designed for developers, consist of the following features
-  
+
 - 📝 **Text-based** - focus on the content with Markdown, and then style them later
 - 🎨 **Themable** - theme can be shared and used with npm packages
 - 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
@@ -71,7 +71,6 @@ h1 {
 }
 </style>
 
-
 ---
 
 # Navigation
@@ -87,13 +86,13 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
 
+<!-- https://sli.dev/guide/animations.html#click-animations -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
   src="https://sli.dev/assets/arrow-bottom-left.svg"
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
 
 ---
 layout: image-right
@@ -104,6 +103,8 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 
 Use code snippets and get the highlighting directly!
 
+<!-- https://sli.dev/guide/syntax.html#line-highlighting -->
+
 ```ts {all|2|1-6|9|all}
 interface User {
   id: number
@@ -112,12 +113,14 @@ interface User {
   role: string
 }
 
-function updateUser(id: number, update: Partial<User>) {
+function updateUser(id: number, update: User) {
   const user = getUser(id)
   const newUser = {...user, ...update}  
   saveUser(id, newUser)
 }
 ```
+
+<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
 
 ---
 
@@ -128,7 +131,7 @@ function updateUser(id: number, update: Partial<User>) {
 
 You can use Vue components directly inside your slides.
 
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly use. And add your custom components are also super easy.
+We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
 
 ```html
 <Counter :count="10" />
@@ -137,7 +140,7 @@ We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that
 <!-- ./components/Counter.vue -->
 <Counter :count="10" m="t-4" />
 
-Check out [the guides](https://sli.dev/custom/#components) for more.
+Check out [the guides](https://sli.dev/builtin/components.html) for more.
 
 </div>
 <div>
@@ -250,11 +253,11 @@ const final = {
 }
 </script>
 
-<div 
+<div
   v-motion
   :initial="{ x:35, y: 40, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-  
+
 [Learn More](https://sli.dev/guide/animations.html#motion)
 
 </div>

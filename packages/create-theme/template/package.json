@@ -9,8 +9,15 @@
     "export": "slidev export example.md",
     "screenshot": "slidev export example.md --format png"
   },
+  "peerDependencies": {
+    "@slidev/client": "*"
+  },
   "dependencies": {
-    "@slidev/cli": "^0.13.13",
-    "@slidev/theme-default": "^0.7.4"
+    "@slidev/types": "^0.14.0-beta.14",
+    "codemirror-theme-vars": "^0.1.1",
+    "prism-theme-vars": "^0.2.2",
+    "shiki": "*",
+    "theme-vitesse": "^0.1.11",
+    "vite-plugin-windicss": "*"
   }
 }

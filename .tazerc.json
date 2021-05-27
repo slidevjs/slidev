@@ -2,7 +2,6 @@
   "exclude": [
     "@iconify/json",
     "husky",
-    "mermaid",
-    "jest"
+    "mermaid"
   ]
 }

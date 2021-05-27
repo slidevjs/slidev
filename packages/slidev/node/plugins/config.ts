@@ -1,14 +1,18 @@
+import { join } from 'path'
 import { InlineConfig, mergeConfig, Plugin } from 'vite'
+import isInstalledGlobally from 'is-installed-globally'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import { ResolvedSlidevOptions } from '../options'
-import { toAtFS } from '../utils'
+import { resolveImportPath, toAtFS } from '../utils'
 
 const EXCLUDE = [
+  '@slidev/shared',
   '@slidev/types',
-  'mermaid',
   '@vueuse/core',
   '@vueuse/shared',
+  'mermaid',
+  'vite-plugin-windicss',
   'vue-demi',
 ]
 
@@ -43,6 +47,14 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           exclude: EXCLUDE,
         },
       }
+
+      if (isInstalledGlobally) {
+        injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
+        injection.root = options.cliRoot
+        // @ts-expect-error
+        injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
+      }
+
       return mergeConfig(config, injection)
     },
     configureServer(server) {

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import path from 'path'
-import http from 'http'
+import net from 'net'
 import os from 'os'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
@@ -9,6 +9,7 @@ import { blue, bold, cyan, dim, gray, green, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { SlidevConfig } from '@slidev/types'
+import isInstalledGlobally from 'is-installed-globally'
 import { version } from '../package.json'
 import { createServer } from './server'
 import { getThemeRoots, isRelative, ResolvedSlidevOptions, resolveOptions } from './options'
@@ -55,9 +56,15 @@ cli.command(
       choices: ['error', 'warn', 'info', 'silent'],
       describe: 'log level',
     })
+    .option('force', {
+      alias: 'f',
+      default: false,
+      type: 'boolean',
+      describe: 'force the optimizer to ignore the cache and re-bundle  ',
+    })
     .strict()
     .help(),
-  async({ entry, theme, port, open, log, remote }) => {
+  async({ entry, theme, port: userPort, open, log, remote, force }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -80,7 +87,7 @@ cli.command(
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, theme }, 'dev')
-      port = port || await findFreePort(3030)
+      const port = userPort || await findFreePort(3030)
       server = (await createServer(
         options,
         {
@@ -98,8 +105,10 @@ cli.command(
         {
           server: {
             port,
+            strictPort: true,
             open,
             host: remote ? '0.0.0.0' : 'localhost',
+            force,
           },
           logLevel: log as LogLevel,
         },
@@ -318,7 +327,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally ? yellow('(global)') : ''}`)
   console.log()
   console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
@@ -346,14 +355,19 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
 
 function isPortFree(port: number) {
   return new Promise((resolve) => {
-    const server = http.createServer()
-      .listen(port, () => {
-        server.close()
-        resolve(true)
-      })
-      .on('error', () => {
-        resolve(false)
-      })
+    const server = net.createServer((socket) => {
+      socket.write('Echo server\r\n')
+      socket.pipe(socket)
+    })
+
+    server.listen(port, '127.0.0.1')
+    server.on('error', () => {
+      resolve(false)
+    })
+    server.on('listening', () => {
+      server.close()
+      resolve(true)
+    })
   })
 }
 
