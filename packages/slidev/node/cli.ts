@@ -12,7 +12,7 @@ import { SlidevConfig } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import { version } from '../package.json'
 import { createServer } from './server'
-import { getThemeRoots, isRelative, ResolvedSlidevOptions, resolveOptions } from './options'
+import { getThemeRoots, isPath, ResolvedSlidevOptions, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
@@ -199,7 +199,7 @@ cli.command(
             console.error('Can not eject theme "none"')
             process.exit(1)
           }
-          if (isRelative(theme)) {
+          if (isPath(theme)) {
             console.error('Theme is already ejected')
             process.exit(1)
           }

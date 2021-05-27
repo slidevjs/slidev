@@ -3,7 +3,7 @@ import { parseNi, run } from '@antfu/ni'
 import isInstalledGlobally from 'is-installed-globally'
 import { underline } from 'kolorist'
 import { resolveImportPath } from './utils'
-import { isRelative } from './options'
+import { isPath } from './options'
 
 const officialThemes: Record<string, string> = {
   'none': '',
@@ -23,7 +23,7 @@ export function resolveThemeName(name: string) {
     return ''
   if (name.startsWith('@slidev/theme-') || name.startsWith('slidev-theme-'))
     return name
-  if (isRelative(name))
+  if (isPath(name))
     return name
 
   // search for local packages first
@@ -43,7 +43,7 @@ export async function promptForThemeInstallation(name: string) {
   if (!name)
     return name
 
-  if (isRelative(name) || packageExists(name))
+  if (isPath(name) || packageExists(name))
     return name
 
   const { confirm } = await prompts({

@@ -71,7 +71,7 @@ export async function ViteSlidevPlugin(
   const MarkdownPlugin = await createMarkdownPlugin(options, pluginOptions)
 
   return [
-    createWindiCSSPlugin(options, pluginOptions),
+    await createWindiCSSPlugin(options, pluginOptions),
     MarkdownPlugin,
     VuePlugin,
 

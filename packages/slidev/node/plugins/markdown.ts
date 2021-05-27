@@ -7,11 +7,12 @@ import mila from 'markdown-it-link-attributes'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
+import * as Shiki from 'shiki'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
-import Shiki, { resolveShikiOptions } from './markdown-it-shiki'
+import MarkdownItShiki, { resolveShikiOptions } from './markdown-it-shiki'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {
@@ -29,10 +30,10 @@ export async function createMarkdownPlugin(
 
   if (config.highlighter === 'shiki') {
     const { getHighlighter } = await import('shiki')
-    const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', {}, DEFAULT_SHIKI_OPTIONS, false)
+    const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', Shiki, DEFAULT_SHIKI_OPTIONS, false)
     const { langs, themes } = resolveShikiOptions(shikiOptions)
     shikiOptions.highlighter = await getHighlighter({ themes, langs })
-    setups.push(md => md.use(Shiki, shikiOptions))
+    setups.push(md => md.use(MarkdownItShiki, shikiOptions))
   }
   else {
     setups.push(md => md.use(Prism))

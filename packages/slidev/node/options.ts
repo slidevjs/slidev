@@ -65,8 +65,8 @@ export function getCLIRoot() {
   return resolve(__dirname, '..')
 }
 
-export function isRelative(name: string) {
-  return /^\.\.?[\/\\]/.test(name)
+export function isPath(name: string) {
+  return name.startsWith('/') || /^\.\.?[\/\\]/.test(name)
 }
 
 export function getThemeRoots(name: string, entry: string) {
@@ -74,7 +74,7 @@ export function getThemeRoots(name: string, entry: string) {
     return []
 
   // TODO: handle theme inherit
-  if (isRelative(name)) {
+  if (isPath(name)) {
     return [
       resolve(dirname(entry), name),
     ]
