@@ -1,7 +1,6 @@
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'
-import resolveFrom from 'resolve-from'
 import resolveGlobal from 'resolve-global'
 
 export function toAtFS(path: string) {
@@ -15,11 +14,6 @@ export function resolveImportPath(importName: string, ensure = false) {
     return resolve(importName, {
       preserveSymlinks: false,
     })
-  }
-  catch {}
-
-  try {
-    return resolveFrom(importName, __dirname)
   }
   catch {}
 
