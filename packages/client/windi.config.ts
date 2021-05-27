@@ -46,7 +46,7 @@ export default defineConfig({
     '!opacity-0',
   ],
   shortcuts: {
-    'abs-t': 'absolute bottom-0 left-0 right-0',
+    'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
     'abs-tl': 'absolute top-0 left-0',
     'abs-tr': 'absolute top-0 right-0',
     'abs-b': 'absolute bottom-0 left-0 right-0',

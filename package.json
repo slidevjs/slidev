@@ -37,6 +37,7 @@
     "@types/cli-progress": "^3.9.1",
     "@types/codemirror": "^5.60.0",
     "@types/connect": "^3.4.34",
+    "@types/debug": "^4.1.5",
     "@types/file-saver": "^2.0.2",
     "@types/fs-extra": "^9.0.11",
     "@types/jest": "^26.0.23",

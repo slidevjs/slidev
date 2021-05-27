@@ -8,8 +8,11 @@ import RemoteAssets from 'vite-plugin-remote-assets'
 import { ArgumentsType, uniq } from '@antfu/utils'
 import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
+import _debug from 'debug'
 import { resolveImportPath } from './utils'
 import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
+
+const debug = _debug('slidev:options')
 
 export interface SlidevEntryOptions {
   /**
@@ -89,9 +92,10 @@ export async function resolveOptions(
   promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
   const {
-    entry = 'slides.md',
+    entry: rawEntry = 'slides.md',
     userRoot = process.cwd(),
   } = options
+  const entry = resolve(userRoot, rawEntry)
   const data = await parser.load(entry)
   const theme = resolveThemeName(options.theme || data.config.theme)
 
@@ -112,10 +116,22 @@ export async function resolveOptions(
   const themeRoots = getThemeRoots(theme, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
 
+  debug({
+    config: data.config,
+    mode,
+    entry,
+    theme,
+    userRoot,
+    clientRoot,
+    cliRoot,
+    themeRoots,
+    roots,
+  })
+
   return {
     data,
     mode,
-    entry: resolve(userRoot, entry),
+    entry,
     theme,
     userRoot,
     clientRoot,
