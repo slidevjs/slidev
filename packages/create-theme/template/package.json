@@ -3,21 +3,23 @@
     "slidev-theme",
     "slidev"
   ],
+  "slidev": {
+    "colorSchema": "both",
+    "highlighter": "all"
+  },
   "scripts": {
     "dev": "slidev example.md --open",
     "build": "slidev build example.md",
     "export": "slidev export example.md",
     "screenshot": "slidev export example.md --format png"
   },
-  "peerDependencies": {
-    "@slidev/client": "*"
-  },
   "dependencies": {
     "@slidev/types": "^0.14.0-beta.14",
     "codemirror-theme-vars": "^0.1.1",
     "prism-theme-vars": "^0.2.2",
-    "shiki": "*",
-    "theme-vitesse": "^0.1.11",
-    "vite-plugin-windicss": "*"
+    "theme-vitesse": "^0.1.11"
+  },
+  "devDependencies": {
+    "@slidev/cli": "*"
   }
 }
