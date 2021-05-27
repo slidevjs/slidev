@@ -13,7 +13,7 @@
     "@slidev/client": "*"
   },
   "dependencies": {
-    "@slidev/types": "^0.14.0-beta.11",
+    "@slidev/types": "^0.14.0-beta.12",
     "codemirror-theme-vars": "^0.1.1",
     "prism-theme-vars": "^0.2.2",
     "shiki": "*",
