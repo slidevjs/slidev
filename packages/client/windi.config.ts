@@ -1,14 +1,7 @@
-import { resolve, dirname } from 'path'
+import { resolve } from 'path'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'
-import { sync as resolvePkg } from 'resolve'
-
-export function resolveImportPath(importName: string) {
-  return resolvePkg(importName, {
-    preserveSymlinks: false,
-  })
-}
 
 export default defineConfig({
   extract: {
@@ -23,9 +16,6 @@ export default defineConfig({
       // @slidev/client/node_modules
       resolve(__dirname, 'node_modules'),
       resolve(__dirname, 'windi.config.ts'),
-      // for monorepo like demo folder
-      dirname(resolveImportPath('monaco-editor/package.json')),
-      dirname(resolveImportPath('katex/package.json')),
     ],
     extractors: [
       {
