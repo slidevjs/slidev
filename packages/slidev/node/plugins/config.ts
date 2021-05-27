@@ -1,4 +1,6 @@
+import { join } from 'path'
 import { InlineConfig, mergeConfig, Plugin } from 'vite'
+import isInstalledGlobally from 'is-installed-globally'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import { ResolvedSlidevOptions } from '../options'
@@ -45,6 +47,10 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           exclude: EXCLUDE,
         },
       }
+
+      if (isInstalledGlobally)
+        injection.cacheDir = join(options.cliRoot, 'node_module/.vite')
+
       return mergeConfig(config, injection)
     },
     configureServer(server) {
