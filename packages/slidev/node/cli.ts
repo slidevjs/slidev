@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import path from 'path'
-import http from 'http'
+import net from 'net'
 import os from 'os'
 import fs from 'fs-extra'
 import yargs, { Argv } from 'yargs'
@@ -355,14 +355,19 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
 
 function isPortFree(port: number) {
   return new Promise((resolve) => {
-    const server = http.createServer()
-      .listen(port, () => {
-        server.close()
-        resolve(true)
-      })
-      .on('error', () => {
-        resolve(false)
-      })
+    const server = net.createServer((socket) => {
+      socket.write('Echo server\r\n')
+      socket.pipe(socket)
+    })
+
+    server.listen(port, '127.0.0.1')
+    server.on('error', () => {
+      resolve(false)
+    })
+    server.on('listening', () => {
+      server.close()
+      resolve(true)
+    })
   })
 }
 
