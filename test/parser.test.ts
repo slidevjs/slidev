@@ -1,6 +1,6 @@
 import { resolve, basename } from 'path'
 import fg from 'fast-glob'
-import { prettify, load, stringify, parse } from '../packages/parser/src/fs'
+import { load, parse, prettify, stringify } from '../packages/parser/src/fs'
 
 describe('md parser', () => {
   const files = fg.sync('*.md', {
@@ -18,6 +18,7 @@ describe('md parser', () => {
 
       expect(data.slides).toMatchSnapshot('slides')
       expect(data.config).toMatchSnapshot('config')
+      expect(data.features).toMatchSnapshot('features')
     })
   }
 

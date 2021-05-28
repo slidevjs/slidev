@@ -1,12 +1,23 @@
-export interface SlideInfo {
-  index: number
-  start: number
-  end: number
+/* eslint-disable no-use-before-define */
+
+export interface SlideInfoBase {
   raw: string
   content: string
   note?: string
   frontmatter: Record<string, any>
   title?: string
+}
+
+export interface SlideInfo extends SlideInfoBase {
+  index: number
+  start: number
+  end: number
+  inline?: SlideInfoBase
+  source?: SlideInfoWithPath
+}
+
+export interface SlideInfoWithPath extends SlideInfoBase {
+  path: string
 }
 
 export interface SlideInfoExtended extends SlideInfo {
@@ -101,10 +112,12 @@ export interface SlidevFeatureFlags {
 }
 
 export interface SlidevMarkdown {
-  filepath?: string
   slides: SlideInfo[]
   raw: string
   config: SlidevConfig
   features: SlidevFeatureFlags
   headmatter: Record<string, unknown>
+
+  filepath?: string
+  entries?: string[]
 }

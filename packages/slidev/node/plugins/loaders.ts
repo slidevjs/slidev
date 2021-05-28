@@ -72,8 +72,7 @@ export function createSlidesLoader(
 ): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrPages = new Set<number>()
-
-  const entryId = slash(entry)
+  let server: ViteDevServer | undefined
 
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
@@ -81,8 +80,9 @@ export function createSlidesLoader(
   return [
     {
       name: 'slidev:loader',
-      configureServer(server) {
-        server.watcher.add(entry)
+      configureServer(_server) {
+        server = _server
+        updateServerWatcher()
 
         server.middlewares.use(async(req, res, next) => {
           const match = req.url?.match(regexId)
@@ -97,10 +97,18 @@ export function createSlidesLoader(
           }
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
-            Object.assign(data.slides[idx], body)
-
+            const slide = data.slides[idx]
             hmrPages.add(idx)
-            await parser.save(data, entry)
+
+            if (slide.source) {
+              Object.assign(slide.source, body)
+              await parser.saveExternalSlide(slide.source)
+            }
+            else {
+              Object.assign(slide, body)
+              await parser.save(data, entry)
+            }
+
             res.statusCode = 200
             return res.end()
           }
@@ -110,7 +118,7 @@ export function createSlidesLoader(
       },
 
       async handleHotUpdate(ctx) {
-        if (ctx.file !== entryId)
+        if (!data.entries!.some(i => slash(i) === ctx.file))
           return
 
         const newData = await parser.load(entry)
@@ -185,6 +193,8 @@ export function createSlidesLoader(
           .filter(notNullish)
           .filter(i => !i.id?.startsWith('/@id/@vite-icons'))
 
+        updateServerWatcher()
+
         return moduleEntries
       },
 
@@ -248,6 +258,12 @@ export function createSlidesLoader(
       },
     },
   ]
+
+  function updateServerWatcher() {
+    if (!server)
+      return
+    server.watcher.add(data.entries?.map(slash) || [])
+  }
 
   async function transformMarkdown(code: string, pageNo: number, data: SlidevMarkdown) {
     const layouts = await getLayouts()

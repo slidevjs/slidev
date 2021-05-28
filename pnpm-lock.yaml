@@ -40,14 +40,14 @@ importers:
       lint-staged: ^11.0.0
       mermaid: ^8.10.1
       playwright-chromium: ^1.11.1
-      pnpm: ^6.5.0
+      pnpm: ^6.6.1
       rimraf: ^3.0.2
       ts-jest: ^27.0.1
       tsup: 4.11.1
       typescript: ^4.3.2
       vite: ^2.3.4
       vite-plugin-windicss: ^0.16.5
-      zx: ^1.14.0
+      zx: ^1.14.1
     devDependencies:
       '@antfu/eslint-config': 0.6.5_eslint@7.27.0+typescript@4.3.2
       '@antfu/ni': 0.7.0
@@ -85,25 +85,25 @@ importers:
       lint-staged: 11.0.0
       mermaid: 8.10.1
       playwright-chromium: 1.11.1
-      pnpm: 6.5.0
+      pnpm: 6.6.1
       rimraf: 3.0.2
       ts-jest: 27.0.1_jest@27.0.1+typescript@4.3.2
       tsup: 4.11.1_typescript@4.3.2
       typescript: 4.3.2
       vite: 2.3.4
       vite-plugin-windicss: 0.16.5_vite@2.3.4
-      zx: 1.14.0
+      zx: 1.14.1
 
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-default': ^0.14.2
       '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-default': 0.14.2
       '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
@@ -111,13 +111,13 @@ importers:
   demo/composable-vue-cn:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-default': ^0.14.2
       '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-default': 0.14.2
       '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
@@ -125,13 +125,13 @@ importers:
   demo/starter:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-default': ^0.14.2
       '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-default': 0.14.2
       '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
@@ -139,13 +139,13 @@ importers:
   demo/test:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.14.1
+      '@slidev/theme-default': ^0.14.2
       '@slidev/theme-seriph': ^0.14.1
       '@slidev/types': workspace:*
       nodemon: ^2.0.7
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.14.1
+      '@slidev/theme-default': 0.14.2
       '@slidev/theme-seriph': 0.14.1
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.7
@@ -1055,8 +1055,8 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@slidev/theme-default/0.14.1:
-    resolution: {integrity: sha512-CKjk80oA9Y/exJppc+mGBbiGLcWOzvmX49C512LDRprLRVqpO2layh80v3G8ASeeu24w5pNU3XWNruIIz2ce4A==}
+  /@slidev/theme-default/0.14.2:
+    resolution: {integrity: sha512-NzUR5N96Fy/sXLIK69s10NeiuyxBY0vnpgOmPojdXLE1NCM9P9UK6hsL4a+Oz8GzB+h9EjUksW6hyBKWXYn3CA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@slidev/types': 0.14.0
@@ -1224,6 +1224,13 @@ packages:
 
   /@types/mermaid/8.2.6:
     resolution: {integrity: sha512-tWbg1SQQnRkFIDNS2KPnO53vfe0PwgvnKiwozRpevmPQ3AcwCVzSuAxwqx7Mb8nwNES3OvzkwrA0uE2NR3RqrA==}
+    dev: true
+
+  /@types/node-fetch/2.5.10:
+    resolution: {integrity: sha512-IpkX0AasN44hgEad0gEF/V6EgR5n69VEqPEgnmoM8GsIGro3PowbWs4tR6IhxUTyPLpOn+fiGG6nrQhcmoCuIQ==}
+    dependencies:
+      '@types/node': 15.6.1
+      form-data: 3.0.1
     dev: true
 
   /@types/node/15.6.0:
@@ -5688,8 +5695,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /pnpm/6.5.0:
-    resolution: {integrity: sha512-yT4Dfd0cfEg/8uu2O4Yw1tFh1CL82QfGOoUaCCnIUYpLAtEZE/1RXcdogJy8rf1qNQkmVCzqMtHpWZ2qlMQk2Q==}
+  /pnpm/6.6.1:
+    resolution: {integrity: sha512-viktTHmFzFckpvY/Gwtl8esjeOItpCgycIrVgLPh4qbxK4f+JqkEM+3LZF5dudyWzBZCOspZHePNuxeM0zn/Ew==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
@@ -7263,12 +7270,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zx/1.14.0:
-    resolution: {integrity: sha512-Bms7kojOPS4SY1jAMH+ektK4015KQOEeMSccE+TBUGRVbkG8JusqRM4GP37X0F9CDVJUbvCul0MlMMwfENnjbQ==}
+  /zx/1.14.1:
+    resolution: {integrity: sha512-M8U7SM8nVnko4vaeb4jp2+gwIyaJpnLNqkOurViML2WOsIn9M+bVHmuJxlVPHKHB6WkoZ3P/0FESLKwvJF4dtw==}
     engines: {node: '>= 14.8.0'}
     hasBin: true
     dependencies:
       '@types/node': 15.6.1
+      '@types/node-fetch': 2.5.10
       chalk: 4.1.1
       node-fetch: 2.6.1
       shq: 1.0.2

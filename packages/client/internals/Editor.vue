@@ -36,7 +36,7 @@ async function save() {
     raw: null!,
     note: note.value || undefined,
     content: content.value,
-    frontmatter: frontmatter.value,
+    // frontmatter: frontmatter.value,
   })
 }
 

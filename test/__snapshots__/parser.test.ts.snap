@@ -17,6 +17,15 @@ Object {
 }
 `;
 
+exports[`md parser frontmatter.md: features 1`] = `
+Object {
+  "katex": false,
+  "mermaid": false,
+  "monaco": false,
+  "tweet": false,
+}
+`;
+
 exports[`md parser frontmatter.md: slides 1`] = `
 Array [
   Object {
@@ -151,6 +160,15 @@ Object {
 }
 `;
 
+exports[`md parser minimal.md: features 1`] = `
+Object {
+  "katex": false,
+  "mermaid": false,
+  "monaco": false,
+  "tweet": false,
+}
+`;
+
 exports[`md parser minimal.md: slides 1`] = `
 Array [
   Object {
@@ -223,6 +241,166 @@ Nice to meet you
 ",
     "start": 19,
     "title": undefined,
+  },
+]
+`;
+
+exports[`md parser multi-entries.md: config 1`] = `
+Object {
+  "aspectRatio": 1.7777777777777777,
+  "canvasWidth": 980,
+  "colorSchema": "auto",
+  "download": false,
+  "highlighter": "prism",
+  "info": false,
+  "monaco": "dev",
+  "remoteAssets": true,
+  "routerMode": "history",
+  "theme": "default",
+  "themeConfig": Object {},
+  "title": "Slidev",
+}
+`;
+
+exports[`md parser multi-entries.md: features 1`] = `
+Object {
+  "katex": true,
+  "mermaid": false,
+  "monaco": false,
+  "tweet": true,
+}
+`;
+
+exports[`md parser multi-entries.md: slides 1`] = `
+Array [
+  Object {
+    "content": "
+# Page 1
+",
+    "end": 4,
+    "frontmatter": Object {
+      "src": "sub/page1.md",
+    },
+    "index": 0,
+    "inline": Object {
+      "content": "",
+      "end": 4,
+      "frontmatter": Object {
+        "src": "sub/page1.md",
+      },
+      "index": 0,
+      "note": undefined,
+      "raw": "---
+src: sub/page1.md
+---
+",
+      "start": 0,
+      "title": undefined,
+    },
+    "note": undefined,
+    "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page1.md",
+    "raw": "---
+src: sub/page1.md
+---
+
+# Page 1
+
+",
+    "source": Object {
+      "content": "# Page 1",
+      "frontmatter": Object {},
+      "note": undefined,
+      "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page1.md",
+      "raw": "# Page 1
+",
+      "title": "Page 1",
+    },
+    "start": 0,
+    "title": "Page 1",
+  },
+  Object {
+    "content": "
+# Page 2
+
+<Tweet />
+",
+    "end": 9,
+    "frontmatter": Object {
+      "background": "https://sli.dev/demo-cover.png",
+      "layout": "cover",
+      "src": "sub/page2.md",
+    },
+    "index": 1,
+    "inline": Object {
+      "content": "",
+      "end": 9,
+      "frontmatter": Object {
+        "background": "https://sli.dev/demo-cover.png",
+        "src": "sub/page2.md",
+      },
+      "index": 1,
+      "note": undefined,
+      "raw": "---
+src: sub/page2.md
+background: https://sli.dev/demo-cover.png
+---
+",
+      "start": 4,
+      "title": undefined,
+    },
+    "note": undefined,
+    "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page2.md",
+    "raw": "---
+layout: cover
+src: sub/page2.md
+background: https://sli.dev/demo-cover.png
+---
+
+# Page 2
+
+<Tweet />
+
+",
+    "source": Object {
+      "content": "# Page 2
+
+<Tweet />",
+      "frontmatter": Object {
+        "layout": "cover",
+      },
+      "note": undefined,
+      "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page2.md",
+      "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+      "title": "Page 2",
+    },
+    "start": 4,
+    "title": "Page 2",
+  },
+  Object {
+    "content": "
+# Inline Page
+
+$x+2$
+",
+    "end": 15,
+    "frontmatter": Object {},
+    "index": 2,
+    "note": undefined,
+    "raw": "
+# Inline Page
+
+$x+2$
+
+",
+    "start": 10,
+    "title": "Inline Page",
   },
 ]
 `;

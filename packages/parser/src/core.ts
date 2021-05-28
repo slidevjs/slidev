@@ -1,12 +1,12 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectPick } from '@antfu/utils'
-import { SlideInfo, SlidevConfig, SlidevMarkdown } from '@slidev/types'
+import { isObject, isTruthy, objectMap, objectPick } from '@antfu/utils'
+import { SlideInfo, SlideInfoBase, SlidevConfig, SlidevFeatureFlags, SlidevMarkdown } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
 export function stringify(data: SlidevMarkdown) {
   return `${
     data.slides
-      .map(stringifySlide)
+      .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
       .join('\n')
       .trim()
   }\n`
@@ -17,8 +17,8 @@ export function filterDisabled(data: SlidevMarkdown) {
   return data
 }
 
-export function stringifySlide(data: SlideInfo, idx = 1) {
-  if (!data.raw)
+export function stringifySlide(data: SlideInfoBase, idx = 0) {
+  if (data.raw == null)
     prettifySlide(data)
 
   return (data.raw.startsWith('---') || idx === 0)
@@ -26,7 +26,7 @@ export function stringifySlide(data: SlideInfo, idx = 1) {
     : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
 }
 
-export function prettifySlide(data: SlideInfo) {
+export function prettifySlide(data: SlideInfoBase) {
   data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
     ? `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
@@ -55,12 +55,34 @@ function matter(code: string) {
   return { data, content }
 }
 
-export function detectFeatures(code: string) {
+export function detectFeatures(code: string): SlidevFeatureFlags {
   return {
     katex: !!code.match(/\$.*?\$/) || !!code.match(/$\$\$/),
     monaco: !!code.match(/{monaco.*}/),
     tweet: !!code.match(/<Tweet\b/),
     mermaid: !!code.match(/^```mermaid/m),
+  }
+}
+
+export function parseSlide(raw: string): SlideInfoBase {
+  const result = matter(raw)
+  let note: string | undefined
+  const frontmatter = result.data || {}
+  const content = result.content
+    .trim()
+    .replace(/<!--([\s\S]*)-->$/g, (_, v = '') => {
+      note = v.trim()
+      return ''
+    })
+
+  const title = frontmatter.title || frontmatter.name || content.match(/^#+ (.*)$/m)?.[1]?.trim()
+
+  return {
+    raw,
+    title,
+    content,
+    frontmatter,
+    note,
   }
 }
 
@@ -71,28 +93,6 @@ export function parse(
   const lines = markdown.split(/\r?\n/g)
   const slides: SlideInfo[] = []
 
-  function parseContent(raw: string) {
-    const result = matter(raw)
-    let note: string | undefined
-    const frontmatter = result.data || {}
-    const content = result.content
-      .trim()
-      .replace(/<!--([\s\S]*)-->$/g, (_, v = '') => {
-        note = v.trim()
-        return ''
-      })
-
-    const title = frontmatter.title || frontmatter.name || content.match(/^#+ (.*)$/m)?.[1]?.trim()
-
-    return {
-      raw,
-      title,
-      content,
-      frontmatter,
-      note,
-    }
-  }
-
   let start = 0
 
   function slice(end: number) {
@@ -100,10 +100,10 @@ export function parse(
       return
     const raw = lines.slice(start, end).join('\n')
     slides.push({
+      ...parseSlide(raw),
       index: slides.length,
       start,
       end,
-      ...parseContent(raw),
     })
     start = end + 1
   }
@@ -167,6 +167,10 @@ export function parse(
     features: detectFeatures(markdown),
     headmatter,
   }
+}
+
+export function mergeFeatureFlags(a: SlidevFeatureFlags, b: SlidevFeatureFlags): SlidevFeatureFlags {
+  return objectMap(a, (k, v) => [k, v || b[k]])
 }
 
 // types auto discovery for TypeScript monaco

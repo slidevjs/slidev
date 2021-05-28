@@ -23,6 +23,12 @@ p {
 </style>
 
 ---
+src: './subpage1.md'
+---
+
+---
+src: './subpage2.md'
+---
 
 # Page 3
 
