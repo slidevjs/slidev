@@ -289,3 +289,94 @@ C -->|Two| E[Result 2]
 ~~~
 
 Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-js.github.io/mermaid)
+
+## Multiple Entries
+
+From v0.15.0, we shipped multi-entries support. This means you can split your `slides.md` into multiple files and organize them as you want.
+
+`slides.md` :
+
+```md
+# Page 1
+
+This is a normal page
+
+---
+src: ./subpage2.md
+---
+
+<!-- this page will be loaded from './subpage2.md' -->
+Inline content will be ignored
+```
+
+`subpage2.md` :
+
+```md
+# Page 2
+
+This page is from another file
+```
+
+### Frontmatter Merging
+
+You can provide frontmatters from both your main entry and external markdown pages. If there are the same keys in them, the ones from the **main entry have the higher priority**. For example
+
+`slides.md` :
+
+```md
+---
+src: ./cover.md
+background: https://sli.dev/bar.png
+class: text-center
+---
+```
+
+`cover.md` :
+
+```md
+---
+layout: cover
+background: https://sli.dev/foo.png
+---
+
+# Cover
+
+Cover Page
+```
+
+They will end up being equivalent of the following page:
+
+```md
+---
+layout: cover
+background: https://sli.dev/bar.png
+class: text-center
+---
+
+# Cover
+
+Cover Page
+```
+
+### Page Reusing
+
+With the multi-entries support, reusing pages could be straightforward. For example:
+
+```yaml
+---
+src: ./cover.md
+---
+
+---
+src: ./intro.md
+---
+
+---
+src: ./content.md
+---
+
+---
+# reuse
+src: ./content.md
+---
+```
