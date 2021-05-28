@@ -390,7 +390,7 @@ export function createSlidesLoader(
               start: i.start,
               end: i.end,
               note: i.note,
-              file: entry,
+              filepath: i.source?.filepath || entry,
               id: idx,
               no,
             },

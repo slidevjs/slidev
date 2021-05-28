@@ -17,7 +17,7 @@ export interface SlideInfo extends SlideInfoBase {
 }
 
 export interface SlideInfoWithPath extends SlideInfoBase {
-  path: string
+  filepath: string
 }
 
 export interface SlideInfoExtended extends SlideInfo {

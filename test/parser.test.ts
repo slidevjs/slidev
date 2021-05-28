@@ -16,6 +16,15 @@ describe('md parser', () => {
 
       prettify(data)
 
+      for (const slide of data.slides) {
+        if (slide.source?.filepath)
+          // @ts-expect-error
+          delete slide.source.filepath
+        // @ts-expect-error
+        if (slide.filepath)
+          // @ts-expect-error
+          delete slide.filepath
+      }
       expect(data.slides).toMatchSnapshot('slides')
       expect(data.config).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')

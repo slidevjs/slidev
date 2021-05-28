@@ -298,7 +298,6 @@ src: sub/page1.md
       "title": undefined,
     },
     "note": undefined,
-    "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page1.md",
     "raw": "---
 src: sub/page1.md
 ---
@@ -310,7 +309,6 @@ src: sub/page1.md
       "content": "# Page 1",
       "frontmatter": Object {},
       "note": undefined,
-      "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page1.md",
       "raw": "# Page 1
 ",
       "title": "Page 1",
@@ -349,7 +347,6 @@ background: https://sli.dev/demo-cover.png
       "title": undefined,
     },
     "note": undefined,
-    "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page2.md",
     "raw": "---
 layout: cover
 src: sub/page2.md
@@ -369,7 +366,6 @@ background: https://sli.dev/demo-cover.png
         "layout": "cover",
       },
       "note": undefined,
-      "path": "/Users/antfu/i/slidev/test/fixtures/markdown/sub/page2.md",
       "raw": "---
 layout: cover
 ---

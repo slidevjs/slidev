@@ -23,7 +23,7 @@ export async function load(filepath: string) {
     const source = parseSlide(raw)
     const inline = { ...slide }
     slide.source = {
-      path,
+      filepath: path,
       ...source,
     }
     slide.inline = inline
@@ -49,5 +49,5 @@ export async function save(data: SlidevMarkdown, filepath?: string) {
 }
 
 export async function saveExternalSlide(slide: SlideInfoWithPath) {
-  await fs.writeFile(slide.path, stringifySlide(slide), 'utf-8')
+  await fs.writeFile(slide.filepath, stringifySlide(slide), 'utf-8')
 }
