@@ -23,6 +23,17 @@ p {
 </style>
 
 ---
+src: sub/page1.md
+---
+
+This will be ignored
+
+---
+src: sub/page2.md
+background: https://sli.dev/demo-cover.png
+---
+
+---
 
 # Page 3
 

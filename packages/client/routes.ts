@@ -49,7 +49,7 @@ declare module 'vue-router' {
       note?: string
       id: number
       no: number
-      file: string
+      filepath: string
     }
 
     // private fields

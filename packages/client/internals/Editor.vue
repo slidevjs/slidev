@@ -36,7 +36,7 @@ async function save() {
     raw: null!,
     note: note.value || undefined,
     content: content.value,
-    frontmatter: frontmatter.value,
+    // frontmatter: frontmatter.value,
   })
 }
 
@@ -111,8 +111,8 @@ useEventListener('resize', () => {
 
 const editorLink = computed(() => {
   const slide = currentRoute.value?.meta?.slide
-  return (slide?.file)
-    ? `vscode://file/${slide.file}:${slide.start}`
+  return (slide?.filepath)
+    ? `vscode://file/${slide.filepath}:${slide.start}`
     : undefined
 })
 
