@@ -2,14 +2,14 @@
 import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
-import { registerShotcuts } from '../logic/shortcuts'
+import { registerShortcuts } from '../logic/shortcuts'
 import { themeVars } from '../env'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesShow from './SlidesShow.vue'
 
-registerShotcuts()
+registerShortcuts()
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {

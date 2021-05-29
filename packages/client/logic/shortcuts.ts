@@ -1,10 +1,10 @@
-import { Fn, not, and } from '@vueuse/core'
+import { Fn, not, and, onKeyStroke, KeyFilter } from '@vueuse/core'
 import { watch } from 'vue'
-import { fullscreen, magicKeys, shortcutsEnabled, isInputing, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
+import { fullscreen, magicKeys, shortcutsEnabled, isInputting, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 
-const _shortcut = and(not(isInputing), not(isOnFocus), shortcutsEnabled)
+const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 
 export function shortcut(key: string, fn: Fn, autoRepeat = false) {
   const source = and(magicKeys[key], _shortcut)
@@ -26,7 +26,14 @@ export function shortcut(key: string, fn: Fn, autoRepeat = false) {
   return watch(source, trigger, { flush: 'sync' })
 }
 
-export function registerShotcuts() {
+export function strokeShortcut(key: KeyFilter, fn: Fn) {
+  return onKeyStroke(key, (ev) => {
+    if (!ev.repeat)
+      fn()
+  })
+}
+
+export function registerShortcuts() {
   // global shortcuts
   shortcut('space', next, true)
   shortcut('right', next, true)
@@ -38,7 +45,7 @@ export function registerShotcuts() {
   shortcut('shift_left', () => prevSlide(false), true)
   shortcut('shift_right', nextSlide, true)
   shortcut('d', toggleDark)
-  shortcut('f', () => fullscreen.toggle())
+  strokeShortcut('f', () => fullscreen.toggle())
   shortcut('o', toggleOverview)
   shortcut('escape', () => showOverview.value = false)
   shortcut('g', () => showGotoDialog.value = !showGotoDialog.value)
