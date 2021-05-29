@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEventListener, throttledWatch } from '@vueuse/core'
 import { computed, watch, ref, onMounted } from 'vue'
-import { activeElement, showEditor, editorWidth, isInputing } from '../state'
+import { activeElement, showEditor, editorWidth, isInputting } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentRoute, currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
@@ -21,7 +21,7 @@ watch(
   (v) => {
     frontmatter.value = v?.frontmatter || {}
 
-    if (!isInputing.value) {
+    if (!isInputting.value) {
       note.value = (v?.note || '').trim()
       content.value = (v?.content || '').trim()
       dirty.value = false

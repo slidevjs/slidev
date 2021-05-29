@@ -5,7 +5,7 @@ import { useTimestamp } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs, themeVars } from '../env'
-import { registerShotcuts } from '../logic/shortcuts'
+import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -15,7 +15,7 @@ import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper.vue'
 
-registerShotcuts()
+registerShortcuts()
 
 useHead({
   title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
