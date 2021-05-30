@@ -81,7 +81,7 @@ if (__DEV__)
       </button>
     </template>
 
-    <button v-if="configs.info && !isEmbedded" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
+    <button v-if="!isPresenter && configs.info && !isEmbedded" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
       <carbon:information />
     </button>
 
