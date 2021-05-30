@@ -1,12 +1,17 @@
-import { App, reactive } from 'vue'
+import { App, computed, reactive, readonly } from 'vue'
 import { objectKeys } from '@antfu/utils'
 import type { UnwrapNestedRefs } from '@vue/reactivity'
 import * as nav from '../logic/nav'
 import { isDark } from '../logic/dark'
+import { configs } from '../env'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $slidev: { nav: UnwrapNestedRefs<typeof nav> }
+    $slidev: {
+      nav: UnwrapNestedRefs<typeof nav>
+      configs: typeof configs
+      themeConfigs: typeof configs['themeConfig']
+    }
   }
 }
 
@@ -22,8 +27,10 @@ export default function createSlidevContext() {
       }
       const context = reactive({
         nav: navObj,
+        configs,
+        themeConfigs: computed(() => configs.themeConfig),
       })
-      app.config.globalProperties.$slidev = context
+      app.config.globalProperties.$slidev = readonly(context)
 
       // allows controls from postMessages
       if (__DEV__) {

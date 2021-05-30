@@ -68,6 +68,10 @@ layout: center
   </a>
 </div>
 
+---
+
+{{ $slidev.configs }}
+
 
 ---
 layout: center

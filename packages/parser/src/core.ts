@@ -1,5 +1,5 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectMap, objectPick } from '@antfu/utils'
+import { isObject, isTruthy, objectMap } from '@antfu/utils'
 import { SlideInfo, SlideInfoBase, SlidevConfig, SlidevFeatureFlags, SlidevMarkdown } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
@@ -154,7 +154,7 @@ export function parse(
   const config: SlidevConfig = Object.assign(
     defaultConfig,
     headmatter.config || {},
-    objectPick(headmatter, Object.keys(defaultConfig)),
+    headmatter,
   )
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
