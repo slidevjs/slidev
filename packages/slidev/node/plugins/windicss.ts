@@ -32,6 +32,7 @@ export async function createWindiCSSPlugin(
         config.scanOptions.include.push(`!${slash(resolve(userRoot, 'node_modules'))}`)
         config.scanOptions.exclude.push(dirname(resolveImportPath('monaco-editor/package.json', true)))
         config.scanOptions.exclude.push(dirname(resolveImportPath('katex/package.json', true)))
+        config.scanOptions.exclude.push(dirname(resolveImportPath('prettier/package.json', true)))
       },
       ...windiOptions,
     },
