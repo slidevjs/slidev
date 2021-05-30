@@ -26,7 +26,7 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
   }
 
   if (data.features.tweet)
-    body += '\n<script src="https://platform.twitter.com/widgets.js"></script>'
+    body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
   main = main
     .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
