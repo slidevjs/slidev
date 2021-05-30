@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
 import { computed, defineProps, ref, watchEffect } from 'vue'
-import { slideAspect, slideWidth, slideHeight } from '../env'
+import { slideAspect, slideWidth, slideHeight, configs } from '../env'
 
 const props = defineProps({
   width: {
@@ -45,11 +45,10 @@ const style = computed(() => ({
   width: `${slideWidth}px`,
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
-
 </script>
 
 <template>
-  <div id="slide-container" ref="root">
+  <div id="slide-container" ref="root" :class="{ 'select-none': !configs.selectable }">
     <div id="slide-content" :style="style">
       <slot />
     </div>
@@ -59,7 +58,7 @@ const style = computed(() => ({
 
 <style lang="postcss">
 #slide-container {
-  @apply relative overflow-hidden select-none;
+  @apply relative overflow-hidden;
 }
 
 #slide-content {

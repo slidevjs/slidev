@@ -148,6 +148,7 @@ export function parse(
     routerMode: 'history',
     aspectRatio: 16 / 9,
     canvasWidth: 980,
+    selectable: false,
     themeConfig: {},
   }
   const config: SlidevConfig = Object.assign(

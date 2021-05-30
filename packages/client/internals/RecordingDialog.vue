@@ -105,7 +105,7 @@ async function start() {
   }
 
   input[type="text"] {
-    @apply border broder-gray-400 rounded px-2 py-1;
+    @apply border border-gray-400 rounded px-2 py-1;
   }
 
   button {

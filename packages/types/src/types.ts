@@ -91,7 +91,12 @@ export interface SlidevConfig {
    * @default '980'
    */
   canvasWidth: number
-
+  /**
+   * Controls whether texts in slides are selectable
+   *
+   * @default false
+   */
+  selectable: boolean
   /**
    * Configure for themes, will inject intro root styles as
    * `--slidev-theme-x` for attribute `x`
