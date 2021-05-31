@@ -49,7 +49,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-const md = Markdown()
+const md = Markdown({ html: true })
 md.use(mila, {
   attrs: {
     target: '_blank',
@@ -413,6 +413,20 @@ export function createSlidesLoader(
 
   function generateConfigs() {
     const config = { ...data.config }
+    if (isString(config.title)) {
+      const tokens = md.parseInline(config.title, {})
+
+      config.title = tokens
+        .map(token =>
+          token.children
+            ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(/^\s*$/))
+            .map(t => t.content.trim())
+            .join(' '),
+        )
+        .filter(Boolean)
+        .join(' ')
+    }
+
     if (isString(config.info))
       config.info = md.render(config.info)
 
