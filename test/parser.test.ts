@@ -58,4 +58,32 @@ f
     expect(data.slides[2].frontmatter)
       .toEqual({ layout: 'z' })
   })
+
+  it('parse section matter', () => {
+    const data = parse(`
+a
+
+---
+
+b
+
+---section2
+layout: z
+---
+c
+----   section 3
+d
+---- section-4
+e
+
+---
+
+f
+
+`)
+    expect(data.slides.map(i => i.content.trim()))
+      .toEqual(Array.from('abcdef'))
+    expect(data.slides[2].frontmatter)
+      .toEqual({ layout: 'z' })
+  })
 })

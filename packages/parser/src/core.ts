@@ -45,7 +45,7 @@ export function prettify(data: SlidevMarkdown) {
 
 function matter(code: string) {
   let data: any = {}
-  const content = code.replace(/^---([\s\S]*?)---/,
+  const content = code.replace(/^---.*\r?\n([\s\S]*?)---/,
     (_, d) => {
       data = YAML.load(d)
       if (!isObject(data))
@@ -110,12 +110,12 @@ export function parse(
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trimRight()
-    if (line.match(/^---+$/)) {
+    if (line.match(/^---+/)) {
       slice(i)
 
       const next = lines[i + 1]
       // found frontmatter, skip next dash
-      if (line.length === 3 && !next?.match(/^\s*$/)) {
+      if (line.match(/^---([^-].*)?$/) && !next?.match(/^\s*$/)) {
         start = i
         for (i += 1; i < lines.length; i++) {
           if (lines[i].trimRight().match(/^---$/))
