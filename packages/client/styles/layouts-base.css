@@ -46,7 +46,7 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background border-$slidev-theme-primary border-l rounded;
+    @apply text-sm px-2 py-1 bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
   }
 
   blockquote > * {
@@ -66,7 +66,7 @@
   }
 
   a {
-    @apply border-current border-b border-dashed hover:(text-primary border-solid);
+    @apply border-current border-b border-dashed hover:(text-$slidev-theme-primary border-solid);
   }
 
   td, th {
