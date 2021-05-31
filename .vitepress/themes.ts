@@ -213,6 +213,26 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+   {
+    id: 'slidev-theme-penguin',
+    name: 'Penguin',
+    description: 'A Penguin theme for Slidev',
+    author: {
+      name: 'Alvaro Saburido (alvarosaburido)',
+      link: 'https://github.com/alvarosaburido',
+    },
+    repo: 'https://github.com/alvarosaburido/slidev-theme-penguin',
+    previews: [
+      'https://raw.githubusercontent.com/alvarosaburido/slidev-theme-penguin/master/screenshots/dark/01.png',
+      'https://raw.githubusercontent.com/alvarosaburido/slidev-theme-penguin/master/screenshots/light/02.png',
+      'https://raw.githubusercontent.com/alvarosaburido/slidev-theme-penguin/master/screenshots/light/06.png',
+      'https://raw.githubusercontent.com/alvarosaburido/slidev-theme-penguin/master/screenshots/light/05.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
