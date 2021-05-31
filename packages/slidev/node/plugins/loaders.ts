@@ -12,7 +12,7 @@ import equal from 'fast-deep-equal'
 import { existsSync } from 'fs-extra'
 import type { Connect } from 'vite'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
-import { resolveImportPath, toAtFS } from '../utils'
+import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
@@ -49,7 +49,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-const md = Markdown()
+const md = Markdown({ html: true })
 md.use(mila, {
   attrs: {
     target: '_blank',
@@ -413,6 +413,11 @@ export function createSlidesLoader(
 
   function generateConfigs() {
     const config = { ...data.config }
+    if (isString(config.title)) {
+      const tokens = md.parseInline(config.title, {})
+      config.title = stringifyMarkdownTokens(tokens)
+    }
+
     if (isString(config.info))
       config.info = md.render(config.info)
 
