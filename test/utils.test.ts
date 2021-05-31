@@ -1,4 +1,6 @@
+import MarkdownIt from 'markdown-it'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
+import { stringifyMarkdownTokens } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
   it('page-range', () => {
@@ -21,5 +23,16 @@ describe('utils', () => {
 
     expect(() => parseAspectRatio('hello')).toThrow()
     expect(() => parseAspectRatio('1/0')).toThrow()
+  })
+
+  it('stringify-markdown-tokens', () => {
+    const md = MarkdownIt({ html: true })
+    const stringify = (src: string) => stringifyMarkdownTokens(md.parseInline(src, {}))
+
+    expect(stringify('<span style="color:red">Composable</span> Vue')).toBe('Composable Vue')
+    expect(stringify('<b>Whatever</b>')).toBe('Whatever')
+    expect(stringify('Talk about `<details/>`')).toBe('Talk about <details/>')
+    expect(stringify('What is Readonly\\<T\\> in TypeScript')).toBe('What is Readonly<T> in TypeScript')
+    expect(stringify('Welcome to<br />*Slidev*')).toBe('Welcome to Slidev')
   })
 })

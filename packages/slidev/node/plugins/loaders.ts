@@ -12,7 +12,7 @@ import equal from 'fast-deep-equal'
 import { existsSync } from 'fs-extra'
 import type { Connect } from 'vite'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
-import { resolveImportPath, toAtFS } from '../utils'
+import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
@@ -415,16 +415,7 @@ export function createSlidesLoader(
     const config = { ...data.config }
     if (isString(config.title)) {
       const tokens = md.parseInline(config.title, {})
-
-      config.title = tokens
-        .map(token =>
-          token.children
-            ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(/^\s*$/))
-            .map(t => t.content.trim())
-            .join(' '),
-        )
-        .filter(Boolean)
-        .join(' ')
+      config.title = stringifyMarkdownTokens(tokens)
     }
 
     if (isString(config.info))
