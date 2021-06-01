@@ -8,12 +8,12 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps } from 'vue'
 defineProps<{
-  link: string; // plotly link for chart
-  width?: number;
-  height?: number;
-}>();
+  link: string // plotly link for chart
+  width?: number
+  height?: number
+}>()
 </script>
 
 <template>
