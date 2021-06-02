@@ -200,7 +200,7 @@ export const community: ThemeInfo[] = [
       name: 'Bogenbai Bayzharassov',
       link: 'https://github.com/thatoranzhevyy',
     },
-    repo: 'https://github.com/thatoranzhevyy/slidev-theme-zhozhoban',
+    repo: 'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba',
     previews: [
       'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/slides-export/01.png?raw=true',
       'https://github.com/thatoranzhevyy/slidev-theme-zhozhoba/blob/master/.github/dark.png?raw=true',
