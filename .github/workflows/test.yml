@@ -40,6 +40,8 @@ jobs:
 
       - name: Install
         run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
 
       - name: Build
         run: nr build
@@ -58,13 +60,19 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Setup
-        run: npm i -g pnpm @antfu/ni
+      - name: Install
+        run: nci
+
+      - name: Build
+        run: nr build
+
+      - name: Hack Cypress
+        run: cp pnpm-lock.yaml package-lock.json
 
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
-          install-command: nci
+          install-command: echo
           build: nr build
           start: nr cy:fixture
 
@@ -84,6 +92,8 @@ jobs:
 
       - name: Install
         run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
 
       - name: Lint
         run: nr lint --if-present
