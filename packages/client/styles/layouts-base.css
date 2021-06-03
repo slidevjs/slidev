@@ -1,5 +1,5 @@
 .slidev-layout {
-  @apply px-14 py-10 text-[1.1rem];
+  @apply px-14 py-10 text-[1.1rem] h-full;
 
   pre, code {
     @apply select-text;
