@@ -72,6 +72,7 @@ export async function createMarkdownPlugin(
           ? transformMarkdownMonaco
           : truncateMancoMark
 
+        code = transformSlotSugar(code)
         code = transformMermaid(code)
         code = monaco(code)
         code = transformHighlighter(code)
@@ -96,8 +97,32 @@ export function transformMarkdownMonaco(md: string) {
   return md
 }
 
-export function truncateMancoMark(code: string) {
-  return code.replace(/{monaco.*?}/g, '')
+export function truncateMancoMark(md: string) {
+  return md.replace(/{monaco.*?}/g, '')
+}
+
+export function transformSlotSugar(md: string) {
+  const lines = md.split(/\r?\n/g)
+
+  let slotName: string | null = null
+
+  const { isLineInsideCodeblocks } = getCodeBlocks(md)
+
+  lines.forEach((line, idx) => {
+    if (isLineInsideCodeblocks(idx))
+      return
+
+    const match = line.trimRight().match(/^::\s*(\w+)\s*::$/)
+    if (match) {
+      lines[idx] = `${slotName ? '\n</template>\n' : '\n'}<template v-slot:${match[1]}>\n`
+      slotName = match[1]
+    }
+  })
+
+  if (slotName)
+    lines[lines.length - 1] += '\n</template>'
+
+  return lines.join('\n')
 }
 
 /**
@@ -112,6 +137,28 @@ export function transformHighlighter(md: string) {
   })
 }
 
+export function getCodeBlocks(md: string) {
+  const codeblocks = Array
+    .from(md.matchAll(/^```[\s\S]*?^```/mg))
+    .map((m) => {
+      const start = m.index!
+      const end = m.index! + m[0].length
+      const startLine = md.slice(0, start).match(/\n/g)?.length || 0
+      const endLine = md.slice(0, end).match(/\n/g)?.length || 0
+      return [start, end, startLine, endLine]
+    })
+
+  return {
+    codeblocks,
+    isInsideCodeblocks(idx: number) {
+      return codeblocks.some(([s, e]) => s <= idx && idx <= e)
+    },
+    isLineInsideCodeblocks(line: number) {
+      return codeblocks.some(([,, s, e]) => s <= line && line <= e)
+    },
+  }
+}
+
 /**
  * Transform <style> in markdown to scoped style with page selector
  */
@@ -120,15 +167,14 @@ export function transformPageCSS(md: string, id: string) {
   if (!page)
     return md
 
-  const codeblocks = Array.from(md.matchAll(/^```[\s\S]*?^```/mg))
-    .map(m => ([m.index!, m.index! + m[0].length]))
+  const { isInsideCodeblocks } = getCodeBlocks(md)
 
   const result = md.replace(
     /(\n<style[^>]*?>)([\s\S]+?)(<\/style>)/g,
     (full, start, css, end) => {
       const index = md.indexOf(full)
       // don't replace `<style>` inside code blocks, #101
-      if (index < 0 || codeblocks.some(([s, e]) => s <= index && index <= e))
+      if (index < 0 || isInsideCodeblocks(index))
         return full
       if (!start.includes('scoped'))
         start = start.replace('<style', '<style scoped')

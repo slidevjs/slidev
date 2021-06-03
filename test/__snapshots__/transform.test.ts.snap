@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`markdown transform slot-sugar 1`] = `
+"
+# Page 
+
+Default Slot
+
+<template v-slot:right>
+
+Right Slot
+
+</template>
+<template v-slot:left>
+
+<div>Left Slot</div>
+
+</template>"
+`;
+
+exports[`markdown transform slot-sugar with code 1`] = `
+"
+# Page 
+
+Default Slot
+
+
+<template v-slot:code>
+
+
+\`\`\`md
+Slot Usage
+::right::
+::left::
+\`\`\`
+
+
+</template>"
+`;
