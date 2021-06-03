@@ -117,6 +117,14 @@ const Customizations = [
     text: 'Configure Mermaid',
     link: '/custom/config-mermaid',
   },
+  {
+    text: 'Vue Global Context',
+    link: '/custom/vue-context',
+  },
+  {
+    text: 'Global Layers',
+    link: '/custom/global-layers',
+  }
 ]
 
 const Resources = [

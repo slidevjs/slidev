@@ -178,3 +178,10 @@ The final hosted `index.html` will be:
 </body>
 </html>
 ```
+
+## Global Layers
+
+Conventions: `global-top.vue` / `global-bottom.vue`
+
+Learn more: [Global Layers](/custom/global-layers)
+

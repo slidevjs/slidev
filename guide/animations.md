@@ -35,6 +35,14 @@ The usage of `v-after` is similar to `v-click` but it will turn the element visi
 
 When you click the "next" button, both `Hello` and `World` will show up together.
 
+### `v-click-hide`
+
+Same as `v-click` but instead of making the element appear, it makes the element invisible after clicking.
+
+```md
+<div v-click-hide>Hello</div>
+```
+
 ### `v-clicks`
 
 `v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists.
