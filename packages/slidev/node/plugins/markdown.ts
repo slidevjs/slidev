@@ -104,7 +104,7 @@ export function truncateMancoMark(md: string) {
 export function transformSlotSugar(md: string) {
   const lines = md.split(/\r?\n/g)
 
-  let slotName: string | null = null
+  let prevSlot = false
 
   const { isLineInsideCodeblocks } = getCodeBlocks(md)
 
@@ -114,13 +114,13 @@ export function transformSlotSugar(md: string) {
 
     const match = line.trimRight().match(/^::\s*(\w+)\s*::$/)
     if (match) {
-      lines[idx] = `${slotName ? '\n</template>\n' : '\n'}<template v-slot:${match[1]}>\n`
-      slotName = match[1]
+      lines[idx] = `${prevSlot ? '\n\n</template>\n' : '\n'}<template v-slot:${match[1]}="slotProps">\n`
+      prevSlot = true
     }
   })
 
-  if (slotName)
-    lines[lines.length - 1] += '\n</template>'
+  if (prevSlot)
+    lines[lines.length - 1] += '\n\n</template>'
 
   return lines.join('\n')
 }

@@ -289,8 +289,14 @@ export function createSlidesLoader(
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
     ]
 
-    code = code.replace(/(<script setup.*>)/g, `$1${imports.join('\n')}\n`)
-    code = code.replace(/<template>([\s\S]*?)<\/template>/mg, '<template><InjectedLayout v-bind="frontmatter">$1</InjectedLayout></template>')
+    code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
+    const injectA = code.indexOf('<template>') + '<template>'.length
+    const injectB = code.lastIndexOf('</template>')
+    let body = code.slice(injectA, injectB).trim()
+    if (body.startsWith('<div>') && body.endsWith('</div>'))
+      body = body.slice(5, -6)
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="frontmatter">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+
     return code
   }
 

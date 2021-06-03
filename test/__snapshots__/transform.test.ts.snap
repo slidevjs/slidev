@@ -37,14 +37,16 @@ exports[`markdown transform slot-sugar 1`] = `
 
 Default Slot
 
-<template v-slot:right>
+<template v-slot:right=\\"slotProps\\">
 
 Right Slot
 
+
 </template>
-<template v-slot:left>
+<template v-slot:left=\\"slotProps\\">
 
 <div>Left Slot</div>
+
 
 </template>"
 `;
@@ -56,7 +58,7 @@ exports[`markdown transform slot-sugar with code 1`] = `
 Default Slot
 
 
-<template v-slot:code>
+<template v-slot:code=\\"slotProps\\">
 
 
 \`\`\`md
@@ -64,6 +66,31 @@ Slot Usage
 ::right::
 ::left::
 \`\`\`
+
+
+
+</template>"
+`;
+
+exports[`markdown transform slot-sugar with default 1`] = `
+"
+
+<template v-slot:right=\\"slotProps\\">
+
+Right Slot
+
+
+</template>
+<template v-slot:left=\\"slotProps\\">
+
+<div>Left Slot</div>
+
+
+</template>
+<template v-slot:default=\\"slotProps\\">
+
+# Page 
+Default Slot
 
 
 </template>"

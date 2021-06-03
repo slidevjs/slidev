@@ -3,6 +3,15 @@ context('Basic', () => {
     cy.visit('/')
   })
 
+  function goPage(no: number) {
+    cy.get('body')
+      .type('g')
+      .get('#slidev-goto-dialog')
+      .type(`${no}{enter}`)
+      .url()
+      .should('eq', `http://localhost:3030/${no}`)
+  }
+
   it('basic nav', () => {
     cy.url()
       .should('eq', 'http://localhost:3030/1')
@@ -20,20 +29,15 @@ context('Basic', () => {
     cy.contains('Global Footer')
       .should('not.exist')
 
-    cy.get('#page-root > #slide-container > #slide-content > .slidev-page-2 > div > p')
+    cy.get('#page-root > #slide-container > #slide-content > .slidev-page-2 > p')
       .should('have.css', 'border-color', 'rgb(0, 128, 0)')
       .should('not.have.css', 'color', 'rgb(128, 0, 0)')
 
-    cy.get('body')
-      .type('g')
-      .get('#slidev-goto-dialog')
-      .type('5{enter}')
-      .url()
-      .should('eq', 'http://localhost:3030/5')
+    goPage(5)
 
-    cy.get('#page-root > #slide-container > #slide-content > .slidev-page-5 > div > .slidev-code')
+    cy.get('#page-root > #slide-container > #slide-content > .slidev-page-5 > .slidev-code')
       .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
-      .get('#page-root > #slide-container > #slide-content > .slidev-page-5 > div > p')
+      .get('#page-root > #slide-container > #slide-content > .slidev-page-5 > p')
       .should('have.text', 'Current Page: 5')
 
     cy.get('body')
@@ -65,5 +69,10 @@ context('Basic', () => {
       .type('{UpArrow}')
       .url()
       .should('eq', 'http://localhost:3030/6')
+
+    goPage(8)
+
+    cy.get('.col-right')
+      .contains('Right')
   })
 })

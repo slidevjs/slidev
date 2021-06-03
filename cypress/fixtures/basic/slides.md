@@ -66,7 +66,7 @@ Current Page: {{$slidev.nav.currentPage}}
 
 ---
 
-# Page 8
+# Page 7
 
 $$
 \begin{aligned}
@@ -74,3 +74,19 @@ $$
 &+\frac{1}{\rho} \operatorname{grad}(\boldsymbol{v} \cdot \operatorname{grad} \mu)+\frac{1}{\rho} \operatorname{rot}(\boldsymbol{v} \times \operatorname{grad} \mu)-\frac{1}{\rho} \boldsymbol{v} \Delta \mu+\boldsymbol{g}
 \end{aligned}
 $$
+
+---
+layout: two-cols
+---
+
+::right::
+
+# Right
+
+<b>Right</b>
+
+:: default ::
+
+# Left
+
+Left

@@ -13,6 +13,18 @@ Right Slot
 `)).toMatchSnapshot()
   })
 
+  it('slot-sugar with default', () => {
+    expect(transformSlotSugar(`
+:: right::
+Right Slot
+::left ::
+<div>Left Slot</div>
+:: default ::
+# Page 
+Default Slot
+`)).toMatchSnapshot()
+  })
+
   it('slot-sugar with code', () => {
     expect(transformSlotSugar(`
 # Page 
