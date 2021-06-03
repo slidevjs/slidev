@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`markdown transform Inline CSS 1`] = `
+"
+# Page 
+
+<style scoped>
+.slidev-page-01{
+h1 {
+  color: red;
+}
+}</style>
+
+\`\`\`css
+<style>
+h1 {
+  color: green;
+}
+</style>
+\`\`\`
+"
+`;
+
+exports[`markdown transform Mermaid 1`] = `
+"
+# Page 
+
+<Mermaid :code=\\"'c2VxdWVuY2VEaWFncmFtCiAgQWxpY2UtPkpvaG46IEhlbGxvIEpvaG4sIGhvdyBhcmUgeW91PwogIE5vdGUgb3ZlciBBbGljZSxKb2huOiBBIHR5cGljYWwgaW50ZXJhY3Rpb24'\\" v-bind=\\"{}\\" />
+
+<Mermaid :code=\\"'Z3JhcGggVEQKQltUZXh0XSAtLT4gQ3tEZWNpc2lvbn0KQyAtLT58T25lfCBEW1Jlc3VsdCAxXQpDIC0tPnxUd298IEVbUmVzdWx0IDJd'\\" v-bind=\\"{theme: 'neutral', scale: 0.8}\\" />
+"
+`;
+
 exports[`markdown transform slot-sugar 1`] = `
 "
 # Page 

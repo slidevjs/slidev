@@ -1,4 +1,4 @@
-import { transformSlotSugar } from '../packages/slidev/node/plugins/markdown'
+import { transformMermaid, transformPageCSS, transformSlotSugar } from '../packages/slidev/node/plugins/markdown'
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
@@ -27,6 +27,45 @@ Slot Usage
 ::left::
 \`\`\`
 
+`)).toMatchSnapshot()
+  })
+
+  it('Inline CSS', () => {
+    expect(transformPageCSS(`
+# Page 
+
+<style>
+h1 {
+  color: red;
+}
+</style>
+
+\`\`\`css
+<style>
+h1 {
+  color: green;
+}
+</style>
+\`\`\`
+`, '01.md')).toMatchSnapshot()
+  })
+
+  it('Mermaid', () => {
+    expect(transformMermaid(`
+# Page 
+
+\`\`\`mermaid
+sequenceDiagram
+  Alice->John: Hello John, how are you?
+  Note over Alice,John: A typical interaction
+\`\`\`
+
+\`\`\`mermaid {theme: 'neutral', scale: 0.8}
+graph TD
+B[Text] --> C{Decision}
+C -->|One| D[Result 1]
+C -->|Two| E[Result 2]
+\`\`\`
 `)).toMatchSnapshot()
   })
 })
