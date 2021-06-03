@@ -60,6 +60,9 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Setup
+        run: npm i -g pnpm @antfu/ni
+
       - name: Install
         run: nci
 
