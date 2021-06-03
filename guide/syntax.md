@@ -209,6 +209,84 @@ You can style the icons just like other HTML elements. For example:
 <uim-rocket class="text-3xl text-red-400 mx-2" />
 <uim-rocket class="text-3xl text-orange-400 animate-ping ml-2" />
 
+## Slots
+
+> Available since v0.18
+
+Some layouts can provide multiple contributing points using [Vue's named slots](https://v3.vuejs.org/guide/component-slots.html).
+
+For example, in [`two-cols` layout](https://github.com/slidevjs/slidev/blob/main/packages/client/layouts/two-cols.vue), you can have two columns left (`default` slot) and right (`right` slot) side by side.
+
+```md
+---
+layout: two-cols
+---
+
+<template v-slot:default>
+
+# Left
+
+This shows on the left
+
+</template>
+<template v-slot:right>
+
+# Right
+
+This shows on the right
+
+<template>
+```
+
+<div class="grid grid-cols-2 rounded border border-gray-400 border-opacity-50 px-10 pb-4">
+<div>
+<h3>Left</h3>
+<p>This shows on the left</p>
+</div>
+<div>
+<h3>Right</h3>
+<p>This shows on the right</p>
+</div>
+</div>
+
+We also provide a shorthand syntax sugar `::name::` for slot name. The following example works exactly the same as the previous one.
+
+```md
+---
+layout: two-cols
+---
+
+# Left
+
+This shows on the left
+
+::right::
+
+# Right
+
+This shows on the right
+```
+
+You can also explicitly specify the default slot and provide in custom order
+
+```md
+---
+layout: two-cols
+---
+
+::right::
+
+# Right
+
+This shows on the right
+
+::default::
+
+# Left
+
+This shows on the left
+```
+
 ## Configurations
 
 All configurations needed can be defined in the Markdown file. For example:
