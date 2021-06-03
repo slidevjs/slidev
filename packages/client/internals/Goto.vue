@@ -28,6 +28,7 @@ whenever(showGotoDialog, async() => {
 
 <template>
   <div
+    id="slidev-goto-dialog"
     class="fixed right-5 bg-main transform transition-all"
     :class="showGotoDialog ? 'top-5' : '-top-20'"
     shadow="~"

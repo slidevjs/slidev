@@ -35,7 +35,7 @@ background: https://sli.dev/demo-cover.png
 
 ---
 
-# Page 3
+# Page 5
 
 ```html
 <div>{{$slidev.nav.currentPage}}</div>
@@ -45,7 +45,7 @@ Current Page: {{$slidev.nav.currentPage}}
 
 ---
 
-# Page 3
+# Page 6
 
 <v-clicks>
 
@@ -66,13 +66,7 @@ Current Page: {{$slidev.nav.currentPage}}
 
 ---
 
-<div>
-Hi
-</div>
-
----
-
-# Page 5
+# Page 8
 
 $$
 \begin{aligned}

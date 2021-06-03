@@ -1,13 +1,14 @@
 {
   "env": {
     "node": true,
-    "jest": true
+    "jest": true,
+    "cypress/globals": true
   },
   "globals": {
     "__DEV__": true
   },
   "extends": "@antfu",
-  "plugins": ["jest"],
+  "plugins": ["jest", "cypress"],
   "rules": {
     "vue/no-lone-template": "off"
   }
