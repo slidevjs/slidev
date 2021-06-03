@@ -292,7 +292,9 @@ Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-j
 
 ## Multiple Entries
 
-From v0.15.0, we shipped multi-entries support. This means you can split your `slides.md` into multiple files and organize them as you want.
+> Available since v0.15
+
+You can split your `slides.md` into multiple files and organize them as you want.
 
 `slides.md` :
 

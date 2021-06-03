@@ -1,8 +1,8 @@
 # Global Layers
 
-> Avaliable from v0.17
+> Available since v0.17
 
-Global layers allow you to have custom components that **persistent** across slides. This could be useful for have footers, cross-slides animations, global effects, etc.
+Global layers allow you to have custom components that **persistent** across slides. This could be useful for having footers, cross-slides animations, global effects, etc.
 
 Slidev provides two layers for this usage, create `global-top.vue` or `global-bottom.vue` under your project root and it will pick up automatically.
 
