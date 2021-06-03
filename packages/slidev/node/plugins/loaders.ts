@@ -2,6 +2,7 @@ import { basename, join } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
 import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
 import fg from 'fast-glob'
+import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
 import { RouteMeta } from 'vue-router'
 // @ts-expect-error
@@ -9,7 +10,7 @@ import mila from 'markdown-it-link-attributes'
 import { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
-import { existsSync } from 'fs-extra'
+
 import type { Connect } from 'vite'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
@@ -225,6 +226,14 @@ export function createSlidesLoader(
         if (id === '/@slidev/configs')
           return generateConfigs()
 
+        // global component
+        if (id === '/@slidev/global-components/top')
+          return generateGlobalComponents('top')
+
+        // global component
+        if (id === '/@slidev/global-components/bottom')
+          return generateGlobalComponents('bottom')
+
         // pages
         if (id.startsWith(slidePrefix)) {
           const remaning = id.slice(slidePrefix.length)
@@ -422,5 +431,43 @@ export function createSlidesLoader(
       config.info = md.render(config.info)
 
     return `export default ${JSON.stringify(config)}`
+  }
+
+  async function generateGlobalComponents(layer: 'top' | 'bottom') {
+    const components = [
+      userRoot,
+      ...themeRoots,
+      clientRoot,
+    ]
+      .flatMap((root) => {
+        if (layer === 'top') {
+          return [
+            join(root, 'global.vue'),
+            join(root, 'Global.vue'),
+            join(root, 'global-top.vue'),
+            join(root, 'GlobalTop.vue'),
+          ]
+        }
+        else {
+          return [
+            join(root, 'global-bottom.vue'),
+            join(root, 'GlobalBottom.vue'),
+          ]
+        }
+      })
+      .filter(i => fs.existsSync(i))
+
+    const imports = components.map((i, idx) => `import __n${idx} from '${toAtFS(i)}'`).join('\n')
+    const render = components.map((i, idx) => `h(__n${idx})`).join(',')
+
+    return `
+${imports}
+import { h } from 'vue'
+export default {
+  render() {
+    return [${render}]
+  }
+}
+`
   }
 }

@@ -13,7 +13,7 @@ import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
 import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import SlideWrapper from './SlideWrapper'
 
 registerShortcuts()
 

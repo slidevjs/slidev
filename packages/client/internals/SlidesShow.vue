@@ -2,7 +2,11 @@
 import { watch } from 'vue'
 import { currentRoute, clicks, rawRoutes, nextRoute } from '../logic/nav'
 import { getSlideClass } from '../utils'
-import SlideWrapper from './SlideWrapper.vue'
+import SlideWrapper from './SlideWrapper'
+// @ts-ignore
+import GlobalTop from '/@slidev/global-components/top'
+// @ts-ignore
+import GlobalBottom from '/@slidev/global-components/bottom'
 
 // preload next route
 watch(currentRoute, () => {
@@ -14,6 +18,14 @@ watch(currentRoute, () => {
 </script>
 
 <template>
+  <!-- Global Bottom -->
+  <SlideWrapper>
+    <div class="slidev-global-bottom -z-1 absolute top-0 left-0 bottom-0 right-0 w-full h-full">
+      <GlobalBottom />
+    </div>
+  </SlideWrapper>
+
+  <!-- Slides -->
   <template v-for="route of rawRoutes" :key="route.path">
     <SlideWrapper
       :is="route?.component"
@@ -25,4 +37,11 @@ watch(currentRoute, () => {
       :class="getSlideClass(route)"
     />
   </template>
+
+  <!-- Global Top -->
+  <SlideWrapper>
+    <div class="slidev-global-top absolute top-0 left-0 bottom-0 right-0 w-full h-full">
+      <GlobalTop />
+    </div>
+  </SlideWrapper>
 </template>

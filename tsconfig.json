@@ -16,7 +16,6 @@
       "vite/client",
       "node",
       "jest",
-      "cypress"
     ],
     "paths": {
       "@slidev/client/*": ["./packages/client/*"],

@@ -7,12 +7,18 @@ context('Basic', () => {
     cy.url()
       .should('eq', 'http://localhost:3030/1')
 
+    cy.contains('Global Footer')
+      .should('exist')
+
     cy.get('#page-root > #slide-container > #slide-content')
 
     cy.get('body')
       .type('{RightArrow}')
       .url()
       .should('eq', 'http://localhost:3030/2')
+
+    cy.contains('Global Footer')
+      .should('not.exist')
 
     cy.get('#page-root > #slide-container > #slide-content > .slidev-page-2 > div > p')
       .should('have.css', 'border-color', 'rgb(0, 128, 0)')

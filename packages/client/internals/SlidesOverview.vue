@@ -5,7 +5,7 @@ import { breakpoints, windowSize } from '../state'
 import { go as goSlide, rawRoutes } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import SlideWrapper from './SlideWrapper'
 
 const emit = defineEmit()
 const props = defineProps<{ modelValue: boolean }>()
