@@ -47,10 +47,26 @@ jobs:
       - name: Test
         run: nr test
 
+  cypress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup
+        run: npm i -g pnpm @antfu/ni
+
       - name: Cypress
         uses: cypress-io/github-action@v2
         with:
-          start: pnpm run cy:fixture
+          install-command: nci
+          build: nr build
+          start: nr cy:fixture
 
   lint:
     runs-on: ubuntu-latest
