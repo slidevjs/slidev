@@ -98,6 +98,20 @@ importers:
       vite-plugin-windicss: 0.16.7_vite@2.3.4
       zx: 1.14.1
 
+  cypress/fixtures/basic:
+    specifiers:
+      '@slidev/cli': workspace:*
+      '@slidev/theme-default': ^0.14.2
+      '@slidev/theme-seriph': ^0.14.1
+      '@slidev/types': workspace:*
+      nodemon: ^2.0.7
+    devDependencies:
+      '@slidev/cli': link:../../../packages/slidev
+      '@slidev/theme-default': 0.14.2
+      '@slidev/theme-seriph': 0.14.1
+      '@slidev/types': link:../../../packages/types
+      nodemon: 2.0.7
+
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
@@ -127,20 +141,6 @@ importers:
       nodemon: 2.0.7
 
   demo/starter:
-    specifiers:
-      '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.14.2
-      '@slidev/theme-seriph': ^0.14.1
-      '@slidev/types': workspace:*
-      nodemon: ^2.0.7
-    devDependencies:
-      '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.14.2
-      '@slidev/theme-seriph': 0.14.1
-      '@slidev/types': link:../../packages/types
-      nodemon: 2.0.7
-
-  demo/test:
     specifiers:
       '@slidev/cli': workspace:*
       '@slidev/theme-default': ^0.14.2

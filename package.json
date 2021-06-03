@@ -15,6 +15,7 @@
     "test": "jest",
     "test:update": "jest -u",
     "cy": "cypress open",
+    "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
     "release": "zx scripts/release.mjs",
     "ci:publish": "zx scripts/publish.mjs"
   },

@@ -12,7 +12,7 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -46,6 +46,11 @@ jobs:
 
       - name: Test
         run: nr test
+
+      - name: Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          start: pnpm run cy:fixture
 
   lint:
     runs-on: ubuntu-latest
