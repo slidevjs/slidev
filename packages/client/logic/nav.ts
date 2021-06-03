@@ -20,6 +20,7 @@ export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice
 export const currentPath = computed(() => getPath(currentPage.value))
 export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
 export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
+export const currentLayout = computed(() => currentRoute.value?.meta?.layout)
 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 
