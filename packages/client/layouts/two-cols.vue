@@ -1,3 +1,24 @@
+<!--
+  Usage:
+
+```md
+---
+layout: two-cols
+---
+
+# Left
+
+This shows on the left
+
+::right::
+
+# Right
+
+This shows on the right
+```
+
+-->
+
 <script setup lang="ts">
 import { defineProps } from 'vue'
 
