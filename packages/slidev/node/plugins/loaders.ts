@@ -61,7 +61,7 @@ md.use(mila, {
 function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
   return {
     ...data,
-    notesHTML: md.render(data.note || ''),
+    notesHTML: md.render(data?.note || ''),
   }
 }
 
@@ -126,8 +126,10 @@ export function createSlidesLoader(
 
         const moduleIds = new Set<string>()
 
-        if (data.slides.length !== newData.slides.length)
+        if (data.slides.length !== newData.slides.length) {
           moduleIds.add('/@slidev/routes')
+          range(newData.slides.length).map(i => hmrPages.add(i))
+        }
 
         if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
           moduleIds.add('/@slidev/routes')
