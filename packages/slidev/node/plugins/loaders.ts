@@ -451,7 +451,6 @@ export function createSlidesLoader(
         if (layer === 'top') {
           return [
             join(root, 'global.vue'),
-            join(root, 'Global.vue'),
             join(root, 'global-top.vue'),
             join(root, 'GlobalTop.vue'),
           ]

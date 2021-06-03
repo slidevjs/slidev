@@ -19,11 +19,7 @@ watch(currentRoute, () => {
 
 <template>
   <!-- Global Bottom -->
-  <SlideWrapper>
-    <div class="slidev-global-bottom -z-1 absolute top-0 left-0 bottom-0 right-0 w-full h-full">
-      <GlobalBottom />
-    </div>
-  </SlideWrapper>
+  <GlobalBottom />
 
   <!-- Slides -->
   <template v-for="route of rawRoutes" :key="route.path">
@@ -39,9 +35,5 @@ watch(currentRoute, () => {
   </template>
 
   <!-- Global Top -->
-  <SlideWrapper>
-    <div class="slidev-global-top absolute top-0 left-0 bottom-0 right-0 w-full h-full">
-      <GlobalTop />
-    </div>
-  </SlideWrapper>
+  <GlobalTop />
 </template>
