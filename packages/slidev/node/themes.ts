@@ -22,8 +22,8 @@ export function packageExists(name: string) {
   return false
 }
 
-export async function getThemeMeta(name: string) {
-  const path = resolveImportPath(`${name}/package.json`)
+export async function getThemeMeta(name: string, path?: string) {
+  path ||= resolveImportPath(`${name}/package.json`)
 
   if (path) {
     const { slidev = {}, engines = {} } = await fs.readJSON(path)

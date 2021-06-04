@@ -103,20 +103,24 @@ export async function resolveOptions(
     if (await promptForThemeInstallation(theme) === false)
       process.exit(1)
   }
-
-  if (!packageExists(theme)) {
-    // eslint-disable-next-line no-console
-    console.error(`Theme "${theme}" not found, have you installed it?`)
-    process.exit(1)
+  else {
+    if (!packageExists(theme)) {
+      // eslint-disable-next-line no-console
+      console.error(`Theme "${theme}" not found, have you installed it?`)
+      process.exit(1)
+    }
   }
 
   const clientRoot = getClientRoot()
   const cliRoot = getCLIRoot()
   const themeRoots = getThemeRoots(theme, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
-  const themeMeta = await getThemeMeta(theme)
-  if (themeMeta)
-    data.config = parser.resolveConfig(data.headmatter, themeMeta)
+
+  if (themeRoots.length) {
+    const themeMeta = await getThemeMeta(theme, themeRoots[0])
+    if (themeMeta)
+      data.config = parser.resolveConfig(data.headmatter, themeMeta)
+  }
 
   debug({
     config: data.config,
