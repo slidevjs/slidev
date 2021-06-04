@@ -13,21 +13,23 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, getCurrentInstance } from 'vue'
+import { defineProps, computed, getCurrentInstance, onMounted } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
   code: string
   scale?: number
+  align?: string
   theme?: string
 }>()
 
 const vm = getCurrentInstance()
 const html = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
+
 </script>
 
 <template>
-  <Transform :scale="scale || 1">
+  <Transform :scale="scale || 1" :origin="'top ' + align || 'top left'">
     <div class="mermaid" v-html="html"></div>
   </Transform>
 </template>
