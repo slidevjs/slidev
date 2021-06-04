@@ -81,10 +81,10 @@
     "shiki": "^0.9.4",
     "vite": "^2.3.6",
     "vite-plugin-components": "^0.10.4",
-    "vite-plugin-icons": "^0.6.0",
+    "vite-plugin-icons": "^0.6.1",
     "vite-plugin-md": "^0.6.7",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-windicss": "^0.16.7",
+    "vite-plugin-windicss": "^0.17.1",
     "vue": "^3.0.11",
     "windicss": "^3.0.12",
     "yargs": "^17.0.1"

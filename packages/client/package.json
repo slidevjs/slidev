@@ -19,7 +19,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vueuse/core": "^4.11.2",
-    "@vueuse/head": "^0.5.1",
+    "@vueuse/head": "^0.6.0",
     "@vueuse/motion": "^1.5.6",
     "codemirror": "^5.61.1",
     "file-saver": "^2.0.5",
@@ -32,7 +32,7 @@
     "prettier": "^2.3.0",
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
-    "vite-plugin-windicss": "*",
+    "vite-plugin-windicss": "^0.17.1",
     "vue": "^3.0.11",
     "vue-router": "^4.0.8",
     "windicss": "^3.0.12"
