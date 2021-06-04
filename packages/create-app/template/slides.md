@@ -304,7 +304,7 @@ sequenceDiagram
     Note over Alice,John: A typical interaction
 ```
 
-```mermaid {theme: 'neutral', scale: 0.5, align: 'center'}
+``````mermaid {theme: 'neutral', scale: 0.8}
 graph TD
 B[Text] --> C{Decision}
 C -->|One| D[Result 1]
