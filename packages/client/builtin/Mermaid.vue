@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, getCurrentInstance, onMounted } from 'vue'
+import { defineProps, computed, getCurrentInstance } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
