@@ -5,15 +5,18 @@
 A (...) theme for [Slidev](https://github.com/slidevjs/slidev).
 
 <!--
-run `npm run dev` to check out the slides for more details of how to start writing a theme
+  Learn more about how to write a theme:
+  https://sli.dev/themes/write-a-theme.html
+--->
+
+<!--
+  run `npm run dev` to check out the slides for more details of how to start writing a theme
 -->
 
 <!--
-put some screenshots here to demonstrate your theme,
--->
+  Put some screenshots here to demonstrate your theme
 
-<!-- 
-Live demo: [...]
+  Live demo: [...]
 -->
 
 ## Install

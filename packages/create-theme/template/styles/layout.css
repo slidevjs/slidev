@@ -13,6 +13,18 @@
   }
 
   h1 + p {
-    @apply opacity-40 -mt-4 text-2xl;
+    @apply -mt-2 opacity-50 mb-4;
+  }
+
+  p + h2, ul + h2, table + h2 {
+    @apply mt-10;
+  }
+
+  h3 {
+    @apply text-sm pt-2 uppercase tracking-widest font-500 -ml-[0.05em];
+  }
+
+  h3:not(.opacity-100) {
+    @apply opacity-40;
   }
 }
