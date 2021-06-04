@@ -2,7 +2,7 @@
 
 > Available since v0.19.3
 
-While you can use HTML and CSS to custom the fonts and style for your slides as you want, Slidev also provides a convenient way to them effortlessly.
+While you can use HTML and CSS to custom the fonts and style for your slides as you want, Slidev also provides a convenient way to use them effortlessly.
 
 In your fontmatter, configure as following
 
@@ -20,7 +20,7 @@ fonts:
 
 And that's all.
 
-Fonts will be **imported automatically from [Google Fonts](https://fonts.google.com/)**. That means you can use any fonts avaliable on Google Fonts directly.
+Fonts will be **imported automatically from [Google Fonts](https://fonts.google.com/)**. That means you can use any fonts available on Google Fonts directly.
 
 ## Local Fonts
 
