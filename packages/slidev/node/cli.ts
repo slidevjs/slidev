@@ -2,10 +2,12 @@
 import path from 'path'
 import net from 'net'
 import os from 'os'
+import { exec } from 'child_process'
 import fs from 'fs-extra'
+import openBrowser from 'open'
 import yargs, { Argv } from 'yargs'
 import prompts from 'prompts'
-import { blue, bold, cyan, dim, gray, green, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { SlidevConfig } from '@slidev/types'
@@ -82,12 +84,13 @@ cli.command(
     }
 
     let server: ViteDevServer | undefined
+    let port = 3030
 
     async function initServer() {
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, theme }, 'dev')
-      const port = userPort || await findFreePort(3030)
+      port = userPort || await findFreePort(3030)
       server = (await createServer(
         options,
         {
@@ -118,7 +121,40 @@ cli.command(
       printInfo(options, port, remote)
     }
 
+    const SHORTCUTS = [
+      {
+        name: 'r',
+        action() {
+          initServer()
+        },
+      },
+      {
+        name: 'o',
+        action() {
+          openBrowser(`http://localhost:${port}`)
+        },
+      },
+      {
+        name: 'e',
+        action() {
+          exec(`code "${entry}"`)
+        },
+      },
+    ]
+
+    function bindShortcut() {
+      process.stdin.resume()
+      process.stdin.setEncoding('utf8')
+      process.stdin.on('data', (data) => {
+        const str = data.toString().trim().toLowerCase()
+        const sh = SHORTCUTS.filter(item => item.name === str)[0]
+        if (sh)
+          sh.action()
+      })
+    }
+
     initServer()
+    bindShortcut()
   },
 )
 
@@ -348,6 +384,9 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     else {
       console.log(`${dim('  remote control ')} > ${dim('pass --remote to enable')}`)
     }
+
+    console.log()
+    console.log(`${dim('  shortcuts ')}      > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
   }
   console.log()
   console.log()

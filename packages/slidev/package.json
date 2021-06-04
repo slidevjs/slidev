@@ -71,6 +71,7 @@
     "markdown-it-link-attributes": "^3.0.0",
     "monaco-editor": "^0.24.0",
     "nanoid": "^3.1.23",
+    "open": "^8.2.0",
     "pdf-lib": "^1.16.0",
     "prismjs": "^1.23.0",
     "prompts": "^2.4.1",
