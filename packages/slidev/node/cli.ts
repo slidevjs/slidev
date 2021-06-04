@@ -12,6 +12,7 @@ import { LogLevel, ViteDevServer } from 'vite'
 import * as parser from '@slidev/parser/fs'
 import { SlidevConfig } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
+import equal from 'fast-deep-equal'
 import { version } from '../package.json'
 import { createServer } from './server'
 import { getThemeRoots, isPath, ResolvedSlidevOptions, resolveOptions } from './options'
@@ -21,6 +22,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
   'monaco',
   'routerMode',
+  'fonts',
 ]
 
 const cli = yargs
@@ -99,7 +101,7 @@ cli.command(
               console.log(yellow('\n  restarting on theme change\n'))
               initServer()
             }
-            else if (CONFIG_RESTART_FIELDS.some(i => newData.config[i] !== data.config[i])) {
+            else if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
             }

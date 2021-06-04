@@ -1,5 +1,9 @@
 ---
 layout: cover
+fonts: 
+  sans: Roboto, Lato
+  serif: Mate SC
+  mono: Fira Code
 ---
 # Hi
 ---

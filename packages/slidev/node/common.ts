@@ -28,6 +28,11 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
   if (data.features.tweet)
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
+  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none') {
+    const fonts = data.config.fonts.webfonts.map(i => `family=${i.replace(/^(['"])(.*)\1$/, '$1').replace(/\s/g, '-')}`).join('&')
+    head += `\n<link href="https://fonts.googleapis.com/css2?${fonts}&display=swap" rel="stylesheet">`
+  }
+
   main = main
     .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
     .replace('<!-- head -->', head)

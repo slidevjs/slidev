@@ -47,6 +47,20 @@ export type FontOptions = {
    * Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided
    */
   webfonts?: string[]
+  /**
+   * Use fonts fallback
+   *
+   * @default true
+   */
+  fallbacks?: boolean
+}
+
+export type ResolvedFontOptions = {
+  sans: string[]
+  mono: string[]
+  serif: string[]
+  provider: 'none' | 'google'
+  webfonts: string[]
 }
 
 export interface SlidevConfig {
@@ -135,7 +149,7 @@ export interface SlidevConfig {
    *
    * @default {}
    */
-  fonts: FontOptions
+  fonts: ResolvedFontOptions
 }
 
 export interface SlidevFeatureFlags {

@@ -6,7 +6,53 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "fonts": Object {},
+  "fonts": Object {
+    "mono": Array [
+      "\\"Fira Code\\"",
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "Monaco",
+      "Consolas",
+      "\\"Liberation Mono\\"",
+      "\\"Courier New\\"",
+      "monospace",
+    ],
+    "provider": "google",
+    "sans": Array [
+      "\\"Roboto\\"",
+      "\\"Lato\\"",
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "\\"Segoe UI\\"",
+      "Roboto",
+      "\\"Helvetica Neue\\"",
+      "Arial",
+      "\\"Noto Sans\\"",
+      "sans-serif",
+      "\\"Apple Color Emoji\\"",
+      "\\"Segoe UI Emoji\\"",
+      "\\"Segoe UI Symbol\\"",
+      "\\"Noto Color Emoji\\"",
+    ],
+    "serif": Array [
+      "\\"Mate SC\\"",
+      "ui-serif",
+      "Georgia",
+      "Cambria",
+      "\\"Times New Roman\\"",
+      "Times",
+      "serif",
+    ],
+    "webfonts": Array [
+      "Roboto",
+      "Lato",
+      "Mate SC",
+      "Fira Code",
+    ],
+  },
   "highlighter": "prism",
   "info": false,
   "layout": "cover",
@@ -35,8 +81,13 @@ Array [
     "content": "
 # Hi
 ",
-    "end": 4,
+    "end": 8,
     "frontmatter": Object {
+      "fonts": Object {
+        "mono": "Fira Code",
+        "sans": "Roboto, Lato",
+        "serif": "Mate SC",
+      },
       "layout": "cover",
       "title": "Hi",
     },
@@ -44,6 +95,10 @@ Array [
     "note": undefined,
     "raw": "---
 layout: cover
+fonts:
+  sans: Roboto, Lato
+  serif: Mate SC
+  mono: Fira Code
 title: Hi
 ---
 
@@ -57,7 +112,7 @@ title: Hi
     "content": "
 # Hello
 ",
-    "end": 12,
+    "end": 16,
     "frontmatter": Object {
       "layout": "center",
       "meta": Object {
@@ -80,14 +135,14 @@ layout: center
 This is notes
 -->
 ",
-    "start": 4,
+    "start": 8,
     "title": "Hello",
   },
   Object {
     "content": "
 # Morning
 ",
-    "end": 15,
+    "end": 19,
     "frontmatter": Object {},
     "index": 2,
     "note": undefined,
@@ -95,7 +150,7 @@ This is notes
 # Morning
 
 ",
-    "start": 13,
+    "start": 17,
     "title": "Morning",
   },
   Object {
@@ -103,7 +158,7 @@ This is notes
 <!-- This is not notes -->
 Hey
 ",
-    "end": 20,
+    "end": 24,
     "frontmatter": Object {
       "layout": "text",
     },
@@ -117,7 +172,7 @@ layout: text
 Hey
 
 ",
-    "start": 15,
+    "start": 19,
     "title": undefined,
   },
   Object {
@@ -129,7 +184,7 @@ this should be treated as code block
 ----
 \`\`\`
 ",
-    "end": 29,
+    "end": 33,
     "frontmatter": Object {},
     "index": 4,
     "note": undefined,
@@ -142,7 +197,7 @@ this should be treated as code block
 \`\`\`
 
 ",
-    "start": 21,
+    "start": 25,
     "title": undefined,
   },
 ]
@@ -154,7 +209,44 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "fonts": Object {},
+  "fonts": Object {
+    "mono": Array [
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "Monaco",
+      "Consolas",
+      "\\"Liberation Mono\\"",
+      "\\"Courier New\\"",
+      "monospace",
+    ],
+    "provider": "google",
+    "sans": Array [
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "\\"Segoe UI\\"",
+      "Roboto",
+      "\\"Helvetica Neue\\"",
+      "Arial",
+      "\\"Noto Sans\\"",
+      "sans-serif",
+      "\\"Apple Color Emoji\\"",
+      "\\"Segoe UI Emoji\\"",
+      "\\"Segoe UI Symbol\\"",
+      "\\"Noto Color Emoji\\"",
+    ],
+    "serif": Array [
+      "ui-serif",
+      "Georgia",
+      "Cambria",
+      "\\"Times New Roman\\"",
+      "Times",
+      "serif",
+    ],
+    "webfonts": Array [],
+  },
   "highlighter": "prism",
   "info": false,
   "monaco": "dev",
@@ -263,7 +355,44 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "fonts": Object {},
+  "fonts": Object {
+    "mono": Array [
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "Monaco",
+      "Consolas",
+      "\\"Liberation Mono\\"",
+      "\\"Courier New\\"",
+      "monospace",
+    ],
+    "provider": "google",
+    "sans": Array [
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "\\"Segoe UI\\"",
+      "Roboto",
+      "\\"Helvetica Neue\\"",
+      "Arial",
+      "\\"Noto Sans\\"",
+      "sans-serif",
+      "\\"Apple Color Emoji\\"",
+      "\\"Segoe UI Emoji\\"",
+      "\\"Segoe UI Symbol\\"",
+      "\\"Noto Color Emoji\\"",
+    ],
+    "serif": Array [
+      "ui-serif",
+      "Georgia",
+      "Cambria",
+      "\\"Times New Roman\\"",
+      "Times",
+      "serif",
+    ],
+    "webfonts": Array [],
+  },
   "highlighter": "prism",
   "info": false,
   "monaco": "dev",

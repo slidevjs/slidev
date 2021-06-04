@@ -8,7 +8,7 @@ import { jiti } from './jiti'
 import { loadSetups } from './setupNode'
 
 export async function createWindiCSSPlugin(
-  { themeRoots, clientRoot, userRoot, roots }: ResolvedSlidevOptions,
+  { themeRoots, clientRoot, userRoot, roots, data }: ResolvedSlidevOptions,
   { windicss: windiOptions }: SlidevPluginOptions,
 ) {
   const configFiles = [
@@ -28,6 +28,21 @@ export async function createWindiCSSPlugin(
     {
       configFiles: [configFile],
       config,
+      onConfigResolved(config: any) {
+        if (!config.theme)
+          config.theme = {}
+        if (!config.theme.extend)
+          config.theme.extend = {}
+        if (!config.theme.extend.fontFamily)
+          config.theme.extend.fontFamily = {}
+
+        const fontFamily = config.theme.extend.fontFamily
+        fontFamily.sans ||= data.config.fonts.sans
+        fontFamily.mono ||= data.config.fonts.mono
+        fontFamily.serif ||= data.config.fonts.serif
+
+        return config
+      },
       onOptionsResolved(config) {
         config.scanOptions.include.push(`!${slash(resolve(userRoot, 'node_modules'))}`)
         config.scanOptions.exclude.push(dirname(resolveImportPath('monaco-editor/package.json', true)))
