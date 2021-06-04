@@ -27,6 +27,7 @@ importers:
       '@types/prompts': ^2.4.0
       '@types/recordrtc': ^5.6.5
       '@types/resolve': ^1.20.0
+      '@types/semver': ^7.3.6
       '@typescript-eslint/eslint-plugin': ^4.26.0
       '@vueuse/core': ^4.11.2
       bumpp: ^6.0.6
@@ -74,6 +75,7 @@ importers:
       '@types/prompts': 2.4.0
       '@types/recordrtc': 5.6.5
       '@types/resolve': 1.20.0
+      '@types/semver': 7.3.6
       '@typescript-eslint/eslint-plugin': 4.26.0_eslint@7.27.0+typescript@4.3.2
       '@vueuse/core': 4.11.2
       bumpp: 6.0.6
@@ -263,6 +265,7 @@ importers:
       resolve: ^1.20.0
       resolve-from: ^5.0.0
       resolve-global: ^1.0.0
+      semver: ^7.3.5
       shiki: ^0.9.4
       sirv: ^1.0.12
       vite: ^2.3.6
@@ -298,6 +301,7 @@ importers:
       markdown-it-link-attributes: 3.0.0
       monaco-editor: 0.24.0
       nanoid: 3.1.23
+      open: 8.2.0
       pdf-lib: 1.16.0
       prismjs: 1.23.0
       prompts: 2.4.1
@@ -305,7 +309,6 @@ importers:
       resolve-from: 5.0.0
       resolve-global: 1.0.0
       shiki: 0.9.4
-      sirv: 1.0.12
       vite: 2.3.6
       vite-plugin-components: 0.10.4_vite@2.3.6
       vite-plugin-icons: 0.6.0_3a062f62dd9e0ad9a7cb2ae18cd865f0
@@ -317,7 +320,8 @@ importers:
       yargs: 17.0.1
     devDependencies:
       fast-deep-equal: 3.1.3
-      open: 8.2.0
+      semver: 7.3.5
+      sirv: 1.0.12
 
   packages/types:
     specifiers: {}
@@ -1080,7 +1084,7 @@ packages:
 
   /@polka/url/1.0.0-next.15:
     resolution: {integrity: sha512-15spi3V28QdevleWBNXE4pIls3nFZmBbUGrW9IVPwiQczuSb9n76TCB4bsk8TSel+I1OkHEdPhu5QKMfY6rQHA==}
-    dev: false
+    dev: true
 
   /@samverschueren/stream-to-observable/0.3.1_rxjs@6.6.7:
     resolution: {integrity: sha512-c/qwwcHyafOQuVQJj0IlBjf5yYgBI7YPJ77k4fOJYesb41jio65eaJODRUmfYKhTOFBrIZ66kgvGPlNbjuoRdQ==}
@@ -1335,6 +1339,10 @@ packages:
 
   /@types/resolve/1.20.0:
     resolution: {integrity: sha512-SFT3jdUNlLkjxUWwH/0QjLiEsV38hjdDX8oMcX9jZAD8KWNzRLdg6INZE7UMz9O86b2BOHzA3dR8nF+DbonX2Q==}
+    dev: true
+
+  /@types/semver/7.3.6:
+    resolution: {integrity: sha512-0caWDWmpCp0uifxFh+FaqK3CuZ2SkRR/ZRxAV5+zNdC3QVUi6wyOJnefhPvtNt8NQWXB5OA93BUvZsXpWat2Xw==}
     dev: true
 
   /@types/sinonjs__fake-timers/6.0.2:
@@ -2992,7 +3000,7 @@ packages:
   /define-lazy-prop/2.0.0:
     resolution: {integrity: sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==}
     engines: {node: '>=8'}
-    dev: true
+    dev: false
 
   /define-properties/1.1.3:
     resolution: {integrity: sha512-3MqfYKj2lLzdMSf8ZIZE/V+Zuy+BgD6f164e8K2w7dgnpKArBDerGYpM46IYYcjnkdPNMjPk9A6VFB8+3SKlXQ==}
@@ -4544,7 +4552,7 @@ packages:
     resolution: {integrity: sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==}
     engines: {node: '>=8'}
     hasBin: true
-    dev: true
+    dev: false
 
   /is-extendable/0.1.1:
     resolution: {integrity: sha1-YrEQ4omkcUGOPsNqYX1HLjAd/Ik=}
@@ -4692,7 +4700,7 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       is-docker: 2.2.1
-    dev: true
+    dev: false
 
   /is-yarn-global/0.3.0:
     resolution: {integrity: sha512-VjSeb/lHmkoyd8ryPVIKvOCn4D1koMqY+vqyjjUfc3xyKtP4dYOxM44sZrnqQSzSds3xyOrUTLTC9LVCVgLngw==}
@@ -5833,6 +5841,7 @@ packages:
     resolution: {integrity: sha512-tqkh47FzKeCPD2PUiPB6pkbMzsCasjxAfC62/Wap5qrUWcb+sFasXUC5I3gYM5iBM8v/Qpn4UK0x+j0iHyFPDg==}
     engines: {node: '>=4.0.0'}
     hasBin: true
+    dev: true
 
   /mimic-fn/1.2.0:
     resolution: {integrity: sha512-jf84uxzwiuiIVKiOLpfYk7N46TSy8ubTonmneY9vrpHNAnp0QBt2BxWV9dO3/j+BoVAb+a5G6YDPW3M5HOdMWQ==}
@@ -6102,7 +6111,7 @@ packages:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
-    dev: true
+    dev: false
 
   /opencollective-postinstall/2.0.3:
     resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
@@ -7007,7 +7016,7 @@ packages:
       '@polka/url': 1.0.0-next.15
       mime: 2.5.2
       totalist: 1.1.0
-    dev: false
+    dev: true
 
   /sisteransi/1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -7458,7 +7467,7 @@ packages:
   /totalist/1.1.0:
     resolution: {integrity: sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==}
     engines: {node: '>=6'}
-    dev: false
+    dev: true
 
   /touch/3.1.0:
     resolution: {integrity: sha512-WBx8Uy5TLtOSRtIq+M03/sKDrXCLHxwDcquSP2c43Le03/9serjQBIztjRz6FkJez9D/hleyAXTBGLwwZUw9lA==}

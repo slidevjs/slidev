@@ -53,6 +53,7 @@
     "@types/prompts": "^2.4.0",
     "@types/recordrtc": "^5.6.5",
     "@types/resolve": "^1.20.0",
+    "@types/semver": "^7.3.6",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@vueuse/core": "^4.11.2",
     "bumpp": "^6.0.6",
