@@ -1,4 +1,4 @@
-import { resolve, dirname } from 'path'
+import { resolve, dirname, join } from 'path'
 import Vue from '@vitejs/plugin-vue'
 import ViteIcons from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
@@ -117,7 +117,7 @@ export async function resolveOptions(
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
 
   if (themeRoots.length) {
-    const themeMeta = await getThemeMeta(theme, themeRoots[0])
+    const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))
     if (themeMeta)
       data.config = parser.resolveConfig(data.headmatter, themeMeta)
   }
