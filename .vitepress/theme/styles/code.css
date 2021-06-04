@@ -66,6 +66,10 @@ html.dark {
 
 /* Overrides */
 
+pre, code {
+  @apply font-mono;
+}
+
 :not(pre) > code {
   background: var(--prism-inline-background);
   padding: 1px 6px;
