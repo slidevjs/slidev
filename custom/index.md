@@ -29,6 +29,13 @@ aspectRatio: '16/9'
 # real width of the canvas, unit in px
 canvasWidth: 980
 
+# fonts will be auto imported from Google fonts
+# Learn more: https://sli.dev/custom/fonts
+fonts:
+  sans: 'Roboto'
+  serif: 'Roboto Slab'
+  mono: 'Fira Code'
+
 # default frontmatter applies to all slides
 defaults:
   layout: 'default'
