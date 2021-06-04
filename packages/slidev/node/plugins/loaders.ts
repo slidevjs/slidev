@@ -122,7 +122,7 @@ export function createSlidesLoader(
         if (!data.entries!.some(i => slash(i) === ctx.file))
           return
 
-        const newData = await parser.load(entry)
+        const newData = await parser.load(entry, data.themeMeta)
 
         const moduleIds = new Set<string>()
 

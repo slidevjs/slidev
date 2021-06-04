@@ -24,7 +24,30 @@ export interface SlideInfoExtended extends SlideInfo {
   notesHTML: string
 }
 
+/**
+ * Metadata for "slidev" field in themes' package.json
+ */
+export interface SlidevThemeMeta {
+  defaults?: Partial<SlidevConfig>
+  colorSchema?: 'dark' | 'light' | 'both'
+  highlighter?: 'prism' | 'shiki' | 'both'
+}
+
 export type SlidevThemeConfig = Record<string, string | number>
+
+export type FontOptions = {
+  sans?: string | string[]
+  mono?: string | string[]
+  serif?: string | string[]
+  /**
+   * @default 'google'
+   */
+  provider?: 'none' | 'google'
+  /**
+   * Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided
+   */
+  webfonts?: string[]
+}
 
 export interface SlidevConfig {
   title: string
@@ -107,6 +130,12 @@ export interface SlidevConfig {
    * @default {}
    */
   themeConfig: SlidevThemeConfig
+  /**
+   * Configure fonts for the slides and app
+   *
+   * @default {}
+   */
+  fonts: FontOptions
 }
 
 export interface SlidevFeatureFlags {
@@ -125,4 +154,5 @@ export interface SlidevMarkdown {
 
   filepath?: string
   entries?: string[]
+  themeMeta?: SlidevThemeMeta
 }

@@ -1,6 +1,6 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap } from '@antfu/utils'
-import { SlideInfo, SlideInfoBase, SlidevConfig, SlidevFeatureFlags, SlidevMarkdown } from '@slidev/types'
+import { SlideInfo, SlideInfoBase, SlidevConfig, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
 export function stringify(data: SlidevMarkdown) {
@@ -89,6 +89,7 @@ export function parseSlide(raw: string): SlideInfoBase {
 export function parse(
   markdown: string,
   filepath?: string,
+  themeMeta?: SlidevThemeMeta,
 ): SlidevMarkdown {
   const lines = markdown.split(/\r?\n/g)
   const slides: SlideInfo[] = []
@@ -136,38 +137,61 @@ export function parse(
     slice(lines.length)
 
   const headmatter = slides[0]?.frontmatter || {}
-  const defaultConfig: SlidevConfig = {
-    theme: 'default',
-    title: slides[0]?.title || 'Slidev',
-    remoteAssets: true,
-    monaco: 'dev',
-    download: false,
-    info: false,
-    highlighter: 'prism',
-    colorSchema: 'auto',
-    routerMode: 'history',
-    aspectRatio: 16 / 9,
-    canvasWidth: 980,
-    selectable: false,
-    themeConfig: {},
-  }
-  const config: SlidevConfig = Object.assign(
-    defaultConfig,
-    headmatter.config || {},
-    headmatter,
-  )
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
-    config.colorSchema = 'auto'
-  config.aspectRatio = parseAspectRatio(config.aspectRatio)
+  headmatter.title = headmatter.title || slides[0]?.title
+  const config = resolveConfig(headmatter, themeMeta)
+  const features = detectFeatures(markdown)
 
   return {
     raw: markdown,
     filepath,
     slides,
     config,
-    features: detectFeatures(markdown),
+    features,
     headmatter,
+    themeMeta,
   }
+}
+
+export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) {
+  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
+  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
+
+  const defaultConfig: SlidevConfig = {
+    theme: 'default',
+    title: 'Slidev',
+    remoteAssets: true,
+    monaco: 'dev',
+    download: false,
+    info: false,
+    highlighter: themeHightlighter || 'prism',
+    colorSchema: themeColorSchema || 'auto',
+    routerMode: 'history',
+    aspectRatio: 16 / 9,
+    canvasWidth: 980,
+    selectable: false,
+    themeConfig: {},
+    fonts: {},
+  }
+  const config: SlidevConfig = Object.assign(
+    defaultConfig,
+    themeMeta.defaults || {},
+    headmatter.config || {},
+    headmatter,
+  )
+  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+    config.colorSchema = 'auto'
+  if (themeColorSchema && config.colorSchema === 'auto')
+    config.colorSchema = themeColorSchema
+  config.aspectRatio = parseAspectRatio(config.aspectRatio)
+
+  if (themeColorSchema && config.colorSchema !== themeColorSchema)
+    // eslint-disable-next-line no-console
+    console.warn(`[slidev] Color schema "${config.colorSchema}" does not supported by the theme`)
+  if (themeHightlighter && config.highlighter !== themeHightlighter)
+    // eslint-disable-next-line no-console
+    console.warn(`[slidev] Syntax highlighter "${config.highlighter}" does not supported by the theme`)
+
+  return config
 }
 
 export function mergeFeatureFlags(a: SlidevFeatureFlags, b: SlidevFeatureFlags): SlidevFeatureFlags {

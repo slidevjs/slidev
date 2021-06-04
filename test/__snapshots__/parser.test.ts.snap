@@ -6,6 +6,7 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "fonts": Object {},
   "highlighter": "prism",
   "info": false,
   "layout": "cover",
@@ -37,11 +38,13 @@ Array [
     "end": 4,
     "frontmatter": Object {
       "layout": "cover",
+      "title": "Hi",
     },
     "index": 0,
     "note": undefined,
     "raw": "---
 layout: cover
+title: Hi
 ---
 
 # Hi
@@ -151,6 +154,7 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "fonts": Object {},
   "highlighter": "prism",
   "info": false,
   "monaco": "dev",
@@ -187,10 +191,15 @@ console.log('Hello World')
 \`\`\`
 ",
     "end": 10,
-    "frontmatter": Object {},
+    "frontmatter": Object {
+      "title": "H1",
+    },
     "index": 0,
     "note": undefined,
-    "raw": "
+    "raw": "---
+title: H1
+---
+
 # H1
 ## H2
 ### H3
@@ -254,6 +263,7 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "fonts": Object {},
   "highlighter": "prism",
   "info": false,
   "monaco": "dev",
@@ -263,7 +273,7 @@ Object {
   "src": "sub/page1.md",
   "theme": "default",
   "themeConfig": Object {},
-  "title": "Slidev",
+  "title": undefined,
 }
 `;
 
@@ -285,6 +295,7 @@ Array [
     "end": 4,
     "frontmatter": Object {
       "src": "sub/page1.md",
+      "title": undefined,
     },
     "index": 0,
     "inline": Object {
@@ -292,6 +303,7 @@ Array [
       "end": 4,
       "frontmatter": Object {
         "src": "sub/page1.md",
+        "title": undefined,
       },
       "index": 0,
       "note": undefined,

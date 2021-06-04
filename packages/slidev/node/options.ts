@@ -10,7 +10,7 @@ import { SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import _debug from 'debug'
 import { resolveImportPath } from './utils'
-import { packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
+import { getThemeMeta, packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
 
 const debug = _debug('slidev:options')
 
@@ -103,18 +103,20 @@ export async function resolveOptions(
     if (await promptForThemeInstallation(theme) === false)
       process.exit(1)
   }
-  else {
-    if (!packageExists(theme)) {
-      // eslint-disable-next-line no-console
-      console.error(`Theme "${theme}" not found, have you installed it?`)
-      process.exit(1)
-    }
+
+  if (!packageExists(theme)) {
+    // eslint-disable-next-line no-console
+    console.error(`Theme "${theme}" not found, have you installed it?`)
+    process.exit(1)
   }
 
   const clientRoot = getClientRoot()
   const cliRoot = getCLIRoot()
   const themeRoots = getThemeRoots(theme, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
+  const themeMeta = await getThemeMeta(theme)
+  if (themeMeta)
+    data.config = parser.resolveConfig(data.headmatter, themeMeta)
 
   debug({
     config: data.config,

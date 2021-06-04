@@ -1,14 +1,14 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
-import { SlideInfoWithPath, SlidevMarkdown } from '@slidev/types'
+import { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import { parseSlide, parse, stringify, stringifySlide, mergeFeatureFlags, detectFeatures } from './core'
 export * from './core'
 
-export async function load(filepath: string) {
+export async function load(filepath: string, themeMeta?: SlidevThemeMeta) {
   const dir = dirname(filepath)
   const markdown = await fs.readFile(filepath, 'utf-8')
 
-  const data = parse(markdown, filepath)
+  const data = parse(markdown, filepath, themeMeta)
 
   const entries = new Set([
     filepath,
