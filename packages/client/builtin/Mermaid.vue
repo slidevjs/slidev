@@ -25,7 +25,6 @@ const props = defineProps<{
 
 const vm = getCurrentInstance()
 const html = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
-
 </script>
 
 <template>
