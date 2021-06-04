@@ -1,6 +1,6 @@
 import { existsSync } from 'fs'
 import { join, resolve } from 'path'
-import { slash } from '@antfu/utils'
+import { slash, uniq } from '@antfu/utils'
 import { Plugin } from 'vite'
 import { ResolvedSlidevOptions } from '../options'
 import { toAtFS } from '../utils'
@@ -18,10 +18,10 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: Re
         const injections: string[] = []
         const asyncInjections: string[] = []
 
-        const setups = [
+        const setups = uniq([
           ...themeRoots,
           userRoot,
-        ].map(i => join(i, 'setup', name))
+        ]).map(i => join(i, 'setup', name))
 
         setups.forEach((path, idx) => {
           if (!existsSync(path))

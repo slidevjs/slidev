@@ -1,6 +1,6 @@
 import { resolve, dirname } from 'path'
 import { existsSync } from 'fs'
-import { slash } from '@antfu/utils'
+import { slash, uniq } from '@antfu/utils'
 import WindiCSS, { defaultConfigureFiles, WindiCssOptions } from 'vite-plugin-windicss'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 import { resolveImportPath } from '../utils'
@@ -11,11 +11,11 @@ export async function createWindiCSSPlugin(
   { themeRoots, clientRoot, userRoot, roots, data }: ResolvedSlidevOptions,
   { windicss: windiOptions }: SlidevPluginOptions,
 ) {
-  const configFiles = [
+  const configFiles = uniq([
     ...defaultConfigureFiles,
     ...themeRoots.map(i => `${i}/windi.config.ts`),
     resolve(clientRoot, 'windi.config.ts'),
-  ]
+  ])
 
   const configFile = configFiles.find(i => existsSync(i))!
   let config = jiti(configFile) as WindiCssOptions

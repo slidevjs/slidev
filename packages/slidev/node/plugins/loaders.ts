@@ -1,6 +1,6 @@
 import { basename, join } from 'path'
 import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
-import { isString, notNullish, objectMap, range, slash } from '@antfu/utils'
+import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -66,7 +66,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, themeRoots, userRoot, roots }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   VuePlugin: Plugin,
   MarkdownPlugin: Plugin,
@@ -309,11 +309,11 @@ export function createSlidesLoader(
 
     const layouts: Record<string, string> = {}
 
-    const roots = [
+    const roots = uniq([
       userRoot,
       ...themeRoots,
       clientRoot,
-    ]
+    ])
 
     for (const root of roots) {
       const layoutPaths = await fg('layouts/*.{vue,ts}', {
@@ -341,10 +341,10 @@ export function createSlidesLoader(
       `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
       `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
     ]
-    const roots = [
+    const roots = uniq([
       ...themeRoots,
       userRoot,
-    ]
+    ])
 
     for (const root of roots) {
       const styles = [
@@ -442,11 +442,7 @@ export function createSlidesLoader(
   }
 
   async function generateGlobalComponents(layer: 'top' | 'bottom') {
-    const components = [
-      userRoot,
-      ...themeRoots,
-      clientRoot,
-    ]
+    const components = roots
       .flatMap((root) => {
         if (layer === 'top') {
           return [
