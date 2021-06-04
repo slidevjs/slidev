@@ -48,6 +48,10 @@ export type FontOptions = {
    */
   webfonts?: string[]
   /**
+   * Specify local fonts names, be excluded from webfonts
+   */
+  local?: string[]
+  /**
    * Use fonts fallback
    *
    * @default true
@@ -61,6 +65,7 @@ export type ResolvedFontOptions = {
   serif: string[]
   provider: 'none' | 'google'
   webfonts: string[]
+  local: string[]
 }
 
 export interface SlidevConfig {

@@ -160,11 +160,15 @@ function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   let sans = toArray(fonts.sans).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
   let serif = toArray(fonts.serif).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
   let mono = toArray(fonts.mono).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+
+  const local = toArray(fonts.local).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
       ? uniq([...sans, ...serif, ...mono])
       : []
+
+  webfonts.filter(i => local.includes(i))
 
   function toQuoted(font: string) {
     if (/^(['"]).*\1$/.test(font))
@@ -218,6 +222,7 @@ function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     mono,
     webfonts,
     provider,
+    local,
   }
 }
 

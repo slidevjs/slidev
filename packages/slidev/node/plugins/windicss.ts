@@ -37,9 +37,9 @@ export async function createWindiCSSPlugin(
           config.theme.extend.fontFamily = {}
 
         const fontFamily = config.theme.extend.fontFamily
-        fontFamily.sans ||= data.config.fonts.sans
-        fontFamily.mono ||= data.config.fonts.mono
-        fontFamily.serif ||= data.config.fonts.serif
+        fontFamily.sans ||= data.config.fonts.sans.join(',')
+        fontFamily.mono ||= data.config.fonts.mono.join(',')
+        fontFamily.serif ||= data.config.fonts.serif.join(',')
 
         return config
       },
