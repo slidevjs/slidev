@@ -15,7 +15,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
     }
   }
   const url = `/@slidev/slide/${id}.json`
-  const { data: info, execute } = useFetch(url).get().json()
+  const { data: info, execute } = useFetch(url).json().get()
 
   execute()
 

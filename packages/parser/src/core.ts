@@ -248,8 +248,8 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
   }
   const config: SlidevConfig = {
     ...defaultConfig,
-    ...themeMeta.defaults || {},
-    ...headmatter.config || {},
+    ...themeMeta.defaults,
+    ...headmatter.config,
     ...headmatter,
     fonts: resolveFonts({
       ...themeMeta.defaults?.fonts,
