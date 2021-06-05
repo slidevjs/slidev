@@ -86,7 +86,7 @@
     "vite-plugin-remote-assets": "^0.2.2",
     "vite-plugin-windicss": "^1.0.1",
     "vue": "^3.0.11",
-    "windicss": "^3.1.0",
+    "windicss": "^3.1.1",
     "yargs": "^17.0.1"
   },
   "devDependencies": {
