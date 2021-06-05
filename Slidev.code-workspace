@@ -1,0 +1,54 @@
+{
+  "folders": [
+	{
+		"name": "✨ root",
+		"path": "."
+	},
+	{
+		"name": "🚀 @slidev/client",
+		"path": "packages/client"
+	},
+	{
+		"name": "📦 @slidev/cli",
+		"path": "packages/slidev"
+	},
+	{
+		"name": "📦 create-slidev",
+		"path": "packages/create-app"
+	},
+	{
+		"name": "📦 create-slidev-theme",
+		"path": "packages/create-theme"
+	},
+	{
+		"name": "⚙️ @slidev/parser",
+		"path": "packages/parser"
+	},
+	{
+		"name": "⚙️ @slidev/types",
+		"path": "packages/types"
+	},
+	{
+		"name": "📄  fixtures/basic",
+		"path": "cypress/fixtures/basic"
+	},
+	{
+		"name": "🖥  demo/composable-vue",
+		"path": "demo/composable-vue"
+	},
+	{
+		"name": "🖥  demo/starter",
+		"path": "demo/starter"
+	}
+],
+  "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "volar.tsPlugin": true,
+    "volar.tsPluginStatus": false,
+    "files.associations": {
+      "*.css": "postcss"
+    },
+    "vite.devCommand": "nr docs",
+    "vite.open": false
+  }
+}
