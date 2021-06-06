@@ -19,7 +19,6 @@ import { renderMermaid } from '../modules/mermaid'
 const props = defineProps<{
   code: string
   scale?: number
-  align?: string
   theme?: string
 }>()
 
