@@ -36,9 +36,23 @@ export interface SlidevThemeMeta {
 export type SlidevThemeConfig = Record<string, string | number>
 
 export type FontOptions = {
+  /**
+   * Sans serif fonts (default fonts for most text)
+   */
   sans?: string | string[]
-  mono?: string | string[]
+  /**
+   * Serif fonts
+   */
   serif?: string | string[]
+  /**
+   * Monospace fonts, for code blocks and etc.
+   */
+  mono?: string | string[]
+  /**
+   * Load webfonts for custom CSS (does not apply anywhere by default)
+   */
+  custom?: string | string[]
+
   /**
    * @default 'google'
    */
