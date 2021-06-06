@@ -69,7 +69,7 @@
     "lint-staged": "^11.0.0",
     "mermaid": "^8.10.1",
     "playwright-chromium": "^1.11.1",
-    "pnpm": "^6.7.1",
+    "pnpm": "^6.7.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.2",
     "tsup": "4.11.2",
