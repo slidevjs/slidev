@@ -1,6 +1,6 @@
 import { Fn, not, and, onKeyStroke, KeyFilter } from '@vueuse/core'
 import { watch } from 'vue'
-import { ShortcutOptions } from 'packages/types/src/setups'
+import type { ShortcutOptions } from '@slidev/types'
 import { fullscreen, magicKeys, shortcutsEnabled, isInputting, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
 import setupShortcuts from '../setup/shortcuts'
 import { toggleDark } from './dark'
