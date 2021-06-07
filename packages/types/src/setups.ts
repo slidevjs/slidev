@@ -27,7 +27,7 @@ export interface ShikiOptions {
 
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
-export interface Nav {
+export interface NavOperations {
   next: () => void
   prev: () => Promise<void>
   nextSlide: () => void
@@ -54,7 +54,7 @@ export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
 export type MonacoSetup = (m: typeof monaco) => Awaitable<void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | undefined
-export type ShortcutsSetup = (nav: Nav) => Array<ShortcutOptions>
+export type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>
 
 export function defineShikiSetup(fn: ShikiSetup) {
   return fn
