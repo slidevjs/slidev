@@ -27,6 +27,21 @@ export interface ShikiOptions {
 
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
+export interface Nav {
+  next: () => void
+  prev: () => Promise<void>
+  nextSlide: () => void
+  prevSlide: () => Promise<void>
+  go: (page: number, clicks?: number) => Promise<void>
+  downloadPDF: () => Promise<void>
+}
+
+export interface ShortcutOptions {
+  key: string
+  fn: () => void
+  autoRepeat?: boolean
+}
+
 // node side
 export type ShikiSetup = (shiki: typeof Shiki) => Awaitable<ShikiOptions | undefined>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
@@ -36,6 +51,7 @@ export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
 export type MonacoSetup = (m: typeof monaco) => Awaitable<void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | undefined
+export type ShortcutsSetup = (nav: Nav) => Array<ShortcutOptions>
 
 export function defineShikiSetup(fn: ShikiSetup) {
   return fn
@@ -58,5 +74,9 @@ export function defineMermaidSetup(fn: MermaidSetup) {
 }
 
 export function defineKatexSetup(fn: KatexSetup) {
+  return fn
+}
+
+export function defineShortcutsSetup(fn: ShortcutsSetup) {
   return fn
 }
