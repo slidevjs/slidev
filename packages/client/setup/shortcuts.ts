@@ -1,12 +1,24 @@
 /* __imports__ */
 
-import { ShortcutOptions } from 'packages/types/src/setups'
-import * as nav from '../logic/nav'
+import { ShortcutOptions, Nav } from '@slidev/types'
+import { next, prev, nextSlide, prevSlide, downloadPDF } from '../logic/nav'
+import { toggleDark } from '../logic/dark'
+import { toggleOverview, showGotoDialog, showOverview } from '../state'
 
 export default function setupShortcuts() {
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const injection_arg = nav
+  const injection_arg: Nav = {
+    next,
+    prev,
+    nextSlide,
+    prevSlide,
+    downloadPDF,
+    toggleDark,
+    toggleOverview,
+    escapeOverview: () => showOverview.value = false,
+    showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
+  }
 
   // eslint-disable-next-line prefer-const
   let injection_return: Array<ShortcutOptions> = []

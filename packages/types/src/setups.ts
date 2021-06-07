@@ -32,8 +32,11 @@ export interface Nav {
   prev: () => Promise<void>
   nextSlide: () => void
   prevSlide: () => Promise<void>
-  go: (page: number, clicks?: number) => Promise<void>
   downloadPDF: () => Promise<void>
+  toggleDark: () => void
+  toggleOverview: () => void
+  escapeOverview: () => void
+  showGotoDialog: () => void
 }
 
 export interface ShortcutOptions {
