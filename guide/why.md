@@ -38,7 +38,7 @@ Find more about [our tech stack](/guide/#tech-stack).
 
 ## Interactive & Expressive
 
-You can write custom Vue components and use them directly inside your markdown file. You can also interact with them inside the presentation to express your idea in a more interserting and intuitive way.
+You can write custom Vue components and use them directly inside your markdown file. You can also interact with them inside the presentation to express your idea in a more interesting and intuitive way.
 
 ## Recording Support
 
