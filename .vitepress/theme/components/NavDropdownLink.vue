@@ -90,7 +90,7 @@ function toggle() {
 .button-arrow {
   display: inline-block;
   margin-top: -1px;
-  margin-left: 8px;
+  margin-left: 5px;
   border-top: 6px solid #ccc;
   border-right: 4px solid transparent;
   border-bottom: 0;

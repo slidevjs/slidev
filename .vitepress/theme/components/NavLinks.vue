@@ -42,7 +42,7 @@ const show = computed(() => links.value)
   }
 
   .item + .item {
-    padding-left: 24px;
+    padding-left: 18px;
   }
 }
 </style>
