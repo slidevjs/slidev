@@ -13,7 +13,6 @@ pie
 -->
 
 <script setup lang="ts">
-import { log } from 'debug'
 import { defineProps, computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
