@@ -155,11 +155,13 @@ export function parse(
 function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const {
     fallbacks = true,
+    italic = false,
     provider = 'google',
   } = fonts
   let sans = toArray(fonts.sans).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
   let serif = toArray(fonts.serif).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
   let mono = toArray(fonts.mono).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(/,\s*/g)).map(i => i.trim())
   const custom = toArray(fonts.custom).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
 
   const local = toArray(fonts.local).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
@@ -224,6 +226,8 @@ function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     webfonts,
     provider,
     local,
+    italic,
+    weights,
   }
 }
 
@@ -258,6 +262,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
       ...headmatter?.fonts,
     }),
   }
+
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
   if (themeColorSchema && config.colorSchema === 'auto')
