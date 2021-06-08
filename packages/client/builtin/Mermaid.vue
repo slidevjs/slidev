@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, getCurrentInstance, ref, onMounted } from 'vue'
+import { defineProps, computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
@@ -26,15 +26,28 @@ const vm = getCurrentInstance()
 const el = ref<HTMLDivElement>()
 const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
 const html = computed(() => svgObj.value)
+const acutalHeight = ref<number>()
 
-onMounted(() => {
-  const svgEl = el.value?.children?.[0] as SVGElement | undefined
-  if (svgEl != null && props.scale != null) {
-    const height = +svgEl.getAttribute('height')!
-    svgEl.setAttribute('width', 'auto')
-    svgEl.setAttribute('height', `${height * props.scale}`)
-  }
+watch(html, () => {
+  acutalHeight.value = undefined
 })
+
+watchEffect(() => {
+  const svgEl = el.value?.children?.[0] as SVGElement | undefined
+  if (svgEl && svgEl.hasAttribute('width') && acutalHeight.value == null) {
+    const v = parseFloat(svgEl.getAttribute('height') || '')
+    acutalHeight.value = isNaN(v) ? undefined : v
+  }
+}, { flush: 'post' })
+
+watchEffect(() => {
+  const svgEl = el.value?.children?.[0] as SVGElement | undefined
+  if (svgEl != null && props.scale != null && acutalHeight.value != null) {
+    svgEl.setAttribute('height', `${acutalHeight.value * props.scale}`)
+    svgEl.removeAttribute('width')
+    svgEl.removeAttribute('style')
+  }
+}, { flush: 'post' })
 </script>
 
 <template>
