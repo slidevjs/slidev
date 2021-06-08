@@ -3,6 +3,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'
 import resolveGlobal from 'resolve-global'
 import type Token from 'markdown-it/lib/token'
+import { ResolvedFontOptions } from '@slidev/types'
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
@@ -40,4 +41,16 @@ export function stringifyMarkdownTokens(tokens: Token[]) {
   )
     .filter(Boolean)
     .join(' ')
+}
+
+export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
+  const weights = options.weights
+    .flatMap(i => options.italic ? [`0,${i}`, `1,${i}`] : [`${i}`])
+    .sort()
+    .join(';')
+  const fonts = options.webfonts
+    .map(i => `family=${i.replace(/^(['"])(.*)\1$/, '$1').replace(/\s+/g, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
+    .join('&')
+
+  return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
 }

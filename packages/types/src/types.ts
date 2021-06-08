@@ -52,6 +52,18 @@ export type FontOptions = {
    * Load webfonts for custom CSS (does not apply anywhere by default)
    */
   custom?: string | string[]
+  /**
+   * Weights for fonts
+   *
+   * @default [200, 400, 600]
+   */
+  weights?: string | (string | number)[]
+  /**
+   * Import italic fonts
+   *
+   * @default false
+   */
+  italic?: boolean
 
   /**
    * @default 'google'
@@ -77,6 +89,8 @@ export type ResolvedFontOptions = {
   sans: string[]
   mono: string[]
   serif: string[]
+  weights: string[]
+  italic: boolean
   provider: 'none' | 'google'
   webfonts: string[]
   local: string[]
