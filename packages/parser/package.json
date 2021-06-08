@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "0.19.6",
+  "version": "0.19.7",
   "engines": {
     "node": ">=14.0.0"
   },
