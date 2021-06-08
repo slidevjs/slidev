@@ -62,7 +62,7 @@
     "eslint": "^7.28.0",
     "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-jest": "^24.3.6",
-    "esno": "^0.7.0",
+    "esno": "^0.7.1",
     "husky": "4.3.7",
     "jest": "^27.0.4",
     "katex": "^0.13.11",
@@ -75,7 +75,7 @@
     "tsup": "4.11.2",
     "typescript": "^4.3.2",
     "vite": "^2.3.6",
-    "vite-plugin-windicss": "^1.0.1",
+    "vite-plugin-windicss": "^1.0.2",
     "zx": "^1.14.1"
   }
 }
