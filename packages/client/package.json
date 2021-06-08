@@ -18,7 +18,7 @@
     "@antfu/utils": "^0.1.6",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^5.0.0-beta.8",
+    "@vueuse/core": "^5.0.1",
     "@vueuse/head": "^0.6.0",
     "@vueuse/motion": "^1.5.6",
     "codemirror": "^5.61.1",
@@ -33,8 +33,8 @@
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
     "vite-plugin-windicss": "^1.0.1",
-    "vue": "^3.0.11",
+    "vue": "3.0.11",
     "vue-router": "^4.0.8",
-    "windicss": "^3.1.1"
+    "windicss": "^3.1.2"
   }
 }
