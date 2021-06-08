@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, getCurrentInstance } from 'vue'
+import { defineProps, computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
@@ -23,11 +23,33 @@ const props = defineProps<{
 }>()
 
 const vm = getCurrentInstance()
-const html = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
+const el = ref<HTMLDivElement>()
+const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
+const html = computed(() => svgObj.value)
+const actuallHeight = ref<number>()
+
+watch(html, () => {
+  actuallHeight.value = undefined
+})
+
+watchEffect(() => {
+  const svgEl = el.value?.children?.[0] as SVGElement | undefined
+  if (svgEl && svgEl.hasAttribute('width') && actuallHeight.value == null) {
+    const v = parseFloat(svgEl.getAttribute('height') || '')
+    actuallHeight.value = isNaN(v) ? undefined : v
+  }
+}, { flush: 'post' })
+
+watchEffect(() => {
+  const svgEl = el.value?.children?.[0] as SVGElement | undefined
+  if (svgEl != null && props.scale != null && actuallHeight.value != null) {
+    svgEl.setAttribute('height', `${actuallHeight.value * props.scale}`)
+    svgEl.removeAttribute('width')
+    svgEl.removeAttribute('style')
+  }
+}, { flush: 'post' })
 </script>
 
 <template>
-  <Transform :scale="scale || 1">
-    <div class="mermaid" v-html="html"></div>
-  </Transform>
+  <div ref="el" class="mermaid" v-html="html"></div>
 </template>

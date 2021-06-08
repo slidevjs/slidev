@@ -1,6 +1,7 @@
 import MarkdownIt from 'markdown-it'
+import { ResolvedFontOptions } from '../packages/parser/node_modules/@slidev/types'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
-import { stringifyMarkdownTokens } from '../packages/slidev/node/utils'
+import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
   it('page-range', () => {
@@ -34,5 +35,24 @@ describe('utils', () => {
     expect(stringify('Talk about `<details/>`')).toBe('Talk about <details/>')
     expect(stringify('What is Readonly\\<T\\> in TypeScript')).toBe('What is Readonly<T> in TypeScript')
     expect(stringify('Welcome to<br />*Slidev*')).toBe('Welcome to Slidev')
+  })
+
+  it('google-fonts', () => {
+    expect(
+      generateGoogleFontsUrl({
+        webfonts: ['Fira Code', 'PT Serif'],
+        weights: ['200', '400', '600'],
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toMatchSnapshot()
+
+    expect(
+      generateGoogleFontsUrl({
+        webfonts: ['Fira Code', 'PT Serif'],
+        weights: ['200', '400', '600'],
+        italic: true,
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toMatchSnapshot()
   })
 })

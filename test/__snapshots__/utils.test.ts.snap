@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils google-fonts 1`] = `"https://fonts.googleapis.com/css2?family=Fira+Code:wght@200;400;600&family=PT+Serif:wght@200;400;600&display=swap"`;
+
+exports[`utils google-fonts 2`] = `"https://fonts.googleapis.com/css2?family=Fira+Code:ital,wght@0,200;0,400;0,600;1,200;1,400;1,600&family=PT+Serif:ital,wght@0,200;0,400;0,600;1,200;1,400;1,600&display=swap"`;

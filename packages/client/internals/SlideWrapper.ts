@@ -5,12 +5,15 @@ import { injectionClicks, injectionClicksDisabled, injectionClicksElements } fro
 export default defineComponent({
   props: {
     clicks: {
+      type: [Number, String],
       default: 0,
     },
     clicksElements: {
+      type: Array,
       default: () => [] as Element[],
     },
     clicksDisabled: {
+      type: Boolean,
       default: false,
     },
     is: {

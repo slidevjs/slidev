@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.19.5",
+  "version": "0.20.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -18,7 +18,7 @@
     "@antfu/utils": "^0.1.6",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^5.0.0-beta.8",
+    "@vueuse/core": "^5.0.1",
     "@vueuse/head": "^0.6.0",
     "@vueuse/motion": "^1.5.6",
     "codemirror": "^5.61.1",
@@ -29,12 +29,12 @@
     "mermaid": "8.5.0",
     "monaco-editor": "^0.24.0",
     "nanoid": "^3.1.23",
-    "prettier": "^2.3.0",
+    "prettier": "^2.3.1",
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
-    "vite-plugin-windicss": "^1.0.1",
-    "vue": "^3.0.11",
+    "vite-plugin-windicss": "^1.0.3",
+    "vue": "3.0.11",
     "vue-router": "^4.0.8",
-    "windicss": "^3.1.0"
+    "windicss": "^3.1.3"
   }
 }

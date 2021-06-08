@@ -296,7 +296,7 @@ $$
 
 You can create diagrams / graphs from textual descriptions, directly in your Markdown.
 
-<div class="grid grid-cols-2 gap-4 pt-4 -mb-6">
+<div class="grid grid-cols-2 gap-10 pt-4 -mb-6">
 
 ```mermaid {scale: 0.9}
 sequenceDiagram

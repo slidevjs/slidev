@@ -118,6 +118,7 @@ export async function resolveOptions(
 
   if (themeRoots.length) {
     const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))
+    data.themeMeta = themeMeta
     if (themeMeta)
       data.config = parser.resolveConfig(data.headmatter, themeMeta)
   }

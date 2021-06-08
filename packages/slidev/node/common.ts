@@ -2,7 +2,7 @@ import { promises as fs, existsSync } from 'fs'
 import { join } from 'path'
 import { uniq } from '@antfu/utils'
 import { ResolvedSlidevOptions } from './options'
-import { toAtFS } from './utils'
+import { generateGoogleFontsUrl, toAtFS } from './utils'
 
 export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
@@ -28,12 +28,8 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
   if (data.features.tweet)
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none') {
-    const fonts = data.config.fonts.webfonts
-      .map(i => `family=${i.replace(/^(['"])(.*)\1$/, '$1').replace(/\s+/g, '+')}`)
-      .join('&')
-    head += `\n<link href="https://fonts.googleapis.com/css2?${fonts}&display=swap" rel="stylesheet">`
-  }
+  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
+    head += `\n<link href="${generateGoogleFontsUrl(data.config.fonts)}" rel="stylesheet">`
 
   main = main
     .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
