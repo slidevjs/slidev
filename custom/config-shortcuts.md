@@ -1,5 +1,7 @@
 # Configure Shortcuts
 
+> Available since v0.20
+
 <Environment type="client" />
 
 Create `./setup/shortcuts.ts` with the following content:

@@ -1,6 +1,6 @@
 # Fonts
 
-> Available since v0.19.3
+> Available since v0.20
 
 While you can use HTML and CSS to custom the fonts and style for your slides as you want, Slidev also provides a convenient way to use them effortlessly.
 
@@ -35,6 +35,23 @@ fonts:
   local: 'Helvetica Neue'
 ---
 ```
+
+## Weights & Italic
+
+By default, Slidev imports three weights `200`,`400`,`600` for each font. You can configure them by:
+
+```yaml
+---
+fonts:
+  sans: 'Robot'
+  # default
+  weights: '200,400,600'
+  # import italic fonts, default `false`
+  italic: false
+---
+```
+
+This configuration applies to all web fonts. For more fine-grained controls of each font's weights, you will need to manually import them with [HTML](/custom/directory-structure.html#index-html) and CSS.
 
 ## Fallback Fonts
 
