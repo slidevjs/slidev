@@ -74,8 +74,8 @@
     "ts-jest": "^27.0.3",
     "tsup": "4.11.2",
     "typescript": "^4.3.2",
-    "vite": "^2.3.6",
-    "vite-plugin-windicss": "^1.0.2",
+    "vite": "^2.3.7",
+    "vite-plugin-windicss": "^1.0.3",
     "zx": "^1.14.1"
   }
 }
