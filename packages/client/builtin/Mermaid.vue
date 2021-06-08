@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, getCurrentInstance, onMounted } from 'vue'
+import { defineProps, computed, getCurrentInstance, ref, onMounted } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
@@ -23,17 +23,20 @@ const props = defineProps<{
 }>()
 
 const vm = getCurrentInstance()
+const el = ref<HTMLDivElement>()
 const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
-const html = computed(() => { return svgObj.value.html })
+const html = computed(() => svgObj.value)
+
 onMounted(() => {
-  const svgEl = document.getElementById(svgObj.value.id)
-  if (props.scale !== 'undefined' && svgEl !== null) {
+  const svgEl = el.value?.children?.[0] as SVGElement | undefined
+  if (svgEl != null && props.scale != null) {
+    const height = +svgEl.getAttribute('height')!
     svgEl.setAttribute('width', 'auto')
-    svgEl.setAttribute('height', svgEl.getAttribute('height') * props.scale)
+    svgEl.setAttribute('height', `${height * props.scale}`)
   }
 })
 </script>
 
 <template>
-  <div class="mermaid" v-html="html"></div>
+  <div ref="el" class="mermaid" v-html="html"></div>
 </template>

@@ -26,5 +26,5 @@ export function renderMermaid(encoded: string, options: any) {
   const id = nanoid()
   const svg = mermaid.render(id, code)
   cache.set(key, svg)
-  return { id, html: svg }
+  return svg
 }
