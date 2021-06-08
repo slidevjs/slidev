@@ -32,9 +32,9 @@
     "prettier": "^2.3.1",
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
-    "vite-plugin-windicss": "^1.0.1",
+    "vite-plugin-windicss": "^1.0.2",
     "vue": "3.0.11",
     "vue-router": "^4.0.8",
-    "windicss": "^3.1.2"
+    "windicss": "^3.1.3"
   }
 }
