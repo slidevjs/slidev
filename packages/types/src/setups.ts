@@ -41,7 +41,7 @@ export interface NavOperations {
 
 export interface ShortcutOptions {
   key: string
-  fn: () => void
+  fn?: () => void
   autoRepeat?: boolean
 }
 
