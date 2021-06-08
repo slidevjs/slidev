@@ -1,6 +1,8 @@
 import { Fn, not, and, onKeyStroke, KeyFilter } from '@vueuse/core'
 import { watch } from 'vue'
+import type { ShortcutOptions } from '@slidev/types'
 import { fullscreen, magicKeys, shortcutsEnabled, isInputting, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
+import setupShortcuts from '../setup/shortcuts'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 
@@ -34,19 +36,32 @@ export function strokeShortcut(key: KeyFilter, fn: Fn) {
 }
 
 export function registerShortcuts() {
-  // global shortcuts
-  shortcut('space', next, true)
-  shortcut('right', next, true)
-  shortcut('left', prev, true)
-  shortcut('pageDown', next, true)
-  shortcut('pageUp', prev, true)
-  shortcut('up', () => prevSlide(false), true)
-  shortcut('down', nextSlide, true)
-  shortcut('shift_left', () => prevSlide(false), true)
-  shortcut('shift_right', nextSlide, true)
-  shortcut('d', toggleDark)
+  const customShortcuts = setupShortcuts()
+
+  const shortcuts = new Map<string, ShortcutOptions>(
+    [
+      { key: 'space', fn: next, autoRepeat: true },
+      { key: 'right', fn: next, autoRepeat: true },
+      { key: 'left', fn: prev, autoRepeat: true },
+      { key: 'pageDown', fn: next, autoRepeat: true },
+      { key: 'pageUp', fn: prev, autoRepeat: true },
+      { key: 'up', fn: () => prevSlide(false), autoRepeat: true },
+      { key: 'down', fn: nextSlide, autoRepeat: true },
+      { key: 'shift_left', fn: () => prevSlide(false), autoRepeat: true },
+      { key: 'shift_right', fn: nextSlide, autoRepeat: true },
+      { key: 'd', fn: toggleDark },
+      { key: 'o', fn: toggleOverview },
+      { key: 'escape', fn: () => showOverview.value = false },
+      { key: 'g', fn: () => showGotoDialog.value = !showGotoDialog.value },
+      ...customShortcuts,
+    ]
+      .map((options: ShortcutOptions) => [options.key, options]),
+  )
+
+  shortcuts.forEach((options) => {
+    if (options.fn)
+      shortcut(options.key, options.fn, options.autoRepeat)
+  })
+
   strokeShortcut('f', () => fullscreen.toggle())
-  shortcut('o', toggleOverview)
-  shortcut('escape', () => showOverview.value = false)
-  shortcut('g', () => showGotoDialog.value = !showGotoDialog.value)
 }
