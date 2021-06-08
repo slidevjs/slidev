@@ -7,7 +7,7 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { useScriptTag } from '@vueuse/core'
+import { useScriptTag, isClient } from '@vueuse/core'
 import { defineProps, getCurrentInstance, onMounted, ref } from 'vue'
 import { isDark } from '../composables/dark'
 
@@ -35,21 +35,23 @@ async function create() {
   loaded.value = true
 }
 
-// @ts-ignore
-if (window?.twttr?.widgets) {
-  onMounted(create)
-}
-else {
-  useScriptTag(
-    'https://platform.twitter.com/widgets.js',
-    () => {
-      if (vm.isMounted)
-        create()
-      else
-        onMounted(create, vm)
-    },
-    { async: true },
-  )
+if (isClient) {
+  // @ts-ignore
+  if (window?.twttr?.widgets) {
+    onMounted(create)
+  }
+  else {
+    useScriptTag(
+      'https://platform.twitter.com/widgets.js',
+      () => {
+        if (vm.isMounted)
+          create()
+        else
+          onMounted(create, vm)
+      },
+      { async: true },
+    )
+  }
 }
 </script>
 
