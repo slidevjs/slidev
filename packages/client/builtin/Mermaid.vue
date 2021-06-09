@@ -26,24 +26,24 @@ const vm = getCurrentInstance()
 const el = ref<HTMLDivElement>()
 const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
 const html = computed(() => svgObj.value)
-const actuallHeight = ref<number>()
+const actualHeight = ref<number>()
 
 watch(html, () => {
-  actuallHeight.value = undefined
+  actualHeight.value = undefined
 })
 
 watchEffect(() => {
   const svgEl = el.value?.children?.[0] as SVGElement | undefined
-  if (svgEl && svgEl.hasAttribute('width') && actuallHeight.value == null) {
-    const v = parseFloat(svgEl.getAttribute('height') || '')
-    actuallHeight.value = isNaN(v) ? undefined : v
+  if (svgEl && svgEl.hasAttribute('viewBox') && actualHeight.value == null) {
+    const v = parseFloat(svgEl.getAttribute('viewBox')?.split(' ')[3] || '')
+    actualHeight.value = isNaN(v) ? undefined : v
   }
 }, { flush: 'post' })
 
 watchEffect(() => {
   const svgEl = el.value?.children?.[0] as SVGElement | undefined
-  if (svgEl != null && props.scale != null && actuallHeight.value != null) {
-    svgEl.setAttribute('height', `${actuallHeight.value * props.scale}`)
+  if (svgEl != null && props.scale != null && actualHeight.value != null) {
+    svgEl.setAttribute('height', `${actualHeight.value * props.scale}`)
     svgEl.removeAttribute('width')
     svgEl.removeAttribute('style')
   }
