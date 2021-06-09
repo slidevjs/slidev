@@ -35,15 +35,6 @@ Status: <b>Public Beta 🎉</b><br>
 </table>
 </p>
 
-## Motivation
-
-I always found myself spending too much time styling and layouting slides when using apps like PowerPoint / Keynote / Google Slides. Whenever I need to share code snippets, I would also need to use other tools to generate the highlighted code as images over and over again.
-
-So as a frontend developer, why not solve it the way that fits better with what I am good at?
-
-Documentations and guides:
-**[Sli.dev](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev) | [Español](https://es.sli.dev)
-
 ## Features
 
 - 📝 [**Markdown-based**](https://sli.dev/guide/syntax.html) - use your favorite editors and workflow
@@ -61,17 +52,20 @@ Documentations and guides:
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](https://sli.dev/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages
 
-## Get Started
+## Getting Started
 
-The best way to understand it is to try it, just one command away:
+Install [Node.js >=14](https://nodejs.org/) and run the following command:
 
 ```bash
-npm init slidev@latest
+npm init slidev
 ```
 
-For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
+Documentations:
+**[English](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev) | [Español](https://es.sli.dev) | [Русский](https://ru.sli.dev)
 
-Learn more with the [Installation Guide](https://sli.dev/guide/install.html).
+Discord: [chat.sli.dev](https://chat.sli.dev)
+
+For a full example, you can check the [demo](https://github.com/slidevjs/slidev/blob/main/demo) folder, which is also the source file for [my previous talk](https://antfu.me/posts/composable-vue-vueday-2021).
 
 ## Tech Stack
 
