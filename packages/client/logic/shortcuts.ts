@@ -30,6 +30,8 @@ export function shortcut(key: string, fn: Fn, autoRepeat = false) {
 
 export function strokeShortcut(key: KeyFilter, fn: Fn) {
   return onKeyStroke(key, (ev) => {
+    if (!_shortcut.value)
+      return
     if (!ev.repeat)
       fn()
   })
