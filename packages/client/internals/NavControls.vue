@@ -16,8 +16,8 @@ defineProps({
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
-const presenterLink = computed(() => `${location.origin}/presenter/${currentPage.value}`)
-const nonPresenterLink = computed(() => `${location.origin}/${currentPage.value}`)
+const presenterLink = computed(() => `/presenter/${currentPage.value}`)
+const nonPresenterLink = computed(() => `/${currentPage.value}`)
 
 const root = ref<HTMLDivElement>()
 const onMouseLeave = () => {
@@ -57,9 +57,9 @@ if (__DEV__)
     <div class="w-1px m-2 opacity-10 bg-current"></div>
 
     <template v-if="__DEV__ && !isEmbedded">
-      <a v-if="isPresenter" :href="nonPresenterLink" class="icon-btn" title="Play Mode">
+      <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
         <carbon:presentation-file />
-      </a>
+      </RouterLink>
 
       <template v-if="!isPresenter && !md && RecordingControls">
         <RecordingControls />
@@ -67,9 +67,9 @@ if (__DEV__)
         <div class="w-1px m-2 opacity-10 bg-current"></div>
       </template>
 
-      <a v-if="!isPresenter" :href="presenterLink" class="icon-btn" title="Presenter Mode">
+      <RouterLink v-if="!isPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
         <carbon:user-speaker />
-      </a>
+      </RouterLink>
 
       <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
         <carbon:edit />

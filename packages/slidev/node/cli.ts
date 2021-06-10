@@ -370,16 +370,17 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
   if (port) {
+    const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter`
     console.log()
     console.log(`${dim('  slide show     ')} > ${cyan(`http://localhost:${bold(port)}/`)}`)
-    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}/presenter`)}`)
+    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
 
     if (remote) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
           .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}/presenter`)}`)
+            console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}${presenterPath}`)}`)
           }),
         )
     }
