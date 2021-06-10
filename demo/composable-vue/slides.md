@@ -1138,7 +1138,7 @@ Creates Universal Library for Vue 2 & 3<br><carbon-logo-github class="inline-blo
 import { ref, reactive, defineComponent } from 'vue-demi'
 ```
 
-<img class="h-50 mx-auto" src="https://raw.githubusercontent.com/vueuse/vue-demi/master/assets/banner.png" />
+<img class="h-50 mx-auto" src="https://cdn.jsdelivr.net/gh/vueuse/vue-demi/assets/banner.png" />
 
 
 ---
