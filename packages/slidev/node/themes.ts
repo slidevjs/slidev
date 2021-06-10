@@ -13,7 +13,7 @@ const officialThemes: Record<string, string> = {
   'none': '',
   'default': '@slidev/theme-default',
   'seriph': '@slidev/theme-seriph',
-  'apple-basic': '@slidev/theme-apple-banisic',
+  'apple-basic': '@slidev/theme-apple-basic',
 }
 
 export function packageExists(name: string) {
