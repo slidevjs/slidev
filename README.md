@@ -12,6 +12,19 @@ Documentation for [Slidev](https://github.com/slidevjs/slidev)
 | Español | [docs-es](https://github.com/slidevjs/docs-es) | [es.sli.dev](https://es.sli.dev) | [@owlnai](https://github.com/owlnai) |
 | Русский | [docs-ru](https://github.com/slidevjs/docs-ru) | [ru.sli.dev](https://ru.sli.dev) | [@xesjkeee](https://github.com/xesjkeee) |
 
+## Start Server Locally
+
+```
+npm i -g pnpm
+
+pnpm i
+pnpm run dev
+```
+
+And then visit `http://localhost:3000`
+
+Or install the [Vite extension for VS Code](https://marketplace.visualstudio.com/items?itemName=antfu.vite) to edit side-by-side.
+
 ## Help on Translating
 
 <!-- For translations maintainers: You don't need to translate this port -->
@@ -30,4 +43,6 @@ If the language you want to contribute isn't on the list,
 - Once the transferring is done, we will set up the subdomain, auto-deployment, and a daily sync-up bot to keep the translation up-to-date with the latest English docs.
 - The site is live, and we will send a shout-out tweet on [our Twitter account](https://twitter.com/Slidevjs).
 
-Thanks again! 
+[Working-in-progress translation list](https://discord.com/channels/851817370623410197/851822360955977760/852614294017146900)
+
+Thanks again!
