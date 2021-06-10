@@ -12,7 +12,7 @@ export async function createWindiCSSPlugin(
   { windicss: windiOptions }: SlidevPluginOptions,
 ) {
   const configFiles = uniq([
-    ...defaultConfigureFiles,
+    ...defaultConfigureFiles.map(i => resolve(userRoot, i)),
     ...themeRoots.map(i => `${i}/windi.config.ts`),
     resolve(clientRoot, 'windi.config.ts'),
   ])
