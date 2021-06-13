@@ -11,6 +11,7 @@ Documentation for [Slidev](https://github.com/slidevjs/slidev)
 | Français | [docs-fr](https://github.com/slidevjs/docs-fr) | [fr.sli.dev](https://fr.sli.dev) | [@ArthurDanjou](https://github.com/ArthurDanjou) |
 | Español | [docs-es](https://github.com/slidevjs/docs-es) | [es.sli.dev](https://es.sli.dev) | [@owlnai](https://github.com/owlnai) |
 | Русский | [docs-ru](https://github.com/slidevjs/docs-ru) | [ru.sli.dev](https://ru.sli.dev) | [@xesjkeee](https://github.com/xesjkeee) |
+| Việt Nam | [docs-vn](https://github.com/slidevjs/docs-vn) | [vn.sli.dev](https://vn.sli.dev) | [@bongudth](https://github.com/bongudth) |
 
 ## Start Server Locally
 
