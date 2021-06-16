@@ -37,6 +37,18 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Seongland',
     datetime: '2021-05-10',
   },
+  {
+    title: 'Vue 3 > Vue 2 + 1',
+    cover: 'https://user-images.githubusercontent.com/11247099/122246420-1df97b80-cef9-11eb-9c57-7751c6999deb.png',
+    author: {
+      name: 'Thorsten Lünborg',
+      link: 'https://github.com/LinusBorg',
+    },
+    slidesLink: 'http://vueday-2021.linusb.org',
+    sourceLink: 'https://github.com/LinusBorg/vueday-enterjs-vue3',
+    at: 'Enter.js Vue Day',
+    datetime: '2021-06-15',
+  },
   // Add yours here!
   {
     title: 'Yours?',
