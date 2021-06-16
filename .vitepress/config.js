@@ -208,11 +208,13 @@ module.exports = {
     editLinks: true,
     editLinkText: 'Suggest changes to this page',
 
-    // for translations maintainers: you probably want to comment this out for now.
-    // I will handle them later when I setup the crawler for translations
     algolia: {
       apiKey: '1a5c5a504139c58f428974c78c55291d',
-      indexName: 'sli',
+      indexName: 'slidev',
+      searchParameters: {
+        // for translations maintainers: change the filter to your locale code (subdomain name)
+        facetFilters: ['language:en']
+      }
     },
 
     nav: [
