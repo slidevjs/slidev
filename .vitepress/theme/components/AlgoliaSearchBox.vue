@@ -150,7 +150,7 @@ function initialize(userOptions: any) {
   --docsearch-footer-shadow: rgba(125,125,125,0.1);
   --docsearch-hit-background: rgba(125,125,125,0.1);
   --docsearch-hit-shadow: none;
-  --docsearch-primary-color: #42b983;
+  --docsearch-primary-color: var(--c-brand);
   --docsearch-highlight-color: var(--docsearch-primary-color);
   --docsearch-searchbox-background: rgba(125,125,125,0.05);
   --docsearch-searchbox-focus-background: rgba(125,125,125,0.05);
