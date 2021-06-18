@@ -8,6 +8,7 @@ import type { Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { WindiCssOptions } from 'vite-plugin-windicss'
+import type MarkdownIt from "markdown-it";
 
 export interface AppContext {
   app: App
@@ -49,6 +50,7 @@ export interface ShortcutOptions {
 export type ShikiSetup = (shiki: typeof Shiki) => Awaitable<ShikiOptions | undefined>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
 export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
+export type MarkdownItSetup = (md: MarkdownIt) => void
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<void>
@@ -81,5 +83,9 @@ export function defineKatexSetup(fn: KatexSetup) {
 }
 
 export function defineShortcutsSetup(fn: ShortcutsSetup) {
+  return fn
+}
+
+export function defineMarkdownItSetup(fn: MarkdownItSetup) {
   return fn
 }

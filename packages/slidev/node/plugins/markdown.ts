@@ -62,6 +62,8 @@ export async function createMarkdownPlugin(
       md.use(Katex, KatexOptions)
 
       setups.forEach(i => i(md))
+
+      loadSetups(roots, 'markdown-it.ts', md, {}, false)
     },
     transforms: {
       before(code, id) {
