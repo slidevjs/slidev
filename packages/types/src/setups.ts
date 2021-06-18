@@ -3,7 +3,7 @@ import type { Awaitable } from '@antfu/utils'
 import type { IThemeRegistration, ILanguageRegistration, Highlighter as ShikiHighlighter } from 'shiki'
 import type * as Shiki from 'shiki'
 import type * as monaco from 'monaco-editor'
-import type { App } from 'vue'
+import type { App, Ref } from 'vue'
 import type { Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
@@ -40,7 +40,7 @@ export interface NavOperations {
 }
 
 export interface ShortcutOptions {
-  key: string
+  key: string | Ref<boolean>
   fn?: () => void
   autoRepeat?: boolean
 }

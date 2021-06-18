@@ -1,5 +1,5 @@
 import { Fn, not, and, onKeyStroke, KeyFilter } from '@vueuse/core'
-import { watch } from 'vue'
+import { Ref, watch } from 'vue'
 import type { ShortcutOptions } from '@slidev/types'
 import { fullscreen, magicKeys, shortcutsEnabled, isInputting, toggleOverview, showGotoDialog, showOverview, isOnFocus } from '../state'
 import setupShortcuts from '../setup/shortcuts'
@@ -8,8 +8,11 @@ import { next, nextSlide, prev, prevSlide } from './nav'
 
 const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 
-export function shortcut(key: string, fn: Fn, autoRepeat = false) {
-  const source = and(magicKeys[key], _shortcut)
+export function shortcut(key: string | Ref<boolean>, fn: Fn, autoRepeat = false) {
+  if (typeof key === 'string')
+    key = magicKeys[key]
+
+  const source = and(key, _shortcut)
   let count = 0
   let timer: any
   const trigger = () => {
@@ -40,17 +43,19 @@ export function strokeShortcut(key: KeyFilter, fn: Fn) {
 export function registerShortcuts() {
   const customShortcuts = setupShortcuts()
 
-  const shortcuts = new Map<string, ShortcutOptions>(
+  const { space, shift, left, right } = magicKeys
+  const shortcuts = new Map<string | Ref<Boolean>, ShortcutOptions>(
     [
-      { key: 'space', fn: next, autoRepeat: true },
-      { key: 'right', fn: next, autoRepeat: true },
-      { key: 'left', fn: prev, autoRepeat: true },
+      { key: and(space, not(shift)), fn: next, autoRepeat: true },
+      { key: and(space, shift), fn: prev, autoRepeat: true },
+      { key: and(right, not(shift)), fn: next, autoRepeat: true },
+      { key: and(left, not(shift)), fn: prev, autoRepeat: true },
       { key: 'pageDown', fn: next, autoRepeat: true },
       { key: 'pageUp', fn: prev, autoRepeat: true },
       { key: 'up', fn: () => prevSlide(false), autoRepeat: true },
       { key: 'down', fn: nextSlide, autoRepeat: true },
-      { key: 'shift_left', fn: () => prevSlide(false), autoRepeat: true },
-      { key: 'shift_right', fn: nextSlide, autoRepeat: true },
+      { key: and(left, shift), fn: () => prevSlide(false), autoRepeat: true },
+      { key: and(right, shift), fn: nextSlide, autoRepeat: true },
       { key: 'd', fn: toggleDark },
       { key: 'o', fn: toggleOverview },
       { key: 'escape', fn: () => showOverview.value = false },
