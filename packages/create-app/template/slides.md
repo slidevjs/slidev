@@ -126,17 +126,18 @@ function updateUser(id: number, update: User) {
 
 # Markdown Footnotes
 
-Here's a simple footnote,[^1] and here's a longer one.[^bignote]
+Here is a footnote reference,[^1] and another.[^longnote]
 
-[^1]: This is the first footnote.
+[^1]: Here is the footnote.
 
-[^bignote]: Here's one with multiple paragraphs and code.
+[^longnote]: Here's one with multiple blocks.
 
-    Indent paragraphs to include them in the footnote.
+    Subsequent paragraphs are indented to show that they
+belong to the previous footnote.
 
-    `{ my code }`
-
-    Add as many paragraphs as you like.
+Here is an inline note.^[Inlines notes are easier to write, since
+you don't have to pick an identifier and move down to type the
+note.]
 
 ---
 
