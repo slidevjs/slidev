@@ -16,9 +16,14 @@ import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 
 registerShortcuts()
+const {
+  title = '',
+  titleSuffix = '',
+} = configs
 
+const slideTitle = title ? `${title}${titleSuffix ? ` ${titleSuffix}` : ''}` : 'Slidev'
 useHead({
-  title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
+  title: `Presenter - ${slideTitle}`,
 })
 
 const tsStart = ref(Date.now())

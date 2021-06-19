@@ -98,6 +98,7 @@ export type ResolvedFontOptions = {
 
 export interface SlidevConfig {
   title: string
+  titleSuffix: string
   /**
    * @see https://sli.dev/themes/use.html
    * @defult 'default'

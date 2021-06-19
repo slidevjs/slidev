@@ -15,8 +15,13 @@ export default function setupRoot() {
 
   /* __injections__ */
 
+  const {
+    title = '',
+    titleSuffix = '',
+  } = configs
+
   useHead({
-    title: configs.title ? `${configs.title} - Slidev` : 'Slidev',
+    title: title ? `${title}${titleSuffix ? ` ${titleSuffix}` : ''}` : 'Slidev',
   })
 
   // sync with server state
