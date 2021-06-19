@@ -4,6 +4,7 @@ import base64 from 'js-base64'
 import { slash } from '@antfu/utils'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
+import mif from 'markdown-it-footnote'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
@@ -58,6 +59,8 @@ export async function createMarkdownPlugin(
           rel: 'noopener',
         },
       })
+
+      md.use(mif)
 
       md.use(Katex, KatexOptions)
 
