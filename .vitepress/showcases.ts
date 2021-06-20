@@ -49,6 +49,17 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Enter.js Vue Day',
     datetime: '2021-06-15',
   },
+  {
+    title: 'Simply Publish Your Package to npm',
+    author: {
+      name: 'Lucky Dewa Satria',
+      link: 'https://github.com/lucky401',
+    },
+    at: 'Weekly sharing',
+    slidesLink: 'https://masukin.link/talks/simply-publish-your-package-to-npm',
+    cover: 'https://masukin.link/talks-cover-npm.png',
+    datetime: '2021-06-12',
+  },
   // Add yours here!
   {
     title: 'Yours?',
