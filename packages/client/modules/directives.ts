@@ -59,7 +59,7 @@ export default function createDirectives() {
                     index = elements?.value.indexOf(el) || 0
 
                   // If dir hasn't set the value, then the index should be
-                  // click count - 1 in elements
+                  // click count minus 1 in elements
                   if (dir.value === undefined)
                     index = c - 1 >= 0 ? c - 1 : 0
 
