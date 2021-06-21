@@ -49,24 +49,30 @@ export default function createDirectives() {
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
 
-                // reset all element CLASS_VCLICK_CURRENT to false
+                // Reset all elements CLASS_VCLICK_CURRENT to false
                 el.classList.toggle(CLASS_VCLICK_CURRENT, false)
                 if (show) {
                   let index
-                  if (dir.value != null && dir.value === c) {
+                  // If dir has set the value, and dir.value equal click count,
+                  // then set index as current element index in elements
+                  if (dir.value != null && dir.value === c)
                     index = elements?.value.indexOf(el) || 0
-                  }
-                  if (dir.value === undefined) {
+
+                  // If dir hasn't set the value, then the index should be
+                  // click count - 1 in elements
+                  if (dir.value === undefined)
                     index = c - 1 >= 0 ? c - 1 : 0
-                  }
+
                   if (index != null && index <= prev) {
                     const currentEl = elements?.value[index] as HTMLElement
-                    
+
+                    // Remove CLASS_VCLICK_PRIOR and add CLASS_VCLICK_CURRENT
                     currentEl.classList.toggle(CLASS_VCLICK_PRIOR, false)
                     currentEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
                   }
                 }
-                
+
+                // Set CLASS_VCLICK_PRIOR if element not have CLASS_VCLICK_CURRENT
                 if (!el.classList.contains(CLASS_VCLICK_CURRENT))
                   el.classList.toggle(CLASS_VCLICK_PRIOR, show)
               },
