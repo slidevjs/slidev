@@ -12,6 +12,8 @@ You can configure Slidev in the frontmatter of your first slide, the following s
 theme: 'default'
 # title of your slide, will auto infer from the first header if not specified
 title: ''
+# titleTemplate for the webpage, `%s` will be replaced by the page's title
+titleTemplate: '%s - Slidev'
 
 # enabled pdf downloading in SPA build, can also be a custom url
 download: true
