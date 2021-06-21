@@ -101,9 +101,7 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 
 # Code
 
-Use code snippets and get the highlighting directly!
-
-<!-- https://sli.dev/guide/syntax.html#line-highlighting -->
+Use code snippets and get the highlighting directly[^1]!
 
 ```ts {all|2|1-6|9|all}
 interface User {
@@ -121,6 +119,17 @@ function updateUser(id: number, update: User) {
 ```
 
 <arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+
+[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+
+<style>
+.footnotes-sep {
+  margin-top: 3em;
+}
+.footnote-backref {
+  display: none
+}
+</style>
 
 ---
 
