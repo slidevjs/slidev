@@ -150,6 +150,28 @@ blockquote {
 </style>
 ```
 
+## Static Assets
+
+Just like you would do in markdown, you can use images pointing to a remote or local url.
+
+For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com/antfu/vite-plugin-remote-assets) will cache them into the disk at the first run so you can have instant loading even for large images later on.
+
+```md
+![Remote Image](https://sli.dev/favicon.png)
+```
+
+For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with **leading slash**.
+
+```md
+![Local Image](/pic.png)
+```
+
+For you want to apply custom sizes or styles, you can convert them to the `<img>` tag 
+
+```html
+<img src="/pic.png" class="m-40 h-40 rounded shadow" />
+```
+
 ## Notes
 
 You can also take notes for each slide. They will show up in [Presenter Mode](/guide/presenter-mode) for you to reference during presentations.
