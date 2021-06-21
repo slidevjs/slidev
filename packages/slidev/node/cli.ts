@@ -295,7 +295,8 @@ cli.command(
       type: 'boolean',
       describe: 'export as dark theme',
     })
-    .option('everyClicks', {
+    .option('with-clicks', {
+      alias: 'c',
       default: false,
       type: 'boolean',
       describe: 'export pages for every clicks',
@@ -310,7 +311,7 @@ cli.command(
     timeout,
     range,
     dark,
-    everyClicks,
+    'with-clicks': withClicks,
   }) => {
     output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
@@ -342,7 +343,7 @@ cli.command(
       routerMode: options.data.config.routerMode,
       width,
       height,
-      everyClicks,
+      withClicks,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()

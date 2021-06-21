@@ -18,7 +18,7 @@ export interface ExportOptions {
   routerMode?: 'hash' | 'history'
   width?: number
   height?: number
-  everyClicks?: boolean
+  withClicks?: boolean
 }
 
 function createSlidevProgress() {
@@ -69,7 +69,7 @@ export async function exportSlides({
   routerMode = 'history',
   width = 1920,
   height = 1080,
-  everyClicks = false,
+  withClicks = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
@@ -89,9 +89,11 @@ export async function exportSlides({
   async function go(no: number, clicks?: string) {
     progress.update(no)
 
+    const path = `${base}${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
     const url = routerMode === 'hash'
-      ? `http://localhost:${port}/#${base}${no}?print${everyClicks ? '&everyClick' : ''}${clicks ? `&clicks=${clicks}` : ''}`
-      : `http://localhost:${port}${base}${no}?print${everyClicks ? '&everyClick' : ''}${clicks ? `&clicks=${clicks}` : ''}`
+      ? `http://localhost:${port}/#${path}`
+      : `http://localhost:${port}${path}`
+
     await page.goto(url, {
       waitUntil: 'networkidle',
     })
@@ -106,7 +108,7 @@ export async function exportSlides({
 
   async function genPageWithClicks(fn: (i: number, clicks?: string) => Promise<any>, i: number, clicks?: string) {
     await fn(i, clicks)
-    if (everyClicks) {
+    if (withClicks) {
       await page.keyboard.press('ArrowRight', { delay: 100 })
       const _clicks = getClicks(page.url())
       if (_clicks && clicks !== _clicks)

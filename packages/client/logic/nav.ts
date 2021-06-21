@@ -9,7 +9,7 @@ export { rawRoutes }
 export const route = computed(() => router.currentRoute.value)
 
 export const isPrintMode = computed(() => route.value.query.print !== undefined)
-export const isPrintEveryClick = computed(() => isPrintMode.value && route.value.query.everyClick !== undefined)
+export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 
