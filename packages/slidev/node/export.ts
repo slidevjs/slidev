@@ -18,6 +18,7 @@ export interface ExportOptions {
   routerMode?: 'hash' | 'history'
   width?: number
   height?: number
+  everyClicks?: boolean
 }
 
 function createSlidevProgress() {
@@ -68,6 +69,7 @@ export async function exportSlides({
   routerMode = 'history',
   width = 1920,
   height = 1080,
+  everyClicks = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
@@ -84,12 +86,12 @@ export async function exportSlides({
   const page = await context.newPage()
   const progress = createSlidevProgress()
 
-  async function go(no: number) {
+  async function go(no: number, clicks?: string) {
     progress.update(no)
 
     const url = routerMode === 'hash'
-      ? `http://localhost:${port}/#${base}${no}?print`
-      : `http://localhost:${port}${base}${no}?print`
+      ? `http://localhost:${port}/#${base}${no}?print${everyClicks ? '&everyClick' : ''}${clicks ? `&clicks=${clicks}` : ''}`
+      : `http://localhost:${port}${base}${no}?print${everyClicks ? '&everyClick' : ''}${clicks ? `&clicks=${clicks}` : ''}`
     await page.goto(url, {
       waitUntil: 'networkidle',
     })
@@ -98,14 +100,28 @@ export async function exportSlides({
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
   }
 
+  function getClicks(url: string) {
+    return url.match(/clicks=([1-9][0-9]*)/)?.[1]
+  }
+
+  async function genPageWithClicks(fn: (i: number, clicks?: string) => Promise<any>, i: number, clicks?: string) {
+    await fn(i, clicks)
+    if (everyClicks) {
+      await page.keyboard.press('ArrowRight', { delay: 100 })
+      const _clicks = getClicks(page.url())
+      if (_clicks && clicks !== _clicks)
+        await genPageWithClicks(fn, i, _clicks)
+    }
+  }
+
   const pages = parseRangeString(total, range)
 
   progress.start(pages.length)
 
   if (format === 'pdf') {
     const buffers: Buffer[] = []
-    for (const i of pages) {
-      await go(i)
+    const genPdfBuffer = async(i: number, clicks?: string) => {
+      await go(i, clicks)
       const pdf = await page.pdf({
         width,
         height,
@@ -121,6 +137,8 @@ export async function exportSlides({
       })
       buffers.push(pdf)
     }
+    for (const i of pages)
+      await genPageWithClicks(genPdfBuffer, i)
 
     const mergedPdf = await PDFDocument.create({})
     for (const pdfBytes of buffers) {
@@ -137,13 +155,15 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
   else if (format === 'png') {
-    for (const i of pages) {
-      await go(i)
+    const genScreenshot = async(i: number, clicks?: string) => {
+      await go(i, clicks)
       await page.screenshot({
         omitBackground: false,
-        path: path.join(output, `${i.toString().padStart(2, '0')}.png`),
+        path: path.join(output, `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`),
       })
     }
+    for (const i of pages)
+      await genPageWithClicks(genScreenshot, i)
   }
   else {
     throw new Error(`Unsupported exporting format "${format}"`)

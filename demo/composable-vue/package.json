@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "nodemon -w '../../packages/slidev/dist/*.js' --exec 'slidev --log=info'",
     "build": "slidev build",
-    "export": "slidev export"
+    "export": "slidev export",
+    "export:everyClicks": "slidev export --everyClicks"
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",

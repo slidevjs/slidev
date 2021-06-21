@@ -1,6 +1,6 @@
 import { App, DirectiveBinding, InjectionKey, Ref, watch } from 'vue'
 import { remove } from '@antfu/utils'
-import { isPrintMode } from '../logic/nav'
+import { isPrintMode, isPrintEveryClick } from '../logic/nav'
 
 export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
 export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
@@ -23,7 +23,7 @@ export default function createDirectives() {
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
+          if ((isPrintMode.value && !isPrintEveryClick.value) || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
           const elements = dirInject(dir, injectionClicksElements)
@@ -64,7 +64,7 @@ export default function createDirectives() {
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
+          if ((isPrintMode.value && !isPrintEveryClick.value) || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
           const elements = dirInject(dir, injectionClicksElements)
@@ -96,7 +96,7 @@ export default function createDirectives() {
         name: 'v-click-hide',
 
         mounted(el: HTMLElement, dir) {
-          if (isPrintMode.value || dirInject(dir, injectionClicksDisabled)?.value)
+          if ((isPrintMode.value && !isPrintEveryClick.value) || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
           const clicks = dirInject(dir, injectionClicks)
