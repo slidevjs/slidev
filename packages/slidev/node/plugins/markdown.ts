@@ -52,7 +52,9 @@ export async function createMarkdownPlugin(
       html: true,
       xhtmlOut: true,
       linkify: true,
+      ...mdOptions?.markdownItOptions,
     },
+    ...mdOptions,
     markdownItSetup(md) {
       md.use(mila, {
         attrs: {
@@ -66,6 +68,8 @@ export async function createMarkdownPlugin(
       md.use(Katex, KatexOptions)
 
       setups.forEach(i => i(md))
+
+      mdOptions?.markdownItSetup?.(md)
     },
     transforms: {
       before(code, id) {
@@ -85,7 +89,6 @@ export async function createMarkdownPlugin(
         return code
       },
     },
-    ...mdOptions,
   })
 }
 

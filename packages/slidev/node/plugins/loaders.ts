@@ -12,7 +12,7 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { Connect } from 'vite'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
+import { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
@@ -68,6 +68,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 export function createSlidesLoader(
   { data, entry, clientRoot, themeRoots, userRoot, roots }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
+  serverOptions: SlidevServerOptions,
   VuePlugin: Plugin,
   MarkdownPlugin: Plugin,
 ): Plugin[] {
@@ -168,7 +169,7 @@ export function createSlidesLoader(
           hmrPages.add(i)
         }
 
-        pluginOptions.onDataReload?.(newData, data)
+        serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
         const vueModules = (

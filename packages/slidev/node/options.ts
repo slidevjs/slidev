@@ -54,6 +54,9 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
   windicss?: ArgumentsType<typeof WindiCSS>[0]
   icons?: ArgumentsType<typeof ViteIcons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
+}
+
+export interface SlidevServerOptions {
   onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
 }
 

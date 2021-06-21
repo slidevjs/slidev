@@ -2,20 +2,21 @@
 import { resolve, join } from 'path'
 import http from 'http'
 import fs from 'fs-extra'
-import { build as viteBuild, InlineConfig, mergeConfig, ResolvedConfig } from 'vite'
+import { build as viteBuild, InlineConfig, mergeConfig, ResolvedConfig, resolveConfig } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import { blue, yellow } from 'kolorist'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml } from './common'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
+import { ResolvedSlidevOptions } from './options'
 
 export async function build(
   options: ResolvedSlidevOptions,
-  pluginOptions: SlidevPluginOptions = {},
   viteConfig: InlineConfig = {},
 ) {
   const indexPath = resolve(options.userRoot, 'index.html')
+  const rawConfig = await resolveConfig({}, 'build')
+  const pluginOptions = rawConfig.slidev || {}
 
   let originalIndexHTML: string | undefined
   if (fs.existsSync(indexPath))

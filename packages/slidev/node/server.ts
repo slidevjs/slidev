@@ -1,18 +1,21 @@
-import { createServer as createViteServer, InlineConfig, mergeConfig } from 'vite'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from './options'
+import { createServer as createViteServer, InlineConfig, mergeConfig, resolveConfig } from 'vite'
+import { ResolvedSlidevOptions, SlidevServerOptions } from './options'
 import { ViteSlidevPlugin } from './plugins/preset'
 
 export async function createServer(
   options: ResolvedSlidevOptions,
-  pluginConfig: SlidevPluginOptions = {},
   viteConfig: InlineConfig = {},
+  serverOptions: SlidevServerOptions = {},
 ) {
+  const rawConfig = await resolveConfig({}, 'serve')
+  const pluginOptions = rawConfig.slidev || {}
+
   const server = await createViteServer(
     mergeConfig(
       viteConfig,
       <InlineConfig>({
         plugins: [
-          await ViteSlidevPlugin(options, pluginConfig),
+          await ViteSlidevPlugin(options, pluginOptions, serverOptions),
         ],
       }),
     ),

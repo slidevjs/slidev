@@ -96,6 +96,16 @@ cli.command(
       server = (await createServer(
         options,
         {
+          server: {
+            port,
+            strictPort: true,
+            open,
+            host: remote ? '0.0.0.0' : 'localhost',
+            force,
+          },
+          logLevel: log as LogLevel,
+        },
+        {
           onDataReload(newData, data) {
             if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
               console.log(yellow('\n  restarting on theme change\n'))
@@ -106,16 +116,6 @@ cli.command(
               initServer()
             }
           },
-        },
-        {
-          server: {
-            port,
-            strictPort: true,
-            open,
-            host: remote ? '0.0.0.0' : 'localhost',
-            force,
-          },
-          logLevel: log as LogLevel,
         },
       ))
 
@@ -194,7 +194,7 @@ cli.command(
       options.data.config.download = download
 
     printInfo(options)
-    await build(options, {}, {
+    await build(options, {
       base,
       build: {
         watch: watch ? {} : undefined,
@@ -320,7 +320,6 @@ cli.command(
     const options = await resolveOptions({ entry, theme }, 'build')
     const server = await createServer(
       options,
-      {},
       {
         server: { port },
         logLevel: 'error',
