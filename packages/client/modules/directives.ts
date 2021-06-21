@@ -10,6 +10,7 @@ export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
 export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
+export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -46,6 +47,21 @@ export default function createDirectives() {
                   : c > prev
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+
+                // reset all element CLASS_VCLICK_CURRENT to false
+                el.classList.toggle(CLASS_VCLICK_CURRENT, false)
+                if (show) {
+                  if (dir.value != null && dir.value === c) {
+                    const index = elements?.value.indexOf(el) || 0
+                    const currentEl = elements?.value[index] as HTMLElement
+                    currentEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
+                  }
+                  if (dir.value === undefined) {
+                    const index = c - 1 >= 0 ? c - 1 : 0
+                    const currentEl = elements?.value[index] as HTMLElement
+                    currentEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
+                  }
+                }
               },
               { immediate: true },
             )
