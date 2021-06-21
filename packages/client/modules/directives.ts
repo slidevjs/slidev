@@ -59,7 +59,7 @@ export default function createDirectives() {
                   if (dir.value === undefined) {
                     const index = c - 1 >= 0 ? c - 1 : 0
                     const currentEl = elements?.value[index] as HTMLElement
-                    currentEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
+                    currentEl ? currentEl.classList.toggle(CLASS_VCLICK_CURRENT, true) : null
                   }
                 }
               },
