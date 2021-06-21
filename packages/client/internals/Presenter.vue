@@ -16,12 +16,8 @@ import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 
 registerShortcuts()
-const {
-  title = '',
-  titleSuffix = '',
-} = configs
 
-const slideTitle = title ? `${title}${titleSuffix ? ` ${titleSuffix}` : ''}` : 'Slidev'
+const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
   title: `Presenter - ${slideTitle}`,
 })

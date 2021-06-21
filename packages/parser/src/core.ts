@@ -238,7 +238,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
   const defaultConfig: SlidevConfig = {
     theme: 'default',
     title: 'Slidev',
-    titleSuffix: '- Slidev',
+    titleTemplate: '%s - Slidev',
     remoteAssets: true,
     monaco: 'dev',
     download: false,
