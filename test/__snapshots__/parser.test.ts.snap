@@ -70,6 +70,7 @@ Object {
   "theme": "default",
   "themeConfig": Object {},
   "title": "Hi",
+  "titleTemplate": "%s - Slidev",
 }
 `;
 
@@ -270,6 +271,7 @@ Object {
   "theme": "default",
   "themeConfig": Object {},
   "title": "H1",
+  "titleTemplate": "%s - Slidev",
 }
 `;
 
@@ -424,6 +426,7 @@ Object {
   "theme": "default",
   "themeConfig": Object {},
   "title": undefined,
+  "titleTemplate": "%s - Slidev",
 }
 `;
 

@@ -17,8 +17,9 @@ import SlideWrapper from './SlideWrapper'
 
 registerShortcuts()
 
+const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
-  title: configs.title ? `Presenter - ${configs.title} - Slidev` : 'Presenter - Slidev',
+  title: `Presenter - ${slideTitle}`,
 })
 
 const tsStart = ref(Date.now())
