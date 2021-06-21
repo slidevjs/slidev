@@ -255,6 +255,7 @@ importers:
       katex: ^0.13.11
       kolorist: ^1.4.1
       markdown-it: ^12.0.6
+      markdown-it-footnote: ^3.0.3
       markdown-it-link-attributes: ^3.0.0
       monaco-editor: ^0.24.0
       nanoid: ^3.1.23
@@ -298,6 +299,7 @@ importers:
       katex: 0.13.11
       kolorist: 1.4.1
       markdown-it: 12.0.6
+      markdown-it-footnote: 3.0.3
       markdown-it-link-attributes: 3.0.0
       monaco-editor: 0.24.0
       nanoid: 3.1.23
@@ -5580,6 +5582,10 @@ packages:
     dependencies:
       tmpl: 1.0.4
     dev: true
+
+  /markdown-it-footnote/3.0.3:
+    resolution: {integrity: sha512-YZMSuCGVZAjzKMn+xqIco9d1cLGxbELHZ9do/TSYVzraooV8ypsppKNmUJ0fVH5ljkCInQAtFpm8Rb3eXSrt5w==}
+    dev: false
 
   /markdown-it-link-attributes/3.0.0:
     resolution: {integrity: sha512-B34ySxVeo6MuEGSPCWyIYryuXINOvngNZL87Mp7YYfKIf6DcD837+lXA8mo6EBbauKsnGz22ZH0zsbOiQRWTNg==}
