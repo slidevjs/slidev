@@ -19,7 +19,7 @@
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "kolorist": "^1.4.1",
+    "kolorist": "^1.5.0",
     "minimist": "^1.2.5",
     "prompts": "^2.4.1"
   }

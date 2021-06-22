@@ -20,7 +20,7 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
     "execa": "^5.1.1",
-    "kolorist": "^1.4.1",
+    "kolorist": "^1.5.0",
     "minimist": "^1.2.5",
     "prompts": "^2.4.1"
   }
