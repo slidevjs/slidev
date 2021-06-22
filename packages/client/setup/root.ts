@@ -16,7 +16,7 @@ export default function setupRoot() {
   /* __injections__ */
 
   useHead({
-    title: configs.titleTemplate.replace('%s', configs.title || 'Slidev'),
+    title: configs.titleTemplate?.replace('%s', configs.title || 'Slidev'),
   })
 
   // sync with server state
