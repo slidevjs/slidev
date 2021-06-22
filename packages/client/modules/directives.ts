@@ -10,10 +10,14 @@ export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
 export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
+export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
+export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
 }
+
+const orderMap = new Map<number, HTMLElement[]>()
 
 export default function createDirectives() {
   return {
@@ -34,6 +38,23 @@ export default function createDirectives() {
           if (elements && !elements?.value?.includes(el))
             elements.value.push(el)
 
+          // Set default dir.value
+          if (dir.value === undefined)
+            dir.value = elements?.value.length
+
+          // If orderMap didn't have dir.value, then initializ it.
+          // Or we move current element to the first of order array
+          // to make sure the after click current state.
+          if (!orderMap.has(dir.value)) {
+            orderMap.set(dir.value, [el])
+          }
+          else {
+            if (!orderMap.get(dir.value)?.includes(el)) {
+              const afterClicks = orderMap.get(dir.value) || []
+              orderMap.set(dir.value, [el].concat(afterClicks))
+            }
+          }
+
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           if (clicks) {
@@ -46,6 +67,24 @@ export default function createDirectives() {
                   : c > prev
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+
+                // Reset CLASS_VCLICK_CURRENT to false
+                el.classList.toggle(CLASS_VCLICK_CURRENT, false)
+
+                const currentElArray = orderMap.get(c)
+                currentElArray?.forEach((cEl, idx) => {
+                  // Reset CLASS_VCLICK_PRIOR to false
+                  cEl.classList.toggle(CLASS_VCLICK_PRIOR, false)
+                  // If the element is the last of order array, then set it
+                  // as CLASS_VCLICK_CURRENT, others set as CLASS_VCLICK_PRIOR
+                  if (idx === currentElArray.length - 1)
+                    cEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
+                  else
+                    cEl.classList.toggle(CLASS_VCLICK_PRIOR, true)
+                })
+
+                if (!el.classList.contains(CLASS_VCLICK_CURRENT))
+                  el.classList.toggle(CLASS_VCLICK_PRIOR, show)
               },
               { immediate: true },
             )
@@ -72,6 +111,18 @@ export default function createDirectives() {
 
           const prev = elements?.value.length
 
+          // Set default dir.value
+          if (dir.value === undefined)
+            dir.value = elements?.value.length
+
+          // If click's order before after is bigger than after, the order map will not
+          // contain the key of after, so we need to set it first, the move after element
+          // to last of the order array
+          if (orderMap.has(dir.value))
+            orderMap.get(dir.value)?.push(el)
+          else
+            orderMap.set(dir.value, [el])
+
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           if (clicks) {
@@ -81,6 +132,12 @@ export default function createDirectives() {
                 const show = (clicks.value ?? 0) >= (dir.value ?? prev ?? 0)
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+
+                // Reset CLASS_VCLICK_CURRENT to false
+                el.classList.toggle(CLASS_VCLICK_CURRENT, false)
+
+                if (!el.classList.contains(CLASS_VCLICK_CURRENT))
+                  el.classList.toggle(CLASS_VCLICK_PRIOR, show)
               },
               { immediate: true },
             )
