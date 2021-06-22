@@ -44,9 +44,9 @@ export default function createDirectives() {
           if (dir.value === null)
             dir.value = elements?.value.length
 
-          // If orderMap didn't have dir.value, then initializ it.
-          // Or we move current element to the first of order array
-          // to make sure the after click current state.
+          // If orderMap didn't have dir.value aka the order key, then initializ it.
+          // If key exists, then move current element to the first of order array to
+          // make sure the v-after set correct CLASS_VCLICK_CURRENT state.
           if (!orderMap?.value.has(dir.value)) {
             orderMap?.value.set(dir.value, [el])
           }
@@ -73,15 +73,15 @@ export default function createDirectives() {
                 if (hide)
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, show)
 
-                // Reset CLASS_VCLICK_CURRENT to false
+                // Reset CLASS_VCLICK_CURRENT to false.
                 el.classList.toggle(CLASS_VCLICK_CURRENT, false)
 
                 const currentElArray = orderMap?.value.get(c)
                 currentElArray?.forEach((cEl, idx) => {
                   // Reset CLASS_VCLICK_PRIOR to false
                   cEl.classList.toggle(CLASS_VCLICK_PRIOR, false)
-                  // If the element is the last of order array, then set it
-                  // as CLASS_VCLICK_CURRENT, others set as CLASS_VCLICK_PRIOR
+                  // If the element is the last of order array, then set it as
+                  // CLASS_VCLICK_CURRENT state, others set as CLASS_VCLICK_PRIOR state.
                   if (idx === currentElArray.length - 1)
                     cEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
                   else
@@ -121,9 +121,9 @@ export default function createDirectives() {
           if (dir.value === undefined)
             dir.value = elements?.value.length
 
-          // If click's order before after is bigger than after, the order map will not
-          // contain the key of after, so we need to set it first, the move after element
-          // to last of the order array
+          // If a v-click order before v-after is lower than v-after, the order map will
+          // not contain the key for v-after, so we need to set it first, then move v-after
+          // to the last of order array.
           if (orderMap?.value.has(dir.value))
             orderMap?.value.get(dir.value)?.push(el)
           else
@@ -139,7 +139,7 @@ export default function createDirectives() {
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
 
-                // Reset CLASS_VCLICK_CURRENT to false
+                // Reset CLASS_VCLICK_CURRENT to false.
                 el.classList.toggle(CLASS_VCLICK_CURRENT, false)
 
                 if (!el.classList.contains(CLASS_VCLICK_CURRENT))
