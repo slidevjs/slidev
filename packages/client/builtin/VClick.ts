@@ -13,8 +13,12 @@ export default defineComponent({
       type: [Number, String],
       default: null,
     },
+    hide: {
+      type: Boolean,
+      default: null,
+    },
   },
   render() {
-    return createVNode(VClicks, { every: 99999, at: this.at }, { default: this.$slots.default })
+    return createVNode(VClicks, { every: 99999, at: this.at, hide: this.hide }, { default: this.$slots.default })
   },
 })
