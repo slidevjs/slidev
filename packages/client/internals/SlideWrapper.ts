@@ -29,14 +29,14 @@ export default defineComponent({
     const clicks = useVModel(props, 'clicks', emit)
     const clicksElements = useVModel(props, 'clicksElements', emit)
     const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-    const clickOrderMap = useVModel(props, 'clicksOrderMap', emit)
+    const clicksOrderMap = useVModel(props, 'clicksOrderMap', emit)
 
     clicksElements.value.length = 0
 
     provide(injectionClicks, clicks)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksElements, clicksElements)
-    provide(injectionOrderMap, clickOrderMap)
+    provide(injectionOrderMap, clicksOrderMap)
   },
   render() {
     if (this.$props.is)
