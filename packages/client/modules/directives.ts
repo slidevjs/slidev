@@ -162,13 +162,7 @@ export default function createDirectives() {
           if ((isPrintMode.value && !isPrintWithClicks.value) || dirInject(dir, injectionClicksDisabled)?.value)
             return
 
-          const elements = dirInject(dir, injectionClicksElements)
           const clicks = dirInject(dir, injectionClicks)
-
-          const prev = elements?.value?.length || 0
-
-          if (elements && !elements?.value?.includes(el))
-            elements.value.push(el)
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 
@@ -176,11 +170,7 @@ export default function createDirectives() {
             watch(
               clicks,
               () => {
-                const c = clicks?.value ?? 0
-                const hide = dir.value != null
-                  ? c >= dir.value
-                  : c > prev
-
+                const hide = (clicks?.value || 0) > dir.value
                 el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
                 el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
               },
