@@ -29,7 +29,7 @@ export default defineComponent({
     const applyDirective = (node: VNode, directive: Directive, delta: number) => {
       if (this.at != null)
         return withDirectives(node, [[directive, +this.at + delta, '', { hide: this.hide }]])
-      return withDirectives(node, [[directive, undefined, '', { hide: this.hide }]])
+      return withDirectives(node, [[directive, null, '', { hide: this.hide }]])
     }
 
     let defaults = this.$slots.default?.()
