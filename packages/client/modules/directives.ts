@@ -4,6 +4,7 @@ import { isPrintMode, isPrintWithClicks } from '../logic/nav'
 
 export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
 export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
+export const injectionOrderMap: InjectionKey<Ref<Map<number, HTMLElement[]>>> = Symbol('v-click-clicks-order-map')
 export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
@@ -16,8 +17,6 @@ export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
 }
-
-const orderMap = new Map<number, HTMLElement[]>()
 
 export default function createDirectives() {
   return {
@@ -32,6 +31,7 @@ export default function createDirectives() {
 
           const elements = dirInject(dir, injectionClicksElements)
           const clicks = dirInject(dir, injectionClicks)
+          const orderMap = dirInject(dir, injectionOrderMap)
 
           const prev = elements?.value?.length || 0
 
@@ -45,13 +45,13 @@ export default function createDirectives() {
           // If orderMap didn't have dir.value, then initializ it.
           // Or we move current element to the first of order array
           // to make sure the after click current state.
-          if (!orderMap.has(dir.value)) {
-            orderMap.set(dir.value, [el])
+          if (!orderMap?.value.has(dir.value)) {
+            orderMap?.value.set(dir.value, [el])
           }
           else {
-            if (!orderMap.get(dir.value)?.includes(el)) {
-              const afterClicks = orderMap.get(dir.value) || []
-              orderMap.set(dir.value, [el].concat(afterClicks))
+            if (!orderMap?.value.get(dir.value)?.includes(el)) {
+              const afterClicks = orderMap?.value.get(dir.value) || []
+              orderMap?.value.set(dir.value, [el].concat(afterClicks))
             }
           }
 
@@ -71,7 +71,7 @@ export default function createDirectives() {
                 // Reset CLASS_VCLICK_CURRENT to false
                 el.classList.toggle(CLASS_VCLICK_CURRENT, false)
 
-                const currentElArray = orderMap.get(c)
+                const currentElArray = orderMap?.value.get(c)
                 currentElArray?.forEach((cEl, idx) => {
                   // Reset CLASS_VCLICK_PRIOR to false
                   cEl.classList.toggle(CLASS_VCLICK_PRIOR, false)
@@ -108,6 +108,7 @@ export default function createDirectives() {
 
           const elements = dirInject(dir, injectionClicksElements)
           const clicks = dirInject(dir, injectionClicks)
+          const orderMap = dirInject(dir, injectionOrderMap)
 
           const prev = elements?.value.length
 
@@ -118,10 +119,10 @@ export default function createDirectives() {
           // If click's order before after is bigger than after, the order map will not
           // contain the key of after, so we need to set it first, the move after element
           // to last of the order array
-          if (orderMap.has(dir.value))
-            orderMap.get(dir.value)?.push(el)
+          if (orderMap?.value.has(dir.value))
+            orderMap?.value.get(dir.value)?.push(el)
           else
-            orderMap.set(dir.value, [el])
+            orderMap?.value.set(dir.value, [el])
 
           el?.classList.toggle(CLASS_VCLICK_TARGET, true)
 

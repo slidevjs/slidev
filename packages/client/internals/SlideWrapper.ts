@@ -1,6 +1,6 @@
 import { useVModel } from '@vueuse/core'
 import { provide, defineComponent, h } from 'vue'
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../modules/directives'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap } from '../modules/directives'
 
 export default defineComponent({
   props: {
@@ -11,6 +11,10 @@ export default defineComponent({
     clicksElements: {
       type: Array,
       default: () => [] as Element[],
+    },
+    clicksOrderMap: {
+      type: Map,
+      default: () => new Map<number, HTMLElement[]>(),
     },
     clicksDisabled: {
       type: Boolean,
@@ -25,12 +29,14 @@ export default defineComponent({
     const clicks = useVModel(props, 'clicks', emit)
     const clicksElements = useVModel(props, 'clicksElements', emit)
     const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
+    const clickOrderMap = useVModel(props, 'clicksOrderMap', emit)
 
     clicksElements.value.length = 0
 
     provide(injectionClicks, clicks)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksElements, clicksElements)
+    provide(injectionOrderMap, clickOrderMap)
   },
   render() {
     if (this.$props.is)
