@@ -15,7 +15,7 @@ export default defineComponent({
     },
     hide: {
       type: Boolean,
-      default: null,
+      default: false,
     },
   },
   render() {

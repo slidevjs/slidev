@@ -97,17 +97,18 @@ context('Basic', () => {
       .should('eq', 'http://localhost:3030/9?clicks=1')
 
     cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'CD')
+      .should('have.text', 'CDE')
 
     cy.get('body')
       .type('{RightArrow}')
       .type('{RightArrow}')
 
     cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'ABCD')
+      .should('have.text', 'ABCDE')
 
     // v-click.hide
     cy.get('body')
+      .type('{RightArrow}')
       .type('{RightArrow}')
 
     cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
@@ -115,7 +116,7 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/9?clicks=4')
+      .should('eq', 'http://localhost:3030/9?clicks=5')
 
     cy.get('body')
       .type('{RightArrow}')

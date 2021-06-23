@@ -70,7 +70,7 @@ export default function createDirectives() {
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
 
-                if (hide)
+                if (hide !== false && hide !== undefined)
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, show)
 
                 // Reset CLASS_VCLICK_CURRENT to false.

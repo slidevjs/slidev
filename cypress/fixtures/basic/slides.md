@@ -100,4 +100,5 @@ Left
   <div v-click="2">B</div>
   <div v-click="1">C</div>
   <div v-click.hide="4">D</div>
+  <v-click hide><div>E</div></v-click>
 </div>
