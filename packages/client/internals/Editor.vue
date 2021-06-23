@@ -98,6 +98,11 @@ function onHandlerDown() {
 function updateWidth(v: number) {
   editorWidth.value = Math.min(Math.max(200, v), window.innerWidth - 200)
 }
+function switchTab(newTab: typeof tab.value) {
+  tab.value = newTab
+  // @ts-expect-error
+  document.activeElement?.blur?.()
+}
 useEventListener('pointermove', (e) => {
   if (handlerDown.value)
     updateWidth(window.innerWidth - e.pageX)
@@ -139,10 +144,10 @@ throttledWatch(
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="tab='content'">
+        <button class="icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
           <carbon:account />
         </button>
-        <button class="icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="tab='note'">
+        <button class="icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
           <carbon:align-box-bottom-right />
         </button>
       </div>
@@ -150,9 +155,6 @@ throttledWatch(
         {{ tab === 'content' ? 'Slide' : 'Note' }}
       </span>
       <div class="flex-auto"></div>
-      <!-- <button class="icon-btn" :class="{ disabled: !dirty }" @click="save">
-        <carbon:save />
-      </button> -->
       <button class="icon-btn">
         <a :href="editorLink" target="_blank">
           <carbon:launch />
@@ -164,10 +166,10 @@ throttledWatch(
     </div>
     <div class="h-full overflow-auto">
       <div v-show="tab === 'content'" class="h-full overflow-auto">
-        <textarea ref="contentInput" />
+        <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
       <div v-show="tab === 'note'" class="h-full overflow-auto">
-        <textarea ref="noteInput" />
+        <textarea ref="noteInput" placeholder="Write some note..." />
       </div>
     </div>
   </div>

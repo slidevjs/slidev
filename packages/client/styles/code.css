@@ -36,3 +36,6 @@ html:not(.dark) .shiki-dark {
 .katex :before {
   border-color: currentColor;
 }
+
+// codemirror
+.CodeMirror pre.CodeMirror-placeholder { opacity: 0.4; }

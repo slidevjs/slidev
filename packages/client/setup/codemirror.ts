@@ -5,6 +5,7 @@ import 'codemirror/mode/css/css'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/mode/xml/xml'
 import 'codemirror/mode/htmlmixed/htmlmixed'
+import 'codemirror/addon/display/placeholder'
 import 'codemirror/lib/codemirror.css'
 
 export async function useCodeMirror(
