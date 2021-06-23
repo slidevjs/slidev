@@ -17,6 +17,10 @@ export default defineComponent({
       type: [Number, String],
       default: null,
     },
+    hide: {
+      type: Boolean,
+      default: null,
+    },
   },
   render() {
     const click = resolveDirective('click')!
@@ -24,8 +28,8 @@ export default defineComponent({
 
     const applyDirective = (node: VNode, directive: Directive, delta: number) => {
       if (this.at != null)
-        return withDirectives(node, [[directive, +this.at + delta]])
-      return withDirectives(node, [[directive]])
+        return withDirectives(node, [[directive, +this.at + delta, '', { hide: this.hide }]])
+      return withDirectives(node, [[directive, null, '', { hide: this.hide }]])
     }
 
     let defaults = this.$slots.default?.()

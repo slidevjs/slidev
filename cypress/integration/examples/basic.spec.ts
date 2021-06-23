@@ -39,6 +39,10 @@ context('Basic', () => {
       .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
       .get('#page-root > #slide-container > #slide-content > .slidev-page-5 > p')
       .should('have.text', 'Current Page: 5')
+  })
+
+  it('should nav correctly', () => {
+    goPage(5)
 
     cy.get('body')
       .type('{DownArrow}')
@@ -69,10 +73,56 @@ context('Basic', () => {
       .type('{UpArrow}')
       .url()
       .should('eq', 'http://localhost:3030/6')
+  })
 
+  it('named slots', () => {
     goPage(8)
 
     cy.get('.col-right')
       .contains('Right')
+  })
+
+  it('clicks map', () => {
+    goPage(9)
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/9')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/9?clicks=1')
+
+    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'CDE')
+
+    cy.get('body')
+      .type('{RightArrow}')
+      .type('{RightArrow}')
+
+    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'ABCDE')
+
+    // v-click.hide
+    cy.get('body')
+      .type('{RightArrow}')
+      .type('{RightArrow}')
+
+    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'ABC')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/9?clicks=5')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/10')
   })
 })

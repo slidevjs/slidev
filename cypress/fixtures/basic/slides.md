@@ -90,3 +90,15 @@ layout: two-cols
 # Left
 
 Left
+
+---
+
+# Page 9
+
+<div class="cy-content">
+  <div v-click="3">A</div>
+  <div v-click="2">B</div>
+  <div v-click="1">C</div>
+  <div v-click.hide="4">D</div>
+  <v-click hide><div>E</div></v-click>
+</div>
