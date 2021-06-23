@@ -15,7 +15,7 @@
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
-    "@antfu/utils": "^0.2.2",
+    "@antfu/utils": "^0.2.4",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vueuse/core": "^5.0.3",
@@ -32,7 +32,7 @@
     "prettier": "^2.3.1",
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
-    "vite-plugin-windicss": "^1.1.0",
+    "vite-plugin-windicss": "^1.1.1",
     "vue": "3.0.11",
     "vue-router": "^4.0.10",
     "windicss": "^3.1.3"
