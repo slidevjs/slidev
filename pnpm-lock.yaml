@@ -6,12 +6,12 @@ importers:
     specifiers:
       '@antfu/eslint-config': ^0.6.6
       '@antfu/ni': ^0.7.0
-      '@antfu/utils': ^0.2.2
+      '@antfu/utils': ^0.2.4
       '@slidev/cli': workspace:*
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
       '@types/cli-progress': ^3.9.1
-      '@types/codemirror': ^5.60.0
+      '@types/codemirror': ^5.60.1
       '@types/connect': ^3.4.34
       '@types/debug': ^4.1.5
       '@types/file-saver': ^2.0.2
@@ -32,7 +32,7 @@ importers:
       '@vueuse/core': ^5.0.3
       bumpp: ^6.0.6
       cross-env: ^7.0.3
-      cypress: ^7.5.0
+      cypress: ^7.6.0
       eslint: ^7.29.0
       eslint-plugin-cypress: ^2.11.3
       eslint-plugin-jest: ^24.3.6
@@ -43,23 +43,23 @@ importers:
       lint-staged: ^11.0.0
       mermaid: ^8.10.1
       playwright-chromium: ^1.12.2
-      pnpm: ^6.8.0
+      pnpm: ^6.9.0
       rimraf: ^3.0.2
       ts-jest: ^27.0.3
       tsup: 4.11.2
       typescript: ^4.3.4
       vite: ^2.3.8
-      vite-plugin-windicss: ^1.1.0
+      vite-plugin-windicss: ^1.1.1
       zx: ^1.14.2
     devDependencies:
       '@antfu/eslint-config': 0.6.6_eslint@7.29.0+typescript@4.3.4
       '@antfu/ni': 0.7.0
-      '@antfu/utils': 0.2.2
+      '@antfu/utils': 0.2.4
       '@slidev/cli': link:packages/slidev
       '@slidev/parser': link:packages/parser
       '@slidev/types': link:packages/types
       '@types/cli-progress': 3.9.1
-      '@types/codemirror': 5.60.0
+      '@types/codemirror': 5.60.1
       '@types/connect': 3.4.34
       '@types/debug': 4.1.5
       '@types/file-saver': 2.0.2
@@ -80,7 +80,7 @@ importers:
       '@vueuse/core': 5.0.3
       bumpp: 6.0.6
       cross-env: 7.0.3
-      cypress: 7.5.0
+      cypress: 7.6.0
       eslint: 7.29.0
       eslint-plugin-cypress: 2.11.3_eslint@7.29.0
       eslint-plugin-jest: 24.3.6_13db132cdcb2886c2bda0976a4d5be56
@@ -91,13 +91,13 @@ importers:
       lint-staged: 11.0.0
       mermaid: 8.10.1
       playwright-chromium: 1.12.2
-      pnpm: 6.8.0
+      pnpm: 6.9.0
       rimraf: 3.0.2
       ts-jest: 27.0.3_jest@27.0.5+typescript@4.3.4
       tsup: 4.11.2_typescript@4.3.4
       typescript: 4.3.4
       vite: 2.3.8
-      vite-plugin-windicss: 1.1.0_vite@2.3.8
+      vite-plugin-windicss: 1.1.1_vite@2.3.8
       zx: 1.14.2
 
   cypress/fixtures/basic:
@@ -158,7 +158,7 @@ importers:
 
   packages/client:
     specifiers:
-      '@antfu/utils': ^0.2.2
+      '@antfu/utils': ^0.2.4
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
       '@vueuse/core': ^5.0.3
@@ -175,12 +175,12 @@ importers:
       prettier: ^2.3.1
       recordrtc: ^5.6.2
       resolve: ^1.20.0
-      vite-plugin-windicss: ^1.1.0
+      vite-plugin-windicss: ^1.1.1
       vue: 3.0.11
       vue-router: ^4.0.10
       windicss: ^3.1.3
     dependencies:
-      '@antfu/utils': 0.2.2
+      '@antfu/utils': 0.2.4
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
       '@vueuse/core': 5.0.3_vue@3.0.11
@@ -197,7 +197,7 @@ importers:
       prettier: 2.3.1
       recordrtc: 5.6.2
       resolve: 1.20.0
-      vite-plugin-windicss: 1.1.0
+      vite-plugin-windicss: 1.1.1
       vue: 3.0.11
       vue-router: 4.0.10_vue@3.0.11
       windicss: 3.1.3
@@ -234,7 +234,7 @@ importers:
 
   packages/slidev:
     specifiers:
-      '@antfu/utils': ^0.2.2
+      '@antfu/utils': ^0.2.4
       '@iconify/json': ^1.1.338
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
@@ -274,12 +274,12 @@ importers:
       vite-plugin-icons: ^0.6.3
       vite-plugin-md: ^0.6.7
       vite-plugin-remote-assets: ^0.2.2
-      vite-plugin-windicss: ^1.1.0
+      vite-plugin-windicss: ^1.1.1
       vue: 3.0.11
       windicss: ^3.1.3
       yargs: ^17.0.1
     dependencies:
-      '@antfu/utils': 0.2.2
+      '@antfu/utils': 0.2.4
       '@iconify/json': 1.1.338
       '@slidev/client': link:../client
       '@slidev/parser': link:../parser
@@ -316,7 +316,7 @@ importers:
       vite-plugin-icons: 0.6.3_3a062f62dd9e0ad9a7cb2ae18cd865f0
       vite-plugin-md: 0.6.7_vite@2.3.8
       vite-plugin-remote-assets: 0.2.2_vite@2.3.8
-      vite-plugin-windicss: 1.1.0_vite@2.3.8
+      vite-plugin-windicss: 1.1.1_vite@2.3.8
       vue: 3.0.11
       windicss: 3.1.3
       yargs: 17.0.1
@@ -410,8 +410,10 @@ packages:
     hasBin: true
     dev: true
 
-  /@antfu/utils/0.2.2:
-    resolution: {integrity: sha512-8GwVE0j48SpZaLxsHO0BSO0sEpkb+EhFQcABFBFomH4O8AwNVVvGQNRCBKOPUwU4Vxj3ZSVz8PDjUrPGwaYP9A==}
+  /@antfu/utils/0.2.4:
+    resolution: {integrity: sha512-2bZNkVfL9IZESmvE26UKi8SzyvSoaIsGXDcnbHFMtmGMqUiB1fXpAJ1ijGf+tSqKRQ5yagck2U1Qk0p+705/kw==}
+    dependencies:
+      '@types/throttle-debounce': 2.1.0
 
   /@babel/code-frame/7.12.11:
     resolution: {integrity: sha512-Zt1yodBx1UcyiePMSkWnU4hPqhwq7hGi2nFL1LeA3EUl+q2LQx16MISgJ0+z7dnmgvP9QtIleuETGOiOH1RcIw==}
@@ -742,16 +744,6 @@ packages:
 
   /@braintree/sanitize-url/3.1.0:
     resolution: {integrity: sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==}
-
-  /@cypress/listr-verbose-renderer/0.4.1:
-    resolution: {integrity: sha1-p3SS9LEdzHxEajSz4ochr9M8ZCo=}
-    engines: {node: '>=4'}
-    dependencies:
-      chalk: 1.1.3
-      cli-cursor: 1.0.2
-      date-fns: 1.30.1
-      figures: 1.7.0
-    dev: true
 
   /@cypress/request/2.88.5:
     resolution: {integrity: sha512-TzEC1XMi1hJkywWpRfD2clreTa/Z+lOrXDCxxBTBPEcY5azdPi56A6Xw+O4tWJnaJH3iIE7G5aDXZC6JgRZLcA==}
@@ -1162,8 +1154,8 @@ packages:
       '@types/node': 15.6.0
     dev: true
 
-  /@types/codemirror/5.60.0:
-    resolution: {integrity: sha512-xgzXZyCzedLRNC67/Nn8rpBtTFnAsX2C+Q/LGoH6zgcpF/LqdNHJMHEOhqT1bwUcSp6kQdOIuKzRbeW9DYhEhg==}
+  /@types/codemirror/5.60.1:
+    resolution: {integrity: sha512-yV14LQ5VvghnW0uSuCw2bEfZC6NvxHQEckl2w3dEk5l0yPGzQh14dCaWvG5KD/2l3cgFSifR+6nIUD7LDLdUTg==}
     dependencies:
       '@types/tern': 0.23.3
     dev: true
@@ -1276,11 +1268,6 @@ packages:
     resolution: {integrity: sha512-+aHJvoCsVhO2ZCuT4o5JtcPrCPyDE3+1nvbDprYes+pPkEsbjH7AGUCNtjMOXS0fqH14t+B7yLzaqSz92FPWyw==}
     dev: true
 
-  /@types/node/15.12.2:
-    resolution: {integrity: sha512-zjQ69G564OCIWIOHSXyQEEDpdpGl+G348RAKY0XXy9Z5kU9Vzv1GMNnkar/ZJ8dzXB3COzD9Mo9NtRZ4xfgUww==}
-    dev: true
-    optional: true
-
   /@types/node/15.12.4:
     resolution: {integrity: sha512-zrNj1+yqYF4WskCMOHwN+w9iuD12+dGm0rQ35HLl9/Ouuq52cEtd0CH9qMgrdNmi5ejC1/V7vKEXYubB+65DkA==}
     dev: true
@@ -1343,6 +1330,9 @@ packages:
       '@types/estree': 0.0.47
     dev: true
 
+  /@types/throttle-debounce/2.1.0:
+    resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+
   /@types/yargs-parser/20.2.0:
     resolution: {integrity: sha512-37RSHht+gzzgYeobbG+KWryeAW8J33Nhr69cjTqSYymXVZEN9NbRYWoYlRtDhHKPVT1FyNKwaTPC1NynKZpzRA==}
     dev: true
@@ -1362,7 +1352,7 @@ packages:
   /@types/yauzl/2.9.1:
     resolution: {integrity: sha512-A1b8SU4D10uoPjwb0lnHmmu8wZhR9d+9o2PKBQT2jU5YPTKsxac6M2qGAdY7VcL+dHHhARVUDmeg0rOrcd9EjA==}
     dependencies:
-      '@types/node': 15.12.2
+      '@types/node': 15.12.4
     dev: true
     optional: true
 
@@ -1721,10 +1711,10 @@ packages:
       - vue
     dev: false
 
-  /@windicss/plugin-utils/1.1.0:
-    resolution: {integrity: sha512-v9WhtcGKRehsbY2Omd9m+Jd0IsjbKJmRSa712BuPLZ+fZuCSomne9twjqtPn29IGqS6T/9lM8aOjW7mRMU1x/g==}
+  /@windicss/plugin-utils/1.1.1:
+    resolution: {integrity: sha512-niKEDyUpOfCGemFHopI9fxdWPpJQIZ/jmaU4spQXsGc1oEts164P8LUJPQmXc8C6vjKwkrH7KA+lxYNG5LmlDA==}
     dependencies:
-      '@antfu/utils': 0.2.2
+      '@antfu/utils': 0.2.4
       debug: 4.3.2
       fast-glob: 3.2.5
       jiti: 1.10.1
@@ -1827,11 +1817,6 @@ packages:
       type-fest: 0.21.3
     dev: true
 
-  /ansi-regex/2.1.1:
-    resolution: {integrity: sha1-w7M6te42DYbg5ijwRorn7yfWVN8=}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /ansi-regex/4.1.0:
     resolution: {integrity: sha512-1apePfXM1UOSqw0o9IiFAovVz9M5S1Dg+4TrDwfMewQ6p/rmMueb7tWZjQ1rx4Loy1ArBggoqGpfqqdI4rondg==}
     engines: {node: '>=6'}
@@ -1840,11 +1825,6 @@ packages:
   /ansi-regex/5.0.0:
     resolution: {integrity: sha512-bY6fj56OUQ0hU1KjFNDQuJFezqKdrAyFdIevADiqrWHwSlbmBNMHp5ak2f40Pm8JTFyM2mqxkG6ngkHO11f/lg==}
     engines: {node: '>=8'}
-
-  /ansi-styles/2.2.1:
-    resolution: {integrity: sha1-tDLdM1i2NM914eRmQ2gkBTPB3b4=}
-    engines: {node: '>=0.10.0'}
-    dev: true
 
   /ansi-styles/3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
@@ -2209,17 +2189,6 @@ packages:
     resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=}
     dev: true
 
-  /chalk/1.1.3:
-    resolution: {integrity: sha1-qBFcVeSnAv5NFQq9OHKCKn4J/Jg=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      ansi-styles: 2.2.1
-      escape-string-regexp: 1.0.5
-      has-ansi: 2.0.0
-      strip-ansi: 3.0.1
-      supports-color: 2.0.0
-    dev: true
-
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -2305,13 +2274,6 @@ packages:
   /cli-boxes/2.2.1:
     resolution: {integrity: sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==}
     engines: {node: '>=6'}
-    dev: true
-
-  /cli-cursor/1.0.2:
-    resolution: {integrity: sha1-ZNo/fValRBLll5S9Ytw1KV6PKYc=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      restore-cursor: 1.0.1
     dev: true
 
   /cli-cursor/3.1.0:
@@ -2575,13 +2537,12 @@ packages:
     resolution: {integrity: sha512-u1wmTI1jJGzCJzWndZo8mk4wnPTZd1eOIYTYvuEyOQGfmDl3TrabCCfKnOC86FZwW/9djqTl933UF/cS425i9A==}
     dev: false
 
-  /cypress/7.5.0:
-    resolution: {integrity: sha512-tw3v6nrTJoEzT37+Nf6RK+DvdTfhMb8EJYskZx7oskZ+J9qQ1QHWA4dH8Eoe/Mr/wE47o+7PK6O9tgqhRy6IHg==}
+  /cypress/7.6.0:
+    resolution: {integrity: sha512-tTwQExY28CKt6cY85/2V1uLExcMfpBEBWXt/EcE2ht/Onl9k4lxUS7ul1UnUO5MrYwMIHMdGVh13DxdzXj4Z5w==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@cypress/listr-verbose-renderer': 0.4.1
       '@cypress/request': 2.88.5
       '@cypress/xvfb': 1.2.4
       '@types/node': 14.17.2
@@ -2593,21 +2554,24 @@ packages:
       cachedir: 2.3.0
       chalk: 4.1.1
       check-more-types: 2.24.0
+      cli-cursor: 3.1.0
       cli-table3: 0.6.0
       commander: 5.1.0
       common-tags: 1.8.0
       dayjs: 1.10.5
       debug: 4.3.2_supports-color@8.1.1
+      enquirer: 2.3.6
       eventemitter2: 6.4.4
       execa: 4.1.0
       executable: 4.1.1
       extract-zip: 2.0.1_supports-color@8.1.1
+      figures: 3.2.0
       fs-extra: 9.1.0
       getos: 3.2.1
       is-ci: 3.0.0
       is-installed-globally: 0.4.0
       lazy-ass: 1.6.0
-      listr2: 3.10.0
+      listr2: 3.10.0_enquirer@2.3.6
       lodash: 4.17.21
       log-symbols: 4.1.0
       minimist: 1.2.5
@@ -2620,8 +2584,6 @@ packages:
       untildify: 4.0.0
       url: 0.11.0
       yauzl: 2.10.0
-    transitivePeerDependencies:
-      - enquirer
     dev: true
 
   /d3-array/1.2.4:
@@ -2837,10 +2799,6 @@ packages:
       abab: 2.0.5
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.5.0
-    dev: true
-
-  /date-fns/1.30.1:
-    resolution: {integrity: sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==}
     dev: true
 
   /dayjs/1.10.5:
@@ -3664,11 +3622,6 @@ packages:
       pify: 2.3.0
     dev: true
 
-  /exit-hook/1.1.1:
-    resolution: {integrity: sha1-8FyiM7SMBdVP/wd2XfhQfpXAL/g=}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /exit/0.1.2:
     resolution: {integrity: sha1-BjJjj42HfMghB9MKD/8aF8uhzQw=}
     engines: {node: '>= 0.8.0'}
@@ -3777,14 +3730,6 @@ packages:
     resolution: {integrity: sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=}
     dependencies:
       pend: 1.2.0
-    dev: true
-
-  /figures/1.7.0:
-    resolution: {integrity: sha1-y+Hjr/zxzUS4DK3+0o3Hk6lwHS4=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      escape-string-regexp: 1.0.5
-      object-assign: 4.1.1
     dev: true
 
   /figures/3.2.0:
@@ -4136,13 +4081,6 @@ packages:
     dependencies:
       ajv: 6.12.6
       har-schema: 2.0.0
-    dev: true
-
-  /has-ansi/2.0.0:
-    resolution: {integrity: sha1-NPUEnOHs3ysGSa8+8k5F7TVBbZE=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      ansi-regex: 2.1.1
     dev: true
 
   /has-bigints/1.0.1:
@@ -5409,7 +5347,7 @@ packages:
       - supports-color
     dev: true
 
-  /listr2/3.10.0:
+  /listr2/3.10.0_enquirer@2.3.6:
     resolution: {integrity: sha512-eP40ZHihu70sSmqFNbNy2NL1YwImmlMmPh9WO5sLmPDleurMHt3n+SwEWNu2kzKScexZnkyFtc1VI0z/TGlmpw==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
@@ -5417,6 +5355,7 @@ packages:
     dependencies:
       cli-truncate: 2.1.0
       colorette: 1.2.2
+      enquirer: 2.3.6
       log-update: 4.0.0
       p-map: 4.0.0
       rxjs: 6.6.7
@@ -5902,11 +5841,6 @@ packages:
       wrappy: 1.0.2
     dev: true
 
-  /onetime/1.1.0:
-    resolution: {integrity: sha1-ofeDj4MUxRbwXs78vEzP4EtO14k=}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /onetime/5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
@@ -6230,8 +6164,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /pnpm/6.8.0:
-    resolution: {integrity: sha512-la/zfhv3FA9K5kwWda58genmRQD0MwWJjLvHhH65EQWOEG3sr9zKSCJxUzckIY9uy//IRhnTTUY0HYqq2D7N6g==}
+  /pnpm/6.9.0:
+    resolution: {integrity: sha512-PYB3AujuDut50PAe7m8jAggruh0D8/Zm+nO2QprVfG1Xug1zAOsMMJEc+wjvEC9irFwT20Qu4qvr+lEiXyK1HA==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
@@ -6636,14 +6570,6 @@ packages:
       lowercase-keys: 1.0.1
     dev: true
 
-  /restore-cursor/1.0.1:
-    resolution: {integrity: sha1-NGYfRohjJ/7SmRR5FSJS35LapUE=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      exit-hook: 1.1.1
-      onetime: 1.1.0
-    dev: true
-
   /restore-cursor/3.1.0:
     resolution: {integrity: sha512-l+sSefzHpj5qimhFSE5a8nufZYAM3sBSVMAPtYkmC+4EH2anSGaEMXSD0izRQbu9nfyQ9y5JrVmp7E8oZrUjvA==}
     engines: {node: '>=8'}
@@ -6996,13 +6922,6 @@ packages:
       is-regexp: 1.0.0
     dev: true
 
-  /strip-ansi/3.0.1:
-    resolution: {integrity: sha1-ajhfuIU9lS1f8F0Oiq+UJ43GPc8=}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      ansi-regex: 2.1.1
-    dev: true
-
   /strip-ansi/5.2.0:
     resolution: {integrity: sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==}
     engines: {node: '>=6'}
@@ -7074,11 +6993,6 @@ packages:
       mz: 2.7.0
       pirates: 4.0.1
       ts-interface-checker: 0.1.13
-    dev: true
-
-  /supports-color/2.0.0:
-    resolution: {integrity: sha1-U10EXOa2Nj+kARcIRimZXp3zJMc=}
-    engines: {node: '>=0.8.0'}
     dev: true
 
   /supports-color/5.5.0:
@@ -7613,12 +7527,12 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss/1.1.0:
-    resolution: {integrity: sha512-vb8jwOlLGCzHcAfh7gtBa/+gioTXmcJYqACoHhaDD1MEwMB55qTODJckvi1eeQ74yV4uBTizOCRrucY+gI2xAg==}
+  /vite-plugin-windicss/1.1.1:
+    resolution: {integrity: sha512-J1n3DoSg8BkQ42HDNzh+FqPhvBgCRgQ0Nvp2HLvb5FVl8FKEPw26Frc/oLaC1g9ypSlvkSM8011gHi+c+pxsRQ==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 1.1.0
+      '@windicss/plugin-utils': 1.1.1
       chalk: 4.1.1
       debug: 4.3.2
       windicss: 3.1.3
@@ -7626,12 +7540,12 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss/1.1.0_vite@2.3.8:
-    resolution: {integrity: sha512-vb8jwOlLGCzHcAfh7gtBa/+gioTXmcJYqACoHhaDD1MEwMB55qTODJckvi1eeQ74yV4uBTizOCRrucY+gI2xAg==}
+  /vite-plugin-windicss/1.1.1_vite@2.3.8:
+    resolution: {integrity: sha512-J1n3DoSg8BkQ42HDNzh+FqPhvBgCRgQ0Nvp2HLvb5FVl8FKEPw26Frc/oLaC1g9ypSlvkSM8011gHi+c+pxsRQ==}
     peerDependencies:
       vite: ^2.0.1
     dependencies:
-      '@windicss/plugin-utils': 1.1.0
+      '@windicss/plugin-utils': 1.1.1
       chalk: 4.1.1
       debug: 4.3.2
       vite: 2.3.8
