@@ -44,7 +44,7 @@ export default function createDirectives() {
           if (dir.value === null)
             dir.value = elements?.value.length
 
-          // If orderMap didn't have dir.value aka the order key, then initializ it.
+          // If orderMap didn't have dir.value aka the order key, then initialize it.
           // If key exists, then move current element to the first of order array to
           // make sure the v-after set correct CLASS_VCLICK_CURRENT state.
           if (!orderMap?.value.has(dir.value)) {

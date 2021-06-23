@@ -1,10 +1,17 @@
-import { computed, Ref, ref } from 'vue'
+import { computed, Ref, ref, nextTick } from 'vue'
 import { isString, SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
 
 export { rawRoutes }
+
+// force update collected elements when the route is fully resolved
+const routeForceRefresh = ref(0)
+router.afterEach(async() => {
+  await nextTick()
+  routeForceRefresh.value += 1
+})
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -25,7 +32,12 @@ export const currentLayout = computed(() => currentRoute.value?.meta?.layout)
 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 
-export const clicksElements = computed<HTMLElement[]>(() => currentRoute.value?.meta?.__clicksElements || [])
+export const clicksElements = computed<HTMLElement[]>(() => {
+  // eslint-disable-next-line no-unused-expressions
+  routeForceRefresh.value
+  return currentRoute.value?.meta?.__clicksElements || []
+})
+
 export const clicks = computed<number>({
   get() {
     let clicks = +(queryClicks.value || 0)
