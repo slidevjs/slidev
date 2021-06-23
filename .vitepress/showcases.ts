@@ -60,6 +60,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://masukin.link/talks-cover-npm.png',
     datetime: '2021-06-12',
   },
+  {
+    title: 'Create Icon Package With Vue and Rollup',
+    author: {
+      name: 'Lucky Dewa Satria',
+      link: 'https://github.com/lucky401',
+    },
+    at: 'Weekly Sharing',
+    slidesLink: 'https://masukin.link/talks/create-icon-package-with-vue-and-rollup',
+    sourceLink: 'https://github.com/lucky401/Create-Icon-Package-With-Vue-and-Rollup',
+    cover: 'https://masukin.link/talks-cover-create-icon-package-with-vue-and-rollup.png',
+    datetime: '2021-06-19',
+  },
   // Add yours here!
   {
     title: 'Yours?',
