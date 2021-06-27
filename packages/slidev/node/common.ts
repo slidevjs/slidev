@@ -29,7 +29,7 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
   if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
-    head += `\n<link href="${generateGoogleFontsUrl(data.config.fonts)}" rel="stylesheet">`
+    head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
 
   main = main
     .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
