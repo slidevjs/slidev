@@ -254,7 +254,8 @@ cli.command(
 
           const dirPath = `./${dir}`
           data.slides[0].frontmatter.theme = dirPath
-          data.slides[0].raw = ''
+          // @ts-expect-error
+          data.slides[0].raw = null
           await parser.save(data)
 
           console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
