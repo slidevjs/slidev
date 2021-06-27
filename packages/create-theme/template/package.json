@@ -26,12 +26,12 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
-    "@slidev/types": "^0.21.5",
+    "@slidev/types": "^0.22.0",
     "codemirror-theme-vars": "^0.1.1",
     "prism-theme-vars": "^0.2.2",
     "theme-vitesse": "^0.1.12"
   },
   "devDependencies": {
-    "@slidev/cli": "^0.21.4"
+    "@slidev/cli": "^0.22.0"
   }
 }
