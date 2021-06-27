@@ -101,7 +101,7 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 
 # Code
 
-Use code snippets and get the highlighting directly[^1]!
+Use code snippets and get the highlighting directly![^1]
 
 ```ts {all|2|1-6|9|all}
 interface User {
@@ -124,10 +124,13 @@ function updateUser(id: number, update: User) {
 
 <style>
 .footnotes-sep {
-  margin-top: 3em;
+  margin-top: 5em;
+}
+.footnotes {
+  @apply text-sm opacity-75;
 }
 .footnote-backref {
-  display: none
+  display: none;
 }
 </style>
 
@@ -332,4 +335,4 @@ class: text-center
 
 # Learn More
 
-[Documentations](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)
+[Documentations](https://sli.dev) / [GitHub](https://github.com/slidevjs/slidev) / [Showcases](https://sli.dev/showcases.html)
