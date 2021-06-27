@@ -2,8 +2,6 @@
   "exclude": [
     "@iconify/json",
     "husky",
-    "mermaid",
-    "@vue/compiler-sfc",
-    "vue"
+    "mermaid"
   ]
 }
