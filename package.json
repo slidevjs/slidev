@@ -67,7 +67,7 @@
     "jest": "^27.0.5",
     "katex": "^0.13.11",
     "lint-staged": "^11.0.0",
-    "mermaid": "^8.10.1",
+    "mermaid": "^8.11.0",
     "playwright-chromium": "^1.12.3",
     "pnpm": "^6.9.1",
     "rimraf": "^3.0.2",
