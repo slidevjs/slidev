@@ -39,6 +39,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'codemirror/mode/markdown/markdown',
             'codemirror/mode/xml/xml',
             'codemirror/mode/htmlmixed/htmlmixed',
+            'codemirror/addon/display/placeholder',
             'prettier/esm/parser-babel',
             'prettier/esm/parser-html',
             'prettier/esm/parser-typescript',
