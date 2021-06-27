@@ -125,3 +125,14 @@ export async function downloadPDF() {
     `${configs.title}.pdf`,
   )
 }
+
+export async function openInEditor(url?: string) {
+  if (url == null) {
+    const slide = currentRoute.value?.meta?.slide
+    if (!slide?.filepath)
+      return false
+    url = `${slide.filepath}:${slide.start}`
+  }
+  await fetch(`/__open-in-editor?file=${encodeURIComponent(url)}`)
+  return true
+}

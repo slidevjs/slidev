@@ -3,7 +3,7 @@ import { useEventListener, throttledWatch } from '@vueuse/core'
 import { computed, watch, ref, onMounted } from 'vue'
 import { activeElement, showEditor, editorWidth, isInputting } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
-import { currentRoute, currentSlideId } from '../logic/nav'
+import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 
 const tab = ref<'content' | 'note'>('content')
@@ -114,13 +114,6 @@ useEventListener('resize', () => {
   updateWidth(editorWidth.value)
 })
 
-const editorLink = computed(() => {
-  const slide = currentRoute.value?.meta?.slide
-  return (slide?.filepath)
-    ? `vscode://file/${slide.filepath}:${slide.start}`
-    : undefined
-})
-
 throttledWatch(
   [content, note],
   () => {
@@ -155,10 +148,8 @@ throttledWatch(
         {{ tab === 'content' ? 'Slide' : 'Note' }}
       </span>
       <div class="flex-auto"></div>
-      <button class="icon-btn">
-        <a :href="editorLink" target="_blank">
-          <carbon:launch />
-        </a>
+      <button class="icon-btn" @click="openInEditor()">
+        <carbon:launch />
       </button>
       <button class="icon-btn" @click="close">
         <carbon:close />
