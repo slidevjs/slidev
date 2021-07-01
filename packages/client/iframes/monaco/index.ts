@@ -129,12 +129,12 @@ async function start() {
   update()
 }
 
-window.addEventListener('message', (playload) => {
-  if (playload.source === window)
+window.addEventListener('message', (payload) => {
+  if (payload.source === window)
     return
-  if (typeof playload.data !== 'string')
+  if (typeof payload.data !== 'string')
     return
-  const { type, data } = JSON.parse(playload.data)
+  const { type, data } = JSON.parse(payload.data)
   if (type === 'slidev-monaco') {
     Object.assign(props, data)
     update()
