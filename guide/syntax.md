@@ -257,7 +257,7 @@ This shows on the left
 
 This shows on the right
 
-<template>
+</template>
 ```
 
 <div class="grid grid-cols-2 rounded border border-gray-400 border-opacity-50 px-10 pb-4">
