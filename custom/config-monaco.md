@@ -2,8 +2,6 @@
 
 <Environment type="client" />
 
-> By default, Monaco only is enabled only on dev mode. To make it work on SPA build, add `monaco: true` to your frontmatter configs.
-
 Create `./setup/monaco.ts` with the following content:
 
 ```ts
@@ -46,7 +44,7 @@ plusOne.value++ // error
 
 ## Exporting
 
-By default, Monaco will ONLY work on `dev` mode. If you would also like to have it available in the exported SPA, you can configure it in your frontmatter:
+By default, Monaco will ONLY work on `dev` mode. If you would like to have it available in the exported SPA, configure it in your frontmatter:
 
 ```yaml
 ---
@@ -56,7 +54,7 @@ monaco: true # default "dev"
 
 ## Types Auto Installing
 
-When you use TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
+When use TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
 
 ~~~ts
 //```ts {monaco}
@@ -67,4 +65,4 @@ const counter = ref(0)
 //```
 ~~~
 
-In the example above, just make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest and your editor will just work!
+In the example above, make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest to get the types working for the editor automatically!

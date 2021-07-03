@@ -32,7 +32,7 @@ You can directly use Windi CSS and Vue components to style and enrich your slide
 
 ## Front Matter & Layouts
 
-You can specify layouts and other metadata for each slide by converting the separators into [front matter blocks](https://jekyllrb.com/docs/front-matter/). Each front matter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
+Specify layouts and other metadata for each slide by converting the separators into [front matter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
 ~~~md
 ---
@@ -71,6 +71,8 @@ One big reason I am building Slidev is needing to make my code look just right i
 console.log('Hello, World!')
 //```
 ~~~
+
+We support [Prism](http://prismjs.com) and [Shiki](https://github.com/shiki/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters/) for more details.
 
 ### Line Highlighting
 
@@ -215,7 +217,7 @@ The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-
 - `<logos-vue />` - <logos-vue /> from [SVG Logos](https://github.com/gilbarbara/logos)
 - And much more...
 
-You can browse and search for all the icons available with [Icônes](https://icones.js.org/).
+Browse and search for all the icons available with [Icônes](https://icones.js.org/).
 
 ### Styling Icons
 
@@ -289,7 +291,7 @@ This shows on the left
 This shows on the right
 ```
 
-You can also explicitly specify the default slot and provide in custom order
+You can also explicitly specify the default slot and provide in the custom order
 
 ```md
 ---
