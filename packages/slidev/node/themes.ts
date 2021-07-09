@@ -14,6 +14,8 @@ const officialThemes: Record<string, string> = {
   'default': '@slidev/theme-default',
   'seriph': '@slidev/theme-seriph',
   'apple-basic': '@slidev/theme-apple-basic',
+  'shibainu': '@slidev/theme-shibainu',
+  'bricks': '@slidev/theme-bricks',
 }
 
 export function packageExists(name: string) {
