@@ -72,7 +72,7 @@ console.log('Hello, World!')
 //```
 ~~~
 
-We support [Prism](http://prismjs.com) and [Shiki](https://github.com/shiki/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters/) for more details.
+We support [Prism](http://prismjs.com) and [Shiki](https://github.com/shiki/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
 
 ### Line Highlighting
 
