@@ -130,7 +130,7 @@ function updateUser(id: number, update: User) {
 
 <style>
 .footnotes-sep {
-  margin-top: 5em;
+  @apply mt-20 opacity-10;
 }
 .footnotes {
   @apply text-sm opacity-75;
