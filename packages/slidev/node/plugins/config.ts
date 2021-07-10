@@ -47,6 +47,11 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ],
           exclude: EXCLUDE,
         },
+        server: {
+          fs: {
+            strict: true,
+          },
+        },
       }
 
       if (isInstalledGlobally) {
