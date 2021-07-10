@@ -55,10 +55,5 @@ export async function createWindiCSSPlugin(
       },
       ...windiOptions,
     },
-    {
-      hookOptions: {
-        ignoreNodeModules: false,
-      },
-    },
   )
 }
