@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { defineEmit, defineProps } from 'vue'
 import { configs } from '../env'
 import Modal from './Modal.vue'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     default: false,

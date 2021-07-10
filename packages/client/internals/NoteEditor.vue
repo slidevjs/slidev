@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ignorableWatch, onClickOutside } from '@vueuse/core'
-import { defineProps, nextTick, ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import { currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 

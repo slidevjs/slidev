@@ -8,7 +8,7 @@ Usage:
 
 <script setup lang="ts">
 import { useScriptTag } from '@vueuse/core'
-import { defineProps, getCurrentInstance, onMounted, ref } from 'vue'
+import { getCurrentInstance, onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
 
 const props = defineProps<{

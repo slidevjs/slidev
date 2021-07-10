@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { defineProps, defineEmit } from 'vue'
 import { useVModel } from '@vueuse/core'
 
-const emit = defineEmit()
+const emit = defineEmits()
 const props = defineProps<{
   value: number
   label?: string

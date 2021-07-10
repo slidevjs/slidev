@@ -7,8 +7,6 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 defineProps<{
   id: string
   width?: number

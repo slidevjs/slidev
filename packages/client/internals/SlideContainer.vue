@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
-import { computed, defineProps, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { slideAspect, slideWidth, slideHeight, configs } from '../env'
 
 const props = defineProps({

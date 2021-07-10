@@ -9,7 +9,6 @@ Simple Arrow
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { customAlphabet } from 'nanoid'
 
 const nanoid = customAlphabet('abcedfghicklmn', 10)

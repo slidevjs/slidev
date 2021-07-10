@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, ref, shallowRef } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { isDark, toggleDark, isColorSchemaConfigured } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'

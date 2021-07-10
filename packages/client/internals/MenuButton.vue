@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onClickOutside, useVModel } from '@vueuse/core'
-import { defineEmit, defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     default: false,

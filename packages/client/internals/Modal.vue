@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { defineEmit, defineProps, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     default: false,

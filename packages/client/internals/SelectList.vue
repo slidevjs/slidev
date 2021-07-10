@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { defineEmit, defineProps } from 'vue'
 import type { PropType } from 'vue'
 import type { SelectionItem } from './types'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     type: [Object, String, Number] as PropType<any>,

@@ -20,8 +20,6 @@ This shows on the right
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 const props = defineProps({
   class: {
     type: String,

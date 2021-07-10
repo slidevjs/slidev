@@ -16,9 +16,9 @@ or
 
 <script setup lang="ts">
 import { useElementSize, useVModel } from '@vueuse/core'
-import { computed, defineEmit, defineProps, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     default: '',

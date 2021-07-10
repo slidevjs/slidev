@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { defineEmit, defineProps, nextTick } from 'vue'
+import { nextTick } from 'vue'
 import { recorder, recordingName, recordCamera, getFilename } from '../logic/recording'
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
 
-const emit = defineEmit()
+const emit = defineEmits<{}>()
 const props = defineProps({
   modelValue: {
     default: false,
