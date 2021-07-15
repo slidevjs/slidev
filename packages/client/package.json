@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.22.4",
+  "version": "0.22.5",
   "engines": {
     "node": ">=14.0.0"
   },
