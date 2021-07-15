@@ -25,6 +25,13 @@ export interface ShikiOptions {
   highlighter?: ShikiHighlighter
 }
 
+export interface MonacoSetupReturn {
+  theme?: {
+    light?: string
+    dark?: string
+  }
+}
+
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
 export interface NavOperations {
@@ -51,7 +58,7 @@ export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
 export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
 
 // client side
-export type MonacoSetup = (m: typeof monaco) => Awaitable<void>
+export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | undefined
 export type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>

@@ -45,7 +45,7 @@ const ext = () => {
 }
 
 async function start() {
-  const { monaco } = await setupMonaco()
+  const { monaco, theme = {} } = await setupMonaco()
 
   const model = monaco.editor.createModel(
     props.code,
@@ -100,7 +100,10 @@ async function start() {
   })
 
   update = () => {
-    monaco.editor.setTheme(props.dark ? 'vitesse-dark' : 'vitesse-light')
+    monaco.editor.setTheme(props.dark
+      ? theme.dark || 'vitesse-dark'
+      : theme.light || 'vitesse-light',
+    )
     styleObject.innerHTML = `:root { ${props.style} }`
 
     if (editor.getValue().toString() !== props.code) {

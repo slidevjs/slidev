@@ -1,6 +1,7 @@
 import { getCurrentInstance, onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
 import { createSingletonPromise } from '@antfu/utils'
+import { MonacoSetupReturn } from '@slidev/types'
 /* __imports__ */
 
 const setup = createSingletonPromise(async() => {
@@ -50,13 +51,18 @@ const setup = createSingletonPromise(async() => {
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const injection_arg = monaco
+  // eslint-disable-next-line prefer-const
+  let injection_return: MonacoSetupReturn = {}
 
   /* __async_injections__ */
 
   if (getCurrentInstance())
     await new Promise<void>(resolve => onMounted(resolve))
 
-  return { monaco }
+  return {
+    monaco,
+    ...injection_return,
+  }
 })
 
 export default setup
