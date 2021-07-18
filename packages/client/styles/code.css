@@ -30,6 +30,17 @@ html:not(.dark) .shiki-dark {
   @apply h-full;
 }
 
+.shiki-container code {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.shiki-container code .line::before {
+  content: counter(step);
+  counter-increment: step;
+  @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600
+}
+
 // revert windicss preflight for katex
 .katex,
 .katex :after,
