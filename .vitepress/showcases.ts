@@ -72,6 +72,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://masukin.link/talks-cover-create-icon-package-with-vue-and-rollup.png',
     datetime: '2021-06-19',
   },
+   {
+    title: 'BeAPT',
+    author: {
+      name: 'Daniel Sousa @TutoDS',
+      link: 'https://github.com/tutods',
+    },
+    at: 'Presentation of my college final project',
+    slidesLink: 'https://beapt-presentation.netlify.app',
+    sourceLink: 'https://github.com/tutods/lei-project/presentation',
+    cover: 'https://github.com/tutods/lei-project/presentation/cover.png',
+    datetime: '2021-07-20',
+  },
   // Add yours here!
   {
     title: 'Yours?',
