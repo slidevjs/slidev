@@ -6,7 +6,13 @@ Excited to hear that you are interested in contributing to this project! Thanks!
 
 Documentations are now moved to [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
 
-## Setup
+## Setup (in your browser)
+
+You can contribute through a development environment in your browser by clicking the following button:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/slidevjs/slidev)
+
+## Setup (locally)
 
 This project uses [`pnpm`](https://pnpm.io/) to manage the dependencies, install it if you haven't via
 
