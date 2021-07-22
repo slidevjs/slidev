@@ -1,0 +1,22 @@
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+  - before: npm i -g pnpm
+    init: |
+      pnpm install
+      pnpm build
+    command: pnpm demo:dev
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - port: 3030
+    onOpen: open-preview
+
+# List the VS Code extensions to install. Learn more https://www.gitpod.io/docs/vscode-extensions/
+vscode:
+  extensions:
+    - "antfu.vite"
+    - "johnsoncodehk.volar"
+    - "antfu.iconify"
+    - "dbaeumer.vscode-eslint"
+    - "voorjaar.windicss-intellisense"
+    - "csstools.postcss"
