@@ -11,7 +11,7 @@ Simple Arrow
 <script setup lang="ts">
 import { customAlphabet } from 'nanoid'
 
-const nanoid = customAlphabet('abcedfghicklmn', 10)
+const nanoid = customAlphabet('abcedfghijklmn', 10)
 
 defineProps<{
   x1: number | string
