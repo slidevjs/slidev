@@ -143,6 +143,12 @@ export interface SlidevConfig {
    */
   highlighter: 'prism' | 'shiki'
   /**
+   * Show line numbers in code blocks
+   *
+   * @default false
+   */
+  lineNumbers: boolean
+  /**
    * Force slides color schema
    *
    * @default 'auto'
