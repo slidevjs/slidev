@@ -244,6 +244,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     download: false,
     info: false,
     highlighter: themeHightlighter || 'prism',
+    lineNumbers: false,
     colorSchema: themeColorSchema || 'auto',
     routerMode: 'history',
     aspectRatio: 16 / 9,

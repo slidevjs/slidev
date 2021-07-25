@@ -45,10 +45,15 @@ const style = computed(() => ({
   width: `${slideWidth}px`,
   transform: `translate(-50%, -50%) scale(${scale.value})`,
 }))
+
+const className = computed(() => ({
+  'select-none': !configs.selectable,
+  'slidev-code-line-numbers': configs.lineNumbers,
+}))
 </script>
 
 <template>
-  <div id="slide-container" ref="root" :class="{ 'select-none': !configs.selectable }">
+  <div id="slide-container" ref="root" :class="className">
     <div id="slide-content" :style="style">
       <slot />
     </div>

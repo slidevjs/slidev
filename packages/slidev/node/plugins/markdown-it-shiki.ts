@@ -43,6 +43,10 @@ export function resolveShikiOptions(options: ShikiOptions) {
   }
 }
 
+function trimEndNewLine(code: string) {
+  return code.replace(/\n$/, '')
+}
+
 const MarkdownItShiki: MarkdownIt.PluginWithOptions<ShikiOptions> = (markdownit, options = {}) => {
   const _highlighter: ShikiHighlighter = options!.highlighter!
 
@@ -50,11 +54,12 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<ShikiOptions> = (markdownit,
 
   markdownit.options.highlight = (code, lang) => {
     if (darkModeThemes) {
+      const trimmed = trimEndNewLine(code)
       const dark = _highlighter
-        .codeToHtml(code, lang || 'text', darkModeThemes.dark)
+        .codeToHtml(trimmed, lang || 'text', darkModeThemes.dark)
         .replace('<pre class="shiki"', '<pre class="slidev-code shiki shiki-dark"')
       const light = _highlighter
-        .codeToHtml(code, lang || 'text', darkModeThemes.light)
+        .codeToHtml(trimmed, lang || 'text', darkModeThemes.light)
         .replace('<pre class="shiki"', '<pre class="slidev-code shiki shiki-light"')
       return escapeVueInCode(`<pre class="shiki-container">${dark}${light}</pre>`)
     }
