@@ -10,6 +10,9 @@ export async function createServer(
   const rawConfig = await resolveConfig({}, 'serve')
   const pluginOptions = rawConfig.slidev || {}
 
+  // default open editor to code, #312
+  process.env.EDITOR = process.env.EDITOR || 'code'
+
   const server = await createViteServer(
     mergeConfig(
       viteConfig,
