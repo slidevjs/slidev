@@ -19,6 +19,8 @@ titleTemplate: '%s - Slidev'
 download: true
 # syntax highlighter, can be 'prism' or 'shiki'
 highlighter: 'prism'
+# show line numbers in code blocks
+lineNumbers: false
 # enable monaco editor, default to dev only
 monaco: 'dev'
 
@@ -50,7 +52,7 @@ info: |
 ---
 ```
 
-Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/types.ts#L29) for more options.
+Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more options.
 
 ## Directory Structure
 
