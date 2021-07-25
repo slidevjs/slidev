@@ -1,7 +1,7 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap, toArray, uniq } from '@antfu/utils'
-import { FontOptions, ResolvedFontOptions, SlideInfo, SlideInfoBase, SlidevConfig, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
-import { parseAspectRatio } from './utils'
+import { FontOptions, ResolvedFontOptions, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
   return `${
@@ -152,7 +152,7 @@ export function parse(
   }
 }
 
-function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
+export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const {
     fallbacks = true,
     italic = false,
@@ -231,56 +231,6 @@ function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   }
 }
 
-export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
-  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
-
-  const defaultConfig: SlidevConfig = {
-    theme: 'default',
-    title: 'Slidev',
-    titleTemplate: '%s - Slidev',
-    remoteAssets: true,
-    monaco: 'dev',
-    download: false,
-    info: false,
-    highlighter: themeHightlighter || 'prism',
-    lineNumbers: false,
-    colorSchema: themeColorSchema || 'auto',
-    routerMode: 'history',
-    aspectRatio: 16 / 9,
-    canvasWidth: 980,
-    selectable: false,
-    themeConfig: {},
-    fonts: {} as ResolvedFontOptions,
-  }
-  const config: SlidevConfig = {
-    ...defaultConfig,
-    ...themeMeta.defaults,
-    ...headmatter.config,
-    ...headmatter,
-    fonts: resolveFonts({
-      ...themeMeta.defaults?.fonts,
-      ...headmatter.config?.fonts,
-      ...headmatter?.fonts,
-    }),
-  }
-
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
-    config.colorSchema = 'auto'
-  if (themeColorSchema && config.colorSchema === 'auto')
-    config.colorSchema = themeColorSchema
-  config.aspectRatio = parseAspectRatio(config.aspectRatio)
-
-  if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    // eslint-disable-next-line no-console
-    console.warn(`[slidev] Color schema "${config.colorSchema}" does not supported by the theme`)
-  if (themeHightlighter && config.highlighter !== themeHightlighter)
-    // eslint-disable-next-line no-console
-    console.warn(`[slidev] Syntax highlighter "${config.highlighter}" does not supported by the theme`)
-
-  return config
-}
-
 export function mergeFeatureFlags(a: SlidevFeatureFlags, b: SlidevFeatureFlags): SlidevFeatureFlags {
   return objectMap(a, (k, v) => [k, v || b[k]])
 }
@@ -305,3 +255,4 @@ export function scanMonacoModules(md: string) {
 }
 
 export * from './utils'
+export * from './config'
