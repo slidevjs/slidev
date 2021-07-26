@@ -21,7 +21,7 @@ The second column
 </div>
 ```
 
-Go further, you can customize the size of each columns like:
+Go further, you can customize the size of each column like:
 
 ```html
 <div class="grid grid-cols-[200px,1fr,10%] gap-4">

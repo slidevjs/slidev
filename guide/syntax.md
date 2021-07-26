@@ -369,7 +369,7 @@ Learn more: [Demo](https://sli.dev/demo/starter/8) | [KaTeX](https://katex.org/)
 
 You can also create diagrams / graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
 
-Code blocks marked as `mermaid` will be converted to digrams, for example:
+Code blocks marked as `mermaid` will be converted to diagrams, for example:
 
 ~~~md
 //```mermaid
