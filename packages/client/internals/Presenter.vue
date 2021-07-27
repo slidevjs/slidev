@@ -105,7 +105,7 @@ useSwipeControls(main)
           />
         </SlideContainer>
       </div>
-      <div class="grid-section note">
+      <div class="grid-section note overflow-auto">
         <NoteEditor class="w-full h-full p-4 overflow-auto" />
       </div>
       <div class="grid-section bottom">
