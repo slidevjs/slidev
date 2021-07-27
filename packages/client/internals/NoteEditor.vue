@@ -70,7 +70,7 @@ onClickOutside(input, () => {
     v-show="editing || !note"
     ref="input"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent"
+    class="prose resize-none overflow-auto outline-none bg-transparent block"
     :class="props.class"
     :placeholder="placeholder"
     @focus="editing = true"
