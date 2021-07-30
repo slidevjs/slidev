@@ -68,6 +68,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       return () => {
         server.middlewares.use(async(req, res, next) => {
           if (req.url!.endsWith('.html')) {
+            res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
             res.end(await getIndexHtml(options))
             return
