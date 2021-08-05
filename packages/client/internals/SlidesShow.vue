@@ -2,6 +2,7 @@
 import { watch } from 'vue'
 import { currentRoute, clicks, rawRoutes, nextRoute } from '../logic/nav'
 import { getSlideClass } from '../utils'
+import DrauuLayer from './DrauuLayer.vue'
 import SlideWrapper from './SlideWrapper'
 // @ts-ignore
 import GlobalTop from '/@slidev/global-components/top'
@@ -36,4 +37,6 @@ watch(currentRoute, () => {
 
   <!-- Global Top -->
   <GlobalTop />
+
+  <DrauuLayer class="w-full h-full absolute top-0" :enabled="true" />
 </template>

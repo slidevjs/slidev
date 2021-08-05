@@ -14,6 +14,7 @@ const EXCLUDE = [
   'mermaid',
   'vite-plugin-windicss',
   'vue-demi',
+  'drauu',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {

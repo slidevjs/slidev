@@ -1,11 +1,7 @@
-import { App, DirectiveBinding, InjectionKey, Ref, watch } from 'vue'
+import { App, DirectiveBinding, InjectionKey, watch } from 'vue'
 import { remove } from '@antfu/utils'
 import { isPrintMode, isPrintWithClicks } from '../logic/nav'
-
-export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
-export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
-export const injectionOrderMap: InjectionKey<Ref<Map<number, HTMLElement[]>>> = Symbol('v-click-clicks-order-map')
-export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
+import { injectionClicksDisabled, injectionClicksElements, injectionClicks, injectionOrderMap } from '../logic/injections'
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'

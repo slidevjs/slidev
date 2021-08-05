@@ -1,6 +1,6 @@
 import { useVModel } from '@vueuse/core'
 import { provide, defineComponent, h } from 'vue'
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap } from '../modules/directives'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap } from '../logic/injections'
 
 export default defineComponent({
   props: {
