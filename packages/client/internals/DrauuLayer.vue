@@ -2,7 +2,7 @@
 import { onMounted, ref, watch, inject } from 'vue'
 import { createDrauu } from 'drauu'
 import { drauuBrush, drauuMode } from '../state/drauu'
-import { injectionSlideScale } from '../logic/injections'
+import { injectionSlideScale } from '../constants'
 
 defineProps<{ enabled?: boolean }>()
 

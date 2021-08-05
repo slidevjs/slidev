@@ -2,7 +2,7 @@
 import { useElementSize } from '@vueuse/core'
 import { computed, provide, ref, watchEffect } from 'vue'
 import { slideAspect, slideWidth, slideHeight, configs } from '../env'
-import { injectionSlideScale } from '../logic/injections'
+import { injectionSlideScale } from '../constants'
 
 const props = defineProps({
   width: {
