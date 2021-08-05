@@ -6,14 +6,14 @@ import ViteComponents from 'vite-plugin-components'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import { notNullish } from '@antfu/utils'
 import { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { createConfigPlugin } from './config'
+import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
-import { createMonacoTypesLoader } from './monaco'
+import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
-import VitePluginServerRef from './server-ref'
+import VitePluginServerRef from './serverRef'
 import { createMarkdownPlugin } from './markdown'
 import { createWindiCSSPlugin } from './windicss'
-import { createFixPlugins } from './fix'
+import { createFixPlugins } from './patchTransform'
 
 const customElements = new Set([
   // katex

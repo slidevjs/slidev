@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { existsSync } from 'fs-extra'
 import { isObject } from '@antfu/utils'
-import { jiti } from './jiti'
+import jiti from 'jiti'
 
 function deepMerge(a: any, b: any, rootPath = '') {
   a = { ...a }
@@ -21,7 +21,7 @@ export async function loadSetups<T, R extends object>(roots: string[], name: str
   for (const root of roots) {
     const path = resolve(root, 'setup', name)
     if (existsSync(path)) {
-      const { default: setup } = jiti(path)
+      const { default: setup } = jiti(__filename)(path)
       const result = await setup(arg)
       if (result !== null) {
         returns = merge
