@@ -20,6 +20,14 @@ html {
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
 }
 
+.icon-btn.shallow {
+  @apply opacity-30
+}
+
+.icon-btn.active {
+  @apply opacity-100
+}
+
 .icon-btn.disabled {
   @apply opacity-25 pointer-events-none;
 }

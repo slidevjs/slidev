@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { shallowRef, watch } from 'vue'
 import { currentRoute, clicks, rawRoutes, nextRoute } from '../logic/nav'
 import { getSlideClass } from '../utils'
-import DrauuLayer from './DrauuLayer.vue'
 import SlideWrapper from './SlideWrapper'
 // @ts-ignore
 import GlobalTop from '/@slidev/global-components/top'
@@ -16,6 +15,10 @@ watch(currentRoute, () => {
   if (nextRoute.value?.meta && nextRoute.value.meta.preload !== false)
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
+
+const DrauuLayer = shallowRef<any>()
+if (__DEV__)
+  import('./DrauuLayer.vue').then(v => DrauuLayer.value = v.default)
 </script>
 
 <template>
@@ -38,5 +41,7 @@ watch(currentRoute, () => {
   <!-- Global Top -->
   <GlobalTop />
 
-  <DrauuLayer class="w-full h-full absolute top-0" :enabled="true" />
+  <template v-if="__DEV__ && DrauuLayer">
+    <DrauuLayer />
+  </template>
 </template>
