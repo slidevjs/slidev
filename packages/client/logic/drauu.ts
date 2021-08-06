@@ -1,5 +1,6 @@
 import { markRaw, reactive, ref, watch } from 'vue'
 import { Brush, createDrauu, DrawingMode } from 'drauu'
+import { currentPage } from './nav'
 
 export const brushColors = [
   '#ff595e',
@@ -27,6 +28,8 @@ export const drauu = markRaw(createDrauu({
 export function clearDrauu() {
   if (confirm('Clear the drawing?'))
     drauu.clear()
+
+  drauuData.delete(currentPage.value)
 }
 
 if (__DEV__) {
