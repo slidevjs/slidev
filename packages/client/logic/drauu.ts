@@ -17,6 +17,8 @@ export const drauuEnabled = ref(false)
 export const canUndo = ref(false)
 export const canRedo = ref(false)
 
+export const drauuData = new Map<number, string>()
+
 export const drauu = markRaw(createDrauu({
   brush: drauuBrush,
   mode: drauuMode.value,
