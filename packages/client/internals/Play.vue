@@ -41,7 +41,7 @@ if (__DEV__)
       :style="{ background: 'var(--slidev-slide-container-background, black)'}"
       :width="isPrintMode ? windowSize.width.value : undefined"
       :scale="slideScale"
-      @click="onClick"
+      @pointerdown="onClick"
     >
       <template #>
         <SlidesShow />

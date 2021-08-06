@@ -7,7 +7,7 @@ import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits([])
 const props = defineProps<{ modelValue: boolean }>()
 
 const value = useVModel(props, 'modelValue', emit)

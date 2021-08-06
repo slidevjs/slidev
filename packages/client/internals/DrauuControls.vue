@@ -22,8 +22,8 @@ function redo() {
         @click="drauuBrush.color = color"
       >
         <div
-          class="w-5 h-5 transition-all border border-gray-400/50"
-          :class="drauuBrush.color !== color ? 'rounded-full' : 'rounded'"
+          class="w-6 h-6 transition-all transform border border-gray-400/50"
+          :class="drauuBrush.color !== color ? 'rounded-1/2 scale-85' : 'rounded'"
           :style="{ background: color }"
         />
       </button>
@@ -34,7 +34,7 @@ function redo() {
         <carbon:draw />
       </button>
       <button class="icon-btn" :class="{ shallow: drauuMode != 'line' }" @click="drauuMode = 'line'">
-        <carbon:scalpel />
+        <uil:line-alt />
       </button>
       <button class="icon-btn" :class="{ shallow: drauuMode != 'ellipse' }" @click="drauuMode = 'ellipse'">
         <carbon:radio-button />
@@ -45,14 +45,14 @@ function redo() {
 
       <VerticalDivider />
 
-      <button class="icon-btn" @click="clearDrauu()">
-        <carbon:clean />
-      </button>
       <button class="icon-btn" :class="{ disabled: !canUndo }" @click="undo()">
         <carbon:undo />
       </button>
       <button class="icon-btn" :class="{ disabled: !canRedo }" @click="redo()">
         <carbon:redo />
+      </button>
+      <button class="icon-btn" @click="clearDrauu()">
+        <carbon:clean />
       </button>
 
       <template v-if="drauuEnabled">
