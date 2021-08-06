@@ -2,6 +2,7 @@
 import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
+import { isDrawing } from '../logic/drauu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { themeVars } from '../env'
 import Controls from './Controls.vue'
@@ -49,7 +50,10 @@ if (__DEV__)
       <template #controls>
         <div
           class="absolute bottom-0 left-0 transition duration-300 opacity-0 hover:opacity-100"
-          :class="presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2'"
+          :class="[
+            presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2',
+            isDrawing ? 'pointer-events-none': ''
+          ]"
         >
           <NavControls
             class="m-auto"

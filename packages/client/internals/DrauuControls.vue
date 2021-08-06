@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { drauuMode, drauu, drauuBrush, brushColors, drauuEnabled, canUndo, canRedo, clearDrauu } from '../logic/drauu'
+import { drauuMode, drauu, drauuBrush, brushColors, drauuEnabled, canUndo, canRedo, canClear, clearDrauu } from '../logic/drauu'
 import VerticalDivider from './VerticalDivider.vue'
 
 function undo() {
   drauu.undo()
 }
-
 function redo() {
   drauu.redo()
 }
@@ -51,8 +50,8 @@ function redo() {
       <button class="icon-btn" :class="{ disabled: !canRedo }" @click="redo()">
         <carbon:redo />
       </button>
-      <button class="icon-btn" @click="clearDrauu()">
-        <carbon:clean />
+      <button class="icon-btn" :class="{ disabled: !canClear }" @click="clearDrauu()">
+        <carbon:delete />
       </button>
 
       <template v-if="drauuEnabled">

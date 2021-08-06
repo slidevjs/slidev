@@ -165,7 +165,7 @@ importers:
       '@vueuse/head': ^0.6.0
       '@vueuse/motion': ^1.5.6
       codemirror: ^5.62.2
-      drauu: ^0.0.7
+      drauu: ^0.0.8
       file-saver: ^2.0.5
       js-base64: ^3.6.1
       js-yaml: ^4.1.0
@@ -188,7 +188,7 @@ importers:
       '@vueuse/head': 0.6.0_vue@3.1.5
       '@vueuse/motion': 1.5.6_vue@3.1.5
       codemirror: 5.62.2
-      drauu: 0.0.7
+      drauu: 0.0.8
       file-saver: 2.0.5
       js-base64: 3.6.1
       js-yaml: 4.1.0
@@ -811,8 +811,8 @@ packages:
       lodash.once: 4.1.1
     dev: true
 
-  /@drauu/core/0.0.7:
-    resolution: {integrity: sha512-+WtQA+ffiw0TOz38gsOfWZntu0HrrES7VvSlxR1HXiCVwbFfTttQqlDxT8VGcUvZgBJMvJQUZz8lwGH1m3XdrQ==}
+  /@drauu/core/0.0.8:
+    resolution: {integrity: sha512-POydIhgntJed+8++rzeibcPvTF3I6tahKyclLhWbNkwH3F0JWpwB1H7+oio1zCHCxj8Zy7sVgGuIlLFPV3IYdg==}
     dev: false
 
   /@eslint/eslintrc/0.4.3:
@@ -3050,10 +3050,10 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /drauu/0.0.7:
-    resolution: {integrity: sha512-7B31yMF1zuZIcrjj+YHvrPa0BlcsM63xqhnJGeo3fgIvXka6DY5nWlwHmn0cVyXME/I/nw+A0Z2q+e9dEHW7jQ==}
+  /drauu/0.0.8:
+    resolution: {integrity: sha512-Vd2zrWF82p+Gg4qdbZo79riymfH0hNR+FKeym2gXH+n3m6T3IuO0j7Ab++vTr8zLJEiJlqy1Txq3WNCGhQ5rUA==}
     dependencies:
-      '@drauu/core': 0.0.7
+      '@drauu/core': 0.0.8
     dev: false
 
   /duplexer3/0.1.4:

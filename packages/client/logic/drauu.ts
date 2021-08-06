@@ -1,4 +1,4 @@
-import { markRaw, reactive, ref, watch } from 'vue'
+import { markRaw, reactive, ref } from 'vue'
 import { Brush, createDrauu, DrawingMode } from 'drauu'
 import { currentPage } from './nav'
 
@@ -14,21 +14,22 @@ export const brushColors = [
 
 export const drauuBrush = reactive<Brush>({ color: brushColors[0], size: 4 })
 export const drauuMode = ref<DrawingMode>('draw')
+export const drauuOptions = reactive({
+  mode: drauuMode,
+  brush: drauuBrush,
+})
 export const drauuEnabled = ref(false)
 export const canUndo = ref(false)
 export const canRedo = ref(false)
+export const canClear = ref(false)
+export const isDrawing = ref(false)
 
 export const drauuData = new Map<number, string>()
 
-export const drauu = markRaw(createDrauu({
-  brush: drauuBrush,
-  mode: drauuMode.value,
-}))
+export const drauu = markRaw(createDrauu(drauuOptions))
 
 export function clearDrauu() {
-  if (confirm('Clear the drawing?'))
-    drauu.clear()
-
+  drauu.clear()
   drauuData.delete(currentPage.value)
 }
 
@@ -36,9 +37,11 @@ if (__DEV__) {
   drauu.on('changed', () => {
     canRedo.value = drauu.canRedo()
     canUndo.value = drauu.canUndo()
+    canClear.value = !!drauu.el?.children.length
   })
 
-  watch(drauuMode, mode => drauu.mode = mode)
+  drauu.on('start', () => isDrawing.value = true)
+  drauu.on('end', () => isDrawing.value = false)
 
   window.addEventListener('keydown', (e) => {
     if (!drauuEnabled.value)
