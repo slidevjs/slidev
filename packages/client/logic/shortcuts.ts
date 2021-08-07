@@ -7,7 +7,7 @@ import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
 import { drawingEnabled } from './drawings'
 
-const _shortcut = and(not(isInputting), not(isOnFocus), not(drawingEnabled), shortcutsEnabled)
+const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 
 export function shortcut(key: string | Ref<boolean>, fn: Fn, autoRepeat = false) {
   if (typeof key === 'string')
@@ -44,7 +44,7 @@ export function strokeShortcut(key: KeyFilter, fn: Fn) {
 export function registerShortcuts() {
   const customShortcuts = setupShortcuts()
 
-  const { space, shift, left, right } = magicKeys
+  const { escape, space, shift, left, right, d, g, o } = magicKeys
   const shortcuts = new Map<string | Ref<Boolean>, ShortcutOptions>(
     [
       { key: and(space, not(shift)), fn: next, autoRepeat: true },
@@ -57,10 +57,10 @@ export function registerShortcuts() {
       { key: 'down', fn: nextSlide, autoRepeat: true },
       { key: and(left, shift), fn: () => prevSlide(false), autoRepeat: true },
       { key: and(right, shift), fn: nextSlide, autoRepeat: true },
-      { key: 'd', fn: toggleDark },
-      { key: 'o', fn: toggleOverview },
-      { key: 'escape', fn: () => showOverview.value = false },
-      { key: 'g', fn: () => showGotoDialog.value = !showGotoDialog.value },
+      { key: and(d, not(drawingEnabled)), fn: toggleDark },
+      { key: and(o, not(drawingEnabled)), fn: toggleOverview },
+      { key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },
+      { key: and(g, not(drawingEnabled)), fn: () => showGotoDialog.value = !showGotoDialog.value },
       ...customShortcuts,
     ]
       .map((options: ShortcutOptions) => [options.key, options]),
