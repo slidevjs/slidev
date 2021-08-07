@@ -6,6 +6,7 @@ import ViteComponents from 'vite-plugin-components'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import { notNullish } from '@antfu/utils'
 import { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
+import { loadDrawings, writeDarwings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
@@ -72,6 +73,8 @@ export async function ViteSlidevPlugin(
 
   const MarkdownPlugin = await createMarkdownPlugin(options, pluginOptions)
 
+  const drawingData = await loadDrawings(options)
+
   return [
     await createWindiCSSPlugin(options, pluginOptions),
     MarkdownPlugin,
@@ -126,9 +129,16 @@ export async function ViteSlidevPlugin(
           page: 0,
           clicks: 0,
         },
-        drauu: {},
+        drauu: drawingData,
+      },
+      onChanged(name, data) {
+        if (!options.data.config.persistDrawings)
+          return
+        if (name === 'drauu')
+          writeDarwings(options, data)
       },
     }),
+
     createConfigPlugin(options),
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),

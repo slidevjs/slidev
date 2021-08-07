@@ -23,6 +23,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     selectable: false,
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
+    persistDrawings: false,
   }
   const config: SlidevConfig = {
     ...defaultConfig,

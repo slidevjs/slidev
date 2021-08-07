@@ -50,6 +50,7 @@ const nextSlide = computed(() => {
   }
 })
 
+// sync presenter cusor
 onMounted(() => {
   const slidesContainer = main.value!.querySelector('#slide-content')!
   const mouse = reactive(useMouse())

@@ -100,6 +100,14 @@ export interface SlidevConfig {
    * @default {}
    */
   fonts: ResolvedFontOptions
+
+  /**
+   * Persist the drawings to disk
+   * Passing string to specify the path (default to `.slidev/drawings.json`)
+   *
+   * @default false
+   */
+  persistDrawings: boolean | string
 }
 
 export type FontOptions = {

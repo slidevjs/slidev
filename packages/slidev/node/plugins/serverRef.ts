@@ -8,6 +8,7 @@ export interface ServerRefOptions<T extends Record<string, unknown>> {
   dataMap?: T
   debounceMs?: number
   debug?: boolean
+  clientVue?: string
   onChanged?: <K extends keyof T>(name: K, data: T[K], timestamp: number, isPatch?: boolean) => void
 }
 
@@ -18,6 +19,7 @@ export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin
     dataMap = {},
     debounceMs = 10,
     debug = true,
+    clientVue = 'vue',
   } = options
 
   return {
@@ -60,7 +62,7 @@ export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin
         return
       const name = id.slice(PREFIX.length)
       return `
-import { ref, watch } from "vue"
+import { ref, watch } from "${clientVue}"
 
 const data = ref(${JSON.stringify(dataMap[name] ?? null)})
 
