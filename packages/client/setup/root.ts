@@ -3,10 +3,7 @@ import { useHead } from '@vueuse/head'
 import { watch } from 'vue'
 import { currentPage, getPath, clicks, isPresenter } from '../logic/nav'
 import { router } from '../routes'
-// @ts-expect-error
-import configs from '/@slidev/configs'
-// @ts-expect-error
-import serverState from '/@server-ref/state'
+import { configs, serverState } from '../env'
 
 export default function setupRoot() {
   // @ts-expect-error
@@ -19,25 +16,19 @@ export default function setupRoot() {
     title: configs.titleTemplate.replace('%s', configs.title || 'Slidev'),
   })
 
-  // sync with server state
-  router.afterEach(updateServerState)
-  router.isReady().then(() => {
-    watch(serverState,
-      () => {
-        if (isPresenter.value)
-          return
-        if (+serverState.value.page !== +currentPage.value || clicks.value !== serverState.value.clicks) {
-          router.replace({
-            path: getPath(serverState.value.page),
-            query: { ...router.currentRoute.value.query, clicks: serverState.value.clicks || 0 },
-          })
-        }
-      },
-      { deep: true },
-    )
-  })
-
-  // upload state to server
+  function onServerStateChanged() {
+    if (isPresenter.value)
+      return
+    if (+serverState.value.page !== +currentPage.value || clicks.value !== serverState.value.clicks) {
+      router.replace({
+        path: getPath(serverState.value.page),
+        query: {
+          ...router.currentRoute.value.query,
+          clicks: serverState.value.clicks || 0,
+        },
+      })
+    }
+  }
   function updateServerState() {
     if (isPresenter.value) {
       serverState.value.page = +currentPage.value
@@ -45,5 +36,12 @@ export default function setupRoot() {
     }
   }
 
+  // upload state to server
+  router.afterEach(updateServerState)
   watch(clicks, updateServerState)
+
+  // sync with server state
+  router.isReady().then(() => {
+    watch(serverState, onServerStateChanged, { deep: true })
+  })
 }

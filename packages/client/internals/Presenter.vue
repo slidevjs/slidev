@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ref, computed } from 'vue'
-import { useTimestamp } from '@vueuse/core'
+import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { useMouse, useTimestamp } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
-import { configs, themeVars } from '../env'
+import { configs, themeVars, serverState } from '../env'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
@@ -15,7 +15,10 @@ import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 
+const main = ref<HTMLDivElement>()
+
 registerShortcuts()
+useSwipeControls(main)
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
@@ -37,7 +40,6 @@ function resetTimer() {
   tsStart.value = now.value
 }
 
-const main = ref<HTMLDivElement>()
 const nextTabElements = ref([])
 const nextSlide = computed(() => {
   if (clicks.value < clicksTotal.value) {
@@ -59,7 +61,24 @@ const nextSlide = computed(() => {
   }
 })
 
-useSwipeControls(main)
+onMounted(() => {
+  const slidesContainer = main.value!.querySelector('#slide-content')!
+  const mouse = reactive(useMouse())
+
+  watch(
+    () => {
+      const rect = slidesContainer.getBoundingClientRect()
+      const x = (mouse.x - rect.left) / rect.width * 100
+      const y = (mouse.y - rect.top) / rect.height * 100
+
+      return { x, y }
+    },
+    (pos) => {
+      serverState.value.cursor = pos
+    },
+  )
+})
+
 </script>
 
 <template>

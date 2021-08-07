@@ -1,9 +1,21 @@
 import { SlidevConfig } from '@slidev/types'
-import { computed } from 'vue'
+import { computed, Ref } from 'vue'
 import { objectMap } from '@antfu/utils'
-// @ts-ignore
+// @ts-expect-error
 import _configs from '/@slidev/configs'
+// @ts-expect-error
+import _serverState from '/@server-ref/state'
 
+export interface ServerState {
+  page: number
+  clicks: number
+  cursor?: {
+    x: number
+    y: number
+  }
+}
+
+export const serverState = _serverState as Ref<ServerState>
 export const configs = _configs as SlidevConfig
 
 export const slideAspect = configs.aspectRatio ?? (16 / 9)

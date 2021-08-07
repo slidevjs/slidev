@@ -4,7 +4,7 @@ import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
 
-export { rawRoutes }
+export { rawRoutes, router }
 
 // force update collected elements when the route is fully resolved
 const routeForceRefresh = ref(0)

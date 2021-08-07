@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { shallowRef, watch } from 'vue'
-import { currentRoute, clicks, rawRoutes, nextRoute } from '../logic/nav'
+import { currentRoute, clicks, rawRoutes, nextRoute, isPresenter } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'
 // @ts-ignore
 import GlobalTop from '/@slidev/global-components/top'
 // @ts-ignore
 import GlobalBottom from '/@slidev/global-components/bottom'
+import PresenterMouse from './PresenterMouse.vue'
 
 // preload next route
 watch(currentRoute, () => {
@@ -44,4 +45,5 @@ if (__DEV__)
   <template v-if="__DEV__ && DrauuLayer">
     <DrauuLayer />
   </template>
+  <PresenterMouse v-if="!isPresenter" />
 </template>
