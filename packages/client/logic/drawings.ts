@@ -18,6 +18,7 @@ export const brush = reactive<Brush>({
   size: 4,
   mode: 'draw',
   simplify: true,
+  pressure: true,
 })
 
 const _mode = ref<DrawingMode | 'arrow'>('draw')
@@ -47,12 +48,12 @@ export const isDrawing = ref(false)
 
 export const drauuData = serverDrawingState
 
-serverDrawingState.send = false
+serverDrawingState.syncUp = false
 
 nextTick(() => {
   watch(isPresenter, (v) => {
-    serverDrawingState.send = v
-    serverDrawingState.receive = !v
+    serverDrawingState.syncUp = v
+    serverDrawingState.syncDown = !v
   }, { immediate: true })
 })
 

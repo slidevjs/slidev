@@ -287,6 +287,7 @@ export function createSlidesLoader(
     if (!layouts[layoutName])
       throw new Error(`Unknown layout "${layoutName}"`)
 
+    delete frontmatter.title
     const imports = [
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       `const frontmatter = ${JSON.stringify(frontmatter)}`,

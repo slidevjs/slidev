@@ -4,6 +4,7 @@ import Vue from '@vitejs/plugin-vue'
 import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
 import ViteComponents from 'vite-plugin-components'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
+import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDarwings } from '../drawings'
@@ -11,7 +12,6 @@ import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
-import VitePluginServerRef from './serverRef'
 import { createMarkdownPlugin } from './markdown'
 import { createWindiCSSPlugin } from './windicss'
 import { createFixPlugins } from './patchTransform'
@@ -122,19 +122,19 @@ export async function ViteSlidevPlugin(
       })
       : null,
 
-    VitePluginServerRef({
-      dataMap: {
+    ServerRef({
+      state: {
         sync: false,
-        state: {
+        nav: {
           page: 0,
           clicks: 0,
         },
         drawings: drawingData,
       },
-      onChanged(name, data) {
+      onChanged(key, data) {
         if (!options.data.config.persistDrawings)
           return
-        if (name === 'drawings')
+        if (key === 'drawings')
           writeDarwings(options, data)
       },
     }),

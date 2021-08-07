@@ -276,6 +276,7 @@ importers:
       vite-plugin-icons: ^0.6.5
       vite-plugin-md: ^0.8.0
       vite-plugin-remote-assets: ^0.2.2
+      vite-plugin-vue-server-ref: ^0.0.0
       vite-plugin-windicss: ^1.2.5
       vue: ^3.1.5
       windicss: ^3.1.5
@@ -318,6 +319,7 @@ importers:
       vite-plugin-icons: 0.6.5_55481af84cf064fbf2a0466ef3956388
       vite-plugin-md: 0.8.0_vite@2.4.3
       vite-plugin-remote-assets: 0.2.2_vite@2.4.3
+      vite-plugin-vue-server-ref: 0.0.0_vite@2.4.3+vue@3.1.5
       vite-plugin-windicss: 1.2.5_vite@2.4.3
       vue: 3.1.5
       windicss: 3.1.5
@@ -7536,6 +7538,19 @@ packages:
       fs-extra: 9.1.0
       magic-string: 0.25.7
       vite: 2.4.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /vite-plugin-vue-server-ref/0.0.0_vite@2.4.3+vue@3.1.5:
+    resolution: {integrity: sha512-wTB5A51w79qybqS7ITgHb1xvLdQQDI6uoicz+VWCj1BAdQJoh2N1ndYsHIOCoSmKccIFpakQ9wUli6p2b1SMFA==}
+    peerDependencies:
+      vite: ^2.0.0
+      vue: ^3.0.0-0
+    dependencies:
+      debug: 4.3.2
+      vite: 2.4.3
+      vue: 3.1.5
     transitivePeerDependencies:
       - supports-color
     dev: false

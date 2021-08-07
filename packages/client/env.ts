@@ -1,12 +1,13 @@
 import { SlidevConfig } from '@slidev/types'
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
 // @ts-expect-error
 import _configs from '/@slidev/configs'
 // @ts-expect-error
-import _serverState from '/@server-ref/state'
+import _serverState from 'server-ref:nav'
 // @ts-expect-error
-import _serverDrawingState from '/@server-ref/drawings'
+import _serverDrawingState from 'server-ref:drawings'
+import type { ServerRef } from 'vite-plugin-vue-server-ref'
 
 export interface ServerState {
   page: number
@@ -16,8 +17,6 @@ export interface ServerState {
     y: number
   }
 }
-
-export type ServerRef<T> = Ref<T> & { receive: boolean; send: boolean }
 
 export const serverState = _serverState as ServerRef<ServerState>
 export const serverDrawingState = _serverDrawingState as ServerRef<Record<number, string | undefined>>

@@ -16,6 +16,7 @@
       "vite/client",
       "node",
       "jest",
+      "vite-plugin-vue-server-ref"
     ],
     "paths": {
       "@slidev/client/*": ["./packages/client/*"],
