@@ -2,7 +2,7 @@
 import { computed, ref, shallowRef } from 'vue'
 import { isDark, toggleDark, isColorSchemaConfigured } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
-import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement } from '../state'
+import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement, showPresenterCursor } from '../state'
 import { drauuEnabled, drauuBrush } from '../logic/drauu'
 import { configs } from '../env'
 import Settings from './Settings.vue'
@@ -67,8 +67,13 @@ if (__DEV__) {
         <VerticalDivider />
       </template>
 
+      <button v-if="isPresenter" class="icon-btn" title="Show presenter cursor" @click="showPresenterCursor = !showPresenterCursor">
+        <ph:cursor-fill v-if="showPresenterCursor" />
+        <ph:cursor-duotone v-else class="opacity-50" />
+      </button>
+
       <template v-if="DrauuControls">
-        <button class="icon-btn relative" @click="drauuEnabled = !drauuEnabled">
+        <button class="icon-btn relative" title="Drawing" @click="drauuEnabled = !drauuEnabled">
           <carbon:draw />
           <div
             v-if="drauuEnabled"

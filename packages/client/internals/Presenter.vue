@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed, reactive, watch, onMounted } from 'vue'
-import { useMouse, useTimestamp, useWindowFocus } from '@vueuse/core'
+import { useMouse, useWindowFocus } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
-import { showOverview } from '../state'
+import { showOverview, showPresenterCursor } from '../state'
 import { configs, themeVars, serverState } from '../env'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
+import { useTimer } from '../logic/utils'
+import { isDrawing } from '../logic/drauu'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
@@ -25,20 +27,7 @@ useHead({
   title: `Presenter - ${slideTitle}`,
 })
 
-const tsStart = ref(Date.now())
-const now = useTimestamp({
-  interval: 1000,
-})
-const timer = computed(() => {
-  const passed = (now.value - tsStart.value) / 1000
-  const sec = Math.floor(passed % 60).toString().padStart(2, '0')
-  const min = Math.floor(passed / 60).toString().padStart(2, '0')
-  return `${min}:${sec}`
-})
-
-function resetTimer() {
-  tsStart.value = now.value
-}
+const { timer, resetTimer } = useTimer()
 
 const nextTabElements = ref([])
 const nextSlide = computed(() => {
@@ -68,12 +57,15 @@ onMounted(() => {
 
   watch(
     () => {
-      if (!focus.value)
+      if (!focus.value || isDrawing.value || !showPresenterCursor.value)
         return undefined
 
       const rect = slidesContainer.getBoundingClientRect()
       const x = (mouse.x - rect.left) / rect.width * 100
       const y = (mouse.y - rect.top) / rect.height * 100
+
+      if (x < 0 || x > 100 || y < 0 || y > 100)
+        return undefined
 
       return { x, y }
     },
@@ -82,7 +74,6 @@ onMounted(() => {
     },
   )
 })
-
 </script>
 
 <template>
