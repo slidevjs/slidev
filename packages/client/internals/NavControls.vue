@@ -67,7 +67,7 @@ if (__DEV__) {
         <VerticalDivider />
       </template>
 
-      <template v-if="!isPresenter && DrauuControls">
+      <template v-if="DrauuControls">
         <button class="icon-btn relative" @click="drauuEnabled = !drauuEnabled">
           <carbon:draw />
           <div

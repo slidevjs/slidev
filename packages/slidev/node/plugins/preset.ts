@@ -126,6 +126,7 @@ export async function ViteSlidevPlugin(
           page: 0,
           clicks: 0,
         },
+        drauu: {},
       },
     }),
     createConfigPlugin(options),

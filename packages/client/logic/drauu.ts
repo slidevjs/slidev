@@ -1,6 +1,7 @@
-import { computed, markRaw, reactive, ref } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import { Brush, createDrauu, DrawingMode } from 'drauu'
-import { currentPage } from './nav'
+import { serverDrauuState } from '../env'
+import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [
   '#ff595e',
@@ -47,13 +48,22 @@ export const canRedo = ref(false)
 export const canClear = ref(false)
 export const isDrawing = ref(false)
 
-export const drauuData = new Map<number, string>()
+export const drauuData = serverDrauuState
+
+serverDrauuState.send = false
+
+nextTick(() => {
+  watch(isPresenter, (v) => {
+    serverDrauuState.send = v
+    serverDrauuState.receive = !v
+  }, { immediate: true })
+})
 
 export const drauu = markRaw(createDrauu(drauuOptions))
 
 export function clearDrauu() {
   drauu.clear()
-  drauuData.delete(currentPage.value)
+  drauuData.value[currentPage.value] = ''
 }
 
 if (__DEV__) {

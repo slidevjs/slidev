@@ -1,4 +1,5 @@
 import type { Plugin } from 'vite'
+import type { Ref } from 'vue'
 import { getBodyJson } from './loaders'
 
 const PREFIX = '/@server-ref/'
@@ -7,8 +8,10 @@ export interface ServerRefOptions<T extends Record<string, unknown>> {
   dataMap?: T
   debounceMs?: number
   debug?: boolean
-  onChanged?: <K extends keyof T>(name: K, data: T[K], timestamp: number) => void
+  onChanged?: <K extends keyof T>(name: K, data: T[K], timestamp: number, isPatch?: boolean) => void
 }
+
+export type ServerRef<T> = Ref<T> & { receive: boolean; send: boolean }
 
 export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin {
   const {
@@ -28,9 +31,7 @@ export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin
           return next()
 
         const name = req.url.slice(PREFIX.length)
-        const { data, timestamp } = await getBodyJson(req)
-
-        // TODO: handle conflicts
+        const { data, timestamp, isPatch } = await getBodyJson(req)
 
         const module = server.moduleGraph.getModuleById(PREFIX + name)
         if (module)
@@ -44,10 +45,11 @@ export function VitePluginServerRef(options: ServerRefOptions<any> = {}): Plugin
             name,
             data,
             timestamp,
+            isPatch,
           },
         })
 
-        options.onChanged?.(name, data, timestamp)
+        options.onChanged?.(name, data, timestamp, isPatch)
 
         res.write('')
         res.end()
@@ -62,13 +64,19 @@ import { ref, watch } from "vue"
 
 const data = ref(${JSON.stringify(dataMap[name] ?? null)})
 
+data.receive = true
+data.send = true
+data.paused = false
+
 if (import.meta.hot) {
   ${debug ? `console.log("[server-ref] [${name}] ref", data)` : ''}
   ${debug ? `console.log("[server-ref] [${name}] initial", data.value)` : ''}
 
   let skipNext = false
   let timer = null
-  import.meta.hot.on("server-ref", (payload) =>{
+  import.meta.hot.on("server-ref", (payload) => {
+    if (!data.receive || data.paused)
+      return
     if (payload.name !== "${name}")
       return
     skipNext = true
@@ -76,6 +84,8 @@ if (import.meta.hot) {
     ${debug ? `console.log("[server-ref] [${name}] incoming", payload.data)` : ''}
   })
   watch(data, (v) => {
+    if (!data.send || data.paused)
+      return
     if (skipNext) {
       skipNext = false
       return

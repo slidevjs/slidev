@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { serverState } from '../env'
-
 </script>
 
 <template>
@@ -10,7 +9,7 @@ import { serverState } from '../env'
   >
     <ph:cursor-fill
       class="absolute"
-      :style="{left: serverState.cursor.x + '%',top: serverState.cursor.y + '%'}"
+      :style="{ left: `${serverState.cursor.x}%`, top: `${serverState.cursor.y}%` }"
     />
   </div>
 </template>

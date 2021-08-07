@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
 import { ref, computed, reactive, watch, onMounted } from 'vue'
-import { useMouse, useTimestamp } from '@vueuse/core'
+import { useMouse, useTimestamp, useWindowFocus } from '@vueuse/core'
 import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
 import { showOverview } from '../state'
 import { configs, themeVars, serverState } from '../env'
@@ -64,9 +64,13 @@ const nextSlide = computed(() => {
 onMounted(() => {
   const slidesContainer = main.value!.querySelector('#slide-content')!
   const mouse = reactive(useMouse())
+  const focus = useWindowFocus()
 
   watch(
     () => {
+      if (!focus.value)
+        return undefined
+
       const rect = slidesContainer.getBoundingClientRect()
       const x = (mouse.x - rect.left) / rect.width * 100
       const y = (mouse.y - rect.top) / rect.height * 100

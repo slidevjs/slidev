@@ -5,6 +5,8 @@ import { objectMap } from '@antfu/utils'
 import _configs from '/@slidev/configs'
 // @ts-expect-error
 import _serverState from '/@server-ref/state'
+// @ts-expect-error
+import _serverDrauuState from '/@server-ref/drauu'
 
 export interface ServerState {
   page: number
@@ -15,7 +17,10 @@ export interface ServerState {
   }
 }
 
-export const serverState = _serverState as Ref<ServerState>
+export type ServerRef<T> = Ref<T> & { receive: boolean; send: boolean }
+
+export const serverState = _serverState as ServerRef<ServerState>
+export const serverDrauuState = _serverDrauuState as ServerRef<Record<number, string | undefined>>
 export const configs = _configs as SlidevConfig
 
 export const slideAspect = configs.aspectRatio ?? (16 / 9)
