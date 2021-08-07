@@ -16,12 +16,10 @@ export const brushColors = [
 export const brush = reactive<Brush>({
   color: brushColors[0],
   size: 4,
-  mode: 'draw',
-  simplify: true,
-  pressure: true,
+  mode: 'stylus',
 })
 
-const _mode = ref<DrawingMode | 'arrow'>('draw')
+const _mode = ref<DrawingMode | 'arrow'>('stylus')
 
 export const drawingMode = computed({
   get() {
@@ -97,8 +95,8 @@ if (__DEV__) {
     else if (e.code === 'KeyA' && noModifier) {
       drawingMode.value = 'arrow'
     }
-    else if (e.code === 'KeyD' && noModifier) {
-      drawingMode.value = 'draw'
+    else if (e.code === 'KeyS' && noModifier) {
+      drawingMode.value = 'stylus'
     }
     else if (e.code === 'KeyR' && noModifier) {
       drawingMode.value = 'rectangle'

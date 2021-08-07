@@ -11,7 +11,7 @@ const svg = ref<SVGSVGElement>()
 onMounted(() => {
   let skipNext = false
   drauu.mount(svg.value!)
-  watch(scale, scale => drauu.options.corrdinateScale = 1 / scale, { immediate: true })
+  watch(scale, scale => drauu.options.coordinateScale = 1 / scale, { immediate: true })
 
   const { ignoreUpdates } = ignorableWatch(
     drauuData,

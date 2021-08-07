@@ -29,7 +29,7 @@ function redo() {
 
       <VerticalDivider />
 
-      <button class="icon-btn" :class="{ shallow: drawingMode != 'draw' }" @click="drawingMode = 'draw'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'stylus' }" @click="drawingMode = 'stylus'">
         <carbon:draw />
       </button>
       <button class="icon-btn" :class="{ shallow: drawingMode != 'line' }" @click="drawingMode = 'line'">
