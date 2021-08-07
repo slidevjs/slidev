@@ -35,6 +35,9 @@ function redo() {
       <button class="icon-btn" :class="{ shallow: drauuMode != 'line' }" @click="drauuMode = 'line'">
         <uil:line-alt />
       </button>
+      <button class="icon-btn" :class="{ shallow: drauuMode != 'arrow' }" @click="drauuMode = 'arrow'">
+        <carbon:arrow-up-right />
+      </button>
       <button class="icon-btn" :class="{ shallow: drauuMode != 'ellipse' }" @click="drauuMode = 'ellipse'">
         <carbon:radio-button />
       </button>

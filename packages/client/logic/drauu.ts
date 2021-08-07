@@ -1,4 +1,4 @@
-import { markRaw, reactive, ref } from 'vue'
+import { computed, markRaw, reactive, ref } from 'vue'
 import { Brush, createDrauu, DrawingMode } from 'drauu'
 import { currentPage } from './nav'
 
@@ -12,10 +12,33 @@ export const brushColors = [
   '#000000',
 ]
 
-export const drauuBrush = reactive<Brush>({ color: brushColors[0], size: 4 })
-export const drauuMode = ref<DrawingMode>('draw')
+export const drauuBrush = reactive<Brush>({
+  color: brushColors[0],
+  size: 4,
+  mode: 'draw',
+  simplify: true,
+})
+
+const _mode = ref<DrawingMode | 'arrow'>('draw')
+
+export const drauuMode = computed({
+  get() {
+    return _mode.value
+  },
+  set(v: DrawingMode | 'arrow') {
+    _mode.value = v
+    if (v === 'arrow') {
+      drauuBrush.mode = 'line'
+      drauuBrush.arrowEnd = true
+    }
+    else {
+      drauuBrush.mode = v
+      drauuBrush.arrowEnd = false
+    }
+  },
+})
+
 export const drauuOptions = reactive({
-  mode: drauuMode,
   brush: drauuBrush,
 })
 export const drauuEnabled = ref(false)
@@ -60,6 +83,9 @@ if (__DEV__) {
     }
     else if (e.code === 'KeyL' && noModifier) {
       drauuMode.value = 'line'
+    }
+    else if (e.code === 'KeyA' && noModifier) {
+      drauuMode.value = 'arrow'
     }
     else if (e.code === 'KeyD' && noModifier) {
       drauuMode.value = 'draw'
