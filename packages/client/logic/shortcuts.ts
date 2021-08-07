@@ -5,9 +5,9 @@ import { fullscreen, magicKeys, shortcutsEnabled, isInputting, toggleOverview, s
 import setupShortcuts from '../setup/shortcuts'
 import { toggleDark } from './dark'
 import { next, nextSlide, prev, prevSlide } from './nav'
-import { drauuEnabled } from './drauu'
+import { drawingEnabled } from './drawings'
 
-const _shortcut = and(not(isInputting), not(isOnFocus), not(drauuEnabled), shortcutsEnabled)
+const _shortcut = and(not(isInputting), not(isOnFocus), not(drawingEnabled), shortcutsEnabled)
 
 export function shortcut(key: string | Ref<boolean>, fn: Fn, autoRepeat = false) {
   if (typeof key === 'string')

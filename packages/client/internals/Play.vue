@@ -2,7 +2,7 @@
 import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
-import { isDrawing } from '../logic/drauu'
+import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
 import { themeVars } from '../env'
 import Controls from './Controls.vue'

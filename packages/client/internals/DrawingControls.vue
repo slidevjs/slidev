@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { drauuMode, drauu, drauuBrush, brushColors, drauuEnabled, canUndo, canRedo, canClear, clearDrauu } from '../logic/drauu'
+import { drawingMode, drauu, brush, brushColors, drawingEnabled, canUndo, canRedo, canClear, clearDrauu } from '../logic/drawings'
 import VerticalDivider from './VerticalDivider.vue'
 
 function undo() {
@@ -17,31 +17,31 @@ function redo() {
         v-for="color of brushColors"
         :key="color"
         class="icon-btn"
-        :class="drauuBrush.color === color ? 'active' : 'shallow'"
-        @click="drauuBrush.color = color"
+        :class="brush.color === color ? 'active' : 'shallow'"
+        @click="brush.color = color"
       >
         <div
           class="w-6 h-6 transition-all transform border border-gray-400/50"
-          :class="drauuBrush.color !== color ? 'rounded-1/2 scale-85' : 'rounded'"
+          :class="brush.color !== color ? 'rounded-1/2 scale-85' : 'rounded'"
           :style="{ background: color }"
         />
       </button>
 
       <VerticalDivider />
 
-      <button class="icon-btn" :class="{ shallow: drauuMode != 'draw' }" @click="drauuMode = 'draw'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'draw' }" @click="drawingMode = 'draw'">
         <carbon:draw />
       </button>
-      <button class="icon-btn" :class="{ shallow: drauuMode != 'line' }" @click="drauuMode = 'line'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'line' }" @click="drawingMode = 'line'">
         <uil:line-alt />
       </button>
-      <button class="icon-btn" :class="{ shallow: drauuMode != 'arrow' }" @click="drauuMode = 'arrow'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'arrow' }" @click="drawingMode = 'arrow'">
         <carbon:arrow-up-right />
       </button>
-      <button class="icon-btn" :class="{ shallow: drauuMode != 'ellipse' }" @click="drauuMode = 'ellipse'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'ellipse' }" @click="drawingMode = 'ellipse'">
         <carbon:radio-button />
       </button>
-      <button class="icon-btn" :class="{ shallow: drauuMode != 'rectangle' }" @click="drauuMode = 'rectangle'">
+      <button class="icon-btn" :class="{ shallow: drawingMode != 'rectangle' }" @click="drawingMode = 'rectangle'">
         <carbon:checkbox />
       </button>
 
@@ -57,9 +57,9 @@ function redo() {
         <carbon:delete />
       </button>
 
-      <template v-if="drauuEnabled">
+      <template v-if="drawingEnabled">
         <VerticalDivider />
-        <button class="icon-btn" @click="drauuEnabled = false">
+        <button class="icon-btn" @click="drawingEnabled = false">
           <carbon:close />
         </button>
       </template>

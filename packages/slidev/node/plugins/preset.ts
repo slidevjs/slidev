@@ -129,12 +129,12 @@ export async function ViteSlidevPlugin(
           page: 0,
           clicks: 0,
         },
-        drauu: drawingData,
+        drawings: drawingData,
       },
       onChanged(name, data) {
         if (!options.data.config.persistDrawings)
           return
-        if (name === 'drauu')
+        if (name === 'drawings')
           writeDarwings(options, data)
       },
     }),

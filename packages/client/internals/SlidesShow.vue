@@ -17,9 +17,9 @@ watch(currentRoute, () => {
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
 
-const DrauuLayer = shallowRef<any>()
+const DrawingLayer = shallowRef<any>()
 if (__DEV__)
-  import('./DrauuLayer.vue').then(v => DrauuLayer.value = v.default)
+  import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 </script>
 
 <template>
@@ -42,8 +42,8 @@ if (__DEV__)
   <!-- Global Top -->
   <GlobalTop />
 
-  <template v-if="__DEV__ && DrauuLayer">
-    <DrauuLayer />
+  <template v-if="__DEV__ && DrawingLayer">
+    <DrawingLayer />
   </template>
   <PresenterMouse v-if="!isPresenter" />
 </template>

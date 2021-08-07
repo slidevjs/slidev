@@ -3,7 +3,7 @@ import { computed, ref, shallowRef } from 'vue'
 import { isDark, toggleDark, isColorSchemaConfigured } from '../logic/dark'
 import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
 import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement, showPresenterCursor } from '../state'
-import { drauuEnabled, drauuBrush } from '../logic/drauu'
+import { drawingEnabled, brush } from '../logic/drawings'
 import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
@@ -28,10 +28,10 @@ const onMouseLeave = () => {
 }
 
 const RecordingControls = shallowRef<any>()
-const DrauuControls = shallowRef<any>()
+const DrawingControls = shallowRef<any>()
 if (__DEV__) {
   import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
-  import('./DrauuControls.vue').then(v => DrauuControls.value = v.default)
+  import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
 }
 </script>
 
@@ -72,16 +72,16 @@ if (__DEV__) {
         <ph:cursor-duotone v-else class="opacity-50" />
       </button>
 
-      <template v-if="DrauuControls">
-        <button class="icon-btn relative" title="Drawing" @click="drauuEnabled = !drauuEnabled">
+      <template v-if="DrawingControls">
+        <button class="icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
           <carbon:draw />
           <div
-            v-if="drauuEnabled"
+            v-if="drawingEnabled"
             class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
-            :style="{ background: drauuBrush.color }"
+            :style="{ background: brush.color }"
           ></div>
         </button>
-        <DrauuControls v-if="drauuEnabled" class="absolute bottom-17 left-2" />
+        <DrawingControls v-if="drawingEnabled" class="absolute bottom-17 left-2" />
         <VerticalDivider />
       </template>
 

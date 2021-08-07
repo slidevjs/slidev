@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, inject, onBeforeUnmount } from 'vue'
 import { ignorableWatch } from '@vueuse/core'
-import { drauuEnabled, drauu, drauuData } from '../logic/drauu'
+import { drawingEnabled, drauu, drauuData } from '../logic/drawings'
 import { injectionSlideScale } from '../constants'
 import { currentPage } from '../logic/nav'
 
@@ -52,6 +52,6 @@ onBeforeUnmount(() => {
   <svg
     ref="svg"
     class="w-full h-full absolute top-0"
-    :class="{ 'pointer-events-none': !drauuEnabled }"
+    :class="{ 'pointer-events-none': !drawingEnabled }"
   ></svg>
 </template>
