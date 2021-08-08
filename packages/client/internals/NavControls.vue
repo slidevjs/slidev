@@ -9,9 +9,9 @@ import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
 
-defineProps({
-  mode: {
-    default: 'fixed',
+const props = defineProps({
+  persist: {
+    default: false,
   },
 })
 
@@ -27,6 +27,11 @@ const onMouseLeave = () => {
     activeElement.value.blur()
 }
 
+const barStyle = computed(() => props.persist
+  ? 'text-$slidev-controls-foreground bg-transparent'
+  : 'rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)',
+)
+
 const RecordingControls = shallowRef<any>()
 const DrawingControls = shallowRef<any>()
 if (__DEV__) {
@@ -36,95 +41,118 @@ if (__DEV__) {
 </script>
 
 <template>
-  <nav ref="root" class="flex flex-wrap-reverse text-xl p-2 gap-1" @mouseleave="onMouseLeave">
-    <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
-      <carbon:minimize v-if="isFullscreen" />
-      <carbon:maximize v-else />
-    </button>
-
-    <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
-      <carbon:arrow-left />
-    </button>
-
-    <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
-      <carbon:arrow-right />
-    </button>
-
-    <button v-if="!isEmbedded" class="icon-btn" title="Slides overview" @click="toggleOverview()">
-      <carbon:apps />
-    </button>
-
-    <button v-if="!isColorSchemaConfigured" class="icon-btn" title="Toggle dark mode" @click="toggleDark()">
-      <carbon-moon v-if="isDark" />
-      <carbon-sun v-else />
-    </button>
-
-    <VerticalDivider />
-
-    <template v-if="__DEV__ && !isEmbedded">
-      <template v-if="!isPresenter && !md && RecordingControls">
-        <RecordingControls />
-        <VerticalDivider />
-      </template>
-
-      <button v-if="isPresenter" class="icon-btn" title="Show presenter cursor" @click="showPresenterCursor = !showPresenterCursor">
-        <ph:cursor-fill v-if="showPresenterCursor" />
-        <ph:cursor-duotone v-else class="opacity-50" />
+  <nav ref="root" class="flex flex-col">
+    <template v-if="__DEV__ && !isEmbedded && DrawingControls && drawingEnabled">
+      <DrawingControls class="ml-0" :class="barStyle" />
+      <div :class="persist ? 'border-b border-gray-400/20' : 'pt-1'"></div>
+    </template>
+    <div class="flex flex-wrap-reverse text-xl p-2 gap-1" :class="barStyle" @mouseleave="onMouseLeave">
+      <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
+        <carbon:minimize v-if="isFullscreen" />
+        <carbon:maximize v-else />
       </button>
 
-      <template v-if="DrawingControls">
-        <button class="icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
-          <carbon:draw />
-          <div
-            v-if="drawingEnabled"
-            class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
-            :style="{ background: brush.color }"
-          ></div>
+      <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+        <carbon:arrow-left />
+      </button>
+
+      <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
+        <carbon:arrow-right />
+      </button>
+
+      <button v-if="!isEmbedded" class="icon-btn" title="Slides overview" @click="toggleOverview()">
+        <carbon:apps />
+      </button>
+
+      <button
+        v-if="!isColorSchemaConfigured"
+        class="icon-btn"
+        title="Toggle dark mode"
+        @click="toggleDark()"
+      >
+        <carbon-moon v-if="isDark" />
+        <carbon-sun v-else />
+      </button>
+
+      <VerticalDivider />
+
+      <template v-if="__DEV__ && !isEmbedded">
+        <template v-if="!isPresenter && !md && RecordingControls">
+          <RecordingControls />
+          <VerticalDivider />
+        </template>
+
+        <button
+          v-if="isPresenter"
+          class="icon-btn"
+          title="Show presenter cursor"
+          @click="showPresenterCursor = !showPresenterCursor"
+        >
+          <ph:cursor-fill v-if="showPresenterCursor" />
+          <ph:cursor-duotone v-else class="opacity-50" />
         </button>
-        <DrawingControls v-if="drawingEnabled" class="absolute bottom-17 left-2" />
-        <VerticalDivider />
+
+        <template v-if="DrawingControls">
+          <button
+            class="icon-btn relative"
+            title="Drawing"
+            @click="drawingEnabled = !drawingEnabled"
+          >
+            <carbon:draw />
+            <div
+              v-if="drawingEnabled"
+              class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
+              :style="{ background: brush.color }"
+            ></div>
+          </button>
+          <VerticalDivider />
+        </template>
+
+        <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
+          <carbon:presentation-file />
+        </RouterLink>
+        <RouterLink v-if="!isPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
+          <carbon:user-speaker />
+        </RouterLink>
+
+        <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
+          <carbon:text-annotation-toggle />
+        </button>
+      </template>
+      <template v-else>
+        <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
+          <carbon:download />
+        </button>
       </template>
 
-      <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
-        <carbon:presentation-file />
-      </RouterLink>
-      <RouterLink v-if="!isPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
-        <carbon:user-speaker />
-      </RouterLink>
-
-      <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
-        <carbon:text-annotation-toggle />
+      <button
+        v-if="!isPresenter && configs.info && !isEmbedded"
+        class="icon-btn"
+        @click="showInfoDialog = !showInfoDialog"
+      >
+        <carbon:information />
       </button>
-    </template>
-    <template v-else>
-      <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
-        <carbon:download />
-      </button>
-    </template>
 
-    <button v-if="!isPresenter && configs.info && !isEmbedded" class="icon-btn" @click="showInfoDialog = !showInfoDialog">
-      <carbon:information />
-    </button>
+      <template v-if="!isPresenter && !isEmbedded">
+        <MenuButton>
+          <template #button>
+            <button class="icon-btn">
+              <carbon:settings-adjust />
+            </button>
+          </template>
+          <template #menu>
+            <Settings />
+          </template>
+        </MenuButton>
+      </template>
 
-    <template v-if="!isPresenter && !isEmbedded">
-      <MenuButton>
-        <template #button>
-          <button class="icon-btn">
-            <carbon:settings-adjust />
-          </button>
-        </template>
-        <template #menu>
-          <Settings />
-        </template>
-      </MenuButton>
-    </template>
+      <VerticalDivider v-if="!isEmbedded" />
 
-    <VerticalDivider v-if="!isEmbedded" />
-
-    <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
-      <div class="my-auto">
-        {{ currentPage }}
-        <span class="opacity-50">/ {{ total }}</span>
+      <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
+        <div class="my-auto">
+          {{ currentPage }}
+          <span class="opacity-50">/ {{ total }}</span>
+        </div>
       </div>
     </div>
   </nav>

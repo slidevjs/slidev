@@ -55,12 +55,7 @@ if (__DEV__)
             isDrawing ? 'pointer-events-none': ''
           ]"
         >
-          <NavControls
-            class="m-auto"
-            :class="presistNav
-              ? 'text-$slidev-controls-foreground bg-transparent'
-              : 'rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)'"
-          />
+          <NavControls class="m-auto" :persist="presistNav" />
         </div>
       </template>
     </SlideContainer>

@@ -124,7 +124,7 @@ onMounted(() => {
         <NoteEditor class="w-full h-full p-4 overflow-auto" />
       </div>
       <div class="grid-section bottom">
-        <NavControls />
+        <NavControls :persist="true" />
       </div>
     </div>
     <div class="progress-bar">
