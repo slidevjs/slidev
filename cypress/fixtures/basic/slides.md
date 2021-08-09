@@ -110,5 +110,6 @@ Left
 <div class="cy-content-hide">
   <div v-click-hide>A</div>
   <div v-click-hide>B</div>
-  <div v-click-hide>C</div>
+  <div v-click>C</div>
+  <div v-click-hide>D</div>
 </div>
