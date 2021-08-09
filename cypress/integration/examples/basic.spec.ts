@@ -124,5 +124,35 @@ context('Basic', () => {
     cy
       .url()
       .should('eq', 'http://localhost:3030/10')
+    
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/10?clicks=1')
+    
+    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'BC')
+    
+    cy.get('body')
+      .type('{RightArrow}')
+    
+    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'C')
+    
+    cy.get('body')
+      .type('{RightArrow}')
+    
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/10?clicks=3')
+    
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/11')
   })
 })
