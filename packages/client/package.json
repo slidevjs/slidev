@@ -18,11 +18,11 @@
     "@antfu/utils": "^0.2.4",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^5.2.0",
+    "@vueuse/core": "^5.3.0",
     "@vueuse/head": "^0.6.0",
     "@vueuse/motion": "^1.5.6",
     "codemirror": "^5.62.2",
-    "drauu": "^0.1.0-beta",
+    "drauu": "^0.1.0-beta.2",
     "file-saver": "^2.0.5",
     "js-base64": "^3.6.1",
     "js-yaml": "^4.1.0",
@@ -34,8 +34,8 @@
     "recordrtc": "^5.6.2",
     "resolve": "^1.20.0",
     "vite-plugin-windicss": "^1.2.7",
-    "vue": "^3.1.5",
-    "vue-router": "^4.0.10",
-    "windicss": "^3.1.6"
+    "vue": "^3.2.1",
+    "vue-router": "^4.0.11",
+    "windicss": "^3.1.7"
   }
 }

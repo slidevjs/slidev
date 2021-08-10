@@ -54,7 +54,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vitejs/plugin-vue": "^1.4.0",
-    "@vue/compiler-sfc": "^3.1.5",
+    "@vue/compiler-sfc": "^3.2.1",
     "cli-progress": "^3.9.0",
     "codemirror": "^5.62.2",
     "connect": "^3.7.0",
@@ -85,10 +85,10 @@
     "vite-plugin-icons": "^0.6.5",
     "vite-plugin-md": "^0.10.0",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-vue-server-ref": "^0.0.0",
+    "vite-plugin-vue-server-ref": "^0.1.0",
     "vite-plugin-windicss": "^1.2.7",
-    "vue": "^3.1.5",
-    "windicss": "^3.1.6",
+    "vue": "^3.2.1",
+    "windicss": "^3.1.7",
     "yargs": "^17.1.0"
   },
   "devDependencies": {
