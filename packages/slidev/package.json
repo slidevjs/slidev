@@ -85,7 +85,7 @@
     "vite-plugin-icons": "^0.6.5",
     "vite-plugin-md": "^0.10.0",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-vue-server-ref": "^0.1.0",
+    "vite-plugin-vue-server-ref": "^0.1.7",
     "vite-plugin-windicss": "^1.2.7",
     "vue": "^3.2.1",
     "windicss": "^3.1.7",

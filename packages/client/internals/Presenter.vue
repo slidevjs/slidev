@@ -71,7 +71,7 @@ onMounted(() => {
       return { x, y }
     },
     (pos) => {
-      serverState.value.cursor = pos
+      serverState.cursor = pos
     },
   )
 })

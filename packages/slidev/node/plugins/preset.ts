@@ -123,6 +123,7 @@ export async function ViteSlidevPlugin(
       : null,
 
     ServerRef({
+      debug: true,
       state: {
         sync: false,
         nav: {

@@ -1,7 +1,7 @@
 import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import { Brush, createDrauu, DrawingMode } from 'drauu'
-import { serverDrawingState } from '../env'
-import { currentPage, isPresenter } from './nav'
+import { serverDrawingState as drawingState } from '../env'
+import { currentPage } from './nav'
 
 export const brushColors = [
   '#ff595e',
@@ -20,6 +20,7 @@ export const brush = reactive<Brush>({
 })
 
 const _mode = ref<DrawingMode | 'arrow'>('stylus')
+let disableDump = false
 
 export const drawingMode = computed({
   get() {
@@ -44,31 +45,52 @@ export const canRedo = ref(false)
 export const canClear = ref(false)
 export const isDrawing = ref(false)
 
-export const drauuData = serverDrawingState
-
-serverDrawingState.syncUp = false
-
-nextTick(() => {
-  watch(isPresenter, (v) => {
-    serverDrawingState.syncUp = v
-    serverDrawingState.syncDown = !v
-  }, { immediate: true })
-})
-
 export const drauu = markRaw(createDrauu(reactive({
   brush,
 })))
 
 export function clearDrauu() {
   drauu.clear()
-  drauuData.value[currentPage.value] = ''
+  drawingState.$patch({ [currentPage.value]: '' })
+}
+
+export function updateState() {
+  canRedo.value = drauu.canRedo()
+  canUndo.value = drauu.canUndo()
+  canClear.value = !!drauu.el?.children.length
+}
+
+export function loadCanvas() {
+  disableDump = true
+  const data = drawingState[currentPage.value]
+  if (data != null)
+    drauu.load(data)
+  else
+    drauu.clear()
+  disableDump = false
 }
 
 if (__DEV__) {
   drauu.on('changed', () => {
-    canRedo.value = drauu.canRedo()
-    canUndo.value = drauu.canUndo()
-    canClear.value = !!drauu.el?.children.length
+    updateState()
+    if (!disableDump)
+      drawingState.$patch({ [currentPage.value]: drauu.dump() })
+  })
+
+  drawingState.$onPatch((patch) => {
+    disableDump = true
+    if (patch[currentPage.value] != null)
+      drauu.load(patch[currentPage.value] || '')
+    disableDump = false
+    updateState()
+  })
+
+  nextTick(() => {
+    watch(currentPage, () => {
+      if (!drauu.mounted)
+        return
+      loadCanvas()
+    }, { immediate: true })
   })
 
   drauu.on('start', () => isDrawing.value = true)
@@ -120,3 +142,5 @@ if (__DEV__) {
     }
   }, false)
 }
+
+export { drawingState }

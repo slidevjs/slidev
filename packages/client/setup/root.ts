@@ -19,20 +19,20 @@ export default function setupRoot() {
   function onServerStateChanged() {
     if (isPresenter.value)
       return
-    if (+serverState.value.page !== +currentPage.value || clicks.value !== serverState.value.clicks) {
+    if (+serverState.page !== +currentPage.value || clicks.value !== serverState.clicks) {
       router.replace({
-        path: getPath(serverState.value.page),
+        path: getPath(serverState.page),
         query: {
           ...router.currentRoute.value.query,
-          clicks: serverState.value.clicks || 0,
+          clicks: serverState.clicks || 0,
         },
       })
     }
   }
   function updateServerState() {
     if (isPresenter.value) {
-      serverState.value.page = +currentPage.value
-      serverState.value.clicks = clicks.value
+      serverState.page = +currentPage.value
+      serverState.clicks = clicks.value
     }
   }
 
