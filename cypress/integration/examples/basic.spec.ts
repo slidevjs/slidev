@@ -124,5 +124,41 @@ context('Basic', () => {
     cy
       .url()
       .should('eq', 'http://localhost:3030/10')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/10?clicks=1')
+
+    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'BD')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'D')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'CD')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/10?clicks=4')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/11')
   })
 })

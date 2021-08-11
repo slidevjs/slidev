@@ -102,3 +102,14 @@ Left
   <div v-click.hide="4">D</div>
   <v-click hide><div>E</div></v-click>
 </div>
+
+---
+
+# Page 10
+
+<div class="cy-content-hide">
+  <div v-click-hide>A</div>
+  <div v-click-hide>B</div>
+  <div v-click>C</div>
+  <div v-click-hide>D</div>
+</div>
