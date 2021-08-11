@@ -132,11 +132,11 @@ export async function ViteSlidevPlugin(
         },
         drawings: drawingData,
       },
-      onChanged(key, data) {
+      onChanged(key, data, patch) {
         if (!options.data.config.persistDrawings)
           return
         if (key === 'drawings')
-          writeDarwings(options, data)
+          writeDarwings(options, patch ?? data)
       },
     }),
 

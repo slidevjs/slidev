@@ -165,14 +165,14 @@ importers:
       '@vueuse/head': ^0.6.0
       '@vueuse/motion': ^1.5.6
       codemirror: ^5.62.2
-      drauu: ^0.1.0-beta.2
+      drauu: ^0.1.0-beta.3
       file-saver: ^2.0.5
       js-base64: ^3.6.1
       js-yaml: ^4.1.0
       katex: ^0.13.13
       mermaid: 8.5.0
       monaco-editor: ^0.26.1
-      nanoid: ^3.1.23
+      nanoid: ^3.1.24
       prettier: ^2.3.2
       recordrtc: ^5.6.2
       resolve: ^1.20.0
@@ -188,14 +188,14 @@ importers:
       '@vueuse/head': 0.6.0_vue@3.2.2
       '@vueuse/motion': 1.5.6_vue@3.2.2
       codemirror: 5.62.2
-      drauu: 0.1.0-beta.2
+      drauu: 0.1.0-beta.3
       file-saver: 2.0.5
       js-base64: 3.6.1
       js-yaml: 4.1.0
       katex: 0.13.13
       mermaid: 8.5.0
       monaco-editor: 0.26.1
-      nanoid: 3.1.23
+      nanoid: 3.1.24
       prettier: 2.3.2
       recordrtc: 5.6.2
       resolve: 1.20.0
@@ -260,7 +260,7 @@ importers:
       markdown-it-footnote: ^3.0.3
       markdown-it-link-attributes: ^3.0.0
       monaco-editor: ^0.26.1
-      nanoid: ^3.1.23
+      nanoid: ^3.1.24
       open: ^8.2.1
       pdf-lib: ^1.16.0
       prismjs: ^1.24.1
@@ -276,7 +276,7 @@ importers:
       vite-plugin-icons: ^0.6.5
       vite-plugin-md: ^0.10.0
       vite-plugin-remote-assets: ^0.2.2
-      vite-plugin-vue-server-ref: ^0.2.1
+      vite-plugin-vue-server-ref: ^0.2.2
       vite-plugin-windicss: ^1.2.7
       vue: ^3.2.2
       windicss: ^3.1.7
@@ -305,7 +305,7 @@ importers:
       markdown-it-footnote: 3.0.3
       markdown-it-link-attributes: 3.0.0
       monaco-editor: 0.26.1
-      nanoid: 3.1.23
+      nanoid: 3.1.24
       open: 8.2.1
       pdf-lib: 1.16.0
       prismjs: 1.24.1
@@ -319,7 +319,7 @@ importers:
       vite-plugin-icons: 0.6.5_d63a26a14985700fe7d189c77308e04a
       vite-plugin-md: 0.10.0_vite@2.4.4
       vite-plugin-remote-assets: 0.2.2_vite@2.4.4
-      vite-plugin-vue-server-ref: 0.2.1_vite@2.4.4+vue@3.2.2
+      vite-plugin-vue-server-ref: 0.2.2_vite@2.4.4+vue@3.2.2
       vite-plugin-windicss: 1.2.7_vite@2.4.4
       vue: 3.2.2
       windicss: 3.1.7
@@ -813,8 +813,8 @@ packages:
       lodash.once: 4.1.1
     dev: true
 
-  /@drauu/core/0.1.0-beta.2:
-    resolution: {integrity: sha512-kg5o/p3KI4Ab8uwDnTfpIrlnJcld0lCz1kzmiqf9NERiFNeeotL3foEh1C+i/koBm7A+A+A6vkn1rJBeZMv5uw==}
+  /@drauu/core/0.1.0-beta.3:
+    resolution: {integrity: sha512-RIJTHbDFuGSNatGdYh80cUX2vFqoUZWgviQvJJglgfNf9vSSb/0MmCke0L4jm638GveiKt1WLPoYV0gHoVabtQ==}
     dependencies:
       perfect-freehand: 0.4.10
     dev: false
@@ -3142,10 +3142,10 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /drauu/0.1.0-beta.2:
-    resolution: {integrity: sha512-Bh5L8qywAa7P3LKXOUlbblvVzdOxJCbrHq0hk3p/MNs0sp6ZPkO9mfuvVnKngxeCJUWtexufdztcYWn+SBSUyA==}
+  /drauu/0.1.0-beta.3:
+    resolution: {integrity: sha512-DR3K5gcTr15KKa20XdlG7g4aWT1EkS0eLnyDUr+Q5AKC92gnC7//rj1aerC9aQJ3v8QeKnBLeZj1EIxXwELRjw==}
     dependencies:
-      '@drauu/core': 0.1.0-beta.2
+      '@drauu/core': 0.1.0-beta.3
     dev: false
 
   /duplexer3/0.1.4:
@@ -5805,6 +5805,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /nanoid/3.1.24:
+    resolution: {integrity: sha512-WNhqqgD4qH7TQdU9ujXfFa/hQI5rOGGnZq+JRmz4JwMZFCgSZVquTq3ORUSv6IC+Y41ACBYV8a8J1kPkqGIiQg==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+    dev: false
+
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
@@ -7657,8 +7663,8 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-vue-server-ref/0.2.1_vite@2.4.4+vue@3.2.2:
-    resolution: {integrity: sha512-ZffTSYOgaI/dFYU1sP4B8kMishkkWnRlLy66ZC3pQlkorCGbd4IHzEIPF1H3nJ5oubTDsnaSerDnAVeNR7rUmg==}
+  /vite-plugin-vue-server-ref/0.2.2_vite@2.4.4+vue@3.2.2:
+    resolution: {integrity: sha512-oWpUE/jc/JS8F+TlWv6U4kmRlVMTjtdsVxW+3xk/yBkgbJhD4b2yK43nZcJbyk/PLdYvXqb6QEfHosEN67fARg==}
     peerDependencies:
       vite: ^2.0.0
       vue: ^3.0.0-0
