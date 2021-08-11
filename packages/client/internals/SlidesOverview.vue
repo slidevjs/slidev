@@ -6,6 +6,7 @@ import { go as goSlide, rawRoutes } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
+import DrawingPreview from './DrawingPreview.vue'
 
 const emit = defineEmits([])
 const props = defineProps<{ modelValue: boolean }>()
@@ -59,6 +60,7 @@ const cardWidth = computed(() => {
             :clicks-disabled="true"
             class="pointer-events-none"
           >
+            <DrawingPreview :page="+route.path" />
             <SlideWrapper
               :is="route?.component"
               :clicks-disabled="true"
