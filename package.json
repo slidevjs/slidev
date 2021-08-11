@@ -1,23 +1,20 @@
 {
-  "private": true,
   "version": "0.22.7",
-  "engines": {
-    "node": ">=14.0.0"
-  },
+  "private": true,
   "scripts": {
-    "dev": "pnpm -r --filter ./packages --parallel run dev",
     "build": "pnpm -r --filter ./packages run build",
-    "demo:build": "zx ./scripts/demo.mjs",
-    "demo:dev": "pnpm -C demo/starter run dev",
-    "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
-    "lint": "eslint '**/*.{js,ts,vue,json}'",
-    "lint:fix": "nr lint --fix",
-    "test": "jest",
-    "test:update": "jest -u",
+    "ci:publish": "zx scripts/publish.mjs",
     "cy": "cypress open",
     "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
+    "demo:build": "zx ./scripts/demo.mjs",
+    "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
+    "demo:dev": "pnpm -C demo/starter run dev",
+    "dev": "pnpm -r --filter ./packages --parallel run dev",
+    "lint": "eslint '**/*.{js,ts,vue,json}'",
+    "lint:fix": "nr lint --fix",
     "release": "zx scripts/release.mjs",
-    "ci:publish": "zx scripts/publish.mjs"
+    "test": "jest",
+    "test:update": "jest -u"
   },
   "husky": {
     "hooks": {
@@ -77,5 +74,8 @@
     "vite": "^2.4.4",
     "vite-plugin-windicss": "^1.2.7",
     "zx": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

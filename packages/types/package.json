@@ -1,10 +1,9 @@
 {
   "name": "@slidev/types",
   "version": "0.22.7",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "description": "Shared types declerations for Slidev",
+  "homepage": "https://sli.dev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,11 +19,12 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "index.d.ts",
-  "homepage": "https://sli.dev",
-  "bugs": "https://github.com/slidevjs/slidev/issues",
   "scripts": {
-    "prepublishOnly": "npm run build",
     "build": "pnpx tsup src/index.ts --format cjs,esm --dts",
-    "dev": "nr build --watch"
+    "dev": "nr build --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

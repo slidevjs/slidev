@@ -1,10 +1,9 @@
 {
   "name": "create-slidev-theme",
   "version": "0.22.7",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "description": "Create starter theme template for Slidev",
+  "homepage": "https://sli.dev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,11 +15,12 @@
   "bin": {
     "create-slidev-theme": "index.js"
   },
-  "homepage": "https://sli.dev",
-  "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
     "kolorist": "^1.5.0",
     "minimist": "^1.2.5",
     "prompts": "^2.4.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

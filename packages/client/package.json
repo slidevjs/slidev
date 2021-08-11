@@ -1,10 +1,9 @@
 {
   "name": "@slidev/client",
   "version": "0.22.7",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "description": "Presentation slides for developers",
+  "homepage": "https://sli.dev",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,8 +11,6 @@
   },
   "funding": "https://github.com/sponsors/antfu",
   "author": "antfu <anthonyfu117@hotmail.com>",
-  "homepage": "https://sli.dev",
-  "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
     "@antfu/utils": "^0.2.4",
     "@slidev/parser": "workspace:*",
@@ -37,5 +34,8 @@
     "vue": "^3.2.1",
     "vue-router": "^4.0.11",
     "windicss": "^3.1.7"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
