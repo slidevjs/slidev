@@ -4,7 +4,7 @@ import { objectMap } from '@antfu/utils'
 // @ts-expect-error
 import _configs from '/@slidev/configs'
 import _serverState from 'server-reactive:nav'
-import _serverDrawingState from 'server-reactive:drawings?defer'
+import _serverDrawingState from 'server-reactive:drawings?diff'
 import type { ServerReactive } from 'vite-plugin-vue-server-ref'
 
 export interface ServerState {
