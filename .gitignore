@@ -7,8 +7,8 @@ node_modules
 .idea/
 *.pdf
 *-export
-demo/starter/slides.md
 assets/demo
 packages/slidev/README.md
+packages/create-app/template/slides.md
 composable-vue-cn
 components.d.ts

@@ -16,6 +16,10 @@
   "bin": {
     "create-slidev": "index.js"
   },
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "cp ../../demo/starter/slides.md template/slides.md"
+  },
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "dependencies": {
