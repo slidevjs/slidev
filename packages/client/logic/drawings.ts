@@ -73,8 +73,12 @@ export function loadCanvas() {
 if (__DEV__) {
   drauu.on('changed', () => {
     updateState()
-    if (!disableDump)
-      drawingState.$patch({ [currentPage.value]: drauu.dump() })
+    if (!disableDump) {
+      const dump = drauu.dump()
+      const key = currentPage.value
+      if ((drawingState[key] || '') !== dump)
+        drawingState.$patch({ [key]: drauu.dump() })
+    }
   })
 
   drawingState.$onPatch((patch) => {

@@ -123,7 +123,7 @@ export async function ViteSlidevPlugin(
       : null,
 
     ServerRef({
-      debug: true,
+      debug: process.env.NODE_ENV === 'development',
       state: {
         sync: false,
         nav: {
