@@ -293,6 +293,28 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-takahashi',
+    name: 'Takahashi',
+    description: 'A simple theme for Slidev',
+    author: {
+      name: 'Percy M.',
+      link: 'https://github.com/kecrily',
+    },
+    repo: 'https://github.com/kecrily/slidev-theme-takahashi',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/01.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/02.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/03.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/04.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/05.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/06.png',
+      'https://cdn.jsdelivr.net/gh/kecrily/slidev-theme-takahashi@master/screenshots/07.png',
+    ],
+    tags: [
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
