@@ -365,7 +365,7 @@ function commonOptions(args: Argv<{}>) {
     .option('theme', {
       alias: 't',
       type: 'string',
-      describe: 'overide theme',
+      describe: 'override theme',
     })
 }
 
