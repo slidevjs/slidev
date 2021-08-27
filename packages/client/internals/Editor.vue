@@ -145,7 +145,7 @@ throttledWatch(
         </button>
       </div>
       <span class="text-2xl pt-1">
-        {{ tab === 'content' ? 'Slide' : 'Note' }}
+        {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
       <div class="flex-auto"></div>
       <button class="icon-btn" @click="openInEditor()">
@@ -160,7 +160,7 @@ throttledWatch(
         <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
       <div v-show="tab === 'note'" class="h-full overflow-auto">
-        <textarea ref="noteInput" placeholder="Write some note..." />
+        <textarea ref="noteInput" placeholder="Write some notes..." />
       </div>
     </div>
   </div>
