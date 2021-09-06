@@ -72,7 +72,7 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://masukin.link/talks-cover-create-icon-package-with-vue-and-rollup.png',
     datetime: '2021-06-19',
   },
-   {
+  {
     title: 'BeAPT',
     author: {
       name: 'Daniel Sousa @TutoDS',
@@ -83,6 +83,18 @@ export const showcases: ShowCaseInfo[] = [
     sourceLink: 'https://github.com/TutoDS/lei-project/tree/master/presentation',
     cover: 'https://raw.githubusercontent.com/TutoDS/lei-project/master/presentation/cover.png',
     datetime: '2021-07-20',
+  },
+  {
+    title: 'Prisma as my ORM for PostgreSQL',
+    cover: 'https://raw.githubusercontent.com/cedric25/prisma-talk/main/cover-for-slidev.png',
+    author: {
+      name: 'Cedric Nicoloso',
+      link: 'https://github.com/cedric25',
+    },
+    slidesLink: 'https://prisma-talk.netlify.app/',
+    sourceLink: 'https://github.com/cedric25/prisma-talk',
+    at: 'LyonJS Meetup',
+    datetime: '2021-07-21',
   },
   // Add yours here!
   {
