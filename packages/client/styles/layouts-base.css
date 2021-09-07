@@ -13,6 +13,26 @@
     @apply text-3xl;
   }
 
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  h5 {
+    @apply text-base;
+  }
+
+  h6 {
+    @apply text-sm pt-1 uppercase tracking-widest font-500 -ml-[0.05em];
+  }
+
+  h6:not(.opacity-100) {
+    @apply opacity-40;
+  }
+
   p {
     @apply my-4 leading-6;
   }
