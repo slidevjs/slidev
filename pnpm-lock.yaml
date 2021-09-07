@@ -167,7 +167,7 @@ importers:
       '@vueuse/head': ^0.6.0
       '@vueuse/motion': ^1.6.0
       codemirror: ^5.62.3
-      drauu: ^0.1.0-beta.5
+      drauu: ^0.1.0-beta.6
       file-saver: ^2.0.5
       js-base64: ^3.6.1
       js-yaml: ^4.1.0
@@ -190,7 +190,7 @@ importers:
       '@vueuse/head': 0.6.0_vue@3.2.10
       '@vueuse/motion': 1.6.0_vue@3.2.10
       codemirror: 5.62.3
-      drauu: 0.1.0-beta.5
+      drauu: 0.1.0-beta.6
       file-saver: 2.0.5
       js-base64: 3.6.1
       js-yaml: 4.1.0
@@ -820,8 +820,8 @@ packages:
       lodash.once: 4.1.1
     dev: true
 
-  /@drauu/core/0.1.0-beta.5:
-    resolution: {integrity: sha512-ZBJRGb75OtqTUI4NFOTjYQeA/+XrKBMqi7URhO33WeikxobkBQZlSL1qmwllSNdih1nHu8eORvnRXcyd5Tw2uQ==}
+  /@drauu/core/0.1.0-beta.6:
+    resolution: {integrity: sha512-RHue08BvEmp+OOkZDuX2HFIaGx8paeeOX/d+GBburSGbQvdzsU01daAdAnOSvV6/3mybHqc2pNlArVafqbNiOQ==}
     dependencies:
       perfect-freehand: 0.5.3
     transitivePeerDependencies:
@@ -3075,10 +3075,10 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /drauu/0.1.0-beta.5:
-    resolution: {integrity: sha512-kYZ4sKciZuOfn6PlswcUGwyDy+bwEOHCtK9PDv0gt4h/yWY2YtCjD/Wc7s9EKftE+Op51eeCpxnGXS4t6FECDQ==}
+  /drauu/0.1.0-beta.6:
+    resolution: {integrity: sha512-0V2YfX4k851E497ViiRMCWk0PCTc9HklKXSQbK3TdkGBuu3hHttw142ePO4Oq17T/6pNeFEPC61KWulxl7QiAg==}
     dependencies:
-      '@drauu/core': 0.1.0-beta.5
+      '@drauu/core': 0.1.0-beta.6
     transitivePeerDependencies:
       - react
       - react-dom

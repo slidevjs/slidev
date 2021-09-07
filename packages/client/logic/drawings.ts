@@ -1,5 +1,5 @@
 import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
-import { Brush, createDrauu, DrawingMode } from 'drauu'
+import { Brush, createDrauu, DrawingMode, Options as DrauuOptions } from 'drauu'
 import { serverDrawingState as drawingState } from '../env'
 import { currentPage } from './nav'
 
@@ -45,9 +45,11 @@ export const canRedo = ref(false)
 export const canClear = ref(false)
 export const isDrawing = ref(false)
 
-export const drauu = markRaw(createDrauu(reactive({
+export const drauuOptions: DrauuOptions = reactive({
   brush,
-})))
+  acceptsInputTypes: computed(() => drawingEnabled.value ? undefined : ['pen' as const]),
+})
+export const drauu = markRaw(createDrauu(drauuOptions))
 
 export function clearDrauu() {
   drauu.clear()
