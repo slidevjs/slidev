@@ -1,8 +1,9 @@
 
 import { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
-import ViteIcons, { ViteIconsResolver } from 'vite-plugin-icons'
-import ViteComponents from 'vite-plugin-components'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
@@ -82,7 +83,7 @@ export async function ViteSlidevPlugin(
 
     createSlidesLoader(options, pluginOptions, serverOptions, VuePlugin, MarkdownPlugin),
 
-    ViteComponents({
+    Components({
       extensions: ['vue', 'md', 'ts'],
 
       dirs: [
@@ -93,9 +94,11 @@ export async function ViteSlidevPlugin(
         'components',
       ],
 
-      customLoaderMatcher: id => id.endsWith('.md'),
-      customComponentResolvers: [
-        ViteIconsResolver({
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      exclude: [],
+
+      resolvers: [
+        IconsResolver({
           componentPrefix: '',
         }),
       ],
@@ -103,7 +106,7 @@ export async function ViteSlidevPlugin(
       ...componentsOptions,
     }),
 
-    ViteIcons({
+    Icons({
       ...iconsOptions,
     }),
 

@@ -1,7 +1,7 @@
 import { resolve, dirname, join } from 'path'
 import Vue from '@vitejs/plugin-vue'
-import ViteIcons from 'vite-plugin-icons'
-import ViteComponents from 'vite-plugin-components'
+import Icons from 'unplugin-icons/vite'
+import Components from 'unplugin-vue-components/vite'
 import Markdown from 'vite-plugin-md'
 import WindiCSS from 'vite-plugin-windicss'
 import RemoteAssets from 'vite-plugin-remote-assets'
@@ -50,9 +50,9 @@ export interface ResolvedSlidevOptions {
 export interface SlidevPluginOptions extends SlidevEntryOptions {
   vue?: ArgumentsType<typeof Vue>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]
-  components?: ArgumentsType<typeof ViteComponents>[0]
+  components?: ArgumentsType<typeof Components>[0]
   windicss?: ArgumentsType<typeof WindiCSS>[0]
-  icons?: ArgumentsType<typeof ViteIcons>[0]
+  icons?: ArgumentsType<typeof Icons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
 }
 
