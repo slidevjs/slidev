@@ -61,6 +61,8 @@ export interface UseDraggableOptions {
    * Initial position of the element.
    */
   initial?: MaybeRef<Position>
+
+  onMove?: (position: Position, event: PointerEvent) => void
 }
 
 export function useDraggable(el: MaybeElementRef, options: UseDraggableOptions = {}) {
@@ -98,6 +100,7 @@ export function useDraggable(el: MaybeElementRef, options: UseDraggableOptions =
       x: e.pageX - pressedDelta.value.x,
       y: e.pageY - pressedDelta.value.y,
     }
+    options.onMove?.(position.value, e)
     preventDefault(e)
   }
   const end = (e: PointerEvent) => {

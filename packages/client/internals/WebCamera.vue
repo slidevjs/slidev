@@ -3,25 +3,31 @@ import { useEventListener, useStorage } from '@vueuse/core'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { currentCamera } from '../state'
 import { recorder } from '../logic/recording'
+import { useDraggable } from '../logic/utils'
 
-const size = useStorage('webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
-const x = useStorage('webcam-x', window.innerWidth - size.value - 30)
-const y = useStorage('webcam-y', window.innerHeight - size.value - 30)
+const size = useStorage('slidev-webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
+const position = useStorage('slidev-webcam-pos', {
+  x: window.innerWidth - size.value - 30,
+  y: window.innerHeight - size.value - 30,
+})
+
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()
 
 const { streamCamera, showAvatar } = recorder
 
+const { style: containerStyle } = useDraggable(frame, { initial: position })
+const { isDragging: handlerDown } = useDraggable(handler, {
+  onMove({ x, y }) {
+    size.value = Math.max(10, Math.min(x - position.value.x, y - position.value.y) / 0.8536)
+  },
+})
+
 watchEffect(() => {
   if (video.value)
     video.value.srcObject = streamCamera.value!
 }, { flush: 'post' })
-
-const containerStyle = computed(() => ({
-  left: `${x.value}px`,
-  top: `${y.value}px`,
-}))
 
 const frameStyle = computed(() => ({
   width: `${size.value}px`,
@@ -37,55 +43,15 @@ const handleStyle = computed(() => ({
   cursor: 'nwse-resize',
 }))
 
-const frameDown = ref(false)
-const handlerDown = ref(false)
-let deletaX = 0
-let deletaY = 0
-
 function fixPosistion() {
-// move back if the camera is outside of the canvas
-  if (x.value >= window.innerWidth)
-    x.value = window.innerWidth - size.value - 30
-  if (y.value >= window.innerHeight)
-    y.value = window.innerHeight - size.value - 30
+  // move back if the camera is outside of the canvas
+  if (position.value.x >= window.innerWidth)
+    position.value.x = window.innerWidth - size.value - 30
+  if (position.value.y >= window.innerHeight)
+    position.value.y = window.innerHeight - size.value - 30
 }
 
-useEventListener(frame, 'pointerdown', (e: MouseEvent) => {
-  if (frame.value) {
-    frameDown.value = true
-    const box = frame.value.getBoundingClientRect()
-    deletaX = e.screenX - box.x
-    deletaY = e.screenY - box.y
-  }
-})
-
-useEventListener(handler, 'pointerdown', (e: MouseEvent) => {
-  if (frame.value) {
-    handlerDown.value = true
-    const box = frame.value.getBoundingClientRect()
-    deletaX = e.screenX - box.x
-    deletaY = e.screenY - box.y
-  }
-})
-
-useEventListener(window, 'pointerup', (e: MouseEvent) => {
-  frameDown.value = false
-  handlerDown.value = false
-})
-
-useEventListener(window, 'pointermove', (e: MouseEvent) => {
-  if (frameDown.value) {
-    x.value = e.screenX - deletaX
-    y.value = e.screenY - deletaY
-  }
-  if (handlerDown.value && frame.value) {
-    const box = frame.value.getBoundingClientRect()
-    size.value = Math.max(10, Math.min(e.clientX - box.x, e.clientY - box.y) / 0.8536)
-  }
-})
-
 useEventListener('resize', fixPosistion)
-
 onMounted(fixPosistion)
 </script>
 
