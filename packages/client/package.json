@@ -21,7 +21,7 @@
     "codemirror": "^5.62.3",
     "drauu": "^0.1.0-beta.6",
     "file-saver": "^2.0.5",
-    "js-base64": "^3.6.1",
+    "js-base64": "^3.6.2",
     "js-yaml": "^4.1.0",
     "katex": "^0.13.18",
     "mermaid": "8.5.0",
