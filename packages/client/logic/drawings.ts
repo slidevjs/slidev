@@ -1,5 +1,6 @@
 import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import { Brush, createDrauu, DrawingMode, Options as DrauuOptions } from 'drauu'
+import { useStorage, toReactive } from '@vueuse/core'
 import { serverDrawingState as drawingState } from '../env'
 import { currentPage } from './nav'
 
@@ -13,15 +14,21 @@ export const brushColors = [
   '#000000',
 ]
 
-export const brush = reactive<Brush>({
+export const drawingEnabled = useStorage('slidev-drawing-enabled', false)
+export const drawingPinned = useStorage('slidev-drawing-pinned', false)
+export const canUndo = ref(false)
+export const canRedo = ref(false)
+export const canClear = ref(false)
+export const isDrawing = ref(false)
+
+export const brush = toReactive(useStorage<Brush>('slidev-drawing-brush', {
   color: brushColors[0],
   size: 4,
   mode: 'stylus',
-})
+}))
 
 const _mode = ref<DrawingMode | 'arrow'>('stylus')
 let disableDump = false
-
 export const drawingMode = computed({
   get() {
     return _mode.value
@@ -38,13 +45,6 @@ export const drawingMode = computed({
     }
   },
 })
-
-export const drawingEnabled = ref(false)
-export const drawingPinned = ref(false)
-export const canUndo = ref(false)
-export const canRedo = ref(false)
-export const canClear = ref(false)
-export const isDrawing = ref(false)
 
 export const drauuOptions: DrauuOptions = reactive({
   brush,
