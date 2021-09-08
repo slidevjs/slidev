@@ -40,6 +40,7 @@ export const drawingMode = computed({
 })
 
 export const drawingEnabled = ref(false)
+export const drawingPinned = ref(false)
 export const canUndo = ref(false)
 export const canRedo = ref(false)
 export const canClear = ref(false)

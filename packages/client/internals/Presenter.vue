@@ -16,6 +16,7 @@ import NoteEditor from './NoteEditor.vue'
 import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
+import DrawingControls from './DrawingControls.vue'
 
 const main = ref<HTMLDivElement>()
 
@@ -126,6 +127,7 @@ onMounted(() => {
       <div class="grid-section bottom">
         <NavControls :persist="true" />
       </div>
+      <DrawingControls />
     </div>
     <div class="progress-bar">
       <div

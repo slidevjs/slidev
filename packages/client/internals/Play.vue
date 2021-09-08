@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, shallowRef } from 'vue'
 import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
-import { isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
+import { isPrintMode, next, prev, useSwipeControls, isEmbedded } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
 import { themeVars } from '../env'
@@ -31,8 +31,11 @@ useSwipeControls(root)
 const presistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const Editor = shallowRef<any>()
-if (__DEV__)
+const DrawingControls = shallowRef<any>()
+if (__DEV__) {
   import('./Editor.vue').then(v => Editor.value = v.default)
+  import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
+}
 </script>
 
 <template>
@@ -57,6 +60,9 @@ if (__DEV__)
         >
           <NavControls class="m-auto" :persist="presistNav" />
         </div>
+        <template v-if="__DEV__ && !isEmbedded && DrawingControls">
+          <DrawingControls class="ml-0" />
+        </template>
       </template>
     </SlideContainer>
 

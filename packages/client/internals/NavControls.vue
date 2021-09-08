@@ -42,10 +42,6 @@ if (__DEV__) {
 
 <template>
   <nav ref="root" class="flex flex-col">
-    <template v-if="__DEV__ && !isEmbedded && DrawingControls && drawingEnabled">
-      <DrawingControls class="ml-0" :class="barStyle" />
-      <div :class="persist ? 'border-b border-gray-400/20' : 'pt-1'"></div>
-    </template>
     <div class="flex flex-wrap-reverse text-xl p-2 gap-1" :class="barStyle" @mouseleave="onMouseLeave">
       <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
         <carbon:minimize v-if="isFullscreen" />
@@ -98,7 +94,7 @@ if (__DEV__) {
             title="Drawing"
             @click="drawingEnabled = !drawingEnabled"
           >
-            <carbon:draw />
+            <carbon:pen />
             <div
               v-if="drawingEnabled"
               class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
