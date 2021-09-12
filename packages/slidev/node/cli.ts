@@ -126,18 +126,21 @@ cli.command(
     const SHORTCUTS = [
       {
         name: 'r',
+        fullname: 'restart',
         action() {
           initServer()
         },
       },
       {
         name: 'o',
+        fullname: 'open',
         action() {
           openBrowser(`http://localhost:${port}`)
         },
       },
       {
         name: 'e',
+        fullname: 'edit',
         action() {
           exec(`code "${entry}"`)
         },
@@ -149,9 +152,15 @@ cli.command(
       process.stdin.setEncoding('utf8')
       process.stdin.on('data', (data) => {
         const str = data.toString().trim().toLowerCase()
-        const sh = SHORTCUTS.filter(item => item.name === str)[0]
-        if (sh)
-          sh.action()
+        const [sh] = SHORTCUTS.filter(item => item.name === str)
+        if (sh) {
+          try {
+            sh.action()
+          }
+          catch (err) {
+            console.error(`error occurred while executing shortcut ${sh.fullname}: ${err}`)
+          }
+        }
       })
     }
 
