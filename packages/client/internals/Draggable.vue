@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStorage } from '@vueuse/core'
-import { useDraggable, Position } from '../logic/utils'
+import { useStorage, useDraggable } from '@vueuse/core'
+import type { Position } from '@vueuse/core'
 
 const props = defineProps<{
   storageKey?: string

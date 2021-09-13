@@ -99,7 +99,7 @@ export async function ViteSlidevPlugin(
 
       resolvers: [
         IconsResolver({
-          componentPrefix: '',
+          prefix: '',
         }),
       ],
 
