@@ -85,6 +85,10 @@ export async function build(
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(options.userRoot, 'dist/index.html'), resolve(options.userRoot, 'dist/404.html'))
+  // _redirects for SPA
+  const redirectsPath = resolve(options.userRoot, 'dist/_redirects')
+  if (!fs.existsSync(redirectsPath))
+    await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
   if (options.data.config.download === true || options.data.config.download === 'auto') {
     const { exportSlides } = await import('./export')
