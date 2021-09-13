@@ -16,10 +16,11 @@ You can learn more about the rationale behind the project in the [Why Slidev](/g
 - 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets
 - 🤹 [**Interactive**](/custom/directory-structure.html#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🧮 [**LaTeX**](/guide/syntax.html#latex) - Built-in LaTeX math equations support
-- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - Creates diagrams with textual descriptions 
+- 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides
+- 🧮 [**LaTeX**](/guide/syntax.html#latex) - built-in LaTeX math equations support
+- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams with textual descriptions 
 - 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any iconset directly
-- 💻 [**Editors**](/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
+- 💻 [**Editors**](/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
 - 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
@@ -36,6 +37,7 @@ Slidev is made possible by combining these tools and technologies.
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family -  [`@vueuse/core`](https://github.com/vueuse/vueuse), [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
 - [Iconify](https://iconify.design/) - Iconsets collection.
+- [Drauu](https://github.com/antfu/drauu) - Drawing and annotations support
 - [KaTeX](https://katex.org/) - LaTeX math rendering.
 - [Mermaid](https://mermaid-js.github.io/mermaid) - Textual Diagrams.
 

@@ -9,10 +9,10 @@ The `vite.config.ts` will be respected if you have one.
 Slidev has the following plugins preconfigured:
 
 - [@vitejs/plugin-vue](https://github.com/vitejs/vite/tree/main/packages/plugin-vue)
+- [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
+- [unplugin-icons](https://github.com/antfu/unplugin-icons)
 - [vite-plugin-md](https://github.com/antfu/vite-plugin-md)
-- [vite-plugin-components](https://github.com/antfu/vite-plugin-components)
 - [vite-plugin-windicss](https://github.com/windicss/vite-plugin-windicss)
-- [vite-plugin-icons](https://github.com/antfu/vite-plugin-icons)
 - [vite-plugin-remote-assets](https://github.com/antfu/vite-plugin-remote-assets)
 
 Learn more about the [pre-configurations here](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/plugins/preset.ts).
