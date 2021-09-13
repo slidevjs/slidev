@@ -38,6 +38,10 @@ const Guide = [
     link: '/guide/presenter-mode',
   },
   {
+    text: 'Drawing & Annonations',
+    link: '/guide/drawing',
+  },
+  {
     text: 'Editor Integrations',
     link: '/guide/editors',
   },
