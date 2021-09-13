@@ -43,7 +43,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 
 <template>
   <nav ref="root" class="flex flex-col">
-    <div class="flex flex-wrap-reverse text-xl p-2 gap-1" :class="barStyle" @mouseleave="onMouseLeave">
+    <div
+      class="flex flex-wrap-reverse text-xl p-2 gap-1"
+      :class="barStyle"
+      @mouseleave="onMouseLeave"
+    >
       <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
         <carbon:minimize v-if="isFullscreen" />
         <carbon:maximize v-else />
@@ -89,23 +93,20 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <ph:cursor-duotone v-else class="opacity-50" />
         </button>
       </template>
-      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !isEmbedded">
-        <template v-if="DrawingControls">
-          <button
-            class="icon-btn relative"
-            title="Drawing"
-            @click="drawingEnabled = !drawingEnabled"
-          >
-            <carbon:pen />
-            <div
-              v-if="drawingEnabled"
-              class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
-              :style="{ background: brush.color }"
-            ></div>
-          </button>
-          <VerticalDivider />
-        </template>
 
+      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !isEmbedded">
+        <button class="icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
+          <carbon:pen />
+          <div
+            v-if="drawingEnabled"
+            class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
+            :style="{ background: brush.color }"
+          ></div>
+        </button>
+        <VerticalDivider />
+      </template>
+
+      <template v-if="__DEV__ && !isEmbedded">
         <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
@@ -117,7 +118,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <carbon:text-annotation-toggle />
         </button>
       </template>
-      <template v-else>
+      <template v-if="!__DEV__">
         <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
           <carbon:download />
         </button>
