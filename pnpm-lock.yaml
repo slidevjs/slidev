@@ -43,7 +43,7 @@ importers:
       lint-staged: ^11.1.2
       mermaid: ^8.12.1
       playwright-chromium: ^1.14.1
-      pnpm: ^6.14.7
+      pnpm: ^6.15.0
       rimraf: ^3.0.2
       ts-jest: ^27.0.5
       tsup: 4.14.0
@@ -91,7 +91,7 @@ importers:
       lint-staged: 11.1.2
       mermaid: 8.12.1
       playwright-chromium: 1.14.1
-      pnpm: 6.14.7
+      pnpm: 6.15.0
       rimraf: 3.0.2
       ts-jest: 27.0.5_04e1385bcb7e61957a9335c26551e89f
       tsup: 4.14.0_typescript@4.4.3
@@ -103,57 +103,57 @@ importers:
   cypress/fixtures/basic:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.20.0
-      '@slidev/theme-seriph': ^0.20.0
+      '@slidev/theme-default': ^0.21.0
+      '@slidev/theme-seriph': ^0.21.0
       '@slidev/types': workspace:*
       nodemon: ^2.0.12
     devDependencies:
       '@slidev/cli': link:../../../packages/slidev
-      '@slidev/theme-default': 0.20.0
-      '@slidev/theme-seriph': 0.20.0
+      '@slidev/theme-default': 0.21.0
+      '@slidev/theme-seriph': 0.21.0
       '@slidev/types': link:../../../packages/types
       nodemon: 2.0.12
 
   demo/composable-vue:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.20.0
-      '@slidev/theme-seriph': ^0.20.0
+      '@slidev/theme-default': ^0.21.0
+      '@slidev/theme-seriph': ^0.21.0
       '@slidev/types': workspace:*
       nodemon: ^2.0.12
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.20.0
-      '@slidev/theme-seriph': 0.20.0
+      '@slidev/theme-default': 0.21.0
+      '@slidev/theme-seriph': 0.21.0
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.12
 
   demo/composable-vue-cn:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.20.0
-      '@slidev/theme-seriph': ^0.20.0
+      '@slidev/theme-default': ^0.21.0
+      '@slidev/theme-seriph': ^0.21.0
       '@slidev/types': workspace:*
       nodemon: ^2.0.12
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.20.0
-      '@slidev/theme-seriph': 0.20.0
+      '@slidev/theme-default': 0.21.0
+      '@slidev/theme-seriph': 0.21.0
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.12
 
   demo/starter:
     specifiers:
       '@slidev/cli': workspace:*
-      '@slidev/theme-default': ^0.20.0
-      '@slidev/theme-seriph': ^0.20.0
+      '@slidev/theme-default': ^0.21.0
+      '@slidev/theme-seriph': ^0.21.0
       '@slidev/types': workspace:*
       nodemon: ^2.0.12
       vite-plugin-inspect: ^0.3.6
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
-      '@slidev/theme-default': 0.20.0
-      '@slidev/theme-seriph': 0.20.0
+      '@slidev/theme-default': 0.21.0
+      '@slidev/theme-seriph': 0.21.0
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.12
       vite-plugin-inspect: 0.3.6_vite@2.5.6
@@ -167,7 +167,7 @@ importers:
       '@vueuse/head': ^0.6.0
       '@vueuse/motion': ^1.6.0
       codemirror: ^5.62.3
-      drauu: ^0.1.0-beta.6
+      drauu: ^0.1.0
       file-saver: ^2.0.5
       js-base64: ^3.7.0
       js-yaml: ^4.1.0
@@ -190,7 +190,7 @@ importers:
       '@vueuse/head': 0.6.0_vue@3.2.11
       '@vueuse/motion': 1.6.0_vue@3.2.11
       codemirror: 5.62.3
-      drauu: 0.1.0-beta.6
+      drauu: 0.1.0
       file-saver: 2.0.5
       js-base64: 3.7.0
       js-yaml: 4.1.0
@@ -820,8 +820,8 @@ packages:
       lodash.once: 4.1.1
     dev: true
 
-  /@drauu/core/0.1.0-beta.6:
-    resolution: {integrity: sha512-RHue08BvEmp+OOkZDuX2HFIaGx8paeeOX/d+GBburSGbQvdzsU01daAdAnOSvV6/3mybHqc2pNlArVafqbNiOQ==}
+  /@drauu/core/0.1.0:
+    resolution: {integrity: sha512-I8FnzXt7sVx+OfwzHfHvpKCK7G5ZR0Gf9pGe9w2QtRj9RBefEtskaY9eHgDHUCP5GeSoB1BIwWwFFGxMzq4kcQ==}
     dependencies:
       perfect-freehand: 0.5.3
     transitivePeerDependencies:
@@ -1156,8 +1156,8 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@slidev/theme-default/0.20.0:
-    resolution: {integrity: sha512-Sl3b4UTX78kbxNt56lE4ZhS9L8QgGsROCiTgcaVsXoOaO+yPyySpSYw45JEBj1DXBTaP+THLVi1Xqu8t8bVH1Q==}
+  /@slidev/theme-default/0.21.0:
+    resolution: {integrity: sha512-8t4WaS0iowe/2VeCmy70rFlpbrvzMIuVgEcej+uhNcjGekyp6DI/kkR80u5LBpegTWc3GsTejZB+i5U1utmkSw==}
     engines: {node: '>=14.0.0', slidev: '>=0.19.2'}
     dependencies:
       '@slidev/types': 0.22.7
@@ -1166,8 +1166,8 @@ packages:
       theme-vitesse: 0.1.12
     dev: true
 
-  /@slidev/theme-seriph/0.20.0:
-    resolution: {integrity: sha512-GOUpfstthBi+VrAxpgThrFNP32KnZDa3SmS/caqlBxBvTXNWV/EqZztO3zbJnG1EpDLMGZc0XaAus8HaO9nfCQ==}
+  /@slidev/theme-seriph/0.21.0:
+    resolution: {integrity: sha512-Z0I+vXMc3RVVz6vmmTUKXrSBG2uro1sAmmlLq5CTJURQaN8HoYpv8tucvJBY/NPT95Lc5jmS8a9RZr4kmxnmJQ==}
     engines: {node: '>=14.0.0', slidev: '>=0.19.3'}
     dependencies:
       '@slidev/types': 0.22.7
@@ -3125,10 +3125,10 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /drauu/0.1.0-beta.6:
-    resolution: {integrity: sha512-0V2YfX4k851E497ViiRMCWk0PCTc9HklKXSQbK3TdkGBuu3hHttw142ePO4Oq17T/6pNeFEPC61KWulxl7QiAg==}
+  /drauu/0.1.0:
+    resolution: {integrity: sha512-/sCWL0RpjrSQwJuu0gEBpf9j6HTVOAjaD6IwLT3ISWxbT9bNegHJgiHOQENAFOW8SNOx/sskGLnx/LY7das8Ww==}
     dependencies:
-      '@drauu/core': 0.1.0-beta.6
+      '@drauu/core': 0.1.0
     transitivePeerDependencies:
       - react
       - react-dom
@@ -6265,8 +6265,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /pnpm/6.14.7:
-    resolution: {integrity: sha512-/pjz4Eod3Heyxw/QCGLYpkZR8YNuzTTblgcVC+qvvYCtX0Wb5J9jVcbHoSRqC2jeo4ldtg8H9dssPlHlH50I7w==}
+  /pnpm/6.15.0:
+    resolution: {integrity: sha512-RqG3S1JHiFYxRgXQ941xT2BnNsjJbp+J1ImacB6b8JiqAIRkp6TAcNeosvF3X0Z9I6FvuCkccMwBxPJe8bboPQ==}
     engines: {node: '>=12.17'}
     hasBin: true
     dev: true
