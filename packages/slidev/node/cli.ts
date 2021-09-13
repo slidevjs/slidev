@@ -158,7 +158,7 @@ cli.command(
             sh.action()
           }
           catch (err) {
-            console.error(`error occurred while executing shortcut ${sh.fullname}: ${err}`)
+            console.error(`Failed to execute shortcut ${sh.fullname}`, err)
           }
         }
       })
