@@ -11,6 +11,9 @@
   "extends": "@antfu",
   "plugins": ["jest", "cypress"],
   "rules": {
-    "vue/no-lone-template": "off"
+    "vue/no-lone-template": "off",
+    "vue/require-prop-types": "off",
+    "vue/require-default-prop": "off",
+    "import/named": "off"
   }
 }

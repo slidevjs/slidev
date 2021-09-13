@@ -9,7 +9,7 @@ const props = defineProps<{
   controls?: boolean
 }>()
 
-const value = useVModel(props, 'value', emit)
+const num = useVModel(props, 'value', emit)
 </script>
 
 <template>
@@ -33,11 +33,11 @@ const value = useVModel(props, 'value', emit)
         <div v-if="controls" class="grid grid-rows-2 text-xl">
           <mdi:menu-up-outline
             class="mt-auto opacity-50 hover:opacity-100 pr-1 cursor-pointer"
-            @click="value += 1"
+            @click="num += 1"
           />
           <mdi:menu-down-outline
             class="opacity-50 hover:opacity-100 pr-1 cursor-pointer"
-            @click="value -= 1"
+            @click="num -= 1"
           />
         </div>
       </div>
