@@ -93,7 +93,7 @@ export async function build(
   if (!fs.existsSync(redirectsPath))
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
-  if (options.data.config.download === true || options.data.config.download === 'auto') {
+  if ([true, 'true', 'auto'].includes(options.data.config.download)) {
     const { exportSlides } = await import('./export')
 
     const port = 12445
@@ -104,6 +104,7 @@ export async function build(
       sirv(config.build.outDir, {
         etag: true,
         single: true,
+        dev: true,
       }),
     )
     server.listen(port)
