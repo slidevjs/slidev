@@ -1,5 +1,4 @@
-import { dirname, resolve, join } from 'path'
-import { basename } from 'path/posix'
+import { dirname, resolve, join, basename } from 'path'
 import fs from 'fs-extra'
 import fg from 'fast-glob'
 import { ResolvedSlidevOptions } from './options'
