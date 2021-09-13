@@ -24,7 +24,7 @@
     "js-base64": "^3.7.0",
     "js-yaml": "^4.1.0",
     "katex": "^0.13.18",
-    "mermaid": "8.5.0",
+    "mermaid": "^8.12.1",
     "monaco-editor": "^0.27.0",
     "nanoid": "^3.1.25",
     "prettier": "^2.4.0",
