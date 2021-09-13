@@ -30,6 +30,10 @@ const Guide = [
     link: '/guide/exporting',
   },
   {
+    text: 'Static Hosting',
+    link: '/guide/hosting',
+  },
+  {
     text: 'Record Presentation',
     link: '/guide/recording',
   },
