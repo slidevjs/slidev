@@ -1,6 +1,6 @@
-import { ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import { toArray, uniq } from '@antfu/utils'
+import { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
-import { resolveFonts } from './core'
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) {
   const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
@@ -23,7 +23,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     selectable: false,
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
-    persistDrawings: false,
+    drawings: {} as ResolvedDrawingsOptions,
   }
   const config: SlidevConfig = {
     ...defaultConfig,
@@ -35,6 +35,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
+    drawings: resolveDarwings(headmatter.drawings),
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -51,4 +52,101 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     console.warn(`[slidev] Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
   return config
+}
+
+export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
+  const {
+    fallbacks = true,
+    italic = false,
+    provider = 'google',
+  } = fonts
+  let sans = toArray(fonts.sans).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  let serif = toArray(fonts.serif).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  let mono = toArray(fonts.mono).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(/,\s*/g)).map(i => i.trim())
+  const custom = toArray(fonts.custom).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+
+  const local = toArray(fonts.local).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
+  const webfonts = fonts.webfonts
+    ? fonts.webfonts
+    : fallbacks
+      ? uniq([...sans, ...serif, ...mono, ...custom])
+      : []
+
+  webfonts.filter(i => local.includes(i))
+
+  function toQuoted(font: string) {
+    if (/^(['"]).*\1$/.test(font))
+      return font
+    return `"${font}"`
+  }
+
+  if (fallbacks) {
+    sans = uniq([
+      ...sans.map(toQuoted),
+      'ui-sans-serif',
+      'system-ui',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      '"Noto Sans"',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+      '"Noto Color Emoji"',
+    ])
+    serif = uniq([
+      ...serif.map(toQuoted),
+      'ui-serif',
+      'Georgia',
+      'Cambria',
+      '"Times New Roman"',
+      'Times',
+      'serif',
+    ])
+    mono = uniq([
+      ...mono.map(toQuoted),
+      'ui-monospace',
+      'SFMono-Regular',
+      'Menlo',
+      'Monaco',
+      'Consolas',
+      '"Liberation Mono"',
+      '"Courier New"',
+      'monospace',
+    ])
+  }
+
+  return {
+    sans,
+    serif,
+    mono,
+    webfonts,
+    provider,
+    local,
+    italic,
+    weights,
+  }
+}
+
+function resolveDarwings(options: DrawingsOptions = {}): ResolvedDrawingsOptions {
+  const {
+    enabled = true,
+    persist = false,
+  } = options
+
+  const persistPath = typeof persist === 'string'
+    ? persist
+    : persist
+      ? '.slidev/drawings'
+      : false
+
+  return {
+    enabled,
+    persist: persistPath,
+  }
 }

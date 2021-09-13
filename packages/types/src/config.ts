@@ -1,4 +1,5 @@
-import { SlidevThemeConfig, ResolvedFontOptions } from './types'
+/* eslint-disable no-use-before-define */
+import { SlidevThemeConfig } from './types'
 
 export interface SlidevConfig {
   title: string
@@ -102,15 +103,12 @@ export interface SlidevConfig {
   fonts: ResolvedFontOptions
 
   /**
-   * Persist the drawings to disk
-   * Passing string to specify the path (default to `.slidev/drawings.json`)
-   *
-   * @default false
+   * Options for drawings
    */
-  persistDrawings: boolean | string
+  drawings: ResolvedDrawingsOptions
 }
 
-export type FontOptions = {
+export interface FontOptions {
   /**
    * Sans serif fonts (default fonts for most text)
    */
@@ -158,4 +156,35 @@ export type FontOptions = {
    * @default true
    */
   fallbacks?: boolean
+}
+
+export interface DrawingsOptions {
+  /**
+   * Persist the drawings to disk
+   * Passing string to specify the directory (default to `.slidev/drawings`)
+   *
+   * @default false
+   */
+  persist?: boolean | string
+
+  /**
+   * @defult true
+   */
+  enabled?: boolean | 'dev' | 'build'
+}
+
+export interface ResolvedFontOptions {
+  sans: string[]
+  mono: string[]
+  serif: string[]
+  weights: string[]
+  italic: boolean
+  provider: 'none' | 'google'
+  webfonts: string[]
+  local: string[]
+}
+
+export interface ResolvedDrawingsOptions {
+  persist: string | false
+  enabled: boolean | 'dev' | 'build'
 }

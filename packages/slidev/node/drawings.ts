@@ -5,12 +5,9 @@ import fg from 'fast-glob'
 import { ResolvedSlidevOptions } from './options'
 
 function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined {
-  if (options.data.config.persistDrawings === false)
-    return undefined
-
-  return options.data.config.persistDrawings === true
-    ? resolve(dirname(options.entry), '.slidev/drawings')
-    : options.data.config.persistDrawings
+  return options.data.config.drawings.persist
+    ? resolve(dirname(options.entry), options.data.config.drawings.persist)
+    : undefined
 }
 
 export async function loadDrawings(options: ResolvedSlidevOptions) {

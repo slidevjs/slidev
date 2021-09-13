@@ -1,6 +1,6 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectMap, toArray, uniq } from '@antfu/utils'
-import { FontOptions, ResolvedFontOptions, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import { isObject, isTruthy, objectMap } from '@antfu/utils'
+import { SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
@@ -149,85 +149,6 @@ export function parse(
     features,
     headmatter,
     themeMeta,
-  }
-}
-
-export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
-  const {
-    fallbacks = true,
-    italic = false,
-    provider = 'google',
-  } = fonts
-  let sans = toArray(fonts.sans).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  let serif = toArray(fonts.serif).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  let mono = toArray(fonts.mono).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(/,\s*/g)).map(i => i.trim())
-  const custom = toArray(fonts.custom).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-
-  const local = toArray(fonts.local).flatMap(i => i.split(/,\s*/g)).map(i => i.trim())
-  const webfonts = fonts.webfonts
-    ? fonts.webfonts
-    : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom])
-      : []
-
-  webfonts.filter(i => local.includes(i))
-
-  function toQuoted(font: string) {
-    if (/^(['"]).*\1$/.test(font))
-      return font
-    return `"${font}"`
-  }
-
-  if (fallbacks) {
-    sans = uniq([
-      ...sans.map(toQuoted),
-      'ui-sans-serif',
-      'system-ui',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      '"Noto Sans"',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-      '"Noto Color Emoji"',
-    ])
-    serif = uniq([
-      ...serif.map(toQuoted),
-      'ui-serif',
-      'Georgia',
-      'Cambria',
-      '"Times New Roman"',
-      'Times',
-      'serif',
-    ])
-    mono = uniq([
-      ...mono.map(toQuoted),
-      'ui-monospace',
-      'SFMono-Regular',
-      'Menlo',
-      'Monaco',
-      'Consolas',
-      '"Liberation Mono"',
-      '"Courier New"',
-      'monospace',
-    ])
-  }
-
-  return {
-    sans,
-    serif,
-    mono,
-    webfonts,
-    provider,
-    local,
-    italic,
-    weights,
   }
 }
 

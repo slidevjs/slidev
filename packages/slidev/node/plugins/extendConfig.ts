@@ -21,11 +21,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
     name: 'slidev:config',
     config(config) {
       const injection: InlineConfig = {
-        define: {
-          __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
-          __SLIDEV_HASH_ROUTE__: options.data.config.routerMode === 'hash',
-          __DEV__: options.mode === 'dev' ? 'true' : 'false',
-        },
+        define: getDefine(options),
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
@@ -78,5 +74,15 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         })
       }
     },
+  }
+}
+
+export function getDefine(options: ResolvedSlidevOptions): Record<string, string> {
+  return {
+    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
+    __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
+    __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
+    __SLIDEV_FEATURE_DRAWINGS_PERSIST__: JSON.stringify(!!options.data.config.drawings.persist === true),
+    __DEV__: options.mode === 'dev' ? 'true' : 'false',
   }
 }

@@ -5,7 +5,8 @@
     "cypress/globals": true
   },
   "globals": {
-    "__DEV__": true
+    "__DEV__": true,
+    "__SLIDEV_FEATURE_DRAWINGS__": true
   },
   "extends": "@antfu",
   "plugins": ["jest", "cypress"],

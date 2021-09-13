@@ -31,11 +31,12 @@ useSwipeControls(root)
 const presistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const Editor = shallowRef<any>()
-const DrawingControls = shallowRef<any>()
-if (__DEV__) {
+if (__DEV__)
   import('./Editor.vue').then(v => Editor.value = v.default)
+
+const DrawingControls = shallowRef<any>()
+if (__SLIDEV_FEATURE_DRAWINGS__)
   import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
-}
 </script>
 
 <template>
@@ -60,7 +61,7 @@ if (__DEV__) {
         >
           <NavControls class="m-auto" :persist="presistNav" />
         </div>
-        <template v-if="__DEV__ && !isEmbedded && DrawingControls">
+        <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !isEmbedded && DrawingControls">
           <DrawingControls class="ml-0" />
         </template>
       </template>

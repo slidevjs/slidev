@@ -36,17 +36,6 @@ export interface SlidevThemeMeta {
 
 export type SlidevThemeConfig = Record<string, string | number>
 
-export type ResolvedFontOptions = {
-  sans: string[]
-  mono: string[]
-  serif: string[]
-  weights: string[]
-  italic: boolean
-  provider: 'none' | 'google'
-  webfonts: string[]
-  local: string[]
-}
-
 export interface SlidevFeatureFlags {
   katex: boolean
   monaco: boolean

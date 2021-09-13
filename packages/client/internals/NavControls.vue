@@ -33,11 +33,12 @@ const barStyle = computed(() => props.persist
 )
 
 const RecordingControls = shallowRef<any>()
-const DrawingControls = shallowRef<any>()
-if (__DEV__) {
+if (__DEV__)
   import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
+
+const DrawingControls = shallowRef<any>()
+if (__SLIDEV_FEATURE_DRAWINGS__)
   import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
-}
 </script>
 
 <template>
@@ -87,7 +88,8 @@ if (__DEV__) {
           <ph:cursor-fill v-if="showPresenterCursor" />
           <ph:cursor-duotone v-else class="opacity-50" />
         </button>
-
+      </template>
+      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !isEmbedded">
         <template v-if="DrawingControls">
           <button
             class="icon-btn relative"

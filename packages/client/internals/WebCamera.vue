@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useEventListener, useStorage } from '@vueuse/core'
+import { useEventListener, useStorage, useDraggable } from '@vueuse/core'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { currentCamera } from '../state'
 import { recorder } from '../logic/recording'
-import { useDraggable } from '../logic/utils'
 
 const size = useStorage('slidev-webcam-size', Math.round(Math.min(window.innerHeight, (window.innerWidth) / 8)))
 const position = useStorage('slidev-webcam-pos', {
@@ -17,7 +16,7 @@ const video = ref<HTMLVideoElement | undefined>()
 
 const { streamCamera, showAvatar } = recorder
 
-const { style: containerStyle } = useDraggable(frame, { initial: position })
+const { style: containerStyle } = useDraggable(frame, { initialValue: position })
 const { isDragging: handlerDown } = useDraggable(handler, {
   onMove({ x, y }) {
     size.value = Math.max(10, Math.min(x - position.value.x, y - position.value.y) / 0.8536)

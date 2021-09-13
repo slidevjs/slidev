@@ -136,7 +136,7 @@ export async function ViteSlidevPlugin(
         drawings: drawingData,
       },
       onChanged(key, data, patch) {
-        if (!options.data.config.persistDrawings)
+        if (!options.data.config.drawings.persist)
           return
         if (key === 'drawings')
           writeDarwings(options, patch ?? data)

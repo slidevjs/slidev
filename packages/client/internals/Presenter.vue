@@ -127,7 +127,7 @@ onMounted(() => {
       <div class="grid-section bottom">
         <NavControls :persist="true" />
       </div>
-      <DrawingControls />
+      <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>
     <div class="progress-bar">
       <div

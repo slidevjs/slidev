@@ -1,18 +1,23 @@
 import { Plugin } from 'vite'
+import { objectEntries } from '@antfu/utils'
 import { ResolvedSlidevOptions } from '../options'
+import { getDefine } from './extendConfig'
 
 export function createFixPlugins(
-  { mode }: ResolvedSlidevOptions,
+  options: ResolvedSlidevOptions,
 ): Plugin[] {
-  const DEV = mode === 'dev' ? 'true' : 'false'
-
+  const define = objectEntries(getDefine(options))
   return [
     {
       name: 'slidev:flags',
       enforce: 'pre',
       transform(code, id) {
-        if (id.endsWith('.vue'))
-          return code.replace(/__DEV__/g, DEV)
+        if (id.endsWith('.vue')) {
+          define.forEach(([from, to]) => {
+            code = code.replaceAll(from, to)
+          })
+          return code
+        }
       },
     },
   ]

@@ -10,6 +10,8 @@ info: |
 
   Learn more at [Sli.dev](https://sli.dev)
 title: Welcome to Slidev
+drawings:
+  persist: true
 ---
 
 # Welcome to Slidev

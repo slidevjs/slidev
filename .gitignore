@@ -12,3 +12,4 @@ packages/slidev/README.md
 packages/create-app/template/slides.md
 composable-vue-cn
 components.d.ts
+.slidev

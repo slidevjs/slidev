@@ -18,7 +18,7 @@ watch(currentRoute, () => {
 }, { immediate: true })
 
 const DrawingLayer = shallowRef<any>()
-if (__DEV__)
+if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 </script>
 
@@ -42,7 +42,7 @@ if (__DEV__)
   <!-- Global Top -->
   <GlobalTop />
 
-  <template v-if="__DEV__ && DrawingLayer">
+  <template v-if="(__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__) && DrawingLayer">
     <DrawingLayer />
   </template>
   <PresenterMouse v-if="!isPresenter" />

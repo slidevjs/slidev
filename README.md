@@ -39,18 +39,18 @@ Status: <b>Public Beta 🎉</b><br>
 
 - 📝 [**Markdown-based**](https://sli.dev/guide/syntax.html) - use your favorite editors and workflow
 - 🧑‍💻 [**Developer Friendly**](https://sli.dev/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
-- 🎨 [**Themable**](https://sli.dev/themes/gallery.html) - theme can be shared and used with npm packages
-- 🌈 [**Stylish**](https://sli.dev/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets
-- 🤹 [**Interactive**](https://sli.dev/custom/directory-structure.html#components) - embedding Vue components seamlessly
-- 🎙 [**Presenter Mode**](https://sli.dev/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🧮 [**LaTeX**](https://sli.dev/guide/syntax.html#latex) - Built-in LaTeX math equations support
-- 📰 [**Diagrams**](https://sli.dev/guide/syntax.html#diagrams) - Creates diagrams with textual descriptions 
-- 🌟 [**Icons**](https://sli.dev/guide/syntax.html#icons) - Access to icons from any iconset directly
-- 💻 [**Editors**](https://sli.dev/guide/editors.html) - Integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
-- 🎥 [**Recording**](https://sli.dev/guide/recording.html) - built-in recording and camera view
-- 📤 [**Portable**](https://sli.dev/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
-- ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
-- 🛠 [**Hackable**](https://sli.dev/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages
+- 🎨 [**Themable**](https://sli.dev/themes/gallery.html) - theme can be shared and used with npm packages.
+- 🌈 [**Stylish**](https://sli.dev/guide/syntax.html#embedded-styles) - [Windi CSS](https://windicss.org/) on-demand utilities, easy-to-use embedded stylesheets.
+- 🤹 [**Interactive**](https://sli.dev/custom/directory-structure.html#components) - embedding Vue components seamlessly.
+- 🎙 [**Presenter Mode**](https://sli.dev/guide/presenter-mode.html) - use another window, or even your phone to control your slides.
+- 🧮 [**LaTeX**](https://sli.dev/guide/syntax.html#latex) - built-in LaTeX math equations support.
+- 📰 [**Diagrams**](https://sli.dev/guide/syntax.html#diagrams) - creates diagrams with textual descriptions
+- 🌟 [**Icons**](https://sli.dev/guide/syntax.html#icons) - access to icons from any iconset directly.
+- 💻 [**Editors**](https://sli.dev/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
+- 🎥 [**Recording**](https://sli.dev/guide/recording.html) - built-in recording and camera view.
+- 📤 [**Portable**](https://sli.dev/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA.
+- ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev).
+- 🛠 [**Hackable**](https://sli.dev/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages.
 
 ## Getting Started
 
@@ -76,6 +76,7 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family -  [`@vueuse/core`](https://github.com/vueuse/vueuse), [`@vueuse/head`](https://github.com/vueuse/head), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
 - [Iconify](https://iconify.design/) - Iconsets collection.
+- [Drauu](https://github.com/antfu/drauu) - Drawing and annotations support
 - [KaTeX](https://katex.org/) - LaTeX math rendering.
 - [Mermaid](https://mermaid-js.github.io/mermaid) - Textual Diagrams.
 
