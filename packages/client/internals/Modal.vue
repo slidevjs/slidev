@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { shallowRef } from 'vue'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits<{(name: 'modelValue', v: boolean): void}>()
 const props = defineProps({
   modelValue: {
     default: false,
@@ -13,23 +12,20 @@ const props = defineProps({
 })
 
 const value = useVModel(props, 'modelValue', emit)
-const container = shallowRef<HTMLDivElement>()
 
-function onClick(e: MouseEvent) {
-  if (e?.target === container.value)
-    value.value = false
+function onClick() {
+  value.value = false
 }
 </script>
 
 <template>
   <KeepAlive>
-    <div
-      v-if="value"
-      ref="container"
-      class="fixed top-0 bottom-0 left-0 right-0 grid z-20"
-      bg="black opacity-80"
-      @click="onClick"
-    >
+    <div v-if="value" class="fixed top-0 bottom-0 left-0 right-0 grid z-20">
+      <div
+        bg="black opacity-80"
+        class="absolute top-0 bottom-0 left-0 right-0 -z-1"
+        @click="onClick()"
+      />
       <div
         class="m-auto rounded-md bg-main shadow"
         dark:border="~ gray-400 opacity-10"

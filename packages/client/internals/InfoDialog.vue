@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
+import { computed } from 'vue'
 import { configs } from '../env'
 import Modal from './Modal.vue'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits<{(name: 'modelValue', v: boolean): void}>()
 const props = defineProps({
   modelValue: {
     default: false,
@@ -11,16 +12,17 @@ const props = defineProps({
 })
 
 const value = useVModel(props, 'modelValue', emit)
+const hasInfo = computed(() => typeof configs.info === 'string')
 </script>
 
 <template>
   <Modal v-model="value" class="px-6 py-4">
     <div class="slidev-info-dialog slidev-layout flex flex-col gap-4 text-base">
       <div
-        v-if="typeof configs.info === 'string'"
+        v-if="hasInfo"
         class="mb-4"
         v-html="configs.info"
-      ></div>
+      />
       <a
         href="https://github.com/slidevjs/slidev"
         target="_blank"
