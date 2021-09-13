@@ -38,6 +38,9 @@ export async function build(
             },
           },
         ],
+        build: {
+          chunkSizeWarningLimit: 2000,
+        },
       }),
     )
 
