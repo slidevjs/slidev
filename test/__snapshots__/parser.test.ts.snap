@@ -6,6 +6,10 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "drawings": Object {
+    "enabled": true,
+    "persist": false,
+  },
   "fonts": Object {
     "italic": false,
     "local": Array [],
@@ -218,6 +222,10 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "drawings": Object {
+    "enabled": true,
+    "persist": false,
+  },
   "fonts": Object {
     "italic": false,
     "local": Array [],
@@ -373,6 +381,10 @@ Object {
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
+  "drawings": Object {
+    "enabled": true,
+    "persist": false,
+  },
   "fonts": Object {
     "italic": false,
     "local": Array [],
