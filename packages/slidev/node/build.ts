@@ -83,6 +83,9 @@ export async function build(
       await fs.unlink(indexPath)
   }
 
+  // copy index.html to 404.html for GitHub Pages
+  await fs.copyFile(resolve(options.userRoot, 'dist/index.html'), resolve(options.userRoot, 'dist/404.html'))
+
   if (options.data.config.download === true || options.data.config.download === 'auto') {
     const { exportSlides } = await import('./export')
 
