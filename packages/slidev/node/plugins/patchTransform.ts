@@ -14,7 +14,7 @@ export function createFixPlugins(
       transform(code, id) {
         if (id.endsWith('.vue')) {
           define.forEach(([from, to]) => {
-            code = code.replaceAll(from, to)
+            code = code.replace(new RegExp(from, 'g'), to)
           })
           return code
         }
