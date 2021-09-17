@@ -142,6 +142,20 @@ importers:
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.12
 
+  demo/new-ways-to-vue:
+    specifiers:
+      '@slidev/cli': workspace:*
+      '@slidev/theme-default': ^0.21.0
+      '@slidev/theme-seriph': ^0.21.0
+      '@slidev/types': workspace:*
+      nodemon: ^2.0.12
+    devDependencies:
+      '@slidev/cli': link:../../packages/slidev
+      '@slidev/theme-default': 0.21.0
+      '@slidev/theme-seriph': 0.21.0
+      '@slidev/types': link:../../packages/types
+      nodemon: 2.0.12
+
   demo/starter:
     specifiers:
       '@slidev/cli': workspace:*
