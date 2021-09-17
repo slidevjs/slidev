@@ -77,5 +77,10 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "^2.5.8"
+    }
   }
 }

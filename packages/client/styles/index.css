@@ -39,3 +39,9 @@ html {
 .slidev-vclick-hidden {
   @apply !opacity-0 !pointer-events-none;
 }
+
+.slidev-icon {
+  display: inline-block;
+  vertical-align: sub;
+  line-height: 1em;
+}
