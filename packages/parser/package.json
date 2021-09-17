@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "0.25.1",
+  "version": "0.25.2",
   "description": "Markdown parser for Slidev",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
