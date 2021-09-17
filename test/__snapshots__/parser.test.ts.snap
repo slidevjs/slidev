@@ -9,6 +9,8 @@ Object {
   "drawings": Object {
     "enabled": true,
     "persist": false,
+    "presenterOnly": false,
+    "syncAll": true,
   },
   "fonts": Object {
     "italic": false,
@@ -225,6 +227,8 @@ Object {
   "drawings": Object {
     "enabled": true,
     "persist": false,
+    "presenterOnly": false,
+    "syncAll": true,
   },
   "fonts": Object {
     "italic": false,
@@ -384,6 +388,8 @@ Object {
   "drawings": Object {
     "enabled": true,
     "persist": false,
+    "presenterOnly": false,
+    "syncAll": true,
   },
   "fonts": Object {
     "italic": false,
