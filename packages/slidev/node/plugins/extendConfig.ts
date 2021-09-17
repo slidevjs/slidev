@@ -2,10 +2,12 @@ import { dirname, join } from 'path'
 import { InlineConfig, mergeConfig, Plugin } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import resolveGlobal from 'resolve-global'
+import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, toAtFS } from '../utils'
+import { searchForWorkspaceRoot } from '../vite/searchRoot'
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -48,15 +50,15 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         server: {
           fs: {
             strict: true,
-            allow: [
-              dirname(options.userRoot),
-              options.cliRoot,
+            allow: uniq([
+              searchForWorkspaceRoot(options.userRoot),
+              searchForWorkspaceRoot(options.cliRoot),
               ...(
                 isInstalledGlobally
                   ? [dirname(resolveGlobal('@slidev/client/package.json'))]
                   : []
               ),
-            ],
+            ]),
           },
         },
       }
