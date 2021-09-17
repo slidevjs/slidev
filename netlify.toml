@@ -8,6 +8,12 @@
   command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
 
 [[redirects]]
+  from = "/new"
+  to = "https://stackblitz.com/fork/slidev-new?file=slides.md"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "https://slidev.antfu.me/*"
   to = "https://sli.dev/:splat"
   status = 301
