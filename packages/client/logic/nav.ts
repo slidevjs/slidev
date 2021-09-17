@@ -1,8 +1,9 @@
 import { computed, Ref, ref, nextTick } from 'vue'
-import { isString, SwipeDirection, timestamp, useSwipe } from '@vueuse/core'
+import { isString, SwipeDirection, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
+import { isDrawing } from './drawings'
 
 export { rawRoutes, router }
 
@@ -91,15 +92,24 @@ export function go(page: number, clicks?: number) {
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   const swipeBegin = ref(0)
-  const { direction, lengthX, lengthY } = useSwipe(root, {
-    onSwipeStart() {
+  const { direction, distanceX, distanceY } = usePointerSwipe(root, {
+    onSwipeStart(e) {
+      if (e.pointerType !== 'touch')
+        return
+      if (isDrawing.value)
+        return
       swipeBegin.value = timestamp()
     },
-    onSwipeEnd() {
+    onSwipeEnd(e) {
+      if (e.pointerType !== 'touch')
+        return
       if (!swipeBegin.value)
         return
-      const x = Math.abs(lengthX.value)
-      const y = Math.abs(lengthY.value)
+      if (isDrawing.value)
+        return
+
+      const x = Math.abs(distanceX.value)
+      const y = Math.abs(distanceY.value)
       if (x / window.innerWidth > 0.3 || x > 100) {
         if (direction.value === SwipeDirection.LEFT)
           next()
