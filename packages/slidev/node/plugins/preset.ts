@@ -100,6 +100,7 @@ export async function ViteSlidevPlugin(
       resolvers: [
         IconsResolver({
           prefix: '',
+          customCollections: Object.keys(iconsOptions.customCollections || []),
         }),
       ],
 
