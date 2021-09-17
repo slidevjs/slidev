@@ -54,6 +54,14 @@ Status: <b>Public Beta 🎉</b><br>
 
 ## Getting Started
 
+### Try it Online ⚡️
+
+[sli.dev/new](https://sli.dev/new)
+
+[![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://sli.dev/new)
+
+### Init Project Locally
+
 Install [Node.js >=14](https://nodejs.org/) and run the following command:
 
 ```bash
