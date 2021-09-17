@@ -2,6 +2,7 @@
 import { useElementSize } from '@vueuse/core'
 import { computed, provide, ref, watchEffect } from 'vue'
 import { slideAspect, slideWidth, slideHeight, configs } from '../env'
+import { injectionSlideScale } from '../constants'
 
 const props = defineProps({
   width: {
@@ -50,6 +51,8 @@ const className = computed(() => ({
   'select-none': !configs.selectable,
   'slidev-code-line-numbers': configs.lineNumbers,
 }))
+
+provide(injectionSlideScale, scale)
 </script>
 
 <template>

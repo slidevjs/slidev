@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, onBeforeUnmount } from 'vue'
+import { onMounted, ref, watch, inject, onBeforeUnmount } from 'vue'
 import { drauu, loadCanvas } from '../logic/drawings'
+import { injectionSlideScale } from '../constants'
 
+const scale = inject(injectionSlideScale)!
 const svg = ref<SVGSVGElement>()
 
 onMounted(() => {
   drauu.mount(svg.value!, svg.value!.parentElement!)
+  watch(scale, scale => drauu.options.coordinateScale = 1 / scale, { immediate: true })
   loadCanvas()
 })
 
