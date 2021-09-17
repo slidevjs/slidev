@@ -43,6 +43,8 @@ Slidev is made possible by combining these tools and technologies.
 
 ### Scaffolding Your First Presentation
 
+<br>
+
 #### Try it Online
 
 [sli.dev/new](https://sli.dev/new)
