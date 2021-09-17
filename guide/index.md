@@ -43,6 +43,14 @@ Slidev is made possible by combining these tools and technologies.
 
 ### Scaffolding Your First Presentation
 
+#### Try it Online
+
+[sli.dev/new](https://sli.dev/new)
+
+[![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://sli.dev/new)
+
+#### Create Locally
+
 With NPM:
 
 ```bash
