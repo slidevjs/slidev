@@ -31,7 +31,7 @@
     "slidev": "./bin/slidev.js"
   },
   "scripts": {
-    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --external @slidev/client/package.json",
+    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --splitting --external @slidev/client/package.json",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build",
     "start": "esno node/cli.ts"
