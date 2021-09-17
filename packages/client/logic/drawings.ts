@@ -1,8 +1,8 @@
-import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, watch, watchEffect } from 'vue'
 import { Brush, createDrauu, DrawingMode, Options as DrauuOptions } from 'drauu'
 import { useStorage, toReactive } from '@vueuse/core'
-import { serverDrawingState as drawingState } from '../env'
-import { currentPage } from './nav'
+import { serverDrawingState as drawingState, configs } from '../env'
+import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [
   '#ff595e',
@@ -98,6 +98,10 @@ if (__DEV__) {
         return
       loadCanvas()
     }, { immediate: true })
+
+    watchEffect(() => {
+      drawingState.$syncUp = configs.drawings.syncAll || isPresenter.value
+    })
   })
 
   drauu.on('start', () => isDrawing.value = true)

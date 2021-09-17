@@ -4,7 +4,7 @@ import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
 import { isPrintMode, next, prev, useSwipeControls, isEmbedded } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
-import { themeVars } from '../env'
+import { themeVars, configs } from '../env'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -61,7 +61,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         >
           <NavControls class="m-auto" :persist="presistNav" />
         </div>
-        <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !isEmbedded && DrawingControls">
+        <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded && DrawingControls">
           <DrawingControls class="ml-0" />
         </template>
       </template>

@@ -137,6 +137,8 @@ function resolveDarwings(options: DrawingsOptions = {}): ResolvedDrawingsOptions
   const {
     enabled = true,
     persist = false,
+    presenterOnly = false,
+    syncAll = true,
   } = options
 
   const persistPath = typeof persist === 'string'
@@ -148,5 +150,7 @@ function resolveDarwings(options: DrawingsOptions = {}): ResolvedDrawingsOptions
   return {
     enabled,
     persist: persistPath,
+    presenterOnly,
+    syncAll,
   }
 }

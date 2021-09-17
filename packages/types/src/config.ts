@@ -171,6 +171,20 @@ export interface DrawingsOptions {
    * @defult true
    */
   enabled?: boolean | 'dev' | 'build'
+
+  /**
+   * Only allow drawing from presenter mode
+   *
+   * @default false
+   */
+  presenterOnly?: boolean
+
+  /**
+   * Sync drawing for all instances
+   *
+   * @default true
+   */
+  syncAll?: boolean
 }
 
 export interface ResolvedFontOptions {
@@ -187,4 +201,6 @@ export interface ResolvedFontOptions {
 export interface ResolvedDrawingsOptions {
   persist: string | false
   enabled: boolean | 'dev' | 'build'
+  presenterOnly: boolean
+  syncAll: boolean
 }

@@ -267,7 +267,7 @@ importers:
       vite: ^2.5.8
       vite-plugin-md: ^0.11.1
       vite-plugin-remote-assets: ^0.2.2
-      vite-plugin-vue-server-ref: ^0.2.3
+      vite-plugin-vue-server-ref: ^0.2.4
       vite-plugin-windicss: ^1.4.3
       vue: ^3.2.12
       windicss: ^3.1.7
@@ -310,7 +310,7 @@ importers:
       vite: 2.5.8
       vite-plugin-md: 0.11.1_vite@2.5.8
       vite-plugin-remote-assets: 0.2.2_vite@2.5.8
-      vite-plugin-vue-server-ref: 0.2.3_vite@2.5.8+vue@3.2.12
+      vite-plugin-vue-server-ref: 0.2.4_vite@2.5.8+vue@3.2.12
       vite-plugin-windicss: 1.4.3_typescript@4.4.3+vite@2.5.8
       vue: 3.2.12
       windicss: 3.1.7
@@ -7591,8 +7591,8 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-vue-server-ref/0.2.3_vite@2.5.8+vue@3.2.12:
-    resolution: {integrity: sha512-4zZgpPiSfdnRmgD/4kzF3AMXpCp3dbGc6EUAsNZRKlEOyOvxARkN6w6rzWrNSh8nnsiKZC97WTrdONiStEIufA==}
+  /vite-plugin-vue-server-ref/0.2.4_vite@2.5.8+vue@3.2.12:
+    resolution: {integrity: sha512-+WAiq0fSfP+LbmTbx2BkDrL6sGWrb0sUGZPk+G3ZbbmowFNh3TY+f+AV1ofce0rKs4hvH3zBuXxEAkTf/wQqRA==}
     peerDependencies:
       vite: ^2.0.0
       vue: ^3.0.0-0
