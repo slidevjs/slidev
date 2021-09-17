@@ -9,8 +9,8 @@
 
 [[redirects]]
   from = "/new"
-  to = "https://stackblitz.com/fork/slidev-new?file=slides.md"
-  status = 301
+  to = "https://stackblitz.com/fork/slidev?file=slides.md"
+  status = 302
   force = true
 
 [[redirects]]
