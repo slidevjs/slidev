@@ -71,8 +71,8 @@
     "ts-jest": "^27.0.5",
     "tsup": "5.1.0",
     "typescript": "^4.4.3",
-    "vite": "^2.5.8",
-    "vite-plugin-windicss": "^1.4.3",
+    "vite": "^2.6.0-beta.2",
+    "vite-plugin-windicss": "^1.4.5",
     "zx": "^4.2.0"
   },
   "engines": {
@@ -80,7 +80,7 @@
   },
   "pnpm": {
     "overrides": {
-      "vite": "^2.5.8"
+      "vite": "^2.6.0-beta.2"
     }
   }
 }
