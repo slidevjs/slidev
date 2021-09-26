@@ -2,7 +2,6 @@ import { useMagicKeys, useActiveElement, useStorage, useBreakpoints, breakpoints
 import { computed, ref } from 'vue'
 import { slideAspect } from '../env'
 
-export const showOverview = ref(false)
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
@@ -25,6 +24,7 @@ export const currentCamera = useStorage<string>('slidev-camera', 'default')
 export const currentMic = useStorage<string>('slidev-mic', 'default')
 export const slideScale = useStorage<number>('slidev-scale', 0)
 
+export const showOverview = useStorage('slidev-show-overview', false)
 export const showPresenterCursor = useStorage('slidev-presenter-cursor', true)
 export const showEditor = useStorage('slidev-show-editor', false)
 export const editorWidth = useStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 100)
