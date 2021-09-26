@@ -8,6 +8,7 @@ export const injectionSlideScale: InjectionKey<ComputedRef<number>> = Symbol('sl
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
+export const CLASS_VCLICK_FADE = 'slidev-vclick-fade'
 export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'

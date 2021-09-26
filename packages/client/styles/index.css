@@ -40,6 +40,10 @@ html {
   @apply !opacity-0 !pointer-events-none;
 }
 
+.slidev-vclick-fade {
+  @apply opacity-50;
+}
+
 .slidev-icon {
   display: inline-block;
   vertical-align: sub;

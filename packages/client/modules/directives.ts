@@ -2,8 +2,16 @@ import { App, DirectiveBinding, InjectionKey, watch } from 'vue'
 import { remove } from '@antfu/utils'
 import { isPrintMode, isPrintWithClicks } from '../logic/nav'
 import {
-  injectionClicksDisabled, injectionClicksElements, injectionClicks, injectionOrderMap,
-  CLASS_VCLICK_CURRENT, CLASS_VCLICK_HIDDEN, CLASS_VCLICK_HIDDEN_EXP, CLASS_VCLICK_PRIOR, CLASS_VCLICK_TARGET,
+  injectionClicksDisabled,
+  injectionClicksElements,
+  injectionClicks,
+  injectionOrderMap,
+  CLASS_VCLICK_CURRENT,
+  CLASS_VCLICK_HIDDEN,
+  CLASS_VCLICK_HIDDEN_EXP,
+  CLASS_VCLICK_PRIOR,
+  CLASS_VCLICK_TARGET,
+  CLASS_VCLICK_FADE,
 } from '../constants'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
@@ -26,8 +34,11 @@ export default function createDirectives() {
           const orderMap = dirInject(dir, injectionOrderMap)
 
           const hide = dir.modifiers.hide
+          const fade = dir.modifiers.fade
 
           const prev = elements?.value?.length || 0
+
+          const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
 
           if (elements && !elements?.value?.includes(el))
             elements.value.push(el)
@@ -59,11 +70,12 @@ export default function createDirectives() {
                 const show = dir.value != null
                   ? c >= dir.value
                   : c > prev
+
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                  el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
+                  el.classList.toggle(CLASS_HIDE, !show)
 
                 if (hide !== false && hide !== undefined)
-                  el.classList.toggle(CLASS_VCLICK_HIDDEN, show)
+                  el.classList.toggle(CLASS_HIDE, show)
 
                 // Reset CLASS_VCLICK_CURRENT to false.
                 el.classList.toggle(CLASS_VCLICK_CURRENT, false)
