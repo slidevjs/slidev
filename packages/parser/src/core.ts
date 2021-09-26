@@ -68,12 +68,16 @@ export function parseSlide(raw: string): SlideInfoBase {
   const result = matter(raw)
   let note: string | undefined
   const frontmatter = result.data || {}
-  const content = result.content
-    .trim()
-    .replace(/<!--([\s\S]*)-->$/g, (_, v = '') => {
-      note = v.trim()
-      return ''
-    })
+  let content = result.content.trim()
+
+  const comments = Array.from(content.matchAll(/<!--([\s\S]*?)-->/g))
+  if (comments.length) {
+    const last = comments[comments.length - 1]
+    if (last.index && last.index + last[0].length >= content.length) {
+      note = last[1].trim()
+      content = content.slice(0, last.index).trim()
+    }
+  }
 
   const title = frontmatter.title || frontmatter.name || content.match(/^#+ (.*)$/m)?.[1]?.trim()
 

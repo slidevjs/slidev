@@ -136,7 +136,7 @@ title: Hi
       },
     },
     "index": 1,
-    "note": "This is notes",
+    "note": "This is note",
     "raw": "---
 meta:
   title: FooBar
@@ -147,7 +147,7 @@ layout: center
 # Hello
 
 <!--
-This is notes
+This is note
 -->
 ",
     "start": 8,
@@ -170,22 +170,25 @@ This is notes
   },
   Object {
     "content": "
-<!-- This is not notes -->
+<!-- This is not note -->
 Hey
 ",
-    "end": 24,
+    "end": 26,
     "frontmatter": Object {
       "layout": "text",
     },
     "index": 3,
-    "note": undefined,
+    "note": "This is note",
     "raw": "---
 layout: text
 ---
 
-<!-- This is not notes -->
+<!-- This is not note -->
 Hey
 
+<!--
+This is note
+-->
 ",
     "start": 19,
     "title": undefined,
@@ -199,7 +202,7 @@ this should be treated as code block
 ----
 \`\`\`
 ",
-    "end": 33,
+    "end": 35,
     "frontmatter": Object {},
     "index": 4,
     "note": undefined,
@@ -212,7 +215,7 @@ this should be treated as code block
 \`\`\`
 
 ",
-    "start": 25,
+    "start": 27,
     "title": undefined,
   },
 ]

@@ -13,15 +13,17 @@ meta:
 layout: center
 ---
 # Hello
-<!-- This is notes -->
+<!-- This is note -->
 ---
 
 # Morning
 ---
 layout: text
 ---
-<!-- This is not notes -->
+<!-- This is not note -->
 Hey
+<!-- This is note -->
+
 ---
 
 ```md
