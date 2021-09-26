@@ -112,6 +112,7 @@ export function createSlidesLoader(
             }
 
             res.statusCode = 200
+            res.write(JSON.stringify(prepareSlideInfo(slide)))
             return res.end()
           }
 
@@ -149,13 +150,14 @@ export function createSlidesLoader(
         const length = Math.max(data.slides.length, newData.slides.length)
 
         for (let i = 0; i < length; i++) {
-          if (hmrPages.has(i))
-            continue
-
           const a = data.slides[i]
           const b = newData.slides[i]
 
-          if (a?.content.trim() === b?.content.trim() && equal(a.frontmatter, b.frontmatter))
+          if (
+            a?.content.trim() === b?.content.trim()
+            && a?.note === b?.note
+            && equal(a.frontmatter, b.frontmatter)
+          )
             continue
 
           ctx.server.ws.send({

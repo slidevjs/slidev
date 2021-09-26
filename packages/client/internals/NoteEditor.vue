@@ -59,15 +59,24 @@ onClickOutside(input, () => {
 </script>
 
 <template>
-  <div
-    v-show="!editing && note"
-    class="prose overflow-auto outline-none"
-    :class="props.class"
-    @click="switchNoteEdit"
-    v-html="info?.notesHTML"
-  />
+  <template v-if="!editing && note">
+    <div
+      v-if="info?.notesHTML"
+      class="prose overflow-auto outline-none"
+      :class="props.class"
+      @click="switchNoteEdit"
+      v-html="info?.notesHTML"
+    ></div>
+    <div
+      v-else
+      class="prose overflow-auto outline-none"
+      :class="props.class"
+      @click="switchNoteEdit"
+      v-text="note"
+    ></div>
+  </template>
   <textarea
-    v-show="editing || !note"
+    v-else
     ref="input"
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent block"

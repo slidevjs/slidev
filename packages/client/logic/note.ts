@@ -4,7 +4,7 @@ import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 
 export interface UseSlideInfo{
   info: Ref<SlideInfoExtended | undefined>
-  update: (data: Partial<SlideInfo>) => Promise<void>
+  update: (data: Partial<SlideInfo>) => Promise<SlideInfoExtended | void>
 }
 
 export function useSlideInfo(id: number | undefined): UseSlideInfo {
@@ -20,7 +20,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
   execute()
 
   const update = async(data: Partial<SlideInfo>) => {
-    await fetch(
+    return await fetch(
       url,
       {
         method: 'POST',
@@ -30,12 +30,12 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
         },
         body: JSON.stringify(data),
       },
-    )
+    ).then(r => r.json())
   }
 
-  import.meta.hot?.on('slidev-update', (playload) => {
-    if (playload.id === id)
-      info.value = playload.data
+  import.meta.hot?.on('slidev-update', (payload) => {
+    if (payload.id === id)
+      info.value = payload.data
   })
 
   return {
@@ -56,6 +56,12 @@ export function useDynamicSlideInfo(id: MaybeRef<number | undefined>) {
 
   return {
     info: computed(() => get(unref(id)).info.value),
-    update: (data: Partial<SlideInfo>, newId?: number) => get(newId ?? unref(id)).update(data),
+    update: async(data: Partial<SlideInfo>, newId?: number) => {
+      const info = get(newId ?? unref(id))
+      const newData = await info.update(data)
+      if (newData)
+        info.info.value = newData
+      return newData
+    },
   }
 }
