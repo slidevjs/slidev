@@ -11,6 +11,6 @@
     "@slidev/theme-default": "^0.21.0",
     "@slidev/theme-seriph": "^0.21.0",
     "@slidev/types": "workspace:*",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.13"
   }
 }
