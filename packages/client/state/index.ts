@@ -8,7 +8,10 @@ export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
 
 export const shortcutsEnabled = ref(true)
-export const breakpoints = useBreakpoints(breakpointsTailwind)
+export const breakpoints = useBreakpoints({
+  xs: 460,
+  ...breakpointsTailwind,
+})
 export const windowSize = useWindowSize()
 export const magicKeys = useMagicKeys()
 export const isScreenVertical = computed(() => windowSize.height.value - windowSize.width.value / slideAspect > 180)

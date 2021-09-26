@@ -22,15 +22,15 @@ function go(page: number) {
   close()
 }
 
+const xs = breakpoints.smaller('xs')
 const sm = breakpoints.smaller('sm')
-const md = breakpoints.smaller('md')
 
 const padding = 4 * 16 * 2
 const gap = 2 * 16
 const cardWidth = computed(() => {
-  if (sm.value)
+  if (xs.value)
     return windowSize.width.value - padding
-  else if (md.value)
+  else if (sm.value)
     return (windowSize.width.value - padding - gap) / 2
   return 300
 })
