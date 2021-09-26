@@ -79,7 +79,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-main h-full">
+  <div class="bg-main h-full slidev-presenter">
     <div class="grid-container">
       <div class="grid-section top flex">
         <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
@@ -141,6 +141,10 @@ onMounted(() => {
 </template>
 
 <style lang="postcss" scoped>
+.slidev-presenter {
+  --slidev-controls-foreground: current;
+}
+
 .timer-btn:hover {
   & > :first-child {
     @apply opacity-0;
