@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.3.0",
-    "@iconify/json": "^1.1.338",
+    "@iconify/json": "^1.1.406",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",

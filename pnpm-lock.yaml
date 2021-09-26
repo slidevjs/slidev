@@ -225,7 +225,7 @@ importers:
   packages/slidev:
     specifiers:
       '@antfu/utils': ^0.3.0
-      '@iconify/json': ^1.1.338
+      '@iconify/json': ^1.1.406
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
@@ -271,7 +271,7 @@ importers:
       yargs: ^17.2.1
     dependencies:
       '@antfu/utils': 0.3.0
-      '@iconify/json': 1.1.338
+      '@iconify/json': 1.1.406
       '@slidev/client': link:../client
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
@@ -302,7 +302,7 @@ importers:
       resolve-from: 5.0.0
       resolve-global: 1.0.0
       shiki: 0.9.11
-      unplugin-icons: 0.11.4_8feb292c6ffe06df0713566f415e9a2c
+      unplugin-icons: 0.11.4_a4fd3b11ca03e3e439228ee8fa77d3bb
       unplugin-vue-components: 0.15.4_vite@2.5.10+vue@3.2.19
       vite: 2.5.10
       vite-plugin-md: 0.11.1_vite@2.5.10
@@ -859,8 +859,8 @@ packages:
     resolution: {integrity: sha512-LFelJDOLZ6JHlmlAkgrvmcu4hpNPB91KYcr4f60D/exzU1eNOb4/KCVHIydGHIQFaOacIOD+Xy+B7P1z812cZg==}
     dev: false
 
-  /@iconify/json/1.1.338:
-    resolution: {integrity: sha512-A6b1ELbuHmg4on9TobRa3T4YzYWUIGNhnrGdqRguskyUqQk/2W+4O3XeexBtkAUI9oT2ggw94tm/VgNBISIB8A==}
+  /@iconify/json/1.1.406:
+    resolution: {integrity: sha512-3mNuYfU1cQeaV0m2mSI5Lf+13Tr6xueOP30w3Du4xCIBFGQY4O0D8wJ8rOp9PXRik1oleu+aKfEVnned0b/tqw==}
     dev: false
 
   /@istanbuljs/load-nyc-config/1.1.0:
@@ -7583,7 +7583,7 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /unplugin-icons/0.11.4_8feb292c6ffe06df0713566f415e9a2c:
+  /unplugin-icons/0.11.4_a4fd3b11ca03e3e439228ee8fa77d3bb:
     resolution: {integrity: sha512-vmUqYCf+uFZF33GyL5/1X3LqNJrn6RfI8K85EPs8PzTTqMF6lGnO9wERSo2yKt2wzkCye10urZFdaYrReheA8A==}
     peerDependencies:
       '@iconify/json': '*'
@@ -7602,7 +7602,7 @@ packages:
         optional: true
     dependencies:
       '@antfu/utils': 0.3.0
-      '@iconify/json': 1.1.338
+      '@iconify/json': 1.1.406
       '@iconify/json-tools': 1.0.10
       '@vue/compiler-sfc': 3.2.19
       has-pkg: 0.0.1
