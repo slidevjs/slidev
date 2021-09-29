@@ -53,7 +53,7 @@ async function start() {
             name="record-camera"
             type="checkbox"
           />
-          <label for="record-camera" @click="recordCamera = !recordCamera">Record camera sperately</label>
+          <label for="record-camera" @click="recordCamera = !recordCamera">Record camera separately</label>
         </div>
         <div class="text-xs w-full opacity-50">
           <div class="mt-2 opacity-50">
