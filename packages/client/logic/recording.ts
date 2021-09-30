@@ -83,7 +83,7 @@ export function useRecording() {
         return
 
       streamCamera.value = await navigator.mediaDevices.getUserMedia({
-        video: currentCamera.value === 'none' || recordCamera.value === false
+        video: currentCamera.value === 'none' || recordCamera.value !== true
           ? false
           : {
             deviceId: currentCamera.value,
@@ -117,13 +117,13 @@ export function useRecording() {
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
-    // @ts-expect-error
     streamSlides.value = await navigator.mediaDevices.getDisplayMedia({
       video: {
         // aspectRatio: 1.6,
         frameRate: 15,
         width: 3840,
         height: 2160,
+        // @ts-expect-error
         cursor: 'motion',
         resizeMode: 'crop-and-scale',
       },
@@ -153,10 +153,12 @@ export function useRecording() {
   async function stopRecording() {
     recording.value = false
     recorderCamera.value?.stopRecording(() => {
-      const blob = recorderCamera.value!.getBlob()
-      const url = URL.createObjectURL(blob)
-      download(getFilename('camera'), url)
-      window.URL.revokeObjectURL(url)
+      if (recordCamera.value) {
+        const blob = recorderCamera.value!.getBlob()
+        const url = URL.createObjectURL(blob)
+        download(getFilename('camera'), url)
+        window.URL.revokeObjectURL(url)
+      }
       recorderCamera.value = undefined
       if (!showAvatar.value)
         closeStream(streamCamera)
