@@ -8,7 +8,7 @@ const props = defineProps({
     type: String,
   },
 })
-var url = ref(props.url)
+const url = ref(props.url)
 </script>
 
 <template>
