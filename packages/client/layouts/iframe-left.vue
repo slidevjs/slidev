@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref } from "vue";
+import { defineProps, ref } from 'vue'
 const props = defineProps({
   class: {
     type: String,
@@ -7,7 +7,7 @@ const props = defineProps({
   url: {
     type: String,
   },
-});
+})
 var url = ref(props.url)
 </script>
 
