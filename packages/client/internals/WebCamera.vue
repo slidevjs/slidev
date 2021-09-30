@@ -70,7 +70,7 @@ onMounted(fixPosistion)
         autoplay
         muted
         volume="0"
-        class="object-cover min-w-full min-h-full"
+        class="object-cover min-w-full min-h-full rounded-full"
         style="transform: rotateY(180deg);"
       />
     </div>
