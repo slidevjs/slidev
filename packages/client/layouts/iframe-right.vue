@@ -1,0 +1,23 @@
+<script setup lang="ts">
+import { defineProps, ref } from 'vue'
+const props = defineProps({
+  class: {
+    type: String,
+  },
+  url: {
+    type: String,
+  },
+})
+const url = ref(props.url)
+</script>
+
+<template>
+  <div class="grid grid-cols-2 w-full h-full">
+    <div class="slidev-layout default" :class="props.class">
+      <slot />
+    </div>
+    <div>
+      <iframe id="frame" class="w-full h-full" :src="url"> </iframe>
+    </div>
+  </div>
+</template>
