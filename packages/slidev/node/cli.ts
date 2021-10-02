@@ -332,7 +332,6 @@ cli.command(
       options,
       {
         server: { port },
-        logLevel: 'error',
         clearScreen: false,
       },
     )
