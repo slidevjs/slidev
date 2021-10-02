@@ -109,6 +109,7 @@ export async function ViteSlidevPlugin(
 
     Icons({
       defaultClass: 'slidev-icon',
+      autoInstall: true,
       ...iconsOptions,
     }),
 

@@ -1,6 +1,5 @@
 {
   "exclude": [
-    "@iconify/json",
     "husky",
     "cypress"
   ]
