@@ -41,7 +41,7 @@ importers:
       jest: ^27.2.4
       katex: ^0.13.18
       lint-staged: ^11.1.2
-      mermaid: ^8.13.2
+      mermaid: 8.13.0
       playwright-chromium: ^1.15.1
       pnpm: ^6.16.0
       rimraf: ^3.0.2
@@ -89,7 +89,7 @@ importers:
       jest: 27.2.4
       katex: 0.13.18
       lint-staged: 11.1.2
-      mermaid: 8.13.2
+      mermaid: 8.13.0
       playwright-chromium: 1.15.1
       pnpm: 6.16.0
       rimraf: 3.0.2
@@ -158,7 +158,7 @@ importers:
       js-base64: ^3.7.2
       js-yaml: ^4.1.0
       katex: ^0.13.18
-      mermaid: ^8.13.2
+      mermaid: 8.13.0
       monaco-editor: ^0.28.1
       nanoid: ^3.1.28
       prettier: ^2.4.1
@@ -181,7 +181,7 @@ importers:
       js-base64: 3.7.2
       js-yaml: 4.1.0
       katex: 0.13.18
-      mermaid: 8.13.2
+      mermaid: 8.13.0
       monaco-editor: 0.28.1
       nanoid: 3.1.28
       prettier: 2.4.1
@@ -260,7 +260,7 @@ importers:
       semver: ^7.3.5
       shiki: ^0.9.11
       sirv: ^1.0.17
-      unplugin-icons: ^0.12.4
+      unplugin-icons: ^0.12.6
       unplugin-vue-components: ^0.15.6
       vite: ^2.6.2
       vite-plugin-md: ^0.11.1
@@ -304,7 +304,7 @@ importers:
       resolve-from: 5.0.0
       resolve-global: 1.0.0
       shiki: 0.9.11
-      unplugin-icons: 0.12.4_482d2d3d4c9442e66bdc4cb86c777ab2
+      unplugin-icons: 0.12.6_482d2d3d4c9442e66bdc4cb86c777ab2
       unplugin-vue-components: 0.15.6_vite@2.6.2+vue@3.2.19
       vite: 2.6.2
       vite-plugin-md: 0.11.1_vite@2.6.2
@@ -413,8 +413,8 @@ packages:
       - typescript
     dev: true
 
-  /@antfu/install-pkg/0.0.0:
-    resolution: {integrity: sha512-TuN4jBCwjlxbvs5c/xkYTejguuysNVBDbWs1xL0c8eLn+Rkbwzt/yDeS6dt+zb5gGz1tuiuq7QNZXoJaT/vBtA==}
+  /@antfu/install-pkg/0.1.0:
+    resolution: {integrity: sha512-VaIJd3d1o7irZfK1U0nvBsHMyjkuyMP3HKYVV53z8DKyulkHKmjhhtccXO51WSPeeSHIeoJEoNOKavYpS7jkZw==}
     dependencies:
       execa: 5.1.1
       find-up: 5.0.0
@@ -5802,8 +5802,9 @@ packages:
       mlly: 0.2.4
     dev: false
 
-  /local-pkg/0.2.0:
-    resolution: {integrity: sha512-M5/pqEFIQcxI19YYwHvEh2mNYjmreUlaCMwfl/8qboqwWoPFhi2kEh1lVrJu03D6ROS2iiwi7g0Cdn7MSh4y9A==}
+  /local-pkg/0.3.0:
+    resolution: {integrity: sha512-JapWObmC38atpkIh2Y8M3223TP+GsdtR4s28Kut7Q98PT6MX7VwvAwPs2/rxpwi+hbDiHM4+dIvRCU67k+qHag==}
+    engines: {node: '>=14'}
     dependencies:
       mlly: 0.2.4
     dev: false
@@ -5955,8 +5956,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  /mermaid/8.13.2:
-    resolution: {integrity: sha512-qTFI7MfC2d+x0Hft5gx063EH9tZg36lERG8o7Zq0Ag+MnO8CgVaMZEU6oA8gzTtTn9upMdy4UlYSLVmavu27cQ==}
+  /mermaid/8.13.0:
+    resolution: {integrity: sha512-/b8tCqyGhb+yiCQQ5cwpGcaesAfZV057kRBaUx+g6LHctebWaMvo5WmIPN+/jMHfLtAgCJIaQDZ1EsECz7FJIQ==}
     dependencies:
       '@braintree/sanitize-url': 3.1.0
       d3: 7.0.4
@@ -7617,17 +7618,14 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /unplugin-icons/0.12.4_482d2d3d4c9442e66bdc4cb86c777ab2:
-    resolution: {integrity: sha512-u0+zjAySgCgsRdOsEGCxY7FILiju3pqvN6tKyap2CMjX1wyJD7CMdGz61QwxIZGcqjQn6bAh7ulPj0XEOxZTqw==}
+  /unplugin-icons/0.12.6_482d2d3d4c9442e66bdc4cb86c777ab2:
+    resolution: {integrity: sha512-vMW3OwcJhy3ixyyN7Pk4hhKTXpRbFzN3u6Nsab2Q2qrpxUrjlmYi2pBQKcctIBD6bkwOfZHV7dEt5YHo8GQlEA==}
     peerDependencies:
-      '@iconify/json': '*'
       '@svgr/core': ^5.5.0
       '@vue/compiler-sfc': ^3.0.2
       vue-template-compiler: ^2.6.12
       vue-template-es2015-compiler: ^1.9.0
     peerDependenciesMeta:
-      '@iconify/json':
-        optional: true
       '@svgr/core':
         optional: true
       '@vue/compiler-sfc':
@@ -7637,14 +7635,14 @@ packages:
       vue-template-es2015-compiler:
         optional: true
     dependencies:
-      '@antfu/install-pkg': 0.0.0
+      '@antfu/install-pkg': 0.1.0
       '@antfu/utils': 0.3.0
       '@iconify/json-tools': 1.0.10
       '@iconify/utils': 1.0.10
       '@vue/compiler-sfc': 3.2.19
       chalk: 4.1.2
       debug: 4.3.2
-      local-pkg: 0.2.0
+      local-pkg: 0.3.0
       unplugin: 0.2.16_vite@2.6.2
     transitivePeerDependencies:
       - rollup

@@ -1,6 +1,7 @@
 {
   "exclude": [
     "husky",
-    "cypress"
+    "cypress",
+    "mermaid"
   ]
 }
