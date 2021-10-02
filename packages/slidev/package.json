@@ -78,7 +78,7 @@
     "resolve-from": "^5.0.0",
     "resolve-global": "^1.0.0",
     "shiki": "^0.9.11",
-    "unplugin-icons": "^0.12.4",
+    "unplugin-icons": "^0.12.6",
     "unplugin-vue-components": "^0.15.6",
     "vite": "^2.6.2",
     "vite-plugin-md": "^0.11.1",
