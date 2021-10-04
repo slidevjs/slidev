@@ -33,8 +33,8 @@ export default function createDirectives() {
           const clicks = dirInject(dir, injectionClicks)
           const orderMap = dirInject(dir, injectionOrderMap)
 
-          const hide = dir.modifiers.hide
-          const fade = dir.modifiers.fade
+          const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
+          const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
           const prev = elements?.value?.length || 0
 

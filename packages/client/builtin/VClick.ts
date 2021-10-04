@@ -17,8 +17,20 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    fade: {
+      type: Boolean,
+      default: false,
+    },
   },
   render() {
-    return createVNode(VClicks, { every: 99999, at: this.at, hide: this.hide }, { default: this.$slots.default })
+    return createVNode(
+      VClicks, {
+        every: 99999,
+        at: this.at,
+        hide: this.hide,
+        fade: this.fade,
+      },
+      { default: this.$slots.default },
+    )
   },
 })

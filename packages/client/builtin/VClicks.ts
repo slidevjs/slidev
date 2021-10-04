@@ -21,16 +21,26 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    fade: {
+      type: Boolean,
+      default: false,
+    },
   },
   render() {
     const click = resolveDirective('click')!
     const after = resolveDirective('after')!
 
-    const applyDirective = (node: VNode, directive: Directive, delta: number) => {
-      if (this.at != null)
-        return withDirectives(node, [[directive, +this.at + delta, '', { hide: this.hide }]])
-      return withDirectives(node, [[directive, null, '', { hide: this.hide }]])
-    }
+    const applyDirective = (node: VNode, directive: Directive, delta: number) =>
+      withDirectives(node, [[
+        directive,
+        this.at != null
+          ? +this.at + delta
+          : null, '',
+        {
+          hide: this.hide,
+          fade: this.fade,
+        },
+      ]])
 
     let defaults = this.$slots.default?.()
 
