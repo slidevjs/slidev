@@ -73,7 +73,7 @@ export interface SlidevConfig {
    */
   aspectRatio: number
   /**
-   * The actual width fro slides canvas.
+   * The actual width for slides canvas.
    * unit in px.
    *
    * @default '980'
