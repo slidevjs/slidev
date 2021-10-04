@@ -16,7 +16,7 @@ const url = ref(props.url)
     <div class="slidev-layout default" :class="props.class">
       <slot />
     </div>
-    <div>
+    <div class="h-full">
       <iframe id="frame" class="w-full h-full" :src="url"> </iframe>
     </div>
   </div>

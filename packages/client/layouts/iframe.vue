@@ -10,7 +10,7 @@ const url = ref(props.url)
 
 <template>
   <div class="h-full w-full">
-    <div>
+    <div class="w-full h-full">
       <iframe id="frame" class="w-full h-full" :src="url"> </iframe>
     </div>
   </div>

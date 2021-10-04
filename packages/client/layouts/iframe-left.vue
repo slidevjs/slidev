@@ -13,8 +13,8 @@ const url = ref(props.url)
 
 <template>
   <div class="grid grid-cols-2 w-full h-full">
-    <div>
-      <iframe id="frame" class="w-full h-full" :src="url"> </iframe>
+    <div class="h-full">
+      <iframe id="frame" class="w-full h-full" :src="url"></iframe>
     </div>
     <div class="slidev-layout default" :class="props.class">
       <slot />
