@@ -22,6 +22,7 @@ export const isPrintMode = computed(() => route.value.query.print !== undefined)
 export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
+export const isClicksDisabled = computed(() => isPresenter.value || !isPrintWithClicks.value)
 
 export const queryClicks = useRouteQuery('clicks', '0')
 export const total = computed(() => rawRoutes.length - 1)
@@ -43,6 +44,8 @@ export const clicksElements = computed<HTMLElement[]>(() => {
 
 export const clicks = computed<number>({
   get() {
+    if (isClicksDisabled.value)
+      return 99999
     let clicks = +(queryClicks.value || 0)
     if (isNaN(clicks))
       clicks = 0
