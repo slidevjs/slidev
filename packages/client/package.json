@@ -33,7 +33,7 @@
     "vite-plugin-windicss": "^1.4.9",
     "vue": "^3.2.19",
     "vue-router": "^4.0.11",
-    "windicss": "^3.1.8"
+    "windicss": "^3.1.9"
   },
   "engines": {
     "node": ">=14.0.0"
