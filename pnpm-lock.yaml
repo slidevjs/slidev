@@ -151,7 +151,7 @@ importers:
       '@slidev/types': workspace:*
       '@vueuse/core': ^6.5.3
       '@vueuse/head': ^0.6.0
-      '@vueuse/motion': ^1.6.0
+      '@vueuse/motion': ^2.0.0-beta.4
       codemirror: ^5.63.1
       drauu: ^0.2.0
       file-saver: ^2.0.5
@@ -174,7 +174,7 @@ importers:
       '@slidev/types': link:../types
       '@vueuse/core': 6.5.3_vue@3.2.19
       '@vueuse/head': 0.6.0_vue@3.2.19
-      '@vueuse/motion': 1.6.0_vue@3.2.19
+      '@vueuse/motion': 2.0.0-beta.4_vue@3.2.19
       codemirror: 5.63.1
       drauu: 0.2.0
       file-saver: 2.0.5
@@ -1796,22 +1796,6 @@ packages:
     resolution: {integrity: sha512-Knqhx7WieLdVgwCAZgTVrDCXZ50uItuecLh9JdLC8O+a5ayaSyIQYveUK3hCRNC7ws5zalHmZwfdLMGaS8r4Ew==}
     dev: false
 
-  /@vueuse/core/6.2.1_vue@3.2.19:
-    resolution: {integrity: sha512-XQei1kz5zOnu+qyq8ZH+aFG2TK3RWLnACzBlepgzCkO7hRvNlzqblfd2cE7cfMh1SwkDbmvSaAuZ4Lptz8xbjQ==}
-    peerDependencies:
-      '@vue/composition-api': ^1.1.0
-      vue: ^2.6.0 || ^3.2.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-      vue:
-        optional: true
-    dependencies:
-      '@vueuse/shared': 6.2.1_vue@3.2.19
-      vue: 3.2.19
-      vue-demi: 0.10.1_vue@3.2.19
-    dev: false
-
   /@vueuse/core/6.5.3:
     resolution: {integrity: sha512-o3CTu4nEqs371sDY5qLBX0r4QOm6GVpm3ApQc2Y+p8OMI2rRGartQo8xRykpUfsyq602A+SVtm/wxIWBkD/KCQ==}
     peerDependencies:
@@ -1851,32 +1835,17 @@ packages:
       vue: 3.2.19
     dev: false
 
-  /@vueuse/motion/1.6.0_vue@3.2.19:
-    resolution: {integrity: sha512-ue2ePBypZ0YAMoWUD/8I0Il2PTqbT84SViMGNWh5PzNRr7yaWfNbjhC2ufpYiwkTOuBH7neQwbcVV9i/+pkW5A==}
+  /@vueuse/motion/2.0.0-beta.4_vue@3.2.19:
+    resolution: {integrity: sha512-+4lnWz+KdaVmpeUwDyguTApzmjB+NzpxwBL/AcAMhVqp4G6rm8ywGSJaHGJG04uSNIQkJ6dUJx2zppnRxDSyrA==}
     peerDependencies:
-      '@vue/composition-api': ^1.1.1
+      '@vue/composition-api': ^1.2.2
       vue: ^2.0.0 || >=3.0.0-rc.0
     peerDependenciesMeta:
       '@vue/composition-api':
         optional: true
     dependencies:
-      '@vueuse/core': 6.2.1_vue@3.2.19
-      popmotion: 9.4.0
-      vue: 3.2.19
-      vue-demi: 0.10.1_vue@3.2.19
-    dev: false
-
-  /@vueuse/shared/6.2.1_vue@3.2.19:
-    resolution: {integrity: sha512-1BF5ZHejpxkvQ61xEPwON+NBgGcWAH223kWtIMQ+aXJEEnNBqen5/bmc+FQnXQcoSNaHXV0poS7vno3sx0TJdA==}
-    peerDependencies:
-      '@vue/composition-api': ^1.1.0
-      vue: ^2.6.0 || ^3.2.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-      vue:
-        optional: true
-    dependencies:
+      '@vueuse/core': 6.5.3_vue@3.2.19
+      popmotion: 10.0.1
       vue: 3.2.19
       vue-demi: 0.10.1_vue@3.2.19
     dev: false
@@ -4482,8 +4451,8 @@ packages:
       mime-types: 2.1.31
     dev: true
 
-  /framesync/5.3.0:
-    resolution: {integrity: sha512-oc5m68HDO/tuK2blj7ZcdEBRx3p1PjrgHazL8GYEpvULhrtGIFbQArN6cQS2QhW8mitffaB+VYzMjDqBxxQeoA==}
+  /framesync/6.0.0:
+    resolution: {integrity: sha512-9iBw/uZ/5fDURdpLrgc/eoFXiX9HC3DeOSLtTL5lZSyX/vQb+kjEz9CPNTiTObfK5PKyGgIUTstU8PK9W6EvoA==}
     dependencies:
       tslib: 2.2.0
     dev: false
@@ -6712,12 +6681,12 @@ packages:
     hasBin: true
     dev: true
 
-  /popmotion/9.4.0:
-    resolution: {integrity: sha512-FGnHjc8iDMrAwuZhka8eNx0yzcaufDqyZzW9vjJebRuC6BryR5ICyBmUH+wCgUuuaFSSU4r6oT2WtnbnDGcr3g==}
+  /popmotion/10.0.1:
+    resolution: {integrity: sha512-jmVmbXMAl/qrrogQXCMGFR8+F290J6gl9kKHSYzAKBRTHm7B1unadmEeLSXX7rGtzPxOfKVnWHA3t3m3CVnxqw==}
     dependencies:
-      framesync: 5.3.0
+      framesync: 6.0.0
       hey-listen: 1.0.8
-      style-value-types: 4.1.4
+      style-value-types: 5.0.0
       tslib: 2.2.0
     dev: false
 
@@ -7430,8 +7399,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /style-value-types/4.1.4:
-    resolution: {integrity: sha512-LCJL6tB+vPSUoxgUBt9juXIlNJHtBMy8jkXzUJSBzeHWdBu6lhzHqCvLVkXFGsFIlNa2ln1sQHya/gzaFmB2Lg==}
+  /style-value-types/5.0.0:
+    resolution: {integrity: sha512-08yq36Ikn4kx4YU6RD7jWEv27v4V+PUsOGa4n/as8Et3CuODMJQ00ENeAVXAeydX4Z2j1XHZF1K2sX4mGl18fA==}
     dependencies:
       hey-listen: 1.0.8
       tslib: 2.2.0
