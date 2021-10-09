@@ -42,7 +42,7 @@ const handleStyle = computed(() => ({
   cursor: 'nwse-resize',
 }))
 
-function fixPosistion() {
+function fixPosition() {
   // move back if the camera is outside of the canvas
   if (position.value.x >= window.innerWidth)
     position.value.x = window.innerWidth - size.value - 30
@@ -50,8 +50,8 @@ function fixPosistion() {
     position.value.y = window.innerHeight - size.value - 30
 }
 
-useEventListener('resize', fixPosistion)
-onMounted(fixPosistion)
+useEventListener('resize', fixPosition)
+onMounted(fixPosition)
 </script>
 
 <template>
