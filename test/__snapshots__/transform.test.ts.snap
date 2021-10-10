@@ -5,11 +5,11 @@ exports[`markdown transform Inline CSS 1`] = `
 # Page 
 
 <style scoped>
-.slidev-page-01{
+
 h1 {
   color: red;
 }
-}</style>
+</style>
 
 \`\`\`css
 <style>
