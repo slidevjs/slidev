@@ -185,7 +185,7 @@ export function transformPageCSS(md: string, id: string) {
         return full
       if (!start.includes('scoped'))
         start = start.replace('<style', '<style scoped')
-      return `${start}\n.slidev-page-${page}{${css}}${end}`
+      return `${start}\n${css}${end}`
     },
   )
 
