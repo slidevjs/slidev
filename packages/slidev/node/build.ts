@@ -87,9 +87,9 @@ export async function build(
   }
 
   // copy index.html to 404.html for GitHub Pages
-  await fs.copyFile(resolve(options.userRoot, 'dist/index.html'), resolve(options.userRoot, 'dist/404.html'))
+  await fs.copyFile(resolve(config.build.outDir, 'index.html'), resolve(config.build.outDir, '404.html'))
   // _redirects for SPA
-  const redirectsPath = resolve(options.userRoot, 'dist/_redirects')
+  const redirectsPath = resolve(config.build.outDir, '_redirects')
   if (!fs.existsSync(redirectsPath))
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
