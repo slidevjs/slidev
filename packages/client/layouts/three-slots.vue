@@ -3,8 +3,11 @@
   Usage:
 ```md
 ---
-layout: two-cols
+layout: three-slots
 ---
+# Center top
+This shows on the top
+::left::
 # Left
 This shows on the left
 ::right::
