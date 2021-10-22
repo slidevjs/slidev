@@ -76,7 +76,7 @@ h1 {
   background-size: 100%;
   -webkit-background-clip: text;
   -moz-background-clip: text;
-  -webkit-text-fill-color: transparent; 
+  -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
 }
 </style>
@@ -250,7 +250,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
     />
   </div>
 
-  <div 
+  <div
     class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
     v-motion
     :initial="{ x: -80, opacity: 0}"
