@@ -24,6 +24,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
     drawings: {} as ResolvedDrawingsOptions,
+    plantUmlServer: 'https://www.plantuml.com/plantuml',
   }
   const config: SlidevConfig = {
     ...defaultConfig,

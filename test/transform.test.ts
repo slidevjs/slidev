@@ -1,4 +1,9 @@
-import { transformMermaid, transformPageCSS, transformSlotSugar } from '../packages/slidev/node/plugins/markdown'
+import {
+  transformMermaid,
+  transformPageCSS,
+  transformPlantUml,
+  transformSlotSugar,
+} from '../packages/slidev/node/plugins/markdown'
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
@@ -79,5 +84,18 @@ C -->|One| D[Result 1]
 C -->|Two| E[Result 2]
 \`\`\`
 `)).toMatchSnapshot()
+  })
+
+  it('PlantUML', () => {
+    expect(transformPlantUml(`
+# Page
+
+\`\`\`plantuml
+@startuml
+Alice -> Bob : Hello
+Alice <- Bob : Hello, too!
+@enduml
+\`\`\`
+`, 'https://www.plantuml.com/plantuml')).toMatchSnapshot()
   })
 })

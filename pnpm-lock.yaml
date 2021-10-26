@@ -161,6 +161,7 @@ importers:
       mermaid: 8.13.0
       monaco-editor: ^0.29.1
       nanoid: ^3.1.30
+      plantuml-encoder: ^1.4.0
       prettier: ^2.4.1
       recordrtc: ^5.6.2
       resolve: ^1.20.0
@@ -184,6 +185,7 @@ importers:
       mermaid: 8.13.0
       monaco-editor: 0.29.1
       nanoid: 3.1.30
+      plantuml-encoder: 1.4.0
       prettier: 2.4.1
       recordrtc: 5.6.2
       resolve: 1.20.0
@@ -6645,6 +6647,10 @@ packages:
     dependencies:
       find-up: 5.0.0
     dev: true
+
+  /plantuml-encoder/1.4.0:
+    resolution: {integrity: sha512-sxMwpDw/ySY1WB2CE3+IdMuEcWibJ72DDOsXLkSmEaSzwEUaYBT6DWgOfBiHGCux4q433X6+OEFWjlVqp7gL6g==}
+    dev: false
 
   /playwright-chromium/1.15.2:
     resolution: {integrity: sha512-YF1hnBHXAMSXRaVN+wzEoifWq0Q2zEH5P8CoTAKp/Xvzgetc0x/IVzcyIgPzrGxfdqczP43bXhpD6TY0NTOubQ==}

@@ -82,6 +82,7 @@ export async function createMarkdownPlugin(
 
         code = transformSlotSugar(code)
         code = transformMermaid(code)
+        code = transformPlantUml(code, config.plantUmlServer)
         code = monaco(code)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
@@ -202,6 +203,14 @@ export function transformMermaid(md: string): string {
       options = options.trim() || '{}'
       const encoded = base64.encode(code, true)
       return `<Mermaid :code="'${encoded}'" v-bind="${options}" />`
+    })
+}
+
+export function transformPlantUml(md: string, server: string): string {
+  return md
+    .replace(/^```plantuml\n([\s\S]+?)\n```/mg, (full, code = '') => {
+      code = code.trim()
+      return `<PlantUml :content="\`${code}\`" :server="'${server}'" />`
     })
 }
 
