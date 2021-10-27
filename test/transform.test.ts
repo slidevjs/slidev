@@ -3,7 +3,7 @@ import {
   transformPageCSS,
   transformPlantUml,
   transformSlotSugar,
-} from '../packages/slidev/node/plugins/markdown'
+} from '@slidev/cli/node/plugins/markdown'
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
@@ -95,6 +95,23 @@ C -->|Two| E[Result 2]
 Alice -> Bob : Hello
 Alice <- Bob : Hello, too!
 @enduml
+\`\`\`
+
+\`\`\`plantuml {scale: 0.5}
+@startmindmap
+* Debian
+** Ubuntu
+*** Linux Mint
+*** Kubuntu
+*** Lubuntu
+*** KDE Neon
+** LMDE
+** SolydXK
+** SteamOS
+** Raspbian with a very long name
+*** <s>Raspmbc</s> => OSMC
+*** <s>Raspyfi</s> => Volumio
+@endmindmap
 \`\`\`
 `, 'https://www.plantuml.com/plantuml')).toMatchSnapshot()
   })

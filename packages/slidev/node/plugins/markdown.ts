@@ -10,6 +10,7 @@ import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import * as Shiki from 'shiki'
+import { encode } from 'plantuml-encoder'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -208,9 +209,10 @@ export function transformMermaid(md: string): string {
 
 export function transformPlantUml(md: string, server: string): string {
   return md
-    .replace(/^```plantuml\n([\s\S]+?)\n```/mg, (full, code = '') => {
-      code = code.trim()
-      return `<PlantUml :content="\`${code}\`" :server="'${server}'" />`
+    .replace(/^```plantuml\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', content = '') => {
+      const code = encode(content.trim())
+      options = options.trim() || '{}'
+      return `<PlantUml :code="'${code}'" :server="'${server}'" v-bind="${options}" />`
     })
 }
 

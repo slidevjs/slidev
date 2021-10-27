@@ -161,7 +161,6 @@ importers:
       mermaid: 8.13.0
       monaco-editor: ^0.29.1
       nanoid: ^3.1.30
-      plantuml-encoder: ^1.4.0
       prettier: ^2.4.1
       recordrtc: ^5.6.2
       resolve: ^1.20.0
@@ -185,7 +184,6 @@ importers:
       mermaid: 8.13.0
       monaco-editor: 0.29.1
       nanoid: 3.1.30
-      plantuml-encoder: 1.4.0
       prettier: 2.4.1
       recordrtc: 5.6.2
       resolve: 1.20.0
@@ -232,6 +230,7 @@ importers:
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
+      '@types/plantuml-encoder': ^1.4.0
       '@vitejs/plugin-vue': ^1.9.3
       '@vue/compiler-sfc': ^3.2.20
       cli-progress: ^3.9.1
@@ -254,6 +253,7 @@ importers:
       nanoid: ^3.1.30
       open: ^8.3.0
       pdf-lib: ^1.17.0
+      plantuml-encoder: ^1.4.0
       prismjs: ^1.25.0
       prompts: ^2.4.2
       resolve: ^1.20.0
@@ -300,6 +300,7 @@ importers:
       nanoid: 3.1.30
       open: 8.3.0
       pdf-lib: 1.17.0
+      plantuml-encoder: 1.4.0
       prismjs: 1.25.0
       prompts: 2.4.2
       resolve: 1.20.0
@@ -317,6 +318,7 @@ importers:
       windicss: 3.1.9
       yargs: 17.2.1
     devDependencies:
+      '@types/plantuml-encoder': 1.4.0
       fast-deep-equal: 3.1.3
       semver: 7.3.5
       sirv: 1.0.18
@@ -1088,7 +1090,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.3
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 16.10.1
+      '@types/node': 16.11.1
       '@types/yargs': 16.0.4
       chalk: 4.1.2
     dev: true
@@ -1285,7 +1287,7 @@ packages:
   /@types/fs-extra/9.0.12:
     resolution: {integrity: sha512-I+bsBr67CurCGnSenZZ7v94gd3tc3+Aj2taxMT4yu4ABLuOgOjeFxX3dokG24ztSRg5tnT00sL8BszO7gSMoIw==}
     dependencies:
-      '@types/node': 16.3.0
+      '@types/node': 16.11.1
     dev: true
 
   /@types/fs-extra/9.0.13:
@@ -1370,7 +1372,7 @@ packages:
   /@types/node-fetch/2.5.12:
     resolution: {integrity: sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==}
     dependencies:
-      '@types/node': 16.7.13
+      '@types/node': 16.11.1
       form-data: 3.0.1
     dev: true
 
@@ -1381,11 +1383,6 @@ packages:
   /@types/node/16.10.1:
     resolution: {integrity: sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==}
     dev: true
-
-  /@types/node/16.10.2:
-    resolution: {integrity: sha512-zCclL4/rx+W5SQTzFs9wyvvyCwoK9QtBpratqz2IYJ3O8Umrn0m3nsTv0wQBk9sRGpvUe9CwPDrQFB10f1FIjQ==}
-    dev: true
-    optional: true
 
   /@types/node/16.11.1:
     resolution: {integrity: sha512-PYGcJHL9mwl1Ek3PLiYgyEKtwTMmkMw4vbiyz/ps3pfdRYLVv+SN7qHVAImrjdAXxgluDEw6Ph4lyv+m9UpRmA==}
@@ -1405,6 +1402,12 @@ packages:
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
+    dev: true
+
+  /@types/plantuml-encoder/1.4.0:
+    resolution: {integrity: sha512-d9HnMblRI20DP/KLa95DRxYFF6qjXc4/VfRP5XW7+wkkmWp0JQnRSbEiSz9YoF9hV/9npifohpfioMIvYmMrvw==}
+    dependencies:
+      '@types/node': 16.11.1
     dev: true
 
   /@types/prettier/2.4.1:
@@ -1466,7 +1469,7 @@ packages:
     resolution: {integrity: sha512-8uALY5LTvSuHgloDVUvWP3pIauILm+8/0pDMokuDYIoNsOkSwd5AiHBTSEJjKTDcZr5z8UpgOWZkxBF4iJftoA==}
     requiresBuild: true
     dependencies:
-      '@types/node': 16.10.2
+      '@types/node': 16.11.1
     dev: true
     optional: true
 

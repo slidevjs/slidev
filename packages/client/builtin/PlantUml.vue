@@ -1,23 +1,29 @@
+<!--
+PlantUML
+(auto transformed, you don't need to use this component directly)
+
+Usage:
+
+```plantuml
+@startuml
+Alice -> Bob : Hello!
+@enduml
+```
+-->
 <template>
-  <img :alt="content" :src="uri" />
+  <img alt="PlantUML diagram" :src="uri" :style="{scale}" />
 </template>
 
-<script>
+<script setup lang="ts">
 
-import { encode } from 'plantuml-encoder'
+import { computed } from 'vue'
 
-export default {
-  props: {
-    content: String,
-    server: {
-      type: String,
-      default: 'https://www.plantuml.com/plantuml',
-    },
-  },
-  computed: {
-    uri() {
-      return `${this.server}/svg/${encode(this.content)}`
-    },
-  },
-}
+const props = defineProps<{
+  code: string
+  server: string
+  scale?: number
+}>()
+
+const uri = computed(() => `${props.server}/svg/${props.code}`)
+
 </script>
