@@ -106,6 +106,13 @@ export interface SlidevConfig {
    * Options for drawings
    */
   drawings: ResolvedDrawingsOptions
+
+  /**
+   * URL of PlantUML server used to render diagrams
+   *
+   * @default https://www.plantuml.com/plantuml
+   */
+  plantUmlServer: string
 }
 
 export interface FontOptions {

@@ -10,6 +10,7 @@ import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import * as Shiki from 'shiki'
+import { encode } from 'plantuml-encoder'
 import { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -82,6 +83,7 @@ export async function createMarkdownPlugin(
 
         code = transformSlotSugar(code)
         code = transformMermaid(code)
+        code = transformPlantUml(code, config.plantUmlServer)
         code = monaco(code)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
@@ -202,6 +204,15 @@ export function transformMermaid(md: string): string {
       options = options.trim() || '{}'
       const encoded = base64.encode(code, true)
       return `<Mermaid :code="'${encoded}'" v-bind="${options}" />`
+    })
+}
+
+export function transformPlantUml(md: string, server: string): string {
+  return md
+    .replace(/^```plantuml\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', content = '') => {
+      const code = encode(content.trim())
+      options = options.trim() || '{}'
+      return `<PlantUml :code="'${code}'" :server="'${server}'" v-bind="${options}" />`
     })
 }
 
