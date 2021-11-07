@@ -19,7 +19,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 </p>
 
 <p align="center">
-  <a href="https://twitter.com/antfu7/status/1389604687502995457">Video Preview</a>
+  <a href="https://twitter.com/antfu7/status/1389604687502995457">Video Preview</a> | <a href="https://sli.dev">Documentation</a>
 </p>
 
 <p align="center">
