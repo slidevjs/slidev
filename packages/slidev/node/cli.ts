@@ -3,6 +3,7 @@ import path from 'path'
 import net from 'net'
 import os from 'os'
 import { exec } from 'child_process'
+import * as readline from 'readline'
 import fs from 'fs-extra'
 import openBrowser from 'open'
 import yargs, { Argv } from 'yargs'
@@ -150,15 +151,23 @@ cli.command(
     function bindShortcut() {
       process.stdin.resume()
       process.stdin.setEncoding('utf8')
-      process.stdin.on('data', (data) => {
-        const str = data.toString().trim().toLowerCase()
-        const [sh] = SHORTCUTS.filter(item => item.name === str)
-        if (sh) {
-          try {
-            sh.action()
-          }
-          catch (err) {
-            console.error(`Failed to execute shortcut ${sh.fullname}`, err)
+      readline.emitKeypressEvents(process.stdin)
+      if (process.stdin.isTTY)
+        process.stdin.setRawMode(true)
+
+      process.stdin.on('keypress', (str, key) => {
+        if (key.ctrl && key.name === 'c') {
+          process.exit()
+        }
+        else {
+          const [sh] = SHORTCUTS.filter(item => item.name === str)
+          if (sh) {
+            try {
+              sh.action()
+            }
+            catch (err) {
+              console.error(`Failed to execute shortcut ${sh.fullname}`, err)
+            }
           }
         }
       })
