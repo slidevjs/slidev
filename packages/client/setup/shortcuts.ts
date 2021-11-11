@@ -4,6 +4,7 @@ import { ShortcutOptions, NavOperations } from '@slidev/types'
 import { next, prev, nextSlide, prevSlide, downloadPDF } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { toggleOverview, showGotoDialog, showOverview } from '../state'
+import { drawingEnabled } from '../logic/drawings'
 
 export default function setupShortcuts() {
   // @ts-expect-error
@@ -16,6 +17,7 @@ export default function setupShortcuts() {
     downloadPDF,
     toggleDark,
     toggleOverview,
+    toggleDrawing: () => drawingEnabled.value = !drawingEnabled.value,
     escapeOverview: () => showOverview.value = false,
     showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
