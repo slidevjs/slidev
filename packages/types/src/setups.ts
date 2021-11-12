@@ -42,6 +42,7 @@ export interface NavOperations {
   downloadPDF: () => Promise<void>
   toggleDark: () => void
   toggleOverview: () => void
+  toggleDrawing: () => void
   escapeOverview: () => void
   showGotoDialog: () => void
 }
