@@ -55,7 +55,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               searchForWorkspaceRoot(options.cliRoot),
               ...(
                 isInstalledGlobally
-                  ? [dirname(resolveGlobal('@slidev/client/package.json'))]
+                  ? [dirname(resolveGlobal('@slidev/client/package.json')), dirname(resolveGlobal('katex/package.json'))]
                   : []
               ),
             ]),
