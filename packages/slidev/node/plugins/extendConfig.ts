@@ -65,6 +65,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
+        injection.publicDir = join(options.userRoot, 'public')
         injection.root = options.cliRoot
         // @ts-expect-error
         injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
