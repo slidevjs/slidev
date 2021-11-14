@@ -96,6 +96,18 @@ export const showcases: ShowCaseInfo[] = [
     at: 'LyonJS Meetup',
     datetime: '2021-07-21',
   },
+  {
+    title: 'Introduction to SVG',
+    cover: 'https://raw.githubusercontent.com/lyqht/intro-to-svg-slides/main/intro-to-svg-slides-cover.png',
+    author: {
+      name: 'Estee Tey',
+      link: 'https://github.com/lyqht',
+    },
+    slidesLink: 'https://lyqht.github.io/intro-to-svg-slides/',
+    sourceLink: 'https://github.com/lyqht/intro-to-svg-slides',
+    at: 'Thoughtworks Internal Lunch & Learn',
+    datetime: '2021-11-12',
+  },
   // Add yours here!
   {
     title: 'Yours?',
