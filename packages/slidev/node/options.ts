@@ -92,7 +92,7 @@ export function getThemeRoots(name: string, entry: string) {
 export function getUserRoot(options: SlidevEntryOptions) {
   const { entry: rawEntry = 'slides.md', userRoot = process.cwd() } = options
   const fullEntry = resolve(userRoot, rawEntry)
-  return { entry: basename(fullEntry), userRoot: dirname(fullEntry) }
+  return { entry: fullEntry, userRoot: dirname(fullEntry) }
 }
 
 export async function resolveOptions(
