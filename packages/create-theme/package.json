@@ -1,6 +1,6 @@
 {
   "name": "create-slidev-theme",
-  "version": "0.27.14",
+  "version": "0.27.15",
   "description": "Create starter theme template for Slidev",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
