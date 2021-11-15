@@ -1,4 +1,4 @@
-import { resolve, basename, dirname, join } from 'path'
+import { resolve, dirname, join } from 'path'
 import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
