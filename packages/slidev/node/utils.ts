@@ -1,7 +1,8 @@
+import { join } from 'path'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'
-import resolveGlobal from 'resolve-global'
+import globalDirs from 'global-dirs'
 import type Token from 'markdown-it/lib/token'
 import { ResolvedFontOptions } from '@slidev/types'
 
@@ -21,7 +22,12 @@ export function resolveImportPath(importName: string, ensure = false) {
 
   if (isInstalledGlobally) {
     try {
-      return resolveGlobal(importName)
+      return require.resolve(join(globalDirs.yarn.packages, importName))
+    }
+    catch {}
+
+    try {
+      return require.resolve(join(globalDirs.npm.packages, importName))
     }
     catch {}
   }
@@ -30,6 +36,25 @@ export function resolveImportPath(importName: string, ensure = false) {
     throw new Error(`Failed to resolve package "${importName}"`)
 
   return undefined
+}
+
+export function resolveGlobalImportPath(importName: string): string {
+  try {
+    return resolve(importName, { preserveSymlinks: false, basedir: __dirname })
+  }
+  catch {}
+
+  try {
+    return require.resolve(join(globalDirs.yarn.packages, importName))
+  }
+  catch {}
+
+  try {
+    return require.resolve(join(globalDirs.npm.packages, importName))
+  }
+  catch {}
+
+  throw new Error(`Failed to resolve global package "${importName}"`)
 }
 
 export function stringifyMarkdownTokens(tokens: Token[]) {
