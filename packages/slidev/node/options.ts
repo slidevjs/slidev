@@ -1,4 +1,4 @@
-import { resolve, dirname, join } from 'path'
+import { resolve, basename, dirname, join } from 'path'
 import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -89,16 +89,21 @@ export function getThemeRoots(name: string, entry: string) {
   }
 }
 
+export function getUserRoot(options: SlidevEntryOptions) {
+  const { entry: rawEntry = 'slides.md', userRoot = process.cwd() } = options
+  const fullEntry = resolve(userRoot, rawEntry)
+  return { entry: basename(fullEntry), userRoot: dirname(fullEntry) }
+}
+
 export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
   promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
   const {
-    entry: rawEntry = 'slides.md',
-    userRoot = process.cwd(),
-  } = options
-  const entry = resolve(userRoot, rawEntry)
+    entry,
+    userRoot,
+  } = getUserRoot(options)
   const data = await parser.load(entry)
   const theme = resolveThemeName(options.theme || data.config.theme)
 
