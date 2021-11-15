@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.27.13",
+  "version": "0.27.14",
   "description": "Presentation slides for developers",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
@@ -59,6 +59,7 @@
     "debug": "^4.3.2",
     "fast-glob": "^3.2.7",
     "fs-extra": "^10.0.0",
+    "global-dirs": "^3.0.0",
     "import-from": "^4.0.0",
     "is-installed-globally": "^0.4.0",
     "jiti": "^1.12.9",
