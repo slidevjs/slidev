@@ -103,6 +103,13 @@ export interface SlidevConfig {
   fonts: ResolvedFontOptions
 
   /**
+   * Configure the icon for app
+   *
+   * @default 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
+   */
+  favicon: string
+
+  /**
    * Options for drawings
    */
   drawings: ResolvedDrawingsOptions
