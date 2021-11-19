@@ -6,7 +6,7 @@ import { generateGoogleFontsUrl, toAtFS } from './utils'
 
 export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
-  let head = ''
+  let head = '<link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png">'
   let body = ''
 
   const roots = uniq([
