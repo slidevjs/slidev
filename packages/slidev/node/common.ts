@@ -9,6 +9,8 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
   let head = ''
   let body = ''
 
+  head += `<link rel="icon" href="${data.config.favicon}">`
+
   const roots = uniq([
     ...themeRoots,
     userRoot,

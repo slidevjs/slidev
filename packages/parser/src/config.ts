@@ -23,6 +23,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     selectable: false,
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
+    favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png',
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
   }
