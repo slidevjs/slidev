@@ -12,6 +12,7 @@ Object {
     "presenterOnly": false,
     "syncAll": true,
   },
+  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": Object {
     "italic": false,
     "local": Array [],
@@ -234,6 +235,7 @@ Object {
     "presenterOnly": false,
     "syncAll": true,
   },
+  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": Object {
     "italic": false,
     "local": Array [],
@@ -396,6 +398,7 @@ Object {
     "presenterOnly": false,
     "syncAll": true,
   },
+  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": Object {
     "italic": false,
     "local": Array [],
