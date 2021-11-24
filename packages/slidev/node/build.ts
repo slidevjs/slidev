@@ -117,6 +117,7 @@ export async function build(
       dark: options.data.config.colorSchema === 'dark',
       width: 1920,
       height: Math.round(1920 / options.data.config.aspectRatio),
+      routerMode: options.data.config.routerMode,
     })
     server.close()
   }
