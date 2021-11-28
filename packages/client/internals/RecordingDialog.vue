@@ -57,7 +57,7 @@ async function start() {
         </div>
         <div class="text-xs w-full opacity-50">
           <div class="mt-2 opacity-50">
-            Enumated filenames
+            Enumerated filenames
           </div>
           <div class="font-mono">
             {{ getFilename('screen') }}
