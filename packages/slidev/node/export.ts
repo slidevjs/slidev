@@ -89,10 +89,10 @@ export async function exportSlides({
   async function go(no: number, clicks?: string) {
     progress.update(no)
 
-    const path = `${base}${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
+    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
     const url = routerMode === 'hash'
-      ? `http://localhost:${port}/#${path}`
-      : `http://localhost:${port}${path}`
+      ? `http://localhost:${port}${base}#${path}`
+      : `http://localhost:${port}${base}${path}`
 
     await page.goto(url, {
       waitUntil: 'networkidle',
