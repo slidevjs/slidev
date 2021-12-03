@@ -15,7 +15,7 @@ Used to display the cover page for the presentation, may contain the presentatio
 
 ### `default`
 
-The most baisc layout, to display any kind of content.
+The most basic layout, to display any kind of content.
 
 ### `end`
 
