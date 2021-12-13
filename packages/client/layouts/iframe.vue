@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
-const props = defineProps({
-  url: {
-    type: String,
-  },
-})
-const url = ref(props.url)
+defineProps<{ url: string }>()
 </script>
 
 <template>
