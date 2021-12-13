@@ -10,13 +10,13 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
-    "@slidev/types": "^0.27.18",
+    "@slidev/types": "^0.27.19",
     "codemirror-theme-vars": "^0.1.1",
     "prism-theme-vars": "^0.2.2",
     "theme-vitesse": "^0.1.14"
   },
   "devDependencies": {
-    "@slidev/cli": "^0.27.18"
+    "@slidev/cli": "^0.27.19"
   },
   "engines": {
     "node": ">=14.0.0",
