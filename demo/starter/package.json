@@ -7,10 +7,10 @@
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "^0.21.0",
-    "@slidev/theme-seriph": "^0.21.0",
+    "@slidev/theme-default": "^0.21.1",
+    "@slidev/theme-seriph": "^0.21.1",
     "@slidev/types": "workspace:*",
-    "nodemon": "^2.0.14",
-    "vite-plugin-inspect": "^0.3.9"
+    "nodemon": "^2.0.15",
+    "vite-plugin-inspect": "^0.3.11"
   }
 }
