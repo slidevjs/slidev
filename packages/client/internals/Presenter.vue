@@ -82,7 +82,7 @@ onMounted(() => {
   <div class="bg-main h-full slidev-presenter">
     <div class="grid-container">
       <div class="grid-section top flex">
-        <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto" />
+        <img src="../assets/logo-title-horizontal.png" class="h-14 ml-2 py-2 my-auto">
         <div class="flex-auto" />
         <div
           class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
@@ -133,7 +133,7 @@ onMounted(() => {
       <div
         class="progress h-2px bg-primary transition-all"
         :style="{ width: `${(currentPage - 1) / (total - 1) * 100}%` }"
-      ></div>
+      />
     </div>
   </div>
   <Goto />

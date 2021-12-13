@@ -1,4 +1,4 @@
-import { SlidevConfig } from '@slidev/types'
+import type { SlidevConfig } from '@slidev/types'
 import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
 // @ts-expect-error

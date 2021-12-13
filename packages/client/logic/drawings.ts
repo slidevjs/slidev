@@ -1,5 +1,6 @@
 import { computed, markRaw, nextTick, reactive, ref, watch, watchEffect } from 'vue'
-import { Brush, createDrauu, DrawingMode, Options as DrauuOptions } from 'drauu'
+import type { Brush, DrawingMode, Options as DrauuOptions } from 'drauu'
+import { createDrauu } from 'drauu'
 import { useStorage, toReactive } from '@vueuse/core'
 import { serverDrawingState as drawingState, configs } from '../env'
 import { currentPage, isPresenter } from './nav'

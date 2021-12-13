@@ -1,6 +1,6 @@
-import { Plugin } from 'vite'
+import type { Plugin } from 'vite'
 import { objectEntries } from '@antfu/utils'
-import { ResolvedSlidevOptions } from '../options'
+import type { ResolvedSlidevOptions } from '../options'
 import { getDefine } from './extendConfig'
 
 export function createFixPlugins(

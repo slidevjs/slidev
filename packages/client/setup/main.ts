@@ -1,6 +1,6 @@
 /* __imports__ */
 
-import { AppContext } from '@slidev/types'
+import type { AppContext } from '@slidev/types'
 import { MotionPlugin } from '@vueuse/motion'
 
 export default function setupMain(context: AppContext) {

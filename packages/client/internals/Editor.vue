@@ -130,7 +130,7 @@ throttledWatch(
     :class="{'!opacity-30': handlerDown}"
     :style="{right: `${editorWidth - 5}px`, cursor: 'col-resize'}"
     @pointerdown="onHandlerDown"
-  ></div>
+  />
   <div
     class="shadow bg-main p-4 grid grid-rows-[max-content,1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
     :style="{width: `${editorWidth}px`}"
@@ -147,7 +147,7 @@ throttledWatch(
       <span class="text-2xl pt-1">
         {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
-      <div class="flex-auto"></div>
+      <div class="flex-auto" />
       <button class="icon-btn" @click="openInEditor()">
         <carbon:launch />
       </button>

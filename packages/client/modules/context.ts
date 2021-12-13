@@ -1,4 +1,5 @@
-import { App, computed, reactive, readonly } from 'vue'
+import type { App } from 'vue'
+import { computed, reactive, readonly } from 'vue'
 import { objectKeys } from '@antfu/utils'
 import type { UnwrapNestedRefs } from '@vue/reactivity'
 import * as nav from '../logic/nav'

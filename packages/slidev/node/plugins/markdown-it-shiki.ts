@@ -1,4 +1,4 @@
-import { ShikiDarkModeThemes } from 'packages/types'
+import type { ShikiDarkModeThemes } from 'packages/types'
 import type { Highlighter as ShikiHighlighter, IShikiTheme, IThemeRegistration } from 'shiki'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'

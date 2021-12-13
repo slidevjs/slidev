@@ -36,7 +36,7 @@ function setBrushColor(color: typeof brush.color) {
     </button>
     <button class="icon-btn" :class="{ shallow: drawingMode != 'line' }" @click="setDrawingMode('line')">
       <svg width="1em" height="1em" class="-mt-0.5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-        <path d="M21.71 3.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l18-18a1 1 0 0 0 0-1.42z" fill="currentColor"></path>
+        <path d="M21.71 3.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l18-18a1 1 0 0 0 0-1.42z" fill="currentColor" />
       </svg>
     </button>
     <button class="icon-btn" :class="{ shallow: drawingMode != 'arrow' }" @click="setDrawingMode('arrow')">

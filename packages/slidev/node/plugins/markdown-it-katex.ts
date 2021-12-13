@@ -9,7 +9,8 @@ It differs in that it takes (a subset of) LaTeX as input and relies on KaTeX
 for rendering output.
 */
 
-import katex, { KatexOptions } from 'katex'
+import type { KatexOptions } from 'katex'
+import katex from 'katex'
 
 // Test if potential opening or closing delimieter
 // Assumes that there is a "$" at state.src[pos]

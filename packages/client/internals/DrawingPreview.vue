@@ -10,5 +10,5 @@ defineProps<{page: number}>()
     ref="svg"
     class="w-full h-full absolute top-0 pointer-events-none"
     v-html="drawingState[page]"
-  ></svg>
+  />
 </template>

@@ -51,5 +51,5 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div ref="el" class="mermaid" v-html="html"></div>
+  <div ref="el" class="mermaid" v-html="html" />
 </template>

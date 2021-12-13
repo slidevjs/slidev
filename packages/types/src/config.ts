@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { SlidevThemeConfig } from './types'
+import type { SlidevThemeConfig } from './types'
 
 export interface SlidevConfig {
   title: string

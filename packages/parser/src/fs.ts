@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
-import { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import type { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import { parseSlide, parse, stringify, stringifySlide, mergeFeatureFlags, detectFeatures } from './core'
 export * from './core'
 

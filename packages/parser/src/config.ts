@@ -1,5 +1,5 @@
 import { toArray, uniq } from '@antfu/utils'
-import { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) {

@@ -5,7 +5,7 @@ defineProps<{ url: string }>()
 <template>
   <div class="h-full w-full">
     <div class="w-full h-full">
-      <iframe id="frame" class="w-full h-full" :src="url"> </iframe>
+      <iframe id="frame" class="w-full h-full" :src="url" />
     </div>
   </div>
 </template>

@@ -1,4 +1,5 @@
-import { App, DirectiveBinding, InjectionKey, watch } from 'vue'
+import type { App, DirectiveBinding, InjectionKey } from 'vue'
+import { watch } from 'vue'
 import { remove } from '@antfu/utils'
 import { isClicksDisabled } from '../logic/nav'
 import {

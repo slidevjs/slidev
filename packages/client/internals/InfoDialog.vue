@@ -34,7 +34,7 @@ const hasInfo = computed(() => typeof configs.info === 'string')
             class="w-5 h-5"
             src="../assets/logo.png"
             alt="Slidev"
-          />
+          >
           <div style="color: #2082A6">
             <b>Sli</b>dev
           </div>

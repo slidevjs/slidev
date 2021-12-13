@@ -1,6 +1,6 @@
 /* __imports__ */
 
-import { ShortcutOptions, NavOperations } from '@slidev/types'
+import type { ShortcutOptions, NavOperations } from '@slidev/types'
 import { next, prev, nextSlide, prevSlide, downloadPDF } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { toggleOverview, showGotoDialog, showOverview } from '../state'

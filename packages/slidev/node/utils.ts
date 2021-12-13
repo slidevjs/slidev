@@ -4,7 +4,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'
 import globalDirs from 'global-dirs'
 import type Token from 'markdown-it/lib/token'
-import { ResolvedFontOptions } from '@slidev/types'
+import type { ResolvedFontOptions } from '@slidev/types'
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`

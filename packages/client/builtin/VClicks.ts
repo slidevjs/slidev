@@ -5,7 +5,8 @@
  */
 
 import { toArray } from '@antfu/utils'
-import { defineComponent, Directive, h, isVNode, resolveDirective, VNode, VNodeArrayChildren, withDirectives } from 'vue'
+import type { Directive, VNode, VNodeArrayChildren } from 'vue'
+import { defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
 
 export default defineComponent({
   props: {

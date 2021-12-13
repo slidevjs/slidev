@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { slash } from '@antfu/utils'
-import { Plugin, resolvePackageData } from 'vite'
+import type { Plugin } from 'vite'
+import { resolvePackageData } from 'vite'
 
 export function createMonacoTypesLoader(): Plugin {
   return {

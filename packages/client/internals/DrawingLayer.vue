@@ -21,5 +21,5 @@ onBeforeUnmount(() => {
   <svg
     ref="svg"
     class="w-full h-full absolute top-0 pointer-events-none"
-  ></svg>
+  />
 </template>

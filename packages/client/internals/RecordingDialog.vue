@@ -42,7 +42,7 @@ async function start() {
             name="title"
             type="text"
             placeholder="Enter the title..."
-          />
+          >
           <div class="text-xs w-full opacity-50 py-2">
             <div>This will be used in the output filename that might <br>help you better orangize your recording chips.</div>
           </div>
@@ -52,7 +52,7 @@ async function start() {
             v-model="recordCamera"
             name="record-camera"
             type="checkbox"
-          />
+          >
           <label for="record-camera" @click="recordCamera = !recordCamera">Record camera separately</label>
         </div>
         <div class="text-xs w-full opacity-50">
@@ -73,7 +73,7 @@ async function start() {
       <button class="cancel" @click="close">
         Cancel
       </button>
-      <div class="flex-auto"></div>
+      <div class="flex-auto" />
       <button @click="start">
         Start
       </button>

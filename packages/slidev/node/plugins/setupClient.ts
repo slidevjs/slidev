@@ -1,8 +1,8 @@
 import { existsSync } from 'fs'
 import { join, resolve } from 'path'
 import { slash, uniq } from '@antfu/utils'
-import { Plugin } from 'vite'
-import { ResolvedSlidevOptions } from '../options'
+import type { Plugin } from 'vite'
+import type { ResolvedSlidevOptions } from '../options'
 import { toAtFS } from '../utils'
 
 export function createClientSetupPlugin({ clientRoot, themeRoots, userRoot }: ResolvedSlidevOptions): Plugin {

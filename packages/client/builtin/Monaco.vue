@@ -12,7 +12,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <template>
-  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }"></iframe>
+  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
 </template>
 
 <script setup lang="ts">

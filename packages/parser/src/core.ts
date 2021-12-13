@@ -1,6 +1,6 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap } from '@antfu/utils'
-import { SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import type { SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {

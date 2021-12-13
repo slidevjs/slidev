@@ -1,7 +1,7 @@
 import { dirname, resolve, join, basename } from 'path'
 import fs from 'fs-extra'
 import fg from 'fast-glob'
-import { ResolvedSlidevOptions } from './options'
+import type { ResolvedSlidevOptions } from './options'
 
 function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined {
   return options.data.config.drawings.persist

@@ -66,14 +66,14 @@ onClickOutside(input, () => {
       :class="props.class"
       @click="switchNoteEdit"
       v-html="info?.notesHTML"
-    ></div>
+    />
     <div
       v-else
       class="prose overflow-auto outline-none"
       :class="props.class"
       @click="switchNoteEdit"
       v-text="note"
-    ></div>
+    />
   </template>
   <textarea
     v-else

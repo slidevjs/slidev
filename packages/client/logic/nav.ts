@@ -1,4 +1,5 @@
-import { computed, Ref, ref, nextTick } from 'vue'
+import type { Ref } from 'vue'
+import { computed, ref, nextTick } from 'vue'
 import { isString, SwipeDirection, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'

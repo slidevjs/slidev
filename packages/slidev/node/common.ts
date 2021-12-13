@@ -1,7 +1,7 @@
 import { promises as fs, existsSync } from 'fs'
 import { join } from 'path'
 import { uniq } from '@antfu/utils'
-import { ResolvedSlidevOptions } from './options'
+import type { ResolvedSlidevOptions } from './options'
 import { generateGoogleFontsUrl, toAtFS } from './utils'
 
 export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {

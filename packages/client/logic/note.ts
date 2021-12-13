@@ -1,5 +1,7 @@
-import { MaybeRef, useFetch } from '@vueuse/core'
-import { computed, ref, Ref, unref } from 'vue'
+import type { MaybeRef } from '@vueuse/core'
+import { useFetch } from '@vueuse/core'
+import type { Ref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 
 export interface UseSlideInfo{

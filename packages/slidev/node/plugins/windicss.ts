@@ -1,9 +1,10 @@
 import { resolve, dirname } from 'path'
 import { existsSync } from 'fs'
 import { slash, uniq } from '@antfu/utils'
-import WindiCSS, { defaultConfigureFiles, WindiCssOptions } from 'vite-plugin-windicss'
+import type { WindiCssOptions } from 'vite-plugin-windicss'
+import WindiCSS, { defaultConfigureFiles } from 'vite-plugin-windicss'
 import jiti from 'jiti'
-import { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 import { resolveImportPath } from '../utils'
 import { loadSetups } from './setupNode'
 

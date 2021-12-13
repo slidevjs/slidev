@@ -1,18 +1,17 @@
 import { basename, join } from 'path'
-import { ModuleNode, Update, ViteDevServer, Plugin } from 'vite'
+import type { ModuleNode, Update, ViteDevServer, Plugin, Connect } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
-import { RouteMeta } from 'vue-router'
+import type { RouteMeta } from 'vue-router'
 // @ts-expect-error
 import mila from 'markdown-it-link-attributes'
-import { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
+import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
-import type { Connect } from 'vite'
-import { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
+import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/

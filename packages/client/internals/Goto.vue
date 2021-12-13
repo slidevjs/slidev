@@ -46,7 +46,7 @@ whenever(showGotoDialog, async() => {
       @keydown.enter="goTo"
       @keydown.escape="close"
       @blur="close"
-    />
+    >
   </div>
 </template>
 

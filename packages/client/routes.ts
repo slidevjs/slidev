@@ -1,4 +1,5 @@
-import { createRouter, RouteRecordRaw, createWebHistory, createWebHashHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import Play from './internals/Play.vue'
 // @ts-expect-error
 import _rawRoutes from '/@slidev/routes'

@@ -1,9 +1,10 @@
 // forked from https://github.com/jGleitz/markdown-it-prism
 // it's modified to output line wrapper `<div class="line" />` for each line
 
-import Prism, { Grammar } from 'prismjs'
+import type { Grammar } from 'prismjs'
+import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/'
-import MarkdownIt from 'markdown-it'
+import type MarkdownIt from 'markdown-it'
 import { escapeVueInCode } from './markdown'
 
 interface Options {

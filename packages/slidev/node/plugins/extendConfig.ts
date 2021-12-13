@@ -1,10 +1,11 @@
 import { dirname, join } from 'path'
-import { InlineConfig, mergeConfig, Plugin } from 'vite'
+import type { InlineConfig, Plugin } from 'vite'
+import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
-import { ResolvedSlidevOptions } from '../options'
+import type { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, resolveGlobalImportPath, toAtFS } from '../utils'
 import { searchForWorkspaceRoot } from '../vite/searchRoot'
 

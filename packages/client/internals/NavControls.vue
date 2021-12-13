@@ -101,7 +101,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
             v-if="drawingEnabled"
             class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
             :style="{ background: brush.color }"
-          ></div>
+          />
         </button>
         <VerticalDivider />
       </template>

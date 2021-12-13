@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it'
-import { ResolvedFontOptions } from '../packages/parser/node_modules/@slidev/types'
+import type { ResolvedFontOptions } from '../packages/parser/node_modules/@slidev/types'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../packages/slidev/node/utils'
 

@@ -1,4 +1,4 @@
-import { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
 export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
 export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')

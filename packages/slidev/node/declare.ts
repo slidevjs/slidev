@@ -1,4 +1,4 @@
-import { SlidevPluginOptions } from './options'
+import type { SlidevPluginOptions } from './options'
 
 // extend vite.config.ts
 declare module 'vite' {

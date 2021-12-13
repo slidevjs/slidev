@@ -11,7 +11,7 @@ Alice -> Bob : Hello!
 ```
 -->
 <template>
-  <img alt="PlantUML diagram" :src="uri" :style="{scale}" />
+  <img alt="PlantUML diagram" :src="uri" :style="{scale}">
 </template>
 
 <script setup lang="ts">
