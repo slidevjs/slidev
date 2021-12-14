@@ -13,20 +13,23 @@
   "author": "antfu <anthonyfu117@hotmail.com>",
   "files": [
     "dist",
-    "index.d.ts"
+    "*.d.ts"
   ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./core": {
       "import": "./dist/core.mjs",
-      "require": "./dist/core.js"
+      "require": "./dist/core.js",
+      "types": "./dist/core.d.ts"
     },
     "./fs": {
       "import": "./dist/fs.mjs",
-      "require": "./dist/fs.js"
+      "require": "./dist/fs.js",
+      "types": "./dist/fs.d.ts"
     }
   },
   "main": "dist/index.js",
