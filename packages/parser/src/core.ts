@@ -114,7 +114,7 @@ export function parse(
   }
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trimRight()
+    const line = lines[i].trimEnd()
     if (line.match(/^---+/)) {
       slice(i)
 
@@ -123,7 +123,7 @@ export function parse(
       if (line.match(/^---([^-].*)?$/) && !next?.match(/^\s*$/)) {
         start = i
         for (i += 1; i < lines.length; i++) {
-          if (lines[i].trimRight().match(/^---$/))
+          if (lines[i].trimEnd().match(/^---$/))
             break
         }
       }
