@@ -7,7 +7,7 @@
 
 ### `center`
 
-Displays the content in the middle of the sreen.
+Displays the content in the middle of the screen.
 
 ### `cover`
 
