@@ -7,6 +7,7 @@ export interface SlideInfoBase {
   note?: string
   frontmatter: Record<string, any>
   title?: string
+  titleLevel?: number
 }
 
 export interface SlideInfo extends SlideInfoBase {
