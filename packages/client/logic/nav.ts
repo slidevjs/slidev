@@ -1,10 +1,22 @@
 import type { Ref } from 'vue'
+import type { RouteRecordRaw } from 'vue-router'
 import { computed, ref, nextTick } from 'vue'
 import { isString, SwipeDirection, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
+
+export interface TocItem {
+  active?: boolean
+  activeParent?: boolean
+  children: TocItem[]
+  hasActiveParent?: boolean
+  level: number
+  path: string
+  hideInToc?: boolean
+  title?: string
+}
 
 export { rawRoutes, router }
 
@@ -61,6 +73,15 @@ export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? 
 
 export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1 || clicks.value < clicksTotal.value)
 export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
+
+export const rawTree = computed(() => rawRoutes
+  .filter((route: RouteRecordRaw) => route.meta?.slide?.title)
+  .reduce((acc: TocItem[], route: RouteRecordRaw) => {
+    addToTree(acc, route)
+    return acc
+  }, []))
+export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value))
+export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
 export function next() {
   if (clicksTotal.value <= clicks.value)
@@ -151,4 +172,48 @@ export async function openInEditor(url?: string) {
   }
   await fetch(`/__open-in-editor?file=${encodeURIComponent(url)}`)
   return true
+}
+
+export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
+  const titleLevel = route.meta?.slide?.level
+  if (titleLevel && titleLevel > level && tree.length > 0) {
+    addToTree(tree[tree.length - 1].children, route, level + 1)
+  }
+  else {
+    tree.push({
+      children: [],
+      level,
+      path: route.path,
+      hideInToc: Boolean(route.meta?.hideInToc),
+      title: route.meta?.slide?.title,
+    })
+  }
+}
+
+export function getTreeWithActiveStatuses(
+  tree: TocItem[],
+  hasActiveParent = false,
+  parent?: TocItem,
+): TocItem[] {
+  return tree.map((item: TocItem) => {
+    const clone = {
+      ...item,
+      active: item.path === currentRoute.value?.path,
+      hasActiveParent,
+    }
+    if (clone.children.length > 0)
+      clone.children = getTreeWithActiveStatuses(clone.children, clone.active || clone.hasActiveParent, clone)
+    if (parent && (clone.active || clone.activeParent))
+      parent.activeParent = true
+    return clone
+  })
+}
+
+function filterTree(tree: TocItem[], level = 1): TocItem[] {
+  return tree
+    .filter((item: TocItem) => !item.hideInToc)
+    .map((item: TocItem) => ({
+      ...item,
+      children: filterTree(item.children, level + 1),
+    }))
 }

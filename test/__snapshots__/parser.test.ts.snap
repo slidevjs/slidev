@@ -109,6 +109,7 @@ Array [
       "title": "Hi",
     },
     "index": 0,
+    "level": 1,
     "note": undefined,
     "raw": "---
 layout: cover
@@ -138,6 +139,7 @@ title: Hi
       },
     },
     "index": 1,
+    "level": 1,
     "note": "This is note",
     "raw": "---
 meta:
@@ -162,6 +164,7 @@ This is note
     "end": 19,
     "frontmatter": Object {},
     "index": 2,
+    "level": 1,
     "note": undefined,
     "raw": "
 # Morning
@@ -180,6 +183,7 @@ Hey
       "layout": "text",
     },
     "index": 3,
+    "level": undefined,
     "note": "This is note",
     "raw": "---
 layout: text
@@ -207,6 +211,7 @@ this should be treated as code block
     "end": 35,
     "frontmatter": Object {},
     "index": 4,
+    "level": undefined,
     "note": undefined,
     "raw": "
 \`\`\`md
@@ -324,6 +329,7 @@ console.log('Hello World')
       "title": "H1",
     },
     "index": 0,
+    "level": 1,
     "note": undefined,
     "raw": "---
 title: H1
@@ -355,6 +361,7 @@ console.log('Hello World')
     "end": 18,
     "frontmatter": Object {},
     "index": 1,
+    "level": 1,
     "note": undefined,
     "raw": "
 # Hello
@@ -375,6 +382,7 @@ Nice to meet you
     "end": 22,
     "frontmatter": Object {},
     "index": 2,
+    "level": undefined,
     "note": undefined,
     "raw": "
 Nice to meet you
@@ -489,6 +497,7 @@ Array [
         "title": undefined,
       },
       "index": 0,
+      "level": undefined,
       "note": undefined,
       "raw": "---
 src: sub/page1.md
@@ -497,6 +506,7 @@ src: sub/page1.md
       "start": 0,
       "title": undefined,
     },
+    "level": 1,
     "note": undefined,
     "raw": "---
 src: sub/page1.md
@@ -508,6 +518,7 @@ src: sub/page1.md
     "source": Object {
       "content": "# Page 1",
       "frontmatter": Object {},
+      "level": 1,
       "note": undefined,
       "raw": "# Page 1
 ",
@@ -537,6 +548,7 @@ src: sub/page1.md
         "src": "sub/page2.md",
       },
       "index": 1,
+      "level": undefined,
       "note": undefined,
       "raw": "---
 src: sub/page2.md
@@ -546,6 +558,7 @@ background: https://sli.dev/demo-cover.png
       "start": 4,
       "title": undefined,
     },
+    "level": 1,
     "note": undefined,
     "raw": "---
 layout: cover
@@ -565,6 +578,7 @@ background: https://sli.dev/demo-cover.png
       "frontmatter": Object {
         "layout": "cover",
       },
+      "level": 1,
       "note": undefined,
       "raw": "---
 layout: cover
@@ -588,6 +602,7 @@ $x+2$
     "end": 15,
     "frontmatter": Object {},
     "index": 2,
+    "level": 1,
     "note": undefined,
     "raw": "
 # Inline Page

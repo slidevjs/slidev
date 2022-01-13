@@ -413,6 +413,8 @@ export function createSlidesLoader(
               filepath: i.source?.filepath || entry,
               id: idx,
               no,
+              title: i.title,
+              level: i.level,
             },
             __clicksElements: [],
             __preloaded: false,

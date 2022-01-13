@@ -79,11 +79,22 @@ export function parseSlide(raw: string): SlideInfoBase {
     }
   }
 
-  const title = frontmatter.title || frontmatter.name || content.match(/^#+ (.*)$/m)?.[1]?.trim()
+  let title
+  let level
+  if (frontmatter.title || frontmatter.name) {
+    title = frontmatter.title || frontmatter.name
+    level = frontmatter.level || 1
+  }
+  else {
+    const match = content.match(/^(#+) (.*)$/m)
+    title = match?.[2]?.trim()
+    level = match?.[1]?.length
+  }
 
   return {
     raw,
     title,
+    level,
     content,
     frontmatter,
     note,
