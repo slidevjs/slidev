@@ -49,6 +49,7 @@
     "@types/recordrtc": "^5.6.8",
     "@types/resolve": "^1.20.1",
     "@types/semver": "^7.3.9",
+    "@types/yargs": "^17.0.8",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@vueuse/core": "^7.5.3",
     "bumpp": "^7.1.1",

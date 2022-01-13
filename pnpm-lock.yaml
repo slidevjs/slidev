@@ -27,6 +27,7 @@ importers:
       '@types/recordrtc': ^5.6.8
       '@types/resolve': ^1.20.1
       '@types/semver': ^7.3.9
+      '@types/yargs': ^17.0.8
       '@typescript-eslint/eslint-plugin': ^5.9.1
       '@vueuse/core': ^7.5.3
       bumpp: ^7.1.1
@@ -72,6 +73,7 @@ importers:
       '@types/recordrtc': 5.6.8
       '@types/resolve': 1.20.1
       '@types/semver': 7.3.9
+      '@types/yargs': 17.0.8
       '@typescript-eslint/eslint-plugin': 5.9.1_eslint@8.6.0+typescript@4.5.4
       '@vueuse/core': 7.5.3
       bumpp: 7.1.1
@@ -814,6 +816,16 @@ packages:
 
   /@types/throttle-debounce/2.1.0:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
+
+  /@types/yargs-parser/20.2.1:
+    resolution: {integrity: sha512-7tFImggNeNBVMsn0vLrpn1H1uPrUBdnARPTpZoitY37ZrdJREzf7I16tMrlK3hen349gr1NYh8CmZQa7CTG6Aw==}
+    dev: true
+
+  /@types/yargs/17.0.8:
+    resolution: {integrity: sha512-wDeUwiUmem9FzsyysEwRukaEdDNcwbROvQ9QGRKaLI6t+IltNzbn4/i4asmB10auvZGQCzSQ6t0GSczEThlUXw==}
+    dependencies:
+      '@types/yargs-parser': 20.2.1
+    dev: true
 
   /@types/yauzl/2.9.2:
     resolution: {integrity: sha512-8uALY5LTvSuHgloDVUvWP3pIauILm+8/0pDMokuDYIoNsOkSwd5AiHBTSEJjKTDcZr5z8UpgOWZkxBF4iJftoA==}
