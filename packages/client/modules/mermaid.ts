@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error missing types
 import mermaid from 'mermaid/dist/mermaid.min'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, inject, onBeforeUnmount } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { drauu, loadCanvas } from '../logic/drawings'
 import { injectionSlideScale } from '../constants'
 

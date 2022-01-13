@@ -1,5 +1,5 @@
 import { useTimestamp } from '@vueuse/core'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export function useTimer() {
   const tsStart = ref(Date.now())

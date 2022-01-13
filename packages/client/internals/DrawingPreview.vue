@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { drawingState } from '../logic/drawings'
 
-defineProps<{page: number}>()
+defineProps<{ page: number }>()
 </script>
 
 <template>

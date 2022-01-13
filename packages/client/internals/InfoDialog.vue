@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { configs } from '../env'
 import Modal from './Modal.vue'
 
-const emit = defineEmits<{(name: 'modelValue', v: boolean): void}>()
+const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
 const props = defineProps({
   modelValue: {
     default: false,

@@ -1,5 +1,5 @@
 <!--
-A simple wrapper for embeded Tweet
+A simple wrapper for embedded Tweet
 
 Usage:
 
@@ -23,7 +23,7 @@ const vm = getCurrentInstance()!
 const loaded = ref(false)
 
 async function create() {
-  // @ts-ignore
+  // @ts-expect-error global
   await window.twttr.widgets.createTweet(
     props.id.toString(),
     tweet.value,
@@ -35,7 +35,7 @@ async function create() {
   loaded.value = true
 }
 
-// @ts-ignore
+// @ts-expect-error global
 if (window?.twttr?.widgets) {
   onMounted(create)
 }

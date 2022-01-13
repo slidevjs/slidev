@@ -2,7 +2,7 @@
 [Expiremental]
 
 Think this component as the TextBox you that will see
-in PowerPoint or Keynote. It will automaitcally resize
+in PowerPoint or Keynote. It will automatically resize
 the font size based on it's content to fit them in.
 
 Usage:
@@ -18,7 +18,9 @@ or
 import { useElementSize, useVModel } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const props = defineProps({
   modelValue: {
     default: '',
@@ -34,7 +36,6 @@ const props = defineProps({
 const container = ref<HTMLDivElement>()
 const inner = ref<HTMLDivElement>()
 const size = ref(100)
-// @ts-ignore
 const fontSize = computed(() => `${size.value}px`)
 const value = useVModel(props, 'modelValue', emit)
 

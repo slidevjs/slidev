@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
-import { showOverview, showRecordingDialog, showInfoDialog } from '../state'
+import { showInfoDialog, showOverview, showRecordingDialog } from '../state'
 import { configs } from '../env'
 import SlidesOverview from './SlidesOverview.vue'
 import InfoDialog from './InfoDialog.vue'

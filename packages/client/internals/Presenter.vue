@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { ref, computed, reactive, watch, onMounted } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { total, currentPage, currentRoute, nextRoute, clicks, useSwipeControls, clicksTotal, hasNext } from '../logic/nav'
+import { clicks, clicksTotal, currentPage, currentRoute, hasNext, nextRoute, total, useSwipeControls } from '../logic/nav'
 import { showOverview, showPresenterCursor } from '../state'
-import { configs, themeVars, serverState } from '../env'
+import { configs, serverState, themeVars } from '../env'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'

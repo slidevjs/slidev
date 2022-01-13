@@ -1,4 +1,4 @@
-import { useMagicKeys, useActiveElement, useStorage, useBreakpoints, breakpointsTailwind, useWindowSize, useFullscreen, useToggle, isClient } from '@vueuse/core'
+import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useMagicKeys, useStorage, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { slideAspect } from '../env'
 

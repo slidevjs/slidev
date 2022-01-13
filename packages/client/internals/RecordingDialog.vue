@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { nextTick } from 'vue'
-import { recorder, recordingName, recordCamera, getFilename } from '../logic/recording'
+import { getFilename, recordCamera, recorder, recordingName } from '../logic/recording'
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
 

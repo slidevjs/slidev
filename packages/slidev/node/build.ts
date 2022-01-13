@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import { resolve, join } from 'path'
+import { join, resolve } from 'path'
 import http from 'http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
-import { build as viteBuild, mergeConfig, resolveConfig } from 'vite'
+import { mergeConfig, resolveConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import { blue, yellow } from 'kolorist'

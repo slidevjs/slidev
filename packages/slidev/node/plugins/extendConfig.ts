@@ -6,7 +6,7 @@ import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import { dependencies } from '../../../client/package.json'
 import type { ResolvedSlidevOptions } from '../options'
-import { resolveImportPath, resolveGlobalImportPath, toAtFS } from '../utils'
+import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
 import { searchForWorkspaceRoot } from '../vite/searchRoot'
 
 const EXCLUDE = [
@@ -67,7 +67,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.publicDir = join(options.userRoot, 'public')
         injection.root = options.cliRoot
-        // @ts-expect-error
+        // @ts-expect-error type cast
         injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
       }
 

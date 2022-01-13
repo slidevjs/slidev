@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {
-  drawingMode, drauu, brush,
-  brushColors, drawingEnabled, drawingPinned,
-  canUndo, canRedo, canClear, clearDrauu,
+  brush, brushColors, canClear,
+  canRedo, canUndo, clearDrauu,
+  drauu, drawingEnabled, drawingMode, drawingPinned,
 } from '../logic/drawings'
 import VerticalDivider from './VerticalDivider.vue'
 import Draggable from './Draggable.vue'

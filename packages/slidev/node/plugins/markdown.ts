@@ -2,9 +2,9 @@ import Markdown from 'vite-plugin-md'
 import type { Plugin } from 'vite'
 import base64 from 'js-base64'
 import { slash } from '@antfu/utils'
-// @ts-expect-error
+// @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-// @ts-expect-error
+// @ts-expect-error missing types
 import mif from 'markdown-it-footnote'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'

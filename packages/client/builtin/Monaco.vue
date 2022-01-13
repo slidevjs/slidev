@@ -16,7 +16,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watchEffect, computed } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { decode } from 'js-base64'
 import { nanoid } from 'nanoid'

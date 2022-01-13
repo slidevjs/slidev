@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import type { Awaitable } from '@antfu/utils'
-import type { IThemeRegistration, ILanguageRegistration, Highlighter as ShikiHighlighter } from 'shiki'
+import type { ILanguageRegistration, IThemeRegistration, Highlighter as ShikiHighlighter } from 'shiki'
 import type * as Shiki from 'shiki'
 import type * as monaco from 'monaco-editor'
 import type { App, Ref } from 'vue'

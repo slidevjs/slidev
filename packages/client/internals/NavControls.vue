@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import { isDark, toggleDark, isColorSchemaConfigured } from '../logic/dark'
-import { hasNext, hasPrev, prev, next, total, isPresenter, currentPage, downloadPDF, isEmbedded } from '../logic/nav'
-import { toggleOverview, showEditor, showInfoDialog, fullscreen, breakpoints, activeElement, showPresenterCursor } from '../state'
-import { drawingEnabled, brush } from '../logic/drawings'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
+import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, prev, total } from '../logic/nav'
+import { activeElement, breakpoints, fullscreen, showEditor, showInfoDialog, showPresenterCursor, toggleOverview } from '../state'
+import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'

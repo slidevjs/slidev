@@ -1,11 +1,11 @@
 import { basename, join } from 'path'
-import type { ModuleNode, Update, ViteDevServer, Plugin, Connect } from 'vite'
+import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
 import type { RouteMeta } from 'vue-router'
-// @ts-expect-error
+// @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
 import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, shallowRef } from 'vue'
-import { showEditor, windowSize, isScreenVertical, slideScale } from '../state'
-import { isPrintMode, next, prev, useSwipeControls, isEmbedded } from '../logic/nav'
+import { computed, ref, shallowRef } from 'vue'
+import { isScreenVertical, showEditor, slideScale, windowSize } from '../state'
+import { isEmbedded, isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
-import { themeVars, configs } from '../env'
+import { configs, themeVars } from '../env'
 import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
@@ -18,7 +18,7 @@ function onClick(e: MouseEvent) {
     return
 
   if ((e.target as HTMLElement)?.id === 'slide-container') {
-    // click right to next, left to previouse
+    // click right to next, left to previous
     if ((e.screenX / window.innerWidth) > 0.6)
       next()
     else
@@ -28,7 +28,7 @@ function onClick(e: MouseEvent) {
 
 useSwipeControls(root)
 
-const presistNav = computed(() => isScreenVertical.value || showEditor.value)
+const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const Editor = shallowRef<any>()
 if (__DEV__)
@@ -55,11 +55,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <div
           class="absolute bottom-0 left-0 transition duration-300 opacity-0 hover:opacity-100"
           :class="[
-            presistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2',
+            persistNav ? 'opacity-100 right-0' : 'oapcity-0 p-2',
             isDrawing ? 'pointer-events-none': ''
           ]"
         >
-          <NavControls class="m-auto" :persist="presistNav" />
+          <NavControls class="m-auto" :persist="persistNav" />
         </div>
         <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded && DrawingControls">
           <DrawingControls class="ml-0" />

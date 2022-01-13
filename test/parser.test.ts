@@ -1,4 +1,4 @@
-import { resolve, basename } from 'path'
+import { basename, resolve } from 'path'
 import fg from 'fast-glob'
 import { load, parse, prettify, stringify } from '../packages/parser/src/fs'
 
@@ -18,11 +18,10 @@ describe('md parser', () => {
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
-          // @ts-expect-error
           delete slide.source.filepath
-        // @ts-expect-error
+        // @ts-expect-error extra prop
         if (slide.filepath)
-          // @ts-expect-error
+          // @ts-expect-error extra prop
           delete slide.filepath
       }
       expect(data.slides).toMatchSnapshot('slides')

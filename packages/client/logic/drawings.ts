@@ -1,8 +1,8 @@
 import { computed, markRaw, nextTick, reactive, ref, watch, watchEffect } from 'vue'
-import type { Brush, DrawingMode, Options as DrauuOptions } from 'drauu'
+import type { Brush, Options as DrauuOptions, DrawingMode } from 'drauu'
 import { createDrauu } from 'drauu'
-import { useStorage, toReactive } from '@vueuse/core'
-import { serverDrawingState as drawingState, configs } from '../env'
+import { toReactive, useStorage } from '@vueuse/core'
+import { configs, serverDrawingState as drawingState } from '../env'
 import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [

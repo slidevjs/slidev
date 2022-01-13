@@ -1,12 +1,12 @@
 /* __imports__ */
 import { useHead } from '@vueuse/head'
 import { watch } from 'vue'
-import { currentPage, getPath, clicks, isPresenter } from '../logic/nav'
+import { clicks, currentPage, getPath, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 import { configs, serverState } from '../env'
 
 export default function setupRoot() {
-  // @ts-expect-error
+  // @ts-expect-error injected in runtime
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const injection_arg = undefined
 

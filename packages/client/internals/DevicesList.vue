@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { currentCamera, currentMic } from '../state'
-import { cameras, microphones, ensureDevicesListPermissions } from '../logic/recording'
+import { cameras, ensureDevicesListPermissions, microphones } from '../logic/recording'
 import SelectList from './SelectList.vue'
 import type { SelectionItem } from './types'
 

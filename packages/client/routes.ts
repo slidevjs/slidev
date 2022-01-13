@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Play from './internals/Play.vue'
-// @ts-expect-error
+// @ts-expect-error missing types
 import _rawRoutes from '/@slidev/routes'
 
 export const rawRoutes = _rawRoutes as RouteRecordRaw[]

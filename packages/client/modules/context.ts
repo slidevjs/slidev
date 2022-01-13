@@ -23,7 +23,7 @@ export default function createSlidevContext() {
       // need to copy over to get rid of the "Module" object type (will not unwrap)
       for (const key of objectKeys(nav)) {
         if (typeof key === 'string')
-          // @ts-expect-error
+          // @ts-expect-error I know :)
           navObj[key] = nav[key]
       }
       const context = reactive({
@@ -35,7 +35,7 @@ export default function createSlidevContext() {
 
       // allows controls from postMessages
       if (__DEV__) {
-        // @ts-expect-error
+        // @ts-expect-error expose global
         window.__slidev__ = context
         window.addEventListener('message', ({ data }) => {
           if (data && data.target === 'slidev') {

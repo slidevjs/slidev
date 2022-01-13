@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import { nextTick, ref, shallowRef, watch } from 'vue'
-import { useEventListener, useDevicesList } from '@vueuse/core'
+import { useDevicesList, useEventListener } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
 import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
@@ -124,7 +124,7 @@ export function useRecording() {
         frameRate: 15,
         width: 3840,
         height: 2160,
-        // @ts-expect-error
+        // @ts-expect-error missing types
         cursor: 'motion',
         resizeMode: 'crop-and-scale',
       },

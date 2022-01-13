@@ -1,5 +1,5 @@
 import { useVModel } from '@vueuse/core'
-import { provide, defineComponent, h } from 'vue'
+import { defineComponent, h, provide } from 'vue'
 import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap } from '../constants'
 
 export default defineComponent({

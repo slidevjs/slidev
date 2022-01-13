@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useEventListener, throttledWatch } from '@vueuse/core'
-import { computed, watch, ref, onMounted } from 'vue'
-import { activeElement, showEditor, editorWidth, isInputting } from '../state'
+import { throttledWatch, useEventListener } from '@vueuse/core'
+import { computed, onMounted, ref, watch } from 'vue'
+import { activeElement, editorWidth, isInputting, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
@@ -66,7 +66,7 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
-      // @ts-ignore
+      // @ts-expect-error missing types
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
     },
@@ -84,7 +84,7 @@ onMounted(() => {
     {
       mode: 'markdown',
       lineWrapping: true,
-      // @ts-ignore
+      // @ts-expect-error missing types
       highlightFormatting: true,
       fencedCodeBlockDefaultMode: 'javascript',
     },
@@ -100,7 +100,7 @@ function updateWidth(v: number) {
 }
 function switchTab(newTab: typeof tab.value) {
   tab.value = newTab
-  // @ts-expect-error
+  // @ts-expect-error force cast
   document.activeElement?.blur?.()
 }
 useEventListener('pointermove', (e) => {

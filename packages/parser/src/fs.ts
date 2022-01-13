@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
 import type { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
-import { parseSlide, parse, stringify, stringifySlide, mergeFeatureFlags, detectFeatures } from './core'
+import { detectFeatures, mergeFeatureFlags, parse, parseSlide, stringify, stringifySlide } from './core'
 export * from './core'
 
 export async function load(filepath: string, themeMeta?: SlidevThemeMeta, content?: string) {

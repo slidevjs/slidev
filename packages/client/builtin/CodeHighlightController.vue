@@ -15,7 +15,7 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 import { range, remove } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import { injectionClicks, injectionClicksElements, injectionClicksDisabled, CLASS_VCLICK_TARGET } from '../constants'
+import { CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../constants'
 
 const props = defineProps({
   ranges: {

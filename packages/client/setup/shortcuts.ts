@@ -1,13 +1,13 @@
 /* __imports__ */
 
-import type { ShortcutOptions, NavOperations } from '@slidev/types'
-import { next, prev, nextSlide, prevSlide, downloadPDF } from '../logic/nav'
+import type { NavOperations, ShortcutOptions } from '@slidev/types'
+import { downloadPDF, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
-import { toggleOverview, showGotoDialog, showOverview } from '../state'
+import { showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'
 
 export default function setupShortcuts() {
-  // @ts-expect-error
+  // @ts-expect-error injected in runtime
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const injection_arg: NavOperations = {
     next,

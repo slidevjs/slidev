@@ -1,7 +1,7 @@
 import type { SlidevConfig } from '@slidev/types'
 import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
-// @ts-expect-error
+// @ts-expect-error missing types
 import _configs from '/@slidev/configs'
 import _serverState from 'server-reactive:nav'
 import _serverDrawingState from 'server-reactive:drawings?diff'

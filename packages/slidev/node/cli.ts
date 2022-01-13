@@ -274,7 +274,7 @@ cli.command(
 
           const dirPath = `./${dir}`
           data.slides[0].frontmatter.theme = dirPath
-          // @ts-expect-error
+          // @ts-expect-error remove the value
           data.slides[0].raw = null
           await parser.save(data)
 

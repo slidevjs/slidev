@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStorage, useDraggable } from '@vueuse/core'
+import { useDraggable, useStorage } from '@vueuse/core'
 
 const props = defineProps<{
   storageKey?: string
-  initial?: {x: number; y: number}
+  initial?: { x: number; y: number }
 }>()
 
 const el = ref<HTMLElement | null>(null)

@@ -11,23 +11,23 @@ export async function formatCode(code: string, lang: string) {
       case 'typescript':
         parser = 'typescript'
         plugins = [
-          // @ts-expect-error
+          // @ts-expect-error missing types
           (await import('prettier/esm/parser-babel')).default,
-          // @ts-expect-error
+          // @ts-expect-error missing types
           (await import('prettier/esm/parser-typescript')).default,
         ]
         break
       case 'html':
         parser = 'html'
         plugins = [
-          // @ts-expect-error
+          // @ts-expect-error missing types
           (await import('prettier/esm/parser-html')).default,
         ]
         break
       default:
         parser = 'babel'
         plugins = [
-          // @ts-expect-error
+          // @ts-expect-error missing types
           (await import('prettier/esm/parser-babel')).default,
         ]
     }
@@ -42,7 +42,6 @@ export async function formatCode(code: string, lang: string) {
     })
   }
   catch (e) {
-    // eslint-disable-next-line no-console
     console.error(e)
     return code
   }

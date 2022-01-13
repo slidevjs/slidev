@@ -14,7 +14,7 @@ export default function setupMain(context: AppContext) {
 
   context.app.use(MotionPlugin)
 
-  // @ts-expect-error
+  // @ts-expect-error inject in runtime
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const injection_arg = context
 

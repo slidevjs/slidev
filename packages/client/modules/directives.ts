@@ -3,16 +3,16 @@ import { watch } from 'vue'
 import { remove } from '@antfu/utils'
 import { isClicksDisabled } from '../logic/nav'
 import {
-  injectionClicksDisabled,
-  injectionClicksElements,
-  injectionClicks,
-  injectionOrderMap,
   CLASS_VCLICK_CURRENT,
+  CLASS_VCLICK_FADE,
   CLASS_VCLICK_HIDDEN,
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
-  CLASS_VCLICK_FADE,
+  injectionClicks,
+  injectionClicksDisabled,
+  injectionClicksElements,
+  injectionOrderMap,
 } from '../constants'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
@@ -23,7 +23,7 @@ export default function createDirectives() {
   return {
     install(app: App) {
       app.directive('click', {
-        // @ts-expect-error
+        // @ts-expect-error extra prop
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
@@ -109,7 +109,7 @@ export default function createDirectives() {
       })
 
       app.directive('after', {
-        // @ts-expect-error
+        // @ts-expect-error extra prop
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
@@ -160,7 +160,7 @@ export default function createDirectives() {
       })
 
       app.directive('click-hide', {
-        // @ts-expect-error
+        // @ts-expect-error extra prop
         name: 'v-click-hide',
 
         mounted(el: HTMLElement, dir) {

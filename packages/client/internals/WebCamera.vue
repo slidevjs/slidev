@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener, useStorage, useDraggable } from '@vueuse/core'
+import { useDraggable, useEventListener, useStorage } from '@vueuse/core'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { currentCamera } from '../state'
 import { recorder } from '../logic/recording'
