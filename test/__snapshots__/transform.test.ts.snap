@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`markdown transform Inline CSS 1`] = `
+exports[`markdown transform > Inline CSS 1`] = `
 "
 # Page 
 
@@ -21,7 +21,7 @@ h1 {
 "
 `;
 
-exports[`markdown transform Mermaid 1`] = `
+exports[`markdown transform > Mermaid 1`] = `
 "
 # Page 
 
@@ -31,7 +31,7 @@ exports[`markdown transform Mermaid 1`] = `
 "
 `;
 
-exports[`markdown transform PlantUML 1`] = `
+exports[`markdown transform > PlantUML 1`] = `
 "
 # Page
 
@@ -41,7 +41,7 @@ exports[`markdown transform PlantUML 1`] = `
 "
 `;
 
-exports[`markdown transform slot-sugar 1`] = `
+exports[`markdown transform > slot-sugar 1`] = `
 "
 # Page 
 
@@ -61,7 +61,7 @@ Right Slot
 </template>"
 `;
 
-exports[`markdown transform slot-sugar with code 1`] = `
+exports[`markdown transform > slot-sugar with code 1`] = `
 "
 # Page 
 
@@ -82,7 +82,7 @@ Slot Usage
 </template>"
 `;
 
-exports[`markdown transform slot-sugar with default 1`] = `
+exports[`markdown transform > slot-sugar with default 1`] = `
 "
 
 <template v-slot:right=\\"slotProps\\">

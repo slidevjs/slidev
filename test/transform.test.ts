@@ -4,6 +4,7 @@ import {
   transformPlantUml,
   transformSlotSugar,
 } from '@slidev/cli/node/plugins/markdown'
+import { describe, expect, it } from 'vitest'
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {

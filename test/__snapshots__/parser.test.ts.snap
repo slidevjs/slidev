@@ -1,22 +1,22 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`md parser frontmatter.md: config 1`] = `
-Object {
+exports[`md parser > frontmatter.md > config 1`] = `
+{
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "drawings": Object {
+  "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
-  "fonts": Object {
+  "fonts": {
     "italic": false,
-    "local": Array [],
-    "mono": Array [
+    "local": [],
+    "mono": [
       "\\"Fira Code\\"",
       "ui-monospace",
       "SFMono-Regular",
@@ -28,7 +28,7 @@ Object {
       "monospace",
     ],
     "provider": "google",
-    "sans": Array [
+    "sans": [
       "\\"Roboto\\"",
       "\\"Lato\\"",
       "ui-sans-serif",
@@ -46,7 +46,7 @@ Object {
       "\\"Segoe UI Symbol\\"",
       "\\"Noto Color Emoji\\"",
     ],
-    "serif": Array [
+    "serif": [
       "\\"Mate SC\\"",
       "ui-serif",
       "Georgia",
@@ -55,13 +55,13 @@ Object {
       "Times",
       "serif",
     ],
-    "webfonts": Array [
+    "webfonts": [
       "Roboto",
       "Lato",
       "Mate SC",
       "Fira Code",
     ],
-    "weights": Array [
+    "weights": [
       "200",
       "400",
       "600",
@@ -77,14 +77,14 @@ Object {
   "routerMode": "history",
   "selectable": false,
   "theme": "default",
-  "themeConfig": Object {},
+  "themeConfig": {},
   "title": "Hi",
   "titleTemplate": "%s - Slidev",
 }
 `;
 
-exports[`md parser frontmatter.md: features 1`] = `
-Object {
+exports[`md parser > frontmatter.md > features 1`] = `
+{
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -92,15 +92,15 @@ Object {
 }
 `;
 
-exports[`md parser frontmatter.md: slides 1`] = `
-Array [
-  Object {
+exports[`md parser > frontmatter.md > slides 1`] = `
+[
+  {
     "content": "
 # Hi
 ",
     "end": 8,
-    "frontmatter": Object {
-      "fonts": Object {
+    "frontmatter": {
+      "fonts": {
         "mono": "Fira Code",
         "sans": "Roboto, Lato",
         "serif": "Mate SC",
@@ -126,14 +126,14 @@ title: Hi
     "start": 0,
     "title": "Hi",
   },
-  Object {
+  {
     "content": "
 # Hello
 ",
     "end": 16,
-    "frontmatter": Object {
+    "frontmatter": {
       "layout": "center",
-      "meta": Object {
+      "meta": {
         "duration": 12,
         "title": "FooBar",
       },
@@ -157,12 +157,12 @@ This is note
     "start": 8,
     "title": "Hello",
   },
-  Object {
+  {
     "content": "
 # Morning
 ",
     "end": 19,
-    "frontmatter": Object {},
+    "frontmatter": {},
     "index": 2,
     "level": 1,
     "note": undefined,
@@ -173,13 +173,13 @@ This is note
     "start": 17,
     "title": "Morning",
   },
-  Object {
+  {
     "content": "
 <!-- This is not note -->
 Hey
 ",
     "end": 26,
-    "frontmatter": Object {
+    "frontmatter": {
       "layout": "text",
     },
     "index": 3,
@@ -199,7 +199,7 @@ This is note
     "start": 19,
     "title": undefined,
   },
-  Object {
+  {
     "content": "
 \`\`\`md
 ---
@@ -209,7 +209,7 @@ this should be treated as code block
 \`\`\`
 ",
     "end": 35,
-    "frontmatter": Object {},
+    "frontmatter": {},
     "index": 4,
     "level": undefined,
     "note": undefined,
@@ -228,23 +228,23 @@ this should be treated as code block
 ]
 `;
 
-exports[`md parser minimal.md: config 1`] = `
-Object {
+exports[`md parser > minimal.md > config 1`] = `
+{
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "drawings": Object {
+  "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
-  "fonts": Object {
+  "fonts": {
     "italic": false,
-    "local": Array [],
-    "mono": Array [
+    "local": [],
+    "mono": [
       "ui-monospace",
       "SFMono-Regular",
       "Menlo",
@@ -255,7 +255,7 @@ Object {
       "monospace",
     ],
     "provider": "google",
-    "sans": Array [
+    "sans": [
       "ui-sans-serif",
       "system-ui",
       "-apple-system",
@@ -271,7 +271,7 @@ Object {
       "\\"Segoe UI Symbol\\"",
       "\\"Noto Color Emoji\\"",
     ],
-    "serif": Array [
+    "serif": [
       "ui-serif",
       "Georgia",
       "Cambria",
@@ -279,8 +279,8 @@ Object {
       "Times",
       "serif",
     ],
-    "webfonts": Array [],
-    "weights": Array [
+    "webfonts": [],
+    "weights": [
       "200",
       "400",
       "600",
@@ -295,14 +295,14 @@ Object {
   "routerMode": "history",
   "selectable": false,
   "theme": "default",
-  "themeConfig": Object {},
+  "themeConfig": {},
   "title": "H1",
   "titleTemplate": "%s - Slidev",
 }
 `;
 
-exports[`md parser minimal.md: features 1`] = `
-Object {
+exports[`md parser > minimal.md > features 1`] = `
+{
   "katex": false,
   "mermaid": false,
   "monaco": false,
@@ -310,9 +310,9 @@ Object {
 }
 `;
 
-exports[`md parser minimal.md: slides 1`] = `
-Array [
-  Object {
+exports[`md parser > minimal.md > slides 1`] = `
+[
+  {
     "content": "
 # H1
 ## H2
@@ -325,7 +325,7 @@ console.log('Hello World')
 \`\`\`
 ",
     "end": 10,
-    "frontmatter": Object {
+    "frontmatter": {
       "title": "H1",
     },
     "index": 0,
@@ -349,7 +349,7 @@ console.log('Hello World')
     "start": 0,
     "title": "H1",
   },
-  Object {
+  {
     "content": "
 # Hello
 
@@ -359,7 +359,7 @@ console.log('Hello World')
 - Yo
 ",
     "end": 18,
-    "frontmatter": Object {},
+    "frontmatter": {},
     "index": 1,
     "level": 1,
     "note": undefined,
@@ -375,12 +375,12 @@ console.log('Hello World')
     "start": 11,
     "title": "Hello",
   },
-  Object {
+  {
     "content": "
 Nice to meet you
 ",
     "end": 22,
-    "frontmatter": Object {},
+    "frontmatter": {},
     "index": 2,
     "level": undefined,
     "note": undefined,
@@ -394,23 +394,23 @@ Nice to meet you
 ]
 `;
 
-exports[`md parser multi-entries.md: config 1`] = `
-Object {
+exports[`md parser > multi-entries.md > config 1`] = `
+{
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
   "download": false,
-  "drawings": Object {
+  "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
-  "fonts": Object {
+  "fonts": {
     "italic": false,
-    "local": Array [],
-    "mono": Array [
+    "local": [],
+    "mono": [
       "ui-monospace",
       "SFMono-Regular",
       "Menlo",
@@ -421,7 +421,7 @@ Object {
       "monospace",
     ],
     "provider": "google",
-    "sans": Array [
+    "sans": [
       "ui-sans-serif",
       "system-ui",
       "-apple-system",
@@ -437,7 +437,7 @@ Object {
       "\\"Segoe UI Symbol\\"",
       "\\"Noto Color Emoji\\"",
     ],
-    "serif": Array [
+    "serif": [
       "ui-serif",
       "Georgia",
       "Cambria",
@@ -445,8 +445,8 @@ Object {
       "Times",
       "serif",
     ],
-    "webfonts": Array [],
-    "weights": Array [
+    "webfonts": [],
+    "weights": [
       "200",
       "400",
       "600",
@@ -462,14 +462,14 @@ Object {
   "selectable": false,
   "src": "sub/page1.md",
   "theme": "default",
-  "themeConfig": Object {},
+  "themeConfig": {},
   "title": undefined,
   "titleTemplate": "%s - Slidev",
 }
 `;
 
-exports[`md parser multi-entries.md: features 1`] = `
-Object {
+exports[`md parser > multi-entries.md > features 1`] = `
+{
   "katex": true,
   "mermaid": false,
   "monaco": false,
@@ -477,22 +477,22 @@ Object {
 }
 `;
 
-exports[`md parser multi-entries.md: slides 1`] = `
-Array [
-  Object {
+exports[`md parser > multi-entries.md > slides 1`] = `
+[
+  {
     "content": "
 # Page 1
 ",
     "end": 4,
-    "frontmatter": Object {
+    "frontmatter": {
       "src": "sub/page1.md",
       "title": undefined,
     },
     "index": 0,
-    "inline": Object {
+    "inline": {
       "content": "",
       "end": 4,
-      "frontmatter": Object {
+      "frontmatter": {
         "src": "sub/page1.md",
         "title": undefined,
       },
@@ -515,9 +515,9 @@ src: sub/page1.md
 # Page 1
 
 ",
-    "source": Object {
+    "source": {
       "content": "# Page 1",
-      "frontmatter": Object {},
+      "frontmatter": {},
       "level": 1,
       "note": undefined,
       "raw": "# Page 1
@@ -527,23 +527,23 @@ src: sub/page1.md
     "start": 0,
     "title": "Page 1",
   },
-  Object {
+  {
     "content": "
 # Page 2
 
 <Tweet />
 ",
     "end": 9,
-    "frontmatter": Object {
+    "frontmatter": {
       "background": "https://sli.dev/demo-cover.png",
       "layout": "cover",
       "src": "sub/page2.md",
     },
     "index": 1,
-    "inline": Object {
+    "inline": {
       "content": "",
       "end": 9,
-      "frontmatter": Object {
+      "frontmatter": {
         "background": "https://sli.dev/demo-cover.png",
         "src": "sub/page2.md",
       },
@@ -571,11 +571,11 @@ background: https://sli.dev/demo-cover.png
 <Tweet />
 
 ",
-    "source": Object {
+    "source": {
       "content": "# Page 2
 
 <Tweet />",
-      "frontmatter": Object {
+      "frontmatter": {
         "layout": "cover",
       },
       "level": 1,
@@ -593,14 +593,14 @@ layout: cover
     "start": 4,
     "title": "Page 2",
   },
-  Object {
+  {
     "content": "
 # Inline Page
 
 $x+2$
 ",
     "end": 15,
-    "frontmatter": Object {},
+    "frontmatter": {},
     "index": 2,
     "level": 1,
     "note": undefined,

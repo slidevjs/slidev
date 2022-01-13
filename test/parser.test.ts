@@ -1,5 +1,6 @@
 import { basename, resolve } from 'path'
 import fg from 'fast-glob'
+import { describe, expect, it } from 'vitest'
 import { load, parse, prettify, stringify } from '../packages/parser/src/fs'
 
 describe('md parser', () => {

@@ -1,6 +1,6 @@
 import Markdown from 'vite-plugin-md'
 import type { Plugin } from 'vite'
-import base64 from 'js-base64'
+import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'

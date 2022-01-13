@@ -1,7 +1,6 @@
 {
   "env": {
     "node": true,
-    "jest": true,
     "cypress/globals": true
   },
   "globals": {
@@ -9,7 +8,7 @@
     "__SLIDEV_FEATURE_DRAWINGS__": true
   },
   "extends": "@antfu",
-  "plugins": ["jest", "cypress"],
+  "plugins": ["cypress"],
   "rules": {
     "vue/no-lone-template": "off",
     "vue/require-prop-types": "off",

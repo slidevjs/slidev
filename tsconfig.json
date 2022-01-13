@@ -15,7 +15,6 @@
     "types": [
       "vite/client",
       "node",
-      "jest",
       "vite-plugin-vue-server-ref/module"
     ],
     "paths": {
