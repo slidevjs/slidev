@@ -80,21 +80,21 @@ export function parseSlide(raw: string): SlideInfoBase {
   }
 
   let title
-  let titleLevel
+  let level
   if (frontmatter.title || frontmatter.name) {
     title = frontmatter.title || frontmatter.name
-    titleLevel = frontmatter.titleLevel || 1
+    level = frontmatter.level || 1
   }
   else {
     const match = content.match(/^(#+) (.*)$/m)
     title = match?.[2]?.trim()
-    titleLevel = match?.[1]?.length
+    level = match?.[1]?.length
   }
 
   return {
     raw,
     title,
-    titleLevel,
+    level,
     content,
     frontmatter,
     note,

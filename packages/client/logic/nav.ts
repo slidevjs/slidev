@@ -14,7 +14,7 @@ export interface TocItem {
   hasActiveParent?: boolean
   level: number
   path: string
-  skipInToc?: boolean
+  hideInToc?: boolean
   title?: string
 }
 
@@ -175,7 +175,7 @@ export async function openInEditor(url?: string) {
 }
 
 export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
-  const titleLevel = route.meta?.slide?.titleLevel
+  const titleLevel = route.meta?.slide?.level
   if (titleLevel && titleLevel > level && tree.length > 0) {
     addToTree(tree[tree.length - 1].children, route, level + 1)
   }
@@ -184,7 +184,7 @@ export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
       children: [],
       level,
       path: route.path,
-      skipInToc: Boolean(route.meta?.skipInToc),
+      hideInToc: Boolean(route.meta?.hideInToc),
       title: route.meta?.slide?.title,
     })
   }
@@ -211,7 +211,7 @@ export function getTreeWithActiveStatuses(
 
 function filterTree(tree: TocItem[], level = 1): TocItem[] {
   return tree
-    .filter((item: TocItem) => !item.skipInToc)
+    .filter((item: TocItem) => !item.hideInToc)
     .map((item: TocItem) => ({
       ...item,
       children: filterTree(item.children, level + 1),

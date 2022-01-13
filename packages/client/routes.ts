@@ -52,7 +52,7 @@ declare module 'vue-router' {
       no: number
       filepath: string
       title?: string
-      titleLevel?: number
+      level?: number
     }
 
     // private fields

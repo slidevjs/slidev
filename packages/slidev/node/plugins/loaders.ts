@@ -414,7 +414,7 @@ export function createSlidesLoader(
               id: idx,
               no,
               title: i.title,
-              titleLevel: i.titleLevel,
+              level: i.level,
             },
             __clicksElements: [],
             __preloaded: false,
