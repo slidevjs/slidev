@@ -19,7 +19,12 @@ const props = withDefaults(
     minDepth?: string | number
     mode?: 'all' | 'onlyCurrentTree' | 'onlySiblings'
   }>(),
-  { columns: 1, maxDepth: Infinity, minDepth: 1, mode: 'all' },
+  {
+    columns: 1,
+    maxDepth: Infinity,
+    minDepth: 1,
+    mode: 'all',
+  },
 )
 
 function filterTreeDepth(tree: TocItem[], level = 1): TocItem[] {
@@ -72,7 +77,7 @@ const toc = computed(() => {
 </script>
 
 <template>
-  <div :style="{ columnCount: columns }">
+  <div :style="`column-count:${columns}`">
     <TocList :level="1" :list="toc" />
   </div>
 </template>
