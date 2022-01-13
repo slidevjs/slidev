@@ -29,7 +29,7 @@
     "./fs": {
       "import": "./dist/fs.mjs",
       "require": "./dist/fs.js",
-      "types": "./dist/fs.d.ts"
+      "types": "./fs.d.ts"
     }
   },
   "main": "dist/index.js",

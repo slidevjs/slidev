@@ -11,7 +11,6 @@ import yargs from 'yargs'
 import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import * as parser from '@slidev/parser/fs'
 import type { SlidevConfig } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
@@ -20,6 +19,7 @@ import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
 import { getThemeRoots, isPath, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
+import { parser } from './parser'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
