@@ -82,7 +82,7 @@
     "shiki": "^0.10.0",
     "unplugin-icons": "^0.13.0",
     "unplugin-vue-components": "^0.17.11",
-    "vite": "^2.7.11",
+    "vite": "^2.7.12",
     "vite-plugin-md": "^0.11.7",
     "vite-plugin-remote-assets": "^0.2.2",
     "vite-plugin-vue-server-ref": "^0.2.4",
