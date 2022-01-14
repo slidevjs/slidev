@@ -69,7 +69,7 @@
     "typescript": "^4.5.4",
     "vite": "^2.7.12",
     "vite-plugin-windicss": "^1.6.2",
-    "vitest": "^0.1.12",
+    "vitest": "^0.1.13",
     "zx": "^4.2.0"
   },
   "engines": {
