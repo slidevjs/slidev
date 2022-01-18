@@ -23,8 +23,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 </script>
 
 <template>
-  <!-- Global Bottom -->
-  <GlobalBottom />
+  <!-- Global Top -->
+  <GlobalTop />
 
   <!-- Slides -->
   <template v-for="route of rawRoutes" :key="route.path">
@@ -39,8 +39,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
     />
   </template>
 
-  <!-- Global Top -->
-  <GlobalTop />
+  <!-- Global Bottom -->
+  <GlobalBottom />
 
   <template v-if="(__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__) && DrawingLayer">
     <DrawingLayer />
