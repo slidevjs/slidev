@@ -16,8 +16,8 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <ul v-if="list && list.length > 0" :class="['toc', `toc-level-${level}`]">
-    <li v-for="item in list" :key="item.path" :class="['toc-item', {'toc-item-active': item.active}, {'toc-item-parent-active': item.activeParent}]">
+  <ul v-if="list && list.length > 0" :class="['slidev-toc-list', `slidev-toc-list-level-${level}`]">
+    <li v-for="item in list" :key="item.path" :class="['slidev-toc-item', {'slidev-toc-item-active': item.active}, {'slidev-toc-item-parent-active': item.activeParent}]">
       <RouterLink :to="item.path">
         {{ item.title }}
       </RouterLink>

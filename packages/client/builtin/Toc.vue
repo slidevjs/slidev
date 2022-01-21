@@ -77,7 +77,7 @@ const toc = computed(() => {
 </script>
 
 <template>
-  <div :style="`column-count:${columns}`">
+  <div class="slidev-toc" :style="`column-count:${columns}`">
     <TocList :level="1" :list="toc" />
   </div>
 </template>
