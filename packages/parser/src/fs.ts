@@ -5,7 +5,7 @@ import Markdown from 'markdown-it'
 import { detectFeatures, mergeFeatureFlags, parse, parseSlide, stringify, stringifySlide } from './core'
 export * from './core'
 
-const md = Markdown({ html: true }).disable(['code_block', 'fence', 'hardbreak', 'softbreak'])
+const md = Markdown({ html: true })
 
 export async function load(filepath: string, themeMeta?: SlidevThemeMeta, content?: string) {
   const dir = dirname(filepath)
