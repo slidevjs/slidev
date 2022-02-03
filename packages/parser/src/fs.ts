@@ -1,8 +1,11 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
 import type { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import Markdown from 'markdown-it'
 import { detectFeatures, mergeFeatureFlags, parse, parseSlide, stringify, stringifySlide } from './core'
 export * from './core'
+
+const md = Markdown({ html: true }).disable(['code_block', 'fence', 'hardbreak', 'softbreak'])
 
 export async function load(filepath: string, themeMeta?: SlidevThemeMeta, content?: string) {
   const dir = dirname(filepath)
@@ -15,6 +18,9 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
   ])
 
   for (const slide of data.slides) {
+    if (slide.title)
+      slide.title = md.render(slide.title).trim().replace(/^<p>/, '').replace(/<\/p>$/, '')
+
     if (!slide.frontmatter.src)
       continue
 
