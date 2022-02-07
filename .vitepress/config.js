@@ -106,6 +106,10 @@ const Translations = [
     text: 'Ελληνικά',
     link: 'https://el.sli.dev{{pathname}}',
   },
+  {
+    text: '日本語',
+    link: 'https://ja.sli.dev{{pathname}}',
+  },
 ]
 
 const Customizations = [
