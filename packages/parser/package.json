@@ -36,7 +36,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts --format cjs,esm --dts --splitting",
+    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts --format cjs,esm --dts --splitting --no-shims",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },
