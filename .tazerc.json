@@ -3,6 +3,7 @@
     "husky",
     "cypress",
     "mermaid",
-    "execa"
+    "execa",
+    "tsup"
   ]
 }
