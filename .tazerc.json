@@ -2,6 +2,7 @@
   "exclude": [
     "husky",
     "cypress",
-    "mermaid"
+    "mermaid",
+    "execa"
   ]
 }
