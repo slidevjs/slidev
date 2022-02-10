@@ -72,7 +72,7 @@ export async function exportSlides({
   withClicks = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i playwright-chromium`')
+    throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
 
   const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch()
