@@ -33,6 +33,8 @@ aspectRatio: '16/9'
 # real width of the canvas, unit in px
 canvasWidth: 980
 
+# favicon, can be a local file path or URL
+favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
 # fonts will be auto imported from Google fonts
 # Learn more: https://sli.dev/custom/fonts
 fonts:
