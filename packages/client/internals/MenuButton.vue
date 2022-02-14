@@ -2,7 +2,9 @@
 import { onClickOutside, useVModel } from '@vueuse/core'
 import { ref } from 'vue'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const props = defineProps({
   modelValue: {
     default: false,

@@ -5,7 +5,9 @@ import { getFilename, recordCamera, recorder, recordingName } from '../logic/rec
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
 
-const emit = defineEmits<{}>()
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const props = defineProps({
   modelValue: {
     default: false,

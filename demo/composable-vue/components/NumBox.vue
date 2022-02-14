@@ -2,7 +2,7 @@
 import { useVModel } from '@vueuse/core'
 
 const emit = defineEmits<{
-  (): any
+  (e: any): void
 }>()
 const props = defineProps<{
   value: number
