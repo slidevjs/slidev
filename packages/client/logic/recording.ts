@@ -1,3 +1,4 @@
+import { getSeekableBlob } from 'recordrtc'
 import type { Ref } from 'vue'
 import { nextTick, ref, shallowRef, watch } from 'vue'
 import { useDevicesList, useEventListener } from '@vueuse/core'
@@ -155,22 +156,24 @@ export function useRecording() {
     recording.value = false
     recorderCamera.value?.stopRecording(() => {
       if (recordCamera.value) {
-        const blob = recorderCamera.value!.getBlob()
-        const url = URL.createObjectURL(blob)
-        download(getFilename('camera'), url)
-        window.URL.revokeObjectURL(url)
+        getSeekableBlob(recorderCamera.value!.getBlob(), (seekableBLob) => {
+          const url = URL.createObjectURL(seekableBLob)
+          download(getFilename('camera'), url)
+          window.URL.revokeObjectURL(url)
+        })
       }
       recorderCamera.value = undefined
       if (!showAvatar.value)
         closeStream(streamCamera)
     })
     recorderSlides.value?.stopRecording(() => {
-      const blob = recorderSlides.value!.getBlob()
-      const url = URL.createObjectURL(blob)
-      download(getFilename('screen'), url)
-      window.URL.revokeObjectURL(url)
-      closeStream(streamSlides)
-      recorderSlides.value = undefined
+      getSeekableBlob(recorderSlides.value!.getBlob(), (seekableBLob) => {
+        const url = URL.createObjectURL(seekableBLob)
+        download(getFilename('screen'), url)
+        window.URL.revokeObjectURL(url)
+        closeStream(streamSlides)
+        recorderSlides.value = undefined
+      })
     })
   }
 
