@@ -135,6 +135,8 @@ async function start() {
 window.addEventListener('message', (payload) => {
   if (payload.source === window)
     return
+  if (payload.origin !== location.origin)
+    return
   if (typeof payload.data !== 'string')
     return
   const { type, data } = JSON.parse(payload.data)
