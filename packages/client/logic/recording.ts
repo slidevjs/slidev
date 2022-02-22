@@ -58,6 +58,8 @@ export function useRecording() {
   const config: RecorderOptions = {
     type: 'video',
     bitsPerSecond: 4 * 256 * 8 * 1024,
+    // Extending recording limit as default is only 1h (see https://github.com/muaz-khan/RecordRTC/issues/144)
+    timeSlice: 24 * 60 * 60 * 1000,
   }
 
   async function toggleAvatar() {
