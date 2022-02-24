@@ -2,7 +2,6 @@
   "exclude": [
     "husky",
     "cypress",
-    "mermaid",
     "execa",
     "tsup"
   ]
