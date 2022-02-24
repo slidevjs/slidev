@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { whenever } from '@vueuse/core'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { go, total } from '../logic/nav'
 import { showGotoDialog } from '../state'
 
@@ -19,10 +18,21 @@ function close() {
   showGotoDialog.value = false
 }
 
-whenever(showGotoDialog, async() => {
-  text.value = ''
-  await nextTick()
-  input.value?.focus()
+watch(showGotoDialog, async(show) => {
+  if (show) {
+    await nextTick()
+    text.value = ''
+    input.value?.focus()
+  }
+  else {
+    input.value?.blur()
+  }
+})
+
+// remove the g character coming from the key that triggered showGotoDialog (e.g. in Firefox)
+watch(text, (t) => {
+  if (t.match(/^[^0-9]/))
+    text.value = text.value.substr(1)
 })
 </script>
 
@@ -38,7 +48,7 @@ whenever(showGotoDialog, async() => {
     <input
       ref="input"
       v-model="text"
-      type="number"
+      type="text"
       :disabled="!showGotoDialog"
       class="outline-none bg-transparent"
       placeholder="Goto..."
@@ -49,16 +59,3 @@ whenever(showGotoDialog, async() => {
     >
   </div>
 </template>
-
-<style scoped>
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-</style>
