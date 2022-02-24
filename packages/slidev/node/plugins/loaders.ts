@@ -245,10 +245,17 @@ export function createSlidesLoader(
           if (match) {
             const [, no, type] = match
             const pageNo = parseInt(no) - 1
-            if (type === 'md')
-              return data.slides[pageNo]?.content
+            if (type === 'md') {
+              return {
+                code: data.slides[pageNo]?.content,
+                map: {},
+              }
+            }
           }
-          return ''
+          return {
+            code: '',
+            map: {},
+          }
         }
       },
     },
