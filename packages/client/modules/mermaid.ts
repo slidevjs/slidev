@@ -1,5 +1,5 @@
 // @ts-expect-error missing types
-import mermaid from 'mermaid/dist/mermaid.min'
+import mermaid from 'mermaid/dist/mermaid'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
 import { clearUndefined } from '@antfu/utils'

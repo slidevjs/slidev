@@ -43,6 +43,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             'prettier/esm/parser-html',
             'prettier/esm/parser-typescript',
             'mermaid/dist/mermaid.min',
+            'mermaid/dist/mermaid',
             'vite-plugin-vue-server-ref/client',
           ],
           exclude: EXCLUDE,
