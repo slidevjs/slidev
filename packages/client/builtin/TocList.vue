@@ -18,7 +18,7 @@ withDefaults(defineProps<{
 <template>
   <ul v-if="list && list.length > 0" :class="['slidev-toc-list', `slidev-toc-list-level-${level}`]">
     <li v-for="item in list" :key="item.path" :class="['slidev-toc-item', {'slidev-toc-item-active': item.active}, {'slidev-toc-item-parent-active': item.activeParent}]">
-      <RouterLink :to="item.path" v-html="item.title" />
+      <RouterLink :to="item.path" @click="$event.target.blur()" v-html="item.title" />
       <TocList :level="level + 1" :list="item.children" />
     </li>
   </ul>
