@@ -27,7 +27,10 @@ withDefaults(defineProps<{
   </ul>
   <template v-if="mode === 'span' && list && list.length > 0">
     <template v-for="item in list" :key="item.path">
-      <a :class="{dot: true, active: item.active}" @click="router.push({ path: item.path })">
+      <a
+        :class="['slidev-toc-dot', item.active ? 'slidev-toc-dot-active' : '', `slidev-toc-dot-level-${level}`]"
+        @click="router.push({ path: item.path })"
+      >
         {{ dots[Math.min(level, dots.length) - 1] }}
       </a>
       <TocList :level="level + 1" :list="item.children" :mode="mode" :dots="dots" />
@@ -36,11 +39,11 @@ withDefaults(defineProps<{
 </template>
 
 <style>
-    .dark .dot { filter: invert();}
+    .dark .slidev-toc-dot { filter: invert();}
 </style>
 <style scoped>
     a { cursor: pointer; border-bottom-width: 0 !important;}
-    .dot:hover { color: red !important; }
-    .dot { font-size: 0.65em; color: #444; text-shadow: white 0 0 2px; margin: 0 .05em; }
-    .dot.active ~ .dot { color: #bbb; }
+    .slidev-toc-dot:hover { color: red !important; }
+    .slidev-toc-dot { font-size: 0.65em; color: #444; text-shadow: white 0 0 2px; margin: 0 .05em; }
+    .slidev-toc-dot-active ~ .slidev-toc-dot { color: #bbb; }
 </style>
