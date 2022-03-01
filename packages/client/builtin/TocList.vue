@@ -34,3 +34,13 @@ withDefaults(defineProps<{
     </template>
   </template>
 </template>
+
+<style>
+    .dark .dot { filter: invert();}
+</style>
+<style scoped>
+    a { cursor: pointer; border-bottom-width: 0 !important;}
+    .dot:hover { color: red !important; }
+    .dot { font-size: 0.65em; color: #444; text-shadow: white 0 0 2px; margin: 0 .05em; }
+    .dot.active ~ .dot { color: #bbb; }
+</style>
