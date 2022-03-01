@@ -17,7 +17,7 @@ const props = withDefaults(
     columns?: string | number
     maxDepth?: string | number
     minDepth?: string | number
-    mode?: 'all' | 'onlyCurrentTree' | 'onlySiblings'
+    mode?: 'all' | 'onlyCurrentTree' | 'onlySiblings' | 'allDots'
   }>(),
   {
     columns: 1,
@@ -78,6 +78,6 @@ const toc = computed(() => {
 
 <template>
   <div class="slidev-toc" :style="`column-count:${columns}`">
-    <TocList :level="1" :list="toc" />
+    <TocList :level="1" :list="toc" :mode="mode === 'allDots' ? 'span' : 'ul'" />
   </div>
 </template>
