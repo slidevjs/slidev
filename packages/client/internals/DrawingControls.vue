@@ -48,6 +48,10 @@ function setBrushColor(color: typeof brush.color) {
     <button class="icon-btn" :class="{ shallow: drawingMode != 'rectangle' }" @click="setDrawingMode('rectangle')">
       <carbon:checkbox />
     </button>
+    <!-- TODO: not sure why it's not working! -->
+    <!-- <button class="icon-btn" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
+      <carbon:erase />
+    </button> -->
 
     <VerticalDivider />
 
