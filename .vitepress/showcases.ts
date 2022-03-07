@@ -108,6 +108,18 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Thoughtworks Internal Lunch & Learn',
     datetime: '2021-11-12',
   },
+  {
+    title: 'Git\'s Most Wanted',
+    cover: 'https://cdn.jsdelivr.net/gh/alexanderdavide/git-most-wanted@assets/slides-export/01.png',
+    author: {
+      name: 'Alexander Eble',
+      link: 'https://github.com/alexanderdavide',
+    },
+    slidesLink: 'https://git-most-wanted.alex-eble.de',
+    sourceLink: 'https://github.com/alexanderdavide/git-most-wanted',
+    at: 'Internal Tech Talk',
+    datetime: '2022-03-11',
+  },
   // Add yours here!
   {
     title: 'Yours?',
