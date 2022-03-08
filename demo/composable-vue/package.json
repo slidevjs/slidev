@@ -7,6 +7,8 @@
     "export:clicks": "slidev export --with-clicks"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.1.1",
+    "@iconify-json/ri": "^1.1.1",
     "@slidev/cli": "workspace:*",
     "@slidev/theme-default": "^0.21.1",
     "@slidev/theme-seriph": "^0.21.1",
