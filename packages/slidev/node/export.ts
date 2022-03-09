@@ -1,6 +1,4 @@
 import path from 'path'
-import fs from 'fs-extra'
-import { PDFDocument } from 'pdf-lib'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
@@ -89,8 +87,9 @@ export async function exportSlides({
   const page = await context.newPage()
   const progress = createSlidevProgress()
 
-  async function go(no: number, clicks?: string) {
-    progress.update(no)
+  async function go(no: number | string, clicks?: string) {
+    if (typeof no === 'number')
+      progress.update(no)
 
     const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
     const url = routerMode === 'hash'
@@ -156,40 +155,23 @@ export async function exportSlides({
   progress.start(pages.length)
 
   if (format === 'pdf') {
-    const buffers: Buffer[] = []
-    const genPdfBuffer = async(i: number, clicks?: string) => {
-      await go(i, clicks)
-      const pdf = await page.pdf({
-        width,
-        height,
-        margin: {
-          left: 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
-        },
-        pageRanges: '1',
-        printBackground: true,
-        preferCSSPageSize: true,
-      })
-      buffers.push(pdf)
-    }
-    for (const i of pages)
-      await genPageWithClicks(genPdfBuffer, i)
-
-    const mergedPdf = await PDFDocument.create({})
-    for (const pdfBytes of buffers) {
-      const pdf = await PDFDocument.load(pdfBytes)
-      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
-      copiedPages.forEach((page) => {
-        mergedPdf.addPage(page)
-      })
-    }
-
-    const buffer = await mergedPdf.save()
     if (!output.endsWith('.pdf'))
       output = `${output}.pdf`
-    await fs.writeFile(output, buffer)
+
+    await go('print')
+    await page.pdf({
+      path: output,
+      width,
+      height,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
   }
   else if (format === 'png') {
     await genPagePng(pages)

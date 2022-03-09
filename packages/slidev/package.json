@@ -72,7 +72,6 @@
     "monaco-editor": "^0.33.0",
     "nanoid": "^3.3.1",
     "open": "^8.4.0",
-    "pdf-lib": "^1.17.1",
     "plantuml-encoder": "^1.4.0",
     "prismjs": "^1.27.0",
     "prompts": "^2.4.2",

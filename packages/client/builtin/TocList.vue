@@ -29,7 +29,7 @@ const classes = computed(() => {
 <template>
   <ol v-if="list && list.length > 0" :class="classes">
     <li v-for="item in list" :key="item.path" :class="['slidev-toc-item', {'slidev-toc-item-active': item.active}, {'slidev-toc-item-parent-active': item.activeParent}]">
-      <RouterLink :to="item.path" v-html="item.title" />
+      <Link :to="item.path" :title="item.title" />
       <TocList :level="level + 1" :list="item.children" :list-class="listClass" />
     </li>
   </ol>
