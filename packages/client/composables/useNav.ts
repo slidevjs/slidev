@@ -1,15 +1,14 @@
-import type { ComputedRef, Ref, WritableComputedRef } from 'vue'
-import { computed, nextTick, reactive, ref } from 'vue'
+import type { ComputedRef, WritableComputedRef } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { TocItem } from '../logic/nav'
 import { addToTree, filterTree, getPath, getTreeWithActiveStatuses } from '../logic/nav'
-import type { SlidevContextNav } from '../modules/context'
 import { rawRoutes, router } from '../routes'
 
 export function useNav(
-  route: ComputedRef<RouteLocationNormalizedLoaded> | ComputedRef<RouteRecordRaw>,
-  clicks: WritableComputedRef<number> | Ref<number> = ref(0),
-): Omit<SlidevContextNav, 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'> {
+  route: ComputedRef<RouteLocationNormalizedLoaded>,
+  clicks: WritableComputedRef<number>,
+) {
   // force update collected elements when the route is fully resolved
   const routeForceRefresh = ref(0)
   nextTick(() => {
@@ -50,7 +49,7 @@ export function useNav(
   const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
   const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
-  return reactive({
+  return {
     route,
     clicks,
     path,
@@ -68,5 +67,5 @@ export function useNav(
     rawTree,
     treeWithActiveStatuses,
     tree,
-  })
+  }
 }

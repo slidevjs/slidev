@@ -1,7 +1,9 @@
 import type { App } from 'vue'
+import { reactive } from 'vue'
 import type { UnwrapNestedRefs } from '@vue/reactivity'
 import type { configs } from '../env'
 import * as nav from '../logic/nav'
+import { clicks, route } from '../logic/nav'
 import { isDark } from '../logic/dark'
 import { injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
@@ -19,8 +21,8 @@ export interface SlidevContext {
 export default function createSlidevContext() {
   return {
     install(app: App) {
-      const context = useContext(nav.route, nav.clicks)
-      app.provide(injectionSlidevContext, context)
+      const context = useContext(route, clicks)
+      app.provide(injectionSlidevContext, reactive(context))
 
       // allows controls from postMessages
       if (__DEV__) {
