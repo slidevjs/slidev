@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, shallowRef } from 'vue'
-import { slideHeight, slideWidth } from '../env'
+import { computed, provide, reactive, shallowRef } from 'vue'
+import { useNav } from '../composables/useNav'
+import { injectionSlidevContext } from '../constants'
+import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import { clicks, currentRoute } from '../logic/nav'
 import SlideWrapper from './SlideWrapper'
@@ -10,7 +12,7 @@ import GlobalTop from '/@slidev/global-components/top'
 // @ts-expect-error virtual module
 import GlobalBottom from '/@slidev/global-components/bottom'
 
-defineProps<{ route: RouteRecordRaw }>()
+const props = defineProps<{ route: RouteRecordRaw }>()
 
 const style = computed(() => ({
   height: `${slideHeight}px`,
@@ -20,6 +22,14 @@ const style = computed(() => ({
 const DrawingPreview = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
+
+const route = computed(() => props.route)
+const nav = useNav(route)
+provide(injectionSlidevContext, reactive({
+  nav,
+  configs,
+  themeConfigs: computed(() => configs.themeConfig),
+}))
 </script>
 
 <template>

@@ -80,7 +80,7 @@ export const rawTree = computed(() => rawRoutes
     addToTree(acc, route)
     return acc
   }, []))
-export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value))
+export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
 export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
 export function next() {
@@ -192,24 +192,25 @@ export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
 
 export function getTreeWithActiveStatuses(
   tree: TocItem[],
+  currentRoute?: RouteRecordRaw,
   hasActiveParent = false,
   parent?: TocItem,
 ): TocItem[] {
   return tree.map((item: TocItem) => {
     const clone = {
       ...item,
-      active: item.path === currentRoute.value?.path,
+      active: item.path === currentRoute?.path,
       hasActiveParent,
     }
     if (clone.children.length > 0)
-      clone.children = getTreeWithActiveStatuses(clone.children, clone.active || clone.hasActiveParent, clone)
+      clone.children = getTreeWithActiveStatuses(clone.children, currentRoute, clone.active || clone.hasActiveParent, clone)
     if (parent && (clone.active || clone.activeParent))
       parent.activeParent = true
     return clone
   })
 }
 
-function filterTree(tree: TocItem[], level = 1): TocItem[] {
+export function filterTree(tree: TocItem[], level = 1): TocItem[] {
   return tree
     .filter((item: TocItem) => !item.hideInToc)
     .map((item: TocItem) => ({
