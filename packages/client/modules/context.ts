@@ -8,12 +8,14 @@ import { isDark } from '../logic/dark'
 import { injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 
-export type SlidevContextNavKey = 'route' | 'clicks' | 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'clicksElements' | 'clicksTotal' | 'hasNext' | 'hasPrev' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
+export type SlidevContextNavKey = 'route' | 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute'| 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
+export type SlidevContextNavClicksKey = 'clicks' | 'clicksElements' | 'clicksTotal' | 'hasNext' | 'hasPrev'
 
-export type SlidevContextNav = UnwrapNestedRefs<Pick<typeof nav, SlidevContextNavKey>>
+export type SlidevContextNav = Pick<typeof nav, SlidevContextNavKey>
+export type SlidevContextNavClicks = Pick<typeof nav, SlidevContextNavClicksKey>
 
 export interface SlidevContext {
-  nav: SlidevContextNav
+  nav: UnwrapNestedRefs<SlidevContextNav & SlidevContextNavClicks>
   configs: typeof configs
   themeConfigs: typeof configs['themeConfig']
 }

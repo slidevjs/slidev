@@ -1,58 +1,21 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, provide, reactive, shallowRef } from 'vue'
+import { computed, reactive } from 'vue'
 import { useNav } from '../composables/useNav'
-import { injectionSlidevContext } from '../constants'
-import { configs, slideHeight, slideWidth } from '../env'
-import { getSlideClass } from '../utils'
-import { clicks, currentRoute } from '../logic/nav'
-import SlideWrapper from './SlideWrapper'
-// @ts-expect-error virtual module
-import GlobalTop from '/@slidev/global-components/top'
-// @ts-expect-error virtual module
-import GlobalBottom from '/@slidev/global-components/bottom'
+import { isClicksDisabled } from '../logic/nav'
+import PrintSlideClick from './PrintSlideClick.vue'
 
 const props = defineProps<{ route: RouteRecordRaw }>()
 
-const style = computed(() => ({
-  height: `${slideHeight}px`,
-  width: `${slideWidth}px`,
-}))
-
-const DrawingPreview = shallowRef<any>()
-if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
-  import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
+const clicksElements = reactive(props.route.meta?.__clicksElements || [])
 
 const route = computed(() => props.route)
 const nav = useNav(route)
-provide(injectionSlidevContext, reactive({
-  nav,
-  configs,
-  themeConfigs: computed(() => configs.themeConfig),
-}))
 </script>
 
 <template>
-  <div :id="route.path" class="slide-container" :style="style">
-    <GlobalBottom />
-
-    <SlideWrapper
-      :is="route?.component"
-      :clicks="route === currentRoute ? clicks : 0"
-      :clicks-elements="route.meta?.__clicksElements || []"
-      :clicks-disabled="false"
-      :class="getSlideClass(route)"
-    />
-    <template
-      v-if="
-        (__SLIDEV_FEATURE_DRAWINGS__ ||
-          __SLIDEV_FEATURE_DRAWINGS_PERSIST__) &&
-          DrawingPreview
-      "
-    >
-      <DrawingPreview :page="+route.path" />
-    </template>
-
-    <GlobalTop />
-  </div>
+  <PrintSlideClick v-model:clicks-elements="clicksElements" :clicks="0" :nav="nav" :route="route" />
+  <template v-if="!isClicksDisabled">
+    <PrintSlideClick v-for="i of (clicksElements.length)" :key="i" :clicks="i" :nav="nav" :route="route" />
+  </template>
 </template>
