@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { watchEffect } from 'vue'
+import type { ComponentCustomProps, Slots } from 'vue'
+import { h, watchEffect } from 'vue'
+import _configs from '/@slidev/configs'
 import { slideScale, windowSize } from '../state'
 import { isPrintMode } from '../logic/nav'
 import { themeVars } from '../env'
 import PrintContainer from './PrintContainer.vue'
+
+const width = _configs.canvasWidth
+const height = Math.round(width / _configs.aspectRatio) + 1
+
+function vStyle<Props>(props: Props, { slots }: { slots: Slots }) {
+  if (slots.default)
+    return h('style', slots.default())
+}
 
 watchEffect(() => {
   if (isPrintMode)
@@ -14,6 +24,9 @@ watchEffect(() => {
 </script>
 
 <template>
+  <vStyle>
+    @page { size: {{ width }}px {{ height }}px; margin: 0px; }
+  </vStyle>
   <div id="page-root" class="grid grid-cols-[1fr,max-content]" :style="themeVars">
     <PrintContainer
       class="w-full h-full"
@@ -24,11 +37,6 @@ watchEffect(() => {
 </template>
 
 <style lang="postcss">
-@page {
-  size: 980px 552px;
-  margin: 0px;
-}
-
 html.print,
 html.print body,
 html.print #app,

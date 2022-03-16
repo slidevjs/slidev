@@ -19,6 +19,9 @@ const scale = computed(() => {
   return (height.value * slideAspect) / slideWidth
 })
 
+// Remove the "end" slide
+const routes = rawRoutes.slice(0, -1)
+
 const className = computed(() => ({
   'select-none': !configs.selectable,
   'slidev-code-line-numbers': configs.lineNumbers,
@@ -30,7 +33,7 @@ provide(injectionSlideScale, scale)
 <template>
   <div id="print-container" :class="className">
     <div id="print-content">
-      <PrintSlide v-for="route of rawRoutes" :key="route.path" :route="route" />
+      <PrintSlide v-for="route of routes" :key="route.path" :route="route" />
     </div>
     <slot name="controls" />
   </div>

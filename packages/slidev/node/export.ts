@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs-extra'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
@@ -68,12 +69,16 @@ export async function exportSlides({
   timeout = 500,
   dark = false,
   routerMode = 'history',
-  width = 1920,
-  height = 1080,
+  width = 980,
+  height = 551,
   withClicks = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
+
+  const pages: number[] = parseRangeString(total, range)
+  // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
+  height = height * pages.length
 
   const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch()
@@ -88,39 +93,54 @@ export async function exportSlides({
   const progress = createSlidevProgress()
 
   async function go(no: number | string, clicks?: string) {
-    if (typeof no === 'number')
-      progress.update(no)
-
     const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
     const url = routerMode === 'hash'
       ? `http://localhost:${port}${base}#${path}`
       : `http://localhost:${port}${base}${path}`
-
     await page.goto(url, {
       waitUntil: 'networkidle',
     })
-    await page.waitForTimeout(timeout)
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    // Wait for twitter iframe if we have some embedded tweets
+    const count = await page.locator('.tweet').count()
+    if (count > 0)
+      await page.locator('.tweet iframe').waitFor()
+    // Wait for frames to load
+    const frames = await page.frames()
+    await Promise.all(frames.map(frame => frame.waitForLoadState()))
+    await page.waitForTimeout(timeout)
   }
 
-  function getClicks(url: string) {
-    return url.match(/clicks=([1-9][0-9]*)/)?.[1]
+  async function genPagePdf() {
+    if (!output.endsWith('.pdf'))
+      output = `${output}.pdf`
+    await go('print')
+    await page.pdf({
+      path: output,
+      width: 980,
+      height: 551,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
   }
 
-  async function genPagePng(pages: number[]) {
-    const genScreenshot = async(i: number, clicks?: string) => {
-      await go(i, clicks)
-      await page.screenshot({
-        omitBackground: false,
-        path: path.join(
-          output,
-          `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`,
-        ),
-      })
+  async function genPagePng() {
+    await go('print')
+    const slides = await page.locator('.slide-container')
+    const count = await slides.count()
+    for (let i = 0; i < count; i++) {
+      progress.update(i + 1)
+      const buffer = await slides.nth(i).screenshot()
+      await fs.ensureDir(output)
+      await fs.writeFile(path.join(output, `${(i + 1).toString().padStart(2, '0')}.png`), buffer)
     }
-    for (const i of pages)
-      await genPageWithClicks(genScreenshot, i)
   }
 
   async function genPageMd(pages: number[], slides: SlideInfo[]) {
@@ -136,48 +156,16 @@ export async function exportSlides({
     await fs.writeFile(output, mds.join(''))
   }
 
-  async function genPageWithClicks(
-    fn: (i: number, clicks?: string) => Promise<any>,
-    i: number,
-    clicks?: string,
-  ) {
-    await fn(i, clicks)
-    if (withClicks) {
-      await page.keyboard.press('ArrowRight', { delay: 100 })
-      const _clicks = getClicks(page.url())
-      if (_clicks && clicks !== _clicks)
-        await genPageWithClicks(fn, i, _clicks)
-    }
-  }
-
-  const pages: number[] = parseRangeString(total, range)
-
   progress.start(pages.length)
 
   if (format === 'pdf') {
-    if (!output.endsWith('.pdf'))
-      output = `${output}.pdf`
-
-    await go('print')
-    await page.pdf({
-      path: output,
-      width,
-      height,
-      margin: {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-      },
-      printBackground: true,
-      preferCSSPageSize: true,
-    })
+    await genPagePdf()
   }
   else if (format === 'png') {
-    await genPagePng(pages)
+    await genPagePng()
   }
   else if (format === 'md') {
-    await genPagePng(pages)
+    await genPagePng()
     await genPageMd(pages, slides)
   }
   else {
