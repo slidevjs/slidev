@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { nextTick } from 'vue'
-import { getFilename, recordCamera, recorder, recordingName } from '../logic/recording'
+import { nextTick, ref } from 'vue'
+import type { Options as RecorderOptions } from 'recordrtc'
+import { getFilename, recordCamera, recorder, recordingName, supportedMimeTypes } from '../logic/recording'
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
+import SelectList from './SelectList.vue'
 
 const emit = defineEmits<{
   (e: any): void
@@ -18,6 +20,13 @@ const value = useVModel(props, 'modelValue', emit)
 
 const { startRecording } = recorder
 
+const mimeTypeItems = supportedMimeTypes.map(mime => ({
+  value: mime,
+  display: mime,
+}))
+
+const currentMimeType = ref('video/webm')
+
 function close() {
   value.value = false
 }
@@ -25,8 +34,11 @@ function close() {
 async function start() {
   close()
   await nextTick()
-  startRecording()
+  startRecording({
+    mimeType: currentMimeType.value,
+  } as RecorderOptions)
 }
+
 </script>
 
 <template>
@@ -57,15 +69,16 @@ async function start() {
           >
           <label for="record-camera" @click="recordCamera = !recordCamera">Record camera separately</label>
         </div>
+        <SelectList v-if="mimeTypeItems.length" v-model="currentMimeType" title="mimeType" :items="mimeTypeItems" />
         <div class="text-xs w-full opacity-50">
           <div class="mt-2 opacity-50">
             Enumerated filenames
           </div>
           <div class="font-mono">
-            {{ getFilename('screen') }}
+            {{ getFilename('screen', currentMimeType) }}
           </div>
           <div v-if="recordCamera" class="font-mono">
-            {{ getFilename('camera') }}
+            {{ getFilename('camera', currentMimeType) }}
           </div>
         </div>
       </div>
