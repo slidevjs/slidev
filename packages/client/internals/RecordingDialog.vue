@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
+import { useStorage, useVModel } from '@vueuse/core'
 import { nextTick, ref } from 'vue'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { getFilename, recordCamera, recorder, recordingName, supportedMimeTypes } from '../logic/recording'
@@ -25,7 +25,7 @@ const mimeTypeItems = supportedMimeTypes.map(mime => ({
   display: mime,
 }))
 
-const currentMimeType = ref('video/webm')
+const currentMimeType = useStorage('slidev-record-mimetype', 'video/webm')
 
 function close() {
   value.value = false
