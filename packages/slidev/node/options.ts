@@ -5,6 +5,7 @@ import type Components from 'unplugin-vue-components/vite'
 import type Markdown from 'vite-plugin-md'
 import type WindiCSS from 'vite-plugin-windicss'
 import type RemoteAssets from 'vite-plugin-remote-assets'
+import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
 import { uniq } from '@antfu/utils'
 import type { SlidevMarkdown } from '@slidev/types'
@@ -55,6 +56,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
   windicss?: ArgumentsType<typeof WindiCSS>[0]
   icons?: ArgumentsType<typeof Icons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
+  serverRef?: ArgumentsType<typeof ServerRef>[0]
 }
 
 export interface SlidevServerOptions {

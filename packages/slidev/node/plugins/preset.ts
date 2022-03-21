@@ -58,6 +58,7 @@ export async function ViteSlidevPlugin(
     components: componentsOptions = {},
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
+    serverRef: serverRefOptions = {},
   } = pluginOptions
 
   const {
@@ -146,8 +147,10 @@ export async function ViteSlidevPlugin(
           clicks: 0,
         },
         drawings: drawingData,
+        ...serverRefOptions.state,
       },
-      onChanged(key, data, patch) {
+      onChanged(key, data, patch, timestamp) {
+        serverRefOptions.onChanged && serverRefOptions.onChanged(key, data, patch, timestamp)
         if (!options.data.config.drawings.persist)
           return
         if (key === 'drawings')
