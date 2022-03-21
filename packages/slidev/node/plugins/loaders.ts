@@ -238,6 +238,10 @@ export function createSlidesLoader(
         if (id === '/@slidev/global-components/bottom')
           return generateGlobalComponents('bottom')
 
+        // custom nav controls
+        if (id === '/@slidev/custom-nav-controls')
+          return generateCustomNavControls()
+
         // pages
         if (id.startsWith(slidePrefix)) {
           const remaning = id.slice(slidePrefix.length)
@@ -469,6 +473,29 @@ export function createSlidesLoader(
             join(root, 'GlobalBottom.vue'),
           ]
         }
+      })
+      .filter(i => fs.existsSync(i))
+
+    const imports = components.map((i, idx) => `import __n${idx} from '${toAtFS(i)}'`).join('\n')
+    const render = components.map((i, idx) => `h(__n${idx})`).join(',')
+
+    return `
+${imports}
+import { h } from 'vue'
+export default {
+  render() {
+    return [${render}]
+  }
+}
+`
+  }
+  async function generateCustomNavControls() {
+    const components = roots
+      .flatMap((root) => {
+        return [
+          join(root, 'custom-nav-controls.vue'),
+          join(root, 'CustomNavControls.vue'),
+        ]
       })
       .filter(i => fs.existsSync(i))
 
