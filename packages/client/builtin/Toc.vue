@@ -15,12 +15,14 @@ import { tree } from '../logic/nav'
 const props = withDefaults(
   defineProps<{
     columns?: string | number
+    listClass?: string | string[]
     maxDepth?: string | number
     minDepth?: string | number
     mode?: 'all' | 'onlyCurrentTree' | 'onlySiblings'
   }>(),
   {
     columns: 1,
+    listClass: '',
     maxDepth: Infinity,
     minDepth: 1,
     mode: 'all',
@@ -78,6 +80,6 @@ const toc = computed(() => {
 
 <template>
   <div class="slidev-toc" :style="`column-count:${columns}`">
-    <TocList :level="1" :list="toc" />
+    <TocList :level="1" :list="toc" :list-class="listClass" />
   </div>
 </template>
