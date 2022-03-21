@@ -8,6 +8,8 @@ import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
+// @ts-expect-error virtual module
+import CustomNavControls from '/@slidev/custom-nav-controls'
 
 const props = defineProps({
   persist: {
@@ -153,6 +155,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <span class="opacity-50">/ {{ total }}</span>
         </div>
       </div>
+
+      <CustomNavControls />
     </div>
   </nav>
 </template>
