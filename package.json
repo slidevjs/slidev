@@ -1,5 +1,5 @@
 {
-  "version": "0.28.10",
+  "version": "0.29.0",
   "private": true,
   "scripts": {
     "build": "pnpm -r --filter ./packages run build",

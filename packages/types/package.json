@@ -1,24 +1,24 @@
 {
   "name": "@slidev/types",
-  "version": "0.28.10",
+  "version": "0.29.0",
   "description": "Shared types declerations for Slidev",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "license": "MIT",
+  "author": "antfu <anthonyfu117@hotmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/slidevjs/slidev"
   },
   "funding": "https://github.com/sponsors/antfu",
-  "author": "antfu <anthonyfu117@hotmail.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "index.d.ts",
   "files": [
     "dist",
     "client.d.ts",
     "index.d.ts"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "index.d.ts",
   "scripts": {
     "build": "pnpx tsup src/index.ts --format cjs,esm --dts --splitting",
     "dev": "nr build --watch",
