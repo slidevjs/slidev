@@ -9,15 +9,31 @@ import { currentCamera, currentMic } from '../state'
 export const recordingName = ref('')
 export const recordCamera = ref(true)
 
-export function getFilename(media?: string) {
+const extensions: Record<string, string> = {
+  'video/webm': 'webm', // RecordRTC default
+  'video/webm\;codecs=h264': 'mp4',
+  'video/x-matroska;codecs=avc1': 'mkv',
+}
+
+export function getFilename(media?: string, mimeType?: string) {
   const d = new Date()
 
   const pad = (v: number) => `${v}`.padStart(2, '0')
 
   const date = `${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`
 
-  return `${[media, recordingName.value, date].filter(isTruthy).join('-')}.webm`
+  const ext = mimeType ? extensions[mimeType] : 'webm'
+
+  return `${[media, recordingName.value, date].filter(isTruthy).join('-')}.${ext}`
 }
+
+function getSupportedMimeTypes() {
+  if (MediaRecorder && typeof MediaRecorder.isTypeSupported === 'function')
+    return Object.keys(extensions).filter(mime => MediaRecorder.isTypeSupported(mime))
+  return []
+}
+
+export const supportedMimeTypes = getSupportedMimeTypes()
 
 export const {
   devices,
@@ -115,7 +131,7 @@ export function useRecording() {
     }
   })
 
-  async function startRecording() {
+  async function startRecording(customConfig?: RecorderOptions) {
     await ensureDevicesListPermissions()
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
@@ -131,6 +147,9 @@ export function useRecording() {
         resizeMode: 'crop-and-scale',
       },
     })
+
+    // merge config
+    Object.assign(config, customConfig)
 
     if (streamCamera.value) {
       const audioTrack = streamCamera.value!.getAudioTracks()?.[0]
@@ -159,7 +178,7 @@ export function useRecording() {
       if (recordCamera.value) {
         const blob = recorderCamera.value!.getBlob()
         const url = URL.createObjectURL(blob)
-        download(getFilename('camera'), url)
+        download(getFilename('camera', config.mimeType), url)
         window.URL.revokeObjectURL(url)
       }
       recorderCamera.value = undefined
@@ -169,7 +188,7 @@ export function useRecording() {
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
       const url = URL.createObjectURL(blob)
-      download(getFilename('screen'), url)
+      download(getFilename('screen', config.mimeType), url)
       window.URL.revokeObjectURL(url)
       closeStream(streamSlides)
       recorderSlides.value = undefined
