@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useStorage, useVModel } from '@vueuse/core'
-import { nextTick, ref } from 'vue'
-import type { Options as RecorderOptions } from 'recordrtc'
-import { getFilename, recordCamera, recorder, recordingName, supportedMimeTypes } from '../logic/recording'
+import { useVModel } from '@vueuse/core'
+import { nextTick } from 'vue'
+import { getFilename, mimeType, recordCamera, recorder, recordingName } from '../logic/recording'
 import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
-import SelectList from './SelectList.vue'
 
 const emit = defineEmits<{
   (e: any): void
@@ -20,13 +18,6 @@ const value = useVModel(props, 'modelValue', emit)
 
 const { startRecording } = recorder
 
-const mimeTypeItems = supportedMimeTypes.map(mime => ({
-  value: mime,
-  display: mime,
-}))
-
-const currentMimeType = useStorage('slidev-record-mimetype', 'video/webm')
-
 function close() {
   value.value = false
 }
@@ -35,10 +26,9 @@ async function start() {
   close()
   await nextTick()
   startRecording({
-    mimeType: currentMimeType.value,
-  } as RecorderOptions)
+    mimeType: mimeType.value,
+  })
 }
-
 </script>
 
 <template>
@@ -58,7 +48,7 @@ async function start() {
             placeholder="Enter the title..."
           >
           <div class="text-xs w-full opacity-50 py-2">
-            <div>This will be used in the output filename that might <br>help you better orangize your recording chips.</div>
+            <div>This will be used in the output filename that might <br>help you better organize your recording chips.</div>
           </div>
         </div>
         <div class="form-check">
@@ -69,16 +59,16 @@ async function start() {
           >
           <label for="record-camera" @click="recordCamera = !recordCamera">Record camera separately</label>
         </div>
-        <SelectList v-if="mimeTypeItems.length" v-model="currentMimeType" title="mimeType" :items="mimeTypeItems" />
+
         <div class="text-xs w-full opacity-50">
           <div class="mt-2 opacity-50">
             Enumerated filenames
           </div>
           <div class="font-mono">
-            {{ getFilename('screen', currentMimeType) }}
+            {{ getFilename('screen', mimeType) }}
           </div>
           <div v-if="recordCamera" class="font-mono">
-            {{ getFilename('camera', currentMimeType) }}
+            {{ getFilename('camera', mimeType) }}
           </div>
         </div>
       </div>

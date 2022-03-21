@@ -1,17 +1,21 @@
 import type { Ref } from 'vue'
 import { nextTick, ref, shallowRef, watch } from 'vue'
-import { useDevicesList, useEventListener } from '@vueuse/core'
+import { useDevicesList, useEventListener, useStorage } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
 import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
 import { currentCamera, currentMic } from '../state'
 
+type Defined<T> = T extends undefined ? never : T
+type MimeType = Defined<RecorderOptions['mimeType']>
+
 export const recordingName = ref('')
 export const recordCamera = ref(true)
+export const mimeType = useStorage<MimeType>('slidev-record-mimetype', 'video/webm')
 
-const extensions: Record<string, string> = {
-  'video/webm': 'webm', // RecordRTC default
-  'video/webm\;codecs=h264': 'mp4',
+export const mimeExtMap: Record<string, string> = {
+  'video/webm': 'webm',
+  'video/webm;codecs=h264': 'mp4',
   'video/x-matroska;codecs=avc1': 'mkv',
 }
 
@@ -22,14 +26,14 @@ export function getFilename(media?: string, mimeType?: string) {
 
   const date = `${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`
 
-  const ext = mimeType ? extensions[mimeType] : 'webm'
+  const ext = mimeType ? mimeExtMap[mimeType] : 'webm'
 
   return `${[media, recordingName.value, date].filter(isTruthy).join('-')}.${ext}`
 }
 
 function getSupportedMimeTypes() {
   if (MediaRecorder && typeof MediaRecorder.isTypeSupported === 'function')
-    return Object.keys(extensions).filter(mime => MediaRecorder.isTypeSupported(mime))
+    return Object.keys(mimeExtMap).filter(mime => MediaRecorder.isTypeSupported(mime))
   return []
 }
 

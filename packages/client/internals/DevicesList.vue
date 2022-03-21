@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { currentCamera, currentMic } from '../state'
-import { cameras, ensureDevicesListPermissions, microphones } from '../logic/recording'
+import {
+  cameras,
+  ensureDevicesListPermissions,
+  microphones,
+  mimeExtMap,
+  mimeType,
+  supportedMimeTypes,
+} from '../logic/recording'
 import SelectList from './SelectList.vue'
 import type { SelectionItem } from './types'
 
@@ -27,6 +34,11 @@ const microphonesItems = computed<SelectionItem<string>[]>(() => [
   })),
 ])
 
+const mimeTypeItems = supportedMimeTypes.map(mime => ({
+  value: mime,
+  display: mimeExtMap[mime].toUpperCase(),
+}))
+
 ensureDevicesListPermissions()
 </script>
 
@@ -34,5 +46,11 @@ ensureDevicesListPermissions()
   <div class="text-sm">
     <SelectList v-model="currentCamera" title="Camera" :items="camerasItems" />
     <SelectList v-model="currentMic" title="Microphone" :items="microphonesItems" />
+    <SelectList
+      v-if="mimeTypeItems.length"
+      v-model="mimeType"
+      title="mimeType"
+      :items="mimeTypeItems"
+    />
   </div>
 </template>
