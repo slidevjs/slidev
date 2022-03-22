@@ -4,13 +4,15 @@
 
 Global layers allow you to have custom components that **persistent** across slides. This could be useful for having footers, cross-slides animations, global effects, etc.
 
-Slidev provides two layers for this usage, create `global-top.vue` or `global-bottom.vue` under your project root and it will pick up automatically.
+Slidev provides three layers for this usage, create `global-top.vue`, `global-bottom.vue` or `custom-nav-controls.vue` under your project root and it will pick up automatically.
 
 Layers relationship:
 
 - Global Top (`global-top.vue`)
 - Slides
 - Global Bottom (`global-bottom.vue`)
+- NavControls
+  - Customized Navigation Controls (`custom-nav-controls.vue`)
 
 ## Example
 
@@ -22,6 +24,17 @@ Layers relationship:
 ```
 
 The text `Your Name` will appear to all your slides.
+
+```html
+<!-- custom-nav-controls -->
+<template>
+  <button class="icon-btn" title="Next" @click="$slidev.nav.next">
+    <carbon:arrow-right />
+  </button>
+</template>
+```
+
+The button `Next` will appear in NavControls.
 
 To enabled it conditionally, you can apply it with the [Vue Global Context](/custom/vue-context).
 
@@ -58,5 +71,15 @@ To enabled it conditionally, you can apply it with the [Vue Global Context](/cus
   >
     {{ $slidev.nav.currentPage }} / {{ $slidev.nav.total }}
   </footer>
+</template>
+```
+
+```html
+<!-- custom-nav-controls -->
+<!-- hide the button in Presenter model -->
+<template>
+  <button v-if="!$slidev.nav.isPresenter" class="icon-btn" title="Next" @click="$slidev.nav.next">
+    <carbon:arrow-right />
+  </button>
 </template>
 ```
