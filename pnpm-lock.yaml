@@ -266,7 +266,7 @@ importers:
       unplugin-icons: ^0.14.0
       unplugin-vue-components: ^0.18.3
       vite: ^2.8.6
-      vite-plugin-md: ^0.12.0
+      vite-plugin-md: ^0.12.1
       vite-plugin-remote-assets: ^0.2.2
       vite-plugin-vue-server-ref: ^0.2.4
       vite-plugin-windicss: ^1.8.3
@@ -312,7 +312,7 @@ importers:
       unplugin-icons: 0.14.0_5dbb0cc878f3ab9caa0bd7b169eded43
       unplugin-vue-components: 0.18.3_vite@2.8.6+vue@3.2.31
       vite: 2.8.6
-      vite-plugin-md: 0.12.0_vite@2.8.6
+      vite-plugin-md: 0.12.1_vite@2.8.6
       vite-plugin-remote-assets: 0.2.2_vite@2.8.6
       vite-plugin-vue-server-ref: 0.2.4_vite@2.8.6+vue@3.2.31
       vite-plugin-windicss: 1.8.3_vite@2.8.6
@@ -3659,10 +3659,6 @@ packages:
       fetch-blob: 3.1.4
     dev: true
 
-  /fp-ts/2.11.9:
-    resolution: {integrity: sha512-GhYlNKkCOfdjp71ocdtyaQGoqCswEoWDJLRr+2jClnBBq2dnSOtd6QxmJdALq8UhfqCyZZ0f0lxadU4OhwY9nw==}
-    dev: false
-
   /framesync/6.0.1:
     resolution: {integrity: sha512-fUY88kXvGiIItgNC7wcTOl0SNRCVXMKSWW2Yzfmn7EKNc+MpCzcz9DhdHcdjbrtN3c6R4H5dTY2jiCpPdysEjA==}
     dependencies:
@@ -6492,8 +6488,8 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-md/0.12.0_vite@2.8.6:
-    resolution: {integrity: sha512-4jvqIU7ZU7ymiyBQiORz6KkoCQZfgliEXQw+F4trfztUbPOE3ERGyCz4OjL9GHRuD7I2hLd9q3kPljCMmoBLxg==}
+  /vite-plugin-md/0.12.1_vite@2.8.6:
+    resolution: {integrity: sha512-dxhtEv/qzhpGV5LHYA9egAjK//VSFpiXBae0aHxvRDldI5MyE6/8qI5qRMHZhEsZnGc6qdfHmPCzkPolNkRJkA==}
     peerDependencies:
       vite: ^2.0.0
     dependencies:
@@ -6501,7 +6497,6 @@ packages:
       '@rollup/pluginutils': 4.2.0
       '@types/markdown-it': 12.2.3
       '@vue/runtime-core': 3.2.31
-      fp-ts: 2.11.9
       gray-matter: 4.0.3
       markdown-it: 12.3.2
       vite: 2.8.6
