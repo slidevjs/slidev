@@ -10,20 +10,10 @@
     "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
     "demo:dev": "pnpm -C demo/starter run dev",
     "dev": "pnpm -r --filter ./packages --parallel run dev",
-    "lint": "eslint '**/*.{js,ts,vue,json}'",
+    "lint": "eslint .",
     "lint:fix": "nr lint --fix",
     "release": "zx scripts/release.mjs",
     "test": "vitest test"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
-      "eslint --fix"
-    ]
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.18.9",
@@ -71,6 +61,16 @@
     "vite-plugin-windicss": "^1.8.3",
     "vitest": "^0.7.7",
     "zx": "^6.0.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
+      "eslint --fix"
+    ]
   },
   "engines": {
     "node": ">=14.0.0"

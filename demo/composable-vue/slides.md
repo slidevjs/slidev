@@ -191,7 +191,7 @@ Get rid of `.value` for most of the time.
 ```ts
 const counter = ref(0)
 
-watch(counter, count => {
+watch(counter, (count) => {
   console.log(count) // same as `counter.value`
 })
 ```
@@ -211,7 +211,7 @@ watch(counter, count => {
 <div>
 
 ```ts {monaco}
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 const foo = ref('bar')
 const data = reactive({ foo, id: 10 })
 data.foo // 'bar'
@@ -248,7 +248,7 @@ function unref<T>(r: Ref<T> | T): T {
 ### Usage
 
 ```ts {monaco}
-import { unref, ref } from 'vue'
+import { ref, unref } from 'vue'
 
 const foo = ref('foo')
 unref(foo) // 'foo'
@@ -280,8 +280,8 @@ Sets of reusable logic, separation of concerns.
 
 ```ts
 export function useDark(options: UseDarkOptions = {}) {
-  const preferredDark = usePreferredDark()         // <--
-  const store = useStorage('vueuse-dark', 'auto')  // <--
+  const preferredDark = usePreferredDark() // <--
+  const store = useStorage('vueuse-dark', 'auto') // <--
 
   return computed<boolean>({
     get() {
@@ -291,7 +291,8 @@ export function useDark(options: UseDarkOptions = {}) {
     },
     set(v) {
       store.value = v === preferredDark.value
-        ? 'auto' : v ? 'dark' : 'light'
+        ? 'auto'
+        : v ? 'dark' : 'light'
     },
   })
 }
@@ -365,10 +366,10 @@ function add(a: number, b: number) {
 ```
 
 ```ts
-let a = 1
-let b = 2
+const a = 1
+const b = 2
 
-let c = add(a, b) // 3
+const c = add(a, b) // 3
 ```
 
 <div class="my-auto leading-6 text-base opacity-75">
@@ -397,7 +398,7 @@ Accepts both refs and plain values.
 ```ts
 function add(
   a: Ref<number> | number,
-  b: Ref<number> | number
+  b: Ref<number> | number,
 ) {
   return computed(() => unref(a) + unref(b))
 }
@@ -439,7 +440,8 @@ export function useTimeAgo(
 ```
 
 ```ts {monaco}
-import { computed, unref, Ref } from 'vue'
+import type { Ref } from 'vue'
+import { computed, unref } from 'vue'
 
 type MaybeRef<T> = Ref<T> | T
 
@@ -479,7 +481,7 @@ title.value = 'Hello World'
 ### Binding an Existing Ref
 
 ```ts {monaco}
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useTitle } from '@vueuse/core'
 
 const name = ref('Hello')
@@ -510,10 +512,10 @@ Take a look at `useTitle`'s implementation
 
 ```ts {monaco}
 import { ref, watch } from 'vue'
-import { MaybeRef } from '@vueuse/core'
+import type { MaybeRef } from '@vueuse/core'
 
 export function useTitle(
-  newTitle: MaybeRef<string | null | undefined>
+  newTitle: MaybeRef<string | null | undefined>,
 ) {
   const title = ref(newTitle || document.title)
 
@@ -552,7 +554,7 @@ export function useTitle(
 If you pass a `ref` into `ref()`, it will return the original ref as-is.
 
 ```ts
-const foo = ref(1)   // Ref<1>
+const foo = ref(1) // Ref<1>
 const bar = ref(foo) // Ref<1>
 
 foo === bar // true
@@ -593,7 +595,7 @@ type MaybeRef<T> = Ref<T> | T
 
 function useBala<T>(arg: MaybeRef<T>) {
   const reference = ref(arg) // get the ref
-  const value = unref(arg)   // get the value
+  const value = unref(arg) // get the value
 }
 ```
 
@@ -611,12 +613,12 @@ Getting benefits from both `ref` and `reactive` for authoring composable functio
 <v-clicks>
 
 ```ts {monaco}
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 function useMouse() {
   return {
     x: ref(0),
-    y: ref(0)
+    y: ref(0),
   }
 }
 
@@ -690,7 +692,7 @@ export function useFetch<R>(url: MaybeRef<string>) {
 
   return {
     data,
-    error
+    error,
   }
 }
 ```
@@ -767,7 +769,7 @@ To get DOM element, you can pass a ref to it, and it will be available after com
 <div v-click>
 
 ```ts {monaco}
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 export default defineComponent({
   setup() {
     const element = ref<HTMLElement | undefined>()
@@ -777,7 +779,7 @@ export default defineComponent({
     })
 
     return { element }
-  }
+  },
 })
 ```
 
@@ -815,7 +817,7 @@ export default defineComponent({
     })
 
     return { element }
-  }
+  },
 })
 ```
 
@@ -833,14 +835,14 @@ Use the `InjectionKey<T>` helper from Vue to share types across context.
 
 ```ts {monaco}
 // context.ts
-import { InjectionKey } from 'vue'
+import type { InjectionKey } from 'vue'
 
 export interface UserInfo {
   id: number
   name: string
 }
 
-export const injectKeyUser: InjectionKey<UserInfo> = Symbol()
+export const injectKeyUser: InjectionKey<UserInfo> = Symbol('user')
 ```
 
 </div>
@@ -864,9 +866,9 @@ export default {
   setup() {
     provide(injectKeyUser, {
       id: '7', // type error: should be number
-      name: 'Anthony'
+      name: 'Anthony',
     })
-  }
+  },
 }
 ```
 
@@ -882,7 +884,7 @@ export default {
 
     if (user)
       console.log(user.name) // Anthony
-  }
+  },
 }
 ```
 
@@ -906,7 +908,7 @@ import { reactive } from 'vue'
 
 export const state = reactive({
   foo: 1,
-  bar: 'Hello'
+  bar: 'Hello',
 })
 ```
 
@@ -947,7 +949,7 @@ Use `provide` and `inject` to share the app-level state
 <v-click>
 
 ```ts
-export const myStateKey: InjectionKey<MyState> = Symbol()
+export const myStateKey: InjectionKey<MyState> = Symbol('state')
 
 export function createMyState() {
   const state = {
@@ -957,7 +959,7 @@ export function createMyState() {
   return {
     install(app: App) {
       app.provide(myStateKey, state)
-    }
+    },
   }
 }
 
@@ -1017,7 +1019,7 @@ export function useVModel(props, name) {
     },
     set(v) {
       emit(`update:${name}`, v)
-    }
+    },
   })
 }
 ```
@@ -1034,7 +1036,7 @@ export default defineComponent({
     const value = useVModel(props, 'value')
 
     return { value }
-  }
+  },
 })
 ```
 
@@ -1070,18 +1072,18 @@ Make the model able to be updated **independently** from the parent logic
 ```ts
 export function usePassiveVModel(props, name) {
   const emit = getCurrentInstance().emit
-  const data = ref(props[name])                     // store the value in a ref
+  const data = ref(props[name]) // store the value in a ref
 
-  watch(() => props.value, (v) => data.value = v)   // sync the ref whenever the prop changes
+  watch(() => props.value, v => data.value = v) // sync the ref whenever the prop changes
 
   return computed({
     get() {
       return data.value
     },
     set(v) {
-      data.value = v                                 // when setting value, update the ref directly
-      emit(`update:${name}`, v)                      // then emit out the changes
-    }
+      data.value = v // when setting value, update the ref directly
+      emit(`update:${name}`, v) // then emit out the changes
+    },
   })
 }
 ```
@@ -1110,7 +1112,7 @@ Vue.use(VueCompositionAPI)
 ```
 
 ```ts
-import { ref, reactive } from '@vue/composition-api'
+import { reactive, ref } from '@vue/composition-api'
 ```
 
 
@@ -1135,7 +1137,7 @@ Creates Universal Library for Vue 2 & 3<br><carbon-logo-github class="inline-blo
 
 ```ts
 // same syntax for both Vue 2 and 3
-import { ref, reactive, defineComponent } from 'vue-demi'
+import { defineComponent, reactive, ref } from 'vue-demi'
 ```
 
 <img class="h-50 mx-auto" src="https://cdn.jsdelivr.net/gh/vueuse/vue-demi/assets/banner.png" />

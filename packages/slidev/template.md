@@ -115,7 +115,7 @@ interface User {
 
 function updateUser(id: number, update: User) {
   const user = getUser(id)
-  const newUser = {...user, ...update}  
+  const newUser = { ...user, ...update }
   saveUser(id, newUser)
 }
 ```
