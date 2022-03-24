@@ -180,8 +180,7 @@ export function transformPageCSS(md: string, id: string) {
 
   const result = md.replace(
     /(\n<style[^>]*?>)([\s\S]+?)(<\/style>)/g,
-    (full, start, css, end) => {
-      const index = md.indexOf(full)
+    (full, start, css, end, index) => {
       // don't replace `<style>` inside code blocks, #101
       if (index < 0 || isInsideCodeblocks(index))
         return full
