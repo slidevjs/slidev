@@ -83,7 +83,7 @@
     "unplugin-icons": "^0.14.0",
     "unplugin-vue-components": "^0.18.3",
     "vite": "^2.8.6",
-    "vite-plugin-md": "^0.12.1",
+    "vite-plugin-md": "^0.12.3",
     "vite-plugin-remote-assets": "^0.2.2",
     "vite-plugin-vue-server-ref": "^0.2.4",
     "vite-plugin-windicss": "^1.8.3",
