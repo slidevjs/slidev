@@ -299,7 +299,7 @@ cli.command(
     .option('format', {
       default: 'pdf',
       type: 'string',
-      choices: ['pdf', 'png'],
+      choices: ['pdf', 'png', 'md'],
       describe: 'output format',
     })
     .option('timeout', {
@@ -353,6 +353,7 @@ cli.command(
     const height = Math.round(width / options.data.config.aspectRatio)
     output = await exportSlides({
       port,
+      slides: options.data.slides,
       total: options.data.slides.length,
       range,
       format: format as any,

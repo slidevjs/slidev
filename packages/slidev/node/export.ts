@@ -4,14 +4,16 @@ import { PDFDocument } from 'pdf-lib'
 import { blue, cyan, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
+import type { SlideInfo } from '@slidev/types'
 import { packageExists } from './themes'
 
 export interface ExportOptions {
   total: number
   range?: string
+  slides: SlideInfo[]
   port?: number
   base?: string
-  format?: 'pdf' | 'png'
+  format?: 'pdf' | 'png' | 'md'
   output?: string
   timeout?: number
   dark?: boolean
@@ -63,6 +65,7 @@ export async function exportSlides({
   range,
   format = 'pdf',
   output = 'slides',
+  slides,
   base = '/',
   timeout = 500,
   dark = false,
@@ -106,7 +109,39 @@ export async function exportSlides({
     return url.match(/clicks=([1-9][0-9]*)/)?.[1]
   }
 
-  async function genPageWithClicks(fn: (i: number, clicks?: string) => Promise<any>, i: number, clicks?: string) {
+  async function genPagePng(pages: number[]) {
+    const genScreenshot = async(i: number, clicks?: string) => {
+      await go(i, clicks)
+      await page.screenshot({
+        omitBackground: false,
+        path: path.join(
+          output,
+          `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`,
+        ),
+      })
+    }
+    for (const i of pages)
+      await genPageWithClicks(genScreenshot, i)
+  }
+
+  async function genPageMd(pages: number[], slides: SlideInfo[]) {
+    const mds: string[] = []
+
+    for (const i of pages) {
+      const mdImg = `![${slides[i - 1]?.title}](./${output}/${i.toString().padStart(2, '0')}.png)\n\n`
+      const mdNote = slides[i - 1]?.note ? `${slides[i - 1]?.note}\n\n` : ''
+      mds.push(`${mdImg}${mdNote}`)
+    }
+
+    if (!output.endsWith('.md')) output = `${output}.md`
+    await fs.writeFile(output, mds.join(''))
+  }
+
+  async function genPageWithClicks(
+    fn: (i: number, clicks?: string) => Promise<any>,
+    i: number,
+    clicks?: string,
+  ) {
     await fn(i, clicks)
     if (withClicks) {
       await page.keyboard.press('ArrowRight', { delay: 100 })
@@ -116,7 +151,7 @@ export async function exportSlides({
     }
   }
 
-  const pages = parseRangeString(total, range)
+  const pages: number[] = parseRangeString(total, range)
 
   progress.start(pages.length)
 
@@ -157,15 +192,11 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
   else if (format === 'png') {
-    const genScreenshot = async(i: number, clicks?: string) => {
-      await go(i, clicks)
-      await page.screenshot({
-        omitBackground: false,
-        path: path.join(output, `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`),
-      })
-    }
-    for (const i of pages)
-      await genPageWithClicks(genScreenshot, i)
+    await genPagePng(pages)
+  }
+  else if (format === 'md') {
+    await genPagePng(pages)
+    await genPageMd(pages, slides)
   }
   else {
     throw new Error(`Unsupported exporting format "${format}"`)
