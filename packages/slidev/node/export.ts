@@ -22,7 +22,7 @@ export interface ExportOptions {
   withClicks?: boolean
 }
 
-function createSlidevProgress() {
+function createSlidevProgress(indeterminate = false) {
   function getSpinner(n = 0) {
     return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
   }
@@ -33,7 +33,7 @@ function createSlidevProgress() {
   const progress = new SingleBar({
     clearOnComplete: true,
     hideCursor: true,
-    format: `  {spin} ${yellow('rendering')} {bar} {value}/{total}`,
+    format: `  {spin} ${yellow('rendering')}${indeterminate ? '' : ' {bar} {value}/{total}'}`,
     linewrap: false,
     barsize: 30,
   }, Presets.shades_grey)
@@ -69,28 +69,27 @@ export async function exportSlides({
   timeout = 500,
   dark = false,
   routerMode = 'history',
-  width = 980,
-  height = 551,
+  width = 1920,
+  height = 1080,
   withClicks = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
 
   const pages: number[] = parseRangeString(total, range)
-  // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
-  height = height * pages.length
 
   const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch()
   const context = await browser.newContext({
     viewport: {
       width,
-      height,
+      // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
+      height: height * pages.length,
     },
     deviceScaleFactor: 1,
   })
   const page = await context.newPage()
-  const progress = createSlidevProgress()
+  const progress = createSlidevProgress(true)
 
   async function go(no: number | string, clicks?: string) {
     const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
@@ -102,10 +101,15 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
-    // Wait for twitter iframe if we have some embedded tweets
-    const count = await page.locator('.tweet').count()
-    if (count > 0)
-      await page.locator('.tweet iframe').waitFor()
+    // Check for "data-waitfor" attribute and wait for given element to be loaded
+    const elements = await page.locator('[data-waitfor]')
+    const count = await elements.count()
+    for (let index = 0; index < count; index++) {
+      const element = await elements.nth(index)
+      const attribute = await element.getAttribute('data-waitfor')
+      if (attribute)
+        await element.locator(attribute).waitFor()
+    }
     // Wait for frames to load
     const frames = await page.frames()
     await Promise.all(frames.map(frame => frame.waitForLoadState()))
@@ -118,8 +122,8 @@ export async function exportSlides({
     await go('print')
     await page.pdf({
       path: output,
-      width: 980,
-      height: 551,
+      width,
+      height,
       margin: {
         left: 0,
         top: 0,
