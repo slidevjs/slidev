@@ -1,8 +1,8 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
-import type { SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import type { SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
 import Markdown from 'markdown-it'
-import { detectFeatures, mergeFeatureFlags, parse, parseSlide, stringify, stringifySlide } from './core'
+import { detectFeatures, mergeFeatureFlags, parse, stringify, stringifySlide } from './core'
 export * from './core'
 
 const md = Markdown({ html: true })
@@ -17,31 +17,58 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
     filepath,
   ])
 
+  for (let iSlide = 0; iSlide < data.slides.length;) {
+    const baseSlide = data.slides[iSlide]
+    if (!baseSlide.frontmatter.src) {
+      iSlide++
+      continue
+    }
+
+    data.slides.splice(iSlide, 1)
+
+    const srcExpression = baseSlide.frontmatter.src
+    const path = resolve(dir, srcExpression)
+    const raw = await fs.readFile(path, 'utf-8')
+    const subSlides = parse(raw, path, themeMeta)
+
+    for (const [offset, subSlide] of subSlides.slides.entries()) {
+      const slide: SlideInfo = { ...baseSlide }
+
+      slide.source = {
+        filepath: path,
+        ...subSlide,
+      }
+
+      if (offset === 0 && !baseSlide.frontmatter.srcseq) {
+        slide.inline = { ...baseSlide }
+        delete slide.inline.frontmatter.src
+        Object.assign(slide, slide.source, { raw: null })
+      }
+      else {
+        Object.assign(slide, slide.source)
+      }
+
+      const baseSlideFrontMatterWithoutSrc = { ...baseSlide.frontmatter }
+      delete baseSlideFrontMatterWithoutSrc.src
+
+      slide.frontmatter = {
+        ...subSlide.frontmatter,
+        ...baseSlideFrontMatterWithoutSrc,
+        srcseq: `${baseSlide.frontmatter.srcseq ? `${baseSlide.frontmatter.srcseq},` : ''}${srcExpression}`,
+      }
+
+      data.features = mergeFeatureFlags(data.features, detectFeatures(raw))
+      entries.add(path)
+      data.slides.splice(iSlide + offset, 0, slide)
+    }
+  }
   for (const slide of data.slides) {
     if (slide.title)
       slide.title = md.render(slide.title).trim().replace(/^<p>/, '').replace(/<\/p>$/, '')
-
-    if (!slide.frontmatter.src)
-      continue
-
-    const path = resolve(dir, slide.frontmatter.src)
-    const raw = await fs.readFile(path, 'utf-8')
-    const source = parseSlide(raw)
-    const inline = { ...slide }
-    slide.source = {
-      filepath: path,
-      ...source,
-    }
-    slide.inline = inline
-    Object.assign(slide, slide.source)
-    slide.frontmatter = {
-      ...slide.source.frontmatter,
-      ...inline.frontmatter,
-    }
-
-    data.features = mergeFeatureFlags(data.features, detectFeatures(raw))
-    entries.add(path)
   }
+  // re-index slides
+  for (let iSlide = 0; iSlide < data.slides.length; iSlide++)
+    data.slides[iSlide].index = iSlide === 0 ? 0 : 1 + data.slides[iSlide - 1].index
 
   data.entries = Array.from(entries)
 

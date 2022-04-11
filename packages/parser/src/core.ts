@@ -6,6 +6,7 @@ import { resolveConfig } from './config'
 export function stringify(data: SlidevMarkdown) {
   return `${
     data.slides
+      .filter(slide => slide.source === undefined || slide.inline !== undefined)
       .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
       .join('\n')
       .trim()
