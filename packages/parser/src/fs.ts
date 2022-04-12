@@ -39,7 +39,7 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
         ...subSlide,
       }
 
-      if (offset === 0 && !baseSlide.frontmatter.srcseq) {
+      if (offset === 0 && !baseSlide.frontmatter.srcSequence) {
         slide.inline = { ...baseSlide }
         delete slide.inline.frontmatter.src
         Object.assign(slide, slide.source, { raw: null })
@@ -54,7 +54,7 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
       slide.frontmatter = {
         ...subSlide.frontmatter,
         ...baseSlideFrontMatterWithoutSrc,
-        srcseq: `${baseSlide.frontmatter.srcseq ? `${baseSlide.frontmatter.srcseq},` : ''}${srcExpression}`,
+        srcSequence: `${baseSlide.frontmatter.srcSequence ? `${baseSlide.frontmatter.srcSequence},` : ''}${srcExpression}`,
       }
 
       data.features = mergeFeatureFlags(data.features, detectFeatures(raw))
