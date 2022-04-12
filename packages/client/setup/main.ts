@@ -2,6 +2,7 @@
 
 import type { AppContext } from '@slidev/types'
 import { MotionPlugin } from '@vueuse/motion'
+import StarportPlugin from 'vue-starport'
 
 export default function setupMain(context: AppContext) {
   function setMaxHeight() {
@@ -13,6 +14,7 @@ export default function setupMain(context: AppContext) {
   window.addEventListener('resize', setMaxHeight)
 
   context.app.use(MotionPlugin)
+  context.app.use(StarportPlugin({ keepAlive: true }))
 
   // @ts-expect-error inject in runtime
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

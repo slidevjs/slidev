@@ -34,6 +34,7 @@
     "vite-plugin-windicss": "^1.8.4",
     "vue": "^3.2.32",
     "vue-router": "^4.0.14",
+    "vue-starport": "^0.2.4",
     "windicss": "^3.5.1"
   },
   "engines": {

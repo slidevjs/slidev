@@ -22,7 +22,8 @@
       "@slidev/types": ["./packages/types/src/index.ts"],
       "@slidev/parser": ["./packages/parser/src/index.ts"],
       "@slidev/parser/fs": ["./packages/parser/src/fs.ts"],
-    }
+    },
+    "jsx": "preserve"
   },
   "include": [
     "./*.ts",
