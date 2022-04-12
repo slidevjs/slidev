@@ -73,6 +73,7 @@ export function useRecording() {
   const recorderCamera: Ref<RecorderType | undefined> = shallowRef()
   const recorderSlides: Ref<RecorderType | undefined> = shallowRef()
   const streamCamera: Ref<MediaStream | undefined> = shallowRef()
+  const streamCapture: Ref<MediaStream | undefined> = shallowRef()
   const streamSlides: Ref<MediaStream | undefined> = shallowRef()
 
   const config: RecorderOptions = {
@@ -140,7 +141,7 @@ export function useRecording() {
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
-    streamSlides.value = await navigator.mediaDevices.getDisplayMedia({
+    streamCapture.value = await navigator.mediaDevices.getDisplayMedia({
       video: {
         // aspectRatio: 1.6,
         frameRate: 15,
@@ -151,6 +152,11 @@ export function useRecording() {
         resizeMode: 'crop-and-scale',
       },
     })
+    streamCapture.value.addEventListener('inactive', stopRecording)
+
+    // We need to create a new Stream to merge video and audio to have the inactive event working on streamCapture
+    streamSlides.value = new MediaStream()
+    streamCapture.value!.getVideoTracks().forEach(videoTrack => streamSlides.value!.addTrack(videoTrack))
 
     // merge config
     Object.assign(config, customConfig)
@@ -194,6 +200,7 @@ export function useRecording() {
       const url = URL.createObjectURL(blob)
       download(getFilename('screen', config.mimeType), url)
       window.URL.revokeObjectURL(url)
+      closeStream(streamCapture)
       closeStream(streamSlides)
       recorderSlides.value = undefined
     })
@@ -237,6 +244,7 @@ export function useRecording() {
     recorderCamera,
     recorderSlides,
     streamCamera,
+    streamCapture,
     streamSlides,
   }
 }

@@ -65,9 +65,9 @@ export function updateState() {
   canClear.value = !!drauu.el?.children.length
 }
 
-export function loadCanvas() {
+export function loadCanvas(page?: number) {
   disableDump = true
-  const data = drawingState[currentPage.value]
+  const data = drawingState[page || currentPage.value]
   if (data != null)
     drauu.load(data)
   else

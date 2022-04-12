@@ -299,11 +299,11 @@ cli.command(
     .option('format', {
       default: 'pdf',
       type: 'string',
-      choices: ['pdf', 'png'],
+      choices: ['pdf', 'png', 'md'],
       describe: 'output format',
     })
     .option('timeout', {
-      default: 100,
+      default: 500,
       type: 'number',
       describe: 'timeout for rendering each page',
     })
@@ -349,10 +349,11 @@ cli.command(
     await server.listen(port)
     printInfo(options)
     parser.filterDisabled(options.data)
-    const width = 1920
+    const width = options.data.config.canvasWidth
     const height = Math.round(width / options.data.config.aspectRatio)
     output = await exportSlides({
       port,
+      slides: options.data.slides,
       total: options.data.slides.length,
       range,
       format: format as any,
