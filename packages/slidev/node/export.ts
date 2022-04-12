@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs-extra'
-import { blue, cyan, green, yellow } from 'kolorist'
+import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
 import type { SlideInfo } from '@slidev/types'
@@ -33,7 +33,7 @@ function createSlidevProgress(indeterminate = false) {
   const progress = new SingleBar({
     clearOnComplete: true,
     hideCursor: true,
-    format: `  {spin} ${yellow('rendering')}${indeterminate ? '' : ' {bar} {value}/{total}'}`,
+    format: `  {spin} ${yellow('rendering')}${indeterminate ? dim(yellow('...')) : ' {bar} {value}/{total}'}`,
     linewrap: false,
     barsize: 30,
   }, Presets.shades_grey)
