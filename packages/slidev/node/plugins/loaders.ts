@@ -281,6 +281,15 @@ export function createSlidesLoader(
         return transformMarkdown(code, pageNo, data)
       },
     },
+    {
+      name: 'slidev:context-transform:pre',
+      enforce: 'pre',
+      async transform(code, id) {
+        if (!id.endsWith('.vue'))
+          return
+        return transformVue(code)
+      },
+    },
   ]
 
   function updateServerWatcher() {
@@ -301,8 +310,11 @@ export function createSlidesLoader(
 
     delete frontmatter.title
     const imports = [
+      'import { inject as vueInject } from "vue"',
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
+      'import { injectionSlidevContext } from "@slidev/client/constants"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
+      'const $slidev = vueInject(injectionSlidevContext)',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -314,6 +326,59 @@ export function createSlidesLoader(
     code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="frontmatter">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
+  }
+
+  function transformVue(code: string): string {
+    if (code.includes('injectionSlidevContext'))
+      return code // Assume that the context is already imported and used
+    const imports = [
+      'import { inject as vueInject } from "vue"',
+      'import { injectionSlidevContext } from "@slidev/client/constants"',
+      'const $slidev = vueInject(injectionSlidevContext)',
+    ]
+    const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
+    if (matchScript && matchScript[2]) {
+      // setup script
+      return code.replace(/(<script.*>)/g, `$1\n${imports.join('\n')}\n`)
+    }
+    else if (matchScript && !matchScript[2]) {
+      // not a setup script
+      const matchExport = code.match(/export\s+default\s+[^{]*{/)
+      if (matchExport) {
+        // script exports a component
+        const exportIndex = (matchExport.index || 0) + matchExport[0].length
+        let component = code.slice(exportIndex)
+        component = component.slice(0, component.indexOf('</script>'))
+        if (component.match(/setup\s*\(/)) {
+          // component has a setup option
+          const scriptIndex = (matchScript.index || 0) + matchScript[0].length
+          const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants"\n'
+          code = `${code.slice(0, scriptIndex)}${provideImport}${code.slice(scriptIndex)}`
+          let injectIndex = exportIndex + provideImport.length
+          let injectObject = '$slidev: { from: injectionSlidevContext },'
+          const matchInject = component.match(/.*inject\s*:\s*([\[{])/)
+          if (matchInject) {
+            // component has a inject option
+            injectIndex += (matchInject.index || 0) + matchInject[0].length
+            if (matchInject[1] === '[') {
+              // inject option is array
+              let injects = component.slice((matchInject.index || 0) + matchInject[0].length)
+              const injectEndIndex = injects.indexOf(']')
+              injects = injects.slice(0, injectEndIndex)
+              injectObject += injects.split(',').map(inject => `${inject}: {from: ${inject}}`).join(',')
+              return `${code.slice(0, injectIndex - 1)}{\n${injectObject}\n}${code.slice(injectIndex + injectEndIndex + 1)}`
+            }
+            else {
+              // inject option is object
+              return `${code.slice(0, injectIndex)}\n${injectObject}\n${code.slice(injectIndex)}`
+            }
+          }
+          return `${code.slice(0, injectIndex)}\ninject: { ${injectObject} },\n${code.slice(injectIndex)}`
+        }
+      }
+    }
+    // no setup script or setup option
+    return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
   }
 
   async function getLayouts() {

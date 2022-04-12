@@ -8,9 +8,11 @@ Usage:
 <Toc columns='2' maxDepth='3' mode='onlySiblings'/>
 -->
 <script setup lang='ts'>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import type { TocItem } from '../logic/nav'
-import { tree } from '../logic/nav'
+import { injectionSlidevContext } from '../constants'
+
+const $slidev = inject(injectionSlidevContext)
 
 const props = withDefaults(
   defineProps<{
@@ -69,7 +71,10 @@ function filterOnlySiblings(tree: TocItem[]): TocItem[] {
 }
 
 const toc = computed(() => {
-  let tocTree = filterTreeDepth(tree.value)
+  const tree = $slidev?.nav.tree
+  if (!tree)
+    return []
+  let tocTree = filterTreeDepth(tree)
   if (props.mode === 'onlyCurrentTree')
     tocTree = filterOnlyCurrentTree(tocTree)
   else if (props.mode === 'onlySiblings')

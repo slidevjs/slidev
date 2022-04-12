@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Play from './internals/Play.vue'
+import Print from './internals/Print.vue'
 // @ts-expect-error missing types
 import _rawRoutes from '/@slidev/routes'
 
@@ -15,6 +16,7 @@ export const routes: RouteRecordRaw[] = [
       ...rawRoutes,
     ],
   },
+  { name: 'print', path: '/print', component: Print },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
