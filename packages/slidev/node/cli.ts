@@ -305,7 +305,7 @@ cli.command(
     .option('timeout', {
       default: 30000,
       type: 'number',
-      describe: 'timeout for rendering each page',
+      describe: 'timeout for rendering the print page',
     })
     .option('range', {
       type: 'string',
