@@ -1,4 +1,3 @@
-
 import { format } from 'prettier'
 
 export async function formatCode(code: string, lang: string) {

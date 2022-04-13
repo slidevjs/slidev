@@ -1,4 +1,3 @@
-
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'

@@ -156,7 +156,8 @@ export async function exportSlides({
       mds.push(`${mdImg}${mdNote}`)
     }
 
-    if (!output.endsWith('.md')) output = `${output}.md`
+    if (!output.endsWith('.md'))
+      output = `${output}.md`
     await fs.writeFile(output, mds.join(''))
   }
 

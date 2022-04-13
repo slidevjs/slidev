@@ -40,11 +40,13 @@ function isValidDelim(state: any, pos: number) {
 function math_inline(state: any, silent: boolean) {
   let match, token, res, pos
 
-  if (state.src[state.pos] !== '$') return false
+  if (state.src[state.pos] !== '$')
+    return false
 
   res = isValidDelim(state, state.pos)
   if (!res.can_open) {
-    if (!silent) state.pending += '$'
+    if (!silent)
+      state.pending += '$'
     state.pos += 1
     return true
   }
@@ -63,20 +65,23 @@ function math_inline(state: any, silent: boolean) {
     while (state.src[pos] === '\\') pos -= 1
 
     // Even number of escapes, potential closing delimiter found
-    if (((match - pos) % 2) === 1) break
+    if (((match - pos) % 2) === 1)
+      break
     match += 1
   }
 
   // No closing delimter found.  Consume $ and continue.
   if (match === -1) {
-    if (!silent) state.pending += '$'
+    if (!silent)
+      state.pending += '$'
     state.pos = start
     return true
   }
 
   // Check if we have empty content, ie: $$.  Do not parse.
   if (match - start === 0) {
-    if (!silent) state.pending += '$$'
+    if (!silent)
+      state.pending += '$$'
     state.pos = start + 1
     return true
   }
@@ -84,7 +89,8 @@ function math_inline(state: any, silent: boolean) {
   // Check for valid closing delimiter
   res = isValidDelim(state, match)
   if (!res.can_close) {
-    if (!silent) state.pending += '$'
+    if (!silent)
+      state.pending += '$'
     state.pos = start
     return true
   }
@@ -105,13 +111,16 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
   let pos = state.bMarks[start] + state.tShift[start]
   let max = state.eMarks[start]
 
-  if (pos + 2 > max) return false
-  if (state.src.slice(pos, pos + 2) !== '$$') return false
+  if (pos + 2 > max)
+    return false
+  if (state.src.slice(pos, pos + 2) !== '$$')
+    return false
 
   pos += 2
   firstLine = state.src.slice(pos, max)
 
-  if (silent) return true
+  if (silent)
+    return true
   if (firstLine.trim().slice(-2) === '$$') {
     // Single line expression
     firstLine = firstLine.trim().slice(0, -2)
@@ -121,7 +130,8 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
   for (next = start; !found;) {
     next++
 
-    if (next >= end) break
+    if (next >= end)
+      break
 
     pos = state.bMarks[next] + state.tShift[next]
     max = state.eMarks[next]

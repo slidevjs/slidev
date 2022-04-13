@@ -10,10 +10,6 @@ Alice -> Bob : Hello!
 @enduml
 ```
 -->
-<template>
-  <img alt="PlantUML diagram" :src="uri" :style="{scale}">
-</template>
-
 <script setup lang="ts">
 
 import { computed } from 'vue'
@@ -27,3 +23,7 @@ const props = defineProps<{
 const uri = computed(() => `${props.server}/svg/${props.code}`)
 
 </script>
+
+<template>
+  <img alt="PlantUML diagram" :src="uri" :style="{scale}">
+</template>

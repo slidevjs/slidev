@@ -47,7 +47,8 @@ const DEFAULTS: Options = {
  * @return The Prism language object for the provided {@code lang} code. {@code undefined} if the language is not known to Prism.
  */
 function loadPrismLang(lang: string): Grammar | undefined {
-  if (!lang) return undefined
+  if (!lang)
+    return undefined
   let langObject = Prism.languages[lang]
   if (langObject === undefined) {
     loadLanguages([lang])

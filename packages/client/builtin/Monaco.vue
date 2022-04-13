@@ -11,10 +11,6 @@ const your_code = 'here'
 Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
-<template>
-  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useEventListener } from '@vueuse/core'
@@ -135,3 +131,7 @@ watchEffect(() => {
   postStyle()
 })
 </script>
+
+<template>
+  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
+</template>
