@@ -72,7 +72,6 @@ export function createSlidesLoader(
   MarkdownPlugin: Plugin,
 ): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
-  const slideTitlePrefix = '/@slidev/title/'
   const hmrPages = new Set<number>()
   let server: ViteDevServer | undefined
 
@@ -130,13 +129,11 @@ export function createSlidesLoader(
 
         if (data.slides.length !== newData.slides.length) {
           moduleIds.add('/@slidev/routes')
-          moduleIds.add('/@slidev/titles')
           range(newData.slides.length).map(i => hmrPages.add(i))
         }
 
         if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
           moduleIds.add('/@slidev/routes')
-          moduleIds.add('/@slidev/titles')
           range(data.slides.length).map(i => hmrPages.add(i))
         }
 
@@ -177,9 +174,12 @@ export function createSlidesLoader(
         serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
+        if (hmrPages.size > 0)
+          moduleIds.add('/@slidev/titles.md')
+
         const vueModules = (
-          await Promise.all([
-            ...Array.from(hmrPages).map(async(i) => {
+          await Promise.all(
+            Array.from(hmrPages).map(async(i) => {
               const file = `${slidePrefix}${i + 1}.md`
               try {
                 const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
@@ -192,20 +192,7 @@ export function createSlidesLoader(
               }
               catch {}
             }),
-            ...Array.from(hmrPages).map(async(i) => {
-              const file = `${slideTitlePrefix}${i + 1}.md`
-              try {
-                const md = transformTitle(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.title, file))
-                return await VuePlugin.handleHotUpdate!({
-                  ...ctx,
-                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-                  file,
-                  read() { return md },
-                })
-              }
-              catch {}
-            }),
-          ])
+          )
         ).flatMap(i => i || [])
         hmrPages.clear()
 
@@ -260,21 +247,11 @@ export function createSlidesLoader(
         if (id === '/@slidev/custom-nav-controls')
           return generateCustomNavControls()
 
-        // titles
-        if (id === '/@slidev/titles')
-          return generateTitles()
-
         // title
-        if (id.startsWith(slideTitlePrefix)) {
-          const remaning = id.slice(slideTitlePrefix.length)
-          const match = remaning.match(regexIdQuery)
-          if (match) {
-            const [, no, type] = match
-            const pageNo = parseInt(no) - 1
-            if (type === 'md')
-              return data.slides[pageNo]?.title
-          }
-          return ''
+        if (id === '/@slidev/titles.md') {
+          return data.slides.map(({ title }, i) => {
+            return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
+          }).join('')
         }
 
         // pages
@@ -329,9 +306,9 @@ export function createSlidesLoader(
       name: 'slidev:title-transform:pre',
       enforce: 'pre',
       transform(code, id) {
-        if (!id.startsWith(slideTitlePrefix))
+        if (id !== '/@slidev/titles.md')
           return
-        return transformTitle(code)
+        return transformTitles(code)
       },
     },
   ]
@@ -425,8 +402,12 @@ export function createSlidesLoader(
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
   }
 
-  function transformTitle(code: string) {
-    return code.replace(/<template>\s*<div>\s*<p>/, '<template>').replace(/<\/p>\s*<\/div>\s*<\/template>/, '</template>')
+  function transformTitles(code: string) {
+    return code
+      .replace(/<template>\s*<div>\s*<p>/, '<template>')
+      .replace(/<\/p>\s*<\/div>\s*<\/template>/, '</template>')
+      .replace(/<script\ssetup>/, `<script setup lang="ts">
+defineProps<{ no: number | string }>()`)
   }
 
   async function getLayouts() {
@@ -624,27 +605,6 @@ export default {
     return [${render}]
   }
 }
-`
-  }
-
-  function generateTitles() {
-    const imports: string[] = []
-    let no = 1
-    const titles = data.slides
-      .map((i, idx) => {
-        if (i.frontmatter?.disabled)
-          return undefined
-        imports.push(`import title${no} from '${slideTitlePrefix}${idx + 1}.md'`)
-        const entry = `${no}:title${no}`
-        no += 1
-        return entry
-      })
-      .filter(notNullish)
-      .join(',')
-
-    return `
-${imports.join('\n')}
-export default {${titles}}
 `
   }
 }

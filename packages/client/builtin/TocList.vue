@@ -10,7 +10,7 @@ Usage:
 import { computed } from 'vue'
 import { toArray } from '@antfu/utils'
 // @ts-expect-error virtual module
-import titles from '/@slidev/titles'
+import Titles from '/@slidev/titles.md'
 import type { TocItem } from '../logic/nav'
 
 const props = withDefaults(defineProps<{
@@ -32,7 +32,7 @@ const classes = computed(() => {
   <ol v-if="list && list.length > 0" :class="classes">
     <li v-for="item in list" :key="item.path" :class="['slidev-toc-item', {'slidev-toc-item-active': item.active}, {'slidev-toc-item-parent-active': item.activeParent}]">
       <Link :to="item.path">
-        <component :is="titles[item.path]" />
+        <Titles :no="item.path" />
       </Link>
       <TocList :level="level + 1" :list="item.children" :list-class="listClass" />
     </li>
