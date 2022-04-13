@@ -30,6 +30,7 @@ export async function build(
     const inlineConfig = mergeConfig(
       viteConfig,
       <InlineConfig>({
+        root: options.userRoot,
         plugins: [
           await ViteSlidevPlugin(options, pluginOptions),
           {
@@ -87,10 +88,12 @@ export async function build(
       await fs.unlink(indexPath)
   }
 
+  const outDir = resolve(options.userRoot, config.build.outDir)
+
   // copy index.html to 404.html for GitHub Pages
-  await fs.copyFile(resolve(config.build.outDir, 'index.html'), resolve(config.build.outDir, '404.html'))
+  await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
   // _redirects for SPA
-  const redirectsPath = resolve(config.build.outDir, '_redirects')
+  const redirectsPath = resolve(outDir, '_redirects')
   if (!fs.existsSync(redirectsPath))
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
@@ -102,7 +105,7 @@ export async function build(
     const server = http.createServer(app)
     app.use(
       config.base,
-      sirv(config.build.outDir, {
+      sirv(outDir, {
         etag: true,
         single: true,
         dev: true,
@@ -113,7 +116,7 @@ export async function build(
       port,
       total: options.data.slides.length,
       format: 'pdf',
-      output: join(config.build.outDir, 'slidev-exported.pdf'),
+      output: join(outDir, 'slidev-exported.pdf'),
       base: config.base,
       dark: options.data.config.colorSchema === 'dark',
       width: 1920,
