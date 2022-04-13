@@ -154,6 +154,7 @@ export function createSlidesLoader(
 
           if (
             a?.content.trim() === b?.content.trim()
+            && a?.title?.trim() === b?.title?.trim()
             && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
           )
@@ -173,20 +174,24 @@ export function createSlidesLoader(
         serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
+        if (hmrPages.size > 0)
+          moduleIds.add('/@slidev/titles.md')
+
         const vueModules = (
-          await Promise.all(Array.from(hmrPages).map(async(i) => {
-            const file = `${slidePrefix}${i + 1}.md`
-            try {
-              const md = await transformMarkdown((<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
-              return await VuePlugin.handleHotUpdate!({
-                ...ctx,
-                modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-                file,
-                read() { return md },
-              })
-            }
-            catch {}
-          }),
+          await Promise.all(
+            Array.from(hmrPages).map(async(i) => {
+              const file = `${slidePrefix}${i + 1}.md`
+              try {
+                const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
+                return await VuePlugin.handleHotUpdate!({
+                  ...ctx,
+                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
+                  file,
+                  read() { return md },
+                })
+              }
+              catch {}
+            }),
           )
         ).flatMap(i => i || [])
         hmrPages.clear()
@@ -242,6 +247,16 @@ export function createSlidesLoader(
         if (id === '/@slidev/custom-nav-controls')
           return generateCustomNavControls()
 
+        // title
+        if (id === '/@slidev/titles.md') {
+          return {
+            code: data.slides.map(({ title }, i) => {
+              return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
+            }).join(''),
+            map: {},
+          }
+        }
+
         // pages
         if (id.startsWith(slidePrefix)) {
           const remaning = id.slice(slidePrefix.length)
@@ -288,6 +303,15 @@ export function createSlidesLoader(
         if (!id.endsWith('.vue'))
           return
         return transformVue(code)
+      },
+    },
+    {
+      name: 'slidev:title-transform:pre',
+      enforce: 'pre',
+      transform(code, id) {
+        if (id !== '/@slidev/titles.md')
+          return
+        return transformTitles(code)
       },
     },
   ]
@@ -379,6 +403,14 @@ export function createSlidesLoader(
     }
     // no setup script or setup option
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
+  }
+
+  function transformTitles(code: string) {
+    return code
+      .replace(/<template>\s*<div>\s*<p>/, '<template>')
+      .replace(/<\/p>\s*<\/div>\s*<\/template>/, '</template>')
+      .replace(/<script\ssetup>/, `<script setup lang="ts">
+defineProps<{ no: number | string }>()`)
   }
 
   async function getLayouts() {
@@ -554,6 +586,7 @@ export default {
 }
 `
   }
+
   async function generateCustomNavControls() {
     const components = roots
       .flatMap((root) => {
