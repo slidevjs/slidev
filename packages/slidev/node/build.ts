@@ -89,6 +89,7 @@ export async function build(
   }
 
   const outDir = resolve(options.userRoot, config.build.outDir)
+  const outFilename = options.data.config.exportFilename || 'slidev-exported.pdf'
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
@@ -116,7 +117,7 @@ export async function build(
       port,
       total: options.data.slides.length,
       format: 'pdf',
-      output: join(outDir, 'slidev-exported.pdf'),
+      output: join(outDir, outFilename),
       base: config.base,
       dark: options.data.config.colorSchema === 'dark',
       width: 1920,
