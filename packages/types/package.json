@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.30.0",
+  "version": "0.30.1",
   "description": "Shared types declerations for Slidev",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
