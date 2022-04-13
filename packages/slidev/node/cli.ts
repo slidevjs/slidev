@@ -334,11 +334,11 @@ cli.command(
     dark,
     'with-clicks': withClicks,
   }) => {
-    output = output || `${path.basename(entry, '.md')}-export`
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
     const port = await findFreePort(12445)
     const options = await resolveOptions({ entry, theme }, 'build')
+    output = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
     const server = await createServer(
       options,
       {

@@ -80,6 +80,11 @@ export interface SlidevConfig {
    */
   canvasWidth: number
   /**
+   * Force the filename used when exporting the presentation.
+   * The extension, e.g. .pdf, gets automatically added.
+   */
+  exportFilename: string | null
+  /**
    * Controls whether texts in slides are selectable
    *
    * @default false
