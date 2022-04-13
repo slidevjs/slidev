@@ -249,9 +249,12 @@ export function createSlidesLoader(
 
         // title
         if (id === '/@slidev/titles.md') {
-          return data.slides.map(({ title }, i) => {
-            return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
-          }).join('')
+          return {
+            code: data.slides.map(({ title }, i) => {
+              return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
+            }).join(''),
+            map: {},
+          }
         }
 
         // pages
