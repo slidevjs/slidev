@@ -30,6 +30,7 @@ export async function build(
     const inlineConfig = mergeConfig(
       viteConfig,
       <InlineConfig>({
+        root: options.userRoot,
         plugins: [
           await ViteSlidevPlugin(options, pluginOptions),
           {
