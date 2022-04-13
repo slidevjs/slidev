@@ -20,7 +20,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     routerMode: 'history',
     aspectRatio: 16 / 9,
     canvasWidth: 980,
-    selectable: false,
+    selectable: true,
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
     favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png',
