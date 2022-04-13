@@ -17,7 +17,7 @@ Now export your slides to PDF using the following command
 $ slidev export
 ```
 
-After a few seconds, your slides will be ready at `./slides-exports.pdf`.
+After a few seconds, your slides will be ready at `./slides-export.pdf`.
 
 In case you want to export your slides using the dark version of the theme, use the `--dark` option:
 
