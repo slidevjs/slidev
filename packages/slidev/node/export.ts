@@ -66,7 +66,7 @@ export async function exportSlides({
   output = 'slides',
   slides,
   base = '/',
-  timeout = 500,
+  timeout = 30000,
   dark = false,
   routerMode = 'history',
   width = 1920,
@@ -98,6 +98,7 @@ export async function exportSlides({
       : `http://localhost:${port}${base}${path}`
     await page.goto(url, {
       waitUntil: 'networkidle',
+      timeout,
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
@@ -113,7 +114,6 @@ export async function exportSlides({
     // Wait for frames to load
     const frames = await page.frames()
     await Promise.all(frames.map(frame => frame.waitForLoadState()))
-    await page.waitForTimeout(timeout)
   }
 
   async function genPagePdf() {

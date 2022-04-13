@@ -303,7 +303,7 @@ cli.command(
       describe: 'output format',
     })
     .option('timeout', {
-      default: 500,
+      default: 30000,
       type: 'number',
       describe: 'timeout for rendering each page',
     })
