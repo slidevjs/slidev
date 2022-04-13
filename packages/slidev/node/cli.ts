@@ -71,112 +71,122 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, port: userPort, open, log, remote, force }) => {
-    if (!fs.existsSync(entry) && !entry.endsWith('.md'))
-      entry = `${entry}.md`
+  async({ entry, theme, port: userPort, open, log, remote, force, secondary }) => {
+    async function startServerFor(entry: string, targetPort: number, isPrimary: boolean) {
+      if (!fs.existsSync(entry) && !entry.endsWith('.md'))
+        entry = `${entry}.md`
 
-    if (!fs.existsSync(entry)) {
-      const { create } = await prompts({
-        name: 'create',
-        type: 'confirm',
-        initial: 'Y',
-        message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
-      })
-      if (create)
-        await fs.copyFile(path.resolve(__dirname, '../template.md'), entry)
-      else
-        process.exit(0)
-    }
+      if (!fs.existsSync(entry)) {
+        const { create } = await prompts({
+          name: 'create',
+          type: 'confirm',
+          initial: 'Y',
+          message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
+        })
+        if (create)
+          await fs.copyFile(path.resolve(__dirname, '../template.md'), entry)
+        else
+          process.exit(0)
+      }
 
-    let server: ViteDevServer | undefined
-    let port = 3030
+      let server: ViteDevServer | undefined
+      const port = targetPort
 
-    async function initServer() {
-      if (server)
-        await server.close()
-      const options = await resolveOptions({ entry, theme }, 'dev')
-      port = userPort || await findFreePort(3030)
-      server = (await createServer(
-        options,
-        {
-          server: {
-            port,
-            strictPort: true,
-            open,
-            host: remote ? '0.0.0.0' : 'localhost',
-            force,
+      async function initServer() {
+        if (server)
+          await server.close()
+        const options = await resolveOptions({ entry, theme }, 'dev')
+        server = (await createServer(
+          options,
+          {
+            server: {
+              port,
+              strictPort: true,
+              open,
+              host: remote ? '0.0.0.0' : 'localhost',
+              force,
+            },
+            logLevel: log as LogLevel,
           },
-          logLevel: log as LogLevel,
-        },
-        {
-          onDataReload(newData, data) {
-            if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
-              console.log(yellow('\n  restarting on theme change\n'))
-              initServer()
-            }
-            else if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
-              console.log(yellow('\n  restarting on config change\n'))
-              initServer()
-            }
+          {
+            onDataReload(newData, data) {
+              if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
+                console.log(yellow('\n  restarting on theme change\n'))
+                initServer()
+              }
+              else if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
+                console.log(yellow('\n  restarting on config change\n'))
+                initServer()
+              }
+            },
           },
-        },
-      ))
+        ))
+        await server.listen()
+        printInfo(options, port, remote, isPrimary)
+      }
 
-      await server.listen()
-      printInfo(options, port, remote)
-    }
+      initServer()
+      if (isPrimary) {
+        const SHORTCUTS = [
+          {
+            name: 'r',
+            fullname: 'restart',
+            action() {
+              initServer()
+            },
+          },
+          {
+            name: 'o',
+            fullname: 'open',
+            action() {
+              openBrowser(`http://localhost:${port}`)
+            },
+          },
+          {
+            name: 'e',
+            fullname: 'edit',
+            action() {
+              exec(`code "${entry}"`)
+            },
+          },
+        ]
 
-    const SHORTCUTS = [
-      {
-        name: 'r',
-        fullname: 'restart',
-        action() {
-          initServer()
-        },
-      },
-      {
-        name: 'o',
-        fullname: 'open',
-        action() {
-          openBrowser(`http://localhost:${port}`)
-        },
-      },
-      {
-        name: 'e',
-        fullname: 'edit',
-        action() {
-          exec(`code "${entry}"`)
-        },
-      },
-    ]
+        function bindShortcut() {
+          process.stdin.resume()
+          process.stdin.setEncoding('utf8')
+          readline.emitKeypressEvents(process.stdin)
+          if (process.stdin.isTTY)
+            process.stdin.setRawMode(true)
 
-    function bindShortcut() {
-      process.stdin.resume()
-      process.stdin.setEncoding('utf8')
-      readline.emitKeypressEvents(process.stdin)
-      if (process.stdin.isTTY)
-        process.stdin.setRawMode(true)
-
-      process.stdin.on('keypress', (str, key) => {
-        if (key.ctrl && key.name === 'c') {
-          process.exit()
-        }
-        else {
-          const [sh] = SHORTCUTS.filter(item => item.name === str)
-          if (sh) {
-            try {
-              sh.action()
+          process.stdin.on('keypress', (str, key) => {
+            if (key.ctrl && key.name === 'c') {
+              process.exit()
             }
-            catch (err) {
-              console.error(`Failed to execute shortcut ${sh.fullname}`, err)
+            else {
+              const [sh] = SHORTCUTS.filter(item => item.name === str)
+              if (sh) {
+                try {
+                  sh.action()
+                }
+                catch (err) {
+                  console.error(`Failed to execute shortcut ${sh.fullname}`, err)
+                }
+              }
             }
-          }
+          })
         }
-      })
+        bindShortcut()
+      }
     }
-
-    initServer()
-    bindShortcut()
+    const primaryPort = userPort || await findFreePort(3030)
+    if (secondary) {
+      const secondaries = secondary.split(',')
+      for (let i = 0; i < secondaries.length; i++) {
+        const secondaryPort = await findFreePort(primaryPort + 1 + i)
+        await startServerFor(secondaries[i], secondaryPort, false)
+      }
+    }
+    await startServerFor(entry, primaryPort, true)
   },
 )
 
@@ -387,9 +397,13 @@ function commonOptions(args: Argv<{}>) {
       type: 'string',
       describe: 'override theme',
     })
+    .option('secondary', {
+      type: 'string',
+      describe: 'more md files to host',
+    })
 }
 
-function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string | boolean) {
+function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string | boolean, isPrimary = true) {
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
@@ -416,11 +430,13 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
       console.log(`${dim('  remote control ')} > ${dim('pass --remote to enable')}`)
     }
 
-    console.log()
-    console.log(`${dim('  shortcuts ')}      > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
+    if (isPrimary) {
+      console.log()
+      console.log(`${dim('  shortcuts ')}      > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
+      console.log()
+      console.log()
+    }
   }
-  console.log()
-  console.log()
 }
 
 function isPortFree(port: number) {
