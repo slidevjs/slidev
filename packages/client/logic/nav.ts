@@ -158,7 +158,9 @@ export async function downloadPDF() {
   saveAs(
     isString(configs.download)
       ? configs.download
-      : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
+      : configs.exportFilename
+        ? `${configs.exportFilename}.pdf`
+        : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
     `${configs.title}.pdf`,
   )
 }

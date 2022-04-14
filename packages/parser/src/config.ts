@@ -20,6 +20,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     routerMode: 'history',
     aspectRatio: 16 / 9,
     canvasWidth: 980,
+    exportFilename: '',
     selectable: false,
     themeConfig: {},
     fonts: {} as ResolvedFontOptions,
@@ -37,7 +38,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDarwings(headmatter.drawings),
+    drawings: resolveDrawings(headmatter.drawings),
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -135,7 +136,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   }
 }
 
-function resolveDarwings(options: DrawingsOptions = {}): ResolvedDrawingsOptions {
+function resolveDrawings(options: DrawingsOptions = {}): ResolvedDrawingsOptions {
   const {
     enabled = true,
     persist = false,
