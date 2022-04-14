@@ -125,7 +125,7 @@ cli.command(
         printInfo(options, port, remote, isPrimary)
       }
 
-      initServer()
+      await initServer()
       if (isPrimary) {
         const SHORTCUTS = [
           {
