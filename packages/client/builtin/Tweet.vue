@@ -21,10 +21,11 @@ const tweet = ref<HTMLElement | null>()
 
 const vm = getCurrentInstance()!
 const loaded = ref(false)
+const tweetNotFound = ref(false)
 
 async function create() {
   // @ts-expect-error global
-  await window.twttr.widgets.createTweet(
+  const element = await window.twttr.widgets.createTweet(
     props.id.toString(),
     tweet.value,
     {
@@ -33,6 +34,8 @@ async function create() {
     },
   )
   loaded.value = true
+  if (element === undefined)
+    tweetNotFound.value = true
 }
 
 // @ts-expect-error global
@@ -55,10 +58,11 @@ else {
 
 <template>
   <Transform :scale="scale || 1">
-    <div ref="tweet" class="tweet" data-waitfor="iframe">
-      <div v-if="!loaded" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
+    <div ref="tweet" class="tweet" :data-waitfor="tweetNotFound ? '' : 'iframe'">
+      <div v-if="!loaded || tweetNotFound" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
         <div class="m-auto animate-pulse text-4xl">
           <carbon:logo-twitter />
+          <span v-if="tweetNotFound">Could not load tweet with id="{{ props.id }}"</span>
         </div>
       </div>
     </div>
