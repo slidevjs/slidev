@@ -1,16 +1,29 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
-import { go, total } from '../logic/nav'
+import { go, rawRoutes, total } from '../logic/nav'
 import { showGotoDialog } from '../state'
 
 const input = ref<HTMLInputElement>()
 const text = ref('')
-const num = computed(() => +text.value)
-const valid = computed(() => !isNaN(num.value) && num.value > 0 && num.value <= total.value)
+
+const valid = computed(() => {
+  if (text.value.startsWith('/')) {
+    return !!rawRoutes.find(r => r.path === text.value.substring(1))
+  }
+  else {
+    const num = +text.value
+    return !isNaN(num) && num > 0 && num <= total.value
+  }
+})
 
 function goTo() {
-  if (valid.value)
-    go(num.value)
+  if (valid.value) {
+    if (text.value.startsWith('/'))
+      go(text.value.substring(1))
+
+    else
+      go(+text.value)
+  }
   close()
 }
 
@@ -31,8 +44,8 @@ watch(showGotoDialog, async(show) => {
 
 // remove the g character coming from the key that triggered showGotoDialog (e.g. in Firefox)
 watch(text, (t) => {
-  if (t.match(/^[^0-9]/))
-    text.value = text.value.substr(1)
+  if (t.match(/^[^0-9/]/))
+    text.value = text.value.substring(1)
 })
 </script>
 
