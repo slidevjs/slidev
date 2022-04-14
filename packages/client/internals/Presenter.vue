@@ -4,7 +4,8 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { clicks, clicksTotal, currentPage, currentRoute, hasNext, nextRoute, total, useSwipeControls } from '../logic/nav'
 import { showOverview, showPresenterCursor } from '../state'
-import { configs, serverState, themeVars } from '../env'
+import { configs, themeVars } from '../env'
+import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
@@ -72,7 +73,7 @@ onMounted(() => {
       return { x, y }
     },
     (pos) => {
-      serverState.cursor = pos
+      sharedState.cursor = pos
     },
   )
 })

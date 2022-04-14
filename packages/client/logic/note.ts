@@ -35,10 +35,12 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
     ).then(r => r.json())
   }
 
-  import.meta.hot?.on('slidev-update', (payload) => {
-    if (payload.id === id)
-      info.value = payload.data
-  })
+  if (__DEV__) {
+    import.meta.hot?.on('slidev-update', (payload) => {
+      if (payload.id === id)
+        info.value = payload.data
+    })
+  }
 
   return {
     info,
