@@ -529,9 +529,11 @@ defineProps<{ no: number | string }>()`)
           }
           const meta = Object.assign({}, i.frontmatter, additions)
           const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
+          const redirect = i.frontmatter?.routeAlias ? `{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }` : null
           no += 1
-          return route
+          return [route, redirect]
         })
+        .flat()
         .filter(notNullish),
       `{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`,
     ]
