@@ -33,6 +33,7 @@ hideInToc: true
 Parameters:
 
 * `columns` (`string | number`, default: `1`): The number of columns of the display
+* `listClass` (`string | string[]`, default: `''`): Classes to apply to the table of contents list
 * `maxDepth` (`string | number`, default: `Infinity`): The maximum depth level of title to display
 * `minDepth` (`string | number`, default: `1`): The minimum depth level of title to display
 * `mode` (`'all' | 'onlyCurrentTree'| 'onlySiblings'`, default: `'all'`):
