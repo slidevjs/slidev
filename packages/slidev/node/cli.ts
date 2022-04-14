@@ -71,7 +71,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, port: userPort, open, log, remote, force, secondary }) => {
+  async({ entry: mainEntry, theme, port: userPort, open, log, remote, force, secondary }) => {
     async function startServerFor(entry: string, targetPort: number, isPrimary: boolean) {
       if (!fs.existsSync(entry) && !entry.endsWith('.md'))
         entry = `${entry}.md`
@@ -180,13 +180,12 @@ cli.command(
     }
     const primaryPort = userPort || await findFreePort(3030)
     if (secondary) {
-      const secondaries = secondary.split(',')
-      for (let i = 0; i < secondaries.length; i++) {
+      for (let i = 0; i < secondary.length; i++) {
         const secondaryPort = await findFreePort(primaryPort + 1 + i)
-        await startServerFor(secondaries[i], secondaryPort, false)
+        await startServerFor(secondary[i] as string, secondaryPort, false)
       }
     }
-    await startServerFor(entry, primaryPort, true)
+    await startServerFor(mainEntry, primaryPort, true)
   },
 )
 
@@ -398,7 +397,7 @@ function commonOptions(args: Argv<{}>) {
       describe: 'override theme',
     })
     .option('secondary', {
-      type: 'string',
+      type: 'array',
       describe: 'more md files to host',
     })
 }
