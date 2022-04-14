@@ -106,25 +106,28 @@ export interface SlidevConfig {
    * @default {}
    */
   fonts: ResolvedFontOptions
-
   /**
    * Configure the icon for app
    *
    * @default 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
    */
   favicon: string
-
   /**
    * Options for drawings
    */
   drawings: ResolvedDrawingsOptions
-
   /**
    * URL of PlantUML server used to render diagrams
    *
    * @default https://www.plantuml.com/plantuml
    */
   plantUmlServer: string
+  /**
+   * Enable slides recording
+   *
+   * @default 'dev'
+   */
+  record: boolean | 'dev' | 'build'
 }
 
 export interface FontOptions {
