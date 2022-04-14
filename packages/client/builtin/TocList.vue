@@ -34,7 +34,7 @@ const classes = computed(() => {
       <Link :to="item.path">
         <Titles :no="item.path" />
       </Link>
-      <TocList :level="level + 1" :list="item.children" :list-class="listClass" />
+      <TocList v-if="item.children.length > 0" :level="level + 1" :list="item.children" :list-class="listClass" />
     </li>
   </ol>
 </template>

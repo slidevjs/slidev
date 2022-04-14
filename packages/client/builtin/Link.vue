@@ -17,8 +17,8 @@ defineProps<{
 </script>
 
 <template>
-  <RouterLink v-if="!isPrintMode && title" :to="to" v-html="title" />
-  <RouterLink v-else-if="!isPrintMode && !title" :to="to">
+  <RouterLink v-if="!isPrintMode && title" :to="to" @click="$event.target.blur()" v-html="title" />
+  <RouterLink v-else-if="!isPrintMode && !title" :to="to" @click="$event.target.blur()">
     <slot />
   </RouterLink>
   <a v-else-if="isPrintMode && title" :href="'#' + to" v-html="title" />
