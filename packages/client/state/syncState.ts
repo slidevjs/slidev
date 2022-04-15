@@ -1,6 +1,6 @@
 import { reactive, toRaw, watch } from 'vue'
 
-export function createSyncState<State extends object>(serverState: State, defaultState: State) {
+export function createSyncState<State extends object>(serverState: State, defaultState: State, persist = false) {
   const onPatchCallbacks: ((state: State) => void)[] = []
   let patching = false
   let updating = false
@@ -35,11 +35,11 @@ export function createSyncState<State extends object>(serverState: State, defaul
 
   function init(channelKey: string) {
     let stateChannel: BroadcastChannel
-    if (!__DEV__ && !__SLIDEV_FEATURE_DRAWINGS_PERSIST__) {
+    if (!__DEV__ && !persist) {
       stateChannel = new BroadcastChannel(channelKey)
       stateChannel.addEventListener('message', (event: MessageEvent<Partial<State>>) => onUpdate(event.data))
     }
-    else if (!__DEV__ && __SLIDEV_FEATURE_DRAWINGS_PERSIST__) {
+    else if (!__DEV__ && persist) {
       window.addEventListener('storage', (event) => {
         if (event && event.key === channelKey && event.newValue)
           onUpdate(JSON.parse(event.newValue) as Partial<State>)
@@ -47,16 +47,16 @@ export function createSyncState<State extends object>(serverState: State, defaul
     }
 
     function onDrawingStateChanged() {
-      if (!__SLIDEV_FEATURE_DRAWINGS_PERSIST__ && stateChannel && !updating)
+      if (!persist && stateChannel && !updating)
         stateChannel.postMessage(toRaw(state))
-      else if (__SLIDEV_FEATURE_DRAWINGS_PERSIST__ && !updating)
+      else if (persist && !updating)
         window.localStorage.setItem(channelKey, JSON.stringify(state))
       if (!patching)
         onPatchCallbacks.forEach((fn: (state: State) => void) => fn(state))
     }
 
     watch(state, onDrawingStateChanged, { deep: true })
-    if (!__DEV__ && __SLIDEV_FEATURE_DRAWINGS_PERSIST__) {
+    if (!__DEV__ && persist) {
       const serialzedState = window.localStorage.getItem(channelKey)
       if (serialzedState)
         onUpdate(JSON.parse(serialzedState) as Partial<State>)

@@ -17,7 +17,7 @@ export default function setupRoot() {
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
   useHead({ title })
   initSharedState(`${title} - shared`)
-  initDrawingState(`${title} - drawing`)
+  initDrawingState(`${title} - drawings`)
 
   // update shared state
   function updateSharedState() {
