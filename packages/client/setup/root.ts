@@ -2,6 +2,7 @@
 import { useHead } from '@vueuse/head'
 import { configs } from '../env'
 import { initSharedState } from '../state/shared'
+import { initDrawingsState } from '../state/drawings'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
@@ -13,4 +14,5 @@ export default function setupRoot() {
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
   useHead({ title })
   initSharedState(title)
+  initDrawingsState(title)
 }
