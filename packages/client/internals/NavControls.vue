@@ -35,7 +35,7 @@ const barStyle = computed(() => props.persist
 )
 
 const RecordingControls = shallowRef<any>()
-if (__DEV__)
+if (__SLIDEV_FEATURE_RECORD__)
   import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
 
 const DrawingControls = shallowRef<any>()
@@ -79,7 +79,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 
       <VerticalDivider />
 
-      <template v-if="__DEV__ && !isEmbedded">
+      <template v-if="!isEmbedded">
         <template v-if="!isPresenter && !md && RecordingControls">
           <RecordingControls />
           <VerticalDivider />

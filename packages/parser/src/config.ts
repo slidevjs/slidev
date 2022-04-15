@@ -27,6 +27,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png',
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
+    record: 'dev',
   }
   const config: SlidevConfig = {
     ...defaultConfig,

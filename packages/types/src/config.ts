@@ -7,37 +7,41 @@ export interface SlidevConfig {
    * String template to compose title
    *
    * @example "%s - Slidev" - to suffix " - Slidev" to all pages
-   * @defult '%s'
+   * @default '%s - Slidev'
    */
   titleTemplate: string
   /**
+   * Theme to use for the slides
+   *
    * @see https://sli.dev/themes/use.html
-   * @defult 'default'
+   * @default 'default'
    */
   theme: string
   /**
-   * @defult true
+   * Download remote assets in local using vite-plugin-remote-assets
+   *
+   * @default true
    */
   remoteAssets: boolean | 'dev' | 'build'
   /**
    * Enable Monaco
    *
    * @see https://sli.dev/custom/config-monaco.html
-   * @defult 'dev'
+   * @default 'dev'
    */
   monaco: boolean | 'dev' | 'build'
   /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
    *
-   * @default true
+   * @default false
    */
   download: boolean | string
   /**
    * Information shows on the built SPA
    * Can be a markdown string
    *
-   * @default true
+   * @default false
    */
   info: string | boolean
   /**
@@ -62,7 +66,7 @@ export interface SlidevConfig {
   /**
    * Router mode for vue-router
    *
-   * @default 'hash'
+   * @default 'history'
    */
   routerMode: 'hash' | 'history'
   /**
@@ -82,12 +86,14 @@ export interface SlidevConfig {
   /**
    * Force the filename used when exporting the presentation.
    * The extension, e.g. .pdf, gets automatically added.
+   *
+   * @default ''
    */
   exportFilename: string | null
   /**
    * Controls whether texts in slides are selectable
    *
-   * @default false
+   * @default true
    */
   selectable: boolean
   /**
@@ -106,25 +112,30 @@ export interface SlidevConfig {
    * @default {}
    */
   fonts: ResolvedFontOptions
-
   /**
    * Configure the icon for app
    *
    * @default 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
    */
   favicon: string
-
   /**
    * Options for drawings
+   *
+   * @default {}
    */
   drawings: ResolvedDrawingsOptions
-
   /**
    * URL of PlantUML server used to render diagrams
    *
    * @default https://www.plantuml.com/plantuml
    */
   plantUmlServer: string
+  /**
+   * Enable slides recording
+   *
+   * @default 'dev'
+   */
+  record: boolean | 'dev' | 'build'
 }
 
 export interface FontOptions {
@@ -187,7 +198,7 @@ export interface DrawingsOptions {
   persist?: boolean | string
 
   /**
-   * @defult true
+   * @default true
    */
   enabled?: boolean | 'dev' | 'build'
 
