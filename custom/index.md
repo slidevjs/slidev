@@ -11,30 +11,45 @@ You can configure Slidev in the frontmatter of your first slide, the following s
 # theme id or package name
 theme: 'default'
 # title of your slide, will auto infer from the first header if not specified
-title: ''
+title: 'Slidev'
 # titleTemplate for the webpage, `%s` will be replaced by the page's title
 titleTemplate: '%s - Slidev'
+# information for your slides, can be a markdown string
+info: false
 
 # enabled pdf downloading in SPA build, can also be a custom url
-download: true
+download: false
+# filename of the export file
+exportFilename: 'slidev-exported.pdf'
 # syntax highlighter, can be 'prism' or 'shiki'
 highlighter: 'prism'
 # show line numbers in code blocks
 lineNumbers: false
-# enable monaco editor, default to dev only
+# enable monaco editor, can be boolean, 'dev' or 'build'
 monaco: 'dev'
+# download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
+remoteAssets: false
+# controls whether texts in slides are selectable
+selectable: true
+# enable slide recording, can be boolean, 'dev' or 'build'
+record: 'dev'
 
-# force color schema for the slides, could be 'auto', 'light', or 'dark'
+# force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: 'auto'
-# router mode for vue-router, could be "history" or "hash"
+# router mode for vue-router, can be "history" or "hash"
 routerMode: 'history'
 # aspect ratio for the slides
 aspectRatio: '16/9'
 # real width of the canvas, unit in px
 canvasWidth: 980
+# used for theme customization, will inject root styles as `--slidev-theme-x` for attribute `x`
+themeConfig:
+  primary: '#5d8392'
 
 # favicon, can be a local file path or URL
 favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
+# URL of PlantUML server used to render diagrams
+plantUmlServer: 'https://www.plantuml.com/plantuml'
 # fonts will be auto imported from Google fonts
 # Learn more: https://sli.dev/custom/fonts
 fonts:
@@ -47,10 +62,13 @@ defaults:
   layout: 'default'
   # ...
 
-# information for your slides, can be a markdown string
-info: |
-  ## Slidev
-  My first [Slidev](http://sli.dev/) presentations!
+# drawing options
+# Learn more: https://sli.dev/guide/drawing.html
+drawings:
+  enabled: true
+  persist: false
+  presenterOnly: false
+  syncAll: true
 ---
 ```
 
