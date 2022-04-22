@@ -104,7 +104,7 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
 
----
+---Code
 layout: image-right
 image: https://source.unsplash.com/collection/94734566/1920x1080
 ---
@@ -177,7 +177,7 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 </div>
 
 
----
+---Themes
 class: px-20
 ---
 
@@ -208,7 +208,7 @@ theme: seriph
 Read more about [How to use a theme](https://sli.dev/themes/use.html) and
 check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
 
----
+---Animations
 preload: false
 ---
 
@@ -373,7 +373,7 @@ database "MySql" {
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
 
 
----
+---Learn More
 layout: center
 class: text-center
 ---
