@@ -327,7 +327,7 @@ export const community: ThemeInfo[] = [
     previews: [
       'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/01.png',
       'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/02.png',
-      'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/03.png',
+      'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/08.png',
       'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/04.png',
       'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/05.png',
       'https://cdn.jsdelivr.net/gh/alexanderdavide/slidev-theme-academic@assets/example-export/06.png',
