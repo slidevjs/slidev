@@ -35,6 +35,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 
 const clicks = computed(() => props.clicks)
 const navClicks = useNavClicks(clicks, props.nav.currentRoute, props.nav.currentPage)
+const id = computed(() => `${props.route.path.toString().padStart(3, '0')}-${(clicks.value + 1).toString().padStart(2, '0')}`)
 
 provide(injectionSlidevContext, reactive({
   nav: { ...props.nav, ...navClicks },
@@ -44,7 +45,7 @@ provide(injectionSlidevContext, reactive({
 </script>
 
 <template>
-  <div :id="route.path" class="slide-container" :style="style">
+  <div :id="id" class="slide-container" :style="style">
     <GlobalBottom />
 
     <SlideWrapper
