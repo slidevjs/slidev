@@ -8,9 +8,9 @@ import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
 
-const emit = defineEmits([])
 const props = defineProps<{ modelValue: boolean }>()
 
+const emit = defineEmits([])
 const value = useVModel(props, 'modelValue', emit)
 
 function close() {

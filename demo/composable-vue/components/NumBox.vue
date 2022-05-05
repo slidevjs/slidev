@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 
-const emit = defineEmits<{
-  (e: any): void
-}>()
 const props = defineProps<{
   value: number
   label?: string
@@ -11,6 +8,9 @@ const props = defineProps<{
   controls?: boolean
 }>()
 
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const num = useVModel(props, 'value', emit)
 </script>
 

@@ -36,9 +36,9 @@ export function resolveShikiOptions(options: ShikiOptions) {
     themes,
     darkModeThemes: darkModeThemes
       ? {
-        dark: getThemeName(darkModeThemes.dark),
-        light: getThemeName(darkModeThemes.light),
-      }
+          dark: getThemeName(darkModeThemes.dark),
+          light: getThemeName(darkModeThemes.light),
+        }
       : undefined,
   }
 }

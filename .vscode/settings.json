@@ -2,11 +2,11 @@
   "prettier.enable": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
+    "source.fixAll.eslint": true
   },
   "files.associations": {
-    "*.css": "postcss",
+    "*.css": "postcss"
   },
   "vite.devCommand": "nr docs",
-  "vite.open": false,
+  "vite.open": false
 }

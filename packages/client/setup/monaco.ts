@@ -4,7 +4,7 @@ import { createSingletonPromise } from '@antfu/utils'
 import type { MonacoSetupReturn } from '@slidev/types'
 /* __imports__ */
 
-const setup = createSingletonPromise(async() => {
+const setup = createSingletonPromise(async () => {
   monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
     ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
     noUnusedLocals: false,
@@ -16,7 +16,7 @@ const setup = createSingletonPromise(async() => {
 
   await Promise.all([
     // load workers
-    (async() => {
+    (async () => {
       const [
         { default: EditorWorker },
         { default: JsonWorker },

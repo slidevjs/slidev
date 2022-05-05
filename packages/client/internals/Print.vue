@@ -30,7 +30,7 @@ watchEffect(() => {
   <div id="page-root" class="grid grid-cols-[1fr,max-content]" :style="themeVars">
     <PrintContainer
       class="w-full h-full"
-      :style="{ background: 'var(--slidev-slide-container-background, black)'}"
+      :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="windowSize.width.value"
     />
   </div>

@@ -12,8 +12,6 @@ import { computed, inject } from 'vue'
 import type { TocItem } from '../logic/nav'
 import { injectionSlidevContext } from '../constants'
 
-const $slidev = inject(injectionSlidevContext)
-
 const props = withDefaults(
   defineProps<{
     columns?: string | number
@@ -30,6 +28,8 @@ const props = withDefaults(
     mode: 'all',
   },
 )
+
+const $slidev = inject(injectionSlidevContext)
 
 function filterTreeDepth(tree: TocItem[], level = 1): TocItem[] {
   if (level > Number(props.maxDepth)) {

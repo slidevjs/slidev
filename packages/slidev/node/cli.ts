@@ -71,7 +71,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, port: userPort, open, log, remote, force }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, force }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -206,7 +206,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({ entry, theme, watch, base, download, out }) => {
+  async ({ entry, theme, watch, base, download, out }) => {
     const { build } = await import('./build')
 
     const options = await resolveOptions({ entry, theme }, 'build')
@@ -230,7 +230,7 @@ cli.command(
   args => commonOptions(args)
     .strict()
     .help(),
-  async({ entry }) => {
+  async ({ entry }) => {
     const data = await parser.load(entry)
     parser.prettify(data)
     await parser.save(data)
@@ -250,7 +250,7 @@ cli.command(
             type: 'string',
             default: 'theme',
           }),
-        async({ entry, dir, theme: themeInput }) => {
+        async ({ entry, dir, theme: themeInput }) => {
           const data = await parser.load(entry)
           const theme = resolveThemeName(themeInput || data.config.theme)
           if (theme === 'none') {
@@ -324,7 +324,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async({
+  async ({
     entry,
     theme,
     output,

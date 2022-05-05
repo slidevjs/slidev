@@ -3,9 +3,6 @@ import { useVModel } from '@vueuse/core'
 import type { PropType } from 'vue'
 import type { SelectionItem } from './types'
 
-const emit = defineEmits<{
-  (e: any): void
-}>()
 const props = defineProps({
   modelValue: {
     type: [Object, String, Number] as PropType<any>,
@@ -18,6 +15,9 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const value = useVModel(props, 'modelValue', emit, { passive: true })
 </script>
 

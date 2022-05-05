@@ -31,21 +31,21 @@ function setBrushColor(color: typeof brush.color) {
     :initial-x="10"
     :initial-y="10"
   >
-    <button class="icon-btn" :class="{ shallow: drawingMode != 'stylus' }" @click="setDrawingMode('stylus')">
+    <button class="icon-btn" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
       <carbon:pen />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode != 'line' }" @click="setDrawingMode('line')">
+    <button class="icon-btn" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
       <svg width="1em" height="1em" class="-mt-0.5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
         <path d="M21.71 3.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l18-18a1 1 0 0 0 0-1.42z" fill="currentColor" />
       </svg>
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode != 'arrow' }" @click="setDrawingMode('arrow')">
+    <button class="icon-btn" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
       <carbon:arrow-up-right />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode != 'ellipse' }" @click="setDrawingMode('ellipse')">
+    <button class="icon-btn" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
       <carbon:radio-button />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode != 'rectangle' }" @click="setDrawingMode('rectangle')">
+    <button class="icon-btn" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
       <carbon:checkbox />
     </button>
     <!-- TODO: not sure why it's not working! -->
@@ -65,7 +65,7 @@ function setBrushColor(color: typeof brush.color) {
       <div
         class="w-6 h-6 transition-all transform border border-gray-400/50"
         :class="brush.color !== color ? 'rounded-1/2 scale-85' : 'rounded-md'"
-        :style="drawingEnabled? { background: color } : { borderColor: color }"
+        :style="drawingEnabled ? { background: color } : { borderColor: color }"
       />
     </button>
 

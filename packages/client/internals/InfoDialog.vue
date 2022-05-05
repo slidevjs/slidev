@@ -4,13 +4,13 @@ import { computed } from 'vue'
 import { configs } from '../env'
 import Modal from './Modal.vue'
 
-const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
 const props = defineProps({
   modelValue: {
     default: false,
   },
 })
 
+const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
 const value = useVModel(props, 'modelValue', emit)
 const hasInfo = computed(() => typeof configs.info === 'string')
 </script>

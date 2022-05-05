@@ -11,8 +11,6 @@ Simple Arrow
 <script setup lang="ts">
 import { customAlphabet } from 'nanoid'
 
-const nanoid = customAlphabet('abcedfghijklmn', 10)
-
 defineProps<{
   x1: number | string
   y1: number | string
@@ -21,6 +19,8 @@ defineProps<{
   width?: number | string
   color?: string
 }>()
+
+const nanoid = customAlphabet('abcedfghijklmn', 10)
 
 const id = nanoid()
 </script>

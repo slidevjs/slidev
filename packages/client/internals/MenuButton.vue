@@ -2,9 +2,6 @@
 import { onClickOutside, useVModel } from '@vueuse/core'
 import { ref } from 'vue'
 
-const emit = defineEmits<{
-  (e: any): void
-}>()
 const props = defineProps({
   modelValue: {
     default: false,
@@ -14,6 +11,9 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits<{
+  (e: any): void
+}>()
 const value = useVModel(props, 'modelValue', emit, { passive: true })
 const el = ref<HTMLDivElement>()
 

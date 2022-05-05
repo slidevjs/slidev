@@ -57,9 +57,9 @@ provide(injectionSlidevContext, reactive({
     />
     <template
       v-if="
-        (__SLIDEV_FEATURE_DRAWINGS__ ||
-          __SLIDEV_FEATURE_DRAWINGS_PERSIST__) &&
-          DrawingPreview
+        (__SLIDEV_FEATURE_DRAWINGS__
+          || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
+          && DrawingPreview
       "
     >
       <DrawingPreview :page="+route.path" />

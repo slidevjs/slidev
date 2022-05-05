@@ -166,7 +166,7 @@ export default function math_plugin(md: any, options: KatexOptions) {
   options = options || {}
 
   // set KaTeX as the renderer for markdown-it-simplemath
-  const katexInline = function(latex: string) {
+  const katexInline = function (latex: string) {
     options.displayMode = false
     try {
       return katex.renderToString(latex, options)
@@ -179,11 +179,11 @@ export default function math_plugin(md: any, options: KatexOptions) {
     }
   }
 
-  const inlineRenderer = function(tokens: any, idx: number) {
+  const inlineRenderer = function (tokens: any, idx: number) {
     return katexInline(tokens[idx].content)
   }
 
-  const katexBlock = function(latex: string) {
+  const katexBlock = function (latex: string) {
     options.displayMode = true
     try {
       return `<p>${katex.renderToString(latex, options)}</p>`
@@ -196,7 +196,7 @@ export default function math_plugin(md: any, options: KatexOptions) {
     }
   }
 
-  const blockRenderer = function(tokens: any, idx: number) {
+  const blockRenderer = function (tokens: any, idx: number) {
     return `${katexBlock(tokens[idx].content)}\n`
   }
 

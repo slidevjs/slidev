@@ -4,7 +4,7 @@ import type { Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
 import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 
-export interface UseSlideInfo{
+export interface UseSlideInfo {
   info: Ref<SlideInfoExtended | undefined>
   update: (data: Partial<SlideInfo>) => Promise<SlideInfoExtended | void>
 }
@@ -13,7 +13,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
   if (id == null) {
     return {
       info: ref() as Ref<SlideInfoExtended | undefined>,
-      update: async() => {},
+      update: async () => {},
     }
   }
   const url = `/@slidev/slide/${id}.json`
@@ -21,7 +21,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
 
   execute()
 
-  const update = async(data: Partial<SlideInfo>) => {
+  const update = async (data: Partial<SlideInfo>) => {
     return await fetch(
       url,
       {
@@ -60,7 +60,7 @@ export function useDynamicSlideInfo(id: MaybeRef<number | undefined>) {
 
   return {
     info: computed(() => get(unref(id)).info.value),
-    update: async(data: Partial<SlideInfo>, newId?: number) => {
+    update: async (data: Partial<SlideInfo>, newId?: number) => {
       const info = get(newId ?? unref(id))
       const newData = await info.update(data)
       if (newData)

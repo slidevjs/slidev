@@ -31,7 +31,7 @@ function close() {
   showGotoDialog.value = false
 }
 
-watch(showGotoDialog, async(show) => {
+watch(showGotoDialog, async (show) => {
   if (show) {
     await nextTick()
     text.value = ''

@@ -21,7 +21,7 @@ export async function loadDrawings(options: ResolvedSlidevOptions) {
   })
 
   const obj: Record<string, string> = {}
-  Promise.all(files.map(async(path) => {
+  Promise.all(files.map(async (path) => {
     const num = +basename(path, '.svg')
     if (Number.isNaN(num))
       return
@@ -45,7 +45,7 @@ export async function writeDarwings(options: ResolvedSlidevOptions, drawing: Rec
   await fs.ensureDir(dir)
 
   return Promise.all(
-    Object.entries(drawing).map(async([key, value]) => {
+    Object.entries(drawing).map(async ([key, value]) => {
       if (!value)
         return
 

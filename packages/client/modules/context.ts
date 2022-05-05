@@ -8,7 +8,7 @@ import { isDark } from '../logic/dark'
 import { injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 
-export type SlidevContextNavKey = 'route' | 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute'| 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
+export type SlidevContextNavKey = 'route' | 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
 export type SlidevContextNavClicksKey = 'clicks' | 'clicksElements' | 'clicksTotal' | 'hasNext' | 'hasPrev'
 
 export type SlidevContextNav = Pick<typeof nav, SlidevContextNavKey>

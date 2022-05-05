@@ -55,7 +55,7 @@ watch([a2, b2], () => cc.value = true)
         class="absolute left-65 top-17.5 from-blue-400 to-purple-400"
         :active="cc"
       />
-      <!--Line1-->
+      <!-- Line1 -->
       <svg
         class="absolute left-20 top-10 -z-1"
         width="62"
@@ -73,7 +73,7 @@ watch([a2, b2], () => cc.value = true)
           stroke-dasharray="5 2"
         />
       </svg>
-      <!--Line2-->
+      <!-- Line2 -->
       <svg
         class="absolute left-20 top-40 -z-1"
         width="62"
@@ -91,7 +91,7 @@ watch([a2, b2], () => cc.value = true)
           stroke-dasharray="5 2"
         />
       </svg>
-      <!--Arc1-->
+      <!-- Arc1 -->
       <svg
         class="absolute left-50 top-10 -z-1"
         width="62"
@@ -102,7 +102,7 @@ watch([a2, b2], () => cc.value = true)
       >
         <path d="M0 0.5C27.5 0.5 39.5 59 61.5 60" stroke="#888888" stroke-dasharray="5 2" />
       </svg>
-      <!--Arc2-->
+      <!-- Arc2 -->
       <svg
         class="absolute left-50 top-25 -z-1"
         width="62"

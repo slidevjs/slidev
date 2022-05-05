@@ -10,7 +10,7 @@
     "@slidev/theme-default": "^0.21.2",
     "@slidev/theme-seriph": "^0.21.2",
     "@slidev/types": "workspace:*",
-    "nodemon": "^2.0.15",
-    "vite-plugin-inspect": "^0.4.3"
+    "nodemon": "^2.0.16",
+    "vite-plugin-inspect": "^0.5.0"
   }
 }

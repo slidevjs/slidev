@@ -110,18 +110,18 @@ export function useRecording() {
         video: currentCamera.value === 'none' || recordCamera.value !== true
           ? false
           : {
-            deviceId: currentCamera.value,
-          },
+              deviceId: currentCamera.value,
+            },
         audio: currentMic.value === 'none'
           ? false
           : {
-            deviceId: currentMic.value,
-          },
+              deviceId: currentMic.value,
+            },
       })
     }
   }
 
-  watch(currentCamera, async(v) => {
+  watch(currentCamera, async (v) => {
     if (v === 'none') {
       closeStream(streamCamera)
     }

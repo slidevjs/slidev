@@ -23,7 +23,7 @@ export { rawRoutes, router }
 // force update collected elements when the route is fully resolved
 const routeForceRefresh = ref(0)
 nextTick(() => {
-  router.afterEach(async() => {
+  router.afterEach(async () => {
     await nextTick()
     routeForceRefresh.value += 1
   })

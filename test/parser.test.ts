@@ -10,7 +10,7 @@ describe('md parser', () => {
   })
 
   for (const file of files) {
-    it(basename(file), async() => {
+    it(basename(file), async () => {
       const data = await load(file)
 
       expect(stringify(data).trim()).toEqual(data.raw.trim())

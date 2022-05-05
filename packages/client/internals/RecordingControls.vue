@@ -24,7 +24,7 @@ function toggleRecording() {
   <button
     v-if="currentCamera !== 'none'"
     class="icon-btn <md:hidden"
-    :class="{'text-green-500': Boolean(showAvatar && streamCamera)}"
+    :class="{ 'text-green-500': Boolean(showAvatar && streamCamera) }"
     title="Show camera view"
     @click="toggleAvatar"
   >
@@ -33,7 +33,7 @@ function toggleRecording() {
 
   <button
     class="icon-btn"
-    :class="{'text-red-500': recording}"
+    :class="{ 'text-red-500': recording }"
     title="Recording"
     @click="toggleRecording"
   >

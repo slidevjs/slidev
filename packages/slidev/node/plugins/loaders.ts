@@ -85,7 +85,7 @@ export function createSlidesLoader(
         server = _server
         updateServerWatcher()
 
-        server.middlewares.use(async(req, res, next) => {
+        server.middlewares.use(async (req, res, next) => {
           const match = req.url?.match(regexId)
           if (!match)
             return next()
@@ -179,7 +179,7 @@ export function createSlidesLoader(
 
         const vueModules = (
           await Promise.all(
-            Array.from(hmrPages).map(async(i) => {
+            Array.from(hmrPages).map(async (i) => {
               const file = `${slidePrefix}${i + 1}.md`
               try {
                 const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)

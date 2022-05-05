@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 
-const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
 const props = defineProps({
   modelValue: {
     default: false,
@@ -11,6 +10,7 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
 const value = useVModel(props, 'modelValue', emit)
 
 function onClick() {

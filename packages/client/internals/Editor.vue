@@ -127,13 +127,13 @@ throttledWatch(
 <template>
   <div
     class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
-    :class="{'!opacity-30': handlerDown}"
-    :style="{right: `${editorWidth - 5}px`, cursor: 'col-resize'}"
+    :class="{ '!opacity-30': handlerDown }"
+    :style="{ right: `${editorWidth - 5}px`, cursor: 'col-resize' }"
     @pointerdown="onHandlerDown"
   />
   <div
     class="shadow bg-main p-4 grid grid-rows-[max-content,1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
-    :style="{width: `${editorWidth}px`}"
+    :style="{ width: `${editorWidth}px` }"
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
