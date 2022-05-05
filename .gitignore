@@ -7,6 +7,7 @@ node_modules
 .idea/
 *.pdf
 *-export
+slides-export.md
 assets/demo
 packages/slidev/README.md
 packages/create-app/template/slides.md
