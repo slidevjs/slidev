@@ -108,7 +108,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <VerticalDivider />
       </template>
 
-      <template v-if="__DEV__ && !isEmbedded">
+      <template v-if="!isEmbedded">
         <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
@@ -116,7 +116,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <carbon:user-speaker />
         </RouterLink>
 
-        <button v-if="!isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
+        <button v-if="__DEV__ && !isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
           <carbon:text-annotation-toggle />
         </button>
       </template>

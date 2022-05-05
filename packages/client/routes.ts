@@ -19,21 +19,16 @@ export const routes: RouteRecordRaw[] = [
   { name: 'print', path: '/print', component: Print },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
+  {
+    name: 'presenter',
+    path: '/presenter/:no',
+    component: () => import('./internals/Presenter.vue'),
+  },
+  {
+    path: '/presenter',
+    redirect: { path: '/presenter/1' },
+  },
 ]
-
-if (import.meta.env.DEV) {
-  routes.push(
-    {
-      name: 'presenter',
-      path: '/presenter/:no',
-      component: () => import('./internals/Presenter.vue'),
-    },
-    {
-      path: '/presenter',
-      redirect: { path: '/presenter/1' },
-    },
-  )
-}
 
 export const router = createRouter({
   history: __SLIDEV_HASH_ROUTE__ ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),

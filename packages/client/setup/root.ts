@@ -1,9 +1,11 @@
 /* __imports__ */
-import { useHead } from '@vueuse/head'
 import { watch } from 'vue'
+import { useHead } from '@vueuse/head'
+import { configs } from '../env'
+import { initSharedState, onPatch, patch } from '../state/shared'
+import { initDrawingState } from '../state/drawings'
 import { clicks, currentPage, getPath, isPresenter } from '../logic/nav'
 import { router } from '../routes'
-import { configs, serverState } from '../env'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
@@ -12,36 +14,30 @@ export default function setupRoot() {
 
   /* __injections__ */
 
-  useHead({
-    title: configs.titleTemplate.replace('%s', configs.title || 'Slidev'),
-  })
+  const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
+  useHead({ title })
+  initSharedState(`${title} - shared`)
+  initDrawingState(`${title} - drawings`)
 
-  function onServerStateChanged() {
-    if (isPresenter.value)
-      return
-    if (+serverState.page !== +currentPage.value || clicks.value !== serverState.clicks) {
+  // update shared state
+  function updateSharedState() {
+    if (isPresenter.value) {
+      patch('page', +currentPage.value)
+      patch('clicks', clicks.value)
+    }
+  }
+  router.afterEach(updateSharedState)
+  watch(clicks, updateSharedState)
+
+  onPatch((state) => {
+    if (+state.page !== +currentPage.value || clicks.value !== state.clicks) {
       router.replace({
-        path: getPath(serverState.page),
+        path: getPath(state.page),
         query: {
           ...router.currentRoute.value.query,
-          clicks: serverState.clicks || 0,
+          clicks: state.clicks || 0,
         },
       })
     }
-  }
-  function updateServerState() {
-    if (isPresenter.value) {
-      serverState.page = +currentPage.value
-      serverState.clicks = clicks.value
-    }
-  }
-
-  // upload state to server
-  router.afterEach(updateServerState)
-  watch(clicks, updateServerState)
-
-  // sync with server state
-  router.isReady().then(() => {
-    watch(serverState, onServerStateChanged, { deep: true })
   })
 }

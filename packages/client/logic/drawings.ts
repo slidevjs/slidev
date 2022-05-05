@@ -1,8 +1,9 @@
-import { computed, markRaw, nextTick, reactive, ref, watch, watchEffect } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import type { Brush, Options as DrauuOptions, DrawingMode } from 'drauu'
 import { createDrauu } from 'drauu'
 import { toReactive, useStorage } from '@vueuse/core'
-import { configs, serverDrawingState as drawingState } from '../env'
+import { drawingState, onPatch, patch } from '../state/drawings'
+import { configs } from '../env'
 import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [
@@ -29,7 +30,9 @@ export const brush = toReactive(useStorage<Brush>('slidev-drawing-brush', {
 }))
 
 const _mode = ref<DrawingMode | 'arrow'>('stylus')
+const syncUp = computed(() => configs.drawings.syncAll || isPresenter.value)
 let disableDump = false
+
 export const drawingMode = computed({
   get() {
     return _mode.value
@@ -56,7 +59,8 @@ export const drauu = markRaw(createDrauu(drauuOptions))
 
 export function clearDrauu() {
   drauu.clear()
-  drawingState.$patch({ [currentPage.value]: '' })
+  if (syncUp.value)
+    patch(currentPage.value, '')
 }
 
 export function updateState() {
@@ -80,24 +84,18 @@ drauu.on('changed', () => {
   if (!disableDump) {
     const dump = drauu.dump()
     const key = currentPage.value
-    if ((drawingState[key] || '') !== dump) {
-      if (__DEV__)
-        drawingState.$patch({ [key]: drauu.dump() })
-      else
-        drawingState[key] = drauu.dump()
-    }
+    if ((drawingState[key] || '') !== dump && syncUp.value)
+      patch(key, drauu.dump())
   }
 })
 
-if (__DEV__) {
-  drawingState.$onPatch((patch) => {
-    disableDump = true
-    if (patch[currentPage.value] != null)
-      drauu.load(patch[currentPage.value] || '')
-    disableDump = false
-    updateState()
-  })
-}
+onPatch((state) => {
+  disableDump = true
+  if (state[currentPage.value] != null)
+    drauu.load(state[currentPage.value] || '')
+  disableDump = false
+  updateState()
+})
 
 nextTick(() => {
   watch(currentPage, () => {
@@ -105,10 +103,6 @@ nextTick(() => {
       return
     loadCanvas()
   }, { immediate: true })
-
-  watchEffect(() => {
-    drawingState.$syncUp = configs.drawings.syncAll || isPresenter.value
-  })
 })
 
 drauu.on('start', () => isDrawing.value = true)
