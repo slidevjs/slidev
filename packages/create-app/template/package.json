@@ -1,4 +1,5 @@
 {
+  "name": "untitled",
   "private": true,
   "scripts": {
     "build": "slidev build",
