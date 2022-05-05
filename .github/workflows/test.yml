@@ -29,15 +29,15 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Setup
-        run: npm i -g pnpm @antfu/ni
+        run: npm i -g @antfu/ni
 
       - name: Install
         run: nci
@@ -55,15 +55,15 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
 
       - name: Setup
-        run: npm i -g pnpm @antfu/ni
+        run: npm i -g @antfu/ni
 
       - name: Install
         run: nci
@@ -86,15 +86,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
 
       - name: Setup
-        run: npm i -g pnpm @antfu/ni
+        run: npm i -g @antfu/ni
 
       - name: Install
         run: nci
