@@ -1,8 +1,6 @@
-import path from 'path'
 import { fileURLToPath } from 'url'
-import fs from 'fs-extra'
 import { installBrowsersWithProgressBar } from 'playwright-chromium/lib/install/installer.js'
-import { $, cd } from 'zx'
+import { $, cd, fs, path } from 'zx'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

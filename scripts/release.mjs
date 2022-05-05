@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { join } from 'path'
 import { execSync } from 'child_process'
-import fs from 'fs-extra'
 import { objectMap } from '@antfu/utils'
-import { $ } from 'zx'
+import { $, fs } from 'zx'
 
 execSync('npx bumpp package.json packages/*/package.json', { stdio: 'inherit' })
 
