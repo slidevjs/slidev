@@ -15,7 +15,7 @@ ports:
 vscode:
   extensions:
     - "antfu.vite"
-    - "johnsoncodehk.volar"
+    - "Vue.volar"
     - "antfu.iconify"
     - "dbaeumer.vscode-eslint"
     - "voorjaar.windicss-intellisense"
