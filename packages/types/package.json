@@ -20,11 +20,14 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "pnpx tsup src/index.ts --format cjs,esm --dts --splitting",
+    "build": "tsup src/index.ts --format cjs,esm --dts --splitting",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "tsup": "^5.12.7"
   }
 }

@@ -328,7 +328,10 @@ importers:
       sirv: 2.0.2
 
   packages/types:
-    specifiers: {}
+    specifiers:
+      tsup: ^5.12.7
+    devDependencies:
+      tsup: 5.12.7
 
 packages:
 
@@ -6107,6 +6110,35 @@ packages:
       sucrase: 3.21.0
       tree-kill: 1.2.2
       typescript: 4.6.4
+    transitivePeerDependencies:
+      - postcss
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup/5.12.7:
+    resolution: {integrity: sha512-+OxYroGLByY0Fm8DLZaB4nVMlD59VsQoNXdhnO9wOG+cOsKXUwN3ER9gaKOjZJG26eKUXebmDme0Cy3emfRvOQ==}
+    hasBin: true
+    peerDependencies:
+      typescript: ^4.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 3.0.4_esbuild@0.14.36
+      cac: 6.7.12
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.14.36
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 3.1.4
+      resolve-from: 5.0.0
+      rollup: 2.70.1
+      source-map: 0.7.3
+      sucrase: 3.21.0
+      tree-kill: 1.2.2
     transitivePeerDependencies:
       - postcss
       - supports-color
