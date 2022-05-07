@@ -15,6 +15,7 @@ pie
 <script setup lang="ts">
 import { computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
+import ShadowRoot from '../internals/ShadowRoot.vue'
 
 const props = defineProps<{
   code: string
@@ -51,5 +52,5 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div ref="el" class="mermaid" v-html="html" />
+  <ShadowRoot class="mermaid" :inner-html="html" />
 </template>
