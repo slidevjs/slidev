@@ -36,6 +36,8 @@ export const isPrintWithClicks = computed(() => route.value.query.print === 'cli
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 export const isClicksDisabled = computed(() => isPrintMode.value && !isPrintWithClicks.value)
+export const presenterToken = computed(() => route.value.query.token)
+export const showPresenter = computed(() => !isPresenter.value && (!configs.presenter.isPrivate || presenterToken.value === configs.presenter.token))
 
 export const queryClicks = useRouteQuery('clicks', '0')
 export const total = computed(() => rawRoutes.length - 1)

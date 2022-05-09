@@ -136,6 +136,12 @@ export interface SlidevConfig {
    * @default 'dev'
    */
   record: boolean | 'dev' | 'build'
+  /**
+   * Options for presenter mode
+   *
+   * @default {public:true}
+   */
+  presenter: ResolvedPresenterOptions
 }
 
 export interface FontOptions {
@@ -217,6 +223,21 @@ export interface DrawingsOptions {
   syncAll?: boolean
 }
 
+export interface PresenterOptions {
+  /**
+   * Restrict access to presenter mode
+   *
+   * @default true
+   */
+  isPrivate?: boolean
+  /**
+   * Remote access key for the presenter mode
+   *
+   * @default true
+   */
+  token?: string
+}
+
 export interface ResolvedFontOptions {
   sans: string[]
   mono: string[]
@@ -233,4 +254,9 @@ export interface ResolvedDrawingsOptions {
   enabled: boolean | 'dev' | 'build'
   presenterOnly: boolean
   syncAll: boolean
+}
+
+export interface ResolvedPresenterOptions {
+  isPrivate: boolean
+  token: string
 }

@@ -390,6 +390,7 @@ function commonOptions(args: Argv<{}>) {
 }
 
 function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string | boolean) {
+  const query = options.data.config.presenter.isPrivate ? `?token=${options.data.config.presenter.token}` : ''
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
@@ -398,26 +399,32 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
   if (port) {
-    const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter`
+    const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     console.log()
-    console.log(`${dim('  slide show     ')} > ${cyan(`http://localhost:${bold(port)}/`)}`)
-    console.log(`${dim('  presenter mode ')} > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
+    if (options.data.config.presenter.isPrivate)
+      console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
+    console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
 
     if (remote) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
           .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            console.log(`${dim('  remote control ')} > ${blue(`http://${address}:${port}${presenterPath}`)}`)
+            console.log(`${dim('  remote control ')}     > ${blue(`http://${address}:${port}${presenterPath}`)}`)
           }),
         )
     }
     else {
-      console.log(`${dim('  remote control ')} > ${dim('pass --remote to enable')}`)
+      console.log(`${dim('  remote control ')}     > ${dim('pass --remote to enable')}`)
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}      > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
+  }
+  else {
+    console.log()
+    console.log(`${dim('  private query to append for presenter mode ')} > ${cyan(query)}`)
   }
   console.log()
   console.log()

@@ -4,6 +4,7 @@ import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
 // @ts-expect-error missing types
 import _rawRoutes from '/@slidev/routes'
+import _configs from '/@slidev/configs'
 
 export const rawRoutes = _rawRoutes as RouteRecordRaw[]
 
@@ -23,6 +24,13 @@ export const routes: RouteRecordRaw[] = [
     name: 'presenter',
     path: '/presenter/:no',
     component: () => import('./internals/Presenter.vue'),
+    beforeEnter: (to) => {
+      if (!_configs.presenter.isPrivate || _configs.presenter.token === to.query.token)
+        return true
+      if (to.params.no)
+        return { path: `/${to.params.no}` }
+      return { path: '' }
+    },
   },
   {
     path: '/presenter',
