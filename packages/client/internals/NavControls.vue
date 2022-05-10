@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterToken, prev, showPresenter, total } from '../logic/nav'
+import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, showEditor, showInfoDialog, showPresenterCursor, toggleOverview } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
@@ -20,7 +20,7 @@ const props = defineProps({
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
-const query = computed(() => presenterToken.value ? `?token=${presenterToken.value}` : '')
+const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
 const presenterLink = computed(() => `/presenter/${currentPage.value}${query.value}`)
 const nonPresenterLink = computed(() => `/${currentPage.value}${query.value}`)
 

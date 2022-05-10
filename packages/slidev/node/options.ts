@@ -30,6 +30,11 @@ export interface SlidevEntryOptions {
   theme?: string
 
   /**
+   * Remote password
+   */
+  remote?: string
+
+  /**
    * Root path
    *
    * @default process.cwd()
@@ -47,6 +52,7 @@ export interface ResolvedSlidevOptions {
   themeRoots: string[]
   roots: string[]
   mode: 'dev' | 'build'
+  remote?: string
 }
 
 export interface SlidevPluginOptions extends SlidevEntryOptions {
@@ -103,6 +109,7 @@ export async function resolveOptions(
   mode: ResolvedSlidevOptions['mode'],
   promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
+  const { remote } = options
   const {
     entry,
     userRoot,
@@ -144,6 +151,7 @@ export async function resolveOptions(
     cliRoot,
     themeRoots,
     roots,
+    remote,
   })
 
   return {
@@ -156,5 +164,6 @@ export async function resolveOptions(
     cliRoot,
     themeRoots,
     roots,
+    remote,
   }
 }

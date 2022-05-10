@@ -137,11 +137,11 @@ export interface SlidevConfig {
    */
   record: boolean | 'dev' | 'build'
   /**
-   * Options for presenter mode
+   * Remote password
    *
-   * @default {}
+   * @default undefined
    */
-  presenter: ResolvedPresenterOptions
+  remote?: string
 }
 
 export interface FontOptions {
@@ -254,9 +254,4 @@ export interface ResolvedDrawingsOptions {
   enabled: boolean | 'dev' | 'build'
   presenterOnly: boolean
   syncAll: boolean
-}
-
-export interface ResolvedPresenterOptions {
-  isPrivate: boolean
-  token: string
 }

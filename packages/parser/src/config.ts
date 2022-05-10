@@ -1,8 +1,6 @@
 import { toArray, uniq } from '@antfu/utils'
-import type { DrawingsOptions, FontOptions, PresenterOptions, ResolvedDrawingsOptions, ResolvedFontOptions, ResolvedPresenterOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
-
-const PRESENTER_TOKEN = Math.random().toString(16).slice(2, 7)
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) {
   const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
@@ -30,7 +28,6 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
     record: 'dev',
-    presenter: {} as ResolvedPresenterOptions,
   }
   const config: SlidevConfig = {
     ...defaultConfig,
@@ -43,7 +40,6 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
       ...headmatter?.fonts,
     }),
     drawings: resolveDrawings(headmatter.drawings),
-    presenter: resolvePresenter(headmatter.presenter),
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -160,17 +156,5 @@ function resolveDrawings(options: DrawingsOptions = {}): ResolvedDrawingsOptions
     persist: persistPath,
     presenterOnly,
     syncAll,
-  }
-}
-
-function resolvePresenter(options: PresenterOptions = {}): ResolvedPresenterOptions {
-  const {
-    isPrivate = false,
-    token = PRESENTER_TOKEN,
-  } = options
-
-  return {
-    isPrivate,
-    token: String(token),
   }
 }

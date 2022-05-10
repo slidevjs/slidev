@@ -65,7 +65,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, userRoot, roots }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, themeRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
   VuePlugin: Plugin,
@@ -544,7 +544,7 @@ defineProps<{ no: number | string }>()`)
   }
 
   function generateConfigs() {
-    const config = { ...data.config }
+    const config = { ...data.config, remote }
     if (isString(config.title)) {
       const tokens = md.parseInline(config.title, {})
       config.title = stringifyMarkdownTokens(tokens)

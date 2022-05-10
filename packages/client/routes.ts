@@ -25,8 +25,14 @@ export const routes: RouteRecordRaw[] = [
     path: '/presenter/:no',
     component: () => import('./internals/Presenter.vue'),
     beforeEnter: (to) => {
-      if (!_configs.presenter.isPrivate || _configs.presenter.token === to.query.token)
+      if (!_configs.remote || _configs.remote === to.query.password)
         return true
+      if (_configs.remote && to.query.password === undefined) {
+        // eslint-disable-next-line no-alert
+        const password = prompt('Enter password')
+        if (_configs.remote === password)
+          return true
+      }
       if (to.params.no)
         return { path: `/${to.params.no}` }
       return { path: '' }
