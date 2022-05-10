@@ -74,6 +74,9 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
+  "presenter": {
+    "isPrivate": false,
+  },
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",
@@ -294,6 +297,9 @@ exports[`md parser > minimal.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
+  "presenter": {
+    "isPrivate": false,
+  },
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",
@@ -462,6 +468,9 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
+  "presenter": {
+    "isPrivate": false,
+  },
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",

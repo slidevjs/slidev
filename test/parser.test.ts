@@ -16,6 +16,7 @@ describe('md parser', () => {
       expect(stringify(data).trim()).toEqual(data.raw.trim())
 
       prettify(data)
+      delete data.config.presenter.token
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
