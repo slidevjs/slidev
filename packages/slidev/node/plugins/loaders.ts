@@ -373,32 +373,32 @@ export function createSlidesLoader(
         const exportIndex = (matchExport.index || 0) + matchExport[0].length
         let component = code.slice(exportIndex)
         component = component.slice(0, component.indexOf('</script>'))
-        if (component.match(/setup\s*\(/)) {
-          // component has a setup option
-          const scriptIndex = (matchScript.index || 0) + matchScript[0].length
-          const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants"\n'
-          code = `${code.slice(0, scriptIndex)}${provideImport}${code.slice(scriptIndex)}`
-          let injectIndex = exportIndex + provideImport.length
-          let injectObject = '$slidev: { from: injectionSlidevContext },'
-          const matchInject = component.match(/.*inject\s*:\s*([\[{])/)
-          if (matchInject) {
-            // component has a inject option
-            injectIndex += (matchInject.index || 0) + matchInject[0].length
-            if (matchInject[1] === '[') {
-              // inject option is array
-              let injects = component.slice((matchInject.index || 0) + matchInject[0].length)
-              const injectEndIndex = injects.indexOf(']')
-              injects = injects.slice(0, injectEndIndex)
-              injectObject += injects.split(',').map(inject => `${inject}: {from: ${inject}}`).join(',')
-              return `${code.slice(0, injectIndex - 1)}{\n${injectObject}\n}${code.slice(injectIndex + injectEndIndex + 1)}`
-            }
-            else {
-              // inject option is object
-              return `${code.slice(0, injectIndex)}\n${injectObject}\n${code.slice(injectIndex)}`
-            }
+
+        const scriptIndex = (matchScript.index || 0) + matchScript[0].length
+        const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants"\n'
+        code = `${code.slice(0, scriptIndex)}${provideImport}${code.slice(scriptIndex)}`
+
+        let injectIndex = exportIndex + provideImport.length
+        let injectObject = '$slidev: { from: injectionSlidevContext },'
+        const matchInject = component.match(/.*inject\s*:\s*([\[{])/)
+        if (matchInject) {
+          // component has a inject option
+          injectIndex += (matchInject.index || 0) + matchInject[0].length
+          if (matchInject[1] === '[') {
+            // inject option in array
+            let injects = component.slice((matchInject.index || 0) + matchInject[0].length)
+            const injectEndIndex = injects.indexOf(']')
+            injects = injects.slice(0, injectEndIndex)
+            injectObject += injects.split(',').map(inject => `${inject}: {from: ${inject}}`).join(',')
+            return `${code.slice(0, injectIndex - 1)}{\n${injectObject}\n}${code.slice(injectIndex + injectEndIndex + 1)}`
           }
-          return `${code.slice(0, injectIndex)}\ninject: { ${injectObject} },\n${code.slice(injectIndex)}`
+          else {
+            // inject option in object
+            return `${code.slice(0, injectIndex)}\n${injectObject}\n${code.slice(injectIndex)}`
+          }
         }
+        // add inject option
+        return `${code.slice(0, injectIndex)}\ninject: { ${injectObject} },\n${code.slice(injectIndex)}`
       }
     }
     // no setup script or setup option
