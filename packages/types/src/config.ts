@@ -139,7 +139,7 @@ export interface SlidevConfig {
   /**
    * Options for presenter mode
    *
-   * @default {public:true}
+   * @default {}
    */
   presenter: ResolvedPresenterOptions
 }
@@ -227,13 +227,13 @@ export interface PresenterOptions {
   /**
    * Restrict access to presenter mode
    *
-   * @default true
+   * @default false
    */
   isPrivate?: boolean
   /**
    * Remote access key for the presenter mode
    *
-   * @default true
+   * @default 'randomly_generated'
    */
   token?: string
 }
