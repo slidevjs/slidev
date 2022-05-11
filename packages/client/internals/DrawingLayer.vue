@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { drauu, loadCanvas } from '../logic/drawings'
+import { drauu, drawingEnabled, loadCanvas } from '../logic/drawings'
 import { injectionSlideScale } from '../constants'
 
 const scale = inject(injectionSlideScale)!
@@ -20,6 +20,7 @@ onBeforeUnmount(() => {
 <template>
   <svg
     ref="svg"
-    class="w-full h-full absolute top-0 pointer-events-none"
+    class="w-full h-full absolute top-0"
+    :class="{ 'pointer-events-none': !drawingEnabled, 'touch-none': drawingEnabled }"
   />
 </template>
