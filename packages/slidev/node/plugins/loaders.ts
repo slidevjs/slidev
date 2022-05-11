@@ -367,7 +367,7 @@ export function createSlidesLoader(
     }
     else if (matchScript && !matchScript[2]) {
       // not a setup script
-      const matchExport = code.match(/export\s+default\s+[^{]*{/)
+      const matchExport = code.match(/export\s+default\s+{/)
       if (matchExport) {
         // script exports a component
         const exportIndex = (matchExport.index || 0) + matchExport[0].length
@@ -401,7 +401,7 @@ export function createSlidesLoader(
         return `${code.slice(0, injectIndex)}\ninject: { ${injectObject} },\n${code.slice(injectIndex)}`
       }
     }
-    // no setup script or setup option
+    // no setup script and not a vue component
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
   }
 
