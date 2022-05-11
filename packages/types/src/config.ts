@@ -225,21 +225,6 @@ export interface DrawingsOptions {
   syncAll?: boolean
 }
 
-export interface PresenterOptions {
-  /**
-   * Restrict access to presenter mode
-   *
-   * @default false
-   */
-  isPrivate?: boolean
-  /**
-   * Remote access key for the presenter mode
-   *
-   * @default 'randomly_generated'
-   */
-  token?: string
-}
-
 export interface ResolvedFontOptions {
   sans: string[]
   mono: string[]
