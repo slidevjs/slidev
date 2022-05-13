@@ -64,6 +64,7 @@ const cardWidth = computed(() => {
               :is="route?.component"
               :clicks-disabled="true"
               :class="getSlideClass(route)"
+              :route="route"
             />
             <DrawingPreview :page="+route.path" />
           </SlideContainer>

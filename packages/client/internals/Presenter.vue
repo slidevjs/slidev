@@ -119,6 +119,7 @@ onMounted(() => {
             :clicks="nextSlide.clicks"
             :clicks-disabled="false"
             :class="getSlideClass(nextSlide.route)"
+            :route="nextSlide.route"
           />
         </SlideContainer>
       </div>

@@ -36,6 +36,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
       :clicks-elements="route.meta?.__clicksElements || []"
       :clicks-disabled="false"
       :class="getSlideClass(route)"
+      :route="route"
     />
   </template>
 

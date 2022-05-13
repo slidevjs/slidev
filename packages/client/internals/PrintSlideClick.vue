@@ -54,6 +54,7 @@ provide(injectionSlidevContext, reactive({
       :clicks="clicks"
       :clicks-disabled="false"
       :class="getSlideClass(route)"
+      :route="route"
     />
     <template
       v-if="
