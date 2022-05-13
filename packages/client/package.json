@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.31.3",
+  "version": "0.31.4",
   "description": "Presentation slides for developers",
   "homepage": "https://sli.dev",
   "bugs": "https://github.com/slidevjs/slidev/issues",
