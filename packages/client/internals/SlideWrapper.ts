@@ -1,6 +1,6 @@
 import { useVModel } from '@vueuse/core'
 import { defineComponent, h, provide } from 'vue'
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap } from '../constants'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap, injectionRoute } from '../constants'
 
 export default defineComponent({
   props: {
@@ -24,6 +24,10 @@ export default defineComponent({
       type: Object,
       default: undefined,
     },
+    route: {
+      type: Object,
+      default: undefined,
+    },
   },
   setup(props, { emit }) {
     const clicks = useVModel(props, 'clicks', emit)
@@ -33,6 +37,7 @@ export default defineComponent({
 
     clicksElements.value.length = 0
 
+    provide(injectionRoute, props.route)
     provide(injectionClicks, clicks)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksElements, clicksElements)
