@@ -45,13 +45,13 @@
     }
   },
   "dependencies": {
-    "@antfu/utils": "^0.5.1",
+    "@antfu/utils": "^0.5.2",
     "@iconify-json/carbon": "^1.1.4",
     "@iconify-json/ph": "^1.1.1",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vitejs/plugin-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "^2.3.3",
     "@vue/compiler-sfc": "^3.2.33",
     "cli-progress": "^3.11.0",
     "codemirror": "^5.65.3",
@@ -80,15 +80,15 @@
     "resolve-global": "^1.0.0",
     "shiki": "^0.10.1",
     "unplugin-icons": "^0.14.3",
-    "unplugin-vue-components": "^0.19.3",
-    "vite": "^2.9.8",
-    "vite-plugin-md": "^0.13.0",
+    "unplugin-vue-components": "^0.19.5",
+    "vite": "^2.9.9",
+    "vite-plugin-md": "^0.13.1",
     "vite-plugin-remote-assets": "^0.2.2",
     "vite-plugin-vue-server-ref": "^0.2.4",
     "vite-plugin-windicss": "^1.8.4",
     "vue": "^3.2.33",
-    "windicss": "^3.5.1",
-    "yargs": "^17.4.1"
+    "windicss": "^3.5.3",
+    "yargs": "^17.5.0"
   },
   "devDependencies": {
     "@types/plantuml-encoder": "^1.4.0",
