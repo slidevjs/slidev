@@ -1,1 +1,1 @@
-export * as parser from '../../parser/src/fs'
+export * as parser from '@slidev/parser/fs'

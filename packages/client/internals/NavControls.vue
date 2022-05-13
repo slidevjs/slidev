@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, prev, total } from '../logic/nav'
+import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, showEditor, showInfoDialog, showPresenterCursor, toggleOverview } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
@@ -20,8 +20,9 @@ const props = defineProps({
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
-const presenterLink = computed(() => `/presenter/${currentPage.value}`)
-const nonPresenterLink = computed(() => `/${currentPage.value}`)
+const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
+const presenterLink = computed(() => `/presenter/${currentPage.value}${query.value}`)
+const nonPresenterLink = computed(() => `/${currentPage.value}${query.value}`)
 
 const root = ref<HTMLDivElement>()
 const onMouseLeave = () => {
@@ -112,7 +113,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
-        <RouterLink v-if="!isPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
+        <RouterLink v-if="showPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
           <carbon:user-speaker />
         </RouterLink>
 

@@ -36,6 +36,8 @@ export const isPrintWithClicks = computed(() => route.value.query.print === 'cli
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 export const isClicksDisabled = computed(() => isPrintMode.value && !isPrintWithClicks.value)
+export const presenterPassword = computed(() => route.value.query.password)
+export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
 
 export const queryClicks = useRouteQuery('clicks', '0')
 export const total = computed(() => rawRoutes.length - 1)

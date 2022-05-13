@@ -136,6 +136,14 @@ export interface SlidevConfig {
    * @default 'dev'
    */
   record: boolean | 'dev' | 'build'
+  /**
+   * Expose the server to inbound requests (listen to `0.0.0.0`)
+   *
+   * Pass a string to set the password for accessing presenter mode.
+   *
+   * @default false
+   */
+  remote?: string | boolean
 }
 
 export interface FontOptions {
