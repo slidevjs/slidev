@@ -3,7 +3,7 @@ import { useVModel } from '@vueuse/core'
 import { computed, watchEffect } from 'vue'
 import { breakpoints, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
-import { currentOverviewPage } from '../logic/overview'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
@@ -42,8 +42,16 @@ const cardWidth = computed(() => {
   return 300
 })
 
+const rowCount = computed(() => {
+  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+})
+
 watchEffect(() => {
+  // Watch currentPage, make sure every time we open overview,
+  // we focus on the righ page.
   currentOverviewPage.value = currentPage.value
+  // Watch rowCount, make sure up and down shortcut work correctly.
+  overviewRowCount.value = rowCount.value
 })
 </script>
 
