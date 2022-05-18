@@ -43,7 +43,7 @@ const cardWidth = computed(() => {
 })
 
 watchEffect(() => {
-  currentOverviewPage.value = currentPage.value;
+  currentOverviewPage.value = currentPage.value
 })
 </script>
 
@@ -63,7 +63,7 @@ watchEffect(() => {
       >
         <div
           class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-$slidev-theme-primary)"
-          v-bind:class="{ 'border-$slidev-theme-primary': focus(idx + 1) }"
+          :class="{ 'border-$slidev-theme-primary': focus(idx + 1) }"
           @click="go(+route.path)"
         >
           <SlideContainer

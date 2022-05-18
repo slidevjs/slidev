@@ -64,8 +64,8 @@ export function registerShortcuts() {
       { key: and(o, not(drawingEnabled)), fn: toggleOverview },
       { key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },
       { key: and(g, not(drawingEnabled)), fn: () => showGotoDialog.value = !showGotoDialog.value },
-      { key: and(left, showOverview), fn: prevOverviewPage},
-      { key: and(right, showOverview), fn: nextOverviewPage},
+      { key: and(left, showOverview), fn: prevOverviewPage },
+      { key: and(right, showOverview), fn: nextOverviewPage },
       { key: and(enter, showOverview), fn: () => go(currentOverviewPage.value) },
       ...customShortcuts,
     ]
