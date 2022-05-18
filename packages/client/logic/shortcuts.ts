@@ -6,8 +6,9 @@ import type { ShortcutOptions } from '@slidev/types'
 import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled, showGotoDialog, showOverview, toggleOverview } from '../state'
 import setupShortcuts from '../setup/shortcuts'
 import { toggleDark } from './dark'
-import { next, nextSlide, prev, prevSlide } from './nav'
+import { go, next, nextSlide, prev, prevSlide } from './nav'
 import { drawingEnabled } from './drawings'
+import { currentOverviewPage, nextOverviewPage, prevOverviewPage } from './overview'
 
 const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 
@@ -46,13 +47,13 @@ export function strokeShortcut(key: KeyFilter, fn: Fn) {
 export function registerShortcuts() {
   const customShortcuts = setupShortcuts()
 
-  const { escape, space, shift, left, right, d, g, o } = magicKeys
+  const { escape, space, shift, left, right, enter, d, g, o } = magicKeys
   const shortcuts = new Map<string | Ref<Boolean>, ShortcutOptions>(
     [
       { key: and(space, not(shift)), fn: next, autoRepeat: true },
       { key: and(space, shift), fn: prev, autoRepeat: true },
-      { key: and(right, not(shift)), fn: next, autoRepeat: true },
-      { key: and(left, not(shift)), fn: prev, autoRepeat: true },
+      { key: and(right, not(shift), not(showOverview)), fn: next, autoRepeat: true },
+      { key: and(left, not(shift), not(showOverview)), fn: prev, autoRepeat: true },
       { key: 'pageDown', fn: next, autoRepeat: true },
       { key: 'pageUp', fn: prev, autoRepeat: true },
       { key: 'up', fn: () => prevSlide(false), autoRepeat: true },
@@ -63,6 +64,9 @@ export function registerShortcuts() {
       { key: and(o, not(drawingEnabled)), fn: toggleOverview },
       { key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },
       { key: and(g, not(drawingEnabled)), fn: () => showGotoDialog.value = !showGotoDialog.value },
+      { key: and(left, showOverview), fn: prevOverviewPage},
+      { key: and(right, showOverview), fn: nextOverviewPage},
+      { key: and(enter, showOverview), fn: () => go(currentOverviewPage.value) },
       ...customShortcuts,
     ]
       .map((options: ShortcutOptions) => [options.key, options]),
