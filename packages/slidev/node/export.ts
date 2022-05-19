@@ -4,7 +4,7 @@ import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
 import type { SlideInfo } from '@slidev/types'
-import { packageExists } from './themes'
+import { packageExists } from './utils'
 
 export interface ExportOptions {
   total: number

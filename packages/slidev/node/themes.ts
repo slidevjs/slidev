@@ -6,7 +6,7 @@ import fs from 'fs-extra'
 import type { SlidevThemeMeta } from '@slidev/types'
 import { satisfies } from 'semver'
 import { version } from '../package.json'
-import { resolveImportPath } from './utils'
+import { packageExists } from './utils'
 import { isPath } from './options'
 
 const officialThemes: Record<string, string> = {
@@ -16,12 +16,6 @@ const officialThemes: Record<string, string> = {
   'apple-basic': '@slidev/theme-apple-basic',
   'shibainu': '@slidev/theme-shibainu',
   'bricks': '@slidev/theme-bricks',
-}
-
-export function packageExists(name: string) {
-  if (resolveImportPath(`${name}/package.json`))
-    return true
-  return false
 }
 
 export async function getThemeMeta(name: string, path: string) {

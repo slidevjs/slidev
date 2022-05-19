@@ -293,7 +293,7 @@ cli.command(
   args => commonOptions(args)
     .option('output', {
       type: 'string',
-      describe: 'path to the the port output',
+      describe: 'path to the output',
     })
     .option('format', {
       default: 'pdf',
