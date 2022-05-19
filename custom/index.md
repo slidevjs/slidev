@@ -9,6 +9,7 @@ You can configure Slidev in the frontmatter of your first slide, the following s
 ```yaml
 ---
 # theme id or package name
+# Learn more: https://sli.dev/themes/use.html
 theme: 'default'
 # title of your slide, will auto infer from the first header if not specified
 title: 'Slidev'
