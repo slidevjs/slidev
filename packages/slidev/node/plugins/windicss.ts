@@ -9,12 +9,13 @@ import { resolveImportPath } from '../utils'
 import { loadSetups } from './setupNode'
 
 export async function createWindiCSSPlugin(
-  { themeRoots, clientRoot, userRoot, roots, data }: ResolvedSlidevOptions,
+  { themeRoots, addonRoots, clientRoot, userRoot, roots, data }: ResolvedSlidevOptions,
   { windicss: windiOptions }: SlidevPluginOptions,
 ) {
   const configFiles = uniq([
     ...defaultConfigureFiles.map(i => resolve(userRoot, i)),
     ...themeRoots.map(i => `${i}/windi.config.ts`),
+    ...addonRoots.map(i => `${i}/windi.config.ts`),
     resolve(clientRoot, 'windi.config.ts'),
   ])
 
@@ -46,6 +47,10 @@ export async function createWindiCSSPlugin(
       },
       onOptionsResolved(config) {
         themeRoots.forEach((i) => {
+          config.scanOptions.include.push(`${i}/components/*.{vue,ts}`)
+          config.scanOptions.include.push(`${i}/layouts/*.{vue,ts}`)
+        })
+        addonRoots.forEach((i) => {
           config.scanOptions.include.push(`${i}/components/*.{vue,ts}`)
           config.scanOptions.include.push(`${i}/layouts/*.{vue,ts}`)
         })

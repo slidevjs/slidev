@@ -11,8 +11,9 @@ import { uniq } from '@antfu/utils'
 import type { SlidevMarkdown } from '@slidev/types'
 import _debug from 'debug'
 import { parser } from './parser'
-import { resolveImportPath } from './utils'
-import { getThemeMeta, packageExists, promptForThemeInstallation, resolveThemeName } from './themes'
+import { packageExists, resolveImportPath } from './utils'
+import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './themes'
+import { getAddons } from './addons'
 
 const debug = _debug('slidev:options')
 
@@ -50,6 +51,7 @@ export interface ResolvedSlidevOptions {
   clientRoot: string
   theme: string
   themeRoots: string[]
+  addonRoots: string[]
   roots: string[]
   mode: 'dev' | 'build'
   remote?: string
@@ -86,16 +88,19 @@ export function getThemeRoots(name: string, entry: string) {
     return []
 
   // TODO: handle theme inherit
-  if (isPath(name)) {
-    return [
-      resolve(dirname(entry), name),
-    ]
-  }
-  else {
-    return [
-      dirname(resolveImportPath(`${name}/package.json`, true)),
-    ]
-  }
+  return [getRoot(name, entry)]
+}
+
+export function getAddonRoots(addons: string[], entry: string) {
+  if (addons.length === 0)
+    return []
+  return addons.map(name => getRoot(name, entry))
+}
+
+export function getRoot(name: string, entry: string) {
+  if (isPath(name))
+    return resolve(dirname(entry), name)
+  return dirname(resolveImportPath(`${name}/package.json`, true))
 }
 
 export function getUserRoot(options: SlidevEntryOptions) {
@@ -132,6 +137,8 @@ export async function resolveOptions(
   const clientRoot = getClientRoot()
   const cliRoot = getCLIRoot()
   const themeRoots = getThemeRoots(theme, entry)
+  const addons = await getAddons(userRoot, data.config)
+  const addonRoots = getAddonRoots(addons, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
 
   if (themeRoots.length) {
@@ -150,6 +157,7 @@ export async function resolveOptions(
     clientRoot,
     cliRoot,
     themeRoots,
+    addonRoots,
     roots,
     remote,
   })
@@ -163,6 +171,7 @@ export async function resolveOptions(
     clientRoot,
     cliRoot,
     themeRoots,
+    addonRoots,
     roots,
     remote,
   }

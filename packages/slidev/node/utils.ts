@@ -79,3 +79,9 @@ export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
 
   return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
 }
+
+export function packageExists(name: string) {
+  if (resolveImportPath(`${name}/package.json`))
+    return true
+  return false
+}

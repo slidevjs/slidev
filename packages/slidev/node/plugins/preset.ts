@@ -63,6 +63,7 @@ export async function ViteSlidevPlugin(
   const {
     mode,
     themeRoots,
+    addonRoots,
     clientRoot,
     data: { config },
   } = options
@@ -99,6 +100,7 @@ export async function ViteSlidevPlugin(
         `${clientRoot}/builtin`,
         `${clientRoot}/components`,
         ...themeRoots.map(i => `${i}/components`),
+        ...addonRoots.map(i => `${i}/components`),
         'src/components',
         'components',
       ],

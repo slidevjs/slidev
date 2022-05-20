@@ -18,6 +18,12 @@ export interface SlidevConfig {
    */
   theme: string
   /**
+   * List of Slidev addons
+   *
+   * @default []
+   */
+  addons: string[]
+  /**
    * Download remote assets in local using vite-plugin-remote-assets
    *
    * @default true
