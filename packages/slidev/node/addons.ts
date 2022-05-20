@@ -11,7 +11,8 @@ export function getPackageJson(root: string) {
 
 export async function getAddons(userRoot: string, config: SlidevConfig): Promise<string[]> {
   const { slidev = {} } = await getPackageJson(userRoot)
-  const addons = config.addons.concat(slidev?.addons || [])
+  const configAddons = config.addons instanceof Array ? config.addons : []
+  const addons = configAddons.concat(slidev.addons instanceof Array ? slidev.addons : [])
   return getRecursivePlugins(addons.map(resolvePluginName))
 }
 
@@ -20,7 +21,7 @@ export async function getRecursivePlugins(addons: string[]): Promise<string[]> {
     const { slidev = {}, engines = {} } = await getPackageJson(addon)
     checkEngine(addon, engines)
 
-    let addons = slidev?.addons || []
+    let addons = slidev.addons instanceof Array ? slidev.addons : []
     if (addons.length > 0)
       addons = await getRecursivePlugins(addons.map(resolvePluginName))
     addons.push(addon)
