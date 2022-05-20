@@ -65,7 +65,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, pluginRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
   VuePlugin: Plugin,
@@ -423,7 +423,7 @@ defineProps<{ no: number | string }>()`)
     const roots = uniq([
       userRoot,
       ...themeRoots,
-      ...pluginRoots,
+      ...addonRoots,
       clientRoot,
     ])
 
@@ -455,7 +455,7 @@ defineProps<{ no: number | string }>()`)
     ]
     const roots = uniq([
       ...themeRoots,
-      ...pluginRoots,
+      ...addonRoots,
       userRoot,
     ])
 

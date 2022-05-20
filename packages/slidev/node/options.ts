@@ -13,7 +13,7 @@ import _debug from 'debug'
 import { parser } from './parser'
 import { packageExists, resolveImportPath } from './utils'
 import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './themes'
-import { getPlugins } from './plugins'
+import { getAddons } from './addons'
 
 const debug = _debug('slidev:options')
 
@@ -51,7 +51,7 @@ export interface ResolvedSlidevOptions {
   clientRoot: string
   theme: string
   themeRoots: string[]
-  pluginRoots: string[]
+  addonRoots: string[]
   roots: string[]
   mode: 'dev' | 'build'
   remote?: string
@@ -91,10 +91,10 @@ export function getThemeRoots(name: string, entry: string) {
   return [getRoot(name, entry)]
 }
 
-export function getPluginRoots(plugins: string[], entry: string) {
-  if (plugins.length === 0)
+export function getAddonRoots(addons: string[], entry: string) {
+  if (addons.length === 0)
     return []
-  return plugins.map(name => getRoot(name, entry))
+  return addons.map(name => getRoot(name, entry))
 }
 
 export function getRoot(name: string, entry: string) {
@@ -137,8 +137,8 @@ export async function resolveOptions(
   const clientRoot = getClientRoot()
   const cliRoot = getCLIRoot()
   const themeRoots = getThemeRoots(theme, entry)
-  const plugins = await getPlugins(userRoot, data.config)
-  const pluginRoots = getPluginRoots(plugins, entry)
+  const addons = await getAddons(userRoot, data.config)
+  const addonRoots = getAddonRoots(addons, entry)
   const roots = uniq([clientRoot, ...themeRoots, userRoot])
 
   if (themeRoots.length) {
@@ -157,7 +157,7 @@ export async function resolveOptions(
     clientRoot,
     cliRoot,
     themeRoots,
-    pluginRoots,
+    addonRoots,
     roots,
     remote,
   })
@@ -171,7 +171,7 @@ export async function resolveOptions(
     clientRoot,
     cliRoot,
     themeRoots,
-    pluginRoots,
+    addonRoots,
     roots,
     remote,
   }

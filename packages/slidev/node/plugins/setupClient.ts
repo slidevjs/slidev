@@ -5,7 +5,7 @@ import type { Plugin } from 'vite'
 import type { ResolvedSlidevOptions } from '../options'
 import { toAtFS } from '../utils'
 
-export function createClientSetupPlugin({ clientRoot, themeRoots, pluginRoots, userRoot }: ResolvedSlidevOptions): Plugin {
+export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, userRoot }: ResolvedSlidevOptions): Plugin {
   const setupEntry = slash(resolve(clientRoot, 'setup'))
 
   return {
@@ -20,7 +20,7 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, pluginRoots, u
 
         const setups = uniq([
           ...themeRoots,
-          ...pluginRoots,
+          ...addonRoots,
           userRoot,
         ]).map(i => join(i, 'setup', name))
 

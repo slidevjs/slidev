@@ -2,6 +2,7 @@
 
 exports[`md parser > frontmatter.md > config 1`] = `
 {
+  "addons": [],
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
@@ -74,7 +75,6 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "plugins": [],
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",
@@ -233,6 +233,7 @@ this should be treated as code block
 
 exports[`md parser > minimal.md > config 1`] = `
 {
+  "addons": [],
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
@@ -295,7 +296,6 @@ exports[`md parser > minimal.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "plugins": [],
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",
@@ -402,6 +402,7 @@ Nice to meet you
 
 exports[`md parser > multi-entries.md > config 1`] = `
 {
+  "addons": [],
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
@@ -464,7 +465,6 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "lineNumbers": false,
   "monaco": "dev",
   "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "plugins": [],
   "record": "dev",
   "remoteAssets": false,
   "routerMode": "history",

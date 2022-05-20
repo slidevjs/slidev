@@ -10,7 +10,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
     theme: 'default',
     title: 'Slidev',
     titleTemplate: '%s - Slidev',
-    plugins: [],
+    addons: [],
     remoteAssets: false,
     monaco: 'dev',
     download: false,
