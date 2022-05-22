@@ -173,7 +173,7 @@ context('Basic', () => {
       .type('o{LeftArrow}{LeftArrow}{LeftArrow}{Enter}')
       .url()
       .should('eq', 'http://localhost:3030/1')
-    
+
     cy.get('body')
       .type('o{DownArrow}{DownArrow}{DownArrow}{Enter}')
       .url()
