@@ -161,4 +161,18 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/11')
   })
+
+  it('overview nav', () => {
+    goPage(2)
+
+    cy.get('body')
+      .type('o{RightArrow}{RightArrow}{Enter}')
+      .url()
+      .should('eq', 'http://localhost:3030/4')
+
+    cy.get('body')
+      .type('o{LeftArrow}{LeftArrow}{LeftArrow}{Enter}')
+      .url()
+      .should('eq', 'http://localhost:3030/1')
+  })
 })
