@@ -120,6 +120,18 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Internal Tech Talk',
     datetime: '2022-03-11',
   },
+  {
+    title: 'OpenFunction 202',
+    cover: 'https://s2.loli.net/2022/05/22/4zsCnkQRFoAU1E5.png',
+    author: {
+      name: 'Haili Zhang',
+      link: 'https://github.com/webup',
+    },
+    slidesLink: 'https://openfunction-talks.netlify.app/2022/202-node-async/',
+    sourceLink: 'https://github.com/webup/openfunction-talks/tree/main/202-node-async',
+    at: 'OpenFunction Tutorial Sharing',
+    datetime: '2022-05-08',
+  },
   // Add yours here!
   {
     title: 'Yours?',
