@@ -52,6 +52,8 @@ export function resolveThemeName(name: string) {
   // fallback to prompt install
   if (officialThemes[name] != null)
     return officialThemes[name]
+  if (name.indexOf('@') === 0 && name.includes('/'))
+    return name
   return `slidev-theme-${name}`
 }
 
