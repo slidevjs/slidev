@@ -72,6 +72,7 @@ context('Basic', () => {
     cy.get('body')
       .type('{UpArrow}')
       .url()
+      .should('eq', 'http://localhost:3030/6')
   })
 
   it('named slots', () => {
