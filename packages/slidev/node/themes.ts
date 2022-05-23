@@ -46,6 +46,8 @@ export function resolveThemeName(name: string) {
     return `@slidev/theme-${name}`
   if (packageExists(`slidev-theme-${name}`))
     return `slidev-theme-${name}`
+  if (packageExists(name))
+    return name
 
   // fallback to prompt install
   if (officialThemes[name] != null)
