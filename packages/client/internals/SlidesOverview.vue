@@ -48,7 +48,7 @@ const rowCount = computed(() => {
 
 watchEffect(() => {
   // Watch currentPage, make sure every time we open overview,
-  // we focus on the righ page.
+  // we focus on the right page.
   currentOverviewPage.value = currentPage.value
   // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
