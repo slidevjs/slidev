@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { breakpoints, windowSize } from '../state'
-import { go as goSlide, rawRoutes } from '../logic/nav'
+import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
@@ -22,6 +23,12 @@ function go(page: number) {
   close()
 }
 
+function focus(page: number) {
+  if (page === currentOverviewPage.value)
+    return true
+  return false
+}
+
 const xs = breakpoints.smaller('xs')
 const sm = breakpoints.smaller('sm')
 
@@ -33,6 +40,18 @@ const cardWidth = computed(() => {
   else if (sm.value)
     return (windowSize.width.value - padding - gap) / 2
   return 300
+})
+
+const rowCount = computed(() => {
+  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+})
+
+watchEffect(() => {
+  // Watch currentPage, make sure every time we open overview,
+  // we focus on the right page.
+  currentOverviewPage.value = currentPage.value
+  // Watch rowCount, make sure up and down shortcut work correctly.
+  overviewRowCount.value = rowCount.value
 })
 </script>
 
@@ -52,6 +71,7 @@ const cardWidth = computed(() => {
       >
         <div
           class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:(border-$slidev-theme-primary)"
+          :class="{ 'border-$slidev-theme-primary': focus(idx + 1) }"
           @click="go(+route.path)"
         >
           <SlideContainer
