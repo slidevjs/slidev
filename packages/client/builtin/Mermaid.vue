@@ -26,7 +26,7 @@ const props = defineProps<{
 
 const vm = getCurrentInstance()
 const el = ref<HTMLDivElement>()
-const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: (isDark.value ? 'dark' : props.theme) }, vm!.attrs)))
+const svgObj = computed(() => renderMermaid(props.code || '', Object.assign(props.theme ? { theme: props.theme } : { theme: (isDark.value ? 'dark' : props.theme) }, vm!.attrs)))
 const html = computed(() => svgObj.value)
 const actualHeight = ref<number>()
 
