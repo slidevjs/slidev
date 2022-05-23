@@ -16,6 +16,7 @@ pie
 import { computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 import ShadowRoot from '../internals/ShadowRoot.vue'
+import { isDark } from '../logic/dark'
 
 const props = defineProps<{
   code: string
@@ -25,7 +26,13 @@ const props = defineProps<{
 
 const vm = getCurrentInstance()
 const el = ref<HTMLDivElement>()
-const svgObj = computed(() => renderMermaid(props.code || '', Object.assign({ theme: props.theme }, vm!.attrs)))
+const svgObj = computed(() => renderMermaid(
+  props.code || '',
+  {
+    theme: props.theme || (isDark.value ? 'dark' : undefined),
+    ...vm!.attrs,
+  },
+))
 const html = computed(() => svgObj.value)
 const actualHeight = ref<number>()
 
