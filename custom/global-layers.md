@@ -36,7 +36,7 @@ The text `Your Name` will appear to all your slides.
 
 The button `Next` will appear in NavControls.
 
-To enabled it conditionally, you can apply it with the [Vue Global Context](/custom/vue-context).
+To enable it conditionally, you can apply it with the [Vue Global Context](/custom/vue-context).
 
 ```html
 <!-- hide the footer from Page 4 -->
