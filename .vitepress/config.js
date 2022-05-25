@@ -70,6 +70,17 @@ const Theme = [
   },
 ]
 
+const Addon = [
+  {
+    text: 'Use Addon',
+    link: '/addons/use',
+  },
+  {
+    text: 'Write an Addon',
+    link: '/addons/write-an-addon',
+  },
+]
+
 const Translations = [
   {
     text: 'English',
@@ -192,6 +203,10 @@ const slidebars = [
     children: Theme,
   },
   {
+    text: 'Addons',
+    children: Addon,
+  },
+  {
     text: 'Customizations',
     children: Customizations,
   },
@@ -255,6 +270,10 @@ module.exports = {
         items: Theme,
       },
       {
+        text: 'Addon',
+        items: Addon,
+      },
+      {
         text: 'Customize',
         items: Customizations,
       },
@@ -271,6 +290,7 @@ module.exports = {
     sidebar: {
       '/guide/': slidebars,
       '/themes/': slidebars,
+      '/addons/': slidebars,
       '/custom/': slidebars,
       '/builtin/': slidebars,
       '/resources/': slidebars,

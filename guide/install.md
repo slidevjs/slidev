@@ -137,7 +137,7 @@ You can visit your slides from http://localhost/
 
 Refer to the [tangramor/slidev_docker](https://github.com/tangramor/slidev_docker) for more details.
 
-### Command Line Interface (CLI)
+## Command Line Interface (CLI)
 
 `@slidev/cli` Expose a few commands you can use with `npx slidev ...` or by adding scripts in your `package.json`:
 ```json
@@ -160,7 +160,7 @@ If you use npm scripts, don't forget to add `--` after the npm command:
 npm run slidev -- --open
 ```
 
-#### `slidev [entry]`
+### `slidev [entry]`
 
 Start a local server for Slidev.
 
@@ -175,7 +175,7 @@ Options:
 * `--force`, `-f` (`boolean`, default `false`): force the optimizer to ignore the cache and re-bundle.
 * `--theme`, `-t` (`string`): override theme.
 
-#### `slidev build [entry]`
+### `slidev build [entry]`
 
 Build hostable SPA.
 
@@ -189,7 +189,7 @@ Options:
 * `--download` (`boolean`, default: `false`): allow to download the slides as PDF inside the SPA.
 * `--theme`, `-t` (`string`): override theme.
 
-#### `slidev export [entry]`
+### `slidev export [entry]`
 
 Export slides to PDF (or other format).
 
@@ -205,13 +205,13 @@ Options:
 * `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every clicks (see https://sli.dev/guide/animations.html#click-animations).
 * `--theme`, `-t` (`string`): override theme.
 
-#### `slidev format [entry]`
+### `slidev format [entry]`
 
 Format the markdown file.
 
 * `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
-#### `slidev theme [subcommand]`
+### `slidev theme [subcommand]`
 
 Theme related operations.
 

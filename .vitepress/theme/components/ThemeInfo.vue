@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { ref } from 'vue'
 import { isClient, useIntervalFn } from '@vueuse/core'
 import type { ThemeInfo } from '../../themes'
 
