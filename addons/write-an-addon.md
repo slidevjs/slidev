@@ -14,7 +14,7 @@ An addon can contribute to the following points:
 
 ## Conventions
 
-Adons are published to npm registry, and they should follow the conventions below:
+Addons are published to npm registry, and they should follow the conventions below:
 
 - Package name should start with `slidev-addon-`, for example: `slidev-addon-awesome`
 - Add `slidev-addon` and `slidev` in the `keywords` field of your `package.json`
@@ -49,7 +49,7 @@ And optionally, you can also add some scripts to your `packages.json`
 }
 ```
 
-To publish your theme, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
+To publish your addon, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
 
 Addon contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/). 
 

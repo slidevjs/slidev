@@ -1,6 +1,6 @@
 # Use Addon
 
-Addons are sets of additionnal components, layouts, styles, configuration...etc. that you can use in your presentation.
+Addons are sets of additional components, layouts, styles, configuration...etc. that you can use in your presentation.
 
 They are quite similar to [themes](/themes/use), but in general:
 
