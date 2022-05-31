@@ -120,7 +120,7 @@ onMounted(() => {
             :clicks-disabled="false"
             :class="getSlideClass(nextSlide.route)"
             :route="nextSlide.route"
-            context="presenterNext"
+            context="previewNext"
           />
         </SlideContainer>
       </div>

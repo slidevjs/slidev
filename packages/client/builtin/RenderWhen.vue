@@ -3,7 +3,7 @@ import { computed, inject } from 'vue'
 
 import { injectionSlideContext } from '../constants'
 
-type SlideContext = 'main' | 'slidesshow' | 'overview' | 'presenter' | 'presenterNext'
+type SlideContext = 'main' | 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 const props = defineProps<{
   context: SlideContext | SlideContext[]
@@ -17,7 +17,7 @@ const shouldRender = computed(() => context instanceof Array ? context.some(cont
 function contextMatch(context: SlideContext) {
   if (context === currentContext)
     return true
-  if (context === 'main' && (currentContext === 'slidesshow' || currentContext === 'presenter'))
+  if (context === 'main' && (currentContext === 'slide' || currentContext === 'presenter'))
     return true
   return false
 }

@@ -9,7 +9,7 @@ import GlobalTop from '/@slidev/global-components/top'
 import GlobalBottom from '/@slidev/global-components/bottom'
 import PresenterMouse from './PresenterMouse.vue'
 
-defineProps<{ context: 'slidesshow' | 'presenter' }>()
+defineProps<{ context: 'slide' | 'presenter' }>()
 
 // preload next route
 watch(currentRoute, () => {
