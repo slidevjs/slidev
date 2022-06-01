@@ -50,10 +50,10 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}) 
   config.aspectRatio = parseAspectRatio(config.aspectRatio)
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    // eslint-disable-next-line no-console
+
     console.warn(`[slidev] Color schema "${config.colorSchema}" does not supported by the theme`)
   if (themeHightlighter && config.highlighter !== themeHightlighter)
-    // eslint-disable-next-line no-console
+
     console.warn(`[slidev] Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
   return config

@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import type { SlidevConfig } from './config'
 
 export interface SlideInfoBase {

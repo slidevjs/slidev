@@ -74,11 +74,9 @@ onMounted(() => {
     'allow-top-navigation-by-user-activation',
   ].join(' '))
 
-  /* eslint-disable no-undef */
   frame.src = __DEV__
     ? `${location.origin}${__SLIDEV_CLIENT_ROOT__}/iframes/monaco/index.html`
     : `${import.meta.env.BASE_URL}iframes/monaco/index.html`
-  /* eslint-enable no-undef */
 
   frame.style.backgroundColor = 'transparent'
 

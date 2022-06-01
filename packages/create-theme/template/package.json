@@ -3,6 +3,10 @@
     "slidev-theme",
     "slidev"
   ],
+  "engines": {
+    "node": ">=14.0.0",
+    "slidev": ">=0.19.3"
+  },
   "scripts": {
     "build": "slidev build example.md",
     "dev": "slidev example.md --open",
@@ -17,10 +21,6 @@
   },
   "devDependencies": {
     "@slidev/cli": "^0.32.3"
-  },
-  "engines": {
-    "node": ">=14.0.0",
-    "slidev": ">=0.19.3"
   },
   "//": "Learn more: https://sli.dev/themes/write-a-theme.html",
   "slidev": {

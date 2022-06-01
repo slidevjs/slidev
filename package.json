@@ -2,6 +2,9 @@
   "version": "0.32.3",
   "private": true,
   "packageManager": "pnpm@7.1.7",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "build": "pnpm -r --filter=./packages/** run build",
     "ci:publish": "zx scripts/publish.mjs",
@@ -70,8 +73,5 @@
     "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
       "eslint --fix"
     ]
-  },
-  "engines": {
-    "node": ">=14.0.0"
   }
 }

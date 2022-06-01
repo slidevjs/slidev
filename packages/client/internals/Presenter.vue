@@ -52,7 +52,7 @@ const nextSlide = computed(() => {
   }
 })
 
-// sync presenter cusor
+// sync presenter cursor
 onMounted(() => {
   const slidesContainer = main.value!.querySelector('#slide-content')!
   const mouse = reactive(useMouse())
@@ -102,7 +102,7 @@ onMounted(() => {
           key="main"
           class="h-full w-full"
         >
-          <template #>
+          <template #default>
             <SlidesShow context="presenter" />
           </template>
         </SlideContainer>

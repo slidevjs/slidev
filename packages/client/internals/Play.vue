@@ -48,8 +48,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       :scale="slideScale"
       @pointerdown="onClick"
     >
-      <template #>
-        <SlidesShow context="slidesshow" />
+      <template #default>
+        <SlidesShow context="slide" />
       </template>
       <template #controls>
         <div

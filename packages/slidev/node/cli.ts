@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import path from 'path'
 import net from 'net'
 import os from 'os'

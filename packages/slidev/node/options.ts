@@ -128,7 +128,6 @@ export async function resolveOptions(
   }
   else {
     if (!packageExists(theme)) {
-      // eslint-disable-next-line no-console
       console.error(`Theme "${theme}" not found, have you installed it?`)
       process.exit(1)
     }

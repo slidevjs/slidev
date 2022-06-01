@@ -13,7 +13,7 @@ const { context } = props
 
 const currentContext = inject(injectionSlideContext)
 
-const shouldRender = computed(() => context instanceof Array ? context.some(contextMatch) : contextMatch(context))
+const shouldRender = computed(() => Array.isArray(context) ? context.some(contextMatch) : contextMatch(context))
 
 function contextMatch(context: Context) {
   if (context === currentContext)

@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import type { SlidevThemeConfig } from './types'
 
 export interface SlidevConfig {
