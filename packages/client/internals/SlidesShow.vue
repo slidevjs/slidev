@@ -9,6 +9,8 @@ import GlobalTop from '/@slidev/global-components/top'
 import GlobalBottom from '/@slidev/global-components/bottom'
 import PresenterMouse from './PresenterMouse.vue'
 
+defineProps<{ context: 'slide' | 'presenter' }>()
+
 // preload next route
 watch(currentRoute, () => {
   if (currentRoute.value?.meta && currentRoute.value.meta.preload !== false)
@@ -37,6 +39,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
       :clicks-disabled="false"
       :class="getSlideClass(route)"
       :route="route"
+      :context="context"
     />
   </template>
 

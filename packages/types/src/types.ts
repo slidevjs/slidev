@@ -55,3 +55,5 @@ export interface SlidevMarkdown {
   entries?: string[]
   themeMeta?: SlidevThemeMeta
 }
+
+export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'

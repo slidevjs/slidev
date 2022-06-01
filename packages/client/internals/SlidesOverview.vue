@@ -85,6 +85,7 @@ watchEffect(() => {
               :clicks-disabled="true"
               :class="getSlideClass(route)"
               :route="route"
+              context="overview"
             />
             <DrawingPreview :page="+route.path" />
           </SlideContainer>

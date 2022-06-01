@@ -1,6 +1,6 @@
 import { useVModel } from '@vueuse/core'
 import { defineComponent, h, provide } from 'vue'
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap, injectionRoute } from '../constants'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap, injectionRoute, injectionSlideContext } from '../constants'
 
 export default defineComponent({
   props: {
@@ -20,6 +20,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    context: {
+      type: String,
+      default: 'main',
+    },
     is: {
       type: Object,
       default: undefined,
@@ -38,6 +42,7 @@ export default defineComponent({
     clicksElements.value.length = 0
 
     provide(injectionRoute, props.route)
+    provide(injectionSlideContext, props.context)
     provide(injectionClicks, clicks)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksElements, clicksElements)
