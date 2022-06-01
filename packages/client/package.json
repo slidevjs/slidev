@@ -2,23 +2,26 @@
   "name": "@slidev/client",
   "version": "0.32.3",
   "description": "Presentation slides for developers",
-  "homepage": "https://sli.dev",
-  "bugs": "https://github.com/slidevjs/slidev/issues",
-  "license": "MIT",
   "author": "antfu <anthonyfu117@hotmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/antfu",
+  "homepage": "https://sli.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/slidevjs/slidev"
   },
-  "funding": "https://github.com/sponsors/antfu",
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "@antfu/utils": "^0.5.2",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vueuse/core": "^8.5.0",
+    "@vueuse/core": "^8.6.0",
     "@vueuse/head": "^0.7.6",
     "@vueuse/motion": "^2.0.0-beta.18",
-    "codemirror": "^5.65.4",
+    "codemirror": "^5.65.5",
     "defu": "^6.0.0",
     "drauu": "^0.3.0",
     "file-saver": "^2.0.5",
@@ -32,12 +35,9 @@
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.0",
     "vite-plugin-windicss": "^1.8.4",
-    "vue": "^3.2.35",
+    "vue": "^3.2.36",
     "vue-router": "^4.0.15",
-    "vue-starport": "^0.2.10",
+    "vue-starport": "^0.2.11",
     "windicss": "^3.5.4"
-  },
-  "engines": {
-    "node": ">=14.0.0"
   }
 }
