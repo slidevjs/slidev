@@ -3,6 +3,7 @@ import { ignorableWatch, onClickOutside } from '@vueuse/core'
 import { nextTick, ref, watch } from 'vue'
 import { currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
+import NoteViewer from './NoteViewer.vue'
 
 const props = defineProps({
   class: {
@@ -59,22 +60,13 @@ onClickOutside(input, () => {
 </script>
 
 <template>
-  <template v-if="!editing && note">
-    <div
-      v-if="info?.notesHTML"
-      class="prose overflow-auto outline-none"
-      :class="props.class"
-      @click="switchNoteEdit"
-      v-html="info?.notesHTML"
-    />
-    <div
-      v-else
-      class="prose overflow-auto outline-none"
-      :class="props.class"
-      @click="switchNoteEdit"
-      v-text="note"
-    />
-  </template>
+  <NoteViewer
+    v-if="!editing && note"
+    :class="props.class"
+    :note="note"
+    :note-html="info?.notesHTML"
+    @click="switchNoteEdit"
+  />
   <textarea
     v-else
     ref="input"

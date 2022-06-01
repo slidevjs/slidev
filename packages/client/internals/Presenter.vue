@@ -14,6 +14,7 @@ import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
 import NoteEditor from './NoteEditor.vue'
+import NoteStatic from './NoteStatic.vue'
 import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
@@ -125,7 +126,8 @@ onMounted(() => {
         </SlideContainer>
       </div>
       <div class="grid-section note overflow-auto">
-        <NoteEditor class="w-full h-full p-4 overflow-auto" />
+        <NoteEditor v-if="__DEV__" class="w-full h-full p-4 overflow-auto" />
+        <NoteStatic v-else class="w-full h-full p-4 overflow-auto" />
       </div>
       <div class="grid-section bottom">
         <NavControls :persist="true" />

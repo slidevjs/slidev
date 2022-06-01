@@ -517,14 +517,10 @@ defineProps<{ no: number | string }>()`)
           imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
           const additions: Partial<RouteMeta> = {
             slide: {
-              start: i.start,
-              end: i.end,
-              note: i.note,
+              ...prepareSlideInfo(i),
               filepath: i.source?.filepath || entry,
               id: idx,
               no,
-              title: i.title,
-              level: i.level,
             },
             __clicksElements: [],
             __preloaded: false,
