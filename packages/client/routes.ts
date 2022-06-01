@@ -59,6 +59,7 @@ declare module 'vue-router' {
       start: number
       end: number
       note?: string
+      notesHTML?: string
       id: number
       no: number
       filepath: string
