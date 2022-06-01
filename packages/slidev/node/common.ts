@@ -1,6 +1,8 @@
 import { existsSync, promises as fs } from 'fs'
 import { join } from 'path'
 import { uniq } from '@antfu/utils'
+import { loadConfigFromFile, mergeConfig } from 'vite'
+import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions } from './options'
 import { generateGoogleFontsUrl, toAtFS } from './utils'
 
@@ -39,4 +41,27 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
     .replace('<!-- body -->', body)
 
   return main
+}
+
+export async function mergeViteConfigs({ addonRoots, themeRoots }: ResolvedSlidevOptions, viteConfig: InlineConfig, config: InlineConfig, command: 'serve' | 'build') {
+  const configEnv: ConfigEnv = {
+    mode: 'development',
+    command,
+  }
+
+  const files = uniq([
+    ...themeRoots,
+    ...addonRoots,
+  ]).map(i => join(i, 'vite.config.ts'))
+
+  for await (const file of files) {
+    if (!existsSync(file))
+      continue
+    const viteConfig = await loadConfigFromFile(configEnv, file)
+    if (!viteConfig?.config)
+      continue
+    config = mergeConfig(config, viteConfig.config)
+  }
+
+  return mergeConfig(viteConfig, config)
 }

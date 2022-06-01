@@ -428,7 +428,7 @@ defineProps<{ no: number | string }>()`)
     ])
 
     for (const root of roots) {
-      const layoutPaths = await fg('layouts/*.{vue,ts}', {
+      const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
         cwd: root,
         absolute: true,
       })
