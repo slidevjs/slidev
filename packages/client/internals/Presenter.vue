@@ -182,7 +182,7 @@ onMounted(() => {
     "bottom bottom";
 }
 
-@media (orientation: portrait) {
+@media (max-aspect-ratio: 3/5) {
   .grid-container {
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr 1fr 1fr min-content;
@@ -195,7 +195,7 @@ onMounted(() => {
   }
 }
 
-@screen md {
+@media (min-aspect-ratio: 1/1) {
   .grid-container {
     grid-template-columns: 1fr 1.1fr 0.9fr;
     grid-template-rows: min-content 1fr 2fr min-content;
