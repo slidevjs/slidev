@@ -407,7 +407,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     if (remote !== undefined) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
-          .filter(details => details.family === 'IPv4' && !details.address.includes('127.0.0.1'))
+          .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
             console.log(`${dim('  remote control ')}     > ${blue(`http://${address}:${port}${presenterPath}`)}`)
           }),
