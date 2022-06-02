@@ -3,12 +3,12 @@ import { join, resolve } from 'path'
 import http from 'http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
-import { mergeConfig, resolveConfig, build as viteBuild } from 'vite'
+import { resolveConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import { blue, yellow } from 'kolorist'
 import { ViteSlidevPlugin } from './plugins/preset'
-import { getIndexHtml } from './common'
+import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
 
 export async function build(
@@ -27,7 +27,8 @@ export async function build(
   let config: ResolvedConfig = undefined!
 
   try {
-    const inlineConfig = mergeConfig(
+    const inlineConfig = await mergeViteConfigs(
+      options,
       viteConfig,
       <InlineConfig>({
         root: options.userRoot,
@@ -44,6 +45,7 @@ export async function build(
           chunkSizeWarningLimit: 2000,
         },
       }),
+      'build',
     )
 
     await viteBuild(inlineConfig)
@@ -56,27 +58,31 @@ export async function build(
         console.log(blue('  building for Monaco...\n'))
 
         await viteBuild(
-          mergeConfig(inlineConfig,
-        <InlineConfig>({
-          root: join(options.clientRoot, 'iframes/monaco'),
-          base: `${config.base}iframes/monaco/`,
-          build: {
-            outDir: resolve(config.build.outDir, 'iframes/monaco'),
-            // fix for monaco workers
-            // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
-            rollupOptions: {
-              output: {
-                manualChunks: {
-                  jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
-                  cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
-                  htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
-                  tsWorker: ['monaco-editor/esm/vs/language/typescript/ts.worker'],
-                  editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
+          await mergeViteConfigs(
+            options,
+            inlineConfig,
+            <InlineConfig>({
+              root: join(options.clientRoot, 'iframes/monaco'),
+              base: `${config.base}iframes/monaco/`,
+              build: {
+                outDir: resolve(config.build.outDir, 'iframes/monaco'),
+                // fix for monaco workers
+                // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
+                rollupOptions: {
+                  output: {
+                    manualChunks: {
+                      jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
+                      cssWorker: ['monaco-editor/esm/vs/language/css/css.worker'],
+                      htmlWorker: ['monaco-editor/esm/vs/language/html/html.worker'],
+                      tsWorker: ['monaco-editor/esm/vs/language/typescript/ts.worker'],
+                      editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
+                    },
+                  },
                 },
               },
-            },
-          },
-        })),
+            }),
+            'build',
+          ),
         )
       }
     }
@@ -115,13 +121,14 @@ export async function build(
     server.listen(port)
     await exportSlides({
       port,
+      slides: options.data.slides,
       total: options.data.slides.length,
       format: 'pdf',
       output: join(outDir, outFilename),
       base: config.base,
       dark: options.data.config.colorSchema === 'dark',
-      width: 1920,
-      height: Math.round(1920 / options.data.config.aspectRatio),
+      width: options.data.config.canvasWidth,
+      height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
       routerMode: options.data.config.routerMode,
     })
     server.close()

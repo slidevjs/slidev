@@ -47,12 +47,12 @@ export async function createWindiCSSPlugin(
       },
       onOptionsResolved(config) {
         themeRoots.forEach((i) => {
-          config.scanOptions.include.push(`${i}/components/*.{vue,ts}`)
-          config.scanOptions.include.push(`${i}/layouts/*.{vue,ts}`)
+          config.scanOptions.include.push(`${i}/components/**/*.{vue,ts}`)
+          config.scanOptions.include.push(`${i}/layouts/**/*.{vue,ts}`)
         })
         addonRoots.forEach((i) => {
-          config.scanOptions.include.push(`${i}/components/*.{vue,ts}`)
-          config.scanOptions.include.push(`${i}/layouts/*.{vue,ts}`)
+          config.scanOptions.include.push(`${i}/components/**/*.{vue,ts}`)
+          config.scanOptions.include.push(`${i}/layouts/**/*.{vue,ts}`)
         })
         config.scanOptions.include.push(`!${slash(resolve(userRoot, 'node_modules'))}`)
         config.scanOptions.exclude.push(dirname(resolveImportPath('monaco-editor/package.json', true)))
