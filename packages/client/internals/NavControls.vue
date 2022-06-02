@@ -47,7 +47,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 <template>
   <nav ref="root" class="flex flex-col">
     <div
-      class="flex flex-wrap-reverse text-xl p-2 gap-1"
+      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:(gap-1 p-2)"
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
