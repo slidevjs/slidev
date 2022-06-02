@@ -16,8 +16,14 @@ html {
 
 .icon-btn {
   @apply inline-block cursor-pointer select-none !outline-none;
-  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-2;
+  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
+}
+
+@screen md {
+  .icon-btn {
+    @apply p-2;
+  }
 }
 
 .icon-btn.shallow {
