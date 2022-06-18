@@ -269,8 +269,8 @@ importers:
       unplugin-icons: ^0.14.3
       unplugin-vue-components: ^0.19.6
       vite: ^2.9.9
-      vite-plugin-md: ^0.13.1
       vite-plugin-remote-assets: ^0.2.2
+      vite-plugin-vue-markdown: ^0.1.0
       vite-plugin-vue-server-ref: ^0.2.4
       vite-plugin-windicss: ^1.8.4
       vue: ^3.2.36
@@ -314,8 +314,8 @@ importers:
       unplugin-icons: 0.14.3_cyjpizlboac2xw76ngrtxfz55y
       unplugin-vue-components: 0.19.6_vite@2.9.9+vue@3.2.36
       vite: 2.9.9
-      vite-plugin-md: 0.13.1_vite@2.9.9
       vite-plugin-remote-assets: 0.2.2_vite@2.9.9
+      vite-plugin-vue-markdown: 0.1.0_vite@2.9.9
       vite-plugin-vue-server-ref: 0.2.4_vite@2.9.9+vue@3.2.36
       vite-plugin-windicss: 1.8.4_vite@2.9.9
       vue: 3.2.36
@@ -6724,20 +6724,6 @@ packages:
       - supports-color
     dev: true
 
-  /vite-plugin-md/0.13.1_vite@2.9.9:
-    resolution: {integrity: sha512-ZLXRuhQCFVCvxTE79CtSOj71TknT7Hube5SN3aU65k7FpsIQ8ftQhMn3PbdVjHUlQRR462IuPsTYbyXHyrOmOQ==}
-    peerDependencies:
-      vite: ^2.0.0
-    dependencies:
-      '@antfu/utils': 0.5.2
-      '@rollup/pluginutils': 4.2.1
-      '@types/markdown-it': 12.2.3
-      '@vue/runtime-core': 3.2.36
-      gray-matter: 4.0.3
-      markdown-it: 13.0.1
-      vite: 2.9.9
-    dev: false
-
   /vite-plugin-remote-assets/0.2.2_vite@2.9.9:
     resolution: {integrity: sha512-Hl2g1EGJW7jHjNKQ0hf96LJEbfmintfQLBIgKJkyFPyjO1NH3gNUheFgBoxi6G4/nbE9hHzpIIr30iwm1NxLlQ==}
     peerDependencies:
@@ -6750,6 +6736,19 @@ packages:
       vite: 2.9.9
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /vite-plugin-vue-markdown/0.1.0_vite@2.9.9:
+    resolution: {integrity: sha512-7mnWdF3PjJ2pHidcxwFkvKdT2Il5D9cXPnf9OmKeXo8DStBtz0RMb2TFw5QbVVxrlLUGoFZBsA/BIbGs5mXcdQ==}
+    peerDependencies:
+      vite: ^2.0.0
+    dependencies:
+      '@antfu/utils': 0.5.2
+      '@rollup/pluginutils': 4.2.1
+      '@types/markdown-it': 12.2.3
+      gray-matter: 4.0.3
+      markdown-it: 13.0.1
+      vite: 2.9.9
     dev: false
 
   /vite-plugin-vue-server-ref/0.2.4_vite@2.9.9+vue@3.2.36:
