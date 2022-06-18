@@ -40,6 +40,7 @@ export interface NavOperations {
   prev: () => Promise<void>
   nextSlide: () => void
   prevSlide: () => Promise<void>
+  go: (index: number) => Promise<void>
   downloadPDF: () => Promise<void>
   toggleDark: () => void
   toggleOverview: () => void
