@@ -1,7 +1,7 @@
 /* __imports__ */
 
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
-import { downloadPDF, next, nextSlide, prev, prevSlide, go } from '../logic/nav'
+import { downloadPDF, go, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'
@@ -20,7 +20,7 @@ export default function setupShortcuts() {
     toggleOverview,
     toggleDrawing: () => drawingEnabled.value = !drawingEnabled.value,
     escapeOverview: () => showOverview.value = false,
-    showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value
+    showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
 
   // eslint-disable-next-line prefer-const
