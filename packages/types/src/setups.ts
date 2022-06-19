@@ -32,7 +32,6 @@ export interface MonacoSetupReturn {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/space-infix-ops
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
 export interface NavOperations {

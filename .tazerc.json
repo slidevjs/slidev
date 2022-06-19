@@ -3,6 +3,7 @@
     "husky",
     "cypress",
     "execa",
-    "tsup"
+    "tsup",
+    "codemirror"
   ]
 }
