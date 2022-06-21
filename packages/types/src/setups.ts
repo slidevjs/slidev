@@ -35,13 +35,13 @@ export interface MonacoSetupReturn {
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
 export interface NavOperations {
-  goFirst: () => void
-  goLast: () => void
   next: () => void
   prev: () => Promise<void>
   nextSlide: () => void
   prevSlide: () => Promise<void>
   go: (index: number) => void
+  goFirst: () => void
+  goLast: () => void
   downloadPDF: () => Promise<void>
   toggleDark: () => void
   toggleOverview: () => void
