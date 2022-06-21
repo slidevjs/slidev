@@ -115,11 +115,11 @@ export async function prevSlide(lastClicks = true) {
     router.replace({ query: { ...route.value.query, clicks: clicksTotal.value } })
 }
 
-export function firstSlide() {
+export function goFirst() {
   return go(1)
 }
 
-export function lastSlide() {
+export function goLast() {
   return go(total.value)
 }
 
