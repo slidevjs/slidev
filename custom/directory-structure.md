@@ -13,7 +13,7 @@ your-slidev/
   ├── styles/           # custom style
   ├── index.html        # injections to index.html
   ├── slides.md         # the main slides entry
-  └── vite.config.ts   # extending vite config
+  └── vite.config.ts    # extending vite config
 ```
 
 All of them are optional.
