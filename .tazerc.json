@@ -1,7 +1,6 @@
 {
   "exclude": [
     "husky",
-    "cypress",
     "execa",
     "tsup",
     "codemirror"
