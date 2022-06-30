@@ -50,9 +50,9 @@
 
   <!-- <Debug /> -->
 
-  <ClientOnly>
+  <!-- <ClientOnly>
     <WorkingInProgress />
-  </ClientOnly>
+  </ClientOnly> -->
 </template>
 
 <script setup lang="ts">
