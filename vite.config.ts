@@ -1,7 +1,8 @@
 import { resolve } from 'path'
 import { UserConfig } from 'vite'
-import Icons, { ViteIconsResolver } from 'vite-plugin-icons'
-import Components from 'vite-plugin-components'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
 
 const config: UserConfig = {
@@ -30,10 +31,10 @@ const config: UserConfig = {
         '.vitepress/theme/components',
         '.vitepress/@slidev/client/builtin',
       ],
-      customLoaderMatcher: id => id.endsWith('.md'),
-      customComponentResolvers: [
-        ViteIconsResolver({
-          componentPrefix: '',
+      extensions: ['vue', 'md'],
+      resolvers: [
+        IconsResolver({
+          prefix: '',
         }),
       ],
     }),
