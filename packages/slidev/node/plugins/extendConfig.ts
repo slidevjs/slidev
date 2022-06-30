@@ -14,6 +14,8 @@ const EXCLUDE = [
   '@slidev/types',
   '@vueuse/core',
   '@vueuse/shared',
+  '@unocss/reset',
+  'unocss',
   'mermaid',
   'vite-plugin-windicss',
   'vue-demi',

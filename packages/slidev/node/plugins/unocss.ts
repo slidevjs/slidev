@@ -1,7 +1,6 @@
 import { resolve } from 'path'
 import { existsSync } from 'fs'
 import { deepMerge, uniq } from '@antfu/utils'
-import UnoCSS from 'unocss/vite'
 import type { Theme } from '@unocss/preset-uno'
 import jiti from 'jiti'
 import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
@@ -12,6 +11,7 @@ export async function createUnocssPlugin(
   { themeRoots, addonRoots, clientRoot, roots, data }: ResolvedSlidevOptions,
   { unocss: unoOptions }: SlidevPluginOptions,
 ) {
+  const UnoCSS = await import('unocss/vite').then(r => r.default)
   const configFiles = uniq([
     ...themeRoots.map(i => `${i}/uno.config.ts`),
     ...addonRoots.map(i => `${i}/uno.config.ts`),
