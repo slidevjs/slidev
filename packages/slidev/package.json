@@ -86,7 +86,7 @@
     "unplugin-vue-components": "^0.20.1",
     "vite": "^2.9.13",
     "vite-plugin-remote-assets": "^0.2.2",
-    "vite-plugin-vue-markdown": "^0.20.0",
+    "vite-plugin-vue-markdown": "^0.20.1",
     "vite-plugin-vue-server-ref": "^0.2.4",
     "vite-plugin-windicss": "^1.8.5",
     "vue": "^3.2.37",
