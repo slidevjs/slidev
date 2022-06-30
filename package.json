@@ -16,7 +16,7 @@
     "dev": "pnpm -r --filter=./packages/** --parallel run dev",
     "lint": "eslint .",
     "lint:fix": "nr lint --fix",
-    "release": "zx scripts/release.mjs",
+    "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test"
   },
   "devDependencies": {

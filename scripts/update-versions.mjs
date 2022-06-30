@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { join } from 'path'
-import { execSync } from 'child_process'
 import { objectMap } from '@antfu/utils'
-import { $, fs } from 'zx'
-
-execSync('npx bumpp package.json packages/*/package.json', { stdio: 'inherit' })
+import { fs } from 'zx'
 
 const templates = [
   'packages/create-app/template',
@@ -28,9 +24,3 @@ for (const template of templates) {
   }
   await fs.writeJSON(path, pkg, { spaces: 2 })
 }
-
-await $`git add .`
-await $`git commit -m "chore: release v${version}"`
-await $`git tag v${version}`
-await $`git push`
-await $`git push origin --tags`
