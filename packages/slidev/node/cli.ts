@@ -13,6 +13,7 @@ import type { LogLevel, ViteDevServer } from 'vite'
 import type { SlidevConfig } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
+import { verifyConfig } from '@slidev/parser'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
@@ -25,6 +26,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
   'routerMode',
   'fonts',
+  'css',
 ]
 
 const cli = yargs
@@ -420,7 +422,9 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     console.log()
     console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
   }
+
   console.log()
+  verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
   console.log()
 }
 

@@ -88,7 +88,6 @@ async function start() {
 
 <style lang="postcss">
 .recording-dialog {
-
   .form-text {
     @apply flex flex-col;
 

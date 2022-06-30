@@ -32,7 +32,7 @@ const onMouseLeave = () => {
 
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
-  : 'rounded-md bg-main shadow dark:(border border-gray-400 border-opacity-10)',
+  : 'rounded-md bg-main shadow dark:border dark:border-gray-400 dark:border-opacity-10',
 )
 
 const RecordingControls = shallowRef<any>()
@@ -47,7 +47,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 <template>
   <nav ref="root" class="flex flex-col">
     <div
-      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:(gap-1 p-2)"
+      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:gap-1 lg:p-2"
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >

@@ -4,6 +4,7 @@ import type Icons from 'unplugin-icons/vite'
 import type Components from 'unplugin-vue-components/vite'
 import type Markdown from 'vite-plugin-vue-markdown'
 import type WindiCSS from 'vite-plugin-windicss'
+import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
 import type RemoteAssets from 'vite-plugin-remote-assets'
 import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
@@ -65,6 +66,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
   icons?: ArgumentsType<typeof Icons>[0]
   remoteAssets?: ArgumentsType<typeof RemoteAssets>[0]
   serverRef?: ArgumentsType<typeof ServerRef>[0]
+  unocss?: UnoCSSConfig
 }
 
 export interface SlidevServerOptions {

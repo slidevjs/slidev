@@ -8,6 +8,7 @@ import type { Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { WindiCssOptions } from 'vite-plugin-windicss'
+import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 
 export interface AppContext {
   app: App
@@ -58,6 +59,7 @@ export interface ShortcutOptions {
 export type ShikiSetup = (shiki: typeof Shiki) => Awaitable<ShikiOptions | undefined>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
 export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
+export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | undefined>
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn>
@@ -70,6 +72,10 @@ export function defineShikiSetup(fn: ShikiSetup) {
 }
 
 export function defineWindiSetup(fn: WindiSetup) {
+  return fn
+}
+
+export function defineUnoSetup(fn: UnoSetup) {
   return fn
 }
 

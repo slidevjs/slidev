@@ -84,7 +84,7 @@ onMounted(() => {
   <div class="bg-main h-full slidev-presenter">
     <div class="grid-container">
       <div class="grid-section top flex">
-        <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:(h-14 py-2)">
+        <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:h-14 lg:py-2">
         <div class="flex-auto" />
         <div
           class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
@@ -98,7 +98,7 @@ onMounted(() => {
           {{ timer }}
         </div>
       </div>
-      <div ref="main" class="relative grid-section main flex flex-col p-2 lg:(p-4)" :style="themeVars">
+      <div ref="main" class="relative grid-section main flex flex-col p-2 lg:p-4" :style="themeVars">
         <SlideContainer
           key="main"
           class="h-full w-full"
@@ -111,7 +111,7 @@ onMounted(() => {
           current
         </div>
       </div>
-      <div class="relative grid-section next flex flex-col p-2 lg:(p-4)">
+      <div class="relative grid-section next flex flex-col p-2 lg:p-4">
         <SlideContainer
           v-if="nextSlide"
           key="next"
@@ -132,8 +132,8 @@ onMounted(() => {
         </div>
       </div>
       <div class="grid-section note overflow-auto">
-        <NoteEditor v-if="__DEV__" class="w-full h-full overflow-auto p-2 lg:(p-4)" />
-        <NoteStatic v-else class="w-full h-full overflow-auto p-2 lg:(p-4)" />
+        <NoteEditor v-if="__DEV__" class="w-full h-full overflow-auto p-2 lg:p-4" />
+        <NoteStatic v-else class="w-full h-full overflow-auto p-2 lg:p-4" />
       </div>
       <div class="grid-section bottom">
         <NavControls :persist="true" />

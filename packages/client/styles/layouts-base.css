@@ -70,7 +70,7 @@
   }
 
   a {
-    @apply border-current border-b border-dashed hover:(text-$slidev-theme-primary border-solid);
+    @apply border-current border-b border-dashed hover:text-$slidev-theme-primary hover:border-solid;
   }
 
   td, th {

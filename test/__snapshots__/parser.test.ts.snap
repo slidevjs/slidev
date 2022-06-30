@@ -6,6 +6,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
+  "css": "windicss",
   "download": false,
   "drawings": {
     "enabled": true,
@@ -237,6 +238,7 @@ exports[`md parser > minimal.md > config 1`] = `
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
+  "css": "windicss",
   "download": false,
   "drawings": {
     "enabled": true,
@@ -406,6 +408,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "aspectRatio": 1.7777777777777777,
   "canvasWidth": 980,
   "colorSchema": "auto",
+  "css": "windicss",
   "download": false,
   "drawings": {
     "enabled": true,

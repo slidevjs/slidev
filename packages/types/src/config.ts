@@ -149,6 +149,15 @@ export interface SlidevConfig {
    * @default false
    */
   remote?: string | boolean
+
+  /**
+   * Engine for atomic CSS
+   *
+   * UnoCSS support is currently experimental.
+   *
+   * @default 'windicss'
+   */
+  css?: 'windicss' | 'unocss'
 }
 
 export interface FontOptions {

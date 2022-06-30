@@ -40,7 +40,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 </script>
 
 <template>
-  <div id="page-root" ref="root" class="grid grid-cols-[1fr,max-content]" :style="themeVars">
+  <div id="page-root" ref="root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
     <SlideContainer
       class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"

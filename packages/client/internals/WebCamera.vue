@@ -77,7 +77,7 @@ onMounted(fixPosition)
 
     <div
       ref="handler"
-      class="absolute bottom-0 right-0 rounded-full bg-main shadow opacity-0 shadow z-30 hover:opacity-100 dark:(border border-true-gray-700)"
+      class="absolute bottom-0 right-0 rounded-full bg-main shadow opacity-0 shadow z-30 hover:opacity-100 dark:border dark:border-true-gray-700"
       :style="handleStyle"
       :class="handlerDown ? '!opacity-100' : ''"
     />

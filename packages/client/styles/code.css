@@ -41,12 +41,12 @@ html:not(.dark) .shiki-dark {
   @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600
 }
 
-// revert windicss preflight for katex
+/* revert windicss preflight for katex */
 .katex,
 .katex :after,
 .katex :before {
   border-color: currentColor;
 }
 
-// codemirror
+/* codemirror */
 .CodeMirror pre.CodeMirror-placeholder { opacity: 0.4; }

@@ -132,7 +132,7 @@ throttledWatch(
     @pointerdown="onHandlerDown"
   />
   <div
-    class="shadow bg-main p-4 grid grid-rows-[max-content,1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
+    class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
     :style="{ width: `${editorWidth}px` }"
   >
     <div class="flex pb-2 text-xl -mt-1">

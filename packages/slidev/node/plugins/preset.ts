@@ -15,6 +15,7 @@ import { createClientSetupPlugin } from './setupClient'
 import { createMarkdownPlugin } from './markdown'
 import { createWindiCSSPlugin } from './windicss'
 import { createFixPlugins } from './patchTransform'
+import { createUnocssPlugin } from './unocss'
 
 const customElements = new Set([
   // katex
@@ -87,7 +88,9 @@ export async function ViteSlidevPlugin(
   const drawingData = await loadDrawings(options)
 
   return [
-    await createWindiCSSPlugin(options, pluginOptions),
+    config.css === 'unocss'
+      ? await createUnocssPlugin(options, pluginOptions)
+      : await createWindiCSSPlugin(options, pluginOptions),
     MarkdownPlugin,
     VuePlugin,
 
