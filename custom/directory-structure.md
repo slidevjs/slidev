@@ -48,7 +48,7 @@ your-slidev/
 </hello-world>
 ```
 
-This feature is powered by [`vite-plugin-components`](https://github.com/antfu/vite-plugin-components), learn more there.
+This feature is powered by [`unplugin-vue-components`](https://github.com/antfu/unplugin-vue-components), learn more there.
 
 Slidev also provides some [built-in components](/builtin/components) for you to use.
 
