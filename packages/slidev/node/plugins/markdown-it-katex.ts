@@ -12,7 +12,7 @@ for rendering output.
 import type { KatexOptions } from 'katex'
 import katex from 'katex'
 
-// Test if potential opening or closing delimieter
+// Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
 function isValidDelim(state: any, pos: number) {
   const max = state.posMax
@@ -51,10 +51,10 @@ function math_inline(state: any, silent: boolean) {
     return true
   }
 
-  // First check for and bypass all properly escaped delimieters
+  // First check for and bypass all properly escaped delimiters
   // This loop will assume that the first leading backtick can not
   // be the first character in state.src, which is known since
-  // we have found an opening delimieter already.
+  // we have found an opening delimiter already.
   const start = state.pos + 1
   match = start
   // eslint-disable-next-line no-cond-assign

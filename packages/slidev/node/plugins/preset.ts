@@ -1,3 +1,4 @@
+import { join } from 'path'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import Icons from 'unplugin-icons/vite'
@@ -100,10 +101,10 @@ export async function ViteSlidevPlugin(
       extensions: ['vue', 'md', 'ts'],
 
       dirs: [
-        `${clientRoot}/builtin`,
-        `${clientRoot}/components`,
-        ...themeRoots.map(i => `${i}/components`),
-        ...addonRoots.map(i => `${i}/components`),
+        join(clientRoot, 'builtin'),
+        join(clientRoot, 'components'),
+        ...themeRoots.map(i => join(i, 'components')),
+        ...addonRoots.map(i => join(i, 'components')),
         'src/components',
         'components',
       ],

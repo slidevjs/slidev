@@ -92,8 +92,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           title="Show presenter cursor"
           @click="showPresenterCursor = !showPresenterCursor"
         >
-          <ph:cursor-fill v-if="showPresenterCursor" />
-          <ph:cursor-duotone v-else class="opacity-50" />
+          <ph-cursor-fill v-if="showPresenterCursor" />
+          <ph-cursor-duotone v-else class="opacity-50" />
         </button>
       </template>
 
