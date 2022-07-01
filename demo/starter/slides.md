@@ -20,7 +20,7 @@ info: |
 drawings:
   persist: false
 # use UnoCSS (experimental)
-# css: unocss
+css: unocss
 ---
 
 # Welcome to Slidev
