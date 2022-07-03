@@ -233,6 +233,7 @@ importers:
   packages/slidev:
     specifiers:
       '@antfu/utils': ^0.5.2
+      '@hedgedoc/markdown-it-task-lists': ^1.0.4
       '@iconify-json/carbon': ^1.1.6
       '@iconify-json/ph': ^1.1.2
       '@slidev/client': workspace:*
@@ -284,6 +285,7 @@ importers:
       yargs: ^17.5.1
     dependencies:
       '@antfu/utils': 0.5.2
+      '@hedgedoc/markdown-it-task-lists': 1.0.4_markdown-it@13.0.1
       '@iconify-json/carbon': 1.1.6
       '@iconify-json/ph': 1.1.2
       '@slidev/client': link:../client
@@ -587,6 +589,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@hedgedoc/markdown-it-task-lists/1.0.4_markdown-it@13.0.1:
+    resolution: {integrity: sha512-L2qzTIxjl2o35DUWLm3oYSMumcMXR74B9KuQ0jMlvOhu3N71TvvySi+zErOvgacQ9cOpYiGW67zvvCtwkbbXAA==}
+    peerDependencies:
+      markdown-it: '>=12'
+    dependencies:
+      markdown-it: 13.0.1
+    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
