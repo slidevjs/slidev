@@ -6,6 +6,7 @@ import { slash } from '@antfu/utils'
 import mila from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import mif from 'markdown-it-footnote'
+import mitl from '@hedgedoc/markdown-it-task-lists'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
@@ -65,7 +66,7 @@ export async function createMarkdownPlugin(
       })
 
       md.use(mif)
-
+      md.use(mitl, { enabled: true, lineNumber: true, label: true })
       md.use(Katex, KatexOptions)
 
       setups.forEach(i => i(md))
@@ -135,14 +136,14 @@ export function transformSlotSugar(md: string) {
 }
 
 /**
- * Transform Monaco code block to component
+ * Transform code block with wrapper
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/^```(\w+?)\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr: string, options = '', code: string) => {
-    const ranges = rangeStr.split(/\|/g).map(i => i.trim())
+  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', code: string) => {
+    const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
     code = code.trimEnd()
     options = options.trim() || '{}'
-    return `\n<CodeHighlightController v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeHighlightController>`
+    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
   })
 }
 

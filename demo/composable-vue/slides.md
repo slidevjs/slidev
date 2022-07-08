@@ -44,7 +44,7 @@ Creator of VueUse, i18n Ally and Type Challenges.<br>
 A fanatical full-time open sourceror.<br>
 </div>
 
-<div class="my-10 grid grid-cols-[40px,1fr] w-min gap-y-4">
+<div class="my-10 grid grid-cols-[40px_1fr] w-min gap-y-4">
   <ri-github-line class="opacity-50"/>
   <div><a href="https://github.com/antfu" target="_blank">antfu</a></div>
   <ri-twitter-line class="opacity-50"/>
@@ -80,7 +80,7 @@ name: VueUse
 layout: center
 ---
 
-<div class="grid grid-cols-[3fr,2fr] gap-4">
+<div class="grid grid-cols-[3fr_2fr] gap-4">
   <div class="text-center pb-4">
     <img class="h-50 inline-block" src="https://vueuse.org/favicon.svg">
     <div class="opacity-50 mb-2 text-sm">
@@ -276,7 +276,7 @@ of writing composable functions
 
 Sets of reusable logic, separation of concerns.
 
-<div v-click class="grid grid-cols-[1fr,130px]">
+<div v-click class="grid grid-cols-[1fr_130px]">
 
 ```ts
 export function useDark(options: UseDarkOptions = {}) {
@@ -318,7 +318,7 @@ The `setup()` only runs **once** on component initialization, to construct the r
 - Input → Output<sup class="ml-1 opacity-50">Effects</sup>
 - Output reflects to input's changes automatically
 
-<div class="grid grid-cols-[auto,1fr] gap-4">
+<div class="grid grid-cols-[auto_1fr] gap-4">
   <Connections v-click class="mt-4"/>
   <div v-click class="p-4">
     <h3 class="pb-2">SpreadSheet Formula</h3>
@@ -344,7 +344,7 @@ Just the same as authoring JavaScript functions.
 
 # Passing Refs as Arguments <MarkerPattern />
 
-<div class="grid grid-cols-[160px,1fr,180px] gap-x-4">
+<div class="grid grid-cols-[160px_1fr_180px] gap-x-4">
 
 <div />
 
@@ -944,7 +944,7 @@ console.log(state.foo) // 2
 
 Use `provide` and `inject` to share the app-level state
 
-<div class="grid grid-cols-[max-content,1fr] gap-4">
+<div class="grid grid-cols-[max-content_1fr] gap-4">
 
 <v-click>
 

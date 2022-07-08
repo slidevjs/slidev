@@ -6,13 +6,23 @@ html:not(.dark) .shiki-dark {
   display: none;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.slidev-code-wrapper {
+  margin: var(--slidev-code-margin) !important;
+  &:-webkit-scrollbar {
+    width: 0px;
+  }
+}
+
 .slidev-code {
   font-family: var(--slidev-code-font-family) !important;
   padding: var(--slidev-code-padding) !important;
   font-size: var(--slidev-code-font-size) !important;
   line-height: var(--slidev-code-line-height) !important;
   border-radius: var(--slidev-code-radius) !important;
-  margin: var(--slidev-code-margin) !important;
   overflow: auto;
 }
 
@@ -38,15 +48,15 @@ html:not(.dark) .shiki-dark {
 .slidev-code-line-numbers .slidev-code code .line::before {
   content: counter(step);
   counter-increment: step;
-  @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600
+  @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600;
 }
 
-// revert windicss preflight for katex
+/* revert windicss preflight for katex */
 .katex,
 .katex :after,
 .katex :before {
   border-color: currentColor;
 }
 
-// codemirror
+/* codemirror */
 .CodeMirror pre.CodeMirror-placeholder { opacity: 0.4; }

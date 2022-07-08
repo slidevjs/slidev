@@ -25,7 +25,8 @@ function setBrushColor(color: typeof brush.color) {
 
 <template>
   <Draggable
-    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 dark:(border border-gray-400 border-opacity-10)"
+    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200"
+    dark="border border-gray-400 border-opacity-10"
     :class="drawingEnabled ? '' : drawingPinned ? 'opacity-40 hover:opacity-90' : 'opacity-0 pointer-events-none'"
     storage-key="slidev-drawing-pos"
     :initial-x="10"

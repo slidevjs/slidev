@@ -11,6 +11,7 @@ import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
+import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
@@ -214,7 +215,7 @@ export function createSlidesLoader(
         return null
       },
 
-      load(id) {
+      load(id): LoadResult | Promise<LoadResult> {
         // routes
         if (id === '/@slidev/routes')
           return generateRoutes()
@@ -253,7 +254,7 @@ export function createSlidesLoader(
             code: data.slides.map(({ title }, i) => {
               return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
             }).join(''),
-            map: {},
+            map: { mappings: '' },
           }
         }
 
@@ -267,13 +268,13 @@ export function createSlidesLoader(
             if (type === 'md') {
               return {
                 code: data.slides[pageNo]?.content,
-                map: {},
+                map: { mappings: '' },
               }
             }
           }
           return {
             code: '',
-            map: {},
+            map: { mappings: '' },
           }
         }
       },
@@ -478,6 +479,26 @@ defineProps<{ no: number | string }>()`)
 
     if (data.features.katex)
       imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
+
+    if (data.config.css === 'unocss') {
+      imports.unshift(
+        'import "@unocss/reset/tailwind.css"',
+        'import "uno:preflights.css"',
+        'import "uno:typography.css"',
+        'import "uno:shortcuts.css"',
+      )
+      imports.push('import "uno.css"')
+    }
+    else {
+      imports.unshift(
+        'import "virtual:windi-components.css"',
+        'import "virtual:windi-base.css"',
+      )
+      imports.push(
+        'import "virtual:windi-utilities.css"',
+        'import "virtual:windi-devtools"',
+      )
+    }
 
     return imports.join('\n')
   }

@@ -14,6 +14,8 @@ const EXCLUDE = [
   '@slidev/types',
   '@vueuse/core',
   '@vueuse/shared',
+  '@unocss/reset',
+  'unocss',
   'mermaid',
   'vite-plugin-windicss',
   'vue-demi',
@@ -22,7 +24,7 @@ const EXCLUDE = [
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:config',
-    config(config) {
+    async config(config) {
       const injection: InlineConfig = {
         define: getDefine(options),
         resolve: {
@@ -48,6 +50,15 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ],
           exclude: EXCLUDE,
         },
+        css: options.data.config.css === 'unocss'
+          ? {
+              postcss: {
+                plugins: [
+                  await import('postcss-nested').then(r => r.default()) as any,
+                ],
+              },
+            }
+          : {},
         server: {
           fs: {
             strict: true,

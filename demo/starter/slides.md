@@ -19,6 +19,8 @@ info: |
 # persist drawings in exports and build
 drawings:
   persist: false
+# use UnoCSS (experimental)
+css: unocss
 ---
 
 # Welcome to Slidev

@@ -1,11 +1,8 @@
 import { fileURLToPath } from 'url'
-import { installBrowsersWithProgressBar } from 'playwright-chromium/lib/install/installer.js'
 import { $, cd, fs, path } from 'zx'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-await installBrowsersWithProgressBar()
 
 await $`npm run build`
 

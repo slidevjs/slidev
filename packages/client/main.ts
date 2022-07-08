@@ -6,11 +6,7 @@ import { router } from './routes'
 import createDirectives from './modules/directives'
 import createSlidevContext from './modules/context'
 
-import 'virtual:windi-base.css'
-import 'virtual:windi-components.css'
 import '/@slidev/styles'
-import 'virtual:windi-utilities.css'
-import 'virtual:windi-devtools'
 
 const app = createApp(App)
 app.use(router)

@@ -25,7 +25,7 @@ export interface SlidevConfig {
   /**
    * Download remote assets in local using vite-plugin-remote-assets
    *
-   * @default true
+   * @default false
    */
   remoteAssets: boolean | 'dev' | 'build'
   /**
@@ -42,6 +42,12 @@ export interface SlidevConfig {
    * @default false
    */
   download: boolean | string
+  /**
+   * Show a copy button in code blocks
+   *
+   * @default true
+   */
+  codeCopy: boolean
   /**
    * Information shows on the built SPA
    * Can be a markdown string
@@ -149,6 +155,14 @@ export interface SlidevConfig {
    * @default false
    */
   remote?: string | boolean
+  /**
+   * Engine for atomic CSS
+   *
+   * UnoCSS support is currently experimental.
+   *
+   * @default 'windicss'
+   */
+  css: 'windicss' | 'unocss'
 }
 
 export interface FontOptions {

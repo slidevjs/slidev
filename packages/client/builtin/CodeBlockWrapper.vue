@@ -14,7 +14,9 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 <script setup lang="ts">
 import { range, remove } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
+import { useClipboard } from '@vueuse/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { configs } from '../env'
 import { CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../constants'
 
 const props = defineProps({
@@ -25,13 +27,17 @@ const props = defineProps({
     type: Number,
     default: undefined,
   },
+  maxHeight: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const clicks = inject(injectionClicks)
 const elements = inject(injectionClicksElements)
 const disabled = inject(injectionClicksDisabled)
 
-function makeid(length = 5) {
+function makeId(length = 5) {
   const result = []
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
@@ -52,7 +58,7 @@ onMounted(() => {
   })
   const rangeStr = computed(() => props.ranges[index.value] || '')
   if (props.ranges.length >= 2 && !disabled?.value) {
-    const id = makeid()
+    const id = makeId()
     const ids = range(props.ranges.length - 1).map(i => id + i)
     if (elements?.value) {
       elements.value.push(...ids)
@@ -74,13 +80,40 @@ onMounted(() => {
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)
       })
+      if (props.maxHeight) {
+        const firstHighlightedEl = target.querySelector('.line.highlighted')
+        if (firstHighlightedEl)
+          firstHighlightedEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
     }
   })
 })
+
+const { copied, copy } = useClipboard()
+
+function copyCode() {
+  const code = el.value?.querySelector('.slidev-code')?.textContent
+  if (code)
+    copy(code)
+}
 </script>
 
 <template>
-  <div ref="el">
+  <div
+    ref="el" class="slidev-code-wrapper relative group"
+    :style="{
+      'max-height': props.maxHeight,
+      'overflow-y': props.maxHeight ? 'scroll' : undefined,
+    }"
+  >
     <slot />
+    <button
+      v-if="configs.codeCopy"
+      class="slidev-code-copy absolute top-0 right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
+      :title="copied ? 'Copied' : 'Copy'" @click="copyCode()"
+    >
+      <ph-check-circle v-if="copied" class="p-2 w-8 h-8" />
+      <ph-clipboard v-else class="p-2 w-8 h-8" />
+    </button>
   </div>
 </template>
