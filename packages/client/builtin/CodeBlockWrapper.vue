@@ -27,6 +27,10 @@ const props = defineProps({
     type: Number,
     default: undefined,
   },
+  maxHeight: {
+    type: String,
+    default: undefined,
+  },
 })
 
 const clicks = inject(injectionClicks)
@@ -76,6 +80,11 @@ onMounted(() => {
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)
       })
+      if (props.maxHeight) {
+        const firstHighlightedEl = target.querySelector('.line.highlighted')
+        if (firstHighlightedEl)
+          firstHighlightedEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
     }
   })
 })
@@ -90,7 +99,13 @@ function copyCode() {
 </script>
 
 <template>
-  <div ref="el" class="slidev-code-wrapper relative group">
+  <div
+    ref="el" class="slidev-code-wrapper relative group"
+    :style="{
+      'max-height': props.maxHeight,
+      'overflow-y': props.maxHeight ? 'scroll' : undefined,
+    }"
+  >
     <slot />
     <button
       v-if="configs.codeCopy"

@@ -6,8 +6,15 @@ html:not(.dark) .shiki-dark {
   display: none;
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
 .slidev-code-wrapper {
   margin: var(--slidev-code-margin) !important;
+  &:-webkit-scrollbar {
+    width: 0px;
+  }
 }
 
 .slidev-code {
