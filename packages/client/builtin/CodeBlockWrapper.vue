@@ -103,7 +103,7 @@ function copyCode() {
     ref="el" class="slidev-code-wrapper relative group"
     :style="{
       'max-height': props.maxHeight,
-      'overflow-y': props.maxHeight ? 'scroll' : 'hidden',
+      'overflow-y': props.maxHeight ? 'scroll' : undefined,
     }"
   >
     <slot />
