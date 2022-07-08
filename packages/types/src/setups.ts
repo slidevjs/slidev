@@ -41,6 +41,8 @@ export interface NavOperations {
   nextSlide: () => void
   prevSlide: () => Promise<void>
   go: (index: number) => void
+  goFirst: () => void
+  goLast: () => void
   downloadPDF: () => Promise<void>
   toggleDark: () => void
   toggleOverview: () => void

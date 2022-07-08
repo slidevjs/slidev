@@ -1,7 +1,7 @@
 /* __imports__ */
 
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
-import { downloadPDF, go, next, nextSlide, prev, prevSlide } from '../logic/nav'
+import { downloadPDF, go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'
@@ -15,6 +15,8 @@ export default function setupShortcuts() {
     nextSlide,
     prevSlide,
     go,
+    goFirst,
+    goLast,
     downloadPDF,
     toggleDark,
     toggleOverview,
