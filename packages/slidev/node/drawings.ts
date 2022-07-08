@@ -18,6 +18,7 @@ export async function loadDrawings(options: ResolvedSlidevOptions) {
     onlyFiles: true,
     cwd: dir,
     absolute: true,
+    suppressErrors: true,
   })
 
   const obj: Record<string, string> = {}
