@@ -18,7 +18,7 @@ With Yarn:
 $ yarn create slidev
 ```
 
-Follow the prompts and it will open up the slideshow at http://localhost:3030/ automatically for you.
+Follow the prompts and it will open up the slideshow at `http://localhost:3030/` automatically for you.
 
 It also contains the basic setup and a short demo with instructions on how to get started with Slidev.
 
@@ -76,7 +76,7 @@ docker run --name slidev --rm -it \
 
 If your work folder is empty, it will generate a template `slides.md` and other related files under your work folder, and launch the server on port `3030`. 
 
-You can access your slides from http://localhost:3030/
+You can access your slides from `http://localhost:3030/`
 
 
 ### Build deployable image
@@ -94,7 +94,7 @@ Create the docker image: `docker build -t myppt .`
 
 And run the container: `docker run --name myslides --rm --user node -p 3030:3030 myppt`
 
-You can visit your slides from http://localhost:3030/
+You can visit your slides from `http://localhost:3030/`
 
 
 ### Build hostable SPA (Single Page Application)
@@ -125,7 +125,6 @@ Or create a static image with following Dockerfile:
 FROM nginx:alpine
 
 COPY dist /usr/share/nginx/html
-
 ```
 
 Create the docker image: `docker build -t mystaticppt .`
@@ -133,7 +132,6 @@ Create the docker image: `docker build -t mystaticppt .`
 And run the container: `docker run --name myslides --rm -p 80:80 mystaticppt`
 
 You can visit your slides from http://localhost/
-
 
 Refer to the [tangramor/slidev_docker](https://github.com/tangramor/slidev_docker) for more details.
 

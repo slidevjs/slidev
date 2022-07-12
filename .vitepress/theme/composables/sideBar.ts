@@ -1,5 +1,5 @@
 import { computed } from 'vue-demi'
-import { useRoute, useSiteDataByRoute } from 'vitepress'
+import { useRoute, useData } from 'vitepress'
 // import { Header } from '/@types/shared'
 import { useActiveSidebarLinks } from '../composables/activeSidebarLink'
 import { getSideBarConfig } from '../support/sideBar'
@@ -7,7 +7,7 @@ import { DefaultTheme } from '../config'
 
 export function useSideBar() {
   const route = useRoute()
-  const site = useSiteDataByRoute()
+  const {site} = useData()
 
   useActiveSidebarLinks()
 

@@ -59,10 +59,8 @@
 import { ref, computed, watch, defineAsyncComponent } from 'vue'
 import {
   useRoute,
-  useSiteData,
-  useSiteDataByRoute,
+  useData,
 } from 'vitepress'
-import type { DefaultTheme } from './config'
 
 // components
 import NavBar from './components/NavBar.vue'
@@ -72,8 +70,7 @@ const Home = defineAsyncComponent(() => import('./components/Home.vue'))
 
 // generic state
 const route = useRoute()
-const siteData = useSiteData<DefaultTheme.Config>()
-const siteRouteData = useSiteDataByRoute()
+const {site: siteData} = useData()
 const theme = computed(() => siteData.value.themeConfig)
 
 const AlgoliaSearchBox = defineAsyncComponent(
@@ -87,7 +84,7 @@ const enableHome = computed(() => !!route.data.frontmatter.home)
 
 // navbar
 const showNavbar = computed(() => {
-  const { themeConfig } = siteRouteData.value
+  const { themeConfig } = siteData.value
   const { frontmatter } = route.data
   if (frontmatter.navbar === false || themeConfig.navbar === false)
     return false
@@ -107,7 +104,7 @@ const openSideBar = ref(false)
 
 const showSidebar = computed(() => {
   const { frontmatter } = route.data
-  const { themeConfig } = siteRouteData.value
+  const { themeConfig } = siteData.value
   return (
     !frontmatter.home
     && frontmatter.sidebar !== false

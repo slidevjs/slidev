@@ -17,14 +17,14 @@
 
         <NavLink
           v-if="hasAction"
-          :item="{ link: data.actionLink, text: data.actionText }"
+          :item="{ link: frontmatter.actionLink, text: frontmatter.actionText }"
           class="action mx-2"
           rounded="tr-4xl tl-2xl br-2xl bl-3xl"
         />
 
         <NavLink
           v-if="hasAltAction"
-          :item="{ link: data.altActionLink, text: data.altActionText }"
+          :item="{ link: frontmatter.altActionLink, text: frontmatter.altActionText }"
           class="action alt mx-2"
           rounded="tr-2xl tl-3xl br-4xl bl-4xl"
         />
@@ -51,19 +51,19 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useFrontmatter } from 'vitepress'
+import { useData } from 'vitepress'
 import NavLink from './NavLink.vue'
 
-const data = useFrontmatter()
+const {frontmatter} = useData()
 
-const hasHeroText = computed(() => data.value.heroText !== null)
-const hasTagline = computed(() => data.value.tagline !== null)
+const hasHeroText = computed(() => frontmatter.value.heroText !== null)
+const hasTagline = computed(() => frontmatter.value.tagline !== null)
 
-const hasAction = computed(() => data.value.actionLink && data.value.actionText)
-const hasAltAction = computed(() => data.value.altActionLink && data.value.altActionText)
+const hasAction = computed(() => frontmatter.value.actionLink && frontmatter.value.actionText)
+const hasAltAction = computed(() => frontmatter.value.altActionLink && frontmatter.value.altActionText)
 
 const showHero = computed(() => {
-  return data.value.heroImage
+  return frontmatter.value.heroImage
     || hasHeroText.value
     || hasTagline.value
     || hasAction.value

@@ -1,13 +1,21 @@
+<script setup lang="ts">
+import { computed } from '@vue/reactivity';
+import { useData ,withBase} from 'vitepress';
+
+const {site} = useData()
+const themeConfig = computed(()=>site.value.themeConfig)
+</script>
+
 <template>
   <a
     class="nav-bar-title"
-    :href="$site.base"
-    :aria-label="`${$site.title}, back to home`"
+    :href="site.base"
+    :aria-label="`${site.title}, back to home`"
   >
     <img
-      v-if="$themeConfig.logo"
+      v-if="themeConfig.logo"
       class="logo"
-      :src="$withBase($themeConfig.logo)"
+      :src="withBase(themeConfig.logo)"
       alt="Logo"
     >
     <span class="title text-primary-deep">

@@ -7,12 +7,11 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { useSiteDataByRoute, usePageData } from 'vitepress'
+import { useData } from 'vitepress'
 
 export default defineComponent({
   setup() {
-    const site = useSiteDataByRoute()
-    const page = usePageData()
+    const { site, page } = useData()
 
     const datetime = ref('')
 
@@ -29,7 +28,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      datetime.value = new Date(page.value.lastUpdated).toLocaleString('en-US')
+      datetime.value = new Date(page.value.lastUpdated || 0).toLocaleString('en-US')
     })
 
     return {

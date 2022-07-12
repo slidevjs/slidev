@@ -3,6 +3,8 @@
 // Read more: https://github.com/vuejs/core/pull/3399
 import '@vue/runtime-core'
 
+export {}
+
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AlgoliaSearchBox: typeof import('./.vitepress/theme/components/AlgoliaSearchBox.vue')['default']
@@ -11,11 +13,29 @@ declare module '@vue/runtime-core' {
     ArrowRight: typeof import('./.vitepress/theme/components/icons/ArrowRight.vue')['default']
     AutoFitText: typeof import('./.vitepress/@slidev/client/builtin/AutoFitText.vue')['default']
     BooleanDisplay: typeof import('./.vitepress/theme/components/BooleanDisplay.vue')['default']
-    'Carbon:checkmark': typeof import('~icons/carbon/checkmark')['default']
     'Carbon:chevronLeft': typeof import('~icons/carbon/chevron-left')['default']
     'Carbon:chevronRight': typeof import('~icons/carbon/chevron-right')['default']
+    'Carbon:logoGithub': typeof import('~icons/carbon/logo-github')['default']
+    'Carbon:logoTwitter': typeof import('~icons/carbon/logo-twitter')['default']
+    'Carbon:presentationFile': typeof import('~icons/carbon/presentation-file')['default']
+    'Carbon:video': typeof import('~icons/carbon/video')['default']
+    CarbonApps: typeof import('~icons/carbon/apps')['default']
+    CarbonArrowLeft: typeof import('~icons/carbon/arrow-left')['default']
+    CarbonArrowRight: typeof import('~icons/carbon/arrow-right')['default']
+    CarbonBadge: typeof import('~icons/carbon/badge')['default']
+    CarbonDownload: typeof import('~icons/carbon/download')['default']
     CarbonEdit: typeof import('~icons/carbon/edit')['default']
-    CodeHighlightController: typeof import('./.vitepress/@slidev/client/builtin/CodeHighlightController.vue')['default']
+    CarbonInformation: typeof import('~icons/carbon/information')['default']
+    CarbonMaximize: typeof import('~icons/carbon/maximize')['default']
+    CarbonMinimize: typeof import('~icons/carbon/minimize')['default']
+    CarbonMoon: typeof import('~icons/carbon/moon')['default']
+    CarbonPen: typeof import('~icons/carbon/pen')['default']
+    CarbonSettingsAdjust: typeof import('~icons/carbon/settings-adjust')['default']
+    CarbonSun: typeof import('~icons/carbon/sun')['default']
+    CarbonUserAvatar: typeof import('~icons/carbon/user-avatar')['default']
+    CarbonUserSpeaker: typeof import('~icons/carbon/user-speaker')['default']
+    CarbonVideo: typeof import('~icons/carbon/video')['default']
+    CodeBlockWrapper: typeof import('./.vitepress/@slidev/client/builtin/CodeBlockWrapper.vue')['default']
     DarkModeSwitch: typeof import('./.vitepress/theme/components/DarkModeSwitch.vue')['default']
     Demo: typeof import('./.vitepress/theme/components/demo/Demo.vue')['default']
     DemoContainer: typeof import('./.vitepress/theme/components/DemoContainer.vue')['default']
@@ -29,6 +49,8 @@ declare module '@vue/runtime-core' {
     HomeHero: typeof import('./.vitepress/theme/components/HomeHero.vue')['default']
     LastUpdated: typeof import('./.vitepress/theme/components/LastUpdated.vue')['default']
     Link: typeof import('./.vitepress/@slidev/client/builtin/Link.vue')['default']
+    LogosVue: typeof import('~icons/logos/vue')['default']
+    MdiAccountCircle: typeof import('~icons/mdi/account-circle')['default']
     Mermaid: typeof import('./.vitepress/@slidev/client/builtin/Mermaid.vue')['default']
     Monaco: typeof import('./.vitepress/@slidev/client/builtin/Monaco.vue')['default']
     Moon: typeof import('./.vitepress/theme/components/icons/Moon.vue')['default']
@@ -57,6 +79,8 @@ declare module '@vue/runtime-core' {
     ShowCases: typeof import('./.vitepress/theme/components/ShowCases.vue')['default']
     SideBar: typeof import('./.vitepress/theme/components/SideBar.vue')['default']
     SideBarLinks: typeof import('./.vitepress/theme/components/SideBarLinks.vue')['default']
+    SimpleIconsGithub: typeof import('~icons/simple-icons/github')['default']
+    SimpleIconsNpm: typeof import('~icons/simple-icons/npm')['default']
     SlideCurrentNo: typeof import('./.vitepress/@slidev/client/builtin/SlideCurrentNo.vue')['default']
     SlidesTotal: typeof import('./.vitepress/@slidev/client/builtin/SlidesTotal.vue')['default']
     Starport: typeof import('vue-starport')['Starport']
@@ -69,9 +93,9 @@ declare module '@vue/runtime-core' {
     ToggleSideBarButton: typeof import('./.vitepress/theme/components/ToggleSideBarButton.vue')['default']
     Transform: typeof import('./.vitepress/@slidev/client/builtin/Transform.vue')['default']
     Tweet: typeof import('./.vitepress/theme/components/Tweet.vue')['default']
+    TwemojiCatWithTearsOfJoy: typeof import('~icons/twemoji/cat-with-tears-of-joy')['default']
+    UimRocket: typeof import('~icons/uim/rocket')['default']
     WorkingInProgress: typeof import('./.vitepress/theme/components/WorkingInProgress.vue')['default']
     Youtube: typeof import('./.vitepress/@slidev/client/builtin/Youtube.vue')['default']
   }
 }
-
-export {}

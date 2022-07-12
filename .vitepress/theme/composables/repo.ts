@@ -1,5 +1,5 @@
 import { computed } from 'vue-demi'
-import { useSiteDataByRoute } from 'vitepress'
+import { useData } from 'vitepress'
 import type { DefaultTheme } from '../config'
 
 export const platforms = ['GitHub', 'GitLab', 'Bitbucket'].map((platform) => {
@@ -7,7 +7,7 @@ export const platforms = ['GitHub', 'GitLab', 'Bitbucket'].map((platform) => {
 })
 
 export function useRepo() {
-  const site = useSiteDataByRoute()
+  const {site} = useData()
 
   return computed(() => {
     const theme = site.value.themeConfig as DefaultTheme.Config

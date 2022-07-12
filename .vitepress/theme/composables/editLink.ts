@@ -1,12 +1,11 @@
 import { computed } from 'vue-demi'
-import { useSiteDataByRoute, usePageData } from 'vitepress'
+import { useData } from 'vitepress'
 import { endingSlashRE, isNullish, isExternal } from '../utils'
 
 const bitbucketRE = /bitbucket.org/
 
 export function useEditLink() {
-  const site = useSiteDataByRoute()
-  const page = usePageData()
+  const {site,page} = useData()
 
   const url = computed(() => {
     const showEditLink = isNullish(page.value.frontmatter.editLink)

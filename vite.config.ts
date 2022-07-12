@@ -1,11 +1,12 @@
 import { resolve } from 'path'
-import { UserConfig } from 'vite'
+import { defineConfig } from 'vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
+import Inspect from 'vite-plugin-inspect'
 
-const config: UserConfig = {
+export default defineConfig({
   resolve: {
     alias: {
       '@slidev/client': resolve(__dirname, '.vitepress/@slidev/client'),
@@ -28,10 +29,13 @@ const config: UserConfig = {
   plugins: [
     Components({
       dirs: [
-        '.vitepress/theme/components',
-        '.vitepress/@slidev/client/builtin',
+        './.vitepress/theme/components',
+        './.vitepress/@slidev/client/builtin',
       ],
       extensions: ['vue', 'md'],
+      include: [
+        /\.(vue|md)$/,
+      ],
       resolvers: [
         IconsResolver({
           prefix: '',
@@ -39,6 +43,7 @@ const config: UserConfig = {
       ],
     }),
     Icons(),
+    Inspect(),
     WindiCSS({
       preflight: false,
     }),
@@ -63,6 +68,4 @@ const config: UserConfig = {
       }
     },
   ],
-}
-
-export default config
+})

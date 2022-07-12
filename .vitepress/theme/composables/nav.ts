@@ -1,10 +1,10 @@
 import { computed } from 'vue-demi'
-import { useRoute, useSiteData, inBrowser } from 'vitepress'
+import { useRoute, useData, inBrowser } from 'vitepress'
 import type { DefaultTheme } from '../config'
 
 export function useLocaleLinks() {
   const route = useRoute()
-  const site = useSiteData()
+  const {site} = useData()
 
   return computed(() => {
     const theme = site.value.themeConfig as DefaultTheme.Config

@@ -1,11 +1,10 @@
 import { computed } from 'vue-demi'
-import { useSiteDataByRoute, usePageData } from 'vitepress'
+import { useData } from 'vitepress'
 import { isArray, ensureStartingSlash } from '../utils'
 import { getSideBarConfig, getFlatSideBarLinks } from '../support/sideBar'
 
 export function useNextAndPrevLinks() {
-  const site = useSiteDataByRoute()
-  const page = usePageData()
+  const {site,page} = useData()
 
   const path = computed(() => {
     return ensureStartingSlash(page.value.relativePath)
