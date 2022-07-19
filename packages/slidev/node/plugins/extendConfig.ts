@@ -106,6 +106,7 @@ export function getDefine(options: ResolvedSlidevOptions): Record<string, string
   return {
     __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
     __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
+    __SLIDEV_FEATURE_OVERRIDE_DEFAULT_SHORTCUTS__: JSON.stringify(options.data.config.shortcuts.override),
     __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
     __SLIDEV_FEATURE_DRAWINGS_PERSIST__: JSON.stringify(!!options.data.config.drawings.persist === true),
     __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),

@@ -130,9 +130,14 @@ export interface SlidevConfig {
    */
   favicon: string
   /**
+   * Options for shortcuts
+   * @default {}
+   */
+  shortcuts: ResolvedShortcutOptions
+  /**
    * Options for drawings
    *
-   * @default {}
+   * @default { override: false }
    */
   drawings: ResolvedDrawingsOptions
   /**
@@ -253,6 +258,10 @@ export interface ResolvedFontOptions {
   provider: 'none' | 'google'
   webfonts: string[]
   local: string[]
+}
+
+export interface ResolvedShortcutOptions {
+  override: boolean
 }
 
 export interface ResolvedDrawingsOptions {

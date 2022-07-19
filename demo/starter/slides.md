@@ -20,6 +20,8 @@ info: |
 drawings:
   persist: false
 # use UnoCSS (experimental)
+shortcuts:
+  override: true
 css: unocss
 ---
 
