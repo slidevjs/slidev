@@ -81,6 +81,9 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "remoteAssets": false,
   "routerMode": "history",
   "selectable": false,
+  "shortcuts": {
+    "override": false,
+  },
   "theme": "default",
   "themeConfig": {},
   "title": "Hi",
@@ -304,6 +307,9 @@ exports[`md parser > minimal.md > config 1`] = `
   "remoteAssets": false,
   "routerMode": "history",
   "selectable": false,
+  "shortcuts": {
+    "override": false,
+  },
   "theme": "default",
   "themeConfig": {},
   "title": "H1",
@@ -475,6 +481,9 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "remoteAssets": false,
   "routerMode": "history",
   "selectable": false,
+  "shortcuts": {
+    "override": false,
+  },
   "src": "sub/page1.md",
   "theme": "default",
   "themeConfig": {},
