@@ -6,7 +6,8 @@ import { toggleDark } from '../logic/dark'
 import { showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'
 
-export default function setupShortcuts() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function setupShortcuts(defaultShortcuts: ShortcutOptions[]) {
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const injection_arg: NavOperations = {
