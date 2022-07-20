@@ -55,6 +55,7 @@ export interface ShortcutOptions {
   key: string | Ref<boolean>
   fn?: () => void
   autoRepeat?: boolean
+  name?: string
 }
 
 // node side
