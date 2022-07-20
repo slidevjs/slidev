@@ -38,8 +38,20 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
             awaitFn = `injection_return = ${awaitFn}`
           }
           if (/\binjection_arg\b/g.test(code)) {
-            fn += ('(injection_arg)')
-            awaitFn += ('(injection_arg)')
+            fn += '('
+            awaitFn += '('
+
+            const matches = Array.from(code.matchAll(/\binjection_arg(_\d+)?\b/g))
+            const dedupedMatches = Array.from(new Set(matches.map(m => m[0])))
+            dedupedMatches.forEach((key, index) => {
+              const isLast = index === dedupedMatches.length - 1
+              const arg = key + (isLast ? '' : ',')
+              fn += arg
+              awaitFn += arg
+            })
+
+            fn += ')'
+            awaitFn += ')'
           }
           else {
             fn += ('()')
