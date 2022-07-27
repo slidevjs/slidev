@@ -193,6 +193,27 @@ export const community: ThemeInfo[] = [
     ],
   },
   {
+    id: 'slidev-theme-eloc',
+    name: 'Eloc',
+    description: 'Focus on writing, present in a concise style.',
+    author: {
+      name: 'Amio',
+      link: 'https://github.com/amio',
+    },
+    repo: 'https://github.com/zthxxx/slides/tree/master/packages/slidev-theme-eloc',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/01.png',
+      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/02.png',
+      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/03.png',
+      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/04.png',
+      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/05.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
+  {
     id: 'slidev-theme-purplin',
     name: 'Purplin',
     description: 'Theme with bar bottom component. Based on purple color',
