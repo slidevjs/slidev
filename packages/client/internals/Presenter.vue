@@ -94,7 +94,7 @@ onMounted(() => {
           <carbon:time class="absolute" />
           <carbon:renew class="absolute opacity-0" />
         </div>
-        <div class="text-2xl pl-2 pr-6 my-auto">
+        <div class="text-2xl pl-2 pr-6 my-auto tabular-nums">
           {{ timer }}
         </div>
       </div>
