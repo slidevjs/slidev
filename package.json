@@ -1,5 +1,5 @@
 {
-  "version": "0.35.1",
+  "version": "0.35.2",
   "private": true,
   "packageManager": "pnpm@7.7.0",
   "engines": {
