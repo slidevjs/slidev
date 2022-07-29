@@ -55,6 +55,7 @@ export interface ShortcutOptions {
   key: string | Ref<boolean>
   fn?: () => void
   autoRepeat?: boolean
+  name?: string
 }
 
 // node side
@@ -67,7 +68,7 @@ export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | undefined>
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | undefined
-export type ShortcutsSetup = (nav: NavOperations) => Array<ShortcutOptions>
+export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 
 export function defineShikiSetup(fn: ShikiSetup) {
   return fn
