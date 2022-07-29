@@ -1,5 +1,6 @@
 import type { Fn, KeyFilter } from '@vueuse/core'
-import { and, not, onKeyStroke } from '@vueuse/core'
+import { onKeyStroke } from '@vueuse/core'
+import { and, not } from '@vueuse/math'
 import type { Ref } from 'vue'
 import { watch } from 'vue'
 import type { ShortcutOptions } from '@slidev/types'
