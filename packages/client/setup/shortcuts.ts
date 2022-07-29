@@ -1,5 +1,5 @@
 /* __imports__ */
-import { and, not } from '@vueuse/core'
+import { and, not } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF, go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
