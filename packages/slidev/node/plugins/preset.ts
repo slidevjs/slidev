@@ -8,7 +8,7 @@ import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { loadDrawings, writeDarwings } from '../drawings'
+import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
@@ -159,7 +159,7 @@ export async function ViteSlidevPlugin(
         if (!options.data.config.drawings.persist)
           return
         if (key === 'drawings')
-          writeDarwings(options, patch ?? data)
+          writeDrawings(options, patch ?? data)
       },
     }),
 
