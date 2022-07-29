@@ -34,7 +34,7 @@ export async function loadDrawings(options: ResolvedSlidevOptions) {
   return obj
 }
 
-export async function writeDarwings(options: ResolvedSlidevOptions, drawing: Record<string, string>) {
+export async function writeDrawings(options: ResolvedSlidevOptions, drawing: Record<string, string>) {
   const dir = resolveDrawingsDir(options)
   if (!dir)
     return
