@@ -241,6 +241,7 @@ importers:
       '@hedgedoc/markdown-it-task-lists': ^1.0.5
       '@iconify-json/carbon': ^1.1.7
       '@iconify-json/ph': ^1.1.2
+      '@lillallol/outline-pdf': ^4.0.0
       '@slidev/client': workspace:*
       '@slidev/parser': workspace:*
       '@slidev/types': workspace:*
@@ -267,6 +268,7 @@ importers:
       monaco-editor: ^0.33.0
       nanoid: ^4.0.0
       open: ^8.4.0
+      pdf-lib: ^1.17.1
       plantuml-encoder: ^1.4.0
       postcss-nested: ^5.0.6
       prismjs: ^1.28.0
@@ -293,6 +295,7 @@ importers:
       '@hedgedoc/markdown-it-task-lists': 1.0.5_markdown-it@13.0.1
       '@iconify-json/carbon': 1.1.7
       '@iconify-json/ph': 1.1.2
+      '@lillallol/outline-pdf': 4.0.0
       '@slidev/client': link:../client
       '@slidev/parser': link:../parser
       '@slidev/types': link:../types
@@ -317,8 +320,9 @@ importers:
       monaco-editor: 0.33.0
       nanoid: 4.0.0
       open: 8.4.0
+      pdf-lib: 1.17.1
       plantuml-encoder: 1.4.0
-      postcss-nested: 5.0.6
+      postcss-nested: 5.0.6_postcss@8.4.14
       prismjs: 1.28.0
       prompts: 2.4.2
       resolve: 1.22.1
@@ -705,6 +709,17 @@ packages:
       type-detect: 4.0.8
     dev: true
 
+  /@lillallol/outline-pdf-data-structure/1.0.3:
+    resolution: {integrity: sha512-XlK9dERP2n9afkJ23JyJzpmesLgiOHmhqKuGgeytnT+IVGFdAsYl1wLr2o+byXNAN5fveNbc7CCI6RfBsd5FCw==}
+    dev: false
+
+  /@lillallol/outline-pdf/4.0.0:
+    resolution: {integrity: sha512-tILGNyOdI3ukZfU19TNTDVoS0W1nSPlMxCKAm9FPV4OPL786Ur7e1CRLQZWKJP6uaMQsUqSDBCTzISs6lXWdAQ==}
+    dependencies:
+      '@lillallol/outline-pdf-data-structure': 1.0.3
+      pdf-lib: 1.17.1
+    dev: false
+
   /@mdit-vue/plugin-component/0.8.1:
     resolution: {integrity: sha512-lBkVDc4/uq93CDKBUbKZ25lpBwZ4fghHaBMV956Eb/Qp7isHzqn31qpdJT6S7nPNltt9clkWTVZeZRL7hmRKUw==}
     dependencies:
@@ -742,6 +757,18 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+
+  /@pdf-lib/standard-fonts/1.0.0:
+    resolution: {integrity: sha512-hU30BK9IUN/su0Mn9VdlVKsWBS6GyhVfqjwl1FjZN4TxP6cCw0jP2w7V3Hf5uX7M0AZJ16vey9yE0ny7Sa59ZA==}
+    dependencies:
+      pako: 1.0.11
+    dev: false
+
+  /@pdf-lib/upng/1.0.1:
+    resolution: {integrity: sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ==}
+    dependencies:
+      pako: 1.0.11
+    dev: false
 
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
@@ -5266,6 +5293,10 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /pako/1.0.11:
+    resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+    dev: false
+
   /parent-module/1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -5343,6 +5374,15 @@ packages:
     dependencies:
       through: 2.3.8
     dev: true
+
+  /pdf-lib/1.17.1:
+    resolution: {integrity: sha512-V/mpyJAoTsN4cnP31vc0wfNA1+p20evqqnap0KLoRUN0Yk/p3wN52DOEsL4oBFcLdb76hlpKPtzJIgo67j/XLw==}
+    dependencies:
+      '@pdf-lib/standard-fonts': 1.0.0
+      '@pdf-lib/upng': 1.0.1
+      pako: 1.0.11
+      tslib: 1.14.1
+    dev: false
 
   /pend/1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
@@ -5438,12 +5478,13 @@ packages:
       yaml: 1.10.2
     dev: true
 
-  /postcss-nested/5.0.6:
+  /postcss-nested/5.0.6_postcss@8.4.14:
     resolution: {integrity: sha512-rKqm2Fk0KbA8Vt3AdGN0FB9OBOMDVajMG6ZCf/GoHgdxUJ4sBFp0A/uMIRm+MJUdo33YXEtjqIz8u7DAp8B7DA==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
+      postcss: 8.4.14
       postcss-selector-parser: 6.0.10
     dev: false
 
@@ -6181,7 +6222,6 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
