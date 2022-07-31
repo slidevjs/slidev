@@ -4,6 +4,8 @@ import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
 import type { SlideInfo } from '@slidev/types'
+import { outlinePdfFactory } from '@lillallol/outline-pdf'
+import * as pdfLib from 'pdf-lib'
 import { packageExists } from './utils'
 
 export interface ExportOptions {
@@ -20,6 +22,7 @@ export interface ExportOptions {
   width?: number
   height?: number
   withClicks?: boolean
+  withTOC?: boolean
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -33,7 +36,9 @@ function createSlidevProgress(indeterminate = false) {
   const progress = new SingleBar({
     clearOnComplete: true,
     hideCursor: true,
-    format: `  {spin} ${yellow('rendering')}${indeterminate ? dim(yellow('...')) : ' {bar} {value}/{total}'}`,
+    format: `  {spin} ${yellow('rendering')}${
+      indeterminate ? dim(yellow('...')) : ' {bar} {value}/{total}'
+    }`,
     linewrap: false,
     barsize: 30,
   }, Presets.shades_grey)
@@ -72,9 +77,13 @@ export async function exportSlides({
   width = 1920,
   height = 1080,
   withClicks = false,
+  withTOC = false,
 }: ExportOptions) {
-  if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
+  if (!packageExists('playwright-chromium')) {
+    throw new Error(
+      'The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`',
+    )
+  }
 
   const pages: number[] = parseRangeString(total, range)
 
@@ -92,7 +101,9 @@ export async function exportSlides({
   const progress = createSlidevProgress(true)
 
   async function go(no: number | string, clicks?: string) {
-    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
+    const path = `${no}?print${withClicks ? '=clicks' : ''}${
+      clicks ? `&clicks=${clicks}` : ''
+    }`
     const url = routerMode === 'hash'
       ? `http://localhost:${port}${base}#${path}`
       : `http://localhost:${port}${base}${path}`
@@ -101,7 +112,10 @@ export async function exportSlides({
       timeout,
     })
     await page.waitForLoadState('networkidle')
-    await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    await page.emulateMedia({
+      colorScheme: dark ? 'dark' : 'light',
+      media: 'screen',
+    })
     // Check for "data-waitfor" attribute and wait for given element to be loaded
     const elements = await page.locator('[data-waitfor]')
     const count = await elements.count()
@@ -119,6 +133,7 @@ export async function exportSlides({
   async function genPagePdf() {
     if (!output.endsWith('.pdf'))
       output = `${output}.pdf`
+
     await go('print')
     await page.pdf({
       path: output,
@@ -133,6 +148,18 @@ export async function exportSlides({
       printBackground: true,
       preferCSSPageSize: true,
     })
+
+    if (withTOC) {
+      const outlinePdf = outlinePdfFactory(pdfLib)
+      const pdf = fs.readFileSync(output, { encoding: 'base64' })
+      const outline = slides.map(({ title }, idx) =>
+        title ? `${idx + 1}||${title}` : null,
+      ).filter(outline => !!outline).join('\n')
+
+      const outlinedPdfDocument = await outlinePdf({ outline, pdf })
+      const outlinedPdf = await outlinedPdfDocument.save()
+      fs.writeFileSync(output, outlinedPdf)
+    }
   }
 
   async function genPagePng() {
@@ -153,14 +180,22 @@ export async function exportSlides({
     const files = await fs.readdir(output)
     const mds: string[] = files.map((file, i, files) => {
       const slideIndex = getSlideIndex(file)
-      const mdImg = `![${slides[slideIndex]?.title}](./${path.join(output, file)})\n\n`
-      if ((i + 1 === files.length || getSlideIndex(files[i + 1]) !== slideIndex) && slides[slideIndex]?.note)
+      const mdImg = `![${slides[slideIndex]?.title}](./${
+        path.join(output, file)
+      })\n\n`
+      if (
+        (i + 1 === files.length
+          || getSlideIndex(files[i + 1]) !== slideIndex)
+        && slides[slideIndex]?.note
+      )
         return `${mdImg}${slides[slideIndex]?.note}\n\n`
+
       return mdImg
     })
 
     if (!output.endsWith('.md'))
       output = `${output}.md`
+
     await fs.writeFile(output, mds.join(''))
   }
 

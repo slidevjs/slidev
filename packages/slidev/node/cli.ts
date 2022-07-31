@@ -322,6 +322,11 @@ cli.command(
       type: 'boolean',
       describe: 'export pages for every clicks',
     })
+    .option('with-toc', {
+      default: false,
+      type: 'boolean',
+      describe: 'export pages with outline',
+    })
     .strict()
     .help(),
   async ({
@@ -333,6 +338,7 @@ cli.command(
     range,
     dark,
     'with-clicks': withClicks,
+    'with-toc': withTOC,
   }) => {
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
@@ -364,6 +370,7 @@ cli.command(
       width,
       height,
       withClicks,
+      withTOC,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
