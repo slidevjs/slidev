@@ -4,6 +4,8 @@ import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
 import type { SlideInfo } from '@slidev/types'
+import { outlinePdfFactory } from '@lillallol/outline-pdf'
+import * as pdfLib from 'pdf-lib'
 import { packageExists } from './utils'
 
 export interface ExportOptions {
@@ -21,6 +23,40 @@ export interface ExportOptions {
   height?: number
   withClicks?: boolean
   executablePath?: string
+  withTOC?: boolean
+}
+
+interface TocItem {
+  children: TocItem[]
+  level: number
+  index: number
+  title?: string
+}
+
+function addToTree(tree: TocItem[], info: SlideInfo, level = 1) {
+  const titleLevel = info.level
+  if (titleLevel && titleLevel > level && tree.length > 0) {
+    addToTree(tree[tree.length - 1].children, info, level + 1)
+  }
+  else {
+    tree.push({
+      children: [],
+      level,
+      index: info.index,
+      title: info.title,
+    })
+  }
+}
+
+function makeOutline(tree: TocItem[]): string {
+  return tree.map(({ title, index, level, children }) => {
+    const rootOutline = title ? `${index + 1}|${'-'.repeat(level - 1)}|${title}` : null
+
+    const childrenOutline = makeOutline(children)
+
+    return childrenOutline.length > 0 ? `${rootOutline}\n${childrenOutline}` : rootOutline
+  },
+  ).filter(outline => !!outline).join('\n')
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -74,6 +110,7 @@ export async function exportSlides({
   height = 1080,
   withClicks = false,
   executablePath = undefined,
+  withTOC = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
@@ -137,6 +174,23 @@ export async function exportSlides({
       printBackground: true,
       preferCSSPageSize: true,
     })
+
+    if (withTOC) {
+      const outlinePdf = outlinePdfFactory(pdfLib)
+      const pdf = fs.readFileSync(output, { encoding: 'base64' })
+
+      const tocTree = slides.filter(slide => slide.title)
+        .reduce((acc: TocItem[], slide) => {
+          addToTree(acc, slide)
+          return acc
+        }, [])
+
+      const outline = makeOutline(tocTree)
+
+      const outlinedPdfDocument = await outlinePdf({ outline, pdf })
+      const outlinedPdf = await outlinedPdfDocument.save()
+      fs.writeFileSync(output, outlinedPdf)
+    }
   }
 
   async function genPagePng() {
