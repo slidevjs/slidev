@@ -282,7 +282,7 @@ importers:
       unplugin-vue-components: ^0.21.2
       vite: ^3.0.4
       vite-plugin-remote-assets: ^0.3.0
-      vite-plugin-vue-markdown: ^0.21.1
+      vite-plugin-vue-markdown: ^0.20.1
       vite-plugin-vue-server-ref: ^0.3.0
       vite-plugin-windicss: ^1.8.7
       vue: ^3.2.37
@@ -330,7 +330,7 @@ importers:
       unplugin-vue-components: 0.21.2_vite@3.0.4+vue@3.2.37
       vite: 3.0.4
       vite-plugin-remote-assets: 0.3.0_vite@3.0.4
-      vite-plugin-vue-markdown: 0.21.1_vite@3.0.4
+      vite-plugin-vue-markdown: 0.20.1_vite@3.0.4
       vite-plugin-vue-server-ref: 0.3.0_vite@3.0.4+vue@3.2.37
       vite-plugin-windicss: 1.8.7_vite@3.0.4
       vue: 3.2.37
@@ -705,24 +705,11 @@ packages:
       type-detect: 4.0.8
     dev: true
 
-  /@mdit-vue/plugin-component/0.8.1:
-    resolution: {integrity: sha512-lBkVDc4/uq93CDKBUbKZ25lpBwZ4fghHaBMV956Eb/Qp7isHzqn31qpdJT6S7nPNltt9clkWTVZeZRL7hmRKUw==}
+  /@mdit-vue/plugin-component/0.1.1:
+    resolution: {integrity: sha512-DC4OEZO737FbvwZxVToO2d9jprbQEs4lor7bylEBrPDYDds8pjRBUIx2BNc54X0effIopsZhq+b4gxkOHJOPNQ==}
     dependencies:
       '@types/markdown-it': 12.2.3
       markdown-it: 13.0.1
-    dev: false
-
-  /@mdit-vue/plugin-frontmatter/0.8.0:
-    resolution: {integrity: sha512-STjTlQ+gxLBprcdyu2dH8kezgBwqS/jlPKLsy18BMSHoElGJeDJM458lwDa3MGL+Mm+g5NK0KoWTnQHj/9Uwow==}
-    dependencies:
-      '@mdit-vue/types': 0.8.0
-      '@types/markdown-it': 12.2.3
-      gray-matter: 4.0.3
-      markdown-it: 13.0.1
-    dev: false
-
-  /@mdit-vue/types/0.8.0:
-    resolution: {integrity: sha512-g6Tc8JwwJjTnx8sb66ZFCHvJ5TJpvoRnAkGT8Aq0K6UcvAOslODaU4tQ87WZ1ETTeXE9PTYPLGxngRudcyMHoQ==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -6584,17 +6571,16 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-vue-markdown/0.21.1_vite@3.0.4:
-    resolution: {integrity: sha512-tvHtARDdNK45nSJhyCVaRhSxBAEVmgA6aD+xV1J4xXynNNxRaYXcpHS3l3S7l09j/lR3beRjTfbS+Ro6ipSHmA==}
+  /vite-plugin-vue-markdown/0.20.1_vite@3.0.4:
+    resolution: {integrity: sha512-OKWb7dtfb8SU2CLUQHWFz54eYN8Y3d3P8FpQCb7yzzh/GetTJVdY57A/orvzNJxAJqjZXx2Af1Q9ncj2wsGkiw==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0-0
     dependencies:
       '@antfu/utils': 0.5.2
-      '@mdit-vue/plugin-component': 0.8.1
-      '@mdit-vue/plugin-frontmatter': 0.8.0
-      '@mdit-vue/types': 0.8.0
+      '@mdit-vue/plugin-component': 0.1.1
       '@rollup/pluginutils': 4.2.1
       '@types/markdown-it': 12.2.3
+      gray-matter: 4.0.3
       markdown-it: 13.0.1
       vite: 3.0.4
     dev: false
