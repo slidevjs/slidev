@@ -20,6 +20,7 @@ export interface ExportOptions {
   width?: number
   height?: number
   withClicks?: boolean
+  executablePath?: string
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -72,6 +73,7 @@ export async function exportSlides({
   width = 1920,
   height = 1080,
   withClicks = false,
+  executablePath = undefined,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
@@ -79,7 +81,9 @@ export async function exportSlides({
   const pages: number[] = parseRangeString(total, range)
 
   const { chromium } = await import('playwright-chromium')
-  const browser = await chromium.launch()
+  const browser = await chromium.launch({
+    executablePath,
+  })
   const context = await browser.newContext({
     viewport: {
       width,
