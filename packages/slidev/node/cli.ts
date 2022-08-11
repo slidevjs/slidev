@@ -322,6 +322,10 @@ cli.command(
       type: 'boolean',
       describe: 'export pages for every clicks',
     })
+    .option('executable-path', {
+      type: 'string',
+      describe: 'executable to override playwright bundled browser',
+    })
     .strict()
     .help(),
   async ({
@@ -333,6 +337,7 @@ cli.command(
     range,
     dark,
     'with-clicks': withClicks,
+    'executable-path': executablePath,
   }) => {
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
@@ -364,6 +369,7 @@ cli.command(
       width,
       height,
       withClicks,
+      executablePath,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
