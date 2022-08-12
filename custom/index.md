@@ -21,7 +21,7 @@ info: false
 # enabled pdf downloading in SPA build, can also be a custom url
 download: false
 # filename of the export file
-exportFilename: 'slidev-exported.pdf'
+exportFilename: 'slidev-exported'
 # syntax highlighter, can be 'prism' or 'shiki'
 highlighter: 'prism'
 # show line numbers in code blocks
