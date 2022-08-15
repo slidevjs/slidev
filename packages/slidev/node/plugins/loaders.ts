@@ -296,12 +296,6 @@ export function createSlidesLoader(
         const pageNo = parseInt(no) - 1
         return transformMarkdown(code, pageNo, data)
       },
-      // #679 fix
-      config: () => ({
-        optimizeDeps: {
-          exclude: ['@slidev/client/constants'],
-        },
-      }),
     },
     {
       name: 'slidev:context-transform:pre',
@@ -311,12 +305,6 @@ export function createSlidesLoader(
           return
         return transformVue(code)
       },
-      // #679 fix
-      config: () => ({
-        optimizeDeps: {
-          exclude: ['@slidev/client/constants'],
-        },
-      }),
     },
     {
       name: 'slidev:title-transform:pre',
