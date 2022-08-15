@@ -191,7 +191,7 @@ export function createSlidesLoader(
                   read() { return md },
                 })
               }
-              catch {}
+              catch { }
             }),
           )
         ).flatMap(i => i || [])

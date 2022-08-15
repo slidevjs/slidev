@@ -12,6 +12,9 @@ import { searchForWorkspaceRoot } from '../vite/searchRoot'
 const EXCLUDE = [
   '@slidev/shared',
   '@slidev/types',
+  '@slidev/client',
+  '@slidev/client/constants',
+  '@slidev/client/logic/dark',
   '@vueuse/core',
   '@vueuse/shared',
   '@unocss/reset',
