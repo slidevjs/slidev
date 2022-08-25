@@ -20,8 +20,9 @@
     "paths": {
       "@slidev/client/*": ["./packages/client/*"],
       "@slidev/types": ["./packages/types/src/index.ts"],
-      "@slidev/parser": ["./packages/parser/src/index.ts"],
-      "@slidev/parser/fs": ["./packages/parser/src/fs.ts"]
+      "@slidev/parser/fs": ["./packages/parser/src/fs.ts"],
+      "@slidev/parser/core": ["./packages/parser/src/core.ts"],
+      "@slidev/parser": ["./packages/parser/src/index.ts"]
     },
     "jsx": "preserve"
   },
