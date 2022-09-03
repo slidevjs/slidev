@@ -17,6 +17,8 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
         const imports: string[] = []
         const injections: string[] = []
         const asyncInjections: string[] = []
+        const chainedInjections: string[] = []
+        const chainedAsyncInjections: string[] = []
 
         const setups = uniq([
           ...themeRoots,
@@ -32,14 +34,20 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
 
           let fn = `__n${idx}`
           let awaitFn = `await __n${idx}`
+          let chainedFn = `__n${idx}`
+          let chainedAwaitFn = `await __n${idx}`
 
           if (/\binjection_return\b/g.test(code)) {
             fn = `injection_return = ${fn}`
             awaitFn = `injection_return = ${awaitFn}`
+            chainedFn = `injection_return = ${chainedFn}`
+            chainedAwaitFn = `injection_return = ${chainedAwaitFn}`
           }
           if (/\binjection_arg\b/g.test(code)) {
             fn += '('
             awaitFn += '('
+            chainedFn += '('
+            chainedAwaitFn += '('
 
             const matches = Array.from(code.matchAll(/\binjection_arg(_\d+)?\b/g))
             const dedupedMatches = Array.from(new Set(matches.map(m => m[0])))
@@ -48,14 +56,20 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
               const arg = key + (isLast ? '' : ',')
               fn += arg
               awaitFn += arg
+              chainedFn += arg
+              chainedAwaitFn += arg
             })
 
             fn += ')'
             awaitFn += ')'
+            chainedFn += ', injection_return)'
+            chainedAwaitFn += ', injection_return)'
           }
           else {
             fn += ('()')
             awaitFn += ('()')
+            chainedFn += '(injection_return)'
+            chainedAwaitFn += '(injection_return)'
           }
 
           injections.push(
@@ -66,11 +80,21 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
             `// ${path}`,
             awaitFn,
           )
+          chainedInjections.push(
+            `// ${path}`,
+            chainedFn,
+          )
+          chainedAsyncInjections.push(
+            `// ${path}`,
+            chainedAwaitFn,
+          )
         })
 
         code = code.replace('/* __imports__ */', imports.join('\n'))
         code = code.replace('/* __injections__ */', injections.join('\n'))
         code = code.replace('/* __async_injections__ */', asyncInjections.join('\n'))
+        code = code.replace('/* __chained_injections__ */', chainedInjections.join('\n'))
+        code = code.replace('/* __chained_async_injections__ */', chainedAsyncInjections.join('\n'))
         return code
       }
 

@@ -53,7 +53,7 @@ export default function setupShortcuts() {
   // eslint-disable-next-line prefer-const
   let injection_return: Array<ShortcutOptions> = []
 
-  /* __injections__ */
+  /* __chained_injections__ */
 
   return { customShortcuts: injection_return, defaultShortcuts: injection_arg_2 }
 }
