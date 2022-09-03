@@ -28,7 +28,8 @@ export default function setupShortcuts() {
     showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
 
-  const injection_arg_2: ShortcutOptions[] = [
+  // eslint-disable-next-line prefer-const
+  let injection_return: ShortcutOptions[] = [
     { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },
     { name: 'prev_space', key: and(space, shift), fn: prev, autoRepeat: true },
     { name: 'next_right', key: and(right, not(shift), not(showOverview)), fn: next, autoRepeat: true },
@@ -50,10 +51,7 @@ export default function setupShortcuts() {
     { name: 'goto_from_overview', key: and(enter, showOverview), fn: () => { go(currentOverviewPage.value); showOverview.value = false } },
   ]
 
-  // eslint-disable-next-line prefer-const
-  let injection_return: Array<ShortcutOptions> = []
-
   /* __chained_injections__ */
 
-  return { customShortcuts: injection_return, defaultShortcuts: injection_arg_2 }
+  return injection_return
 }
