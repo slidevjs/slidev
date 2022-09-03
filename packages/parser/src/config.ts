@@ -76,11 +76,6 @@ export function verifyConfig(
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to Windi CSS`)
     config.css = 'windicss'
   }
-
-  if (config.css === 'unocss') {
-    warn('UnoCSS support is experimental, the styling might break without following semver.')
-    warn('We suggest pinning the version of Slidev when using experimental features.')
-  }
 }
 
 export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
