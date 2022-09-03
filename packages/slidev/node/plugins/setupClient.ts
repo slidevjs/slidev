@@ -16,9 +16,6 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
         const name = id.slice(setupEntry.length + 1)
         const imports: string[] = []
         const injections: string[] = []
-        const asyncInjections: string[] = []
-        const chainedInjections: string[] = []
-        const chainedAsyncInjections: string[] = []
 
         const setups = uniq([
           ...themeRoots,
@@ -32,69 +29,39 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
 
           imports.push(`import __n${idx} from '${toAtFS(path)}'`)
 
-          let fn = `__n${idx}`
-          let awaitFn = `await __n${idx}`
-          let chainedFn = `__n${idx}`
-          let chainedAwaitFn = `await __n${idx}`
+          let fn = `:AWAIT:__n${idx}`
 
-          if (/\binjection_return\b/g.test(code)) {
+          if (/\binjection_return\b/g.test(code))
             fn = `injection_return = ${fn}`
-            awaitFn = `injection_return = ${awaitFn}`
-            chainedFn = `injection_return = ${chainedFn}`
-            chainedAwaitFn = `injection_return = ${chainedAwaitFn}`
-          }
+
           if (/\binjection_arg\b/g.test(code)) {
             fn += '('
-            awaitFn += '('
-            chainedFn += '('
-            chainedAwaitFn += '('
-
             const matches = Array.from(code.matchAll(/\binjection_arg(_\d+)?\b/g))
             const dedupedMatches = Array.from(new Set(matches.map(m => m[0])))
-            dedupedMatches.forEach((key, index) => {
-              const isLast = index === dedupedMatches.length - 1
-              const arg = key + (isLast ? '' : ',')
-              fn += arg
-              awaitFn += arg
-              chainedFn += arg
-              chainedAwaitFn += arg
-            })
-
-            fn += ')'
-            awaitFn += ')'
-            chainedFn += ', injection_return)'
-            chainedAwaitFn += ', injection_return)'
+            fn += dedupedMatches.join(', ')
+            fn += ', :LAST:)'
           }
           else {
-            fn += ('()')
-            awaitFn += ('()')
-            chainedFn += '(injection_return)'
-            chainedAwaitFn += '(injection_return)'
+            fn += '(:LAST:)'
           }
 
           injections.push(
             `// ${path}`,
             fn,
           )
-          asyncInjections.push(
-            `// ${path}`,
-            awaitFn,
-          )
-          chainedInjections.push(
-            `// ${path}`,
-            chainedFn,
-          )
-          chainedAsyncInjections.push(
-            `// ${path}`,
-            chainedAwaitFn,
-          )
         })
 
+        function getInjections(isAwait = false, isChained = false): string {
+          return injections.join('\n')
+            .replace(/:AWAIT:/g, isAwait ? 'await ' : '')
+            .replace(/(,\s*)?:LAST:/g, isChained ? '$1injection_return' : '')
+        }
+
         code = code.replace('/* __imports__ */', imports.join('\n'))
-        code = code.replace('/* __injections__ */', injections.join('\n'))
-        code = code.replace('/* __async_injections__ */', asyncInjections.join('\n'))
-        code = code.replace('/* __chained_injections__ */', chainedInjections.join('\n'))
-        code = code.replace('/* __chained_async_injections__ */', chainedAsyncInjections.join('\n'))
+        code = code.replace('/* __injections__ */', getInjections())
+        code = code.replace('/* __async_injections__ */', getInjections(true))
+        code = code.replace('/* __chained_injections__ */', getInjections(false, true))
+        code = code.replace('/* __chained_async_injections__ */', getInjections(true, true))
         return code
       }
 
