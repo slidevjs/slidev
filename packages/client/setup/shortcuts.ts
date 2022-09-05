@@ -51,7 +51,23 @@ export default function setupShortcuts() {
     { name: 'goto_from_overview', key: and(enter, showOverview), fn: () => { go(currentOverviewPage.value); showOverview.value = false } },
   ]
 
+  const baseShortcutNames = new Set(injection_return.map(s => s.name))
+
   /* __chained_injections__ */
+
+  const remainingBaseShortcutNames = injection_return.filter(s => s.name && baseShortcutNames.has(s.name))
+  if (remainingBaseShortcutNames.length === 0) {
+    const message = [
+      '========== WARNING ==========',
+      'defineShortcutsSetup did not return any of the base shortcuts.',
+      'See https://sli.dev/custom/config-shortcuts.html for migration.',
+      'If it is intentional, return at least one shortcut with one of the base names (e.g. name:"goto").',
+    ].join('\n\n')
+    // eslint-disable-next-line no-alert
+    alert(message)
+
+    console.warn(message)
+  }
 
   return injection_return
 }
