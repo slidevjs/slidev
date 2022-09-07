@@ -282,7 +282,7 @@ importers:
       unplugin-vue-components: ^0.22.4
       vite: ^3.0.9
       vite-plugin-remote-assets: ^0.3.0
-      vite-plugin-vue-markdown: ~0.21.1
+      vite-plugin-vue-markdown: 0.21.0
       vite-plugin-vue-server-ref: ^0.3.0
       vite-plugin-windicss: ^1.8.7
       vue: ^3.2.38
@@ -330,7 +330,7 @@ importers:
       unplugin-vue-components: 0.22.4_vite@3.0.9+vue@3.2.38
       vite: 3.0.9
       vite-plugin-remote-assets: 0.3.0_vite@3.0.9
-      vite-plugin-vue-markdown: 0.21.1_vite@3.0.9
+      vite-plugin-vue-markdown: 0.21.0_vite@3.0.9
       vite-plugin-vue-server-ref: 0.3.0_vite@3.0.9+vue@3.2.38
       vite-plugin-windicss: 1.8.7_vite@3.0.9
       vue: 3.2.38
@@ -6766,8 +6766,8 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-vue-markdown/0.21.1_vite@3.0.9:
-    resolution: {integrity: sha512-tvHtARDdNK45nSJhyCVaRhSxBAEVmgA6aD+xV1J4xXynNNxRaYXcpHS3l3S7l09j/lR3beRjTfbS+Ro6ipSHmA==}
+  /vite-plugin-vue-markdown/0.21.0_vite@3.0.9:
+    resolution: {integrity: sha512-7qFs3mQu1nV9HiiQ0EZD0aG++qsUW4K8TOuIWHa5uVaOxq8WLgr+AkFK0UJDJ+kLG6fL8MWoBYUfsrJOPcLGoA==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0-0
     dependencies:
