@@ -11,6 +11,6 @@
     "@slidev/theme-seriph": "^0.21.3",
     "@slidev/types": "workspace:*",
     "nodemon": "^2.0.19",
-    "vite-plugin-inspect": "^0.6.1"
+    "vite-plugin-inspect": "^0.7.1"
   }
 }
