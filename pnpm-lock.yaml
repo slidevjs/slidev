@@ -277,7 +277,7 @@ importers:
       sirv: ^2.0.2
       unocss: ^0.45.20
       unplugin-icons: ^0.14.9
-      unplugin-vue-components: ^0.22.6
+      unplugin-vue-components: ^0.22.7
       vite: ^3.1.0
       vite-plugin-inspect: ^0.7.1
       vite-plugin-remote-assets: ^0.3.0
@@ -326,7 +326,7 @@ importers:
       shiki: 0.11.1
       unocss: 0.45.20_vite@3.1.0
       unplugin-icons: 0.14.9_6igbc34rdygfc6m44bomdw5yyu
-      unplugin-vue-components: 0.22.6_vite@3.1.0+vue@3.2.39
+      unplugin-vue-components: 0.22.7_vite@3.1.0+vue@3.2.39
       vite: 3.1.0
       vite-plugin-inspect: 0.7.1_vite@3.1.0
       vite-plugin-remote-assets: 0.3.0_vite@3.1.0
@@ -6637,8 +6637,8 @@ packages:
       - webpack
     dev: false
 
-  /unplugin-vue-components/0.22.6_vite@3.1.0+vue@3.2.39:
-    resolution: {integrity: sha512-QiOAjEHpAD/i4+B1nFJPhzRYMQpFJN/m/VM0zLVxGzHGtJW//2z0Iyq5eqYczZeRfj6v9pIyuVw7BdChgD4G6A==}
+  /unplugin-vue-components/0.22.7_vite@3.1.0+vue@3.2.39:
+    resolution: {integrity: sha512-MJEAKJF9bRykTRvJ4WXF0FNMAyt1PX3iwpu2NN+li35sAKjQv6sC1col5aZDLiwDZDo2AGwxNkzLJFKaun9qHw==}
     engines: {node: '>=14'}
     peerDependencies:
       '@babel/parser': ^7.15.8
