@@ -2,15 +2,19 @@
 
 > Available since v0.20
 
+> Since v0.35.6 (excluded), you decide which base shortcuts to keep (see `...base,` below).
+
 <Environment type="client" />
 
 Create `./setup/shortcuts.ts` with the following content:
 
 ```ts
-import { defineShortcutsSetup, NavOperations } from '@slidev/types'
+import type { NavOperations, ShortcutOptions } from '@slidev/types'
+import { defineShortcutsSetup } from '@slidev/types'
 
-export default defineShortcutsSetup((nav: NavOperations) => {
+export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]) => {
   return [
+    ...base, // keep the existing shortcuts
     {
       key: 'enter',
       fn: () => nav.next(),
@@ -32,10 +36,12 @@ The configuration function receives an object with some navigation methods, and 
 The `key` type only allows for strings, but you can still bind multiple keys by using following convention:
 
 ```ts
-import { defineShortcutsSetup, NavOperations } from '@slidev/types'
+import type { NavOperations, ShortcutOptions } from '@slidev/types'
+import { defineShortcutsSetup } from '@slidev/types'
 
-export default defineShortcutsSetup((nav: NavOperations) => {
+export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]) => {
   return [
+    ...base,
     {
       key: 'ShiftLeft+ArrowRight',
       fn: () => nav.next(),
