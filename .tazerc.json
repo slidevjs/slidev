@@ -4,7 +4,6 @@
     "execa",
     "tsup",
     "codemirror",
-    "vite-plugin-vue-markdown",
     "monaco-editor"
   ]
 }

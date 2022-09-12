@@ -183,7 +183,7 @@ export function createSlidesLoader(
             Array.from(hmrPages).map(async (i) => {
               const file = `${slidePrefix}${i + 1}.md`
               try {
-                const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
+                const md = await transformMarkdown((await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file)).code, i, newData)
                 const handleHotUpdate = 'handler' in VuePlugin.handleHotUpdate! ? VuePlugin.handleHotUpdate!.handler : VuePlugin.handleHotUpdate!
                 return await handleHotUpdate({
                   ...ctx,
