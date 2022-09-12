@@ -16,7 +16,7 @@ export async function build(
   viteConfig: InlineConfig = {},
 ) {
   const indexPath = resolve(options.userRoot, 'index.html')
-  const rawConfig = await resolveConfig({}, 'build')
+  const rawConfig = await resolveConfig({}, 'build', options.entry)
   const pluginOptions = rawConfig.slidev || {}
 
   let originalIndexHTML: string | undefined
