@@ -2,7 +2,7 @@ import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
-export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, verify = false) {
+export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
   const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
 
@@ -42,7 +42,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings),
+    drawings: resolveDrawings(headmatter.drawings, filepath),
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -157,7 +157,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   }
 }
 
-function resolveDrawings(options: DrawingsOptions = {}): ResolvedDrawingsOptions {
+function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): ResolvedDrawingsOptions {
   const {
     enabled = true,
     persist = false,
@@ -168,7 +168,7 @@ function resolveDrawings(options: DrawingsOptions = {}): ResolvedDrawingsOptions
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? '.slidev/drawings'
+      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
       : false
 
   return {
