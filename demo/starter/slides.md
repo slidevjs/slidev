@@ -19,7 +19,7 @@ info: |
 # persist drawings in exports and build
 drawings:
   persist: false
-# use UnoCSS (experimental)
+# use UnoCSS
 css: unocss
 ---
 

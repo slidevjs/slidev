@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [
     Inspect({
-      enabled: true,
+      dev: true,
     }),
   ],
 })

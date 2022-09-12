@@ -184,7 +184,8 @@ export function createSlidesLoader(
               const file = `${slidePrefix}${i + 1}.md`
               try {
                 const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
-                return await VuePlugin.handleHotUpdate!({
+                const handleHotUpdate = 'handler' in VuePlugin.handleHotUpdate! ? VuePlugin.handleHotUpdate!.handler : VuePlugin.handleHotUpdate!
+                return await handleHotUpdate({
                   ...ctx,
                   modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
                   file,
