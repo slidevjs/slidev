@@ -14,13 +14,13 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
-    "@slidev/types": "^0.36.1",
+    "@slidev/types": "^0.36.2",
     "codemirror-theme-vars": "^0.1.1",
     "prism-theme-vars": "^0.2.4",
     "theme-vitesse": "^0.5.2"
   },
   "devDependencies": {
-    "@slidev/cli": "^0.36.1"
+    "@slidev/cli": "^0.36.2"
   },
   "//": "Learn more: https://sli.dev/themes/write-a-theme.html",
   "slidev": {
