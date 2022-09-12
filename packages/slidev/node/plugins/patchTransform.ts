@@ -12,11 +12,13 @@ export function createFixPlugins(
       name: 'slidev:flags',
       enforce: 'pre',
       transform(code, id) {
-        if (id.endsWith('.vue')) {
+        if (id.match(/\.vue($|\?)/)) {
+          const original = code
           define.forEach(([from, to]) => {
             code = code.replace(new RegExp(from, 'g'), to)
           })
-          return code
+          if (original !== code)
+            return code
         }
       },
     },
