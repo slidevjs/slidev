@@ -110,7 +110,7 @@ export async function ViteSlidevPlugin(
         'components',
       ],
 
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/],
       exclude: [],
 
       resolvers: [
