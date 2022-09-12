@@ -88,6 +88,7 @@
     "unplugin-icons": "^0.14.9",
     "unplugin-vue-components": "^0.22.6",
     "vite": "^3.1.0",
+    "vite-plugin-inspect": "^0.7.1",
     "vite-plugin-remote-assets": "^0.3.0",
     "vite-plugin-vue-markdown": "~0.20.1",
     "vite-plugin-vue-server-ref": "^0.3.0",

@@ -135,14 +135,12 @@ importers:
       '@slidev/theme-seriph': ^0.21.3
       '@slidev/types': workspace:*
       nodemon: ^2.0.19
-      vite-plugin-inspect: ^0.7.1
     devDependencies:
       '@slidev/cli': link:../../packages/slidev
       '@slidev/theme-default': 0.21.2
       '@slidev/theme-seriph': 0.21.3
       '@slidev/types': link:../../packages/types
       nodemon: 2.0.19
-      vite-plugin-inspect: 0.7.1
 
   packages/client:
     specifiers:
@@ -281,6 +279,7 @@ importers:
       unplugin-icons: ^0.14.9
       unplugin-vue-components: ^0.22.6
       vite: ^3.1.0
+      vite-plugin-inspect: ^0.7.1
       vite-plugin-remote-assets: ^0.3.0
       vite-plugin-vue-markdown: ~0.20.1
       vite-plugin-vue-server-ref: ^0.3.0
@@ -329,6 +328,7 @@ importers:
       unplugin-icons: 0.14.9_6igbc34rdygfc6m44bomdw5yyu
       unplugin-vue-components: 0.22.6_vite@3.1.0+vue@3.2.39
       vite: 3.1.0
+      vite-plugin-inspect: 0.7.1_vite@3.1.0
       vite-plugin-remote-assets: 0.3.0_vite@3.1.0
       vite-plugin-vue-markdown: 0.20.1_vite@3.1.0
       vite-plugin-vue-server-ref: 0.3.0_vite@3.1.0+vue@3.2.39
@@ -759,6 +759,7 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    dev: false
 
   /@slidev/theme-default/0.21.2:
     resolution: {integrity: sha512-neUucFs2YrRZZd73QwvLTyRG/o1nerDFUR5t8YAmXVLTMzWfY71flQ6aAhjYf+WjsozYsOHcxi/pZtIzZ4VhTQ==}
@@ -3908,6 +3909,7 @@ packages:
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: false
 
   /esutils/2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
@@ -6528,6 +6530,7 @@ packages:
 
   /ufo/0.8.5:
     resolution: {integrity: sha512-e4+UtA5IRO+ha6hYklwj6r7BjiGMxS0O+UaSg9HbaTefg4kMkzj4tXzEBajRR+wkxf+golgAWKzLbytCUDMJAA==}
+    dev: false
 
   /unbox-primitive/1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -6727,7 +6730,7 @@ packages:
       extsprintf: 1.3.0
     dev: true
 
-  /vite-plugin-inspect/0.7.1:
+  /vite-plugin-inspect/0.7.1_vite@3.1.0:
     resolution: {integrity: sha512-mkTw5itsI+89WNJ6og0BpEAaV4ticrOGaoj+oWDR61W72H2mfkuw3MaAdpnnq6s6A7tKfM4nPaMtxjlmw3uXYg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -6739,9 +6742,10 @@ packages:
       kolorist: 1.6.0
       sirv: 2.0.2
       ufo: 0.8.5
+      vite: 3.1.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
+    dev: false
 
   /vite-plugin-remote-assets/0.3.0_vite@3.1.0:
     resolution: {integrity: sha512-EgbyLhVpKqlwwRnkDHmEv/JeO9njgZk00+XyxHzXp9dBUx8co8A7ohbEED2mdIO62kPYD7bHF8MUT5VtulzFUQ==}

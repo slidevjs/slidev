@@ -63,6 +63,11 @@ cli.command(
       choices: ['error', 'warn', 'info', 'silent'],
       describe: 'log level',
     })
+    .option('inspect', {
+      default: false,
+      type: 'boolean',
+      describe: 'enable the inspect plugin for debugging',
+    })
     .option('force', {
       alias: 'f',
       default: false,
@@ -71,7 +76,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, force }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, force, inspect }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -94,7 +99,7 @@ cli.command(
     async function initServer() {
       if (server)
         await server.close()
-      const options = await resolveOptions({ entry, remote, theme }, 'dev')
+      const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev')
       port = userPort || await findFreePort(3030)
       server = (await createServer(
         options,
@@ -204,12 +209,17 @@ cli.command(
       type: 'boolean',
       describe: 'allow download as PDF',
     })
+    .option('inspect', {
+      default: false,
+      type: 'boolean',
+      describe: 'enable the inspect plugin for debugging',
+    })
     .strict()
     .help(),
-  async ({ entry, theme, watch, base, download, out }) => {
+  async ({ entry, theme, watch, base, download, out, inspect }) => {
     const { build } = await import('./build')
 
-    const options = await resolveOptions({ entry, theme }, 'build')
+    const options = await resolveOptions({ entry, theme, inspect }, 'build')
     if (download && !options.data.config.download)
       options.data.config.download = download
 
@@ -411,6 +421,8 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
     console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    if (options.inspect)
+      console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
     if (remote !== undefined) {
       Object.values(os.networkInterfaces())
