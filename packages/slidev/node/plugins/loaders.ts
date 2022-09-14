@@ -316,6 +316,16 @@ export function createSlidesLoader(
         return transformTitles(code)
       },
     },
+    {
+      name: 'slidev:slide-transform:post',
+      enforce: 'post',
+      transform(code, id) {
+        if (!id.match(/\/@slidev\/slides\/\d+\.md($|\?)/))
+          return
+        // force reload slide component to ensure v-click resolves correctly
+        return code.replace('if (_rerender_only)', 'if (false)')
+      },
+    },
   ]
 
   function updateServerWatcher() {
