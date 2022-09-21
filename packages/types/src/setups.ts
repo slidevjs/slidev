@@ -9,6 +9,7 @@ import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { WindiCssOptions } from 'vite-plugin-windicss'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
+import type { SlidevPreparserExtension } from './types'
 
 export interface AppContext {
   app: App
@@ -63,6 +64,7 @@ export type ShikiSetup = (shiki: typeof Shiki) => Awaitable<ShikiOptions | undef
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
 export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | undefined>
+export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn>
@@ -99,5 +101,9 @@ export function defineKatexSetup(fn: KatexSetup) {
 }
 
 export function defineShortcutsSetup(fn: ShortcutsSetup) {
+  return fn
+}
+
+export function definePreparserSetup(fn: PreparserSetup) {
   return fn
 }

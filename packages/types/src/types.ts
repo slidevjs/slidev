@@ -55,4 +55,15 @@ export interface SlidevMarkdown {
   themeMeta?: SlidevThemeMeta
 }
 
+export interface SlidevPreparserExtension {
+  name: string
+  transformRawLines?(lines: string[]): Promise<void>
+  transformSlide?(content: string, frontmatter: any): Promise<string | undefined>
+}
+
+export type PreparserExtensionLoader = (addons: string[], filepath?: string) => Promise<SlidevPreparserExtension[]>
+
+// internal type?
+export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath: string | undefined) => Promise<SlidevPreparserExtension[]>
+
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'

@@ -93,8 +93,8 @@ f
       .toEqual({ })
   })
 
-  async function parseWithExtension(src, handle, more = {}, moreExts: SlidevPreparserExtension = []) {
-    return await parse(src, undefined, undefined, undefined, async () => [{ handle, ...more }, ...moreExts])
+  async function parseWithExtension(src, transformRawLines, more = {}, moreExts: SlidevPreparserExtension = []) {
+    return await parse(src, undefined, undefined, [], async () => [{ transformRawLines, ...more }, ...moreExts])
   }
 
   it('parse with-extension replace', async () => {
@@ -109,63 +109,93 @@ b
 @@v@@
 
 @@v@@ = @@v@@
-`, (s) => {
-      s.lines[s.i] = s.lines[s.i].replace(/@@v@@/g, 'thing')
-      return false
+`, (lines) => {
+      for (const i in lines)
+        lines[i] = lines[i].replace(/@@v@@/g, 'thing')
     })
 
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('a thing/b%thing%%thing = thing')
   })
 
-  it('parse with-extension disabled', async () => {
-    const data = await parseWithExtension(`
+  it('parse with-extension custom-separator', async () => {
+    const data = await parseWithExtension(`---
+ga: bu
+SEPARATOR
 a @@v@@
 
----
+SEPARATOR
 
 b
 @@v@@
 
 @@v@@ = @@v@@
-`, (s) => {
-      s.lines[s.i] = s.lines[s.i].replace(/@@v@@/g, 'thing')
-      return false
-    }, { disabled: true })
+`, (lines) => {
+      for (const i in lines)
+        lines[i] = lines[i].replace(/^SEPARATOR$/g, '---')
+    })
 
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('a @@v@@/b%@@v@@%%@@v@@ = @@v@@')
   })
 
-  it('parse with-extension pingpong', async () => {
-    const data = await parseWithExtension(`
-.
-a.
-.
-`, () => false, {}, [{
-      handle(s) {
-        const l = s.lines[s.i]
-        if (l.startsWith('......'))
-          return false
-        if (l.startsWith('.')) {
-          s.lines[s.i] = `.${s.lines[s.i]}`
-          return true
+  it('parse with-extension eg-easy-cover', async () => {
+    function cov(i, more = '.jpg') {
+      return `---
+layout: cover
+background: ${i}${more}
+---
+
+`
+    }
+    const data = await parseWithExtension(`@cov 1.jpg
+@cov 2.jpg
+# 2
+---
+
+# 3
+@cov 4.jpg
+`, (lines) => {
+      let i = 0
+      while (i < lines.length) {
+        if (lines[i].startsWith('@cov ')) {
+          const repl = [...cov(lines[i].substring(5), '').split('\n')]
+          lines.splice(i, 1, ...repl)
         }
-        return false
+        i++
+      }
+    })
+
+    expect(data.slides.map(s => s.content.trim().replace(/\n/g, '%')).join('/'))
+      .toEqual('/# 2/# 3/'.replace(/\n/g, '%'))
+    expect(data.slides[0].frontmatter)
+      .toEqual({ layout: 'cover', background: '1.jpg' })
+    expect(data.slides[1].frontmatter)
+      .toEqual({ layout: 'cover', background: '2.jpg' })
+    expect(data.slides[3].frontmatter)
+      .toEqual({ layout: 'cover', background: '4.jpg' })
+  })
+
+  it('parse with-extension sequence', async () => {
+    const data = await parseWithExtension(`
+a..A
+a.a.A.A
+.a.A.
+`, undefined, {}, [{
+      transformRawLines(lines: string[]) {
+        for (const i in lines)
+          lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
       },
     },
     {
-      handle(s) {
-        const l = s.lines[s.i]
-        if (l[0] !== '.' || l.length > 9)
-          return false
-        s.lines[s.i] = `.A${s.lines[s.i]}`
-        return true
+      transformRawLines(lines: string[]) {
+        for (const i in lines)
+          lines[i] = lines[i].replace(/A/g, 'C')
       },
     },
     ])
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
-      .toEqual('......A......%a.%......A......')
+      .toEqual('C..B%C.C.B.B%.C.B.')
   })
 
   // Generate cartesian product of given iterables:
@@ -175,11 +205,11 @@ a.
     for (const r of remainder) for (const h of head) yield [h, ...r]
   }
   const B = [0, 1]
-  const Bs = [B, B, B, B, B, B, B]
-  const bNames = '_swScCfF'
+  const Bs = [B, B, B, B, B, B]
+  const bNames = '_swScCF'
 
   for (const desc of cartesian(...Bs)) {
-    const [withSlideBefore, withFrontmatter, withSlideAfter, prependContent, appendContent, prependFrontmatter, appendFrontmatter] = desc
+    const [withSlideBefore, withFrontmatter, withSlideAfter, prependContent, appendContent, addFrontmatter] = desc
     it(`parse with-extension wrap ${desc.map((b, i) => bNames[b * (i + 1)]).join('')}`, async () => {
       const data = await parseWithExtension(`${
 withSlideBefore
@@ -205,40 +235,50 @@ withSlideAfter
 
 ..
 `
-: ''}`, (s) => {
-        const l = s.lines[s.i]
-        if (l.startsWith('@')) {
-          const t = l.substr(1)
-          if (prependContent)
-            s.contentPrepend.push(`<${t}>`)
-          if (appendContent)
-            s.contentAppend.unshift(`</${t}>`)
-          if (prependFrontmatter)
-            s.frontmatterPrepend.push(`start${t}: start`)
-          if (appendFrontmatter)
-            s.frontmatterAppend.unshift(`end${t}: end`)
-          s.lines.splice(s.i, 1)
-          return true
-        }
+: ''}`, undefined, {
+        transformSlide(content: string, frontmatter: any) {
+          const lines = content.split('\n')
+          let i = 0
+          let appendBeforeCount = 0
+          let appendAfterCount = 0
+          while (i < lines.length) {
+            const l = lines[i]
+            if (l.startsWith('@')) {
+              const t = l.substring(1)
+              lines.splice(i, 1)
+              if (prependContent)
+                lines.splice(appendBeforeCount++, 0, `<${t}>`)
+              if (appendContent)
+                lines.splice(lines.length - appendAfterCount++, 0, `</${t}>`)
+              if (addFrontmatter)
+                frontmatter[`add${t}`] = 'add'
+              i--
+            }
+            i++
+          }
+          return lines.join('\n')
+        },
       })
       function project(s) {
         // like the trim in other tests, the goal is not to test newlines here
         return s.replace(/%%%*/g, '%')
       }
-      const fm = withFrontmatter || prependFrontmatter || appendFrontmatter
-      expect(project(data.slides.map(i => i.raw.replace(/\n/g, '%')).join('/')))
+      expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([
-          ...withSlideBefore ? ['%.%/'] : [],
-          ...fm ? ['---%'] : [],
-          ...prependFrontmatter ? ['starta: start%startb: start%'] : [],
-          ...withFrontmatter ? ['m: M%n: N%'] : [],
-          ...appendFrontmatter ? ['endb: end%enda: end%'] : [],
-          ...fm ? ['---%'] : [],
+          ...withSlideBefore ? ['./'] : [],
           ...prependContent ? ['<a>%<b>%'] : [],
-          '%ccc%ddd%',
-          ...appendContent ? ['</b>%</a>'] : [],
-          ...withSlideAfter ? ['/%..%'] : [],
+          'ccc%ddd',
+          ...appendContent ? ['%</b>%</a>'] : [],
+          ...withSlideAfter ? ['/..'] : [],
         ].join('')))
+
+      if (withFrontmatter || addFrontmatter) {
+        expect(data.slides[withSlideBefore ? 1 : 0].frontmatter)
+          .toEqual({
+            ...withFrontmatter ? { m: 'M', n: 'N' } : {},
+            ...addFrontmatter ? { adda: 'add', addb: 'add' } : {},
+          })
+      }
     })
   }
 })
