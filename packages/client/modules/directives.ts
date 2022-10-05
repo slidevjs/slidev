@@ -45,7 +45,7 @@ export default function createDirectives() {
             elements.value.push(el)
 
           // Set default dir.value
-          if (dir.value === null)
+          if (dir.value == null)
             dir.value = elements?.value.length
 
           // If orderMap didn't have dir.value aka the order key, then initialize it.
@@ -123,7 +123,7 @@ export default function createDirectives() {
           const prev = elements?.value.length
 
           // Set default dir.value
-          if (dir.value === undefined)
+          if (dir.value == null)
             dir.value = elements?.value.length
 
           // If a v-click order before v-after is lower than v-after, the order map will
