@@ -45,7 +45,7 @@ export default function createDirectives() {
             elements.value.push(el)
 
           // Set default dir.value
-          if (dir.value === null)
+          if (dir.value === undefined)
             dir.value = elements?.value.length
 
           // If orderMap didn't have dir.value aka the order key, then initialize it.
