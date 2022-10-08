@@ -374,6 +374,10 @@ database "MySql" {
 
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
 
+---
+src: ./pages/multiple-entries.md
+hide: false # set to true to hide this page
+---
 
 ---
 layout: center
