@@ -376,7 +376,7 @@ database "MySql" {
 
 ---
 src: ./pages/multiple-entries.md
-hide: false # set to true to hide this page
+hide: false
 ---
 
 ---
