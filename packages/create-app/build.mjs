@@ -6,7 +6,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 const __templateDir = resolve(__dirname, 'template')
 const __pagesDir = resolve(__templateDir, 'pages')
 
-const shouldCreatePagesDict = () => existsSync(__pagesDir)
+const shouldCreatePagesDict = () => !existsSync(__pagesDir)
 
 const needCopyFiles = {
   'slides.md': '../../../demo/starter/slides.md',
@@ -14,7 +14,7 @@ const needCopyFiles = {
 }
 
 function main() {
-  if (!shouldCreatePagesDict())
+  if (shouldCreatePagesDict())
     mkdirSync(__pagesDir)
   Object.keys(needCopyFiles).forEach((relativeTargetPath) => {
     const sourcePath = resolve(__templateDir, needCopyFiles[relativeTargetPath])
