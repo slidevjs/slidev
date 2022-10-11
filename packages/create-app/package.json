@@ -19,7 +19,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "cp ../../demo/starter/slides.md template/slides.md",
+    "build": "node build.mjs",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

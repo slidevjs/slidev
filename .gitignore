@@ -11,6 +11,7 @@ slides-export.md
 assets/demo
 packages/slidev/README.md
 packages/create-app/template/slides.md
+packages/create-app/template/pages
 composable-vue-cn
 components.d.ts
 .slidev
