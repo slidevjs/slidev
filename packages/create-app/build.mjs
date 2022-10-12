@@ -11,8 +11,8 @@ const shouldCreatePagesDict = () => !existsSync(__pagesDir)
 // key: copy to (relative ./)
 // value: origin (relative ./template)
 const needCopyFiles = {
-  'slides.md': '../../../demo/starter/slides.md',
-  'pages/multiple-entries.md': '../../../demo/starter/pages/multiple-entries.md',
+  'slides.md': '../../demo/starter/slides.md',
+  'pages/multiple-entries.md': '../../demo/starter/pages/multiple-entries.md',
 }
 
 function main() {
