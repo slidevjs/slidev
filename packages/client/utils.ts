@@ -8,16 +8,9 @@ export function getSlideClass(route?: RouteRecordRaw) {
 }
 
 /**
- * The height must be an integer (apply round) and it should honors the aspect ratio more as possible.
- * Also, to prevent errors on PDF export, we need to increase the height by 1px at time until the real
- * aspect ratio is equal or less than the requested one.
- * Doing this, we will prevent to create empty white pages after all single pages.
+ * To honor the aspect ratio more as possible, we need to approximate the height to the next integer.
+ * Doing this, we will prevent on print, to create an additional empty white page after each page.
  */
 export function getSlideHeightRespectingAspectAsPossible(requestedWidth: number, aspectRatio: number) {
-  let calculatedHeight = Math.ceil(requestedWidth / aspectRatio)
-
-  while (aspectRatio < (requestedWidth / calculatedHeight))
-    calculatedHeight++
-
-  return calculatedHeight
+  return Math.ceil(requestedWidth / aspectRatio)
 }
