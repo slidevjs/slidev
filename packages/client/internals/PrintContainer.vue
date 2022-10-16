@@ -46,9 +46,6 @@ provide(injectionSlideScale, scale)
 }
 
 .slide-container {
-  @apply relative;
-  position: relative;
-  overflow: hidden;
-  page-break-before: always;
+  @apply relative overflow-hidden break-after-page;
 }
 </style>
