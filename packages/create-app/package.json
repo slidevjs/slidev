@@ -25,7 +25,7 @@
   "dependencies": {
     "execa": "^5.1.1",
     "kolorist": "^1.6.0",
-    "minimist": "^1.2.6",
+    "minimist": "^1.2.7",
     "prompts": "^2.4.2"
   }
 }

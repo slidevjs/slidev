@@ -20,7 +20,7 @@
     "@slidev/types": "workspace:*",
     "@unocss/reset": "^0.45.29",
     "@vueuse/core": "^9.3.0",
-    "@vueuse/head": "^0.9.7",
+    "@vueuse/head": "^0.9.8",
     "@vueuse/math": "^9.3.0",
     "@vueuse/motion": "^2.0.0-beta.23",
     "codemirror": "^5.65.5",
@@ -38,12 +38,12 @@
     "resolve": "^1.22.1",
     "unocss": "^0.45.29",
     "vite-plugin-windicss": "^1.8.8",
-    "vue": "^3.2.40",
+    "vue": "^3.2.41",
     "vue-router": "^4.1.5",
     "vue-starport": "^0.3.0",
     "windicss": "^3.5.6"
   },
   "devDependencies": {
-    "vite": "^3.1.6"
+    "vite": "^3.1.8"
   }
 }
