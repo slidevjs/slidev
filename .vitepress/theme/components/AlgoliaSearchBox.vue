@@ -4,126 +4,93 @@
 
 <script setup lang="ts">
 import '@docsearch/css'
-import { useRoute, useRouter } from 'vitepress'
-import { getCurrentInstance, onMounted, watch } from 'vue'
 import docsearch from '@docsearch/js'
-import type { DocSearchHit } from '@docsearch/react/dist/esm/types'
-import type { DefaultTheme } from '../config'
+import { onMounted } from 'vue'
+import { useRouter, useRoute, useData } from 'vitepress'
 
-const props = defineProps<{
-  options: DefaultTheme.AlgoliaSearchOptions
-}>()
-
-const vm = getCurrentInstance()
-const route = useRoute()
 const router = useRouter()
-
-watch(
-  () => props.options,
-  (value) => {
-    update(value)
-  },
-)
+const route = useRoute()
+const { theme, site } = useData()
 
 onMounted(() => {
-  initialize(props.options)
+  initialize(theme.value.algolia)
+  setTimeout(poll, 16)
 })
 
-function isSpecialClick(event: MouseEvent) {
-  return (
-    event.button === 1
-    || event.altKey
-    || event.ctrlKey
-    || event.metaKey
-    || event.shiftKey
-  )
+function poll() {
+  // programmatically open the search box after initialize
+  const e = new Event('keydown') as any
+
+  e.key = 'k'
+  e.metaKey = true
+
+  window.dispatchEvent(e)
+
+  setTimeout(() => {
+    if (!document.querySelector('.DocSearch-Modal')) {
+      poll()
+    }
+  }, 16)
+}
+
+// @ts-expect-error
+const docsearch$ = docsearch.default ?? docsearch
+type DocSearchProps = Parameters<typeof docsearch$>[0]
+
+function initialize(userOptions: any) {
+  // note: multi-lang search support is removed since the theme
+  // doesn't support multiple locales as of now.
+  const options = Object.assign<{}, {}, DocSearchProps>({}, userOptions, {
+    container: '#docsearch',
+
+    navigator: {
+      navigate({ itemUrl }: any) {
+        const { pathname: hitPathname } = new URL(
+          window.location.origin + itemUrl
+        )
+
+        // router doesn't handle same-page navigation so we use the native
+        // browser location API for anchor navigation
+        if (route.path === hitPathname) {
+          window.location.assign(window.location.origin + itemUrl)
+        } else {
+          router.go(itemUrl)
+        }
+      }
+    },
+
+    transformItems(items: any) {
+      return items.map((item: any) => {
+        return Object.assign({}, item, {
+          url: getRelativePath(item.url)
+        })
+      })
+    },
+
+    // @ts-expect-error vue-tsc thinks this should return Vue JSX but it returns the required React one
+    hitComponent({ hit, children }) {
+      return {
+        __v: null,
+        type: 'a',
+        ref: undefined,
+        constructor: undefined,
+        key: undefined,
+        props: { href: hit.url, children }
+      }
+    }
+  })
+
+  docsearch$(options)
 }
 
 function getRelativePath(absoluteUrl: string) {
   const { pathname, hash } = new URL(absoluteUrl)
-
-  return pathname + hash
-}
-
-function update(options: any) {
-  if (vm && vm.vnode.el) {
-    vm.vnode.el.innerHTML
-      = '<div class="algolia-search-box" id="docsearch"></div>'
-    initialize(options)
-  }
-}
-
-function initialize(userOptions: any) {
-  docsearch(
-    Object.assign({}, userOptions, {
-      container: '#docsearch',
-
-      searchParameters: Object.assign({}, userOptions.searchParameters),
-
-      navigator: {
-        navigate: ({ suggestionUrl }: { suggestionUrl: string }) => {
-          const { pathname: hitPathname } = new URL(
-            window.location.origin + suggestionUrl,
-          )
-
-          // Router doesn't handle same-page navigation so we use the native
-          // browser location API for anchor navigation
-          if (route.path === hitPathname)
-            window.location.assign(window.location.origin + suggestionUrl)
-
-          else
-            router.go(suggestionUrl)
-        },
-      },
-
-      transformItems: (items: DocSearchHit[]) => {
-        return items.map((item) => {
-          return Object.assign({}, item, {
-            url: getRelativePath(item.url),
-          })
-        })
-      },
-
-      hitComponent: ({
-        hit,
-        children,
-      }: {
-        hit: DocSearchHit
-        children: any
-      }) => {
-        const relativeHit = hit.url.startsWith('http')
-          ? getRelativePath(hit.url as string)
-          : hit.url
-
-        return {
-          type: 'a',
-          ref: undefined,
-          constructor: undefined,
-          key: undefined,
-          props: {
-            href: hit.url,
-            onClick: (event: MouseEvent) => {
-              if (isSpecialClick(event))
-                return
-
-              // we rely on the native link scrolling when user is already on
-              // the right anchor because Router doesn't support duplicated
-              // history entries
-              if (route.path === relativeHit)
-                return
-
-              // if the hits goes to another page, we prevent the native link
-              // behavior to leverage the Router loading feature
-              if (route.path !== relativeHit)
-                event.preventDefault()
-
-              router.go(relativeHit)
-            },
-            children,
-          },
-        }
-      },
-    }),
+  return (
+    pathname.replace(
+      /\.html$/,
+      // @ts-expect-error
+      site.value.cleanUrls === 'disabled' ? '.html' : ''
+    ) + hash
   )
 }
 </script>
