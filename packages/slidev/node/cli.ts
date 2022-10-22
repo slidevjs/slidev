@@ -387,6 +387,57 @@ cli.command(
   },
 )
 
+cli.command(
+  'export-notes [entry]',
+  'Export slide notes to PDF',
+  args => args
+    .positional('entry', {
+      default: 'slides.md',
+      type: 'string',
+      describe: 'path to the slides markdown entry',
+    })
+    .option('output', {
+      type: 'string',
+      describe: 'path to the output',
+    })
+    .strict()
+    .help(),
+  async ({
+    entry,
+    output,
+  }) => {
+    process.env.NODE_ENV = 'production'
+    const { exportNotes } = await import('./export')
+
+    const port = await findFreePort(12445)
+    const options = await resolveOptions({ entry }, 'build')
+
+    if (!output)
+      output = options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entry, '.md')}-export-notes`
+
+    const server = await createServer(
+      options,
+      {
+        server: { port },
+        clearScreen: false,
+      },
+    )
+    await server.listen(port)
+
+    printInfo(options)
+    parser.filterDisabled(options.data)
+
+    output = await exportNotes({
+      port,
+      output,
+    })
+    console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
+
+    server.close()
+    process.exit(0)
+  },
+)
+
 cli
   .help()
   .parse()

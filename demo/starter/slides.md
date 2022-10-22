@@ -83,6 +83,10 @@ h1 {
 }
 </style>
 
+<!--
+NOTE: the previous comment about 'style' tag is not treatead as a presenter note.
+-->
+
 ---
 
 # Navigation
@@ -177,6 +181,19 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 
 </div>
 </div>
+
+<!--
+Presenter note with **bold**, *italic*, and ~~striked~~ text.
+
+Also, HTML elements are valid:
+<div class="flex w-full">
+  <span style="flex-grow: 1;">Left content</span>
+  <span>Right content</span>
+</div>
+
+#### Note
+Not all slides have presenter notes
+-->
 
 
 ---
