@@ -15,7 +15,7 @@ const style = computed(() => handleBackground(props.image))
 </script>
 
 <template>
-  <div class="grid grid-cols-2 w-full h-full">
+  <div class="grid grid-cols-2 w-full h-full auto-rows-fr">
     <div class="slidev-layout default" :class="props.class">
       <slot />
     </div>
