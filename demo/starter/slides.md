@@ -84,7 +84,7 @@ h1 {
 </style>
 
 <!--
-The last comment block will be treated as the presenter note.
+Here is another comment.
 -->
 
 ---
@@ -190,9 +190,6 @@ Also, HTML elements are valid:
   <span style="flex-grow: 1;">Left content</span>
   <span>Right content</span>
 </div>
-
-#### Note
-Not all slides have presenter notes
 -->
 
 
