@@ -25,7 +25,7 @@ const slidesWithNote = computed(() => rawRoutes
         </div>
       </div>
 
-      <div v-for="(slide, index) of slidesWithNote" :key="index" class="flex flex-col gap-4">
+      <div v-for="(slide, index) of slidesWithNote" :key="index" class="flex flex-col gap-4 break-inside-avoid-page">
         <div>
           <h2 class="text-lg">
             <div class="font-bold flex gap-2">
@@ -47,5 +47,19 @@ const slidesWithNote = computed(() => rawRoutes
 <style lang="postcss">
 @page {
   size: A4;
+  margin-top: 1.5cm;
+  margin-bottom: 1cm;
+}
+
+* {
+  -webkit-print-color-adjust: exact;
+}
+
+html,
+html body,
+html #app,
+html #page-root {
+  height: auto;
+  overflow: auto !important;
 }
 </style>
