@@ -83,6 +83,10 @@ h1 {
 }
 </style>
 
+<!--
+Here is another comment.
+-->
+
 ---
 
 # Navigation
@@ -177,6 +181,16 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 
 </div>
 </div>
+
+<!--
+Presenter note with **bold**, *italic*, and ~~striked~~ text.
+
+Also, HTML elements are valid:
+<div class="flex w-full">
+  <span style="flex-grow: 1;">Left content</span>
+  <span>Right content</span>
+</div>
+-->
 
 
 ---
