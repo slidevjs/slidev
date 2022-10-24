@@ -84,7 +84,7 @@ h1 {
 </style>
 
 <!--
-NOTE: the previous comment about 'style' tag is not treatead as a presenter note.
+The last comment block will be treated as the presenter note.
 -->
 
 ---
