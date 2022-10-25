@@ -1,6 +1,8 @@
 # Exporting
 
-## PDF
+## Slides
+
+### PDF
 
 > Exporting to PDF or PNG relies on [Playwright](https://playwright.dev) for rendering. You will therefore need to install [`playwright-chromium`](https://playwright.dev/docs/installation#download-single-browser-binary) to use this feature.
 > If you are doing exporting in a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
@@ -25,7 +27,7 @@ In case you want to export your slides using the dark version of the theme, use 
 $ slidev export --dark
 ```
 
-### Export Clicks Steps
+#### Export Clicks Steps
 
 > Available since v0.21
 
@@ -35,7 +37,7 @@ By default, Slidev exports one page per slide with clicks animations disabled. I
 $ slidev export --with-clicks
 ```
 
-## PNGs
+### PNGs
 
 When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF.
 
@@ -43,6 +45,16 @@ When passing in the `--format png` option, Slidev will export PNG images for eac
 $ slidev export --format png
 ```
 
-## Single-Page Application (SPA)
+### Single-Page Application (SPA)
 
 See [Static Hosting](/guide/hosting).
+
+## Presenter notes
+
+> Available since v0.36.8
+
+Export only the presenter notes (the last comment block for each slide) into a text document in PDF.
+
+```bash
+$ slidev export-notes
+```
