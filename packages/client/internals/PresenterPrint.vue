@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { useHead } from '@vueuse/head'
 import { computed } from '@vue/reactivity'
-import { rawRoutes, total } from '../logic/nav'
+import { useHead } from '@vueuse/head'
+import type { Slots } from 'vue'
+import { h } from 'vue'
 import { configs, themeVars } from '../env'
+import { rawRoutes, total } from '../logic/nav'
 import NoteViewer from './NoteViewer.vue'
+
+// Global style to apply only within this component, must be defined inline.
+// It doesn't work if placed in "scoped" component style, since the scoped attribute prevents to access elements outside the component.
+function vStyle<Props>(props: Props, { slots }: { slots: Slots }) {
+  if (slots.default)
+    return h('style', slots.default())
+}
 
 useHead({ title: `Notes - ${configs.title}` })
 
@@ -14,6 +23,19 @@ const slidesWithNote = computed(() => rawRoutes
 </script>
 
 <template>
+  <vStyle>
+    * {
+    -webkit-print-color-adjust: exact;
+    }
+
+    html,
+    html body,
+    html #app,
+    html #page-root {
+    height: auto;
+    overflow: auto !important;
+    }
+  </vStyle>
   <div id="page-root" :style="themeVars">
     <div class="m-4">
       <div class="mb-10">
@@ -49,17 +71,5 @@ const slidesWithNote = computed(() => rawRoutes
   size: A4;
   margin-top: 1.5cm;
   margin-bottom: 1cm;
-}
-
-* {
-  -webkit-print-color-adjust: exact;
-}
-
-html,
-html body,
-html #app,
-html #page-root {
-  height: auto;
-  overflow: auto !important;
 }
 </style>
