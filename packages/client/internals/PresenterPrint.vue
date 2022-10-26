@@ -44,7 +44,7 @@ const slidesWithNote = computed(() => rawRoutes
   </div>
 </template>
 
-<style lang="postcss">
+<style scoped lang="postcss">
 @page {
   size: A4;
   margin-top: 1.5cm;
