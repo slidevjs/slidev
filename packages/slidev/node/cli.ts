@@ -336,6 +336,11 @@ cli.command(
       type: 'string',
       describe: 'executable to override playwright bundled browser',
     })
+    .option('with-toc', {
+      default: false,
+      type: 'boolean',
+      describe: 'export pages with outline',
+    })
     .strict()
     .help(),
   async ({
@@ -348,6 +353,7 @@ cli.command(
     dark,
     'with-clicks': withClicks,
     'executable-path': executablePath,
+    'with-toc': withTOC,
   }) => {
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
@@ -380,6 +386,7 @@ cli.command(
       height,
       withClicks,
       executablePath,
+      withTOC,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
