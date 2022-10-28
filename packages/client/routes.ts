@@ -20,6 +20,7 @@ export const routes: RouteRecordRaw[] = [
   { name: 'print', path: '/print', component: Print },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
+  { path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') },
   {
     name: 'presenter',
     path: '/presenter/:no',

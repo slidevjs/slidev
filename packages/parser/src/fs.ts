@@ -23,6 +23,9 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
 
     data.slides.splice(iSlide, 1)
 
+    if (baseSlide.frontmatter.hide)
+      continue
+
     const srcExpression = baseSlide.frontmatter.src
     const path = resolve(dir, srcExpression)
     const raw = await fs.readFile(path, 'utf-8')

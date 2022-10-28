@@ -3,6 +3,7 @@
     "husky",
     "execa",
     "tsup",
-    "codemirror"
+    "codemirror",
+    "monaco-editor"
   ]
 }

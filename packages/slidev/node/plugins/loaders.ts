@@ -183,15 +183,16 @@ export function createSlidesLoader(
             Array.from(hmrPages).map(async (i) => {
               const file = `${slidePrefix}${i + 1}.md`
               try {
-                const md = await transformMarkdown(await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file), i, newData)
-                return await VuePlugin.handleHotUpdate!({
+                const md = await transformMarkdown((await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file)).code, i, newData)
+                const handleHotUpdate = 'handler' in VuePlugin.handleHotUpdate! ? VuePlugin.handleHotUpdate!.handler : VuePlugin.handleHotUpdate!
+                return await handleHotUpdate({
                   ...ctx,
                   modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
                   file,
                   read() { return md },
                 })
               }
-              catch {}
+              catch { }
             }),
           )
         ).flatMap(i => i || [])
@@ -313,6 +314,16 @@ export function createSlidesLoader(
         if (id !== '/@slidev/titles.md')
           return
         return transformTitles(code)
+      },
+    },
+    {
+      name: 'slidev:slide-transform:post',
+      enforce: 'post',
+      transform(code, id) {
+        if (!id.match(/\/@slidev\/slides\/\d+\.md($|\?)/))
+          return
+        // force reload slide component to ensure v-click resolves correctly
+        return code.replace('if (_rerender_only)', 'if (false)')
       },
     },
   ]

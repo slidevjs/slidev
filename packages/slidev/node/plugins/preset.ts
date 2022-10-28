@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
+import Inspect from 'vite-plugin-inspect'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
@@ -109,7 +110,7 @@ export async function ViteSlidevPlugin(
         'components',
       ],
 
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/],
       exclude: [],
 
       resolvers: [
@@ -167,6 +168,13 @@ export async function ViteSlidevPlugin(
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),
     createFixPlugins(options),
+
+    options.inspect
+      ? Inspect({
+        dev: true,
+        build: true,
+      })
+      : null,
   ]
     .flat()
     .filter(notNullish)

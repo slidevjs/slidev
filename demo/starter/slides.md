@@ -19,7 +19,7 @@ info: |
 # persist drawings in exports and build
 drawings:
   persist: false
-# use UnoCSS (experimental)
+# use UnoCSS
 css: unocss
 ---
 
@@ -82,6 +82,10 @@ h1 {
   -moz-text-fill-color: transparent;
 }
 </style>
+
+<!--
+Here is another comment.
+-->
 
 ---
 
@@ -177,6 +181,16 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 
 </div>
 </div>
+
+<!--
+Presenter note with **bold**, *italic*, and ~~striked~~ text.
+
+Also, HTML elements are valid:
+<div class="flex w-full">
+  <span style="flex-grow: 1;">Left content</span>
+  <span>Right content</span>
+</div>
+-->
 
 
 ---
@@ -374,6 +388,10 @@ database "MySql" {
 
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
 
+---
+src: ./pages/multiple-entries.md
+hide: false
+---
 
 ---
 layout: center

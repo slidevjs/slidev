@@ -13,7 +13,7 @@ export function useNav(route: ComputedRef<RouteLocationNormalizedLoaded>) {
   const currentPath = computed(() => getPath(currentPage.value))
   const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
   const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
-  const currentLayout = computed(() => currentRoute.value?.meta?.layout)
+  const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
 
   const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 

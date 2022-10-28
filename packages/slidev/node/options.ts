@@ -42,6 +42,11 @@ export interface SlidevEntryOptions {
    * @default process.cwd()
    */
   userRoot?: string
+
+  /**
+   * Enable inspect plugin
+   */
+  inspect?: boolean
 }
 
 export interface ResolvedSlidevOptions {
@@ -56,6 +61,7 @@ export interface ResolvedSlidevOptions {
   roots: string[]
   mode: 'dev' | 'build'
   remote?: string
+  inspect?: boolean
 }
 
 export interface SlidevPluginOptions extends SlidevEntryOptions {
@@ -116,7 +122,7 @@ export async function resolveOptions(
   mode: ResolvedSlidevOptions['mode'],
   promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
-  const { remote } = options
+  const { remote, inspect } = options
   const {
     entry,
     userRoot,
@@ -146,7 +152,7 @@ export async function resolveOptions(
     const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))
     data.themeMeta = themeMeta
     if (themeMeta)
-      data.config = parser.resolveConfig(data.headmatter, themeMeta)
+      data.config = parser.resolveConfig(data.headmatter, themeMeta, options.entry)
   }
 
   debug({
@@ -175,5 +181,6 @@ export async function resolveOptions(
     addonRoots,
     roots,
     remote,
+    inspect,
   }
 }

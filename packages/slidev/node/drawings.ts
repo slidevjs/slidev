@@ -5,7 +5,10 @@ import type { ResolvedSlidevOptions } from './options'
 
 function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined {
   return options.data.config.drawings.persist
-    ? resolve(dirname(options.entry), options.data.config.drawings.persist)
+    ? resolve(
+      dirname(options.entry),
+      options.data.config.drawings.persist,
+    )
     : undefined
 }
 

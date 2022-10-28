@@ -13,10 +13,12 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
     enforce: 'pre',
     async transform(code, id) {
       if (id.startsWith(setupEntry)) {
-        const name = id.slice(setupEntry.length + 1)
+        const name = id
+          .slice(setupEntry.length + 1)
+          .replace(/\?.*$/, '') // remove query
+
         const imports: string[] = []
         const injections: string[] = []
-        const asyncInjections: string[] = []
 
         const setups = uniq([
           ...themeRoots,
@@ -30,47 +32,39 @@ export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, us
 
           imports.push(`import __n${idx} from '${toAtFS(path)}'`)
 
-          let fn = `__n${idx}`
-          let awaitFn = `await __n${idx}`
+          let fn = `:AWAIT:__n${idx}`
 
-          if (/\binjection_return\b/g.test(code)) {
+          if (/\binjection_return\b/g.test(code))
             fn = `injection_return = ${fn}`
-            awaitFn = `injection_return = ${awaitFn}`
-          }
+
           if (/\binjection_arg\b/g.test(code)) {
             fn += '('
-            awaitFn += '('
-
             const matches = Array.from(code.matchAll(/\binjection_arg(_\d+)?\b/g))
             const dedupedMatches = Array.from(new Set(matches.map(m => m[0])))
-            dedupedMatches.forEach((key, index) => {
-              const isLast = index === dedupedMatches.length - 1
-              const arg = key + (isLast ? '' : ',')
-              fn += arg
-              awaitFn += arg
-            })
-
-            fn += ')'
-            awaitFn += ')'
+            fn += dedupedMatches.join(', ')
+            fn += ', :LAST:)'
           }
           else {
-            fn += ('()')
-            awaitFn += ('()')
+            fn += '(:LAST:)'
           }
 
           injections.push(
             `// ${path}`,
             fn,
           )
-          asyncInjections.push(
-            `// ${path}`,
-            awaitFn,
-          )
         })
 
+        function getInjections(isAwait = false, isChained = false): string {
+          return injections.join('\n')
+            .replace(/:AWAIT:/g, isAwait ? 'await ' : '')
+            .replace(/(,\s*)?:LAST:/g, isChained ? '$1injection_return' : '')
+        }
+
         code = code.replace('/* __imports__ */', imports.join('\n'))
-        code = code.replace('/* __injections__ */', injections.join('\n'))
-        code = code.replace('/* __async_injections__ */', asyncInjections.join('\n'))
+        code = code.replace('/* __injections__ */', getInjections())
+        code = code.replace('/* __async_injections__ */', getInjections(true))
+        code = code.replace('/* __chained_injections__ */', getInjections(false, true))
+        code = code.replace('/* __chained_async_injections__ */', getInjections(true, true))
         return code
       }
 

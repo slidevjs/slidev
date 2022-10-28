@@ -10,7 +10,7 @@ export async function createServer(
   viteConfig: InlineConfig = {},
   serverOptions: SlidevServerOptions = {},
 ) {
-  const rawConfig = await resolveConfig({}, 'serve')
+  const rawConfig = await resolveConfig({}, 'serve', options.entry)
   const pluginOptions = rawConfig.slidev || {}
 
   // default open editor to code, #312

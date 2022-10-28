@@ -154,7 +154,7 @@ export function parse(
 
   const headmatter = slides[0]?.frontmatter || {}
   headmatter.title = headmatter.title || slides[0]?.title
-  const config = resolveConfig(headmatter, themeMeta)
+  const config = resolveConfig(headmatter, themeMeta, filepath)
   const features = detectFeatures(markdown)
 
   return {
