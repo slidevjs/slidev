@@ -1,9 +1,28 @@
 <script setup lang="ts">
-import { useHead } from '@vueuse/head'
 import { computed } from '@vue/reactivity'
-import { rawRoutes, total } from '../logic/nav'
+import { useStyleTag } from '@vueuse/core'
+import { useHead } from '@vueuse/head'
 import { configs, themeVars } from '../env'
+import { rawRoutes, total } from '../logic/nav'
 import NoteViewer from './NoteViewer.vue'
+
+useStyleTag(`
+@page {
+  size: A4;
+  margin-top: 1.5cm;
+  margin-bottom: 1cm;
+}
+* {
+  -webkit-print-color-adjust: exact;
+}
+html,
+html body,
+html #app,
+html #page-root {
+  height: auto;
+  overflow: auto !important;
+}
+`)
 
 useHead({ title: `Notes - ${configs.title}` })
 
@@ -43,23 +62,3 @@ const slidesWithNote = computed(() => rawRoutes
     </div>
   </div>
 </template>
-
-<style scoped lang="postcss">
-@page {
-  size: A4;
-  margin-top: 1.5cm;
-  margin-bottom: 1cm;
-}
-
-* {
-  -webkit-print-color-adjust: exact;
-}
-
-html,
-html body,
-html #app,
-html #page-root {
-  height: auto;
-  overflow: auto !important;
-}
-</style>
