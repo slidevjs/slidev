@@ -359,6 +359,33 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-mokkapps',
+    name: 'Mokkapps',
+    description: 'A theme for my personal brand "Mokkapps"',
+    author: {
+      name: 'Michael Hoffmann',
+      link: 'https://github.com/mokkapps',
+    },
+    repo: 'https://github.com/mokkapps/slidev-theme-mokkapps',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/001.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/002.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/003.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/004.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/005.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/006.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/007.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/008.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/009.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/010.png',
+      'https://cdn.jsdelivr.net/gh/mokkapps/slidev-theme-mokkapps@master/screenshots/dark/011.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
