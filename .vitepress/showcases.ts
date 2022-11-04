@@ -143,6 +143,17 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://raw.githubusercontent.com/alstn2468/2022-jsconf-presentation/main/public/images/og.png',
     datetime: '2022-09-16',
   },
+  {
+    title: 'Blazing slidev ppt template with naive-ui',
+    author: {
+      name: 'godkun',
+    },
+    at: 'personal sharing',
+    slidesLink: 'https://ppt.godkun.top',
+    sourceLink: 'https://github.com/godkun/ppt-template',
+    cover: 'https://github.com/godkun/ppt-template/raw/main/public/show.gif',
+    datetime: '2022-10-24',
+  },
   // Add yours here!
   {
     title: 'Yours?',
