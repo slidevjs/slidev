@@ -14,24 +14,7 @@ const { theme, site } = useData()
 
 onMounted(() => {
   initialize(theme.value.algolia)
-  setTimeout(poll, 16)
 })
-
-function poll() {
-  // programmatically open the search box after initialize
-  const e = new Event('keydown') as any
-
-  e.key = 'k'
-  e.metaKey = true
-
-  window.dispatchEvent(e)
-
-  setTimeout(() => {
-    if (!document.querySelector('.DocSearch-Modal')) {
-      poll()
-    }
-  }, 16)
-}
 
 // @ts-expect-error
 const docsearch$ = docsearch.default ?? docsearch
