@@ -15,35 +15,35 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@antfu/utils": "^0.5.2",
+    "@antfu/utils": "^0.6.3",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@unocss/reset": "^0.45.29",
-    "@vueuse/core": "^9.3.0",
+    "@unocss/reset": "^0.46.3",
+    "@vueuse/core": "^9.5.0",
     "@vueuse/head": "^0.9.8",
-    "@vueuse/math": "^9.3.0",
-    "@vueuse/motion": "^2.0.0-beta.23",
+    "@vueuse/math": "^9.5.0",
+    "@vueuse/motion": "^2.0.0-beta.24",
     "codemirror": "^5.65.5",
     "defu": "^6.1.0",
     "drauu": "^0.3.2",
     "file-saver": "^2.0.5",
     "js-base64": "^3.7.2",
     "js-yaml": "^4.1.0",
-    "katex": "^0.16.2",
-    "mermaid": "^9.1.7",
+    "katex": "^0.16.3",
+    "mermaid": "^9.2.1",
     "monaco-editor": "^0.33.0",
     "nanoid": "^4.0.0",
     "prettier": "^2.7.1",
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.1",
-    "unocss": "^0.45.29",
+    "unocss": "^0.46.3",
     "vite-plugin-windicss": "^1.8.8",
-    "vue": "^3.2.41",
-    "vue-router": "^4.1.5",
+    "vue": "^3.2.42",
+    "vue-router": "^4.1.6",
     "vue-starport": "^0.3.0",
     "windicss": "^3.5.6"
   },
   "devDependencies": {
-    "vite": "^3.1.8"
+    "vite": "^3.2.3"
   }
 }
