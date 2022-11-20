@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
 import { computed, watchEffect } from 'vue'
+import { themeVars } from '../env'
 import { breakpoints, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
@@ -72,6 +73,7 @@ watchEffect(() => {
         <div
           class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary"
           :class="{ 'border-$slidev-theme-primary': focus(idx + 1) }"
+          :style="themeVars"
           @click="go(+route.path)"
         >
           <SlideContainer
