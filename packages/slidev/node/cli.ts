@@ -10,16 +10,18 @@ import yargs from 'yargs'
 import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { SlidevConfig } from '@slidev/types'
+import type { SlidevConfig, SlidevPreparserExtension } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
+import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
-import { getThemeRoots, isPath, resolveOptions } from './options'
+import { getAddonRoots, getClientRoot, getThemeRoots, getUserRoot, isPath, resolveOptions } from './options'
 import { resolveThemeName } from './themes'
 import { parser } from './parser'
+import { loadSetups } from './plugins/setupNode'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -28,6 +30,16 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'fonts',
   'css',
 ]
+
+injectPreparserExtensionLoader(async (addons: string[], filepath?: string) => {
+  const roots = /* uniq */([
+    getUserRoot({}).userRoot,
+    ...getAddonRoots(addons, ''),
+    getClientRoot(),
+  ])
+  const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
+  return await loadSetups(roots, 'preparser.ts', filepath, [], false, mergeArrays)
+})
 
 const cli = yargs
   .scriptName('slidev')
@@ -264,7 +276,7 @@ cli.command(
           const data = await parser.load(entry)
           const theme = resolveThemeName(themeInput || data.config.theme)
           if (theme === 'none') {
-            console.error('Can not eject theme "none"')
+            console.error('Cannot eject theme "none"')
             process.exit(1)
           }
           if (isPath(theme)) {
@@ -273,7 +285,7 @@ cli.command(
           }
           const roots = getThemeRoots(theme, entry)
           if (!roots.length) {
-            console.error(`Does not found theme "${theme}"`)
+            console.error(`Could not find theme "${theme}"`)
             process.exit(1)
           }
           const root = roots[0]

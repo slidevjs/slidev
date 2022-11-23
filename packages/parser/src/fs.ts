@@ -1,14 +1,26 @@
 import { promises as fs } from 'fs'
 import { dirname, resolve } from 'path'
-import type { SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import type { PreparserExtensionLoader, SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
 import { detectFeatures, mergeFeatureFlags, parse, stringify, stringifySlide } from './core'
 export * from './core'
+
+let preparserExtensionLoader: PreparserExtensionLoader | null = null
+
+export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
+  preparserExtensionLoader = fn
+}
 
 export async function load(filepath: string, themeMeta?: SlidevThemeMeta, content?: string) {
   const dir = dirname(filepath)
   const markdown = content ?? await fs.readFile(filepath, 'utf-8')
 
-  const data = parse(markdown, filepath, themeMeta)
+  const preparserExtensions: SlidevPreparserExtension[] = []
+  const data = await parse(markdown, filepath, themeMeta, [], async (headmatter, exts: SlidevPreparserExtension[], filepath: string | undefined) => {
+    return [
+      ...exts,
+      ...preparserExtensionLoader ? await preparserExtensionLoader(headmatter.addons ?? [], filepath) : [],
+    ]
+  })
 
   const entries = new Set([
     filepath,
@@ -29,7 +41,7 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
     const srcExpression = baseSlide.frontmatter.src
     const path = resolve(dir, srcExpression)
     const raw = await fs.readFile(path, 'utf-8')
-    const subSlides = parse(raw, path, themeMeta)
+    const subSlides = await parse(raw, path, themeMeta, preparserExtensions)
 
     for (const [offset, subSlide] of subSlides.slides.entries()) {
       const slide: SlideInfo = { ...baseSlide }

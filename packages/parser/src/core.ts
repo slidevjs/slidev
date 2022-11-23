@@ -1,6 +1,6 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap } from '@antfu/utils'
-import type { SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevThemeMeta } from '@slidev/types'
+import type { PreparserExtensionFromHeadmatter, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
@@ -102,33 +102,67 @@ export function parseSlide(raw: string): SlideInfoBase {
   }
 }
 
-export function parse(
+export async function parse(
   markdown: string,
   filepath?: string,
   themeMeta?: SlidevThemeMeta,
-): SlidevMarkdown {
+  extensions?: SlidevPreparserExtension[],
+  onHeadmatter?: PreparserExtensionFromHeadmatter,
+): Promise<SlidevMarkdown> {
   const lines = markdown.split(/\r?\n/g)
   const slides: SlideInfo[] = []
 
   let start = 0
 
-  function slice(end: number) {
+  async function slice(end: number) {
     if (start === end)
       return
     const raw = lines.slice(start, end).join('\n')
-    slides.push({
+    const slide = {
       ...parseSlide(raw),
       index: slides.length,
       start,
       end,
-    })
+    }
+    if (extensions) {
+      for (const e of extensions) {
+        if (e.transformSlide) {
+          const newContent = await e.transformSlide(slide.content, slide.frontmatter)
+          if (newContent !== undefined)
+            slide.content = newContent
+        }
+      }
+    }
+    slides.push(slide)
     start = end + 1
+  }
+
+  // identify the headmatter, to be able to load preparser extensions
+  {
+    let hStart = 0
+    while (hStart < lines.length && lines[hStart].match(/^(---|\w*)+/))
+      hStart++
+    let hEnd = hStart + 1
+    while (hEnd < lines.length && !lines[hEnd].match(/^---+/))
+      hEnd++
+    if (onHeadmatter) {
+      /// //// TODO call matter()
+      const o = YAML.load(lines.slice(hStart, hEnd).join('\n')) ?? {}
+      extensions = await onHeadmatter(o, extensions ?? [], filepath)
+    }
+  }
+
+  if (extensions) {
+    for (const e of extensions) {
+      if (e.transformRawLines)
+        await e.transformRawLines(lines)
+    }
   }
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trimEnd()
     if (line.match(/^---+/)) {
-      slice(i)
+      await slice(i)
 
       const next = lines[i + 1]
       // found frontmatter, skip next dash
@@ -150,7 +184,7 @@ export function parse(
   }
 
   if (start <= lines.length - 1)
-    slice(lines.length)
+    await slice(lines.length)
 
   const headmatter = slides[0]?.frontmatter || {}
   headmatter.title = headmatter.title || slides[0]?.title
