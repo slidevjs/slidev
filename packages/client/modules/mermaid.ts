@@ -1,4 +1,4 @@
-// @ts-expect-error missing types
+/* eslint-disable import/default */
 import mermaid from 'mermaid/dist/mermaid'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
@@ -24,7 +24,8 @@ export function renderMermaid(encoded: string, options: any) {
   })
   const code = decode(encoded)
   const id = nanoid()
-  const svg = mermaid.render(id, code)
+  // @ts-expect-error type mistake
+  const svg = mermaid.render(id, code) as string
   cache.set(key, svg)
   return svg
 }
