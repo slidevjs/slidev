@@ -165,6 +165,10 @@ const Customizations = [
     link: '/custom/config-mermaid',
   },
   {
+    text: 'Configure Parser',
+    link: '/custom/config-parser',
+  },
+  {
     text: 'Configure Shortcuts',
     link: '/custom/config-shortcuts',
   },
