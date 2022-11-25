@@ -146,7 +146,7 @@ export async function resolveOptions(
   const themeRoots = getThemeRoots(theme, entry)
   const addons = await getAddons(userRoot, data.config)
   const addonRoots = getAddonRoots(addons, entry)
-  const roots = uniq([clientRoot, ...themeRoots, userRoot])
+  const roots = uniq([clientRoot, ...themeRoots, ...addonRoots, userRoot])
 
   if (themeRoots.length) {
     const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))

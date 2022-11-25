@@ -6,7 +6,7 @@ import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions } from './options'
 import { generateGoogleFontsUrl, toAtFS } from './utils'
 
-export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ clientRoot, themeRoots, addonRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
@@ -15,6 +15,7 @@ export async function getIndexHtml({ clientRoot, themeRoots, data, userRoot }: R
 
   const roots = uniq([
     ...themeRoots,
+    ...addonRoots,
     userRoot,
   ])
 
