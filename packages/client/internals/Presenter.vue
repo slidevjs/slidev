@@ -111,7 +111,7 @@ onMounted(() => {
           current
         </div>
       </div>
-      <div class="relative grid-section next flex flex-col p-2 lg:p-4">
+      <div class="relative grid-section next flex flex-col p-2 lg:p-4" :style="themeVars">
         <SlideContainer
           v-if="nextSlide"
           key="next"
