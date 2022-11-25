@@ -6,6 +6,7 @@ import { parseRangeString } from '@slidev/parser/core'
 import type { SlideInfo } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
+import { PDFDocument } from 'pdf-lib'
 import { packageExists } from './utils'
 
 export interface ExportOptions {
@@ -223,9 +224,18 @@ export async function exportSlides({
       preferCSSPageSize: true,
     })
 
+    // Edit generated PDF: add metadata and (optionally) TOC
+    let pdfData = await fs.readFile(output)
+    let pdf = await PDFDocument.load(pdfData)
+
+    const titleSlide = slides[0]
+    if (titleSlide?.title)
+      pdf.setTitle(titleSlide.title)
+    if (titleSlide?.frontmatter?.info)
+      pdf.setSubject(titleSlide.frontmatter.info)
+
     if (withTOC) {
       const outlinePdf = outlinePdfFactory(pdfLib)
-      const pdf = fs.readFileSync(output, { encoding: 'base64' })
 
       const tocTree = slides.filter(slide => slide.title)
         .reduce((acc: TocItem[], slide) => {
@@ -235,10 +245,11 @@ export async function exportSlides({
 
       const outline = makeOutline(tocTree)
 
-      const outlinedPdfDocument = await outlinePdf({ outline, pdf })
-      const outlinedPdf = await outlinedPdfDocument.save()
-      fs.writeFileSync(output, outlinedPdf)
+      pdf = await outlinePdf({ outline, pdf })
     }
+
+    pdfData = Buffer.from(await pdf.save())
+    await fs.writeFile(output, pdfData)
   }
 
   async function genPagePng() {
