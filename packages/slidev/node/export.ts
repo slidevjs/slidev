@@ -225,7 +225,7 @@ export async function exportSlides({
     })
 
     // Edit generated PDF: add metadata and (optionally) TOC
-    let pdfData = fs.readFileSync(output)
+    let pdfData = await fs.readFile(output)
     let pdf = await PDFDocument.load(pdfData)
 
     const titleSlide = slides[0]
@@ -249,7 +249,7 @@ export async function exportSlides({
     }
 
     pdfData = Buffer.from(await pdf.save())
-    fs.writeFileSync(output, pdfData)
+    await fs.writeFile(output, pdfData)
   }
 
   async function genPagePng() {
