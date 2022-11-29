@@ -1,16 +1,15 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectMap } from '@antfu/utils'
+import { isDef, isObject, isTruthy, objectMap } from '@antfu/utils'
 import type { PreparserExtensionFromHeadmatter, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
-  return `${
-    data.slides
-      .filter(slide => slide.source === undefined || slide.inline !== undefined)
-      .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
-      .join('\n')
-      .trim()
-  }\n`
+  return `${data.slides
+    .filter(slide => !isDef(slide.source) || isDef(slide.inline))
+    .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
+    .join('\n')
+    .trim()
+    }\n`
 }
 
 export function filterDisabled(data: SlidevMarkdown) {
@@ -74,7 +73,7 @@ export function parseSlide(raw: string): SlideInfoBase {
   const comments = Array.from(content.matchAll(/<!--([\s\S]*?)-->/g))
   if (comments.length) {
     const last = comments[comments.length - 1]
-    if (last.index !== undefined && last.index + last[0].length >= content.length) {
+    if (isDef(last.index) && last.index + last[0].length >= content.length) {
       note = last[1].trim()
       content = content.slice(0, last.index).trim()
     }
@@ -128,7 +127,7 @@ export async function parse(
       for (const e of extensions) {
         if (e.transformSlide) {
           const newContent = await e.transformSlide(slide.content, slide.frontmatter)
-          if (newContent !== undefined)
+          if (isDef(newContent))
             slide.content = newContent
         }
       }

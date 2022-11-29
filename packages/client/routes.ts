@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { isDef } from '@antfu/utils'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
 // @ts-expect-error missing types
@@ -28,7 +29,7 @@ export const routes: RouteRecordRaw[] = [
     beforeEnter: (to) => {
       if (!_configs.remote || _configs.remote === to.query.password)
         return true
-      if (_configs.remote && to.query.password === undefined) {
+      if (_configs.remote && !isDef(to.query.password)) {
         // eslint-disable-next-line no-alert
         const password = prompt('Enter password')
         if (_configs.remote === password)

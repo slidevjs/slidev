@@ -1,3 +1,4 @@
+import { isDef } from '@antfu/utils'
 import type { Ref } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref } from 'vue'
@@ -31,9 +32,9 @@ nextTick(() => {
 
 export const route = computed(() => router.currentRoute.value)
 
-export const isPrintMode = computed(() => route.value.query.print !== undefined)
+export const isPrintMode = computed(() => isDef(route.value.query.print))
 export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
-export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
+export const isEmbedded = computed(() => isDef(route.value.query.embedded))
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 export const isClicksDisabled = computed(() => isPrintMode.value && !isPrintWithClicks.value)
 export const presenterPassword = computed(() => route.value.query.password)

@@ -1,6 +1,6 @@
 import type { App, DirectiveBinding, InjectionKey } from 'vue'
 import { watch } from 'vue'
-import { remove } from '@antfu/utils'
+import { isDef, remove } from '@antfu/utils'
 import { isClicksDisabled } from '../logic/nav'
 import {
   CLASS_VCLICK_CURRENT,
@@ -75,7 +75,7 @@ export default function createDirectives() {
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_HIDE, !show)
 
-                if (hide !== false && hide !== undefined)
+                if (hide !== false && isDef(hide))
                   el.classList.toggle(CLASS_HIDE, show)
 
                 // Reset CLASS_VCLICK_CURRENT to false.

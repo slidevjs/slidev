@@ -1,3 +1,4 @@
+import { isString } from '@antfu/utils'
 import '/@slidev/styles'
 import './index.css'
 
@@ -18,7 +19,7 @@ const props = {
 
 const styleObject = document.createElement('style')
 let editor: monaco.editor.IStandaloneCodeEditor
-let update: () => void = () => {}
+let update: () => void = () => { }
 
 document.body.appendChild(styleObject)
 
@@ -137,7 +138,7 @@ window.addEventListener('message', (payload) => {
     return
   if (payload.origin !== location.origin)
     return
-  if (typeof payload.data !== 'string')
+  if (!isString(payload.data))
     return
   const { type, data } = JSON.parse(payload.data)
   if (type === 'slidev-monaco') {

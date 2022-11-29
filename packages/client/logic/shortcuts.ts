@@ -4,13 +4,13 @@ import { and, not } from '@vueuse/math'
 import type { Ref } from 'vue'
 import { watch } from 'vue'
 import type { ShortcutOptions } from '@slidev/types'
+import { isString } from '@antfu/utils'
 import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled } from '../state'
 import setupShortcuts from '../setup/shortcuts'
-
 const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 
 export function shortcut(key: string | Ref<boolean>, fn: Fn, autoRepeat = false) {
-  if (typeof key === 'string')
+  if (isString(key))
     key = magicKeys[key]
 
   const source = and(key, _shortcut)

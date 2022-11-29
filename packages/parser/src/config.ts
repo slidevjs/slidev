@@ -1,4 +1,4 @@
-import { toArray, uniq } from '@antfu/utils'
+import { isString, toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
@@ -165,7 +165,7 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
     syncAll = true,
   } = options
 
-  const persistPath = typeof persist === 'string'
+  const persistPath = isString(persist)
     ? persist
     : persist
       ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`

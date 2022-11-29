@@ -217,47 +217,26 @@ export function createSlidesLoader(
       },
 
       load(id): LoadResult | Promise<LoadResult> {
-        // routes
-        if (id === '/@slidev/routes')
-          return generateRoutes()
-
-        // layouts
-        if (id === '/@slidev/layouts')
-          return generateLayouts()
-
-        // styles
-        if (id === '/@slidev/styles')
-          return generateUserStyles()
-
-        // monaco-types
-        if (id === '/@slidev/monaco-types')
-          return generateMonacoTypes()
-
-        // configs
-        if (id === '/@slidev/configs')
-          return generateConfigs()
-
-        // global component
-        if (id === '/@slidev/global-components/top')
-          return generateGlobalComponents('top')
-
-        // global component
-        if (id === '/@slidev/global-components/bottom')
-          return generateGlobalComponents('bottom')
-
-        // custom nav controls
-        if (id === '/@slidev/custom-nav-controls')
-          return generateCustomNavControls()
-
-        // title
-        if (id === '/@slidev/titles.md') {
-          return {
+        const map: Record<string, () => LoadResult | Promise<LoadResult>> = {
+          '/@slidev/routes': () => generateRoutes(), // routes
+          '/@slidev/layouts': () => generateLayouts(), // layouts
+          '/@slidev/styles': () => generateUserStyles(), // styles
+          '/@slidev/monaco-types': () => generateMonacoTypes(), // monaco-types
+          '/@slidev/configs': () => generateConfigs(), // configs
+          '/@slidev/global-components/top': () => generateGlobalComponents('top'), // global component
+          '/@slidev/global-components/bottom': () => generateGlobalComponents('bottom'), // global component
+          '/@slidev/custom-nav-controls': () => generateCustomNavControls(), // custom nav controls
+          '/@slidev/titles.md': () => ({
             code: data.slides.map(({ title }, i) => {
               return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">${title}</template>`
             }).join(''),
             map: { mappings: '' },
-          }
+          }), // title
         }
+        const fn = map[id]
+
+        if (fn)
+          return fn()
 
         // pages
         if (id.startsWith(slidePrefix)) {
@@ -482,10 +461,8 @@ defineProps<{ no: number | string }>()`)
       ]
 
       for (const style of styles) {
-        if (existsSync(style)) {
+        if (existsSync(style))
           imports.push(`import "${toAtFS(style)}"`)
-          continue
-        }
       }
     }
 

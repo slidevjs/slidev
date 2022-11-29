@@ -3,6 +3,7 @@ import net from 'net'
 import os from 'os'
 import { exec } from 'child_process'
 import * as readline from 'readline'
+import { isDef } from '@antfu/utils'
 import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
@@ -120,7 +121,7 @@ cli.command(
             port,
             strictPort: true,
             open,
-            host: remote !== undefined ? '0.0.0.0' : 'localhost',
+            host: isDef(remote) ? '0.0.0.0' : 'localhost',
             force,
           },
           logLevel: log as LogLevel,
@@ -494,7 +495,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     if (options.inspect)
       console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
-    if (remote !== undefined) {
+    if (isDef(remote)) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
           .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))

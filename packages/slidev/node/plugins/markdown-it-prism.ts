@@ -1,3 +1,4 @@
+import { isDef } from '@antfu/utils'
 // forked from https://github.com/jGleitz/markdown-it-prism
 // it's modified to output line wrapper `<div class="line" />` for each line
 
@@ -50,7 +51,7 @@ function loadPrismLang(lang: string): Grammar | undefined {
   if (!lang)
     return undefined
   let langObject = Prism.languages[lang]
-  if (langObject === undefined) {
+  if (!isDef(langObject)) {
     loadLanguages([lang])
     langObject = Prism.languages[lang]
   }
@@ -83,11 +84,11 @@ function loadPrismPlugin(name: string): void {
  */
 function selectLanguage(options: Options, lang: string): [string, Grammar | undefined] {
   let langToUse = lang
-  if (langToUse === '' && options.defaultLanguageForUnspecified !== undefined)
+  if (langToUse === '' && isDef(options.defaultLanguageForUnspecified))
     langToUse = options.defaultLanguageForUnspecified
 
   let prismLang = loadPrismLang(langToUse)
-  if (prismLang === undefined && options.defaultLanguageForUnknown !== undefined) {
+  if (!isDef(prismLang) && isDef(options.defaultLanguageForUnknown)) {
     langToUse = options.defaultLanguageForUnknown
     prismLang = loadPrismLang(langToUse)
   }
@@ -138,7 +139,7 @@ function checkLanguageOption(
   optionName: 'defaultLanguage' | 'defaultLanguageForUnknown' | 'defaultLanguageForUnspecified',
 ): void {
   const language = options[optionName]
-  if (language !== undefined && loadPrismLang(language) === undefined)
+  if (isDef(language) && !isDef(loadPrismLang(language)))
     throw new Error(`Bad option ${optionName}: There is no Prism language '${language}'.`)
 }
 

@@ -4,6 +4,7 @@ import { useDevicesList, useEventListener, useStorage } from '@vueuse/core'
 import { isTruthy } from '@antfu/utils'
 import type RecorderType from 'recordrtc'
 import type { Options as RecorderOptions } from 'recordrtc'
+import { isFunction } from 'cypress/types/lodash'
 import { currentCamera, currentMic } from '../state'
 
 type Defined<T> = T extends undefined ? never : T
@@ -32,7 +33,7 @@ export function getFilename(media?: string, mimeType?: string) {
 }
 
 function getSupportedMimeTypes() {
-  if (MediaRecorder && typeof MediaRecorder.isTypeSupported === 'function')
+  if (MediaRecorder && isFunction(MediaRecorder.isTypeSupported))
     return Object.keys(mimeExtMap).filter(mime => MediaRecorder.isTypeSupported(mime))
   return []
 }

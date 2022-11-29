@@ -1,3 +1,4 @@
+import { isString } from '@antfu/utils'
 import type { ShikiDarkModeThemes } from 'packages/types'
 import type { IShikiTheme, IThemeRegistration, Highlighter as ShikiHighlighter } from 'shiki'
 import type MarkdownIt from 'markdown-it'
@@ -5,7 +6,7 @@ import type { ShikiOptions } from '@slidev/types'
 import { escapeVueInCode } from './markdown'
 
 function getThemeName(theme: IThemeRegistration) {
-  if (typeof theme === 'string')
+  if (isString(theme))
     return theme
   return (theme as IShikiTheme).name
 }
@@ -17,7 +18,7 @@ export function resolveShikiOptions(options: ShikiOptions) {
   if (!options.theme) {
     themes.push('nord')
   }
-  else if (typeof options.theme === 'string') {
+  else if (isString(options.theme)) {
     themes.push(options.theme)
   }
   else {
