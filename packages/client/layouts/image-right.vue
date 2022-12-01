@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { handleBackground } from '../layoutHelper'
+import { computed } from '@vue/reactivity'
 
-const props = defineProps({
-  image: {
-    type: String,
-  },
-  class: {
-    type: String,
-  },
-})
+const props = defineProps<{
+  url: string
+  scale?: number
+}>()
 
-const style = computed(() => handleBackground(props.image))
+const scaleInvertPercent = computed(() => `${(1 / (props.scale || 1)) * 100}%`)
 </script>
 
 <template>
-  <div class="grid grid-cols-2 w-full h-full auto-rows-fr">
-    <div class="slidev-layout default" :class="props.class">
-      <slot />
+  <div class="grid grid-cols-2 w-full h-full">
+    <div relative :style="{ width: scaleInvertPercent, height: scaleInvertPercent }">
+      <iframe
+        id="frame" class="w-full h-full"
+        :src="url"
+        :style="scale ? { transform: `scale(${scale})`, transformOrigin: 'top left' } : {}"
+      />
     </div>
-    <div class="w-full w-full" :style="style" />
   </div>
 </template>
+ 
