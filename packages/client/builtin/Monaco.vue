@@ -12,7 +12,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { decode } from 'js-base64'
 import { nanoid } from 'nanoid'
@@ -40,7 +40,6 @@ const id = nanoid()
 const code = ref(decode(props.code).trimEnd())
 const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
 const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * lineHeight + 20}px` : props.height)
-const isReady = ref(false)
 
 const iframe = ref<HTMLIFrameElement>()
 
@@ -79,11 +78,6 @@ onMounted(() => {
     : `${import.meta.env.BASE_URL}iframes/monaco/index.html`
 
   frame.style.backgroundColor = 'transparent'
-
-  frame.addEventListener('load', () => {
-    postCode()
-    isReady.value = true
-  }, { once: true })
 })
 
 function post(payload: any) {
@@ -96,37 +90,26 @@ function post(payload: any) {
   )
 }
 
-function postCode() {
-  post({
-    code: code.value,
-    lang: props.lang,
-  })
-}
-
-function postStyle() {
-  if (!iframe.value)
-    return
-  post({
-    id,
-    readonly: props.readonly,
-    lineNumbers: props.lineNumbers,
-    dark: isDark.value,
-    style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
-  })
-}
-
 useEventListener(window, 'message', ({ data: payload }) => {
+  if (payload.type === 'slidev-monaco-loaded') {
+    if (iframe.value) {
+      post({
+        code: code.value,
+        lang: props.lang,
+        id,
+        readonly: props.readonly,
+        lineNumbers: props.lineNumbers,
+        dark: isDark.value,
+        style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
+      })
+    }
+    return
+  }
   if (payload.type !== 'slidev-monaco' || payload.id !== id)
     return
   if (!payload?.data?.code || code.value === payload.data.code)
     return
   code.value = payload.data.code
-})
-
-watchEffect(() => {
-  if (!isReady.value)
-    return
-  postStyle()
 })
 </script>
 
