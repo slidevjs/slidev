@@ -121,7 +121,7 @@ b
   it('parse with-extension custom-separator', async () => {
     const data = await parseWithExtension(`---
 ga: bu
-SEPARATOR
+---
 a @@v@@
 
 SEPARATOR
