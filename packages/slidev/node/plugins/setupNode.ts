@@ -16,7 +16,7 @@ function deepMerge(a: any, b: any, rootPath = '') {
   return a
 }
 
-export async function loadSetups<T, R extends object>(roots: string[], name: string, arg: T, initial: R, merge = true, accumulate: (a: R, o: R) => R = undefined): Promise<R> {
+export async function loadSetups<T, R extends object>(roots: string[], name: string, arg: T, initial: R, merge = true, accumulate?: (a: R, o: R) => R): Promise<R> {
   let returns = initial
   for (const root of roots) {
     const path = resolve(root, 'setup', name)

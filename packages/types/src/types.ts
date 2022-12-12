@@ -61,9 +61,9 @@ export interface SlidevPreparserExtension {
   transformSlide?(content: string, frontmatter: any): Promise<string | undefined>
 }
 
-export type PreparserExtensionLoader = (addons: string[], filepath?: string) => Promise<SlidevPreparserExtension[]>
+export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string) => Promise<SlidevPreparserExtension[]>
 
 // internal type?
-export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath: string | undefined) => Promise<SlidevPreparserExtension[]>
+export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath?: string) => Promise<SlidevPreparserExtension[]>
 
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'

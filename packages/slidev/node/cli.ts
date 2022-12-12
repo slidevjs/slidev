@@ -31,14 +31,15 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'css',
 ]
 
-injectPreparserExtensionLoader(async (addons: string[], filepath?: string) => {
+injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
+  const addons = headmatter?.addons as string[] ?? []
   const roots = /* uniq */([
     getUserRoot({}).userRoot,
     ...getAddonRoots(addons, ''),
     getClientRoot(),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(roots, 'preparser.ts', filepath, [], false, mergeArrays)
+  return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], false, mergeArrays)
 })
 
 const cli = yargs

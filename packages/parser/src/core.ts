@@ -138,16 +138,17 @@ export async function parse(
   }
 
   // identify the headmatter, to be able to load preparser extensions
+  // (strict parsing based on the parsing code)
   {
-    let hStart = 0
-    while (hStart < lines.length && lines[hStart].match(/^(---|\w*)+/))
-      hStart++
-    let hEnd = hStart + 1
-    while (hEnd < lines.length && !lines[hEnd].match(/^---+/))
-      hEnd++
+    let hm = ''
+    if (lines[0].match(/^---([^-].*)?$/) && !lines[1]?.match(/^\s*$/)) {
+      let hEnd = 1
+      while (hEnd < lines.length && !lines[hEnd].trimEnd().match(/^---$/))
+        hEnd++
+      hm = lines.slice(1, hEnd).join('\n')
+    }
     if (onHeadmatter) {
-      /// //// TODO call matter()
-      const o = YAML.load(lines.slice(hStart, hEnd).join('\n')) ?? {}
+      const o = YAML.load(hm) ?? {}
       extensions = await onHeadmatter(o, extensions ?? [], filepath)
     }
   }
