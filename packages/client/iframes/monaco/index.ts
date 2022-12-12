@@ -18,7 +18,7 @@ const props = {
 
 const styleObject = document.createElement('style')
 let editor: monaco.editor.IStandaloneCodeEditor
-let update: () => void = () => {}
+let update: () => void = () => { }
 
 document.body.appendChild(styleObject)
 
@@ -145,5 +145,7 @@ window.addEventListener('message', (payload) => {
     update()
   }
 })
+
+window.parent.postMessage({ type: 'slidev-monaco-loaded' }, location.origin)
 
 start()
