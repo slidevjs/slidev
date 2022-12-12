@@ -5,7 +5,7 @@ import type { TocItem } from '../logic/nav'
 import { addToTree, filterTree, getPath, getTreeWithActiveStatuses } from '../logic/nav'
 import { rawRoutes } from '../routes'
 
-export function useNav(route: ComputedRef<RouteLocationNormalizedLoaded>) {
+export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>) {
   const path = computed(() => route.value.path)
   const total = computed(() => rawRoutes.length - 1)
 

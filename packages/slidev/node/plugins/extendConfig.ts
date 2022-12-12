@@ -22,6 +22,7 @@ const EXCLUDE = [
   'mermaid',
   'vite-plugin-windicss',
   'vue-demi',
+  'vue',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
@@ -34,6 +35,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
           },
+          dedupe: ['vue'],
         },
         optimizeDeps: {
           include: [

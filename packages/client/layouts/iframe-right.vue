@@ -23,4 +23,3 @@ const scaleInvertPercent = computed(() => `${(1 / (props.scale || 1)) * 100}%`)
     </div>
   </div>
 </template>
- 

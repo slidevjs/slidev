@@ -106,7 +106,10 @@ function math_inline(state: any, silent: boolean) {
 }
 
 function math_block(state: any, start: number, end: number, silent: boolean) {
-  let firstLine; let lastLine; let next; let lastPos
+  let firstLine
+  let lastLine
+  let next
+  let lastPos
   let found = false
   let pos = state.bMarks[start] + state.tShift[start]
   let max = state.eMarks[start]

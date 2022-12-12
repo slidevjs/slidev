@@ -1,4 +1,3 @@
-/* eslint-disable import/default */
 import mermaid from 'mermaid/dist/mermaid'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'

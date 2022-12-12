@@ -49,7 +49,7 @@ provide(injectionSlidevContext, reactive({
     <GlobalBottom />
 
     <SlideWrapper
-      :is="route?.component"
+      :is="route?.component!"
       v-model:clicks-elements="clicksElements"
       :clicks="clicks"
       :clicks-disabled="false"

@@ -48,7 +48,14 @@ export default function setupShortcuts() {
     { name: 'prev_overview', key: and(left, showOverview), fn: prevOverviewPage },
     { name: 'up_overview', key: and(up, showOverview), fn: upOverviewPage },
     { name: 'down_overview', key: and(down, showOverview), fn: downOverviewPage },
-    { name: 'goto_from_overview', key: and(enter, showOverview), fn: () => { go(currentOverviewPage.value); showOverview.value = false } },
+    {
+      name: 'goto_from_overview',
+      key: and(enter, showOverview),
+      fn: () => {
+        go(currentOverviewPage.value)
+        showOverview.value = false
+      },
+    },
   ]
 
   const baseShortcutNames = new Set(injection_return.map(s => s.name))
