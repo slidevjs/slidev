@@ -26,7 +26,7 @@ To customize it, create a `./setup/preparser.ts` file with the following content
 ```ts
 import { definePreparserSetup } from '@slidev/types'
 
-export default definePreparserSetup((filepath) => {
+export default definePreparserSetup(({filepath, headmatter}) => {
   return [
     {
       transformRawLines(lines) {
@@ -42,7 +42,7 @@ export default definePreparserSetup((filepath) => {
 
 This example systematically replaces any `@@@` line by a line with `hello`. It illustrates the structure of a preparser configuration file and some of the main concepts the preparser involves:
 - `definePreparserSetup` must be called with a function as parameter.
-- The function receives the file path (of the root presentation file) and could use this information (e.g., enable extensions based on the presentation file).
+- The function receives the file path (of the root presentation file) and headmatter (from the md file). It could use this information (e.g., enable extensions based on the presentation file).
 - The function must return a list of preparser extensions.
 - An extension can contain:
   - a `transformRawLines(lines)` function that runs just after parsing the headmatter of the md file and receives a list of all lines (from the md file). The function can mutate the list arbitrarily.
@@ -75,7 +75,7 @@ To allow these `@src:` and `@cover:` syntaxes, create a `./setup/preparser.ts` f
 ```ts
 import { definePreparserSetup } from '@slidev/types'
 
-export default definePreparserSetup((filepath) => {
+export default definePreparserSetup(() => {
   return [
     {
       transformRawLines(lines) {
@@ -155,7 +155,7 @@ To handle this `_scale: ...` syntax in the frontmatter, create a `./setup/prepar
 ```ts
 import { definePreparserSetup } from '@slidev/types'
 
-export default definePreparserSetup((filepath) => {
+export default definePreparserSetup(() => {
   return [
     {
       transformSlide(content, frontmatter) {
