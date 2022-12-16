@@ -420,11 +420,17 @@ cli.command(
       type: 'string',
       describe: 'path to the output',
     })
+    .option('timeout', {
+      default: 30000,
+      type: 'number',
+      describe: 'timeout for rendering the print page',
+    })
     .strict()
     .help(),
   async ({
     entry,
     output,
+    timeout,
   }) => {
     process.env.NODE_ENV = 'production'
     const { exportNotes } = await import('./export')
@@ -450,6 +456,7 @@ cli.command(
     output = await exportNotes({
       port,
       output,
+      timeout,
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
 
