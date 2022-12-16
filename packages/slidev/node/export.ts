@@ -64,6 +64,7 @@ export interface ExportNotesOptions {
   port?: number
   base?: string
   output?: string
+  timeout?: number
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -106,6 +107,7 @@ export async function exportNotes({
   port = 18724,
   base = '/',
   output = 'notes',
+  timeout = 30000,
 }: ExportNotesOptions): Promise<string> {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
@@ -122,7 +124,7 @@ export async function exportNotes({
   if (!output.endsWith('.pdf'))
     output = `${output}.pdf`
 
-  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle' })
+  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
   await page.waitForLoadState('networkidle')
   await page.emulateMedia({ media: 'screen' })
 
