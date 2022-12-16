@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { parseRangeString } from '@slidev/parser/core'
 import { computed, provide } from 'vue'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { rawRoutes } from '../logic/nav'
+import { rawRoutes, route } from '../logic/nav'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{
@@ -21,7 +22,11 @@ const scale = computed(() => {
 })
 
 // Remove the "end" slide
-const routes = rawRoutes.slice(0, -1)
+let routes = rawRoutes.slice(0, -1)
+if (route.value.query.range) {
+  const r = parseRangeString(routes.length, route.value.query.range)
+  routes = r.map(i => routes[i - 1])
+}
 
 const className = computed(() => ({
   'select-none': !configs.selectable,

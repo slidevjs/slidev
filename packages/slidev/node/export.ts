@@ -182,7 +182,7 @@ export async function exportSlides({
   const progress = createSlidevProgress(true)
 
   async function go(no: number | string, clicks?: string) {
-    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}`
+    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}${range ? `&range=${range}` : ''}`
     const url = routerMode === 'hash'
       ? `http://localhost:${port}${base}#${path}`
       : `http://localhost:${port}${base}${path}`
