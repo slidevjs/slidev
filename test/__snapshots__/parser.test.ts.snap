@@ -556,7 +556,7 @@ srcSequence: sub/page1.md
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#2",
       "layout": "cover",
-      "srcSequence": "sub/page2.md",
+      "srcSequence": "/sub/page2.md",
       "title": "Page 2",
     },
     "index": 1,
@@ -570,7 +570,7 @@ srcSequence: sub/page1.md
       "level": undefined,
       "note": undefined,
       "raw": "---
-src: sub/page2.md
+src: /sub/page2.md
 background: https://sli.dev/demo-cover.png#2
 ---
 ",
@@ -583,7 +583,7 @@ background: https://sli.dev/demo-cover.png#2
 layout: cover
 title: Page 2
 background: https://sli.dev/demo-cover.png#2
-srcSequence: sub/page2.md
+srcSequence: /sub/page2.md
 ---
 
 # Page 2
@@ -624,7 +624,7 @@ layout: cover
     "end": 2,
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
-      "srcSequence": "sub/pages3-4.md",
+      "srcSequence": "./sub/pages3-4.md",
       "title": "Page 3",
     },
     "index": 2,
@@ -638,7 +638,7 @@ layout: cover
       "level": undefined,
       "note": undefined,
       "raw": "---
-src: sub/pages3-4.md
+src: ./sub/pages3-4.md
 background: https://sli.dev/demo-cover.png#34
 ---
 ",
@@ -650,7 +650,7 @@ background: https://sli.dev/demo-cover.png#34
     "raw": "---
 title: Page 3
 background: https://sli.dev/demo-cover.png#34
-srcSequence: sub/pages3-4.md
+srcSequence: ./sub/pages3-4.md
 ---
 
 # Page 3
@@ -683,7 +683,7 @@ srcSequence: sub/pages3-4.md
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
       "layout": "cover",
-      "srcSequence": "sub/pages3-4.md",
+      "srcSequence": "./sub/pages3-4.md",
     },
     "index": 3,
     "level": 1,
@@ -691,7 +691,7 @@ srcSequence: sub/pages3-4.md
     "raw": "---
 layout: cover
 background: https://sli.dev/demo-cover.png#34
-srcSequence: sub/pages3-4.md
+srcSequence: ./sub/pages3-4.md
 ---
 
 # Page 4
@@ -731,7 +731,7 @@ layout: cover
     "end": 2,
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
-      "srcSequence": "sub/nested1-4.md,sub/page1.md",
+      "srcSequence": "sub/nested1-4.md,/sub/page1.md",
       "title": undefined,
     },
     "index": 4,
@@ -756,7 +756,7 @@ background: https://sli.dev/demo-cover.png#14
     "note": undefined,
     "raw": "---
 background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,sub/page1.md
+srcSequence: sub/nested1-4.md,/sub/page1.md
 ---
 
 # Page 1
@@ -789,7 +789,7 @@ srcSequence: sub/nested1-4.md,sub/page1.md
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
-      "srcSequence": "sub/nested1-4.md,sub/page2.md",
+      "srcSequence": "sub/nested1-4.md,page2.md",
       "title": "Page 2",
     },
     "index": 5,
@@ -799,7 +799,7 @@ srcSequence: sub/nested1-4.md,sub/page1.md
 layout: cover
 title: Page 2
 background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,sub/page2.md
+srcSequence: sub/nested1-4.md,page2.md
 ---
 
 # Page 2
@@ -840,7 +840,7 @@ layout: cover
     "end": 2,
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
-      "srcSequence": "sub/nested1-4.md,sub/pages3-4.md",
+      "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
       "title": "Page 3",
     },
     "index": 6,
@@ -849,7 +849,7 @@ layout: cover
     "raw": "---
 title: Page 3
 background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,sub/pages3-4.md
+srcSequence: sub/nested1-4.md,../sub/pages3-4.md
 ---
 
 # Page 3
@@ -882,7 +882,7 @@ srcSequence: sub/nested1-4.md,sub/pages3-4.md
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
-      "srcSequence": "sub/nested1-4.md,sub/pages3-4.md",
+      "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
     },
     "index": 7,
     "level": 1,
@@ -890,7 +890,7 @@ srcSequence: sub/nested1-4.md,sub/pages3-4.md
     "raw": "---
 layout: cover
 background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,sub/pages3-4.md
+srcSequence: sub/nested1-4.md,../sub/pages3-4.md
 ---
 
 # Page 4

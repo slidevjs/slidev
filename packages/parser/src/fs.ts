@@ -16,10 +16,11 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
 
   const preparserExtensions: SlidevPreparserExtension[] = []
   const data = await parse(markdown, filepath, themeMeta, [], async (headmatter, exts: SlidevPreparserExtension[], filepath: string | undefined) => {
-    return [
+    preparserExtensions.splice(0, preparserExtensions.length,
       ...exts,
       ...preparserExtensionLoader ? await preparserExtensionLoader(headmatter, filepath) : [],
-    ]
+    )
+    return preparserExtensions
   })
 
   const entries = new Set([
@@ -39,7 +40,14 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
       continue
 
     const srcExpression = baseSlide.frontmatter.src
-    const path = resolve(dir, srcExpression)
+    let path
+    if (srcExpression.startsWith('/'))
+      path = resolve(dir, srcExpression.substring(1))
+    else if (baseSlide.source?.filepath)
+      path = resolve(dirname(baseSlide.source.filepath), srcExpression)
+    else
+      path = resolve(dir, srcExpression)
+
     const raw = await fs.readFile(path, 'utf-8')
     const subSlides = await parse(raw, path, themeMeta, preparserExtensions)
 

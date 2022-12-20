@@ -20,7 +20,7 @@ describe('md parser', () => {
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
-          // @ts-ingore non-optional
+          // @ts-expect-error non-optional
           delete slide.source.filepath
         // @ts-expect-error extra prop
         if (slide.filepath)
