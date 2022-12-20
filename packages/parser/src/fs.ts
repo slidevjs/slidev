@@ -40,7 +40,14 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
       continue
 
     const srcExpression = baseSlide.frontmatter.src
-    const path = resolve(dir, srcExpression)
+    let path
+    if (srcExpression.startsWith('/'))
+      path = resolve(dir, srcExpression.substring(1))
+    else if (baseSlide.source?.filepath)
+      path = resolve(dirname(baseSlide.source.filepath), srcExpression)
+    else
+      path = resolve(dir, srcExpression)
+
     const raw = await fs.readFile(path, 'utf-8')
     const subSlides = await parse(raw, path, themeMeta, preparserExtensions)
 
