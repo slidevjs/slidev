@@ -1,5 +1,5 @@
 <!--
-A simple wrapper for embeded Tweet
+A simple wrapper for embedded Tweet
 
 Usage:
 

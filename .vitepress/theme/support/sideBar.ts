@@ -3,7 +3,7 @@ import {
   isArray,
   ensureSlash,
   ensureStartingSlash,
-  removeExtention,
+  removeExtension,
 } from '../utils'
 
 export function isSideBarConfig(
@@ -33,7 +33,7 @@ export function getSideBarConfig(
 
   // get the very first segment of the path to compare with nulti sidebar keys
   // and make sure it's surrounded by slash
-  path = removeExtention(path)
+  path = removeExtension(path)
   path = ensureStartingSlash(path).split('/')[1] || '/'
   path = ensureSlash(path)
 
@@ -57,7 +57,7 @@ export function getFlatSideBarLinks(
 ): DefaultTheme.SideBarLink[] {
   return sidebar.reduce<DefaultTheme.SideBarLink[]>((links, item) => {
     if (item.link)
-      links.push({ text: item.text, link: removeExtention(item.link) })
+      links.push({ text: item.text, link: removeExtension(item.link) })
 
     if (isSideBarGroup(item))
       links = [...links, ...getFlatSideBarLinks(item.children)]
