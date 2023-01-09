@@ -57,10 +57,10 @@ const MarkdownItShiki: MarkdownIt.PluginWithOptions<ShikiOptions> = (markdownit,
       const trimmed = trimEndNewLine(code)
       const dark = _highlighter
         .codeToHtml(trimmed, { lang: lang || 'text', theme: darkModeThemes.dark })
-        .replace('<pre class="shiki"', '<pre class="slidev-code shiki shiki-dark"')
+        .replace('<pre class="shiki', '<pre class="slidev-code shiki shiki-dark')
       const light = _highlighter
         .codeToHtml(trimmed, { lang: lang || 'text', theme: darkModeThemes.light })
-        .replace('<pre class="shiki"', '<pre class="slidev-code shiki shiki-light"')
+        .replace('<pre class="shiki', '<pre class="slidev-code shiki shiki-light')
       return escapeVueInCode(`<pre class="shiki-container">${dark}${light}</pre>`)
     }
     else {
