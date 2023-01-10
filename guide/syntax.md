@@ -121,7 +121,7 @@ If the code doesn't fit into one slide, you can pass an extra maxHeight option w
 and enable scrolling
 
 ~~~ts {2|3|7|12}
-//```ts {2|3|7|12} {maxHeight:'100'}
+//```ts {2|3|7|12} {maxHeight:'100px'}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
