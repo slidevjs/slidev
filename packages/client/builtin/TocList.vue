@@ -47,3 +47,9 @@ const classes = computed(() => {
     </li>
   </ol>
 </template>
+
+<style>
+.slidev-toc-item p {
+  margin: 0;
+}
+</style>
