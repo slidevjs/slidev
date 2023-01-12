@@ -3,7 +3,7 @@ import { parseRangeString } from '@slidev/parser/core'
 import { computed, provide } from 'vue'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { rawRoutes, route } from '../logic/nav'
+import { route as currentRoute, rawRoutes } from '../logic/nav'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{
@@ -23,8 +23,8 @@ const scale = computed(() => {
 
 // Remove the "end" slide
 let routes = rawRoutes.slice(0, -1)
-if (route.value.query.range) {
-  const r = parseRangeString(routes.length, route.value.query.range)
+if (currentRoute.value.query.range) {
+  const r = parseRangeString(routes.length, currentRoute.value.query.range as string)
   routes = r.map(i => routes[i - 1])
 }
 
