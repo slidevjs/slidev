@@ -31,6 +31,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     codeCopy: true,
     record: 'dev',
     css: 'windicss',
+    presenter: true,
   }
   const config: SlidevConfig = {
     ...defaultConfig,
