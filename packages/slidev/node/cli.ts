@@ -371,7 +371,7 @@ cli.command(
     process.env.NODE_ENV = 'production'
     const { exportSlides } = await import('./export')
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry, theme }, 'build')
+    const options = await resolveOptions({ entry, theme }, 'export')
     output = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
     const server = await createServer(
       options,
@@ -436,7 +436,7 @@ cli.command(
     const { exportNotes } = await import('./export')
 
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry }, 'build')
+    const options = await resolveOptions({ entry }, 'export')
 
     if (!output)
       output = options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entry, '.md')}-export-notes`
