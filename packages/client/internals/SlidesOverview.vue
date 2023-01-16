@@ -71,8 +71,8 @@ watchEffect(() => {
         class="relative"
       >
         <div
-          class="inline-block border border-gray-400 rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary"
-          :class="{ 'border-$slidev-theme-primary': focus(idx + 1) }"
+          class="inline-block border rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary"
+          :class="{ 'border-$slidev-theme-primary': focus(idx + 1), 'border-gray-400': !focus(idx + 1) }"
           :style="themeVars"
           @click="go(+route.path)"
         >
