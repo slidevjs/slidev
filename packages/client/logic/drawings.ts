@@ -52,7 +52,7 @@ export const drawingMode = computed({
 
 export const drauuOptions: DrauuOptions = reactive({
   brush,
-  acceptsInputTypes: computed(() => drawingEnabled.value ? undefined : ['pen' as const]),
+  acceptsInputTypes: computed(() => (drawingEnabled.value && (!configs.drawings.presenterOnly || isPresenter.value)) ? undefined : ['pen' as const]),
   coordinateTransform: false,
 })
 export const drauu = markRaw(createDrauu(drauuOptions))
