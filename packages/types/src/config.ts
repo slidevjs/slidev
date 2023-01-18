@@ -163,6 +163,12 @@ export interface SlidevConfig {
    * @default 'windicss'
    */
   css: 'windicss' | 'unocss'
+  /**
+   * Enable presenter mode
+   *
+   * @default true
+   */
+  presenter: boolean | 'dev' | 'build'
 }
 
 export interface FontOptions {

@@ -10,6 +10,10 @@ function getThemeName(theme: IThemeRegistration) {
   return (theme as IShikiTheme).name
 }
 
+function isShikiDarkModeThemes(theme: IThemeRegistration | ShikiDarkModeThemes): theme is ShikiDarkModeThemes {
+  return typeof theme === 'object' && ('dark' in theme || 'light' in theme)
+}
+
 export function resolveShikiOptions(options: ShikiOptions) {
   const themes: IThemeRegistration[] = []
   let darkModeThemes: ShikiDarkModeThemes | undefined
@@ -21,7 +25,7 @@ export function resolveShikiOptions(options: ShikiOptions) {
     themes.push(options.theme)
   }
   else {
-    if ('dark' in options.theme || 'light' in options.theme) {
+    if (isShikiDarkModeThemes(options.theme)) {
       darkModeThemes = options.theme
       themes.push(options.theme.dark)
       themes.push(options.theme.light)

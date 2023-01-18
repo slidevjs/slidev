@@ -20,8 +20,11 @@ export const routes: RouteRecordRaw[] = [
   { name: 'print', path: '/print', component: Print },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
-  { path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') },
-  {
+]
+
+if (__SLIDEV_FEATURE_PRESENTER__) {
+  routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
+  routes.push({
     name: 'presenter',
     path: '/presenter/:no',
     component: () => import('./internals/Presenter.vue'),
@@ -38,12 +41,12 @@ export const routes: RouteRecordRaw[] = [
         return { path: `/${to.params.no}` }
       return { path: '' }
     },
-  },
-  {
+  })
+  routes.push({
     path: '/presenter',
     redirect: { path: '/presenter/1' },
-  },
-]
+  })
+}
 
 export const router = createRouter({
   history: __SLIDEV_HASH_ROUTE__ ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),

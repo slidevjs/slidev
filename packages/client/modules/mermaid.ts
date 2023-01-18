@@ -23,7 +23,6 @@ export function renderMermaid(encoded: string, options: any) {
   })
   const code = decode(encoded)
   const id = nanoid()
-  // @ts-expect-error type mistake
   const svg = mermaid.render(id, code) as string
   cache.set(key, svg)
   return svg

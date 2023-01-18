@@ -113,7 +113,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
-        <RouterLink v-if="showPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
+        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && showPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
           <carbon:user-speaker />
         </RouterLink>
 
