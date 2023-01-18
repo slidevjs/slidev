@@ -19,7 +19,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unocss/reset": "^0.47.6",
-    "@vueuse/core": "^9.7.0",
+    "@vueuse/core": "^9.11.0",
     "@vueuse/head": "^1.0.22",
     "@vueuse/math": "^9.7.0",
     "@vueuse/motion": "^2.0.0-beta.26",
