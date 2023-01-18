@@ -45,7 +45,7 @@
     "@types/semver": "^7.3.13",
     "@types/yargs": "^17.0.17",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
-    "@vueuse/core": "^9.7.0",
+    "@vueuse/core": "^9.11.0",
     "bumpp": "^8.2.1",
     "cross-env": "^7.0.3",
     "cypress": "^12.1.0",
