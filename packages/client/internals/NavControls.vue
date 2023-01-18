@@ -97,7 +97,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         </button>
       </template>
 
-      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded">
+      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
         <button class="icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
           <carbon:pen />
           <div
