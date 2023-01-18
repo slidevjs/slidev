@@ -84,6 +84,11 @@ watch(currentRoute, (next, prev) => {
   navDirection.value = Number(next?.path) - Number(prev?.path)
 })
 
+export const aliases = computed(() => new Map(rawRoutes
+  .filter((route: RouteRecordRaw) => route.meta?.slide?.frontmatter?.routeAlias)
+  .map((route: RouteRecordRaw) => [route.meta?.slide?.frontmatter?.routeAlias, route.path])))
+export const availablePaths = computed(() => rawRoutes.map(route => route.path).concat([...aliases.value.keys()]))
+
 export function next() {
   if (clicksTotal.value <= clicks.value)
     nextSlide()

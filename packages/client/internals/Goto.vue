@@ -1,28 +1,32 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
-import { go, rawRoutes, total } from '../logic/nav'
+import { computed, ref, watch } from 'vue'
+import { aliases, availablePaths, go } from '../logic/nav'
 import { showGotoDialog } from '../state'
 
 const input = ref<HTMLInputElement>()
 const text = ref('')
 
-const valid = computed(() => {
-  if (text.value.startsWith('/')) {
-    return !!rawRoutes.find(r => r.path === text.value.substring(1))
-  }
-  else {
-    const num = +text.value
-    return !isNaN(num) && num > 0 && num <= total.value
-  }
-})
+const valid = computed(() => isValid(false))
+
+function isValid(strict: boolean): boolean {
+  let path = text.value
+  if (text.value.startsWith('/'))
+    path = text.value.substring(1)
+  if (strict)
+    return availablePaths.value.includes(path)
+  else
+    return availablePaths.value.some(availablePath => availablePath.startsWith(path))
+}
 
 function goTo() {
-  if (valid.value) {
+  if (isValid(true)) {
+    let path = text.value
     if (text.value.startsWith('/'))
-      go(text.value.substring(1))
-
+      path = text.value.substring(1)
+    if (aliases.value.has(path))
+      go(+aliases.value.get(path)!)
     else
-      go(+text.value)
+      go(+path)
   }
   close()
 }
@@ -33,19 +37,13 @@ function close() {
 
 watch(showGotoDialog, async (show) => {
   if (show) {
-    await nextTick()
     text.value = ''
-    input.value?.focus()
+    // delay the focus to avoid the g character coming from the key that triggered showGotoDialog
+    setTimeout(() => input.value?.focus(), 0)
   }
   else {
     input.value?.blur()
   }
-})
-
-// remove the g character coming from the key that triggered showGotoDialog (e.g. in Firefox)
-watch(text, (t) => {
-  if (t.match(/^[^0-9/]/))
-    text.value = text.value.substring(1)
 })
 </script>
 
