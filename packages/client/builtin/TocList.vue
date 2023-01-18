@@ -31,7 +31,7 @@ const classes = computed(() => {
 <template>
   <ol v-if="list && list.length > 0" :class="classes">
     <li
-      v-for="item in list"
+      v-for="item of list"
       :key="item.path" class="slidev-toc-item"
       :class="[{ 'slidev-toc-item-active': item.active }, { 'slidev-toc-item-parent-active': item.activeParent }]"
     >
