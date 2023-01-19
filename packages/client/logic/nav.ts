@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { SwipeDirection, isString, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
@@ -28,6 +28,7 @@ nextTick(() => {
     routeForceRefresh.value += 1
   })
 })
+export const navDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -50,6 +51,7 @@ export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id
 export const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
+export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
 export const clicksElements = computed<HTMLElement[]>(() => {
   // eslint-disable-next-line no-unused-expressions
@@ -84,6 +86,12 @@ export const rawTree = computed(() => rawRoutes
   }, []))
 export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
 export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
+
+export const transition = computed(() => getTransition(navDirection.value, currentRoute.value, prevRoute.value))
+
+watch(currentRoute, (next, prev) => {
+  navDirection.value = Number(next?.path) - Number(prev?.path)
+})
 
 export function next() {
   if (clicksTotal.value <= clicks.value)
@@ -229,4 +237,32 @@ export function filterTree(tree: TocItem[], level = 1): TocItem[] {
       ...item,
       children: filterTree(item.children, level + 1),
     }))
+}
+
+export function getTransition(direction: number, currentRoute?: RouteRecordRaw, prevRoute?: RouteRecordRaw) {
+  let transition = currentRoute?.meta?.transition
+  if (direction > 0)
+    transition = prevRoute?.meta?.transition
+  if (!transition)
+    transition = configs.transition
+  if (typeof transition === 'string')
+    return direction > 0 ? transition : getBackwardTransition(transition)
+  return direction > 0 ? transition?.forward : transition?.backward
+}
+
+export function getBackwardTransition(transition: string) {
+  switch (transition) {
+    case 'slide-left':
+      return 'slide-right'
+    case 'slide-right':
+      return 'slide-left'
+    case 'slide-up':
+      return 'slide-down'
+    case 'slide-down':
+      return 'slide-up'
+    case 'fade':
+      return 'fade'
+    default:
+      return ''
+  }
 }

@@ -169,6 +169,12 @@ export interface SlidevConfig {
    * @default true
    */
   presenter: boolean | 'dev' | 'build'
+  /**
+   * Slide transition
+   *
+   * @default ''
+   */
+  transition: string | SlideTransition
 }
 
 export interface FontOptions {
@@ -266,4 +272,9 @@ export interface ResolvedDrawingsOptions {
   enabled: boolean | 'dev' | 'build'
   presenterOnly: boolean
   syncAll: boolean
+}
+
+export interface SlideTransition {
+  forward: string
+  backward: string
 }

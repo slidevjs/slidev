@@ -86,6 +86,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
   "themeConfig": {},
   "title": "Hi",
   "titleTemplate": "%s - Slidev",
+  "transition": "",
 }
 `;
 
@@ -310,6 +311,7 @@ exports[`md parser > minimal.md > config 1`] = `
   "themeConfig": {},
   "title": "H1",
   "titleTemplate": "%s - Slidev",
+  "transition": "",
 }
 `;
 
@@ -483,6 +485,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
   "themeConfig": {},
   "title": undefined,
   "titleTemplate": "%s - Slidev",
+  "transition": "",
 }
 `;
 

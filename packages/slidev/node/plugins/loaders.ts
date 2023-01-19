@@ -469,6 +469,7 @@ defineProps<{ no: number | string }>()`)
       `import "${toAtFS(join(clientRoot, 'styles/vars.css'))}"`,
       `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
       `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
+      `import "${toAtFS(join(clientRoot, 'styles/transitions.css'))}"`,
     ]
     const roots = uniq([
       ...themeRoots,

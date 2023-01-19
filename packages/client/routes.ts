@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import type { SlideTransition } from '@slidev/types'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
@@ -70,7 +71,7 @@ declare module 'vue-router' {
       title?: string
       level?: number
     }
-
+    transition?: string | SlideTransition
     // private fields
     __clicksElements: HTMLElement[]
     __preloaded?: boolean

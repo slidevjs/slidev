@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { shallowRef, watch } from 'vue'
-import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes } from '../logic/nav'
+import { TransitionGroup, shallowRef, watch } from 'vue'
+import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'
 // @ts-expect-error virtual module
@@ -29,19 +29,21 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   <GlobalBottom />
 
   <!-- Slides -->
-  <template v-for="route of rawRoutes" :key="route.path">
-    <SlideWrapper
-      :is="route?.component"
-      v-show="route === currentRoute"
-      v-if="route.meta?.__preloaded || route === currentRoute"
-      :clicks="route === currentRoute ? clicks : 0"
-      :clicks-elements="route.meta?.__clicksElements || []"
-      :clicks-disabled="false"
-      :class="getSlideClass(route)"
-      :route="route"
-      :context="context"
-    />
-  </template>
+  <TransitionGroup :name="transition">
+    <template v-for="route of rawRoutes" :key="route.path">
+      <SlideWrapper
+        :is="route?.component"
+        v-show="route === currentRoute"
+        v-if="route.meta?.__preloaded || route === currentRoute"
+        :clicks="route === currentRoute ? clicks : 0"
+        :clicks-elements="route.meta?.__clicksElements || []"
+        :clicks-disabled="false"
+        :class="getSlideClass(route)"
+        :route="route"
+        :context="context"
+      />
+    </template>
+  </TransitionGroup>
 
   <!-- Global Top -->
   <GlobalTop />
