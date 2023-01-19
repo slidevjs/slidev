@@ -6,7 +6,7 @@
   }
 
   h1 {
-    @apply text-4xl mb-4 -ml-[0.05em];
+    @apply text-4xl mb-4;
   }
 
   h2 {
@@ -26,7 +26,7 @@
   }
 
   h6 {
-    @apply text-sm pt-1 uppercase tracking-widest font-500 -ml-[0.05em];
+    @apply text-sm pt-1 uppercase tracking-widest font-500;
   }
 
   h6:not(.opacity-100) {
@@ -46,7 +46,7 @@
   }
 
   li {
-    @apply ml-1.1em pl-0.2em leading-1.8em;
+    @apply leading-1.8em;
   }
 
   blockquote {
@@ -84,5 +84,36 @@
   kbd {
     @apply border border-gray-400 border-b-2 border-opacity-20 rounded;
     @apply bg-gray-400 bg-opacity-5 py-0.5 px-1 text-xs font-mono;
+  }
+}
+
+.slidev-layout,
+[dir=ltr],
+.slidev-layout [dir=ltr] {
+  h1 {
+    @apply -ml-[0.05em] mr-0;
+  }
+
+  h6 {
+    @apply -ml-[0.05em] mr-0;
+  }
+
+  li {
+    @apply ml-1.1em pl-0.2em mr-0 pr-0;
+  }
+}
+
+[dir=rtl],
+.slidev-layout [dir=rtl] {
+  h1 {
+    @apply -mr-[0.05em] ml-0; 
+  }
+
+  h6 {
+    @apply -mr-[0.05em] ml-0;
+  }
+
+  li {
+    @apply mr-1.1em pr-0.2em ml-0 pl-0;
   }
 }
