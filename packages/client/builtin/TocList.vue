@@ -50,6 +50,6 @@ const classes = computed(() => {
 
 <style>
 .slidev-toc-item p {
-  margin: 0;
+  margin: 0 !important;
 }
 </style>
