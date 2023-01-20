@@ -18,6 +18,8 @@ titleTemplate: '%s - Slidev'
 # information for your slides, can be a markdown string
 info: false
 
+# enable presenter mode, can be boolean, 'dev' or 'build'
+presenter: true
 # enabled pdf downloading in SPA build, can also be a custom url
 download: false
 # filename of the export file
