@@ -80,6 +80,49 @@ Parameters:
 
 * `no` (`string | number`): The number of the slide to display the title from (slides starts from `1`)
 
+### `LightOrDark`
+
+Use it to display one thing or another depending on the active light or dark theme.
+
+#### Usage
+
+Use it with the two named Slots `#dark` and `#light`:
+~~~md
+<LightOrDark>
+  <template #dark>Dark mode is on</template>
+  <template #light>Light mode is on</template>
+</LightOrDark>
+~~~
+
+Provided props on `LightOrDark` component will be available using scoped slot props:
+~~~md
+<LightOrDark width="100" alt="some image">
+  <template #dark="props">
+    <img src="/dark.png" v-bind="props"/>
+  </template>
+  <template #light="props">
+    <img src="/light.png" v-bind="props"/>
+  </template>
+</LightOrDark>
+~~~
+
+You can provide markdown in the slots, but you will need to surround the content with blank lines:
+~~~md
+<LightOrDark>
+  <template #dark>
+  
+![dark](/dark.png)
+
+  </template>
+  <template #light>
+  
+![light](/light.png)
+
+  </template>
+</LightOrDark>
+~~~
+
+
 ## Custom Components
 
 Create a directory `components/` under your project root, and simply put your custom Vue components under it, then you can use it with the same name in your markdown file!
