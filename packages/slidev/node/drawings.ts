@@ -25,7 +25,7 @@ export async function loadDrawings(options: ResolvedSlidevOptions) {
   })
 
   const obj: Record<string, string> = {}
-  Promise.all(files.map(async (path) => {
+  await Promise.all(files.map(async (path) => {
     const num = +basename(path, '.svg')
     if (Number.isNaN(num))
       return

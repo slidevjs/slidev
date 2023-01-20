@@ -59,7 +59,7 @@ export interface ResolvedSlidevOptions {
   themeRoots: string[]
   addonRoots: string[]
   roots: string[]
-  mode: 'dev' | 'build'
+  mode: 'dev' | 'build' | 'export'
   remote?: string
   inspect?: boolean
 }
