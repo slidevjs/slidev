@@ -32,6 +32,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     record: 'dev',
     css: 'windicss',
     presenter: true,
+    htmlAttrs: {},
   }
   const config: SlidevConfig = {
     ...defaultConfig,
@@ -44,6 +45,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter?.fonts,
     }),
     drawings: resolveDrawings(headmatter.drawings, filepath),
+    htmlAttrs: {
+      ...themeMeta.defaults?.htmlAttrs,
+      ...headmatter.config?.htmlAttrs,
+      ...headmatter?.htmlAttrs,
+    },
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
