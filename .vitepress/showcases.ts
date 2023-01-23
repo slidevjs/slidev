@@ -154,6 +154,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://github.com/godkun/ppt-template/raw/main/public/show.gif',
     datetime: '2022-10-24',
   },
+  {
+    title: 'Building a Polite Popup with Nuxt 3',
+    author: {
+      name: 'Michael Hoffmann',
+      link: 'https://github.com/mokkapps',
+    },
+    at: 'Vue.js Nation 2023',
+    slidesLink: 'https://vuejsnation-2023-talk-polite-popup.netlify.app',
+    sourceLink: 'https://github.com/Mokkapps/vuejsnation-2023-lightning-talk-polite-popup-nuxt-3-slides',
+    cover: 'https://raw.githubusercontent.com/Mokkapps/vuejsnation-2023-lightning-talk-polite-popup-nuxt-3-slides/main/screenshots/001.png',
+    datetime: '2023-01-25',
+  },
   // Add yours here!
   {
     title: 'Yours?',
