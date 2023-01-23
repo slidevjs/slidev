@@ -237,7 +237,7 @@ cli.command(
 )
 
 cli.command(
-  'build [entry]',
+  'build [entry..]',
   'Build hostable SPA',
   args => exportOptions(commonOptions(args))
     .option('watch', {
@@ -271,31 +271,35 @@ cli.command(
     const { entry, theme, watch, base, download, out, inspect } = args
     const { build } = await import('./build')
 
-    const options = await resolveOptions({ entry, theme, inspect }, 'build')
-    if (download && !options.data.config.download)
-      options.data.config.download = download
+    for (const entryFile of entry as unknown as string[]) {
+      const options = await resolveOptions({ entry: entryFile, theme, inspect }, 'build')
+      if (download && !options.data.config.download)
+        options.data.config.download = download
 
-    printInfo(options)
-    await build(options, {
-      base,
-      build: {
-        watch: watch ? {} : undefined,
-        outDir: out,
-      },
-    }, args)
+      printInfo(options)
+      await build(options, {
+        base,
+        build: {
+          watch: watch ? {} : undefined,
+          outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+        },
+      }, { ...args, entry: entryFile })
+    }
   },
 )
 
 cli.command(
-  'format [entry]',
+  'format [entry..]',
   'Format the markdown file',
   args => commonOptions(args)
     .strict()
     .help(),
   async ({ entry }) => {
-    const data = await parser.load(entry)
-    parser.prettify(data)
-    await parser.save(data)
+    for (const entryFile of entry as unknown as string[]) {
+      const data = await parser.load(entryFile)
+      parser.prettify(data)
+      await parser.save(data)
+    }
   },
 )
 
@@ -351,7 +355,7 @@ cli.command(
 )
 
 cli.command(
-  'export [entry]',
+  'export [entry..]',
   'Export slides to PDF',
   args => exportOptions(commonOptions(args))
     .strict()
@@ -361,29 +365,33 @@ cli.command(
     process.env.NODE_ENV = 'production'
     const { exportSlides, getExportOptions } = await import('./export')
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry, theme }, 'export')
-    const server = await createServer(
-      options,
-      {
-        server: { port },
-        clearScreen: false,
-      },
-    )
-    await server.listen(port)
-    printInfo(options)
-    parser.filterDisabled(options.data)
-    const output = await exportSlides({
-      port,
-      ...getExportOptions(args, options),
-    })
-    console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
-    server.close()
+
+    for (const entryFile of entry as unknown as string) {
+      const options = await resolveOptions({ entry: entryFile, theme }, 'export')
+      const server = await createServer(
+        options,
+        {
+          server: { port },
+          clearScreen: false,
+        },
+      )
+      await server.listen(port)
+      printInfo(options)
+      parser.filterDisabled(options.data)
+      const result = await exportSlides({
+        port,
+        ...getExportOptions({ ...args, entry: entryFile }, options),
+      })
+      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      server.close()
+    }
+
     process.exit(0)
   },
 )
 
 cli.command(
-  'export-notes [entry]',
+  'export-notes [entry..]',
   'Export slide notes to PDF',
   args => args
     .positional('entry', {
@@ -409,33 +417,32 @@ cli.command(
   }) => {
     process.env.NODE_ENV = 'production'
     const { exportNotes } = await import('./export')
-
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry }, 'export')
 
-    if (!output)
-      output = options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entry, '.md')}-export-notes`
+    for (const entryFile of entry as unknown as string[]) {
+      const options = await resolveOptions({ entry: entryFile }, 'export')
+      const server = await createServer(
+        options,
+        {
+          server: { port },
+          clearScreen: false,
+        },
+      )
+      await server.listen(port)
 
-    const server = await createServer(
-      options,
-      {
-        server: { port },
-        clearScreen: false,
-      },
-    )
-    await server.listen(port)
+      printInfo(options)
+      parser.filterDisabled(options.data)
 
-    printInfo(options)
-    parser.filterDisabled(options.data)
+      const result = await exportNotes({
+        port,
+        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
+        timeout,
+      })
+      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
 
-    output = await exportNotes({
-      port,
-      output,
-      timeout,
-    })
-    console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
+      server.close()
+    }
 
-    server.close()
     process.exit(0)
   },
 )
