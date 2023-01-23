@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
-import type { SlideInfo } from '@slidev/types'
+import type { SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
@@ -27,31 +27,25 @@ export interface ExportOptions {
   withTOC?: boolean
 }
 
-interface TocItem {
-  children: TocItem[]
-  level: number
-  index: number
-  title?: string
-}
-
-function addToTree(tree: TocItem[], info: SlideInfo, level = 1) {
+function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
   const titleLevel = info.level
   if (titleLevel && titleLevel > level && tree.length > 0) {
-    addToTree(tree[tree.length - 1].children, info, level + 1)
+    addToTree(tree[tree.length - 1].children, info, slideIndexes, level + 1)
   }
   else {
     tree.push({
       children: [],
       level,
-      index: info.index,
+      path: String(slideIndexes[info.index + 1]),
+      hideInToc: Boolean(info.frontmatter?.hideInToc),
       title: info.title,
     })
   }
 }
 
 function makeOutline(tree: TocItem[]): string {
-  return tree.map(({ title, index, level, children }) => {
-    const rootOutline = title ? `${index + 1}|${'-'.repeat(level - 1)}|${title}` : null
+  return tree.map(({ title, path, level, children }) => {
+    const rootOutline = title ? `${path}|${'-'.repeat(level - 1)}|${title}` : null
 
     const childrenOutline = makeOutline(children)
 
@@ -208,10 +202,29 @@ export async function exportSlides({
     await Promise.all(frames.map(frame => frame.waitForLoadState()))
   }
 
+  async function getSlidesIndex() {
+    const clicksBySlide: Record<string, number> = {}
+    const slides = await page.locator('.slide-container')
+    const count = await slides.count()
+    for (let i = 0; i < count; i++) {
+      const id = (await slides.nth(i).getAttribute('id')) || ''
+      const path = Number(id.split('-')[0])
+      clicksBySlide[path] = (clicksBySlide[path] || 0) + 1
+    }
+
+    const slideIndexes = Object.fromEntries(Object.entries(clicksBySlide)
+      .reduce<[string, number][]>((acc, [path, clicks], i) => {
+        acc.push([path, clicks + (acc[i - 1]?.[1] ?? 0)])
+        return acc
+      }, []))
+    return slideIndexes
+  }
+
   async function genPagePdf() {
     if (!output.endsWith('.pdf'))
       output = `${output}.pdf`
     await go('print')
+    const slideIndexes = await getSlidesIndex()
     await page.pdf({
       path: output,
       width,
@@ -241,7 +254,7 @@ export async function exportSlides({
 
       const tocTree = slides.filter(slide => slide.title)
         .reduce((acc: TocItem[], slide) => {
-          addToTree(acc, slide)
+          addToTree(acc, slide, slideIndexes)
           return acc
         }, [])
 

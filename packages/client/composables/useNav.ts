@@ -1,7 +1,7 @@
 import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
-import type { TocItem } from '../logic/nav'
+import type { TocItem } from '@slidev/types'
 import { addToTree, filterTree, getPath, getTreeWithActiveStatuses } from '../logic/nav'
 import { rawRoutes } from '../routes'
 
