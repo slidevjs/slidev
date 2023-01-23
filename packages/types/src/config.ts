@@ -1,3 +1,4 @@
+import type { ExportArgs } from './cli'
 import type { SlidevThemeConfig } from './types'
 
 export interface SlidevConfig {
@@ -42,6 +43,12 @@ export interface SlidevConfig {
    * @default false
    */
   download: boolean | string
+  /**
+   * Options for export
+   *
+   * @default {}
+   */
+  exportOptions: ResolvedExportOptions
   /**
    * Show a copy button in code blocks
    *
@@ -272,4 +279,10 @@ export interface ResolvedDrawingsOptions {
   enabled: boolean | 'dev' | 'build'
   presenterOnly: boolean
   syncAll: boolean
+}
+
+export interface ResolvedExportOptions extends Partial<Omit<ExportArgs, 'entry' | 'theme'>> {
+  withClicks?: boolean
+  executablePath?: string
+  withToc?: boolean
 }

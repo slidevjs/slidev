@@ -3,10 +3,11 @@ import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
-import type { SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
+import type { ResolvedSlidevOptions } from './options'
 import { packageExists } from './utils'
 
 export interface ExportOptions {
@@ -24,7 +25,7 @@ export interface ExportOptions {
   height?: number
   withClicks?: boolean
   executablePath?: string
-  withTOC?: boolean
+  withToc?: boolean
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -155,7 +156,7 @@ export async function exportSlides({
   height = 1080,
   withClicks = false,
   executablePath = undefined,
-  withTOC = false,
+  withToc = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
@@ -249,7 +250,7 @@ export async function exportSlides({
     if (titleSlide?.frontmatter?.info)
       pdf.setSubject(titleSlide.frontmatter.info)
 
-    if (withTOC) {
+    if (withToc) {
       const outlinePdf = outlinePdfFactory(pdfLib)
 
       const tocTree = slides.filter(slide => slide.title)
@@ -320,4 +321,43 @@ export async function exportSlides({
   progress.stop()
   browser.close()
   return output
+}
+
+export function exportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
+  const config = {
+    ...options.data.config.exportOptions,
+    ...args,
+    withClicks: args['with-clicks'],
+    executablePath: args['executable-path'],
+    withToc: args['with-toc'],
+  }
+  const {
+    entry,
+    output,
+    format,
+    timeout,
+    range,
+    dark,
+    withClicks,
+    executablePath,
+    withToc,
+  } = config
+  outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
+  if (outDir)
+    outFilename = path.join(outDir, outFilename)
+  return {
+    output: outFilename,
+    slides: options.data.slides,
+    total: options.data.slides.length,
+    range,
+    format: format as 'pdf' | 'png' | 'md',
+    timeout,
+    dark: dark || options.data.config.colorSchema === 'dark',
+    routerMode: options.data.config.routerMode,
+    width: options.data.config.canvasWidth,
+    height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
+    withClicks,
+    executablePath,
+    withToc,
+  }
 }

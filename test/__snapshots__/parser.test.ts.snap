@@ -16,6 +16,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
     "syncAll": true,
   },
   "exportFilename": "",
+  "exportOptions": {},
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
@@ -251,6 +252,7 @@ exports[`md parser > minimal.md > config 1`] = `
     "syncAll": true,
   },
   "exportFilename": "",
+  "exportOptions": {},
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
@@ -424,6 +426,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
     "syncAll": true,
   },
   "exportFilename": "",
+  "exportOptions": {},
   "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
