@@ -49,7 +49,7 @@ const classes = computed(() => {
 </template>
 
 <style>
-.slidev-toc-item p {
-  margin: 0 !important;
+.slidev-layout .slidev-toc-item p {
+  margin: 0;
 }
 </style>
