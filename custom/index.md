@@ -24,6 +24,15 @@ presenter: true
 download: false
 # filename of the export file
 exportFilename: 'slidev-exported'
+# export options
+# use export CLI options in camelCase format
+# Learn more: https://sli.dev/guide/exporting.html
+export:
+  format: pdf
+  timeout: 30000
+  dark: false
+  withClicks: false
+  withToc: false
 # syntax highlighter, can be 'prism' or 'shiki'
 highlighter: 'prism'
 # show line numbers in code blocks

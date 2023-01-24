@@ -21,28 +21,70 @@ $ slidev export
 
 After a few seconds, your slides will be ready at `./slides-export.pdf`.
 
+### PNGs and Markdown
+
+When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF.
+
+```bash
+$ slidev export --format png
+```
+
+You can also compile a markdown file composed of compiled png using `--format md`.
+
+```bash
+$ slidev export --format md
+```
+
+### Dark mode
+
 In case you want to export your slides using the dark version of the theme, use the `--dark` option:
 
 ```bash
 $ slidev export --dark
 ```
 
-#### Export Clicks Steps
+### Export Clicks Steps
 
 > Available since v0.21
 
-By default, Slidev exports one page per slide with clicks animations disabled. If you want export slides with multiple steps into multiple pages, pass the `--with-clicks` options.
+By default, Slidev exports one page per slide with clicks animations disabled. If you want export slides with multiple steps into multiple pages, pass the `--with-clicks` option.
 
 ```bash
 $ slidev export --with-clicks
 ```
 
-### PNGs
+### Slide range
 
-When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF.
+You can also specify a range of slides to export with the `--range` option.
 
 ```bash
-$ slidev export --format png
+$ slidev export --range 1,4-5,6
+```
+
+### PDF outline
+
+> Available since v0.36.10
+
+You can generate the PDF outline by passing the `--with-toc` option.
+
+```bash
+$ slidev export --with-toc
+```
+
+### Output filename
+
+You can specify the output filename with the `--output` option.
+
+```bash
+$ slidev export --output my-pdf-export
+```
+
+Or in the frontmatter configuration:
+
+```yaml
+---
+exportFilename: my-pdf-export
+---
 ```
 
 ### Export a range of slides
@@ -70,3 +112,21 @@ $ slidev export-notes
 ## Single-Page Application (SPA)
 
 See [Static Hosting](/guide/hosting).
+
+## Troubleshooting
+
+### Timeout
+
+For big presentation you might want to increase the playwrigth timeout with `--timeout`
+
+```bash
+$ slidev export --timeout 60000
+```
+
+### Executable path
+
+You can set the browser executable path for playwright using `--executable-path`
+
+```bash
+$ slidev export --executable-path [path_to_chromium]
+```

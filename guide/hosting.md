@@ -9,7 +9,11 @@ You can also build the slides into a self-hostable SPA:
 $ slidev build
 ```
 
-The generated application will be available under `dist/` and then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. Now you can share your slides with the rest of the world with a single link.
+The generated application will be available under `dist/`.
+
+You can test the generated build using a web server (Apache, NGINX, Caddy...etc.) or in the project you can directly run: `npx vite preview`.
+
+Then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](https://netlify.app/), [Vercel](https://vercel.com/), or whatever you want. Now you can share your slides with the rest of the world with a single link.
 
 ### Base Path
 
@@ -39,6 +43,33 @@ You can also provide a custom URL for the PDF. In that case, the rendering proce
 ---
 download: 'https://myside.com/my-talk.pdf'
 ---
+```
+
+This can also be done with the CLI option `--download` (`boolean` only).
+
+```bash
+$ slidev build --download
+```
+
+When using the download option, you can also provide the export options:
+
+* By using [CLI export options](/guide/exporting.html)
+* Or [frontmatter export options](/custom/#frontmatter-configures)
+
+### Output directory
+
+You can change the output directory using `--out`.
+
+```bash
+$ slidev build --dir my-build-folder
+```
+
+### Watch mode
+
+By passing the `--watch` option the build will run in watch mode and will rebuild anytime the source changes.
+
+```bash
+$ slidev build --watch
 ```
 
 ## Examples
