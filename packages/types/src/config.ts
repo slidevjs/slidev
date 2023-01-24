@@ -48,7 +48,7 @@ export interface SlidevConfig {
    *
    * @default {}
    */
-  exportOptions: ResolvedExportOptions
+  export: ResolvedExportOptions
   /**
    * Show a copy button in code blocks
    *
@@ -281,7 +281,7 @@ export interface ResolvedDrawingsOptions {
   syncAll: boolean
 }
 
-export interface ResolvedExportOptions extends Partial<Omit<ExportArgs, 'entry' | 'theme'>> {
+export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme'> {
   withClicks?: boolean
   executablePath?: string
   withToc?: boolean

@@ -5,13 +5,13 @@ export interface CommonArgs {
 
 export interface ExportArgs extends CommonArgs {
   output?: string
-  format: string
-  timeout: number
+  format?: string
+  timeout?: number
   range?: string
-  dark: boolean
-  'with-clicks': boolean
+  dark?: boolean
+  'with-clicks'?: boolean
   'executable-path'?: string
-  'with-toc': boolean
+  'with-toc'?: boolean
 }
 
 export interface BuildArgs extends ExportArgs {

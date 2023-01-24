@@ -106,7 +106,7 @@ export async function build(
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
   if ([true, 'true', 'auto'].includes(options.data.config.download)) {
-    const { exportOptions, exportSlides } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./export')
 
     const port = 12445
     const app = connect()
@@ -123,7 +123,7 @@ export async function build(
     await exportSlides({
       port,
       base: config.base,
-      ...exportOptions(args, options, outDir, 'slidev-exported.pdf'),
+      ...getExportOptions(args, options, outDir, 'slidev-exported.pdf'),
     })
     server.close()
   }

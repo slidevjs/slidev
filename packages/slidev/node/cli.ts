@@ -321,7 +321,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     process.env.NODE_ENV = 'production'
-    const { exportOptions, exportSlides } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./export')
     const port = await findFreePort(12445)
     const options = await resolveOptions({ entry, theme }, 'export')
     const server = await createServer(
@@ -336,7 +336,7 @@ cli.command(
     parser.filterDisabled(options.data)
     const output = await exportSlides({
       port,
-      ...exportOptions(args, options),
+      ...getExportOptions(args, options),
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
@@ -427,13 +427,11 @@ function exportOptions<T>(args: Argv<T>) {
       describe: 'path to the output',
     })
     .option('format', {
-      default: 'pdf',
       type: 'string',
       choices: ['pdf', 'png', 'md'],
       describe: 'output format',
     })
     .option('timeout', {
-      default: 30000,
       type: 'number',
       describe: 'timeout for rendering the print page',
     })
@@ -442,13 +440,11 @@ function exportOptions<T>(args: Argv<T>) {
       describe: 'page ranges to export, for example "1,4-5,6"',
     })
     .option('dark', {
-      default: false,
       type: 'boolean',
       describe: 'export as dark theme',
     })
     .option('with-clicks', {
       alias: 'c',
-      default: false,
       type: 'boolean',
       describe: 'export pages for every clicks',
     })
@@ -457,7 +453,6 @@ function exportOptions<T>(args: Argv<T>) {
       describe: 'executable to override playwright bundled browser',
     })
     .option('with-toc', {
-      default: false,
       type: 'boolean',
       describe: 'export pages with outline',
     })

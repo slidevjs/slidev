@@ -323,9 +323,9 @@ export async function exportSlides({
   return output
 }
 
-export function exportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
+export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
   const config = {
-    ...options.data.config.exportOptions,
+    ...options.data.config.export,
     ...args,
     withClicks: args['with-clicks'],
     executablePath: args['executable-path'],
@@ -350,14 +350,14 @@ export function exportOptions(args: ExportArgs, options: ResolvedSlidevOptions, 
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
-    format: format as 'pdf' | 'png' | 'md',
-    timeout,
+    format: (format || 'pdf') as 'pdf' | 'png' | 'md',
+    timeout: timeout || 30000,
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-    withClicks,
+    withClicks: withClicks || false,
     executablePath,
-    withToc,
+    withToc: withToc || false,
   }
 }
