@@ -1,5 +1,6 @@
 import { dirname, join, resolve } from 'path'
 import type Vue from '@vitejs/plugin-vue'
+import type VueJsx from '@vitejs/plugin-vue-jsx'
 import type Icons from 'unplugin-icons/vite'
 import type Components from 'unplugin-vue-components/vite'
 import type Markdown from 'vite-plugin-vue-markdown'
@@ -66,6 +67,7 @@ export interface ResolvedSlidevOptions {
 
 export interface SlidevPluginOptions extends SlidevEntryOptions {
   vue?: ArgumentsType<typeof Vue>[0]
+  vuejsx?: ArgumentsType<typeof VueJsx>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]
   components?: ArgumentsType<typeof Components>[0]
   windicss?: ArgumentsType<typeof WindiCSS>[0]
