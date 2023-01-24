@@ -169,6 +169,12 @@ export interface SlidevConfig {
    * @default true
    */
   presenter: boolean | 'dev' | 'build'
+  /**
+   * Attributes to apply to the HTML element
+   *
+   * @default {}
+   */
+  htmlAttrs: Record<string, string>
 }
 
 export interface FontOptions {
