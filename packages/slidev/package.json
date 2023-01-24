@@ -57,6 +57,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.0",
     "cli-progress": "^3.11.2",
     "codemirror": "^5.65.5",
     "connect": "^3.7.0",
