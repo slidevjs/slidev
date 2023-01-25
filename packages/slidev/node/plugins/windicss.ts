@@ -13,7 +13,7 @@ export async function createWindiCSSPlugin(
 ) {
   const { default: WindiCSS } = await import('vite-plugin-windicss')
   const { defaultConfigureFiles } = await import('@windicss/config')
-  
+
   const configFiles = uniq([
     ...defaultConfigureFiles.map(i => resolve(userRoot, i)),
     ...themeRoots.map(i => `${i}/windi.config.ts`),

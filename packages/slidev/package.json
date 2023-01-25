@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.38.4",
+  "version": "0.38.5",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -50,7 +50,7 @@
   "dependencies": {
     "@antfu/utils": "^0.7.2",
     "@hedgedoc/markdown-it-task-lists": "^2.0.1",
-    "@iconify-json/carbon": "^1.1.13",
+    "@iconify-json/carbon": "^1.1.14",
     "@iconify-json/ph": "^1.1.3",
     "@lillallol/outline-pdf": "^4.0.0",
     "@slidev/client": "workspace:*",
@@ -58,6 +58,7 @@
     "@slidev/types": "workspace:*",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
+    "@windicss/config": "^1.8.10",
     "cli-progress": "^3.11.2",
     "codemirror": "^5.65.5",
     "connect": "^3.7.0",
