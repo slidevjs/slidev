@@ -7,6 +7,7 @@ import { resolveConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import { blue, yellow } from 'kolorist'
+import type { BuildArgs } from '@slidev/types'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
@@ -14,6 +15,7 @@ import type { ResolvedSlidevOptions } from './options'
 export async function build(
   options: ResolvedSlidevOptions,
   viteConfig: InlineConfig = {},
+  args: BuildArgs,
 ) {
   const indexPath = resolve(options.userRoot, 'index.html')
   const rawConfig = await resolveConfig({}, 'build', options.entry)
@@ -95,7 +97,6 @@ export async function build(
   }
 
   const outDir = resolve(options.userRoot, config.build.outDir)
-  const outFilename = options.data.config.exportFilename || 'slidev-exported.pdf'
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
@@ -105,7 +106,7 @@ export async function build(
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
   if ([true, 'true', 'auto'].includes(options.data.config.download)) {
-    const { exportSlides } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./export')
 
     const port = 12445
     const app = connect()
@@ -121,15 +122,8 @@ export async function build(
     server.listen(port)
     await exportSlides({
       port,
-      slides: options.data.slides,
-      total: options.data.slides.length,
-      format: 'pdf',
-      output: join(outDir, outFilename),
       base: config.base,
-      dark: options.data.config.colorSchema === 'dark',
-      width: options.data.config.canvasWidth,
-      height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-      routerMode: options.data.config.routerMode,
+      ...getExportOptions(args, options, outDir, 'slidev-exported.pdf'),
     })
     server.close()
   }

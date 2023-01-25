@@ -201,7 +201,7 @@ cli.command(
 cli.command(
   'build [entry]',
   'Build hostable SPA',
-  args => commonOptions(args)
+  args => exportOptions(commonOptions(args))
     .option('watch', {
       alias: 'w',
       default: false,
@@ -229,7 +229,8 @@ cli.command(
     })
     .strict()
     .help(),
-  async ({ entry, theme, watch, base, download, out, inspect }) => {
+  async (args) => {
+    const { entry, theme, watch, base, download, out, inspect } = args
     const { build } = await import('./build')
 
     const options = await resolveOptions({ entry, theme, inspect }, 'build')
@@ -243,7 +244,7 @@ cli.command(
         watch: watch ? {} : undefined,
         outDir: out,
       },
-    })
+    }, args)
   },
 )
 
@@ -314,65 +315,15 @@ cli.command(
 cli.command(
   'export [entry]',
   'Export slides to PDF',
-  args => commonOptions(args)
-    .option('output', {
-      type: 'string',
-      describe: 'path to the output',
-    })
-    .option('format', {
-      default: 'pdf',
-      type: 'string',
-      choices: ['pdf', 'png', 'md'],
-      describe: 'output format',
-    })
-    .option('timeout', {
-      default: 30000,
-      type: 'number',
-      describe: 'timeout for rendering the print page',
-    })
-    .option('range', {
-      type: 'string',
-      describe: 'page ranges to export, for example "1,4-5,6"',
-    })
-    .option('dark', {
-      default: false,
-      type: 'boolean',
-      describe: 'export as dark theme',
-    })
-    .option('with-clicks', {
-      alias: 'c',
-      default: false,
-      type: 'boolean',
-      describe: 'export pages for every clicks',
-    })
-    .option('executable-path', {
-      type: 'string',
-      describe: 'executable to override playwright bundled browser',
-    })
-    .option('with-toc', {
-      default: false,
-      type: 'boolean',
-      describe: 'export pages with outline',
-    })
+  args => exportOptions(commonOptions(args))
     .strict()
     .help(),
-  async ({
-    entry,
-    theme,
-    output,
-    format,
-    timeout,
-    range,
-    dark,
-    'with-clicks': withClicks,
-    'executable-path': executablePath,
-    'with-toc': withTOC,
-  }) => {
+  async (args) => {
+    const { entry, theme } = args
     process.env.NODE_ENV = 'production'
-    const { exportSlides } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./export')
     const port = await findFreePort(12445)
     const options = await resolveOptions({ entry, theme }, 'export')
-    output = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
     const server = await createServer(
       options,
       {
@@ -383,23 +334,9 @@ cli.command(
     await server.listen(port)
     printInfo(options)
     parser.filterDisabled(options.data)
-    const width = options.data.config.canvasWidth
-    const height = Math.round(width / options.data.config.aspectRatio)
-    output = await exportSlides({
+    const output = await exportSlides({
       port,
-      slides: options.data.slides,
-      total: options.data.slides.length,
-      range,
-      format: format as any,
-      output,
-      timeout,
-      dark,
-      routerMode: options.data.config.routerMode,
-      width,
-      height,
-      withClicks,
-      executablePath,
-      withTOC,
+      ...getExportOptions(args, options),
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
@@ -480,6 +417,44 @@ function commonOptions(args: Argv<{}>) {
       alias: 't',
       type: 'string',
       describe: 'override theme',
+    })
+}
+
+function exportOptions<T>(args: Argv<T>) {
+  return args
+    .option('output', {
+      type: 'string',
+      describe: 'path to the output',
+    })
+    .option('format', {
+      type: 'string',
+      choices: ['pdf', 'png', 'md'],
+      describe: 'output format',
+    })
+    .option('timeout', {
+      type: 'number',
+      describe: 'timeout for rendering the print page',
+    })
+    .option('range', {
+      type: 'string',
+      describe: 'page ranges to export, for example "1,4-5,6"',
+    })
+    .option('dark', {
+      type: 'boolean',
+      describe: 'export as dark theme',
+    })
+    .option('with-clicks', {
+      alias: 'c',
+      type: 'boolean',
+      describe: 'export pages for every clicks',
+    })
+    .option('executable-path', {
+      type: 'string',
+      describe: 'executable to override playwright bundled browser',
+    })
+    .option('with-toc', {
+      type: 'boolean',
+      describe: 'export pages with outline',
     })
 }
 
