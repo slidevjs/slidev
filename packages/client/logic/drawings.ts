@@ -76,6 +76,7 @@ export function loadCanvas(page?: number) {
     drauu.load(data)
   else
     drauu.clear()
+  updateState()
   disableDump = false
 }
 
