@@ -35,7 +35,6 @@
     "@types/js-yaml": "^4.0.5",
     "@types/katex": "^0.16.0",
     "@types/markdown-it": "^12.2.3",
-    "@types/mermaid": "^9.2.0",
     "@types/node": "^18.11.18",
     "@types/prettier": "^2.7.2",
     "@types/prismjs": "^1.26.0",
