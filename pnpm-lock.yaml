@@ -252,6 +252,7 @@ importers:
       fast-deep-equal: ^3.1.3
       fast-glob: ^3.2.12
       fs-extra: ^11.1.0
+      get-port-please: ^3.0.1
       global-dirs: ^3.0.1
       import-from: ^4.0.0
       is-installed-globally: ^0.4.0
@@ -306,6 +307,7 @@ importers:
       debug: 4.3.4
       fast-glob: 3.2.12
       fs-extra: 11.1.0
+      get-port-please: 3.0.1
       global-dirs: 3.0.1
       import-from: 4.0.0
       is-installed-globally: 0.4.0
@@ -4697,6 +4699,10 @@ packages:
       has: 1.0.3
       has-symbols: 1.0.3
     dev: true
+
+  /get-port-please/3.0.1:
+    resolution: {integrity: sha512-R5pcVO8Z1+pVDu8Ml3xaJCEkBiiy1VQN9za0YqH8GIi1nIqD4IzQhzY6dDzMRtdS1lyiGlucRzm8IN8wtLIXng==}
+    dev: false
 
   /get-stream/5.2.0:
     resolution: {integrity: sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==}

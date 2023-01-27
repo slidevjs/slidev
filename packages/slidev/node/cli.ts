@@ -1,5 +1,4 @@
 import path from 'path'
-import net from 'net'
 import os from 'os'
 import { exec } from 'child_process'
 import * as readline from 'readline'
@@ -15,6 +14,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
+import { checkPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
@@ -499,26 +499,8 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log()
 }
 
-function isPortFree(port: number) {
-  return new Promise((resolve) => {
-    const server = net.createServer((socket) => {
-      socket.write('Echo server\r\n')
-      socket.pipe(socket)
-    })
-
-    server.listen(port, '127.0.0.1')
-    server.on('error', () => {
-      resolve(false)
-    })
-    server.on('listening', () => {
-      server.close()
-      resolve(true)
-    })
-  })
-}
-
 async function findFreePort(start: number): Promise<number> {
-  if (await isPortFree(start))
+  if (await checkPort(start) !== false)
     return start
   return findFreePort(start + 1)
 }

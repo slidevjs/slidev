@@ -65,6 +65,7 @@
     "debug": "^4.3.4",
     "fast-glob": "^3.2.12",
     "fs-extra": "^11.1.0",
+    "get-port-please": "^3.0.1",
     "global-dirs": "^3.0.1",
     "import-from": "^4.0.0",
     "is-installed-globally": "^0.4.0",
