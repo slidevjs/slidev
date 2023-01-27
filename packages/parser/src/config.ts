@@ -2,11 +2,8 @@ import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
-export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
-  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
-
-  const defaultConfig: SlidevConfig = {
+export function getDefaultConfig(): SlidevConfig {
+  return {
     theme: 'default',
     title: 'Slidev',
     titleTemplate: '%s - Slidev',
@@ -16,9 +13,9 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
-    highlighter: themeHightlighter || 'prism',
+    highlighter: 'prism',
     lineNumbers: false,
-    colorSchema: themeColorSchema || 'auto',
+    colorSchema: 'auto',
     routerMode: 'history',
     aspectRatio: 16 / 9,
     canvasWidth: 980,
@@ -34,9 +31,20 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     css: 'windicss',
     presenter: true,
     htmlAttrs: {},
+    pageTransition: {},
   }
+}
+
+export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
+  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
+  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
+
+  const defaultConfig = getDefaultConfig()
+
   const config: SlidevConfig = {
     ...defaultConfig,
+    highlighter: themeHightlighter || defaultConfig.highlighter,
+    colorSchema: themeColorSchema || defaultConfig.colorSchema,
     ...themeMeta.defaults,
     ...headmatter.config,
     ...headmatter,

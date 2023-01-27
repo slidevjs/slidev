@@ -2,22 +2,12 @@
 
 exports[`md parser > frontmatter.md > config 1`] = `
 {
-  "addons": [],
-  "aspectRatio": 1.7777777777777777,
-  "canvasWidth": 980,
-  "codeCopy": true,
-  "colorSchema": "auto",
-  "css": "windicss",
-  "download": false,
   "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
-  "export": {},
-  "exportFilename": "",
-  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
     "local": [],
@@ -72,22 +62,8 @@ exports[`md parser > frontmatter.md > config 1`] = `
       "600",
     ],
   },
-  "highlighter": "prism",
-  "htmlAttrs": {},
-  "info": false,
   "layout": "cover",
-  "lineNumbers": false,
-  "monaco": "dev",
-  "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "presenter": true,
-  "record": "dev",
-  "remoteAssets": false,
-  "routerMode": "history",
-  "selectable": false,
-  "theme": "default",
-  "themeConfig": {},
   "title": "Hi",
-  "titleTemplate": "%s - Slidev",
 }
 `;
 
@@ -238,22 +214,12 @@ this should be treated as code block
 
 exports[`md parser > minimal.md > config 1`] = `
 {
-  "addons": [],
-  "aspectRatio": 1.7777777777777777,
-  "canvasWidth": 980,
-  "codeCopy": true,
-  "colorSchema": "auto",
-  "css": "windicss",
-  "download": false,
   "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
-  "export": {},
-  "exportFilename": "",
-  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
     "local": [],
@@ -299,21 +265,7 @@ exports[`md parser > minimal.md > config 1`] = `
       "600",
     ],
   },
-  "highlighter": "prism",
-  "htmlAttrs": {},
-  "info": false,
-  "lineNumbers": false,
-  "monaco": "dev",
-  "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "presenter": true,
-  "record": "dev",
-  "remoteAssets": false,
-  "routerMode": "history",
-  "selectable": false,
-  "theme": "default",
-  "themeConfig": {},
   "title": "H1",
-  "titleTemplate": "%s - Slidev",
 }
 `;
 
@@ -412,22 +364,12 @@ Nice to meet you
 
 exports[`md parser > multi-entries.md > config 1`] = `
 {
-  "addons": [],
-  "aspectRatio": 1.7777777777777777,
-  "canvasWidth": 980,
-  "codeCopy": true,
-  "colorSchema": "auto",
-  "css": "windicss",
-  "download": false,
   "drawings": {
     "enabled": true,
     "persist": false,
     "presenterOnly": false,
     "syncAll": true,
   },
-  "export": {},
-  "exportFilename": "",
-  "favicon": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png",
   "fonts": {
     "italic": false,
     "local": [],
@@ -473,22 +415,8 @@ exports[`md parser > multi-entries.md > config 1`] = `
       "600",
     ],
   },
-  "highlighter": "prism",
-  "htmlAttrs": {},
-  "info": false,
-  "lineNumbers": false,
-  "monaco": "dev",
-  "plantUmlServer": "https://www.plantuml.com/plantuml",
-  "presenter": true,
-  "record": "dev",
-  "remoteAssets": false,
-  "routerMode": "history",
-  "selectable": false,
   "src": "sub/page1.md",
-  "theme": "default",
-  "themeConfig": {},
   "title": undefined,
-  "titleTemplate": "%s - Slidev",
 }
 `;
 

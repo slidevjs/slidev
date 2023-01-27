@@ -1,8 +1,18 @@
 import { basename, resolve } from 'path'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { load, parse, prettify, stringify } from '../packages/parser/src/fs'
-import type { SlidevPreparserExtension } from '../slidev/types/src/types'
+import { getDefaultConfig, load, parse, prettify, stringify } from '../packages/parser/src/fs'
+import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
+
+function configDiff(v: SlidevConfig) {
+  const defaults = getDefaultConfig()
+  const res: Record<string, any> = {}
+  for (const key of Object.keys(v)) {
+    if (JSON.stringify(v[key]) !== JSON.stringify(defaults[key]))
+      res[key] = v[key]
+  }
+  return res
+}
 
 describe('md parser', () => {
   const files = fg.sync('*.md', {
@@ -20,7 +30,8 @@ describe('md parser', () => {
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
-          // @ts-expect-error non-optional
+          // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+          // @ts-ignore non-optional
           delete slide.source.filepath
         // @ts-expect-error extra prop
         if (slide.filepath)
@@ -28,7 +39,7 @@ describe('md parser', () => {
           delete slide.filepath
       }
       expect(data.slides).toMatchSnapshot('slides')
-      expect(data.config).toMatchSnapshot('config')
+      expect(configDiff(data.config)).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')
     })
   }
@@ -93,7 +104,7 @@ f
       .toEqual({ })
   })
 
-  async function parseWithExtension(src, transformRawLines, more = {}, moreExts: SlidevPreparserExtension = []) {
+  async function parseWithExtension(src: string, transformRawLines, more = {}, moreExts: SlidevPreparserExtension[] = []) {
     return await parse(src, undefined, undefined, [], async () => [{ transformRawLines, ...more }, ...moreExts])
   }
 
@@ -182,12 +193,14 @@ a..A
 a.a.A.A
 .a.A.
 `, undefined, {}, [{
+      name: 'test',
       transformRawLines(lines: string[]) {
         for (const i in lines)
           lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
       },
     },
     {
+      name: 'test',
       transformRawLines(lines: string[]) {
         for (const i in lines)
           lines[i] = lines[i].replace(/A/g, 'C')
