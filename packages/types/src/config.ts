@@ -1,3 +1,4 @@
+import type { TransitionProps } from 'vue'
 import type { ExportArgs } from './cli'
 import type { SlidevThemeConfig } from './types'
 
@@ -182,6 +183,20 @@ export interface SlidevConfig {
    * @default {}
    */
   htmlAttrs: Record<string, string>
+  /**
+   * Page transition, powered by Vue Transition
+   *
+   * @see https://vuejs.org/guide/built-ins/transition.html
+   * @experimental
+   */
+  pageTransition: TransitionProps & {
+    /**
+     * Use crossfade transition
+     *
+     * @default true
+     */
+    crossfade?: boolean
+  }
 }
 
 export interface FontOptions {

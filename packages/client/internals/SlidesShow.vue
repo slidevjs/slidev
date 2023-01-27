@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { shallowRef, watch } from 'vue'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes } from '../logic/nav'
 import { getSlideClass } from '../utils'
+import { configs } from '../env'
 import SlideWrapper from './SlideWrapper'
 // @ts-expect-error virtual module
 import GlobalTop from '/@slidev/global-components/top'
@@ -22,6 +23,18 @@ watch(currentRoute, () => {
 const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
+
+const routes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
+
+const isLeaving = ref(false)
+function onBeforeLeave() {
+  if (configs.pageTransition?.crossfade === false)
+    isLeaving.value = true
+}
+function onAfterLeave() {
+  if (configs.pageTransition?.crossfade === false)
+    isLeaving.value = false
+}
 </script>
 
 <template>
@@ -29,18 +42,26 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   <GlobalBottom />
 
   <!-- Slides -->
-  <template v-for="route of rawRoutes" :key="route.path">
-    <SlideWrapper
-      :is="route?.component"
-      v-show="route === currentRoute"
-      v-if="route.meta?.__preloaded || route === currentRoute"
-      :clicks="route === currentRoute ? clicks : 0"
-      :clicks-elements="route.meta?.__clicksElements || []"
-      :clicks-disabled="false"
-      :class="getSlideClass(route)"
-      :route="route"
-      :context="context"
-    />
+  <template
+    v-for="route of routes"
+    :key="route.path"
+  >
+    <Transition
+      v-bind="configs.pageTransition"
+      @before-leave="onBeforeLeave()"
+      @after-leave="onAfterLeave()"
+    >
+      <SlideWrapper
+        :is="route?.component as any"
+        v-show="route === currentRoute && !isLeaving"
+        :clicks="route === currentRoute ? clicks : 0"
+        :clicks-elements="route.meta?.__clicksElements || []"
+        :clicks-disabled="false"
+        :class="getSlideClass(route)"
+        :route="route"
+        :context="context"
+      />
+    </Transition>
   </template>
 
   <!-- Global Top -->

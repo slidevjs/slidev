@@ -19,6 +19,10 @@ info: |
 # persist drawings in exports and build
 drawings:
   persist: false
+# page transition, apply to all slides
+pageTransition:
+  name: fade
+  mode: out-in
 # use UnoCSS
 css: unocss
 ---

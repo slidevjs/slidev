@@ -1,7 +1,6 @@
 import { join } from 'path'
 import { slash } from '@antfu/utils'
 import type { Plugin } from 'vite'
-import { resolvePackageData } from 'vite'
 
 export function createMonacoTypesLoader(): Plugin {
   return {
@@ -13,10 +12,11 @@ export function createMonacoTypesLoader(): Plugin {
       return null
     },
 
-    load(id) {
+    async load(id) {
       const match = id.match(/^\/\@slidev-monaco-types\/(.*)$/)
       if (match) {
         const pkg = match[1]
+        const { resolvePackageData } = await import('vite')
         const info = resolvePackageData(pkg, process.cwd())
         if (!info)
           return
