@@ -8,14 +8,19 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 import { loadSetups } from './setupNode'
 
 export async function createUnocssPlugin(
-  { themeRoots, addonRoots, clientRoot, roots, data }: ResolvedSlidevOptions,
+  { themeRoots, addonRoots, clientRoot, roots, userRoot, data }: ResolvedSlidevOptions,
   { unocss: unoOptions }: SlidevPluginOptions,
 ) {
   const UnoCSS = await import('unocss/vite').then(r => r.default)
   const configFiles = uniq([
+    resolve(userRoot, 'uno.config.ts'),
+    resolve(userRoot, 'unocss.config.ts'),
     ...themeRoots.map(i => `${i}/uno.config.ts`),
+    ...themeRoots.map(i => `${i}/unocss.config.ts`),
     ...addonRoots.map(i => `${i}/uno.config.ts`),
+    ...addonRoots.map(i => `${i}/unocss.config.ts`),
     resolve(clientRoot, 'uno.config.ts'),
+    resolve(clientRoot, 'unocss.config.ts'),
   ])
 
   const configFile = configFiles.find(i => existsSync(i))!
