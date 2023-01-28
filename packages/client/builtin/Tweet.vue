@@ -58,7 +58,7 @@ else {
 
 <template>
   <Transform :scale="scale || 1">
-    <div ref="tweet" class="tweet" :data-waitfor="tweetNotFound ? '' : 'iframe'">
+    <div ref="tweet" class="tweet">
       <div v-if="!loaded || tweetNotFound" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
         <div class="m-auto animate-pulse text-4xl">
           <carbon:logo-twitter />

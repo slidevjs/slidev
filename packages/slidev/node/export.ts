@@ -26,6 +26,11 @@ export interface ExportOptions {
   withClicks?: boolean
   executablePath?: string
   withToc?: boolean
+  /**
+   * Render slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF.
+   * @default false
+   */
+  perSlide?: boolean
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -157,6 +162,7 @@ export async function exportSlides({
   withClicks = false,
   executablePath = undefined,
   withToc = false,
+  perSlide = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
@@ -171,12 +177,12 @@ export async function exportSlides({
     viewport: {
       width,
       // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
-      height: height * pages.length,
+      height: perSlide ? height : height * pages.length,
     },
     deviceScaleFactor: 1,
   })
   const page = await context.newPage()
-  const progress = createSlidevProgress(true)
+  const progress = createSlidevProgress(!perSlide)
 
   async function go(no: number | string, clicks?: string) {
     const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}${range ? `&range=${range}` : ''}`
@@ -190,22 +196,22 @@ export async function exportSlides({
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
     // Check for "data-waitfor" attribute and wait for given element to be loaded
-    const elements = await page.locator('[data-waitfor]')
+    const elements = page.locator('[data-waitfor]')
     const count = await elements.count()
     for (let index = 0; index < count; index++) {
-      const element = await elements.nth(index)
+      const element = elements.nth(index)
       const attribute = await element.getAttribute('data-waitfor')
       if (attribute)
         await element.locator(attribute).waitFor()
     }
     // Wait for frames to load
-    const frames = await page.frames()
+    const frames = page.frames()
     await Promise.all(frames.map(frame => frame.waitForLoadState()))
   }
 
   async function getSlidesIndex() {
     const clicksBySlide: Record<string, number> = {}
-    const slides = await page.locator('.slide-container')
+    const slides = page.locator('.print-slide-container')
     const count = await slides.count()
     for (let i = 0; i < count; i++) {
       const id = (await slides.nth(i).getAttribute('id')) || ''
@@ -221,9 +227,63 @@ export async function exportSlides({
     return slideIndexes
   }
 
-  async function genPagePdf() {
-    if (!output.endsWith('.pdf'))
-      output = `${output}.pdf`
+  function getClicksFromUrl(url: string) {
+    return url.match(/clicks=([1-9][0-9]*)/)?.[1]
+  }
+
+  async function genPageWithClicks(
+    fn: (i: number, clicks?: string) => Promise<any>,
+    i: number,
+    clicks?: string,
+  ) {
+    await fn(i, clicks)
+    if (withClicks) {
+      await page.keyboard.press('ArrowRight', { delay: 100 })
+      const _clicks = getClicksFromUrl(page.url())
+      if (_clicks && clicks !== _clicks)
+        await genPageWithClicks(fn, i, _clicks)
+    }
+  }
+
+  async function genPagePdfPerSlide() {
+    const buffers: Buffer[] = []
+    const genPdfBuffer = async (i: number, clicks?: string) => {
+      await go(i, clicks)
+      const pdf = await page.pdf({
+        width,
+        height,
+        margin: {
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+        },
+        pageRanges: '1',
+        printBackground: true,
+        preferCSSPageSize: true,
+      })
+      buffers.push(pdf)
+    }
+    let idx = 0
+    for (const i of pages) {
+      await genPageWithClicks(genPdfBuffer, i)
+      progress.update(++idx)
+    }
+
+    const mergedPdf = await PDFDocument.create({})
+    for (const pdfBytes of buffers) {
+      const pdf = await PDFDocument.load(pdfBytes)
+      const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
+      copiedPages.forEach((page) => {
+        mergedPdf.addPage(page)
+      })
+    }
+
+    const buffer = await mergedPdf.save()
+    await fs.writeFile(output, buffer)
+  }
+
+  async function genPagePdfOnePiece() {
     await go('print')
     const slideIndexes = await getSlidesIndex()
     await page.pdf({
@@ -268,10 +328,10 @@ export async function exportSlides({
     await fs.writeFile(output, pdfData)
   }
 
-  async function genPagePng() {
+  async function genPagePngOnePiece() {
     await go('print')
     await fs.emptyDir(output)
-    const slides = await page.locator('.slide-container')
+    const slides = await page.locator('.print-slide-container')
     const count = await slides.count()
     for (let i = 0; i < count; i++) {
       progress.update(i + 1)
@@ -280,6 +340,35 @@ export async function exportSlides({
       const buffer = await slides.nth(i).screenshot()
       await fs.writeFile(path.join(output, `${id}.png`), buffer)
     }
+  }
+
+  async function genPagePngPerSlide() {
+    const genScreenshot = async (i: number, clicks?: string) => {
+      await go(i, clicks)
+      await page.screenshot({
+        omitBackground: false,
+        path: path.join(
+          output,
+          `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`,
+        ),
+      })
+    }
+    for (const i of pages)
+      await genPageWithClicks(genScreenshot, i)
+  }
+
+  function genPagePdf() {
+    if (!output.endsWith('.pdf'))
+      output = `${output}.pdf`
+    return perSlide
+      ? genPagePdfPerSlide()
+      : genPagePdfOnePiece()
+  }
+
+  function genPagePng() {
+    return perSlide
+      ? genPagePngPerSlide()
+      : genPagePngOnePiece()
   }
 
   async function genPageMd(slides: SlideInfo[]) {
@@ -330,6 +419,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks: args['with-clicks'],
     executablePath: args['executable-path'],
     withToc: args['with-toc'],
+    perSlide: args['per-slide'],
   }
   const {
     entry,
@@ -341,6 +431,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks,
     executablePath,
     withToc,
+    perSlide,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
   if (outDir)
@@ -351,7 +442,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     total: options.data.slides.length,
     range,
     format: (format || 'pdf') as 'pdf' | 'png' | 'md',
-    timeout: timeout || 30000,
+    timeout: timeout ?? 30000,
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
@@ -359,5 +450,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks: withClicks || false,
     executablePath,
     withToc: withToc || false,
+    perSlide: perSlide || false,
   }
 }

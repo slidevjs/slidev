@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import type { Slots } from 'vue'
-import { h, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
 import { windowSize } from '../state'
 import { isPrintMode } from '../logic/nav'
-import { slideHeight, slideWidth, themeVars } from '../env'
+import { themeVars } from '../env'
 import PrintContainer from './PrintContainer.vue'
-
-function vStyle<Props>(props: Props, { slots }: { slots: Slots }) {
-  if (slots.default)
-    return h('style', slots.default())
-}
+import PrintStyle from './PrintStyle.vue'
 
 watchEffect(() => {
   if (isPrintMode)
@@ -20,9 +15,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <vStyle>
-    @page { size: {{ slideWidth }}px {{ slideHeight }}px; margin: 0px; }
-  </vStyle>
+  <PrintStyle v-if="isPrintMode" />
   <div id="page-root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
     <PrintContainer
       class="w-full h-full"

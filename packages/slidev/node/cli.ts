@@ -456,6 +456,10 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'boolean',
       describe: 'export pages with outline',
     })
+    .option('per-slide', {
+      type: 'boolean',
+      describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
+    })
 }
 
 function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string) {
