@@ -50,6 +50,8 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
+transition: slide-up
+---
 
 # What is Slidev?
 
@@ -89,6 +91,8 @@ h1 {
 Here is another comment.
 -->
 
+---
+transition: fade-out
 ---
 
 # Navigation
