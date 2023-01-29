@@ -20,9 +20,7 @@ info: |
 drawings:
   persist: false
 # page transition, apply to all slides
-pageTransition:
-  name: fade
-  mode: out-in
+pageTransition: fade
 # use UnoCSS
 css: unocss
 ---

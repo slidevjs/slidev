@@ -189,14 +189,14 @@ export interface SlidevConfig {
    * @see https://vuejs.org/guide/built-ins/transition.html
    * @experimental
    */
-  pageTransition: TransitionProps & {
+  pageTransition: string | (TransitionProps & {
     /**
      * Use crossfade transition
      *
      * @default false
      */
     crossfade?: boolean
-  }
+  })
 }
 
 export interface FontOptions {

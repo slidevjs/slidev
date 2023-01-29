@@ -59,6 +59,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.htmlAttrs,
       ...headmatter?.htmlAttrs,
     },
+    pageTransition: {
+      ...resolvePageTransition(themeMeta.defaults?.pageTransition),
+      ...resolvePageTransition(headmatter.config?.pageTransition),
+      ...resolvePageTransition(headmatter?.pageTransition),
+    },
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -193,4 +198,13 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
     presenterOnly,
     syncAll,
   }
+}
+
+function resolvePageTransition(options?: SlidevConfig['pageTransition']) {
+  if (!options)
+    return undefined
+  if (typeof options === 'string')
+    return { name: options, mode: 'out-in' }
+  if (typeof options === 'object')
+    return options
 }
