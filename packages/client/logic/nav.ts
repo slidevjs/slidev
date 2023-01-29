@@ -1,4 +1,4 @@
-import type { Ref } from 'vue'
+import type { Ref, TransitionProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
 import type { TocItem } from '@slidev/types'
@@ -77,7 +77,7 @@ export const rawTree = computed(() => rawRoutes
 export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
 export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
-export const transition = computed(() => getTransition(navDirection.value, currentRoute.value, prevRoute.value))
+export const transition = computed(() => getCurrentTransition(navDirection.value, currentRoute.value, prevRoute.value))
 
 watch(currentRoute, (next, prev) => {
   navDirection.value = Number(next?.path) - Number(prev?.path)
@@ -229,30 +229,49 @@ export function filterTree(tree: TocItem[], level = 1): TocItem[] {
     }))
 }
 
-export function getTransition(direction: number, currentRoute?: RouteRecordRaw, prevRoute?: RouteRecordRaw) {
-  let transition = currentRoute?.meta?.transition
-  if (direction > 0)
-    transition = prevRoute?.meta?.transition
-  if (!transition)
-    transition = configs.transition
-  if (typeof transition === 'string')
-    return direction > 0 ? transition : getBackwardTransition(transition)
-  return direction > 0 ? transition?.forward : transition?.backward
+const transitionResolveMap: Record<string, string | undefined> = {
+  'slide-left': 'slide-left | slide-right',
+  'slide-right': 'slide-right | slide-left',
+  'slide-up': 'slide-up | slide-down',
+  'slide-down': 'slide-down | slide-up',
 }
 
-export function getBackwardTransition(transition: string) {
-  switch (transition) {
-    case 'slide-left':
-      return 'slide-right'
-    case 'slide-right':
-      return 'slide-left'
-    case 'slide-up':
-      return 'slide-down'
-    case 'slide-down':
-      return 'slide-up'
-    case 'fade':
-      return 'fade'
-    default:
-      return ''
+export function resolveTransition(transition?: string | TransitionProps, isBackward = false): TransitionProps | undefined {
+  if (!transition)
+    return undefined
+  if (typeof transition === 'string') {
+    transition = {
+      name: transition,
+    }
   }
+
+  if (!transition.name)
+    return undefined
+
+  let name = transition.name.includes('|')
+    ? transition.name
+    : (transitionResolveMap[transition.name] || transition.name)
+
+  if (name.includes('|')) {
+    const [forward, backward] = name.split('|').map(i => i.trim())
+    name = isBackward ? backward : forward
+  }
+
+  if (!name)
+    return undefined
+
+  return {
+    ...transition,
+    name,
+  }
+}
+
+export function getCurrentTransition(direction: number, currentRoute?: RouteRecordRaw, prevRoute?: RouteRecordRaw) {
+  let transition = direction > 0
+    ? prevRoute?.meta?.transition
+    : currentRoute?.meta?.transition
+  if (!transition)
+    transition = configs.transition
+
+  return resolveTransition(transition, direction < 0)
 }

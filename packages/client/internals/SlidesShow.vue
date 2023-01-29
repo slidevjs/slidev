@@ -44,7 +44,7 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   <GlobalBottom />
 
   <!-- Slides -->
-  <TransitionGroup :name="transition">
+  <TransitionGroup v-bind="transition">
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
         :is="route?.component as any"

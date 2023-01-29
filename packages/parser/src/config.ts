@@ -31,7 +31,7 @@ export function getDefaultConfig(): SlidevConfig {
     css: 'windicss',
     presenter: true,
     htmlAttrs: {},
-    transition: {},
+    transition: undefined,
   }
 }
 
@@ -58,11 +58,6 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...themeMeta.defaults?.htmlAttrs,
       ...headmatter.config?.htmlAttrs,
       ...headmatter?.htmlAttrs,
-    },
-    transition: {
-      ...resolvePageTransition(themeMeta.defaults?.transition),
-      ...resolvePageTransition(headmatter.config?.transition),
-      ...resolvePageTransition(headmatter?.transition),
     },
   }
 
@@ -198,13 +193,4 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
     presenterOnly,
     syncAll,
   }
-}
-
-function resolvePageTransition(options?: SlidevConfig['transition']) {
-  if (!options)
-    return undefined
-  if (typeof options === 'string')
-    return { name: options, mode: 'out-in' }
-  if (typeof options === 'object')
-    return options
 }

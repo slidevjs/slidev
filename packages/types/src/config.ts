@@ -189,7 +189,7 @@ export interface SlidevConfig {
    * @see https://vuejs.org/guide/built-ins/transition.html
    * @experimental
    */
-  transition: SlideTransition | string | (TransitionProps & {
+  transition?: BuiltinSlideTransition | string | (TransitionProps & {
     /**
      * Use crossfade transition
      *
@@ -301,3 +301,5 @@ export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme
   executablePath?: string
   withToc?: boolean
 }
+
+export type BuiltinSlideTransition = 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade' | 'zoom' | 'none'

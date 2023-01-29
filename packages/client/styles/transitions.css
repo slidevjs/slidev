@@ -9,11 +9,6 @@
   transition: all 0.4s ease;
 }
 
-.fade-enter-active,
-.fade-leave-active   {
-  transition: opacity 0.4s ease;
-}
-
 .slide-left-enter-from,
 .slide-right-leave-to {
   transform: translateX(100%);
@@ -34,7 +29,26 @@
   transform: translateY(-100%);
 }
 
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-active {
+  transition: opacity 0.4s ease;
+  transition-delay: 0.4s;
+}
+
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.crossfade-enter-active,
+.crossfade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.crossfade-enter-from,
+.crossfade-leave-to {
   opacity: 0;
 }
