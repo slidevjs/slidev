@@ -42,12 +42,12 @@
 }
 
 .fade-out-leave-active {
-  transition: opacity var(--slidev-transition-duration) ease-out;
+  transition: opacity calc(var(--slidev-transition-duration) * 0.6) ease-out;
 }
 
 .fade-out-enter-active {
-  transition: opacity var(--slidev-transition-duration) ease-in;
-  transition-delay: var(--slidev-transition-duration);
+  transition: opacity calc(var(--slidev-transition-duration) * 0.8) ease-in;
+  transition-delay: calc(var(--slidev-transition-duration) * 0.6);
 }
 
 .fade-out-enter-from,
