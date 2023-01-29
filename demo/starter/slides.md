@@ -20,7 +20,7 @@ info: |
 drawings:
   persist: false
 # page transition
-transition: fade-out
+transition: slide-left
 # use UnoCSS
 css: unocss
 ---
@@ -50,7 +50,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
-transition: slide-left
+transition: fade-out
 ---
 
 # What is Slidev?
