@@ -20,7 +20,7 @@ info: |
 drawings:
   persist: false
 # page transition
-transition: fade-out
+transition: slide-left
 # use UnoCSS
 css: unocss
 ---

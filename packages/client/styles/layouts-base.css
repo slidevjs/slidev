@@ -1,5 +1,5 @@
 #slide-content > div {
-  @apply h-full w-full absolute bg-main;
+  @apply h-full w-full absolute;
 }
 
 .slidev-layout {

@@ -1,4 +1,4 @@
-import type { Ref, TransitionProps } from 'vue'
+import type { Ref, TransitionGroupProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
 import type { TocItem } from '@slidev/types'
@@ -236,7 +236,7 @@ const transitionResolveMap: Record<string, string | undefined> = {
   'slide-down': 'slide-down | slide-up',
 }
 
-export function resolveTransition(transition?: string | TransitionProps, isBackward = false): TransitionProps | undefined {
+export function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
   if (!transition)
     return undefined
   if (typeof transition === 'string') {

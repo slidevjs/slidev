@@ -24,19 +24,6 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
 const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
-
-// const isLeaving = shallowRef<RouteRecordRaw | undefined>()
-// function onBeforeLeave(route: RouteRecordRaw) {
-//   if (configs.transition.crossfade)
-//     return
-//   isLeaving.value = route
-// }
-// function onAfterLeave(route: RouteRecordRaw) {
-//   if (configs.transition.crossfade)
-//     return
-//   if (isLeaving.value === route)
-//     isLeaving.value = undefined
-// }
 </script>
 
 <template>
