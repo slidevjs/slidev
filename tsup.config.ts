@@ -5,7 +5,7 @@ export default defineConfig({
     'esm',
     'cjs',
   ],
-  target: 'node16',
+  target: 'node14',
   splitting: true,
   dts: true,
   clean: true,
