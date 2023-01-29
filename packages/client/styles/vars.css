@@ -7,6 +7,8 @@
   --slidev-code-radius: 4px;
   --slidev-code-margin: 4px 0;
 
+  --slidev-transition-duration: 0.5s;
+
   --slidev-slide-container-background: black;
   --slidev-controls-foreground: white;
 }

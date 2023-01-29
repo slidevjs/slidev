@@ -1,6 +1,6 @@
-import type { Ref } from 'vue'
+import type { Ref, TransitionGroupProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import type { TocItem } from '@slidev/types'
 import { SwipeDirection, isString, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
@@ -18,6 +18,7 @@ nextTick(() => {
     routeForceRefresh.value += 1
   })
 })
+export const navDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -40,6 +41,7 @@ export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id
 export const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
+export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
 export const clicksElements = computed<HTMLElement[]>(() => {
   // eslint-disable-next-line no-unused-expressions
@@ -74,6 +76,12 @@ export const rawTree = computed(() => rawRoutes
   }, []))
 export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
 export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
+
+export const transition = computed(() => getCurrentTransition(navDirection.value, currentRoute.value, prevRoute.value))
+
+watch(currentRoute, (next, prev) => {
+  navDirection.value = Number(next?.path) - Number(prev?.path)
+})
 
 export function next() {
   if (clicksTotal.value <= clicks.value)
@@ -219,4 +227,51 @@ export function filterTree(tree: TocItem[], level = 1): TocItem[] {
       ...item,
       children: filterTree(item.children, level + 1),
     }))
+}
+
+const transitionResolveMap: Record<string, string | undefined> = {
+  'slide-left': 'slide-left | slide-right',
+  'slide-right': 'slide-right | slide-left',
+  'slide-up': 'slide-up | slide-down',
+  'slide-down': 'slide-down | slide-up',
+}
+
+export function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
+  if (!transition)
+    return undefined
+  if (typeof transition === 'string') {
+    transition = {
+      name: transition,
+    }
+  }
+
+  if (!transition.name)
+    return undefined
+
+  let name = transition.name.includes('|')
+    ? transition.name
+    : (transitionResolveMap[transition.name] || transition.name)
+
+  if (name.includes('|')) {
+    const [forward, backward] = name.split('|').map(i => i.trim())
+    name = isBackward ? backward : forward
+  }
+
+  if (!name)
+    return undefined
+
+  return {
+    ...transition,
+    name,
+  }
+}
+
+export function getCurrentTransition(direction: number, currentRoute?: RouteRecordRaw, prevRoute?: RouteRecordRaw) {
+  let transition = direction > 0
+    ? prevRoute?.meta?.transition
+    : currentRoute?.meta?.transition
+  if (!transition)
+    transition = configs.transition
+
+  return resolveTransition(transition, direction < 0)
 }

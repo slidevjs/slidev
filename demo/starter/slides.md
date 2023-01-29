@@ -19,8 +19,8 @@ info: |
 # persist drawings in exports and build
 drawings:
   persist: false
-# page transition, apply to all slides
-pageTransition: fade
+# page transition
+transition: fade-out
 # use UnoCSS
 css: unocss
 ---
@@ -49,6 +49,8 @@ Presentation slides for developers
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
 
+---
+transition: slide-left
 ---
 
 # What is Slidev?
@@ -89,6 +91,8 @@ h1 {
 Here is another comment.
 -->
 
+---
+transition: slide-up
 ---
 
 # Navigation

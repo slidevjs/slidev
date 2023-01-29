@@ -1,4 +1,4 @@
-import type { TransitionProps } from 'vue'
+import type { TransitionGroupProps } from 'vue'
 import type { ExportArgs } from './cli'
 import type { SlidevThemeConfig } from './types'
 
@@ -184,19 +184,20 @@ export interface SlidevConfig {
    */
   htmlAttrs: Record<string, string>
   /**
-   * Page transition, powered by Vue Transition
+   * Page transition, powered by Vue's <TransitionGroup/>
    *
+   * Built-in transitions:
+   * - fade
+   * - fade-out
+   * - slide-left
+   * - slide-right
+   * - slide-up
+   * - slide-down
+   *
+   * @see https://sli.dev/guide/animations.html#pages-transitions
    * @see https://vuejs.org/guide/built-ins/transition.html
-   * @experimental
    */
-  pageTransition: string | (TransitionProps & {
-    /**
-     * Use crossfade transition
-     *
-     * @default false
-     */
-    crossfade?: boolean
-  })
+  transition?: BuiltinSlideTransition | string | TransitionGroupProps
 }
 
 export interface FontOptions {
@@ -301,3 +302,5 @@ export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme
   executablePath?: string
   withToc?: boolean
 }
+
+export type BuiltinSlideTransition = 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade' | 'zoom' | 'none'
