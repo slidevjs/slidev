@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from 'vue'
+import { computed, shallowRef, watch } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes } from '../logic/nav'
 import { getSlideClass } from '../utils'
