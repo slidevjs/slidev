@@ -194,8 +194,8 @@ export interface SlidevConfig {
    * - slide-up
    * - slide-down
    *
+   * @see https://sli.dev/guide/animations.html#pages-transitions
    * @see https://vuejs.org/guide/built-ins/transition.html
-   * @experimental
    */
   transition?: BuiltinSlideTransition | string | TransitionGroupProps
 }
