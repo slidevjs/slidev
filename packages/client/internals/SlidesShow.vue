@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef, watch } from 'vue'
+import type { RouteRecordRaw } from 'vue-router'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
@@ -26,14 +27,17 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 
 const routes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
 
-const isLeaving = ref(false)
-function onBeforeLeave() {
-  if (configs.pageTransition?.crossfade === false)
-    isLeaving.value = true
+const isLeaving = shallowRef<RouteRecordRaw | undefined>()
+function onBeforeLeave(route: RouteRecordRaw) {
+  if (configs.pageTransition.crossfade)
+    return
+  isLeaving.value = route
 }
-function onAfterLeave() {
-  if (configs.pageTransition?.crossfade === false)
-    isLeaving.value = false
+function onAfterLeave(route: RouteRecordRaw) {
+  if (configs.pageTransition.crossfade)
+    return
+  if (isLeaving.value === route)
+    isLeaving.value = undefined
 }
 </script>
 
@@ -48,8 +52,8 @@ function onAfterLeave() {
   >
     <Transition
       v-bind="configs.pageTransition"
-      @before-leave="onBeforeLeave()"
-      @after-leave="onAfterLeave()"
+      @before-leave="onBeforeLeave(route)"
+      @after-leave="onAfterLeave(route)"
     >
       <SlideWrapper
         :is="route?.component as any"

@@ -193,7 +193,7 @@ export interface SlidevConfig {
     /**
      * Use crossfade transition
      *
-     * @default true
+     * @default false
      */
     crossfade?: boolean
   }

@@ -105,7 +105,7 @@ f
   })
 
   async function parseWithExtension(src: string, transformRawLines, more = {}, moreExts: SlidevPreparserExtension[] = []) {
-    return await parse(src, undefined, undefined, [], async () => [{ transformRawLines, ...more }, ...moreExts])
+    return await parse(src, undefined, undefined, [], async () => [{ transformRawLines, ...more }, ...moreExts] as any)
   }
 
   it('parse with-extension replace', async () => {
