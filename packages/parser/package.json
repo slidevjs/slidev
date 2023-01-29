@@ -39,7 +39,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts --format cjs,esm --dts --splitting --no-shims",
+    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "ESNext",
     "baseUrl": ".",
-    "target": "es2016",
+    "target": "es2020",
     "lib": ["DOM", "ESNext"],
     "strict": true,
     "esModuleInterop": true,

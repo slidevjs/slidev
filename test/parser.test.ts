@@ -231,7 +231,7 @@ withSlideBefore
 
 ---
 `
-: ''}${!withSlideBefore && withFrontmatter ? '---\n' : ''}${withFrontmatter
+: ''}${(!withSlideBefore && withFrontmatter) ? '---\n' : ''}${withFrontmatter
 ? `m: M
 n: N
 ---`

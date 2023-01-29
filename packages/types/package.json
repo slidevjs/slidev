@@ -23,11 +23,8 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --splitting",
+    "build": "tsup src/index.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "tsup": "^5.12.7"
   }
 }

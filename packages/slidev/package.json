@@ -34,7 +34,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "rimraf dist && tsup node/index.ts node/cli.ts --dts --format cjs,esm --splitting --external @slidev/client/package.json",
+    "build": "rimraf dist && tsup node/index.ts node/cli.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build",
     "start": "esno node/cli.ts"
@@ -104,6 +104,7 @@
   "devDependencies": {
     "@types/plantuml-encoder": "^1.4.0",
     "fast-deep-equal": "^3.1.3",
+    "local-pkg": "^0.4.3",
     "semver": "^7.3.8",
     "sirv": "^2.0.2"
   }

@@ -59,7 +59,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ? {
               postcss: {
                 plugins: [
-                  await import('postcss-nested').then(r => r.default()) as any,
+                  await import('postcss-nested').then(r => (r.default || r)()) as any,
                 ],
               },
             }
