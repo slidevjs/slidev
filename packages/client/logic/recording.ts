@@ -107,7 +107,7 @@ export function useRecording() {
         return
 
       streamCamera.value = await navigator.mediaDevices.getUserMedia({
-        video: currentCamera.value === 'none' || recordCamera.value !== true
+        video: (currentCamera.value === 'none' || recordCamera.value !== true)
           ? false
           : {
               deviceId: currentCamera.value,

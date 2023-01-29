@@ -3,6 +3,7 @@ import { useElementSize } from '@vueuse/core'
 import { computed, provide, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
+import { isPrintMode } from '../logic/nav'
 
 const props = defineProps({
   width: {
@@ -34,7 +35,7 @@ if (props.width) {
 const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
-  if (props.scale)
+  if (props.scale && !isPrintMode.value)
     return props.scale
   if (screenAspect.value < slideAspect)
     return width.value / slideWidth
@@ -66,7 +67,7 @@ provide(injectionSlideScale, scale)
 
 <style lang="postcss">
 #slide-container {
-  @apply relative overflow-hidden;
+  @apply relative overflow-hidden break-after-page;
 }
 
 #slide-content {

@@ -50,7 +50,7 @@ provide(injectionSlideScale, scale)
   @apply bg-main;
 }
 
-.slide-container {
+.print-slide-container {
   @apply relative overflow-hidden break-after-page;
 }
 </style>

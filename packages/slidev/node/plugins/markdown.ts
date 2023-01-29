@@ -6,7 +6,7 @@ import { slash } from '@antfu/utils'
 import mila from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import mif from 'markdown-it-footnote'
-import mitl from '@hedgedoc/markdown-it-task-lists'
+import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
@@ -66,7 +66,7 @@ export async function createMarkdownPlugin(
       })
 
       md.use(mif)
-      md.use(mitl, { enabled: true, lineNumber: true, label: true })
+      md.use(taskLists, { enabled: true, lineNumber: true, label: true })
       md.use(Katex, KatexOptions)
 
       setups.forEach(i => i(md))

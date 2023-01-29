@@ -1,3 +1,5 @@
+import type { TransitionProps } from 'vue'
+import type { ExportArgs } from './cli'
 import type { SlidevThemeConfig } from './types'
 
 export interface SlidevConfig {
@@ -42,6 +44,12 @@ export interface SlidevConfig {
    * @default false
    */
   download: boolean | string
+  /**
+   * Options for export
+   *
+   * @default {}
+   */
+  export: ResolvedExportOptions
   /**
    * Show a copy button in code blocks
    *
@@ -170,11 +178,25 @@ export interface SlidevConfig {
    */
   presenter: boolean | 'dev' | 'build'
   /**
-   * Slide transition
+   * Attributes to apply to the HTML element
    *
-   * @default ''
+   * @default {}
    */
-  transition: string | SlideTransition
+  htmlAttrs: Record<string, string>
+  /**
+   * Page transition, powered by Vue Transition
+   *
+   * @see https://vuejs.org/guide/built-ins/transition.html
+   * @experimental
+   */
+  transition: SlideTransition | string | (TransitionProps & {
+    /**
+     * Use crossfade transition
+     *
+     * @default false
+     */
+    crossfade?: boolean
+  })
 }
 
 export interface FontOptions {
@@ -274,7 +296,8 @@ export interface ResolvedDrawingsOptions {
   syncAll: boolean
 }
 
-export interface SlideTransition {
-  forward: string
-  backward: string
+export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme'> {
+  withClicks?: boolean
+  executablePath?: string
+  withToc?: boolean
 }

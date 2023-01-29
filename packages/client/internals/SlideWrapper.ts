@@ -3,6 +3,7 @@ import { defineComponent, h, provide } from 'vue'
 import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap, injectionRoute, injectionSlideContext } from '../constants'
 
 export default defineComponent({
+  name: 'SlideWrapper',
   props: {
     clicks: {
       type: [Number, String],

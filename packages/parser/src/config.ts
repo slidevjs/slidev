@@ -1,12 +1,9 @@
 import { toArray, uniq } from '@antfu/utils'
-import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { parseAspectRatio } from './utils'
 
-export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
-  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
-
-  const defaultConfig: SlidevConfig = {
+export function getDefaultConfig(): SlidevConfig {
+  return {
     theme: 'default',
     title: 'Slidev',
     titleTemplate: '%s - Slidev',
@@ -14,10 +11,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     remoteAssets: false,
     monaco: 'dev',
     download: false,
+    export: {} as ResolvedExportOptions,
     info: false,
-    highlighter: themeHightlighter || 'prism',
+    highlighter: 'prism',
     lineNumbers: false,
-    colorSchema: themeColorSchema || 'auto',
+    colorSchema: 'auto',
     routerMode: 'history',
     aspectRatio: 16 / 9,
     canvasWidth: 980,
@@ -32,10 +30,21 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     record: 'dev',
     css: 'windicss',
     presenter: true,
-    transition: '',
+    htmlAttrs: {},
+    transition: {},
   }
+}
+
+export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
+  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
+  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
+
+  const defaultConfig = getDefaultConfig()
+
   const config: SlidevConfig = {
     ...defaultConfig,
+    highlighter: themeHightlighter || defaultConfig.highlighter,
+    colorSchema: themeColorSchema || defaultConfig.colorSchema,
     ...themeMeta.defaults,
     ...headmatter.config,
     ...headmatter,
@@ -45,6 +54,16 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter?.fonts,
     }),
     drawings: resolveDrawings(headmatter.drawings, filepath),
+    htmlAttrs: {
+      ...themeMeta.defaults?.htmlAttrs,
+      ...headmatter.config?.htmlAttrs,
+      ...headmatter?.htmlAttrs,
+    },
+    transition: {
+      ...resolvePageTransition(themeMeta.defaults?.transition),
+      ...resolvePageTransition(headmatter.config?.transition),
+      ...resolvePageTransition(headmatter?.transition),
+    },
   }
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
@@ -179,4 +198,13 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
     presenterOnly,
     syncAll,
   }
+}
+
+function resolvePageTransition(options?: SlidevConfig['transition']) {
+  if (!options)
+    return undefined
+  if (typeof options === 'string')
+    return { name: options, mode: 'out-in' }
+  if (typeof options === 'object')
+    return options
 }

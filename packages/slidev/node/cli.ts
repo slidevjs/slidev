@@ -1,5 +1,4 @@
 import path from 'path'
-import net from 'net'
 import os from 'os'
 import { exec } from 'child_process'
 import * as readline from 'readline'
@@ -15,6 +14,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
+import { checkPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
@@ -201,7 +201,7 @@ cli.command(
 cli.command(
   'build [entry]',
   'Build hostable SPA',
-  args => commonOptions(args)
+  args => exportOptions(commonOptions(args))
     .option('watch', {
       alias: 'w',
       default: false,
@@ -229,7 +229,8 @@ cli.command(
     })
     .strict()
     .help(),
-  async ({ entry, theme, watch, base, download, out, inspect }) => {
+  async (args) => {
+    const { entry, theme, watch, base, download, out, inspect } = args
     const { build } = await import('./build')
 
     const options = await resolveOptions({ entry, theme, inspect }, 'build')
@@ -243,7 +244,7 @@ cli.command(
         watch: watch ? {} : undefined,
         outDir: out,
       },
-    })
+    }, args)
   },
 )
 
@@ -314,65 +315,15 @@ cli.command(
 cli.command(
   'export [entry]',
   'Export slides to PDF',
-  args => commonOptions(args)
-    .option('output', {
-      type: 'string',
-      describe: 'path to the output',
-    })
-    .option('format', {
-      default: 'pdf',
-      type: 'string',
-      choices: ['pdf', 'png', 'md'],
-      describe: 'output format',
-    })
-    .option('timeout', {
-      default: 30000,
-      type: 'number',
-      describe: 'timeout for rendering the print page',
-    })
-    .option('range', {
-      type: 'string',
-      describe: 'page ranges to export, for example "1,4-5,6"',
-    })
-    .option('dark', {
-      default: false,
-      type: 'boolean',
-      describe: 'export as dark theme',
-    })
-    .option('with-clicks', {
-      alias: 'c',
-      default: false,
-      type: 'boolean',
-      describe: 'export pages for every clicks',
-    })
-    .option('executable-path', {
-      type: 'string',
-      describe: 'executable to override playwright bundled browser',
-    })
-    .option('with-toc', {
-      default: false,
-      type: 'boolean',
-      describe: 'export pages with outline',
-    })
+  args => exportOptions(commonOptions(args))
     .strict()
     .help(),
-  async ({
-    entry,
-    theme,
-    output,
-    format,
-    timeout,
-    range,
-    dark,
-    'with-clicks': withClicks,
-    'executable-path': executablePath,
-    'with-toc': withTOC,
-  }) => {
+  async (args) => {
+    const { entry, theme } = args
     process.env.NODE_ENV = 'production'
-    const { exportSlides } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./export')
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry, theme }, 'build')
-    output = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
+    const options = await resolveOptions({ entry, theme }, 'export')
     const server = await createServer(
       options,
       {
@@ -383,23 +334,9 @@ cli.command(
     await server.listen(port)
     printInfo(options)
     parser.filterDisabled(options.data)
-    const width = options.data.config.canvasWidth
-    const height = Math.round(width / options.data.config.aspectRatio)
-    output = await exportSlides({
+    const output = await exportSlides({
       port,
-      slides: options.data.slides,
-      total: options.data.slides.length,
-      range,
-      format: format as any,
-      output,
-      timeout,
-      dark,
-      routerMode: options.data.config.routerMode,
-      width,
-      height,
-      withClicks,
-      executablePath,
-      withTOC,
+      ...getExportOptions(args, options),
     })
     console.log(`${green('  ✓ ')}${dim('exported to ')}./${output}\n`)
     server.close()
@@ -436,7 +373,7 @@ cli.command(
     const { exportNotes } = await import('./export')
 
     const port = await findFreePort(12445)
-    const options = await resolveOptions({ entry }, 'build')
+    const options = await resolveOptions({ entry }, 'export')
 
     if (!output)
       output = options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entry, '.md')}-export-notes`
@@ -483,6 +420,48 @@ function commonOptions(args: Argv<{}>) {
     })
 }
 
+function exportOptions<T>(args: Argv<T>) {
+  return args
+    .option('output', {
+      type: 'string',
+      describe: 'path to the output',
+    })
+    .option('format', {
+      type: 'string',
+      choices: ['pdf', 'png', 'md'],
+      describe: 'output format',
+    })
+    .option('timeout', {
+      type: 'number',
+      describe: 'timeout for rendering the print page',
+    })
+    .option('range', {
+      type: 'string',
+      describe: 'page ranges to export, for example "1,4-5,6"',
+    })
+    .option('dark', {
+      type: 'boolean',
+      describe: 'export as dark theme',
+    })
+    .option('with-clicks', {
+      alias: 'c',
+      type: 'boolean',
+      describe: 'export pages for every clicks',
+    })
+    .option('executable-path', {
+      type: 'string',
+      describe: 'executable to override playwright bundled browser',
+    })
+    .option('with-toc', {
+      type: 'boolean',
+      describe: 'export pages with outline',
+    })
+    .option('per-slide', {
+      type: 'boolean',
+      describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
+    })
+}
+
 function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string) {
   console.log()
   console.log()
@@ -524,26 +503,8 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log()
 }
 
-function isPortFree(port: number) {
-  return new Promise((resolve) => {
-    const server = net.createServer((socket) => {
-      socket.write('Echo server\r\n')
-      socket.pipe(socket)
-    })
-
-    server.listen(port, '127.0.0.1')
-    server.on('error', () => {
-      resolve(false)
-    })
-    server.on('listening', () => {
-      server.close()
-      resolve(true)
-    })
-  })
-}
-
 async function findFreePort(start: number): Promise<number> {
-  if (await isPortFree(start))
+  if (await checkPort(start) !== false)
     return start
   return findFreePort(start + 1)
 }

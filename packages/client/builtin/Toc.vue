@@ -9,7 +9,7 @@ Usage:
 -->
 <script setup lang='ts'>
 import { computed, inject } from 'vue'
-import type { TocItem } from '../logic/nav'
+import type { TocItem } from '@slidev/types'
 import { injectionSlidevContext } from '../constants'
 
 const props = withDefaults(

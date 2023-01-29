@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.38.3",
+  "version": "0.38.8",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -18,25 +18,25 @@
     "@antfu/utils": "^0.7.2",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@unocss/reset": "^0.47.6",
-    "@vueuse/core": "^9.11.0",
-    "@vueuse/head": "^1.0.22",
-    "@vueuse/math": "^9.7.0",
-    "@vueuse/motion": "^2.0.0-beta.26",
+    "@unocss/reset": "^0.49.1",
+    "@vueuse/core": "^9.11.1",
+    "@vueuse/head": "^1.0.23",
+    "@vueuse/math": "^9.11.1",
+    "@vueuse/motion": "^2.0.0-beta.27",
     "codemirror": "^5.65.5",
-    "defu": "^6.1.1",
+    "defu": "^6.1.2",
     "drauu": "^0.3.2",
     "file-saver": "^2.0.5",
-    "js-base64": "^3.7.3",
+    "js-base64": "^3.7.4",
     "js-yaml": "^4.1.0",
     "katex": "^0.16.4",
     "mermaid": "^9.3.0",
     "monaco-editor": "^0.33.0",
     "nanoid": "^4.0.0",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.3",
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.1",
-    "unocss": "^0.47.6",
+    "unocss": "^0.49.1",
     "vite-plugin-windicss": "^1.8.10",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
@@ -44,6 +44,6 @@
     "windicss": "^3.5.6"
   },
   "devDependencies": {
-    "vite": "^4.0.2"
+    "vite": "^4.0.4"
   }
 }

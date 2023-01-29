@@ -9,9 +9,9 @@ Usage:
 <script setup lang="ts">
 import { computed } from 'vue'
 import { toArray } from '@antfu/utils'
+import type { TocItem } from '@slidev/types'
 // @ts-expect-error virtual module
 import Titles from '/@slidev/titles.md'
-import type { TocItem } from '../logic/nav'
 
 const props = withDefaults(defineProps<{
   level: number
@@ -49,7 +49,7 @@ const classes = computed(() => {
 </template>
 
 <style>
-.slidev-toc-item p {
+.slidev-layout .slidev-toc-item p {
   margin: 0;
 }
 </style>

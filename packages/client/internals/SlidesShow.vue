@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TransitionGroup, shallowRef, watch } from 'vue'
+import { TransitionGroup, computed, shallowRef, watch } from 'vue'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'
@@ -22,6 +22,21 @@ watch(currentRoute, () => {
 const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
+
+const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
+
+// const isLeaving = shallowRef<RouteRecordRaw | undefined>()
+// function onBeforeLeave(route: RouteRecordRaw) {
+//   if (configs.transition.crossfade)
+//     return
+//   isLeaving.value = route
+// }
+// function onAfterLeave(route: RouteRecordRaw) {
+//   if (configs.transition.crossfade)
+//     return
+//   if (isLeaving.value === route)
+//     isLeaving.value = undefined
+// }
 </script>
 
 <template>
@@ -30,11 +45,10 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 
   <!-- Slides -->
   <TransitionGroup :name="transition">
-    <template v-for="route of rawRoutes" :key="route.path">
+    <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
-        :is="route?.component"
+        :is="route?.component as any"
         v-show="route === currentRoute"
-        v-if="route.meta?.__preloaded || route === currentRoute"
         :clicks="route === currentRoute ? clicks : 0"
         :clicks-elements="route.meta?.__clicksElements || []"
         :clicks-disabled="false"

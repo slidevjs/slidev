@@ -1,22 +1,12 @@
 import type { Ref } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
+import type { TocItem } from '@slidev/types'
 import { SwipeDirection, isString, timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
-
-export interface TocItem {
-  active?: boolean
-  activeParent?: boolean
-  children: TocItem[]
-  hasActiveParent?: boolean
-  level: number
-  path: string
-  hideInToc?: boolean
-  title?: string
-}
 
 export { rawRoutes, router }
 

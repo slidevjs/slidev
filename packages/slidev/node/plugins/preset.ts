@@ -1,6 +1,7 @@
 import { join } from 'path'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
+import VueJsx from '@vitejs/plugin-vue-jsx'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
@@ -57,6 +58,7 @@ export async function ViteSlidevPlugin(
 ): Promise<Plugin[]> {
   const {
     vue: vueOptions = {},
+    vuejsx: vuejsxOptions = {},
     components: componentsOptions = {},
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
@@ -85,6 +87,8 @@ export async function ViteSlidevPlugin(
     ...vueOptions,
   })
 
+  const VueJsxPlugin = VueJsx(vuejsxOptions)
+
   const MarkdownPlugin = await createMarkdownPlugin(options, pluginOptions)
 
   const drawingData = await loadDrawings(options)
@@ -94,12 +98,13 @@ export async function ViteSlidevPlugin(
       ? await createUnocssPlugin(options, pluginOptions)
       : await createWindiCSSPlugin(options, pluginOptions),
     MarkdownPlugin,
+    VueJsxPlugin,
     VuePlugin,
 
     createSlidesLoader(options, pluginOptions, serverOptions, VuePlugin, MarkdownPlugin),
 
     Components({
-      extensions: ['vue', 'md', 'ts'],
+      extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
 
       dirs: [
         join(clientRoot, 'builtin'),

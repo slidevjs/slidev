@@ -9,6 +9,7 @@ import Controls from './Controls.vue'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesShow from './SlidesShow.vue'
+import PrintStyle from './PrintStyle.vue'
 
 registerShortcuts()
 
@@ -40,6 +41,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 </script>
 
 <template>
+  <PrintStyle v-if="isPrintMode" />
   <div id="page-root" ref="root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
     <SlideContainer
       class="w-full h-full"

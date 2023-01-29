@@ -2,7 +2,6 @@
   "exclude": [
     "husky",
     "execa",
-    "tsup",
     "codemirror",
     "monaco-editor"
   ]

@@ -1,6 +1,6 @@
 /* __imports__ */
 import { watch } from 'vue'
-import { useHead } from '@vueuse/head'
+import { useHead, useHtmlAttrs } from '@vueuse/head'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
@@ -16,6 +16,7 @@ export default function setupRoot() {
 
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
   useHead({ title })
+  useHtmlAttrs(configs.htmlAttrs)
   initSharedState(`${title} - shared`)
   initDrawingState(`${title} - drawings`)
 

@@ -45,7 +45,7 @@ provide(injectionSlidevContext, reactive({
 </script>
 
 <template>
-  <div :id="id" class="slide-container" :style="style">
+  <div :id="id" class="print-slide-container" :style="style">
     <GlobalBottom />
 
     <SlideWrapper

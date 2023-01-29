@@ -51,3 +51,7 @@ html {
   vertical-align: sub;
   line-height: 1em;
 }
+
+.slidev-page {
+  @apply absolute top-0 left-0 right-0 w-full relative;
+}

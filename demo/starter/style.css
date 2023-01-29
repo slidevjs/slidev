@@ -1,0 +1,13 @@
+/* for page transition */
+.fade-leave-active {
+  transition: opacity 0.3s ease-in;
+}
+
+.fade-enter-active {
+  transition: opacity 0.4s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
