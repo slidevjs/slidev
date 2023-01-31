@@ -125,6 +125,8 @@ export async function ViteSlidevPlugin(
         }),
       ],
 
+      dts: false,
+
       ...componentsOptions,
     }),
 
