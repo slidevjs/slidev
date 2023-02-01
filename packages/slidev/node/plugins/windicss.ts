@@ -11,8 +11,7 @@ export async function createWindiCSSPlugin(
   { themeRoots, addonRoots, clientRoot, userRoot, roots, data }: ResolvedSlidevOptions,
   { windicss: windiOptions }: SlidevPluginOptions,
 ) {
-  const { default: WindiCSS } = await import('vite-plugin-windicss')
-  const { defaultConfigureFiles } = await import('@windicss/config')
+  const [{ default: WindiCSS }, { defaultConfigureFiles }] = await Promise.all([import('vite-plugin-windicss'), import('@windicss/config')])
 
   const configFiles = uniq([
     ...defaultConfigureFiles.map(i => resolve(userRoot, i)),

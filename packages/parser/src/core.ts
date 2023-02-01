@@ -154,10 +154,7 @@ export async function parse(
   }
 
   if (extensions) {
-    for (const e of extensions) {
-      if (e.transformRawLines)
-        await e.transformRawLines(lines)
-    }
+    await extensions.map((e) => e.transformRawLines && e.transformRawLines(lines))
   }
 
   for (let i = 0; i < lines.length; i++) {

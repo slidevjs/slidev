@@ -400,8 +400,7 @@ export async function exportSlides({
     await genPagePng()
   }
   else if (format === 'md') {
-    await genPagePng()
-    await genPageMd(slides)
+    await Promise.all([ genPagePng(), genPageMd(slides)])
   }
   else {
     throw new Error(`Unsupported exporting format "${format}"`)
