@@ -46,8 +46,9 @@ function decreaseFontSize() {
         :placeholder="`No notes for Slide ${pageNo}.`"
       />
     </div>
-    <div v-if="nextRoute" class="px-5 py-4 max-h-40 overflow-auto border-t border-gray-400 border-opacity-20">
+    <div v-if="nextRoute" class="px-5 py-2 max-h-60 overflow-auto border-t border-gray-400 border-opacity-20">
       <NoteDisplay
+        class="opacity-50"
         :note="nextRoute?.meta?.slide?.note"
         :note-html="nextRoute?.meta?.slide?.noteHTML"
         placeholder="No notes for next slide."
