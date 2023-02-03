@@ -70,6 +70,11 @@ cli.command(
       type: 'string',
       describe: 'listen public host and enable remote control',
     })
+    .option('tunnel', {
+      default: false,
+      type: 'boolean',
+      describe: 'open localtunnel to make Slidev available on the internet',
+    })
     .option('log', {
       default: 'warn',
       type: 'string',
@@ -89,7 +94,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, force, inspect }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -108,6 +113,8 @@ cli.command(
 
     let server: ViteDevServer | undefined
     let port = 3030
+
+    let lastRemoteUrl: string | undefined
 
     async function initServer() {
       if (server)
@@ -141,7 +148,25 @@ cli.command(
       ))
 
       await server.listen()
-      printInfo(options, port, remote)
+
+      let tunnelUrl = ''
+      if (tunnel) {
+        if (remote != null)
+          tunnelUrl = await openTunnel(port)
+        else
+          console.log(yellow('\n  --remote is required for tunneling, localtunnel is not enabled.\n'))
+      }
+
+      lastRemoteUrl = printInfo(options, port, remote, tunnelUrl)
+    }
+
+    async function openTunnel(port: number) {
+      const localtunnel = await import('localtunnel').then(r => r.default || r)
+      const tunnel = await localtunnel({
+        port,
+        local_host: '0.0.0.0',
+      })
+      return tunnel.url
     }
 
     const SHORTCUTS = [
@@ -164,6 +189,19 @@ cli.command(
         fullname: 'edit',
         action() {
           exec(`code "${entry}"`)
+        },
+      },
+      {
+        name: 'c',
+        fullname: 'qrcode',
+        async action() {
+          if (!lastRemoteUrl)
+            return
+          const { default: qrcode } = await import('qrcode-terminal')
+          qrcode.generate(lastRemoteUrl, { small: true }, (v: string) => {
+            console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
+            console.log(v.split('\n').map(i => `  ${i}`).join('\n'))
+          })
         },
       },
     ]
@@ -462,7 +500,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
 }
 
-function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string) {
+function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string, tunnelUrl?: string) {
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
@@ -481,21 +519,31 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     if (options.inspect)
       console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
+    let lastRemoteUrl = ''
+
     if (remote !== undefined) {
       Object.values(os.networkInterfaces())
         .forEach(v => (v || [])
           .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            console.log(`${dim('  remote control ')}     > ${blue(`http://${address}:${port}${presenterPath}`)}`)
+            lastRemoteUrl = `http://${address}:${port}${presenterPath}`
+            console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
           }),
         )
+
+      if (tunnelUrl) {
+        lastRemoteUrl = `${tunnelUrl}${presenterPath}`
+        console.log(`${dim('  remote via tunnel')}   > ${yellow(lastRemoteUrl)}`)
+      }
     }
     else {
       console.log(`${dim('  remote control ')}     > ${dim('pass --remote to enable')}`)
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
+
+    return lastRemoteUrl
   }
 
   console.log()
