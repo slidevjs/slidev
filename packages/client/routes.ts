@@ -1,5 +1,6 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import type { TransitionGroupProps } from 'vue'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
 // @ts-expect-error missing types
@@ -78,6 +79,7 @@ declare module 'vue-router' {
       title?: string
       level?: number
     }
+    transition?: string | TransitionGroupProps | undefined
     // private fields
     __clicksElements: HTMLElement[]
     __preloaded?: boolean

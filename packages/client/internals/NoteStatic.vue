@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { currentRoute } from '../logic/nav'
-import NoteViewer from './NoteViewer.vue'
+import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps<{
   class?: string
@@ -12,7 +12,7 @@ const noteHtml = computed(() => currentRoute.value?.meta?.slide?.noteHTML)
 </script>
 
 <template>
-  <NoteViewer
+  <NoteDisplay
     :class="props.class"
     :note="note"
     :note-html="noteHtml"

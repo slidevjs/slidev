@@ -4,7 +4,7 @@ import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@vueuse/head'
 import { configs, themeVars } from '../env'
 import { rawRoutes, total } from '../logic/nav'
-import NoteViewer from './NoteViewer.vue'
+import NoteDisplay from './NoteDisplay.vue'
 
 useStyleTag(`
 @page {
@@ -55,7 +55,7 @@ const slidesWithNote = computed(() => rawRoutes
               <div class="flex-auto" />
             </div>
           </h2>
-          <NoteViewer :note-html="slide!.noteHTML" class="max-w-full" />
+          <NoteDisplay :note-html="slide!.noteHTML" class="max-w-full" />
         </div>
         <hr v-if="index < slidesWithNote.length - 1" class="border-gray-400/50 mb-8">
       </div>

@@ -5,8 +5,9 @@ import { nanoid } from 'nanoid'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
-import { clicks, currentPage, getPath, isPresenter } from '../logic/nav'
+import { clicks, currentPage, getPath, isNotesViewer, isPresenter } from '../logic/nav'
 import { router } from '../routes'
+import { TRUST_ORIGINS } from '../constants'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
@@ -21,10 +22,17 @@ export default function setupRoot() {
   initSharedState(`${title} - shared`)
   initDrawingState(`${title} - drawings`)
 
-  const id = nanoid()
+  const id = `${location.origin}_${nanoid()}`
 
   // update shared state
   function updateSharedState() {
+    if (isNotesViewer.value)
+      return
+
+    // we allow Presenter mode, or Viewer mode from trusted origins to update the shared state
+    if (!isPresenter.value && !TRUST_ORIGINS.includes(location.host.split(':')[0]))
+      return
+
     if (isPresenter.value) {
       patch('page', +currentPage.value)
       patch('clicks', clicks.value)
