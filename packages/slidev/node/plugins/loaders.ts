@@ -61,7 +61,7 @@ md.use(mila, {
 function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
   return {
     ...data,
-    notesHTML: md.render(data?.note || ''),
+    noteHTML: md.render(data?.note || ''),
   }
 }
 

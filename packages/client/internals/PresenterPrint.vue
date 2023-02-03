@@ -29,7 +29,7 @@ useHead({ title: `Notes - ${configs.title}` })
 const slidesWithNote = computed(() => rawRoutes
   .slice(0, -1)
   .map(route => route.meta?.slide)
-  .filter(slide => slide !== undefined && slide.notesHTML !== ''))
+  .filter(slide => slide !== undefined && slide.noteHTML !== ''))
 </script>
 
 <template>
@@ -55,7 +55,7 @@ const slidesWithNote = computed(() => rawRoutes
               <div class="flex-auto" />
             </div>
           </h2>
-          <NoteViewer :note-html="slide!.notesHTML" class="max-w-full" />
+          <NoteViewer :note-html="slide!.noteHTML" class="max-w-full" />
         </div>
         <hr v-if="index < slidesWithNote.length - 1" class="border-gray-400/50 mb-8">
       </div>

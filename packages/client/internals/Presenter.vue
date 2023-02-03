@@ -118,7 +118,7 @@ onMounted(() => {
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="nextSlide.route?.component"
+            :is="nextSlide.route?.component as any"
             v-model:clicks-elements="nextTabElements"
             :clicks="nextSlide.clicks"
             :clicks-disabled="false"

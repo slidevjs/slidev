@@ -8,10 +8,27 @@ export interface SharedState {
     x: number
     y: number
   }
+
+  viewerPage: number
+  viewerClicks: number
+
+  lastUpdate?: {
+    id: string
+    type: 'presenter' | 'viewer'
+    time: number
+  }
 }
 
 const { init, onPatch, patch, state } = createSyncState<SharedState>(serverState, {
   page: 1,
   clicks: 0,
+  viewerPage: 1,
+  viewerClicks: 0,
 })
-export { init as initSharedState, onPatch, patch, state as sharedState }
+
+export {
+  init as initSharedState,
+  onPatch,
+  patch,
+  state as sharedState,
+}

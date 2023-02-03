@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useDraggable, useStorage } from '@vueuse/core'
+import { useDraggable, useLocalStorage } from '@vueuse/core'
 
 const props = defineProps<{
   storageKey?: string
@@ -10,7 +10,7 @@ const props = defineProps<{
 const el = ref<HTMLElement | null>(null)
 const initial = props.initial ?? { x: 0, y: 0 }
 const point = props.storageKey
-  ? useStorage(props.storageKey, initial)
+  ? useLocalStorage(props.storageKey, initial)
   : ref(initial)
 const { style } = useDraggable(el, { initialValue: point })
 </script>

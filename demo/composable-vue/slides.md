@@ -281,7 +281,7 @@ Sets of reusable logic, separation of concerns.
 ```ts
 export function useDark(options: UseDarkOptions = {}) {
   const preferredDark = usePreferredDark() // <--
-  const store = useStorage('vueuse-dark', 'auto') // <--
+  const store = useLocalStorage('vueuse-dark', 'auto') // <--
 
   return computed<boolean>({
     get() {

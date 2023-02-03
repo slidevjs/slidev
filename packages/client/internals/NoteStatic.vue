@@ -8,7 +8,7 @@ const props = defineProps<{
 }>()
 
 const note = computed(() => currentRoute.value?.meta?.slide?.note)
-const noteHtml = computed(() => currentRoute.value?.meta?.slide?.notesHTML)
+const noteHtml = computed(() => currentRoute.value?.meta?.slide?.noteHTML)
 </script>
 
 <template>

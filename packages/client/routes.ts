@@ -1,5 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
-import type { SlideTransition } from '@slidev/types'
+import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
@@ -25,24 +24,31 @@ export const routes: RouteRecordRaw[] = [
 ]
 
 if (__SLIDEV_FEATURE_PRESENTER__) {
+  function passwordGuard(to: RouteLocationNormalized) {
+    if (!_configs.remote || _configs.remote === to.query.password)
+      return true
+    if (_configs.remote && to.query.password === undefined) {
+      // eslint-disable-next-line no-alert
+      const password = prompt('Enter password')
+      if (_configs.remote === password)
+        return true
+    }
+    if (to.params.no)
+      return { path: `/${to.params.no}` }
+    return { path: '' }
+  }
   routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
+  routes.push({
+    name: 'notes',
+    path: '/notes',
+    component: () => import('./internals/NotesView.vue'),
+    beforeEnter: passwordGuard,
+  })
   routes.push({
     name: 'presenter',
     path: '/presenter/:no',
     component: () => import('./internals/Presenter.vue'),
-    beforeEnter: (to) => {
-      if (!_configs.remote || _configs.remote === to.query.password)
-        return true
-      if (_configs.remote && to.query.password === undefined) {
-        // eslint-disable-next-line no-alert
-        const password = prompt('Enter password')
-        if (_configs.remote === password)
-          return true
-      }
-      if (to.params.no)
-        return { path: `/${to.params.no}` }
-      return { path: '' }
-    },
+    beforeEnter: passwordGuard,
   })
   routes.push({
     path: '/presenter',
@@ -65,14 +71,13 @@ declare module 'vue-router' {
       start: number
       end: number
       note?: string
-      notesHTML?: string
+      noteHTML?: string
       id: number
       no: number
       filepath: string
       title?: string
       level?: number
     }
-    transition?: string | SlideTransition
     // private fields
     __clicksElements: HTMLElement[]
     __preloaded?: boolean

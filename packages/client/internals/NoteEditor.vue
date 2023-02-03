@@ -64,7 +64,7 @@ onClickOutside(input, () => {
     v-if="!editing && note"
     :class="props.class"
     :note="note"
-    :note-html="info?.notesHTML"
+    :note-html="info?.noteHTML"
     @click="switchNoteEdit"
   />
   <textarea

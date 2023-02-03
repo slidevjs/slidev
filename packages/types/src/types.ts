@@ -22,7 +22,7 @@ export interface SlideInfoWithPath extends SlideInfoBase {
 }
 
 export interface SlideInfoExtended extends SlideInfo {
-  notesHTML: string
+  noteHTML: string
 }
 
 /**

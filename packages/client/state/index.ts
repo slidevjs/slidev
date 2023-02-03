@@ -1,4 +1,4 @@
-import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useMagicKeys, useStorage, useToggle, useWindowSize } from '@vueuse/core'
+import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { slideAspect } from '../env'
 
@@ -20,13 +20,13 @@ export const activeElement = useActiveElement()
 export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
 export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.value?.tagName || ''))
 
-export const currentCamera = useStorage<string>('slidev-camera', 'default')
-export const currentMic = useStorage<string>('slidev-mic', 'default')
-export const slideScale = useStorage<number>('slidev-scale', 0)
+export const currentCamera = useLocalStorage<string>('slidev-camera', 'default')
+export const currentMic = useLocalStorage<string>('slidev-mic', 'default')
+export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 
-export const showOverview = useStorage('slidev-show-overview', false)
-export const showPresenterCursor = useStorage('slidev-presenter-cursor', true)
-export const showEditor = useStorage('slidev-show-editor', false)
-export const editorWidth = useStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 100)
+export const showOverview = useLocalStorage('slidev-show-overview', false)
+export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true)
+export const showEditor = useLocalStorage('slidev-show-editor', false)
+export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 100)
 
 export const toggleOverview = useToggle(showOverview)

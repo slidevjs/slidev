@@ -1,9 +1,9 @@
-import { isClient, usePreferredDark, useStorage, useToggle } from '@vueuse/core'
+import { isClient, useLocalStorage, usePreferredDark, useToggle } from '@vueuse/core'
 import { computed, watch } from 'vue'
 import { configs } from '../env'
 
 const preferredDark = usePreferredDark()
-const store = useStorage('slidev-color-schema', 'auto')
+const store = useLocalStorage('slidev-color-schema', 'auto')
 
 export const isColorSchemaConfigured = computed(() => configs.colorSchema !== 'auto')
 export const isDark = computed<boolean>({
