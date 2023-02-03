@@ -197,7 +197,7 @@ cli.command(
         async action() {
           if (!lastRemoteUrl)
             return
-          const { default: qrcode } = await import('qrcode-terminal')
+          const qrcode = await import('qrcode-terminal').then(r => r.default || r)
           qrcode.generate(lastRemoteUrl, { small: true }, (v: string) => {
             console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
             console.log(v.split('\n').map(i => `  ${i}`).join('\n'))
