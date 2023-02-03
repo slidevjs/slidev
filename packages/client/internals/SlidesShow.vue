@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, shallowRef, watch } from 'vue'
+import { computed, shallowRef, watch } from 'vue'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'

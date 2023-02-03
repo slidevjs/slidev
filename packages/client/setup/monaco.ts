@@ -49,7 +49,7 @@ const setup = createSingletonPromise(async () => {
   ])
 
   // @ts-expect-error injected in runtime
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const injection_arg = monaco
   // eslint-disable-next-line prefer-const
   let injection_return: MonacoSetupReturn = {}

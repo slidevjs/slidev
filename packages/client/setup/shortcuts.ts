@@ -11,7 +11,7 @@ export default function setupShortcuts() {
   const { escape, space, shift, left, right, up, down, enter, d, g, o } = magicKeys
 
   // @ts-expect-error injected in runtime
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const injection_arg: NavOperations = {
     next,
     prev,

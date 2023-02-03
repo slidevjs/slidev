@@ -17,7 +17,7 @@ export default function setupMain(context: AppContext) {
   context.app.use(StarportPlugin({ keepAlive: true }))
 
   // @ts-expect-error inject in runtime
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const injection_arg = context
 
   /* __injections__ */

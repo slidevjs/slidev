@@ -18,10 +18,10 @@
     "@antfu/utils": "^0.7.2",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@unocss/reset": "^0.49.1",
-    "@vueuse/core": "^9.11.1",
-    "@vueuse/head": "^1.0.23",
-    "@vueuse/math": "^9.11.1",
+    "@unocss/reset": "^0.49.4",
+    "@vueuse/core": "^9.12.0",
+    "@vueuse/head": "^1.0.24",
+    "@vueuse/math": "^9.12.0",
     "@vueuse/motion": "^2.0.0-beta.27",
     "codemirror": "^5.65.5",
     "defu": "^6.1.2",
@@ -36,14 +36,14 @@
     "prettier": "^2.8.3",
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.1",
-    "unocss": "^0.49.1",
+    "unocss": "^0.49.4",
     "vite-plugin-windicss": "^1.8.10",
-    "vue": "^3.2.45",
+    "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vue-starport": "^0.3.0",
     "windicss": "^3.5.6"
   },
   "devDependencies": {
-    "vite": "^4.0.4"
+    "vite": "^4.1.1"
   }
 }
