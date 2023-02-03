@@ -198,11 +198,13 @@ The text `Slidev` will move from `-80px` to its original position on initializat
 
 Learn mode: [Demo](https://sli.dev/demo/starter/7) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/directive-usage.html) | [Presets](https://motion.vueuse.org/presets.html)
 
-## Pages Transitions
+## Slide Transitions
+
+<div id="pages-transitions" />
 
 > Available since v0.39.0
 
-Slidev supports page transitions out of the box. You can enable it by setting the `transition` frontmatter option:
+Slidev supports slide transitions out of the box. You can enable it by setting the `transition` frontmatter option:
 
 ```md
 ---
@@ -216,14 +218,14 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 
 - `fade` - Crossfade in/out
 - `fade-out` - Fade out and then fade in
-- `slide-left` - Slides to the left, slide to right when going back
-- `slide-right` - Slides to the right, slide to left when going back
-- `slide-top` - Slides to the top, slide to bottom when going back
-- `slide-bottom` - Slides to the bottom, slide to top when going back
+- `slide-left` - Slides to the left (slide to right when going backward)
+- `slide-right` - Slides to the right (slide to left when going backward)
+- `slide-top` - Slides to the top (slide to bottom when going backward)
+- `slide-bottom` - Slides to the bottom (slide to top when going backward)
 
 ### Custom Transitions
 
-Slidev's page transitions are powered by [Vue Transition](https://vuejs.org/guide/built-ins/transition.html). You can provide your custom transitions by:
+Slidev's slide transitions are powered by [Vue Transition](https://vuejs.org/guide/built-ins/transition.html). You can provide your custom transitions by:
 
 ```md
 ---
