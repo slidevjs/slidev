@@ -16,6 +16,8 @@ export function createSyncState<State extends object>(serverState: State, defaul
   }
 
   function patch<K extends keyof State>(key: K, value: State[K]) {
+    if (state[key] === value)
+      return
     clearTimeout(patchingTimeout)
     patching = true
     state[key] = value
