@@ -94,9 +94,6 @@ export async function ViteSlidevPlugin(
   const drawingData = await loadDrawings(options)
 
   return [
-    config.css === 'unocss'
-      ? await createUnocssPlugin(options, pluginOptions)
-      : await createWindiCSSPlugin(options, pluginOptions),
     MarkdownPlugin,
     VueJsxPlugin,
     VuePlugin,
@@ -182,6 +179,10 @@ export async function ViteSlidevPlugin(
         build: true,
       })
       : null,
+
+    config.css === 'unocss'
+      ? await createUnocssPlugin(options, pluginOptions)
+      : await createWindiCSSPlugin(options, pluginOptions),
   ]
     .flat()
     .filter(notNullish)
