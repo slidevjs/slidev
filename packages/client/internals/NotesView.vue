@@ -56,14 +56,14 @@ function decreaseFontSize() {
     </div>
     <div class="flex-none border-t border-gray-400 border-opacity-20">
       <div class="flex gap-1 items-center px-6 py-3">
-        <button class="icon-btn" @click="toggleFullscreen">
+        <button class="slidev-icon-btn" @click="toggleFullscreen">
           <carbon:minimize v-if="isFullscreen" />
           <carbon:maximize v-else />
         </button>
-        <button class="icon-btn" @click="increaseFontSize">
+        <button class="slidev-icon-btn" @click="increaseFontSize">
           <carbon:zoom-in />
         </button>
-        <button class="icon-btn" @click="decreaseFontSize">
+        <button class="slidev-icon-btn" @click="decreaseFontSize">
           <carbon:zoom-out />
         </button>
         <div class="flex-auto" />

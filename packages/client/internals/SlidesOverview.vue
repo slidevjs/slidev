@@ -101,7 +101,7 @@ watchEffect(() => {
       </div>
     </div>
   </div>
-  <button v-if="value" class="fixed text-2xl top-4 right-4 icon-btn text-gray-400" @click="close">
+  <button v-if="value" class="fixed text-2xl top-4 right-4 slidev-icon-btn text-gray-400" @click="close">
     <carbon:close />
   </button>
 </template>

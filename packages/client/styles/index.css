@@ -15,22 +15,22 @@ html {
   background: transparent;
 }
 
-.icon-btn {
+.slidev-icon-btn {
   @apply inline-block cursor-pointer select-none !outline-none;
   @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
   @apply md:p-2;
 }
 
-.icon-btn.shallow {
+.slidev-icon-btn.shallow {
   @apply opacity-30
 }
 
-.icon-btn.active {
+.slidev-icon-btn.active {
   @apply opacity-100
 }
 
-.icon-btn.disabled {
+.slidev-icon-btn.disabled {
   @apply opacity-25 pointer-events-none;
 }
 

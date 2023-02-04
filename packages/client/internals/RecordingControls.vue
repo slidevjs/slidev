@@ -35,7 +35,7 @@ onMounted(() => {
 <template>
   <button
     v-if="currentCamera !== 'none'"
-    class="icon-btn <md:hidden"
+    class="slidev-icon-btn <md:hidden"
     :class="{ 'text-green-500': Boolean(showAvatar && streamCamera) }"
     title="Show camera view"
     @click="toggleAvatar"
@@ -44,7 +44,7 @@ onMounted(() => {
   </button>
 
   <button
-    class="icon-btn"
+    class="slidev-icon-btn"
     :class="{ 'text-red-500': recording }"
     title="Recording"
     @click="toggleRecording"
@@ -54,7 +54,7 @@ onMounted(() => {
   </button>
   <MenuButton :disabled="recording">
     <template #button>
-      <button class="icon-btn h-full !text-sm !px-0">
+      <button class="slidev-icon-btn h-full !text-sm !px-0">
         <carbon:chevron-up class="opacity-50" />
       </button>
     </template>

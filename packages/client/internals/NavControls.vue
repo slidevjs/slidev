@@ -51,26 +51,26 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
-      <button v-if="!isEmbedded" class="icon-btn" @click="toggleFullscreen">
+      <button v-if="!isEmbedded" class="slidev-icon-btn" @click="toggleFullscreen">
         <carbon:minimize v-if="isFullscreen" />
         <carbon:maximize v-else />
       </button>
 
-      <button class="icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+      <button class="slidev-icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
         <carbon:arrow-left />
       </button>
 
-      <button class="icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
+      <button class="slidev-icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
         <carbon:arrow-right />
       </button>
 
-      <button v-if="!isEmbedded" class="icon-btn" title="Slides overview" @click="toggleOverview()">
+      <button v-if="!isEmbedded" class="slidev-icon-btn" title="Slides overview" @click="toggleOverview()">
         <carbon:apps />
       </button>
 
       <button
         v-if="!isColorSchemaConfigured"
-        class="icon-btn"
+        class="slidev-icon-btn"
         title="Toggle dark mode"
         @click="toggleDark()"
       >
@@ -88,7 +88,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 
         <button
           v-if="isPresenter"
-          class="icon-btn"
+          class="slidev-icon-btn"
           title="Show presenter cursor"
           @click="showPresenterCursor = !showPresenterCursor"
         >
@@ -98,7 +98,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
 
       <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
-        <button class="icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
+        <button class="slidev-icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
           <carbon:pen />
           <div
             v-if="drawingEnabled"
@@ -110,26 +110,26 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
 
       <template v-if="!isEmbedded">
-        <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="icon-btn" title="Play Mode">
+        <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="slidev-icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
-        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && showPresenter" :to="presenterLink" class="icon-btn" title="Presenter Mode">
+        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && showPresenter" :to="presenterLink" class="slidev-icon-btn" title="Presenter Mode">
           <carbon:user-speaker />
         </RouterLink>
 
-        <button v-if="__DEV__ && !isPresenter" class="icon-btn <md:hidden" @click="showEditor = !showEditor">
+        <button v-if="__DEV__ && !isPresenter" class="slidev-icon-btn <md:hidden" @click="showEditor = !showEditor">
           <carbon:text-annotation-toggle />
         </button>
       </template>
       <template v-if="!__DEV__">
-        <button v-if="configs.download" class="icon-btn" @click="downloadPDF">
+        <button v-if="configs.download" class="slidev-icon-btn" @click="downloadPDF">
           <carbon:download />
         </button>
       </template>
 
       <button
         v-if="!isPresenter && configs.info && !isEmbedded"
-        class="icon-btn"
+        class="slidev-icon-btn"
         @click="showInfoDialog = !showInfoDialog"
       >
         <carbon:information />
@@ -138,7 +138,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       <template v-if="!isPresenter && !isEmbedded">
         <MenuButton>
           <template #button>
-            <button class="icon-btn">
+            <button class="slidev-icon-btn">
               <carbon:settings-adjust />
             </button>
           </template>

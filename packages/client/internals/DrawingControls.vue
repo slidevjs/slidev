@@ -32,25 +32,25 @@ function setBrushColor(color: typeof brush.color) {
     :initial-x="10"
     :initial-y="10"
   >
-    <button class="icon-btn" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
+    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
       <carbon:pen />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
+    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
       <svg width="1em" height="1em" class="-mt-0.5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
         <path d="M21.71 3.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l18-18a1 1 0 0 0 0-1.42z" fill="currentColor" />
       </svg>
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
+    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
       <carbon:arrow-up-right />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
+    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
       <carbon:radio-button />
     </button>
-    <button class="icon-btn" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
+    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
       <carbon:checkbox />
     </button>
     <!-- TODO: not sure why it's not working! -->
-    <!-- <button class="icon-btn" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
+    <!-- <button class="slidev-icon-btn" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
       <carbon:erase />
     </button> -->
 
@@ -59,7 +59,7 @@ function setBrushColor(color: typeof brush.color) {
     <button
       v-for="color of brushColors"
       :key="color"
-      class="icon-btn"
+      class="slidev-icon-btn"
       :class="brush.color === color ? 'active' : 'shallow'"
       @click="setBrushColor(color)"
     >
@@ -72,24 +72,24 @@ function setBrushColor(color: typeof brush.color) {
 
     <VerticalDivider />
 
-    <button class="icon-btn" :class="{ disabled: !canUndo }" @click="undo()">
+    <button class="slidev-icon-btn" :class="{ disabled: !canUndo }" @click="undo()">
       <carbon:undo />
     </button>
-    <button class="icon-btn" :class="{ disabled: !canRedo }" @click="redo()">
+    <button class="slidev-icon-btn" :class="{ disabled: !canRedo }" @click="redo()">
       <carbon:redo />
     </button>
-    <button class="icon-btn" :class="{ disabled: !canClear }" @click="clearDrauu()">
+    <button class="slidev-icon-btn" :class="{ disabled: !canClear }" @click="clearDrauu()">
       <carbon:delete />
     </button>
 
     <VerticalDivider />
-    <button class="icon-btn" :class="{ shallow: !drawingPinned }" @click="drawingPinned = !drawingPinned">
+    <button class="slidev-icon-btn" :class="{ shallow: !drawingPinned }" @click="drawingPinned = !drawingPinned">
       <carbon:pin-filled v-show="drawingPinned" class="transform -rotate-45" />
       <carbon:pin v-show="!drawingPinned" />
     </button>
     <button
       v-if="drawingEnabled"
-      class="icon-btn"
+      class="slidev-icon-btn"
       :class="{ shallow: !drawingEnabled }"
       @click="drawingEnabled = !drawingEnabled"
     >

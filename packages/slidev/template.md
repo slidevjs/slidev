@@ -27,7 +27,7 @@ Presentation slides for developers
 </div>
 
 <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
-  class="abs-br m-6 text-xl icon-btn opacity-50 !border-none !hover:text-white">
+  class="abs-br m-6 text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
   <carbon-logo-github />
 </a>
 

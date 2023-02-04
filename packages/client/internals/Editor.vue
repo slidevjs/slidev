@@ -137,10 +137,10 @@ throttledWatch(
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
+        <button class="slidev-icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
           <carbon:account />
         </button>
-        <button class="icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
+        <button class="slidev-icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
           <carbon:align-box-bottom-right />
         </button>
       </div>
@@ -148,10 +148,10 @@ throttledWatch(
         {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
       <div class="flex-auto" />
-      <button class="icon-btn" @click="openInEditor()">
+      <button class="slidev-icon-btn" @click="openInEditor()">
         <carbon:launch />
       </button>
-      <button class="icon-btn" @click="close">
+      <button class="slidev-icon-btn" @click="close">
         <carbon:close />
       </button>
     </div>
