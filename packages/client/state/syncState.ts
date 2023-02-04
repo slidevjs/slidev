@@ -48,7 +48,7 @@ export function createSyncState<State extends object>(serverState: State, defaul
       })
     }
 
-    function onDrawingStateChanged() {
+    function onStateChanged() {
       if (!persist && stateChannel && !updating)
         stateChannel.postMessage(toRaw(state))
       else if (persist && !updating)
@@ -57,7 +57,7 @@ export function createSyncState<State extends object>(serverState: State, defaul
         onPatchCallbacks.forEach((fn: (state: State) => void) => fn(state))
     }
 
-    watch(state, onDrawingStateChanged, { deep: true })
+    watch(state, onStateChanged, { deep: true })
     if (!__USE_SERVER__ && persist) {
       const serialzedState = window.localStorage.getItem(channelKey)
       if (serialzedState)
