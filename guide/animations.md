@@ -220,8 +220,8 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 - `fade-out` - Fade out and then fade in
 - `slide-left` - Slides to the left (slide to right when going backward)
 - `slide-right` - Slides to the right (slide to left when going backward)
-- `slide-top` - Slides to the top (slide to bottom when going backward)
-- `slide-bottom` - Slides to the bottom (slide to top when going backward)
+- `slide-up` - Slides to the top (slide to bottom when going backward)
+- `slide-down` - Slides to the bottom (slide to top when going backward)
 
 ### Custom Transitions
 
