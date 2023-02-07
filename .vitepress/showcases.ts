@@ -115,7 +115,7 @@ export const showcases: ShowCaseInfo[] = [
       name: 'Alexander Eble',
       link: 'https://github.com/alexanderdavide',
     },
-    slidesLink: 'https://git-most-wanted.alex-eble.de',
+    slidesLink: 'https://alexeble.de/talks/git-most-wanted/',
     sourceLink: 'https://github.com/alexanderdavide/git-most-wanted',
     at: 'Internal Tech Talk',
     datetime: '2022-03-11',
@@ -165,6 +165,18 @@ export const showcases: ShowCaseInfo[] = [
     sourceLink: 'https://github.com/Mokkapps/vuejsnation-2023-lightning-talk-polite-popup-nuxt-3-slides',
     cover: 'https://raw.githubusercontent.com/Mokkapps/vuejsnation-2023-lightning-talk-polite-popup-nuxt-3-slides/main/screenshots/001.png',
     datetime: '2023-01-25',
+  },
+  {
+    title: 'Dev Environment as Code',
+    cover: 'https://cdn.jsdelivr.net/gh/alexanderdavide/dev-environment-as-code@assets/slides-export/001.png',
+    author: {
+      name: 'Alexander Eble',
+      link: 'https://github.com/alexanderdavide',
+    },
+    slidesLink: 'https://alexeble.de/talks/dev-environment-as-code/',
+    sourceLink: 'https://github.com/alexanderdavide/dev-environment-as-code',
+    at: 'Internal Tech Talk',
+    datetime: '2022-12-01',
   },
   // Add yours here!
   {
