@@ -31,7 +31,7 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   <GlobalBottom />
 
   <!-- Slides -->
-  <TransitionGroup v-bind="transition">
+  <TransitionGroup v-bind="transition" id="slideshow" tag="div">
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
         :is="route?.component as any"
@@ -54,3 +54,13 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   </template>
   <PresenterMouse v-if="!isPresenter" />
 </template>
+
+<style scoped>
+#slideshow {
+  @apply h-full;
+}
+
+#slideshow > div {
+  @apply h-full w-full absolute;
+}
+</style>

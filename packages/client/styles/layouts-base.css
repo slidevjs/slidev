@@ -1,7 +1,3 @@
-#slide-content > div {
-  @apply h-full w-full absolute;
-}
-
 .slidev-layout {
   @apply px-14 py-10 text-[1.1rem] h-full;
 
