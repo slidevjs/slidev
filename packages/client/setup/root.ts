@@ -54,7 +54,7 @@ export default function setupRoot() {
     const routePath = router.currentRoute.value.path
     if (!routePath.match(/^\/(\d+|presenter)\/?/))
       return
-    if (+state.page !== +currentPage.value || +clicks.value !== +state.clicks) {
+    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentPage.value || +clicks.value !== +state.clicks)) {
       router.replace({
         path: getPath(state.page),
         query: {
