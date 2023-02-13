@@ -180,8 +180,9 @@ export async function ViteSlidevPlugin(
       })
       : null,
 
-    config.css === 'none' ? null :
-      config.css === 'unocss'
+    config.css === 'none'
+      ? null
+      : config.css === 'unocss'
         ? await createUnocssPlugin(options, pluginOptions)
         : await createWindiCSSPlugin(options, pluginOptions),
   ]

@@ -11,7 +11,6 @@ import { TRUST_ORIGINS } from '../constants'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
-
   const injection_arg = undefined
 
   /* __injections__ */
