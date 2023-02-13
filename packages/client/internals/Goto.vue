@@ -5,6 +5,8 @@ import { activeElement, showGotoDialog } from '../state'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
+const list = ref<HTMLUListElement>()
+const items = ref<HTMLLIElement[]>()
 const text = ref('')
 const selectedItem = ref(-1)
 
@@ -44,6 +46,7 @@ function focusDown(event: Event) {
   selectedItem.value++
   if (selectedItem.value >= autocomplete.value.length)
     selectedItem.value = -1
+  scroll()
 }
 
 function focusUp(event: Event) {
@@ -52,6 +55,25 @@ function focusUp(event: Event) {
   selectedItem.value--
   if (selectedItem.value <= -2)
     selectedItem.value = autocomplete.value.length - 1
+  scroll()
+}
+
+function scroll() {
+  const item = items.value?.[selectedItem.value]
+  if (item && list.value) {
+    if (item.offsetTop + item.offsetHeight > list.value.offsetHeight + list.value.scrollTop) {
+      list.value.scrollTo({
+        behavior: 'smooth',
+        top: item.offsetTop + item.offsetHeight - list.value.offsetHeight + 1,
+      })
+    }
+    else if (item.offsetTop < list.value.scrollTop) {
+      list.value.scrollTo({
+        behavior: 'smooth',
+        top: item.offsetTop,
+      })
+    }
+  }
 }
 
 function updateText(event: Event) {
@@ -112,14 +134,17 @@ watch(activeElement, () => {
     </div>
     <ul
       v-if="autocomplete.length > 0"
-      class="bg-main transform mt-1"
+      ref="list"
+      class="autocomplete-list"
       shadow="~"
       p="x-4 y-2"
       border="~ transparent rounded dark:gray-400 dark:opacity-25"
     >
       <li
         v-for="(item, index) of autocomplete"
-        :key="item" class="autocomplete"
+        ref="items"
+        :key="item"
+        class="autocomplete"
         :class="{ selected: selectedItem === index }"
         role="button"
         tabindex="0"
@@ -132,6 +157,11 @@ watch(activeElement, () => {
 </template>
 
 <style scoped lang="postcss">
+.autocomplete-list {
+  @apply bg-main transform mt-1 overflow-auto;
+  max-height: calc( 100vh - 100px );
+}
+
 .autocomplete {
   cursor: pointer;
 
