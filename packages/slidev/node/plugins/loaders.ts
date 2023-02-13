@@ -511,10 +511,9 @@ defineProps<{ no: number | string }>()`)
         'import "virtual:windi-components.css"',
         'import "virtual:windi-base.css"',
       )
-      imports.push(
-        'import "virtual:windi-utilities.css"',
-        'import "virtual:windi-devtools"',
-      )
+      imports.push('import "virtual:windi-utilities.css"')
+      if (process.env.NODE_ENV !== 'production')
+        imports.push('import "virtual:windi-devtools"')
     }
 
     return imports.join('\n')
