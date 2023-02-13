@@ -11,6 +11,7 @@ import { TRUST_ORIGINS } from '../constants'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const injection_arg = undefined
 
   /* __injections__ */

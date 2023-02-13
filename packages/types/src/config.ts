@@ -170,7 +170,7 @@ export interface SlidevConfig {
    *
    * @default 'windicss'
    */
-  css: 'windicss' | 'unocss'
+  css: 'windicss' | 'unocss' | 'none'
   /**
    * Enable presenter mode
    *

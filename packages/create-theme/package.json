@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "kolorist": "^1.7.0",
-    "minimist": "^1.2.7",
+    "minimist": "^1.2.8",
     "prompts": "^2.4.2"
   }
 }
