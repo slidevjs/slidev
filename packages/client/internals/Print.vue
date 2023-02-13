@@ -28,12 +28,14 @@ watchEffect(() => {
 <style lang="postcss">
 html.print,
 html.print body,
-html.print #app,
-html.print #page-root {
+html.print #app {
   height: auto;
   overflow: auto;
 }
-
+html.print #page-root {
+  height: auto;
+  overflow: hidden;
+}
 html.print * {
   -webkit-print-color-adjust: exact;
 }
