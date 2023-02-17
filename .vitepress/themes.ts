@@ -405,6 +405,27 @@ export const community: ThemeInfo[] = [
       'dark'
     ],
   },
+  {
+    id: 'slidev-theme-dracula',
+    name: 'Dracula',
+    description: 'One the best dark theme meets slidev',
+    author: {
+      name: 'JD Solanki (jd-solanki)',
+      link: 'https://github.com/jd-solanki',
+    },
+    repo: 'https://github.com/jd-solanki/slidev-theme-dracula',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/jd-solanki/slidev-theme-dracula/screenshots/screenshot-1.png',
+      'https://cdn.jsdelivr.net/gh/jd-solanki/slidev-theme-dracula/screenshots/screenshot-2.png',
+      'https://cdn.jsdelivr.net/gh/jd-solanki/slidev-theme-dracula/screenshots/screenshot-3.png',
+      'https://cdn.jsdelivr.net/gh/jd-solanki/slidev-theme-dracula/screenshots/screenshot-4.png',
+      'https://cdn.jsdelivr.net/gh/jd-solanki/slidev-theme-dracula/screenshots/screenshot-5.png',
+    ],
+    tags: [
+      'dark',
+      'minimalism',
+    ],
+  },
   // Add yours here!
   {
     id: '',
