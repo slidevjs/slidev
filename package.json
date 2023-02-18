@@ -15,7 +15,7 @@
     "demo:dev": "pnpm -C demo/starter run dev",
     "play": "pnpm demo:dev",
     "dev": "pnpm -r --filter=./packages/** --parallel run dev",
-    "lint": "eslint .",
+    "lint": "eslint . --cache",
     "lint:fix": "nr lint --fix",
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test"
@@ -73,7 +73,7 @@
   },
   "lint-staged": {
     "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
-      "eslint --fix"
+      "eslint --fix --cache"
     ]
   }
 }
