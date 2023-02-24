@@ -113,3 +113,31 @@ Left
   <div v-click>C</div>
   <div v-click-hide>D</div>
 </div>
+
+---
+
+# Page 11
+
+<div class="cy-depth">
+<v-clicks depth="3">
+
+- A
+  - B
+    - C
+    - D
+  - E
+  - F
+    - G
+    - H
+- I
+
+</v-clicks>
+
+<v-clicks>
+
+- J
+- K
+- L
+
+</v-clicks>
+</div>

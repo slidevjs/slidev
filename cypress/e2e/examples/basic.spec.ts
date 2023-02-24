@@ -185,4 +185,36 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/1')
   })
+
+  it('deep nested lists', () => {
+    goPage(11)
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/11')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}')
+
+    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'C')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}')
+
+    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'CD')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}')
+
+    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'CDGH')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}')
+
+    cy.get('.cy-depth > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'A B CDEF GHIJKL')
+  })
 })

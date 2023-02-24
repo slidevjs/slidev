@@ -46,7 +46,10 @@ export default function createDirectives() {
 
           // Set default dir.value
           if (dir.value == null)
-            dir.value = elements?.value.length
+            dir.value = elements?.value?.length
+          // Relative value starts with '+' o '-'
+          if (typeof dir.value === 'string' && (dir.value.startsWith('+') || dir.value.startsWith('-')))
+            dir.value = (elements?.value?.length || 0) + Number(dir.value)
 
           // If orderMap didn't have dir.value aka the order key, then initialize it.
           // If key exists, then move current element to the first of order array to
