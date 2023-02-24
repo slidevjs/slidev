@@ -182,6 +182,17 @@ const Customizations = [
   }
 ]
 
+const BuiltIn = [
+  {
+    text: 'Components',
+    link: '/builtin/components',
+  },
+  {
+    text: 'Layouts',
+    link: '/builtin/layouts',
+  },
+]
+
 const Resources = [
   {
     text: 'Showcases',
@@ -216,16 +227,7 @@ const slidebars = [
   },
   {
     text: 'Built-in',
-    children: [
-      {
-        text: 'Components',
-        link: '/builtin/components',
-      },
-      {
-        text: 'Layouts',
-        link: '/builtin/layouts',
-      },
-    ],
+    children: BuiltIn,
   },
 ]
 
@@ -281,6 +283,10 @@ module.exports = {
       {
         text: 'Customize',
         items: Customizations,
+      },
+      {
+        text: 'Built-in',
+        items: BuiltIn,
       },
       {
         text: 'Resources',
