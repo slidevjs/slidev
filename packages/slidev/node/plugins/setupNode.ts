@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { pathExists } from 'fs-extra'
 import { isObject } from '@antfu/utils'
 import jiti from 'jiti'

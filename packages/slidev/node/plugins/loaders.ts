@@ -1,4 +1,4 @@
-import { basename, join } from 'path'
+import { basename, join } from 'node:path'
 import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'

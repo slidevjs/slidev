@@ -1,4 +1,4 @@
-import { basename, resolve } from 'path'
+import { basename, resolve } from 'node:path'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
 import { getDefaultConfig, load, parse, prettify, stringify } from '../packages/parser/src/fs'

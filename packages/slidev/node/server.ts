@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import type { InlineConfig } from 'vite'
 import { createServer as createViteServer, resolveConfig } from 'vite'
 import { mergeViteConfigs } from './common'

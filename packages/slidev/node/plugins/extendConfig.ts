@@ -1,4 +1,4 @@
-import { dirname, join } from 'path'
+import { dirname, join } from 'node:path'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'

@@ -1,4 +1,4 @@
-import { existsSync } from 'fs'
+import { existsSync } from 'node:fs'
 import { join, resolve } from 'path'
 import { slash, uniq } from '@antfu/utils'
 import type { Plugin } from 'vite'
