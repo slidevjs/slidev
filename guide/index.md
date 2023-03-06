@@ -65,6 +65,12 @@ With Yarn:
 $ yarn create slidev
 ```
 
+With pnpm:
+
+```bash
+$ pnpm create slidev
+```
+
 Follow the prompts and start making your slides now! For more details about the markdown syntax, read through the [syntax guide](/guide/syntax).
 
 ### Command Line Interface
