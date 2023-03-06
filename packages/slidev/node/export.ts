@@ -110,7 +110,7 @@ export async function exportNotes({
   timeout = 30000,
 }: ExportNotesOptions): Promise<string> {
   if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
+    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
 
   const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch()
@@ -165,7 +165,7 @@ export async function exportSlides({
   perSlide = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please installed it via `npm i -D playwright-chromium`')
+    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
 
   const pages: number[] = parseRangeString(total, range)
 
