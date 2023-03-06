@@ -61,7 +61,7 @@ When using the download option, you can also provide the export options:
 You can change the output directory using `--out`.
 
 ```bash
-$ slidev build --dir my-build-folder
+$ slidev build --out my-build-folder
 ```
 
 ### Watch mode
