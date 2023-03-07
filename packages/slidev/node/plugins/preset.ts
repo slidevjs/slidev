@@ -148,6 +148,13 @@ export async function ViteSlidevPlugin(
       })
       : null,
 
+    // Must be before ServerRef.
+    config.css === 'none'
+      ? null
+      : config.css === 'unocss'
+        ? await createUnocssPlugin(options, pluginOptions)
+        : await createWindiCSSPlugin(options, pluginOptions),
+
     ServerRef({
       debug: process.env.NODE_ENV === 'development',
       state: {
@@ -179,12 +186,6 @@ export async function ViteSlidevPlugin(
         build: true,
       })
       : null,
-
-    config.css === 'none'
-      ? null
-      : config.css === 'unocss'
-        ? await createUnocssPlugin(options, pluginOptions)
-        : await createWindiCSSPlugin(options, pluginOptions),
   ]
     .flat()
     .filter(notNullish)
