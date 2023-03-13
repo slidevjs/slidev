@@ -6,7 +6,7 @@ highlighter: shiki
 info: |
   ## Composable Vue
 
-  Pattens and tips for writing good composable logic in Vue
+  Patterns and tips for writing good composable logic in Vue
 
   [Anthony Fu](https://antfu.me/) at [VueDay 2021](https://2021.vueday.it/)
 
@@ -17,7 +17,7 @@ info: |
 
 # Composable Vue
 
-Pattens and tips for writing good composable logic in Vue
+Patterns and tips for writing good composable logic in Vue
 
 <div class="uppercase text-sm tracking-widest">
 Anthony Fu
