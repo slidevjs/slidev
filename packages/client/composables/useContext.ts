@@ -1,7 +1,7 @@
 import type { ComputedRef, WritableComputedRef } from 'vue'
 import { computed } from 'vue'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import { downloadPDF, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
+import type { SlidevContext } from '../modules/context'
 import { configs } from '../env'
 import { useNav } from './useNav'
 import { useNavClicks } from './useNavClicks'
@@ -9,19 +9,13 @@ import { useNavClicks } from './useNavClicks'
 export function useContext(
   route: ComputedRef<RouteLocationNormalizedLoaded>,
   clicks: WritableComputedRef<number>,
-) {
+): SlidevContext {
   const nav = useNav(route)
   const navClicks = useNavClicks(clicks, nav.currentRoute, nav.currentPage)
   return {
     nav: {
       ...nav,
       ...navClicks,
-      downloadPDF,
-      next,
-      nextSlide,
-      openInEditor,
-      prev,
-      prevSlide,
     },
     configs,
     themeConfigs: computed(() => configs.themeConfig),
