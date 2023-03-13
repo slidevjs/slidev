@@ -18,28 +18,30 @@ import { decode } from 'js-base64'
 import { nanoid } from 'nanoid'
 import { isDark } from '../logic/dark'
 
-const props = defineProps({
-  code: {
-    default: '',
-  },
-  lang: {
-    default: 'typescript',
-  },
-  readonly: {
-    default: false,
-  },
-  lineNumbers: {
-    default: 'off',
-  },
-  height: {
-    default: 'auto',
-  },
+const props = withDefaults(defineProps<{
+  code: string
+  diff?: string
+  lang?: string
+  readonly?: boolean
+  lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
+  height?: number | string
+}>(), {
+  code: '',
+  lang: 'typescript',
+  readonly: false,
+  lineNumbers: 'off',
+  height: 'auto',
 })
 
 const id = nanoid()
 const code = ref(decode(props.code).trimEnd())
+const diff = ref(props.diff ? decode(props.diff).trimEnd() : null)
 const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
-const height = computed(() => props.height === 'auto' ? `${code.value.split(/\r?\n/g).length * lineHeight + 20}px` : props.height)
+const editorHeight = ref(0)
+const calculatedHeight = computed(() => code.value.split(/\r?\n/g).length * lineHeight)
+const height = computed(() => {
+  return props.height === 'auto' ? `${Math.max(calculatedHeight.value, editorHeight.value) + 20}px` : props.height
+})
 
 const iframe = ref<HTMLIFrameElement>()
 
@@ -73,9 +75,13 @@ onMounted(() => {
     'allow-top-navigation-by-user-activation',
   ].join(' '))
 
-  frame.src = __DEV__
-    ? `${location.origin}${__SLIDEV_CLIENT_ROOT__}/iframes/monaco/index.html`
-    : `${import.meta.env.BASE_URL}iframes/monaco/index.html`
+  let src = __DEV__
+    ? `${location.origin}${__SLIDEV_CLIENT_ROOT__}/`
+    : import.meta.env.BASE_URL
+  src += `iframes/monaco/index.html?id=${id}&lineNumbers=${props.lineNumbers}&lang=${props.lang}`
+  if (diff.value)
+    src += '&diff=1'
+  frame.src = src
 
   frame.style.backgroundColor = 'transparent'
 })
@@ -85,18 +91,21 @@ function post(payload: any) {
     JSON.stringify({
       type: 'slidev-monaco',
       data: payload,
+      id,
     }),
     location.origin,
   )
 }
 
 useEventListener(window, 'message', ({ data: payload }) => {
+  if (payload.id !== id)
+    return
   if (payload.type === 'slidev-monaco-loaded') {
     if (iframe.value) {
       post({
         code: code.value,
+        diff: diff.value,
         lang: props.lang,
-        id,
         readonly: props.readonly,
         lineNumbers: props.lineNumbers,
         dark: isDark.value,
@@ -105,11 +114,14 @@ useEventListener(window, 'message', ({ data: payload }) => {
     }
     return
   }
-  if (payload.type !== 'slidev-monaco' || payload.id !== id)
+  if (payload.type !== 'slidev-monaco')
     return
-  if (!payload?.data?.code || code.value === payload.data.code)
-    return
-  code.value = payload.data.code
+  if (payload.data?.height)
+    editorHeight.value = payload.data?.height
+  if (payload?.data?.code && code.value !== payload.data.code)
+    code.value = payload.data.code
+  if (payload?.data?.diff && diff.value !== payload.data.diff)
+    diff.value = payload.data.diff
 })
 </script>
 
