@@ -2,10 +2,11 @@ import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { TocItem } from '@slidev/types'
-import { addToTree, filterTree, getPath, getTreeWithActiveStatuses } from '../logic/nav'
+import type { SlidevContextNav } from '../modules/context'
+import { addToTree, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
 import { rawRoutes } from '../routes'
 
-export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>) {
+export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>): SlidevContextNav {
   const path = computed(() => route.value.path)
   const total = computed(() => rawRoutes.length - 1)
 
@@ -39,5 +40,11 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
     rawTree,
     treeWithActiveStatuses,
     tree,
+    downloadPDF,
+    next,
+    nextSlide,
+    openInEditor,
+    prev,
+    prevSlide,
   }
 }

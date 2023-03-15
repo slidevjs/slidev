@@ -1,4 +1,4 @@
-import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { RenderContext } from '@slidev/types'
 import type { SlidevContext } from './modules/context'
@@ -8,7 +8,7 @@ export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = 
 export const injectionOrderMap: InjectionKey<Ref<Map<number, HTMLElement[]>>> = Symbol('v-click-clicks-order-map')
 export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
 export const injectionSlideScale: InjectionKey<ComputedRef<number>> = Symbol('slidev-slide-scale')
-export const injectionSlidevContext: InjectionKey<SlidevContext> = Symbol('slidev-slidev-context')
+export const injectionSlidevContext: InjectionKey<UnwrapNestedRefs<SlidevContext>> = Symbol('slidev-slidev-context')
 export const injectionRoute: InjectionKey<RouteRecordRaw> = Symbol('slidev-route')
 export const injectionSlideContext: InjectionKey<RenderContext> = Symbol('slidev-slide-context')
 

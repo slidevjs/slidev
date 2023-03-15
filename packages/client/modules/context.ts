@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 import { reactive } from 'vue'
-import type { UnwrapNestedRefs } from '@vue/reactivity'
+import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
+import type { ComputedRef } from '@vue/reactivity'
 import type { configs } from '../env'
 import * as nav from '../logic/nav'
 import { clicks, route } from '../logic/nav'
@@ -8,16 +9,18 @@ import { isDark } from '../logic/dark'
 import { injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 
-export type SlidevContextNavKey = 'route' | 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
+export type SlidevContextNavKey = 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide'
 export type SlidevContextNavClicksKey = 'clicks' | 'clicksElements' | 'clicksTotal' | 'hasNext' | 'hasPrev'
 
-export type SlidevContextNav = Pick<typeof nav, SlidevContextNavKey>
+export interface SlidevContextNav extends Pick<typeof nav, SlidevContextNavKey> {
+  route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>
+}
 export type SlidevContextNavClicks = Pick<typeof nav, SlidevContextNavClicksKey>
 
 export interface SlidevContext {
-  nav: UnwrapNestedRefs<SlidevContextNav & SlidevContextNavClicks>
+  nav: SlidevContextNav & SlidevContextNavClicks
   configs: typeof configs
-  themeConfigs: typeof configs['themeConfig']
+  themeConfigs: ComputedRef<typeof configs['themeConfig']>
 }
 
 export default function createSlidevContext() {

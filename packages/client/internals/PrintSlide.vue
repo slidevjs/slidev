@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import { useNav } from '../composables/useNav'
 import { isClicksDisabled } from '../logic/nav'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const props = defineProps<{ route: RouteRecordRaw }>()
 
-const clicksElements = reactive(props.route.meta?.__clicksElements || [])
+const clicksElements = ref(props.route.meta?.__clicksElements || [])
 
 const route = computed(() => props.route)
 const nav = useNav(route)
