@@ -97,7 +97,7 @@ export async function createMarkdownPlugin(
 
 export function transformMarkdownMonaco(md: string) {
   // transform monaco
-  md = md.replace(/^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string, diff: string) => {
+  md = md.replace(/^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string, diff: string) => {
     lang = lang.trim()
     options = options.trim() || '{}'
     const encoded = base64.encode(code, true)
