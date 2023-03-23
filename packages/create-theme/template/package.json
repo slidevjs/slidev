@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "@slidev/types": "^0.40.3",
-    "codemirror-theme-vars": "^0.1.1",
+    "codemirror-theme-vars": "^0.1.2",
     "prism-theme-vars": "^0.2.4",
-    "theme-vitesse": "^0.6.2"
+    "theme-vitesse": "^0.6.4"
   },
   "devDependencies": {
     "@slidev/cli": "^0.40.3"
