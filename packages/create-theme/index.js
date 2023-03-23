@@ -2,8 +2,8 @@
 /* eslint-disable no-console */
 
 // @ts-check
-const fs = require('fs')
-const path = require('path')
+const fs = require('node:fs')
+const path = require('node:path')
 const argv = require('minimist')(process.argv.slice(2))
 const prompts = require('prompts')
 const { cyan, blue, yellow, bold, dim, green } = require('kolorist')

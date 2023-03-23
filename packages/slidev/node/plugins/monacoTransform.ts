@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import type { Plugin } from 'vite'
 

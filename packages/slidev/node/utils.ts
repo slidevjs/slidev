@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import { sync as resolve } from 'resolve'

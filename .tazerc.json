@@ -3,6 +3,7 @@
     "husky",
     "execa",
     "codemirror",
-    "monaco-editor"
+    "monaco-editor",
+    "open"
   ]
 }

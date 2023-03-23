@@ -1,5 +1,5 @@
-import { dirname, resolve } from 'path'
-import { existsSync } from 'fs'
+import { dirname, resolve } from 'node:path'
+import { existsSync } from 'node:fs'
 import { slash, uniq } from '@antfu/utils'
 import type { WindiCssOptions } from 'vite-plugin-windicss'
 import jiti from 'jiti'

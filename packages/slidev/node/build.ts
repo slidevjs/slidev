@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { join, resolve } from 'path'
-import http from 'http'
+import { join, resolve } from 'node:path'
+import http from 'node:http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
 import { resolveConfig, build as viteBuild } from 'vite'

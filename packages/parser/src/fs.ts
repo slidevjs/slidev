@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
-import { dirname, resolve } from 'path'
+import { promises as fs } from 'node:fs'
+import { dirname, resolve } from 'node:path'
 import type { PreparserExtensionLoader, SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
 import { detectFeatures, mergeFeatureFlags, parse, stringify, stringifySlide } from './core'
 export * from './core'

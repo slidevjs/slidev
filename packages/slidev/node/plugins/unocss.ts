@@ -1,5 +1,5 @@
-import { resolve } from 'path'
-import { existsSync } from 'fs'
+import { resolve } from 'node:path'
+import { existsSync } from 'node:fs'
 import { deepMerge, uniq } from '@antfu/utils'
 import type { Theme } from '@unocss/preset-uno'
 import jiti from 'jiti'

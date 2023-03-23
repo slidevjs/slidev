@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-const path = require('path')
+const path = require('node:path')
 const resolveFrom = require('resolve-from')
 
 let modulePath = '../dist/cli'
