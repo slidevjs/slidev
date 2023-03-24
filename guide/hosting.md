@@ -72,6 +72,22 @@ By passing the `--watch` option the build will run in watch mode and will rebuil
 $ slidev build --watch
 ```
 
+### Multiple entries
+
+You can also build multiple slides at once.
+
+```bash
+$ slidev build slides1.md slides1.md
+```
+
+Or
+
+```bash
+$ slidev build *.md
+```
+
+In this case, each input file will generate a folder containing the build in the output directory.
+
 ## Examples
 
 Here are a few examples of the exported SPA:

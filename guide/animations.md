@@ -60,6 +60,21 @@ Same as `v-click` but instead of making the element appear, it makes the element
 
 An item will become visible each time you click "next".
 
+It accepts a `depth` props for nested list:
+
+```md
+<v-clicks depth="2">
+
+- Item 1
+  - Item 1.1
+  - Item 1.2
+- Item 2
+  - Item 2.1
+  - Item 2.2
+
+</v-clicks>
+```
+
 ### Custom Clicks Count
 
 By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
