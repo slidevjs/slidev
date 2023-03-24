@@ -128,6 +128,9 @@ export default function createDirectives() {
           // Set default dir.value
           if (dir.value == null)
             dir.value = elements?.value.length
+          // Relative value starts with '+' o '-'
+          if (typeof dir.value === 'string' && (dir.value.startsWith('+') || dir.value.startsWith('-')))
+            dir.value = (elements?.value?.length || 0) + Number(dir.value)
 
           // If a v-click order before v-after is lower than v-after, the order map will
           // not contain the key for v-after, so we need to set it first, then move v-after
