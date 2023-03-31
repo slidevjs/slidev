@@ -25,12 +25,15 @@ function isValid(strict: boolean): boolean {
 
 function goTo() {
   if (selectedItem.value >= 0 && selectedItem.value < autocomplete.value.length)
-    text.value = autocomplete.value.at(selectedItem.value)
+    text.value = autocomplete.value.at(selectedItem.value) ?? ''
   if (isValid(true)) {
-    if (aliases.value.has(path.value))
-      go(+aliases.value.get(path.value)!)
-    else
+    if (aliases.value.has(path.value)) {
+      const alias = aliases.value.get(path.value)!
+      go(+alias.path)
+    }
+    else {
       go(+path.value)
+    }
   }
   close()
 }
@@ -82,8 +85,14 @@ function updateText(event: Event) {
 }
 
 function select(item: string) {
-  go(+aliases.value.get(item)!)
+  const alias = aliases.value.get(item)!
+  go(+alias.path)
   close()
+}
+
+function getTitle(item: string) {
+  const alias = aliases.value.get(item)!
+  return `${'#'.repeat(alias.level)} ${item}`
 }
 
 watch(showGotoDialog, async (show) => {
@@ -150,7 +159,7 @@ watch(activeElement, () => {
         tabindex="0"
         @click.stop="select(item)"
       >
-        {{ item }}
+        {{ getTitle(item) }}
       </li>
     </ul>
   </div>
