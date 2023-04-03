@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { aliases, availablePaths, go } from '../logic/nav'
+import Fuse from 'fuse.js'
+import { go, rawRoutes } from '../logic/nav'
 import { activeElement, showGotoDialog } from '../state'
 
 const container = ref<HTMLDivElement>()
@@ -8,32 +9,28 @@ const input = ref<HTMLInputElement>()
 const list = ref<HTMLUListElement>()
 const items = ref<HTMLLIElement[]>()
 const text = ref('')
-const selectedItem = ref(-1)
+const selectedIndex = ref(0)
 
-const path = computed(() => text.value.startsWith('/') ? text.value.substring(1) : text.value)
-const valid = computed(() => isValid(false))
-const autocompleteList = computed(() => [...aliases.value.keys()])
-const autocomplete = computed(() => autocompleteList.value
-  .filter(item => path.value !== '' && item.toLowerCase().startsWith(path.value.toLowerCase())))
-
-function isValid(strict: boolean): boolean {
-  if (strict)
-    return availablePaths.value.includes(path.value)
-  else
-    return availablePaths.value.some(availablePath => availablePath.toLowerCase().startsWith(path.value.toLowerCase()))
+function notNull<T>(value: T | null | undefined): value is T {
+  return value !== null && value !== undefined
 }
 
+const fuse = computed(() => new Fuse(rawRoutes.map(i => i.meta?.slide).filter(notNull), {
+  keys: ['no', 'title'],
+  threshold: 0.3,
+  shouldSort: true,
+  minMatchCharLength: 1,
+}))
+
+const path = computed(() => text.value.startsWith('/') ? text.value.substring(1) : text.value)
+const result = computed(() => fuse.value.search(path.value).map(result => result.item))
+const valid = computed(() => !!result.value.length)
+
 function goTo() {
-  if (selectedItem.value >= 0 && selectedItem.value < autocomplete.value.length)
-    text.value = autocomplete.value.at(selectedItem.value) ?? ''
-  if (isValid(true)) {
-    if (aliases.value.has(path.value)) {
-      const alias = aliases.value.get(path.value)!
-      go(+alias.path)
-    }
-    else {
-      go(+path.value)
-    }
+  if (valid.value) {
+    const item = result.value.at(selectedIndex.value || 0)
+    if (item)
+      go(item.no)
   }
   close()
 }
@@ -44,25 +41,23 @@ function close() {
 }
 
 function focusDown(event: Event) {
-  if (autocomplete.value.length > 0)
-    event.preventDefault()
-  selectedItem.value++
-  if (selectedItem.value >= autocomplete.value.length)
-    selectedItem.value = -1
+  event.preventDefault()
+  selectedIndex.value++
+  if (selectedIndex.value >= result.value.length)
+    selectedIndex.value = 0
   scroll()
 }
 
 function focusUp(event: Event) {
-  if (autocomplete.value.length > 0)
-    event.preventDefault()
-  selectedItem.value--
-  if (selectedItem.value <= -2)
-    selectedItem.value = autocomplete.value.length - 1
+  event.preventDefault()
+  selectedIndex.value--
+  if (selectedIndex.value <= -2)
+    selectedIndex.value = result.value.length - 1
   scroll()
 }
 
 function scroll() {
-  const item = items.value?.[selectedItem.value]
+  const item = items.value?.[selectedIndex.value]
   if (item && list.value) {
     if (item.offsetTop + item.offsetHeight > list.value.offsetHeight + list.value.scrollTop) {
       list.value.scrollTo({
@@ -80,25 +75,19 @@ function scroll() {
 }
 
 function updateText(event: Event) {
-  selectedItem.value = -1
+  selectedIndex.value = 0
   text.value = (event.target as HTMLInputElement).value
 }
 
-function select(item: string) {
-  const alias = aliases.value.get(item)!
-  go(+alias.path)
+function select(no: number) {
+  go(no)
   close()
-}
-
-function getTitle(item: string) {
-  const alias = aliases.value.get(item)!
-  return `${'#'.repeat(alias.level)} ${item}`
 }
 
 watch(showGotoDialog, async (show) => {
   if (show) {
     text.value = ''
-    selectedItem.value = -1
+    selectedIndex.value = 0
     // delay the focus to avoid the g character coming from the key that triggered showGotoDialog
     setTimeout(() => input.value?.focus(), 0)
   }
@@ -124,7 +113,7 @@ watch(activeElement, () => {
       class="bg-main transform"
       shadow="~"
       p="x-4 y-2"
-      border="~ transparent rounded dark:gray-400 dark:opacity-25"
+      border="~ transparent rounded dark:main"
     >
       <input
         ref="input"
@@ -142,24 +131,31 @@ watch(activeElement, () => {
       >
     </div>
     <ul
-      v-if="autocomplete.length > 0"
+      v-if="result.length > 0"
       ref="list"
       class="autocomplete-list"
       shadow="~"
-      p="x-4 y-2"
-      border="~ transparent rounded dark:gray-400 dark:opacity-25"
+      border="~ transparent rounded dark:main"
     >
       <li
-        v-for="(item, index) of autocomplete"
+        v-for="(item, index) of result"
         ref="items"
-        :key="item"
-        class="autocomplete"
-        :class="{ selected: selectedItem === index }"
+        :key="item.id"
         role="button"
         tabindex="0"
-        @click.stop="select(item)"
+        p="x-4 y-2"
+        cursor-pointer
+        hover="op100"
+        flex="~ gap-2"
+        items-center
+        :border="index === 0 ? '' : 't main'"
+        :class="selectedIndex === index ? 'bg-active op100' : 'op80'"
+        @click.stop="select(item.no)"
       >
-        {{ getTitle(item) }}
+        <div w-4 text-right op50 text-sm>
+          {{ item.no }}
+        </div>
+        {{ item.title }}
       </li>
     </ul>
   </div>
@@ -173,26 +169,5 @@ watch(activeElement, () => {
 
 .autocomplete {
   cursor: pointer;
-
-  &:hover {
-    text-decoration: underline
-  }
-}
-
-.selected {
-  position: relative;
-
-  &::before {
-    @apply rounded;
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: -0.25em;
-    right: -0.25em;
-    background-color: var(--slidev-theme-primary);
-    opacity: 0.5;
-    z-index: -1;
-  }
 }
 </style>
