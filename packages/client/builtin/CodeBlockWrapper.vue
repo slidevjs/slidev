@@ -81,9 +81,14 @@ onMounted(() => {
         line.classList.toggle('dishonored', !highlighted)
       })
       if (props.maxHeight) {
-        const firstHighlightedEl = target.querySelector('.line.highlighted')
-        if (firstHighlightedEl)
-          firstHighlightedEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        const highlightedEls = Array.from(target.querySelectorAll('.line.highlighted'))
+        const height = highlightedEls.reduce((acc, el) => el.offsetHeight + acc, 0)
+        if (height > el.value.offsetHeight) {
+          highlightedEls[0].scrollIntoView({ behavior: 'smooth', block: 'start' })
+        } else if (highlightedEls.length > 0) {
+          const middleEl = highlightedEls[Math.round((highlightedEls.length - 1) / 2)]
+          middleEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
       }
     }
   })
