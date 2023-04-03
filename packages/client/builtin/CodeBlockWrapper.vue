@@ -85,7 +85,8 @@ onMounted(() => {
         const height = highlightedEls.reduce((acc, el) => el.offsetHeight + acc, 0)
         if (height > el.value.offsetHeight) {
           highlightedEls[0].scrollIntoView({ behavior: 'smooth', block: 'start' })
-        } else if (highlightedEls.length > 0) {
+        }
+        else if (highlightedEls.length > 0) {
           const middleEl = highlightedEls[Math.round((highlightedEls.length - 1) / 2)]
           middleEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
