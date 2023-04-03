@@ -12,6 +12,7 @@ html:not(.dark) .shiki-dark {
 
 .slidev-code-wrapper {
   margin: var(--slidev-code-margin) !important;
+  scroll-padding: var(--slidev-code-padding);
   &:-webkit-scrollbar {
     width: 0px;
   }
