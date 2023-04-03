@@ -88,7 +88,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
       }
 
-      return mergeConfig(config, injection)
+      return mergeConfig(injection, config)
     },
     configureServer(server) {
       // serve our index.html after vite history fallback
