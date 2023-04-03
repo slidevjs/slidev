@@ -25,7 +25,7 @@ const presenterLink = computed(() => `/presenter/${currentPage.value}${query.val
 const nonPresenterLink = computed(() => `/${currentPage.value}${query.value}`)
 
 const root = ref<HTMLDivElement>()
-const onMouseLeave = () => {
+function onMouseLeave() {
   if (root.value && activeElement.value && root.value.contains(activeElement.value))
     activeElement.value.blur()
 }

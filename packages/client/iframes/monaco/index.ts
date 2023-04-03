@@ -26,7 +26,7 @@ let update: () => void = () => { }
 
 document.body.appendChild(styleObject)
 
-const lang = () => {
+function lang() {
   switch (props.lang) {
     case 'ts':
       return 'typescript'
@@ -37,7 +37,7 @@ const lang = () => {
   }
 }
 
-const ext = () => {
+function ext() {
   switch (lang()) {
     case 'typescript':
       return 'ts'
