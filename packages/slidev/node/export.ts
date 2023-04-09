@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { Buffer } from 'node:buffer'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
