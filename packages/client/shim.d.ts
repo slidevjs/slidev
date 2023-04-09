@@ -16,7 +16,6 @@ declare module '/@slidev/configs' {
   export default SlidevConfig
 }
 
-
 declare module 'mermaid/dist/mermaid.esm.mjs' {
   import Mermaid from 'mermaid/dist/mermaid.d.ts'
   export default Mermaid
