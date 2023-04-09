@@ -10,7 +10,7 @@ mermaid.initialize({ startOnLoad: false })
 const nanoid = customAlphabet('abcedfghicklmn', 10)
 const cache = new Map<string, string>()
 
-export function renderMermaid(encoded: string, options: any) {
+export async function renderMermaid(encoded: string, options: any) {
   const key = encoded + JSON.stringify(options)
   const _cache = cache.get(key)
   if (_cache)
@@ -23,7 +23,7 @@ export function renderMermaid(encoded: string, options: any) {
   })
   const code = decode(encoded)
   const id = nanoid()
-  const svg = mermaid.render(id, code) as string
+  const svg = await mermaid.renderAsync(id, code)
   cache.set(key, svg)
   return svg
 }

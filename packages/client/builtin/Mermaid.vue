@@ -13,7 +13,7 @@ pie
 -->
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch, watchEffect } from 'vue'
+import { getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import { renderMermaid } from '../modules/mermaid'
 import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
@@ -26,14 +26,24 @@ const props = defineProps<{
 
 const vm = getCurrentInstance()
 const el = ref<HTMLDivElement>()
-const svgObj = computed(() => renderMermaid(
-  props.code || '',
-  {
-    theme: props.theme || (isDark.value ? 'dark' : undefined),
-    ...vm!.attrs,
-  },
-))
-const html = computed(() => svgObj.value)
+const html = ref('')
+
+watchEffect(async (onCleanup) => {
+  let disposed = false
+  onCleanup(() => {
+    disposed = true
+  })
+  const svg = await renderMermaid(
+    props.code || '',
+    {
+      theme: props.theme || (isDark.value ? 'dark' : undefined),
+      ...vm!.attrs,
+    },
+  )
+  if (!disposed)
+    html.value = svg
+})
+
 const actualHeight = ref<number>()
 
 watch(html, () => {
