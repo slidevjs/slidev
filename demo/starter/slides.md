@@ -92,7 +92,21 @@ Here is another comment.
 -->
 
 ---
+layout: default
+---
+
+# Table of contents
+
+```
+<Toc minDepth="1" maxDepth="5"></Toc>
+```
+
+<Toc></Toc>
+
+---
 transition: slide-up
+
+level: 2
 ---
 
 # Navigation
@@ -427,3 +441,8 @@ class: text-center
 # Learn More
 
 [Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+
+---
+layout: end
+---
+

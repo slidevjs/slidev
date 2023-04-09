@@ -52,4 +52,7 @@ const classes = computed(() => {
 .slidev-layout .slidev-toc-item p {
   margin: 0;
 }
+.slidev-layout .slidev-toc-item div, .slidev-layout .slidev-toc-item div p {
+    display: initial;
+}
 </style>
