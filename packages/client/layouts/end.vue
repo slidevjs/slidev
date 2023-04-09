@@ -1,6 +1,6 @@
 <template>
   <div class="slidev-layout end">
-    END
+    <slot>END</slot>
   </div>
 </template>
 
