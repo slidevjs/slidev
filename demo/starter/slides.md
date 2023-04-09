@@ -355,6 +355,26 @@ C -->|One| D[Result 1]
 C -->|Two| E[Result 2]
 ```
 
+```mermaid
+mindmap
+  root((mindmap))
+    Origins
+      Long history
+      ::icon(fa fa-book)
+      Popularisation
+        British popular psychology author Tony Buzan
+    Research
+      On effectivness<br/>and features
+      On Automatic creation
+        Uses
+            Creative techniques
+            Strategic planning
+            Argument mapping
+    Tools
+      Pen and paper
+      Mermaid
+```
+
 ```plantuml {scale: 0.7}
 @startuml
 

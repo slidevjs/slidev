@@ -1,4 +1,4 @@
-import mermaid from 'mermaid/dist/mermaid'
+import mermaid from 'mermaid/dist/mermaid.esm.mjs'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
 import { clearUndefined } from '@antfu/utils'
@@ -10,7 +10,7 @@ mermaid.initialize({ startOnLoad: false })
 const nanoid = customAlphabet('abcedfghicklmn', 10)
 const cache = new Map<string, string>()
 
-export function renderMermaid(encoded: string, options: any) {
+export async function renderMermaid(encoded: string, options: any) {
   const key = encoded + JSON.stringify(options)
   const _cache = cache.get(key)
   if (_cache)
@@ -23,7 +23,7 @@ export function renderMermaid(encoded: string, options: any) {
   })
   const code = decode(encoded)
   const id = nanoid()
-  const svg = mermaid.render(id, code) as string
+  const { svg } = await mermaid.render(id, code)
   cache.set(key, svg)
   return svg
 }
