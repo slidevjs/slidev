@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import mermaid from 'mermaid/dist/mermaid.esm.mjs'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
