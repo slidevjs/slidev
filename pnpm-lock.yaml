@@ -254,8 +254,8 @@ importers:
         specifier: ^0.16.4
         version: 0.16.4
       mermaid:
-        specifier: ^9.4.3
-        version: 9.4.3
+        specifier: ^10.1.0
+        version: 10.1.0(react-dom@16.14.0)(react@16.14.0)
       monaco-editor:
         specifier: ^0.33.0
         version: 0.33.0
@@ -1360,7 +1360,6 @@ packages:
       '@types/react': 18.0.33
       react: 16.14.0
       react-dom: 16.14.0(react@16.14.0)
-    dev: true
 
   /@lillallol/outline-pdf-data-structure@1.0.3:
     resolution: {integrity: sha512-XlK9dERP2n9afkJ23JyJzpmesLgiOHmhqKuGgeytnT+IVGFdAsYl1wLr2o+byXNAN5fveNbc7CCI6RfBsd5FCw==}
@@ -1657,7 +1656,6 @@ packages:
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
-    dev: true
 
   /@types/ps-tree@1.1.2:
     resolution: {integrity: sha512-ZREFYlpUmPQJ0esjxoG1fMvB2HNaD3z+mjqdSosZvd3RalncI9NEur73P8ZJz4YQdL64CmV1w0RuqoRUlhQRBw==}
@@ -1673,7 +1671,6 @@ packages:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.1
-    dev: true
 
   /@types/recordrtc@5.6.11:
     resolution: {integrity: sha512-X4XD5nltz0cjmyzsPNegQReOPF+C5ARTfSPAPhqnKV7SsfRta/M4FBJ5AtSInCaEveL71FLLSVQE9mg8Uuo++w==}
@@ -1685,7 +1682,6 @@ packages:
 
   /@types/scheduler@0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
-    dev: true
 
   /@types/semver@7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
@@ -3326,14 +3322,6 @@ packages:
     dependencies:
       d3: 7.8.2
       lodash-es: 4.17.21
-    dev: true
-
-  /dagre-d3-es@7.0.9:
-    resolution: {integrity: sha512-rYR4QfVmy+sR44IBDvVtcAmOReGBvRCWDpO2QjYwqgh9yijw6eSHBqaPG/LIOEy7aBsniLvtMW6pg19qJhq60w==}
-    dependencies:
-      d3: 7.8.2
-      lodash-es: 4.17.21
-    dev: false
 
   /dashdash@1.14.1:
     resolution: {integrity: sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==}
@@ -3492,13 +3480,8 @@ packages:
       domelementtype: 2.3.0
     dev: true
 
-  /dompurify@2.4.3:
-    resolution: {integrity: sha512-q6QaLcakcRjebxjg8/+NP+h0rPfatOgOzc46Fst9VAA3jF2ApfKBNKMzdP4DYTqtUMXSCd5pRS/8Po/OmoCHZQ==}
-    dev: false
-
   /dompurify@2.4.5:
     resolution: {integrity: sha512-jggCCd+8Iqp4Tsz0nIvpcb22InKEBrGz5dw3EQJMs8HPJDsKbFIO3STYtAvCfDx26Muevn1MHVI0XxjgFfmiSA==}
-    dev: true
 
   /domutils@3.0.1:
     resolution: {integrity: sha512-z08c1l761iKhDFtfXO04C7kTdPBLi41zwOZl00WS8b5eiaebNpY00HKbztwBq+e3vyqWNwWF3mP9YLUeqIrF+Q==}
@@ -5632,7 +5615,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: true
 
   /loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
@@ -5769,28 +5751,6 @@ packages:
     transitivePeerDependencies:
       - react
       - react-dom
-    dev: true
-
-  /mermaid@9.4.3:
-    resolution: {integrity: sha512-TLkQEtqhRSuEHSE34lh5bCa94KATCyluAXmFnNI2PRZwOpXFeqiJWwZl+d2CcemE1RS6QbbueSSq9QIg8Uxcyw==}
-    dependencies:
-      '@braintree/sanitize-url': 6.0.2
-      cytoscape: 3.23.0
-      cytoscape-cose-bilkent: 4.1.0(cytoscape@3.23.0)
-      cytoscape-fcose: 2.2.0(cytoscape@3.23.0)
-      d3: 7.8.2
-      dagre-d3-es: 7.0.9
-      dayjs: 1.11.7
-      dompurify: 2.4.3
-      elkjs: 0.8.2
-      khroma: 2.0.0
-      lodash-es: 4.17.21
-      non-layered-tidy-tree-layout: 2.0.2
-      stylis: 4.1.3
-      ts-dedent: 2.2.0
-      uuid: 9.0.0
-      web-worker: 1.2.0
-    dev: false
 
   /micromark@2.11.4:
     resolution: {integrity: sha512-+WoovN/ppKolQOFIAajxi7Lu9kInbPxFuTBVEavFcL8eAfVstoc5MocPmqBeAdBOJV00uaVjegzH4+MA0DN/uA==}
@@ -6010,7 +5970,6 @@ packages:
   /object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /object-inspect@1.12.3:
     resolution: {integrity: sha512-geUvdk7c+eizMNUDkRpW1wJwgfOiOeHbxBR/hLXK1aT6zmVSO0jsQcs7fj6MGw89jC/cjGfLcNOrtMYtGqm81g==}
@@ -6440,7 +6399,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /proxy-from-env@1.0.0:
     resolution: {integrity: sha512-F2JHgJQ1iqwnHDcQjVBsq3n/uoaFL+iPW/eAeL7kVxy/2RrWaN4WroKjjvbsoRtv0ftelNyC01bjRhn/bhcf4A==}
@@ -6515,11 +6473,9 @@ packages:
       prop-types: 15.8.1
       react: 16.14.0
       scheduler: 0.19.1
-    dev: true
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-    dev: true
 
   /react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -6532,7 +6488,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       prop-types: 15.8.1
-    dev: true
 
   /read-pkg-up@7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
@@ -6723,7 +6678,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-    dev: true
 
   /scule@1.0.0:
     resolution: {integrity: sha512-4AsO/FrViE/iDNEPaAQlb77tf0csuq27EsVpy6ett584EcRTp6pTDLoGWVxCD77y5iU5FauOvhsI4o1APwPoSQ==}
