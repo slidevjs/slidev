@@ -1,4 +1,6 @@
-import mermaid from 'mermaid/dist/mermaid'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import mermaid from 'mermaid/dist/mermaid.esm.mjs'
 import { customAlphabet } from 'nanoid'
 import { decode } from 'js-base64'
 import { clearUndefined } from '@antfu/utils'
@@ -23,7 +25,7 @@ export async function renderMermaid(encoded: string, options: any) {
   })
   const code = decode(encoded)
   const id = nanoid()
-  const svg = await mermaid.renderAsync(id, code)
+  const { svg } = await mermaid.render(id, code)
   cache.set(key, svg)
   return svg
 }
