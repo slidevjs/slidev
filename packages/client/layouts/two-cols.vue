@@ -28,7 +28,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="slidev-layout two-columns w-full h-full grid grid-cols-2">
+  <div class="slidev-layout two-columns w-full h-full grid grid-cols-2 gap-4">
     <div class="col-left" :class="props.class">
       <slot />
     </div>
