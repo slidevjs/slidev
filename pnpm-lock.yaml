@@ -479,6 +479,9 @@ importers:
       vite-plugin-remote-assets:
         specifier: ^0.3.2
         version: 0.3.2(vite@4.2.1)
+      vite-plugin-static-copy:
+        specifier: ^0.13.1
+        version: 0.13.1(vite@4.2.1)
       vite-plugin-vue-markdown:
         specifier: ^0.22.4
         version: 0.22.4(vite@4.2.1)
@@ -7589,6 +7592,19 @@ packages:
       vite: 4.2.1(@types/node@18.15.11)
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /vite-plugin-static-copy@0.13.1(vite@4.2.1):
+    resolution: {integrity: sha512-KwIcGBT1aOxSq+laK3VmSngoEa3HXWj/6ZEXdv+y59eZ7p/XSuPahoDo+CfYW22JjTdnstgeKWiX+78KNgDu6g==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      chokidar: 3.5.3
+      fast-glob: 3.2.12
+      fs-extra: 11.1.1
+      picocolors: 1.0.0
+      vite: 4.2.1(@types/node@18.15.11)
     dev: false
 
   /vite-plugin-vue-markdown@0.22.4(vite@4.2.1):
