@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.40.9",
+  "version": "0.40.10",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -96,6 +96,7 @@
     "vite": "^4.2.1",
     "vite-plugin-inspect": "^0.7.19",
     "vite-plugin-remote-assets": "^0.3.2",
+    "vite-plugin-static-copy": "^0.13.1",
     "vite-plugin-vue-markdown": "^0.22.4",
     "vite-plugin-vue-server-ref": "^0.3.1",
     "vite-plugin-windicss": "^1.8.10",

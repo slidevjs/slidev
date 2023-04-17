@@ -9,6 +9,7 @@ import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import Inspect from 'vite-plugin-inspect'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
@@ -166,6 +167,15 @@ export async function ViteSlidevPlugin(
         if (key === 'drawings')
           writeDrawings(options, patch ?? data)
       },
+    }),
+
+    viteStaticCopy({
+      targets: themeRoots.map((i) => {
+        return {
+          src: `${i}/public/*`,
+          dest: 'theme',
+        }
+      }),
     }),
 
     createConfigPlugin(options),
