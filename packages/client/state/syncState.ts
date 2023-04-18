@@ -57,7 +57,7 @@ export function createSyncState<State extends object>(serverState: State, defaul
         onPatchCallbacks.forEach((fn: (state: State) => void) => fn(state))
     }
 
-    watch(state, onStateChanged, { deep: true })
+    watch(state, onStateChanged, { deep: true, flush: 'sync' })
 
     if (!__SLIDEV_HAS_SERVER__ && persist) {
       const serialzedState = window.localStorage.getItem(channelKey)

@@ -1,6 +1,6 @@
 /* __imports__ */
 import { watch } from 'vue'
-import { useHead, useHtmlAttrs } from '@vueuse/head'
+import { useHead } from '@vueuse/head'
 import { nanoid } from 'nanoid'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
@@ -17,8 +17,10 @@ export default function setupRoot() {
   /* __injections__ */
 
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-  useHead({ title })
-  useHtmlAttrs(configs.htmlAttrs)
+  useHead({
+    title,
+    htmlAttrs: configs.htmlAttrs,
+  })
   initSharedState(`${title} - shared`)
   initDrawingState(`${title} - drawings`)
 
@@ -41,6 +43,7 @@ export default function setupRoot() {
       patch('viewerPage', +currentPage.value)
       patch('viewerClicks', clicks.value)
     }
+
     patch('lastUpdate', {
       id,
       type: isPresenter.value ? 'presenter' : 'viewer',
