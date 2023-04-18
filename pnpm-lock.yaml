@@ -483,8 +483,8 @@ importers:
         specifier: ^0.13.1
         version: 0.13.1(vite@4.2.2)
       vite-plugin-vue-markdown:
-        specifier: ^0.22.5
-        version: 0.22.5(vite@4.2.2)
+        specifier: ^0.22.6
+        version: 0.22.6(vite@4.2.2)
       vite-plugin-vue-server-ref:
         specifier: ^0.3.2
         version: 0.3.2(vite@4.2.2)(vue@3.2.47)
@@ -7758,8 +7758,8 @@ packages:
       vite: 4.2.2(@types/node@18.15.11)
     dev: false
 
-  /vite-plugin-vue-markdown@0.22.5(vite@4.2.2):
-    resolution: {integrity: sha512-VH0SbESc6ij+iC9AQ9BG40yayHmYwoVyJ4ZjcWQzg0O3hdxW4yYt7c7JmRkKHCkECb8Dsp02VsAUV4YLy29hhg==}
+  /vite-plugin-vue-markdown@0.22.6(vite@4.2.2):
+    resolution: {integrity: sha512-BB0/yYoRO+4hceFZRgU/iAOpgklFvo/eHLapOkavIoDkP0jeoQubOMTEF8K4FuYRX9jaN5WcP2TrfhUgc7RuUg==}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0
     dependencies:
