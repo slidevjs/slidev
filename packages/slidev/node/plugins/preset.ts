@@ -1,4 +1,5 @@
 import { join } from 'node:path'
+import { existsSync } from 'node:fs'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
@@ -94,6 +95,8 @@ export async function ViteSlidevPlugin(
 
   const drawingData = await loadDrawings(options)
 
+  const publicRoots = themeRoots.map(i => join(i, 'public')).filter(existsSync)
+
   return [
     MarkdownPlugin,
     VueJsxPlugin,
@@ -169,14 +172,14 @@ export async function ViteSlidevPlugin(
       },
     }),
 
-    viteStaticCopy({
-      targets: themeRoots.map((i) => {
-        return {
-          src: `${i}/public/*`,
+    publicRoots.length
+      ? viteStaticCopy({
+        targets: publicRoots.map(r => ({
+          src: `${r}/*`,
           dest: 'theme',
-        }
-      }),
-    }),
+        })),
+      })
+      : null,
 
     createConfigPlugin(options),
     createClientSetupPlugin(options),
