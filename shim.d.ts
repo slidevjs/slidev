@@ -7,7 +7,7 @@ declare global {
   const __SLIDEV_FEATURE_DRAWINGS_PERSIST__: boolean
   const __SLIDEV_FEATURE_RECORD__: boolean
   const __SLIDEV_FEATURE_PRESENTER__: boolean
-  const __USE_SERVER__: boolean
+  const __SLIDEV_HAS_SERVER__: boolean
 }
 
 declare module 'vue' {
@@ -19,6 +19,6 @@ declare module 'vue' {
     __SLIDEV_FEATURE_DRAWINGS_PERSIST__: boolean
     __SLIDEV_FEATURE_RECORD__: boolean
     __SLIDEV_FEATURE_PRESENTER__: boolean
-    __USE_SERVER__: boolean
+    __SLIDEV_HAS_SERVER__: boolean
   }
 }
