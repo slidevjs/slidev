@@ -82,7 +82,7 @@ export default defineComponent({
         const directive = idx % this.every === 0 ? click : after
         let vNode
         let childCount = 0
-        if (depth < this.depth && Array.isArray(i.children)) {
+        if (depth < +this.depth && Array.isArray(i.children)) {
           const [vNodes, total] = mapSubList(i.children, depth)
           vNode = h(i, {}, [vNodes])
           childCount = total

@@ -8,7 +8,7 @@ const size = useLocalStorage('slidev-webcam-size', Math.round(Math.min(window.in
 const position = useLocalStorage('slidev-webcam-pos', {
   x: window.innerWidth - size.value - 30,
   y: window.innerHeight - size.value - 30,
-}, undefined, { deep: true })
+}, { deep: true })
 
 const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()

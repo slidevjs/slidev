@@ -25,7 +25,7 @@ const props = defineProps<{
 }>()
 
 const vm = getCurrentInstance()
-const el = ref<HTMLDivElement>()
+const el = ref<ShadowRoot>()
 const html = ref('')
 
 watchEffect(async (onCleanup) => {

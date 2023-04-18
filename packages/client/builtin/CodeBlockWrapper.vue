@@ -81,7 +81,7 @@ onMounted(() => {
         line.classList.toggle('dishonored', !highlighted)
       })
       if (props.maxHeight) {
-        const highlightedEls = Array.from(target.querySelectorAll('.line.highlighted'))
+        const highlightedEls = Array.from(target.querySelectorAll('.line.highlighted')) as HTMLElement[]
         const height = highlightedEls.reduce((acc, el) => el.offsetHeight + acc, 0)
         if (height > el.value.offsetHeight) {
           highlightedEls[0].scrollIntoView({ behavior: 'smooth', block: 'start' })

@@ -17,7 +17,7 @@ const scaleInvertPercent = computed(() => `${(1 / (props.scale || 1)) * 100}%`)
         :src="url"
         :style="scale ? { transform: `scale(${scale})`, transformOrigin: 'top left' } : {}"
       />
-      <div class="slidev-layout default" :class="props.class">
+      <div class="slidev-layout default" v-bind="$attrs">
         <slot />
       </div>
     </div>

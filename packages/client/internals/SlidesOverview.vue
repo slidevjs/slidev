@@ -83,7 +83,8 @@ watchEffect(() => {
             class="pointer-events-none"
           >
             <SlideWrapper
-              :is="route?.component"
+              :is="route.component"
+              v-if="route?.component"
               :clicks-disabled="true"
               :class="getSlideClass(route)"
               :route="route"
