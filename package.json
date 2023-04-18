@@ -1,7 +1,7 @@
 {
   "version": "0.40.10",
   "private": true,
-  "packageManager": "pnpm@8.1.1",
+  "packageManager": "pnpm@8.3.0",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -21,7 +21,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.38.4",
+    "@antfu/eslint-config": "^0.38.5",
     "@antfu/ni": "^0.21.3",
     "@antfu/utils": "^0.7.2",
     "@slidev/cli": "workspace:*",
@@ -46,26 +46,26 @@
     "@types/resolve": "^1.20.2",
     "@types/semver": "^7.3.13",
     "@types/yargs": "^17.0.24",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@vueuse/core": "^9.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@vueuse/core": "^10.0.2",
     "bumpp": "^9.1.0",
     "cross-env": "^7.0.3",
-    "cypress": "^12.9.0",
+    "cypress": "^12.10.0",
     "eslint": "^8.38.0",
     "eslint-plugin-cypress": "^2.13.2",
     "esno": "^0.16.3",
-    "katex": "^0.16.4",
+    "katex": "^0.16.6",
     "lint-staged": "^13.2.1",
     "mermaid": "^10.1.0",
-    "playwright-chromium": "^1.32.2",
-    "pnpm": "^8.1.1",
-    "rimraf": "^4.4.1",
+    "playwright-chromium": "^1.32.3",
+    "pnpm": "^8.3.0",
+    "rimraf": "^5.0.0",
     "simple-git-hooks": "^2.8.1",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
-    "vite": "^4.2.1",
+    "vite": "^4.2.2",
     "vite-plugin-windicss": "^1.8.10",
-    "vitest": "^0.29.8",
+    "vitest": "^0.30.1",
     "zx": "^7.2.1"
   },
   "simple-git-hooks": {
