@@ -2,8 +2,10 @@ import Markdown from 'vite-plugin-vue-markdown'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
+
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
+
 // @ts-expect-error missing types
 import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'

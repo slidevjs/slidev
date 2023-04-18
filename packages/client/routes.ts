@@ -3,8 +3,10 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import type { TransitionGroupProps } from 'vue'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
+
 // @ts-expect-error missing types
 import _rawRoutes from '/@slidev/routes'
+
 // @ts-expect-error missing types
 import _configs from '/@slidev/configs'
 

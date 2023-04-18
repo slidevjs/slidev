@@ -3,8 +3,10 @@ import { computed, shallowRef, watch } from 'vue'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'
+
 // @ts-expect-error virtual module
 import GlobalTop from '/@slidev/global-components/top'
+
 // @ts-expect-error virtual module
 import GlobalBottom from '/@slidev/global-components/bottom'
 import PresenterMouse from './PresenterMouse.vue'

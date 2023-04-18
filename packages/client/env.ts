@@ -1,6 +1,7 @@
 import type { SlidevConfig } from '@slidev/types'
 import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
+
 // @ts-expect-error missing types
 import _configs from '/@slidev/configs'
 

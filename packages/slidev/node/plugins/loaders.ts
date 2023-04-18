@@ -5,6 +5,7 @@ import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
 import type { RouteMeta } from 'vue-router'
+
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
 import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
