@@ -98,7 +98,7 @@
     "vite-plugin-remote-assets": "^0.3.2",
     "vite-plugin-static-copy": "^0.13.1",
     "vite-plugin-vue-markdown": "^0.22.6",
-    "vite-plugin-vue-server-ref": "^0.3.2",
+    "vite-plugin-vue-server-ref": "^0.3.3",
     "vite-plugin-windicss": "^1.8.10",
     "vue": "^3.2.47",
     "windicss": "^3.5.6",
