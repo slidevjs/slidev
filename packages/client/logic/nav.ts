@@ -2,7 +2,7 @@ import type { Ref, TransitionGroupProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
 import type { TocItem } from '@slidev/types'
-import { SwipeDirection, isString, timestamp, usePointerSwipe } from '@vueuse/core'
+import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { useRouteQuery } from './route'
@@ -147,13 +147,13 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
       const x = Math.abs(distanceX.value)
       const y = Math.abs(distanceY.value)
       if (x / window.innerWidth > 0.3 || x > 100) {
-        if (direction.value === SwipeDirection.LEFT)
+        if (direction.value === 'left')
           next()
         else
           prev()
       }
       else if (y / window.innerHeight > 0.4 || y > 200) {
-        if (direction.value === SwipeDirection.DOWN)
+        if (direction.value === 'down')
           prevSlide()
         else
           nextSlide()
@@ -165,7 +165,7 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
 export async function downloadPDF() {
   const { saveAs } = await import('file-saver')
   saveAs(
-    isString(configs.download)
+    typeof configs.download === 'string'
       ? configs.download
       : configs.exportFilename
         ? `${configs.exportFilename}.pdf`

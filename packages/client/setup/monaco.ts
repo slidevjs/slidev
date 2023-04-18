@@ -2,6 +2,7 @@ import { getCurrentInstance, onMounted } from 'vue'
 import * as monaco from 'monaco-editor'
 import { createSingletonPromise } from '@antfu/utils'
 import type { MonacoSetupReturn } from '@slidev/types'
+
 /* __imports__ */
 
 const setup = createSingletonPromise(async () => {
@@ -31,7 +32,6 @@ const setup = createSingletonPromise(async () => {
         import('monaco-editor/esm/vs/language/typescript/ts.worker?worker'),
       ])
 
-      // @ts-expect-error global config for monaca
       window.MonacoEnvironment = {
         getWorker(_: any, label: string) {
           if (label === 'json')
