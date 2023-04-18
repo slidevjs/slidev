@@ -65,6 +65,7 @@ function loadPrismLang(lang: string): Grammar | undefined {
  */
 function loadPrismPlugin(name: string): void {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     require(`prismjs/plugins/${name}/prism-${name}`)
   }
   catch (e) {

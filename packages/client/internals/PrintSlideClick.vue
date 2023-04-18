@@ -8,8 +8,10 @@ import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../modules/context'
 import SlideWrapper from './SlideWrapper'
+
 // @ts-expect-error virtual module
 import GlobalTop from '/@slidev/global-components/top'
+
 // @ts-expect-error virtual module
 import GlobalBottom from '/@slidev/global-components/bottom'
 

@@ -8,6 +8,7 @@ import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
+
 // @ts-expect-error virtual module
 import CustomNavControls from '/@slidev/custom-nav-controls'
 
