@@ -2,6 +2,19 @@ import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import type { Plugin } from 'vite'
 
+async function getPackageData(pkg: string) {
+  const { resolvePackageData } = await import('vite')
+  const info = resolvePackageData(pkg, process.cwd())
+  if (!info)
+    return
+
+  const typePath = info.data.types || info.data.typings
+  if (!typePath)
+    return
+
+  return [info, typePath]
+}
+
 export function createMonacoTypesLoader(): Plugin {
   return {
     name: 'slidev:monaco-types-loader',
@@ -16,14 +29,11 @@ export function createMonacoTypesLoader(): Plugin {
       const match = id.match(/^\/\@slidev-monaco-types\/(.*)$/)
       if (match) {
         const pkg = match[1]
-        const { resolvePackageData } = await import('vite')
-        const info = resolvePackageData(pkg, process.cwd())
-        if (!info)
+        const packageData = await getPackageData(pkg) || await getPackageData(`@types/${pkg}`)
+        if (!packageData)
           return
 
-        const typePath = info.data.types || info.data.typings
-        if (!typePath)
-          return ''
+        const [info, typePath] = packageData
 
         return [
           'import * as monaco from \'monaco-editor\'',
