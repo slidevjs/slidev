@@ -355,7 +355,7 @@ ${title}
     const imports = [
       'import { inject as vueInject } from "vue"',
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      'import { injectionSlidevContext } from "@slidev/client/constants"',
+      'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
       'const $slidev = vueInject(injectionSlidevContext)',
     ]
@@ -376,7 +376,7 @@ ${title}
       return code // Assume that the context is already imported and used
     const imports = [
       'import { inject as vueInject } from "vue"',
-      'import { injectionSlidevContext } from "@slidev/client/constants"',
+      'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
       'const $slidev = vueInject(injectionSlidevContext)',
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
@@ -394,7 +394,7 @@ ${title}
         component = component.slice(0, component.indexOf('</script>'))
 
         const scriptIndex = (matchScript.index || 0) + matchScript[0].length
-        const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants"\n'
+        const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants.ts"\n'
         code = `${code.slice(0, scriptIndex)}${provideImport}${code.slice(scriptIndex)}`
 
         let injectIndex = exportIndex + provideImport.length
