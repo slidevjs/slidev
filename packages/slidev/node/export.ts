@@ -32,6 +32,7 @@ export interface ExportOptions {
    * @default false
    */
   perSlide?: boolean
+  withoutEndSlide?: boolean
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -164,11 +165,12 @@ export async function exportSlides({
   executablePath = undefined,
   withToc = false,
   perSlide = false,
+  withoutEndSlide = false,
 }: ExportOptions) {
   if (!packageExists('playwright-chromium'))
     throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
 
-  const pages: number[] = parseRangeString(total, range)
+  const pages: number[] = parseRangeString(total, range, withoutEndSlide)
 
   const { chromium } = await import('playwright-chromium')
   const browser = await chromium.launch({
@@ -421,6 +423,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath: args['executable-path'],
     withToc: args['with-toc'],
     perSlide: args['per-slide'],
+    withoutEndSlide: args['without-end-slide'],
   }
   const {
     entry,
@@ -433,6 +436,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc,
     perSlide,
+    withoutEndSlide,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
   if (outDir)
@@ -452,5 +456,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
+    withoutEndSlide: withoutEndSlide || false,
   }
 }

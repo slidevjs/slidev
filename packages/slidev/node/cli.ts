@@ -378,6 +378,10 @@ cli.command(
       await server.listen(port)
       printInfo(options)
       parser.filterDisabled(options.data)
+
+      if (args.withoutEndSlide)
+        parser.filterOutEndSlide(options.data)
+
       const result = await exportSlides({
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
@@ -504,6 +508,10 @@ function exportOptions<T>(args: Argv<T>) {
     .option('per-slide', {
       type: 'boolean',
       describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
+    })
+    .option('without-end-slide', {
+      type: 'boolean',
+      describe: 'do not include end slide (works only if no range is given)',
     })
 }
 

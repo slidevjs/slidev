@@ -18,6 +18,11 @@ export function filterDisabled(data: SlidevMarkdown) {
   return data
 }
 
+export function filterOutEndSlide(data: SlidevMarkdown) {
+  data.slides = data.slides.filter(i => i.frontmatter?.layout !== 'end')
+  return data
+}
+
 export function stringifySlide(data: SlideInfoBase, idx = 0) {
   if (data.raw == null)
     prettifySlide(data)

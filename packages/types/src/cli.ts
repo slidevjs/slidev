@@ -13,6 +13,7 @@ export interface ExportArgs extends CommonArgs {
   'executable-path'?: string
   'with-toc'?: boolean
   'per-slide'?: boolean
+  'without-end-slide'?: boolean
 }
 
 export interface BuildArgs extends ExportArgs {
