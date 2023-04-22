@@ -126,5 +126,5 @@ useEventListener(window, 'message', ({ data: payload }) => {
 </script>
 
 <template>
-  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
+  <iframe ref="iframe" class="text-base w-full" :style="{ height }" />
 </template>
