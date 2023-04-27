@@ -107,6 +107,7 @@ watch(activeElement, () => {
     id="slidev-goto-dialog"
     ref="container"
     class="fixed right-5 transition-all"
+    w-90
     :class="showGotoDialog ? 'top-5' : '-top-20'"
   >
     <div
