@@ -29,7 +29,9 @@ document.body.appendChild(styleObject)
 function lang() {
   switch (props.lang) {
     case 'ts':
+    case 'tsx':
       return 'typescript'
+    case 'jsx':
     case 'js':
       return 'javascript'
     default:
