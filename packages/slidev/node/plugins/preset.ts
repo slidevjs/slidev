@@ -174,6 +174,7 @@ export async function ViteSlidevPlugin(
 
     publicRoots.length
       ? viteStaticCopy({
+        silent: true,
         targets: publicRoots.map(r => ({
           src: `${r}/*`,
           dest: 'theme',
