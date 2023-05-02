@@ -3,7 +3,11 @@ import { slash } from '@antfu/utils'
 import type { Plugin } from 'vite'
 
 async function getPackageData(pkg: string) {
-  const { resolvePackageData } = await import('vite')
+  // Trick the bundler to avoid transforming dynamic import to require.
+  // The "resolvePackageData" is not available in CommonJS build of Vite.
+  // eslint-disable-next-line no-eval
+  const { resolvePackageData } = await eval('import("vite")')
+
   const info = resolvePackageData(pkg, process.cwd())
   if (!info)
     return
