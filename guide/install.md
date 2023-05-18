@@ -18,6 +18,12 @@ With Yarn:
 $ yarn create slidev
 ```
 
+With PNPM:
+
+```bash
+$ pnpm create slidev
+```
+
 Follow the prompts and it will open up the slideshow at `http://localhost:3030/` automatically for you.
 
 It also contains the basic setup and a short demo with instructions on how to get started with Slidev.
