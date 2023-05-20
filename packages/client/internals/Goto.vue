@@ -107,7 +107,7 @@ watch(activeElement, () => {
     id="slidev-goto-dialog"
     ref="container"
     class="fixed right-5 transition-all"
-    w-90
+    w-90 max-w-90 min-w-90
     :class="showGotoDialog ? 'top-5' : '-top-20'"
   >
     <div
@@ -148,6 +148,7 @@ watch(activeElement, () => {
         cursor-pointer
         hover="op100"
         flex="~ gap-2"
+        w-90
         items-center
         :border="index === 0 ? '' : 't main'"
         :class="selectedIndex === index ? 'bg-active op100' : 'op80'"
