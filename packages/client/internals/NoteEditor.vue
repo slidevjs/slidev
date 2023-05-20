@@ -72,6 +72,7 @@ onClickOutside(input, () => {
     ref="input"
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent block"
+    style="line-height: 1.75; margin: 1em 0;"
     :class="props.class"
     :placeholder="placeholder"
     @focus="editing = true"
