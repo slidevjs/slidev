@@ -64,7 +64,7 @@ A theme can provide default [configurations](/custom/#frontmatter-configures) vi
 // package.json
 {
   "slidev": {
-    "default": {
+    "defaults": {
       "aspectRatio": "16/9",
       "canvasWidth": 980,
       "fonts": {
@@ -128,7 +128,7 @@ Also, remember to specify the supported highlighters in your `package.json`
 // package.json
 {
   "slidev": {
-    "highlighter": "shiki" // or "prism" or "all"
+    "highlighter": "shiki" // or "prism" or "both"
   }
 }
 ```
