@@ -198,6 +198,12 @@ export interface SlidevConfig {
    * @see https://vuejs.org/guide/built-ins/transition.html
    */
   transition?: BuiltinSlideTransition | string | TransitionGroupProps
+  /**
+    * Include the blank standard "end" slide.
+    *
+    * @default true
+  */
+  includeDefaultEnd: boolean
 }
 
 export interface FontOptions {

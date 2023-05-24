@@ -544,9 +544,6 @@ defineProps<{ no: number | string }>()`)
 
   async function generateRoutes() {
     const imports: string[] = []
-    const layouts = await getLayouts()
-
-    imports.push(`import __layout__end from '${layouts.end}'`)
 
     let no = 1
     const routes = [
@@ -573,8 +570,13 @@ defineProps<{ no: number | string }>()`)
         })
         .flat()
         .filter(notNullish),
-      `{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`,
     ]
+
+    if (data.config.includeDefaultEnd) {
+      const layouts = await getLayouts()
+      imports.push(`import __layout__end from '${layouts.end}'`)
+      routes.push(`{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`)
+    }
 
     const routesStr = `export default [\n${routes.join(',\n')}\n]`
 
