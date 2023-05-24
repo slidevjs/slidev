@@ -572,7 +572,7 @@ defineProps<{ no: number | string }>()`)
         .filter(notNullish),
     ]
 
-    if (data.config.includeDefaultEnd) {
+    if (includeDefaultEnd()) {
       const layouts = await getLayouts()
       imports.push(`import __layout__end from '${layouts.end}'`)
       routes.push(`{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`)
@@ -581,6 +581,19 @@ defineProps<{ no: number | string }>()`)
     const routesStr = `export default [\n${routes.join(',\n')}\n]`
 
     return [...imports, routesStr].join('\n')
+  }
+
+  function includeDefaultEnd(): boolean {
+    const configValue = data.config.includeDefaultEnd
+    if (typeof configValue === 'boolean')
+      return configValue
+
+    // if in the future the possible values change, you can find issues with forgetting this method faster with this.
+    // eslint-disable-next-line no-console
+    console.assert(configValue === 'auto', 'expected includeDefaultEnd to be "auto" at this point')
+
+    const alreadyHasEndSlide = data.slides.some(slide => slide.frontmatter.layout === 'end')
+    return !alreadyHasEndSlide
   }
 
   function generateConfigs() {

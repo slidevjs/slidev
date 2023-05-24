@@ -22,7 +22,9 @@ const scale = computed(() => {
 })
 
 // Remove the default "end" slide
-let routes = configs.includeDefaultEnd ? rawRoutes.slice(0, -1) : rawRoutes
+const slidesIncludeDefaultEnd = rawRoutes.some(route => route.meta.slide == null)
+let routes = slidesIncludeDefaultEnd ? rawRoutes.slice(0, -1) : rawRoutes
+
 if (currentRoute.value.query.range) {
   const r = parseRangeString(routes.length, currentRoute.value.query.range as string)
   routes = r.map(i => routes[i - 1])

@@ -201,9 +201,15 @@ export interface SlidevConfig {
   /**
     * Include the blank standard "end" slide.
     *
-    * @default true
+    * If set to 'auto', it will only include the blank default end slide,
+    * if there is no slide with layout 'end' already.
+    * Note: If you add an empty 'end' slide by yourself,
+    * that slide will be included in the export.
+    * Only 'auto' included end-slide will be omitted on export.
+    *
+    * @default 'auto'
   */
-  includeDefaultEnd: boolean
+  includeDefaultEnd: boolean | 'auto'
 }
 
 export interface FontOptions {
