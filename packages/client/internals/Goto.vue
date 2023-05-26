@@ -117,6 +117,7 @@ watch(activeElement, () => {
       border="~ transparent rounded dark:main"
     >
       <input
+        id="slidev-goto-input"
         ref="input"
         :value="text"
         type="text"
