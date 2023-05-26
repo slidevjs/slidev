@@ -24,11 +24,14 @@ const props = defineProps({
   class: {
     type: String,
   },
+  layoutClass: {
+    type: String,
+  },
 })
 </script>
 
 <template>
-  <div class="slidev-layout two-columns w-full h-full grid grid-cols-2">
+  <div class="slidev-layout two-columns w-full h-full grid grid-cols-2" :class="props.layoutClass">
     <div class="col-left" :class="props.class">
       <slot />
     </div>
