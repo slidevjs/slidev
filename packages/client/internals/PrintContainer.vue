@@ -21,8 +21,7 @@ const scale = computed(() => {
   return (height.value * slideAspect) / slideWidth
 })
 
-// Remove the "end" slide
-let routes = rawRoutes.slice(0, -1)
+let routes = rawRoutes
 if (currentRoute.value.query.range) {
   const r = parseRangeString(routes.length, currentRoute.value.query.range as string)
   routes = r.map(i => routes[i - 1])

@@ -66,7 +66,7 @@ watchEffect(() => {
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
     >
       <div
-        v-for="(route, idx) of rawRoutes.slice(0, -1)"
+        v-for="(route, idx) of rawRoutes"
         :key="route.path"
         class="relative"
       >
