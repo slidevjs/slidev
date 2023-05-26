@@ -5,9 +5,12 @@ context('Basic', () => {
 
   function goPage(no: number) {
     cy.get('body')
+      .wait(100)
       .type('g')
-      .get('#slidev-goto-dialog')
-      .type(`${no}{enter}`)
+      .wait(100)
+      .get('#slidev-goto-input')
+      .type(`${no}`)
+      .type('{enter}')
       .url()
       .should('eq', `http://localhost:3030/${no}`)
   }

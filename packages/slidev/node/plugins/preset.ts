@@ -190,9 +190,9 @@ export async function ViteSlidevPlugin(
 
     config.css === 'none'
       ? null
-      : config.css === 'unocss'
-        ? import('./unocss').then(r => r.createUnocssPlugin(options, pluginOptions))
-        : import('./windicss').then(r => r.createWindiCSSPlugin(options, pluginOptions)),
+      : config.css === 'windicss'
+        ? import('./windicss').then(r => r.createWindiCSSPlugin(options, pluginOptions))
+        : import('./unocss').then(r => r.createUnocssPlugin(options, pluginOptions)),
   ]
 
   return (await Promise.all(plugins))
