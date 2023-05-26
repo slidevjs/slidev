@@ -164,13 +164,13 @@ export interface SlidevConfig {
    */
   remote?: string | boolean
   /**
-   * Engine for atomic CSS
+   * Engine for Atomic CSS
    *
-   * UnoCSS support is currently experimental.
-   *
-   * @default 'windicss'
+   * @see https://unocss.dev/
+   * @see https://windicss.org/
+   * @default 'unocss'
    */
-  css: 'windicss' | 'unocss' | 'none'
+  css: 'unocss' | 'windicss' | 'none'
   /**
    * Enable presenter mode
    *
