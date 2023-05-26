@@ -513,8 +513,13 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
   console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally ? yellow('(global)') : ''}`)
   console.log()
-  console.log(dim('  theme   ') + (options.theme ? green(options.theme) : gray('none')))
-  console.log(dim('  entry   ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+
+  verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
+
+  console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
+  console.log(dim('  css engine  ') + (options.data.config.css ? blue(options.data.config.css) : gray('none')))
+  console.log(dim('  entry       ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+
   if (port) {
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
@@ -552,10 +557,6 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
 
     return lastRemoteUrl
   }
-
-  console.log()
-  verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
-  console.log()
 }
 
 async function findFreePort(start: number): Promise<number> {

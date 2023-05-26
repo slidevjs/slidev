@@ -196,9 +196,9 @@ export async function ViteSlidevPlugin(
 
     config.css === 'none'
       ? null
-      : config.css === 'unocss'
-        ? await createUnocssPlugin(options, pluginOptions)
-        : await createWindiCSSPlugin(options, pluginOptions),
+      : config.css === 'windicss'
+        ? await createWindiCSSPlugin(options, pluginOptions)
+        : await createUnocssPlugin(options, pluginOptions),
   ]
     .flat()
     .filter(notNullish)

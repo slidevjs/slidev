@@ -28,7 +28,7 @@ export function getDefaultConfig(): SlidevConfig {
     plantUmlServer: 'https://www.plantuml.com/plantuml',
     codeCopy: true,
     record: 'dev',
-    css: 'windicss',
+    css: 'unocss',
     presenter: true,
     htmlAttrs: {},
     transition: undefined,
@@ -89,8 +89,8 @@ export function verifyConfig(
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
   if (!['windicss', 'unocss', undefined].includes(config.css)) {
-    warn(`Unsupported Atomic CSS engine "${config.css}", fallback to Windi CSS`)
-    config.css = 'windicss'
+    warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
+    config.css = 'unocss'
   }
 }
 
