@@ -573,7 +573,6 @@ defineProps<{ no: number | string }>()`)
         })
         .flat()
         .filter(notNullish),
-      `{ path: "${no}", component: __layout__end, meta: { layout: "end" } }`,
     ]
 
     const routesStr = `export default [\n${routes.join(',\n')}\n]`

@@ -27,7 +27,6 @@ html #page-root {
 useHead({ title: `Notes - ${configs.title}` })
 
 const slidesWithNote = computed(() => rawRoutes
-  .slice(0, -1)
   .map(route => route.meta?.slide)
   .filter(slide => slide !== undefined && slide.noteHTML !== ''))
 </script>
