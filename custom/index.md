@@ -1,6 +1,6 @@
 # Customizations
 
-Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [Windi CSS](/custom/config-windicss), [Monaco](/custom/config-monaco), etc.)
+Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [UnoCSS](/custom/config-unocss), [Monaco](/custom/config-monaco), etc.)
 
 ## Frontmatter Configures
 
@@ -118,6 +118,7 @@ Refer to the [Directory Structure](/custom/directory-structure) section.
 - [Highlighters](/custom/highlighters)
 - [Configure Vue](/custom/config-vue)
 - [Configure Vite](/custom/config-vite)
+- [Configure UnoCSS](/custom/config-unocss)
 - [Configure Windi CSS](/custom/config-windicss)
 - [Configure Monaco](/custom/config-monaco)
 - [Configure KaTeX](/custom/config-katex)

@@ -4,7 +4,7 @@
 
 Since Slidev is based on the Web, you can apply any grid layouts as you want. [CSS Grids](https://css-tricks.com/snippets/css/complete-guide-grid/), [flexboxes](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), or even [Masonry](https://css-tricks.com/native-css-masonry-layout-in-css-grid/), you get the full controls.
 
-Since we have [Windi CSS](https://windicss.org/) built-in, here is one simple way for you to reference:
+Since we have [UnoCSS](https://windicss.org/) built-in, here is one simple way for you to reference:
 
 ```html
 <div class="grid grid-cols-2 gap-4">

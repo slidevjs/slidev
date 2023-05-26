@@ -13,7 +13,7 @@ You can learn more about the rationale behind the project in the [Why Slidev](/g
 - 📝 [**Markdown-based**](/guide/syntax.html) - use your favorite editors and workflow
 - 🧑‍💻 [**Developer Friendly**](/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
 - 🎨 [**Themable**](/themes/gallery.html) - theme can be shared and used with npm packages
-- 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - on-demand utilities via [Windi CSS](https://windicss.org/) or [UnoCSS](https://github.com/unocss/unocss).
+- 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss) or [Windi CSS](https://windicss.org/).
 - 🤹 [**Interactive**](/custom/directory-structure.html#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
 - 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides

@@ -2,7 +2,18 @@
 
 <Environment type="node" />
 
-Markdown naturally supports embedded HTML markups. You can therefore style your content the way you want. To provide some convenience, we have [Windi CSS](https://github.com/windicss/windicss) built-in, so you can style markup directly using class utilities. 
+::: warning
+Since Slidev v0.42.0, [UnoCSS](/custom/config-unocss) become the default CSS framework for Slidev.
+
+You can still use Windi CSS by setting `css: windicss` in the frontmatter.
+```md
+---
+css: windicss
+---
+```
+:::
+
+Markdown naturally supports embedded HTML markups. You can therefore style your content the way you want.
 
 For example:
 

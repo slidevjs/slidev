@@ -16,7 +16,7 @@ A theme can contribute to the following points:
 - Provide default configurations (fonts, color schema, highlighters, etc.)
 - Provide custom layouts or override the existing one
 - Provide custom components or override the existing one
-- Extend Windi CSS configurations
+- Extend UnoCSS/Windi CSS configurations
 - Configure tools like Monaco and Prism
 
 ## Conventions
