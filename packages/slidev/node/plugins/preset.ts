@@ -6,11 +6,8 @@ import VueJsx from '@vitejs/plugin-vue-jsx'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
-import RemoteAssets, { DefaultRules } from 'vite-plugin-remote-assets'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
-import Inspect from 'vite-plugin-inspect'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
@@ -18,9 +15,7 @@ import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
 import { createMarkdownPlugin } from './markdown'
-import { createWindiCSSPlugin } from './windicss'
 import { createFixPlugins } from './patchTransform'
-import { createUnocssPlugin } from './unocss'
 
 const customElements = new Set([
   // katex
@@ -97,7 +92,7 @@ export async function ViteSlidevPlugin(
 
   const publicRoots = themeRoots.map(i => join(i, 'public')).filter(existsSync)
 
-  return [
+  const plugins = [
     MarkdownPlugin,
     VueJsxPlugin,
     VuePlugin,
@@ -138,9 +133,9 @@ export async function ViteSlidevPlugin(
     }),
 
     (config.remoteAssets === true || config.remoteAssets === mode)
-      ? RemoteAssets({
+      ? import('vite-plugin-remote-assets').then(r => r.default({
         rules: [
-          ...DefaultRules,
+          ...r.DefaultRules,
           {
             match: /\b(https?:\/\/image.unsplash\.com.*?)(?=[`'")\]])/ig,
             ext: '.png',
@@ -149,7 +144,7 @@ export async function ViteSlidevPlugin(
         resolveMode: id => id.endsWith('index.html') ? 'relative' : '@fs',
         awaitDownload: mode === 'build',
         ...remoteAssetsOptions,
-      })
+      }))
       : null,
 
     ServerRef({
@@ -172,34 +167,35 @@ export async function ViteSlidevPlugin(
       },
     }),
 
-    publicRoots.length
-      ? viteStaticCopy({
-        silent: true,
-        targets: publicRoots.map(r => ({
-          src: `${r}/*`,
-          dest: 'theme',
-        })),
-      })
-      : null,
-
     createConfigPlugin(options),
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),
     createFixPlugins(options),
 
+    publicRoots.length
+      ? import('vite-plugin-static-copy').then(r => r.viteStaticCopy({
+        silent: true,
+        targets: publicRoots.map(r => ({
+          src: `${r}/*`,
+          dest: 'theme',
+        })),
+      }))
+      : null,
     options.inspect
-      ? Inspect({
+      ? import('vite-plugin-inspect').then(r => r.default({
         dev: true,
         build: true,
-      })
+      }))
       : null,
 
     config.css === 'none'
       ? null
       : config.css === 'unocss'
-        ? await createUnocssPlugin(options, pluginOptions)
-        : await createWindiCSSPlugin(options, pluginOptions),
+        ? import('./unocss').then(r => r.createUnocssPlugin(options, pluginOptions))
+        : import('./windicss').then(r => r.createWindiCSSPlugin(options, pluginOptions)),
   ]
+
+  return (await Promise.all(plugins))
     .flat()
     .filter(notNullish)
 }

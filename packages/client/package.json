@@ -18,11 +18,11 @@
     "@antfu/utils": "^0.7.2",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@unocss/reset": "^0.51.13",
+    "@unocss/reset": "^0.52.4",
     "@vueuse/core": "^10.1.2",
     "@vueuse/head": "^1.1.26",
     "@vueuse/math": "^10.1.2",
-    "@vueuse/motion": "^2.0.0-beta.27",
+    "@vueuse/motion": "^2.0.0",
     "codemirror": "^5.65.5",
     "defu": "^6.1.2",
     "drauu": "^0.3.2",
@@ -31,20 +31,20 @@
     "js-base64": "^3.7.5",
     "js-yaml": "^4.1.0",
     "katex": "^0.16.7",
-    "mermaid": "^10.1.0",
+    "mermaid": "^10.2.0",
     "monaco-editor": "^0.37.1",
     "nanoid": "^4.0.2",
     "prettier": "^2.8.8",
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.2",
-    "unocss": "^0.51.13",
+    "unocss": "^0.52.4",
     "vite-plugin-windicss": "^1.9.0",
-    "vue": "^3.3.2",
-    "vue-router": "^4.2.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.1",
     "vue-starport": "^0.3.0",
     "windicss": "^3.5.6"
   },
   "devDependencies": {
-    "vite": "^4.3.7"
+    "vite": "^4.3.9"
   }
 }
