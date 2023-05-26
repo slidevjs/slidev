@@ -1,17 +1,18 @@
 import { resolve } from 'node:path'
 import { existsSync } from 'node:fs'
-import { deepMerge, uniq } from '@antfu/utils'
+import { uniq } from '@antfu/utils'
 import type { Theme } from '@unocss/preset-uno'
+import type { UserConfig } from '@unocss/core'
+import { mergeConfigs } from 'unocss'
 import jiti from 'jiti'
-import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
+import UnoCSS from 'unocss/vite'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 import { loadSetups } from './setupNode'
 
 export async function createUnocssPlugin(
   { themeRoots, addonRoots, clientRoot, roots, userRoot, data }: ResolvedSlidevOptions,
-  { unocss: unoOptions }: SlidevPluginOptions,
+  { unocss: unoOptions = {} }: SlidevPluginOptions,
 ) {
-  const UnoCSS = await import('unocss/vite').then(r => r.default)
   const configFiles = uniq([
     resolve(userRoot, 'uno.config.ts'),
     resolve(userRoot, 'unocss.config.ts'),
@@ -21,12 +22,19 @@ export async function createUnocssPlugin(
     ...addonRoots.map(i => `${i}/unocss.config.ts`),
     resolve(clientRoot, 'uno.config.ts'),
     resolve(clientRoot, 'unocss.config.ts'),
-  ])
+  ]).filter(i => existsSync(i))
 
-  const configFile = configFiles.find(i => existsSync(i))!
-  let config = jiti(__filename)(configFile) as UnoCSSConfig<Theme> | { default: UnoCSSConfig }
-  if ('default' in config)
-    config = config.default
+  const configs = configFiles
+    .map((i) => {
+      const loaded = jiti(__filename)(i)
+      const config = 'default' in loaded ? loaded.default : loaded
+      return config
+    })
+    .filter(Boolean) as UserConfig<Theme>[]
+
+  configs.reverse()
+
+  let config = mergeConfigs([...configs, unoOptions as UserConfig<Theme>])
 
   config = await loadSetups(roots, 'unocss.ts', {}, config, true)
 
@@ -38,6 +46,7 @@ export async function createUnocssPlugin(
 
   return UnoCSS({
     configFile: false,
-    ...deepMerge(config, unoOptions || {}) as UnoCSSConfig,
+    configDeps: configFiles,
+    ...config as any,
   })
 }
