@@ -40,7 +40,7 @@
     "unocss": "^0.52.4",
     "vite-plugin-windicss": "^1.9.0",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.1",
+    "vue-router": "^4.2.2",
     "vue-starport": "^0.3.0",
     "windicss": "^3.5.6"
   },
