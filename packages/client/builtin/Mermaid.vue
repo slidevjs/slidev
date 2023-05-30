@@ -69,5 +69,5 @@ watchEffect(() => {
 </script>
 
 <template>
-  <ShadowRoot ref="el" class="mermaid" :inner-html="html" @shadow="el = $event" />
+  <ShadowRoot class="mermaid" :inner-html="html" @shadow="el = $event" />
 </template>
