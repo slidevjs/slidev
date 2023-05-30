@@ -50,7 +50,7 @@
   "dependencies": {
     "@antfu/utils": "^0.7.2",
     "@hedgedoc/markdown-it-plugins": "^2.0.0",
-    "@iconify-json/carbon": "^1.1.16",
+    "@iconify-json/carbon": "^1.1.17",
     "@iconify-json/ph": "^1.1.5",
     "@lillallol/outline-pdf": "^4.0.0",
     "@slidev/client": "workspace:*",
