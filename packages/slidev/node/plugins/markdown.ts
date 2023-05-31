@@ -151,8 +151,8 @@ export function transformHighlighter(md: string) {
   return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', code: string) => {
     const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
     code = code.trimEnd()
-    options = options.trim() || '{}'
-    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
+    options = options.trim() || undefined
+    return `\n<CodeBlockWrapper :options="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
   })
 }
 
