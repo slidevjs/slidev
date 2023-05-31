@@ -78,11 +78,12 @@ onMounted(() => {
       return
     const isDuoTone = el.value.querySelector('.shiki-dark')
     const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
+    const startLine = props.options.startLine ?? 1
     for (const target of targets) {
       const lines = Array.from(target.querySelectorAll('.line'))
-      const highlights: number[] = parseRangeString(lines.length + props.options.startLine - 1, rangeStr.value)
+      const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr.value)
       lines.forEach((line, idx) => {
-        const highlighted = highlights.includes(idx + (props.options.startLine))
+        const highlighted = highlights.includes(idx + startLine)
         line.classList.toggle(CLASS_VCLICK_TARGET, true)
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)
@@ -109,18 +110,25 @@ function copyCode() {
   if (code)
     copy(code)
 }
+
+function showLines() {
+  if (props.options.lines == null)
+    return configs.lineNumbers ?? false
+  else
+    return props.options.lines ?? false
+}
 </script>
 
 <template>
   <div
     ref="el" class="slidev-code-wrapper relative group"
     :class="{
-      'slidev-code-line-numbers': props.options.lines,
+      'slidev-code-line-numbers': showLines(),
     }"
     :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
-      '--start': props.options.startLine,
+      '--start': props.options.startLine ?? 1,
     }"
   >
     <slot />
