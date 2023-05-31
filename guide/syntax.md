@@ -76,10 +76,36 @@ We support [Prism](https://prismjs.com) and [Shiki](https://github.com/shikijs/s
 
 ### Line Highlighting
 
-To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1.
+To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1 by default.
 
 ~~~ts
 //```ts {2,3}
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+//```
+~~~
+
+You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. In case you want to disable the numbering for an specific block when `lineNumbers: true` you can set `lines:false` for that block:
+
+~~~ts
+//```ts {2,3} {lines:true}
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+//```
+~~~
+
+You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
+
+~~~ts
+//```ts {6,7} {lines:true, startLine:5}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
