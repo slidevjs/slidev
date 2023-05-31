@@ -23,12 +23,13 @@ const props = defineProps({
   ranges: {
     default: () => [],
   },
-  options: {
-    type: Object,
-    default: () => ({
-      startLine: 1,
-      lines: false,
-    }),
+  startLine: {
+    type: Number,
+    default: 1,
+  },
+  lines: {
+    type: Boolean,
+    default: configs.lineNumbers,
   },
   at: {
     type: Number,
@@ -78,7 +79,7 @@ onMounted(() => {
       return
     const isDuoTone = el.value.querySelector('.shiki-dark')
     const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
-    const startLine = props.options.startLine ?? 1
+    const startLine = props.startLine
     for (const target of targets) {
       const lines = Array.from(target.querySelectorAll('.line'))
       const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr.value)
@@ -110,25 +111,18 @@ function copyCode() {
   if (code)
     copy(code)
 }
-
-function showLines() {
-  if (props.options.lines == null)
-    return configs.lineNumbers ?? false
-  else
-    return props.options.lines ?? false
-}
 </script>
 
 <template>
   <div
     ref="el" class="slidev-code-wrapper relative group"
     :class="{
-      'slidev-code-line-numbers': showLines(),
+      'slidev-code-line-numbers': props.lines,
     }"
     :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
-      '--start': props.options.startLine ?? 1,
+      '--start': props.startLine,
     }"
   >
     <slot />
