@@ -43,7 +43,7 @@ html:not(.dark) .shiki-dark {
 
 .slidev-code-line-numbers .slidev-code code {
   counter-reset: step;
-  counter-increment: step 0;
+  counter-increment: step calc(var(--start, 1) - 1);
 }
 
 .slidev-code-line-numbers .slidev-code code .line::before {
