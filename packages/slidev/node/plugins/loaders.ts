@@ -255,13 +255,15 @@ export function createSlidesLoader(
         // title
         if (id === '/@slidev/titles.md') {
           return {
-            code: data.slides.map(({ title }, i) => {
-              return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">
+            code: data.slides
+              .filter(({ frontmatter }) => !frontmatter?.disabled)
+              .map(({ title }, i) => {
+                return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">
 
 ${title}
 
 </template>`
-            }).join(''),
+              }).join(''),
             map: { mappings: '' },
           }
         }
