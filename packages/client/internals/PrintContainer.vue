@@ -29,7 +29,6 @@ if (currentRoute.value.query.range) {
 
 const className = computed(() => ({
   'select-none': !configs.selectable,
-  'slidev-code-line-numbers': configs.lineNumbers,
 }))
 
 provide(injectionSlideScale, scale)

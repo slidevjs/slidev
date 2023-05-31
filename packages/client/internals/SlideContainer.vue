@@ -50,7 +50,6 @@ const style = computed(() => ({
 
 const className = computed(() => ({
   'select-none': !configs.selectable,
-  'slidev-code-line-numbers': configs.lineNumbers,
 }))
 
 provide(injectionSlideScale, scale)

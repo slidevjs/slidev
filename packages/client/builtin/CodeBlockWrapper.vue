@@ -23,6 +23,13 @@ const props = defineProps({
   ranges: {
     default: () => [],
   },
+  options: {
+    type: Object,
+    default: () => ({
+      startLine: 1,
+      lines: false,
+    }),
+  },
   at: {
     type: Number,
     default: undefined,
@@ -73,9 +80,9 @@ onMounted(() => {
     const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
     for (const target of targets) {
       const lines = Array.from(target.querySelectorAll('.line'))
-      const highlights: number[] = parseRangeString(lines.length, rangeStr.value)
+      const highlights: number[] = parseRangeString(lines.length + props.options.startLine - 1, rangeStr.value)
       lines.forEach((line, idx) => {
-        const highlighted = highlights.includes(idx + 1)
+        const highlighted = highlights.includes(idx + (props.options.startLine))
         line.classList.toggle(CLASS_VCLICK_TARGET, true)
         line.classList.toggle('highlighted', highlighted)
         line.classList.toggle('dishonored', !highlighted)
@@ -107,9 +114,13 @@ function copyCode() {
 <template>
   <div
     ref="el" class="slidev-code-wrapper relative group"
+    :class="{
+      'slidev-code-line-numbers': props.options.lines,
+    }"
     :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
+      '--start': props.options.startLine,
     }"
   >
     <slot />
