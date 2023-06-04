@@ -5,6 +5,10 @@
     @apply select-text;
   }
 
+  code {
+    @apply font-mono;
+  }
+
   h1 {
     @apply text-4xl mb-4;
   }
