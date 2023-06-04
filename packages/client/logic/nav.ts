@@ -32,7 +32,7 @@ export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
 
 export const queryClicks = useRouteQuery('clicks', '0')
-export const total = computed(() => rawRoutes.length - 1)
+export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
 
 export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
