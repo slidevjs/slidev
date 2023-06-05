@@ -544,40 +544,42 @@ defineProps<{ no: number | string }>()`)
 
   async function generateRoutes() {
     const imports: string[] = []
+    const redirects: string[] = []
     const layouts = await getLayouts()
 
     imports.push(`import __layout__end from '${layouts.end}'`)
 
     let no = 1
-    const routes = [
-      ...data.slides
-        .map((i, idx) => {
-          if (i.frontmatter?.disabled)
-            return undefined
-          imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-          const additions: Partial<RouteMeta> = {
-            slide: {
-              ...prepareSlideInfo(i),
-              filepath: i.source?.filepath || entry,
-              id: idx,
-              no,
-            },
-            __clicksElements: [],
-            __preloaded: false,
-          }
-          const meta = Object.assign({}, i.frontmatter, additions)
-          const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
-          const redirect = i.frontmatter?.routeAlias ? `{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }` : null
-          no += 1
-          return [route, redirect]
-        })
-        .flat()
-        .filter(notNullish),
-    ]
+    const routes = data.slides
+      .map((i, idx) => {
+        if (i.frontmatter?.disabled)
+          return undefined
+        imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
+        const additions: Partial<RouteMeta> = {
+          slide: {
+            ...prepareSlideInfo(i),
+            filepath: i.source?.filepath || entry,
+            id: idx,
+            no,
+          },
+          __clicksElements: [],
+          __preloaded: false,
+        }
+        const meta = Object.assign({}, i.frontmatter, additions)
+        const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
+
+        if (i.frontmatter?.routeAlias)
+          redirects.push(`{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }`)
+
+        no += 1
+
+        return route
+      })
 
     const routesStr = `export default [\n${routes.join(',\n')}\n]`
+    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n]`
 
-    return [...imports, routesStr].join('\n')
+    return [...imports, routesStr, redirectsStr].join('\n')
   }
 
   function generateConfigs() {
