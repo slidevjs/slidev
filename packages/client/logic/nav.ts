@@ -66,7 +66,7 @@ export const clicks = computed<number>({
 
 export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? clicksElements.value.length))
 
-export const hasNext = computed(() => currentPage.value < rawRoutes.length - 1 || clicks.value < clicksTotal.value)
+export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
 export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
 
 export const rawTree = computed(() => rawRoutes
