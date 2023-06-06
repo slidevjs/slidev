@@ -35,7 +35,7 @@ export const queryClicks = useRouteQuery('clicks', '0')
 export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
 
-export const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
+export const currentPage = computed(() => Number.parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
 export const currentPath = computed(() => getPath(currentPage.value))
 export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
 export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
@@ -55,7 +55,7 @@ export const clicks = computed<number>({
     if (isClicksDisabled.value)
       return 99999
     let clicks = +(queryClicks.value || 0)
-    if (isNaN(clicks))
+    if (Number.isNaN(clicks))
       clicks = 0
     return clicks
   },
