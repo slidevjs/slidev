@@ -8,7 +8,7 @@ import { rawRoutes } from '../routes'
 
 export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>): SlidevContextNav {
   const path = computed(() => route.value.path)
-  const total = computed(() => rawRoutes.length - 1)
+  const total = computed(() => rawRoutes.length)
 
   const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
   const currentPath = computed(() => getPath(currentPage.value))
