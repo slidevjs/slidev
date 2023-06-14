@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`markdown-it-prism > should render multi-line strings correctly 1`] = `
+"<pre class=\\"slidev-code language-js\\"><code><span class=\\"line\\"><span class=\\"token template-string\\"><span class=\\"token template-punctuation string\\">\`</span><span class=\\"token string\\">Multi</span></span></span>
+<span class=\\"line\\"><span class=\\"token string\\"><span class=\\"token template-string\\">line</span><span class=\\"token template-punctuation string\\">\`</span></span></span>
+<span class=\\"line\\"><span class=\\"token comment\\">/**</span></span>
+<span class=\\"line\\"><span class=\\"token comment\\"> * Hello</span></span>
+<span class=\\"line\\"><span class=\\"token comment\\"> */</span></span></code></pre>
+"
+`;
