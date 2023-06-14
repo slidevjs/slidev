@@ -1,10 +1,25 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`markdown-it-prism > should render multi-line strings correctly 1`] = `
+exports[`markdown-it-prism > should render multi-line JS strings and comments correctly 1`] = `
 "<pre class=\\"slidev-code language-js\\"><code><span class=\\"line\\"><span class=\\"token template-string\\"><span class=\\"token template-punctuation string\\">\`</span><span class=\\"token string\\">Multi</span></span></span>
 <span class=\\"line\\"><span class=\\"token string\\"><span class=\\"token template-string\\">line</span><span class=\\"token template-punctuation string\\">\`</span></span></span>
 <span class=\\"line\\"><span class=\\"token comment\\">/**</span></span>
 <span class=\\"line\\"><span class=\\"token comment\\"> * Hello</span></span>
 <span class=\\"line\\"><span class=\\"token comment\\"> */</span></span></code></pre>
+"
+`;
+
+exports[`markdown-it-prism > should render multi-line XML nodes correctly 1`] = `
+"<pre class=\\"slidev-code language-xml\\"><code><span class=\\"line\\"><span class=\\"token tag\\"><span class=\\"token tag\\"><span class=\\"token punctuation\\">&lt;</span>a</span><span class=\\"token punctuation\\">/></span></span></span>
+<span class=\\"line\\"><span class=\\"token tag\\"><span class=\\"token tag\\"><span class=\\"token punctuation\\">&lt;</span>b</span></span></span>
+<span class=\\"line\\"><span class=\\"token tag\\">  <span class=\\"token attr-name\\">attr</span><span class=\\"token attr-value\\"><span class=\\"token punctuation attr-equals\\">=</span><span class=\\"token punctuation\\">\\"</span>value<span class=\\"token punctuation\\">\\"</span></span></span></span>
+<span class=\\"line\\"><span class=\\"token tag\\"><span class=\\"token punctuation\\">/></span></span></span></code></pre>
+"
+`;
+
+exports[`markdown-it-prism > should render non-multiline statements correctly 1`] = `
+"<pre class=\\"slidev-code language-ts\\"><code><span class=\\"line\\"><span class=\\"token keyword\\">const</span> a <span class=\\"token operator\\">=</span> <span class=\\"token number\\">1</span><span class=\\"token punctuation\\">;</span></span>
+<span class=\\"line\\"><span class=\\"token keyword\\">const</span> b <span class=\\"token operator\\">=</span> <span class=\\"token number\\">2</span><span class=\\"token punctuation\\">;</span></span>
+<span class=\\"line\\"><span class=\\"token keyword\\">const</span> c <span class=\\"token operator\\">=</span> a <span class=\\"token operator\\">+</span> b<span class=\\"token punctuation\\">;</span></span></code></pre>
 "
 `;
