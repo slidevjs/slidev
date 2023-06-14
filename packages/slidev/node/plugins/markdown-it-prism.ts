@@ -5,6 +5,7 @@ import type { Grammar } from 'prismjs'
 import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/'
 import type MarkdownIt from 'markdown-it'
+import * as htmlparser2 from 'htmlparser2'
 import { escapeVueInCode } from './markdown'
 
 interface Options {
@@ -27,6 +28,30 @@ interface Options {
    * to each option if it is set to {@code undefined}.
    */
   defaultLanguage?: string
+}
+
+interface Attributes {
+  [s: string]: string
+}
+
+class Tag {
+  tagname: string
+  attributes: Attributes
+
+  constructor(tagname: string, attributes: Attributes) {
+    this.tagname = tagname
+    this.attributes = attributes
+  }
+
+  asOpen() {
+    return `<${this.tagname} ${Object.entries(this.attributes)
+      .map(([key, value]) => `${key}="${value}"`)
+      .join(' ')}>`
+  }
+
+  asClosed() {
+    return `</${this.tagname}>`
+  }
 }
 
 const DEFAULTS: Options = {
@@ -111,18 +136,47 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {
   const [langToUse, prismLang] = selectLanguage(options, lang)
-  const code = text
-    .trimEnd()
-    .split(/\r?\n/g)
-    .map(line => prismLang
-      ? Prism.highlight(line, prismLang, langToUse)
-      : markdownit.utils.escapeHtml(line))
+  let code = text.trimEnd()
+  code = prismLang
+    ? highlightPrism(code, prismLang, langToUse)
+    : markdownit.utils.escapeHtml(code)
+  code = code.split(/\r?\n/g)
     .map(line => `<span class="line">${line}</span>`)
     .join('\n')
   const classAttribute = langToUse
     ? ` class="slidev-code ${markdownit.options.langPrefix}${markdownit.utils.escapeHtml(langToUse)}"`
     : ''
   return escapeVueInCode(`<pre${classAttribute}><code>${code}</code></pre>`)
+}
+
+function highlightPrism(code: string, prismLang: Grammar, langToUse: string) {
+  // keep track of open tags
+  const openTags: Tag[] = []
+  // create parser
+  const parser = new htmlparser2.Parser({
+    onopentag(tagname, attributes) {
+      openTags.push(new Tag(tagname, attributes))
+    },
+    onclosetag() {
+      openTags.pop()
+    },
+  })
+  // highlight code
+  code = Prism.highlight(code, prismLang, langToUse)
+  // split result by line
+  code = code.split(/\r?\n/g).map((line) => {
+    // if tag hierarchy is not empty, open elements at start of line
+    const prefix = openTags.map(tag => tag.asOpen()).join('')
+    // parse line
+    parser.write(line)
+    // if tag hierarchy is not empty, close elements at end of line
+    const postfix = openTags.reverse().map(tag => tag.asClosed()).join('')
+    // concatenate result
+    return prefix + line + postfix
+  }).join('\n')
+  // clear parser
+  parser.end()
+  return code
 }
 
 /**
