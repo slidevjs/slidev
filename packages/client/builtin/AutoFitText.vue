@@ -49,7 +49,7 @@ watch([container, value, containerSize.width, innerSize.width], async () => {
   if (!container.value || innerSize.width.value <= 0)
     return
   const ratio = containerSize.width.value / innerSize.width.value
-  if (isNaN(ratio) || ratio <= 0)
+  if (Number.isNaN(ratio) || ratio <= 0)
     return
   let newSize = size.value * (containerSize.width.value / innerSize.width.value)
   if (newSize < props.min) {

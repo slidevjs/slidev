@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-operators */
 // Ported from https://github.com/waylonflinn/markdown-it-katex
 
 /* Process inline math */
