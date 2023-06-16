@@ -53,8 +53,8 @@ watch(html, () => {
 watchEffect(() => {
   const svgEl = el.value?.children?.[0] as SVGElement | undefined
   if (svgEl && svgEl.hasAttribute('viewBox') && actualHeight.value == null) {
-    const v = parseFloat(svgEl.getAttribute('viewBox')?.split(' ')[3] || '')
-    actualHeight.value = isNaN(v) ? undefined : v
+    const v = Number.parseFloat(svgEl.getAttribute('viewBox')?.split(' ')[3] || '')
+    actualHeight.value = Number.isNaN(v) ? undefined : v
   }
 }, { flush: 'post' })
 
