@@ -93,7 +93,7 @@ export function createSlidesLoader(
             return next()
 
           const [, no, type] = match
-          const idx = parseInt(no)
+          const idx = Number.parseInt(no)
           if (type === 'json' && req.method === 'GET') {
             res.write(JSON.stringify(prepareSlideInfo(data.slides[idx])))
             return res.end()
@@ -274,7 +274,7 @@ ${title}
           const match = remaning.match(regexIdQuery)
           if (match) {
             const [, no, type] = match
-            const pageNo = parseInt(no) - 1
+            const pageNo = Number.parseInt(no) - 1
             if (type === 'md') {
               return {
                 code: data.slides[pageNo]?.content,
@@ -303,7 +303,7 @@ ${title}
         if (type !== 'md')
           return
 
-        const pageNo = parseInt(no) - 1
+        const pageNo = Number.parseInt(no) - 1
         return transformMarkdown(code, pageNo, data)
       },
     },

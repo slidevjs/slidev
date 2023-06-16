@@ -10,7 +10,7 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
   const path = computed(() => route.value.path)
   const total = computed(() => rawRoutes.length)
 
-  const currentPage = computed(() => parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
+  const currentPage = computed(() => Number.parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
   const currentPath = computed(() => getPath(currentPage.value))
   const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
   const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
