@@ -7,7 +7,7 @@
 import { toArray } from '@antfu/utils'
 import type { Directive, VNode, VNodeArrayChildren } from 'vue'
 
-import { defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
+import { Comment, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
 
 const listTags = ['ul', 'ol']
 
@@ -77,7 +77,7 @@ export default defineComponent({
     const mapChildren = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
       let idx = 0
       const vNodes = children.map((i) => {
-        if (!isVNode(i))
+        if (!isVNode(i) || i.type === Comment)
           return i
         const directive = idx % this.every === 0 ? click : after
         let vNode
