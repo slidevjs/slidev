@@ -5,7 +5,7 @@ import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
 
 // @ts-expect-error missing types
-import _rawRoutes from '/@slidev/routes'
+import _rawRoutes, { redirects } from '/@slidev/routes'
 
 // @ts-expect-error missing types
 import _configs from '/@slidev/configs'
@@ -19,6 +19,7 @@ export const routes: RouteRecordRaw[] = [
     component: Play,
     children: [
       ...rawRoutes,
+      ...redirects,
     ],
   },
   { name: 'print', path: '/print', component: Print },

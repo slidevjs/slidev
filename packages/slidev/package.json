@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.42.4",
+  "version": "0.42.5",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -67,6 +67,7 @@
     "fs-extra": "^11.1.1",
     "get-port-please": "^3.0.1",
     "global-dirs": "^3.0.1",
+    "htmlparser2": "^9.0.0",
     "import-from": "^4.0.0",
     "is-installed-globally": "^0.4.0",
     "jiti": "^1.18.2",
