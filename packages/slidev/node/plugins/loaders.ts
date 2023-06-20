@@ -553,9 +553,8 @@ defineProps<{ no: number | string }>()`)
 
     let no = 1
     const routes = data.slides
+      .filter(({ frontmatter }) => !frontmatter?.disabled)
       .map((i, idx) => {
-        if (i.frontmatter?.disabled)
-          return undefined
         imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
         const additions: Partial<RouteMeta> = {
           slide: {
