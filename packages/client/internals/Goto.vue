@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import { go, rawRoutes } from '../logic/nav'
 import { activeElement, showGotoDialog } from '../state'
+import Titles from '/@slidev/titles.md'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
@@ -153,12 +154,12 @@ watch(activeElement, () => {
         items-center
         :border="index === 0 ? '' : 't main'"
         :class="selectedIndex === index ? 'bg-active op100' : 'op80'"
-        @click.stop="select(item.no)"
+        @click.stop.prevent="select(item.no)"
       >
         <div w-4 text-right op50 text-sm>
           {{ item.no }}
         </div>
-        {{ item.title }}
+        <Titles :no="item.no" />
       </li>
     </ul>
   </div>
