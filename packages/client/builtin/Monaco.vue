@@ -16,6 +16,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { decode } from 'js-base64'
 import { nanoid } from 'nanoid'
+import type * as monaco from 'monaco-editor'
 import { isDark } from '../logic/dark'
 
 const props = withDefaults(defineProps<{
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<{
   readonly?: boolean
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
   height?: number | string
+  editorOptions?: monaco.editor.IEditorOptions
 }>(), {
   code: '',
   lang: 'typescript',
@@ -108,6 +110,7 @@ useEventListener(window, 'message', ({ data: payload }) => {
         lang: props.lang,
         readonly: props.readonly,
         lineNumbers: props.lineNumbers,
+        editorOptions: props.editorOptions,
         dark: isDark.value,
         style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
       })

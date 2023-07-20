@@ -32,6 +32,7 @@ export interface MonacoSetupReturn {
     light?: string
     dark?: string
   }
+  editorOptions?: monaco.editor.IEditorOptions
 }
 
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
