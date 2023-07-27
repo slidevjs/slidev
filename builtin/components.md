@@ -96,12 +96,23 @@ Insert a link you can use to navigate to a given slide.
 ~~~md
 <Link to="42">Go to slide 42</Link>
 <Link to="42" title="Go to slide 42"/>
+<Link to="solutions" title="Go to solutions"/>
 ~~~
 
 Parameters:
 
 * `to` (`string | number`): The path of the slide to navigate to (slides starts from `1`)
 * `title` (`string`): The title to display
+
+One can use a string as `to`, provided the corresponding route exists, e.g.
+
+~~~md
+---
+routeAlias: solutions
+---
+# Now some solutions!
+~~~
+
 
 ### `RenderWhen`
 
