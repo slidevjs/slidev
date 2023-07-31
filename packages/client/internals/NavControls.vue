@@ -18,6 +18,8 @@ const props = defineProps({
   },
 })
 
+const passwordSet = typeof (configs.remote) === 'string' && configs.remote.length
+
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
@@ -118,7 +120,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <carbon:user-speaker />
         </RouterLink>
 
-        <button v-if="__DEV__ && !isPresenter && !presenterPassword.value && configs.codeEditor" class="slidev-icon-btn <md:hidden" @click="showEditor = !showEditor">
+        <button v-if="__DEV__ && !isPresenter && !passwordSet && configs.codeEditor" class="slidev-icon-btn <md:hidden" @click="showEditor = !showEditor">
           <carbon:text-annotation-toggle />
         </button>
       </template>
