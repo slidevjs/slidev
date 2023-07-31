@@ -198,6 +198,12 @@ export interface SlidevConfig {
    * @see https://vuejs.org/guide/built-ins/transition.html
    */
   transition?: BuiltinSlideTransition | string | TransitionGroupProps
+  /**
+   * Enable Code editor button
+   *
+   * @default true
+   */
+  codeEditor: boolean
 }
 
 export interface FontOptions {
