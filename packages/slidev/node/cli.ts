@@ -192,6 +192,17 @@ cli.command(
         },
       },
       {
+        name: 'q',
+        fullname: 'quit',
+        action() {
+          try {
+            server?.close()
+          } finally {
+            process.exit()
+          }
+        }
+      },
+      {
         name: 'c',
         fullname: 'qrcode',
         async action() {
@@ -553,7 +564,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
 
     return lastRemoteUrl
   }
