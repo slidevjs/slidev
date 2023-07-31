@@ -197,10 +197,11 @@ cli.command(
         action() {
           try {
             server?.close()
-          } finally {
+          }
+          finally {
             process.exit()
           }
-        }
+        },
       },
       {
         name: 'c',
