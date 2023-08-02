@@ -23,7 +23,7 @@ const props = withDefaults(
   {
     columns: 1,
     listClass: '',
-    maxDepth: Infinity,
+    maxDepth: Number.POSITIVE_INFINITY,
     minDepth: 1,
     mode: 'all',
   },

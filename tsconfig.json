@@ -31,7 +31,8 @@
     "./docs/.vitepress/**/*.ts",
     "./docs/.vitepress/**/*.vue",
     "./packages/**/*.ts",
-    "./packages/**/*.vue"
+    "./packages/**/*.vue",
+    "./test/**/*.ts"
   ],
   "exclude": ["**/dist/**", "node_modules"]
 }

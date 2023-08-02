@@ -10,24 +10,20 @@ export async function formatCode(code: string, lang: string) {
       case 'typescript':
         parser = 'typescript'
         plugins = [
-          // @ts-expect-error missing types
-          (await import('prettier/esm/parser-babel')).default,
-          // @ts-expect-error missing types
-          (await import('prettier/esm/parser-typescript')).default,
+          (await import('prettier/plugins/babel')).default,
+          (await import('prettier/plugins/typescript')).default,
         ]
         break
       case 'html':
         parser = 'html'
         plugins = [
-          // @ts-expect-error missing types
-          (await import('prettier/esm/parser-html')).default,
+          (await import('prettier/plugins/html')).default,
         ]
         break
       default:
         parser = 'babel'
         plugins = [
-          // @ts-expect-error missing types
-          (await import('prettier/esm/parser-babel')).default,
+          (await import('prettier/plugins/babel')).default,
         ]
     }
 

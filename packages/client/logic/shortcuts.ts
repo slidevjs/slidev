@@ -44,7 +44,7 @@ export function strokeShortcut(key: KeyFilter, fn: Fn) {
 export function registerShortcuts() {
   const allShortcuts = setupShortcuts()
 
-  const shortcuts = new Map<string | Ref<Boolean>, ShortcutOptions>(
+  const shortcuts = new Map<string | Ref<boolean>, ShortcutOptions>(
     allShortcuts.map((options: ShortcutOptions) => [options.key, options]),
   )
 

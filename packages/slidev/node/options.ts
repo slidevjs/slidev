@@ -1,4 +1,5 @@
 import { dirname, join, resolve } from 'node:path'
+import process from 'node:process'
 import type Vue from '@vitejs/plugin-vue'
 import type VueJsx from '@vitejs/plugin-vue-jsx'
 import type Icons from 'unplugin-icons/vite'

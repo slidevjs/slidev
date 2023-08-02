@@ -1,9 +1,11 @@
 import type { SlidevConfig } from '@slidev/types'
+import type { UnwrapNestedRefs } from 'vue'
 import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
 
 // @ts-expect-error missing types
 import _configs from '/@slidev/configs'
+import type { SlidevContext } from './modules/context'
 
 export const configs = _configs as SlidevConfig
 export const slideAspect = configs.aspectRatio ?? (16 / 9)
@@ -15,3 +17,9 @@ export const slideHeight = Math.ceil(slideWidth / slideAspect)
 export const themeVars = computed(() => {
   return objectMap(configs.themeConfig || {}, (k, v) => [`--slidev-theme-${k}`, v])
 })
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $slidev: UnwrapNestedRefs<SlidevContext>
+  }
+}

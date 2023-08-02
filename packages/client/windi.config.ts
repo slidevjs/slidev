@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import process from 'node:process'
 import { isTruthy } from '@antfu/utils'
 import { DefaultExtractor, defineConfig } from 'vite-plugin-windicss'
 import typography from 'windicss/plugin/typography'

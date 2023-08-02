@@ -38,7 +38,7 @@ export async function useCodeMirror(
       if (v !== cm.getValue()) {
         skip = true
         const selections = cm.listSelections()
-        cm.replaceRange(v, cm.posFromIndex(0), cm.posFromIndex(Infinity))
+        cm.replaceRange(v, cm.posFromIndex(0), cm.posFromIndex(Number.POSITIVE_INFINITY))
         cm.setSelections(selections)
       }
     },

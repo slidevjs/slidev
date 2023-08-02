@@ -2,6 +2,7 @@ import path from 'node:path'
 import os from 'node:os'
 import { exec } from 'node:child_process'
 import * as readline from 'node:readline'
+import process from 'node:process'
 import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
@@ -463,7 +464,7 @@ cli
   .help()
   .parse()
 
-function commonOptions(args: Argv<{}>) {
+function commonOptions(args: Argv<object>) {
   return args
     .positional('entry', {
       default: 'slides.md',

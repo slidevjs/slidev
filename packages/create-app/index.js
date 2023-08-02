@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 
 // @ts-check
+const process = require('node:process')
 const fs = require('node:fs')
 const path = require('node:path')
 const argv = require('minimist')(process.argv.slice(2))

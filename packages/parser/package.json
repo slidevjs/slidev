@@ -14,18 +14,18 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./core": {
       "types": "./dist/core.d.ts",
-      "require": "./dist/core.js",
-      "import": "./dist/core.mjs"
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.js"
     },
     "./fs": {
       "types": "./fs.d.ts",
-      "require": "./dist/fs.js",
-      "import": "./dist/fs.mjs"
+      "import": "./dist/fs.mjs",
+      "require": "./dist/fs.js"
     }
   },
   "main": "dist/index.js",
