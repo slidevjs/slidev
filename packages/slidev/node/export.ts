@@ -310,6 +310,14 @@ export async function exportSlides({
       pdf.setTitle(titleSlide.title)
     if (titleSlide?.frontmatter?.info)
       pdf.setSubject(titleSlide.frontmatter.info)
+    if (titleSlide?.frontmatter?.author)
+      pdf.setAuthor(titleSlide.frontmatter.author)
+    if (titleSlide?.frontmatter?.keywords) {
+      if (Array.isArray(titleSlide?.frontmatter?.keywords))
+        pdf.setKeywords(titleSlide?.frontmatter?.keywords)
+      else
+        pdf.setKeywords(titleSlide?.frontmatter?.keywords.split(','))
+    }
 
     if (withToc) {
       const outlinePdf = outlinePdfFactory(pdfLib)
