@@ -249,6 +249,13 @@ export function createSlidesLoader(
         if (id === '/@slidev/global-components/bottom')
           return generateGlobalComponents('bottom')
 
+        // global component
+        if (id === '/@slidev/global-components/handout')
+          return generateGlobalComponents('handout')
+
+        if (id === '/@slidev/global-components/handout-cover')
+          return generateGlobalComponents('handout-cover')
+
         // custom nav controls
         if (id === '/@slidev/custom-nav-controls')
           return generateCustomNavControls()
@@ -597,7 +604,7 @@ defineProps<{ no: number | string }>()`)
     return `export default ${JSON.stringify(config)}`
   }
 
-  async function generateGlobalComponents(layer: 'top' | 'bottom') {
+  async function generateGlobalComponents(layer: 'top' | 'bottom' | 'handout' | 'handout-cover') {
     const components = roots
       .flatMap((root) => {
         if (layer === 'top') {
@@ -605,6 +612,20 @@ defineProps<{ no: number | string }>()`)
             join(root, 'global.vue'),
             join(root, 'global-top.vue'),
             join(root, 'GlobalTop.vue'),
+          ]
+        }
+        else if (layer === 'handout') {
+          return [
+            join(root, 'handout.vue'),
+            join(root, 'global-handout.vue'),
+            join(root, 'GlobalHandout.vue'),
+          ]
+        }
+        else if (layer === 'handout-cover') {
+          return [
+            join(root, 'handout-cover.vue'),
+            join(root, 'global-handout-cover.vue'),
+            join(root, 'GlobalHandoutCover.vue'),
           ]
         }
         else {

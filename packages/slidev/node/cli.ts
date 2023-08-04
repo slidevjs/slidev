@@ -460,6 +460,63 @@ cli.command(
   },
 )
 
+cli.command(
+  'export-handouts [entry..]',
+  'Export slide handouts to PDF',
+  args => args
+    .positional('entry', {
+      default: 'slides.md',
+      type: 'string',
+      describe: 'path to the slides markdown entry',
+    })
+    .option('output', {
+      type: 'string',
+      describe: 'path to the output',
+    })
+    .option('timeout', {
+      default: 30000,
+      type: 'number',
+      describe: 'timeout for rendering the print page',
+    })
+    .strict()
+    .help(),
+  async ({
+    entry,
+    output,
+    timeout,
+  }) => {
+    process.env.NODE_ENV = 'production'
+    const { exportHandouts } = await import('./export')
+    const port = await findFreePort(12445)
+
+    for (const entryFile of entry as unknown as string[]) {
+      const options = await resolveOptions({ entry: entryFile }, 'export')
+      const server = await createServer(
+        options,
+        {
+          server: { port },
+          clearScreen: false,
+        },
+      )
+      await server.listen(port)
+
+      printInfo(options)
+      parser.filterDisabled(options.data)
+
+      const result = await exportHandouts({
+        port,
+        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-handouts` : `${path.basename(entryFile, '.md')}-handouts`),
+        timeout,
+      })
+      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+
+      server.close()
+    }
+
+    process.exit(0)
+  },
+)
+
 cli
   .help()
   .parse()

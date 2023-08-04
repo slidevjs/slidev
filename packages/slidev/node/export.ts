@@ -68,6 +68,13 @@ export interface ExportNotesOptions {
   timeout?: number
 }
 
+export interface ExportHandoutsOptions {
+  port?: number
+  base?: string
+  output?: string
+  timeout?: number
+}
+
 function createSlidevProgress(indeterminate = false) {
   function getSpinner(n = 0) {
     return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
@@ -126,6 +133,49 @@ export async function exportNotes({
     output = `${output}.pdf`
 
   await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
+  await page.waitForLoadState('networkidle')
+  await page.emulateMedia({ media: 'screen' })
+
+  await page.pdf({
+    path: output,
+    margin: {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+    },
+    printBackground: true,
+    preferCSSPageSize: true,
+  })
+
+  progress.stop()
+  browser.close()
+
+  return output
+}
+
+export async function exportHandouts({
+  port = 18724,
+  base = '/',
+  output = 'notes',
+  timeout = 30000,
+}: ExportHandoutsOptions): Promise<string> {
+  if (!packageExists('playwright-chromium'))
+    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
+
+  const { chromium } = await import('playwright-chromium')
+  const browser = await chromium.launch()
+  const context = await browser.newContext()
+  const page = await context.newPage()
+
+  const progress = createSlidevProgress(true)
+
+  progress.start(1)
+
+  if (!output.endsWith('.pdf'))
+    output = `${output}.pdf`
+
+  await page.goto(`http://localhost:${port}${base}handouts/print`, { waitUntil: 'networkidle', timeout })
   await page.waitForLoadState('networkidle')
   await page.emulateMedia({ media: 'screen' })
 

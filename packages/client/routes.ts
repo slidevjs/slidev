@@ -42,6 +42,7 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
     return { path: '' }
   }
   routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
+  routes.push({ path: '/handouts/print', component: () => import('./internals/HandoutsPrint.vue') })
   routes.push({
     name: 'notes',
     path: '/notes',
