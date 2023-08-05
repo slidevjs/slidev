@@ -210,11 +210,12 @@ cli.command(
         async action() {
           if (!lastRemoteUrl)
             return
-          const qrcode = await import('qrcode-terminal').then(r => r.default || r)
-          qrcode.generate(lastRemoteUrl, { small: true }, (v: string) => {
-            console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
-            console.log(v.split('\n').map(i => `  ${i}`).join('\n'))
-          })
+          await import('uqr')
+            .then((r) => {
+              const code = r.renderUnicodeCompact(lastRemoteUrl!)
+              console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
+              console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
+            })
         },
       },
     ]
