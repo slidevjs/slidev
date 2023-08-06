@@ -1,8 +1,0 @@
-node_modules
-.DS_Store
-dist
-*.local
-index.html
-.remote-assets
-.idea/
-components.d.ts

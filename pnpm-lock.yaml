@@ -17,13 +17,13 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.5
         version: 0.7.5
-      '@slidev/cli':
+      '@packetsafari/cli':
         specifier: workspace:*
         version: link:packages/slidev
-      '@slidev/parser':
+      '@packetsafari/parser':
         specifier: workspace:*
         version: link:packages/parser
-      '@slidev/types':
+      '@packetsafari/types':
         specifier: workspace:*
         version: link:packages/types
       '@types/cli-progress':
@@ -149,18 +149,18 @@ importers:
 
   cypress/fixtures/basic:
     devDependencies:
-      '@slidev/cli':
+      '@packetsafari/cli':
         specifier: workspace:*
         version: link:../../../packages/slidev
+      '@packetsafari/types':
+        specifier: workspace:*
+        version: link:../../../packages/types
       '@slidev/theme-default':
         specifier: ^0.21.2
         version: 0.21.2
       '@slidev/theme-seriph':
         specifier: ^0.21.3
         version: 0.21.3
-      '@slidev/types':
-        specifier: workspace:*
-        version: link:../../../packages/types
       nodemon:
         specifier: ^3.0.1
         version: 3.0.1
@@ -173,36 +173,36 @@ importers:
       '@iconify-json/ri':
         specifier: ^1.1.11
         version: 1.1.11
-      '@slidev/cli':
+      '@packetsafari/cli':
         specifier: workspace:*
         version: link:../../packages/slidev
+      '@packetsafari/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@slidev/theme-default':
         specifier: ^0.21.2
         version: 0.21.2
       '@slidev/theme-seriph':
         specifier: ^0.21.3
         version: 0.21.3
-      '@slidev/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       nodemon:
         specifier: ^3.0.1
         version: 3.0.1
 
   demo/starter:
     devDependencies:
-      '@slidev/cli':
+      '@packetsafari/cli':
         specifier: workspace:*
         version: link:../../packages/slidev
+      '@packetsafari/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@slidev/theme-default':
         specifier: ^0.21.2
         version: 0.21.2
       '@slidev/theme-seriph':
         specifier: ^0.21.3
         version: 0.21.3
-      '@slidev/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       nodemon:
         specifier: ^3.0.1
         version: 3.0.1
@@ -212,10 +212,10 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.5
         version: 0.7.5
-      '@slidev/parser':
+      '@packetsafari/parser':
         specifier: workspace:*
         version: link:../parser
-      '@slidev/types':
+      '@packetsafari/types':
         specifier: workspace:*
         version: link:../types
       '@unocss/reset':
@@ -327,7 +327,7 @@ importers:
 
   packages/parser:
     dependencies:
-      '@slidev/types':
+      '@packetsafari/types':
         specifier: workspace:*
         version: link:../types
       js-yaml:
@@ -354,13 +354,13 @@ importers:
       '@mrdrogdrog/optional':
         specifier: ^1.2.1
         version: 1.2.1
-      '@slidev/client':
+      '@packetsafari/client':
         specifier: workspace:*
         version: link:../client
-      '@slidev/parser':
+      '@packetsafari/parser':
         specifier: workspace:*
         version: link:../parser
-      '@slidev/types':
+      '@packetsafari/types':
         specifier: workspace:*
         version: link:../types
       '@vitejs/plugin-vue':
