@@ -3,6 +3,8 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import type { TransitionGroupProps } from 'vue'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
+import HandoutPrint from './internals/HandoutPrint.vue'
+import CoverPrint from './internals/CoverPrint.vue'
 
 // @ts-expect-error missing types
 import _rawRoutes, { redirects } from '/@slidev/routes'
@@ -23,6 +25,8 @@ export const routes: RouteRecordRaw[] = [
     ],
   },
   { name: 'print', path: '/print', component: Print },
+  { name: 'handout', path: '/handout', component: HandoutPrint },
+  { name: 'cover', path: '/cover', component: CoverPrint },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
@@ -42,6 +46,7 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
     return { path: '' }
   }
   routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
+
   routes.push({
     name: 'notes',
     path: '/notes',

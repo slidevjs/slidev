@@ -22,7 +22,8 @@ export const navDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
-export const isPrintMode = computed(() => route.value.query.print !== undefined)
+export const isPrintMode = computed(() => route.value.query.print !== undefined || route.value.query.handout !== undefined || route.value.path.startsWith('/handout'))
+export const isHandout = computed(() => route.value.query.handout !== undefined)
 export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
