@@ -132,6 +132,9 @@ export async function parse(
           if (newContent !== undefined)
             slide.content = newContent
         }
+        if(e.lintSlide){
+            await e.lintSlide(slide)
+        }
       }
     }
     slides.push(slide)
