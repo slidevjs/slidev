@@ -176,6 +176,33 @@ This shows on the left
 This shows on the right
 ```
 
+### `tow-cols-header`
+
+Separates the upper and lower lines of the page content, and the second line separates the left and right columns.
+
+#### Usage
+
+
+```md
+---
+layout: two-cols-header
+---
+
+This spans both
+
+:::left:::
+
+# Left
+
+This shows on the left
+
+::right::
+
+# Right
+
+This shows on the right
+```
+
 ## Custom Layouts
 
 Create a directory `layouts/` under your project root, and simply put your custom Vue layout components under it.
