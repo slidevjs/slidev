@@ -89,9 +89,9 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (/pnpm/.test(process.env.npm_execpath) || /pnpm/.test(process.env.npm_config_user_agent))
+  const pkgManager = (/pnpm/.test(process.env.npm_execpath || '') || /pnpm/.test(process.env.npm_config_user_agent || ''))
     ? 'pnpm'
-    : /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm'
+    : /yarn/.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
 
   const related = path.relative(cwd, root)
 
