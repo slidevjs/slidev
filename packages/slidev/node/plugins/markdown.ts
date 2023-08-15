@@ -1,4 +1,4 @@
-import Markdown from 'vite-plugin-vue-markdown'
+import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
@@ -94,7 +94,7 @@ export async function createMarkdownPlugin(
         return code
       },
     },
-  })
+  }) as Plugin
 }
 
 export function transformMarkdownMonaco(md: string) {
