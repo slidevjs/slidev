@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isDark, toggleDark } from '@slidev/client/logic/dark'
+import { isDark, toggleDark } from '@slidev/client/logic/dark.ts'
 </script>
 
 <template>

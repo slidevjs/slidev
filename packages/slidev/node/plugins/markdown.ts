@@ -48,6 +48,7 @@ export async function createMarkdownPlugin(
   const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, { strict: false }, false)
 
   return Markdown({
+    include: [/\.md$/],
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,
