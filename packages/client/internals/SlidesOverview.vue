@@ -60,6 +60,7 @@ watchEffect(() => {
   <div
     v-show="value"
     class="bg-main !bg-opacity-75 p-16 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
+    @click="close()"
   >
     <div
       class="grid gap-y-4 gap-x-8 w-full"
