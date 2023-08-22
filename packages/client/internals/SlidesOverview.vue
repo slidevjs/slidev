@@ -59,7 +59,7 @@ watchEffect(() => {
 <template>
   <div
     v-show="value"
-    class="slides-overview bg-main !bg-opacity-75 p-16 overflow-y-auto"
+    class="bg-main !bg-opacity-75 p-16 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
   >
     <div
       class="grid gap-y-4 gap-x-8 w-full"
@@ -106,12 +106,3 @@ watchEffect(() => {
     <carbon:close />
   </button>
 </template>
-
-<style lang="postcss">
-.slides-overview {
-  @apply fixed left-0 right-0 top-0;
-  backdrop-filter: blur(5px);
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
-}
-</style>
