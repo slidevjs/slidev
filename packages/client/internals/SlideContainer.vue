@@ -52,7 +52,7 @@ const className = computed(() => ({
   'select-none': !configs.selectable,
 }))
 
-provide(injectionSlideScale, scale)
+provide(injectionSlideScale, scale as any)
 </script>
 
 <template>

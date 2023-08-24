@@ -2,6 +2,7 @@ import path from 'node:path'
 import os from 'node:os'
 import { exec } from 'node:child_process'
 import * as readline from 'node:readline'
+import process from 'node:process'
 import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
@@ -192,16 +193,29 @@ cli.command(
         },
       },
       {
+        name: 'q',
+        fullname: 'quit',
+        action() {
+          try {
+            server?.close()
+          }
+          finally {
+            process.exit()
+          }
+        },
+      },
+      {
         name: 'c',
         fullname: 'qrcode',
         async action() {
           if (!lastRemoteUrl)
             return
-          const qrcode = await import('qrcode-terminal').then(r => r.default || r)
-          qrcode.generate(lastRemoteUrl, { small: true }, (v: string) => {
-            console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
-            console.log(v.split('\n').map(i => `  ${i}`).join('\n'))
-          })
+          await import('uqr')
+            .then((r) => {
+              const code = r.renderUnicodeCompact(lastRemoteUrl!)
+              console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
+              console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
+            })
         },
       },
     ]
@@ -451,7 +465,7 @@ cli
   .help()
   .parse()
 
-function commonOptions(args: Argv<{}>) {
+function commonOptions(args: Argv<object>) {
   return args
     .positional('entry', {
       default: 'slides.md',
@@ -553,7 +567,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
     }
 
     console.log()
-    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
+    console.log(`${dim('  shortcuts ')}          > ${underline('r')}${dim('estart | ')}${underline('o')}${dim('pen | ')}${underline('e')}${dim('dit | ')}${underline('q')}${dim('uit')}${lastRemoteUrl ? ` | ${dim('qr')}${underline('c')}${dim('ode')}` : ''}`)
 
     return lastRemoteUrl
   }

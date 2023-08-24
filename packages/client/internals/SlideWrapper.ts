@@ -1,5 +1,7 @@
 import { useVModel } from '@vueuse/core'
+import type { Ref } from 'vue'
 import { defineComponent, h, provide } from 'vue'
+import type { RenderContext } from '@slidev/types'
 import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionOrderMap, injectionRoute, injectionSlideContext } from '../constants'
 
 export default defineComponent({
@@ -42,12 +44,12 @@ export default defineComponent({
 
     clicksElements.value.length = 0
 
-    provide(injectionRoute, props.route)
-    provide(injectionSlideContext, props.context)
-    provide(injectionClicks, clicks)
+    provide(injectionRoute, props.route as any)
+    provide(injectionSlideContext, props.context as RenderContext)
+    provide(injectionClicks, clicks as Ref<number>)
     provide(injectionClicksDisabled, clicksDisabled)
-    provide(injectionClicksElements, clicksElements)
-    provide(injectionOrderMap, clicksOrderMap)
+    provide(injectionClicksElements, clicksElements as any)
+    provide(injectionOrderMap, clicksOrderMap as any)
   },
   render() {
     if (this.$props.is)

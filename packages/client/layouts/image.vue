@@ -6,9 +6,13 @@ const props = defineProps({
   image: {
     type: String,
   },
+  backgroundSize: {
+    type: String,
+    default: 'cover',
+  },
 })
 
-const style = computed(() => handleBackground(props.image))
+const style = computed(() => handleBackground(props.image, false, props.backgroundSize))
 </script>
 
 <template>

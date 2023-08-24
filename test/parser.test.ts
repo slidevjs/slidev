@@ -7,7 +7,7 @@ import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/s
 function configDiff(v: SlidevConfig) {
   const defaults = getDefaultConfig()
   const res: Record<string, any> = {}
-  for (const key of Object.keys(v)) {
+  for (const key of Object.keys(v) as (keyof SlidevConfig)[]) {
     if (JSON.stringify(v[key]) !== JSON.stringify(defaults[key]))
       res[key] = v[key]
   }
@@ -104,8 +104,19 @@ f
       .toEqual({ })
   })
 
-  async function parseWithExtension(src: string, transformRawLines, more = {}, moreExts: SlidevPreparserExtension[] = []) {
-    return await parse(src, undefined, undefined, [], async () => [{ transformRawLines, ...more }, ...moreExts] as any)
+  async function parseWithExtension(
+    src: string,
+    transformRawLines: (lines: string[]) => void | Promise<void> = () => {},
+    more = {},
+    moreExts: SlidevPreparserExtension[] = [],
+  ) {
+    return await parse(
+      src,
+      undefined,
+      undefined,
+      [],
+      async () => [{ transformRawLines, ...more }, ...moreExts] as any,
+    )
   }
 
   it('parse with-extension replace', async () => {
@@ -151,7 +162,7 @@ b
   })
 
   it('parse with-extension eg-easy-cover', async () => {
-    function cov(i, more = '.jpg') {
+    function cov(i: string, more = '.jpg') {
       return `---
 layout: cover
 background: ${i}${more}
@@ -212,10 +223,13 @@ a.a.A.A
   })
 
   // Generate cartesian product of given iterables:
-  function* cartesian(...all) {
+  function* cartesian(...all: any[]): Generator<any[], void, void> {
     const [head, ...tail] = all
     const remainder = tail.length ? cartesian(...tail) : [[]]
-    for (const r of remainder) for (const h of head) yield [h, ...r]
+    for (const r of remainder) {
+      for (const h of head)
+        yield [h, ...r]
+    }
   }
   const B = [0, 1]
   const Bs = [B, B, B, B, B, B]
@@ -272,7 +286,7 @@ withSlideAfter
           return lines.join('\n')
         },
       })
-      function project(s) {
+      function project(s: string) {
         // like the trim in other tests, the goal is not to test newlines here
         return s.replace(/%%%*/g, '%')
       }
