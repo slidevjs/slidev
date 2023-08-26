@@ -196,7 +196,9 @@ export function createSlidesLoader(
                   read() { return md },
                 })
               }
-              catch { }
+              catch (e) {
+                console.error('[Slidev] failed to send HMR', e)
+              }
             }),
           )
         ).flatMap(i => i || [])
