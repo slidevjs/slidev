@@ -183,7 +183,7 @@ export async function ViteSlidevPlugin(
       }))
       : null,
     options.inspect
-      ? import('vite-plugin-inspect').then(r => r.default({
+      ? import('vite-plugin-inspect').then(r => (r.default || r)({
         dev: true,
         build: true,
       }))
