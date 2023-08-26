@@ -358,7 +358,7 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@vitejs/plugin-vue':
-        specifier: 4.3.3
+        specifier: ^4.3.3
         version: 4.3.3(vite@4.4.9)(vue@3.3.4)
       '@vitejs/plugin-vue-jsx':
         specifier: ^3.0.2

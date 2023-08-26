@@ -57,7 +57,7 @@
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@vitejs/plugin-vue": "4.3.3",
+    "@vitejs/plugin-vue": "^4.3.3",
     "@vitejs/plugin-vue-jsx": "^3.0.2",
     "@windicss/config": "^1.9.1",
     "cli-progress": "^3.12.0",
