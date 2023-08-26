@@ -182,26 +182,10 @@ export function createSlidesLoader(
         if (hmrPages.size > 0)
           moduleIds.add('/@slidev/titles.md')
 
-        const vueModules = (
-          await Promise.all(
-            Array.from(hmrPages).map(async (i) => {
-              const file = `${slidePrefix}${i + 1}.md`
-              try {
-                const md = await transformMarkdown((await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file)).code, i, newData)
-                const handleHotUpdate = 'handler' in VuePlugin.handleHotUpdate! ? VuePlugin.handleHotUpdate!.handler : VuePlugin.handleHotUpdate!
-                return await handleHotUpdate({
-                  ...ctx,
-                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-                  file,
-                  read() { return md },
-                })
-              }
-              catch (e) {
-                console.error('[Slidev] failed to send HMR', e)
-              }
-            }),
-          )
-        ).flatMap(i => i || [])
+        const vueModules = Array.from(hmrPages).map(i =>
+          ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.md`),
+        )
+
         hmrPages.clear()
 
         const moduleEntries = [
