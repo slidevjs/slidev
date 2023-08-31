@@ -1,11 +1,10 @@
 [build.environment]
-  NPM_FLAGS = "--prefix=/dev/null"
-  NODE_VERSION = "14"
+  NODE_VERSION = "18"
   PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [build]
   publish = ".vitepress/dist"
-  command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
+  command = "pnpm run build"
 
 [[redirects]]
   from = "/new"
