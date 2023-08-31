@@ -76,3 +76,19 @@ themeConfig:
 ```
 {{ $slidev.themeConfigs.primary }} // '#213435'
 ```
+
+### `$nav`
+
+> Available since v0.43.0
+
+A shorthand of `$slidev.nav`.
+
+### `$clicks`
+
+> Available since v0.43.0
+
+A shorthand of `$slidev.nav.clicks`.
+
+```html
+<div v-if="$clicks > 3">Content</div>
+```
