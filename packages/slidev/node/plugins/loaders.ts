@@ -345,11 +345,13 @@ ${title}
 
     delete frontmatter.title
     const imports = [
-      'import { inject as vueInject } from "vue"',
+      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
-      'const $slidev = vueInject(injectionSlidevContext)',
+      'const $frontmatter = frontmatter',
+      'const $slidev = _vueInject(injectionSlidevContext)',
+      'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
