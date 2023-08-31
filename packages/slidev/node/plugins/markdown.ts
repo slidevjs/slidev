@@ -13,6 +13,7 @@ import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
+import Mdc from 'markdown-it-mdc'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -43,6 +44,9 @@ export async function createMarkdownPlugin(
   else {
     setups.push(md => md.use(Prism))
   }
+
+  if (config.mdc)
+    setups.push(md => md.use(Mdc))
 
   const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, { strict: false }, false)
 

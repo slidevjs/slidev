@@ -30,6 +30,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'routerMode',
   'fonts',
   'css',
+  'mdc',
 ]
 
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
