@@ -114,6 +114,16 @@ clicks: 3
 </v-clicks>
 ```
 
+### Enter & Leave
+
+> Available since v0.43.0
+
+You can also specify the enter and leave index for the `v-click` directive by passing an array. The end index is exclusive.
+
+```md
+<div v-click="[2, 4]">This will be shown on the 2nd and 3rd clicks, and hide again after the 4th.</div>
+```
+
 ### Element Transitions
 
 When you apply the `v-click` directive to your elements, it will attach the class name `slidev-vclick-target` to it. When the elements are hidden, the class name `slidev-vclick-hidden` will also be attached. For example:
