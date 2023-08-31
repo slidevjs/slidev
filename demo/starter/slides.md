@@ -87,11 +87,11 @@ layout: default
 
 # Table of contents
 
-```
-<Toc minDepth="1" maxDepth="5"></Toc>
+```html
+<Toc minDepth="1" maxDepth="1"></Toc>
 ```
 
-<Toc></Toc>
+<Toc maxDepth="1"></Toc>
 
 ---
 transition: slide-up

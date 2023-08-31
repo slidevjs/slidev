@@ -1,12 +1,12 @@
 import type { ShikiDarkModeThemes } from 'packages/types'
-import type { IShikiTheme, IThemeRegistration, Highlighter as ShikiHighlighter } from 'shiki'
+import type { IShikiTheme, IThemeRegistration, Highlighter as ShikiHighlighter, Theme } from 'shiki'
 import type MarkdownIt from 'markdown-it'
-import type { ShikiOptions } from '@slidev/types'
+import type { ResolvedShikiOptions, ShikiOptions } from '@slidev/types'
 import { escapeVueInCode } from './markdown'
 
-function getThemeName(theme: IThemeRegistration) {
+function getThemeName(theme: IThemeRegistration | string) {
   if (typeof theme === 'string')
-    return theme
+    return theme as Theme
   return (theme as IShikiTheme).name
 }
 
@@ -14,8 +14,8 @@ function isShikiDarkModeThemes(theme: IThemeRegistration | ShikiDarkModeThemes):
   return typeof theme === 'object' && ('dark' in theme || 'light' in theme)
 }
 
-export function resolveShikiOptions(options: ShikiOptions) {
-  const themes: IThemeRegistration[] = []
+export function resolveShikiOptions(options: ShikiOptions): ResolvedShikiOptions {
+  const themes: (IThemeRegistration | Theme)[] = []
   let darkModeThemes: ShikiDarkModeThemes | undefined
 
   if (!options.theme) {

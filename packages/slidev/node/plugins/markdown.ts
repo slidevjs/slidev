@@ -12,7 +12,6 @@ import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
-import * as Shiki from 'shiki'
 import { encode } from 'plantuml-encoder'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
@@ -35,10 +34,10 @@ export async function createMarkdownPlugin(
   const entryPath = slash(entry)
 
   if (config.highlighter === 'shiki') {
-    const { getHighlighter } = await import('shiki')
+    const Shiki = await import('shiki')
     const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', Shiki, DEFAULT_SHIKI_OPTIONS, false)
     const { langs, themes } = resolveShikiOptions(shikiOptions)
-    shikiOptions.highlighter = await getHighlighter({ themes, langs })
+    shikiOptions.highlighter = await Shiki.getHighlighter({ themes, langs })
     setups.push(md => md.use(MarkdownItShiki, shikiOptions))
   }
   else {
