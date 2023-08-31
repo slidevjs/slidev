@@ -6,6 +6,7 @@ import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
 import type { RouteMeta } from 'vue-router'
+import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -336,9 +337,13 @@ ${title}
       ...(data.headmatter?.defaults as object || {}),
       ...(data.slides[pageNo]?.frontmatter || {}),
     }
-    const layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
-    if (!layouts[layoutName])
-      throw new Error(`Unknown layout "${layoutName}"`)
+    let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+    if (!layouts[layoutName]) {
+      console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
+      + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
+      console.error()
+      layoutName = 'default'
+    }
 
     delete frontmatter.title
     const imports = [
