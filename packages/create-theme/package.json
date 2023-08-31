@@ -1,6 +1,6 @@
 {
   "name": "create-slidev-theme",
-  "version": "0.42.9",
+  "version": "0.43.0-beta.2",
   "description": "Create starter theme template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "create-slidev-theme": "index.js"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "kolorist": "^1.8.0",

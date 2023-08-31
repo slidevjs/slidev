@@ -4,7 +4,7 @@
     "slidev"
   ],
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=18.0.0",
     "slidev": ">=0.19.3"
   },
   "scripts": {
@@ -14,13 +14,13 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
-    "@slidev/types": "^0.42.9",
+    "@slidev/types": "^0.43.0-beta.2",
     "codemirror-theme-vars": "^0.1.2",
     "prism-theme-vars": "^0.2.4",
     "theme-vitesse": "^0.7.2"
   },
   "devDependencies": {
-    "@slidev/cli": "^0.42.9"
+    "@slidev/cli": "^0.43.0-beta.2"
   },
   "//": "Learn more: https://sli.dev/themes/write-a-theme.html",
   "slidev": {

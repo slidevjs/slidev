@@ -6,6 +6,7 @@ import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
 import type { RouteMeta } from 'vue-router'
+import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -71,8 +72,6 @@ export function createSlidesLoader(
   { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
-  VuePlugin: Plugin,
-  MarkdownPlugin: Plugin,
 ): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrPages = new Set<number>()
@@ -182,24 +181,10 @@ export function createSlidesLoader(
         if (hmrPages.size > 0)
           moduleIds.add('/@slidev/titles.md')
 
-        const vueModules = (
-          await Promise.all(
-            Array.from(hmrPages).map(async (i) => {
-              const file = `${slidePrefix}${i + 1}.md`
-              try {
-                const md = await transformMarkdown((await (<any>MarkdownPlugin.transform)(newData.slides[i]?.content, file)).code, i, newData)
-                const handleHotUpdate = 'handler' in VuePlugin.handleHotUpdate! ? VuePlugin.handleHotUpdate!.handler : VuePlugin.handleHotUpdate!
-                return await handleHotUpdate({
-                  ...ctx,
-                  modules: Array.from(ctx.server.moduleGraph.getModulesByFile(file) || []),
-                  file,
-                  read() { return md },
-                })
-              }
-              catch { }
-            }),
-          )
-        ).flatMap(i => i || [])
+        const vueModules = Array.from(hmrPages).map(i =>
+          ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.md`),
+        )
+
         hmrPages.clear()
 
         const moduleEntries = [
@@ -350,17 +335,24 @@ ${title}
       ...(data.headmatter?.defaults as object || {}),
       ...(data.slides[pageNo]?.frontmatter || {}),
     }
-    const layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
-    if (!layouts[layoutName])
-      throw new Error(`Unknown layout "${layoutName}"`)
+    let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+    if (!layouts[layoutName]) {
+      console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
+      + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
+      console.error()
+      layoutName = 'default'
+    }
 
     delete frontmatter.title
     const imports = [
-      'import { inject as vueInject } from "vue"',
+      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
-      'const $slidev = vueInject(injectionSlidevContext)',
+      'const $frontmatter = frontmatter',
+      'const $slidev = _vueInject(injectionSlidevContext)',
+      'const $nav = _vueToRef($slidev, "nav")',
+      'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -378,9 +370,11 @@ ${title}
     if (code.includes('injectionSlidevContext'))
       return code // Assume that the context is already imported and used
     const imports = [
-      'import { inject as vueInject } from "vue"',
+      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
-      'const $slidev = vueInject(injectionSlidevContext)',
+      'const $slidev = _vueInject(injectionSlidevContext)',
+      'const $nav = _vueToRef($slidev, "nav")',
+      'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {

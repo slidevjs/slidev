@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "0.42.9",
+  "version": "0.43.0-beta.2",
   "description": "Markdown parser for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "*.d.ts"
   ],
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts",
