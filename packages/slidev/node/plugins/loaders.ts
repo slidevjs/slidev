@@ -297,7 +297,7 @@ ${title}
       name: 'slidev:context-transform:pre',
       enforce: 'pre',
       async transform(code, id) {
-        if (!id.endsWith('.vue'))
+        if (!id.endsWith('.vue') || id.includes('/@slidev/client/') || id.includes('/packages/client/'))
           return
         return transformVue(code)
       },
@@ -347,12 +347,12 @@ ${title}
     const imports = [
       'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
+      'import { injectionSlidevContext as _injectionSlidevContext, injectionClicks as _injectionClicks } from "@slidev/client/constants.ts"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
       'const $frontmatter = frontmatter',
-      'const $slidev = _vueInject(injectionSlidevContext)',
+      'const $slidev = _vueInject(_injectionSlidevContext)',
       'const $nav = _vueToRef($slidev, "nav")',
-      'const $clicks = _vueToRef($slidev.nav, "clicks")',
+      'const $clicks = _vueInject(_injectionClicks)',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -367,14 +367,14 @@ ${title}
   }
 
   function transformVue(code: string): string {
-    if (code.includes('injectionSlidevContext'))
+    if (code.includes('injectionSlidevContext') || code.includes('injectionClicks') || code.includes('const $slidev'))
       return code // Assume that the context is already imported and used
     const imports = [
       'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
-      'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
-      'const $slidev = _vueInject(injectionSlidevContext)',
+      'import { injectionSlidevContext as _injectionSlidevContext, injectionClicks as _injectionClicks } from "@slidev/client/constants.ts"',
+      'const $slidev = _vueInject(_injectionSlidevContext)',
       'const $nav = _vueToRef($slidev, "nav")',
-      'const $clicks = _vueToRef($slidev.nav, "clicks")',
+      'const $clicks = _vueInject(_injectionClicks)',
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
