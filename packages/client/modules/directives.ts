@@ -72,7 +72,9 @@ export default function createDirectives() {
               () => {
                 const c = clicks?.value ?? 0
                 const show = dir.value != null
-                  ? c >= dir.value
+                  ? Array.isArray(dir.value)
+                    ? c >= dir.value[0] && c < dir.value[1]
+                    : c >= dir.value
                   : c > prev
 
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
@@ -123,7 +125,7 @@ export default function createDirectives() {
           const clicks = dirInject(dir, injectionClicks)
           const orderMap = dirInject(dir, injectionOrderMap)
 
-          const prev = elements?.value.length
+          const prev = elements?.value.length || 0
 
           // Set default dir.value
           if (dir.value == null)
@@ -146,7 +148,13 @@ export default function createDirectives() {
             watch(
               clicks,
               () => {
-                const show = (clicks.value ?? 0) >= (dir.value ?? prev ?? 0)
+                const c = (clicks.value ?? 0)
+                const show = dir.value != null
+                  ? Array.isArray(dir.value)
+                    ? c >= dir.value[0] && c < dir.value[1]
+                    : c >= dir.value
+                  : c >= prev
+
                 if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
                   el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
 

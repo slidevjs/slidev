@@ -72,8 +72,6 @@ export function createSlidesLoader(
   { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
-  VuePlugin: Plugin,
-  MarkdownPlugin: Plugin,
 ): Plugin[] {
   const slidePrefix = '/@slidev/slides/'
   const hmrPages = new Set<number>()

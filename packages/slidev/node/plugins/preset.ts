@@ -98,7 +98,7 @@ export async function ViteSlidevPlugin(
     VueJsxPlugin,
     VuePlugin,
 
-    createSlidesLoader(options, pluginOptions, serverOptions, VuePlugin, MarkdownPlugin),
+    createSlidesLoader(options, pluginOptions, serverOptions),
 
     Components({
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
