@@ -372,7 +372,7 @@ ${title}
     const imports = [
       'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
-      'const $slidev = vueInject(injectionSlidevContext)',
+      'const $slidev = _vueInject(injectionSlidevContext)',
       'const $nav = _vueToRef($slidev, "nav")',
       'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
