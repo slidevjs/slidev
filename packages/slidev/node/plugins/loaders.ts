@@ -351,6 +351,7 @@ ${title}
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
       'const $frontmatter = frontmatter',
       'const $slidev = _vueInject(injectionSlidevContext)',
+      'const $nav = _vueToRef($slidev, "nav")',
       'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
 
@@ -369,9 +370,11 @@ ${title}
     if (code.includes('injectionSlidevContext'))
       return code // Assume that the context is already imported and used
     const imports = [
-      'import { inject as vueInject } from "vue"',
+      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
       'import { injectionSlidevContext } from "@slidev/client/constants.ts"',
       'const $slidev = vueInject(injectionSlidevContext)',
+      'const $nav = _vueToRef($slidev, "nav")',
+      'const $clicks = _vueToRef($slidev.nav, "clicks")',
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
