@@ -40,7 +40,7 @@ export async function getRecursivePlugins(addons: string[], depth: number): Prom
 }
 
 export async function checkEngine(name: string, engines: { slidev?: string }) {
-  if (engines.slidev && !satisfies(version, engines.slidev))
+  if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
     throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
 }
 
