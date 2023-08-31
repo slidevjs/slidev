@@ -12,7 +12,7 @@
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
