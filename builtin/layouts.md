@@ -190,7 +190,7 @@ layout: two-cols-header
 
 This spans both
 
-:::left:::
+::left::
 
 # Left
 
