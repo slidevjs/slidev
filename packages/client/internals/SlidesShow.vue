@@ -85,19 +85,27 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   <TransitionGroup v-if="!isViewTransition" v-bind="transition" id="slideshow" tag="div">
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
-        :is="route?.component as any" v-show="route === currentRoute"
+        :is="route?.component as any"
+        v-show="route === currentRoute"
         :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
-        :clicks-elements="route.meta?.__clicksElements || []" :clicks-disabled="false" :class="getSlideClass(route)"
-        :route="route" :context="context"
+        :clicks-elements="route.meta?.__clicksElements || []"
+        :clicks-disabled="false"
+        :class="getSlideClass(route)"
+        :route="route"
+        :context="context"
       />
     </template>
   </TransitionGroup>
   <template v-for="route of loadedRoutes" v-else :key="route.path">
     <SlideWrapper
-      :is="route?.component as any" v-show="route === currentRoute"
+      :is="route?.component as any"
+      v-show="route === currentRoute"
       :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
-      :clicks-elements="route.meta?.__clicksElements || []" :clicks-disabled="false" :class="getSlideClass(route)"
-      :route="route" :context="context"
+      :clicks-elements="route.meta?.__clicksElements || []"
+      :clicks-disabled="false"
+      :class="getSlideClass(route)"
+      :route="route"
+      :context="context"
     />
   </template>
   <!-- Global Top -->
