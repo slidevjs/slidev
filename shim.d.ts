@@ -5,6 +5,7 @@ declare global {
   const __SLIDEV_CLIENT_ROOT__: string
   const __SLIDEV_FEATURE_DRAWINGS__: boolean
   const __SLIDEV_FEATURE_DRAWINGS_PERSIST__: boolean
+  const __SLIDEV_FEATURE_EDITOR__: boolean
   const __SLIDEV_FEATURE_RECORD__: boolean
   const __SLIDEV_FEATURE_PRESENTER__: boolean
   const __SLIDEV_HAS_SERVER__: boolean
@@ -17,6 +18,7 @@ declare module 'vue' {
     __SLIDEV_CLIENT_ROOT__: string
     __SLIDEV_FEATURE_DRAWINGS__: boolean
     __SLIDEV_FEATURE_DRAWINGS_PERSIST__: boolean
+    __SLIDEV_FEATURE_EDITOR__: boolean
     __SLIDEV_FEATURE_RECORD__: boolean
     __SLIDEV_FEATURE_PRESENTER__: boolean
     __SLIDEV_HAS_SERVER__: boolean

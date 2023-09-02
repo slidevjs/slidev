@@ -32,7 +32,7 @@ export function getDefaultConfig(): SlidevConfig {
     presenter: true,
     htmlAttrs: {},
     transition: undefined,
-    codeEditor: true,
+    editor: true,
   }
 }
 

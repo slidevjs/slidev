@@ -208,11 +208,11 @@ export interface SlidevConfig {
    */
   mdc?: boolean
   /**
-   * Enable Code editor button
+   * Enable built-in editor
    *
    * @default true
    */
-  codeEditor: boolean
+  editor: boolean
 }
 
 export interface FontOptions {

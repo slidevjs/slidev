@@ -118,7 +118,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <carbon:user-speaker />
         </RouterLink>
 
-        <button v-if="__DEV__ && showPresenter && configs.codeEditor" class="slidev-icon-btn <md:hidden" @click="showEditor = !showEditor">
+        <button
+          v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
+          class="slidev-icon-btn <md:hidden"
+          @click="showEditor = !showEditor"
+        >
           <carbon:text-annotation-toggle />
         </button>
       </template>

@@ -31,6 +31,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'fonts',
   'css',
   'mdc',
+  'editor',
 ]
 
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {

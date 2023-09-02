@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { clicks, clicksTotal, currentPage, currentRoute, hasNext, nextRoute, total, useSwipeControls } from '../logic/nav'
-import { showOverview, showPresenterCursor } from '../state'
+import { showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs, themeVars } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
@@ -52,6 +52,10 @@ const nextSlide = computed(() => {
     }
   }
 })
+
+const Editor = shallowRef<any>()
+if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
+  import('./Editor.vue').then(v => Editor.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {
@@ -132,7 +136,10 @@ onMounted(() => {
         </div>
       </div>
       <div class="grid-section note overflow-auto">
-        <NoteEditor v-if="__DEV__" class="w-full max-w-full h-full overflow-auto p-2 lg:p-4" />
+        <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor">
+          <Editor />
+        </template>
+        <NoteEditor v-else-if="__DEV__" class="w-full max-w-full h-full overflow-auto p-2 lg:p-4" />
         <NoteStatic v-else class="w-full max-w-full h-full overflow-auto p-2 lg:p-4" />
       </div>
       <div class="grid-section bottom">
