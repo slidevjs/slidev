@@ -58,9 +58,9 @@ watchEffect(() => {
 
 <template>
   <Transition
-    enter-active-class="duration-300 ease-out"
+    enter-active-class="duration-150 ease-out"
     enter-from-class="opacity-0 scale-102 !backdrop-blur-0px"
-    leave-active-class="duration-300 ease-in"
+    leave-active-class="duration-200 ease-in"
     leave-to-class="opacity-0 scale-102 !backdrop-blur-0px"
   >
     <div
