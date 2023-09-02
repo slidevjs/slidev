@@ -1,5 +1,5 @@
 {
-  "version": "0.43.0-beta.2",
+  "version": "0.43.0-beta.3",
   "private": true,
   "packageManager": "pnpm@8.7.1",
   "engines": {
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.41.0",
-    "@antfu/ni": "^0.21.6",
+    "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
@@ -38,7 +38,7 @@
     "@types/katex": "^0.16.2",
     "@types/localtunnel": "^2.0.2",
     "@types/markdown-it": "^13.0.1",
-    "@types/node": "^20.5.7",
+    "@types/node": "^20.5.9",
     "@types/prismjs": "^1.26.0",
     "@types/prompts": "^2.4.4",
     "@types/recordrtc": "^5.6.11",

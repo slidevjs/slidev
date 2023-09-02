@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue'
-import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
+import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, router, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper'
 
@@ -21,6 +21,12 @@ watch(currentRoute, () => {
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
 
+// preserve the clicks count for previous slide to avoid flash on transition
+let previousClicks: [string | undefined, number] = [] as any
+router.beforeEach(() => {
+  previousClicks = [currentRoute.value?.path, clicks.value]
+})
+
 const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
@@ -38,7 +44,7 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
       <SlideWrapper
         :is="route?.component as any"
         v-show="route === currentRoute"
-        :clicks="route === currentRoute ? clicks : 0"
+        :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
         :clicks-elements="route.meta?.__clicksElements || []"
         :clicks-disabled="false"
         :class="getSlideClass(route)"

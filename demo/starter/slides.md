@@ -13,6 +13,7 @@ drawings:
   persist: false
 transition: slide-left
 title: Welcome to Slidev
+mdc: true
 ---
 
 # Welcome to Slidev
@@ -95,7 +96,6 @@ layout: default
 
 ---
 transition: slide-up
-
 level: 2
 ---
 

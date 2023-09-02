@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "0.43.0-beta.2",
+  "version": "0.43.0-beta.3",
   "description": "Markdown parser for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
