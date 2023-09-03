@@ -33,6 +33,26 @@ Current page is: {{ $slidev.nav.currentPage }}
 <div v-if="$clicks > 3">Content</div>
 ```
 
+### `$page`
+
+`$page` holds the number of the current page, 1-indexed.
+
+```md
+Page: {{ $page }}
+
+Is current page active: {{ $page === $slidev.nav.currentPage }}
+```
+
+### `$renderContext`
+
+`$renderContext` holds the current render context, can be `slide`, `overview`, `presenter` or `previewNext`
+
+```md
+<div v-if="$renderContext === 'slide'">
+  This content will only be rendered in slides view
+</div>
+```
+
 ### `$slidev.nav`
 
 A reactive object holding the properties and controls of the slides navigation. For examples:
