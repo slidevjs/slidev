@@ -13,6 +13,7 @@ export const injectionSlidevContext: InjectionKey<UnwrapNestedRefs<SlidevContext
 export const injectionRoute: InjectionKey<RouteRecordRaw> = Symbol('slidev-route')
 export const injectionSlideContext: InjectionKey<RenderContext> = Symbol('slidev-slide-context')
 export const injectionActive: InjectionKey<Ref<boolean>> = Symbol('slidev-active')
+export const injectionFrontmatter: InjectionKey<Record<string, any>> = Symbol('slidev-fontmatter')
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'

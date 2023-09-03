@@ -21,12 +21,13 @@ const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
 const vueContextImports = [
-  'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
+  'import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"',
   `import {
     injectionSlidevContext as _injectionSlidevContext, 
     injectionClicks as _injectionClicks,
     injectionCurrentPage as _injectionCurrentPage,
     injectionSlideContext as _injectionSlideContext,
+    injectionFrontmatter as _injectionFrontmatter,
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
@@ -407,6 +408,7 @@ export function createSlidesLoader(
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       `import frontmatter from "${toAtFS(`${slidePrefix + (pageNo + 1)}.frontmatter`)}"`,
       'const $frontmatter = frontmatter',
+      '_vueProvide(_injectionFrontmatter, frontmatter)',
       // update frontmatter in router
       ';(() => {',
       '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page))',
@@ -435,6 +437,7 @@ export function createSlidesLoader(
       return code // Assume that the context is already imported and used
     const imports = [
       ...vueContextImports,
+      'const $frontmatter = _vueInject(_injectionFrontmatter)',
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
