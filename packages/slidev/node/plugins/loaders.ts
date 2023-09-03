@@ -21,6 +21,21 @@ import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json)$/
 
+const vueContextImports = [
+  'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
+  `import {
+    injectionSlidevContext as _injectionSlidevContext, 
+    injectionClicks as _injectionClicks,
+    injectionCurrentPage as _injectionCurrentPage,
+    injectionSlideContext as _injectionSlideContext,
+  } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
+  'const $slidev = _vueInject(_injectionSlidevContext)',
+  'const $nav = _vueToRef($slidev, "nav")',
+  'const $clicks = _vueInject(_injectionClicks)',
+  'const $page = _vueInject(_injectionCurrentPage)',
+  'const $renderContext = _vueInject(_injectionSlideContext)',
+]
+
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
     let body = ''
@@ -345,14 +360,10 @@ ${title}
 
     delete frontmatter.title
     const imports = [
-      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
+      ...vueContextImports,
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      'import { injectionSlidevContext as _injectionSlidevContext, injectionClicks as _injectionClicks } from "@slidev/client/constants.ts"',
       `const frontmatter = ${JSON.stringify(frontmatter)}`,
       'const $frontmatter = frontmatter',
-      'const $slidev = _vueInject(_injectionSlidevContext)',
-      'const $nav = _vueToRef($slidev, "nav")',
-      'const $clicks = _vueInject(_injectionClicks)',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -370,11 +381,7 @@ ${title}
     if (code.includes('injectionSlidevContext') || code.includes('injectionClicks') || code.includes('const $slidev'))
       return code // Assume that the context is already imported and used
     const imports = [
-      'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
-      'import { injectionSlidevContext as _injectionSlidevContext, injectionClicks as _injectionClicks } from "@slidev/client/constants.ts"',
-      'const $slidev = _vueInject(_injectionSlidevContext)',
-      'const $nav = _vueToRef($slidev, "nav")',
-      'const $clicks = _vueInject(_injectionClicks)',
+      ...vueContextImports,
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {

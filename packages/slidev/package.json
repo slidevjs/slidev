@@ -80,7 +80,7 @@
     "markdown-it": "^13.0.1",
     "markdown-it-footnote": "^3.0.3",
     "markdown-it-link-attributes": "^4.0.1",
-    "markdown-it-mdc": "^0.1.1",
+    "markdown-it-mdc": "^0.1.2",
     "monaco-editor": "^0.37.1",
     "nanoid": "^4.0.2",
     "open": "^8.4.1",
