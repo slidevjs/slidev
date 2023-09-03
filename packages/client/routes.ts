@@ -67,10 +67,14 @@ export const router = createRouter({
 
 declare module 'vue-router' {
   interface RouteMeta {
+    // inherited from frontmatter
     layout: string
     name?: string
     class?: string
     clicks?: number
+    transition?: string | TransitionGroupProps | undefined
+
+    // slide info
     slide?: {
       start: number
       end: number
@@ -85,7 +89,7 @@ declare module 'vue-router' {
       content: string
       frontmatter: Record<string, any>
     }
-    transition?: string | TransitionGroupProps | undefined
+
     // private fields
     __clicksElements: HTMLElement[]
     __preloaded?: boolean

@@ -5,7 +5,6 @@ import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/util
 import fg from 'fast-glob'
 import fs, { existsSync } from 'fs-extra'
 import Markdown from 'markdown-it'
-import type { RouteMeta } from 'vue-router'
 import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
@@ -19,7 +18,7 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } 
 import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
-const regexIdQuery = /(\d+?)\.(md|json)$/
+const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
 const vueContextImports = [
   'import { inject as _vueInject, toRef as _vueToRef } from "vue"',
@@ -84,7 +83,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -196,9 +195,11 @@ export function createSlidesLoader(
         if (hmrPages.size > 0)
           moduleIds.add('/@slidev/titles.md')
 
-        const vueModules = Array.from(hmrPages).map(i =>
-          ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.md`),
-        )
+        const vueModules = Array.from(hmrPages)
+          .flatMap(i => [
+            ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.frontmatter`),
+            ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.md`),
+          ])
 
         hmrPages.clear()
 
@@ -258,13 +259,8 @@ export function createSlidesLoader(
           return {
             code: data.slides
               .filter(({ frontmatter }) => !frontmatter?.disabled)
-              .map(({ title }, i) => {
-                return `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">
-
-${title}
-
-</template>`
-              }).join(''),
+              .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">\n\n${title}\n\n</template>`)
+              .join(''),
             map: { mappings: '' },
           }
         }
@@ -276,9 +272,54 @@ ${title}
           if (match) {
             const [, no, type] = match
             const pageNo = Number.parseInt(no) - 1
+            const slide = data.slides[pageNo]
+            if (!slide)
+              return
+
             if (type === 'md') {
               return {
-                code: data.slides[pageNo]?.content,
+                code: slide?.content,
+                map: { mappings: '' },
+              }
+            }
+            else if (type === 'frontmatter') {
+              return {
+                code: [
+                  'import { reactive, computed } from "vue"',
+                  `export const frontmatter = reactive(${JSON.stringify(slide.frontmatter)})`,
+                  `export const meta = reactive({
+                    layout: computed(() => frontmatter.layout),
+                    transition: computed(() => frontmatter.transition),
+                    class: computed(() => frontmatter.class),
+                    clicks: computed(() => frontmatter.clicks),
+                    name: computed(() => frontmatter.name),
+                    slide: {
+                      ...(${JSON.stringify({
+                        ...prepareSlideInfo(slide),
+                        frontmatter: undefined,
+                        // remove raw content in build, optimize the bundle size
+                        ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+                      })}),
+                      frontmatter,
+                      filepath: ${JSON.stringify(slide.source?.filepath || entry)},
+                      id: ${pageNo},
+                      no: ${no},
+                    },
+                    __clicksElements: [],
+                    __preloaded: false,
+                  })`,
+                  'export default frontmatter',
+                  // handle HMR, update frontmatter with update
+                  'if (import.meta.hot) {',
+                  '  import.meta.hot.accept(({ frontmatter: update }) => {',
+                  '    if(!update) return',
+                  '    Object.keys(frontmatter).forEach(key => {',
+                  '      if (!(key in update)) delete frontmatter[key]',
+                  '    })',
+                  '    Object.assign(frontmatter, update)',
+                  '  })',
+                  '}',
+                ].join('\n'),
                 map: { mappings: '' },
               }
             }
@@ -333,7 +374,9 @@ ${title}
         if (!id.match(/\/@slidev\/slides\/\d+\.md($|\?)/))
           return
         // force reload slide component to ensure v-click resolves correctly
-        return code.replace('if (_rerender_only)', 'if (false)')
+        const replaced = code.replace('if (_rerender_only)', 'if (false)')
+        if (replaced !== code)
+          return replaced
       },
     },
   ]
@@ -362,8 +405,18 @@ ${title}
     const imports = [
       ...vueContextImports,
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      `const frontmatter = ${JSON.stringify(frontmatter)}`,
+      `import frontmatter from "${toAtFS(`${slidePrefix + (pageNo + 1)}.frontmatter`)}"`,
       'const $frontmatter = frontmatter',
+      // update frontmatter in router
+      ';(() => {',
+      '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page))',
+      '  if (route.meta.slide.frontmatter) {',
+      '    Object.keys(route.meta.slide.frontmatter).forEach(key => {',
+      '      if (!(key in $frontmatter)) delete route.meta.slide.frontmatter[key]',
+      '    })',
+      '    Object.assign(route.meta.slide.frontmatter, frontmatter)',
+      '  }',
+      '})();',
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -558,18 +611,8 @@ defineProps<{ no: number | string }>()`)
       .filter(({ frontmatter }) => !frontmatter?.disabled)
       .map((i, idx) => {
         imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-        const additions: Partial<RouteMeta> = {
-          slide: {
-            ...prepareSlideInfo(i),
-            filepath: i.source?.filepath || entry,
-            id: idx,
-            no,
-          },
-          __clicksElements: [],
-          __preloaded: false,
-        }
-        const meta = Object.assign({}, i.frontmatter, additions)
-        const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: ${JSON.stringify(meta)} }`
+        imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)
+        const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: f${no} }`
 
         if (i.frontmatter?.routeAlias)
           redirects.push(`{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }`)
