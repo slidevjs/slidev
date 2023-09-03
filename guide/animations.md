@@ -247,6 +247,31 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 - `slide-right` - Slides to the right (slide to left when going backward)
 - `slide-up` - Slides to the top (slide to bottom when going backward)
 - `slide-down` - Slides to the bottom (slide to top when going backward)
+- `view-transition` - Slides with the view transitions API
+
+### View Transitions
+
+> Available since v0.43.0
+
+The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more how it works in [View Transitions API - MDN Web Docs - Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
+
+:::warning
+Experimental: This is not supported by all browsers. Check the [Browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#browser_compatibility) carefully before using this.
+:::
+
+You can use the `view-transition-name` CSS property to name view transitions, which creates connections between different page elements and smooth transitions when switching slides.
+
+You can enable [MDC (Markdown Component) Syntax](https://content.nuxtjs.org/guide/writing/mdc) support to conveniently name view-transitions:
+
+```md
+---
+transition: view-transition
+mdc: true
+---
+# View Transition {.inline-block.view-transition-title}
+---
+# View Transition {.inline-block.view-transition-title}
+```
 
 ### Custom Transitions
 
