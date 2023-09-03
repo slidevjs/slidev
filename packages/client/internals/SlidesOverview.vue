@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
-import { computed, watchEffect } from 'vue'
+import { useEventListener, useVModel } from '@vueuse/core'
+import { computed, ref, watchEffect } from 'vue'
 import { themeVars } from '../env'
-import { breakpoints, windowSize } from '../state'
+import { breakpoints, showOverview, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { getSlideClass } from '../utils'
@@ -45,6 +45,42 @@ const cardWidth = computed(() => {
 
 const rowCount = computed(() => {
   return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+})
+
+const keyboardBuffer = ref<string>('')
+
+useEventListener('keypress', (e) => {
+  if (!showOverview.value) {
+    keyboardBuffer.value = ''
+    return
+  }
+  if (e.key === 'Enter' && keyboardBuffer.value) {
+    e.preventDefault()
+    go(+keyboardBuffer.value)
+    keyboardBuffer.value = ''
+    return
+  }
+  const num = Number.parseInt(e.key.replace(/[^0-9]/g, ''))
+  if (Number.isNaN(num)) {
+    keyboardBuffer.value = ''
+    return
+  }
+  if (!keyboardBuffer.value && num === 0)
+    return
+
+  keyboardBuffer.value += String(num)
+
+  // beyond the number of slides, reset
+  if (+keyboardBuffer.value >= rawRoutes.length) {
+    keyboardBuffer.value = ''
+    return
+  }
+
+  // When the input number is the largest at the number of digits, we go to that page directly.
+  if (+keyboardBuffer.value * 10 > rawRoutes.length) {
+    go(+keyboardBuffer.value)
+    keyboardBuffer.value = ''
+  }
 })
 
 watchEffect(() => {
@@ -101,10 +137,16 @@ watchEffect(() => {
             </SlideContainer>
           </div>
           <div
-            class="absolute top-0 opacity-50"
+            class="absolute top-0"
             :style="`left: ${cardWidth + 5}px`"
           >
-            {{ idx + 1 }}
+            <template v-if="keyboardBuffer && String(idx + 1).startsWith(keyboardBuffer)">
+              <span class="text-green font-bold">{{ keyboardBuffer }}</span>
+              <span class="opacity-50">{{ String(idx + 1).slice(keyboardBuffer.length) }}</span>
+            </template>
+            <span v-else class="opacity-50">
+              {{ idx + 1 }}
+            </span>
           </div>
         </div>
       </div>

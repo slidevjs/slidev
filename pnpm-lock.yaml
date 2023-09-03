@@ -427,8 +427,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       markdown-it-mdc:
-        specifier: ^0.1.2
-        version: 0.1.2(@types/markdown-it@13.0.1)(markdown-it@13.0.1)
+        specifier: ^0.1.3
+        version: 0.1.3(@types/markdown-it@13.0.1)(markdown-it@13.0.1)
       monaco-editor:
         specifier: ^0.37.1
         version: 0.37.1
@@ -6070,8 +6070,8 @@ packages:
     resolution: {integrity: sha512-pg5OK0jPLg62H4k7M9mRJLT61gUp9nvG0XveKYHMOOluASo9OEF13WlXrpAp2aj35LbedAy3QOCgQCw0tkLKAQ==}
     dev: false
 
-  /markdown-it-mdc@0.1.2(@types/markdown-it@13.0.1)(markdown-it@13.0.1):
-    resolution: {integrity: sha512-fyQyq5Lpc5FCU/kQSvsJTFyiR4HBJeD3ym4CcNzYktb62Tly8SFr2zk4X/cY6Je9MzgqGfXllzs7cZyhk+RoSw==}
+  /markdown-it-mdc@0.1.3(@types/markdown-it@13.0.1)(markdown-it@13.0.1):
+    resolution: {integrity: sha512-HHpN0KiRG96C/FhipO6/fAN/v0FgrM96AZLPiywQHuDIT/9GZN82xviuQPnR+u8rz0j66LVxlCkT2d0be0qgWw==}
     peerDependencies:
       '@types/markdown-it': ^13.0.1
       markdown-it: ^13.0.1

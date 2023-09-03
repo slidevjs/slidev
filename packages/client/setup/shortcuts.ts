@@ -1,5 +1,5 @@
 /* __imports__ */
-import { and, not } from '@vueuse/math'
+import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF, go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
@@ -8,7 +8,7 @@ import { drawingEnabled } from '../logic/drawings'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
 
 export default function setupShortcuts() {
-  const { escape, space, shift, left, right, up, down, enter, d, g, o } = magicKeys
+  const { escape, space, shift, left, right, up, down, enter, d, g, o, '`': backtick } = magicKeys
 
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -41,7 +41,7 @@ export default function setupShortcuts() {
     { name: 'next_shift', key: and(right, shift), fn: nextSlide, autoRepeat: true },
     { name: 'prev_shift', key: and(left, shift), fn: () => prevSlide(false), autoRepeat: true },
     { name: 'toggle_dark', key: and(d, not(drawingEnabled)), fn: toggleDark },
-    { name: 'toggle_overview', key: and(o, not(drawingEnabled)), fn: toggleOverview },
+    { name: 'toggle_overview', key: and(or(o, backtick), not(drawingEnabled)), fn: toggleOverview },
     { name: 'hide_overview', key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },
     { name: 'goto', key: and(g, not(drawingEnabled)), fn: () => showGotoDialog.value = !showGotoDialog.value },
     { name: 'next_overview', key: and(right, showOverview), fn: nextOverviewPage },
