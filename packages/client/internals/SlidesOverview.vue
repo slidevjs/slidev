@@ -76,6 +76,10 @@ useEventListener('keypress', (e) => {
     return
   }
 
+  const extactMatch = rawRoutes.findIndex(i => i.path === keyboardBuffer.value)
+  if (extactMatch !== -1)
+    currentOverviewPage.value = extactMatch + 1
+
   // When the input number is the largest at the number of digits, we go to that page directly.
   if (+keyboardBuffer.value * 10 > rawRoutes.length) {
     go(+keyboardBuffer.value)
@@ -115,7 +119,7 @@ watchEffect(() => {
         >
           <div
             class="inline-block border rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary transition"
-            :class="{ 'border-$slidev-theme-primary': focus(idx + 1), 'border-gray-400': !focus(idx + 1) }"
+            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-$slidev-theme-primary' : 'border-gray-400'"
             :style="themeVars"
             @click="go(+route.path)"
           >
