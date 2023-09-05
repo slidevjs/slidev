@@ -176,7 +176,7 @@ This shows on the left
 This shows on the right
 ```
 
-### `tow-cols-header`
+### `two-cols-header`
 
 Separates the upper and lower lines of the page content, and the second line separates the left and right columns.
 
