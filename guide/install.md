@@ -2,7 +2,7 @@
 
 ## Starter Template
 
-> Slidev requires [**Node.js >=14.0**](https://nodejs.org/)
+> Slidev requires [**Node.js >=18.0**](https://nodejs.org/)
 
 The best way to get started is using our official starter template.
 
