@@ -18,6 +18,7 @@ import { useClipboard } from '@vueuse/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { configs } from '../env'
 import { CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../constants'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   ranges: {
@@ -44,15 +45,6 @@ const props = defineProps({
 const clicks = inject(injectionClicks)
 const elements = inject(injectionClicksElements)
 const disabled = inject(injectionClicksDisabled)
-
-function makeId(length = 5) {
-  const result = []
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++)
-    result.push(characters.charAt(Math.floor(Math.random() * charactersLength)))
-  return result.join('')
-}
 
 const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
