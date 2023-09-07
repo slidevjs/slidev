@@ -1,3 +1,24 @@
+<!--
+Line highlighting for KaTex blocks/
+(auto transformed, you don't need to use this component directly)
+
+Usage:
+$$ {1|3|all}
+\begin{array}{c}
+
+\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
+= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+
+\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+
+\nabla \cdot \vec{\mathbf{B}} & = 0
+
+\end{array}
+$$
+
+Learn more: https://deploy-preview-145--slidev.netlify.app/guide/syntax.html#latex-line-highlighting
+-->
+
 <script setup lang="ts">
 import { range, remove } from '@antfu/utils'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
