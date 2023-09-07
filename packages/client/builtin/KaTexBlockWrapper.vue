@@ -16,7 +16,7 @@ $$ {1|3|all}
 \end{array}
 $$
 
-Learn more: https://deploy-preview-145--slidev.netlify.app/guide/syntax.html#latex-line-highlighting
+Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 -->
 
 <script setup lang="ts">
