@@ -6,6 +6,7 @@ exemptLabels:
   - no-stale
   - no stale
   - pr welcome
+  - help wanted
 staleLabel: stale
 markComment: >
   This issue has been automatically marked as stale because it has not had
