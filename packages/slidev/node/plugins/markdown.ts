@@ -94,11 +94,20 @@ export async function createMarkdownPlugin(
         code = monaco(code)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
+        code = transformKaTex(code)
 
         return code
       },
     },
   }) as Plugin
+}
+
+export function transformKaTex(md: string) {
+  return md.replace(/^\$\$(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^\$\$/mg, (full, rangeStr = '', _, code: string) => {
+    const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
+    code = code.trimEnd()
+    return `<KaTexBlockWrapper :ranges='${JSON.stringify(ranges)}'>\n\n\$\$\n${code}\n\$\$\n</KaTexBlockWrapper>\n`
+  })
 }
 
 export function transformMarkdownMonaco(md: string) {
