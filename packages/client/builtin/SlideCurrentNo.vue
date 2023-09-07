@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { injectionSlidevContext } from '../constants'
+import { injectionCurrentPage } from '../constants'
 
-const $slidev = inject(injectionSlidevContext)
+const $page = inject(injectionCurrentPage)
 </script>
 
 <template>
-  <span>{{ $slidev.nav.currentPage }}</span>
+  <span>{{ $page }}</span>
 </template>
