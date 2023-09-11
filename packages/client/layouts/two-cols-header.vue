@@ -11,6 +11,9 @@ This shows on the left
 ::right::
 # Right
 This shows on the right
+::bottom::
+# Bottom
+This shows at bottom, below left and right
 ```
 -->
 
@@ -36,6 +39,9 @@ const props = defineProps({
     <div class="col-right" :class="props.class">
       <slot name="right" />
     </div>
+    <div class="col-bottom" :class="props.class">
+      <slot name="bottom" />
+    </div>
   </div>
 </template>
 
@@ -49,4 +55,5 @@ const props = defineProps({
 .col-header { grid-area: 1 / 1 / 2 / 3; }
 .col-left { grid-area: 2 / 1 / 3 / 2; }
 .col-right { grid-area: 2 / 2 / 3 / 3; }
+.col-bottom { grid-area: 3 / 3 / 2 / 3; }
 </style>
