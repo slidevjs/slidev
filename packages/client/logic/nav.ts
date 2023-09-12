@@ -146,7 +146,7 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
 
       const x = Math.abs(distanceX.value)
       const y = Math.abs(distanceY.value)
-      if (x / window.innerWidth > 0.3 || x > 100) {
+      if (x / window.innerWidth > 0.3 || x > 75) {
         if (direction.value === 'left')
           next()
         else
