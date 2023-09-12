@@ -195,7 +195,7 @@ export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
       children: [],
       level,
       path: route.path,
-      hideInToc: Boolean(route.meta?.hideInToc),
+      hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })
   }
