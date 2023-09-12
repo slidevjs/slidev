@@ -14,6 +14,8 @@ import Titles from '/@slidev/titles.md'
 
 const props = withDefaults(defineProps<{
   level: number
+  start: number
+  listStyle?: string | string[]
   list: TocItem[]
   listClass?: string | string[]
 }>(), { level: 1 })
@@ -25,10 +27,20 @@ const classes = computed(() => {
     `slidev-toc-list-level-${props.level}`,
   ]
 })
+
+const styles = computed(() => {
+  return [
+    ...toArray(props.listStyle || [])
+  ]
+})
 </script>
 
 <template>
-  <ol v-if="list && list.length > 0" :class="classes">
+  <ol v-if="list && list.length > 0" 
+    :class="classes"
+    :start="level === 1 ? start : null"
+    :style="styles.length >= level ? 'list-style:' + styles[level-1] : null"
+  >
     <li
       v-for="item of list"
       :key="item.path" class="slidev-toc-item"
@@ -40,6 +52,7 @@ const classes = computed(() => {
       <TocList
         v-if="item.children.length > 0"
         :level="level + 1"
+        :listStyle="listStyle"
         :list="item.children"
         :list-class="listClass"
       />
