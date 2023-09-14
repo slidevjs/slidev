@@ -131,8 +131,8 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  *        The text to highlight.
  * @param lang
  *        Code of the language to highlight the text in.
- * @return {@code text} wrapped in {@code &lt;pre&gt;} and {@code &lt;code&gt;}, both equipped with the appropriate class
- *  (markdown-it’s langPrefix + lang). If Prism knows {@code lang}, {@code text} will be highlighted by it.
+ * @return {string} wrapped in `<pre>` and `<code>`, both equipped with the appropriate class
+ *  (markdown-it’s langPrefix + lang). If Prism knows `lang`, `text` will be highlighted by it.
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {
   const [langToUse, prismLang] = selectLanguage(options, lang)

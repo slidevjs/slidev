@@ -22,7 +22,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.41.0",
+    "@antfu/eslint-config": "^0.42.0",
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
     "@slidev/cli": "workspace:*",
@@ -35,7 +35,7 @@
     "@types/file-saver": "^2.0.5",
     "@types/fs-extra": "^11.0.1",
     "@types/js-yaml": "^4.0.5",
-    "@types/katex": "^0.16.2",
+    "@types/katex": "^0.16.3",
     "@types/localtunnel": "^2.0.2",
     "@types/markdown-it": "^13.0.1",
     "@types/node": "^20.6.0",
@@ -55,7 +55,7 @@
     "katex": "^0.16.8",
     "lint-staged": "^14.0.1",
     "mermaid": "^10.4.0",
-    "playwright-chromium": "^1.37.1",
+    "playwright-chromium": "^1.38.0",
     "pnpm": "^8.7.5",
     "rimraf": "^5.0.1",
     "simple-git-hooks": "^2.9.0",
@@ -64,7 +64,7 @@
     "vite": "^4.4.9",
     "vite-plugin-windicss": "^1.9.1",
     "vitest": "^0.34.4",
-    "vue-tsc": "^1.8.10",
+    "vue-tsc": "^1.8.11",
     "zx": "^7.2.3"
   },
   "simple-git-hooks": {
