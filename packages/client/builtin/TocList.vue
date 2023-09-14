@@ -14,7 +14,7 @@ import Titles from '/@slidev/titles.md'
 
 const props = withDefaults(defineProps<{
   level: number
-  start: number
+  start?: number
   listStyle?: string | string[]
   list: TocItem[]
   listClass?: string | string[]
@@ -30,16 +30,17 @@ const classes = computed(() => {
 
 const styles = computed(() => {
   return [
-    ...toArray(props.listStyle || [])
+    ...toArray(props.listStyle || []),
   ]
 })
 </script>
 
 <template>
-  <ol v-if="list && list.length > 0" 
+  <ol
+    v-if="list && list.length > 0"
     :class="classes"
-    :start="level === 1 ? start : null"
-    :style="styles.length >= level ? 'list-style:' + styles[level-1] : null"
+    :start="level === 1 ? start : undefined"
+    :style="styles.length >= level ? `list-style:${styles[level - 1]}` : undefined"
   >
     <li
       v-for="item of list"
@@ -52,7 +53,7 @@ const styles = computed(() => {
       <TocList
         v-if="item.children.length > 0"
         :level="level + 1"
-        :listStyle="listStyle"
+        :list-style="listStyle"
         :list="item.children"
         :list-class="listClass"
       />

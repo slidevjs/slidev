@@ -89,6 +89,12 @@ const toc = computed(() => {
 
 <template>
   <div class="slidev-toc" :style="`column-count:${columns}`">
-    <TocList :level="1" :start="start" :listStyle="listStyle" :list="toc" :list-class="listClass" />
+    <TocList
+      :level="1"
+      :start="start"
+      :list-style="listStyle"
+      :list="toc"
+      :list-class="listClass"
+    />
   </div>
 </template>
