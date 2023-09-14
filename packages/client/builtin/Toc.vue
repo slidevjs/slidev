@@ -16,6 +16,8 @@ const props = withDefaults(
   defineProps<{
     columns?: string | number
     listClass?: string | string[]
+    start?: string | number
+    listStyle?: string | string[]
     maxDepth?: string | number
     minDepth?: string | number
     mode?: 'all' | 'onlyCurrentTree' | 'onlySiblings'
@@ -23,6 +25,8 @@ const props = withDefaults(
   {
     columns: 1,
     listClass: '',
+    start: 1,
+    listStyle: '',
     maxDepth: Number.POSITIVE_INFINITY,
     minDepth: 1,
     mode: 'all',
@@ -85,6 +89,12 @@ const toc = computed(() => {
 
 <template>
   <div class="slidev-toc" :style="`column-count:${columns}`">
-    <TocList :level="1" :list="toc" :list-class="listClass" />
+    <TocList
+      :level="1"
+      :start="start"
+      :list-style="listStyle"
+      :list="toc"
+      :list-class="listClass"
+    />
   </div>
 </template>
