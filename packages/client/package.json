@@ -1,6 +1,6 @@
 {
   "name": "@packetsafari/client",
-  "version": "0.42.8",
+  "version": "0.42.13",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.5",
-    "@packetsafari/parser": "workspace:*",
-    "@packetsafari/types": "workspace:*",
+    "@slidev/parser": "link:../parser",
+    "@slidev/types": "link:../types",
     "@unocss/reset": "^0.54.1",
     "@vueuse/core": "^10.3.0",
     "@vueuse/head": "^1.1.26",

@@ -1,5 +1,5 @@
 {
-  "version": "0.42.6",
+  "version": "0.42.13",
   "private": true,
   "packageManager": "pnpm@8.6.11",
   "engines": {
@@ -25,9 +25,9 @@
     "@antfu/eslint-config": "^0.40.0",
     "@antfu/ni": "^0.21.5",
     "@antfu/utils": "^0.7.5",
-    "@packetsafari/cli": "workspace:*",
-    "@packetsafari/parser": "workspace:*",
-    "@packetsafari/types": "workspace:*",
+    "@slidev/cli": "link:../slidev",
+    "@slidev/parser": "link:../parser",
+    "@slidev/types": "link:../types",
     "@types/cli-progress": "^3.11.0",
     "@types/codemirror": "^5.60.8",
     "@types/connect": "^3.4.35",

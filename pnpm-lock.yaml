@@ -17,15 +17,15 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.5
         version: 0.7.5
-      '@packetsafari/cli':
-        specifier: workspace:*
-        version: link:packages/slidev
-      '@packetsafari/parser':
-        specifier: workspace:*
-        version: link:packages/parser
-      '@packetsafari/types':
-        specifier: workspace:*
-        version: link:packages/types
+      '@slidev/cli':
+        specifier: link:../slidev
+        version: 'link:'
+      '@slidev/parser':
+        specifier: link:../parser
+        version: link:../parser
+      '@slidev/types':
+        specifier: link:../types
+        version: link:../types
       '@types/cli-progress':
         specifier: ^3.11.0
         version: 3.11.0
@@ -147,76 +147,16 @@ importers:
         specifier: ^7.2.3
         version: 7.2.3
 
-  cypress/fixtures/basic:
-    devDependencies:
-      '@packetsafari/cli':
-        specifier: workspace:*
-        version: link:../../../packages/slidev
-      '@packetsafari/types':
-        specifier: workspace:*
-        version: link:../../../packages/types
-      '@slidev/theme-default':
-        specifier: ^0.21.2
-        version: 0.21.2
-      '@slidev/theme-seriph':
-        specifier: ^0.21.3
-        version: 0.21.3
-      nodemon:
-        specifier: ^3.0.1
-        version: 3.0.1
-
-  demo/composable-vue:
-    devDependencies:
-      '@iconify-json/mdi':
-        specifier: ^1.1.53
-        version: 1.1.53
-      '@iconify-json/ri':
-        specifier: ^1.1.11
-        version: 1.1.11
-      '@packetsafari/cli':
-        specifier: workspace:*
-        version: link:../../packages/slidev
-      '@packetsafari/types':
-        specifier: workspace:*
-        version: link:../../packages/types
-      '@slidev/theme-default':
-        specifier: ^0.21.2
-        version: 0.21.2
-      '@slidev/theme-seriph':
-        specifier: ^0.21.3
-        version: 0.21.3
-      nodemon:
-        specifier: ^3.0.1
-        version: 3.0.1
-
-  demo/starter:
-    devDependencies:
-      '@packetsafari/cli':
-        specifier: workspace:*
-        version: link:../../packages/slidev
-      '@packetsafari/types':
-        specifier: workspace:*
-        version: link:../../packages/types
-      '@slidev/theme-default':
-        specifier: ^0.21.2
-        version: 0.21.2
-      '@slidev/theme-seriph':
-        specifier: ^0.21.3
-        version: 0.21.3
-      nodemon:
-        specifier: ^3.0.1
-        version: 3.0.1
-
   packages/client:
     dependencies:
       '@antfu/utils':
         specifier: ^0.7.5
         version: 0.7.5
-      '@packetsafari/parser':
-        specifier: workspace:*
+      '@slidev/parser':
+        specifier: link:../parser
         version: link:../parser
-      '@packetsafari/types':
-        specifier: workspace:*
+      '@slidev/types':
+        specifier: link:../types
         version: link:../types
       '@unocss/reset':
         specifier: ^0.54.1
@@ -298,37 +238,10 @@ importers:
         specifier: ^4.4.8
         version: 4.4.8(@types/node@18.17.3)
 
-  packages/create-app:
-    dependencies:
-      execa:
-        specifier: ^5.1.1
-        version: 5.1.1
-      kolorist:
-        specifier: ^1.8.0
-        version: 1.8.0
-      minimist:
-        specifier: ^1.2.8
-        version: 1.2.8
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
-
-  packages/create-theme:
-    dependencies:
-      kolorist:
-        specifier: ^1.8.0
-        version: 1.8.0
-      minimist:
-        specifier: ^1.2.8
-        version: 1.2.8
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
-
   packages/parser:
     dependencies:
-      '@packetsafari/types':
-        specifier: workspace:*
+      '@slidev/types':
+        specifier: link:../types
         version: link:../types
       js-yaml:
         specifier: ^4.1.0
@@ -354,14 +267,14 @@ importers:
       '@mrdrogdrog/optional':
         specifier: ^1.2.1
         version: 1.2.1
-      '@packetsafari/client':
-        specifier: workspace:*
+      '@slidev/client':
+        specifier: link:../client
         version: link:../client
-      '@packetsafari/parser':
-        specifier: workspace:*
+      '@slidev/parser':
+        specifier: link:../parser
         version: link:../parser
-      '@packetsafari/types':
-        specifier: workspace:*
+      '@slidev/types':
+        specifier: link:../types
         version: link:../types
       '@vitejs/plugin-vue':
         specifier: ^4.2.3
@@ -1295,26 +1208,15 @@ packages:
       '@iconify/types': 2.0.0
     dev: false
 
-  /@iconify-json/mdi@1.1.53:
-    resolution: {integrity: sha512-qG72Tc9Bd4w7fha+kMEySVTbH4Obgb9xA1mQl+WReFhtZ3PjcVpIWLgZGTewuIfZY8RAbd8zfAqhZ7qEYZWrhg==}
-    dependencies:
-      '@iconify/types': 2.0.0
-    dev: true
-
   /@iconify-json/ph@1.1.5:
     resolution: {integrity: sha512-iLXq3nohfGge22gL2tZmQ2WHBKkKkIbGWrkuyC8arckS4PWaONyh4A+uDPtSek9QbYDvi9AE2+NxWkNZhANotA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: false
 
-  /@iconify-json/ri@1.1.11:
-    resolution: {integrity: sha512-1jHNoEslFk7l9Wh5qWhV2kV4ArEc3WB88wmwy3Hz93hlqGacXd5ufJe1lJW69Ej5BQeZVSnaP9pCOX/z311aUw==}
-    dependencies:
-      '@iconify/types': 2.0.0
-    dev: true
-
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+    dev: false
 
   /@iconify/utils@2.1.7:
     resolution: {integrity: sha512-P8S3z/L1LcV4Qem9AoCfVAaTFGySEMzFEY4CHZLkfRj0Fv9LiR+AwjDgrDrzyI93U2L2mg9JHsbTJ52mF8suNw==}
@@ -1517,31 +1419,6 @@ packages:
 
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
-    dev: true
-
-  /@slidev/theme-default@0.21.2:
-    resolution: {integrity: sha512-neUucFs2YrRZZd73QwvLTyRG/o1nerDFUR5t8YAmXVLTMzWfY71flQ6aAhjYf+WjsozYsOHcxi/pZtIzZ4VhTQ==}
-    engines: {node: '>=14.0.0', slidev: '>=0.19.2'}
-    dependencies:
-      '@slidev/types': 0.22.7
-      codemirror-theme-vars: 0.1.1
-      prism-theme-vars: 0.2.4
-      theme-vitesse: 0.1.14
-    dev: true
-
-  /@slidev/theme-seriph@0.21.3:
-    resolution: {integrity: sha512-cLya6O4hmcLHUhloCMPPoKMLX27Q+8M8pRS82BSsLXVeXTXrlpc3l3glx5VB738p+NQr7FgqFN6H2CXQRoVv9Q==}
-    engines: {node: '>=14.0.0', slidev: '>=0.19.3'}
-    dependencies:
-      '@slidev/types': 0.22.7
-      codemirror-theme-vars: 0.1.1
-      prism-theme-vars: 0.2.4
-      theme-vitesse: 0.1.14
-    dev: true
-
-  /@slidev/types@0.22.7:
-    resolution: {integrity: sha512-mCVKQbcGTv6d6n9aHpYNp5U04HF+FMbpY083vqpJ6Folc805BB1Am02eubaW0J6nM+dSOu2dDgPY+kIjs75sAQ==}
-    engines: {node: '>=14.0.0'}
     dev: true
 
   /@types/chai-subset@1.3.3:
@@ -2523,10 +2400,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /abbrev@1.1.1:
-    resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
-    dev: true
-
   /acorn-jsx@5.3.2(acorn@8.9.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -3061,10 +2934,6 @@ packages:
       wrap-ansi: 7.0.0
     dev: false
 
-  /codemirror-theme-vars@0.1.1:
-    resolution: {integrity: sha512-Au0Ysn6tUMZB/1Jd5S8g4Or1kZxTuTnNx6MVs9H46Ad7w8IEjkHusH+4oyia/FBcVuAJO4DIlkDnPM8Qnnf1rg==}
-    dev: true
-
   /codemirror@5.65.11:
     resolution: {integrity: sha512-Gp62g2eKSCHYt10axmGhKq3WoJSvVpvhXmowNq7pZdRVowwtvBR/hi2LSP5srtctKkRT33T6/n8Kv1UGp7JW4A==}
     dev: false
@@ -3550,18 +3419,6 @@ packages:
     dependencies:
       ms: 2.0.0
     dev: false
-
-  /debug@3.2.7(supports-color@5.5.0):
-    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.3
-      supports-color: 5.5.0
-    dev: true
 
   /debug@3.2.7(supports-color@8.1.1):
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -5130,10 +4987,6 @@ packages:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: true
 
-  /ignore-by-default@1.0.1:
-    resolution: {integrity: sha512-Ius2VYcGNk7T90CppJqcIkS5ooHUZyIQK+ClZfMfMNFEF9VSE73Fq+906u/CWu92x4gzZMWOwfFYckPObzdEbA==}
-    dev: true
-
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
@@ -6006,6 +5859,7 @@ packages:
 
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: true
 
   /minipass@3.3.6:
     resolution: {integrity: sha512-DxiNidxSEK+tHG6zOIklvNOwm3hvCrbUrdtzY74U6HKTJxvIDfOUL5W5P2Ghd3DTkhhKPYGqeNUIh5qcM4YBfw==}
@@ -6130,32 +5984,8 @@ packages:
     resolution: {integrity: sha512-dFSmB8fFHEH/s81Xi+Y/15DQY6VHW81nXRj86EMSL3lmuTmK1e+aT4wrFCkTbm+gSwkw4KpX+rT/pMM2c1mF+A==}
     dev: false
 
-  /nodemon@3.0.1:
-    resolution: {integrity: sha512-g9AZ7HmkhQkqXkRc20w+ZfQ73cHLbE8hnPbtaFbFtCumZsjyMhKk9LajQ07U5Ux28lvFjZ5X7HvWR1xzU8jHVw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      chokidar: 3.5.3
-      debug: 3.2.7(supports-color@5.5.0)
-      ignore-by-default: 1.0.1
-      minimatch: 3.1.2
-      pstree.remy: 1.1.8
-      semver: 7.5.4
-      simple-update-notifier: 2.0.0
-      supports-color: 5.5.0
-      touch: 3.1.0
-      undefsafe: 2.0.5
-    dev: true
-
   /non-layered-tidy-tree-layout@2.0.2:
     resolution: {integrity: sha512-gkXMxRzUH+PB0ax9dUN0yYF0S25BqeAYqhgMaLUFmpXLEk7Fcu8f4emJuOAY0V8kjDICxROIKsTAKsV/v355xw==}
-
-  /nopt@1.0.10:
-    resolution: {integrity: sha512-NWmpvLSqUrgrAC9HCuxEvb+PSloHpqVu+FqcO4eeF2h5qYRhA7ev6KvelyQAKtegUbC6RypJnlEOhd8vloNKYg==}
-    hasBin: true
-    dependencies:
-      abbrev: 1.1.1
-    dev: true
 
   /normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
@@ -6598,10 +6428,6 @@ packages:
       react-is: 18.2.0
     dev: true
 
-  /prism-theme-vars@0.2.4:
-    resolution: {integrity: sha512-B3Pht+GCT87sZph7hMRLlCQXzCM0awW7Rhk08RavpqRW4LEQOeqN0uMG4QCWkul2tr8PB61YAOJGUrEW+1uuJA==}
-    dev: true
-
   /prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
     engines: {node: '>=6'}
@@ -6644,10 +6470,6 @@ packages:
 
   /psl@1.9.0:
     resolution: {integrity: sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag==}
-    dev: true
-
-  /pstree.remy@1.1.8:
-    resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
     dev: true
 
   /pump@3.0.0:
@@ -6945,13 +6767,6 @@ packages:
     requiresBuild: true
     dev: true
 
-  /simple-update-notifier@2.0.0:
-    resolution: {integrity: sha512-a2B9Y0KlNXl9u/vsW6sTIu9vGEpfKu2wRV6l1H3XEas/0gUIzGzBoP/IouTcUQbm9JWZLH3COxyn03TYlFax6w==}
-    engines: {node: '>=10'}
-    dependencies:
-      semver: 7.5.4
-    dev: true
-
   /sirv@2.0.3:
     resolution: {integrity: sha512-O9jm9BsID1P+0HOi81VpXPoDxYP374pkOLzACAoyUQ/3OUVndNpsz6wMnY2z+yOxzbllCKZrM+9QrWsv4THnyA==}
     engines: {node: '>= 10'}
@@ -7232,11 +7047,6 @@ packages:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
 
-  /theme-vitesse@0.1.14:
-    resolution: {integrity: sha512-b5s+Zpfaw5+djoCJ9AEbcTbpiTlLsOvGM9oblDmmWRGWNqg9oXtEYO/uwubwx77novHBI6zNuwZRHKNlAIBo4A==}
-    engines: {vscode: ^1.43.0}
-    dev: true
-
   /thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
     engines: {node: '>=0.8'}
@@ -7297,13 +7107,6 @@ packages:
   /totalist@3.0.0:
     resolution: {integrity: sha512-eM+pCBxXO/njtF7vdFsHuqb+ElbxqtI4r5EAvk6grfAFyJ6IvWlSkfZ5T9ozC6xWw3Fj1fGoSmrl0gUs46JVIw==}
     engines: {node: '>=6'}
-
-  /touch@3.1.0:
-    resolution: {integrity: sha512-WBx8Uy5TLtOSRtIq+M03/sKDrXCLHxwDcquSP2c43Le03/9serjQBIztjRz6FkJez9D/hleyAXTBGLwwZUw9lA==}
-    hasBin: true
-    dependencies:
-      nopt: 1.0.10
-    dev: true
 
   /tough-cookie@2.5.0:
     resolution: {integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==}
@@ -7483,10 +7286,6 @@ packages:
       unplugin: 1.3.1
     dev: false
     optional: true
-
-  /undefsafe@2.0.5:
-    resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
-    dev: true
 
   /unhead@1.1.26:
     resolution: {integrity: sha512-MshcPoPLXSGRgYtczddGvMgLUISTbt2pxihqD5kZVXKmY2FZLj1OQIY111aX45Xq47XJxjvYavvoyeUFroKQcg==}

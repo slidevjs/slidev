@@ -1,6 +1,6 @@
 {
   "name": "@packetsafari/parser",
-  "version": "0.42.7",
+  "version": "0.42.13",
   "description": "Markdown parser for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -44,7 +44,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@packetsafari/types": "workspace:*",
+    "@slidev/types": "link:../types",
     "js-yaml": "^4.1.0"
   }
 }
