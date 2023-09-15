@@ -44,7 +44,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@slidev/types": "link:../types",
+    "@packetsafari/types": "workspace:*",
     "js-yaml": "^4.1.0"
   }
 }
