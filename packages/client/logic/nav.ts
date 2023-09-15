@@ -147,7 +147,7 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
 
       const x = Math.abs(distanceX.value)
       const y = Math.abs(distanceY.value)
-      if (x / window.innerWidth > 0.3 || x > 100) {
+      if (x / window.innerWidth > 0.3 || x > 75) {
         if (direction.value === 'left')
           next()
         else
@@ -196,7 +196,7 @@ export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
       children: [],
       level,
       path: route.path,
-      hideInToc: Boolean(route.meta?.hideInToc),
+      hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })
   }

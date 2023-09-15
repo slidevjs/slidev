@@ -1,6 +1,6 @@
 /* eslint-disable import/no-duplicates */
 import type { Awaitable } from '@antfu/utils'
-import type { ILanguageRegistration, IThemeRegistration, Highlighter as ShikiHighlighter } from 'shiki'
+import type { ILanguageRegistration, IThemeRegistration, Lang, Highlighter as ShikiHighlighter, Theme } from 'shiki'
 import type * as Shiki from 'shiki'
 import type * as monaco from 'monaco-editor'
 import type { App, Ref } from 'vue'
@@ -17,14 +17,22 @@ export interface AppContext {
 }
 
 export interface ShikiDarkModeThemes {
-  dark: IThemeRegistration
-  light: IThemeRegistration
+  dark: IThemeRegistration | Theme
+  light: IThemeRegistration | Theme
 }
 
 export interface ShikiOptions {
-  theme?: IThemeRegistration | ShikiDarkModeThemes
-  langs?: ILanguageRegistration[]
+  theme?: IThemeRegistration | ShikiDarkModeThemes | Theme
+  langs?: (ILanguageRegistration | Lang)[]
   highlighter?: ShikiHighlighter
+}
+
+export interface ResolvedShikiOptions extends ShikiOptions {
+  themes: (IThemeRegistration | Theme)[]
+  darkModeThemes?: {
+    dark: Theme
+    light: Theme
+  }
 }
 
 export interface MonacoSetupReturn {
@@ -32,6 +40,7 @@ export interface MonacoSetupReturn {
     light?: string
     dark?: string
   }
+  editorOptions?: monaco.editor.IEditorOptions
 }
 
 export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never

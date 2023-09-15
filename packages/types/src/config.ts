@@ -198,6 +198,21 @@ export interface SlidevConfig {
    * @see https://vuejs.org/guide/built-ins/transition.html
    */
   transition?: BuiltinSlideTransition | string | TransitionGroupProps
+  /**
+   * Suppport **experimental** MDC syntax
+   *
+   * @see https://github.com/antfu/markdown-it-mdc
+   * @see https://content.nuxtjs.org/guide/writing/mdc
+   * @experimental
+   * @default false
+   */
+  mdc?: boolean
+  /**
+   * Enable built-in editor
+   *
+   * @default true
+   */
+  editor: boolean
 }
 
 export interface FontOptions {
@@ -229,7 +244,6 @@ export interface FontOptions {
    * @default false
    */
   italic?: boolean
-
   /**
    * @default 'google'
    */

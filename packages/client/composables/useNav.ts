@@ -28,6 +28,7 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
   const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
   return {
+    rawRoutes,
     route,
     path,
     total,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, shallowRef, watch } from 'vue'
-import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
+import { TransitionGroup, computed, shallowRef, watch } from 'vue'
+import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, router, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
+import { useViewTransition } from '../composables/useViewTransition'
 import SlideWrapper from './SlideWrapper'
 
 // @ts-expect-error virtual module
@@ -21,6 +22,14 @@ watch(currentRoute, () => {
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
 
+const hasViewTransition = useViewTransition()
+
+// preserve the clicks count for previous slide to avoid flash on transition
+let previousClicks: [string | undefined, number] = [] as any
+router.beforeEach(() => {
+  previousClicks = [currentRoute.value?.path, clicks.value]
+})
+
 const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
@@ -33,12 +42,16 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   <GlobalBottom />
 
   <!-- Slides -->
-  <TransitionGroup v-bind="transition" id="slideshow" tag="div">
+  <component
+    :is="hasViewTransition ? 'div' : TransitionGroup"
+    v-bind="transition"
+    id="slideshow" tag="div"
+  >
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
         :is="route?.component as any"
         v-show="route === currentRoute"
-        :clicks="route === currentRoute ? clicks : 0"
+        :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
         :clicks-elements="route.meta?.__clicksElements || []"
         :clicks-disabled="false"
         :class="getSlideClass(route)"
@@ -46,7 +59,7 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
         :context="context"
       />
     </template>
-  </TransitionGroup>
+  </component>
 
   <!-- Global Top -->
   <GlobalTop />

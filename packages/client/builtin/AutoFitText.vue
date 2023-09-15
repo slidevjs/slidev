@@ -1,5 +1,5 @@
 <!--
-[Expiremental]
+[Experimental]
 
 Think this component as the TextBox you that will see
 in PowerPoint or Keynote. It will automatically resize

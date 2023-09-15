@@ -25,7 +25,7 @@ export async function getThemeMeta(name: string, path: string) {
   if (path) {
     const { slidev = {}, engines = {} } = await fs.readJSON(path)
 
-    if (engines.slidev && !satisfies(version, engines.slidev))
+    if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
       throw new Error(`[slidev] theme "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
 
     return slidev as SlidevThemeMeta

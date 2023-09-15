@@ -1,0 +1,5 @@
+.slidev-katex-wrapper .mord.highlighted {
+}
+.slidev-katex-wrapper .mord.dishonored {
+  opacity: 0.3;
+}

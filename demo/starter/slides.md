@@ -13,6 +13,7 @@ drawings:
   persist: false
 transition: slide-left
 title: Welcome to Slidev
+mdc: true
 ---
 
 # Welcome to Slidev
@@ -87,15 +88,14 @@ layout: default
 
 # Table of contents
 
-```
-<Toc minDepth="1" maxDepth="5"></Toc>
+```html
+<Toc minDepth="1" maxDepth="1"></Toc>
 ```
 
-<Toc></Toc>
+<Toc maxDepth="1"></Toc>
 
 ---
 transition: slide-up
-
 level: 2
 ---
 
@@ -144,7 +144,7 @@ function updateUser(id: number, update: User) {
 }
 ```
 
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+<arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
 
 [^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
 
@@ -321,7 +321,7 @@ LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
 Inline $\sqrt{3x-1}+(1+x)^2$
 
 Block
-$$
+$$ {1|3|all}
 \begin{array}{c}
 
 \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &

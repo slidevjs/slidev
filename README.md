@@ -61,7 +61,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ### Init Project Locally
 
-Install [Node.js >=14](https://nodejs.org/) and run the following command:
+Install [Node.js >=18](https://nodejs.org/) and run the following command:
 
 ```bash
 npm init slidev

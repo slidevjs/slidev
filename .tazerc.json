@@ -4,6 +4,7 @@
     "execa",
     "codemirror",
     "monaco-editor",
-    "open"
+    "open",
+    "cypress"
   ]
 }

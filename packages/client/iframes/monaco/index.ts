@@ -16,6 +16,7 @@ const props = {
   lineNumbers: url.searchParams.get('lineNumbers') ?? 'off',
   dark: false,
   style: '',
+  editorOptions: {},
 }
 
 const styleObject = document.createElement('style')
@@ -65,7 +66,7 @@ function post(data: any, type = 'slidev-monaco') {
 }
 
 async function start() {
-  const { monaco, theme = {} } = await setupMonaco()
+  const { monaco, theme = {}, editorOptions = {} } = await setupMonaco()
 
   const style = getComputedStyle(document.documentElement)
   const container = document.getElementById('container')!
@@ -106,6 +107,7 @@ async function start() {
       enableSplitViewResizing: false,
       renderOverviewRuler: false,
       // renderSideBySide: false,
+      ...editorOptions,
     })
     monacoEditor.setModel({
       original: model,
@@ -146,6 +148,7 @@ async function start() {
         if (selection)
           originalEditor.setSelection(selection)
       }
+      originalEditor.updateOptions(props.editorOptions)
 
       if (modifiedEditor.getValue().toString() !== props.diff) {
         const selection = modifiedEditor.getSelection()
@@ -153,6 +156,7 @@ async function start() {
         if (selection)
           modifiedEditor.setSelection(selection)
       }
+      modifiedEditor.updateOptions(props.editorOptions)
     }
 
     diffModel.onDidChangeContent(() => {
@@ -191,6 +195,7 @@ async function start() {
       },
       overviewRulerLanes: 0,
       minimap: { enabled: false },
+      ...editorOptions,
     })
 
     format = async () => {
@@ -218,6 +223,7 @@ async function start() {
         if (selection)
           originalEditor.setSelection(selection)
       }
+      originalEditor.updateOptions(props.editorOptions)
     }
   }
 

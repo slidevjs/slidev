@@ -32,7 +32,7 @@ useSwipeControls(root)
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const Editor = shallowRef<any>()
-if (__DEV__)
+if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
   import('./Editor.vue').then(v => Editor.value = v.default)
 
 const DrawingControls = shallowRef<any>()
@@ -69,8 +69,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
     </SlideContainer>
 
-    <template v-if="__DEV__">
-      <Editor v-if="Editor && showEditor" />
+    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor">
+      <Editor :resize="true" />
     </template>
   </div>
   <Controls />

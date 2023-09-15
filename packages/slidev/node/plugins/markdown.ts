@@ -1,4 +1,4 @@
-import Markdown from 'vite-plugin-vue-markdown'
+import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
@@ -12,8 +12,8 @@ import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
-import * as Shiki from 'shiki'
 import { encode } from 'plantuml-encoder'
+import Mdc from 'markdown-it-mdc'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -35,19 +35,23 @@ export async function createMarkdownPlugin(
   const entryPath = slash(entry)
 
   if (config.highlighter === 'shiki') {
-    const { getHighlighter } = await import('shiki')
+    const Shiki = await import('shiki')
     const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', Shiki, DEFAULT_SHIKI_OPTIONS, false)
     const { langs, themes } = resolveShikiOptions(shikiOptions)
-    shikiOptions.highlighter = await getHighlighter({ themes, langs })
+    shikiOptions.highlighter = await Shiki.getHighlighter({ themes, langs })
     setups.push(md => md.use(MarkdownItShiki, shikiOptions))
   }
   else {
     setups.push(md => md.use(Prism))
   }
 
+  if (config.mdc)
+    setups.push(md => md.use(Mdc))
+
   const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, { strict: false }, false)
 
   return Markdown({
+    include: [/\.md$/],
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,
@@ -90,10 +94,19 @@ export async function createMarkdownPlugin(
         code = monaco(code)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
+        code = transformKaTex(code)
 
         return code
       },
     },
+  }) as Plugin
+}
+
+export function transformKaTex(md: string) {
+  return md.replace(/^\$\$(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^\$\$/mg, (full, rangeStr = '', _, code: string) => {
+    const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
+    code = code.trimEnd()
+    return `<KaTexBlockWrapper :ranges='${JSON.stringify(ranges)}'>\n\n\$\$\n${code}\n\$\$\n</KaTexBlockWrapper>\n`
   })
 }
 

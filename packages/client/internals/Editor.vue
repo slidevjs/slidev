@@ -6,6 +6,10 @@ import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 
+const props = defineProps<{
+  resize: boolean
+}>()
+
 const tab = ref<'content' | 'note'>('content')
 const content = ref('')
 const note = ref('')
@@ -103,16 +107,19 @@ function switchTab(newTab: typeof tab.value) {
   // @ts-expect-error force cast
   document.activeElement?.blur?.()
 }
-useEventListener('pointermove', (e) => {
-  if (handlerDown.value)
-    updateWidth(window.innerWidth - e.pageX)
-}, { passive: true })
-useEventListener('pointerup', () => {
-  handlerDown.value = false
-})
-useEventListener('resize', () => {
-  updateWidth(editorWidth.value)
-})
+
+if (props.resize) {
+  useEventListener('pointermove', (e) => {
+    if (handlerDown.value)
+      updateWidth(window.innerWidth - e.pageX)
+  }, { passive: true })
+  useEventListener('pointerup', () => {
+    handlerDown.value = false
+  })
+  useEventListener('resize', () => {
+    updateWidth(editorWidth.value)
+  })
+}
 
 throttledWatch(
   [content, note],
@@ -126,14 +133,16 @@ throttledWatch(
 
 <template>
   <div
+    v-if="resize"
     class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
     :class="{ '!opacity-30': handlerDown }"
     :style="{ right: `${editorWidth - 5}px`, cursor: 'col-resize' }"
     @pointerdown="onHandlerDown"
   />
   <div
-    class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden border-l border-gray-400 border-opacity-20"
-    :style="{ width: `${editorWidth}px` }"
+    class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
+    :class="resize ? 'border-l border-gray-400 border-opacity-20' : ''"
+    :style="resize ? { width: `${editorWidth}px` } : {}"
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
