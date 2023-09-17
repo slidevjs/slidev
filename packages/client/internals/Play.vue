@@ -51,7 +51,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       @pointerdown="onClick"
     >
       <template #default>
-        <SlidesShow context="slide" />
+        <SlidesShow render-context="slide" />
       </template>
       <template #controls>
         <div

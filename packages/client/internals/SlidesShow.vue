@@ -12,7 +12,9 @@ import GlobalTop from '/@slidev/global-components/top'
 import GlobalBottom from '/@slidev/global-components/bottom'
 import PresenterMouse from './PresenterMouse.vue'
 
-defineProps<{ context: 'slide' | 'presenter' }>()
+defineProps<{
+  renderContext: 'slide' | 'presenter'
+}>()
 
 // preload next route
 watch(currentRoute, () => {
@@ -56,7 +58,7 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
         :clicks-disabled="false"
         :class="getSlideClass(route)"
         :route="route"
-        :context="context"
+        :render-context="renderContext"
       />
     </template>
   </component>

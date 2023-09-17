@@ -108,7 +108,7 @@ onMounted(() => {
           class="h-full w-full"
         >
           <template #default>
-            <SlidesShow context="presenter" />
+            <SlidesShow render-context="presenter" />
           </template>
         </SlideContainer>
         <div class="context">
@@ -128,7 +128,7 @@ onMounted(() => {
             :clicks-disabled="false"
             :class="getSlideClass(nextSlide.route)"
             :route="nextSlide.route"
-            context="previewNext"
+            render-context="previewNext"
           />
         </SlideContainer>
         <div class="context">

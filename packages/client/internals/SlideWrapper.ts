@@ -1,8 +1,8 @@
 import { useVModel } from '@vueuse/core'
 import type { Ref } from 'vue'
-import { defineComponent, h, provide, toRef } from 'vue'
+import { defineComponent, h, provide, ref, toRef } from 'vue'
 import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRoute, injectionSlideContext } from '../constants'
+import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
@@ -23,7 +23,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    context: {
+    renderContext: {
       type: String,
       default: 'main',
     },
@@ -49,8 +49,8 @@ export default defineComponent({
     clicksElements.value.length = 0
 
     provide(injectionRoute, props.route as any)
-    provide(injectionCurrentPage, +props.route?.path)
-    provide(injectionSlideContext, props.context as RenderContext)
+    provide(injectionCurrentPage, ref(+props.route?.path))
+    provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
     provide(injectionClicks, clicks as Ref<number>)
     provide(injectionClicksDisabled, clicksDisabled)

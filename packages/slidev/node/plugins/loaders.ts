@@ -26,14 +26,14 @@ const vueContextImports = [
     injectionSlidevContext as _injectionSlidevContext, 
     injectionClicks as _injectionClicks,
     injectionCurrentPage as _injectionCurrentPage,
-    injectionSlideContext as _injectionSlideContext,
+    injectionRenderContext as _injectionRenderContext,
     injectionFrontmatter as _injectionFrontmatter,
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
   'const $clicks = _vueInject(_injectionClicks)',
   'const $page = _vueInject(_injectionCurrentPage)',
-  'const $renderContext = _vueInject(_injectionSlideContext)',
+  'const $renderContext = _vueInject(_injectionRenderContext)',
 ]
 
 export function getBodyJson(req: Connect.IncomingMessage) {
@@ -411,8 +411,8 @@ export function createSlidesLoader(
       '_vueProvide(_injectionFrontmatter, frontmatter)',
       // update frontmatter in router
       ';(() => {',
-      '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page))',
-      '  if (route.meta.slide.frontmatter) {',
+      '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page.value))',
+      '  if (route?.meta?.slide?.frontmatter) {',
       '    Object.keys(route.meta.slide.frontmatter).forEach(key => {',
       '      if (!(key in $frontmatter)) delete route.meta.slide.frontmatter[key]',
       '    })',

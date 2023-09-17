@@ -1,12 +1,12 @@
 import type { App } from 'vue'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { ComputedRef } from '@vue/reactivity'
 import type { configs } from '../env'
 import * as nav from '../logic/nav'
 import { clicks, route } from '../logic/nav'
 import { isDark } from '../logic/dark'
-import { injectionSlidevContext } from '../constants'
+import { injectionClicks, injectionCurrentPage, injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 
 export type SlidevContextNavKey = 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide' | 'rawRoutes'
@@ -26,8 +26,10 @@ export interface SlidevContext {
 export default function createSlidevContext() {
   return {
     install(app: App) {
-      const context = useContext(route, clicks)
-      app.provide(injectionSlidevContext, reactive(context))
+      const context = reactive(useContext(route, clicks))
+      app.provide(injectionSlidevContext, context)
+      app.provide(injectionCurrentPage, computed(() => context.nav.currentPage))
+      app.provide(injectionClicks, computed(() => context.nav.clicks))
 
       // allows controls from postMessages
       if (__DEV__) {

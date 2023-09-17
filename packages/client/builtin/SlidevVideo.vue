@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
 
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionRoute, injectionSlideContext, injectionSlidevContext } from '../constants'
+import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const $slidev = inject(injectionSlidevContext)
 const route = inject(injectionRoute)
-const currentContext = inject(injectionSlideContext)
+const currentContext = inject(injectionRenderContext)
 const clicks = inject(injectionClicks)
 const clicksDisabled = inject(injectionClicksDisabled)
 const clicksElements = inject(injectionClicksElements)
@@ -21,13 +21,13 @@ const played = ref(false)
 const ended = ref(false)
 
 const matchRoute = computed(() => {
-  if (!video.value || currentContext !== 'slide')
+  if (!video.value || currentContext?.value !== 'slide')
     return false
   return route === $slidev?.nav.currentRoute
 })
 
 const matchClick = computed(() => {
-  if (!video.value || currentContext !== 'slide' || clicks?.value === undefined || clicksDisabled?.value)
+  if (!video.value || currentContext?.value !== 'slide' || clicks?.value === undefined || clicksDisabled?.value)
     return false
   return !clicksElements?.value.includes(video.value) || clicksElements?.value[clicks?.value - 1] === video.value
 })
@@ -35,7 +35,7 @@ const matchClick = computed(() => {
 const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)
 
 watch(matchRouteAndClick, () => {
-  if (!video.value || currentContext !== 'slide')
+  if (!video.value || currentContext?.value !== 'slide')
     return
 
   if (matchRouteAndClick.value) {
@@ -50,7 +50,7 @@ watch(matchRouteAndClick, () => {
 })
 
 watch(matchRoute, () => {
-  if (!video.value || currentContext !== 'slide')
+  if (!video.value || currentContext?.value !== 'slide')
     return
 
   if (matchRoute.value && props.autoReset === 'slide')
@@ -66,14 +66,14 @@ function onEnded() {
 }
 
 onMounted(() => {
-  if (!video.value || currentContext !== 'slide')
+  if (!video.value || currentContext?.value !== 'slide')
     return
   video.value?.addEventListener('play', onPlay)
   video.value?.addEventListener('ended', onEnded)
 })
 
 onUnmounted(() => {
-  if (!video.value || currentContext !== 'slide')
+  if (!video.value || currentContext?.value !== 'slide')
     return
   video.value?.removeEventListener('play', onPlay)
   video.value?.removeEventListener('ended', onEnded)

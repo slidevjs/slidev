@@ -2,7 +2,7 @@
 import { computed, inject } from 'vue'
 import type { RenderContext } from '@slidev/types'
 
-import { injectionSlideContext } from '../constants'
+import { injectionRenderContext } from '../constants'
 
 type Context = 'main' | RenderContext
 
@@ -11,14 +11,14 @@ const props = defineProps<{
 }>()
 const { context } = props
 
-const currentContext = inject(injectionSlideContext)
+const currentContext = inject(injectionRenderContext)
 
 const shouldRender = computed(() => Array.isArray(context) ? context.some(contextMatch) : contextMatch(context))
 
 function contextMatch(context: Context) {
-  if (context === currentContext)
+  if (context === currentContext?.value)
     return true
-  if (context === 'main' && (currentContext === 'slide' || currentContext === 'presenter'))
+  if (context === 'main' && (currentContext?.value === 'slide' || currentContext?.value === 'presenter'))
     return true
   return false
 }
