@@ -36,7 +36,7 @@ export async function createUnocssPlugin(
 
   let config = mergeConfigs([...configs, unoOptions as UserConfig<Theme>])
 
-  config = await loadSetups(roots, 'unocss.ts', {}, config, true)
+  config = await loadSetups(roots, 'unocss.ts', {}, config, (a, b) => mergeConfigs([a, b]))
 
   config.theme ||= {}
   config.theme.fontFamily ||= {}

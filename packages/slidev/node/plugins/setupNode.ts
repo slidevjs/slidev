@@ -16,7 +16,13 @@ function deepMerge(a: any, b: any, rootPath = '') {
   return a
 }
 
-export async function loadSetups<T, R extends object>(roots: string[], name: string, arg: T, initial: R, merge = true, accumulate?: (a: R, o: R) => R): Promise<R> {
+export async function loadSetups<T, R extends object>(
+  roots: string[],
+  name: string,
+  arg: T,
+  initial: R,
+  merge: boolean | ((a: R, o: R) => R) = true,
+): Promise<R> {
   let returns = initial
   for (const root of roots) {
     const path = resolve(root, 'setup', name)
@@ -24,10 +30,10 @@ export async function loadSetups<T, R extends object>(roots: string[], name: str
       const { default: setup } = jiti(__filename)(path)
       const result = await setup(arg)
       if (result !== null) {
-        returns = merge
-          ? deepMerge(returns, result)
-          : accumulate
-            ? accumulate(returns, result)
+        returns = typeof merge === 'function'
+          ? merge(returns, result)
+          : merge
+            ? deepMerge(returns, result)
             : result
       }
     }

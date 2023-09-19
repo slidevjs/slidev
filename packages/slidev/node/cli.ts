@@ -42,7 +42,7 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
     getClientRoot(),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], false, mergeArrays)
+  return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
 })
 
 const cli = yargs
