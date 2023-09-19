@@ -286,6 +286,7 @@ export function createSlidesLoader(
             else if (type === 'frontmatter') {
               return {
                 code: [
+                  '// @unocss-include',
                   'import { reactive, computed } from "vue"',
                   `export const frontmatter = reactive(${JSON.stringify(slide.frontmatter)})`,
                   `export const meta = reactive({
