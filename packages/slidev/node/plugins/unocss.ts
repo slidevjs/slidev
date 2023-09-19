@@ -8,6 +8,7 @@ import jiti from 'jiti'
 import UnoCSS from 'unocss/vite'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
 import { loadSetups } from './setupNode'
+import { extractorFrontmatterClass } from './extractor'
 
 export async function createUnocssPlugin(
   { themeRoots, addonRoots, clientRoot, roots, userRoot, data }: ResolvedSlidevOptions,
@@ -34,7 +35,23 @@ export async function createUnocssPlugin(
 
   configs.reverse()
 
-  let config = mergeConfigs([...configs, unoOptions as UserConfig<Theme>])
+  let config = mergeConfigs([
+    {
+      content: {
+        pipeline: {
+          include: [
+            /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+            /\.(frontmatter)/,
+          ],
+        },
+      },
+      extractors: [
+        extractorFrontmatterClass(),
+      ],
+    },
+    ...configs,
+    unoOptions as UserConfig<Theme>,
+  ])
 
   config = await loadSetups(roots, 'unocss.ts', {}, config, true)
 
