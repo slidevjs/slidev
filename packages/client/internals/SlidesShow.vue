@@ -3,6 +3,7 @@ import { TransitionGroup, computed, shallowRef, watch } from 'vue'
 import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, router, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
+import { skipTransition } from '../composables/hmr'
 import SlideWrapper from './SlideWrapper'
 
 // @ts-expect-error virtual module
@@ -37,6 +38,12 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
 const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
+
+function onAfterLeave() {
+  // After transition, we disable it so HMR won't trigger it again
+  // We will turn it back on `nav.go` so the normal navigation would still work
+  skipTransition.value = true
+}
 </script>
 
 <template>
@@ -46,8 +53,10 @@ const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded ||
   <!-- Slides -->
   <component
     :is="hasViewTransition ? 'div' : TransitionGroup"
-    v-bind="transition"
-    id="slideshow" tag="div"
+    v-bind="skipTransition ? {} : transition"
+    id="slideshow"
+    tag="div"
+    @after-leave="onAfterLeave"
   >
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper

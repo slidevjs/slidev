@@ -5,6 +5,7 @@ import type { TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
+import { skipTransition } from '../composables/hmr'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
 
@@ -123,6 +124,7 @@ export function goLast() {
 }
 
 export function go(page: number | string, clicks?: number) {
+  skipTransition.value = false
   return router.push({ path: getPath(page), query: { ...route.value.query, clicks } })
 }
 
