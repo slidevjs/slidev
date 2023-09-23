@@ -195,5 +195,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v2
 ```
-- In your repository, go to Settings>Pages. Under "Build and deployment", select "Deploy from a branch", select "gh-pages" and "root". Click on save.
+- In your repository, go to Settings>Pages. Under "Build and deployment", select "Github Actions".
 - Finally, after all workflows are executed, a link to the slides should appear under Settings>Pages.
