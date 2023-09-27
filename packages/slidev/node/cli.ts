@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'node:path'
 import os from 'node:os'
 import { exec } from 'node:child_process'
@@ -556,8 +557,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
           .forEach(({ address }) => {
             lastRemoteUrl = `http://${address}:${port}${presenterPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
-          }),
-        )
+          }))
 
       if (tunnelUrl) {
         lastRemoteUrl = `${tunnelUrl}${presenterPath}`

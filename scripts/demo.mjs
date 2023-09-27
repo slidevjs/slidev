@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { $, cd, fs, path } from 'zx'
 
 const __filename = fileURLToPath(import.meta.url)

@@ -90,7 +90,7 @@ function loadPrismLang(lang: string): Grammar | undefined {
  */
 function loadPrismPlugin(name: string): void {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    // eslint-disable-next-line ts/no-require-imports
     require(`prismjs/plugins/${name}/prism-${name}`)
   }
   catch (e) {
@@ -131,7 +131,7 @@ function selectLanguage(options: Options, lang: string): [string, Grammar | unde
  *        The text to highlight.
  * @param lang
  *        Code of the language to highlight the text in.
- * @return {string} wrapped in `<pre>` and `<code>`, both equipped with the appropriate class
+ * @return wrapped in `<pre>` and `<code>`, both equipped with the appropriate class
  *  (markdown-it’s langPrefix + lang). If Prism knows `lang`, `text` will be highlighted by it.
  */
 function highlight(markdownit: MarkdownIt, options: Options, text: string, lang: string): string {

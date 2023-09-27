@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { join } from 'node:path'
 import { objectMap } from '@antfu/utils'
 import { fs } from 'zx'
 

@@ -24,7 +24,8 @@ export default defineComponent({
   },
   render() {
     return createVNode(
-      VClicks, {
+      VClicks,
+      {
         every: 99999,
         at: this.at,
         hide: this.hide,

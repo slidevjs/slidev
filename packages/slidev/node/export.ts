@@ -57,8 +57,7 @@ function makeOutline(tree: TocItem[]): string {
     const childrenOutline = makeOutline(children)
 
     return childrenOutline.length > 0 ? `${rootOutline}\n${childrenOutline}` : rootOutline
-  },
-  ).filter(outline => !!outline).join('\n')
+  }).filter(outline => !!outline).join('\n')
 }
 
 export interface ExportNotesOptions {

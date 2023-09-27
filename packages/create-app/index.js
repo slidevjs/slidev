@@ -165,8 +165,7 @@ async function getValidPackageName(projectName) {
       name: 'inputPackageName',
       message: 'Package name:',
       initial: suggestedPackageName,
-      validate: input =>
-        packageNameRegExp.test(input) ? true : 'Invalid package.json name',
+      validate: input => packageNameRegExp.test(input) ? true : 'Invalid package.json name',
     })
     return inputPackageName
   }

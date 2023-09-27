@@ -15,8 +15,8 @@
   "module": "dist/index.mjs",
   "types": "index.d.ts",
   "files": [
-    "dist",
     "client.d.ts",
+    "dist",
     "index.d.ts"
   ],
   "engines": {

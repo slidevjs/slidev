@@ -138,8 +138,7 @@ async function start() {
     update = () => {
       monaco.editor.setTheme(props.dark
         ? (theme.dark || 'vitesse-dark')
-        : (theme.light || 'vitesse-light'),
-      )
+        : (theme.light || 'vitesse-light'))
       styleObject.innerHTML = `:root { ${props.style} }`
 
       if (originalEditor.getValue().toString() !== props.code) {
@@ -213,8 +212,7 @@ async function start() {
     update = () => {
       monaco.editor.setTheme(props.dark
         ? (theme.dark || 'vitesse-dark')
-        : (theme.light || 'vitesse-light'),
-      )
+        : (theme.light || 'vitesse-light'))
       styleObject.innerHTML = `:root { ${props.style} }`
 
       if (originalEditor.getValue().toString() !== props.code) {

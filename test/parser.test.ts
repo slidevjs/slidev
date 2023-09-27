@@ -30,7 +30,7 @@ describe('md parser', () => {
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
-          // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+          // eslint-disable-next-line ts/prefer-ts-expect-error
           // @ts-ignore non-optional
           delete slide.source.filepath
         // @ts-expect-error extra prop
@@ -209,15 +209,13 @@ a.a.A.A
         for (const i in lines)
           lines[i] = lines[i].replace(/A/g, 'B').replace(/a/g, 'A')
       },
-    },
-    {
+    }, {
       name: 'test',
       transformRawLines(lines: string[]) {
         for (const i in lines)
           lines[i] = lines[i].replace(/A/g, 'C')
       },
-    },
-    ])
+    }])
     expect(data.slides.map(i => i.content.trim().replace(/\n/g, '%')).join('/'))
       .toEqual('C..B%C.C.B.B%.C.B.')
   })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from '@vue/reactivity'
+import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@vueuse/head'
 import { configs, themeVars } from '../env'

@@ -53,8 +53,7 @@ function filterTreeDepth(tree: TocItem[], level = 1): TocItem[] {
 function filterOnlyCurrentTree(tree: TocItem[]): TocItem[] {
   return tree
     .filter(
-      (item: TocItem) =>
-        item.active || item.activeParent || item.hasActiveParent,
+      (item: TocItem) => item.active || item.activeParent || item.hasActiveParent,
     )
     .map((item: TocItem) => ({
       ...item,

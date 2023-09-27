@@ -31,7 +31,7 @@ export function useViewTransition() {
     let changeRoute: () => void
     const ready = new Promise<void>(resolve => (changeRoute = resolve))
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
     const transition = document.startViewTransition(() => {
       changeRoute()

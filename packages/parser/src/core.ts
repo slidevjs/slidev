@@ -46,13 +46,15 @@ export function prettify(data: SlidevMarkdown) {
 
 function matter(code: string) {
   let data: any = {}
-  const content = code.replace(/^---.*\r?\n([\s\S]*?)---/,
+  const content = code.replace(
+    /^---.*\r?\n([\s\S]*?)---/,
     (_, d) => {
       data = YAML.load(d)
       if (!isObject(data))
         data = {}
       return ''
-    })
+    },
+  )
   return { data, content }
 }
 

@@ -212,6 +212,7 @@ watch(counter, (count) => {
 
 ```ts {monaco}
 import { reactive, ref } from 'vue'
+
 const foo = ref('bar')
 const data = reactive({ foo, id: 10 })
 data.foo // 'bar'
@@ -770,6 +771,7 @@ To get DOM element, you can pass a ref to it, and it will be available after com
 
 ```ts {monaco}
 import { defineComponent, onMounted, ref } from 'vue'
+
 export default defineComponent({
   setup() {
     const element = ref<HTMLElement | undefined>()
@@ -805,6 +807,7 @@ Use `watch` instead of `onMounted` to unify the handling for template ref change
 
 ```ts {monaco}
 import { defineComponent, ref, watch } from 'vue'
+
 export default defineComponent({
   setup() {
     const element = ref<HTMLElement | undefined>()

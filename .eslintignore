@@ -1,6 +1,0 @@
-dist
-node_modules
-public
-!.vitepress
-temp
-demo/**/*.md

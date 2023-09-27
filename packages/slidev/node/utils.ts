@@ -58,12 +58,10 @@ export function resolveGlobalImportPath(importName: string): string {
 }
 
 export function stringifyMarkdownTokens(tokens: Token[]) {
-  return tokens.map(token =>
-    token.children
-      ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(/^\s*$/))
-      .map(t => t.content.trim())
-      .join(' '),
-  )
+  return tokens.map(token => token.children
+    ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(/^\s*$/))
+    .map(t => t.content.trim())
+    .join(' '))
     .filter(Boolean)
     .join(' ')
 }

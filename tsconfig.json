@@ -1,22 +1,11 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "baseUrl": ".",
     "target": "es2020",
     "lib": ["DOM", "ESNext"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
+    "jsx": "preserve",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": [
-      "vite/client",
-      "node",
-      "vite-plugin-vue-server-ref/module"
-    ],
+    "baseUrl": ".",
     "paths": {
       "@slidev/client/*": ["./packages/client/*"],
       "@slidev/types": ["./packages/types/src/index.ts"],
@@ -24,7 +13,18 @@
       "@slidev/parser/core": ["./packages/parser/src/core.ts"],
       "@slidev/parser": ["./packages/parser/src/index.ts"]
     },
-    "jsx": "preserve"
+    "types": [
+      "vite/client",
+      "node",
+      "vite-plugin-vue-server-ref/module"
+    ],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
   },
   "include": [
     "./*.ts",

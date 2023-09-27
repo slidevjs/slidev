@@ -63,7 +63,7 @@ export default defineComponent({
         if (!isVNode(i))
           return i
         if (listTags.includes(i.type as string) && Array.isArray(i.children)) {
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          // eslint-disable-next-line ts/no-use-before-define
           const [vNodes, total] = mapChildren(i.children, depth + 1)
           idx += total
           return h(i, {}, [vNodes])
