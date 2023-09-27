@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { TocItem } from '@slidev/types'
 import type { SlidevContextNav } from '../modules/context'
-import { addToTree, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
+import { addToTree, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, go, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
 import { rawRoutes } from '../routes'
 
 export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>): SlidevContextNav {
@@ -41,6 +41,7 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
     rawTree,
     treeWithActiveStatuses,
     tree,
+    go,
     downloadPDF,
     next,
     nextSlide,
