@@ -5,6 +5,7 @@ import { activeElement, editorWidth, isInputting, showEditor } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
+import HiddenText from './HiddenText.vue'
 
 const props = defineProps<{
   resize: boolean
@@ -147,9 +148,11 @@ throttledWatch(
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
         <button class="slidev-icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
+          <HiddenText text="Switch to content tab" />
           <carbon:account />
         </button>
         <button class="slidev-icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
+          <HiddenText text="Switch to notes tab" />
           <carbon:align-box-bottom-right />
         </button>
       </div>
@@ -158,9 +161,11 @@ throttledWatch(
       </span>
       <div class="flex-auto" />
       <button class="slidev-icon-btn" @click="openInEditor()">
+        <HiddenText text="Open in editor" />
         <carbon:launch />
       </button>
       <button class="slidev-icon-btn" @click="close">
+        <HiddenText text="Close" />
         <carbon:close />
       </button>
     </div>

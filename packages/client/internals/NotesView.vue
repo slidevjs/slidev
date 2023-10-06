@@ -8,6 +8,7 @@ import { fullscreen } from '../state'
 import { total } from '../logic/nav'
 import { rawRoutes } from '../routes'
 import NoteDisplay from './NoteDisplay.vue'
+import HiddenText from './HiddenText.vue'
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
@@ -57,13 +58,16 @@ function decreaseFontSize() {
     <div class="flex-none border-t border-gray-400 border-opacity-20">
       <div class="flex gap-1 items-center px-6 py-3">
         <button class="slidev-icon-btn" @click="toggleFullscreen">
+          <HiddenText :text="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" />
           <carbon:minimize v-if="isFullscreen" />
           <carbon:maximize v-else />
         </button>
         <button class="slidev-icon-btn" @click="increaseFontSize">
+          <HiddenText text="Increase font size" />
           <carbon:zoom-in />
         </button>
         <button class="slidev-icon-btn" @click="decreaseFontSize">
+          <HiddenText text="Decrease font size" />
           <carbon:zoom-out />
         </button>
         <div class="flex-auto" />

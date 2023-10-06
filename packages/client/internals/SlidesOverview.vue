@@ -9,6 +9,7 @@ import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
+import HiddenText from './HiddenText.vue'
 
 const props = defineProps<{ modelValue: boolean }>()
 
@@ -157,6 +158,7 @@ watchEffect(() => {
     </div>
   </Transition>
   <button v-if="value" class="fixed text-2xl top-4 right-4 slidev-icon-btn text-gray-400" @click="close">
+    <HiddenText text="Close" />
     <carbon:close />
   </button>
 </template>

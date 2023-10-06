@@ -26,7 +26,7 @@ Presentation slides for developers
   </span>
 </div>
 
-<a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
+<a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
   class="abs-br m-6 text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
   <carbon-logo-github />
 </a>
@@ -77,7 +77,7 @@ h1 {
 
 Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
 
-### Keyboard Shortcuts
+## Keyboard Shortcuts
 
 |     |     |
 | --- | --- |
@@ -91,6 +91,7 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
   src="https://sli.dev/assets/arrow-bottom-left.svg"
+  alt=""
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
 
@@ -177,9 +178,9 @@ theme: seriph
 ---
 ```
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
+<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
+<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
 
 </div>
 
@@ -211,6 +212,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
       :enter="final"
       class="absolute top-0 left-0 right-0 bottom-0"
       src="https://sli.dev/logo-square.png"
+      alt=""
     />
     <img
       v-motion
@@ -218,6 +220,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
       :enter="final"
       class="absolute top-0 left-0 right-0 bottom-0"
       src="https://sli.dev/logo-circle.png"
+      alt=""
     />
     <img
       v-motion
@@ -225,6 +228,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
       :enter="final"
       class="absolute top-0 left-0 right-0 bottom-0"
       src="https://sli.dev/logo-triangle.png"
+      alt=""
     />
   </div>
 

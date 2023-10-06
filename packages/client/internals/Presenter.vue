@@ -88,7 +88,7 @@ onMounted(() => {
   <div class="bg-main h-full slidev-presenter">
     <div class="grid-container">
       <div class="grid-section top flex">
-        <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:h-14 lg:py-2" style="height: 3.5rem;">
+        <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:h-14 lg:py-2" style="height: 3.5rem;" alt="Slidev logo">
         <div class="flex-auto" />
         <div
           class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
