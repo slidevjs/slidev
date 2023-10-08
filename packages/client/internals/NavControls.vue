@@ -8,6 +8,7 @@ import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
+import HiddenText from './HiddenText.vue'
 
 // @ts-expect-error virtual module
 import CustomNavControls from '/@slidev/custom-nav-controls'
@@ -52,19 +53,28 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       @mouseleave="onMouseLeave"
     >
       <button v-if="!isEmbedded" class="slidev-icon-btn" @click="toggleFullscreen">
-        <carbon:minimize v-if="isFullscreen" />
-        <carbon:maximize v-else />
+        <template v-if="isFullscreen">
+          <HiddenText text="Close fullscreen" />
+          <carbon:minimize />
+        </template>
+        <template v-else>
+          <HiddenText text="Enter fullscreen" />
+          <carbon:maximize />
+        </template>
       </button>
 
       <button class="slidev-icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
+        <HiddenText text="Go to previous slide" />
         <carbon:arrow-left />
       </button>
 
       <button class="slidev-icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
+        <HiddenText text="Go to next slide" />
         <carbon:arrow-right />
       </button>
 
       <button v-if="!isEmbedded" class="slidev-icon-btn" title="Slides overview" @click="toggleOverview()">
+        <HiddenText text="Show slide overview" />
         <carbon:apps />
       </button>
 
@@ -74,8 +84,14 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         title="Toggle dark mode"
         @click="toggleDark()"
       >
-        <carbon-moon v-if="isDark" />
-        <carbon-sun v-else />
+        <template v-if="isDark">
+          <HiddenText text="Switch to light theme" />
+          <carbon-moon />
+        </template>
+        <template v-else>
+          <HiddenText text="Switch to dark mode theme" />
+          <carbon-sun />
+        </template>
       </button>
 
       <VerticalDivider />
@@ -92,13 +108,20 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           title="Show presenter cursor"
           @click="showPresenterCursor = !showPresenterCursor"
         >
-          <ph-cursor-fill v-if="showPresenterCursor" />
-          <ph-cursor-duotone v-else class="opacity-50" />
+          <template v-if="showPresenterCursor">
+            <HiddenText text="Hide presenter cursor" />
+            <ph-cursor-fill />
+          </template>
+          <template v-else>
+            <HiddenText text="Show presenter cursor" />
+            <ph-cursor-duotone />
+          </template>
         </button>
       </template>
 
       <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
         <button class="slidev-icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
+          <HiddenText v-if="drawingEnabled" :text="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" />
           <carbon:pen />
           <div
             v-if="drawingEnabled"
@@ -122,11 +145,13 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           class="slidev-icon-btn <md:hidden"
           @click="showEditor = !showEditor"
         >
+          <HiddenText :text="showEditor ? 'Hide editor' : 'Show editor'" />
           <carbon:text-annotation-toggle />
         </button>
       </template>
       <template v-if="!__DEV__">
         <button v-if="configs.download" class="slidev-icon-btn" @click="downloadPDF">
+          <HiddenText text="Download as PDF" />
           <carbon:download />
         </button>
       </template>
@@ -136,6 +161,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         class="slidev-icon-btn"
         @click="showInfoDialog = !showInfoDialog"
       >
+        <HiddenText text="Show info" />
         <carbon:information />
       </button>
 
@@ -143,6 +169,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <MenuButton>
           <template #button>
             <button class="slidev-icon-btn">
+              <HiddenText text="Adjust settings" />
               <carbon:settings-adjust />
             </button>
           </template>

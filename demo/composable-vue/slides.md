@@ -24,7 +24,7 @@ Anthony Fu
 </div>
 
 <div class="abs-bl mx-14 my-12 flex">
-  <img src="https://2020.vueday.it/img/themes/vueday/vueday-logo.png" class="h-8">
+  <img src="https://2020.vueday.it/img/themes/vueday/vueday-logo.png" class="h-8" alt="">
   <div class="ml-3 flex flex-col text-left">
     <div><b>Vue</b>Day</div>
     <div class="text-sm opacity-50">Apr. 29th, 2021</div>
@@ -53,7 +53,7 @@ A fanatical full-time open sourceror.<br>
   <div><a href="https://antfu.me" target="_blank">antfu.me</a></div>
 </div>
 
-<img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12"/>
+<img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12" alt="A comic art image of Anthony Fu"/>
 
 
 ---
@@ -61,7 +61,7 @@ name: Sponsors
 layout: center
 ---
 
-<img class="h-100 -mt-10" src="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png" /><br>
+<img class="h-100 -mt-10" src="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png" alt="A list of the sponsor logos" /><br>
 <div class="text-center text-xs opacity-50 -mt-8 hover:opacity-100">
   <a href="https://github.com/sponsors/antfu" target="_blank">
     Sponsor me at GitHub
@@ -82,7 +82,7 @@ layout: center
 
 <div class="grid grid-cols-[3fr_2fr] gap-4">
   <div class="text-center pb-4">
-    <img class="h-50 inline-block" src="https://vueuse.org/favicon.svg">
+    <img class="h-50 inline-block" src="https://vueuse.org/favicon.svg" alt="">
     <div class="opacity-50 mb-2 text-sm">
       Collection of essential Vue Composition Utilities
     </div>
@@ -323,7 +323,7 @@ The `setup()` only runs **once** on component initialization, to construct the r
   <Connections v-click class="mt-4"/>
   <div v-click class="p-4">
     <h3 class="pb-2">SpreadSheet Formula</h3>
-    <img class="h-40" src="https://cdn.wallstreetmojo.com/wp-content/uploads/2019/01/Division-Formula-in-Excel-Example-1-1.png">
+    <img class="h-40" src="https://cdn.wallstreetmojo.com/wp-content/uploads/2019/01/Division-Formula-in-Excel-Example-1-1.png" alt="">
   </div>
 </div>
 
@@ -1143,7 +1143,7 @@ Creates Universal Library for Vue 2 & 3<br><carbon-logo-github class="inline-blo
 import { defineComponent, reactive, ref } from 'vue-demi'
 ```
 
-<img class="h-50 mx-auto" src="https://cdn.jsdelivr.net/gh/vueuse/vue-demi/assets/banner.png" />
+<img class="h-50 mx-auto" src="https://cdn.jsdelivr.net/gh/vueuse/vue-demi/assets/banner.png" alt="" />
 
 
 ---

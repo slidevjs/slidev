@@ -38,7 +38,7 @@ Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 Hover on the bottom-left corner to see the navigation's controls panel
 
-### Keyboard Shortcuts
+## Keyboard Shortcuts
 
 |     |     |
 | --- | --- |

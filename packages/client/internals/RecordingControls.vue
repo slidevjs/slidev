@@ -5,6 +5,7 @@ import { recorder } from '../logic/recording'
 import { currentCamera, showRecordingDialog } from '../state'
 import DevicesList from './DevicesList.vue'
 import MenuButton from './MenuButton.vue'
+import HiddenText from './HiddenText.vue'
 
 const {
   recording,
@@ -40,6 +41,7 @@ onMounted(() => {
     title="Show camera view"
     @click="toggleAvatar"
   >
+    <HiddenText text="Toggle camera view" />
     <carbon:user-avatar />
   </button>
 
@@ -49,12 +51,14 @@ onMounted(() => {
     title="Recording"
     @click="toggleRecording"
   >
+    <HiddenText :text="recording ? 'Stop record video' : 'Record video'" />
     <carbon:stop-outline v-if="recording" />
     <carbon:video v-else />
   </button>
   <MenuButton :disabled="recording">
     <template #button>
       <button class="slidev-icon-btn h-full !text-sm !px-0">
+        <HiddenText text="Select recording device" />
         <carbon:chevron-up class="opacity-50" />
       </button>
     </template>
