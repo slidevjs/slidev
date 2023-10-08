@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`markdown transform > Inline CSS 1`] = `
+exports[`markdown transform > inline CSS 1`] = `
 "
 # Page 
 
@@ -21,7 +21,7 @@ h1 {
 "
 `;
 
-exports[`markdown transform > Mermaid 1`] = `
+exports[`markdown transform > mermaid 1`] = `
 "
 # Page 
 
@@ -31,7 +31,7 @@ exports[`markdown transform > Mermaid 1`] = `
 "
 `;
 
-exports[`markdown transform > PlantUML 1`] = `
+exports[`markdown transform > plantUML 1`] = `
 "
 # Page
 
