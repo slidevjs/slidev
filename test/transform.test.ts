@@ -48,7 +48,7 @@ Slot Usage
 `)).toMatchSnapshot()
   })
 
-  it('Inline CSS', () => {
+  it('inline CSS', () => {
     expect(transformPageCSS(`
 # Page 
 
@@ -68,7 +68,7 @@ h1 {
 `, '01.md')).toMatchSnapshot()
   })
 
-  it('Mermaid', () => {
+  it('mermaid', () => {
     expect(transformMermaid(`
 # Page 
 
@@ -87,7 +87,7 @@ C -->|Two| E[Result 2]
 `)).toMatchSnapshot()
   })
 
-  it('PlantUML', () => {
+  it('plantUML', () => {
     expect(transformPlantUml(`
 # Page
 
