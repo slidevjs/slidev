@@ -17,7 +17,7 @@ Then you can host it on [GitHub Pages](https://pages.github.com/), [Netlify](htt
 
 ### Base Path
 
-To deploy your slides under sub-routes, you will need to pass the `--base` option. For example:
+To deploy your slides under sub-routes, you will need to pass the `--base` option. The `--base` path **must begin and end** with a slash `/`; for example:
 
 ```bash
 $ slidev build --base /talks/my-cool-talk/
@@ -139,13 +139,13 @@ Create `vercel.json` in your project root with the following content.
 
 Then go to your Vercel dashboard and create a new site with the repository.
 
-## GitHub Pages
+### GitHub Pages
 
 - [GitHub Pages](https://pages.github.com/)
 
 To deploy your slides on GitHub Pages:
 - upload all the files of the project in your repo (i.e. named `name_of_repo`)
-- create `.github/workflows/deploy.yml` with following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`.
+- create `.github/workflows/deploy.yml` with following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`. Make sure to leave the leading and trailing slashes in place.
 
 ```yaml
 name: Deploy pages
@@ -183,7 +183,7 @@ jobs:
         run:  npm i -g @slidev/cli
 
       - name: Build
-        run: slidev build --base <name_of_repo>
+        run: slidev build --base /<name_of_repo>/
 
       - uses: actions/configure-pages@v3
 
