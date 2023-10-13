@@ -105,6 +105,7 @@
     "vite-plugin-static-copy": "^0.17.0",
     "vite-plugin-vue-server-ref": "^0.3.4",
     "vite-plugin-windicss": "^1.9.1",
+    "vitefu": "^0.2.5",
     "vue": "^3.3.4",
     "windicss": "^3.5.6",
     "yargs": "^17.7.2"
