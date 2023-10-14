@@ -4,6 +4,7 @@ import { computed, provide, reactive, shallowRef } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { useNavClicks } from '../composables/useNavClicks'
 import { injectionSlidevContext } from '../constants'
+import { isClicksDisabled } from '../logic/nav'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../modules/context'
@@ -53,8 +54,8 @@ provide(injectionSlidevContext, reactive({
     <SlideWrapper
       :is="route?.component!"
       v-model:clicks-elements="clicksElements"
-      :clicks="clicks"
-      :clicks-disabled="false"
+      :clicks="isClicksDisabled ? undefined : clicks"
+      :clicks-disabled="isClicksDisabled"
       :class="getSlideClass(route)"
       :route="route"
     />
