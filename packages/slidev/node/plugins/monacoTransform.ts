@@ -1,23 +1,22 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import fs from 'node:fs/promises'
 import process from 'node:process'
 import { slash } from '@antfu/utils'
 import type { Plugin } from 'vite'
+import { findDepPkgJsonPath } from 'vitefu'
 
 async function getPackageData(pkg: string) {
-  // Trick the bundler to avoid transforming dynamic import to require.
-  // The "resolvePackageData" is not available in CommonJS build of Vite.
-  // eslint-disable-next-line no-eval
-  const { resolvePackageData } = await eval('import("vite")')
-
-  const info = resolvePackageData(pkg, process.cwd())
-  if (!info)
+  const pkgJsonPath = await findDepPkgJsonPath(pkg, process.cwd())
+  if (!pkgJsonPath)
     return
 
-  const typePath = info.data.types || info.data.typings
+  const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, 'utf-8'))
+
+  const typePath = pkgJson.types || pkgJson.typings
   if (!typePath)
     return
 
-  return [info, typePath]
+  return [dirname(pkgJsonPath), pkgJson, typePath]
 }
 
 export function createMonacoTypesLoader(): Plugin {
@@ -38,12 +37,12 @@ export function createMonacoTypesLoader(): Plugin {
         if (!packageData)
           return
 
-        const [info, typePath] = packageData
+        const [pkgDir, pkgJson, typePath] = packageData
 
         return [
           'import * as monaco from \'monaco-editor\'',
-          `import Type from "${slash(join(info.dir, typePath))}?raw"`,
-          ...Object.keys(info.data.dependencies || {}).map(i => `import "/@slidev-monaco-types/${i}"`),
+          `import Type from "${slash(join(pkgDir, typePath))}?raw"`,
+          ...Object.keys(pkgJson.dependencies || {}).map(i => `import "/@slidev-monaco-types/${i}"`),
           `monaco.languages.typescript.typescriptDefaults.addExtraLib(\`declare module "${pkg}" { \$\{Type\} }\`)`,
         ].join('\n')
       }
