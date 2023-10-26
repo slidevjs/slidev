@@ -23,7 +23,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^1.0.0-beta.28",
+    "@antfu/eslint-config": "^1.0.0-beta.29",
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
     "@slidev/cli": "workspace:*",
