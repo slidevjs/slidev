@@ -1,6 +1,5 @@
 import { useVModel } from '@vueuse/core'
-import type { Ref } from 'vue'
-import { defineComponent, h, provide, ref, toRef } from 'vue'
+import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
 import type { RenderContext } from '@slidev/types'
 import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRenderContext, injectionRoute } from '../constants'
 
@@ -48,11 +47,22 @@ export default defineComponent({
 
     clicksElements.value.length = 0
 
+    const clicksWithDisable = computed({
+      get() {
+        if (clicksDisabled.value)
+          return 9999999
+        return +clicks.value
+      },
+      set(value) {
+        clicks.value = value
+      },
+    })
+
     provide(injectionRoute, props.route as any)
     provide(injectionCurrentPage, ref(+props.route?.path))
     provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicks, clicks as Ref<number>)
+    provide(injectionClicks, clicksWithDisable)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksElements, clicksElements as any)
     provide(injectionOrderMap, clicksOrderMap as any)
