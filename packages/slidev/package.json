@@ -84,7 +84,7 @@
     "markdown-it-mdc": "^0.1.4",
     "monaco-editor": "^0.37.1",
     "nanoid": "^5.0.2",
-    "open": "^8.4.1",
+    "open": "^9.1.0",
     "pdf-lib": "^1.17.1",
     "plantuml-encoder": "^1.4.0",
     "postcss-nested": "^6.0.1",
