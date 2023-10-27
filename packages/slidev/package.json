@@ -22,7 +22,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "slidev": "./bin/slidev.js"
+    "slidev": "./bin/slidev.mjs"
   },
   "files": [
     "bin",

@@ -1,5 +1,6 @@
 import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import type Vue from '@vitejs/plugin-vue'
 import type VueJsx from '@vitejs/plugin-vue-jsx'
 import type Icons from 'unplugin-icons/vite'
@@ -19,6 +20,7 @@ import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './th
 import { getAddons } from './addons'
 
 const debug = _debug('slidev:options')
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface SlidevEntryOptions {
   /**

@@ -1,10 +1,15 @@
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
-import { sync as resolve } from 'resolve'
+import resolve from 'resolve'
 import globalDirs from 'global-dirs'
 import type Token from 'markdown-it/lib/token'
 import type { ResolvedFontOptions } from '@slidev/types'
+
+const require = createRequire(import.meta.url)
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
@@ -14,8 +19,9 @@ export function resolveImportPath(importName: string, ensure: true): string
 export function resolveImportPath(importName: string, ensure?: boolean): string | undefined
 export function resolveImportPath(importName: string, ensure = false) {
   try {
-    return resolve(importName, {
+    return resolve.sync(importName, {
       preserveSymlinks: false,
+      basedir: __dirname,
     })
   }
   catch {}
@@ -40,7 +46,10 @@ export function resolveImportPath(importName: string, ensure = false) {
 
 export function resolveGlobalImportPath(importName: string): string {
   try {
-    return resolve(importName, { preserveSymlinks: false, basedir: __dirname })
+    return resolve.sync(importName, {
+      preserveSymlinks: false,
+      basedir: __dirname,
+    })
   }
   catch {}
 

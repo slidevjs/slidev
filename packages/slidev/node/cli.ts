@@ -46,7 +46,7 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
   return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
 })
 
-const cli = yargs
+const cli = yargs(process.argv.slice(2))
   .scriptName('slidev')
   .usage('$0 [args]')
   .version(version)

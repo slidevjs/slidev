@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { uniq } from '@antfu/utils'
 import type { Theme } from '@unocss/preset-uno'
 import type { UserConfig } from '@unocss/core'
@@ -26,7 +27,7 @@ export async function createUnocssPlugin(
 
   const configs = configFiles
     .map((i) => {
-      const loaded = jiti(__filename)(i)
+      const loaded = jiti(fileURLToPath(import.meta.url))(i)
       const config = 'default' in loaded ? loaded.default : loaded
       return config
     })

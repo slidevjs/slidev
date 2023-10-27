@@ -1,12 +1,15 @@
 // forked from https://github.com/jGleitz/markdown-it-prism
 // it's modified to output line wrapper `<div class="line" />` for each line
 
+import { createRequire } from 'node:module'
 import type { Grammar } from 'prismjs'
 import Prism from 'prismjs'
-import loadLanguages from 'prismjs/components/'
+import loadLanguages from 'prismjs/components/index.js'
 import type MarkdownIt from 'markdown-it'
 import * as htmlparser2 from 'htmlparser2'
 import { escapeVueInCode } from './markdown'
+
+const require = createRequire(import.meta.url)
 
 interface Options {
   plugins: string[]
@@ -90,7 +93,6 @@ function loadPrismLang(lang: string): Grammar | undefined {
  */
 function loadPrismPlugin(name: string): void {
   try {
-    // eslint-disable-next-line ts/no-require-imports
     require(`prismjs/plugins/${name}/prism-${name}`)
   }
   catch (e) {

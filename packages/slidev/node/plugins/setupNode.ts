@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
-import { pathExists } from 'fs-extra'
+import { fileURLToPath } from 'node:url'
+import fs from 'fs-extra'
 import { isObject } from '@antfu/utils'
 import jiti from 'jiti'
 
@@ -26,8 +27,8 @@ export async function loadSetups<T, R extends object>(
   let returns = initial
   for (const root of roots) {
     const path = resolve(root, 'setup', name)
-    if (await pathExists(path)) {
-      const { default: setup } = jiti(__filename)(path)
+    if (await fs.pathExists(path)) {
+      const { default: setup } = jiti(fileURLToPath(import.meta.url))(path)
       const result = await setup(arg)
       if (result !== null) {
         returns = typeof merge === 'function'

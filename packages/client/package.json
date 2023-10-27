@@ -11,6 +11,10 @@
     "url": "https://github.com/slidevjs/slidev"
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
+  "exports": {
+    "./package.json": "./package.json",
+    "./*": "./*"
+  },
   "engines": {
     "node": ">=18.0.0"
   },

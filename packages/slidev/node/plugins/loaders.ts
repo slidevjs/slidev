@@ -3,7 +3,7 @@ import process from 'node:process'
 import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
-import fs, { existsSync } from 'fs-extra'
+import fs from 'fs-extra'
 import Markdown from 'markdown-it'
 import { bold, gray, red, yellow } from 'kolorist'
 
@@ -552,7 +552,7 @@ defineProps<{ no: number | string }>()`)
       ]
 
       for (const style of styles) {
-        if (existsSync(style)) {
+        if (fs.existsSync(style)) {
           imports.push(`import "${toAtFS(style)}"`)
           continue
         }

@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'node:path'
 import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { slash, uniq } from '@antfu/utils'
 import type { WindiCssOptions } from 'vite-plugin-windicss'
 import jiti from 'jiti'
@@ -22,7 +23,7 @@ export async function createWindiCSSPlugin(
   ])
 
   const configFile = configFiles.find(i => existsSync(i))!
-  let config = jiti(__filename)(configFile) as WindiCssOptions
+  let config = jiti(fileURLToPath(import.meta.url))(configFile) as WindiCssOptions
   if (config.default)
     config = config.default
 
