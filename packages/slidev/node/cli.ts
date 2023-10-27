@@ -540,6 +540,7 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
   if (port) {
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
+    const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
     if (query)
@@ -555,12 +556,12 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
         .forEach(v => (v || [])
           .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            lastRemoteUrl = `http://${address}:${port}${presenterPath}`
+            lastRemoteUrl = `http://${address}:${port}${entryPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
           }))
 
       if (tunnelUrl) {
-        lastRemoteUrl = `${tunnelUrl}${presenterPath}`
+        lastRemoteUrl = `${tunnelUrl}${entryPath}`
         console.log(`${dim('  remote via tunnel')}   > ${yellow(lastRemoteUrl)}`)
       }
     }

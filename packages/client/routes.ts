@@ -42,12 +42,19 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
     return { path: '' }
   }
   routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
-  routes.push({
-    name: 'notes',
-    path: '/notes',
-    component: () => import('./internals/NotesView.vue'),
-    beforeEnter: passwordGuard,
-  })
+  if (__SLIDEV_HAS_SERVER__) {
+    routes.push({
+      name: 'entry',
+      path: '/entry',
+      component: () => import('./internals/EntrySelect.vue'),
+    })
+    routes.push({
+      name: 'notes',
+      path: '/notes',
+      component: () => import('./internals/NotesView.vue'),
+      beforeEnter: passwordGuard,
+    })
+  }
   routes.push({
     name: 'presenter',
     path: '/presenter/:no',
@@ -61,7 +68,9 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
 }
 
 export const router = createRouter({
-  history: __SLIDEV_HASH_ROUTE__ ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),
+  history: __SLIDEV_HASH_ROUTE__
+    ? createWebHashHistory(import.meta.env.BASE_URL)
+    : createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
 
