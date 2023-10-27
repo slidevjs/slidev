@@ -1,5 +1,6 @@
 {
   "name": "untitled",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "slidev build",
