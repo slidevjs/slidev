@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useHead } from '@vueuse/head'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
@@ -17,9 +17,15 @@ useHead({
 
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
+const scroller = ref<HTMLDivElement>()
 const fontSize = useLocalStorage('slidev-notes-font-size', 18)
 const pageNo = computed(() => sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerPage : sharedState.page)
 const currentRoute = computed(() => rawRoutes.find(i => i.path === `${pageNo.value}`))
+
+watch(pageNo, () => {
+  scroller.value?.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
+  window.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
+})
 
 function increaseFontSize() {
   fontSize.value = fontSize.value + 1
@@ -37,6 +43,7 @@ function decreaseFontSize() {
   />
   <div class="h-full flex flex-col">
     <div
+      ref="scroller"
       class="px-5 flex-auto h-full overflow-auto"
       :style="{ fontSize: `${fontSize}px` }"
     >
