@@ -161,7 +161,11 @@ cli.command(
           console.log(yellow('\n  --remote is required for tunneling, localtunnel is not enabled.\n'))
       }
 
-      lastRemoteUrl = printInfo(options, port, remote, tunnelUrl)
+      let publicIp: string | undefined
+      if (remote)
+        publicIp = await import('public-ip').then(r => r.publicIpv4())
+
+      lastRemoteUrl = printInfo(options, port, remote, tunnelUrl, publicIp)
     }
 
     async function openTunnel(port: number) {
@@ -214,10 +218,13 @@ cli.command(
           if (!lastRemoteUrl)
             return
           await import('uqr')
-            .then((r) => {
+            .then(async (r) => {
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
+              const publicIp = await import('public-ip').then(r => r.publicIpv4())
+              if (publicIp)
+                console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
             })
         },
       },
@@ -524,7 +531,13 @@ function exportOptions<T>(args: Argv<T>) {
     })
 }
 
-function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: string, tunnelUrl?: string) {
+function printInfo(
+  options: ResolvedSlidevOptions,
+  port?: number,
+  remote?: string,
+  tunnelUrl?: string,
+  publicIp?: string,
+) {
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
@@ -559,6 +572,11 @@ function printInfo(options: ResolvedSlidevOptions, port?: number, remote?: strin
             lastRemoteUrl = `http://${address}:${port}${entryPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
           }))
+
+      if (publicIp) {
+        lastRemoteUrl = `http://${publicIp}:${port}${entryPath}`
+        console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
+      }
 
       if (tunnelUrl) {
         lastRemoteUrl = `${tunnelUrl}${entryPath}`
