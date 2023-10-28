@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ignorableWatch, onClickOutside } from '@vueuse/core'
-import { nextTick, ref, watch } from 'vue'
+import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
+import { ref, watch, watchEffect } from 'vue'
 import { currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
@@ -9,6 +9,9 @@ const props = defineProps({
   class: {
     default: '',
   },
+  editing: {
+    default: false,
+  },
   style: {
     default: () => ({}),
   },
@@ -16,6 +19,11 @@ const props = defineProps({
     default: 'No notes for this slide',
   },
 })
+
+const emit = defineEmits([
+  'update:editing',
+])
+const editing = useVModel(props, 'editing', emit, { passive: true })
 
 const { info, update } = useDynamicSlideInfo(currentSlideId)
 
@@ -45,17 +53,11 @@ watch(
 )
 
 const input = ref<HTMLTextAreaElement>()
-const editing = ref(false)
 
-async function switchNoteEdit(e: MouseEvent) {
-  if ((e?.target as HTMLElement)?.tagName === 'A')
-    return
-
-  editing.value = true
-  input.value?.focus()
-  await nextTick()
-  input.value?.focus()
-}
+watchEffect(() => {
+  if (editing.value)
+    input.value?.focus()
+})
 
 onClickOutside(input, () => {
   editing.value = false
@@ -64,13 +66,12 @@ onClickOutside(input, () => {
 
 <template>
   <NoteDisplay
-    v-if="!editing && note"
+    v-if="!editing"
     class="my--4 border-transparent border-2"
-    :class="props.class"
+    :class="[props.class, note ? '' : 'opacity-50']"
     :style="props.style"
-    :note="note"
+    :note="note || placeholder"
     :note-html="info?.noteHTML"
-    @click="switchNoteEdit"
   />
   <textarea
     v-else

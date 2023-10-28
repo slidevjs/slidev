@@ -30,6 +30,8 @@ useHead({
   title: `Presenter - ${slideTitle}`,
 })
 
+const notesEditing = ref(false)
+
 const { timer, resetTimer } = useTimer()
 
 const nextTabElements = ref([])
@@ -143,6 +145,7 @@ onMounted(() => {
         <NoteEditor
           v-if="__DEV__"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
+          :editing="notesEditing"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <NoteStatic
@@ -158,6 +161,13 @@ onMounted(() => {
           <button class="slidev-icon-btn" @click="decreasePresenterFontSize">
             <HiddenText text="Decrease font size" />
             <carbon:zoom-out />
+          </button>
+          <button
+            v-if="__DEV__"
+            class="slidev-icon-btn" @click="notesEditing = !notesEditing"
+          >
+            <HiddenText text="Edit Notes" />
+            <carbon:edit />
           </button>
         </div>
       </div>
@@ -212,7 +222,7 @@ onMounted(() => {
 }
 
 .grid-container.layout2 {
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 2fr;
   grid-template-rows: min-content 2fr 1fr min-content;
   grid-template-areas:
     "top top"
