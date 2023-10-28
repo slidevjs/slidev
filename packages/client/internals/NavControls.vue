@@ -2,7 +2,7 @@
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
-import { activeElement, breakpoints, fullscreen, showEditor, showInfoDialog, showPresenterCursor, toggleOverview } from '../state'
+import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
 import Settings from './Settings.vue'
@@ -147,6 +147,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         >
           <HiddenText :text="showEditor ? 'Hide editor' : 'Show editor'" />
           <carbon:text-annotation-toggle />
+        </button>
+
+        <button v-if="isPresenter" class="slidev-icon-btn" title="Toggle Presenter Layout" @click="togglePresenterLayout">
+          <carbon:template />
+          {{ presenterLayout }}
         </button>
       </template>
       <template v-if="!__DEV__">

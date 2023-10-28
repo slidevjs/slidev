@@ -29,4 +29,21 @@ export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', tr
 export const showEditor = useLocalStorage('slidev-show-editor', false)
 export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 100)
 
+export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1)
+export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1)
+
+export function togglePresenterLayout() {
+  presenterLayout.value = presenterLayout.value + 1
+  if (presenterLayout.value > 2)
+    presenterLayout.value = 1
+}
+
+export function increasePresenterFontSize() {
+  presenterNotesFontSize.value = Math.min(2, presenterNotesFontSize.value + 0.1)
+}
+
+export function decreasePresenterFontSize() {
+  presenterNotesFontSize.value = Math.max(0.5, presenterNotesFontSize.value - 0.1)
+}
+
 export const toggleOverview = useToggle(showOverview)

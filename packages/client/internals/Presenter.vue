@@ -3,7 +3,7 @@ import { useHead } from '@vueuse/head'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { clicks, clicksTotal, currentPage, currentRoute, hasNext, nextRoute, total, useSwipeControls } from '../logic/nav'
-import { showEditor, showOverview, showPresenterCursor } from '../state'
+import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs, themeVars } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
@@ -86,7 +86,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-main h-full slidev-presenter">
-    <div class="grid-container">
+    <div class="grid-container" :class="`layout${presenterLayout}`">
       <div class="grid-section top flex">
         <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:h-14 lg:py-2" style="height: 3.5rem;" alt="Slidev logo">
         <div class="flex-auto" />
@@ -135,12 +135,31 @@ onMounted(() => {
           next
         </div>
       </div>
-      <div class="grid-section note overflow-auto">
-        <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor">
-          <Editor />
-        </template>
-        <NoteEditor v-else-if="__DEV__" class="w-full max-w-full h-full overflow-auto p-2 lg:p-4" />
-        <NoteStatic v-else class="w-full max-w-full h-full overflow-auto p-2 lg:p-4" />
+      <!-- Notes -->
+      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor" class="grid-section note of-auto">
+        <Editor />
+      </div>
+      <div v-else class="grid-section note grid grid-rows-[1fr_min-content]">
+        <NoteEditor
+          v-if="__DEV__"
+          class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
+          :style="{ fontSize: `${presenterNotesFontSize}em` }"
+        />
+        <NoteStatic
+          v-else
+          class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
+          :style="{ fontSize: `${presenterNotesFontSize}em` }"
+        />
+        <div class="border-t border-main py-1 px-2 text-sm">
+          <button class="slidev-icon-btn" @click="increasePresenterFontSize">
+            <HiddenText text="Increase font size" />
+            <carbon:zoom-in />
+          </button>
+          <button class="slidev-icon-btn" @click="decreasePresenterFontSize">
+            <HiddenText text="Decrease font size" />
+            <carbon:zoom-out />
+          </button>
+        </div>
       </div>
       <div class="grid-section bottom">
         <NavControls :persist="true" />
@@ -180,6 +199,9 @@ onMounted(() => {
   @apply h-full w-full bg-gray-400 bg-opacity-15;
   display: grid;
   gap: 1px 1px;
+}
+
+.grid-container.layout1 {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: min-content 2fr 1fr min-content;
   grid-template-areas:
@@ -189,8 +211,18 @@ onMounted(() => {
     "bottom bottom";
 }
 
+.grid-container.layout2 {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: min-content 2fr 1fr min-content;
+  grid-template-areas:
+    "top top"
+    "note main"
+    "note next"
+    "bottom bottom";
+}
+
 @media (max-aspect-ratio: 3/5) {
-  .grid-container {
+  .grid-container.layout1 {
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr 1fr 1fr min-content;
     grid-template-areas:
@@ -203,7 +235,7 @@ onMounted(() => {
 }
 
 @media (min-aspect-ratio: 1/1) {
-  .grid-container {
+  .grid-container.layout1 {
     grid-template-columns: 1fr 1.1fr 0.9fr;
     grid-template-rows: min-content 1fr 2fr min-content;
     grid-template-areas:

@@ -9,6 +9,9 @@ const props = defineProps({
   class: {
     default: '',
   },
+  style: {
+    default: () => ({}),
+  },
   placeholder: {
     default: 'No notes for this slide',
   },
@@ -63,7 +66,8 @@ onClickOutside(input, () => {
   <NoteDisplay
     v-if="!editing && note"
     class="my--4 border-transparent border-2"
-    :class="[props.class]"
+    :class="props.class"
+    :style="props.style"
     :note="note"
     :note-html="info?.noteHTML"
     @click="switchNoteEdit"
@@ -74,8 +78,10 @@ onClickOutside(input, () => {
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent block border-green border-2"
     style="line-height: 1.75;"
+    :style="props.style"
     :class="props.class"
     :placeholder="placeholder"
+    @keydown.esc=" editing = false"
     @focus="editing = true"
   />
 </template>
