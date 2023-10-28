@@ -1,5 +1,6 @@
 {
   "name": "create-slidev-theme",
+  "type": "module",
   "version": "0.43.11",
   "description": "Create starter theme template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
@@ -11,9 +12,9 @@
     "url": "https://github.com/slidevjs/slidev"
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
-  "main": "index.js",
+  "main": "index.mjs",
   "bin": {
-    "create-slidev-theme": "index.js"
+    "create-slidev-theme": "index.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

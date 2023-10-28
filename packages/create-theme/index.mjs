@@ -2,15 +2,20 @@
 /* eslint-disable no-console */
 
 // @ts-check
-const process = require('node:process')
-const fs = require('node:fs')
-const path = require('node:path')
-const argv = require('minimist')(process.argv.slice(2))
-const prompts = require('prompts')
-const { cyan, blue, yellow, bold, dim, green } = require('kolorist')
-const { version } = require('./package.json')
+import process from 'node:process'
+import fs from 'node:fs'
+import path from 'node:path'
+import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
+import minimist from 'minimist'
+import prompts from 'prompts'
+import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 
+const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
+const require = createRequire(import.meta.url)
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const { version } = require('./package.json')
 
 const renameFiles = {
   _gitignore: '.gitignore',
