@@ -62,7 +62,8 @@ onClickOutside(input, () => {
 <template>
   <NoteDisplay
     v-if="!editing && note"
-    :class="props.class"
+    class="my--4 border-transparent border-2"
+    :class="[props.class]"
     :note="note"
     :note-html="info?.noteHTML"
     @click="switchNoteEdit"
@@ -71,8 +72,8 @@ onClickOutside(input, () => {
     v-else
     ref="input"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent block"
-    style="line-height: 1.75; margin: 1em 0;"
+    class="prose resize-none overflow-auto outline-none bg-transparent block border-green border-2"
+    style="line-height: 1.75;"
     :class="props.class"
     :placeholder="placeholder"
     @focus="editing = true"
