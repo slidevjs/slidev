@@ -141,7 +141,7 @@ onMounted(() => {
       <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor" class="grid-section note of-auto">
         <Editor />
       </div>
-      <div v-else class="grid-section note grid grid-rows-[60vh_1fr_min-content]">
+      <div v-else class="grid-section note grid grid-rows-[60vh_min-content]">
         <NoteEditor
           v-if="__DEV__"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
