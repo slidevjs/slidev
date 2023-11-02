@@ -2,7 +2,7 @@
   "type": "module",
   "version": "0.43.12",
   "private": true,
-  "packageManager": "pnpm@8.9.2",
+  "packageManager": "pnpm@8.10.2",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -23,7 +23,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^1.0.0-beta.29",
+    "@antfu/eslint-config": "^1.1.0",
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
     "@slidev/cli": "workspace:*",
@@ -39,7 +39,7 @@
     "@types/katex": "^0.16.5",
     "@types/localtunnel": "^2.0.3",
     "@types/markdown-it": "^13.0.5",
-    "@types/node": "^20.8.9",
+    "@types/node": "^20.8.10",
     "@types/prismjs": "^1.26.2",
     "@types/prompts": "^2.4.7",
     "@types/recordrtc": "^5.6.13",
@@ -56,7 +56,7 @@
     "lint-staged": "^15.0.2",
     "mermaid": "^10.6.0",
     "playwright-chromium": "^1.39.0",
-    "pnpm": "^8.9.2",
+    "pnpm": "^8.10.2",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.9.0",
     "tsup": "^7.2.0",
