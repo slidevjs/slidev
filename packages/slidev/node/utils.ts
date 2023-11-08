@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import resolve from 'resolve'
-import globalDirs from 'global-dirs'
+import globalDirs from 'global-directory'
 import type Token from 'markdown-it/lib/token'
 import type { ResolvedFontOptions } from '@slidev/types'
 
