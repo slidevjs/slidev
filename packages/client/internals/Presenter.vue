@@ -141,7 +141,7 @@ onMounted(() => {
       <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor" class="grid-section note of-auto">
         <Editor />
       </div>
-      <div v-else class="slidev-notes-container grid-section note grid grid-rows-[1fr_min-content]">
+      <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
         <NoteEditor
           v-if="__DEV__"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
@@ -219,10 +219,6 @@ onMounted(() => {
     "main main"
     "note next"
     "bottom bottom";
-}
-
-.grid-container.layout1 .slidev-notes-container {
-  max-height: 60vh;
 }
 
 .grid-container.layout2 {
