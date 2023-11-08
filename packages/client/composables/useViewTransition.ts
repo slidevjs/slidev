@@ -10,8 +10,17 @@ export function useViewTransition() {
 
   const supportViewTransition = typeof document !== 'undefined' && 'startViewTransition' in document
 
-  router.beforeResolve((from, to) => {
-    if (!(from.meta.transition === 'view-transition' || to.meta.transition === 'view-transition')) {
+  router.beforeResolve((to, from) => {
+    const fromNo = from.meta.slide?.no
+    const toNo = to.meta.slide?.no
+    if (
+      !(
+        fromNo !== undefined && toNo !== undefined && (
+          (from.meta.transition === 'view-transition' && fromNo < toNo)
+          || (to.meta.transition === 'view-transition' && toNo < fromNo)
+        )
+      )
+    ) {
       isViewTransition.value = false
       return
     }
