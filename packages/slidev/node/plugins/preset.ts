@@ -134,7 +134,7 @@ export async function ViteSlidevPlugin(
     }),
 
     (config.remoteAssets === true || config.remoteAssets === mode)
-      ? import('vite-plugin-remote-assets').then(r => r.default({
+      ? import('vite-plugin-remote-assets').then(r => r.VitePluginRemoteAssets({
         rules: [
           ...r.DefaultRules,
           {
