@@ -8,6 +8,7 @@ import PrintSlideClick from './PrintSlideClick.vue'
 const props = defineProps<{ route: RouteRecordRaw }>()
 
 const clicksElements = ref(props.route.meta?.__clicksElements || [])
+const clicks = computed(() => props.route.meta?.clicks ?? clicksElements.value.length)
 
 const route = computed(() => props.route)
 const nav = useNav(route)
@@ -16,6 +17,6 @@ const nav = useNav(route)
 <template>
   <PrintSlideClick v-model:clicks-elements="clicksElements" :clicks="0" :nav="nav" :route="route" />
   <template v-if="!isClicksDisabled">
-    <PrintSlideClick v-for="i of (clicksElements.length)" :key="i" :clicks="i" :nav="nav" :route="route" />
+    <PrintSlideClick v-for="i of clicks" :key="i" :clicks="i" :nav="nav" :route="route" />
   </template>
 </template>
