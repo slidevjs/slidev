@@ -8,6 +8,7 @@ import { initDrawingState } from '../state/drawings'
 import { clicks, currentPage, getPath, isNotesViewer, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 import { TRUST_ORIGINS } from '../constants'
+import { skipTransition } from '../composables/hmr'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
@@ -58,6 +59,7 @@ export default function setupRoot() {
     if (!routePath.match(/^\/(\d+|presenter)\/?/))
       return
     if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentPage.value || +clicks.value !== +state.clicks)) {
+      skipTransition.value = false
       router.replace({
         path: getPath(state.page),
         query: {
