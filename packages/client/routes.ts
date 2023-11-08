@@ -82,6 +82,7 @@ declare module 'vue-router' {
     class?: string
     clicks?: number
     transition?: string | TransitionGroupProps | undefined
+    preload?: boolean
 
     // slide info
     slide?: {

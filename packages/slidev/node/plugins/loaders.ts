@@ -295,6 +295,7 @@ export function createSlidesLoader(
                     class: computed(() => frontmatter.class),
                     clicks: computed(() => frontmatter.clicks),
                     name: computed(() => frontmatter.name),
+                    preload: computed(() => frontmatter.preload),
                     slide: {
                       ...(${JSON.stringify({
                         ...prepareSlideInfo(slide),
