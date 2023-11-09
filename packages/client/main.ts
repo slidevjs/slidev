@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createHead } from '@vueuse/head'
+import { createHead } from '@unhead/vue'
 import App from './App.vue'
 import setupMain from './setup/main'
 import { router } from './routes'

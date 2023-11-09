@@ -1,6 +1,6 @@
 /* __imports__ */
 import { watch } from 'vue'
-import { useHead } from '@vueuse/head'
+import { useHead } from '@unhead/vue'
 import { nanoid } from 'nanoid'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'

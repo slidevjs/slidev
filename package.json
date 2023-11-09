@@ -32,7 +32,7 @@
     "@types/cli-progress": "^3.11.5",
     "@types/codemirror": "^5.60.13",
     "@types/connect": "^3.4.38",
-    "@types/debug": "^4.1.11",
+    "@types/debug": "^4.1.12",
     "@types/file-saver": "^2.0.7",
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
