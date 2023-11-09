@@ -44,17 +44,22 @@ export function prettify(data: SlidevMarkdown) {
   return data
 }
 
+function safeParseYAML(str: string) {
+  const res = YAML.load(str)
+  return isObject(res) ? res : {}
+}
+
 function matter(code: string) {
-  let data: any = {}
-  const content = code.replace(
-    /^---.*\r?\n([\s\S]*?)---/,
-    (_, d) => {
-      data = YAML.load(d)
-      if (!isObject(data))
-        data = {}
-      return ''
-    },
-  )
+  const data: any = {}
+  const replacer = (_: string, d: string) => {
+    Object.assign(data, safeParseYAML(d))
+    return ''
+  }
+
+  const content = code
+    .replace(/^---.*\r?\n([\s\S]*?)---/, replacer)
+    .replace(/<v-config>([\s\S]*?)<\/v-config>/g, replacer)
+
   return { data, content }
 }
 
