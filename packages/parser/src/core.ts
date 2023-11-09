@@ -58,7 +58,7 @@ function matter(code: string) {
 
   const content = code
     .replace(/^---.*\r?\n([\s\S]*?)---/, replacer)
-    .replace(/<v-config>([\s\S]*?)<\/v-config>/g, replacer)
+    .replace(/^\s*```yml([\s\S]*?)```/, replacer)
 
   return { data, content }
 }
