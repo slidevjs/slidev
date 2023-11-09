@@ -1,7 +1,7 @@
 {
   "name": "create-slidev-theme",
   "type": "module",
-  "version": "0.43.14",
+  "version": "0.43.15",
   "description": "Create starter theme template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
