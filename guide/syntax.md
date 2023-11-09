@@ -130,6 +130,21 @@ function add(
 
 This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
 
+You can start the highlight at a specific click:
+
+~~~ts
+//```ts {2-3|5|all} {at:0}
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+//```
+~~~
+
+This is especially useful when you need to sync different animations (when using `two-cols` layout and list animation for instance).
+
 To skip highlighting any lines, you can set the line number to `0`. For example
 
 ~~~ts {0}
