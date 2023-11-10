@@ -426,6 +426,26 @@ export const community: ThemeInfo[] = [
       'minimalism',
     ],
   },
+  {
+    id: 'slidev-theme-frankfurt',
+    name: 'Frankfurt',
+    description: 'Inspired by the Beamer theme Frankfurt',
+    author: {
+      name: 'Mu-Tsun Tsai',
+      link: 'https://github.com/MuTsunTsai',
+    },
+    repo: 'https://github.com/MuTsunTsai/slidev-theme-frankfurt',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/MuTsunTsai/slidev-theme-frankfurt/screenshots/01.png',
+      'https://cdn.jsdelivr.net/gh/MuTsunTsai/slidev-theme-frankfurt/screenshots/04.png',
+      'https://cdn.jsdelivr.net/gh/MuTsunTsai/slidev-theme-frankfurt/screenshots/06.png',
+      'https://cdn.jsdelivr.net/gh/MuTsunTsai/slidev-theme-frankfurt/screenshots/07.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
