@@ -50,21 +50,21 @@ export default defineComponent({
       ]])
     }
 
-    let defaults = this.$slots.default?.()
-
-    if (!defaults)
-      return
-
-    defaults = toArray(defaults)
-
-    const openAllTopLevelSlots = (children: VNodeArrayChildren): VNodeArrayChildren => {
+    const openAllTopLevelSlots = <T extends VNodeArrayChildren | VNode[]>(children: T): T => {
       return children.flatMap((i) => {
         if (isVNode(i) && typeof i.type === 'symbol' && Array.isArray(i.children))
           return openAllTopLevelSlots(i.children)
         else
           return [i]
-      })
+      }) as T
     }
+
+    let defaults = this.$slots.default?.()
+
+    if (!defaults)
+      return
+
+    defaults = openAllTopLevelSlots(toArray(defaults))
 
     const mapSubList = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
       let idx = 0
