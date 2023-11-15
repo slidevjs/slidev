@@ -141,3 +141,40 @@ Left
 
 </v-clicks>
 </div>
+
+---
+
+# Page 12
+
+<v-clicks>
+  <ul><li>A</li><li>B</li></ul>
+</v-clicks>
+
+<wrap-in-clicks>
+  <ul><li>A</li><li>B</li></ul>
+</wrap-in-clicks>
+
+<wrap-in-clicks>
+
+- A
+- B
+
+</wrap-in-clicks>
+
+---
+
+# Page 13
+
+<div class="cy-wrapdecorate">
+<wrap-in-clicks-decorate>
+  <li>E</li>
+  <li>F</li>
+</wrap-in-clicks-decorate>
+
+(the next is kept for a future patch but not animating the nesting)
+
+<wrap-in-component-in-clicks>
+  <li>step i</li>
+  <li>step j</li>
+</wrap-in-component-in-clicks>
+</div>

@@ -220,4 +220,37 @@ context('Basic', () => {
     cy.get('.cy-depth > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'A B CDEF GHIJKL')
   })
+
+  it('slot in v-clicks', () => {
+    goPage(12)
+
+    cy
+      .url()
+      .should('eq', 'http://localhost:3030/12')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
+      .url()
+      .should('eq', 'http://localhost:3030/12?clicks=6') // we should still be on page 12
+
+    cy.get('body')
+      .type('{RightArrow}')
+      .url()
+      .should('eq', 'http://localhost:3030/13')
+
+    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target.slidev-vclick-hidden')
+      .should('have.text', 'AEFZ')
+
+    cy.get('body')
+      .type('{RightArrow}{RightArrow}{RightArrow}')
+
+    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'AEF')
+
+    cy.get('body')
+      .type('{RightArrow}')
+
+    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'AEFZ')
+  })
 })
