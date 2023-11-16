@@ -1,10 +1,13 @@
 import type { SlidevConfig } from './config'
 
+export type FrontmatterStyle = 'frontmatter' | 'yaml'
+
 export interface SlideInfoBase {
   raw: string
   content: string
   note?: string
   frontmatter: Record<string, any>
+  frontmatterStyle?: FrontmatterStyle
   title?: string
   level?: number
 }

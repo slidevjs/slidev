@@ -92,6 +92,7 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       "layout": "cover",
       "title": "Hi",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -122,6 +123,7 @@ title: Hi
         "title": "FooBar",
       },
     },
+    "frontmatterStyle": "frontmatter",
     "index": 1,
     "level": 1,
     "note": "This is note",
@@ -147,6 +149,7 @@ This is note
 ",
     "end": 19,
     "frontmatter": {},
+    "frontmatterStyle": undefined,
     "index": 2,
     "level": 1,
     "note": undefined,
@@ -166,6 +169,7 @@ Hey
     "frontmatter": {
       "layout": "text",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": undefined,
     "note": "This is note",
@@ -194,6 +198,7 @@ this should be treated as code block
 ",
     "end": 35,
     "frontmatter": {},
+    "frontmatterStyle": undefined,
     "index": 4,
     "level": undefined,
     "note": undefined,
@@ -208,6 +213,91 @@ this should be treated as code block
 ",
     "start": 27,
     "title": undefined,
+  },
+  {
+    "content": "
+Content 1
+",
+    "end": 44,
+    "frontmatter": {
+      "layout": "from yaml",
+    },
+    "frontmatterStyle": "yaml",
+    "index": 5,
+    "level": undefined,
+    "note": undefined,
+    "raw": "\`\`\`yaml
+layout: from yaml
+\`\`\`
+
+Content 1
+
+",
+    "start": 36,
+    "title": undefined,
+  },
+  {
+    "content": "
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 1
+\`\`\`
+
+Content 2
+",
+    "end": 55,
+    "frontmatter": {
+      "layout": "cover",
+    },
+    "frontmatterStyle": "frontmatter",
+    "index": 6,
+    "level": 1,
+    "note": undefined,
+    "raw": "---
+layout: cover
+---
+
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 1
+\`\`\`
+
+Content 2
+
+",
+    "start": 44,
+    "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+  },
+  {
+    "content": "
+# Title
+
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 2
+\`\`\`
+
+Content 3
+",
+    "end": 66,
+    "frontmatter": {},
+    "frontmatterStyle": undefined,
+    "index": 7,
+    "level": 1,
+    "note": undefined,
+    "raw": "
+# Title
+
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 2
+\`\`\`
+
+Content 3
+
+",
+    "start": 56,
+    "title": "Title",
   },
 ]
 `;
@@ -292,6 +382,7 @@ exports[`md parser > mdc.md > slides 1`] = `
       "mdc": true,
       "title": "MDC{style=\\"color:red\\"}",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -395,6 +486,7 @@ console.log('Hello World')
     "frontmatter": {
       "title": "H1",
     },
+    "frontmatterStyle": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -427,6 +519,7 @@ console.log('Hello World')
 ",
     "end": 18,
     "frontmatter": {},
+    "frontmatterStyle": undefined,
     "index": 1,
     "level": 1,
     "note": undefined,
@@ -448,6 +541,7 @@ Nice to meet you
 ",
     "end": 22,
     "frontmatter": {},
+    "frontmatterStyle": undefined,
     "index": 2,
     "level": undefined,
     "note": undefined,
@@ -539,6 +633,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "srcSequence": "sub/page1.md",
       "title": undefined,
     },
+    "frontmatterStyle": undefined,
     "index": 0,
     "inline": {
       "content": "",
@@ -546,6 +641,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "frontmatter": {
         "title": undefined,
       },
+      "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": undefined,
       "note": undefined,
@@ -571,6 +667,7 @@ srcSequence: sub/page1.md
       "frontmatter": {
         "title": "Page 1",
       },
+      "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -595,6 +692,7 @@ srcSequence: sub/page1.md
       "srcSequence": "/sub/page2.md",
       "title": "Page 2",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 1,
     "inline": {
       "content": "",
@@ -602,6 +700,7 @@ srcSequence: sub/page1.md
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#2",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": undefined,
       "note": undefined,
@@ -636,6 +735,7 @@ srcSequence: /sub/page2.md
         "layout": "cover",
         "title": "Page 2",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -663,6 +763,7 @@ layout: cover
       "srcSequence": "./sub/pages3-4.md",
       "title": "Page 3",
     },
+    "frontmatterStyle": undefined,
     "index": 2,
     "inline": {
       "content": "",
@@ -670,6 +771,7 @@ layout: cover
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#34",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 2,
       "level": undefined,
       "note": undefined,
@@ -698,6 +800,7 @@ srcSequence: ./sub/pages3-4.md
       "frontmatter": {
         "title": "Page 3",
       },
+      "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -721,6 +824,7 @@ srcSequence: ./sub/pages3-4.md
       "layout": "cover",
       "srcSequence": "./sub/pages3-4.md",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": 1,
     "note": undefined,
@@ -743,6 +847,7 @@ srcSequence: ./sub/pages3-4.md
       "frontmatter": {
         "layout": "cover",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": 1,
       "note": undefined,
@@ -770,6 +875,7 @@ layout: cover
       "srcSequence": "sub/nested1-4.md,/sub/page1.md",
       "title": undefined,
     },
+    "frontmatterStyle": undefined,
     "index": 4,
     "inline": {
       "content": "",
@@ -777,6 +883,7 @@ layout: cover
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#14",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 3,
       "level": undefined,
       "note": undefined,
@@ -804,6 +911,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "frontmatter": {
         "title": "Page 1",
       },
+      "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -828,6 +936,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "srcSequence": "sub/nested1-4.md,page2.md",
       "title": "Page 2",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 5,
     "level": 1,
     "note": undefined,
@@ -852,6 +961,7 @@ srcSequence: sub/nested1-4.md,page2.md
         "layout": "cover",
         "title": "Page 2",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -879,6 +989,7 @@ layout: cover
       "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
       "title": "Page 3",
     },
+    "frontmatterStyle": undefined,
     "index": 6,
     "level": 1,
     "note": undefined,
@@ -897,6 +1008,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "frontmatter": {
         "title": "Page 3",
       },
+      "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
       "note": undefined,
@@ -920,6 +1032,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "layout": "cover",
       "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
     },
+    "frontmatterStyle": "frontmatter",
     "index": 7,
     "level": 1,
     "note": undefined,
@@ -942,6 +1055,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "frontmatter": {
         "layout": "cover",
       },
+      "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": 1,
       "note": undefined,
@@ -967,6 +1081,7 @@ $x+2$
 ",
     "end": 25,
     "frontmatter": {},
+    "frontmatterStyle": undefined,
     "index": 8,
     "level": 1,
     "note": undefined,

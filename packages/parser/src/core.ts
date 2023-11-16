@@ -1,6 +1,6 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap } from '@antfu/utils'
-import type { PreparserExtensionFromHeadmatter, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
+import type { FrontmatterStyle, PreparserExtensionFromHeadmatter, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
@@ -30,7 +30,9 @@ export function stringifySlide(data: SlideInfoBase, idx = 0) {
 export function prettifySlide(data: SlideInfoBase) {
   data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
-    ? `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
+    ? data.frontmatterStyle === 'yaml'
+      ? `\`\`\`yaml\n${YAML.dump(data.frontmatter).trim()}\n\`\`\`\n${data.content}`
+      : `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
     data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
@@ -44,18 +46,37 @@ export function prettify(data: SlidevMarkdown) {
   return data
 }
 
+function safeParseYAML(str: string) {
+  const res = YAML.load(str)
+  return isObject(res) ? res : {}
+}
+
 function matter(code: string) {
-  let data: any = {}
-  const content = code.replace(
-    /^---.*\r?\n([\s\S]*?)---/,
-    (_, d) => {
-      data = YAML.load(d)
-      if (!isObject(data))
-        data = {}
+  let type: FrontmatterStyle | undefined
+
+  const data: any = {}
+
+  let content = code
+    .replace(/^---.*\r?\n([\s\S]*?)---/, (_, f) => {
+      type = 'frontmatter'
+      Object.assign(data, safeParseYAML(f))
       return ''
-    },
-  )
-  return { data, content }
+    })
+
+  if (type !== 'frontmatter') {
+    content = content
+      .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, d) => {
+        type = 'yaml'
+        Object.assign(data, safeParseYAML(d))
+        return ''
+      })
+  }
+
+  return {
+    type,
+    data,
+    content,
+  }
 }
 
 export function detectFeatures(code: string): SlidevFeatureFlags {
@@ -68,10 +89,10 @@ export function detectFeatures(code: string): SlidevFeatureFlags {
 }
 
 export function parseSlide(raw: string): SlideInfoBase {
-  const result = matter(raw)
+  const matterResult = matter(raw)
   let note: string | undefined
-  const frontmatter = result.data || {}
-  let content = result.content.trim()
+  const frontmatter = matterResult.data || {}
+  let content = matterResult.content.trim()
 
   const comments = Array.from(content.matchAll(/<!--([\s\S]*?)-->/g))
   if (comments.length) {
@@ -101,6 +122,7 @@ export function parseSlide(raw: string): SlideInfoBase {
     level,
     content,
     frontmatter,
+    frontmatterStyle: matterResult.type,
     note,
   }
 }
