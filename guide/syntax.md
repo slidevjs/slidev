@@ -62,6 +62,33 @@ This is a default page without any additional metadata.
 
 Refer to [customization](/custom/) for more details.
 
+> The custom syntax might not be compactible with some formatters like Prettier. To improve that, we also support using a direct `yaml` code block to define the frontmatter:
+>
+> ~~~markdown
+> ---
+> layout: cover
+> ---
+> 
+> # Slidev
+> 
+> This is the cover page.
+> 
+> ---
+> 
+> ```yaml
+> # The first yaml block will be treated as the frontmatter of that slide
+> layout: center
+> background: './images/background-1.png'
+> class: 'text-white'
+> ```
+> 
+> # Page 2
+> 
+> This is a page with the layout `center` and a background image.
+> ~~~
+>
+> (Available since v0.44.0)
+
 ## Code Blocks
 
 One big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
