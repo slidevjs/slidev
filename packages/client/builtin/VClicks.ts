@@ -50,16 +50,25 @@ export default defineComponent({
       ]])
     }
 
+    const openAllTopLevelSlots = <T extends VNodeArrayChildren | VNode[]>(children: T): T => {
+      return children.flatMap((i) => {
+        if (isVNode(i) && typeof i.type === 'symbol' && Array.isArray(i.children))
+          return openAllTopLevelSlots(i.children)
+        else
+          return [i]
+      }) as T
+    }
+
     let defaults = this.$slots.default?.()
 
     if (!defaults)
       return
 
-    defaults = toArray(defaults)
+    defaults = openAllTopLevelSlots(toArray(defaults))
 
     const mapSubList = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
       let idx = 0
-      const vNodes = children.map((i) => {
+      const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i))
           return i
         if (listTags.includes(i.type as string) && Array.isArray(i.children)) {
@@ -76,7 +85,7 @@ export default defineComponent({
     let globalIdx = 0
     const mapChildren = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
       let idx = 0
-      const vNodes = children.map((i) => {
+      const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i) || i.type === Comment)
           return i
         const directive = idx % this.every === 0 ? click : after
