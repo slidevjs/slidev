@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
-import { useHead } from '@vueuse/head'
+import { useHead } from '@unhead/vue'
 import { configs, themeVars } from '../env'
 import { rawRoutes, total } from '../logic/nav'
 import NoteDisplay from './NoteDisplay.vue'
