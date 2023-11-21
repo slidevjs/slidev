@@ -179,11 +179,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install slidev
-        run:  npm i -g @slidev/cli
-
       - name: Build
-        run: slidev build --base /<name_of_repo>/
+        run: npm run build -- --base /<name_of_repo>/
 
       - uses: actions/configure-pages@v3
 
