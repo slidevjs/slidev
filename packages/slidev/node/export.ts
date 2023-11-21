@@ -32,7 +32,7 @@ export interface ExportOptions {
    * @default false
    */
   perSlide?: boolean
-  browser?: 'chromium' | 'firefox' | 'webkit'
+  browserArg?: 'chromium' | 'firefox' | 'webkit'
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -66,7 +66,7 @@ export interface ExportNotesOptions {
   base?: string
   output?: string
   timeout?: number
-  browser?: 'chromium' | 'firefox' | 'webkit'
+  browserArg?: 'chromium' | 'firefox' | 'webkit'
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -110,9 +110,9 @@ export async function exportNotes({
   base = '/',
   output = 'notes',
   timeout = 30000,
-  browser = 'chromium',
+  browserArg = 'chromium',
 }: ExportNotesOptions): Promise<string> {
-  const browserOption = ["chromium", "firefox", "webkit"].includes(browser) ? browser : null;
+  const browserOption = ["chromium", "firefox", "webkit"].includes(browserArg) ? browserArg : null;
   if (!browserOption) {
     throw new Error("Available Playwright browsers are: chromium, firefox, webkit")
   }
@@ -171,9 +171,9 @@ export async function exportSlides({
   executablePath = undefined,
   withToc = false,
   perSlide = false,
-  browser = 'chromium',
+  browserArg = 'chromium',
 }: ExportOptions) {
-  const browserOption = ["chromium", "firefox", "webkit"].includes(browser) ? browser : null;
+  const browserOption = ["chromium", "firefox", "webkit"].includes(browserArg) ? browserArg : null;
   if (!browserOption) {
     throw new Error("Available Playwright browsers are: chromium, firefox, webkit")
   }
@@ -442,6 +442,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath: args['executable-path'],
     withToc: args['with-toc'],
     perSlide: args['per-slide'],
+    browserArg: args['browser'],
   }
   const {
     entry,
@@ -473,6 +474,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
-    browser,
+    browserArg,
   }
 }
