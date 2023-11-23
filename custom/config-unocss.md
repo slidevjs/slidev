@@ -12,6 +12,8 @@ By default, Slidev enables the following presets out-of-box:
 - [@unocss/preset-web-fonts](https://unocss.dev/presets/web-fonts) - Use web fonts at ease
 - [@unocss/transformer-directives](https://unocss.dev/transformers/directives) - Use `@apply` in CSS
 
+Slidev also adds shortcuts as can be seen in its [source code](https://github.com/slidevjs/slidev/blob/main/packages/client/uno.config.ts).
+
 You can therefore style your content the way you want. For example:
 
 ```html
