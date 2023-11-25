@@ -20,7 +20,7 @@ import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingControls from './DrawingControls.vue'
 import HiddenText from './HiddenText.vue'
-  
+
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
