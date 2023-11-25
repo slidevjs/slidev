@@ -102,4 +102,6 @@ jobs:
           CYPRESS_INSTALL_BINARY: 0
 
       - name: Lint
-        run: nr lint --if-present
+        run: nr lint --fix
+
+      - uses: autofix-ci/action@v1
