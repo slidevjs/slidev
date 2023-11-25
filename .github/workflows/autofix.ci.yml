@@ -1,0 +1,36 @@
+name: autofix.ci
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js lts/*
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+
+      - name: Setup
+        run: npm i -g @antfu/ni
+
+      - name: Install
+        run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: Lint
+        run: nr lint --fix
+
+      - uses: autofix-ci/action@v1
