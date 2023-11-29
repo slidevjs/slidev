@@ -110,6 +110,7 @@ export async function ViteSlidevPlugin(
         ...addonRoots.map(i => join(i, 'components')),
         'src/components',
         'components',
+        join(process.cwd(), 'components'),
       ],
 
       include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/],
