@@ -105,3 +105,23 @@ Default Slot
 
 </template>"
 `;
+
+exports[`markdown transform > slot-sugar with symbols in name 1`] = `
+"
+# Page 
+
+Default Slot
+
+<template v-slot:slot-[1]=\\"slotProps\\">
+
+First Slot
+
+
+</template>
+<template v-slot:slot.2=\\"slotProps\\">
+
+Second Slot
+
+
+</template>"
+`;
