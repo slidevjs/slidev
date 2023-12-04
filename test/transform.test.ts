@@ -53,7 +53,7 @@ Slot Usage
 # Page 
 
 Default Slot
-::slot-[1]::
+::slot::1::
 First Slot
 ::slot.2::
 Second Slot

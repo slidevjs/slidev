@@ -112,7 +112,7 @@ exports[`markdown transform > slot-sugar with symbols in name 1`] = `
 
 Default Slot
 
-<template v-slot:slot-[1]=\\"slotProps\\">
+<template v-slot:slot::1=\\"slotProps\\">
 
 First Slot
 
