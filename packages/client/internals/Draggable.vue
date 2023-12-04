@@ -4,7 +4,7 @@ import { useDraggable, useLocalStorage } from '@vueuse/core'
 
 const props = defineProps<{
   storageKey?: string
-  initial?: { x: number; y: number }
+  initial?: { x: number, y: number }
 }>()
 
 const el = ref<HTMLElement | null>(null)
