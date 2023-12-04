@@ -22,6 +22,7 @@ export async function createServer(
       options,
       viteConfig,
       <InlineConfig>({
+        root: options.userRoot,
         optimizeDeps: {
           entries: [
             join(options.clientRoot, 'main.ts'),
