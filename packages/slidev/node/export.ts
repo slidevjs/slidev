@@ -32,6 +32,7 @@ export interface ExportOptions {
    * @default false
    */
   perSlide?: boolean
+  browserArg?: 'chromium' | 'firefox' | 'webkit'
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -65,6 +66,7 @@ export interface ExportNotesOptions {
   base?: string
   output?: string
   timeout?: number
+  browserArg?: 'chromium' | 'firefox' | 'webkit'
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -108,12 +110,18 @@ export async function exportNotes({
   base = '/',
   output = 'notes',
   timeout = 30000,
+  browserArg = 'chromium',
 }: ExportNotesOptions): Promise<string> {
-  if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
+  const browserOption = ["chromium", "firefox", "webkit"].includes(browserArg) ? browserArg : null;
+  if (!browserOption) {
+    throw new Error("Available Playwright browsers are: chromium, firefox, webkit")
+  }
+  const browserPackage = `playwright-${browserOption}`;
+  if (!packageExists(browserPackage))
+    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D ' + browserPackage + '`')
 
-  const { chromium } = await import('playwright-chromium')
-  const browser = await chromium.launch()
+  const { playwright } = await import(browserPackage)
+  const browser = await playwright.launch()
   const context = await browser.newContext()
   const page = await context.newPage()
 
@@ -163,14 +171,20 @@ export async function exportSlides({
   executablePath = undefined,
   withToc = false,
   perSlide = false,
+  browserArg = 'chromium',
 }: ExportOptions) {
-  if (!packageExists('playwright-chromium'))
-    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
+  const browserOption = ["chromium", "firefox", "webkit"].includes(browserArg) ? browserArg : null;
+  if (!browserOption) {
+    throw new Error("Available Playwright browsers are: chromium, firefox, webkit")
+  }
+  const browserPackage = `playwright-${browserOption}`;
+  if (!packageExists(browserPackage))
+    throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D ' + browserPackage + '`')
 
   const pages: number[] = parseRangeString(total, range)
 
-  const { chromium } = await import('playwright-chromium')
-  const browser = await chromium.launch({
+  const { playwright } = await import(browserPackage)
+  const browser = await playwright.launch({
     executablePath,
   })
   const context = await browser.newContext({
@@ -428,6 +442,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath: args['executable-path'],
     withToc: args['with-toc'],
     perSlide: args['per-slide'],
+    browserArg: args['browser'],
   }
   const {
     entry,
@@ -459,5 +474,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
+    browserArg,
   }
 }

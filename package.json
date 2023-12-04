@@ -56,6 +56,8 @@
     "lint-staged": "^15.1.0",
     "mermaid": "^10.6.1",
     "playwright-chromium": "^1.39.0",
+    "playwright-firefox": "^1.39.0",
+    "playwright-webkit": "^1.39.0",
     "pnpm": "^8.10.5",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.9.0",
