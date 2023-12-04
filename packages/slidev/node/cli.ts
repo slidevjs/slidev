@@ -133,6 +133,11 @@ cli.command(
             strictPort: true,
             open,
             host: remote !== undefined ? '0.0.0.0' : 'localhost',
+            // @ts-expect-error Vite <= 4
+            force,
+          },
+          optimizeDeps: {
+            // Vite 5
             force,
           },
           logLevel: log as LogLevel,
