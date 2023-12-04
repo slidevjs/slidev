@@ -118,6 +118,24 @@ export default defineComponent({
     if (defaults.length === 1 && listTags.includes(defaults[0].type as string) && Array.isArray(defaults[0].children))
       return h(defaults[0], {}, [mapChildren(defaults[0].children)[0]])
 
+    if (defaults.length === 1 && defaults[0].type as string === 'table') {
+      const tableNode = defaults[0]
+      if (Array.isArray(tableNode.children)) {
+        return h(tableNode, {}, tableNode.children.map((i) => {
+          if (!isVNode(i)) {
+            return i
+          }
+          else {
+            if (i.type === 'tbody' && Array.isArray(i.children))
+              return h(i, {}, [mapChildren(i.children)[0]])
+
+            else
+              return h(i)
+          }
+        }))
+      }
+    }
+
     return mapChildren(defaults)[0]
   },
 })
