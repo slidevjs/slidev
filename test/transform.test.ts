@@ -48,6 +48,18 @@ Slot Usage
 `)).toMatchSnapshot()
   })
 
+  it('slot-sugar with symbols in name', () => {
+    expect(transformSlotSugar(`
+# Page 
+
+Default Slot
+::slot::1::
+First Slot
+::slot.2::
+Second Slot
+`)).toMatchSnapshot()
+  })
+
   it('inline CSS', () => {
     expect(transformPageCSS(`
 # Page 
