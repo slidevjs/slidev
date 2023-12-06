@@ -144,7 +144,7 @@ export function transformSlotSugar(md: string) {
     if (isLineInsideCodeblocks(idx))
       return
 
-    const match = line.trimEnd().match(/^::\s*(\w+)\s*::$/)
+    const match = line.trimEnd().match(/^::\s*([\w\.\-\:]+)\s*::$/)
     if (match) {
       lines[idx] = `${prevSlot ? '\n\n</template>\n' : '\n'}<template v-slot:${match[1]}="slotProps">\n`
       prevSlot = true
