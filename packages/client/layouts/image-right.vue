@@ -23,6 +23,6 @@ const style = computed(() => handleBackground(props.image, false, props.backgrou
     <div class="slidev-layout default" :class="props.class">
       <slot />
     </div>
-    <div class="w-full w-full" :style="style" />
+    <div class="w-full h-full" :style="style" />
   </div>
 </template>
