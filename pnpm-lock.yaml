@@ -107,8 +107,8 @@ importers:
         specifier: ^15.2.0
         version: 15.2.0
       markdown-it-shikiji:
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.6
+        version: 0.8.6
       mermaid:
         specifier: ^10.6.1
         version: 10.6.1
@@ -122,8 +122,8 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5
       shikiji:
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.6
+        version: 0.8.6
       simple-git-hooks:
         specifier: ^2.9.0
         version: 2.9.0
@@ -444,8 +444,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@types/markdown-it@13.0.7)(markdown-it@14.0.0)
       markdown-it-shikiji:
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.6
+        version: 0.8.6
       monaco-editor:
         specifier: ^0.37.1
         version: 0.37.1
@@ -486,14 +486,14 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       shiki:
-        specifier: npm:shikiji-compat@^0.8.5
-        version: /shikiji-compat@0.8.5
+        specifier: npm:shikiji-compat@^0.8.6
+        version: /shikiji-compat@0.8.6
       shikiji:
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.6
+        version: 0.8.6
       shikiji-twoslash:
-        specifier: ^0.8.5
-        version: 0.8.5(typescript@5.3.3)
+        specifier: ^0.8.6
+        version: 0.8.6(typescript@5.3.3)
       sirv:
         specifier: ^2.0.3
         version: 2.0.3
@@ -6160,11 +6160,11 @@ packages:
       markdown-it: 14.0.0
     dev: false
 
-  /markdown-it-shikiji@0.8.5:
-    resolution: {integrity: sha512-NGLvtRhuc8Oe3ErGZ2NOgJc97Ci1ZwvZneZWdMJmHFtv6fkzGzpNk8gOwP7ycb4VTd1oOO9F1sV4Jk95yiQVHQ==}
+  /markdown-it-shikiji@0.8.6:
+    resolution: {integrity: sha512-9xqMuXmm0zQikpoZwPWyexDOIcJ6iWKEhgWH3OEsBXxwG3ngGyk8HcYLu1hoHlwoZDZo3qvVkBRmr/Xofy6MsQ==}
     dependencies:
       markdown-it: 14.0.0
-      shikiji: 0.8.5
+      shikiji: 0.8.6
 
   /markdown-it@13.0.2:
     resolution: {integrity: sha512-FtwnEuuK+2yVU7goGn/MJ0WBZMM9ZPgU9spqlFs7/A/pDIUNSOQZhUgOqYCficIuR2QaFnrt8LHqBWsbTAoI5w==}
@@ -7424,31 +7424,31 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  /shikiji-compat@0.8.5:
-    resolution: {integrity: sha512-IPAf/hhVehZxKlzqElzgNZtsH4UJ6pUrjeKVeT1ogqkOQI/HSqVJ87BcGffNSQA5YfuiOeDXjH6HVgbCNTe0cw==}
+  /shikiji-compat@0.8.6:
+    resolution: {integrity: sha512-EqIN+wUdbWJ2W4pJP4J/QWIeuWUPLv82UV0bMYhyf13lewozh8FK0iyF7+UT+m4gYHL7FFHmHx0eRmodhp5kTQ==}
     dependencies:
-      shikiji: 0.8.5
-      shikiji-transformers: 0.8.5
+      shikiji: 0.8.6
+      shikiji-transformers: 0.8.6
     dev: false
 
-  /shikiji-transformers@0.8.5:
-    resolution: {integrity: sha512-64P716zaWhX2s3vGasOcaqu5pHlBgUGeV9gkCQdRqfhruKNcmTuExbJfYVGnnEONnmac5liCY3Ef1C7oSDidbQ==}
+  /shikiji-transformers@0.8.6:
+    resolution: {integrity: sha512-x+aPJHOv+Xf1FIEkKMHtePSmhL0rkbBpCyrT5vTq62Y5sc7rcXRz/zEXQEZSrX0ncL5cubeAJhmvjtOqgbwbfg==}
     dependencies:
-      shikiji: 0.8.5
+      shikiji: 0.8.6
     dev: false
 
-  /shikiji-twoslash@0.8.5(typescript@5.3.3):
-    resolution: {integrity: sha512-t6ss3jTl5dKiFOBQvaXiYvwxzU5gw3WdwUgMyvC1ZTUO8mhv0IVsvCWkvlQUhUKCRBJrSK+U0oLhz+ejDg/ZSg==}
+  /shikiji-twoslash@0.8.6(typescript@5.3.3):
+    resolution: {integrity: sha512-rAOx+6MTjPOC5TmVXoNgKE/iWx319q7sn/NqQXwo0wyb5sNmsuhPndiO60I4jo0PSqBtzbvw1Th+lmu3DVh4WQ==}
     dependencies:
       '@typescript/twoslash': 3.2.4(typescript@5.3.3)
-      shikiji: 0.8.5
+      shikiji: 0.8.6
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: false
 
-  /shikiji@0.8.5:
-    resolution: {integrity: sha512-DSQ1EqyDSDw60YjrWRcJFaDbbrqt+2BQqz9U56PRWRiZQMWXqYLAnUbvDPV4lPh/t0bgUeFKivct85ECxKRKFg==}
+  /shikiji@0.8.6:
+    resolution: {integrity: sha512-ES15MfwaJ2vzehLRNKbpyMkl+ToAqQieHNtUDHBU6ZH50ibddS8pF4rYg8QRQXgRjMZMHipOblaEbCcgIxHUfw==}
     dependencies:
       hast-util-to-html: 9.0.0
 
