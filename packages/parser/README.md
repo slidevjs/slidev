@@ -11,4 +11,3 @@ Refer to the TypeScript definitions for API.
 ## License
 
 MIT License © 2021 [Anthony Fu](https://github.com/antfu)
-

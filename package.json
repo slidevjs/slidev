@@ -16,7 +16,7 @@
     "demo:dev": "pnpm -C demo/starter run dev",
     "play": "pnpm demo:dev",
     "dev": "pnpm -r --filter=./packages/** --parallel run dev",
-    "lint": "eslint . --cache",
+    "lint": "eslint .",
     "lint:fix": "nr lint --fix",
     "typecheck": "vue-tsc --noEmit",
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
@@ -69,6 +69,11 @@
     "vue-tsc": "^1.8.25",
     "zx": "^7.2.3"
   },
+  "pnpm": {
+    "patchedDependencies": {
+      "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
+    }
+  },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
@@ -76,10 +81,5 @@
     "{packages,.vitepress,scripts}/**/*.{js,ts,vue,json}": [
       "eslint --fix --cache"
     ]
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
-    }
   }
 }

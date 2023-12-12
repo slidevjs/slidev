@@ -155,7 +155,6 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 </div>
 </div>
 
-
 ---
 class: px-20
 ---
@@ -318,7 +317,6 @@ C -->|Two| E[Result 2]
 </div>
 
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
 
 ---
 layout: center

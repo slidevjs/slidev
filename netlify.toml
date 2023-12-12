@@ -1,23 +1,23 @@
-[build.environment]
-  NODE_VERSION = "18"
-  PLAYWRIGHT_BROWSERS_PATH = "0"
-
 [build]
-  publish = "dist"
-  command = "pnpm run demo:build"
+publish = "dist"
+command = "pnpm run demo:build"
+
+[build.environment]
+NODE_VERSION = "18"
+PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
-  from = "/composable-vue/*"
-  to = "/composable-vue/index.html"
-  status = 200
+from = "/composable-vue/*"
+to = "/composable-vue/index.html"
+status = 200
 
 [[redirects]]
-  from = "/starter/*"
-  to = "/starter/index.html"
-  status = 200
+from = "/starter/*"
+to = "/starter/index.html"
+status = 200
 
 [[redirects]]
-  from = "/"
-  to = "https://sli.dev/"
-  status = 301
-  force = true
+from = "/"
+to = "https://sli.dev/"
+status = 301
+force = true

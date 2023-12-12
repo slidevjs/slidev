@@ -7,4 +7,3 @@ Client code for [Slidev](https://sli.dev). Shipped with [`@slidev/cli`](https://
 ## License
 
 MIT License © 2021 [Anthony Fu](https://github.com/antfu)
-
