@@ -37,8 +37,12 @@ export function getDefaultConfig(): SlidevConfig {
 }
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
-  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
+  const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
+    ? themeMeta.highlighter as 'prism' | 'shiki' | 'shikiji'
+    : undefined
+  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
+    ? themeMeta.colorSchema as 'light' | 'dark'
+    : undefined
 
   const defaultConfig = getDefaultConfig()
 
@@ -80,8 +84,12 @@ export function verifyConfig(
   themeMeta: SlidevThemeMeta = {},
   warn = (v: string) => console.warn(`[slidev] ${v}`),
 ) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '') ? themeMeta.highlighter as 'prism' | 'shiki' : undefined
-  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '') ? themeMeta.colorSchema as 'light' | 'dark' : undefined
+  const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
+    ? themeMeta.highlighter as 'prism' | 'shiki' | 'shikiji'
+    : undefined
+  const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
+    ? themeMeta.colorSchema as 'light' | 'dark'
+    : undefined
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
     warn(`Color schema "${config.colorSchema}" does not supported by the theme`)

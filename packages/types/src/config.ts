@@ -69,7 +69,7 @@ export interface SlidevConfig {
    * @see https://sli.dev/custom/highlighters.html
    * @default prism
    */
-  highlighter: 'prism' | 'shiki'
+  highlighter: 'prism' | 'shiki' | 'shikiji'
   /**
    * Show line numbers in code blocks
    *
@@ -199,7 +199,7 @@ export interface SlidevConfig {
    */
   transition?: BuiltinSlideTransition | string | TransitionGroupProps
   /**
-   * Suppport **experimental** MDC syntax
+   * Suppport MDC syntax
    *
    * @see https://github.com/antfu/markdown-it-mdc
    * @see https://content.nuxtjs.org/guide/writing/mdc

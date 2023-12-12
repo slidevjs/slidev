@@ -14,6 +14,7 @@ import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
+import { addClassToHast } from 'shikiji'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -40,6 +41,33 @@ export async function createMarkdownPlugin(
     const { langs, themes } = resolveShikiOptions(shikiOptions)
     shikiOptions.highlighter = await Shiki.getHighlighter({ themes, langs })
     setups.push(md => md.use(MarkdownItShiki, shikiOptions))
+  }
+  else if (config.highlighter === 'shikiji') {
+    const MarkdownItShikiji = await import('markdown-it-shikiji').then(r => r.default)
+    const { transformerTwoSlash, rendererRich } = await import('shikiji-twoslash')
+    const plugin = await MarkdownItShikiji({
+      // TODO: Setup
+      themes: {
+        dark: 'vitesse-dark',
+        light: 'vitesse-light',
+      },
+      defaultColor: false,
+      transformers: [
+        transformerTwoSlash({
+          explicitTrigger: true,
+          renderer: rendererRich,
+        }),
+        {
+          pre(pre) {
+            addClassToHast(pre, 'slidev-code shikiji')
+          },
+          postprocess(code) {
+            return escapeVueInCode(code)
+          },
+        },
+      ],
+    })
+    setups.push(md => md.use(plugin))
   }
   else {
     setups.push(md => md.use(Prism))
@@ -161,11 +189,11 @@ export function transformSlotSugar(md: string) {
  * Transform code block with wrapper
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', code: string) => {
+  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', attrs = '', code: string) => {
     const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
     code = code.trimEnd()
     options = options.trim() || '{}'
-    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
+    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
   })
 }
 
