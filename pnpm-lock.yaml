@@ -107,8 +107,8 @@ importers:
         specifier: ^15.2.0
         version: 15.2.0
       markdown-it-shikiji:
-        specifier: ^0.8.6
-        version: 0.8.6
+        specifier: ^0.8.7
+        version: 0.8.7
       mermaid:
         specifier: ^10.6.1
         version: 10.6.1
@@ -116,14 +116,14 @@ importers:
         specifier: ^1.40.1
         version: 1.40.1
       pnpm:
-        specifier: ^8.12.0
-        version: 8.12.0
+        specifier: ^8.12.1
+        version: 8.12.1
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
       shikiji:
-        specifier: ^0.8.6
-        version: 0.8.6
+        specifier: ^0.8.7
+        version: 0.8.7
       simple-git-hooks:
         specifier: ^2.9.0
         version: 2.9.0
@@ -170,8 +170,8 @@ importers:
   demo/composable-vue:
     devDependencies:
       '@iconify-json/mdi':
-        specifier: ^1.1.61
-        version: 1.1.61
+        specifier: ^1.1.62
+        version: 1.1.62
       '@iconify-json/ri':
         specifier: ^1.1.17
         version: 1.1.17
@@ -444,8 +444,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@types/markdown-it@13.0.7)(markdown-it@14.0.0)
       markdown-it-shikiji:
-        specifier: ^0.8.6
-        version: 0.8.6
+        specifier: ^0.8.7
+        version: 0.8.7
       monaco-editor:
         specifier: ^0.37.1
         version: 0.37.1
@@ -486,14 +486,14 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       shiki:
-        specifier: npm:shikiji-compat@^0.8.6
-        version: /shikiji-compat@0.8.6
+        specifier: npm:shikiji-compat@^0.8.7
+        version: /shikiji-compat@0.8.7
       shikiji:
-        specifier: ^0.8.6
-        version: 0.8.6
+        specifier: ^0.8.7
+        version: 0.8.7
       shikiji-twoslash:
-        specifier: ^0.8.6
-        version: 0.8.6(typescript@5.3.3)
+        specifier: ^0.8.7
+        version: 0.8.7(typescript@5.3.3)
       sirv:
         specifier: ^2.0.3
         version: 2.0.3
@@ -1497,8 +1497,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: false
 
-  /@iconify-json/mdi@1.1.61:
-    resolution: {integrity: sha512-WCDcJFm4VpE7a5fwesOM5DCLXrMrbYw1isoCtR2XzlJc2CvkrEx1JkfnINtA1Of4cyryfg7KrxKfvoSS0Bn7bQ==}
+  /@iconify-json/mdi@1.1.62:
+    resolution: {integrity: sha512-VEfnaIwO++vZ5xUYdbPuB303E1Db29kRfkd+n9dxC0zQQ6fTy4TEI2Q79TYZtEPwiIOWOy8pudTbOv4GLUaziA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
@@ -6160,11 +6160,11 @@ packages:
       markdown-it: 14.0.0
     dev: false
 
-  /markdown-it-shikiji@0.8.6:
-    resolution: {integrity: sha512-9xqMuXmm0zQikpoZwPWyexDOIcJ6iWKEhgWH3OEsBXxwG3ngGyk8HcYLu1hoHlwoZDZo3qvVkBRmr/Xofy6MsQ==}
+  /markdown-it-shikiji@0.8.7:
+    resolution: {integrity: sha512-PseTDi67w0i3kyex6ZM6HJBM7UMVwt+E17K0fp/5zUzJjgJSnbtbhSaHiozGxKqoC8xG1XiMAFm3tAq1/A5j0w==}
     dependencies:
       markdown-it: 14.0.0
-      shikiji: 0.8.6
+      shikiji: 0.8.7
 
   /markdown-it@13.0.2:
     resolution: {integrity: sha512-FtwnEuuK+2yVU7goGn/MJ0WBZMM9ZPgU9spqlFs7/A/pDIUNSOQZhUgOqYCficIuR2QaFnrt8LHqBWsbTAoI5w==}
@@ -6998,8 +6998,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /pnpm@8.12.0:
-    resolution: {integrity: sha512-J5J4+Dvngvb6rvusvMxQMwHE7Cza/UCYPnwmru7nw4Jw9cjmNbQ0ZGkbiXq+FnW0DAbfbtrd6SJTK3NoqppSZw==}
+  /pnpm@8.12.1:
+    resolution: {integrity: sha512-ZwXqGWattlhwU+bP5v3cN3+BBmIo2vc2xEkAEvRPL/G/DHE7uPMUX84OPvZpx8FfGaWawVeDiVHyNMF7gcplXQ==}
     engines: {node: '>=16.14'}
     hasBin: true
     dev: true
@@ -7424,31 +7424,31 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  /shikiji-compat@0.8.6:
-    resolution: {integrity: sha512-EqIN+wUdbWJ2W4pJP4J/QWIeuWUPLv82UV0bMYhyf13lewozh8FK0iyF7+UT+m4gYHL7FFHmHx0eRmodhp5kTQ==}
+  /shikiji-compat@0.8.7:
+    resolution: {integrity: sha512-rIi61teX3JJDN+9ldPYfk4aJzDIk4GRU818aUOMPLXUuvlBERVp3Zu+eLnuBvEYlebZ0g/p5uxaMh4ytGSOEmQ==}
     dependencies:
-      shikiji: 0.8.6
-      shikiji-transformers: 0.8.6
+      shikiji: 0.8.7
+      shikiji-transformers: 0.8.7
     dev: false
 
-  /shikiji-transformers@0.8.6:
-    resolution: {integrity: sha512-x+aPJHOv+Xf1FIEkKMHtePSmhL0rkbBpCyrT5vTq62Y5sc7rcXRz/zEXQEZSrX0ncL5cubeAJhmvjtOqgbwbfg==}
+  /shikiji-transformers@0.8.7:
+    resolution: {integrity: sha512-aKv60+TZj87Qs8pJwuUWm//kirfyeaCn0xb/U5fjYhxKtY3MNRwpnv4quqT518MkG5pGV5zhTWAF+5gxZnY2qA==}
     dependencies:
-      shikiji: 0.8.6
+      shikiji: 0.8.7
     dev: false
 
-  /shikiji-twoslash@0.8.6(typescript@5.3.3):
-    resolution: {integrity: sha512-rAOx+6MTjPOC5TmVXoNgKE/iWx319q7sn/NqQXwo0wyb5sNmsuhPndiO60I4jo0PSqBtzbvw1Th+lmu3DVh4WQ==}
+  /shikiji-twoslash@0.8.7(typescript@5.3.3):
+    resolution: {integrity: sha512-4FNbxFgGLnNqn3Xef1JoWKDtn9Zdo4k6UVSXAtPRmFvld2gONfPg8YApM4edyA3xmF7dpCdmrFhzygZFoILHUg==}
     dependencies:
       '@typescript/twoslash': 3.2.4(typescript@5.3.3)
-      shikiji: 0.8.6
+      shikiji: 0.8.7
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: false
 
-  /shikiji@0.8.6:
-    resolution: {integrity: sha512-ES15MfwaJ2vzehLRNKbpyMkl+ToAqQieHNtUDHBU6ZH50ibddS8pF4rYg8QRQXgRjMZMHipOblaEbCcgIxHUfw==}
+  /shikiji@0.8.7:
+    resolution: {integrity: sha512-j5usxwI0yHkDTHOuhuSJl9+wT5CNYeYO82dJMSJBlJ/NYT5SIebGcPoL6y9QOyH15wGrJC4LOP2nz5k8mUDGRQ==}
     dependencies:
       hast-util-to-html: 9.0.0
 
