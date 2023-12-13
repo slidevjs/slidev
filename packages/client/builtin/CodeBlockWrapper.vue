@@ -73,7 +73,7 @@ onMounted(() => {
     const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
     const startLine = props.startLine
     for (const target of targets) {
-      const lines = Array.from(target.querySelectorAll('.line'))
+      const lines = Array.from(target.querySelectorAll('code > .line'))
       const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr.value)
       lines.forEach((line, idx) => {
         const highlighted = highlights.includes(idx + startLine)

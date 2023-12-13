@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
@@ -14,6 +15,9 @@ import type MarkdownIt from 'markdown-it'
 import type { ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
+import { addClassToHast } from 'shikiji'
+import fs from 'fs-extra'
+import type { MarkdownItShikijiOptions } from 'markdown-it-shikiji'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -40,6 +44,30 @@ export async function createMarkdownPlugin(
     const { langs, themes } = resolveShikiOptions(shikiOptions)
     shikiOptions.highlighter = await Shiki.getHighlighter({ themes, langs })
     setups.push(md => md.use(MarkdownItShiki, shikiOptions))
+  }
+  else if (config.highlighter === 'shikiji') {
+    const MarkdownItShikiji = await import('markdown-it-shikiji').then(r => r.default)
+    const { transformerTwoSlash, rendererRich } = await import('shikiji-twoslash')
+    const options = await loadShikijiSetups(roots)
+    const plugin = await MarkdownItShikiji({
+      ...options,
+      transformers: [
+        ...options.transformers || [],
+        transformerTwoSlash({
+          explicitTrigger: true,
+          renderer: rendererRich,
+        }),
+        {
+          pre(pre) {
+            addClassToHast(pre, 'slidev-code shikiji')
+          },
+          postprocess(code) {
+            return escapeVueInCode(code)
+          },
+        },
+      ],
+    })
+    setups.push(md => md.use(plugin))
   }
   else {
     setups.push(md => md.use(Prism))
@@ -161,11 +189,11 @@ export function transformSlotSugar(md: string) {
  * Transform code block with wrapper
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', code: string) => {
+  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', attrs = '', code: string) => {
     const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
     code = code.trimEnd()
     options = options.trim() || '{}'
-    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
+    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
   })
 }
 
@@ -243,4 +271,34 @@ export function transformPlantUml(md: string, server: string): string {
  */
 export function escapeVueInCode(md: string) {
   return md.replace(/{{(.*?)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
+}
+
+export async function loadShikijiSetups(
+  roots: string[],
+) {
+  const anyShikiji = roots.some(root => fs.existsSync(resolve(root, 'setup', 'shikiji.ts')))
+  const result: any = anyShikiji
+    ? await loadSetups(roots, 'shikiji.ts', undefined, {}, false)
+    : await loadSetups(roots, 'shiki.ts', await import('shiki'), {}, false)
+
+  if ('theme' in result && 'themes' in result)
+    delete result.theme
+
+  if (result.theme && typeof result.theme !== 'string') {
+    result.themes = result.theme
+    delete result.theme
+  }
+
+  // No theme at all, apply the default
+  if (!result.theme && !result.themes) {
+    result.themes = {
+      dark: 'vitesse-dark',
+      light: 'vitesse-light',
+    }
+  }
+
+  if (result.themes)
+    result.defaultColor = false
+
+  return result as MarkdownItShikijiOptions
 }

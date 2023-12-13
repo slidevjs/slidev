@@ -1,6 +1,6 @@
 ---
 layout: cover
-fonts: 
+fonts:
   sans: Roboto, Lato
   serif: Mate SC
   mono: Fira Code

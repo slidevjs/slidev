@@ -563,6 +563,9 @@ defineProps<{ no: number | string }>()`)
     if (data.features.katex)
       imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
 
+    if (data.config.highlighter === 'shikiji')
+      imports.push(`import "${toAtFS(resolveImportPath('shikiji-twoslash/style-rich.css', true))}"`)
+
     if (data.config.css === 'unocss') {
       imports.unshift(
         'import "@unocss/reset/tailwind.css"',

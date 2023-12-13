@@ -27,7 +27,7 @@ export async function loadSetups<T, R extends object>(
   let returns = initial
   for (const root of roots) {
     const path = resolve(root, 'setup', name)
-    if (await fs.pathExists(path)) {
+    if (fs.existsSync(path)) {
       const { default: setup } = jiti(fileURLToPath(import.meta.url))(path)
       const result = await setup(arg)
       if (result !== null) {

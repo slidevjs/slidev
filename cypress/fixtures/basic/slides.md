@@ -55,7 +55,6 @@ Current Page: {{$slidev.nav.currentPage}}
 
 </v-clicks>
 
-
 <v-clicks>
 
 1. C

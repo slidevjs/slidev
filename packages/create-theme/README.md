@@ -19,4 +19,3 @@ yarn create slidev-theme
 ## License
 
 MIT License © 2021 [Anthony Fu](https://github.com/antfu)
-
