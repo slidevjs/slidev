@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path'
 import http from 'node:http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
-import { resolveConfig, build as viteBuild } from 'vite'
+import { mergeConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import { blue, yellow } from 'kolorist'
@@ -18,8 +18,6 @@ export async function build(
   args: BuildArgs,
 ) {
   const indexPath = resolve(options.userRoot, 'index.html')
-  const rawConfig = await resolveConfig({}, 'build', options.entry)
-  const pluginOptions = rawConfig.slidev || {}
 
   let originalIndexHTML: string | undefined
   if (fs.existsSync(indexPath))
@@ -29,13 +27,12 @@ export async function build(
   let config: ResolvedConfig = undefined!
 
   try {
-    const inlineConfig = await mergeViteConfigs(
+    let inlineConfig = await mergeViteConfigs(
       options,
       viteConfig,
       <InlineConfig>({
         root: options.userRoot,
         plugins: [
-          await ViteSlidevPlugin(options, pluginOptions),
           {
             name: 'resolve-config',
             configResolved(_config) {
@@ -48,6 +45,15 @@ export async function build(
         },
       }),
       'build',
+    )
+
+    inlineConfig = mergeConfig(
+      inlineConfig,
+      {
+        plugins: [
+          await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
+        ],
+      },
     )
 
     await viteBuild(inlineConfig)
