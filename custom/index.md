@@ -37,7 +37,7 @@ export:
   dark: false
   withClicks: false
   withToc: false
-# syntax highlighter, can be 'prism' or 'shiki'
+# syntax highlighter, can be 'prism', 'shiki' or `shikiji`
 highlighter: 'prism'
 # show line numbers in code blocks
 lineNumbers: false
