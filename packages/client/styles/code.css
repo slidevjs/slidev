@@ -2,6 +2,7 @@ html.dark:root {
   color-scheme: dark;
 }
 
+/* Shiki */
 html.dark .shiki-light {
   display: none;
 }
@@ -10,6 +11,45 @@ html:not(.dark) .shiki-dark {
   display: none;
 }
 
+.shiki-container {
+  @apply relative flex flex-col;
+}
+
+.shiki-container > .shiki {
+  @apply h-full;
+}
+
+/* Shikiji */
+html.dark .shikiji {
+  color: var(--shiki-dark, inherit);
+  background: var(--shiki-dark-bg, inherit);
+  --twoslash-popup-bg: var(--shiki-dark-bg, inherit);
+}
+
+html.dark .shikiji span {
+  color: var(--shiki-dark);
+}
+
+html:not(.dark) .shikiji {
+  color: var(--shiki-light, inherit);
+  background: var(--shiki-light-bg, inherit);
+  --twoslash-popup-bg: var(--shiki-light-bg, inherit);
+}
+
+html:not(.dark) .shikiji span {
+  color: var(--shiki-light);
+}
+
+.shikiji.twoslash {
+  /* Do not set overflow so the hover popover can be displayed */
+  overflow: inherit;
+}
+
+.twoslash-meta-line.twoslash-popover-line {
+  margin-top: -10px;
+}
+
+/* Slidev */
 .slidev-code-wrapper {
   margin: var(--slidev-code-margin) !important;
   scroll-padding: var(--slidev-code-padding);
@@ -31,14 +71,7 @@ html:not(.dark) .shiki-dark {
 }
 .slidev-code .line.dishonored {
   opacity: 0.3;
-}
-
-.shiki-container {
-  @apply relative flex flex-col;
-}
-
-.shiki-container > .shiki {
-  @apply h-full;
+  pointer-events: none;
 }
 
 .slidev-code-line-numbers .slidev-code code {
@@ -52,12 +85,12 @@ html:not(.dark) .shiki-dark {
   @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600;
 }
 
-/* revert windicss preflight for katex */
+/* Revert CSS reset for KaTex */
 .katex,
 .katex :after,
 .katex :before {
   border-color: currentColor;
 }
 
-/* codemirror */
+/* CodeMirror */
 .CodeMirror pre.CodeMirror-placeholder { opacity: 0.4; }

@@ -31,7 +31,6 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 
 Read more about [Why Slidev?](https://sli.dev/guide/why)
 
-
 ---
 
 # Navigation

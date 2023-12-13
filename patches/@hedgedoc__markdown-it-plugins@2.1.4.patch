@@ -1,0 +1,10 @@
+diff --git a/dist/esm/task-lists/index.js b/dist/esm/task-lists/index.js
+index 99087c6d616500138111a086da7f4a445fabd7dd..1c5bfa743fb5522bcf26e2d2f6480a7fd70f1531 100644
+--- a/dist/esm/task-lists/index.js
++++ b/dist/esm/task-lists/index.js
+@@ -1,4 +1,4 @@
+-import Token from 'markdown-it/lib/token.js';
++import Token from 'markdown-it/lib/token.mjs';
+ const checkboxRegex = /^ *\[([\sx])] /i;
+ export function taskLists(md, options = { enabled: false, label: false, lineNumber: false }) {
+     md.core.ruler.after('inline', 'task-lists', (state) => processToken(state, options));

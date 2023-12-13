@@ -2,6 +2,7 @@
 import type { Awaitable } from '@antfu/utils'
 import type { ILanguageRegistration, IThemeRegistration, Lang, Highlighter as ShikiHighlighter, Theme } from 'shiki'
 import type * as Shiki from 'shiki'
+import type { CodeToHastOptions as ShikijiOptions } from 'shikiji'
 import type * as monaco from 'monaco-editor'
 import type { App, Ref } from 'vue'
 import type { Router } from 'vue-router'
@@ -70,6 +71,7 @@ export interface ShortcutOptions {
 
 // node side
 export type ShikiSetup = (shiki: typeof Shiki) => Awaitable<ShikiOptions | undefined>
+export type ShikijiSetup = () => Awaitable<Partial<ShikijiOptions> | undefined>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | undefined>
 export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | undefined>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | undefined>

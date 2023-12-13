@@ -31,7 +31,6 @@ Anthony Fu
   </div>
 </div>
 
-
 ---
 layout: 'intro'
 ---
@@ -55,7 +54,6 @@ A fanatical full-time open sourceror.<br>
 
 <img src="https://antfu.me/avatar.png" class="rounded-full w-40 abs-tr mt-16 mr-12" alt="A comic art image of Anthony Fu"/>
 
-
 ---
 name: Sponsors
 layout: center
@@ -73,7 +71,6 @@ layout: center
 ---
 
 # Composable Vue
-
 
 ---
 name: VueUse
@@ -106,7 +103,6 @@ layout: center
   </div>
 </div>
 
-
 ---
 layout: center
 class: text-center
@@ -115,7 +111,6 @@ class: text-center
 # Composition API
 
 a brief go-through
-
 
 ---
 
@@ -175,7 +170,6 @@ bar.prop = 1
 </div>
 </div></div>
 
-
 ---
 
 # Ref Auto Unwrapping <MarkerCore />
@@ -224,7 +218,6 @@ data.foo // 'bar'
 
 </div>
 
-
 ---
 
 # `unref` - Opposite of Ref <MarkerCore />
@@ -260,7 +253,6 @@ unref(bar) // 'bar'
 
 </div></div>
 
-
 ---
 layout: center
 class: text-center
@@ -269,7 +261,6 @@ class: text-center
 # Patterns & Tips
 
 of writing composable functions
-
 
 ---
 
@@ -309,7 +300,6 @@ export function useDark(options: UseDarkOptions = {}) {
 <VueUse name="useDark"/>
 </div>
 
-
 ---
 
 # Think as "Connections"
@@ -327,7 +317,6 @@ The `setup()` only runs **once** on component initialization, to construct the r
   </div>
 </div>
 
-
 ---
 
 # One Thing at a Time
@@ -339,7 +328,6 @@ Just the same as authoring JavaScript functions.
 - Consistent naming conversions - `useXX` `createXX` `onXX`
 - Keep function small and simple
 - "Do one thing, and do it well"
-
 
 ---
 
@@ -358,7 +346,6 @@ Just the same as authoring JavaScript functions.
 <div class="my-auto leading-6 text-base opacity-75">
 Plain function
 </div>
-
 
 ```ts
 function add(a: number, b: number) {
@@ -416,7 +403,6 @@ c.value // 6
 
 </div>
 
-
 ---
 
 # MaybeRef <MarkerTips/>
@@ -430,7 +416,6 @@ type MaybeRef<T> = Ref<T> | T
 <v-click>
 
 In VueUse, we use this helper heavily to support optional reactive arguments
-
 
 ```ts
 export function useTimeAgo(
@@ -454,7 +439,6 @@ export function useTimeAgo(
 ```
 
 </v-click>
-
 
 ---
 
@@ -501,7 +485,6 @@ name.value = 'Hi' // Hi - World
 <VueUse name="useTitle"/>
 </div>
 
-
 ---
 
 # `useTitle` <Marker class="text-blue-400">Case</Marker>
@@ -531,11 +514,6 @@ export function useTitle(
 
 ```html
 
-
-
-
-
-
 <-- 1. use the user provided ref or create a new one
 
 <-- 2. sync ref changes to the document title
@@ -544,7 +522,6 @@ export function useTitle(
 
 </v-clicks>
 </div>
-
 
 ---
 
@@ -561,7 +538,6 @@ const bar = ref(foo) // Ref<1>
 foo === bar // true
 ```
 
-
 ```ts
 function useFoo(foo: Ref<string> | string) {
   // no need!
@@ -577,7 +553,6 @@ function useFoo(foo: Ref<string> | string) {
 Extremely useful in composable functions that take uncertain argument types.
 
 </v-clicks>
-
 
 ---
 
@@ -601,7 +576,6 @@ function useBala<T>(arg: MaybeRef<T>) {
 ```
 
 </div>
-
 
 ---
 
@@ -639,7 +613,6 @@ mouse.x === x.value // true
 </v-clicks>
 </div>
 
-
 ---
 
 # Async to "Sync" <MarkerTips />
@@ -674,7 +647,6 @@ Establish the "Connections" first, then wait for data to be filled up. The idea 
 
 </div>
 
-
 ---
 
 # `useFetch` <Marker class="text-blue-400">Case</Marker>
@@ -703,7 +675,6 @@ export function useFetch<R>(url: MaybeRef<string>) {
 <div v-click class="abs-b mx-14 my-12">
 <VueUse name="useFetch"/>
 </div>
-
 
 ---
 
@@ -758,7 +729,6 @@ const scope = effectScope(() => {
 stop(scope)
 ```
 
-
 ---
 disabled: true
 ---
@@ -793,7 +763,6 @@ export default defineComponent({
 
 </div>
 
-
 ---
 disabled: true
 ---
@@ -827,7 +796,6 @@ export default defineComponent({
 </v-click>
 </div>
 
-
 ---
 
 # Typed Provide / Inject <MarkerCore/>
@@ -849,7 +817,6 @@ export const injectKeyUser: InjectionKey<UserInfo> = Symbol('user')
 ```
 
 </div>
-
 
 ---
 
@@ -893,7 +860,6 @@ export default {
 
 </v-clicks>
 </div>
-
 
 ---
 
@@ -939,7 +905,6 @@ console.log(state.foo) // 2
 </div>
 
 <h3 v-click class="opacity-100">⚠️ But it's not SSR compatible!</h3>
-
 
 ---
 
@@ -1001,7 +966,6 @@ const state = useMyState()
 
 </div>
 
-
 ---
 
 # useVModel <MarkerTips />
@@ -1061,7 +1025,6 @@ export default defineComponent({
 <VueUse name="useVModel"/>
 </div>
 
-
 ---
 disabled: true
 ---
@@ -1093,13 +1056,11 @@ export function usePassiveVModel(props, name) {
 
 </v-click>
 
-
 ---
 layout: center
 ---
 
 # All of them work for both Vue 2 and 3
-
 
 ---
 
@@ -1118,7 +1079,6 @@ Vue.use(VueCompositionAPI)
 import { reactive, ref } from '@vue/composition-api'
 ```
 
-
 ---
 
 # Vue 2.7 <Marker class="text-purple-400">Upcoming</Marker>
@@ -1130,7 +1090,6 @@ import { reactive, ref } from '@vue/composition-api'
 - Migrate codebase to TypeScript.
 - IE11 support.
 - LTS.
-
 
 ---
 
@@ -1145,7 +1104,6 @@ import { defineComponent, reactive, ref } from 'vue-demi'
 
 <img class="h-50 mx-auto" src="https://cdn.jsdelivr.net/gh/vueuse/vue-demi/assets/banner.png" alt="" />
 
-
 ---
 
 # Recap
@@ -1158,7 +1116,6 @@ import { defineComponent, reactive, ref } from 'vue-demi'
 - Async to "sync"
 - Side-effect self clean up
 - Shared state
-
 
 ---
 layout: center

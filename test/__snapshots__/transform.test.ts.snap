@@ -25,9 +25,9 @@ exports[`markdown transform > mermaid 1`] = `
 "
 # Page 
 
-<Mermaid :code=\\"'c2VxdWVuY2VEaWFncmFtCiAgQWxpY2UtPkpvaG46IEhlbGxvIEpvaG4sIGhvdyBhcmUgeW91PwogIE5vdGUgb3ZlciBBbGljZSxKb2huOiBBIHR5cGljYWwgaW50ZXJhY3Rpb24'\\" v-bind=\\"{}\\" />
+<Mermaid :code="'c2VxdWVuY2VEaWFncmFtCiAgQWxpY2UtPkpvaG46IEhlbGxvIEpvaG4sIGhvdyBhcmUgeW91PwogIE5vdGUgb3ZlciBBbGljZSxKb2huOiBBIHR5cGljYWwgaW50ZXJhY3Rpb24'" v-bind="{}" />
 
-<Mermaid :code=\\"'Z3JhcGggVEQKQltUZXh0XSAtLT4gQ3tEZWNpc2lvbn0KQyAtLT58T25lfCBEW1Jlc3VsdCAxXQpDIC0tPnxUd298IEVbUmVzdWx0IDJd'\\" v-bind=\\"{theme: 'neutral', scale: 0.8}\\" />
+<Mermaid :code="'Z3JhcGggVEQKQltUZXh0XSAtLT4gQ3tEZWNpc2lvbn0KQyAtLT58T25lfCBEW1Jlc3VsdCAxXQpDIC0tPnxUd298IEVbUmVzdWx0IDJd'" v-bind="{theme: 'neutral', scale: 0.8}" />
 "
 `;
 
@@ -35,9 +35,9 @@ exports[`markdown transform > plantUML 1`] = `
 "
 # Page
 
-<PlantUml :code=\\"'SoWkIImgAStDuNBCoKnELT2rKt3AJrAmKl18pSd9XmhQw28BwYYKvEShSZcavgK0zG40'\\" :server=\\"'https://www.plantuml.com/plantuml'\\" v-bind=\\"{}\\" />
+<PlantUml :code="'SoWkIImgAStDuNBCoKnELT2rKt3AJrAmKl18pSd9XmhQw28BwYYKvEShSZcavgK0zG40'" :server="'https://www.plantuml.com/plantuml'" v-bind="{}" />
 
-<PlantUml :code=\\"'JOzD3e8m44Rtd6BMtNW192IM5I29HEDsAbKdeLD2MvNRIsjCMCsRlFd9LpgFipV4Wy4f4o2r8kHC23Yhm3wi9A0X3XzeYNrgwx1H6wvb1KTjqtRJoYhMtexBSAqJUescwoEUq4tn3xp9Fm7XfUS5HiiFO3Gw7SjT4QUCkkKxLy2-WAvl3rkrtEclBdOCXcnMwZN7ByiN'\\" :server=\\"'https://www.plantuml.com/plantuml'\\" v-bind=\\"{scale: 0.5}\\" />
+<PlantUml :code="'JOzD3e8m44Rtd6BMtNW192IM5I29HEDsAbKdeLD2MvNRIsjCMCsRlFd9LpgFipV4Wy4f4o2r8kHC23Yhm3wi9A0X3XzeYNrgwx1H6wvb1KTjqtRJoYhMtexBSAqJUescwoEUq4tn3xp9Fm7XfUS5HiiFO3Gw7SjT4QUCkkKxLy2-WAvl3rkrtEclBdOCXcnMwZN7ByiN'" :server="'https://www.plantuml.com/plantuml'" v-bind="{scale: 0.5}" />
 "
 `;
 
@@ -47,13 +47,13 @@ exports[`markdown transform > slot-sugar 1`] = `
 
 Default Slot
 
-<template v-slot:right=\\"slotProps\\">
+<template v-slot:right="slotProps">
 
 Right Slot
 
 
 </template>
-<template v-slot:left=\\"slotProps\\">
+<template v-slot:left="slotProps">
 
 <div>Left Slot</div>
 
@@ -68,7 +68,7 @@ exports[`markdown transform > slot-sugar with code 1`] = `
 Default Slot
 
 
-<template v-slot:code=\\"slotProps\\">
+<template v-slot:code="slotProps">
 
 
 \`\`\`md
@@ -85,19 +85,19 @@ Slot Usage
 exports[`markdown transform > slot-sugar with default 1`] = `
 "
 
-<template v-slot:right=\\"slotProps\\">
+<template v-slot:right="slotProps">
 
 Right Slot
 
 
 </template>
-<template v-slot:left=\\"slotProps\\">
+<template v-slot:left="slotProps">
 
 <div>Left Slot</div>
 
 
 </template>
-<template v-slot:default=\\"slotProps\\">
+<template v-slot:default="slotProps">
 
 # Page 
 Default Slot
@@ -112,13 +112,13 @@ exports[`markdown transform > slot-sugar with symbols in name 1`] = `
 
 Default Slot
 
-<template v-slot:slot::1=\\"slotProps\\">
+<template v-slot:slot::1="slotProps">
 
 First Slot
 
 
 </template>
-<template v-slot:slot.2=\\"slotProps\\">
+<template v-slot:slot.2="slotProps">
 
 Second Slot
 

@@ -7,4 +7,3 @@ Shared types for [Slidev](https://sli.dev).
 ## License
 
 MIT License © 2021 [Anthony Fu](https://github.com/antfu)
-

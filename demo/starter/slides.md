@@ -2,7 +2,7 @@
 theme: seriph
 background: https://source.unsplash.com/collection/94734566/1920x1080
 class: text-center
-highlighter: shiki
+highlighter: shikiji
 lineNumbers: false
 info: |
   ## Slidev Starter Template
@@ -128,14 +128,24 @@ image: https://source.unsplash.com/collection/94734566/1920x1080
 
 # Code
 
-Use code snippets and get the highlighting directly![^1]
+Use code snippets and get the highlighting directly, and even types hover![^1]
 
-```ts {all|2|1-6|9|all}
+```ts {all|5|1-6|9|all} twoslash
+// TwoSlash enables TypeScript hover information and errors in markdown code blocks
+// Learn more at https://www.typescriptlang.org/dev/twoslash/
+function getUser(id: number): User {
+  return undefined as any
+}
+function saveUser(id: number, user: User) {
+  // ...
+}
+// ---cut---
 interface User {
   id: number
   firstName: string
   lastName: string
   role: string
+// ^?
 }
 
 function updateUser(id: number, update: User) {
@@ -202,7 +212,6 @@ Also, HTML elements are valid:
   <span>Right content</span>
 </div>
 -->
-
 
 ---
 class: px-20
@@ -400,7 +409,6 @@ cloud {
   [Example 1]
 }
 
-
 database "MySql" {
   folder "This is my folder" {
     [Folder 3]
@@ -409,7 +417,6 @@ database "MySql" {
     [Frame 4]
   }
 }
-
 
 [Another Component] --> [Example 1]
 [Example 1] --> [Folder 3]
