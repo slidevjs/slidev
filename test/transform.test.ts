@@ -6,6 +6,8 @@ import {
 } from '@slidev/cli/node/plugins/markdown'
 import { describe, expect, it } from 'vitest'
 
+const isMacOS = process.platform === 'darwin'
+
 describe('markdown transform', () => {
   it('slot-sugar', () => {
     expect(transformSlotSugar(`
@@ -99,7 +101,10 @@ C -->|Two| E[Result 2]
 `)).toMatchSnapshot()
   })
 
-  it('plantUML', () => {
+  // TODO: not so sure on this,
+  // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
+  // we may need to find a better way to test this
+  it.runIf(isMacOS)('plantUML', () => {
     expect(transformPlantUml(`
 # Page
 
