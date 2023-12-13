@@ -1,7 +1,7 @@
 import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
 import { uniq } from '@antfu/utils'
-import { loadConfigFromFile, mergeConfig } from 'vite'
+import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions } from './options'
 import { generateGoogleFontsUrl, toAtFS } from './utils'
@@ -44,12 +44,17 @@ export async function getIndexHtml({ clientRoot, themeRoots, addonRoots, data, u
   return main
 }
 
-export async function mergeViteConfigs({ addonRoots, themeRoots }: ResolvedSlidevOptions, viteConfig: InlineConfig, config: InlineConfig, command: 'serve' | 'build') {
+export async function mergeViteConfigs(
+  { addonRoots, themeRoots, entry }: ResolvedSlidevOptions,
+  viteConfig: InlineConfig,
+  config: InlineConfig,
+  command: 'serve' | 'build',
+) {
   const configEnv: ConfigEnv = {
     mode: 'development',
     command,
   }
-
+  // Merge theme & addon configs
   const files = uniq([
     ...themeRoots,
     ...addonRoots,
@@ -64,5 +69,12 @@ export async function mergeViteConfigs({ addonRoots, themeRoots }: ResolvedSlide
     config = mergeConfig(config, viteConfig.config)
   }
 
-  return mergeConfig(viteConfig, config)
+  // Merge viteConfig argument
+  config = mergeConfig(config, viteConfig)
+
+  // Merge local config (slidev options only)
+  const localConfig = await resolveConfig({}, command, entry)
+  config = mergeConfig(config, { slidev: localConfig.slidev || {} })
+
+  return config
 }
