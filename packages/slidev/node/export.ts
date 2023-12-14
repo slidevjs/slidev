@@ -270,7 +270,7 @@ export async function exportSlides({
       progress.update(++idx)
     }
 
-    const mergedPdf = await PDFDocument.create({})
+    let mergedPdf = await PDFDocument.create({})
     for (const pdfBytes of buffers) {
       const pdf = await PDFDocument.load(pdfBytes)
       const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
@@ -279,13 +279,18 @@ export async function exportSlides({
       })
     }
 
+    // Edit generated PDF: add metadata and (optionally) TOC
+    addPdfMetadata(mergedPdf)
+
+    if (withToc)
+      mergedPdf = await addTocToPdf(mergedPdf)
+
     const buffer = await mergedPdf.save()
     await fs.writeFile(output, buffer)
   }
 
   async function genPagePdfOnePiece() {
     await go('print')
-    const slideIndexes = await getSlidesIndex()
     await page.pdf({
       path: output,
       width,
@@ -304,33 +309,10 @@ export async function exportSlides({
     let pdfData = await fs.readFile(output)
     let pdf = await PDFDocument.load(pdfData)
 
-    const titleSlide = slides[0]
-    if (titleSlide?.title)
-      pdf.setTitle(titleSlide.title)
-    if (titleSlide?.frontmatter?.info)
-      pdf.setSubject(titleSlide.frontmatter.info)
-    if (titleSlide?.frontmatter?.author)
-      pdf.setAuthor(titleSlide.frontmatter.author)
-    if (titleSlide?.frontmatter?.keywords) {
-      if (Array.isArray(titleSlide?.frontmatter?.keywords))
-        pdf.setKeywords(titleSlide?.frontmatter?.keywords)
-      else
-        pdf.setKeywords(titleSlide?.frontmatter?.keywords.split(','))
-    }
+    addPdfMetadata(pdf)
 
-    if (withToc) {
-      const outlinePdf = outlinePdfFactory(pdfLib)
-
-      const tocTree = slides.filter(slide => slide.title)
-        .reduce((acc: TocItem[], slide) => {
-          addToTree(acc, slide, slideIndexes)
-          return acc
-        }, [])
-
-      const outline = makeOutline(tocTree)
-
-      pdf = await outlinePdf({ outline, pdf })
-    }
+    if (withToc)
+      pdf = await addTocToPdf(pdf)
 
     pdfData = Buffer.from(await pdf.save())
     await fs.writeFile(output, pdfData)
@@ -397,6 +379,38 @@ export async function exportSlides({
   function getSlideIndex(file: string): number {
     const slideId = file.substring(0, file.indexOf('.')).split('-')[0]
     return Number(slideId) - 1
+  }
+
+  // Adds metadata (title, author, keywords) to PDF document, mutating it
+  function addPdfMetadata(pdf: PDFDocument): void {
+    const titleSlide = slides[0]
+    if (titleSlide?.title)
+      pdf.setTitle(titleSlide.title)
+    if (titleSlide?.frontmatter?.info)
+      pdf.setSubject(titleSlide.frontmatter.info)
+    if (titleSlide?.frontmatter?.author)
+      pdf.setAuthor(titleSlide.frontmatter.author)
+    if (titleSlide?.frontmatter?.keywords) {
+      if (Array.isArray(titleSlide?.frontmatter?.keywords))
+        pdf.setKeywords(titleSlide?.frontmatter?.keywords)
+      else
+        pdf.setKeywords(titleSlide?.frontmatter?.keywords.split(','))
+    }
+  }
+
+  async function addTocToPdf(pdf: PDFDocument): Promise<PDFDocument> {
+    const outlinePdf = outlinePdfFactory(pdfLib)
+    const slideIndexes = await getSlidesIndex()
+
+    const tocTree = slides.filter(slide => slide.title)
+      .reduce((acc: TocItem[], slide) => {
+        addToTree(acc, slide, slideIndexes)
+        return acc
+      }, [])
+
+    const outline = makeOutline(tocTree)
+
+    return await outlinePdf({ outline, pdf })
   }
 
   progress.start(pages.length)
