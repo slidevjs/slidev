@@ -55,7 +55,12 @@ export async function createMarkdownPlugin(
         ...options.transformers || [],
         transformerTwoSlash({
           explicitTrigger: true,
-          renderer: rendererRich,
+          renderer: rendererRich(),
+          twoslashOptions: {
+            defaultOptions: {
+              noErrorValidation: true,
+            },
+          },
         }),
         {
           pre(pre) {
