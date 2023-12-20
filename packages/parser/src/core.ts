@@ -148,6 +148,7 @@ export async function parse(
       index: slides.length,
       start,
       end,
+      snippetsUsed: [],
     }
     if (extensions) {
       for (const e of extensions) {

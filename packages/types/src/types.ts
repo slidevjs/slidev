@@ -18,6 +18,7 @@ export interface SlideInfo extends SlideInfoBase {
   end: number
   inline?: SlideInfoBase
   source?: SlideInfoWithPath
+  snippetsUsed: string[]
 }
 
 export interface SlideInfoWithPath extends SlideInfoBase {

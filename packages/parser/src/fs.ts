@@ -1,7 +1,7 @@
-import { promises as fs } from 'node:fs'
+import { existsSync, promises as fs, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import type { PreparserExtensionLoader, SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
-import { detectFeatures, mergeFeatureFlags, parse, stringify, stringifySlide } from './core'
+import { detectFeatures, mergeFeatureFlags, parse, parseRangeString, stringify, stringifySlide } from './core'
 
 export * from './core'
 
@@ -34,6 +34,27 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
     const baseSlide = data.slides[iSlide]
     if (!baseSlide.frontmatter.src) {
       iSlide++
+
+      baseSlide.content = baseSlide.content.replaceAll(
+        /^```(\w+?)\s*\[([\s\S]+?)\]([\s\S]*?)\n+^```/mg,
+        (full, lang = '', external: string, rest: string) => {
+          const [externalPath, externalRangeStr] = external.split(':').map(i => i.trim())
+          const sourcePath = resolve(dir, 'snippets', externalPath)
+          entries.add(sourcePath)
+          let source: string
+          if (!existsSync(sourcePath)) {
+            lang = 'plaintext'
+            source = `File not found: ${sourcePath}`
+          }
+          source = readFileSync(sourcePath, 'utf-8')
+          if (externalRangeStr) {
+            const lines = source.split(/\r?\n/g)
+            source = parseRangeString(lines.length, externalRangeStr).map(i => lines[i - 1]).join('\n')
+          }
+          return `\`\`\`${lang} ${rest}\n${source}\n\`\`\``
+        },
+      )
+
       continue
     }
 

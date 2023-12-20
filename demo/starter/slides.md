@@ -155,13 +155,16 @@ function updateUser(id: number, update: User) {
 }
 ```
 
+```ts [helloWorld.ts:2-3,5]
+```
+
 <arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
 
 [^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
 
 <style>
 .footnotes-sep {
-  @apply mt-20 opacity-10;
+  @apply mt-7 opacity-10;
 }
 .footnotes {
   @apply text-sm opacity-75;
