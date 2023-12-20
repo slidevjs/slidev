@@ -1,5 +1,207 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`md parser > external-snippets.md > config 1`] = `
+{
+  "drawings": {
+    "enabled": true,
+    "persist": false,
+    "presenterOnly": false,
+    "syncAll": true,
+  },
+  "fonts": {
+    "italic": false,
+    "local": [],
+    "mono": [
+      "ui-monospace",
+      "SFMono-Regular",
+      "Menlo",
+      "Monaco",
+      "Consolas",
+      ""Liberation Mono"",
+      ""Courier New"",
+      "monospace",
+    ],
+    "provider": "google",
+    "sans": [
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      ""Segoe UI"",
+      "Roboto",
+      ""Helvetica Neue"",
+      "Arial",
+      ""Noto Sans"",
+      "sans-serif",
+      ""Apple Color Emoji"",
+      ""Segoe UI Emoji"",
+      ""Segoe UI Symbol"",
+      ""Noto Color Emoji"",
+    ],
+    "serif": [
+      "ui-serif",
+      "Georgia",
+      "Cambria",
+      ""Times New Roman"",
+      "Times",
+      "serif",
+    ],
+    "webfonts": [],
+    "weights": [
+      "200",
+      "400",
+      "600",
+    ],
+  },
+  "title": "Basic",
+}
+`;
+
+exports[`md parser > external-snippets.md > features 1`] = `
+{
+  "katex": false,
+  "mermaid": false,
+  "monaco": false,
+  "tweet": false,
+}
+`;
+
+exports[`md parser > external-snippets.md > slides 1`] = `
+[
+  {
+    "content": "
+# Basic
+
+\`\`\`ts 
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+// Line 9
+// Line 10
+
+\`\`\`
+",
+    "end": 5,
+    "frontmatter": {
+      "title": "Basic",
+    },
+    "frontmatterStyle": undefined,
+    "index": 0,
+    "level": 1,
+    "note": undefined,
+    "raw": "---
+title: Basic
+---
+
+# Basic
+
+\`\`\`ts 
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+// Line 9
+// Line 10
+
+\`\`\`
+
+",
+    "snippetsUsed": [],
+    "start": 0,
+    "title": "Basic",
+  },
+  {
+    "content": "
+# With range
+
+\`\`\`ts 
+// Line 1
+// Line 2
+// Line 3
+// Line 5
+// Line 9
+\`\`\`
+",
+    "end": 12,
+    "frontmatter": {},
+    "frontmatterStyle": undefined,
+    "index": 1,
+    "level": 1,
+    "note": undefined,
+    "raw": "
+# With range
+
+\`\`\`ts 
+// Line 1
+// Line 2
+// Line 3
+// Line 5
+// Line 9
+\`\`\`
+
+",
+    "snippetsUsed": [],
+    "start": 6,
+    "title": "With range",
+  },
+  {
+    "content": "
+# With other options
+
+\`\`\`ts  {2-3|5|all} {maxHeight:'100px'}
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+// Line 9
+// Line 10
+
+\`\`\`
+",
+    "end": 19,
+    "frontmatter": {},
+    "frontmatterStyle": undefined,
+    "index": 2,
+    "level": 1,
+    "note": undefined,
+    "raw": "
+# With other options
+
+\`\`\`ts  {2-3|5|all} {maxHeight:'100px'}
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+// Line 9
+// Line 10
+
+\`\`\`
+
+",
+    "snippetsUsed": [],
+    "start": 13,
+    "title": "With other options",
+  },
+]
+`;
+
 exports[`md parser > frontmatter.md > config 1`] = `
 {
   "drawings": {
@@ -108,6 +310,7 @@ title: Hi
 # Hi
 
 ",
+    "snippetsUsed": [],
     "start": 0,
     "title": "Hi",
   },
@@ -140,6 +343,7 @@ layout: center
 This is note
 -->
 ",
+    "snippetsUsed": [],
     "start": 8,
     "title": "Hello",
   },
@@ -157,6 +361,7 @@ This is note
 # Morning
 
 ",
+    "snippetsUsed": [],
     "start": 17,
     "title": "Morning",
   },
@@ -184,6 +389,7 @@ Hey
 This is note
 -->
 ",
+    "snippetsUsed": [],
     "start": 19,
     "title": undefined,
   },
@@ -211,6 +417,7 @@ this should be treated as code block
 \`\`\`
 
 ",
+    "snippetsUsed": [],
     "start": 27,
     "title": undefined,
   },
@@ -233,6 +440,7 @@ layout: from yaml
 Content 1
 
 ",
+    "snippetsUsed": [],
     "start": 36,
     "title": undefined,
   },
@@ -265,6 +473,7 @@ layout: should not from yaml 1
 Content 2
 
 ",
+    "snippetsUsed": [],
     "start": 44,
     "title": "When there is already a frontmatter, the first yaml block should be treated as content",
   },
@@ -296,6 +505,7 @@ layout: should not from yaml 2
 Content 3
 
 ",
+    "snippetsUsed": [],
     "start": 56,
     "title": "Title",
   },
@@ -396,6 +606,7 @@ title: MDC{style="color:red"}
 :arrow{x1=1 y1=1 x2=2 y2=2}
 
 ",
+    "snippetsUsed": [],
     "start": 0,
     "title": "MDC{style="color:red"}",
   },
@@ -505,6 +716,7 @@ console.log('Hello World')
 \`\`\`
 
 ",
+    "snippetsUsed": [],
     "start": 0,
     "title": "H1",
   },
@@ -532,6 +744,7 @@ console.log('Hello World')
 - Yo
 
 ",
+    "snippetsUsed": [],
     "start": 11,
     "title": "Hello",
   },
@@ -549,6 +762,7 @@ Nice to meet you
 Nice to meet you
 
 ",
+    "snippetsUsed": [],
     "start": 19,
     "title": undefined,
   },
@@ -649,6 +863,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
 src: sub/page1.md
 ---
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": undefined,
     },
@@ -661,6 +876,7 @@ srcSequence: sub/page1.md
 # Page 1
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 1",
       "end": 2,
@@ -673,6 +889,7 @@ srcSequence: sub/page1.md
       "note": undefined,
       "raw": "# Page 1
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 1",
     },
@@ -709,6 +926,7 @@ src: /sub/page2.md
 background: https://sli.dev/demo-cover.png#2
 ---
 ",
+      "snippetsUsed": [],
       "start": 4,
       "title": undefined,
     },
@@ -726,6 +944,7 @@ srcSequence: /sub/page2.md
 <Tweet />
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 2
 
@@ -747,6 +966,7 @@ layout: cover
 
 <Tweet />
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 2",
     },
@@ -780,6 +1000,7 @@ src: ./sub/pages3-4.md
 background: https://sli.dev/demo-cover.png#34
 ---
 ",
+      "snippetsUsed": [],
       "start": 9,
       "title": undefined,
     },
@@ -794,6 +1015,7 @@ srcSequence: ./sub/pages3-4.md
 # Page 3
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 3",
       "end": 2,
@@ -806,6 +1028,7 @@ srcSequence: ./sub/pages3-4.md
       "note": undefined,
       "raw": "# Page 3
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 3",
     },
@@ -839,6 +1062,7 @@ srcSequence: ./sub/pages3-4.md
 <Tweet />
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 4
 
@@ -859,6 +1083,7 @@ layout: cover
 
 <Tweet />
 ",
+      "snippetsUsed": [],
       "start": 2,
       "title": "Page 4",
     },
@@ -892,6 +1117,7 @@ src: sub/nested1-4.md
 background: https://sli.dev/demo-cover.png#14
 ---
 ",
+      "snippetsUsed": [],
       "start": 14,
       "title": undefined,
     },
@@ -905,6 +1131,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
 # Page 1
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 1",
       "end": 2,
@@ -917,6 +1144,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "note": undefined,
       "raw": "# Page 1
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 1",
     },
@@ -952,6 +1180,7 @@ srcSequence: sub/nested1-4.md,page2.md
 <Tweet />
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 2
 
@@ -973,6 +1202,7 @@ layout: cover
 
 <Tweet />
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 2",
     },
@@ -1002,6 +1232,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
 # Page 3
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 3",
       "end": 2,
@@ -1014,6 +1245,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "note": undefined,
       "raw": "# Page 3
 ",
+      "snippetsUsed": [],
       "start": 0,
       "title": "Page 3",
     },
@@ -1047,6 +1279,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
 <Tweet />
 
 ",
+    "snippetsUsed": [],
     "source": {
       "content": "# Page 4
 
@@ -1067,6 +1300,7 @@ layout: cover
 
 <Tweet />
 ",
+      "snippetsUsed": [],
       "start": 2,
       "title": "Page 4",
     },
@@ -1091,6 +1325,7 @@ $x+2$
 $x+2$
 
 ",
+    "snippetsUsed": [],
     "start": 20,
     "title": "Inline Page",
   },
