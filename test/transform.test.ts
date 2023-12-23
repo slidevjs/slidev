@@ -1,4 +1,5 @@
 import {
+  transformExternalSnippet,
   transformMermaid,
   transformPageCSS,
   transformPlantUml,
@@ -132,5 +133,16 @@ Alice <- Bob : Hello, too!
 @endmindmap
 \`\`\`
 `, 'https://www.plantuml.com/plantuml')).toMatchSnapshot()
+  })
+
+  it('external snippet', () => {
+    const external = `path/to/snippet:1-2, 3`
+    expect(transformExternalSnippet(`
+\`\`\`ts [${external}] {monaco}
+ignored
+\`\`\`
+`, {
+      [external]: 'replaced'
+    })).toMatchSnapshot()
   })
 })

@@ -1,5 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`markdown transform > external snippet 1`] = `
+"
+\`\`\`ts  {monaco}
+replaced
+\`\`\`
+"
+`;
+
 exports[`markdown transform > inline CSS 1`] = `
 "
 # Page 

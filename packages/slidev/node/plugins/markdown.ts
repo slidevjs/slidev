@@ -12,7 +12,7 @@ import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
-import type { ShikiOptions } from '@slidev/types'
+import type { LoadedSnippets, ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import { addClassToHast } from 'shikiji'
@@ -32,9 +32,11 @@ const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
 }
 
 export async function createMarkdownPlugin(
-  { data: { config }, roots, mode, entry }: ResolvedSlidevOptions,
+  options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
+  const { data: { config }, roots, mode, entry } = options
+
   const setups: ((md: MarkdownIt) => void)[] = []
   const entryPath = slash(entry)
 
@@ -125,6 +127,7 @@ export async function createMarkdownPlugin(
         code = transformMermaid(code)
         code = transformPlantUml(code, config.plantUmlServer)
         code = monaco(code)
+        code = transformExternalSnippet(code, options.data.snippets!)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
         code = transformKaTex(code)
@@ -191,6 +194,20 @@ export function transformSlotSugar(md: string) {
 }
 
 /**
+ * Transform external snippet syntax
+ */
+export function transformExternalSnippet(md: string, snippets: LoadedSnippets) {
+  return md.replaceAll(/^```(\w+?)\s*\[([\s\S]+?)\](.*)[\s\S]*^```/mg, (_full, lang, external, rest) => {
+    const source = snippets[external]
+
+    if (source === undefined)
+      throw new Error(`Snippet not found: ${external}`)
+
+    return `\`\`\`${lang} ${rest}\n${source}\n\`\`\``
+  })
+}
+
+/**
  * Transform code block with wrapper
  */
 export function transformHighlighter(md: string) {
@@ -219,7 +236,7 @@ export function getCodeBlocks(md: string) {
       return codeblocks.some(([s, e]) => s <= idx && idx <= e)
     },
     isLineInsideCodeblocks(line: number) {
-      return codeblocks.some(([,, s, e]) => s <= line && line <= e)
+      return codeblocks.some(([, , s, e]) => s <= line && line <= e)
     },
   }
 }

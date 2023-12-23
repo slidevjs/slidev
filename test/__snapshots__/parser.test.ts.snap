@@ -72,18 +72,7 @@ exports[`md parser > external-snippets.md > slides 1`] = `
     "content": "
 # Basic
 
-\`\`\`ts 
-// Line 1
-// Line 2
-// Line 3
-// Line 4
-// Line 5
-// Line 6
-// Line 7
-// Line 8
-// Line 9
-// Line 10
-
+\`\`\`ts [snippets/snippet.ts]
 \`\`\`
 ",
     "end": 5,
@@ -100,22 +89,13 @@ title: Basic
 
 # Basic
 
-\`\`\`ts 
-// Line 1
-// Line 2
-// Line 3
-// Line 4
-// Line 5
-// Line 6
-// Line 7
-// Line 8
-// Line 9
-// Line 10
-
+\`\`\`ts [snippets/snippet.ts]
 \`\`\`
 
 ",
-    "snippetsUsed": [],
+    "snippetsUsed": [
+      "snippets/snippet.ts",
+    ],
     "start": 0,
     "title": "Basic",
   },
@@ -123,12 +103,7 @@ title: Basic
     "content": "
 # With range
 
-\`\`\`ts 
-// Line 1
-// Line 2
-// Line 3
-// Line 5
-// Line 9
+\`\`\`ts [/snippets/snippet.ts:1-3, 5,9]
 \`\`\`
 ",
     "end": 12,
@@ -140,16 +115,13 @@ title: Basic
     "raw": "
 # With range
 
-\`\`\`ts 
-// Line 1
-// Line 2
-// Line 3
-// Line 5
-// Line 9
+\`\`\`ts [/snippets/snippet.ts:1-3, 5,9]
 \`\`\`
 
 ",
-    "snippetsUsed": [],
+    "snippetsUsed": [
+      "/snippets/snippet.ts:1-3, 5,9",
+    ],
     "start": 6,
     "title": "With range",
   },
@@ -157,18 +129,7 @@ title: Basic
     "content": "
 # With other options
 
-\`\`\`ts  {2-3|5|all} {maxHeight:'100px'}
-// Line 1
-// Line 2
-// Line 3
-// Line 4
-// Line 5
-// Line 6
-// Line 7
-// Line 8
-// Line 9
-// Line 10
-
+\`\`\`ts [./snippets/snippet.ts] {2-3|5|all} {maxHeight:'100px'}
 \`\`\`
 ",
     "end": 19,
@@ -180,22 +141,13 @@ title: Basic
     "raw": "
 # With other options
 
-\`\`\`ts  {2-3|5|all} {maxHeight:'100px'}
-// Line 1
-// Line 2
-// Line 3
-// Line 4
-// Line 5
-// Line 6
-// Line 7
-// Line 8
-// Line 9
-// Line 10
-
+\`\`\`ts [./snippets/snippet.ts] {2-3|5|all} {maxHeight:'100px'}
 \`\`\`
 
 ",
-    "snippetsUsed": [],
+    "snippetsUsed": [
+      "./snippets/snippet.ts",
+    ],
     "start": 13,
     "title": "With other options",
   },

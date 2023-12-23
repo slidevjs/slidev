@@ -9,7 +9,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
+import type { LoadedSnippets, SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -171,11 +171,22 @@ export function createSlidesLoader(
           const a = data.slides[i]
           const b = newData.slides[i]
 
+          function snippetsUnchanged(usedA: string[], usedB: string[], snippetsA: LoadedSnippets, snippetsB: LoadedSnippets) {
+            if (!equal(usedA, usedB))
+              return false
+            for (const id of usedA) {
+              if (snippetsA[id] !== snippetsB[id])
+                return false
+            }
+            return true
+          }
+
           if (
             a?.content.trim() === b?.content.trim()
             && a?.title?.trim() === b?.title?.trim()
             && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
+            && snippetsUnchanged(a.snippetsUsed, b.snippetsUsed, data.snippets!, newData.snippets!)
           )
             continue
 
@@ -298,11 +309,11 @@ export function createSlidesLoader(
                     preload: computed(() => frontmatter.preload),
                     slide: {
                       ...(${JSON.stringify({
-                        ...prepareSlideInfo(slide),
-                        frontmatter: undefined,
-                        // remove raw content in build, optimize the bundle size
-                        ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
-                      })}),
+                    ...prepareSlideInfo(slide),
+                    frontmatter: undefined,
+                    // remove raw content in build, optimize the bundle size
+                    ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+                  })}),
                       frontmatter,
                       filepath: ${JSON.stringify(slide.source?.filepath || entry)},
                       id: ${pageNo},
