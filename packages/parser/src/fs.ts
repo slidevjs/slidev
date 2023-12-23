@@ -54,7 +54,14 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
             lang = 'plaintext'
             source = `File not found: ${sourcePath}`
           }
-          source = readFileSync(sourcePath, 'utf-8')
+          try {
+            source = readFileSync(sourcePath, 'utf-8')
+          }
+          catch (e) {
+            lang = 'plaintext'
+            source = `Error reading file: ${sourcePath}\n\n${e}`
+          }
+
           if (externalRangeStr) {
             const lines = source.split(/\r?\n/g)
             source = parseRangeString(lines.length, externalRangeStr).map(i => lines[i - 1]).join('\n')
