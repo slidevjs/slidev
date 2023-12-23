@@ -39,7 +39,15 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
         /^```(\w+?)\s*\[([\s\S]+?)\]([\s\S]*?)\n+^```/mg,
         (full, lang = '', external: string, rest: string) => {
           const [externalPath, externalRangeStr] = external.split(':').map(i => i.trim())
-          const sourcePath = resolve(dir, 'snippets', externalPath)
+
+          let sourcePath: string
+          if (externalPath.startsWith('/'))
+            sourcePath = resolve(dir, externalPath.substring(1))
+          else if (baseSlide.source?.filepath)
+            sourcePath = resolve(dirname(baseSlide.source.filepath), externalPath)
+          else
+            sourcePath = resolve(dir, externalPath)
+
           entries.add(sourcePath)
           let source: string
           if (!existsSync(sourcePath)) {
