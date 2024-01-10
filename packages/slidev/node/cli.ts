@@ -391,7 +391,6 @@ cli.command(
     .help(),
   async (args) => {
     const { entry, theme } = args
-    process.env.NODE_ENV = 'production'
     const { exportSlides, getExportOptions } = await import('./export')
     const port = await findFreePort(12445)
 
