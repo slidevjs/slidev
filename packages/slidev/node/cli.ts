@@ -444,7 +444,6 @@ cli.command(
     output,
     timeout,
   }) => {
-    process.env.NODE_ENV = 'production'
     const { exportNotes } = await import('./export')
     const port = await findFreePort(12445)
 
