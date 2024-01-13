@@ -68,7 +68,7 @@ onMounted(() => {
     if (!equationParents)
       return
 
-    // We extract each equation row from the parents
+    // For each row we extract the individual equation rows
     const equationRowsOfEachParent = Array.from(equationParents)
       .map(item => Array.from(item.querySelectorAll('.vlist-t > .vlist-r > .vlist > span > .mord')))
     // This list maps rows, which pairs up rows from different equationParents
