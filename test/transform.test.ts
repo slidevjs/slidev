@@ -1,4 +1,3 @@
-import exp from 'node:constants'
 import {
   transformMermaid,
   transformPageCSS,
@@ -7,8 +6,8 @@ import {
 } from '@slidev/cli/node/plugins/markdown'
 import { describe, expect, it } from 'vitest'
 
-const isMacOS = process.platform === 'darwin'
-const isNode18orAbove = +process.version.slice(1, 3) >= 18
+// const isMacOS = process.platform === 'darwin'
+// const isNode18orAbove = +process.version.slice(1, 3) >= 18
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
