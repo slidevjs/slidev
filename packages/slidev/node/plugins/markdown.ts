@@ -223,7 +223,7 @@ export function getCodeBlocks(md: string) {
       return codeblocks.some(([s, e]) => s <= idx && idx <= e)
     },
     isLineInsideCodeblocks(line: number) {
-      return codeblocks.some(([, , s, e]) => s <= line && line <= e)
+      return codeblocks.some(([,, s, e]) => s <= line && line <= e)
     },
   }
 }

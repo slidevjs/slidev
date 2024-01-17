@@ -24,7 +24,7 @@ describe('md parser', () => {
     it(basename(file), async () => {
       const data = await load(file)
 
-      expect(stringify(data).trim()).toEqual(data.raw.replaceAll('\r\n', '\n').trim())
+      expect(stringify(data).trim()).toEqual(data.raw.trim())
 
       prettify(data)
 
