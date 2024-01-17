@@ -55,10 +55,15 @@ useEventListener('keypress', (e) => {
     keyboardBuffer.value = ''
     return
   }
-  if (e.key === 'Enter' && keyboardBuffer.value) {
+  if (e.key === 'Enter') {
     e.preventDefault()
-    go(+keyboardBuffer.value)
-    keyboardBuffer.value = ''
+    if (keyboardBuffer.value) {
+      go(+keyboardBuffer.value)
+      keyboardBuffer.value = ''
+    }
+    else {
+      go(currentOverviewPage.value)
+    }
     return
   }
   const num = Number.parseInt(e.key.replace(/[^0-9]/g, ''))
