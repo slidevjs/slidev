@@ -7,7 +7,8 @@ import {
 } from '@slidev/cli/node/plugins/markdown'
 import { describe, expect, it } from 'vitest'
 
-const isMacOS = process.platform === 'darwin'
+// const isMacOS = process.platform === 'darwin'
+// const isNode18orAbove = +process.version.slice(1, 3) >= 18
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
@@ -102,11 +103,9 @@ C -->|Two| E[Result 2]
 `)).toMatchSnapshot()
   })
 
-  // TODO: not so sure on this,
-  // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
-  // we may need to find a better way to test this
-  it.runIf(isMacOS)('plantUML', () => {
-    expect(transformPlantUml(`
+  it('plantUML', () => {
+    const result = transformPlantUml(
+      `
 # Page
 
 \`\`\`plantuml
@@ -132,7 +131,16 @@ Alice <- Bob : Hello, too!
 *** <s>Raspyfi</s> => Volumio
 @endmindmap
 \`\`\`
-`, 'https://www.plantuml.com/plantuml')).toMatchSnapshot()
+`,
+      'https://www.plantuml.com/plantuml',
+    )
+
+    expect(result).toContain(`<PlantUml :code="'JOzD`)
+
+    // TODO: not so sure on this,
+    // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
+    // we may need to find a better way to test this
+    // expect(result).toMatchSnapshot()
   })
 
   it('external snippet', () => {

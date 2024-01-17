@@ -87,6 +87,10 @@ export function defineShikiSetup(fn: ShikiSetup) {
   return fn
 }
 
+export function defineShikijiSetup(fn: ShikijiSetup) {
+  return fn
+}
+
 export function defineWindiSetup(fn: WindiSetup) {
   return fn
 }
