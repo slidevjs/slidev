@@ -12,7 +12,7 @@ import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
-import type { LoadedSnippets, ShikiOptions } from '@slidev/types'
+import type { ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import { addClassToHast } from 'shikiji'
@@ -23,6 +23,7 @@ import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import MarkdownItShiki, { resolveShikiOptions } from './markdown-it-shiki'
+import { transformSnippet } from './transformSnippet'
 
 const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
   theme: {
@@ -124,10 +125,10 @@ export async function createMarkdownPlugin(
           : truncateMancoMark
 
         code = transformSlotSugar(code)
+        code = transformSnippet(code, options, id)
         code = transformMermaid(code)
         code = transformPlantUml(code, config.plantUmlServer)
         code = monaco(code)
-        code = transformExternalSnippet(code, options.data.snippets!)
         code = transformHighlighter(code)
         code = transformPageCSS(code, id)
         code = transformKaTex(code)
@@ -191,20 +192,6 @@ export function transformSlotSugar(md: string) {
     lines[lines.length - 1] += '\n\n</template>'
 
   return lines.join('\n')
-}
-
-/**
- * Transform external snippet syntax
- */
-export function transformExternalSnippet(md: string, snippets: LoadedSnippets) {
-  return md.replaceAll(/^```(\w+?)\s*\[([\s\S]+?)\](.*)[\s\S]*^```/mg, (_full, lang, external, rest) => {
-    const source = snippets[external]
-
-    if (source === undefined)
-      throw new Error(`Snippet not found: ${external}`)
-
-    return `\`\`\`${lang} ${rest}\n${source}\n\`\`\``
-  })
 }
 
 /**

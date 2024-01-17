@@ -155,8 +155,7 @@ function updateUser(id: number, update: User) {
 }
 ```
 
-```ts [snippets/helloWorld.ts:2-3,5]
-```
+<<< @/snippets/helloWorld.ts#snippet {2}
 
 <arrow v-click="[3, 4]" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
 

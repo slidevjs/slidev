@@ -1,10 +1,9 @@
-// from snippets/helloWorld.ts Line 1
-// from snippets/helloWorld.ts Line 2
-// from snippets/helloWorld.ts Line 3
-// from snippets/helloWorld.ts Line 4
-// from snippets/helloWorld.ts Line 5
-// from snippets/helloWorld.ts Line 6
-// from snippets/helloWorld.ts Line 7
-// from snippets/helloWorld.ts Line 8
-// from snippets/helloWorld.ts Line 9
-// from snippets/helloWorld.ts Line 10
+/* eslint-disable no-console */
+
+// #region snippet
+function hello() {
+  console.log('Hello from snippets/helloWorld.ts')
+}
+// #endregion snippet
+
+export default hello

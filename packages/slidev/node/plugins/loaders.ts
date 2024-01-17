@@ -9,7 +9,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { LoadedSnippets, SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
+import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -171,22 +171,20 @@ export function createSlidesLoader(
           const a = data.slides[i]
           const b = newData.slides[i]
 
-          function snippetsUnchanged(usedA: string[], usedB: string[], snippetsA: LoadedSnippets, snippetsB: LoadedSnippets) {
-            if (!equal(usedA, usedB))
-              return false
-            for (const id of usedA) {
-              if (snippetsA[id] !== snippetsB[id])
-                return false
-            }
-            return true
-          }
-
           if (
             a?.content.trim() === b?.content.trim()
             && a?.title?.trim() === b?.title?.trim()
             && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
-            && snippetsUnchanged(a.snippetsUsed, b.snippetsUsed, data.snippets!, newData.snippets!)
+            && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
+              try {
+                const newContent = fs.readFileSync(file, 'utf-8')
+                return oldContent === newContent
+              }
+              catch {
+                return false
+              }
+            })
           )
             continue
 

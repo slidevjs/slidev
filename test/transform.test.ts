@@ -1,10 +1,11 @@
+import path from 'node:path'
 import {
-  transformExternalSnippet,
   transformMermaid,
   transformPageCSS,
   transformPlantUml,
   transformSlotSugar,
 } from '@slidev/cli/node/plugins/markdown'
+import { transformSnippet } from 'packages/slidev/node/plugins/transformSnippet'
 import { describe, expect, it } from 'vitest'
 
 // const isMacOS = process.platform === 'darwin'
@@ -144,13 +145,16 @@ Alice <- Bob : Hello, too!
   })
 
   it('external snippet', () => {
-    const external = `path/to/snippet:1-2, 3`
-    expect(transformExternalSnippet(`
-\`\`\`ts [${external}] {monaco}
-ignored
-\`\`\`
+    expect(transformSnippet(`
+<<< @/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
 `, {
-      [external]: 'replaced'
-    })).toMatchSnapshot()
+      userRoot: path.join(__dirname, './fixtures/'),
+      data: {
+        slides: [
+          {} as any
+        ],
+        entries: [],
+      },
+    } as any, `/@slidev/slides/1.md`)).toMatchSnapshot()
   })
 })

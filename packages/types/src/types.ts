@@ -18,7 +18,7 @@ export interface SlideInfo extends SlideInfoBase {
   end: number
   inline?: SlideInfoBase
   source?: SlideInfoWithPath
-  snippetsUsed: string[]
+  snippetsUsed?: LoadedSnippets
 }
 
 export interface SlideInfoWithPath extends SlideInfoBase {
@@ -57,7 +57,6 @@ export interface SlidevMarkdown {
   filepath?: string
   entries?: string[]
   themeMeta?: SlidevThemeMeta
-  snippets?: LoadedSnippets
 }
 
 export interface SlidevPreparserExtension {

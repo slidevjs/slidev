@@ -2,8 +2,10 @@
 
 exports[`markdown transform > external snippet 1`] = `
 "
-\`\`\`ts  {monaco}
-replaced
+\`\`\`ts {2|3|4}{lines:true}
+function _foo() {
+  // ...
+}
 \`\`\`
 "
 `;
