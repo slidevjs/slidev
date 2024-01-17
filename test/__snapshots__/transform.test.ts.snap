@@ -31,16 +31,6 @@ exports[`markdown transform > mermaid 1`] = `
 "
 `;
 
-exports[`markdown transform > plantUML 1`] = `
-"
-# Page
-
-<PlantUml :code="'SoWkIImgAStDuNBCoKnELT2rKt3AJrAmKl18pSd9XmhQw28BwYYKvEShSZcavgK0zG40'" :server="'https://www.plantuml.com/plantuml'" v-bind="{}" />
-
-<PlantUml :code="'JOzD3e8m44Rtd6BMtNW192IM5I29HEDsAbKdeLD2MvNRIsjCMCsRlFd9LpgFipV4Wy4f4o2r8kHC23Yhm3wi9A0X3XzeYNrgwx1H6wvb1KTjqtRJoYhMtexBSAqJUescwoEUq4tn3xp9Fm7XfUS5HiiFO3Gw7SjT4QUCkkKxLy2-WAvl3rkrtEclBdOCXcnMwZN7ByiN'" :server="'https://www.plantuml.com/plantuml'" v-bind="{scale: 0.5}" />
-"
-`;
-
 exports[`markdown transform > slot-sugar 1`] = `
 "
 # Page 
