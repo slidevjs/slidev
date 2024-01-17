@@ -7,6 +7,7 @@ import {
 import { describe, expect, it } from 'vitest'
 
 const isMacOS = process.platform === 'darwin'
+const isNode18orAbove = +process.version.slice(1, 3) >= 18
 
 describe('markdown transform', () => {
   it('slot-sugar', () => {
@@ -104,7 +105,7 @@ C -->|Two| E[Result 2]
   // TODO: not so sure on this,
   // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
   // we may need to find a better way to test this
-  it.runIf(isMacOS)('plantUML', () => {
+  it.runIf(isMacOS && isNode18orAbove)('plantUML', () => {
     expect(transformPlantUml(`
 # Page
 
