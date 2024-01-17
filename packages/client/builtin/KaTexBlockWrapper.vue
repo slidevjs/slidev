@@ -63,19 +63,27 @@ onMounted(() => {
   watchEffect(() => {
     if (!el.value)
       return
-    const baseTargets = Array.from(el.value.querySelectorAll('.col-align-c > .vlist-t > .vlist-r > .vlist'))
+    // KaTeX equations have col-align-XXX as parent
+    const equationParents = el.value.querySelectorAll('.mtable > [class*=col-align]')
+    if (!equationParents)
+      return
+
+    // For each row we extract the individual equation rows
+    const equationRowsOfEachParent = Array.from(equationParents)
+      .map(item => Array.from(item.querySelectorAll('.vlist-t > .vlist-r > .vlist > span > .mord')))
+    // This list maps rows from different parents to line them up
     const lines: Element[][] = []
-    baseTargets.forEach((baseTarget) => {
-      Array.from(baseTarget.children).forEach((childNode, idx) => {
-        const realNode = childNode.querySelector('.mord')
-        if (!realNode)
+    for (const equationRowParent of equationRowsOfEachParent) {
+      equationRowParent.forEach((equationRow, idx) => {
+        if (!equationRow)
           return
         if (Array.isArray(lines[idx]))
-          lines[idx].push(realNode)
+          lines[idx].push(equationRow)
         else
-          lines[idx] = [realNode]
+          lines[idx] = [equationRow]
       })
-    })
+    }
+
     const startLine = props.startLine
     const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr.value)
     lines.forEach((line, idx) => {
