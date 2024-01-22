@@ -34,6 +34,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  at: {
+    type: Number,
+    default: undefined,
+  },
 })
 
 const clicks = inject(injectionClicks)
@@ -44,7 +48,7 @@ const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  const prev = elements?.value.length
+  const prev = props.at == null ? elements?.value.length : props.at
   const index = computed(() => {
     if (disabled?.value)
       return props.ranges.length - 1
@@ -70,7 +74,7 @@ onMounted(() => {
 
     // For each row we extract the individual equation rows
     const equationRowsOfEachParent = Array.from(equationParents)
-      .map(item => Array.from(item.querySelectorAll('.vlist-t > .vlist-r > .vlist > span > .mord')))
+      .map(item => Array.from(item.querySelectorAll(':scope > .vlist-t > .vlist-r > .vlist > span > .mord')))
     // This list maps rows from different parents to line them up
     const lines: Element[][] = []
     for (const equationRowParent of equationRowsOfEachParent) {
