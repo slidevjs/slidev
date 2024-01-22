@@ -171,6 +171,7 @@ function add(
 ~~~
 
 This is especially useful when you need to sync different animations (when using `two-cols` layout and list animation for instance).
+You may need to set the [custom clicks count](/guide/animations#custom-clicks-count) for the slide progression to function correctly.
 
 To skip highlighting any lines, you can set the line number to `0`. For example
 
