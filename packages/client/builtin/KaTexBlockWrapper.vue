@@ -74,7 +74,7 @@ onMounted(() => {
 
     // For each row we extract the individual equation rows
     const equationRowsOfEachParent = Array.from(equationParents)
-      .map(item => Array.from(item.querySelectorAll('.vlist-t > .vlist-r > .vlist > span > .mord')))
+      .map(item => Array.from(item.querySelectorAll(':scope > .vlist-t > .vlist-r > .vlist > span > .mord')))
     // This list maps rows from different parents to line them up
     const lines: Element[][] = []
     for (const equationRowParent of equationRowsOfEachParent) {
