@@ -47,17 +47,17 @@ export async function createMarkdownPlugin(
   }
   else if (config.highlighter === 'shikiji') {
     const MarkdownItShikiji = await import('markdown-it-shikiji').then(r => r.default)
-    const { transformerTwoSlash, rendererRich } = await import('shikiji-twoslash')
+    const { transformerTwoslash, rendererRich } = await import('shikiji-twoslash')
     const options = await loadShikijiSetups(roots)
     const plugin = await MarkdownItShikiji({
       ...options,
       transformers: [
         ...options.transformers || [],
-        transformerTwoSlash({
+        transformerTwoslash({
           explicitTrigger: true,
           renderer: rendererRich(),
           twoslashOptions: {
-            defaultOptions: {
+            handbookOptions: {
               noErrorValidation: true,
             },
           },
