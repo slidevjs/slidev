@@ -119,7 +119,7 @@ function add(
 You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. In case you want to disable the numbering for an specific block when `lineNumbers: true` you can set `lines:false` for that block:
 
 ~~~ts
-//```ts {2,3} {lines:true}
+//```ts {2,3}{lines:true}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -132,7 +132,7 @@ function add(
 You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
 
 ~~~ts
-//```ts {6,7} {lines:true, startLine:5}
+//```ts {6,7}{lines:true, startLine:5}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -160,7 +160,7 @@ This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number
 You can start the highlight at a specific click:
 
 ~~~ts
-//```ts {2-3|5|all} {at:0}
+//```ts {2-3|5|all}{at:0}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -190,7 +190,7 @@ If the code doesn't fit into one slide, you can pass an extra maxHeight option w
 and enable scrolling
 
 ~~~ts {2|3|7|12}
-//```ts {2|3|7|12} {maxHeight:'100px'}
+//```ts {2|3|7|12}{maxHeight:'100px'}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
