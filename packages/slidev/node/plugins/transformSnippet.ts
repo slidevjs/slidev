@@ -1,3 +1,5 @@
+// Ported from https://github.com/vuejs/vitepress/blob/main/src/node/markdown/plugins/snippet.ts
+
 import path from 'node:path'
 import fs from 'fs-extra'
 import type { ResolvedSlidevOptions } from '../options'
