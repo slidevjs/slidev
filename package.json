@@ -2,7 +2,7 @@
   "type": "module",
   "version": "0.46.2",
   "private": true,
-  "packageManager": "pnpm@8.14.1",
+  "packageManager": "pnpm@8.14.2",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -23,7 +23,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.2",
+    "@antfu/eslint-config": "^2.6.3",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.7",
     "@slidev/cli": "workspace:*",
@@ -56,16 +56,16 @@
     "lint-staged": "^15.2.0",
     "markdown-it-shikiji": "^0.9.19",
     "mermaid": "^10.7.0",
-    "playwright-chromium": "^1.41.0",
-    "pnpm": "^8.14.1",
+    "playwright-chromium": "^1.41.1",
+    "pnpm": "^8.14.2",
     "rimraf": "^5.0.5",
     "shikiji": "^0.9.19",
     "simple-git-hooks": "^2.9.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11",
+    "vite": "^5.0.12",
     "vite-plugin-windicss": "^1.9.3",
-    "vitest": "^1.2.0",
+    "vitest": "^1.2.1",
     "vue-tsc": "^1.8.27",
     "zx": "^7.2.3"
   },
