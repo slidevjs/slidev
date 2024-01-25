@@ -110,6 +110,6 @@ export default defineShikijiSetup(() => {
 })
 ```
 
-Refer to [Shikiji's docs](https://github.com/antfu/shikji) for all available options.
+Refer to [Shikiji's docs](https://github.com/antfu/shikiji) for all available options.
 
 > It make it easier for the community to adapt, when no `shikiji.ts` it presented, we will look for `shiki.ts` and try to convert it to Shikiji options.
