@@ -290,7 +290,8 @@ export async function loadShikijiSetups(
   if ('theme' in result && 'themes' in result)
     delete result.theme
 
-  if (result.theme && typeof result.theme !== 'string') {
+  // Rename theme to themes when provided in multiple themes format, but exclude when it's a theme object.
+  if (result.theme && typeof result.theme !== 'string' && !result.theme.name && !result.theme.tokenColors) {
     result.themes = result.theme
     delete result.theme
   }
