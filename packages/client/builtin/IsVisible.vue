@@ -15,9 +15,9 @@ Usage:
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
-const slotWrapper = ref(null)
+const slotWrapper = ref<HTMLElement>()
 const isVisible = ref(false)
-const observer = ref(null)
+const observer = ref<IntersectionObserver>()
 
 function show() {
   isVisible.value = true
