@@ -1,6 +1,6 @@
 # Highlighters
 
-Slidev comes with two syntax highlighter for you to choose from:
+Slidev comes with three syntax highlighters for you to choose from:
 
 - [Prism](https://prismjs.com/)
 - [Shiki](https://github.com/shikijs/shiki)
@@ -10,7 +10,7 @@ Slidev comes with two syntax highlighter for you to choose from:
 
 **Shiki**, on the other hand, is a TextMate grammar-powered syntax highlighter. It generates colored tokens, so there is no additional CSS needed. Since it has great grammar support, the generated colors are very accurate, just like what you will see in VS Code. Shiki also comes with [a bunch of built-in themes](https://github.com/shikijs/shiki/blob/master/docs/themes.md). The downside of Shiki is that it also requires TextMate themes (compatible with VS Code theme) to do the highlighting, which can be a bit harder to customize.
 
-**Shikiji** is a ESM rewrite of Shiki bringing many improvements and new features. You could have [AST-based transformers](https://github.com/antfu/shikiji#hast-transformers) to customize how the code is rendered. And the [TwoSlash](#twoslash) support is also built-in.
+**Shikiji** is an ESM rewrite of Shiki bringing many improvements and new features. You could have [AST-based transformers](https://github.com/antfu/shikiji#hast-transformers) to customize how the code is rendered. And the [TwoSlash](#twoslash) support is also built-in.
 
 Slidev themes usually support both Prism and Shiki, but depending on the theme you are using, it might only support one of them.
 
@@ -32,7 +32,7 @@ highlighter: shikiji
 
 This feature is only available when you set `highlighter` to `shikiji`.
 
-[TwoSlash](https://www.typescriptlang.org/dev/twoslash/) is a powerful tool for rendering TypeScript code blocks with type informations on hover or inlined. It's quite useful for preapring slides for JavaScript/TypeScript related topics.
+[TwoSlash](https://www.typescriptlang.org/dev/twoslash/) is a powerful tool for rendering TypeScript code blocks with type information on hover or inlined. It's quite useful for preparing slides for JavaScript/TypeScript-related topics.
 
 To use it, you can add `twoslash` to the code block's language identifier:
 
@@ -42,11 +42,11 @@ console.log('hello')
 ```
 ~~~
 
-And example of TwoSlash enabled code snippet [can be found here](https://antfu.me/posts/shikiji-twoslash).
+An example of TwoSlash enabled code snippet [can be found here](https://antfu.me/posts/shikiji-twoslash).
 
 ## Configure Prism
 
-To configure your Prism, you can just import the theme css or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to its docs for more details.
+To configure your Prism, you can just import the theme CSS or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to its docs for more details.
 
 ## Configure Shiki
 
@@ -112,4 +112,4 @@ export default defineShikijiSetup(() => {
 
 Refer to [Shikiji's docs](https://github.com/antfu/shikiji) for all available options.
 
-> It make it easier for the community to adapt, when no `shikiji.ts` it presented, we will look for `shiki.ts` and try to convert it to Shikiji options.
+> It makes it easier for the community to adapt, when no `shikiji.ts` is presented, we will look for `shiki.ts` and try to convert it to Shikiji options.
