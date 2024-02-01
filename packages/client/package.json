@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.46.2",
+  "version": "0.46.3",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -31,6 +31,7 @@
     "defu": "^6.1.4",
     "drauu": "^0.3.7",
     "file-saver": "^2.0.5",
+    "floating-vue": "^5.2.0",
     "fuse.js": "^7.0.0",
     "js-base64": "^3.7.6",
     "js-yaml": "^4.1.0",

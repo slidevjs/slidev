@@ -50,17 +50,17 @@ export async function createMarkdownPlugin(
   }
   else if (config.highlighter === 'shikiji') {
     const MarkdownItShikiji = await import('markdown-it-shikiji').then(r => r.default)
-    const { transformerTwoSlash, rendererRich } = await import('shikiji-twoslash')
+    const { transformerTwoslash, rendererRich } = await import('shikiji-twoslash')
     const options = await loadShikijiSetups(roots)
     const plugin = await MarkdownItShikiji({
       ...options,
       transformers: [
         ...options.transformers || [],
-        transformerTwoSlash({
+        transformerTwoslash({
           explicitTrigger: true,
           renderer: rendererRich(),
           twoslashOptions: {
-            defaultOptions: {
+            handbookOptions: {
               noErrorValidation: true,
             },
           },
@@ -294,7 +294,8 @@ export async function loadShikijiSetups(
   if ('theme' in result && 'themes' in result)
     delete result.theme
 
-  if (result.theme && typeof result.theme !== 'string') {
+  // Rename theme to themes when provided in multiple themes format, but exclude when it's a theme object.
+  if (result.theme && typeof result.theme !== 'string' && !result.theme.name && !result.theme.tokenColors) {
     result.themes = result.theme
     delete result.theme
   }

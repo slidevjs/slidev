@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "0.46.2",
+  "version": "0.46.3",
   "private": true,
   "packageManager": "pnpm@8.14.2",
   "engines": {
@@ -54,12 +54,12 @@
     "esno": "^4.0.0",
     "katex": "^0.16.9",
     "lint-staged": "^15.2.0",
-    "markdown-it-shikiji": "^0.9.19",
+    "markdown-it-shikiji": "^0.10.0",
     "mermaid": "^10.7.0",
     "playwright-chromium": "^1.41.1",
     "pnpm": "^8.14.2",
     "rimraf": "^5.0.5",
-    "shikiji": "^0.9.19",
+    "shikiji": "^0.10.0",
     "simple-git-hooks": "^2.9.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
