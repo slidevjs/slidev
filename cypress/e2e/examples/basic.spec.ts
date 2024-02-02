@@ -39,7 +39,7 @@ context('Basic', () => {
     goPage(5)
 
     cy.get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 .slidev-code')
-      .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
+      .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>\n')
       .get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 > p')
       .should('have.text', 'Current Page: 5')
   })
