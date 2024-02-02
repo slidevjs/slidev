@@ -108,7 +108,7 @@
     "vite-plugin-inspect": "^0.8.3",
     "vite-plugin-remote-assets": "^0.4.1",
     "vite-plugin-static-copy": "^1.0.1",
-    "vite-plugin-vue-server-ref": "^0.4.0",
+    "vite-plugin-vue-server-ref": "^0.4.1",
     "vitefu": "^0.2.5",
     "vue": "^3.4.15",
     "yargs": "^17.7.2"
