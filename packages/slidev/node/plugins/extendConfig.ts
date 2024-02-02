@@ -4,7 +4,6 @@ import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
-import { dependencies } from '../../../client/package.json'
 import type { ResolvedSlidevOptions } from '../options'
 import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
 import { searchForWorkspaceRoot } from '../vite/searchRoot'
@@ -37,21 +36,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           dedupe: ['vue'],
         },
         optimizeDeps: {
-          include: [
-            ...Object.keys(dependencies).filter(i => !EXCLUDE.includes(i)),
-            'codemirror/mode/javascript/javascript',
-            'codemirror/mode/css/css',
-            'codemirror/mode/markdown/markdown',
-            'codemirror/mode/xml/xml',
-            'codemirror/mode/htmlmixed/htmlmixed',
-            'codemirror/addon/display/placeholder',
-            'prettier/plugins/babel',
-            'prettier/plugins/html',
-            'prettier/plugins/typescript',
-            'mermaid/dist/mermaid.esm.min.mjs',
-            'mermaid/dist/mermaid.esm.mjs',
-            'vite-plugin-vue-server-ref/client',
-          ],
           exclude: EXCLUDE,
         },
         css: options.data.config.css === 'unocss'
