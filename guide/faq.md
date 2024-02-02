@@ -43,8 +43,6 @@ The third column (10% width to parent container)
 </div>
 ```
 
-Learn more about [Windi CSS Grids](https://windicss.org/utilities/layout/grid.html).
-
 ## Positioning
 
 Slides are defined in fixed sizes (default `980x552px`) and scale to fit with the user screen. You can safely use absolute position in your slides as they will scale along with the screen.

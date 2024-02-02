@@ -3,14 +3,7 @@
 <Environment type="node" />
 
 ::: warning
-Since Slidev v0.42.0, [UnoCSS](/custom/config-unocss) become the default CSS framework for Slidev.
-
-You can still use Windi CSS by setting `css: windicss` in the frontmatter.
-```md
----
-css: windicss
----
-```
+Since Slidev v0.47.0, we no longer support Windi CSS. Please migrate to [UnoCSS](/custom/config-unocss).
 :::
 
 Markdown naturally supports embedded HTML markups. You can therefore style your content the way you want.

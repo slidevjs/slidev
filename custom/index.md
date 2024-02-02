@@ -37,8 +37,8 @@ export:
   dark: false
   withClicks: false
   withToc: false
-# syntax highlighter, can be 'prism', 'shiki' or `shikiji`
-highlighter: prism
+# syntax highlighter, can be 'prism', 'shiki'
+highlighter: shiki
 # show line numbers in code blocks
 lineNumbers: false
 # enable monaco editor, can be boolean, 'dev' or 'build'
@@ -123,7 +123,6 @@ Refer to the [Directory Structure](/custom/directory-structure) section.
 - [Configure Vue](/custom/config-vue)
 - [Configure Vite](/custom/config-vite)
 - [Configure UnoCSS](/custom/config-unocss)
-- [Configure Windi CSS](/custom/config-windicss)
 - [Configure Monaco](/custom/config-monaco)
 - [Configure KaTeX](/custom/config-katex)
 - [Configure Mermaid](/custom/config-mermaid)

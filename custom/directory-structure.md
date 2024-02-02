@@ -115,18 +115,18 @@ import './code.css'
 import './layouts.css'
 ```
 
-Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://windicss.org/features/directives.html) out-of-box. For example:
+Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://unocss.dev/transformers/directives#apply) out-of-box. For example:
 
 ```less
 .slidev-layout {
-  @apply px-14 py-10 text-[1.1rem];
+  --uno: px-14 py-10 text-[1.1rem];
 
   h1, h2, h3, h4, p, div {
-    @apply select-none;
+    --uno: select-none;
   }
 
   pre, code {
-    @apply select-text;
+    --uno: select-text;
   }
 
   a {
@@ -135,7 +135,7 @@ Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://
 }
 ```
 
-[Learn more about the syntax](https://windicss.org/features/directives.html).
+[Learn more about the syntax](https://unocss.dev/transformers/directives#apply).
 
 ## `index.html`
 

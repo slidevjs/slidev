@@ -49,22 +49,6 @@ export default defineShikiSetup(() => {
 
 Refer to [Shiki's docs](https://shiki.style) for available theme names.
 
-## TwoSlash Integration
-
-This feature is only available when you set `highlighter` to `shiki`.
-
-[TwoSlash](https://twoslash.netlify.app/) is a powerful tool for rendering TypeScript code blocks with type information on hover or inlined. It's quite useful for preparing slides for JavaScript/TypeScript-related topics.
-
-To use it, you can add `twoslash` to the code block's language identifier:
-
-~~~md
-```ts twoslash
-console.log('hello')
-```
-~~~
-
-An example of TwoSlash enabled code snippet [can be found here](https://antfu.me/posts/shikiji-twoslash).
-
 ## Configure Prism
 
 To configure your Prism, you can just import the theme CSS or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to its docs for more details.

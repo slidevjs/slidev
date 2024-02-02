@@ -11,7 +11,7 @@ In your frontmatter, configure as following
 fonts:
   # basically the text
   sans: Robot
-  # use with `font-serif` css class from windicss
+  # use with `font-serif` css class from UnoCSS
   serif: Robot Slab
   # for code blocks, inline code, etc.
   mono: Fira Code

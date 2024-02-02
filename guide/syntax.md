@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Markdown Syntax
 
 Slides are written within **a single markdown file** (by default `./slides.md`).
@@ -30,9 +34,9 @@ You can directly use Windi CSS and Vue components to style and enrich your slide
 </div>
 ~~~
 
-## Front Matter & Layouts
+## Frontmatter & Layouts
 
-Specify layouts and other metadata for each slide by converting the separators into [front matter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
+Specify layouts and other metadata for each slide by converting the separators into [frontmatter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
 ~~~md
 ---
@@ -99,7 +103,7 @@ console.log('Hello, World!')
 ```
 ~~~
 
-We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shiki) and [Shikiji](https://github.com/antfu/shikiji) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
+We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
 
 ### Line Highlighting
 
@@ -202,6 +206,32 @@ const c = add(1, 2)
 ```
 ~~~
 
+### TwoSlash Integration
+
+This feature is only available when you [set `highlighter` to `shiki`](/custom/highlighters)
+
+[TwoSlash](https://twoslash.netlify.app/) is a powerful tool for rendering TypeScript code blocks with type information on hover or inlined. It's quite useful for preparing slides for JavaScript/TypeScript-related topics.
+
+To use it, you can add `twoslash` to the code block's language identifier:
+
+~~~md
+```ts twoslash
+import { ref } from 'vue'
+
+const count = ref(0)
+//            ^?
+```
+~~~
+
+It will be rendered as:
+
+```ts twoslash
+import { ref } from 'vue'
+
+const count = ref(0)
+//            ^?
+```
+
 ### Monaco Editor
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
@@ -254,7 +284,7 @@ h1 {
 
 `<style>` tag in Markdown is always [scoped](https://vuejs.org/api/sfc-css-features.html#scoped-css). As an outstanding result, a selector with the child combinator (`.a > .b`) is unusable as such; see the previous link. To have global style overrides, check out the [customization section](/custom/directory-structure#style).
 
-Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and [directives](https://windicss.org/features/directives.html) (e.g. `@apply`)
+Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and [directives](https://unocss.dev/transformers/directives) (e.g. `--uno:` or `@apply`)
 
 ```md
 # Slidev
@@ -264,7 +294,7 @@ Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and 
 <style>
 blockquote {
   code {
-    @apply text-teal-500 dark:text-teal-400;
+    --uno: text-teal-500 dark:text-teal-400;
   }
 }
 </style>
@@ -428,6 +458,22 @@ This shows on the right
 
 This shows on the left
 ```
+
+## Import Code Snippets
+
+> Available since v0.47.0
+
+You can import code snippets from existing files via following syntax:
+
+```md
+<<< @/snippets/snippet.js
+```
+
+::: ttp
+The value of `@` corresponds to the source root, the directory where the `slides.md` is located.
+:::
+
+This feature is vendored from VitePress, learn more about it in [VitePress's documentation](https://vitepress.dev/guide/markdown#import-code-snippets).
 
 ## Configurations
 

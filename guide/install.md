@@ -6,23 +6,21 @@
 
 The best way to get started is using our official starter template.
 
-With NPM:
+::: code-group
 
-```bash
-$ npm init slidev@latest
+```bash [npm]
+npm init slidev@latest
 ```
 
-With Yarn:
-
-```bash
-$ yarn create slidev
+```bash [yarn]
+yarn create slidev
 ```
 
-With PNPM:
-
-```bash
-$ pnpm create slidev
+```bash [pnpm]
+pnpm create slidev
 ```
+
+:::
 
 Follow the prompts and it will open up the slideshow at `http://localhost:3030/` automatically for you.
 
@@ -33,20 +31,14 @@ It also contains the basic setup and a short demo with instructions on how to ge
 If you still prefer to install Slidev manually or would like to integrate it into your existing projects, you can do:
 
 ```bash
-$ npm install @slidev/cli @slidev/theme-default
+npm install @slidev/cli @slidev/theme-default
 ```
 ```bash
-$ touch slides.md
+touch slides.md
 ```
 ```bash
-$ npx slidev
+npx slidev
 ```
-
-> Please note if you are using [pnpm](https://pnpm.io), you will need to enable [shamefully-hoist](https://pnpm.io/npmrc#shamefully-hoist) option for Slidev to work properly:
->
-> ```bash
-> echo 'shamefully-hoist=true' >> .npmrc
-> ```
 
 ## Install Globally
 
@@ -55,13 +47,13 @@ $ npx slidev
 You can install Slidev globally with the following command
 
 ```bash
-$ npm i -g @slidev/cli
+npm i -g @slidev/cli
 ```
 
 And then use `slidev` everywhere without creating a project every time.
 
 ```bash
-$ slidev
+npx slidev
 ```
 
 This command will also try to use local `@slidev/cli` if it has been found in the `node_modules`.

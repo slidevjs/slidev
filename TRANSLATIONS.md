@@ -46,7 +46,6 @@ In case it's already been translated but you're wondering how to maintain it, sk
 - [ ] `config-shortcuts.md` - Configuring Shortcuts
 - [ ] `config-vite.md` - Configuring Vite
 - [ ] `config-vue.md` - Configuring Vue
-- [ ] `config-windicss.md`- Configuring Windicss
 - [ ] `directory-structure.md` - Configuring the directory structure
 - [ ] `fonts.md` - Configuring fonts
 - [ ] `global-layers.md` - Configuring the global layers

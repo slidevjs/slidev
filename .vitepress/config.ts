@@ -1,5 +1,6 @@
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
+import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 
 const CURRENT_VERSION = '0.47.1'
 
@@ -125,10 +126,6 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/config-unocss',
   },
   {
-    text: 'Configure Windi CSS',
-    link: '/custom/config-windicss',
-  },
-  {
     text: 'Configure Monaco',
     link: '/custom/config-monaco',
   },
@@ -225,6 +222,9 @@ export default defineConfig({
         'markdown',
       )
     },
+    codeTransformers: [
+      transformerTwoslash(),
+    ],
   },
   cleanUrls: true,
   themeConfig: {
