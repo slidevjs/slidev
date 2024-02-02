@@ -152,7 +152,6 @@ export async function resolveOptions(
 
   const clientRoot = await getClientRoot()
   const cliRoot = getCLIRoot()
-  console.log({ cliRoot })
   const themeRoots = await getThemeRoots(theme, entry)
   const addons = await getAddons(userRoot, data.config)
   const addonRoots = await getAddonRoots(addons, entry)
