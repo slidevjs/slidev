@@ -53,13 +53,3 @@ html.dark {
   --prism-line-highlight-background: #444444;
   --prism-selection-background: #444444;
 }
-
-pre[class*='language-'] {
-  @apply p-2;
-}
-
-:not(pre) > code {
-  font-size: 0.9em;
-  background: var(--prism-background);
-  @apply font-light py-0.5 rounded;
-}

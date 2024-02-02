@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+import fs from 'node:fs/promises'
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
@@ -12,24 +12,13 @@ import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
-import type { ShikiOptions } from '@slidev/types'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
-import { addClassToHast } from 'shikiji'
-import fs from 'fs-extra'
-import type { MarkdownItShikijiOptions } from 'markdown-it-shikiji'
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
-import MarkdownItShiki, { resolveShikiOptions } from './markdown-it-shiki'
-
-const DEFAULT_SHIKI_OPTIONS: ShikiOptions = {
-  theme: {
-    dark: 'min-dark',
-    light: 'min-light',
-  },
-}
 
 export async function createMarkdownPlugin(
   { data: { config }, roots, mode, entry }: ResolvedSlidevOptions,
@@ -39,17 +28,10 @@ export async function createMarkdownPlugin(
   const entryPath = slash(entry)
 
   if (config.highlighter === 'shiki') {
-    const Shiki = await import('shiki')
-    const shikiOptions: ShikiOptions = await loadSetups(roots, 'shiki.ts', Shiki, DEFAULT_SHIKI_OPTIONS, false)
-    const { langs, themes } = resolveShikiOptions(shikiOptions)
-    shikiOptions.highlighter = await Shiki.getHighlighter({ themes, langs })
-    setups.push(md => md.use(MarkdownItShiki, shikiOptions))
-  }
-  else if (config.highlighter === 'shikiji') {
-    const MarkdownItShikiji = await import('markdown-it-shikiji').then(r => r.default)
-    const { transformerTwoslash, rendererRich } = await import('shikiji-twoslash')
-    const options = await loadShikijiSetups(roots)
-    const plugin = await MarkdownItShikiji({
+    const MarkdownItShiki = await import('@shikijs/markdown-it').then(r => r.default)
+    const { transformerTwoslash, rendererRich } = await import('@shikijs/twoslash')
+    const options = await loadShikiSetups(roots)
+    const plugin = await MarkdownItShiki({
       ...options,
       transformers: [
         ...options.transformers || [],
@@ -64,7 +46,7 @@ export async function createMarkdownPlugin(
         }),
         {
           pre(pre) {
-            addClassToHast(pre, 'slidev-code shikiji')
+            this.addClassToHast(pre, 'slidev-code')
           },
           postprocess(code) {
             return escapeVueInCode(code)
@@ -279,13 +261,22 @@ export function escapeVueInCode(md: string) {
   return md.replace(/{{(.*?)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
 }
 
-export async function loadShikijiSetups(
+export async function loadShikiSetups(
   roots: string[],
 ) {
-  const anyShikiji = roots.some(root => fs.existsSync(resolve(root, 'setup', 'shikiji.ts')))
-  const result: any = anyShikiji
-    ? await loadSetups(roots, 'shikiji.ts', undefined, {}, false)
-    : await loadSetups(roots, 'shiki.ts', await import('shiki'), {}, false)
+  const result: any = await loadSetups(
+    roots,
+    'shiki.ts',
+    {
+      /** @deprecated */
+      async loadTheme(path: string) {
+        console.warn('[slidev] `loadTheme` in `setup/shiki.ts` is deprecated. Pass directly the theme name it\'s supported by Shiki. For custom themes, load it manually via `JSON.parse(fs.readFileSync(path, \'utf-8\'))` and pass the raw JSON object instead.')
+        return JSON.parse(await fs.readFile(path, 'utf-8'))
+      },
+    },
+    {},
+    false,
+  )
 
   if ('theme' in result && 'themes' in result)
     delete result.theme
@@ -307,5 +298,5 @@ export async function loadShikijiSetups(
   if (result.themes)
     result.defaultColor = false
 
-  return result as MarkdownItShikijiOptions
+  return result as MarkdownItShikiOptions
 }
