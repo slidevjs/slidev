@@ -6,5 +6,4 @@ setupRoot()
 
 <template>
   <RouterView />
-  <StarportCarrier />
 </template>

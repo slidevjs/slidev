@@ -295,9 +295,6 @@ importers:
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.4.15)
-      vue-starport:
-        specifier: ^0.4.0
-        version: 0.4.0(typescript@5.3.3)
       windicss:
         specifier: ^3.5.6
         version: 3.5.6
@@ -8996,16 +8993,6 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.5.1
       vue: 3.4.15(typescript@5.3.3)
-    dev: false
-
-  /vue-starport@0.4.0(typescript@5.3.3):
-    resolution: {integrity: sha512-02odSlCxGyUaDam1VzNP/d/lj2p/SO3ji5pvuajXrC1Ol7iqSqIt+n/x4xoBugUIctyGyCQoJbMuoyaiyGy9ag==}
-    dependencies:
-      '@vueuse/core': 10.7.2(vue@3.4.15)
-      vue: 3.4.15(typescript@5.3.3)
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - typescript
     dev: false
 
   /vue-template-compiler@2.7.15:
