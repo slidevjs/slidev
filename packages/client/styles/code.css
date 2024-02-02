@@ -21,11 +21,6 @@ html:not(.dark) .shiki span {
   color: var(--shiki-light);
 }
 
-.shiki.twoslash {
-  /* Do not set overflow so the hover popover can be displayed */
-  overflow: inherit;
-}
-
 .twoslash-meta-line.twoslash-popover-line {
   margin-top: -10px;
 }
@@ -68,14 +63,14 @@ html:not(.dark) .shiki span {
 }
 
 /* Inline Code */
-:not(pre) > code {
+.slidev-layout :not(pre) > code {
   font-size: 0.9em;
   background: var(--slidev-code-background);
   border-radius: var(--slidev-code-radius);
   @apply font-light py-0.5 px-1.5;
 }
 
-:not(pre) > code:before {
+.slidev-layout :not(pre) > code:before {
   margin-right: -0.08em;
 }
 

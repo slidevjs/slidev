@@ -29,7 +29,7 @@ export async function createMarkdownPlugin(
 
   if (config.highlighter === 'shiki') {
     const MarkdownItShiki = await import('@shikijs/markdown-it').then(r => r.default)
-    const { transformerTwoslash, rendererRich } = await import('@shikijs/twoslash')
+    const { transformerTwoslash } = await import('@shikijs/vitepress-twoslash')
     const options = await loadShikiSetups(roots)
     const plugin = await MarkdownItShiki({
       ...options,
@@ -37,7 +37,6 @@ export async function createMarkdownPlugin(
         ...options.transformers || [],
         transformerTwoslash({
           explicitTrigger: true,
-          renderer: rendererRich(),
           twoslashOptions: {
             handbookOptions: {
               noErrorValidation: true,
@@ -47,6 +46,7 @@ export async function createMarkdownPlugin(
         {
           pre(pre) {
             this.addClassToHast(pre, 'slidev-code')
+            delete pre.properties.tabindex
           },
           postprocess(code) {
             return escapeVueInCode(code)
@@ -70,6 +70,7 @@ export async function createMarkdownPlugin(
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,
+    escapeCodeTagInterpolation: false,
     markdownItOptions: {
       quotes: '""\'\'',
       html: true,

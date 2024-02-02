@@ -48,6 +48,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="isPrintMode ? windowSize.width.value : undefined"
       :scale="slideScale"
+      :is-main="true"
       @pointerdown="onClick"
     >
       <template #default>

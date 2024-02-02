@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, provide, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
@@ -14,6 +14,10 @@ const props = defineProps({
   },
   scale: {
     type: [Number, String],
+  },
+  isMain: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -51,6 +55,14 @@ const style = computed(() => ({
 const className = computed(() => ({
   'select-none': !configs.selectable,
 }))
+
+if (props.isMain) {
+  useStyleTag(computed(() => `
+    :root {
+      --slidev-slide-scale: ${scale.value};
+    }
+  `))
+}
 
 provide(injectionSlideScale, scale as any)
 </script>

@@ -55,6 +55,7 @@
     "@mrdrogdrog/optional": "^1.2.1",
     "@shikijs/markdown-it": "^1.0.0-beta.3",
     "@shikijs/twoslash": "^1.0.0-beta.3",
+    "@shikijs/vitepress-twoslash": "1.0.0-beta.3",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",

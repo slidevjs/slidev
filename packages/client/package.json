@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.7",
+    "@shikijs/vitepress-twoslash": "^1.0.0-beta.3",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
