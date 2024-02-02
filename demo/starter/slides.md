@@ -145,11 +145,16 @@ doubled.value = 2
 
 <arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
 
+<!-- This allow you to embed external code blocks -->
+<<< @/snippets/external.ts#snippet
+
+<!-- Footer -->
 [^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
 
+<!-- Inline style -->
 <style>
 .footnotes-sep {
-  @apply mt-20 opacity-10;
+  @apply mt-5 opacity-10;
 }
 .footnotes {
   @apply text-sm opacity-75;

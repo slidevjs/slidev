@@ -175,6 +175,15 @@ export function createSlidesLoader(
             && a?.title?.trim() === b?.title?.trim()
             && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
+            && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
+              try {
+                const newContent = fs.readFileSync(file, 'utf-8')
+                return oldContent === newContent
+              }
+              catch {
+                return false
+              }
+            })
           )
             continue
 
@@ -297,11 +306,11 @@ export function createSlidesLoader(
                     preload: computed(() => frontmatter.preload),
                     slide: {
                       ...(${JSON.stringify({
-                        ...prepareSlideInfo(slide),
-                        frontmatter: undefined,
-                        // remove raw content in build, optimize the bundle size
-                        ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
-                      })}),
+                    ...prepareSlideInfo(slide),
+                    frontmatter: undefined,
+                    // remove raw content in build, optimize the bundle size
+                    ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+                  })}),
                       frontmatter,
                       filepath: ${JSON.stringify(slide.source?.filepath || entry)},
                       id: ${pageNo},

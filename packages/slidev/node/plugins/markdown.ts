@@ -19,11 +19,14 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
+import { transformSnippet } from './transformSnippet'
 
 export async function createMarkdownPlugin(
-  { data: { config }, roots, mode, entry }: ResolvedSlidevOptions,
+  options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
+  const { data: { config }, roots, mode, entry } = options
+
   const setups: ((md: MarkdownIt) => void)[] = []
   const entryPath = slash(entry)
 
@@ -105,6 +108,7 @@ export async function createMarkdownPlugin(
           : truncateMancoMark
 
         code = transformSlotSugar(code)
+        code = transformSnippet(code, options, id)
         code = transformMermaid(code)
         code = transformPlantUml(code, config.plantUmlServer)
         code = monaco(code)
