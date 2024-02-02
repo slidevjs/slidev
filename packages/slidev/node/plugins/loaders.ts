@@ -8,7 +8,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
+import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -292,11 +292,19 @@ export function createSlidesLoader(
               }
             }
             else if (type === 'frontmatter') {
+              const slideBase = {
+                ...prepareSlideInfo(slide),
+                frontmatter: undefined,
+                // remove raw content in build, optimize the bundle size
+                ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+              }
+              const fontmatter = getFrontmatter(pageNo)
+
               return {
                 code: [
                   '// @unocss-include',
                   'import { reactive, computed } from "vue"',
-                  `export const frontmatter = reactive(${JSON.stringify(slide.frontmatter)})`,
+                  `export const frontmatter = reactive(${JSON.stringify(fontmatter)})`,
                   `export const meta = reactive({
                     layout: computed(() => frontmatter.layout),
                     transition: computed(() => frontmatter.transition),
@@ -305,12 +313,7 @@ export function createSlidesLoader(
                     name: computed(() => frontmatter.name),
                     preload: computed(() => frontmatter.preload),
                     slide: {
-                      ...(${JSON.stringify({
-                    ...prepareSlideInfo(slide),
-                    frontmatter: undefined,
-                    // remove raw content in build, optimize the bundle size
-                    ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
-                  })}),
+                      ...(${JSON.stringify(slideBase)}),
                       frontmatter,
                       filepath: ${JSON.stringify(slide.source?.filepath || entry)},
                       id: ${pageNo},
@@ -357,7 +360,7 @@ export function createSlidesLoader(
           return
 
         const pageNo = Number.parseInt(no) - 1
-        return transformMarkdown(code, pageNo, data)
+        return transformMarkdown(code, pageNo)
       },
     },
     {
@@ -398,12 +401,16 @@ export function createSlidesLoader(
     server.watcher.add(data.entries?.map(slash) || [])
   }
 
-  async function transformMarkdown(code: string, pageNo: number, data: SlidevMarkdown) {
-    const layouts = await getLayouts()
-    const frontmatter = {
+  function getFrontmatter(pageNo: number) {
+    return {
       ...(data.headmatter?.defaults as object || {}),
       ...(data.slides[pageNo]?.frontmatter || {}),
     }
+  }
+
+  async function transformMarkdown(code: string, pageNo: number) {
+    const layouts = await getLayouts()
+    const frontmatter = getFrontmatter(pageNo)
     let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
     if (!layouts[layoutName]) {
       console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
