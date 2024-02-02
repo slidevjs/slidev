@@ -12,6 +12,8 @@ declare module 'vue' {
     ArrowRight: typeof import('./.vitepress/theme/components/icons/ArrowRight.vue')['default']
     AutoFitText: typeof import('./.vitepress/@slidev/client/builtin/AutoFitText.vue')['default']
     BooleanDisplay: typeof import('./.vitepress/theme/components/BooleanDisplay.vue')['default']
+    'Carbon:chevronLeft': typeof import('~icons/carbon/chevron-left')['default']
+    'Carbon:chevronRight': typeof import('~icons/carbon/chevron-right')['default']
     CarbonApps: typeof import('~icons/carbon/apps')['default']
     CarbonArrowLeft: typeof import('~icons/carbon/arrow-left')['default']
     CarbonArrowRight: typeof import('~icons/carbon/arrow-right')['default']
