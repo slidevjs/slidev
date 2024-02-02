@@ -215,7 +215,7 @@ importers:
         specifier: ^0.7.7
         version: 0.7.7
       '@shikijs/vitepress-twoslash':
-        specifier: 1.0.0-beta.3
+        specifier: ^1.0.0-beta.3
         version: 1.0.0-beta.3(typescript@5.3.3)
       '@slidev/parser':
         specifier: workspace:*
