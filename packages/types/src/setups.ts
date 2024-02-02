@@ -5,7 +5,6 @@ import type { Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { CodeToHastOptions, Highlighter } from 'shiki'
-import type { WindiCssOptions } from 'vite-plugin-windicss'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { SlidevPreparserExtension } from './types'
 
@@ -62,7 +61,6 @@ export type ShikiSetupReturn = Partial<CodeToHastOptions> & {
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | void>
-export type WindiSetup = () => Awaitable<Partial<WindiCssOptions> | void>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
 export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 
@@ -73,10 +71,6 @@ export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 
 export function defineShikiSetup(fn: ShikiSetup) {
-  return fn
-}
-
-export function defineWindiSetup(fn: WindiSetup) {
   return fn
 }
 

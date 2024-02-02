@@ -20,7 +20,6 @@ const EXCLUDE = [
   '@unocss/reset',
   'unocss',
   'mermaid',
-  'vite-plugin-windicss',
   'vue-demi',
   'vue',
 ]
