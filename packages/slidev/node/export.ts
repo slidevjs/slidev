@@ -473,11 +473,11 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
 
 async function importPlaywright(): Promise<typeof import('playwright-chromium')> {
   // 1. resolve from local
-  if (packageExists('playwright-chromium'))
+  if (await packageExists('playwright-chromium'))
     return await import('playwright-chromium')
 
   // 2. resolve from global local (when Slidev is installed globally)
-  let globalPath = isInstalledGlobally ? resolveGlobalImportPath('playwright-chromium') : undefined
+  let globalPath = isInstalledGlobally ? await resolveGlobalImportPath('playwright-chromium') : undefined
   if (globalPath)
     return await import(globalPath)
 

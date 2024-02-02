@@ -20,7 +20,7 @@ const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
 const vueContextImports = [
-  'import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"',
+  `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
   `import {
     injectionSlidevContext as _injectionSlidevContext, 
     injectionClicks as _injectionClicks,
@@ -537,13 +537,21 @@ defineProps<{ no: number | string }>()`)
     return layouts
   }
 
+  async function resolveUrl(id: string) {
+    return toAtFS(await resolveImportPath(id, true))
+  }
+
+  function resolveUrlOfClient(name: string) {
+    return toAtFS(join(clientRoot, name))
+  }
+
   async function generateUserStyles() {
     const imports: string[] = [
-      `import "${toAtFS(join(clientRoot, 'styles/vars.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/katex.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/transitions.css'))}"`,
+      `import "${resolveUrlOfClient('styles/vars.css')}"`,
+      `import "${resolveUrlOfClient('styles/index.css')}"`,
+      `import "${resolveUrlOfClient('styles/code.css')}"`,
+      `import "${resolveUrlOfClient('styles/katex.css')}"`,
+      `import "${resolveUrlOfClient('styles/transitions.css')}"`,
     ]
     const roots = uniq([
       ...themeRoots,
@@ -569,18 +577,18 @@ defineProps<{ no: number | string }>()`)
     }
 
     if (data.features.katex)
-      imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
+      imports.push(`import "${await resolveUrl('katex/dist/katex.min.css')}"`)
 
     if (data.config.highlighter === 'shiki') {
       imports.push(
-        `import "${toAtFS(resolveImportPath('@shikijs/vitepress-twoslash/style.css', true))}"`,
-        `import "${toAtFS(join(clientRoot, 'styles/shiki-twoslash.css'))}"`,
+        `import "${await resolveUrl('@shikijs/vitepress-twoslash/style.css')}"`,
+        `import "${resolveUrlOfClient('styles/shiki-twoslash.css')}"`,
       )
     }
 
     if (data.config.css === 'unocss') {
       imports.unshift(
-        'import "@unocss/reset/tailwind.css"',
+        `import "${await resolveUrl('@unocss/reset/tailwind.css')}"`,
         'import "uno:preflights.css"',
         'import "uno:typography.css"',
         'import "uno:shortcuts.css"',

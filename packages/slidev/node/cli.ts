@@ -39,8 +39,8 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
   const addons = headmatter?.addons as string[] ?? []
   const roots = /* uniq */([
     getUserRoot({}).userRoot,
-    ...getAddonRoots(addons, ''),
-    getClientRoot(),
+    ...await getAddonRoots(addons, ''),
+    await getClientRoot(),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
   return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
@@ -143,8 +143,8 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          onDataReload(newData, data) {
-            if (!theme && resolveThemeName(newData.config.theme) !== resolveThemeName(data.config.theme)) {
+          async onDataReload(newData, data) {
+            if (!theme && await resolveThemeName(newData.config.theme) !== await resolveThemeName(data.config.theme)) {
               console.log(yellow('\n  restarting on theme change\n'))
               initServer()
             }
@@ -347,7 +347,7 @@ cli.command(
           }),
         async ({ entry, dir, theme: themeInput }) => {
           const data = await parser.load(entry)
-          const theme = resolveThemeName(themeInput || data.config.theme)
+          const theme = await resolveThemeName(themeInput || data.config.theme)
           if (theme === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
@@ -356,7 +356,7 @@ cli.command(
             console.error('Theme is already ejected')
             process.exit(1)
           }
-          const roots = getThemeRoots(theme, entry)
+          const roots = await getThemeRoots(theme, entry)
           if (!roots.length) {
             console.error(`Could not find theme "${theme}"`)
             process.exit(1)

@@ -7,7 +7,7 @@ import { isPath } from './options'
 
 export async function getPackageJson(root: string): Promise<Record<string, any>> {
   try {
-    const file = resolveImportPath(`${root}/package.json`, true)
+    const file = await resolveImportPath(`${root}/package.json`, true)
     if (file && fs.existsSync(file))
       return await fs.readJSON(file)
     return {}
@@ -21,7 +21,7 @@ export async function getAddons(userRoot: string, config: SlidevConfig): Promise
   const { slidev = {} } = await getPackageJson(userRoot)
   const configAddons = Array.isArray(config.addons) ? config.addons : []
   const addons = configAddons.concat(Array.isArray(slidev?.addons) ? slidev.addons : [])
-  return (await getRecursivePlugins(addons.map(resolvePluginName), 3)).filter(Boolean)
+  return (await getRecursivePlugins(await Promise.all(addons.map(resolvePluginName)), 3)).filter(Boolean)
 }
 
 export async function getRecursivePlugins(addons: string[], depth: number): Promise<string[]> {
@@ -44,12 +44,12 @@ export async function checkEngine(name: string, engines: { slidev?: string }) {
     throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
 }
 
-export function resolvePluginName(name: string) {
+export async function resolvePluginName(name: string) {
   if (!name)
     return ''
   if (isPath(name))
     return name
-  if (packageExists(`slidev-addon-${name}`))
+  if (await packageExists(`slidev-addon-${name}`))
     return `slidev-addon-${name}`
   return name
 }

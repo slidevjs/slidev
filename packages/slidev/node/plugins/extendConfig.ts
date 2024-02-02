@@ -71,7 +71,10 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               searchForWorkspaceRoot(options.cliRoot),
               ...(
                 isInstalledGlobally
-                  ? [dirname(resolveGlobalImportPath('@slidev/client/package.json')), dirname(resolveGlobalImportPath('katex/package.json'))]
+                  ? [
+                      dirname(await resolveGlobalImportPath('@slidev/client/package.json')),
+                      dirname(await resolveGlobalImportPath('katex/package.json')),
+                    ]
                   : []
               ),
             ]),
@@ -80,12 +83,16 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         publicDir: join(options.userRoot, 'public'),
       }
 
+      injection.resolve ||= {}
+      injection.resolve.alias ||= {}
+
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
-        // @ts-expect-error type cast
-        injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
       }
+
+      // @ts-expect-error type cast
+      injection.resolve.alias.vue = await resolveImportPath('vue/dist/vue.esm-browser.js', true)
 
       return mergeConfig(injection, config)
     },

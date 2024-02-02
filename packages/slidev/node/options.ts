@@ -82,8 +82,8 @@ export interface SlidevServerOptions {
   onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
 }
 
-export function getClientRoot() {
-  return dirname(resolveImportPath('@slidev/client/package.json', true))
+export async function getClientRoot() {
+  return dirname(await resolveImportPath('@slidev/client/package.json', true))
 }
 
 export function getCLIRoot() {
@@ -94,30 +94,37 @@ export function isPath(name: string) {
   return name.startsWith('/') || /^\.\.?[\/\\]/.test(name)
 }
 
-export function getThemeRoots(name: string, entry: string) {
+export async function getThemeRoots(name: string, entry: string) {
   if (!name)
     return []
 
   // TODO: handle theme inherit
-  return [getRoot(name, entry)]
+  return [await getRoot(name, entry)]
 }
 
-export function getAddonRoots(addons: string[], entry: string) {
+export async function getAddonRoots(addons: string[], entry: string) {
   if (addons.length === 0)
     return []
-  return addons.map(name => getRoot(name, entry))
+  return await Promise.all(addons.map(name => getRoot(name, entry)))
 }
 
-export function getRoot(name: string, entry: string) {
+export async function getRoot(name: string, entry: string) {
   if (isPath(name))
     return resolve(dirname(entry), name)
-  return dirname(resolveImportPath(`${name}/package.json`, true))
+  return dirname(await resolveImportPath(`${name}/package.json`, true))
 }
 
 export function getUserRoot(options: SlidevEntryOptions) {
-  const { entry: rawEntry = 'slides.md', userRoot = process.cwd() } = options
+  const {
+    entry: rawEntry = 'slides.md',
+    userRoot = process.cwd(),
+  } = options
+
   const fullEntry = resolve(userRoot, rawEntry)
-  return { entry: fullEntry, userRoot: dirname(fullEntry) }
+  return {
+    entry: fullEntry,
+    userRoot: dirname(fullEntry),
+  }
 }
 
 export async function resolveOptions(
@@ -131,24 +138,24 @@ export async function resolveOptions(
     userRoot,
   } = getUserRoot(options)
   const data = await parser.load(entry)
-  const theme = resolveThemeName(options.theme || data.config.theme)
+  const theme = await resolveThemeName(options.theme || data.config.theme)
 
   if (promptForInstallation) {
     if (await promptForThemeInstallation(theme) === false)
       process.exit(1)
   }
   else {
-    if (!packageExists(theme)) {
+    if (!await packageExists(theme)) {
       console.error(`Theme "${theme}" not found, have you installed it?`)
       process.exit(1)
     }
   }
 
-  const clientRoot = getClientRoot()
+  const clientRoot = await getClientRoot()
   const cliRoot = getCLIRoot()
-  const themeRoots = getThemeRoots(theme, entry)
+  const themeRoots = await getThemeRoots(theme, entry)
   const addons = await getAddons(userRoot, data.config)
-  const addonRoots = getAddonRoots(addons, entry)
+  const addonRoots = await getAddonRoots(addons, entry)
   const roots = uniq([clientRoot, ...themeRoots, ...addonRoots, userRoot])
 
   if (themeRoots.length) {
