@@ -136,9 +136,6 @@ importers:
       vite:
         specifier: ^5.0.12
         version: 5.0.12(@types/node@20.11.16)
-      vite-plugin-windicss:
-        specifier: ^1.9.3
-        version: 1.9.3(vite@5.0.12)
       vitest:
         specifier: ^1.2.2
         version: 1.2.2(@types/node@20.11.16)
@@ -286,18 +283,12 @@ importers:
       unocss:
         specifier: ^0.58.4
         version: 0.58.4(postcss@8.4.33)(vite@5.0.12)
-      vite-plugin-windicss:
-        specifier: ^1.9.3
-        version: 1.9.3(vite@5.0.12)
       vue:
         specifier: ^3.4.15
         version: 3.4.15(typescript@5.3.3)
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.4.15)
-      windicss:
-        specifier: ^3.5.6
-        version: 3.5.6
     devDependencies:
       vite:
         specifier: ^5.0.12
@@ -386,9 +377,6 @@ importers:
       '@vitejs/plugin-vue-jsx':
         specifier: ^3.1.0
         version: 3.1.0(vite@5.0.12)(vue@3.4.15)
-      '@windicss/config':
-        specifier: ^1.9.3
-        version: 1.9.3
       cli-progress:
         specifier: ^3.12.0
         version: 3.12.0
@@ -530,18 +518,12 @@ importers:
       vite-plugin-vue-server-ref:
         specifier: ^0.4.0
         version: 0.4.0(vite@5.0.12)(vue@3.4.15)
-      vite-plugin-windicss:
-        specifier: ^1.9.3
-        version: 1.9.3(vite@5.0.12)
       vitefu:
         specifier: ^0.2.5
         version: 0.2.5(vite@5.0.12)
       vue:
         specifier: ^3.4.15
         version: 3.4.15(typescript@5.3.3)
-      windicss:
-        specifier: ^3.5.6
-        version: 3.5.6
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -3031,28 +3013,6 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-
-  /@windicss/config@1.9.3:
-    resolution: {integrity: sha512-u8GUjsfC9r5X1AGYhzb1lX3zZj8wqk6SH1DYex8XUGmZ1M2UpvnUPOFi63XFViduspQ6l2xTX84QtG+lUzhEoQ==}
-    dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
-      jiti: 1.21.0
-      windicss: 3.5.6
-    transitivePeerDependencies:
-      - supports-color
-
-  /@windicss/plugin-utils@1.9.3:
-    resolution: {integrity: sha512-3VG5HEGeuIfG/9iTwLyzWWm/aGKNTbtSVkpkAabdRuDP/2lEmf6Hpo4uo5drwE+2O9gXfc6nSYgAwBjotx5CfQ==}
-    dependencies:
-      '@antfu/utils': 0.7.7
-      '@windicss/config': 1.9.3
-      debug: 4.3.4(supports-color@8.1.1)
-      fast-glob: 3.3.2
-      magic-string: 0.30.5
-      micromatch: 4.0.5
-      windicss: 3.5.6
-    transitivePeerDependencies:
-      - supports-color
 
   /abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -6001,6 +5961,7 @@ packages:
 
   /kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
+    dev: false
 
   /layout-base@1.0.2:
     resolution: {integrity: sha512-8h2oVEZNktL4BH2JCOI90iD1yXwL6iNW7KcCKT2QZgQJR2vbqDsldCTPRU9NifTCqHZci57XvQQ15YTu+sTYPg==}
@@ -8830,19 +8791,6 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-windicss@1.9.3(vite@5.0.12):
-    resolution: {integrity: sha512-PqNiIsrEftCrgn0xIpj8ZMSdpz8NZn+OJ3gKXnOF+hFzbHFrKGJA49ViOUKCHDOquxoGBZMmTjepWr8GrftKcQ==}
-    peerDependencies:
-      vite: ^2.0.1 || ^3.0.0 || ^4.0.0 || ^5.0.0
-    dependencies:
-      '@windicss/plugin-utils': 1.9.3
-      debug: 4.3.4(supports-color@8.1.1)
-      kolorist: 1.8.0
-      vite: 5.0.12(@types/node@20.11.16)
-      windicss: 3.5.6
-    transitivePeerDependencies:
-      - supports-color
-
   /vite@5.0.12(@types/node@20.11.16):
     resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -9085,11 +9033,6 @@ packages:
       siginfo: 2.0.0
       stackback: 0.0.2
     dev: true
-
-  /windicss@3.5.6:
-    resolution: {integrity: sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==}
-    engines: {node: '>= 12'}
-    hasBin: true
 
   /wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}

@@ -1,5 +1,4 @@
 import { basename, join } from 'node:path'
-import process from 'node:process'
 import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -578,15 +577,6 @@ defineProps<{ no: number | string }>()`)
         'import "uno:shortcuts.css"',
       )
       imports.push('import "uno.css"')
-    }
-    else {
-      imports.unshift(
-        'import "virtual:windi-components.css"',
-        'import "virtual:windi-base.css"',
-      )
-      imports.push('import "virtual:windi-utilities.css"')
-      if (process.env.NODE_ENV !== 'production')
-        imports.push('import "virtual:windi-devtools"')
     }
 
     return imports.join('\n')
