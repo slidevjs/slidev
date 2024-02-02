@@ -110,7 +110,7 @@ cli.command(
         message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
       })
       if (create)
-        await fs.copyFile(path.resolve(__dirname, '../template.md'), entry)
+        await fs.copyFile(new URL('../template.md', import.meta.url), entry)
       else
         process.exit(0)
     }

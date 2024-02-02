@@ -19,7 +19,6 @@ import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './th
 import { getAddons } from './addons'
 
 const debug = _debug('slidev:options')
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export interface SlidevEntryOptions {
   /**
@@ -87,7 +86,7 @@ export async function getClientRoot() {
 }
 
 export function getCLIRoot() {
-  return resolve(__dirname, '..')
+  return fileURLToPath(new URL('..', import.meta.url))
 }
 
 export function isPath(name: string) {
@@ -153,6 +152,7 @@ export async function resolveOptions(
 
   const clientRoot = await getClientRoot()
   const cliRoot = getCLIRoot()
+  console.log({ cliRoot })
   const themeRoots = await getThemeRoots(theme, entry)
   const addons = await getAddons(userRoot, data.config)
   const addonRoots = await getAddonRoots(addons, entry)
