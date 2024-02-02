@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style lang="postcss">
 .slide {
   background: var(--c-bg);
   font-size: 1em;
@@ -16,6 +16,9 @@
   position: relative;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 30px 1px rgba(0, 0, 0, 0.15);
   @apply mt-4 transform translate-x-20 -translate-y-20 overflow-hidden;
-  @apply dark:(bg-gray-400 bg-opacity-5 border border-gray-400 border-opacity-10);
+}
+
+.dark .slide {
+  @apply bg-gray-400 bg-opacity-5 border border-gray-400 border-opacity-10;
 }
 </style>
