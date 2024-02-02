@@ -4,11 +4,8 @@
 
 :root {
   --prism-font-family: var(--slidev-code-font-family);
-}
-
-html:not(.dark) {
+  --prism-background: var(--slidev-code-background);
   --prism-foreground: #393a34;
-  --prism-background: #f8f8f8;
   --prism-comment: #a0ada0;
   --prism-string: #b56959;
   --prism-literal: #2f8a89;
@@ -30,7 +27,6 @@ html:not(.dark) {
 
 html.dark {
   --prism-foreground: #d4cfbf;
-  --prism-background: #1b1b1b;
   --prism-comment: #758575;
   --prism-string: #d48372;
   --prism-literal: #429988;
@@ -52,14 +48,4 @@ html.dark {
   --prism-line-number-gutter: #eeeeee;
   --prism-line-highlight-background: #444444;
   --prism-selection-background: #444444;
-}
-
-pre[class*='language-'] {
-  @apply p-2;
-}
-
-:not(pre) > code {
-  font-size: 0.9em;
-  background: var(--prism-background);
-  @apply font-light py-0.5 rounded;
 }

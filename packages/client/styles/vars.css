@@ -1,5 +1,6 @@
 :root {
-  --slidev-code-background: rgba(125,125,125,0.03);
+  --slidev-code-background: #f5f5f5;
+  --slidev-code-foreground: #1b1b1b;
   --slidev-code-font-family: theme('fontFamily.mono');
   --slidev-code-padding: 8px;
   --slidev-code-font-size: 12px;
@@ -8,7 +9,11 @@
   --slidev-code-margin: 4px 0;
 
   --slidev-transition-duration: 0.5s;
-
   --slidev-slide-container-background: black;
   --slidev-controls-foreground: white;
+}
+
+html.dark {
+  --slidev-code-background: #1b1b1b;
+  --slidev-code-foreground: #eee;
 }
