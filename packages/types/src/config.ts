@@ -67,9 +67,9 @@ export interface SlidevConfig {
    * Prefer highlighter
    *
    * @see https://sli.dev/custom/highlighters.html
-   * @default prism
+   * @default shiki
    */
-  highlighter: 'prism' | 'shiki' | 'shikiji'
+  highlighter: 'prism' | 'shiki'
   /**
    * Show line numbers in code blocks
    *
@@ -167,10 +167,9 @@ export interface SlidevConfig {
    * Engine for Atomic CSS
    *
    * @see https://unocss.dev/
-   * @see https://windicss.org/
    * @default 'unocss'
    */
-  css: 'unocss' | 'windicss' | 'none'
+  css: 'unocss' | 'none'
   /**
    * Enable presenter mode
    *

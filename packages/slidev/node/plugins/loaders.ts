@@ -1,5 +1,4 @@
 import { basename, join } from 'node:path'
-import process from 'node:process'
 import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -572,8 +571,12 @@ defineProps<{ no: number | string }>()`)
     if (data.features.katex)
       imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
 
-    if (data.config.highlighter === 'shikiji')
-      imports.push(`import "${toAtFS(resolveImportPath('shikiji-twoslash/style-rich.css', true))}"`)
+    if (data.config.highlighter === 'shiki') {
+      imports.push(
+        `import "${toAtFS(resolveImportPath('@shikijs/vitepress-twoslash/style.css', true))}"`,
+        `import "${toAtFS(join(clientRoot, 'styles/shiki-twoslash.css'))}"`,
+      )
+    }
 
     if (data.config.css === 'unocss') {
       imports.unshift(
@@ -583,15 +586,6 @@ defineProps<{ no: number | string }>()`)
         'import "uno:shortcuts.css"',
       )
       imports.push('import "uno.css"')
-    }
-    else {
-      imports.unshift(
-        'import "virtual:windi-components.css"',
-        'import "virtual:windi-base.css"',
-      )
-      imports.push('import "virtual:windi-utilities.css"')
-      if (process.env.NODE_ENV !== 'production')
-        imports.push('import "virtual:windi-devtools"')
     }
 
     return imports.join('\n')
