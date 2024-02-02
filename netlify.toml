@@ -3,7 +3,7 @@ publish = ".vitepress/dist"
 command = "pnpm run build"
 
 [build.environment]
-NODE_VERSION = 20
+NODE_VERSION = "20"
 PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
