@@ -6,7 +6,7 @@ We have [drauu](https://github.com/antfu/drauu) built-in for drawing and annotat
 
 To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/presenter-mode). Drawings and annotations you created will be **synced up** automatically across all instances in real-time.
 
-<Tweet id="1424027510342250499" />
+<TheTweet id="1424027510342250499" />
 
 ## Use with Stylus Pen
 

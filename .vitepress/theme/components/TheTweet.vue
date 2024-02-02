@@ -3,7 +3,7 @@ A simple wrapper for embedded Tweet
 
 Usage:
 
-<Tweet id="20" />
+<TheTweet id="20" />
 -->
 
 <script setup lang="ts">

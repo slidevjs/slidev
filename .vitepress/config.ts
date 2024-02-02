@@ -1,6 +1,7 @@
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
+import vite from '../vite.config'
 
 const CURRENT_VERSION = '0.47.1'
 

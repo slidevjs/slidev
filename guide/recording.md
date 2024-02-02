@@ -6,7 +6,7 @@ Slidev has a built-in recording and camera view. You can use them to record your
 
 Click the <carbon-user-avatar class="inline-icon-btn"/> button in the navigation panel to show your camera view in the presentation. You can drag to move it, and use the handler on the right bottom corner to resize it. The size and position will persist in `localStorage` and will therefore be consistent across multiple refreshes, so no need to worry about that.
 
-<Tweet id="1395006771027120133" />
+<TheTweet id="1395006771027120133" />
 
 ## Recording
 

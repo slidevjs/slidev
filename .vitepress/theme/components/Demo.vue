@@ -15,6 +15,9 @@ import SlideContainer from '@slidev/client/internals/SlideContainer.vue'
 import '@slidev/client/styles/layouts-base.css'
 import '@slidev/theme-default/styles/layouts.css'
 
+import DemoEditor from './DemoEditor.vue'
+import DemoSlide from './DemoSlide.vue'
+
 const page = ref(0)
 const paused = ref(false)
 const code = ref('')
