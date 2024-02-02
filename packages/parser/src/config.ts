@@ -13,7 +13,7 @@ export function getDefaultConfig(): SlidevConfig {
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
-    highlighter: 'prism',
+    highlighter: 'shiki',
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
