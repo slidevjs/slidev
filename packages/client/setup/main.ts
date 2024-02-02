@@ -2,7 +2,6 @@
 
 import type { AppContext } from '@slidev/types'
 import { MotionPlugin } from '@vueuse/motion'
-import StarportPlugin from 'vue-starport'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 
 export default function setupMain(context: AppContext) {
@@ -15,7 +14,6 @@ export default function setupMain(context: AppContext) {
   window.addEventListener('resize', setMaxHeight)
 
   context.app.use(MotionPlugin)
-  context.app.use(StarportPlugin({ keepAlive: true }))
   context.app.use(TwoSlashFloatingVue as any)
 
   // @ts-expect-error inject in runtime
