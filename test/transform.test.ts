@@ -151,7 +151,7 @@ Alice <- Bob : Hello, too!
       userRoot: path.join(__dirname, './fixtures/'),
       data: {
         slides: [
-          {} as any
+          {} as any,
         ],
         entries: [],
       },
