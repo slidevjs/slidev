@@ -8,14 +8,14 @@ defineProps<{
 
 <template>
   <div>
-    <div class="block mb-1.5 w-full relative aspect-9/16">
+    <div class="block mb-1.5 w-full relative aspect-16/9">
       <a
         class="absolute top-0 bottom-0 left-0 right-0 overflow-hidden"
         border="~ rounded gray-400 opacity-20"
         :href="info.slidesLink"
         target="_blank"
       >
-        <img :src="info.cover" />
+        <img :src="info.cover">
       </a>
     </div>
     <div class="font-bold">
@@ -36,7 +36,7 @@ defineProps<{
       <div v-else class="text-current text-sm opacity-50">
         {{ info.author.name }}
       </div>
-      <div class="flex-auto"></div>
+      <div class="flex-auto" />
       <a
         v-if="info.videoLink"
         :href="info.videoLink"

@@ -28,6 +28,6 @@ Move your mouse to the bottom left corner of Slidev page to make the navigation 
 
 ## Slides Overview
 
-By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have the overview of your slides so you can jump between them easily. 
+By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have the overview of your slides so you can jump between them easily.
 
 ![](/screenshots/slides-overview.png)

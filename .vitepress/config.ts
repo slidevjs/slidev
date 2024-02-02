@@ -1,6 +1,9 @@
-// @ts-check
+import type { DefaultTheme } from 'vitepress'
+import { defineConfig } from 'vitepress'
 
-const Guide = [
+const CURRENT_VERSION = '0.47.1'
+
+const Guide: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Why Slidev',
     link: '/guide/why',
@@ -55,7 +58,18 @@ const Guide = [
   },
 ]
 
-const Theme = [
+const BuiltIn: DefaultTheme.NavItemWithLink[] = [
+  {
+    text: 'Components',
+    link: '/builtin/components',
+  },
+  {
+    text: 'Layouts',
+    link: '/builtin/layouts',
+  },
+]
+
+const Theme: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildren)[] = [
   {
     text: 'Use Theme',
     link: '/themes/use',
@@ -70,7 +84,7 @@ const Theme = [
   },
 ]
 
-const Addon = [
+const Addon: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Use Addon',
     link: '/addons/use',
@@ -81,49 +95,7 @@ const Addon = [
   },
 ]
 
-const Translations = [
-  {
-    text: 'English',
-  },
-  {
-    text: '简体中文',
-    link: 'https://cn.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Français',
-    link: 'https://fr.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Español',
-    link: 'https://es.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Русский',
-    link: 'https://ru.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Việt Nam',
-    link: 'https://vn.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Deutsch',
-    link: 'https://de.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Português (BR)',
-    link: 'https://br.sli.dev{{pathname}}',
-  },
-  {
-    text: 'Ελληνικά',
-    link: 'https://el.sli.dev{{pathname}}',
-  },
-  {
-    text: '日本語',
-    link: 'https://ja.sli.dev{{pathname}}',
-  },
-]
-
-const Customizations = [
+const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildren)[] = [
   {
     text: 'Customizations',
     link: '/custom/',
@@ -183,21 +155,10 @@ const Customizations = [
   {
     text: 'Global Layers',
     link: '/custom/global-layers',
-  }
-]
-
-const BuiltIn = [
-  {
-    text: 'Components',
-    link: '/builtin/components',
-  },
-  {
-    text: 'Layouts',
-    link: '/builtin/layouts',
   },
 ]
 
-const Resources = [
+const Resources: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Showcases',
     link: '/showcases',
@@ -212,33 +173,30 @@ const Resources = [
   },
 ]
 
-const slidebars = [
+const slidebars: DefaultTheme.SidebarItem[] = [
   {
     text: 'Guide',
-    children: Guide,
+    items: Guide,
   },
   {
     text: 'Themes',
-    children: Theme,
+    items: Theme,
   },
   {
     text: 'Addons',
-    children: Addon,
+    items: Addon,
   },
   {
     text: 'Customizations',
-    children: Customizations,
+    items: Customizations,
   },
   {
     text: 'Built-in',
-    children: BuiltIn,
+    items: BuiltIn,
   },
 ]
 
-/**
- * @type {import('vitepress').UserConfig}
- */
-module.exports = {
+export default defineConfig({
   title: 'Slidev',
   description: 'Presentation slides for developers',
   head: [
@@ -254,21 +212,30 @@ module.exports = {
     ['link', { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' }],
     ['link', { href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;400;500&family=Inter:wght@200;400;500;600', rel: 'stylesheet' }],
   ],
+  markdown: {
+    theme: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    },
+    async shikiSetup(shiki) {
+      await shiki.loadLanguage(
+        'html',
+        'xml',
+        'vue',
+        'markdown',
+      )
+    },
+  },
+  cleanUrls: true,
   themeConfig: {
-    repo: 'slidevjs/docs',
     logo: '/logo.svg',
-    docsBranch: 'main',
-    editLinks: true,
-    editLinkText: 'Suggest changes to this page',
+    editLink: {
+      pattern: 'https://github.com/slidevjs/docs/edit/main/:path',
+      text: 'Suggest changes to this page',
+    },
 
-    algolia: {
-      appId: 'LCBV6MIFS6',
-      apiKey: '1ff173fe73b20edc962c1c24c0b1c160',
-      indexName: 'slidev',
-      searchParameters: {
-        // for translations maintainers: change the filter to your locale code (subdomain name)
-        facetFilters: ['language:en']
-      }
+    search: {
+      provider: 'local',
     },
 
     nav: [
@@ -278,28 +245,40 @@ module.exports = {
       },
       {
         text: 'Theme',
-        items: Theme,
-      },
-      {
-        text: 'Addon',
-        items: Addon,
+        items: [
+          ...Theme,
+          {
+            text: 'Built-in',
+            items: BuiltIn,
+          },
+        ],
       },
       {
         text: 'Customize',
-        items: Customizations,
-      },
-      {
-        text: 'Built-in',
-        items: BuiltIn,
+        items: [
+          ...Customizations,
+          {
+            text: 'Addon',
+            items: Addon,
+          },
+        ],
       },
       {
         text: 'Resources',
         items: Resources,
       },
       {
-        text: 'English',
-        items: Translations,
+        text: `v${CURRENT_VERSION}`,
+        items: [
+          { text: 'Release Notes', link: 'https://github.com/slidevjs/slidev/releases' },
+        ],
       },
+    ],
+
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/slidevjs/slidev' },
+      { icon: 'twitter', link: 'https://twitter.com/slidevjs' },
+      { icon: 'discord', link: 'https://chat.sli.dev' },
     ],
 
     sidebar: {
@@ -311,5 +290,52 @@ module.exports = {
       '/resources/': slidebars,
       '/': slidebars,
     },
+
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2020 Anthony Fu.',
+    },
   },
-}
+
+  locales: {
+    root: {
+      label: 'English',
+    },
+    zh: {
+      label: '简体中文',
+      link: 'https://cn.sli.dev/',
+    },
+    fr: {
+      label: 'Français',
+      link: 'https://fr.sli.dev/',
+    },
+    es: {
+      label: 'Español',
+      link: 'https://es.sli.dev/',
+    },
+    ru: {
+      label: 'Русский',
+      link: 'https://ru.sli.dev/',
+    },
+    vn: {
+      label: 'Việt Nam',
+      link: 'https://vn.sli.dev/',
+    },
+    de: {
+      label: 'Deutsch',
+      link: 'https://de.sli.dev/',
+    },
+    br: {
+      label: 'Português (BR)',
+      link: 'https://br.sli.dev/',
+    },
+    el: {
+      label: 'Ελληνικά',
+      link: 'https://el.sli.dev/',
+    },
+    ja: {
+      label: '日本語',
+      link: 'https://ja.sli.dev/',
+    },
+  },
+})

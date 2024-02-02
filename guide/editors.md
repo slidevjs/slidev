@@ -6,7 +6,7 @@ If you want some high-level management to your slides, we have provided the foll
 
 ## Integrated Editor
 
-Slidev comes with an integrated [CodeMirror](https://codemirror.net/) editor that will instantly reload and save the changes to your file. 
+Slidev comes with an integrated [CodeMirror](https://codemirror.net/) editor that will instantly reload and save the changes to your file.
 
 Click the <carbon-edit class="inline-icon-btn"/> button to open it.
 

@@ -52,7 +52,7 @@ Optionally, you can also add some scripts to your `packages.json`
 
 To publish your theme, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
 
-Theme contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/). 
+Theme contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/).
 
 ## Default Configurations
 

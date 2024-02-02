@@ -96,7 +96,7 @@ Learn more: [Embedded Styles](/guide/syntax.html#embedded-styles)
 You can provide custom global styles by creating `./style.css`, for example
 
 ```css
-/* style.css */ 
+/* style.css */
 
 h1 {
   font-size: 10em !important;

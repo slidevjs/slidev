@@ -132,7 +132,7 @@ export const showcases: ShowCaseInfo[] = [
     at: 'OpenFunction Tutorial Sharing',
     datetime: '2022-05-08',
   },
-    {
+  {
     title: 'Is it Okay to Pursue Functional Programming on Frontend?',
     author: {
       name: 'Minsu Kim , Changhui Lee',

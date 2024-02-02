@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-// @ts-ignore
+import { onMounted, ref, watch } from 'vue'
+
+// @ts-expect-error missing types
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
-// @ts-ignore
-import Cover from '@slidev/theme-default/layouts/cover.vue'
+
+// @ts-expect-error missing types
 import { parse } from '@slidev/parser'
+import Cover from '@slidev/theme-default/layouts/cover.vue'
 import Default from '@slidev/client/layouts/default.vue'
 import Center from '@slidev/client/layouts/center.vue'
 import SlideContainer from '@slidev/client/internals/SlideContainer.vue'
@@ -70,6 +72,7 @@ onMounted(() => {
     speed: 50,
     startDelay: 900,
     afterStep: () => {
+      // eslint-disable-next-line unicorn/prefer-dom-node-text-content
       code.value = JSON.parse(JSON.stringify(block.value!.innerText.replace('|', '')))
     },
   })
@@ -112,12 +115,12 @@ onMounted(() => {
 <template>
   <div>
     <DemoEditor>
-      <div class="text-sm opacity-50">
+      <div class="text-sm opacity-50 text-center">
         ./slides.md
       </div>
 
-      <div class="language-md !bg-transparent">
-        <pre ref="block" class="text-left whitespace-normal font-mono bg-transparent"></pre>
+      <div class="language-md !bg-transparent px4 py1">
+        <pre ref="block" class="text-left whitespace-pre-wrap font-mono bg-transparent" />
       </div>
     </DemoEditor>
 
@@ -125,16 +128,16 @@ onMounted(() => {
       <div
         class="flex h-full dark:bg-[#181819] transition-transform transform duration-500"
         style="width: 200%"
-        :class="page === 1 ? '-translate-x-1/2': ''"
+        :class="page === 1 ? '-translate-x-1/2' : ''"
       >
         <SlideContainer class="w-full h-full">
           <component :is="getLayout(0)" v-bind="getAttrs(0)">
-            <div v-html="getHTML(0)"></div>
+            <div v-html="getHTML(0)" />
           </component>
         </SlideContainer>
         <SlideContainer class="w-full h-full">
           <component :is="getLayout(1)" v-bind="getAttrs(1)">
-            <div v-html="getHTML(1)"></div>
+            <div v-html="getHTML(1)" />
           </component>
         </SlideContainer>
       </div>

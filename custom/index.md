@@ -10,9 +10,9 @@ You can configure Slidev in the frontmatter of your first slide, the following s
 ---
 # theme id or package name
 # Learn more: https://sli.dev/themes/use.html
-theme: 'default'
+theme: default
 # title of your slide, will auto infer from the first header if not specified
-title: 'Slidev'
+title: Slidev
 # titleTemplate for the webpage, `%s` will be replaced by the page's title
 titleTemplate: '%s - Slidev'
 # information for your slides, can be a markdown string.
@@ -27,7 +27,7 @@ presenter: true
 # enabled pdf downloading in SPA build, can also be a custom url
 download: false
 # filename of the export file
-exportFilename: 'slidev-exported'
+exportFilename: slidev-exported
 # export options
 # use export CLI options in camelCase format
 # Learn more: https://sli.dev/guide/exporting.html
@@ -38,24 +38,24 @@ export:
   withClicks: false
   withToc: false
 # syntax highlighter, can be 'prism', 'shiki' or `shikiji`
-highlighter: 'prism'
+highlighter: prism
 # show line numbers in code blocks
 lineNumbers: false
 # enable monaco editor, can be boolean, 'dev' or 'build'
-monaco: 'dev'
+monaco: dev
 # download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
 remoteAssets: false
 # controls whether texts in slides are selectable
 selectable: true
 # enable slide recording, can be boolean, 'dev' or 'build'
-record: 'dev'
+record: dev
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
-colorSchema: 'auto'
+colorSchema: auto
 # router mode for vue-router, can be "history" or "hash"
-routerMode: 'history'
+routerMode: history
 # aspect ratio for the slides
-aspectRatio: '16/9'
+aspectRatio: 16/9
 # real width of the canvas, unit in px
 canvasWidth: 980
 # used for theme customization, will inject root styles as `--slidev-theme-x` for attribute `x`
@@ -69,13 +69,13 @@ plantUmlServer: 'https://www.plantuml.com/plantuml'
 # fonts will be auto imported from Google fonts
 # Learn more: https://sli.dev/custom/fonts
 fonts:
-  sans: 'Roboto'
-  serif: 'Roboto Slab'
-  mono: 'Fira Code'
+  sans: Roboto
+  serif: Roboto Slab
+  mono: Fira Code
 
 # default frontmatter applies to all slides
 defaults:
-  layout: 'default'
+  layout: default
   # ...
 
 # drawing options
@@ -88,8 +88,8 @@ drawings:
 
 # HTML tag attributes
 htmlAttrs:
-  dir: 'ltr'
-  lang: 'en'
+  dir: ltr
+  lang: en
 ---
 ```
 

@@ -1,4 +1,3 @@
-
 # Static Hosting
 
 ## Build Single Page Applications (SPA)
@@ -109,16 +108,16 @@ Create `netlify.toml` in your project root with the following content.
 
 ```ts
 [build.environment]
-  NODE_VERSION = "14"
+NODE_VERSION = '14'
 
-[build]
-  publish = "dist"
-  command = "npm run build"
+  [build]
+publish = 'dist'
+command = 'npm run build'
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  [[redirects]]
+from = '/*'
+to = '/index.html'
+status = 200
 ```
 
 Then go to your Netlify dashboard and create a new site with the repository.

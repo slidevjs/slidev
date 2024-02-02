@@ -89,7 +89,7 @@ exportFilename: my-pdf-export
 
 ### Export a range of slides
 
-By default, all slides in the presentation are exported. If you want to export a specific slide or a range of slides you can set the `--range` option and specify which slides you would like to export. 
+By default, all slides in the presentation are exported. If you want to export a specific slide or a range of slides you can set the `--range` option and specify which slides you would like to export.
 
 ```bash
 $ slidev export --range 1,6-8,10
@@ -98,7 +98,6 @@ $ slidev export --range 1,6-8,10
 This option accepts both specific slide numbers and ranges.
 
 The example above would export slides 1,6,7,8, and 10.
-
 
 ### Multiple entries
 

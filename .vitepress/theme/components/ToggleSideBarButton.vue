@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  emits: ['toggle'],
+}
+</script>
+
 <template>
   <div class="sidebar-button" @click="$emit('toggle')">
     <svg
@@ -15,12 +21,6 @@
     </svg>
   </div>
 </template>
-
-<script lang="ts">
-export default {
-  emits: ['toggle'],
-}
-</script>
 
 <style>
 .sidebar-button {

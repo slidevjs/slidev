@@ -97,7 +97,7 @@ A reactive object holding the parsed theme configurations.
 ---
 title: My First Slidev!
 themeConfig:
-  primary: #213435
+  primary: # 213435
 ---
 ```
 

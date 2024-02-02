@@ -184,4 +184,3 @@ The final hosted `index.html` will be:
 Conventions: `global-top.vue` | `global-bottom.vue`
 
 Learn more: [Global Layers](/custom/global-layers)
-

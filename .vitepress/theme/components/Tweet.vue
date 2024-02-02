@@ -7,7 +7,7 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { useScriptTag, isClient } from '@vueuse/core'
+import { isClient, useScriptTag } from '@vueuse/core'
 import { getCurrentInstance, onMounted, ref } from 'vue'
 import { isDark } from '../composables/dark'
 
@@ -23,7 +23,7 @@ const vm = getCurrentInstance()!
 const loaded = ref(false)
 
 async function create() {
-  // @ts-ignore
+  // @ts-expect-error
   await window.twttr.widgets.createTweet(
     props.id.toString(),
     tweet.value,
@@ -36,7 +36,7 @@ async function create() {
 }
 
 if (isClient) {
-  // @ts-ignore
+  // @ts-expect-error
   if (window?.twttr?.widgets) {
     onMounted(create)
   }
@@ -56,13 +56,13 @@ if (isClient) {
 </script>
 
 <template>
-<div class="w-full flex">
-  <div ref="tweet" class="mx-auto w-140">
-    <div v-if="!loaded" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
-      <div class="m-auto animate-pulse text-4xl">
-        <carbon:logo-twitter />
+  <div class="w-full flex">
+    <div ref="tweet" class="mx-auto w-140">
+      <div v-if="!loaded" class="w-30 h-30 my-10px bg-gray-400 bg-opacity-10 rounded-lg flex opacity-50">
+        <div class="m-auto animate-pulse text-4xl">
+          <carbon:logo-twitter />
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>

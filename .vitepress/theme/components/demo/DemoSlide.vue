@@ -1,6 +1,6 @@
 <template>
   <div class="slide">
-    <div class="aspect-9/16"></div>
+    <div class="aspect-16/9" />
     <div class="absolute top-0 left-0 right-0 bottom-0">
       <slot />
     </div>

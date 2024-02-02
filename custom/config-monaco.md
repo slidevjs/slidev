@@ -18,28 +18,28 @@ Learn more about [configuring Monaco](https://github.com/Microsoft/monaco-editor
 
 To use Monaco in your slides, simply append `{monaco}` to your code snippets:
 
-~~~js
-//```js
+~~~md
+```js
 const count = ref(1)
 const plusOne = computed(() => count.value + 1)
 
 console.log(plusOne.value) // 2
 
 plusOne.value++ // error
-//```
+```
 ~~~
 
 To
 
-~~~js
-//```js {monaco}
+~~~md
+```js {monaco}
 const count = ref(1)
 const plusOne = computed(() => count.value + 1)
 
 console.log(plusOne.value) // 2
 
 plusOne.value++ // error
-//```
+```
 ~~~
 
 ## Exporting
@@ -56,13 +56,13 @@ monaco: true # default "dev"
 
 When use TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
 
-~~~ts
-//```ts {monaco}
+~~~md
+```ts {monaco}
 import { ref } from 'vue'
 import { useMouse } from '@vueuse/core'
 
 const counter = ref(0)
-//```
+```
 ~~~
 
 In the example above, make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest to get the types working for the editor automatically!
@@ -115,10 +115,10 @@ export default defineMonacoSetup((monaco) => {
 
 If you would like to customize the Monaco editor you may pass an `editorOptions` object that matches the [Monaco IEditorOptions](https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IEditorOptions.html) definition.
 
-~~~ts
-//```ts {monaco} { editorOptions: { wordWrap:'on'} }
+~~~md
+```ts {monaco} { editorOptions: { wordWrap:'on'} }
 console.log('HelloWorld')
-//```
+```
 ~~~
 
 Alternatively if you would like these options to be applied to every Monaco instance, you can return them in the `defineMonacoSetup` function

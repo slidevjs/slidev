@@ -60,13 +60,13 @@ export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]
 The `nav` navigation operations allows you to access some functionalities than basic _next slide_ or _previous slide_. See the following for use-cases:
 
 ```ts
-import { defineShortcutsSetup, NavOperations } from '@slidev/types'
+import { NavOperations, defineShortcutsSetup } from '@slidev/types'
 
 export default defineShortcutsSetup((nav: NavOperations) => {
   return [
     {
       key: 'e',
-      
+
       // Set the `e` keyboard shortcut to be used as a bookmark
       // or quick-access of sorts, to navigate specifically to
       // slide number 42

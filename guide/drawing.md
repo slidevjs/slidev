@@ -18,7 +18,7 @@ The following frontmatter configuration allows you to persist your drawings as S
 
 ```md
 ---
-drawings: 
+drawings:
   persist: true
 ---
 ```
@@ -29,7 +29,7 @@ Entirely:
 
 ```md
 ---
-drawings: 
+drawings:
   enabled: false
 ---
 ```
@@ -38,7 +38,7 @@ Only in Development:
 
 ```md
 ---
-drawings: 
+drawings:
   enabled: dev
 ---
 ```
@@ -47,7 +47,7 @@ Only in Presenter Mode:
 
 ```md
 ---
-drawings: 
+drawings:
   presenterOnly: true
 ---
 ```
@@ -58,11 +58,9 @@ By default, Slidev syncs up your drawings across all instances. If you are shari
 
 ```md
 ---
-drawings: 
+drawings:
   syncAll: false
 ---
 ```
 
 With this config, only the drawing from the presenter instance will be able to sync with others.
-
-

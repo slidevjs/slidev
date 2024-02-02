@@ -1,104 +1,151 @@
-/** Base Styles */
+/**
+ * Customize default theme styling by overriding CSS variables:
+ * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
+ */
+
+/**
+ * Colors
+ *
+ * Each colors have exact same color scale system with 3 levels of solid
+ * colors with different brightness, and 1 soft color.
+ *
+ * - `XXX-1`: The most solid color used mainly for colored text. It must
+ *   satisfy the contrast ratio against when used on top of `XXX-soft`.
+ *
+ * - `XXX-2`: The color used mainly for hover state of the button.
+ *
+ * - `XXX-3`: The color for solid background, such as bg color of the button.
+ *   It must satisfy the contrast ratio with pure white (#ffffff) text on
+ *   top of it.
+ *
+ * - `XXX-soft`: The color used for subtle background such as custom container
+ *   or badges. It must satisfy the contrast ratio when putting `XXX-1` colors
+ *   on top of it.
+ *
+ *   The soft color must be semi transparent alpha channel. This is crucial
+ *   because it allows adding multiple "soft" colors on top of each other
+ *   to create a accent, such as when having inline code block inside
+ *   custom containers.
+ *
+ * - `default`: The color used purely for subtle indication without any
+ *   special meanings attched to it such as bg color for menu hover state.
+ *
+ * - `brand`: Used for primary brand colors, such as link text, button with
+ *   brand theme, etc.
+ *
+ * - `tip`: Used to indicate useful information. The default theme uses the
+ *   brand color for this by default.
+ *
+ * - `warning`: Used to indicate warning to the users. Used in custom
+ *   container, badges, etc.
+ *
+ * - `danger`: Used to show error, or dangerous message to the users. Used
+ *   in custom container, badges, etc.
+ * -------------------------------------------------------------------------- */
+
 :root {
+  --vp-c-brand-1: #3AB9D4;
+  --vp-c-brand-2: #60c4db;
+  --vp-c-brand-3: #6fcce1;
+  --vp-c-brand-soft: #3AB9D450;
+  --vp-c-bg-alt: #f9f9f9;
 
-  /**
-   * Colors
-   * --------------------------------------------------------------------- */
-  --c-bg: #fff;
-  --c-bg-semi: rgba(255,255,255,0.8);
-  --c-bg-secondary: #f3f5f7;
-
-  --c-white: #ffffff;
-  --c-black: #000000;
-
-  --c-divider-light: rgba(60, 60, 67, .12);
-  --c-divider-dark: rgba(84, 84, 88, .48);
-
-  --c-text-light-1: #2c3e50;
-  --c-text-light-2: #476582;
-  --c-text-light-3: #90a4b7;
-
-  --c-brand: #3AB9D4;
-  --c-brand-active: #3AB9D4;
-  --c-brand-dark: #3AB9D4;
-  --c-brand-light: #3AB9D4;
-
-  --c-disabled-bg: #e5e5e5;
-  --c-disabled-fg: #666;
-
-  --code-bg-color: #f8f8f8;
-  --code-inline-bg-color: rgba(27, 31, 35, .04);
-  --code-highlight: rgba(0, 0, 0, .04);
-
-  /**
-   * Typography
-   * --------------------------------------------------------------------- */
-
-   --font-family-base: 'Inter', apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-   --font-family-mono: 'IBM Plex Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-
-  /**
-   * Z Indexes
-   *
-   * Algolia SearchBox has a z-index of 200, so make sure not to go above
-   * that value.
-   * --------------------------------------------------------------------- */
-
-  --z-index-navbar: 10;
-  --z-index-sidebar: 6;
-
-  /**
-   * Shadows
-   * --------------------------------------------------------------------- */
-
-  --shadow-1: 0 1px 2px rgba(0, 0, 0, .04), 0 1px 2px rgba(0, 0, 0, .06);
-  --shadow-2: 0 3px 12px rgba(0, 0, 0, .07), 0 1px 4px rgba(0, 0, 0, .07);
-  --shadow-3: 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08);
-  --shadow-4: 0 14px 44px rgba(0, 0, 0, .12), 0 3px 9px rgba(0, 0, 0, .12);
-  --shadow-5: 0 18px 56px rgba(0, 0, 0, .16), 0 4px 12px rgba(0, 0, 0, .16);
-
-  /**
-   * Sizes
-   * --------------------------------------------------------------------- */
-
-  --header-height: 3.6rem;
-  --sidebar-width: 17.5rem;
-  --scrollbar-width: 0;
+  --vp-font-family-mono: theme('fontFamily.mono');
 }
 
-html.dark {
-  --c-bg: #111;
-  --c-bg-semi: rgba(17,17,17,0.8);
-  --c-bg-secondary: #222;
-  --c-text: #f5f7fa;
-  --c-text-light: #f9f9f9;
-  --c-text-lighter: #ffffff;
-
-  --c-divider-light: rgba(200, 200, 200, .12);
-  --c-divider-dark: rgba(200, 200, 200, .48);
-  --code-bg-color: #191919;
-  --code-inline-bg-color: rgba(255, 255, 255, .04);
-  --code-highlight: rgba(0, 0, 0, .66);
-
-  --c-disabled-bg: #333;
-  --c-disabled-fg: #aaa;
+.dark {
+  --vp-c-brand-1: #6fcce1;
+  --vp-c-brand-2: #60c4db;
+  --vp-c-brand-3: #3AB9D4;
+  --vp-c-brand-soft: #3AB9D450;
+  --vp-c-bg-alt: #18181b;
 }
 
-/** Fallback Styles */
 :root {
-  --c-divider: var(--c-divider-light);
+  --vp-c-default-1: var(--vp-c-gray-1);
+  --vp-c-default-2: var(--vp-c-gray-2);
+  --vp-c-default-3: var(--vp-c-gray-3);
+  --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --c-text: var(--c-text-light-1);
-  --c-text-light: var(--c-text-light-2);
-  --c-text-lighter: var(--c-text-light-3);
-
-  --c-bg: var(--c-white);
-
-  --code-line-height: 24px;
-  --code-font-family: var(--font-family-mono);
-  --code-font-size: 14px;
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
 }
 
-.no-sidebar {
-  --sidebar-width: 0;
+:root {
+  -vp-c-text-1: rgba(42, 40, 47);
+  -vp-c-text-2: rgba(42, 40, 47, 0.78);
+  -vp-c-text-3: rgba(42, 40, 47, 0.56);
+  --black-text-1: rgba(42, 40, 47);
+}
+
+.dark {
+  --vp-c-text-1: rgba(255, 255, 245, 0.86);
+  --vp-c-text-2: rgba(235, 235, 245, 0.6);
+  --vp-c-text-3: rgba(235, 235, 245, 0.38);
+}
+
+/**
+ * Component: Button
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+.dark {
+  --vp-button-brand-text: var(--black-text-1);
+  --vp-button-brand-bg: var(--vp-c-brand-2);
+  --vp-button-brand-hover-text: var(--black-text-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-1);
+  --vp-button-brand-active-text: var(--black-text-1);
+  --vp-button-brand-active-bg: var(--vp-c-brand-3);
+}
+
+/**
+ * Component: Home
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-home-hero-name-color: var(--vp-c-brand-1);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(72px);
+  }
+}
+
+/**
+ * Component: Custom Block
+ * -------------------------------------------------------------------------- */
+
+:root {
+  --vp-custom-block-tip-border: transparent;
+  --vp-custom-block-tip-text: var(--vp-c-text-1);
+  --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
+  --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft);
+}
+
+/**
+ * Component: Algolia
+ * -------------------------------------------------------------------------- */
+
+.DocSearch {
+  --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }

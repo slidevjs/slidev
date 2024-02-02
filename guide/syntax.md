@@ -1,8 +1,8 @@
 # Markdown Syntax
 
-Slides are written within **a single markdown file** (by default `./slides.md`). 
+Slides are written within **a single markdown file** (by default `./slides.md`).
 
-You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [UnoCSS](/custom/config-unocss) is also supported. Use `---` padded with a new line to separate your slides. 
+You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [UnoCSS](/custom/config-unocss) is also supported. Use `---` padded with a new line to separate your slides.
 
 ~~~md
 # Slidev
@@ -47,7 +47,7 @@ This is the cover page.
 layout: center
 background: './images/background-1.png'
 class: 'text-white'
----​
+---
 
 # Page 2
 
@@ -68,22 +68,22 @@ Refer to [customization](/custom/) for more details.
 > ---
 > layout: cover
 > ---
-> 
+>
 > # Slidev
-> 
+>
 > This is the cover page.
-> 
+>
 > ---
-> 
+>
 > ```yaml
 > # The first yaml block will be treated as the frontmatter of that slide
 > layout: center
 > background: './images/background-1.png'
 > class: 'text-white'
 > ```
-> 
+>
 > # Page 2
-> 
+>
 > This is a page with the layout `center` and a background image.
 > ~~~
 >
@@ -93,10 +93,10 @@ Refer to [customization](/custom/) for more details.
 
 One big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
-~~~ts
-//```ts
+~~~md
+```ts
 console.log('Hello, World!')
-//```
+```
 ~~~
 
 We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shiki) and [Shikiji](https://github.com/antfu/shikiji) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
@@ -105,69 +105,69 @@ We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shik
 
 To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1 by default.
 
-~~~ts
-//```ts {2,3}
+~~~md
+```ts {2,3}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. In case you want to disable the numbering for an specific block when `lineNumbers: true` you can set `lines:false` for that block:
 
-~~~ts
-//```ts {2,3}{lines:true}
+~~~md
+```ts {2,3}{lines:true}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
 
-~~~ts
-//```ts {6,7}{lines:true, startLine:5}
+~~~md
+```ts {6,7}{lines:true, startLine:5}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 To change the highlight in multiple steps, you can use `|` to separate them. For example
 
-~~~ts
-//```ts {2-3|5|all}
+~~~md
+```ts {2-3|5|all}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
 
 You can start the highlight at a specific click:
 
-~~~ts
-//```ts {2-3|5|all}{at:0}
+~~~md
+```ts {2-3|5|all}{at:0}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 This is especially useful when you need to sync different animations (when using `two-cols` layout and list animation for instance).
@@ -175,22 +175,22 @@ You may need to set the [custom clicks count](/guide/animations#custom-clicks-co
 
 To skip highlighting any lines, you can set the line number to `0`. For example
 
-~~~ts {0}
-//```ts {0}
+~~~md {1}
+```ts {0}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
 ) {
   return computed(() => unref(a) + unref(b))
 }
-//```
+```
 ~~~
 
 If the code doesn't fit into one slide, you can pass an extra maxHeight option which will set fixed height
 and enable scrolling
 
-~~~ts {2|3|7|12}
-//```ts {2|3|7|12}{maxHeight:'100px'}
+~~~md {1}
+```ts {2|3|7|12}{maxHeight:'100px'}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -199,27 +199,27 @@ function add(
 }
 /// ...as many lines as you want
 const c = add(1, 2)
-//```
+```
 ~~~
 
 ### Monaco Editor
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
-~~~ts
-//```ts {monaco}
+~~~md
+```ts {monaco}
 console.log('HelloWorld')
-//```
+```
 ~~~
 
 Learn more about [configuring Monaco](/custom/config-monaco).
 
-### Monaco diff
+#### Monaco Diff
 
 Monaco can also generate a diff between two code blocks. Use `{monaco-diff}` to turn the block into a [diff Monaco editor](https://microsoft.github.io/monaco-editor/playground.html?source=v0.36.1#example-creating-the-diffeditor-multi-line-example) and use `~~~` to separate both original and modified version of the code!
 
-```md
-//```ts {monaco-diff}
+````md
+```ts {monaco-diff}
 This line is removed on the right.
 just some text
 abcd
@@ -231,8 +231,8 @@ abcz
 zzzzefgh
 Some more text.
 This line is removed on the left.
-//```
 ```
+````
 
 ## Embedded Styles
 
@@ -286,7 +286,7 @@ For local assets, put them into the [`public` folder](/custom/directory-structur
 ![Local Image](/pic.png)
 ```
 
-For you want to apply custom sizes or styles, you can convert them to the `<img>` tag 
+For you want to apply custom sizes or styles, you can convert them to the `<img>` tag
 
 ```html
 <img src="/pic.png" class="m-40 h-40 rounded shadow" />
@@ -466,7 +466,7 @@ $\sqrt{3x-1}+(1+x)^2$
 Use two (`$$`) for block rendering. This mode uses bigger symbols and centers
 the result.
 
-```md
+```latex
 $$
 \begin{array}{c}
 
@@ -489,7 +489,7 @@ Learn more: [Demo](https://sli.dev/demo/starter/8) | [KaTeX](https://katex.org/)
 
 To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1 by default.
 
-```md
+```latex
 $$ {1|3|all}
 \begin{array}{c}
 \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &

@@ -128,26 +128,6 @@ export const official: ThemeInfo[] = [
 
 export const community: ThemeInfo[] = [
   {
-    id: 'slidev-theme-flayyer',
-    name: 'Flayyer',
-    description: 'This theme is inspired by the layout of Flayyer and the way that it works.',
-    author: {
-      name: 'Daniel Esteves',
-      link: 'https://github.com/danestves',
-    },
-    repo: 'https://github.com/danestves/slidev-theme-flayyer',
-    previews: [
-      'https://i.imgur.com/grKiGIK.png',
-      'https://i.imgur.com/tAvcf5S.png',
-      'https://i.imgur.com/mj42LcL.png',
-      'https://i.imgur.com/41QWv3c.png',
-    ],
-    tags: [
-      'dark',
-      'light',
-    ],
-  },
-  {
     id: 'slidev-theme-geist',
     name: 'Vercel',
     description: 'A theme based on Vercel\'s design system.',
@@ -402,7 +382,7 @@ export const community: ThemeInfo[] = [
       'https://cdn.jsdelivr.net/gh/estruyf/slidev-theme-the-unnamed@main/assets/section.png',
     ],
     tags: [
-      'dark'
+      'dark',
     ],
   },
   {

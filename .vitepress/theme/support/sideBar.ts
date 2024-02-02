@@ -1,8 +1,8 @@
 import type { DefaultTheme } from '../config'
 import {
-  isArray,
   ensureSlash,
   ensureStartingSlash,
+  isArray,
   removeExtension,
 } from '../utils'
 

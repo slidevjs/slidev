@@ -1,10 +1,10 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
-import WindiCSS from 'vite-plugin-windicss'
 import Inspect from 'vite-plugin-inspect'
+import UnoCSS from 'unocss/vite'
 
 export default defineConfig({
   resolve: {
@@ -42,11 +42,11 @@ export default defineConfig({
         }),
       ],
     }),
-    Icons(),
-    Inspect(),
-    WindiCSS({
-      preflight: false,
+    Icons({
+      defaultStyle: 'display: inline-block;',
     }),
+    Inspect(),
+    UnoCSS(),
     {
       name: 'code-block-escape',
       enforce: 'post',
@@ -58,14 +58,14 @@ export default defineConfig({
     },
     {
       name: 'virtual-modules',
-      resolveId(id){
+      resolveId(id) {
         return id === '/@slidev/configs' ? id : null
       },
       load(id) {
-        if(id !== '/@slidev/configs')
-        return
+        if (id !== '/@slidev/configs')
+          return
         return 'export default {}'
-      }
+      },
     },
   ],
 })

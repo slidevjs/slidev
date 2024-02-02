@@ -19,7 +19,7 @@ In case it's already been translated but you're wondering how to maintain it, sk
 
 - [ ] Fork the main docs repo: [slidevjs/docs](https://github.com/slidevjs/docs)
 - [ ] Translate README.md, you can take one of the already translated repositories as an example.
-- [ ] Share your repo's link to the `#translations` channel telling people you are working on it and find collaborators. 
+- [ ] Share your repo's link to the `#translations` channel telling people you are working on it and find collaborators.
 
 ## Translating Markdown files
 
@@ -92,7 +92,6 @@ In case it's already been translated but you're wondering how to maintain it, sk
 
 - `docschina-bot` will periodically submit merge requests from the `slidev/docs` repository. Switch to the branch created in the pull request, make any changes necessary and merge it. [example](https://github.com/slidevjs/docs-fr/pull/13).
 - Sometimes it will occur that a merge request is made and you haven't merged the previous one. The latest PR always checks your main branch against the English one; so you can just close the previous PR(s), move your work to the latest one and merge it.
-
 
 [Working-in-progress translation list](https://discord.com/channels/851817370623410197/851822360955977760/852614294017146900)
 

@@ -75,12 +75,12 @@ You can provide markdown in the slots, but you will need to surround the content
 ~~~md
 <LightOrDark>
   <template #dark>
-  
+
 ![dark](/dark.png)
 
   </template>
   <template #light>
-  
+
 ![light](/light.png)
 
   </template>
@@ -112,7 +112,6 @@ routeAlias: solutions
 ---
 # Now some solutions!
 ~~~
-
 
 ### `RenderWhen`
 

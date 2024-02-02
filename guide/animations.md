@@ -153,9 +153,9 @@ By default, a subtle opacity transition is applied to those classes:
 }
 ```
 
-You can override them to customize the transition effects in your custom stylesheets. 
+You can override them to customize the transition effects in your custom stylesheets.
 
-For example, you can achieve the scaling up transitions by: 
+For example, you can achieve the scaling up transitions by:
 
 ```css
 // styles.css
