@@ -99,6 +99,7 @@
     "resolve-global": "^2.0.0",
     "shiki": "^1.0.0-beta.5",
     "sirv": "^2.0.4",
+    "typescript": "^5.3.3",
     "unocss": "^0.58.4",
     "unplugin-icons": "^0.18.3",
     "unplugin-vue-components": "^0.26.0",
