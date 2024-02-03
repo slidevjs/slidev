@@ -92,6 +92,12 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       "layout": "cover",
       "title": "Hi",
     },
+    "frontmatterRaw": "layout: cover
+fonts:
+  sans: Roboto, Lato
+  serif: Mate SC
+  mono: Fira Code
+",
     "frontmatterStyle": "frontmatter",
     "index": 0,
     "level": 1,
@@ -123,6 +129,11 @@ title: Hi
         "title": "FooBar",
       },
     },
+    "frontmatterRaw": "meta:
+  title: FooBar
+  duration: 12
+layout: center
+",
     "frontmatterStyle": "frontmatter",
     "index": 1,
     "level": 1,
@@ -149,6 +160,7 @@ This is note
 ",
     "end": 19,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 2,
     "level": 1,
@@ -169,6 +181,8 @@ Hey
     "frontmatter": {
       "layout": "text",
     },
+    "frontmatterRaw": "layout: text
+",
     "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": undefined,
@@ -198,6 +212,7 @@ this should be treated as code block
 ",
     "end": 35,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 4,
     "level": undefined,
@@ -222,6 +237,10 @@ Content 1
     "frontmatter": {
       "layout": "from yaml",
     },
+    "frontmatterRaw": "
+# The first yaml block should be treated as frontmatter
+layout: from yaml
+",
     "frontmatterStyle": "yaml",
     "index": 5,
     "level": undefined,
@@ -249,6 +268,8 @@ Content 2
     "frontmatter": {
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "frontmatterStyle": "frontmatter",
     "index": 6,
     "level": 1,
@@ -281,6 +302,7 @@ Content 3
 ",
     "end": 66,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 7,
     "level": 1,
@@ -382,6 +404,8 @@ exports[`md parser > mdc.md > slides 1`] = `
       "mdc": true,
       "title": "MDC{style="color:red"}",
     },
+    "frontmatterRaw": "mdc: true
+",
     "frontmatterStyle": "frontmatter",
     "index": 0,
     "level": 1,
@@ -486,6 +510,7 @@ console.log('Hello World')
     "frontmatter": {
       "title": "H1",
     },
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 0,
     "level": 1,
@@ -519,6 +544,7 @@ console.log('Hello World')
 ",
     "end": 18,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 1,
     "level": 1,
@@ -541,6 +567,7 @@ Nice to meet you
 ",
     "end": 22,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 2,
     "level": undefined,
@@ -633,6 +660,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "srcSequence": "sub/page1.md",
       "title": undefined,
     },
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 0,
     "inline": {
@@ -641,6 +669,8 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "frontmatter": {
         "title": undefined,
       },
+      "frontmatterRaw": "src: sub/page1.md
+",
       "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": undefined,
@@ -667,6 +697,7 @@ srcSequence: sub/page1.md
       "frontmatter": {
         "title": "Page 1",
       },
+      "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
@@ -692,6 +723,8 @@ srcSequence: sub/page1.md
       "srcSequence": "/sub/page2.md",
       "title": "Page 2",
     },
+    "frontmatterRaw": "layout: cover
+",
     "frontmatterStyle": "frontmatter",
     "index": 1,
     "inline": {
@@ -700,6 +733,9 @@ srcSequence: sub/page1.md
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#2",
       },
+      "frontmatterRaw": "src: /sub/page2.md
+background: https://sli.dev/demo-cover.png#2
+",
       "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": undefined,
@@ -735,6 +771,8 @@ srcSequence: /sub/page2.md
         "layout": "cover",
         "title": "Page 2",
       },
+      "frontmatterRaw": "layout: cover
+",
       "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": 1,
@@ -763,6 +801,7 @@ layout: cover
       "srcSequence": "./sub/pages3-4.md",
       "title": "Page 3",
     },
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 2,
     "inline": {
@@ -771,6 +810,9 @@ layout: cover
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#34",
       },
+      "frontmatterRaw": "src: ./sub/pages3-4.md
+background: https://sli.dev/demo-cover.png#34
+",
       "frontmatterStyle": "frontmatter",
       "index": 2,
       "level": undefined,
@@ -800,6 +842,7 @@ srcSequence: ./sub/pages3-4.md
       "frontmatter": {
         "title": "Page 3",
       },
+      "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
@@ -824,6 +867,8 @@ srcSequence: ./sub/pages3-4.md
       "layout": "cover",
       "srcSequence": "./sub/pages3-4.md",
     },
+    "frontmatterRaw": "layout: cover
+",
     "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": 1,
@@ -847,6 +892,8 @@ srcSequence: ./sub/pages3-4.md
       "frontmatter": {
         "layout": "cover",
       },
+      "frontmatterRaw": "layout: cover
+",
       "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": 1,
@@ -875,6 +922,7 @@ layout: cover
       "srcSequence": "sub/nested1-4.md,/sub/page1.md",
       "title": undefined,
     },
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 4,
     "inline": {
@@ -883,6 +931,9 @@ layout: cover
       "frontmatter": {
         "background": "https://sli.dev/demo-cover.png#14",
       },
+      "frontmatterRaw": "src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+",
       "frontmatterStyle": "frontmatter",
       "index": 3,
       "level": undefined,
@@ -911,6 +962,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "frontmatter": {
         "title": "Page 1",
       },
+      "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
@@ -936,6 +988,8 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "srcSequence": "sub/nested1-4.md,page2.md",
       "title": "Page 2",
     },
+    "frontmatterRaw": "layout: cover
+",
     "frontmatterStyle": "frontmatter",
     "index": 5,
     "level": 1,
@@ -961,6 +1015,8 @@ srcSequence: sub/nested1-4.md,page2.md
         "layout": "cover",
         "title": "Page 2",
       },
+      "frontmatterRaw": "layout: cover
+",
       "frontmatterStyle": "frontmatter",
       "index": 0,
       "level": 1,
@@ -989,6 +1045,7 @@ layout: cover
       "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
       "title": "Page 3",
     },
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 6,
     "level": 1,
@@ -1008,6 +1065,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "frontmatter": {
         "title": "Page 3",
       },
+      "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
       "level": 1,
@@ -1032,6 +1090,8 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "layout": "cover",
       "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
     },
+    "frontmatterRaw": "layout: cover
+",
     "frontmatterStyle": "frontmatter",
     "index": 7,
     "level": 1,
@@ -1055,6 +1115,8 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "frontmatter": {
         "layout": "cover",
       },
+      "frontmatterRaw": "layout: cover
+",
       "frontmatterStyle": "frontmatter",
       "index": 1,
       "level": 1,
@@ -1081,6 +1143,7 @@ $x+2$
 ",
     "end": 25,
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
     "index": 8,
     "level": 1,
