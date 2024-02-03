@@ -15,6 +15,7 @@ const props = defineProps<{
   id: string | number
   scale?: string | number
   conversation?: string
+  cards?: 'hidden' | 'visible'
 }>()
 
 const tweet = ref<HTMLElement | null>()
@@ -31,6 +32,7 @@ async function create() {
     {
       theme: isDark.value ? 'dark' : 'light',
       conversation: props.conversation || 'none',
+      cards: props.cards,
     },
   )
   loaded.value = true
