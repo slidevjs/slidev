@@ -2,14 +2,14 @@
   "private": true,
   "scripts": {
     "build": "slidev build",
-    "dev": "nodemon -w '../../packages/slidev/dist/*.js' --exec \"slidev ./slides.md --open=false --log=info\"",
+    "dev": "nodemon -w '../../packages/slidev/dist/*.mjs' --exec \"slidev ./slides.md --open=false --log=info --inspect\"",
     "export": "slidev export",
     "export-notes": "slidev export-notes"
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "^0.21.2",
-    "@slidev/theme-seriph": "^0.21.3",
+    "@slidev/theme-default": "^0.25.0",
+    "@slidev/theme-seriph": "^0.25.0",
     "@slidev/types": "workspace:*",
     "nodemon": "^3.0.3"
   }

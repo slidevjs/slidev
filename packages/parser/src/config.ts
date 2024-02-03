@@ -13,7 +13,7 @@ export function getDefaultConfig(): SlidevConfig {
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
-    highlighter: 'prism',
+    highlighter: 'shiki',
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',
@@ -38,7 +38,7 @@ export function getDefaultConfig(): SlidevConfig {
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
   const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki' | 'shikiji'
+    ? themeMeta.highlighter as 'prism' | 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -66,6 +66,12 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     },
   }
 
+  // @ts-expect-error compat
+  if (config.highlighter === 'shikiji') {
+    console.warn(`[slidev] "shikiji" is merged back to "shiki", you can safely change it "highlighter: shiki"`)
+    config.highlighter = 'shiki'
+  }
+
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
   if (themeColorSchema && config.colorSchema === 'auto')
@@ -84,8 +90,8 @@ export function verifyConfig(
   themeMeta: SlidevThemeMeta = {},
   warn = (v: string) => console.warn(`[slidev] ${v}`),
 ) {
-  const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki' | 'shikiji'
+  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '')
+    ? themeMeta.highlighter as 'prism' | 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -97,7 +103,7 @@ export function verifyConfig(
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
-  if (!['windicss', 'unocss', undefined].includes(config.css)) {
+  if (!['unocss', undefined].includes(config.css)) {
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
     config.css = 'unocss'
   }

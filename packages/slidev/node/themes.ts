@@ -33,7 +33,7 @@ export async function getThemeMeta(name: string, path: string) {
   return undefined
 }
 
-export function resolveThemeName(name: string) {
+export async function resolveThemeName(name: string) {
   if (!name || name === 'none')
     return ''
   if (name.startsWith('@slidev/theme-') || name.startsWith('slidev-theme-'))
@@ -42,11 +42,11 @@ export function resolveThemeName(name: string) {
     return name
 
   // search for local packages first
-  if (packageExists(`@slidev/theme-${name}`))
+  if (await packageExists(`@slidev/theme-${name}`))
     return `@slidev/theme-${name}`
-  if (packageExists(`slidev-theme-${name}`))
+  if (await packageExists(`slidev-theme-${name}`))
     return `slidev-theme-${name}`
-  if (packageExists(name))
+  if (await packageExists(name))
     return name
 
   // fallback to prompt install
@@ -58,11 +58,11 @@ export function resolveThemeName(name: string) {
 }
 
 export async function promptForThemeInstallation(name: string) {
-  name = resolveThemeName(name)
+  name = await resolveThemeName(name)
   if (!name)
     return name
 
-  if (isPath(name) || packageExists(name))
+  if (isPath(name) || await packageExists(name))
     return name
 
   const { confirm } = await prompts({

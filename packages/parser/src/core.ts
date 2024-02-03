@@ -4,13 +4,12 @@ import type { FrontmatterStyle, PreparserExtensionFromHeadmatter, SlideInfo, Sli
 import { resolveConfig } from './config'
 
 export function stringify(data: SlidevMarkdown) {
-  return `${
-    data.slides
+  return `${data.slides
       .filter(slide => slide.source === undefined || slide.inline !== undefined)
       .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
       .join('\n')
       .trim()
-  }\n`
+    }\n`
 }
 
 export function filterDisabled(data: SlidevMarkdown) {
@@ -53,12 +52,14 @@ function safeParseYAML(str: string) {
 
 function matter(code: string) {
   let type: FrontmatterStyle | undefined
+  let raw: string | undefined
 
   const data: any = {}
 
   let content = code
     .replace(/^---.*\r?\n([\s\S]*?)---/, (_, f) => {
       type = 'frontmatter'
+      raw = f
       Object.assign(data, safeParseYAML(f))
       return ''
     })
@@ -67,6 +68,7 @@ function matter(code: string) {
     content = content
       .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, d) => {
         type = 'yaml'
+        raw = d
         Object.assign(data, safeParseYAML(d))
         return ''
       })
@@ -74,6 +76,7 @@ function matter(code: string) {
 
   return {
     type,
+    raw,
     data,
     content,
   }
@@ -123,6 +126,7 @@ export function parseSlide(raw: string): SlideInfoBase {
     content,
     frontmatter,
     frontmatterStyle: matterResult.type,
+    frontmatterRaw: matterResult.raw,
     note,
   }
 }

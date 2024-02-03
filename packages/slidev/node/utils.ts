@@ -1,27 +1,25 @@
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
-import resolve from 'resolve'
+import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import type Token from 'markdown-it/lib/token'
 import type { ResolvedFontOptions } from '@slidev/types'
 
 const require = createRequire(import.meta.url)
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
 }
 
-export function resolveImportPath(importName: string, ensure: true): string
-export function resolveImportPath(importName: string, ensure?: boolean): string | undefined
-export function resolveImportPath(importName: string, ensure = false) {
+export async function resolveImportPath(importName: string, ensure: true): Promise<string>
+export async function resolveImportPath(importName: string, ensure?: boolean): Promise<string | undefined>
+export async function resolveImportPath(importName: string, ensure = false) {
   try {
-    return resolve.sync(importName, {
-      preserveSymlinks: false,
-      basedir: __dirname,
+    return resolvePath(importName, {
+      url: fileURLToPath(import.meta.url),
     })
   }
   catch {}
@@ -44,11 +42,10 @@ export function resolveImportPath(importName: string, ensure = false) {
   return undefined
 }
 
-export function resolveGlobalImportPath(importName: string): string {
+export async function resolveGlobalImportPath(importName: string): Promise<string> {
   try {
-    return resolve.sync(importName, {
-      preserveSymlinks: false,
-      basedir: __dirname,
+    return resolvePath(importName, {
+      url: fileURLToPath(import.meta.url),
     })
   }
   catch {}
@@ -87,8 +84,8 @@ export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
   return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
 }
 
-export function packageExists(name: string) {
-  if (resolveImportPath(`${name}/package.json`))
+export async function packageExists(name: string) {
+  if (await resolveImportPath(`${name}/package.json`))
     return true
   return false
 }

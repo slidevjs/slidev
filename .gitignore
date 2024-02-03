@@ -12,6 +12,7 @@ assets/demo
 packages/slidev/README.md
 packages/create-app/template/slides.md
 packages/create-app/template/pages
+packages/create-app/template/snippets
 composable-vue-cn
 components.d.ts
 .slidev

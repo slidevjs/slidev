@@ -7,6 +7,7 @@ export interface SlideInfoBase {
   content: string
   note?: string
   frontmatter: Record<string, any>
+  frontmatterRaw?: string
   frontmatterStyle?: FrontmatterStyle
   title?: string
   level?: number
@@ -18,6 +19,7 @@ export interface SlideInfo extends SlideInfoBase {
   end: number
   inline?: SlideInfoBase
   source?: SlideInfoWithPath
+  snippetsUsed?: LoadedSnippets
 }
 
 export interface SlideInfoWithPath extends SlideInfoBase {
@@ -70,3 +72,5 @@ export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, fi
 export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath?: string) => Promise<SlidevPreparserExtension[]>
 
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
+
+export type LoadedSnippets = Record<string, string>

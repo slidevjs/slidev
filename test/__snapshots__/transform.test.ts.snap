@@ -1,5 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`markdown transform > external snippet 1`] = `
+"
+\`\`\`ts {2|3|4}{lines:true}
+function _foo() {
+  // ...
+}
+\`\`\`
+"
+`;
+
 exports[`markdown transform > inline CSS 1`] = `
 "
 # Page 

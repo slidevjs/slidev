@@ -4,7 +4,6 @@ import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
-import { dependencies } from '../../../client/package.json'
 import type { ResolvedSlidevOptions } from '../options'
 import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
 import { searchForWorkspaceRoot } from '../vite/searchRoot'
@@ -20,7 +19,6 @@ const EXCLUDE = [
   '@unocss/reset',
   'unocss',
   'mermaid',
-  'vite-plugin-windicss',
   'vue-demi',
   'vue',
 ]
@@ -38,21 +36,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           dedupe: ['vue'],
         },
         optimizeDeps: {
-          include: [
-            ...Object.keys(dependencies).filter(i => !EXCLUDE.includes(i)),
-            'codemirror/mode/javascript/javascript',
-            'codemirror/mode/css/css',
-            'codemirror/mode/markdown/markdown',
-            'codemirror/mode/xml/xml',
-            'codemirror/mode/htmlmixed/htmlmixed',
-            'codemirror/addon/display/placeholder',
-            'prettier/plugins/babel',
-            'prettier/plugins/html',
-            'prettier/plugins/typescript',
-            'mermaid/dist/mermaid.esm.min.mjs',
-            'mermaid/dist/mermaid.esm.mjs',
-            'vite-plugin-vue-server-ref/client',
-          ],
           exclude: EXCLUDE,
         },
         css: options.data.config.css === 'unocss'
@@ -72,7 +55,10 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               searchForWorkspaceRoot(options.cliRoot),
               ...(
                 isInstalledGlobally
-                  ? [dirname(resolveGlobalImportPath('@slidev/client/package.json')), dirname(resolveGlobalImportPath('katex/package.json'))]
+                  ? [
+                      dirname(await resolveGlobalImportPath('@slidev/client/package.json')),
+                      dirname(await resolveGlobalImportPath('katex/package.json')),
+                    ]
                   : []
               ),
             ]),
@@ -81,12 +67,16 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         publicDir: join(options.userRoot, 'public'),
       }
 
+      injection.resolve ||= {}
+      injection.resolve.alias ||= {}
+
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
-        // @ts-expect-error type cast
-        injection.resolve.alias.vue = `${resolveImportPath('vue/dist/vue.esm-browser.js', true)}`
       }
+
+      // @ts-expect-error type cast
+      injection.resolve.alias.vue = await resolveImportPath('vue/dist/vue.esm-browser.js', true)
 
       return mergeConfig(injection, config)
     },

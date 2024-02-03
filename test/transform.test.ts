@@ -1,9 +1,11 @@
+import path from 'node:path'
 import {
   transformMermaid,
   transformPageCSS,
   transformPlantUml,
   transformSlotSugar,
 } from '@slidev/cli/node/plugins/markdown'
+import { transformSnippet } from 'packages/slidev/node/plugins/transformSnippet'
 import { describe, expect, it } from 'vitest'
 
 // const isMacOS = process.platform === 'darwin'
@@ -140,5 +142,19 @@ Alice <- Bob : Hello, too!
     // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
     // we may need to find a better way to test this
     // expect(result).toMatchSnapshot()
+  })
+
+  it('external snippet', () => {
+    expect(transformSnippet(`
+<<< @/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
+`, {
+      userRoot: path.join(__dirname, './fixtures/'),
+      data: {
+        slides: [
+          {} as any,
+        ],
+        entries: [],
+      },
+    } as any, `/@slidev/slides/1.md`)).toMatchSnapshot()
   })
 })

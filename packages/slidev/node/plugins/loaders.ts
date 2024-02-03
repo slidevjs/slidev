@@ -1,5 +1,4 @@
 import { basename, join } from 'node:path'
-import process from 'node:process'
 import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -9,7 +8,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo, SlideInfoExtended, SlidevMarkdown } from '@slidev/types'
+import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -21,7 +20,7 @@ const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
 const vueContextImports = [
-  'import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"',
+  `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
   `import {
     injectionSlidevContext as _injectionSlidevContext, 
     injectionClicks as _injectionClicks,
@@ -176,6 +175,15 @@ export function createSlidesLoader(
             && a?.title?.trim() === b?.title?.trim()
             && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
+            && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
+              try {
+                const newContent = fs.readFileSync(file, 'utf-8')
+                return oldContent === newContent
+              }
+              catch {
+                return false
+              }
+            })
           )
             continue
 
@@ -284,11 +292,19 @@ export function createSlidesLoader(
               }
             }
             else if (type === 'frontmatter') {
+              const slideBase = {
+                ...prepareSlideInfo(slide),
+                frontmatter: undefined,
+                // remove raw content in build, optimize the bundle size
+                ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+              }
+              const fontmatter = getFrontmatter(pageNo)
+
               return {
                 code: [
                   '// @unocss-include',
                   'import { reactive, computed } from "vue"',
-                  `export const frontmatter = reactive(${JSON.stringify(slide.frontmatter)})`,
+                  `export const frontmatter = reactive(${JSON.stringify(fontmatter)})`,
                   `export const meta = reactive({
                     layout: computed(() => frontmatter.layout),
                     transition: computed(() => frontmatter.transition),
@@ -297,12 +313,7 @@ export function createSlidesLoader(
                     name: computed(() => frontmatter.name),
                     preload: computed(() => frontmatter.preload),
                     slide: {
-                      ...(${JSON.stringify({
-                        ...prepareSlideInfo(slide),
-                        frontmatter: undefined,
-                        // remove raw content in build, optimize the bundle size
-                        ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
-                      })}),
+                      ...(${JSON.stringify(slideBase)}),
                       frontmatter,
                       filepath: ${JSON.stringify(slide.source?.filepath || entry)},
                       id: ${pageNo},
@@ -349,7 +360,7 @@ export function createSlidesLoader(
           return
 
         const pageNo = Number.parseInt(no) - 1
-        return transformMarkdown(code, pageNo, data)
+        return transformMarkdown(code, pageNo)
       },
     },
     {
@@ -390,12 +401,16 @@ export function createSlidesLoader(
     server.watcher.add(data.entries?.map(slash) || [])
   }
 
-  async function transformMarkdown(code: string, pageNo: number, data: SlidevMarkdown) {
-    const layouts = await getLayouts()
-    const frontmatter = {
+  function getFrontmatter(pageNo: number) {
+    return {
       ...(data.headmatter?.defaults as object || {}),
       ...(data.slides[pageNo]?.frontmatter || {}),
     }
+  }
+
+  async function transformMarkdown(code: string, pageNo: number) {
+    const layouts = await getLayouts()
+    const frontmatter = getFrontmatter(pageNo)
     let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
     if (!layouts[layoutName]) {
       console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
@@ -529,13 +544,21 @@ defineProps<{ no: number | string }>()`)
     return layouts
   }
 
+  async function resolveUrl(id: string) {
+    return toAtFS(await resolveImportPath(id, true))
+  }
+
+  function resolveUrlOfClient(name: string) {
+    return toAtFS(join(clientRoot, name))
+  }
+
   async function generateUserStyles() {
     const imports: string[] = [
-      `import "${toAtFS(join(clientRoot, 'styles/vars.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/index.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/code.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/katex.css'))}"`,
-      `import "${toAtFS(join(clientRoot, 'styles/transitions.css'))}"`,
+      `import "${resolveUrlOfClient('styles/vars.css')}"`,
+      `import "${resolveUrlOfClient('styles/index.css')}"`,
+      `import "${resolveUrlOfClient('styles/code.css')}"`,
+      `import "${resolveUrlOfClient('styles/katex.css')}"`,
+      `import "${resolveUrlOfClient('styles/transitions.css')}"`,
     ]
     const roots = uniq([
       ...themeRoots,
@@ -561,28 +584,23 @@ defineProps<{ no: number | string }>()`)
     }
 
     if (data.features.katex)
-      imports.push(`import "${toAtFS(resolveImportPath('katex/dist/katex.min.css', true))}"`)
+      imports.push(`import "${await resolveUrl('katex/dist/katex.min.css')}"`)
 
-    if (data.config.highlighter === 'shikiji')
-      imports.push(`import "${toAtFS(resolveImportPath('shikiji-twoslash/style-rich.css', true))}"`)
+    if (data.config.highlighter === 'shiki') {
+      imports.push(
+        `import "${await resolveUrl('@shikijs/vitepress-twoslash/style.css')}"`,
+        `import "${resolveUrlOfClient('styles/shiki-twoslash.css')}"`,
+      )
+    }
 
     if (data.config.css === 'unocss') {
       imports.unshift(
-        'import "@unocss/reset/tailwind.css"',
+        `import "${await resolveUrl('@unocss/reset/tailwind.css')}"`,
         'import "uno:preflights.css"',
         'import "uno:typography.css"',
         'import "uno:shortcuts.css"',
       )
       imports.push('import "uno.css"')
-    }
-    else {
-      imports.unshift(
-        'import "virtual:windi-components.css"',
-        'import "virtual:windi-base.css"',
-      )
-      imports.push('import "virtual:windi-utilities.css"')
-      if (process.env.NODE_ENV !== 'production')
-        imports.push('import "virtual:windi-devtools"')
     }
 
     return imports.join('\n')

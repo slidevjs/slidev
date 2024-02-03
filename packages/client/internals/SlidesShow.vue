@@ -68,6 +68,7 @@ function onAfterLeave() {
         :class="getSlideClass(route)"
         :route="route"
         :render-context="renderContext"
+        class="overflow-hidden"
       />
     </template>
   </component>

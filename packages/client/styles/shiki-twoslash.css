@@ -1,0 +1,24 @@
+:root {
+  --twoslash-popup-bg: var(--slidev-code-background);
+  --twoslash-popup-color: var(--slidev-code-foreground);
+  --twoslash-docs-color: inherit;
+  --twoslash-docs-font: inherit;
+  --twoslash-code-font: theme('fontFamily.mono');
+  --twoslash-underline-color: #8888;
+  --twoslash-border-color: #8888;
+  --twoslash-cursor-color: var(--slidev-theme-primary);
+  --twoslash-matched-color: var(--slidev-theme-primary);
+}
+
+.twoslash-popup-container {
+  font-size: calc(13px * var(--slidev-slide-scale, 1));
+}
+
+.twoslash-popup-container .twoslash-popup-code {
+  font-size: 0.85em;
+}
+
+.twoslash-floating .twoslash-popup-docs-tags .twoslash-popup-docs-tag-name {
+  color: inherit;
+  opacity: 0.5;
+}
