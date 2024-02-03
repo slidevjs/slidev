@@ -7,6 +7,7 @@ export interface SlideInfoBase {
   content: string
   note?: string
   frontmatter: Record<string, any>
+  frontmatterRaw?: string
   frontmatterStyle?: FrontmatterStyle
   title?: string
   level?: number
