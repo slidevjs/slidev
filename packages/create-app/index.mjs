@@ -116,7 +116,7 @@ async function init() {
     const { agent } = await prompts({
       name: 'agent',
       type: 'select',
-      message: 'Choose the agent',
+      message: 'Choose the package manager',
       choices: ['npm', 'yarn', 'pnpm'].map(i => ({ value: i, title: i })),
     })
 
