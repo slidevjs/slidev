@@ -79,6 +79,25 @@ image: ./path/to/the/image
 ---
 ```
 
+You can change the default background size (`cover`) by adding the `backgroundSize` attribute:
+
+```yaml
+---
+layout: image
+image: ./path/to/the/image
+backgroundSize: contain
+---
+```
+
+```yaml
+---
+layout: image-left
+image: ./path/to/the/image
+backgroundSize: 20em 70%
+---
+```
+
+
 ### `iframe-left`
 
 Shows a web page on the left side of the screen, the content will be placed on the right side.
