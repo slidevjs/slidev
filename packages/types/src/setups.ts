@@ -51,11 +51,11 @@ export interface ShikiContext {
    * @deprecated Pass directly the theme name it's supported by Shiki.
    * For custom themes, load it manually via `JSON.parse(fs.readFileSync(path, 'utf-8'))` and pass the raw JSON object instead.
    */
-  loadTheme(path: string): Promise<any>
+  loadTheme: (path: string) => Promise<any>
 }
 
 export type ShikiSetupReturn = Partial<CodeToHastOptions> & {
-  setup?(highlighter: Highlighter): Awaitable<void>
+  setup?: (highlighter: Highlighter) => Awaitable<void>
 }
 
 // node side

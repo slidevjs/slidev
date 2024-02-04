@@ -23,7 +23,7 @@
     "test": "vitest test"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.3",
+    "@antfu/eslint-config": "^2.6.4",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.7",
     "@shikijs/markdown-it": "1.0.0-beta.3",

@@ -62,8 +62,8 @@ export interface SlidevMarkdown {
 
 export interface SlidevPreparserExtension {
   name: string
-  transformRawLines?(lines: string[]): Promise<void> | void
-  transformSlide?(content: string, frontmatter: any): Promise<string | undefined>
+  transformRawLines?: (lines: string[]) => Promise<void> | void
+  transformSlide?: (content: string, frontmatter: any) => Promise<string | undefined>
 }
 
 export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string) => Promise<SlidevPreparserExtension[]>
