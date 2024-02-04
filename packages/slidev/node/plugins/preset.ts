@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
@@ -130,6 +131,7 @@ export async function ViteSlidevPlugin(
 
     Icons({
       defaultClass: 'slidev-icon',
+      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
       ...iconsOptions,
     }),
 
