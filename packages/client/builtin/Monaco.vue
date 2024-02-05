@@ -171,13 +171,13 @@ const colorTable = {
   <div v-if="props.runnable" class="relative">
     <iframe ref="iframe" class="text-base w-full rounded-t" :style="{ height }" />
     <div
-      class="relative px-2 pt-1 rounded-b bg-[var(--slidev-code-background)]"
+      class="relative px-2 py-1 rounded-b bg-[var(--slidev-code-background)]"
       :style="{ height: props.outputHeight && `${1.25 + 0.8 * props.outputHeight}em` }"
     >
-      <div v-if="result === 'empty'" class="text-sm text-center opacity-70">
+      <div v-if="result === 'empty'" class="text-sm text-center opacity-50">
         Click the play button to run the code
       </div>
-      <div v-else-if="result === 'running'" class="text-sm text-center opacity-70">
+      <div v-else-if="result === 'running'" class="text-sm text-center opacity-50">
         Running...
       </div>
       <div v-else-if="result.type === 'error'" class="text-sm text-red-500">
