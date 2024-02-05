@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "0.47.2",
+  "version": "0.47.3",
   "private": true,
   "packageManager": "pnpm@8.15.1",
   "engines": {
@@ -26,7 +26,7 @@
     "@antfu/eslint-config": "^2.6.4",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.7",
-    "@shikijs/markdown-it": "1.0.0-beta.3",
+    "@shikijs/markdown-it": "^1.0.0-beta.5",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
@@ -59,7 +59,7 @@
     "playwright-chromium": "^1.41.2",
     "pnpm": "^8.15.1",
     "rimraf": "^5.0.5",
-    "shiki": "1.0.0-beta.3",
+    "shiki": "^1.0.0-beta.5",
     "simple-git-hooks": "^2.9.0",
     "taze": "^0.13.2",
     "tsup": "^8.0.1",

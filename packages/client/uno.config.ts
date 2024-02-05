@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import {
   defineConfig,
   presetAttributify,
@@ -26,7 +27,9 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
-    presetIcons(),
+    presetIcons({
+      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
+    }),
     presetTypography(),
   ],
   transformers: [
