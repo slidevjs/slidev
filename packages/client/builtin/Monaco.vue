@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<{
   height?: number | string
   editorOptions?: monaco.editor.IEditorOptions
   runnable?: boolean
-  immediate?: boolean
+  autorun?: boolean | 'once'
   outputHeight?: number | undefined
 }>(), {
   code: '',
@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<{
   lineNumbers: 'off',
   height: 'auto',
   runnable: false,
-  immediate: true,
+  autorun: true,
 })
 
 const id = nanoid()
@@ -122,7 +122,7 @@ useEventListener(window, 'message', ({ data: payload }) => {
         style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
       })
     }
-    if (props.immediate)
+    if (props.autorun)
       run()
     return
   }
@@ -130,16 +130,21 @@ useEventListener(window, 'message', ({ data: payload }) => {
     return
   if (payload.data?.height)
     editorHeight.value = payload.data?.height
-  if (notNullish(payload?.data?.code) && code.value !== payload.data.code)
+  if (notNullish(payload?.data?.code) && code.value !== payload.data.code) {
     code.value = payload.data.code
+    if (props.autorun === true)
+      run()
+  }
   if (notNullish(payload?.data?.diff) && diff.value !== payload.data.diff)
     diff.value = payload.data.diff
 })
 
-const result = ref<RunResult | 'running' | 'empty'>(props.immediate ? 'running' : 'empty')
+const result = ref<RunResult | 'running' | 'empty'>(props.autorun ? 'running' : 'empty')
 
 async function run() {
-  result.value = 'running'
+  const setAsRunning = setTimeout(() => {
+    result.value = 'running'
+  }, 500)
   result.value = await fetch(
     `/__run_code?lang=${encodeURIComponent(props.lang)}`,
     {
@@ -151,6 +156,7 @@ async function run() {
       body: JSON.stringify(code.value),
     },
   ).then(r => r.json())
+  clearTimeout(setAsRunning)
 }
 
 const colorTable = {
@@ -188,7 +194,8 @@ const colorTable = {
     </div>
     <div v-if="code.trim()" class="absolute right-3 top-4 max-h-full flex gap-1">
       <button class="code-action" :disabled="result === 'running'" @click="run">
-        <carbon:play-filled-alt />
+        <carbon:renew v-if="props.autorun === true" />
+        <carbon:play-filled-alt v-else />
       </button>
     </div>
   </div>
