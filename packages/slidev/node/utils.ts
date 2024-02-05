@@ -7,6 +7,7 @@ import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import type Token from 'markdown-it/lib/token'
 import type { ResolvedFontOptions } from '@slidev/types'
+import type { Connect } from 'vite'
 
 const require = createRequire(import.meta.url)
 
@@ -88,4 +89,20 @@ export async function packageExists(name: string) {
   if (await resolveImportPath(`${name}/package.json`))
     return true
   return false
+}
+
+export function getBodyJson(req: Connect.IncomingMessage) {
+  return new Promise<any>((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => body += chunk)
+    req.on('error', reject)
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body) || {})
+      }
+      catch (e) {
+        reject(e)
+      }
+    })
+  })
 }

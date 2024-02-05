@@ -146,7 +146,12 @@ export function transformMarkdownMonaco(md: string) {
     const encoded = base64.encode(code, true)
     return `<Monaco :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
   })
-
+  md = md.replace(/^```(\w+?)\s*{monaco-runnable}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string) => {
+    lang = lang.trim()
+    options = options.trim() || '{}'
+    const encoded = base64.encode(code, true)
+    return `<Monaco runnable :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
+  })
   return md
 }
 

@@ -14,9 +14,11 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
+import { notNullish } from '@antfu/utils'
 import { decode } from 'js-base64'
 import { nanoid } from 'nanoid'
 import type * as monaco from 'monaco-editor'
+import type { RunResult } from '@slidev/types'
 import { isDark } from '../logic/dark'
 
 const props = withDefaults(defineProps<{
@@ -27,12 +29,17 @@ const props = withDefaults(defineProps<{
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
   height?: number | string
   editorOptions?: monaco.editor.IEditorOptions
+  runnable?: boolean
+  immediate?: boolean
+  outputHeight?: number | undefined
 }>(), {
   code: '',
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
   height: 'auto',
+  runnable: false,
+  immediate: true,
 })
 
 const id = nanoid()
@@ -115,19 +122,84 @@ useEventListener(window, 'message', ({ data: payload }) => {
         style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
       })
     }
+    if (props.immediate)
+      run()
     return
   }
   if (payload.type !== 'slidev-monaco')
     return
   if (payload.data?.height)
     editorHeight.value = payload.data?.height
-  if (payload?.data?.code && code.value !== payload.data.code)
+  if (notNullish(payload?.data?.code) && code.value !== payload.data.code)
     code.value = payload.data.code
-  if (payload?.data?.diff && diff.value !== payload.data.diff)
+  if (notNullish(payload?.data?.diff) && diff.value !== payload.data.diff)
     diff.value = payload.data.diff
 })
+
+const result = ref<RunResult | 'running' | 'empty'>(props.immediate ? 'running' : 'empty')
+
+async function run() {
+  result.value = 'running'
+  result.value = await fetch(
+    `/__run_code?lang=${encodeURIComponent(props.lang)}`,
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(code.value),
+    },
+  ).then(r => r.json())
+}
+
+const colorTable = {
+  debug: 'text-gray-500',
+  info: 'text-blue-500',
+  warn: 'text-yellow-500',
+  error: 'text-red-500',
+}
 </script>
 
 <template>
-  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
+  <div v-if="props.runnable" class="relative">
+    <iframe ref="iframe" class="text-base w-full rounded-t" :style="{ height }" />
+    <div
+      class="relative px-2 pt-1 rounded-b bg-[var(--slidev-code-background)]"
+      :style="{ height: props.outputHeight && `${1.25 + 0.8 * props.outputHeight}em` }"
+    >
+      <div v-if="result === 'empty'" class="text-sm text-center opacity-70">
+        Click the play button to run the code
+      </div>
+      <div v-else-if="result === 'running'" class="text-sm text-center opacity-70">
+        Running...
+      </div>
+      <div v-else-if="result.type === 'error'" class="text-sm text-red-500">
+        {{ result.message }}
+      </div>
+      <div v-else class="flex flex-col h-full -mt-1">
+        <div class="text-xs font-[Consolas]">
+          OUTPUT
+        </div>
+        <div class="ml-1 text-xs overflow-auto leading-[.8rem]">
+          <pre v-for="line, i of result.output" :key="i" :class="colorTable[line.type]" v-text="line.text" />
+        </div>
+      </div>
+    </div>
+    <div v-if="code.trim()" class="absolute right-3 top-4 max-h-full flex gap-1">
+      <button class="code-action" :disabled="result === 'running'" @click="run">
+        <carbon:play-filled-alt />
+      </button>
+    </div>
+  </div>
+  <iframe v-else ref="iframe" class="text-base w-full rounded" :style="{ height }" />
 </template>
+
+<style scoped lang="postcss">
+.code-action {
+  @apply w-8 h-8 max-h-full;
+  @apply flex justify-center items-center;
+  @apply rounded bg-gray-100 text-gray-500;
+  @apply hover:(bg-gray-200);
+}
+</style>

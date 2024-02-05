@@ -1,5 +1,5 @@
 import { basename, join } from 'node:path'
-import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import type { ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
@@ -14,7 +14,7 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
+import { getBodyJson, resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -34,22 +34,6 @@ const vueContextImports = [
   'const $page = _vueInject(_injectionCurrentPage)',
   'const $renderContext = _vueInject(_injectionRenderContext)',
 ]
-
-export function getBodyJson(req: Connect.IncomingMessage) {
-  return new Promise<any>((resolve, reject) => {
-    let body = ''
-    req.on('data', chunk => body += chunk)
-    req.on('error', reject)
-    req.on('end', () => {
-      try {
-        resolve(JSON.parse(body) || {})
-      }
-      catch (e) {
-        reject(e)
-      }
-    })
-  })
-}
 
 export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   const timestamp = +Date.now()

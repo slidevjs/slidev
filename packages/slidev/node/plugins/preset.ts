@@ -17,6 +17,7 @@ import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
 import { createMarkdownPlugin } from './markdown'
 import { createFixPlugins } from './patchTransform'
+import { createMonacoRunnable } from './monacoRunnable'
 
 const customElements = new Set([
   // katex
@@ -171,6 +172,7 @@ export async function ViteSlidevPlugin(
     createConfigPlugin(options),
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),
+    createMonacoRunnable(),
     createFixPlugins(options),
 
     publicRoots.length
