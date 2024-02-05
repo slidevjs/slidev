@@ -45,6 +45,9 @@ async function runJavaScript(src: string) {
 }
 
 function runTypeScript(src: string) {
+  if (src.trim() === '')
+    return Promise.resolve({ type: 'success', output: [] } as RunResult)
+
   return runJavaScript(ts.transpile(src))
 }
 

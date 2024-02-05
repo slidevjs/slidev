@@ -98,7 +98,7 @@ export function getBodyJson(req: Connect.IncomingMessage) {
     req.on('error', reject)
     req.on('end', () => {
       try {
-        resolve(JSON.parse(body) || {})
+        resolve(JSON.parse(body) ?? {})
       }
       catch (e) {
         reject(e)
