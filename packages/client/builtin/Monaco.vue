@@ -189,6 +189,9 @@ const colorTable = {
         </div>
         <div class="ml-1 text-xs overflow-auto leading-[.8rem]">
           <pre v-for="line, i of result.output" :key="i" :class="colorTable[line.type]" v-text="line.text" />
+          <div v-if="result.output.length === 0" class="opacity-50">
+            (empty)
+          </div>
         </div>
       </div>
     </div>
