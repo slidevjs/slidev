@@ -2,7 +2,7 @@ import * as vm from 'node:vm'
 import type { Plugin } from 'vite'
 import type { RunResult } from '@slidev/types'
 import ts from 'typescript'
-import { getBodyJson } from '../utils'
+import { getBodyJson, resolveImportPath } from '../utils'
 
 async function runJavaScript(src: string) {
   const result: RunResult = {
@@ -25,7 +25,7 @@ async function runJavaScript(src: string) {
       log: createOutputFunc('info'),
       assert: (condition: any, ...args: any[]) => {
         if (!condition)
-          createOutputFunc('error')('Assertion failed:', ...args)
+          context.console.error('Assertion failed:', ...args)
       },
       clear: () => {
         result.output = []
@@ -34,8 +34,16 @@ async function runJavaScript(src: string) {
   }
 
   try {
-    vm.createContext(context)
-    vm.runInContext(src, context)
+    await vm.runInNewContext(`async (_import) => {
+      ${src}
+    }`, context)(async (id: string) => {
+      try {
+        return await import(`file:///${await resolveImportPath(id, true)}`)
+      }
+      catch (e) {
+        context.console.error(e)
+      }
+    })
   }
   catch (e) {
     result.output.push({ type: 'error', text: String(e) })
