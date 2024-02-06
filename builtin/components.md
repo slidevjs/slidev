@@ -241,6 +241,7 @@ Parameters:
 * `id` (`number | string`, required): id of the tweet
 * `scale` (`number | string`, default `1`): transform scale value
 * `conversation` (`string`, default `'none'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
+* `cards` (`'hidden' | 'visible'`, default `'visible'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 
 ### `VAfter`, `VClick` and `VClicks`
 
