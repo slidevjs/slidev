@@ -12,11 +12,14 @@ const props = defineProps<{
 const { context } = props
 const target = ref(null)
 const targetVisible = useElementVisibility(target)
+
+// When context has `visible`, we need to wrap the content with a div to track the visibility
+const needsDomWrapper = Array.isArray(context) ? context.includes('visible') : context === 'visible'
+
 const currentContext = inject(injectionRenderContext)
 const shouldRender = computed(() => {
   const anyContext = Array.isArray(context) ? context.some(contextMatch) : contextMatch(context)
   const allConditions = Array.isArray(context) ? context.every(conditionsMatch) : conditionsMatch(context)
-
   return anyContext && allConditions
 })
 
@@ -38,7 +41,8 @@ function conditionsMatch(context: Context) {
 </script>
 
 <template>
-  <div ref="target">
+  <div v-if="needsDomWrapper" ref="target">
     <slot v-if="shouldRender" />
   </div>
+  <slot v-else-if="shouldRender" />
 </template>
