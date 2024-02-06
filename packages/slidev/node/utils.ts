@@ -18,7 +18,7 @@ export async function resolveImportPath(importName: string, ensure: true): Promi
 export async function resolveImportPath(importName: string, ensure?: boolean): Promise<string | undefined>
 export async function resolveImportPath(importName: string, ensure = false) {
   try {
-    return resolvePath(importName, {
+    return await resolvePath(importName, {
       url: fileURLToPath(import.meta.url),
     })
   }
@@ -44,7 +44,7 @@ export async function resolveImportPath(importName: string, ensure = false) {
 
 export async function resolveGlobalImportPath(importName: string): Promise<string> {
   try {
-    return resolvePath(importName, {
+    return await resolvePath(importName, {
       url: fileURLToPath(import.meta.url),
     })
   }
@@ -85,7 +85,7 @@ export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
 }
 
 export async function packageExists(name: string) {
-  if (await resolveImportPath(`${name}/package.json`))
+  if (await resolveImportPath(`${name}/package.json`).catch(() => false))
     return true
   return false
 }
