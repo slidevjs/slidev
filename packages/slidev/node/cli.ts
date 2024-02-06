@@ -534,6 +534,10 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'boolean',
       describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
     })
+    .option('scale', {
+      type: 'number',
+      describe: 'scale factor for image export',
+    })
 }
 
 function printInfo(
