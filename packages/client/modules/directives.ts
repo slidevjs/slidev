@@ -105,9 +105,12 @@ export default function createDirectives() {
         },
         unmounted(el: HTMLElement, dir) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, false)
-          const elements = dirInject(dir, injectionClicksElements)!
+          const elements = dirInject(dir, injectionClicksElements)
+          const orderMap = dirInject(dir, injectionOrderMap)
           if (elements?.value)
             remove(elements.value, el)
+          if (orderMap?.value)
+            orderMap.value.forEach(v => remove(v, el))
         },
       })
 
@@ -205,8 +208,11 @@ export default function createDirectives() {
         unmounted(el, dir) {
           el?.classList.toggle(CLASS_VCLICK_TARGET, false)
           const elements = dirInject(dir, injectionClicksElements)
+          const orderMap = dirInject(dir, injectionOrderMap)
           if (elements?.value)
             remove(elements.value, el)
+          if (orderMap?.value)
+            orderMap.value.forEach(v => remove(v, el))
         },
       })
     },
