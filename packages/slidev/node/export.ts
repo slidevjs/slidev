@@ -33,6 +33,7 @@ export interface ExportOptions {
    * @default false
    */
   perSlide?: boolean
+  scale?: number
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -161,6 +162,7 @@ export async function exportSlides({
   executablePath = undefined,
   withToc = false,
   perSlide = false,
+  scale = 1,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -174,7 +176,7 @@ export async function exportSlides({
       // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
       height: perSlide ? height : height * pages.length,
     },
-    deviceScaleFactor: 1,
+    deviceScaleFactor: scale,
   })
   const page = await context.newPage()
   const progress = createSlidevProgress(!perSlide)
@@ -449,6 +451,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc,
     perSlide,
+    scale,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
   if (outDir)
@@ -468,6 +471,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
+    scale: scale || 1,
   }
 }
 

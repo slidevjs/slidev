@@ -23,8 +23,8 @@ importers:
         specifier: ^0.7.7
         version: 0.7.7
       '@shikijs/markdown-it':
-        specifier: ^1.0.0-beta.5
-        version: 1.0.0-beta.5
+        specifier: ^1.0.0-rc.0
+        version: 1.0.0-rc.0
       '@slidev/cli':
         specifier: workspace:*
         version: link:packages/slidev
@@ -107,8 +107,8 @@ importers:
         specifier: ^0.16.9
         version: 0.16.9
       lint-staged:
-        specifier: ^15.2.1
-        version: 15.2.1
+        specifier: ^15.2.2
+        version: 15.2.2
       mermaid:
         specifier: ^10.8.0
         version: 10.8.0
@@ -122,14 +122,14 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5
       shiki:
-        specifier: ^1.0.0-beta.5
-        version: 1.0.0-beta.5
+        specifier: ^1.0.0-rc.0
+        version: 1.0.0-rc.0
       simple-git-hooks:
         specifier: ^2.9.0
         version: 2.9.0
       taze:
-        specifier: ^0.13.2
-        version: 0.13.2
+        specifier: ^0.13.3
+        version: 0.13.3
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(typescript@5.3.3)
@@ -358,7 +358,7 @@ importers:
         version: 1.2.1
       '@shikijs/markdown-it':
         specifier: ^1.0.0-beta.5
-        version: 1.0.0-beta.5
+        version: 1.0.0-rc.0
       '@shikijs/twoslash':
         specifier: ^1.0.0-beta.5
         version: 1.0.0-beta.5(typescript@5.3.3)
@@ -493,7 +493,7 @@ importers:
         version: 2.0.0
       shiki:
         specifier: ^1.0.0-beta.5
-        version: 1.0.0-beta.5
+        version: 1.0.0-rc.0
       sirv:
         specifier: ^2.0.4
         version: 2.0.4
@@ -1492,7 +1492,7 @@ packages:
       nopt: 7.2.0
       proc-log: 3.0.0
       read-package-json-fast: 3.0.2
-      semver: 7.5.4
+      semver: 7.6.0
       walk-up-path: 3.0.1
     dev: true
 
@@ -1500,7 +1500,7 @@ packages:
     resolution: {integrity: sha512-7kZUAaLscfgbwBQRbvdMYaZOWyMEcPTH/tJjnyAWJ/dvvs9Ef+CERx/qJb9GExJpl1qipaDGn7KqHnFGGixd0w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      semver: 7.5.4
+      semver: 7.6.0
     dev: true
 
   /@npmcli/git@5.0.4:
@@ -1513,7 +1513,7 @@ packages:
       proc-log: 3.0.0
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
-      semver: 7.5.4
+      semver: 7.6.0
       which: 4.0.0
     transitivePeerDependencies:
       - bluebird
@@ -1558,7 +1558,7 @@ packages:
       json-parse-even-better-errors: 3.0.1
       normalize-package-data: 6.0.0
       proc-log: 3.0.0
-      semver: 7.5.4
+      semver: 7.6.0
     transitivePeerDependencies:
       - bluebird
     dev: true
@@ -1771,18 +1771,22 @@ packages:
 
   /@shikijs/core@1.0.0-beta.5:
     resolution: {integrity: sha512-C/MxtvK3FFCQZSsDq6OfjDHHOmyP1Jc9wO66cnE8VLEyWXzWch7Zpoc2MWuVJTSC0Pz9QxyUlsBCnroplFqoSg==}
+    dev: false
 
-  /@shikijs/markdown-it@1.0.0-beta.5:
-    resolution: {integrity: sha512-7JVuImT+BfjxuZ9i6ASMTmtelEPNnmjlLWe2IxPlT26tgu2aSvM4NNKiT3Dd7eIHmab24fkzvR6vI59g9MtfUA==}
+  /@shikijs/core@1.0.0-rc.0:
+    resolution: {integrity: sha512-j/7te+hvEYlQTvk/wPoA+1rOklZTz8QuyqVvV81KcEN/g1WXKVnqp9WZ7jFuv0ZVLqBtDx/V8viRDROJniyMLA==}
+
+  /@shikijs/markdown-it@1.0.0-rc.0:
+    resolution: {integrity: sha512-tXPFPvaAJXqz9qdX4XJLLF+Dt2pmvwJTC4RFUmRtJsw63DCBCGQVSdfTYd8UbMiSQdtLNz4qChP+WL/hV+WCrw==}
     dependencies:
-      '@shikijs/transformers': 1.0.0-beta.5
+      '@shikijs/transformers': 1.0.0-rc.0
       markdown-it: 14.0.0
-      shiki: 1.0.0-beta.5
+      shiki: 1.0.0-rc.0
 
-  /@shikijs/transformers@1.0.0-beta.5:
-    resolution: {integrity: sha512-Kd3312yH6sh8Jw0xjBFfGpXTU3Qts1bwuB19wDDoKRvJqjrkffftdSuKzhHPa+DP/L0ZFhq96xMPngzQ15rQmQ==}
+  /@shikijs/transformers@1.0.0-rc.0:
+    resolution: {integrity: sha512-1W4QpLKDM+hnlO6vqGre7orZxW4CrnO4F1zftj1KE6MdaEvy1awZKYUXPswvDIARvuetbzTvgc/ZE2yYVT/6GA==}
     dependencies:
-      shiki: 1.0.0-beta.5
+      shiki: 1.0.0-rc.0
 
   /@shikijs/twoslash@1.0.0-beta.5(typescript@5.3.3):
     resolution: {integrity: sha512-BPn2PFgy6Bon/hWU52ELWeGrdO1lsuR6ZIhTTDw4q+GrOZQsVDkdNlhIjoanGv1UY95dlbTEuPqXtzmk+4O73Q==}
@@ -5891,8 +5895,8 @@ packages:
     dependencies:
       uc.micro: 2.0.0
 
-  /lint-staged@15.2.1:
-    resolution: {integrity: sha512-dhwAPnM85VdshybV9FWI/9ghTvMLoQLEXgVMx+ua2DN7mdfzd/tRfoU2yhMcBac0RHkofoxdnnJUokr8s4zKmQ==}
+  /lint-staged@15.2.2:
+    resolution: {integrity: sha512-TiTt93OPh1OZOsb5B7k96A/ATl2AjIZo+vnzFZ6oHK5FuTk63ByDtxGQpHm+kFETjEWqgkF95M8FRXKR/LEBcw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
@@ -6905,7 +6909,7 @@ packages:
       make-fetch-happen: 13.0.0
       nopt: 7.2.0
       proc-log: 3.0.0
-      semver: 7.5.4
+      semver: 7.6.0
       tar: 6.2.0
       which: 4.0.0
     transitivePeerDependencies:
@@ -6965,7 +6969,7 @@ packages:
     dependencies:
       hosted-git-info: 7.0.1
       is-core-module: 2.13.1
-      semver: 7.5.4
+      semver: 7.6.0
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -6989,7 +6993,7 @@ packages:
     resolution: {integrity: sha512-W29RiK/xtpCGqn6f3ixfRYGk+zRyr+Ew9F2E20BfXxT5/euLdA/Nm7fO7OeTGuAmTs30cpgInyJ0cYe708YTZw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
-      semver: 7.5.4
+      semver: 7.6.0
     dev: true
 
   /npm-normalize-package-bin@3.0.1:
@@ -7003,7 +7007,7 @@ packages:
     dependencies:
       hosted-git-info: 7.0.1
       proc-log: 3.0.0
-      semver: 7.5.4
+      semver: 7.6.0
       validate-npm-package-name: 5.0.0
     dev: true
 
@@ -7021,7 +7025,7 @@ packages:
       npm-install-checks: 6.3.0
       npm-normalize-package-bin: 3.0.1
       npm-package-arg: 11.0.1
-      semver: 7.5.4
+      semver: 7.6.0
     dev: true
 
   /npm-registry-fetch@16.1.0:
@@ -7838,6 +7842,14 @@ packages:
     dependencies:
       lru-cache: 6.0.0
 
+  /semver@7.6.0:
+    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      lru-cache: 6.0.0
+    dev: true
+
   /set-function-length@1.2.0:
     resolution: {integrity: sha512-4DBHDoyHlM1IRPGYcoxexgh67y4ueR53FKV1yyxwFMY7aCqcN/38M1+SwZ/qJQ8iLv7+ck385ot4CcisOAPT9w==}
     engines: {node: '>= 0.4'}
@@ -7863,6 +7875,12 @@ packages:
     resolution: {integrity: sha512-S5FV55ZH8zLicVyqlJZj8LYqh/VuUICDDNG/L9eDM9I4d69EX+FbgSnKRIuJIwLrmJfTiPoGVnH1HsHX5whP/g==}
     dependencies:
       '@shikijs/core': 1.0.0-beta.5
+    dev: false
+
+  /shiki@1.0.0-rc.0:
+    resolution: {integrity: sha512-aeEjERF5qeK+YChgEv94LOjcEcjZBLd0acPaHginz0N8FvyTn2iSLhO0AtoqfvlZ8cWGCJRKLWtDApnQVQB6/Q==}
+    dependencies:
+      '@shikijs/core': 1.0.0-rc.0
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -8231,8 +8249,8 @@ packages:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  /taze@0.13.2:
-    resolution: {integrity: sha512-G2S3f4kFjcYu0Xdxv/vgx5NmPuJAhhI16weQs0P8J/pjCo4Ieip37k1/TPg32pgggLq1GQtwlDuAui/LQ+XH9g==}
+  /taze@0.13.3:
+    resolution: {integrity: sha512-+NgEyx6F+Ydpwo/9JsWdH40wHGrlZIaYjGtcErg21mdynP/dwTCgOa/gkvOZov1U1brJQCdShG0wifesRucr7A==}
     hasBin: true
     dependencies:
       '@antfu/ni': 0.21.12
@@ -8244,7 +8262,7 @@ packages:
       pacote: 17.0.6
       picocolors: 1.0.0
       prompts: 2.4.2
-      semver: 7.5.4
+      semver: 7.6.0
       unconfig: 0.3.11
       yargs: 17.7.2
     transitivePeerDependencies:
