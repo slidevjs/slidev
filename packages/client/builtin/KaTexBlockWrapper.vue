@@ -41,8 +41,8 @@ const props = defineProps({
     default: 1,
   },
   at: {
-    type: Number,
-    default: undefined,
+    type: [String, Number],
+    default: 'flow',
   },
 })
 
@@ -55,7 +55,7 @@ const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  const start = props.at ?? flow?.value.size ?? 0
+  const start = props.at === 'flow' ? (flow?.value.size ?? 0) : +props.at
   const end = start + props.ranges.length - 1
 
   // register to the page click map
