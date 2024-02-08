@@ -1,8 +1,7 @@
-import type { App, DirectiveBinding, InjectionKey, Ref } from 'vue'
-import { computed, watch, watchEffect } from 'vue'
-import type { ClicksFlow, ResolvedClicksInfo } from '@slidev/types'
 import { sum } from '@antfu/utils'
-import { isClicksDisabled } from '../logic/nav'
+import type { ResolvedClicksInfo } from '@slidev/types'
+import type { App, DirectiveBinding, InjectionKey } from 'vue'
+import { computed, watchEffect } from 'vue'
 import {
   CLASS_VCLICK_CURRENT,
   CLASS_VCLICK_FADE,
@@ -15,6 +14,7 @@ import {
   injectionClicksFlow,
   injectionClicksMap,
 } from '../constants'
+import { isClicksDisabled } from '../logic/nav'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -28,42 +28,23 @@ export default function createDirectives() {
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir)
+          if (resolved == null)
             return
 
-          if (dir.value === false || dir.value === 'false')
-            return
-
-          const flow = dirInject(dir, injectionClicksFlow)
-          const clicks = dirInject(dir, injectionClicks)
-          const clicksMap = dirInject(dir, injectionClicksMap)
-
-          if (!flow || !clicks || !clicksMap)
-            return
-
-          const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
-          const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
-
-          if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
-            flow.value.set(el, 1)
-          const resolvedClick = resolveClick(dir.value, hide, flow.value, clicks)
-          clicksMap.value.set(el, resolvedClick)
-
-          const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
-
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           watchEffect(() => {
-            const active = resolvedClick.isActive.value
-            const current = resolvedClick.isCurrent.value
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
             const prior = active && !current
 
-            if (hide) {
-              el.classList.toggle(CLASS_HIDE, active)
+            if (resolved.clickHide) {
+              el.classList.toggle(resolved.CLASS_HIDE, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(CLASS_HIDE, !active)
+              el.classList.toggle(resolved.CLASS_HIDE, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -78,49 +59,28 @@ export default function createDirectives() {
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir, true)
+          if (resolved == null)
             return
 
-          if (dir.value === false || dir.value === 'false')
-            return
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          const flow = dirInject(dir, injectionClicksFlow)
-          const clicks = dirInject(dir, injectionClicks)
-          const clicksMap = dirInject(dir, injectionClicksMap)
+          watchEffect(() => {
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
+            const prior = active && !current
 
-          if (!flow || !clicks || !clicksMap)
-            return
+            if (resolved.clickHide) {
+              el.classList.toggle(resolved.CLASS_HIDE, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+            }
+            else {
+              el.classList.toggle(resolved.CLASS_HIDE, !active)
+            }
 
-          const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
-          const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
-
-          const resolvedClick = resolveClick(dir.value, true, flow.value, clicks)
-          clicksMap.value.set(el, resolvedClick)
-
-          const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
-
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-
-          watch(
-            clicks,
-            () => {
-              const active = resolvedClick.isActive.value
-              const current = resolvedClick.isCurrent.value
-              const prior = active && !current
-
-              if (hide) {
-                el.classList.toggle(CLASS_HIDE, active)
-                el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-              }
-              else {
-                el.classList.toggle(CLASS_HIDE, !active)
-              }
-
-              el.classList.toggle(CLASS_VCLICK_CURRENT, current)
-              el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
-            },
-            { immediate: true },
-          )
+            el.classList.toggle(CLASS_VCLICK_CURRENT, current)
+            el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
+          })
         },
         unmounted,
       })
@@ -130,45 +90,23 @@ export default function createDirectives() {
         name: 'v-click-hide',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir, false, true)
+          if (resolved == null)
             return
 
-          if (dir.value === false || dir.value === 'false')
-            return
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          const flow = dirInject(dir, injectionClicksFlow)
-          const clicks = dirInject(dir, injectionClicks)
-          const clicksMap = dirInject(dir, injectionClicksMap)
+          watchEffect(() => {
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
+            const prior = active && !current
 
-          if (!flow || !clicks || !clicksMap)
-            return
+            el.classList.toggle(resolved.CLASS_HIDE, active)
+            el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
-          const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
-
-          if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
-            flow.value.set(el, 1)
-          const resolvedClick = resolveClick(dir.value, true, flow.value, clicks)
-          clicksMap.value.set(el, resolvedClick)
-
-          const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
-
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-
-          watch(
-            clicks,
-            () => {
-              const active = resolvedClick.isActive.value
-              const current = resolvedClick.isCurrent.value
-              const prior = active && !current
-
-              el.classList.toggle(CLASS_HIDE, active)
-              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-
-              el.classList.toggle(CLASS_VCLICK_CURRENT, current)
-              el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
-            },
-            { immediate: true },
-          )
+            el.classList.toggle(CLASS_VCLICK_CURRENT, current)
+            el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
+          })
         },
         unmounted,
       })
@@ -188,14 +126,40 @@ function isCurrent(thisClick: number | [number, number], clicks: number) {
     : thisClick === clicks
 }
 
-type ClickInfo = Required<ResolvedClicksInfo>
+type ClickInfo = null | (Required<ResolvedClicksInfo> & {
+  clickHide: boolean
+  CLASS_HIDE: string
+})
 
-function resolveClick(value: any, hide: boolean, flow: ClicksFlow, clicks: Ref<number>): ClickInfo {
+function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, clickHide = false): ClickInfo {
+  if (!el || isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+    return null
+
+  if (dir.value === false || dir.value === 'false')
+    return null
+
+  const flow = dirInject(dir, injectionClicksFlow)
+  const clicks = dirInject(dir, injectionClicks)
+  const clicksMap = dirInject(dir, injectionClicksMap)
+
+  if (!flow || !clicks || !clicksMap)
+    return null
+
+  clickHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
+  const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+
+  const value = dir.value
+
+  if (!clickAfter) {
+    if (value == null || value === true || value === 'true' || value === 'flow')
+      flow.value.set(el, 1)
+  }
+
   let thisClick: number | [number, number]
   let maxClick: number
   if (value == null || value === true || value === 'true' || value === 'flow') {
     // flow
-    thisClick = sum(...flow.values())
+    thisClick = sum(...flow.value.values())
     maxClick = thisClick
   }
   else if (Array.isArray(value)) {
@@ -209,16 +173,20 @@ function resolveClick(value: any, hide: boolean, flow: ClicksFlow, clicks: Ref<n
     maxClick = thisClick
   }
 
-  return {
+  const resolved = {
     max: maxClick,
     isActive: computed(() => isActive(thisClick, clicks.value)),
     isCurrent: computed(() => isCurrent(thisClick, clicks.value)),
-    shows: computed(() => hide ? !isActive(thisClick, clicks.value) : isActive(thisClick, clicks.value)),
+    shows: computed(() => clickHide ? !isActive(thisClick, clicks.value) : isActive(thisClick, clicks.value)),
+    clickHide,
+    CLASS_HIDE: fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN,
   }
+  clicksMap.value.set(el, resolved)
+  return resolved
 }
 
 function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
-  el?.classList.toggle(CLASS_VCLICK_TARGET, false)
+  el.classList.toggle(CLASS_VCLICK_TARGET, false)
   const elements = dirInject(dir, injectionClicksFlow)
   elements?.value.delete(el)
 }
