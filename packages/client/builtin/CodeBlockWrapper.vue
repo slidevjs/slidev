@@ -12,7 +12,6 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
-import { range } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
@@ -64,10 +63,9 @@ onMounted(() => {
   const id = makeId()
   maxMap?.value.set(id, end)
   onUnmounted(() => maxMap?.value.delete(id), vm)
-  if (props.at == null && flow?.value) {
-    const ids = range(props.ranges.length - 1).map(i => id + i)
-    ids.forEach(id => flow.value.add(id))
-    onUnmounted(() => ids.forEach(id => flow.value.delete(id)), vm)
+  if (props.at === 'flow' && flow?.value) {
+    flow.value.set(id, props.ranges.length - 1)
+    onUnmounted(() => flow.value.delete(id), vm)
   }
 
   const index = computed(() => {

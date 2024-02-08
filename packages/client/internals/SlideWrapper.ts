@@ -15,8 +15,8 @@ export default defineComponent({
       default: false,
     },
     clicksFlow: {
-      type: Set,
-      default: () => new Set(),
+      type: Map,
+      default: () => new Map(),
     },
     clicksMaxMap: {
       type: Map,

@@ -75,6 +75,6 @@ export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
 
-export type ClicksFlow = Set<Element | string>
+export type ClicksFlow = Map<Element | string, number>
 
 export type ClicksMaxMap = Map<Element | string, number>

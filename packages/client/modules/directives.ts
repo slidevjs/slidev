@@ -1,6 +1,7 @@
 import type { App, DirectiveBinding, InjectionKey } from 'vue'
 import { watch, watchEffect } from 'vue'
 import type { ClicksFlow } from '@slidev/types'
+import { sum } from '@antfu/utils'
 import { isClicksDisabled } from '../logic/nav'
 import {
   CLASS_VCLICK_CURRENT,
@@ -48,7 +49,7 @@ export default function createDirectives() {
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
           if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
-            flow.value.add(el)
+            flow.value.set(el, 1)
           const { thisClick, maxClick } = resolveClick(dir.value, flow.value)
           maxMap.value.set(el, maxClick)
 
@@ -142,7 +143,7 @@ export default function createDirectives() {
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
           if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
-            flow.value.add(el)
+            flow.value.set(el, 1)
           const { thisClick, maxClick } = resolveClick(dir.value, flow.value)
           maxMap.value.set(el, maxClick)
 
@@ -175,9 +176,10 @@ export default function createDirectives() {
 function resolveClick(dir: any, flow: ClicksFlow) {
   if (dir == null || dir === true || dir === 'true' || dir === 'flow') {
     // flow
+    const thisClick = sum(...flow.values())
     return {
-      thisClick: flow.size,
-      maxClick: flow.size,
+      thisClick,
+      maxClick: thisClick,
     }
   }
   else if (Array.isArray(dir)) {

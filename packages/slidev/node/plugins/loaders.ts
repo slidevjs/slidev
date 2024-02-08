@@ -318,7 +318,7 @@ export function createSlidesLoader(
                       id: ${pageNo},
                       no: ${no},
                     },
-                    __clicksFlow: new Set(),
+                    __clicksFlow: new Map(),
                     __clicksMaxMap: reactive(new Map()),
                     __preloaded: false,
                   })`,

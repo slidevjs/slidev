@@ -9,7 +9,7 @@ import PrintSlideClick from './PrintSlideClick.vue'
 
 const props = defineProps<{ route: RouteRecordRaw }>()
 
-const clicksFlow = ref(props.route.meta?.__clicksFlow ?? new Set()) as Ref<ClicksFlow>
+const clicksFlow = ref(props.route.meta?.__clicksFlow ?? new Map()) as Ref<ClicksFlow>
 const clicksMaxMap = props.route.meta?.__clicksMaxMap ?? reactive(new Map()) as ClicksMaxMap
 
 const route = computed(() => props.route)
@@ -25,6 +25,6 @@ const nav = useNav(route)
     :route="route"
   />
   <template v-if="!isClicksDisabled">
-    <PrintSlideClick v-for="i of nav.clicks" :key="i" :clicks="i" :nav="nav" :route="route" />
+    <PrintSlideClick v-for="i of nav.clicksTotal.value" :key="i" :clicks="i" :nav="nav" :route="route" />
   </template>
 </template>

@@ -48,7 +48,7 @@ export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.m
 export const clicksFlow = computed<ClicksFlow>(() => {
   // eslint-disable-next-line no-unused-expressions
   routeForceRefresh.value
-  return currentRoute.value?.meta?.__clicksFlow ?? new Set()
+  return currentRoute.value?.meta?.__clicksFlow ?? new Map()
 })
 
 export const clicksTotal = computed<number>(() => {
