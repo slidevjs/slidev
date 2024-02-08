@@ -100,7 +100,7 @@ context('Basic', () => {
       .should('eq', 'http://localhost:3030/9?clicks=1')
 
     cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'CDE')
+      .should('have.text', 'CD')
 
     cy.get('body')
       .type('{RightArrow}')
