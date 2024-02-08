@@ -96,8 +96,7 @@ export default function createDirectives() {
 
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-          const { thisClick, maxClick } = resolveClick(dir.value, flow.value)
-          maxMap.value.set(el, maxClick)
+          const thisClick = flow.value.size
 
           const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
 

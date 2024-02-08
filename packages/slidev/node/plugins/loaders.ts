@@ -309,7 +309,6 @@ export function createSlidesLoader(
                     layout: computed(() => frontmatter.layout),
                     transition: computed(() => frontmatter.transition),
                     class: computed(() => frontmatter.class),
-                    clicks: computed(() => frontmatter.clicks),
                     name: computed(() => frontmatter.name),
                     preload: computed(() => frontmatter.preload),
                     slide: {
