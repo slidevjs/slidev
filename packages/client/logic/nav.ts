@@ -54,8 +54,8 @@ export const clicksFlow = computed<ClicksFlow>(() => {
 export const clicksTotal = computed<number>(() => {
   // eslint-disable-next-line no-unused-expressions
   routeForceRefresh.value
-  const maxMap = currentRoute.value?.meta?.__clicksMaxMap
-  return currentRoute.value?.meta?.clicks ?? Math.max(maxMap?.size ? Math.max(...maxMap.values()) : 0)
+  const clicksMap = currentRoute.value?.meta?.__clicksMap
+  return currentRoute.value?.meta?.clicks ?? Math.max(clicksMap?.size ? Math.max(...clicksMap.values()) : 0)
 })
 
 export const clicks = computed<number>({

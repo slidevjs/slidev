@@ -64,7 +64,7 @@ function onAfterLeave() {
         v-show="route === currentRoute"
         :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
         :clicks-flow="route.meta?.__clicksFlow"
-        :clicks-max-map="route.meta?.__clicksMaxMap"
+        :clicks-map="route.meta?.__clicksMap"
         :clicks-disabled="false"
         :class="getSlideClass(route)"
         :route="route"

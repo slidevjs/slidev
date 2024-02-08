@@ -18,7 +18,7 @@ import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watc
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMaxMap } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap } from '../constants'
 
 const props = defineProps({
   ranges: {
@@ -50,7 +50,7 @@ const props = defineProps({
 const clicks = inject(injectionClicks)
 const disabled = inject(injectionClicksDisabled)
 const flow = inject(injectionClicksFlow)
-const maxMap = inject(injectionClicksMaxMap)
+const clicksMap = inject(injectionClicksMap)
 
 const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
@@ -61,8 +61,8 @@ onMounted(() => {
 
   // register to the page click map
   const id = makeId()
-  maxMap?.value.set(id, end)
-  onUnmounted(() => maxMap?.value.delete(id), vm)
+  clicksMap?.value.set(id, end)
+  onUnmounted(() => clicksMap?.value.delete(id), vm)
   if (props.at === 'flow' && flow?.value) {
     flow.value.set(id, props.ranges.length - 1)
     onUnmounted(() => flow.value.delete(id), vm)

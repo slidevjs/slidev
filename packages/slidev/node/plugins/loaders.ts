@@ -320,7 +320,7 @@ export function createSlidesLoader(
                       no: ${no},
                     },
                     __clicksFlow: new Map(),
-                    __clicksMaxMap: reactive(new Map()),
+                    __clicksMap: reactive(new Map()),
                     __preloaded: false,
                   })`,
                   'export default frontmatter',

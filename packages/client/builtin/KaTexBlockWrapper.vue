@@ -23,7 +23,7 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { parseRangeString } from '@slidev/parser'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMaxMap } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap } from '../constants'
 import { makeId } from '../logic/utils'
 
 const props = defineProps({
@@ -48,7 +48,7 @@ const props = defineProps({
 const clicks = inject(injectionClicks)
 const disabled = inject(injectionClicksDisabled)
 const flow = inject(injectionClicksFlow)
-const maxMap = inject(injectionClicksMaxMap)
+const clicksMap = inject(injectionClicksMap)
 
 const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
@@ -59,8 +59,8 @@ onMounted(() => {
 
   // register to the page click map
   const id = makeId()
-  maxMap?.value.set(id, end)
-  onUnmounted(() => maxMap?.value.delete(id), vm)
+  clicksMap?.value.set(id, end)
+  onUnmounted(() => clicksMap?.value.delete(id), vm)
   if (props.at === 'flow' && flow?.value) {
     flow.value.set(id, props.ranges.length - 1)
     onUnmounted(() => flow.value.delete(id), vm)

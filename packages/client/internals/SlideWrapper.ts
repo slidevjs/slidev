@@ -1,7 +1,7 @@
 import { useVModel } from '@vueuse/core'
 import { computed, defineComponent, h, provide, reactive, ref, toRef } from 'vue'
 import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMaxMap, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
@@ -18,7 +18,7 @@ export default defineComponent({
       type: Map,
       default: () => new Map(),
     },
-    clicksMaxMap: {
+    clicksMap: {
       type: Map,
       default: () => reactive(new Map()),
     },
@@ -43,7 +43,7 @@ export default defineComponent({
     const clicks = useVModel(props, 'clicks', emit)
     const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
     const clicksFlow = useVModel(props, 'clicksFlow', emit)
-    const clicksMaxMap = useVModel(props, 'clicksMaxMap', emit)
+    const clicksMap = useVModel(props, 'clicksMap', emit)
 
     const clicksWithDisable = computed({
       get() {
@@ -63,7 +63,7 @@ export default defineComponent({
     provide(injectionClicks, clicksWithDisable)
     provide(injectionClicksDisabled, clicksDisabled)
     provide(injectionClicksFlow, clicksFlow as any)
-    provide(injectionClicksMaxMap, clicksMaxMap as any)
+    provide(injectionClicksMap, clicksMap as any)
   },
   render() {
     if (this.$props.is)

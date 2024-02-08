@@ -1,7 +1,7 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import type { TransitionGroupProps } from 'vue'
-import type { ClicksMaxMap } from 'packages/types'
+import type { ClicksMap } from 'packages/types'
 import type { ClicksFlow } from '@slidev/types'
 import Play from './internals/Play.vue'
 import Print from './internals/Print.vue'
@@ -104,7 +104,7 @@ declare module 'vue-router' {
 
     // private fields
     __clicksFlow: ClicksFlow
-    __clicksMaxMap: ClicksMaxMap
+    __clicksMap: ClicksMap
     __preloaded?: boolean
   }
 }

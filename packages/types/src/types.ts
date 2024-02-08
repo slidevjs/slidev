@@ -77,4 +77,4 @@ export type LoadedSnippets = Record<string, string>
 
 export type ClicksFlow = Map<Element | string, number>
 
-export type ClicksMaxMap = Map<Element | string, number>
+export type ClicksMap = Map<Element | string, number>

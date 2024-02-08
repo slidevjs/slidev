@@ -13,7 +13,7 @@ import {
   injectionClicks,
   injectionClicksDisabled,
   injectionClicksFlow,
-  injectionClicksMaxMap,
+  injectionClicksMap,
 } from '../constants'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
@@ -36,9 +36,9 @@ export default function createDirectives() {
 
           const flow = dirInject(dir, injectionClicksFlow)
           const clicks = dirInject(dir, injectionClicks)
-          const maxMap = dirInject(dir, injectionClicksMaxMap)
+          const clicksMap = dirInject(dir, injectionClicksMap)
 
-          if (!flow || !clicks || !maxMap)
+          if (!flow || !clicks || !clicksMap)
             return
 
           const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
@@ -47,7 +47,7 @@ export default function createDirectives() {
           if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
             flow.value.set(el, 1)
           const { thisClick, maxClick } = resolveClick(dir.value, flow.value)
-          maxMap.value.set(el, maxClick)
+          clicksMap.value.set(el, maxClick)
 
           const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
 
@@ -86,9 +86,9 @@ export default function createDirectives() {
 
           const flow = dirInject(dir, injectionClicksFlow)
           const clicks = dirInject(dir, injectionClicks)
-          const maxMap = dirInject(dir, injectionClicksMaxMap)
+          const clicksMap = dirInject(dir, injectionClicksMap)
 
-          if (!flow || !clicks || !maxMap)
+          if (!flow || !clicks || !clicksMap)
             return
 
           const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
@@ -137,9 +137,9 @@ export default function createDirectives() {
 
           const flow = dirInject(dir, injectionClicksFlow)
           const clicks = dirInject(dir, injectionClicks)
-          const maxMap = dirInject(dir, injectionClicksMaxMap)
+          const clicksMap = dirInject(dir, injectionClicksMap)
 
-          if (!flow || !clicks || !maxMap)
+          if (!flow || !clicks || !clicksMap)
             return
 
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
@@ -147,7 +147,7 @@ export default function createDirectives() {
           if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
             flow.value.set(el, 1)
           const { thisClick, maxClick } = resolveClick(dir.value, flow.value)
-          maxMap.value.set(el, maxClick)
+          clicksMap.value.set(el, maxClick)
 
           const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
 

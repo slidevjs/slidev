@@ -2,7 +2,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, reactive, ref } from 'vue'
 import type { Ref } from 'vue'
-import type { ClicksFlow, ClicksMaxMap } from '@slidev/types'
+import type { ClicksFlow, ClicksMap } from '@slidev/types'
 import { useNav } from '../composables/useNav'
 import { isClicksDisabled } from '../logic/nav'
 import PrintSlideClick from './PrintSlideClick.vue'
@@ -10,7 +10,7 @@ import PrintSlideClick from './PrintSlideClick.vue'
 const props = defineProps<{ route: RouteRecordRaw }>()
 
 const clicksFlow = ref(props.route.meta?.__clicksFlow ?? new Map()) as Ref<ClicksFlow>
-const clicksMaxMap = props.route.meta?.__clicksMaxMap ?? reactive(new Map()) as ClicksMaxMap
+const clicksMap = props.route.meta?.__clicksMap ?? reactive(new Map()) as ClicksMap
 
 const route = computed(() => props.route)
 const nav = useNav(route)
@@ -19,7 +19,7 @@ const nav = useNav(route)
 <template>
   <PrintSlideClick
     v-model:clicks-flow="clicksFlow"
-    v-model:clicks-max-map="clicksMaxMap"
+    v-model:clicks-map="clicksMap"
     :clicks="0"
     :nav="nav"
     :route="route"
