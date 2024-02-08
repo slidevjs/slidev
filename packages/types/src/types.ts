@@ -1,3 +1,4 @@
+import type { ComputedRef } from '@vue/reactivity'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -75,6 +76,15 @@ export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
 
-export type ClicksFlow = Map<Element | string, number>
+export type ClicksElement = Element | string
 
-export type ClicksMap = Map<Element | string, number>
+export type ClicksFlow = Map<ClicksElement, number>
+
+export interface ResolvedClicksInfo {
+  max: number
+  isCurrent?: ComputedRef<boolean>
+  isActive?: ComputedRef<boolean>
+  shows?: ComputedRef<boolean>
+}
+
+export type ClicksMap = Map<ClicksElement, ResolvedClicksInfo>

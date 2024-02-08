@@ -59,7 +59,7 @@ onMounted(() => {
 
   // register to the page click map
   const id = makeId()
-  clicksMap?.value.set(id, end)
+  clicksMap?.value.set(id, { max: end })
   onUnmounted(() => clicksMap?.value.delete(id), vm)
   if (props.at === 'flow' && flow?.value) {
     flow.value.set(id, props.ranges.length - 1)
