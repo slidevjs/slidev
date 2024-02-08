@@ -26,7 +26,7 @@ export function useNavClicks(
     return currentRoute.value?.meta?.__clicksFlow ?? new Map()
   })
 
-  const clicksTotal = computed(() => sum(...clicksFlow.value.values()))
+  const clicksTotal = computed(() => currentRoute.value?.meta?.clicks ?? sum(...clicksFlow.value.values()))
 
   const hasNext = computed(() => currentPage.value < rawRoutes.length - 1 || clicks.value < clicksTotal.value)
   const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)

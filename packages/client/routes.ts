@@ -82,6 +82,7 @@ declare module 'vue-router' {
     layout: string
     name?: string
     class?: string
+    clicks?: number
     transition?: string | TransitionGroupProps | undefined
     preload?: boolean
 
