@@ -10,7 +10,7 @@ import { injectionClicks, injectionCurrentPage, injectionSlidevContext } from '.
 import { useContext } from '../composables/useContext'
 
 export type SlidevContextNavKey = 'path' | 'total' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide' | 'rawRoutes' | 'go'
-export type SlidevContextNavClicksKey = 'clicks' | 'clicksElements' | 'clicksTotal' | 'hasNext' | 'hasPrev'
+export type SlidevContextNavClicksKey = 'clicks' | 'clicksFlow' | 'clicksTotal' | 'hasNext' | 'hasPrev'
 
 export interface SlidevContextNav extends Pick<typeof nav, SlidevContextNavKey> {
   route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>

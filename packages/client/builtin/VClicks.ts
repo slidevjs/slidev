@@ -18,7 +18,7 @@ export default defineComponent({
       default: 1,
     },
     every: {
-      type: Number,
+      type: [Number, String],
       default: 1,
     },
     at: {
@@ -88,27 +88,22 @@ export default defineComponent({
       const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i) || i.type === Comment)
           return i
-        const directive = idx % this.every === 0 ? click : after
+        const directive = idx % +this.every === 0 ? click : after
         let vNode
-        let childCount = 0
         if (depth < +this.depth && Array.isArray(i.children)) {
           const [vNodes, total] = mapSubList(i.children, depth)
           vNode = h(i, {}, [vNodes])
-          childCount = total
           idx += total + 1
         }
         else {
           vNode = h(i)
           idx++
         }
-        const delta = this.at != null
-          ? Number(this.at) + Math.floor(globalIdx / this.every) + depth
-          : (depth - 1 - childCount).toString()
         globalIdx++
         return applyDirective(
           vNode,
           directive,
-          (typeof delta === 'string' && !delta.startsWith('-')) ? `+${delta}` : delta,
+          this.at == null ? 'flow' : +this.at + Math.floor(globalIdx / +this.every) + depth,
         )
       })
       return [vNodes, idx]

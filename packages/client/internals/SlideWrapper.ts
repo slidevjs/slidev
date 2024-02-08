@@ -1,7 +1,7 @@
 import { useVModel } from '@vueuse/core'
-import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
+import { computed, defineComponent, h, provide, reactive, ref, toRef } from 'vue'
 import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRenderContext, injectionRoute } from '../constants'
+import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMaxMap, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
@@ -10,17 +10,17 @@ export default defineComponent({
       type: [Number, String],
       default: 0,
     },
-    clicksElements: {
-      type: Array,
-      default: () => [] as Element[],
-    },
-    clicksOrderMap: {
-      type: Map,
-      default: () => new Map<number, HTMLElement[]>(),
-    },
     clicksDisabled: {
       type: Boolean,
       default: false,
+    },
+    clicksFlow: {
+      type: Set,
+      default: () => new Set(),
+    },
+    clicksMaxMap: {
+      type: Map,
+      default: () => reactive(new Map()),
     },
     renderContext: {
       type: String,
@@ -41,11 +41,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const clicks = useVModel(props, 'clicks', emit)
-    const clicksElements = useVModel(props, 'clicksElements', emit)
     const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-    const clicksOrderMap = useVModel(props, 'clicksOrderMap', emit)
-
-    clicksElements.value.length = 0
+    const clicksFlow = useVModel(props, 'clicksFlow', emit)
+    const clicksMaxMap = useVModel(props, 'clicksMaxMap', emit)
 
     const clicksWithDisable = computed({
       get() {
@@ -64,8 +62,8 @@ export default defineComponent({
     provide(injectionActive, toRef(props, 'active'))
     provide(injectionClicks, clicksWithDisable)
     provide(injectionClicksDisabled, clicksDisabled)
-    provide(injectionClicksElements, clicksElements as any)
-    provide(injectionOrderMap, clicksOrderMap as any)
+    provide(injectionClicksFlow, clicksFlow as any)
+    provide(injectionClicksMaxMap, clicksMaxMap as any)
   },
   render() {
     if (this.$props.is)

@@ -2,6 +2,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, provide, reactive, shallowRef } from 'vue'
 import { useVModel } from '@vueuse/core'
+import type { ClicksFlow, ClicksMaxMap } from '@slidev/types'
 import { useNavClicks } from '../composables/useNavClicks'
 import { injectionSlidevContext } from '../constants'
 import { isClicksDisabled } from '../logic/nav'
@@ -18,14 +19,16 @@ import GlobalBottom from '/@slidev/global-components/bottom'
 
 const props = defineProps<{
   clicks: number
-  clicksElements?: HTMLElement[]
+  clicksFlow?: ClicksFlow
+  clicksMaxMap?: ClicksMaxMap
   nav: SlidevContextNav
   route: RouteRecordRaw
 }>()
 
-const emit = defineEmits(['update:clicksElements'])
+const emit = defineEmits(['update:clicksFlow'])
 
-const clicksElements = useVModel(props, 'clicksElements', emit)
+const clicksFlow = useVModel(props, 'clicksFlow', emit)
+const clicksMaxMap = useVModel(props, 'clicksMaxMap', emit)
 
 const style = computed(() => ({
   height: `${slideHeight}px`,
@@ -53,7 +56,8 @@ provide(injectionSlidevContext, reactive({
 
     <SlideWrapper
       :is="route?.component!"
-      v-model:clicks-elements="clicksElements"
+      v-model:clicks-flow="clicksFlow"
+      v-model:clicks-max-map="clicksMaxMap"
       :clicks="isClicksDisabled ? undefined : clicks"
       :clicks-disabled="isClicksDisabled"
       :class="getSlideClass(route)"

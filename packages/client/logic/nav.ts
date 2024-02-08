@@ -1,7 +1,7 @@
 import type { Ref, TransitionGroupProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
-import type { TocItem } from '@slidev/types'
+import type { ClicksFlow, TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
@@ -45,10 +45,17 @@ export const currentLayout = computed(() => currentRoute.value?.meta?.layout || 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
-export const clicksElements = computed<HTMLElement[]>(() => {
+export const clicksFlow = computed<ClicksFlow>(() => {
   // eslint-disable-next-line no-unused-expressions
   routeForceRefresh.value
-  return currentRoute.value?.meta?.__clicksElements || []
+  return currentRoute.value?.meta?.__clicksFlow ?? new Set()
+})
+
+export const clicksTotal = computed<number>(() => {
+  // eslint-disable-next-line no-unused-expressions
+  routeForceRefresh.value
+  const maxMap = currentRoute.value?.meta?.__clicksMaxMap
+  return Math.max(maxMap?.size ? Math.max(...maxMap.values()) : 0)
 })
 
 export const clicks = computed<number>({
@@ -64,8 +71,6 @@ export const clicks = computed<number>({
     queryClicks.value = v.toString()
   },
 })
-
-export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? clicksElements.value.length))
 
 export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
 export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)

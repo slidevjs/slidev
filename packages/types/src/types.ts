@@ -74,3 +74,7 @@ export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPre
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
+
+export type ClicksFlow = Set<Element | string>
+
+export type ClicksMaxMap = Map<Element | string, number>

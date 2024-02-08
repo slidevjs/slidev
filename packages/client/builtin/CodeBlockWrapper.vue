@@ -12,17 +12,23 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
-import { range, remove } from '@antfu/utils'
+import { range } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import type { PropType } from 'vue'
 import { configs } from '../env'
-import { CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksElements } from '../constants'
 import { makeId } from '../logic/utils'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMaxMap } from '../constants'
 
 const props = defineProps({
   ranges: {
+    type: Array as PropType<string[]>,
     default: () => [],
+  },
+  finally: {
+    type: [String, Number],
+    default: 'last',
   },
   startLine: {
     type: Number,
@@ -43,38 +49,53 @@ const props = defineProps({
 })
 
 const clicks = inject(injectionClicks)
-const elements = inject(injectionClicksElements)
 const disabled = inject(injectionClicksDisabled)
+const flow = inject(injectionClicksFlow)
+const maxMap = inject(injectionClicksMaxMap)
 
 const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  const prev = props.at == null ? elements?.value.length : props.at
+  const start = props.at ?? flow?.value.size ?? 0
+  const end = start + props.ranges.length - 1
+
+  // register to the page click map
+  const id = makeId()
+  maxMap?.value.set(id, end)
+  onUnmounted(() => maxMap?.value.delete(id), vm)
+  if (props.at == null && flow?.value) {
+    const ids = range(props.ranges.length - 1).map(i => id + i)
+    ids.forEach(id => flow.value.add(id))
+    onUnmounted(() => ids.forEach(id => flow.value.delete(id)), vm)
+  }
+
   const index = computed(() => {
     if (disabled?.value)
       return props.ranges.length - 1
-    return Math.min(Math.max(0, (clicks?.value || 0) - (prev || 0)), props.ranges.length - 1)
+    return Math.max(0, (clicks?.value ?? 0) - start)
   })
-  const rangeStr = computed(() => props.ranges[index.value] || '')
-  if (props.ranges.length >= 2 && !disabled?.value) {
-    const id = makeId()
-    const ids = range(props.ranges.length - 1).map(i => id + i)
-    if (elements?.value) {
-      elements.value.push(...ids)
-      onUnmounted(() => ids.forEach(i => remove(elements.value, i)), vm)
-    }
-  }
+
+  const finallyRange = computed(() => {
+    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+  })
 
   watchEffect(() => {
     if (!el.value)
       return
+
+    let rangeStr = props.ranges[index.value] ?? finallyRange.value
+    const hide = rangeStr === 'hide'
+    el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+    if (hide)
+      rangeStr = props.ranges[index.value + 1] ?? finallyRange.value
+
     const isDuoTone = el.value.querySelector('.shiki-dark')
     const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
     const startLine = props.startLine
     for (const target of targets) {
       const lines = Array.from(target.querySelectorAll('code > .line'))
-      const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr.value)
+      const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr)
       lines.forEach((line, idx) => {
         const highlighted = highlights.includes(idx + startLine)
         line.classList.toggle(CLASS_VCLICK_TARGET, true)
