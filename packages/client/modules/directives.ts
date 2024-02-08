@@ -42,10 +42,6 @@ export default function createDirectives() {
             return
 
           const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
-
-          if (hide)
-            console.warn('[slidev] `v-click.hide` is deprecated, use `v-click-hide` instead.')
-
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
           if (dir.value == null || dir.value === true || dir.value === 'true' || dir.value === 'flow')
@@ -95,6 +91,7 @@ export default function createDirectives() {
           if (!flow || !clicks || !maxMap)
             return
 
+          const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
           const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
           const thisClick = flow.value.size
@@ -106,12 +103,17 @@ export default function createDirectives() {
           watch(
             clicks,
             () => {
-              const show = isActive(thisClick, clicks.value)
+              const active = isActive(thisClick, clicks.value)
               const current = isCurrent(thisClick, clicks.value)
-              const prior = show && !current
+              const prior = active && !current
 
-              if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                el.classList.toggle(CLASS_HIDE, !show)
+              if (hide) {
+                el.classList.toggle(CLASS_HIDE, active)
+                el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+              }
+              else {
+                el.classList.toggle(CLASS_HIDE, !active)
+              }
 
               el.classList.toggle(CLASS_VCLICK_CURRENT, current)
               el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
