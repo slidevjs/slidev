@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-import { injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
+import { injectionClicks, injectionClicksDisabled, injectionClicksMap, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -13,7 +13,7 @@ const route = inject(injectionRoute)
 const currentContext = inject(injectionRenderContext)
 const clicks = inject(injectionClicks)
 const clicksDisabled = inject(injectionClicksDisabled)
-const clicksFlow = inject(injectionClicksFlow)
+const clicksMap = inject(injectionClicksMap)
 
 const video = ref<HTMLMediaElement>()
 const played = ref(false)
@@ -28,7 +28,7 @@ const matchRoute = computed(() => {
 const matchClick = computed(() => {
   if (!video.value || currentContext?.value !== 'slide' || clicks?.value === undefined || clicksDisabled?.value)
     return false
-  return !clicksFlow?.value.has(video.value) // TODO
+  return clicksMap?.value.get(video.value)?.shows?.value ?? true
 })
 
 const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)
