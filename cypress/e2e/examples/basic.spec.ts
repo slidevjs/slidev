@@ -107,7 +107,7 @@ context('Basic', () => {
       .type('{RightArrow}')
 
     cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'ABCDE')
+      .should('have.text', 'ABCD')
 
     // v-click.hide
     cy.get('body')
