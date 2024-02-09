@@ -38,11 +38,11 @@ export default function setupRoot() {
 
     if (isPresenter.value) {
       patch('page', +currentPage.value)
-      patch('clicks', clicks.value)
+      patch('clicks', clicks.value.current)
     }
     else {
       patch('viewerPage', +currentPage.value)
-      patch('viewerClicks', clicks.value)
+      patch('viewerClicks', clicks.value.current)
     }
 
     patch('lastUpdate', {
@@ -58,7 +58,7 @@ export default function setupRoot() {
     const routePath = router.currentRoute.value.path
     if (!routePath.match(/^\/(\d+|presenter)\/?/))
       return
-    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentPage.value || +clicks.value !== +state.clicks)) {
+    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentPage.value || +clicks.value.current !== +state.clicks)) {
       skipTransition.value = false
       router.replace({
         path: getPath(state.page),

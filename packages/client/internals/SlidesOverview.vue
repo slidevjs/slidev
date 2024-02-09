@@ -5,6 +5,7 @@ import { themeVars } from '../env'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { useFixedClicks } from '../logic/clicks'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
@@ -138,7 +139,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-disabled="true"
+                :clicks="useFixedClicks(route, 99999)[1]"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"

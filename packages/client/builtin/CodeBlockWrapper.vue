@@ -12,14 +12,13 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
-import { sum } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
-import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, inject, onMounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId, safeParseNumber } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks } from '../constants'
 
 const props = defineProps({
   ranges: {
@@ -48,47 +47,44 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicks)
-const disabled = inject(injectionClicksDisabled)
-const flow = inject(injectionClicksFlow)
-const clicksMap = inject(injectionClicksMap)
-
+const clicksRef = inject(injectionClicks)
 const el = ref<HTMLDivElement>()
-const vm = getCurrentInstance()
 
 onMounted(() => {
-  if (!clicks || !disabled || !flow || !clicksMap)
-    return
-
-  const at = props.at === 'flow' ? '+1' : props.at
-  const inFlow = typeof at === 'string' && '+-'.includes(at[0])
-  const start = inFlow
-    ? sum(...flow.value.values()) + safeParseNumber(at)
-    : safeParseNumber(at)
-  const end = start + props.ranges.length - 1
-
-  // register to the page click map
-  const id = makeId()
-  clicksMap.value.set(id, { max: end })
-  onUnmounted(() => clicksMap.value.delete(id), vm)
-  if (inFlow) {
-    flow.value.set(id, props.ranges.length - 1)
-    onUnmounted(() => flow.value.delete(id), vm)
-  }
-
-  const index = computed(() => {
-    if (disabled.value)
-      return props.ranges.length - 1
-    return Math.max(0, clicks.value - start)
-  })
-
-  const finallyRange = computed(() => {
-    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
-  })
-
-  watchEffect(() => {
+  watchEffect((onCleanup) => {
     if (!el.value)
       return
+
+    const clicks = clicksRef?.value
+
+    if (!clicks || clicks.disabled)
+      return
+
+    const at = props.at === 'flow' ? '+1' : props.at
+    const atNum = safeParseNumber(at)
+    const inFlow = typeof at === 'string' && '+-'.includes(at[0])
+    const flowSize = inFlow
+      ? atNum + props.ranges.length - 2
+      : 0
+    const start = inFlow
+      ? clicks.flowSum + atNum - 1
+      : atNum
+    const end = start + props.ranges.length - 1
+
+    // register to the page click map
+    const id = makeId()
+    clicks.register(id, { max: end, flowSize })
+    onCleanup(() => clicks.unregister(id))
+
+    const index = computed(() => {
+      if (clicks.disabled)
+        return props.ranges.length - 1
+      return Math.max(0, clicks.current - start)
+    })
+
+    const finallyRange = computed(() => {
+      return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+    })
 
     let rangeStr = props.ranges[index.value] ?? finallyRange.value
     const hide = rangeStr === 'hide'
@@ -134,11 +130,9 @@ function copyCode() {
 
 <template>
   <div
-    ref="el" class="slidev-code-wrapper relative group"
-    :class="{
+    ref="el" class="slidev-code-wrapper relative group" :class="{
       'slidev-code-line-numbers': props.lines,
-    }"
-    :style="{
+    }" :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
       '--start': props.startLine,

@@ -20,11 +20,10 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 -->
 
 <script setup lang="ts">
-import { sum } from '@antfu/utils'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { parseRangeString } from '@slidev/parser'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks } from '../constants'
 import { makeId, safeParseNumber } from '../logic/utils'
 
 const props = defineProps({
@@ -46,38 +45,35 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicks)
-const disabled = inject(injectionClicksDisabled)
-const flow = inject(injectionClicksFlow)
-const clicksMap = inject(injectionClicksMap)
+const clicks = inject(injectionClicks)?.value
 
 const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  if (!clicks || !disabled || !flow || !clicksMap)
+  if (!clicks || clicks.disabled)
     return
 
   const at = props.at === 'flow' ? '+1' : props.at
+  const atNum = safeParseNumber(at)
   const inFlow = typeof at === 'string' && '+-'.includes(at[0])
+  const flowSize = inFlow
+    ? atNum + props.ranges.length - 2
+    : 0
   const start = inFlow
-    ? sum(...flow.value.values()) + safeParseNumber(at)
-    : safeParseNumber(at)
+    ? clicks.flowSum + atNum - 1
+    : atNum
   const end = start + props.ranges.length - 1
 
   // register to the page click map
   const id = makeId()
-  clicksMap.value.set(id, { max: end })
-  onUnmounted(() => clicksMap.value.delete(id), vm)
-  if (inFlow) {
-    flow.value.set(id, props.ranges.length - 1)
-    onUnmounted(() => flow.value.delete(id), vm)
-  }
+  clicks.register(id, { max: end, flowSize })
+  onUnmounted(() => clicks.unregister(id), vm)
 
   const index = computed(() => {
-    if (disabled.value)
+    if (clicks.disabled)
       return props.ranges.length - 1
-    return Math.max(0, clicks.value - start)
+    return Math.max(0, clicks.current - start)
   })
 
   const finallyRange = computed(() => {
@@ -130,9 +126,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    ref="el" class="slidev-katex-wrapper"
-  >
+  <div ref="el" class="slidev-katex-wrapper">
     <slot />
   </div>
 </template>

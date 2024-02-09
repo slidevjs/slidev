@@ -1,18 +1,19 @@
 import type { Ref, TransitionGroupProps } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, nextTick, ref, watch } from 'vue'
-import type { ClicksFlow, TocItem } from '@slidev/types'
+import type { TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
+import { usePrimaryClicks } from './clicks'
 
 export { rawRoutes, router }
 
 // force update collected elements when the route is fully resolved
-const routeForceRefresh = ref(0)
+export const routeForceRefresh = ref(0)
 nextTick(() => {
   router.afterEach(async () => {
     await nextTick()
@@ -28,11 +29,25 @@ export const isPrintWithClicks = computed(() => route.value.query.print === 'cli
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 export const isNotesViewer = computed(() => route.value.path.startsWith('/notes'))
-export const isClicksDisabled = computed(() => isPrintMode.value && !isPrintWithClicks.value)
 export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
 
-export const queryClicks = useRouteQuery('clicks', '0')
+const queryClicksRaw = useRouteQuery('clicks', '0')
+export const queryClicks = computed({
+  get() {
+    // eslint-disable-next-line ts/no-use-before-define
+    if (clicks.value.disabled)
+      return 99999
+    let v = +(queryClicksRaw.value || 0)
+    if (Number.isNaN(v))
+      v = 0
+    return v
+  },
+  set(v) {
+    queryClicksRaw.value = v.toString()
+  },
+})
+
 export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
 
@@ -45,38 +60,10 @@ export const currentLayout = computed(() => currentRoute.value?.meta?.layout || 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
-export const clicksFlow = computed<ClicksFlow>(() => {
-  // eslint-disable-next-line no-unused-expressions
-  routeForceRefresh.value
-  return currentRoute.value?.meta?.__clicksFlow ?? new Map()
-})
+export const clicks = computed(() => usePrimaryClicks(currentRoute.value))
 
-export const clicksTotal = computed<number>(() => {
-  // eslint-disable-next-line no-unused-expressions
-  routeForceRefresh.value
-  const clicksMap = currentRoute.value?.meta?.__clicksMap
-  return currentRoute.value?.meta?.clicks
-    ?? Math.max(clicksMap?.size
-      ? Math.max(...[...clicksMap.values()].map(v => v.max))
-      : 0)
-})
-
-export const clicks = computed<number>({
-  get() {
-    if (isClicksDisabled.value)
-      return 99999
-    let clicks = +(queryClicks.value || 0)
-    if (Number.isNaN(clicks))
-      clicks = 0
-    return clicks
-  },
-  set(v) {
-    queryClicks.value = v.toString()
-  },
-})
-
-export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
-export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
+export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value.current < clicks.value.total)
+export const hasPrev = computed(() => currentPage.value > 1 || clicks.value.current > 0)
 
 export const rawTree = computed(() => rawRoutes
   .filter((route: RouteRecordRaw) => route.meta?.slide?.title)
@@ -94,17 +81,17 @@ watch(currentRoute, (next, prev) => {
 })
 
 export function next() {
-  if (clicksTotal.value <= clicks.value)
+  if (clicks.value.total <= queryClicks.value)
     nextSlide()
   else
-    clicks.value += 1
+    queryClicks.value += 1
 }
 
 export async function prev() {
-  if (clicks.value <= 0)
+  if (queryClicks.value <= 0)
     await prevSlide()
   else
-    clicks.value -= 1
+    queryClicks.value -= 1
 }
 
 export function getPath(no: number | string) {
@@ -119,8 +106,8 @@ export function nextSlide() {
 export async function prevSlide(lastClicks = true) {
   const next = Math.max(1, currentPage.value - 1)
   await go(next)
-  if (lastClicks && clicksTotal.value)
-    router.replace({ query: { ...route.value.query, clicks: clicksTotal.value } })
+  if (lastClicks && clicks.value.total)
+    router.replace({ query: { ...route.value.query, clicks: clicks.value.total } })
 }
 
 export function goFirst() {

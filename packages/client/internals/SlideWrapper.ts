@@ -1,26 +1,14 @@
-import { useVModel } from '@vueuse/core'
-import { computed, defineComponent, h, provide, reactive, ref, toRef } from 'vue'
-import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import { defineComponent, h, provide, ref, toRef } from 'vue'
+import type { PropType } from 'vue'
+import type { ClicksContext, RenderContext } from '@slidev/types'
+import { injectionActive, injectionClicks, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
   props: {
     clicks: {
-      type: [Number, String],
-      default: 0,
-    },
-    clicksDisabled: {
-      type: Boolean,
-      default: false,
-    },
-    clicksFlow: {
-      type: Map,
-      default: () => new Map(),
-    },
-    clicksMap: {
-      type: Map,
-      default: () => reactive(new Map()),
+      type: Object as PropType<ClicksContext>,
+      required: true,
     },
     renderContext: {
       type: String,
@@ -39,31 +27,12 @@ export default defineComponent({
       default: undefined,
     },
   },
-  setup(props, { emit }) {
-    const clicks = useVModel(props, 'clicks', emit)
-    const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-    const clicksFlow = useVModel(props, 'clicksFlow', emit)
-    const clicksMap = useVModel(props, 'clicksMap', emit)
-
-    const clicksWithDisable = computed({
-      get() {
-        if (clicksDisabled.value)
-          return 9999999
-        return +clicks.value
-      },
-      set(value) {
-        clicks.value = value
-      },
-    })
-
+  setup(props) {
     provide(injectionRoute, props.route as any)
     provide(injectionCurrentPage, ref(+props.route?.path))
     provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicks, clicksWithDisable)
-    provide(injectionClicksDisabled, clicksDisabled)
-    provide(injectionClicksFlow, clicksFlow as any)
-    provide(injectionClicksMap, clicksMap as any)
+    provide(injectionClicks, toRef(props, 'clicks'))
   },
   render() {
     if (this.$props.is)

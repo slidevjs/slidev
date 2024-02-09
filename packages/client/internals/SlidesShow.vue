@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { clicks, currentRoute, isPresenter, nextRoute, rawRoutes, router, transition } from '../logic/nav'
+import { currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
+import { usePrimaryClicks } from '../logic/clicks'
 import SlideWrapper from './SlideWrapper'
 
 // @ts-expect-error virtual module
@@ -26,12 +27,6 @@ watch(currentRoute, () => {
 }, { immediate: true })
 
 const hasViewTransition = useViewTransition()
-
-// preserve the clicks count for previous slide to avoid flash on transition
-let previousClicks: [string | undefined, number] = [] as any
-router.beforeEach(() => {
-  previousClicks = [currentRoute.value?.path, clicks.value]
-})
 
 const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
@@ -58,20 +53,17 @@ function onAfterLeave() {
     tag="div"
     @after-leave="onAfterLeave"
   >
-    <template v-for="route of loadedRoutes" :key="route.path">
-      <SlideWrapper
-        :is="route?.component as any"
-        v-show="route === currentRoute"
-        :clicks="route === currentRoute ? clicks : route.path === previousClicks[0] ? previousClicks[1] : 0"
-        :clicks-flow="route.meta?.__clicksFlow"
-        :clicks-map="route.meta?.__clicksMap"
-        :clicks-disabled="false"
-        :class="getSlideClass(route)"
-        :route="route"
-        :render-context="renderContext"
-        class="overflow-hidden"
-      />
-    </template>
+    <SlideWrapper
+      :is="route?.component as any"
+      v-for="route of loadedRoutes"
+      v-show="route === currentRoute"
+      :key="route.path"
+      :clicks="usePrimaryClicks(route)"
+      :class="getSlideClass(route)"
+      :route="route"
+      :render-context="renderContext"
+      class="overflow-hidden"
+    />
   </component>
 
   <!-- Global Top -->

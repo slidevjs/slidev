@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
 import { computed, provide, reactive, shallowRef } from 'vue'
-import { useVModel } from '@vueuse/core'
-import type { ClicksFlow, ClicksMap } from '@slidev/types'
-import { useNavClicks } from '../composables/useNavClicks'
+import type { ClicksContext } from '@slidev/types'
 import { injectionSlidevContext } from '../constants'
-import { isClicksDisabled } from '../logic/nav'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../modules/context'
@@ -18,17 +15,10 @@ import GlobalTop from '/@slidev/global-components/top'
 import GlobalBottom from '/@slidev/global-components/bottom'
 
 const props = defineProps<{
-  clicks: number
-  clicksFlow?: ClicksFlow
-  clicksMap?: ClicksMap
+  clicks: ClicksContext
   nav: SlidevContextNav
   route: RouteRecordRaw
 }>()
-
-const emit = defineEmits(['update:clicksFlow'])
-
-const clicksFlow = useVModel(props, 'clicksFlow', emit)
-const clicksMap = useVModel(props, 'clicksMap', emit)
 
 const style = computed(() => ({
   height: `${slideHeight}px`,
@@ -39,12 +29,12 @@ const DrawingPreview = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
 
-const clicks = computed(() => props.clicks)
-const navClicks = useNavClicks(clicks, props.nav.currentRoute, props.nav.currentPage)
-const id = computed(() => `${props.route.path.toString().padStart(3, '0')}-${(clicks.value + 1).toString().padStart(2, '0')}`)
+const id = computed(() =>
+  `${props.route.path.toString().padStart(3, '0')}-${(props.nav.clicks.value.current + 1).toString().padStart(2, '0')}`,
+)
 
 provide(injectionSlidevContext, reactive({
-  nav: { ...props.nav, ...navClicks },
+  nav: props.nav,
   configs,
   themeConfigs: computed(() => configs.themeConfig),
 }))
@@ -54,15 +44,7 @@ provide(injectionSlidevContext, reactive({
   <div :id="id" class="print-slide-container" :style="style">
     <GlobalBottom />
 
-    <SlideWrapper
-      :is="route?.component!"
-      v-model:clicks-flow="clicksFlow"
-      v-model:clicks-map="clicksMap"
-      :clicks="isClicksDisabled ? undefined : clicks"
-      :clicks-disabled="isClicksDisabled"
-      :class="getSlideClass(route)"
-      :route="route"
-    />
+    <SlideWrapper :is="route?.component!" :clicks="clicks" :class="getSlideClass(route)" :route="route" />
     <template
       v-if="
         (__SLIDEV_FEATURE_DRAWINGS__

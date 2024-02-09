@@ -1,4 +1,3 @@
-import { sum } from '@antfu/utils'
 import type { ResolvedClicksInfo } from '@slidev/types'
 import type { App, DirectiveBinding, InjectionKey } from 'vue'
 import { computed, watchEffect } from 'vue'
@@ -10,11 +9,7 @@ import {
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
   injectionClicks,
-  injectionClicksDisabled,
-  injectionClicksFlow,
-  injectionClicksMap,
 } from '../constants'
-import { isClicksDisabled } from '../logic/nav'
 import { safeParseNumber } from '../logic/utils'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
@@ -133,19 +128,15 @@ type ClickInfo = null | (Required<ResolvedClicksInfo> & {
 })
 
 function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, clickHide = false): ClickInfo {
-  if (!el || isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+  const ctx = dirInject(dir, injectionClicks)?.value
+
+  if (!el || !ctx || ctx.disabled)
     return null
 
   let value = dir.value
+  let flowSize = 0
 
   if (value === false || value === 'false')
-    return null
-
-  const flow = dirInject(dir, injectionClicksFlow)
-  const clicks = dirInject(dir, injectionClicks)
-  const clicksMap = dirInject(dir, injectionClicksMap)
-
-  if (!flow || !clicks || !clicksMap)
     return null
 
   clickHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
@@ -156,11 +147,11 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   }
   else {
     if (value == null || value === true || value === 'true' || value === 'flow') {
-      flow.value.set(el, 1)
+      flowSize = 1
       value = 'flow'
     }
     else if (typeof value === 'string' && '+-'.includes(value[0])) {
-      flow.value.set(el, safeParseNumber(value))
+      flowSize = safeParseNumber(value)
       value = 'flow'
     }
   }
@@ -169,7 +160,7 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   let maxClick: number
   if (value === 'flow') {
     // flow
-    thisClick = sum(...flow.value.values())
+    thisClick = ctx.flowSum + flowSize
     maxClick = thisClick
   }
   else if (Array.isArray(value)) {
@@ -185,18 +176,19 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
 
   const resolved = {
     max: maxClick,
-    isActive: computed(() => isActive(thisClick, clicks.value)),
-    isCurrent: computed(() => isCurrent(thisClick, clicks.value)),
-    shows: computed(() => clickHide ? !isActive(thisClick, clicks.value) : isActive(thisClick, clicks.value)),
+    flowSize,
+    isActive: computed(() => isActive(thisClick, ctx.current)),
+    isCurrent: computed(() => isCurrent(thisClick, ctx.current)),
+    shows: computed(() => clickHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
     clickHide,
     CLASS_HIDE: fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN,
   }
-  clicksMap.value.set(el, resolved)
+  ctx.register(el, resolved)
   return resolved
 }
 
 function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
   el.classList.toggle(CLASS_VCLICK_TARGET, false)
-  const elements = dirInject(dir, injectionClicksFlow)
-  elements?.value.delete(el)
+  const ctx = dirInject(dir, injectionClicks)?.value
+  ctx?.unregister(el)
 }

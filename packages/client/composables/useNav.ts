@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { TocItem } from '@slidev/types'
 import type { SlidevContextNav } from '../modules/context'
-import { addToTree, clicksTotal, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, go, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
+import { addToTree, clicks, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, go, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
 import { rawRoutes } from '../routes'
 
 export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>): SlidevContextNav {
@@ -12,7 +12,7 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
 
   const currentPage = computed(() => Number.parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
   const currentPath = computed(() => getPath(currentPage.value))
-  const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
+  const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`) ?? rawRoutes.at(-1) ?? rawRoutes[0])
   const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
   const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
 
@@ -32,7 +32,7 @@ export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormaliz
     route,
     path,
     total,
-    clicksTotal,
+    clicks,
     currentPage,
     currentPath,
     currentRoute,

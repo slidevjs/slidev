@@ -82,9 +82,21 @@ export type ClicksFlow = Map<ClicksElement, number>
 
 export interface ResolvedClicksInfo {
   max: number
+  flowSize: number
   isCurrent?: ComputedRef<boolean>
   isActive?: ComputedRef<boolean>
   shows?: ComputedRef<boolean>
 }
 
 export type ClicksMap = Map<ClicksElement, ResolvedClicksInfo>
+
+export interface ClicksContext {
+  readonly disabled: boolean
+  readonly current: number
+  readonly flow: ClicksFlow
+  readonly map: ClicksMap
+  register: (el: ClicksElement, resolved: ResolvedClicksInfo) => void
+  unregister: (el: ClicksElement) => void
+  readonly flowSum: number
+  readonly total: number
+}
