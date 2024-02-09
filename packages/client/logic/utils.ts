@@ -30,3 +30,8 @@ export function makeId(length = 5) {
     result.push(characters.charAt(Math.floor(Math.random() * charactersLength)))
   return result.join('')
 }
+
+export function safeParseNumber(s: string | number, defaultValue = 0) {
+  const n = +s
+  return Number.isNaN(n) ? defaultValue : n
+}

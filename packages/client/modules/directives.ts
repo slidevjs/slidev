@@ -15,6 +15,7 @@ import {
   injectionClicksMap,
 } from '../constants'
 import { isClicksDisabled } from '../logic/nav'
+import { safeParseNumber } from '../logic/utils'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -135,7 +136,9 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   if (!el || isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
     return null
 
-  if (dir.value === false || dir.value === 'false')
+  let value = dir.value
+
+  if (value === false || value === 'false')
     return null
 
   const flow = dirInject(dir, injectionClicksFlow)
@@ -148,16 +151,23 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   clickHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
   const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-  const value = dir.value
-
-  if (!clickAfter) {
-    if (value == null || value === true || value === 'true' || value === 'flow')
+  if (clickAfter) {
+    value = 'flow'
+  }
+  else {
+    if (value == null || value === true || value === 'true' || value === 'flow') {
       flow.value.set(el, 1)
+      value = 'flow'
+    }
+    else if (typeof value === 'string' && '+-'.includes(value[0])) {
+      flow.value.set(el, safeParseNumber(value))
+      value = 'flow'
+    }
   }
 
   let thisClick: number | [number, number]
   let maxClick: number
-  if (value == null || value === true || value === 'true' || value === 'flow') {
+  if (value === 'flow') {
     // flow
     thisClick = sum(...flow.value.values())
     maxClick = thisClick
@@ -169,7 +179,7 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   }
   else {
     // since (absolute)
-    thisClick = +value
+    thisClick = safeParseNumber(value)
     maxClick = thisClick
   }
 

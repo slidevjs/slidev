@@ -12,12 +12,13 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
+import { sum } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
 import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
-import { makeId } from '../logic/utils'
+import { makeId, safeParseNumber } from '../logic/utils'
 import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks, injectionClicksDisabled, injectionClicksFlow, injectionClicksMap } from '../constants'
 
 const props = defineProps({
@@ -56,22 +57,29 @@ const el = ref<HTMLDivElement>()
 const vm = getCurrentInstance()
 
 onMounted(() => {
-  const start = props.at === 'flow' ? (flow?.value.size ?? 0) : +props.at
+  if (!clicks || !disabled || !flow || !clicksMap)
+    return
+
+  const at = props.at === 'flow' ? '+1' : props.at
+  const inFlow = typeof at === 'string' && '+-'.includes(at[0])
+  const start = inFlow
+    ? sum(...flow.value.values()) + safeParseNumber(at)
+    : safeParseNumber(at)
   const end = start + props.ranges.length - 1
 
   // register to the page click map
   const id = makeId()
-  clicksMap?.value.set(id, { max: end })
-  onUnmounted(() => clicksMap?.value.delete(id), vm)
-  if (props.at === 'flow' && flow?.value) {
+  clicksMap.value.set(id, { max: end })
+  onUnmounted(() => clicksMap.value.delete(id), vm)
+  if (inFlow) {
     flow.value.set(id, props.ranges.length - 1)
     onUnmounted(() => flow.value.delete(id), vm)
   }
 
   const index = computed(() => {
-    if (disabled?.value)
+    if (disabled.value)
       return props.ranges.length - 1
-    return Math.max(0, (clicks?.value ?? 0) - start)
+    return Math.max(0, clicks.value - start)
   })
 
   const finallyRange = computed(() => {
