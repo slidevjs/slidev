@@ -5,9 +5,10 @@
  */
 
 import { toArray } from '@antfu/utils'
-import type { Directive, VNode, VNodeArrayChildren } from 'vue'
-
-import { Comment, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
+import type { VNode, VNodeArrayChildren } from 'vue'
+import { Comment, createVNode, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
+import { normalizeAtProp } from '../logic/clicks'
+import VClickGap from './VClickGap.vue'
 
 const listTags = ['ul', 'ol']
 
@@ -23,7 +24,7 @@ export default defineComponent({
     },
     at: {
       type: [Number, String],
-      default: null,
+      default: 'flow',
     },
     hide: {
       type: Boolean,
@@ -35,13 +36,16 @@ export default defineComponent({
     },
   },
   render() {
-    const click = resolveDirective('click')!
-    const after = resolveDirective('after')!
+    const every = +this.every
+    const at = normalizeAtProp(this.at)
+    const inFlow = typeof at === 'string'
 
-    const applyDirective = (node: VNode, directive: Directive, delta: number | string) => {
+    const click = resolveDirective('click')!
+
+    const applyDirective = (node: VNode, value: number | string) => {
       return withDirectives(node, [[
-        directive,
-        delta,
+        click,
+        value,
         '',
         {
           hide: this.hide,
@@ -66,71 +70,70 @@ export default defineComponent({
 
     defaults = openAllTopLevelSlots(toArray(defaults))
 
-    const mapSubList = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
-      let idx = 0
+    const mapSubList = (children: VNodeArrayChildren, depth = 1): VNodeArrayChildren => {
       const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i))
           return i
         if (listTags.includes(i.type as string) && Array.isArray(i.children)) {
           // eslint-disable-next-line ts/no-use-before-define
-          const [vNodes, total] = mapChildren(i.children, depth + 1)
-          idx += total
-          return h(i, {}, [vNodes])
+          const vNodes = mapChildren(i.children, depth + 1)
+          return h(i, {}, vNodes)
         }
         return h(i)
       })
-      return [vNodes, idx]
+      return vNodes
     }
 
-    let globalIdx = 0
-    const mapChildren = (children: VNodeArrayChildren, depth = 1): [VNodeArrayChildren, number] => {
-      let idx = 0
+    let globalIdx = +at
+    let execIdx = 0
+    const mapChildren = (children: VNodeArrayChildren, depth = 1): VNodeArrayChildren => {
       const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i) || i.type === Comment)
           return i
-        const directive = idx % +this.every === 0 ? click : after
+
+        const thisShowIdx = Math.ceil(globalIdx++ / every)
+
         let vNode
-        if (depth < +this.depth && Array.isArray(i.children)) {
-          const [vNodes, total] = mapSubList(i.children, depth)
-          vNode = h(i, {}, [vNodes])
-          idx += total + 1
-        }
-        else {
+        if (depth < +this.depth && Array.isArray(i.children))
+          vNode = h(i, {}, mapSubList(i.children, depth))
+        else
           vNode = h(i)
-          idx++
-        }
-        globalIdx++
+
+        const delta = thisShowIdx - execIdx
+        execIdx = thisShowIdx
+
         return applyDirective(
           vNode,
-          directive,
-          this.at == null ? 'flow' : +this.at + Math.floor(globalIdx / +this.every) + depth,
+          inFlow
+            ? delta >= 0 ? `+${delta}` : `${delta}`
+            : thisShowIdx,
         )
       })
-      return [vNodes, idx]
+      return vNodes
     }
+
+    const lastGap = () => createVNode(VClickGap, {
+      size: Math.ceil((globalIdx + 1) / every) - execIdx - 1,
+    })
 
     // handle ul, ol list
     if (defaults.length === 1 && listTags.includes(defaults[0].type as string) && Array.isArray(defaults[0].children))
-      return h(defaults[0], {}, [mapChildren(defaults[0].children)[0]])
+      return h(defaults[0], {}, [mapChildren(defaults[0].children), lastGap()])
 
     if (defaults.length === 1 && defaults[0].type as string === 'table') {
       const tableNode = defaults[0]
       if (Array.isArray(tableNode.children)) {
         return h(tableNode, {}, tableNode.children.map((i) => {
-          if (!isVNode(i)) {
+          if (!isVNode(i))
             return i
-          }
-          else {
-            if (i.type === 'tbody' && Array.isArray(i.children))
-              return h(i, {}, [mapChildren(i.children)[0]])
-
-            else
-              return h(i)
-          }
+          else if (i.type === 'tbody' && Array.isArray(i.children))
+            return h(i, {}, [mapChildren(i.children), lastGap()])
+          else
+            return h(i)
         }))
       }
     }
 
-    return mapChildren(defaults)[0]
+    return [mapChildren(defaults)[0], lastGap()]
   },
 })

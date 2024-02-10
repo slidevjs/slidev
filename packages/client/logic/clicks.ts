@@ -4,6 +4,7 @@ import type { Ref } from 'vue'
 import { ref, shallowReactive } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from './nav'
+import { safeParseNumber } from './utils'
 
 export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksContext {
   if (route?.meta?.__clicksContext)
@@ -90,4 +91,19 @@ export function useFixedClicks(route: RouteRecordRaw | undefined, currentInit = 
         : 0)
     },
   }]
+}
+
+/**
+ * 'flow' => '+1'
+ *   '+3' => '+3'
+ *   '-3' => '-3'
+ *    '3' => 3
+ *      3 => 3
+ */
+export function normalizeAtProp(at: string | number = 'flow') {
+  if (at === 'flow')
+    return '+1'
+  if (typeof at === 'string' && '+-'.includes(at[0]))
+    return at
+  return safeParseNumber(at)
 }
