@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext, RenderContext } from '@slidev/types'
 import type { SlidevContext } from './modules/context'
 
-export const injectionClicks: InjectionKey<Ref<ClicksContext>> = Symbol('v-click-clicks')
+export const injectionClicks: InjectionKey<Ref<ClicksContext>> = Symbol('v-clicks-context')
 export const injectionCurrentPage: InjectionKey<Ref<number>> = Symbol('slidev-page')
 export const injectionSlideScale: InjectionKey<ComputedRef<number>> = Symbol('slidev-slide-scale')
 export const injectionSlidevContext: InjectionKey<UnwrapNestedRefs<SlidevContext>> = Symbol('slidev-slidev-context')

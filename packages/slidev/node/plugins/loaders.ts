@@ -22,15 +22,14 @@ const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 const vueContextImports = [
   `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
   `import {
-    injectionSlidevContext as _injectionSlidevContext, 
-    injectionClicks as _injectionClicks,
+    injectionSlidevContext as _injectionSlidevContext,
     injectionCurrentPage as _injectionCurrentPage,
     injectionRenderContext as _injectionRenderContext,
     injectionFrontmatter as _injectionFrontmatter,
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
-  'const $clicksContext = _vueInject(_injectionClicks)',
+  'const $clicksContext = _vueToRef($nav, "clicks")',
   'const $clicks = _vueToRef($clicksContext, "current")',
   'const $page = _vueInject(_injectionCurrentPage)',
   'const $renderContext = _vueInject(_injectionRenderContext)',
