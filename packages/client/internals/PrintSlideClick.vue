@@ -44,7 +44,12 @@ provide(injectionSlidevContext, reactive({
   <div :id="id" class="print-slide-container" :style="style">
     <GlobalBottom />
 
-    <SlideWrapper :is="route?.component!" :clicks="clicks" :class="getSlideClass(route)" :route="route" />
+    <SlideWrapper
+      :is="route?.component!"
+      :clicks="clicks"
+      :class="getSlideClass(route)"
+      :route="route"
+    />
     <template
       v-if="
         (__SLIDEV_FEATURE_DRAWINGS__
