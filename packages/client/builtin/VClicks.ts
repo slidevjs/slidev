@@ -113,7 +113,7 @@ export default defineComponent({
     }
 
     const lastGap = () => createVNode(VClickGap, {
-      size: Math.ceil((globalIdx + 1) / every) - execIdx - 1,
+      size: Math.ceil((globalIdx - 1) / every) - execIdx,
     })
 
     // handle ul, ol list
