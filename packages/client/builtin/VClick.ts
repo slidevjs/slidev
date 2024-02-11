@@ -4,14 +4,14 @@
  * Learn more: https://sli.dev/guide/animations.html#click-animations
  */
 
-import { createVNode, defineComponent } from 'vue'
+import { Text, defineComponent, h } from 'vue'
 import VClicks from './VClicks'
 
 export default defineComponent({
   props: {
     at: {
       type: [Number, String],
-      default: null,
+      default: null, // should be 'flow' after #1279 is merged
     },
     hide: {
       type: Boolean,
@@ -23,7 +23,7 @@ export default defineComponent({
     },
   },
   render() {
-    return createVNode(
+    return h(
       VClicks,
       {
         every: 99999,
@@ -31,7 +31,14 @@ export default defineComponent({
         hide: this.hide,
         fade: this.fade,
       },
-      { default: this.$slots.default },
+      {
+        default: () =>
+          this.$slots.default?.().map(v =>
+            v.type === Text
+              ? h('span', v)
+              : v,
+          ),
+      },
     )
   },
 })
