@@ -33,9 +33,7 @@ export default defineConfig({
         './.vitepress/@slidev/client/builtin',
       ],
       extensions: ['vue', 'md'],
-      include: [
-        /\.(vue|md)$/,
-      ],
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
       resolvers: [
         IconsResolver({
           prefix: '',
