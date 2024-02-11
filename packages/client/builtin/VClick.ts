@@ -22,7 +22,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    wrapTextAs: {
+    wrapText: {
       type: Function as PropType<(text: VNode) => VNode>,
       default: (text: VNode) => h('span', text),
     },
@@ -40,7 +40,7 @@ export default defineComponent({
         default: () =>
           this.$slots.default?.().map(v =>
             v.type === Text
-              ? this.wrapTextAs(v)
+              ? this.wrapText(v)
               : v,
           ),
       },
