@@ -262,6 +262,8 @@ Parameters:
 * `width` (`number`): width of the video
 * `height` (`number`): height of the video
 
+You can also make the video start at specific time if you add `?start=1234` to the id value (where 1234 are seconds),
+
 ## Custom Components
 
 Create a directory `components/` under your project root, and simply put your custom Vue components under it, then you can use it with the same name in your markdown file!
