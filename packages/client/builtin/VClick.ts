@@ -12,7 +12,7 @@ export default defineComponent({
   props: {
     at: {
       type: [Number, String],
-      default: null, // should be 'flow' after #1279 is merged
+      default: null,
     },
     hide: {
       type: Boolean,
