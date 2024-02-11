@@ -8,16 +8,6 @@ import type { ResolvedSlidevOptions } from '../options'
 import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
 import { searchForWorkspaceRoot } from '../vite/searchRoot'
 
-const INCLUDE = [
-  'codemirror',
-  'codemirror/mode/javascript/javascript',
-  'codemirror/mode/css/css',
-  'codemirror/mode/markdown/markdown',
-  'codemirror/mode/xml/xml',
-  'codemirror/mode/htmlmixed/htmlmixed',
-  'codemirror/addon/display/placeholder',
-]
-
 const EXCLUDE = [
   '@slidev/shared',
   '@slidev/types',
@@ -46,7 +36,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           dedupe: ['vue'],
         },
         optimizeDeps: {
-          include: INCLUDE,
           exclude: EXCLUDE,
         },
         css: options.data.config.css === 'unocss'

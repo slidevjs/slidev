@@ -1,6 +1,6 @@
 import type { Ref, WritableComputedRef } from 'vue'
 import { watch } from 'vue'
-import CodeMirror from 'codemirror'
+import * as _CodeMirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/markdown/markdown'
@@ -8,6 +8,10 @@ import 'codemirror/mode/xml/xml'
 import 'codemirror/mode/htmlmixed/htmlmixed'
 import 'codemirror/addon/display/placeholder'
 import 'codemirror/lib/codemirror.css'
+
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-expect-error
+const CodeMirror: typeof _CodeMirror = _CodeMirror.fromTextArea ? _CodeMirror : globalThis.CodeMirror
 
 export async function useCodeMirror(
   textarea: Ref<HTMLTextAreaElement | null | undefined>,
