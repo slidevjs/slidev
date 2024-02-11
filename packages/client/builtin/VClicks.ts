@@ -84,14 +84,14 @@ export default defineComponent({
       return vNodes
     }
 
-    let globalIdx = +at
+    let globalIdx = 1
     let execIdx = 0
     const mapChildren = (children: VNodeArrayChildren, depth = 1): VNodeArrayChildren => {
       const vNodes = openAllTopLevelSlots(children).map((i) => {
         if (!isVNode(i) || i.type === Comment)
           return i
 
-        const thisShowIdx = Math.ceil(globalIdx++ / every)
+        const thisShowIdx = +at + Math.ceil(globalIdx++ / every) - 1
 
         let vNode
         if (depth < +this.depth && Array.isArray(i.children))
@@ -113,7 +113,7 @@ export default defineComponent({
     }
 
     const lastGap = () => createVNode(VClickGap, {
-      size: Math.ceil((globalIdx - 1) / every) - execIdx,
+      size: +at + Math.ceil((globalIdx - 1) / every) - 1 - execIdx,
     })
 
     // handle ul, ol list
