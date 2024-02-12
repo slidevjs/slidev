@@ -55,18 +55,18 @@ onMounted(() => {
 
   const at = props.at
   const atNum = safeParseNumber(at)
-  const inFlow = typeof at === 'string' && '+-'.includes(at[0])
-  const flowSize = inFlow
+  const isRelative = typeof at === 'string' && '+-'.includes(at[0])
+  const relativeDelta = isRelative
     ? atNum + props.ranges.length - 2
     : 0
-  const start = inFlow
-    ? clicks.flowSum + atNum - 1
+  const start = isRelative
+    ? clicks.currentOffset + atNum - 1
     : atNum
   const end = start + props.ranges.length - 1
 
   // register to the page click map
   const id = makeId()
-  clicks.register(id, { max: end, flowSize })
+  clicks.register(id, { max: end, relativeDelta })
   onUnmounted(() => clicks.unregister(id))
 
   const index = computed(() => {

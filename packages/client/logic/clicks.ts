@@ -11,7 +11,7 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
     return route.meta.__clicksContext
   const thisPath = +(route?.path ?? 99999)
 
-  const flow = new Map()
+  const relativeOffsets = new Map()
   const map = shallowReactive(new Map())
 
   const context: ClicksContext = {
@@ -27,20 +27,20 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
       else
         return 0
     },
-    flow,
+    relativeOffsets,
     map,
     register(el, resolved) {
-      flow.set(el, resolved.flowSize)
+      relativeOffsets.set(el, resolved.relativeDelta)
       map.set(el, resolved)
     },
     unregister(el) {
-      flow.delete(el)
+      relativeOffsets.delete(el)
       map.delete(el)
     },
-    get flowSum() {
+    get currentOffset() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return sum(...flow.values())
+      return sum(...relativeOffsets.values())
     },
     get total() {
       // eslint-disable-next-line no-unused-expressions
@@ -56,7 +56,7 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
 
 export function useFixedClicks(route: RouteRecordRaw | undefined, currentInit = 0): [Ref<number>, ClicksContext] {
   const current = ref(currentInit)
-  const flow = new Map()
+  const relativeOffsets = new Map()
   const map = shallowReactive(new Map())
 
   return [current, {
@@ -68,20 +68,20 @@ export function useFixedClicks(route: RouteRecordRaw | undefined, currentInit = 
     },
     set current(_v) {
     },
-    flow,
+    relativeOffsets,
     map,
     register(el, resolved) {
-      flow.set(el, resolved.flowSize)
+      relativeOffsets.set(el, resolved.relativeDelta)
       map.set(el, resolved)
     },
     unregister(el) {
-      flow.delete(el)
+      relativeOffsets.delete(el)
       map.delete(el)
     },
-    get flowSum() {
+    get currentOffset() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return sum(...flow.values())
+      return sum(...relativeOffsets.values())
     },
     get total() {
       // eslint-disable-next-line no-unused-expressions

@@ -26,7 +26,7 @@ const matchRoute = computed(() => {
 const matchClick = computed(() => {
   if (!video.value || currentContext?.value !== 'slide' || clicks?.disabled || clicks?.current === undefined)
     return false
-  return clicks.map.get(video.value)?.shows?.value ?? true
+  return clicks.map.get(video.value)?.isShown?.value ?? true
 })
 
 const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)

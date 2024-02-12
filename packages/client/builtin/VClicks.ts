@@ -38,7 +38,7 @@ export default defineComponent({
   render() {
     const every = +this.every
     const at = normalizeAtProp(this.at)
-    const inFlow = typeof at === 'string'
+    const isRelative = typeof at === 'string'
 
     const click = resolveDirective('click')!
 
@@ -104,7 +104,7 @@ export default defineComponent({
 
         return applyDirective(
           vNode,
-          inFlow
+          isRelative
             ? delta >= 0 ? `+${delta}` : `${delta}`
             : thisShowIdx,
         )

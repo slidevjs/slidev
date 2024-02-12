@@ -78,14 +78,14 @@ export type LoadedSnippets = Record<string, string>
 
 export type ClicksElement = Element | string
 
-export type ClicksFlow = Map<ClicksElement, number>
+export type ClicksRelativeEls = Map<ClicksElement, number>
 
 export interface ResolvedClicksInfo {
   max: number
-  flowSize: number
+  relativeDelta: number
   isCurrent?: ComputedRef<boolean>
   isActive?: ComputedRef<boolean>
-  shows?: ComputedRef<boolean>
+  isShown?: ComputedRef<boolean>
 }
 
 export type ClicksMap = Map<ClicksElement, ResolvedClicksInfo>
@@ -93,10 +93,10 @@ export type ClicksMap = Map<ClicksElement, ResolvedClicksInfo>
 export interface ClicksContext {
   readonly disabled: boolean
   readonly current: number
-  readonly flow: ClicksFlow
+  readonly relativeOffsets: ClicksRelativeEls
   readonly map: ClicksMap
   register: (el: ClicksElement, resolved: ResolvedClicksInfo) => void
   unregister: (el: ClicksElement) => void
-  readonly flowSum: number
+  readonly currentOffset: number
   readonly total: number
 }

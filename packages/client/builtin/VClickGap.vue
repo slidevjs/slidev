@@ -19,11 +19,11 @@ onMounted(() => {
     if (!clicks || clicks.disabled)
       return
 
-    const flowSize = safeParseNumber(props.size)
-    const max = clicks.flowSum + flowSize - 1
+    const relativeDelta = safeParseNumber(props.size)
+    const max = clicks.currentOffset + relativeDelta - 1
 
     const id = makeId()
-    clicks.register(id, { max, flowSize })
+    clicks.register(id, { max, relativeDelta })
     onCleanup(() => clicks.unregister(id))
   })
 })

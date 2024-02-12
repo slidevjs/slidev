@@ -146,34 +146,34 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   else if (value == null || value === true || value === 'true')
     value = '+1'
 
-  let flowSize: number
+  let relativeDelta: number
   let thisClick: number | [number, number]
   let maxClick: number
   if (typeof value === 'string' && '+-'.includes(value[0])) {
     // flow
-    flowSize = safeParseNumber(value)
-    thisClick = ctx.flowSum + flowSize
+    relativeDelta = safeParseNumber(value)
+    thisClick = ctx.currentOffset + relativeDelta
     maxClick = thisClick
   }
   else if (Array.isArray(value)) {
     // range (absolute)
-    flowSize = 0
+    relativeDelta = 0
     thisClick = value as [number, number]
     maxClick = value[1]
   }
   else {
     // since (absolute)
-    flowSize = 0
+    relativeDelta = 0
     thisClick = safeParseNumber(value)
     maxClick = thisClick
   }
 
   const resolved = {
     max: maxClick,
-    flowSize,
+    relativeDelta,
     isActive: computed(() => isActive(thisClick, ctx.current)),
     isCurrent: computed(() => isCurrent(thisClick, ctx.current)),
-    shows: computed(() => clickHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
+    isShown: computed(() => clickHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
     clickHide,
     CLASS_HIDE: fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN,
   }
