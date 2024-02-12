@@ -39,7 +39,7 @@ const props = defineProps({
   },
   at: {
     type: [String, Number],
-    default: 'flow',
+    default: '+1',
   },
   maxHeight: {
     type: String,
@@ -60,7 +60,7 @@ onMounted(() => {
     if (!clicks || clicks.disabled)
       return
 
-    const at = props.at === 'flow' ? '+1' : props.at
+    const at = props.at
     const atNum = safeParseNumber(at)
     const inFlow = typeof at === 'string' && '+-'.includes(at[0])
     const flowSize = inFlow

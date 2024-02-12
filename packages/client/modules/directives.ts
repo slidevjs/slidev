@@ -134,7 +134,6 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
     return null
 
   let value = dir.value
-  let flowSize = 0
 
   if (value === false || value === 'false')
     return null
@@ -142,34 +141,29 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   clickHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
   const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-  if (clickAfter) {
-    value = 'flow'
-  }
-  else {
-    if (value == null || value === true || value === 'true' || value === 'flow') {
-      flowSize = 1
-      value = 'flow'
-    }
-    else if (typeof value === 'string' && '+-'.includes(value[0])) {
-      flowSize = safeParseNumber(value)
-      value = 'flow'
-    }
-  }
+  if (clickAfter)
+    value = '+0'
+  else if (value == null || value === true || value === 'true')
+    value = '+1'
 
+  let flowSize: number
   let thisClick: number | [number, number]
   let maxClick: number
-  if (value === 'flow') {
+  if (typeof value === 'string' && '+-'.includes(value[0])) {
     // flow
+    flowSize = safeParseNumber(value)
     thisClick = ctx.flowSum + flowSize
     maxClick = thisClick
   }
   else if (Array.isArray(value)) {
     // range (absolute)
+    flowSize = 0
     thisClick = value as [number, number]
     maxClick = value[1]
   }
   else {
     // since (absolute)
+    flowSize = 0
     thisClick = safeParseNumber(value)
     maxClick = thisClick
   }

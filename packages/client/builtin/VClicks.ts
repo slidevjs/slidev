@@ -24,7 +24,7 @@ export default defineComponent({
     },
     at: {
       type: [Number, String],
-      default: 'flow',
+      default: '+1',
     },
     hide: {
       type: Boolean,

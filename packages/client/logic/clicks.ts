@@ -94,15 +94,12 @@ export function useFixedClicks(route: RouteRecordRaw | undefined, currentInit = 
 }
 
 /**
- * 'flow' => '+1'
  *   '+3' => '+3'
  *   '-3' => '-3'
  *    '3' => 3
  *      3 => 3
  */
-export function normalizeAtProp(at: string | number = 'flow') {
-  if (at === 'flow')
-    return '+1'
+export function normalizeAtProp(at: string | number = '+1') {
   if (typeof at === 'string' && '+-'.includes(at[0]))
     return at
   return safeParseNumber(at)

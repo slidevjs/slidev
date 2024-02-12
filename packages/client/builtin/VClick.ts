@@ -11,7 +11,7 @@ export default defineComponent({
   props: {
     at: {
       type: [Number, String],
-      default: 'flow',
+      default: '+1',
     },
     hide: {
       type: Boolean,
