@@ -22,18 +22,18 @@ export async function resolveImportPath(importName: string, ensure = false) {
       url: fileURLToPath(import.meta.url),
     })
   }
-  catch {}
+  catch { }
 
   if (isInstalledGlobally) {
     try {
       return require.resolve(join(globalDirs.yarn.packages, importName))
     }
-    catch {}
+    catch { }
 
     try {
       return require.resolve(join(globalDirs.npm.packages, importName))
     }
-    catch {}
+    catch { }
   }
 
   if (ensure)
@@ -48,17 +48,17 @@ export async function resolveGlobalImportPath(importName: string): Promise<strin
       url: fileURLToPath(import.meta.url),
     })
   }
-  catch {}
+  catch { }
 
   try {
     return require.resolve(join(globalDirs.yarn.packages, importName))
   }
-  catch {}
+  catch { }
 
   try {
     return require.resolve(join(globalDirs.npm.packages, importName))
   }
-  catch {}
+  catch { }
 
   throw new Error(`Failed to resolve global package "${importName}"`)
 }
@@ -88,4 +88,31 @@ export async function packageExists(name: string) {
   if (await resolveImportPath(`${name}/package.json`).catch(() => false))
     return true
   return false
+}
+
+export async function importOptinalPeerDep<T>(name: string, msg: string): Promise<T> {
+  const _import = async (id: string) => {
+    const mod = await import(id)
+    return 'default' in mod ? mod.default : mod
+  }
+
+  // 1. resolve from local
+  if (await packageExists(name))
+    return await _import(name)
+
+  // 2. resolve from global local (when Slidev is installed globally)
+  let globalPath = isInstalledGlobally ? await resolveGlobalImportPath(name) : undefined
+  if (globalPath)
+    return await _import(globalPath)
+
+  // 3. resolve from global registry
+  const { resolveGlobal } = await import('resolve-global')
+  try {
+    globalPath = resolveGlobal(name)
+  }
+  catch { }
+  if (globalPath)
+    return await _import(globalPath)
+
+  throw new Error(msg)
 }

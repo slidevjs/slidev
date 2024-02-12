@@ -24,6 +24,7 @@ import { getAddonRoots, getClientRoot, getThemeRoots, getUserRoot, isPath, resol
 import { resolveThemeName } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
+import { importOptinalPeerDep } from './utils'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -174,7 +175,7 @@ cli.command(
     }
 
     async function openTunnel(port: number) {
-      const localtunnel = await import('localtunnel').then(r => r.default || r)
+      const localtunnel = await importLocaltunnel()
       const tunnel = await localtunnel({
         port,
         local_host: '0.0.0.0',
@@ -607,4 +608,11 @@ async function findFreePort(start: number): Promise<number> {
   if (await checkPort(start) !== false)
     return start
   return findFreePort(start + 1)
+}
+
+function importLocaltunnel() {
+  return importOptinalPeerDep<typeof import('localtunnel')>(
+    'localtunnel',
+  'Localtunnel is not installed by default, please install it via `npm i -D localtunnel`',
+  )
 }
