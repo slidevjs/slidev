@@ -37,8 +37,7 @@ export default defineComponent({
   },
   render() {
     const every = +this.every
-    const at = normalizeAtProp(this.at)
-    const isRelative = typeof at === 'string'
+    const [isRelative, at] = normalizeAtProp(this.at)
 
     const click = resolveDirective('click')!
 

@@ -10,7 +10,6 @@ import {
   CLASS_VCLICK_TARGET,
   injectionClicksContext,
 } from '../constants'
-import { safeParseNumber } from '../logic/utils'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -149,23 +148,14 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   let relativeDelta: number
   let thisClick: number | [number, number]
   let maxClick: number
-  if (typeof value === 'string' && '+-'.includes(value[0])) {
-    // flow
-    relativeDelta = safeParseNumber(value)
-    thisClick = ctx.currentOffset + relativeDelta
-    maxClick = thisClick
-  }
-  else if (Array.isArray(value)) {
+  if (Array.isArray(value)) {
     // range (absolute)
     relativeDelta = 0
     thisClick = value as [number, number]
     maxClick = value[1]
   }
   else {
-    // since (absolute)
-    relativeDelta = 0
-    thisClick = safeParseNumber(value)
-    maxClick = thisClick
+    ({ start: thisClick, end: maxClick, relativeDelta } = ctx.resolve(value))
   }
 
   const resolved = {

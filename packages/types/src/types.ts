@@ -95,6 +95,11 @@ export interface ClicksContext {
   readonly current: number
   readonly relativeOffsets: ClicksRelativeEls
   readonly map: ClicksMap
+  resolve: (at: string | number, size?: number) => {
+    start: number
+    end: number
+    relativeDelta: number
+  }
   register: (el: ClicksElement, resolved: ResolvedClicksInfo) => void
   unregister: (el: ClicksElement) => void
   readonly currentOffset: number

@@ -24,7 +24,7 @@ import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { parseRangeString } from '@slidev/parser'
 import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicksContext } from '../constants'
-import { makeId, safeParseNumber } from '../logic/utils'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   ranges: {
@@ -46,23 +46,13 @@ const props = defineProps({
 })
 
 const clicks = inject(injectionClicksContext)?.value
-
 const el = ref<HTMLDivElement>()
 
 onMounted(() => {
   if (!clicks || clicks.disabled)
     return
 
-  const at = props.at
-  const atNum = safeParseNumber(at)
-  const isRelative = typeof at === 'string' && '+-'.includes(at[0])
-  const relativeDelta = isRelative
-    ? atNum + props.ranges.length - 2
-    : 0
-  const start = isRelative
-    ? clicks.currentOffset + atNum - 1
-    : atNum
-  const end = start + props.ranges.length - 1
+  const { start, end, relativeDelta } = clicks.resolve(props.at, props.ranges.length - 1)
 
   // register to the page click map
   const id = makeId()
@@ -72,7 +62,7 @@ onMounted(() => {
   const index = computed(() => {
     if (clicks.disabled)
       return props.ranges.length - 1
-    return Math.max(0, clicks.current - start)
+    return Math.max(0, clicks.current - start + 1)
   })
 
   const finallyRange = computed(() => {
