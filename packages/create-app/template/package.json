@@ -11,6 +11,6 @@
     "@slidev/cli": "^0.47.4",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "latest",
-    "vue": "^3.4.15"
+    "vue": "^3.4.18"
   }
 }

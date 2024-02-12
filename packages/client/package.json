@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.7",
-    "@iconify-json/carbon": "^1.1.28",
+    "@iconify-json/carbon": "^1.1.30",
     "@iconify-json/ph": "^1.1.11",
-    "@shikijs/vitepress-twoslash": "^1.0.0-beta.5",
+    "@shikijs/vitepress-twoslash": "^1.1.1",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
@@ -46,10 +46,10 @@
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.8",
     "unocss": "^0.58.5",
-    "vue": "^3.4.15",
+    "vue": "^3.4.18",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "vite": "^5.0.12"
+    "vite": "^5.1.1"
   }
 }
