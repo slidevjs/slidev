@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Fragment, inject, onMounted, watchEffect } from 'vue'
 import { injectionClicksContext } from '../constants'
-import { makeId, safeParseNumber } from '../logic/utils'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   size: {
@@ -19,7 +19,11 @@ onMounted(() => {
     if (!clicks || clicks.disabled)
       return
 
-    const relativeDelta = safeParseNumber(props.size)
+    let relativeDelta = +props.size
+    if (Number.isNaN(relativeDelta)) {
+      console.warn(`[slidev] Invalid size for VClickGap: ${props.size}`)
+      relativeDelta = 1
+    }
     const max = clicks.currentOffset + relativeDelta - 1
 
     const id = makeId()
