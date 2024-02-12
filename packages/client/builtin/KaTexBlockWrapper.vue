@@ -20,7 +20,7 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 -->
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { parseRangeString } from '@slidev/parser'
 import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks } from '../constants'
@@ -48,7 +48,6 @@ const props = defineProps({
 const clicks = inject(injectionClicks)?.value
 
 const el = ref<HTMLDivElement>()
-const vm = getCurrentInstance()
 
 onMounted(() => {
   if (!clicks || clicks.disabled)
@@ -68,7 +67,7 @@ onMounted(() => {
   // register to the page click map
   const id = makeId()
   clicks.register(id, { max: end, flowSize })
-  onUnmounted(() => clicks.unregister(id), vm)
+  onUnmounted(() => clicks.unregister(id))
 
   const index = computed(() => {
     if (clicks.disabled)

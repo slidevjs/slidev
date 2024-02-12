@@ -14,7 +14,7 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 <script setup lang="ts">
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
-import { computed, inject, onMounted, ref, watchEffect } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId, safeParseNumber } from '../logic/utils'
@@ -47,44 +47,42 @@ const props = defineProps({
   },
 })
 
-const clicksRef = inject(injectionClicks)
+const clicks = inject(injectionClicks)?.value
 const el = ref<HTMLDivElement>()
 
 onMounted(() => {
-  watchEffect((onCleanup) => {
+  if (!clicks || clicks.disabled)
+    return
+
+  const at = props.at
+  const atNum = safeParseNumber(at)
+  const inFlow = typeof at === 'string' && '+-'.includes(at[0])
+  const flowSize = inFlow
+    ? atNum + props.ranges.length - 2
+    : 0
+  const start = inFlow
+    ? clicks.flowSum + atNum - 1
+    : atNum
+  const end = start + props.ranges.length - 1
+
+  // register to the page click map
+  const id = makeId()
+  clicks.register(id, { max: end, flowSize })
+  onUnmounted(() => clicks.unregister(id))
+
+  const index = computed(() => {
+    if (clicks.disabled)
+      return props.ranges.length - 1
+    return Math.max(0, clicks.current - start)
+  })
+
+  const finallyRange = computed(() => {
+    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+  })
+
+  watchEffect(() => {
     if (!el.value)
       return
-
-    const clicks = clicksRef?.value
-
-    if (!clicks || clicks.disabled)
-      return
-
-    const at = props.at
-    const atNum = safeParseNumber(at)
-    const inFlow = typeof at === 'string' && '+-'.includes(at[0])
-    const flowSize = inFlow
-      ? atNum + props.ranges.length - 2
-      : 0
-    const start = inFlow
-      ? clicks.flowSum + atNum - 1
-      : atNum
-    const end = start + props.ranges.length - 1
-
-    // register to the page click map
-    const id = makeId()
-    clicks.register(id, { max: end, flowSize })
-    onCleanup(() => clicks.unregister(id))
-
-    const index = computed(() => {
-      if (clicks.disabled)
-        return props.ranges.length - 1
-      return Math.max(0, clicks.current - start)
-    })
-
-    const finallyRange = computed(() => {
-      return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
-    })
 
     let rangeStr = props.ranges[index.value] ?? finallyRange.value
     const hide = rangeStr === 'hide'
