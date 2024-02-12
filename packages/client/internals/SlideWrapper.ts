@@ -1,12 +1,12 @@
 import { defineComponent, h, provide, ref, toRef } from 'vue'
 import type { PropType } from 'vue'
 import type { ClicksContext, RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
   props: {
-    clicks: {
+    clicksContext: {
       type: Object as PropType<ClicksContext>,
       required: true,
     },
@@ -32,7 +32,7 @@ export default defineComponent({
     provide(injectionCurrentPage, ref(+props.route?.path))
     provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicks, toRef(props, 'clicks'))
+    provide(injectionClicksContext, toRef(props, 'clicksContext'))
   },
   render() {
     if (this.$props.is)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Fragment, inject, onMounted, watchEffect } from 'vue'
-import { injectionClicks } from '../constants'
+import { injectionClicksContext } from '../constants'
 import { makeId, safeParseNumber } from '../logic/utils'
 
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const clicksRef = inject(injectionClicks)
+const clicksRef = inject(injectionClicksContext)
 
 onMounted(() => {
   watchEffect((onCleanup) => {

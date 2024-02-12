@@ -23,7 +23,7 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { parseRangeString } from '@slidev/parser'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicksContext } from '../constants'
 import { makeId, safeParseNumber } from '../logic/utils'
 
 const props = defineProps({
@@ -45,7 +45,7 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicks)?.value
+const clicks = inject(injectionClicksContext)?.value
 
 const el = ref<HTMLDivElement>()
 

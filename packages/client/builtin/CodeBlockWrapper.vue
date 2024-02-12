@@ -18,7 +18,7 @@ import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId, safeParseNumber } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicks } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicksContext } from '../constants'
 
 const props = defineProps({
   ranges: {
@@ -47,7 +47,7 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicks)?.value
+const clicks = inject(injectionClicksContext)?.value
 const el = ref<HTMLDivElement>()
 
 onMounted(() => {

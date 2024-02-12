@@ -15,7 +15,7 @@ import GlobalTop from '/@slidev/global-components/top'
 import GlobalBottom from '/@slidev/global-components/bottom'
 
 const props = defineProps<{
-  clicks: ClicksContext
+  clicksContext: ClicksContext
   nav: SlidevContextNav
   route: RouteRecordRaw
 }>()
@@ -30,7 +30,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
 
 const id = computed(() =>
-  `${props.route.path.toString().padStart(3, '0')}-${(props.nav.clicks.value.current + 1).toString().padStart(2, '0')}`,
+  `${props.route.path.toString().padStart(3, '0')}-${(props.nav.clicks.value + 1).toString().padStart(2, '0')}`,
 )
 
 provide(injectionSlidevContext, reactive({
@@ -46,7 +46,7 @@ provide(injectionSlidevContext, reactive({
 
     <SlideWrapper
       :is="route?.component!"
-      :clicks="clicks"
+      :clicks-context="clicksContext"
       :class="getSlideClass(route)"
       :route="route"
     />

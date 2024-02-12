@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-import { injectionClicks, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
+import { injectionClicksContext, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -11,7 +11,7 @@ const props = defineProps<{
 const $slidev = inject(injectionSlidevContext)
 const route = inject(injectionRoute)
 const currentContext = inject(injectionRenderContext)
-const clicks = inject(injectionClicks)?.value
+const clicks = inject(injectionClicksContext)?.value
 
 const video = ref<HTMLMediaElement>()
 const played = ref(false)

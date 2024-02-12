@@ -36,7 +36,7 @@ const queryClicksRaw = useRouteQuery('clicks', '0')
 export const queryClicks = computed({
   get() {
     // eslint-disable-next-line ts/no-use-before-define
-    if (clicks.value.disabled)
+    if (clicksContext.value.disabled)
       return 99999
     let v = +(queryClicksRaw.value || 0)
     if (Number.isNaN(v))
@@ -60,10 +60,12 @@ export const currentLayout = computed(() => currentRoute.value?.meta?.layout || 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
-export const clicks = computed(() => usePrimaryClicks(currentRoute.value))
+export const clicksContext = computed(() => usePrimaryClicks(currentRoute.value))
+export const clicks = computed(() => clicksContext.value.current)
+export const clicksTotal = computed(() => clicksContext.value.total)
 
-export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value.current < clicks.value.total)
-export const hasPrev = computed(() => currentPage.value > 1 || clicks.value.current > 0)
+export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
+export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
 
 export const rawTree = computed(() => rawRoutes
   .filter((route: RouteRecordRaw) => route.meta?.slide?.title)
@@ -81,7 +83,7 @@ watch(currentRoute, (next, prev) => {
 })
 
 export function next() {
-  if (clicks.value.total <= queryClicks.value)
+  if (clicksTotal.value <= queryClicks.value)
     nextSlide()
   else
     queryClicks.value += 1
@@ -106,8 +108,8 @@ export function nextSlide() {
 export async function prevSlide(lastClicks = true) {
   const next = Math.max(1, currentPage.value - 1)
   await go(next)
-  if (lastClicks && clicks.value.total)
-    router.replace({ query: { ...route.value.query, clicks: clicks.value.total } })
+  if (lastClicks && clicksTotal.value)
+    router.replace({ query: { ...route.value.query, clicks: clicksTotal.value } })
 }
 
 export function goFirst() {

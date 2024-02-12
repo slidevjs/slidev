@@ -450,7 +450,7 @@ export function createSlidesLoader(
   }
 
   function transformVue(code: string): string {
-    if (code.includes('injectionSlidevContext') || code.includes('injectionClicks') || code.includes('const $slidev'))
+    if (code.includes('injectionSlidevContext') || code.includes('injectionClicksContext') || code.includes('const $slidev'))
       return code // Assume that the context is already imported and used
     const imports = [
       ...vueContextImports,

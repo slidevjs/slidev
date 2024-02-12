@@ -14,11 +14,11 @@ const clicks0 = useFixedClicks(route.value, 0)[1]
 
 <template>
   <PrintSlideClick
-    :clicks="clicks0"
+    :clicks-context="clicks0"
     :nav="nav"
     :route="route"
   />
   <template v-if="!clicks0.disabled">
-    <PrintSlideClick v-for="i of clicks0.total" :key="i" :clicks="useFixedClicks(route, i)[1]" :nav="nav" :route="route" />
+    <PrintSlideClick v-for="i of clicks0.total" :key="i" :clicks-context="useFixedClicks(route, i)[1]" :nav="nav" :route="route" />
   </template>
 </template>

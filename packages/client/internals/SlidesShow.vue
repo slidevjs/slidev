@@ -57,7 +57,7 @@ function onAfterLeave() {
       <SlideWrapper
         :is="route?.component as any"
         v-show="route === currentRoute"
-        :clicks="usePrimaryClicks(route)"
+        :clicks-context="usePrimaryClicks(route)"
         :class="getSlideClass(route)"
         :route="route"
         :render-context="renderContext"

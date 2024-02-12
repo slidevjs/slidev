@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { clicks, currentPage, currentRoute, hasNext, nextRoute, queryClicks, rawRoutes, total, useSwipeControls } from '../logic/nav'
+import { clicksContext, currentPage, currentRoute, hasNext, nextRoute, queryClicks, rawRoutes, total, useSwipeControls } from '../logic/nav'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs, themeVars } from '../env'
 import { sharedState } from '../state/shared'
@@ -38,8 +38,8 @@ const { timer, resetTimer } = useTimer()
 
 const clicksCtxMap = rawRoutes.map(route => useFixedClicks(route))
 const nextFrame = computed(() => {
-  if (clicks.value.current < clicks.value.total)
-    return [currentRoute.value!, clicks.value.current + 1] as const
+  if (clicksContext.value.current < clicksContext.value.total)
+    return [currentRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
     return [nextRoute.value!, 0] as const
   else
@@ -123,7 +123,7 @@ onMounted(() => {
           <SlideWrapper
             :is="nextFrame[0].component as any"
             :key="nextFrame[0].path"
-            :clicks="nextFrameClicksCtx[1]"
+            :clicks-context="nextFrameClicksCtx[1]"
             :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
             render-context="previewNext"

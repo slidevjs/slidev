@@ -8,7 +8,7 @@ import {
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
-  injectionClicks,
+  injectionClicksContext,
 } from '../constants'
 import { safeParseNumber } from '../logic/utils'
 
@@ -128,7 +128,7 @@ type ClickInfo = null | (Required<ResolvedClicksInfo> & {
 })
 
 function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, clickHide = false): ClickInfo {
-  const ctx = dirInject(dir, injectionClicks)?.value
+  const ctx = dirInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx || ctx.disabled)
     return null
@@ -183,6 +183,6 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
 
 function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
   el.classList.toggle(CLASS_VCLICK_TARGET, false)
-  const ctx = dirInject(dir, injectionClicks)?.value
+  const ctx = dirInject(dir, injectionClicksContext)?.value
   ctx?.unregister(el)
 }
