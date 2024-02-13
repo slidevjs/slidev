@@ -116,7 +116,11 @@ export function createSlidesLoader(
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
             const slide = data.slides[idx]
-            hmrPages.add(idx)
+
+            const onlyNoteChanged = Object.keys(body).length === 2
+              && 'note' in body && body.raw === null
+            if (!onlyNoteChanged)
+              hmrPages.add(idx)
 
             if (slide.source) {
               Object.assign(slide.source, body)
@@ -174,7 +178,6 @@ export function createSlidesLoader(
           if (
             a?.content.trim() === b?.content.trim()
             && a?.title?.trim() === b?.title?.trim()
-            && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
               try {
@@ -185,8 +188,20 @@ export function createSlidesLoader(
                 return false
               }
             })
-          )
+          ) {
+            if (a?.note !== b?.note) {
+              ctx.server.ws.send({
+                type: 'custom',
+                event: 'slidev-update-note',
+                data: {
+                  id: i,
+                  note: b!.note || '',
+                  noteHTML: md.render(b!.note || ''),
+                },
+              })
+            }
             continue
+          }
 
           ctx.server.ws.send({
             type: 'custom',
