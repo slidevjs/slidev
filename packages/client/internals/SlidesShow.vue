@@ -4,7 +4,7 @@ import { currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
-import { usePrimaryClicks } from '../logic/clicks'
+import { usePrimaryClicks } from '../composables/useClicks'
 import SlideWrapper from './SlideWrapper'
 
 // @ts-expect-error virtual module

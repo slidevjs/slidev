@@ -3,25 +3,8 @@ import type { ClicksContext } from '@slidev/types'
 import type { Ref } from 'vue'
 import { ref, shallowReactive } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
-import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from './nav'
-
-/**
- *   '+3' => '+3'
- *   '-3' => '-3'
- *    '3' => 3
- *      3 => 3
- */
-export function normalizeAtProp(at: string | number = '+1'): [isRelative: boolean, value: number] {
-  let n = +at
-  if (Number.isNaN(n)) {
-    console.warn('[slidev] Invalid click position:', at)
-    n = 0
-  }
-  return [
-    typeof at === 'string' && '+-'.includes(at[0]),
-    n,
-  ]
-}
+import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
+import { normalizeAtProp } from '../logic/utils'
 
 function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () => number): ClicksContext {
   const relativeOffsets = new Map()

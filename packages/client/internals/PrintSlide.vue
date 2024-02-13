@@ -2,7 +2,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 import { computed } from 'vue'
 import { useNav } from '../composables/useNav'
-import { useFixedClicks } from '../logic/clicks'
+import { useFixedClicks } from '../composables/useClicks'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const props = defineProps<{ route: RouteRecordRaw }>()

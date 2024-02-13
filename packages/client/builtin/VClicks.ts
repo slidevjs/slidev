@@ -7,7 +7,7 @@
 import { toArray } from '@antfu/utils'
 import type { VNode, VNodeArrayChildren } from 'vue'
 import { Comment, createVNode, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
-import { normalizeAtProp } from '../logic/clicks'
+import { normalizeAtProp } from '../logic/utils'
 import VClickGap from './VClickGap.vue'
 
 const listTags = ['ul', 'ol']

@@ -6,9 +6,9 @@ import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
+import { usePrimaryClicks } from '../composables/useClicks'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
-import { usePrimaryClicks } from './clicks'
 
 export { rawRoutes, router }
 
