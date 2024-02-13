@@ -9,9 +9,7 @@ import 'codemirror/mode/htmlmixed/htmlmixed'
 import 'codemirror/addon/display/placeholder'
 import 'codemirror/lib/codemirror.css'
 
-// eslint-disable-next-line ts/ban-ts-comment
-// @ts-expect-error
-const CodeMirror: typeof _CodeMirror = _CodeMirror.fromTextArea ? _CodeMirror : globalThis.CodeMirror
+const CodeMirror = _CodeMirror.default ?? ('fromTextArea' in _CodeMirror ? _CodeMirror : globalThis.CodeMirror)
 
 export async function useCodeMirror(
   textarea: Ref<HTMLTextAreaElement | null | undefined>,
