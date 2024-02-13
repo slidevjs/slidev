@@ -30,7 +30,7 @@ const vueContextImports = [
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
-  'const $clicksContext = _vueInject(_injectionClicksContext).value',
+  'const $clicksContext = _vueInject(_injectionClicksContext)?.value',
   'const $clicks = _vueToRef($clicksContext, "current")',
   'const $page = _vueInject(_injectionCurrentPage)',
   'const $renderContext = _vueInject(_injectionRenderContext)',
