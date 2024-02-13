@@ -12,7 +12,7 @@ export default defineComponent({
   props: {
     at: {
       type: [Number, String],
-      default: null,
+      default: '+1',
     },
     hide: {
       type: Boolean,

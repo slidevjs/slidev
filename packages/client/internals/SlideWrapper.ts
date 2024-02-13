@@ -1,26 +1,14 @@
-import { useVModel } from '@vueuse/core'
-import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
-import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRenderContext, injectionRoute } from '../constants'
+import { defineComponent, h, provide, ref, toRef } from 'vue'
+import type { PropType } from 'vue'
+import type { ClicksContext, RenderContext } from '@slidev/types'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
   props: {
-    clicks: {
-      type: [Number, String],
-      default: 0,
-    },
-    clicksElements: {
-      type: Array,
-      default: () => [] as Element[],
-    },
-    clicksOrderMap: {
-      type: Map,
-      default: () => new Map<number, HTMLElement[]>(),
-    },
-    clicksDisabled: {
-      type: Boolean,
-      default: false,
+    clicksContext: {
+      type: Object as PropType<ClicksContext>,
+      required: true,
     },
     renderContext: {
       type: String,
@@ -39,33 +27,12 @@ export default defineComponent({
       default: undefined,
     },
   },
-  setup(props, { emit }) {
-    const clicks = useVModel(props, 'clicks', emit)
-    const clicksElements = useVModel(props, 'clicksElements', emit)
-    const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-    const clicksOrderMap = useVModel(props, 'clicksOrderMap', emit)
-
-    clicksElements.value.length = 0
-
-    const clicksWithDisable = computed({
-      get() {
-        if (clicksDisabled.value)
-          return 9999999
-        return +clicks.value
-      },
-      set(value) {
-        clicks.value = value
-      },
-    })
-
+  setup(props) {
     provide(injectionRoute, props.route as any)
     provide(injectionCurrentPage, ref(+props.route?.path))
     provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicks, clicksWithDisable)
-    provide(injectionClicksDisabled, clicksDisabled)
-    provide(injectionClicksElements, clicksElements as any)
-    provide(injectionOrderMap, clicksOrderMap as any)
+    provide(injectionClicksContext, toRef(props, 'clicksContext'))
   },
   render() {
     if (this.$props.is)

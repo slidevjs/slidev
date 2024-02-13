@@ -23,14 +23,15 @@ const vueContextImports = [
   `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
   `import {
     injectionSlidevContext as _injectionSlidevContext, 
-    injectionClicks as _injectionClicks,
+    injectionClicksContext as _injectionClicksContext,
     injectionCurrentPage as _injectionCurrentPage,
     injectionRenderContext as _injectionRenderContext,
     injectionFrontmatter as _injectionFrontmatter,
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
-  'const $clicks = _vueInject(_injectionClicks)',
+  'const $clicksContext = _vueInject(_injectionClicksContext)?.value',
+  'const $clicks = _vueToRef($clicksContext, "current")',
   'const $page = _vueInject(_injectionCurrentPage)',
   'const $renderContext = _vueInject(_injectionRenderContext)',
 ]
@@ -334,7 +335,7 @@ export function createSlidesLoader(
                       id: ${pageNo},
                       no: ${no},
                     },
-                    __clicksElements: [],
+                    __clicksContext: null,
                     __preloaded: false,
                   })`,
                   'export default frontmatter',
@@ -465,7 +466,7 @@ export function createSlidesLoader(
   }
 
   function transformVue(code: string): string {
-    if (code.includes('injectionSlidevContext') || code.includes('injectionClicks') || code.includes('const $slidev'))
+    if (code.includes('injectionSlidevContext') || code.includes('injectionClicksContext') || code.includes('const $slidev'))
       return code // Assume that the context is already imported and used
     const imports = [
       ...vueContextImports,

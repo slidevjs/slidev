@@ -30,3 +30,21 @@ export function makeId(length = 5) {
     result.push(characters.charAt(Math.floor(Math.random() * charactersLength)))
   return result.join('')
 }
+
+/**
+ *   '+3' => '+3'
+ *   '-3' => '-3'
+ *    '3' => 3
+ *      3 => 3
+ */
+export function normalizeAtProp(at: string | number = '+1'): [isRelative: boolean, value: number] {
+  let n = +at
+  if (Number.isNaN(n)) {
+    console.warn('[slidev] Invalid click position:', at)
+    n = 0
+  }
+  return [
+    typeof at === 'string' && '+-'.includes(at[0]),
+    n,
+  ]
+}

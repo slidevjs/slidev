@@ -1,3 +1,4 @@
+import type { ComputedRef } from '@vue/reactivity'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -74,3 +75,63 @@ export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPre
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
+
+export type ClicksElement = Element | string
+
+export type ClicksRelativeEls = Map<ClicksElement, number>
+
+export interface ClicksInfo {
+  /**
+   * The maximum clicks, used to calculate the total clicks for current slide
+   */
+  max?: number
+  /**
+   * The offsets added to the subsequent clicks
+   * Delta is 0 when the click is absolute
+   */
+  delta: number
+  /**
+   * Resolved clicks
+   */
+  clicks?: number | [number, number]
+  /**
+   * Computed ref of whether the click is exactly matched
+   */
+  isCurrent?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is active
+   */
+  isActive?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is shown, it take flagHide into account
+   */
+  isShown?: ComputedRef<boolean>
+  /**
+   * Having the hide flag
+   */
+  flagHide?: boolean
+  /**
+   * Having the fade flag
+   */
+  flagFade?: boolean
+}
+
+export type ResolvedClicksInfo = Required<ClicksInfo>
+
+export type ClicksMap = Map<ClicksElement, ClicksInfo>
+
+export interface ClicksContext {
+  readonly disabled: boolean
+  readonly current: number
+  readonly relativeOffsets: ClicksRelativeEls
+  readonly map: ClicksMap
+  resolve: (at: string | number, size?: number) => {
+    start: number
+    end: number
+    delta: number
+  }
+  register: (el: ClicksElement, info: ClicksInfo) => void
+  unregister: (el: ClicksElement) => void
+  readonly currentOffset: number
+  readonly total: number
+}
