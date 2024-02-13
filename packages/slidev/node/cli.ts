@@ -77,7 +77,7 @@ cli.command(
     .option('tunnel', {
       default: false,
       type: 'boolean',
-      describe: 'open localtunnel to make Slidev available on the internet',
+      describe: 'open a Cloudflare Quick Tunnel to make Slidev available on the internet',
     })
     .option('log', {
       default: 'warn',
@@ -163,7 +163,7 @@ cli.command(
         if (remote != null)
           tunnelUrl = await openTunnel(port)
         else
-          console.log(yellow('\n  --remote is required for tunneling, localtunnel is not enabled.\n'))
+          console.log(yellow('\n  --remote is required for tunneling, Cloudflare Quick Tunnel is not enabled.\n'))
       }
 
       let publicIp: string | undefined
@@ -174,12 +174,12 @@ cli.command(
     }
 
     async function openTunnel(port: number) {
-      const localtunnel = await import('localtunnel').then(r => r.default || r)
-      const tunnel = await localtunnel({
+      const { startTunnel } = await import('untun')
+      const tunnel = await startTunnel({
         port,
-        local_host: '0.0.0.0',
+        acceptCloudflareNotice: true,
       })
-      return tunnel.url
+      return await tunnel?.getURL() ?? ''
     }
 
     const SHORTCUTS = [

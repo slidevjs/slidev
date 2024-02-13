@@ -38,7 +38,6 @@
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
     "@types/katex": "^0.16.7",
-    "@types/localtunnel": "^2.0.4",
     "@types/markdown-it": "^13.0.7",
     "@types/node": "^20.11.16",
     "@types/prismjs": "^1.26.3",
