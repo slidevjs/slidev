@@ -40,13 +40,9 @@
     "start": "esno node/cli.ts"
   },
   "peerDependencies": {
-    "localtunnel": "^2.0.2",
     "playwright-chromium": "^1.10.0"
   },
   "peerDependenciesMeta": {
-    "localtunnel": {
-      "optional": true
-    },
     "playwright-chromium": {
       "optional": true
     }
@@ -83,6 +79,7 @@
     "katex": "^0.16.9",
     "kolorist": "^1.8.0",
     "local-pkg": "^0.5.0",
+    "localtunnel": "^2.0.2",
     "markdown-it": "^14.0.0",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-link-attributes": "^4.0.1",
