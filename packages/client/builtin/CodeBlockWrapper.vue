@@ -59,8 +59,8 @@ onMounted(() => {
   if (!clicks || clicks.disabled)
     return
 
-  const { start, end, relativeDelta } = clicks.resolve(props.at, props.ranges.length - 1)
-  clicks.register(id, { max: end, relativeDelta })
+  const { start, end, delta } = clicks.resolve(props.at, props.ranges.length - 1)
+  clicks.register(id, { max: end, delta })
 
   const index = computed(() => {
     if (clicks.disabled)

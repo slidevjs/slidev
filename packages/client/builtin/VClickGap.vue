@@ -19,15 +19,15 @@ onMounted(() => {
     if (!clicks || clicks.disabled)
       return
 
-    let relativeDelta = +props.size
-    if (Number.isNaN(relativeDelta)) {
+    let delta = +props.size
+    if (Number.isNaN(delta)) {
       console.warn(`[slidev] Invalid size for VClickGap: ${props.size}`)
-      relativeDelta = 1
+      delta = 1
     }
-    const max = clicks.currentOffset + relativeDelta - 1
+    const max = clicks.currentOffset + delta - 1
 
     const id = makeId()
-    clicks.register(id, { max, relativeDelta })
+    clicks.register(id, { max, delta })
     onCleanup(() => clicks.unregister(id))
   })
 })

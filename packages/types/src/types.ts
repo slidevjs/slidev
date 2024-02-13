@@ -80,15 +80,45 @@ export type ClicksElement = Element | string
 
 export type ClicksRelativeEls = Map<ClicksElement, number>
 
-export interface ResolvedClicksInfo {
-  max: number
-  relativeDelta: number
+export interface ClicksInfo {
+  /**
+   * The maximum clicks, used to calculate the total clicks for current slide
+   */
+  max?: number
+  /**
+   * The offsets added to the subsequent clicks
+   * Delta is 0 when the click is absolute
+   */
+  delta: number
+  /**
+   * Resolved clicks
+   */
+  clicks?: number | [number, number]
+  /**
+   * Computed ref of whether the click is exactly matched
+   */
   isCurrent?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is active
+   */
   isActive?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is shown, it take flagHide into account
+   */
   isShown?: ComputedRef<boolean>
+  /**
+   * Having the hide flag
+   */
+  flagHide?: boolean
+  /**
+   * Having the fade flag
+   */
+  flagFade?: boolean
 }
 
-export type ClicksMap = Map<ClicksElement, ResolvedClicksInfo>
+export type ResolvedClicksInfo = Required<ClicksInfo>
+
+export type ClicksMap = Map<ClicksElement, ClicksInfo>
 
 export interface ClicksContext {
   readonly disabled: boolean
@@ -98,9 +128,9 @@ export interface ClicksContext {
   resolve: (at: string | number, size?: number) => {
     start: number
     end: number
-    relativeDelta: number
+    delta: number
   }
-  register: (el: ClicksElement, resolved: ResolvedClicksInfo) => void
+  register: (el: ClicksElement, info: ClicksInfo) => void
   unregister: (el: ClicksElement) => void
   readonly currentOffset: number
   readonly total: number

@@ -20,6 +20,7 @@ nextTick(() => {
     routeForceRefresh.value += 1
   })
 })
+
 export const navDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)

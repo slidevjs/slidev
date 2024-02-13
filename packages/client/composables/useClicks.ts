@@ -7,8 +7,9 @@ import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRe
 import { normalizeAtProp } from '../logic/utils'
 
 function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () => number): ClicksContext {
-  const relativeOffsets = new Map()
-  const map = shallowReactive(new Map())
+  const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
+  const map: ClicksContext['map'] = shallowReactive(new Map())
+
   return {
     get disabled() {
       return isPrintMode.value && !isPrintWithClicks.value
@@ -25,19 +26,19 @@ function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () 
         return {
           start: offset + value,
           end: offset + value + size - 1,
-          relativeDelta: value + size - 1,
+          delta: value + size - 1,
         }
       }
       else {
         return {
           start: value,
           end: value + size - 1,
-          relativeDelta: 0,
+          delta: 0,
         }
       }
     },
     register(el, resolved) {
-      relativeOffsets.set(el, resolved.relativeDelta)
+      relativeOffsets.set(el, resolved.delta)
       map.set(el, resolved)
     },
     unregister(el) {
@@ -53,7 +54,7 @@ function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () 
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
       return route?.meta?.clicks
-        ?? Math.max(0, ...[...map.values()].map(v => v.max))
+        ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
     },
   }
 }
@@ -71,7 +72,8 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
     else
       return 0
   })
-  route?.meta && (route.meta.__clicksContext = context)
+  if (route?.meta)
+    route.meta.__clicksContext = context
   return context
 }
 

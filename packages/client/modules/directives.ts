@@ -29,17 +29,23 @@ export default function createDirectives() {
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
+          // Expose the resolved clicks info to the element to make it easier to understand and debug
+          const clicks = Array.isArray(resolved.clicks) ? resolved.clicks : [resolved.clicks, undefined]
+          el.dataset.slidevClicksStart = String(clicks[0])
+          if (clicks[1] != null)
+            el.dataset.slidevClicksEnd = String(clicks[1])
+
           watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            if (resolved.clickHide) {
-              el.classList.toggle(resolved.CLASS_HIDE, active)
+            if (resolved.flagHide) {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(resolved.CLASS_HIDE, !active)
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -65,12 +71,12 @@ export default function createDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            if (resolved.clickHide) {
-              el.classList.toggle(resolved.CLASS_HIDE, active)
+            if (resolved.flagHide) {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(resolved.CLASS_HIDE, !active)
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -96,7 +102,7 @@ export default function createDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            el.classList.toggle(resolved.CLASS_HIDE, active)
+            el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -121,12 +127,7 @@ function isCurrent(thisClick: number | [number, number], clicks: number) {
     : thisClick === clicks
 }
 
-type ClickInfo = null | (Required<ResolvedClicksInfo> & {
-  clickHide: boolean
-  CLASS_HIDE: string
-})
-
-function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, clickHide = false): ClickInfo {
+function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
   const ctx = dirInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx || ctx.disabled)
@@ -137,35 +138,36 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
   if (value === false || value === 'false')
     return null
 
-  clickHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
-  const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+  flagHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
+  const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
   if (clickAfter)
     value = '+0'
   else if (value == null || value === true || value === 'true')
     value = '+1'
 
-  let relativeDelta: number
+  let delta: number
   let thisClick: number | [number, number]
   let maxClick: number
   if (Array.isArray(value)) {
     // range (absolute)
-    relativeDelta = 0
+    delta = 0
     thisClick = value as [number, number]
     maxClick = value[1]
   }
   else {
-    ({ start: thisClick, end: maxClick, relativeDelta } = ctx.resolve(value))
+    ({ start: thisClick, end: maxClick, delta } = ctx.resolve(value))
   }
 
-  const resolved = {
+  const resolved: ResolvedClicksInfo = {
     max: maxClick,
-    relativeDelta,
+    clicks: thisClick,
+    delta,
     isActive: computed(() => isActive(thisClick, ctx.current)),
     isCurrent: computed(() => isCurrent(thisClick, ctx.current)),
-    isShown: computed(() => clickHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
-    clickHide,
-    CLASS_HIDE: fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN,
+    isShown: computed(() => flagHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
+    flagFade,
+    flagHide,
   }
   ctx.register(el, resolved)
   return resolved
