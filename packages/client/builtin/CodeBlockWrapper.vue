@@ -49,17 +49,18 @@ const props = defineProps({
 
 const clicks = inject(injectionClicksContext)?.value
 const el = ref<HTMLDivElement>()
+const id = makeId()
+
+onUnmounted(() => {
+  clicks!.unregister(id)
+})
 
 onMounted(() => {
   if (!clicks || clicks.disabled)
     return
 
   const { start, end, relativeDelta } = clicks.resolve(props.at, props.ranges.length - 1)
-
-  // register to the page click map
-  const id = makeId()
   clicks.register(id, { max: end, relativeDelta })
-  onUnmounted(() => clicks.unregister(id))
 
   const index = computed(() => {
     if (clicks.disabled)
