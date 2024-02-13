@@ -26,6 +26,7 @@ const props = defineProps<{
 
 const vm = getCurrentInstance()
 const el = ref<ShadowRoot>()
+const error = ref<string | null>(null)
 const html = ref('')
 
 watchEffect(async (onCleanup) => {
@@ -33,15 +34,21 @@ watchEffect(async (onCleanup) => {
   onCleanup(() => {
     disposed = true
   })
-  const svg = await renderMermaid(
-    props.code || '',
-    {
-      theme: props.theme || (isDark.value ? 'dark' : undefined),
-      ...vm!.attrs,
-    },
-  )
-  if (!disposed)
-    html.value = svg
+  error.value = null
+  try {
+    const svg = await renderMermaid(
+      props.code || '',
+      {
+        theme: props.theme || (isDark.value ? 'dark' : undefined),
+        ...vm!.attrs,
+      },
+    )
+    if (!disposed)
+      html.value = svg
+  }
+  catch (e) {
+    error.value = `${e}`
+  }
 })
 
 const actualHeight = ref<number>()
@@ -69,5 +76,6 @@ watchEffect(() => {
 </script>
 
 <template>
-  <ShadowRoot class="mermaid" :inner-html="html" @shadow="el = $event" />
+  <pre v-if="error" border="1 red rounded" class="pa-3">{{ error }}</pre>
+  <ShadowRoot v-else class="mermaid" :inner-html="html" @shadow="el = $event" />
 </template>
