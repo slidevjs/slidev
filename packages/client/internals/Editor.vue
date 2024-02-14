@@ -5,7 +5,7 @@ import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEd
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 const props = defineProps<{
   resize?: boolean
@@ -167,37 +167,37 @@ throttledWatch(
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="slidev-icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
-          <HiddenText text="Switch to content tab" />
+        <IconButton
+          title="Switch to content tab" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''"
+          @click="switchTab('content')"
+        >
           <carbon:account />
-        </button>
-        <button class="slidev-icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
-          <HiddenText text="Switch to notes tab" />
+        </IconButton>
+        <IconButton
+          title="Switch to notes tab" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''"
+          @click="switchTab('note')"
+        >
           <carbon:align-box-bottom-right />
-        </button>
+        </IconButton>
       </div>
       <span class="text-2xl pt-1">
         {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
       <div class="flex-auto" />
-      <button v-if="resize" class="slidev-icon-btn" @click="vertical = !vertical">
-        <template v-if="vertical">
-          <HiddenText text="Dock to right" />
+      <template v-if="resize">
+        <IconButton v-if="vertical" title="Dock to right" @click="vertical = false">
           <carbon:open-panel-right />
-        </template>
-        <template v-else>
-          <HiddenText text="Dock to bottom" />
+        </IconButton>
+        <IconButton v-else title="Dock to bottom" @click="vertical = true">
           <carbon:open-panel-bottom />
-        </template>
-      </button>
-      <button class="slidev-icon-btn" @click="openInEditor()">
-        <HiddenText text="Open in editor" />
+        </IconButton>
+      </template>
+      <IconButton title="Open in editor" @click="openInEditor()">
         <carbon:launch />
-      </button>
-      <button class="slidev-icon-btn" @click="close">
-        <HiddenText text="Close" />
+      </IconButton>
+      <IconButton title="Close" @click="close">
         <carbon:close />
-      </button>
+      </IconButton>
     </div>
     <div>
       <div v-show="tab === 'content'" class="w-full h-full">

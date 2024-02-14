@@ -20,7 +20,7 @@ import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingControls from './DrawingControls.vue'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 const main = ref<HTMLDivElement>()
 
@@ -150,21 +150,19 @@ onMounted(() => {
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <div class="border-t border-main py-1 px-2 text-sm">
-          <button class="slidev-icon-btn" @click="increasePresenterFontSize">
-            <HiddenText text="Increase font size" />
+          <IconButton title="Increase font size" @click="increasePresenterFontSize">
             <carbon:zoom-in />
-          </button>
-          <button class="slidev-icon-btn" @click="decreasePresenterFontSize">
-            <HiddenText text="Decrease font size" />
+          </IconButton>
+          <IconButton title="Decrease font size" @click="decreasePresenterFontSize">
             <carbon:zoom-out />
-          </button>
-          <button
+          </IconButton>
+          <IconButton
             v-if="__DEV__"
-            class="slidev-icon-btn" @click="notesEditing = !notesEditing"
+            title="Edit Notes"
+            @click="notesEditing = !notesEditing"
           >
-            <HiddenText text="Edit Notes" />
             <carbon:edit />
-          </button>
+          </IconButton>
         </div>
       </div>
       <div class="grid-section bottom">
