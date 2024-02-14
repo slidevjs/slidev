@@ -83,9 +83,9 @@ watch(currentRoute, (next, prev) => {
   navDirection.value = Number(next?.path) - Number(prev?.path)
 })
 
-export function next() {
+export async function next() {
   if (clicksTotal.value <= queryClicks.value)
-    nextSlide()
+    await nextSlide()
   else
     queryClicks.value += 1
 }
@@ -101,9 +101,9 @@ export function getPath(no: number | string) {
   return isPresenter.value ? `/presenter/${no}` : `/${no}`
 }
 
-export function nextSlide() {
-  const next = Math.min(rawRoutes.length, currentPage.value + 1)
-  return go(next)
+export async function nextSlide() {
+  if (currentPage.value < rawRoutes.length)
+    await go(currentPage.value + 1)
 }
 
 export async function prevSlide(lastClicks = true) {
