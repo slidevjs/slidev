@@ -8,7 +8,7 @@ import { configs } from '../env'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 // @ts-expect-error virtual module
 import CustomNavControls from '/@slidev/custom-nav-controls'
@@ -52,47 +52,27 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
-      <button v-if="!isEmbedded" class="slidev-icon-btn" @click="toggleFullscreen">
-        <template v-if="isFullscreen">
-          <HiddenText text="Close fullscreen" />
-          <carbon:minimize />
-        </template>
-        <template v-else>
-          <HiddenText text="Enter fullscreen" />
-          <carbon:maximize />
-        </template>
-      </button>
-
-      <button class="slidev-icon-btn" :class="{ disabled: !hasPrev }" @click="prev">
-        <HiddenText text="Go to previous slide" />
+      <IconButton v-if="!isEmbedded" :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
+        <carbon:minimize v-if="isFullscreen" />
+        <carbon:maximize v-else />
+      </IconButton>
+      <IconButton :class="{ disabled: !hasPrev }" title="Go to previous slide" @click="prev">
         <carbon:arrow-left />
-      </button>
-
-      <button class="slidev-icon-btn" :class="{ disabled: !hasNext }" title="Next" @click="next">
-        <HiddenText text="Go to next slide" />
+      </IconButton>
+      <IconButton :class="{ disabled: !hasNext }" title="Go to next slide" @click="next">
         <carbon:arrow-right />
-      </button>
-
-      <button v-if="!isEmbedded" class="slidev-icon-btn" title="Slides overview" @click="toggleOverview()">
-        <HiddenText text="Show slide overview" />
+      </IconButton>
+      <IconButton v-if="!isEmbedded" title="Show slide overview" @click="toggleOverview()">
         <carbon:apps />
-      </button>
-
-      <button
+      </IconButton>
+      <IconButton
         v-if="!isColorSchemaConfigured"
-        class="slidev-icon-btn"
-        title="Toggle dark mode"
+        :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
         @click="toggleDark()"
       >
-        <template v-if="isDark">
-          <HiddenText text="Switch to light theme" />
-          <carbon-moon />
-        </template>
-        <template v-else>
-          <HiddenText text="Switch to dark mode theme" />
-          <carbon-sun />
-        </template>
-      </button>
+        <carbon-moon v-if="isDark" />
+        <carbon-sun v-else />
+      </IconButton>
 
       <VerticalDivider />
 
@@ -102,33 +82,25 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <VerticalDivider />
         </template>
 
-        <button
+        <IconButton
           v-if="isPresenter"
-          class="slidev-icon-btn"
-          title="Show presenter cursor"
+          :title="showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor'"
           @click="showPresenterCursor = !showPresenterCursor"
         >
-          <template v-if="showPresenterCursor">
-            <HiddenText text="Hide presenter cursor" />
-            <ph-cursor-fill />
-          </template>
-          <template v-else>
-            <HiddenText text="Show presenter cursor" />
-            <ph-cursor-duotone />
-          </template>
-        </button>
+          <ph-cursor-fill v-if="showPresenterCursor" />
+          <ph-cursor-duotone v-else />
+        </IconButton>
       </template>
 
       <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
-        <button class="slidev-icon-btn relative" title="Drawing" @click="drawingEnabled = !drawingEnabled">
-          <HiddenText v-if="drawingEnabled" :text="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" />
+        <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
           <carbon:pen />
           <div
             v-if="drawingEnabled"
             class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
             :style="{ background: brush.color }"
           />
-        </button>
+        </IconButton>
         <VerticalDivider />
       </template>
 
@@ -140,43 +112,40 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
           <carbon:user-speaker />
         </RouterLink>
 
-        <button
+        <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
-          class="slidev-icon-btn <md:hidden"
+          :title="showEditor ? 'Hide editor' : 'Show editor'"
+          class="<md:hidden"
           @click="showEditor = !showEditor"
         >
-          <HiddenText :text="showEditor ? 'Hide editor' : 'Show editor'" />
           <carbon:text-annotation-toggle />
-        </button>
+        </IconButton>
 
-        <button v-if="isPresenter" class="slidev-icon-btn" title="Toggle Presenter Layout" @click="togglePresenterLayout">
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" @click="togglePresenterLayout">
           <carbon:template />
           {{ presenterLayout }}
-        </button>
+        </IconButton>
       </template>
       <template v-if="!__DEV__">
-        <button v-if="configs.download" class="slidev-icon-btn" @click="downloadPDF">
-          <HiddenText text="Download as PDF" />
+        <IconButton v-if="configs.download" title="Download as PDF" @click="downloadPDF">
           <carbon:download />
-        </button>
+        </IconButton>
       </template>
 
-      <button
+      <IconButton
         v-if="!isPresenter && configs.info && !isEmbedded"
-        class="slidev-icon-btn"
+        title="Show info"
         @click="showInfoDialog = !showInfoDialog"
       >
-        <HiddenText text="Show info" />
         <carbon:information />
-      </button>
+      </IconButton>
 
       <template v-if="!isPresenter && !isEmbedded">
         <MenuButton>
           <template #button>
-            <button class="slidev-icon-btn">
-              <HiddenText text="Adjust settings" />
+            <IconButton title="Adjust settings">
               <carbon:settings-adjust />
-            </button>
+            </IconButton>
           </template>
           <template #menu>
             <Settings />

@@ -13,7 +13,7 @@ import {
 } from '../logic/drawings'
 import VerticalDivider from './VerticalDivider.vue'
 import Draggable from './Draggable.vue'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 function undo() {
   drauu.undo()
@@ -40,81 +40,69 @@ function setBrushColor(color: typeof brush.color) {
     :initial-x="10"
     :initial-y="10"
   >
-    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
-      <HiddenText text="Draw with stylus" />
+    <IconButton title="Draw with stylus" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
       <carbon:pen />
-    </button>
-    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
-      <HiddenText text="Draw a line" />
+    </IconButton>
+    <IconButton title="Draw a line" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
       <svg width="1em" height="1em" class="-mt-0.5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
         <path d="M21.71 3.29a1 1 0 0 0-1.42 0l-18 18a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l18-18a1 1 0 0 0 0-1.42z" fill="currentColor" />
       </svg>
-    </button>
-    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
-      <HiddenText text="Draw an arrow" />
+    </IconButton>
+    <IconButton title="Draw an arrow" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
       <carbon:arrow-up-right />
-    </button>
-    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
-      <HiddenText text="Draw an ellipse" />
+    </IconButton>
+    <IconButton title="Draw an ellipse" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
       <carbon:radio-button />
-    </button>
-    <button class="slidev-icon-btn" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
-      <HiddenText text="Draw a rectangle" />
+    </IconButton>
+    <IconButton title="Draw a rectangle" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
       <carbon:checkbox />
-    </button>
+    </IconButton>
     <!-- TODO: not sure why it's not working! -->
-    <!-- <button class="slidev-icon-btn" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
-      <HiddenText text="Erase" />
+    <!-- <IconButton title="Erase" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
       <carbon:erase />
-    </button> -->
+    </IconButton> -->
 
     <VerticalDivider />
 
-    <button
+    <IconButton
       v-for="color of brushColors"
       :key="color"
-      class="slidev-icon-btn"
+      title="Set brush color"
       :class="brush.color === color ? 'active' : 'shallow'"
       @click="setBrushColor(color)"
     >
-      <HiddenText text="Set brush color" />
       <div
         class="w-6 h-6 transition-all transform border border-gray-400/50"
         :class="brush.color !== color ? 'rounded-1/2 scale-85' : 'rounded-md'"
         :style="drawingEnabled ? { background: color } : { borderColor: color }"
       />
-    </button>
+    </IconButton>
 
     <VerticalDivider />
 
-    <button class="slidev-icon-btn" :class="{ disabled: !canUndo }" @click="undo()">
-      <HiddenText text="Undo" />
+    <IconButton title="Undo" :class="{ disabled: !canUndo }" @click="undo()">
       <carbon:undo />
-    </button>
-    <button class="slidev-icon-btn" :class="{ disabled: !canRedo }" @click="redo()">
-      <HiddenText text="Redo" />
+    </IconButton>
+    <IconButton title="Redo" :class="{ disabled: !canRedo }" @click="redo()">
       <carbon:redo />
-    </button>
-    <button class="slidev-icon-btn" :class="{ disabled: !canClear }" @click="clearDrauu()">
-      <HiddenText text="Delete" />
+    </IconButton>
+    <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clearDrauu()">
       <carbon:delete />
-    </button>
+    </IconButton>
 
     <VerticalDivider />
-    <button class="slidev-icon-btn" :class="{ shallow: !drawingPinned }" @click="drawingPinned = !drawingPinned">
-      <HiddenText :text="drawingPinned ? 'Unpin drawing' : 'Pin drawing'" />
+    <IconButton :title="drawingPinned ? 'Unpin drawing' : 'Pin drawing'" :class="{ shallow: !drawingPinned }" @click="drawingPinned = !drawingPinned">
       <carbon:pin-filled v-show="drawingPinned" class="transform -rotate-45" />
       <carbon:pin v-show="!drawingPinned" />
-    </button>
-    <button
+    </IconButton>
+    <IconButton
       v-if="drawingEnabled"
-      class="slidev-icon-btn"
+      :title="drawingPinned ? 'Drawing pinned' : 'Drawing unpinned'"
       :class="{ shallow: !drawingEnabled }"
       @click="drawingEnabled = !drawingEnabled"
     >
-      <HiddenText :text="drawingPinned ? 'Drawing pinned' : 'Drawing unpinned'" />
       <carbon:error v-show="drawingPinned" />
       <carbon:close-outline v-show="!drawingPinned" />
-    </button>
+    </IconButton>
   </Draggable>
 </template>

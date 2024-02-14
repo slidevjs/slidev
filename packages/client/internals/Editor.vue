@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { throttledWatch, useEventListener } from '@vueuse/core'
-import { computed, onMounted, ref, watch } from 'vue'
-import { activeElement, editorWidth, isInputting, showEditor } from '../state'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 const props = defineProps<{
-  resize: boolean
+  resize?: boolean
 }>()
 
 const tab = ref<'content' | 'note'>('content')
@@ -56,8 +56,8 @@ useEventListener('keydown', (e) => {
   }
 })
 
-onMounted(() => {
-  useCodeMirror(
+onMounted(async () => {
+  const contentEditor = await useCodeMirror(
     contentInput,
     computed({
       get() { return content.value },
@@ -77,7 +77,7 @@ onMounted(() => {
     },
   )
 
-  useCodeMirror(
+  const noteEditor = await useCodeMirror(
     noteInput,
     computed({
       get() { return note.value },
@@ -94,14 +94,26 @@ onMounted(() => {
       fencedCodeBlockDefaultMode: 'javascript',
     },
   )
+
+  watch([tab, vertical], () => {
+    nextTick(() => {
+      if (tab.value === 'content')
+        contentEditor.refresh()
+      else
+        noteEditor.refresh()
+    })
+  })
 })
 
 const handlerDown = ref(false)
 function onHandlerDown() {
   handlerDown.value = true
 }
-function updateWidth(v: number) {
-  editorWidth.value = Math.min(Math.max(200, v), window.innerWidth - 200)
+function updateSize(v?: number) {
+  if (vertical.value)
+    editorHeight.value = Math.min(Math.max(300, v ?? editorHeight.value), window.innerHeight - 200)
+  else
+    editorWidth.value = Math.min(Math.max(318, v ?? editorWidth.value), window.innerWidth - 200)
 }
 function switchTab(newTab: typeof tab.value) {
   tab.value = newTab
@@ -111,14 +123,17 @@ function switchTab(newTab: typeof tab.value) {
 
 if (props.resize) {
   useEventListener('pointermove', (e) => {
-    if (handlerDown.value)
-      updateWidth(window.innerWidth - e.pageX)
+    if (handlerDown.value) {
+      updateSize(vertical.value
+        ? window.innerHeight - e.pageY
+        : window.innerWidth - e.pageX)
+    }
   }, { passive: true })
   useEventListener('pointerup', () => {
     handlerDown.value = false
   })
   useEventListener('resize', () => {
-    updateWidth(editorWidth.value)
+    updateSize()
   })
 }
 
@@ -134,46 +149,61 @@ throttledWatch(
 
 <template>
   <div
-    v-if="resize"
-    class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
-    :class="{ '!opacity-30': handlerDown }"
-    :style="{ right: `${editorWidth - 5}px`, cursor: 'col-resize' }"
-    @pointerdown="onHandlerDown"
+    v-if="resize" class="fixed bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
+    :class="vertical ? 'left-0 right-0 w-full h-10px' : 'top-0 bottom-0 w-10px h-full'" :style="{
+      opacity: handlerDown ? '0.3' : undefined,
+      bottom: vertical ? `${editorHeight - 5}px` : undefined,
+      right: !vertical ? `${editorWidth - 5}px` : undefined,
+      cursor: vertical ? 'row-resize' : 'col-resize',
+    }" @pointerdown="onHandlerDown"
   />
   <div
     class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
     :class="resize ? 'border-l border-gray-400 border-opacity-20' : ''"
-    :style="resize ? { width: `${editorWidth}px` } : {}"
+    :style="resize ? {
+      height: vertical ? `${editorHeight}px` : undefined,
+      width: !vertical ? `${editorWidth}px` : undefined,
+    } : {}"
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
-        <button class="slidev-icon-btn" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('content')">
-          <HiddenText text="Switch to content tab" />
+        <IconButton
+          title="Switch to content tab" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''"
+          @click="switchTab('content')"
+        >
           <carbon:account />
-        </button>
-        <button class="slidev-icon-btn" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''" @click="switchTab('note')">
-          <HiddenText text="Switch to notes tab" />
+        </IconButton>
+        <IconButton
+          title="Switch to notes tab" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''"
+          @click="switchTab('note')"
+        >
           <carbon:align-box-bottom-right />
-        </button>
+        </IconButton>
       </div>
       <span class="text-2xl pt-1">
         {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
       <div class="flex-auto" />
-      <button class="slidev-icon-btn" @click="openInEditor()">
-        <HiddenText text="Open in editor" />
+      <template v-if="resize">
+        <IconButton v-if="vertical" title="Dock to right" @click="vertical = false">
+          <carbon:open-panel-right />
+        </IconButton>
+        <IconButton v-else title="Dock to bottom" @click="vertical = true">
+          <carbon:open-panel-bottom />
+        </IconButton>
+      </template>
+      <IconButton title="Open in editor" @click="openInEditor()">
         <carbon:launch />
-      </button>
-      <button class="slidev-icon-btn" @click="close">
-        <HiddenText text="Close" />
+      </IconButton>
+      <IconButton title="Close" @click="close">
         <carbon:close />
-      </button>
+      </IconButton>
     </div>
-    <div class="h-full overflow-auto">
-      <div v-show="tab === 'content'" class="h-full overflow-auto">
+    <div class="overflow-hidden">
+      <div v-show="tab === 'content'" class="w-full h-full">
         <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
-      <div v-show="tab === 'note'" class="h-full overflow-auto">
+      <div v-show="tab === 'note'" class="w-full h-full">
         <textarea ref="noteInput" placeholder="Write some notes..." />
       </div>
     </div>
