@@ -199,7 +199,7 @@ throttledWatch(
         <carbon:close />
       </IconButton>
     </div>
-    <div>
+    <div class="overflow-hidden">
       <div v-show="tab === 'content'" class="w-full h-full">
         <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
