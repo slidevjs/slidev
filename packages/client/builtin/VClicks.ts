@@ -62,12 +62,12 @@ export default defineComponent({
       }) as T
     }
 
-    let defaults = this.$slots.default?.()
+    let elements = this.$slots.default?.()
 
-    if (!defaults)
+    if (!elements)
       return
 
-    defaults = openAllTopLevelSlots(toArray(defaults))
+    elements = openAllTopLevelSlots(toArray(elements))
 
     const mapSubList = (children: VNodeArrayChildren, depth = 1): VNodeArrayChildren => {
       const vNodes = openAllTopLevelSlots(children).map((i) => {
@@ -96,7 +96,7 @@ export default defineComponent({
         if (depth < +this.depth && Array.isArray(i.children))
           vNode = h(i, {}, mapSubList(i.children, depth))
         else
-          vNode = h(i)
+          vNode = i
 
         const delta = thisShowIdx - execIdx
         execIdx = thisShowIdx
@@ -116,23 +116,23 @@ export default defineComponent({
     })
 
     // handle ul, ol list
-    if (defaults.length === 1 && listTags.includes(defaults[0].type as string) && Array.isArray(defaults[0].children))
-      return h(defaults[0], {}, [mapChildren(defaults[0].children), lastGap()])
+    if (elements.length === 1 && listTags.includes(elements[0].type as string) && Array.isArray(elements[0].children))
+      return h(elements[0], {}, [...mapChildren(elements[0].children), lastGap()])
 
-    if (defaults.length === 1 && defaults[0].type as string === 'table') {
-      const tableNode = defaults[0]
+    if (elements.length === 1 && elements[0].type as string === 'table') {
+      const tableNode = elements[0]
       if (Array.isArray(tableNode.children)) {
         return h(tableNode, {}, tableNode.children.map((i) => {
           if (!isVNode(i))
             return i
           else if (i.type === 'tbody' && Array.isArray(i.children))
-            return h(i, {}, [mapChildren(i.children), lastGap()])
+            return h(i, {}, [...mapChildren(i.children), lastGap()])
           else
             return h(i)
         }))
       }
     }
 
-    return [mapChildren(defaults)[0], lastGap()]
+    return [...mapChildren(elements), lastGap()]
   },
 })
