@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { throttledWatch, useEventListener } from '@vueuse/core'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
@@ -56,8 +56,8 @@ useEventListener('keydown', (e) => {
   }
 })
 
-onMounted(() => {
-  useCodeMirror(
+onMounted(async () => {
+  const contentEditor = await useCodeMirror(
     contentInput,
     computed({
       get() { return content.value },
@@ -77,7 +77,7 @@ onMounted(() => {
     },
   )
 
-  useCodeMirror(
+  const noteEditor = await useCodeMirror(
     noteInput,
     computed({
       get() { return note.value },
@@ -94,6 +94,15 @@ onMounted(() => {
       fencedCodeBlockDefaultMode: 'javascript',
     },
   )
+
+  watch([tab, vertical], () => {
+    nextTick(() => {
+      if (tab.value === 'content')
+        contentEditor.refresh()
+      else
+        noteEditor.refresh()
+    })
+  })
 })
 
 const handlerDown = ref(false)
@@ -190,11 +199,11 @@ throttledWatch(
         <carbon:close />
       </button>
     </div>
-    <div class="relative overflow-auto">
-      <div :style="{ visibility: tab === 'content' ? 'visible' : 'hidden' }" class="absolute w-full h-full">
+    <div>
+      <div v-show="tab === 'content'" class="w-full h-full">
         <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
-      <div :style="{ visibility: tab === 'note' ? 'visible' : 'hidden' }" class="absolute w-full h-full">
+      <div v-show="tab === 'note'" class="w-full h-full">
         <textarea ref="noteInput" placeholder="Write some notes..." />
       </div>
     </div>
