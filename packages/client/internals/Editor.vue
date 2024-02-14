@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, onMounted, ref, watch } from 'vue'
-import { activeElement, editorWidth, isInputting, showEditor } from '../state'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideId, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 import HiddenText from './HiddenText.vue'
 
 const props = defineProps<{
-  resize: boolean
+  resize?: boolean
 }>()
 
 const tab = ref<'content' | 'note'>('content')
@@ -100,8 +100,11 @@ const handlerDown = ref(false)
 function onHandlerDown() {
   handlerDown.value = true
 }
-function updateWidth(v: number) {
-  editorWidth.value = Math.min(Math.max(200, v), window.innerWidth - 200)
+function updateSize(v?: number) {
+  if (vertical.value)
+    editorHeight.value = Math.min(Math.max(300, v ?? editorHeight.value), window.innerHeight - 200)
+  else
+    editorWidth.value = Math.min(Math.max(318, v ?? editorWidth.value), window.innerWidth - 200)
 }
 function switchTab(newTab: typeof tab.value) {
   tab.value = newTab
@@ -111,14 +114,17 @@ function switchTab(newTab: typeof tab.value) {
 
 if (props.resize) {
   useEventListener('pointermove', (e) => {
-    if (handlerDown.value)
-      updateWidth(window.innerWidth - e.pageX)
+    if (handlerDown.value) {
+      updateSize(vertical.value
+        ? window.innerHeight - e.pageY
+        : window.innerWidth - e.pageX)
+    }
   }, { passive: true })
   useEventListener('pointerup', () => {
     handlerDown.value = false
   })
   useEventListener('resize', () => {
-    updateWidth(editorWidth.value)
+    updateSize()
   })
 }
 
@@ -134,16 +140,21 @@ throttledWatch(
 
 <template>
   <div
-    v-if="resize"
-    class="fixed h-full top-0 bottom-0 w-10px bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
-    :class="{ '!opacity-30': handlerDown }"
-    :style="{ right: `${editorWidth - 5}px`, cursor: 'col-resize' }"
-    @pointerdown="onHandlerDown"
+    v-if="resize" class="fixed bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
+    :class="vertical ? 'left-0 right-0 w-full h-10px' : 'top-0 bottom-0 w-10px h-full'" :style="{
+      opacity: handlerDown ? '0.3' : undefined,
+      bottom: vertical ? `${editorHeight - 5}px` : undefined,
+      right: !vertical ? `${editorWidth - 5}px` : undefined,
+      cursor: vertical ? 'row-resize' : 'col-resize',
+    }" @pointerdown="onHandlerDown"
   />
   <div
     class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
     :class="resize ? 'border-l border-gray-400 border-opacity-20' : ''"
-    :style="resize ? { width: `${editorWidth}px` } : {}"
+    :style="resize ? {
+      height: vertical ? `${editorHeight}px` : undefined,
+      width: !vertical ? `${editorWidth}px` : undefined,
+    } : {}"
   >
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
@@ -160,6 +171,16 @@ throttledWatch(
         {{ tab === 'content' ? 'Slide' : 'Notes' }}
       </span>
       <div class="flex-auto" />
+      <button v-if="resize" class="slidev-icon-btn" @click="vertical = !vertical">
+        <template v-if="vertical">
+          <HiddenText text="Dock to right" />
+          <carbon:open-panel-right />
+        </template>
+        <template v-else>
+          <HiddenText text="Dock to bottom" />
+          <carbon:open-panel-bottom />
+        </template>
+      </button>
       <button class="slidev-icon-btn" @click="openInEditor()">
         <HiddenText text="Open in editor" />
         <carbon:launch />
