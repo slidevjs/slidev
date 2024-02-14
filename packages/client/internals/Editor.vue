@@ -169,11 +169,11 @@ throttledWatch(
         <carbon:close />
       </button>
     </div>
-    <div class="h-full overflow-auto">
-      <div v-show="tab === 'content'" class="h-full overflow-auto">
+    <div class="relative overflow-auto">
+      <div :style="{ visibility: tab === 'content' ? 'visible' : 'hidden' }" class="absolute w-full h-full">
         <textarea ref="contentInput" placeholder="Create slide content..." />
       </div>
-      <div v-show="tab === 'note'" class="h-full overflow-auto">
+      <div :style="{ visibility: tab === 'note' ? 'visible' : 'hidden' }" class="absolute w-full h-full">
         <textarea ref="noteInput" placeholder="Write some notes..." />
       </div>
     </div>
