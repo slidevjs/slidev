@@ -21,13 +21,18 @@ function undo() {
 function redo() {
   drauu.redo()
 }
+
+let lastDrawingMode: typeof drawingMode.value = 'stylus'
 function setDrawingMode(mode: typeof drawingMode.value) {
   drawingMode.value = mode
   drawingEnabled.value = true
+  if (mode !== 'eraseLine')
+    lastDrawingMode = mode
 }
 function setBrushColor(color: typeof brush.color) {
   brush.color = color
   drawingEnabled.value = true
+  drawingMode.value = lastDrawingMode
 }
 </script>
 
@@ -67,7 +72,7 @@ function setBrushColor(color: typeof brush.color) {
       v-for="color of brushColors"
       :key="color"
       title="Set brush color"
-      :class="brush.color === color ? 'active' : 'shallow'"
+      :class="brush.color === color && drawingMode !== 'eraseLine' ? 'active' : 'shallow'"
       @click="setBrushColor(color)"
     >
       <div
