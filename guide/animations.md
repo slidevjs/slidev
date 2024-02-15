@@ -1,51 +1,59 @@
+---
+outline: deep
+---
+
 # Animations
 
 ## Click Animations
+
+> [!NOTE]
+> Since v0.48.0, we are rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
 
 ### `v-click`
 
 To apply "click animations" for elements, you can use the `v-click` directive or `<v-click>` components
 
 ```md
-# Hello
+<!-- Component usage:
+     this will be invisible until you press "next" -->
+<v-click> Hello **World** </v-click>
 
-<!-- Component usage: this will be invisible until you press "next" -->
-<v-click>
-
-Hello World
-
-</v-click>
-
-<!-- Directive usage: this will be invisible until you press "next" the second time -->
-<div v-click class="text-xl p-2">
-
-Hey!
-
-</div>
+<!-- Directive usage:
+     this will be invisible until you press "next" the second time -->
+<div v-click class="text-xl"> Hey! </div>
 ```
 
 ### `v-after`
 
-The usage of `v-after` is similar to `v-click` but it will turn the element visible when the previous `v-click` is triggered.
+`v-after` is only provided as a directive. It will turn the element visible when the previous `v-click` is triggered.
 
 ```md
-<div v-click>Hello</div>
-<div v-after>World</div>
+<div v-click> Hello </div>
+<div v-after> World </div>
 ```
 
-When you click the "next" button, both `Hello` and `World` will show up together.
+When you press "next", both `Hello` and `World` will show up together.
 
-### `v-click-hide`
+### Hide after clicking
 
-Same as `v-click` but instead of making the element appear, it makes the element invisible after clicking.
+Add a `.hide` modifier to `v-click` or `v-after` to make the element invisible after clicking, instead of showing up.
 
 ```md
-<div v-click-hide>Hello</div>
+<div v-click> Visible after 1 click </div>
+<div v-click.hide> Hidden after 2 click </div>
+<div v-after.hide> Hidden after 2 click </div>
+```
+
+For `v-click` component, you can use the `hide` prop to achieve the same effect:
+
+```md
+<v-click> Visible after 1 click </v-click>
+<v-click hide> Hidden after 2 click </v-click>
 ```
 
 ### `v-clicks`
 
-`v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists.
+`v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists and tables.
 
 ```md
 <v-clicks>
@@ -53,14 +61,12 @@ Same as `v-click` but instead of making the element appear, it makes the element
 - Item 1
 - Item 2
 - Item 3
-- Item 4
 
 </v-clicks>
 ```
 
 An item will become visible each time you click "next".
-
-It accepts a `depth` props for nested list:
+It accepts a `depth` prop for nested list:
 
 ```md
 <v-clicks depth="2">
@@ -75,44 +81,108 @@ It accepts a `depth` props for nested list:
 </v-clicks>
 ```
 
-### Custom Clicks Count
-
-By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
-
-```yaml
----
-# 10 clicks in this slide, before going to the next
-clicks: 10
----
-```
-
-### Ordering
-
-Passing the click index to your directives, you can customize the order of the revealing
+Also, you can use the `every` prop to specify the number of items to show after each click:
 
 ```md
-<div v-click>1</div>
-<div v-click>2</div>
-<div v-click>3</div>
-```
+<v-clicks every="2">
 
-```md
-<!-- the order is reversed -->
-<div v-click="3">1</div>
-<div v-click="2">2</div>
-<div v-click="1">3</div>
-```
+- Item 1 (part 1)
+- Item 1 (part 2)
+- Item 2 (part 1)
+- Item 2 (part 2)
 
-```md
----
-clicks: 3
----
-
-<!-- visible after 3 clicks -->
-<v-clicks at="3">
-  <div>Hi</div>
 </v-clicks>
 ```
+
+### Positioning
+
+By default, the clicking animations take place one by one. You can customize the animation position of elements by using the `at` prop or the `v-click` directive with value.
+
+Like the CSS layout system, click-animated elements can be "relative" or "absolute":
+
+#### Relative Position
+
+This actual position of relative elements are calculated based on the previous relative elements:
+
+~~~md
+<div v-click> visible after 1 click </div>
+<v-click at="+2"><div> visible after 3 clicks </div></v-click>
+<div v-click.hide="'-1'"> hidden after 2 clicks </div>
+
+```js {none|1|2}{at:'+5'}
+1  // highlighted after 7 clicks
+2  // highlighted after 8 clicks
+```
+~~~
+
+> [!NOTE]
+> The default value of `v-click` is `'+1'` when you don't specify it.
+
+In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
+
+```md
+<!-- The following 2 usages are equivalent -->
+<img v-after />
+<img v-click="'+0'" />
+
+<!-- The following 3 usages are equivalent -->
+<img v-click />
+<img v-click="'+1'" />
+<v-click-gap size="1" /><img v-after />
+```
+
+:::info
+Only string values start with `'+'` or `'-'` like `'+1'` are treated as relative positions:
+
+| Value          | Kind     |
+| -------------- | -------- |
+| `'-1'`, `'+1'` | Relative |
+| `+1` === `1`   | Absolute |
+| `'1'`          | Absolute |
+
+So don't forget the single quotes for the relative values.
+:::
+
+#### Absolute Position
+
+The given value is the exact click count to show the element:
+
+~~~md
+<div v-click="3"> visible after 3 clicks </div>
+<v-click at="2"><div> visible after 2 clicks </div></v-click>
+<div v-click.hide="1"> hidden after 1 click </div>
+
+```js {none|1|2}{at:3}
+1  // highlighted after 3 clicks
+2  // highlighted after 4 clicks
+```
+~~~
+
+#### Mixed Case
+
+You can mix the absolute and relative positions:
+
+~~~md
+<div v-click> visible after 1 click </div>
+<div v-click="3"> visible after 3 clicks </div>
+<div v-click> visible after 2 click </div>
+<div v-click="'-1'"> visible after 1 click </div>
+<div v-click="4"> visible after 4 clicks </div>
+~~~
+
+The following example synchronizes the highlighting of the two code blocks:
+
+~~~md
+```js {1|2}{at:1}
+1 + 1
+'a' + 'b'
+```
+
+```js {1|2}{at:1}
+2
+'ab'
+```
+~~~
 
 ### Enter & Leave
 
@@ -122,6 +192,17 @@ You can also specify the enter and leave index for the `v-click` directive by pa
 
 ```md
 <div v-click="[2, 4]">This will be shown on the 2nd and 3rd clicks, and hide again after the 4th.</div>
+```
+
+### Custom Total Clicks Count
+
+By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
+
+```yaml
+---
+# 10 clicks in this slide, before going to the next
+clicks: 10
+---
 ```
 
 ### Element Transitions

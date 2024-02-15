@@ -120,20 +120,7 @@ function add(
 ```
 ~~~
 
-You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. In case you want to disable the numbering for an specific block when `lineNumbers: true` you can set `lines:false` for that block:
-
-~~~md
-```ts {2,3}{lines:true}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-~~~
-
-You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
+You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
 
 ~~~md
 ```ts {6,7}{lines:true, startLine:5}
@@ -146,7 +133,7 @@ function add(
 ```
 ~~~
 
-To change the highlight in multiple steps, you can use `|` to separate them. For example
+To change the highlight in multiple clicks, you can use `|` to separate them:
 
 ~~~md
 ```ts {2-3|5|all}
@@ -159,12 +146,12 @@ function add(
 ```
 ~~~
 
-This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block. Learn more in the [clicks animations guide](/guide/animations).
+This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block.
 
-You can start the highlight at a specific click:
+You can set the line number to `hide` to hide the code block or `none` to not highlight any line:
 
 ~~~md
-```ts {2-3|5|all}{at:0}
+```ts {hide|none}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -174,26 +161,14 @@ function add(
 ```
 ~~~
 
-This is especially useful when you need to sync different animations (when using `two-cols` layout and list animation for instance).
-You may need to set the [custom clicks count](/guide/animations#custom-clicks-count) for the slide progression to function correctly.
+::: tip
+Learn more in the [clicks animations guide](./animations#positioning).
+:::
 
-To skip highlighting any lines, you can set the line number to `0`. For example
 
-~~~md {1}
-```ts {0}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-~~~
+If the code doesn't fit into one slide, you use the `maxHeight` to set fixed height and enable scrolling:
 
-If the code doesn't fit into one slide, you can pass an extra maxHeight option which will set fixed height
-and enable scrolling
-
-~~~md {1}
+~~~md
 ```ts {2|3|7|12}{maxHeight:'100px'}
 function add(
   a: Ref<number> | number,
@@ -469,7 +444,7 @@ You can import code snippets from existing files via following syntax:
 <<< @/snippets/snippet.js
 ```
 
-::: ttp
+::: tip
 The value of `@` corresponds to the source root, the directory where the `slides.md` is located.
 :::
 
@@ -545,6 +520,8 @@ $$ {1|3|all}
 \end{array}
 $$
 ```
+
+The `at` and `finally` options of [code blocks](#line-highlighting) are also available for LaTeX blocks.
 
 ## Diagrams
 
