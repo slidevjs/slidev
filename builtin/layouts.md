@@ -97,7 +97,6 @@ backgroundSize: 20em 70%
 ---
 ```
 
-
 ### `iframe-left`
 
 Shows a web page on the left side of the screen, the content will be placed on the right side.

@@ -165,7 +165,6 @@ function add(
 Learn more in the [clicks animations guide](./animations#positioning).
 :::
 
-
 If the code doesn't fit into one slide, you use the `maxHeight` to set fixed height and enable scrolling:
 
 ~~~md

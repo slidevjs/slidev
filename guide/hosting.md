@@ -106,15 +106,15 @@ We recommend to use `npm init slidev@latest` to scaffold your project, which con
 
 Create `netlify.toml` in your project root with the following content.
 
-```ts
-[build.environment]
-NODE_VERSION = '14'
-
-  [build]
+```toml
+[build]
 publish = 'dist'
 command = 'npm run build'
 
-  [[redirects]]
+[build.environment]
+NODE_VERSION = '20'
+
+[[redirects]]
 from = '/*'
 to = '/index.html'
 status = 200
