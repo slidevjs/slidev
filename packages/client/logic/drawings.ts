@@ -40,11 +40,13 @@ export const drawingMode = computed({
   set(v: DrawingMode | 'arrow') {
     _mode.value = v
     if (v === 'arrow') {
-      brush.mode = 'line'
+      // eslint-disable-next-line ts/no-use-before-define
+      drauu.mode = 'line'
       brush.arrowEnd = true
     }
     else {
-      brush.mode = v
+      // eslint-disable-next-line ts/no-use-before-define
+      drauu.mode = v
       brush.arrowEnd = false
     }
   },
