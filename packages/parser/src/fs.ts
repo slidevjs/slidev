@@ -100,6 +100,7 @@ export async function save(data: SlidevMarkdown, filepath?: string) {
   await fs.writeFile(filepath, stringify(data), 'utf-8')
 }
 
-export async function saveExternalSlide(slide: SlideInfoWithPath) {
-  await fs.writeFile(slide.filepath, stringifySlide(slide), 'utf-8')
+export async function saveExternalSlide(data: SlidevMarkdown, filepath: string) {
+  const slides = data.slides.map(s => s.source).filter(s => s?.filepath === filepath)
+  await fs.writeFile(filepath, stringify({ slides } as any), 'utf-8')
 }
