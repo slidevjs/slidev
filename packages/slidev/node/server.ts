@@ -35,6 +35,10 @@ export async function createServer(
         plugins: [
           await ViteSlidevPlugin(options, config.slidev || {}, serverOptions),
         ],
+        define: {
+          // Fixes Vue production mode breaking PDF Export #1245
+          __VUE_PROD_DEVTOOLS__: JSON.stringify(true),
+        },
       },
     ),
   )
