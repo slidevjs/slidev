@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path'
-import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
+import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import { isString, isTruthy, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -409,6 +409,39 @@ export function createSlidesLoader(
           return replaced
       },
     },
+    {
+      name: 'slidev:index-html-transform',
+      transformIndexHtml() {
+        const { info, author, keywords } = data.headmatter
+        return [
+          {
+            tag: 'title',
+            children: getTitle(),
+          },
+          info && {
+            tag: 'meta',
+            attrs: {
+              name: 'description',
+              content: info,
+            },
+          },
+          author && {
+            tag: 'meta',
+            attrs: {
+              name: 'author',
+              content: author,
+            },
+          },
+          keywords && {
+            tag: 'meta',
+            attrs: {
+              name: 'keywords',
+              content: Array.isArray(keywords) ? keywords.join(', ') : keywords,
+            },
+          },
+        ].filter(isTruthy) as HtmlTagDescriptor[]
+      },
+    },
   ]
 
   function updateServerWatcher() {
@@ -671,11 +704,19 @@ defineProps<{ no: number | string }>()`)
     return [...imports, routesStr, redirectsStr].join('\n')
   }
 
+  function getTitle() {
+    if (isString(data.config.title)) {
+      const tokens = md.parseInline(data.config.title, {})
+      return stringifyMarkdownTokens(tokens)
+    }
+    return data.config.title
+  }
+
   function generateConfigs() {
-    const config = { ...data.config, remote }
-    if (isString(config.title)) {
-      const tokens = md.parseInline(config.title, {})
-      config.title = stringifyMarkdownTokens(tokens)
+    const config = {
+      ...data.config,
+      remote,
+      title: getTitle(),
     }
 
     if (isString(config.info))
