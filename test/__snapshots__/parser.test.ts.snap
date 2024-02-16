@@ -694,9 +694,7 @@ srcSequence: sub/page1.md
     "source": {
       "content": "# Page 1",
       "end": 2,
-      "frontmatter": {
-        "title": "Page 1",
-      },
+      "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -721,7 +719,6 @@ srcSequence: sub/page1.md
       "background": "https://sli.dev/demo-cover.png#2",
       "layout": "cover",
       "srcSequence": "/sub/page2.md",
-      "title": "Page 2",
     },
     "frontmatterRaw": "layout: cover
 ",
@@ -752,7 +749,6 @@ background: https://sli.dev/demo-cover.png#2
     "note": undefined,
     "raw": "---
 layout: cover
-title: Page 2
 background: https://sli.dev/demo-cover.png#2
 srcSequence: /sub/page2.md
 ---
@@ -769,7 +765,6 @@ srcSequence: /sub/page2.md
       "end": 8,
       "frontmatter": {
         "layout": "cover",
-        "title": "Page 2",
       },
       "frontmatterRaw": "layout: cover
 ",
@@ -799,7 +794,6 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
       "srcSequence": "./sub/pages3-4.md",
-      "title": "Page 3",
     },
     "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
@@ -828,7 +822,6 @@ background: https://sli.dev/demo-cover.png#34
     "level": 1,
     "note": undefined,
     "raw": "---
-title: Page 3
 background: https://sli.dev/demo-cover.png#34
 srcSequence: ./sub/pages3-4.md
 ---
@@ -839,9 +832,7 @@ srcSequence: ./sub/pages3-4.md
     "source": {
       "content": "# Page 3",
       "end": 2,
-      "frontmatter": {
-        "title": "Page 3",
-      },
+      "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -920,7 +911,6 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "srcSequence": "sub/nested1-4.md,/sub/page1.md",
-      "title": undefined,
     },
     "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
@@ -959,9 +949,7 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
     "source": {
       "content": "# Page 1",
       "end": 2,
-      "frontmatter": {
-        "title": "Page 1",
-      },
+      "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -986,7 +974,6 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
       "srcSequence": "sub/nested1-4.md,page2.md",
-      "title": "Page 2",
     },
     "frontmatterRaw": "layout: cover
 ",
@@ -996,7 +983,6 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
     "note": undefined,
     "raw": "---
 layout: cover
-title: Page 2
 background: https://sli.dev/demo-cover.png#14
 srcSequence: sub/nested1-4.md,page2.md
 ---
@@ -1013,7 +999,6 @@ srcSequence: sub/nested1-4.md,page2.md
       "end": 8,
       "frontmatter": {
         "layout": "cover",
-        "title": "Page 2",
       },
       "frontmatterRaw": "layout: cover
 ",
@@ -1043,7 +1028,6 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
-      "title": "Page 3",
     },
     "frontmatterRaw": undefined,
     "frontmatterStyle": undefined,
@@ -1051,7 +1035,6 @@ layout: cover
     "level": 1,
     "note": undefined,
     "raw": "---
-title: Page 3
 background: https://sli.dev/demo-cover.png#14
 srcSequence: sub/nested1-4.md,../sub/pages3-4.md
 ---
@@ -1062,9 +1045,7 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
     "source": {
       "content": "# Page 3",
       "end": 2,
-      "frontmatter": {
-        "title": "Page 3",
-      },
+      "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,

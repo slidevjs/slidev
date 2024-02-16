@@ -124,7 +124,7 @@ export function createSlidesLoader(
 
             if (slide.source) {
               Object.assign(slide.source, body)
-              await parser.saveExternalSlide(slide.source)
+              await parser.saveExternalSlide(data, slide.source.filepath)
             }
             else {
               Object.assign(slide, body)
