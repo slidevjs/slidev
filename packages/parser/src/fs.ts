@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import type { PreparserExtensionLoader, SlideInfo, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
-import { detectFeatures, mergeFeatureFlags, parse, stringify } from './core'
+import { mergeFeatureFlags, parse, stringify } from './core'
 
 export * from './core'
 
@@ -37,24 +37,29 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
       continue
     }
 
-    data.slides.splice(iSlide, 1)
-
     if (baseSlide.frontmatter.hide)
       continue
 
     const srcExpression = baseSlide.frontmatter.src
-    let path
+    let path: string
     if (srcExpression.startsWith('/'))
       path = resolve(dir, srcExpression.substring(1))
     else if (baseSlide.source?.filepath)
       path = resolve(dirname(baseSlide.source.filepath), srcExpression)
     else
       path = resolve(dir, srcExpression)
+    entries.add(path)
 
     const raw = await fs.readFile(path, 'utf-8')
-    const subSlides = await parse(raw, path, themeMeta, preparserExtensions)
+    const subSlidesData = await parse(raw, path, themeMeta, preparserExtensions)
+    delete subSlidesData.headmatter.title
+    delete subSlidesData.slides[0].frontmatter.title
 
-    for (const [offset, subSlide] of subSlides.slides.entries()) {
+    data.features = mergeFeatureFlags(data.features, subSlidesData.features)
+    data.subSlides ??= {}
+    data.subSlides[path] = subSlidesData
+
+    const subSlides = subSlidesData.slides.map((subSlide, offset) => {
       const slide: SlideInfo = { ...baseSlide }
 
       slide.source = {
@@ -80,11 +85,12 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
         srcSequence: `${baseSlide.frontmatter.srcSequence ? `${baseSlide.frontmatter.srcSequence},` : ''}${srcExpression}`,
       }
 
-      data.features = mergeFeatureFlags(data.features, detectFeatures(raw))
-      entries.add(path)
-      data.slides.splice(iSlide + offset, 0, slide)
-    }
+      return slide
+    })
+    subSlidesData.slides = subSlides.map(slide => slide.source!)
+    data.slides.splice(iSlide, 1, ...subSlides)
   }
+
   // re-index slides
   for (let iSlide = 0; iSlide < data.slides.length; iSlide++)
     data.slides[iSlide].index = iSlide === 0 ? 0 : 1 + data.slides[iSlide - 1].index
@@ -101,6 +107,5 @@ export async function save(data: SlidevMarkdown, filepath?: string) {
 }
 
 export async function saveExternalSlide(data: SlidevMarkdown, filepath: string) {
-  const slides = data.slides.map(s => s.source).filter(s => s?.filepath === filepath)
-  await fs.writeFile(filepath, stringify({ slides } as any), 'utf-8')
+  await fs.writeFile(filepath, stringify(data.subSlides![filepath]), 'utf-8')
 }
