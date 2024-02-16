@@ -59,7 +59,6 @@ export interface SlidevMarkdown {
   filepath?: string
   entries?: string[]
   themeMeta?: SlidevThemeMeta
-
   subSlides?: Record<string, SlidevMarkdown>
 }
 
