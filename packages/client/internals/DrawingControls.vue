@@ -91,7 +91,7 @@ function setBrushColor(color: typeof brush.color) {
       <carbon:redo />
     </IconButton>
     <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clearDrauu()">
-      <carbon:delete />
+      <carbon:trash-can />
     </IconButton>
 
     <VerticalDivider />
