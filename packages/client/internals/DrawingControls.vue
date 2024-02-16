@@ -76,8 +76,8 @@ function setBrushColor(color: typeof brush.color) {
       @click="setBrushColor(color)"
     >
       <div
-        class="w-6 h-6 transition-all transform border border-gray-400/50"
-        :class="brush.color !== color ? 'rounded-1/2 scale-85' : 'rounded-md'"
+        class="w-6 h-6 transition-all transform border"
+        :class="brush.color !== color ? 'rounded-1/2 scale-85 border-white' : 'rounded-md border-gray-300/50'"
         :style="drawingEnabled ? { background: color } : { borderColor: color }"
       />
     </IconButton>
