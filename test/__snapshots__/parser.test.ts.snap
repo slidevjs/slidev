@@ -79,10 +79,7 @@ exports[`md parser > frontmatter.md > features 1`] = `
 exports[`md parser > frontmatter.md > slides 1`] = `
 [
   {
-    "content": "
-# Hi
-",
-    "end": 8,
+    "content": "# Hi",
     "frontmatter": {
       "fonts": {
         "mono": "Fira Code",
@@ -90,38 +87,51 @@ exports[`md parser > frontmatter.md > slides 1`] = `
         "serif": "Mate SC",
       },
       "layout": "cover",
-      "title": "Hi",
     },
-    "frontmatterRaw": "layout: cover
+    "index": 0,
+    "level": 1,
+    "note": undefined,
+    "source": {
+      "content": "
+# Hi
+",
+      "end": 8,
+      "frontmatter": {
+        "fonts": {
+          "mono": "Fira Code",
+          "sans": "Roboto, Lato",
+          "serif": "Mate SC",
+        },
+        "layout": "cover",
+      },
+      "frontmatterRaw": "layout: cover
 fonts:
   sans: Roboto, Lato
   serif: Mate SC
   mono: Fira Code
 ",
-    "frontmatterStyle": "frontmatter",
-    "index": 0,
-    "level": 1,
-    "note": undefined,
-    "raw": "---
+      "frontmatterStyle": "frontmatter",
+      "index": 0,
+      "level": 1,
+      "note": undefined,
+      "raw": "---
 layout: cover
 fonts:
   sans: Roboto, Lato
   serif: Mate SC
   mono: Fira Code
-title: Hi
 ---
 
 # Hi
 
 ",
-    "start": 0,
+      "start": 0,
+      "title": "Hi",
+    },
     "title": "Hi",
   },
   {
-    "content": "
-# Hello
-",
-    "end": 16,
+    "content": "# Hello",
     "frontmatter": {
       "layout": "center",
       "meta": {
@@ -129,16 +139,31 @@ title: Hi
         "title": "FooBar",
       },
     },
-    "frontmatterRaw": "meta:
+    "index": 1,
+    "level": 1,
+    "note": "This is note",
+    "source": {
+      "content": "
+# Hello
+",
+      "end": 16,
+      "frontmatter": {
+        "layout": "center",
+        "meta": {
+          "duration": 12,
+          "title": "FooBar",
+        },
+      },
+      "frontmatterRaw": "meta:
   title: FooBar
   duration: 12
 layout: center
 ",
-    "frontmatterStyle": "frontmatter",
-    "index": 1,
-    "level": 1,
-    "note": "This is note",
-    "raw": "---
+      "frontmatterStyle": "frontmatter",
+      "index": 1,
+      "level": 1,
+      "note": "This is note",
+      "raw": "---
 meta:
   title: FooBar
   duration: 12
@@ -151,43 +176,62 @@ layout: center
 This is note
 -->
 ",
-    "start": 8,
+      "start": 8,
+      "title": "Hello",
+    },
     "title": "Hello",
   },
   {
-    "content": "
-# Morning
-",
-    "end": 19,
+    "content": "# Morning",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 2,
     "level": 1,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+# Morning
+",
+      "end": 19,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 2,
+      "level": 1,
+      "note": undefined,
+      "raw": "
 # Morning
 
 ",
-    "start": 17,
+      "start": 17,
+      "title": "Morning",
+    },
     "title": "Morning",
   },
   {
-    "content": "
-<!-- This is not note -->
-Hey
-",
-    "end": 26,
+    "content": "<!-- This is not note -->
+Hey",
     "frontmatter": {
       "layout": "text",
     },
-    "frontmatterRaw": "layout: text
-",
-    "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": undefined,
     "note": "This is note",
-    "raw": "---
+    "source": {
+      "content": "
+<!-- This is not note -->
+Hey
+",
+      "end": 26,
+      "frontmatter": {
+        "layout": "text",
+      },
+      "frontmatterRaw": "layout: text
+",
+      "frontmatterStyle": "frontmatter",
+      "index": 3,
+      "level": undefined,
+      "note": "This is note",
+      "raw": "---
 layout: text
 ---
 
@@ -198,26 +242,39 @@ Hey
 This is note
 -->
 ",
-    "start": 19,
+      "start": 19,
+      "title": undefined,
+    },
     "title": undefined,
   },
   {
-    "content": "
-\`\`\`md
+    "content": "\`\`\`md
 ---
 this should be treated as code block
 ---
 ----
-\`\`\`
-",
-    "end": 35,
+\`\`\`",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 4,
     "level": undefined,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+\`\`\`md
+---
+this should be treated as code block
+---
+----
+\`\`\`
+",
+      "end": 35,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 4,
+      "level": undefined,
+      "note": undefined,
+      "raw": "
 \`\`\`md
 ---
 this should be treated as code block
@@ -226,37 +283,62 @@ this should be treated as code block
 \`\`\`
 
 ",
-    "start": 27,
+      "start": 27,
+      "title": undefined,
+    },
     "title": undefined,
   },
   {
-    "content": "
-Content 1
-",
-    "end": 44,
+    "content": "Content 1",
     "frontmatter": {
       "layout": "from yaml",
     },
-    "frontmatterRaw": "
-# The first yaml block should be treated as frontmatter
-layout: from yaml
-",
-    "frontmatterStyle": "yaml",
     "index": 5,
     "level": undefined,
     "note": undefined,
-    "raw": "\`\`\`yaml
+    "source": {
+      "content": "
+Content 1
+",
+      "end": 44,
+      "frontmatter": {
+        "layout": "from yaml",
+      },
+      "frontmatterRaw": "
+# The first yaml block should be treated as frontmatter
+layout: from yaml
+",
+      "frontmatterStyle": "yaml",
+      "index": 5,
+      "level": undefined,
+      "note": undefined,
+      "raw": "\`\`\`yaml
 layout: from yaml
 \`\`\`
 
 Content 1
 
 ",
-    "start": 36,
+      "start": 36,
+      "title": undefined,
+    },
     "title": undefined,
   },
   {
-    "content": "
+    "content": "\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 1
+\`\`\`
+
+Content 2",
+    "frontmatter": {
+      "layout": "cover",
+    },
+    "index": 6,
+    "level": 1,
+    "note": undefined,
+    "source": {
+      "content": "
 \`\`\`yaml
 # When there is already a frontmatter, the first yaml block should be treated as content
 layout: should not from yaml 1
@@ -264,17 +346,17 @@ layout: should not from yaml 1
 
 Content 2
 ",
-    "end": 55,
-    "frontmatter": {
-      "layout": "cover",
-    },
-    "frontmatterRaw": "layout: cover
+      "end": 55,
+      "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterRaw": "layout: cover
 ",
-    "frontmatterStyle": "frontmatter",
-    "index": 6,
-    "level": 1,
-    "note": undefined,
-    "raw": "---
+      "frontmatterStyle": "frontmatter",
+      "index": 6,
+      "level": 1,
+      "note": undefined,
+      "raw": "---
 layout: cover
 ---
 
@@ -286,28 +368,43 @@ layout: should not from yaml 1
 Content 2
 
 ",
-    "start": 44,
+      "start": 44,
+      "title": "When there is already a frontmatter, the first yaml block should be treated as content",
+    },
     "title": "When there is already a frontmatter, the first yaml block should be treated as content",
   },
   {
-    "content": "
-# Title
+    "content": "# Title
 
 \`\`\`yaml
 # When there is already a frontmatter, the first yaml block should be treated as content
 layout: should not from yaml 2
 \`\`\`
 
-Content 3
-",
-    "end": 66,
+Content 3",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 7,
     "level": 1,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+# Title
+
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 2
+\`\`\`
+
+Content 3
+",
+      "end": 66,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 7,
+      "level": 1,
+      "note": undefined,
+      "raw": "
 # Title
 
 \`\`\`yaml
@@ -318,7 +415,9 @@ layout: should not from yaml 2
 Content 3
 
 ",
-    "start": 56,
+      "start": 56,
+      "title": "Title",
+    },
     "title": "Title",
   },
 ]
@@ -394,25 +493,33 @@ exports[`md parser > mdc.md > features 1`] = `
 exports[`md parser > mdc.md > slides 1`] = `
 [
   {
-    "content": "
+    "content": "# MDC{style="color:red"}
+
+:arrow{x1=1 y1=1 x2=2 y2=2}",
+    "frontmatter": {
+      "mdc": true,
+    },
+    "index": 0,
+    "level": 1,
+    "note": undefined,
+    "source": {
+      "content": "
 # MDC{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
-    "end": 8,
-    "frontmatter": {
-      "mdc": true,
-      "title": "MDC{style="color:red"}",
-    },
-    "frontmatterRaw": "mdc: true
+      "end": 8,
+      "frontmatter": {
+        "mdc": true,
+      },
+      "frontmatterRaw": "mdc: true
 ",
-    "frontmatterStyle": "frontmatter",
-    "index": 0,
-    "level": 1,
-    "note": undefined,
-    "raw": "---
+      "frontmatterStyle": "frontmatter",
+      "index": 0,
+      "level": 1,
+      "note": undefined,
+      "raw": "---
 mdc: true
-title: MDC{style="color:red"}
 ---
 
 # MDC{style="color:red"}
@@ -420,7 +527,9 @@ title: MDC{style="color:red"}
 :arrow{x1=1 y1=1 x2=2 y2=2}
 
 ",
-    "start": 0,
+      "start": 0,
+      "title": "MDC{style="color:red"}",
+    },
     "title": "MDC{style="color:red"}",
   },
 ]
@@ -495,8 +604,7 @@ exports[`md parser > minimal.md > features 1`] = `
 exports[`md parser > minimal.md > slides 1`] = `
 [
   {
-    "content": "
-# H1
+    "content": "# H1
 ## H2
 ### H3
 
@@ -504,21 +612,31 @@ Sample Text
 
 \`\`\`ts
 console.log('Hello World')
-\`\`\`
-",
-    "end": 10,
-    "frontmatter": {
-      "title": "H1",
-    },
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
+\`\`\`",
+    "frontmatter": {},
     "index": 0,
     "level": 1,
     "note": undefined,
-    "raw": "---
-title: H1
----
+    "source": {
+      "content": "
+# H1
+## H2
+### H3
 
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`
+",
+      "end": 10,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 0,
+      "level": 1,
+      "note": undefined,
+      "raw": "
 # H1
 ## H2
 ### H3
@@ -530,26 +648,39 @@ console.log('Hello World')
 \`\`\`
 
 ",
-    "start": 0,
+      "start": 0,
+      "title": "H1",
+    },
     "title": "H1",
   },
   {
-    "content": "
-# Hello
+    "content": "# Hello
 
 - Hello
 - Hi
 - Hey
-- Yo
-",
-    "end": 18,
+- Yo",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 1,
     "level": 1,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+# Hello
+
+- Hello
+- Hi
+- Hey
+- Yo
+",
+      "end": 18,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 1,
+      "level": 1,
+      "note": undefined,
+      "raw": "
 # Hello
 
 - Hello
@@ -558,25 +689,35 @@ console.log('Hello World')
 - Yo
 
 ",
-    "start": 11,
+      "start": 11,
+      "title": "Hello",
+    },
     "title": "Hello",
   },
   {
-    "content": "
-Nice to meet you
-",
-    "end": 22,
+    "content": "Nice to meet you",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 2,
     "level": undefined,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+Nice to meet you
+",
+      "end": 22,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 2,
+      "level": undefined,
+      "note": undefined,
+      "raw": "
 Nice to meet you
 
 ",
-    "start": 19,
+      "start": 19,
+      "title": undefined,
+    },
     "title": undefined,
   },
 ]
@@ -636,7 +777,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
     ],
   },
   "src": "sub/page1.md",
-  "title": undefined,
+  "title": "Page 1",
 }
 `;
 
@@ -652,45 +793,11 @@ exports[`md parser > multi-entries.md > features 1`] = `
 exports[`md parser > multi-entries.md > slides 1`] = `
 [
   {
-    "content": "
-# Page 1
-",
-    "end": 2,
-    "frontmatter": {
-      "srcSequence": "sub/page1.md",
-      "title": undefined,
-    },
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
+    "content": "# Page 1",
+    "frontmatter": {},
     "index": 0,
-    "inline": {
-      "content": "",
-      "end": 4,
-      "frontmatter": {
-        "title": undefined,
-      },
-      "frontmatterRaw": "src: sub/page1.md
-",
-      "frontmatterStyle": "frontmatter",
-      "index": 0,
-      "level": undefined,
-      "note": undefined,
-      "raw": "---
-src: sub/page1.md
----
-",
-      "start": 0,
-      "title": undefined,
-    },
     "level": 1,
     "note": undefined,
-    "raw": "---
-srcSequence: sub/page1.md
----
-
-# Page 1
-
-",
     "source": {
       "content": "# Page 1",
       "end": 2,
@@ -705,59 +812,19 @@ srcSequence: sub/page1.md
       "start": 0,
       "title": "Page 1",
     },
-    "start": 0,
     "title": "Page 1",
   },
   {
-    "content": "
-# Page 2
+    "content": "# Page 2
 
-<Tweet />
-",
-    "end": 8,
+<Tweet />",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#2",
       "layout": "cover",
-      "srcSequence": "/sub/page2.md",
     },
-    "frontmatterRaw": "layout: cover
-",
-    "frontmatterStyle": "frontmatter",
     "index": 1,
-    "inline": {
-      "content": "",
-      "end": 9,
-      "frontmatter": {
-        "background": "https://sli.dev/demo-cover.png#2",
-      },
-      "frontmatterRaw": "src: /sub/page2.md
-background: https://sli.dev/demo-cover.png#2
-",
-      "frontmatterStyle": "frontmatter",
-      "index": 1,
-      "level": undefined,
-      "note": undefined,
-      "raw": "---
-src: /sub/page2.md
-background: https://sli.dev/demo-cover.png#2
----
-",
-      "start": 4,
-      "title": undefined,
-    },
     "level": 1,
     "note": undefined,
-    "raw": "---
-layout: cover
-background: https://sli.dev/demo-cover.png#2
-srcSequence: /sub/page2.md
----
-
-# Page 2
-
-<Tweet />
-
-",
     "source": {
       "content": "# Page 2
 
@@ -783,52 +850,16 @@ layout: cover
       "start": 0,
       "title": "Page 2",
     },
-    "start": 0,
     "title": "Page 2",
   },
   {
-    "content": "
-# Page 3
-",
-    "end": 2,
+    "content": "# Page 3",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
-      "srcSequence": "./sub/pages3-4.md",
     },
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 2,
-    "inline": {
-      "content": "",
-      "end": 14,
-      "frontmatter": {
-        "background": "https://sli.dev/demo-cover.png#34",
-      },
-      "frontmatterRaw": "src: ./sub/pages3-4.md
-background: https://sli.dev/demo-cover.png#34
-",
-      "frontmatterStyle": "frontmatter",
-      "index": 2,
-      "level": undefined,
-      "note": undefined,
-      "raw": "---
-src: ./sub/pages3-4.md
-background: https://sli.dev/demo-cover.png#34
----
-",
-      "start": 9,
-      "title": undefined,
-    },
     "level": 1,
     "note": undefined,
-    "raw": "---
-background: https://sli.dev/demo-cover.png#34
-srcSequence: ./sub/pages3-4.md
----
-
-# Page 3
-
-",
     "source": {
       "content": "# Page 3",
       "end": 2,
@@ -843,38 +874,19 @@ srcSequence: ./sub/pages3-4.md
       "start": 0,
       "title": "Page 3",
     },
-    "start": 0,
     "title": "Page 3",
   },
   {
-    "content": "
-# Page 4
+    "content": "# Page 4
 
-<Tweet />
-",
-    "end": 10,
+<Tweet />",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
       "layout": "cover",
-      "srcSequence": "./sub/pages3-4.md",
     },
-    "frontmatterRaw": "layout: cover
-",
-    "frontmatterStyle": "frontmatter",
     "index": 3,
     "level": 1,
     "note": undefined,
-    "raw": "---
-layout: cover
-background: https://sli.dev/demo-cover.png#34
-srcSequence: ./sub/pages3-4.md
----
-
-# Page 4
-
-<Tweet />
-
-",
     "source": {
       "content": "# Page 4
 
@@ -900,52 +912,16 @@ layout: cover
       "start": 2,
       "title": "Page 4",
     },
-    "start": 2,
     "title": "Page 4",
   },
   {
-    "content": "
-# Page 1
-",
-    "end": 2,
+    "content": "# Page 1",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
-      "srcSequence": "sub/nested1-4.md,/sub/page1.md",
     },
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 4,
-    "inline": {
-      "content": "",
-      "end": 19,
-      "frontmatter": {
-        "background": "https://sli.dev/demo-cover.png#14",
-      },
-      "frontmatterRaw": "src: sub/nested1-4.md
-background: https://sli.dev/demo-cover.png#14
-",
-      "frontmatterStyle": "frontmatter",
-      "index": 3,
-      "level": undefined,
-      "note": undefined,
-      "raw": "---
-src: sub/nested1-4.md
-background: https://sli.dev/demo-cover.png#14
----
-",
-      "start": 14,
-      "title": undefined,
-    },
     "level": 1,
     "note": undefined,
-    "raw": "---
-background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,/sub/page1.md
----
-
-# Page 1
-
-",
     "source": {
       "content": "# Page 1",
       "end": 2,
@@ -960,38 +936,19 @@ srcSequence: sub/nested1-4.md,/sub/page1.md
       "start": 0,
       "title": "Page 1",
     },
-    "start": 0,
     "title": "Page 1",
   },
   {
-    "content": "
-# Page 2
+    "content": "# Page 2
 
-<Tweet />
-",
-    "end": 8,
+<Tweet />",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
-      "srcSequence": "sub/nested1-4.md,page2.md",
     },
-    "frontmatterRaw": "layout: cover
-",
-    "frontmatterStyle": "frontmatter",
     "index": 5,
     "level": 1,
     "note": undefined,
-    "raw": "---
-layout: cover
-background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,page2.md
----
-
-# Page 2
-
-<Tweet />
-
-",
     "source": {
       "content": "# Page 2
 
@@ -1017,31 +974,16 @@ layout: cover
       "start": 0,
       "title": "Page 2",
     },
-    "start": 0,
     "title": "Page 2",
   },
   {
-    "content": "
-# Page 3
-",
-    "end": 2,
+    "content": "# Page 3",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
-      "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
     },
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 6,
     "level": 1,
     "note": undefined,
-    "raw": "---
-background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,../sub/pages3-4.md
----
-
-# Page 3
-
-",
     "source": {
       "content": "# Page 3",
       "end": 2,
@@ -1056,38 +998,19 @@ srcSequence: sub/nested1-4.md,../sub/pages3-4.md
       "start": 0,
       "title": "Page 3",
     },
-    "start": 0,
     "title": "Page 3",
   },
   {
-    "content": "
-# Page 4
+    "content": "# Page 4
 
-<Tweet />
-",
-    "end": 10,
+<Tweet />",
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
-      "srcSequence": "sub/nested1-4.md,../sub/pages3-4.md",
     },
-    "frontmatterRaw": "layout: cover
-",
-    "frontmatterStyle": "frontmatter",
     "index": 7,
     "level": 1,
     "note": undefined,
-    "raw": "---
-layout: cover
-background: https://sli.dev/demo-cover.png#14
-srcSequence: sub/nested1-4.md,../sub/pages3-4.md
----
-
-# Page 4
-
-<Tweet />
-
-",
     "source": {
       "content": "# Page 4
 
@@ -1113,29 +1036,38 @@ layout: cover
       "start": 2,
       "title": "Page 4",
     },
-    "start": 2,
     "title": "Page 4",
   },
   {
-    "content": "
-# Inline Page
+    "content": "# Inline Page
 
-$x+2$
-",
-    "end": 25,
+$x+2$",
     "frontmatter": {},
-    "frontmatterRaw": undefined,
-    "frontmatterStyle": undefined,
     "index": 8,
     "level": 1,
     "note": undefined,
-    "raw": "
+    "source": {
+      "content": "
+# Inline Page
+
+$x+2$
+",
+      "end": 25,
+      "frontmatter": {},
+      "frontmatterRaw": undefined,
+      "frontmatterStyle": undefined,
+      "index": 4,
+      "level": 1,
+      "note": undefined,
+      "raw": "
 # Inline Page
 
 $x+2$
 
 ",
-    "start": 20,
+      "start": 20,
+      "title": "Inline Page",
+    },
     "title": "Inline Page",
   },
 ]

@@ -1,32 +1,18 @@
 import YAML from 'js-yaml'
 import { isObject, isTruthy, objectMap } from '@antfu/utils'
-import type { FrontmatterStyle, PreparserExtensionFromHeadmatter, SlideInfo, SlideInfoBase, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
-import { resolveConfig } from './config'
+import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
-  return `${data.slides
-      .filter(slide => slide.source === undefined || slide.inline !== undefined)
-      .map((slide, idx) => stringifySlide(slide.inline || slide, idx))
-      .join('\n')
-      .trim()
-    }\n`
+  return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
 }
 
-export function filterDisabled(data: SlidevMarkdown) {
-  data.slides = data.slides.filter(i => !i.frontmatter?.disabled)
-  return data
-}
-
-export function stringifySlide(data: SlideInfoBase, idx = 0) {
-  if (data.raw == null)
-    prettifySlide(data)
-
+export function stringifySlide(data: SourceSlideInfo, idx = 0) {
   return (data.raw.startsWith('---') || idx === 0)
     ? data.raw
     : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
 }
 
-export function prettifySlide(data: SlideInfoBase) {
+export function prettifySlide(data: SourceSlideInfo) {
   data.content = `\n${data.content.trim()}\n`
   data.raw = Object.keys(data.frontmatter || {}).length
     ? data.frontmatterStyle === 'yaml'
@@ -91,7 +77,7 @@ export function detectFeatures(code: string): SlidevFeatureFlags {
   }
 }
 
-export function parseSlide(raw: string): SlideInfoBase {
+export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'end'> {
   const matterResult = matter(raw)
   let note: string | undefined
   const frontmatter = matterResult.data || {}
@@ -133,13 +119,11 @@ export function parseSlide(raw: string): SlideInfoBase {
 
 export async function parse(
   markdown: string,
-  filepath?: string,
-  themeMeta?: SlidevThemeMeta,
+  filepath: string,
   extensions?: SlidevPreparserExtension[],
-  onHeadmatter?: PreparserExtensionFromHeadmatter,
 ): Promise<SlidevMarkdown> {
   const lines = markdown.split(/\r?\n/g)
-  const slides: SlideInfo[] = []
+  const slides: SourceSlideInfo[] = []
 
   let start = 0
 
@@ -149,6 +133,7 @@ export async function parse(
     const raw = lines.slice(start, end).join('\n')
     const slide = {
       ...parseSlide(raw),
+      filepath,
       index: slides.length,
       start,
       end,
@@ -164,22 +149,6 @@ export async function parse(
     }
     slides.push(slide)
     start = end + 1
-  }
-
-  // identify the headmatter, to be able to load preparser extensions
-  // (strict parsing based on the parsing code)
-  {
-    let hm = ''
-    if (lines[0].match(/^---([^-].*)?$/) && !lines[1]?.match(/^\s*$/)) {
-      let hEnd = 1
-      while (hEnd < lines.length && !lines[hEnd].trimEnd().match(/^---$/))
-        hEnd++
-      hm = lines.slice(1, hEnd).join('\n')
-    }
-    if (onHeadmatter) {
-      const o = YAML.load(hm) ?? {}
-      extensions = await onHeadmatter(o, extensions ?? [], filepath)
-    }
   }
 
   if (extensions) {
@@ -216,19 +185,10 @@ export async function parse(
   if (start <= lines.length - 1)
     await slice(lines.length)
 
-  const headmatter = { ...slides[0]?.frontmatter } || {}
-  headmatter.title = headmatter.title || slides[0]?.title
-  const config = resolveConfig(headmatter, themeMeta, filepath)
-  const features = detectFeatures(markdown)
-
   return {
-    raw: markdown,
     filepath,
+    raw: markdown,
     slides,
-    config,
-    features,
-    headmatter,
-    themeMeta,
   }
 }
 
