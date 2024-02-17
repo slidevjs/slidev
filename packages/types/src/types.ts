@@ -61,10 +61,16 @@ export interface SlidevFeatureFlags {
 export interface SlidevMarkdown {
   filepath: string
   raw: string
+  /**
+   * All slides in this markdown file
+   */
   slides: SourceSlideInfo[]
 }
 
 export interface SlidevData {
+  /**
+   * Slides that should be rendered
+   */
   slides: SlideInfo[]
   entry: SlidevMarkdown
   config: SlidevConfig
