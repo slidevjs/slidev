@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import type { PreparserExtensionLoader, SlideInfo, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
-import { mergeFeatureFlags, parse, stringify } from './core'
+import type { PreparserExtensionLoader, SlideInfo, SlidevMarkdown, SlidevMarkdownWithPath, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
+import { detectFeatures, mergeFeatureFlags, parse, parseRangeString, stringify } from './core'
 
 export * from './core'
 
@@ -40,31 +40,40 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
     if (baseSlide.frontmatter.hide)
       continue
 
-    const srcExpression = baseSlide.frontmatter.src
+    const [pathRaw, rangeRaw] = baseSlide.frontmatter.src.split('#')
     let path: string
-    if (srcExpression.startsWith('/'))
-      path = resolve(dir, srcExpression.substring(1))
+    if (pathRaw.startsWith('/'))
+      path = resolve(dir, pathRaw.substring(1))
     else if (baseSlide.source?.filepath)
-      path = resolve(dirname(baseSlide.source.filepath), srcExpression)
+      path = resolve(dirname(baseSlide.source.filepath), pathRaw)
     else
-      path = resolve(dir, srcExpression)
-    entries.add(path)
+      path = resolve(dir, pathRaw)
 
-    const raw = await fs.readFile(path, 'utf-8')
-    const subSlidesData = await parse(raw, path, themeMeta, preparserExtensions)
-    delete subSlidesData.headmatter.title
-    delete subSlidesData.slides[0].frontmatter.title
+    let subSlidesData = data.subSlides?.[path]
+    if (!subSlidesData) {
+      entries.add(path)
+      const raw = await fs.readFile(path, 'utf-8')
+      subSlidesData = await parse(raw, path, themeMeta, preparserExtensions) as SlidevMarkdownWithPath
+      subSlidesData.slides.forEach(s => s.filepath = path)
+      data.subSlides ??= {}
+      data.subSlides[path] = subSlidesData
+    }
 
-    data.features = mergeFeatureFlags(data.features, subSlidesData.features)
-    data.subSlides ??= {}
-    data.subSlides[path] = subSlidesData
+    let subSlides = subSlidesData.slides
+    let features = subSlidesData.features
+    if (rangeRaw) {
+      const range = parseRangeString(subSlides.length, rangeRaw)
+      subSlides = range.map(i => subSlides[i - 1])
+      const rawInRange = subSlides.map(s => s.raw).join('')
+      features = detectFeatures(rawInRange)
+    }
 
-    const subSlides = subSlidesData.slides.map((subSlide, offset) => {
-      const slide: SlideInfo = { ...baseSlide }
+    data.features = mergeFeatureFlags(data.features, features)
 
-      slide.source = {
-        filepath: path,
-        ...subSlide,
+    data.slides.splice(iSlide, 1, ...subSlides.map((subSlide, offset) => {
+      const slide: SlideInfo = {
+        ...baseSlide,
+        source: subSlide,
       }
 
       if (offset === 0 && !baseSlide.frontmatter.srcSequence) {
@@ -82,13 +91,11 @@ export async function load(filepath: string, themeMeta?: SlidevThemeMeta, conten
       slide.frontmatter = {
         ...subSlide.frontmatter,
         ...baseSlideFrontMatterWithoutSrc,
-        srcSequence: `${baseSlide.frontmatter.srcSequence ? `${baseSlide.frontmatter.srcSequence},` : ''}${srcExpression}`,
+        srcSequence: `${baseSlide.frontmatter.srcSequence ? `${baseSlide.frontmatter.srcSequence},` : ''}${pathRaw}`,
       }
 
       return slide
-    })
-    subSlidesData.slides = subSlides.map(slide => slide.source!)
-    data.slides.splice(iSlide, 1, ...subSlides)
+    }))
   }
 
   // re-index slides

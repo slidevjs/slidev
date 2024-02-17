@@ -59,7 +59,12 @@ export interface SlidevMarkdown {
   filepath?: string
   entries?: string[]
   themeMeta?: SlidevThemeMeta
-  subSlides?: Record<string, SlidevMarkdown>
+  subSlides?: Record<string, SlidevMarkdownWithPath>
+}
+
+export interface SlidevMarkdownWithPath extends SlidevMarkdown {
+  filepath: string
+  slides: SlideInfoWithPath[]
 }
 
 export interface SlidevPreparserExtension {

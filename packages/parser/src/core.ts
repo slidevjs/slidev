@@ -216,7 +216,7 @@ export async function parse(
   if (start <= lines.length - 1)
     await slice(lines.length)
 
-  const headmatter = slides[0]?.frontmatter || {}
+  const headmatter = { ...slides[0]?.frontmatter } || {}
   headmatter.title = headmatter.title || slides[0]?.title
   const config = resolveConfig(headmatter, themeMeta, filepath)
   const features = detectFeatures(markdown)
