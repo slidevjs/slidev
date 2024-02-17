@@ -278,7 +278,6 @@ export function createSlidesLoader(
         if (id === '/@slidev/titles.md') {
           return {
             code: data.slides
-              .filter(({ frontmatter }) => !frontmatter?.disabled)
               .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">\n\n${title}\n\n</template>`)
               .join(''),
             map: { mappings: '' },
@@ -679,7 +678,6 @@ defineProps<{ no: number | string }>()`)
 
     let no = 1
     const routes = data.slides
-      .filter(({ frontmatter }) => !frontmatter?.disabled)
       .map((i, idx) => {
         imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
         imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)

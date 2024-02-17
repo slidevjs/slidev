@@ -69,7 +69,7 @@ export interface SlidevMarkdown {
 
 export interface SlidevData {
   /**
-   * Slides that should be rendered
+   * Slides that should be rendered (disabled slides excluded)
    */
   slides: SlideInfo[]
   entry: SlidevMarkdown

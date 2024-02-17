@@ -51,6 +51,8 @@ export async function load(userRoot: string, filepath: string, themeMeta?: Slide
   }
 
   async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>) {
+    if (slide.frontmatter.disabled)
+      return
     if (slide.frontmatter.src) {
       const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
       const path = rawPath.startsWith('/')
