@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits<{ (name: 'modelValue', v: boolean): void }>()
+const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 function onClick() {
