@@ -369,9 +369,9 @@ cli.command(
           })
 
           const dirPath = `./${dir}`
-          data.slides[0].frontmatter.theme = dirPath
-          // @ts-expect-error remove the value
-          data.slides[0].raw = null
+          const firstSlide = data.entry.slides[0]
+          firstSlide.frontmatter.theme = dirPath
+          parser.prettifySlide(firstSlide)
           await parser.save(data.entry)
 
           console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
