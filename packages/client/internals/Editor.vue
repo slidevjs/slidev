@@ -38,7 +38,6 @@ watch(
 async function save() {
   dirty.value = false
   await update({
-    raw: null!,
     note: note.value || undefined,
     content: content.value,
     // frontmatter: frontmatter.value,

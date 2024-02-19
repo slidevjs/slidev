@@ -14,7 +14,7 @@ import IconButton from './IconButton.vue'
 
 const props = defineProps<{ modelValue: boolean }>()
 
-const emit = defineEmits([])
+const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 function close() {

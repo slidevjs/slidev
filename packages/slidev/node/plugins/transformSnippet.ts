@@ -97,7 +97,7 @@ export function transformSnippet(md: string, options: ResolvedSlidevOptions, id:
         ? path.resolve(userRoot, filepath.slice(2))
         : path.resolve(dir, filepath)
 
-      data.entries!.push(src)
+      data.watchFiles.push(src)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {

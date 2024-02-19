@@ -8,7 +8,7 @@ import type RemoteAssets from 'vite-plugin-remote-assets'
 import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
 import { uniq } from '@antfu/utils'
-import type { SlidevMarkdown } from '@slidev/types'
+import type { SlidevData } from '@slidev/types'
 import _debug from 'debug'
 import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './themes'
@@ -49,7 +49,7 @@ export interface SlidevEntryOptions {
 }
 
 export interface ResolvedSlidevOptions {
-  data: SlidevMarkdown
+  data: SlidevData
   entry: string
   theme: string | null
   themeRoots: string[]
@@ -75,7 +75,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export interface SlidevServerOptions {
-  onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
+  onDataReload?: (newData: SlidevData, data: SlidevData) => void
 }
 
 export async function resolveOptions(
@@ -84,7 +84,7 @@ export async function resolveOptions(
 ): Promise<ResolvedSlidevOptions> {
   const { remote, inspect } = options
   const entry = resolveEntry(options.entry || 'slides.md')
-  const data = await parser.load(entry)
+  const data = await parser.load(userRoot, entry)
   const [theme, themeRoot] = await resolveTheme(options.theme || data.config.theme, entry)
   const themeRoots = themeRoot ? [themeRoot] : []
   const addonRoots = await resolveAddons(data.config.addons)

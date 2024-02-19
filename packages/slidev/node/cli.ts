@@ -100,9 +100,14 @@ cli.command(
       type: 'boolean',
       describe: 'force the optimizer to ignore the cache and re-bundle  ',
     })
+    .option('bind', {
+      type: 'string',
+      default: '0.0.0.0',
+      describe: 'specify which IP addresses the server should listen on in remote mode',
+    })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -136,7 +141,7 @@ cli.command(
             port,
             strictPort: true,
             open,
-            host: remote !== undefined ? '0.0.0.0' : 'localhost',
+            host: remote !== undefined ? bind : 'localhost',
             // @ts-expect-error Vite <= 4
             force,
           },
@@ -325,9 +330,9 @@ cli.command(
     .help(),
   async ({ entry }) => {
     for (const entryFile of entry as unknown as string[]) {
-      const data = await parser.load(entryFile)
-      parser.prettify(data)
-      await parser.save(data)
+      const md = await parser.parse(await fs.readFile(entryFile, 'utf-8'), entryFile)
+      parser.prettify(md)
+      await parser.save(md)
     }
   },
 )
@@ -346,7 +351,7 @@ cli.command(
             default: 'theme',
           }),
         async ({ entry, dir, theme: themeInput }) => {
-          const data = await parser.load(entry)
+          const data = await parser.load(userRoot, entry)
           const themeRaw = themeInput || data.config.theme
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
@@ -363,10 +368,10 @@ cli.command(
           })
 
           const dirPath = `./${dir}`
-          data.slides[0].frontmatter.theme = dirPath
-          // @ts-expect-error remove the value
-          data.slides[0].raw = null
-          await parser.save(data)
+          const firstSlide = data.entry.slides[0]
+          firstSlide.frontmatter.theme = dirPath
+          parser.prettifySlide(firstSlide)
+          await parser.save(data.entry)
 
           console.log(`Theme "${name}" ejected successfully to "${dirPath}"`)
         },
@@ -400,7 +405,6 @@ cli.command(
       )
       await server.listen(port)
       printInfo(options)
-      parser.filterDisabled(options.data)
       const result = await exportSlides({
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
@@ -453,7 +457,6 @@ cli.command(
       await server.listen(port)
 
       printInfo(options)
-      parser.filterDisabled(options.data)
 
       const result = await exportNotes({
         port,
