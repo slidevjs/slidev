@@ -52,7 +52,11 @@ export async function build(
       inlineConfig,
       {
         plugins: [
-          await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
+          await ViteSlidevPlugin(options, inlineConfig.slidev || {}, {
+            loadData() {
+              throw new Error('Build does not support live reload')
+            },
+          }),
         ],
       },
     )

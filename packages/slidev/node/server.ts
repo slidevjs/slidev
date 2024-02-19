@@ -10,7 +10,7 @@ import { clientRoot, userRoot } from './fs'
 export async function createServer(
   options: ResolvedSlidevOptions,
   viteConfig: InlineConfig = {},
-  serverOptions: SlidevServerOptions = {},
+  serverOptions: SlidevServerOptions,
 ) {
   // default open editor to code, #312
   process.env.EDITOR = process.env.EDITOR || 'code'
