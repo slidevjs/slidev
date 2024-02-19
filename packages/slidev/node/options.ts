@@ -11,7 +11,7 @@ import type RemoteAssets from 'vite-plugin-remote-assets'
 import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
 import { uniq } from '@antfu/utils'
-import type { SlidevMarkdown } from '@slidev/types'
+import type { SlidevData } from '@slidev/types'
 import _debug from 'debug'
 import { parser } from './parser'
 import { packageExists, resolveImportPath } from './utils'
@@ -52,7 +52,7 @@ export interface SlidevEntryOptions {
 }
 
 export interface ResolvedSlidevOptions {
-  data: SlidevMarkdown
+  data: SlidevData
   entry: string
   userRoot: string
   cliRoot: string
@@ -78,7 +78,7 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export interface SlidevServerOptions {
-  onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
+  onDataReload?: (newData: SlidevData, data: SlidevData) => void
 }
 
 export async function getClientRoot() {
@@ -136,7 +136,7 @@ export async function resolveOptions(
     entry,
     userRoot,
   } = getUserRoot(options)
-  const data = await parser.load(entry)
+  const data = await parser.load(userRoot, entry)
   const theme = await resolveThemeName(options.theme || data.config.theme)
 
   if (promptForInstallation) {

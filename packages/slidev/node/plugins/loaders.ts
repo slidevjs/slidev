@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -8,7 +8,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
+import type { SlideInfo } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -76,7 +76,7 @@ md.use(mila, {
   },
 })
 
-function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
+function renderNoteHTML(data: SlideInfo): SlideInfo {
   return {
     ...data,
     noteHTML: md.render(data?.note || ''),
@@ -110,7 +110,7 @@ export function createSlidesLoader(
           const [, no, type] = match
           const idx = Number.parseInt(no)
           if (type === 'json' && req.method === 'GET') {
-            res.write(JSON.stringify(prepareSlideInfo(data.slides[idx])))
+            res.write(JSON.stringify(renderNoteHTML(data.slides[idx])))
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
@@ -122,17 +122,12 @@ export function createSlidesLoader(
             if (!onlyNoteChanged)
               hmrPages.add(idx)
 
-            if (slide.source) {
-              Object.assign(slide.source, body)
-              await parser.saveExternalSlide(data, slide.source.filepath)
-            }
-            else {
-              Object.assign(slide, body)
-              await parser.save(data, entry)
-            }
+            Object.assign(slide.source, body)
+            parser.prettifySlide(slide.source)
+            await parser.save(data.markdownFiles[slide.source.filepath])
 
             res.statusCode = 200
-            res.write(JSON.stringify(prepareSlideInfo(slide)))
+            res.write(JSON.stringify(renderNoteHTML(slide)))
             return res.end()
           }
 
@@ -141,12 +136,12 @@ export function createSlidesLoader(
       },
 
       async handleHotUpdate(ctx) {
-        if (!data.entries!.some(i => slash(i) === ctx.file))
+        if (!data.watchFiles.includes(ctx.file))
           return
 
         await ctx.read()
 
-        const newData = await parser.load(entry, data.themeMeta)
+        const newData = await parser.load(userRoot, entry, data.themeMeta)
 
         const moduleIds = new Set<string>()
 
@@ -208,7 +203,7 @@ export function createSlidesLoader(
             event: 'slidev-update',
             data: {
               id: i,
-              data: prepareSlideInfo(newData.slides[i]),
+              data: renderNoteHTML(newData.slides[i]),
             },
           })
           hmrPages.add(i)
@@ -283,7 +278,6 @@ export function createSlidesLoader(
         if (id === '/@slidev/titles.md') {
           return {
             code: data.slides
-              .filter(({ frontmatter }) => !frontmatter?.disabled)
               .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">\n\n${title}\n\n</template>`)
               .join(''),
             map: { mappings: '' },
@@ -309,7 +303,7 @@ export function createSlidesLoader(
             }
             else if (type === 'frontmatter') {
               const slideBase = {
-                ...prepareSlideInfo(slide),
+                ...renderNoteHTML(slide),
                 frontmatter: undefined,
                 // remove raw content in build, optimize the bundle size
                 ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
@@ -447,7 +441,7 @@ export function createSlidesLoader(
   function updateServerWatcher() {
     if (!server)
       return
-    server.watcher.add(data.entries?.map(slash) || [])
+    server.watcher.add(data.watchFiles)
   }
 
   function getFrontmatter(pageNo: number) {
@@ -656,7 +650,7 @@ defineProps<{ no: number | string }>()`)
   }
 
   async function generateMonacoTypes() {
-    return `void 0; ${parser.scanMonacoModules(data.raw).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
+    return `void 0; ${parser.scanMonacoModules(data.slides.map(s => s.source.raw).join()).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
   }
 
   async function generateLayouts() {
@@ -684,7 +678,6 @@ defineProps<{ no: number | string }>()`)
 
     let no = 1
     const routes = data.slides
-      .filter(({ frontmatter }) => !frontmatter?.disabled)
       .map((i, idx) => {
         imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
         imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)

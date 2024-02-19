@@ -325,9 +325,9 @@ cli.command(
     .help(),
   async ({ entry }) => {
     for (const entryFile of entry as unknown as string[]) {
-      const data = await parser.load(entryFile)
-      parser.prettify(data)
-      await parser.save(data)
+      const md = await parser.parse(await fs.readFile(entryFile, 'utf-8'), entryFile)
+      parser.prettify(md)
+      await parser.save(md)
     }
   },
 )
@@ -346,7 +346,8 @@ cli.command(
             default: 'theme',
           }),
         async ({ entry, dir, theme: themeInput }) => {
-          const data = await parser.load(entry)
+          const { userRoot } = getUserRoot({ entry })
+          const data = await parser.load(userRoot, entry)
           const theme = await resolveThemeName(themeInput || data.config.theme)
           if (theme === 'none') {
             console.error('Cannot eject theme "none"')
@@ -368,10 +369,10 @@ cli.command(
           })
 
           const dirPath = `./${dir}`
-          data.slides[0].frontmatter.theme = dirPath
-          // @ts-expect-error remove the value
-          data.slides[0].raw = null
-          await parser.save(data)
+          const firstSlide = data.entry.slides[0]
+          firstSlide.frontmatter.theme = dirPath
+          parser.prettifySlide(firstSlide)
+          await parser.save(data.entry)
 
           console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
         },
@@ -405,7 +406,6 @@ cli.command(
       )
       await server.listen(port)
       printInfo(options)
-      parser.filterDisabled(options.data)
       const result = await exportSlides({
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
@@ -458,7 +458,6 @@ cli.command(
       await server.listen(port)
 
       printInfo(options)
-      parser.filterDisabled(options.data)
 
       const result = await exportNotes({
         port,

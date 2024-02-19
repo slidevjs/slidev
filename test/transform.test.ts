@@ -153,7 +153,7 @@ Alice <- Bob : Hello, too!
         slides: [
           {} as any,
         ],
-        entries: [],
+        watchFiles: [],
       },
     } as any, `/@slidev/slides/1.md`)).toMatchSnapshot()
   })
