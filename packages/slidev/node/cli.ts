@@ -96,9 +96,14 @@ cli.command(
       type: 'boolean',
       describe: 'force the optimizer to ignore the cache and re-bundle  ',
     })
+    .option('bind', {
+      type: 'string',
+      default: '0.0.0.0',
+      describe: 'specify which IP addresses the server should listen on in remote mode',
+    })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
     if (!fs.existsSync(entry) && !entry.endsWith('.md'))
       entry = `${entry}.md`
 
@@ -132,7 +137,7 @@ cli.command(
             port,
             strictPort: true,
             open,
-            host: remote !== undefined ? '0.0.0.0' : 'localhost',
+            host: remote !== undefined ? bind : 'localhost',
             // @ts-expect-error Vite <= 4
             force,
           },
