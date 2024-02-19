@@ -11,7 +11,7 @@ import yargs from 'yargs'
 import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { SlidevConfig, SlidevPreparserExtension } from '@slidev/types'
+import type { SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
@@ -22,7 +22,7 @@ import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
 import { resolveOptions } from './options'
-import { resolveTheme } from './themes'
+import { getThemeMeta, resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
 import { cliRoot, clientRoot, userRoot } from './fs'
@@ -152,11 +152,30 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          async onDataReload(newData, data) {
-            if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
+          async loadData() {
+            const { data: oldData, entry } = options
+            const loaded = await parser.load(userRoot, entry)
+
+            const themeRaw = theme || loaded.headmatter.theme as string || 'default'
+            if (options.themeRaw !== themeRaw) {
+              console.log(yellow('\n  restarting on theme change\n'))
+              initServer()
+              return false
+            }
+            // Because themeRaw is not changed, we don't resolve it again
+            const themeMeta = options.themeRoots[0] ? await getThemeMeta(themeRaw, options.themeRoots[0]) : undefined
+            const newData: SlidevData = {
+              ...loaded,
+              themeMeta,
+              config: parser.resolveConfig(loaded.headmatter, themeMeta, entry),
+            }
+
+            if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], oldData.config[i]))) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
+              return false
             }
+            return newData
           },
         },
       ))
@@ -352,7 +371,7 @@ cli.command(
           }),
         async ({ entry, dir, theme: themeInput }) => {
           const data = await parser.load(userRoot, entry)
-          const themeRaw = themeInput || data.config.theme
+          const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)

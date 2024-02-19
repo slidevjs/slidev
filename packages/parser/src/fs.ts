@@ -2,8 +2,8 @@ import { promises as fs } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import YAML from 'js-yaml'
 import { slash } from '@antfu/utils'
-import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta, SourceSlideInfo } from '@slidev/types'
-import { detectFeatures, parse, parseRangeString, resolveConfig, stringify } from './core'
+import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import { detectFeatures, parse, parseRangeString, stringify } from './core'
 
 export * from './core'
 
@@ -13,7 +13,13 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
   preparserExtensionLoader = fn
 }
 
-export async function load(userRoot: string, filepath: string, themeMeta?: SlidevThemeMeta, content?: string): Promise<SlidevData> {
+/**
+ * Slidev data without config and themeMeta,
+ * because config and themeMeta depends on the theme to be loaded.
+ */
+export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
+
+export async function load(userRoot: string, filepath: string, content?: string): Promise<LoadedSlidevData> {
   const markdown = content ?? await fs.readFile(filepath, 'utf-8')
 
   let extensions: SlidevPreparserExtension[] | undefined
@@ -90,10 +96,8 @@ export async function load(userRoot: string, filepath: string, themeMeta?: Slide
   return {
     slides,
     entry,
-    config: resolveConfig(headmatter, themeMeta, filepath),
     headmatter,
     features: detectFeatures(slides.map(s => s.source.raw).join('')),
-    themeMeta,
     markdownFiles,
     watchFiles: Object.keys(markdownFiles).map(slash),
   }

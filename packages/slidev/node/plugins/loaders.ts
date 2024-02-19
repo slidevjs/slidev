@@ -15,7 +15,7 @@ import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
-import { clientRoot, resolveImportPath, toAtFS, userRoot } from '../fs'
+import { clientRoot, resolveImportPath, toAtFS } from '../fs'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -142,7 +142,9 @@ export function createSlidesLoader(
 
         await ctx.read()
 
-        const newData = await parser.load(userRoot, entry, data.themeMeta)
+        const newData = await serverOptions.loadData()
+        if (!newData)
+          return []
 
         const moduleIds = new Set<string>()
 
@@ -210,7 +212,6 @@ export function createSlidesLoader(
           hmrPages.add(i)
         }
 
-        serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
         if (hmrPages.size > 0)

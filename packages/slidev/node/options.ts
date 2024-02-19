@@ -36,13 +36,6 @@ export interface SlidevEntryOptions {
   remote?: string
 
   /**
-   * Root path
-   *
-   * @default process.cwd()
-   */
-  userRoot?: string
-
-  /**
    * Enable inspect plugin
    */
   inspect?: boolean
@@ -51,7 +44,8 @@ export interface SlidevEntryOptions {
 export interface ResolvedSlidevOptions {
   data: SlidevData
   entry: string
-  theme: string | null
+  themeRaw: string
+  theme: string
   themeRoots: string[]
   addonRoots: string[]
   /**
@@ -75,30 +69,35 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export interface SlidevServerOptions {
-  onDataReload?: (newData: SlidevData, data: SlidevData) => void
+  /**
+   * @returns `false` if server should be restarted
+   */
+  loadData: () => Promise<SlidevData | false>
 }
 
 export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
 ): Promise<ResolvedSlidevOptions> {
-  const { remote, inspect } = options
   const entry = resolveEntry(options.entry || 'slides.md')
-  const data = await parser.load(userRoot, entry)
-  const [theme, themeRoot] = await resolveTheme(options.theme || data.config.theme, entry)
+  const loaded = await parser.load(userRoot, entry)
+
+  // Load theme data first, because it may affect the config
+  const themeRaw = options.theme || loaded.headmatter.theme as string || 'default'
+  const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
   const themeRoots = themeRoot ? [themeRoot] : []
-  const addonRoots = await resolveAddons(data.config.addons)
+  const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
+
+  const config = parser.resolveConfig(loaded.headmatter, themeMeta, options.entry)
+  const addonRoots = await resolveAddons(config.addons)
   const roots = uniq([...themeRoots, ...addonRoots, userRoot])
 
-  if (themeRoot) {
-    const themeMeta = await getThemeMeta(theme, themeRoot)
-    data.config = parser.resolveConfig(data.headmatter, themeMeta, options.entry)
-  }
-
   debug({
-    config: data.config,
+    ...options,
+    config,
     mode,
     entry,
+    themeRaw,
     theme,
     userRoot,
     clientRoot,
@@ -106,18 +105,21 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    remote,
   })
 
   return {
-    data,
+    ...options,
+    data: {
+      ...loaded,
+      config,
+      themeMeta,
+    },
     mode,
     entry,
+    themeRaw,
     theme,
     themeRoots,
     addonRoots,
     roots,
-    remote,
-    inspect,
   }
 }
