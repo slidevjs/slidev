@@ -12,6 +12,7 @@ import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDrawings } from '../drawings'
+import { clientRoot } from '../fs'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
@@ -68,7 +69,7 @@ export async function ViteSlidevPlugin(
     mode,
     themeRoots,
     addonRoots,
-    clientRoot,
+    roots,
     data: { config },
   } = options
 
@@ -92,7 +93,7 @@ export async function ViteSlidevPlugin(
 
   const drawingData = await loadDrawings(options)
 
-  const publicRoots = themeRoots.map(i => join(i, 'public')).filter(existsSync)
+  const publicRoots = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
 
   const plugins = [
     MarkdownPlugin,
@@ -106,9 +107,7 @@ export async function ViteSlidevPlugin(
 
       dirs: [
         join(clientRoot, 'builtin'),
-        join(clientRoot, 'components'),
-        ...themeRoots.map(i => join(i, 'components')),
-        ...addonRoots.map(i => join(i, 'components')),
+        ...roots.map(i => join(i, 'components')),
         'src/components',
         'components',
         join(process.cwd(), 'components'),

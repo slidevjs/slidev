@@ -11,13 +11,14 @@ import type { BuildArgs } from '@slidev/types'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
+import { clientRoot, userRoot } from './fs'
 
 export async function build(
   options: ResolvedSlidevOptions,
   viteConfig: InlineConfig = {},
   args: BuildArgs,
 ) {
-  const indexPath = resolve(options.userRoot, 'index.html')
+  const indexPath = resolve(userRoot, 'index.html')
 
   let originalIndexHTML: string | undefined
   if (fs.existsSync(indexPath))
@@ -31,7 +32,7 @@ export async function build(
       options,
       viteConfig,
       <InlineConfig>({
-        root: options.userRoot,
+        root: userRoot,
         plugins: [
           {
             name: 'resolve-config',
@@ -70,7 +71,7 @@ export async function build(
             options,
             inlineConfig,
             <InlineConfig>({
-              root: join(options.clientRoot, 'iframes/monaco'),
+              root: join(clientRoot, 'iframes/monaco'),
               base: `${config.base}iframes/monaco/`,
               build: {
                 outDir: resolve(config.build.outDir, 'iframes/monaco'),
@@ -102,7 +103,7 @@ export async function build(
       await fs.unlink(indexPath)
   }
 
-  const outDir = resolve(options.userRoot, config.build.outDir)
+  const outDir = resolve(userRoot, config.build.outDir)
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))

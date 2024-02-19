@@ -1,21 +1,9 @@
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import fs from 'fs-extra'
-import { isObject } from '@antfu/utils'
+import { deepMergeWithArray } from '@antfu/utils'
 import jiti from 'jiti'
-
-function deepMerge(a: any, b: any, rootPath = '') {
-  a = { ...a }
-  Object.keys(b).forEach((key) => {
-    if (isObject(a[key]))
-      a[key] = deepMerge(a[key], b[key], rootPath ? `${rootPath}.${key}` : key)
-    else if (Array.isArray(a[key]))
-      a[key] = [...a[key], ...b[key]]
-    else
-      a[key] = b[key]
-  })
-  return a
-}
+import { clientRoot } from '../fs'
 
 export async function loadSetups<T, R extends object>(
   roots: string[],
@@ -25,7 +13,7 @@ export async function loadSetups<T, R extends object>(
   merge: boolean | ((a: R, o: R) => R) = true,
 ): Promise<R> {
   let returns = initial
-  for (const root of roots) {
+  for (const root of [clientRoot, ...roots].reverse()) {
     const path = resolve(root, 'setup', name)
     if (fs.existsSync(path)) {
       const { default: setup } = jiti(fileURLToPath(import.meta.url))(path)
@@ -34,7 +22,7 @@ export async function loadSetups<T, R extends object>(
         returns = typeof merge === 'function'
           ? merge(returns, result)
           : merge
-            ? deepMerge(returns, result)
+            ? deepMergeWithArray(returns, result)
             : result
       }
     }

@@ -1,6 +1,3 @@
-import { dirname, join, resolve } from 'node:path'
-import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import type Vue from '@vitejs/plugin-vue'
 import type VueJsx from '@vitejs/plugin-vue-jsx'
 import type Icons from 'unplugin-icons/vite'
@@ -14,9 +11,9 @@ import { uniq } from '@antfu/utils'
 import type { SlidevMarkdown } from '@slidev/types'
 import _debug from 'debug'
 import { parser } from './parser'
-import { packageExists, resolveImportPath } from './utils'
-import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './themes'
-import { getAddons } from './addons'
+import { getThemeMeta, resolveTheme } from './themes'
+import { resolveAddons } from './addons'
+import { cliRoot, clientRoot, resolveEntry, userRoot } from './fs'
 
 const debug = _debug('slidev:options')
 
@@ -54,12 +51,12 @@ export interface SlidevEntryOptions {
 export interface ResolvedSlidevOptions {
   data: SlidevMarkdown
   entry: string
-  userRoot: string
-  cliRoot: string
-  clientRoot: string
-  theme: string
+  theme: string | null
   themeRoots: string[]
   addonRoots: string[]
+  /**
+   * =`[...themeRoots, ...addonRoots, userRoot]` (`clientRoot` excluded)
+   */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
   remote?: string
@@ -81,87 +78,21 @@ export interface SlidevServerOptions {
   onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
 }
 
-export async function getClientRoot() {
-  return dirname(await resolveImportPath('@slidev/client/package.json', true))
-}
-
-export function getCLIRoot() {
-  return fileURLToPath(new URL('..', import.meta.url))
-}
-
-export function isPath(name: string) {
-  return name.startsWith('/') || /^\.\.?[\/\\]/.test(name)
-}
-
-export async function getThemeRoots(name: string, entry: string) {
-  if (!name)
-    return []
-
-  // TODO: handle theme inherit
-  return [await getRoot(name, entry)]
-}
-
-export async function getAddonRoots(addons: string[], entry: string) {
-  if (addons.length === 0)
-    return []
-  return await Promise.all(addons.map(name => getRoot(name, entry)))
-}
-
-export async function getRoot(name: string, entry: string) {
-  if (isPath(name))
-    return resolve(dirname(entry), name)
-  return dirname(await resolveImportPath(`${name}/package.json`, true))
-}
-
-export function getUserRoot(options: SlidevEntryOptions) {
-  const {
-    entry: rawEntry = 'slides.md',
-    userRoot = process.cwd(),
-  } = options
-
-  const fullEntry = resolve(userRoot, rawEntry)
-  return {
-    entry: fullEntry,
-    userRoot: dirname(fullEntry),
-  }
-}
-
 export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
-  promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
   const { remote, inspect } = options
-  const {
-    entry,
-    userRoot,
-  } = getUserRoot(options)
+  const entry = resolveEntry(options.entry || 'slides.md')
   const data = await parser.load(entry)
-  const theme = await resolveThemeName(options.theme || data.config.theme)
+  const [theme, themeRoot] = await resolveTheme(options.theme || data.config.theme, entry)
+  const themeRoots = themeRoot ? [themeRoot] : []
+  const addonRoots = await resolveAddons(data.config.addons)
+  const roots = uniq([...themeRoots, ...addonRoots, userRoot])
 
-  if (promptForInstallation) {
-    if (await promptForThemeInstallation(theme) === false)
-      process.exit(1)
-  }
-  else {
-    if (!await packageExists(theme)) {
-      console.error(`Theme "${theme}" not found, have you installed it?`)
-      process.exit(1)
-    }
-  }
-
-  const clientRoot = await getClientRoot()
-  const cliRoot = getCLIRoot()
-  const themeRoots = await getThemeRoots(theme, entry)
-  const addons = await getAddons(userRoot, data.config)
-  const addonRoots = await getAddonRoots(addons, entry)
-  const roots = uniq([clientRoot, ...themeRoots, ...addonRoots, userRoot])
-
-  if (themeRoots.length) {
-    const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))
-    data.themeMeta = themeMeta
-    if (themeMeta)
-      data.config = parser.resolveConfig(data.headmatter, themeMeta, options.entry)
+  if (themeRoot) {
+    const themeMeta = await getThemeMeta(theme, themeRoot)
+    data.config = parser.resolveConfig(data.headmatter, themeMeta, options.entry)
   }
 
   debug({
@@ -183,9 +114,6 @@ export async function resolveOptions(
     mode,
     entry,
     theme,
-    userRoot,
-    clientRoot,
-    cliRoot,
     themeRoots,
     addonRoots,
     roots,

@@ -1,12 +1,11 @@
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
-import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
-import { searchForWorkspaceRoot } from '../vite/searchRoot'
+import { cliRoot, clientRoot, resolveImportPath, toAtFS, userRoot, userWorkspaceRoot } from '../fs'
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -31,7 +30,8 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         define: getDefine(options),
         resolve: {
           alias: {
-            '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
+            '@slidev/client/': `${toAtFS(clientRoot)}/`,
+            'vue': await resolveImportPath('vue/dist/vue.esm-browser.js', true),
           },
           dedupe: ['vue'],
         },
@@ -51,32 +51,20 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           fs: {
             strict: true,
             allow: uniq([
-              searchForWorkspaceRoot(options.userRoot),
-              searchForWorkspaceRoot(options.cliRoot),
-              ...(
-                isInstalledGlobally
-                  ? [
-                      dirname(await resolveGlobalImportPath('@slidev/client/package.json')),
-                      dirname(await resolveGlobalImportPath('katex/package.json')),
-                    ]
-                  : []
-              ),
+              userWorkspaceRoot,
+              cliRoot,
+              clientRoot,
+              ...options.roots,
             ]),
           },
         },
-        publicDir: join(options.userRoot, 'public'),
+        publicDir: join(userRoot, 'public'),
       }
-
-      injection.resolve ||= {}
-      injection.resolve.alias ||= {}
 
       if (isInstalledGlobally) {
-        injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
-        injection.root = options.cliRoot
+        injection.cacheDir = join(cliRoot, 'node_modules/.vite')
+        injection.root = cliRoot
       }
-
-      // @ts-expect-error type cast
-      injection.resolve.alias.vue = await resolveImportPath('vue/dist/vue.esm-browser.js', true)
 
       return mergeConfig(injection, config)
     },
@@ -100,7 +88,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 export function getDefine(options: ResolvedSlidevOptions): Record<string, string> {
   return {
     __DEV__: options.mode === 'dev' ? 'true' : 'false',
-    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
+    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(clientRoot)),
     __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
     __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
     __SLIDEV_FEATURE_EDITOR__: JSON.stringify(options.mode === 'dev' && options.data.config.editor !== false),

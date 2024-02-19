@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, range, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -14,7 +14,8 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
+import { stringifyMarkdownTokens } from '../utils'
+import { clientRoot, resolveImportPath, toAtFS } from '../fs'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -84,7 +85,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, entry, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -565,14 +566,7 @@ defineProps<{ no: number | string }>()`)
 
     const layouts: Record<string, string> = {}
 
-    const roots = uniq([
-      userRoot,
-      ...themeRoots,
-      ...addonRoots,
-      clientRoot,
-    ])
-
-    for (const root of roots) {
+    for (const root of [...roots, clientRoot]) {
       const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
         cwd: root,
         absolute: true,
@@ -609,11 +603,6 @@ defineProps<{ no: number | string }>()`)
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
     ]
-    const roots = uniq([
-      ...themeRoots,
-      ...addonRoots,
-      userRoot,
-    ])
 
     for (const root of roots) {
       const styles = [

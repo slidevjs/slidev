@@ -3,9 +3,9 @@ import { join, resolve } from 'node:path'
 import { slash, uniq } from '@antfu/utils'
 import type { Plugin } from 'vite'
 import type { ResolvedSlidevOptions } from '../options'
-import { toAtFS } from '../utils'
+import { clientRoot, toAtFS, userRoot } from '../fs'
 
-export function createClientSetupPlugin({ clientRoot, themeRoots, addonRoots, userRoot }: ResolvedSlidevOptions): Plugin {
+export function createClientSetupPlugin({ themeRoots, addonRoots }: ResolvedSlidevOptions): Plugin {
   const setupEntry = slash(resolve(clientRoot, 'setup'))
 
   return {

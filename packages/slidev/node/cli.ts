@@ -16,14 +16,17 @@ import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
+import { uniq } from '@antfu/utils'
 import { checkPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
-import { getAddonRoots, getClientRoot, getThemeRoots, getUserRoot, isPath, resolveOptions } from './options'
-import { resolveThemeName } from './themes'
+import { resolveOptions } from './options'
+import { resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
+import { cliRoot, clientRoot, userRoot } from './fs'
+import { resolveAddons } from './addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -33,14 +36,15 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'css',
   'mdc',
   'editor',
+  'theme',
 ]
 
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
   const addons = headmatter?.addons as string[] ?? []
-  const roots = /* uniq */([
-    getUserRoot({}).userRoot,
-    ...await getAddonRoots(addons, ''),
-    await getClientRoot(),
+  const roots = uniq([
+    clientRoot,
+    userRoot,
+    ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
   return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
@@ -110,7 +114,7 @@ cli.command(
         message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
       })
       if (create)
-        await fs.copyFile(new URL('../template.md', import.meta.url), entry)
+        await fs.copyFile(path.resolve(cliRoot, 'template.md'), entry)
       else
         process.exit(0)
     }
@@ -144,11 +148,7 @@ cli.command(
         },
         {
           async onDataReload(newData, data) {
-            if (!theme && await resolveThemeName(newData.config.theme) !== await resolveThemeName(data.config.theme)) {
-              console.log(yellow('\n  restarting on theme change\n'))
-              initServer()
-            }
-            else if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
+            if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
             }
@@ -347,21 +347,16 @@ cli.command(
           }),
         async ({ entry, dir, theme: themeInput }) => {
           const data = await parser.load(entry)
-          const theme = await resolveThemeName(themeInput || data.config.theme)
-          if (theme === 'none') {
+          const themeRaw = themeInput || data.config.theme
+          if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
           }
-          if (isPath(theme)) {
+          if ('/.'.includes(themeRaw[0]) || (themeRaw[0] !== '@' && themeRaw.includes('/'))) {
             console.error('Theme is already ejected')
             process.exit(1)
           }
-          const roots = await getThemeRoots(theme, entry)
-          if (!roots.length) {
-            console.error(`Could not find theme "${theme}"`)
-            process.exit(1)
-          }
-          const root = roots[0]
+          const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
           await fs.copy(root, path.resolve(dir), {
             filter: i => !/node_modules|.git/.test(path.relative(root, i)),
@@ -373,7 +368,7 @@ cli.command(
           data.slides[0].raw = null
           await parser.save(data)
 
-          console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
+          console.log(`Theme "${name}" ejected successfully to "${dirPath}"`)
         },
       )
   },

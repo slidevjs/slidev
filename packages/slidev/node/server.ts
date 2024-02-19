@@ -5,6 +5,7 @@ import { createServer as createViteServer, mergeConfig } from 'vite'
 import { mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions, SlidevServerOptions } from './options'
 import { ViteSlidevPlugin } from './plugins/preset'
+import { clientRoot, userRoot } from './fs'
 
 export async function createServer(
   options: ResolvedSlidevOptions,
@@ -18,10 +19,10 @@ export async function createServer(
     options,
     viteConfig,
     <InlineConfig>({
-      root: options.userRoot,
+      root: userRoot,
       optimizeDeps: {
         entries: [
-          join(options.clientRoot, 'main.ts'),
+          join(clientRoot, 'main.ts'),
         ],
       },
     }),

@@ -8,9 +8,7 @@ import type { ExportArgs, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
-import isInstalledGlobally from 'is-installed-globally'
 import type { ResolvedSlidevOptions } from './options'
-import { packageExists, resolveGlobalImportPath } from './utils'
 
 export interface ExportOptions {
   total: number
@@ -477,22 +475,18 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
 
 async function importPlaywright(): Promise<typeof import('playwright-chromium')> {
   // 1. resolve from local
-  if (await packageExists('playwright-chromium'))
-    return await import('playwright-chromium')
-
-  // 2. resolve from global local (when Slidev is installed globally)
-  let globalPath = isInstalledGlobally ? await resolveGlobalImportPath('playwright-chromium') : undefined
-  if (globalPath)
-    return await import(globalPath)
-
-  // 3. resolve from global registry
-  const { resolveGlobal } = await import('resolve-global')
   try {
-    globalPath = resolveGlobal('playwright-chromium')
+    return await import('playwright-chromium')
   }
   catch {}
-  if (globalPath)
-    return await import(globalPath)
+
+  // 2. resolve from global registry
+  const { resolveGlobal } = await import('resolve-global')
+  try {
+    const imported = await import(resolveGlobal('playwright-chromium'))
+    return imported.default ?? imported
+  }
+  catch {}
 
   throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
 }
