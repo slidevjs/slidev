@@ -22,7 +22,7 @@
     "@antfu/utils": "^0.7.7",
     "@iconify-json/carbon": "^1.1.30",
     "@iconify-json/ph": "^1.1.11",
-    "@shikijs/vitepress-twoslash": "^1.1.3",
+    "@shikijs/vitepress-twoslash": "^1.1.5",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
