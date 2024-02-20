@@ -1,7 +1,7 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import type { TransitionGroupProps } from 'vue'
-import type { ClicksContext } from '@slidev/types'
+import type { ClicksContext, SlideInfo } from '@slidev/types'
 
 // @ts-expect-error missing types
 import _rawRoutes, { redirects } from '/@slidev/routes'
@@ -84,19 +84,12 @@ declare module 'vue-router' {
     preload?: boolean
 
     // slide info
-    slide?: {
+    slide?: Omit<SlideInfo, 'source'> & {
+      noteHTML: string
+      filepath: string
       start: number
-      end: number
-      note?: string
-      noteHTML?: string
       id: number
       no: number
-      filepath: string
-      title?: string
-      level?: number
-      raw: string
-      content: string
-      frontmatter: Record<string, any>
     }
 
     // private fields

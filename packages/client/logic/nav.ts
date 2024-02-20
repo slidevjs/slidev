@@ -177,7 +177,7 @@ export async function downloadPDF() {
 export async function openInEditor(url?: string) {
   if (url == null) {
     const slide = currentRoute.value?.meta?.slide
-    if (!slide?.filepath)
+    if (!slide)
       return false
     url = `${slide.filepath}:${slide.start}`
   }
