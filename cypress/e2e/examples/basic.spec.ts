@@ -9,8 +9,8 @@ context('Basic', () => {
       .type('g')
       .wait(100)
       .get('#slidev-goto-input')
-      .type(`${no}`)
-      .type('{enter}', {force: true})
+      .type(`${no}`, { force: true })
+      .type('{enter}', { force: true })
       .url()
       .should('eq', `http://localhost:3030/${no}`)
   }
