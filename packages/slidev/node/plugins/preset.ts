@@ -54,7 +54,7 @@ const customElements = new Set([
 export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
-  serverOptions: SlidevServerOptions,
+  serverOptions: SlidevServerOptions = {},
 ): Promise<Plugin[]> {
   const {
     vue: vueOptions = {},

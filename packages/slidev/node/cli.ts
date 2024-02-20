@@ -421,11 +421,6 @@ cli.command(
           server: { port },
           clearScreen: false,
         },
-        {
-          loadData() {
-            throw new Error('Export does not support live reload')
-          },
-        },
       )
       await server.listen(port)
       printInfo(options)
@@ -476,11 +471,6 @@ cli.command(
         {
           server: { port },
           clearScreen: false,
-        },
-        {
-          loadData() {
-            throw new Error('Export does not support live reload')
-          },
         },
       )
       await server.listen(port)

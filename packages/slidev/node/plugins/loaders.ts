@@ -142,7 +142,7 @@ export function createSlidesLoader(
 
         await ctx.read()
 
-        const newData = await serverOptions.loadData()
+        const newData = await serverOptions.loadData?.()
         if (!newData)
           return []
 

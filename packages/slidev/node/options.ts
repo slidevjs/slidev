@@ -72,7 +72,7 @@ export interface SlidevServerOptions {
   /**
    * @returns `false` if server should be restarted
    */
-  loadData: () => Promise<SlidevData | false>
+  loadData?: () => Promise<SlidevData | false>
 }
 
 export async function resolveOptions(
