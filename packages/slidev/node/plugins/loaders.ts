@@ -306,6 +306,7 @@ export function createSlidesLoader(
               const slideBase = {
                 ...renderNoteHTML(slide),
                 frontmatter: undefined,
+                source: undefined,
                 // remove raw content in build, optimize the bundle size
                 ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
               }
@@ -326,7 +327,8 @@ export function createSlidesLoader(
                     slide: {
                       ...(${JSON.stringify(slideBase)}),
                       frontmatter,
-                      filepath: ${JSON.stringify(slide.source?.filepath || entry)},
+                      filepath: ${JSON.stringify(slide.source.filepath)},
+                      start: ${JSON.stringify(slide.source.start)},
                       id: ${pageNo},
                       no: ${no},
                     },
