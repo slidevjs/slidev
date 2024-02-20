@@ -79,7 +79,7 @@ export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
 ): Promise<ResolvedSlidevOptions> {
-  const entry = resolveEntry(options.entry || 'slides.md')
+  const entry = await resolveEntry(options.entry || 'slides.md')
   const loaded = await parser.load(userRoot, entry)
 
   // Load theme data first, because it may affect the config

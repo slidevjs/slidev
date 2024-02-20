@@ -8,7 +8,6 @@ import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
 import yargs from 'yargs'
-import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
@@ -25,7 +24,7 @@ import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
-import { cliRoot, clientRoot, userRoot } from './resolver'
+import { clientRoot, userRoot } from './resolver'
 import { resolveAddons } from './addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
@@ -108,22 +107,6 @@ cli.command(
     .strict()
     .help(),
   async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
-    if (!fs.existsSync(entry) && !entry.endsWith('.md'))
-      entry = `${entry}.md`
-
-    if (!fs.existsSync(entry)) {
-      const { create } = await prompts({
-        name: 'create',
-        type: 'confirm',
-        initial: 'Y',
-        message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
-      })
-      if (create)
-        await fs.copyFile(path.resolve(cliRoot, 'template.md'), entry)
-      else
-        process.exit(0)
-    }
-
     let server: ViteDevServer | undefined
     let port = 3030
 

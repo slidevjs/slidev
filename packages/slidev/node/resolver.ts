@@ -10,7 +10,7 @@ import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
-import { underline } from 'kolorist'
+import { underline, yellow } from 'kolorist'
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
@@ -137,10 +137,25 @@ function searchForWorkspaceRoot(
   return searchForWorkspaceRoot(dir, root)
 }
 
-export function resolveEntry(entryRaw: string) {
-  if (entryRaw.startsWith('@/'))
-    return join(userRoot, entryRaw.slice(2))
-  return resolve(process.cwd(), entryRaw)
+export async function resolveEntry(entryRaw: string) {
+  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/\/\\/.test(entryRaw))
+    entryRaw += '.md'
+  const entry = entryRaw.startsWith('@/')
+    ? join(userRoot, entryRaw.slice(2))
+    : resolve(process.cwd(), entryRaw)
+  if (!fs.existsSync(entry)) {
+    const { create } = await prompts({
+      name: 'create',
+      type: 'confirm',
+      initial: 'Y',
+      message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
+    })
+    if (create)
+      fs.copyFileSync(resolve(cliRoot, 'template.md'), entry)
+    else
+      process.exit(0)
+  }
+  return entry
 }
 
 /**
