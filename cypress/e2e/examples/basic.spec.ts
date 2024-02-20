@@ -1,7 +1,6 @@
 context('Basic', () => {
   beforeEach(() => {
     cy.visit('/')
-    cy.get('body').focus()
   })
 
   function goPage(no: number) {
@@ -11,7 +10,7 @@ context('Basic', () => {
       .wait(100)
       .get('#slidev-goto-input')
       .type(`${no}`)
-      .type('{enter}')
+      .type('{enter}', {force: true})
       .url()
       .should('eq', `http://localhost:3030/${no}`)
   }
