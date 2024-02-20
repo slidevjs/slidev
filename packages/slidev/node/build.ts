@@ -11,14 +11,14 @@ import type { BuildArgs } from '@slidev/types'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
-import { clientRoot, findPkgRoot, userRoot } from './resolver'
+import { findPkgRoot } from './resolver'
 
 export async function build(
   options: ResolvedSlidevOptions,
   viteConfig: InlineConfig = {},
   args: BuildArgs,
 ) {
-  const indexPath = resolve(userRoot, 'index.html')
+  const indexPath = resolve(options.userRoot, 'index.html')
 
   let originalIndexHTML: string | undefined
   if (fs.existsSync(indexPath))
@@ -32,7 +32,7 @@ export async function build(
       options,
       viteConfig,
       <InlineConfig>({
-        root: userRoot,
+        root: options.userRoot,
         plugins: [
           {
             name: 'resolve-config',
@@ -65,16 +65,16 @@ export async function build(
       }
       else {
         console.log(blue('  building for Monaco...\n'))
-        const monacoRoot = await findPkgRoot('monaco-editor', clientRoot, true)
+        const monacoRoot = await findPkgRoot('monaco-editor', options.clientRoot, true)
         const getWorkerPath = (path: string) => [join(monacoRoot, 'esm/vs', path)]
         await viteBuild({
-          root: join(clientRoot, 'iframes/monaco'),
+          root: join(options.clientRoot, 'iframes/monaco'),
           base: `${config.base}iframes/monaco/`,
           plugins: [
             await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
           ],
           build: {
-            outDir: resolve(userRoot, config.build.outDir, 'iframes/monaco'),
+            outDir: resolve(options.userRoot, config.build.outDir, 'iframes/monaco'),
             // fix for monaco workers
             // https://github.com/vitejs/vite/issues/1927#issuecomment-805803918
             rollupOptions: {
@@ -100,7 +100,7 @@ export async function build(
       await fs.unlink(indexPath)
   }
 
-  const outDir = resolve(userRoot, config.build.outDir)
+  const outDir = resolve(options.userRoot, config.build.outDir)
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))

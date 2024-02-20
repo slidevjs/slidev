@@ -3,7 +3,7 @@ import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
 import { describe, expect, it } from 'vitest'
 import type { ResolvedFontOptions } from '@slidev/types'
-import { cliRoot, clientRoot, userRoot, userWorkspaceRoot } from 'packages/slidev/node/resolver'
+import { getRoots } from 'packages/slidev/node/resolver'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../packages/slidev/node/utils'
 
@@ -60,7 +60,8 @@ describe('utils', () => {
     ).toMatchSnapshot()
   })
 
-  it('roots', () => {
+  it('roots', async () => {
+    const { cliRoot, clientRoot, userRoot, userWorkspaceRoot } = await getRoots()
     const expectRelative = (v: string) => expect(slash(relative(__dirname, v)))
     expectRelative(cliRoot).toMatchInlineSnapshot(`"../packages/slidev"`)
     expectRelative(clientRoot).toMatchInlineSnapshot(`"../packages/client"`)

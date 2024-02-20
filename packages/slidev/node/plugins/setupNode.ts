@@ -3,9 +3,9 @@ import { fileURLToPath } from 'node:url'
 import fs from 'fs-extra'
 import { deepMergeWithArray } from '@antfu/utils'
 import jiti from 'jiti'
-import { clientRoot } from '../resolver'
 
 export async function loadSetups<T, R extends object>(
+  clientRoot: string,
   roots: string[],
   name: string,
   arg: T,

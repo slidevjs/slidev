@@ -3,7 +3,6 @@
 import path from 'node:path'
 import fs from 'fs-extra'
 import type { ResolvedSlidevOptions } from '../options'
-import { userRoot } from '../resolver'
 
 function dedent(text: string): string {
   const lines = text.split('\n')
@@ -87,14 +86,14 @@ export function transformSnippet(md: string, options: ResolvedSlidevOptions, id:
     return md
   const data = options.data
   const slideInfo = data.slides[+slideId - 1]
-  const dir = path.dirname(slideInfo.source?.filepath ?? options?.entry ?? userRoot)
+  const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
   return md.replace(
     /^<<< *(.+?)(#[\w-]+)? *(?: (\S+?))? *(\{.*)?$/mg,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
       const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
 
       const src = /^\@[\/]/.test(filepath)
-        ? path.resolve(userRoot, filepath.slice(2))
+        ? path.resolve(options.userRoot, filepath.slice(2))
         : path.resolve(dir, filepath)
 
       data.watchFiles.push(src)

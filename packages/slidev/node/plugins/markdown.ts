@@ -25,7 +25,7 @@ export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
-  const { data: { config }, roots, mode, entry } = options
+  const { data: { config }, roots, mode, entry, clientRoot } = options
 
   const setups: ((md: MarkdownIt) => void)[] = []
   const entryPath = slash(entry)
@@ -33,7 +33,7 @@ export async function createMarkdownPlugin(
   if (config.highlighter === 'shiki') {
     const MarkdownItShiki = await import('@shikijs/markdown-it').then(r => r.default)
     const { transformerTwoslash } = await import('@shikijs/vitepress-twoslash')
-    const options = await loadShikiSetups(roots)
+    const options = await loadShikiSetups(clientRoot, roots)
     const plugin = await MarkdownItShiki({
       ...options,
       transformers: [
@@ -66,7 +66,7 @@ export async function createMarkdownPlugin(
   if (config.mdc)
     setups.push(md => md.use(Mdc))
 
-  const KatexOptions: KatexOptions = await loadSetups(roots, 'katex.ts', {}, { strict: false }, false)
+  const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
 
   return Markdown({
     include: [/\.md$/],
@@ -207,7 +207,7 @@ export function getCodeBlocks(md: string) {
       return codeblocks.some(([s, e]) => s <= idx && idx <= e)
     },
     isLineInsideCodeblocks(line: number) {
-      return codeblocks.some(([,, s, e]) => s <= line && line <= e)
+      return codeblocks.some(([, , s, e]) => s <= line && line <= e)
     },
   }
 }
@@ -267,9 +267,11 @@ export function escapeVueInCode(md: string) {
 }
 
 export async function loadShikiSetups(
+  clientRoot: string,
   roots: string[],
 ) {
   const result: any = await loadSetups(
+    clientRoot,
     roots,
     'shiki.ts',
     {

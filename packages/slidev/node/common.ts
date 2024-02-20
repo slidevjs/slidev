@@ -4,9 +4,9 @@ import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions } from './options'
 import { generateGoogleFontsUrl } from './utils'
-import { clientRoot, toAtFS } from './resolver'
+import { toAtFS } from './resolver'
 
-export async function getIndexHtml({ roots, data }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''

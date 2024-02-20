@@ -12,7 +12,6 @@ import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { loadDrawings, writeDrawings } from '../drawings'
-import { clientRoot } from '../resolver'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 import { createMonacoTypesLoader } from './monacoTransform'
@@ -106,7 +105,7 @@ export async function ViteSlidevPlugin(
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
 
       dirs: [
-        join(clientRoot, 'builtin'),
+        join(options.clientRoot, 'builtin'),
         ...roots.map(i => join(i, 'components')),
         'src/components',
         'components',

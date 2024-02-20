@@ -146,9 +146,9 @@ Alice <- Bob : Hello, too!
 
   it('external snippet', () => {
     expect(transformSnippet(`
-<<< @/test/fixtures/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
+<<< @/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
 `, {
-      entry: path.join(__dirname, './fixtures/'),
+      userRoot: path.join(__dirname, './fixtures/'),
       data: {
         slides: [
           {} as any,

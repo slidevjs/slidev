@@ -15,7 +15,7 @@ import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
-import { clientRoot, resolveImportPath, toAtFS } from '../resolver'
+import { resolveImportPath, toAtFS } from '../resolver'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -85,7 +85,7 @@ function renderNoteHTML(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, entry, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {

@@ -5,7 +5,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
-import { cliRoot, clientRoot, resolveImportPath, toAtFS, userRoot, userWorkspaceRoot } from '../resolver'
+import { resolveImportPath, toAtFS } from '../resolver'
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -30,7 +30,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         define: getDefine(options),
         resolve: {
           alias: {
-            '@slidev/client/': `${toAtFS(clientRoot)}/`,
+            '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
             'vue': await resolveImportPath('vue/dist/vue.esm-browser.js', true),
           },
           dedupe: ['vue'],
@@ -51,19 +51,19 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           fs: {
             strict: true,
             allow: uniq([
-              userWorkspaceRoot,
-              cliRoot,
-              clientRoot,
+              options.userWorkspaceRoot,
+              options.cliRoot,
+              options.clientRoot,
               ...options.roots,
             ]),
           },
         },
-        publicDir: join(userRoot, 'public'),
+        publicDir: join(options.userRoot, 'public'),
       }
 
       if (isInstalledGlobally) {
-        injection.cacheDir = join(cliRoot, 'node_modules/.vite')
-        injection.root = cliRoot
+        injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
+        injection.root = options.cliRoot
       }
 
       return mergeConfig(injection, config)
@@ -88,7 +88,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 export function getDefine(options: ResolvedSlidevOptions): Record<string, string> {
   return {
     __DEV__: options.mode === 'dev' ? 'true' : 'false',
-    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(clientRoot)),
+    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
     __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
     __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
     __SLIDEV_FEATURE_EDITOR__: JSON.stringify(options.mode === 'dev' && options.data.config.editor !== false),

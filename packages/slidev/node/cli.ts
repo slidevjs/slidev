@@ -24,7 +24,7 @@ import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
-import { clientRoot, userRoot } from './resolver'
+import { getRoots } from './resolver'
 import { resolveAddons } from './addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
@@ -40,13 +40,14 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
   const addons = headmatter?.addons as string[] ?? []
+  const { clientRoot, userRoot } = await getRoots()
   const roots = uniq([
     clientRoot,
     userRoot,
     ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
+  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
 })
 
 const cli = yargs(process.argv.slice(2))
@@ -137,7 +138,7 @@ cli.command(
         {
           async loadData() {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(userRoot, entry)
+            const loaded = await parser.load(options.userRoot, entry)
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -353,7 +354,8 @@ cli.command(
             default: 'theme',
           }),
         async ({ entry, dir, theme: themeInput }) => {
-          const data = await parser.load(userRoot, entry)
+          const roots = await getRoots()
+          const data = await parser.load(roots.userRoot, entry)
           const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')

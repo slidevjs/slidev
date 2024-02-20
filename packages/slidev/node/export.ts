@@ -10,7 +10,7 @@ import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { resolve } from 'mlly'
 import type { ResolvedSlidevOptions } from './options'
-import { userRoot, userWorkspaceRoot } from './resolver'
+import { getRoots } from './resolver'
 
 export interface ExportOptions {
   total: number
@@ -476,6 +476,8 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
 }
 
 async function importPlaywright(): Promise<typeof import('playwright-chromium')> {
+  const { userRoot, userWorkspaceRoot } = await getRoots()
+
   // 1. resolve from user root
   try {
     return await import(await resolve('playwright-chromium', { url: userRoot }))

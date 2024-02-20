@@ -1,9 +1,10 @@
 import { resolve } from 'node:path'
 import fs from 'fs-extra'
-import { createResolver, userPkgJson, userRoot } from './resolver'
+import { createResolver, getRoots } from './resolver'
 import { checkEngine } from './utils'
 
 export async function resolveAddons(addonsInConfig: string[]) {
+  const { userRoot, userPkgJson } = await getRoots()
   const resolved: string[] = []
 
   const resolveAddonNameAndRoot = createResolver('addon', {})
