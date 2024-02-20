@@ -27,6 +27,7 @@ const vueContextImports = [
     injectionCurrentPage as _injectionCurrentPage,
     injectionRenderContext as _injectionRenderContext,
     injectionFrontmatter as _injectionFrontmatter,
+    filterFrontmatter as _filterFrontmatter,
   } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
   'const $slidev = _vueInject(_injectionSlidevContext)',
   'const $nav = _vueToRef($slidev, "nav")',
@@ -489,7 +490,7 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="frontmatter">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_filterFrontmatter(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }
