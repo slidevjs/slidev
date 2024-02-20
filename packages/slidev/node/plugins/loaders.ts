@@ -15,7 +15,7 @@ import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
-import { clientRoot, resolveImportPath, toAtFS } from '../fs'
+import { clientRoot, resolveImportPath, toAtFS } from '../resolver'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/

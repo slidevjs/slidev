@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import fs from 'fs-extra'
-import { createResolver, userPkgJson, userRoot } from './fs'
+import { createResolver, userPkgJson, userRoot } from './resolver'
 import { checkEngine } from './utils'
 
 export async function resolveAddons(addonsInConfig: string[]) {

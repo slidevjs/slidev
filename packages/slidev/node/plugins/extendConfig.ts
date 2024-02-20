@@ -5,7 +5,7 @@ import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
-import { cliRoot, clientRoot, resolveImportPath, toAtFS, userRoot, userWorkspaceRoot } from '../fs'
+import { cliRoot, clientRoot, resolveImportPath, toAtFS, userRoot, userWorkspaceRoot } from '../resolver'
 
 const EXCLUDE = [
   '@slidev/shared',

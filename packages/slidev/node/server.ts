@@ -5,7 +5,7 @@ import { createServer as createViteServer, mergeConfig } from 'vite'
 import { mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions, SlidevServerOptions } from './options'
 import { ViteSlidevPlugin } from './plugins/preset'
-import { clientRoot, userRoot } from './fs'
+import { clientRoot, userRoot } from './resolver'
 
 export async function createServer(
   options: ResolvedSlidevOptions,

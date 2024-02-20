@@ -25,7 +25,7 @@ import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
-import { cliRoot, clientRoot, userRoot } from './fs'
+import { cliRoot, clientRoot, userRoot } from './resolver'
 import { resolveAddons } from './addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [

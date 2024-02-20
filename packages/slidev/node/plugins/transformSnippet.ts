@@ -3,7 +3,7 @@
 import path from 'node:path'
 import fs from 'fs-extra'
 import type { ResolvedSlidevOptions } from '../options'
-import { userRoot } from '../fs'
+import { userRoot } from '../resolver'
 
 function dedent(text: string): string {
   const lines = text.split('\n')

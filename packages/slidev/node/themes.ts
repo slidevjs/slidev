@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import type { SlidevThemeMeta } from '@slidev/types'
 import { satisfies } from 'semver'
 import { version } from '../package.json'
-import { createResolver } from './fs'
+import { createResolver } from './resolver'
 
 const officialThemes: Record<string, string> = {
   'none': '',

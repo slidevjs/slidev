@@ -11,7 +11,7 @@ import type { BuildArgs } from '@slidev/types'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
-import { clientRoot, userRoot } from './fs'
+import { clientRoot, userRoot } from './resolver'
 
 export async function build(
   options: ResolvedSlidevOptions,

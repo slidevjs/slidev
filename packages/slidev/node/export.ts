@@ -10,7 +10,7 @@ import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { resolve } from 'mlly'
 import type { ResolvedSlidevOptions } from './options'
-import { userRoot, userWorkspaceRoot } from './fs'
+import { userRoot, userWorkspaceRoot } from './resolver'
 
 export interface ExportOptions {
   total: number

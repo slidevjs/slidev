@@ -13,7 +13,7 @@ import _debug from 'debug'
 import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './themes'
 import { resolveAddons } from './addons'
-import { cliRoot, clientRoot, resolveEntry, userRoot } from './fs'
+import { cliRoot, clientRoot, resolveEntry, userRoot } from './resolver'
 
 const debug = _debug('slidev:options')
 
