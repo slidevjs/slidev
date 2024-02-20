@@ -86,7 +86,7 @@ If you want to disable the fallback fonts, configure as following
 ---
 fonts:
   mono: 'Fira Code, monospace'
-  fallback: false
+  fallbacks: false
 ---
 ```
 
