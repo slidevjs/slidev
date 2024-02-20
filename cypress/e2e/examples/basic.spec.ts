@@ -1,6 +1,7 @@
 context('Basic', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.get('body').focus()
   })
 
   function goPage(no: number) {
