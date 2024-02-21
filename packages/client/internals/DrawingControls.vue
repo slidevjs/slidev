@@ -71,11 +71,11 @@ function setBrushColor(color: typeof brush.color) {
     <VerticalDivider />
 
     <Menu>
-      <IconButton title="Adjust settings">
+      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }">
         <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
-          <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" />
-          <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" />
-          <line x1="7" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" />
+          <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+          <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <line x1="7" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
         </svg>
       </IconButton>
       <template #popper>
