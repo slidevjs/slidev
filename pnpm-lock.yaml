@@ -248,8 +248,8 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4
       drauu:
-        specifier: ^0.3.7
-        version: 0.3.7
+        specifier: ^0.4.0
+        version: 0.4.0
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -1022,8 +1022,8 @@ packages:
       - supports-color
     dev: true
 
-  /@drauu/core@0.3.7:
-    resolution: {integrity: sha512-JFTKEyVoFKHQLfYKqFrcbI2ZnHWfe2/heuDr2JUmLG9pdMJn2Gq1WMK4LuB4L1uZDfJyYjnLQ/OicZ0ePIwI0Q==}
+  /@drauu/core@0.4.0:
+    resolution: {integrity: sha512-NaypCz/tA0XBAAZrie536FqOXpIuPg2lANB15wsUmrX+Hdw3DZWGz0Ez+wS9WKQsr4+qKcPL61o5eE7CoCYNCg==}
     dev: false
 
   /@es-joy/jsdoccomment@0.41.0:
@@ -4062,10 +4062,10 @@ packages:
     resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
     engines: {node: '>=12'}
 
-  /drauu@0.3.7:
-    resolution: {integrity: sha512-fENggzwwVYTiIfKt4hYLsG2azq//hflHqu1qwAWZBzZANkN5KdX+goZYeDsRx01uvtiuxH09w/i8oESygytutg==}
+  /drauu@0.4.0:
+    resolution: {integrity: sha512-G+JU7UN5WGmx/yBk+iTAlkKwHDeHc02K0oEYms7b9OrsVU0UqXlpRKg/sNXKNDHbIlS3lGzUx7o4J200E5lAOQ==}
     dependencies:
-      '@drauu/core': 0.3.7
+      '@drauu/core': 0.4.0
     dev: false
 
   /duplexer@0.1.2:
