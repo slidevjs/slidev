@@ -96,7 +96,7 @@ export default defineComponent({
         if (depth < +this.depth && Array.isArray(i.children))
           vNode = h(i, {}, mapSubList(i.children, depth))
         else
-          vNode = i
+          vNode = h(i)
 
         const delta = thisShowIdx - execIdx
         execIdx = thisShowIdx
