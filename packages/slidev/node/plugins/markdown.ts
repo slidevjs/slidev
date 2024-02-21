@@ -260,10 +260,10 @@ export function transformPlantUml(md: string, server: string): string {
 }
 
 /**
- * Escape `{{}}` in code block to prevent Vue interpret it, #99
+ * Escape `{{` in code block to prevent Vue interpret it, #99, #1316
  */
 export function escapeVueInCode(md: string) {
-  return md.replace(/{{(.*?)}}/g, '&lbrace;&lbrace;$1&rbrace;&rbrace;')
+  return md.replace(/{{/g, '&lbrace;&lbrace;')
 }
 
 export async function loadShikiSetups(
