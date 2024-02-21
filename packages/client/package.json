@@ -1,5 +1,6 @@
 {
   "name": "@slidev/client",
+  "type": "module",
   "version": "0.48.0-beta.4",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
@@ -13,6 +14,12 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
     "./package.json": "./package.json",
+    "./constants": "./constants.ts",
+    "./context": "./context.ts",
+    "./env": "./env.ts",
+    "./layoutHelper": "./layoutHelper.ts",
+    "./routes": "./routes.ts",
+    "./utils": "./utils.ts",
     "./*": "./*"
   },
   "engines": {

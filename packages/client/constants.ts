@@ -1,7 +1,6 @@
 import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext, RenderContext } from '@slidev/types'
-import { objectOmit } from '@vueuse/core'
 import type { SlidevContext } from './modules/context'
 
 export const injectionClicksContext: InjectionKey<Ref<ClicksContext>> = Symbol('slidev-clicks-context')
@@ -26,7 +25,7 @@ export const TRUST_ORIGINS = [
   '127.0.0.1',
 ]
 
-const FRONTMATTER_FIELDS = [
+export const FRONTMATTER_FIELDS = [
   'clicks',
   'disabled',
   'hide',
@@ -41,7 +40,7 @@ const FRONTMATTER_FIELDS = [
   'zoom',
 ]
 
-const HEADMATTER_FIELDS = [
+export const HEADMATTER_FIELDS = [
   ...FRONTMATTER_FIELDS,
   'theme',
   'titleTemplate',
@@ -71,10 +70,3 @@ const HEADMATTER_FIELDS = [
   'htmlAttrs',
   'mdc',
 ]
-
-export function filterFrontmatter(frontmatter: Record<string, any>, pageNo: number) {
-  return {
-    ...objectOmit(frontmatter, pageNo === 0 ? HEADMATTER_FIELDS : FRONTMATTER_FIELDS),
-    frontmatter,
-  }
-}

@@ -20,23 +20,13 @@ import { resolveImportPath, toAtFS } from '../resolver'
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
-const vueContextImports = [
-  `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
-  `import {
-    injectionSlidevContext as _injectionSlidevContext, 
-    injectionClicksContext as _injectionClicksContext,
-    injectionCurrentPage as _injectionCurrentPage,
-    injectionRenderContext as _injectionRenderContext,
-    injectionFrontmatter as _injectionFrontmatter,
-    filterFrontmatter as _filterFrontmatter,
-  } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
-  'const $slidev = _vueInject(_injectionSlidevContext)',
-  'const $nav = _vueToRef($slidev, "nav")',
-  'const $clicksContext = _vueInject(_injectionClicksContext)?.value',
-  'const $clicks = _vueToRef($clicksContext, "current")',
-  'const $page = _vueInject(_injectionCurrentPage)',
-  'const $renderContext = _vueInject(_injectionRenderContext)',
-]
+const templateInjectionMarker = '/* @slidev-injection */'
+const templateImportContextUtils = `import {
+  useSlidevContext,
+  provideFrontmatter as _provideFrontmatter,
+  frontmatterToProps as _frontmatterToProps,
+} from "@slidev/client/context.ts"`.replace(/\n\s*/g, ' ')
+const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlidevContext()`
 
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -469,21 +459,12 @@ export function createSlidesLoader(
 
     delete frontmatter.title
     const imports = [
-      ...vueContextImports,
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       `import frontmatter from "${toAtFS(`${slidePrefix + (pageNo + 1)}.frontmatter`)}"`,
-      'const $frontmatter = frontmatter',
-      '_vueProvide(_injectionFrontmatter, frontmatter)',
-      // update frontmatter in router
-      ';(() => {',
-      '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page.value))',
-      '  if (route?.meta?.slide?.frontmatter) {',
-      '    Object.keys(route.meta.slide.frontmatter).forEach(key => {',
-      '      if (!(key in $frontmatter)) delete route.meta.slide.frontmatter[key]',
-      '    })',
-      '    Object.assign(route.meta.slide.frontmatter, frontmatter)',
-      '  }',
-      '})();',
+      templateImportContextUtils,
+      '_provideFrontmatter(frontmatter)',
+      templateInitContext,
+      templateInjectionMarker,
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -492,17 +473,18 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_filterFrontmatter(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }
 
   function transformVue(code: string): string {
-    if (code.includes('injectionSlidevContext') || code.includes('injectionClicksContext') || code.includes('const $slidev'))
+    if (code.includes(templateInjectionMarker))
       return code // Assume that the context is already imported and used
     const imports = [
-      ...vueContextImports,
-      'const $frontmatter = _vueInject(_injectionFrontmatter)',
+      templateImportContextUtils,
+      templateInitContext,
+      templateInjectionMarker,
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
