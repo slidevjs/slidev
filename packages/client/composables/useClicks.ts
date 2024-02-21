@@ -6,7 +6,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
 
-function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () => number): ClicksContext {
+function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
@@ -53,7 +53,7 @@ function useClicksContextBase(route: RouteRecordRaw | undefined, getCurrent: () 
     get total() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return route?.meta?.clicks
+      return clicksOverrides
         ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
     },
   }
@@ -63,21 +63,24 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
   const thisPath = +(route?.path ?? 99999)
-  const context = useClicksContextBase(route, () => {
-    const currentPath = +(currentRoute.value?.path ?? 99999)
-    if (currentPath === thisPath)
-      return queryClicks.value
-    else if (currentPath > thisPath)
-      return 99999
-    else
-      return 0
-  })
+  const context = useClicksContextBase(
+    () => {
+      const currentPath = +(currentRoute.value?.path ?? 99999)
+      if (currentPath === thisPath)
+        return queryClicks.value
+      else if (currentPath > thisPath)
+        return 99999
+      else
+        return 0
+    },
+    route?.meta?.clicks,
+  )
   if (route?.meta)
     route.meta.__clicksContext = context
   return context
 }
 
-export function useFixedClicks(route: RouteRecordRaw | undefined, currentInit = 0): [Ref<number>, ClicksContext] {
+export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): [Ref<number>, ClicksContext] {
   const current = ref(currentInit)
-  return [current, useClicksContextBase(route, () => current.value)]
+  return [current, useClicksContextBase(() => current.value, route?.meta?.clicks)]
 }

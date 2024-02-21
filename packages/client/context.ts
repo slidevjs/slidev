@@ -1,5 +1,6 @@
-import { toRef } from 'vue'
+import { ref, shallowRef, toRef } from 'vue'
 import { injectLocal, objectOmit, provideLocal } from '@vueuse/core'
+import { useFixedClicks } from './composables/useClicks'
 import {
   FRONTMATTER_FIELDS,
   HEADMATTER_FIELDS,
@@ -16,11 +17,11 @@ import {
 export function useSlidevContext() {
   const $slidev = injectLocal(injectionSlidevContext)!
   const $nav = toRef($slidev, 'nav')
-  const $clicksContext = injectLocal(injectionClicksContext)!.value
+  const $clicksContext = injectLocal(injectionClicksContext, shallowRef(useFixedClicks()[1]))!.value
   const $clicks = toRef($clicksContext, 'current')
   const $page = injectLocal(injectionCurrentPage)!
-  const $renderContext = injectLocal(injectionRenderContext)!
-  const $frontmatter = injectLocal(injectionFrontmatter) || {}
+  const $renderContext = injectLocal(injectionRenderContext, ref('slide'))
+  const $frontmatter = injectLocal(injectionFrontmatter, {})
 
   return {
     $slidev,

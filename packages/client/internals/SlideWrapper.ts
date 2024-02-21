@@ -1,5 +1,6 @@
-import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
+import { computed, defineComponent, h, ref, toRef } from 'vue'
 import type { PropType } from 'vue'
+import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext } from '@slidev/types'
 import type { RouteRecordRaw } from 'vue-router'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
@@ -29,11 +30,11 @@ export default defineComponent({
     },
   },
   setup(props) {
-    provide(injectionRoute, props.route)
-    provide(injectionCurrentPage, ref(+props.route.path))
-    provide(injectionRenderContext, ref(props.renderContext as RenderContext))
-    provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicksContext, toRef(props, 'clicksContext'))
+    provideLocal(injectionRoute, props.route)
+    provideLocal(injectionCurrentPage, ref(+props.route.path))
+    provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
+    provideLocal(injectionActive, toRef(props, 'active'))
+    provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 
     const style = computed(() => {
       const zoom = props.route.meta?.slide?.frontmatter.zoom ?? 1
