@@ -7,9 +7,9 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { useScriptTag } from '@vueuse/core'
 import { getCurrentInstance, onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
+import { useTweet } from '../composables/tweet'
 
 const props = defineProps<{
   id: string | number
@@ -41,21 +41,10 @@ async function create() {
 }
 
 // @ts-expect-error global
-if (window?.twttr?.widgets) {
+if (window?.twttr?.widgets)
   onMounted(create)
-}
-else {
-  useScriptTag(
-    'https://platform.twitter.com/widgets.js',
-    () => {
-      if (vm.isMounted)
-        create()
-      else
-        onMounted(create, vm)
-    },
-    { async: true },
-  )
-}
+else
+  useTweet(vm, create)
 </script>
 
 <template>
