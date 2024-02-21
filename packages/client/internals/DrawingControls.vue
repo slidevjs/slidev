@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Menu } from 'floating-vue'
+import 'floating-vue/dist/style.css'
 import {
   brush,
   brushColors,
@@ -68,6 +70,25 @@ function setBrushColor(color: typeof brush.color) {
 
     <VerticalDivider />
 
+    <Menu>
+      <IconButton title="Adjust settings">
+        <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
+          <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" />
+          <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" />
+          <line x1="6" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" />
+        </svg>
+      </IconButton>
+      <template #popper>
+        <div class="flex bg-main p-2">
+          <div class="inline-block w-7 text-center">
+            {{ brush.size }}
+          </div>
+          <div class="pt-.5">
+            <input v-model="brush.size" type="range" min="1" max="15">
+          </div>
+        </div>
+      </template>
+    </Menu>
     <IconButton
       v-for="color of brushColors"
       :key="color"
@@ -110,3 +131,12 @@ function setBrushColor(color: typeof brush.color) {
     </IconButton>
   </Draggable>
 </template>
+
+<style lang="postcss">
+.v-popper--theme-menu {
+
+  .v-popper__arrow-inner {
+    @apply border-main;
+  }
+}
+</style>
