@@ -9,7 +9,7 @@ Usage:
 <script setup lang="ts">
 import { getCurrentInstance, onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
-import { useTweet } from '../composables/tweet'
+import { useTweetScript } from '../composables/useTweetScript'
 
 const props = defineProps<{
   id: string | number
@@ -44,7 +44,7 @@ async function create() {
 if (window?.twttr?.widgets)
   onMounted(create)
 else
-  useTweet(vm, create)
+  useTweetScript(vm, create)
 </script>
 
 <template>
