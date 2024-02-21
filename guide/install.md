@@ -163,8 +163,9 @@ Options:
 * `--port`, `-p` (`number`, default: `3030`): port number.
 * `--open`, `-o` (`boolean`, default: `false`): open in browser.
 * `--remote [password]` (`string`): listen to public host and enable remote control, if a value is passed then the presenter mode is private and only accessible by passing the given password in the URL query `password` parameter.
+* `--bind` (`string`, default: `0.0.0.0`): specify which IP addresses the server should listen on in the remote mode.
 * `--log` (`'error', 'warn', 'info', 'silent'`, default: `'warn'`): Log level.
-* `--force`, `-f` (`boolean`, default `false`): force the optimizer to ignore the cache and re-bundle.
+* `--force`, `-f` (`boolean`, default: `false`): force the optimizer to ignore the cache and re-bundle.
 * `--theme`, `-t` (`string`): override theme.
 
 ### `slidev build [entry]`
