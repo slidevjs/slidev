@@ -1,6 +1,7 @@
-import { defineComponent, h, provide, ref, toRef } from 'vue'
+import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
 import type { PropType } from 'vue'
 import type { ClicksContext, RenderContext } from '@slidev/types'
+import type { RouteRecordRaw } from 'vue-router'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
@@ -20,23 +21,37 @@ export default defineComponent({
     },
     is: {
       type: Object,
-      default: undefined,
+      required: true,
     },
     route: {
-      type: Object,
-      default: undefined,
+      type: Object as PropType<RouteRecordRaw>,
+      required: true,
     },
   },
   setup(props) {
-    provide(injectionRoute, props.route as any)
-    provide(injectionCurrentPage, ref(+props.route?.path))
+    provide(injectionRoute, props.route)
+    provide(injectionCurrentPage, ref(+props.route.path))
     provide(injectionRenderContext, ref(props.renderContext as RenderContext))
     provide(injectionActive, toRef(props, 'active'))
     provide(injectionClicksContext, toRef(props, 'clicksContext'))
+
+    const style = computed(() => {
+      const zoom = props.route.meta?.slide?.frontmatter.zoom ?? 1
+      return zoom === 1
+        ? undefined
+        : {
+            width: `${100 / zoom}%`,
+            height: `${100 / zoom}%`,
+            transformOrigin: 'top left',
+            transform: `scale(${zoom})`,
+          }
+    })
+
+    return {
+      style,
+    }
   },
   render() {
-    if (this.$props.is)
-      return h(this.$props.is)
-    return this.$slots?.default?.()
+    return h(this.$props.is, { style: this.style })
   },
 })

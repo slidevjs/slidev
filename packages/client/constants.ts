@@ -38,6 +38,7 @@ const FRONTMATTER_FIELDS = [
   'src',
   'title',
   'transition',
+  'zoom',
 ]
 
 const HEADMATTER_FIELDS = [
