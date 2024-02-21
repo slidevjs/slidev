@@ -89,7 +89,7 @@ export interface SlidevPreparserExtension {
 
 export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string) => Promise<SlidevPreparserExtension[]>
 
-export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
+export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
 

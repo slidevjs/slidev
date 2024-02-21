@@ -1,4 +1,4 @@
-import { ref, shallowRef, toRef } from 'vue'
+import { shallowRef, toRef } from 'vue'
 import { injectLocal, objectOmit, provideLocal } from '@vueuse/core'
 import { useFixedClicks } from './composables/useClicks'
 import {
@@ -23,7 +23,7 @@ export function useSlideContext() {
   const $clicksContext = injectLocal(injectionClicksContext, clicksContextFallback)!.value
   const $clicks = toRef($clicksContext, 'current')
   const $page = injectLocal(injectionCurrentPage)!
-  const $renderContext = injectLocal(injectionRenderContext, ref('slide'))
+  const $renderContext = injectLocal(injectionRenderContext)!
   const $frontmatter = injectLocal(injectionFrontmatter, {})
   const $route = injectLocal(injectionRoute, undefined)
 
