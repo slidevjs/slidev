@@ -8,9 +8,9 @@ Usage:
 <Toc columns='2' maxDepth='3' mode='onlySiblings'/>
 -->
 <script setup lang='ts'>
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import type { TocItem } from '@slidev/types'
-import { injectionSlidevContext } from '../constants'
+import { useSlideContext } from '../context'
 
 const props = withDefaults(
   defineProps<{
@@ -33,7 +33,7 @@ const props = withDefaults(
   },
 )
 
-const $slidev = inject(injectionSlidevContext)
+const { $slidev } = useSlideContext()
 
 function filterTreeDepth(tree: TocItem[], level = 1): TocItem[] {
   if (level > Number(props.maxDepth)) {

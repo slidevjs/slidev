@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import { injectionCurrentPage } from '../constants'
+import { useSlideContext } from '../context'
 
-const $page = inject(injectionCurrentPage)
+const { $page } = useSlideContext()
 </script>
 
 <template>

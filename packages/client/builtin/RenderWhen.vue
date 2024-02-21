@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { RenderContext } from '@slidev/types'
-import { computed, inject, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useElementVisibility } from '@vueuse/core'
-import { injectionRenderContext } from '../constants'
+import { useSlideContext } from '../context'
 
 type Context = 'main' | 'visible' | RenderContext
 
@@ -16,7 +16,7 @@ const targetVisible = useElementVisibility(target)
 // When context has `visible`, we need to wrap the content with a div to track the visibility
 const needsDomWrapper = Array.isArray(context) ? context.includes('visible') : context === 'visible'
 
-const currentContext = inject(injectionRenderContext)
+const { $renderContext: currentContext } = useSlideContext()
 const shouldRender = computed(() => {
   const anyContext = Array.isArray(context) ? context.some(contextMatch) : contextMatch(context)
   const allConditions = Array.isArray(context) ? context.every(conditionsMatch) : conditionsMatch(context)

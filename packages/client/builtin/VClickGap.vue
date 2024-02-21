@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Fragment, inject, onMounted, watchEffect } from 'vue'
-import { injectionClicksContext } from '../constants'
+import { Fragment, onMounted, watchEffect } from 'vue'
 import { makeId } from '../logic/utils'
+import { useSlideContext } from '../context'
 
 const props = defineProps({
   size: {
@@ -10,12 +10,10 @@ const props = defineProps({
   },
 })
 
-const clicksRef = inject(injectionClicksContext)
+const { $clicksContext: clicks } = useSlideContext()
 
 onMounted(() => {
   watchEffect((onCleanup) => {
-    const clicks = clicksRef?.value
-
     if (!clicks || clicks.disabled)
       return
 

@@ -22,11 +22,11 @@ const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
 const templateInjectionMarker = '/* @slidev-injection */'
 const templateImportContextUtils = `import {
-  useSlidevContext,
+  useSlideContext,
   provideFrontmatter as _provideFrontmatter,
   frontmatterToProps as _frontmatterToProps,
 } from "@slidev/client/context.ts"`.replace(/\n\s*/g, ' ')
-const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlidevContext()`
+const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlideContext()`
 
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -479,7 +479,7 @@ export function createSlidesLoader(
   }
 
   function transformVue(code: string): string {
-    if (code.includes(templateInjectionMarker))
+    if (code.includes(templateInjectionMarker) || code.includes('useSlideContext()'))
       return code // Assume that the context is already imported and used
     const imports = [
       templateImportContextUtils,

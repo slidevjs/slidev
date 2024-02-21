@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { parseRangeString } from '@slidev/parser/core'
-import { computed, provide } from 'vue'
+import { computed } from 'vue'
+import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
 import { route as currentRoute, rawRoutes } from '../logic/nav'
@@ -31,7 +32,7 @@ const className = computed(() => ({
   'select-none': !configs.selectable,
 }))
 
-provide(injectionSlideScale, scale)
+provideLocal(injectionSlideScale, scale)
 </script>
 
 <template>

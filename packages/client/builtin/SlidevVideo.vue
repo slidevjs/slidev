@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-import { injectionClicksContext, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useSlideContext } from '../context'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -8,10 +8,12 @@ const props = defineProps<{
   autoReset?: 'slide' | 'click'
 }>()
 
-const $slidev = inject(injectionSlidevContext)
-const route = inject(injectionRoute)
-const currentContext = inject(injectionRenderContext)
-const clicks = inject(injectionClicksContext)?.value
+const {
+  $slidev,
+  $clicksContext: clicks,
+  $renderContext: currentContext,
+  $route: route,
+} = useSlideContext()
 
 const video = ref<HTMLMediaElement>()
 const played = ref(false)

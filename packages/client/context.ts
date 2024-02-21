@@ -8,26 +8,32 @@ import {
   injectionCurrentPage,
   injectionFrontmatter,
   injectionRenderContext,
+  injectionRoute,
   injectionSlidevContext,
 } from './constants'
 
+const clicksContextFallback = shallowRef(useFixedClicks()[1])
+
 /**
- * Get the current slidev context, should be called inside the setup function of a component inside slide
+ * Get the current slide context, should be called inside the setup function of a component inside slide
  */
-export function useSlidevContext() {
+export function useSlideContext() {
   const $slidev = injectLocal(injectionSlidevContext)!
   const $nav = toRef($slidev, 'nav')
-  const $clicksContext = injectLocal(injectionClicksContext, shallowRef(useFixedClicks()[1]))!.value
+  const $clicksContext = injectLocal(injectionClicksContext, clicksContextFallback)!.value
   const $clicks = toRef($clicksContext, 'current')
   const $page = injectLocal(injectionCurrentPage)!
   const $renderContext = injectLocal(injectionRenderContext, ref('slide'))
   const $frontmatter = injectLocal(injectionFrontmatter, {})
+  const $route = injectLocal(injectionRoute, undefined)
 
   return {
     $slidev,
     $nav,
+    $clicksContext,
     $clicks,
     $page,
+    $route,
     $renderContext,
     $frontmatter,
   }
@@ -39,7 +45,7 @@ export function provideFrontmatter(frontmatter: Record<string, any>) {
   const {
     $slidev,
     $page,
-  } = useSlidevContext()
+  } = useSlideContext()
 
   // update frontmatter in router to make HMR work better
   const route = $slidev.nav.rawRoutes.find(i => i.path === String($page.value))

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
-import { computed, provide, reactive, shallowRef } from 'vue'
+import { computed, reactive, shallowRef } from 'vue'
 import type { ClicksContext } from '@slidev/types'
+import { provideLocal } from '@vueuse/core'
 import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
@@ -33,7 +34,7 @@ const id = computed(() =>
   `${props.route.path.toString().padStart(3, '0')}-${(props.nav.clicks.value + 1).toString().padStart(2, '0')}`,
 )
 
-provide(injectionSlidevContext, reactive({
+provideLocal(injectionSlidevContext, reactive({
   nav: props.nav,
   configs,
   themeConfigs: computed(() => configs.themeConfig),

@@ -14,11 +14,12 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 <script setup lang="ts">
 import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
-import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, injectionClicksContext } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET } from '../constants'
+import { useSlideContext } from '../context'
 
 const props = defineProps({
   ranges: {
@@ -47,7 +48,7 @@ const props = defineProps({
   },
 })
 
-const clicks = inject(injectionClicksContext)?.value
+const { $clicksContext: clicks } = useSlideContext()
 const el = ref<HTMLDivElement>()
 const id = makeId()
 
