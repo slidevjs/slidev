@@ -3,14 +3,16 @@ import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext, RenderContext } from '@slidev/types'
 import type { SlidevContext } from './modules/context'
 
-export const injectionClicksContext: InjectionKey<Ref<ClicksContext>> = Symbol('slidev-clicks-context')
-export const injectionCurrentPage: InjectionKey<Ref<number>> = Symbol('slidev-page')
-export const injectionSlideScale: InjectionKey<ComputedRef<number>> = Symbol('slidev-slide-scale')
-export const injectionSlidevContext: InjectionKey<UnwrapNestedRefs<SlidevContext>> = Symbol('slidev-slidev-context')
-export const injectionRoute: InjectionKey<RouteRecordRaw> = Symbol('slidev-route')
-export const injectionRenderContext: InjectionKey<Ref<RenderContext>> = Symbol('slidev-render-context')
-export const injectionActive: InjectionKey<Ref<boolean>> = Symbol('slidev-active')
-export const injectionFrontmatter: InjectionKey<Record<string, any>> = Symbol('slidev-fontmatter')
+// Here we use string literal instead of symbols to make HMR more stable
+// The value of the injections keys are implementation details, you should always use them with the reference to the constant instead of the value
+export const injectionClicksContext = '$$slidev-clicks-context' as unknown as InjectionKey<Ref<ClicksContext>>
+export const injectionCurrentPage = '$$slidev-page' as unknown as InjectionKey<Ref<number>>
+export const injectionSlideScale = '$$slidev-slide-scale' as unknown as InjectionKey<ComputedRef<number>>
+export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
+export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<RouteRecordRaw>
+export const injectionRenderContext = '$$slidev-render-context' as unknown as InjectionKey<Ref<RenderContext>>
+export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
+export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
