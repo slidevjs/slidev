@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-
-import { injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionRenderContext, injectionRoute, injectionSlidevContext } from '../constants'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useSlideContext } from '../context'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -9,12 +8,12 @@ const props = defineProps<{
   autoReset?: 'slide' | 'click'
 }>()
 
-const $slidev = inject(injectionSlidevContext)
-const route = inject(injectionRoute)
-const currentContext = inject(injectionRenderContext)
-const clicks = inject(injectionClicks)
-const clicksDisabled = inject(injectionClicksDisabled)
-const clicksElements = inject(injectionClicksElements)
+const {
+  $slidev,
+  $clicksContext: clicks,
+  $renderContext: currentContext,
+  $route: route,
+} = useSlideContext()
 
 const video = ref<HTMLMediaElement>()
 const played = ref(false)
@@ -27,9 +26,9 @@ const matchRoute = computed(() => {
 })
 
 const matchClick = computed(() => {
-  if (!video.value || currentContext?.value !== 'slide' || clicks?.value === undefined || clicksDisabled?.value)
+  if (!video.value || currentContext?.value !== 'slide' || clicks?.disabled || clicks?.current === undefined)
     return false
-  return !clicksElements?.value.includes(video.value) || clicksElements?.value[clicks?.value - 1] === video.value
+  return clicks.map.get(video.value)?.isShown?.value ?? true
 })
 
 const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)

@@ -1,7 +1,7 @@
 import { basename, resolve } from 'node:path'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { getDefaultConfig, load, parse, prettify, stringify } from '../packages/parser/src/fs'
+import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 
 function configDiff(v: SlidevConfig) {
@@ -15,18 +15,19 @@ function configDiff(v: SlidevConfig) {
 }
 
 describe('md parser', () => {
+  const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
-    cwd: resolve(__dirname, 'fixtures/markdown'),
+    cwd: userRoot,
     absolute: true,
   })
 
   for (const file of files) {
     it(basename(file), async () => {
-      const data = await load(file)
+      const data = await load(userRoot, file)
 
-      expect(stringify(data).trim()).toEqual(data.raw.trim())
+      expect(stringify(data.entry).trim()).toEqual(data.entry.raw.trim())
 
-      prettify(data)
+      prettify(data.entry)
 
       for (const slide of data.slides) {
         if (slide.source?.filepath)
@@ -39,7 +40,7 @@ describe('md parser', () => {
           delete slide.filepath
       }
       expect(data.slides).toMatchSnapshot('slides')
-      expect(configDiff(data.config)).toMatchSnapshot('config')
+      expect(configDiff(resolveConfig(data.headmatter, {}))).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')
     })
   }
@@ -65,7 +66,7 @@ e
 
 f
 
-`)
+`, 'file.md')
     expect(data.slides.map(i => i.content.trim()))
       .toEqual(Array.from('abcdef'))
     expect(data.slides[2].frontmatter)
@@ -95,7 +96,7 @@ e
 
 f
 
-`)
+`, 'file.md')
     expect(data.slides.map(i => i.content.trim()))
       .toEqual(Array.from('abcdef'))
     expect(data.slides[2].frontmatter)
@@ -112,10 +113,8 @@ f
   ) {
     return await parse(
       src,
-      undefined,
-      undefined,
-      [],
-      async () => [{ transformRawLines, ...more }, ...moreExts] as any,
+      'file.md',
+      [{ transformRawLines, ...more }, ...moreExts] as any,
     )
   }
 

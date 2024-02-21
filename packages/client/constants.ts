@@ -1,12 +1,9 @@
 import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
-import type { RenderContext } from '@slidev/types'
+import type { ClicksContext, RenderContext } from '@slidev/types'
 import type { SlidevContext } from './modules/context'
 
-export const injectionClicks: InjectionKey<Ref<number>> = Symbol('v-click-clicks')
-export const injectionClicksElements: InjectionKey<Ref<(Element | string)[]>> = Symbol('v-click-clicks-elements')
-export const injectionClicksDisabled: InjectionKey<Ref<boolean>> = Symbol('v-click-clicks-disabled')
-export const injectionOrderMap: InjectionKey<Ref<Map<number, HTMLElement[]>>> = Symbol('v-click-clicks-order-map')
+export const injectionClicksContext: InjectionKey<Ref<ClicksContext>> = Symbol('slidev-clicks-context')
 export const injectionCurrentPage: InjectionKey<Ref<number>> = Symbol('slidev-page')
 export const injectionSlideScale: InjectionKey<ComputedRef<number>> = Symbol('slidev-slide-scale')
 export const injectionSlidevContext: InjectionKey<UnwrapNestedRefs<SlidevContext>> = Symbol('slidev-slidev-context')
@@ -26,4 +23,50 @@ export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 export const TRUST_ORIGINS = [
   'localhost',
   '127.0.0.1',
+]
+
+export const FRONTMATTER_FIELDS = [
+  'clicks',
+  'disabled',
+  'hide',
+  'hideInToc',
+  'layout',
+  'level',
+  'preload',
+  'routeAlias',
+  'src',
+  'title',
+  'transition',
+  'zoom',
+]
+
+export const HEADMATTER_FIELDS = [
+  ...FRONTMATTER_FIELDS,
+  'theme',
+  'titleTemplate',
+  'info',
+  'author',
+  'keywords',
+  'presenter',
+  'download',
+  'exportFilename',
+  'export',
+  'highlighter',
+  'lineNumbers',
+  'monaco',
+  'remoteAssets',
+  'selectable',
+  'record',
+  'colorSchema',
+  'routerMode',
+  'aspectRatio',
+  'canvasWidth',
+  'themeConfig',
+  'favicon',
+  'plantUmlServer',
+  'fonts',
+  'defaults',
+  'drawings',
+  'htmlAttrs',
+  'mdc',
 ]

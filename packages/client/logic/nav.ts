@@ -6,19 +6,21 @@ import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
+import { usePrimaryClicks } from '../composables/useClicks'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
 
 export { rawRoutes, router }
 
 // force update collected elements when the route is fully resolved
-const routeForceRefresh = ref(0)
+export const routeForceRefresh = ref(0)
 nextTick(() => {
   router.afterEach(async () => {
     await nextTick()
     routeForceRefresh.value += 1
   })
 })
+
 export const navDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
@@ -28,11 +30,25 @@ export const isPrintWithClicks = computed(() => route.value.query.print === 'cli
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
 export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
 export const isNotesViewer = computed(() => route.value.path.startsWith('/notes'))
-export const isClicksDisabled = computed(() => isPrintMode.value && !isPrintWithClicks.value)
 export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
 
-export const queryClicks = useRouteQuery('clicks', '0')
+const queryClicksRaw = useRouteQuery('clicks', '0')
+export const queryClicks = computed({
+  get() {
+    // eslint-disable-next-line ts/no-use-before-define
+    if (clicksContext.value.disabled)
+      return 99999
+    let v = +(queryClicksRaw.value || 0)
+    if (Number.isNaN(v))
+      v = 0
+    return v
+  },
+  set(v) {
+    queryClicksRaw.value = v.toString()
+  },
+})
+
 export const total = computed(() => rawRoutes.length)
 export const path = computed(() => route.value.path)
 
@@ -45,27 +61,9 @@ export const currentLayout = computed(() => currentRoute.value?.meta?.layout || 
 export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
 export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
 
-export const clicksElements = computed<HTMLElement[]>(() => {
-  // eslint-disable-next-line no-unused-expressions
-  routeForceRefresh.value
-  return currentRoute.value?.meta?.__clicksElements || []
-})
-
-export const clicks = computed<number>({
-  get() {
-    if (isClicksDisabled.value)
-      return 99999
-    let clicks = +(queryClicks.value || 0)
-    if (Number.isNaN(clicks))
-      clicks = 0
-    return clicks
-  },
-  set(v) {
-    queryClicks.value = v.toString()
-  },
-})
-
-export const clicksTotal = computed(() => +(currentRoute.value?.meta?.clicks ?? clicksElements.value.length))
+export const clicksContext = computed(() => usePrimaryClicks(currentRoute.value))
+export const clicks = computed(() => clicksContext.value.current)
+export const clicksTotal = computed(() => clicksContext.value.total)
 
 export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
 export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
@@ -85,27 +83,27 @@ watch(currentRoute, (next, prev) => {
   navDirection.value = Number(next?.path) - Number(prev?.path)
 })
 
-export function next() {
-  if (clicksTotal.value <= clicks.value)
-    nextSlide()
+export async function next() {
+  if (clicksTotal.value <= queryClicks.value)
+    await nextSlide()
   else
-    clicks.value += 1
+    queryClicks.value += 1
 }
 
 export async function prev() {
-  if (clicks.value <= 0)
+  if (queryClicks.value <= 0)
     await prevSlide()
   else
-    clicks.value -= 1
+    queryClicks.value -= 1
 }
 
 export function getPath(no: number | string) {
   return isPresenter.value ? `/presenter/${no}` : `/${no}`
 }
 
-export function nextSlide() {
-  const next = Math.min(rawRoutes.length, currentPage.value + 1)
-  return go(next)
+export async function nextSlide() {
+  if (currentPage.value < rawRoutes.length)
+    await go(currentPage.value + 1)
 }
 
 export async function prevSlide(lastClicks = true) {
@@ -179,7 +177,7 @@ export async function downloadPDF() {
 export async function openInEditor(url?: string) {
   if (url == null) {
     const slide = currentRoute.value?.meta?.slide
-    if (!slide?.filepath)
+    if (!slide)
       return false
     url = `${slide.filepath}:${slide.start}`
   }

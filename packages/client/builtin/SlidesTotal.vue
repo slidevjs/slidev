@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import { injectionSlidevContext } from '../constants'
+import { useSlideContext } from '../context'
 
-const $slidev = inject(injectionSlidevContext)
+const { $nav } = useSlideContext()
 </script>
 
 <template>
-  <span>{{ $slidev.nav.total }}</span>
+  <span>{{ $nav.total }}</span>
 </template>

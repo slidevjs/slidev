@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { clicks, clicksTotal, currentPage, currentRoute, hasNext, nextRoute, total, useSwipeControls } from '../logic/nav'
+import { clicksContext, currentPage, currentRoute, hasNext, nextRoute, queryClicks, rawRoutes, total, useSwipeControls } from '../logic/nav'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs, themeVars } from '../env'
 import { sharedState } from '../state/shared'
@@ -10,6 +10,7 @@ import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { isDrawing } from '../logic/drawings'
+import { useFixedClicks } from '../composables/useClicks'
 import SlideContainer from './SlideContainer.vue'
 import NavControls from './NavControls.vue'
 import SlidesOverview from './SlidesOverview.vue'
@@ -19,7 +20,7 @@ import Goto from './Goto.vue'
 import SlidesShow from './SlidesShow.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingControls from './DrawingControls.vue'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 const main = ref<HTMLDivElement>()
 
@@ -35,26 +36,21 @@ const notesEditing = ref(false)
 
 const { timer, resetTimer } = useTimer()
 
-const nextTabElements = ref([])
-const nextSlide = computed(() => {
-  if (clicks.value < clicksTotal.value) {
-    return {
-      route: currentRoute.value,
-      clicks: clicks.value + 1,
-    }
-  }
-  else {
-    if (hasNext.value) {
-      return {
-        route: nextRoute.value,
-        clicks: 0,
-      }
-    }
-    else {
-      return null
-    }
-  }
+const clicksCtxMap = rawRoutes.map(route => useFixedClicks(route))
+const nextFrame = computed(() => {
+  if (clicksContext.value.current < clicksContext.value.total)
+    return [currentRoute.value!, clicksContext.value.current + 1] as const
+  else if (hasNext.value)
+    return [nextRoute.value!, 0] as const
+  else
+    return null
 })
+const nextFrameClicksCtx = computed(() => {
+  return nextFrame.value && clicksCtxMap[+nextFrame.value[0].path - 1]
+})
+watch([currentRoute, queryClicks], () => {
+  nextFrameClicksCtx.value && (nextFrameClicksCtx.value[0].value = nextFrame.value![1])
+}, { immediate: true })
 
 const Editor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
@@ -120,17 +116,16 @@ onMounted(() => {
       </div>
       <div class="relative grid-section next flex flex-col p-2 lg:p-4" :style="themeVars">
         <SlideContainer
-          v-if="nextSlide"
+          v-if="nextFrame && nextFrameClicksCtx"
           key="next"
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="nextSlide.route?.component as any"
-            v-model:clicks-elements="nextTabElements"
-            :clicks="nextSlide.clicks"
-            :clicks-disabled="false"
-            :class="getSlideClass(nextSlide.route)"
-            :route="nextSlide.route"
+            :is="nextFrame[0].component as any"
+            :key="nextFrame[0].path"
+            :clicks-context="nextFrameClicksCtx[1]"
+            :class="getSlideClass(nextFrame[0])"
+            :route="nextFrame[0]"
             render-context="previewNext"
           />
         </SlideContainer>
@@ -155,21 +150,19 @@ onMounted(() => {
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <div class="border-t border-main py-1 px-2 text-sm">
-          <button class="slidev-icon-btn" @click="increasePresenterFontSize">
-            <HiddenText text="Increase font size" />
+          <IconButton title="Increase font size" @click="increasePresenterFontSize">
             <carbon:zoom-in />
-          </button>
-          <button class="slidev-icon-btn" @click="decreasePresenterFontSize">
-            <HiddenText text="Decrease font size" />
+          </IconButton>
+          <IconButton title="Decrease font size" @click="decreasePresenterFontSize">
             <carbon:zoom-out />
-          </button>
-          <button
+          </IconButton>
+          <IconButton
             v-if="__DEV__"
-            class="slidev-icon-btn" @click="notesEditing = !notesEditing"
+            title="Edit Notes"
+            @click="notesEditing = !notesEditing"
           >
-            <HiddenText text="Edit Notes" />
             <carbon:edit />
-          </button>
+          </IconButton>
         </div>
       </div>
       <div class="grid-section bottom">

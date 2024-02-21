@@ -4,6 +4,7 @@ import { createDrauu } from 'drauu'
 import { toReactive, useLocalStorage } from '@vueuse/core'
 import { drawingState, onPatch, patch } from '../state/drawings'
 import { configs } from '../env'
+import { isInputting } from '../state'
 import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [
@@ -40,11 +41,13 @@ export const drawingMode = computed({
   set(v: DrawingMode | 'arrow') {
     _mode.value = v
     if (v === 'arrow') {
-      brush.mode = 'line'
+      // eslint-disable-next-line ts/no-use-before-define
+      drauu.mode = 'line'
       brush.arrowEnd = true
     }
     else {
-      brush.mode = v
+      // eslint-disable-next-line ts/no-use-before-define
+      drauu.mode = v
       brush.arrowEnd = false
     }
   },
@@ -110,7 +113,7 @@ drauu.on('start', () => isDrawing.value = true)
 drauu.on('end', () => isDrawing.value = false)
 
 window.addEventListener('keydown', (e) => {
-  if (!drawingEnabled.value)
+  if (!drawingEnabled.value || isInputting.value)
     return
 
   const noModifier = !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey

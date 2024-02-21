@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useElementSize, useStyleTag } from '@vueuse/core'
-import { computed, provide, ref, watchEffect } from 'vue'
+import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
+import { computed, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
 import { isPrintMode } from '../logic/nav'
@@ -64,7 +64,7 @@ if (props.isMain) {
   `))
 }
 
-provide(injectionSlideScale, scale as any)
+provideLocal(injectionSlideScale, scale as any)
 </script>
 
 <template>

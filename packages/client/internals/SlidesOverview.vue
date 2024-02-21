@@ -5,15 +5,16 @@ import { themeVars } from '../env'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
-import HiddenText from './HiddenText.vue'
+import IconButton from './IconButton.vue'
 
 const props = defineProps<{ modelValue: boolean }>()
 
-const emit = defineEmits([])
+const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
 
 function close() {
@@ -138,7 +139,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-disabled="true"
+                :clicks-context="useFixedClicks(route, 99999)[1]"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
@@ -162,8 +163,7 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <button v-if="value" class="fixed text-2xl top-4 right-4 slidev-icon-btn text-gray-400" @click="close">
-    <HiddenText text="Close" />
+  <IconButton v-if="value" title="Close" class="fixed text-2xl top-4 right-4 text-gray-400" @click="close">
     <carbon:close />
-  </button>
+  </IconButton>
 </template>

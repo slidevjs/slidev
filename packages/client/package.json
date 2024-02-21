@@ -1,6 +1,7 @@
 {
   "name": "@slidev/client",
-  "version": "0.47.3",
+  "type": "module",
+  "version": "0.48.0-beta.5",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -13,6 +14,12 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
     "./package.json": "./package.json",
+    "./constants": "./constants.ts",
+    "./context": "./context.ts",
+    "./env": "./env.ts",
+    "./layoutHelper": "./layoutHelper.ts",
+    "./routes": "./routes.ts",
+    "./utils": "./utils.ts",
     "./*": "./*"
   },
   "engines": {
@@ -20,19 +27,19 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.7",
-    "@iconify-json/carbon": "^1.1.28",
+    "@iconify-json/carbon": "^1.1.30",
     "@iconify-json/ph": "^1.1.11",
-    "@shikijs/vitepress-twoslash": "^1.0.0-beta.5",
+    "@shikijs/vitepress-twoslash": "^1.1.6",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
     "@unocss/reset": "^0.58.5",
-    "@vueuse/core": "^10.7.2",
-    "@vueuse/math": "^10.7.2",
+    "@vueuse/core": "^10.8.0",
+    "@vueuse/math": "^10.8.0",
     "@vueuse/motion": "^2.0.0",
-    "codemirror": "^5.65.5",
+    "codemirror": "^5.65.16",
     "defu": "^6.1.4",
-    "drauu": "^0.3.7",
+    "drauu": "^0.4.0",
     "file-saver": "^2.0.5",
     "floating-vue": "^5.2.2",
     "fuse.js": "^7.0.0",
@@ -41,15 +48,15 @@
     "katex": "^0.16.9",
     "mermaid": "^10.8.0",
     "monaco-editor": "^0.37.1",
-    "nanoid": "^5.0.5",
+    "nanoid": "^5.0.6",
     "prettier": "^3.2.5",
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.8",
     "unocss": "^0.58.5",
-    "vue": "^3.4.15",
+    "vue": "^3.4.19",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "vite": "^5.0.12"
+    "vite": "^5.1.3"
   }
 }

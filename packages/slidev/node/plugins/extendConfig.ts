@@ -1,12 +1,11 @@
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
-import { resolveGlobalImportPath, resolveImportPath, toAtFS } from '../utils'
-import { searchForWorkspaceRoot } from '../vite/searchRoot'
+import { resolveImportPath, toAtFS } from '../resolver'
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -32,6 +31,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
+            'vue': await resolveImportPath('vue/dist/vue.esm-browser.js', true),
           },
           dedupe: ['vue'],
         },
@@ -51,32 +51,20 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           fs: {
             strict: true,
             allow: uniq([
-              searchForWorkspaceRoot(options.userRoot),
-              searchForWorkspaceRoot(options.cliRoot),
-              ...(
-                isInstalledGlobally
-                  ? [
-                      dirname(await resolveGlobalImportPath('@slidev/client/package.json')),
-                      dirname(await resolveGlobalImportPath('katex/package.json')),
-                    ]
-                  : []
-              ),
+              options.userWorkspaceRoot,
+              options.cliRoot,
+              options.clientRoot,
+              ...options.roots,
             ]),
           },
         },
         publicDir: join(options.userRoot, 'public'),
       }
 
-      injection.resolve ||= {}
-      injection.resolve.alias ||= {}
-
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
       }
-
-      // @ts-expect-error type cast
-      injection.resolve.alias.vue = await resolveImportPath('vue/dist/vue.esm-browser.js', true)
 
       return mergeConfig(injection, config)
     },

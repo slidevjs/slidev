@@ -1,7 +1,6 @@
+import type { ResolvedClicksInfo } from '@slidev/types'
 import type { App, DirectiveBinding, InjectionKey } from 'vue'
-import { watch } from 'vue'
-import { remove } from '@antfu/utils'
-import { isClicksDisabled } from '../logic/nav'
+import { computed, watchEffect } from 'vue'
 import {
   CLASS_VCLICK_CURRENT,
   CLASS_VCLICK_FADE,
@@ -9,10 +8,7 @@ import {
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
-  injectionClicks,
-  injectionClicksDisabled,
-  injectionClicksElements,
-  injectionOrderMap,
+  injectionClicksContext,
 } from '../constants'
 
 function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
@@ -27,88 +23,36 @@ export default function createDirectives() {
         name: 'v-click',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir)
+          if (resolved == null)
             return
 
-          if (dir.value === false || dir.value === 'false')
-            return
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          const elements = dirInject(dir, injectionClicksElements)
-          const clicks = dirInject(dir, injectionClicks)
-          const orderMap = dirInject(dir, injectionOrderMap)
+          // Expose the resolved clicks info to the element to make it easier to understand and debug
+          const clicks = Array.isArray(resolved.clicks) ? resolved.clicks : [resolved.clicks, undefined]
+          el.dataset.slidevClicksStart = String(clicks[0])
+          if (clicks[1] != null)
+            el.dataset.slidevClicksEnd = String(clicks[1])
 
-          const hide = dir.modifiers.hide !== false && dir.modifiers.hide != null
-          const fade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+          watchEffect(() => {
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
+            const prior = active && !current
 
-          const CLASS_HIDE = fade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
-
-          if (elements && !elements?.value?.includes(el))
-            elements.value.push(el)
-
-          const prev = elements?.value?.length || 0
-
-          resolveDirValue(dir, prev)
-
-          // If orderMap didn't have dir.value aka the order key, then initialize it.
-          // If key exists, then move current element to the first of order array to
-          // make sure the v-after set correct CLASS_VCLICK_CURRENT state.
-          if (!orderMap?.value.has(dir.value)) {
-            orderMap?.value.set(dir.value, [el])
-          }
-          else {
-            if (!orderMap?.value.get(dir.value)?.includes(el)) {
-              const afterClicks = orderMap?.value.get(dir.value) || []
-              orderMap?.value.set(dir.value, [el].concat(afterClicks))
+            if (resolved.flagHide) {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
-          }
+            else {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+            }
 
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-
-          if (clicks) {
-            watch(
-              clicks,
-              () => {
-                const c = clicks?.value ?? 0
-                const show = dir.value != null
-                  ? Array.isArray(dir.value)
-                    ? c >= dir.value[0] && c < dir.value[1]
-                    : c >= dir.value
-                  : c > prev
-
-                if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                  el.classList.toggle(CLASS_HIDE, !show)
-
-                if (hide !== false && hide !== undefined)
-                  el.classList.toggle(CLASS_HIDE, show)
-
-                // Reset CLASS_VCLICK_CURRENT to false.
-                el.classList.toggle(CLASS_VCLICK_CURRENT, false)
-
-                const currentElArray = orderMap?.value.get(c)
-                currentElArray?.forEach((cEl, idx) => {
-                  // Reset CLASS_VCLICK_PRIOR to false
-                  cEl.classList.toggle(CLASS_VCLICK_PRIOR, false)
-                  // If the element is the last of order array, then set it as
-                  // CLASS_VCLICK_CURRENT state, others set as CLASS_VCLICK_PRIOR state.
-                  if (idx === currentElArray.length - 1)
-                    cEl.classList.toggle(CLASS_VCLICK_CURRENT, true)
-                  else
-                    cEl.classList.toggle(CLASS_VCLICK_PRIOR, true)
-                })
-
-                if (!el.classList.contains(CLASS_VCLICK_CURRENT))
-                  el.classList.toggle(CLASS_VCLICK_PRIOR, show)
-              },
-              { immediate: true },
-            )
-          }
+            el.classList.toggle(CLASS_VCLICK_CURRENT, current)
+            el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
+          })
         },
-        unmounted(el: HTMLElement, dir) {
-          el?.classList.toggle(CLASS_VCLICK_TARGET, false)
-          const elements = dirInject(dir, injectionClicksElements)!
-          if (elements?.value)
-            remove(elements.value, el)
-        },
+        unmounted,
       })
 
       app.directive('after', {
@@ -116,57 +60,30 @@ export default function createDirectives() {
         name: 'v-after',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir, true)
+          if (resolved == null)
             return
 
-          if (dir.value === false || dir.value === 'false')
-            return
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          const elements = dirInject(dir, injectionClicksElements)
-          const clicks = dirInject(dir, injectionClicks)
-          const orderMap = dirInject(dir, injectionOrderMap)
+          watchEffect(() => {
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
+            const prior = active && !current
 
-          const prev = elements?.value.length || 0
+            if (resolved.flagHide) {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+            }
+            else {
+              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+            }
 
-          resolveDirValue(dir, prev)
-
-          // If a v-click order before v-after is lower than v-after, the order map will
-          // not contain the key for v-after, so we need to set it first, then move v-after
-          // to the last of order array.
-          if (orderMap?.value.has(dir.value))
-            orderMap?.value.get(dir.value)?.push(el)
-          else
-            orderMap?.value.set(dir.value, [el])
-
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-
-          if (clicks) {
-            watch(
-              clicks,
-              () => {
-                const c = (clicks.value ?? 0)
-                const show = dir.value != null
-                  ? Array.isArray(dir.value)
-                    ? c >= dir.value[0] && c < dir.value[1]
-                    : c >= dir.value
-                  : c >= prev
-
-                if (!el.classList.contains(CLASS_VCLICK_HIDDEN_EXP))
-                  el.classList.toggle(CLASS_VCLICK_HIDDEN, !show)
-
-                // Reset CLASS_VCLICK_CURRENT to false.
-                el.classList.toggle(CLASS_VCLICK_CURRENT, false)
-
-                if (!el.classList.contains(CLASS_VCLICK_CURRENT))
-                  el.classList.toggle(CLASS_VCLICK_PRIOR, show)
-              },
-              { immediate: true },
-            )
-          }
+            el.classList.toggle(CLASS_VCLICK_CURRENT, current)
+            el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
+          })
         },
-        unmounted(el: HTMLElement) {
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-        },
+        unmounted,
       })
 
       app.directive('click-hide', {
@@ -174,50 +91,90 @@ export default function createDirectives() {
         name: 'v-click-hide',
 
         mounted(el: HTMLElement, dir) {
-          if (isClicksDisabled.value || dirInject(dir, injectionClicksDisabled)?.value)
+          const resolved = resolveClick(el, dir, false, true)
+          if (resolved == null)
             return
 
-          const elements = dirInject(dir, injectionClicksElements)
-          const clicks = dirInject(dir, injectionClicks)
+          el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          const prev = elements?.value?.length || 0
+          watchEffect(() => {
+            const active = resolved.isActive.value
+            const current = resolved.isCurrent.value
+            const prior = active && !current
 
-          if (elements && !elements?.value?.includes(el))
-            elements.value.push(el)
+            el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+            el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
-          el?.classList.toggle(CLASS_VCLICK_TARGET, true)
-
-          if (clicks) {
-            watch(
-              clicks,
-              () => {
-                const c = clicks?.value ?? 0
-                const hide = dir.value != null
-                  ? c >= dir.value
-                  : c > prev
-                el.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
-                el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, hide)
-              },
-              { immediate: true },
-            )
-          }
+            el.classList.toggle(CLASS_VCLICK_CURRENT, current)
+            el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
+          })
         },
-        unmounted(el, dir) {
-          el?.classList.toggle(CLASS_VCLICK_TARGET, false)
-          const elements = dirInject(dir, injectionClicksElements)
-          if (elements?.value)
-            remove(elements.value, el)
-        },
+        unmounted,
       })
     },
   }
 }
 
-function resolveDirValue(dir: DirectiveBinding<any>, prev: number) {
-  // Set default dir.value
-  if (dir.value == null || dir.value === true || dir.value === 'true')
-    dir.value = prev
-  // Relative value starts with '+' o '-'
-  if (typeof dir.value === 'string' && (dir.value.startsWith('+') || dir.value.startsWith('-')))
-    dir.value = prev + Number(dir.value)
+function isActive(thisClick: number | [number, number], clicks: number) {
+  return Array.isArray(thisClick)
+    ? thisClick[0] <= clicks && clicks < thisClick[1]
+    : thisClick <= clicks
+}
+
+function isCurrent(thisClick: number | [number, number], clicks: number) {
+  return Array.isArray(thisClick)
+    ? thisClick[0] === clicks
+    : thisClick === clicks
+}
+
+function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
+  const ctx = dirInject(dir, injectionClicksContext)?.value
+
+  if (!el || !ctx || ctx.disabled)
+    return null
+
+  let value = dir.value
+
+  if (value === false || value === 'false')
+    return null
+
+  flagHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
+  const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+
+  if (clickAfter)
+    value = '+0'
+  else if (value == null || value === true || value === 'true')
+    value = '+1'
+
+  let delta: number
+  let thisClick: number | [number, number]
+  let maxClick: number
+  if (Array.isArray(value)) {
+    // range (absolute)
+    delta = 0
+    thisClick = value as [number, number]
+    maxClick = value[1]
+  }
+  else {
+    ({ start: thisClick, end: maxClick, delta } = ctx.resolve(value))
+  }
+
+  const resolved: ResolvedClicksInfo = {
+    max: maxClick,
+    clicks: thisClick,
+    delta,
+    isActive: computed(() => isActive(thisClick, ctx.current)),
+    isCurrent: computed(() => isCurrent(thisClick, ctx.current)),
+    isShown: computed(() => flagHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
+    flagFade,
+    flagHide,
+  }
+  ctx.register(el, resolved)
+  return resolved
+}
+
+function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
+  el.classList.toggle(CLASS_VCLICK_TARGET, false)
+  const ctx = dirInject(dir, injectionClicksContext)?.value
+  ctx?.unregister(el)
 }

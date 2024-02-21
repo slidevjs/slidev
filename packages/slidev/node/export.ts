@@ -8,9 +8,9 @@ import type { ExportArgs, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
-import isInstalledGlobally from 'is-installed-globally'
+import { resolve } from 'mlly'
 import type { ResolvedSlidevOptions } from './options'
-import { packageExists, resolveGlobalImportPath } from './utils'
+import { getRoots } from './resolver'
 
 export interface ExportOptions {
   total: number
@@ -33,6 +33,7 @@ export interface ExportOptions {
    * @default false
    */
   perSlide?: boolean
+  scale?: number
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -161,6 +162,7 @@ export async function exportSlides({
   executablePath = undefined,
   withToc = false,
   perSlide = false,
+  scale = 1,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -174,7 +176,7 @@ export async function exportSlides({
       // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
       height: perSlide ? height : height * pages.length,
     },
-    deviceScaleFactor: 1,
+    deviceScaleFactor: scale,
   })
   const page = await context.newPage()
   const progress = createSlidevProgress(!perSlide)
@@ -449,6 +451,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc,
     perSlide,
+    scale,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
   if (outDir)
@@ -468,27 +471,40 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
+    scale: scale || 1,
   }
 }
 
 async function importPlaywright(): Promise<typeof import('playwright-chromium')> {
-  // 1. resolve from local
-  if (await packageExists('playwright-chromium'))
-    return await import('playwright-chromium')
+  const { userRoot, userWorkspaceRoot } = await getRoots()
 
-  // 2. resolve from global local (when Slidev is installed globally)
-  let globalPath = isInstalledGlobally ? await resolveGlobalImportPath('playwright-chromium') : undefined
-  if (globalPath)
-    return await import(globalPath)
+  // 1. resolve from user root
+  try {
+    return await import(await resolve('playwright-chromium', { url: userRoot }))
+  }
+  catch { }
+
+  // 2. resolve from user workspace root
+  if (userWorkspaceRoot !== userRoot) {
+    try {
+      return await import(await resolve('playwright-chromium', { url: userWorkspaceRoot }))
+    }
+    catch { }
+  }
 
   // 3. resolve from global registry
   const { resolveGlobal } = await import('resolve-global')
   try {
-    globalPath = resolveGlobal('playwright-chromium')
+    const imported = await import(resolveGlobal('playwright-chromium'))
+    return imported.default ?? imported
   }
-  catch {}
-  if (globalPath)
-    return await import(globalPath)
+  catch { }
+
+  // 4. resolve from current @slidev/cli installation
+  try {
+    return await import('playwright-chromium')
+  }
+  catch { }
 
   throw new Error('The exporting for Slidev is powered by Playwright, please install it via `npm i -D playwright-chromium`')
 }

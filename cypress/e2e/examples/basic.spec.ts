@@ -9,8 +9,8 @@ context('Basic', () => {
       .type('g')
       .wait(100)
       .get('#slidev-goto-input')
-      .type(`${no}`)
-      .type('{enter}')
+      .type(`${no}`, { force: true })
+      .type('{enter}', { force: true })
       .url()
       .should('eq', `http://localhost:3030/${no}`)
   }
@@ -39,7 +39,7 @@ context('Basic', () => {
     goPage(5)
 
     cy.get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 .slidev-code')
-      .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>\n')
+      .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
       .get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 > p')
       .should('have.text', 'Current Page: 5')
   })
@@ -99,27 +99,26 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/9?clicks=1')
 
-    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'CDE')
+    cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'CD')
 
     cy.get('body')
       .type('{RightArrow}')
       .type('{RightArrow}')
 
-    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
-      .should('have.text', 'ABCDE')
+    cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'ABCD')
 
     // v-click.hide
     cy.get('body')
       .type('{RightArrow}')
-      .type('{RightArrow}')
 
-    cy.get('.cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'ABC')
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/9?clicks=5')
+      .should('eq', 'http://localhost:3030/9?clicks=4')
 
     cy.get('body')
       .type('{RightArrow}')
@@ -135,19 +134,19 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/10?clicks=1')
 
-    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'BD')
 
     cy.get('body')
       .type('{RightArrow}')
 
-    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'D')
 
     cy.get('body')
       .type('{RightArrow}')
 
-    cy.get('.cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CD')
 
     cy.get('body')
@@ -199,25 +198,25 @@ context('Basic', () => {
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
 
-    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-11 .cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'C')
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
 
-    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-11 .cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CD')
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
 
-    cy.get('.cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-11 .cy-depth .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden) .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CDGH')
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
 
-    cy.get('.cy-depth > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-11 .cy-depth > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'A B CDEF GHIJKL')
   })
 
@@ -238,19 +237,19 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/13')
 
-    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target.slidev-vclick-hidden')
+    cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target.slidev-vclick-hidden')
       .should('have.text', 'AEFZ')
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
 
-    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEF')
 
     cy.get('body')
       .type('{RightArrow}')
 
-    cy.get('.cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
+    cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEFZ')
   })
 })

@@ -86,17 +86,17 @@ export function transformSnippet(md: string, options: ResolvedSlidevOptions, id:
     return md
   const data = options.data
   const slideInfo = data.slides[+slideId - 1]
-  const dir = path.dirname(slideInfo.source?.filepath ?? options?.entry ?? options!.userRoot)
+  const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
   return md.replace(
     /^<<< *(.+?)(#[\w-]+)? *(?: (\S+?))? *(\{.*)?$/mg,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
       const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
 
       const src = /^\@[\/]/.test(filepath)
-        ? path.resolve(options!.userRoot, filepath.slice(2))
+        ? path.resolve(options.userRoot, filepath.slice(2))
         : path.resolve(dir, filepath)
 
-      data.entries!.push(src)
+      data.watchFiles.push(src)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {

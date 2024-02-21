@@ -7,6 +7,9 @@ export function parseRangeString(total: number, rangeStr?: string) {
   if (!rangeStr || rangeStr === 'all' || rangeStr === '*')
     return range(1, total + 1)
 
+  if (rangeStr === 'none')
+    return []
+
   const pages: number[] = []
   for (const part of rangeStr.split(/[,;]/g)) {
     if (!part.includes('-')) {

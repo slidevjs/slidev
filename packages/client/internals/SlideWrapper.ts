@@ -1,26 +1,16 @@
-import { useVModel } from '@vueuse/core'
-import { computed, defineComponent, h, provide, ref, toRef } from 'vue'
-import type { RenderContext } from '@slidev/types'
-import { injectionActive, injectionClicks, injectionClicksDisabled, injectionClicksElements, injectionCurrentPage, injectionOrderMap, injectionRenderContext, injectionRoute } from '../constants'
+import { computed, defineComponent, h, ref, toRef } from 'vue'
+import type { PropType } from 'vue'
+import { provideLocal } from '@vueuse/core'
+import type { ClicksContext, RenderContext } from '@slidev/types'
+import type { RouteRecordRaw } from 'vue-router'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
 
 export default defineComponent({
   name: 'SlideWrapper',
   props: {
-    clicks: {
-      type: [Number, String],
-      default: 0,
-    },
-    clicksElements: {
-      type: Array,
-      default: () => [] as Element[],
-    },
-    clicksOrderMap: {
-      type: Map,
-      default: () => new Map<number, HTMLElement[]>(),
-    },
-    clicksDisabled: {
-      type: Boolean,
-      default: false,
+    clicksContext: {
+      type: Object as PropType<ClicksContext>,
+      required: true,
     },
     renderContext: {
       type: String,
@@ -32,44 +22,37 @@ export default defineComponent({
     },
     is: {
       type: Object,
-      default: undefined,
+      required: true,
     },
     route: {
-      type: Object,
-      default: undefined,
+      type: Object as PropType<RouteRecordRaw>,
+      required: true,
     },
   },
-  setup(props, { emit }) {
-    const clicks = useVModel(props, 'clicks', emit)
-    const clicksElements = useVModel(props, 'clicksElements', emit)
-    const clicksDisabled = useVModel(props, 'clicksDisabled', emit)
-    const clicksOrderMap = useVModel(props, 'clicksOrderMap', emit)
+  setup(props) {
+    provideLocal(injectionRoute, props.route)
+    provideLocal(injectionCurrentPage, ref(+props.route.path))
+    provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
+    provideLocal(injectionActive, toRef(props, 'active'))
+    provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 
-    clicksElements.value.length = 0
-
-    const clicksWithDisable = computed({
-      get() {
-        if (clicksDisabled.value)
-          return 9999999
-        return +clicks.value
-      },
-      set(value) {
-        clicks.value = value
-      },
+    const style = computed(() => {
+      const zoom = props.route.meta?.slide?.frontmatter.zoom ?? 1
+      return zoom === 1
+        ? undefined
+        : {
+            width: `${100 / zoom}%`,
+            height: `${100 / zoom}%`,
+            transformOrigin: 'top left',
+            transform: `scale(${zoom})`,
+          }
     })
 
-    provide(injectionRoute, props.route as any)
-    provide(injectionCurrentPage, ref(+props.route?.path))
-    provide(injectionRenderContext, ref(props.renderContext as RenderContext))
-    provide(injectionActive, toRef(props, 'active'))
-    provide(injectionClicks, clicksWithDisable)
-    provide(injectionClicksDisabled, clicksDisabled)
-    provide(injectionClicksElements, clicksElements as any)
-    provide(injectionOrderMap, clicksOrderMap as any)
+    return {
+      style,
+    }
   },
   render() {
-    if (this.$props.is)
-      return h(this.$props.is)
-    return this.$slots?.default?.()
+    return h(this.$props.is, { style: this.style })
   },
 })

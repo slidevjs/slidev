@@ -1,6 +1,3 @@
-import { dirname, join, resolve } from 'node:path'
-import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import type Vue from '@vitejs/plugin-vue'
 import type VueJsx from '@vitejs/plugin-vue-jsx'
 import type Icons from 'unplugin-icons/vite'
@@ -11,12 +8,13 @@ import type RemoteAssets from 'vite-plugin-remote-assets'
 import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
 import { uniq } from '@antfu/utils'
-import type { SlidevMarkdown } from '@slidev/types'
+import type { SlidevData } from '@slidev/types'
 import _debug from 'debug'
 import { parser } from './parser'
-import { packageExists, resolveImportPath } from './utils'
-import { getThemeMeta, promptForThemeInstallation, resolveThemeName } from './themes'
-import { getAddons } from './addons'
+import { getThemeMeta, resolveTheme } from './themes'
+import { resolveAddons } from './addons'
+import { getRoots, resolveEntry } from './resolver'
+import type { RootsInfo } from './resolver'
 
 const debug = _debug('slidev:options')
 
@@ -39,27 +37,21 @@ export interface SlidevEntryOptions {
   remote?: string
 
   /**
-   * Root path
-   *
-   * @default process.cwd()
-   */
-  userRoot?: string
-
-  /**
    * Enable inspect plugin
    */
   inspect?: boolean
 }
 
-export interface ResolvedSlidevOptions {
-  data: SlidevMarkdown
+export interface ResolvedSlidevOptions extends RootsInfo {
+  data: SlidevData
   entry: string
-  userRoot: string
-  cliRoot: string
-  clientRoot: string
+  themeRaw: string
   theme: string
   themeRoots: string[]
   addonRoots: string[]
+  /**
+   * =`[...themeRoots, ...addonRoots, userRoot]` (`clientRoot` excluded)
+   */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
   remote?: string
@@ -78,118 +70,57 @@ export interface SlidevPluginOptions extends SlidevEntryOptions {
 }
 
 export interface SlidevServerOptions {
-  onDataReload?: (newData: SlidevMarkdown, data: SlidevMarkdown) => void
-}
-
-export async function getClientRoot() {
-  return dirname(await resolveImportPath('@slidev/client/package.json', true))
-}
-
-export function getCLIRoot() {
-  return fileURLToPath(new URL('..', import.meta.url))
-}
-
-export function isPath(name: string) {
-  return name.startsWith('/') || /^\.\.?[\/\\]/.test(name)
-}
-
-export async function getThemeRoots(name: string, entry: string) {
-  if (!name)
-    return []
-
-  // TODO: handle theme inherit
-  return [await getRoot(name, entry)]
-}
-
-export async function getAddonRoots(addons: string[], entry: string) {
-  if (addons.length === 0)
-    return []
-  return await Promise.all(addons.map(name => getRoot(name, entry)))
-}
-
-export async function getRoot(name: string, entry: string) {
-  if (isPath(name))
-    return resolve(dirname(entry), name)
-  return dirname(await resolveImportPath(`${name}/package.json`, true))
-}
-
-export function getUserRoot(options: SlidevEntryOptions) {
-  const {
-    entry: rawEntry = 'slides.md',
-    userRoot = process.cwd(),
-  } = options
-
-  const fullEntry = resolve(userRoot, rawEntry)
-  return {
-    entry: fullEntry,
-    userRoot: dirname(fullEntry),
-  }
+  /**
+   * @returns `false` if server should be restarted
+   */
+  loadData?: () => Promise<SlidevData | false>
 }
 
 export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
-  promptForInstallation = true,
 ): Promise<ResolvedSlidevOptions> {
-  const { remote, inspect } = options
-  const {
-    entry,
-    userRoot,
-  } = getUserRoot(options)
-  const data = await parser.load(entry)
-  const theme = await resolveThemeName(options.theme || data.config.theme)
+  const rootsInfo = await getRoots()
+  const entry = await resolveEntry(options.entry || 'slides.md', rootsInfo)
+  const loaded = await parser.load(rootsInfo.userRoot, entry)
 
-  if (promptForInstallation) {
-    if (await promptForThemeInstallation(theme) === false)
-      process.exit(1)
-  }
-  else {
-    if (!await packageExists(theme)) {
-      console.error(`Theme "${theme}" not found, have you installed it?`)
-      process.exit(1)
-    }
-  }
+  // Load theme data first, because it may affect the config
+  const themeRaw = options.theme || loaded.headmatter.theme as string || 'default'
+  const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
+  const themeRoots = themeRoot ? [themeRoot] : []
+  const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
 
-  const clientRoot = await getClientRoot()
-  const cliRoot = getCLIRoot()
-  const themeRoots = await getThemeRoots(theme, entry)
-  const addons = await getAddons(userRoot, data.config)
-  const addonRoots = await getAddonRoots(addons, entry)
-  const roots = uniq([clientRoot, ...themeRoots, ...addonRoots, userRoot])
-
-  if (themeRoots.length) {
-    const themeMeta = await getThemeMeta(theme, join(themeRoots[0], 'package.json'))
-    data.themeMeta = themeMeta
-    if (themeMeta)
-      data.config = parser.resolveConfig(data.headmatter, themeMeta, options.entry)
-  }
+  const config = parser.resolveConfig(loaded.headmatter, themeMeta, options.entry)
+  const addonRoots = await resolveAddons(config.addons)
+  const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
 
   debug({
-    config: data.config,
+    ...rootsInfo,
+    ...options,
+    config,
     mode,
     entry,
+    themeRaw,
     theme,
-    userRoot,
-    clientRoot,
-    cliRoot,
     themeRoots,
     addonRoots,
     roots,
-    remote,
   })
 
   return {
-    data,
+    ...rootsInfo,
+    ...options,
+    data: {
+      ...loaded,
+      config,
+      themeMeta,
+    },
     mode,
     entry,
+    themeRaw,
     theme,
-    userRoot,
-    clientRoot,
-    cliRoot,
     themeRoots,
     addonRoots,
     roots,
-    remote,
-    inspect,
   }
 }

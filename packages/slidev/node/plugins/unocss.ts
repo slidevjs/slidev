@@ -7,11 +7,11 @@ import type { UserConfig } from '@unocss/core'
 import { mergeConfigs } from 'unocss'
 import jiti from 'jiti'
 import UnoCSS from 'unocss/vite'
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '..'
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import { loadSetups } from './setupNode'
 
 export async function createUnocssPlugin(
-  { themeRoots, addonRoots, clientRoot, roots, userRoot, data }: ResolvedSlidevOptions,
+  { themeRoots, addonRoots, clientRoot, roots, data, userRoot }: ResolvedSlidevOptions,
   { unocss: unoOptions = {} }: SlidevPluginOptions,
 ) {
   const configFiles = uniq([
@@ -37,7 +37,7 @@ export async function createUnocssPlugin(
 
   let config = mergeConfigs([...configs, unoOptions as UserConfig<Theme>])
 
-  config = await loadSetups(roots, 'unocss.ts', {}, config, (a, b) => mergeConfigs([a, b]))
+  config = await loadSetups(clientRoot, roots, 'unocss.ts', {}, config, (a, b) => mergeConfigs([a, b]))
 
   config.theme ||= {}
   config.theme.fontFamily ||= {}

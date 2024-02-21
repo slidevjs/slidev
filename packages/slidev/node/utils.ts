@@ -1,68 +1,8 @@
-import { join } from 'node:path'
-import { createRequire } from 'node:module'
-import { fileURLToPath } from 'node:url'
-import { ensurePrefix, slash } from '@antfu/utils'
-import isInstalledGlobally from 'is-installed-globally'
-import { resolvePath } from 'mlly'
-import globalDirs from 'global-directory'
 import type Token from 'markdown-it/lib/token'
 import type { ResolvedFontOptions } from '@slidev/types'
+import { satisfies } from 'semver'
 import type { Connect } from 'vite'
-
-const require = createRequire(import.meta.url)
-
-export function toAtFS(path: string) {
-  return `/@fs${ensurePrefix('/', slash(path))}`
-}
-
-export async function resolveImportPath(importName: string, ensure: true): Promise<string>
-export async function resolveImportPath(importName: string, ensure?: boolean): Promise<string | undefined>
-export async function resolveImportPath(importName: string, ensure = false) {
-  try {
-    return resolvePath(importName, {
-      url: fileURLToPath(import.meta.url),
-    })
-  }
-  catch {}
-
-  if (isInstalledGlobally) {
-    try {
-      return require.resolve(join(globalDirs.yarn.packages, importName))
-    }
-    catch {}
-
-    try {
-      return require.resolve(join(globalDirs.npm.packages, importName))
-    }
-    catch {}
-  }
-
-  if (ensure)
-    throw new Error(`Failed to resolve package "${importName}"`)
-
-  return undefined
-}
-
-export async function resolveGlobalImportPath(importName: string): Promise<string> {
-  try {
-    return resolvePath(importName, {
-      url: fileURLToPath(import.meta.url),
-    })
-  }
-  catch {}
-
-  try {
-    return require.resolve(join(globalDirs.yarn.packages, importName))
-  }
-  catch {}
-
-  try {
-    return require.resolve(join(globalDirs.npm.packages, importName))
-  }
-  catch {}
-
-  throw new Error(`Failed to resolve global package "${importName}"`)
-}
+import { version } from '../package.json'
 
 export function stringifyMarkdownTokens(tokens: Token[]) {
   return tokens.map(token => token.children
@@ -85,10 +25,9 @@ export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
   return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
 }
 
-export async function packageExists(name: string) {
-  if (await resolveImportPath(`${name}/package.json`))
-    return true
-  return false
+export function checkEngine(name: string, engines: { slidev?: string } = {}) {
+  if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
+    throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
 }
 
 export function getBodyJson(req: Connect.IncomingMessage) {

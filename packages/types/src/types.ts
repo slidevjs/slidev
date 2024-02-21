@@ -1,33 +1,43 @@
+import type { ComputedRef } from '@vue/reactivity'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
 
 export interface SlideInfoBase {
-  raw: string
+  frontmatter: Record<string, any>
   content: string
   note?: string
-  frontmatter: Record<string, any>
-  frontmatterRaw?: string
-  frontmatterStyle?: FrontmatterStyle
   title?: string
   level?: number
 }
 
-export interface SlideInfo extends SlideInfoBase {
+export interface SourceSlideInfo extends SlideInfoBase {
+  /**
+   * The filepath of the markdown file
+   */
+  filepath: string
+  /**
+   * The index of the slide in the markdown file
+   */
   index: number
+  /**
+   * The range of the slide in the markdown file
+   */
   start: number
   end: number
-  inline?: SlideInfoBase
-  source?: SlideInfoWithPath
+  raw: string
+  frontmatterRaw?: string
+  frontmatterStyle?: FrontmatterStyle
+}
+
+export interface SlideInfo extends SlideInfoBase {
+  /**
+   * The index of the slide in the presentation
+   */
+  index: number
+  source: SourceSlideInfo
   snippetsUsed?: LoadedSnippets
-}
-
-export interface SlideInfoWithPath extends SlideInfoBase {
-  filepath: string
-}
-
-export interface SlideInfoExtended extends SlideInfo {
-  noteHTML: string
+  noteHTML?: string
 }
 
 /**
@@ -49,15 +59,26 @@ export interface SlidevFeatureFlags {
 }
 
 export interface SlidevMarkdown {
-  slides: SlideInfo[]
+  filepath: string
   raw: string
-  config: SlidevConfig
-  features: SlidevFeatureFlags
-  headmatter: Record<string, unknown>
+  /**
+   * All slides in this markdown file
+   */
+  slides: SourceSlideInfo[]
+}
 
-  filepath?: string
-  entries?: string[]
+export interface SlidevData {
+  /**
+   * Slides that should be rendered (disabled slides excluded)
+   */
+  slides: SlideInfo[]
+  entry: SlidevMarkdown
+  config: SlidevConfig
+  headmatter: Record<string, unknown>
+  features: SlidevFeatureFlags
   themeMeta?: SlidevThemeMeta
+  markdownFiles: Record<string, SlidevMarkdown>
+  watchFiles: string[]
 }
 
 export interface SlidevPreparserExtension {
@@ -68,9 +89,66 @@ export interface SlidevPreparserExtension {
 
 export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string) => Promise<SlidevPreparserExtension[]>
 
-// internal type?
-export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath?: string) => Promise<SlidevPreparserExtension[]>
-
-export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
+export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previewNext'
 
 export type LoadedSnippets = Record<string, string>
+
+export type ClicksElement = Element | string
+
+export type ClicksRelativeEls = Map<ClicksElement, number>
+
+export interface ClicksInfo {
+  /**
+   * The maximum clicks, used to calculate the total clicks for current slide
+   */
+  max?: number
+  /**
+   * The offsets added to the subsequent clicks
+   * Delta is 0 when the click is absolute
+   */
+  delta: number
+  /**
+   * Resolved clicks
+   */
+  clicks?: number | [number, number]
+  /**
+   * Computed ref of whether the click is exactly matched
+   */
+  isCurrent?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is active
+   */
+  isActive?: ComputedRef<boolean>
+  /**
+   * Computed ref of whether the click is shown, it take flagHide into account
+   */
+  isShown?: ComputedRef<boolean>
+  /**
+   * Having the hide flag
+   */
+  flagHide?: boolean
+  /**
+   * Having the fade flag
+   */
+  flagFade?: boolean
+}
+
+export type ResolvedClicksInfo = Required<ClicksInfo>
+
+export type ClicksMap = Map<ClicksElement, ClicksInfo>
+
+export interface ClicksContext {
+  readonly disabled: boolean
+  readonly current: number
+  readonly relativeOffsets: ClicksRelativeEls
+  readonly map: ClicksMap
+  resolve: (at: string | number, size?: number) => {
+    start: number
+    end: number
+    delta: number
+  }
+  register: (el: ClicksElement, info: ClicksInfo) => void
+  unregister: (el: ClicksElement) => void
+  readonly currentOffset: number
+  readonly total: number
+}

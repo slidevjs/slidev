@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path'
-import type { ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, notNullish, objectMap, range, slash, uniq } from '@antfu/utils'
+import type { HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -8,32 +8,25 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
+import type { SlideInfo } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { getBodyJson, resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
+import { getBodyJson, stringifyMarkdownTokens } from '../utils'
+import { resolveImportPath, toAtFS } from '../resolver'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
 
-const vueContextImports = [
-  `import { inject as _vueInject, provide as _vueProvide, toRef as _vueToRef } from "vue"`,
-  `import {
-    injectionSlidevContext as _injectionSlidevContext, 
-    injectionClicks as _injectionClicks,
-    injectionCurrentPage as _injectionCurrentPage,
-    injectionRenderContext as _injectionRenderContext,
-    injectionFrontmatter as _injectionFrontmatter,
-  } from "@slidev/client/constants.ts"`.replace(/\n\s+/g, '\n'),
-  'const $slidev = _vueInject(_injectionSlidevContext)',
-  'const $nav = _vueToRef($slidev, "nav")',
-  'const $clicks = _vueInject(_injectionClicks)',
-  'const $page = _vueInject(_injectionCurrentPage)',
-  'const $renderContext = _vueInject(_injectionRenderContext)',
-]
+const templateInjectionMarker = '/* @slidev-injection */'
+const templateImportContextUtils = `import {
+  useSlideContext,
+  provideFrontmatter as _provideFrontmatter,
+  frontmatterToProps as _frontmatterToProps,
+} from "@slidev/client/context.ts"`.replace(/\n\s*/g, ' ')
+const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlideContext()`
 
 export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   const timestamp = +Date.now()
@@ -59,7 +52,7 @@ md.use(mila, {
   },
 })
 
-function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
+function renderNoteHTML(data: SlideInfo): SlideInfo {
   return {
     ...data,
     noteHTML: md.render(data?.note || ''),
@@ -67,7 +60,7 @@ function prepareSlideInfo(data: SlideInfo): SlideInfoExtended {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -93,25 +86,24 @@ export function createSlidesLoader(
           const [, no, type] = match
           const idx = Number.parseInt(no)
           if (type === 'json' && req.method === 'GET') {
-            res.write(JSON.stringify(prepareSlideInfo(data.slides[idx])))
+            res.write(JSON.stringify(renderNoteHTML(data.slides[idx])))
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
             const body = await getBodyJson(req)
             const slide = data.slides[idx]
-            hmrPages.add(idx)
 
-            if (slide.source) {
-              Object.assign(slide.source, body)
-              await parser.saveExternalSlide(slide.source)
-            }
-            else {
-              Object.assign(slide, body)
-              await parser.save(data, entry)
-            }
+            const onlyNoteChanged = Object.keys(body).length === 2
+              && 'note' in body && body.raw === null
+            if (!onlyNoteChanged)
+              hmrPages.add(idx)
+
+            Object.assign(slide.source, body)
+            parser.prettifySlide(slide.source)
+            await parser.save(data.markdownFiles[slide.source.filepath])
 
             res.statusCode = 200
-            res.write(JSON.stringify(prepareSlideInfo(slide)))
+            res.write(JSON.stringify(renderNoteHTML(slide)))
             return res.end()
           }
 
@@ -120,12 +112,14 @@ export function createSlidesLoader(
       },
 
       async handleHotUpdate(ctx) {
-        if (!data.entries!.some(i => slash(i) === ctx.file))
+        if (!data.watchFiles.includes(ctx.file))
           return
 
         await ctx.read()
 
-        const newData = await parser.load(entry, data.themeMeta)
+        const newData = await serverOptions.loadData?.()
+        if (!newData)
+          return []
 
         const moduleIds = new Set<string>()
 
@@ -157,7 +151,6 @@ export function createSlidesLoader(
           if (
             a?.content.trim() === b?.content.trim()
             && a?.title?.trim() === b?.title?.trim()
-            && a?.note === b?.note
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
               try {
@@ -168,21 +161,32 @@ export function createSlidesLoader(
                 return false
               }
             })
-          )
+          ) {
+            if (a?.note !== b?.note) {
+              ctx.server.ws.send({
+                type: 'custom',
+                event: 'slidev-update-note',
+                data: {
+                  id: i,
+                  note: b!.note || '',
+                  noteHTML: md.render(b!.note || ''),
+                },
+              })
+            }
             continue
+          }
 
           ctx.server.ws.send({
             type: 'custom',
             event: 'slidev-update',
             data: {
               id: i,
-              data: prepareSlideInfo(newData.slides[i]),
+              data: renderNoteHTML(newData.slides[i]),
             },
           })
           hmrPages.add(i)
         }
 
-        serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
         if (hmrPages.size > 0)
@@ -251,7 +255,6 @@ export function createSlidesLoader(
         if (id === '/@slidev/titles.md') {
           return {
             code: data.slides
-              .filter(({ frontmatter }) => !frontmatter?.disabled)
               .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">\n\n${title}\n\n</template>`)
               .join(''),
             map: { mappings: '' },
@@ -277,8 +280,9 @@ export function createSlidesLoader(
             }
             else if (type === 'frontmatter') {
               const slideBase = {
-                ...prepareSlideInfo(slide),
+                ...renderNoteHTML(slide),
                 frontmatter: undefined,
+                source: undefined,
                 // remove raw content in build, optimize the bundle size
                 ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
               }
@@ -299,11 +303,12 @@ export function createSlidesLoader(
                     slide: {
                       ...(${JSON.stringify(slideBase)}),
                       frontmatter,
-                      filepath: ${JSON.stringify(slide.source?.filepath || entry)},
+                      filepath: ${JSON.stringify(slide.source.filepath)},
+                      start: ${JSON.stringify(slide.source.start)},
                       id: ${pageNo},
                       no: ${no},
                     },
-                    __clicksElements: [],
+                    __clicksContext: null,
                     __preloaded: false,
                   })`,
                   'export default frontmatter',
@@ -377,12 +382,45 @@ export function createSlidesLoader(
           return replaced
       },
     },
+    {
+      name: 'slidev:index-html-transform',
+      transformIndexHtml() {
+        const { info, author, keywords } = data.headmatter
+        return [
+          {
+            tag: 'title',
+            children: getTitle(),
+          },
+          info && {
+            tag: 'meta',
+            attrs: {
+              name: 'description',
+              content: info,
+            },
+          },
+          author && {
+            tag: 'meta',
+            attrs: {
+              name: 'author',
+              content: author,
+            },
+          },
+          keywords && {
+            tag: 'meta',
+            attrs: {
+              name: 'keywords',
+              content: Array.isArray(keywords) ? keywords.join(', ') : keywords,
+            },
+          },
+        ].filter(isTruthy) as HtmlTagDescriptor[]
+      },
+    },
   ]
 
   function updateServerWatcher() {
     if (!server)
       return
-    server.watcher.add(data.entries?.map(slash) || [])
+    server.watcher.add(data.watchFiles)
   }
 
   function getFrontmatter(pageNo: number) {
@@ -405,21 +443,12 @@ export function createSlidesLoader(
 
     delete frontmatter.title
     const imports = [
-      ...vueContextImports,
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
       `import frontmatter from "${toAtFS(`${slidePrefix + (pageNo + 1)}.frontmatter`)}"`,
-      'const $frontmatter = frontmatter',
-      '_vueProvide(_injectionFrontmatter, frontmatter)',
-      // update frontmatter in router
-      ';(() => {',
-      '  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page.value))',
-      '  if (route?.meta?.slide?.frontmatter) {',
-      '    Object.keys(route.meta.slide.frontmatter).forEach(key => {',
-      '      if (!(key in $frontmatter)) delete route.meta.slide.frontmatter[key]',
-      '    })',
-      '    Object.assign(route.meta.slide.frontmatter, frontmatter)',
-      '  }',
-      '})();',
+      templateImportContextUtils,
+      '_provideFrontmatter(frontmatter)',
+      templateInitContext,
+      templateInjectionMarker,
     ]
 
     code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
@@ -428,17 +457,18 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="frontmatter">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }
 
   function transformVue(code: string): string {
-    if (code.includes('injectionSlidevContext') || code.includes('injectionClicks') || code.includes('const $slidev'))
+    if (code.includes(templateInjectionMarker) || code.includes('useSlideContext()'))
       return code // Assume that the context is already imported and used
     const imports = [
-      ...vueContextImports,
-      'const $frontmatter = _vueInject(_injectionFrontmatter)',
+      templateImportContextUtils,
+      templateInitContext,
+      templateInjectionMarker,
     ]
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
@@ -500,14 +530,7 @@ defineProps<{ no: number | string }>()`)
 
     const layouts: Record<string, string> = {}
 
-    const roots = uniq([
-      userRoot,
-      ...themeRoots,
-      ...addonRoots,
-      clientRoot,
-    ])
-
-    for (const root of roots) {
+    for (const root of [...roots, clientRoot]) {
       const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
         cwd: root,
         absolute: true,
@@ -544,11 +567,6 @@ defineProps<{ no: number | string }>()`)
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
     ]
-    const roots = uniq([
-      ...themeRoots,
-      ...addonRoots,
-      userRoot,
-    ])
 
     for (const root of roots) {
       const styles = [
@@ -591,7 +609,7 @@ defineProps<{ no: number | string }>()`)
   }
 
   async function generateMonacoTypes() {
-    return `void 0; ${parser.scanMonacoModules(data.raw).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
+    return `void 0; ${parser.scanMonacoModules(data.slides.map(s => s.source.raw).join()).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
   }
 
   async function generateLayouts() {
@@ -619,7 +637,6 @@ defineProps<{ no: number | string }>()`)
 
     let no = 1
     const routes = data.slides
-      .filter(({ frontmatter }) => !frontmatter?.disabled)
       .map((i, idx) => {
         imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
         imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)
@@ -639,11 +656,19 @@ defineProps<{ no: number | string }>()`)
     return [...imports, routesStr, redirectsStr].join('\n')
   }
 
+  function getTitle() {
+    if (isString(data.config.title)) {
+      const tokens = md.parseInline(data.config.title, {})
+      return stringifyMarkdownTokens(tokens)
+    }
+    return data.config.title
+  }
+
   function generateConfigs() {
-    const config = { ...data.config, remote }
-    if (isString(config.title)) {
-      const tokens = md.parseInline(config.title, {})
-      config.title = stringifyMarkdownTokens(tokens)
+    const config = {
+      ...data.config,
+      remote,
+      title: getTitle(),
     }
 
     if (isString(config.info))
