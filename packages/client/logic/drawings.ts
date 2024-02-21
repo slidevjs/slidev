@@ -4,6 +4,7 @@ import { createDrauu } from 'drauu'
 import { toReactive, useLocalStorage } from '@vueuse/core'
 import { drawingState, onPatch, patch } from '../state/drawings'
 import { configs } from '../env'
+import { isInputting } from '../state'
 import { currentPage, isPresenter } from './nav'
 
 export const brushColors = [
@@ -112,7 +113,7 @@ drauu.on('start', () => isDrawing.value = true)
 drauu.on('end', () => isDrawing.value = false)
 
 window.addEventListener('keydown', (e) => {
-  if (!drawingEnabled.value)
+  if (!drawingEnabled.value || isInputting.value)
     return
 
   const noModifier = !e.ctrlKey && !e.altKey && !e.shiftKey && !e.metaKey
