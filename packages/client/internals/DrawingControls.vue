@@ -75,7 +75,7 @@ function setBrushColor(color: typeof brush.color) {
         <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
           <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" />
           <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" />
-          <line x1="6" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" />
+          <line x1="7" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" />
         </svg>
       </IconButton>
       <template #popper>
@@ -134,7 +134,6 @@ function setBrushColor(color: typeof brush.color) {
 
 <style lang="postcss">
 .v-popper--theme-menu {
-
   .v-popper__arrow-inner {
     @apply border-main;
   }
