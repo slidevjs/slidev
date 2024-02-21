@@ -1,6 +1,6 @@
 {
   "name": "@slidev/client",
-  "version": "0.48.0-beta.1",
+  "version": "0.48.0-beta.3",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "@antfu/utils": "^0.7.7",
     "@iconify-json/carbon": "^1.1.30",
     "@iconify-json/ph": "^1.1.11",
-    "@shikijs/vitepress-twoslash": "^1.1.2",
+    "@shikijs/vitepress-twoslash": "^1.1.5",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
@@ -30,7 +30,7 @@
     "@vueuse/core": "^10.7.2",
     "@vueuse/math": "^10.7.2",
     "@vueuse/motion": "^2.0.0",
-    "codemirror": "^5.65.5",
+    "codemirror": "^5.65.16",
     "defu": "^6.1.4",
     "drauu": "^0.3.7",
     "file-saver": "^2.0.5",
@@ -50,6 +50,6 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "vite": "^5.1.1"
+    "vite": "^5.1.3"
   }
 }

@@ -2,17 +2,17 @@ import type { MaybeRef } from '@vueuse/core'
 import { useFetch } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
-import type { SlideInfo, SlideInfoExtended } from '@slidev/types'
+import type { SlideInfo } from '@slidev/types'
 
 export interface UseSlideInfo {
-  info: Ref<SlideInfoExtended | undefined>
-  update: (data: Partial<SlideInfo>) => Promise<SlideInfoExtended | void>
+  info: Ref<SlideInfo | undefined>
+  update: (data: Partial<SlideInfo>) => Promise<SlideInfo | void>
 }
 
 export function useSlideInfo(id: number | undefined): UseSlideInfo {
   if (id == null) {
     return {
-      info: ref() as Ref<SlideInfoExtended | undefined>,
+      info: ref() as Ref<SlideInfo | undefined>,
       update: async () => {},
     }
   }
@@ -41,7 +41,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
         info.value = payload.data
     })
     import.meta.hot?.on('slidev-update-note', (payload) => {
-      if (payload.id === id && info.value.note.trim() !== payload.note.trim())
+      if (payload.id === id && info.value.note?.trim() !== payload.note?.trim())
         info.value = { ...info.value, ...payload }
     })
   }

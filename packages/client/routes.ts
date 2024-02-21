@@ -1,9 +1,7 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import type { TransitionGroupProps } from 'vue'
-import type { ClicksContext } from '@slidev/types'
-import Play from './internals/Play.vue'
-import Print from './internals/Print.vue'
+import type { ClicksContext, SlideInfo } from '@slidev/types'
 
 // @ts-expect-error missing types
 import _rawRoutes, { redirects } from '/@slidev/routes'
@@ -17,13 +15,13 @@ export const routes: RouteRecordRaw[] = [
   {
     name: 'play',
     path: '/',
-    component: Play,
+    component: () => import('./internals/Play.vue'),
     children: [
       ...rawRoutes,
       ...redirects,
     ],
   },
-  { name: 'print', path: '/print', component: Print },
+  { name: 'print', path: '/print', component: () => import('./internals/Print.vue') },
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
@@ -86,19 +84,12 @@ declare module 'vue-router' {
     preload?: boolean
 
     // slide info
-    slide?: {
+    slide?: Omit<SlideInfo, 'source'> & {
+      noteHTML: string
+      filepath: string
       start: number
-      end: number
-      note?: string
-      noteHTML?: string
       id: number
       no: number
-      filepath: string
-      title?: string
-      level?: number
-      raw: string
-      content: string
-      frontmatter: Record<string, any>
     }
 
     // private fields

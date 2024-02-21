@@ -1,6 +1,7 @@
 import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext, RenderContext } from '@slidev/types'
+import { objectOmit } from '@vueuse/core'
 import type { SlidevContext } from './modules/context'
 
 export const injectionClicksContext: InjectionKey<Ref<ClicksContext>> = Symbol('slidev-clicks-context')
@@ -24,3 +25,55 @@ export const TRUST_ORIGINS = [
   'localhost',
   '127.0.0.1',
 ]
+
+const FRONTMATTER_FIELDS = [
+  'clicks',
+  'disabled',
+  'hide',
+  'hideInToc',
+  'layout',
+  'level',
+  'preload',
+  'routeAlias',
+  'src',
+  'title',
+  'transition',
+]
+
+const HEADMATTER_FIELDS = [
+  ...FRONTMATTER_FIELDS,
+  'theme',
+  'titleTemplate',
+  'info',
+  'author',
+  'keywords',
+  'presenter',
+  'download',
+  'exportFilename',
+  'export',
+  'highlighter',
+  'lineNumbers',
+  'monaco',
+  'remoteAssets',
+  'selectable',
+  'record',
+  'colorSchema',
+  'routerMode',
+  'aspectRatio',
+  'canvasWidth',
+  'themeConfig',
+  'favicon',
+  'plantUmlServer',
+  'fonts',
+  'defaults',
+  'drawings',
+  'htmlAttrs',
+  'mdc',
+]
+
+export function filterFrontmatter(frontmatter: Record<string, any>, pageNo: number) {
+  return {
+    ...objectOmit(frontmatter, pageNo === 0 ? HEADMATTER_FIELDS : FRONTMATTER_FIELDS),
+    frontmatter,
+  }
+}

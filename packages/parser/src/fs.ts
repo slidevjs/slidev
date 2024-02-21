@@ -1,7 +1,9 @@
 import { promises as fs } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import type { PreparserExtensionLoader, SlideInfo, SlideInfoWithPath, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta } from '@slidev/types'
-import { detectFeatures, mergeFeatureFlags, parse, stringify, stringifySlide } from './core'
+import YAML from 'js-yaml'
+import { slash } from '@antfu/utils'
+import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SlidevThemeMeta, SourceSlideInfo } from '@slidev/types'
+import { detectFeatures, parse, parseRangeString, resolveConfig, stringify } from './core'
 
 export * from './core'
 
@@ -11,95 +13,92 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
   preparserExtensionLoader = fn
 }
 
-export async function load(filepath: string, themeMeta?: SlidevThemeMeta, content?: string) {
-  const dir = dirname(filepath)
+export async function load(userRoot: string, filepath: string, themeMeta?: SlidevThemeMeta, content?: string): Promise<SlidevData> {
   const markdown = content ?? await fs.readFile(filepath, 'utf-8')
 
-  const preparserExtensions: SlidevPreparserExtension[] = []
-  const data = await parse(markdown, filepath, themeMeta, [], async (headmatter, exts: SlidevPreparserExtension[], filepath: string | undefined) => {
-    preparserExtensions.splice(
-      0,
-      preparserExtensions.length,
-      ...exts,
-      ...preparserExtensionLoader ? await preparserExtensionLoader(headmatter, filepath) : [],
-    )
-    return preparserExtensions
-  })
+  let extensions: SlidevPreparserExtension[] | undefined
+  if (preparserExtensionLoader) {
+    // #703
+    // identify the headmatter, to be able to load preparser extensions
+    // (strict parsing based on the parsing code)
+    const lines = markdown.split(/\r?\n/g)
+    let hm = ''
+    if (lines[0].match(/^---([^-].*)?$/) && !lines[1]?.match(/^\s*$/)) {
+      let hEnd = 1
+      while (hEnd < lines.length && !lines[hEnd].trimEnd().match(/^---$/))
+        hEnd++
+      hm = lines.slice(1, hEnd).join('\n')
+    }
+    const o = YAML.load(hm) as Record<string, unknown> ?? {}
+    extensions = await preparserExtensionLoader(o, filepath)
+  }
 
-  const entries = new Set([
-    filepath,
-  ])
+  const markdownFiles: Record<string, SlidevMarkdown> = {}
+  const slides: SlideInfo[] = []
 
-  for (let iSlide = 0; iSlide < data.slides.length;) {
-    const baseSlide = data.slides[iSlide]
-    if (!baseSlide.frontmatter.src) {
-      iSlide++
-      continue
+  async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>) {
+    let md = markdownFiles[path]
+    if (!md) {
+      const raw = await fs.readFile(path, 'utf-8')
+      md = await parse(raw, path, extensions)
+      markdownFiles[path] = md
     }
 
-    data.slides.splice(iSlide, 1)
+    for (const index of parseRangeString(md.slides.length, range))
+      await loadSlide(md.slides[index - 1], frontmatterOverride)
 
-    if (baseSlide.frontmatter.hide)
-      continue
+    return md
+  }
 
-    const srcExpression = baseSlide.frontmatter.src
-    let path
-    if (srcExpression.startsWith('/'))
-      path = resolve(dir, srcExpression.substring(1))
-    else if (baseSlide.source?.filepath)
-      path = resolve(dirname(baseSlide.source.filepath), srcExpression)
-    else
-      path = resolve(dir, srcExpression)
+  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>) {
+    if (slide.frontmatter.disabled || slide.frontmatter.hide)
+      return
+    if (slide.frontmatter.src) {
+      const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
+      const path = rawPath.startsWith('/')
+        ? resolve(userRoot, rawPath.substring(1))
+        : resolve(dirname(slide.filepath), rawPath)
 
-    const raw = await fs.readFile(path, 'utf-8')
-    const subSlides = await parse(raw, path, themeMeta, preparserExtensions)
-
-    for (const [offset, subSlide] of subSlides.slides.entries()) {
-      const slide: SlideInfo = { ...baseSlide }
-
-      slide.source = {
-        filepath: path,
-        ...subSlide,
+      frontmatterOverride = {
+        ...slide.frontmatter,
+        ...frontmatterOverride,
       }
+      delete frontmatterOverride.src
 
-      if (offset === 0 && !baseSlide.frontmatter.srcSequence) {
-        slide.inline = { ...baseSlide }
-        delete slide.inline.frontmatter.src
-        Object.assign(slide, slide.source, { raw: null })
-      }
-      else {
-        Object.assign(slide, slide.source)
-      }
-
-      const baseSlideFrontMatterWithoutSrc = { ...baseSlide.frontmatter }
-      delete baseSlideFrontMatterWithoutSrc.src
-
-      slide.frontmatter = {
-        ...subSlide.frontmatter,
-        ...baseSlideFrontMatterWithoutSrc,
-        srcSequence: `${baseSlide.frontmatter.srcSequence ? `${baseSlide.frontmatter.srcSequence},` : ''}${srcExpression}`,
-      }
-
-      data.features = mergeFeatureFlags(data.features, detectFeatures(raw))
-      entries.add(path)
-      data.slides.splice(iSlide + offset, 0, slide)
+      await loadMarkdown(path, rangeRaw, frontmatterOverride)
+    }
+    else {
+      slides.push({
+        index: slides.length,
+        source: slide,
+        frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
+        content: slide.content,
+        note: slide.note,
+        title: slide.title,
+        level: slide.level,
+      })
     }
   }
-  // re-index slides
-  for (let iSlide = 0; iSlide < data.slides.length; iSlide++)
-    data.slides[iSlide].index = iSlide === 0 ? 0 : 1 + data.slides[iSlide - 1].index
 
-  data.entries = Array.from(entries)
+  const entry = await loadMarkdown(filepath)
 
-  return data
+  const headmatter = {
+    title: slides[0]?.title,
+    ...entry.slides[0]?.frontmatter,
+  }
+
+  return {
+    slides,
+    entry,
+    config: resolveConfig(headmatter, themeMeta, filepath),
+    headmatter,
+    features: detectFeatures(slides.map(s => s.source.raw).join('')),
+    themeMeta,
+    markdownFiles,
+    watchFiles: Object.keys(markdownFiles).map(slash),
+  }
 }
 
-export async function save(data: SlidevMarkdown, filepath?: string) {
-  filepath = filepath || data.filepath!
-
-  await fs.writeFile(filepath, stringify(data), 'utf-8')
-}
-
-export async function saveExternalSlide(slide: SlideInfoWithPath) {
-  await fs.writeFile(slide.filepath, stringifySlide(slide), 'utf-8')
+export async function save(markdown: SlidevMarkdown) {
+  await fs.writeFile(markdown.filepath, stringify(markdown), 'utf-8')
 }

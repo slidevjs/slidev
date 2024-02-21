@@ -36,7 +36,7 @@ const { ignoreUpdates } = ignorableWatch(
     const id = currentSlideId.value
     clearTimeout(timer)
     timer = setTimeout(() => {
-      update({ raw: null!, note: v }, id)
+      update({ note: v }, id)
     }, 500)
   },
 )

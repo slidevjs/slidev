@@ -4,31 +4,40 @@ import type { SlidevConfig } from './config'
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
 
 export interface SlideInfoBase {
-  raw: string
+  frontmatter: Record<string, any>
   content: string
   note?: string
-  frontmatter: Record<string, any>
-  frontmatterRaw?: string
-  frontmatterStyle?: FrontmatterStyle
   title?: string
   level?: number
 }
 
-export interface SlideInfo extends SlideInfoBase {
+export interface SourceSlideInfo extends SlideInfoBase {
+  /**
+   * The filepath of the markdown file
+   */
+  filepath: string
+  /**
+   * The index of the slide in the markdown file
+   */
   index: number
+  /**
+   * The range of the slide in the markdown file
+   */
   start: number
   end: number
-  inline?: SlideInfoBase
-  source?: SlideInfoWithPath
+  raw: string
+  frontmatterRaw?: string
+  frontmatterStyle?: FrontmatterStyle
+}
+
+export interface SlideInfo extends SlideInfoBase {
+  /**
+   * The index of the slide in the presentation
+   */
+  index: number
+  source: SourceSlideInfo
   snippetsUsed?: LoadedSnippets
-}
-
-export interface SlideInfoWithPath extends SlideInfoBase {
-  filepath: string
-}
-
-export interface SlideInfoExtended extends SlideInfo {
-  noteHTML: string
+  noteHTML?: string
 }
 
 /**
@@ -50,15 +59,26 @@ export interface SlidevFeatureFlags {
 }
 
 export interface SlidevMarkdown {
-  slides: SlideInfo[]
+  filepath: string
   raw: string
-  config: SlidevConfig
-  features: SlidevFeatureFlags
-  headmatter: Record<string, unknown>
+  /**
+   * All slides in this markdown file
+   */
+  slides: SourceSlideInfo[]
+}
 
-  filepath?: string
-  entries?: string[]
+export interface SlidevData {
+  /**
+   * Slides that should be rendered (disabled slides excluded)
+   */
+  slides: SlideInfo[]
+  entry: SlidevMarkdown
+  config: SlidevConfig
+  headmatter: Record<string, unknown>
+  features: SlidevFeatureFlags
   themeMeta?: SlidevThemeMeta
+  markdownFiles: Record<string, SlidevMarkdown>
+  watchFiles: string[]
 }
 
 export interface SlidevPreparserExtension {
@@ -68,9 +88,6 @@ export interface SlidevPreparserExtension {
 }
 
 export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string) => Promise<SlidevPreparserExtension[]>
-
-// internal type?
-export type PreparserExtensionFromHeadmatter = (headmatter: any, exts: SlidevPreparserExtension[], filepath?: string) => Promise<SlidevPreparserExtension[]>
 
 export type RenderContext = 'slide' | 'overview' | 'presenter' | 'previewNext'
 
