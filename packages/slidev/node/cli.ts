@@ -8,22 +8,24 @@ import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
 import yargs from 'yargs'
-import prompts from 'prompts'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { SlidevConfig, SlidevPreparserExtension } from '@slidev/types'
+import type { SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
+import { uniq } from '@antfu/utils'
 import { checkPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
-import { getAddonRoots, getClientRoot, getThemeRoots, getUserRoot, isPath, resolveOptions } from './options'
-import { resolveThemeName } from './themes'
+import { resolveOptions } from './options'
+import { getThemeMeta, resolveTheme } from './themes'
 import { parser } from './parser'
 import { loadSetups } from './plugins/setupNode'
+import { getRoots } from './resolver'
+import { resolveAddons } from './addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -33,17 +35,19 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'css',
   'mdc',
   'editor',
+  'theme',
 ]
 
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
   const addons = headmatter?.addons as string[] ?? []
-  const roots = /* uniq */([
-    getUserRoot({}).userRoot,
-    ...await getAddonRoots(addons, ''),
-    await getClientRoot(),
+  const { clientRoot, userRoot } = await getRoots()
+  const roots = uniq([
+    clientRoot,
+    userRoot,
+    ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
+  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
 })
 
 const cli = yargs(process.argv.slice(2))
@@ -104,22 +108,6 @@ cli.command(
     .strict()
     .help(),
   async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
-    if (!fs.existsSync(entry) && !entry.endsWith('.md'))
-      entry = `${entry}.md`
-
-    if (!fs.existsSync(entry)) {
-      const { create } = await prompts({
-        name: 'create',
-        type: 'confirm',
-        initial: 'Y',
-        message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
-      })
-      if (create)
-        await fs.copyFile(new URL('../template.md', import.meta.url), entry)
-      else
-        process.exit(0)
-    }
-
     let server: ViteDevServer | undefined
     let port = 3030
 
@@ -148,15 +136,30 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          async onDataReload(newData, data) {
-            if (!theme && await resolveThemeName(newData.config.theme) !== await resolveThemeName(data.config.theme)) {
+          async loadData() {
+            const { data: oldData, entry } = options
+            const loaded = await parser.load(options.userRoot, entry)
+
+            const themeRaw = theme || loaded.headmatter.theme as string || 'default'
+            if (options.themeRaw !== themeRaw) {
               console.log(yellow('\n  restarting on theme change\n'))
               initServer()
+              return false
             }
-            else if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], data.config[i]))) {
+            // Because themeRaw is not changed, we don't resolve it again
+            const themeMeta = options.themeRoots[0] ? await getThemeMeta(themeRaw, options.themeRoots[0]) : undefined
+            const newData: SlidevData = {
+              ...loaded,
+              themeMeta,
+              config: parser.resolveConfig(loaded.headmatter, themeMeta, entry),
+            }
+
+            if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], oldData.config[i]))) {
               console.log(yellow('\n  restarting on config change\n'))
               initServer()
+              return false
             }
+            return newData
           },
         },
       ))
@@ -351,23 +354,18 @@ cli.command(
             default: 'theme',
           }),
         async ({ entry, dir, theme: themeInput }) => {
-          const { userRoot } = getUserRoot({ entry })
-          const data = await parser.load(userRoot, entry)
-          const theme = await resolveThemeName(themeInput || data.config.theme)
-          if (theme === 'none') {
+          const roots = await getRoots()
+          const data = await parser.load(roots.userRoot, entry)
+          const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
+          if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
           }
-          if (isPath(theme)) {
+          if ('/.'.includes(themeRaw[0]) || (themeRaw[0] !== '@' && themeRaw.includes('/'))) {
             console.error('Theme is already ejected')
             process.exit(1)
           }
-          const roots = await getThemeRoots(theme, entry)
-          if (!roots.length) {
-            console.error(`Could not find theme "${theme}"`)
-            process.exit(1)
-          }
-          const root = roots[0]
+          const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
           await fs.copy(root, path.resolve(dir), {
             filter: i => !/node_modules|.git/.test(path.relative(root, i)),
@@ -379,7 +377,7 @@ cli.command(
           parser.prettifySlide(firstSlide)
           await parser.save(data.entry)
 
-          console.log(`Theme "${theme}" ejected successfully to "${dirPath}"`)
+          console.log(`Theme "${name}" ejected successfully to "${dirPath}"`)
         },
       )
   },

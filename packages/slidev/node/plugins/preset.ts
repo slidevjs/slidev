@@ -68,7 +68,7 @@ export async function ViteSlidevPlugin(
     mode,
     themeRoots,
     addonRoots,
-    clientRoot,
+    roots,
     data: { config },
   } = options
 
@@ -92,7 +92,7 @@ export async function ViteSlidevPlugin(
 
   const drawingData = await loadDrawings(options)
 
-  const publicRoots = themeRoots.map(i => join(i, 'public')).filter(existsSync)
+  const publicRoots = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
 
   const plugins = [
     MarkdownPlugin,
@@ -105,10 +105,8 @@ export async function ViteSlidevPlugin(
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
 
       dirs: [
-        join(clientRoot, 'builtin'),
-        join(clientRoot, 'components'),
-        ...themeRoots.map(i => join(i, 'components')),
-        ...addonRoots.map(i => join(i, 'components')),
+        join(options.clientRoot, 'builtin'),
+        ...roots.map(i => join(i, 'components')),
         'src/components',
         'components',
         join(process.cwd(), 'components'),

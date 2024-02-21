@@ -1,6 +1,6 @@
 import { basename, join } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -14,7 +14,8 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { resolveImportPath, stringifyMarkdownTokens, toAtFS } from '../utils'
+import { stringifyMarkdownTokens } from '../utils'
+import { resolveImportPath, toAtFS } from '../resolver'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -85,7 +86,7 @@ function renderNoteHTML(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, themeRoots, addonRoots, userRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, entry, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -142,7 +143,9 @@ export function createSlidesLoader(
 
         await ctx.read()
 
-        const newData = await parser.load(userRoot, entry, data.themeMeta)
+        const newData = await serverOptions.loadData?.()
+        if (!newData)
+          return []
 
         const moduleIds = new Set<string>()
 
@@ -210,7 +213,6 @@ export function createSlidesLoader(
           hmrPages.add(i)
         }
 
-        serverOptions.onDataReload?.(newData, data)
         Object.assign(data, newData)
 
         if (hmrPages.size > 0)
@@ -562,14 +564,7 @@ defineProps<{ no: number | string }>()`)
 
     const layouts: Record<string, string> = {}
 
-    const roots = uniq([
-      userRoot,
-      ...themeRoots,
-      ...addonRoots,
-      clientRoot,
-    ])
-
-    for (const root of roots) {
+    for (const root of [...roots, clientRoot]) {
       const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
         cwd: root,
         absolute: true,
@@ -606,11 +601,6 @@ defineProps<{ no: number | string }>()`)
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
     ]
-    const roots = uniq([
-      ...themeRoots,
-      ...addonRoots,
-      userRoot,
-    ])
 
     for (const root of roots) {
       const styles = [

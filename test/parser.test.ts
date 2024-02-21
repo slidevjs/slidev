@@ -1,7 +1,7 @@
 import { basename, resolve } from 'node:path'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { getDefaultConfig, load, parse, prettify, stringify } from '../packages/parser/src/fs'
+import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 
 function configDiff(v: SlidevConfig) {
@@ -40,7 +40,7 @@ describe('md parser', () => {
           delete slide.filepath
       }
       expect(data.slides).toMatchSnapshot('slides')
-      expect(configDiff(data.config)).toMatchSnapshot('config')
+      expect(configDiff(resolveConfig(data.headmatter, {}))).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')
     })
   }

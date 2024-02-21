@@ -1,55 +1,30 @@
+import { resolve } from 'node:path'
 import fs from 'fs-extra'
-import { satisfies } from 'semver'
-import type { SlidevConfig } from '@slidev/types'
-import { version } from '../package.json'
-import { packageExists, resolveImportPath } from './utils'
-import { isPath } from './options'
+import { createResolver, getRoots } from './resolver'
+import { checkEngine } from './utils'
 
-export async function getPackageJson(root: string): Promise<Record<string, any>> {
-  try {
-    const file = await resolveImportPath(`${root}/package.json`, true)
-    if (file && fs.existsSync(file))
-      return await fs.readJSON(file)
-    return {}
+export async function resolveAddons(addonsInConfig: string[]) {
+  const { userRoot, userPkgJson } = await getRoots()
+  const resolved: string[] = []
+
+  const resolveAddonNameAndRoot = createResolver('addon', {})
+
+  async function resolveAddon(name: string, parent: string) {
+    const [, pkgRoot] = await resolveAddonNameAndRoot(name, parent)
+    if (!pkgRoot)
+      return
+    resolved.push(pkgRoot)
+    const { slidev, engines } = await fs.readJSON(resolve(pkgRoot, 'package.json'))
+    checkEngine(name, engines)
+
+    if (Array.isArray(slidev?.addons))
+      await Promise.all(slidev.addons.map((addon: string) => resolveAddon(addon, pkgRoot)))
   }
-  catch (e) {
-    return {}
-  }
-}
 
-export async function getAddons(userRoot: string, config: SlidevConfig): Promise<string[]> {
-  const { slidev = {} } = await getPackageJson(userRoot)
-  const configAddons = Array.isArray(config.addons) ? config.addons : []
-  const addons = configAddons.concat(Array.isArray(slidev?.addons) ? slidev.addons : [])
-  return (await getRecursivePlugins(await Promise.all(addons.map(resolvePluginName)), 3)).filter(Boolean)
-}
+  if (Array.isArray(addonsInConfig))
+    await Promise.all(addonsInConfig.map((addon: string) => resolveAddon(addon, userRoot)))
+  if (Array.isArray(userPkgJson.slidev?.addons))
+    await Promise.all(userPkgJson.slidev.addons.map((addon: string) => resolveAddon(addon, userRoot)))
 
-export async function getRecursivePlugins(addons: string[], depth: number): Promise<string[]> {
-  const addonsArray = await Promise.all(addons.map(async (addon) => {
-    const { slidev = {}, engines = {} } = await getPackageJson(addon)
-    checkEngine(addon, engines)
-
-    let addons = Array.isArray(slidev?.addons) ? slidev.addons : []
-    if (addons.length > 0 && depth)
-      addons = await getRecursivePlugins(addons.map(resolvePluginName), depth - 1)
-    addons.push(addon)
-
-    return addons
-  }))
-  return addonsArray.flat()
-}
-
-export async function checkEngine(name: string, engines: { slidev?: string }) {
-  if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
-    throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
-}
-
-export async function resolvePluginName(name: string) {
-  if (!name)
-    return ''
-  if (isPath(name))
-    return name
-  if (await packageExists(`slidev-addon-${name}`))
-    return `slidev-addon-${name}`
-  return name
+  return resolved
 }

@@ -1,23 +1,17 @@
 import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
-import { uniq } from '@antfu/utils'
 import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions } from './options'
-import { generateGoogleFontsUrl, toAtFS } from './utils'
+import { generateGoogleFontsUrl } from './utils'
+import { toAtFS } from './resolver'
 
-export async function getIndexHtml({ clientRoot, themeRoots, addonRoots, data, userRoot }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
 
   head += `<link rel="icon" href="${data.config.favicon}">`
-
-  const roots = uniq([
-    ...themeRoots,
-    ...addonRoots,
-    userRoot,
-  ])
 
   for (const root of roots) {
     const path = join(root, 'index.html')
@@ -45,7 +39,7 @@ export async function getIndexHtml({ clientRoot, themeRoots, addonRoots, data, u
 }
 
 export async function mergeViteConfigs(
-  { addonRoots, themeRoots, entry }: ResolvedSlidevOptions,
+  { roots, entry }: ResolvedSlidevOptions,
   viteConfig: InlineConfig,
   config: InlineConfig,
   command: 'serve' | 'build',
@@ -55,10 +49,7 @@ export async function mergeViteConfigs(
     command,
   }
   // Merge theme & addon configs
-  const files = uniq([
-    ...themeRoots,
-    ...addonRoots,
-  ]).map(i => join(i, 'vite.config.ts'))
+  const files = roots.map(i => join(i, 'vite.config.ts'))
 
   for await (const file of files) {
     if (!existsSync(file))
