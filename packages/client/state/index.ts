@@ -20,19 +20,19 @@ export const activeElement = useActiveElement()
 export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
 export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.value?.tagName || ''))
 
-export const currentCamera = useLocalStorage<string>('slidev-camera', 'default')
-export const currentMic = useLocalStorage<string>('slidev-mic', 'default')
+export const currentCamera = useLocalStorage<string>('slidev-camera', 'default', { listenToStorageChanges: false })
+export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 
-export const showOverview = useLocalStorage('slidev-show-overview', false)
-export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true)
-export const showEditor = useLocalStorage('slidev-show-editor', false)
-export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false)
-export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318)
-export const editorHeight = useLocalStorage('slidev-editor-height', isClient ? window.innerHeight * 0.4 : 300)
+export const showOverview = useLocalStorage('slidev-show-overview', false, { listenToStorageChanges: false })
+export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
+export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
+export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false, { listenToStorageChanges: false })
+export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318, { listenToStorageChanges: false })
+export const editorHeight = useLocalStorage('slidev-editor-height', isClient ? window.innerHeight * 0.4 : 300, { listenToStorageChanges: false })
 
-export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1)
-export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1)
+export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1, { listenToStorageChanges: false })
+export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1, { listenToStorageChanges: false })
 
 export function togglePresenterLayout() {
   presenterLayout.value = presenterLayout.value + 1
