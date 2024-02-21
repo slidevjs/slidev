@@ -86,7 +86,7 @@ function renderNoteHTML(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, entry, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
