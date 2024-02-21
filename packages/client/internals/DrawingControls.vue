@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Menu } from 'floating-vue'
+import 'floating-vue/dist/style.css'
 import {
   brush,
   brushColors,
@@ -21,19 +23,24 @@ function undo() {
 function redo() {
   drauu.redo()
 }
+
+let lastDrawingMode: typeof drawingMode.value = 'stylus'
 function setDrawingMode(mode: typeof drawingMode.value) {
   drawingMode.value = mode
   drawingEnabled.value = true
+  if (mode !== 'eraseLine')
+    lastDrawingMode = mode
 }
 function setBrushColor(color: typeof brush.color) {
   brush.color = color
   drawingEnabled.value = true
+  drawingMode.value = lastDrawingMode
 }
 </script>
 
 <template>
   <Draggable
-    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200"
+    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 z-20"
     dark="border border-gray-400 border-opacity-10"
     :class="drawingEnabled ? '' : drawingPinned ? 'opacity-40 hover:opacity-90' : 'opacity-0 pointer-events-none'"
     storage-key="slidev-drawing-pos"
@@ -57,23 +64,41 @@ function setBrushColor(color: typeof brush.color) {
     <IconButton title="Draw a rectangle" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
       <carbon:checkbox />
     </IconButton>
-    <!-- TODO: not sure why it's not working! -->
-    <!-- <IconButton title="Erase" :class="{ shallow: drawingMode != 'eraseLine' }" @click="setDrawingMode('eraseLine')">
+    <IconButton title="Erase" :class="{ shallow: drawingMode !== 'eraseLine' }" @click="setDrawingMode('eraseLine')">
       <carbon:erase />
-    </IconButton> -->
+    </IconButton>
 
     <VerticalDivider />
 
+    <Menu>
+      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }">
+        <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
+          <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+          <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <line x1="7" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+        </svg>
+      </IconButton>
+      <template #popper>
+        <div class="flex bg-main p-2">
+          <div class="inline-block w-7 text-center">
+            {{ brush.size }}
+          </div>
+          <div class="pt-.5">
+            <input v-model="brush.size" type="range" min="1" max="15" @change="drawingMode = lastDrawingMode">
+          </div>
+        </div>
+      </template>
+    </Menu>
     <IconButton
       v-for="color of brushColors"
       :key="color"
       title="Set brush color"
-      :class="brush.color === color ? 'active' : 'shallow'"
+      :class="brush.color === color && drawingMode !== 'eraseLine' ? 'active' : 'shallow'"
       @click="setBrushColor(color)"
     >
       <div
-        class="w-6 h-6 transition-all transform border border-gray-400/50"
-        :class="brush.color !== color ? 'rounded-1/2 scale-85' : 'rounded-md'"
+        class="w-6 h-6 transition-all transform border"
+        :class="brush.color !== color ? 'rounded-1/2 scale-85 border-white' : 'rounded-md border-gray-300/50'"
         :style="drawingEnabled ? { background: color } : { borderColor: color }"
       />
     </IconButton>
@@ -87,7 +112,7 @@ function setBrushColor(color: typeof brush.color) {
       <carbon:redo />
     </IconButton>
     <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clearDrauu()">
-      <carbon:delete />
+      <carbon:trash-can />
     </IconButton>
 
     <VerticalDivider />
@@ -106,3 +131,11 @@ function setBrushColor(color: typeof brush.color) {
     </IconButton>
   </Draggable>
 </template>
+
+<style lang="postcss">
+.v-popper--theme-menu {
+  .v-popper__arrow-inner {
+    @apply border-main;
+  }
+}
+</style>

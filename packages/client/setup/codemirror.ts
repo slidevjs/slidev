@@ -1,4 +1,5 @@
 import type { Ref, WritableComputedRef } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import { watch } from 'vue'
 import * as _CodeMirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript'
@@ -46,6 +47,12 @@ export async function useCodeMirror(
     },
     { immediate: true },
   )
+
+  onClickOutside(cm.getWrapperElement(), () => {
+    const el = cm.getInputField()
+    if (document.activeElement === el)
+      el.blur()
+  })
 
   return cm
 }
