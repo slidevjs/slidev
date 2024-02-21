@@ -84,7 +84,7 @@ function setBrushColor(color: typeof brush.color) {
             {{ brush.size }}
           </div>
           <div class="pt-.5">
-            <input v-model="brush.size" type="range" min="1" max="15">
+            <input v-model="brush.size" type="range" min="1" max="15" @change="drawingMode = lastDrawingMode">
           </div>
         </div>
       </template>
