@@ -2,11 +2,11 @@ import type { MaybeRef } from '@vueuse/core'
 import { useFetch } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
-import type { SlideInfo } from '@slidev/types'
+import type { SlideInfo, SlidePatch } from '@slidev/types'
 
 export interface UseSlideInfo {
   info: Ref<SlideInfo | undefined>
-  update: (data: Partial<SlideInfo>) => Promise<SlideInfo | void>
+  update: (data: SlidePatch) => Promise<SlideInfo | void>
 }
 
 export function useSlideInfo(id: number | undefined): UseSlideInfo {
@@ -21,7 +21,7 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
 
   execute()
 
-  const update = async (data: Partial<SlideInfo>) => {
+  const update = async (data: SlidePatch) => {
     return await fetch(
       url,
       {
@@ -64,7 +64,7 @@ export function useDynamicSlideInfo(id: MaybeRef<number | undefined>) {
 
   return {
     info: computed(() => get(unref(id)).info.value),
-    update: async (data: Partial<SlideInfo>, newId?: number) => {
+    update: async (data: SlidePatch, newId?: number) => {
       const info = get(newId ?? unref(id))
       const newData = await info.update(data)
       if (newData)
