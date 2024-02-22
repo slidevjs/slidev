@@ -112,7 +112,7 @@ export async function ViteSlidevPlugin(
         join(process.cwd(), 'components'),
       ],
 
-      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/, /\.md\?vue/],
       exclude: [],
 
       resolvers: [
