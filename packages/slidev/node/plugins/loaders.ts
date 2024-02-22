@@ -8,7 +8,7 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo } from '@slidev/types'
+import type { SlideInfo, SlidePatch } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
@@ -106,12 +106,10 @@ export function createSlidesLoader(
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
-            const body = await getBodyJson(req)
+            const body: SlidePatch = await getBodyJson(req)
             const slide = data.slides[idx]
 
-            const onlyNoteChanged = Object.keys(body).length === 2
-              && 'note' in body && body.raw === null
-            if (!onlyNoteChanged)
+            if (body.content && body.content !== slide.source.content)
               hmrPages.add(idx)
 
             Object.assign(slide.source, body)
