@@ -102,6 +102,11 @@ onMounted(async () => {
         noteEditor.refresh()
     })
   })
+
+  watch(currentSlideId, () => {
+    contentEditor.clearHistory()
+    noteEditor.clearHistory()
+  }, { flush: 'post' })
 })
 
 const handlerDown = ref(false)
