@@ -172,7 +172,7 @@ export async function ViteSlidevPlugin(
     createConfigPlugin(options),
     createClientSetupPlugin(options),
     createMonacoTypesLoader(),
-    createMonacoRunnable(),
+    createMonacoRunnable(options),
     createFixPlugins(options),
 
     publicRoots.length
