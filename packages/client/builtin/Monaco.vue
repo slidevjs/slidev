@@ -53,8 +53,7 @@ const container = ref<HTMLDivElement>()
 onMounted(async () => {
   await setup()
   monaco.editor.create(container.value!, {
-    model: monaco.editor.createModel(code.value, props.lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`)),
-    language: lang,
+    model: monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`)),
     readOnly: props.readonly,
     lineNumbers: props.lineNumbers,
     minimap: { enabled: false },
