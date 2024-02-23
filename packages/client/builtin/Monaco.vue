@@ -41,8 +41,10 @@ const langMap: Record<string, string> = {
 }
 const lang = langMap[props.lang] ?? props.lang
 const extMap: Record<string, string> = {
-  typescript: 'ts',
-  javascript: 'js',
+  typescript: 'mts',
+  javascript: 'mjs',
+  ts: 'mts',
+  js: 'mjs',
 }
 const ext = extMap[props.lang] ?? props.lang
 
