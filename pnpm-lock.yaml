@@ -217,6 +217,9 @@ importers:
       '@iconify-json/ph':
         specifier: ^1.1.11
         version: 1.1.11
+      '@shikijs/monaco':
+        specifier: ^1.1.6
+        version: 1.1.6
       '@shikijs/vitepress-twoslash':
         specifier: ^1.1.6
         version: 1.1.6(typescript@5.3.3)
@@ -272,8 +275,8 @@ importers:
         specifier: ^10.8.0
         version: 10.8.0
       monaco-editor:
-        specifier: ^0.37.1
-        version: 0.37.1
+        specifier: ^0.46.0
+        version: 0.46.0
       nanoid:
         specifier: ^5.0.6
         version: 5.0.6
@@ -286,6 +289,9 @@ importers:
       resolve:
         specifier: ^1.22.8
         version: 1.22.8
+      shiki:
+        specifier: ^1.1.6
+        version: 1.1.6
       unocss:
         specifier: ^0.58.5
         version: 0.58.5(postcss@8.4.35)(vite@5.1.3)
@@ -446,9 +452,6 @@ importers:
       mlly:
         specifier: ^1.5.0
         version: 1.5.0
-      monaco-editor:
-        specifier: ^0.37.1
-        version: 0.37.1
       nanoid:
         specifier: ^5.0.6
         version: 5.0.6
@@ -1775,6 +1778,12 @@ packages:
       '@shikijs/transformers': 1.1.6
       markdown-it: 14.0.0
       shiki: 1.1.6
+
+  /@shikijs/monaco@1.1.6:
+    resolution: {integrity: sha512-4gCqOskQXAEyjdu4HXPKI9KgXJKAHpfgwNURTaDhVvGPiD/dtOusL7sr8BIupr3cRn8zwyfXuVaSV6ANVvCTZA==}
+    dependencies:
+      '@shikijs/core': 1.1.6
+    dev: false
 
   /@shikijs/transformers@1.1.6:
     resolution: {integrity: sha512-R+eI1I9sQv0MCJyfR4kAG1G1SKSctw5ILszP0tHVrAgzSHWTpaHbXreZrDueahqtUCNHjt+MKmKJ8EMFtiitOQ==}
@@ -6764,8 +6773,8 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.3.2
 
-  /monaco-editor@0.37.1:
-    resolution: {integrity: sha512-jLXEEYSbqMkT/FuJLBZAVWGuhIb4JNwHE9kPTorAVmsdZ4UzHAfgWxLsVtD7pLRFaOwYPhNG9nUCpmFL1t/dIg==}
+  /monaco-editor@0.46.0:
+    resolution: {integrity: sha512-ADwtLIIww+9FKybWscd7OCfm9odsFYHImBRI1v9AviGce55QY8raT+9ihH8jX/E/e6QVSGM+pKj4jSUSRmALNQ==}
     dev: false
 
   /mri@1.2.0:

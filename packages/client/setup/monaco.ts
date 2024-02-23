@@ -1,52 +1,83 @@
-import { getCurrentInstance, onMounted } from 'vue'
-import * as monaco from 'monaco-editor'
 import { createSingletonPromise } from '@antfu/utils'
+import { shikiToMonaco } from '@shikijs/monaco'
 import type { MonacoSetupReturn } from '@slidev/types'
+import * as monaco from 'monaco-editor'
+import { getHighlighter } from 'shiki'
+import { watchEffect } from 'vue'
+
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+
+// @ts-expect-error missing types
+import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
+
+// @ts-expect-error missing types
+import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
+
+// @ts-expect-error missing types
+import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
+
+import { isDark } from '../logic/dark'
 
 /* __imports__ */
 
+window.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === 'json')
+      return new JsonWorker()
+    if (label === 'css' || label === 'scss' || label === 'less')
+      return new CssWorker()
+    if (label === 'html' || label === 'handlebars' || label === 'razor')
+      return new HtmlWorker()
+    if (label === 'typescript' || label === 'javascript')
+      return new TsWorker()
+    return new EditorWorker()
+  },
+}
+
+class ContextViewService2 extends ContextViewService {
+  showContextView(...args: any) {
+    super.showContextView(...args)
+    // @ts-expect-error missing types
+    const container: HTMLElement = this.layoutService.getContainer()
+    const contextView = container.querySelector('.monaco-editor .shadow-root-host')!.shadowRoot!.childNodes[1] as HTMLElement
+    contextView.style.left = `calc(${contextView.style.left} / var(--slidev-slide-scale))`
+    contextView.style.top = `calc(${contextView.style.top} / var(--slidev-slide-scale))`
+    // Reset the scale to 1. Otherwise, the sub-menu will be in the wrong position.
+    contextView.style.transform = `scale(calc(1 / var(--slidev-slide-scale)))`
+    contextView.style.transformOrigin = '0 0'
+  }
+}
+
 const setup = createSingletonPromise(async () => {
-  monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-    ...monaco.languages.typescript.typescriptDefaults.getCompilerOptions(),
-    noUnusedLocals: false,
-    noUnusedParameters: false,
-    allowUnreachableCode: true,
-    allowUnusedLabels: true,
-    strict: true,
+  // Initialize services first, otherwise we can't override them.
+  StandaloneServices.initialize({
+    contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
-  await Promise.all([
-    // load workers
-    (async () => {
-      const [
-        { default: EditorWorker },
-        { default: JsonWorker },
-        { default: CssWorker },
-        { default: HtmlWorker },
-        { default: TsWorker },
-      ] = await Promise.all([
-        import('monaco-editor/esm/vs/editor/editor.worker?worker'),
-        import('monaco-editor/esm/vs/language/json/json.worker?worker'),
-        import('monaco-editor/esm/vs/language/css/css.worker?worker'),
-        import('monaco-editor/esm/vs/language/html/html.worker?worker'),
-        import('monaco-editor/esm/vs/language/typescript/ts.worker?worker'),
-      ])
+  monaco.languages.register({ id: 'vue' })
+  monaco.languages.register({ id: 'typescript' })
+  monaco.languages.register({ id: 'javascript' })
 
-      window.MonacoEnvironment = {
-        getWorker(_: any, label: string) {
-          if (label === 'json')
-            return new JsonWorker()
-          if (label === 'css' || label === 'scss' || label === 'less')
-            return new CssWorker()
-          if (label === 'html' || label === 'handlebars' || label === 'razor')
-            return new HtmlWorker()
-          if (label === 'typescript' || label === 'javascript')
-            return new TsWorker()
-          return new EditorWorker()
-        },
-      }
-    })(),
-  ])
+  const highlighter = await getHighlighter({
+    themes: [
+      'vitesse-dark',
+      'vitesse-light',
+    ],
+    langs: [
+      'javascript',
+      'typescript',
+      'vue',
+    ],
+  })
+  shikiToMonaco(highlighter, monaco)
+
+  watchEffect(() => {
+    monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vitesse-light')
+  })
 
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -56,9 +87,6 @@ const setup = createSingletonPromise(async () => {
 
   /* __async_injections__ */
 
-  if (getCurrentInstance())
-    await new Promise<void>(resolve => onMounted(resolve))
-
   return {
     monaco,
     ...injection_return,
@@ -66,5 +94,3 @@ const setup = createSingletonPromise(async () => {
 })
 
 export default setup
-
-setup()

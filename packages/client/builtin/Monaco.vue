@@ -12,12 +12,11 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useEventListener } from '@vueuse/core'
 import { decode } from 'js-base64'
+import * as monaco from 'monaco-editor'
 import { nanoid } from 'nanoid'
-import type * as monaco from 'monaco-editor'
-import { isDark } from '../logic/dark'
+import { onMounted, ref } from 'vue'
+import setup from '../setup/monaco'
 
 const props = withDefaults(defineProps<{
   code: string
@@ -31,103 +30,51 @@ const props = withDefaults(defineProps<{
   code: '',
   lang: 'typescript',
   readonly: false,
-  lineNumbers: 'off',
+  lineNumbers: 'on',
   height: 'auto',
 })
 
-const id = nanoid()
 const code = ref(decode(props.code).trimEnd())
-const diff = ref(props.diff ? decode(props.diff).trimEnd() : null)
-const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
-const editorHeight = ref(0)
-const calculatedHeight = computed(() => code.value.split(/\r?\n/g).length * lineHeight)
-const height = computed(() => {
-  return props.height === 'auto' ? `${Math.max(calculatedHeight.value, editorHeight.value) + 20}px` : props.height
-})
-
-const iframe = ref<HTMLIFrameElement>()
-
-const cssVars = [
-  '--slidev-code-font-size',
-  '--slidev-code-font-family',
-  '--slidev-code-background',
-  '--slidev-code-line-height',
-  '--slidev-code-padding',
-  '--slidev-code-margin',
-  '--slidev-code-radius',
-]
-
-function getStyleObject(el: Element) {
-  const object: Record<string, string> = {}
-  const style = getComputedStyle(el)
-  for (const v of cssVars)
-    object[v] = style.getPropertyValue(v)
-  return object
+const langMap: Record<string, string> = {
+  ts: 'typescript',
+  js: 'javascript',
 }
-
-onMounted(() => {
-  const frame = iframe.value!
-  frame.setAttribute('sandbox', [
-    'allow-forms',
-    'allow-modals',
-    'allow-pointer-lock',
-    'allow-popups',
-    'allow-same-origin',
-    'allow-scripts',
-    'allow-top-navigation-by-user-activation',
-  ].join(' '))
-
-  let src = __DEV__
-    ? `${location.origin}${__SLIDEV_CLIENT_ROOT__}/`
-    : import.meta.env.BASE_URL
-  src += `iframes/monaco/index.html?id=${id}&lineNumbers=${props.lineNumbers}&lang=${props.lang}`
-  if (diff.value)
-    src += '&diff=1'
-  frame.src = src
-
-  frame.style.backgroundColor = 'transparent'
-})
-
-function post(payload: any) {
-  iframe.value?.contentWindow?.postMessage(
-    JSON.stringify({
-      type: 'slidev-monaco',
-      data: payload,
-      id,
-    }),
-    location.origin,
-  )
+const lang = langMap[props.lang] ?? props.lang
+const extMap: Record<string, string> = {
+  typescript: 'ts',
+  javascript: 'js',
 }
+const ext = extMap[props.lang] ?? props.lang
 
-useEventListener(window, 'message', ({ data: payload }) => {
-  if (payload.id !== id)
-    return
-  if (payload.type === 'slidev-monaco-loaded') {
-    if (iframe.value) {
-      post({
-        code: code.value,
-        diff: diff.value,
-        lang: props.lang,
-        readonly: props.readonly,
-        lineNumbers: props.lineNumbers,
-        editorOptions: props.editorOptions,
-        dark: isDark.value,
-        style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
-      })
-    }
-    return
-  }
-  if (payload.type !== 'slidev-monaco')
-    return
-  if (payload.data?.height)
-    editorHeight.value = payload.data?.height
-  if (payload?.data?.code && code.value !== payload.data.code)
-    code.value = payload.data.code
-  if (payload?.data?.diff && diff.value !== payload.data.diff)
-    diff.value = payload.data.diff
+const container = ref<HTMLDivElement>()
+
+onMounted(async () => {
+  await setup()
+  monaco.editor.create(container.value!, {
+    model: monaco.editor.createModel(code.value, props.lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`)),
+    language: lang,
+    readOnly: props.readonly,
+    lineNumbers: props.lineNumbers,
+    minimap: { enabled: false },
+    padding: { top: 10, bottom: 10 },
+    lineDecorationsWidth: 0,
+    lineNumbersMinChars: 3,
+    tabSize: 2,
+    scrollBeyondLastLine: false,
+    ...props.editorOptions,
+  })
 })
 </script>
 
 <template>
-  <iframe ref="iframe" class="text-base w-full rounded" :style="{ height }" />
+  <div class="relative h-90" border="2 gray-300 dark:gray-600 rounded-lg">
+    <div ref="container" class="absolute inset-.5" />
+  </div>
 </template>
+
+<style>
+div[widgetid="editor.contrib.resizableContentHoverWidget"],
+div[widgetid="messageoverlay"] {
+  transform: translateY(calc(100% * (var(--slidev-slide-scale) - 1)));
+}
+</style>
