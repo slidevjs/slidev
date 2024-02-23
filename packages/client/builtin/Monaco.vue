@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<{
   code: '',
   lang: 'typescript',
   readonly: false,
-  lineNumbers: 'on',
+  lineNumbers: 'off',
   height: 'auto',
 })
 
@@ -65,6 +65,8 @@ onMounted(async () => {
     lineNumbersMinChars: 3,
     bracketPairColorization: { enabled: false },
     tabSize: 2,
+    fontSize: 11.5,
+    fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
     ...props.editorOptions,
   })
@@ -73,7 +75,7 @@ onMounted(async () => {
 
 <template>
   <div class="slidev-monaco-container">
-    <div ref="container" class="absolute inset-.5" />
+    <div ref="container" class="absolute inset-0" />
   </div>
 </template>
 
@@ -87,9 +89,7 @@ div[widgetid="messageoverlay"] {
   position: relative;
   /* TODO: auto resize */
   height: 100%;
-  font-family: var(--slidev-code-font-family) !important;
   padding: var(--slidev-code-padding) !important;
-  font-size: var(--slidev-code-font-size) !important;
   line-height: var(--slidev-code-line-height) !important;
   border-radius: var(--slidev-code-radius) !important;
   background: var(--slidev-code-background);
@@ -97,6 +97,7 @@ div[widgetid="messageoverlay"] {
 }
 
 .slidev-monaco-container .monaco-editor {
+  --monaco-monospace-font: var(--slidev-code-font-family);
   --vscode-editor-background: var(--slidev-code-background);
   --vscode-editorGutter-background: var(--slidev-code-background);
 }
