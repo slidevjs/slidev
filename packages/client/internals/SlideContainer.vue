@@ -47,9 +47,10 @@ const scale = computed(() => {
 })
 
 const style = computed(() => ({
-  height: `${slideHeight}px`,
-  width: `${slideWidth}px`,
-  transform: `translate(-50%, -50%) scale(${scale.value})`,
+  'height': `${slideHeight}px`,
+  'width': `${slideWidth}px`,
+  'transform': `translate(-50%, -50%) scale(${scale.value})`,
+  '--slidev-slide-scale': scale.value,
 }))
 
 const className = computed(() => ({
