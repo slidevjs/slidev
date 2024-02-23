@@ -430,6 +430,16 @@ hide: false
 ---
 
 ---
+
+# Monaco Editor
+
+```ts {monaco}
+import { ref } from 'vue'
+
+const code = ref('const a = 1')
+```
+
+---
 layout: center
 class: text-center
 ---

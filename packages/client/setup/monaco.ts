@@ -58,19 +58,20 @@ const setup = createSingletonPromise(async () => {
     contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
-  monaco.languages.register({ id: 'vue' })
+  // monaco.languages.register({ id: 'vue' })
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
 
   const highlighter = await getHighlighter({
     themes: [
+      // TODO: pass theme names from server
       'vitesse-dark',
       'vitesse-light',
     ],
     langs: [
       'javascript',
       'typescript',
-      'vue',
+      // 'vue',
     ],
   })
   shikiToMonaco(highlighter, monaco)

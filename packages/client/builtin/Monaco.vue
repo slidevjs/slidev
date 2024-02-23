@@ -52,14 +52,18 @@ const container = ref<HTMLDivElement>()
 
 onMounted(async () => {
   await setup()
+  const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
   monaco.editor.create(container.value!, {
-    model: monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`)),
+    model,
     readOnly: props.readonly,
     lineNumbers: props.lineNumbers,
     minimap: { enabled: false },
+    overviewRulerBorder: false,
+    overviewRulerLanes: 0,
     padding: { top: 10, bottom: 10 },
     lineDecorationsWidth: 0,
     lineNumbersMinChars: 3,
+    bracketPairColorization: { enabled: false },
     tabSize: 2,
     scrollBeyondLastLine: false,
     ...props.editorOptions,
@@ -68,7 +72,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="relative h-90" border="2 gray-300 dark:gray-600 rounded-lg">
+  <div class="slidev-monaco-container">
     <div ref="container" class="absolute inset-.5" />
   </div>
 </template>
@@ -77,5 +81,23 @@ onMounted(async () => {
 div[widgetid="editor.contrib.resizableContentHoverWidget"],
 div[widgetid="messageoverlay"] {
   transform: translateY(calc(100% * (var(--slidev-slide-scale) - 1)));
+}
+
+.slidev-monaco-container {
+  position: relative;
+  /* TODO: auto resize */
+  height: 100%;
+  font-family: var(--slidev-code-font-family) !important;
+  padding: var(--slidev-code-padding) !important;
+  font-size: var(--slidev-code-font-size) !important;
+  line-height: var(--slidev-code-line-height) !important;
+  border-radius: var(--slidev-code-radius) !important;
+  background: var(--slidev-code-background);
+  overflow: auto;
+}
+
+.slidev-monaco-container .monaco-editor {
+  --vscode-editor-background: var(--slidev-code-background);
+  --vscode-editorGutter-background: var(--slidev-code-background);
 }
 </style>
