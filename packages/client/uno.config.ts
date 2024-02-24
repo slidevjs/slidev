@@ -8,6 +8,7 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
+import { variantMatcher } from '@unocss/preset-mini/utils'
 
 export default defineConfig({
   safelist: [
@@ -28,6 +29,13 @@ export default defineConfig({
     'abs-bl': 'absolute bottom-0 left-0',
     'abs-br': 'absolute bottom-0 right-0',
   },
+  // Slidev Specific Variants, probably extrat to a preset later
+  variants: [
+    // `forward:` and `backward:` variant to selectively apply styles based on the direction of the slide
+    // For example, `forward:text-red` will only apply to the slides that are navigated forward
+    variantMatcher('forward', input => ({ prefix: `.slidev-nav-go-forward ${input.prefix}` })),
+    variantMatcher('backward', input => ({ prefix: `.slidev-nav-go-forward ${input.prefix}` })),
+  ],
   presets: [
     presetUno(),
     presetAttributify(),

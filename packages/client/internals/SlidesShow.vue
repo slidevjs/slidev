@@ -77,10 +77,12 @@ function onAfterLeave() {
 
 <style scoped>
 #slideshow {
-  @apply h-full;
+  height: 100%;
 }
 
 #slideshow > div {
-  @apply h-full w-full absolute;
+  display: absolute;
+  height: 100%;
+  width: 100%;
 }
 </style>
