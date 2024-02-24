@@ -3,7 +3,7 @@ import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { isPrintMode, navDirection } from '../logic/nav'
+import { clicksDirection, isPrintMode, navDirection } from '../logic/nav'
 
 const props = defineProps({
   width: {
@@ -55,8 +55,8 @@ const style = computed(() => ({
 
 const className = computed(() => ({
   'select-none': !configs.selectable,
-  'slidev-nav-go-forward': navDirection.value > 0,
-  'slidev-nav-go-backward': navDirection.value < 0,
+  'slidev-nav-go-forward': clicksDirection.value > 0,
+  'slidev-nav-go-backward': clicksDirection.value < 0,
 }))
 
 if (props.isMain) {
