@@ -31,6 +31,7 @@
     "@iconify-json/ph": "^1.1.11",
     "@shikijs/vitepress-twoslash": "^1.1.6",
     "@slidev/parser": "workspace:*",
+    "@slidev/rough-notation": "^0.0.4",
     "@slidev/types": "workspace:*",
     "@unhead/vue": "^1.8.10",
     "@unocss/reset": "^0.58.5",

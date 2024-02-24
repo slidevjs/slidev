@@ -240,12 +240,48 @@ Read more about [How to use a theme](https://sli.dev/themes/use.html) and
 check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
 
 ---
+
+# Clicks Animations
+
+You can add `v-click` to elements to add a click animation.
+
+<div v-click>
+
+This shows up when you click the slide:
+```html
+<div v-click>This shows up when you click the slide.</div>
+```
+
+</div>
+
+<br>
+
+<v-click>
+
+The <span v-mark.red="3"><code>v-mark</code> directive</span>
+also allows you to add
+<span v-mark.circle.orange="4">inline marks</span>
+, powered by [Rough Notation](https://roughnotation.com/):
+
+```html
+<span v-mark.underline.orange>inline markers</span>
+```
+
+</v-click>
+
+<div mt-20 v-click>
+
+[Learn More](https://sli.dev/guide/animations#click-animations)
+
+</div>
+
+---
 preload: false
 ---
 
-# Animations
+# Motions
 
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
+Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
 
 ```html
 <div

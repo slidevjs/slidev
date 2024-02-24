@@ -16,7 +16,7 @@ import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
 import { uniq } from '@antfu/utils'
-import { checkPort } from 'get-port-please'
+import { getPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
@@ -117,7 +117,13 @@ cli.command(
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev')
-      port = userPort || await findFreePort(3030)
+      const host = remote !== undefined ? bind : 'localhost'
+      port = userPort || await getPort({
+        port: 3030,
+        random: false,
+        portRange: [3030, 4000],
+        host,
+      })
       server = (await createServer(
         options,
         {
@@ -125,7 +131,7 @@ cli.command(
             port,
             strictPort: true,
             open,
-            host: remote !== undefined ? bind : 'localhost',
+            host,
             // @ts-expect-error Vite <= 4
             force,
           },
@@ -601,10 +607,4 @@ function printInfo(
 
     return lastRemoteUrl
   }
-}
-
-async function findFreePort(start: number): Promise<number> {
-  if (await checkPort(start) !== false)
-    return start
-  return findFreePort(start + 1)
 }
