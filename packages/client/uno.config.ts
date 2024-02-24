@@ -15,9 +15,10 @@ export default defineConfig({
     'prose',
   ],
   shortcuts: {
-    'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
+    'bg-main': 'bg-white dark:bg-[#121212]',
     'bg-active': 'bg-gray-400/10',
     'border-main': 'border-gray/20',
+    'text-main': 'text-[#181818] dark:text-[#ddd]',
     'text-primary': 'color-$slidev-theme-primary',
     'bg-primary': 'bg-$slidev-theme-primary',
     'border-primary': 'border-$slidev-theme-primary',

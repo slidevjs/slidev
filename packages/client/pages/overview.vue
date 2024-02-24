@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from 'vue'
+import { useHead } from '@unhead/vue'
 import { themeVars } from '../env'
 import { rawRoutes } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
@@ -65,18 +66,27 @@ onMounted(() => {
 <template>
   <div class="h-screen w-screen of-hidden flex">
     <nav class="h-full flex flex-col border-r border-main p2 select-none">
-      <div class="of-auto flex flex-col flex-auto items-center">
-        <button
+      <div class="flex flex-col flex-auto items-center justify-center group gap-1">
+        <div
           v-for="(route, idx) of rawRoutes"
           :key="route.path"
-          class="relative transition duration-300 w-8 h-8 rounded hover:bg-gray:10 hover:op100"
-          :class="[
-            activeBlocks.includes(idx) ? 'op100 text-primary' : 'op20',
-          ]"
-          @click="scrollToSlide(idx)"
+          class="relative"
         >
-          <div>{{ idx + 1 }}</div>
-        </button>
+          <button
+            class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
+            :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
+            @click="scrollToSlide(idx)"
+          >
+            <div>{{ idx + 1 }}</div>
+          </button>
+          <div
+            v-if="route.meta?.slide?.title"
+            class="pointer-events-none select-none absolute left-110% bg-main top-50% translate-y--50% ws-nowrap z-10 px2 shadow-xl rounded border border-main transition duration-400 op0 group-hover:op100"
+            :class="activeBlocks.includes(idx) ? 'text-primary' : 'text-main important-text-op-50'"
+          >
+            {{ route.meta?.slide?.title }}
+          </div>
+        </div>
       </div>
       <IconButton
         v-if="!isColorSchemaConfigured"
