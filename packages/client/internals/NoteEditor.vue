@@ -46,6 +46,8 @@ const { ignoreUpdates } = ignorableWatch(
 watch(
   info,
   (v) => {
+    if (editing.value)
+      return
     clearTimeout(timer)
     ignoreUpdates(() => {
       note.value = v?.note || ''
@@ -70,7 +72,7 @@ onClickOutside(input, () => {
   <NoteDisplay
     v-if="!editing"
     class="my--4 border-transparent border-2"
-    :class="[props.class, note ? '' : 'opacity-50']"
+    :class="[props.class, note ? '' : 'opacity-25 italic select-none']"
     :style="props.style"
     :note="note || placeholder"
     :note-html="info?.noteHTML"
@@ -79,7 +81,7 @@ onClickOutside(input, () => {
     v-else
     ref="input"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent block border-green border-2"
+    class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
     style="line-height: 1.75;"
     :style="props.style"
     :class="props.class"
