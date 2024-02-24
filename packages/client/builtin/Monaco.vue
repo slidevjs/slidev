@@ -37,7 +37,9 @@ const props = withDefaults(defineProps<{
   ata: true,
 })
 
-const code = ref(decode(props.code).trimEnd())
+const code = decode(props.code).trimEnd()
+const diff = props.diff && decode(props.diff).trimEnd()
+
 const langMap: Record<string, string> = {
   ts: 'typescript',
   js: 'javascript',
@@ -66,16 +68,15 @@ const height = computed(() => {
 
 onMounted(async () => {
   const { ata } = await setup()
-  const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
-  const editor = monaco.editor.create(container.value!, {
-    model,
+  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
+  const commonOptions = {
+    automaticLayout: true,
     readOnly: props.readonly,
     lineNumbers: props.lineNumbers,
     minimap: { enabled: false },
     overviewRulerBorder: false,
     overviewRulerLanes: 0,
     padding: { top: 10, bottom: 10 },
-    lineDecorationsWidth: 0,
     lineNumbersMinChars: 3,
     bracketPairColorization: { enabled: false },
     tabSize: 2,
@@ -83,25 +84,55 @@ onMounted(async () => {
     fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
     ...props.editorOptions,
-  })
+  } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
+
+  let editableEditor: monaco.editor.IStandaloneCodeEditor
+  if (diff) {
+    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
+    const editor = monaco.editor.createDiffEditor(container.value!, {
+      renderOverviewRuler: false,
+      ...commonOptions,
+    })
+    editor.setModel({
+      original: model,
+      modified: diffModel,
+    })
+    const originalEditor = editor.getOriginalEditor()
+    const modifiedEditor = editor.getModifiedEditor()
+    const onContentSizeChange = () => {
+      const newHeight = Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight())
+      initialHeight.value ??= newHeight
+      contentHeight.value = newHeight
+      nextTick(() => editor.layout())
+    }
+    originalEditor.onDidContentSizeChange(onContentSizeChange)
+    modifiedEditor.onDidContentSizeChange(onContentSizeChange)
+    editableEditor = modifiedEditor
+  }
+  else {
+    const editor = monaco.editor.create(container.value!, {
+      model,
+      lineDecorationsWidth: 0,
+      ...commonOptions,
+    })
+    editor.onDidContentSizeChange((e) => {
+      const newHeight = e.contentHeight
+      initialHeight.value ??= newHeight
+      contentHeight.value = newHeight
+      nextTick(() => editableEditor.layout())
+    })
+    editableEditor = editor
+  }
   if (props.ata) {
-    ata(code.value)
-    editor.onDidChangeModelContent(debounce(1000, () => {
-      ata(model.getValue())
+    ata(editableEditor.getValue())
+    editableEditor.onDidChangeModelContent(debounce(1000, () => {
+      ata(editableEditor.getValue())
     }))
   }
-  nextTick(() => editor.layout())
-  editor.onDidContentSizeChange((e) => {
-    const newHeight = e.contentHeight
-    initialHeight.value ??= newHeight
-    contentHeight.value = newHeight
-    nextTick(() => editor.layout())
-  })
-  const originalLayoutContentWidget = editor.layoutContentWidget.bind(editor)
-  editor.layoutContentWidget = (widget: any) => {
+  const originalLayoutContentWidget = editableEditor.layoutContentWidget.bind(editableEditor)
+  editableEditor.layoutContentWidget = (widget: any) => {
     originalLayoutContentWidget(widget)
     const id = widget.getId()
-    console.warn(id)
     if (id === 'editor.contrib.resizableContentHoverWidget') {
       widget._resizableNode.domNode.style.transform = widget._positionPreference === 1
         ? /* ABOVE */ `translateY(calc(100% * (var(--slidev-slide-scale) - 1)))`
@@ -140,6 +171,7 @@ div[widgetid="messageoverlay"] {
 .slidev-monaco-container .monaco-editor a {
   border-bottom: none;
 }
+
 .slidev-monaco-container .monaco-editor a:hover {
   border-bottom: none;
 }
