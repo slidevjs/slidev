@@ -626,10 +626,13 @@ defineProps<{ no: number | string }>()`)
     const typesRoot = join(userRoot, 'snippets')
     const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
     let result = 'import * as monaco from "monaco-editor"\n'
-    result += 'const defaults = monaco.languages.typescript.typescriptDefaults\n'
+    result += 'function addFile(code, path) {\n'
+    result += '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file:///" + path)\n'
+    result += '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))\n'
+    result += '}\n'
     for (const file of files) {
       const content = fs.readFileSync(resolve(typesRoot, file), 'utf-8')
-      result += `defaults.addExtraLib(${JSON.stringify(content)}, ${JSON.stringify(`file:///${file}`)})\n`
+      result += `addFile(${JSON.stringify(content)}, ${JSON.stringify(file)})\n`
     }
     return result
   }

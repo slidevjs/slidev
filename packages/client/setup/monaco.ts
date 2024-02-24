@@ -78,6 +78,9 @@ const setup = createSingletonPromise(async () => {
     delegate: {
       receivedFile: (code: string, path: string) => {
         defaults.addExtraLib(code, `file://${path}`)
+        const uri = monaco.Uri.file(path)
+        if (monaco.editor.getModel(uri) === null)
+          monaco.editor.createModel(code, 'javascript', uri)
       },
       progress: (downloaded: number, total: number) => {
         // eslint-disable-next-line no-console
