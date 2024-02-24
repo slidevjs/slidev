@@ -1,16 +1,14 @@
-import { join, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import http from 'node:http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
 import { mergeConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
-import { blue, yellow } from 'kolorist'
 import type { BuildArgs } from '@slidev/types'
 import { ViteSlidevPlugin } from './plugins/preset'
 import { getIndexHtml, mergeViteConfigs } from './common'
 import type { ResolvedSlidevOptions } from './options'
-import { findPkgRoot } from './resolver'
 
 export async function build(
   options: ResolvedSlidevOptions,
