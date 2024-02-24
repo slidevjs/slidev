@@ -177,10 +177,11 @@ onMounted(() => {
         <NoteEditor
           :no="idx"
           class="max-w-250 w-250 text-lg rounded p3"
+          :auto-height="true"
           :editing="edittingNote === idx"
+          @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
         />
-
         <div
           v-if="wordCounts[idx] > 0"
           class="absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
