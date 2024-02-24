@@ -102,17 +102,16 @@ onMounted(() => {
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
       @scroll="checkActiveBlocks"
     >
-      <div class="px4 py2 text-orange bg-orange:5 select-none">
-        <span font-bold>List Overview</span> is in beta, feedback is welcome!
-      </div>
       <div
         v-for="(route, idx) of rawRoutes"
         :key="route.path"
-        :ref="el => blocks.set(idx, el)"
+        :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
       >
-        <div class="select-none text-3xl op20 w-13 my4 text-right">
-          {{ idx + 1 }}
+        <div class="select-none w-13 text-right my4">
+          <div class="text-3xl op20">
+            {{ idx + 1 }}
+          </div>
         </div>
         <div
           class="border rounded border-main overflow-hidden bg-main my5 select-none h-max"
