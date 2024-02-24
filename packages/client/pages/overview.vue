@@ -13,6 +13,10 @@ import NoteEditor from '../internals/NoteEditor.vue'
 
 const cardWidth = 450
 
+useHead({
+  title: 'List Overview',
+})
+
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<string | null>(null)
@@ -101,7 +105,7 @@ onMounted(() => {
           {{ idx + 1 }}
         </div>
         <div
-          class="border rounded border-main overflow-hidden bg-main my5 select-none"
+          class="border rounded border-main overflow-hidden bg-main my5 select-none h-max"
           :style="themeVars"
           @dblclick="openSlideInNewTab(route.path)"
         >
