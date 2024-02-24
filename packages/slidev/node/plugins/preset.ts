@@ -14,7 +14,6 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } 
 import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
-import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
 import { createMarkdownPlugin } from './markdown'
 import { createFixPlugins } from './patchTransform'
@@ -170,7 +169,6 @@ export async function ViteSlidevPlugin(
 
     createConfigPlugin(options),
     createClientSetupPlugin(options),
-    createMonacoTypesLoader(),
     createFixPlugins(options),
 
     publicRoots.length

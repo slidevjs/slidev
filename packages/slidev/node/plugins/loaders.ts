@@ -1,4 +1,4 @@
-import { basename, join } from 'node:path'
+import { basename, join, resolve } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -76,7 +76,7 @@ function renderNoteHTML(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, clientRoot, roots, remote, mode, userRoot }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -623,7 +623,15 @@ defineProps<{ no: number | string }>()`)
   }
 
   async function generateMonacoTypes() {
-    return `void 0; ${parser.scanMonacoModules(data.slides.map(s => s.source.raw).join()).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
+    const typesRoot = join(userRoot, 'snippets')
+    const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
+    let result = 'import * as monaco from "monaco-editor"\n'
+    result += 'const defaults = monaco.languages.typescript.typescriptDefaults\n'
+    for (const file of files) {
+      const content = fs.readFileSync(resolve(typesRoot, file), 'utf-8')
+      result += `defaults.addExtraLib(${JSON.stringify(content)}, ${JSON.stringify(`file:///${file}`)})\n`
+    }
+    return result
   }
 
   async function generateLayouts() {

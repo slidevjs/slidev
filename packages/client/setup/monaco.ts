@@ -59,6 +59,9 @@ const setup = createSingletonPromise(async () => {
     contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
+  // @ts-expect-error missing types
+  import('/@slidev/monaco-types')
+
   const defaults = monaco.languages.typescript.typescriptDefaults
 
   defaults.setCompilerOptions({
