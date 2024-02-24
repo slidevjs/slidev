@@ -5,11 +5,11 @@ import { isEmbedded, isPrintMode, next, prev, useSwipeControls } from '../logic/
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
 import { configs, themeVars } from '../env'
-import Controls from './Controls.vue'
-import SlideContainer from './SlideContainer.vue'
-import NavControls from './NavControls.vue'
-import SlidesShow from './SlidesShow.vue'
-import PrintStyle from './PrintStyle.vue'
+import Controls from '../internals/Controls.vue'
+import SlideContainer from '../internals/SlideContainer.vue'
+import NavControls from '../internals/NavControls.vue'
+import SlidesShow from '../internals/SlidesShow.vue'
+import PrintStyle from '../internals/PrintStyle.vue'
 
 registerShortcuts()
 
@@ -33,11 +33,11 @@ const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const Editor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('./Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/Editor.vue').then(v => Editor.value = v.default)
 
 const DrawingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__)
-  import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
+  import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 </script>
 
 <template>

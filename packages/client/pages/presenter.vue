@@ -11,16 +11,16 @@ import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { isDrawing } from '../logic/drawings'
 import { useFixedClicks } from '../composables/useClicks'
-import SlideContainer from './SlideContainer.vue'
-import NavControls from './NavControls.vue'
-import SlidesOverview from './SlidesOverview.vue'
-import NoteEditor from './NoteEditor.vue'
-import NoteStatic from './NoteStatic.vue'
-import Goto from './Goto.vue'
-import SlidesShow from './SlidesShow.vue'
-import SlideWrapper from './SlideWrapper'
-import DrawingControls from './DrawingControls.vue'
-import IconButton from './IconButton.vue'
+import SlideWrapper from '../internals/SlideWrapper'
+import SlideContainer from '../internals/SlideContainer.vue'
+import NavControls from '../internals/NavControls.vue'
+import SlidesOverview from '../internals/SlidesOverview.vue'
+import NoteEditor from '../internals/NoteEditor.vue'
+import NoteStatic from '../internals/NoteStatic.vue'
+import Goto from '../internals/Goto.vue'
+import SlidesShow from '../internals/SlidesShow.vue'
+import DrawingControls from '../internals/DrawingControls.vue'
+import IconButton from '../internals/IconButton.vue'
 
 const main = ref<HTMLDivElement>()
 
@@ -54,7 +54,7 @@ watch([currentRoute, queryClicks], () => {
 
 const Editor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('./Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/Editor.vue').then(v => Editor.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {

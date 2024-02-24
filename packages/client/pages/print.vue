@@ -3,8 +3,8 @@ import { watchEffect } from 'vue'
 import { windowSize } from '../state'
 import { isPrintMode } from '../logic/nav'
 import { themeVars } from '../env'
-import PrintContainer from './PrintContainer.vue'
-import PrintStyle from './PrintStyle.vue'
+import PrintContainer from '../internals/PrintContainer.vue'
+import PrintStyle from '../internals/PrintStyle.vue'
 
 watchEffect(() => {
   if (isPrintMode)

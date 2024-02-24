@@ -7,8 +7,8 @@ import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
 import { total } from '../logic/nav'
 import { rawRoutes } from '../routes'
-import NoteDisplay from './NoteDisplay.vue'
-import IconButton from './IconButton.vue'
+import NoteDisplay from '../internals/NoteDisplay.vue'
+import IconButton from '../internals/IconButton.vue'
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({

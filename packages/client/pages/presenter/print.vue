@@ -2,9 +2,9 @@
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
-import { configs, themeVars } from '../env'
-import { rawRoutes, total } from '../logic/nav'
-import NoteDisplay from './NoteDisplay.vue'
+import { configs, themeVars } from '../../env'
+import { rawRoutes, total } from '../../logic/nav'
+import NoteDisplay from '../../internals/NoteDisplay.vue'
 
 useStyleTag(`
 @page {
@@ -24,7 +24,9 @@ html #page-root {
 }
 `)
 
-useHead({ title: `Notes - ${configs.title}` })
+useHead({
+  title: `Notes - ${configs.title}`,
+})
 
 const slidesWithNote = computed(() => rawRoutes
   .map(route => route.meta?.slide)
