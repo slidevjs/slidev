@@ -163,7 +163,7 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <div class="fixed top-4 right-4 text-gray-400 flex items-center gap-4">
+  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex items-center gap-4">
     <RouterLink
       v-if="__DEV__"
       to="/overview"
@@ -172,7 +172,7 @@ watchEffect(() => {
     >
       List overview
     </RouterLink>
-    <IconButton v-if="value" title="Close" class="text-2xl" @click="close">
+    <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
     </IconButton>
   </div>
