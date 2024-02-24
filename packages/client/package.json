@@ -33,6 +33,7 @@
     "@shikijs/vitepress-twoslash": "^1.1.6",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
+    "@typescript/ata": "^0.9.4",
     "@unhead/vue": "^1.8.10",
     "@unocss/reset": "^0.58.5",
     "@vueuse/core": "^10.8.0",

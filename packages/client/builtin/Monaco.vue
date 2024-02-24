@@ -16,6 +16,7 @@ import { decode } from 'js-base64'
 import * as monaco from 'monaco-editor'
 import { nanoid } from 'nanoid'
 import { onMounted, ref } from 'vue'
+import { debounce } from '@antfu/utils'
 import setup from '../setup/monaco'
 
 const props = withDefaults(defineProps<{
@@ -26,12 +27,14 @@ const props = withDefaults(defineProps<{
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
   height?: number | string
   editorOptions?: monaco.editor.IEditorOptions
+  ata?: boolean
 }>(), {
   code: '',
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
   height: 'auto',
+  ata: true,
 })
 
 const code = ref(decode(props.code).trimEnd())
@@ -51,9 +54,9 @@ const ext = extMap[props.lang] ?? props.lang
 const container = ref<HTMLDivElement>()
 
 onMounted(async () => {
-  await setup()
+  const { ata } = await setup()
   const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
-  monaco.editor.create(container.value!, {
+  const editor = monaco.editor.create(container.value!, {
     model,
     readOnly: props.readonly,
     lineNumbers: props.lineNumbers,
@@ -70,6 +73,12 @@ onMounted(async () => {
     scrollBeyondLastLine: false,
     ...props.editorOptions,
   })
+  if (props.ata) {
+    ata(code.value)
+    editor.onDidChangeModelContent(debounce(1000, () => {
+      ata(model.getValue())
+    }))
+  }
 })
 </script>
 

@@ -4,6 +4,8 @@ import type { MonacoSetupReturn } from '@slidev/types'
 import * as monaco from 'monaco-editor'
 import { getHighlighter } from 'shiki'
 import { watchEffect } from 'vue'
+import { setupTypeAcquisition } from '@typescript/ata'
+import ts from 'typescript'
 
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -58,6 +60,30 @@ const setup = createSingletonPromise(async () => {
     contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
+  const defaults = monaco.languages.typescript.typescriptDefaults
+
+  defaults.setCompilerOptions({
+    ...defaults.getCompilerOptions(),
+    strict: true,
+    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+    module: monaco.languages.typescript.ModuleKind.ESNext,
+  })
+
+  const ata = setupTypeAcquisition({
+    projectName: 'TypeScript Playground',
+    typescript: ts as any, // Version mismatch. No problem found so far.
+    logger: console,
+    delegate: {
+      receivedFile: (code: string, path: string) => {
+        defaults.addExtraLib(code, `file://${path}`)
+      },
+      progress: (downloaded: number, total: number) => {
+        // eslint-disable-next-line no-console
+        console.debug(`[Typescript ATA] ${downloaded} / ${total}`)
+      },
+    },
+  })
+
   // monaco.languages.register({ id: 'vue' })
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
@@ -90,6 +116,7 @@ const setup = createSingletonPromise(async () => {
 
   return {
     monaco,
+    ata,
     ...injection_return,
   }
 })
