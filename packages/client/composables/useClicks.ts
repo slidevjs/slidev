@@ -6,7 +6,10 @@ import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
 
-function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number): ClicksContext {
+/**
+ * @internal
+ */
+export function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 

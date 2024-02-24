@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
+import type { RouteRecordRaw } from 'vue-router'
+import type { ClicksContext } from 'packages/types'
 import { themeVars } from '../env'
 import { rawRoutes } from '../logic/nav'
-import { useFixedClicks } from '../composables/useClicks'
+import { useClicksContextBase } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
@@ -21,6 +23,25 @@ useHead({
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
+const wordCounts = computed(() => rawRoutes.map(route => wordCount(route.meta?.slide?.note || '')))
+const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
+const totalClicks = computed(() => rawRoutes.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
+
+const clicksContextMap = new WeakMap<RouteRecordRaw, ClicksContext>()
+function getClickContext(route: RouteRecordRaw) {
+  // We create a local clicks context to calculate the total clicks of the slide
+  if (!clicksContextMap.has(route))
+    clicksContextMap.set(route, useClicksContextBase(() => 999999, route?.meta?.clicks))
+  return clicksContextMap.get(route)!
+}
+
+function getSlideClicks(route: RouteRecordRaw) {
+  return route.meta?.clicks || getClickContext(route)?.total
+}
+
+function wordCount(str: string) {
+  return str.match(/[\w\d\’\'-]+/gi)?.length || 0
+}
 
 function isElementInViewport(el: HTMLElement) {
   const rect = el.getBoundingClientRect()
@@ -109,8 +130,16 @@ onMounted(() => {
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
       >
         <div class="select-none w-13 text-right my4">
-          <div class="text-3xl op20">
+          <div class="text-3xl op20 mb2">
             {{ idx + 1 }}
+          </div>
+          <div
+            v-if="getSlideClicks(route)"
+            class="flex gap-0.5 op50 items-center justify-end"
+            :title="`Clicks in this slide: ${getSlideClicks(route)}`"
+          >
+            <carbon:cursor-1 text-sm />
+            {{ getSlideClicks(route) }}
           </div>
         </div>
         <div
@@ -127,7 +156,7 @@ onMounted(() => {
             <SlideWrapper
               :is="route.component"
               v-if="route?.component"
-              :clicks-context="useFixedClicks(route, 99999)[1]"
+              :clicks-context="getClickContext(route)"
               :class="getSlideClass(route)"
               :route="route"
               render-context="overview"
@@ -151,7 +180,21 @@ onMounted(() => {
           :editing="edittingNote === idx"
           @update:editing="edittingNote = null"
         />
+
+        <div
+          v-if="wordCounts[idx] > 0"
+          class="absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
+        >
+          {{ wordCounts[idx] }} words
+        </div>
       </div>
     </main>
+    <div class="absolute top-0 right-0 px3 py1.5 border-b border-l rounded-lb bg-main border-main">
+      <div class="text-xs op50">
+        {{ rawRoutes.length }} slides ·
+        {{ totalClicks + rawRoutes.length - 1 }} clicks ·
+        {{ totalWords }} words
+      </div>
+    </div>
   </div>
 </template>

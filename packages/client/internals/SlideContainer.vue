@@ -3,7 +3,7 @@ import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { clicksDirection, isPrintMode, navDirection } from '../logic/nav'
+import { clicksDirection, isPrintMode } from '../logic/nav'
 
 const props = defineProps({
   width: {
