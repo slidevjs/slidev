@@ -44,8 +44,7 @@ class ContextViewService2 extends ContextViewService {
   showContextView(...args: any) {
     super.showContextView(...args)
     // @ts-expect-error missing types
-    const container: HTMLElement = this.layoutService.getContainer()
-    const contextView = container.querySelector('.monaco-editor .shadow-root-host')!.shadowRoot!.childNodes[1] as HTMLElement
+    const contextView = this.contextView.view as HTMLElement
     contextView.style.left = `calc(${contextView.style.left} / var(--slidev-slide-scale))`
     contextView.style.top = `calc(${contextView.style.top} / var(--slidev-slide-scale))`
     // Reset the scale to 1. Otherwise, the sub-menu will be in the wrong position.
