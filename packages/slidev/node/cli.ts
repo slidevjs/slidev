@@ -402,7 +402,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     const { exportSlides, getExportOptions } = await import('./export')
-    const port = await findFreePort(12445)
+    const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string) {
       const options = await resolveOptions({ entry: entryFile, theme }, 'export')
@@ -453,7 +453,7 @@ cli.command(
     timeout,
   }) => {
     const { exportNotes } = await import('./export')
-    const port = await findFreePort(12445)
+    const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile }, 'export')
