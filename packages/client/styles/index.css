@@ -55,3 +55,8 @@ html {
 .slidev-page {
   @apply absolute top-0 left-0 right-0 w-full relative;
 }
+
+/* Transform the position back for Rough Notation (v-mark) */
+.rough-annotation {
+  transform: scale(calc(1 / var(--slidev-slide-scale)));
+}
