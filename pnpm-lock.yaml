@@ -224,8 +224,8 @@ importers:
         specifier: workspace:*
         version: link:../parser
       '@slidev/rough-notation':
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.1.0
+        version: 0.1.0
       '@slidev/types':
         specifier: workspace:*
         version: link:../types
@@ -1876,8 +1876,8 @@ packages:
     dev: false
     optional: true
 
-  /@slidev/rough-notation@0.0.4:
-    resolution: {integrity: sha512-d+pv3GiJXKYGuNazNdMxX0adtBQoZzFqJfAxUbTq5KMkYlo88xAfXzz4bEGNiAbT0HuRYwjdbTwWBiBL5eVLjQ==}
+  /@slidev/rough-notation@0.1.0:
+    resolution: {integrity: sha512-a/CbVmjuoO3E4JbUr2HOTsXndbcrdLWOM+ajbSQIY3gmLFzhjeXHGksGcp1NZ08pJjLZyTCxfz1C7v/ltJqycA==}
     dependencies:
       roughjs: 4.6.6
     dev: false
