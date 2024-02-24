@@ -15,7 +15,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 import { decode } from 'js-base64'
 import * as monaco from 'monaco-editor'
 import { nanoid } from 'nanoid'
-import { onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
 import setup from '../setup/monaco'
 
@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<{
   lang?: string
   readonly?: boolean
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
-  height?: number | string
+  height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
   editorOptions?: monaco.editor.IEditorOptions
   ata?: boolean
 }>(), {
@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<{
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
-  height: 'auto',
+  height: 'initial',
   ata: true,
 })
 
@@ -51,7 +51,18 @@ const extMap: Record<string, string> = {
 }
 const ext = extMap[props.lang] ?? props.lang
 
+const outer = ref<HTMLDivElement>()
 const container = ref<HTMLDivElement>()
+
+const contentHeight = ref(0)
+const initialHeight = ref<number>()
+const height = computed(() => {
+  if (props.height === 'auto')
+    return `${contentHeight.value}px`
+  if (props.height === 'initial')
+    return `${initialHeight.value}px`
+  return props.height
+})
 
 onMounted(async () => {
   const { ata } = await setup()
@@ -79,11 +90,17 @@ onMounted(async () => {
       ata(model.getValue())
     }))
   }
+  editor.onDidContentSizeChange((e) => {
+    const newHeight = e.contentHeight
+    initialHeight.value ??= newHeight
+    contentHeight.value = newHeight
+    nextTick(() => editor.layout())
+  })
 })
 </script>
 
 <template>
-  <div class="slidev-monaco-container">
+  <div ref="outer" class="slidev-monaco-container" :style="{ height }">
     <div ref="container" class="absolute inset-0" />
   </div>
 </template>
@@ -96,13 +113,10 @@ div[widgetid="messageoverlay"] {
 
 .slidev-monaco-container {
   position: relative;
-  /* TODO: auto resize */
-  height: 100%;
   padding: var(--slidev-code-padding) !important;
   line-height: var(--slidev-code-line-height) !important;
   border-radius: var(--slidev-code-radius) !important;
   background: var(--slidev-code-background);
-  overflow: auto;
 }
 
 .slidev-monaco-container .monaco-editor {
