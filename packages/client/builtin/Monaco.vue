@@ -90,12 +90,24 @@ onMounted(async () => {
       ata(model.getValue())
     }))
   }
+  nextTick(() => editor.layout())
   editor.onDidContentSizeChange((e) => {
     const newHeight = e.contentHeight
     initialHeight.value ??= newHeight
     contentHeight.value = newHeight
     nextTick(() => editor.layout())
   })
+  const originalLayoutContentWidget = editor.layoutContentWidget.bind(editor)
+  editor.layoutContentWidget = (widget: any) => {
+    originalLayoutContentWidget(widget)
+    const id = widget.getId()
+    console.warn(id)
+    if (id === 'editor.contrib.resizableContentHoverWidget') {
+      widget._resizableNode.domNode.style.transform = widget._positionPreference === 1
+        ? /* ABOVE */ `translateY(calc(100% * (var(--slidev-slide-scale) - 1)))`
+        : /* BELOW */ `` // reset
+    }
+  }
 })
 </script>
 
@@ -106,7 +118,6 @@ onMounted(async () => {
 </template>
 
 <style>
-div[widgetid="editor.contrib.resizableContentHoverWidget"],
 div[widgetid="messageoverlay"] {
   transform: translateY(calc(100% * (var(--slidev-slide-scale) - 1)));
 }
