@@ -166,6 +166,7 @@ watchEffect(() => {
   <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex items-center gap-4">
     <RouterLink
       v-if="__DEV__"
+      target="_blank"
       to="/overview"
       tab-index="-1"
       class="border-main border px3 py1 rounded hover:bg-gray/5 hover:text-primary"
