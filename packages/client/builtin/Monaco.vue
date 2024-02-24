@@ -124,4 +124,12 @@ div[widgetid="messageoverlay"] {
   --vscode-editor-background: var(--slidev-code-background);
   --vscode-editorGutter-background: var(--slidev-code-background);
 }
+
+/** Revert styles */
+.slidev-monaco-container .monaco-editor a {
+  border-bottom: none;
+}
+.slidev-monaco-container .monaco-editor a:hover {
+  border-bottom: none;
+}
 </style>
