@@ -92,7 +92,7 @@ layout: center
       <a class="!border-none" href="https://github.com/vueuse/vueuse" target="__blank"><img class="mt-2 h-4 inline mx-0.5" alt="GitHub stars" src="https://img.shields.io/github/stars/vueuse/vueuse?style=social"></a>
     </div>
   </div>
-  <div class="border-l border-gray-400 border-opacity-25 !all:leading-12 !all:list-none my-auto">
+  <div class="border-l border-main !all:leading-12 !all:list-none my-auto">
 
   - Works for both Vue 2 and 3
   - Tree-shakeable ESM

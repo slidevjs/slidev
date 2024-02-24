@@ -53,7 +53,7 @@ function decreaseFontSize() {
         :placeholder="`No notes for Slide ${pageNo}.`"
       />
     </div>
-    <div class="flex-none border-t border-gray-400 border-opacity-20">
+    <div class="flex-none border-t border-main">
       <div class="flex gap-1 items-center px-6 py-3">
         <IconButton :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
           <carbon:minimize v-if="isFullscreen" />

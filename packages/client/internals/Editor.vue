@@ -172,13 +172,13 @@ throttledWatch(
     <div class="flex pb-2 text-xl -mt-1">
       <div class="mr-4 rounded flex">
         <IconButton
-          title="Switch to content tab" :class="tab === 'content' ? 'text-$slidev-theme-primary' : ''"
+          title="Switch to content tab" :class="tab === 'content' ? 'text-primary' : ''"
           @click="switchTab('content')"
         >
           <carbon:account />
         </IconButton>
         <IconButton
-          title="Switch to notes tab" :class="tab === 'note' ? 'text-$slidev-theme-primary' : ''"
+          title="Switch to notes tab" :class="tab === 'note' ? 'text-primary' : ''"
           @click="switchTab('note')"
         >
           <carbon:align-box-bottom-right />

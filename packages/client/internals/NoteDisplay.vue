@@ -27,7 +27,7 @@ defineEmits(['click'])
   </div>
   <div
     v-else
-    class="prose overflow-auto outline-none opacity-50 italic"
+    class="prose overflow-auto outline-none opacity-50 italic select-none"
     :class="props.class"
     @click="$emit('click')"
   >

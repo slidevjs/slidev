@@ -58,6 +58,11 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
       component: () => import('./pages/entry.vue'),
     })
     routes.push({
+      name: 'overview',
+      path: '/overview',
+      component: () => import('./pages/overview.vue'),
+    })
+    routes.push({
       name: 'notes',
       path: '/notes',
       component: () => import('./pages/notes.vue'),

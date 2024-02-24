@@ -34,7 +34,7 @@ function onMouseLeave() {
 
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
-  : 'rounded-md bg-main shadow dark:border dark:border-gray-400 dark:border-opacity-10')
+  : 'rounded-md bg-main shadow dark:border dark:border-main')
 
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)

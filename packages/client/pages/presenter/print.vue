@@ -58,7 +58,7 @@ const slidesWithNote = computed(() => rawRoutes
           </h2>
           <NoteDisplay :note-html="slide!.noteHTML" class="max-w-full" />
         </div>
-        <hr v-if="index < slidesWithNote.length - 1" class="border-gray-400/50 mb-8">
+        <hr v-if="index < slidesWithNote.length - 1" class="border-main mb-8">
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
@@ -112,7 +113,7 @@ watchEffect(() => {
   >
     <div
       v-show="value"
-      class="bg-main !bg-opacity-75 p-16 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
+      class="bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
       @click="close()"
     >
       <div
@@ -125,8 +126,8 @@ watchEffect(() => {
           class="relative"
         >
           <div
-            class="inline-block border rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary transition"
-            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-$slidev-theme-primary' : 'border-gray-400'"
+            class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
+            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
             :style="themeVars"
             @click="go(+route.path)"
           >
@@ -163,7 +164,17 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <IconButton v-if="value" title="Close" class="fixed text-2xl top-4 right-4 text-gray-400" @click="close">
-    <carbon:close />
-  </IconButton>
+  <div class="fixed top-4 right-4 text-gray-400 flex items-center gap-4">
+    <RouterLink
+      v-if="__DEV__"
+      to="/overview"
+      tab-index="-1"
+      class="border-main border px3 py1 rounded hover:bg-gray/5 hover:text-primary"
+    >
+      List overview
+    </RouterLink>
+    <IconButton v-if="value" title="Close" class="text-2xl" @click="close">
+      <carbon:close />
+    </IconButton>
+  </div>
 </template>

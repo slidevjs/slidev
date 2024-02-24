@@ -17,7 +17,10 @@ export default defineConfig({
   shortcuts: {
     'bg-main': 'bg-white text-[#181818] dark:(bg-[#121212] text-[#ddd])',
     'bg-active': 'bg-gray-400/10',
-    'border-main': 'border-gray-400/20',
+    'border-main': 'border-gray/20',
+    'text-primary': 'color-$slidev-theme-primary',
+    'bg-primary': 'bg-$slidev-theme-primary',
+    'border-primary': 'border-$slidev-theme-primary',
     'abs-tl': 'absolute top-0 left-0',
     'abs-tr': 'absolute top-0 right-0',
     'abs-b': 'absolute bottom-0 left-0 right-0',

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import { ref, watch, watchEffect } from 'vue'
-import { currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps({
+  no: {
+    type: Number,
+  },
   class: {
     default: '',
   },
@@ -25,7 +27,7 @@ const emit = defineEmits([
 ])
 const editing = useVModel(props, 'editing', emit, { passive: true })
 
-const { info, update } = useDynamicSlideInfo(currentSlideId)
+const { info, update } = useDynamicSlideInfo(props.no)
 
 const note = ref('')
 let timer: any
@@ -33,7 +35,7 @@ let timer: any
 const { ignoreUpdates } = ignorableWatch(
   note,
   (v) => {
-    const id = currentSlideId.value
+    const id = props.no
     clearTimeout(timer)
     timer = setTimeout(() => {
       update({ note: v }, id)

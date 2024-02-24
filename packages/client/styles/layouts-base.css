@@ -54,7 +54,9 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
+    background: var(--slidev-code-background);
+    color: var(--slidev-code-foreground);
+    @apply text-sm px-2 py-1 border-primary border-l rounded;
   }
 
   blockquote > * {
@@ -66,7 +68,7 @@
   }
 
   tr {
-    @apply border-b border-gray-400 border-opacity-20;
+    @apply border-b border-main;
   }
 
   th {
@@ -74,7 +76,7 @@
   }
 
   a {
-    @apply border-current border-b border-dashed hover:text-$slidev-theme-primary hover:border-solid;
+    @apply border-current border-b border-dashed hover:text-primary hover:border-solid;
   }
 
   td, th {
@@ -86,7 +88,7 @@
   }
 
   kbd {
-    @apply border border-gray-400 border-b-2 border-opacity-20 rounded;
+    @apply border border-main border-b-2 rounded;
     @apply bg-gray-400 bg-opacity-5 py-0.5 px-1 text-xs font-mono;
   }
 }
