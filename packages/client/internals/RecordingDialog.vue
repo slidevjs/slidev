@@ -109,7 +109,7 @@ async function start() {
   }
 
   input[type="text"] {
-    @apply border border-gray-400 rounded px-2 py-1;
+    @apply border border-main rounded px-2 py-1;
   }
 
   button {
@@ -118,8 +118,7 @@ async function start() {
   }
 
   button.cancel {
-    @apply bg-gray-400 text-white px-4 py-1 rounded border-b-2 border-gray-500;
-    @apply bg-opacity-50 border-opacity-50;
+    @apply bg-gray-400 bg-opacity-50 text-white px-4 py-1 rounded border-b-2 border-main;
     @apply hover:(bg-opacity-75 border-opacity-75)
   }
 }

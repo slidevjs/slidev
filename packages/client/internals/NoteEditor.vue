@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import { ref, watch, watchEffect } from 'vue'
-import { currentSlideId } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps({
+  no: {
+    type: Number,
+  },
   class: {
     default: '',
   },
@@ -25,7 +27,7 @@ const emit = defineEmits([
 ])
 const editing = useVModel(props, 'editing', emit, { passive: true })
 
-const { info, update } = useDynamicSlideInfo(currentSlideId)
+const { info, update } = useDynamicSlideInfo(props.no)
 
 const note = ref('')
 let timer: any
@@ -33,7 +35,7 @@ let timer: any
 const { ignoreUpdates } = ignorableWatch(
   note,
   (v) => {
-    const id = currentSlideId.value
+    const id = props.no
     clearTimeout(timer)
     timer = setTimeout(() => {
       update({ note: v }, id)
@@ -44,6 +46,8 @@ const { ignoreUpdates } = ignorableWatch(
 watch(
   info,
   (v) => {
+    if (editing.value)
+      return
     clearTimeout(timer)
     ignoreUpdates(() => {
       note.value = v?.note || ''
@@ -68,7 +72,7 @@ onClickOutside(input, () => {
   <NoteDisplay
     v-if="!editing"
     class="my--4 border-transparent border-2"
-    :class="[props.class, note ? '' : 'opacity-50']"
+    :class="[props.class, note ? '' : 'opacity-25 italic select-none']"
     :style="props.style"
     :note="note || placeholder"
     :note-html="info?.noteHTML"
@@ -77,7 +81,7 @@ onClickOutside(input, () => {
     v-else
     ref="input"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent block border-green border-2"
+    class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
     style="line-height: 1.75;"
     :style="props.style"
     :class="props.class"

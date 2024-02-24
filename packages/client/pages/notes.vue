@@ -7,8 +7,8 @@ import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
 import { total } from '../logic/nav'
 import { rawRoutes } from '../routes'
-import NoteDisplay from './NoteDisplay.vue'
-import IconButton from './IconButton.vue'
+import NoteDisplay from '../internals/NoteDisplay.vue'
+import IconButton from '../internals/IconButton.vue'
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
@@ -53,7 +53,7 @@ function decreaseFontSize() {
         :placeholder="`No notes for Slide ${pageNo}.`"
       />
     </div>
-    <div class="flex-none border-t border-gray-400 border-opacity-20">
+    <div class="flex-none border-t border-main">
       <div class="flex gap-1 items-center px-6 py-3">
         <IconButton :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
           <carbon:minimize v-if="isFullscreen" />

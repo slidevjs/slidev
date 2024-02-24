@@ -15,13 +15,19 @@ export const routes: RouteRecordRaw[] = [
   {
     name: 'play',
     path: '/',
-    component: () => import('./internals/Play.vue'),
+    component: () => import('./pages/play.vue'),
     children: [
       ...rawRoutes,
       ...redirects,
     ],
   },
-  { name: 'print', path: '/print', component: () => import('./internals/Print.vue') },
+  {
+    name: 'print',
+    path: '/print',
+    component: () => import('./pages/print.vue'),
+  },
+
+  // Redirects
   { path: '', redirect: { path: '/1' } },
   { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
@@ -40,24 +46,33 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
       return { path: `/${to.params.no}` }
     return { path: '' }
   }
-  routes.push({ path: '/presenter/print', component: () => import('./internals/PresenterPrint.vue') })
+
+  routes.push({
+    path: '/presenter/print',
+    component: () => import('./pages/presenter/print.vue'),
+  })
   if (__SLIDEV_HAS_SERVER__) {
     routes.push({
       name: 'entry',
       path: '/entry',
-      component: () => import('./internals/EntrySelect.vue'),
+      component: () => import('./pages/entry.vue'),
+    })
+    routes.push({
+      name: 'overview',
+      path: '/overview',
+      component: () => import('./pages/overview.vue'),
     })
     routes.push({
       name: 'notes',
       path: '/notes',
-      component: () => import('./internals/NotesView.vue'),
+      component: () => import('./pages/notes.vue'),
       beforeEnter: passwordGuard,
     })
   }
   routes.push({
     name: 'presenter',
     path: '/presenter/:no',
-    component: () => import('./internals/Presenter.vue'),
+    component: () => import('./pages/presenter.vue'),
     beforeEnter: passwordGuard,
   })
   routes.push({
