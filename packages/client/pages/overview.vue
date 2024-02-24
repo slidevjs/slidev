@@ -20,7 +20,7 @@ useHead({
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
-const edittingNote = ref<string | null>(null)
+const edittingNote = ref<number | null>(null)
 
 function isElementInViewport(el: HTMLElement) {
   const rect = el.getBoundingClientRect()
