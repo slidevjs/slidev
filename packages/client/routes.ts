@@ -1,15 +1,10 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-import type { TransitionGroupProps } from 'vue'
-import type { ClicksContext, SlideInfo } from '@slidev/types'
 
-// @ts-expect-error missing types
-import _rawRoutes, { redirects } from '/@slidev/routes'
+import { rawRoutes, redirects } from '#slidev/routes'
+import configs from '#slidev/configs'
 
-// @ts-expect-error missing types
-import _configs from '/@slidev/configs'
-
-export const rawRoutes = _rawRoutes as RouteRecordRaw[]
+export { rawRoutes }
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -34,12 +29,12 @@ export const routes: RouteRecordRaw[] = [
 
 if (__SLIDEV_FEATURE_PRESENTER__) {
   function passwordGuard(to: RouteLocationNormalized) {
-    if (!_configs.remote || _configs.remote === to.query.password)
+    if (!configs.remote || configs.remote === to.query.password)
       return true
-    if (_configs.remote && to.query.password === undefined) {
+    if (configs.remote && to.query.password === undefined) {
       // eslint-disable-next-line no-alert
       const password = prompt('Enter password')
-      if (_configs.remote === password)
+      if (configs.remote === password)
         return true
     }
     if (to.params.no)
@@ -87,28 +82,3 @@ export const router = createRouter({
     : createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
-
-declare module 'vue-router' {
-  interface RouteMeta {
-    // inherited from frontmatter
-    layout: string
-    name?: string
-    class?: string
-    clicks?: number
-    transition?: string | TransitionGroupProps | undefined
-    preload?: boolean
-
-    // slide info
-    slide?: Omit<SlideInfo, 'source'> & {
-      noteHTML: string
-      filepath: string
-      start: number
-      id: number
-      no: number
-    }
-
-    // private fields
-    __clicksContext: null | ClicksContext
-    __preloaded?: boolean
-  }
-}

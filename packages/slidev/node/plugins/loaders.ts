@@ -647,7 +647,10 @@ defineProps<{ no: number | string }>()`)
     const redirects: string[] = []
     const layouts = await getLayouts()
 
-    imports.push(`import __layout__end from '${layouts.end}'`)
+    imports.push(
+      `import { markRaw } from 'vue'`,
+      `import __layout__end from '${layouts.end}'`,
+    )
 
     let no = 1
     const routes = data.slides
@@ -664,8 +667,8 @@ defineProps<{ no: number | string }>()`)
         return route
       })
 
-    const routesStr = `export default [\n${routes.join(',\n')}\n]`
-    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n]`
+    const routesStr = `export const rawRoutes = [\n${routes.join(',\n')}\n].map(markRaw)`
+    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n].map(markRaw)`
 
     return [...imports, routesStr, redirectsStr].join('\n')
   }
