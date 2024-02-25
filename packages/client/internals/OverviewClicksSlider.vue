@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
 import type { Ref } from 'vue'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   clickContext: [Ref<number>, ClicksContext]
