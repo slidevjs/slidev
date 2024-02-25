@@ -100,7 +100,7 @@ onMounted(async () => {
     const originalEditor = editor.getOriginalEditor()
     const modifiedEditor = editor.getModifiedEditor()
     const onContentSizeChange = () => {
-      const newHeight = Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight())
+      const newHeight = Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()) + 4
       initialHeight.value ??= newHeight
       contentHeight.value = newHeight
       nextTick(() => editor.layout())
@@ -116,7 +116,7 @@ onMounted(async () => {
       ...commonOptions,
     })
     editor.onDidContentSizeChange((e) => {
-      const newHeight = e.contentHeight
+      const newHeight = e.contentHeight + 4
       initialHeight.value ??= newHeight
       contentHeight.value = newHeight
       nextTick(() => editableEditor.layout())
