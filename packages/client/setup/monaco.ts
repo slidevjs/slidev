@@ -21,6 +21,7 @@ import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/comm
 import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
 
 import { isDark } from '../logic/dark'
+import configs from '#slidev/configs'
 
 /* __imports__ */
 
@@ -57,9 +58,6 @@ const setup = createSingletonPromise(async () => {
     contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
-  // Load types from server
-  import('#slidev/monaco-types')
-
   const defaults = monaco.languages.typescript.typescriptDefaults
 
   defaults.setCompilerOptions({
@@ -69,23 +67,28 @@ const setup = createSingletonPromise(async () => {
     module: monaco.languages.typescript.ModuleKind.ESNext,
   })
 
-  const ata = setupTypeAcquisition({
-    projectName: 'TypeScript Playground',
-    typescript: ts as any, // Version mismatch. No problem found so far.
-    logger: console,
-    delegate: {
-      receivedFile: (code: string, path: string) => {
-        defaults.addExtraLib(code, `file://${path}`)
-        const uri = monaco.Uri.file(path)
-        if (monaco.editor.getModel(uri) === null)
-          monaco.editor.createModel(code, 'javascript', uri)
+  // Load types from server
+  import('#slidev/monaco-types')
+
+  const ata = configs.monacoTypesSource === 'cdn'
+    ? setupTypeAcquisition({
+      projectName: 'TypeScript Playground',
+      typescript: ts as any, // Version mismatch. No problem found so far.
+      logger: console,
+      delegate: {
+        receivedFile: (code: string, path: string) => {
+          defaults.addExtraLib(code, `file://${path}`)
+          const uri = monaco.Uri.file(path)
+          if (monaco.editor.getModel(uri) === null)
+            monaco.editor.createModel(code, 'javascript', uri)
+        },
+        progress: (downloaded: number, total: number) => {
+          // eslint-disable-next-line no-console
+          console.debug(`[Typescript ATA] ${downloaded} / ${total}`)
+        },
       },
-      progress: (downloaded: number, total: number) => {
-        // eslint-disable-next-line no-console
-        console.debug(`[Typescript ATA] ${downloaded} / ${total}`)
-      },
-    },
-  })
+    })
+    : () => { }
 
   // monaco.languages.register({ id: 'vue' })
   monaco.languages.register({ id: 'typescript' })

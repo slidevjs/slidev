@@ -14,6 +14,7 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
+import { scanMonacoModules } from '@slidev/parser'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
 import { resolveImportPath, toAtFS } from '../resolver'
@@ -632,13 +633,94 @@ defineProps<{ no: number | string }>()`)
     const typesRoot = join(userRoot, 'snippets')
     const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
     let result = 'import * as monaco from "monaco-editor"\n'
-    result += 'function addFile(code, path) {\n'
+    result += 'async function addFile(url, path) {\n'
+    result += '  const code = (await import(/* @vite-ignore */ url)).default\n'
     result += '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file:///" + path)\n'
     result += '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))\n'
     result += '}\n'
+    // User snippets
     for (const file of files) {
-      const content = fs.readFileSync(resolve(typesRoot, file), 'utf-8')
-      result += `addFile(${JSON.stringify(content)}, ${JSON.stringify(file)})\n`
+      const url = `${toAtFS(resolve(typesRoot, file))}?raw`
+      result += `addFile(${JSON.stringify(url)}, ${JSON.stringify(file)})\n`
+    }
+    // Dependencies
+    if (data.config.monacoTypesSource === 'local') {
+      // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
+      /** Converts some of the known global imports to node so that we grab the right info */
+      function mapModuleNameToModule(moduleSpecifier: string) {
+        // in node repl:
+        // > require("module").builtinModules
+        const builtInNodeMods = [
+          'assert',
+          'assert/strict',
+          'async_hooks',
+          'buffer',
+          'child_process',
+          'cluster',
+          'console',
+          'constants',
+          'crypto',
+          'dgram',
+          'diagnostics_channel',
+          'dns',
+          'dns/promises',
+          'domain',
+          'events',
+          'fs',
+          'fs/promises',
+          'http',
+          'http2',
+          'https',
+          'inspector',
+          'module',
+          'net',
+          'os',
+          'path',
+          'path/posix',
+          'path/win32',
+          'perf_hooks',
+          'process',
+          'punycode',
+          'querystring',
+          'readline',
+          'repl',
+          'stream',
+          'stream/promises',
+          'stream/consumers',
+          'stream/web',
+          'string_decoder',
+          'sys',
+          'timers',
+          'timers/promises',
+          'tls',
+          'trace_events',
+          'tty',
+          'url',
+          'util',
+          'util/types',
+          'v8',
+          'vm',
+          'wasi',
+          'worker_threads',
+          'zlib',
+        ]
+
+        if (builtInNodeMods.includes(moduleSpecifier.replace('node:', '')))
+          return 'node'
+
+        // strip module filepath e.g. lodash/identity => lodash
+        const [a = '', b = ''] = moduleSpecifier.split('/')
+        const moduleName = a.startsWith('@') ? `${a}/${b}` : a
+
+        return moduleName
+      }
+
+      for (const specifier of scanMonacoModules(data.slides.map(s => s.source.raw).join())) {
+        if (specifier[0] === '.')
+          continue
+        const moduleName = mapModuleNameToModule(specifier)
+        result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve/${moduleName}`)})\n`
+      }
     }
     return result
   }

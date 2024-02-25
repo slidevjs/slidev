@@ -205,6 +205,9 @@ importers:
       nodemon:
         specifier: ^3.1.0
         version: 3.1.0
+      vue:
+        specifier: ^3.4.19
+        version: 3.4.19(typescript@5.3.3)
 
   packages/client:
     dependencies:

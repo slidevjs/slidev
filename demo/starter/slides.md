@@ -16,6 +16,7 @@ defaults:
 transition: slide-left
 title: Welcome to Slidev
 mdc: true
+monacoTypesSource: cdn # or local
 ---
 
 # Welcome to Slidev
@@ -471,8 +472,10 @@ hide: false
 
 ```ts {monaco}
 import { ref } from 'vue'
+import hello from './external'
 
 const code = ref('const a = 1')
+hello()
 ```
 
 ---

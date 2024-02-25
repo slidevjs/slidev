@@ -10,6 +10,7 @@ export function getDefaultConfig(): SlidevConfig {
     addons: [],
     remoteAssets: false,
     monaco: 'dev',
+    monacoTypesSource: 'local',
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
