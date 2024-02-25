@@ -19,6 +19,11 @@ const current = computed({
 })
 
 const range = computed(() => Array.from({ length: total.value + 1 }, (_, i) => i))
+
+function onMousedown() {
+  if (current.value < 0 || current.value > total.value)
+    current.value = 0
+}
 </script>
 
 <template>
@@ -61,6 +66,7 @@ const range = computed(() => Array.from({ length: total.value + 1 }, (_, i) => i
         class="range" absolute inset-0
         type="range" :min="0" :max="total" :step="1" z-10 op0
         :style="{ '--thumb-width': `${1 / (total + 1) * 100}%` }"
+        @mousedown="onMousedown"
       >
     </div>
   </div>
