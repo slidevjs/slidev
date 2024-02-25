@@ -4,7 +4,7 @@ import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext } from 'packages/types'
 import { themeVars } from '../env'
-import { rawRoutes } from '../logic/nav'
+import { openInEditor, rawRoutes } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
@@ -131,10 +131,25 @@ onMounted(() => {
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
       >
-        <div class="select-none w-13 text-right my4">
+        <div class="select-none w-13 text-right my4 flex flex-col gap-1 items-end">
           <div class="text-3xl op20 mb2">
             {{ idx + 1 }}
           </div>
+          <IconButton
+            class="mr--3 op0 group-hover:op80"
+            title="Play in new tab"
+            @click="openSlideInNewTab(route.path)"
+          >
+            <carbon:presentation-file />
+          </IconButton>
+          <IconButton
+            v-if="route.meta?.slide"
+            class="mr--3 op0 group-hover:op80"
+            title="Open in editor"
+            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+          >
+            <carbon:cics-program />
+          </IconButton>
         </div>
         <div class="flex flex-col gap-2 my5">
           <div

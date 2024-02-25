@@ -16,7 +16,11 @@ html {
 }
 
 .slidev-icon-btn {
-  @apply inline-block cursor-pointer select-none !outline-none;
+  aspect-ratio: 1;
+  display: inline-block;
+  user-select: none;  
+  outline: none;
+  cursor: pointer;
   @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
   @apply md:p-2;

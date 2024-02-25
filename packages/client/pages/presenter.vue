@@ -52,9 +52,9 @@ watch([currentRoute, queryClicks], () => {
   nextFrameClicksCtx.value && (nextFrameClicksCtx.value.current = nextFrame.value![1])
 }, { immediate: true })
 
-const Editor = shallowRef<any>()
+const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('../internals/Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {
@@ -134,8 +134,8 @@ onMounted(() => {
         </div>
       </div>
       <!-- Notes -->
-      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor" class="grid-section note of-auto">
-        <Editor />
+      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor" class="grid-section note of-auto">
+        <SideEditor />
       </div>
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
         <NoteEditor
