@@ -650,9 +650,8 @@ defineProps<{ no: number | string }>()`)
 
     // Dependencies
     const deps = data.config.monacoTypesAdditionalDeps
-    if (data.config.monacoTypesSource === 'local') {
+    if (data.config.monacoTypesSource === 'local')
       deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
-    }
 
     // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
     /** Converts some of the known global imports to node so that we grab the right info */
