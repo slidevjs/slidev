@@ -16,7 +16,8 @@ defaults:
 transition: slide-left
 title: Welcome to Slidev
 mdc: true
-monacoTypesSource: cdn # or local
+monaco: true
+monacoTypesSource: local # or cdn or none
 ---
 
 # Welcome to Slidev

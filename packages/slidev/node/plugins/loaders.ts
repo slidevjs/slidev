@@ -632,16 +632,18 @@ defineProps<{ no: number | string }>()`)
   async function generateMonacoTypes() {
     const typesRoot = join(userRoot, 'snippets')
     const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
-    let result = 'import * as monaco from "monaco-editor"\n'
-    result += 'async function addFile(url, path) {\n'
-    result += '  const code = (await import(/* @vite-ignore */ url)).default\n'
-    result += '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file:///" + path)\n'
-    result += '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))\n'
-    result += '}\n'
+    let result = [
+      'import * as monaco from "monaco-editor"',
+      'async function addFile(mod, path) {',
+      '  const code = (await mod).default',
+      '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file:///" + path)',
+      '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
+      '}',
+    ].join('\n')
     // User snippets
     for (const file of files) {
       const url = `${toAtFS(resolve(typesRoot, file))}?raw`
-      result += `addFile(${JSON.stringify(url)}, ${JSON.stringify(file)})\n`
+      result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
     }
     // Dependencies
     if (data.config.monacoTypesSource === 'local') {

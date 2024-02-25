@@ -50,13 +50,13 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         files.push('package.json')
         return [
           'import * as monaco from \'monaco-editor\'',
-          'async function load(url, subPath) {',
-          '  const code = (await import(/* @vite-ignore */ url)).default',
+          'async function addFile(mod, subPath) {',
+          '  const code = (await mod).default',
           `  const path = ${JSON.stringify(`/node_modules/${name}/`)} + subPath`,
           '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file://" + path)',
           '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
           '}',
-          ...files.map(file => `load(${JSON.stringify(`${toAtFS(resolve(root, file))}?raw`)}, ${JSON.stringify(file)})`),
+          ...files.map(file => `addFile(import(${JSON.stringify(`${toAtFS(resolve(root, file))}?raw`)}), ${JSON.stringify(file)})`),
         ].join('\n')
       }
     },
