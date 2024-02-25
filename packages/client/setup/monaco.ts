@@ -1,8 +1,6 @@
 import { createSingletonPromise } from '@antfu/utils'
-import { shikiToMonaco } from '@shikijs/monaco'
 import type { MonacoSetupReturn } from '@slidev/types'
 import * as monaco from 'monaco-editor'
-import { getHighlighter } from 'shiki'
 import { watchEffect } from 'vue'
 import { setupTypeAcquisition } from '@typescript/ata'
 import ts from 'typescript'
@@ -59,8 +57,8 @@ const setup = createSingletonPromise(async () => {
     contextViewService: new SyncDescriptor(ContextViewService2, [], true),
   })
 
-  // @ts-expect-error missing types
-  import('/@slidev/monaco-types')
+  // Load types from server
+  import('#slidev/monaco-types')
 
   const defaults = monaco.languages.typescript.typescriptDefaults
 
@@ -93,23 +91,22 @@ const setup = createSingletonPromise(async () => {
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
 
-  const highlighter = await getHighlighter({
-    themes: [
-      // TODO: pass theme names from server
-      'vitesse-dark',
-      'vitesse-light',
-    ],
-    langs: [
-      'javascript',
-      'typescript',
-      // 'vue',
-    ],
-  })
+  const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
+  const highlighter = await shiki
+
+  // Use Shiki to highlight Monaco
   shikiToMonaco(highlighter, monaco)
 
-  watchEffect(() => {
-    monaco.editor.setTheme(isDark.value ? 'vitesse-dark' : 'vitesse-light')
-  })
+  if (typeof themes === 'string') {
+    monaco.editor.setTheme(themes)
+  }
+  else {
+    watchEffect(() => {
+      monaco.editor.setTheme(isDark.value
+        ? themes.dark || 'vitesse-dark'
+        : themes.light || 'vitesse-light')
+    })
+  }
 
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line unused-imports/no-unused-vars
