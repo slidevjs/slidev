@@ -61,7 +61,7 @@ html:not(.dark) .shiki span {
   counter-increment: step;
   display: inline-block;
   text-align: right;
-  --uno: w-4 mr-6 text-gray-400 dark:text-gray-600;
+  --uno: w-4 mr-6 text-gray-400 dark-text-gray-600;
 }
 
 /* Inline Code */
