@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { nextTick, ref, watch, watchEffect } from 'vue'
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
-import { ref, watch, watchEffect } from 'vue'
 import { useDynamicSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
 
@@ -19,6 +19,9 @@ const props = defineProps({
   },
   placeholder: {
     default: 'No notes for this slide',
+  },
+  autoHeight: {
+    default: false,
   },
 })
 
@@ -66,6 +69,27 @@ watchEffect(() => {
 onClickOutside(input, () => {
   editing.value = false
 })
+
+function calculateHeight() {
+  if (!props.autoHeight || !input.value || !editing.value)
+    return
+  if (input.value.scrollHeight > input.value.clientHeight)
+    input.value.style.height = `${input.value.scrollHeight}px`
+}
+
+const inputHeight = ref<number | null>()
+watchEffect(() => {
+  calculateHeight()
+})
+watch(
+  note,
+  () => {
+    nextTick(() => {
+      calculateHeight()
+    })
+  },
+  { flush: 'post' },
+)
 </script>
 
 <template>
@@ -83,7 +107,7 @@ onClickOutside(input, () => {
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
     style="line-height: 1.75;"
-    :style="props.style"
+    :style="[props.style, inputHeight != null ? { height: `${inputHeight}px` } : {}]"
     :class="props.class"
     :placeholder="placeholder"
     @keydown.esc=" editing = false"

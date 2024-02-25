@@ -22,6 +22,7 @@ nextTick(() => {
 })
 
 export const navDirection = ref(0)
+export const clicksDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -84,6 +85,7 @@ watch(currentRoute, (next, prev) => {
 })
 
 export async function next() {
+  clicksDirection.value = 1
   if (clicksTotal.value <= queryClicks.value)
     await nextSlide()
   else
@@ -91,6 +93,7 @@ export async function next() {
 }
 
 export async function prev() {
+  clicksDirection.value = -1
   if (queryClicks.value <= 0)
     await prevSlide()
   else
@@ -102,11 +105,13 @@ export function getPath(no: number | string) {
 }
 
 export async function nextSlide() {
+  clicksDirection.value = 1
   if (currentPage.value < rawRoutes.length)
     await go(currentPage.value + 1)
 }
 
 export async function prevSlide(lastClicks = true) {
+  clicksDirection.value = -1
   const next = Math.max(1, currentPage.value - 1)
   await go(next)
   if (lastClicks && clicksTotal.value)
