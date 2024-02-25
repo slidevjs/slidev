@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
@@ -30,8 +29,8 @@ const wordCounts = computed(() => rawRoutes.map(route => wordCount(route.meta?.s
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => rawRoutes.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
-const clicksContextMap = new WeakMap<RouteRecordRaw, [Ref<number>, ClicksContext]>()
-function getClickContext(route: RouteRecordRaw) {
+const clicksContextMap = new WeakMap<RouteRecordRaw, ClicksContext>()
+function getClicksContext(route: RouteRecordRaw) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
     clicksContextMap.set(route, useFixedClicks(route, CLICKS_MAX))
@@ -39,7 +38,7 @@ function getClickContext(route: RouteRecordRaw) {
 }
 
 function getSlideClicks(route: RouteRecordRaw) {
-  return route.meta?.clicks || getClickContext(route)?.[1]?.total
+  return route.meta?.clicks || getClicksContext(route)?.total
 }
 
 function wordCount(str: string) {
@@ -152,7 +151,7 @@ onMounted(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="getClickContext(route)[1]"
+                :clicks-context="getClicksContext(route)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
@@ -163,7 +162,7 @@ onMounted(() => {
           <OverviewClicksSlider
             v-if="getSlideClicks(route)"
             mt-2
-            :click-context="getClickContext(route)"
+            :clicks-context="getClicksContext(route)"
             class="w-full"
           />
         </div>
@@ -182,7 +181,7 @@ onMounted(() => {
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
           :editing="edittingNote === idx"
-          :clicks="getClickContext(route)[0].value"
+          :clicks="getClicksContext(route).current"
           @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
         />

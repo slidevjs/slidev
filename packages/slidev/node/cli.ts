@@ -569,13 +569,15 @@ function printInfo(
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
+    const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
     console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
     if (options.inspect)
-      console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
+      console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
     let lastRemoteUrl = ''
 

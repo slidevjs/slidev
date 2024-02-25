@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { PropType } from 'vue'
 import { nextTick, ref, watch, watchEffect } from 'vue'
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
+import type { ClicksContext } from '@slidev/types'
 import { useDynamicSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
 
@@ -20,8 +22,8 @@ const props = defineProps({
   placeholder: {
     default: 'No notes for this slide',
   },
-  clicks: {
-    type: [Number, String],
+  clicksContext: {
+    type: Object as PropType<ClicksContext>,
   },
   autoHeight: {
     default: false,
@@ -103,7 +105,7 @@ watch(
     :style="props.style"
     :note="note || placeholder"
     :note-html="info?.noteHTML"
-    :clicks="props.clicks"
+    :clicks-context="clicksContext"
   />
   <textarea
     v-else

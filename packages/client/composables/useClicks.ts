@@ -1,16 +1,13 @@
 import { sum } from '@antfu/utils'
 import type { ClicksContext } from '@slidev/types'
 import type { Ref } from 'vue'
-import { ref, shallowReactive } from 'vue'
+import { computed, ref, shallowReactive } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
 import { CLICKS_MAX } from '../constants'
 
-/**
- * @internal
- */
-export function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number): ClicksContext {
+function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
@@ -19,7 +16,10 @@ export function useClicksContextBase(getCurrent: () => number, clicksOverrides?:
       return isPrintMode.value && !isPrintWithClicks.value
     },
     get current() {
-      return getCurrent()
+      return current.value
+    },
+    set current(value) {
+      current.value = value
     },
     relativeOffsets,
     map,
@@ -67,8 +67,8 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
   const thisPath = +(route?.path ?? CLICKS_MAX)
-  const context = useClicksContextBase(
-    () => {
+  const current = computed({
+    get() {
       const currentPath = +(currentRoute.value?.path ?? CLICKS_MAX)
       if (currentPath === thisPath)
         return queryClicks.value
@@ -77,6 +77,14 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
       else
         return 0
     },
+    set(v) {
+      const currentPath = +(currentRoute.value?.path ?? CLICKS_MAX)
+      if (currentPath === thisPath)
+        queryClicks.value = v
+    },
+  })
+  const context = useClicksContextBase(
+    current,
     route?.meta?.clicks,
   )
   if (route?.meta)
@@ -84,7 +92,6 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   return context
 }
 
-export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): [Ref<number>, ClicksContext] {
-  const current = ref(currentInit)
-  return [current, useClicksContextBase(() => current.value, route?.meta?.clicks)]
+export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): ClicksContext {
+  return useClicksContextBase(ref(currentInit), route?.meta?.clicks)
 }

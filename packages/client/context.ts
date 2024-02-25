@@ -12,7 +12,7 @@ import {
   injectionSlidevContext,
 } from './constants'
 
-const clicksContextFallback = shallowRef(useFixedClicks()[1])
+const clicksContextFallback = shallowRef(useFixedClicks())
 
 /**
  * Get the current slide context, should be called inside the setup function of a component inside slide

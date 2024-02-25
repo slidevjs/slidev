@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import type { ClicksContext } from '@slidev/types'
 import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
@@ -7,19 +8,19 @@ const props = defineProps<{
   noteHtml?: string
   note?: string
   placeholder?: string
-  clicks?: number | string
+  clicksContext?: ClicksContext
 }>()
 
 defineEmits(['click'])
 
-const withClicks = computed(() => props.clicks != null && props.noteHtml?.includes('slidev-note-click-mark'))
+const withClicks = computed(() => props.clicksContext?.current != null && props.noteHtml?.includes('slidev-note-click-mark'))
 const noteDisplay = ref<HTMLElement | null>(null)
 
 function highlightNote() {
-  if (!noteDisplay.value || !withClicks.value || props.clicks == null)
+  if (!noteDisplay.value || !withClicks.value || props.clicksContext?.current == null)
     return
 
-  const disabled = +props.clicks < 0 || +props.clicks >= CLICKS_MAX
+  const disabled = +props.clicksContext?.current < 0 || +props.clicksContext?.current >= CLICKS_MAX
   if (disabled) {
     Array.from(noteDisplay.value.querySelectorAll('*'))
       .forEach(el => el.classList.remove('slidev-note-fade'))
@@ -71,13 +72,13 @@ function highlightNote() {
       'slidev-note-fade',
       nodeToIgnores.has(el)
         ? false
-        : +count !== +props.clicks!,
+        : +count !== +props.clicksContext!.current!,
     ))
   }
 }
 
 watch(
-  () => [props.noteHtml, props.clicks],
+  () => [props.noteHtml, props.clicksContext?.current],
   () => {
     nextTick(() => {
       highlightNote()

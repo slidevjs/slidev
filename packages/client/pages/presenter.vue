@@ -49,7 +49,7 @@ const nextFrameClicksCtx = computed(() => {
   return nextFrame.value && clicksCtxMap[+nextFrame.value[0].path - 1]
 })
 watch([currentRoute, queryClicks], () => {
-  nextFrameClicksCtx.value && (nextFrameClicksCtx.value[0].value = nextFrame.value![1])
+  nextFrameClicksCtx.value && (nextFrameClicksCtx.value.current = nextFrame.value![1])
 }, { immediate: true })
 
 const Editor = shallowRef<any>()
@@ -123,7 +123,7 @@ onMounted(() => {
           <SlideWrapper
             :is="nextFrame[0].component as any"
             :key="nextFrame[0].path"
-            :clicks-context="nextFrameClicksCtx[1]"
+            :clicks-context="nextFrameClicksCtx"
             :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
             render-context="previewNext"

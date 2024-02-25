@@ -140,7 +140,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="useFixedClicks(route, CLICKS_MAX)[1]"
+                :clicks-context="useFixedClicks(route, CLICKS_MAX)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"

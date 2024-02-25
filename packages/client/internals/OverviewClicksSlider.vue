@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
-import type { Ref } from 'vue'
 import { computed } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
-  clickContext: [Ref<number>, ClicksContext]
+  clicksContext: ClicksContext
 }>()
 
-const total = computed(() => props.clickContext[1].total)
+const total = computed(() => props.clicksContext.total)
 const current = computed({
   get() {
-    return props.clickContext[0].value > total.value ? -1 : props.clickContext[0].value
+    return props.clicksContext.current > total.value ? -1 : props.clicksContext.current
   },
   set(value: number) {
     // eslint-disable-next-line vue/no-mutating-props
-    props.clickContext[0].value = value
+    props.clicksContext.current = value
   },
 })
 
