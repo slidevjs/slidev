@@ -73,7 +73,8 @@ html {
   user-select: none;
   font-size: 0.7em;
   display: inline-flex;
-  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border border-transparent;
+  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border
+    border-transparent;
 }
 .slidev-note-click-mark.slidev-note-click-mark-active {
   --uno: border border-violet;
