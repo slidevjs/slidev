@@ -39,8 +39,10 @@ export interface SlidevConfig {
   monaco: boolean | 'dev' | 'build'
   /**
    * Where to load monaco types from
+   *
+   * @default 'local'
    */
-  monacoTypesSource: 'cdn' | 'local'
+  monacoTypesSource: 'cdn' | 'local' | 'none'
   /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
