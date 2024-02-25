@@ -23,15 +23,16 @@ html {
 }
 
 .slidev-icon-btn.shallow {
-  @apply opacity-30
+  opacity: 0.3;
 }
 
 .slidev-icon-btn.active {
-  @apply opacity-100
+  opacity: 1;
 }
 
 .slidev-icon-btn.disabled {
-  @apply opacity-25 pointer-events-none;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .slidev-vclick-target {
@@ -39,11 +40,13 @@ html {
 }
 
 .slidev-vclick-hidden {
-  @apply !opacity-0 !pointer-events-none;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  user-select: none !important;
 }
 
 .slidev-vclick-fade {
-  @apply opacity-50;
+  opacity: 0.5;
 }
 
 .slidev-icon {
@@ -53,7 +56,11 @@ html {
 }
 
 .slidev-page {
-  @apply absolute top-0 left-0 right-0 w-full relative;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 /* Transform the position back for Rough Notation (v-mark) */

@@ -34,7 +34,7 @@ export default defineConfig({
     // `forward:` and `backward:` variant to selectively apply styles based on the direction of the slide
     // For example, `forward:text-red` will only apply to the slides that are navigated forward
     variantMatcher('forward', input => ({ prefix: `.slidev-nav-go-forward ${input.prefix}` })),
-    variantMatcher('backward', input => ({ prefix: `.slidev-nav-go-forward ${input.prefix}` })),
+    variantMatcher('backward', input => ({ prefix: `.slidev-nav-go-backward ${input.prefix}` })),
   ],
   presets: [
     presetUno(),

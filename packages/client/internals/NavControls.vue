@@ -10,8 +10,7 @@ import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
 import IconButton from './IconButton.vue'
 
-// @ts-expect-error virtual module
-import CustomNavControls from '/@slidev/custom-nav-controls'
+import CustomNavControls from '#slidev/custom-nav-controls'
 
 const props = defineProps({
   persist: {

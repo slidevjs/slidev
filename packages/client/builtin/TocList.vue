@@ -10,7 +10,7 @@ Usage:
 import { computed } from 'vue'
 import { toArray } from '@antfu/utils'
 import type { TocItem } from '@slidev/types'
-import Titles from '/@slidev/titles.md'
+import Titles from '#slidev/titles.md'
 
 const props = withDefaults(defineProps<{
   level: number
@@ -65,7 +65,8 @@ const styles = computed(() => {
 .slidev-layout .slidev-toc-item p {
   margin: 0;
 }
-.slidev-layout .slidev-toc-item div, .slidev-layout .slidev-toc-item div p {
+.slidev-layout .slidev-toc-item div,
+.slidev-layout .slidev-toc-item div p {
   display: initial;
 }
 </style>

@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "0.48.0-beta.10",
+  "version": "0.48.0-beta.11",
   "private": true,
   "packageManager": "pnpm@8.15.4",
   "engines": {
@@ -51,6 +51,7 @@
     "cross-env": "^7.0.3",
     "cypress": "^13.6.6",
     "eslint": "^8.57.0",
+    "eslint-plugin-format": "^0.1.0",
     "esno": "^4.0.0",
     "katex": "^0.16.9",
     "lint-staged": "^15.2.2",
