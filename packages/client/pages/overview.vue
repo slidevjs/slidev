@@ -15,6 +15,7 @@ import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
 import NoteEditor from '../internals/NoteEditor.vue'
 import OverviewClicksSlider from '../internals/OverviewClicksSlider.vue'
+import { CLICKS_MAX } from '../constants'
 
 const cardWidth = 450
 
@@ -33,7 +34,7 @@ const clicksContextMap = new WeakMap<RouteRecordRaw, [Ref<number>, ClicksContext
 function getClickContext(route: RouteRecordRaw) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
-    clicksContextMap.set(route, useFixedClicks(route, 9999))
+    clicksContextMap.set(route, useFixedClicks(route, CLICKS_MAX))
   return clicksContextMap.get(route)!
 }
 
@@ -181,6 +182,7 @@ onMounted(() => {
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
           :editing="edittingNote === idx"
+          :clicks="getClickContext(route)[0].value"
           @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
         />

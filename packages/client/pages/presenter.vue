@@ -144,6 +144,7 @@ onMounted(() => {
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :editing="notesEditing"
+          :clicks="clicksContext.current"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <NoteStatic
@@ -152,6 +153,7 @@ onMounted(() => {
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
+          :clicks="clicksContext.current"
         />
         <div class="border-t border-main py-1 px-2 text-sm">
           <IconButton title="Increase font size" @click="increasePresenterFontSize">

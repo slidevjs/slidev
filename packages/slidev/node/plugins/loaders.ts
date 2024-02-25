@@ -68,10 +68,23 @@ md.use(mila, {
   },
 })
 
-function renderNoteHTML(data: SlideInfo): SlideInfo {
+function renderNote(text: string = '') {
+  let clickCount = 0
+  const html = md.render(text
+    // replace [click] marker with span
+    .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
+      clickCount += Number(count)
+      return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
+    }),
+  )
+
+  return html
+}
+
+function withRenderedNote(data: SlideInfo): SlideInfo {
   return {
     ...data,
-    noteHTML: md.render(data?.note || ''),
+    noteHTML: renderNote(data?.note),
   }
 }
 
@@ -102,7 +115,7 @@ export function createSlidesLoader(
           const [, no, type] = match
           const idx = Number.parseInt(no)
           if (type === 'json' && req.method === 'GET') {
-            res.write(JSON.stringify(renderNoteHTML(data.slides[idx])))
+            res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
@@ -117,7 +130,7 @@ export function createSlidesLoader(
             await parser.save(data.markdownFiles[slide.source.filepath])
 
             res.statusCode = 200
-            res.write(JSON.stringify(renderNoteHTML(slide)))
+            res.write(JSON.stringify(withRenderedNote(slide)))
             return res.end()
           }
 
@@ -183,7 +196,7 @@ export function createSlidesLoader(
                 data: {
                   id: i,
                   note: b!.note || '',
-                  noteHTML: md.render(b!.note || ''),
+                  noteHTML: renderNote(b!.note || ''),
                 },
               })
             }
@@ -195,7 +208,7 @@ export function createSlidesLoader(
             event: 'slidev-update',
             data: {
               id: i,
-              data: renderNoteHTML(newData.slides[i]),
+              data: withRenderedNote(newData.slides[i]),
             },
           })
           hmrPages.add(i)
@@ -294,7 +307,7 @@ export function createSlidesLoader(
             }
             else if (type === 'frontmatter') {
               const slideBase = {
-                ...renderNoteHTML(slide),
+                ...withRenderedNote(slide),
                 frontmatter: undefined,
                 source: undefined,
                 // remove raw content in build, optimize the bundle size
