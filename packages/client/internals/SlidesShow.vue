@@ -78,7 +78,7 @@ function onAfterLeave() {
 }
 
 #slideshow > div {
-  display: absolute;
+  position: absolute;
   height: 100%;
   width: 100%;
 }
