@@ -108,18 +108,18 @@ async function start() {
     }
   }
 
-  input[type="text"] {
+  input[type='text'] {
     @apply border border-main rounded px-2 py-1;
   }
 
   button {
     @apply bg-orange-400 text-white px-4 py-1 rounded border-b-2 border-orange-600;
-    @apply hover:(bg-orange-500 border-orange-700)
+    @apply hover:(bg-orange-500 border-orange-700);
   }
 
   button.cancel {
     @apply bg-gray-400 bg-opacity-50 text-white px-4 py-1 rounded border-b-2 border-main;
-    @apply hover:(bg-opacity-75 border-opacity-75)
+    @apply hover:(bg-opacity-75 border-opacity-75);
   }
 }
 </style>

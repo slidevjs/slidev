@@ -1,3 +1,5 @@
+/// <reference types="@slidev/types/client" />
+
 import { createApp } from 'vue'
 import { createHead } from '@unhead/vue'
 import App from './App.vue'
@@ -7,7 +9,7 @@ import { createVClickDirectives } from './modules/v-click'
 import { createVMarkDirective } from './modules/v-mark'
 import { createSlidevContext } from './modules/context'
 
-import '/@slidev/styles'
+import '#slidev/styles'
 
 const app = createApp(App)
 app.use(router)

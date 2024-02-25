@@ -8,5 +8,10 @@ export default antfu(
         'vue/component-name-in-template-casing': 'off',
       },
     },
+    formatters: {
+      // disable for now, we can enable it after we have the slidev plugin in eslint-config
+      markdown: false,
+      css: true,
+    },
   },
 )

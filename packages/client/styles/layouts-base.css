@@ -1,7 +1,8 @@
 .slidev-layout {
   @apply px-14 py-10 text-[1.1rem] h-full;
 
-  pre, code {
+  pre,
+  code {
     @apply select-text;
   }
 
@@ -79,11 +80,13 @@
     @apply border-current border-b border-dashed hover:text-primary hover:border-solid;
   }
 
-  td, th {
+  td,
+  th {
     @apply p-2 py-3;
   }
 
-  b, strong {
+  b,
+  strong {
     @apply font-600;
   }
 
@@ -94,8 +97,8 @@
 }
 
 .slidev-layout,
-[dir=ltr],
-.slidev-layout [dir=ltr] {
+[dir='ltr'],
+.slidev-layout [dir='ltr'] {
   h1 {
     @apply -ml-[0.05em] mr-0;
   }
@@ -109,10 +112,10 @@
   }
 }
 
-[dir=rtl],
-.slidev-layout [dir=rtl] {
+[dir='rtl'],
+.slidev-layout [dir='rtl'] {
   h1 {
-    @apply -mr-[0.05em] ml-0; 
+    @apply -mr-[0.05em] ml-0;
   }
 
   h6 {
