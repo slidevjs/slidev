@@ -292,6 +292,9 @@ importers:
       resolve:
         specifier: ^1.22.8
         version: 1.22.8
+      shiki-magic-move:
+        specifier: ^0.0.7
+        version: 0.0.7(shiki@1.1.7)(vue@3.4.19)
       unocss:
         specifier: ^0.58.5
         version: 0.58.5(postcss@8.4.35)(vite@5.1.4)
@@ -494,6 +497,9 @@ importers:
       shiki:
         specifier: ^1.1.7
         version: 1.1.7
+      shiki-magic-move:
+        specifier: ^0.0.7
+        version: 0.0.7(shiki@1.1.7)(vue@3.4.19)
       sirv:
         specifier: ^2.0.4
         version: 2.0.4
@@ -7894,6 +7900,16 @@ packages:
   /shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+
+  /shiki-magic-move@0.0.7(shiki@1.1.7)(vue@3.4.19):
+    resolution: {integrity: sha512-RE09YcxOFwljVVuoV5FMUBbtTzQ2PgEVvt76I1hj7pR4H9LimMZ7O8gtVJtgAB/o6UPMKC8TTvD+Orl6avSaYw==}
+    peerDependencies:
+      shiki: ^1.1.6
+      vue: ^3.4.0
+    dependencies:
+      shiki: 1.1.7
+      vue: 3.4.19(typescript@5.3.3)
+    dev: false
 
   /shiki@1.1.7:
     resolution: {integrity: sha512-9kUTMjZtcPH3i7vHunA6EraTPpPOITYTdA5uMrvsJRexktqP0s7P3s9HVK80b4pP42FRVe03D7fT3NmJv2yYhw==}

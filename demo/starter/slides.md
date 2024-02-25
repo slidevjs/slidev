@@ -43,6 +43,18 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
+
+````md magic-move
+```ts
+// This is a code block
+console.log('Hello, Slidev!')
+```
+```ts
+let message = 'Hello, Slidev!'
+```
+````
+
+---
 transition: fade-out
 ---
 

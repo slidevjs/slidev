@@ -15,11 +15,16 @@ import type MarkdownIt from 'markdown-it'
 import { encode } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
+import type { Highlighter, ShikiTransformer } from 'shiki'
+import { codeToKeyedTokens, createMagicMoveMachine } from 'shiki-magic-move/core'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
 import Prism from './markdown-it-prism'
 import { transformSnippet } from './transformSnippet'
+
+let shiki: Highlighter | undefined
+let shikiOptions: MarkdownItShikiOptions | undefined
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
@@ -31,31 +36,49 @@ export async function createMarkdownPlugin(
   const entryPath = slash(entry)
 
   if (config.highlighter === 'shiki') {
-    const MarkdownItShiki = await import('@shikijs/markdown-it').then(r => r.default)
-    const { transformerTwoslash } = await import('@shikijs/vitepress-twoslash')
-    const options = await loadShikiSetups(clientRoot, roots)
-    const plugin = await MarkdownItShiki({
-      ...options,
-      transformers: [
-        ...options.transformers || [],
-        transformerTwoslash({
-          explicitTrigger: true,
-          twoslashOptions: {
-            handbookOptions: {
-              noErrorValidation: true,
-            },
-          },
-        }),
-        {
-          pre(pre) {
-            this.addClassToHast(pre, 'slidev-code')
-            delete pre.properties.tabindex
-          },
-          postprocess(code) {
-            return escapeVueInCode(code)
+    const [
+      options,
+      { getHighlighter, bundledLanguages },
+      markdownItShiki,
+      transformerTwoslash,
+    ] = await Promise.all([
+      loadShikiSetups(clientRoot, roots),
+      import('shiki').then(({ getHighlighter, bundledLanguages }) => ({ bundledLanguages, getHighlighter })),
+      import('@shikijs/markdown-it/core').then(({ fromHighlighter }) => fromHighlighter),
+      import('@shikijs/vitepress-twoslash').then(({ transformerTwoslash }) => transformerTwoslash),
+    ] as const)
+
+    shikiOptions = options
+    shiki = await getHighlighter({
+      ...options as any,
+      langs: options.langs ?? Object.keys(bundledLanguages),
+      themes: 'themes' in options ? Object.values(options.themes) : [options.theme],
+    })
+
+    const transformers: ShikiTransformer[] = [
+      ...options.transformers || [],
+      transformerTwoslash({
+        explicitTrigger: true,
+        twoslashOptions: {
+          handbookOptions: {
+            noErrorValidation: true,
           },
         },
-      ],
+      }),
+      {
+        pre(pre) {
+          this.addClassToHast(pre, 'slidev-code')
+          delete pre.properties.tabindex
+        },
+        postprocess(code) {
+          return escapeVueInCode(code)
+        },
+      },
+    ]
+
+    const plugin = markdownItShiki(shiki, {
+      ...options,
+      transformers,
     })
     setups.push(md => md.use(plugin))
   }
@@ -106,6 +129,9 @@ export async function createMarkdownPlugin(
         const monaco = (config.monaco === true || config.monaco === mode)
           ? transformMarkdownMonaco
           : truncateMancoMark
+
+        if (config.highlighter === 'shiki')
+          code = transformMagicMove(code, shiki, shikiOptions)
 
         code = transformSlotSugar(code)
         code = transformSnippet(code, options, id)
@@ -178,16 +204,63 @@ export function transformSlotSugar(md: string) {
   return lines.join('\n')
 }
 
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^````$/mg
+const reCodeBlock = /^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
+
+/**
+ * Transform magic-move code blocks
+ */
+export function transformMagicMove(
+  md: string,
+  shiki: Highlighter | undefined,
+  shikiOptions: MarkdownItShikiOptions | undefined,
+) {
+  return md.replace(
+    reMagicMoveBlock,
+    (full, rangeStr = '', options = '', attrs = '', body: string) => {
+      if (!shiki || !shikiOptions)
+        throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
+
+      const matches = Array.from(body.matchAll(reCodeBlock))
+
+      if (!matches.length)
+        throw new Error('Magic Move block must contain at least one code block')
+      const langs = new Set(matches.map(i => i[1]))
+      if (langs.size > 1)
+        throw new Error(`Magic Move block must contain code blocks with the same language, got ${Array.from(langs).join(', ')}`)
+      const lang = Array.from(langs)[0] as any
+
+      const magicMove = createMagicMoveMachine(
+        code => codeToKeyedTokens(shiki, code, {
+          ...shikiOptions,
+          lang,
+        }),
+      )
+
+      const steps = matches.map(i => magicMove.commit(i[5].trimEnd()))
+
+      return `<script setup>
+const __magicMoveSteps = Object.freeze(${JSON.stringify(steps)})
+</script>
+
+<ShikiMagicMove :steps='__magicMoveSteps' />`
+    },
+  )
+}
+
 /**
  * Transform code block with wrapper
  */
 export function transformHighlighter(md: string) {
-  return md.replace(/^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```/mg, (full, lang = '', rangeStr = '', options = '', attrs = '', code: string) => {
-    const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
-    code = code.trimEnd()
-    options = options.trim() || '{}'
-    return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
-  })
+  return md.replace(
+    reCodeBlock,
+    (full, lang = '', rangeStr = '', options = '', attrs = '', code: string) => {
+      const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
+      code = code.trimEnd()
+      options = options.trim() || '{}'
+      return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
+    },
+  )
 }
 
 export function getCodeBlocks(md: string) {
