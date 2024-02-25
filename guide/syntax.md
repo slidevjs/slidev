@@ -646,11 +646,11 @@ src: ./content.md
 
 > Available since v0.43.0
 
-Slidev has an experimental support for [MDC (Markdown Components) Syntax](https://content.nuxtjs.org/guide/writing/mdc) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
+Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxtjs.org/guide/writing/mdc) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
 
 You can enable it by adding `mdc: true` to the frontmatter of your markdown file.
 
-```md
+```mdc
 ---
 mdc: true
 ---
@@ -664,4 +664,4 @@ The **default** slot
 ::
 ```
 
-Learn more about [the syntax](https://content.nuxtjs.org/guide/writing/mdc).
+Learn more about [the syntax](https://content.nuxt.com/guide/writing/mdc).
