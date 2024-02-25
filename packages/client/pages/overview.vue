@@ -184,13 +184,13 @@ onMounted(() => {
         />
         <div
           v-if="wordCounts[idx] > 0"
-          class="absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
+          class="select-none absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
         >
           {{ wordCounts[idx] }} words
         </div>
       </div>
     </main>
-    <div class="absolute top-0 right-0 px3 py1.5 border-b border-l rounded-lb bg-main border-main">
+    <div class="absolute top-0 right-0 px3 py1.5 border-b border-l rounded-lb bg-main border-main select-none">
       <div class="text-xs op50">
         {{ rawRoutes.length }} slides ·
         {{ totalClicks + rawRoutes.length - 1 }} clicks ·
