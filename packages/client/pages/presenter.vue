@@ -185,26 +185,26 @@ onMounted(() => {
   <SlidesOverview v-model="showOverview" />
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
 .slidev-presenter {
   --slidev-controls-foreground: current;
 }
 
-.timer-btn:hover {
-  & > :first-child {
-    @apply opacity-0;
-  }
-  & > :last-child {
-    @apply opacity-100;
-  }
+.timer-btn:hover > :first-child {
+  opacity: 0;
+}
+.timer-btn:hover > :last-child {
+  opacity: 1;
 }
 
 .section-title {
-  @apply px-4 py-2 text-xl;
+  --uno: px-4 py-2 text-xl;
 }
 
 .grid-container {
-  @apply h-full w-full bg-gray-400 bg-opacity-15;
+  --uno: bg-active;
+  height: 100%;
+  width: 100%;
   display: grid;
   gap: 1px 1px;
 }
@@ -213,20 +213,20 @@ onMounted(() => {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: min-content 2fr 1fr min-content;
   grid-template-areas:
-    "top top"
-    "main main"
-    "note next"
-    "bottom bottom";
+    'top top'
+    'main main'
+    'note next'
+    'bottom bottom';
 }
 
 .grid-container.layout2 {
   grid-template-columns: 3fr 2fr;
   grid-template-rows: min-content 2fr 1fr min-content;
   grid-template-areas:
-    "top top"
-    "note main"
-    "note next"
-    "bottom bottom";
+    'top top'
+    'note main'
+    'note next'
+    'bottom bottom';
 }
 
 @media (max-aspect-ratio: 3/5) {
@@ -234,11 +234,11 @@ onMounted(() => {
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr 1fr 1fr min-content;
     grid-template-areas:
-      "top"
-      "main"
-      "note"
-      "next"
-      "bottom";
+      'top'
+      'main'
+      'note'
+      'next'
+      'bottom';
   }
 }
 
@@ -247,38 +247,40 @@ onMounted(() => {
     grid-template-columns: 1fr 1.1fr 0.9fr;
     grid-template-rows: min-content 1fr 2fr min-content;
     grid-template-areas:
-      "top top top"
-      "main main next"
-      "main main note"
-      "bottom bottom bottom";
+      'top top top'
+      'main main next'
+      'main main note'
+      'bottom bottom bottom';
   }
 }
 
 .progress-bar {
-  @apply fixed left-0 right-0 bottom-0;
+  --uno: fixed left-0 right-0 bottom-0;
 }
 
 .grid-section {
-  @apply bg-main;
-
-  &.top {
-    grid-area: top;
-  }
-  &.main {
-    grid-area: main;
-  }
-  &.next {
-    grid-area: next;
-  }
-  &.note {
-    grid-area: note;
-  }
-  &.bottom {
-    grid-area: bottom;
-  }
+  --uno: bg-main;
 }
 
+.grid-section.top {
+  grid-area: top;
+}
+.grid-section.main {
+  grid-area: main;
+}
+.grid-section.next {
+  grid-area: next;
+}
+.grid-section.note {
+  grid-area: note;
+}
+.grid-section.bottom {
+  grid-area: bottom;
+}
 .context {
-  @apply absolute top-0 left-0 px-1 text-xs bg-gray-400 bg-opacity-50 opacity-75 rounded-br-md;
+  position: absolute;
+  top: 0;
+  left: 0;
+  --uno: px-1 text-xs bg-gray-400 bg-opacity-50 opacity-75 rounded-br-md;
 }
 </style>

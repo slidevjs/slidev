@@ -51,9 +51,15 @@ const props = defineProps({
   grid-template-rows: repeat(2, 1fr);
 }
 
-.col-header { grid-area: 1 / 1 / 2 / 3; }
-.col-left { grid-area: 2 / 1 / 3 / 2; }
-.col-right { grid-area: 2 / 2 / 3 / 3; }
+.col-header {
+  grid-area: 1 / 1 / 2 / 3;
+}
+.col-left {
+  grid-area: 2 / 1 / 3 / 2;
+}
+.col-right {
+  grid-area: 2 / 2 / 3 / 3;
+}
 .col-bottom {
   align-self: end;
   grid-area: 3 / 1 / 3 / 3;

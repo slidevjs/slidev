@@ -131,10 +131,8 @@ function setBrushColor(color: typeof brush.color) {
   </Draggable>
 </template>
 
-<style lang="postcss">
-.v-popper--theme-menu {
-  .v-popper__arrow-inner {
-    @apply border-main;
-  }
+<style>
+.v-popper--theme-menu .v-popper__arrow-inner {
+  --uno: border-main;
 }
 </style>

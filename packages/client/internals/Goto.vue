@@ -165,10 +165,11 @@ watch(activeElement, () => {
   </div>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
 .autocomplete-list {
-  @apply bg-main transform mt-1 overflow-auto;
-  max-height: calc( 100vh - 100px );
+  --uno: bg-main mt-1;
+  overflow: auto;
+  max-height: calc(100vh - 100px);
 }
 
 .autocomplete {

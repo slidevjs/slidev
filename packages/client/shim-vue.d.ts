@@ -1,6 +1,5 @@
 declare module 'vue' {
   import type { UnwrapNestedRefs } from 'vue'
-  import { computed } from 'vue'
   import type { SlidevContext } from './modules/context'
 
   interface ComponentCustomProperties {

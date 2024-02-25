@@ -59,7 +59,9 @@ html:not(.dark) .shiki span {
 .slidev-code-line-numbers .slidev-code code .line::before {
   content: counter(step);
   counter-increment: step;
-  @apply w-4 mr-6 inline-block text-right text-gray-400 dark:text-gray-600;
+  display: inline-block;
+  text-align: right;
+  --uno: w-4 mr-6 text-gray-400 dark:text-gray-600;
 }
 
 /* Inline Code */
@@ -67,7 +69,7 @@ html:not(.dark) .shiki span {
   font-size: 0.9em;
   background: var(--slidev-code-background);
   border-radius: var(--slidev-code-radius);
-  @apply font-light py-0.5 px-1.5;
+  --uno: font-light py-0.5 px-1.5;
 }
 
 .slidev-layout :not(pre) > code:before {
@@ -82,4 +84,6 @@ html:not(.dark) .shiki span {
 }
 
 /* CodeMirror */
-.CodeMirror pre.CodeMirror-placeholder { opacity: 0.4; }
+.CodeMirror pre.CodeMirror-placeholder {
+  opacity: 0.4;
+}
