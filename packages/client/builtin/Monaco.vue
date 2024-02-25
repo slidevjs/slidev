@@ -149,7 +149,7 @@ onMounted(async () => {
 </template>
 
 <style>
-div[widgetid="messageoverlay"] {
+div[widgetid='messageoverlay'] {
   transform: translateY(calc(100% * (var(--slidev-slide-scale) - 1)));
 }
 
