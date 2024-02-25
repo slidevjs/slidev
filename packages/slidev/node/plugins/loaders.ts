@@ -647,33 +647,38 @@ defineProps<{ no: number | string }>()`)
       const url = `${toAtFS(resolve(typesRoot, file))}?raw`
       result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
     }
+
     // Dependencies
+    const deps = data.config.monacoTypesAdditionalDeps
     if (data.config.monacoTypesSource === 'local') {
-      // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
-      /** Converts some of the known global imports to node so that we grab the right info */
-      function mapModuleNameToModule(moduleSpecifier: string) {
-        if (moduleSpecifier.startsWith('node:'))
-          return 'node'
-        if (builtinModules.includes(moduleSpecifier))
-          return 'node'
-        const mainPackageName = moduleSpecifier.split('/')[0]
-        if (builtinModules.includes(mainPackageName) && !mainPackageName.startsWith('@'))
-          return 'node'
-
-        // strip module filepath e.g. lodash/identity => lodash
-        const [a = '', b = ''] = moduleSpecifier.split('/')
-        const moduleName = a.startsWith('@') ? `${a}/${b}` : a
-
-        return moduleName
-      }
-
-      for (const specifier of scanMonacoModules(data.slides.map(s => s.source.raw).join())) {
-        if (specifier[0] === '.')
-          continue
-        const moduleName = mapModuleNameToModule(specifier)
-        result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve/${moduleName}`)})\n`
-      }
+      deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
     }
+
+    // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
+    /** Converts some of the known global imports to node so that we grab the right info */
+    function mapModuleNameToModule(moduleSpecifier: string) {
+      if (moduleSpecifier.startsWith('node:'))
+        return 'node'
+      if (builtinModules.includes(moduleSpecifier))
+        return 'node'
+      const mainPackageName = moduleSpecifier.split('/')[0]
+      if (builtinModules.includes(mainPackageName) && !mainPackageName.startsWith('@'))
+        return 'node'
+
+      // strip module filepath e.g. lodash/identity => lodash
+      const [a = '', b = ''] = moduleSpecifier.split('/')
+      const moduleName = a.startsWith('@') ? `${a}/${b}` : a
+
+      return moduleName
+    }
+
+    for (const specifier of deps) {
+      if (specifier[0] === '.')
+        continue
+      const moduleName = mapModuleNameToModule(specifier)
+      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve/${moduleName}`)})\n`
+    }
+
     return result
   }
 
