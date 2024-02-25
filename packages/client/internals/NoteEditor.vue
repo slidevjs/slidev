@@ -20,6 +20,9 @@ const props = defineProps({
   placeholder: {
     default: 'No notes for this slide',
   },
+  clicks: {
+    type: [Number, String],
+  },
   autoHeight: {
     default: false,
   },
@@ -100,6 +103,7 @@ watch(
     :style="props.style"
     :note="note || placeholder"
     :note-html="info?.noteHTML"
+    :clicks="props.clicks"
   />
   <textarea
     v-else

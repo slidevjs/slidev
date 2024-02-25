@@ -63,7 +63,40 @@ html {
   width: 100%;
 }
 
+/* Note Clicks */
+
+.slidev-note-with-clicks .slidev-note-fade {
+  color: #888888ab;
+}
+
+.slidev-note-click-mark {
+  font-size: 0.8em;
+  --uno: text-violet bg-violet:10 mx1 px1 font-mono rounded flex flex-inline items-center align-middle;
+}
+
+.slidev-note-click-mark::before {
+  content: '';
+  display: inline-block;
+  --un-icon: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 32 32' width='1.2em' height='1.2em' xmlns='http://www.w3.org/2000/svg' %3E%3Cpath fill='currentColor' d='M23 28a1 1 0 0 1-.71-.29l-6.13-6.14l-3.33 5a1 1 0 0 1-1 .44a1 1 0 0 1-.81-.7l-6-20A1 1 0 0 1 6.29 5l20 6a1 1 0 0 1 .7.81a1 1 0 0 1-.44 1l-5 3.33l6.14 6.13a1 1 0 0 1 0 1.42l-4 4A1 1 0 0 1 23 28m0-2.41L25.59 23l-7.16-7.15l5.25-3.5L7.49 7.49l4.86 16.19l3.5-5.25Z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--un-icon) no-repeat;
+  mask: var(--un-icon) no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  background-color: currentColor;
+  color: inherit;
+  width: 1.2em;
+  height: 1.2em;
+  opacity: 0.8;
+}
+
+.slidev-note-click-mark::after {
+  content: attr(data-clicks);
+  display: inline-block;
+  transform: translateY(0.1em);
+}
+
 /* Transform the position back for Rough Notation (v-mark) */
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
 }
+

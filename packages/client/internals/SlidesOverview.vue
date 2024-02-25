@@ -7,6 +7,7 @@ import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
+import { CLICKS_MAX } from '../constants'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
@@ -139,7 +140,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="useFixedClicks(route, 99999)[1]"
+                :clicks-context="useFixedClicks(route, CLICKS_MAX)[1]"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"

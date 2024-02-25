@@ -7,6 +7,7 @@ import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
+import { CLICKS_MAX } from '../constants'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
 
@@ -39,7 +40,7 @@ export const queryClicks = computed({
   get() {
     // eslint-disable-next-line ts/no-use-before-define
     if (clicksContext.value.disabled)
-      return 99999
+      return CLICKS_MAX
     let v = +(queryClicksRaw.value || 0)
     if (Number.isNaN(v))
       v = 0

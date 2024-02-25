@@ -166,6 +166,18 @@ doubled.value = 2
 }
 </style>
 
+<!--
+Notes can also sync with clicks [click]
+
+This will be highlighted after the first click [click]
+
+Highlighted with `count = ref(0)` [click]
+
+[click:2]
+
+Last click (skip two clicks)
+-->
+
 ---
 
 # Components

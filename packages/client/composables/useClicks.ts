@@ -5,6 +5,7 @@ import { ref, shallowReactive } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
+import { CLICKS_MAX } from '../constants'
 
 /**
  * @internal
@@ -65,14 +66,14 @@ export function useClicksContextBase(getCurrent: () => number, clicksOverrides?:
 export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
-  const thisPath = +(route?.path ?? 99999)
+  const thisPath = +(route?.path ?? CLICKS_MAX)
   const context = useClicksContextBase(
     () => {
-      const currentPath = +(currentRoute.value?.path ?? 99999)
+      const currentPath = +(currentRoute.value?.path ?? CLICKS_MAX)
       if (currentPath === thisPath)
         return queryClicks.value
       else if (currentPath > thisPath)
-        return 99999
+        return CLICKS_MAX
       else
         return 0
     },

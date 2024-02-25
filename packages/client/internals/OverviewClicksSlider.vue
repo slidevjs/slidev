@@ -2,6 +2,7 @@
 import type { ClicksContext } from '@slidev/types'
 import type { Ref } from 'vue'
 import { computed } from 'vue'
+import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
   clickContext: [Ref<number>, ClicksContext]
@@ -38,7 +39,7 @@ function onMousedown() {
     </div>
     <div
       relative flex-auto h5 flex="~"
-      @dblclick="current = 999999"
+      @dblclick="current = CLICKS_MAX"
     >
       <div
         v-for="i of range" :key="i"
