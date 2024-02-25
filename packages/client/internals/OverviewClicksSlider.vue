@@ -44,19 +44,42 @@ const range = computed(() => Array.from({ length: total.value + 1 }, (_, i) => i
         ]"
         :style="{ width: `${1 / total * 100}%` }"
       >
-        <div absolute inset-0 z--1 :class=" i <= current ? 'bg-primary' : ''" />
+        <div absolute inset-0 z--1 :class=" i <= current ? 'bg-primary op20' : ''" />
         <div
           :class="[
-            +i === +current ? 'text-white font-bold op100' : 'op30',
+            +i === +current ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',
             i === 0 ? 'rounded-l' : '',
-            i === total ? 'rounded-r' : 'border-r border-main',
+            i === total ? 'rounded-r' : 'border-r-2',
           ]"
           w-full h-full text-xs flex items-center justify-center
         >
           {{ i }}
         </div>
       </div>
-      <input v-model="current" absolute inset-0 type="range" :min="0" :max="total" :step="1" z-10 op0>
+      <input
+        v-model="current"
+        class="range" absolute inset-0
+        type="range" :min="0" :max="total" :step="1" z-10 op0
+        :style="{ '--thumb-width': `${1 / (total + 1) * 100}%` }"
+      >
     </div>
   </div>
 </template>
+
+<style scoped>
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 100%;
+  width: var(--thumb-width, 0.5rem);
+}
+
+.range::-moz-range-thumb {
+  height: 100%;
+  width: var(--thumb-width, 0.5rem);
+}
+</style>
