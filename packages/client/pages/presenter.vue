@@ -121,7 +121,7 @@ onMounted(() => {
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="nextFrame[0].component as any"
+            :is="(nextFrame[0].component as any)"
             :key="nextFrame[0].path"
             :clicks-context="nextFrameClicksCtx"
             :class="getSlideClass(nextFrame[0])"
@@ -144,7 +144,7 @@ onMounted(() => {
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :editing="notesEditing"
-          :clicks="clicksContext.current"
+          :clicks-context="clicksContext"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <NoteStatic
@@ -153,7 +153,7 @@ onMounted(() => {
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
-          :clicks="clicksContext.current"
+          :clicks-context="clicksContext"
         />
         <div class="border-t border-main py-1 px-2 text-sm">
           <IconButton title="Increase font size" @click="increasePresenterFontSize">

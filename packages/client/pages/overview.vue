@@ -181,7 +181,7 @@ onMounted(() => {
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
           :editing="edittingNote === idx"
-          :clicks="getClicksContext(route).current"
+          :clicks-context="getClicksContext(route)"
           @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
         />

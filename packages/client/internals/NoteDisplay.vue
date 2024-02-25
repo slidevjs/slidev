@@ -16,14 +16,18 @@ defineEmits(['click'])
 const withClicks = computed(() => props.clicksContext?.current != null && props.noteHtml?.includes('slidev-note-click-mark'))
 const noteDisplay = ref<HTMLElement | null>(null)
 
+const CLASS_FADE = 'slidev-note-fade'
+const CLASS_MARKER = 'slidev-note-click-mark'
+
 function highlightNote() {
   if (!noteDisplay.value || !withClicks.value || props.clicksContext?.current == null)
     return
 
-  const disabled = +props.clicksContext?.current < 0 || +props.clicksContext?.current >= CLICKS_MAX
+  const current = +props.clicksContext?.current ?? CLICKS_MAX
+  const disabled = current < 0 || current >= CLICKS_MAX
   if (disabled) {
     Array.from(noteDisplay.value.querySelectorAll('*'))
-      .forEach(el => el.classList.remove('slidev-note-fade'))
+      .forEach(el => el.classList.remove(CLASS_FADE))
     return
   }
 
@@ -36,10 +40,14 @@ function highlightNote() {
       ignoreParent(node.parentElement)
   }
 
-  const markers = Array.from(noteDisplay.value.querySelectorAll('.slidev-note-click-mark'))
+  const markers = Array.from(noteDisplay.value.querySelectorAll(`.${CLASS_MARKER}`)) as HTMLElement[]
+  const markersMap = new Map<number, HTMLElement>()
+
   // Convert all sibling text nodes to spans, so we attach classes to them
   for (const marker of markers) {
     const parent = marker.parentElement!
+    const clicks = Number(marker.dataset!.clicks)
+    markersMap.set(clicks, marker)
     // Ignore the parents of the marker, so the class only applies to the children
     ignoreParent(parent)
     Array.from(parent!.childNodes)
@@ -56,24 +64,38 @@ function highlightNote() {
 
   let count = 0
 
-  const groups = new Map<number, Element[]>()
-
+  // Segmenting notes by clicks
+  const segments = new Map<number, Element[]>()
   for (const child of children) {
-    if (!groups.has(count))
-      groups.set(count, [])
-
-    groups.get(count)!.push(child)
-    if (child.classList.contains('slidev-note-click-mark'))
+    if (!segments.has(count))
+      segments.set(count, [])
+    segments.get(count)!.push(child)
+    // Update count when reach marker
+    if (child.classList.contains(CLASS_MARKER))
       count = Number((child as HTMLElement).dataset.clicks) || (count + 1)
   }
 
-  for (const [count, els] of groups) {
+  // Apply
+  for (const [count, els] of segments) {
     els.forEach(el => el.classList.toggle(
-      'slidev-note-fade',
+      CLASS_FADE,
       nodeToIgnores.has(el)
         ? false
-        : +count !== +props.clicksContext!.current!,
+        : count !== current,
     ))
+  }
+
+  for (const [clicks, marker] of markersMap) {
+    marker.classList.remove(CLASS_FADE)
+    marker.classList.toggle(`${CLASS_MARKER}-past`, clicks < current)
+    marker.classList.toggle(`${CLASS_MARKER}-active`, clicks === current)
+    marker.classList.toggle(`${CLASS_MARKER}-next`, clicks === current + 1)
+    marker.classList.toggle(`${CLASS_MARKER}-future`, clicks > current + 1)
+    marker.addEventListener('dblclick', (e) => {
+      props.clicksContext!.current = clicks
+      e.stopPropagation()
+      e.stopImmediatePropagation()
+    })
   }
 }
 
