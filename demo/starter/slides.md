@@ -44,13 +44,48 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 ---
 
+# Shiki Magic Move
+
 ````md magic-move
 ```ts
-// This is a code block
-console.log('Hello, Slidev!')
+const author = reactive({
+  name: 'John Doe',
+  books: [
+    'Vue 2 - Advanced Guide',
+    'Vue 3 - Basic Guide',
+    'Vue 4 - The Mystery'
+  ]
+})
 ```
 ```ts
-let message = 'Hello, Slidev!'
+export default {
+  data() {
+    return {
+      author: {
+        name: 'John Doe',
+        books: [
+          'Vue 2 - Advanced Guide',
+          'Vue 3 - Basic Guide',
+          'Vue 4 - The Mystery'
+        ]
+      }
+    }
+  }
+}
+```
+```ts
+export default {
+  data: () => ({
+    author: {
+      name: 'John Doe',
+      books: [
+        'Vue 2 - Advanced Guide',
+        'Vue 3 - Basic Guide',
+        'Vue 4 - The Mystery'
+      ]
+    }
+  })
+}
 ```
 ````
 

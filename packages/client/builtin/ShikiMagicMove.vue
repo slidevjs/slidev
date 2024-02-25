@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ShikiMagicMoveCompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/core'
-import 'shiki-magic-move/vue/style.css'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
+
+import 'shiki-magic-move/vue/style.css'
 
 const props = defineProps<{
   steps: KeyedTokensInfo[]
   at?: string | number
 }>()
 
-const { $clicksContext: clicks } = useSlideContext()
+const { $clicksContext: clicks, $scale: scale } = useSlideContext()
 const id = makeId()
 const index = ref(0)
 
@@ -37,7 +38,11 @@ onMounted(() => {
 
 <template>
   <div class="slidev-code-wrapper slidev-code-magic-move">
-    {{ index }}
-    <ShikiMagicMoveCompiled class="slidev-code relative" :steps="steps" :step="index" />
+    <ShikiMagicMoveCompiled
+      class="slidev-code relative"
+      :steps="steps"
+      :step="index"
+      :global-scale="scale"
+    />
   </div>
 </template>
