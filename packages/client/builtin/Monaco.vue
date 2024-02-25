@@ -144,7 +144,7 @@ onMounted(async () => {
 
 <template>
   <div ref="outer" class="slidev-monaco-container" :style="{ height }">
-    <div ref="container" class="absolute inset-0" />
+    <div ref="container" class="absolute inset-0.5" />
   </div>
 </template>
 
@@ -155,9 +155,10 @@ div[widgetid="messageoverlay"] {
 
 .slidev-monaco-container {
   position: relative;
-  padding: var(--slidev-code-padding) !important;
-  line-height: var(--slidev-code-line-height) !important;
-  border-radius: var(--slidev-code-radius) !important;
+  margin: var(--slidev-code-margin);
+  padding: var(--slidev-code-padding);
+  line-height: var(--slidev-code-line-height);
+  border-radius: var(--slidev-code-radius);
   background: var(--slidev-code-background);
 }
 
