@@ -70,9 +70,9 @@ html {
 }
 
 .slidev-note-click-mark {
-  font-size: 0.8em;
-  --uno: text-violet bg-violet/10 mx1 px1 font-mono rounded flex flex-inline
-    items-center align-middle;
+  font-size: 0.7em;
+  display: inline-flex;
+  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center;
 }
 
 .slidev-note-click-mark::before {

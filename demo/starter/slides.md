@@ -167,15 +167,13 @@ doubled.value = 2
 </style>
 
 <!--
-Notes can also sync with clicks [click]
+Notes can also sync with clicks
 
-This will be highlighted after the first click [click]
+[click] This will be highlighted after the first click
 
-Highlighted with `count = ref(0)` [click]
+[click] Highlighted with `count = ref(0)`
 
-[click:2]
-
-Last click (skip two clicks)
+[click:3] Last click (skip two clicks)
 -->
 
 ---

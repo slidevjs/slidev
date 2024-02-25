@@ -19,13 +19,39 @@ function highlightNote() {
   if (!noteDisplay.value || !withClicks.value || props.clicks == null)
     return
 
-  const children = Array.from(noteDisplay.value.querySelectorAll('*'))
-
   const disabled = +props.clicks < 0 || +props.clicks >= CLICKS_MAX
   if (disabled) {
-    children.forEach(el => el.classList.remove('slidev-note-fade'))
+    Array.from(noteDisplay.value.querySelectorAll('*'))
+      .forEach(el => el.classList.remove('slidev-note-fade'))
     return
   }
+
+  const nodeToIgnores = new Set<Element>()
+  function ignoreParent(node: Element) {
+    if (!node || node === noteDisplay.value)
+      return
+    nodeToIgnores.add(node)
+    if (node.parentElement)
+      ignoreParent(node.parentElement)
+  }
+
+  const markers = Array.from(noteDisplay.value.querySelectorAll('.slidev-note-click-mark'))
+  // Convert all sibling text nodes to spans, so we attach classes to them
+  for (const marker of markers) {
+    const parent = marker.parentElement!
+    // Ignore the parents of the marker, so the class only applies to the children
+    ignoreParent(parent)
+    Array.from(parent!.childNodes)
+      .forEach((node) => {
+        if (node.nodeType === 3) { // text node
+          const span = document.createElement('span')
+          span.textContent = node.textContent
+          parent.insertBefore(span, node)
+          node.remove()
+        }
+      })
+  }
+  const children = Array.from(noteDisplay.value.querySelectorAll('*'))
 
   let count = 0
 
@@ -40,8 +66,14 @@ function highlightNote() {
       count = Number((child as HTMLElement).dataset.clicks) || (count + 1)
   }
 
-  for (const [count, els] of groups)
-    els.forEach(el => el.classList.toggle('slidev-note-fade', +count !== +props.clicks!))
+  for (const [count, els] of groups) {
+    els.forEach(el => el.classList.toggle(
+      'slidev-note-fade',
+      nodeToIgnores.has(el)
+        ? false
+        : +count !== +props.clicks!,
+    ))
+  }
 }
 
 watch(
