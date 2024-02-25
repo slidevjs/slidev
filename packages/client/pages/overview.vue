@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext } from 'packages/types'
 import { themeVars } from '../env'
 import { rawRoutes } from '../logic/nav'
-import { useClicksContextBase } from '../composables/useClicks'
+import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
@@ -13,6 +14,7 @@ import SlideWrapper from '../internals/SlideWrapper'
 import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
 import NoteEditor from '../internals/NoteEditor.vue'
+import OverviewClicksSlider from '../internals/OverviewClicksSlider.vue'
 
 const cardWidth = 450
 
@@ -27,16 +29,16 @@ const wordCounts = computed(() => rawRoutes.map(route => wordCount(route.meta?.s
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => rawRoutes.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
-const clicksContextMap = new WeakMap<RouteRecordRaw, ClicksContext>()
+const clicksContextMap = new WeakMap<RouteRecordRaw, [Ref<number>, ClicksContext]>()
 function getClickContext(route: RouteRecordRaw) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
-    clicksContextMap.set(route, useClicksContextBase(() => 999999, route?.meta?.clicks))
+    clicksContextMap.set(route, useFixedClicks(route, 9999))
   return clicksContextMap.get(route)!
 }
 
 function getSlideClicks(route: RouteRecordRaw) {
-  return route.meta?.clicks || getClickContext(route)?.total
+  return route.meta?.clicks || getClickContext(route)?.[1]?.total
 }
 
 function wordCount(str: string) {
@@ -133,36 +135,36 @@ onMounted(() => {
           <div class="text-3xl op20 mb2">
             {{ idx + 1 }}
           </div>
-          <div
-            v-if="getSlideClicks(route)"
-            class="flex gap-0.5 op50 items-center justify-end"
-            :title="`Clicks in this slide: ${getSlideClicks(route)}`"
-          >
-            <carbon:cursor-1 text-sm />
-            {{ getSlideClicks(route) }}
-          </div>
         </div>
-        <div
-          class="border rounded border-main overflow-hidden bg-main my5 select-none h-max"
-          :style="themeVars"
-          @dblclick="openSlideInNewTab(route.path)"
-        >
-          <SlideContainer
-            :key="route.path"
-            :width="cardWidth"
-            :clicks-disabled="true"
-            class="pointer-events-none important:[&_*]:select-none"
+        <div class="flex flex-col gap-2 my5">
+          <div
+            class="border rounded border-main overflow-hidden bg-main select-none h-max"
+            :style="themeVars"
+            @dblclick="openSlideInNewTab(route.path)"
           >
-            <SlideWrapper
-              :is="route.component"
-              v-if="route?.component"
-              :clicks-context="getClickContext(route)"
-              :class="getSlideClass(route)"
-              :route="route"
-              render-context="overview"
-            />
-            <DrawingPreview :page="+route.path" />
-          </SlideContainer>
+            <SlideContainer
+              :key="route.path"
+              :width="cardWidth"
+              :clicks-disabled="true"
+              class="pointer-events-none important:[&_*]:select-none"
+            >
+              <SlideWrapper
+                :is="route.component"
+                v-if="route?.component"
+                :clicks-context="getClickContext(route)[1]"
+                :class="getSlideClass(route)"
+                :route="route"
+                render-context="overview"
+              />
+              <DrawingPreview :page="+route.path" />
+            </SlideContainer>
+          </div>
+          <OverviewClicksSlider
+            v-if="getSlideClicks(route)"
+            mt-2
+            :click-context="getClickContext(route)"
+            class="w-full"
+          />
         </div>
         <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
           <IconButton
