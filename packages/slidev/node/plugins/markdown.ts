@@ -3,6 +3,7 @@ import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
+import { hash as getHash } from 'ohash'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -215,9 +216,12 @@ export function transformMagicMove(
   shiki: Highlighter | undefined,
   shikiOptions: MarkdownItShikiOptions | undefined,
 ) {
-  return md.replace(
+  const scripts: string[] = []
+
+  let count = 0
+  md = md.replace(
     reMagicMoveBlock,
-    (full, options = '', attrs = '', body: string) => {
+    (full, _options = '', _attrs = '', body: string) => {
       if (!shiki || !shikiOptions)
         throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
 
@@ -238,14 +242,15 @@ export function transformMagicMove(
       )
 
       const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
-
-      return `<script setup>
-const __magicMoveSteps = Object.freeze(${JSON.stringify(steps)})
-</script>
-
-<ShikiMagicMove :steps='__magicMoveSteps' />`
+      const id = `__magicMoveSteps_${getHash(body)}_${count++}`
+      scripts.push(`const ${id} = Object.freeze(${JSON.stringify(steps)})`)
+      return `<ShikiMagicMove :steps='${id}' />`
     },
   )
+
+  if (scripts.length)
+    md = `<script setup>\n${scripts.join('\n')}</script>\n\n${md}`
+  return md
 }
 
 /**
