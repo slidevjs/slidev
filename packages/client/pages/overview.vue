@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext } from 'packages/types'
-import { themeVars } from '../env'
+import { configs, themeVars } from '../env'
 import { openInEditor, rawRoutes } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
@@ -18,8 +18,9 @@ import { CLICKS_MAX } from '../constants'
 
 const cardWidth = 450
 
+const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
-  title: 'List Overview',
+  title: `Overview - ${slideTitle}`,
 })
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())

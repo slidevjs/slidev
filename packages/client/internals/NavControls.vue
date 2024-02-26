@@ -114,13 +114,13 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
-          class="<md:hidden"
+          class="lt-md:hidden"
           @click="showEditor = !showEditor"
         >
           <carbon:text-annotation-toggle />
         </IconButton>
 
-        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" @click="togglePresenterLayout">
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial" @click="togglePresenterLayout">
           <carbon:template />
           {{ presenterLayout }}
         </IconButton>

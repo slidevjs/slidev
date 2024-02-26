@@ -177,6 +177,8 @@ Notes can also sync with clicks
 -->
 
 ---
+level: 2
+---
 
 # Shiki Magic Move
 

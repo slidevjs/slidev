@@ -69,7 +69,9 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   const thisPath = +(route?.path ?? CLICKS_MAX)
   const current = computed({
     get() {
-      const currentPath = +(currentRoute.value?.path ?? CLICKS_MAX)
+      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
+      if (!currentPath || Number.isNaN(currentPath))
+        return 0
       if (currentPath === thisPath)
         return queryClicks.value
       else if (currentPath > thisPath)
@@ -78,7 +80,7 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
         return 0
     },
     set(v) {
-      const currentPath = +(currentRoute.value?.path ?? CLICKS_MAX)
+      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
       if (currentPath === thisPath)
         queryClicks.value = v
     },

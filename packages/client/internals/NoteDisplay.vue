@@ -129,7 +129,7 @@ onMounted(() => {
   />
   <div
     v-else-if="note"
-    class="prose overflow-auto outline-none"
+    class="prose overflow-auto outline-none slidev-note"
     :class="props.class"
     @click="$emit('click')"
   >
@@ -137,10 +137,16 @@ onMounted(() => {
   </div>
   <div
     v-else
-    class="prose overflow-auto outline-none opacity-50 italic select-none"
+    class="prose overflow-auto outline-none opacity-50 italic select-none slidev-note"
     :class="props.class"
     @click="$emit('click')"
   >
     <p v-text="props.placeholder || 'No notes.'" />
   </div>
 </template>
+
+<style>
+.slidev-note :first-child {
+  margin-top: 0;
+}
+</style>

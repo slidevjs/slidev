@@ -83,9 +83,7 @@ function calculateHeight() {
 }
 
 const inputHeight = ref<number | null>()
-watchEffect(() => {
-  calculateHeight()
-})
+
 watch(
   note,
   () => {
@@ -93,14 +91,14 @@ watch(
       calculateHeight()
     })
   },
-  { flush: 'post' },
+  { flush: 'post', immediate: true },
 )
 </script>
 
 <template>
   <NoteDisplay
     v-if="!editing"
-    class="my--4 border-transparent border-2"
+    class="border-transparent border-2"
     :class="[props.class, note ? '' : 'opacity-25 italic select-none']"
     :style="props.style"
     :note="note || placeholder"
@@ -117,7 +115,6 @@ watch(
     :style="[props.style, inputHeight != null ? { height: `${inputHeight}px` } : {}]"
     :class="props.class"
     :placeholder="placeholder"
-    @keydown.esc=" editing = false"
-    @focus="editing = true"
+    @keydown.esc="editing = false"
   />
 </template>
