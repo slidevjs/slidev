@@ -30,9 +30,12 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:editing',
-])
+const emit = defineEmits<{
+  (type: 'update:editing', value: boolean): void
+  (type: 'markerDblclick', e: MouseEvent, clicks: number): void
+  (type: 'markerClick', e: MouseEvent, clicks: number): void
+}>()
+
 const editing = useVModel(props, 'editing', emit, { passive: true })
 
 const { info, update } = useDynamicSlideInfo(props.no)
@@ -40,9 +43,12 @@ const { info, update } = useDynamicSlideInfo(props.no)
 const note = ref('')
 let timer: any
 
+// Send back the note on changes
 const { ignoreUpdates } = ignorableWatch(
   note,
   (v) => {
+    if (!editing.value)
+      return
     const id = props.no
     clearTimeout(timer)
     timer = setTimeout(() => {
@@ -51,46 +57,44 @@ const { ignoreUpdates } = ignorableWatch(
   },
 )
 
+// Update note value when info changes
 watch(
-  info,
-  (v) => {
+  () => info.value?.note,
+  (value = '') => {
     if (editing.value)
       return
     clearTimeout(timer)
     ignoreUpdates(() => {
-      note.value = v?.note || ''
+      note.value = value
     })
   },
   { immediate: true, flush: 'sync' },
 )
 
-const input = ref<HTMLTextAreaElement>()
+const inputEl = ref<HTMLTextAreaElement>()
+const inputHeight = ref<number | null>()
 
 watchEffect(() => {
   if (editing.value)
-    input.value?.focus()
+    inputEl.value?.focus()
 })
 
-onClickOutside(input, () => {
+onClickOutside(inputEl, () => {
   editing.value = false
 })
 
-function calculateHeight() {
-  if (!props.autoHeight || !input.value || !editing.value)
+function calculateEditorHeight() {
+  if (!props.autoHeight || !inputEl.value || !editing.value)
     return
-  if (input.value.scrollHeight > input.value.clientHeight)
-    input.value.style.height = `${input.value.scrollHeight}px`
+  if (inputEl.value.scrollHeight > inputEl.value.clientHeight)
+    inputEl.value.style.height = `${inputEl.value.scrollHeight}px`
 }
-
-const inputHeight = ref<number | null>()
 
 watch(
   note,
-  () => {
-    nextTick(() => {
-      calculateHeight()
-    })
-  },
+  () => nextTick(() => {
+    calculateEditorHeight()
+  }),
   { flush: 'post', immediate: true },
 )
 </script>
@@ -105,10 +109,12 @@ watch(
     :note-html="info?.noteHTML"
     :clicks-context="clicksContext"
     :auto-scroll="!autoHeight"
+    @marker-click="(e, clicks) => emit('markerClick', e, clicks)"
+    @marker-dblclick="(e, clicks) => emit('markerDblclick', e, clicks)"
   />
   <textarea
     v-else
-    ref="input"
+    ref="inputEl"
     v-model="note"
     class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
     style="line-height: 1.75;"

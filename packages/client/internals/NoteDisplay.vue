@@ -12,7 +12,10 @@ const props = defineProps<{
   autoScroll?: boolean
 }>()
 
-defineEmits(['click'])
+const emit = defineEmits<{
+  (type: 'markerDblclick', e: MouseEvent, clicks: number): void
+  (type: 'markerClick', e: MouseEvent, clicks: number): void
+}>()
 
 const withClicks = computed(() => props.clicksContext?.current != null && props.noteHtml?.includes('slidev-note-click-mark'))
 const noteDisplay = ref<HTMLElement | null>(null)
@@ -21,16 +24,13 @@ const CLASS_FADE = 'slidev-note-fade'
 const CLASS_MARKER = 'slidev-note-click-mark'
 
 function highlightNote() {
-  if (!noteDisplay.value || !withClicks.value || props.clicksContext?.current == null)
+  if (!noteDisplay.value || !withClicks.value)
     return
 
-  const current = +props.clicksContext?.current ?? CLICKS_MAX
+  const markers = Array.from(noteDisplay.value.querySelectorAll(`.${CLASS_MARKER}`)) as HTMLElement[]
+
+  const current = +(props.clicksContext?.current ?? CLICKS_MAX)
   const disabled = current < 0 || current >= CLICKS_MAX
-  if (disabled) {
-    Array.from(noteDisplay.value.querySelectorAll('*'))
-      .forEach(el => el.classList.remove(CLASS_FADE))
-    return
-  }
 
   const nodeToIgnores = new Set<Element>()
   function ignoreParent(node: Element) {
@@ -41,7 +41,6 @@ function highlightNote() {
       ignoreParent(node.parentElement)
   }
 
-  const markers = Array.from(noteDisplay.value.querySelectorAll(`.${CLASS_MARKER}`)) as HTMLElement[]
   const markersMap = new Map<number, HTMLElement>()
 
   // Convert all sibling text nodes to spans, so we attach classes to them
@@ -78,25 +77,36 @@ function highlightNote() {
 
   // Apply
   for (const [count, els] of segments) {
-    els.forEach(el => el.classList.toggle(
-      CLASS_FADE,
-      nodeToIgnores.has(el)
-        ? false
-        : count !== current,
-    ))
+    if (disabled) {
+      els.forEach(el => el.classList.remove(CLASS_FADE))
+    }
+    else {
+      els.forEach(el => el.classList.toggle(
+        CLASS_FADE,
+        nodeToIgnores.has(el)
+          ? false
+          : count !== current,
+      ))
+    }
   }
 
   for (const [clicks, marker] of markersMap) {
     marker.classList.remove(CLASS_FADE)
-    marker.classList.toggle(`${CLASS_MARKER}-past`, clicks < current)
-    marker.classList.toggle(`${CLASS_MARKER}-active`, clicks === current)
-    marker.classList.toggle(`${CLASS_MARKER}-next`, clicks === current + 1)
-    marker.classList.toggle(`${CLASS_MARKER}-future`, clicks > current + 1)
-    marker.addEventListener('dblclick', (e) => {
+    marker.classList.toggle(`${CLASS_MARKER}-past`, disabled ? false : clicks < current)
+    marker.classList.toggle(`${CLASS_MARKER}-active`, disabled ? false : clicks === current)
+    marker.classList.toggle(`${CLASS_MARKER}-next`, disabled ? false : clicks === current + 1)
+    marker.classList.toggle(`${CLASS_MARKER}-future`, disabled ? false : clicks > current + 1)
+    marker.ondblclick = (e) => {
+      emit('markerDblclick', e, clicks)
+      if (e.defaultPrevented)
+        return
       props.clicksContext!.current = clicks
       e.stopPropagation()
       e.stopImmediatePropagation()
-    })
+    }
+    marker.onclick = (e) => {
+      emit('markerClick', e, clicks)
+    }
 
     if (props.autoScroll && clicks === current)
       marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -124,14 +134,12 @@ onMounted(() => {
     ref="noteDisplay"
     class="prose overflow-auto outline-none slidev-note"
     :class="[props.class, withClicks ? 'slidev-note-with-clicks' : '']"
-    @click="$emit('click')"
     v-html="noteHtml"
   />
   <div
     v-else-if="note"
     class="prose overflow-auto outline-none slidev-note"
     :class="props.class"
-    @click="$emit('click')"
   >
     <p v-text="note" />
   </div>
@@ -139,7 +147,6 @@ onMounted(() => {
     v-else
     class="prose overflow-auto outline-none opacity-50 italic select-none slidev-note"
     :class="props.class"
-    @click="$emit('click')"
   >
     <p v-text="props.placeholder || 'No notes.'" />
   </div>

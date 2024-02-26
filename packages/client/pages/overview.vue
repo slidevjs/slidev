@@ -12,7 +12,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper'
 import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
-import NoteEditor from '../internals/NoteEditor.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
 import OverviewClicksSlider from '../internals/OverviewClicksSlider.vue'
 import { CLICKS_MAX } from '../constants'
 
@@ -78,6 +78,15 @@ function scrollToSlide(idx: number) {
   const el = blocks.get(idx)
   if (el)
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onMarkerClick(e: MouseEvent, clicks: number, route: RouteRecordRaw) {
+  const ctx = getClicksContext(route)
+  if (ctx.current === clicks)
+    ctx.current = CLICKS_MAX
+  else
+    ctx.current = clicks
+  e.preventDefault()
 }
 
 onMounted(() => {
@@ -192,7 +201,7 @@ onMounted(() => {
             <carbon:pen />
           </IconButton>
         </div>
-        <NoteEditor
+        <NoteEditable
           :no="idx"
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
@@ -200,6 +209,7 @@ onMounted(() => {
           :clicks-context="getClicksContext(route)"
           @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
+          @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
         />
         <div
           v-if="wordCounts[idx] > 0"

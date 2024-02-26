@@ -15,7 +15,7 @@ import SlideWrapper from '../internals/SlideWrapper'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import QuickOverview from '../internals/QuickOverview.vue'
-import NoteEditor from '../internals/NoteEditor.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
 import Goto from '../internals/Goto.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
@@ -130,7 +130,7 @@ onMounted(() => {
         <SideEditor />
       </div>
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
-        <NoteEditor
+        <NoteEditable
           v-if="__DEV__"
           :key="`edit-${currentSlideId}`"
           v-model:editing="notesEditing"
