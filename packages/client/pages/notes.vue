@@ -52,6 +52,7 @@ function decreaseFontSize() {
         :note-html="currentRoute?.meta?.slide?.noteHTML"
         :placeholder="`No notes for Slide ${pageNo}.`"
         :clicks-context="currentRoute?.meta?.__clicksContext"
+        :auto-scroll="true"
       />
     </div>
     <div class="flex-none border-t border-main">

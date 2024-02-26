@@ -106,6 +106,7 @@ watch(
     :note="note || placeholder"
     :note-html="info?.noteHTML"
     :clicks-context="clicksContext"
+    :auto-scroll="!autoHeight"
   />
   <textarea
     v-else

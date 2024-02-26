@@ -9,6 +9,7 @@ const props = defineProps<{
   note?: string
   placeholder?: string
   clicksContext?: ClicksContext
+  autoScroll?: boolean
 }>()
 
 defineEmits(['click'])
@@ -97,7 +98,7 @@ function highlightNote() {
       e.stopImmediatePropagation()
     })
 
-    if (clicks === current)
+    if (props.autoScroll && clicks === current)
       marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 }
