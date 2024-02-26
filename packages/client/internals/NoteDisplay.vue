@@ -96,6 +96,9 @@ function highlightNote() {
       e.stopPropagation()
       e.stopImmediatePropagation()
     })
+
+    if (clicks === current)
+      marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 }
 
