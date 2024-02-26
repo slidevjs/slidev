@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { injectLocal } from '@vueuse/core'
 import { drauu, drawingEnabled, loadCanvas } from '../logic/drawings'
-import { injectionSlideScale } from '../constants'
+import { useSlideContext } from '../context'
 
-const scale = injectLocal(injectionSlideScale)!
+const scale = useSlideContext().$scale
 const svg = ref<SVGSVGElement>()
 
 onMounted(() => {
