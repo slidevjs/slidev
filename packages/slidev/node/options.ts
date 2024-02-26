@@ -82,7 +82,7 @@ export async function resolveOptions(
 ): Promise<ResolvedSlidevOptions> {
   const rootsInfo = await getRoots()
   const entry = await resolveEntry(options.entry || 'slides.md', rootsInfo)
-  const loaded = await parser.load(rootsInfo.userRoot, entry)
+  const loaded = await parser.load(rootsInfo.userRoot, entry, undefined, mode)
 
   // Load theme data first, because it may affect the config
   const themeRaw = options.theme || loaded.headmatter.theme as string || 'default'

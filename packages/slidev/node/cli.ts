@@ -38,7 +38,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'theme',
 ]
 
-injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
+injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
   const addons = headmatter?.addons as string[] ?? []
   const { clientRoot, userRoot } = await getRoots()
   const roots = uniq([
@@ -47,7 +47,7 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
     ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
+  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter, mode }, [], mergeArrays)
 })
 
 const cli = yargs(process.argv.slice(2))
@@ -144,7 +144,7 @@ cli.command(
         {
           async loadData() {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry)
+            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
