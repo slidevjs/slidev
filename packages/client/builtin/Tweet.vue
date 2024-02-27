@@ -22,7 +22,7 @@ const tweet = ref<HTMLElement | null>()
 const loaded = ref(false)
 const tweetNotFound = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   // @ts-expect-error global
   const element = await window.twttr.widgets.createTweet(
     props.id.toString(),
