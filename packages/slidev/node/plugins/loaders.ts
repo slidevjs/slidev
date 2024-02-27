@@ -15,11 +15,10 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
-import { scanMonacoModules } from '@slidev/parser'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
 import { resolveImportPath, toAtFS } from '../resolver'
-import { loadShikiSetups } from './markdown'
+import { loadShikiSetups, scanMonacoModules } from './markdown'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -655,6 +654,7 @@ defineProps<{ no: number | string }>()`)
       '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
       '}',
     ].join('\n')
+
     // User snippets
     for (const file of files) {
       const url = `${toAtFS(resolve(typesRoot, file))}?raw`
@@ -662,12 +662,12 @@ defineProps<{ no: number | string }>()`)
     }
 
     // Dependencies
-    const deps = data.config.monacoTypesAdditionalDeps
+    const deps = data.config.monacoTypesAdditionalPackages
     if (data.config.monacoTypesSource === 'local')
       deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
 
     // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
-    /** Converts some of the known global imports to node so that we grab the right info */
+    // Converts some of the known global imports to node so that we grab the right info
     function mapModuleNameToModule(moduleSpecifier: string) {
       if (moduleSpecifier.startsWith('node:'))
         return 'node'

@@ -18,7 +18,7 @@ title: Welcome to Slidev
 mdc: true
 monaco: true
 monacoTypesSource: local # or cdn or none
-monacoTypesAdditionalDeps:
+monacoTypesAdditionalPackages:
   - '@slidev/types'
 ---
 
