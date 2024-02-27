@@ -15,7 +15,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 import type * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
-import { lz } from '../utils'
+import lz from 'lz-string'
 import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{

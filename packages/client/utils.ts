@@ -1,8 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router'
-import * as _lz from 'lz-string'
-
-// @ts-expect-error compat
-export const lz: typeof _lz = _lz.default ?? ('compress' in _lz ? _lz : globalThis.LZString)
 
 export function getSlideClass(route?: RouteRecordRaw, extra = '') {
   const classes = ['slidev-page', extra]

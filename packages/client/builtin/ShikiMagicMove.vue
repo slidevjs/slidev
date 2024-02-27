@@ -2,7 +2,7 @@
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import { lz } from '../utils'
+import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
 
