@@ -84,7 +84,7 @@
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-mdc": "^0.2.3",
     "mlly": "^1.6.1",
-    "monaco-editor": "^0.37.1",
+    "monaco-editor": "^0.46.0",
     "open": "^10.0.4",
     "pdf-lib": "^1.17.1",
     "plantuml-encoder": "^1.4.0",

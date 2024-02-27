@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
-import { slash } from '@antfu/utils'
+import { isTruthy, slash } from '@antfu/utils'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
@@ -152,31 +152,62 @@ export async function createMarkdownPlugin(
 }
 
 export function transformKaTex(md: string) {
-  return md.replace(/^\$\$(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^\$\$/mg, (full, rangeStr = '', options = '', code: string) => {
-    const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
-    code = code.trimEnd()
-    options = options.trim() || '{}'
-    return `<KaTexBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\$\$\n${code}\n\$\$\n</KaTexBlockWrapper>\n`
-  })
+  return md.replace(
+    /^\$\$(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^\$\$/mg,
+    (full, rangeStr = '', options = '', code: string) => {
+      const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
+      code = code.trimEnd()
+      options = options.trim() || '{}'
+      return `<KaTexBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\$\$\n${code}\n\$\$\n</KaTexBlockWrapper>\n`
+    },
+  )
 }
 
 export function transformMarkdownMonaco(md: string) {
   // transform monaco
-  md = md.replace(/^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string, diff: string) => {
-    lang = lang.trim()
-    options = options.trim() || '{}'
-    const encoded = lz.compressToBase64(code)
-    const encodedDiff = lz.compressToBase64(diff)
-    return `<Monaco code-lz="${encoded}" diff-lz="${encodedDiff}" lang="${lang}" v-bind="${options}" />`
-  })
-  md = md.replace(/^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string) => {
-    lang = lang.trim()
-    options = options.trim() || '{}'
-    const encoded = lz.compressToBase64(code)
-    return `<Monaco code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
-  })
+  md = md.replace(
+    /^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg,
+    (full, lang = 'ts', options = '{}', code: string, diff: string) => {
+      lang = lang.trim()
+      options = options.trim() || '{}'
+      const encoded = lz.compressToBase64(code)
+      const encodedDiff = lz.compressToBase64(diff)
+      return `<Monaco code-lz="${encoded}" diff-lz="${encodedDiff}" lang="${lang}" v-bind="${options}" />`
+    },
+  )
+  md = md.replace(
+    /^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg,
+    (full, lang = 'ts', options = '{}', code: string) => {
+      lang = lang.trim()
+      options = options.trim() || '{}'
+      const encoded = lz.compressToBase64(code)
+      return `<Monaco code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
+    },
+  )
 
   return md
+}
+
+// types auto discovery for TypeScript monaco
+export function scanMonacoModules(md: string) {
+  const typeModules = new Set<string>()
+
+  md.replace(
+    /^```(\w+?)\s*{monaco([\w:,-]*)}[\s\n]*([\s\S]+?)^```/mg,
+    (full, lang = 'ts', options: string, code: string) => {
+      options = options || ''
+      lang = lang.trim()
+      if (lang === 'ts' || lang === 'typescript') {
+        Array.from(code.matchAll(/\s+from\s+(["'])([\/\w@-]+)\1/g))
+          .map(i => i[2])
+          .filter(isTruthy)
+          .map(i => typeModules.add(i))
+      }
+      return ''
+    },
+  )
+
+  return Array.from(typeModules)
 }
 
 export function truncateMancoMark(md: string) {

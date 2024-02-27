@@ -38,6 +38,21 @@ export interface SlidevConfig {
    */
   monaco: boolean | 'dev' | 'build'
   /**
+   * Where to load monaco types from
+   *
+   * - `cdn` - load from CDN with `@typescript/ata`
+   * - `local` - load from local node_modules
+   *
+   * @default 'local'
+   */
+  monacoTypesSource: 'cdn' | 'local' | 'none'
+  /**
+   * Additional node packages to load as monaco types
+   *
+   * @default []
+   */
+  monacoTypesAdditionalPackages: string[]
+  /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
    *

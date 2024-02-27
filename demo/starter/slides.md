@@ -16,6 +16,10 @@ defaults:
 transition: slide-left
 title: Welcome to Slidev
 mdc: true
+monaco: true
+monacoTypesSource: local # or cdn or none
+monacoTypesAdditionalPackages:
+  - '@slidev/types'
 ---
 
 # Welcome to Slidev
@@ -529,6 +533,18 @@ database "MySql" {
 src: ./pages/multiple-entries.md
 hide: false
 ---
+
+---
+
+# Monaco Editor
+
+```ts {monaco}
+import { ref } from 'vue'
+import hello from './external'
+
+const code = ref('const a = 1')
+hello()
+```
 
 ---
 layout: center

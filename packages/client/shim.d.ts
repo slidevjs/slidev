@@ -1,5 +1,5 @@
-// with unplugin-vue-markdown, markdowns can be treat as Vue components
 declare module '*.md' {
+  // with unplugin-vue-markdown, markdowns can be treat as Vue components
   import type { ComponentOptions } from 'vue'
 
   const component: ComponentOptions

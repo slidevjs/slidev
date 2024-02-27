@@ -135,16 +135,13 @@ export function go(page: number | string, clicks?: number) {
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   const swipeBegin = ref(0)
   const { direction, distanceX, distanceY } = usePointerSwipe(root, {
-    onSwipeStart(e) {
-      if (e.pointerType !== 'touch')
-        return
+    pointerTypes: ['touch'],
+    onSwipeStart() {
       if (isDrawing.value)
         return
       swipeBegin.value = timestamp()
     },
-    onSwipeEnd(e) {
-      if (e.pointerType !== 'touch')
-        return
+    onSwipeEnd() {
       if (!swipeBegin.value)
         return
       if (isDrawing.value)
