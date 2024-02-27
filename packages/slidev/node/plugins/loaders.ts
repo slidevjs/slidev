@@ -1,7 +1,7 @@
 import { basename, join, resolve } from 'node:path'
 import { builtinModules } from 'node:module'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -684,7 +684,7 @@ defineProps<{ no: number | string }>()`)
       return moduleName
     }
 
-    for (const specifier of deps) {
+    for (const specifier of uniq(deps)) {
       if (specifier[0] === '.')
         continue
       const moduleName = mapModuleNameToModule(specifier)
