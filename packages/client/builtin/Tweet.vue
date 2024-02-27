@@ -7,9 +7,8 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { getCurrentInstance, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
-import { useTweetScript } from '../composables/useTweetScript'
 
 const props = defineProps<{
   id: string | number
@@ -20,11 +19,10 @@ const props = defineProps<{
 
 const tweet = ref<HTMLElement | null>()
 
-const vm = getCurrentInstance()!
 const loaded = ref(false)
 const tweetNotFound = ref(false)
 
-async function create() {
+onMounted(() => {
   // @ts-expect-error global
   const element = await window.twttr.widgets.createTweet(
     props.id.toString(),
@@ -38,13 +36,7 @@ async function create() {
   loaded.value = true
   if (element === undefined)
     tweetNotFound.value = true
-}
-
-// @ts-expect-error global
-if (window?.twttr?.widgets)
-  onMounted(create)
-else
-  useTweetScript(vm, create)
+})
 </script>
 
 <template>
