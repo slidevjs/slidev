@@ -91,10 +91,12 @@ function calculateEditorHeight() {
 }
 
 watch(
-  note,
-  () => nextTick(() => {
-    calculateEditorHeight()
-  }),
+  [note, editing],
+  () => {
+    nextTick(() => {
+      calculateEditorHeight()
+    })
+  },
   { flush: 'post', immediate: true },
 )
 </script>
