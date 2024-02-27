@@ -19,7 +19,7 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, content?: string): Promise<LoadedSlidevData> {
+export async function load(userRoot: string, filepath: string, content?: string, mode?: string): Promise<LoadedSlidevData> {
   const markdown = content ?? await fs.readFile(filepath, 'utf-8')
 
   let extensions: SlidevPreparserExtension[] | undefined
@@ -36,7 +36,7 @@ export async function load(userRoot: string, filepath: string, content?: string)
       hm = lines.slice(1, hEnd).join('\n')
     }
     const o = YAML.load(hm) as Record<string, unknown> ?? {}
-    extensions = await preparserExtensionLoader(o, filepath)
+    extensions = await preparserExtensionLoader(o, filepath, mode)
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}
