@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext } from 'packages/types'
-import { configs, themeVars } from '../env'
+import { configs } from '../env'
 import { openInEditor, rawRoutes } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
@@ -13,7 +13,7 @@ import SlideWrapper from '../internals/SlideWrapper'
 import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
-import OverviewClicksSlider from '../internals/OverviewClicksSlider.vue'
+import ClicksSlider from '../internals/ClicksSlider.vue'
 import { CLICKS_MAX } from '../constants'
 
 const cardWidth = 450
@@ -164,7 +164,6 @@ onMounted(() => {
         <div class="flex flex-col gap-2 my5">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            :style="themeVars"
             @dblclick="openSlideInNewTab(route.path)"
           >
             <SlideContainer
@@ -184,7 +183,7 @@ onMounted(() => {
               <DrawingPreview :page="+route.path" />
             </SlideContainer>
           </div>
-          <OverviewClicksSlider
+          <ClicksSlider
             v-if="getSlideClicks(route)"
             mt-2
             :clicks-context="getClicksContext(route)"

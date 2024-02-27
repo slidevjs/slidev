@@ -2,7 +2,6 @@
 import { watchEffect } from 'vue'
 import { windowSize } from '../state'
 import { isPrintMode } from '../logic/nav'
-import { themeVars } from '../env'
 import PrintContainer from '../internals/PrintContainer.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
 
@@ -16,7 +15,7 @@ watchEffect(() => {
 
 <template>
   <PrintStyle v-if="isPrintMode" />
-  <div id="page-root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
+  <div id="page-root" class="grid grid-cols-[1fr_max-content]">
     <PrintContainer
       class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
