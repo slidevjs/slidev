@@ -55,7 +55,7 @@ onUnmounted(() => {
 })
 
 onMounted(() => {
-  if (!clicks || clicks.disabled)
+  if (!clicks || clicks.disabled || !props.ranges?.length)
     return
 
   const { start, end, delta } = clicks.resolve(props.at, props.ranges.length - 1)
