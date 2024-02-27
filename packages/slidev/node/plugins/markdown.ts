@@ -2,12 +2,6 @@ import fs from 'node:fs/promises'
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import { slash } from '@antfu/utils'
-
-// @ts-expect-error missing types
-import mila from 'markdown-it-link-attributes'
-
-// @ts-expect-error missing types
-import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
@@ -16,7 +10,16 @@ import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import { codeToKeyedTokens, createMagicMoveMachine } from 'shiki-magic-move/core'
-import { compressToBase64 } from 'lz-string'
+
+// @ts-expect-error missing types
+import mila from 'markdown-it-link-attributes'
+
+// @ts-expect-error missing types
+import mif from 'markdown-it-footnote'
+
+// lz-string is still a CJS package atm, change to named export when 2.0 hits
+import lz from 'lz-string'
+
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -162,14 +165,14 @@ export function transformMarkdownMonaco(md: string) {
   md = md.replace(/^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string, diff: string) => {
     lang = lang.trim()
     options = options.trim() || '{}'
-    const encoded = compressToBase64(code)
-    const encodedDiff = compressToBase64(diff)
+    const encoded = lz.compressToBase64(code)
+    const encodedDiff = lz.compressToBase64(diff)
     return `<Monaco code-lz="${encoded}" diff-lz="${encodedDiff}" lang="${lang}" v-bind="${options}" />`
   })
   md = md.replace(/^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string) => {
     lang = lang.trim()
     options = options.trim() || '{}'
-    const encoded = compressToBase64(code)
+    const encoded = lz.compressToBase64(code)
     return `<Monaco code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
   })
 
@@ -238,8 +241,8 @@ export function transformMagicMove(
       )
 
       const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
-      const lz = compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove steps-lz="${lz}" />`
+      const compressed = lz.compressToBase64(JSON.stringify(steps))
+      return `<ShikiMagicMove steps-lz="${compressed}" />`
     },
   )
 }
@@ -314,7 +317,7 @@ export function transformMermaid(md: string): string {
     .replace(/^```mermaid\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
       code = code.trim()
       options = options.trim() || '{}'
-      const encoded = compressToBase64(code)
+      const encoded = lz.compressToBase64(code)
       return `<Mermaid code-lz="${encoded}" v-bind="${options}" />`
     })
 }
