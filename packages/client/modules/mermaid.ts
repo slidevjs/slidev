@@ -1,6 +1,6 @@
 import mermaid from 'mermaid/dist/mermaid.esm.mjs'
-import lz from 'lz-string'
 import { clearUndefined } from '@antfu/utils'
+import { lz } from '../utils'
 import setupMermaid from '../setup/mermaid'
 import { makeId } from '../logic/utils'
 
