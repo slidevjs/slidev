@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isEditorVertical, isScreenVertical, showEditor, slideScale, windowSize } from '../state'
-import { isEmbedded, isPrintMode, next, prev } from '../logic/nav'
+import { isEmbedded, isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
 import { configs, themeVars } from '../env'
@@ -27,8 +27,7 @@ function onClick(e: MouseEvent) {
   }
 }
 
-// Temporarily disable swipe controls because it's not working well with the Monaco editor
-// useSwipeControls(root)
+useSwipeControls(root)
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
