@@ -20,7 +20,7 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
     },
 
     async load(id) {
-      const matchResolve = id.match(/^\/\@slidev-monaco-types\/resolve\/(.*?)(?:\?importer=(.*))?$/)
+      const matchResolve = id.match(/^\/\@slidev-monaco-types\/resolve\?pkg=(.*?)(?:&importer=(.*))?$/)
       if (matchResolve) {
         const [_, pkg, importer = userRoot] = matchResolve
 
@@ -38,12 +38,12 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         const deps = pkgJson.dependencies ?? {}
 
         return [
-          `import "/@slidev-monaco-types/load/${slash(root)}&name=${pkgJson.name}"`,
-          ...Object.keys(deps).map(dep => `import "/@slidev-monaco-types/resolve/${dep}?importer=${slash(root)}"`),
+          `import "/@slidev-monaco-types/load?root=${slash(root)}&name=${pkgJson.name}"`,
+          ...Object.keys(deps).map(dep => `import "/@slidev-monaco-types/resolve?pkg=${dep}&importer=${slash(root)}"`),
         ].join('\n')
       }
 
-      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\/(.*?)&name=(.*)$/)
+      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\?root=(.*?)&name=(.*)$/)
       if (matchLoad) {
         const [_, root, name] = matchLoad
         const files = await fg(
@@ -71,7 +71,7 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
           '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file://" + path)',
           '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
           '}',
-          ...files.map(file => `addFile(import(${JSON.stringify(`${toAtFS(resolve(root, file))}?raw`)}), ${JSON.stringify(file)})`),
+          ...files.map(file => `addFile(import(${JSON.stringify(`${toAtFS(resolve(root, file))}?monaco-types&raw`)}), ${JSON.stringify(file)})`),
         ].join('\n')
       }
     },

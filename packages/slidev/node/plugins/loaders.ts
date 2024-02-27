@@ -657,7 +657,7 @@ defineProps<{ no: number | string }>()`)
 
     // User snippets
     for (const file of files) {
-      const url = `${toAtFS(resolve(typesRoot, file))}?raw`
+      const url = `${toAtFS(resolve(typesRoot, file))}?monaco-types&raw`
       result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
     }
 
@@ -688,7 +688,7 @@ defineProps<{ no: number | string }>()`)
       if (specifier[0] === '.')
         continue
       const moduleName = mapModuleNameToModule(specifier)
-      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve/${moduleName}`)})\n`
+      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve?pkg=${moduleName}`)})\n`
     }
 
     return result

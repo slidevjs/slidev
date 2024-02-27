@@ -87,7 +87,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                 return DEFAULT
               },
               manualChunks(id) {
-                if (id.startsWith('/@slidev-monaco-types/') || id.includes('/@slidev/monaco-types') || id.match(/(\.d\.[mc]?ts|package.json)\?raw$/))
+                if (id.startsWith('/@slidev-monaco-types/') || id.includes('/@slidev/monaco-types') || id.endsWith('?monaco-types&raw'))
                   return 'monaco/bundled-types'
                 if (id.includes('/shiki/') || id.includes('/@shikijs/'))
                   return `modules/shiki`
