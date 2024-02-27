@@ -15,7 +15,7 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 import * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
-import { decompressFromBase64 } from 'lz-string'
+import lz from 'lz-string'
 import setup from '../setup/monaco'
 import { makeId } from '../logic/utils'
 
@@ -37,8 +37,8 @@ const props = withDefaults(defineProps<{
   ata: true,
 })
 
-const code = decompressFromBase64(props.codeLz).trimEnd()
-const diff = props.diffLz && decompressFromBase64(props.diffLz).trimEnd()
+const code = lz.decompressFromBase64(props.codeLz).trimEnd()
+const diff = props.diffLz && lz.decompressFromBase64(props.diffLz).trimEnd()
 
 const langMap: Record<string, string> = {
   ts: 'typescript',

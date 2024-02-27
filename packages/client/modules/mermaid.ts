@@ -1,5 +1,5 @@
 import mermaid from 'mermaid/dist/mermaid.esm.mjs'
-import { decompressFromBase64 } from 'lz-string'
+import lz from 'lz-string'
 import { clearUndefined } from '@antfu/utils'
 import setupMermaid from '../setup/mermaid'
 import { makeId } from '../logic/utils'
@@ -20,7 +20,7 @@ export async function renderMermaid(lzEncoded: string, options: any) {
     ...clearUndefined(setupMermaid() || {}),
     ...clearUndefined(options),
   })
-  const code = decompressFromBase64(lzEncoded)
+  const code = lz.decompressFromBase64(lzEncoded)
   const id = makeId()
   const { svg } = await mermaid.render(id, code)
   cache.set(key, svg)
