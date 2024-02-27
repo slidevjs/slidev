@@ -14,30 +14,30 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import { decode } from 'js-base64'
-import { nanoid } from 'nanoid'
 import type * as monaco from 'monaco-editor'
+import { decompressFromBase64 } from 'lz-string'
 import { isDark } from '../logic/dark'
+import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{
-  code: string
-  diff?: string
+  codeLz: string
+  diffLz?: string
   lang?: string
   readonly?: boolean
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
   height?: number | string
   editorOptions?: monaco.editor.IEditorOptions
 }>(), {
-  code: '',
+  codeLz: '',
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
   height: 'auto',
 })
 
-const id = nanoid()
-const code = ref(decode(props.code).trimEnd())
-const diff = ref(props.diff ? decode(props.diff).trimEnd() : null)
+const id = makeId()
+const code = ref(decompressFromBase64(props.codeLz))
+const diff = ref(props.diffLz ? decompressFromBase64(props.diffLz) : null)
 const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
 const editorHeight = ref(0)
 const calculatedHeight = computed(() => code.value.split(/\r?\n/g).length * lineHeight)

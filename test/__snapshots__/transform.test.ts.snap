@@ -35,9 +35,9 @@ exports[`markdown transform > mermaid 1`] = `
 "
 # Page 
 
-<Mermaid :code="'c2VxdWVuY2VEaWFncmFtCiAgQWxpY2UtPkpvaG46IEhlbGxvIEpvaG4sIGhvdyBhcmUgeW91PwogIE5vdGUgb3ZlciBBbGljZSxKb2huOiBBIHR5cGljYWwgaW50ZXJhY3Rpb24'" v-bind="{}" />
+<Mermaid code-lz="M4UwjgriB2DGIBECWBDA5gJxQWwFAAJ8BBAGyXgFoA+AKQHsALaALnwAkQSS796mAafAzoB3fCgwh8ATzoQA/AXwA5OgBcpdAG4gMxMvH58WxfGukAHcihL4k0DVlhqkdaEA" v-bind="{}" />
 
-<Mermaid :code="'Z3JhcGggVEQKQltUZXh0XSAtLT4gQ3tEZWNpc2lvbn0KQyAtLT58T25lfCBEW1Jlc3VsdCAxXQpDIC0tPnxUd298IEVbUmVzdWx0IDJd'" v-bind="{theme: 'neutral', scale: 0.8}" />
+<Mermaid code-lz="OYJwhgDgFgBAKgEQFACEDacCmAPALgXRgFoiA+GAYQG8FMBjASwGcGB7AOwF8kLiyAfAPLtM/GAjQAlTEwCuAG1wwAjPh59S/OAHdWYgKJSZCpQCZ8QA" v-bind="{theme: 'neutral', scale: 0.8}" />
 "
 `;
 

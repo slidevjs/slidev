@@ -9,7 +9,7 @@ Simple Arrow
 -->
 
 <script setup lang="ts">
-import { customAlphabet } from 'nanoid'
+import { makeId } from '../logic/utils'
 
 defineProps<{
   x1: number | string
@@ -20,9 +20,7 @@ defineProps<{
   color?: string
 }>()
 
-const nanoid = customAlphabet('abcedfghijklmn', 10)
-
-const id = nanoid()
+const id = makeId()
 </script>
 
 <template>

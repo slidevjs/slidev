@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises'
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
-import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
 
 // @ts-expect-error missing types
@@ -12,7 +11,7 @@ import mif from 'markdown-it-footnote'
 import { taskLists } from '@hedgedoc/markdown-it-plugins'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
-import { encode } from 'plantuml-encoder'
+import { encode as encodePlantUml } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
@@ -163,15 +162,15 @@ export function transformMarkdownMonaco(md: string) {
   md = md.replace(/^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string, diff: string) => {
     lang = lang.trim()
     options = options.trim() || '{}'
-    const encoded = base64.encode(code, true)
-    const encodedDiff = base64.encode(diff, true)
-    return `<Monaco :code="'${encoded}'" :diff="'${encodedDiff}'" lang="${lang}" v-bind="${options}" />`
+    const encoded = compressToBase64(code)
+    const encodedDiff = compressToBase64(diff)
+    return `<Monaco code-lz="${encoded}" diff-lz="${encodedDiff}" lang="${lang}" v-bind="${options}" />`
   })
   md = md.replace(/^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg, (full, lang = 'ts', options = '{}', code: string) => {
     lang = lang.trim()
     options = options.trim() || '{}'
-    const encoded = base64.encode(code, true)
-    return `<Monaco :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
+    const encoded = compressToBase64(code)
+    return `<Monaco code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
   })
 
   return md
@@ -240,7 +239,7 @@ export function transformMagicMove(
 
       const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
       const lz = compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove steps-lz='${lz}' />`
+      return `<ShikiMagicMove steps-lz="${lz}" />`
     },
   )
 }
@@ -315,15 +314,15 @@ export function transformMermaid(md: string): string {
     .replace(/^```mermaid\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', code = '') => {
       code = code.trim()
       options = options.trim() || '{}'
-      const encoded = base64.encode(code, true)
-      return `<Mermaid :code="'${encoded}'" v-bind="${options}" />`
+      const encoded = compressToBase64(code)
+      return `<Mermaid code-lz="${encoded}" v-bind="${options}" />`
     })
 }
 
 export function transformPlantUml(md: string, server: string): string {
   return md
     .replace(/^```plantuml\s*?({.*?})?\n([\s\S]+?)\n```/mg, (full, options = '', content = '') => {
-      const code = encode(content.trim())
+      const code = encodePlantUml(content.trim())
       options = options.trim() || '{}'
       return `<PlantUml :code="'${code}'" :server="'${server}'" v-bind="${options}" />`
     })
