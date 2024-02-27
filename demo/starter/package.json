@@ -12,6 +12,6 @@
     "@slidev/theme-seriph": "^0.25.0",
     "@slidev/types": "workspace:*",
     "nodemon": "^3.1.0",
-    "vue": "^3.4.19"
+    "vue": "^3.4.20"
   }
 }
