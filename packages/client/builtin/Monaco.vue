@@ -88,7 +88,7 @@ onMounted(async () => {
 
   let editableEditor: monaco.editor.IStandaloneCodeEditor
   if (diff) {
-    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
+    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
     const editor = monaco.editor.createDiffEditor(container.value!, {
       renderOverviewRuler: false,
       ...commonOptions,
