@@ -46,8 +46,15 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
       const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\/(.*?)&name=(.*)$/)
       if (matchLoad) {
         const [_, root, name] = matchLoad
-        const files = fg.sync(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: root })
-        files.push('package.json')
+        const files = await fg(
+          [
+            '**/*.ts',
+            '**/*.mts',
+            '**/*.cts',
+            'package.json',
+          ],
+          { cwd: root },
+        )
         return [
           'import * as monaco from \'monaco-editor\'',
           'async function addFile(mod, subPath) {',
