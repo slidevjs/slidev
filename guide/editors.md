@@ -41,3 +41,7 @@ The VS Code extension provides some features to help you better organize your sl
 ![](https://user-images.githubusercontent.com/11247099/116809994-cc2caa00-ab73-11eb-879f-60585747c3c9.png)
 
 <TheTweet id="1395333405345148930" />
+
+## Prettier Plugin
+
+Slidev also provides a Prettier plugin to format your slides. You can use it with your favorite editor that supports Prettier. Docs for the plugin can be found [here](https://github.com/slidevjs/prettier-plugin).
