@@ -1,7 +1,7 @@
 import { basename, join, resolve } from 'node:path'
 import { builtinModules } from 'node:module'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
+import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -657,7 +657,7 @@ defineProps<{ no: number | string }>()`)
 
     // User snippets
     for (const file of files) {
-      const url = `${toAtFS(resolve(typesRoot, file))}?raw`
+      const url = `${toAtFS(resolve(typesRoot, file))}?monaco-types&raw`
       result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
     }
 
@@ -684,11 +684,11 @@ defineProps<{ no: number | string }>()`)
       return moduleName
     }
 
-    for (const specifier of deps) {
+    for (const specifier of uniq(deps)) {
       if (specifier[0] === '.')
         continue
       const moduleName = mapModuleNameToModule(specifier)
-      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve/${moduleName}`)})\n`
+      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve?pkg=${moduleName}`)})\n`
     }
 
     return result
