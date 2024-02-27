@@ -7,9 +7,8 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { getCurrentInstance, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
-import { useTweetScript } from '../composables/useTweetScript'
 
 const props = defineProps<{
   id: string | number
@@ -20,7 +19,6 @@ const props = defineProps<{
 
 const tweet = ref<HTMLElement | null>()
 
-const vm = getCurrentInstance()!
 const loaded = ref(false)
 const tweetNotFound = ref(false)
 
@@ -44,7 +42,7 @@ async function create() {
 if (window?.twttr?.widgets)
   onMounted(create)
 else
-  useTweetScript(vm, create)
+  throw new Error('Twitter widget not found')
 </script>
 
 <template>
