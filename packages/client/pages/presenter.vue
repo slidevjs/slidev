@@ -4,13 +4,13 @@ import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { clicksContext, currentPage, currentRoute, currentSlideId, hasNext, nextRoute, queryClicks, rawRoutes, total, useSwipeControls } from '../logic/nav'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
-import { configs, themeVars } from '../env'
+import { configs } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { isDrawing } from '../logic/drawings'
-import { useFixedClicks } from '../composables/useClicks'
+import { useFixedClicks, usePrimaryClicks } from '../composables/useClicks'
 import SlideWrapper from '../internals/SlideWrapper'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
@@ -21,6 +21,7 @@ import Goto from '../internals/Goto.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
+import ClicksSlider from '../internals/ClicksSlider.vue'
 
 const main = ref<HTMLDivElement>()
 
@@ -93,20 +94,25 @@ onMounted(() => {
 <template>
   <div class="bg-main h-full slidev-presenter">
     <div class="grid-container" :class="`layout${presenterLayout}`">
-      <div ref="main" class="relative grid-section main flex flex-col p-2 lg:p-4" :style="themeVars">
+      <div ref="main" class="relative grid-section main flex flex-col">
         <SlideContainer
           key="main"
-          class="h-full w-full"
+          class="h-full w-full p-2 lg:p-4 flex-auto"
         >
           <template #default>
             <SlidesShow render-context="presenter" />
           </template>
         </SlideContainer>
+        <ClicksSlider
+          :key="currentRoute?.path"
+          :clicks-context="usePrimaryClicks(currentRoute)"
+          class="w-full pb2 px4 flex-none"
+        />
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
           Current
         </div>
       </div>
-      <div class="relative grid-section next flex flex-col p-2 lg:p-4" :style="themeVars">
+      <div class="relative grid-section next flex flex-col p-2 lg:p-4">
         <SlideContainer
           v-if="nextFrame && nextFrameClicksCtx"
           key="next"
@@ -182,7 +188,7 @@ onMounted(() => {
     </div>
     <div class="progress-bar">
       <div
-        class="progress h-2px bg-primary transition-all"
+        class="progress h-3px bg-primary transition-all"
         :style="{ width: `${(currentPage - 1) / (total - 1) * 100}%` }"
       />
     </div>
@@ -257,7 +263,7 @@ onMounted(() => {
 }
 
 .progress-bar {
-  --uno: fixed left-0 right-0 bottom-0;
+  --uno: fixed left-0 right-0 top-0;
 }
 
 .grid-section {

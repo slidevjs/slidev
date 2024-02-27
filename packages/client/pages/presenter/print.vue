@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
-import { configs, themeVars } from '../../env'
+import { configs } from '../../env'
 import { rawRoutes, total } from '../../logic/nav'
 import NoteDisplay from '../../internals/NoteDisplay.vue'
 
@@ -34,7 +34,7 @@ const slidesWithNote = computed(() => rawRoutes
 </script>
 
 <template>
-  <div id="page-root" :style="themeVars">
+  <div id="page-root">
     <div class="m-4">
       <div class="mb-10">
         <h1 class="text-4xl font-bold mt-2">

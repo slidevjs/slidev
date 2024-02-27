@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useEventListener, useVModel } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { themeVars } from '../env'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
@@ -128,7 +127,6 @@ watchEffect(() => {
           <div
             class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
             :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
-            :style="themeVars"
             @click="go(+route.path)"
           >
             <SlideContainer

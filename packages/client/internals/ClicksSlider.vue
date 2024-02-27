@@ -30,10 +30,14 @@ function onMousedown() {
   <div
     class="flex gap-0.5 items-center select-none"
     :title="`Clicks in this slide: ${total}`"
+    :class="total ? '' : 'op50'"
   >
     <div class="flex gap-1 items-center min-w-16">
       <carbon:cursor-1 text-sm op50 />
-      <span v-if="current <= total && current >= 0" text-primary>{{ current }}/</span>
+      <template v-if="current <= total && current >= 0">
+        <span text-primary>{{ current }}</span>
+        <span op50>/</span>
+      </template>
       <span op50>{{ total }}</span>
     </div>
     <div
@@ -47,16 +51,16 @@ function onMousedown() {
           i === 0 ? 'rounded-l border-l' : '',
           i === total ? 'rounded-r border-r' : '',
         ]"
-        :style="{ width: `${1 / total * 100}%` }"
+        :style="{ width: total > 0 ? `${1 / total * 100}%` : '100%' }"
       >
-        <div absolute inset-0 z--1 :class=" i <= current ? 'bg-primary op20' : ''" />
+        <div absolute inset-0 :class="i <= current ? 'bg-primary op20' : ''" />
         <div
           :class="[
             +i === +current ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',
             i === 0 ? 'rounded-l' : '',
             i === total ? 'rounded-r' : 'border-r-2',
           ]"
-          w-full h-full text-xs flex items-center justify-center
+          w-full h-full text-xs flex items-center justify-center z-1
         >
           {{ i }}
         </div>

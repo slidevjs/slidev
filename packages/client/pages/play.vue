@@ -4,7 +4,7 @@ import { isEditorVertical, isScreenVertical, showEditor, slideScale, windowSize 
 import { isEmbedded, isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
-import { configs, themeVars } from '../env'
+import { configs } from '../env'
 import Controls from '../internals/Controls.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
@@ -42,7 +42,10 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 
 <template>
   <PrintStyle v-if="isPrintMode" />
-  <div id="page-root" ref="root" class="grid" :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'" :style="themeVars">
+  <div
+    id="page-root" ref="root" class="grid"
+    :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"
+  >
     <SlideContainer
       class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
