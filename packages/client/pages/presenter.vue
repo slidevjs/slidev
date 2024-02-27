@@ -14,8 +14,8 @@ import { useFixedClicks } from '../composables/useClicks'
 import SlideWrapper from '../internals/SlideWrapper'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
-import SlidesOverview from '../internals/SlidesOverview.vue'
-import NoteEditor from '../internals/NoteEditor.vue'
+import QuickOverview from '../internals/QuickOverview.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
 import Goto from '../internals/Goto.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
@@ -45,16 +45,23 @@ const nextFrame = computed(() => {
   else
     return null
 })
+
 const nextFrameClicksCtx = computed(() => {
   return nextFrame.value && clicksCtxMap[+nextFrame.value[0].path - 1]
 })
-watch([currentRoute, queryClicks], () => {
-  nextFrameClicksCtx.value && (nextFrameClicksCtx.value[0].value = nextFrame.value![1])
-}, { immediate: true })
 
-const Editor = shallowRef<any>()
+watch(
+  [currentRoute, queryClicks],
+  () => {
+    if (nextFrameClicksCtx.value)
+      nextFrameClicksCtx.value.current = nextFrame.value![1]
+  },
+  { immediate: true },
+)
+
+const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('../internals/Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {
@@ -86,21 +93,6 @@ onMounted(() => {
 <template>
   <div class="bg-main h-full slidev-presenter">
     <div class="grid-container" :class="`layout${presenterLayout}`">
-      <div class="grid-section top flex">
-        <img src="../assets/logo-title-horizontal.png" class="ml-2 my-auto h-10 py-1 lg:h-14 lg:py-2" style="height: 3.5rem;" alt="Slidev logo">
-        <div class="flex-auto" />
-        <div
-          class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
-          opacity="50 hover:100"
-          @click="resetTimer"
-        >
-          <carbon:time class="absolute" />
-          <carbon:renew class="absolute opacity-0" />
-        </div>
-        <div class="text-2xl pl-2 pr-6 my-auto tabular-nums">
-          {{ timer }}
-        </div>
-      </div>
       <div ref="main" class="relative grid-section main flex flex-col p-2 lg:p-4" :style="themeVars">
         <SlideContainer
           key="main"
@@ -110,8 +102,8 @@ onMounted(() => {
             <SlidesShow render-context="presenter" />
           </template>
         </SlideContainer>
-        <div class="context">
-          current
+        <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
+          Current
         </div>
       </div>
       <div class="relative grid-section next flex flex-col p-2 lg:p-4" :style="themeVars">
@@ -121,29 +113,30 @@ onMounted(() => {
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="nextFrame[0].component as any"
+            :is="(nextFrame[0].component as any)"
             :key="nextFrame[0].path"
-            :clicks-context="nextFrameClicksCtx[1]"
+            :clicks-context="nextFrameClicksCtx"
             :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
             render-context="previewNext"
           />
         </SlideContainer>
-        <div class="context">
-          next
+        <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
+          Next
         </div>
       </div>
       <!-- Notes -->
-      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor" class="grid-section note of-auto">
-        <Editor />
+      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor" class="grid-section note of-auto">
+        <SideEditor />
       </div>
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
-        <NoteEditor
+        <NoteEditable
           v-if="__DEV__"
           :key="`edit-${currentSlideId}`"
+          v-model:editing="notesEditing"
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
-          :editing="notesEditing"
+          :clicks-context="clicksContext"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <NoteStatic
@@ -152,6 +145,7 @@ onMounted(() => {
           :no="currentSlideId"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
+          :clicks-context="clicksContext"
         />
         <div class="border-t border-main py-1 px-2 text-sm">
           <IconButton title="Increase font size" @click="increasePresenterFontSize">
@@ -169,8 +163,20 @@ onMounted(() => {
           </IconButton>
         </div>
       </div>
-      <div class="grid-section bottom">
+      <div class="grid-section bottom flex">
         <NavControls :persist="true" />
+        <div flex-auto />
+        <div
+          class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
+          opacity="50 hover:100"
+          @click="resetTimer"
+        >
+          <carbon:time class="absolute" />
+          <carbon:renew class="absolute opacity-0" />
+        </div>
+        <div class="text-2xl pl-2 pr-6 my-auto tabular-nums">
+          {{ timer }}
+        </div>
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>
@@ -182,7 +188,7 @@ onMounted(() => {
     </div>
   </div>
   <Goto />
-  <SlidesOverview v-model="showOverview" />
+  <QuickOverview v-model="showOverview" />
 </template>
 
 <style scoped>
@@ -202,7 +208,7 @@ onMounted(() => {
 }
 
 .grid-container {
-  --uno: bg-active;
+  --uno: bg-gray/20;
   height: 100%;
   width: 100%;
   display: grid;
@@ -211,9 +217,8 @@ onMounted(() => {
 
 .grid-container.layout1 {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: min-content 2fr 1fr min-content;
+  grid-template-rows: 2fr 1fr min-content;
   grid-template-areas:
-    'top top'
     'main main'
     'note next'
     'bottom bottom';
@@ -221,9 +226,8 @@ onMounted(() => {
 
 .grid-container.layout2 {
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: min-content 2fr 1fr min-content;
+  grid-template-rows: 2fr 1fr min-content;
   grid-template-areas:
-    'top top'
     'note main'
     'note next'
     'bottom bottom';
@@ -232,9 +236,8 @@ onMounted(() => {
 @media (max-aspect-ratio: 3/5) {
   .grid-container.layout1 {
     grid-template-columns: 1fr;
-    grid-template-rows: min-content 1fr 1fr 1fr min-content;
+    grid-template-rows: 1fr 1fr 1fr min-content;
     grid-template-areas:
-      'top'
       'main'
       'note'
       'next'
@@ -245,9 +248,8 @@ onMounted(() => {
 @media (min-aspect-ratio: 1/1) {
   .grid-container.layout1 {
     grid-template-columns: 1fr 1.1fr 0.9fr;
-    grid-template-rows: min-content 1fr 2fr min-content;
+    grid-template-rows: 1fr 2fr min-content;
     grid-template-areas:
-      'top top top'
       'main main next'
       'main main note'
       'bottom bottom bottom';
@@ -276,11 +278,5 @@ onMounted(() => {
 }
 .grid-section.bottom {
   grid-area: bottom;
-}
-.context {
-  position: absolute;
-  top: 0;
-  left: 0;
-  --uno: px-1 text-xs bg-gray-400 bg-opacity-50 opacity-75 rounded-br-md;
 }
 </style>

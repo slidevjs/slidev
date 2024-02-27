@@ -38,7 +38,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'theme',
 ]
 
-injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
+injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
   const addons = headmatter?.addons as string[] ?? []
   const { clientRoot, userRoot } = await getRoots()
   const roots = uniq([
@@ -47,7 +47,7 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
     ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
+  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter, mode }, [], mergeArrays)
 })
 
 const cli = yargs(process.argv.slice(2))
@@ -144,7 +144,7 @@ cli.command(
         {
           async loadData() {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry)
+            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -569,13 +569,15 @@ function printInfo(
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
+    const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
     console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
     if (options.inspect)
-      console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
+      console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
     let lastRemoteUrl = ''
 

@@ -7,6 +7,7 @@ import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
+import { CLICKS_MAX } from '../constants'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
@@ -139,7 +140,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="useFixedClicks(route, 99999)[1]"
+                :clicks-context="useFixedClicks(route, CLICKS_MAX)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
@@ -163,18 +164,19 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex items-center gap-4">
-    <RouterLink
-      v-if="__DEV__"
-      target="_blank"
-      to="/overview"
-      tab-index="-1"
-      class="border-main border px3 py1 rounded hover:bg-gray/5 hover:text-primary"
-    >
-      List overview
-    </RouterLink>
+  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
+    </IconButton>
+    <IconButton
+      as="a"
+      title="Slides Overview"
+      target="_blank"
+      href="/overview"
+      tab-index="-1"
+      class="text-2xl"
+    >
+      <carbon:list-boxes />
     </IconButton>
   </div>
 </template>

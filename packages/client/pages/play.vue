@@ -32,9 +32,9 @@ function onClick(e: MouseEvent) {
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
-const Editor = shallowRef<any>()
+const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('../internals/Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 const DrawingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__)
@@ -71,8 +71,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
     </SlideContainer>
 
-    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor">
-      <Editor :resize="true" />
+    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor">
+      <SideEditor :resize="true" />
     </template>
   </div>
   <Controls />

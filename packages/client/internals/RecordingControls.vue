@@ -54,7 +54,7 @@ onMounted(() => {
   </IconButton>
   <MenuButton :disabled="recording">
     <template #button>
-      <IconButton title="Select recording device" class="h-full !text-sm !px-0">
+      <IconButton title="Select recording device" class="h-full !text-sm !px-0 aspect-initial">
         <carbon:chevron-up class="opacity-50" />
       </IconButton>
     </template>

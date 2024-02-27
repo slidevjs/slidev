@@ -2,7 +2,7 @@
 import { shallowRef } from 'vue'
 import { showInfoDialog, showOverview, showRecordingDialog } from '../state'
 import { configs } from '../env'
-import SlidesOverview from './SlidesOverview.vue'
+import QuickOverview from './QuickOverview.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
 
@@ -15,7 +15,7 @@ if (__SLIDEV_FEATURE_RECORD__) {
 </script>
 
 <template>
-  <SlidesOverview v-model="showOverview" />
+  <QuickOverview v-model="showOverview" />
   <Goto />
   <WebCamera v-if="WebCamera" />
   <RecordingDialog v-if="RecordingDialog" v-model="showRecordingDialog" />

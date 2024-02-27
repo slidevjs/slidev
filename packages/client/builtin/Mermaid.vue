@@ -19,7 +19,7 @@ import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
 
 const props = defineProps<{
-  code: string
+  codeLz: string
   scale?: number
   theme?: string
 }>()
@@ -37,7 +37,7 @@ watchEffect(async (onCleanup) => {
   error.value = null
   try {
     const svg = await renderMermaid(
-      props.code || '',
+      props.codeLz || '',
       {
         theme: props.theme || (isDark.value ? 'dark' : undefined),
         ...vm!.attrs,

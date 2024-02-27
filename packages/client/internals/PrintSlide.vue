@@ -9,7 +9,7 @@ const props = defineProps<{ route: RouteRecordRaw }>()
 
 const route = computed(() => props.route)
 const nav = useNav(route)
-const clicks0 = useFixedClicks(route.value, 0)[1]
+const clicks0 = useFixedClicks(route.value, 0)
 </script>
 
 <template>
@@ -19,6 +19,12 @@ const clicks0 = useFixedClicks(route.value, 0)[1]
     :route="route"
   />
   <template v-if="!clicks0.disabled">
-    <PrintSlideClick v-for="i of clicks0.total" :key="i" :clicks-context="useFixedClicks(route, i)[1]" :nav="nav" :route="route" />
+    <PrintSlideClick
+      v-for="i of clicks0.total"
+      :key="i"
+      :clicks-context="useFixedClicks(route, i)"
+      :nav="nav"
+      :route="route"
+    />
   </template>
 </template>

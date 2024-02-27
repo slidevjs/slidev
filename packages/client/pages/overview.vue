@@ -3,21 +3,24 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { RouteRecordRaw } from 'vue-router'
 import type { ClicksContext } from 'packages/types'
-import { themeVars } from '../env'
-import { rawRoutes } from '../logic/nav'
-import { useClicksContextBase } from '../composables/useClicks'
+import { configs, themeVars } from '../env'
+import { openInEditor, rawRoutes } from '../logic/nav'
+import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper'
 import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
-import NoteEditor from '../internals/NoteEditor.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
+import OverviewClicksSlider from '../internals/OverviewClicksSlider.vue'
+import { CLICKS_MAX } from '../constants'
 
 const cardWidth = 450
 
+const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
-  title: 'List Overview',
+  title: `Overview - ${slideTitle}`,
 })
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
@@ -28,15 +31,15 @@ const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => rawRoutes.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
 const clicksContextMap = new WeakMap<RouteRecordRaw, ClicksContext>()
-function getClickContext(route: RouteRecordRaw) {
+function getClicksContext(route: RouteRecordRaw) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
-    clicksContextMap.set(route, useClicksContextBase(() => 999999, route?.meta?.clicks))
+    clicksContextMap.set(route, useFixedClicks(route, CLICKS_MAX))
   return clicksContextMap.get(route)!
 }
 
 function getSlideClicks(route: RouteRecordRaw) {
-  return route.meta?.clicks || getClickContext(route)?.total
+  return route.meta?.clicks || getClicksContext(route)?.total
 }
 
 function wordCount(str: string) {
@@ -75,6 +78,15 @@ function scrollToSlide(idx: number) {
   const el = blocks.get(idx)
   if (el)
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onMarkerClick(e: MouseEvent, clicks: number, route: RouteRecordRaw) {
+  const ctx = getClicksContext(route)
+  if (ctx.current === clicks)
+    ctx.current = CLICKS_MAX
+  else
+    ctx.current = clicks
+  e.preventDefault()
 }
 
 onMounted(() => {
@@ -129,40 +141,55 @@ onMounted(() => {
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
       >
-        <div class="select-none w-13 text-right my4">
+        <div class="select-none w-13 text-right my4 flex flex-col gap-1 items-end">
           <div class="text-3xl op20 mb2">
             {{ idx + 1 }}
           </div>
-          <div
-            v-if="getSlideClicks(route)"
-            class="flex gap-0.5 op50 items-center justify-end"
-            :title="`Clicks in this slide: ${getSlideClicks(route)}`"
+          <IconButton
+            class="mr--3 op0 group-hover:op80"
+            title="Play in new tab"
+            @click="openSlideInNewTab(route.path)"
           >
-            <carbon:cursor-1 text-sm />
-            {{ getSlideClicks(route) }}
-          </div>
+            <carbon:presentation-file />
+          </IconButton>
+          <IconButton
+            v-if="route.meta?.slide"
+            class="mr--3 op0 group-hover:op80"
+            title="Open in editor"
+            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+          >
+            <carbon:cics-program />
+          </IconButton>
         </div>
-        <div
-          class="border rounded border-main overflow-hidden bg-main my5 select-none h-max"
-          :style="themeVars"
-          @dblclick="openSlideInNewTab(route.path)"
-        >
-          <SlideContainer
-            :key="route.path"
-            :width="cardWidth"
-            :clicks-disabled="true"
-            class="pointer-events-none important:[&_*]:select-none"
+        <div class="flex flex-col gap-2 my5">
+          <div
+            class="border rounded border-main overflow-hidden bg-main select-none h-max"
+            :style="themeVars"
+            @dblclick="openSlideInNewTab(route.path)"
           >
-            <SlideWrapper
-              :is="route.component"
-              v-if="route?.component"
-              :clicks-context="getClickContext(route)"
-              :class="getSlideClass(route)"
-              :route="route"
-              render-context="overview"
-            />
-            <DrawingPreview :page="+route.path" />
-          </SlideContainer>
+            <SlideContainer
+              :key="route.path"
+              :width="cardWidth"
+              :clicks-disabled="true"
+              class="pointer-events-none important:[&_*]:select-none"
+            >
+              <SlideWrapper
+                :is="route.component"
+                v-if="route?.component"
+                :clicks-context="getClicksContext(route)"
+                :class="getSlideClass(route)"
+                :route="route"
+                render-context="overview"
+              />
+              <DrawingPreview :page="+route.path" />
+            </SlideContainer>
+          </div>
+          <OverviewClicksSlider
+            v-if="getSlideClicks(route)"
+            mt-2
+            :clicks-context="getClicksContext(route)"
+            class="w-full"
+          />
         </div>
         <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
           <IconButton
@@ -174,13 +201,15 @@ onMounted(() => {
             <carbon:pen />
           </IconButton>
         </div>
-        <NoteEditor
+        <NoteEditable
           :no="idx"
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
           :editing="edittingNote === idx"
+          :clicks-context="getClicksContext(route)"
           @dblclick="edittingNote !== idx ? edittingNote = idx : null"
           @update:editing="edittingNote = null"
+          @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
         />
         <div
           v-if="wordCounts[idx] > 0"

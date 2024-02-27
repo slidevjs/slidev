@@ -22,6 +22,8 @@ export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 
+export const CLICKS_MAX = 999999
+
 export const TRUST_ORIGINS = [
   'localhost',
   '127.0.0.1',

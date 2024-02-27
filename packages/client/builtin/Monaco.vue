@@ -12,16 +12,16 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { decode } from 'js-base64'
 import * as monaco from 'monaco-editor'
-import { nanoid } from 'nanoid'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
+import { decompressFromBase64 } from 'lz-string'
 import setup from '../setup/monaco'
+import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{
-  code: string
-  diff?: string
+  codeLz: string
+  diffLz?: string
   lang?: string
   readonly?: boolean
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<{
   editorOptions?: monaco.editor.IEditorOptions
   ata?: boolean
 }>(), {
-  code: '',
+  codeLz: '',
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
@@ -37,8 +37,8 @@ const props = withDefaults(defineProps<{
   ata: true,
 })
 
-const code = decode(props.code).trimEnd()
-const diff = props.diff && decode(props.diff).trimEnd()
+const code = decompressFromBase64(props.codeLz).trimEnd()
+const diff = props.diffLz && decompressFromBase64(props.diffLz).trimEnd()
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -68,7 +68,7 @@ const height = computed(() => {
 
 onMounted(async () => {
   const { ata } = await setup()
-  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${nanoid()}.${ext}`))
+  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
   const commonOptions = {
     automaticLayout: true,
     readOnly: props.readonly,

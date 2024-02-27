@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.1.64",
-    "@iconify-json/ri": "^1.1.19",
+    "@iconify-json/ri": "^1.1.20",
     "@slidev/cli": "workspace:*",
     "@slidev/theme-default": "^0.25.0",
     "@slidev/theme-seriph": "^0.25.0",

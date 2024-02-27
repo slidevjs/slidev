@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "0.48.0-beta.11",
+  "version": "0.48.0-beta.14",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -46,9 +46,9 @@
     "file-saver": "^2.0.5",
     "floating-vue": "^5.2.2",
     "fuse.js": "^7.0.0",
-    "js-base64": "^3.7.7",
     "js-yaml": "^4.1.0",
     "katex": "^0.16.9",
+    "lz-string": "^1.5.0",
     "mermaid": "^10.8.0",
     "monaco-editor": "^0.46.0",
     "nanoid": "^5.0.6",
@@ -56,8 +56,9 @@
     "recordrtc": "^5.6.2",
     "resolve": "^1.22.8",
     "shiki": "^1.1.7",
+    "shiki-magic-move": "^0.1.0",
     "unocss": "^0.58.5",
-    "vue": "^3.4.19",
+    "vue": "^3.4.20",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

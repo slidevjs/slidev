@@ -5,6 +5,7 @@ import { slideAspect } from '../env'
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
+export const showOverview = ref(false)
 
 export const shortcutsEnabled = ref(true)
 export const breakpoints = useBreakpoints({
@@ -24,7 +25,6 @@ export const currentCamera = useLocalStorage<string>('slidev-camera', 'default',
 export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 
-export const showOverview = useLocalStorage('slidev-show-overview', false, { listenToStorageChanges: false })
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
 export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false, { listenToStorageChanges: false })

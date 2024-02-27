@@ -56,7 +56,10 @@ const slidesWithNote = computed(() => rawRoutes
               <div class="flex-auto" />
             </div>
           </h2>
-          <NoteDisplay :note-html="slide!.noteHTML" class="max-w-full" />
+          <NoteDisplay
+            :note-html="slide!.noteHTML"
+            class="max-w-full"
+          />
         </div>
         <hr v-if="index < slidesWithNote.length - 1" class="border-main mb-8">
       </div>
