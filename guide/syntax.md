@@ -443,11 +443,28 @@ You can import code snippets from existing files via following syntax:
 <<< @/snippets/snippet.js
 ```
 
-::: tip
-The value of `@` corresponds to the source root, the directory where the `slides.md` is located.
+:::tip
+The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets`, for compatibility with the Monaco editor. Alternatively, you can also import from relative paths.
 :::
 
-This feature is vendored from VitePress, learn more about it in [VitePress's documentation](https://vitepress.dev/guide/markdown#import-code-snippets).
+You can also use a [VS Code region](https://code.visualstudio.com/docs/editor/codebasics#_folding) to only include the corresponding part of the code file:
+
+```md
+<<< @/snippets/snippet.js#region-name
+```
+
+To explicitly specify the language of the imported code, you can add a language identifier after:
+
+```md
+<<< @/snippets/snippet.js ts
+```
+
+Any code block features like [line highlighting](#line-highlighting) and [Monaco editor](#monaco-editor) are also supported:
+
+```md
+<<< @/snippets/snippet.js {2,3|5}{lines:true}
+<<< @/snippets/snippet.js ts {monaco}{height:200px}
+```
 
 ## Configurations
 
