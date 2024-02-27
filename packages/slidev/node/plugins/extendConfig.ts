@@ -22,6 +22,12 @@ const EXCLUDE = [
   'vue',
 ]
 
+const ASYNC_MODULES = [
+  'file-saver',
+  'vue',
+  '@vue',
+]
+
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:config',
@@ -60,7 +66,60 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           },
         },
         publicDir: join(options.userRoot, 'public'),
+        build: {
+          rollupOptions: {
+            output: {
+              chunkFileNames(chunkInfo) {
+                const DEFAULT = '[name]-[hash].js'
+
+                // Already handled in manualChunks
+                if (chunkInfo.name.includes('/') || chunkInfo.name === 'entry')
+                  return DEFAULT
+
+                // Over 60% of the chunk is slidev client code, we put it into slidev chunk
+                if (chunkInfo.moduleIds.filter(i => isSlidevClient(i)).length > chunkInfo.moduleIds.length * 0.6)
+                  return 'slidev/[name]-[hash].js'
+
+                // Monaco Editor
+                if (chunkInfo.moduleIds.filter(i => i.includes('/monaco-editor/')).length > chunkInfo.moduleIds.length * 0.6)
+                  return 'monaco/[name]-[hash].js'
+
+                return DEFAULT
+              },
+              manualChunks(id) {
+                if (id.startsWith('/@slidev-monaco-types/') || id.includes('/@slidev/monaco-types') || id.match(/(\.d\.[mc]?ts|package.json)\?raw$/))
+                  return 'monaco/bundled-types'
+                if (id.includes('/shiki/') || id.includes('/@shikijs/'))
+                  return `modules/shiki`
+                if (id.startsWith('~icons/'))
+                  return 'modules/unplugin-icons'
+                if (id.includes('/client/main.ts'))
+                  return 'entry'
+
+                // It seems that moving slides out will breaks the production build
+                // Would need to find a better way to handle this
+                // const slideMatch = id.match(/\/@slidev\/slides\/(\d+)/)
+                // if (slideMatch && !id.includes('.frontmatter'))
+                //   return `slides/${slideMatch[1]}`
+
+                const matchedAsyncModule = ASYNC_MODULES.find(i => id.includes(`/node_modules/${i}`))
+                if (matchedAsyncModule)
+                  return `modules/${matchedAsyncModule.replace('@', '').replace('/', '-')}`
+              },
+            },
+          },
+        },
       }
+
+      function isSlidevClient(id: string) {
+        return id.includes('/@slidev/') || id.includes('/slidev/packages/client/') || id.includes('/@vueuse/')
+      }
+
+      // function getNodeModuleName(path: string) {
+      //   const nodeModuelsMatch = [...path.matchAll(/node_modules\/(@[^/]+\/[^/]+|[^/]+)\//g)]
+      //   if (nodeModuelsMatch.length)
+      //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
+      // }
 
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')

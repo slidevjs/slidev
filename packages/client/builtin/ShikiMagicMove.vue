@@ -2,7 +2,7 @@
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import { decompressFromBase64 } from 'lz-string'
+import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
 
@@ -13,7 +13,7 @@ const props = defineProps<{
   at?: string | number
 }>()
 
-const steps = JSON.parse(decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
+const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
 const { $clicksContext: clicks, $scale: scale } = useSlideContext()
 const id = makeId()
 const index = ref(0)

@@ -50,6 +50,6 @@ provideLocal(injectionSlideScale, scale)
 }
 
 .print-slide-container {
-  @apply relative overflow-hidden break-after-page;
+  @apply relative overflow-hidden break-after-page translate-0;
 }
 </style>
