@@ -43,19 +43,20 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         ].join('\n')
       }
 
-      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load(\/.*?)&name=(.*)$/)
+      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\/(.*?)&name=(.*)$/)
       if (matchLoad) {
         const [_, root, name] = matchLoad
         const files = await fg(
           [
-            '**/*.d.ts',
-            '**/*.d.mts',
-            '**/*.d.cts',
+            '**/*.ts',
+            '**/*.mts',
+            '**/*.cts',
             'package.json',
           ],
           {
             cwd: root,
             followSymbolicLinks: true,
+            ignore: ['**/node_modules/**'],
           },
         )
 
