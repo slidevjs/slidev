@@ -22,7 +22,7 @@ const tweet = ref<HTMLElement | null>()
 const loaded = ref(false)
 const tweetNotFound = ref(false)
 
-async function create() {
+onMounted(() => {
   // @ts-expect-error global
   const element = await window.twttr.widgets.createTweet(
     props.id.toString(),
@@ -36,13 +36,7 @@ async function create() {
   loaded.value = true
   if (element === undefined)
     tweetNotFound.value = true
-}
-
-// @ts-expect-error global
-if (window?.twttr?.widgets)
-  onMounted(create)
-else
-  throw new Error('Twitter widget not found')
+})
 </script>
 
 <template>
