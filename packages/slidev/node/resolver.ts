@@ -24,7 +24,7 @@ export async function resolveImportPath(importName: string, ensure?: boolean): P
 export async function resolveImportPath(importName: string, ensure = false) {
   try {
     return await resolvePath(importName, {
-      url: fileURLToPath(import.meta.url),
+      url: import.meta.url,
     })
   }
   catch { }

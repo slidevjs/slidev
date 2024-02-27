@@ -64,14 +64,10 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
           return ''
 
         return [
-          'import * as monaco from \'monaco-editor\'',
-          'async function addFile(mod, subPath) {',
-          '  const code = (await mod).default',
-          `  const path = ${JSON.stringify(`/node_modules/${name}/`)} + subPath`,
-          '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file://" + path)',
-          '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
-          '}',
-          ...files.map(file => `addFile(import(${JSON.stringify(`${toAtFS(resolve(root, file))}?monaco-types&raw`)}), ${JSON.stringify(file)})`),
+          'import { addFile } from "@slidev/client/setup/monaco.ts"',
+          ...files.map(file => `addFile(import(${
+            JSON.stringify(`${toAtFS(resolve(root, file))}?monaco-types&raw`)
+          }), ${JSON.stringify(`node_modules/${name}/${file}`)})`),
         ].join('\n')
       }
     },
