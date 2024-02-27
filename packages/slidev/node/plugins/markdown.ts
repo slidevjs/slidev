@@ -3,7 +3,6 @@ import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import * as base64 from 'js-base64'
 import { slash } from '@antfu/utils'
-import { hash as getHash } from 'ohash'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -18,6 +17,7 @@ import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import { codeToKeyedTokens, createMagicMoveMachine } from 'shiki-magic-move/core'
+import { compressToBase64 } from 'lz-string'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 import Katex from './markdown-it-katex'
 import { loadSetups } from './setupNode'
@@ -216,10 +216,7 @@ export function transformMagicMove(
   shiki: Highlighter | undefined,
   shikiOptions: MarkdownItShikiOptions | undefined,
 ) {
-  const scripts: string[] = []
-
-  let count = 0
-  md = md.replace(
+  return md.replace(
     reMagicMoveBlock,
     (full, _options = '', _attrs = '', body: string) => {
       if (!shiki || !shikiOptions)
@@ -242,15 +239,10 @@ export function transformMagicMove(
       )
 
       const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
-      const id = `__magicMoveSteps_${getHash(body)}_${count++}`
-      scripts.push(`const ${id} = Object.freeze(${JSON.stringify(steps)})`)
-      return `<ShikiMagicMove :steps='${id}' />`
+      const lz = compressToBase64(JSON.stringify(steps))
+      return `<ShikiMagicMove steps-lz='${lz}' />`
     },
   )
-
-  if (scripts.length)
-    md = `<script setup>\n${scripts.join('\n')}</script>\n\n${md}`
-  return md
 }
 
 /**

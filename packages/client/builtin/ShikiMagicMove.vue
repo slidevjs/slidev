@@ -2,16 +2,18 @@
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { decompressFromBase64 } from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
 
 import 'shiki-magic-move/style.css'
 
 const props = defineProps<{
-  steps: KeyedTokensInfo[]
+  stepsLz: string
   at?: string | number
 }>()
 
+const steps = JSON.parse(decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
 const { $clicksContext: clicks, $scale: scale } = useSlideContext()
 const id = makeId()
 const index = ref(0)
@@ -24,14 +26,14 @@ onMounted(() => {
   if (!clicks || clicks.disabled)
     return
 
-  const { start, end, delta } = clicks.resolve(props.at || '+1', props.steps.length - 1)
+  const { start, end, delta } = clicks.resolve(props.at || '+1', steps.length - 1)
   clicks.register(id, { max: end, delta })
 
   watchEffect(() => {
     if (clicks.disabled)
-      index.value = props.steps.length - 1
+      index.value = steps.length - 1
     else
-      index.value = Math.min(Math.max(0, clicks.current - start + 1), props.steps.length - 1)
+      index.value = Math.min(Math.max(0, clicks.current - start + 1), steps.length - 1)
   })
 })
 </script>
