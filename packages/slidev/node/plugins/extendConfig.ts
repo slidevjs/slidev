@@ -6,6 +6,7 @@ import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, toAtFS } from '../resolver'
+import { dependencies } from '../../../client/package.json'
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -20,6 +21,7 @@ const EXCLUDE = [
   'mermaid',
   'vue-demi',
   'vue',
+  'shiki',
 ]
 
 const ASYNC_MODULES = [
@@ -44,6 +46,10 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         },
         optimizeDeps: {
           exclude: EXCLUDE,
+          include: Object.keys(dependencies)
+            .filter(i => !EXCLUDE.includes(i))
+            // We need to specify the full deps path for non-hoisted modules
+            .map(i => `@slidev/cli > @slidev/client > ${i}`),
         },
         css: options.data.config.css === 'unocss'
           ? {
