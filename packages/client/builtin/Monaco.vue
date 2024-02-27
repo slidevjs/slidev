@@ -12,11 +12,10 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import * as monaco from 'monaco-editor'
+import type * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
-import setup from '../setup/monaco'
 import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{
@@ -67,7 +66,9 @@ const height = computed(() => {
 })
 
 onMounted(async () => {
-  const { ata } = await setup()
+  // Lazy load monaco, so it will be bundled in async chunk
+  const { default: setup } = await import('../setup/monaco')
+  const { ata, monaco } = await setup()
   const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
   const commonOptions = {
     automaticLayout: true,

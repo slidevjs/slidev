@@ -24,7 +24,6 @@ import { isDark } from '../logic/dark'
 import configs from '#slidev/configs'
 
 /* __imports__ */
-
 window.MonacoEnvironment = {
   getWorker(_, label) {
     if (label === 'json')

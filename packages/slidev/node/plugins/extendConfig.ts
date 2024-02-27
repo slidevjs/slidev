@@ -70,19 +70,19 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           rollupOptions: {
             output: {
               chunkFileNames(chunkInfo) {
-                const DEFAULT = '[name]-[hash].js'
+                const DEFAULT = 'assets/[name]-[hash].js'
 
                 // Already handled in manualChunks
-                if (chunkInfo.name.includes('/') || chunkInfo.name === 'entry')
+                if (chunkInfo.name.includes('/'))
                   return DEFAULT
 
                 // Over 60% of the chunk is slidev client code, we put it into slidev chunk
                 if (chunkInfo.moduleIds.filter(i => isSlidevClient(i)).length > chunkInfo.moduleIds.length * 0.6)
-                  return 'slidev/[name]-[hash].js'
+                  return 'assets/slidev/[name]-[hash].js'
 
                 // Monaco Editor
-                if (chunkInfo.moduleIds.filter(i => i.includes('/monaco-editor/')).length > chunkInfo.moduleIds.length * 0.6)
-                  return 'monaco/[name]-[hash].js'
+                if (chunkInfo.moduleIds.filter(i => i.match(/\/monaco-editor(-core)?\//)).length > chunkInfo.moduleIds.length * 0.6)
+                  return 'assets/monaco/[name]-[hash].js'
 
                 return DEFAULT
               },
@@ -93,9 +93,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                   return `modules/shiki`
                 if (id.startsWith('~icons/'))
                   return 'modules/unplugin-icons'
-                if (id.includes('/client/main.ts'))
-                  return 'entry'
-
                 // It seems that moving slides out will breaks the production build
                 // Would need to find a better way to handle this
                 // const slideMatch = id.match(/\/@slidev\/slides\/(\d+)/)
