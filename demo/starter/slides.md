@@ -317,6 +317,7 @@ You can add `v-click` to elements to add a click animation.
 <div v-click>
 
 This shows up when you click the slide:
+
 ```html
 <div v-click>This shows up when you click the slide.</div>
 ```

@@ -284,8 +284,8 @@ export function transformMagicMove(
 export function transformHighlighter(md: string) {
   return md.replace(
     reCodeBlock,
-    (full, lang = '', rangeStr = '', options = '', attrs = '', code: string) => {
-      const ranges = (rangeStr as string).split(/\|/g).map(i => i.trim())
+    (full, lang = '', rangeStr: string = '', options = '', attrs = '', code: string) => {
+      const ranges = !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
       code = code.trimEnd()
       options = options.trim() || '{}'
       return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
