@@ -1,7 +1,7 @@
 import type { Ref, WritableComputedRef } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { watch } from 'vue'
-import { fromTextArea } from 'codemirror'
+import Codemirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/markdown/markdown'
@@ -15,7 +15,7 @@ export async function useCodeMirror(
   input: Ref<string> | WritableComputedRef<string>,
   options: CodeMirror.EditorConfiguration = {},
 ) {
-  const cm = fromTextArea(
+  const cm = Codemirror.fromTextArea(
     textarea.value!,
     {
       theme: 'vars',
