@@ -125,4 +125,10 @@ const setup = createSingletonPromise(async () => {
   }
 })
 
+export async function addFile(raw: Promise<{ default: string }>, path: string) {
+  const code = (await raw).default
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
+  monaco.editor.createModel(code, 'javascript', monaco.Uri.file(path))
+}
+
 export default setup
