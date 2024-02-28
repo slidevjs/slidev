@@ -1,5 +1,5 @@
 diff --git a/dist/index.cjs b/dist/index.cjs
-index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3c5037d4b 100644
+index 464efcaba86859445732d5e6d99bcc8602a2c080..7cc692b9d897f68782b913a5e97a2363d33d8e1a 100644
 --- a/dist/index.cjs
 +++ b/dist/index.cjs
 @@ -94,7 +94,7 @@ module.exports = __toCommonJS(src_exports);
@@ -30,7 +30,7 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
  // src/configs/stylistic.ts
  var StylisticConfigDefaults = {
    indent: 2,
-@@ -810,17 +813,19 @@ async function stylistic(options = {}) {
+@@ -810,17 +813,21 @@ async function stylistic(options = {}) {
  
  // src/configs/formatters.ts
  async function formatters(options = {}, stylistic2 = {}) {
@@ -51,26 +51,27 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
 +    "eslint-plugin-format",
 +    options.markdown && options.slidev ? "prettier-plugin-slidev" : void 0
 +  ]);
++  if (options.slidev && options.markdown !== true && options.markdown !== "prettier")
++    throw new Error("`slidev` option only works when `markdown` is enabled with `prettier`");
    const {
      indent,
      quotes,
-@@ -929,8 +934,11 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -929,8 +936,10 @@ async function formatters(options = {}, stylistic2 = {}) {
    }
    if (options.markdown) {
      const formater = options.markdown === true ? "prettier" : options.markdown;
-+    const hasSlidev = formater === "prettier" && options.slidev;
-+    const GLOB_SLIDEV = hasSlidev ? ["**/slides.md"] : [];
++    const GLOB_SLIDEV = !options.slidev ? [] : options.slidev === true ? ["**/slides.md"] : options.slidev.files;
      configs.push({
        files: [GLOB_MARKDOWN],
 +      ignores: GLOB_SLIDEV,
        languageOptions: {
          parser: parserPlain
        },
-@@ -950,6 +958,29 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -950,6 +959,29 @@ async function formatters(options = {}, stylistic2 = {}) {
          ]
        }
      });
-+    if (hasSlidev) {
++    if (options.slidev) {
 +      configs.push({
 +        files: GLOB_SLIDEV,
 +        languageOptions: {
@@ -96,7 +97,7 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
    }
    if (options.graphql) {
      configs.push({
-@@ -973,7 +1004,7 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -973,7 +1005,7 @@ async function formatters(options = {}, stylistic2 = {}) {
  }
  
  // src/configs/react.ts
@@ -105,7 +106,7 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
  var ReactRefreshAllowConstantExportPackages = [
    "vite"
  ];
-@@ -998,7 +1029,7 @@ async function react(options = {}) {
+@@ -998,7 +1030,7 @@ async function react(options = {}) {
      interopDefault(import("eslint-plugin-react-refresh"))
    ]);
    const isAllowConstantExport = ReactRefreshAllowConstantExportPackages.some(
@@ -114,7 +115,7 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
    );
    return [
      {
-@@ -1355,6 +1386,8 @@ async function svelte(options = {}) {
+@@ -1355,6 +1387,8 @@ async function svelte(options = {}) {
            { args: "after-used", argsIgnorePattern: "^_", vars: "all", varsIgnorePattern: "^(_|\\$\\$Props$)" }
          ],
          ...stylistic2 ? {
@@ -123,7 +124,7 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
            "style/no-trailing-spaces": "off",
            // superseded by svelte/no-trailing-spaces
            "svelte/derived-has-same-inputs-outputs": "error",
-@@ -1934,12 +1967,12 @@ async function antfu(options = {}, ...userConfigs) {
+@@ -1934,12 +1968,12 @@ async function antfu(options = {}, ...userConfigs) {
    const {
      componentExts = [],
      gitignore: enableGitignore = true,
@@ -140,21 +141,25 @@ index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3
    const stylisticOptions = options.stylistic === false ? false : typeof options.stylistic === "object" ? options.stylistic : {};
    if (stylisticOptions && !("jsx" in stylisticOptions))
 diff --git a/dist/index.d.cts b/dist/index.d.cts
-index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19bfb74b34b 100644
+index 089791f9291a88889e5238f9c229380eeb8fa5fa..86c808aadcb538da463dc0a42347e1ad4f6d778e 100644
 --- a/dist/index.d.cts
 +++ b/dist/index.d.cts
-@@ -189,6 +189,10 @@ interface OptionsFormatters {
+@@ -189,6 +189,14 @@ interface OptionsFormatters {
       * By default it's controlled by our own config.
       */
      dprintOptions?: boolean;
 +    /**
 +     * Install the prettier plugin for handle Slidev markdown
++     *
++     * Only works when `markdown` is enabled with `prettier`.
 +     */
-+    slidev?: 'prettier' | boolean;
++    slidev?: boolean | {
++        files?: string[];
++    };
  }
  interface OptionsComponentExts {
      /**
-@@ -511,6 +515,6 @@ declare function toArray<T>(value: T | T[]): T[];
+@@ -511,6 +519,6 @@ declare function toArray<T>(value: T | T[]): T[];
  declare function interopDefault<T>(m: Awaitable<T>): Promise<T extends {
      default: infer U;
  } ? U : T>;
@@ -163,21 +168,25 @@ index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19b
  
  export { type Awaitable, type FlatConfigItem, GLOB_ALL_SRC, GLOB_CSS, GLOB_EXCLUDE, GLOB_HTML, GLOB_JS, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_JSX, GLOB_LESS, GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN, GLOB_POSTCSS, GLOB_SCSS, GLOB_SRC, GLOB_SRC_EXT, GLOB_STYLE, GLOB_SVELTE, GLOB_TESTS, GLOB_TOML, GLOB_TS, GLOB_TSX, GLOB_VUE, GLOB_YAML, type OptionsComponentExts, type OptionsConfig, type OptionsFiles, type OptionsFormatters, type OptionsHasTypeScript, type OptionsIsInEditor, type OptionsOverrides, type OptionsStylistic, type OptionsTypeScriptParserOptions, type OptionsTypeScriptWithTypes, type OptionsTypescript, type OptionsUnoCSS, type OptionsVue, type ResolvedOptions, type Rules, type StylisticConfig, StylisticConfigDefaults, type UserConfigItem, type WrapRuleConfig, antfu, combine, comments, antfu as default, ensurePackages, formatters, getOverrides, ignores, imports, interopDefault, javascript, jsdoc, jsonc, markdown, node, parserPlain, perfectionist, react, renameRules, resolveSubOptions, sortPackageJson, sortTsconfig, stylistic, svelte, test, toArray, toml, typescript, unicorn, unocss, vue, yaml };
 diff --git a/dist/index.d.ts b/dist/index.d.ts
-index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19bfb74b34b 100644
+index 089791f9291a88889e5238f9c229380eeb8fa5fa..86c808aadcb538da463dc0a42347e1ad4f6d778e 100644
 --- a/dist/index.d.ts
 +++ b/dist/index.d.ts
-@@ -189,6 +189,10 @@ interface OptionsFormatters {
+@@ -189,6 +189,14 @@ interface OptionsFormatters {
       * By default it's controlled by our own config.
       */
      dprintOptions?: boolean;
 +    /**
 +     * Install the prettier plugin for handle Slidev markdown
++     *
++     * Only works when `markdown` is enabled with `prettier`.
 +     */
-+    slidev?: 'prettier' | boolean;
++    slidev?: boolean | {
++        files?: string[];
++    };
  }
  interface OptionsComponentExts {
      /**
-@@ -511,6 +515,6 @@ declare function toArray<T>(value: T | T[]): T[];
+@@ -511,6 +519,6 @@ declare function toArray<T>(value: T | T[]): T[];
  declare function interopDefault<T>(m: Awaitable<T>): Promise<T extends {
      default: infer U;
  } ? U : T>;
@@ -186,7 +195,7 @@ index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19b
  
  export { type Awaitable, type FlatConfigItem, GLOB_ALL_SRC, GLOB_CSS, GLOB_EXCLUDE, GLOB_HTML, GLOB_JS, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_JSX, GLOB_LESS, GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN, GLOB_POSTCSS, GLOB_SCSS, GLOB_SRC, GLOB_SRC_EXT, GLOB_STYLE, GLOB_SVELTE, GLOB_TESTS, GLOB_TOML, GLOB_TS, GLOB_TSX, GLOB_VUE, GLOB_YAML, type OptionsComponentExts, type OptionsConfig, type OptionsFiles, type OptionsFormatters, type OptionsHasTypeScript, type OptionsIsInEditor, type OptionsOverrides, type OptionsStylistic, type OptionsTypeScriptParserOptions, type OptionsTypeScriptWithTypes, type OptionsTypescript, type OptionsUnoCSS, type OptionsVue, type ResolvedOptions, type Rules, type StylisticConfig, StylisticConfigDefaults, type UserConfigItem, type WrapRuleConfig, antfu, combine, comments, antfu as default, ensurePackages, formatters, getOverrides, ignores, imports, interopDefault, javascript, jsdoc, jsonc, markdown, node, parserPlain, perfectionist, react, renameRules, resolveSubOptions, sortPackageJson, sortTsconfig, stylistic, svelte, test, toArray, toml, typescript, unicorn, unocss, vue, yaml };
 diff --git a/dist/index.js b/dist/index.js
-index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152607bd5ee 100644
+index 9c4352530f050168badd09af6808c1ffb6934544..dd48c3e90ec1dc066e7fcd8e68a6113d83745d7f 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -1,7 +1,7 @@
@@ -217,7 +226,7 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
  // src/configs/stylistic.ts
  var StylisticConfigDefaults = {
    indent: 2,
-@@ -717,17 +720,19 @@ async function stylistic(options = {}) {
+@@ -717,17 +720,21 @@ async function stylistic(options = {}) {
  
  // src/configs/formatters.ts
  async function formatters(options = {}, stylistic2 = {}) {
@@ -238,26 +247,27 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
 +    "eslint-plugin-format",
 +    options.markdown && options.slidev ? "prettier-plugin-slidev" : void 0
 +  ]);
++  if (options.slidev && options.markdown !== true && options.markdown !== "prettier")
++    throw new Error("`slidev` option only works when `markdown` is enabled with `prettier`");
    const {
      indent,
      quotes,
-@@ -836,8 +841,11 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -836,8 +843,10 @@ async function formatters(options = {}, stylistic2 = {}) {
    }
    if (options.markdown) {
      const formater = options.markdown === true ? "prettier" : options.markdown;
-+    const hasSlidev = formater === "prettier" && options.slidev;
-+    const GLOB_SLIDEV = hasSlidev ? ["**/slides.md"] : [];
++    const GLOB_SLIDEV = !options.slidev ? [] : options.slidev === true ? ["**/slides.md"] : options.slidev.files;
      configs.push({
        files: [GLOB_MARKDOWN],
 +      ignores: GLOB_SLIDEV,
        languageOptions: {
          parser: parserPlain
        },
-@@ -857,6 +865,29 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -857,6 +866,29 @@ async function formatters(options = {}, stylistic2 = {}) {
          ]
        }
      });
-+    if (hasSlidev) {
++    if (options.slidev) {
 +      configs.push({
 +        files: GLOB_SLIDEV,
 +        languageOptions: {
@@ -283,7 +293,7 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
    }
    if (options.graphql) {
      configs.push({
-@@ -880,7 +911,7 @@ async function formatters(options = {}, stylistic2 = {}) {
+@@ -880,7 +912,7 @@ async function formatters(options = {}, stylistic2 = {}) {
  }
  
  // src/configs/react.ts
@@ -292,7 +302,7 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
  var ReactRefreshAllowConstantExportPackages = [
    "vite"
  ];
-@@ -905,7 +936,7 @@ async function react(options = {}) {
+@@ -905,7 +937,7 @@ async function react(options = {}) {
      interopDefault(import("eslint-plugin-react-refresh"))
    ]);
    const isAllowConstantExport = ReactRefreshAllowConstantExportPackages.some(
@@ -301,7 +311,7 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
    );
    return [
      {
-@@ -1262,6 +1293,8 @@ async function svelte(options = {}) {
+@@ -1262,6 +1294,8 @@ async function svelte(options = {}) {
            { args: "after-used", argsIgnorePattern: "^_", vars: "all", varsIgnorePattern: "^(_|\\$\\$Props$)" }
          ],
          ...stylistic2 ? {
@@ -310,7 +320,7 @@ index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152
            "style/no-trailing-spaces": "off",
            // superseded by svelte/no-trailing-spaces
            "svelte/derived-has-same-inputs-outputs": "error",
-@@ -1841,12 +1874,12 @@ async function antfu(options = {}, ...userConfigs) {
+@@ -1841,12 +1875,12 @@ async function antfu(options = {}, ...userConfigs) {
    const {
      componentExts = [],
      gitignore: enableGitignore = true,

@@ -10,8 +10,16 @@ export default antfu(
     },
     formatters: {
       markdown: true,
-      slidev: true,
       css: true,
+      slidev: {
+        files: [
+          '**/slides.md',
+          '**/template.md',
+          '**/example.md',
+          'test/fixtures/markdown/**/*.md',
+        ],
+      },
+
     },
   },
 )
