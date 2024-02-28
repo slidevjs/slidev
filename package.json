@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "0.48.0-beta.18",
+  "version": "0.48.0-beta.19",
   "private": true,
   "packageManager": "pnpm@8.15.4",
   "engines": {
@@ -46,7 +46,7 @@
     "@types/resolve": "^1.20.6",
     "@types/semver": "^7.5.8",
     "@types/yargs": "^17.0.32",
-    "@vueuse/core": "^10.8.0",
+    "@vueuse/core": "^10.9.0",
     "bumpp": "^9.3.0",
     "cross-env": "^7.0.3",
     "cypress": "^13.6.6",
@@ -56,7 +56,7 @@
     "katex": "^0.16.9",
     "lint-staged": "^15.2.2",
     "mermaid": "^10.8.0",
-    "playwright-chromium": "^1.41.2",
+    "playwright-chromium": "^1.42.0",
     "pnpm": "^8.15.4",
     "rimraf": "^5.0.5",
     "shiki": "^1.1.7",
