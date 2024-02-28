@@ -1,6 +1,6 @@
-import { join } from "node:path"
-import process from "node:process"
-import { $, argv, cd, fs } from "zx"
+import { join } from 'node:path'
+import process from 'node:process'
+import { $, argv, cd, fs } from 'zx'
 
 const WORKSPACE_ROOT = process.cwd()
 const PKG_ROOT = join(WORKSPACE_ROOT, argv._[0])
