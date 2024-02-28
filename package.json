@@ -22,6 +22,9 @@
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test"
   },
+  "dependencies": {
+    "prettier-plugin-slidev": "^1.0.2"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.4",
     "@antfu/ni": "^0.21.12",
@@ -71,7 +74,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
+      "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch",
+      "@antfu/eslint-config@2.6.4": "patches/@antfu__eslint-config@2.6.4.patch"
     }
   },
   "simple-git-hooks": {

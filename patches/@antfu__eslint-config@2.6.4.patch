@@ -1,0 +1,392 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 464efcaba86859445732d5e6d99bcc8602a2c080..916fe938e5de8f758ec48112e47db8e3c5037d4b 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -94,7 +94,7 @@ module.exports = __toCommonJS(src_exports);
+ // src/factory.ts
+ var import_node_process3 = __toESM(require("process"), 1);
+ var import_node_fs = __toESM(require("fs"), 1);
+-var import_local_pkg3 = require("local-pkg");
++var import_local_pkg4 = require("local-pkg");
+ 
+ // src/plugins.ts
+ var import_eslint_plugin_antfu = __toESM(require("eslint-plugin-antfu"), 1);
+@@ -505,7 +505,7 @@ async function interopDefault(m) {
+ async function ensurePackages(packages) {
+   if (import_node_process.default.env.CI || import_node_process.default.stdout.isTTY === false)
+     return;
+-  const nonExistingPackages = packages.filter((i) => !(0, import_local_pkg.isPackageExists)(i));
++  const nonExistingPackages = packages.filter((i) => i && !(0, import_local_pkg.isPackageExists)(i));
+   if (nonExistingPackages.length === 0)
+     return;
+   const { default: prompts } = await import("prompts");
+@@ -762,6 +762,9 @@ async function perfectionist() {
+   ];
+ }
+ 
++// src/configs/formatters.ts
++var import_local_pkg2 = require("local-pkg");
++
+ // src/configs/stylistic.ts
+ var StylisticConfigDefaults = {
+   indent: 2,
+@@ -810,17 +813,19 @@ async function stylistic(options = {}) {
+ 
+ // src/configs/formatters.ts
+ async function formatters(options = {}, stylistic2 = {}) {
+-  await ensurePackages([
+-    "eslint-plugin-format"
+-  ]);
+   if (options === true) {
+     options = {
+       css: true,
+       graphql: true,
+       html: true,
+-      markdown: true
++      markdown: true,
++      slidev: (0, import_local_pkg2.isPackageExists)("@slidev/cli")
+     };
+   }
++  await ensurePackages([
++    "eslint-plugin-format",
++    options.markdown && options.slidev ? "prettier-plugin-slidev" : void 0
++  ]);
+   const {
+     indent,
+     quotes,
+@@ -929,8 +934,11 @@ async function formatters(options = {}, stylistic2 = {}) {
+   }
+   if (options.markdown) {
+     const formater = options.markdown === true ? "prettier" : options.markdown;
++    const hasSlidev = formater === "prettier" && options.slidev;
++    const GLOB_SLIDEV = hasSlidev ? ["**/slides.md"] : [];
+     configs.push({
+       files: [GLOB_MARKDOWN],
++      ignores: GLOB_SLIDEV,
+       languageOptions: {
+         parser: parserPlain
+       },
+@@ -950,6 +958,29 @@ async function formatters(options = {}, stylistic2 = {}) {
+         ]
+       }
+     });
++    if (hasSlidev) {
++      configs.push({
++        files: GLOB_SLIDEV,
++        languageOptions: {
++          parser: parserPlain
++        },
++        name: "antfu:formatter:slidev",
++        rules: {
++          "format/prettier": [
++            "error",
++            {
++              printWidth: 120,
++              ...prettierOptions,
++              embeddedLanguageFormatting: "off",
++              parser: "slidev",
++              plugins: [
++                "prettier-plugin-slidev"
++              ]
++            }
++          ]
++        }
++      });
++    }
+   }
+   if (options.graphql) {
+     configs.push({
+@@ -973,7 +1004,7 @@ async function formatters(options = {}, stylistic2 = {}) {
+ }
+ 
+ // src/configs/react.ts
+-var import_local_pkg2 = require("local-pkg");
++var import_local_pkg3 = require("local-pkg");
+ var ReactRefreshAllowConstantExportPackages = [
+   "vite"
+ ];
+@@ -998,7 +1029,7 @@ async function react(options = {}) {
+     interopDefault(import("eslint-plugin-react-refresh"))
+   ]);
+   const isAllowConstantExport = ReactRefreshAllowConstantExportPackages.some(
+-    (i) => (0, import_local_pkg2.isPackageExists)(i)
++    (i) => (0, import_local_pkg3.isPackageExists)(i)
+   );
+   return [
+     {
+@@ -1355,6 +1386,8 @@ async function svelte(options = {}) {
+           { args: "after-used", argsIgnorePattern: "^_", vars: "all", varsIgnorePattern: "^(_|\\$\\$Props$)" }
+         ],
+         ...stylistic2 ? {
++          "style/indent": "off",
++          // superseded by svelte/indent
+           "style/no-trailing-spaces": "off",
+           // superseded by svelte/no-trailing-spaces
+           "svelte/derived-has-same-inputs-outputs": "error",
+@@ -1934,12 +1967,12 @@ async function antfu(options = {}, ...userConfigs) {
+   const {
+     componentExts = [],
+     gitignore: enableGitignore = true,
+-    isInEditor = !!((import_node_process3.default.env.VSCODE_PID || import_node_process3.default.env.JETBRAINS_IDE || import_node_process3.default.env.VIM) && !import_node_process3.default.env.CI),
++    isInEditor = !!((import_node_process3.default.env.VSCODE_PID || import_node_process3.default.env.VSCODE_CWD || import_node_process3.default.env.JETBRAINS_IDE || import_node_process3.default.env.VIM) && !import_node_process3.default.env.CI),
+     react: enableReact = false,
+     svelte: enableSvelte = false,
+-    typescript: enableTypeScript = (0, import_local_pkg3.isPackageExists)("typescript"),
++    typescript: enableTypeScript = (0, import_local_pkg4.isPackageExists)("typescript"),
+     unocss: enableUnoCSS = false,
+-    vue: enableVue = VuePackages.some((i) => (0, import_local_pkg3.isPackageExists)(i))
++    vue: enableVue = VuePackages.some((i) => (0, import_local_pkg4.isPackageExists)(i))
+   } = options;
+   const stylisticOptions = options.stylistic === false ? false : typeof options.stylistic === "object" ? options.stylistic : {};
+   if (stylisticOptions && !("jsx" in stylisticOptions))
+diff --git a/dist/index.d.cts b/dist/index.d.cts
+index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19bfb74b34b 100644
+--- a/dist/index.d.cts
++++ b/dist/index.d.cts
+@@ -189,6 +189,10 @@ interface OptionsFormatters {
+      * By default it's controlled by our own config.
+      */
+     dprintOptions?: boolean;
++    /**
++     * Install the prettier plugin for handle Slidev markdown
++     */
++    slidev?: 'prettier' | boolean;
+ }
+ interface OptionsComponentExts {
+     /**
+@@ -511,6 +515,6 @@ declare function toArray<T>(value: T | T[]): T[];
+ declare function interopDefault<T>(m: Awaitable<T>): Promise<T extends {
+     default: infer U;
+ } ? U : T>;
+-declare function ensurePackages(packages: string[]): Promise<void>;
++declare function ensurePackages(packages: (string | undefined)[]): Promise<void>;
+ 
+ export { type Awaitable, type FlatConfigItem, GLOB_ALL_SRC, GLOB_CSS, GLOB_EXCLUDE, GLOB_HTML, GLOB_JS, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_JSX, GLOB_LESS, GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN, GLOB_POSTCSS, GLOB_SCSS, GLOB_SRC, GLOB_SRC_EXT, GLOB_STYLE, GLOB_SVELTE, GLOB_TESTS, GLOB_TOML, GLOB_TS, GLOB_TSX, GLOB_VUE, GLOB_YAML, type OptionsComponentExts, type OptionsConfig, type OptionsFiles, type OptionsFormatters, type OptionsHasTypeScript, type OptionsIsInEditor, type OptionsOverrides, type OptionsStylistic, type OptionsTypeScriptParserOptions, type OptionsTypeScriptWithTypes, type OptionsTypescript, type OptionsUnoCSS, type OptionsVue, type ResolvedOptions, type Rules, type StylisticConfig, StylisticConfigDefaults, type UserConfigItem, type WrapRuleConfig, antfu, combine, comments, antfu as default, ensurePackages, formatters, getOverrides, ignores, imports, interopDefault, javascript, jsdoc, jsonc, markdown, node, parserPlain, perfectionist, react, renameRules, resolveSubOptions, sortPackageJson, sortTsconfig, stylistic, svelte, test, toArray, toml, typescript, unicorn, unocss, vue, yaml };
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 089791f9291a88889e5238f9c229380eeb8fa5fa..68fdda5085309bef098a0278d072f19bfb74b34b 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -189,6 +189,10 @@ interface OptionsFormatters {
+      * By default it's controlled by our own config.
+      */
+     dprintOptions?: boolean;
++    /**
++     * Install the prettier plugin for handle Slidev markdown
++     */
++    slidev?: 'prettier' | boolean;
+ }
+ interface OptionsComponentExts {
+     /**
+@@ -511,6 +515,6 @@ declare function toArray<T>(value: T | T[]): T[];
+ declare function interopDefault<T>(m: Awaitable<T>): Promise<T extends {
+     default: infer U;
+ } ? U : T>;
+-declare function ensurePackages(packages: string[]): Promise<void>;
++declare function ensurePackages(packages: (string | undefined)[]): Promise<void>;
+ 
+ export { type Awaitable, type FlatConfigItem, GLOB_ALL_SRC, GLOB_CSS, GLOB_EXCLUDE, GLOB_HTML, GLOB_JS, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_JSX, GLOB_LESS, GLOB_MARKDOWN, GLOB_MARKDOWN_CODE, GLOB_MARKDOWN_IN_MARKDOWN, GLOB_POSTCSS, GLOB_SCSS, GLOB_SRC, GLOB_SRC_EXT, GLOB_STYLE, GLOB_SVELTE, GLOB_TESTS, GLOB_TOML, GLOB_TS, GLOB_TSX, GLOB_VUE, GLOB_YAML, type OptionsComponentExts, type OptionsConfig, type OptionsFiles, type OptionsFormatters, type OptionsHasTypeScript, type OptionsIsInEditor, type OptionsOverrides, type OptionsStylistic, type OptionsTypeScriptParserOptions, type OptionsTypeScriptWithTypes, type OptionsTypescript, type OptionsUnoCSS, type OptionsVue, type ResolvedOptions, type Rules, type StylisticConfig, StylisticConfigDefaults, type UserConfigItem, type WrapRuleConfig, antfu, combine, comments, antfu as default, ensurePackages, formatters, getOverrides, ignores, imports, interopDefault, javascript, jsdoc, jsonc, markdown, node, parserPlain, perfectionist, react, renameRules, resolveSubOptions, sortPackageJson, sortTsconfig, stylistic, svelte, test, toArray, toml, typescript, unicorn, unocss, vue, yaml };
+diff --git a/dist/index.js b/dist/index.js
+index 9c4352530f050168badd09af6808c1ffb6934544..153ae73e43b48007deb646c5ac08c152607bd5ee 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,7 +1,7 @@
+ // src/factory.ts
+ import process3 from "process";
+ import fs from "fs";
+-import { isPackageExists as isPackageExists3 } from "local-pkg";
++import { isPackageExists as isPackageExists4 } from "local-pkg";
+ 
+ // src/plugins.ts
+ import { default as default2 } from "eslint-plugin-antfu";
+@@ -412,7 +412,7 @@ async function interopDefault(m) {
+ async function ensurePackages(packages) {
+   if (process.env.CI || process.stdout.isTTY === false)
+     return;
+-  const nonExistingPackages = packages.filter((i) => !isPackageExists(i));
++  const nonExistingPackages = packages.filter((i) => i && !isPackageExists(i));
+   if (nonExistingPackages.length === 0)
+     return;
+   const { default: prompts } = await import("prompts");
+@@ -669,6 +669,9 @@ async function perfectionist() {
+   ];
+ }
+ 
++// src/configs/formatters.ts
++import { isPackageExists as isPackageExists2 } from "local-pkg";
++
+ // src/configs/stylistic.ts
+ var StylisticConfigDefaults = {
+   indent: 2,
+@@ -717,17 +720,19 @@ async function stylistic(options = {}) {
+ 
+ // src/configs/formatters.ts
+ async function formatters(options = {}, stylistic2 = {}) {
+-  await ensurePackages([
+-    "eslint-plugin-format"
+-  ]);
+   if (options === true) {
+     options = {
+       css: true,
+       graphql: true,
+       html: true,
+-      markdown: true
++      markdown: true,
++      slidev: isPackageExists2("@slidev/cli")
+     };
+   }
++  await ensurePackages([
++    "eslint-plugin-format",
++    options.markdown && options.slidev ? "prettier-plugin-slidev" : void 0
++  ]);
+   const {
+     indent,
+     quotes,
+@@ -836,8 +841,11 @@ async function formatters(options = {}, stylistic2 = {}) {
+   }
+   if (options.markdown) {
+     const formater = options.markdown === true ? "prettier" : options.markdown;
++    const hasSlidev = formater === "prettier" && options.slidev;
++    const GLOB_SLIDEV = hasSlidev ? ["**/slides.md"] : [];
+     configs.push({
+       files: [GLOB_MARKDOWN],
++      ignores: GLOB_SLIDEV,
+       languageOptions: {
+         parser: parserPlain
+       },
+@@ -857,6 +865,29 @@ async function formatters(options = {}, stylistic2 = {}) {
+         ]
+       }
+     });
++    if (hasSlidev) {
++      configs.push({
++        files: GLOB_SLIDEV,
++        languageOptions: {
++          parser: parserPlain
++        },
++        name: "antfu:formatter:slidev",
++        rules: {
++          "format/prettier": [
++            "error",
++            {
++              printWidth: 120,
++              ...prettierOptions,
++              embeddedLanguageFormatting: "off",
++              parser: "slidev",
++              plugins: [
++                "prettier-plugin-slidev"
++              ]
++            }
++          ]
++        }
++      });
++    }
+   }
+   if (options.graphql) {
+     configs.push({
+@@ -880,7 +911,7 @@ async function formatters(options = {}, stylistic2 = {}) {
+ }
+ 
+ // src/configs/react.ts
+-import { isPackageExists as isPackageExists2 } from "local-pkg";
++import { isPackageExists as isPackageExists3 } from "local-pkg";
+ var ReactRefreshAllowConstantExportPackages = [
+   "vite"
+ ];
+@@ -905,7 +936,7 @@ async function react(options = {}) {
+     interopDefault(import("eslint-plugin-react-refresh"))
+   ]);
+   const isAllowConstantExport = ReactRefreshAllowConstantExportPackages.some(
+-    (i) => isPackageExists2(i)
++    (i) => isPackageExists3(i)
+   );
+   return [
+     {
+@@ -1262,6 +1293,8 @@ async function svelte(options = {}) {
+           { args: "after-used", argsIgnorePattern: "^_", vars: "all", varsIgnorePattern: "^(_|\\$\\$Props$)" }
+         ],
+         ...stylistic2 ? {
++          "style/indent": "off",
++          // superseded by svelte/indent
+           "style/no-trailing-spaces": "off",
+           // superseded by svelte/no-trailing-spaces
+           "svelte/derived-has-same-inputs-outputs": "error",
+@@ -1841,12 +1874,12 @@ async function antfu(options = {}, ...userConfigs) {
+   const {
+     componentExts = [],
+     gitignore: enableGitignore = true,
+-    isInEditor = !!((process3.env.VSCODE_PID || process3.env.JETBRAINS_IDE || process3.env.VIM) && !process3.env.CI),
++    isInEditor = !!((process3.env.VSCODE_PID || process3.env.VSCODE_CWD || process3.env.JETBRAINS_IDE || process3.env.VIM) && !process3.env.CI),
+     react: enableReact = false,
+     svelte: enableSvelte = false,
+-    typescript: enableTypeScript = isPackageExists3("typescript"),
++    typescript: enableTypeScript = isPackageExists4("typescript"),
+     unocss: enableUnoCSS = false,
+-    vue: enableVue = VuePackages.some((i) => isPackageExists3(i))
++    vue: enableVue = VuePackages.some((i) => isPackageExists4(i))
+   } = options;
+   const stylisticOptions = options.stylistic === false ? false : typeof options.stylistic === "object" ? options.stylistic : {};
+   if (stylisticOptions && !("jsx" in stylisticOptions))
+diff --git a/package.json b/package.json
+index 089e8db2d093ca70ce1da676afe44a43ceba86ee..3310a35533210bc38456116c92922f6e4f1e257e 100644
+--- a/package.json
++++ b/package.json
+@@ -24,6 +24,18 @@
+     "bin",
+     "dist"
+   ],
++  "scripts": {
++    "build": "tsup --format esm,cjs --clean --dts",
++    "stub": "tsup --format esm",
++    "dev": "tsup --format esm,cjs --watch & eslint-flat-config-viewer",
++    "watch": "tsup --format esm,cjs --watch",
++    "lint": "eslint .",
++    "prepack": "nr build",
++    "release": "bumpp && pnpm publish",
++    "test": "vitest",
++    "typecheck": "tsc --noEmit",
++    "prepare": "simple-git-hooks"
++  },
+   "peerDependencies": {
+     "@unocss/eslint-plugin": ">=0.50.0",
+     "eslint": ">=8.40.0",
+@@ -89,6 +101,7 @@
+     "local-pkg": "^0.5.0",
+     "parse-gitignore": "^2.0.0",
+     "picocolors": "^1.0.0",
++    "prettier-plugin-slidev": "^1.0.2",
+     "prompts": "^2.4.2",
+     "toml-eslint-parser": "^0.9.3",
+     "vue-eslint-parser": "^9.4.2",
+@@ -96,6 +109,7 @@
+     "yargs": "^17.7.2"
+   },
+   "devDependencies": {
++    "@antfu/eslint-config": "2.6.4",
+     "@antfu/eslint-plugin-prettier": "^5.0.1-1",
+     "@antfu/ni": "^0.21.12",
+     "@stylistic/eslint-plugin-migrate": "^1.5.4",
+@@ -126,23 +140,12 @@
+     "tsup": "^8.0.1",
+     "typescript": "^5.3.3",
+     "vitest": "^1.2.2",
+-    "vue": "^3.4.15",
+-    "@antfu/eslint-config": "2.6.4"
++    "vue": "^3.4.15"
+   },
+   "simple-git-hooks": {
+     "pre-commit": "pnpm lint-staged"
+   },
+   "lint-staged": {
+     "*": "eslint --fix"
+-  },
+-  "scripts": {
+-    "build": "tsup --format esm,cjs --clean --dts",
+-    "stub": "tsup --format esm",
+-    "dev": "tsup --format esm,cjs --watch & eslint-flat-config-viewer",
+-    "watch": "tsup --format esm,cjs --watch",
+-    "lint": "eslint .",
+-    "release": "bumpp && pnpm publish",
+-    "test": "vitest",
+-    "typecheck": "tsc --noEmit"
+   }
+ }

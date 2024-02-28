@@ -9,8 +9,8 @@ export default antfu(
       },
     },
     formatters: {
-      // disable for now, we can enable it after we have the slidev plugin in eslint-config
-      markdown: false,
+      markdown: true,
+      slidev: true,
       css: true,
     },
   },
