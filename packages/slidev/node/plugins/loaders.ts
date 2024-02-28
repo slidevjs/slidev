@@ -646,14 +646,7 @@ defineProps<{ no: number | string }>()`)
   async function generateMonacoTypes() {
     const typesRoot = join(userRoot, 'snippets')
     const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
-    let result = [
-      'import * as monaco from "monaco-editor"',
-      'async function addFile(mod, path) {',
-      '  const code = (await mod).default',
-      '  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, "file:///" + path)',
-      '  monaco.editor.createModel(code, "javascript", monaco.Uri.file(path))',
-      '}',
-    ].join('\n')
+    let result = 'import { addFile } from "@slidev/client/setup/monaco.ts"\n'
 
     // User snippets
     for (const file of files) {
