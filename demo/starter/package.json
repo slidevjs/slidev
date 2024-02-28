@@ -10,7 +10,6 @@
     "@slidev/cli": "workspace:*",
     "@slidev/theme-default": "^0.25.0",
     "@slidev/theme-seriph": "^0.25.0",
-    "@slidev/types": "workspace:*",
     "nodemon": "^3.1.0",
     "vue": "^3.4.20"
   }
