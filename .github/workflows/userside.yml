@@ -1,0 +1,106 @@
+name: User-side Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [ubuntu-latest, windows-latest]
+        pm: [yarn, npm, pnpm]
+        hoist: [true, false]
+      fail-fast: true
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup
+        run: npm i -g @antfu/ni
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install
+        run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: Build
+        run: nr build
+
+      - name: Pack
+        run: node ./scripts/pack.mjs ../temp/slidev-pkgs
+
+      - name: Create new project
+        run: |
+          npm i -g ../temp/slidev-pkgs/create-app.tgz
+          echo "N" | create-slidev ../temp/slidev-project
+
+      - name: Remove npmrc
+        run: pnpx del-cli ./.npmrc
+        working-directory: ../temp/slidev-project
+        if: ${{ ! matrix.hoist }}
+
+      - name: Install project (npm, pnpm)
+        run: |
+          ${{ matrix.pm }} i
+          ${{ matrix.pm }} i ../slidev-pkgs/cli.tgz playwright-chromium
+        working-directory: ../temp/slidev-project
+        if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Install project (yarn)
+        run: |
+          yarn
+          yarn add ../slidev-pkgs/cli.tgz playwright-chromium
+        working-directory: ../temp/slidev-project
+        if: ${{ matrix.pm == 'yarn' }}
+
+      - name: Test build and export command in project
+        run: |
+          pnpm build
+          pnpm export --timeout 300000
+          pnpm export --per-slide --timeout 300000
+        working-directory: ../temp/slidev-project
+
+      - name: Install globally
+        run: ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
+        if: ${{ matrix.pm != 'yarn' }}
+      
+      - name: Create slide file
+        run: pnpm --package=cpy-cli dlx cpy ./packages/slidev/template.md ../temp/
+        if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Test build and export command in global mode
+        run: |
+          slidev build template.md
+          slidev export template.md --timeout 300000
+          slidev export template.md --per-slide --timeout 300000
+        if: ${{ matrix.pm != 'yarn' }}
+        working-directory: ../temp
