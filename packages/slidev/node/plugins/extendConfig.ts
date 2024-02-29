@@ -8,6 +8,16 @@ import type { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, toAtFS } from '../resolver'
 import { dependencies } from '../../../client/package.json'
 
+const INCLUDE = [
+  ...Object.keys(dependencies),
+  'codemirror/mode/javascript/javascript',
+  'codemirror/mode/css/css',
+  'codemirror/mode/markdown/markdown',
+  'codemirror/mode/xml/xml',
+  'codemirror/mode/htmlmixed/htmlmixed',
+  'codemirror/addon/display/placeholder',
+]
+
 const EXCLUDE = [
   '@slidev/shared',
   '@slidev/types',
@@ -46,7 +56,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         },
         optimizeDeps: {
           exclude: EXCLUDE,
-          include: Object.keys(dependencies)
+          include: INCLUDE
             .filter(i => !EXCLUDE.includes(i))
             // We need to specify the full deps path for non-hoisted modules
             .map(i => `@slidev/cli > @slidev/client > ${i}`),
