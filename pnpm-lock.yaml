@@ -15,10 +15,6 @@ patchedDependencies:
 importers:
 
   .:
-    dependencies:
-      prettier-plugin-slidev:
-        specifier: ^1.0.2
-        version: 1.0.2(prettier@3.2.5)
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.6.4
@@ -125,6 +121,9 @@ importers:
       pnpm:
         specifier: ^8.15.4
         version: 8.15.4
+      prettier-plugin-slidev:
+        specifier: ^1.0.4
+        version: 1.0.4(prettier@3.2.5)
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -1922,7 +1921,7 @@ packages:
     dependencies:
       '@slidev/types': 0.47.5
       js-yaml: 4.1.0
-    dev: false
+    dev: true
 
   /@slidev/rough-notation@0.1.0:
     resolution: {integrity: sha512-a/CbVmjuoO3E4JbUr2HOTsXndbcrdLWOM+ajbSQIY3gmLFzhjeXHGksGcp1NZ08pJjLZyTCxfz1C7v/ltJqycA==}
@@ -1956,7 +1955,7 @@ packages:
   /@slidev/types@0.47.5:
     resolution: {integrity: sha512-X67V4cCgM0Sz50bP8GbVzmiL8DHC2IXvdKcsN7DlxHyf+/T4d9GveeGukwha5Fx3MuYeGZWKag7TFL2ZY4w54A==}
     engines: {node: '>=18.0.0'}
-    dev: false
+    dev: true
 
   /@stylistic/eslint-plugin-js@1.5.4(eslint@8.57.0):
     resolution: {integrity: sha512-3ctWb3NvJNV1MsrZN91cYp2EGInLPSoZKphXIbIRx/zjZxKwLDr9z4LMOWtqjq14li/OgqUUcMq5pj8fgbLoTw==}
@@ -7534,14 +7533,14 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier-plugin-slidev@1.0.2(prettier@3.2.5):
-    resolution: {integrity: sha512-Un2VygzbNeGexdLJBetSBpybdZU3lYAhsZ5s9J978CKFK+AZNgs4efpH59bJtRhYwnG0bqAfOc1sFvZAVEneEw==}
+  /prettier-plugin-slidev@1.0.4(prettier@3.2.5):
+    resolution: {integrity: sha512-Qt8Ikkob0woRbxU+eWob2L5GHX/ez7ZjnSKGa93qw+d47QtV2A3/2v9LnfC7VNK2qF7d61HCnQtw45qGvJ/vew==}
     peerDependencies:
       prettier: ^3.2.4
     dependencies:
       '@slidev/parser': 0.47.5
       prettier: 3.2.5
-    dev: false
+    dev: true
 
   /prettier@3.2.5:
     resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}

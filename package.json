@@ -22,9 +22,6 @@
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test"
   },
-  "dependencies": {
-    "prettier-plugin-slidev": "^1.0.2"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.4",
     "@antfu/ni": "^0.21.12",
@@ -61,6 +58,7 @@
     "mermaid": "^10.8.0",
     "playwright-chromium": "^1.42.0",
     "pnpm": "^8.15.4",
+    "prettier-plugin-slidev": "^1.0.4",
     "rimraf": "^5.0.5",
     "shiki": "^1.1.7",
     "simple-git-hooks": "^2.9.0",
