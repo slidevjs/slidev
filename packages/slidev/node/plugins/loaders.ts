@@ -168,7 +168,7 @@ export function createSlidesLoader(
 
         if (!equal(data.features, newData.features)) {
           setTimeout(() => {
-            ctx.server.ws.send({ type: 'full-reload' })
+            ctx.server.hot.send({ type: 'full-reload' })
           }, 1)
         }
 
@@ -193,27 +193,25 @@ export function createSlidesLoader(
             })
           ) {
             if (a?.note !== b?.note) {
-              ctx.server.ws.send({
-                type: 'custom',
-                event: 'slidev-update-note',
-                data: {
+              ctx.server.hot.send(
+                'slidev:update-note',
+                {
                   id: i,
                   note: b!.note || '',
                   noteHTML: renderNote(b!.note || ''),
                 },
-              })
+              )
             }
             continue
           }
 
-          ctx.server.ws.send({
-            type: 'custom',
-            event: 'slidev-update',
-            data: {
+          ctx.server.hot.send(
+            'slidev:update-slide',
+            {
               id: i,
               data: withRenderedNote(newData.slides[i]),
             },
-          })
+          )
           hmrPages.add(i)
         }
 
