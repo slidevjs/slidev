@@ -39,7 +39,7 @@ function onMousedown() {
     </div>
     <div
       relative flex-auto h5 flex="~"
-      @dblclick="current = 999999"
+      @dblclick="current = clicksContext.total"
     >
       <div
         v-for="i of range" :key="i"
