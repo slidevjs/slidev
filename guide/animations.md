@@ -342,7 +342,7 @@ Experimental: This is not supported by all browsers. Check the [Browser compatib
 
 You can use the `view-transition-name` CSS property to name view transitions, which creates connections between different page elements and smooth transitions when switching slides.
 
-You can enable [MDC (Markdown Component) Syntax](/syntax#mdc-syntax) support to conveniently name view-transitions:
+You can enable [MDC (Markdown Component) Syntax](/guide/syntax#mdc-syntax) support to conveniently name view-transitions:
 
 ```md
 ---
