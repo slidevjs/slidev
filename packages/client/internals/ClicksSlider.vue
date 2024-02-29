@@ -68,6 +68,7 @@ function onMousedown() {
         type="range" :min="0" :max="total" :step="1" z-10 op0
         :style="{ '--thumb-width': `${1 / (total + 1) * 100}%` }"
         @mousedown="onMousedown"
+        @focus="event => (event.currentTarget as HTMLElement)?.blur()"
       >
     </div>
   </div>
