@@ -9,13 +9,15 @@ setTimeout(() => {
 
 <template>
   <div class="slide-loading">
-    <div v-if="timeout" class="lds-ring">
-      <div />
-      <div />
-      <div />
-      <div />
-    </div>
-    <div>Slide is loading...</div>
+    <template v-if="timeout">
+      <div class="lds-ring">
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
+      <div>Slide is loading...</div>
+    </template>
   </div>
 </template>
 
@@ -46,7 +48,7 @@ setTimeout(() => {
   border: 4px solid;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: var(--vp-c-brand) transparent transparent transparent;
+  border-color: var(--slidev-theme-primary) transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;

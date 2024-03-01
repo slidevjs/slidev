@@ -50,7 +50,7 @@ function onAfterLeave() {
     tag="div"
     @after-leave="onAfterLeave"
   >
-    <template v-for="route of loadedRoutes" :key="route.path">
+    <div v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
         :is="route.component!"
         v-show="route === currentRoute"
@@ -60,7 +60,7 @@ function onAfterLeave() {
         :render-context="renderContext"
         class="overflow-hidden"
       />
-    </template>
+    </div>
   </component>
 
   <!-- Global Top -->
