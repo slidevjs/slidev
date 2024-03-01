@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
 import { computed } from 'vue'
-import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
   clicksContext: ClicksContext
@@ -34,15 +33,13 @@ function onMousedown() {
   >
     <div class="flex gap-1 items-center min-w-16">
       <carbon:cursor-1 text-sm op50 />
-      <template v-if="current <= total && current >= 0">
-        <span text-primary>{{ current }}</span>
-        <span op50>/</span>
-      </template>
+      <span text-primary>{{ current }}</span>
+      <span op50>/</span>
       <span op50>{{ total }}</span>
     </div>
     <div
       relative flex-auto h5 flex="~"
-      @dblclick="current = CLICKS_MAX"
+      @dblclick="current = clicksContext.total"
     >
       <div
         v-for="i of range" :key="i"
@@ -71,6 +68,7 @@ function onMousedown() {
         type="range" :min="0" :max="total" :step="1" z-10 op0
         :style="{ '--thumb-width': `${1 / (total + 1) * 100}%` }"
         @mousedown="onMousedown"
+        @focus="event => (event.currentTarget as HTMLElement)?.blur()"
       >
     </div>
   </div>
