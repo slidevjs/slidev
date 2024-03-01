@@ -9,7 +9,7 @@ declare global {
 }
 
 Cypress.Commands.add('rightArrow', (n = 1) => {
-  cy.get('body').type('{rightarrow}'.repeat(n)).wait(200)
+  cy.get('body').wait(200).type('{rightarrow}'.repeat(n)).wait(200)
 })
 
 context('Basic', () => {
@@ -45,7 +45,7 @@ context('Basic', () => {
     cy.contains('Global Footer')
       .should('not.exist')
 
-    cy.get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-2 > p')
+    cy.get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-2 > div > p')
       .should('have.css', 'border-color', 'rgb(0, 128, 0)')
       .should('not.have.css', 'color', 'rgb(128, 0, 0)')
 
@@ -53,7 +53,7 @@ context('Basic', () => {
 
     cy.get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 .slidev-code')
       .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
-      .get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 > p')
+      .get('#page-root > #slide-container > #slide-content > #slideshow > .slidev-page-5 > div > p')
       .should('have.text', 'Current Page: 5')
   })
 
