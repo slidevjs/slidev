@@ -52,7 +52,7 @@ function onAfterLeave() {
   >
     <template v-for="route of loadedRoutes" :key="route.path">
       <SlideWrapper
-        :is="route?.component as any"
+        :is="route.component!"
         v-show="route === currentRoute"
         :clicks-context="usePrimaryClicks(route)"
         :class="getSlideClass(route)"

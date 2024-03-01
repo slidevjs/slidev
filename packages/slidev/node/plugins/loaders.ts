@@ -708,20 +708,29 @@ defineProps<{ no: number | string }>()`)
 
     imports.push(
       `import { markRaw } from 'vue'`,
-      `import __layout__end from '${layouts.end}'`,
+      `import * as __layout__error from '${layouts.error}'`,
     )
 
-    let no = 1
     const routes = data.slides
       .map((i, idx) => {
-        imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-        imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)
-        const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: f${no} }`
+        const no = idx + 1
+        imports.push(`import { meta as f${no} } from '${slidePrefix}${no}.frontmatter'`)
+        const route = `{
+          path: '${no}',
+          name: 'page-${no}',
+          meta: f${no},
+          component: async () => {
+            try {
+              return await import('${slidePrefix}${no}.md')
+            }
+            catch {
+              return __layout__error
+            }
+          }
+        }`
 
         if (i.frontmatter?.routeAlias)
           redirects.push(`{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }`)
-
-        no += 1
 
         return route
       })

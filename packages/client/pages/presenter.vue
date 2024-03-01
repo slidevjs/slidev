@@ -119,7 +119,7 @@ onMounted(() => {
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="(nextFrame[0].component as any)"
+            :is="nextFrame[0].component!"
             :key="nextFrame[0].path"
             :clicks-context="nextFrameClicksCtx"
             :class="getSlideClass(nextFrame[0])"

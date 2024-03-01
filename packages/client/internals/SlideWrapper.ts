@@ -1,9 +1,10 @@
-import { computed, defineComponent, h, ref, toRef } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, h, ref, toRef } from 'vue'
 import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext } from '@slidev/types'
 import type { RouteRecordRaw } from 'vue-router'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import SlideLoading from './SlideLoading.vue'
 
 export default defineComponent({
   name: 'SlideWrapper',
@@ -21,7 +22,6 @@ export default defineComponent({
       default: false,
     },
     is: {
-      type: Object,
       required: true,
     },
     route: {
@@ -48,11 +48,18 @@ export default defineComponent({
           }
     })
 
+    const SlideComponent = defineAsyncComponent({
+      loader: (props.is as any),
+      delay: 0,
+      loadingComponent: SlideLoading,
+    })
+
     return {
+      SlideComponent,
       style,
     }
   },
   render() {
-    return h(this.$props.is, { style: this.style })
+    return h(this.SlideComponent, { style: this.style })
   },
 })

@@ -43,7 +43,7 @@ provideLocal(injectionSlidevContext, reactive({
     <GlobalBottom />
 
     <SlideWrapper
-      :is="route?.component!"
+      :is="route.component!"
       :clicks-context="clicksContext"
       :class="getSlideClass(route)"
       :route="route"

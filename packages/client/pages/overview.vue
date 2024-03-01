@@ -173,8 +173,7 @@ onMounted(() => {
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :is="route.component"
-                v-if="route?.component"
+                :is="route.component!"
                 :clicks-context="getClicksContext(route)"
                 :class="getSlideClass(route)"
                 :route="route"
