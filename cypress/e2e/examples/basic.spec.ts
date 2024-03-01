@@ -1,3 +1,17 @@
+export {}
+declare global {
+  // eslint-disable-next-line ts/no-namespace
+  namespace Cypress {
+    interface Chainable<Subject> {
+      rightArrow: (n?: number) => Chainable<Subject>
+    }
+  }
+}
+
+Cypress.Commands.add('rightArrow', (n = 1) => {
+  cy.get('body').type('{rightarrow}'.repeat(n)).wait(200)
+})
+
 context('Basic', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -24,8 +38,7 @@ context('Basic', () => {
 
     cy.get('#page-root > #slide-container > #slide-content')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
       .url()
       .should('eq', 'http://localhost:3030/2')
 
@@ -51,8 +64,7 @@ context('Basic', () => {
       .type('{DownArrow}')
       .url().should('eq', 'http://localhost:3030/6')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
@@ -92,8 +104,7 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/9')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
@@ -102,16 +113,13 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CD')
 
-    cy.get('body')
-      .type('{RightArrow}')
-      .type('{RightArrow}')
+    cy.rightArrow(2)
 
     cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'ABCD')
 
     // v-click.hide
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'ABC')
@@ -120,15 +128,13 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/9?clicks=4')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
       .should('eq', 'http://localhost:3030/10')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
@@ -137,27 +143,23 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'BD')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'D')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CD')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
       .should('eq', 'http://localhost:3030/10?clicks=4')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy
       .url()
@@ -232,8 +234,7 @@ context('Basic', () => {
       .url()
       .should('eq', 'http://localhost:3030/12?clicks=6') // we should still be on page 12
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
       .url()
       .should('eq', 'http://localhost:3030/13')
 
@@ -246,8 +247,7 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEF')
 
-    cy.get('body')
-      .type('{RightArrow}')
+    cy.rightArrow()
 
     cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEFZ')
