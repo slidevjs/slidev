@@ -48,6 +48,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ShowCaseInfo: typeof import('./.vitepress/theme/components/ShowCaseInfo.vue')['default']
     ShowCases: typeof import('./.vitepress/theme/components/ShowCases.vue')['default']
+    SimpleIconsGithub: typeof import('~icons/simple-icons/github')['default']
+    SimpleIconsNpm: typeof import('~icons/simple-icons/npm')['default']
     SlideCurrentNo: typeof import('./.vitepress/@slidev/client/builtin/SlideCurrentNo.vue')['default']
     SlidesTotal: typeof import('./.vitepress/@slidev/client/builtin/SlidesTotal.vue')['default']
     Starport: typeof import('vue-starport')['Starport']

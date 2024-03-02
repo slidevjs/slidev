@@ -217,7 +217,7 @@ const count = ref(0)
 
 Shiki Magic Move enables you to have granular transition between code changes like Keynote's Magic Move. You can check [this demo](https://shiki-magic-move.netlify.app/) to see how it works.
 
-In Slidev, we bind it to the [clicks system](guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
+In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
 
 ~~~~md
 ````md magic-move
