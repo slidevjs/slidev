@@ -1,10 +1,13 @@
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
-import { downloadPDF, getSlidePath, openInEditor, rawTree, slides, total, tree, treeWithActiveStatuses } from '../logic/nav'
+import { configs } from '../env'
 import type { SlidevContextNav } from '../modules/context'
+import { isPresenter, rawTree, tree, treeWithActiveStatuses } from '../logic/nav'
+import { slides } from '#slidev/slides'
 
-export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksContext: ComputedRef<ClicksContext>): SlidevContextNav {
+export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksContext: ComputedRef<ClicksContext>) {
+  const total = computed(() => slides.value.length)
   const path = computed(() => getSlidePath(currentSlideRoute.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
@@ -15,7 +18,28 @@ export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksCon
   const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
   const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
 
-  const noOp = async () => { }
+  async function downloadPDF() {
+    const { saveAs } = await import('file-saver')
+    saveAs(
+      typeof configs.download === 'string'
+        ? configs.download
+        : configs.exportFilename
+          ? `${configs.exportFilename}.pdf`
+          : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
+      `${configs.title}.pdf`,
+    )
+  }
+
+  async function openInEditor(url?: string) {
+    if (url == null) {
+      const slide = currentSlideRoute.value?.meta?.slide
+      if (!slide)
+        return false
+      url = `${slide.filepath}:${slide.start}`
+    }
+    await fetch(`/__open-in-editor?file=${encodeURIComponent(url)}`)
+    return true
+  }
 
   return {
     slides,
@@ -32,9 +56,15 @@ export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksCon
     clicksTotal,
     hasNext,
     hasPrev,
-    rawTree,
-    treeWithActiveStatuses,
-    tree,
+    downloadPDF,
+    openInEditor,
+  }
+}
+
+export function useFixedNav(currentSlideRoute: SlideRoute, clicksContext: ClicksContext): SlidevContextNav {
+  const noOp = async () => { }
+  return {
+    ...useNavBase(computed(() => currentSlideRoute), computed(() => clicksContext)),
     next: noOp,
     prev: noOp,
     nextSlide: noOp,
@@ -42,11 +72,21 @@ export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksCon
     goFirst: noOp,
     goLast: noOp,
     go: noOp,
-    downloadPDF,
-    openInEditor,
+    rawTree,
+    treeWithActiveStatuses,
+    tree,
   }
 }
 
-export function useFixedNav(currentSlideRoute: SlideRoute, clicksContext: ClicksContext): SlidevContextNav {
-  return useNavBase(computed(() => currentSlideRoute), computed(() => clicksContext))
+export function getSlide(no: number | string) {
+  return slides.value.find(
+    s => (s.no === +no || s.meta.slide?.frontmatter.routeAlias === no),
+  )
+}
+
+export function getSlidePath(route: SlideRoute | number | string) {
+  if (typeof route === 'number' || typeof route === 'string')
+    route = getSlide(route)!
+  const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
+  return isPresenter.value ? `/presenter/${no}` : `/${no}`
 }

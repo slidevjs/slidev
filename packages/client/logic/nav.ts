@@ -8,23 +8,12 @@ import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
+import { useNavBase } from '../composables/useNav'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
 import { slides } from '#slidev/slides'
 
 export { slides, router }
-
-// force update collected elements when the route is fully resolved
-export const routeForceRefresh = ref(0)
-nextTick(() => {
-  router.afterEach(async () => {
-    await nextTick()
-    routeForceRefresh.value += 1
-  })
-})
-
-export const navDirection = ref(0)
-export const clicksDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -38,10 +27,40 @@ export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
 export const hasPrimarySlide = logicOr(isPlaying, isPresenter)
 
+export const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(route.value.params.no as string)?.no ?? 1 : 1)
+export const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
+export const clicksContext = computed(() => usePrimaryClicks(currentSlideRoute.value))
+
+export const {
+  total,
+  path,
+  currentPage,
+  currentLayout,
+  nextRoute,
+  prevRoute,
+  clicks,
+  clicksTotal,
+  hasNext,
+  hasPrev,
+  downloadPDF,
+  openInEditor,
+} = useNavBase(currentSlideRoute, clicksContext)
+
+// force update collected elements when the route is fully resolved
+export const routeForceRefresh = ref(0)
+nextTick(() => {
+  router.afterEach(async () => {
+    await nextTick()
+    routeForceRefresh.value += 1
+  })
+})
+
+export const navDirection = ref(0)
+export const clicksDirection = ref(0)
+
 const queryClicksRaw = useRouteQuery('clicks', '0')
 export const queryClicks = computed({
   get() {
-    // eslint-disable-next-line ts/no-use-before-define
     if (clicksContext.value.disabled)
       return CLICKS_MAX
     let v = +(queryClicksRaw.value || 0)
@@ -53,24 +72,6 @@ export const queryClicks = computed({
     queryClicksRaw.value = v.toString()
   },
 })
-
-export const total = computed(() => slides.value.length)
-export const path = computed(() => route.value.path)
-
-export const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(route.value.params.no as string)?.no ?? 1 : 1)
-export const currentPage = currentSlideNo // Backward compatibility
-export const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
-export const currentLayout = computed(() => currentSlideRoute.value?.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
-
-export const nextRoute = computed(() => slides.value[Math.min(slides.value.length, currentSlideNo.value + 1) - 1])
-export const prevRoute = computed(() => slides.value[Math.max(1, currentSlideNo.value - 1) - 1])
-
-export const clicksContext = computed(() => usePrimaryClicks(currentSlideRoute.value))
-export const clicks = computed(() => clicksContext.value.current)
-export const clicksTotal = computed(() => clicksContext.value.total)
-
-export const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
-export const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
 
 export const rawTree = computed(() => slides.value
   .filter((route: SlideRoute) => route.meta?.slide?.title)
@@ -181,29 +182,6 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
       }
     },
   })
-}
-
-export async function downloadPDF() {
-  const { saveAs } = await import('file-saver')
-  saveAs(
-    typeof configs.download === 'string'
-      ? configs.download
-      : configs.exportFilename
-        ? `${configs.exportFilename}.pdf`
-        : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
-    `${configs.title}.pdf`,
-  )
-}
-
-export async function openInEditor(url?: string) {
-  if (url == null) {
-    const slide = currentSlideRoute.value?.meta?.slide
-    if (!slide)
-      return false
-    url = `${slide.filepath}:${slide.start}`
-  }
-  await fetch(`/__open-in-editor?file=${encodeURIComponent(url)}`)
-  return true
 }
 
 export function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {

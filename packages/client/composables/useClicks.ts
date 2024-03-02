@@ -2,9 +2,10 @@ import { sum } from '@antfu/utils'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
 import { computed, ref, shallowReactive } from 'vue'
-import { currentSlideNo, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
+import { currentSlideNo, isPrintMode, isPrintWithClicks } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
 import { CLICKS_MAX } from '../constants'
+import { routeForceRefresh, useRouteQuery } from '../logic/route'
 
 function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
@@ -62,14 +63,19 @@ function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): C
   }
 }
 
+const queryClicksRaw = useRouteQuery('clicks', '0')
+
 export function usePrimaryClicks(route: SlideRoute): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
   const thisNo = route.no
   const current = computed({
     get() {
+      // eslint-disable-next-line ts/no-use-before-define
+      if (context.disabled)
+        return CLICKS_MAX
       if (currentSlideNo.value === thisNo)
-        return queryClicks.value
+        return +(queryClicksRaw.value || 0) || 0
       else if (currentSlideNo.value > thisNo)
         return CLICKS_MAX
       else
@@ -78,7 +84,7 @@ export function usePrimaryClicks(route: SlideRoute): ClicksContext {
     set(v) {
       if (currentSlideNo.value === thisNo) {
         // eslint-disable-next-line ts/no-use-before-define
-        queryClicks.value = Math.min(v, context.total)
+        queryClicksRaw.value = Math.min(v, context.total).toString()
       }
     },
   })
