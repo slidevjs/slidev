@@ -66,32 +66,35 @@ This is a default page without any additional metadata.
 
 Refer to [customization](/custom/) for more details.
 
-> The custom syntax might not be compactible with some formatters like Prettier. To improve that, we also support using a direct `yaml` code block to define the frontmatter:
->
-> ~~~markdown
-> ---
-> layout: cover
-> ---
->
-> # Slidev
->
-> This is the cover page.
->
-> ---
->
-> ```yaml
-> # The first yaml block will be treated as the frontmatter of that slide
-> layout: center
-> background: './images/background-1.png'
-> class: 'text-white'
-> ```
->
-> # Page 2
->
-> This is a page with the layout `center` and a background image.
-> ~~~
->
-> (Available since v0.44.0)
+### Prettier Support
+
+> Available since v0.44
+
+The custom syntax might not be compactible with some formatters like Prettier.
+You can either install the [Prettier Plugin](/guide/editors#prettier-plugin) or use a direct `yaml` code block to define the frontmatter instead:
+
+~~~markdown
+---
+layout: cover
+---
+
+# Slidev
+
+This is the cover page.
+
+---
+
+```yaml
+# The first yaml block will be treated as the frontmatter of that slide
+layout: center
+background: './images/background-1.png'
+class: 'text-white'
+```
+
+# Page 2
+
+This is a page with the layout `center` and a background image.
+~~~
 
 ## Code Blocks
 
@@ -208,11 +211,11 @@ const count = ref(0)
 //            ^?
 ```
 
-### Magic Shiki Integration
+### Shiki Magic Move
 
 > Available since v0.48
 
-Magic Shiki enables you to have granular transition between code changes. You can check [this demo](https://shiki-magic-move.netlify.app/) to see how Magic Shiki works.
+Shiki Magic Move enables you to have granular transition between code changes like Keynote's Magic Move. You can check [this demo](https://shiki-magic-move.netlify.app/) to see how it works.
 
 In Slidev, we bind it to the [clicks system](guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
 
@@ -352,6 +355,16 @@ This is another note
 -->
 ~~~
 
+Basic Markdown and HTML are also supported in notes on Presenter renderering.
+
+### Click Markers
+
+> Available since v0.48
+
+For some slides you might have longer notes that might be hard to find where you are looking at, we introduced the click markers that allows highlighting and auto-scrolling to the section of notes of your corresponding content. Put `[click]` markers in your notes for the timming you need to go to another [click](/guide/animations#click-animations), Slidev divide the content between the click markers and highlight them in presenter notes, synchronized with your slide progress.
+
+<!-- TODO: add a video -->
+
 ## Icons
 
 Slidev allows you to have the accessing to almost all the popular open-source iconsets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
@@ -469,28 +482,11 @@ You can import code snippets from existing files via following syntax:
 <<< @/snippets/snippet.js
 ```
 
-:::tip
-The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets`, for compatibility with the Monaco editor. Alternatively, you can also import from relative paths.
+::: tip
+The value of `@` corresponds to the source root, the directory where the `slides.md` is located.
 :::
 
-You can also use a [VS Code region](https://code.visualstudio.com/docs/editor/codebasics#_folding) to only include the corresponding part of the code file:
-
-```md
-<<< @/snippets/snippet.js#region-name
-```
-
-To explicitly specify the language of the imported code, you can add a language identifier after:
-
-```md
-<<< @/snippets/snippet.js ts
-```
-
-Any code block features like [line highlighting](#line-highlighting) and [Monaco editor](#monaco-editor) are also supported:
-
-```md
-<<< @/snippets/snippet.js {2,3|5}{lines:true}
-<<< @/snippets/snippet.js ts {monaco}{height:200px}
-```
+This feature is vendored from VitePress, learn more about it in [VitePress's documentation](https://vitepress.dev/guide/markdown#import-code-snippets).
 
 ## Configurations
 
