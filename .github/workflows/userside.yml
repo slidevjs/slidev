@@ -84,7 +84,7 @@ jobs:
         run: pnpm build
         working-directory: ../temp/slidev-project
 
-      - name: E2E test in global mode
+      - name: E2E test in project
         uses: cypress-io/github-action@v4
         with:
           install-command: echo
@@ -111,5 +111,5 @@ jobs:
           project: ${{ github.workspace }}
           install-command: echo
           build: echo
-          start: slidev --dir ../temp template.md
+          start: slidev ../template.md
           spec: cypress/e2e/examples/noError.spec.ts
