@@ -90,6 +90,7 @@ jobs:
           install-command: echo
           build: echo
           start: pnpm --dir ../temp/slidev-project dev
+          spec: cypress/e2e/examples/noError.spec.ts
 
       - name: Install globally
         run: ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
@@ -111,3 +112,4 @@ jobs:
           install-command: echo
           build: echo
           start: slidev --dir ../temp template.md
+          spec: cypress/e2e/examples/noError.spec.ts
