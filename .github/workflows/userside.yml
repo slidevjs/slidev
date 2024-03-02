@@ -49,8 +49,6 @@ jobs:
 
       - name: Install
         run: nci
-        env:
-          CYPRESS_INSTALL_BINARY: 0
 
       - name: Build
         run: nr build
