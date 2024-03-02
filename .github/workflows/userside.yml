@@ -87,11 +87,9 @@ jobs:
       - name: E2E test in global mode
         uses: cypress-io/github-action@v4
         with:
-          project: ${{ github.workspace }}
           install-command: echo
           build: echo
-          working-directory: ../temp/slidev-project
-          start: pnpm dev
+          start: cd ../temp/slidev-project && pnpm dev
 
       - name: Install globally
         run: ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
