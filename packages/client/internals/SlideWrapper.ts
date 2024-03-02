@@ -49,7 +49,7 @@ export default defineComponent({
 
     const SlideComponent = defineAsyncComponent({
       loader: (props.is as any),
-      delay: 0,
+      delay: 100,
       loadingComponent: SlideLoading,
     })
 
