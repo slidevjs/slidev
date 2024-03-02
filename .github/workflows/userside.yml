@@ -82,11 +82,17 @@ jobs:
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm == 'yarn' }}
 
-      - name: Test build and export command in project
-        run: |
-          pnpm build
-          pnpm export --timeout 300000
-          pnpm export --per-slide --timeout 300000
+      - name: Test build command in project
+        run: pnpm build
+        working-directory: ../temp/slidev-project
+
+      - name: E2E test in global mode
+        uses: cypress-io/github-action@v4
+        with:
+          project: ${{ github.workspace }}
+          install-command: echo
+          build: echo
+          start: pnpm dev
         working-directory: ../temp/slidev-project
 
       - name: Install globally
@@ -97,10 +103,16 @@ jobs:
         run: pnpm --package=cpy-cli dlx cpy ./packages/slidev/template.md ../temp/
         if: ${{ matrix.pm != 'yarn' }}
 
-      - name: Test build and export command in global mode
-        run: |
-          slidev build template.md
-          slidev export template.md --timeout 300000
-          slidev export template.md --per-slide --timeout 300000
+      - name: Test build command in global mode
+        run: slidev build template.md
         if: ${{ matrix.pm != 'yarn' }}
+        working-directory: ../temp
+
+      - name: E2E test in global mode
+        uses: cypress-io/github-action@v4
+        with:
+          project: ${{ github.workspace }}
+          install-command: echo
+          build: echo
+          start: slidev template.md
         working-directory: ../temp
