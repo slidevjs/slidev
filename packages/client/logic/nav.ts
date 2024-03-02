@@ -46,15 +46,6 @@ export const {
   openInEditor,
 } = useNavBase(currentSlideRoute, clicksContext)
 
-// force update collected elements when the route is fully resolved
-export const routeForceRefresh = ref(0)
-nextTick(() => {
-  router.afterEach(async () => {
-    await nextTick()
-    routeForceRefresh.value += 1
-  })
-})
-
 export const navDirection = ref(0)
 export const clicksDirection = ref(0)
 
