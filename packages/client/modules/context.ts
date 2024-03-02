@@ -8,7 +8,7 @@ import { injectionCurrentPage, injectionRenderContext, injectionSlidevContext } 
 import { useContext } from '../composables/useContext'
 
 export type SlidevContextNavKey =
-  | 'slideRoutes'
+  | 'slides'
   | 'total'
   | 'path'
   | 'currentSlideNo'

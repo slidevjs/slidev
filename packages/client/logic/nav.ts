@@ -2,6 +2,7 @@ import type { Ref, TransitionGroupProps } from 'vue'
 import { computed, nextTick, ref, watch } from 'vue'
 import type { SlideRoute, TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
+import { logicOr } from '@vueuse/math'
 import { router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
@@ -9,9 +10,9 @@ import { usePrimaryClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
-import { slides } from '#slidev/routes'
+import { slides } from '#slidev/slides'
 
-export { slides as slideRoutes, router }
+export { slides, router }
 
 // force update collected elements when the route is fully resolved
 export const routeForceRefresh = ref(0)
@@ -30,10 +31,12 @@ export const route = computed(() => router.currentRoute.value)
 export const isPrintMode = computed(() => route.value.query.print !== undefined)
 export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
-export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
-export const isNotesViewer = computed(() => route.value.path.startsWith('/notes'))
+export const isPlaying = computed(() => route.value.name === 'play')
+export const isPresenter = computed(() => route.value.name === 'presenter')
+export const isNotesViewer = computed(() => route.value.name === 'notes')
 export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
+export const hasPrimarySlide = logicOr(isPlaying, isPresenter)
 
 const queryClicksRaw = useRouteQuery('clicks', '0')
 export const queryClicks = computed({
@@ -54,8 +57,7 @@ export const queryClicks = computed({
 export const total = computed(() => slides.value.length)
 export const path = computed(() => route.value.path)
 
-export const currentSlideNo = computed(() => slides.value.find(s =>
-  s.no === +route.value.params.no || s.meta.slide?.frontmatter.routeAlias === route.value.params.no)?.no || 1)
+export const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(route.value.params.no as string)?.no ?? 1 : 1)
 export const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
 export const currentLayout = computed(() => currentSlideRoute.value?.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
 
@@ -84,6 +86,13 @@ watch(currentSlideRoute, (next, prev) => {
   navDirection.value = next.no - prev.no
 })
 
+watch([total, route], async () => {
+  if (hasPrimarySlide.value && !getSlide(route.value.params.no as string)) {
+    // It seems that this slide has been removed, redirect to the last slide.
+    await goLast()
+  }
+}, { flush: 'post', immediate: true })
+
 export async function next() {
   clicksDirection.value = 1
   if (clicksTotal.value <= queryClicks.value)
@@ -100,7 +109,16 @@ export async function prev() {
     queryClicks.value -= 1
 }
 
-export function getPath(no: number | string) {
+export function getSlide(no: number | string) {
+  return slides.value.find(
+    s => (s.no === +no || s.meta.slide?.frontmatter.routeAlias === no),
+  )
+}
+
+export function getSlidePath(route: SlideRoute | number | string) {
+  if (typeof route === 'number' || typeof route === 'string')
+    route = getSlide(route)!
+  const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
   return isPresenter.value ? `/presenter/${no}` : `/${no}`
 }
 
@@ -128,7 +146,7 @@ export function goLast() {
 
 export function go(page: number | string, clicks?: number) {
   skipTransition.value = false
-  return router.push({ path: getPath(page), query: { ...route.value.query, clicks } })
+  return router.push({ path: getSlidePath(page), query: { ...route.value.query, clicks } })
 }
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
@@ -197,7 +215,7 @@ export function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
       no: route.no,
       children: [],
       level,
-      path: getPath(route.meta.slide?.frontmatter?.routeAlias ?? route.no),
+      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no),
       hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })

@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { configs } from '../env'
-import { openInEditor, slideRoutes } from '../logic/nav'
+import { openInEditor, slides } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
@@ -25,9 +25,9 @@ useHead({
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
-const wordCounts = computed(() => slideRoutes.value.map(route => wordCount(route.meta?.slide?.note || '')))
+const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
-const totalClicks = computed(() => slideRoutes.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
+const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
@@ -100,7 +100,7 @@ onMounted(() => {
     <nav class="h-full flex flex-col border-r border-main p2 select-none">
       <div class="flex flex-col flex-auto items-center justify-center group gap-1">
         <div
-          v-for="(route, idx) of slideRoutes"
+          v-for="(route, idx) of slides"
           :key="route.no"
           class="relative"
         >
@@ -135,7 +135,7 @@ onMounted(() => {
       @scroll="checkActiveBlocks"
     >
       <div
-        v-for="(route, idx) of slideRoutes"
+        v-for="(route, idx) of slides"
         :key="route.no"
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
@@ -218,8 +218,8 @@ onMounted(() => {
     </main>
     <div class="absolute top-0 right-0 px3 py1.5 border-b border-l rounded-lb bg-main border-main select-none">
       <div class="text-xs op50">
-        {{ slideRoutes.length }} slides ·
-        {{ totalClicks + slideRoutes.length - 1 }} clicks ·
+        {{ slides.length }} slides ·
+        {{ totalClicks + slides.length - 1 }} clicks ·
         {{ totalWords }} words
       </div>
     </div>

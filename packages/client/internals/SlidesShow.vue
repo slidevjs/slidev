@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { currentSlideRoute, isPresenter, nextRoute, slideRoutes, transition } from '../logic/nav'
+import { currentSlideRoute, isPresenter, nextRoute, slides, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
@@ -29,7 +29,7 @@ const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
-const loadedRoutes = computed(() => slideRoutes.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
+const loadedRoutes = computed(() => slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
 
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again

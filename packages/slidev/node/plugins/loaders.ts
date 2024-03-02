@@ -154,12 +154,12 @@ export function createSlidesLoader(
         const moduleIds = new Set<string>()
 
         if (data.slides.length !== newData.slides.length) {
-          moduleIds.add('/@slidev/routes')
+          moduleIds.add('/@slidev/slides')
           range(newData.slides.length).map(i => hmrPages.add(i))
         }
 
         if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
-          moduleIds.add('/@slidev/routes')
+          moduleIds.add('/@slidev/slides')
           range(data.slides.length).map(i => hmrPages.add(i))
         }
 
@@ -172,15 +172,15 @@ export function createSlidesLoader(
           }, 1)
         }
 
-        const length = Math.max(data.slides.length, newData.slides.length)
+        const length = Math.min(data.slides.length, newData.slides.length)
 
         for (let i = 0; i < length; i++) {
           const a = data.slides[i]
           const b = newData.slides[i]
 
           if (
-            a?.content.trim() === b?.content.trim()
-            && a?.title?.trim() === b?.title?.trim()
+            a.content.trim() === b.content.trim()
+            && a.title?.trim() === b.title?.trim()
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
               try {
@@ -192,7 +192,7 @@ export function createSlidesLoader(
               }
             })
           ) {
-            if (a?.note !== b?.note) {
+            if (a.note !== b.note) {
               ctx.server.hot.send(
                 'slidev:update-note',
                 {
@@ -248,7 +248,7 @@ export function createSlidesLoader(
 
       load(id): LoadResult | Promise<LoadResult> {
         // routes
-        if (id === '/@slidev/routes')
+        if (id === '/@slidev/slides')
           return generateRoutes()
 
         // layouts
@@ -726,11 +726,16 @@ defineProps<{ no: number | string }>()`)
       })
     return [
       ...imports,
-      `export const slides = shallowRef([\n${slides.join(',\n')}\n])`,
+      `const data = [\n${slides.join(',\n')}\n]`,
+      `export const slides = shallowRef([...data])`,
+      `let oldRef = slides`,
+      `export function update(old) {`,
+      `  oldRef = old`,
+      `  old.value = data`,
+      `}`,
       `if (import.meta.hot) {`,
-      `  import.meta.hot.accept(({ slides: newSlides }) => {`,
-      `    if (!newSlides) return`,
-      `    slides.value = newSlides.value`,
+      `  import.meta.hot.accept(({ update }) => {`,
+      `    update(oldRef)`,
       `  })`,
       `}`,
     ].join('\n')

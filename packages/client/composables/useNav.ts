@@ -1,12 +1,11 @@
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
-import { downloadPDF, getPath, openInEditor, rawTree, slideRoutes, total, tree, treeWithActiveStatuses } from '../logic/nav'
+import { downloadPDF, getSlidePath, openInEditor, rawTree, slides, total, tree, treeWithActiveStatuses } from '../logic/nav'
 import type { SlidevContextNav } from '../modules/context'
-import { slides } from '#slidev/routes'
 
 export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksContext: ComputedRef<ClicksContext>): SlidevContextNav {
-  const path = computed(() => getPath(currentSlideRoute.value.no))
+  const path = computed(() => getSlidePath(currentSlideRoute.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
   const clicks = computed(() => clicksContext.value.current)
@@ -19,7 +18,7 @@ export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksCon
   const noOp = async () => { }
 
   return {
-    slideRoutes,
+    slides,
     total,
     path,
     currentSlideNo,

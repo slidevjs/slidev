@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
-import { go, slideRoutes } from '../logic/nav'
+import { go, slides } from '../logic/nav'
 import { activeElement, showGotoDialog } from '../state'
 import Titles from '#slidev/titles.md'
 
@@ -16,7 +16,7 @@ function notNull<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined
 }
 
-const fuse = computed(() => new Fuse(slideRoutes.value.map(i => i.meta?.slide).filter(notNull), {
+const fuse = computed(() => new Fuse(slides.value.map(i => i.meta?.slide).filter(notNull), {
   keys: ['no', 'title'],
   threshold: 0.3,
   shouldSort: true,

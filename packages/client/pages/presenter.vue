@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { clicksContext, currentSlideNo, currentSlideRoute, hasNext, nextRoute, queryClicks, slideRoutes, total, useSwipeControls } from '../logic/nav'
+import { clicksContext, currentSlideNo, currentSlideRoute, hasNext, nextRoute, queryClicks, slides, total, useSwipeControls } from '../logic/nav'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
@@ -37,7 +37,7 @@ const notesEditing = ref(false)
 
 const { timer, resetTimer } = useTimer()
 
-const clicksCtxMap = computed(() => slideRoutes.value.map(route => useFixedClicks(route)))
+const clicksCtxMap = computed(() => slides.value.map(route => useFixedClicks(route)))
 const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const

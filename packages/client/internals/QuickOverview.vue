@@ -2,7 +2,7 @@
 import { useEventListener, useVModel } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
-import { currentSlideNo, go as goSlide, slideRoutes } from '../logic/nav'
+import { currentSlideNo, go as goSlide, slides } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
@@ -78,17 +78,17 @@ useEventListener('keypress', (e) => {
   keyboardBuffer.value += String(num)
 
   // beyond the number of slides, reset
-  if (+keyboardBuffer.value >= slideRoutes.value.length) {
+  if (+keyboardBuffer.value >= slides.value.length) {
     keyboardBuffer.value = ''
     return
   }
 
-  const extactMatch = slideRoutes.value.findIndex(i => `/${i.no}` === keyboardBuffer.value)
+  const extactMatch = slides.value.findIndex(i => `/${i.no}` === keyboardBuffer.value)
   if (extactMatch !== -1)
     currentOverviewPage.value = extactMatch + 1
 
   // When the input number is the largest at the number of digits, we go to that page directly.
-  if (+keyboardBuffer.value * 10 > slideRoutes.value.length) {
+  if (+keyboardBuffer.value * 10 > slides.value.length) {
     go(+keyboardBuffer.value)
     keyboardBuffer.value = ''
   }
@@ -120,7 +120,7 @@ watchEffect(() => {
         :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
       >
         <div
-          v-for="(route, idx) of slideRoutes"
+          v-for="(route, idx) of slides"
           :key="route.no"
           class="relative"
         >

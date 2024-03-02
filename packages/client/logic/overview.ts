@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
-import { slideRoutes } from './nav'
+import { slides } from './nav'
 
 // To have same format(.value) as max, wrap it with ref.
 const min = ref(1)
-const max = computed(() => slideRoutes.value.length)
+const max = computed(() => slides.value.length)
 
 export const currentOverviewPage = ref(0)
 export const overviewRowCount = ref(0)

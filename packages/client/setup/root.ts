@@ -4,7 +4,7 @@ import { useHead } from '@unhead/vue'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
-import { clicksContext, currentSlideNo, getPath, isNotesViewer, isPresenter } from '../logic/nav'
+import { clicksContext, currentSlideNo, getSlidePath, isNotesViewer, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 import { TRUST_ORIGINS } from '../constants'
 import { skipTransition } from '../composables/hmr'
@@ -61,7 +61,7 @@ export default function setupRoot() {
     if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
       skipTransition.value = false
       router.replace({
-        path: getPath(state.page),
+        path: getSlidePath(state.page),
         query: {
           ...router.currentRoute.value.query,
           clicks: state.clicks || 0,

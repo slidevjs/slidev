@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
 import { configs } from '../../env'
-import { slideRoutes, total } from '../../logic/nav'
+import { slides, total } from '../../logic/nav'
 import NoteDisplay from '../../internals/NoteDisplay.vue'
 
 useStyleTag(`
@@ -28,7 +28,7 @@ useHead({
   title: `Notes - ${configs.title}`,
 })
 
-const slidesWithNote = computed(() => slideRoutes.value
+const slidesWithNote = computed(() => slides.value
   .map(route => route.meta?.slide)
   .filter(slide => slide !== undefined && slide.noteHTML !== ''))
 </script>
