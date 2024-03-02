@@ -66,7 +66,7 @@ function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): C
 export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
-  const thisPath = +(route?.path ?? CLICKS_MAX)
+  const thisPath = +(route?.path ?? Number.NaN)
   const current = computed({
     get() {
       const currentPath = +(currentRoute.value?.path ?? Number.NaN)
@@ -81,8 +81,10 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
     },
     set(v) {
       const currentPath = +(currentRoute.value?.path ?? Number.NaN)
-      if (currentPath === thisPath)
-        queryClicks.value = v
+      if (currentPath === thisPath) {
+        // eslint-disable-next-line ts/no-use-before-define
+        queryClicks.value = Math.min(v, context.total)
+      }
     },
   })
   const context = useClicksContextBase(
