@@ -58,6 +58,7 @@ export const total = computed(() => slides.value.length)
 export const path = computed(() => route.value.path)
 
 export const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(route.value.params.no as string)?.no ?? 1 : 1)
+export const currentPage = currentSlideNo // Backward compatibility
 export const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
 export const currentLayout = computed(() => currentSlideRoute.value?.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
 

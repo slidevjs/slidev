@@ -22,6 +22,7 @@ export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksCon
     total,
     path,
     currentSlideNo,
+    currentPage: currentSlideNo,
     currentSlideRoute,
     currentLayout,
     nextRoute,

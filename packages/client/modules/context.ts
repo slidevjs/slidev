@@ -12,6 +12,7 @@ export type SlidevContextNavKey =
   | 'total'
   | 'path'
   | 'currentSlideNo'
+  | 'currentPage'
   | 'currentSlideRoute'
   | 'currentLayout'
   | 'nextRoute'
