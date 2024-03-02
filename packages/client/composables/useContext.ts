@@ -1,16 +1,11 @@
-import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import type { SlidevContext } from '../modules/context'
 import { configs } from '../env'
-import { useNav } from './useNav'
+import type { SlidevContext } from '../modules/context'
+import * as nav from '../logic/nav'
 
-export function useContext(
-  route: ComputedRef<RouteLocationNormalizedLoaded>,
-): SlidevContext {
-  const nav = useNav(route)
+export function useContext(): SlidevContext {
   return {
-    nav,
+    nav: { ...nav },
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   }

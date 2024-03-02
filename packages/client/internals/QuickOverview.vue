@@ -2,7 +2,7 @@
 import { useEventListener, useVModel } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
-import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
+import { currentSlideNo, go as goSlide, slideRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
@@ -78,17 +78,17 @@ useEventListener('keypress', (e) => {
   keyboardBuffer.value += String(num)
 
   // beyond the number of slides, reset
-  if (+keyboardBuffer.value >= rawRoutes.length) {
+  if (+keyboardBuffer.value >= slideRoutes.value.length) {
     keyboardBuffer.value = ''
     return
   }
 
-  const extactMatch = rawRoutes.findIndex(i => i.path === keyboardBuffer.value)
+  const extactMatch = slideRoutes.value.findIndex(i => `/${i.no}` === keyboardBuffer.value)
   if (extactMatch !== -1)
     currentOverviewPage.value = extactMatch + 1
 
   // When the input number is the largest at the number of digits, we go to that page directly.
-  if (+keyboardBuffer.value * 10 > rawRoutes.length) {
+  if (+keyboardBuffer.value * 10 > slideRoutes.value.length) {
     go(+keyboardBuffer.value)
     keyboardBuffer.value = ''
   }
@@ -97,7 +97,7 @@ useEventListener('keypress', (e) => {
 watchEffect(() => {
   // Watch currentPage, make sure every time we open overview,
   // we focus on the right page.
-  currentOverviewPage.value = currentPage.value
+  currentOverviewPage.value = currentSlideNo.value
   // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
 })
@@ -120,17 +120,17 @@ watchEffect(() => {
         :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
       >
         <div
-          v-for="(route, idx) of rawRoutes"
-          :key="route.path"
+          v-for="(route, idx) of slideRoutes"
+          :key="route.no"
           class="relative"
         >
           <div
             class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
             :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
-            @click="go(+route.path)"
+            @click="go(route.no)"
           >
             <SlideContainer
-              :key="route.path"
+              :key="route.no"
               :width="cardWidth"
               :clicks-disabled="true"
               class="pointer-events-none"
@@ -143,7 +143,7 @@ watchEffect(() => {
                 :route="route"
                 render-context="overview"
               />
-              <DrawingPreview :page="+route.path" />
+              <DrawingPreview :page="route.no" />
             </SlideContainer>
           </div>
           <div

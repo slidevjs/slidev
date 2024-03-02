@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { route as currentRoute, rawRoutes } from '../logic/nav'
+import { route as currentRoute, slideRoutes } from '../logic/nav'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{
@@ -22,7 +22,8 @@ const scale = computed(() => {
   return (height.value * slideAspect) / slideWidth
 })
 
-let routes = rawRoutes
+// In print mode, the routes will never change. So we don't need reactivity here.
+let routes = slideRoutes.value
 if (currentRoute.value.query.range) {
   const r = parseRangeString(routes.length, currentRoute.value.query.range as string)
   routes = r.map(i => routes[i - 1])
@@ -38,7 +39,7 @@ provideLocal(injectionSlideScale, scale)
 <template>
   <div id="print-container" :class="className">
     <div id="print-content">
-      <PrintSlide v-for="route of routes" :key="route.path" :route="route" />
+      <PrintSlide v-for="route of routes" :key="route.no" :route="route" />
     </div>
     <slot name="controls" />
   </div>

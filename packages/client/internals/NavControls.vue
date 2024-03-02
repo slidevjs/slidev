@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { currentPage, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
+import { currentSlideNo, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
@@ -22,8 +22,8 @@ const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
-const presenterLink = computed(() => `/presenter/${currentPage.value}${query.value}`)
-const nonPresenterLink = computed(() => `/${currentPage.value}${query.value}`)
+const presenterLink = computed(() => `/presenter/${currentSlideNo.value}${query.value}`)
+const nonPresenterLink = computed(() => `/${currentSlideNo.value}${query.value}`)
 
 const root = ref<HTMLDivElement>()
 function onMouseLeave() {
@@ -156,7 +156,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
 
       <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
         <div class="my-auto">
-          {{ currentPage }}
+          {{ currentSlideNo }}
           <span class="opacity-50">/ {{ total }}</span>
         </div>
       </div>

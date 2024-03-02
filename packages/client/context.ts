@@ -51,7 +51,7 @@ export function provideFrontmatter(frontmatter: Record<string, any>) {
   } = useSlideContext()
 
   // update frontmatter in router to make HMR work better
-  const route = $slidev.nav.rawRoutes.find(i => i.path === String($page.value))
+  const route = $slidev.nav.slideRoutes.find(i => i.no === $page.value)
   if (route?.meta?.slide?.frontmatter) {
     for (const key of Object.keys(route.meta.slide.frontmatter)) {
       if (!(key in frontmatter))

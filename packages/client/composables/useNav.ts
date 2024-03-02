@@ -1,55 +1,52 @@
+import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
-import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
-import type { TocItem } from '@slidev/types'
+import { downloadPDF, getPath, openInEditor, rawTree, slideRoutes, total, tree, treeWithActiveStatuses } from '../logic/nav'
 import type { SlidevContextNav } from '../modules/context'
-import { addToTree, clicks, clicksContext, clicksTotal, downloadPDF, filterTree, getPath, getTreeWithActiveStatuses, go, next, nextSlide, openInEditor, prev, prevSlide } from '../logic/nav'
-import { rawRoutes } from '../routes'
+import { slides } from '#slidev/routes'
 
-export function useNav(route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>): SlidevContextNav {
-  const path = computed(() => route.value.path)
-  const total = computed(() => rawRoutes.length)
+export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksContext: ComputedRef<ClicksContext>): SlidevContextNav {
+  const path = computed(() => getPath(currentSlideRoute.value.no))
+  const currentSlideNo = computed(() => currentSlideRoute.value.no)
+  const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
+  const clicks = computed(() => clicksContext.value.current)
+  const clicksTotal = computed(() => clicksContext.value.total)
+  const nextRoute = computed(() => slides.value[Math.min(slides.value.length, currentSlideNo.value + 1) - 1])
+  const prevRoute = computed(() => slides.value[Math.max(1, currentSlideNo.value - 1) - 1])
+  const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
+  const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
 
-  const currentPage = computed(() => Number.parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
-  const currentPath = computed(() => getPath(currentPage.value))
-  const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`) ?? rawRoutes.at(-1) ?? rawRoutes[0])
-  const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
-  const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
-
-  const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
-
-  const rawTree = computed(() => rawRoutes
-    .filter((route: RouteRecordRaw) => route.meta?.slide?.title)
-    .reduce((acc: TocItem[], route: RouteRecordRaw) => {
-      addToTree(acc, route)
-      return acc
-    }, []))
-  const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
-  const tree = computed(() => filterTree(treeWithActiveStatuses.value))
+  const noOp = async () => { }
 
   return {
-    rawRoutes,
-    route,
-    path,
+    slideRoutes,
     total,
+    path,
+    currentSlideNo,
+    currentSlideRoute,
+    currentLayout,
+    nextRoute,
+    prevRoute,
     clicksContext,
     clicks,
     clicksTotal,
-    currentPage,
-    currentPath,
-    currentRoute,
-    currentSlideId,
-    currentLayout,
-    nextRoute,
+    hasNext,
+    hasPrev,
     rawTree,
     treeWithActiveStatuses,
     tree,
-    go,
+    next: noOp,
+    prev: noOp,
+    nextSlide: noOp,
+    prevSlide: noOp,
+    goFirst: noOp,
+    goLast: noOp,
+    go: noOp,
     downloadPDF,
-    next,
-    nextSlide,
     openInEditor,
-    prev,
-    prevSlide,
   }
+}
+
+export function useFixedNav(currentSlideRoute: SlideRoute, clicksContext: ClicksContext): SlidevContextNav {
+  return useNavBase(computed(() => currentSlideRoute), computed(() => clicksContext))
 }

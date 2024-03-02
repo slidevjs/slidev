@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { currentRoute, isPresenter, nextRoute, rawRoutes, transition } from '../logic/nav'
+import { currentSlideRoute, isPresenter, nextRoute, slideRoutes, transition } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
@@ -16,9 +16,9 @@ defineProps<{
 }>()
 
 // preload next route
-watch(currentRoute, () => {
-  if (currentRoute.value?.meta && currentRoute.value.meta.preload !== false)
-    currentRoute.value.meta.__preloaded = true
+watch(currentSlideRoute, () => {
+  if (currentSlideRoute.value?.meta && currentSlideRoute.value.meta.preload !== false)
+    currentSlideRoute.value.meta.__preloaded = true
   if (nextRoute.value?.meta && nextRoute.value.meta.preload !== false)
     nextRoute.value.meta.__preloaded = true
 }, { immediate: true })
@@ -29,7 +29,7 @@ const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
-const loadedRoutes = computed(() => rawRoutes.filter(r => r.meta?.__preloaded || r === currentRoute.value))
+const loadedRoutes = computed(() => slideRoutes.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
 
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
@@ -50,10 +50,13 @@ function onAfterLeave() {
     tag="div"
     @after-leave="onAfterLeave"
   >
-    <div v-for="route of loadedRoutes" :key="route.path">
+    <div
+      v-for="route of loadedRoutes"
+      v-show="route === currentSlideRoute"
+      :key="route.no"
+    >
       <SlideWrapper
         :is="route.component!"
-        v-show="route === currentRoute"
         :clicks-context="usePrimaryClicks(route)"
         :class="getSlideClass(route)"
         :route="route"

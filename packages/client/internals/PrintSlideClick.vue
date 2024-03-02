@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { RouteRecordRaw } from 'vue-router'
 import { computed, reactive, shallowRef } from 'vue'
-import type { ClicksContext } from '@slidev/types'
 import { provideLocal } from '@vueuse/core'
 import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
@@ -12,11 +10,11 @@ import SlideWrapper from './SlideWrapper'
 import GlobalTop from '#slidev/global-components/top'
 import GlobalBottom from '#slidev/global-components/bottom'
 
-const props = defineProps<{
-  clicksContext: ClicksContext
+const { nav } = defineProps<{
   nav: SlidevContextNav
-  route: RouteRecordRaw
 }>()
+
+const route = computed(() => nav.currentSlideRoute.value)
 
 const style = computed(() => ({
   height: `${slideHeight}px`,
@@ -28,11 +26,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
 
 const id = computed(() =>
-  `${props.route.path.toString().padStart(3, '0')}-${(props.nav.clicks.value + 1).toString().padStart(2, '0')}`,
+  `${route.value.no.toString().padStart(3, '0')}-${(nav.clicks.value + 1).toString().padStart(2, '0')}`,
 )
 
 provideLocal(injectionSlidevContext, reactive({
-  nav: props.nav,
+  nav,
   configs,
   themeConfigs: computed(() => configs.themeConfig),
 }))
@@ -44,7 +42,7 @@ provideLocal(injectionSlidevContext, reactive({
 
     <SlideWrapper
       :is="route.component!"
-      :clicks-context="clicksContext"
+      :clicks-context="nav.clicksContext.value"
       :class="getSlideClass(route)"
       :route="route"
     />
@@ -55,7 +53,7 @@ provideLocal(injectionSlidevContext, reactive({
           && DrawingPreview
       "
     >
-      <DrawingPreview :page="+route.path" />
+      <DrawingPreview :page="route.no" />
     </template>
 
     <GlobalTop />

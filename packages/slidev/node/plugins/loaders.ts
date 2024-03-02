@@ -702,22 +702,17 @@ defineProps<{ no: number | string }>()`)
   }
 
   async function generateRoutes() {
-    const imports: string[] = []
-    const redirects: string[] = []
     const layouts = await getLayouts()
-
-    imports.push(
-      `import { markRaw } from 'vue'`,
+    const imports = [
+      `import { shallowRef } from 'vue'`,
       `import * as __layout__error from '${layouts.error}'`,
-    )
-
-    const routes = data.slides
-      .map((i, idx) => {
+    ]
+    const slides = data.slides
+      .map((_, idx) => {
         const no = idx + 1
         imports.push(`import { meta as f${no} } from '${slidePrefix}${no}.frontmatter'`)
-        const route = `{
-          path: '${no}',
-          name: 'page-${no}',
+        return `{
+          no: ${no},
           meta: f${no},
           component: async () => {
             try {
@@ -726,19 +721,19 @@ defineProps<{ no: number | string }>()`)
             catch {
               return __layout__error
             }
-          }
+          },
         }`
-
-        if (i.frontmatter?.routeAlias)
-          redirects.push(`{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }`)
-
-        return route
       })
-
-    const routesStr = `export const rawRoutes = [\n${routes.join(',\n')}\n].map(markRaw)`
-    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n].map(markRaw)`
-
-    return [...imports, routesStr, redirectsStr].join('\n')
+    return [
+      ...imports,
+      `export const slides = shallowRef([\n${slides.join(',\n')}\n])`,
+      `if (import.meta.hot) {`,
+      `  import.meta.hot.accept(({ slides: newSlides }) => {`,
+      `    if (!newSlides) return`,
+      `    slides.value = newSlides.value`,
+      `  })`,
+      `}`,
+    ].join('\n')
   }
 
   function getTitle() {

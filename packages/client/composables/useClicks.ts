@@ -1,9 +1,8 @@
 import { sum } from '@antfu/utils'
-import type { ClicksContext } from '@slidev/types'
+import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
 import { computed, ref, shallowReactive } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
-import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
+import { currentSlideNo, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
 import { CLICKS_MAX } from '../constants'
 
@@ -63,25 +62,21 @@ function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): C
   }
 }
 
-export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksContext {
+export function usePrimaryClicks(route: SlideRoute): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
-  const thisPath = +(route?.path ?? Number.NaN)
+  const thisNo = route.no
   const current = computed({
     get() {
-      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
-      if (!currentPath || Number.isNaN(currentPath))
-        return 0
-      if (currentPath === thisPath)
+      if (currentSlideNo.value === thisNo)
         return queryClicks.value
-      else if (currentPath > thisPath)
+      else if (currentSlideNo.value > thisNo)
         return CLICKS_MAX
       else
         return 0
     },
     set(v) {
-      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
-      if (currentPath === thisPath) {
+      if (currentSlideNo.value === thisNo) {
         // eslint-disable-next-line ts/no-use-before-define
         queryClicks.value = Math.min(v, context.total)
       }
@@ -96,6 +91,6 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   return context
 }
 
-export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): ClicksContext {
+export function useFixedClicks(route?: SlideRoute | undefined, currentInit = 0): ClicksContext {
   return useClicksContextBase(ref(currentInit), route?.meta?.clicks)
 }

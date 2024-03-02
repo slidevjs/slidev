@@ -1,4 +1,5 @@
 export interface TocItem {
+  no: number
   active?: boolean
   activeParent?: boolean
   children: TocItem[]

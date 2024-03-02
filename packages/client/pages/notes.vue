@@ -5,8 +5,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
-import { total } from '../logic/nav'
-import { rawRoutes } from '../routes'
+import { slideRoutes, total } from '../logic/nav'
 import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
 
@@ -20,7 +19,7 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 const scroller = ref<HTMLDivElement>()
 const fontSize = useLocalStorage('slidev-notes-font-size', 18)
 const pageNo = computed(() => sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerPage : sharedState.page)
-const currentRoute = computed(() => rawRoutes.find(i => i.path === `${pageNo.value}`))
+const currentRoute = computed(() => slideRoutes.value.find(i => i.no === pageNo.value))
 
 watch(pageNo, () => {
   scroller.value?.scrollTo({ left: 0, top: 0, behavior: 'smooth' })
