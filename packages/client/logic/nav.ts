@@ -81,7 +81,7 @@ watch(currentSlideRoute, (next, prev) => {
 
 watch([total, route], async () => {
   if (hasPrimarySlide.value && !getSlide(route.value.params.no as string)) {
-    // It seems that this slide has been removed, redirect to the last slide.
+    // The current slide may has been removed. Redirect to the last slide.
     await goLast()
   }
 }, { flush: 'post', immediate: true })
