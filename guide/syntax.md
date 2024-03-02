@@ -182,6 +182,8 @@ const c = add(1, 2)
 
 ### TwoSlash Integration
 
+> Available since v0.46
+
 This feature is only available when you [set `highlighter` to `shiki`](/custom/highlighters)
 
 [TwoSlash](https://twoslash.netlify.app/) is a powerful tool for rendering TypeScript code blocks with type information on hover or inlined. It's quite useful for preparing slides for JavaScript/TypeScript-related topics.
@@ -205,6 +207,30 @@ import { ref } from 'vue'
 const count = ref(0)
 //            ^?
 ```
+
+### Magic Shiki Integration
+
+> Available since v0.48
+
+Magic Shiki enables you to have granular transition between code changes. You can check [this demo](https://shiki-magic-move.netlify.app/) to see how Magic Shiki works.
+
+In Slidev, we bind it to the [clicks system](guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
+
+~~~~md
+````md magic-move
+```ts
+console.log(`Step ${1}`)
+```
+```ts
+console.log(`Step ${1 + 1}`)
+```
+```ts
+console.log(`Step ${3}`)
+```
+````
+~~~~
+
+<!-- TODO: add an inline demo -->
 
 ### Monaco Editor
 
