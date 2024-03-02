@@ -1,14 +1,16 @@
-import type { UnwrapNestedRefs } from 'vue'
-import type { SlideInfo } from '@slidev/types'
-import type { SlidevContext } from './modules/context'
-
 declare module 'vue' {
+  import type { UnwrapNestedRefs } from 'vue'
+  import type { SlidevContext } from './modules/context'
+
   interface ComponentCustomProperties {
     $slidev: UnwrapNestedRefs<SlidevContext>
   }
 }
 
 declare module 'vue-router' {
+  import type { TransitionGroupProps } from 'vue'
+  import type { ClicksContext, SlideInfo } from '@slidev/types'
+
   interface RouteMeta {
     // inherited from frontmatter
     layout: string
