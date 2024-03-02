@@ -1,5 +1,5 @@
 import type { Ref, TransitionGroupProps } from 'vue'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { SlideRoute, TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
 import { logicOr } from '@vueuse/math'
