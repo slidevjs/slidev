@@ -116,7 +116,7 @@ onMounted(() => {
         <SlideContainer
           v-if="nextFrame && nextFrameClicksCtx"
           key="next"
-          class="h-full w-full"
+          class="h-full w-full slidev-view-transition-none"
         >
           <SlideWrapper
             :is="(nextFrame[0].component as any)"
@@ -198,6 +198,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.slidev-view-transition-none:deep(*) {
+  view-transition-name: none !important;
+}
+
 .slidev-presenter {
   --slidev-controls-foreground: current;
 }
