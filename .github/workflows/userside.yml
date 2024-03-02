@@ -111,5 +111,5 @@ jobs:
           project: ${{ github.workspace }}
           install-command: echo
           build: echo
-          start: slidev ../template.md
+          start: ${{ matrix.os == 'windows' && 'cmd /C slidev ../template.md' || 'bash -c "slidev ../template.md"' }}
           spec: cypress/e2e/examples/noError.spec.ts
