@@ -24,7 +24,6 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         pm: [yarn, npm, pnpm]
         hoist: [true, false]
-      fail-fast: true
 
     steps:
       - name: Set git to use LF
