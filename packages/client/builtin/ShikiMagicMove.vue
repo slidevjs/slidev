@@ -41,7 +41,7 @@ onMounted(() => {
 <template>
   <div class="slidev-code-wrapper slidev-code-magic-move">
     <ShikiMagicMovePrecompiled
-      class="slidev-code relative shiki"
+      class="slidev-code relative shiki overflow-visible"
       :steps="steps"
       :step="index"
       :options="{ globalScale: scale }"
