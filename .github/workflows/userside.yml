@@ -89,9 +89,8 @@ jobs:
         with:
           install-command: echo
           build: echo
-          start: |
-            cd ../temp/slidev-project
-            pnpm dev
+          working-directory: ../temp/slidev-project
+          start: pnpm dev
 
       - name: Install globally
         run: ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
@@ -111,4 +110,5 @@ jobs:
         with:
           install-command: echo
           build: echo
-          start: slidev ../template.md
+          working-directory: ../temp
+          start: slidev template.md
