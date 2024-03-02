@@ -211,6 +211,9 @@ const count = ref(0)
 //            ^?
 ```
 
+<!-- For the popup to not to overlap the content below -->
+<div class="py-20" />
+
 ### Shiki Magic Move
 
 > Available since v0.48
