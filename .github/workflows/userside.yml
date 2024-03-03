@@ -85,7 +85,7 @@ jobs:
 
       - name: E2E test in project
         uses: cypress-io/github-action@v4
-        if: ${{ matrix.os != 'windows' }}
+        if: ${{ matrix.os != 'windows-latest' }}
         with:
           install-command: echo
           build: echo
