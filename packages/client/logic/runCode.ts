@@ -26,7 +26,6 @@ export async function runJavaScript(js: string) {
     obj[name] = function (...objs: any[]) {
       const output = objs.map(objectToText)
       allLogs.push([id, output])
-      raw[name](...objs)
     }
   }
 
@@ -79,7 +78,6 @@ export async function runJavaScript(js: string) {
     else {
       textRep = String(arg)
     }
-    console.warn(textRep)
     return textRep
   }
 
