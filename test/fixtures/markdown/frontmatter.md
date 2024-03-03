@@ -44,6 +44,8 @@ this should be treated as code block
 ---
 
 ---
+
+Also part of the code block
 ```
 
 ---
