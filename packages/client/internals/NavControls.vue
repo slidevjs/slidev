@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { currentSlideNo, downloadPDF, getSlidePath, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
+import { downloadPDF } from '../utils'
+import { currentRoute, currentSlideNo, getSlidePath, hasNext, hasPrev, isEmbedded, isPresenter, isPresenterAvailable, next, prev, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
@@ -21,6 +22,7 @@ const props = defineProps({
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
+const presenterPassword = computed(() => currentRoute.value.query.password)
 const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
 const presenterLink = computed(() => `${getSlidePath(currentSlideNo.value, true)}${query.value}`)
 const nonPresenterLink = computed(() => `${getSlidePath(currentSlideNo.value, false)}${query.value}`)
@@ -107,7 +109,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="slidev-icon-btn" title="Play Mode">
           <carbon:presentation-file />
         </RouterLink>
-        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && showPresenter" :to="presenterLink" class="slidev-icon-btn" title="Presenter Mode">
+        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" :to="presenterLink" class="slidev-icon-btn" title="Presenter Mode">
           <carbon:user-speaker />
         </RouterLink>
 

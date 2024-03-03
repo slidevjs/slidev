@@ -1,7 +1,8 @@
 /* __imports__ */
 import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
-import { downloadPDF, go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
+import { downloadPDF } from '../utils'
+import { go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'

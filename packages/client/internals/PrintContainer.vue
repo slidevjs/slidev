@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { route as currentRoute, slides } from '../logic/nav'
+import { currentRoute, slides } from '../logic/nav'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{

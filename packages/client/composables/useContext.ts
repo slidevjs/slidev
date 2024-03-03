@@ -5,7 +5,7 @@ import * as nav from '../logic/nav'
 
 export function useContext(): SlidevContext {
   return {
-    nav: { ...nav }, //
+    nav: { ...nav },
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   }
