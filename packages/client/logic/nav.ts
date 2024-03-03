@@ -59,8 +59,8 @@ export const {
   router,
 )
 
-watch([total, currentSlideNo], async () => {
-  if (hasPrimarySlide.value && !getSlide(currentSlideNo.value)) {
+watch([total, route], async () => {
+  if (hasPrimarySlide.value && !getSlide(route.value.params.no as string)) {
     // The current slide may has been removed. Redirect to the last slide.
     await goLast()
   }
