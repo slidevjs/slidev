@@ -39,11 +39,11 @@ const style = computed(() => {
   return zoom === 1
     ? undefined
     : {
-      width: `${100 / zoom}%`,
-      height: `${100 / zoom}%`,
-      transformOrigin: 'top left',
-      transform: `scale(${zoom})`,
-    }
+        width: `${100 / zoom}%`,
+        height: `${100 / zoom}%`,
+        transformOrigin: 'top left',
+        transform: `scale(${zoom})`,
+      }
 })
 
 const SlideComponent = defineAsyncComponent({
