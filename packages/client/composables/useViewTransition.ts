@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getSlide } from '../logic/nav'
 
 export function useViewTransition() {
   const router = useRouter()
@@ -11,13 +12,15 @@ export function useViewTransition() {
   const supportViewTransition = typeof document !== 'undefined' && 'startViewTransition' in document
 
   router.beforeResolve((to, from) => {
-    const fromNo = from.meta.slide?.no
-    const toNo = to.meta.slide?.no
+    const fromMeta = getSlide(from.params.no as string)?.meta
+    const toMeta = getSlide(to.params.no as string)?.meta
+    const fromNo = fromMeta?.slide?.no
+    const toNo = toMeta?.slide?.no
     if (
       !(
         fromNo !== undefined && toNo !== undefined && (
-          (from.meta.transition === 'view-transition' && fromNo < toNo)
-          || (to.meta.transition === 'view-transition' && toNo < fromNo)
+          (fromMeta?.transition === 'view-transition' && fromNo < toNo)
+          || (toMeta?.transition === 'view-transition' && toNo < fromNo)
         )
       )
     ) {

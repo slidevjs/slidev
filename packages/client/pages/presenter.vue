@@ -11,7 +11,7 @@ import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { isDrawing } from '../logic/drawings'
 import { useFixedClicks, usePrimaryClicks } from '../composables/useClicks'
-import SlideWrapper from '../internals/SlideWrapper'
+import SlideWrapper from '../internals/SlideWrapper.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import QuickOverview from '../internals/QuickOverview.vue'
@@ -116,7 +116,7 @@ onMounted(() => {
         <SlideContainer
           v-if="nextFrame && nextFrameClicksCtx"
           key="next"
-          class="h-full w-full slidev-view-transition-none"
+          class="h-full w-full"
         >
           <SlideWrapper
             :is="nextFrame[0].component!"
@@ -198,10 +198,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.slidev-view-transition-none:deep(*) {
-  view-transition-name: none !important;
-}
-
 .slidev-presenter {
   --slidev-controls-foreground: current;
 }

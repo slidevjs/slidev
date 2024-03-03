@@ -52,14 +52,9 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
   }
   routes.push({
     name: 'presenter',
-    path: '/presenter',
+    path: '/presenter/:no',
     component: () => import('./pages/presenter.vue'),
     beforeEnter: passwordGuard,
-    children: rawRoutes.map(rawRoute => ({
-      path: rawRoute.path,
-      meta: rawRoute.meta,
-      component: () => import('./pages/presenter.vue'),
-    })),
   })
   routes.push({
     path: '/presenter',
