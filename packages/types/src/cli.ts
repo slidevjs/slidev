@@ -4,16 +4,16 @@ export interface CommonArgs {
 }
 
 export interface ExportArgs extends CommonArgs {
-  output?: string
-  format?: string
-  timeout?: number
-  range?: string
-  dark?: boolean
+  'output'?: string
+  'format'?: string
+  'timeout'?: number
+  'range'?: string
+  'dark'?: boolean
   'with-clicks'?: boolean
   'executable-path'?: string
   'with-toc'?: boolean
   'per-slide'?: boolean
-  scale?: number
+  'scale'?: number
 }
 
 export interface BuildArgs extends ExportArgs {

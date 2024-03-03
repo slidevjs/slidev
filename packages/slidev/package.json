@@ -1,6 +1,6 @@
 {
   "name": "@slidev/cli",
-  "version": "0.48.0-beta.19",
+  "version": "0.48.0-beta.20",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -112,7 +112,7 @@
     "vite-plugin-static-copy": "^1.0.1",
     "vite-plugin-vue-server-ref": "^0.4.2",
     "vitefu": "^0.2.5",
-    "vue": "^3.4.20",
+    "vue": "^3.4.21",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
