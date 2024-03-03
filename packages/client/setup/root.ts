@@ -1,7 +1,6 @@
 /* __imports__ */
 import { watch } from 'vue'
 import { useHead } from '@unhead/vue'
-import { nanoid } from 'nanoid'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
@@ -9,6 +8,7 @@ import { clicksContext, currentPage, getPath, isNotesViewer, isPresenter } from 
 import { router } from '../routes'
 import { TRUST_ORIGINS } from '../constants'
 import { skipTransition } from '../composables/hmr'
+import { makeId } from '../logic/utils'
 
 export default function setupRoot() {
   // @ts-expect-error injected in runtime
@@ -25,7 +25,7 @@ export default function setupRoot() {
   initSharedState(`${title} - shared`)
   initDrawingState(`${title} - drawings`)
 
-  const id = `${location.origin}_${nanoid()}`
+  const id = `${location.origin}_${makeId()}`
 
   // update shared state
   function updateSharedState() {

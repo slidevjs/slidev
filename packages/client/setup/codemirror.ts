@@ -1,7 +1,7 @@
 import type { Ref, WritableComputedRef } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { watch } from 'vue'
-import * as _CodeMirror from 'codemirror'
+import CodeMirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/markdown/markdown'
@@ -9,8 +9,6 @@ import 'codemirror/mode/xml/xml'
 import 'codemirror/mode/htmlmixed/htmlmixed'
 import 'codemirror/addon/display/placeholder'
 import 'codemirror/lib/codemirror.css'
-
-const CodeMirror = _CodeMirror.default ?? ('fromTextArea' in _CodeMirror ? _CodeMirror : globalThis.CodeMirror)
 
 export async function useCodeMirror(
   textarea: Ref<HTMLTextAreaElement | null | undefined>,

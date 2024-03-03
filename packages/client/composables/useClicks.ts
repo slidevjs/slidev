@@ -1,12 +1,13 @@
 import { sum } from '@antfu/utils'
 import type { ClicksContext } from '@slidev/types'
 import type { Ref } from 'vue'
-import { ref, shallowReactive } from 'vue'
+import { computed, ref, shallowReactive } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { currentRoute, isPrintMode, isPrintWithClicks, queryClicks, routeForceRefresh } from '../logic/nav'
 import { normalizeAtProp } from '../logic/utils'
+import { CLICKS_MAX } from '../constants'
 
-function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number): ClicksContext {
+function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
@@ -15,7 +16,10 @@ function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number
       return isPrintMode.value && !isPrintWithClicks.value
     },
     get current() {
-      return getCurrent()
+      return current.value
+    },
+    set current(value) {
+      current.value = value
     },
     relativeOffsets,
     map,
@@ -62,17 +66,29 @@ function useClicksContextBase(getCurrent: () => number, clicksOverrides?: number
 export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
-  const thisPath = +(route?.path ?? 99999)
-  const context = useClicksContextBase(
-    () => {
-      const currentPath = +(currentRoute.value?.path ?? 99999)
+  const thisPath = +(route?.path ?? Number.NaN)
+  const current = computed({
+    get() {
+      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
+      if (!currentPath || Number.isNaN(currentPath))
+        return 0
       if (currentPath === thisPath)
         return queryClicks.value
       else if (currentPath > thisPath)
-        return 99999
+        return CLICKS_MAX
       else
         return 0
     },
+    set(v) {
+      const currentPath = +(currentRoute.value?.path ?? Number.NaN)
+      if (currentPath === thisPath) {
+        // eslint-disable-next-line ts/no-use-before-define
+        queryClicks.value = Math.min(v, context.total)
+      }
+    },
+  })
+  const context = useClicksContextBase(
+    current,
     route?.meta?.clicks,
   )
   if (route?.meta)
@@ -80,7 +96,6 @@ export function usePrimaryClicks(route: RouteRecordRaw | undefined): ClicksConte
   return context
 }
 
-export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): [Ref<number>, ClicksContext] {
-  const current = ref(currentInit)
-  return [current, useClicksContextBase(() => current.value, route?.meta?.clicks)]
+export function useFixedClicks(route?: RouteRecordRaw | undefined, currentInit = 0): ClicksContext {
+  return useClicksContextBase(ref(currentInit), route?.meta?.clicks)
 }

@@ -6,6 +6,7 @@
 
 import type { PropType, VNode } from 'vue'
 import { Text, defineComponent, h } from 'vue'
+import { CLICKS_MAX } from '../constants'
 import VClicks from './VClicks'
 
 export default defineComponent({
@@ -31,7 +32,7 @@ export default defineComponent({
     return h(
       VClicks,
       {
-        every: 99999,
+        every: CLICKS_MAX,
         at: this.at,
         hide: this.hide,
         fade: this.fade,

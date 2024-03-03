@@ -6,6 +6,17 @@ import { uniq } from '@antfu/utils'
 import { getIndexHtml } from '../common'
 import type { ResolvedSlidevOptions } from '../options'
 import { resolveImportPath, toAtFS } from '../resolver'
+import { dependencies } from '../../../client/package.json'
+
+const INCLUDE = [
+  ...Object.keys(dependencies),
+  'codemirror/mode/javascript/javascript',
+  'codemirror/mode/css/css',
+  'codemirror/mode/markdown/markdown',
+  'codemirror/mode/xml/xml',
+  'codemirror/mode/htmlmixed/htmlmixed',
+  'codemirror/addon/display/placeholder',
+]
 
 const EXCLUDE = [
   '@slidev/shared',
@@ -20,6 +31,13 @@ const EXCLUDE = [
   'mermaid',
   'vue-demi',
   'vue',
+  'shiki',
+]
+
+const ASYNC_MODULES = [
+  'file-saver',
+  'vue',
+  '@vue',
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
@@ -31,12 +49,17 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: {
             '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
+            '#slidev/': '/@slidev/',
             'vue': await resolveImportPath('vue/dist/vue.esm-browser.js', true),
           },
           dedupe: ['vue'],
         },
         optimizeDeps: {
           exclude: EXCLUDE,
+          include: INCLUDE
+            .filter(i => !EXCLUDE.includes(i))
+            // We need to specify the full deps path for non-hoisted modules
+            .map(i => `@slidev/cli > @slidev/client > ${i}`),
         },
         css: options.data.config.css === 'unocss'
           ? {
@@ -59,7 +82,57 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           },
         },
         publicDir: join(options.userRoot, 'public'),
+        build: {
+          rollupOptions: {
+            output: {
+              chunkFileNames(chunkInfo) {
+                const DEFAULT = 'assets/[name]-[hash].js'
+
+                // Already handled in manualChunks
+                if (chunkInfo.name.includes('/'))
+                  return DEFAULT
+
+                // Over 60% of the chunk is slidev client code, we put it into slidev chunk
+                if (chunkInfo.moduleIds.filter(i => isSlidevClient(i)).length > chunkInfo.moduleIds.length * 0.6)
+                  return 'assets/slidev/[name]-[hash].js'
+
+                // Monaco Editor
+                if (chunkInfo.moduleIds.filter(i => i.match(/\/monaco-editor(-core)?\//)).length > chunkInfo.moduleIds.length * 0.6)
+                  return 'assets/monaco/[name]-[hash].js'
+
+                return DEFAULT
+              },
+              manualChunks(id) {
+                if (id.startsWith('/@slidev-monaco-types/') || id.includes('/@slidev/monaco-types') || id.endsWith('?monaco-types&raw'))
+                  return 'monaco/bundled-types'
+                if (id.includes('/shiki/') || id.includes('/@shikijs/'))
+                  return `modules/shiki`
+                if (id.startsWith('~icons/'))
+                  return 'modules/unplugin-icons'
+                // It seems that moving slides out will breaks the production build
+                // Would need to find a better way to handle this
+                // const slideMatch = id.match(/\/@slidev\/slides\/(\d+)/)
+                // if (slideMatch && !id.includes('.frontmatter'))
+                //   return `slides/${slideMatch[1]}`
+
+                const matchedAsyncModule = ASYNC_MODULES.find(i => id.includes(`/node_modules/${i}`))
+                if (matchedAsyncModule)
+                  return `modules/${matchedAsyncModule.replace('@', '').replace('/', '-')}`
+              },
+            },
+          },
+        },
       }
+
+      function isSlidevClient(id: string) {
+        return id.includes('/@slidev/') || id.includes('/slidev/packages/client/') || id.includes('/@vueuse/')
+      }
+
+      // function getNodeModuleName(path: string) {
+      //   const nodeModuelsMatch = [...path.matchAll(/node_modules\/(@[^/]+\/[^/]+|[^/]+)\//g)]
+      //   if (nodeModuelsMatch.length)
+      //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
+      // }
 
       if (isInstalledGlobally) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')

@@ -14,11 +14,10 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } 
 import { loadDrawings, writeDrawings } from '../drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
-import { createMonacoTypesLoader } from './monacoTransform'
 import { createClientSetupPlugin } from './setupClient'
 import { createMarkdownPlugin } from './markdown'
 import { createFixPlugins } from './patchTransform'
-import { createMonacoRunnable } from './monacoRunnable'
+import { createMonacoTypesLoader } from './monacoTypes'
 
 const customElements = new Set([
   // katex
@@ -113,7 +112,7 @@ export async function ViteSlidevPlugin(
         join(process.cwd(), 'components'),
       ],
 
-      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/, /\.md\?vue/],
       exclude: [],
 
       resolvers: [
@@ -171,8 +170,7 @@ export async function ViteSlidevPlugin(
 
     createConfigPlugin(options),
     createClientSetupPlugin(options),
-    createMonacoTypesLoader(),
-    createMonacoRunnable(options),
+    createMonacoTypesLoader(options),
     createFixPlugins(options),
 
     publicRoots.length

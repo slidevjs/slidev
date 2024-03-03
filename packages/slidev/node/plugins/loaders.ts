@@ -1,6 +1,7 @@
-import { basename, join } from 'node:path'
-import type { HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range } from '@antfu/utils'
+import { basename, join, resolve } from 'node:path'
+import { builtinModules } from 'node:module'
+import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -8,14 +9,16 @@ import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
-import type { SlideInfo } from '@slidev/types'
+import type { SlideInfo, SlidePatch } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
+import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { getBodyJson, stringifyMarkdownTokens } from '../utils'
+import { stringifyMarkdownTokens } from '../utils'
 import { resolveImportPath, toAtFS } from '../resolver'
+import { loadShikiSetups, scanMonacoModules } from './markdown'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -27,6 +30,22 @@ const templateImportContextUtils = `import {
   frontmatterToProps as _frontmatterToProps,
 } from "@slidev/client/context.ts"`.replace(/\n\s*/g, ' ')
 const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlideContext()`
+
+export function getBodyJson(req: Connect.IncomingMessage) {
+  return new Promise<any>((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => body += chunk)
+    req.on('error', reject)
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body) || {})
+      }
+      catch (e) {
+        reject(e)
+      }
+    })
+  })
+}
 
 export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   const timestamp = +Date.now()
@@ -52,15 +71,28 @@ md.use(mila, {
   },
 })
 
-function renderNoteHTML(data: SlideInfo): SlideInfo {
+function renderNote(text: string = '') {
+  let clickCount = 0
+  const html = md.render(text
+    // replace [click] marker with span
+    .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
+      clickCount += Number(count)
+      return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
+    }),
+  )
+
+  return html
+}
+
+function withRenderedNote(data: SlideInfo): SlideInfo {
   return {
     ...data,
-    noteHTML: md.render(data?.note || ''),
+    noteHTML: renderNote(data?.note),
   }
 }
 
 export function createSlidesLoader(
-  { data, clientRoot, roots, remote, mode }: ResolvedSlidevOptions,
+  { data, clientRoot, roots, remote, mode, userRoot }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -86,16 +118,14 @@ export function createSlidesLoader(
           const [, no, type] = match
           const idx = Number.parseInt(no)
           if (type === 'json' && req.method === 'GET') {
-            res.write(JSON.stringify(renderNoteHTML(data.slides[idx])))
+            res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
             return res.end()
           }
           if (type === 'json' && req.method === 'POST') {
-            const body = await getBodyJson(req)
+            const body: SlidePatch = await getBodyJson(req)
             const slide = data.slides[idx]
 
-            const onlyNoteChanged = Object.keys(body).length === 2
-              && 'note' in body && body.raw === null
-            if (!onlyNoteChanged)
+            if (body.content && body.content !== slide.source.content)
               hmrPages.add(idx)
 
             Object.assign(slide.source, body)
@@ -103,7 +133,7 @@ export function createSlidesLoader(
             await parser.save(data.markdownFiles[slide.source.filepath])
 
             res.statusCode = 200
-            res.write(JSON.stringify(renderNoteHTML(slide)))
+            res.write(JSON.stringify(withRenderedNote(slide)))
             return res.end()
           }
 
@@ -169,7 +199,7 @@ export function createSlidesLoader(
                 data: {
                   id: i,
                   note: b!.note || '',
-                  noteHTML: md.render(b!.note || ''),
+                  noteHTML: renderNote(b!.note || ''),
                 },
               })
             }
@@ -181,7 +211,7 @@ export function createSlidesLoader(
             event: 'slidev-update',
             data: {
               id: i,
-              data: renderNoteHTML(newData.slides[i]),
+              data: withRenderedNote(newData.slides[i]),
             },
           })
           hmrPages.add(i)
@@ -251,6 +281,10 @@ export function createSlidesLoader(
         if (id === '/@slidev/custom-nav-controls')
           return generateCustomNavControls()
 
+        // shiki for client side
+        if (id === '/@slidev/shiki')
+          return generteShikiBundle()
+
         // title
         if (id === '/@slidev/titles.md') {
           return {
@@ -280,7 +314,7 @@ export function createSlidesLoader(
             }
             else if (type === 'frontmatter') {
               const slideBase = {
-                ...renderNoteHTML(slide),
+                ...withRenderedNote(slide),
                 frontmatter: undefined,
                 source: undefined,
                 // remove raw content in build, optimize the bundle size
@@ -566,6 +600,7 @@ defineProps<{ no: number | string }>()`)
       `import "${resolveUrlOfClient('styles/code.css')}"`,
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
+      `import "${resolveUrlOfClient('styles/monaco.css')}"`,
     ]
 
     for (const root of roots) {
@@ -609,7 +644,47 @@ defineProps<{ no: number | string }>()`)
   }
 
   async function generateMonacoTypes() {
-    return `void 0; ${parser.scanMonacoModules(data.slides.map(s => s.source.raw).join()).map(i => `import('/@slidev-monaco-types/${i}')`).join('\n')}`
+    const typesRoot = join(userRoot, 'snippets')
+    const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
+    let result = 'import { addFile } from "@slidev/client/setup/monaco.ts"\n'
+
+    // User snippets
+    for (const file of files) {
+      const url = `${toAtFS(resolve(typesRoot, file))}?monaco-types&raw`
+      result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
+    }
+
+    // Dependencies
+    const deps = data.config.monacoTypesAdditionalPackages
+    if (data.config.monacoTypesSource === 'local')
+      deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
+
+    // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
+    // Converts some of the known global imports to node so that we grab the right info
+    function mapModuleNameToModule(moduleSpecifier: string) {
+      if (moduleSpecifier.startsWith('node:'))
+        return 'node'
+      if (builtinModules.includes(moduleSpecifier))
+        return 'node'
+      const mainPackageName = moduleSpecifier.split('/')[0]
+      if (builtinModules.includes(mainPackageName) && !mainPackageName.startsWith('@'))
+        return 'node'
+
+      // strip module filepath e.g. lodash/identity => lodash
+      const [a = '', b = ''] = moduleSpecifier.split('/')
+      const moduleName = a.startsWith('@') ? `${a}/${b}` : a
+
+      return moduleName
+    }
+
+    for (const specifier of uniq(deps)) {
+      if (specifier[0] === '.')
+        continue
+      const moduleName = mapModuleNameToModule(specifier)
+      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve?pkg=${moduleName}`)})\n`
+    }
+
+    return result
   }
 
   async function generateLayouts() {
@@ -633,7 +708,10 @@ defineProps<{ no: number | string }>()`)
     const redirects: string[] = []
     const layouts = await getLayouts()
 
-    imports.push(`import __layout__end from '${layouts.end}'`)
+    imports.push(
+      `import { markRaw } from 'vue'`,
+      `import __layout__end from '${layouts.end}'`,
+    )
 
     let no = 1
     const routes = data.slides
@@ -650,8 +728,8 @@ defineProps<{ no: number | string }>()`)
         return route
       })
 
-    const routesStr = `export default [\n${routes.join(',\n')}\n]`
-    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n]`
+    const routesStr = `export const rawRoutes = [\n${routes.join(',\n')}\n].map(markRaw)`
+    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n].map(markRaw)`
 
     return [...imports, routesStr, redirectsStr].join('\n')
   }
@@ -732,5 +810,75 @@ export default {
   }
 }
 `
+  }
+
+  async function generteShikiBundle() {
+    const options = await loadShikiSetups(clientRoot, roots)
+    const langs = await resolveLangs(options.langs || ['javascript', 'typescript', 'html', 'css'])
+    const resolvedThemeOptions = 'themes' in options
+      ? {
+          themes: Object.fromEntries(await Promise.all(Object.entries(options.themes)
+            .map(async ([name, value]) => [name, await resolveTheme(value!)]),
+          )) as Record<string, ThemeRegistration | string>,
+        }
+      : {
+          theme: await resolveTheme(options.theme || 'vitesse-dark'),
+        }
+
+    const themes = resolvedThemeOptions.themes
+      ? Object.values(resolvedThemeOptions.themes)
+      : [resolvedThemeOptions.theme!]
+
+    const themeOptionsNames = resolvedThemeOptions.themes
+      ? { themes: Object.fromEntries(Object.entries(resolvedThemeOptions.themes).map(([name, value]) => [name, typeof value === 'string' ? value : value.name])) }
+      : { theme: typeof resolvedThemeOptions.theme === 'string' ? resolvedThemeOptions.theme : resolvedThemeOptions.theme.name }
+
+    async function normalizeGetter<T>(p: MaybeGetter<T>): Promise<T> {
+      return Promise.resolve(typeof p === 'function' ? (p as any)() : p).then(r => r.default || r)
+    }
+
+    async function resolveLangs(langs: (LanguageInput | SpecialLanguage | string)[]): Promise<(LanguageRegistration | string)[]> {
+      return Array.from(new Set((
+        await Promise.all(
+          langs.map(async lang => await normalizeGetter(lang as LanguageInput).then(r => Array.isArray(r) ? r : [r])),
+        )).flat()))
+    }
+
+    async function resolveTheme(theme: string | ThemeInput): Promise<ThemeRegistration | string> {
+      return typeof theme === 'string' ? theme : await normalizeGetter(theme)
+    }
+
+    const langsInit = await Promise.all(langs
+      .map(async lang =>
+        typeof lang === 'string'
+          ? `import('${await resolveUrl(`shiki/langs/${lang}.mjs`)}')`
+          : JSON.stringify(lang)),
+    )
+
+    const themesInit = await Promise.all(themes
+      .map(async theme =>
+        typeof theme === 'string'
+          ? `import('${await resolveUrl(`shiki/themes/${theme}.mjs`)}')`
+          : JSON.stringify(theme)))
+
+    const langNames = langs
+      .flatMap(lang => typeof lang === 'string' ? lang : lang.name)
+
+    const lines: string[] = []
+    lines.push(
+      `import { getHighlighterCore } from "${await resolveUrl('shiki/core')}"`,
+      `export { shikiToMonaco } from "${await resolveUrl('@shikijs/monaco')}"`,
+
+      `export const languages = ${JSON.stringify(langNames)}`,
+      `export const themes = ${JSON.stringify(themeOptionsNames.themes || themeOptionsNames.theme)}`,
+
+      'export const shiki = getHighlighterCore({',
+      `  themes: [${themesInit.join(',')}],`,
+      `  langs: [${langsInit.join(',')}],`,
+      `  loadWasm: import('${await resolveUrl('shiki/wasm')}'),`,
+      '})',
+    )
+
+    return lines.join('\n')
   }
 }

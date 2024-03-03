@@ -7,6 +7,7 @@ import { rawRoutes, router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
+import { CLICKS_MAX } from '../constants'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
 
@@ -22,6 +23,7 @@ nextTick(() => {
 })
 
 export const navDirection = ref(0)
+export const clicksDirection = ref(0)
 
 export const route = computed(() => router.currentRoute.value)
 
@@ -38,7 +40,7 @@ export const queryClicks = computed({
   get() {
     // eslint-disable-next-line ts/no-use-before-define
     if (clicksContext.value.disabled)
-      return 99999
+      return CLICKS_MAX
     let v = +(queryClicksRaw.value || 0)
     if (Number.isNaN(v))
       v = 0
@@ -84,6 +86,7 @@ watch(currentRoute, (next, prev) => {
 })
 
 export async function next() {
+  clicksDirection.value = 1
   if (clicksTotal.value <= queryClicks.value)
     await nextSlide()
   else
@@ -91,6 +94,7 @@ export async function next() {
 }
 
 export async function prev() {
+  clicksDirection.value = -1
   if (queryClicks.value <= 0)
     await prevSlide()
   else
@@ -102,11 +106,13 @@ export function getPath(no: number | string) {
 }
 
 export async function nextSlide() {
+  clicksDirection.value = 1
   if (currentPage.value < rawRoutes.length)
     await go(currentPage.value + 1)
 }
 
 export async function prevSlide(lastClicks = true) {
+  clicksDirection.value = -1
   const next = Math.max(1, currentPage.value - 1)
   await go(next)
   if (lastClicks && clicksTotal.value)
@@ -129,16 +135,13 @@ export function go(page: number | string, clicks?: number) {
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   const swipeBegin = ref(0)
   const { direction, distanceX, distanceY } = usePointerSwipe(root, {
-    onSwipeStart(e) {
-      if (e.pointerType !== 'touch')
-        return
+    pointerTypes: ['touch'],
+    onSwipeStart() {
       if (isDrawing.value)
         return
       swipeBegin.value = timestamp()
     },
-    onSwipeEnd(e) {
-      if (e.pointerType !== 'touch')
-        return
+    onSwipeEnd() {
       if (!swipeBegin.value)
         return
       if (isDrawing.value)

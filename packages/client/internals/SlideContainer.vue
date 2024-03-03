@@ -3,7 +3,7 @@ import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { isPrintMode } from '../logic/nav'
+import { clicksDirection, isPrintMode } from '../logic/nav'
 
 const props = defineProps({
   width: {
@@ -47,13 +47,16 @@ const scale = computed(() => {
 })
 
 const style = computed(() => ({
-  height: `${slideHeight}px`,
-  width: `${slideWidth}px`,
-  transform: `translate(-50%, -50%) scale(${scale.value})`,
+  'height': `${slideHeight}px`,
+  'width': `${slideWidth}px`,
+  'transform': `translate(-50%, -50%) scale(${scale.value})`,
+  '--slidev-slide-scale': scale.value,
 }))
 
 const className = computed(() => ({
   'select-none': !configs.selectable,
+  'slidev-nav-go-forward': clicksDirection.value > 0,
+  'slidev-nav-go-backward': clicksDirection.value < 0,
 }))
 
 if (props.isMain) {
@@ -68,8 +71,8 @@ provideLocal(injectionSlideScale, scale as any)
 </script>
 
 <template>
-  <div id="slide-container" ref="root" :class="className">
-    <div id="slide-content" :style="style">
+  <div id="slide-container" ref="root" class="slidev-slides-container" :class="className">
+    <div id="slide-content" class="slidev-slide-content" :style="style">
       <slot />
     </div>
     <slot name="controls" />

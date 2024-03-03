@@ -11,19 +11,21 @@ import {
   injectionClicksContext,
 } from '../constants'
 
-function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
+export type VClickValue = string | [string | number, string | number] | boolean
+
+export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
 }
 
-export default function createDirectives() {
+export function createVClickDirectives() {
   return {
     install(app: App) {
-      app.directive('click', {
+      app.directive<HTMLElement, VClickValue>('click', {
         // @ts-expect-error extra prop
         name: 'v-click',
 
-        mounted(el: HTMLElement, dir) {
-          const resolved = resolveClick(el, dir)
+        mounted(el, dir) {
+          const resolved = resolveClick(el, dir, dir.value)
           if (resolved == null)
             return
 
@@ -55,12 +57,12 @@ export default function createDirectives() {
         unmounted,
       })
 
-      app.directive('after', {
+      app.directive<HTMLElement, VClickValue>('after', {
         // @ts-expect-error extra prop
         name: 'v-after',
 
-        mounted(el: HTMLElement, dir) {
-          const resolved = resolveClick(el, dir, true)
+        mounted(el, dir) {
+          const resolved = resolveClick(el, dir, dir.value, true)
           if (resolved == null)
             return
 
@@ -86,12 +88,12 @@ export default function createDirectives() {
         unmounted,
       })
 
-      app.directive('click-hide', {
+      app.directive<HTMLElement, VClickValue>('click-hide', {
         // @ts-expect-error extra prop
         name: 'v-click-hide',
 
-        mounted(el: HTMLElement, dir) {
-          const resolved = resolveClick(el, dir, false, true)
+        mounted(el, dir) {
+          const resolved = resolveClick(el, dir, dir.value, false, true)
           if (resolved == null)
             return
 
@@ -127,13 +129,11 @@ function isCurrent(thisClick: number | [number, number], clicks: number) {
     : thisClick === clicks
 }
 
-function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
+export function resolveClick(el: Element, dir: DirectiveBinding<any>, value: VClickValue, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
   const ctx = dirInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx || ctx.disabled)
     return null
-
-  let value = dir.value
 
   if (value === false || value === 'false')
     return null
@@ -153,7 +153,7 @@ function resolveClick(el: Element, dir: DirectiveBinding<any>, clickAfter = fals
     // range (absolute)
     delta = 0
     thisClick = value as [number, number]
-    maxClick = value[1]
+    maxClick = +value[1]
   }
   else {
     ({ start: thisClick, end: maxClick, delta } = ctx.resolve(value))

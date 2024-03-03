@@ -56,8 +56,12 @@ onUnmounted(() => {
   clicks!.unregister(id)
 })
 
+watchEffect(() => {
+  el.value?.classList.toggle('slidev-code-line-numbers', props.lines)
+})
+
 onMounted(() => {
-  if (!clicks || clicks.disabled)
+  if (!clicks || clicks.disabled || !props.ranges?.length)
     return
 
   const { start, end, delta } = clicks.resolve(props.at, props.ranges.length - 1)
@@ -121,9 +125,12 @@ function copyCode() {
 
 <template>
   <div
-    ref="el" class="slidev-code-wrapper relative group" :class="{
+    ref="el"
+    class="slidev-code-wrapper relative group"
+    :class="{
       'slidev-code-line-numbers': props.lines,
-    }" :style="{
+    }"
+    :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
       '--start': props.startLine,

@@ -14,10 +14,6 @@ export interface AppContext {
 }
 
 export interface MonacoSetupReturn {
-  theme?: {
-    light?: string
-    dark?: string
-  }
   editorOptions?: monaco.editor.IEditorOptions
 }
 
@@ -65,7 +61,7 @@ export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
 export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 
 // client side
-export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn>
+export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>

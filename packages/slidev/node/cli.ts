@@ -16,7 +16,7 @@ import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
 import { uniq } from '@antfu/utils'
-import { checkPort } from 'get-port-please'
+import { getPort } from 'get-port-please'
 import { version } from '../package.json'
 import { createServer } from './server'
 import type { ResolvedSlidevOptions } from './options'
@@ -38,7 +38,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'theme',
 ]
 
-injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string) => {
+injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
   const addons = headmatter?.addons as string[] ?? []
   const { clientRoot, userRoot } = await getRoots()
   const roots = uniq([
@@ -47,7 +47,7 @@ injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, file
     ...await resolveAddons(addons),
   ])
   const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter }, [], mergeArrays)
+  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter, mode }, [], mergeArrays)
 })
 
 const cli = yargs(process.argv.slice(2))
@@ -117,7 +117,13 @@ cli.command(
       if (server)
         await server.close()
       const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev')
-      port = userPort || await findFreePort(3030)
+      const host = remote !== undefined ? bind : 'localhost'
+      port = userPort || await getPort({
+        port: 3030,
+        random: false,
+        portRange: [3030, 4000],
+        host,
+      })
       server = (await createServer(
         options,
         {
@@ -125,7 +131,7 @@ cli.command(
             port,
             strictPort: true,
             open,
-            host: remote !== undefined ? bind : 'localhost',
+            host,
             // @ts-expect-error Vite <= 4
             force,
           },
@@ -138,7 +144,7 @@ cli.command(
         {
           async loadData() {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry)
+            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -396,7 +402,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     const { exportSlides, getExportOptions } = await import('./export')
-    const port = await findFreePort(12445)
+    const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string) {
       const options = await resolveOptions({ entry: entryFile, theme }, 'export')
@@ -447,7 +453,7 @@ cli.command(
     timeout,
   }) => {
     const { exportNotes } = await import('./export')
-    const port = await findFreePort(12445)
+    const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile }, 'export')
@@ -563,13 +569,15 @@ function printInfo(
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
+    const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
     console.log()
     console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
     console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
     if (options.inspect)
-      console.log(`${dim('  inspector')}           > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
+      console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
     let lastRemoteUrl = ''
 
@@ -601,10 +609,4 @@ function printInfo(
 
     return lastRemoteUrl
   }
-}
-
-async function findFreePort(start: number): Promise<number> {
-  if (await checkPort(start) !== false)
-    return start
-  return findFreePort(start + 1)
 }

@@ -1,5 +1,5 @@
 import YAML from 'js-yaml'
-import { isObject, isTruthy, objectMap } from '@antfu/utils'
+import { isObject, objectMap } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
@@ -194,25 +194,6 @@ export async function parse(
 
 export function mergeFeatureFlags(a: SlidevFeatureFlags, b: SlidevFeatureFlags): SlidevFeatureFlags {
   return objectMap(a, (k, v) => [k, v || b[k]])
-}
-
-// types auto discovery for TypeScript monaco
-export function scanMonacoModules(md: string) {
-  const typeModules = new Set<string>()
-
-  md.replace(/^```(\w+?)\s*{monaco([\w:,-]*)}[\s\n]*([\s\S]+?)^```/mg, (full, lang = 'ts', options: string, code: string) => {
-    options = options || ''
-    lang = lang.trim()
-    if (lang === 'ts' || lang === 'typescript') {
-      Array.from(code.matchAll(/\s+from\s+(["'])([\/\w@-]+)\1/g))
-        .map(i => i[2])
-        .filter(isTruthy)
-        .map(i => typeModules.add(i))
-    }
-    return ''
-  })
-
-  return Array.from(typeModules)
 }
 
 export * from './utils'

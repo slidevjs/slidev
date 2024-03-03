@@ -19,7 +19,7 @@ import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
 
 const props = defineProps<{
-  code: string
+  codeLz: string
   scale?: number
   theme?: string
 }>()
@@ -37,7 +37,7 @@ watchEffect(async (onCleanup) => {
   error.value = null
   try {
     const svg = await renderMermaid(
-      props.code || '',
+      props.codeLz || '',
       {
         theme: props.theme || (isDark.value ? 'dark' : undefined),
         ...vm!.attrs,
@@ -48,6 +48,7 @@ watchEffect(async (onCleanup) => {
   }
   catch (e) {
     error.value = `${e}`
+    console.warn(e)
   }
 })
 
@@ -76,6 +77,6 @@ watchEffect(() => {
 </script>
 
 <template>
-  <pre v-if="error" border="1 red rounded" class="pa-3">{{ error }}</pre>
+  <pre v-if="error" border="1 red rounded" class="pa-3 text-wrap">{{ error }}</pre>
   <ShadowRoot v-else class="mermaid" :inner-html="html" @shadow="el = $event" />
 </template>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useEventListener, useVModel } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { themeVars } from '../env'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentPage, go as goSlide, rawRoutes } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
+import { CLICKS_MAX } from '../constants'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper'
 import DrawingPreview from './DrawingPreview.vue'
@@ -112,7 +112,7 @@ watchEffect(() => {
   >
     <div
       v-show="value"
-      class="bg-main !bg-opacity-75 p-16 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
+      class="bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
       @click="close()"
     >
       <div
@@ -125,9 +125,8 @@ watchEffect(() => {
           class="relative"
         >
           <div
-            class="inline-block border rounded border-opacity-50 overflow-hidden bg-main hover:border-$slidev-theme-primary transition"
-            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-$slidev-theme-primary' : 'border-gray-400'"
-            :style="themeVars"
+            class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
+            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
             @click="go(+route.path)"
           >
             <SlideContainer
@@ -139,7 +138,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="useFixedClicks(route, 99999)[1]"
+                :clicks-context="useFixedClicks(route, CLICKS_MAX)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
@@ -163,7 +162,19 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <IconButton v-if="value" title="Close" class="fixed text-2xl top-4 right-4 text-gray-400" @click="close">
-    <carbon:close />
-  </IconButton>
+  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2">
+    <IconButton title="Close" class="text-2xl" @click="close">
+      <carbon:close />
+    </IconButton>
+    <IconButton
+      as="a"
+      title="Slides Overview"
+      target="_blank"
+      href="/overview"
+      tab-index="-1"
+      class="text-2xl"
+    >
+      <carbon:list-boxes />
+    </IconButton>
+  </div>
 </template>

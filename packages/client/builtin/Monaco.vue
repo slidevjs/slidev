@@ -12,131 +12,139 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useEventListener } from '@vueuse/core'
-import { notNullish } from '@antfu/utils'
-import { decode } from 'js-base64'
-import { nanoid } from 'nanoid'
 import type * as monaco from 'monaco-editor'
-import type { RunResult } from '@slidev/types'
-import { isDark } from '../logic/dark'
+import { computed, nextTick, onMounted, ref } from 'vue'
+import { debounce } from '@antfu/utils'
+import lz from 'lz-string'
+import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{
-  code: string
-  diff?: string
+  codeLz: string
+  diffLz?: string
   lang?: string
   readonly?: boolean
   lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
-  height?: number | string
+  height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
   editorOptions?: monaco.editor.IEditorOptions
+  ata?: boolean
   runnable?: boolean
   autorun?: boolean | 'once'
   outputHeight?: number | undefined
 }>(), {
-  code: '',
+  codeLz: '',
   lang: 'typescript',
   readonly: false,
   lineNumbers: 'off',
-  height: 'auto',
+  height: 'initial',
+  ata: true,
   runnable: false,
   autorun: true,
 })
 
-const id = nanoid()
-const code = ref(decode(props.code).trimEnd())
-const diff = ref(props.diff ? decode(props.diff).trimEnd() : null)
-const lineHeight = +(getComputedStyle(document.body).getPropertyValue('--slidev-code-line-height') || '18').replace('px', '') || 18
-const editorHeight = ref(0)
-const calculatedHeight = computed(() => code.value.split(/\r?\n/g).length * lineHeight)
+const code = lz.decompressFromBase64(props.codeLz).trimEnd()
+const diff = props.diffLz && lz.decompressFromBase64(props.diffLz).trimEnd()
+
+const langMap: Record<string, string> = {
+  ts: 'typescript',
+  js: 'javascript',
+}
+const lang = langMap[props.lang] ?? props.lang
+const extMap: Record<string, string> = {
+  typescript: 'mts',
+  javascript: 'mjs',
+  ts: 'mts',
+  js: 'mjs',
+}
+const ext = extMap[props.lang] ?? props.lang
+
+const outer = ref<HTMLDivElement>()
+const container = ref<HTMLDivElement>()
+
+const contentHeight = ref(0)
+const initialHeight = ref<number>()
 const height = computed(() => {
-  return props.height === 'auto' ? `${Math.max(calculatedHeight.value, editorHeight.value) + 20}px` : props.height
+  if (props.height === 'auto')
+    return `${contentHeight.value}px`
+  if (props.height === 'initial')
+    return `${initialHeight.value}px`
+  return props.height
 })
 
-const iframe = ref<HTMLIFrameElement>()
+onMounted(async () => {
+  // Lazy load monaco, so it will be bundled in async chunk
+  const { default: setup } = await import('../setup/monaco')
+  const { ata, monaco } = await setup()
+  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+  const commonOptions = {
+    automaticLayout: true,
+    readOnly: props.readonly,
+    lineNumbers: props.lineNumbers,
+    minimap: { enabled: false },
+    overviewRulerBorder: false,
+    overviewRulerLanes: 0,
+    padding: { top: 10, bottom: 10 },
+    lineNumbersMinChars: 3,
+    bracketPairColorization: { enabled: false },
+    tabSize: 2,
+    fontSize: 11.5,
+    fontFamily: 'var(--slidev-code-font-family)',
+    scrollBeyondLastLine: false,
+    ...props.editorOptions,
+  } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
 
-const cssVars = [
-  '--slidev-code-font-size',
-  '--slidev-code-font-family',
-  '--slidev-code-background',
-  '--slidev-code-line-height',
-  '--slidev-code-padding',
-  '--slidev-code-margin',
-  '--slidev-code-radius',
-]
-
-function getStyleObject(el: Element) {
-  const object: Record<string, string> = {}
-  const style = getComputedStyle(el)
-  for (const v of cssVars)
-    object[v] = style.getPropertyValue(v)
-  return object
-}
-
-onMounted(() => {
-  const frame = iframe.value!
-  frame.setAttribute('sandbox', [
-    'allow-forms',
-    'allow-modals',
-    'allow-pointer-lock',
-    'allow-popups',
-    'allow-same-origin',
-    'allow-scripts',
-    'allow-top-navigation-by-user-activation',
-  ].join(' '))
-
-  let src = __DEV__
-    ? `${location.origin}${__SLIDEV_CLIENT_ROOT__}/`
-    : import.meta.env.BASE_URL
-  src += `iframes/monaco/index.html?id=${id}&lineNumbers=${props.lineNumbers}&lang=${props.lang}`
-  if (diff.value)
-    src += '&diff=1'
-  frame.src = src
-
-  frame.style.backgroundColor = 'transparent'
-})
-
-function post(payload: any) {
-  iframe.value?.contentWindow?.postMessage(
-    JSON.stringify({
-      type: 'slidev-monaco',
-      data: payload,
-      id,
-    }),
-    location.origin,
-  )
-}
-
-useEventListener(window, 'message', ({ data: payload }) => {
-  if (payload.id !== id)
-    return
-  if (payload.type === 'slidev-monaco-loaded') {
-    if (iframe.value) {
-      post({
-        code: code.value,
-        diff: diff.value,
-        lang: props.lang,
-        readonly: props.readonly,
-        lineNumbers: props.lineNumbers,
-        editorOptions: props.editorOptions,
-        dark: isDark.value,
-        style: Object.entries(getStyleObject(iframe.value)).map(([k, v]) => `${k}: ${v};`).join(''),
-      })
+  let editableEditor: monaco.editor.IStandaloneCodeEditor
+  if (diff) {
+    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+    const editor = monaco.editor.createDiffEditor(container.value!, {
+      renderOverviewRuler: false,
+      ...commonOptions,
+    })
+    editor.setModel({
+      original: model,
+      modified: diffModel,
+    })
+    const originalEditor = editor.getOriginalEditor()
+    const modifiedEditor = editor.getModifiedEditor()
+    const onContentSizeChange = () => {
+      const newHeight = Math.max(originalEditor.getContentHeight(), modifiedEditor.getContentHeight()) + 4
+      initialHeight.value ??= newHeight
+      contentHeight.value = newHeight
+      nextTick(() => editor.layout())
     }
-    if (props.autorun)
-      run()
-    return
+    originalEditor.onDidContentSizeChange(onContentSizeChange)
+    modifiedEditor.onDidContentSizeChange(onContentSizeChange)
+    editableEditor = modifiedEditor
   }
-  if (payload.type !== 'slidev-monaco')
-    return
-  if (payload.data?.height)
-    editorHeight.value = payload.data?.height
-  if (notNullish(payload?.data?.code) && code.value !== payload.data.code) {
-    code.value = payload.data.code
-    if (props.autorun === true)
-      run()
+  else {
+    const editor = monaco.editor.create(container.value!, {
+      model,
+      lineDecorationsWidth: 0,
+      ...commonOptions,
+    })
+    editor.onDidContentSizeChange((e) => {
+      const newHeight = e.contentHeight + 4
+      initialHeight.value ??= newHeight
+      contentHeight.value = newHeight
+      nextTick(() => editableEditor.layout())
+    })
+    editableEditor = editor
   }
-  if (notNullish(payload?.data?.diff) && diff.value !== payload.data.diff)
-    diff.value = payload.data.diff
+  if (props.ata) {
+    ata(editableEditor.getValue())
+    editableEditor.onDidChangeModelContent(debounce(1000, () => {
+      ata(editableEditor.getValue())
+    }))
+  }
+  const originalLayoutContentWidget = editableEditor.layoutContentWidget.bind(editableEditor)
+  editableEditor.layoutContentWidget = (widget: any) => {
+    originalLayoutContentWidget(widget)
+    const id = widget.getId()
+    if (id === 'editor.contrib.resizableContentHoverWidget') {
+      widget._resizableNode.domNode.style.transform = widget._positionPreference === 1
+        ? /* ABOVE */ `translateY(calc(100% * (var(--slidev-slide-scale) - 1)))`
+        : /* BELOW */ `` // reset
+    }
+  }
 })
 
 const result = ref<RunResult | 'running' | 'empty'>(props.autorun ? 'running' : 'empty')
@@ -168,41 +176,44 @@ const colorTable = {
 </script>
 
 <template>
-  <div v-if="props.runnable" class="relative">
-    <iframe ref="iframe" class="text-base w-full rounded-t" :style="{ height }" />
-    <div
-      class="relative px-2 py-1 rounded-b bg-[var(--slidev-code-background)]"
-      :style="{ height: props.outputHeight && `${1.25 + 0.8 * props.outputHeight}em` }"
-    >
-      <div v-if="result === 'empty'" class="text-sm text-center opacity-50">
-        Click the play button to run the code
-      </div>
-      <div v-else-if="result === 'running'" class="text-sm text-center opacity-50">
-        Running...
-      </div>
-      <div v-else-if="result.type === 'error'" class="text-sm text-red-500">
-        {{ result.message }}
-      </div>
-      <div v-else class="flex flex-col h-full -mt-1">
-        <div class="text-xs font-[Consolas]">
-          OUTPUT
+  <div class="relative">
+    <div ref="outer" class="slidev-monaco-container" :style="{ height }">
+      <div ref="container" class="absolute inset-0.5" />
+    </div>
+    <template v-if="props.runnable">
+      <div
+        class="relative px-2 py-1 rounded-b bg-[var(--slidev-code-background)]"
+        :style="{ height: props.outputHeight && `${1.25 + 0.8 * props.outputHeight}em` }"
+      >
+        <div v-if="result === 'empty'" class="text-sm text-center opacity-50">
+          Click the play button to run the code
         </div>
-        <div class="ml-1 text-xs overflow-auto leading-[.8rem]">
-          <pre v-for="line, i of result.output" :key="i" :class="colorTable[line.type]" v-text="line.text" />
-          <div v-if="result.output.length === 0" class="opacity-50">
-            (empty)
+        <div v-else-if="result === 'running'" class="text-sm text-center opacity-50">
+          Running...
+        </div>
+        <div v-else-if="result.type === 'error'" class="text-sm text-red-500">
+          {{ result.message }}
+        </div>
+        <div v-else class="flex flex-col h-full -mt-1">
+          <div class="text-xs font-[Consolas]">
+            OUTPUT
+          </div>
+          <div class="ml-1 text-xs overflow-auto leading-[.8rem]">
+            <pre v-for="line, i of result.output" :key="i" :class="colorTable[line.type]" v-text="line.text" />
+            <div v-if="result.output.length === 0" class="opacity-50">
+              (empty)
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-if="code.trim()" class="absolute right-3 top-4 max-h-full flex gap-1">
-      <button class="code-action" :disabled="result === 'running'" @click="run">
-        <carbon:renew v-if="props.autorun === true" />
-        <carbon:play-filled-alt v-else />
-      </button>
-    </div>
+      <div v-if="code.trim()" class="absolute right-3 top-4 max-h-full flex gap-1">
+        <button class="code-action" :disabled="result === 'running'" @click="run">
+          <carbon:renew v-if="props.autorun === true" />
+          <carbon:play-filled-alt v-else />
+        </button>
+      </div>
+    </template>
   </div>
-  <iframe v-else ref="iframe" class="text-base w-full rounded" :style="{ height }" />
 </template>
 
 <style scoped lang="postcss">

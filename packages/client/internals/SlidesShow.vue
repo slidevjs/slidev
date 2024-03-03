@@ -6,13 +6,10 @@ import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
 import SlideWrapper from './SlideWrapper'
-
-// @ts-expect-error virtual module
-import GlobalTop from '/@slidev/global-components/top'
-
-// @ts-expect-error virtual module
-import GlobalBottom from '/@slidev/global-components/bottom'
 import PresenterMouse from './PresenterMouse.vue'
+
+import GlobalTop from '#slidev/global-components/top'
+import GlobalBottom from '#slidev/global-components/bottom'
 
 defineProps<{
   renderContext: 'slide' | 'presenter'
@@ -77,10 +74,12 @@ function onAfterLeave() {
 
 <style scoped>
 #slideshow {
-  @apply h-full;
+  height: 100%;
 }
 
 #slideshow > div {
-  @apply h-full w-full absolute;
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 </style>

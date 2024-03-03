@@ -10,8 +10,7 @@ import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
 import IconButton from './IconButton.vue'
 
-// @ts-expect-error virtual module
-import CustomNavControls from '/@slidev/custom-nav-controls'
+import CustomNavControls from '#slidev/custom-nav-controls'
 
 const props = defineProps({
   persist: {
@@ -34,7 +33,7 @@ function onMouseLeave() {
 
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
-  : 'rounded-md bg-main shadow dark:border dark:border-gray-400 dark:border-opacity-10')
+  : 'rounded-md bg-main shadow dark:border dark:border-main')
 
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)
@@ -115,13 +114,13 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
-          class="<md:hidden"
+          class="lt-md:hidden"
           @click="showEditor = !showEditor"
         >
           <carbon:text-annotation-toggle />
         </IconButton>
 
-        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" @click="togglePresenterLayout">
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial" @click="togglePresenterLayout">
           <carbon:template />
           {{ presenterLayout }}
         </IconButton>

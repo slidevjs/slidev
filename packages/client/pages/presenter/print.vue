@@ -2,9 +2,9 @@
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
-import { configs, themeVars } from '../env'
-import { rawRoutes, total } from '../logic/nav'
-import NoteDisplay from './NoteDisplay.vue'
+import { configs } from '../../env'
+import { rawRoutes, total } from '../../logic/nav'
+import NoteDisplay from '../../internals/NoteDisplay.vue'
 
 useStyleTag(`
 @page {
@@ -24,7 +24,9 @@ html #page-root {
 }
 `)
 
-useHead({ title: `Notes - ${configs.title}` })
+useHead({
+  title: `Notes - ${configs.title}`,
+})
 
 const slidesWithNote = computed(() => rawRoutes
   .map(route => route.meta?.slide)
@@ -32,7 +34,7 @@ const slidesWithNote = computed(() => rawRoutes
 </script>
 
 <template>
-  <div id="page-root" :style="themeVars">
+  <div id="page-root">
     <div class="m-4">
       <div class="mb-10">
         <h1 class="text-4xl font-bold mt-2">
@@ -54,9 +56,12 @@ const slidesWithNote = computed(() => rawRoutes
               <div class="flex-auto" />
             </div>
           </h2>
-          <NoteDisplay :note-html="slide!.noteHTML" class="max-w-full" />
+          <NoteDisplay
+            :note-html="slide!.noteHTML"
+            class="max-w-full"
+          />
         </div>
-        <hr v-if="index < slidesWithNote.length - 1" class="border-gray-400/50 mb-8">
+        <hr v-if="index < slidesWithNote.length - 1" class="border-main mb-8">
       </div>
     </div>
   </div>

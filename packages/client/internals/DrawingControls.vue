@@ -40,8 +40,7 @@ function setBrushColor(color: typeof brush.color) {
 
 <template>
   <Draggable
-    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 z-20"
-    dark="border border-gray-400 border-opacity-10"
+    class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 z-20 border border-main"
     :class="drawingEnabled ? '' : drawingPinned ? 'opacity-40 hover:opacity-90' : 'opacity-0 pointer-events-none'"
     storage-key="slidev-drawing-pos"
     :initial-x="10"
@@ -132,10 +131,8 @@ function setBrushColor(color: typeof brush.color) {
   </Draggable>
 </template>
 
-<style lang="postcss">
-.v-popper--theme-menu {
-  .v-popper__arrow-inner {
-    @apply border-main;
-  }
+<style>
+.v-popper--theme-menu .v-popper__arrow-inner {
+  --uno: border-main;
 }
 </style>

@@ -21,7 +21,7 @@ export interface SlidevContext {
   themeConfigs: ComputedRef<typeof configs['themeConfig']>
 }
 
-export default function createSlidevContext() {
+export function createSlidevContext() {
   return {
     install(app: App) {
       const context = reactive(useContext(route))

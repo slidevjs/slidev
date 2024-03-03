@@ -16,6 +16,8 @@ defaults:
 transition: slide-left
 title: Welcome to Slidev
 mdc: true
+monaco: true
+monacoTypesSource: local # or cdn or none
 ---
 
 # Welcome to Slidev
@@ -166,6 +168,71 @@ doubled.value = 2
 }
 </style>
 
+<!--
+Notes can also sync with clicks
+
+[click] This will be highlighted after the first click
+
+[click] Highlighted with `count = ref(0)`
+
+[click:3] Last click (skip two clicks)
+-->
+
+---
+level: 2
+---
+
+# Shiki Magic Move
+
+(this feature is still experimental)
+
+Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
+
+Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
+
+````md magic-move
+```ts
+const author = reactive({
+  name: 'John Doe',
+  books: [
+    'Vue 2 - Advanced Guide',
+    'Vue 3 - Basic Guide',
+    'Vue 4 - The Mystery'
+  ]
+})
+```
+```ts
+export default {
+  data() {
+    return {
+      author: {
+        name: 'John Doe',
+        books: [
+          'Vue 2 - Advanced Guide',
+          'Vue 3 - Basic Guide',
+          'Vue 4 - The Mystery'
+        ]
+      }
+    }
+  }
+}
+```
+```ts
+export default {
+  data: () => ({
+    author: {
+      name: 'John Doe',
+      books: [
+        'Vue 2 - Advanced Guide',
+        'Vue 3 - Basic Guide',
+        'Vue 4 - The Mystery'
+      ]
+    }
+  })
+}
+```
+````
+
 ---
 
 # Components
@@ -240,12 +307,49 @@ Read more about [How to use a theme](https://sli.dev/themes/use.html) and
 check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
 
 ---
+
+# Clicks Animations
+
+You can add `v-click` to elements to add a click animation.
+
+<div v-click>
+
+This shows up when you click the slide:
+
+```html
+<div v-click>This shows up when you click the slide.</div>
+```
+
+</div>
+
+<br>
+
+<v-click>
+
+The <span v-mark.red="3"><code>v-mark</code> directive</span>
+also allows you to add
+<span v-mark.circle.orange="4">inline marks</span>
+, powered by [Rough Notation](https://roughnotation.com/):
+
+```html
+<span v-mark.underline.orange>inline markers</span>
+```
+
+</v-click>
+
+<div mt-20 v-click>
+
+[Learn More](https://sli.dev/guide/animations#click-animations)
+
+</div>
+
+---
 preload: false
 ---
 
-# Animations
+# Motions
 
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
+Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
 
 ```html
 <div
@@ -428,6 +532,18 @@ database "MySql" {
 src: ./pages/multiple-entries.md
 hide: false
 ---
+
+---
+
+# Monaco Editor
+
+```ts {monaco}
+import { ref } from 'vue'
+import hello from './external'
+
+const code = ref('const a = 1')
+hello()
+```
 
 ---
 layout: center

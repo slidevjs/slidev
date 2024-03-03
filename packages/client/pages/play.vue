@@ -4,12 +4,12 @@ import { isEditorVertical, isScreenVertical, showEditor, slideScale, windowSize 
 import { isEmbedded, isPrintMode, next, prev, useSwipeControls } from '../logic/nav'
 import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
-import { configs, themeVars } from '../env'
-import Controls from './Controls.vue'
-import SlideContainer from './SlideContainer.vue'
-import NavControls from './NavControls.vue'
-import SlidesShow from './SlidesShow.vue'
-import PrintStyle from './PrintStyle.vue'
+import { configs } from '../env'
+import Controls from '../internals/Controls.vue'
+import SlideContainer from '../internals/SlideContainer.vue'
+import NavControls from '../internals/NavControls.vue'
+import SlidesShow from '../internals/SlidesShow.vue'
+import PrintStyle from '../internals/PrintStyle.vue'
 
 registerShortcuts()
 
@@ -31,18 +31,21 @@ useSwipeControls(root)
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
-const Editor = shallowRef<any>()
+const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('./Editor.vue').then(v => Editor.value = v.default)
+  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 const DrawingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__)
-  import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
+  import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 </script>
 
 <template>
   <PrintStyle v-if="isPrintMode" />
-  <div id="page-root" ref="root" class="grid" :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'" :style="themeVars">
+  <div
+    id="page-root" ref="root" class="grid"
+    :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"
+  >
     <SlideContainer
       class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
@@ -70,8 +73,8 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
     </SlideContainer>
 
-    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && Editor && showEditor">
-      <Editor :resize="true" />
+    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor">
+      <SideEditor :resize="true" />
     </template>
   </div>
   <Controls />

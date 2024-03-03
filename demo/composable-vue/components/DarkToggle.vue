@@ -4,7 +4,7 @@ import { isDark, toggleDark } from '@slidev/client/logic/dark.ts'
 
 <template>
   <button
-    class="bg-$slidev-theme-primary rounded border-b-2 border-green-900 text-sm px-2 pt-1.5 pb-1 inline-block !outline-none hover:bg-opacity-85"
+    class="bg-primary rounded border-b-2 border-green-900 text-sm px-2 pt-1.5 pb-1 inline-block !outline-none hover:bg-opacity-85"
     @click="toggleDark"
   >
     <div class="flex">
