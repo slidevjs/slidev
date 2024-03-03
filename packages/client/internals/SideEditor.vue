@@ -3,7 +3,7 @@ import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
-import { currentSlideId, openInEditor } from '../logic/nav'
+import { currentSlideNo, openInEditor } from '../logic/nav'
 import { useDynamicSlideInfo } from '../logic/note'
 import IconButton from './IconButton.vue'
 
@@ -19,7 +19,7 @@ const frontmatter = ref<any>({})
 const contentInput = ref<HTMLTextAreaElement>()
 const noteInput = ref<HTMLTextAreaElement>()
 
-const { info, update } = useDynamicSlideInfo(currentSlideId)
+const { info, update } = useDynamicSlideInfo(currentSlideNo)
 
 watch(
   info,
@@ -103,7 +103,7 @@ onMounted(async () => {
     })
   })
 
-  watch(currentSlideId, () => {
+  watch(currentSlideNo, () => {
     contentEditor.clearHistory()
     noteEditor.clearHistory()
   }, { flush: 'post' })

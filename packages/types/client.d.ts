@@ -22,15 +22,15 @@ declare module '#slidev/global-components/bottom' {
   export default component
 }
 
-declare module '#slidev/routes' {
-  import type { RouteRecordRaw } from 'vue-router'
+declare module '#slidev/slides' {
+  import type { ShallowRef } from 'vue'
+  import type { SlideRoute } from '@slidev/types'
 
-  const rawRoutes: RouteRecordRaw[]
-  const redirects: RouteRecordRaw[]
-  export { rawRoutes, redirects }
+  const slides: ShallowRef<SlideRoute[]>
+  export { slides }
 }
 
-declare module '@slidev/titles.md' {
+declare module '#slidev/titles.md' {
   import type { ComponentOptions } from 'vue'
 
   const component: ComponentOptions

@@ -1,21 +1,8 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
-
-import { rawRoutes, redirects } from '#slidev/routes'
 import configs from '#slidev/configs'
 
-export { rawRoutes }
-
 export const routes: RouteRecordRaw[] = [
-  {
-    name: 'play',
-    path: '/',
-    component: () => import('./pages/play.vue'),
-    children: [
-      ...rawRoutes,
-      ...redirects,
-    ],
-  },
   {
     name: 'print',
     path: '/print',
@@ -24,7 +11,6 @@ export const routes: RouteRecordRaw[] = [
 
   // Redirects
   { path: '', redirect: { path: '/1' } },
-  { path: '/:pathMatch(.*)', redirect: { path: '/1' } },
 ]
 
 if (__SLIDEV_FEATURE_PRESENTER__) {
@@ -80,6 +66,12 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
     redirect: { path: '/presenter/1' },
   })
 }
+
+routes.push({
+  name: 'play',
+  path: '/:no',
+  component: () => import('./pages/play.vue'),
+})
 
 export const router = createRouter({
   history: __SLIDEV_HASH_ROUTE__

@@ -1,4 +1,4 @@
-import { computed, nextTick, unref } from 'vue'
+import { computed, nextTick, ref, unref } from 'vue'
 import { router } from '../routes'
 
 export function useRouteQuery<T extends string | string[]>(
@@ -24,3 +24,12 @@ export function useRouteQuery<T extends string | string[]>(
     },
   })
 }
+
+// force update collected elements when the route is fully resolved
+export const routeForceRefresh = ref(0)
+nextTick(() => {
+  router.afterEach(async () => {
+    await nextTick()
+    routeForceRefresh.value += 1
+  })
+})

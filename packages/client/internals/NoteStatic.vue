@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ClicksContext } from 'packages/types'
+import type { ClicksContext } from '@slidev/types'
 import { useSlideInfo } from '../logic/note'
 import NoteDisplay from './NoteDisplay.vue'
 

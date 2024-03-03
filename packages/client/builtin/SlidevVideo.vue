@@ -22,7 +22,7 @@ const ended = ref(false)
 const matchRoute = computed(() => {
   if (!video.value || currentContext?.value !== 'slide')
     return false
-  return route === $slidev?.nav.currentRoute
+  return route && route.no === $slidev?.nav.currentSlideNo
 })
 
 const matchClick = computed(() => {

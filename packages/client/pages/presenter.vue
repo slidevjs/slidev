@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { clicksContext, currentPage, currentRoute, currentSlideId, hasNext, nextRoute, queryClicks, rawRoutes, total, useSwipeControls } from '../logic/nav'
+import { clicksContext, currentSlideNo, currentSlideRoute, hasNext, nextRoute, queryClicks, slides, total, useSwipeControls } from '../logic/nav'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
@@ -37,10 +37,10 @@ const notesEditing = ref(false)
 
 const { timer, resetTimer } = useTimer()
 
-const clicksCtxMap = rawRoutes.map(route => useFixedClicks(route))
+const clicksCtxMap = computed(() => slides.value.map(route => useFixedClicks(route)))
 const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
-    return [currentRoute.value!, clicksContext.value.current + 1] as const
+    return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
     return [nextRoute.value!, 0] as const
   else
@@ -48,11 +48,11 @@ const nextFrame = computed(() => {
 })
 
 const nextFrameClicksCtx = computed(() => {
-  return nextFrame.value && clicksCtxMap[+nextFrame.value[0].path - 1]
+  return nextFrame.value && clicksCtxMap.value[nextFrame.value[0].no - 1]
 })
 
 watch(
-  [currentRoute, queryClicks],
+  [currentSlideRoute, queryClicks],
   () => {
     if (nextFrameClicksCtx.value)
       nextFrameClicksCtx.value.current = nextFrame.value![1]
@@ -104,8 +104,8 @@ onMounted(() => {
           </template>
         </SlideContainer>
         <ClicksSlider
-          :key="currentRoute?.path"
-          :clicks-context="usePrimaryClicks(currentRoute)"
+          :key="currentSlideRoute?.no"
+          :clicks-context="usePrimaryClicks(currentSlideRoute)"
           class="w-full pb2 px4 flex-none"
         />
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
@@ -119,8 +119,8 @@ onMounted(() => {
           class="h-full w-full slidev-view-transition-none"
         >
           <SlideWrapper
-            :is="(nextFrame[0].component as any)"
-            :key="nextFrame[0].path"
+            :is="nextFrame[0].component!"
+            :key="nextFrame[0].no"
             :clicks-context="nextFrameClicksCtx"
             :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
@@ -138,17 +138,17 @@ onMounted(() => {
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
         <NoteEditable
           v-if="__DEV__"
-          :key="`edit-${currentSlideId}`"
+          :key="`edit-${currentSlideNo}`"
           v-model:editing="notesEditing"
-          :no="currentSlideId"
+          :no="currentSlideNo"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :clicks-context="clicksContext"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
         />
         <NoteStatic
           v-else
-          :key="`static-${currentSlideId}`"
-          :no="currentSlideId"
+          :key="`static-${currentSlideNo}`"
+          :no="currentSlideNo"
           class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
           :style="{ fontSize: `${presenterNotesFontSize}em` }"
           :clicks-context="clicksContext"
@@ -189,7 +189,7 @@ onMounted(() => {
     <div class="progress-bar">
       <div
         class="progress h-3px bg-primary transition-all"
-        :style="{ width: `${(currentPage - 1) / (total - 1) * 100}%` }"
+        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100}%` }"
       />
     </div>
   </div>
