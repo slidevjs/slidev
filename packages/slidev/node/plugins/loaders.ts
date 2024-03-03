@@ -247,9 +247,13 @@ export function createSlidesLoader(
       },
 
       load(id): LoadResult | Promise<LoadResult> {
-        // routes
+        // slide routes
         if (id === '/@slidev/slides')
-          return generateRoutes()
+          return generateSlideRoutes()
+
+        // routes
+        if (id === '/@slidev/routes')
+          return generateDummyRoutes()
 
         // layouts
         if (id === '/@slidev/layouts')
@@ -701,7 +705,7 @@ defineProps<{ no: number | string }>()`)
     ].join('\n\n')
   }
 
-  async function generateRoutes() {
+  async function generateSlideRoutes() {
     const layouts = await getLayouts()
     const imports = [
       `import { shallowRef } from 'vue'`,
@@ -738,6 +742,13 @@ defineProps<{ no: number | string }>()`)
       `    update(oldRef)`,
       `  })`,
       `}`,
+    ].join('\n')
+  }
+
+  function generateDummyRoutes() {
+    return [
+      `export { slides } from '#slidev/slides'`,
+      `console.warn('[slidev] #slidev/routes is deprecated, use #slidev/slides instead')`,
     ].join('\n')
   }
 
