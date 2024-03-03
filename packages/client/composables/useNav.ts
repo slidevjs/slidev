@@ -11,29 +11,45 @@ import { slides } from '#slidev/slides'
 export interface SlidevContextNav {
   slides: Ref<SlideRoute[]>
   total: ComputedRef<number>
-  path: ComputedRef<string>
+
+  currentPath: ComputedRef<string>
   currentPage: ComputedRef<number>
   currentSlideNo: ComputedRef<number>
   currentSlideRoute: ComputedRef<SlideRoute>
   currentTransition: ComputedRef<TransitionGroupProps | undefined>
   currentLayout: ComputedRef<string>
+
   nextRoute: ComputedRef<SlideRoute>
   prevRoute: ComputedRef<SlideRoute>
+  hasNext: ComputedRef<boolean>
+  hasPrev: ComputedRef<boolean>
+
   clicksContext: ComputedRef<ClicksContext>
   clicks: ComputedRef<number>
   clicksTotal: ComputedRef<number>
-  hasNext: ComputedRef<boolean>
-  hasPrev: ComputedRef<boolean>
+
+  /** The table of content tree */
   tocTree: ComputedRef<TocItem[]>
+  /** The direction of the navigation, 1 for forward, -1 for backward */
   navDirection: Ref<number>
+  /** The direction of the clicks, 1 for forward, -1 for backward */
   clicksDirection: Ref<number>
+  /** Utility function for open file in editor, only avaible in dev mode  */
   openInEditor: (url?: string) => Promise<boolean>
+
+  /** Go to next click */
   next: () => Promise<void>
+  /** Go to previous click */
   prev: () => Promise<void>
+  /** Go to next slide */
   nextSlide: () => Promise<void>
+  /** Go to previous slide */
   prevSlide: (lastClicks?: boolean) => Promise<void>
+  /** Go to slide */
   go: (page: number | string, clicks?: number) => Promise<void>
+  /** Go to the first slide */
   goFirst: () => Promise<void>
+  /** Go to the last slide */
   goLast: () => Promise<void>
 }
 
@@ -44,18 +60,20 @@ export function useNavBase(
   router?: Router,
 ): SlidevContextNav {
   const total = computed(() => slides.value.length)
-  const path = computed(() => getSlidePath(currentSlideRoute.value))
+
+  const navDirection = ref(0)
+  const clicksDirection = ref(0)
+
+  const currentPath = computed(() => getSlidePath(currentSlideRoute.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
+
   const clicks = computed(() => clicksContext.value.current)
   const clicksTotal = computed(() => clicksContext.value.total)
   const nextRoute = computed(() => slides.value[Math.min(slides.value.length, currentSlideNo.value + 1) - 1])
   const prevRoute = computed(() => slides.value[Math.max(1, currentSlideNo.value - 1) - 1])
   const hasNext = computed(() => currentSlideNo.value < slides.value.length || clicks.value < clicksTotal.value)
   const hasPrev = computed(() => currentSlideNo.value > 1 || clicks.value > 0)
-
-  const navDirection = ref(0)
-  const clicksDirection = ref(0)
 
   const currentTransition = computed(() => getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
 
@@ -64,6 +82,8 @@ export function useNavBase(
   })
 
   async function openInEditor(url?: string) {
+    if (!__DEV__)
+      return false
     if (url == null) {
       const slide = currentSlideRoute.value?.meta?.slide
       if (!slide)
@@ -128,7 +148,7 @@ export function useNavBase(
   return {
     slides,
     total,
-    path,
+    currentPath,
     currentSlideNo,
     currentPage: currentSlideNo,
     currentSlideRoute,

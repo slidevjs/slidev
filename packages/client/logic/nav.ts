@@ -30,7 +30,7 @@ export const queryClicks = computed({
 export const {
   slides,
   total,
-  path,
+  currentPath,
   currentSlideNo,
   currentPage,
   currentLayout,
