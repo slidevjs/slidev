@@ -12,7 +12,7 @@ Configuring the markdown parser used in step 2 can be done by [configuring Vite 
 
 ## Preparser Extensions
 
-> Available since v0.37.0
+> Available since v0.37.0.
 
 :::warning
 Important: when modifying the preparser configuration, you need to stop and start slidev again (restart might not be sufficient).
@@ -25,7 +25,7 @@ To customize it, create a `./setup/preparser.ts` file with the following content
 ```ts
 import { definePreparserSetup } from '@slidev/types'
 
-export default definePreparserSetup(({ filepath, headmatter }) => {
+export default definePreparserSetup(({ filepath, headmatter, mode }) => {
   return [
     {
       transformRawLines(lines) {
@@ -41,7 +41,7 @@ export default definePreparserSetup(({ filepath, headmatter }) => {
 
 This example systematically replaces any `@@@` line by a line with `hello`. It illustrates the structure of a preparser configuration file and some of the main concepts the preparser involves:
 - `definePreparserSetup` must be called with a function as parameter.
-- The function receives the file path (of the root presentation file) and headmatter (from the md file). It could use this information (e.g., enable extensions based on the presentation file).
+- The function receives the file path (of the root presentation file), the headmatter (from the md file) and, since v0.48.0, a mode (dev, build or export). It could use this information (e.g., enable extensions based on the presentation file or whether we are exporting a PDF).
 - The function must return a list of preparser extensions.
 - An extension can contain:
   - a `transformRawLines(lines)` function that runs just after parsing the headmatter of the md file and receives a list of all lines (from the md file). The function can mutate the list arbitrarily.
