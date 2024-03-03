@@ -156,14 +156,17 @@ onMounted(async () => {
   }
 })
 
-const output = ref(props.autorun || isPrintMode.value ? '_running' : '_empty')
+const runnable = computed(() => props.runnable && ['slide', 'presenter'].includes($renderContext.value))
+const autorun = isPrintMode.value ? 'once' : props.autorun
+const output = ref(autorun ? '_running' : '_empty')
 
 let shikiModule: typeof import('#slidev/shiki') | undefined
 let tsModule: typeof import('typescript') | undefined
 
 const run = debounce(200, async () => {
-  if (!props.runnable || $renderContext.value !== 'slide')
+  if (!runnable.value)
     return
+
   const setAsRunning = setTimeout(() => {
     output.value = '_running'
   }, 500)
@@ -198,18 +201,18 @@ const run = debounce(200, async () => {
   clearTimeout(setAsRunning)
 })
 
-if (props.autorun === 'once' || isPrintMode.value)
+if (autorun === 'once')
   run()
-else if (props.autorun)
+else if (autorun)
   watch(code, run, { immediate: true })
 </script>
 
 <template>
-  <div class="relative" :data-waitfor="props.runnable ? '.output' : undefined">
+  <div class="relative" :data-waitfor="runnable ? '.output' : undefined">
     <div ref="outer" class="slidev-monaco-container" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
-    <template v-if="props.runnable">
+    <template v-if="runnable">
       <div class="relative flex flex-col px-2 py-1 rounded-b bg-$slidev-code-background" :style="{ height: props.outputHeight }">
         <div v-if="output === '_empty'" class="text-sm text-center opacity-50">
           Click the play button to run the code
