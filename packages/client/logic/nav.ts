@@ -4,7 +4,7 @@ import { usePrimaryClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNavBase } from '../composables/useNav'
 import { useRouteQuery } from './route'
-import { currentSlideRoute, hasPrimarySlide } from './nav-state'
+import { currentRoute, currentSlideRoute, hasPrimarySlide } from './nav-state'
 import { getSlide } from './slides'
 
 export * from './slides'
@@ -59,9 +59,13 @@ export const {
   router,
 )
 
-watch([total, route], async () => {
-  if (hasPrimarySlide.value && !getSlide(route.value.params.no as string)) {
-    // The current slide may has been removed. Redirect to the last slide.
-    await goLast()
-  }
-}, { flush: 'post', immediate: true })
+watch(
+  [total, currentRoute],
+  async () => {
+    if (hasPrimarySlide.value && !getSlide(currentRoute.value.params.no as string)) {
+      // The current slide may has been removed. Redirect to the last slide.
+      await goLast()
+    }
+  },
+  { flush: 'post', immediate: true },
+)
