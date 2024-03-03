@@ -14,7 +14,7 @@ export default defineComponent({
     },
     renderContext: {
       type: String,
-      default: 'main',
+      default: 'slide',
     },
     active: {
       type: Boolean,

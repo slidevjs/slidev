@@ -156,7 +156,7 @@ onMounted(async () => {
   }
 })
 
-const output = ref(props.autorun ? '_running' : '_empty')
+const output = ref(props.autorun || isPrintMode.value ? '_running' : '_empty')
 
 let shikiModule: typeof import('#slidev/shiki') | undefined
 let tsModule: typeof import('typescript') | undefined
@@ -198,14 +198,14 @@ const run = debounce(200, async () => {
   clearTimeout(setAsRunning)
 })
 
-if (props.autorun === 'once')
+if (props.autorun === 'once' || isPrintMode.value)
   run()
 else if (props.autorun)
   watch(code, run, { immediate: true })
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative" :data-waitfor="props.runnable ? '.output' : undefined">
     <div ref="outer" class="slidev-monaco-container" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
@@ -214,7 +214,7 @@ else if (props.autorun)
         <div v-if="output === '_empty'" class="text-sm text-center opacity-50">
           Click the play button to run the code
         </div>
-        <div v-else-if="output === '_running'" class="text-sm text-center opacity-50">
+        <div v-else-if="output === '_running'" class="text-sm text-center opacity-50 running">
           Running...
         </div>
         <template v-else>
