@@ -108,11 +108,11 @@ export function getSlide(no: number | string) {
   )
 }
 
-export function getSlidePath(route: SlideRoute | number | string) {
+export function getSlidePath(route: SlideRoute | number | string, presenter = isPresenter.value) {
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return isPresenter.value ? `/presenter/${no}` : `/${no}`
+  return presenter ? `/presenter/${no}` : `/${no}`
 }
 
 export async function nextSlide() {

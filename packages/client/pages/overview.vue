@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { configs } from '../env'
-import { openInEditor, slides } from '../logic/nav'
+import { getSlidePath, openInEditor, slides } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
@@ -147,7 +147,7 @@ onMounted(() => {
           <IconButton
             class="mr--3 op0 group-hover:op80"
             title="Play in new tab"
-            @click="openSlideInNewTab(`/${route.no}`)"
+            @click="openSlideInNewTab(getSlidePath(route, false))"
           >
             <carbon:presentation-file />
           </IconButton>
@@ -163,7 +163,7 @@ onMounted(() => {
         <div class="flex flex-col gap-2 my5">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            @dblclick="openSlideInNewTab(`/${route.no}`)"
+            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
           >
             <SlideContainer
               :key="route.no"

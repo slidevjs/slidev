@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { currentSlideNo, downloadPDF, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
+import { currentSlideNo, downloadPDF, getSlidePath, hasNext, hasPrev, isEmbedded, isPresenter, next, presenterPassword, prev, showPresenter, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
@@ -22,8 +22,8 @@ const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
-const presenterLink = computed(() => `/presenter/${currentSlideNo.value}${query.value}`)
-const nonPresenterLink = computed(() => `/${currentSlideNo.value}${query.value}`)
+const presenterLink = computed(() => `${getSlidePath(currentSlideNo.value, true)}${query.value}`)
+const nonPresenterLink = computed(() => `${getSlidePath(currentSlideNo.value, false)}${query.value}`)
 
 const root = ref<HTMLDivElement>()
 function onMouseLeave() {

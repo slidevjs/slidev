@@ -3,7 +3,7 @@ import type { ComputedRef } from 'vue'
 import { computed } from 'vue'
 import { configs } from '../env'
 import type { SlidevContextNav } from '../modules/context'
-import { isPresenter, rawTree, tree, treeWithActiveStatuses } from '../logic/nav'
+import { getSlidePath, rawTree, tree, treeWithActiveStatuses } from '../logic/nav'
 import { slides } from '#slidev/slides'
 
 export function useNavBase(currentSlideRoute: ComputedRef<SlideRoute>, clicksContext: ComputedRef<ClicksContext>) {
@@ -76,17 +76,4 @@ export function useFixedNav(currentSlideRoute: SlideRoute, clicksContext: Clicks
     treeWithActiveStatuses,
     tree,
   }
-}
-
-export function getSlide(no: number | string) {
-  return slides.value.find(
-    s => (s.no === +no || s.meta.slide?.frontmatter.routeAlias === no),
-  )
-}
-
-export function getSlidePath(route: SlideRoute | number | string) {
-  if (typeof route === 'number' || typeof route === 'string')
-    route = getSlide(route)!
-  const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return isPresenter.value ? `/presenter/${no}` : `/${no}`
 }
