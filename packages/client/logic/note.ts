@@ -36,11 +36,11 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
   }
 
   if (__DEV__) {
-    import.meta.hot?.on('slidev-update', (payload) => {
+    import.meta.hot?.on('slidev:update-slide', (payload) => {
       if (payload.id === id)
         info.value = payload.data
     })
-    import.meta.hot?.on('slidev-update-note', (payload) => {
+    import.meta.hot?.on('slidev:update-note', (payload) => {
       if (payload.id === id && info.value.note?.trim() !== payload.note?.trim())
         info.value = { ...info.value, ...payload }
     })

@@ -201,6 +201,7 @@ const author = reactive({
   ]
 })
 ```
+
 ```ts
 export default {
   data() {
@@ -217,6 +218,7 @@ export default {
   }
 }
 ```
+
 ```ts
 export default {
   data: () => ({

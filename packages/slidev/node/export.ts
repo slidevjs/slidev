@@ -43,6 +43,7 @@ function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number
   }
   else {
     tree.push({
+      no: info.index,
       children: [],
       level,
       path: String(slideIndexes[info.index + 1]),

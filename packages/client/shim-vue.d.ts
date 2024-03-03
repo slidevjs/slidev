@@ -8,6 +8,9 @@ declare module 'vue' {
 }
 
 declare module 'vue-router' {
+  import type { TransitionGroupProps } from 'vue'
+  import type { ClicksContext, SlideInfo } from '@slidev/types'
+
   interface RouteMeta {
     // inherited from frontmatter
     layout: string

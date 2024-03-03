@@ -48,7 +48,7 @@ const styles = computed(() => {
       :class="[{ 'slidev-toc-item-active': item.active }, { 'slidev-toc-item-parent-active': item.activeParent }]"
     >
       <Link :to="item.path">
-        <Titles :no="item.path" />
+        <Titles :no="item.no" />
       </Link>
       <TocList
         v-if="item.children.length > 0"
