@@ -286,4 +286,4 @@ onMounted(() => {
 .grid-section.bottom {
   grid-area: bottom;
 }
-</style>../composables/useSwipeControls
+</style>
