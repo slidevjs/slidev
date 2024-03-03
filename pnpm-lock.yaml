@@ -431,9 +431,6 @@ importers:
       is-installed-globally:
         specifier: ^1.0.0
         version: 1.0.0
-      is-path-inside:
-        specifier: ^4.0.0
-        version: 4.0.0
       jiti:
         specifier: ^1.21.0
         version: 1.21.0

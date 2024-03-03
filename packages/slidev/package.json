@@ -75,7 +75,6 @@
     "global-directory": "^4.0.1",
     "htmlparser2": "^9.1.0",
     "is-installed-globally": "^1.0.0",
-    "is-path-inside": "^4.0.0",
     "jiti": "^1.21.0",
     "katex": "^0.16.9",
     "kolorist": "^1.8.0",
