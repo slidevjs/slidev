@@ -5,7 +5,7 @@ import { toReactive, useLocalStorage } from '@vueuse/core'
 import { drawingState, onPatch, patch } from '../state/drawings'
 import { configs } from '../env'
 import { isInputting } from '../state'
-import { currentPage, isPresenter } from './nav'
+import { currentSlideNo, isPresenter } from './nav'
 
 export const brushColors = [
   '#ff595e',
@@ -63,7 +63,7 @@ export const drauu = markRaw(createDrauu(drauuOptions))
 export function clearDrauu() {
   drauu.clear()
   if (syncUp.value)
-    patch(currentPage.value, '')
+    patch(currentSlideNo.value, '')
 }
 
 export function updateState() {
@@ -74,7 +74,7 @@ export function updateState() {
 
 export function loadCanvas(page?: number) {
   disableDump = true
-  const data = drawingState[page || currentPage.value]
+  const data = drawingState[page || currentSlideNo.value]
   if (data != null)
     drauu.load(data)
   else
@@ -87,7 +87,7 @@ drauu.on('changed', () => {
   updateState()
   if (!disableDump) {
     const dump = drauu.dump()
-    const key = currentPage.value
+    const key = currentSlideNo.value
     if ((drawingState[key] || '') !== dump && syncUp.value)
       patch(key, drauu.dump())
   }
@@ -95,14 +95,14 @@ drauu.on('changed', () => {
 
 onPatch((state) => {
   disableDump = true
-  if (state[currentPage.value] != null)
-    drauu.load(state[currentPage.value] || '')
+  if (state[currentSlideNo.value] != null)
+    drauu.load(state[currentSlideNo.value] || '')
   disableDump = false
   updateState()
 })
 
 nextTick(() => {
-  watch(currentPage, () => {
+  watch(currentSlideNo, () => {
     if (!drauu.mounted)
       return
     loadCanvas()

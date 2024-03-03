@@ -1,44 +1,57 @@
 import type { Ref, TransitionGroupProps } from 'vue'
-import type { RouteRecordRaw } from 'vue-router'
-import { computed, nextTick, ref, watch } from 'vue'
-import type { TocItem } from '@slidev/types'
+import { computed, ref, watch } from 'vue'
+import type { SlideRoute, TocItem } from '@slidev/types'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
-import { rawRoutes, router } from '../routes'
+import { logicOr } from '@vueuse/math'
+import { router } from '../routes'
 import { configs } from '../env'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
+import { useNavBase } from '../composables/useNav'
 import { useRouteQuery } from './route'
 import { isDrawing } from './drawings'
+import { slides } from '#slidev/slides'
 
-export { rawRoutes, router }
-
-// force update collected elements when the route is fully resolved
-export const routeForceRefresh = ref(0)
-nextTick(() => {
-  router.afterEach(async () => {
-    await nextTick()
-    routeForceRefresh.value += 1
-  })
-})
-
-export const navDirection = ref(0)
-export const clicksDirection = ref(0)
+export { slides, router }
 
 export const route = computed(() => router.currentRoute.value)
 
 export const isPrintMode = computed(() => route.value.query.print !== undefined)
 export const isPrintWithClicks = computed(() => route.value.query.print === 'clicks')
 export const isEmbedded = computed(() => route.value.query.embedded !== undefined)
-export const isPresenter = computed(() => route.value.path.startsWith('/presenter'))
-export const isNotesViewer = computed(() => route.value.path.startsWith('/notes'))
+export const isPlaying = computed(() => route.value.name === 'play')
+export const isPresenter = computed(() => route.value.name === 'presenter')
+export const isNotesViewer = computed(() => route.value.name === 'notes')
 export const presenterPassword = computed(() => route.value.query.password)
 export const showPresenter = computed(() => !isPresenter.value && (!configs.remote || presenterPassword.value === configs.remote))
+export const hasPrimarySlide = logicOr(isPlaying, isPresenter)
+
+export const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(route.value.params.no as string)?.no ?? 1 : 1)
+export const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
+export const clicksContext = computed(() => usePrimaryClicks(currentSlideRoute.value))
+
+export const {
+  total,
+  path,
+  currentPage,
+  currentLayout,
+  nextRoute,
+  prevRoute,
+  clicks,
+  clicksTotal,
+  hasNext,
+  hasPrev,
+  downloadPDF,
+  openInEditor,
+} = useNavBase(currentSlideRoute, clicksContext)
+
+export const navDirection = ref(0)
+export const clicksDirection = ref(0)
 
 const queryClicksRaw = useRouteQuery('clicks', '0')
 export const queryClicks = computed({
   get() {
-    // eslint-disable-next-line ts/no-use-before-define
     if (clicksContext.value.disabled)
       return CLICKS_MAX
     let v = +(queryClicksRaw.value || 0)
@@ -51,39 +64,27 @@ export const queryClicks = computed({
   },
 })
 
-export const total = computed(() => rawRoutes.length)
-export const path = computed(() => route.value.path)
-
-export const currentPage = computed(() => Number.parseInt(path.value.split(/\//g).slice(-1)[0]) || 1)
-export const currentPath = computed(() => getPath(currentPage.value))
-export const currentRoute = computed(() => rawRoutes.find(i => i.path === `${currentPage.value}`))
-export const currentSlideId = computed(() => currentRoute.value?.meta?.slide?.id)
-export const currentLayout = computed(() => currentRoute.value?.meta?.layout || (currentPage.value === 1 ? 'cover' : 'default'))
-
-export const nextRoute = computed(() => rawRoutes.find(i => i.path === `${Math.min(rawRoutes.length, currentPage.value + 1)}`))
-export const prevRoute = computed(() => rawRoutes.find(i => i.path === `${Math.max(1, currentPage.value - 1)}`))
-
-export const clicksContext = computed(() => usePrimaryClicks(currentRoute.value))
-export const clicks = computed(() => clicksContext.value.current)
-export const clicksTotal = computed(() => clicksContext.value.total)
-
-export const hasNext = computed(() => currentPage.value < rawRoutes.length || clicks.value < clicksTotal.value)
-export const hasPrev = computed(() => currentPage.value > 1 || clicks.value > 0)
-
-export const rawTree = computed(() => rawRoutes
-  .filter((route: RouteRecordRaw) => route.meta?.slide?.title)
-  .reduce((acc: TocItem[], route: RouteRecordRaw) => {
+export const rawTree = computed(() => slides.value
+  .filter((route: SlideRoute) => route.meta?.slide?.title)
+  .reduce((acc: TocItem[], route: SlideRoute) => {
     addToTree(acc, route)
     return acc
   }, []))
-export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentRoute.value))
+export const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentSlideRoute.value))
 export const tree = computed(() => filterTree(treeWithActiveStatuses.value))
 
-export const transition = computed(() => getCurrentTransition(navDirection.value, currentRoute.value, prevRoute.value))
+export const transition = computed(() => getCurrentTransition(navDirection.value, currentSlideRoute.value, prevRoute.value))
 
-watch(currentRoute, (next, prev) => {
-  navDirection.value = Number(next?.path) - Number(prev?.path)
+watch(currentSlideRoute, (next, prev) => {
+  navDirection.value = next.no - prev.no
 })
+
+watch([total, route], async () => {
+  if (hasPrimarySlide.value && !getSlide(route.value.params.no as string)) {
+    // The current slide may has been removed. Redirect to the last slide.
+    await goLast()
+  }
+}, { flush: 'post', immediate: true })
 
 export async function next() {
   clicksDirection.value = 1
@@ -101,19 +102,28 @@ export async function prev() {
     queryClicks.value -= 1
 }
 
-export function getPath(no: number | string) {
-  return isPresenter.value ? `/presenter/${no}` : `/${no}`
+export function getSlide(no: number | string) {
+  return slides.value.find(
+    s => (s.no === +no || s.meta.slide?.frontmatter.routeAlias === no),
+  )
+}
+
+export function getSlidePath(route: SlideRoute | number | string, presenter = isPresenter.value) {
+  if (typeof route === 'number' || typeof route === 'string')
+    route = getSlide(route)!
+  const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
+  return presenter ? `/presenter/${no}` : `/${no}`
 }
 
 export async function nextSlide() {
   clicksDirection.value = 1
-  if (currentPage.value < rawRoutes.length)
-    await go(currentPage.value + 1)
+  if (currentSlideNo.value < slides.value.length)
+    await go(currentSlideNo.value + 1)
 }
 
 export async function prevSlide(lastClicks = true) {
   clicksDirection.value = -1
-  const next = Math.max(1, currentPage.value - 1)
+  const next = Math.max(1, currentSlideNo.value - 1)
   await go(next)
   if (lastClicks && clicksTotal.value)
     router.replace({ query: { ...route.value.query, clicks: clicksTotal.value } })
@@ -129,7 +139,7 @@ export function goLast() {
 
 export function go(page: number | string, clicks?: number) {
   skipTransition.value = false
-  return router.push({ path: getPath(page), query: { ...route.value.query, clicks } })
+  return router.push({ path: getSlidePath(page), query: { ...route.value.query, clicks } })
 }
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
@@ -165,39 +175,17 @@ export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
   })
 }
 
-export async function downloadPDF() {
-  const { saveAs } = await import('file-saver')
-  saveAs(
-    typeof configs.download === 'string'
-      ? configs.download
-      : configs.exportFilename
-        ? `${configs.exportFilename}.pdf`
-        : `${import.meta.env.BASE_URL}slidev-exported.pdf`,
-    `${configs.title}.pdf`,
-  )
-}
-
-export async function openInEditor(url?: string) {
-  if (url == null) {
-    const slide = currentRoute.value?.meta?.slide
-    if (!slide)
-      return false
-    url = `${slide.filepath}:${slide.start}`
-  }
-  await fetch(`/__open-in-editor?file=${encodeURIComponent(url)}`)
-  return true
-}
-
-export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
+export function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
   const titleLevel = route.meta?.slide?.level
   if (titleLevel && titleLevel > level && tree.length > 0) {
     addToTree(tree[tree.length - 1].children, route, level + 1)
   }
   else {
     tree.push({
+      no: route.no,
       children: [],
       level,
-      path: route.path,
+      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no),
       hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })
@@ -206,14 +194,14 @@ export function addToTree(tree: TocItem[], route: RouteRecordRaw, level = 1) {
 
 export function getTreeWithActiveStatuses(
   tree: TocItem[],
-  currentRoute?: RouteRecordRaw,
+  currentRoute?: SlideRoute,
   hasActiveParent = false,
   parent?: TocItem,
 ): TocItem[] {
   return tree.map((item: TocItem) => {
     const clone = {
       ...item,
-      active: item.path === currentRoute?.path,
+      active: item.no === currentSlideNo.value,
       hasActiveParent,
     }
     if (clone.children.length > 0)
@@ -270,7 +258,7 @@ export function resolveTransition(transition?: string | TransitionGroupProps, is
   }
 }
 
-export function getCurrentTransition(direction: number, currentRoute?: RouteRecordRaw, prevRoute?: RouteRecordRaw) {
+export function getCurrentTransition(direction: number, currentRoute?: SlideRoute, prevRoute?: SlideRoute) {
   let transition = direction > 0
     ? prevRoute?.meta?.transition
     : currentRoute?.meta?.transition

@@ -1,6 +1,6 @@
-import type { RouteRecordRaw } from 'vue-router'
+import type { SlideRoute } from '@slidev/types'
 
-export function getSlideClass(route?: RouteRecordRaw, extra = '') {
+export function getSlideClass(route?: SlideRoute, extra = '') {
   const classes = ['slidev-page', extra]
 
   const no = route?.meta?.slide?.no

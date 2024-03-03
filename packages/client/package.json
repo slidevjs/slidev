@@ -29,6 +29,7 @@
     "@antfu/utils": "^0.7.7",
     "@iconify-json/carbon": "^1.1.30",
     "@iconify-json/ph": "^1.1.11",
+    "@iconify-json/svg-spinners": "^1.1.2",
     "@shikijs/monaco": "^1.1.7",
     "@shikijs/vitepress-twoslash": "^1.1.7",
     "@slidev/parser": "workspace:*",

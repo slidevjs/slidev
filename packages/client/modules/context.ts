@@ -1,19 +1,41 @@
 import type { App } from 'vue'
 import { computed, reactive, ref } from 'vue'
-import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
 import type { ComputedRef } from '@vue/reactivity'
 import type { configs } from '../env'
 import * as nav from '../logic/nav'
-import { route } from '../logic/nav'
 import { isDark } from '../logic/dark'
 import { injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 
-export type SlidevContextNavKey = 'path' | 'total' | 'clicksContext' | 'clicks' | 'clicksTotal' | 'currentPage' | 'currentPath' | 'currentRoute' | 'currentSlideId' | 'currentLayout' | 'nextRoute' | 'rawTree' | 'treeWithActiveStatuses' | 'tree' | 'downloadPDF' | 'next' | 'nextSlide' | 'openInEditor' | 'prev' | 'prevSlide' | 'rawRoutes' | 'go'
+export type SlidevContextNavKey =
+  | 'slides'
+  | 'total'
+  | 'path'
+  | 'currentSlideNo'
+  | 'currentPage'
+  | 'currentSlideRoute'
+  | 'currentLayout'
+  | 'nextRoute'
+  | 'prevRoute'
+  | 'clicksContext'
+  | 'clicks'
+  | 'clicksTotal'
+  | 'hasNext'
+  | 'hasPrev'
+  | 'rawTree'
+  | 'treeWithActiveStatuses'
+  | 'tree'
+  | 'next'
+  | 'prev'
+  | 'nextSlide'
+  | 'prevSlide'
+  | 'goFirst'
+  | 'goLast'
+  | 'go'
+  | 'downloadPDF'
+  | 'openInEditor'
 
-export interface SlidevContextNav extends Pick<typeof nav, SlidevContextNavKey> {
-  route: ComputedRef<RouteRecordRaw | RouteLocationNormalizedLoaded>
-}
+export type SlidevContextNav = Pick<typeof nav, SlidevContextNavKey>
 
 export interface SlidevContext {
   nav: SlidevContextNav
@@ -24,10 +46,10 @@ export interface SlidevContext {
 export function createSlidevContext() {
   return {
     install(app: App) {
-      const context = reactive(useContext(route))
+      const context = reactive(useContext())
       app.provide(injectionRenderContext, ref('none'))
       app.provide(injectionSlidevContext, context)
-      app.provide(injectionCurrentPage, computed(() => context.nav.currentPage))
+      app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
 
       // allows controls from postMessages
       if (__DEV__) {

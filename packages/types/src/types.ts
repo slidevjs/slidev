@@ -1,4 +1,5 @@
 import type { ComputedRef } from '@vue/reactivity'
+import type { RouteComponent, RouteMeta } from 'vue-router'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -95,6 +96,12 @@ export interface SlidevPreparserExtension {
 export type PreparserExtensionLoader = (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => Promise<SlidevPreparserExtension[]>
 
 export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previewNext'
+
+export interface SlideRoute {
+  no: number
+  meta: RouteMeta
+  component: () => Promise<RouteComponent>
+}
 
 export type LoadedSnippets = Record<string, string>
 

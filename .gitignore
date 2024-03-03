@@ -17,3 +17,4 @@ composable-vue-cn
 components.d.ts
 .slidev
 .eslintcache
+.vite-inspect
