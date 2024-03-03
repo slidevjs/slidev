@@ -4,7 +4,7 @@ import { useHead } from '@unhead/vue'
 import { configs } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
-import { clicksContext, currentPage, getPath, isNotesViewer, isPresenter } from '../logic/nav'
+import { clicksContext, currentSlideNo, getSlidePath, hasPrimarySlide, isNotesViewer, isPresenter } from '../logic/nav'
 import { router } from '../routes'
 import { TRUST_ORIGINS } from '../constants'
 import { skipTransition } from '../composables/hmr'
@@ -37,11 +37,11 @@ export default function setupRoot() {
       return
 
     if (isPresenter.value) {
-      patch('page', +currentPage.value)
+      patch('page', +currentSlideNo.value)
       patch('clicks', clicksContext.value.current)
     }
     else {
-      patch('viewerPage', +currentPage.value)
+      patch('viewerPage', +currentSlideNo.value)
       patch('viewerClicks', clicksContext.value.current)
     }
 
@@ -55,13 +55,13 @@ export default function setupRoot() {
   watch(clicksContext, updateSharedState)
 
   onPatch((state) => {
-    const routePath = router.currentRoute.value.path
-    if (!routePath.match(/^\/(\d+|presenter)\/?/))
+    if (!hasPrimarySlide.value)
       return
-    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentPage.value || +clicksContext.value.current !== +state.clicks)) {
+    console.warn('patch', state.lastUpdate?.type)
+    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
       skipTransition.value = false
       router.replace({
-        path: getPath(state.page),
+        path: getSlidePath(state.page),
         query: {
           ...router.currentRoute.value.query,
           clicks: state.clicks || 0,

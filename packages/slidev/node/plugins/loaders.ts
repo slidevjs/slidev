@@ -154,12 +154,12 @@ export function createSlidesLoader(
         const moduleIds = new Set<string>()
 
         if (data.slides.length !== newData.slides.length) {
-          moduleIds.add('/@slidev/routes')
+          moduleIds.add('/@slidev/slides')
           range(newData.slides.length).map(i => hmrPages.add(i))
         }
 
         if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
-          moduleIds.add('/@slidev/routes')
+          moduleIds.add('/@slidev/slides')
           range(data.slides.length).map(i => hmrPages.add(i))
         }
 
@@ -168,19 +168,19 @@ export function createSlidesLoader(
 
         if (!equal(data.features, newData.features)) {
           setTimeout(() => {
-            ctx.server.ws.send({ type: 'full-reload' })
+            ctx.server.hot.send({ type: 'full-reload' })
           }, 1)
         }
 
-        const length = Math.max(data.slides.length, newData.slides.length)
+        const length = Math.min(data.slides.length, newData.slides.length)
 
         for (let i = 0; i < length; i++) {
           const a = data.slides[i]
           const b = newData.slides[i]
 
           if (
-            a?.content.trim() === b?.content.trim()
-            && a?.title?.trim() === b?.title?.trim()
+            a.content.trim() === b.content.trim()
+            && a.title?.trim() === b.title?.trim()
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
               try {
@@ -192,28 +192,26 @@ export function createSlidesLoader(
               }
             })
           ) {
-            if (a?.note !== b?.note) {
-              ctx.server.ws.send({
-                type: 'custom',
-                event: 'slidev-update-note',
-                data: {
+            if (a.note !== b.note) {
+              ctx.server.hot.send(
+                'slidev:update-note',
+                {
                   id: i,
                   note: b!.note || '',
                   noteHTML: renderNote(b!.note || ''),
                 },
-              })
+              )
             }
             continue
           }
 
-          ctx.server.ws.send({
-            type: 'custom',
-            event: 'slidev-update',
-            data: {
+          ctx.server.hot.send(
+            'slidev:update-slide',
+            {
               id: i,
               data: withRenderedNote(newData.slides[i]),
             },
-          })
+          )
           hmrPages.add(i)
         }
 
@@ -249,9 +247,13 @@ export function createSlidesLoader(
       },
 
       load(id): LoadResult | Promise<LoadResult> {
+        // slide routes
+        if (id === '/@slidev/slides')
+          return generateSlideRoutes()
+
         // routes
         if (id === '/@slidev/routes')
-          return generateRoutes()
+          return generateDummyRoutes()
 
         // layouts
         if (id === '/@slidev/layouts')
@@ -703,35 +705,51 @@ defineProps<{ no: number | string }>()`)
     ].join('\n\n')
   }
 
-  async function generateRoutes() {
-    const imports: string[] = []
-    const redirects: string[] = []
+  async function generateSlideRoutes() {
     const layouts = await getLayouts()
-
-    imports.push(
-      `import { markRaw } from 'vue'`,
-      `import __layout__end from '${layouts.end}'`,
-    )
-
-    let no = 1
-    const routes = data.slides
-      .map((i, idx) => {
-        imports.push(`import n${no} from '${slidePrefix}${idx + 1}.md'`)
-        imports.push(`import { meta as f${no} } from '${slidePrefix}${idx + 1}.frontmatter'`)
-        const route = `{ path: '${no}', name: 'page-${no}', component: n${no}, meta: f${no} }`
-
-        if (i.frontmatter?.routeAlias)
-          redirects.push(`{ path: '${i.frontmatter?.routeAlias}', redirect: { path: '${no}' } }`)
-
-        no += 1
-
-        return route
+    const imports = [
+      `import { shallowRef } from 'vue'`,
+      `import * as __layout__error from '${layouts.error}'`,
+    ]
+    const slides = data.slides
+      .map((_, idx) => {
+        const no = idx + 1
+        imports.push(`import { meta as f${no} } from '${slidePrefix}${no}.frontmatter'`)
+        return `{
+          no: ${no},
+          meta: f${no},
+          component: async () => {
+            try {
+              return await import('${slidePrefix}${no}.md')
+            }
+            catch {
+              return __layout__error
+            }
+          },
+        }`
       })
+    return [
+      ...imports,
+      `const data = [\n${slides.join(',\n')}\n]`,
+      `export const slides = shallowRef([...data])`,
+      `let oldRef = slides`,
+      `export function update(old) {`,
+      `  oldRef = old`,
+      `  old.value = data`,
+      `}`,
+      `if (import.meta.hot) {`,
+      `  import.meta.hot.accept(({ update }) => {`,
+      `    update(oldRef)`,
+      `  })`,
+      `}`,
+    ].join('\n')
+  }
 
-    const routesStr = `export const rawRoutes = [\n${routes.join(',\n')}\n].map(markRaw)`
-    const redirectsStr = `export const redirects = [\n${redirects.join(',\n')}\n].map(markRaw)`
-
-    return [...imports, routesStr, redirectsStr].join('\n')
+  function generateDummyRoutes() {
+    return [
+      `export { slides } from '#slidev/slides'`,
+      `console.warn('[slidev] #slidev/routes is deprecated, use #slidev/slides instead')`,
+    ].join('\n')
   }
 
   function getTitle() {

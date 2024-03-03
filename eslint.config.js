@@ -9,9 +9,16 @@ export default antfu(
       },
     },
     formatters: {
-      // disable for now, we can enable it after we have the slidev plugin in eslint-config
-      markdown: false,
+      markdown: true,
       css: true,
+      slidev: {
+        files: [
+          '**/slides.md',
+          '**/template.md',
+          '**/example.md',
+          'test/fixtures/markdown/**/*.md',
+        ],
+      },
     },
   },
 )

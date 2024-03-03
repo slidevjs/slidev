@@ -1,0 +1,119 @@
+name: Production Smoke Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        os: [ubuntu-latest, windows-latest]
+        pm: [yarn, npm, pnpm]
+        hoist: [true, false]
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup
+        run: npm i -g @antfu/ni
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install
+        run: nci
+
+      - name: Build
+        run: nr build
+
+      - name: Pack
+        run: node ./scripts/pack.mjs ../temp/slidev-pkgs
+
+      - name: Create new project
+        run: |
+          npm i -g ../temp/slidev-pkgs/create-app.tgz
+          echo "N" | create-slidev ../temp/slidev-project
+
+      - name: Remove npmrc
+        run: pnpx del-cli ./.npmrc
+        working-directory: ../temp/slidev-project
+        if: ${{ ! matrix.hoist }}
+
+      - name: Install project (npm, pnpm)
+        run: |
+          ${{ matrix.pm }} i
+          ${{ matrix.pm }} i ../slidev-pkgs/cli.tgz playwright-chromium
+        working-directory: ../temp/slidev-project
+        if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Install project (yarn)
+        run: |
+          yarn
+          yarn add ../slidev-pkgs/cli.tgz playwright-chromium
+        working-directory: ../temp/slidev-project
+        if: ${{ matrix.pm == 'yarn' }}
+
+      - name: Test build command in project
+        run: pnpm build
+        working-directory: ../temp/slidev-project
+
+      - name: E2E Smoke Test
+        uses: cypress-io/github-action@v4
+        if: ${{ matrix.os != 'windows-latest' }}
+        with:
+          install-command: echo
+          build: echo
+          start: pnpm --dir ../temp/slidev-project dev
+          spec: cypress/e2e/examples/smoke.spec.ts
+
+      - name: Install globally
+        run: |
+          ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
+          ${{ matrix.pm }} i -g @slidev/theme-seriph
+        if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Create slide file
+        run: pnpm --package=cpy-cli dlx cpy ./packages/slidev/template.md ../temp/ --flat
+        if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Test build command in global mode
+        run: slidev build template.md
+        if: ${{ matrix.pm != 'yarn' }}
+        working-directory: ../temp
+
+      # Commented out because it's not working
+      # - name: E2E test in global mode
+      #   uses: cypress-io/github-action@v4
+      #   if: ${{ matrix.os != 'windows' }}
+      #   with:
+      #     project: ${{ github.workspace }}
+      #     install-command: echo
+      #     build: echo
+      #     start: ${{ 'bash -c "slidev ../template.md"' }}
+      #     spec: cypress/e2e/examples/noError.spec.ts

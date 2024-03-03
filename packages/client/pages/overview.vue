@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
-import type { RouteRecordRaw } from 'vue-router'
-import type { ClicksContext } from 'packages/types'
+import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { configs } from '../env'
-import { openInEditor, rawRoutes } from '../logic/nav'
+import { getSlidePath, openInEditor, slides } from '../logic/nav'
 import { useFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
@@ -26,19 +25,19 @@ useHead({
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
-const wordCounts = computed(() => rawRoutes.map(route => wordCount(route.meta?.slide?.note || '')))
+const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
-const totalClicks = computed(() => rawRoutes.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
+const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
-const clicksContextMap = new WeakMap<RouteRecordRaw, ClicksContext>()
-function getClicksContext(route: RouteRecordRaw) {
+const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
+function getClicksContext(route: SlideRoute) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
     clicksContextMap.set(route, useFixedClicks(route, CLICKS_MAX))
   return clicksContextMap.get(route)!
 }
 
-function getSlideClicks(route: RouteRecordRaw) {
+function getSlideClicks(route: SlideRoute) {
   return route.meta?.clicks || getClicksContext(route)?.total
 }
 
@@ -80,7 +79,7 @@ function scrollToSlide(idx: number) {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function onMarkerClick(e: MouseEvent, clicks: number, route: RouteRecordRaw) {
+function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
   const ctx = getClicksContext(route)
   if (ctx.current === clicks)
     ctx.current = CLICKS_MAX
@@ -101,8 +100,8 @@ onMounted(() => {
     <nav class="h-full flex flex-col border-r border-main p2 select-none">
       <div class="flex flex-col flex-auto items-center justify-center group gap-1">
         <div
-          v-for="(route, idx) of rawRoutes"
-          :key="route.path"
+          v-for="(route, idx) of slides"
+          :key="route.no"
           class="relative"
         >
           <button
@@ -136,8 +135,8 @@ onMounted(() => {
       @scroll="checkActiveBlocks"
     >
       <div
-        v-for="(route, idx) of rawRoutes"
-        :key="route.path"
+        v-for="(route, idx) of slides"
+        :key="route.no"
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
       >
@@ -148,7 +147,7 @@ onMounted(() => {
           <IconButton
             class="mr--3 op0 group-hover:op80"
             title="Play in new tab"
-            @click="openSlideInNewTab(route.path)"
+            @click="openSlideInNewTab(getSlidePath(route, false))"
           >
             <carbon:presentation-file />
           </IconButton>
@@ -164,23 +163,22 @@ onMounted(() => {
         <div class="flex flex-col gap-2 my5">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            @dblclick="openSlideInNewTab(route.path)"
+            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
           >
             <SlideContainer
-              :key="route.path"
+              :key="route.no"
               :width="cardWidth"
               :clicks-disabled="true"
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :is="route.component"
-                v-if="route?.component"
+                :is="route.component!"
                 :clicks-context="getClicksContext(route)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />
-              <DrawingPreview :page="+route.path" />
+              <DrawingPreview :page="route.no" />
             </SlideContainer>
           </div>
           <ClicksSlider
@@ -220,8 +218,8 @@ onMounted(() => {
     </main>
     <div class="absolute top-0 right-0 px3 py1.5 border-b border-l rounded-lb bg-main border-main select-none">
       <div class="text-xs op50">
-        {{ rawRoutes.length }} slides ·
-        {{ totalClicks + rawRoutes.length - 1 }} clicks ·
+        {{ slides.length }} slides ·
+        {{ totalClicks + slides.length - 1 }} clicks ·
         {{ totalWords }} words
       </div>
     </div>
