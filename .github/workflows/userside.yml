@@ -83,13 +83,9 @@ jobs:
         run: pnpm build
         working-directory: ../temp/slidev-project
 
-      - name: Hack Cypress
-        run: |
-          npm exec cypress install
-          cp pnpm-lock.yaml package-lock.json
-
       - name: E2E test in project
         uses: cypress-io/github-action@v4
+        if: ${{ matrix.os != 'windows' }}
         with:
           install-command: echo
           build: echo
@@ -101,7 +97,7 @@ jobs:
         if: ${{ matrix.pm != 'yarn' }}
 
       - name: Create slide file
-        run: pnpm --package=cpy-cli dlx cpy ./packages/slidev/template.md ../temp/
+        run: pnpm --package=cpy-cli dlx cpy ./packages/slidev/template.md ../temp/ --flat
         if: ${{ matrix.pm != 'yarn' }}
 
       - name: Test build command in global mode
@@ -109,13 +105,12 @@ jobs:
         if: ${{ matrix.pm != 'yarn' }}
         working-directory: ../temp
 
-      # Commented out because it's not working
-      # - name: E2E test in global mode
-      #   uses: cypress-io/github-action@v4
-      #   if: ${{ matrix.pm != 'yarn' }}
-      #   with:
-      #     project: ${{ github.workspace }}
-      #     install-command: echo
-      #     build: echo
-      #     start: ${{ matrix.os == 'windows' && 'cmd /C slidev ../template.md' || 'bash -c "slidev ../template.md"' }}
-      #     spec: cypress/e2e/examples/noError.spec.ts
+      - name: E2E test in global mode
+        uses: cypress-io/github-action@v4
+        if: ${{ matrix.os != 'windows'  }}
+        with:
+          project: ${{ github.workspace }}
+          install-command: echo
+          build: echo
+          start: ${{ 'bash -c "slidev ../template.md"' }}
+          spec: cypress/e2e/examples/noError.spec.ts
