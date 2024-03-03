@@ -13,10 +13,14 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 
 <script setup lang="ts">
 import type * as monaco from 'monaco-editor'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
 import { makeId } from '../logic/utils'
+import { runJavaScript } from '../logic/runCode'
+import { useSlideContext } from '../context'
+import { isDark } from '../logic/dark'
+import IconButton from '../internals/IconButton.vue'
 
 const props = withDefaults(defineProps<{
   codeLz: string
@@ -29,7 +33,7 @@ const props = withDefaults(defineProps<{
   ata?: boolean
   runnable?: boolean
   autorun?: boolean | 'once'
-  outputHeight?: number | undefined
+  outputHeight?: string
 }>(), {
   codeLz: '',
   lang: 'typescript',
@@ -41,8 +45,10 @@ const props = withDefaults(defineProps<{
   autorun: true,
 })
 
-const code = lz.decompressFromBase64(props.codeLz).trimEnd()
-const diff = props.diffLz && lz.decompressFromBase64(props.diffLz).trimEnd()
+const { $renderContext } = useSlideContext()
+
+const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
+const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -74,7 +80,8 @@ onMounted(async () => {
   // Lazy load monaco, so it will be bundled in async chunk
   const { default: setup } = await import('../setup/monaco')
   const { ata, monaco } = await setup()
-  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+  const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+  model.onDidChangeContent(() => code.value = model.getValue())
   const commonOptions = {
     automaticLayout: true,
     readOnly: props.readonly,
@@ -94,7 +101,8 @@ onMounted(async () => {
 
   let editableEditor: monaco.editor.IStandaloneCodeEditor
   if (diff) {
-    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+    const diffModel = monaco.editor.createModel(diff.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+    diffModel.onDidChangeContent(() => code.value = model.getValue())
     const editor = monaco.editor.createDiffEditor(container.value!, {
       renderOverviewRuler: false,
       ...commonOptions,
@@ -147,32 +155,48 @@ onMounted(async () => {
   }
 })
 
-const result = ref<RunResult | 'running' | 'empty'>(props.autorun ? 'running' : 'empty')
+const output = ref(props.autorun ? '_running' : '_empty')
 
-async function run() {
+let shikiModule: typeof import('#slidev/shiki') | undefined
+let tsModule: typeof import('typescript') | undefined
+
+const run = debounce(200, async () => {
+  if (!props.runnable || $renderContext.value !== 'slide')
+    return
   const setAsRunning = setTimeout(() => {
-    result.value = 'running'
+    output.value = '_running'
   }, 500)
-  result.value = await fetch(
-    `/__run_code?lang=${encodeURIComponent(props.lang)}`,
-    {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(code.value),
-    },
-  ).then(r => r.json())
-  clearTimeout(setAsRunning)
-}
 
-const colorTable = {
-  debug: 'text-gray-500',
-  info: 'text-blue-500',
-  warn: 'text-yellow-500',
-  error: 'text-red-500',
-}
+  const { shiki, themes } = (shikiModule ??= await import('#slidev/shiki'))
+  const highlighter = await shiki
+  const highlight = (code: string) => highlighter.codeToHtml(code, {
+    lang: 'javascript',
+    theme: typeof themes === 'string'
+      ? themes
+      : isDark.value
+        ? themes.dark || 'vitesse-dark'
+        : themes.light || 'vitesse-light',
+  })
+
+  const { transpile } = (tsModule ??= await import('typescript'))
+  const js = lang === 'typescript' ? transpile(code.value) : code.value
+
+  output.value = (await runJavaScript(js)).map(
+    ([type, content]) => [
+      `<span class="decorator">[</span>`,
+      `<span class="log-type ${type}">${type}</span>`,
+      `<span class="decorator">]:</span> `,
+      content.map(highlight).join('<span class="decorator">, </span>'),
+    ].join(''),
+  ).join('<hr>')
+
+  clearTimeout(setAsRunning)
+})
+
+if (props.autorun === 'once')
+  run()
+else if (props.autorun)
+  watch(code, run, { immediate: true })
 </script>
 
 <template>
@@ -181,36 +205,31 @@ const colorTable = {
       <div ref="container" class="absolute inset-0.5" />
     </div>
     <template v-if="props.runnable">
-      <div
-        class="relative px-2 py-1 rounded-b bg-[var(--slidev-code-background)]"
-        :style="{ height: props.outputHeight && `${1.25 + 0.8 * props.outputHeight}em` }"
-      >
-        <div v-if="result === 'empty'" class="text-sm text-center opacity-50">
+      <div class="relative flex flex-col px-2 py-1 rounded-b bg-$slidev-code-background" :style="{ height: props.outputHeight }">
+        <div v-if="output === '_empty'" class="text-sm text-center opacity-50">
           Click the play button to run the code
         </div>
-        <div v-else-if="result === 'running'" class="text-sm text-center opacity-50">
+        <div v-else-if="output === '_running'" class="text-sm text-center opacity-50">
           Running...
         </div>
-        <div v-else-if="result.type === 'error'" class="text-sm text-red-500">
-          {{ result.message }}
-        </div>
-        <div v-else class="flex flex-col h-full -mt-1">
-          <div class="text-xs font-[Consolas]">
+        <template v-else>
+          <div class="mb-1 -mt-1 text-xs font-bold text-primary">
             OUTPUT
           </div>
-          <div class="ml-1 text-xs overflow-auto leading-[.8rem]">
-            <pre v-for="line, i of result.output" :key="i" :class="colorTable[line.type]" v-text="line.text" />
-            <div v-if="result.output.length === 0" class="opacity-50">
-              (empty)
-            </div>
-          </div>
-        </div>
+          <div
+            class="flex-grow ml-1 text-xs leading-[.8rem] font-$slidev-code-font-family output"
+            v-html="output"
+          />
+        </template>
       </div>
-      <div v-if="code.trim()" class="absolute right-3 top-4 max-h-full flex gap-1">
-        <button class="code-action" :disabled="result === 'running'" @click="run">
-          <carbon:renew v-if="props.autorun === true" />
+      <div v-if="code.trim()" class="absolute right-1 top-1 max-h-full flex gap-1">
+        <IconButton
+          class="w-8 h-8 max-h-full flex justify-center items-center"
+          :title="props.autorun ? 'Rerun' : 'Run code'" @click="run"
+        >
+          <carbon:renew v-if="props.autorun" />
           <carbon:play-filled-alt v-else />
-        </button>
+        </IconButton>
       </div>
     </template>
   </div>
@@ -222,5 +241,37 @@ const colorTable = {
   @apply flex justify-center items-center;
   @apply rounded bg-gray-100 text-gray-500;
   @apply hover:(bg-gray-200);
+}
+
+.output :deep(.log-type) {
+  @apply font-bold op-70;
+
+  &.DBG {
+    @apply text-gray-500;
+  }
+
+  &.LOG {
+    @apply text-blue-500;
+  }
+
+  &.WRN {
+    @apply text-orange-500;
+  }
+
+  &.ERR {
+    @apply text-red-500;
+  }
+}
+
+.output :deep(.decorator) {
+  @apply op-40;
+}
+
+.output :deep(hr) {
+  @apply my-.5 border-none;
+}
+
+.output :deep(pre) {
+  @apply inline !bg-transparent;
 }
 </style>

@@ -172,7 +172,7 @@ export function transformMarkdownMonaco(md: string) {
       options = options.trim() || '{}'
       const encoded = lz.compressToBase64(code)
       const encodedDiff = lz.compressToBase64(diff)
-      return `<Monaco :code="'${encoded}'" :diff="'${encodedDiff}'" lang="${lang}" v-bind="${options}" />`
+      return `<Monaco code-lz="${encoded}" diff-lz="${encodedDiff}" lang="${lang}" v-bind="${options}" />`
     },
   )
   md = md.replace(
@@ -181,7 +181,7 @@ export function transformMarkdownMonaco(md: string) {
       lang = lang.trim()
       options = options.trim() || '{}'
       const encoded = lz.compressToBase64(code)
-      return `<Monaco :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
+      return `<Monaco code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
     },
   )
   md = md.replace(
@@ -190,7 +190,7 @@ export function transformMarkdownMonaco(md: string) {
       lang = lang.trim()
       options = options.trim() || '{}'
       const encoded = lz.compressToBase64(code)
-      return `<Monaco runnable :code="'${encoded}'" lang="${lang}" v-bind="${options}" />`
+      return `<Monaco runnable code-lz="${encoded}" lang="${lang}" v-bind="${options}" />`
     },
   )
   return md
