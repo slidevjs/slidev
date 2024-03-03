@@ -49,16 +49,10 @@ export default defineComponent({
 
     const SlideComponent = defineAsyncComponent({
       loader: (props.is as any),
-      delay: 100,
+      delay: 300,
       loadingComponent: SlideLoading,
     })
 
-    return {
-      SlideComponent,
-      style,
-    }
-  },
-  render() {
-    return h(this.SlideComponent, { style: this.style })
+    return () => h(SlideComponent, { style: style.value })
   },
 })
