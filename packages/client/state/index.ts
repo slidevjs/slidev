@@ -14,7 +14,7 @@ export const breakpoints = useBreakpoints({
 })
 export const windowSize = useWindowSize()
 export const magicKeys = useMagicKeys()
-export const isScreenVertical = computed(() => windowSize.height.value - windowSize.width.value / slideAspect > 120)
+export const isScreenVertical = computed(() => windowSize.height.value - windowSize.width.value / slideAspect.value > 120)
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()

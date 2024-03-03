@@ -17,8 +17,8 @@ const { nav } = defineProps<{
 const route = computed(() => nav.currentSlideRoute.value)
 
 const style = computed(() => ({
-  height: `${slideHeight}px`,
-  width: `${slideWidth}px`,
+  height: `${slideHeight.value}px`,
+  width: `${slideWidth.value}px`,
 }))
 
 const DrawingPreview = shallowRef<any>()

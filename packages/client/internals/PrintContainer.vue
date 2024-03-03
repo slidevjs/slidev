@@ -12,14 +12,14 @@ const props = defineProps<{
 }>()
 
 const width = computed(() => props.width)
-const height = computed(() => props.width / slideAspect)
+const height = computed(() => props.width / slideAspect.value)
 
 const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
-  if (screenAspect.value < slideAspect)
-    return width.value / slideWidth
-  return (height.value * slideAspect) / slideWidth
+  if (screenAspect.value < slideAspect.value)
+    return width.value / slideWidth.value
+  return (height.value * slideAspect.value) / slideWidth.value
 })
 
 // In print mode, the routes will never change. So we don't need reactivity here.
