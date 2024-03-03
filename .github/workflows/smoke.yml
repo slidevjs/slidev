@@ -1,4 +1,4 @@
-name: User-side Test
+name: Production Smoke Test
 
 on:
   push:
@@ -83,14 +83,14 @@ jobs:
         run: pnpm build
         working-directory: ../temp/slidev-project
 
-      - name: E2E test in project
+      - name: E2E Smoke Test
         uses: cypress-io/github-action@v4
         if: ${{ matrix.os != 'windows-latest' }}
         with:
           install-command: echo
           build: echo
           start: pnpm --dir ../temp/slidev-project dev
-          spec: cypress/e2e/examples/noError.spec.ts
+          spec: cypress/e2e/examples/smoke.spec.ts
 
       - name: Install globally
         run: |

@@ -1,4 +1,4 @@
-context('No error', () => {
+context('Smoke test', () => {
   async function testAllSlides() {
     while (1) {
       let oldUrl, newUrl
