@@ -4,7 +4,7 @@ import { provideLocal } from '@vueuse/core'
 import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
-import type { SlidevContextNav } from '../modules/context'
+import type { SlidevContextNav } from '../composables/useNav'
 import SlideWrapper from './SlideWrapper'
 
 import GlobalTop from '#slidev/global-components/top'

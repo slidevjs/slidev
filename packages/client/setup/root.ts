@@ -57,7 +57,6 @@ export default function setupRoot() {
   onPatch((state) => {
     if (!hasPrimarySlide.value)
       return
-    console.warn('patch', state.lastUpdate?.type)
     if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
       skipTransition.value = false
       router.replace({

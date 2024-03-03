@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { currentSlideRoute, isPresenter, nextRoute, slides, transition } from '../logic/nav'
+import { currentSlideRoute, currentTransition, isPresenter, nextRoute, slides } from '../logic/nav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
@@ -45,7 +45,7 @@ function onAfterLeave() {
   <!-- Slides -->
   <component
     :is="hasViewTransition ? 'div' : TransitionGroup"
-    v-bind="skipTransition ? {} : transition"
+    v-bind="skipTransition ? {} : currentTransition"
     id="slideshow"
     tag="div"
     @after-leave="onAfterLeave"
