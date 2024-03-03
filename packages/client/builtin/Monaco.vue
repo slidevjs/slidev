@@ -21,6 +21,7 @@ import { runJavaScript } from '../logic/runCode'
 import { useSlideContext } from '../context'
 import { isDark } from '../logic/dark'
 import IconButton from '../internals/IconButton.vue'
+import { isPrintMode } from '../logic/nav'
 
 const props = withDefaults(defineProps<{
   codeLz: string
@@ -179,7 +180,11 @@ const run = debounce(200, async () => {
   })
 
   const { transpile } = (tsModule ??= await import('typescript'))
-  const js = lang === 'typescript' ? transpile(code.value) : code.value
+  const js = lang === 'typescript'
+    ? transpile(code.value, {
+      module: tsModule.ModuleKind.ESNext,
+    })
+    : code.value
 
   output.value = (await runJavaScript(js)).map(
     ([type, content]) => [
