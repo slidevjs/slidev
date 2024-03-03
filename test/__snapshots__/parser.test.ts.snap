@@ -95,7 +95,7 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       "content": "
 # Hi
 ",
-      "end": 8,
+      "end": 10,
       "frontmatter": {
         "fonts": {
           "mono": "Fira Code",
@@ -146,7 +146,7 @@ fonts:
       "content": "
 # Hello
 ",
-      "end": 16,
+      "end": 23,
       "frontmatter": {
         "layout": "center",
         "meta": {
@@ -176,7 +176,7 @@ layout: center
 This is note
 -->
 ",
-      "start": 8,
+      "start": 10,
       "title": "Hello",
     },
     "title": "Hello",
@@ -191,7 +191,7 @@ This is note
       "content": "
 # Morning
 ",
-      "end": 19,
+      "end": 27,
       "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
@@ -202,7 +202,7 @@ This is note
 # Morning
 
 ",
-      "start": 17,
+      "start": 24,
       "title": "Morning",
     },
     "title": "Morning",
@@ -221,7 +221,7 @@ Hey",
 <!-- This is not note -->
 Hey
 ",
-      "end": 26,
+      "end": 38,
       "frontmatter": {
         "layout": "text",
       },
@@ -242,7 +242,7 @@ Hey
 This is note
 -->
 ",
-      "start": 19,
+      "start": 27,
       "title": undefined,
     },
     "title": undefined,
@@ -252,7 +252,8 @@ This is note
 ---
 this should be treated as code block
 ---
-----
+
+---
 \`\`\`",
     "frontmatter": {},
     "index": 4,
@@ -264,10 +265,11 @@ this should be treated as code block
 ---
 this should be treated as code block
 ---
-----
+
+---
 \`\`\`
 ",
-      "end": 35,
+      "end": 48,
       "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
@@ -279,11 +281,12 @@ this should be treated as code block
 ---
 this should be treated as code block
 ---
-----
+
+---
 \`\`\`
 
 ",
-      "start": 27,
+      "start": 39,
       "title": undefined,
     },
     "title": undefined,
@@ -300,7 +303,7 @@ this should be treated as code block
       "content": "
 Content 1
 ",
-      "end": 44,
+      "end": 57,
       "frontmatter": {
         "layout": "from yaml",
       },
@@ -319,7 +322,7 @@ layout: from yaml
 Content 1
 
 ",
-      "start": 36,
+      "start": 49,
       "title": undefined,
     },
     "title": undefined,
@@ -346,7 +349,7 @@ layout: should not from yaml 1
 
 Content 2
 ",
-      "end": 55,
+      "end": 68,
       "frontmatter": {
         "layout": "cover",
       },
@@ -368,7 +371,7 @@ layout: should not from yaml 1
 Content 2
 
 ",
-      "start": 44,
+      "start": 57,
       "title": "When there is already a frontmatter, the first yaml block should be treated as content",
     },
     "title": "When there is already a frontmatter, the first yaml block should be treated as content",
@@ -397,7 +400,7 @@ layout: should not from yaml 2
 
 Content 3
 ",
-      "end": 66,
+      "end": 79,
       "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
@@ -415,7 +418,7 @@ layout: should not from yaml 2
 Content 3
 
 ",
-      "start": 56,
+      "start": 69,
       "title": "Title",
     },
     "title": "Title",
@@ -673,7 +676,7 @@ console.log('Hello World')
 - Hey
 - Yo
 ",
-      "end": 18,
+      "end": 19,
       "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
@@ -704,7 +707,7 @@ console.log('Hello World')
       "content": "
 Nice to meet you
 ",
-      "end": 22,
+      "end": 23,
       "frontmatter": {},
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
@@ -715,7 +718,7 @@ Nice to meet you
 Nice to meet you
 
 ",
-      "start": 19,
+      "start": 20,
       "title": undefined,
     },
     "title": undefined,
