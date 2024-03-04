@@ -1,12 +1,13 @@
 import type { App } from 'vue'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, shallowRef } from 'vue'
 import type { ComputedRef } from '@vue/reactivity'
 import type { configs } from '../env'
 import * as nav from '../logic/nav'
 import { isDark } from '../logic/dark'
-import { injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
 import { useContext } from '../composables/useContext'
 import type { SlidevContextNav } from '../composables/useNav'
+import { useFixedClicks } from '../composables/useClicks'
 
 export interface SlidevContext {
   nav: SlidevContextNav
@@ -21,6 +22,7 @@ export function createSlidevContext() {
       app.provide(injectionRenderContext, ref('none'))
       app.provide(injectionSlidevContext, context)
       app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
+      app.provide(injectionClicksContext, shallowRef(useFixedClicks()))
 
       // allows controls from postMessages
       if (__DEV__) {

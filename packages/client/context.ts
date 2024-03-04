@@ -1,6 +1,5 @@
-import { ref, shallowRef, toRef } from 'vue'
+import { ref, toRef } from 'vue'
 import { injectLocal, objectOmit, provideLocal } from '@vueuse/core'
-import { useFixedClicks } from './composables/useClicks'
 import {
   FRONTMATTER_FIELDS,
   HEADMATTER_FIELDS,
@@ -13,15 +12,13 @@ import {
   injectionSlidevContext,
 } from './constants'
 
-const clicksContextFallback = shallowRef(useFixedClicks())
-
 /**
  * Get the current slide context, should be called inside the setup function of a component inside slide
  */
 export function useSlideContext() {
   const $slidev = injectLocal(injectionSlidevContext)!
   const $nav = toRef($slidev, 'nav')
-  const $clicksContext = injectLocal(injectionClicksContext, clicksContextFallback)!.value
+  const $clicksContext = injectLocal(injectionClicksContext)!.value
   const $clicks = toRef($clicksContext, 'current')
   const $page = injectLocal(injectionCurrentPage)!
   const $renderContext = injectLocal(injectionRenderContext)!
