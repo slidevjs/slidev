@@ -52,14 +52,18 @@ const run = debounce(200, async () => {
     })
     : code.value
 
-  output.value = (await runJavaScript(js)).map(
+  output.value = (await runJavaScript(js)).flatMap(
     ([type, content]) => [
+      `<div class="output-line">`,
       `<span class="decorator">[</span>`,
       `<span class="log-type ${type}">${type}</span>`,
-      `<span class="decorator">]:</span> `,
+      `<span class="decorator">]:&nbsp;</span>`,
+      `<div class="select-text">`,
       content.map(highlight).join('<span class="decorator">, </span>'),
-    ].join(''),
-  ).join('<hr>')
+      `</div>`,
+      `</div>`,
+    ],
+  ).join('')
 
   clearTimeout(setAsRunning)
 })
@@ -129,11 +133,11 @@ else if (autorun)
   @apply op-40;
 }
 
-.output :deep(hr) {
-  @apply my-.5 border-none;
+.output :deep(.output-line) {
+  @apply my-1 flex w-full;
 }
 
 .output :deep(pre) {
-  @apply inline !bg-transparent;
+  @apply inline text-wrap !bg-transparent;
 }
 </style>
