@@ -11,7 +11,7 @@ declare global {
   const __SLIDEV_HAS_SERVER__: boolean
 }
 
-declare module 'vue' {
+declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     __DEV__: boolean
     __SLIDEV_HASH_ROUTE__: boolean
