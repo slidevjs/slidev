@@ -74,7 +74,7 @@ function filterOnlySiblings(tree: TocItem[]): TocItem[] {
 }
 
 const toc = computed(() => {
-  const tree = $slidev?.nav.tree
+  const tree = $slidev?.nav.tocTree
   if (!tree)
     return []
   let tocTree = filterTreeDepth(tree)

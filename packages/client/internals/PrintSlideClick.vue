@@ -4,7 +4,7 @@ import { provideLocal } from '@vueuse/core'
 import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
-import type { SlidevContextNav } from '../modules/context'
+import type { SlidevContextNav } from '../composables/useNav'
 import SlideWrapper from './SlideWrapper.vue'
 
 import GlobalTop from '#slidev/global-components/top'
@@ -17,8 +17,8 @@ const { nav } = defineProps<{
 const route = computed(() => nav.currentSlideRoute.value)
 
 const style = computed(() => ({
-  height: `${slideHeight}px`,
-  width: `${slideWidth}px`,
+  height: `${slideHeight.value}px`,
+  width: `${slideWidth.value}px`,
 }))
 
 const DrawingPreview = shallowRef<any>()

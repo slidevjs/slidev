@@ -25,7 +25,7 @@ const root = ref<HTMLDivElement>()
 const element = useElementSize(root)
 
 const width = computed(() => props.width ? props.width : element.width.value)
-const height = computed(() => props.width ? props.width / slideAspect : element.height.value)
+const height = computed(() => props.width ? props.width / slideAspect.value : element.height.value)
 
 if (props.width) {
   watchEffect(() => {
@@ -41,14 +41,14 @@ const screenAspect = computed(() => width.value / height.value)
 const scale = computed(() => {
   if (props.scale && !isPrintMode.value)
     return props.scale
-  if (screenAspect.value < slideAspect)
-    return width.value / slideWidth
-  return height.value * slideAspect / slideWidth
+  if (screenAspect.value < slideAspect.value)
+    return width.value / slideWidth.value
+  return height.value * slideAspect.value / slideWidth.value
 })
 
 const style = computed(() => ({
-  'height': `${slideHeight}px`,
-  'width': `${slideWidth}px`,
+  'height': `${slideHeight.value}px`,
+  'width': `${slideWidth.value}px`,
   'transform': `translate(-50%, -50%) scale(${scale.value})`,
   '--slidev-slide-scale': scale.value,
 }))
