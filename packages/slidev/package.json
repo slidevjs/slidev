@@ -50,7 +50,7 @@
   "dependencies": {
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.7",
-    "@iconify-json/carbon": "^1.1.30",
+    "@iconify-json/carbon": "^1.1.31",
     "@iconify-json/ph": "^1.1.11",
     "@iconify-json/svg-spinners": "^1.1.2",
     "@lillallol/outline-pdf": "^4.0.0",
@@ -97,7 +97,7 @@
     "resolve-global": "^2.0.0",
     "semver": "^7.6.0",
     "shiki": "^1.1.7",
-    "shiki-magic-move": "^0.2.1",
+    "shiki-magic-move": "^0.3.0",
     "sirv": "^2.0.4",
     "typescript": "^5.3.3",
     "unocss": "^0.58.5",
