@@ -238,7 +238,7 @@ export function transformSlotSugar(md: string) {
   return lines.join('\n')
 }
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*?({.*?})?([^\n]*?))?\n([\s\S]+?)^````$/mg
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*(\{.*?\})?([^\n]*?))?\n([\s\S]+?)^````$/mg
 const reCodeBlock = /^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
 
 /**
@@ -251,7 +251,7 @@ export function transformMagicMove(
 ) {
   return md.replace(
     reMagicMoveBlock,
-    (full, _options = '', _attrs = '', body: string) => {
+    (full, options = '{}', _attrs = '', body: string) => {
       if (!shiki || !shikiOptions)
         throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
 
@@ -267,7 +267,7 @@ export function transformMagicMove(
         }),
       )
       const compressed = lz.compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove steps-lz="${compressed}" />`
+      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" />`
     },
   )
 }

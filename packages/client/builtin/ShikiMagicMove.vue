@@ -26,7 +26,7 @@ onMounted(() => {
   if (!clicks || clicks.disabled)
     return
 
-  const { start, end, delta } = clicks.resolve(props.at || '+1', steps.length - 1)
+  const { start, end, delta } = clicks.resolve(props.at ?? '+1', steps.length - 1)
   clicks.register(id, { max: end, delta })
 
   watchEffect(() => {
