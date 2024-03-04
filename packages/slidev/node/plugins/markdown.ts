@@ -9,7 +9,7 @@ import { encode as encodePlantUml } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
-import { codeToKeyedTokens, createMagicMoveMachine } from 'shiki-magic-move/core'
+import { codeToKeyedTokens } from 'shiki-magic-move/core'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -264,14 +264,12 @@ export function transformMagicMove(
         throw new Error(`Magic Move block must contain code blocks with the same language, got ${Array.from(langs).join(', ')}`)
       const lang = Array.from(langs)[0] as any
 
-      const magicMove = createMagicMoveMachine(
-        code => codeToKeyedTokens(shiki, code, {
+      const steps = matches.map(i =>
+        codeToKeyedTokens(shiki, i[5].trimEnd(), {
           ...shikiOptions,
           lang,
         }),
       )
-
-      const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
       const compressed = lz.compressToBase64(JSON.stringify(steps))
       return `<ShikiMagicMove steps-lz="${compressed}" />`
     },

@@ -97,7 +97,7 @@
     "resolve-global": "^2.0.0",
     "semver": "^7.6.0",
     "shiki": "^1.1.7",
-    "shiki-magic-move": "^0.1.0",
+    "shiki-magic-move": "^0.2.1",
     "sirv": "^2.0.4",
     "typescript": "^5.3.3",
     "unocss": "^0.58.5",

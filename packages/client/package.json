@@ -54,7 +54,7 @@
     "prettier": "^3.2.5",
     "recordrtc": "^5.6.2",
     "shiki": "^1.1.7",
-    "shiki-magic-move": "^0.1.0",
+    "shiki-magic-move": "^0.2.1",
     "typescript": "^5.3.3",
     "unocss": "^0.58.5",
     "vue": "^3.4.21",
