@@ -259,15 +259,11 @@ export function transformMagicMove(
 
       if (!matches.length)
         throw new Error('Magic Move block must contain at least one code block')
-      const langs = new Set(matches.map(i => i[1]))
-      if (langs.size > 1)
-        throw new Error(`Magic Move block must contain code blocks with the same language, got ${Array.from(langs).join(', ')}`)
-      const lang = Array.from(langs)[0] as any
 
       const steps = matches.map(i =>
         codeToKeyedTokens(shiki, i[5].trimEnd(), {
           ...shikiOptions,
-          lang,
+          lang: i[1] as any,
         }),
       )
       const compressed = lz.compressToBase64(JSON.stringify(steps))
