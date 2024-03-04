@@ -116,7 +116,7 @@ export function createSlidesLoader(
             return next()
 
           const [, no, type] = match
-          const idx = Number.parseInt(no)
+          const idx = Number.parseInt(no) - 1
           if (type === 'json' && req.method === 'GET') {
             res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
             return res.end()
