@@ -44,9 +44,9 @@ html:not(.dark) .shiki span {
   overflow: auto;
 }
 
-.slidev-code .line.highlighted {
+.slidev-code .slidev-code-highlighted {
 }
-.slidev-code .line.dishonored {
+.slidev-code .slidev-code-dishonored {
   opacity: 0.3;
   pointer-events: none;
 }

@@ -1,5 +1,7 @@
+import { parseRangeString } from '@slidev/parser/core'
 import { useTimestamp } from '@vueuse/core'
 import { computed, ref } from 'vue'
+import { CLASS_VCLICK_TARGET } from '../constants'
 
 export function useTimer() {
   const tsStart = ref(Date.now())
@@ -47,4 +49,26 @@ export function normalizeAtProp(at: string | number = '+1'): [isRelative: boolea
     typeof at === 'string' && '+-'.includes(at[0]),
     n,
   ]
+}
+
+export function updateCodeHighlightRange(
+  rangeStr: string,
+  linesCount: number,
+  startLine: number,
+  getTokenOfLine: (line: number) => Element[],
+) {
+  const highlights: number[] = parseRangeString(linesCount + startLine - 1, rangeStr)
+  for (let line = 0; line < linesCount; line++) {
+    const tokens = getTokenOfLine(line)
+    const isHighlighted = highlights.includes(line + startLine)
+    for (const token of tokens) {
+      token.classList.toggle(CLASS_VCLICK_TARGET, true)
+      token.classList.toggle('slidev-code-highlighted', isHighlighted)
+      token.classList.toggle('slidev-code-dishonored', !isHighlighted)
+
+      // for backward compatibility
+      token.classList.toggle('highlighted', isHighlighted)
+      token.classList.toggle('dishonored', !isHighlighted)
+    }
+  }
 }

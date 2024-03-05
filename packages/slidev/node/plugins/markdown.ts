@@ -260,6 +260,7 @@ export function transformMagicMove(
       if (!matches.length)
         throw new Error('Magic Move block must contain at least one code block')
 
+      const ranges = matches.map(i => normalizeRangeStr(i[2]))
       const steps = matches.map(i =>
         codeToKeyedTokens(shiki, i[5].trimEnd(), {
           ...shikiOptions,
@@ -267,7 +268,7 @@ export function transformMagicMove(
         }),
       )
       const compressed = lz.compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" />`
+      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
     },
   )
 }
@@ -279,12 +280,16 @@ export function transformHighlighter(md: string) {
   return md.replace(
     reCodeBlock,
     (full, lang = '', rangeStr: string = '', options = '', attrs = '', code: string) => {
-      const ranges = !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
+      const ranges = normalizeRangeStr(rangeStr)
       code = code.trimEnd()
       options = options.trim() || '{}'
       return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
     },
   )
+}
+
+function normalizeRangeStr(rangeStr = '') {
+  return !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
 }
 
 export function getCodeBlocks(md: string) {

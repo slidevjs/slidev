@@ -190,8 +190,9 @@ Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev sup
 
 Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
 
-````md magic-move {at:0}
-```ts
+````md magic-move
+```ts {*|2|*}
+// step 1
 const author = reactive({
   name: 'John Doe',
   books: [
@@ -202,7 +203,8 @@ const author = reactive({
 })
 ```
 
-```ts
+```ts {*|1-2|3-4|3-4,8}
+// step 2
 export default {
   data() {
     return {
@@ -220,6 +222,7 @@ export default {
 ```
 
 ```ts
+// step 3
 export default {
   data: () => ({
     author: {
@@ -237,6 +240,7 @@ export default {
 Non-code blocks are ignored.
 
 ```vue
+<!-- step 4 -->
 <script setup>
 const author = {
   name: 'John Doe',
