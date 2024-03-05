@@ -123,10 +123,10 @@ function add(
 ```
 ~~~
 
-You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines:true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
+You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
 
 ~~~md
-```ts {6,7}{lines:true, startLine:5}
+```ts {6,7}{lines:true,startLine:5}
 function add(
   a: Ref<number> | number,
   b: Ref<number> | number
@@ -218,20 +218,40 @@ const count = ref(0)
 
 > Available since v0.48
 
-Shiki Magic Move enables you to have granular transition between code changes like Keynote's Magic Move. You can check [this demo](https://shiki-magic-move.netlify.app/) to see how it works.
+[Shiki Magic Move](https://github.com/shikijs/shiki-magic-move) enables you to have granular transition between code changes, similar to Keynote's Magic Move. You can check [the playground](https://shiki-magic-move.netlify.app/) to see how it works.
 
 In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
 
 ~~~~md
 ````md magic-move
-```ts
+```js
 console.log(`Step ${1}`)
 ```
-```ts
+```js
 console.log(`Step ${1 + 1}`)
 ```
 ```ts
-console.log(`Step ${3}`)
+console.log(`Step ${3}` as string)
+```
+````
+~~~~
+
+It's also possible mix Magic Move with [line highlighting](#line-highlighting), for example:
+
+~~~~md
+````md magic-move {at:4} // [!code hl]
+```js {*|1|2-5} // [!code hl]
+let count = 1
+function add() {
+  count++
+}
+```
+
+Non-code blocks in between as ignored, you can put some comments.
+
+```js
+let count = 1
+const add = () => count += 1
 ```
 ````
 ~~~~
