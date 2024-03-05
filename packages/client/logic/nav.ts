@@ -67,5 +67,5 @@ watch(
       await goLast()
     }
   },
-  { flush: 'post', immediate: true },
+  { flush: 'pre', immediate: true },
 )

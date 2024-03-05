@@ -8,7 +8,7 @@ import { useFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
 import { CLICKS_MAX } from '../constants'
 import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper'
+import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
 
