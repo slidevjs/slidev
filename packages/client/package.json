@@ -58,6 +58,7 @@
     "typescript": "^5.3.3",
     "unocss": "^0.58.5",
     "vue": "^3.4.21",
+    "vue-demi": "^0.14.7",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

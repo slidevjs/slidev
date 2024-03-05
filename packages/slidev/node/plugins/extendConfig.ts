@@ -35,6 +35,7 @@ const EXCLUDE = [
   '@slidev/client/constants',
   '@slidev/client/logic/dark',
   '@vueuse/core',
+  '@vueuse/math',
   '@vueuse/shared',
   '@unocss/reset',
   'unocss',
