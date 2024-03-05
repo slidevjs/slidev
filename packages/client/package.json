@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "0.48.0-beta.21",
+  "version": "0.48.0-beta.22",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.7",
-    "@iconify-json/carbon": "^1.1.30",
+    "@iconify-json/carbon": "^1.1.31",
     "@iconify-json/ph": "^1.1.11",
     "@iconify-json/svg-spinners": "^1.1.2",
     "@shikijs/monaco": "^1.1.7",
@@ -36,7 +36,7 @@
     "@slidev/rough-notation": "^0.1.0",
     "@slidev/types": "workspace:*",
     "@typescript/ata": "^0.9.4",
-    "@unhead/vue": "^1.8.10",
+    "@unhead/vue": "^1.8.11",
     "@unocss/reset": "^0.58.5",
     "@vueuse/core": "^10.9.0",
     "@vueuse/math": "^10.9.0",
@@ -54,13 +54,13 @@
     "prettier": "^3.2.5",
     "recordrtc": "^5.6.2",
     "shiki": "^1.1.7",
-    "shiki-magic-move": "^0.1.0",
+    "shiki-magic-move": "^0.3.1",
     "typescript": "^5.3.3",
     "unocss": "^0.58.5",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "vite": "^5.1.4"
+    "vite": "^5.1.5"
   }
 }

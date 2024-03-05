@@ -12,13 +12,12 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
-import { parseRangeString } from '@slidev/parser/core'
 import { useClipboard } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
-import { makeId } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET } from '../constants'
+import { makeId, updateCodeHighlightRange } from '../logic/utils'
+import { CLASS_VCLICK_HIDDEN } from '../constants'
 import { useSlideContext } from '../context'
 
 const props = defineProps({
@@ -87,28 +86,27 @@ onMounted(() => {
     if (hide)
       rangeStr = props.ranges[index.value + 1] ?? finallyRange.value
 
-    const isDuoTone = el.value.querySelector('.shiki-dark')
-    const targets = isDuoTone ? Array.from(el.value.querySelectorAll('.shiki')) : [el.value]
-    const startLine = props.startLine
-    for (const target of targets) {
-      const lines = Array.from(target.querySelectorAll('code > .line'))
-      const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr)
-      lines.forEach((line, idx) => {
-        const highlighted = highlights.includes(idx + startLine)
-        line.classList.toggle(CLASS_VCLICK_TARGET, true)
-        line.classList.toggle('highlighted', highlighted)
-        line.classList.toggle('dishonored', !highlighted)
-      })
-      if (props.maxHeight) {
-        const highlightedEls = Array.from(target.querySelectorAll('.line.highlighted')) as HTMLElement[]
-        const height = highlightedEls.reduce((acc, el) => el.offsetHeight + acc, 0)
-        if (height > el.value.offsetHeight) {
-          highlightedEls[0].scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
-        else if (highlightedEls.length > 0) {
-          const middleEl = highlightedEls[Math.round((highlightedEls.length - 1) / 2)]
-          middleEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }
+    const pre = el.value.querySelector('.shiki')!
+    const lines = Array.from(pre.querySelectorAll('code > .line'))
+    const linesCount = lines.length
+
+    updateCodeHighlightRange(
+      rangeStr,
+      linesCount,
+      props.startLine,
+      no => [lines[no]],
+    )
+
+    // Scroll to the highlighted line if `maxHeight` is set
+    if (props.maxHeight) {
+      const highlightedEls = Array.from(pre.querySelectorAll('.line.highlighted')) as HTMLElement[]
+      const height = highlightedEls.reduce((acc, el) => el.offsetHeight + acc, 0)
+      if (height > el.value.offsetHeight) {
+        highlightedEls[0].scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+      else if (highlightedEls.length > 0) {
+        const middleEl = highlightedEls[Math.round((highlightedEls.length - 1) / 2)]
+        middleEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
     }
   })

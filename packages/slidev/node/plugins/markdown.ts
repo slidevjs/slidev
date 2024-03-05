@@ -9,7 +9,7 @@ import { encode as encodePlantUml } from 'plantuml-encoder'
 import Mdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
-import { codeToKeyedTokens, createMagicMoveMachine } from 'shiki-magic-move/core'
+import { codeToKeyedTokens } from 'shiki-magic-move/core'
 
 // @ts-expect-error missing types
 import mila from 'markdown-it-link-attributes'
@@ -238,7 +238,7 @@ export function transformSlotSugar(md: string) {
   return lines.join('\n')
 }
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*?({.*?})?([^\n]*?))?\n([\s\S]+?)^````$/mg
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*(\{.*?\})?([^\n]*?))?\n([\s\S]+?)^````$/mg
 const reCodeBlock = /^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
 
 /**
@@ -251,7 +251,7 @@ export function transformMagicMove(
 ) {
   return md.replace(
     reMagicMoveBlock,
-    (full, _options = '', _attrs = '', body: string) => {
+    (full, options = '{}', _attrs = '', body: string) => {
       if (!shiki || !shikiOptions)
         throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
 
@@ -259,21 +259,16 @@ export function transformMagicMove(
 
       if (!matches.length)
         throw new Error('Magic Move block must contain at least one code block')
-      const langs = new Set(matches.map(i => i[1]))
-      if (langs.size > 1)
-        throw new Error(`Magic Move block must contain code blocks with the same language, got ${Array.from(langs).join(', ')}`)
-      const lang = Array.from(langs)[0] as any
 
-      const magicMove = createMagicMoveMachine(
-        code => codeToKeyedTokens(shiki, code, {
+      const ranges = matches.map(i => normalizeRangeStr(i[2]))
+      const steps = matches.map(i =>
+        codeToKeyedTokens(shiki, i[5].trimEnd(), {
           ...shikiOptions,
-          lang,
+          lang: i[1] as any,
         }),
       )
-
-      const steps = matches.map(i => magicMove.commit((i[5] || '').trimEnd()))
       const compressed = lz.compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove steps-lz="${compressed}" />`
+      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
     },
   )
 }
@@ -285,12 +280,16 @@ export function transformHighlighter(md: string) {
   return md.replace(
     reCodeBlock,
     (full, lang = '', rangeStr: string = '', options = '', attrs = '', code: string) => {
-      const ranges = !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
+      const ranges = normalizeRangeStr(rangeStr)
       code = code.trimEnd()
       options = options.trim() || '{}'
       return `\n<CodeBlockWrapper v-bind="${options}" :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
     },
   )
+}
+
+function normalizeRangeStr(rangeStr = '') {
+  return !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
 }
 
 export function getCodeBlocks(md: string) {

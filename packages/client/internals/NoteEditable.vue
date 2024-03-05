@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
-import { nextTick, ref, watch, watchEffect } from 'vue'
+import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import type { ClicksContext } from '@slidev/types'
-import { useDynamicSlideInfo } from '../logic/note'
+import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps({
   no: {
     type: Number,
+    required: true,
   },
   class: {
     default: '',
@@ -38,7 +39,7 @@ const emit = defineEmits<{
 
 const editing = useVModel(props, 'editing', emit, { passive: true })
 
-const { info, update } = useDynamicSlideInfo(props.no)
+const { info, update } = useDynamicSlideInfo(toRef(props, 'no'))
 
 const note = ref('')
 let timer: any

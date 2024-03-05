@@ -116,7 +116,7 @@ export function createSlidesLoader(
             return next()
 
           const [, no, type] = match
-          const idx = Number.parseInt(no)
+          const idx = Number.parseInt(no) - 1
           if (type === 'json' && req.method === 'GET') {
             res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
             return res.end()
@@ -179,7 +179,8 @@ export function createSlidesLoader(
           const b = newData.slides[i]
 
           if (
-            a.content.trim() === b.content.trim()
+            !hmrPages.has(i)
+            && a.content.trim() === b.content.trim()
             && a.title?.trim() === b.title?.trim()
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
@@ -196,7 +197,7 @@ export function createSlidesLoader(
               ctx.server.hot.send(
                 'slidev:update-note',
                 {
-                  id: i,
+                  no: i + 1,
                   note: b!.note || '',
                   noteHTML: renderNote(b!.note || ''),
                 },
@@ -208,7 +209,7 @@ export function createSlidesLoader(
           ctx.server.hot.send(
             'slidev:update-slide',
             {
-              id: i,
+              no: i + 1,
               data: withRenderedNote(newData.slides[i]),
             },
           )
@@ -731,16 +732,11 @@ defineProps<{ no: number | string }>()`)
     return [
       ...imports,
       `const data = [\n${slides.join(',\n')}\n]`,
-      `export const slides = shallowRef([...data])`,
-      `let oldRef = slides`,
-      `export function update(old) {`,
-      `  oldRef = old`,
-      `  old.value = data`,
-      `}`,
+      `import.meta.hot.data.slides ??= shallowRef()`,
+      `import.meta.hot.data.slides.value = data`,
+      `export const slides = import.meta.hot.data.slides`,
       `if (import.meta.hot) {`,
-      `  import.meta.hot.accept(({ update }) => {`,
-      `    update(oldRef)`,
-      `  })`,
+      `  import.meta.hot.accept()`,
       `}`,
     ].join('\n')
   }

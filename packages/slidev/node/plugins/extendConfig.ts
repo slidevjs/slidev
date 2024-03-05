@@ -10,12 +10,22 @@ import { dependencies } from '../../../client/package.json'
 
 const INCLUDE = [
   ...Object.keys(dependencies),
+
+  // CodeMirror
   'codemirror/mode/javascript/javascript',
   'codemirror/mode/css/css',
   'codemirror/mode/markdown/markdown',
   'codemirror/mode/xml/xml',
   'codemirror/mode/htmlmixed/htmlmixed',
   'codemirror/addon/display/placeholder',
+
+  // Monaco
+  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
+  'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
+  'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
+
+  // Others
+  'shiki-magic-move/vue',
 ]
 
 const EXCLUDE = [
