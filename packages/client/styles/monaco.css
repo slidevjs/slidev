@@ -5,10 +5,13 @@ div[widgetid='messageoverlay'] {
 .slidev-monaco-container {
   position: relative;
   margin: var(--slidev-code-margin);
-  padding: var(--slidev-code-padding);
   line-height: var(--slidev-code-line-height);
   border-radius: var(--slidev-code-radius);
   background: var(--slidev-code-background);
+}
+
+.slidev-monaco-container-inner {
+  padding: var(--slidev-code-padding);
 }
 
 .slidev-monaco-container .monaco-editor {

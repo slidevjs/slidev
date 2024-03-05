@@ -1,7 +1,12 @@
 // Ported from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/playground/src/sidebar/runtime.ts
 
-export async function runJavaScript(js: string) {
-  const allLogs: [type: string, content: string[]][] = []
+export interface JavaScriptExecutionLog {
+  type: string
+  content: string[]
+}
+
+export async function runJavaScript(js: string): Promise<JavaScriptExecutionLog[]> {
+  const allLogs: JavaScriptExecutionLog[] = []
 
   const rawConsole = console
 
@@ -25,7 +30,7 @@ export async function runJavaScript(js: string) {
   function bindLoggingFunc(obj: any, raw: any, name: string, id: string) {
     obj[name] = function (...objs: any[]) {
       const output = objs.map(objectToText)
-      allLogs.push([id, output])
+      allLogs.push({ type: id, content: output })
     }
   }
 

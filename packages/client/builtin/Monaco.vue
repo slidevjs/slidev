@@ -152,8 +152,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="relative">
-    <div ref="outer" class="slidev-monaco-container" :style="{ height }">
+  <div class="relative slidev-monaco-container">
+    <div ref="outer" class="slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
     <MonacoOutput v-if="props.runnable" v-model="code" :lang="lang" :autorun="props.autorun" :height="props.outputHeight" />

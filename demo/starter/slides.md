@@ -558,12 +558,8 @@ hide: false
 
 # Monaco Editor
 
-```ts {monaco}
-import { ref } from 'vue'
-import hello from './external'
-
-const code = ref('const a = 1')
-hello()
+```ts {monaco-runnable}
+console.log('ASDasd')
 ```
 
 ---
