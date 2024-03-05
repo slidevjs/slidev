@@ -5,7 +5,7 @@ import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../composables/useNav'
-import SlideWrapper from './SlideWrapper'
+import SlideWrapper from './SlideWrapper.vue'
 
 import GlobalTop from '#slidev/global-components/top'
 import GlobalBottom from '#slidev/global-components/bottom'

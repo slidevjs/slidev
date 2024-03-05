@@ -5,7 +5,7 @@ import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../composables/hmr'
 import { usePrimaryClicks } from '../composables/useClicks'
-import SlideWrapper from './SlideWrapper'
+import SlideWrapper from './SlideWrapper.vue'
 import PresenterMouse from './PresenterMouse.vue'
 
 import GlobalTop from '#slidev/global-components/top'
