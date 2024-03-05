@@ -9,14 +9,14 @@ export interface UseSlideInfo {
   update: (data: SlidePatch) => Promise<SlideInfo | void>
 }
 
-export function useSlideInfo(id: number | undefined): UseSlideInfo {
-  if (id == null) {
+export function useSlideInfo(no: number): UseSlideInfo {
+  if (no == null) {
     return {
       info: ref() as Ref<SlideInfo | undefined>,
       update: async () => {},
     }
   }
-  const url = `/@slidev/slide/${id}.json`
+  const url = `/@slidev/slide/${no}.json`
   const { data: info, execute } = useFetch(url).json().get()
 
   execute()
@@ -37,11 +37,11 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
 
   if (__DEV__) {
     import.meta.hot?.on('slidev:update-slide', (payload) => {
-      if (payload.id === id)
+      if (payload.no === no)
         info.value = payload.data
     })
     import.meta.hot?.on('slidev:update-note', (payload) => {
-      if (payload.id === id && info.value.note?.trim() !== payload.note?.trim())
+      if (payload.no === no && info.value.note?.trim() !== payload.note?.trim())
         info.value = { ...info.value, ...payload }
     })
   }
@@ -52,20 +52,17 @@ export function useSlideInfo(id: number | undefined): UseSlideInfo {
   }
 }
 
-const map: Record<string, UseSlideInfo> = {}
+const map: Record<number, UseSlideInfo> = {}
 
-export function useDynamicSlideInfo(id: MaybeRef<number | undefined>) {
-  function get(id: number | undefined) {
-    const i = `${id}`
-    if (!map[i])
-      map[i] = useSlideInfo(id)
-    return map[i]
+export function useDynamicSlideInfo(no: MaybeRef<number>) {
+  function get(no: number) {
+    return map[no] ??= useSlideInfo(no)
   }
 
   return {
-    info: computed(() => get(unref(id)).info.value),
+    info: computed(() => get(unref(no)).info.value),
     update: async (data: SlidePatch, newId?: number) => {
-      const info = get(newId ?? unref(id))
+      const info = get(newId ?? unref(no))
       const newData = await info.update(data)
       if (newData)
         info.info.value = newData
