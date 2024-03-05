@@ -2,7 +2,7 @@ import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 
-const CURRENT_VERSION = '0.48.0-beta.2'
+const CURRENT_VERSION = '0.48.0-beta.22'
 
 const Guide: DefaultTheme.NavItemWithLink[] = [
   {
