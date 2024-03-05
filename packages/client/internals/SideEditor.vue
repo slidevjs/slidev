@@ -4,7 +4,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../setup/codemirror'
 import { currentSlideNo, openInEditor } from '../logic/nav'
-import { useDynamicSlideInfo } from '../logic/note'
+import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import IconButton from './IconButton.vue'
 
 const props = defineProps<{

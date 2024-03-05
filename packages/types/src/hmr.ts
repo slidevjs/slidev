@@ -3,11 +3,11 @@ import type { SlideInfo } from './types'
 declare module 'vite' {
   interface CustomEventMap {
     'slidev:update-slide': {
-      id: number
+      no: number
       data: SlideInfo
     }
     'slidev:update-note': {
-      id: number
+      no: number
       note: string
       noteHTML: string
     }

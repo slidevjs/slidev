@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
-import { useSlideInfo } from '../logic/note'
+import { useSlideInfo } from '../composables/useSlideInfo'
 import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps<{
-  no?: number
+  no: number
   class?: string
   clicksContext?: ClicksContext
 }>()

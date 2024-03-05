@@ -179,7 +179,8 @@ export function createSlidesLoader(
           const b = newData.slides[i]
 
           if (
-            a.content.trim() === b.content.trim()
+            !hmrPages.has(i)
+            && a.content.trim() === b.content.trim()
             && a.title?.trim() === b.title?.trim()
             && equal(a.frontmatter, b.frontmatter)
             && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
@@ -196,7 +197,7 @@ export function createSlidesLoader(
               ctx.server.hot.send(
                 'slidev:update-note',
                 {
-                  id: i,
+                  no: i + 1,
                   note: b!.note || '',
                   noteHTML: renderNote(b!.note || ''),
                 },
@@ -208,7 +209,7 @@ export function createSlidesLoader(
           ctx.server.hot.send(
             'slidev:update-slide',
             {
-              id: i,
+              no: i + 1,
               data: withRenderedNote(newData.slides[i]),
             },
           )
