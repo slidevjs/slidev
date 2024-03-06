@@ -19,18 +19,25 @@ export default createSingletonPromise(async () => {
         : themes.light || 'vitesse-light',
   })
 
-  const run = (code: string, lang: string, rawMode: boolean): Promise<RunnerOutput> => {
-    const runner = runners[lang]
-    if (!runner)
-      throw new Error(`Runner for language "${lang}" not found`)
-    return runner(
-      code,
-      {
-        highlight,
-        run: (code, lang) => run(code, lang, rawMode),
-        rawMode,
-      },
-    )
+  const run = async (code: string, lang: string, rawMode: boolean): Promise<RunnerOutput> => {
+    try {
+      const runner = runners[lang]
+      if (!runner)
+        throw new Error(`Runner for language "${lang}" not found`)
+      return await runner(
+        code,
+        {
+          highlight,
+          run: (code, lang) => run(code, lang, rawMode),
+          rawMode,
+        },
+      )
+    }
+    catch (e) {
+      return {
+        error: `${e}`,
+      }
+    }
   }
 
   // @ts-expect-error injected in runtime
