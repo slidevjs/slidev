@@ -1,3 +1,4 @@
+/* __imports__ */
 import { createSingletonPromise } from '@antfu/utils'
 import type { CodeRunner, RunnerContext, RunnerOutput, RunnerTextOutput } from '@slidev/types'
 import { isDark } from '../logic/dark'
