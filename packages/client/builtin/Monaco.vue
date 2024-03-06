@@ -31,6 +31,8 @@ const props = withDefaults(defineProps<{
   runnable?: boolean
   autorun?: boolean | 'once'
   outputHeight?: string
+  highlightOutput?: boolean
+  rawOutput?: boolean
 }>(), {
   codeLz: '',
   lang: 'typescript',
@@ -40,6 +42,8 @@ const props = withDefaults(defineProps<{
   ata: true,
   runnable: false,
   autorun: true,
+  highlightOutput: true,
+  rawOutput: false,
 })
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
@@ -156,6 +160,14 @@ onMounted(async () => {
     <div ref="outer" class="slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
-    <MonacoOutput v-if="props.runnable" v-model="code" :lang="lang" :autorun="props.autorun" :height="props.outputHeight" />
+    <MonacoOutput
+      v-if="props.runnable"
+      v-model="code"
+      :lang="lang"
+      :autorun="props.autorun"
+      :height="props.outputHeight"
+      :highlight-output="props.highlightOutput"
+      :raw-mode="props.rawOutput"
+    />
   </div>
 </template>

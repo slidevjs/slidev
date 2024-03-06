@@ -1,26 +1,21 @@
 <script setup lang="ts">
 import { debounce } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
+import type { RunnerOutput } from '@slidev/types'
 import { computed, ref, shallowRef, watch } from 'vue'
-import { isDark } from '../logic/dark'
 import { isPrintMode } from '../logic/nav'
-import type { JavaScriptExecutionLog } from '../logic/runCode'
-import { runJavaScript } from '../logic/runCode'
 import { useSlideContext } from '../context'
+import setupRunners from '../setup/runners'
 import IconButton from './IconButton.vue'
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: string
-    lang: string
-    autorun?: boolean | 'once'
-    height?: string
-    highlightOutput?: boolean
-  }>(),
-  {
-    highlightOutput: true,
-  },
-)
+const props = defineProps<{
+  modelValue: string
+  lang: string
+  autorun: boolean | 'once'
+  height?: string
+  highlightOutput: boolean
+  rawMode: boolean
+}>()
 
 const emit = defineEmits(['update:modelValue'])
 const code = useVModel(props, 'modelValue', emit)
@@ -30,109 +25,86 @@ const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
 const isRunning = ref(autorun)
-const output = shallowRef<JavaScriptExecutionLog[]>()
+const output = shallowRef<RunnerOutput>()
+const highlightFn = ref<(code: string, lang: string) => string>()
 
-let tsModule: typeof import('typescript') | undefined
-
-let highlight: ((code: string) => string) | undefined
-
-const run = debounce(200, async () => {
+const triggerRun = debounce(200, async () => {
   if (disabled.value)
     return
+
+  const { highlight, run } = await setupRunners()
+  highlightFn.value = highlight
 
   const setAsRunning = setTimeout(() => {
     isRunning.value = true
   }, 500)
 
-  if (!highlight && props.highlightOutput) {
-    const { shiki, themes } = await import('#slidev/shiki')
-    const highlighter = await shiki
-    highlight = (code: string) => highlighter.codeToHtml(code, {
-      lang: 'javascript',
-      theme: typeof themes === 'string'
-        ? themes
-        : isDark.value
-          ? themes.dark || 'vitesse-dark'
-          : themes.light || 'vitesse-light',
-    })
-  }
-
-  const { transpile } = (tsModule ??= await import('typescript'))
-  const js = props.lang === 'typescript'
-    ? transpile(code.value, {
-      module: tsModule.ModuleKind.ESNext,
-    })
-    : code.value
-
-  // TODO: try catch to render the errors
-  output.value = await runJavaScript(js)
+  output.value = await run(code.value, props.lang, props.rawMode)
   isRunning.value = false
-  // ).flatMap(
-  //   ([type, content]) => [
-  //     `<div class="output-line">`,
-  //     `<span class="decorator">[</span>`,
-  //     `<span class="log-type ${type}">${type}</span>`,
-  //     `<span class="decorator">]:&nbsp;</span>`,
-  //     `<div class="select-text">`,
-  //     content.map(highlight).join('<span class="decorator">, </span>'),
-  //     `</div>`,
-  //     `</div>`,
-  //   ],
-  // ).join('')
 
   clearTimeout(setAsRunning)
 })
 
 if (autorun === 'once')
-  run()
+  triggerRun()
 else if (autorun)
-  watch(code, run, { immediate: true })
+  watch(code, triggerRun, { immediate: true })
 </script>
 
 <template>
   <div
-    class="relative flex flex-col rounded-b border-t border-main px4 py3"
+    class="relative flex flex-col rounded-b border-t border-main"
     :style="{ height: props.height }"
     data-waitfor=".output"
   >
     <div v-if="disabled" class="text-sm text-center opacity-50">
       Code is disabled in the "{{ $renderContext }}" mode
     </div>
-    <div v-else-if="isRunning" class="text-sm text-center opacity-50 running">
+    <div v-else-if="isRunning" class="text-sm text-center opacity-50">
       Running...
     </div>
     <div v-else-if="!output" class="text-sm text-center opacity-50">
       Click the play button to run the code
     </div>
-    <template v-else>
-      <div class="flex-grow text-xs leading-[.8rem] font-$slidev-code-font-family slidev-monaco-output">
-        <div v-for="log, idx in output" :key="idx" class="flex gap-2">
-          <span>
-            {{ log.type /* TODO: add better style */ }}:
-          </span>
-          <div class="flex flex-col">
-            <template v-for="c, idx2 in log.content" :key="idx2">
-              <div v-if="highlight" v-html="highlight(c)" />
-              <pre v-else>{{ c }}</pre>
+    <div v-else class="slidev-monaco-output">
+      <div v-if="'html' in output" v-html="output.html" />
+      <div v-else-if="'error' in output" class="text-red-500">
+        {{ output.error }}
+      </div>
+      <div v-for="line, idx in output" v-else :key="idx" class="output-line">
+        <template v-if="!rawMode && line.type">
+          <span :class="`log-type ${line.type}`"> {{ line.type }} </span>
+          <span class="separator">:</span>
+        </template>
+        <div class="flex-grow break-anywhere">
+          <template v-for="item, idx2 in line.content" :key="idx2">
+            <span v-if="'html' in item" v-html="item.html" />
+            <template v-else>
+              <span
+                v-if="item.highlightLang && highlightFn"
+                class="highlighted"
+                v-html="highlightFn(item.text, item.highlightLang)"
+              />
+              <span v-else :class="item.class">{{ item.text }}</span>
             </template>
-          </div>
+            <span v-if="idx2 < line.content.length - 1" class="separator">,</span>
+          </template>
         </div>
       </div>
-    </template>
+    </div>
   </div>
   <div v-if="code.trim()" class="absolute right-1 top-1 max-h-full flex gap-1">
-    <IconButton
-      class="w-8 h-8 max-h-full flex justify-center items-center"
-      :title="props.autorun ? 'Rerun' : 'Run code'"
-      @click="run"
-    >
-      <carbon:renew v-if="props.autorun" />
-      <carbon:play-filled-alt v-else />
+    <IconButton class="w-8 h-8 max-h-full flex justify-center items-center" title="Run code" @click="triggerRun">
+      <carbon:play />
     </IconButton>
   </div>
 </template>
 
 <style lang="postcss">
+.slidev-monaco-output {
+  @apply px-4 py-3 flex-grow text-xs leading-[.8rem] font-$slidev-code-font-family select-text;
+}
+
 .slidev-monaco-output .log-type {
   @apply font-bold op-70;
 
@@ -153,15 +125,15 @@ else if (autorun)
   }
 }
 
-.slidev-monaco-output .decorator {
-  @apply op-40;
-}
-
 .slidev-monaco-output .output-line {
-  @apply my-1 flex w-full;
+  @apply flex my-1 w-full;
 }
 
-.slidev-monaco-output pre {
+.slidev-monaco-output .separator {
+  @apply op-40 mr-1;
+}
+
+.slidev-monaco-output .highlighted > pre {
   @apply inline text-wrap !bg-transparent;
 }
 </style>
