@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { debounce } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
-import type { RunnerOutput } from '@slidev/types'
+import type { CodeRunnerOutput } from '@slidev/types'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { isPrintMode } from '../logic/nav'
 import { useSlideContext } from '../context'
@@ -25,7 +25,7 @@ const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
 const isRunning = ref(autorun)
-const output = shallowRef<RunnerOutput>()
+const output = shallowRef<CodeRunnerOutput>()
 const highlightFn = ref<(code: string, lang: string) => string>()
 
 const triggerRun = debounce(200, async () => {

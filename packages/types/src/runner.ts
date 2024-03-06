@@ -1,12 +1,12 @@
 import type { CodeToHastOptions } from 'shiki'
 
-export interface RunnerContext {
+export interface CodeRunnerContext {
   options: Record<string, unknown>
   highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
-  run: (code: string, lang: string) => Promise<RunnerOutput>
+  run: (code: string, lang: string) => Promise<CodeRunnerOutput>
 }
 
-export type RunnerTextOutput =
+export type CodeRunnerTextOutput =
   (
     | {
       text: string
@@ -18,8 +18,8 @@ export type RunnerTextOutput =
     }
   )[]
 
-export type RunnerOutput =
-  | RunnerTextOutput[]
+export type CodeRunnerOutput =
+  | CodeRunnerTextOutput[]
   | {
     html: string
   }
@@ -27,4 +27,4 @@ export type RunnerOutput =
     error: string
   }
 
-export type CodeRunner = (code: string, ctx: RunnerContext) => Promise<RunnerOutput>
+export type CodeRunner = (code: string, ctx: CodeRunnerContext) => Promise<CodeRunnerOutput>
