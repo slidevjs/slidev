@@ -22,7 +22,7 @@ export default createSingletonPromise(async () => {
     ...options,
   })
 
-  const run = async (code: string, lang: string, rawMode: boolean): Promise<RunnerOutput> => {
+  const run = async (code: string, lang: string, rawMode: boolean, options: Record<string, unknown>): Promise<RunnerOutput> => {
     try {
       const runner = runners[lang]
       if (!runner)
@@ -30,8 +30,9 @@ export default createSingletonPromise(async () => {
       return await runner(
         code,
         {
+          options,
           highlight,
-          run: (code, lang) => run(code, lang, rawMode),
+          run: (code, lang) => run(code, lang, rawMode, options),
           rawMode,
         },
       )

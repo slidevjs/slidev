@@ -15,6 +15,7 @@ const props = defineProps<{
   height?: string
   highlightOutput: boolean
   rawMode: boolean
+  runnerOptions?: Record<string, unknown>
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -39,7 +40,7 @@ const triggerRun = debounce(200, async () => {
     isRunning.value = true
   }, 500)
 
-  output.value = await run(code.value, props.lang, props.rawMode)
+  output.value = await run(code.value, props.lang, props.rawMode, props.runnerOptions ?? {})
   isRunning.value = false
 
   clearTimeout(setAsRunning)

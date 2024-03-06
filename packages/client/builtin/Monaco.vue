@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   outputHeight?: string
   highlightOutput?: boolean
   rawOutput?: boolean
+  runnerOptions?: Record<string, unknown>
 }>(), {
   codeLz: '',
   lang: 'typescript',
@@ -168,6 +169,7 @@ onMounted(async () => {
       :height="props.outputHeight"
       :highlight-output="props.highlightOutput"
       :raw-mode="props.rawOutput"
+      :runner-options="props.runnerOptions"
     />
   </div>
 </template>
