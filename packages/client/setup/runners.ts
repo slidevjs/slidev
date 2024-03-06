@@ -22,7 +22,7 @@ export default createSingletonPromise(async () => {
     ...options,
   })
 
-  const run = async (code: string, lang: string, rawMode: boolean, options: Record<string, unknown>): Promise<RunnerOutput> => {
+  const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<RunnerOutput> => {
     try {
       const runner = runners[lang]
       if (!runner)
@@ -32,8 +32,7 @@ export default createSingletonPromise(async () => {
         {
           options,
           highlight,
-          run: (code, lang) => run(code, lang, rawMode, options),
-          rawMode,
+          run: (code, lang) => run(code, lang, options),
         },
       )
     }
@@ -61,11 +60,10 @@ export async function runJavaScript(code: string) {
   const allLogs: RunnerTextOutput[] = []
 
   const replace = {} as any
-  bindLoggingFunc(replace, 'log', 'LOG')
-  bindLoggingFunc(replace, 'debug', 'DBG')
-  bindLoggingFunc(replace, 'warn', 'WRN')
-  bindLoggingFunc(replace, 'error', 'ERR')
-  replace.info = replace.log
+  const logger = function (...objs: any[]) {
+    allLogs.push(objs.map(printObject))
+  }
+  replace.info = replace.log = replace.debug = replace.warn = replace.error = logger
   replace.clear = () => allLogs.length = 0
   const vmConsole = Object.assign({}, console, replace)
   try {
@@ -76,12 +74,6 @@ export async function runJavaScript(code: string) {
   catch (error) {
     return {
       error: `ERROR: ${error}`,
-    }
-  }
-
-  function bindLoggingFunc(obj: any, name: string, type: string) {
-    obj[name] = function (...objs: any[]) {
-      allLogs.push({ type, content: objs.map(printObject) })
     }
   }
 

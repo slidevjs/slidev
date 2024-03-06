@@ -14,7 +14,6 @@ const props = defineProps<{
   autorun: boolean | 'once'
   height?: string
   highlightOutput: boolean
-  rawMode: boolean
   runnerOptions?: Record<string, unknown>
 }>()
 
@@ -40,7 +39,7 @@ const triggerRun = debounce(200, async () => {
     isRunning.value = true
   }, 500)
 
-  output.value = await run(code.value, props.lang, props.rawMode, props.runnerOptions ?? {})
+  output.value = await run(code.value, props.lang, props.runnerOptions ?? {})
   isRunning.value = false
 
   clearTimeout(setAsRunning)
@@ -73,12 +72,8 @@ else if (autorun)
         {{ output.error }}
       </div>
       <div v-for="line, idx in output" v-else :key="idx" class="output-line">
-        <template v-if="!rawMode && line.type">
-          <span :class="`log-type ${line.type}`"> {{ line.type }} </span>
-          <span class="separator">:</span>
-        </template>
         <div class="flex-grow break-anywhere">
-          <template v-for="item, idx2 in line.content" :key="idx2">
+          <template v-for="item, idx2 in line" :key="idx2">
             <span v-if="'html' in item" v-html="item.html" />
             <template v-else>
               <span
@@ -88,7 +83,7 @@ else if (autorun)
               />
               <span v-else :class="item.class">{{ item.text }}</span>
             </template>
-            <span v-if="idx2 < line.content.length - 1" class="separator">,</span>
+            <span v-if="idx2 < line.length - 1" class="separator">,</span>
           </template>
         </div>
       </div>
@@ -103,7 +98,7 @@ else if (autorun)
 
 <style lang="postcss">
 .slidev-runner-output {
-  @apply px-4 py-3 flex-grow text-xs leading-[.8rem] font-$slidev-code-font-family select-text;
+  @apply px-5 py-3 flex-grow text-xs leading-[.8rem] font-$slidev-code-font-family select-text;
 }
 
 .slidev-runner-output .log-type {

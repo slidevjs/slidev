@@ -4,12 +4,10 @@ export interface RunnerContext {
   options: Record<string, unknown>
   highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
   run: (code: string, lang: string) => Promise<RunnerOutput>
-  rawMode: boolean
 }
 
-export interface RunnerTextOutput {
-  type?: string
-  content: (
+export type RunnerTextOutput =
+  (
     | {
       text: string
       class?: string
@@ -19,7 +17,6 @@ export interface RunnerTextOutput {
       html: string
     }
   )[]
-}
 
 export type RunnerOutput =
   | RunnerTextOutput[]

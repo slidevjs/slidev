@@ -32,7 +32,6 @@ const props = withDefaults(defineProps<{
   autorun?: boolean | 'once'
   outputHeight?: string
   highlightOutput?: boolean
-  rawOutput?: boolean
   runnerOptions?: Record<string, unknown>
 }>(), {
   codeLz: '',
@@ -44,7 +43,6 @@ const props = withDefaults(defineProps<{
   runnable: false,
   autorun: true,
   highlightOutput: true,
-  rawOutput: false,
 })
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
@@ -168,7 +166,6 @@ onMounted(async () => {
       :autorun="props.autorun"
       :height="props.outputHeight"
       :highlight-output="props.highlightOutput"
-      :raw-mode="props.rawOutput"
       :runner-options="props.runnerOptions"
     />
   </div>

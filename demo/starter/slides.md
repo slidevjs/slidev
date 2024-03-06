@@ -562,7 +562,7 @@ hide: false
 console.log('Hello' as string, [1, 'text', new Error('message'), () => {}])
 ```
 
-```js {monaco-runnable}{rawOutput: true}
+```js {monaco-runnable}
 console.log({ a: { b: 1 } }, new Date())
 ```
 
