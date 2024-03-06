@@ -1,6 +1,4 @@
 declare module 'vue' {
-  import type { UnwrapNestedRefs } from 'vue'
-
   type SlideContext = import('./context').SlideContext
   interface ComponentCustomProperties extends SlideContext {
   }
