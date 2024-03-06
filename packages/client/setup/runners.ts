@@ -42,13 +42,9 @@ export default createSingletonPromise(async () => {
 
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = undefined
-  // eslint-disable-next-line prefer-const
-  let injection_return: Record<string, CodeRunner> = {}
+  const injection_arg = runners
 
   /* __async_injections__ */
-
-  Object.assign(runners, injection_return)
 
   return {
     highlight,

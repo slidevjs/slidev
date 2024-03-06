@@ -66,7 +66,7 @@ export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | vo
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
-export type RunnersSetup = () => Record<string, CodeRunner>
+export type RunnersSetup = (runners: Record<string, CodeRunner>) => Promise<void>
 
 export function defineShikiSetup(fn: ShikiSetup) {
   return fn
