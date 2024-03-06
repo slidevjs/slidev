@@ -1,6 +1,7 @@
 /* __imports__ */
 import { createSingletonPromise } from '@antfu/utils'
 import type { CodeRunner, RunnerContext, RunnerOutput, RunnerTextOutput } from '@slidev/types'
+import type { CodeToHastOptions } from 'shiki'
 import { isDark } from '../logic/dark'
 
 export default createSingletonPromise(async () => {
@@ -11,13 +12,14 @@ export default createSingletonPromise(async () => {
 
   const { shiki, themes } = await import('#slidev/shiki')
   const highlighter = await shiki
-  const highlight = (code: string, lang: string) => highlighter.codeToHtml(code, {
+  const highlight = (code: string, lang: string, options: Partial<CodeToHastOptions> = {}) => highlighter.codeToHtml(code, {
     lang,
     theme: typeof themes === 'string'
       ? themes
       : isDark.value
         ? themes.dark || 'vitesse-dark'
         : themes.light || 'vitesse-light',
+    ...options,
   })
 
   const run = async (code: string, lang: string, rawMode: boolean): Promise<RunnerOutput> => {

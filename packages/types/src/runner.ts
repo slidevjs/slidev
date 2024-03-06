@@ -1,5 +1,7 @@
+import type { CodeToHastOptions } from 'shiki'
+
 export interface RunnerContext {
-  highlight: (code: string, lang: string) => Promise<string>
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
   run: (code: string, lang: string) => Promise<RunnerOutput>
   rawMode: boolean
 }
