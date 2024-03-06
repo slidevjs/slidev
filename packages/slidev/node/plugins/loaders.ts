@@ -603,7 +603,6 @@ defineProps<{ no: number | string }>()`)
       `import "${resolveUrlOfClient('styles/code.css')}"`,
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
-      `import "${resolveUrlOfClient('styles/monaco.css')}"`,
     ]
 
     for (const root of roots) {

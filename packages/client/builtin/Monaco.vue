@@ -140,6 +140,7 @@ onMounted(async () => {
         : /* BELOW */ `` // reset
     }
   }
+  nextTick(() => monaco.editor.remeasureFonts())
 })
 </script>
 
@@ -148,3 +149,33 @@ onMounted(async () => {
     <div ref="container" class="absolute inset-0.5" />
   </div>
 </template>
+
+<style>
+div[widgetid='messageoverlay'] {
+  transform: translateY(calc(100% * (var(--slidev-slide-scale) - 1)));
+}
+
+.slidev-monaco-container {
+  position: relative;
+  margin: var(--slidev-code-margin);
+  padding: var(--slidev-code-padding);
+  line-height: var(--slidev-code-line-height);
+  border-radius: var(--slidev-code-radius);
+  background: var(--slidev-code-background);
+}
+
+.slidev-monaco-container .monaco-editor {
+  --monaco-monospace-font: var(--slidev-code-font-family);
+  --vscode-editor-background: var(--slidev-code-background);
+  --vscode-editorGutter-background: var(--slidev-code-background);
+}
+
+/** Revert styles */
+.slidev-monaco-container .monaco-editor a {
+  border-bottom: none;
+}
+
+.slidev-monaco-container .monaco-editor a:hover {
+  border-bottom: none;
+}
+</style>
