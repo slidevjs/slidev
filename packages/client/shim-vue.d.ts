@@ -1,8 +1,8 @@
 declare module 'vue' {
   import type { UnwrapNestedRefs } from 'vue'
 
-  interface ComponentCustomProperties {
-    $slidev: UnwrapNestedRefs<import('./modules/context').SlidevContext>
+  type SlideContext = import('./context').SlideContext
+  interface ComponentCustomProperties extends SlideContext {
   }
 }
 
