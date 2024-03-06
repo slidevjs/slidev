@@ -66,7 +66,7 @@ else if (autorun)
     <div v-else-if="!output" class="text-sm text-center opacity-50">
       Click the play button to run the code
     </div>
-    <div v-else class="slidev-monaco-output">
+    <div v-else class="slidev-runner-output">
       <div v-if="'html' in output" v-html="output.html" />
       <div v-else-if="'error' in output" class="text-red-500">
         {{ output.error }}
@@ -101,11 +101,11 @@ else if (autorun)
 </template>
 
 <style lang="postcss">
-.slidev-monaco-output {
+.slidev-runner-output {
   @apply px-4 py-3 flex-grow text-xs leading-[.8rem] font-$slidev-code-font-family select-text;
 }
 
-.slidev-monaco-output .log-type {
+.slidev-runner-output .log-type {
   @apply font-bold op-70;
 
   &.DBG {
@@ -125,15 +125,15 @@ else if (autorun)
   }
 }
 
-.slidev-monaco-output .output-line {
+.slidev-runner-output .output-line {
   @apply flex my-1 w-full;
 }
 
-.slidev-monaco-output .separator {
+.slidev-runner-output .separator {
   @apply op-40 mr-1;
 }
 
-.slidev-monaco-output .highlighted > pre {
+.slidev-runner-output .highlighted > pre {
   @apply inline text-wrap !bg-transparent;
 }
 </style>

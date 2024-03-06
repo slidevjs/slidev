@@ -17,7 +17,7 @@ import lz from 'lz-string'
 import type * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { makeId } from '../logic/utils'
-import MonacoOutput from '../internals/MonacoOutput.vue'
+import CodeRunner from '../internals/CodeRunner.vue'
 
 const props = withDefaults(defineProps<{
   codeLz: string
@@ -160,7 +160,7 @@ onMounted(async () => {
     <div ref="outer" class="slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
-    <MonacoOutput
+    <CodeRunner
       v-if="props.runnable"
       v-model="code"
       :lang="lang"
