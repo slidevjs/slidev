@@ -559,12 +559,11 @@ hide: false
 # Monaco Editor
 
 ```ts {monaco-runnable}
-console.log('Hello' as string, [1, "text", new Error('message'), ()=>{}])
-console.log()
+console.log('Hello' as string, [1, 'text', new Error('message'), () => {}])
 ```
 
 ```js {monaco-runnable}{rawOutput: true}
-console.log({ a: {b: 1} }, new Date())
+console.log({ a: { b: 1 } }, new Date())
 ```
 
 ---
