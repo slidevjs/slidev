@@ -1,15 +1,13 @@
 declare module 'vue' {
   import type { UnwrapNestedRefs } from 'vue'
-  import type { SlidevContext } from './modules/context'
 
   interface ComponentCustomProperties {
-    $slidev: UnwrapNestedRefs<SlidevContext>
+    $slidev: UnwrapNestedRefs<import('./modules/context').SlidevContext>
   }
 }
 
 declare module 'vue-router' {
   import type { TransitionGroupProps } from 'vue'
-  import type { ClicksContext, SlideInfo } from '@slidev/types'
 
   interface RouteMeta {
     // inherited from frontmatter
@@ -21,7 +19,7 @@ declare module 'vue-router' {
     preload?: boolean
 
     // slide info
-    slide?: Omit<SlideInfo, 'source'> & {
+    slide?: Omit<import('@slidev/types').SlideInfo, 'source'> & {
       noteHTML: string
       filepath: string
       start: number
@@ -30,7 +28,7 @@ declare module 'vue-router' {
     }
 
     // private fields
-    __clicksContext: null | ClicksContext
+    __clicksContext: null | import('@slidev/types').ClicksContext
     __preloaded?: boolean
   }
 }
