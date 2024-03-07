@@ -157,7 +157,7 @@ onMounted(async () => {
 
 <template>
   <div class="relative slidev-monaco-container">
-    <div ref="outer" class="slidev-monaco-container-inner" :style="{ height }">
+    <div ref="outer" class="relative slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
     <CodeRunner
