@@ -73,10 +73,9 @@ else if (autorun)
           {{ output.error }}
         </div>
         <div v-else class="output-line">
-          <div
+          <template
             v-for="item, idx2 in toArray(output)"
             :key="idx2"
-            class="flex-grow break-anywhere"
           >
             <span
               v-if="item.highlightLang && highlightFn"
@@ -85,7 +84,7 @@ else if (autorun)
             />
             <span v-else :class="item.class">{{ item.text }}</span>
             <span v-if="idx2 < toArray(output).length - 1" class="separator">,</span>
-          </div>
+          </template>
         </div>
       </template>
     </div>
