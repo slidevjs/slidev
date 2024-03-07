@@ -7,7 +7,7 @@ import type { KatexOptions } from 'katex'
 import type { CodeToHastOptions, Highlighter } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { SlidevPreparserExtension } from './types'
-import type { CodeRunner } from './runner'
+import type { CodeRunnerProviders } from './code-runner'
 
 export interface AppContext {
   app: App
@@ -66,7 +66,7 @@ export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | vo
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
-export type RunnersSetup = (runners: Record<string, CodeRunner>) => void | Promise<void>
+export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>
 
 export function defineShikiSetup(fn: ShikiSetup) {
   return fn
@@ -100,6 +100,6 @@ export function definePreparserSetup(fn: PreparserSetup) {
   return fn
 }
 
-export function defineRunnersSetup(fn: RunnersSetup) {
+export function defineCodeRunnersSetup(fn: CodeRunnersSetup) {
   return fn
 }

@@ -1,13 +1,15 @@
 /* __imports__ */
 import { createSingletonPromise } from '@antfu/utils'
-import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerTextOutput } from '@slidev/types'
+import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs, CodeRunnerProviders } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
 import { isDark } from '../logic/dark'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {
     javascript: runJavaScript,
+    js: runJavaScript,
     typescript: runTypeScript,
+    ts: runJavaScript,
   }
 
   const { shiki, themes } = await import('#slidev/shiki')
@@ -22,7 +24,7 @@ export default createSingletonPromise(async () => {
     ...options,
   })
 
-  const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutput> => {
+  const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {
       const runner = runners[lang]
       if (!runner)
@@ -32,11 +34,14 @@ export default createSingletonPromise(async () => {
         {
           options,
           highlight,
-          run: (code, lang) => run(code, lang, options),
+          run: async (code, lang) => {
+            return await run(code, lang, options)
+          },
         },
       )
     }
     catch (e) {
+      console.error(e)
       return {
         error: `${e}`,
       }
@@ -46,8 +51,12 @@ export default createSingletonPromise(async () => {
   // @ts-expect-error injected in runtime
   // eslint-disable-next-line unused-imports/no-unused-vars
   const injection_arg = runners
+  // eslint-disable-next-line prefer-const
+  let injection_return: CodeRunnerProviders = {}
 
   /* __async_injections__ */
+
+  Object.assign(runners, injection_return)
 
   return {
     highlight,
@@ -56,8 +65,8 @@ export default createSingletonPromise(async () => {
 })
 
 // Ported from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/playground/src/sidebar/runtime.ts
-export async function runJavaScript(code: string) {
-  const allLogs: CodeRunnerTextOutput[] = []
+export async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
+  const allLogs: CodeRunnerOutput[] = []
 
   const replace = {} as any
   const logger = function (...objs: any[]) {
@@ -77,7 +86,7 @@ export async function runJavaScript(code: string) {
     }
   }
 
-  function printObject(arg: any) {
+  function printObject(arg: any): CodeRunnerOutputText {
     if (typeof arg === 'string') {
       return {
         text: arg,
@@ -149,6 +158,7 @@ export async function runJavaScript(code: string) {
 }
 
 let tsModule: typeof import('typescript') | undefined
+
 export async function runTypeScript(code: string, context: CodeRunnerContext) {
   const { transpile } = tsModule ??= await import('typescript')
   code = transpile(code, {

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { debounce } from '@antfu/utils'
+import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
 import type { CodeRunnerOutput } from '@slidev/types'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { isPrintMode } from '../logic/nav'
 import { useSlideContext } from '../context'
-import setupRunners from '../setup/runners'
+import setupCodeRunners from '../setup/code-runners'
 import IconButton from './IconButton.vue'
 
 const props = defineProps<{
@@ -25,21 +25,21 @@ const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
 const isRunning = ref(autorun)
-const output = shallowRef<CodeRunnerOutput>()
+const outputs = shallowRef<CodeRunnerOutput[]>()
 const highlightFn = ref<(code: string, lang: string) => string>()
 
 const triggerRun = debounce(200, async () => {
   if (disabled.value)
     return
 
-  const { highlight, run } = await setupRunners()
+  const { highlight, run } = await setupCodeRunners()
   highlightFn.value = highlight
 
   const setAsRunning = setTimeout(() => {
     isRunning.value = true
   }, 500)
 
-  output.value = await run(code.value, props.lang, props.runnerOptions ?? {})
+  outputs.value = toArray(await run(code.value, props.lang, props.runnerOptions ?? {}))
   isRunning.value = false
 
   clearTimeout(setAsRunning)
@@ -63,30 +63,31 @@ else if (autorun)
     <div v-else-if="isRunning" class="text-sm text-center opacity-50">
       Running...
     </div>
-    <div v-else-if="!output" class="text-sm text-center opacity-50">
+    <div v-else-if="!outputs?.length" class="text-sm text-center opacity-50">
       Click the play button to run the code
     </div>
     <div v-else class="slidev-runner-output">
-      <div v-if="'html' in output" v-html="output.html" />
-      <div v-else-if="'error' in output" class="text-red-500">
-        {{ output.error }}
-      </div>
-      <div v-for="line, idx in output" v-else :key="idx" class="output-line">
-        <div class="flex-grow break-anywhere">
-          <template v-for="item, idx2 in line" :key="idx2">
-            <span v-if="'html' in item" v-html="item.html" />
-            <template v-else>
-              <span
-                v-if="item.highlightLang && highlightFn"
-                class="highlighted"
-                v-html="highlightFn(item.text, item.highlightLang)"
-              />
-              <span v-else :class="item.class">{{ item.text }}</span>
-            </template>
-            <span v-if="idx2 < line.length - 1" class="separator">,</span>
-          </template>
+      <template v-for="output, _idx1 of outputs" :key="_idx1">
+        <div v-if="'html' in output" v-html="output.html" />
+        <div v-else-if="'error' in output" class="text-red-500">
+          {{ output.error }}
         </div>
-      </div>
+        <div v-else class="output-line">
+          <div
+            v-for="item, idx2 in toArray(output)"
+            :key="idx2"
+            class="flex-grow break-anywhere"
+          >
+            <span
+              v-if="item.highlightLang && highlightFn"
+              class="highlighted"
+              v-html="highlightFn(item.text, item.highlightLang)"
+            />
+            <span v-else :class="item.class">{{ item.text }}</span>
+            <span v-if="idx2 < toArray(output).length - 1" class="separator">,</span>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
   <div v-if="code.trim()" class="absolute right-1 top-1 max-h-full flex gap-1">
