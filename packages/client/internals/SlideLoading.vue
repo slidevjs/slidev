@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="h-full w-full flex items-center justify-center gap-2">
+  <div class="h-full w-full flex items-center justify-center gap-2 slidev-slide-loading">
     <template v-if="timeout">
       <div class="i-svg-spinners-90-ring-with-bg text-xl" />
       <div>Loading slide...</div>
