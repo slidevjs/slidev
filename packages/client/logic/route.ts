@@ -22,7 +22,7 @@ export function useRouteQuery<T extends string | string[]>(
         router[unref(mode) as 'replace' | 'push']({
           query: {
             ...router.currentRoute.value.query,
-            [name]: v === defaultValue ? undefined : v,
+            [name]: `${v}` === defaultValue ? undefined : v,
           },
         })
       })
