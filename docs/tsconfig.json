@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "jsx": "preserve",
+    "lib": ["DOM", "ESNext"],
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./*.ts",
+    "./.vitepress/**/*.ts",
+    "./.vitepress/**/*.vue"
+  ],
+  "exclude": ["**/dist/**", "node_modules"]
+}
