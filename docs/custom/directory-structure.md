@@ -117,6 +117,8 @@ import './layouts.css'
 
 Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://unocss.dev/transformers/directives#apply) out-of-box. For example:
 
+<!-- eslint-skip -->
+
 ```less
 .slidev-layout {
   --uno: px-14 py-10 text-[1.1rem];

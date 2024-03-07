@@ -8,7 +8,7 @@ Slides are written within **a single markdown file** (by default `./slides.md`).
 
 You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [UnoCSS](/custom/config-unocss) is also supported. Use `---` padded with a new line to separate your slides.
 
-~~~md
+````md
 # Slidev
 
 Hello, World!
@@ -19,9 +19,9 @@ Hello, World!
 
 Directly use code blocks for highlighting
 
-//```ts
+```ts
 console.log('Hello, World!')
-//```
+```
 
 ---
 
@@ -32,13 +32,15 @@ You can directly use Windi CSS and Vue components to style and enrich your slide
 <div class="p-3">
   <Tweet id="20" />
 </div>
-~~~
+````
 
 ## Frontmatter & Layouts
 
 Specify layouts and other metadata for each slide by converting the separators into [frontmatter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
-~~~md
+<!-- eslint-skip -->
+
+```md
 ---
 layout: cover
 ---
@@ -62,7 +64,7 @@ This is a page with the layout `center` and a background image.
 # Page 3
 
 This is a default page without any additional metadata.
-~~~
+```
 
 Refer to [customization](/custom/) for more details.
 
@@ -73,7 +75,7 @@ Refer to [customization](/custom/) for more details.
 The custom syntax might not be compactible with some formatters like Prettier.
 You can either install the [Prettier Plugin](/guide/editors#prettier-plugin) or use a direct `yaml` code block to define the frontmatter instead:
 
-~~~markdown
+````md
 ---
 layout: cover
 ---
@@ -94,17 +96,17 @@ class: 'text-white'
 # Page 2
 
 This is a page with the layout `center` and a background image.
-~~~
+````
 
 ## Code Blocks
 
 One big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
 
-~~~md
+````md
 ```ts
 console.log('Hello, World!')
 ```
-~~~
+````
 
 We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
 
@@ -112,7 +114,7 @@ We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shik
 
 To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1 by default.
 
-~~~md
+````md
 ```ts {2,3}
 function add(
   a: Ref<number> | number,
@@ -121,11 +123,11 @@ function add(
   return computed(() => unref(a) + unref(b))
 }
 ```
-~~~
+````
 
 You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
 
-~~~md
+````md
 ```ts {6,7}{lines:true,startLine:5}
 function add(
   a: Ref<number> | number,
@@ -134,11 +136,11 @@ function add(
   return computed(() => unref(a) + unref(b))
 }
 ```
-~~~
+````
 
 To change the highlight in multiple clicks, you can use `|` to separate them:
 
-~~~md
+````md
 ```ts {2-3|5|all}
 function add(
   a: Ref<number> | number,
@@ -147,13 +149,13 @@ function add(
   return computed(() => unref(a) + unref(b))
 }
 ```
-~~~
+````
 
 This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block.
 
 You can set the line number to `hide` to hide the code block or `none` to not highlight any line:
 
-~~~md
+````md
 ```ts {hide|none}
 function add(
   a: Ref<number> | number,
@@ -162,7 +164,7 @@ function add(
   return computed(() => unref(a) + unref(b))
 }
 ```
-~~~
+````
 
 ::: tip
 Learn more in the [clicks animations guide](./animations#positioning).
@@ -170,7 +172,7 @@ Learn more in the [clicks animations guide](./animations#positioning).
 
 If the code doesn't fit into one slide, you use the `maxHeight` to set fixed height and enable scrolling:
 
-~~~md
+````md
 ```ts {2|3|7|12}{maxHeight:'100px'}
 function add(
   a: Ref<number> | number,
@@ -181,7 +183,7 @@ function add(
 /// ...as many lines as you want
 const c = add(1, 2)
 ```
-~~~
+````
 
 ### TwoSlash Integration
 
@@ -193,14 +195,14 @@ This feature is only available when you [set `highlighter` to `shiki`](/custom/h
 
 To use it, you can add `twoslash` to the code block's language identifier:
 
-~~~md
+````md
 ```ts twoslash
 import { ref } from 'vue'
 
 const count = ref(0)
 //            ^?
 ```
-~~~
+````
 
 It will be rendered as:
 
@@ -222,7 +224,7 @@ const count = ref(0)
 
 In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
 
-~~~~md
+`````md
 ````md magic-move
 ```js
 console.log(`Step ${1}`)
@@ -234,11 +236,11 @@ console.log(`Step ${1 + 1}`)
 console.log(`Step ${3}` as string)
 ```
 ````
-~~~~
+`````
 
 It's also possible mix Magic Move with [line highlighting](#line-highlighting), for example:
 
-~~~~md
+`````md
 ````md magic-move {at:4} // [!code hl]
 ```js {*|1|2-5} // [!code hl]
 let count = 1
@@ -254,7 +256,7 @@ let count = 1
 const add = () => count += 1
 ```
 ````
-~~~~
+`````
 
 <!-- TODO: add an inline demo -->
 
@@ -262,11 +264,11 @@ const add = () => count += 1
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
-~~~md
+````md
 ```ts {monaco}
 console.log('HelloWorld')
 ```
-~~~
+````
 
 Learn more about [configuring Monaco](/custom/config-monaco).
 
@@ -354,7 +356,7 @@ You can also take notes for each slide. They will show up in [Presenter Mode](/g
 
 In Markdown, the last comment block in each slide will be treated as a note.
 
-~~~md
+```md
 ---
 layout: cover
 ---
@@ -376,7 +378,7 @@ The second page
 <!--
 This is another note
 -->
-~~~
+```
 
 Basic Markdown and HTML are also supported in notes on Presenter renderering.
 
@@ -590,24 +592,24 @@ You can also create diagrams / graphs from textual descriptions in your Markdown
 
 Code blocks marked as `mermaid` will be converted to diagrams, for example:
 
-~~~md
-//```mermaid
+````md
+```mermaid
 sequenceDiagram
   Alice->John: Hello John, how are you?
   Note over Alice,John: A typical interaction
-//```
-~~~
+```
+````
 
 You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
 
-~~~md
-//```mermaid {theme: 'neutral', scale: 0.8}
+````md
+```mermaid {theme: 'neutral', scale: 0.8}
 graph TD
 B[Text] --> C{Decision}
 C -->|One| D[Result 1]
 C -->|Two| E[Result 2]
-//```
-~~~
+```
+````
 
 Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-js.github.io/mermaid)
 
@@ -618,6 +620,8 @@ Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-j
 You can split your `slides.md` into multiple files and organize them as you want.
 
 `slides.md` :
+
+<!-- eslint-skip -->
 
 ```md
 # Page 1

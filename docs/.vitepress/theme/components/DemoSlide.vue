@@ -14,7 +14,9 @@
   line-height: 1.2em;
   border-radius: 7px;
   position: relative;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 30px 1px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 0 30px 1px rgba(0, 0, 0, 0.15);
   @apply mt-4 transform translate-x-20 -translate-y-20 overflow-hidden;
 }
 

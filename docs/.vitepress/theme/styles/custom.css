@@ -1,7 +1,7 @@
 .icon-btn {
   --uno: inline-block cursor-pointer select-none important-outline-none;
   --uno: opacity-75 transition duration-200 ease-in-out align-middle rounded p-2;
-  --uno: hover:(opacity-100 bg-gray-400 bg-opacity-10);
+  --uno: hover-(opacity-100 bg-gray-400 bg-opacity-10);
 }
 
 .icon-btn.disabled {

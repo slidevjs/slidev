@@ -52,8 +52,8 @@ $ slidev build --download
 
 When using the download option, you can also provide the export options:
 
-* By using [CLI export options](/guide/exporting.html)
-* Or [frontmatter export options](/custom/#frontmatter-configures)
+- By using [CLI export options](/guide/exporting.html)
+- Or [frontmatter export options](/custom/#frontmatter-configures)
 
 ### Output directory
 
@@ -143,6 +143,7 @@ Then go to your Vercel dashboard and create a new site with the repository.
 - [GitHub Pages](https://pages.github.com/)
 
 To deploy your slides on GitHub Pages:
+
 - upload all the files of the project in your repo (i.e. named `name_of_repo`)
 - create `.github/workflows/deploy.yml` with following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`. Make sure to leave the leading and trailing slashes in place.
 
@@ -191,5 +192,6 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 ```
+
 - In your repository, go to Settings>Pages. Under "Build and deployment", select "Github Actions".
 - Finally, after all workflows are executed, a link to the slides should appear under Settings>Pages.

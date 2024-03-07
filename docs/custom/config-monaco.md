@@ -18,7 +18,7 @@ Learn more about [configuring Monaco](https://github.com/Microsoft/monaco-editor
 
 To use Monaco in your slides, simply append `{monaco}` to your code snippets:
 
-~~~md
+````md
 ```js {monaco} // [!code ++]
 const count = ref(1)
 const plusOne = computed(() => count.value + 1)
@@ -27,20 +27,20 @@ console.log(plusOne.value) // 2
 
 plusOne.value++ // error
 ```
-~~~
+````
 
 ## TypeScript Types
 
 When use TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
 
-~~~md
+````md
 ```ts {monaco}
 import { ref } from 'vue'
 import { useMouse } from '@vueuse/core'
 
 const counter = ref(0)
 ```
-~~~
+````
 
 In the example above, make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest to get the types working for the editor automatically. When deploy as SPA, those types will also be bundled for static hosting.
 
@@ -78,11 +78,11 @@ Since v0.48.0, Monaco will reuse the Shiki theme you configured in [Shiki's setu
 
 If you would like to customize the Monaco editor you may pass an `editorOptions` object that matches the [Monaco IEditorOptions](https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IEditorOptions.html) definition.
 
-~~~md
+````md
 ```ts {monaco} { editorOptions: { wordWrap:'on'} }
 console.log('HelloWorld')
 ```
-~~~
+````
 
 Alternatively if you would like these options to be applied to every Monaco instance, you can return them in the `defineMonacoSetup` function
 

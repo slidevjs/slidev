@@ -40,6 +40,7 @@ export default definePreparserSetup(({ filepath, headmatter, mode }) => {
 ```
 
 This example systematically replaces any `@@@` line by a line with `hello`. It illustrates the structure of a preparser configuration file and some of the main concepts the preparser involves:
+
 - `definePreparserSetup` must be called with a function as parameter.
 - The function receives the file path (of the root presentation file), the headmatter (from the md file) and, since v0.48.0, a mode (dev, build or export). It could use this information (e.g., enable extensions based on the presentation file or whether we are exporting a PDF).
 - The function must return a list of preparser extensions.
@@ -53,6 +54,8 @@ This example systematically replaces any `@@@` line by a line with `hello`. It i
 ### Use case 1: compact syntax top-level presentation
 
 Imagine a situation where (part of) your presentation is mainly showing cover images and including other md files. You might want a compact notation where for instance (part of) `slides.md` is as follows:
+
+<!-- eslint-skip -->
 
 ```md
 @cover: /nice.jpg
@@ -115,6 +118,8 @@ And that's it.
 
 Imagine a case where you often want to scale some of your slides but still want to use a variety of existing layouts so create a new layout would not be suited.
 For instance, you might want to write your `slides.md` as follows:
+
+<!-- eslint-skip -->
 
 ```md
 ---

@@ -4,8 +4,8 @@ Addons are sets of additional components, layouts, styles, configuration...etc. 
 
 They are quite similar to [themes](/themes/use), but in general:
 
-* they don't affect the global styles of your slides
-* you can use multiple addons in one presentation
+- they don't affect the global styles of your slides
+- you can use multiple addons in one presentation
 
 To use addons, you have to install them manually via:
 

@@ -17,11 +17,13 @@ presenter: false
 ```
 
 Or you can enable it only for `dev` or `build` mode by setting the mode you want in the config:
+
 ```md
 ---
 presenter: dev
 ---
 ```
+
 In that case the presenter will only be available when running `slidev` but not when running `slidev build`.
 
 ## Remote restricted access

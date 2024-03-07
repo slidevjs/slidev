@@ -16,6 +16,7 @@ To apply "click animations" for elements, you can use the `v-click` directive or
 ```md
 <!-- Component usage:
      this will be invisible until you press "next" -->
+
 <v-click> Hello **World** </v-click>
 
 <!-- Directive usage:
@@ -104,7 +105,7 @@ Like the CSS layout system, click-animated elements can be "relative" or "absolu
 
 This actual position of relative elements are calculated based on the previous relative elements:
 
-~~~md
+````md
 <div v-click> visible after 1 click </div>
 <v-click at="+2"><div> visible after 3 clicks </div></v-click>
 <div v-click.hide="'-1'"> hidden after 2 clicks </div>
@@ -113,7 +114,7 @@ This actual position of relative elements are calculated based on the previous r
 1  // highlighted after 7 clicks
 2  // highlighted after 8 clicks
 ```
-~~~
+````
 
 > [!NOTE]
 > The default value of `v-click` is `'+1'` when you don't specify it.
@@ -147,7 +148,7 @@ So don't forget the single quotes for the relative values.
 
 The given value is the exact click count to show the element:
 
-~~~md
+````md
 <div v-click="3"> visible after 3 clicks </div>
 <v-click at="2"><div> visible after 2 clicks </div></v-click>
 <div v-click.hide="1"> hidden after 1 click </div>
@@ -156,23 +157,23 @@ The given value is the exact click count to show the element:
 1  // highlighted after 3 clicks
 2  // highlighted after 4 clicks
 ```
-~~~
+````
 
 #### Mixed Case
 
 You can mix the absolute and relative positions:
 
-~~~md
+```md
 <div v-click> visible after 1 click </div>
 <div v-click="3"> visible after 3 clicks </div>
 <div v-click> visible after 2 click </div>
 <div v-click="'-1'"> visible after 1 click </div>
 <div v-click="4"> visible after 4 clicks </div>
-~~~
+```
 
 The following example synchronizes the highlighting of the two code blocks:
 
-~~~md
+````md
 ```js {1|2}{at:1}
 1 + 1
 'a' + 'b'
@@ -182,7 +183,7 @@ The following example synchronizes the highlighting of the two code blocks:
 2
 'ab'
 ```
-~~~
+````
 
 ### Enter & Leave
 
@@ -385,8 +386,11 @@ You can enable [MDC (Markdown Component) Syntax](/guide/syntax#mdc-syntax) suppo
 transition: view-transition
 mdc: true
 ---
+
 # View Transition {.inline-block.view-transition-title}
+
 ---
+
 # View Transition {.inline-block.view-transition-title}
 ```
 

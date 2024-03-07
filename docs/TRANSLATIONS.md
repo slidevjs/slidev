@@ -9,7 +9,9 @@ You can find the repositories for each existing translation in [README.md](./REA
 If the language you want to contribute isn't on the list, join [our Discord server](https://chat.sli.dev), and find the `#translations` channel to see if someone is already working on the language you want, consider joining them and translate together. If not, you can start a new translation project with the following steps.
 
 In case it's already been translated but you're wondering how to maintain it, skip to the end.
+
 ## Some tips before you get started
+
 - It is recommended that you use your IDE of choice (e.g VSCode) paired with a development server running, so you can see your translation changes in real-time.
 - You can mark these checkmarks as the translation progresses or use your own workflow. The translations don't need to be made in any particular order.
 - Translations don't need to be literal, but they should convey the same message. In case you're not sure how to translate something, you can either leave it as it is or use online tools like WordReference or Linguee to aid you.

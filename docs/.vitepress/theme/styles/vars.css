@@ -44,10 +44,10 @@
  * -------------------------------------------------------------------------- */
 
 :root {
-  --vp-c-brand-1: #3AB9D4;
+  --vp-c-brand-1: #3ab9d4;
   --vp-c-brand-2: #60c4db;
   --vp-c-brand-3: #6fcce1;
-  --vp-c-brand-soft: #3AB9D450;
+  --vp-c-brand-soft: #3ab9d450;
   --vp-c-bg-alt: #f9f9f9;
 
   --vp-font-family-mono: theme('fontFamily.mono');
@@ -56,8 +56,8 @@
 .dark {
   --vp-c-brand-1: #6fcce1;
   --vp-c-brand-2: #60c4db;
-  --vp-c-brand-3: #3AB9D4;
-  --vp-c-brand-soft: #3AB9D450;
+  --vp-c-brand-3: #3ab9d4;
+  --vp-c-brand-soft: #3ab9d450;
   --vp-c-bg-alt: #18181b;
   --vp-c-gutter: #8883;
 }

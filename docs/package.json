@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
-    "lint": "eslint .",
     "postinstall": "node .vitepress/scripts/prepare.js"
   },
   "dependencies": {
@@ -14,7 +13,6 @@
     "typeit": "^7.0.4"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.4",
     "@iconify/json": "^2.2.188",
     "@shikijs/vitepress-twoslash": "^1.1.7",
     "@slidev/client": "0.34.3",
@@ -24,7 +22,6 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.11.24",
     "@unocss/reset": "^0.58.5",
-    "eslint": "^8.57.0",
     "fs-extra": "^11.2.0",
     "markdown-it": "^14.0.0",
     "shiki": "^1.1.7",
