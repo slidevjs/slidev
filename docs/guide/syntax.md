@@ -72,7 +72,7 @@ Refer to [customization](/custom/) for more details.
 
 > Available since v0.44
 
-The custom syntax might not be compactible with some formatters like Prettier.
+The custom syntax might not be compatible with some formatters like Prettier.
 You can either install the [Prettier Plugin](/guide/editors#prettier-plugin) or use a direct `yaml` code block to define the frontmatter instead:
 
 ````md
@@ -100,7 +100,7 @@ This is a page with the layout `center` and a background image.
 
 ## Code Blocks
 
-One big reason I am building Slidev is needing to make my code look just right in the slides. So just as you expected, you can use Markdown flavored code block to highlight your code.
+One big reason I am building Slidev is the need to make my code look just right in the slides. So just as you expected, you can use Markdown-flavored code block to highlight your code.
 
 ````md
 ```ts
@@ -170,7 +170,7 @@ function add(
 Learn more in the [clicks animations guide](./animations#positioning).
 :::
 
-If the code doesn't fit into one slide, you use the `maxHeight` to set fixed height and enable scrolling:
+If the code doesn't fit into one slide, you use the `maxHeight` to set a fixed height and enable scrolling:
 
 ````md
 ```ts {2|3|7|12}{maxHeight:'100px'}
@@ -213,16 +213,16 @@ const count = ref(0)
 //            ^?
 ```
 
-<!-- For the popup to not to overlap the content below -->
+<!-- For the popup to not overlap the content below -->
 <div class="py-20" />
 
 ### Shiki Magic Move
 
 > Available since v0.48
 
-[Shiki Magic Move](https://github.com/shikijs/shiki-magic-move) enables you to have granular transition between code changes, similar to Keynote's Magic Move. You can check [the playground](https://shiki-magic-move.netlify.app/) to see how it works.
+[Shiki Magic Move](https://github.com/shikijs/shiki-magic-move) enables you to have a granular transition between code changes, similar to Keynote's Magic Move. You can check [the playground](https://shiki-magic-move.netlify.app/) to see how it works.
 
-In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is wrap multiple code blocks representing each steps with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphing to each steps as you click.
+In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is to wrap multiple code blocks representing each step with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphs to each step as you click.
 
 `````md
 ````md magic-move
@@ -238,7 +238,7 @@ console.log(`Step ${3}` as string)
 ````
 `````
 
-It's also possible mix Magic Move with [line highlighting](#line-highlighting), for example:
+It's also possible to mix Magic Move with [line highlighting](#line-highlighting), for example:
 
 `````md
 ````md magic-move {at:4} // [!code hl]
@@ -322,7 +322,7 @@ blockquote {
 
 ## Static Assets
 
-Just like you would do in markdown, you can use images pointing to a remote or local url.
+Just like you would do in markdown, you can use images pointing to a remote or local URL.
 
 For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com/antfu/vite-plugin-remote-assets) will cache them into the disk at the first run so you can have instant loading even for large images later on.
 
@@ -330,13 +330,13 @@ For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com
 ![Remote Image](https://sli.dev/favicon.png)
 ```
 
-For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with **leading slash**.
+For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash**.
 
 ```md
 ![Local Image](/pic.png)
 ```
 
-For you want to apply custom sizes or styles, you can convert them to the `<img>` tag
+If you want to apply custom sizes or styles, you can convert them to the `<img>` tag
 
 ```html
 <img src="/pic.png" class="m-40 h-40 rounded shadow" />
@@ -384,7 +384,7 @@ For some slides you might have longer notes that might be hard to find where you
 
 ## Icons
 
-Slidev allows you to have access to almost all the popular open-source iconsets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
+Slidev allows you to have access to almost all the popular open-source icon sets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
 
 The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-name}-{icon-name}`. For example:
 
@@ -680,7 +680,7 @@ background: https://sli.dev/foo.png
 Cover Page
 ```
 
-They will end up being equivalent of the following page:
+They will end up being equivalent to the following page:
 
 ```md
 ---

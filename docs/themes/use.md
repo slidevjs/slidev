@@ -37,7 +37,7 @@ If you want to get full control of the current theme, you can **eject** it to yo
 $ slidev theme eject
 ```
 
-It will eject the theme you are using currently into `./theme`, and changed your frontmatter to
+It will eject the theme you are using currently into `./theme`, and change your frontmatter to
 
 ```yaml
 ---

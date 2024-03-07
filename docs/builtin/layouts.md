@@ -154,11 +154,11 @@ To introduce the presentation, usually with the presentation title, a short desc
 
 ### `none`
 
-A layout without any existent styling.
+A layout without any existing styling.
 
 ### `quote`
 
-To display a quotation with prominience.
+To display a quotation with prominence.
 
 ### `section`
 

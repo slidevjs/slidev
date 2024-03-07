@@ -21,7 +21,7 @@ Learn more about the [pre-configurations here](https://github.com/slidevjs/slide
 
 > Available since v0.21
 
-To configure the built-in plugins list above, create `vite.config.ts` with the following content. Please note Slidev has some preconfigure options for those plugins, this usage will override some of them, which could potentially cause the app to break. Please treat this as **an advanced feature**, make sure you know what you are doing before moving on.
+To configure the built-in plugins listed above, create `vite.config.ts` with the following content. Please note Slidev has some preconfigure options for those plugins, this usage will override some of them, which could potentially cause the app to break. Please treat this as **an advanced feature**, make sure you know what you are doing before moving on.
 
 ```ts
 import { defineConfig } from 'vite'

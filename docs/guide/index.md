@@ -21,7 +21,7 @@ You can learn more about the rationale behind the project in the [Why Slidev](/g
 - 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides
 - 🧮 [**LaTeX**](/guide/syntax.html#latex) - built-in LaTeX math equations support
 - 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams with textual descriptions
-- 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any iconset directly
+- 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any icon set directly
 - 💻 [**Editors**](/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
 - 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
@@ -80,7 +80,7 @@ Run `slidev --help` for more options available.
 
 ## Markdown Syntax
 
-Slidev reads your `slides.md` file under your project root and converts them into slides. Whenever you made changes to it, the content of the slides will be updated immediately. For example:
+Slidev reads your `slides.md` file under your project root and converts them into slides. Whenever you make changes to it, the content of the slides will be updated immediately. For example:
 
 ````md
 # Slidev
