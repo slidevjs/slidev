@@ -123,7 +123,6 @@ fonts:
 ---
 
 # Hi
-
 ",
       "start": 0,
       "title": "Hi",
@@ -200,7 +199,6 @@ This is note
       "note": undefined,
       "raw": "
 # Morning
-
 ",
       "start": 24,
       "title": "Morning",
@@ -290,7 +288,6 @@ this should be treated as code block
 
 Also part of the code block
 \`\`\`
-
 ",
       "start": 39,
       "title": undefined,
@@ -322,11 +319,11 @@ layout: from yaml
       "level": undefined,
       "note": undefined,
       "raw": "\`\`\`yaml
+# The first yaml block should be treated as frontmatter
 layout: from yaml
 \`\`\`
 
 Content 1
-
 ",
       "start": 51,
       "title": undefined,
@@ -375,7 +372,6 @@ layout: should not from yaml 1
 \`\`\`
 
 Content 2
-
 ",
       "start": 59,
       "title": "When there is already a frontmatter, the first yaml block should be treated as content",
@@ -422,7 +418,6 @@ layout: should not from yaml 2
 \`\`\`
 
 Content 3
-
 ",
       "start": 71,
       "title": "Title",
@@ -534,7 +529,6 @@ mdc: true
 # MDC{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
-
 ",
       "start": 0,
       "title": "MDC{style="color:red"}",
@@ -655,7 +649,6 @@ Sample Text
 \`\`\`ts
 console.log('Hello World')
 \`\`\`
-
 ",
       "start": 0,
       "title": "H1",
@@ -696,7 +689,6 @@ console.log('Hello World')
 - Hi
 - Hey
 - Yo
-
 ",
       "start": 11,
       "title": "Hello",
@@ -722,7 +714,6 @@ Nice to meet you
       "note": undefined,
       "raw": "
 Nice to meet you
-
 ",
       "start": 20,
       "title": undefined,
@@ -1072,7 +1063,6 @@ $x+2$
 # Inline Page
 
 $x+2$
-
 ",
       "start": 20,
       "title": "Inline Page",
