@@ -15,6 +15,7 @@
     },
     "resolveJsonModule": true,
     "types": [
+      "vite",
       "vite/client",
       "node",
       "vite-plugin-vue-server-ref/module"
