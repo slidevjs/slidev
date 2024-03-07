@@ -272,23 +272,15 @@ console.log('HelloWorld')
 
 Learn more about [configuring Monaco](/custom/config-monaco).
 
-#### Monaco Diff
+#### Monaco Diff Editor
 
-Monaco can also generate a diff between two code blocks. Use `{monaco-diff}` to turn the block into a [diff Monaco editor](https://microsoft.github.io/monaco-editor/playground.html?source=v0.36.1#example-creating-the-diffeditor-multi-line-example) and use `~~~` to separate both original and modified version of the code!
+Monaco can also generate a diff between two code blocks. Use `{monaco-diff}` to turn the block into a [Monaco diff editor](https://microsoft.github.io/monaco-editor/playground.html?source=v0.36.1#example-creating-the-diffeditor-multi-line-example) and use `~~~` to separate the original and modified code!
 
 ````md
 ```ts {monaco-diff}
-This line is removed on the right.
-just some text
-abcd
-efgh
-Some more text
+console.log('Original text')
 ~~~
-just some text
-abcz
-zzzzefgh
-Some more text.
-This line is removed on the left.
+console.log('Modified text')
 ```
 ````
 
@@ -380,19 +372,19 @@ This is another note
 -->
 ```
 
-Basic Markdown and HTML are also supported in notes on Presenter renderering.
+Basic Markdown and HTML are also supported in notes on Presenter rendering.
 
 ### Click Markers
 
 > Available since v0.48
 
-For some slides you might have longer notes that might be hard to find where you are looking at, we introduced the click markers that allows highlighting and auto-scrolling to the section of notes of your corresponding content. Put `[click]` markers in your notes for the timming you need to go to another [click](/guide/animations#click-animations), Slidev divide the content between the click markers and highlight them in presenter notes, synchronized with your slide progress.
+For some slides you might have longer notes that might be hard to find where you are looking at, we introduced the click markers that allow highlighting and auto-scrolling to the section of notes of your corresponding content. Put `[click]` markers in your notes for the timing you need to go to another [click](/guide/animations#click-animations), Slidev divides the content between the click markers and highlights them in presenter notes, synchronized with your slide progress.
 
 <!-- TODO: add a video -->
 
 ## Icons
 
-Slidev allows you to have the accessing to almost all the popular open-source iconsets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
+Slidev allows you to have access to almost all the popular open-source iconsets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
 
 The naming follows [Iconify](https://iconify.design/)'s conversion `{collection-name}-{icon-name}`. For example:
 
@@ -501,17 +493,34 @@ This shows on the left
 
 > Available since v0.47.0
 
-You can import code snippets from existing files via following syntax:
+You can import code snippets from existing files via the following syntax:
 
 ```md
 <<< @/snippets/snippet.js
 ```
 
 ::: tip
-The value of `@` corresponds to the source root, the directory where the `slides.md` is located.
+The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets`, for compatibility with the Monaco editor. Alternatively, you can also import from relative paths.
 :::
 
-This feature is vendored from VitePress, learn more about it in [VitePress's documentation](https://vitepress.dev/guide/markdown#import-code-snippets).
+You can also use a [VS Code region](https://code.visualstudio.com/docs/editor/codebasics#_folding) to only include the corresponding part of the code file:
+
+```md
+<<< @/snippets/snippet.js#region-name
+```
+
+To explicitly specify the language of the imported code, you can add a language identifier after:
+
+```md
+<<< @/snippets/snippet.js ts
+```
+
+Any code block features like [line highlighting](#line-highlighting) and [Monaco editor](#monaco-editor) are also supported:
+
+```md
+<<< @/snippets/snippet.js {2,3|5}{lines:true}
+<<< @/snippets/snippet.js ts {monaco}{height:200px}
+```
 
 ## Configurations
 
