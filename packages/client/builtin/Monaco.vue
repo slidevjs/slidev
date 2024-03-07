@@ -12,11 +12,12 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import type * as monaco from 'monaco-editor'
-import { computed, nextTick, onMounted, ref } from 'vue'
 import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
+import type * as monaco from 'monaco-editor'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { makeId } from '../logic/utils'
+import CodeRunner from '../internals/CodeRunner.vue'
 
 const props = withDefaults(defineProps<{
   codeLz: string
@@ -27,6 +28,11 @@ const props = withDefaults(defineProps<{
   height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
   editorOptions?: monaco.editor.IEditorOptions
   ata?: boolean
+  runnable?: boolean
+  autorun?: boolean | 'once'
+  outputHeight?: string
+  highlightOutput?: boolean
+  runnerOptions?: Record<string, unknown>
 }>(), {
   codeLz: '',
   lang: 'typescript',
@@ -34,10 +40,13 @@ const props = withDefaults(defineProps<{
   lineNumbers: 'off',
   height: 'initial',
   ata: true,
+  runnable: false,
+  autorun: true,
+  highlightOutput: true,
 })
 
-const code = lz.decompressFromBase64(props.codeLz).trimEnd()
-const diff = props.diffLz && lz.decompressFromBase64(props.diffLz).trimEnd()
+const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
+const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -69,7 +78,8 @@ onMounted(async () => {
   // Lazy load monaco, so it will be bundled in async chunk
   const { default: setup } = await import('../setup/monaco')
   const { ata, monaco } = await setup()
-  const model = monaco.editor.createModel(code, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+  const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+  model.onDidChangeContent(() => code.value = model.getValue())
   const commonOptions = {
     automaticLayout: true,
     readOnly: props.readonly,
@@ -89,7 +99,8 @@ onMounted(async () => {
 
   let editableEditor: monaco.editor.IStandaloneCodeEditor
   if (diff) {
-    const diffModel = monaco.editor.createModel(diff, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+    const diffModel = monaco.editor.createModel(diff.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
+    diffModel.onDidChangeContent(() => code.value = model.getValue())
     const editor = monaco.editor.createDiffEditor(container.value!, {
       renderOverviewRuler: false,
       ...commonOptions,
@@ -145,8 +156,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div ref="outer" class="slidev-monaco-container" :style="{ height }">
-    <div ref="container" class="absolute inset-0.5" />
+  <div class="relative slidev-monaco-container">
+    <div ref="outer" class="relative slidev-monaco-container-inner" :style="{ height }">
+      <div ref="container" class="absolute inset-0.5" />
+    </div>
+    <CodeRunner
+      v-if="props.runnable"
+      v-model="code"
+      :lang="lang"
+      :autorun="props.autorun"
+      :height="props.outputHeight"
+      :highlight-output="props.highlightOutput"
+      :runner-options="props.runnerOptions"
+    />
   </div>
 </template>
 
@@ -158,10 +180,13 @@ div[widgetid='messageoverlay'] {
 .slidev-monaco-container {
   position: relative;
   margin: var(--slidev-code-margin);
-  padding: var(--slidev-code-padding);
   line-height: var(--slidev-code-line-height);
   border-radius: var(--slidev-code-radius);
   background: var(--slidev-code-background);
+}
+
+.slidev-monaco-container-inner {
+  padding: var(--slidev-code-padding);
 }
 
 .slidev-monaco-container .monaco-editor {

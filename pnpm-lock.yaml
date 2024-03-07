@@ -212,6 +212,27 @@ importers:
         specifier: ^3.4.21
         version: 3.4.21(typescript@5.3.3)
 
+  demo/vue-runner:
+    devDependencies:
+      '@slidev/cli':
+        specifier: workspace:*
+        version: link:../../packages/slidev
+      '@slidev/theme-default':
+        specifier: ^0.25.0
+        version: 0.25.0
+      '@slidev/theme-seriph':
+        specifier: ^0.25.0
+        version: 0.25.0
+      '@vue/compiler-sfc':
+        specifier: ^3.4.21
+        version: 3.4.21
+      nodemon:
+        specifier: ^3.1.0
+        version: 3.1.0
+      vue:
+        specifier: ^3.4.21
+        version: 3.4.21(typescript@5.3.3)
+
   docs:
     dependencies:
       '@antfu/utils':

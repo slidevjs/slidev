@@ -34,7 +34,7 @@ export interface SlidevConfig {
    * Enable Monaco
    *
    * @see https://sli.dev/custom/config-monaco.html
-   * @default 'dev'
+   * @default true
    */
   monaco: boolean | 'dev' | 'build'
   /**

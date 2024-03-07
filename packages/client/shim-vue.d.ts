@@ -26,7 +26,7 @@ declare module 'vue-router' {
     }
 
     // private fields
-    __clicksContext: null | import('@slidev/types').ClicksContext
+    __clicksContext: import('@slidev/types').ClicksContext | undefined
     __preloaded?: boolean
   }
 }

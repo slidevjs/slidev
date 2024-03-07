@@ -262,6 +262,8 @@ const add = () => count += 1
 
 ### Monaco Editor
 
+<video src="https://github.com/slidevjs/slidev/assets/11247099/0c6ce681-80d3-4555-93bf-9288ee533462" controls rounded shadow></video>
+
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
 ````md
@@ -283,6 +285,33 @@ console.log('Original text')
 console.log('Modified text')
 ```
 ````
+
+#### Monaco Runner
+
+> Available since v0.48
+
+Slidev also provides the Monaco Runner Editor, which allows you to run the code directly in the editor and see the result. Use `{monaco-run}` to turn the block into a Monaco Runner Editor.
+
+````md
+```ts {monaco-run}
+function distance(x: number, y: number) {
+  return Math.sqrt(x ** 2 + y ** 2)
+}
+console.log(distance(3, 4))
+```
+````
+
+It will provide the editor with a "Run" button, and shows the result right below the code block. You many also modify the code and the result will be re-evaluated on the fly.
+
+By default it will automatically runs the code when the slide is loaded, if you want to always explicitly trigger the run, you can set `{autorun:false}`.
+
+````md
+```ts {monaco-run} {autorun:false}
+console.log('HelloWorld')
+```
+````
+
+Currently Slidev supports running JavaScript and TypeScript code out-of-box. Refer to [Custom Code Runners](/custom/config-code-runners) for custom languages support.
 
 ## Embedded Styles
 
@@ -609,6 +638,15 @@ sequenceDiagram
 ```
 ````
 
+````
+
+```
+
+```
+````
+
+`````
+
 You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
 
 ````md
@@ -740,3 +778,16 @@ The **default** slot
 ```
 
 Learn more about [the syntax](https://content.nuxt.com/guide/writing/mdc).
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+`````

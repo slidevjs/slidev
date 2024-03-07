@@ -562,12 +562,28 @@ hide: false
 
 # Monaco Editor
 
+Slidev provides built-in Moanco Editor support.
+
+Add `{monaco}` to the code block to turn it into an editor:
+
 ```ts {monaco}
 import { ref } from 'vue'
 import hello from './external'
 
 const code = ref('const a = 1')
 hello()
+```
+
+Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
+
+```ts {monaco-run}
+function fibonacci(n: number): number {
+  return n <= 1
+    ? n
+    : fibonacci(n - 1) + fibonacci(n - 2) // you know, this is NOT the best way to do it :P
+}
+
+console.log(Array.from({ length: 10 }, (_, i) => fibonacci(i + 1)))
 ```
 
 ---
