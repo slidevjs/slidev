@@ -185,7 +185,7 @@ export function transformMarkdownMonaco(md: string) {
     },
   )
   md = md.replace(
-    /^```(\w+?)\s*{monaco-runnable}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg,
+    /^```(\w+?)\s*{monaco-run}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg,
     (full, lang = 'ts', options = '{}', code: string) => {
       lang = lang.trim()
       options = options.trim() || '{}'

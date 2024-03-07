@@ -574,9 +574,9 @@ const code = ref('const a = 1')
 hello()
 ```
 
-Use `{monaco-runnable}` to create an editor that can execute the code directly in the slide:
+Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
 
-```ts {monaco-runnable}
+```ts {monaco-run}
 function fibonacci(n: number): number {
   return n <= 1
     ? n

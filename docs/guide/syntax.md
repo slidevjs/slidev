@@ -284,6 +284,23 @@ console.log('Modified text')
 ```
 ````
 
+#### Monaco Runner
+
+> Available since v0.48
+
+Slidev also provides the Monaco Runner Editor, which allows you to run the code directly in the editor and see the result. Use `{monaco-run}` to turn the block into a Monaco Runner Editor.
+
+````md
+```ts {monaco-run}
+function distance(x: number, y: number) {
+  return Math.sqrt(x ** 2 + y ** 2)
+}
+console.log(distance(3, 4))
+```
+````
+
+It will provide the editor with a "Run" button, and shows the result right below the code block. You many also modify the code and the result will be re-evaluated on the fly. Currently Slidev supports running JavaScript and TypeScript code out-of-box. Refer to [Custom Code Runners](/custom/config-code-runners) for custom languages support.
+
 ## Embedded Styles
 
 You can use `<style>` tag in your Markdown directly to override styles for the **current slide**.
@@ -609,6 +626,15 @@ sequenceDiagram
 ```
 ````
 
+````
+
+```
+
+```
+````
+
+`````
+
 You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
 
 ````md
@@ -740,3 +766,16 @@ The **default** slot
 ```
 
 Learn more about [the syntax](https://content.nuxt.com/guide/writing/mdc).
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+`````
