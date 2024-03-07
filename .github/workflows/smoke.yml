@@ -85,7 +85,7 @@ jobs:
         with:
           install-command: echo
           build: echo
-          start: pnpm --dir ../temp/slidev-project dev
+          start: pnpm --dir ../temp/slidev-project dev --port 3041
           spec: cypress/e2e/examples/smoke.spec.ts
 
       - name: Install globally
