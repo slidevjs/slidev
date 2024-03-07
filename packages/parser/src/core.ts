@@ -1,15 +1,15 @@
 import YAML from 'js-yaml'
-import { isObject, objectMap } from '@antfu/utils'
+import { ensurePrefix, isObject, objectMap } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
-  return `${data.slides.map(stringifySlide).join('').trim()}\n`
+  return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
 }
 
 export function stringifySlide(data: SourceSlideInfo, idx = 0) {
   return (data.raw.startsWith('---') || idx === 0)
     ? data.raw
-    : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
+    : `---\n${ensurePrefix('\n', data.raw)}`
 }
 
 export function prettifySlide(data: SourceSlideInfo) {
@@ -21,9 +21,7 @@ export function prettifySlide(data: SourceSlideInfo) {
       : `---\n${data.frontmatterRaw.trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
-    data.raw += `\n<!--\n${data.note.trim()}\n-->\n\n`
-  else
-    data.raw += '\n'
+    data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
   return data
 }
 
