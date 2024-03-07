@@ -262,6 +262,8 @@ const add = () => count += 1
 
 ### Monaco Editor
 
+<video src="https://github.com/slidevjs/slidev/assets/11247099/0c6ce681-80d3-4555-93bf-9288ee533462" controls rounded shadow></video>
+
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
 ````md
