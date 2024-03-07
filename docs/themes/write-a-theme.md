@@ -21,9 +21,9 @@ A theme can contribute to the following points:
 
 ## Conventions
 
-Themes are published to npm registry, and they should follow the conventions below:
+Themes are published to the NPM registry, and they should follow the conventions below:
 
-- Package name should start with `slidev-theme-`, for example: `slidev-theme-awesome`
+- Package name should start with `slidev-theme-`, for example, `slidev-theme-awesome`
 - Add `slidev-theme` and `slidev` in the `keywords` field of your `package.json`
 
 ## Setup
@@ -76,7 +76,7 @@ A theme can provide default [configurations](/custom/#frontmatter-configures) vi
 }
 ```
 
-Fonts will be auto imported from [Google Fonts](https://fonts.google.com/).
+Fonts will be auto-imported from [Google Fonts](https://fonts.google.com/).
 
 Learn more about [fonts](/custom/fonts) and [frontmatter configurations](/custom/#frontmatter-configures).
 
@@ -84,7 +84,7 @@ Learn more about [fonts](/custom/fonts) and [frontmatter configurations](/custom
 
 ### Color Schema
 
-By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme be presented in a designed color schema, you will need to specify it explicitly in `package.json`
+By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme to be presented in a designed color schema, you will need to specify it explicitly in `package.json`
 
 ```json
 // package.json
@@ -100,7 +100,7 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 }
 ```
 
-To access the dark mode when creating your theme styles, you can wrap the dark-mode-specific css inside a `dark` class:
+To access the dark mode when creating your theme styles, you can wrap the dark-mode-specific CSS inside a `dark` class:
 
 ```css
 /* general css here */
@@ -120,7 +120,7 @@ Slidev toggles a `dark` class on the page's `html` element for switching color s
 
 Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/), [Shiki](https://github.com/shikijs/shiki). For more information please refer to [the syntax highlighting docs](/custom/highlighters).
 
-You can support either one of them, or both. Refer to the default theme for configurations examples [`./styles/code.css`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/styles/code.css) / [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/setup/shiki.ts).
+You can support either one of them, or both. Refer to the default theme for configuration examples [`./styles/code.css`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/styles/code.css) / [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/setup/shiki.ts).
 
 Also, remember to specify the supported highlighters in your `package.json`
 
@@ -135,7 +135,7 @@ Also, remember to specify the supported highlighters in your `package.json`
 
 ### Slidev Version
 
-If the theme is relying on a specific feature of Slidev that are newly introduced, you can set the minimal Slidev version required to have your theme working properly:
+If the theme is relying on a specific feature of Slidev that is newly introduced, you can set the minimal Slidev version required to have your theme working properly:
 
 ```json
 // package.json

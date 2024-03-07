@@ -64,7 +64,7 @@ your-slidev/
       └── my-cool-theme.vue
 ```
 
-You can use any filename for your layout. You then reference your layout in you YAML header using the filename.
+You can use any filename for your layout. You then reference your layout in your YAML header using the filename.
 
 ```yaml
 ---
@@ -95,7 +95,7 @@ Assets in this directory will be served at root path `/` during dev, and copied 
 
 Conventions: `./style.css` | `./styles/index.{css,js,ts}`
 
-Files following this convention will be injected to the App root. If you need to import multiple css entries, you can create the following structure and managing the import order yourself.
+Files following this convention will be injected to the App root. If you need to import multiple CSS entries, you can create the following structure and manage the import order yourself.
 
 ```bash
 your-slidev/
@@ -115,7 +115,7 @@ import './code.css'
 import './layouts.css'
 ```
 
-Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use css nesting and [at-directives](https://unocss.dev/transformers/directives#apply) out-of-box. For example:
+Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://postcss.org/), so you can use CSS nesting and [at-directives](https://unocss.dev/transformers/directives#apply) out-of-box. For example:
 
 <!-- eslint-skip -->
 

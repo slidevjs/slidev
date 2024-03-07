@@ -104,7 +104,7 @@ Insert a link you can use to navigate to a given slide.
 
 Parameters:
 
-- `to` (`string | number`): The path of the slide to navigate to (slides starts from `1`)
+- `to` (`string | number`): The path of the slide to navigate to (slides path starts from `1`)
 - `title` (`string`): The title to display
 
 One can use a string as `to`, provided the corresponding route exists, e.g.
@@ -119,7 +119,7 @@ routeAlias: solutions
 
 ### `RenderWhen`
 
-Render slot only when the context match (for example when we are in presenter view).
+Render slot only when the context matches (for example when we are in presenter view).
 
 #### Usage
 
@@ -157,9 +157,9 @@ Total number of slides.
 
 Insert the main title from a slide parsed as HTML.
 
-Titles and title levels get automatically retrieved from the first title element of each slides.
+Titles and title levels get automatically retrieved from the first title element of each slide.
 
-You can override this automatic behaviour for a slide by using the front matter syntax:
+You can override this automatic behavior for a slide by using the front matter syntax:
 
 ```yml
 ---
@@ -190,7 +190,7 @@ Parameters:
 
 Insert a Table Of Content.
 
-If you want a slide to not appear in the `<Toc>` component, you can use in the front matter block of the slide:
+If you want a slide to not appear in the `<Toc>` component, you can use the `hideInToc` option in the frontmatter of the slide:
 
 ```yml
 ---
@@ -257,7 +257,7 @@ See https://sli.dev/guide/animations.html
 
 ### `Youtube`
 
-Embed a youtube video.
+Embed a YouTube video.
 
 #### Usage
 
@@ -267,11 +267,11 @@ Embed a youtube video.
 
 Parameters:
 
-- `id` (`string`, required): id of the youtube video
+- `id` (`string`, required): id of the YouTube video
 - `width` (`number`): width of the video
 - `height` (`number`): height of the video
 
-You can also make the video start at specific time if you add `?start=1234` to the id value (where 1234 are seconds),
+You can also make the video start at a specific time if you add `?start=1234` to the id value (where `1234` is seconds),
 
 ## Custom Components
 
@@ -281,6 +281,6 @@ Read more in the [Customization](/custom/directory-structure#components) section
 
 ## Theme-provided Components
 
-Themes can provide components as well. Please read their documentations for what they have provided.
+Themes can provide components as well. Please read their documentation for what they have provided.
 
 Check more in the [directory structure](/custom/directory-structure) section.

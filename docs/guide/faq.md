@@ -45,7 +45,7 @@ The third column (10% width to parent container)
 
 ## Positioning
 
-Slides are defined in fixed sizes (default `980x552px`) and scale to fit with the user screen. You can safely use absolute position in your slides as they will scale along with the screen.
+Slides are defined in fixed sizes (default `980x552px`) and scaled to fit with the user screen. You can safely use absolute position in your slides as they will scale along with the screen.
 
 For example:
 
@@ -65,7 +65,7 @@ canvasWidth: 800
 
 ## Font Size
 
-If you feel the font size in your slides are too small, you can adjust it in a few ways:
+If you feel the font size in your slides is too small, you can adjust it in a few ways:
 
 ### Override Local Style
 
