@@ -18,3 +18,5 @@ components.d.ts
 .slidev
 .eslintcache
 .vite-inspect
+docs/.vitepress/cache
+docs/.vitepress/@slidev

@@ -2,3 +2,4 @@ packages:
   - packages/*
   - demo/*
   - cypress/fixtures/*
+  - docs

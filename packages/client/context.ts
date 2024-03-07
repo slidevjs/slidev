@@ -39,6 +39,8 @@ export function useSlideContext() {
   }
 }
 
+export type SlideContext = ReturnType<typeof useSlideContext>
+
 export function provideFrontmatter(frontmatter: Record<string, any>) {
   provideLocal(injectionFrontmatter, frontmatter)
 

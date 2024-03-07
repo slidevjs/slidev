@@ -19,6 +19,8 @@
     "lint": "eslint .",
     "lint:fix": "nr lint --fix",
     "typecheck": "vue-tsc --noEmit",
+    "docs": "pnpm -C docs run dev",
+    "docs:build": "pnpm -C docs run build",
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test"
   },

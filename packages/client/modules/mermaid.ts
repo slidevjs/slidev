@@ -8,8 +8,10 @@ mermaid.startOnLoad = false
 mermaid.initialize({ startOnLoad: false })
 
 const cache = new Map<string, string>()
+let containerElement: Element | undefined
 
 export async function renderMermaid(lzEncoded: string, options: any) {
+  containerElement ??= document.getElementById('mermaid-rendering-container')!
   const key = lzEncoded + JSON.stringify(options)
   const _cache = cache.get(key)
   if (_cache)
@@ -22,7 +24,7 @@ export async function renderMermaid(lzEncoded: string, options: any) {
   })
   const code = lz.decompressFromBase64(lzEncoded)
   const id = makeId()
-  const { svg } = await mermaid.render(id, code)
+  const { svg } = await mermaid.render(id, code, containerElement)
   cache.set(key, svg)
   return svg
 }

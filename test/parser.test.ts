@@ -14,6 +14,10 @@ function configDiff(v: SlidevConfig) {
   return res
 }
 
+function replaceCRLF(s: string) {
+  return s.replace(/\r\n/g, '\n')
+}
+
 describe('md parser', () => {
   const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
@@ -25,7 +29,7 @@ describe('md parser', () => {
     it(basename(file), async () => {
       const data = await load(userRoot, file)
 
-      expect(stringify(data.entry).trim()).toEqual(data.entry.raw.trim())
+      expect(stringify(data.entry).trim()).toEqual(replaceCRLF(data.entry.raw.trim()))
 
       prettify(data.entry)
 

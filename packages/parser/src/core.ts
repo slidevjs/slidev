@@ -1,5 +1,5 @@
 import YAML from 'js-yaml'
-import { isObject, objectMap } from '@antfu/utils'
+import { ensurePrefix, isObject, objectMap } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
@@ -9,20 +9,19 @@ export function stringify(data: SlidevMarkdown) {
 export function stringifySlide(data: SourceSlideInfo, idx = 0) {
   return (data.raw.startsWith('---') || idx === 0)
     ? data.raw
-    : `---\n${data.raw.startsWith('\n') ? data.raw : `\n${data.raw}`}`
+    : `---\n${ensurePrefix('\n', data.raw)}`
 }
 
 export function prettifySlide(data: SourceSlideInfo) {
-  data.content = `\n${data.content.trim()}\n`
-  data.raw = Object.keys(data.frontmatter || {}).length
+  const trimed = data.content.trim()
+  data.content = trimed ? `\n${data.content.trim()}\n` : ''
+  data.raw = data.frontmatterRaw
     ? data.frontmatterStyle === 'yaml'
-      ? `\`\`\`yaml\n${YAML.dump(data.frontmatter).trim()}\n\`\`\`\n${data.content}`
-      : `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
+      ? `\`\`\`yaml\n${data.frontmatterRaw.trim()}\n\`\`\`\n${data.content}`
+      : `---\n${data.frontmatterRaw.trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
     data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
-  else
-    data.raw += '\n'
   return data
 }
 
