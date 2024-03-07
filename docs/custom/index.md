@@ -42,7 +42,7 @@ highlighter: shiki
 # show line numbers in code blocks
 lineNumbers: false
 # enable monaco editor, can be boolean, 'dev' or 'build'
-monaco: dev
+monaco: true
 # Where to load monaco types from, can be 'cdn', 'local' or 'none'
 monacoTypesSource: local
 # explicitly specify extra local packages to import the types for

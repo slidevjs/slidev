@@ -9,7 +9,7 @@ export function getDefaultConfig(): SlidevConfig {
     titleTemplate: '%s - Slidev',
     addons: [],
     remoteAssets: false,
-    monaco: 'dev',
+    monaco: true,
     monacoTypesSource: 'local',
     monacoTypesAdditionalPackages: [],
     download: false,
