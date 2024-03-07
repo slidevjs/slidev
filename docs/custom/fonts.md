@@ -2,9 +2,9 @@
 
 > Available since v0.20
 
-While you can use HTML and CSS to custom the fonts and style for your slides as you want, Slidev also provides a convenient way to use them effortlessly.
+While you can use HTML and CSS to customize the fonts and style for your slides as you want, Slidev also provides a convenient way to use them effortlessly.
 
-In your frontmatter, configure as following
+In your frontmatter, configure as the following:
 
 ```yaml
 ---
@@ -82,7 +82,7 @@ will result in
 }
 ```
 
-If you want to disable the fallback fonts, configure as following
+If you want to disable the fallback fonts, configure as the following:
 
 ```yaml
 ---
@@ -97,7 +97,7 @@ fonts:
 - Options: `google` | `none`
 - Default: `google`
 
-Currently, only Google Fonts is supported, we are planned to add more providers in the future. Specify to `none` will disable the auto-importing feature entirely and treat all the fonts local.
+Currently, only Google Fonts is supported, we are planning to add more providers in the future. Specify to `none` will disable the auto-importing feature entirely and treat all the fonts locally.
 
 ```yaml
 ---

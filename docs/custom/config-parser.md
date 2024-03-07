@@ -14,11 +14,11 @@ Configuring the markdown parser used in step 2 can be done by [configuring Vite 
 
 > Available since v0.37.0.
 
-:::warning
+::: warning
 Important: when modifying the preparser configuration, you need to stop and start slidev again (restart might not be sufficient).
 :::
 
-The preparser (step 1 above) is highly extensible and allows to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to break [editor integrations](/guide/editors) due to implicit changes in the syntax.
+The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](/guide/editors) due to implicit changes in the syntax.
 
 To customize it, create a `./setup/preparser.ts` file with the following content:
 
@@ -39,7 +39,7 @@ export default definePreparserSetup(({ filepath, headmatter, mode }) => {
 })
 ```
 
-This example systematically replaces any `@@@` line by a line with `hello`. It illustrates the structure of a preparser configuration file and some of the main concepts the preparser involves:
+This example systematically replaces any `@@@` line with a line with `hello`. It illustrates the structure of a preparser configuration file and some of the main concepts the preparser involves:
 
 - `definePreparserSetup` must be called with a function as parameter.
 - The function receives the file path (of the root presentation file), the headmatter (from the md file) and, since v0.48.0, a mode (dev, build or export). It could use this information (e.g., enable extensions based on the presentation file or whether we are exporting a PDF).
@@ -64,7 +64,7 @@ Imagine a situation where (part of) your presentation is mainly showing cover im
 @src: page2.md
 @cover: /break.jpg
 @src: pages3-4.md
-@cover: https://source.unsplash.com/collection/94734566/1920x1080
+@cover: https://cover.sli.dev
 # Questions?
 see you next time
 ```
@@ -116,7 +116,7 @@ And that's it.
 
 ### Use case 2: using custom frontmatter to wrap slides
 
-Imagine a case where you often want to scale some of your slides but still want to use a variety of existing layouts so create a new layout would not be suited.
+Imagine a case where you often want to scale some of your slides but still want to use a variety of existing layouts so creating a new layout would not be suited.
 For instance, you might want to write your `slides.md` as follows:
 
 <!-- eslint-skip -->

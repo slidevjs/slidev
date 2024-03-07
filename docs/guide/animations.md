@@ -103,7 +103,7 @@ Like the CSS layout system, click-animated elements can be "relative" or "absolu
 
 #### Relative Position
 
-This actual position of relative elements are calculated based on the previous relative elements:
+This actual position of relative elements is calculated based on the previous relative elements:
 
 ````md
 <div v-click> visible after 1 click </div>
@@ -132,8 +132,8 @@ In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
 <v-click-gap size="1" /><img v-after />
 ```
 
-:::info
-Only string values start with `'+'` or `'-'` like `'+1'` are treated as relative positions:
+::: info
+Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relative positions:
 
 | Value          | Kind     |
 | -------------- | -------- |
@@ -251,7 +251,7 @@ For example, you can achieve the scaling up transitions by:
 }
 ```
 
-To specify animations for only certain slide or layout
+To specify animations for only certain slides or layouts
 
 ```scss
 .slidev-page-7,
@@ -284,7 +284,7 @@ Rough Notation integrates comes with the `v-mark` directive.
 
 #### Color
 
-`v-mark.red` make the notation `red`. Supported builtin color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
+`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
 
 #### Clicks
 
@@ -306,7 +306,7 @@ Important text
 
 ## Motion
 
-Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to make apply motion on them. For example
+Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to apply motion to them. For example
 
 ```html
 <div
@@ -355,7 +355,7 @@ transition: slide-left
 ---
 ```
 
-This will give you a nice sliding effects on slide switching. Setting it in the frontmatter will apply to all slides. You can also set different transition per slide.
+This will give you a nice sliding effects on slide switching. Setting it in the frontmatter will apply to all slides. You can also set different transitions per slide.
 
 ### Builtin Transitions
 
@@ -418,7 +418,7 @@ and then in your custom stylesheets:
 }
 ```
 
-Learn more how it works in [Vue Transition](https://vuejs.org/guide/built-ins/transition.html).
+Learn more about how it works in [Vue Transition](https://vuejs.org/guide/built-ins/transition.html).
 
 ### Forward & Backward Transitions
 
