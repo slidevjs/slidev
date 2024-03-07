@@ -131,6 +131,24 @@ This command also accept multiple entries like for the [export command](#multipl
 
 See [Static Hosting](/guide/hosting).
 
+## Exportable Docker Image
+
+To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintianed by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
+
+```bash
+docker run --name slidev --rm -it \
+    -v ${PWD}:/slidev \
+    -p 3030:3030 \
+    -e NPM_MIRROR="https://registry.npmmirror.com" \
+    tangramor/slidev:playwright
+```
+
+Then you can use the export feature like following under your work folder:
+
+```bash
+docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
+```
+
 ## Troubleshooting
 
 ### Timeout
