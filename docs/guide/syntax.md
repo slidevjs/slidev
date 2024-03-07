@@ -293,7 +293,7 @@ You can use `<style>` tag in your Markdown directly to override styles for the *
 
 <style>
 h1 {
-  color: red
+  color: red;
 }
 </style>
 
