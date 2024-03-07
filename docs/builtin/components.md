@@ -104,7 +104,7 @@ Insert a link you can use to navigate to a given slide.
 
 Parameters:
 
-- `to` (`string | number`): The path of the slide to navigate to (slides start from `1`)
+- `to` (`string | number`): The path of the slide to navigate to (slides path starts from `1`)
 - `title` (`string`): The title to display
 
 One can use a string as `to`, provided the corresponding route exists, e.g.
