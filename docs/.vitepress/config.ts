@@ -1,8 +1,7 @@
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
-
-const CURRENT_VERSION = '0.48.0-beta.22'
+import { version } from '../../package.json'
 
 const Guide: DefaultTheme.NavItemWithLink[] = [
   {
@@ -276,7 +275,7 @@ export default defineConfig({
         items: Resources,
       },
       {
-        text: `v${CURRENT_VERSION}`,
+        text: `v${version}`,
         items: [
           { text: 'Release Notes', link: 'https://github.com/slidevjs/slidev/releases' },
         ],
