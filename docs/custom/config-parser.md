@@ -64,7 +64,7 @@ Imagine a situation where (part of) your presentation is mainly showing cover im
 @src: page2.md
 @cover: /break.jpg
 @src: pages3-4.md
-@cover: https://source.unsplash.com/collection/94734566/1920x1080
+@cover: https://cover.sli.dev
 # Questions?
 see you next time
 ```
