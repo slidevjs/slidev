@@ -3,7 +3,7 @@ import { isObject, objectMap } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
-  return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
+  return `${data.slides.map(stringifySlide).join('').trim()}\n`
 }
 
 export function stringifySlide(data: SourceSlideInfo, idx = 0) {
@@ -13,14 +13,15 @@ export function stringifySlide(data: SourceSlideInfo, idx = 0) {
 }
 
 export function prettifySlide(data: SourceSlideInfo) {
-  data.content = `\n${data.content.trim()}\n`
-  data.raw = Object.keys(data.frontmatter || {}).length
+  const trimed = data.content.trim()
+  data.content = trimed ? `\n${data.content.trim()}\n` : ''
+  data.raw = data.frontmatterRaw
     ? data.frontmatterStyle === 'yaml'
-      ? `\`\`\`yaml\n${YAML.dump(data.frontmatter).trim()}\n\`\`\`\n${data.content}`
-      : `---\n${YAML.dump(data.frontmatter).trim()}\n---\n${data.content}`
+      ? `\`\`\`yaml\n${data.frontmatterRaw.trim()}\n\`\`\`\n${data.content}`
+      : `---\n${data.frontmatterRaw.trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
-    data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
+    data.raw += `\n<!--\n${data.note.trim()}\n-->\n\n`
   else
     data.raw += '\n'
   return data
