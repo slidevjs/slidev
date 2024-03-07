@@ -3,7 +3,8 @@ import type { ComputedRef, Ref, TransitionGroupProps } from 'vue'
 import { computed, ref, watch } from 'vue'
 import type { Router } from 'vue-router'
 import { getCurrentTransition } from '../logic/transition'
-import { getSlidePath } from '../logic/slides'
+import { getSlide, getSlidePath } from '../logic/slides'
+import { CLICKS_MAX } from '../constants'
 import { useTocTree } from './useTocTree'
 import { skipTransition } from './hmr'
 import { slides } from '#slidev/slides'
@@ -121,12 +122,12 @@ export function useNavBase(
   async function prevSlide(lastClicks = true) {
     clicksDirection.value = -1
     const next = Math.max(1, currentSlideNo.value - 1)
-    await go(next)
-    if (lastClicks && clicksTotal.value) {
-      router?.replace({
-        query: { ...router.currentRoute.value.query, clicks: clicksTotal.value },
-      })
-    }
+    await go(
+      next,
+      lastClicks
+        ? getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
+        : undefined,
+    )
   }
 
   function goFirst() {
@@ -141,7 +142,10 @@ export function useNavBase(
     skipTransition.value = false
     await router?.push({
       path: getSlidePath(page),
-      query: { ...router.currentRoute.value.query, clicks },
+      query: {
+        ...router.currentRoute.value.query,
+        clicks: clicks || undefined,
+      },
     })
   }
 

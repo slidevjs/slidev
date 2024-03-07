@@ -23,6 +23,7 @@ function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): C
     },
     relativeOffsets,
     map,
+    onMounted() {},
     resolve(at, size = 1) {
       const [isRelative, value] = normalizeAtProp(at)
       if (isRelative) {
@@ -57,8 +58,7 @@ function useClicksContextBase(current: Ref<number>, clicksOverrides?: number): C
     get total() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return clicksOverrides
-        ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
+      return clicksOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
     },
   }
 }
@@ -68,6 +68,7 @@ const queryClicksRaw = useRouteQuery('clicks', '0')
 export function usePrimaryClicks(route: SlideRoute): ClicksContext {
   if (route?.meta?.__clicksContext)
     return route.meta.__clicksContext
+
   const thisNo = route.no
   const current = computed({
     get() {
@@ -92,6 +93,13 @@ export function usePrimaryClicks(route: SlideRoute): ClicksContext {
     current,
     route?.meta?.clicks,
   )
+
+  // On slide mounted, make sure the query is not greater than the total
+  context.onMounted = () => {
+    if (queryClicksRaw.value)
+      queryClicksRaw.value = Math.min(queryClicksRaw.value, context.total)
+  }
+
   if (route?.meta)
     route.meta.__clicksContext = context
   return context
