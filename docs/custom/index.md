@@ -44,7 +44,7 @@ lineNumbers: false
 # enable monaco editor, can be boolean, 'dev' or 'build'
 monaco: dev
 # Where to load monaco types from, can be 'cdn', 'local' or 'none'
-monacoTypesSource: 'local'
+monacoTypesSource: local
 # explicitly specify extra local packages to import the types for
 monacoTypesAdditionalPackages: []
 # download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
