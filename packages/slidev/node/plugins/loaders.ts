@@ -657,7 +657,7 @@ defineProps<{ no: number | string }>()`)
     }
 
     // Dependencies
-    const deps = data.config.monacoTypesAdditionalPackages
+    const deps = [...data.config.monacoTypesAdditionalPackages]
     if (data.config.monacoTypesSource === 'local')
       deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
 

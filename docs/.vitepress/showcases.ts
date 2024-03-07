@@ -20,8 +20,8 @@ export const showcases: ShowCaseInfo[] = [
       name: 'Anthony Fu',
       link: 'https://github.com/antfu',
     },
-    slidesLink: 'https://sli.dev/demo/composable-vue',
-    sourceLink: 'https://github.com/antfu/talks/tree/master/2021-04-29',
+    slidesLink: 'https://talks.antfu.me/2021/composable-vue/',
+    sourceLink: 'https://github.com/antfu/talks/tree/main/2021-04-29',
     at: 'VueDay 2021',
     datetime: '2021-04-29',
   },
@@ -49,29 +49,29 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Enter.js Vue Day',
     datetime: '2021-06-15',
   },
-  {
-    title: 'Simply Publish Your Package to npm',
-    author: {
-      name: 'Lucky Dewa Satria',
-      link: 'https://github.com/lucky401',
-    },
-    at: 'Weekly sharing',
-    slidesLink: 'https://masukin.link/talks/simply-publish-your-package-to-npm',
-    cover: 'https://masukin.link/talks-cover-npm.png',
-    datetime: '2021-06-12',
-  },
-  {
-    title: 'Create Icon Package With Vue and Rollup',
-    author: {
-      name: 'Lucky Dewa Satria',
-      link: 'https://github.com/lucky401',
-    },
-    at: 'Weekly Sharing',
-    slidesLink: 'https://masukin.link/talks/create-icon-package-with-vue-and-rollup',
-    sourceLink: 'https://github.com/lucky401/Create-Icon-Package-With-Vue-and-Rollup',
-    cover: 'https://masukin.link/talks-cover-create-icon-package-with-vue-and-rollup.png',
-    datetime: '2021-06-19',
-  },
+  // {
+  //   title: 'Simply Publish Your Package to npm',
+  //   author: {
+  //     name: 'Lucky Dewa Satria',
+  //     link: 'https://github.com/lucky401',
+  //   },
+  //   at: 'Weekly sharing',
+  //   slidesLink: 'https://masukin.link/talks/simply-publish-your-package-to-npm',
+  //   cover: 'https://masukin.link/talks-cover-npm.png',
+  //   datetime: '2021-06-12',
+  // },
+  // {
+  //   title: 'Create Icon Package With Vue and Rollup',
+  //   author: {
+  //     name: 'Lucky Dewa Satria',
+  //     link: 'https://github.com/lucky401',
+  //   },
+  //   at: 'Weekly Sharing',
+  //   slidesLink: 'https://masukin.link/talks/create-icon-package-with-vue-and-rollup',
+  //   sourceLink: 'https://github.com/lucky401/Create-Icon-Package-With-Vue-and-Rollup',
+  //   cover: 'https://masukin.link/talks-cover-create-icon-package-with-vue-and-rollup.png',
+  //   datetime: '2021-06-19',
+  // },
   {
     title: 'BeAPT',
     author: {
@@ -190,6 +190,18 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Presentation on Social Engineering in Computers in Society class',
     datetime: '2023-10-20',
   },
+  {
+    title: 'Diablo Health Orb Shader',
+    author: {
+      name: 'SuneBear',
+      link: 'https://github.com/sunebear',
+    },
+    at: 'rctAI Sessions',
+    slidesLink: 'https://rct-ai.github.io/frontend-slides/diablo-health-orb-shader/',
+    sourceLink: 'https://github.com/rct-ai/frontend-slides',
+    cover: 'https://github-production-user-asset-6210df.s3.amazonaws.com/7693264/284304324-db973b4c-a043-4644-932c-826169a1b4d8.gif',
+    datetime: '2022-09-01',
+  },
   // Add yours here!
   {
     title: 'Yours?',
@@ -199,6 +211,6 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Submit your talk/presentation to be list here!',
     slidesLink: 'https://github.com/slidevjs/docs/edit/main/.vitepress/showcases.ts',
     cover: `${import.meta.env.BASE_URL}theme-placeholder.png`,
-    datetime: '2021-04-29',
+    datetime: '2020-1-1',
   },
-]
+].sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime())

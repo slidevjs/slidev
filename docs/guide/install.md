@@ -71,8 +71,11 @@ docker run --name slidev --rm -it \
     --user node \
     -v ${PWD}:/slidev \
     -p 3030:3030 \
+    -e NPM_MIRROR="https://registry.npmmirror.com" \
     tangramor/slidev:latest
 ```
+
+**_Note_**: You can use `NPM_MIRROR` to specify a npm mirror to speed up the installation process.
 
 If your work folder is empty, it will generate a template `slides.md` and other related files under your work folder, and launch the server on port `3030`.
 
@@ -86,7 +89,6 @@ Or you can create your own slidev project to a docker image with Dockerfile:
 FROM tangramor/slidev:latest
 
 ADD . /slidev
-
 ```
 
 Create the docker image: `docker build -t myppt .`
