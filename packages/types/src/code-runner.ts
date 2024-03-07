@@ -16,6 +16,13 @@ export interface CodeRunnerOutputHtml {
   html: string
 }
 
+export interface CodeRunnerOutputDom {
+  /**
+   * The DOM element to be rendered.
+   */
+  element: HTMLElement
+}
+
 export interface CodeRunnerOutputError {
   /**
    * The error message to be displayed.
@@ -40,7 +47,7 @@ export interface CodeRunnerOutputText {
 
 export type CodeRunnerOutputTextArray = CodeRunnerOutputText[]
 
-export type CodeRunnerOutput = CodeRunnerOutputHtml | CodeRunnerOutputError | CodeRunnerOutputText | CodeRunnerOutputTextArray
+export type CodeRunnerOutput = CodeRunnerOutputHtml | CodeRunnerOutputError | CodeRunnerOutputText | CodeRunnerOutputTextArray | CodeRunnerOutputDom
 
 export type CodeRunnerOutputs = Arrayable<CodeRunnerOutput>
 

@@ -89,16 +89,25 @@ const setup = createSingletonPromise(async () => {
     })
     : () => { }
 
-  // monaco.languages.register({ id: 'vue' })
+  monaco.languages.register({ id: 'vue' })
+  monaco.languages.register({ id: 'html' })
+  monaco.languages.register({ id: 'css' })
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
 
   const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
+  // @ts-expect-error injected in runtime
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const injection_arg = monaco
+  // eslint-disable-next-line prefer-const
+  let injection_return: MonacoSetupReturn = {}
+
+  /* __async_injections__ */
+
   // Use Shiki to highlight Monaco
   shikiToMonaco(highlighter, monaco)
-
   if (typeof themes === 'string') {
     monaco.editor.setTheme(themes)
   }
@@ -109,14 +118,6 @@ const setup = createSingletonPromise(async () => {
         : themes.light || 'vitesse-light')
     })
   }
-
-  // @ts-expect-error injected in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = monaco
-  // eslint-disable-next-line prefer-const
-  let injection_return: MonacoSetupReturn = {}
-
-  /* __async_injections__ */
 
   return {
     monaco,

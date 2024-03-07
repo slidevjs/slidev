@@ -9,7 +9,7 @@ export default createSingletonPromise(async () => {
     javascript: runJavaScript,
     js: runJavaScript,
     typescript: runTypeScript,
-    ts: runJavaScript,
+    ts: runTypeScript,
   }
 
   const { shiki, themes } = await import('#slidev/shiki')
