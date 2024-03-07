@@ -193,18 +193,49 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    // Wait for slides to be loaded
+    {
+      const elements = page.locator('.slidev-slide-loading')
+      const count = await elements.count()
+      for (let index = 0; index < count; index++)
+        await elements.nth(index).waitFor({ state: 'detached' })
+    }
     // Check for "data-waitfor" attribute and wait for given element to be loaded
-    const elements = page.locator('[data-waitfor]')
-    const count = await elements.count()
-    for (let index = 0; index < count; index++) {
-      const element = elements.nth(index)
-      const attribute = await element.getAttribute('data-waitfor')
-      if (attribute)
-        await element.locator(attribute).waitFor()
+    {
+      const elements = page.locator('[data-waitfor]')
+      const count = await elements.count()
+      for (let index = 0; index < count; index++) {
+        const element = elements.nth(index)
+        const attribute = await element.getAttribute('data-waitfor')
+        if (attribute)
+          await element.locator(attribute).waitFor()
+      }
     }
     // Wait for frames to load
-    const frames = page.frames()
-    await Promise.all(frames.map(frame => frame.waitForLoadState()))
+    {
+      const frames = page.frames()
+      await Promise.all(frames.map(frame => frame.waitForLoadState()))
+    }
+    // Wait for Mermaid graphs to be rendered
+    {
+      const container = page.locator('#mermaid-rendering-container')
+      while (true) {
+        const element = container.locator('div').first()
+        if (await element.count() === 0)
+          break
+        await element.waitFor({ state: 'detached' })
+      }
+      await container.evaluate(node => node.style.display = 'none')
+    }
+    // Hide Monaco aria container
+    {
+      const elements = page.locator('.monaco-aria-container')
+      const count = await elements.count()
+      for (let index = 0; index < count; index++) {
+        const element = elements.nth(index)
+        await element.evaluate(node => node.style.display = 'none')
+      }
+    }
   }
 
   async function getSlidesIndex() {
