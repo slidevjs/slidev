@@ -4,7 +4,7 @@
 
 ### Videos
 
-<iframe class="aspect-16/9 rounded-xl w-full shadow-md border-none" src="https://www.youtube-nocookie.com/embed/oSgM6GoSwyY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+- [Slidev - one of the best presentation software and it is free!](https://www.youtube.com/watch?v=oSgM6GoSwyY) - by [Federico Tartarini](https://www.youtube.com/@FedericoTartarini)
 
 ### Articles
 
