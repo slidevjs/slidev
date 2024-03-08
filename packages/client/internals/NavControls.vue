@@ -2,10 +2,11 @@
 import { computed, ref, shallowRef } from 'vue'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { downloadPDF } from '../utils'
-import { currentRoute, currentSlideNo, getSlidePath, hasNext, hasPrev, isEmbedded, isPresenter, isPresenterAvailable, next, prev, total } from '../logic/nav'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
-import { brush, drawingEnabled } from '../logic/drawings'
 import { configs } from '../env'
+import { useNav } from '../composables/useNav'
+import { getSlidePath } from '../logic/slides'
+import { useDrawings } from '../composables/useDrawings'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
@@ -18,6 +19,23 @@ const props = defineProps({
     default: false,
   },
 })
+
+const {
+  currentRoute,
+  currentSlideNo,
+  hasNext,
+  hasPrev,
+  isEmbedded,
+  isPresenter,
+  isPresenterAvailable,
+  next,
+  prev,
+  total,
+} = useNav()
+const {
+  brush,
+  drawingEnabled,
+} = useDrawings()
 
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
@@ -166,4 +184,4 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       <CustomNavControls />
     </div>
   </nav>
-</template>
+</template>../composables/drawings

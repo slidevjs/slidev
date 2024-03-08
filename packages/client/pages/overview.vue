@@ -3,8 +3,8 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { configs } from '../env'
-import { getSlidePath, openInEditor, slides } from '../logic/nav'
-import { useFixedClicks } from '../composables/useClicks'
+import { getSlidePath } from '../logic/slides'
+import { createFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
@@ -14,6 +14,7 @@ import IconButton from '../internals/IconButton.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import { CLICKS_MAX } from '../constants'
+import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 
@@ -21,6 +22,8 @@ const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev'
 useHead({
   title: `Overview - ${slideTitle}`,
 })
+
+const { openInEditor, slides } = useNav()
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
@@ -33,7 +36,7 @@ const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
   // We create a local clicks context to calculate the total clicks of the slide
   if (!clicksContextMap.has(route))
-    clicksContextMap.set(route, useFixedClicks(route, CLICKS_MAX))
+    clicksContextMap.set(route, createFixedClicks(route, CLICKS_MAX))
   return clicksContextMap.get(route)!
 }
 

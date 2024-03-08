@@ -1,5 +1,4 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import configs from '#slidev/configs'
 
 export const routes: RouteRecordRaw[] = [
@@ -66,11 +65,4 @@ routes.push({
   name: 'play',
   path: '/:no',
   component: () => import('./pages/play.vue'),
-})
-
-export const router = createRouter({
-  history: __SLIDEV_HASH_ROUTE__
-    ? createWebHashHistory(import.meta.env.BASE_URL)
-    : createWebHistory(import.meta.env.BASE_URL),
-  routes,
 })

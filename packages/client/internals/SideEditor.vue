@@ -3,13 +3,15 @@ import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../modules/codemirror'
-import { currentSlideNo, openInEditor } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import IconButton from './IconButton.vue'
 
 const props = defineProps<{
   resize?: boolean
 }>()
+
+const { currentSlideNo, openInEditor } = useNav()
 
 const tab = ref<'content' | 'note'>('content')
 const content = ref('')

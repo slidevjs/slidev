@@ -1,14 +1,16 @@
 import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF } from '../utils'
-import { go, goFirst, goLast, next, nextSlide, prev, prevSlide } from '../logic/nav'
 import { toggleDark } from '../logic/dark'
 import { magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
-import { drawingEnabled } from '../logic/drawings'
+import { useNav } from '../composables/useNav'
+import { useDrawings } from '../composables/useDrawings'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
 import setups from '#slidev/setups/shortcuts'
 
 export default function setupShortcuts() {
+  const { go, goFirst, goLast, next, nextSlide, prev, prevSlide } = useNav()
+  const { drawingEnabled } = useDrawings()
   const { escape, space, shift, left, right, up, down, enter, d, g, o, '`': backtick } = magicKeys
 
   const context: NavOperations = {

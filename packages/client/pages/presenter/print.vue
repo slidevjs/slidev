@@ -2,9 +2,11 @@
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
+import { useNav } from '../../composables/useNav'
 import { configs } from '../../env'
-import { slides, total } from '../../logic/nav'
 import NoteDisplay from '../../internals/NoteDisplay.vue'
+
+const { slides, total } = useNav()
 
 useStyleTag(`
 @page {

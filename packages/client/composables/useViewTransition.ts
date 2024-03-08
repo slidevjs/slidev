@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getSlide } from '../logic/nav'
+import { getSlide } from '../logic/slides'
 
 export function useViewTransition() {
   const router = useRouter()
