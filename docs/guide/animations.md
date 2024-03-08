@@ -325,8 +325,6 @@ Important text
 </span>
 ```
 
-````
-
 #### Preview
 
 <video src="https://github.com/slidevjs/slidev/assets/11247099/c840340c-0aa1-4cde-b228-e6c67e5f6879" rounded-lg shadow controls></video>
@@ -471,8 +469,3 @@ transition:
   enterActiveClass: custom-enter-active
 ---
 ```
-
-```
-
-```
-````
