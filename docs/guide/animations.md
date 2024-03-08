@@ -223,7 +223,7 @@ After a click, it will become
 By default, a subtle opacity transition is applied to those classes:
 
 ```css
-// the default
+/* below shows the default style */
 
 .slidev-vclick-target {
   transition: opacity 100ms ease;
@@ -268,6 +268,31 @@ To specify animations for only certain slides or layouts
 
 Learn more about [customizing styles](/custom/directory-structure#style).
 
+### Direction Specific Animations
+
+> Available since v0.48.0
+
+In some cases, you might want to have different animations going forward and backward. Slide will apply the `.slidev-nav-go-forward` or `.slidev-nav-go-backward` class to slide container when navigating.
+
+So you can leverage this to apply different animations for different directions, for example:
+
+```css
+/* example: delay on only forward but not backward */
+.slidev-nav-go-forward .slidev-vclick-target {
+  transition-delay: 500ms;
+}
+.slidev-nav-go-backward .slidev-vclick-target {
+  transition-delay: 0;
+}
+```
+
+To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38), that you can add `forward:` or `backward:` prefix to any utility classes to apply them conditionally.
+
+```html
+<div v-click class="transition delay-300">Element</div> // [!code --]
+<div v-click class="transition forward:delay-300">Element</div> // [!code ++]
+```
+
 ## Rough Markers
 
 > Available since v0.48.0
@@ -299,6 +324,8 @@ Optionally you can pass an object to `v-mark` to specify the options, for exampl
 Important text
 </span>
 ```
+
+````
 
 #### Preview
 
@@ -444,3 +471,8 @@ transition:
   enterActiveClass: custom-enter-active
 ---
 ```
+
+```
+
+```
+````
