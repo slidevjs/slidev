@@ -1,4 +1,5 @@
 {
+  "name": "slidev-demo",
   "private": true,
   "scripts": {
     "build": "slidev build",

@@ -10,6 +10,7 @@ import { createVMarkDirective } from './modules/v-mark'
 import { createSlidevContext } from './modules/context'
 
 import '#slidev/styles'
+import 'shiki-magic-move/style.css'
 
 const app = createApp(App)
 app.use(router)

@@ -6,8 +6,6 @@ import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
-import 'shiki-magic-move/style.css'
-
 const props = defineProps<{
   at?: string | number
   stepsLz: string
@@ -94,7 +92,12 @@ onMounted(() => {
       class="slidev-code relative shiki overflow-visible"
       :steps="steps"
       :step="stepIndex"
-      :options="{ globalScale: scale }"
+      :options="{
+        globalScale: scale,
+        // TODO: make this configurable later
+        duration: 800,
+        stagger: 1,
+      }"
     />
   </div>
 </template>
