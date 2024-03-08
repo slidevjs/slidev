@@ -2,8 +2,17 @@ import type { CodeToHastOptions } from 'shiki'
 import type { Arrayable, Awaitable } from '@antfu/utils'
 
 export interface CodeRunnerContext {
+  /**
+   * Options passed to runner via the `runnerOptions` prop.
+   */
   options: Record<string, unknown>
+  /**
+   * Highlight code with shiki.
+   */
   highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  /**
+   * Use (other) code runner to run code.
+   */
   run: (code: string, lang: string) => Promise<CodeRunnerOutputs>
 }
 
