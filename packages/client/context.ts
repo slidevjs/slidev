@@ -11,14 +11,13 @@ import {
   injectionSlideScale,
   injectionSlidevContext,
 } from './constants'
-import { useNav } from './composables/useNav'
 
 /**
  * Get the current slide context, should be called inside the setup function of a component inside slide
  */
 export function useSlideContext() {
   const $slidev = injectLocal(injectionSlidevContext)!
-  const $nav = useNav()
+  const $nav = toRef($slidev, 'nav')
   const $clicksContext = injectLocal(injectionClicksContext)!.value
   const $clicks = toRef($clicksContext, 'current')
   const $page = injectLocal(injectionCurrentPage)!

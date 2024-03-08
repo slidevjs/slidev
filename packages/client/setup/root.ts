@@ -9,7 +9,6 @@ import { skipTransition } from '../logic/hmr'
 import { makeId } from '../logic/utils'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
-import { useContext } from '../composables/useContext'
 import { isDark } from '../logic/dark'
 import { useNav } from '../composables/useNav'
 import setups from '#slidev/setups/root'
@@ -17,7 +16,11 @@ import setups from '#slidev/setups/root'
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
 
-  const context = reactive(useContext())
+  const context = reactive({
+    nav: useNav(),
+    configs,
+    themeConfigs: computed(() => configs.themeConfig),
+  })
   app.provide(injectionRenderContext, ref('none'))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
