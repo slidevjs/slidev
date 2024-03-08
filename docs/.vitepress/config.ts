@@ -29,18 +29,6 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/animations',
   },
   {
-    text: 'Exporting',
-    link: '/guide/exporting',
-  },
-  {
-    text: 'Static Hosting',
-    link: '/guide/hosting',
-  },
-  {
-    text: 'Record Presentation',
-    link: '/guide/recording',
-  },
-  {
     text: 'Presenter Mode',
     link: '/guide/presenter-mode',
   },
@@ -55,6 +43,18 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Editor Integrations',
     link: '/guide/editors',
+  },
+  {
+    text: 'Record Presentation',
+    link: '/guide/recording',
+  },
+  {
+    text: 'Exporting',
+    link: '/guide/exporting',
+  },
+  {
+    text: 'Static Hosting',
+    link: '/guide/hosting',
   },
   {
     text: 'FAQ',
