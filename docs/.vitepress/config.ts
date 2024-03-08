@@ -45,6 +45,10 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/presenter-mode',
   },
   {
+    text: 'Slides Overview',
+    link: '/guide/overview',
+  },
+  {
     text: 'Drawing & Annotations',
     link: '/guide/drawing',
   },

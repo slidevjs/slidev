@@ -22,6 +22,7 @@ declare module 'vue' {
     CarbonDownload: typeof import('~icons/carbon/download')['default']
     CarbonEdit: typeof import('~icons/carbon/edit')['default']
     CarbonInformation: typeof import('~icons/carbon/information')['default']
+    CarbonListBoxes: typeof import('~icons/carbon/list-boxes')['default']
     CarbonMaximize: typeof import('~icons/carbon/maximize')['default']
     CarbonMinimize: typeof import('~icons/carbon/minimize')['default']
     CarbonMoon: typeof import('~icons/carbon/moon')['default']
