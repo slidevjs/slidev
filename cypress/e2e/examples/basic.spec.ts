@@ -12,6 +12,8 @@ Cypress.Commands.add('rightArrow', (n = 1) => {
   cy.get('body').wait(500).type('{rightarrow}'.repeat(n)).wait(500)
 })
 
+const BASE = 'http://localhost:3041'
+
 context('Basic', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -26,13 +28,13 @@ context('Basic', () => {
       .type(`${no}`, { force: true })
       .type('{enter}', { force: true })
       .url()
-      .should('eq', `http://localhost:3030/${no}`)
+      .should('eq', `${BASE}/${no}`)
       .wait(500)
   }
 
   it('basic nav', () => {
     cy.url()
-      .should('eq', 'http://localhost:3030/1')
+      .should('eq', `${BASE}/1`)
 
     cy.contains('Global Footer')
       .should('exist')
@@ -41,7 +43,7 @@ context('Basic', () => {
 
     cy.rightArrow()
       .url()
-      .should('eq', 'http://localhost:3030/2')
+      .should('eq', `${BASE}/2`)
 
     cy.contains('Global Footer')
       .should('not.exist')
@@ -63,32 +65,32 @@ context('Basic', () => {
 
     cy.get('body')
       .type('{DownArrow}')
-      .url().should('eq', 'http://localhost:3030/6')
+      .url().should('eq', `${BASE}/6`)
 
     cy.rightArrow()
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/6?clicks=1')
+      .should('eq', `${BASE}/6?clicks=1`)
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
-      .url().should('eq', 'http://localhost:3030/7')
+      .url().should('eq', `${BASE}/7`)
 
     cy.get('body')
       .type('{LeftArrow}')
       .url()
-      .should('eq', 'http://localhost:3030/6?clicks=6')
+      .should('eq', `${BASE}/6?clicks=6`)
 
     cy.get('body')
       .type('{DownArrow}')
       .url()
-      .should('eq', 'http://localhost:3030/7')
+      .should('eq', `${BASE}/7`)
 
     cy.get('body')
       .type('{UpArrow}')
       .url()
-      .should('eq', 'http://localhost:3030/6')
+      .should('eq', `${BASE}/6`)
   })
 
   it('named slots', () => {
@@ -103,13 +105,13 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/9')
+      .should('eq', `${BASE}/9`)
 
     cy.rightArrow()
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/9?clicks=1')
+      .should('eq', `${BASE}/9?clicks=1`)
 
     cy.get('#slideshow .slidev-page-9 .cy-content .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'CD')
@@ -127,19 +129,19 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/9?clicks=4')
+      .should('eq', `${BASE}/9?clicks=4`)
 
     cy.rightArrow()
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/10')
+      .should('eq', `${BASE}/10`)
 
     cy.rightArrow()
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/10?clicks=1')
+      .should('eq', `${BASE}/10?clicks=1`)
 
     cy.get('#slideshow .slidev-page-10 .cy-content-hide .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'BD')
@@ -158,13 +160,13 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/10?clicks=4')
+      .should('eq', `${BASE}/10?clicks=4`)
 
     cy.rightArrow()
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/11')
+      .should('eq', `${BASE}/11`)
   })
 
   it('overview nav', () => {
@@ -173,22 +175,22 @@ context('Basic', () => {
     cy.get('body')
       .type('o{RightArrow}{RightArrow}{Enter}')
       .url()
-      .should('eq', 'http://localhost:3030/4')
+      .should('eq', `${BASE}/4`)
 
     cy.get('body')
       .type('o{LeftArrow}{LeftArrow}{LeftArrow}{Enter}')
       .url()
-      .should('eq', 'http://localhost:3030/1')
+      .should('eq', `${BASE}/1`)
 
     cy.get('body')
       .type('o{DownArrow}{DownArrow}{DownArrow}{Enter}')
       .url()
-      .should('not.eq', 'http://localhost:3030/1')
+      .should('not.eq', `${BASE}/1`)
 
     cy.get('body')
       .type('o{UpArrow}{UpArrow}{UpArrow}{Enter}')
       .url()
-      .should('eq', 'http://localhost:3030/1')
+      .should('eq', `${BASE}/1`)
   })
 
   it('deep nested lists', () => {
@@ -196,7 +198,7 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/11')
+      .should('eq', `${BASE}/11`)
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}')
@@ -228,16 +230,16 @@ context('Basic', () => {
 
     cy
       .url()
-      .should('eq', 'http://localhost:3030/12')
+      .should('eq', `${BASE}/12`)
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
       .url()
-      .should('eq', 'http://localhost:3030/12?clicks=6') // we should still be on page 12
+      .should('eq', `${BASE}/12?clicks=6`) // we should still be on page 12
 
     cy.rightArrow()
       .url()
-      .should('eq', 'http://localhost:3030/13')
+      .should('eq', `${BASE}/13`)
 
     cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target.slidev-vclick-hidden')
       .should('have.text', 'AEFZ')

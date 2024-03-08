@@ -38,6 +38,25 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'theme',
 ]
 
+/**
+ * Files that triggers a restart when added or removed
+ */
+const FILES_CREATE_RESTART_GLOBS = [
+  'global-bottom.vue',
+  'global-top.vue',
+  'uno.config.js',
+  'uno.config.ts',
+  'unocss.config.js',
+  'unocss.config.ts',
+]
+
+const FILES_CHANGE_RESTART_GLOBS = [
+  'vite.config.*',
+  'setup/shiki.ts',
+  'setup/katex.ts',
+  'setup/preparser.ts',
+]
+
 injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
   const addons = headmatter?.addons as string[] ?? []
   const { clientRoot, userRoot } = await getRoots()
@@ -113,6 +132,15 @@ cli.command(
 
     let lastRemoteUrl: string | undefined
 
+    let restartTimer: ReturnType<typeof setTimeout> | undefined
+    function restartServer() {
+      clearTimeout(restartTimer!)
+      restartTimer = setTimeout(() => {
+        console.log(yellow('\n  restarting...\n'))
+        initServer()
+      }, 500)
+    }
+
     async function initServer() {
       if (server)
         await server.close()
@@ -149,7 +177,7 @@ cli.command(
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
               console.log(yellow('\n  restarting on theme change\n'))
-              initServer()
+              restartServer()
               return false
             }
             // Because themeRaw is not changed, we don't resolve it again
@@ -162,7 +190,7 @@ cli.command(
 
             if (CONFIG_RESTART_FIELDS.some(i => !equal(newData.config[i], oldData.config[i]))) {
               console.log(yellow('\n  restarting on config change\n'))
-              initServer()
+              restartServer()
               return false
             }
             return newData
@@ -276,6 +304,30 @@ cli.command(
 
     initServer()
     bindShortcut()
+
+    // Start watcher to restart server on file changes
+    const { watch } = await import('chokidar')
+    const watcher = watch([
+      ...FILES_CREATE_RESTART_GLOBS,
+      ...FILES_CHANGE_RESTART_GLOBS,
+    ], {
+      ignored: ['node_modules', '.git'],
+      ignoreInitial: true,
+    })
+    watcher.on('unlink', (file) => {
+      console.log(yellow(`\n  file ${file} removed, restarting...\n`))
+      restartServer()
+    })
+    watcher.on('add', (file) => {
+      console.log(yellow(`\n  file ${file} added, restarting...\n`))
+      restartServer()
+    })
+    watcher.on('change', (file) => {
+      if (FILES_CREATE_RESTART_GLOBS.includes(file))
+        return
+      console.log(yellow(`\n  file ${file} changed, restarting...\n`))
+      restartServer()
+    })
   },
 )
 

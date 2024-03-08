@@ -15,6 +15,7 @@
     },
     "resolveJsonModule": true,
     "types": [
+      "vite",
       "vite/client",
       "node",
       "vite-plugin-vue-server-ref/module"
@@ -28,8 +29,6 @@
   },
   "include": [
     "./*.ts",
-    "./docs/.vitepress/**/*.ts",
-    "./docs/.vitepress/**/*.vue",
     "./packages/**/*.ts",
     "./packages/**/*.vue",
     "./test/**/*.ts"

@@ -1,4 +1,5 @@
 {
+  "name": "docs",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@8.15.4",
@@ -13,23 +14,23 @@
     "typeit": "^7.0.4"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.188",
+    "@iconify/json": "^2.2.190",
     "@shikijs/vitepress-twoslash": "^1.1.7",
     "@slidev/client": "0.34.3",
     "@slidev/parser": "0.34.3",
     "@slidev/theme-default": "0.21.2",
     "@slidev/types": "0.34.3",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.11.25",
     "@unocss/reset": "^0.58.5",
     "fs-extra": "^11.2.0",
     "markdown-it": "^14.0.0",
     "shiki": "^1.1.7",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "unocss": "^0.58.5",
     "unplugin-icons": "^0.18.5",
     "unplugin-vue-components": "^0.26.0",
     "vite-plugin-inspect": "^0.8.3",
-    "vitepress": "^1.0.0-rc.44"
+    "vitepress": "^1.0.0-rc.45"
   }
 }

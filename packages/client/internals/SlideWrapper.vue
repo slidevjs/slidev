@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref, toRef } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
 import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
@@ -20,6 +20,7 @@ const props = defineProps({
     default: false,
   },
   is: {
+    type: Function as PropType<() => any>,
     required: true,
   },
   route: {
@@ -47,14 +48,28 @@ const style = computed(() => {
 })
 
 const SlideComponent = defineAsyncComponent({
-  loader: (props.is as any),
+  loader: async () => {
+    const component = await props.is()
+    return defineComponent({
+      setup(_, { attrs }) {
+        onMounted(() => {
+          props.clicksContext.onMounted()
+        })
+        return () => h(component.default, attrs)
+      },
+    })
+  },
   delay: 300,
   loadingComponent: SlideLoading,
 })
 </script>
 
 <template>
-  <component :is="SlideComponent" :style="style" :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }" />
+  <component
+    :is="SlideComponent"
+    :style="style"
+    :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
+  />
 </template>
 
 <style scoped>

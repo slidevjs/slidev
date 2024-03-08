@@ -31,7 +31,7 @@ export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]
 })
 ```
 
-With the setup, you can provide the custom setting for shortcuts mentioned in [Navigation](/guide/navigation#navigation-bar). The above configuration binds next animation or slide to <kbd>enter</kbd> and previous animation or slide to <kbd>backspace</kbd>.
+With the setup, you can provide the custom setting for shortcuts mentioned in [Navigation](/guide/navigation#navigation-bar). The above configuration binds the next animation or slide to <kbd>enter</kbd> and the previous animation or slide to <kbd>backspace</kbd>.
 
 The configuration function receives an object with some navigation methods, and returns an array containing some shortcut configuration. Refer to the type definitions for more details.
 
@@ -57,7 +57,7 @@ export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]
 
 ## Advanced navigation features
 
-The `nav` navigation operations allows you to access some functionalities than basic _next slide_ or _previous slide_. See the following for use-cases:
+The `nav` navigation operations allow you to access some functionalities than the basic _next slide_ or _previous slide_. See the following for use cases:
 
 ```ts
 import { NavOperations, defineShortcutsSetup } from '@slidev/types'

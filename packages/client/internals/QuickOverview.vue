@@ -167,6 +167,7 @@ watchEffect(() => {
       <carbon:close />
     </IconButton>
     <IconButton
+      v-if="__DEV__"
       as="a"
       title="Slides Overview"
       target="_blank"

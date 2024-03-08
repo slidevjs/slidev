@@ -426,6 +426,25 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-hep',
+    name: 'HEP',
+    description: 'Academic style for High Energy Physics',
+    author: {
+      name: 'Yulei ZHANG',
+      link: 'https://github.com/AvencastF',
+    },
+    repo: 'https://github.com/AvencastF/slidev-theme-hep',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/avencastf/slidev-theme-hep/screenshot/001.png',
+      'https://cdn.jsdelivr.net/gh/avencastf/slidev-theme-hep/screenshot/004.png',
+      'https://cdn.jsdelivr.net/gh/avencastf/slidev-theme-hep/screenshot/006.png',
+      'https://cdn.jsdelivr.net/gh/avencastf/slidev-theme-hep/screenshot/008.png',
+    ],
+    tags: [
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',

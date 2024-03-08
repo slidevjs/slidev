@@ -6,7 +6,7 @@
 
 An addon can contribute to the following points:
 
-- Global styles (use with caution has it is more the role of [themes](/themes/use))
+- Global styles (use with caution as it has more role than [themes](/themes/use))
 - Provide custom layouts or override the existing one
 - Provide custom components or override the existing one
 - Extend UnoCSS/Windi CSS configurations
@@ -14,7 +14,7 @@ An addon can contribute to the following points:
 
 ## Conventions
 
-Addons are published to npm registry, and they should follow the conventions below:
+Addons are published to the NPM registry, and they should follow the conventions below:
 
 - Package name should start with `slidev-addon-`, for example: `slidev-addon-awesome`
 - Add `slidev-addon` and `slidev` in the `keywords` field of your `package.json`
@@ -23,9 +23,9 @@ Addons are published to npm registry, and they should follow the conventions bel
 
 ### Initialization
 
-To create your addon, start by creating a directory with create a `package.json` file (you can use `npm init`).
+To create your addon, start by creating a directory with a `package.json` file (you can use `npm init`).
 
-Then, install slidev dependencies:
+Then, install Slidev dependencies:
 
 ```bash
 $ npm install -D @slidev/cli
@@ -57,7 +57,7 @@ Addon contribution points follow the same conventions as local customization, pl
 
 ### Slidev Version
 
-If the addon is relying on a specific feature of Slidev that are newly introduced, you can set the minimal Slidev version required to have your addon working properly:
+If the addon is relying on a specific feature of Slidev that is newly introduced, you can set the minimal Slidev version required to have your addon working properly:
 
 ```json
 // package.json

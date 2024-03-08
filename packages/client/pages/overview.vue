@@ -139,6 +139,7 @@ onMounted(() => {
         :key="route.no"
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
+        :class="idx === 0 ? 'pt5' : ''"
       >
         <div class="select-none w-13 text-right my4 flex flex-col gap-1 items-end">
           <div class="text-3xl op20 mb2">
@@ -192,19 +193,19 @@ onMounted(() => {
           <IconButton
             title="Edit Note"
             class="rounded-full w-9 h-9 text-sm"
-            :class="edittingNote === idx ? 'important:op0' : ''"
-            @click="edittingNote = idx"
+            :class="edittingNote === route.no ? 'important:op0' : ''"
+            @click="edittingNote = route.no"
           >
             <carbon:pen />
           </IconButton>
         </div>
         <NoteEditable
-          :no="idx"
+          :no="route.no"
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
-          :editing="edittingNote === idx"
+          :editing="edittingNote === route.no"
           :clicks-context="getClicksContext(route)"
-          @dblclick="edittingNote !== idx ? edittingNote = idx : null"
+          @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"
           @update:editing="edittingNote = null"
           @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
         />

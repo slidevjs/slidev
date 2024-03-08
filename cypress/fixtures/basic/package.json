@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nodemon -w '../../../packages/slidev/dist/*.js' --exec 'slidev --log=info'",
+    "dev": "nodemon -w '../../../packages/slidev/dist/*.js' --exec 'slidev --log=info --port=3041'",
     "build": "slidev build",
     "export": "slidev export"
   },

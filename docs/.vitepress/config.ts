@@ -1,8 +1,7 @@
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
-
-const CURRENT_VERSION = '0.48.0-beta.22'
+import { version } from '../../package.json'
 
 const Guide: DefaultTheme.NavItemWithLink[] = [
   {
@@ -30,20 +29,12 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/animations',
   },
   {
-    text: 'Exporting',
-    link: '/guide/exporting',
-  },
-  {
-    text: 'Static Hosting',
-    link: '/guide/hosting',
-  },
-  {
-    text: 'Record Presentation',
-    link: '/guide/recording',
-  },
-  {
     text: 'Presenter Mode',
     link: '/guide/presenter-mode',
+  },
+  {
+    text: 'Slides Overview',
+    link: '/guide/overview',
   },
   {
     text: 'Drawing & Annotations',
@@ -52,6 +43,18 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Editor Integrations',
     link: '/guide/editors',
+  },
+  {
+    text: 'Record Presentation',
+    link: '/guide/recording',
+  },
+  {
+    text: 'Exporting',
+    link: '/guide/exporting',
+  },
+  {
+    text: 'Static Hosting',
+    link: '/guide/hosting',
   },
   {
     text: 'FAQ',
@@ -146,6 +149,10 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/config-shortcuts',
   },
   {
+    text: 'Configure Code Runners',
+    link: '/custom/config-code-runners',
+  },
+  {
     text: 'Vue Global Context',
     link: '/custom/vue-context',
   },
@@ -190,6 +197,10 @@ const slidebars: DefaultTheme.SidebarItem[] = [
   {
     text: 'Built-in',
     items: BuiltIn,
+  },
+  {
+    text: 'Resources',
+    items: Resources,
   },
 ]
 
@@ -268,7 +279,7 @@ export default defineConfig({
         items: Resources,
       },
       {
-        text: `v${CURRENT_VERSION}`,
+        text: `v${version}`,
         items: [
           { text: 'Release Notes', link: 'https://github.com/slidevjs/slidev/releases' },
         ],

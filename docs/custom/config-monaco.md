@@ -31,7 +31,7 @@ plusOne.value++ // error
 
 ## TypeScript Types
 
-When use TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
+When using TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.
 
 ````md
 ```ts {monaco}
@@ -42,11 +42,11 @@ const counter = ref(0)
 ```
 ````
 
-In the example above, make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest to get the types working for the editor automatically. When deploy as SPA, those types will also be bundled for static hosting.
+In the example above, make sure `vue` and `@vueuse/core` are installed locally as dependencies / devDependencies, Slidev will handle the rest to get the types working for the editor automatically. When deployed as SPA, those types will also be bundled for static hosting.
 
 ### Additional Types
 
-Slidev will scan all the monaco codeblocks in your slides and import the types for those used libraries for you. In case it missed some, you can explicitly specify extra packages to import the types for:
+Slidev will scan all the Monaco code blocks in your slides and import the types for those used libraries for you. In case it missed some, you can explicitly specify extra packages to import the types for:
 
 ```md
 ---
@@ -101,10 +101,14 @@ export default defineMonacoSetup(() => {
 
 ## Disabling
 
-Since v0.48.0, Monaco editor is enabled by default and only be bundled when you use it. If you want to disable it, you can set `monaco` to `false` in the frontmatter of your slide:
+Since v0.48.0, the Monaco editor is enabled by default and only be bundled when you use it. If you want to disable it, you can set `monaco` to `false` in the frontmatter of your slide:
 
 ```yaml
 ---
 monaco: false # can also be `dev` or `build` tp conditionally enable it
 ---
 ```
+
+## Configure Code Runners
+
+To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference to [Configure Code Runners](/custom/config-code-runners).

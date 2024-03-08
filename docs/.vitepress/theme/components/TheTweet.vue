@@ -24,6 +24,9 @@ const loaded = ref(false)
 
 async function create() {
   // @ts-expect-error Global variable
+  if (!window.twttr?.widgets?.createTweet)
+    return
+  // @ts-expect-error Global variable
   await window.twttr.widgets.createTweet(
     props.id.toString(),
     tweet.value,
@@ -37,7 +40,7 @@ async function create() {
 
 if (isClient) {
   // @ts-expect-error Global variable
-  if (window?.twttr?.widgets) {
+  if (window?.twttr?.widgets?.createTweet) {
     onMounted(create)
   }
   else {

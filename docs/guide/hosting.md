@@ -98,7 +98,7 @@ For more, check out [Showcases](/showcases).
 
 ## Hosting
 
-We recommend to use `npm init slidev@latest` to scaffold your project, which contains the necessary configuration files for hosting services out-of-the-box.
+We recommend using `npm init slidev@latest` to scaffold your project, which contains the necessary configuration files for hosting services out-of-the-box.
 
 ### Netlify
 
@@ -145,7 +145,7 @@ Then go to your Vercel dashboard and create a new site with the repository.
 To deploy your slides on GitHub Pages:
 
 - upload all the files of the project in your repo (i.e. named `name_of_repo`)
-- create `.github/workflows/deploy.yml` with following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`. Make sure to leave the leading and trailing slashes in place.
+- create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`. Make sure to leave the leading and trailing slashes in place.
 
 ```yaml
 name: Deploy pages
@@ -193,5 +193,5 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-- In your repository, go to Settings>Pages. Under "Build and deployment", select "Github Actions".
+- In your repository, go to Settings>Pages. Under "Build and deployment", select "GitHub Actions".
 - Finally, after all workflows are executed, a link to the slides should appear under Settings>Pages.

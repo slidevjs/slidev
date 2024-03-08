@@ -103,7 +103,7 @@ Like the CSS layout system, click-animated elements can be "relative" or "absolu
 
 #### Relative Position
 
-This actual position of relative elements are calculated based on the previous relative elements:
+This actual position of relative elements is calculated based on the previous relative elements:
 
 ````md
 <div v-click> visible after 1 click </div>
@@ -132,8 +132,8 @@ In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
 <v-click-gap size="1" /><img v-after />
 ```
 
-:::info
-Only string values start with `'+'` or `'-'` like `'+1'` are treated as relative positions:
+::: info
+Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relative positions:
 
 | Value          | Kind     |
 | -------------- | -------- |
@@ -223,7 +223,7 @@ After a click, it will become
 By default, a subtle opacity transition is applied to those classes:
 
 ```css
-// the default
+/* below shows the default style */
 
 .slidev-vclick-target {
   transition: opacity 100ms ease;
@@ -251,7 +251,7 @@ For example, you can achieve the scaling up transitions by:
 }
 ```
 
-To specify animations for only certain slide or layout
+To specify animations for only certain slides or layouts
 
 ```scss
 .slidev-page-7,
@@ -267,6 +267,31 @@ To specify animations for only certain slide or layout
 ```
 
 Learn more about [customizing styles](/custom/directory-structure#style).
+
+### Direction Specific Animations
+
+> Available since v0.48.0
+
+In some cases, you might want to have different animations going forward and backward. Slide will apply the `.slidev-nav-go-forward` or `.slidev-nav-go-backward` class to slide container when navigating.
+
+So you can leverage this to apply different animations for different directions, for example:
+
+```css
+/* example: delay on only forward but not backward */
+.slidev-nav-go-forward .slidev-vclick-target {
+  transition-delay: 500ms;
+}
+.slidev-nav-go-backward .slidev-vclick-target {
+  transition-delay: 0;
+}
+```
+
+To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38), that you can add `forward:` or `backward:` prefix to any utility classes to apply them conditionally.
+
+```html
+<div v-click class="transition delay-300">Element</div> // [!code --]
+<div v-click class="transition forward:delay-300">Element</div> // [!code ++]
+```
 
 ## Rough Markers
 
@@ -284,7 +309,7 @@ Rough Notation integrates comes with the `v-mark` directive.
 
 #### Color
 
-`v-mark.red` make the notation `red`. Supported builtin color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
+`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
 
 #### Clicks
 
@@ -306,7 +331,7 @@ Important text
 
 ## Motion
 
-Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to make apply motion on them. For example
+Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to apply motion to them. For example
 
 ```html
 <div
@@ -355,7 +380,7 @@ transition: slide-left
 ---
 ```
 
-This will give you a nice sliding effects on slide switching. Setting it in the frontmatter will apply to all slides. You can also set different transition per slide.
+This will give you a nice sliding effects on slide switching. Setting it in the frontmatter will apply to all slides. You can also set different transitions per slide.
 
 ### Builtin Transitions
 
@@ -418,7 +443,7 @@ and then in your custom stylesheets:
 }
 ```
 
-Learn more how it works in [Vue Transition](https://vuejs.org/guide/built-ins/transition.html).
+Learn more about how it works in [Vue Transition](https://vuejs.org/guide/built-ins/transition.html).
 
 ### Forward & Backward Transitions
 

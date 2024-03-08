@@ -27,7 +27,7 @@ Current page is: {{ $slidev.nav.currentPage }}
 
 ### `$clicks`
 
-`$clicks` hold a number of clicks on the current slide. Can be used conditionally to show different content on clicks.
+`$clicks` hold the number of clicks on the current slide. Can be used conditionally to show different content on clicks.
 
 ```html
 <div v-if="$clicks > 3">Content</div>
@@ -45,7 +45,7 @@ Is current page active: {{ $page === $slidev.nav.currentPage }}
 
 ### `$renderContext`
 
-`$renderContext` holds the current render context, can be `slide`, `overview`, `presenter` or `previewNext`
+`$renderContext` holds the current render context, which can be `slide`, `overview`, `presenter` or `previewNext`
 
 ```md
 <div v-if="$renderContext === 'slide'">
@@ -55,7 +55,7 @@ Is current page active: {{ $page === $slidev.nav.currentPage }}
 
 ### `$slidev.nav`
 
-A reactive object holding the properties and controls of the slides navigation. For examples:
+A reactive object holding the properties and controls of the slide navigation. For examples:
 
 ```js
 $slidev.nav.next() // go next step

@@ -4,7 +4,7 @@
 
 We have [drauu](https://github.com/antfu/drauu) built-in for drawing and annotation that could enhance your presentation further.
 
-To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/presenter-mode). Drawings and annotations you created will be **synced up** automatically across all instances in real-time.
+To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/presenter-mode). Drawings and annotations you created will be **synced up** automatically across all instances in real time.
 
 <TheTweet id="1424027510342250499" />
 
@@ -14,7 +14,7 @@ When using a stylus pen on a tablet (for example, iPad with Apple Pencil), Slide
 
 ## Persist Drawings
 
-The following frontmatter configuration allows you to persist your drawings as SVGs under `.slidev/drawings` directory and have them inside your exported pdf or hosted site.
+The following frontmatter configuration allows you to persist your drawings as SVGs under `.slidev/drawings` directory and have them inside your exported PDF or hosted site.
 
 ```md
 ---

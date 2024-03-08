@@ -161,6 +161,7 @@ export interface ClicksContext {
   }
   register: (el: ClicksElement, info: ClicksInfo) => void
   unregister: (el: ClicksElement) => void
+  onMounted: () => void
   readonly currentOffset: number
   readonly total: number
 }

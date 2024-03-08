@@ -47,7 +47,7 @@ $ slidev export --dark
 
 > Available since v0.21
 
-By default, Slidev exports one page per slide with clicks animations disabled. If you want export slides with multiple steps into multiple pages, pass the `--with-clicks` option.
+By default, Slidev exports one page per slide with clicks animations disabled. If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option.
 
 ```bash
 $ slidev export --with-clicks
@@ -97,7 +97,7 @@ $ slidev export --range 1,6-8,10
 
 This option accepts both specific slide numbers and ranges.
 
-The example above would export slides 1,6,7,8, and 10.
+The example above would export slides 1,6,7,8 and 10.
 
 ### Multiple entries
 
@@ -125,17 +125,35 @@ Export only the presenter notes (the last comment block for each slide) into a t
 $ slidev export-notes
 ```
 
-This command also accept multiple entries like for the [export command](#multiple-entries)
+This command also accepts multiple entries like for the [export command](#multiple-entries)
 
 ## Single-Page Application (SPA)
 
 See [Static Hosting](/guide/hosting).
 
+## Exportable Docker Image
+
+To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintianed by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
+
+```bash
+docker run --name slidev --rm -it \
+    -v ${PWD}:/slidev \
+    -p 3030:3030 \
+    -e NPM_MIRROR="https://registry.npmmirror.com" \
+    tangramor/slidev:playwright
+```
+
+Then you can use the export feature like following under your work folder:
+
+```bash
+docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
+```
+
 ## Troubleshooting
 
 ### Timeout
 
-For big presentation you might want to increase the playwrigth timeout with `--timeout`
+For big presentations you might want to increase the Playwright timeout with `--timeout`
 
 ```bash
 $ slidev export --timeout 60000
@@ -143,7 +161,7 @@ $ slidev export --timeout 60000
 
 ### Executable path
 
-You can set the browser executable path for playwright using `--executable-path`
+You can set the browser executable path for Playwright using `--executable-path`
 
 ```bash
 $ slidev export --executable-path [path_to_chromium]

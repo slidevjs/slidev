@@ -4,7 +4,7 @@
 
 > Slidev requires [**Node.js >=18.0**](https://nodejs.org/)
 
-The best way to get started is using our official starter template.
+The best way to get started is by using our official starter template.
 
 ::: code-group
 
@@ -64,15 +64,18 @@ This command will also try to use local `@slidev/cli` if it has been found in th
 
 If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker](https://hub.docker.com/r/tangramor/slidev) image maintained by [tangramor](https://github.com/tangramor), or build your own.
 
-Just run following command in your work folder:
+Just run the following command in your work folder:
 
 ```bash
 docker run --name slidev --rm -it \
     --user node \
     -v ${PWD}:/slidev \
     -p 3030:3030 \
+    -e NPM_MIRROR="https://registry.npmmirror.com" \
     tangramor/slidev:latest
 ```
+
+**_Note_**: You can use `NPM_MIRROR` to specify a npm mirror to speed up the installation process.
 
 If your work folder is empty, it will generate a template `slides.md` and other related files under your work folder, and launch the server on port `3030`.
 
@@ -86,14 +89,13 @@ Or you can create your own slidev project to a docker image with Dockerfile:
 FROM tangramor/slidev:latest
 
 ADD . /slidev
-
 ```
 
 Create the docker image: `docker build -t myppt .`
 
 And run the container: `docker run --name myslides --rm --user node -p 3030:3030 myppt`
 
-You can visit your slides from `http://localhost:3030/`
+You can visit your slides at `http://localhost:3030/`
 
 ### Build hostable SPA (Single Page Application)
 
@@ -101,11 +103,11 @@ Run command `docker exec -i slidev npx slidev build` on the running container `s
 
 #### Host on Github Pages
 
-You can host `dist` in a static web site such as [Github Pages](https://tangramor.github.io/slidev_docker/) or Gitlab Pages.
+You can host `dist` in a static website such as [Github Pages](https://tangramor.github.io/slidev_docker/) or Gitlab Pages.
 
-Because in Github pages the url may contain subfolder, so you need to modify the generated `index.html` to change `href="/assets/xxx` to `href="./assets/xxx`. Or you may use `--base=/<subfolder>/` option during the build process, such as: `docker exec -i slidev npx slidev build --base=/slidev_docker/`.
+Because in GitHub Pages, the URL may contain subfolders, you may use `--base=/<subfolder>/` option during the build process, such as `docker exec -i slidev npx slidev build --base=/slidev_docker/`.
 
-And to avoid Jekyll build process, you need to add an empty file `.nojekyll`.
+To avoid the Jekyll build process, you need to add an empty file `.nojekyll`.
 
 #### Host by docker
 
@@ -115,7 +117,7 @@ You can also host it by yourself with docker:
 docker run --name myslides --rm -p 80:80 -v ${PWD}/dist:/usr/share/nginx/html nginx:alpine
 ```
 
-Or create a static image with following Dockerfile:
+Or create a static image with the following Dockerfile:
 
 ```Dockerfile
 FROM nginx:alpine
@@ -127,7 +129,7 @@ Create the docker image: `docker build -t mystaticppt .`
 
 And run the container: `docker run --name myslides --rm -p 80:80 mystaticppt`
 
-You can visit your slides from http://localhost/
+You can visit your slides at http://localhost/
 
 Refer to the [tangramor/slidev_docker](https://github.com/tangramor/slidev_docker) for more details.
 
@@ -143,9 +145,9 @@ Refer to the [tangramor/slidev_docker](https://github.com/tangramor/slidev_docke
 }
 ```
 
-In that case you will be able to run `npm run dev`.
+In that case, you will be able to run `npm run dev`.
 
-You can pass options to any commands:
+You can pass options to any command:
 
 - boolean option are `true` if they are present, false otherwise (example: `slidev --open`)
 - some options can have values you can add just after the option or by using the `=` character (example: `slidev --port 8080` or `slidev --port=8080`)
@@ -165,8 +167,8 @@ Start a local server for Slidev.
 Options:
 
 - `--port`, `-p` (`number`, default: `3030`): port number.
-- `--open`, `-o` (`boolean`, default: `false`): open in browser.
-- `--remote [password]` (`string`): listen to public host and enable remote control, if a value is passed then the presenter mode is private and only accessible by passing the given password in the URL query `password` parameter.
+- `--open`, `-o` (`boolean`, default: `false`): open in the browser.
+- `--remote [password]` (`string`): listen to the public host and enable remote control, if a value is passed then the presenter mode is private and only accessible by passing the given password in the URL query `password` parameter.
 - `--bind` (`string`, default: `0.0.0.0`): specify which IP addresses the server should listen on in the remote mode.
 - `--log` (`'error', 'warn', 'info', 'silent'`, default: `'warn'`): Log level.
 - `--force`, `-f` (`boolean`, default: `false`): force the optimizer to ignore the cache and re-bundle.
@@ -199,7 +201,7 @@ Options:
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.
-- `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every clicks (see https://sli.dev/guide/animations.html#click-animations).
+- `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animations).
 - `--theme`, `-t` (`string`): override theme.
 
 ### `slidev format [entry]`
@@ -210,12 +212,12 @@ Format the markdown file.
 
 ### `slidev theme [subcommand]`
 
-Theme related operations.
+Theme-related operations.
 
 Subcommands:
 
-- `eject [entry]`: Eject current theme into local file system
+- `eject [entry]`: Eject the current theme into the local file system
   - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
   - Options:
-    - `--dir` (`string`, default: `theme`): output dir.
+    - `--dir` (`string`, default: `theme`): the output dir.
     - `--theme`, `-t` (`string`): override theme.

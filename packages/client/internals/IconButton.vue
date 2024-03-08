@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <component :is="as || 'button'" class="slidev-icon-btn" :title="title" v-bind="$attrs">
+  <component :is="as || 'button'" class="slidev-icon-btn" :title="title">
     <span class="sr-only">{{ title }}</span>
     <slot>
       <div :class="icon" />
