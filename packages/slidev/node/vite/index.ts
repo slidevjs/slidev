@@ -3,52 +3,20 @@ import { existsSync } from 'node:fs'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
-import Vue from '@vitejs/plugin-vue'
-import VueJsx from '@vitejs/plugin-vue-jsx'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
-import { loadDrawings, writeDrawings } from '../drawings'
+import { loadDrawings, writeDrawings } from '../integrations/drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 
 import { createMarkdownPlugin } from './markdown'
-import { createFixPlugins } from './patchTransform'
+import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createMonacoTypesLoader } from './monacoTypes'
-
-const customElements = new Set([
-  // katex
-  'annotation',
-  'math',
-  'menclose',
-  'mfrac',
-  'mglyph',
-  'mi',
-  'mlabeledtr',
-  'mn',
-  'mo',
-  'mover',
-  'mpadded',
-  'mphantom',
-  'mroot',
-  'mrow',
-  'mspace',
-  'msqrt',
-  'mstyle',
-  'msub',
-  'msubsup',
-  'msup',
-  'mtable',
-  'mtd',
-  'mtext',
-  'mtr',
-  'munder',
-  'munderover',
-  'semantics',
-])
+import { createVuePlugin } from './vue'
 
 export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
@@ -56,8 +24,6 @@ export async function ViteSlidevPlugin(
   serverOptions: SlidevServerOptions = {},
 ): Promise<Plugin[]> {
   const {
-    vue: vueOptions = {},
-    vuejsx: vuejsxOptions = {},
     components: componentsOptions = {},
     icons: iconsOptions = {},
     remoteAssets: remoteAssetsOptions = {},
@@ -72,33 +38,14 @@ export async function ViteSlidevPlugin(
     data: { config },
   } = options
 
-  const VuePlugin = Vue({
-    include: [/\.vue$/, /\.md$/],
-    exclude: [],
-    template: {
-      compilerOptions: {
-        isCustomElement(tag) {
-          return customElements.has(tag)
-        },
-      },
-      ...vueOptions?.template,
-    },
-    ...vueOptions,
-  })
-
-  const VueJsxPlugin = VueJsx(vuejsxOptions)
-
-  const MarkdownPlugin = await createMarkdownPlugin(options, pluginOptions)
-
   const drawingData = await loadDrawings(options)
 
   const publicRoots = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
 
   const plugins = [
-    MarkdownPlugin,
-    VueJsxPlugin,
-    VuePlugin,
+    createMarkdownPlugin(options, pluginOptions),
 
+    createVuePlugin(options, pluginOptions),
     createSlidesLoader(options, pluginOptions, serverOptions),
 
     Components({
@@ -170,7 +117,7 @@ export async function ViteSlidevPlugin(
 
     createConfigPlugin(options),
     createMonacoTypesLoader(options),
-    createFixPlugins(options),
+    createVueCompilerFlagsPlugin(options),
 
     publicRoots.length
       ? import('vite-plugin-static-copy').then(r => r.viteStaticCopy({

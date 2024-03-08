@@ -9,14 +9,14 @@ import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
 import { uniq } from '@antfu/utils'
 import type { SlidevData } from '@slidev/types'
-import _debug from 'debug'
+import Debug from 'debug'
 import { parser } from './parser'
-import { getThemeMeta, resolveTheme } from './themes'
-import { resolveAddons } from './addons'
+import { getThemeMeta, resolveTheme } from './integrations/themes'
+import { resolveAddons } from './integrations/addons'
 import { getRoots, resolveEntry } from './resolver'
 import type { RootsInfo } from './resolver'
 
-const debug = _debug('slidev:options')
+const debug = Debug('slidev:options')
 
 export interface SlidevEntryOptions {
   /**

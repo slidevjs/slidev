@@ -6,9 +6,9 @@ import { mergeConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import type { BuildArgs } from '@slidev/types'
-import { ViteSlidevPlugin } from './plugins/preset'
-import { getIndexHtml, mergeViteConfigs } from './common'
-import type { ResolvedSlidevOptions } from './options'
+import { ViteSlidevPlugin } from '../vite'
+import type { ResolvedSlidevOptions } from '../options'
+import { getIndexHtml, mergeViteConfigs } from './shared'
 
 export async function build(
   options: ResolvedSlidevOptions,

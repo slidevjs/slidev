@@ -1,8 +1,6 @@
-import {
-  transformMagicMove,
-} from '@slidev/cli/node/plugins/markdown'
 import { expect, it } from 'vitest'
 import { getHighlighter } from 'shiki'
+import { transformMagicMove } from '../packages/slidev/node/syntax/transform'
 
 it('basic', async () => {
   const code = `

@@ -1,12 +1,6 @@
 import path from 'node:path'
-import {
-  transformMermaid,
-  transformPageCSS,
-  transformPlantUml,
-  transformSlotSugar,
-} from '@slidev/cli/node/plugins/markdown'
-import { transformSnippet } from 'packages/slidev/node/plugins/transformSnippet'
 import { describe, expect, it } from 'vitest'
+import { transformMermaid, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../packages/slidev/node/syntax/transform'
 
 // const isMacOS = process.platform === 'darwin'
 // const isNode18orAbove = +process.version.slice(1, 3) >= 18

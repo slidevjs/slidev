@@ -1,5 +1,5 @@
 import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
-import { loadShikiSetups } from '../plugins/markdown'
+import { loadShikiSetups } from '../setups/shiki'
 import { resolveImportUrl } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
 

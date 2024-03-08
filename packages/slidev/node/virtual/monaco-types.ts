@@ -3,8 +3,8 @@ import { join, resolve } from 'node:path'
 
 import fg from 'fast-glob'
 import { uniq } from '@antfu/utils'
-import { scanMonacoModules } from '../plugins/markdown'
 import { toAtFS } from '../resolver'
+import { scanMonacoModules } from '../syntax/transform/monaco'
 import type { VirtualModuleTemplate } from './types'
 
 export const templateMonacoTypes: VirtualModuleTemplate = {

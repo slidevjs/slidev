@@ -3,7 +3,10 @@ import { objectEntries } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '../options'
 import { getDefine } from './extendConfig'
 
-export function createFixPlugins(
+/**
+ * Replace compiler flags like `__DEV__` in Vue SFC
+ */
+export function createVueCompilerFlagsPlugin(
   options: ResolvedSlidevOptions,
 ): Plugin[] {
   const define = objectEntries(getDefine(options))

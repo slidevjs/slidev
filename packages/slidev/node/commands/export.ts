@@ -9,8 +9,8 @@ import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { resolve } from 'mlly'
-import type { ResolvedSlidevOptions } from './options'
-import { getRoots } from './resolver'
+import type { ResolvedSlidevOptions } from '../options'
+import { getRoots } from '../resolver'
 
 export interface ExportOptions {
   total: number

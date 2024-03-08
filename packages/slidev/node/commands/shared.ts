@@ -2,9 +2,9 @@ import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
 import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import type { ResolvedSlidevOptions } from './options'
-import { generateGoogleFontsUrl } from './utils'
-import { toAtFS } from './resolver'
+import type { ResolvedSlidevOptions } from '../options'
+import { generateGoogleFontsUrl } from '../utils'
+import { toAtFS } from '../resolver'
 
 export async function getIndexHtml({ clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')

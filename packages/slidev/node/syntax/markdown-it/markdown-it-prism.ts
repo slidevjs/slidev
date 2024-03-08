@@ -7,7 +7,7 @@ import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/index.js'
 import type MarkdownIt from 'markdown-it'
 import * as htmlparser2 from 'htmlparser2'
-import { escapeVueInCode } from './markdown'
+import { escapeVueInCode } from '../transform/utils'
 
 const require = createRequire(import.meta.url)
 
