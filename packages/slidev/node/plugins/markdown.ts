@@ -247,7 +247,7 @@ export function transformSlotSugar(md: string) {
 }
 
 const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*(\{.*?\})?([^\n]*?))?\n([\s\S]+?)^````$/mg
-const reCodeBlock = /^```(\w+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
+const reCodeBlock = /^```([\w'-]+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
 
 /**
  * Transform magic-move code blocks
