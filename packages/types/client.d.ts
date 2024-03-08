@@ -30,7 +30,7 @@ declare module '#slidev/slides' {
   export { slides }
 }
 
-declare module '#slidev/titles.md' {
+declare module '#slidev/title-renderer' {
   import type { ComponentOptions } from 'vue'
 
   const component: ComponentOptions

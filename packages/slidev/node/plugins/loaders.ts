@@ -1,7 +1,6 @@
-import { basename, join, resolve } from 'node:path'
-import { builtinModules } from 'node:module'
+import { basename } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, objectMap, range, uniq } from '@antfu/utils'
+import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -14,11 +13,14 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '../options'
 import { stringifyMarkdownTokens } from '../utils'
-import { resolveImportPath, toAtFS } from '../resolver'
-import { loadShikiSetups, scanMonacoModules } from './markdown'
+import { toAtFS } from '../resolver'
+import { templates } from '../virtual'
+import type { VirtualModuleTempalteContext } from '../virtual/types'
+import { templateTitleRendererMd } from '../virtual/titles'
+import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
+import { templateConfigs } from '../virtual/configs'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -92,16 +94,48 @@ function withRenderedNote(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, clientRoot, roots, remote, mode, userRoot, themeRoots, addonRoots }: ResolvedSlidevOptions,
+  options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
-  const slidePrefix = '/@slidev/slides/'
   const hmrPages = new Set<number>()
   let server: ViteDevServer | undefined
 
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
+
+  const { data, clientRoot, roots, mode } = options
+
+  const templateCtx: VirtualModuleTempalteContext = {
+    md,
+    async getLayouts() {
+      const now = Date.now()
+      if (now - _layouts_cache_time < 2000)
+        return _layouts_cache
+
+      const layouts: Record<string, string> = {}
+
+      for (const root of [...roots, clientRoot]) {
+        const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
+          cwd: root,
+          absolute: true,
+          suppressErrors: true,
+        })
+
+        for (const layoutPath of layoutPaths) {
+          const layout = basename(layoutPath).replace(/\.\w+$/, '')
+          if (layouts[layout])
+            continue
+          layouts[layout] = layoutPath
+        }
+      }
+
+      _layouts_cache_time = now
+      _layouts_cache = layouts
+
+      return layouts
+    },
+  }
 
   return [
     {
@@ -154,17 +188,17 @@ export function createSlidesLoader(
         const moduleIds = new Set<string>()
 
         if (data.slides.length !== newData.slides.length) {
-          moduleIds.add('/@slidev/slides')
+          moduleIds.add(templateSlides.id)
           range(newData.slides.length).map(i => hmrPages.add(i))
         }
 
         if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
-          moduleIds.add('/@slidev/slides')
+          moduleIds.add(templateSlides.id)
           range(data.slides.length).map(i => hmrPages.add(i))
         }
 
         if (!equal(data.config, newData.config))
-          moduleIds.add('/@slidev/configs')
+          moduleIds.add(templateConfigs.id)
 
         if (!equal(data.features, newData.features)) {
           setTimeout(() => {
@@ -219,12 +253,12 @@ export function createSlidesLoader(
         Object.assign(data, newData)
 
         if (hmrPages.size > 0)
-          moduleIds.add('/@slidev/titles.md')
+          moduleIds.add(templateTitleRendererMd.id)
 
         const vueModules = Array.from(hmrPages)
           .flatMap(i => [
-            ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.frontmatter`),
-            ctx.server.moduleGraph.getModuleById(`${slidePrefix}${i + 1}.md`),
+            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.frontmatter`),
+            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.md`),
           ])
 
         hmrPages.clear()
@@ -242,72 +276,23 @@ export function createSlidesLoader(
       },
 
       resolveId(id) {
-        if (id.startsWith(slidePrefix) || id.startsWith('/@slidev/'))
+        if (id.startsWith(VIRTUAL_SLIDE_PREFIX) || id.startsWith('/@slidev/'))
           return id
         return null
       },
 
-      load(id): LoadResult | Promise<LoadResult> {
-        // slide routes
-        if (id === '/@slidev/slides')
-          return generateSlideRoutes()
-
-        // routes
-        if (id === '/@slidev/routes')
-          return generateDummyRoutes()
-
-        // layouts
-        if (id === '/@slidev/layouts')
-          return generateLayouts()
-
-        // styles
-        if (id === '/@slidev/styles')
-          return generateUserStyles()
-
-        // monaco-types
-        if (id === '/@slidev/monaco-types')
-          return generateMonacoTypes()
-
-        // configs
-        if (id === '/@slidev/configs')
-          return generateConfigs()
-
-        // global component
-        if (id === '/@slidev/global-components/top')
-          return generateGlobalComponents('top')
-
-        // global component
-        if (id === '/@slidev/global-components/bottom')
-          return generateGlobalComponents('bottom')
-
-        // custom nav controls
-        if (id === '/@slidev/custom-nav-controls')
-          return generateCustomNavControls()
-
-        // shiki for client side
-        if (id === '/@slidev/shiki')
-          return generteShikiBundle()
-
-        // setups
-        const setupModules = ['shiki', 'code-runners', 'monaco', 'mermaid', 'main', 'root', 'shortcuts']
-        for (const name of setupModules) {
-          if (id === `/@slidev/setups/${name}`)
-            return generateSetupArray(name)
-        }
-
-        // title
-        if (id === '/@slidev/titles.md') {
+      async load(id): Promise<LoadResult> {
+        const template = templates.find(i => i.id === id)
+        if (template) {
           return {
-            code: data.slides
-              .map(({ title }, i) => `<template ${i === 0 ? 'v-if' : 'v-else-if'}="+no === ${i + 1}">\n\n${title}\n\n</template>`)
-              .join(''),
+            code: await template.getContent(options, templateCtx),
             map: { mappings: '' },
           }
         }
 
         // pages
-        if (id.startsWith(slidePrefix)) {
-          const remaning = id.slice(slidePrefix.length)
+        if (id.startsWith(VIRTUAL_SLIDE_PREFIX)) {
+          const remaning = id.slice(VIRTUAL_SLIDE_PREFIX.length)
           const match = remaning.match(regexIdQuery)
           if (match) {
             const [, no, type] = match
@@ -382,9 +367,9 @@ export function createSlidesLoader(
       name: 'slidev:layout-transform:pre',
       enforce: 'pre',
       async transform(code, id) {
-        if (!id.startsWith(slidePrefix))
+        if (!id.startsWith(VIRTUAL_SLIDE_PREFIX))
           return
-        const remaning = id.slice(slidePrefix.length)
+        const remaning = id.slice(VIRTUAL_SLIDE_PREFIX.length)
         const match = remaning.match(regexIdQuery)
         if (!match)
           return
@@ -403,15 +388,6 @@ export function createSlidesLoader(
         if (!id.endsWith('.vue') || id.includes('/@slidev/client/') || id.includes('/packages/client/'))
           return
         return transformVue(code)
-      },
-    },
-    {
-      name: 'slidev:title-transform:pre',
-      enforce: 'pre',
-      transform(code, id) {
-        if (id !== '/@slidev/titles.md')
-          return
-        return transformTitles(code)
       },
     },
     {
@@ -475,7 +451,7 @@ export function createSlidesLoader(
   }
 
   async function transformMarkdown(code: string, pageNo: number) {
-    const layouts = await getLayouts()
+    const layouts = await templateCtx.getLayouts()
     const frontmatter = getFrontmatter(pageNo)
     let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
     if (!layouts[layoutName]) {
@@ -488,7 +464,7 @@ export function createSlidesLoader(
     delete frontmatter.title
     const imports = [
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      `import frontmatter from "${toAtFS(`${slidePrefix + (pageNo + 1)}.frontmatter`)}"`,
+      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (pageNo + 1)}.frontmatter`)}"`,
       templateImportContextUtils,
       '_provideFrontmatter(frontmatter)',
       templateInitContext,
@@ -559,371 +535,11 @@ export function createSlidesLoader(
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
   }
 
-  function transformTitles(code: string) {
-    return code
-      .replace(/<template>\s*<div>\s*<p>/, '<template>')
-      .replace(/<\/p>\s*<\/div>\s*<\/template>/, '</template>')
-      .replace(/<script\ssetup>/, `<script setup lang="ts">
-defineProps<{ no: number | string }>()`)
-  }
-
-  async function getLayouts() {
-    const now = Date.now()
-    if (now - _layouts_cache_time < 2000)
-      return _layouts_cache
-
-    const layouts: Record<string, string> = {}
-
-    for (const root of [...roots, clientRoot]) {
-      const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
-        cwd: root,
-        absolute: true,
-        suppressErrors: true,
-      })
-
-      for (const layoutPath of layoutPaths) {
-        const layout = basename(layoutPath).replace(/\.\w+$/, '')
-        if (layouts[layout])
-          continue
-        layouts[layout] = layoutPath
-      }
-    }
-
-    _layouts_cache_time = now
-    _layouts_cache = layouts
-
-    return layouts
-  }
-
-  async function resolveUrl(id: string) {
-    return toAtFS(await resolveImportPath(id, true))
-  }
-
-  function resolveUrlOfClient(name: string) {
-    return toAtFS(join(clientRoot, name))
-  }
-
-  async function generateUserStyles() {
-    const imports: string[] = [
-      `import "${resolveUrlOfClient('styles/vars.css')}"`,
-      `import "${resolveUrlOfClient('styles/index.css')}"`,
-      `import "${resolveUrlOfClient('styles/code.css')}"`,
-      `import "${resolveUrlOfClient('styles/katex.css')}"`,
-      `import "${resolveUrlOfClient('styles/transitions.css')}"`,
-    ]
-
-    for (const root of roots) {
-      const styles = [
-        join(root, 'styles', 'index.ts'),
-        join(root, 'styles', 'index.js'),
-        join(root, 'styles', 'index.css'),
-        join(root, 'styles.css'),
-        join(root, 'style.css'),
-      ]
-
-      for (const style of styles) {
-        if (fs.existsSync(style)) {
-          imports.push(`import "${toAtFS(style)}"`)
-          continue
-        }
-      }
-    }
-
-    if (data.features.katex)
-      imports.push(`import "${await resolveUrl('katex/dist/katex.min.css')}"`)
-
-    if (data.config.highlighter === 'shiki') {
-      imports.push(
-        `import "${await resolveUrl('@shikijs/vitepress-twoslash/style.css')}"`,
-        `import "${resolveUrlOfClient('styles/shiki-twoslash.css')}"`,
-      )
-    }
-
-    if (data.config.css === 'unocss') {
-      imports.unshift(
-        `import "${await resolveUrl('@unocss/reset/tailwind.css')}"`,
-        'import "uno:preflights.css"',
-        'import "uno:typography.css"',
-        'import "uno:shortcuts.css"',
-      )
-      imports.push('import "uno.css"')
-    }
-
-    return imports.join('\n')
-  }
-
-  async function generateMonacoTypes() {
-    const typesRoot = join(userRoot, 'snippets')
-    const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
-    let result = 'import { addFile } from "@slidev/client/setup/monaco.ts"\n'
-
-    // User snippets
-    for (const file of files) {
-      const url = `${toAtFS(resolve(typesRoot, file))}?monaco-types&raw`
-      result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
-    }
-
-    // Dependencies
-    const deps = [...data.config.monacoTypesAdditionalPackages]
-    if (data.config.monacoTypesSource === 'local')
-      deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
-
-    // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
-    // Converts some of the known global imports to node so that we grab the right info
-    function mapModuleNameToModule(moduleSpecifier: string) {
-      if (moduleSpecifier.startsWith('node:'))
-        return 'node'
-      if (builtinModules.includes(moduleSpecifier))
-        return 'node'
-      const mainPackageName = moduleSpecifier.split('/')[0]
-      if (builtinModules.includes(mainPackageName) && !mainPackageName.startsWith('@'))
-        return 'node'
-
-      // strip module filepath e.g. lodash/identity => lodash
-      const [a = '', b = ''] = moduleSpecifier.split('/')
-      const moduleName = a.startsWith('@') ? `${a}/${b}` : a
-
-      return moduleName
-    }
-
-    for (const specifier of uniq(deps)) {
-      if (specifier[0] === '.')
-        continue
-      const moduleName = mapModuleNameToModule(specifier)
-      result += `import(${JSON.stringify(`/@slidev-monaco-types/resolve?pkg=${moduleName}`)})\n`
-    }
-
-    return result
-  }
-
-  async function generateLayouts() {
-    const imports: string[] = []
-    const layouts = objectMap(
-      await getLayouts(),
-      (k, v) => {
-        imports.push(`import __layout_${k} from "${toAtFS(v)}"`)
-        return [k, `__layout_${k}`]
-      },
-    )
-
-    return [
-      imports.join('\n'),
-      `export default {\n${Object.entries(layouts).map(([k, v]) => `"${k}": ${v}`).join(',\n')}\n}`,
-    ].join('\n\n')
-  }
-
-  async function generateSlideRoutes() {
-    const layouts = await getLayouts()
-    const imports = [
-      `import { shallowRef } from 'vue'`,
-      `import * as __layout__error from '${layouts.error}'`,
-    ]
-    const slides = data.slides
-      .map((_, idx) => {
-        const no = idx + 1
-        imports.push(`import { meta as f${no} } from '${slidePrefix}${no}.frontmatter'`)
-        return `{
-          no: ${no},
-          meta: f${no},
-          component: async () => {
-            try {
-              return await import('${slidePrefix}${no}.md')
-            }
-            catch {
-              return __layout__error
-            }
-          },
-        }`
-      })
-    return [
-      ...imports,
-      `const data = [\n${slides.join(',\n')}\n]`,
-      `if (import.meta.hot) {`,
-      `  import.meta.hot.data.slides ??= shallowRef()`,
-      `  import.meta.hot.data.slides.value = data`,
-      `  import.meta.hot.accept()`,
-      `}`,
-      `export const slides = import.meta.hot ? import.meta.hot.data.slides : shallowRef(data)`,
-    ].join('\n')
-  }
-
-  function generateDummyRoutes() {
-    return [
-      `export { slides } from '#slidev/slides'`,
-      `console.warn('[slidev] #slidev/routes is deprecated, use #slidev/slides instead')`,
-    ].join('\n')
-  }
-
   function getTitle() {
     if (isString(data.config.title)) {
       const tokens = md.parseInline(data.config.title, {})
       return stringifyMarkdownTokens(tokens)
     }
     return data.config.title
-  }
-
-  function generateConfigs() {
-    const config = {
-      ...data.config,
-      remote,
-      title: getTitle(),
-    }
-
-    if (isString(config.info))
-      config.info = md.render(config.info)
-
-    return `export default ${JSON.stringify(config)}`
-  }
-
-  async function generateGlobalComponents(layer: 'top' | 'bottom') {
-    const components = roots
-      .flatMap((root) => {
-        if (layer === 'top') {
-          return [
-            join(root, 'global.vue'),
-            join(root, 'global-top.vue'),
-            join(root, 'GlobalTop.vue'),
-          ]
-        }
-        else {
-          return [
-            join(root, 'global-bottom.vue'),
-            join(root, 'GlobalBottom.vue'),
-          ]
-        }
-      })
-      .filter(i => fs.existsSync(i))
-
-    const imports = components.map((i, idx) => `import __n${idx} from '${toAtFS(i)}'`).join('\n')
-    const render = components.map((i, idx) => `h(__n${idx})`).join(',')
-
-    return `
-${imports}
-import { h } from 'vue'
-export default {
-  render() {
-    return [${render}]
-  }
-}
-`
-  }
-
-  async function generateCustomNavControls() {
-    const components = roots
-      .flatMap((root) => {
-        return [
-          join(root, 'custom-nav-controls.vue'),
-          join(root, 'CustomNavControls.vue'),
-        ]
-      })
-      .filter(i => fs.existsSync(i))
-
-    const imports = components.map((i, idx) => `import __n${idx} from '${toAtFS(i)}'`).join('\n')
-    const render = components.map((i, idx) => `h(__n${idx})`).join(',')
-
-    return `
-${imports}
-import { h } from 'vue'
-export default {
-  render() {
-    return [${render}]
-  }
-}
-`
-  }
-
-  async function generateSetupArray(name: string) {
-    const setups = uniq([
-      ...themeRoots,
-      ...addonRoots,
-      userRoot,
-    ])
-      .flatMap((i) => {
-        const path = join(i, 'setup', name)
-        return ['.ts', '.mts', '.js', '.mjs'].map(ext => path + ext)
-      })
-      .filter(i => fs.existsSync(i))
-
-    const imports: string[] = []
-
-    setups.forEach((path, idx) => {
-      imports.push(`import __n${idx} from '${toAtFS(path)}'`)
-    })
-
-    imports.push(
-      `export default [${setups.map((_, idx) => `__n${idx}`).join(',')}]`,
-    )
-
-    return imports.join('\n')
-  }
-
-  async function generteShikiBundle() {
-    const options = await loadShikiSetups(clientRoot, roots)
-    const langs = await resolveLangs(options.langs || ['javascript', 'typescript', 'html', 'css'])
-    const resolvedThemeOptions = 'themes' in options
-      ? {
-          themes: Object.fromEntries(await Promise.all(Object.entries(options.themes)
-            .map(async ([name, value]) => [name, await resolveTheme(value!)]),
-          )) as Record<string, ThemeRegistration | string>,
-        }
-      : {
-          theme: await resolveTheme(options.theme || 'vitesse-dark'),
-        }
-
-    const themes = resolvedThemeOptions.themes
-      ? Object.values(resolvedThemeOptions.themes)
-      : [resolvedThemeOptions.theme!]
-
-    const themeOptionsNames = resolvedThemeOptions.themes
-      ? { themes: Object.fromEntries(Object.entries(resolvedThemeOptions.themes).map(([name, value]) => [name, typeof value === 'string' ? value : value.name])) }
-      : { theme: typeof resolvedThemeOptions.theme === 'string' ? resolvedThemeOptions.theme : resolvedThemeOptions.theme.name }
-
-    async function normalizeGetter<T>(p: MaybeGetter<T>): Promise<T> {
-      return Promise.resolve(typeof p === 'function' ? (p as any)() : p).then(r => r.default || r)
-    }
-
-    async function resolveLangs(langs: (LanguageInput | SpecialLanguage | string)[]): Promise<(LanguageRegistration | string)[]> {
-      return Array.from(new Set((
-        await Promise.all(
-          langs.map(async lang => await normalizeGetter(lang as LanguageInput).then(r => Array.isArray(r) ? r : [r])),
-        )).flat()))
-    }
-
-    async function resolveTheme(theme: string | ThemeInput): Promise<ThemeRegistration | string> {
-      return typeof theme === 'string' ? theme : await normalizeGetter(theme)
-    }
-
-    const langsInit = await Promise.all(langs
-      .map(async lang =>
-        typeof lang === 'string'
-          ? `import('${await resolveUrl(`shiki/langs/${lang}.mjs`)}')`
-          : JSON.stringify(lang)),
-    )
-
-    const themesInit = await Promise.all(themes
-      .map(async theme =>
-        typeof theme === 'string'
-          ? `import('${await resolveUrl(`shiki/themes/${theme}.mjs`)}')`
-          : JSON.stringify(theme)))
-
-    const langNames = langs
-      .flatMap(lang => typeof lang === 'string' ? lang : lang.name)
-
-    const lines: string[] = []
-    lines.push(
-      `import { getHighlighterCore } from "${await resolveUrl('shiki/core')}"`,
-      `export { shikiToMonaco } from "${await resolveUrl('@shikijs/monaco')}"`,
-
-      `export const languages = ${JSON.stringify(langNames)}`,
-      `export const themes = ${JSON.stringify(themeOptionsNames.themes || themeOptionsNames.theme)}`,
-
-      'export const shiki = getHighlighterCore({',
-      `  themes: [${themesInit.join(',')}],`,
-      `  langs: [${langsInit.join(',')}],`,
-      `  loadWasm: import('${await resolveUrl('shiki/wasm')}'),`,
-      '})',
-    )
-
-    return lines.join('\n')
   }
 }

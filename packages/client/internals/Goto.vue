@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import { go, slides } from '../logic/nav'
 import { activeElement, showGotoDialog } from '../state'
-import Titles from '#slidev/titles.md'
+import Titles from '#slidev/title-renderer'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()

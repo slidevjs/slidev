@@ -12,6 +12,13 @@ import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { underline, yellow } from 'kolorist'
 
+/**
+ * Resolve path for import url on Vite client side
+ */
+export async function resolveImportUrl(id: string) {
+  return toAtFS(await resolveImportPath(id, true))
+}
+
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
 }

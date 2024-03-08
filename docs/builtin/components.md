@@ -170,16 +170,16 @@ level: 2
 
 #### Usage
 
-The `<Titles>` component is a virtual component you can import with:
+The `<TitleRenderer>` component is a virtual component you can import with:
 
 ```js
-import Titles from '/@slidev/titles.md'
+import TitleRenderer from '#slidev/title-renderer'
 ```
 
 Then you can use it with:
 
 ```md
-<Titles no="42" />
+<TitleRenderer no="42" />
 ```
 
 Parameters:
