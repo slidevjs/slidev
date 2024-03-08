@@ -11,7 +11,7 @@ import {
   injectionSlideScale,
   injectionSlidevContext,
 } from './constants'
-import { useNav } from './logic/nav'
+import { useNav } from './composables/useNav'
 
 /**
  * Get the current slide context, should be called inside the setup function of a component inside slide

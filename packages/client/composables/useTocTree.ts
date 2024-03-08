@@ -2,7 +2,6 @@ import type { SlideRoute, TocItem } from '@slidev/types'
 import type { ComputedRef, Ref } from 'vue'
 import { computed } from 'vue'
 import { getSlidePath } from '../logic/slides'
-import { useNavState } from '../logic/nav-state'
 
 function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
   const titleLevel = route.meta?.slide?.level
@@ -58,9 +57,11 @@ function filterTree(tree: TocItem[], level = 1): TocItem[] {
     }))
 }
 
-export function useTocTree(slides: Ref<SlideRoute[]>): ComputedRef<TocItem[]> {
-  const { currentSlideNo, currentSlideRoute } = useNavState()
-
+export function useTocTree(
+  slides: Ref<SlideRoute[]>,
+  currentSlideNo: Ref<number>,
+  currentSlideRoute: Ref<SlideRoute>,
+): ComputedRef<TocItem[]> {
   const rawTree = computed(() => slides.value
     .filter((route: SlideRoute) => route.meta?.slide?.title)
     .reduce((acc: TocItem[], route: SlideRoute) => {

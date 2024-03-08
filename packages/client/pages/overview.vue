@@ -14,7 +14,7 @@ import IconButton from '../internals/IconButton.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import { CLICKS_MAX } from '../constants'
-import { useNav } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 

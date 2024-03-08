@@ -21,8 +21,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
-import { useNav } from '../logic/nav'
-import { useNavState } from '../logic/nav-state'
+import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 
 const main = ref<HTMLDivElement>()
@@ -37,12 +36,10 @@ const {
   hasNext,
   nextRoute,
   slides,
-  total,
-} = useNav()
-const {
   queryClicks,
   getPrimaryClicks,
-} = useNavState()
+  total,
+} = useNav()
 const { isDrawing } = useDrawings()
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')

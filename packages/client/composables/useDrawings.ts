@@ -5,10 +5,10 @@ import { createSharedComposable, toReactive, useLocalStorage } from '@vueuse/cor
 import { drawingState, onPatch, patch } from '../state/drawings'
 import { configs } from '../env'
 import { isInputting } from '../state'
-import { useNavState } from '../logic/nav-state'
+import { useNav } from './useNav'
 
 export const useDrawings = createSharedComposable(() => {
-  const { currentSlideNo, isPresenter } = useNavState()
+  const { currentSlideNo, isPresenter } = useNav()
 
   const brushColors = [
     '#ff595e',

@@ -8,7 +8,7 @@ import { fullscreen } from '../state'
 
 import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
-import { useNav } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({

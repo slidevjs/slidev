@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { useNav } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
-import { useNavState } from '../logic/nav-state'
 import SlideWrapper from './SlideWrapper.vue'
 import PresenterMouse from './PresenterMouse.vue'
 
@@ -15,8 +14,14 @@ defineProps<{
   renderContext: 'slide' | 'presenter'
 }>()
 
-const { currentSlideRoute, isPresenter, getPrimaryClicks } = useNavState()
-const { currentTransition, nextRoute, slides } = useNav()
+const {
+  currentSlideRoute,
+  currentTransition,
+  getPrimaryClicks,
+  isPresenter,
+  nextRoute,
+  slides,
+} = useNav()
 
 // preload next route
 watch(currentSlideRoute, () => {

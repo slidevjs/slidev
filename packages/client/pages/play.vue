@@ -9,14 +9,12 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
-import { useNav } from '../logic/nav'
-import { useNavState } from '../logic/nav-state'
+import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 
 registerShortcuts()
 
-const { isEmbedded, isPrintMode } = useNavState()
-const { next, prev } = useNav()
+const { next, prev, isEmbedded, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()

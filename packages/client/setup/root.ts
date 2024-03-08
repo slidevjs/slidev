@@ -7,11 +7,11 @@ import { initDrawingState } from '../state/drawings'
 import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
 import { skipTransition } from '../logic/hmr'
 import { makeId } from '../logic/utils'
-import { useNavState } from '../logic/nav-state'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { useContext } from '../composables/useContext'
 import { isDark } from '../logic/dark'
+import { useNav } from '../composables/useNav'
 import setups from '#slidev/setups/root'
 
 export default function setupRoot() {
@@ -51,12 +51,12 @@ export default function setupRoot() {
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 
   const {
-    isPresenter,
-    isNotesViewer,
-    currentSlideNo,
     clicksContext,
+    currentSlideNo,
     hasPrimarySlide,
-  } = useNavState()
+    isNotesViewer,
+    isPresenter,
+  } = useNav()
 
   useHead({
     title,

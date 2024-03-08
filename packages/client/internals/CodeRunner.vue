@@ -5,7 +5,7 @@ import type { CodeRunnerOutput } from '@slidev/types'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { useSlideContext } from '../context'
 import setupCodeRunners from '../setup/code-runners'
-import { useNavState } from '../logic/nav-state'
+import { useNav } from '../composables/useNav'
 import IconButton from './IconButton.vue'
 import DomElement from './DomElement.vue'
 
@@ -20,7 +20,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue'])
 
-const { isPrintMode } = useNavState()
+const { isPrintMode } = useNav()
 
 const code = useVModel(props, 'modelValue', emit)
 

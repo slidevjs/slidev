@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import { activeElement, showGotoDialog } from '../state'
-import { useNav } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 import Titles from '#slidev/title-renderer'
 
 const container = ref<HTMLDivElement>()

@@ -71,7 +71,7 @@ $slidev.nav.currentPage // current slide number
 $slidev.nav.currentLayout // current layout id
 ```
 
-For more properties available, refer to the [nav.ts](https://github.com/slidevjs/slidev/blob/main/packages/client/logic/nav.ts) exports.
+For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).
 
 > Note: `$slidev.nav.clicks` is a global state while `$clicks` is local to each slide. It's recommended to **use `$clicks` over `$slidev.nav.clicks`** to avoid clicks changed been triggered on page transitions.
 

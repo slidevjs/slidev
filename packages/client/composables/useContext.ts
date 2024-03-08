@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { configs } from '../env'
 import type { SlidevContext } from '../modules/context'
-import { useNav } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 
 export function useContext(): SlidevContext {
   return {

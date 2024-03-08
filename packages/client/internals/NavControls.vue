@@ -4,8 +4,7 @@ import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { downloadPDF } from '../utils'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { configs } from '../env'
-import { useNav } from '../logic/nav'
-import { useNavState } from '../logic/nav-state'
+import { useNav } from '../composables/useNav'
 import { getSlidePath } from '../logic/slides'
 import { useDrawings } from '../composables/useDrawings'
 import Settings from './Settings.vue'
@@ -22,15 +21,13 @@ const props = defineProps({
 })
 
 const {
-  isPresenter,
-  isEmbedded,
   currentRoute,
-  isPresenterAvailable,
-} = useNavState()
-const {
   currentSlideNo,
   hasNext,
   hasPrev,
+  isEmbedded,
+  isPresenter,
+  isPresenterAvailable,
   next,
   prev,
   total,

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useStyleTag } from '@vueuse/core'
 import { useHead } from '@unhead/vue'
-import { useNav } from '../../logic/nav'
+import { useNav } from '../../composables/useNav'
 import { configs } from '../../env'
 import NoteDisplay from '../../internals/NoteDisplay.vue'
 

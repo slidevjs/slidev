@@ -8,14 +8,14 @@ Usage:
 <Link :to="5" title="Go to slide 5" />
 -->
 <script setup lang="ts">
-import { useNavState } from '../logic/nav-state'
+import { useNav } from '../composables/useNav'
 
 defineProps<{
   to: number | string
   title?: string
 }>()
 
-const { isPrintMode } = useNavState()
+const { isPrintMode } = useNav()
 </script>
 
 <template>
