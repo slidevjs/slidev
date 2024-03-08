@@ -54,7 +54,7 @@ export async function findPkgRoot(dep: string, parent: string, ensure: true): Pr
 export async function findPkgRoot(dep: string, parent: string, ensure?: boolean): Promise<string | undefined>
 export async function findPkgRoot(dep: string, parent: string, ensure = false) {
   const pkgJsonPath = await findDepPkgJsonPath(dep, parent)
-  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally ? findGlobalPkgRoot(dep, false) : undefined
+  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally ? await findGlobalPkgRoot(dep, false) : undefined
   if (ensure && !path)
     throw new Error(`Failed to resolve package "${dep}"`)
   return path
