@@ -92,7 +92,7 @@ function withRenderedNote(data: SlideInfo): SlideInfo {
 }
 
 export function createSlidesLoader(
-  { data, clientRoot, roots, remote, mode, userRoot }: ResolvedSlidevOptions,
+  { data, clientRoot, roots, remote, mode, userRoot, themeRoots, addonRoots }: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin[] {
@@ -287,6 +287,13 @@ export function createSlidesLoader(
         // shiki for client side
         if (id === '/@slidev/shiki')
           return generteShikiBundle()
+
+        // setups
+        const setupModules = ['shiki', 'code-runners', 'monaco', 'mermaid', 'main', 'root', 'shortcuts']
+        for (const name of setupModules) {
+          if (id === `/@slidev/setups/${name}`)
+            return generateSetupArray(name)
+        }
 
         // title
         if (id === '/@slidev/titles.md') {
@@ -823,6 +830,31 @@ export default {
   }
 }
 `
+  }
+
+  async function generateSetupArray(name: string) {
+    const setups = uniq([
+      ...themeRoots,
+      ...addonRoots,
+      userRoot,
+    ])
+      .flatMap((i) => {
+        const path = join(i, 'setup', name)
+        return ['.ts', '.mts', '.js', '.mjs'].map(ext => path + ext)
+      })
+      .filter(i => fs.existsSync(i))
+
+    const imports: string[] = []
+
+    setups.forEach((path, idx) => {
+      imports.push(`import __n${idx} from '${toAtFS(path)}'`)
+    })
+
+    imports.push(
+      `export default [${setups.map((_, idx) => `__n${idx}`).join(',')}]`,
+    )
+
+    return imports.join('\n')
   }
 
   async function generteShikiBundle() {

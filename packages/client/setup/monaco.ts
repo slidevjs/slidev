@@ -22,8 +22,8 @@ import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/brows
 
 import { isDark } from '../logic/dark'
 import configs from '#slidev/configs'
+import setups from '#slidev/setups/monaco'
 
-/* __imports__ */
 window.MonacoEnvironment = {
   getWorker(_, label) {
     if (label === 'json')
@@ -98,13 +98,11 @@ const setup = createSingletonPromise(async () => {
   const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
-  // @ts-expect-error injected in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = monaco
-  // eslint-disable-next-line prefer-const
-  let injection_return: MonacoSetupReturn = {}
-
-  /* __async_injections__ */
+  const setupReturn: MonacoSetupReturn = {}
+  for (const setup of setups) {
+    const result = await setup(monaco)
+    Object.assign(setupReturn, result)
+  }
 
   // Use Shiki to highlight Monaco
   shikiToMonaco(highlighter, monaco)
@@ -122,7 +120,7 @@ const setup = createSingletonPromise(async () => {
   return {
     monaco,
     ata,
-    ...injection_return,
+    ...setupReturn,
   }
 })
 

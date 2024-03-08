@@ -1,4 +1,3 @@
-/* __imports__ */
 import { watch } from 'vue'
 import { useHead } from '@unhead/vue'
 import { configs } from '../env'
@@ -9,13 +8,11 @@ import { router } from '../routes'
 import { TRUST_ORIGINS } from '../constants'
 import { skipTransition } from '../composables/hmr'
 import { makeId } from '../logic/utils'
+import setups from '#slidev/setups/root'
 
 export default function setupRoot() {
-  // @ts-expect-error injected in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = undefined
-
-  /* __injections__ */
+  for (const setup of setups)
+    setup()
 
   const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
   useHead({

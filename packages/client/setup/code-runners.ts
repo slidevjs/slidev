@@ -1,8 +1,8 @@
-/* __imports__ */
 import { createSingletonPromise } from '@antfu/utils'
-import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs, CodeRunnerProviders } from '@slidev/types'
+import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
 import { isDark } from '../logic/dark'
+import setups from '#slidev/setups/code-runners'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {
@@ -48,15 +48,10 @@ export default createSingletonPromise(async () => {
     }
   }
 
-  // @ts-expect-error injected in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = runners
-  // eslint-disable-next-line prefer-const
-  let injection_return: CodeRunnerProviders = {}
-
-  /* __async_injections__ */
-
-  Object.assign(runners, injection_return)
+  for (const setup of setups) {
+    const result = await setup(runners)
+    Object.assign(runners, result)
+  }
 
   return {
     highlight,

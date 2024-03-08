@@ -55,6 +55,48 @@ declare module '#slidev/shiki' {
   export const shiki: Promise<ShikiHighlighterCore>
 }
 
+declare module '#slidev/setups/monaco' {
+  import type { MonacoSetup } from '@slidev/types'
+
+  const setups: MonacoSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/code-runners' {
+  import type { CodeRunnersSetup } from '@slidev/types'
+
+  const setups: CodeRunnersSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/mermaid' {
+  import type { MermaidSetup } from '@slidev/types'
+
+  const setups: MermaidSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/main' {
+  import type { AppSetup } from '@slidev/types'
+
+  const setups: AppSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/root' {
+  import type { RootSetup } from '@slidev/types'
+
+  const setups: RootSetup[]
+  export default setups
+}
+
+declare module '#slidev/setups/shortcuts' {
+  import type { ShortcutsSetup } from '@slidev/types'
+
+  const setups: ShortcutsSetup[]
+  export default setups
+}
+
 declare module '#slidev/styles' {
   // side-effects only
 }
