@@ -1,7 +1,6 @@
 import { parseRangeString } from '@slidev/parser/core'
 import { useTimestamp } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import { CLASS_VCLICK_TARGET } from '../constants'
 
 export function useTimer() {
   const tsStart = ref(Date.now())
