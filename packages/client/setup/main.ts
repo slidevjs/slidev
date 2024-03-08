@@ -1,10 +1,9 @@
-/* __imports__ */
-
 import type { AppContext } from '@slidev/types'
 import { MotionPlugin } from '@vueuse/motion'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
+import setups from '#slidev/setups/main'
 
-export default function setupMain(context: AppContext) {
+export default async function setupMain(context: AppContext) {
   function setMaxHeight() {
     // disable the mobile navbar scroll
     // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
@@ -16,9 +15,6 @@ export default function setupMain(context: AppContext) {
   context.app.use(MotionPlugin)
   context.app.use(TwoSlashFloatingVue as any)
 
-  // @ts-expect-error inject in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg = context
-
-  /* __injections__ */
+  for (const setup of setups)
+    await setup(context)
 }

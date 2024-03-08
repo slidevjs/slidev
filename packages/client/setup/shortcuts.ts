@@ -1,4 +1,3 @@
-/* __imports__ */
 import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF } from '../utils'
@@ -7,13 +6,12 @@ import { toggleDark } from '../logic/dark'
 import { magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
 import { drawingEnabled } from '../logic/drawings'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
+import setups from '#slidev/setups/shortcuts'
 
 export default function setupShortcuts() {
   const { escape, space, shift, left, right, up, down, enter, d, g, o, '`': backtick } = magicKeys
 
-  // @ts-expect-error injected in runtime
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const injection_arg: NavOperations = {
+  const context: NavOperations = {
     next,
     prev,
     nextSlide,
@@ -29,8 +27,7 @@ export default function setupShortcuts() {
     showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
 
-  // eslint-disable-next-line prefer-const
-  let injection_return: ShortcutOptions[] = [
+  let shortcuts: ShortcutOptions[] = [
     { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },
     { name: 'prev_space', key: and(space, shift), fn: prev, autoRepeat: true },
     { name: 'next_right', key: and(right, not(shift), not(showOverview)), fn: next, autoRepeat: true },
@@ -59,11 +56,14 @@ export default function setupShortcuts() {
     },
   ]
 
-  const baseShortcutNames = new Set(injection_return.map(s => s.name))
+  const baseShortcutNames = new Set(shortcuts.map(s => s.name))
 
-  /* __chained_injections__ */
+  for (const setup of setups) {
+    const result = setup(context, shortcuts)
+    shortcuts = shortcuts.concat(result)
+  }
 
-  const remainingBaseShortcutNames = injection_return.filter(s => s.name && baseShortcutNames.has(s.name))
+  const remainingBaseShortcutNames = shortcuts.filter(s => s.name && baseShortcutNames.has(s.name))
   if (remainingBaseShortcutNames.length === 0) {
     const message = [
       '========== WARNING ==========',
@@ -77,5 +77,5 @@ export default function setupShortcuts() {
     console.warn(message)
   }
 
-  return injection_return
+  return shortcuts
 }
