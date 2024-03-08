@@ -29,3 +29,28 @@ export default defineCodeRunnersSetup(() => {
   }
 })
 ```
+
+## Runner Context
+
+The second argument `ctx` is the runner context, which contains the following properties:
+
+```ts
+export interface CodeRunnerContext {
+  /**
+   * Options passed to runner via the `runnerOptions` prop.
+   */
+  options: Record<string, unknown>
+  /**
+   * Highlight code with shiki.
+   */
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  /**
+   * Use (other) code runner to run code.
+   */
+  run: (code: string, lang: string) => Promise<CodeRunnerOutputs>
+}
+```
+
+## Runner Output
+
+The runner can either return a text or HTML output, or an element to be mounted. Refer to https://github.com/slidevjs/slidev/blob/main/packages/types/src/code-runner.ts for more details.
