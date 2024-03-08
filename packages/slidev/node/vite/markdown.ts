@@ -14,6 +14,7 @@ import MarkdownItAttrs from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 
@@ -21,8 +22,6 @@ import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
 import { transformCodeWrapper, transformKaTexWrapper, transformMagicMove, transformMermaid, transformMonaco, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../syntax/transform'
 import { escapeVueInCode } from '../syntax/transform/utils'
-
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
 
 let shiki: Highlighter | undefined
 let shikiOptions: MarkdownItShikiOptions | undefined

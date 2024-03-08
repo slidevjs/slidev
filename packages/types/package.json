@@ -26,5 +26,21 @@
     "build": "tsup src/index.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@antfu/utils": "^0.7.7",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "katex": "^0.16.9",
+    "mermaid": "^10.9.0",
+    "monaco-editor": "^0.46.0",
+    "shiki": "^1.1.7",
+    "unocss": "^0.58.5",
+    "unplugin-icons": "^0.18.5",
+    "unplugin-vue-markdown": "^0.26.0",
+    "vite-plugin-remote-assets": "^0.4.1",
+    "vite-plugin-vue-server-ref": "^0.4.2",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   }
 }

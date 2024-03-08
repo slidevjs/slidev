@@ -23,6 +23,7 @@
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true

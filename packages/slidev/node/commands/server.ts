@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import process from 'node:process'
 import type { InlineConfig } from 'vite'
 import { createServer as createViteServer, mergeConfig } from 'vite'
-import type { ResolvedSlidevOptions, SlidevServerOptions } from '../options'
+import type { ResolvedSlidevOptions, SlidevServerOptions } from '@slidev/types'
 import { ViteSlidevPlugin } from '../vite'
 import { mergeViteConfigs } from './shared'
 

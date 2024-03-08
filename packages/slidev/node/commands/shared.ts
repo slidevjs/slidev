@@ -2,7 +2,7 @@ import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
 import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import type { ResolvedSlidevOptions } from '../options'
+import type { ResolvedSlidevOptions } from '@slidev/types'
 import { generateGoogleFontsUrl } from '../utils'
 import { toAtFS } from '../resolver'
 

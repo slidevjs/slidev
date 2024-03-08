@@ -4,12 +4,11 @@ import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
 import { parseRangeString } from '@slidev/parser/core'
-import type { ExportArgs, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { resolve } from 'mlly'
-import type { ResolvedSlidevOptions } from '../options'
 import { getRoots } from '../resolver'
 
 export interface ExportOptions {

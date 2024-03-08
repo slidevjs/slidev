@@ -7,7 +7,7 @@ import type { UserConfig } from '@unocss/core'
 import { mergeConfigs } from 'unocss'
 import jiti from 'jiti'
 import UnoCSS from 'unocss/vite'
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import { loadSetups } from '../setups/load'
 
 export async function createUnocssPlugin(

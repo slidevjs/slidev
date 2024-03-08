@@ -1,6 +1,6 @@
 import type { Awaitable } from '@antfu/utils'
 import type MarkdownIt from 'markdown-it'
-import type { ResolvedSlidevOptions } from '../options'
+import type { ResolvedSlidevOptions } from '@slidev/types'
 
 export interface VirtualModuleTemplate {
   id: string

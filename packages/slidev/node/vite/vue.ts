@@ -1,7 +1,7 @@
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '../options'
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 
 const customElements = new Set([
   // katex

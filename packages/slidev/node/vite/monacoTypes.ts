@@ -4,7 +4,7 @@ import { slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import type { Plugin } from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
-import type { ResolvedSlidevOptions } from '../options'
+import type { ResolvedSlidevOptions } from '@slidev/types'
 import { toAtFS } from '../resolver'
 
 export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Plugin {

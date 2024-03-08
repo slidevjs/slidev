@@ -5,9 +5,8 @@ import type { InlineConfig, ResolvedConfig } from 'vite'
 import { mergeConfig, build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
-import type { BuildArgs } from '@slidev/types'
+import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
 import { ViteSlidevPlugin } from '../vite'
-import type { ResolvedSlidevOptions } from '../options'
 import { getIndexHtml, mergeViteConfigs } from './shared'
 
 export async function build(

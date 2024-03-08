@@ -11,6 +11,7 @@ import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { underline, yellow } from 'kolorist'
+import type { RootsInfo } from '@slidev/types'
 
 /**
  * Resolve path for import url on Vite client side
@@ -222,14 +223,6 @@ function searchForWorkspaceRoot(
     return root
 
   return searchForWorkspaceRoot(dir, root)
-}
-
-export interface RootsInfo {
-  cliRoot: string
-  clientRoot: string
-  userRoot: string
-  userPkgJson: Record<string, any>
-  userWorkspaceRoot: string
 }
 
 let rootsInfo: RootsInfo | null = null
