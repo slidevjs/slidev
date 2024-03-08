@@ -731,12 +731,12 @@ defineProps<{ no: number | string }>()`)
     return [
       ...imports,
       `const data = [\n${slides.join(',\n')}\n]`,
-      `import.meta.hot.data.slides ??= shallowRef()`,
-      `import.meta.hot.data.slides.value = data`,
-      `export const slides = import.meta.hot.data.slides`,
       `if (import.meta.hot) {`,
+      `  import.meta.hot.data.slides ??= shallowRef()`,
+      `  import.meta.hot.data.slides.value = data`,
       `  import.meta.hot.accept()`,
       `}`,
+      `export const slides = import.meta.hot ? import.meta.hot.data.slides : shallowRef(data)`,
     ].join('\n')
   }
 
