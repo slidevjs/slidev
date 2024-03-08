@@ -5,15 +5,17 @@ import { useLocalStorage } from '@vueuse/core'
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
-import { slides, total } from '../logic/nav'
+
 import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
+import { useNav } from '../logic/nav'
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
   title: `Notes - ${slideTitle}`,
 })
 
+const { slides, total } = useNav()
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const scroller = ref<HTMLDivElement>()

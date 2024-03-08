@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { Menu } from 'floating-vue'
-import 'floating-vue/dist/style.css'
-import {
+import { useDrawings } from '../composables/useDrawings'
+import VerticalDivider from './VerticalDivider.vue'
+import Draggable from './Draggable.vue'
+import IconButton from './IconButton.vue'
+
+const {
   brush,
-  brushColors,
   canClear,
   canRedo,
   canUndo,
-  clearDrauu,
+  clear,
   drauu,
   drawingEnabled,
   drawingMode,
   drawingPinned,
-} from '../logic/drawings'
-import VerticalDivider from './VerticalDivider.vue'
-import Draggable from './Draggable.vue'
-import IconButton from './IconButton.vue'
+  brushColors,
+} = useDrawings()
 
 function undo() {
   drauu.undo()
@@ -110,7 +111,7 @@ function setBrushColor(color: typeof brush.color) {
     <IconButton title="Redo" :class="{ disabled: !canRedo }" @click="redo()">
       <carbon:redo />
     </IconButton>
-    <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clearDrauu()">
+    <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clear()">
       <carbon:trash-can />
     </IconButton>
 
@@ -135,4 +136,4 @@ function setBrushColor(color: typeof brush.color) {
 .v-popper--theme-menu .v-popper__arrow-inner {
   --uno: border-main;
 }
-</style>
+</style>../composables/drawings

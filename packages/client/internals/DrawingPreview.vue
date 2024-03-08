@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { drawingState } from '../logic/drawings'
+import { useDrawings } from '../composables/useDrawings'
 
 defineProps<{ page: number }>()
+
+const { drawingState } = useDrawings()
 </script>
 
 <template>
@@ -10,4 +12,4 @@ defineProps<{ page: number }>()
     class="w-full h-full absolute top-0 pointer-events-none"
     v-html="drawingState[page]"
   />
-</template>
+</template>../composables/drawings

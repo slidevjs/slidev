@@ -1,9 +1,20 @@
 import type { AppContext } from '@slidev/types'
 import { MotionPlugin } from '@vueuse/motion'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
+import type { App } from 'vue'
+import { nextTick } from 'vue'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createHead } from '@unhead/vue'
+import { routeForceRefresh } from '../logic/route'
+import { createVClickDirectives } from '../modules/v-click'
+import { createVMarkDirective } from '../modules/v-mark'
+import { routes } from '../routes'
 import setups from '#slidev/setups/main'
 
-export default async function setupMain(context: AppContext) {
+import '#slidev/styles'
+import 'shiki-magic-move/style.css'
+
+export default async function setupMain(app: App) {
   function setMaxHeight() {
     // disable the mobile navbar scroll
     // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
@@ -12,8 +23,31 @@ export default async function setupMain(context: AppContext) {
   setMaxHeight()
   window.addEventListener('resize', setMaxHeight)
 
-  context.app.use(MotionPlugin)
-  context.app.use(TwoSlashFloatingVue as any)
+  const router = createRouter({
+    history: __SLIDEV_HASH_ROUTE__
+      ? createWebHashHistory(import.meta.env.BASE_URL)
+      : createWebHistory(import.meta.env.BASE_URL),
+    routes,
+  })
+
+  app.use(router)
+  app.use(createHead())
+  app.use(createVClickDirectives())
+  app.use(createVMarkDirective())
+  app.use(MotionPlugin)
+  app.use(TwoSlashFloatingVue as any)
+
+  const context: AppContext = {
+    app,
+    router,
+  }
+
+  nextTick(() => {
+    router.afterEach(async () => {
+      await nextTick()
+      routeForceRefresh.value += 1
+    })
+  })
 
   for (const setup of setups)
     await setup(context)

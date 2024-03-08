@@ -2,20 +2,21 @@
 import { useEventListener, useVModel } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
-import { currentSlideNo, go as goSlide, slides } from '../logic/nav'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
-import { useFixedClicks } from '../composables/useClicks'
+import { createFixedClicks } from '../composables/useClicks'
 import { getSlideClass } from '../utils'
 import { CLICKS_MAX } from '../constants'
+import { useNav } from '../logic/nav'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
 
 const props = defineProps<{ modelValue: boolean }>()
-
 const emit = defineEmits(['update:modelValue'])
 const value = useVModel(props, 'modelValue', emit)
+
+const { currentSlideNo, go: goSlide, slides } = useNav()
 
 function close() {
   value.value = false
@@ -138,7 +139,7 @@ watchEffect(() => {
               <SlideWrapper
                 :is="route.component"
                 v-if="route?.component"
-                :clicks-context="useFixedClicks(route, CLICKS_MAX)"
+                :clicks-context="createFixedClicks(route, CLICKS_MAX)"
                 :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"

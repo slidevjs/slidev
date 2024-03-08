@@ -5,8 +5,8 @@ import type { Router } from 'vue-router'
 import { getCurrentTransition } from '../logic/transition'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { CLICKS_MAX } from '../constants'
+import { skipTransition } from '../logic/hmr'
 import { useTocTree } from './useTocTree'
-import { skipTransition } from './hmr'
 import { slides } from '#slidev/slides'
 
 export interface SlidevContextNav {
@@ -58,6 +58,7 @@ export function useNavBase(
   currentSlideRoute: ComputedRef<SlideRoute>,
   clicksContext: ComputedRef<ClicksContext>,
   queryClicks: Ref<number> = ref(0),
+  isPresenter: Ref<boolean>,
   router?: Router,
 ): SlidevContextNav {
   const total = computed(() => slides.value.length)
@@ -65,7 +66,7 @@ export function useNavBase(
   const navDirection = ref(0)
   const clicksDirection = ref(0)
 
-  const currentPath = computed(() => getSlidePath(currentSlideRoute.value))
+  const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
 
@@ -141,7 +142,7 @@ export function useNavBase(
   async function go(page: number | string, clicks?: number) {
     skipTransition.value = false
     await router?.push({
-      path: getSlidePath(page),
+      path: getSlidePath(page, isPresenter.value),
       query: {
         ...router.currentRoute.value.query,
         clicks: clicks || undefined,
@@ -185,7 +186,12 @@ export function useFixedNav(
 ): SlidevContextNav {
   const noop = async () => { }
   return {
-    ...useNavBase(computed(() => currentSlideRoute), computed(() => clicksContext)),
+    ...useNavBase(
+      computed(() => currentSlideRoute),
+      computed(() => clicksContext),
+      ref(CLICKS_MAX),
+      ref(false),
+    ),
     next: noop,
     prev: noop,
     nextSlide: noop,

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
 import { windowSize } from '../state'
-import { isPrintMode } from '../logic/nav'
+import { useNavState } from '../logic/nav-state'
 import PrintContainer from '../internals/PrintContainer.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
+
+const { isPrintMode } = useNavState()
 
 watchEffect(() => {
   if (isPrintMode)

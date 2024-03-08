@@ -1,9 +1,7 @@
 import type { SlideRoute } from '@slidev/types'
-import { router } from '../routes'
-import { isPresenter } from './nav-state'
 import { slides } from '#slidev/slides'
 
-export { slides, router }
+export { slides }
 
 export function getSlide(no: number | string) {
   return slides.value.find(
@@ -11,7 +9,10 @@ export function getSlide(no: number | string) {
   )
 }
 
-export function getSlidePath(route: SlideRoute | number | string, presenter = isPresenter.value) {
+export function getSlidePath(
+  route: SlideRoute | number | string,
+  presenter: boolean,
+) {
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no

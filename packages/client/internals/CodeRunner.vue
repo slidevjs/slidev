@@ -3,9 +3,9 @@ import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
 import type { CodeRunnerOutput } from '@slidev/types'
 import { computed, ref, shallowRef, watch } from 'vue'
-import { isPrintMode } from '../logic/nav'
 import { useSlideContext } from '../context'
 import setupCodeRunners from '../setup/code-runners'
+import { useNavState } from '../logic/nav-state'
 import IconButton from './IconButton.vue'
 import DomElement from './DomElement.vue'
 
@@ -19,6 +19,9 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:modelValue'])
+
+const { isPrintMode } = useNavState()
+
 const code = useVModel(props, 'modelValue', emit)
 
 const { $renderContext } = useSlideContext()

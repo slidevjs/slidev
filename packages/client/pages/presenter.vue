@@ -2,7 +2,6 @@
 import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { clicksContext, currentSlideNo, currentSlideRoute, hasNext, nextRoute, queryClicks, slides, total } from '../logic/nav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
 import { configs } from '../env'
@@ -10,8 +9,7 @@ import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
-import { isDrawing } from '../logic/drawings'
-import { useFixedClicks, usePrimaryClicks } from '../composables/useClicks'
+import { createFixedClicks } from '../composables/useClicks'
 import SlideWrapper from '../internals/SlideWrapper.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
@@ -23,11 +21,29 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
+import { useNav } from '../logic/nav'
+import { useNavState } from '../logic/nav-state'
+import { useDrawings } from '../composables/useDrawings'
 
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
+
+const {
+  clicksContext,
+  currentSlideNo,
+  currentSlideRoute,
+  hasNext,
+  nextRoute,
+  slides,
+  total,
+} = useNav()
+const {
+  queryClicks,
+  getPrimaryClicks,
+} = useNavState()
+const { isDrawing } = useDrawings()
 
 const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
@@ -38,7 +54,7 @@ const notesEditing = ref(false)
 
 const { timer, resetTimer } = useTimer()
 
-const clicksCtxMap = computed(() => slides.value.map(route => useFixedClicks(route)))
+const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
 const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
@@ -106,7 +122,7 @@ onMounted(() => {
         </SlideContainer>
         <ClicksSlider
           :key="currentSlideRoute?.no"
-          :clicks-context="usePrimaryClicks(currentSlideRoute)"
+          :clicks-context="getPrimaryClicks(currentSlideRoute)"
           class="w-full pb2 px4 flex-none"
         />
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
@@ -286,4 +302,4 @@ onMounted(() => {
 .grid-section.bottom {
   grid-area: bottom;
 }
-</style>
+</style>../composables/drawings

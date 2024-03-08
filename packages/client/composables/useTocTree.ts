@@ -1,7 +1,8 @@
 import type { SlideRoute, TocItem } from '@slidev/types'
 import type { ComputedRef, Ref } from 'vue'
 import { computed } from 'vue'
-import { currentSlideNo, currentSlideRoute, getSlidePath } from '../logic/nav'
+import { getSlidePath } from '../logic/slides'
+import { useNavState } from '../logic/nav-state'
 
 function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
   const titleLevel = route.meta?.slide?.level
@@ -13,7 +14,7 @@ function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
       no: route.no,
       children: [],
       level,
-      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no),
+      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no, false),
       hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })
@@ -25,15 +26,23 @@ function getTreeWithActiveStatuses(
   currentRoute?: SlideRoute,
   hasActiveParent = false,
   parent?: TocItem,
+  currentSlideNo?: Ref<number>,
 ): TocItem[] {
   return tree.map((item: TocItem) => {
     const clone = {
       ...item,
-      active: item.no === currentSlideNo.value,
+      active: item.no === currentSlideNo?.value,
       hasActiveParent,
     }
-    if (clone.children.length > 0)
-      clone.children = getTreeWithActiveStatuses(clone.children, currentRoute, clone.active || clone.hasActiveParent, clone)
+    if (clone.children.length > 0) {
+      clone.children = getTreeWithActiveStatuses(
+        clone.children,
+        currentRoute,
+        clone.active || clone.hasActiveParent,
+        clone,
+        currentSlideNo,
+      )
+    }
     if (parent && (clone.active || clone.activeParent))
       parent.activeParent = true
     return clone
@@ -50,6 +59,8 @@ function filterTree(tree: TocItem[], level = 1): TocItem[] {
 }
 
 export function useTocTree(slides: Ref<SlideRoute[]>): ComputedRef<TocItem[]> {
+  const { currentSlideNo, currentSlideRoute } = useNavState()
+
   const rawTree = computed(() => slides.value
     .filter((route: SlideRoute) => route.meta?.slide?.title)
     .reduce((acc: TocItem[], route: SlideRoute) => {
@@ -57,7 +68,13 @@ export function useTocTree(slides: Ref<SlideRoute[]>): ComputedRef<TocItem[]> {
       return acc
     }, []))
 
-  const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(rawTree.value, currentSlideRoute.value))
+  const treeWithActiveStatuses = computed(() => getTreeWithActiveStatuses(
+    rawTree.value,
+    currentSlideRoute.value,
+    undefined,
+    undefined,
+    currentSlideNo,
+  ))
 
   return computed(() => filterTree(treeWithActiveStatuses.value))
 }

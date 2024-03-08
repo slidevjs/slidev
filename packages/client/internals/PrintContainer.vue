@@ -4,12 +4,16 @@ import { computed } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
-import { currentRoute, slides } from '../logic/nav'
+import { useNav } from '../logic/nav'
+import { useNavState } from '../logic/nav-state'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{
   width: number
 }>()
+
+const { slides } = useNav()
+const { currentRoute } = useNavState()
 
 const width = computed(() => props.width)
 const height = computed(() => props.width / slideAspect.value)
