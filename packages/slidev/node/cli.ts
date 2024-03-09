@@ -50,7 +50,6 @@ const FILES_CREATE_RESTART_GLOBS = [
 ]
 
 const FILES_CHANGE_RESTART_GLOBS = [
-  'vite.config.*',
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
