@@ -35,7 +35,7 @@ export default async function setupMain(app: App) {
   app.use(createVClickDirectives())
   app.use(createVMarkDirective())
   app.use(MotionPlugin)
-  app.use(TwoSlashFloatingVue as any)
+  app.use(TwoSlashFloatingVue as any, { container: '#slideshow' })
 
   const context: AppContext = {
     app,

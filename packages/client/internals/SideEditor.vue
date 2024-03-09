@@ -221,4 +221,3 @@ throttledWatch(
   @apply px-3 py-2 h-full overflow-hidden bg-transparent font-mono text-sm z-0;
 }
 </style>
-../modules/codemirror

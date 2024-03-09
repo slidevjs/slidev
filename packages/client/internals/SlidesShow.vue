@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
+import { recomputeAllPoppers } from 'floating-vue'
 import { useNav } from '../composables/useNav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
@@ -43,6 +44,8 @@ function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
   // We will turn it back on `nav.go` so the normal navigation would still work
   skipTransition.value = true
+  // recompute poppers after transition
+  recomputeAllPoppers()
 }
 </script>
 
