@@ -10,7 +10,7 @@ Usage:
 import { computed } from 'vue'
 import { toArray } from '@antfu/utils'
 import type { TocItem } from '@slidev/types'
-import Titles from '#slidev/titles.md'
+import TitleRenderer from '#slidev/title-renderer'
 
 const props = withDefaults(defineProps<{
   level: number
@@ -48,7 +48,7 @@ const styles = computed(() => {
       :class="[{ 'slidev-toc-item-active': item.active }, { 'slidev-toc-item-parent-active': item.activeParent }]"
     >
       <Link :to="item.path">
-        <Titles :no="item.no" />
+        <TitleRenderer :no="item.no" />
       </Link>
       <TocList
         v-if="item.children.length > 0"

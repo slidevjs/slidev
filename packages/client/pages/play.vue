@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { isEditorVertical, isScreenVertical, showEditor, slideScale, windowSize } from '../state'
-import { isEmbedded, isPrintMode, next, prev } from '../logic/nav'
 import { useSwipeControls } from '../composables/useSwipeControls'
-import { isDrawing } from '../logic/drawings'
 import { registerShortcuts } from '../logic/shortcuts'
 import { configs } from '../env'
 import Controls from '../internals/Controls.vue'
@@ -11,8 +9,13 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
+import { useNav } from '../composables/useNav'
+import { useDrawings } from '../composables/useDrawings'
 
 registerShortcuts()
+
+const { next, prev, isEmbedded, isPrintMode } = useNav()
+const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {
@@ -79,4 +82,4 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
     </template>
   </div>
   <Controls />
-</template>
+</template>../composables/drawings

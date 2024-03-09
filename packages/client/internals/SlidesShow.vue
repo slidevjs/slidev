@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
-import { currentSlideRoute, currentTransition, isPresenter, nextRoute, slides } from '../logic/nav'
+import { useNav } from '../composables/useNav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
-import { skipTransition } from '../composables/hmr'
-import { usePrimaryClicks } from '../composables/useClicks'
+import { skipTransition } from '../logic/hmr'
 import SlideWrapper from './SlideWrapper.vue'
 import PresenterMouse from './PresenterMouse.vue'
 
@@ -14,6 +13,15 @@ import GlobalBottom from '#slidev/global-components/bottom'
 defineProps<{
   renderContext: 'slide' | 'presenter'
 }>()
+
+const {
+  currentSlideRoute,
+  currentTransition,
+  getPrimaryClicks,
+  isPresenter,
+  nextRoute,
+  slides,
+} = useNav()
 
 // preload next route
 watch(currentSlideRoute, () => {
@@ -57,7 +65,7 @@ function onAfterLeave() {
     >
       <SlideWrapper
         :is="route.component!"
-        :clicks-context="usePrimaryClicks(route)"
+        :clicks-context="getPrimaryClicks(route)"
         :class="getSlideClass(route)"
         :route="route"
         :render-context="renderContext"
@@ -86,3 +94,4 @@ function onAfterLeave() {
   width: 100%;
 }
 </style>
+../logic/hmr

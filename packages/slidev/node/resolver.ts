@@ -11,6 +11,14 @@ import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { underline, yellow } from 'kolorist'
+import type { RootsInfo } from '@slidev/types'
+
+/**
+ * Resolve path for import url on Vite client side
+ */
+export async function resolveImportUrl(id: string) {
+  return toAtFS(await resolveImportPath(id, true))
+}
 
 export function toAtFS(path: string) {
   return `/@fs${ensurePrefix('/', slash(path))}`
@@ -47,7 +55,7 @@ export async function findPkgRoot(dep: string, parent: string, ensure: true): Pr
 export async function findPkgRoot(dep: string, parent: string, ensure?: boolean): Promise<string | undefined>
 export async function findPkgRoot(dep: string, parent: string, ensure = false) {
   const pkgJsonPath = await findDepPkgJsonPath(dep, parent)
-  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally ? findGlobalPkgRoot(dep, false) : undefined
+  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally ? await findGlobalPkgRoot(dep, false) : undefined
   if (ensure && !path)
     throw new Error(`Failed to resolve package "${dep}"`)
   return path
@@ -215,14 +223,6 @@ function searchForWorkspaceRoot(
     return root
 
   return searchForWorkspaceRoot(dir, root)
-}
-
-export interface RootsInfo {
-  cliRoot: string
-  clientRoot: string
-  userRoot: string
-  userPkgJson: Record<string, any>
-  userWorkspaceRoot: string
 }
 
 let rootsInfo: RootsInfo | null = null

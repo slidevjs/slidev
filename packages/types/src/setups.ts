@@ -4,7 +4,7 @@ import type { App, Ref } from 'vue'
 import type { Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
-import type { CodeToHastOptions, Highlighter } from 'shiki'
+import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { SlidevPreparserExtension } from './types'
 import type { CodeRunnerProviders } from './code-runner'
@@ -51,9 +51,14 @@ export interface ShikiContext {
   loadTheme: (path: string) => Promise<any>
 }
 
-export type ShikiSetupReturn = Partial<CodeToHastOptions> & {
-  setup?: (highlighter: Highlighter) => Awaitable<void>
-}
+export type ShikiSetupReturn =
+  & Partial<Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>>
+  & CodeOptionsThemes<BuiltinTheme>
+  & CodeOptionsMeta
+  & {
+    setup?: (highlighter: Highlighter) => Awaitable<void>
+    langs?: (LanguageInput | BuiltinLanguage)[]
+  }
 
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
@@ -64,6 +69,7 @@ export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
+export type RootSetup = () => Awaitable<void>
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>

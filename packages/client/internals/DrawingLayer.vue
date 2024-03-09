@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { drauu, drawingEnabled, loadCanvas } from '../logic/drawings'
 import { useSlideContext } from '../context'
+import { useDrawings } from '../composables/useDrawings'
+
+const { drauu, drawingEnabled, loadCanvas } = useDrawings()
 
 const scale = useSlideContext().$scale
 const svg = ref<SVGSVGElement>()
@@ -23,4 +25,4 @@ onBeforeUnmount(() => {
     class="w-full h-full absolute top-0"
     :class="{ 'pointer-events-none': !drawingEnabled, 'touch-none': drawingEnabled }"
   />
-</template>
+</template>../composables/drawings

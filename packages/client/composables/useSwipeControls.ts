@@ -1,10 +1,13 @@
 import type { Ref } from 'vue'
 import { ref } from 'vue'
 import { timestamp, usePointerSwipe } from '@vueuse/core'
-import { isDrawing } from '../logic/drawings'
-import { next, nextSlide, prev, prevSlide } from '../logic/nav'
+import { useNav } from '../composables/useNav'
+import { useDrawings } from './useDrawings'
 
 export function useSwipeControls(root: Ref<HTMLElement | undefined>) {
+  const { next, nextSlide, prev, prevSlide } = useNav()
+  const { isDrawing } = useDrawings()
+
   const swipeBegin = ref(0)
   const { direction, distanceX, distanceY } = usePointerSwipe(root, {
     pointerTypes: ['touch'],

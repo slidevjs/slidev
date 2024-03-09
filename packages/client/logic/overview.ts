@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { slides } from './nav'
+import { slides } from './slides'
 
 // To have same format(.value) as max, wrap it with ref.
 const min = ref(1)

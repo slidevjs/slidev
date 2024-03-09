@@ -13,11 +13,12 @@ outline: deep
 
 To apply "click animations" for elements, you can use the `v-click` directive or `<v-click>` components
 
+<!-- eslint-skip -->
+
 ```md
 <!-- Component usage:
      this will be invisible until you press "next" -->
-
-<v-click> Hello **World** </v-click>
+<v-click> Hello World! </v-click>
 
 <!-- Directive usage:
      this will be invisible until you press "next" the second time -->

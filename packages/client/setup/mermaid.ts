@@ -1,15 +1,14 @@
-/* __imports__ */
-
 import type { MermaidOptions } from '@slidev/types'
 import { defineMermaidSetup } from '@slidev/types'
+import setups from '#slidev/setups/mermaid'
 
 export default defineMermaidSetup(() => {
-  // eslint-disable-next-line prefer-const
-  let injection_return: MermaidOptions = {
+  const setupReturn: MermaidOptions = {
     theme: 'default',
   }
 
-  /* __injections__ */
+  for (const setup of setups)
+    Object.assign(setupReturn, setup())
 
-  return injection_return
+  return setupReturn
 })

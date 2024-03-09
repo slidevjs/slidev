@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
 import { useFixedNav } from '../composables/useNav'
-import { useFixedClicks } from '../composables/useClicks'
+import { createFixedClicks } from '../composables/useClicks'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const { route } = defineProps<{ route: SlideRoute }>()
-const clicks0 = useFixedClicks(route, 0)
+const clicks0 = createFixedClicks(route, 0)
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const clicks0 = useFixedClicks(route, 0)
     <PrintSlideClick
       v-for="i of clicks0.total"
       :key="i"
-      :nav="useFixedNav(route, useFixedClicks(route, i))"
+      :nav="useFixedNav(route, createFixedClicks(route, i))"
     />
   </template>
 </template>

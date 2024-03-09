@@ -10,7 +10,7 @@ import type { Argv } from 'yargs'
 import yargs from 'yargs'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
+import type { ResolvedSlidevOptions, SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
@@ -18,14 +18,13 @@ import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
 import { uniq } from '@antfu/utils'
 import { getPort } from 'get-port-please'
 import { version } from '../package.json'
-import { createServer } from './server'
-import type { ResolvedSlidevOptions } from './options'
+import { createServer } from './commands/server'
 import { resolveOptions } from './options'
-import { getThemeMeta, resolveTheme } from './themes'
+import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
-import { loadSetups } from './plugins/setupNode'
+import { loadSetups } from './setups/load'
 import { getRoots } from './resolver'
-import { resolveAddons } from './addons'
+import { resolveAddons } from './integrations/addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -364,7 +363,7 @@ cli.command(
     .help(),
   async (args) => {
     const { entry, theme, watch, base, download, out, inspect } = args
-    const { build } = await import('./build')
+    const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile, theme, inspect }, 'build')
@@ -453,7 +452,7 @@ cli.command(
     .help(),
   async (args) => {
     const { entry, theme } = args
-    const { exportSlides, getExportOptions } = await import('./export')
+    const { exportSlides, getExportOptions } = await import('./commands/export')
     const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string) {
@@ -504,7 +503,7 @@ cli.command(
     output,
     timeout,
   }) => {
-    const { exportNotes } = await import('./export')
+    const { exportNotes } = await import('./commands/export')
     const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {

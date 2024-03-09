@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
-import { go, slides } from '../logic/nav'
 import { activeElement, showGotoDialog } from '../state'
-import Titles from '#slidev/titles.md'
+import { useNav } from '../composables/useNav'
+import Titles from '#slidev/title-renderer'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
@@ -11,6 +11,8 @@ const list = ref<HTMLUListElement>()
 const items = ref<HTMLLIElement[]>()
 const text = ref('')
 const selectedIndex = ref(0)
+
+const { go, slides } = useNav()
 
 function notNull<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined

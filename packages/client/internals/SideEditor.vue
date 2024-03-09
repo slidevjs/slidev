@@ -2,14 +2,16 @@
 import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
-import { useCodeMirror } from '../setup/codemirror'
-import { currentSlideNo, openInEditor } from '../logic/nav'
+import { useCodeMirror } from '../modules/codemirror'
+import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import IconButton from './IconButton.vue'
 
 const props = defineProps<{
   resize?: boolean
 }>()
+
+const { currentSlideNo, openInEditor } = useNav()
 
 const tab = ref<'content' | 'note'>('content')
 const content = ref('')
@@ -219,3 +221,4 @@ throttledWatch(
   @apply px-3 py-2 h-full overflow-hidden bg-transparent font-mono text-sm z-0;
 }
 </style>
+../modules/codemirror
