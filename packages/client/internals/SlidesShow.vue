@@ -58,20 +58,17 @@ function onAfterLeave() {
     tag="div"
     @after-leave="onAfterLeave"
   >
-    <div
+    <SlideWrapper
+      :is="route.component!"
       v-for="route of loadedRoutes"
       v-show="route === currentSlideRoute"
       :key="route.no"
-    >
-      <SlideWrapper
-        :is="route.component!"
-        :clicks-context="getPrimaryClicks(route)"
-        :class="getSlideClass(route)"
-        :route="route"
-        :render-context="renderContext"
-        class="overflow-hidden"
-      />
-    </div>
+      :clicks-context="getPrimaryClicks(route)"
+      :class="getSlideClass(route)"
+      :route="route"
+      :render-context="renderContext"
+      class="overflow-hidden"
+    />
   </component>
 
   <!-- Global Top -->

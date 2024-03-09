@@ -29,11 +29,11 @@ const props = defineProps({
   },
 })
 
-const component = ref<typeof SlideComponent | null>(null)
+const element = ref<HTMLElement | null>(null)
 
 provideLocal(injectionRoute, props.route)
 provideLocal(injectionCurrentPage, ref(props.route.no))
-provideLocal(injectionSlideElement, computed(() => component.value?.$el))
+provideLocal(injectionSlideElement, element)
 provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
 provideLocal(injectionActive, toRef(props, 'active'))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
@@ -68,12 +68,13 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
-  <component
-    :is="SlideComponent"
-    ref="component"
-    :style="style"
-    :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
-  />
+  <div ref="element">
+    <component
+      :is="SlideComponent"
+      :style="style"
+      :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
+    />
+  </div>
 </template>
 
 <style scoped>

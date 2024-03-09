@@ -42,7 +42,7 @@ const screenAspect = computed(() => width.value / height.value)
 
 const scale = computed(() => {
   if (props.scale && !isPrintMode.value)
-    return props.scale
+    return +props.scale
   if (screenAspect.value < slideAspect.value)
     return width.value / slideWidth.value
   return height.value * slideAspect.value / slideWidth.value
@@ -69,7 +69,7 @@ if (props.isMain) {
   `))
 }
 
-provideLocal(injectionSlideScale, scale as any)
+provideLocal(injectionSlideScale, scale)
 </script>
 
 <template>
