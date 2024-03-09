@@ -166,11 +166,12 @@ export interface ClicksContext {
   readonly total: number
 }
 
-export interface FixedElementInfo {
-  /**
-   * `NaN` if no data found
-   */
-  dataStart: number
-  dataEnd: number
-  dataStr: string
+export interface FixedElementsContext {
+  readonly enabled: boolean
+  enable: () => void
+  save: () => void
+  discard: () => void
+  register: (id: string) => void
+  unregister: (id: string) => void
+  update: (id: string, posStr: string) => void
 }
