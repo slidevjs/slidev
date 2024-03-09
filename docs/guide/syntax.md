@@ -632,9 +632,9 @@ KaTeX extension needs to be loaded.
 Create `vite.config.ts` with the following content:
 
 ```ts
-import 'katex/contrib/mhchem';
+import 'katex/contrib/mhchem'
 
-export default {};
+export default {}
 ```
 
 Now chemical equations can be rendered properly.
