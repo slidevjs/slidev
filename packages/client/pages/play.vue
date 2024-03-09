@@ -82,4 +82,4 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
     </template>
   </div>
   <Controls />
-</template>../composables/drawings
+</template>

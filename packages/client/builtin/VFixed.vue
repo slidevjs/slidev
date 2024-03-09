@@ -1,42 +1,58 @@
 <script setup lang="ts">
 import { clamp } from '@antfu/utils'
-import { useElementBounding, watchDebounced } from '@vueuse/core'
 import type { StyleValue } from 'vue'
-import { computed, inject, ref, watch } from 'vue'
-import { useNav } from '../composables/useNav'
-import { useDynamicSlideInfo } from '../composables/useSlideInfo'
-import { injectionSlideElement, injectionSlideScale } from '../constants'
+import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useFixedElementsContext } from '../composables/useFixedElements'
+import { useSlideBounds } from '../composables/useSlideBounds'
+import { injectionSlideScale } from '../constants'
 import { useSlideContext } from '../context'
 import { slideHeight, slideWidth } from '../env'
-import { draggingFixedElements } from '../state'
+import { makeId } from '../logic/utils'
 
 const props = defineProps<{
   pos?: string
 }>()
 
-const { currentSlideNo } = useNav()
-const { $renderContext } = useSlideContext()
-const enabled = computed(() => draggingFixedElements.value && ['slide', 'presenter'].includes($renderContext.value))
+const id = makeId()
 
-const container = ref<HTMLElement | null>(null)
+const { $renderContext, $page } = useSlideContext()
+const context = computed(() => useFixedElementsContext($page.value))
+const enabled = computed(() => context.value.enabled && ['slide', 'presenter'].includes($renderContext.value))
 const scale = inject(injectionSlideScale, ref(1))
-const slideElement = inject(injectionSlideElement, ref())
-const { left: slideLeft, top: slideTop } = useElementBounding(slideElement)
+const { left: slideLeft, top: slideTop } = useSlideBounds()
 
 const cornerSize = 10
-const minSize = 30
+const minSize = 40
 
-const pos = props.pos?.split(',').map(Number) ?? [0, 0, 100, 100]
+const container = ref<HTMLElement>()
+const pos = props.pos?.split(',').map(Number) ?? [-1, -1, 0, 0]
 const left = ref(pos[0])
 const top = ref(pos[1])
 const right = ref(pos[0] + pos[2])
 const bottom = ref(pos[1] + pos[3])
 
-const style = computed((): StyleValue => {
-  const pos = props.pos?.split(',').map(Number)
-  return pos
+if (['slide', 'presenter'].includes($renderContext.value)) {
+  onMounted(() => {
+    context.value.register(id)
+    if (!props.pos) {
+      setTimeout(() => {
+        const bounds = container.value!.getBoundingClientRect()
+        console.warn(bounds, slideLeft.value)
+        left.value = (bounds.left - slideLeft.value) / scale.value
+        top.value = (bounds.top - slideTop.value) / scale.value
+        right.value = (bounds.right - slideLeft.value) / scale.value
+        bottom.value = (bounds.bottom - slideTop.value) / scale.value
+      }, 100)
+    }
+  })
+  onUnmounted(() => context.value.unregister(id))
+}
+
+const positionStyles = computed((): StyleValue => {
+  return left.value >= 0
     ? {
         position: 'absolute',
+        padding: '10px',
         left: `${left.value}px`,
         top: `${top.value}px`,
         width: `${right.value - left.value}px`,
@@ -44,6 +60,7 @@ const style = computed((): StyleValue => {
       }
     : {
         position: 'absolute',
+        padding: '10px',
       }
 })
 
@@ -132,44 +149,30 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
   }
 }
 
-const { info, update } = useDynamicSlideInfo(currentSlideNo)
-
-watchDebounced(
+watch(
   [left, top, right, bottom],
   ([l, t, r, b]) => {
     const posStr = [l, t, r - l, b - t].map(Math.round).join()
-    const oldContent = info.value?.content
-    if (!oldContent) {
-      setTimeout(() => {
-        left.value += 1e-10
-      }, 1000)
-      return
-    }
-    const match = [...oldContent.matchAll(/<v-fixed.*?>/g)][0]
-    const start = match.index! + 8
-    const end = match.index! + match[0].length - 1
-    update({
-      content: `${oldContent.slice(0, start)} pos="${posStr}"${oldContent.slice(end)}`,
-    })
-  },
-  {
-    debounce: 1000,
+    context.value.update(id, ` pos="${posStr}"`)
   },
 )
 </script>
 
 <template>
   <div
-    ref="container" :style="style" border="~ white" @pointerdown="onPointerdown" @pointermove="onPointermove"
-    @pointerup="onPointerup"
+    v-if="enabled" ref="container" :style="positionStyles" border="~ white" @pointerdown="onPointerdown"
+    @pointermove="onPointermove" @pointerup="onPointerup"
   >
     <slot />
-    <div v-if="enabled" class="absolute inset-0 z-100">
+    <div class="absolute inset-0 z-100">
       <template v-for="isLeft in [true, false]">
         <template v-for="isTop in [true, false]" :key="isLeft + isTop">
           <div v-bind="getCornerProps(isLeft, isTop)" />
         </template>
       </template>
     </div>
+  </div>
+  <div v-else ref="container" :style="positionStyles">
+    <slot />
   </div>
 </template>

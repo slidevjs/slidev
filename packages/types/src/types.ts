@@ -168,10 +168,10 @@ export interface ClicksContext {
 
 export interface FixedElementsContext {
   readonly enabled: boolean
-  enable: () => void
-  save: () => void
-  discard: () => void
+  // enable: () => void
+  // save: () => void
+  // discard: () => void
   register: (id: string) => void
   unregister: (id: string) => void
-  update: (id: string, posStr: string) => void
+  update: (id: string, dataStr: string) => void
 }
