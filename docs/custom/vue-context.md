@@ -110,3 +110,23 @@ themeConfig:
 > Available since v0.43.0
 
 A shorthand of `$slidev.nav`.
+
+## Composable Usage
+
+> Available since v0.48.0
+
+If you want to get the context programmatically (also type-safely), you can import composables from `@slidev/client`:
+
+```vue
+<script setup>
+import { useDarkMode, useNav, useSlidevContext } from '@slidev/client'
+
+const { $slidev } = useSlidevContext()
+const { currentSlideRoute } = useNav()
+const { isDark } = useDarkMode()
+// ...
+</script>
+```
+
+> [!NOTE]
+> Previously, you might see the usage of importing nested modules like `import { isDark } from '@slidev/client/logic/dark.ts'`, this is **NOT RECOMMENDED** as they are internal implementation details and might be broken in the future. Try always to use the public API from `@slidev/client` whenever possible.

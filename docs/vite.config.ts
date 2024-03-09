@@ -9,7 +9,7 @@ import UnoCSS from 'unocss/vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@slidev/client': resolve(__dirname, '.vitepress/@slidev/client'),
+      '@slidev/client/': `${resolve(__dirname, '.vitepress/@slidev/client')}/`,
       '@slidev/parser': resolve(__dirname, '.vitepress/@slidev/parser'),
       '@slidev/theme-default': resolve(__dirname, '.vitepress/@slidev/theme-default'),
     },

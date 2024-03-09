@@ -13,6 +13,7 @@
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
+    ".": "./index.ts",
     "./package.json": "./package.json",
     "./constants": "./constants.ts",
     "./context": "./context.ts",
@@ -22,6 +23,7 @@
     "./utils": "./utils.ts",
     "./*": "./*"
   },
+  "main": "./public.ts",
   "engines": {
     "node": ">=18.0.0"
   },
