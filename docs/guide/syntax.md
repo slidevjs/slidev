@@ -645,6 +645,7 @@ $$
 $$
 ```
 
+Learn more: [Syntax](https://mhchem.github.io/MathJax-mhchem)
 
 ## Diagrams
 
