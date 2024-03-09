@@ -661,15 +661,6 @@ sequenceDiagram
 ```
 ````
 
-````
-
-```
-
-```
-````
-
-`````
-
 You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
 
 ````md
@@ -801,16 +792,3 @@ The **default** slot
 ```
 
 Learn more about [the syntax](https://content.nuxt.com/guide/writing/mdc).
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-`````
