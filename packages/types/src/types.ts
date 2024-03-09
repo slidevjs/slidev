@@ -165,3 +165,12 @@ export interface ClicksContext {
   readonly currentOffset: number
   readonly total: number
 }
+
+export interface FixedElementInfo {
+  /**
+   * `NaN` if no data found
+   */
+  dataStart: number
+  dataEnd: number
+  dataStr: string
+}

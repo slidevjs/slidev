@@ -3,7 +3,7 @@ import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toR
 import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideElement } from '../constants'
 import SlideLoading from './SlideLoading.vue'
 
 const props = defineProps({
@@ -29,8 +29,11 @@ const props = defineProps({
   },
 })
 
+const component = ref<typeof SlideComponent | null>(null)
+
 provideLocal(injectionRoute, props.route)
 provideLocal(injectionCurrentPage, ref(props.route.no))
+provideLocal(injectionSlideElement, computed(() => component.value?.$el))
 provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
 provideLocal(injectionActive, toRef(props, 'active'))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
@@ -67,6 +70,7 @@ const SlideComponent = defineAsyncComponent({
 <template>
   <component
     :is="SlideComponent"
+    ref="component"
     :style="style"
     :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
   />
