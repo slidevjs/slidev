@@ -624,6 +624,29 @@ $$
 
 The `at` and `finally` options of [code blocks](#line-highlighting) are also available for LaTeX blocks.
 
+### Chemical equations
+
+To enable the redering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
+KaTeX extension needs to be loaded.
+
+Create `vite.config.ts` with the following content:
+
+```ts
+import 'katex/contrib/mhchem'
+
+export default {}
+```
+
+Now chemical equations can be rendered properly.
+
+```latex
+$$
+\displaystyle{\ce{B(OH)3 + H2O <--> B(OH)4^- + H+}}
+$$
+```
+
+Learn more: [Syntax](https://mhchem.github.io/MathJax-mhchem)
+
 ## Diagrams
 
 You can also create diagrams / graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
@@ -637,15 +660,6 @@ sequenceDiagram
   Note over Alice,John: A typical interaction
 ```
 ````
-
-````
-
-```
-
-```
-````
-
-`````
 
 You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
 
@@ -778,16 +792,3 @@ The **default** slot
 ```
 
 Learn more about [the syntax](https://content.nuxt.com/guide/writing/mdc).
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-`````

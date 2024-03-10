@@ -6,7 +6,6 @@ import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
 
-// @ts-expect-error missing types
 import { parse } from '@slidev/parser'
 import Cover from '@slidev/theme-default/layouts/cover.vue'
 import Default from '@slidev/client/layouts/default.vue'

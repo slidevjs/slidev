@@ -58,11 +58,24 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       const injection: InlineConfig = {
         define: getDefine(options),
         resolve: {
-          alias: {
-            '@slidev/client/': `${toAtFS(options.clientRoot)}/`,
-            '#slidev/': '/@slidev/',
-            'vue': await resolveImportPath('vue/dist/vue.esm-browser.js', true),
-          },
+          alias: [
+            {
+              find: /^@slidev\/client$/,
+              replacement: `${toAtFS(options.clientRoot)}/index.ts`,
+            },
+            {
+              find: /^@slidev\/client\/(.*)/,
+              replacement: `${toAtFS(options.clientRoot)}/$1`,
+            },
+            {
+              find: /^#slidev\/(.*)/,
+              replacement: '/@slidev/$1',
+            },
+            {
+              find: 'vue',
+              replacement: await resolveImportPath('vue/dist/vue.esm-browser.js', true),
+            },
+          ],
           dedupe: ['vue'],
         },
         optimizeDeps: {
