@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
 import { computed } from 'vue'
+import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
   clicksContext: ClicksContext
@@ -31,10 +32,13 @@ function onMousedown() {
     :title="`Clicks in this slide: ${total}`"
     :class="total ? '' : 'op50'"
   >
-    <div class="flex gap-1 items-center min-w-16">
+    <div class="flex gap-1 items-center min-w-16 tabular-nums">
       <carbon:cursor-1 text-sm op50 />
-      <span text-primary>{{ current }}</span>
-      <span op50>/</span>
+      <template v-if="current >= 0 && current !== CLICKS_MAX">
+        <div flex-auto />
+        <span text-primary>{{ current }}</span>
+        <span op25>/</span>
+      </template>
       <span op50>{{ total }}</span>
     </div>
     <div

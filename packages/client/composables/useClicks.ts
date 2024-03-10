@@ -18,10 +18,10 @@ export function createClicksContextBase(
       return isDisabled ? isDisabled() : false
     },
     get current() {
-      return current.value
+      return +current.value
     },
     set current(value) {
-      current.value = value
+      current.value = +value
     },
     relativeOffsets,
     map,
