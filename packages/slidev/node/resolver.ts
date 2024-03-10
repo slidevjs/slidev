@@ -79,7 +79,7 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
 export async function resolveEntry(entryRaw: string) {
   if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[\/\\]/.test(entryRaw))
     entryRaw += '.md'
-  const entry = resolve(process.cwd(), entryRaw)
+  const entry = resolve(entryRaw)
   if (!fs.existsSync(entry)) {
     const { create } = await prompts({
       name: 'create',
@@ -228,7 +228,7 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
   if (!entry)
     throw new Error('[slidev] Cannot find roots without entry')
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
-  const userRoot = dirname(resolve(entry))
+  const userRoot = dirname(entry)
   const userPkgJson = getUserPkgJson(userRoot)
   const userWorkspaceRoot = searchForWorkspaceRoot(userRoot)
   rootsInfo = {
