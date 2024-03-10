@@ -1,7 +1,10 @@
-import { fs } from 'zx'
+import { resolve } from 'node:path'
+import * as fs from 'node:fs/promises'
+
+const path = resolve('./package.json')
 
 async function removeDeps() {
-  const pkgJson = JSON.parse(await fs.readFile(`./package.json`, 'utf-8'))
+  const pkgJson = JSON.parse(await fs.readFile(path, 'utf-8'))
   let count = 0
   for(const key in pkgJson.dependencies) {
     if(key.startsWith('@slidev')) {
@@ -15,7 +18,7 @@ async function removeDeps() {
       count++
     }
   }
-  await fs.writeFile(`${path}/package.json`, JSON.stringify(pkgJson, null, 2))
+  await fs.writeFile(path, JSON.stringify(pkgJson, null, 2))
   return count
 }
 
