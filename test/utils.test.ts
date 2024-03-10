@@ -1,4 +1,4 @@
-import { relative } from 'node:path'
+import { relative, resolve } from 'node:path'
 import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
 import { describe, expect, it } from 'vitest'
@@ -61,7 +61,7 @@ describe('utils', () => {
   })
 
   it('roots', async () => {
-    const { cliRoot, clientRoot, userRoot, userWorkspaceRoot } = await getRoots()
+    const { cliRoot, clientRoot, userRoot, userWorkspaceRoot } = await getRoots(resolve('slides.md'))
     const expectRelative = (v: string) => expect(slash(relative(__dirname, v)))
     expectRelative(cliRoot).toMatchInlineSnapshot(`"../packages/slidev"`)
     expectRelative(clientRoot).toMatchInlineSnapshot(`"../packages/client"`)

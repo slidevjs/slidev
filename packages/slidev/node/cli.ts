@@ -23,7 +23,7 @@ import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
 import { loadSetups } from './setups/load'
-import { getRoots } from './resolver'
+import { getRoots, resolveEntry } from './resolver'
 import { resolveAddons } from './integrations/addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
@@ -409,8 +409,9 @@ cli.command(
             type: 'string',
             default: 'theme',
           }),
-        async ({ entry, dir, theme: themeInput }) => {
-          const roots = await getRoots()
+        async ({ entry: entryRaw, dir, theme: themeInput }) => {
+          const entry = await resolveEntry(entryRaw)
+          const roots = await getRoots(entry)
           const data = await parser.load(roots.userRoot, entry)
           const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
           if (themeRaw === 'none') {
