@@ -29,4 +29,4 @@ async function removeDeps() {
   return count
 }
 
-console.log(`removed ${await removeDeps()} dependencies from ${path}`)
+console.log(`Removed ${await removeDeps()} dependencies from ${path}`)
