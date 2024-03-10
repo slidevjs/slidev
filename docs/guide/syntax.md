@@ -222,6 +222,8 @@ const count = ref(0)
 
 [Shiki Magic Move](https://github.com/shikijs/shiki-magic-move) enables you to have a granular transition between code changes, similar to Keynote's Magic Move. You can check [the playground](https://shiki-magic-move.netlify.app/) to see how it works.
 
+<video src="https://github.com/slidevjs/slidev/assets/11247099/79927794-27ba-4342-9911-9996cec889d6" controls rounded shadow w-full></video>
+
 In Slidev, we bind it to the [clicks system](/guide/animations#click-animations). The syntax is to wrap multiple code blocks representing each step with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphs to each step as you click.
 
 `````md
@@ -258,11 +260,9 @@ const add = () => count += 1
 ````
 `````
 
-<!-- TODO: add an inline demo -->
-
 ### Monaco Editor
 
-<video src="https://github.com/slidevjs/slidev/assets/11247099/0c6ce681-80d3-4555-93bf-9288ee533462" controls rounded shadow></video>
+<video src="https://github.com/slidevjs/slidev/assets/11247099/0c6ce681-80d3-4555-93bf-9288ee533462" controls rounded shadow w-full></video>
 
 Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
 
@@ -409,7 +409,7 @@ Basic Markdown and HTML are also supported in notes on Presenter rendering.
 
 For some slides you might have longer notes that might be hard to find where you are looking at, we introduced the click markers that allow highlighting and auto-scrolling to the section of notes of your corresponding content. Put `[click]` markers in your notes for the timing you need to go to another [click](/guide/animations#click-animations), Slidev divides the content between the click markers and highlights them in presenter notes, synchronized with your slide progress.
 
-<!-- TODO: add a video -->
+<video src="https://github.com/slidevjs/slidev/assets/11247099/40014e34-67cd-4830-8c8d-8431754a3672" controls rounded shadow w-full></video>
 
 ## Icons
 
