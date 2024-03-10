@@ -411,7 +411,7 @@ cli.command(
             default: 'theme',
           }),
         async ({ entry, dir, theme: themeInput }) => {
-          const roots = await getRoots()
+          const roots = await getRoots(entry)
           const data = await parser.load(roots.userRoot, entry)
           const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
           if (themeRaw === 'none') {

@@ -5,13 +5,15 @@ import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import { resolveGlobal } from 'resolve-global'
-import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
+import { findDepPkgJsonPath } from 'vitefu'
 import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { underline, yellow } from 'kolorist'
 import type { RootsInfo } from '@slidev/types'
+
+const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 
 /**
  * Resolve path for import url on Vite client side
@@ -74,12 +76,10 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
     throw new Error(`Failed to resolve global package "${name}"`)
 }
 
-export async function resolveEntry(entryRaw: string, roots: RootsInfo) {
-  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/\/\\/.test(entryRaw))
+export async function resolveEntry(entryRaw: string) {
+  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[\/\\]/.test(entryRaw))
     entryRaw += '.md'
-  const entry = entryRaw.startsWith('@/')
-    ? join(roots.userRoot, entryRaw.slice(2))
-    : resolve(process.cwd(), entryRaw)
+  const entry = resolve(process.cwd(), entryRaw)
   if (!fs.existsSync(entry)) {
     const { create } = await prompts({
       name: 'create',
@@ -88,7 +88,7 @@ export async function resolveEntry(entryRaw: string, roots: RootsInfo) {
       message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
     })
     if (create)
-      fs.copyFileSync(resolve(roots.cliRoot, 'template.md'), entry)
+      fs.copyFileSync(resolve(cliRoot, 'template.md'), entry)
     else
       process.exit(0)
   }
@@ -160,11 +160,6 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
   }
 }
 
-async function getUserRoot() {
-  const pkgJsonPath = await findClosestPkgJsonPath(process.cwd())
-  return pkgJsonPath ? dirname(pkgJsonPath) : process.cwd()
-}
-
 function getUserPkgJson(userRoot: string) {
   const path = resolve(userRoot, 'package.json')
   if (fs.existsSync(path))
@@ -227,12 +222,13 @@ function searchForWorkspaceRoot(
 
 let rootsInfo: RootsInfo | null = null
 
-export async function getRoots(): Promise<RootsInfo> {
+export async function getRoots(entry?: string): Promise<RootsInfo> {
   if (rootsInfo)
     return rootsInfo
-  const cliRoot = fileURLToPath(new URL('..', import.meta.url))
+  if (!entry)
+    throw new Error('[slidev] Cannot find roots without entry')
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
-  const userRoot = await getUserRoot()
+  const userRoot = dirname(resolve(entry))
   const userPkgJson = getUserPkgJson(userRoot)
   const userWorkspaceRoot = searchForWorkspaceRoot(userRoot)
   rootsInfo = {

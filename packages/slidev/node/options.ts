@@ -12,8 +12,8 @@ export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
 ): Promise<ResolvedSlidevOptions> {
-  const rootsInfo = await getRoots()
-  const entry = await resolveEntry(options.entry || 'slides.md', rootsInfo)
+  const entry = await resolveEntry(options.entry)
+  const rootsInfo = await getRoots(entry)
   const loaded = await parser.load(rootsInfo.userRoot, entry, undefined, mode)
 
   // Load theme data first, because it may affect the config

@@ -11,10 +11,8 @@ export interface RootsInfo {
 export interface SlidevEntryOptions {
   /**
    * Markdown entry
-   *
-   * @default 'slides.md'
    */
-  entry?: string
+  entry: string
 
   /**
    * Theme id
