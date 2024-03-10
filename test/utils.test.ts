@@ -3,7 +3,7 @@ import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
 import { describe, expect, it } from 'vitest'
 import type { ResolvedFontOptions } from '@slidev/types'
-import { getRoots, resolveEntry } from 'packages/slidev/node/resolver'
+import { getRoots } from 'packages/slidev/node/resolver'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../packages/slidev/node/utils'
 
