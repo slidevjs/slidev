@@ -64,6 +64,10 @@ jobs:
         run: pnpx del-cli ./.npmrc
         working-directory: ../temp/slidev-project
         if: ${{ ! matrix.hoist }}
+      
+      - name: Remove overridden dependencies
+        run: node ${{ github.workspace }}/scripts/remove-deps.mjs
+        working-directory: ../temp/slidev-project
 
       - name: Install project (npm, pnpm)
         run: ${{ matrix.pm }} i ../slidev-pkgs/cli.tgz playwright-chromium
