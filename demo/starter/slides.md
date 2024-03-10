@@ -91,18 +91,6 @@ Here is another comment.
 -->
 
 ---
-layout: default
----
-
-# Table of contents
-
-```html
-<Toc minDepth="1" maxDepth="1"></Toc>
-```
-
-<Toc maxDepth="1"></Toc>
-
----
 transition: slide-up
 level: 2
 ---
@@ -128,6 +116,25 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
   alt=""
 />
 <p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+
+---
+layout: two-cols
+layoutClass: gap-16
+---
+
+# Table of contents
+
+You can use the `Toc` component to generate a table of contents for your slides:
+
+```html
+<Toc minDepth="1" maxDepth="1"></Toc>
+```
+
+The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
+
+::right::
+
+<Toc v-click minDepth="1" maxDepth="2"></Toc>
 
 ---
 layout: image-right
@@ -187,8 +194,6 @@ level: 2
 ---
 
 # Shiki Magic Move
-
-(this feature is still experimental)
 
 Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
 
