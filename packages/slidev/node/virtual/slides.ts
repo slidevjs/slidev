@@ -21,7 +21,8 @@ export const templateSlides: VirtualModuleTemplate = {
             try {
               return await import('${VIRTUAL_SLIDE_PREFIX}${no}.md')
             }
-            catch {
+            catch(e) {
+              console.error('Failed to load slide ${no}:', e)
               return __layout__error
             }
           },
