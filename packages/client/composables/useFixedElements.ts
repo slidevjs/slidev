@@ -63,7 +63,6 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
     update: debounce(
       1000,
       (id: string, dataStr: string) => {
-        console.warn(elements)
         const idx = elements.indexOf(id)
         if (idx < 0 || !info.value)
           return
