@@ -17,9 +17,12 @@ export function useSlideBounds() {
       windowSize.height,
     ],
     () => {
-      setTimeout(bounding.update)
+      setTimeout(bounding.update, 300)
     },
-    { flush: 'post' },
+    {
+      flush: 'post',
+      immediate: true,
+    },
   )
   return bounding
 }

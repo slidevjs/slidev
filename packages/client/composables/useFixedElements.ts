@@ -1,7 +1,6 @@
 import { debounce } from '@antfu/utils'
 import type { FixedElementsContext } from '@slidev/types'
-import { computed, watch } from 'vue'
-import { routeForceRefresh } from '../logic/route'
+import { computed } from 'vue'
 import { showEditor } from '../state'
 import { useNav } from './useNav'
 import { useDynamicSlideInfo } from './useSlideInfo'
@@ -28,27 +27,13 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
   const enabled = computed(() => showEditor.value && no === currentSlideNo.value)
 
   const elements: string[] = []
-  let updates: Record<number, [number, number, string]> = {}
 
-  const save = () => {
-    if (!info.value)
-      return
-    if (Object.keys(updates).length === 0)
-      return
-    const oldContent = info.value!.content
-    let i = 0
-    let content = ''
-    for (const [start, end, posStr] of Object.values(updates)) {
-      content += oldContent.slice(i, start) + posStr
-      i = end
-    }
-    content += oldContent.slice(i)
-    update({ content })
-    updates = {}
-  }
-
-  watch([enabled, routeForceRefresh], save)
-  import.meta.hot?.on('vite:beforeUpdate', save)
+  const save = debounce(500, async (newContent: string) => {
+    await update({
+      content: newContent,
+      skipHmr: true,
+    })
+  })
 
   return map[no] = {
     get enabled() {
@@ -60,18 +45,17 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
     unregister(id) {
       elements.splice(elements.indexOf(id), 1)
     },
-    update: debounce(
-      1000,
-      (id: string, dataStr: string) => {
-        const idx = elements.indexOf(id)
-        if (idx < 0 || !info.value)
-          return
-        const oldContent = info.value.content
-        const match = [...oldContent.matchAll(/<v-fixed.*?>/g)][idx]
-        const start = match.index! + 8
-        const end = match.index! + match[0].length - 1
-        updates[idx] = [start, end, dataStr]
-      },
-    ),
+    update(id, dataStr) {
+      const idx = elements.indexOf(id)
+      if (idx < 0 || !info.value)
+        return
+      const oldContent = info.value.content
+      const match = [...oldContent.matchAll(/<v-fixed.*?>/g)][idx]
+      const start = match.index! + 8
+      const end = match.index! + match[0].length - 1
+      const newContent = oldContent.slice(0, start) + dataStr + oldContent.slice(end)
+      info.value = { ...info.value, content: newContent }
+      save(newContent)
+    },
   }
 }

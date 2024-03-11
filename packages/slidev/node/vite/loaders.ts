@@ -1,6 +1,6 @@
 import { basename } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, range } from '@antfu/utils'
+import { isString, isTruthy, notNullish, range, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
@@ -103,6 +103,8 @@ export function createSlidesLoader(
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
+  let skipHmr: [filePath: string, fileContent: string] | null = null
+
   const { data, clientRoot, roots, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
@@ -161,9 +163,19 @@ export function createSlidesLoader(
             if (body.content && body.content !== slide.source.content)
               hmrPages.add(idx)
 
-            Object.assign(slide.source, body)
+            if (body.content)
+              slide.content = slide.source.content = body.content
+            if (body.note)
+              slide.note = slide.source.note = body.note
+
             parser.prettifySlide(slide.source)
-            await parser.save(data.markdownFiles[slide.source.filepath])
+            const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
+            if (body.skipHmr) {
+              skipHmr = [slide.source.filepath, fileContent]
+              server?.moduleGraph.invalidateModule(
+                server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
+              )
+            }
 
             res.statusCode = 200
             res.write(JSON.stringify(withRenderedNote(slide)))
@@ -183,6 +195,11 @@ export function createSlidesLoader(
         const newData = await serverOptions.loadData?.()
         if (!newData)
           return []
+
+        if (skipHmr && newData.markdownFiles[skipHmr[0]]?.raw === skipHmr[1]) {
+          skipHmr = null
+          return []
+        }
 
         const moduleIds = new Set<string>()
 
