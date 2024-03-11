@@ -11,7 +11,7 @@
 }
 
 .twoslash-popup-container {
-  font-size: calc(13px * var(--slidev-slide-scale, 1));
+  font-size: 13px;
 }
 
 .twoslash-popup-container .twoslash-popup-code {

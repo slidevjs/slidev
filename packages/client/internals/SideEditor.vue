@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { throttledWatch, useEventListener } from '@vueuse/core'
+import { throttledWatch, useEventListener, watchThrottled } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
+import { activeElement, editorHeight, editorWidth, isEditorVertical, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useCodeMirror } from '../modules/codemirror'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
@@ -96,14 +96,21 @@ onMounted(async () => {
     },
   )
 
-  watch([tab, vertical], () => {
-    nextTick(() => {
-      if (tab.value === 'content')
-        contentEditor.refresh()
-      else
-        noteEditor.refresh()
-    })
-  })
+  watchThrottled(
+    [tab, vertical, isEditorVertical, editorWidth, editorHeight],
+    () => {
+      nextTick(() => {
+        if (tab.value === 'content')
+          contentEditor.refresh()
+        else
+          noteEditor.refresh()
+      })
+    },
+    {
+      throttle: 100,
+      flush: 'post',
+    },
+  )
 
   watch(currentSlideNo, () => {
     contentEditor.clearHistory()
@@ -221,4 +228,3 @@ throttledWatch(
   @apply px-3 py-2 h-full overflow-hidden bg-transparent font-mono text-sm z-0;
 }
 </style>
-../modules/codemirror

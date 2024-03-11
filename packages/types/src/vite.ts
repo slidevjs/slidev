@@ -7,9 +7,8 @@ import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
 import type RemoteAssets from 'vite-plugin-remote-assets'
 import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ArgumentsType } from '@antfu/utils'
-import type { SlidevEntryOptions } from './options'
 
-export interface SlidevPluginOptions extends SlidevEntryOptions {
+export interface SlidevPluginOptions {
   vue?: ArgumentsType<typeof Vue>[0]
   vuejsx?: ArgumentsType<typeof VueJsx>[0]
   markdown?: ArgumentsType<typeof Markdown>[0]

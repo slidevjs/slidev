@@ -190,6 +190,7 @@ onMounted(() => {
             mt-2
             :clicks-context="getClicksContext(route)"
             class="w-full"
+            @dblclick="getClicksContext(route).current = CLICKS_MAX"
           />
         </div>
         <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">

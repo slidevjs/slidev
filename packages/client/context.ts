@@ -41,6 +41,9 @@ export function useSlideContext() {
 
 export type SlideContext = ReturnType<typeof useSlideContext>
 
+/**
+ * @internal
+ */
 export function provideFrontmatter(frontmatter: Record<string, any>) {
   provideLocal(injectionFrontmatter, frontmatter)
 
@@ -63,6 +66,8 @@ export function provideFrontmatter(frontmatter: Record<string, any>) {
 /**
  * Convert frontmatter options to props for v-bind
  * It removes known options fields, and expose an extra `frontmatter` field that contains full frontmatter
+ *
+ * @internal
  */
 export function frontmatterToProps(frontmatter: Record<string, any>, pageNo: number) {
   return {

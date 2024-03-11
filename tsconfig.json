@@ -7,6 +7,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "paths": {
+      "@slidev/client": ["./packages/client/index.ts"],
       "@slidev/client/*": ["./packages/client/*"],
       "@slidev/types": ["./packages/types/src/index.ts"],
       "@slidev/parser/fs": ["./packages/parser/src/fs.ts"],
@@ -32,6 +33,8 @@
     "./*.ts",
     "./packages/**/*.ts",
     "./packages/**/*.vue",
+    "./demo/**/*.ts",
+    "./demo/**/*.vue",
     "./test/**/*.ts"
   ],
   "exclude": ["**/dist/**", "node_modules"]
