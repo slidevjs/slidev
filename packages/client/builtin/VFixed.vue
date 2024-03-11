@@ -2,12 +2,14 @@
 import { clamp } from '@antfu/utils'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import { useFixedElementsContext } from '../composables/useFixedElements'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { useSlideContext } from '../context'
 import { slideHeight, slideWidth } from '../env'
 import { makeId } from '../logic/utils'
+import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
   pos?: string
@@ -16,8 +18,10 @@ const props = defineProps<{
 const id = makeId()
 
 const { $renderContext, $page } = useSlideContext()
+const { currentSlideNo } = useNav()
 const context = computed(() => useFixedElementsContext($page.value))
-const enabled = computed(() => context.value.enabled && ['slide', 'presenter'].includes($renderContext.value))
+const enabled = computed(() => __DEV__ && $page.value === currentSlideNo.value && ['slide', 'presenter'].includes($renderContext.value))
+const dragging = ref(false)
 const scale = inject(injectionSlideScale, ref(1))
 const { left: slideLeft, top: slideTop } = useSlideBounds()
 
@@ -156,12 +160,26 @@ watch(
     context.value.update(id, ` pos="${posStr}"`)
   },
 )
+
+function startDragging() {
+  if (enabled.value)
+    dragging.value = true
+}
+
+onClickOutside(container, () => {
+  dragging.value = false
+})
 </script>
 
 <template>
   <div
-    v-if="enabled" ref="container" :style="positionStyles" border="~ white" @pointerdown="onPointerdown"
-    @pointermove="onPointermove" @pointerup="onPointerup"
+    v-if="enabled && dragging"
+    ref="container"
+    :style="positionStyles"
+    border="~ white"
+    @pointerdown="onPointerdown"
+    @pointermove="onPointermove"
+    @pointerup="onPointerup"
   >
     <slot />
     <div class="absolute inset-0 z-100">
@@ -172,7 +190,7 @@ watch(
       </template>
     </div>
   </div>
-  <div v-else ref="container" :style="positionStyles">
+  <div v-else ref="container" :style="positionStyles" border="~ transparent" @dblclick="startDragging">
     <slot />
   </div>
 </template>

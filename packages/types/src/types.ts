@@ -167,13 +167,3 @@ export interface ClicksContext {
   readonly currentOffset: number
   readonly total: number
 }
-
-export interface FixedElementsContext {
-  readonly enabled: boolean
-  // enable: () => void
-  // save: () => void
-  // discard: () => void
-  register: (id: string) => void
-  unregister: (id: string) => void
-  update: (id: string, dataStr: string) => void
-}

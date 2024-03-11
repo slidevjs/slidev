@@ -1,18 +1,17 @@
 import { debounce } from '@antfu/utils'
-import type { FixedElementsContext } from '@slidev/types'
-import { computed } from 'vue'
-import { showEditor } from '../state'
-import { useNav } from './useNav'
 import { useDynamicSlideInfo } from './useSlideInfo'
+
+export interface FixedElementsContext {
+  register: (id: string) => void
+  unregister: (id: string) => void
+  update: (id: string, dataStr: string) => void
+}
 
 const map: Record<number, FixedElementsContext> = {}
 
 export function useFixedElementsContext(no: number): FixedElementsContext {
   if (!(__DEV__ && __SLIDEV_FEATURE_EDITOR__)) {
     return {
-      get enabled() {
-        return false
-      },
       register() { },
       unregister() { },
       update() { },
@@ -21,10 +20,7 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
 
   if (map[no])
     return map[no]
-  const { currentSlideNo } = useNav()
   const { info, update } = useDynamicSlideInfo(no)
-
-  const enabled = computed(() => showEditor.value && no === currentSlideNo.value)
 
   const elements: string[] = []
 
@@ -36,9 +32,6 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
   })
 
   return map[no] = {
-    get enabled() {
-      return enabled.value
-    },
     register(id) {
       elements.push(id)
     },

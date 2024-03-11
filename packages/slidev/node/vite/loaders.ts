@@ -1,6 +1,6 @@
 import { basename } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, range, slash } from '@antfu/utils'
+import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
