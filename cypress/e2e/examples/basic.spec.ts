@@ -9,9 +9,7 @@ declare global {
 }
 
 Cypress.Commands.add('rightArrow', (n = 1) => {
-  const body = cy.get('body').wait(200)
-  for (let i = 0; i < n; i++)
-    body.type('{rightarrow}').wait(200)
+  cy.get('body').wait(500).type('{rightarrow}'.repeat(n)).wait(500)
 })
 
 const BASE = 'http://localhost:3041'
@@ -76,7 +74,7 @@ context('Basic', () => {
       .should('eq', `${BASE}/6?clicks=1`)
 
     cy.get('body')
-      .rightArrow(6)
+      .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
       .url().should('eq', `${BASE}/7`)
 
     cy.get('body')
@@ -235,7 +233,7 @@ context('Basic', () => {
       .should('eq', `${BASE}/12`)
 
     cy.get('body')
-      .rightArrow(6)
+      .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
       .url()
       .should('eq', `${BASE}/12?clicks=6`) // we should still be on page 12
 
