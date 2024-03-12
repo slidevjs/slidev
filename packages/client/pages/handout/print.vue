@@ -4,7 +4,7 @@ import { useStyleTag } from '@vueuse/core'
 import { windowSize } from '../../state'
 import { useNav } from '../../composables/useNav'
 import { themeVars } from '../../env'
-import HandoutPrintContainer from '../../internals/HandoutPrintContainer.vue'
+import PrintContainerHandout from '../../internals/PrintContainerHandout.vue'
 
 const { isPrintMode } = useNav()
 
@@ -54,7 +54,7 @@ html.print body {
 
 <template>
     <div id="page-root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
-        <HandoutPrintContainer class="w-full h-full" :width="windowSize.width.value" />
+        <PrintContainerHandout class="w-full h-full" :width="windowSize.width.value" />
     </div>
 </template>
 

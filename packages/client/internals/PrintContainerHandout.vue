@@ -5,7 +5,7 @@ import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
 import { injectionSlideScale } from '../constants'
 import { useNav } from '../composables/useNav'
-import HandoutPrintSlide from './HandoutPrintSlide.vue'
+import PrintHandout from './PrintHandout.vue'
 
 const props = defineProps<{
     width: number
@@ -41,7 +41,7 @@ provideLocal(injectionSlideScale, scale)
 <template>
     <div id="print-container" :class="className">
         <div id="print-content">
-            <HandoutPrintSlide v-for="(route, index) of routes" :key="route.path" :route="route" :index="index" />
+            <PrintHandout v-for="(route, index) of routes" :key="route.path" :route="route" :index="index" />
             <div class="break-after-page h-130" />
         </div>
         <slot name="controls" />

@@ -13,7 +13,6 @@ const route = computed(() => props.route)
 </script>
 
 <template>
-
   <div class="break-after-page">
     <!--TODO: A4 specific, figure out better customization-->
     <div class="w-full mt-104 h-176 flex flex-col relative overflow-hidden">
