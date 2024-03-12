@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full absolute bottom-[75px] px-2">
+    <div class="w-full absolute bottom-[75px]">
         <div class="h-[1px] bg-black w-full" />
         <div class="mt-2 relative">
             <div class="top-3.0 absolute left-0 !text-[11px]">© {{ new Date().getFullYear() }} Author

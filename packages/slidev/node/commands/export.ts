@@ -840,12 +840,13 @@ export async function exportHandout({
       if (notesPages[i]) {
         
         const noteEmbedded = await pdf.embedPage(notesPages[i], {
-          left: 0,
-          bottom: 0,
-          right: 600,
-          top: 530,
+          left: 0, /* TODO: make adjustable, depends on A4 */
+          bottom: 0, /* TODO: make adjustable, depends on A4 */
+          right: 600, /* TODO: make adjustable, depends on A4 */
+          top: 530, /* TODO: make adjustable, depends on A4 */
         })
 
+        /* TODO: make adjustable, depends on A4. we scale a bit to add margins by default */
         const noteEmbeddedDims = noteEmbedded.scale(0.93)
 
         firstPage.drawPage(noteEmbedded, {
