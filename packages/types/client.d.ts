@@ -22,6 +22,22 @@ declare module '#slidev/global-components/bottom' {
   export default component
 }
 
+
+declare module '#slidev/global-components/handout-bottom' {
+  import type { ComponentOptions } from 'vue'
+
+  const component: ComponentOptions
+  export default component
+}
+
+declare module '#slidev/global-components/handout-cover' {
+  import type { ComponentOptions } from 'vue'
+
+  const component: ComponentOptions
+  export default component
+}
+
+
 declare module '#slidev/slides' {
   import type { ShallowRef } from 'vue'
   import type { SlideRoute } from '@slidev/types'

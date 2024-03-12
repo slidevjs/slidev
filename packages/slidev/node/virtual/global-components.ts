@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
 
-function createGlobalComponentTemplate(layer: 'top' | 'bottom'): VirtualModuleTemplate {
+function createGlobalComponentTemplate(layer: 'top' | 'bottom' | 'handout-bottom' | 'handout-cover'): VirtualModuleTemplate {
   return {
     id: `/@slidev/global-components/${layer}`,
     getContent({ roots }) {
@@ -14,6 +14,18 @@ function createGlobalComponentTemplate(layer: 'top' | 'bottom'): VirtualModuleTe
               join(root, 'global.vue'),
               join(root, 'global-top.vue'),
               join(root, 'GlobalTop.vue'),
+            ]
+          }
+          else if (layer === 'handout-bottom') {
+            return [
+              join(root, 'handout-bottom.vue'),
+              join(root, 'HandoutBottom.vue'),
+            ]
+          }
+          else if (layer === 'handout-cover') {
+            return [
+              join(root, 'handout-cover.vue'),
+              join(root, 'HandoutCover.vue'),
             ]
           }
           else {
@@ -70,3 +82,5 @@ render() {
 
 export const templateGlobalTop = createGlobalComponentTemplate('top')
 export const templateGlobalBottom = createGlobalComponentTemplate('bottom')
+export const templateGlobalHandoutBottom = createGlobalComponentTemplate('handout-bottom')
+export const templateGlobalHandoutCover = createGlobalComponentTemplate('handout-cover')

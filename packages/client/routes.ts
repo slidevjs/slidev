@@ -7,7 +7,16 @@ export const routes: RouteRecordRaw[] = [
     path: '/print',
     component: () => import('./pages/print.vue'),
   },
-
+  {
+    name: 'handout',
+    path: '/handout',
+    component: () => import('./pages/handout/print.vue'),
+  },
+  {
+    name: 'cover',
+    path: '/cover',
+    component: () => import('./pages/cover/print.vue'),
+  },
   // Redirects
   { path: '', redirect: { path: '/1' } },
 ]
