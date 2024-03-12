@@ -382,7 +382,10 @@ export async function exportSlides({
   }
 
   async function genNotesPdfOnePiece() {
-    const output_notes = `notes-${output}`
+
+    const baseName = output.replace('.pdf', '');
+    const output_notes = `${baseName}-notes.pdf`;
+
     await go('handout')
     await page.pdf({
       path: output_notes,
@@ -402,7 +405,10 @@ export async function exportSlides({
   }
 
   async function genCoverPdfOnePiece() {
-    const output_notes = `cover-${output}`
+
+    const baseName = output.replace('.pdf', '');
+    const output_notes = `${baseName}-cover.pdf`;
+
     await go('cover')
     await page.pdf({
       path: output_notes,
@@ -530,18 +536,18 @@ export async function exportSlides({
         annots?.asArray().forEach((a) => {
 
           const dict = slides.context.lookupMaybe(a, PDFDict);
-          if(!dict) return 
+          if (!dict) return
 
           const aRecord = dict.get(asPDFName(`A`));
-          if(!aRecord) return 
+          if (!aRecord) return
 
           const subtype = dict.get(PDFName.of("Subtype")).toString();
-          if(!subtype) return 
+          if (!subtype) return
 
           if (subtype === "/Link") {
             const rect = dict.get(PDFName.of("Rect"));
             const link = slides.context.lookupMaybe(aRecord, PDFDict);
-            if(!link) return
+            if (!link) return
 
             const uri = link.get(asPDFName("URI")).toString().slice(1, -1); // get the original link, remove parenthesis
 
