@@ -9,7 +9,9 @@ declare global {
 }
 
 Cypress.Commands.add('rightArrow', (n = 1) => {
-  cy.get('body').wait(500).type('{rightarrow}'.repeat(n)).wait(500)
+  const body = cy.get('body').wait(200)
+  for (let i = 0; i < n; i++)
+    body.type('{rightarrow}').wait(200)
 })
 
 const BASE = 'http://localhost:3041'
