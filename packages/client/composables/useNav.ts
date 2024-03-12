@@ -170,15 +170,19 @@ export function useNavBase(
     return go(total.value)
   }
 
-  async function go(page: number | string, clicks?: number) {
+  async function go(page: number | string, clicks: number = 0) {
     skipTransition.value = false
-    await router?.push({
-      path: getSlidePath(page, isPresenter.value),
-      query: {
-        ...router.currentRoute.value.query,
-        clicks: clicks || undefined,
-      },
-    })
+    const pageChanged = currentSlideNo.value !== page
+    const clicksChanged = clicks !== queryClicks.value
+    if (pageChanged || clicksChanged) {
+      await router?.push({
+        path: getSlidePath(page, isPresenter.value),
+        query: {
+          ...router.currentRoute.value.query,
+          clicks: clicks === 0 ? undefined : clicks.toString(),
+        },
+      })
+    }
   }
 
   return {

@@ -9,7 +9,7 @@ const transitionResolveMap: Record<string, string | undefined> = {
   'slide-down': 'slide-down | slide-up',
 }
 
-export function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
+function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
   if (!transition)
     return undefined
   if (typeof transition === 'string') {
