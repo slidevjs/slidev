@@ -42,13 +42,9 @@ export function useViewTransition() {
     // Wait for `TransitionGroup` to become normal `div`
     setTimeout(() => {
       // @ts-expect-error missing types
-      const transition = document.startViewTransition(() => {
+      document.startViewTransition(() => {
         changeRoute()
         return promise
-      })
-      transition.finished.then(() => {
-        viewTransitionAbort = undefined
-        viewTransitionFinish = undefined
       })
     }, 50)
 
