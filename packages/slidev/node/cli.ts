@@ -535,96 +535,6 @@ cli.command(
   },
 )
 
-cli.command(
-  'export-handout [entry..]',
-  'Export handout to PDF',
-  args => exportOptionsHandout(commonOptions(args))
-    .strict()
-    .help(),
-  async (args) => {
-    const { entry, theme } = args
-    process.env.NODE_ENV = 'production'
-    const { exportHandout, getExportOptionsHandout } = await import('./commands/export')
-    const port = await getPort(12445)
-
-    for (const entryFile of entry as unknown as string) {
-      const options = await resolveOptions({ entry: entryFile, theme }, 'export')
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
-      printInfo(options)
-      
-      const result = await exportHandout({
-        port,
-        ...getExportOptionsHandout({ ...args, entry: entryFile }, options),
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
-      server.close()
-    }
-
-    process.exit(0)
-  },
-)
-
-function exportOptionsHandout<T>(args: Argv<T>) {
-  return args
-    .option('output', {
-      type: 'string',
-      describe: 'path to the output',
-    })
-    .option('format', {
-      type: 'string',
-      choices: ['pdf'],
-      describe: 'output format',
-    })
-    .option('timeout', {
-      type: 'number',
-      describe: 'timeout for rendering the print page',
-    })
-    .option('range', {
-      type: 'string',
-      describe: 'page ranges to export, for example "1,4-5,6"',
-    })
-    .option('dark', {
-      type: 'boolean',
-      describe: 'export as dark theme',
-    })
-    .option('with-clicks', {
-      alias: 'c',
-      type: 'boolean',
-      describe: 'export pages for every clicks',
-    })
-    .option('executable-path', {
-      type: 'string',
-      describe: 'executable to override playwright bundled browser',
-    })
-    .option('per-slide', {
-      type: 'boolean',
-      describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
-    })
-    .option('cover', {
-      type: 'boolean',
-      describe: 'prepend cover to handout, needs handout-cover.vue in project',
-    })
-    .option('slide-format', {
-      choices: ['pdf', 'png', 'jpeg'],
-      describe: 'intermediate output format of slides',
-    })
-    .option('jpeg-image-quality', {
-      type: 'number',
-      describe: 'jpeg quality of intermediate slides',
-    })
-    .option('write-slide-images-to-disk', {
-      type: 'boolean',
-      describe: 'write intermediate slide images to disk if --slide-format is png or jpeg',
-    })
-}
-
 cli
   .help()
   .parse()
@@ -686,6 +596,14 @@ function exportOptions<T>(args: Argv<T>) {
     .option('scale', {
       type: 'number',
       describe: 'scale factor for image export',
+    })
+    .option('cover', {
+      type: 'boolean',
+      describe: 'prepend cover to handout, needs handout-cover.vue in project',
+    })
+    .option('handout', {
+      type: 'boolean',
+      describe: 'Export handout with slides on top and notes on bottom, optionally prepending a cover',
     })
 }
 

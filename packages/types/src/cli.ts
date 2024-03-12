@@ -3,23 +3,10 @@ export interface CommonArgs {
   theme?: string
 }
 
-export interface ExportArgsHandout extends CommonArgs {
-  output?: string
-  format?: string
-  timeout?: number
-  range?: string
-  dark?: boolean
-  cover?: boolean
-  'with-clicks'?: boolean
-  'executable-path'?: string
-  'per-slide'?: boolean
-  'slide-format'?: string
-  'jpeg-image-quality'?: number
-  'write-slide-images-to-disk'?: boolean
-}
-
 export interface ExportArgs extends CommonArgs {
   'output'?: string
+  'handout'?: boolean
+  'cover'?: boolean
   'format'?: string
   'timeout'?: number
   'range'?: string
