@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getSlide } from '../logic/slides'
+import { configs } from '../env'
 
 export function useViewTransition() {
   const router = useRouter()
@@ -17,12 +18,10 @@ export function useViewTransition() {
     const fromNo = fromMeta?.slide?.no
     const toNo = toMeta?.slide?.no
     if (
-      !(
-        fromNo !== undefined && toNo !== undefined && (
-          (fromMeta?.transition === 'view-transition' && fromNo < toNo)
-          || (toMeta?.transition === 'view-transition' && toNo < fromNo)
-        )
-      )
+      !fromNo || !toNo
+      || (configs.transition !== 'view-transition'
+      && ((fromNo < toNo && fromMeta?.transition === 'view-transition')
+      || (toNo < fromNo && toMeta?.transition === 'view-transition')))
     ) {
       isViewTransition.value = false
       return
