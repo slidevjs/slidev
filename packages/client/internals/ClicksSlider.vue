@@ -28,21 +28,21 @@ function onMousedown() {
 
 <template>
   <div
-    class="flex gap-0.5 items-center select-none"
+    class="flex gap-1 items-center select-none"
     :title="`Clicks in this slide: ${total}`"
     :class="total ? '' : 'op50'"
   >
-    <div class="flex gap-1 items-center min-w-16 tabular-nums">
+    <div class="flex gap-0.5 items-center min-w-16 font-mono mr1">
       <carbon:cursor-1 text-sm op50 />
+      <div flex-auto />
       <template v-if="current >= 0 && current !== CLICKS_MAX">
-        <div flex-auto />
         <span text-primary>{{ current }}</span>
         <span op25>/</span>
       </template>
       <span op50>{{ total }}</span>
     </div>
     <div
-      relative flex-auto h5 flex="~"
+      relative flex-auto h5 font-mono flex="~"
       @dblclick="current = clicksContext.total"
     >
       <div
@@ -54,7 +54,7 @@ function onMousedown() {
         ]"
         :style="{ width: total > 0 ? `${1 / total * 100}%` : '100%' }"
       >
-        <div absolute inset-0 :class="i <= current ? 'bg-primary op20' : ''" />
+        <div absolute inset-0 :class="i <= current ? 'bg-primary op15' : ''" />
         <div
           :class="[
             +i === +current ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',

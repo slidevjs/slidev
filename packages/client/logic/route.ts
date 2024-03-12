@@ -22,6 +22,9 @@ export function useRouteQuery<T extends string | string[]>(
     },
     set(v) {
       nextTick(() => {
+        const oldValue = router.currentRoute.value.query[name]
+        if ((oldValue ?? defaultValue?.toString()) === v.toString())
+          return
         router[unref(mode) as 'replace' | 'push']({
           query: {
             ...router.currentRoute.value.query,
@@ -30,7 +33,7 @@ export function useRouteQuery<T extends string | string[]>(
         })
       })
     },
-  }) as any
+  })
 }
 
 // force update collected elements when the route is fully resolved
