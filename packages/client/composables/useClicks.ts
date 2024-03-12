@@ -4,6 +4,7 @@ import type { Ref } from 'vue'
 import { ref, shallowReactive } from 'vue'
 import { normalizeAtProp } from '../logic/utils'
 import { routeForceRefresh } from '../logic/route'
+import { useNav } from './useNav'
 
 export function createClicksContextBase(
   current: Ref<number>,
@@ -69,5 +70,6 @@ export function createFixedClicks(
   route?: SlideRoute | undefined,
   currentInit = 0,
 ): ClicksContext {
-  return createClicksContextBase(ref(currentInit), route?.meta?.clicks)
+  const { isPrintWithClicks, isPrintMode } = useNav()
+  return createClicksContextBase(ref(currentInit), route?.meta?.clicks, () => isPrintMode.value && !isPrintWithClicks.value)
 }
