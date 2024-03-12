@@ -68,6 +68,7 @@ export function createClicksContextBase(
 export function createFixedClicks(
   route?: SlideRoute | undefined,
   currentInit = 0,
+  isDisabled?: () => boolean,
 ): ClicksContext {
-  return createClicksContextBase(ref(currentInit), route?.meta?.clicks)
+  return createClicksContextBase(ref(currentInit), route?.meta?.clicks, isDisabled)
 }
