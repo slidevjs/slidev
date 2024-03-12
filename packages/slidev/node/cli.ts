@@ -43,6 +43,8 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 const FILES_CREATE_RESTART_GLOBS = [
   'global-bottom.vue',
   'global-top.vue',
+  'handout-bottom.vue',
+  'handout-cover.vue',
   'uno.config.js',
   'uno.config.ts',
   'unocss.config.js',
@@ -559,7 +561,6 @@ cli.command(
       
       const result = await exportHandout({
         port,
-
         ...getExportOptionsHandout({ ...args, entry: entryFile }, options),
       })
       console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
