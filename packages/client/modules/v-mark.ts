@@ -116,7 +116,8 @@ export function createVMarkDirective() {
 
           const resolvedClick = resolveClick(el, binding, options.value.at)
           if (!resolvedClick) {
-            console.error('[Slidev] Invalid value for v-mark:', options.value.at)
+            // No click animation, just show the mark
+            annotation.show()
             return
           }
 
@@ -130,19 +131,14 @@ export function createVMarkDirective() {
 
             const at = options.value.at
 
-            if (at === true) {
+            if (at === true)
               shouldShow = true
-            }
-            else if (at === false) {
+
+            else if (at === false)
               shouldShow = false
-            }
-            else if (resolvedClick) {
+
+            else
               shouldShow = resolvedClick.isActive.value
-            }
-            else {
-              console.error('[Slidev] Invalid value for v-mark:', at)
-              return
-            }
 
             if (shouldShow == null)
               return
