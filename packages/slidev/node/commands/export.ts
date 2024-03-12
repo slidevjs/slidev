@@ -702,7 +702,10 @@ export async function exportSlides({
     }
 
     const pdfData = Buffer.from(await pdf.save())
-    await fs.writeFile(`handout-${output}`, pdfData)
+    const baseName = output.replace('.pdf', '');
+    const handOut = `${baseName}-handout.pdf`;
+
+    await fs.writeFile(handOut, pdfData)
   }
 
   function genPagePdf() {
