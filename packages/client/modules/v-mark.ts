@@ -133,10 +133,8 @@ export function createVMarkDirective() {
 
             if (at === true)
               shouldShow = true
-
             else if (at === false)
               shouldShow = false
-
             else
               shouldShow = resolvedClick.isActive.value
 
