@@ -33,7 +33,6 @@ export function useViewTransition() {
       return
     }
 
-    const becomeViewTransition = !isViewTransition.value
     isViewTransition.value = true
     const promise = new Promise<void>((resolve, reject) => {
       viewTransitionFinish = resolve
@@ -43,7 +42,8 @@ export function useViewTransition() {
     let changeRoute: () => void
     const ready = new Promise<void>(resolve => (changeRoute = resolve))
 
-    const startViewTransition = () => {
+    // Wait for `TransitionGroup` to become normal `div`
+    setTimeout(() => {
       // @ts-expect-error missing types
       const transition = document.startViewTransition(() => {
         changeRoute()
@@ -53,15 +53,7 @@ export function useViewTransition() {
         viewTransitionAbort = undefined
         viewTransitionFinish = undefined
       })
-    }
-
-    if (becomeViewTransition) {
-      // Wait for `TransitionGroup` to become normal `div`
-      setTimeout(startViewTransition, 50)
-    }
-    else {
-      startViewTransition()
-    }
+    }, 50)
 
     return ready
   })
