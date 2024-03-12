@@ -43,17 +43,19 @@ export function useViewTransition() {
     let changeRoute: () => void
     const ready = new Promise<void>(resolve => (changeRoute = resolve))
 
-    // eslint-disable-next-line ts/ban-ts-comment
-    // @ts-expect-error
-    const transition = document.startViewTransition(() => {
-      changeRoute()
-      return promise
-    })
+    // Wait for `TransitionGroup` to become normal `div`
+    setTimeout(() => {
+      // @ts-expect-error missing types
+      const transition = document.startViewTransition(() => {
+        changeRoute()
+        return promise
+      })
+      transition.finished.then(() => {
+        viewTransitionAbort = undefined
+        viewTransitionFinish = undefined
+      })
+    }, 50)
 
-    transition.finished.then(() => {
-      viewTransitionAbort = undefined
-      viewTransitionFinish = undefined
-    })
     return ready
   })
 
