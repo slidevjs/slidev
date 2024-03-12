@@ -17,7 +17,8 @@ export async function resolveOptions(
   const loaded = await parser.load(rootsInfo.userRoot, entry, undefined, mode)
 
   // Load theme data first, because it may affect the config
-  const themeRaw = options.theme || loaded.headmatter.theme as string || 'default'
+  let themeRaw = options.theme || loaded.headmatter.theme as string | null | undefined
+  themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
   const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
   const themeRoots = themeRoot ? [themeRoot] : []
   const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
