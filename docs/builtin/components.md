@@ -255,6 +255,41 @@ Parameters:
 
 See https://sli.dev/guide/animations.html
 
+### `SlidevVideo`
+
+Embed a video.
+
+#### Usage
+
+```md
+<SlidevVideo>
+  <!-- Anything that can go in a HTML video element. -->
+  <source src="myMovie.mp4" type="video/mp4" />
+  <source src="myMovie.webm" type="video/webm" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="myMovie.mp4">here</a>.
+  </p>
+</SlidevVideo>
+```
+
+Check [HTML video element's doc](https://developer.mozilla.org/docs/Web/HTML/Element/Video) to see what can be included in this component's slot.
+
+Parameters:
+
+- `autoPlay` (`boolean | 'once' | 'resume' | 'resumeOnce'`, default: `false`):
+  - `true` or `'once'`: start the video only once and does not restart it once ended or paused
+  - `false`: never automatically start the video (rely on html5 controls instead)
+  - `'resume'` resume the video when going back to its click turn
+  - `'resumeOnce'` only resume it if it hasn't ended
+- `autoPause` (`'slide' | 'click'`, default: `undefined`):
+  - `'slide'`: pause the video on slide change
+  - `'click'`:  pause on next click
+- `autoReset` (`'slide' | 'click'`, default: `undefined`):
+  - `'slide'`: go back to the start of the video when going back to the slide
+  - `'click'`: go back to the start of the video when going back to the component's click turn
+ 
+    
 ### `Youtube`
 
 Embed a YouTube video.
