@@ -264,11 +264,11 @@ Embed a video.
 ```md
 <SlidevVideo>
   <!-- Anything that can go in a HTML video element. -->
-  <source src="maVideo.mp4" type="video/mp4" />
-  <source src="maVideo.webm" type="video/webm" />
+  <source src="myMovie.mp4" type="video/mp4" />
+  <source src="myMovie.webm" type="video/webm" />
   <p>
-    Votre navigateur ne prend pas en charge les vidéos HTML5. Voici
-    <a href="myVideo.mp4">un lien pour télécharger la vidéo</a>.
+    Your browser does not support videos. You may download it
+    <a href="myMovie.mp4">here</a>.
   </p>
 </SlidevVideo>
 ```
