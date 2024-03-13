@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import { useFixedNav } from '../composables/useNav'
+import { useFixedNav, useNav } from '../composables/useNav'
 import { createFixedClicks } from '../composables/useClicks'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const { route } = defineProps<{ route: SlideRoute }>()
-const clicks0 = createFixedClicks(route, 0)
+const { isPrintWithClicks } = useNav()
+const clicks0 = createFixedClicks(route, 0, () => !isPrintWithClicks.value)
 </script>
 
 <template>

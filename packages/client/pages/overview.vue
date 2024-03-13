@@ -100,37 +100,42 @@ onMounted(() => {
 
 <template>
   <div class="h-screen w-screen of-hidden flex">
-    <nav class="h-full flex flex-col border-r border-main p2 select-none">
-      <div class="flex flex-col flex-auto items-center justify-center group gap-1">
-        <div
-          v-for="(route, idx) of slides"
-          :key="route.no"
-          class="relative"
-        >
-          <button
-            class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
-            :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
-            @click="scrollToSlide(idx)"
-          >
-            <div>{{ idx + 1 }}</div>
-          </button>
+    <nav class="grid grid-rows-[auto_max-content] border-r border-main select-none max-h-full h-full">
+      <div class="relative">
+        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-scroll" style="direction:rtl">
           <div
-            v-if="route.meta?.slide?.title"
-            class="pointer-events-none select-none absolute left-110% bg-main top-50% translate-y--50% ws-nowrap z-10 px2 shadow-xl rounded border border-main transition duration-400 op0 group-hover:op100"
-            :class="activeBlocks.includes(idx) ? 'text-primary' : 'text-main important-text-op-50'"
+            v-for="(route, idx) of slides"
+            :key="route.no"
+            class="relative"
+            style="direction:ltr"
           >
-            {{ route.meta?.slide?.title }}
+            <button
+              class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
+              :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
+              @click="scrollToSlide(idx)"
+            >
+              <div>{{ idx + 1 }}</div>
+            </button>
+            <div
+              v-if="route.meta?.slide?.title"
+              class="pointer-events-none select-none absolute left-110% backdrop-blur-8 top-50% translate-y--50% ws-nowrap z-10 px2 shadow-xl rounded border border-main transition duration-400 op0 group-hover:op100"
+              :class="activeBlocks.includes(idx) ? 'text-primary' : 'text-main important-text-op-50'"
+            >
+              {{ route.meta?.slide?.title }}
+            </div>
           </div>
         </div>
       </div>
-      <IconButton
-        v-if="!isColorSchemaConfigured"
-        :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
-        @click="toggleDark()"
-      >
-        <carbon-moon v-if="isDark" />
-        <carbon-sun v-else />
-      </IconButton>
+      <div p2 border="t main">
+        <IconButton
+          v-if="!isColorSchemaConfigured"
+          :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
+          @click="toggleDark()"
+        >
+          <carbon-moon v-if="isDark" />
+          <carbon-sun v-else />
+        </IconButton>
+      </div>
     </nav>
     <main
       class="flex-1 h-full of-auto"

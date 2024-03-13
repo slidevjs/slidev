@@ -415,7 +415,8 @@ cli.command(
           const entry = await resolveEntry(entryRaw)
           const roots = await getRoots(entry)
           const data = await parser.load(roots.userRoot, entry)
-          const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
+          let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
+          themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)
