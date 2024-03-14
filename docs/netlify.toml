@@ -8,7 +8,7 @@ PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
 from = "/new"
-to = "https://stackblitz.com/fork/slidev?file=slides.md"
+to = "https://stackblitz.com/github/slidevjs/new?file=slides.md"
 status = 302
 force = true
 
