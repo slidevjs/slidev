@@ -47,8 +47,8 @@ function conditionsMatch(context: Context) {
 <template>
   <div v-if="needsDomWrapper" ref="target">
     <slot v-if="shouldRender" />
-    <slot v-else name="else" />
+    <slot v-else name="fallback" />
   </div>
   <slot v-else-if="shouldRender" />
-  <slot v-else name="else" />
+  <slot v-else name="fallback" />
 </template>

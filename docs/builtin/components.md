@@ -136,7 +136,7 @@ Parameters:
 Slots:
 
 - `#default`: Rendered when the context matches
-- `#else`: Rendered when the context does not match
+- `#fallback`: Rendered when the context does not match
 
 ### `SlideCurrentNo`
 
