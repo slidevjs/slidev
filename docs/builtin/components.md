@@ -119,7 +119,7 @@ routeAlias: solutions
 
 ### `RenderWhen`
 
-Render slot only when the context matches (for example when we are in presenter view).
+Render slots depending on whether the context matches (for example whether we are in presenter view).
 
 #### Usage
 
@@ -127,11 +127,16 @@ Render slot only when the context matches (for example when we are in presenter 
 <RenderWhen context="presenter">This will only be rendered in presenter view.</RenderWhen>
 ```
 
-Context type: `'main' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
+Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
 
 Parameters:
 
-- `context` (`Context | Context[]`): context or array of contexts you want the slot to be rendered
+- `context` (`Context | Context[]`): a context or array of contexts you want to check for
+
+Slots:
+
+- `#default`: Rendered when the context matches
+- `#else`: Rendered when the context does not match
 
 ### `SlideCurrentNo`
 
