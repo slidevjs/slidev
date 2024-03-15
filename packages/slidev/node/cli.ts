@@ -370,13 +370,17 @@ cli.command(
         options.data.config.download = download
 
       printInfo(options)
-      await build(options, {
-        base,
-        build: {
-          watch: watch ? {} : undefined,
-          outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+      await build(
+        options,
+        {
+          base,
+          build: {
+            watch: watch ? {} : undefined,
+            outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+          },
         },
-      }, { ...args, entry: entryFile })
+        { ...args, entry: entryFile },
+      )
     }
   },
 )
