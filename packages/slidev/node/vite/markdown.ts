@@ -1,6 +1,6 @@
 import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
-import { slash } from '@antfu/utils'
+import { isTruthy, slash } from '@antfu/utils'
 import type { KatexOptions } from 'katex'
 import type MarkdownIt from 'markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
@@ -55,9 +55,11 @@ export async function createMarkdownPlugin(
       themes: 'themes' in options ? Object.values(options.themes) : [options.theme],
     })
 
-    const transformers: ShikiTransformer[] = [
+    const twoslashEnabled = (config.twoslash === true || config.twoslash === mode)
+
+    const transformers = [
       ...options.transformers || [],
-      transformerTwoslash({
+      twoslashEnabled && transformerTwoslash({
         explicitTrigger: true,
         twoslashOptions: {
           handbookOptions: {
@@ -73,8 +75,8 @@ export async function createMarkdownPlugin(
         postprocess(code) {
           return escapeVueInCode(code)
         },
-      },
-    ]
+      } as ShikiTransformer,
+    ].filter(isTruthy) as ShikiTransformer[]
 
     const plugin = markdownItShiki(shiki, {
       ...options,
