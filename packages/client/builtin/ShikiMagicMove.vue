@@ -25,11 +25,11 @@ const container = ref<HTMLElement>()
 const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
 
 onUnmounted(() => {
-  clicks!.unregister(id)
+  clicks?.unregister(id)
 })
 
 onMounted(() => {
-  if (!clicks || clicks.disabled)
+  if (!clicks)
     return
 
   if (ranges.value.length !== steps.length)

@@ -133,7 +133,6 @@ watchEffect(() => {
             <SlideContainer
               :key="route.no"
               :width="cardWidth"
-              :clicks-disabled="true"
               class="pointer-events-none"
             >
               <SlideWrapper

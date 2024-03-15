@@ -2,11 +2,12 @@
 import type { SlideRoute } from '@slidev/types'
 import { useFixedNav, useNav } from '../composables/useNav'
 import { createFixedClicks } from '../composables/useClicks'
+import { CLICKS_MAX } from '../constants'
 import PrintSlideClick from './PrintSlideClick.vue'
 
 const { route } = defineProps<{ route: SlideRoute }>()
 const { isPrintWithClicks } = useNav()
-const clicks0 = createFixedClicks(route, 0, () => !isPrintWithClicks.value)
+const clicks0 = createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MAX)
 </script>
 
 <template>
@@ -14,7 +15,7 @@ const clicks0 = createFixedClicks(route, 0, () => !isPrintWithClicks.value)
     :clicks-context="clicks0"
     :nav="useFixedNav(route, clicks0)"
   />
-  <template v-if="!clicks0.disabled">
+  <template v-if="isPrintWithClicks">
     <PrintSlideClick
       v-for="i of clicks0.total"
       :key="i"
