@@ -216,6 +216,14 @@ const count = ref(0)
 <!-- For the popup to not overlap the content below -->
 <div class="py-20" />
 
+#### Disable Twoslash
+
+```yaml
+---
+twoslash: false # can also be `dev` or `build` tp conditionally enable it
+---
+```
+
 ### Shiki Magic Move
 
 > Available since v0.48
