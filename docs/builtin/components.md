@@ -284,12 +284,14 @@ Parameters:
   - `'resumeOnce'` only resume it if it hasn't ended
 - `autoPause` (`'slide' | 'click'`, default: `undefined`):
   - `'slide'`: pause the video on slide change
-  - `'click'`:  pause on next click
+  - `'click'`: pause on next click
 - `autoReset` (`'slide' | 'click'`, default: `undefined`):
   - `'slide'`: go back to the start of the video when going back to the slide
   - `'click'`: go back to the start of the video when going back to the component's click turn
- 
-    
+- `timeToPrint` (`number | 'last'`, default: `0`):
+  - `number`: time in seconds to jump to when printing
+  - `'last'`: jump to the last second of the video when printing
+
 ### `Youtube`
 
 Embed a YouTube video.
