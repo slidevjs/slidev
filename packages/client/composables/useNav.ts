@@ -259,8 +259,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
 
   const queryClicks = computed({
     get() {
-      if (clicksContext.value.disabled)
-        return CLICKS_MAX
       let v = +(queryClicksRaw.value || 0)
       if (Number.isNaN(v))
         v = 0
@@ -281,8 +279,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     const context = createClicksContextBase(
       computed({
         get() {
-          if (context.disabled)
-            return CLICKS_MAX
           if (currentSlideNo.value === thisNo)
             return +(queryClicksRaw.value || 0) || 0
           else if (currentSlideNo.value > thisNo)
@@ -296,7 +292,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
         },
       }),
       route?.meta?.clicks,
-      () => isPrintMode.value && !isPrintWithClicks.value,
     )
 
     // On slide mounted, make sure the query is not greater than the total

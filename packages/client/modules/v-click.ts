@@ -132,7 +132,7 @@ function isCurrent(thisClick: number | [number, number], clicks: number) {
 export function resolveClick(el: Element, dir: DirectiveBinding<any>, value: VClickValue, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
   const ctx = dirInject(dir, injectionClicksContext)?.value
 
-  if (!el || !ctx || ctx.disabled)
+  if (!el || !ctx)
     return null
 
   if (value === false || value === 'false')
