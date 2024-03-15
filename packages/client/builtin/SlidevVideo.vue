@@ -7,7 +7,7 @@ const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
   autoPause?: 'slide' | 'click'
   autoReset?: 'slide' | 'click'
-  timeToPrint?: number | 'last'
+  timeToPrint?: string | number | 'last'
 }>()
 
 const {
@@ -74,9 +74,9 @@ onMounted(() => {
   video.value.addEventListener('ended', onEnded)
   video.value.addEventListener('loadedmetadata', () => {
     if (isPrintMode.value) {
-      video.value!.currentTime = props.timeToPrint === 'last'
+      video.value!.currentTime = !props.timeToPrint || props.timeToPrint === 'last'
         ? video.value!.duration - 0.1
-        : props.timeToPrint ?? 0
+        : +props.timeToPrint
     }
   })
 })

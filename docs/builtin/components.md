@@ -288,8 +288,8 @@ Parameters:
 - `autoReset` (`'slide' | 'click'`, default: `undefined`):
   - `'slide'`: go back to the start of the video when going back to the slide
   - `'click'`: go back to the start of the video when going back to the component's click turn
-- `timeToPrint` (`number | 'last'`, default: `0`):
-  - `number`: time in seconds to jump to when printing
+- `timeToPrint` (`string | number | 'last'`, default: `'last'`):
+  - `string | number`: time in seconds to jump to when printing
   - `'last'`: jump to the last second of the video when printing
 
 ### `Youtube`
