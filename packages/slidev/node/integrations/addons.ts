@@ -15,12 +15,12 @@ export async function resolveAddons(addonsInConfig: string[]) {
     if (!pkgRoot)
       return
     resolved.push(pkgRoot)
-    const { slidev, engines } = await fs.readJSON(resolve(pkgRoot, 'package.json'))
+    const { slidev = {}, engines = {} } = await fs.readJSON(resolve(pkgRoot, 'package.json'))
 
     if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
       throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
 
-    if (Array.isArray(slidev?.addons))
+    if (Array.isArray(slidev.addons))
       await Promise.all(slidev.addons.map((addon: string) => resolveAddon(addon, pkgRoot)))
   }
 

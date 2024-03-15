@@ -11,17 +11,17 @@
   "dependencies": {
     "@antfu/utils": "^0.7.7",
     "@vueuse/core": "^10.9.0",
-    "typeit": "^7.0.4"
+    "typeit": "^8.8.3"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.190",
+    "@iconify/json": "^2.2.192",
     "@shikijs/vitepress-twoslash": "^1.1.7",
     "@slidev/client": "0.34.3",
     "@slidev/parser": "0.34.3",
     "@slidev/theme-default": "0.21.2",
     "@slidev/types": "0.34.3",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^20.11.25",
+    "@types/node": "^20.11.27",
     "@unocss/reset": "^0.58.5",
     "fs-extra": "^11.2.0",
     "markdown-it": "^14.0.0",
