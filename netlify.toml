@@ -13,6 +13,16 @@ status = 302
 force = true
 
 [[redirects]]
+from = "/demo/composable-vue/*"
+to = "/demo/composable-vue/index.html"
+status = 200
+
+[[redirects]]
+from = "/demo/starter/*"
+to = "/demo/starter/index.html"
+status = 200
+
+[[redirects]]
 from = "https://slidev.antfu.me/*"
 to = "https://sli.dev/:splat"
 status = 301
