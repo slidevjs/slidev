@@ -288,7 +288,10 @@ Parameters:
 - `autoReset` (`'slide' | 'click'`, default: `undefined`):
   - `'slide'`: go back to the start of the video when going back to the slide
   - `'click'`: go back to the start of the video when going back to the component's click turn
+- `imgToPrint` (`string`, default: `undefined`):
+  - The source of the image to print instead of the video.
 - `timeToPrint` (`string | number | 'last'`, default: `'last'`):
+  > Only works when `imgToPrint` is not set.
   - `string | number`: time in seconds to jump to when printing
   - `'last'`: jump to the last second of the video when printing
 

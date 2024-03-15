@@ -7,6 +7,7 @@ const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
   autoPause?: 'slide' | 'click'
   autoReset?: 'slide' | 'click'
+  imgToPrint?: string
   timeToPrint?: string | number | 'last'
 }>()
 
@@ -72,13 +73,13 @@ onMounted(() => {
     return
   video.value.addEventListener('play', onPlay)
   video.value.addEventListener('ended', onEnded)
-  video.value.addEventListener('loadedmetadata', () => {
-    if (isPrintMode.value) {
+  if (isPrintMode.value && !props.imgToPrint) {
+    video.value.addEventListener('loadedmetadata', () => {
       video.value!.currentTime = !props.timeToPrint || props.timeToPrint === 'last'
         ? video.value!.duration - 0.1
         : +props.timeToPrint
-    }
-  })
+    })
+  }
 })
 
 onUnmounted(() => {
@@ -90,7 +91,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <video ref="video">
+  <video v-if="!isPrintMode || !props.imgToPrint" ref="video">
     <slot />
   </video>
+  <img v-else :src="props.imgToPrint">
 </template>
