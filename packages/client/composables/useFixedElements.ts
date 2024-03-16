@@ -5,6 +5,7 @@ export interface FixedElementsContext {
   register: (id: string) => void
   unregister: (id: string) => void
   update: (id: string, dataStr: string) => void
+  save: () => Promise<void>
 }
 
 const map: Record<number, FixedElementsContext> = {}
@@ -15,6 +16,7 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
       register() { },
       unregister() { },
       update() { },
+      save: async () => { },
     }
   }
 
@@ -24,12 +26,17 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
 
   const elements: string[] = []
 
-  const save = debounce(500, async (newContent: string) => {
-    await update({
-      content: newContent,
-      skipHmr: true,
-    })
-  })
+  let newContent: string | null = null
+  async function save() {
+    if (newContent) {
+      await update({
+        content: newContent,
+        skipHmr: true,
+      })
+      newContent = null
+    }
+  }
+  const debouncedSave = debounce(500, save)
 
   return map[no] = {
     register(id) {
@@ -46,9 +53,10 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
       const match = [...oldContent.matchAll(/<v-fixed.*?>/g)][idx]
       const start = match.index! + 8
       const end = match.index! + match[0].length - 1
-      const newContent = oldContent.slice(0, start) + dataStr + oldContent.slice(end)
+      newContent = oldContent.slice(0, start) + dataStr + oldContent.slice(end)
       info.value = { ...info.value, content: newContent }
-      save(newContent)
+      debouncedSave()
     },
+    save,
   }
 }

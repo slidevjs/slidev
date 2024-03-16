@@ -168,6 +168,7 @@ function startDragging() {
 
 onClickOutside(container, () => {
   dragging.value = false
+  context.value.save()
 })
 </script>
 
