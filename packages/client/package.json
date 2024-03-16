@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "0.48.1",
+  "version": "0.48.3",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "@slidev/rough-notation": "^0.1.0",
     "@slidev/types": "workspace:*",
     "@typescript/ata": "^0.9.4",
-    "@unhead/vue": "^1.8.11",
+    "@unhead/vue": "^1.8.18",
     "@unocss/reset": "^0.58.5",
     "@vueuse/core": "^10.9.0",
     "@vueuse/math": "^10.9.0",
@@ -52,7 +52,7 @@
     "katex": "^0.16.9",
     "lz-string": "^1.5.0",
     "mermaid": "^10.9.0",
-    "monaco-editor": "^0.46.0",
+    "monaco-editor": "^0.47.0",
     "prettier": "^3.2.5",
     "recordrtc": "^5.6.2",
     "shiki": "^1.1.7",
@@ -64,6 +64,6 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "vite": "^5.1.5"
+    "vite": "^5.1.6"
   }
 }

@@ -370,13 +370,17 @@ cli.command(
         options.data.config.download = download
 
       printInfo(options)
-      await build(options, {
-        base,
-        build: {
-          watch: watch ? {} : undefined,
-          outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+      await build(
+        options,
+        {
+          base,
+          build: {
+            watch: watch ? {} : undefined,
+            outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+          },
         },
-      }, { ...args, entry: entryFile })
+        { ...args, entry: entryFile },
+      )
     }
   },
 )
@@ -413,7 +417,8 @@ cli.command(
           const entry = await resolveEntry(entryRaw)
           const roots = await getRoots(entry)
           const data = await parser.load(roots.userRoot, entry)
-          const themeRaw = themeInput || (data.headmatter.theme as string) || 'default'
+          let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
+          themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
           if (themeRaw === 'none') {
             console.error('Cannot eject theme "none"')
             process.exit(1)

@@ -16,6 +16,7 @@ export function getDefaultConfig(): SlidevConfig {
     export: {} as ResolvedExportOptions,
     info: false,
     highlighter: 'shiki',
+    twoslash: true,
     lineNumbers: false,
     colorSchema: 'auto',
     routerMode: 'history',

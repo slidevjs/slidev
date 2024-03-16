@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.48.1",
+  "version": "0.48.3",
   "description": "Shared types declarations for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "katex": "^0.16.9",
     "mermaid": "^10.9.0",
-    "monaco-editor": "^0.46.0",
+    "monaco-editor": "^0.47.0",
     "shiki": "^1.1.7",
     "unocss": "^0.58.5",
     "unplugin-icons": "^0.18.5",

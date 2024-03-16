@@ -5,6 +5,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
+import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
   at?: string | number
@@ -14,6 +15,7 @@ const props = defineProps<{
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
 const { $clicksContext: clicks, $scale: scale } = useSlideContext()
+const { isPrintMode } = useNav()
 const id = makeId()
 
 const stepIndex = ref(0)
@@ -23,11 +25,11 @@ const container = ref<HTMLElement>()
 const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
 
 onUnmounted(() => {
-  clicks!.unregister(id)
+  clicks?.unregister(id)
 })
 
 onMounted(() => {
-  if (!clicks || clicks.disabled)
+  if (!clicks)
     return
 
   if (ranges.value.length !== steps.length)
@@ -92,6 +94,7 @@ onMounted(() => {
       class="slidev-code relative shiki overflow-visible"
       :steps="steps"
       :step="stepIndex"
+      :animate="!isPrintMode"
       :options="{
         globalScale: scale,
         // TODO: make this configurable later

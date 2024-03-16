@@ -8,9 +8,19 @@ PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
 from = "/new"
-to = "https://stackblitz.com/fork/slidev?file=slides.md"
+to = "https://stackblitz.com/github/slidevjs/new?file=slides.md"
 status = 302
 force = true
+
+[[redirects]]
+from = "/demo/composable-vue/*"
+to = "/demo/composable-vue/index.html"
+status = 200
+
+[[redirects]]
+from = "/demo/starter/*"
+to = "/demo/starter/index.html"
+status = 200
 
 [[redirects]]
 from = "https://slidev.antfu.me/*"

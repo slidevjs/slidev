@@ -8,15 +8,11 @@ import { routeForceRefresh } from '../logic/route'
 export function createClicksContextBase(
   current: Ref<number>,
   clicksOverrides?: number,
-  isDisabled?: () => boolean,
 ): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
   return {
-    get disabled() {
-      return isDisabled ? isDisabled() : false
-    },
     get current() {
       return +current.value
     },
@@ -25,7 +21,7 @@ export function createClicksContextBase(
     },
     relativeOffsets,
     map,
-    onMounted() {},
+    onMounted() { },
     resolve(at, size = 1) {
       const [isRelative, value] = normalizeAtProp(at)
       if (isRelative) {
