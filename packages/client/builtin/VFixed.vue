@@ -70,7 +70,7 @@ const positionStyles = computed((): StyleValue => {
       }
 })
 
-let pressedDelta: [number, number] | undefined
+let currentDrag: [dx: number, dy: number, ratio: number] | undefined
 
 function onPointerdown(ev: PointerEvent) {
   if (!enabled.value)
@@ -80,22 +80,23 @@ function onPointerdown(ev: PointerEvent) {
   ev.stopPropagation()
   const el = ev.target as HTMLElement
   const elBounds = el.getBoundingClientRect()
-  pressedDelta = [
+  currentDrag = [
     ev.clientX - elBounds.left,
     ev.clientY - elBounds.top,
+    (right.value - left.value) / (bottom.value - top.value),
   ];
   (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId)
 }
 
 function onPointermove(ev: PointerEvent) {
-  if (!pressedDelta)
+  if (!currentDrag)
     return
 
   ev.preventDefault()
   ev.stopPropagation()
 
-  const x = (ev.clientX - slideLeft.value - pressedDelta[0]) / scale.value
-  const y = (ev.clientY - slideTop.value - pressedDelta[1]) / scale.value
+  const x = (ev.clientX - slideLeft.value - currentDrag[0]) / scale.value
+  const y = (ev.clientY - slideTop.value - currentDrag[1]) / scale.value
 
   const width = right.value - left.value
   const height = bottom.value - top.value
@@ -106,27 +107,50 @@ function onPointermove(ev: PointerEvent) {
 }
 
 function onPointerup(ev: PointerEvent) {
-  if (!pressedDelta)
+  if (!currentDrag)
     return
 
   ev.preventDefault()
   ev.stopPropagation()
 
-  pressedDelta = undefined
+  currentDrag = undefined
 }
 
 function getCornerProps(isLeft: boolean, isTop: boolean) {
   return {
     onPointerdown,
     onPointermove: (ev: PointerEvent) => {
-      if (!pressedDelta)
+      if (!currentDrag)
         return
 
       ev.preventDefault()
       ev.stopPropagation()
 
-      const x = (ev.clientX - slideLeft.value - pressedDelta[0]) / scale.value + cornerSize / 2
-      const y = (ev.clientY - slideTop.value - pressedDelta[1]) / scale.value + cornerSize / 2
+      const x = (ev.clientX - slideLeft.value - currentDrag[0]) / scale.value + cornerSize / 2
+      const y = (ev.clientY - slideTop.value - currentDrag[1]) / scale.value + cornerSize / 2
+
+      if (ev.shiftKey) {
+        const ratio = currentDrag[2]
+        const maxRestrictedWith = isLeft ? right.value : slideWidth.value - left.value
+        const maxRestrictedHeight = isTop ? bottom.value : slideHeight.value - top.value
+        const maxWidth = Math.min(maxRestrictedWith, maxRestrictedHeight * ratio)
+        const minWidth = minSize * Math.max(1, ratio)
+        const expectedWidth = isLeft ? right.value - x : x - left.value
+        const expectedHeight = isTop ? bottom.value - y : y - top.value
+        const width = clamp(Math.max(expectedWidth, expectedHeight * ratio), minWidth, maxWidth)
+        const height = width / ratio
+
+        if (isLeft)
+          left.value = right.value - width
+        else
+          right.value = left.value + width
+
+        if (isTop)
+          top.value = bottom.value - height
+        else
+          bottom.value = top.value + height
+        return
+      }
 
       if (isLeft)
         left.value = clamp(x, 0, right.value - minSize)
