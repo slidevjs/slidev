@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { clamp } from '@antfu/utils'
+import type { Pausable } from '@vueuse/core'
+import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
-import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import { useFixedElementsContext } from '../composables/useFixedElements'
+import { useNav } from '../composables/useNav'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { useSlideContext } from '../context'
 import { slideHeight, slideWidth } from '../env'
 import { makeId } from '../logic/utils'
-import { useNav } from '../composables/useNav'
+import { draggingFixedElement, magicKeys } from '../state'
 
 const props = defineProps<{
   pos?: string
@@ -162,19 +164,75 @@ watch(
 )
 
 function startDragging() {
-  if (enabled.value)
+  if (enabled.value) {
     dragging.value = true
+    draggingFixedElement.value = true
+  }
+}
+function stopDragging() {
+  if (dragging.value) {
+    dragging.value = false
+    draggingFixedElement.value = false
+    context.value.save()
+  }
+}
+onClickOutside(container, stopDragging)
+watch(useWindowFocus(), (focused) => {
+  if (!focused)
+    stopDragging()
+})
+
+const moveInterval = 40
+
+const intervalFnOptions = {
+  immediate: false,
+  immediateCallback: false,
 }
 
-onClickOutside(container, () => {
-  dragging.value = false
-  context.value.save()
+const moveLeft = useIntervalFn(() => {
+  if (left.value <= 0)
+    return
+  left.value--
+  right.value--
+}, moveInterval, intervalFnOptions)
+
+const moveRight = useIntervalFn(() => {
+  if (right.value >= slideWidth.value)
+    return
+  left.value++
+  right.value++
+}, moveInterval, intervalFnOptions)
+
+const moveUp = useIntervalFn(() => {
+  if (top.value <= 0)
+    return
+  top.value--
+  bottom.value--
+}, moveInterval, intervalFnOptions)
+
+const moveDown = useIntervalFn(() => {
+  if (bottom.value >= slideHeight.value)
+    return
+  top.value++
+  bottom.value++
+}, moveInterval, intervalFnOptions)
+
+watchEffect(() => {
+  function shortcut(key: string, fn: Pausable) {
+    if (magicKeys[key].value && dragging.value)
+      fn.resume()
+    else fn.pause()
+  }
+  shortcut('left', moveLeft)
+  shortcut('right', moveRight)
+  shortcut('up', moveUp)
+  shortcut('down', moveDown)
 })
 </script>
 
 <template>
   <div
-    v-if="enabled && dragging"
+    v-if="dragging"
     ref="container"
     :style="positionStyles"
     border="~ white"
