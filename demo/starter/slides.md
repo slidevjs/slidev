@@ -6,7 +6,6 @@
 
 # v-fixed
 
-
 <v-fixed pos="527,229,396,40">
 <div text-center>
 Fixed box 1
