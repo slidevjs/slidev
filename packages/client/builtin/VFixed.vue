@@ -70,11 +70,7 @@ const positionStyles = computed((): StyleValue => {
       }
 })
 
-const pressedDelta = ref<[number, number]>()
-
-watch(enabled, () => {
-  pressedDelta.value = undefined
-})
+let pressedDelta: [number, number] | undefined
 
 function onPointerdown(ev: PointerEvent) {
   if (!enabled.value)
@@ -84,7 +80,7 @@ function onPointerdown(ev: PointerEvent) {
   ev.stopPropagation()
   const el = ev.target as HTMLElement
   const elBounds = el.getBoundingClientRect()
-  pressedDelta.value = [
+  pressedDelta = [
     ev.clientX - elBounds.left,
     ev.clientY - elBounds.top,
   ];
@@ -92,14 +88,14 @@ function onPointerdown(ev: PointerEvent) {
 }
 
 function onPointermove(ev: PointerEvent) {
-  if (!pressedDelta.value)
+  if (!pressedDelta)
     return
 
   ev.preventDefault()
   ev.stopPropagation()
 
-  const x = (ev.clientX - slideLeft.value - pressedDelta.value[0]) / scale.value
-  const y = (ev.clientY - slideTop.value - pressedDelta.value[1]) / scale.value
+  const x = (ev.clientX - slideLeft.value - pressedDelta[0]) / scale.value
+  const y = (ev.clientY - slideTop.value - pressedDelta[1]) / scale.value
 
   const width = right.value - left.value
   const height = bottom.value - top.value
@@ -110,27 +106,27 @@ function onPointermove(ev: PointerEvent) {
 }
 
 function onPointerup(ev: PointerEvent) {
-  if (!pressedDelta.value)
+  if (!pressedDelta)
     return
 
   ev.preventDefault()
   ev.stopPropagation()
 
-  pressedDelta.value = undefined
+  pressedDelta = undefined
 }
 
 function getCornerProps(isLeft: boolean, isTop: boolean) {
   return {
     onPointerdown,
     onPointermove: (ev: PointerEvent) => {
-      if (!pressedDelta.value)
+      if (!pressedDelta)
         return
 
       ev.preventDefault()
       ev.stopPropagation()
 
-      const x = (ev.clientX - slideLeft.value - pressedDelta.value[0]) / scale.value + cornerSize / 2
-      const y = (ev.clientY - slideTop.value - pressedDelta.value[1]) / scale.value + cornerSize / 2
+      const x = (ev.clientX - slideLeft.value - pressedDelta[0]) / scale.value + cornerSize / 2
+      const y = (ev.clientY - slideTop.value - pressedDelta[1]) / scale.value + cornerSize / 2
 
       if (isLeft)
         left.value = clamp(x, 0, right.value - minSize)
@@ -151,7 +147,7 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
       top: isTop ? `${-cornerSize / 2}px` : undefined,
       bottom: isTop ? undefined : `${-cornerSize / 2}px`,
     },
-    class: 'absolute border border-white cursor-move bg-white bg-opacity-50',
+    class: `absolute border border-white bg-white bg-opacity-50 ${+isLeft + +isTop === 1 ? 'cursor-sw-resize' : 'cursor-se-resize'}`,
   }
 }
 
