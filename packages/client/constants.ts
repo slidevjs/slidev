@@ -1,5 +1,5 @@
 import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
-import type { ClicksContext, FixedElementsContext, RenderContext, SlideRoute } from '@slidev/types'
+import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import type { SlidevContext } from './modules/context'
 
 // Here we use string literal instead of symbols to make HMR more stable
@@ -11,7 +11,6 @@ export const injectionSlideScale = '$$slidev-slide-scale' as unknown as Injectio
 export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
 export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<SlideRoute>
 export const injectionRenderContext = '$$slidev-render-context' as unknown as InjectionKey<Ref<RenderContext>>
-export const injectionFixedElementsContext = '$$slidev-fixed-elements-context' as unknown as InjectionKey<Ref<FixedElementsContext>>
 export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
 export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
 

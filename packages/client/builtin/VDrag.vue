@@ -27,7 +27,7 @@ const dragging = ref(false)
 const scale = inject(injectionSlideScale, ref(1))
 const { left: slideLeft, top: slideTop } = useSlideBounds()
 
-const cornerSize = 10
+const ctrlSize = 10
 const minSize = 40
 
 const container = ref<HTMLElement>()
@@ -116,6 +116,8 @@ function onPointerup(ev: PointerEvent) {
   currentDrag = undefined
 }
 
+const ctrlClasses = `absolute border border-white bg-white bg-opacity-50 `
+
 function getCornerProps(isLeft: boolean, isTop: boolean) {
   return {
     onPointerdown,
@@ -126,8 +128,8 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
       ev.preventDefault()
       ev.stopPropagation()
 
-      const x = (ev.clientX - slideLeft.value - currentDrag[0]) / scale.value + cornerSize / 2
-      const y = (ev.clientY - slideTop.value - currentDrag[1]) / scale.value + cornerSize / 2
+      const x = (ev.clientX - slideLeft.value - currentDrag[0]) / scale.value + ctrlSize / 2
+      const y = (ev.clientY - slideTop.value - currentDrag[1]) / scale.value + ctrlSize / 2
 
       if (ev.shiftKey) {
         const ratio = currentDrag[2]
@@ -164,14 +166,52 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
     },
     onPointerup,
     style: {
-      width: `${cornerSize}px`,
-      height: `${cornerSize}px`,
-      left: isLeft ? `${-cornerSize / 2}px` : undefined,
-      right: isLeft ? undefined : `${-cornerSize / 2}px`,
-      top: isTop ? `${-cornerSize / 2}px` : undefined,
-      bottom: isTop ? undefined : `${-cornerSize / 2}px`,
+      width: `${ctrlSize}px`,
+      height: `${ctrlSize}px`,
+      margin: `-${ctrlSize / 2}px`,
+      left: isLeft ? '0' : undefined,
+      right: isLeft ? undefined : '0',
+      top: isTop ? '0' : undefined,
+      bottom: isTop ? undefined : '0',
+      cursor: +isLeft + +isTop === 1 ? 'nesw-resize' : 'nwse-resize',
     },
-    class: `absolute border border-white bg-white bg-opacity-50 ${+isLeft + +isTop === 1 ? 'cursor-sw-resize' : 'cursor-se-resize'}`,
+    class: ctrlClasses,
+  }
+}
+
+function getBorderProps(dir: 'l' | 'r' | 't' | 'b') {
+  return {
+    onPointerdown,
+    onPointermove: (ev: PointerEvent) => {
+      if (!currentDrag)
+        return
+
+      ev.preventDefault()
+      ev.stopPropagation()
+
+      const x = (ev.clientX - slideLeft.value - currentDrag[0]) / scale.value + ctrlSize / 2
+      const y = (ev.clientY - slideTop.value - currentDrag[1]) / scale.value + ctrlSize / 2
+
+      if (dir === 'l')
+        left.value = clamp(x, 0, right.value - minSize)
+      else if (dir === 'r')
+        right.value = clamp(x, left.value + minSize, slideWidth.value)
+      else if (dir === 't')
+        top.value = clamp(y, 0, bottom.value - minSize)
+      else
+        bottom.value = clamp(y, top.value + minSize, slideHeight.value)
+    },
+    onPointerup,
+    style: {
+      width: `${ctrlSize}px`,
+      height: `${ctrlSize}px`,
+      margin: `-${ctrlSize / 2}px`,
+      left: dir === 'l' ? '0' : dir === 'r' ? `100%` : `50%`,
+      top: dir === 't' ? '0' : dir === 'b' ? `100%` : `50%`,
+      cursor: 'lr'.includes(dir) ? 'ew-resize' : 'ns-resize',
+      borderRadius: '50%',
+    },
+    class: ctrlClasses,
   }
 }
 
@@ -267,6 +307,14 @@ watchEffect(() => {
           <div v-bind="getCornerProps(isLeft, isTop)" />
         </template>
       </template>
+      <div v-bind="getCornerProps(true, true)" />
+      <div v-bind="getCornerProps(true, false)" />
+      <div v-bind="getCornerProps(false, true)" />
+      <div v-bind="getCornerProps(false, false)" />
+      <div v-bind="getBorderProps('l')" />
+      <div v-bind="getBorderProps('r')" />
+      <div v-bind="getBorderProps('t')" />
+      <div v-bind="getBorderProps('b')" />
     </div>
   </div>
   <div v-else ref="container" :style="positionStyles" border="~ transparent" @dblclick="startDragging">
