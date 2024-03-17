@@ -4,22 +4,22 @@
 
 ---
 
-# v-fixed
+# v-drag
 
-<v-fixed pos="527,229,396,40">
+<v-drag  pos="513,382,396,40">
 <div text-center>
-Fixed box 1
+Draggable box 1
 </div>
-</v-fixed>
+</v-drag>
 
-<v-fixed pos="93,51,228,400">
+<v-drag  pos="91,208,325,114">
 <div>
-Fixed box 2123
+Draggable box 2123
 </div>
-</v-fixed>
+</v-drag>
 
-<v-fixed pos="299,102,112,48">
+<v-drag  pos="529,103,228,127">
 <div>
-Fixed box 3
+Draggable box 3
 </div>
-</v-fixed>
+</v-drag>

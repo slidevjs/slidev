@@ -2,7 +2,7 @@ import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF } from '../utils'
 import { toggleDark } from '../logic/dark'
-import { draggingFixedElement, magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
+import { isDraggingElement, magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
@@ -29,7 +29,7 @@ export default function setupShortcuts() {
     showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
 
-  const navViaArrowKeys = and(not(showOverview), not(draggingFixedElement))
+  const navViaArrowKeys = and(not(showOverview), not(isDraggingElement))
 
   let shortcuts: ShortcutOptions[] = [
     { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },

@@ -4,14 +4,14 @@ import type { Pausable } from '@vueuse/core'
 import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
-import { useFixedElementsContext } from '../composables/useFixedElements'
+import { useDragElementsContext } from '../composables/useDragElements'
 import { useNav } from '../composables/useNav'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { useSlideContext } from '../context'
 import { slideHeight, slideWidth } from '../env'
 import { makeId } from '../logic/utils'
-import { draggingFixedElement, magicKeys } from '../state'
+import { isDraggingElement, magicKeys } from '../state'
 
 const props = defineProps<{
   pos?: string
@@ -21,7 +21,7 @@ const id = makeId()
 
 const { $renderContext, $page } = useSlideContext()
 const { currentSlideNo } = useNav()
-const context = computed(() => useFixedElementsContext($page.value))
+const context = computed(() => useDragElementsContext($page.value))
 const enabled = computed(() => __DEV__ && $page.value === currentSlideNo.value && ['slide', 'presenter'].includes($renderContext.value))
 const dragging = ref(false)
 const scale = inject(injectionSlideScale, ref(1))
@@ -186,13 +186,13 @@ watch(
 function startDragging() {
   if (enabled.value) {
     dragging.value = true
-    draggingFixedElement.value = true
+    isDraggingElement.value = true
   }
 }
 function stopDragging() {
   if (dragging.value) {
     dragging.value = false
-    draggingFixedElement.value = false
+    isDraggingElement.value = false
     context.value.save()
   }
 }

@@ -1,16 +1,16 @@
 import { debounce } from '@antfu/utils'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
-export interface FixedElementsContext {
+export interface DragElementsContext {
   register: (id: string) => void
   unregister: (id: string) => void
   update: (id: string, dataStr: string) => void
   save: () => Promise<void>
 }
 
-const map: Record<number, FixedElementsContext> = {}
+const map: Record<number, DragElementsContext> = {}
 
-export function useFixedElementsContext(no: number): FixedElementsContext {
+export function useDragElementsContext(no: number): DragElementsContext {
   if (!(__DEV__ && __SLIDEV_FEATURE_EDITOR__)) {
     return {
       register() { },
@@ -50,7 +50,7 @@ export function useFixedElementsContext(no: number): FixedElementsContext {
       if (idx < 0 || !info.value)
         return
       const oldContent = info.value.content
-      const match = [...oldContent.matchAll(/<v-fixed.*?>/g)][idx]
+      const match = [...oldContent.matchAll(/<v-?drag.*?>/ig)][idx]
       const start = match.index! + 8
       const end = match.index! + match[0].length - 1
       newContent = oldContent.slice(0, start) + dataStr + oldContent.slice(end)

@@ -31,7 +31,7 @@ export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false,
 export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318, { listenToStorageChanges: false })
 export const editorHeight = useLocalStorage('slidev-editor-height', isClient ? window.innerHeight * 0.4 : 300, { listenToStorageChanges: false })
 
-export const draggingFixedElement = ref(false)
+export const isDraggingElement = ref(false)
 
 export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1, { listenToStorageChanges: false })
 export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1, { listenToStorageChanges: false })
