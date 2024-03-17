@@ -160,7 +160,7 @@ function onPointerup(ev: PointerEvent) {
   currentDrag = null
 }
 
-const ctrlClasses = `absolute border border-white bg-white bg-opacity-50 `
+const ctrlClasses = `absolute border border-gray bg-gray dark:border-gray-500 dark:bg-gray-800 bg-opacity-30 `
 
 function getCornerProps(isLeft: boolean, isTop: boolean) {
   return {
@@ -442,18 +442,12 @@ watchEffect(() => {
     v-if="dragging"
     ref="container"
     :style="positionStyles"
-    border="~ white"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
     @pointerup="onPointerup"
   >
     <slot />
-    <div class="absolute inset-0 z-100">
-      <template v-for="isLeft in [true, false]">
-        <template v-for="isTop in [true, false]" :key="isLeft + isTop">
-          <div v-bind="getCornerProps(isLeft, isTop)" />
-        </template>
-      </template>
+    <div class="absolute inset-0 z-100 b b-dark dark:b-gray-400">
       <div v-bind="getCornerProps(true, true)" />
       <div v-bind="getCornerProps(true, false)" />
       <div v-bind="getCornerProps(false, true)" />
@@ -463,9 +457,10 @@ watchEffect(() => {
       <div v-bind="getBorderProps('t')" />
       <div v-bind="getBorderProps('b')" />
       <div v-bind="getRotateProps()" />
+      <div class="absolute -top-15px h-10px w-0 b b-dashed b-dark dark:b-gray-400" style="left:calc(50% - 1px)" />
     </div>
   </div>
-  <div v-else ref="container" :style="positionStyles" border="~ transparent" @dblclick="startDragging">
+  <div v-else ref="container" :style="positionStyles" @dblclick="startDragging">
     <slot />
   </div>
 </template>
