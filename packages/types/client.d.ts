@@ -22,7 +22,6 @@ declare module '#slidev/global-components/bottom' {
   export default component
 }
 
-
 declare module '#slidev/global-components/handout-bottom' {
   import type { ComponentOptions } from 'vue'
 

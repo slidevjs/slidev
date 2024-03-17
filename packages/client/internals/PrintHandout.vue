@@ -13,13 +13,15 @@ const route = computed(() => props.route)
 
 <template>
   <div class="break-after-page">
-    <!--A4 specific, figure out better customization-->
+    <!-- A4 specific, figure out better customization -->
     <div class="w-full mt-104 h-176 flex flex-col relative overflow-hidden">
-      <NoteDisplay v-if="route.meta?.slide!.noteHTML" :note-html="route.meta?.slide!.noteHTML"
-        class="w-full mx-auto px-2 handout-notes" />
+      <NoteDisplay
+        v-if="route.meta?.slide!.noteHTML" :note-html="route.meta?.slide!.noteHTML"
+        class="w-full mx-auto px-2 handout-notes"
+      />
 
       <div class="">
-        <HandoutBottom :pageNumber="index + 100" />
+        <HandoutBottom :page-number="index + 100" />
         <!-- I would like to do this in HandoutBottom, but somehow props don't get passed. -->
         <div class="absolute bottom-5 right-0 text-right text-[11px] ">
           {{ index + 1 }}

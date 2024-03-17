@@ -20,8 +20,8 @@ export interface ExportOptions {
   base?: string
   format?: 'pdf' | 'png' | 'md'
   output?: string
-  handout?: boolean,
-  cover?: boolean,
+  handout?: boolean
+  cover?: boolean
   timeout?: number
   dark?: boolean
   routerMode?: 'hash' | 'history'
@@ -383,7 +383,6 @@ export async function exportSlides({
   }
 
   async function genNotesPdfOnePiece() {
-
     const baseName = output.replace('.pdf', '')
     const output_notes = `${baseName}-notes.pdf`
 
@@ -406,7 +405,6 @@ export async function exportSlides({
   }
 
   async function genCoverPdfOnePiece() {
-
     const baseName = output.replace('.pdf', '')
     const output_notes = `${baseName}-cover.pdf`
 
@@ -433,27 +431,27 @@ export async function exportSlides({
     llx = 0,
     lly = 30,
     urx = 40,
-    ury = 230
+    ury = 230,
   ) =>
     page.doc.context.register(
       page.doc.context.obj({
-        Type: "Annot",
-        Subtype: "Link",
+        Type: 'Annot',
+        Subtype: 'Link',
         Rect: [llx, lly, urx, ury],
         Border: [0, 0, 0],
         C: [0, 0, 1],
         A: {
-          Type: "Action",
-          S: "URI",
+          Type: 'Action',
+          S: 'URI',
           URI: PDFString.of(uri),
         },
-      })
+      }),
     )
 
   async function mergeSlidesWithNotes(
     slides: pdfLib.PDFDocument,
     pdfNotes: pdfLib.PDFDocument,
-    pdfCover: pdfLib.PDFDocument | undefined
+    pdfCover: pdfLib.PDFDocument | undefined,
   ) {
     const pdfSlidePages = slides.getPages()
     const numSlides = pdfSlidePages.length
@@ -481,7 +479,7 @@ export async function exportSlides({
 
       const currentPage = pdf.addPage(PageSizes.A4)
 
-      //firstPage.drawPage(slideEmbedded as pdfLib.PDFEmbeddedPage, {
+      // firstPage.drawPage(slideEmbedded as pdfLib.PDFEmbeddedPage, {
       currentPage.drawPage(slideEmbedded, {
         ...slideEmbeddedDims,
         x: currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2,
@@ -500,8 +498,8 @@ export async function exportSlides({
       })
 
       let noteEmbeddedDims: {
-        width: number;
-        height: number;
+        width: number
+        height: number
       }
 
       /* add notes */
@@ -520,46 +518,51 @@ export async function exportSlides({
           x: currentPage.getWidth() / 2 - noteEmbeddedDims.width / 2,
           y: 0,
         })
-      } catch (error) {
+      }
+      catch (error) {
         console.error(`Could not embed note as page does not exist: ${error}`)
       }
 
       /* add links for slides */
       const annots = pdfSlidePages[i].node.Annots()
 
-      const newLinkAnnotations: PDFRef[] = []; // Initialize an empty array to accumulate new link annotations
+      const newLinkAnnotations: PDFRef[] = [] // Initialize an empty array to accumulate new link annotations
 
       try {
         annots?.asArray().forEach((a) => {
-
           const dict = slides.context.lookupMaybe(a, PDFDict)
-          if (!dict) return
+          if (!dict)
+            return
 
           const aRecord = dict.get(asPDFName(`A`))
-          if (!aRecord) return
+          if (!aRecord)
+            return
 
-          const subtype = dict.get(PDFName.of("Subtype"))?.toString()
-          if (!subtype) return
+          const subtype = dict.get(PDFName.of('Subtype'))?.toString()
+          if (!subtype)
+            return
 
-          if (subtype === "/Link") {
-            const rect = dict.get(PDFName.of("Rect"))!
+          if (subtype === '/Link') {
+            const rect = dict.get(PDFName.of('Rect'))!
             const link = slides.context.lookupMaybe(aRecord, PDFDict)
-            if (!link) return
+            if (!link)
+              return
 
-            const uri = link.get(asPDFName("URI"))!.toString().slice(1, -1) // get the original link, remove parenthesis
+            const uri = link.get(asPDFName('URI'))!.toString().slice(1, -1) // get the original link, remove parenthesis
 
-            const scale = slideEmbeddedDims.width / pdfSlidePages[i].getWidth(); // Calculate scale based on the width (or height)
-            const offsetX =
-              currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2
-            const offsetY =
-              currentPage.getHeight() - slideEmbeddedDims.height - 30
+            const scale = slideEmbeddedDims.width / pdfSlidePages[i].getWidth() // Calculate scale based on the width (or height)
+            const offsetX
+              = currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2
+            const offsetY
+              = currentPage.getHeight() - slideEmbeddedDims.height - 30
 
             // @ts-expect-error missing types
             const newRect = rect.array.map((value, index) => {
               if (index % 2 === 0) {
                 // x values (llx, urx)
                 return value * scale + offsetX
-              } else {
+              }
+              else {
                 // y values (lly, ury)
                 // Y values need to be inverted due to PDF's coordinate system (0 at bottom)
 
@@ -580,9 +583,8 @@ export async function exportSlides({
             newLinkAnnotations.push(newLink)
           }
         })
-
-
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
 
@@ -593,30 +595,33 @@ export async function exportSlides({
           let dict: PDFDict | undefined
           try {
             dict = pdfNotes.context.lookupMaybe(a, PDFDict)
-          } catch (e) {
+          }
+          catch (e) {
           }
 
-          if (!dict) return
+          if (!dict)
+            return
 
           const aRecord = dict.get(PDFName.of(`A`))
-          const subtype = dict.get(PDFName.of("Subtype"))?.toString()
+          const subtype = dict.get(PDFName.of('Subtype'))?.toString()
 
-          if (subtype === "/Link") {
-            const rect = dict.get(PDFName.of("Rect"))!
+          if (subtype === '/Link') {
+            const rect = dict.get(PDFName.of('Rect'))!
             const link = pdfNotes.context.lookupMaybe(aRecord, PDFDict)!
-            const uri = link.get(PDFName.of("URI"))!.toString().slice(1, -1)
+            const uri = link.get(PDFName.of('URI'))!.toString().slice(1, -1)
 
             const scale = noteEmbeddedDims.width / notesPages[i].getWidth()
             const offsetX = currentPage.getWidth() / 2 - noteEmbeddedDims.width / 2
-            const offsetY = 0; // Notes are drawn at the bottom, so offsetY is 0
+            const offsetY = 0 // Notes are drawn at the bottom, so offsetY is 0
 
             // @ts-expect-error missing types
             const newRect = rect.array.map((value, index) => {
               if (index % 2 === 0) {
-                return value * scale + offsetX; // x values
-              } else {
+                return value * scale + offsetX // x values
+              }
+              else {
                 // y values need to be adjusted differently for notes
-                return -2 + offsetY + value * scale; // Adjust y values for position
+                return -2 + offsetY + value * scale // Adjust y values for position
               }
             })
 
@@ -626,28 +631,26 @@ export async function exportSlides({
               newRect[0], // llx
               newRect[1], // lly
               newRect[2], // urx
-              newRect[3] // ury
+              newRect[3], // ury
             )
             newLinkAnnotations.push(newLink)
           }
         })
-
-
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
 
       if (newLinkAnnotations.length > 0) {
         currentPage.node.set(
-          PDFName.of("Annots"),
-          pdf.context.obj(newLinkAnnotations)
+          PDFName.of('Annots'),
+          pdf.context.obj(newLinkAnnotations),
         )
       }
     }
 
     return pdf
   }
-
 
   async function genHandoutAndMerge(pdfSlidesPath: string) {
     if (format !== 'pdf')
@@ -673,9 +676,10 @@ export async function exportSlides({
 
     const pdf = await mergeSlidesWithNotes(pdfSlides, pdfNotes, pdfCover)
 
-    /* cleanup*/
+    /* cleanup */
     await fs.unlink(notesPath)
-    if (cover && coverPath) await fs.unlink(coverPath)
+    if (cover && coverPath)
+      await fs.unlink(coverPath)
 
     if (!pdf)
       throw new Error('PDF could not be generated')
