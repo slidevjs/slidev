@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { clamp } from '@antfu/utils'
 import type { Pausable } from '@vueuse/core'
-import { onClickOutside, useIntervalFn, usePointer, useWindowFocus } from '@vueuse/core'
+import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import { useDragElementsContext } from '../composables/useDragElements'
