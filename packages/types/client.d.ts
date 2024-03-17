@@ -37,7 +37,6 @@ declare module '#slidev/global-components/handout-cover' {
   export default component
 }
 
-
 declare module '#slidev/slides' {
   import type { ShallowRef } from 'vue'
   import type { SlideRoute } from '@slidev/types'

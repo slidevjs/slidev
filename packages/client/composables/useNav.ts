@@ -242,8 +242,8 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const router = useRouter()
 
   const currentRoute = computed(() => router.currentRoute.value)
-  const isPrintMode = computed(() => currentRoute.value.query.print !== undefined || isHandout.value)
   const isHandout = computed(() => currentRoute.value.query.handout !== undefined || currentRoute.value.path.startsWith('/handout'))
+  const isPrintMode = computed(() => currentRoute.value.query.print !== undefined || isHandout.value)
   const isPrintWithClicks = computed(() => currentRoute.value.query.print === 'clicks')
   const isEmbedded = computed(() => currentRoute.value.query.embedded !== undefined)
   const isPlaying = computed(() => currentRoute.value.name === 'play')
@@ -318,6 +318,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     currentRoute,
     isPrintMode,
     isPrintWithClicks,
+    isHandout,
     isEmbedded,
     isPlaying,
     isPresenter,

@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { RouteRecordRaw } from 'vue-router'
+import type { SlideRoute } from '@slidev/types'
 import { computed } from 'vue'
 import NoteDisplay from './NoteDisplay.vue'
+import HandoutBottom from '#slidev/global-components/handout-bottom'
 
-// @ts-expect-error virtual module
-import HandoutBottom from '/@slidev/global-components/handout-bottom'
-
-const props = defineProps<{ route: RouteRecordRaw; index: number }>()
+const props = defineProps<{
+  route: SlideRoute
+  index: number
+}>()
 const route = computed(() => props.route)
 </script>
 
@@ -18,7 +19,7 @@ const route = computed(() => props.route)
         class="w-full mx-auto px-2 handout-notes" />
 
       <div class="">
-        <HandoutBottom  :pageNumber="index + 100" />
+        <HandoutBottom :pageNumber="index + 100" />
         <!-- I would like to do this in HandoutBottom, but somehow props don't get passed. -->
         <div class="absolute bottom-5 right-0 text-right text-[11px] ">
           {{ index + 1 }}
@@ -27,6 +28,7 @@ const route = computed(() => props.route)
     </div>
   </div>
 </template>
+
 <style scoped>
 .handout-notes {
   @apply max-w-186;

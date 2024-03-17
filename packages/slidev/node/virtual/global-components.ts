@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
 
-function createGlobalComponentTemplate(layer: 'top' | 'bottom' | 'handout-bottom' | 'handout-cover'): VirtualModuleTemplate {
+function createGlobalComponentTemplate(layer: 'top' | 'bottom' | 'handout-bottom' | 'handout-cover'): VirtualModuleTemplate {
   return {
     id: `/@slidev/global-components/${layer}`,
     getContent({ roots }) {

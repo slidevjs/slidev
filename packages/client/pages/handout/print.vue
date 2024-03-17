@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
-import { useStyleTag } from '@vueuse/core'
 import { windowSize } from '../../state'
 import { useNav } from '../../composables/useNav'
 import { themeVars } from '../../env'
@@ -9,13 +8,21 @@ import PrintContainerHandout from '../../internals/PrintContainerHandout.vue'
 const { isPrintMode } = useNav()
 
 watchEffect(() => {
-    if (isPrintMode)
-        (document.body.parentNode as HTMLElement).classList.add('print')
-    else
-        (document.body.parentNode as HTMLElement).classList.remove('print')
+  const html = document.body.parentNode as HTMLElement
+  if (isPrintMode.value)
+    html.classList.add('print')
+  else
+    html.classList.remove('print')
 })
+</script>
 
-useStyleTag(`
+<template>
+  <div id="page-root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
+    <PrintContainerHandout class="w-full h-full" :width="windowSize.width.value" />
+  </div>
+</template>
+
+<style>
 html.print,
 html.print body,
 html.print #app {
@@ -46,16 +53,7 @@ html.print body {
   size: A4;
   margin-top: 0cm;
   margin-bottom: 0cm;
-  margin-left: 0.0cm;
-  margin-right: 0.0cm;
+  margin-left: 0cm;
+  margin-right: 0cm;
 }
-`)
-</script>
-
-<template>
-    <div id="page-root" class="grid grid-cols-[1fr_max-content]" :style="themeVars">
-        <PrintContainerHandout class="w-full h-full" :width="windowSize.width.value" />
-    </div>
-</template>
-
-<style lang="postcss"></style>
+</style>
