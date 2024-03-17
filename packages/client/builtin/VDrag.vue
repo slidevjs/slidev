@@ -102,7 +102,7 @@ let currentDrag: {
 } | null = null
 
 function onPointerdown(ev: PointerEvent) {
-  if (!enabled.value)
+  if (!enabled.value || ev.buttons !== 1)
     return
 
   ev.preventDefault()
@@ -137,7 +137,7 @@ function onPointerdown(ev: PointerEvent) {
 }
 
 function onPointermove(ev: PointerEvent) {
-  if (!currentDrag)
+  if (!currentDrag || ev.buttons !== 1)
     return
 
   ev.preventDefault()
@@ -166,7 +166,7 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
   return {
     onPointerdown,
     onPointermove: (ev: PointerEvent) => {
-      if (!currentDrag)
+      if (!currentDrag || ev.buttons !== 1)
         return
 
       ev.preventDefault()
@@ -271,7 +271,7 @@ function getBorderProps(dir: 'l' | 'r' | 't' | 'b') {
   return {
     onPointerdown,
     onPointermove: (ev: PointerEvent) => {
-      if (!currentDrag)
+      if (!currentDrag || ev.buttons !== 1)
         return
 
       ev.preventDefault()
@@ -329,7 +329,7 @@ function getRotateProps() {
   return {
     onPointerdown,
     onPointermove: (ev: PointerEvent) => {
-      if (!currentDrag)
+      if (!currentDrag || ev.buttons !== 1)
         return
 
       ev.preventDefault()
