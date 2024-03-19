@@ -75,6 +75,7 @@ function onAfterLeave() {
         class="overflow-hidden"
       />
     </div>
+    <div id="twoslash-container" />
   </component>
 
   <!-- Global Top -->
