@@ -2,7 +2,7 @@ node_modules
 .DS_Store
 dist
 *.local
-index.html
+.vite-inspect
 .remote-assets
 .idea/
 components.d.ts
