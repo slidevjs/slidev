@@ -3,6 +3,7 @@ import { Buffer } from 'node:buffer'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
+import { clearUndefined } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
@@ -466,10 +467,12 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
   const config = {
     ...options.data.config.export,
     ...args,
-    withClicks: args['with-clicks'],
-    executablePath: args['executable-path'],
-    withToc: args['with-toc'],
-    perSlide: args['per-slide'],
+    ...clearUndefined({
+      withClicks: args['with-clicks'],
+      executablePath: args['executable-path'],
+      withToc: args['with-toc'],
+      perSlide: args['per-slide'],
+    }),
   }
   const {
     entry,
