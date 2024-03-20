@@ -21,7 +21,6 @@ export function createClicksContextBase(
     },
     relativeOffsets,
     map,
-    onMounted() { },
     resolve(at, size = 1) {
       const [isRelative, value] = normalizeAtProp(at)
       if (isRelative) {
