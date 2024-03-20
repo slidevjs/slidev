@@ -626,7 +626,7 @@ The `at` and `finally` options of [code blocks](#line-highlighting) are also ava
 
 ### Chemical equations
 
-To enable the redering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
+To enable the rendering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
 KaTeX extension needs to be loaded.
 
 Create `vite.config.ts` with the following content:
