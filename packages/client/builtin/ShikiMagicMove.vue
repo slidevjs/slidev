@@ -14,7 +14,7 @@ const props = defineProps<{
 }>()
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
-const { $clicksContext: clicks, $scale: scale } = useSlideContext()
+const { $clicksContext: clicks, $scale: scale, $zoom: zoom } = useSlideContext()
 const { isPrintMode } = useNav()
 const id = makeId()
 
@@ -96,7 +96,7 @@ onMounted(() => {
       :step="stepIndex"
       :animate="!isPrintMode"
       :options="{
-        globalScale: scale,
+        globalScale: scale * zoom,
         // TODO: make this configurable later
         duration: 800,
         stagger: 1,
