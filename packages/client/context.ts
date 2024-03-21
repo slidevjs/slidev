@@ -1,4 +1,4 @@
-import { ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { injectLocal, objectOmit, provideLocal } from '@vueuse/core'
 import {
   FRONTMATTER_FIELDS,
@@ -9,6 +9,7 @@ import {
   injectionRenderContext,
   injectionRoute,
   injectionSlideScale,
+  injectionSlideZoom,
   injectionSlidevContext,
 } from './constants'
 
@@ -24,7 +25,8 @@ export function useSlideContext() {
   const $renderContext = injectLocal(injectionRenderContext)!
   const $frontmatter = injectLocal(injectionFrontmatter, {})
   const $route = injectLocal(injectionRoute, undefined)
-  const $scale = injectLocal(injectionSlideScale, ref(1))!
+  const $scale = injectLocal(injectionSlideScale, ref(1))
+  const $zoom = injectLocal(injectionSlideZoom, computed(() => 1))
 
   return {
     $slidev,
@@ -36,6 +38,7 @@ export function useSlideContext() {
     $renderContext,
     $frontmatter,
     $scale,
+    $zoom,
   }
 }
 
