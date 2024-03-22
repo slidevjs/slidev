@@ -92,10 +92,9 @@ function onAfterLeave() {
   height: 100%;
 }
 
-#slideshow > div {
+#slideshow > div:not(#twoslash-container) {
   position: absolute;
   height: 100%;
   width: 100%;
 }
 </style>
-../logic/hmr
