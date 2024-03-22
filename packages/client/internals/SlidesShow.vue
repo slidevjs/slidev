@@ -75,8 +75,9 @@ function onAfterLeave() {
         class="overflow-hidden"
       />
     </div>
-    <div id="twoslash-container" />
   </component>
+
+  <div id="twoslash-container" />
 
   <!-- Global Top -->
   <GlobalTop />
@@ -92,7 +93,7 @@ function onAfterLeave() {
   height: 100%;
 }
 
-#slideshow > div:not(#twoslash-container) {
+#slideshow > div {
   position: absolute;
   height: 100%;
   width: 100%;
