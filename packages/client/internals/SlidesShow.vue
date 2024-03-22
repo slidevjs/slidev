@@ -2,7 +2,6 @@
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
 import { useNav } from '../composables/useNav'
-import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
 import { createFixedClicks } from '../composables/useClicks'
@@ -71,7 +70,6 @@ function onAfterLeave() {
       v-show="route === currentSlideRoute"
       :key="route.no"
       :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
-      :class="getSlideClass(route)"
       :route="route"
       :render-context="renderContext"
       class="overflow-hidden"
