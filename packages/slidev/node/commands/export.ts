@@ -204,8 +204,10 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
-    const slide = page.locator(`[data-slidev-no="${no}"]`)
-    await slide.waitFor({ state: 'visible' })
+    const slide = no === 'print'
+      ? page.locator('body')
+      : page.locator(`[data-slidev-no="${no}"]`)
+    await slide.waitFor()
 
     // Wait for slides to be loaded
     {
