@@ -7,18 +7,21 @@ import { routeForceRefresh } from '../logic/route'
 
 export function createClicksContextBase(
   current: Ref<number>,
-  clicksOverrides?: number,
+  clicksStart: number,
+  clicksTotalOverrides?: number,
 ): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
   return {
     get current() {
-      return +current.value
+      // Here we haven't know clicksTotal yet.
+      return Math.max(+current.value, clicksStart)
     },
     set current(value) {
-      current.value = +value
+      current.value = Math.max(+value, clicksStart)
     },
+    clicksStart,
     relativeOffsets,
     map,
     onMounted() { },
@@ -56,8 +59,8 @@ export function createClicksContextBase(
     get total() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return clicksOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
-    },
+      return clicksTotalOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
+    }
   }
 }
 
@@ -65,5 +68,10 @@ export function createFixedClicks(
   route?: SlideRoute | undefined,
   currentInit = 0,
 ): ClicksContext {
-  return createClicksContextBase(ref(currentInit), route?.meta?.clicks)
+  const clicksStart = route?.meta.slide?.frontmatter.clicksStart ?? 0
+  return createClicksContextBase(
+    ref(Math.max(currentInit, clicksStart)),
+    clicksStart,
+    route?.meta?.clicks
+  )
 }

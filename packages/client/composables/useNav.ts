@@ -34,6 +34,7 @@ export interface SlidevContextNav {
 
   clicksContext: ComputedRef<ClicksContext>
   clicks: ComputedRef<number>
+  clicksStart: ComputedRef<number>
   clicksTotal: ComputedRef<number>
 
   /** The table of content tree */
@@ -99,6 +100,7 @@ export function useNavBase(
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
 
   const clicks = computed(() => clicksContext.value.current)
+  const clicksStart = computed(() => clicksContext.value.clicksStart)
   const clicksTotal = computed(() => clicksContext.value.total)
   const nextRoute = computed(() => slides.value[Math.min(slides.value.length, currentSlideNo.value + 1) - 1])
   const prevRoute = computed(() => slides.value[Math.max(1, currentSlideNo.value - 1) - 1])
@@ -140,8 +142,7 @@ export function useNavBase(
 
   async function prev() {
     clicksDirection.value = -1
-    const clicksStart = currentSlideRoute.value.meta.slide?.frontmatter.clicksStart ?? 0
-    if (queryClicks.value <= clamp(0, clicksStart, clicksTotal.value))
+    if (queryClicks.value <= clicksStart.value)
       await prevSlide()
     else
       queryClicks.value -= 1
@@ -204,6 +205,7 @@ export function useNavBase(
     prevRoute,
     clicksContext,
     clicks,
+    clicksStart,
     clicksTotal,
     hasNext,
     hasPrev,
@@ -285,26 +287,25 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
       computed({
         get() {
           if (currentSlideNo.value === thisNo)
-            return +(queryClicksRaw.value || 0) || 0
+            return Math.max(+(queryClicksRaw.value ?? 0), context.clicksStart)
           else if (currentSlideNo.value > thisNo)
             return CLICKS_MAX
           else
-            return 0
+            return context.clicksStart
         },
         set(v) {
           if (currentSlideNo.value === thisNo)
-            queryClicksRaw.value = Math.min(v, context.total).toString()
+            queryClicksRaw.value = clamp(v, context.clicksStart, context.total).toString()
         },
       }),
-      route?.meta?.clicks,
+      route?.meta.slide?.frontmatter.clicksStart ?? 0,
+      route?.meta.clicks,
     )
 
     // On slide mounted, make sure the query is not greater than the total
     context.onMounted = () => {
       if (currentSlideNo.value === thisNo) {
-        const clicksStart = currentSlideRoute.value.meta.slide?.frontmatter.clicksStart ?? 0
-        const clicksMax = Math.max(+queryClicksRaw.value, clicksStart)
-        queryClicksRaw.value = Math.min(clicksMax, context.total).toString()
+        queryClicksRaw.value = clamp(+queryClicksRaw.value, context.clicksStart, context.total).toString()
       }
     }
 
