@@ -3,6 +3,7 @@ import { useFetch } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
 import type { SlideInfo, SlidePatch } from '@slidev/types'
+import { getSlide } from '../logic/slides'
 
 export interface UseSlideInfo {
   info: Ref<SlideInfo | null>
@@ -10,9 +11,9 @@ export interface UseSlideInfo {
 }
 
 export function useSlideInfo(no: number): UseSlideInfo {
-  if (no == null) {
+  if (!__SLIDEV_HAS_SERVER__) {
     return {
-      info: ref() as Ref<SlideInfo | null>,
+      info: ref(getSlide(no)?.meta.slide ?? null) as Ref<SlideInfo | null>,
       update: async () => {},
     }
   }

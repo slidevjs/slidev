@@ -603,7 +603,7 @@ $$
 $$
 ```
 
-Learn more: [Demo](https://sli.dev/demo/starter/8) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex)
+Learn more: [Demo](https://sli.dev/demo/starter/11) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex)
 
 ### LaTex line highlighting
 
@@ -626,7 +626,7 @@ The `at` and `finally` options of [code blocks](#line-highlighting) are also ava
 
 ### Chemical equations
 
-To enable the redering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
+To enable the rendering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
 KaTeX extension needs to be loaded.
 
 Create `vite.config.ts` with the following content:
@@ -672,7 +672,7 @@ C -->|Two| E[Result 2]
 ```
 ````
 
-Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-js.github.io/mermaid)
+Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-js.github.io/mermaid)
 
 ## Multiple Entries
 

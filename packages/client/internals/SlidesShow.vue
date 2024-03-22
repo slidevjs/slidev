@@ -5,6 +5,8 @@ import { useNav } from '../composables/useNav'
 import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
+import { createFixedClicks } from '../composables/useClicks'
+import { CLICKS_MAX } from '../constants'
 import SlideWrapper from './SlideWrapper.vue'
 import PresenterMouse from './PresenterMouse.vue'
 
@@ -22,6 +24,8 @@ const {
   isPresenter,
   nextRoute,
   slides,
+  isPrintMode,
+  isPrintWithClicks,
 } = useNav()
 
 // preload next route
@@ -66,13 +70,15 @@ function onAfterLeave() {
       v-for="route of loadedRoutes"
       v-show="route === currentSlideRoute"
       :key="route.no"
-      :clicks-context="getPrimaryClicks(route)"
+      :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
       :class="getSlideClass(route)"
       :route="route"
       :render-context="renderContext"
       class="overflow-hidden"
     />
   </component>
+
+  <div id="twoslash-container" />
 
   <!-- Global Top -->
   <GlobalTop />
@@ -87,11 +93,4 @@ function onAfterLeave() {
 #slideshow {
   height: 100%;
 }
-
-#slideshow > div {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-}
 </style>
-../logic/hmr
