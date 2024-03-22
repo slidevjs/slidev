@@ -60,7 +60,7 @@ export function createClicksContextBase(
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
       return clicksTotalOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
-    }
+    },
   }
 }
 
@@ -72,6 +72,6 @@ export function createFixedClicks(
   return createClicksContextBase(
     ref(Math.max(currentInit, clicksStart)),
     clicksStart,
-    route?.meta?.clicks
+    route?.meta?.clicks,
   )
 }
