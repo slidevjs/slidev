@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import type { RouteLocationNormalized, Router } from 'vue-router'
 import { createSharedComposable } from '@vueuse/core'
 import { logicOr } from '@vueuse/math'
+import { clamp } from '@antfu/utils'
 import { getCurrentTransition } from '../logic/transition'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { CLICKS_MAX } from '../constants'
@@ -139,7 +140,8 @@ export function useNavBase(
 
   async function prev() {
     clicksDirection.value = -1
-    if (queryClicks.value <= 0)
+    const clicksStart = currentSlideRoute.value.meta.slide?.frontmatter.clicksStart ?? 0
+    if (queryClicks.value <= clamp(0, clicksStart, clicksTotal.value))
       await prevSlide()
     else
       queryClicks.value -= 1
@@ -174,6 +176,9 @@ export function useNavBase(
     skipTransition.value = false
     const pageChanged = currentSlideNo.value !== page
     const clicksChanged = clicks !== queryClicks.value
+    const meta = getSlide(page)?.meta
+    const clicksStart = meta?.slide?.frontmatter.clicksStart ?? 0
+    clicks = clamp(clicks, clicksStart, meta?.__clicksContext?.total ?? CLICKS_MAX)
     if (pageChanged || clicksChanged) {
       await router?.push({
         path: getSlidePath(page, isPresenter.value),
@@ -296,8 +301,11 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
 
     // On slide mounted, make sure the query is not greater than the total
     context.onMounted = () => {
-      if (queryClicksRaw.value)
-        queryClicksRaw.value = Math.min(+queryClicksRaw.value, context.total).toString()
+      if (currentSlideNo.value === thisNo) {
+        const clicksStart = currentSlideRoute.value.meta.slide?.frontmatter.clicksStart ?? 0
+        const clicksMax = Math.max(+queryClicksRaw.value, clicksStart)
+        queryClicksRaw.value = Math.min(clicksMax, context.total).toString()
+      }
     }
 
     if (route?.meta)
