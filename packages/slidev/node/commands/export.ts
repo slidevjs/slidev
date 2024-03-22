@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { Buffer } from 'node:buffer'
+import process from 'node:process'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
@@ -183,7 +184,17 @@ export async function exportSlides({
   const progress = createSlidevProgress(!perSlide)
 
   async function go(no: number | string, clicks?: string) {
-    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}${range ? `&range=${range}` : ''}`
+    const query = new URLSearchParams()
+    if (withClicks)
+      query.set('print', 'clicks')
+    else
+      query.set('print', 'true')
+    if (range)
+      query.set('range', range)
+    if (clicks)
+      query.set('clicks', clicks)
+
+    const path = `${no}?${query.toString()}`
     const url = routerMode === 'hash'
       ? `http://localhost:${port}${base}#${path}`
       : `http://localhost:${port}${base}${path}`
@@ -193,22 +204,32 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    const slide = no === 'print'
+      ? page.locator('body')
+      : page.locator(`[data-slidev-no="${no}"]`)
+    await slide.waitFor()
+
     // Wait for slides to be loaded
     {
-      const elements = page.locator('.slidev-slide-loading')
+      const elements = slide.locator('.slidev-slide-loading')
       const count = await elements.count()
       for (let index = 0; index < count; index++)
         await elements.nth(index).waitFor({ state: 'detached' })
     }
     // Check for "data-waitfor" attribute and wait for given element to be loaded
     {
-      const elements = page.locator('[data-waitfor]')
+      const elements = slide.locator('[data-waitfor]')
       const count = await elements.count()
       for (let index = 0; index < count; index++) {
         const element = elements.nth(index)
         const attribute = await element.getAttribute('data-waitfor')
-        if (attribute)
-          await element.locator(attribute).waitFor()
+        if (attribute) {
+          await element.locator(attribute).waitFor({ state: 'visible' })
+            .catch((e) => {
+              console.error(e)
+              process.exitCode = 1
+            })
+        }
       }
     }
     // Wait for frames to load
@@ -218,18 +239,21 @@ export async function exportSlides({
     }
     // Wait for Mermaid graphs to be rendered
     {
-      const container = page.locator('#mermaid-rendering-container')
-      while (true) {
-        const element = container.locator('div').first()
-        if (await element.count() === 0)
-          break
-        await element.waitFor({ state: 'detached' })
+      const container = slide.locator('#mermaid-rendering-container')
+      const count = await container.count()
+      if (count > 0) {
+        while (true) {
+          const element = container.locator('div').first()
+          if (await element.count() === 0)
+            break
+          await element.waitFor({ state: 'detached' })
+        }
+        await container.evaluate(node => node.style.display = 'none')
       }
-      await container.evaluate(node => node.style.display = 'none')
     }
     // Hide Monaco aria container
     {
-      const elements = page.locator('.monaco-aria-container')
+      const elements = slide.locator('.monaco-aria-container')
       const count = await elements.count()
       for (let index = 0; index < count; index++) {
         const element = elements.nth(index)

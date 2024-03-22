@@ -88,6 +88,7 @@ export function useNavBase(
   clicksContext: ComputedRef<ClicksContext>,
   queryClicks: Ref<number> = ref(0),
   isPresenter: Ref<boolean>,
+  isPrint: Ref<boolean>,
   router?: Router,
 ): SlidevContextNav {
   const total = computed(() => slides.value.length)
@@ -160,7 +161,9 @@ export function useNavBase(
     await go(
       next,
       lastClicks
-        ? getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
+        ? isPrint.value
+          ? undefined
+          : getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
         : undefined,
     )
   }
@@ -233,6 +236,7 @@ export function useFixedNav(
       computed(() => clicksContext),
       ref(CLICKS_MAX),
       ref(false),
+      ref(false),
     ),
     next: noop,
     prev: noop,
@@ -248,13 +252,18 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const router = useRouter()
 
   const currentRoute = computed(() => router.currentRoute.value)
-  const isPrintMode = computed(() => currentRoute.value.query.print !== undefined)
-  const isPrintWithClicks = computed(() => currentRoute.value.query.print === 'clicks')
-  const isEmbedded = computed(() => currentRoute.value.query.embedded !== undefined)
+  const query = computed(() => {
+    // eslint-disable-next-line no-unused-expressions
+    router.currentRoute.value.query
+    return new URLSearchParams(location.search)
+  })
+  const isPrintMode = computed(() => query.value.has('print'))
+  const isPrintWithClicks = computed(() => query.value.get('print') === 'clicks')
+  const isEmbedded = computed(() => query.value.has('embedded'))
   const isPlaying = computed(() => currentRoute.value.name === 'play')
   const isPresenter = computed(() => currentRoute.value.name === 'presenter')
   const isNotesViewer = computed(() => currentRoute.value.name === 'notes')
-  const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || currentRoute.value.query.password === configs.remote))
+  const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || query.value.get('password') === configs.remote))
   const hasPrimarySlide = logicOr(isPlaying, isPresenter)
 
   const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.value.params.no as string)?.no ?? 1 : 1)
@@ -344,6 +353,7 @@ export const useNav = createSharedComposable((): SlidevContextNavFull => {
     state.clicksContext,
     state.queryClicks,
     state.isPresenter,
+    state.isPrintMode,
     router,
   )
 
