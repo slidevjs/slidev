@@ -55,7 +55,7 @@ const SlideComponent = defineAsyncComponent({
     return defineComponent({
       setup(_, { attrs }) {
         onMounted(() => {
-          props.clicksContext.onMounted()
+          props.clicksContext?.onMounted?.()
         })
         return () => h(component.default, attrs)
       },
@@ -70,6 +70,7 @@ const SlideComponent = defineAsyncComponent({
   <component
     :is="SlideComponent"
     :style="style"
+    :data-slidev-no="props.route.no"
     :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
   />
 </template>
