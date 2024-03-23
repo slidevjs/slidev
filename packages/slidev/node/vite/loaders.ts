@@ -103,7 +103,7 @@ export function createSlidesLoader(
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
-  let skipHmr: [filePath: string, fileContent: string] | null = null
+  let skipHmr: { filePath: string, fileContent: string } | null = null
 
   const { data, clientRoot, roots, mode } = options
 
@@ -171,7 +171,10 @@ export function createSlidesLoader(
             parser.prettifySlide(slide.source)
             const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
             if (body.skipHmr) {
-              skipHmr = [slide.source.filepath, fileContent]
+              skipHmr = {
+                filePath: slide.source.filepath,
+                fileContent,
+              }
               server?.moduleGraph.invalidateModule(
                 server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
               )
@@ -196,7 +199,7 @@ export function createSlidesLoader(
         if (!newData)
           return []
 
-        if (skipHmr && newData.markdownFiles[skipHmr[0]]?.raw === skipHmr[1]) {
+        if (skipHmr && newData.markdownFiles[skipHmr.filePath]?.raw === skipHmr.fileContent) {
           skipHmr = null
           return []
         }
