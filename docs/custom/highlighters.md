@@ -28,7 +28,11 @@ highlighter: Prism
 
 <Environment type="node" />
 
-Create `./setup/shiki.ts` file with the following content
+:::warning
+For now, Shiki Magic Move does not support transformers defined in custom configurations.
+:::
+
+Create `./setup/shiki.ts` file with the following content:
 
 ```ts
 /* ./setup/shiki.ts */
