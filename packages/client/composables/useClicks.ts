@@ -1,4 +1,4 @@
-import { sum } from '@antfu/utils'
+import { clamp, sum } from '@antfu/utils'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
 import { ref, shallowReactive } from 'vue'
@@ -16,10 +16,10 @@ export function createClicksContextBase(
   return {
     get current() {
       // Here we haven't know clicksTotal yet.
-      return Math.max(+current.value, clicksStart)
+      return clamp(+current.value, clicksStart, this.total)
     },
     set current(value) {
-      current.value = Math.max(+value, clicksStart)
+      current.value = clamp(+value, clicksStart, this.total)
     },
     clicksStart,
     relativeOffsets,

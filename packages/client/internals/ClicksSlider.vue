@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
-import { range } from '@antfu/utils'
+import { clamp, range } from '@antfu/utils'
 import { computed } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
@@ -8,8 +8,8 @@ const props = defineProps<{
   clicksContext: ClicksContext
 }>()
 
-const start = computed(() => props.clicksContext.clicksStart)
 const total = computed(() => props.clicksContext.total)
+const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
 const length = computed(() => total.value - start.value + 1)
 const current = computed({
   get() {
