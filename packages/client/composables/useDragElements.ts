@@ -1,14 +1,14 @@
-import { debounce } from '@antfu/utils'
+import { debounce, ensureSuffix } from '@antfu/utils'
 import type { SlidePatch } from 'packages/types'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
-export type DragElementsDataSource = 'inline' | 'frontmatter'
+export type DragElementDataSource = 'inline' | 'frontmatter'
 export type DragElementsMarkdownSource = [startLine: number, endLine: number, index: number]
 
 export interface DragElementsContext {
   register: (id: string) => void
   unregister: (id: string) => void
-  update: (id: string, posStr: string, type: DragElementsDataSource, markdownSource?: DragElementsMarkdownSource) => void
+  update: (id: string, posStr: string, type: DragElementDataSource, markdownSource?: DragElementsMarkdownSource) => void
   save: () => Promise<void>
 }
 
@@ -73,10 +73,15 @@ export function useDragElementsContext(no: number): DragElementsContext {
         let section = lines.slice(startLine, endLine).join('\n')
         let replaced = false
 
-        section = section.replace(/<(v-?drag)(.*?)(?:pos=".*?")(.*?)>/ig, (full, tag, attrs1 = '', attrs2 = '', index) => {
+        section = section.replace(/<(v-?drag)(.*?)>/ig, (full, tag, attrs, index) => {
           if (index === idx) {
             replaced = true
-            return `<${tag}${attrs1 || ' '}pos="${posStr}"${attrs2}>`
+            const posMatch = attrs.match(/pos=".*?"/)
+            if (!posMatch)
+              return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}">`
+            const start = posMatch.index
+            const end = start + posMatch[0].length
+            return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}>`
           }
           return full
         })

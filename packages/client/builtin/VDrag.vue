@@ -4,7 +4,7 @@ import type { Pausable } from '@vueuse/core'
 import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
-import type { DragElementsDataSource, DragElementsMarkdownSource } from '../composables/useDragElements'
+import type { DragElementDataSource, DragElementsMarkdownSource as DragElementMarkdownSource } from '../composables/useDragElements'
 import { useDragElementsContext } from '../composables/useDragElements'
 import { useNav } from '../composables/useNav'
 import { useSlideBounds } from '../composables/useSlideBounds'
@@ -20,11 +20,11 @@ const props = defineProps<{
   /**
    * Markdown source position, injected by markdown-it plugin
    */
-  markdownSource?: DragElementsMarkdownSource
+  markdownSource?: DragElementMarkdownSource
 }>()
 
 const id = props.id ?? makeId()
-const dataSource: DragElementsDataSource | undefined = props.pos
+const dataSource: DragElementDataSource | undefined = props.pos
   ? 'inline'
   : props.id
     ? 'frontmatter'
@@ -49,8 +49,8 @@ const minRemain = 10
 
 const container = ref<HTMLElement>()
 const pos = (props.pos || $frontmatter?.dragPos?.[id])?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0, 0]
-const x0 = ref(pos[0])
-const y0 = ref(pos[1])
+const x0 = ref(pos[0] + pos[2] / 2)
+const y0 = ref(pos[1] + pos[3] / 2)
 const width = ref(pos[2])
 const height = ref(pos[3])
 const rotate = ref(pos[4] ?? 0)
@@ -385,7 +385,7 @@ function getRotateProps() {
 watch(
   [x0, y0, width, height, rotate],
   ([l, t, w, h, r]) => {
-    let posStr = [l, t, w, h].map(Math.round).join()
+    let posStr = [l - w / 2, t - h / 2, w, h].map(Math.round).join()
     if (Math.round(r) !== 0)
       posStr += `,${Math.round(r)}`
     context.value.update(id, posStr, dataSource, props.markdownSource)
