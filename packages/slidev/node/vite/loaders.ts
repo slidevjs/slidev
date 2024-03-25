@@ -4,6 +4,7 @@ import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
+import YAML from 'js-yaml'
 import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
@@ -167,6 +168,10 @@ export function createSlidesLoader(
               slide.content = slide.source.content = body.content
             if (body.note)
               slide.note = slide.source.note = body.note
+            if (body.frontmatter) {
+              Object.assign(slide.frontmatter, body.frontmatter)
+              slide.source.frontmatterRaw = YAML.dump(slide.frontmatter)
+            }
 
             parser.prettifySlide(slide.source)
             const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
@@ -178,6 +183,11 @@ export function createSlidesLoader(
               server?.moduleGraph.invalidateModule(
                 server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
               )
+              if (body.frontmatter) {
+                server?.moduleGraph.invalidateModule(
+                  server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter`)!,
+                )
+              }
             }
 
             res.statusCode = 200

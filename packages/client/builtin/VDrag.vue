@@ -4,6 +4,7 @@ import type { Pausable } from '@vueuse/core'
 import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
+import type { DragElementsDataSource, DragElementsMarkdownSource } from '../composables/useDragElements'
 import { useDragElementsContext } from '../composables/useDragElements'
 import { useNav } from '../composables/useNav'
 import { useSlideBounds } from '../composables/useSlideBounds'
@@ -15,11 +16,26 @@ import { isDraggingElement, magicKeys } from '../state'
 
 const props = defineProps<{
   pos?: string
+  id?: string
+  /**
+   * Markdown source position, injected by markdown-it plugin
+   */
+  markdownSource?: DragElementsMarkdownSource
 }>()
 
-const id = makeId()
+const id = props.id ?? makeId()
+const dataSource: DragElementsDataSource | undefined = props.pos
+  ? 'inline'
+  : props.id
+    ? 'frontmatter'
+    : props.markdownSource
+      ? 'inline'
+      : undefined
 
-const { $renderContext, $page } = useSlideContext()
+if (!dataSource)
+  throw new Error('[Slidev] Can not identify the source position of the v-drag element, please provide an explicit `id` prop.')
+
+const { $renderContext, $page, $frontmatter } = useSlideContext()
 const { currentSlideNo } = useNav()
 const context = computed(() => useDragElementsContext($page.value))
 const enabled = computed(() => __DEV__ && $page.value === currentSlideNo.value && ['slide', 'presenter'].includes($renderContext.value))
@@ -32,7 +48,7 @@ const minSize = 40
 const minRemain = 10
 
 const container = ref<HTMLElement>()
-const pos = props.pos?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0, 0]
+const pos = (props.pos || $frontmatter?.dragPos?.[id])?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0, 0]
 const x0 = ref(pos[0])
 const y0 = ref(pos[1])
 const width = ref(pos[2])
@@ -42,13 +58,13 @@ const rotateRad = computed(() => rotate.value * Math.PI / 180)
 const rotateSin = computed(() => Math.sin(rotateRad.value))
 const rotateCos = computed(() => Math.cos(rotateRad.value))
 
-const boudingWidth = computed(() => width.value * rotateCos.value + height.value * rotateSin.value)
-const boudingHeight = computed(() => width.value * rotateSin.value + height.value * rotateCos.value)
+const boundingWidth = computed(() => width.value * rotateCos.value + height.value * rotateSin.value)
+const boundingHeight = computed(() => width.value * rotateSin.value + height.value * rotateCos.value)
 
-const boudingLeft = computed(() => x0.value - boudingWidth.value / 2)
-const boudingTop = computed(() => y0.value - boudingHeight.value / 2)
-const boudingRight = computed(() => x0.value + boudingWidth.value / 2)
-const boudingBottom = computed(() => y0.value + boudingHeight.value / 2)
+const boundingLeft = computed(() => x0.value - boundingWidth.value / 2)
+const boundingTop = computed(() => y0.value - boundingHeight.value / 2)
+const boundingRight = computed(() => x0.value + boundingWidth.value / 2)
+const boundingBottom = computed(() => y0.value + boundingHeight.value / 2)
 
 if (['slide', 'presenter'].includes($renderContext.value)) {
   onMounted(() => {
@@ -63,7 +79,9 @@ if (['slide', 'presenter'].includes($renderContext.value)) {
       }, 100)
     }
   })
-  onUnmounted(() => context.value.unregister(id))
+  onUnmounted(() => {
+    context.value.unregister(id)
+  })
 }
 
 const positionStyles = computed((): StyleValue => {
@@ -146,8 +164,8 @@ function onPointermove(ev: PointerEvent) {
   const x = (ev.clientX - slideLeft.value - currentDrag.dx0) / scale.value
   const y = (ev.clientY - slideTop.value - currentDrag.dy0) / scale.value
 
-  x0.value = clamp(x, -boudingWidth.value / 2 + minRemain, slideWidth.value + boudingWidth.value / 2 - minRemain)
-  y0.value = clamp(y, -boudingHeight.value / 2 + minRemain, slideHeight.value + boudingHeight.value / 2 - minRemain)
+  x0.value = clamp(x, -boundingWidth.value / 2 + minRemain, slideWidth.value + boundingWidth.value / 2 - minRemain)
+  y0.value = clamp(y, -boundingHeight.value / 2 + minRemain, slideHeight.value + boundingHeight.value / 2 - minRemain)
 }
 
 function onPointerup(ev: PointerEvent) {
@@ -370,7 +388,7 @@ watch(
     let posStr = [l, t, w, h].map(Math.round).join()
     if (Math.round(r) !== 0)
       posStr += `,${Math.round(r)}`
-    context.value.update(id, `pos="${posStr}"`)
+    context.value.update(id, posStr, dataSource, props.markdownSource)
   },
 )
 
@@ -401,25 +419,25 @@ const intervalFnOptions = {
 }
 
 const moveLeft = useIntervalFn(() => {
-  if (boudingRight.value <= minRemain)
+  if (boundingRight.value <= minRemain)
     return
   x0.value--
 }, moveInterval, intervalFnOptions)
 
 const moveRight = useIntervalFn(() => {
-  if (boudingLeft.value >= slideWidth.value - minRemain)
+  if (boundingLeft.value >= slideWidth.value - minRemain)
     return
   x0.value++
 }, moveInterval, intervalFnOptions)
 
 const moveUp = useIntervalFn(() => {
-  if (boudingBottom.value <= minRemain)
+  if (boundingBottom.value <= minRemain)
     return
   y0.value--
 }, moveInterval, intervalFnOptions)
 
 const moveDown = useIntervalFn(() => {
-  if (boudingTop.value >= slideHeight.value - minRemain)
+  if (boundingTop.value >= slideHeight.value - minRemain)
     return
   y0.value++
 }, moveInterval, intervalFnOptions)

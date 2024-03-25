@@ -3,23 +3,25 @@
 111
 
 ---
+foo: bar
+dragPos:
+  foo: 676,294,156,73
+---
 
 # v-drag
 
-<v-drag pos="-8,134,153,48">
+<v-drag id="foo">
 <div text-center>
 Draggable box 1
 </div>
 </v-drag>
 
-<v-drag pos="133,120,153,48">
+<v-drag bg-blue pos="128,352,188,80,15">
 <div>
 Draggable box 2123
 </div>
 </v-drag>
 
-<v-drag pos="484,132,84,222,40">
-<div>
+<v-drag pos="446,150,105,180,40">
 Draggable box 3
-</div>
 </v-drag>
