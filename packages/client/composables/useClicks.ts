@@ -7,7 +7,7 @@ import { routeForceRefresh } from '../logic/route'
 
 export function createClicksContextBase(
   current: Ref<number>,
-  clicksStart: number,
+  clicksStart = 0,
   clicksTotalOverrides?: number,
 ): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
