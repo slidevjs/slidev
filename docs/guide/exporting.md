@@ -161,8 +161,7 @@ $ slidev export --timeout 60000
 
 ### Wait
 
-Some parts of your slides may require a longer time to render. You can use the `--wait` option to 
-have an extra delay before exporting.
+Some parts of your slides may require a longer time to render. You can use the `--wait` option to have an extra delay before exporting.
 
 ```bash
 $ slidev export --wait 10000
