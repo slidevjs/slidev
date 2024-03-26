@@ -104,5 +104,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
 }
 
 export async function save(markdown: SlidevMarkdown) {
-  await fs.writeFile(markdown.filepath, stringify(markdown), 'utf-8')
+  const fileContent = stringify(markdown)
+  await fs.writeFile(markdown.filepath, fileContent, 'utf-8')
+  return fileContent
 }

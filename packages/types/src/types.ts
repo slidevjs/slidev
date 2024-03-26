@@ -44,7 +44,9 @@ export interface SlideInfo extends SlideInfoBase {
 /**
  * Editable fields for a slide
  */
-export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note'>>
+export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'frontmatter'>> & {
+  skipHmr?: boolean
+}
 
 /**
  * Metadata for "slidev" field in themes' package.json

@@ -17,6 +17,7 @@ import MarkdownItFootnote from 'markdown-it-footnote'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
+import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
 
 import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
@@ -118,6 +119,7 @@ export async function createMarkdownPlugin(
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
       md.use(MarkdownItKatex, KatexOptions)
+      md.use(MarkdownItVDrag)
 
       setups.forEach(i => i(md))
       mdOptions?.markdownItSetup?.(md)

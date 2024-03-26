@@ -2,7 +2,6 @@
 import { TransitionGroup, computed, shallowRef, watch } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
 import { useNav } from '../composables/useNav'
-import { getSlideClass } from '../utils'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
 import { createFixedClicks } from '../composables/useClicks'
@@ -65,20 +64,16 @@ function onAfterLeave() {
     tag="div"
     @after-leave="onAfterLeave"
   >
-    <div
+    <SlideWrapper
+      :is="route.component!"
       v-for="route of loadedRoutes"
       v-show="route === currentSlideRoute"
       :key="route.no"
-    >
-      <SlideWrapper
-        :is="route.component!"
-        :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
-        :class="getSlideClass(route)"
-        :route="route"
-        :render-context="renderContext"
-        class="overflow-hidden"
-      />
-    </div>
+      :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
+      :route="route"
+      :render-context="renderContext"
+      class="overflow-hidden"
+    />
   </component>
 
   <div id="twoslash-container" />
@@ -95,11 +90,5 @@ function onAfterLeave() {
 <style scoped>
 #slideshow {
   height: 100%;
-}
-
-#slideshow > div {
-  position: absolute;
-  height: 100%;
-  width: 100%;
 }
 </style>
