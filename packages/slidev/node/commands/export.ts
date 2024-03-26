@@ -70,6 +70,7 @@ export interface ExportNotesOptions {
   base?: string
   output?: string
   timeout?: number
+  wait?: number
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -113,6 +114,7 @@ export async function exportNotes({
   base = '/',
   output = 'notes',
   timeout = 30000,
+  wait = 0,
 }: ExportNotesOptions): Promise<string> {
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch()
@@ -129,6 +131,9 @@ export async function exportNotes({
   await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
   await page.waitForLoadState('networkidle')
   await page.emulateMedia({ media: 'screen' })
+
+  if (wait)
+    await page.waitForTimeout(wait)
 
   await page.pdf({
     path: output,
