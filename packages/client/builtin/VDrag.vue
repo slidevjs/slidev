@@ -47,15 +47,6 @@ const ctrlSize = 10
 const minSize = 40
 const minRemain = 10
 
-const container = ref<HTMLElement>()
-const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
-const actualHeight = ref(0)
-function updateBounds() {
-  bounds.value = container.value!.getBoundingClientRect()
-  // eslint-disable-next-line ts/no-use-before-define
-  actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
-}
-
 const posStr = props.pos || $frontmatter?.dragPos?.[id]
 const pos = posStr?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0]
 
@@ -66,6 +57,15 @@ const rotate = ref(pos[4] ?? 0)
 const rotateRad = computed(() => rotate.value * Math.PI / 180)
 const rotateSin = computed(() => Math.sin(rotateRad.value))
 const rotateCos = computed(() => Math.cos(rotateRad.value))
+
+const container = ref<HTMLElement>()
+const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
+const actualHeight = ref(0)
+function updateBounds() {
+  bounds.value = container.value!.getBoundingClientRect()
+  actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
+}
+watch([width], updateBounds)
 
 const autoHeight = posStr && (!pos[3] || pos[3] === '_')
 const configuredHeight = ref(pos[3] ?? 0)
@@ -444,30 +444,25 @@ watch(useWindowFocus(), (focused) => {
 })
 
 const moveInterval = 20
-
 const intervalFnOptions = {
   immediate: false,
   immediateCallback: false,
 }
-
 const moveLeft = useIntervalFn(() => {
   if (boundingRight.value <= minRemain)
     return
   x0.value--
 }, moveInterval, intervalFnOptions)
-
 const moveRight = useIntervalFn(() => {
   if (boundingLeft.value >= slideWidth.value - minRemain)
     return
   x0.value++
 }, moveInterval, intervalFnOptions)
-
 const moveUp = useIntervalFn(() => {
   if (boundingBottom.value <= minRemain)
     return
   y0.value--
 }, moveInterval, intervalFnOptions)
-
 const moveDown = useIntervalFn(() => {
   if (boundingTop.value >= slideHeight.value - minRemain)
     return
@@ -485,8 +480,6 @@ watchEffect(() => {
   shortcut('up', moveUp)
   shortcut('down', moveDown)
 })
-
-watch([width], updateBounds)
 </script>
 
 <template>
