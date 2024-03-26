@@ -110,11 +110,11 @@ In addition, every slide accepts the following configuration in the Frontmatter 
 - `hide` (`boolean`): The same as `disabled`.
 - `hideInToc` (`boolean`): Hide the slide for the `<Toc>` components (learn more [here](/builtin/components.html#toc)).
 - `layout` (`string`): Defines the layout component applied to the slide (learn more [here](/guide/syntax.html#front-matter-layouts) and [here](/builtin/layouts.html)).
-- `level` (`number`): Override the title level for the `<Title>` and `<Toc>` components (only if `title` has also been declared, learn more [here](/builtin/components.html#titles)).
+- `level` (`number`): Override the title level for the `<TitleRenderer>` and `<Toc>` components (only if `title` has also been declared, learn more [here](/builtin/components.html#titlerenderer)).
 - `preload` (`boolean`, default `true`): Preload the next slide (learn more [here](/guide/animations.html#motion)).
 - `routeAlias` (`string`): Create a route alias that can be used in the URL or with the `<Link>` component (learn more [here](/builtin/components.html#link)).
 - `src` (`string`): Includes a markdown file (learn more [here](/guide/syntax.html#multiple-entries)).
-- `title` (`string`): Override the title for the `<Title>` and `<Toc>` components (learn more [here](/builtin/components.html#titles)).
+- `title` (`string`): Override the title for the `<TitleRenderer>` and `<Toc>` components (learn more [here](/builtin/components.html#titlerenderer)).
 - `transition` (`string | TransitionProps`): Defines the transition between the slide and the next one (learn more [here](/guide/animations.html#slide-transitions)).
 - `zoom` (`number`): Custom zoom scale. Useful for slides with a lot of content.
 
