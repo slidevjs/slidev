@@ -571,6 +571,10 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'number',
       describe: 'timeout for rendering the print page',
     })
+    .option('wait', {
+      type: 'number',
+      describe: 'wait for the specified ms before exporting',
+    })
     .option('range', {
       type: 'string',
       describe: 'page ranges to export, for example "1,4-5,6"',

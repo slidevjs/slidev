@@ -22,6 +22,7 @@ export interface ExportOptions {
   format?: 'pdf' | 'png' | 'md'
   output?: string
   timeout?: number
+  wait?: number
   dark?: boolean
   routerMode?: 'hash' | 'history'
   width?: number
@@ -156,6 +157,7 @@ export async function exportSlides({
   slides,
   base = '/',
   timeout = 30000,
+  wait = 0,
   dark = false,
   routerMode = 'history',
   width = 1920,
@@ -260,6 +262,9 @@ export async function exportSlides({
         await element.evaluate(node => node.style.display = 'none')
       }
     }
+    // Wait for the given time
+    if (wait)
+      await page.waitForTimeout(wait)
   }
 
   async function getSlidesIndex() {
@@ -503,6 +508,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     output,
     format,
     timeout,
+    wait,
     range,
     dark,
     withClicks,
@@ -521,6 +527,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     range,
     format: (format || 'pdf') as 'pdf' | 'png' | 'md',
     timeout: timeout ?? 30000,
+    wait: wait ?? 0,
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
