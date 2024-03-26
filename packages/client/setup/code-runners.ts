@@ -144,9 +144,13 @@ export async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
     return textRep
   }
 
-  // The reflect-metadata runtime is available, so allow that to go through
   function sanitizeJS(code: string) {
-    return code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
+    // The reflect-metadata runtime is available, so allow that to go through
+    code = code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
+    // Transpiled typescript sometimes contains an empty export, remove it.
+    code = code.replace('export {};', '')
+
+    return code
   }
 
   return allLogs
