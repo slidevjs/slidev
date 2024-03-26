@@ -106,6 +106,7 @@ Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/pa
 In addition, every slide accepts the following configuration in the Frontmatter block:
 
 - `clicks` (`number`): Custom clicks count (learn more [here](/guide/animations.html#custom-total-clicks-count)).
+- `clicksStart` (`number`): Custom start clicks count.
 - `disabled` (`boolean`): Completely disable and hide the slide.
 - `hide` (`boolean`): The same as `disabled`.
 - `hideInToc` (`boolean`): Hide the slide for the `<Toc>` components (learn more [here](/builtin/components.html#toc)).

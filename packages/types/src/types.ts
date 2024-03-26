@@ -151,6 +151,7 @@ export type ClicksMap = Map<ClicksElement, ClicksInfo>
 
 export interface ClicksContext {
   current: number
+  readonly clicksStart: number
   readonly relativeOffsets: ClicksRelativeEls
   readonly map: ClicksMap
   resolve: (at: string | number, size?: number) => {

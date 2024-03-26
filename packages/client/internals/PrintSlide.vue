@@ -16,10 +16,14 @@ const clicks0 = createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MA
     :nav="useFixedNav(route, clicks0)"
   />
   <template v-if="isPrintWithClicks">
+    <!--
+      clicks0.total can be any number >=0 when rendering.
+      So total-clicksStart can be negative in intermediate states.
+    -->
     <PrintSlideClick
-      v-for="i of clicks0.total"
+      v-for="i in Math.max(0, clicks0.total - clicks0.clicksStart)"
       :key="i"
-      :nav="useFixedNav(route, createFixedClicks(route, i))"
+      :nav="useFixedNav(route, createFixedClicks(route, i + clicks0.clicksStart))"
     />
   </template>
 </template>
