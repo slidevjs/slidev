@@ -43,6 +43,7 @@ export const FRONTMATTER_FIELDS = [
   'title',
   'transition',
   'zoom',
+  'dragPos',
 ]
 
 export const HEADMATTER_FIELDS = [
