@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useSlideContext } from '../context'
+import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
   autoPause?: 'slide' | 'click'
   autoReset?: 'slide' | 'click'
+  imgToPrint?: string
+  timeToPrint?: string | number | 'last'
 }>()
 
 const {
@@ -14,6 +17,7 @@ const {
   $renderContext: currentContext,
   $route: route,
 } = useSlideContext()
+const { isPrintMode } = useNav()
 
 const video = ref<HTMLMediaElement>()
 const played = ref(false)
@@ -40,7 +44,7 @@ watch(matchRouteAndClick, () => {
   if (matchRouteAndClick.value) {
     if (props.autoReset === 'click')
       video.value.currentTime = 0
-    if (props.autoPlay && (!played.value || props.autoPlay === 'resume' || (props.autoPlay === 'resumeOnce' && !ended.value)))
+    if (!isPrintMode.value && props.autoPlay && (!played.value || props.autoPlay === 'resume' || (props.autoPlay === 'resumeOnce' && !ended.value)))
       video.value.play()
   }
 
@@ -67,8 +71,15 @@ function onEnded() {
 onMounted(() => {
   if (!video.value || currentContext?.value !== 'slide')
     return
-  video.value?.addEventListener('play', onPlay)
-  video.value?.addEventListener('ended', onEnded)
+  video.value.addEventListener('play', onPlay)
+  video.value.addEventListener('ended', onEnded)
+  if (isPrintMode.value && !props.imgToPrint) {
+    video.value.addEventListener('loadedmetadata', () => {
+      video.value!.currentTime = !props.timeToPrint || props.timeToPrint === 'last'
+        ? video.value!.duration - 0.1
+        : +props.timeToPrint
+    })
+  }
 })
 
 onUnmounted(() => {
@@ -80,7 +91,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <video ref="video">
+  <video v-if="!isPrintMode || !props.imgToPrint" ref="video">
     <slot />
   </video>
+  <img v-else :src="props.imgToPrint">
 </template>
