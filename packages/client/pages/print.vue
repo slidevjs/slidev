@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { watchEffect } from 'vue'
+import { onMounted, watchEffect } from 'vue'
+import { recomputeAllPoppers } from 'floating-vue'
 import { windowSize } from '../state'
 import PrintContainer from '../internals/PrintContainer.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
@@ -13,6 +14,10 @@ watchEffect(() => {
   else
     (document.body.parentNode as HTMLElement).classList.remove('print')
 })
+
+onMounted(() => {
+  recomputeAllPoppers()
+})
 </script>
 
 <template>
@@ -23,6 +28,7 @@ watchEffect(() => {
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="windowSize.width.value"
     />
+    <div id="twoslash-container" />
   </div>
 </template>
 
