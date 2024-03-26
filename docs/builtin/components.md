@@ -132,6 +132,14 @@ Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter'
 Parameters:
 
 - `context` (`Context | Context[]`): a context or array of contexts you want to check for
+  - `'main'`: Render in slides and presenter view (equivalent to ['slide', 'presenter']),
+  - `'visible'`: Render the content if it is visible
+  - `'print'`: Render in print mode
+  - `'slide'`: Render in slides
+  - `'overview'`: Render in overview
+  - `'presenter'`: Render in presenter view
+  - `'previewNext'`: Render in presenter's next slide view
+  - `'previewPrevious'`: Render in presenter's previous slide view
 
 Slots:
 
