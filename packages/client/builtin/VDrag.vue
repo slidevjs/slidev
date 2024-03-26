@@ -433,7 +433,11 @@ function stopDragging() {
     context.value.save()
   }
 }
-onClickOutside(container, stopDragging)
+onClickOutside(container, (ev) => {
+  if ((ev.target as HTMLElement | null)?.dataset?.dragId === id)
+    return
+  stopDragging()
+})
 watch(useWindowFocus(), (focused) => {
   if (!focused)
     stopDragging()
@@ -488,6 +492,7 @@ watch([width], updateBounds)
 <template>
   <div
     v-if="dragging"
+    :data-drag-id="id"
     :style="positionStyles"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
