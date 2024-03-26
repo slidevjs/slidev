@@ -56,7 +56,8 @@ function updateBounds() {
   actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
 }
 
-const pos = (props.pos || $frontmatter?.dragPos?.[id])?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0]
+const posStr = props.pos || $frontmatter?.dragPos?.[id]
+const pos = posStr?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0]
 
 const width = ref(pos[2])
 const x0 = ref(pos[0] + pos[2] / 2)
@@ -66,7 +67,7 @@ const rotateRad = computed(() => rotate.value * Math.PI / 180)
 const rotateSin = computed(() => Math.sin(rotateRad.value))
 const rotateCos = computed(() => Math.cos(rotateRad.value))
 
-const autoHeight = !pos[3] || pos[3] === '_'
+const autoHeight = posStr && (!pos[3] || pos[3] === '_')
 const configuredHeight = ref(pos[3] ?? 0)
 const height = computed({
   get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
@@ -90,11 +91,13 @@ if (['slide', 'presenter'].includes($renderContext.value)) {
   onMounted(() => {
     context.value.register(id)
     updateBounds()
-    if (!props.pos) {
+    if (!posStr) {
       setTimeout(() => {
-        x0.value = (bounds.value.left + bounds.value.top / 2 - slideLeft.value) / scale.value
+        updateBounds()
+        x0.value = (bounds.value.left + bounds.value.width / 2 - slideLeft.value) / scale.value
         y0.value = (bounds.value.top - slideTop.value) / scale.value
         width.value = bounds.value.width / scale.value
+        height.value = bounds.value.height / scale.value
       }, 100)
     }
   })
