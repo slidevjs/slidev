@@ -3,12 +3,12 @@ import type { SlidePatch } from 'packages/types'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
 export type DragElementDataSource = 'inline' | 'frontmatter'
-export type DragElementsMarkdownSource = [startLine: number, endLine: number, index: number]
+export type DragElementMarkdownSource = [startLine: number, endLine: number, index: number]
 
 export interface DragElementsContext {
   register: (id: string) => void
   unregister: (id: string) => void
-  update: (id: string, posStr: string, type: DragElementDataSource, markdownSource?: DragElementsMarkdownSource) => void
+  update: (id: string, posStr: string, type: DragElementDataSource, markdownSource?: DragElementMarkdownSource) => void
   save: () => Promise<void>
 }
 

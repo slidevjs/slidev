@@ -4,7 +4,7 @@ import type { Pausable } from '@vueuse/core'
 import { onClickOutside, useIntervalFn, useWindowFocus } from '@vueuse/core'
 import type { StyleValue } from 'vue'
 import { computed, inject, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
-import type { DragElementDataSource, DragElementsMarkdownSource as DragElementMarkdownSource } from '../composables/useDragElements'
+import type { DragElementDataSource, DragElementMarkdownSource } from '../composables/useDragElements'
 import { useDragElementsContext } from '../composables/useDragElements'
 import { useNav } from '../composables/useNav'
 import { useSlideBounds } from '../composables/useSlideBounds'
@@ -48,15 +48,35 @@ const minSize = 40
 const minRemain = 10
 
 const container = ref<HTMLElement>()
-const pos = (props.pos || $frontmatter?.dragPos?.[id])?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0, 0]
-const x0 = ref(pos[0] + pos[2] / 2)
-const y0 = ref(pos[1] + pos[3] / 2)
+const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
+const actualHeight = ref(0)
+function updateBounds() {
+  bounds.value = container.value!.getBoundingClientRect()
+  // eslint-disable-next-line ts/no-use-before-define
+  actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
+}
+
+const pos = (props.pos || $frontmatter?.dragPos?.[id])?.split(',').map(Number) ?? [Number.NaN, Number.NaN, 0]
+
 const width = ref(pos[2])
-const height = ref(pos[3])
+const x0 = ref(pos[0] + pos[2] / 2)
+
 const rotate = ref(pos[4] ?? 0)
 const rotateRad = computed(() => rotate.value * Math.PI / 180)
 const rotateSin = computed(() => Math.sin(rotateRad.value))
 const rotateCos = computed(() => Math.cos(rotateRad.value))
+
+const autoHeight = !pos[3] || pos[3] === '_'
+const configuredHeight = ref(pos[3] ?? 0)
+const height = computed({
+  get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
+  set: v => !autoHeight && (configuredHeight.value = v),
+})
+const configuredY0 = ref(pos[1])
+const y0 = computed({
+  get: () => configuredY0.value + height.value / 2,
+  set: v => configuredY0.value = v - height.value / 2,
+})
 
 const boundingWidth = computed(() => width.value * rotateCos.value + height.value * rotateSin.value)
 const boundingHeight = computed(() => width.value * rotateSin.value + height.value * rotateCos.value)
@@ -69,13 +89,12 @@ const boundingBottom = computed(() => y0.value + boundingHeight.value / 2)
 if (['slide', 'presenter'].includes($renderContext.value)) {
   onMounted(() => {
     context.value.register(id)
+    updateBounds()
     if (!props.pos) {
       setTimeout(() => {
-        const bounds = container.value!.getBoundingClientRect()
-        x0.value = (bounds.left + bounds.width / 2 - slideLeft.value) / scale.value
-        y0.value = (bounds.top + bounds.height / 2 - slideTop.value) / scale.value
-        width.value = bounds.width / scale.value
-        height.value = bounds.height / scale.value
+        x0.value = (bounds.value.left + bounds.value.top / 2 - slideLeft.value) / scale.value
+        y0.value = (bounds.value.top - slideTop.value) / scale.value
+        width.value = bounds.value.width / scale.value
       }, 100)
     }
   })
@@ -92,7 +111,8 @@ const positionStyles = computed((): StyleValue => {
         left: `${x0.value - width.value / 2}px`,
         top: `${y0.value - height.value / 2}px`,
         width: `${width.value}px`,
-        height: `${height.value}px`,
+        height: autoHeight ? undefined : `${height.value}px`,
+        transformOrigin: 'center center',
         transform: `rotate(${rotate.value}deg)`,
       }
     : {
@@ -385,7 +405,11 @@ function getRotateProps() {
 watch(
   [x0, y0, width, height, rotate],
   ([l, t, w, h, r]) => {
-    let posStr = [l - w / 2, t - h / 2, w, h].map(Math.round).join()
+    let posStr = [l - w / 2, t - h / 2, w].map(Math.round).join()
+    if (autoHeight)
+      posStr += ',_'
+    else
+      posStr += `,${Math.round(h)}`
     if (Math.round(r) !== 0)
       posStr += `,${Math.round(r)}`
     context.value.update(id, posStr, dataSource, props.markdownSource)
@@ -396,6 +420,7 @@ function startDragging() {
   if (enabled.value) {
     dragging.value = true
     isDraggingElement.value = true
+    updateBounds()
   }
 }
 function stopDragging() {
@@ -453,12 +478,13 @@ watchEffect(() => {
   shortcut('up', moveUp)
   shortcut('down', moveDown)
 })
+
+watch([width], updateBounds)
 </script>
 
 <template>
   <div
     v-if="dragging"
-    ref="container"
     :style="positionStyles"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
@@ -466,17 +492,28 @@ watchEffect(() => {
   >
     <slot />
     <div class="absolute inset-0 z-100 b b-dark dark:b-gray-400">
-      <div v-bind="getCornerProps(true, true)" />
-      <div v-bind="getCornerProps(true, false)" />
-      <div v-bind="getCornerProps(false, true)" />
-      <div v-bind="getCornerProps(false, false)" />
+      <template v-if="!autoHeight">
+        <div v-bind="getCornerProps(true, true)" />
+        <div v-bind="getCornerProps(true, false)" />
+        <div v-bind="getCornerProps(false, true)" />
+        <div v-bind="getCornerProps(false, false)" />
+      </template>
       <div v-bind="getBorderProps('l')" />
       <div v-bind="getBorderProps('r')" />
-      <div v-bind="getBorderProps('t')" />
-      <div v-bind="getBorderProps('b')" />
+      <template v-if="!autoHeight">
+        <div v-bind="getBorderProps('t')" />
+        <div v-bind="getBorderProps('b')" />
+      </template>
       <div v-bind="getRotateProps()" />
-      <div class="absolute -top-15px h-10px w-0 b b-dashed b-dark dark:b-gray-400" style="left:calc(50% - 1px)" />
+      <div
+        class="absolute -top-15px w-0 b b-dashed b-dark dark:b-gray-400"
+        :style="{
+          left: 'calc(50% - 1px)',
+          height: autoHeight ? '14px' : '10px',
+        }"
+      />
     </div>
+    <div ref="container" class="absolute inset-0 invisible" />
   </div>
   <div v-else ref="container" :style="positionStyles" @dblclick="startDragging">
     <slot />
