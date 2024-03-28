@@ -20,8 +20,8 @@ const items = setupContextMenu()
   <div
     v-if="contextMenuPos"
     ref="container"
-    :key="contextMenuPos"
-    :style="contextMenuPos"
+    :key="contextMenuPos.join()"
+    :style="`left:${contextMenuPos[0]}px;top:${contextMenuPos[1]}px`"
     class="fixed z-100 w-60 flex flex-wrap justify-items-start animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden"
     @contextmenu.prevent=""
     @click="closeContextMenu"
