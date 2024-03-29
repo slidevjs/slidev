@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { onClickOutside, useWindowFocus } from '@vueuse/core'
+import { onClickOutside, useEventListener, useWindowFocus } from '@vueuse/core'
 import { ref, watch } from 'vue'
 import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
 
 const container = ref<HTMLElement>()
 onClickOutside(container, closeContextMenu)
+useEventListener(document, 'mousedown', (ev) => {
+  if (ev.buttons & 2)
+    closeContextMenu()
+}, {
+  passive: true,
+  capture: true,
+})
 
 const windowFocus = useWindowFocus()
 watch(windowFocus, (hasFocus) => {
@@ -17,7 +24,6 @@ watch(windowFocus, (hasFocus) => {
   <div
     v-if="currentContextMenu"
     ref="container"
-    :key="`${currentContextMenu[0]},${currentContextMenu[1]}`"
     :style="`left:${currentContextMenu[0]}px;top:${currentContextMenu[1]}px`"
     class="fixed z-100 w-60 flex flex-wrap justify-items-start animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden"
     @contextmenu.prevent=""
