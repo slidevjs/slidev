@@ -166,7 +166,7 @@ Total number of slides.
 <SlidesTotal />
 ```
 
-### `Titles`
+### `TitleRenderer`
 
 Insert the main title from a slide parsed as HTML.
 
