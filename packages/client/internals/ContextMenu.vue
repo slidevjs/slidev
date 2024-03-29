@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onClickOutside, useWindowFocus } from '@vueuse/core'
 import { ref, watch } from 'vue'
-import { closeContextMenu, contextMenuPos } from '../logic/contextMenu'
-import setupContextMenu from '../setup/context-menu'
+import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
 
 const container = ref<HTMLElement>()
 onClickOutside(container, closeContextMenu)
@@ -12,27 +11,26 @@ watch(windowFocus, (hasFocus) => {
   if (!hasFocus)
     closeContextMenu()
 })
-
-const items = setupContextMenu()
 </script>
 
 <template>
   <div
-    v-if="contextMenuPos"
+    v-if="currentContextMenu"
     ref="container"
-    :key="contextMenuPos.join()"
-    :style="`left:${contextMenuPos[0]}px;top:${contextMenuPos[1]}px`"
+    :key="`${currentContextMenu[0]},${currentContextMenu[1]}`"
+    :style="`left:${currentContextMenu[0]}px;top:${currentContextMenu[1]}px`"
     class="fixed z-100 w-60 flex flex-wrap justify-items-start animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden"
     @contextmenu.prevent=""
     @click="closeContextMenu"
   >
-    <template v-for="item, index of items" :key="index">
+    <template v-for="item, index of currentContextMenu[2].value" :key="index">
       <div v-if="item === 'separator'" class="w-full mx-2 my-1 border-t border-gray-500/70" />
       <div
         v-else-if="item.small"
         class="p-2 w-[40px] h-[40px] inline-block text-center"
         :class="item.disabled ? `op40` : `hover:(bg-dark/20 dark:bg-white/20)`"
         :title="item.label as string"
+        @click="item.action"
       >
         <component :is="item.icon" />
       </div>

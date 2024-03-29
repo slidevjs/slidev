@@ -9,7 +9,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
-import { openContextMenu } from '../logic/contextMenu'
+import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 
@@ -30,15 +30,6 @@ function onClick(e: MouseEvent) {
     else
       prev()
   }
-}
-
-function onContextMenu(e: MouseEvent) {
-  if (e.shiftKey)
-    return
-
-  openContextMenu(e.pageX, e.pageY)
-  e.preventDefault()
-  e.stopPropagation()
 }
 
 useSwipeControls(root)

@@ -1,11 +1,23 @@
-import { ref } from 'vue'
+import type { ContextMenuItem } from '@slidev/types'
+import type { ComputedRef } from 'vue'
+import { shallowRef } from 'vue'
+import setupContextMenu from '../setup/context-menu'
 
-export const contextMenuPos = ref<null | [number, number]>(null)
+export const currentContextMenu = shallowRef<null | [number, number, ComputedRef<ContextMenuItem[]>]>(null)
 
 export function openContextMenu(x: number, y: number) {
-  contextMenuPos.value = [x, y]
+  currentContextMenu.value = [x, y, setupContextMenu()]
 }
 
 export function closeContextMenu() {
-  contextMenuPos.value = null
+  currentContextMenu.value = null
+}
+
+export function onContextMenu(ev: MouseEvent) {
+  if (ev.shiftKey || ev.defaultPrevented)
+    return
+
+  openContextMenu(ev.pageX, ev.pageY)
+  ev.preventDefault()
+  ev.stopPropagation()
 }
