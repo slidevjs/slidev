@@ -11,7 +11,7 @@ import {
   injectionClicksContext,
 } from '../constants'
 
-export type VClickValue = string | [string | number, string | number] | boolean
+export type VClickValue = undefined | string | [string | number, string | number] | boolean
 
 export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
@@ -37,7 +37,8 @@ export function createVClickDirectives() {
           if (clicks[1] != null)
             el.dataset.slidevClicksEnd = String(clicks[1])
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -68,7 +69,8 @@ export function createVClickDirectives() {
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -99,7 +101,8 @@ export function createVClickDirectives() {
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -129,7 +132,7 @@ function isCurrent(thisClick: number | [number, number], clicks: number) {
     : thisClick === clicks
 }
 
-export function resolveClick(el: Element, dir: DirectiveBinding<any>, value: VClickValue, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
+export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: VClickValue, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
   const ctx = dirInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx)
@@ -177,4 +180,6 @@ function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
   el.classList.toggle(CLASS_VCLICK_TARGET, false)
   const ctx = dirInject(dir, injectionClicksContext)?.value
   ctx?.unregister(el)
+  // @ts-expect-error extra prop
+  el.watchStopHandle?.()
 }
