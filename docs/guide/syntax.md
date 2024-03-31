@@ -359,13 +359,13 @@ For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com
 ![Remote Image](https://sli.dev/favicon.png)
 ```
 
-For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash**.
+For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash** (i.e., `/pic.png`, NOT `./pic.png`, which is relative to the working file).
 
 ```md
 ![Local Image](/pic.png)
 ```
 
-If you want to apply custom sizes or styles, you can convert them to the `<img>` tag
+If you want to apply custom sizes or styles, you can convert them to the `<img>` tag:
 
 ```html
 <img src="/pic.png" class="m-40 h-40 rounded shadow" />
