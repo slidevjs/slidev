@@ -119,9 +119,9 @@ If you want to get the context programmatically (also type-safely), you can impo
 
 ```vue
 <script setup>
-import { useDarkMode, useNav, useSlidevContext } from '@slidev/client'
+import { useDarkMode, useNav, useSlideContext } from '@slidev/client'
 
-const { $slidev } = useSlidevContext()
+const { $slidev } = useSlideContext()
 const { currentSlideRoute } = useNav()
 const { isDark } = useDarkMode()
 // ...
