@@ -77,7 +77,7 @@ For more properties available, refer to the [`SlidevContextNav` interface](https
 
 ### `$slidev.configs`
 
-A reactive object holding the parsed [configurations in the first frontmatter](/custom/#frontmatter-configures) of your `slides.md`. For example
+A reactive object holding the parsed [configurations in the first frontmatter](/custom/#frontmatter-configures) of your `slides.md`. For example:
 
 ```yaml
 ---
@@ -115,6 +115,8 @@ A shorthand of `$slidev.nav`.
 
 > Available since v0.48.0
 
+### Context
+
 If you want to get the context programmatically (also type-safely), you can import composables from `@slidev/client`:
 
 ```vue
@@ -122,7 +124,7 @@ If you want to get the context programmatically (also type-safely), you can impo
 import { useDarkMode, useNav, useSlideContext } from '@slidev/client'
 
 const { $slidev } = useSlideContext()
-const { currentSlideRoute } = useNav()
+const { currentPage, currentLayout, currentSlideRoute } = useNav()
 const { isDark } = useDarkMode()
 // ...
 </script>
@@ -130,3 +132,17 @@ const { isDark } = useDarkMode()
 
 > [!NOTE]
 > Previously, you might see the usage of importing nested modules like `import { isDark } from '@slidev/client/logic/dark.ts'`, this is **NOT RECOMMENDED** as they are internal implementation details and might be broken in the future. Try always to use the public API from `@slidev/client` whenever possible.
+
+### Types
+
+If you want to get a type programmatically, you can import types like `TocItem` from `@slidev/types`:
+
+```vue
+<script setup>
+import type { TocItem } from "@slidev/types";
+
+function tocFunc(tree: TocItem[]): TocItem[] {
+  // ...
+}
+</script>
+```
