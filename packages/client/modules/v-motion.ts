@@ -1,5 +1,6 @@
 import type { App, ObjectDirective } from 'vue'
 import { watchEffect } from 'vue'
+import type { MotionInstance } from '@vueuse/motion'
 import { MotionDirective } from '@vueuse/motion'
 import type { ResolvedClicksInfo } from '@slidev/types'
 import { injectionClicksContext, injectionCurrentPage } from '../constants'
@@ -40,30 +41,30 @@ export function createVMotionDirectives() {
           }
 
           const idPrefix = `${makeId()}-`
-          const statesMap: {
-            n: number
+          const clicks: {
             id: string
+            at: number | [number, number]
             variant: string
-            resolvedClick: ResolvedClicksInfo | null
+            resolved: ResolvedClicksInfo | null
           }[] = []
 
           for (const k of Object.keys(node.props)) {
-            if (k.startsWith('state-')) {
-              const n = +k.slice(6)
-              const id = idPrefix + n
-              statesMap.push({
-                n,
+            if (k.startsWith('click-')) {
+              const s = k.slice(6)
+              const at = s.includes('-') ? s.split('-').map(Number) as [number, number] : +s
+              const id = idPrefix + s
+              clicks.push({
                 id,
+                at,
                 variant: k,
-                resolvedClick: resolveClick(id, binding, node.props[k].at),
+                resolved: resolveClick(id, binding, at),
               })
-              delete node.props[k].at
               node.props.variants[k] = node.props[k]
               delete node.props[k]
             }
           }
 
-          statesMap.sort((a, b) => b.n - a.n)
+          clicks.sort((a, b) => -(Array.isArray(a.at) ? a.at[0] : a.at) - (Array.isArray(b.at) ? b.at[0] : b.at))
 
           original.created!(el, binding, node, prevNode)
           original.mounted!(el, binding, node, prevNode)
@@ -72,11 +73,11 @@ export function createVMotionDirectives() {
           const { currentPage } = useNav()
           // @ts-expect-error extra prop
           const motion = el.motionInstance
-          motion.clickIds = statesMap.map(i => i.id)
+          motion.clickIds = clicks.map(i => i.id)
           motion.watchStopHandle = watchEffect(() => {
             if (thisPage === currentPage.value) {
               let hasClickState = false
-              for (const { variant, resolvedClick } of statesMap) {
+              for (const { variant, resolved: resolvedClick } of clicks) {
                 if (resolvedClick?.isActive.value) {
                   motion.variant.value = variant
                   hasClickState = true

@@ -11,7 +11,7 @@ import {
   injectionClicksContext,
 } from '../constants'
 
-export type VClickValue = undefined | string | [string | number, string | number] | boolean
+export type VClickValue = undefined | string | number | [string | number, string | number] | boolean
 
 export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
   return (dir.instance?.$ as any).provides[key as any] ?? defaultValue

@@ -11,21 +11,32 @@ transition: fade
 <div
   v-motion
   :initial="{ x: 100, y: 0 }"
-  :enter="{ x: 400, y:0}"
-  :state-1="{ at: '+1', x: 400, y:100}"
-  :state-2="{ at: '+1', x: 400, y:200}"
-  :state-3="{ at: '+1', x: 400, y:300}"
-  :state-4="{ at: '+1', x: 400, y:400}"
+  :click-0="{ x: 400, y:0 }"
+  :click-1="{ x: 400, y:100}"
+  :click-2="{ x: 400, y:200}"
+  :click-3="{ x: 400, y:300}"
+  :click-4="{ x: 400, y:400}"
   :leave="{ x: 800, y:400 }"
   w-30 b b-white>
   clicks {{ $clicks }}
 </div>
 
+<v-clicks>
+
+- A
+- B
+- C
+- D
+
+</v-clicks>
+
 ---
 
 # Next Page
 
-<div class="w-60 relative mt-6">
+Click once to see the icons.
+
+<div v-click class="w-60 relative mt-6">
   <div class="relative w-40 h-40">
     <img
       v-motion
@@ -79,6 +90,7 @@ const final = {
 </script>
 
 <div
+  v-after
   v-motion
   :initial="{ x:35, y: 40, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
