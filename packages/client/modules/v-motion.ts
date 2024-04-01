@@ -1,13 +1,13 @@
 import type { App, ObjectDirective } from 'vue'
-import { watchEffect } from 'vue'
-import type { MotionInstance } from '@vueuse/motion'
+import { watch } from 'vue'
 import { MotionDirective } from '@vueuse/motion'
 import type { ResolvedClicksInfo } from '@slidev/types'
-import { injectionClicksContext, injectionCurrentPage } from '../constants'
+import { injectionClickVisibility, injectionClicksContext, injectionCurrentPage } from '../constants'
 import { useNav } from '../composables/useNav'
 import { makeId } from '../logic/utils'
+import { directiveInject } from '../utils'
 import type { VClickValue } from './v-click'
-import { dirInject, resolveClick } from './v-click'
+import { resolveClick } from './v-click'
 
 export type MotionDirectiveValue = undefined | VClickValue | {
   key?: string
@@ -22,33 +22,27 @@ export function createVMotionDirectives() {
         // @ts-expect-error extra prop
         name: 'v-motion',
         mounted(el, binding, node, prevNode) {
-          const props = node.props ??= {}
-          const variants = node.props.variants ?? {}
-          node.props = {
-            ...props,
-            variants: {
-              ...variants,
-              'slidev-before': { ...props.initial, ...variants.initial, ...props['slidev-before'] },
-              'slidev-current': { ...props.enter, ...variants.enter, ...props['slidev-current'] },
-              'slidev-after': { ...props.leave, ...variants.leave, ...props['slidev-after'] },
-              'initial': variants['vmotion-initial'],
-              'enter': variants['vmotion-enter'],
-              'leave': variants['vmotion-leave'],
-            },
-            initial: undefined,
-            enter: undefined,
-            leave: undefined,
-          }
+          if (!directiveInject(binding, injectionClicksContext)?.value)
+            return
+
+          const props = node.props = { ...node.props }
+
+          const variantBefore = { ...props.initial, ...props.variants?.['slidev-before'] }
+          const variantCurrent = { ...props.enter, ...props.variants?.['slidev-current'] }
+          const variantAfter = { ...props.leave, ...props.variants?.['slidev-after'] }
+          delete props.initial
+          delete props.enter
+          delete props.leave
 
           const idPrefix = `${makeId()}-`
           const clicks: {
             id: string
             at: number | [number, number]
-            variant: string
+            variant: Record<string, unknown>
             resolved: ResolvedClicksInfo | null
           }[] = []
 
-          for (const k of Object.keys(node.props)) {
+          for (const k of Object.keys(props)) {
             if (k.startsWith('click-')) {
               const s = k.slice(6)
               const at = s.includes('-') ? s.split('-').map(Number) as [number, number] : +s
@@ -56,44 +50,48 @@ export function createVMotionDirectives() {
               clicks.push({
                 id,
                 at,
-                variant: k,
+                variant: { ...props[k] },
                 resolved: resolveClick(id, binding, at),
               })
-              node.props.variants[k] = node.props[k]
-              delete node.props[k]
+              delete props[k]
             }
           }
 
-          clicks.sort((a, b) => -(Array.isArray(a.at) ? a.at[0] : a.at) - (Array.isArray(b.at) ? b.at[0] : b.at))
+          clicks.sort((a, b) => (Array.isArray(a.at) ? a.at[0] : a.at) - (Array.isArray(b.at) ? b.at[0] : b.at))
 
           original.created!(el, binding, node, prevNode)
           original.mounted!(el, binding, node, prevNode)
 
-          const thisPage = dirInject(binding, injectionCurrentPage)?.value ?? -1
-          const { currentPage } = useNav()
+          const thisPage = directiveInject(binding, injectionCurrentPage)
+          const clickVisibility = directiveInject(binding, injectionClickVisibility)
+          const { currentPage, clicks: currentClicks } = useNav()
           // @ts-expect-error extra prop
           const motion = el.motionInstance
           motion.clickIds = clicks.map(i => i.id)
-          motion.watchStopHandle = watchEffect(() => {
-            if (thisPage === currentPage.value) {
-              let hasClickState = false
-              for (const { variant, resolved: resolvedClick } of clicks) {
-                if (resolvedClick?.isActive.value) {
-                  motion.variant.value = variant
-                  hasClickState = true
-                  break
+          motion.watchStopHandle = watch(
+            [thisPage, currentPage, currentClicks].filter(Boolean),
+            () => {
+              if (clickVisibility)
+                console.warn('clickVisibility', clickVisibility.value)
+              if ((clickVisibility?.value ?? true) && thisPage?.value === currentPage.value) {
+                const mixedVariant: Record<string, unknown> = { ...variantCurrent }
+                for (const { variant, resolved: resolvedClick } of clicks) {
+                  if (resolvedClick?.isActive.value)
+                    Object.assign(mixedVariant, { ...variant })
                 }
+                motion.apply(mixedVariant)
               }
-              if (!hasClickState)
-                motion.variant.value = 'slidev-current'
-            }
-            else {
-              motion.variant.value = thisPage > currentPage.value ? 'slidev-before' : 'slidev-after'
-            }
-          })
+              else {
+                motion.apply((thisPage?.value ?? -1) >= currentPage.value ? variantBefore : variantAfter)
+              }
+            },
+          )
         },
         unmounted(el, dir) {
-          const ctx = dirInject(dir, injectionClicksContext)?.value
+          if (!directiveInject(dir, injectionClicksContext)?.value)
+            return
+
+          const ctx = directiveInject(dir, injectionClicksContext)?.value
           // @ts-expect-error extra prop
           const motion = el.motionInstance
           motion.clickIds.map((id: string) => ctx?.unregister(id))
