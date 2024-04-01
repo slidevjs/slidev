@@ -90,10 +90,10 @@ const final = {
 </script>
 
 <div
-  v-after
+  v-click
   v-motion
   :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
+  :enter="{ y: 0, opacity: 1 }">
 
 [Learn More](https://sli.dev/guide/animations.html#motion)
 

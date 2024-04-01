@@ -27,9 +27,9 @@ export function createVMotionDirectives() {
 
           const props = node.props = { ...node.props }
 
-          const variantBefore = { ...props.initial, ...props.variants?.['slidev-before'] }
-          const variantCurrent = { ...props.enter, ...props.variants?.['slidev-current'] }
-          const variantAfter = { ...props.leave, ...props.variants?.['slidev-after'] }
+          const variantInitial = { ...props.initial, ...props.variants?.['slidev-initial'] }
+          const variantEnter = { ...props.enter, ...props.variants?.['slidev-enter'] }
+          const variantLeave = { ...props.leave, ...props.variants?.['slidev-leave'] }
           delete props.initial
           delete props.enter
           delete props.leave
@@ -68,13 +68,14 @@ export function createVMotionDirectives() {
           // @ts-expect-error extra prop
           const motion = el.motionInstance
           motion.clickIds = clicks.map(i => i.id)
+          motion.set(variantInitial)
           motion.watchStopHandle = watch(
             [thisPage, currentPage, currentClicks].filter(Boolean),
             () => {
               if (clickVisibility)
                 console.warn('clickVisibility', clickVisibility.value)
               if ((clickVisibility?.value ?? true) && thisPage?.value === currentPage.value) {
-                const mixedVariant: Record<string, unknown> = { ...variantCurrent }
+                const mixedVariant: Record<string, unknown> = { ...variantEnter }
                 for (const { variant, resolved: resolvedClick } of clicks) {
                   if (resolvedClick?.isActive.value)
                     Object.assign(mixedVariant, { ...variant })
@@ -82,8 +83,11 @@ export function createVMotionDirectives() {
                 motion.apply(mixedVariant)
               }
               else {
-                motion.apply((thisPage?.value ?? -1) >= currentPage.value ? variantBefore : variantAfter)
+                motion.apply((thisPage?.value ?? -1) >= currentPage.value ? variantInitial : variantLeave)
               }
+            },
+            {
+              immediate: true,
             },
           )
         },
