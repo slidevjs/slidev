@@ -72,18 +72,22 @@ export function createVMotionDirectives() {
           motion.watchStopHandle = watch(
             [thisPage, currentPage, currentClicks].filter(Boolean),
             () => {
-              if (clickVisibility)
-                console.warn('clickVisibility', clickVisibility.value)
-              if ((clickVisibility?.value ?? true) && thisPage?.value === currentPage.value) {
-                const mixedVariant: Record<string, unknown> = { ...variantEnter }
-                for (const { variant, resolved: resolvedClick } of clicks) {
-                  if (resolvedClick?.isActive.value)
-                    Object.assign(mixedVariant, { ...variant })
+              const visibility = clickVisibility?.value ?? true
+              if (thisPage?.value === currentPage.value) {
+                if (visibility === true) {
+                  const mixedVariant: Record<string, unknown> = { ...variantEnter }
+                  for (const { variant, resolved: resolvedClick } of clicks) {
+                    if (resolvedClick?.isActive.value)
+                      Object.assign(mixedVariant, { ...variant })
+                  }
+                  motion.apply(mixedVariant)
                 }
-                motion.apply(mixedVariant)
+                else {
+                  motion.apply(visibility === 'before' ? variantInitial : variantLeave)
+                }
               }
               else {
-                motion.apply((thisPage?.value ?? -1) >= currentPage.value ? variantInitial : variantLeave)
+                motion.apply((thisPage?.value ?? -1) > currentPage.value ? variantInitial : variantLeave)
               }
             },
             {

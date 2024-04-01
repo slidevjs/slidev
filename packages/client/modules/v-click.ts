@@ -153,7 +153,7 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   if (Array.isArray(value)) {
     // range (absolute)
     delta = 0
-    thisClick = value as [number, number]
+    thisClick = [+value[0], +value[1]]
     maxClick = +value[1]
   }
   else {
@@ -176,8 +176,16 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   }
   ctx.register(el, resolved)
 
-  if (provideVisibility)
-    directiveProvide(dir, injectionClickVisibility, isShown)
+  if (provideVisibility) {
+    directiveProvide(dir, injectionClickVisibility, computed(() => {
+      if (isShown.value)
+        return true
+      if (Array.isArray(thisClick))
+        return ctx.current < thisClick[0] ? 'before' : 'after'
+      else
+        return flagHide ? 'after' : 'before'
+    }))
+  }
 
   return resolved
 }

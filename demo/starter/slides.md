@@ -10,18 +10,21 @@ transition: fade
 
 <div
   v-motion
-  :initial="{ x: 100, y: 0 }"
-  :click-0="{ x: 400, y:0 }"
-  :click-1="{ x: 400, y:100}"
-  :click-2="{ x: 400, y:200}"
-  :click-3="{ x: 400, y:300}"
-  :click-4="{ x: 400, y:400}"
+  :initial="{ x: -200, y: -200 }"
+  :enter="{ x: 0, y: 0, rotate: 0 }"
+  :click-1="{ y: 30 }"
+  :click-2="{ y: 70 }"
+  :click-3="{ y: 95 }"
+  :click-4="{ y: 125 }"
+  :click-5="{ y: 0 }"
+  :click-2-3="{ rotate: 90 }"
   :leave="{ x: 800, y:400 }"
-  w-30 b b-white>
-  clicks {{ $clicks }}
+  absolute left-30 top-25 w-fit
+>
+  ← {{ $clicks }}
 </div>
 
-<v-clicks>
+<v-clicks at="+0">
 
 - A
 - B
@@ -29,6 +32,14 @@ transition: fade
 - D
 
 </v-clicks>
+
+<div v-click="[4, 5]" v-motion
+  :initial="{ x: -50 }"
+  :enter="{ x: 0 }"
+  :leave="{ x: 50 }"
+>
+  ABC
+</div>
 
 ---
 
