@@ -55,6 +55,8 @@ remoteAssets: false
 selectable: true
 # enable slide recording, can be boolean, 'dev' or 'build'
 record: dev
+# enable Slidev's context menu, can be boolean, 'dev' or 'build'
+contextmenu: true
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto
