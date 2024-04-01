@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import type { ContextMenuItem } from '@slidev/types'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
-import { fullscreen, toggleOverview } from '../state'
+import { fullscreen, showEditor, toggleOverview } from '../state'
 import setups from '#slidev/setups/context-menu'
 
 import IconArrowLeft from '~icons/carbon/arrow-left'
@@ -12,6 +12,7 @@ import IconArrowRight from '~icons/carbon/arrow-right'
 import IconArrowUp from '~icons/carbon/arrow-up'
 import IconArrowDown from '~icons/carbon/arrow-down'
 import IconPen from '~icons/carbon/pen'
+import IconTextNotationToggle from '~icons/carbon/text-annotation-toggle'
 import IconApps from '~icons/carbon/apps'
 import IconPresentationFile from '~icons/carbon/presentation-file'
 import IconUserSpeaker from '~icons/carbon/user-speaker'
@@ -77,6 +78,11 @@ export default () => {
         disabled: currentPage.value >= total.value,
       },
       'separator',
+      {
+        icon: IconTextNotationToggle,
+        label: showEditor.value ? 'Hide editor' : 'Show editor',
+        action: () => (showEditor.value = !showEditor.value),
+      },
       {
         icon: IconPen,
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
