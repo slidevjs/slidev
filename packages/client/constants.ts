@@ -73,4 +73,5 @@ export const HEADMATTER_FIELDS = [
   'drawings',
   'htmlAttrs',
   'mdc',
+  'contextmenu',
 ]

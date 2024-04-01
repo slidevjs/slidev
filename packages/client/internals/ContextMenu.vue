@@ -25,7 +25,7 @@ watch(windowFocus, (hasFocus) => {
     v-if="currentContextMenu"
     ref="container"
     :style="`left:${currentContextMenu[0]}px;top:${currentContextMenu[1]}px`"
-    class="fixed z-100 w-60 flex flex-wrap justify-items-start animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden"
+    class="fixed z-100 w-60 flex flex-wrap justify-items-start animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden select-none"
     @contextmenu.prevent=""
     @click="closeContextMenu"
   >
@@ -55,7 +55,8 @@ watch(windowFocus, (hasFocus) => {
         <component :is="item.label" v-else />
       </div>
     </template>
+    <div class="w-full p-2 text-xs op60">
+      Right clicking with <kbd>shift</kbd> down for the default context menu.
+    </div>
   </div>
 </template>
-
-<style scoped></style>

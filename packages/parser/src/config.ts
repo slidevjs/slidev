@@ -36,6 +36,7 @@ export function getDefaultConfig(): SlidevConfig {
     htmlAttrs: {},
     transition: undefined,
     editor: true,
+    contextmenu: true,
   }
 }
 

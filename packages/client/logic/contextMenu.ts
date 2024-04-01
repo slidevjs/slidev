@@ -2,6 +2,7 @@ import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { shallowRef } from 'vue'
 import setupContextMenu from '../setup/context-menu'
+import { configs, mode } from '../env'
 
 export const currentContextMenu = shallowRef<null | [number, number, ComputedRef<ContextMenuItem[]>]>(null)
 
@@ -14,6 +15,8 @@ export function closeContextMenu() {
 }
 
 export function onContextMenu(ev: MouseEvent) {
+  if (configs.contextmenu !== true && configs.contextmenu !== mode)
+    return
   if (ev.shiftKey || ev.defaultPrevented)
     return
 
