@@ -28,8 +28,8 @@ onMounted(() => {
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="windowSize.width.value"
     />
+    <div id="twoslash-container" />
   </div>
-  <div id="twoslash-container" />
 </template>
 
 <style lang="postcss">
