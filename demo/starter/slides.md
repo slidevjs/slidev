@@ -10,7 +10,7 @@ dragPos:
 
 # v-drag
 
-<v-drag bg-yellow id="foo">
+<v-drag bg-yellow pos="foo">
 <div text-center>
 Frontmatter position
 </div>

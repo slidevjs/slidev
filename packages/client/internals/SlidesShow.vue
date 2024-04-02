@@ -5,9 +5,11 @@ import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
 import { createFixedClicks } from '../composables/useClicks'
+import { activeDragElement } from '../state'
 import { CLICKS_MAX } from '../constants'
 import SlideWrapper from './SlideWrapper.vue'
 import PresenterMouse from './PresenterMouse.vue'
+import DragControl from './DragControl.vue'
 
 import GlobalTop from '#slidev/global-components/top'
 import GlobalBottom from '#slidev/global-components/bottom'
@@ -75,6 +77,8 @@ function onAfterLeave() {
       class="overflow-hidden"
     />
   </component>
+
+  <DragControl v-if="activeDragElement" :data="activeDragElement" />
 
   <div id="twoslash-container" />
 

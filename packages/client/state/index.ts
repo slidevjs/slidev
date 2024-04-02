@@ -1,6 +1,7 @@
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
+import type { DragElementState } from '../composables/useDragElements'
 
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
@@ -31,7 +32,7 @@ export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false,
 export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318, { listenToStorageChanges: false })
 export const editorHeight = useLocalStorage('slidev-editor-height', isClient ? window.innerHeight * 0.4 : 300, { listenToStorageChanges: false })
 
-export const isDraggingElement = ref(false)
+export const activeDragElement = shallowRef<DragElementState | null>(null)
 
 export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1, { listenToStorageChanges: false })
 export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1, { listenToStorageChanges: false })

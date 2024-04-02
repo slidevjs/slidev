@@ -2,7 +2,7 @@
 import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { configs, slideAspect, slideHeight, slideWidth } from '../env'
-import { injectionSlideScale } from '../constants'
+import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { useNav } from '../composables/useNav'
 
 const props = defineProps({
@@ -23,11 +23,12 @@ const props = defineProps({
 
 const { clicksDirection, isPrintMode } = useNav()
 
-const root = ref<HTMLDivElement>()
-const element = useElementSize(root)
+const root = ref<HTMLDivElement | null>(null)
+const rootSize = useElementSize(root)
+const slideElement = ref<HTMLElement | null>(null)
 
-const width = computed(() => props.width ? props.width : element.width.value)
-const height = computed(() => props.width ? props.width / slideAspect.value : element.height.value)
+const width = computed(() => props.width ? props.width : rootSize.width.value)
+const height = computed(() => props.width ? props.width / slideAspect.value : rootSize.height.value)
 
 if (props.width) {
   watchEffect(() => {
@@ -70,11 +71,12 @@ if (props.isMain) {
 }
 
 provideLocal(injectionSlideScale, scale)
+provideLocal(injectionSlideElement, slideElement)
 </script>
 
 <template>
   <div id="slide-container" ref="root" class="slidev-slides-container" :class="className">
-    <div id="slide-content" class="slidev-slide-content" :style="style">
+    <div id="slide-content" ref="slideElement" class="slidev-slide-content" :style="style">
       <slot />
     </div>
     <slot name="controls" />

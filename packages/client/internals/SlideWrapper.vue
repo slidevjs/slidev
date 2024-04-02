@@ -3,7 +3,7 @@ import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toR
 import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideElement, injectionSlideZoom } from '../constants'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
 import SlideLoading from './SlideLoading.vue'
 
@@ -30,12 +30,10 @@ const props = defineProps({
   },
 })
 
-const element = ref<HTMLElement | null>(null)
 const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
 
 provideLocal(injectionRoute, props.route)
 provideLocal(injectionCurrentPage, ref(props.route.no))
-provideLocal(injectionSlideElement, element)
 provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
 provideLocal(injectionActive, toRef(props, 'active'))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
@@ -70,7 +68,7 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
-  <div ref="element" :class="getSlideClass(route)">
+  <div :class="getSlideClass(route)">
     <component
       :is="SlideComponent"
       :style="style"
