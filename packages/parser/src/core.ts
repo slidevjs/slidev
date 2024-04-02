@@ -69,7 +69,7 @@ function matter(code: string) {
 
 export function detectFeatures(code: string): SlidevFeatureFlags {
   return {
-    katex: !!code.match(/\$.*?\$/) || !!code.match(/$\$\$/),
+    katex: !!code.match(/\$.*?\$/) || !!code.match(/\$\$/),
     monaco: !!code.match(/{monaco.*}/),
     tweet: !!code.match(/<Tweet\b/),
     mermaid: !!code.match(/^```mermaid/m),

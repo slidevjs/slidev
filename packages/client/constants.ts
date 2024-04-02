@@ -31,6 +31,7 @@ export const TRUST_ORIGINS = [
 
 export const FRONTMATTER_FIELDS = [
   'clicks',
+  'clicksStart',
   'disabled',
   'hide',
   'hideInToc',
