@@ -4,7 +4,11 @@ import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { getSlideClass } from '../utils'
 import SlideLoading from './SlideLoading.vue'
+
+import GlobalTop from '#slidev/global-components/top'
+import GlobalBottom from '#slidev/global-components/bottom'
 
 const props = defineProps({
   clicksContext: {
@@ -18,10 +22,6 @@ const props = defineProps({
   active: {
     type: Boolean,
     default: false,
-  },
-  is: {
-    type: Function as PropType<() => any>,
-    required: true,
   },
   route: {
     type: Object as PropType<SlideRoute>,
@@ -51,7 +51,7 @@ const style = computed(() => {
 
 const SlideComponent = defineAsyncComponent({
   loader: async () => {
-    const component = await props.is()
+    const component = await props.route.component()
     return defineComponent({
       setup(_, { attrs }) {
         onMounted(() => {
@@ -67,12 +67,19 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
+  <!-- Global Bottom -->
+  <GlobalBottom />
+
+  <!-- Slide Content -->
   <component
     :is="SlideComponent"
     :style="style"
     :data-slidev-no="props.route.no"
-    :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
+    :class="getSlideClass(props.route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
   />
+
+  <!-- Global Top -->
+  <GlobalTop />
 </template>
 
 <style scoped>

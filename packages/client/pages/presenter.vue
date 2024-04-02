@@ -7,7 +7,6 @@ import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, 
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
-import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { createFixedClicks } from '../composables/useClicks'
 import SlideWrapper from '../internals/SlideWrapper.vue'
@@ -133,10 +132,8 @@ onMounted(() => {
           class="h-full w-full"
         >
           <SlideWrapper
-            :is="nextFrame[0].component!"
             :key="nextFrame[0].no"
             :clicks-context="nextFrameClicksCtx"
-            :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
             render-context="previewNext"
           />

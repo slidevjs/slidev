@@ -6,7 +6,6 @@ import { configs } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
 import DrawingPreview from '../internals/DrawingPreview.vue'
@@ -180,9 +179,7 @@ onMounted(() => {
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :is="route.component!"
                 :clicks-context="getClicksContext(route)"
-                :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />
