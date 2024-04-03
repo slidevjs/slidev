@@ -10,7 +10,7 @@ import { dirInject } from '../modules/v-click'
 import { useSlideBounds } from './useSlideBounds'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
-export type DragElementDataSource = 'inline' | 'frontmatter' | 'directive'
+export type DragElementDataSource = 'frontmatter' | 'prop' | 'directive'
 /**
  * Markdown source position, injected by markdown-it plugin
  */
@@ -71,7 +71,7 @@ export function useDragElementsContext(no: number): DragElementsContext {
         let section = lines.slice(startLine, endLine).join('\n')
         let replaced = false
 
-        section = type === 'inline'
+        section = type === 'prop'
           ? section.replace(/<(v-?drag)(.*?)>/ig, (full, tag, attrs, index) => {
             if (index === idx) {
               replaced = true
@@ -132,7 +132,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const { left: slideLeft, top: slideTop, stop: stopWatchBounds } = useSlideBounds(inject(injectionSlideElement) ?? ref())
   const enabled = ['slide', 'presenter'].includes(renderContext.value)
 
-  let dataSource: DragElementDataSource = directive ? 'directive' : 'inline'
+  let dataSource: DragElementDataSource = directive ? 'directive' : 'prop'
   let id: string = makeId()
   let pos: number[] | undefined
   if (Array.isArray(posRaw)) {
@@ -170,9 +170,6 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     bounds.value = container.value!.getBoundingClientRect()
     actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
   }
-  watchStopHandles.push(
-    watch(width, updateBounds),
-  )
 
   const configuredHeight = ref(pos[3] ?? 0)
   const height = computed({
@@ -189,7 +186,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     return Number.isFinite(x0.value)
       ? {
         position: 'absolute',
-        padding: '10px',
+        zIndex: 100,
         left: `${x0.value - width.value / 2}px`,
         top: `${y0.value - height.value / 2}px`,
         width: `${width.value}px`,
@@ -199,7 +196,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       } satisfies CSSProperties
       : {
         position: 'absolute',
-        padding: '10px',
+        zIndex: 100,
       } satisfies CSSProperties
   })
 
@@ -219,6 +216,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
           posStr = `[${posStr}]`
 
         context.value.update(id, posStr, dataSource, markdownSource)
+        updateBounds()
       },
     ),
   )
@@ -257,6 +255,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       state.stopDragging()
     },
     startDragging(): void {
+      updateBounds()
       activeDragElement.value = state
     },
     stopDragging(): void {

@@ -15,7 +15,13 @@ onUnmounted(unmounted)
 </script>
 
 <template>
-  <div ref="container" :data-drag-id="id" :style="positionStyle" @dblclick="startDragging">
+  <div
+    ref="container"
+    :data-drag-id="id"
+    :style="positionStyle"
+    class="p-1"
+    @dblclick="startDragging"
+  >
     <slot />
   </div>
 </template>
