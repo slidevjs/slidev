@@ -110,6 +110,6 @@ onMounted(() => {
 <style>
 .slidev-code-magic-move .shiki-magic-move-enter-from,
 .slidev-code-magic-move .shiki-magic-move-leave-to {
-  opacity: 0 !important;
+  opacity: 0;
 }
 </style>
