@@ -8,6 +8,7 @@ import { createHead } from '@unhead/vue'
 import { routeForceRefresh } from '../logic/route'
 import { createVClickDirectives } from '../modules/v-click'
 import { createVMarkDirective } from '../modules/v-mark'
+import { createVDragDirective } from '../modules/v-drag'
 import { routes } from '../routes'
 import setups from '#slidev/setups/main'
 
@@ -34,6 +35,7 @@ export default async function setupMain(app: App) {
   app.use(createHead())
   app.use(createVClickDirectives())
   app.use(createVMarkDirective())
+  app.use(createVDragDirective())
   app.use(MotionPlugin)
   app.use(TwoSlashFloatingVue as any, { container: '#twoslash-container' })
 

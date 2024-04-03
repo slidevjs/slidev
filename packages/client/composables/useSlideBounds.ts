@@ -3,10 +3,9 @@ import { inject, ref, watch } from 'vue'
 import { injectionSlideElement } from '../constants'
 import { editorHeight, editorWidth, isEditorVertical, showEditor, slideScale, windowSize } from '../state'
 
-export function useSlideBounds() {
-  const slideElement = inject(injectionSlideElement, ref())
+export function useSlideBounds(slideElement = inject(injectionSlideElement, ref())) {
   const bounding = useElementBounding(slideElement)
-  watch(
+  const stop = watch(
     [
       showEditor,
       isEditorVertical,
@@ -24,5 +23,8 @@ export function useSlideBounds() {
       immediate: true,
     },
   )
-  return bounding
+  return {
+    ...bounding,
+    stop,
+  }
 }

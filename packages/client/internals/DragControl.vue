@@ -10,7 +10,7 @@ import { slideHeight, slideWidth } from '../env'
 import { magicKeys } from '../state'
 
 const { data } = defineProps<{ data: DragElementState }>()
-const { id, autoHeight, dragging, x0, y0, width, height, rotate, positionStyle } = data
+const { id, autoHeight, x0, y0, width, height, rotate, positionStyle } = data
 
 const scale = inject(injectionSlideScale, ref(1))
 const { left: slideLeft, top: slideTop } = useSlideBounds()
@@ -50,7 +50,7 @@ let currentDrag: {
 } | null = null
 
 function onPointerdown(ev: PointerEvent) {
-  if (!dragging.value || ev.buttons !== 1)
+  if (ev.buttons !== 1)
     return
 
   ev.preventDefault()
@@ -340,7 +340,7 @@ const moveDown = useIntervalFn(() => {
 
 watchEffect(() => {
   function shortcut(key: string, fn: Pausable) {
-    if (magicKeys[key].value && dragging.value)
+    if (magicKeys[key].value)
       fn.resume()
     else fn.pause()
   }
@@ -353,7 +353,7 @@ watchEffect(() => {
 
 <template>
   <div
-    v-if="dragging && Number.isFinite(x0)"
+    v-if="Number.isFinite(x0)"
     :data-drag-id="id"
     :style="{
       ...positionStyle,

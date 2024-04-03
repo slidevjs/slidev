@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
 import type { DragElementMarkdownSource } from '../composables/useDragElements'
 import { useDragElement } from '../composables/useDragElements'
 
@@ -7,11 +8,14 @@ const props = defineProps<{
   markdownSource?: DragElementMarkdownSource
 }>()
 
-const { container, positionStyle, startDragging } = useDragElement(props.pos, props.markdownSource)
+const { id, container, positionStyle, mounted, unmounted, startDragging } = useDragElement(null, props.pos, props.markdownSource)
+
+onMounted(mounted)
+onUnmounted(unmounted)
 </script>
 
 <template>
-  <div ref="container" :style="positionStyle" @dblclick="startDragging">
+  <div ref="container" :data-drag-id="id" :style="positionStyle" @dblclick="startDragging">
     <slot />
   </div>
 </template>

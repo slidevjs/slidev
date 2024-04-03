@@ -1,17 +1,42 @@
 import type { App } from 'vue'
+import { watch } from 'vue'
+import type { DragElementState } from '../composables/useDragElements'
+import { useDragElement } from '../composables/useDragElements'
 
-/**
- * This supports v-mark directive to add notations to elements, powered by `rough-notation`.
- */
-export function createVMarkDirective() {
+export function createVDragDirective() {
   return {
     install(app: App) {
-      app.directive('drag', {
+      app.directive<HTMLElement & { draggingState: DragElementState }>('drag', {
         // @ts-expect-error extra prop
         name: 'v-drag',
 
-        mounted: () => {
-
+        created(el, binding, vnode) {
+          const state = useDragElement(binding, binding.value, vnode.props?.markdownSource)
+          if (vnode.props) {
+            vnode.props = { ...vnode.props }
+            delete vnode.props.markdownSource
+          }
+          state.container.value = el
+          el.draggingState = state
+          el.dataset.dragId = state.id
+          state.watchStopHandles.push(
+            watch(state.positionStyle, (style) => {
+              for (const [k, v] of Object.entries(style)) {
+                if (v)
+                  el.style[k as any] = v
+              }
+            }, { immediate: true }),
+          )
+          el.addEventListener('dblclick', state.startDragging)
+        },
+        mounted(el) {
+          el.draggingState.mounted()
+        },
+        unmounted(el) {
+          const state = el.draggingState
+          state.unmounted()
+          el.removeEventListener('dblclick', state.startDragging)
+          state.watchStopHandles.forEach(fn => fn())
         },
       })
     },
