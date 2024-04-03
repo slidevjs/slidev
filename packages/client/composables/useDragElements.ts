@@ -3,7 +3,7 @@ import type { SlidePatch } from '@slidev/types'
 import { injectLocal, onClickOutside, useWindowFocus } from '@vueuse/core'
 import type { CSSProperties, DirectiveBinding, InjectionKey, WatchStopHandle } from 'vue'
 import { computed, ref, watch } from 'vue'
-import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionSlideElement, injectionSlideScale } from '../constants'
+import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionSlideElement, injectionSlideScale, injectionSlideZoom } from '../constants'
 import { makeId } from '../logic/utils'
 import { activeDragElement } from '../state'
 import { dirInject } from '../modules/v-click'
@@ -129,6 +129,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const page = inject(injectionCurrentPage)!
   const context = computed(() => useDragElementsContext(page.value))
   const scale = inject(injectionSlideScale) ?? ref(1)
+  const zoom = inject(injectionSlideZoom) ?? ref(1)
   const { left: slideLeft, top: slideTop, stop: stopWatchBounds } = useSlideBounds(inject(injectionSlideElement) ?? ref())
   const enabled = ['slide', 'presenter'].includes(renderContext.value)
 
@@ -167,8 +168,14 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
   const actualHeight = ref(0)
   function updateBounds() {
-    bounds.value = container.value!.getBoundingClientRect()
-    actualHeight.value = (bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value
+    const rect = container.value!.getBoundingClientRect()
+    bounds.value = {
+      left: rect.left / zoom.value,
+      top: rect.top / zoom.value,
+      width: rect.width / zoom.value,
+      height: rect.height / zoom.value,
+    }
+    actualHeight.value = ((bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value)
   }
 
   const configuredHeight = ref(pos[3] ?? 0)
@@ -182,22 +189,22 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     set: v => configuredY0.value = v - height.value / 2,
   })
 
-  const positionStyle = computed(() => {
+  const containerStyle = computed<CSSProperties>(() => {
     return Number.isFinite(x0.value)
       ? {
-        position: 'absolute',
-        zIndex: 100,
-        left: `${x0.value - width.value / 2}px`,
-        top: `${y0.value - height.value / 2}px`,
-        width: `${width.value}px`,
-        height: autoHeight ? undefined : `${height.value}px`,
-        transformOrigin: 'center center',
-        transform: `rotate(${rotate.value}deg)`,
-      } satisfies CSSProperties
+          position: 'absolute',
+          zIndex: 100,
+          left: `${x0.value - width.value / 2}px`,
+          top: `${y0.value - height.value / 2}px`,
+          width: `${width.value}px`,
+          height: autoHeight ? undefined : `${height.value}px`,
+          transformOrigin: 'center center',
+          transform: `rotate(${rotate.value}deg)`,
+        }
       : {
-        position: 'absolute',
-        zIndex: 100,
-      } satisfies CSSProperties
+          position: 'absolute',
+          zIndex: 100,
+        }
   })
 
   watchStopHandles.push(
@@ -225,6 +232,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     id,
     dataSource,
     markdownSource,
+    zoom,
     autoHeight,
     x0,
     y0,
@@ -232,7 +240,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     height,
     rotate,
     container,
-    positionStyle,
+    containerStyle,
     watchStopHandles,
     dragging: computed((): boolean => activeDragElement.value === state),
     mounted() {

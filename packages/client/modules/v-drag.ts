@@ -20,7 +20,7 @@ export function createVDragDirective() {
           el.draggingState = state
           el.dataset.dragId = state.id
           state.watchStopHandles.push(
-            watch(state.positionStyle, (style) => {
+            watch(state.containerStyle, (style) => {
               for (const [k, v] of Object.entries(style)) {
                 if (v)
                   el.style[k as any] = v

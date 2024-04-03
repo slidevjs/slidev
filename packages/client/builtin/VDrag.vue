@@ -8,7 +8,7 @@ const props = defineProps<{
   markdownSource?: DragElementMarkdownSource
 }>()
 
-const { id, container, positionStyle, mounted, unmounted, startDragging } = useDragElement(null, props.pos, props.markdownSource)
+const { id, container, containerStyle, mounted, unmounted, startDragging } = useDragElement(null, props.pos, props.markdownSource)
 
 onMounted(mounted)
 onUnmounted(unmounted)
@@ -18,7 +18,7 @@ onUnmounted(unmounted)
   <div
     ref="container"
     :data-drag-id="id"
-    :style="positionStyle"
+    :style="containerStyle"
     class="p-1"
     @dblclick="startDragging"
   >

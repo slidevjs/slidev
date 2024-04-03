@@ -10,9 +10,10 @@ import { slideHeight, slideWidth } from '../env'
 import { magicKeys } from '../state'
 
 const { data } = defineProps<{ data: DragElementState }>()
-const { id, autoHeight, x0, y0, width, height, rotate, positionStyle } = data
+const { id, zoom, autoHeight, x0, y0, width, height, rotate } = data
 
-const scale = inject(injectionSlideScale, ref(1))
+const slideScale = inject(injectionSlideScale, ref(1))
+const scale = computed(() => slideScale.value * zoom.value)
 const { left: slideLeft, top: slideTop } = useSlideBounds()
 
 const ctrlSize = 10
@@ -356,8 +357,14 @@ watchEffect(() => {
     v-if="Number.isFinite(x0)"
     :data-drag-id="id"
     :style="{
-      ...positionStyle,
-      height: `${height}px`,
+      position: 'absolute',
+      zIndex: 100,
+      left: `${zoom * (x0 - width / 2)}px`,
+      top: `${zoom * (y0 - height / 2)}px`,
+      width: `${zoom * width}px`,
+      height: `${zoom * height}px`,
+      transformOrigin: 'center center',
+      transform: `rotate(${rotate}deg)`,
     }"
     @pointerdown="onPointerdown"
     @pointermove="onPointermove"
