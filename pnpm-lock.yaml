@@ -546,6 +546,9 @@ importers:
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
+      magic-string:
+        specifier: ^0.30.9
+        version: 0.30.9
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
@@ -3263,7 +3266,7 @@ packages:
       colorette: 2.0.20
       consola: 3.2.3
       fast-glob: 3.3.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       pathe: 1.1.2
       perfect-debounce: 1.0.0
     transitivePeerDependencies:
@@ -3326,7 +3329,7 @@ packages:
       '@unocss/rule-utils': 0.58.9
       css-tree: 2.3.1
       fast-glob: 3.3.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       postcss: 8.4.38
 
   /@unocss/preset-attributify@0.42.1:
@@ -3450,7 +3453,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@unocss/core': 0.58.9
-      magic-string: 0.30.8
+      magic-string: 0.30.9
 
   /@unocss/scope@0.42.1:
     resolution: {integrity: sha512-nFkfZwBGLl6nN6bBaUrF1l2ZkMcg2dAibSlA0U1mr+75L14gem2o+QR++Q76dATiLA9ljdL++Tn5JLR8zGQ7xg==}
@@ -3539,7 +3542,7 @@ packages:
       '@unocss/transformer-directives': 0.58.9
       chokidar: 3.6.0
       fast-glob: 3.3.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       vite: 3.2.8(@types/node@20.12.2)
     transitivePeerDependencies:
       - rollup
@@ -3559,7 +3562,7 @@ packages:
       '@unocss/transformer-directives': 0.58.9
       chokidar: 3.6.0
       fast-glob: 3.3.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       vite: 5.2.7(@types/node@20.12.2)
     transitivePeerDependencies:
       - rollup
@@ -3610,7 +3613,7 @@ packages:
   /@vitest/snapshot@1.4.0:
     resolution: {integrity: sha512-saAFnt5pPIA5qDGxOHxJ/XxhMFKkUSBJmVt5VgDsAqPTX6JP326r5C/c9UuCMPoXNzuudTPsYDZCoJ5ilpqG2A==}
     dependencies:
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       pathe: 1.1.2
       pretty-format: 29.7.0
     dev: true
@@ -3706,7 +3709,7 @@ packages:
       '@vue/compiler-ssr': 3.4.21
       '@vue/shared': 3.4.21
       estree-walker: 2.0.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       postcss: 8.4.38
       source-map-js: 1.2.0
 
@@ -3988,7 +3991,7 @@ packages:
       '@windicss/config': 1.9.3
       debug: 4.3.4(supports-color@8.1.1)
       fast-glob: 3.3.2
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       micromatch: 4.0.5
       windicss: 3.5.6
     transitivePeerDependencies:
@@ -7546,8 +7549,8 @@ packages:
       sourcemap-codec: 1.4.8
     dev: true
 
-  /magic-string@0.30.8:
-    resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
+  /magic-string@0.30.9:
+    resolution: {integrity: sha512-S1+hd+dIrC8EZqKyT9DstTH/0Z+f76kmmvZnkfQVmOpDEF9iVgdYif3Q/pIWHmCoo59bQVGW0kVL3e2nl+9+Sw==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -10195,7 +10198,7 @@ packages:
     dependencies:
       acorn: 8.11.3
       estree-walker: 3.0.3
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       unplugin: 1.6.0
     optional: true
 
@@ -10237,7 +10240,7 @@ packages:
       estree-walker: 3.0.3
       fast-glob: 3.3.2
       local-pkg: 0.5.0
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       mlly: 1.6.1
       pathe: 1.1.2
       pkg-types: 1.0.3
@@ -10472,7 +10475,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       fast-glob: 3.3.2
       local-pkg: 0.4.3
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       minimatch: 9.0.3
       resolve: 1.22.8
       unplugin: 1.6.0
@@ -10708,7 +10711,7 @@ packages:
       blueimp-md5: 2.19.0
       debug: 4.3.4(supports-color@8.1.1)
       fs-extra: 11.2.0
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       vite: 5.2.7(@types/node@20.12.2)
     transitivePeerDependencies:
       - supports-color
@@ -10930,7 +10933,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       execa: 8.0.1
       local-pkg: 0.5.0
-      magic-string: 0.30.8
+      magic-string: 0.30.9
       pathe: 1.1.2
       picocolors: 1.0.0
       std-env: 3.7.0
