@@ -2,7 +2,7 @@ import type { App, ObjectDirective } from 'vue'
 import { watch } from 'vue'
 import { MotionDirective } from '@vueuse/motion'
 import type { ResolvedClicksInfo } from '@slidev/types'
-import { injectionClickVisibility, injectionClicksContext, injectionCurrentPage } from '../constants'
+import { injectionClickVisibility, injectionClicksContext, injectionCurrentPage, injectionRenderContext } from '../constants'
 import { useNav } from '../composables/useNav'
 import { makeId } from '../logic/utils'
 import { directiveInject } from '../utils'
@@ -22,9 +22,6 @@ export function createVMotionDirectives() {
         // @ts-expect-error extra prop
         name: 'v-motion',
         mounted(el, binding, node, prevNode) {
-          if (!directiveInject(binding, injectionClicksContext)?.value)
-            return
-
           const props = node.props = { ...node.props }
 
           const variantInitial = { ...props.initial, ...props.variants?.['slidev-initial'] }
@@ -63,8 +60,10 @@ export function createVMotionDirectives() {
           original.mounted!(el, binding, node, prevNode)
 
           const thisPage = directiveInject(binding, injectionCurrentPage)
+          const renderContext = directiveInject(binding, injectionRenderContext)
           const clickVisibility = directiveInject(binding, injectionClickVisibility)
-          const { currentPage, clicks: currentClicks } = useNav()
+          const clicksContext = directiveInject(binding, injectionClicksContext)
+          const { currentPage, clicks: currentClicks, isPrintMode } = useNav()
           // @ts-expect-error extra prop
           const motion = el.motionInstance
           motion.clickIds = clicks.map(i => i.id)
@@ -73,14 +72,24 @@ export function createVMotionDirectives() {
             [thisPage, currentPage, currentClicks].filter(Boolean),
             () => {
               const visibility = clickVisibility?.value ?? true
-              if (thisPage?.value === currentPage.value) {
+              if (!clicksContext?.value || !['slide', 'presenter'].includes(renderContext?.value ?? '')) {
+                const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
+                for (const { variant } of clicks)
+                  Object.assign(mixedVariant, variant)
+
+                motion.set(mixedVariant)
+              }
+              else if (isPrintMode.value || thisPage?.value === currentPage.value) {
                 if (visibility === true) {
-                  const mixedVariant: Record<string, unknown> = { ...variantEnter }
+                  const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
                   for (const { variant, resolved: resolvedClick } of clicks) {
-                    if (resolvedClick?.isActive.value)
-                      Object.assign(mixedVariant, { ...variant })
+                    if (!resolvedClick || resolvedClick.isActive.value)
+                      Object.assign(mixedVariant, variant)
                   }
-                  motion.apply(mixedVariant)
+                  if (isPrintMode.value)
+                    motion.set(mixedVariant) // print with clicks
+                  else
+                    motion.apply(mixedVariant)
                 }
                 else {
                   motion.apply(visibility === 'before' ? variantInitial : variantLeave)
