@@ -16,18 +16,13 @@ export type DragElementDataSource = 'frontmatter' | 'prop' | 'directive'
  */
 export type DragElementMarkdownSource = [startLine: number, endLine: number, index: number]
 
-export interface DragElementsContext {
-  update: (id: string, posStr: string, type: DragElementDataSource, markdownSource?: DragElementMarkdownSource) => void
-}
+export type DragElementsUpdater = (id: string, posStr: string, type: DragElementDataSource, markdownSource?: DragElementMarkdownSource) => void
 
-const map: Record<number, DragElementsContext> = {}
+const map: Record<number, DragElementsUpdater> = {}
 
-export function useDragElementsContext(no: number): DragElementsContext {
-  if (!(__DEV__ && __SLIDEV_FEATURE_EDITOR__)) {
-    return {
-      update() { },
-    }
-  }
+export function useDragElementsUpdater(no: number) {
+  if (!(__DEV__ && __SLIDEV_FEATURE_EDITOR__))
+    return () => {}
 
   if (map[no])
     return map[no]
@@ -46,74 +41,72 @@ export function useDragElementsContext(no: number): DragElementsContext {
   }
   const debouncedSave = debounce(500, save)
 
-  return map[no] = {
-    update(id, posStr, type, markdownSource) {
-      if (!info.value)
+  return map[no] = (id, posStr, type, markdownSource) => {
+    if (!info.value)
+      return
+
+    if (type === 'frontmatter') {
+      const frontmatter = info.value.frontmatter
+      frontmatter.dragPos ||= {}
+      if (frontmatter.dragPos[id] === posStr)
         return
-
-      if (type === 'frontmatter') {
-        const frontmatter = info.value.frontmatter
-        frontmatter.dragPos ||= {}
-        if (frontmatter.dragPos[id] === posStr)
-          return
-        frontmatter.dragPos[id] = posStr
-        newPatch = {
-          frontmatter,
-        }
+      frontmatter.dragPos[id] = posStr
+      newPatch = {
+        frontmatter,
       }
-      else {
-        if (!markdownSource)
-          throw new Error(`[Slidev] VDrag Element ${id} is missing markdown source`)
+    }
+    else {
+      if (!markdownSource)
+        throw new Error(`[Slidev] VDrag Element ${id} is missing markdown source`)
 
-        const [startLine, endLine, idx] = markdownSource
-        const lines = info.value.content.split(/\r?\n/g)
+      const [startLine, endLine, idx] = markdownSource
+      const lines = info.value.content.split(/\r?\n/g)
 
-        let section = lines.slice(startLine, endLine).join('\n')
-        let replaced = false
+      let section = lines.slice(startLine, endLine).join('\n')
+      let replaced = false
 
-        section = type === 'prop'
-          ? section.replace(/<(v-?drag)(.*?)>/ig, (full, tag, attrs, index) => {
-            if (index === idx) {
-              replaced = true
-              const posMatch = attrs.match(/pos=".*?"/)
-              if (!posMatch)
-                return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}">`
-              const start = posMatch.index
-              const end = start + posMatch[0].length
-              return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}>`
-            }
-            return full
-          })
-          : section.replace(/(?<![</\w])v-drag(?:=".*?")?/ig, (full, index) => {
-            if (index === idx) {
-              replaced = true
-              return `v-drag="${posStr}"`
-            }
-            return full
-          })
+      section = type === 'prop'
+        ? section.replace(/<(v-?drag)(.*?)>/ig, (full, tag, attrs, index) => {
+          if (index === idx) {
+            replaced = true
+            const posMatch = attrs.match(/pos=".*?"/)
+            if (!posMatch)
+              return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}">`
+            const start = posMatch.index
+            const end = start + posMatch[0].length
+            return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}>`
+          }
+          return full
+        })
+        : section.replace(/(?<![</\w])v-drag(?:=".*?")?/ig, (full, index) => {
+          if (index === idx) {
+            replaced = true
+            return `v-drag="${posStr}"`
+          }
+          return full
+        })
 
-        if (!replaced)
-          throw new Error(`[Slidev] VDrag Element ${id} is not found in the markdown source`)
+      if (!replaced)
+        throw new Error(`[Slidev] VDrag Element ${id} is not found in the markdown source`)
 
-        lines.splice(
-          startLine,
-          endLine - startLine,
-          section,
-        )
+      lines.splice(
+        startLine,
+        endLine - startLine,
+        section,
+      )
 
-        const newContent = lines.join('\n')
-        if (info.value.content === newContent)
-          return
-        newPatch = {
-          content: newContent,
-        }
-        info.value = {
-          ...info.value,
-          content: newContent,
-        }
+      const newContent = lines.join('\n')
+      if (info.value.content === newContent)
+        return
+      newPatch = {
+        content: newContent,
       }
-      debouncedSave()
-    },
+      info.value = {
+        ...info.value,
+        content: newContent,
+      }
+    }
+    debouncedSave()
   }
 }
 
@@ -127,7 +120,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const renderContext = inject(injectionRenderContext)!
   const frontmatter = inject(injectionFrontmatter) ?? {}
   const page = inject(injectionCurrentPage)!
-  const context = computed(() => useDragElementsContext(page.value))
+  const updater = computed(() => useDragElementsUpdater(page.value))
   const scale = inject(injectionSlideScale) ?? ref(1)
   const zoom = inject(injectionSlideZoom) ?? ref(1)
   const { left: slideLeft, top: slideTop, stop: stopWatchBounds } = useSlideBounds(inject(injectionSlideElement) ?? ref())
@@ -223,7 +216,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
         if (dataSource === 'directive')
           posStr = `[${posStr}]`
 
-        context.value.update(id, posStr, dataSource, markdownSource)
+        updater.value(id, posStr, dataSource, markdownSource)
       },
     ),
   )
