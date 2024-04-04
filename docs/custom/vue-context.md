@@ -139,7 +139,7 @@ If you want to get a type programmatically, you can import types like `TocItem` 
 
 ```vue
 <script setup>
-import type { TocItem } from "@slidev/types";
+import type { TocItem } from '@slidev/types'
 
 function tocFunc(tree: TocItem[]): TocItem[] {
   // ...

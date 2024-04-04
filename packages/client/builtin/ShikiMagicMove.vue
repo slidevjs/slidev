@@ -45,43 +45,45 @@ onMounted(() => {
       // Calculate the step and rangeStr based on the current click count
       const clickCount = clicks.current - start
       let step = steps.length - 1
-      let _currentClickSum = 0
+      let currentClickSum = 0
       let rangeStr = 'all'
       for (let i = 0; i < ranges.value.length; i++) {
         const current = ranges.value[i]
-        if (clickCount < _currentClickSum + current.length - 1) {
+        if (clickCount < currentClickSum + current.length - 1) {
           step = i
-          rangeStr = current[clickCount - _currentClickSum + 1]
+          rangeStr = current[clickCount - currentClickSum + 1]
           break
         }
-        _currentClickSum += current.length || 1
+        currentClickSum += current.length || 1
       }
       stepIndex.value = step
 
-      const pre = container.value?.querySelector('.shiki') as HTMLElement
-      if (!pre)
-        return
+      setTimeout(() => {
+        const pre = container.value?.querySelector('.shiki') as HTMLElement
+        if (!pre)
+          return
 
-      const children = (Array.from(pre.children) as HTMLElement[])
-        .slice(1) // Remove the first anchor
-        .filter(i => !i.className.includes('shiki-magic-move-leave')) // Filter the leaving elements
+        const children = (Array.from(pre.children) as HTMLElement[])
+          .slice(1) // Remove the first anchor
+          .filter(i => !i.className.includes('shiki-magic-move-leave')) // Filter the leaving elements
 
-      // Group to lines between `<br>`
-      const lines = children.reduce((acc, el) => {
-        if (el.tagName === 'BR')
-          acc.push([])
-        else
-          acc[acc.length - 1].push(el)
-        return acc
-      }, [[]] as HTMLElement[][])
+        // Group to lines between `<br>`
+        const lines = children.reduce((acc, el) => {
+          if (el.tagName === 'BR')
+            acc.push([])
+          else
+            acc[acc.length - 1].push(el)
+          return acc
+        }, [[]] as HTMLElement[][])
 
-      // Update highlight range
-      updateCodeHighlightRange(
-        rangeStr,
-        lines.length,
-        1,
-        no => lines[no],
-      )
+        // Update highlight range
+        updateCodeHighlightRange(
+          rangeStr,
+          lines.length,
+          1,
+          no => lines[no],
+        )
+      })
     },
     { immediate: true },
   )
@@ -104,3 +106,10 @@ onMounted(() => {
     />
   </div>
 </template>
+
+<style>
+.slidev-code-magic-move .shiki-magic-move-enter-from,
+.slidev-code-magic-move .shiki-magic-move-leave-to {
+  opacity: 0;
+}
+</style>
