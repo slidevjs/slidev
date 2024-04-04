@@ -177,6 +177,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
     }
     actualHeight.value = ((bounds.value.width + bounds.value.height) / scale.value / (Math.abs(rotateSin.value) + Math.abs(rotateCos.value)) - width.value)
   }
+  watchStopHandles.push(watch(width, updateBounds, { flush: 'post' }))
 
   const configuredHeight = ref(pos[3] ?? 0)
   const height = computed({
@@ -223,7 +224,6 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
           posStr = `[${posStr}]`
 
         context.value.update(id, posStr, dataSource, markdownSource)
-        updateBounds()
       },
     ),
   )

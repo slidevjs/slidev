@@ -562,14 +562,13 @@ database "MySql" {
 foo: bar
 dragPos:
   square: 686,66,157,_,-17
-zoom: 2
 ---
 
 # Draggable Elements
 
 Double-click on the draggable elements to edit their positions.
 
-<v-drag pos="459,286,253,_,-17">
+<v-drag pos="641,235,253,_,-20">
 <div text-center text-3xl border>
 Double-click me!
 </div>
