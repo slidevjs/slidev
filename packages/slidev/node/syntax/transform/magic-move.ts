@@ -2,6 +2,7 @@ import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter } from 'shiki'
 import { codeToKeyedTokens } from 'shiki-magic-move/core'
 import lz from 'lz-string'
+import type { MarkdownTransformContext } from '@slidev/types'
 import { normalizeRangeStr } from './utils'
 import { reCodeBlock } from './code-wrapper'
 
@@ -11,13 +12,13 @@ const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*(\{.*?\})?([^\n]
  * Transform magic-move code blocks
  */
 export function transformMagicMove(
-  md: string,
+  ctx: MarkdownTransformContext,
   shiki: Highlighter | undefined,
   shikiOptions: MarkdownItShikiOptions | undefined,
 ) {
-  return md.replace(
+  ctx.s.replace(
     reMagicMoveBlock,
-    (full, options = '{}', _attrs = '', body: string) => {
+    (full, options = '{}', _attrs = '', body: string, index: number) => {
       if (!shiki || !shikiOptions)
         throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
 
@@ -33,6 +34,9 @@ export function transformMagicMove(
       }),
       )
       const compressed = lz.compressToBase64(JSON.stringify(steps))
+
+      ctx.ignores.push([index, index + full.length])
+
       return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
     },
   )
