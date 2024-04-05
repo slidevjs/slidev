@@ -1,5 +1,5 @@
 import type { ResolvedClicksInfo } from '@slidev/types'
-import type { App, DirectiveBinding, InjectionKey } from 'vue'
+import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
 import {
   CLASS_VCLICK_CURRENT,
@@ -8,14 +8,12 @@ import {
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
+  injectionClickVisibility,
   injectionClicksContext,
 } from '../constants'
+import { directiveInject, directiveProvide } from '../utils'
 
-export type VClickValue = string | [string | number, string | number] | boolean
-
-export function dirInject<T = unknown>(dir: DirectiveBinding<any>, key: InjectionKey<T> | string, defaultValue?: T): T | undefined {
-  return (dir.instance?.$ as any).provides[key as any] ?? defaultValue
-}
+export type VClickValue = undefined | string | number | [string | number, string | number] | boolean
 
 export function createVClickDirectives() {
   return {
@@ -25,7 +23,7 @@ export function createVClickDirectives() {
         name: 'v-click',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value)
+          const resolved = resolveClick(el, dir, dir.value, true)
           if (resolved == null)
             return
 
@@ -37,7 +35,8 @@ export function createVClickDirectives() {
           if (clicks[1] != null)
             el.dataset.slidevClicksEnd = String(clicks[1])
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -62,13 +61,14 @@ export function createVClickDirectives() {
         name: 'v-after',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value, true)
+          const resolved = resolveClick(el, dir, dir.value, true, true)
           if (resolved == null)
             return
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -93,13 +93,14 @@ export function createVClickDirectives() {
         name: 'v-click-hide',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value, false, true)
+          const resolved = resolveClick(el, dir, dir.value, true, false, true)
           if (resolved == null)
             return
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             const active = resolved.isActive.value
             const current = resolved.isCurrent.value
             const prior = active && !current
@@ -117,20 +118,20 @@ export function createVClickDirectives() {
   }
 }
 
-function isActive(thisClick: number | [number, number], clicks: number) {
+function isClickActive(thisClick: number | [number, number], clicks: number) {
   return Array.isArray(thisClick)
     ? thisClick[0] <= clicks && clicks < thisClick[1]
     : thisClick <= clicks
 }
 
-function isCurrent(thisClick: number | [number, number], clicks: number) {
+function isClickCurrent(thisClick: number | [number, number], clicks: number) {
   return Array.isArray(thisClick)
     ? thisClick[0] === clicks
     : thisClick === clicks
 }
 
-export function resolveClick(el: Element, dir: DirectiveBinding<any>, value: VClickValue, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
-  const ctx = dirInject(dir, injectionClicksContext)?.value
+export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: VClickValue, provideVisibility = false, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
+  const ctx = directiveInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx)
     return null
@@ -152,29 +153,47 @@ export function resolveClick(el: Element, dir: DirectiveBinding<any>, value: VCl
   if (Array.isArray(value)) {
     // range (absolute)
     delta = 0
-    thisClick = value as [number, number]
+    thisClick = [+value[0], +value[1]]
     maxClick = +value[1]
   }
   else {
     ({ start: thisClick, end: maxClick, delta } = ctx.resolve(value))
   }
 
+  const isActive = computed(() => isClickActive(thisClick, ctx.current))
+  const isCurrent = computed(() => isClickCurrent(thisClick, ctx.current))
+  const isShown = computed(() => flagHide ? !isActive.value : isActive.value)
+
   const resolved: ResolvedClicksInfo = {
     max: maxClick,
     clicks: thisClick,
     delta,
-    isActive: computed(() => isActive(thisClick, ctx.current)),
-    isCurrent: computed(() => isCurrent(thisClick, ctx.current)),
-    isShown: computed(() => flagHide ? !isActive(thisClick, ctx.current) : isActive(thisClick, ctx.current)),
+    isActive,
+    isCurrent,
+    isShown,
     flagFade,
     flagHide,
   }
   ctx.register(el, resolved)
+
+  if (provideVisibility) {
+    directiveProvide(dir, injectionClickVisibility, computed(() => {
+      if (isShown.value)
+        return true
+      if (Array.isArray(thisClick))
+        return ctx.current < thisClick[0] ? 'before' : 'after'
+      else
+        return flagHide ? 'after' : 'before'
+    }))
+  }
+
   return resolved
 }
 
 function unmounted(el: HTMLElement, dir: DirectiveBinding<any>) {
   el.classList.toggle(CLASS_VCLICK_TARGET, false)
-  const ctx = dirInject(dir, injectionClicksContext)?.value
+  const ctx = directiveInject(dir, injectionClicksContext)?.value
   ctx?.unregister(el)
+  // @ts-expect-error extra prop
+  el.watchStopHandle?.()
 }

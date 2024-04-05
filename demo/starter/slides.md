@@ -374,8 +374,6 @@ also allows you to add
 </div>
 
 ---
-preload: false
----
 
 # Motions
 
@@ -385,18 +383,21 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
 <div
   v-motion
   :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
+  :enter="{ x: 0 }"
+  :click-3="{ x: 80 }"
+  :leave="{ x: 1000 }"
+>
   Slidev
 </div>
 ```
 
-<div class="w-60 relative mt-6">
+<div class="w-60 relative">
   <div class="relative w-40 h-40">
     <img
       v-motion
       :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-square.png"
       alt=""
     />
@@ -404,7 +405,7 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
       v-motion
       :initial="{ y: 500, x: -100, scale: 2 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-circle.png"
       alt=""
     />
@@ -412,7 +413,7 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
       v-motion
       :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-triangle.png"
       alt=""
     />
@@ -445,7 +446,7 @@ const final = {
 
 <div
   v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
+  :initial="{ x:35, y: 30, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
 
 [Learn More](https://sli.dev/guide/animations.html#motion)
