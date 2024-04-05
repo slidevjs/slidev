@@ -6,7 +6,7 @@ import { computed, ref, watch } from 'vue'
 import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionSlideElement, injectionSlideScale, injectionSlideZoom } from '../constants'
 import { makeId } from '../logic/utils'
 import { activeDragElement } from '../state'
-import { dirInject } from '../modules/v-click'
+import { directiveInject } from '../utils'
 import { useSlideBounds } from './useSlideBounds'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
@@ -113,7 +113,7 @@ export function useDragElementsUpdater(no: number) {
 export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource) {
   function inject<T>(key: InjectionKey<T> | string): T | undefined {
     return directive
-      ? dirInject(directive, key)
+      ? directiveInject(directive, key)
       : injectLocal(key)
   }
 
