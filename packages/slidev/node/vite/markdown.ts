@@ -7,6 +7,7 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
+import { SourceMapConsumer } from 'source-map-js'
 import MagicString from 'magic-string'
 
 // @ts-expect-error missing types
@@ -95,6 +96,8 @@ export async function createMarkdownPlugin(
 
   const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
 
+  const sourceMapConsumers: Record<string, SourceMapConsumer> = {}
+
   return Markdown({
     include: [/\.md$/],
     wrapperClasses: '',
@@ -120,7 +123,7 @@ export async function createMarkdownPlugin(
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
       md.use(MarkdownItKatex, KatexOptions)
-      md.use(MarkdownItVDrag)
+      md.use(MarkdownItVDrag, sourceMapConsumers)
 
       setups.forEach(i => i(md))
       mdOptions?.markdownItSetup?.(md)
@@ -154,6 +157,7 @@ export async function createMarkdownPlugin(
         transformPageCSS(ctx, id)
         transformSlotSugar(ctx)
 
+        sourceMapConsumers[id] = new SourceMapConsumer(ctx.s.generateMap())
         return ctx.s.toString()
       },
     },
