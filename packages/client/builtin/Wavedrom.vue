@@ -1,14 +1,17 @@
 <!--
-Mermaid
+Wavedrom
 (auto transformed, you don't need to use this component directly)
 
 Usage:
 
-```mermaid
-pie
-"Dogs" : 386
-"Cats" : 85
-"Rats" : 15
+```wavedrom
+{signal: [
+  {name: 'clk', wave: 'p.....|...'},
+  {name: 'dat', wave: 'x.345x|=.x', data: ['head', 'body', 'tail', 'data']},
+  {name: 'req', wave: '0.1..0|1.0'},
+  {},
+  {name: 'ack', wave: '1.....|01.'}
+]}
 ```
 -->
 
