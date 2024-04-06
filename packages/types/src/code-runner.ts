@@ -11,6 +11,10 @@ export interface CodeRunnerContext {
    */
   highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
   /**
+   * Resolve the import path of a module.
+   */
+  resolveId: (specifer: string) => Promise<string | null>
+  /**
    * Use (other) code runner to run code.
    */
   run: (code: string, lang: string) => Promise<CodeRunnerOutputs>
