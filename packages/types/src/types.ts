@@ -62,6 +62,7 @@ export interface SlidevFeatureFlags {
   monaco: boolean
   tweet: boolean
   mermaid: boolean
+  wavedrom: boolean
 }
 
 export interface SlidevMarkdown {

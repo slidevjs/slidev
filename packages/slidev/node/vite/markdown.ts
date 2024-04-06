@@ -21,7 +21,7 @@ import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 
 import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
-import { transformCodeWrapper, transformKaTexWrapper, transformMagicMove, transformMermaid, transformMonaco, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../syntax/transform'
+import { transformCodeWrapper, transformKaTexWrapper, transformMagicMove, transformMermaid, transformMonaco, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet, transformWavedrom } from '../syntax/transform'
 import { escapeVueInCode } from '../syntax/transform/utils'
 
 let shiki: Highlighter | undefined
@@ -144,6 +144,7 @@ export async function createMarkdownPlugin(
           transformMagicMove(ctx, shiki, shikiOptions)
 
         transformMermaid(ctx)
+        transformWavedrom(ctx)
         transformPlantUml(ctx, config.plantUmlServer)
         transformMonaco(ctx, monacoEnabled)
         transformCodeWrapper(ctx)

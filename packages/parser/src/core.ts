@@ -73,6 +73,7 @@ export function detectFeatures(code: string): SlidevFeatureFlags {
     monaco: !!code.match(/{monaco.*}/),
     tweet: !!code.match(/<Tweet\b/),
     mermaid: !!code.match(/^```mermaid/m),
+    wavedrom: !!code.match(/^```wavedrom/m),
   }
 }
 

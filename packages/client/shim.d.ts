@@ -11,3 +11,23 @@ declare module 'mermaid/dist/mermaid.esm.mjs' {
 
   export default Mermaid
 }
+
+declare module 'wavedrom' {
+  export function renderAny(number, string, unknown): any[]
+}
+
+declare module 'wavedrom/skins/default' {
+  export default unknown
+}
+
+declare module 'wavedrom/skins/narrow' {
+  export const narrow: unknown
+}
+
+declare module 'wavedrom/skins/lowkey' {
+  export const lowkey: unknown
+}
+
+declare module 'onml' {
+  export function s(value: unknown): string
+}
