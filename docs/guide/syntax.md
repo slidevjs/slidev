@@ -674,6 +674,40 @@ C -->|Two| E[Result 2]
 
 Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-js.github.io/mermaid)
 
+## Waveforms
+
+You can also create waveforms from textual descriptions in your Markdown, powered by [Wavedrom](https://wavedrom.com/).
+
+Code blocks marked as `wavedrom` will be converted to waveforms, for example:
+
+````md
+```wavedrom
+{signal: [
+  {name: 'clk', wave: 'p.....|...'},
+  {name: 'dat', wave: 'x.345x|=.x', data: ['head', 'body', 'tail', 'data']},
+  {name: 'req', wave: '0.1..0|1.0'},
+  {},
+  {name: 'ack', wave: '1.....|01.'}
+]}
+```
+````
+
+You can further pass an options object to it to specify the scaling. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
+
+````md
+```wavedrom {scale: 0.8}
+{signal: [
+  {name: 'clk', wave: 'p.....|...'},
+  {name: 'dat', wave: 'x.345x|=.x', data: ['head', 'body', 'tail', 'data']},
+  {name: 'req', wave: '0.1..0|1.0'},
+  {},
+  {name: 'ack', wave: '1.....|01.'}
+]}
+```
+````
+
+Learn more: [Demo](https://sli.dev/demo/starter/15) | [Wavedrom](https://wavedrom.com/tutorial.html)
+
 ## Multiple Entries
 
 > Available since v0.15
