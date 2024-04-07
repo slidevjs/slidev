@@ -676,6 +676,8 @@ Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-
 
 ## Waveforms
 
+> Available since v0.48.9
+
 You can also create waveforms from textual descriptions in your Markdown, powered by [Wavedrom](https://wavedrom.com/).
 
 Code blocks marked as `wavedrom` will be converted to waveforms, for example:
