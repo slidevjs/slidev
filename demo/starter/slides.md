@@ -568,7 +568,7 @@ hide: false
 
 # Monaco Editor
 
-Slidev provides built-in Moanco Editor support.
+Slidev provides built-in Monaco Editor support.
 
 Add `{monaco}` to the code block to turn it into an editor:
 
