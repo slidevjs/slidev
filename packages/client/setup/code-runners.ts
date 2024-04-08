@@ -181,7 +181,7 @@ export async function runTypeScript(code: string, context: CodeRunnerContext) {
       target: tsModule.ScriptTarget.ES2022,
     },
     transformers: {
-      after: [transfromImports],
+      after: [transformImports],
     },
   }).outputText
 
@@ -197,7 +197,7 @@ export async function runTypeScript(code: string, context: CodeRunnerContext) {
 /**
  * Transform import statements to dynamic imports
  */
-function transfromImports(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
+function transformImports(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
   const { factory } = context
   const { isImportDeclaration, isNamedImports, NodeFlags } = tsModule!
   return (sourceFile: ts.SourceFile) => {
