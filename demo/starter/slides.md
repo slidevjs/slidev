@@ -576,20 +576,21 @@ Add `{monaco}` to the code block to turn it into an editor:
 import { ref } from 'vue'
 import hello from './external'
 
-const code = ref('const a = 1')
-hello()
+const code = ref(hello())
 ```
 
 Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
 
 ```ts {monaco-run}
+import { version } from 'vue'
+
 function fibonacci(n: number): number {
   return n <= 1
     ? n
     : fibonacci(n - 1) + fibonacci(n - 2) // you know, this is NOT the best way to do it :P
 }
 
-console.log(Array.from({ length: 10 }, (_, i) => fibonacci(i + 1)))
+console.log(version, Array.from({ length: 10 }, (_, i) => fibonacci(i + 1)))
 ```
 
 ---
