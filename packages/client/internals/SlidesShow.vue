@@ -74,7 +74,6 @@ function onAfterLeave() {
       :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
       :route="route"
       :render-context="renderContext"
-      class="overflow-hidden"
     />
   </component>
 
