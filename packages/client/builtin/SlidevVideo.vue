@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useSlideContext } from '../context'
+import { resolvedClickMap } from '../modules/v-click'
 
 const props = defineProps<{
   autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
@@ -28,7 +29,7 @@ const matchRoute = computed(() => {
 const matchClick = computed(() => {
   if (!video.value || currentContext?.value !== 'slide' || !clicks)
     return false
-  return clicks.map.get(video.value)?.isShown?.value ?? true
+  return resolvedClickMap.get(video.value)?.isShown.value ?? true
 })
 
 const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)

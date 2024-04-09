@@ -58,10 +58,10 @@ onMounted(() => {
   if (!clicks || !props.ranges?.length)
     return
 
-  const { start, end, delta } = clicks.resolve(props.at, props.ranges.length - 1)
-  clicks.register(id, { max: end, delta })
+  const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
+  clicks.register(id, clicksInfo)
 
-  const index = computed(() => Math.max(0, clicks.current - start + 1))
+  const index = computed(() => Math.max(0, clicks.current - clicksInfo.start + 1))
 
   const finallyRange = computed(() => {
     return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()

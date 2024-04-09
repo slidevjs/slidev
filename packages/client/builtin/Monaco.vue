@@ -16,6 +16,7 @@ import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
 import type * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
+import type { RawAtValue } from '@slidev/types'
 import { makeId } from '../logic/utils'
 import CodeRunner from '../internals/CodeRunner.vue'
 
@@ -30,6 +31,7 @@ const props = withDefaults(defineProps<{
   ata?: boolean
   runnable?: boolean
   autorun?: boolean | 'once'
+  showOutputAt?: RawAtValue
   outputHeight?: string
   highlightOutput?: boolean
   runnerOptions?: Record<string, unknown>
@@ -165,6 +167,7 @@ onMounted(async () => {
       v-model="code"
       :lang="lang"
       :autorun="props.autorun"
+      :show-output-at="props.showOutputAt"
       :height="props.outputHeight"
       :highlight-output="props.highlightOutput"
       :runner-options="props.runnerOptions"
