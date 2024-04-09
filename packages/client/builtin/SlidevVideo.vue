@@ -1,98 +1,78 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { and } from '@vueuse/math'
 import { useSlideContext } from '../context'
 import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
-  autoPlay?: boolean | 'once' | 'resume' | 'resumeOnce'
-  autoPause?: 'slide' | 'click'
-  autoReset?: 'slide' | 'click'
-  imgToPrint?: string
-  timeToPrint?: string | number | 'last'
+  autoplay?: boolean | 'once'
+  autoreset?: 'slide' | 'click'
+  poster?: string
+  printPoster?: string
+  timestamp?: string | number
+  printTimestamp?: string | number | 'last'
+  controls?: boolean
 }>()
+
+const printPoster = computed(() => props.printPoster ?? props.poster)
+const printTimestamp = computed(() => props.printTimestamp ?? props.timestamp ?? 0)
 
 const {
   $slidev,
-  $clicksContext: clicks,
-  $renderContext: currentContext,
-  $route: route,
+  $clicksContext,
+  $renderContext,
+  $route,
 } = useSlideContext()
 const { isPrintMode } = useNav()
 
+const noPlay = computed(() => isPrintMode.value || !['slide', 'presenter'].includes($renderContext.value))
+
 const video = ref<HTMLMediaElement>()
 const played = ref(false)
-const ended = ref(false)
-
-const matchRoute = computed(() => {
-  if (!video.value || currentContext?.value !== 'slide')
-    return false
-  return route && route.no === $slidev?.nav.currentSlideNo
-})
-
-const matchClick = computed(() => {
-  if (!video.value || currentContext?.value !== 'slide' || clicks?.disabled || clicks?.current === undefined)
-    return false
-  return clicks.map.get(video.value)?.isShown?.value ?? true
-})
-
-const matchRouteAndClick = computed(() => matchRoute.value && matchClick.value)
-
-watch(matchRouteAndClick, () => {
-  if (!video.value || currentContext?.value !== 'slide')
-    return
-
-  if (matchRouteAndClick.value) {
-    if (props.autoReset === 'click')
-      video.value.currentTime = 0
-    if (!isPrintMode.value && props.autoPlay && (!played.value || props.autoPlay === 'resume' || (props.autoPlay === 'resumeOnce' && !ended.value)))
-      video.value.play()
-  }
-
-  if ((props.autoPause === 'click' && !matchRouteAndClick.value) || (props.autoPause === 'slide' && !matchRoute.value))
-    video.value.pause()
-})
-
-watch(matchRoute, () => {
-  if (!video.value || currentContext?.value !== 'slide')
-    return
-
-  if (matchRoute.value && props.autoReset === 'slide')
-    video.value.currentTime = 0
-})
-
-function onPlay() {
-  played.value = true
-}
-
-function onEnded() {
-  ended.value = true
-}
 
 onMounted(() => {
-  if (!video.value || currentContext?.value !== 'slide')
+  if (noPlay.value)
     return
-  video.value.addEventListener('play', onPlay)
-  video.value.addEventListener('ended', onEnded)
-  if (isPrintMode.value && !props.imgToPrint) {
-    video.value.addEventListener('loadedmetadata', () => {
-      video.value!.currentTime = !props.timeToPrint || props.timeToPrint === 'last'
-        ? video.value!.duration - 0.1
-        : +props.timeToPrint
-    })
-  }
+
+  const timestamp = +(props.timestamp ?? 0)
+  video.value!.currentTime = timestamp
+
+  const matchRoute = computed(() => !!$route && $route.no === $slidev?.nav.currentSlideNo)
+  const matchClick = computed(() => !!video.value && ($clicksContext.map.get(video.value)?.isShown?.value ?? true))
+  const matchRouteAndClick = and(matchRoute, matchClick)
+
+  watch(matchRouteAndClick, () => {
+    if (matchRouteAndClick.value) {
+      if (props.autoplay === true || (props.autoplay === 'once' && !played.value))
+        video.value!.play()
+    }
+    else {
+      video.value!.pause()
+      if (props.autoreset === 'click' || (props.autoreset === 'slide' && !matchRoute.value))
+        video.value!.currentTime = timestamp
+    }
+  }, { immediate: true })
 })
 
-onUnmounted(() => {
-  if (!video.value || currentContext?.value !== 'slide')
-    return
-  video.value?.removeEventListener('play', onPlay)
-  video.value?.removeEventListener('ended', onEnded)
-})
+function onLoadedMetadata(ev: Event) {
+  // The video may be loaded before component mounted
+  const element = ev.target as HTMLMediaElement
+  if (noPlay.value && (!printPoster.value || props.printTimestamp)) {
+    element.currentTime = printTimestamp.value === 'last'
+      ? element.duration
+      : +printTimestamp.value
+  }
+}
 </script>
 
 <template>
-  <video v-if="!isPrintMode || !props.imgToPrint" ref="video">
+  <video
+    ref="video"
+    :poster="noPlay ? printPoster : props.poster"
+    :controls="!noPlay && props.controls"
+    @play="played = true"
+    @loadedmetadata="onLoadedMetadata"
+  >
     <slot />
   </video>
-  <img v-else :src="props.imgToPrint">
 </template>

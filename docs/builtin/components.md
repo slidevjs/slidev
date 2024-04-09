@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # Components
 
 ## Built-in Components
@@ -277,23 +281,25 @@ Check [HTML video element's doc](https://developer.mozilla.org/docs/Web/HTML/Ele
 
 Parameters:
 
-- `autoPlay` (`boolean | 'once' | 'resume' | 'resumeOnce'`, default: `false`):
+- `controls` (`boolean`, default: `false`): show the video controls
+- `autoplay` (`boolean | 'once'`, default: `false`):
   - `true` or `'once'`: start the video only once and does not restart it once ended or paused
-  - `false`: never automatically start the video (rely on html5 controls instead)
-  - `'resume'` resume the video when going back to its click turn
-  - `'resumeOnce'` only resume it if it hasn't ended
-- `autoPause` (`'slide' | 'click'`, default: `undefined`):
-  - `'slide'`: pause the video on slide change
-  - `'click'`: pause on next click
-- `autoReset` (`'slide' | 'click'`, default: `undefined`):
+  - `false`: never automatically start the video (rely on `controls` instead)
+- `autoreset` (`'slide' | 'click'`, default: `undefined`):
   - `'slide'`: go back to the start of the video when going back to the slide
   - `'click'`: go back to the start of the video when going back to the component's click turn
-- `imgToPrint` (`string`, default: `undefined`):
-  - The source of the image to print instead of the video.
-- `timeToPrint` (`string | number | 'last'`, default: `'last'`):
-  > Only works when `imgToPrint` is not set.
-  - `string | number`: time in seconds to jump to when printing
-  - `'last'`: jump to the last second of the video when printing
+- `poster` (`string | undefined`, default: `undefined`):
+  - The source of the image to print when the video is not playing.
+- `printPoster` (`string | undefined`, default: `undefined`):
+  - The override for `poster` when printing.
+- `timestamp` (`string | number`, default: `0`):
+  - The starting time of the video in seconds.
+- `printTimestamp` (`string | number | 'last' | undefined`, default: `undefined`):
+  - The override for `timestamp` when printing.
+
+::: warning
+When exporting, the video may fail to load because Chromium does not support some video formats. In this case, you can specify the executable path of the browser. See [Chromium executable path](/guide/exporting.html#executable-path) for more information.
+:::
 
 ### `Youtube`
 
