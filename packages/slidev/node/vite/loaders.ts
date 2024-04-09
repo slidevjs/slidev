@@ -172,6 +172,18 @@ export function createSlidesLoader(
 
           next()
         })
+
+        server.middlewares.use(async (req, res, next) => {
+          const match = req.url?.match(/^\/\@slidev\/resolve-id\/(.*)$/)
+          if (!match)
+            return next()
+
+          const [, specifier] = match
+          const resolved = await server!.pluginContainer.resolveId(specifier)
+          res.statusCode = 200
+          res.write(resolved?.id ?? '')
+          return res.end()
+        })
       },
 
       async handleHotUpdate(ctx) {

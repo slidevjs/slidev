@@ -7,6 +7,7 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
+import MagicString from 'magic-string'
 
 // @ts-expect-error missing types
 import MarkdownItAttrs from 'markdown-it-link-attributes'
@@ -14,7 +15,7 @@ import MarkdownItAttrs from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
+import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 
@@ -129,19 +130,29 @@ export async function createMarkdownPlugin(
 
         const monacoEnabled = (config.monaco === true || config.monaco === mode)
 
+        const ctx: MarkdownTransformContext = {
+          s: new MagicString(code),
+          ignores: [],
+          isIgnored(index) {
+            return index < 0 || ctx.ignores.some(([start, end]) => start <= index && index < end)
+          },
+        }
+
+        transformSnippet(ctx, options, id)
+
         if (config.highlighter === 'shiki')
-          code = transformMagicMove(code, shiki, shikiOptions)
+          transformMagicMove(ctx, shiki, shikiOptions)
 
-        code = transformSlotSugar(code)
-        code = transformSnippet(code, options, id)
-        code = transformMermaid(code)
-        code = transformPlantUml(code, config.plantUmlServer)
-        code = transformMonaco(code, monacoEnabled)
-        code = transformCodeWrapper(code)
-        code = transformPageCSS(code, id)
-        code = transformKaTexWrapper(code)
+        transformMermaid(ctx)
+        transformPlantUml(ctx, config.plantUmlServer)
+        transformMonaco(ctx, monacoEnabled)
+        transformCodeWrapper(ctx)
+        transformKaTexWrapper(ctx)
 
-        return code
+        transformPageCSS(ctx, id)
+        transformSlotSugar(ctx)
+
+        return ctx.s.toString()
       },
     },
   }) as Plugin

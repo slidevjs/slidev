@@ -21,6 +21,9 @@ h1 {
 }
 </style>
 
+
+<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+
 \`\`\`css
 <style>
 h1 {
@@ -28,6 +31,8 @@ h1 {
 }
 </style>
 \`\`\`
+
+</CodeBlockWrapper>
 "
 `;
 
@@ -71,11 +76,16 @@ Default Slot
 <template v-slot:code="slotProps">
 
 
+
+<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+
 \`\`\`md
 Slot Usage
 ::right::
 ::left::
 \`\`\`
+
+</CodeBlockWrapper>
 
 
 
