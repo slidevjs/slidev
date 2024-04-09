@@ -1,13 +1,14 @@
-import { createSingletonPromise } from '@antfu/utils'
+import { createSingletonPromise, ensurePrefix, slash } from '@antfu/utils'
 import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
+import type ts from 'typescript'
 import { isDark } from '../logic/dark'
 import setups from '#slidev/setups/code-runners'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {
-    javascript: runJavaScript,
-    js: runJavaScript,
+    javascript: runTypeScript,
+    js: runTypeScript,
     typescript: runTypeScript,
     ts: runTypeScript,
   }
@@ -24,6 +25,18 @@ export default createSingletonPromise(async () => {
     ...options,
   })
 
+  const resolveId = async (specifier: string) => {
+    if (!/^(@[^\/:]+?\/)?[^\/:]+$/.test(specifier))
+      return specifier
+    const res = await fetch(`/@slidev/resolve-id/${specifier}`)
+    if (!res.ok)
+      return null
+    const id = await res.text()
+    if (!id)
+      return null
+    return `/@fs${ensurePrefix('/', slash(id))}`
+  }
+
   const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {
       const runner = runners[lang]
@@ -34,6 +47,7 @@ export default createSingletonPromise(async () => {
         {
           options,
           highlight,
+          resolveId,
           run: async (code, lang) => {
             return await run(code, lang, options)
           },
@@ -60,7 +74,7 @@ export default createSingletonPromise(async () => {
 })
 
 // Ported from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/playground/src/sidebar/runtime.ts
-export async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
+async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
   const allLogs: CodeRunnerOutput[] = []
 
   const replace = {} as any
@@ -144,9 +158,13 @@ export async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
     return textRep
   }
 
-  // The reflect-metadata runtime is available, so allow that to go through
   function sanitizeJS(code: string) {
-    return code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
+    // The reflect-metadata runtime is available, so allow that to go through
+    code = code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
+    // Transpiled typescript sometimes contains an empty export, remove it.
+    code = code.replace('export {};', '')
+
+    return code
   }
 
   return allLogs
@@ -155,10 +173,80 @@ export async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
 let tsModule: typeof import('typescript') | undefined
 
 export async function runTypeScript(code: string, context: CodeRunnerContext) {
-  const { transpile } = tsModule ??= await import('typescript')
-  code = transpile(code, {
-    module: tsModule.ModuleKind.ESNext,
-    target: tsModule.ScriptTarget.ES2022,
-  })
-  return await context.run(code, 'javascript')
+  tsModule ??= await import('typescript')
+
+  code = tsModule.transpileModule(code, {
+    compilerOptions: {
+      module: tsModule.ModuleKind.ESNext,
+      target: tsModule.ScriptTarget.ES2022,
+    },
+    transformers: {
+      after: [transformImports],
+    },
+  }).outputText
+
+  const importRegex = /import\s*\(\s*(['"])(.+?)['"]\s*\)/g
+  const idMap: Record<string, string> = {}
+  for (const [,,specifier] of code.matchAll(importRegex)!)
+    idMap[specifier] = await context.resolveId(specifier) ?? specifier
+  code = code.replace(importRegex, (_full, quote, specifier) => `import(${quote}${idMap[specifier] ?? specifier}${quote})`)
+
+  return await runJavaScript(code)
+}
+
+/**
+ * Transform import statements to dynamic imports
+ */
+function transformImports(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
+  const { factory } = context
+  const { isImportDeclaration, isNamedImports, NodeFlags } = tsModule!
+  return (sourceFile: ts.SourceFile) => {
+    const statements = [...sourceFile.statements]
+    for (let i = 0; i < statements.length; i++) {
+      const statement = statements[i]
+      if (!isImportDeclaration(statement))
+        continue
+      let bindingPattern: ts.ObjectBindingPattern | ts.Identifier
+      const namedBindings = statement.importClause?.namedBindings
+      const bindings: ts.BindingElement[] = []
+      if (statement.importClause?.name)
+        bindings.push(factory.createBindingElement(undefined, factory.createIdentifier('default'), statement.importClause.name))
+      if (namedBindings) {
+        if (isNamedImports(namedBindings)) {
+          for (const specifier of namedBindings.elements)
+            bindings.push(factory.createBindingElement(undefined, specifier.propertyName, specifier.name))
+          bindingPattern = factory.createObjectBindingPattern(bindings)
+        }
+        else {
+          bindingPattern = factory.createIdentifier(namedBindings.name.text)
+        }
+      }
+      else {
+        bindingPattern = factory.createObjectBindingPattern(bindings)
+      }
+
+      const newStatement = factory.createVariableStatement(
+        undefined,
+        factory.createVariableDeclarationList(
+          [
+            factory.createVariableDeclaration(
+              bindingPattern,
+              undefined,
+              undefined,
+              factory.createAwaitExpression(
+                factory.createCallExpression(
+                  factory.createIdentifier('import'),
+                  undefined,
+                  [statement.moduleSpecifier],
+                ),
+              ),
+            ),
+          ],
+          NodeFlags.Const,
+        ),
+      )
+      statements[i] = newStatement
+    }
+    return factory.updateSourceFile(sourceFile, statements)
+  }
 }

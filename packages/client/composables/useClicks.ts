@@ -1,4 +1,4 @@
-import { sum } from '@antfu/utils'
+import { clamp, sum } from '@antfu/utils'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
 import { ref, shallowReactive } from 'vue'
@@ -7,25 +7,24 @@ import { routeForceRefresh } from '../logic/route'
 
 export function createClicksContextBase(
   current: Ref<number>,
-  clicksOverrides?: number,
-  isDisabled?: () => boolean,
+  clicksStart = 0,
+  clicksTotalOverrides?: number,
 ): ClicksContext {
   const relativeOffsets: ClicksContext['relativeOffsets'] = new Map()
   const map: ClicksContext['map'] = shallowReactive(new Map())
 
   return {
-    get disabled() {
-      return isDisabled ? isDisabled() : false
-    },
     get current() {
-      return +current.value
+      // Here we haven't know clicksTotal yet.
+      return clamp(+current.value, clicksStart, this.total)
     },
     set current(value) {
-      current.value = +value
+      current.value = clamp(+value, clicksStart, this.total)
     },
+    clicksStart,
     relativeOffsets,
     map,
-    onMounted() {},
+    onMounted() { },
     resolve(at, size = 1) {
       const [isRelative, value] = normalizeAtProp(at)
       if (isRelative) {
@@ -60,7 +59,7 @@ export function createClicksContextBase(
     get total() {
       // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
-      return clicksOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
+      return clicksTotalOverrides ?? Math.max(0, ...[...map.values()].map(v => v.max || 0))
     },
   }
 }
@@ -68,7 +67,11 @@ export function createClicksContextBase(
 export function createFixedClicks(
   route?: SlideRoute | undefined,
   currentInit = 0,
-  isDisabled?: () => boolean,
 ): ClicksContext {
-  return createClicksContextBase(ref(currentInit), route?.meta?.clicks, isDisabled)
+  const clicksStart = route?.meta.slide?.frontmatter.clicksStart ?? 0
+  return createClicksContextBase(
+    ref(Math.max(currentInit, clicksStart)),
+    clicksStart,
+    route?.meta?.clicks,
+  )
 }

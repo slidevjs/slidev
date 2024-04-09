@@ -159,6 +159,14 @@ For big presentations you might want to increase the Playwright timeout with `--
 $ slidev export --timeout 60000
 ```
 
+### Wait
+
+Some parts of your slides may require a longer time to render. You can use the `--wait` option to have an extra delay before exporting.
+
+```bash
+$ slidev export --wait 10000
+```
+
 ### Executable path
 
 Chromium may miss some features like codecs that are required to decode some videos. You can set the browser executable path for Playwright to your Chrome or Edge using `--executable-path`:

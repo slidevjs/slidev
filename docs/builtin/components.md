@@ -123,7 +123,7 @@ routeAlias: solutions
 
 ### `RenderWhen`
 
-Render slot only when the context matches (for example when we are in presenter view).
+Render slots depending on whether the context matches (for example whether we are in presenter view).
 
 #### Usage
 
@@ -131,11 +131,24 @@ Render slot only when the context matches (for example when we are in presenter 
 <RenderWhen context="presenter">This will only be rendered in presenter view.</RenderWhen>
 ```
 
-Context type: `'main' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
+Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
 
 Parameters:
 
-- `context` (`Context | Context[]`): context or array of contexts you want the slot to be rendered
+- `context` (`Context | Context[]`): a context or array of contexts you want to check for
+  - `'main'`: Render in slides and presenter view (equivalent to ['slide', 'presenter']),
+  - `'visible'`: Render the content if it is visible
+  - `'print'`: Render in print mode
+  - `'slide'`: Render in slides
+  - `'overview'`: Render in overview
+  - `'presenter'`: Render in presenter view
+  - `'previewNext'`: Render in presenter's next slide view
+  - `'previewPrevious'`: Render in presenter's previous slide view
+
+Slots:
+
+- `#default`: Rendered when the context matches
+- `#fallback`: Rendered when the context does not match
 
 ### `SlideCurrentNo`
 
@@ -157,7 +170,7 @@ Total number of slides.
 <SlidesTotal />
 ```
 
-### `Titles`
+### `TitleRenderer`
 
 Insert the main title from a slide parsed as HTML.
 

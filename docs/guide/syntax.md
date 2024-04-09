@@ -359,13 +359,13 @@ For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com
 ![Remote Image](https://sli.dev/favicon.png)
 ```
 
-For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash**.
+For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash** (i.e., `/pic.png`, NOT `./pic.png`, which is relative to the working file).
 
 ```md
 ![Local Image](/pic.png)
 ```
 
-If you want to apply custom sizes or styles, you can convert them to the `<img>` tag
+If you want to apply custom sizes or styles, you can convert them to the `<img>` tag:
 
 ```html
 <img src="/pic.png" class="m-40 h-40 rounded shadow" />
@@ -603,7 +603,7 @@ $$
 $$
 ```
 
-Learn more: [Demo](https://sli.dev/demo/starter/8) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex)
+Learn more: [Demo](https://sli.dev/demo/starter/11) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex)
 
 ### LaTex line highlighting
 
@@ -626,7 +626,7 @@ The `at` and `finally` options of [code blocks](#line-highlighting) are also ava
 
 ### Chemical equations
 
-To enable the redering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
+To enable the rendering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
 KaTeX extension needs to be loaded.
 
 Create `vite.config.ts` with the following content:
@@ -672,7 +672,7 @@ C -->|Two| E[Result 2]
 ```
 ````
 
-Learn more: [Demo](https://sli.dev/demo/starter/9) | [Mermaid](https://mermaid-js.github.io/mermaid)
+Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-js.github.io/mermaid)
 
 ## Multiple Entries
 

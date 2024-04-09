@@ -121,7 +121,8 @@ export function createVMarkDirective() {
             return
           }
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             let shouldShow: boolean | undefined
 
             if (options.value.class)
@@ -146,6 +147,11 @@ export function createVMarkDirective() {
             else
               annotation.hide()
           })
+        },
+
+        unmounted: (el) => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle?.()
         },
       })
     },

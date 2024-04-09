@@ -1,8 +1,10 @@
 import path from 'node:path'
 import { Buffer } from 'node:buffer'
+import process from 'node:process'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
+import { clearUndefined } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
@@ -20,6 +22,7 @@ export interface ExportOptions {
   format?: 'pdf' | 'png' | 'md'
   output?: string
   timeout?: number
+  wait?: number
   dark?: boolean
   routerMode?: 'hash' | 'history'
   width?: number
@@ -67,6 +70,7 @@ export interface ExportNotesOptions {
   base?: string
   output?: string
   timeout?: number
+  wait?: number
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -110,6 +114,7 @@ export async function exportNotes({
   base = '/',
   output = 'notes',
   timeout = 30000,
+  wait = 0,
 }: ExportNotesOptions): Promise<string> {
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch()
@@ -126,6 +131,9 @@ export async function exportNotes({
   await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
   await page.waitForLoadState('networkidle')
   await page.emulateMedia({ media: 'screen' })
+
+  if (wait)
+    await page.waitForTimeout(wait)
 
   await page.pdf({
     path: output,
@@ -154,6 +162,7 @@ export async function exportSlides({
   slides,
   base = '/',
   timeout = 30000,
+  wait = 0,
   dark = false,
   routerMode = 'history',
   width = 1920,
@@ -182,7 +191,17 @@ export async function exportSlides({
   const progress = createSlidevProgress(!perSlide)
 
   async function go(no: number | string, clicks?: string) {
-    const path = `${no}?print${withClicks ? '=clicks' : ''}${clicks ? `&clicks=${clicks}` : ''}${range ? `&range=${range}` : ''}`
+    const query = new URLSearchParams()
+    if (withClicks)
+      query.set('print', 'clicks')
+    else
+      query.set('print', 'true')
+    if (range)
+      query.set('range', range)
+    if (clicks)
+      query.set('clicks', clicks)
+
+    const path = `${no}?${query.toString()}`
     const url = routerMode === 'hash'
       ? `http://localhost:${port}${base}#${path}`
       : `http://localhost:${port}${base}${path}`
@@ -192,22 +211,32 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+    const slide = no === 'print'
+      ? page.locator('body')
+      : page.locator(`[data-slidev-no="${no}"]`)
+    await slide.waitFor()
+
     // Wait for slides to be loaded
     {
-      const elements = page.locator('.slidev-slide-loading')
+      const elements = slide.locator('.slidev-slide-loading')
       const count = await elements.count()
       for (let index = 0; index < count; index++)
         await elements.nth(index).waitFor({ state: 'detached' })
     }
     // Check for "data-waitfor" attribute and wait for given element to be loaded
     {
-      const elements = page.locator('[data-waitfor]')
+      const elements = slide.locator('[data-waitfor]')
       const count = await elements.count()
       for (let index = 0; index < count; index++) {
         const element = elements.nth(index)
         const attribute = await element.getAttribute('data-waitfor')
-        if (attribute)
-          await element.locator(attribute).waitFor()
+        if (attribute) {
+          await element.locator(attribute).waitFor({ state: 'visible' })
+            .catch((e) => {
+              console.error(e)
+              process.exitCode = 1
+            })
+        }
       }
     }
     // Wait for frames to load
@@ -217,24 +246,30 @@ export async function exportSlides({
     }
     // Wait for Mermaid graphs to be rendered
     {
-      const container = page.locator('#mermaid-rendering-container')
-      while (true) {
-        const element = container.locator('div').first()
-        if (await element.count() === 0)
-          break
-        await element.waitFor({ state: 'detached' })
+      const container = slide.locator('#mermaid-rendering-container')
+      const count = await container.count()
+      if (count > 0) {
+        while (true) {
+          const element = container.locator('div').first()
+          if (await element.count() === 0)
+            break
+          await element.waitFor({ state: 'detached' })
+        }
+        await container.evaluate(node => node.style.display = 'none')
       }
-      await container.evaluate(node => node.style.display = 'none')
     }
     // Hide Monaco aria container
     {
-      const elements = page.locator('.monaco-aria-container')
+      const elements = slide.locator('.monaco-aria-container')
       const count = await elements.count()
       for (let index = 0; index < count; index++) {
         const element = elements.nth(index)
         await element.evaluate(node => node.style.display = 'none')
       }
     }
+    // Wait for the given time
+    if (wait)
+      await page.waitForTimeout(wait)
   }
 
   async function getSlidesIndex() {
@@ -466,16 +501,19 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
   const config = {
     ...options.data.config.export,
     ...args,
-    withClicks: args['with-clicks'],
-    executablePath: args['executable-path'],
-    withToc: args['with-toc'],
-    perSlide: args['per-slide'],
+    ...clearUndefined({
+      withClicks: args['with-clicks'],
+      executablePath: args['executable-path'],
+      withToc: args['with-toc'],
+      perSlide: args['per-slide'],
+    }),
   }
   const {
     entry,
     output,
     format,
     timeout,
+    wait,
     range,
     dark,
     withClicks,
@@ -494,6 +532,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     range,
     format: (format || 'pdf') as 'pdf' | 'png' | 'md',
     timeout: timeout ?? 30000,
+    wait: wait ?? 0,
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
