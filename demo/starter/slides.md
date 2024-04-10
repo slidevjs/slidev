@@ -562,20 +562,24 @@ database "MySql" {
 ---
 foo: bar
 dragPos:
-  square: 688,108,154,_,-15
+  square: 691,33,167,_,-16
 ---
 
 # Draggable Elements
 
 Double-click on the draggable elements to edit their positions.
 
-#### Directive Usage
+<br>
+
+###### Directive Usage
 
 ```md
 <img v-drag="'square'" src="https://sli.dev/logo.png">
 ```
 
-#### Component Usage
+<br>
+
+###### Component Usage
 
 ```md
 <v-drag text-3xl>
@@ -584,8 +588,8 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="634,281,253,_,-15">
-  <div text-center text-3xl border>
+<v-drag pos="671,205,253,_,-15">
+  <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>
 </v-drag>
