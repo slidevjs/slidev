@@ -4,6 +4,7 @@ import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
+import YAML from 'js-yaml'
 import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
@@ -103,6 +104,8 @@ export function createSlidesLoader(
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
+  let skipHmr: { filePath: string, fileContent: string } | null = null
+
   const { data, clientRoot, roots, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
@@ -161,9 +164,31 @@ export function createSlidesLoader(
             if (body.content && body.content !== slide.source.content)
               hmrPages.add(idx)
 
-            Object.assign(slide.source, body)
+            if (body.content)
+              slide.content = slide.source.content = body.content
+            if (body.note)
+              slide.note = slide.source.note = body.note
+            if (body.frontmatter) {
+              Object.assign(slide.frontmatter, body.frontmatter)
+              slide.source.frontmatterRaw = YAML.dump(slide.frontmatter)
+            }
+
             parser.prettifySlide(slide.source)
-            await parser.save(data.markdownFiles[slide.source.filepath])
+            const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
+            if (body.skipHmr) {
+              skipHmr = {
+                filePath: slide.source.filepath,
+                fileContent,
+              }
+              server?.moduleGraph.invalidateModule(
+                server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
+              )
+              if (body.frontmatter) {
+                server?.moduleGraph.invalidateModule(
+                  server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter`)!,
+                )
+              }
+            }
 
             res.statusCode = 200
             res.write(JSON.stringify(withRenderedNote(slide)))
@@ -195,6 +220,11 @@ export function createSlidesLoader(
         const newData = await serverOptions.loadData?.()
         if (!newData)
           return []
+
+        if (skipHmr && newData.markdownFiles[skipHmr.filePath]?.raw === skipHmr.fileContent) {
+          skipHmr = null
+          return []
+        }
 
         const moduleIds = new Set<string>()
 

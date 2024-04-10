@@ -101,6 +101,7 @@
     "shiki": "^1.2.3",
     "shiki-magic-move": "^0.3.5",
     "sirv": "^2.0.4",
+    "source-map-js": "^1.2.0",
     "typescript": "^5.4.3",
     "unocss": "^0.58.9",
     "unplugin-icons": "^0.18.5",

@@ -29,6 +29,10 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/animations',
   },
   {
+    text: 'Draggable Elements',
+    link: '/guide/draggable',
+  },
+  {
     text: 'Presenter Mode',
     link: '/guide/presenter-mode',
   },

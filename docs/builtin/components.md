@@ -272,6 +272,10 @@ Parameters:
 
 See https://sli.dev/guide/animations.html
 
+### `VDrag`
+
+See https://sli.dev/guide/draggable.html
+
 ### `SlidevVideo`
 
 Embed a video.
