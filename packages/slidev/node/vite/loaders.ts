@@ -1,4 +1,4 @@
-import { basename } from 'node:path'
+import { basename, resolve } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -199,12 +199,23 @@ export function createSlidesLoader(
         })
 
         server.middlewares.use(async (req, res, next) => {
-          const match = req.url?.match(/^\/\@slidev\/resolve-id\/(.*)$/)
+          const match = req.url?.match(
+            /^\/\@slidev\/resolve-id\/(.*)\?isRelative=(.*)$/,
+          )
           if (!match)
             return next()
 
-          const [, specifier] = match
-          const resolved = await server!.pluginContainer.resolveId(specifier)
+          const [, specifier, isRelative] = match
+
+          const getResolved = async () => {
+            if (isRelative === 'true') {
+              const files = await fg([`**/${specifier}.*`], { cwd: `${options.userRoot}/snippets/` })
+              return { id: files.length > 0 ? resolve(`${options.userRoot}/snippets/`, files[0]) : '' }
+            }
+            return await server!.pluginContainer.resolveId(specifier)
+          }
+
+          const resolved = await getResolved()
           res.statusCode = 200
           res.write(resolved?.id ?? '')
           return res.end()
