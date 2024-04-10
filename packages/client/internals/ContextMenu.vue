@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onClickOutside, useEventListener, useWindowFocus } from '@vueuse/core'
-import { ref, watch } from 'vue'
+import { onClickOutside, useElementBounding, useEventListener, useWindowFocus } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
 import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
-import contextMenu from '../setup/context-menu'
+import { windowSize } from '../state'
 
 const container = ref<HTMLElement>()
 onClickOutside(container, closeContextMenu)
@@ -33,18 +33,36 @@ function onClickDisable() {
     },
   })
 }
+
+const { width, height } = useElementBounding(container)
+const left = computed(() => {
+  const x = currentContextMenu.value?.x
+  if (!x)
+    return 0
+  if (x + width.value > windowSize.width.value)
+    return windowSize.width.value - width.value
+  return x
+})
+const top = computed(() => {
+  const y = currentContextMenu.value?.y
+  if (!y)
+    return 0
+  if (y + height.value > windowSize.height.value)
+    return windowSize.height.value - height.value
+  return y
+})
 </script>
 
 <template>
   <div
     v-if="currentContextMenu"
     ref="container"
-    :style="`left:${currentContextMenu[0]}px;top:${currentContextMenu[1]}px`"
+    :style="`left:${left}px;top:${top}px`"
     class="fixed z-100 w-60 flex flex-wrap justify-items-start p-.5 animate-fade-in animate-duration-100 backdrop-blur bg-white/60 dark:bg-black/60 b b-gray-500/50 rounded-md shadow shadow-gray-500 overflow-hidden select-none"
     @contextmenu.prevent=""
     @click="closeContextMenu"
   >
-    <template v-for="item, index of currentContextMenu[2].value" :key="index">
+    <template v-for="item, index of currentContextMenu.items.value" :key="index">
       <div v-if="item === 'separator'" class="w-full mx-2 my-.5 border-t border-gray-500/70" />
       <div
         v-else-if="item.small"

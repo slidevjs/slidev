@@ -4,10 +4,18 @@ import { shallowRef } from 'vue'
 import setupContextMenu from '../setup/context-menu'
 import { configs, mode } from '../env'
 
-export const currentContextMenu = shallowRef<null | [number, number, ComputedRef<ContextMenuItem[]>]>(null)
+export const currentContextMenu = shallowRef<null | {
+  x: number
+  y: number
+  items: ComputedRef<ContextMenuItem[]>
+}>(null)
 
 export function openContextMenu(x: number, y: number) {
-  currentContextMenu.value = [x, y, setupContextMenu()]
+  currentContextMenu.value = {
+    x,
+    y,
+    items: setupContextMenu(),
+  }
 }
 
 export function closeContextMenu() {
