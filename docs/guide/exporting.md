@@ -133,7 +133,7 @@ See [Static Hosting](/guide/hosting).
 
 ## Exportable Docker Image
 
-To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintianed by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
+To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintained by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
 
 ```bash
 docker run --name slidev --rm -it \
