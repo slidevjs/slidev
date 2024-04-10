@@ -1,4 +1,4 @@
-import { basename, resolve } from 'node:path'
+import path from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
@@ -106,7 +106,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, clientRoot, roots, mode } = options
+  const { data, clientRoot, userRoot, roots, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
@@ -125,7 +125,7 @@ export function createSlidesLoader(
         })
 
         for (const layoutPath of layoutPaths) {
-          const layout = basename(layoutPath).replace(/\.\w+$/, '')
+          const layout = path.basename(layoutPath).replace(/\.\w+$/, '')
           if (layouts[layout])
             continue
           layouts[layout] = layoutPath
@@ -198,24 +198,15 @@ export function createSlidesLoader(
           next()
         })
 
+        const snippetsPath = path.resolve(userRoot, 'snippets/__importer__.ts')
+
         server.middlewares.use(async (req, res, next) => {
-          const match = req.url?.match(
-            /^\/\@slidev\/resolve-id\/(.*)\?isRelative=(.*)$/,
-          )
+          const match = req.url?.match(/^\/\@slidev\/resolve-id\?specifier=(.*)$/)
           if (!match)
             return next()
 
-          const [, specifier, isRelative] = match
-
-          const getResolved = async () => {
-            if (isRelative === 'true') {
-              const files = await fg([`**/${specifier}.*`], { cwd: `${options.userRoot}/snippets/` })
-              return { id: files.length > 0 ? resolve(`${options.userRoot}/snippets/`, files[0]) : '' }
-            }
-            return await server!.pluginContainer.resolveId(specifier)
-          }
-
-          const resolved = await getResolved()
+          const [, specifier] = match
+          const resolved = await server!.pluginContainer.resolveId(specifier, snippetsPath)
           res.statusCode = 200
           res.write(resolved?.id ?? '')
           return res.end()

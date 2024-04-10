@@ -26,11 +26,9 @@ export default createSingletonPromise(async () => {
   })
 
   const resolveId = async (specifier: string) => {
-    const match = specifier.match(/^(@[^\/:]+?\/)?(\.\/)?[^\/:]+$/)
-    if (!match)
-      return specifier
-    const [value, , isRelative] = match
-    const res = await fetch(`/@slidev/resolve-id/${value}?isRelative=${!!isRelative}`)
+    if (!'./'.includes(specifier[0]) && !/^(@[^\/:]+?\/)?[^\/:]+$/.test(specifier))
+      return specifier // this might be a url or something else
+    const res = await fetch(`/@slidev/resolve-id?specifier=${specifier}`)
     if (!res.ok)
       return null
     const id = await res.text()
