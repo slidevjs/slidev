@@ -15,7 +15,7 @@ export function closeContextMenu() {
 }
 
 export function onContextMenu(ev: MouseEvent) {
-  if (configs.contextmenu !== true && configs.contextmenu !== mode)
+  if (configs.contextMenu !== true && configs.contextMenu !== mode)
     return
   if (ev.shiftKey || ev.defaultPrevented)
     return

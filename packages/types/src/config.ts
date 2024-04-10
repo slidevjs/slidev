@@ -238,7 +238,7 @@ export interface SlidevConfig {
    *
    * @default true
    */
-  contextmenu: boolean | 'dev' | 'build'
+  contextMenu: boolean | 'dev' | 'build'
 }
 
 export interface FontOptions {
