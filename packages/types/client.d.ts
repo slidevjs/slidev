@@ -44,6 +44,13 @@ declare module '#slidev/custom-nav-controls' {
   export default component
 }
 
+declare module '#slidev/page-templates/*' {
+  import type { Component } from 'vue'
+
+  const component: Component
+  export default component
+}
+
 declare module '#slidev/shiki' {
   import type { ShikiHighlighterCore } from 'shiki/core'
   import type { BundledLanguage, BundledTheme } from 'shiki'

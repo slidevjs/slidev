@@ -1,7 +1,5 @@
-import { basename } from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, range } from '@antfu/utils'
-import fg from 'fast-glob'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
 import YAML from 'js-yaml'
@@ -15,7 +13,7 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import { stringifyMarkdownTokens } from '../utils'
-import { toAtFS } from '../resolver'
+import { createGlobResolver, toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
 import { templateTitleRendererMd } from '../virtual/titles'
@@ -101,42 +99,14 @@ export function createSlidesLoader(
   const hmrPages = new Set<number>()
   let server: ViteDevServer | undefined
 
-  let _layouts_cache_time = 0
-  let _layouts_cache: Record<string, string> = {}
-
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, clientRoot, roots, mode } = options
+  const { data, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
-    async getLayouts() {
-      const now = Date.now()
-      if (now - _layouts_cache_time < 2000)
-        return _layouts_cache
-
-      const layouts: Record<string, string> = {}
-
-      for (const root of [...roots, clientRoot]) {
-        const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
-          cwd: root,
-          absolute: true,
-          suppressErrors: true,
-        })
-
-        for (const layoutPath of layoutPaths) {
-          const layout = basename(layoutPath).replace(/\.\w+$/, '')
-          if (layouts[layout])
-            continue
-          layouts[layout] = layoutPath
-        }
-      }
-
-      _layouts_cache_time = now
-      _layouts_cache = layouts
-
-      return layouts
-    },
+    getLayouts: createGlobResolver('layouts/**/*.{vue,ts}', options),
+    getPageTemplates: createGlobResolver('page-templates/**/*.{vue,ts}', options),
   }
 
   return [
@@ -399,6 +369,17 @@ export function createSlidesLoader(
           }
           return {
             code: '',
+            map: { mappings: '' },
+          }
+        }
+
+        // page templates
+        const VIRTUAL_PAGE_TEMPLATES_PREFIX = '/@slidev/page-templates/'
+        if (id.startsWith(VIRTUAL_PAGE_TEMPLATES_PREFIX)) {
+          const templateName = id.slice(VIRTUAL_PAGE_TEMPLATES_PREFIX.length)
+          const template = (await templateCtx.getPageTemplates())[templateName]
+          return {
+            code: `import PageTemplate from "${toAtFS(template)}"\nexport default PageTemplate`,
             map: { mappings: '' },
           }
         }

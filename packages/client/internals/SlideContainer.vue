@@ -20,6 +20,7 @@ const props = defineProps({
     default: false,
   },
 })
+const emit = defineEmits(['update:slide-element'])
 
 const { clicksDirection, isPrintMode } = useNav()
 
@@ -72,11 +73,12 @@ if (props.isMain) {
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
+watchEffect(() => emit('update:slide-element', slideElement.value))
 </script>
 
 <template>
-  <div id="slide-container" ref="root" class="slidev-slides-container" :class="className">
-    <div id="slide-content" ref="slideElement" class="slidev-slide-content" :style="style">
+  <div ref="root" class="slidev-slides-container" :class="className">
+    <div ref="slideElement" class="slidev-slide-content" :style="style">
       <slot />
     </div>
     <slot name="controls" />
@@ -84,11 +86,11 @@ provideLocal(injectionSlideElement, slideElement)
 </template>
 
 <style lang="postcss">
-#slide-container {
+.slidev-slides-container {
   @apply relative overflow-hidden break-after-page;
 }
 
-#slide-content {
+.slidev-slide-content {
   @apply relative overflow-hidden bg-main absolute left-1/2 top-1/2;
 }
 </style>

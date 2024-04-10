@@ -1,4 +1,4 @@
-import { dirname, join, resolve } from 'node:path'
+import { basename, dirname, join, resolve } from 'node:path'
 import * as fs from 'node:fs'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -11,7 +11,8 @@ import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
 import { underline, yellow } from 'kolorist'
-import type { RootsInfo } from '@slidev/types'
+import fg from 'fast-glob'
+import type { ResolvedSlidevOptions, RootsInfo } from '@slidev/types'
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -239,4 +240,34 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     userWorkspaceRoot,
   }
   return rootsInfo
+}
+
+export function createGlobResolver(source: string, { roots, clientRoot }: ResolvedSlidevOptions) {
+  let cache_time = 0
+  let cache_data: Record<string, string> = {}
+  return async function () {
+    const now = Date.now()
+    if (now - cache_time < 2000)
+      return cache_data
+
+    const fileMap: Record<string, string> = {}
+
+    const allFiles = await Promise.all([...roots, clientRoot].map(cwd => fg(source, {
+      cwd,
+      absolute: true,
+      suppressErrors: true,
+    })))
+
+    for (const filePath of allFiles.flat()) {
+      const name = basename(filePath).replace(/\.\w+$/, '')
+      if (fileMap[name])
+        continue
+      fileMap[name] = filePath
+    }
+
+    cache_time = now
+    cache_data = fileMap
+
+    return fileMap
+  }
 }
