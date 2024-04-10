@@ -2,6 +2,8 @@
 import { onClickOutside, useEventListener, useWindowFocus } from '@vueuse/core'
 import { ref, watch } from 'vue'
 import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
+import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import contextMenu from '../setup/context-menu'
 
 const container = ref<HTMLElement>()
 onClickOutside(container, closeContextMenu)
@@ -18,6 +20,19 @@ watch(windowFocus, (hasFocus) => {
   if (!hasFocus)
     closeContextMenu()
 })
+
+const firstSlide = useDynamicSlideInfo(1)
+function onClickDisable() {
+  const info = firstSlide.info.value
+  if (!info)
+    return
+  firstSlide.update({
+    frontmatter: {
+      ...info.frontmatter,
+      contextMenu: false,
+    },
+  })
+}
 </script>
 
 <template>
@@ -56,7 +71,10 @@ watch(windowFocus, (hasFocus) => {
       </div>
     </template>
     <div class="w-full p-2 text-xs op60">
-      Right clicking with <kbd>shift</kbd> down for the default context menu.
+      <kbd class="b b-op-50 rounded px-.5">shift</kbd> to open the default menu.
+      <div class="underline mt-.5 -mb-.5" @click="onClickDisable">
+        Disable context menu
+      </div>
     </div>
   </div>
 </template>
