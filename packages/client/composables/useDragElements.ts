@@ -268,8 +268,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   watchStopHandles.push(
     onClickOutside(container, (ev) => {
       const container = document.querySelector('#drag-control-container')
-      if (container && ev.target && !container.contains(ev.target as HTMLElement))
-        state.stopDragging()
+      if (container && ev.target && container.contains(ev.target as HTMLElement))
+        return
+      state.stopDragging()
     }),
     watch(useWindowFocus(), (focused) => {
       if (!focused)
