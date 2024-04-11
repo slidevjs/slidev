@@ -23,30 +23,40 @@ export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
   return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
 }
 
-export function updateDragPos(slide: SlideInfo, dragPos: Record<string, string>) {
+/**
+ * Update frontmatter patch and preserve the comments
+ */
+export function updateFrontmatterPatch(slide: SlideInfo, frontmatter: Record<string, any>) {
   const source = slide.source
-  slide.frontmatter.dragPos = source.frontmatter.dragPos = dragPos
   let doc = source.frontmatterDoc
   if (!doc) {
     source.frontmatterStyle = 'frontmatter'
     source.frontmatterDoc = doc = new YAML.Document({})
   }
-  const valueNode = doc.createNode(dragPos)
-  let found = false
-  YAML.visit(doc.contents, {
-    Pair(_key, node, path) {
-      if (path.length === 1 && YAML.isScalar(node.key) && node.key.value === 'dragPos') {
-        node.value = valueNode
-        found = true
-        return YAML.visit.BREAK
+  for (const [key, value] of Object.entries(frontmatter)) {
+    slide.frontmatter[key] = source.frontmatter[key] = value
+    if (value == null) {
+      doc.delete(key)
+    }
+    else {
+      const valueNode = doc.createNode(value)
+      let found = false
+      YAML.visit(doc.contents, {
+        Pair(_key, node, path) {
+          if (path.length === 1 && YAML.isScalar(node.key) && node.key.value === key) {
+            node.value = valueNode
+            found = true
+            return YAML.visit.BREAK
+          }
+        },
+      })
+      if (!found) {
+        if (!YAML.isMap(doc.contents))
+          doc.contents = doc.createNode({})
+        doc.contents.add(
+          doc.createPair(key, valueNode),
+        )
       }
-    },
-  })
-  if (!found) {
-    if (!YAML.isMap(doc.contents))
-      doc.contents = doc.createNode({})
-    doc.contents.add(
-      doc.createPair('dragPos', valueNode),
-    )
+    }
   }
 }

@@ -5,7 +5,6 @@ import { downloadPDF } from '../utils'
 import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
 import { configs } from '../env'
 import { useNav } from '../composables/useNav'
-import { getSlidePath } from '../logic/slides'
 import { useDrawings } from '../composables/useDrawings'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
@@ -21,7 +20,6 @@ const props = defineProps({
 })
 
 const {
-  currentRoute,
   currentSlideNo,
   hasNext,
   hasPrev,
@@ -31,6 +29,8 @@ const {
   next,
   prev,
   total,
+  enterPresenter,
+  exitPresenter,
 } = useNav()
 const {
   brush,
@@ -39,11 +39,6 @@ const {
 
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
-
-const presenterPassword = computed(() => currentRoute.value.query.password)
-const query = computed(() => presenterPassword.value ? `?password=${presenterPassword.value}` : '')
-const presenterLink = computed(() => `${getSlidePath(currentSlideNo.value, true)}${query.value}`)
-const nonPresenterLink = computed(() => `${getSlidePath(currentSlideNo.value, false)}${query.value}`)
 
 const root = ref<HTMLDivElement>()
 function onMouseLeave() {
@@ -124,12 +119,12 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       </template>
 
       <template v-if="!isEmbedded">
-        <RouterLink v-if="isPresenter" :to="nonPresenterLink" class="slidev-icon-btn" title="Play Mode">
+        <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
           <carbon:presentation-file />
-        </RouterLink>
-        <RouterLink v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" :to="presenterLink" class="slidev-icon-btn" title="Presenter Mode">
+        </IconButton>
+        <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" title="Presenter Mode" @click="enterPresenter">
           <carbon:user-speaker />
-        </RouterLink>
+        </IconButton>
 
         <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"

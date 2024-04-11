@@ -9,6 +9,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
+import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 
@@ -22,9 +23,9 @@ function onClick(e: MouseEvent) {
   if (showEditor.value)
     return
 
-  if ((e.target as HTMLElement)?.id === 'slide-container') {
+  if (e.button === 0 && (e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previous
-    if ((e.screenX / window.innerWidth) > 0.6)
+    if ((e.pageX / window.innerWidth) > 0.6)
       next()
     else
       prev()
@@ -57,6 +58,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       :scale="slideScale"
       :is-main="true"
       @pointerdown="onClick"
+      @contextmenu="onContextMenu"
     >
       <template #default>
         <SlidesShow render-context="slide" />

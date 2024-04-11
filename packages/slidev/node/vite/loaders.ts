@@ -13,7 +13,7 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import { stringifyMarkdownTokens, updateDragPos } from '../utils'
+import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
 import { toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
@@ -167,8 +167,8 @@ export function createSlidesLoader(
               slide.content = slide.source.content = body.content
             if (body.note)
               slide.note = slide.source.note = body.note
-            if (body.dragPos)
-              updateDragPos(slide, body.dragPos)
+            if (body.frontmatter)
+              updateFrontmatterPatch(slide, body.frontmatter)
 
             parser.prettifySlide(slide.source)
             const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
@@ -180,7 +180,7 @@ export function createSlidesLoader(
               server?.moduleGraph.invalidateModule(
                 server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
               )
-              if (body.dragPos) {
+              if (body.frontmatter) {
                 server?.moduleGraph.invalidateModule(
                   server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter`)!,
                 )

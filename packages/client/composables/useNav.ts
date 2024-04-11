@@ -60,6 +60,11 @@ export interface SlidevContextNav {
   goFirst: () => Promise<void>
   /** Go to the last slide */
   goLast: () => Promise<void>
+
+  /** Enter presenter mode */
+  enterPresenter: () => void
+  /** Exit presenter mode */
+  exitPresenter: () => void
 }
 
 export interface SlidevContextNavState {
@@ -194,6 +199,19 @@ export function useNavBase(
     }
   }
 
+  function enterPresenter() {
+    router?.push({
+      path: getSlidePath(currentSlideNo.value, true),
+      query: { ...router.currentRoute.value.query },
+    })
+  }
+  function exitPresenter() {
+    router?.push({
+      path: getSlidePath(currentSlideNo.value, false),
+      query: { ...router.currentRoute.value.query },
+    })
+  }
+
   return {
     slides,
     total,
@@ -222,6 +240,8 @@ export function useNavBase(
     goFirst,
     nextSlide,
     prevSlide,
+    enterPresenter,
+    exitPresenter,
   }
 }
 
