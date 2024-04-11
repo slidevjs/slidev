@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { configs } from '../env'
+import { slideTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
@@ -18,7 +18,6 @@ import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
   title: `Overview - ${slideTitle}`,
 })

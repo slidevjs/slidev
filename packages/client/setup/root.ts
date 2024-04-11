@@ -1,7 +1,7 @@
 import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
 import { useHead } from '@unhead/vue'
 import { useRouter } from 'vue-router'
-import { configs } from '../env'
+import { configs, slideTitle } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
 import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
@@ -51,8 +51,6 @@ export default function setupRoot() {
   for (const setup of setups)
     setup()
 
-  const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-
   const {
     clicksContext,
     currentSlideNo,
@@ -62,12 +60,12 @@ export default function setupRoot() {
   } = useNav()
 
   useHead({
-    title,
+    title: slideTitle,
     htmlAttrs: configs.htmlAttrs,
   })
 
-  initSharedState(`${title} - shared`)
-  initDrawingState(`${title} - drawings`)
+  initSharedState(`${slideTitle} - shared`)
+  initDrawingState(`${slideTitle} - drawings`)
 
   const id = `${location.origin}_${makeId()}`
 

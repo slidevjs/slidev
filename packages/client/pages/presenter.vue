@@ -4,7 +4,7 @@ import { computed, reactive, ref, shallowRef, watch, watchEffect } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
-import { configs } from '../env'
+import { slideTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
 import { getSlideClass } from '../utils'
@@ -43,7 +43,6 @@ const {
 } = useNav()
 const { isDrawing } = useDrawings()
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 useHead({
   title: `Presenter - ${slideTitle}`,
 })
@@ -184,8 +183,8 @@ watchEffect(() => {
     </template>
     <template #progress-bar="attrs">
       <div
-        class="h-3px bg-primary transition-all"
-        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100}%` }"
+        class="h-3px bg-primary transition-all duration-500"
+        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100 + 1}%` }"
         v-bind="attrs"
       />
     </template>

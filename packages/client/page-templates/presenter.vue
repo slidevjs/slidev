@@ -18,7 +18,6 @@ import { presenterLayout } from '../state'
           Next
         </div>
       </div>
-      <!-- Notes -->
       <slot name="notes" class="grid-area-[note]" />
       <div class="grid-area-[bottom] flex">
         <slot name="nav-controls" />
