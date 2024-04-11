@@ -101,7 +101,7 @@ onMounted(() => {
   <div class="h-screen w-screen of-hidden flex">
     <nav class="grid grid-rows-[auto_max-content] border-r border-main select-none max-h-full h-full">
       <div class="relative">
-        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-scroll" style="direction:rtl">
+        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
           <div
             v-for="(route, idx) of slides"
             :key="route.no"
