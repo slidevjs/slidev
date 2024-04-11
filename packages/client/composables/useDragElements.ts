@@ -267,7 +267,8 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
 
   watchStopHandles.push(
     onClickOutside(container, (ev) => {
-      if ((ev.target as HTMLElement | null)?.dataset?.dragId !== id)
+      const container = document.querySelector('#drag-control-container')
+      if (container && ev.target && !container.contains(ev.target as HTMLElement))
         state.stopDragging()
     }),
     watch(useWindowFocus(), (focused) => {

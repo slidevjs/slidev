@@ -355,6 +355,7 @@ watchEffect(() => {
 <template>
   <div
     v-if="Number.isFinite(x0)"
+    id="drag-control-container"
     :data-drag-id="id"
     :style="{
       position: 'absolute',
