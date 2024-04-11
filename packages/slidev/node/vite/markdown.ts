@@ -157,7 +157,11 @@ export async function createMarkdownPlugin(
         transformPageCSS(ctx, id)
         transformSlotSugar(ctx)
 
-        sourceMapConsumers[id] = new SourceMapConsumer(ctx.s.generateMap())
+        const sourceMap = ctx.s.generateMap()
+        sourceMapConsumers[id] = new SourceMapConsumer({
+          ...sourceMap,
+          version: sourceMap.version.toString(),
+        })
         return ctx.s.toString()
       },
     },
