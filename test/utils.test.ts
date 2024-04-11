@@ -6,7 +6,7 @@ import YAML from 'yaml'
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
 import { getRoots } from '../packages/slidev/node/resolver'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
-import { generateGoogleFontsUrl, stringifyMarkdownTokens, updateDragPos } from '../packages/slidev/node/utils'
+import { generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
   it('page-range', () => {
@@ -70,7 +70,7 @@ describe('utils', () => {
     expectRelative(userWorkspaceRoot).toMatchInlineSnapshot(`".."`)
   })
 
-  it('update dragPos', async () => {
+  it('update frontmatter patch', async () => {
     const dragPos = {
       foo: '1,2,3,4',
     }
@@ -90,7 +90,7 @@ describe('utils', () => {
     }
 
     const slide1 = createFakeSource(``)
-    updateDragPos(slide1, dragPos)
+    updateFrontmatterPatch(slide1, { dragPos })
     expectFrontmatter(slide1).toMatchInlineSnapshot(`
       "dragPos:
         foo: 1,2,3,4
@@ -103,12 +103,26 @@ describe('utils', () => {
       dragPos:
         bar: 5,6,7,8
     `)
-    updateDragPos(slide2, dragPos)
+    updateFrontmatterPatch(slide2, { dragPos })
     expectFrontmatter(slide2).toMatchInlineSnapshot(`
       "# comment
       title: Hello # another comment
       dragPos:
         foo: 1,2,3,4
+      "
+    `)
+
+    // remove a field
+    const slide3 = createFakeSource(`
+      # comment
+      title: Hello  # another comment
+      dragPos:
+        bar: 5,6,7,8
+    `)
+    updateFrontmatterPatch(slide3, { title: null })
+    expectFrontmatter(slide3).toMatchInlineSnapshot(`
+      "dragPos:
+        bar: 5,6,7,8
       "
     `)
   })

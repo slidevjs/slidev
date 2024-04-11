@@ -48,6 +48,7 @@ export interface SlideInfo extends SlideInfoBase {
 export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note'>> & {
   skipHmr?: boolean
   dragPos?: Record<string, string>
+  frontmatter?: Record<string, any>
 }
 
 /**

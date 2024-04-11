@@ -13,7 +13,7 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import { stringifyMarkdownTokens, updateDragPos } from '../utils'
+import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
 import { toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
@@ -168,7 +168,9 @@ export function createSlidesLoader(
             if (body.note)
               slide.note = slide.source.note = body.note
             if (body.dragPos)
-              updateDragPos(slide, body.dragPos)
+              updateFrontmatterPatch(slide, { dragPos: body.dragPos })
+            if (body.frontmatter)
+              updateFrontmatterPatch(slide, body.frontmatter)
 
             parser.prettifySlide(slide.source)
             const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
