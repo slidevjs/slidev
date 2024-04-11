@@ -26,9 +26,9 @@ export default createSingletonPromise(async () => {
   })
 
   const resolveId = async (specifier: string) => {
-    if (!/^(@[^\/:]+?\/)?[^\/:]+$/.test(specifier))
-      return specifier
-    const res = await fetch(`/@slidev/resolve-id/${specifier}`)
+    if (!'./'.includes(specifier[0]) && !/^(@[^\/:]+?\/)?[^\/:]+$/.test(specifier))
+      return specifier // this might be a url or something else
+    const res = await fetch(`/@slidev/resolve-id?specifier=${specifier}`)
     if (!res.ok)
       return null
     const id = await res.text()
@@ -85,7 +85,10 @@ async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
   replace.clear = () => allLogs.length = 0
   const vmConsole = Object.assign({}, console, replace)
   try {
-    const safeJS = `return async (console) => {${sanitizeJS(code)}}`
+    const safeJS = `return async (console) => {
+      window.console = console
+      ${sanitizeJS(code)}
+    }`
     // eslint-disable-next-line no-new-func
     await (new Function(safeJS)())(vmConsole)
   }
