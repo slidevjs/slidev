@@ -118,6 +118,7 @@ In addition, every slide accepts the following configuration in the Frontmatter 
 - `title` (`string`): Override the title for the `<TitleRenderer>` and `<Toc>` components (learn more [here](/builtin/components.html#titlerenderer)).
 - `transition` (`string | TransitionProps`): Defines the transition between the slide and the next one (learn more [here](/guide/animations.html#slide-transitions)).
 - `zoom` (`number`): Custom zoom scale. Useful for slides with a lot of content.
+- `dragPos` (`Record<string,string>`): Used as positions of draggable elements (learn more [here](/guide/draggable.html).
 
 ## Directory Structure
 

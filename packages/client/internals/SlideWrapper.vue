@@ -4,6 +4,7 @@ import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { getSlideClass } from '../utils'
 import SlideLoading from './SlideLoading.vue'
 
 const props = defineProps({
@@ -67,16 +68,24 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
-  <component
-    :is="SlideComponent"
-    :style="style"
-    :data-slidev-no="props.route.no"
-    :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
-  />
+  <div :class="getSlideClass(route)">
+    <component
+      :is="SlideComponent"
+      :style="style"
+      :data-slidev-no="props.route.no"
+      :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
+    />
+  </div>
 </template>
 
 <style scoped>
 .disable-view-transition:deep(*) {
   view-transition-name: none !important;
+}
+
+.slidev-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>

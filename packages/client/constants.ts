@@ -6,6 +6,7 @@ import type { SlidevContext } from './modules/context'
 // The value of the injections keys are implementation details, you should always use them with the reference to the constant instead of the value
 export const injectionClicksContext = '$$slidev-clicks-context' as unknown as InjectionKey<Ref<ClicksContext>>
 export const injectionCurrentPage = '$$slidev-page' as unknown as InjectionKey<Ref<number>>
+export const injectionSlideElement = '$$slidev-slide-element' as unknown as InjectionKey<Ref<HTMLElement | null>>
 export const injectionSlideScale = '$$slidev-slide-scale' as unknown as InjectionKey<ComputedRef<number>>
 export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
 export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<SlideRoute>
@@ -43,6 +44,7 @@ export const FRONTMATTER_FIELDS = [
   'title',
   'transition',
   'zoom',
+  'dragPos',
 ]
 
 export const HEADMATTER_FIELDS = [

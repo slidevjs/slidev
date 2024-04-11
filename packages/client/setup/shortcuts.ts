@@ -2,7 +2,7 @@ import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { downloadPDF } from '../utils'
 import { toggleDark } from '../logic/dark'
-import { magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
+import { activeDragElement, magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
@@ -29,15 +29,17 @@ export default function setupShortcuts() {
     showGotoDialog: () => showGotoDialog.value = !showGotoDialog.value,
   }
 
+  const navViaArrowKeys = and(not(showOverview), not(activeDragElement))
+
   let shortcuts: ShortcutOptions[] = [
     { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },
     { name: 'prev_space', key: and(space, shift), fn: prev, autoRepeat: true },
-    { name: 'next_right', key: and(right, not(shift), not(showOverview)), fn: next, autoRepeat: true },
-    { name: 'prev_left', key: and(left, not(shift), not(showOverview)), fn: prev, autoRepeat: true },
+    { name: 'next_right', key: and(right, not(shift), navViaArrowKeys), fn: next, autoRepeat: true },
+    { name: 'prev_left', key: and(left, not(shift), navViaArrowKeys), fn: prev, autoRepeat: true },
     { name: 'next_page_key', key: 'pageDown', fn: next, autoRepeat: true },
     { name: 'prev_page_key', key: 'pageUp', fn: prev, autoRepeat: true },
-    { name: 'next_down', key: and(down, not(showOverview)), fn: nextSlide, autoRepeat: true },
-    { name: 'prev_up', key: and(up, not(showOverview)), fn: () => prevSlide(false), autoRepeat: true },
+    { name: 'next_down', key: and(down, navViaArrowKeys), fn: nextSlide, autoRepeat: true },
+    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: () => prevSlide(false), autoRepeat: true },
     { name: 'next_shift', key: and(right, shift), fn: nextSlide, autoRepeat: true },
     { name: 'prev_shift', key: and(left, shift), fn: () => prevSlide(false), autoRepeat: true },
     { name: 'toggle_dark', key: and(d, not(drawingEnabled)), fn: toggleDark },
