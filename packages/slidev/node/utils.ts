@@ -1,4 +1,4 @@
-import type Token from 'markdown-it/lib/token'
+import type { Token } from 'markdown-it'
 import type { ResolvedFontOptions } from '@slidev/types'
 
 export function stringifyMarkdownTokens(tokens: Token[]) {

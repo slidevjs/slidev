@@ -52,13 +52,15 @@ export interface ShikiContext {
 }
 
 export type ShikiSetupReturn =
-  & Partial<Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>>
-  & CodeOptionsThemes<BuiltinTheme>
-  & CodeOptionsMeta
-  & {
-    setup?: (highlighter: Highlighter) => Awaitable<void>
-    langs?: (LanguageInput | BuiltinLanguage)[]
-  }
+  Partial<
+    & Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>
+    & CodeOptionsThemes<BuiltinTheme>
+    & CodeOptionsMeta
+    & {
+      setup: (highlighter: Highlighter) => Awaitable<void>
+      langs: (LanguageInput | BuiltinLanguage)[]
+    }
+  >
 
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
