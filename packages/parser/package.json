@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "@slidev/types": "workspace:*",
-    "js-yaml": "^4.1.0"
+    "yaml": "^2.4.1"
   }
 }

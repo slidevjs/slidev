@@ -52,7 +52,7 @@ export function useDragElementsUpdater(no: number) {
         return
       frontmatter.dragPos[id] = posStr
       newPatch = {
-        frontmatter,
+        dragPos: frontmatter.dragPos,
       }
     }
     else {
@@ -267,8 +267,10 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
 
   watchStopHandles.push(
     onClickOutside(container, (ev) => {
-      if ((ev.target as HTMLElement | null)?.dataset?.dragId !== id)
-        state.stopDragging()
+      const container = document.querySelector('#drag-control-container')
+      if (container && ev.target && container.contains(ev.target as HTMLElement))
+        return
+      state.stopDragging()
     }),
     watch(useWindowFocus(), (focused) => {
       if (!focused)

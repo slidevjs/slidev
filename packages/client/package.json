@@ -48,7 +48,6 @@
     "file-saver": "^2.0.5",
     "floating-vue": "^5.2.2",
     "fuse.js": "^7.0.0",
-    "js-yaml": "^4.1.0",
     "katex": "^0.16.10",
     "lz-string": "^1.5.0",
     "mermaid": "^10.9.0",
@@ -61,7 +60,8 @@
     "unocss": "^0.59.0",
     "vue": "^3.4.21",
     "vue-demi": "^0.14.7",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "yaml": "^2.4.1"
   },
   "devDependencies": {
     "vite": "^5.2.8"

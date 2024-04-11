@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { and } from '@vueuse/math'
 import { useSlideContext } from '../context'
+import { resolvedClickMap } from '../modules/v-click'
 import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
@@ -17,12 +18,7 @@ const props = defineProps<{
 const printPoster = computed(() => props.printPoster ?? props.poster)
 const printTimestamp = computed(() => props.printTimestamp ?? props.timestamp ?? 0)
 
-const {
-  $slidev,
-  $clicksContext,
-  $renderContext,
-  $route,
-} = useSlideContext()
+const { $slidev, $renderContext, $route } = useSlideContext()
 const { isPrintMode } = useNav()
 
 const noPlay = computed(() => isPrintMode.value || !['slide', 'presenter'].includes($renderContext.value))
@@ -38,7 +34,7 @@ onMounted(() => {
   video.value!.currentTime = timestamp
 
   const matchRoute = computed(() => !!$route && $route.no === $slidev?.nav.currentSlideNo)
-  const matchClick = computed(() => !!video.value && ($clicksContext.map.get(video.value)?.isShown?.value ?? true))
+  const matchClick = computed(() => !!video.value && (resolvedClickMap.get(video.value)?.isShown?.value ?? true))
   const matchRouteAndClick = and(matchRoute, matchClick)
 
   watch(matchRouteAndClick, () => {

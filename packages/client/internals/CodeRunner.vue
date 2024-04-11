@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
-import type { CodeRunnerOutput } from '@slidev/types'
-import { computed, ref, shallowRef, watch } from 'vue'
+import type { CodeRunnerOutput, RawAtValue } from '@slidev/types'
+import { computed, onMounted, onUnmounted, ref, shallowRef, watch, watchSyncEffect } from 'vue'
 import { useSlideContext } from '../context'
 import setupCodeRunners from '../setup/code-runners'
 import { useNav } from '../composables/useNav'
+import { makeId } from '../logic/utils'
+import { normalizeAtValue } from '../composables/useClicks'
 import IconButton from './IconButton.vue'
 import DomElement from './DomElement.vue'
 
@@ -14,6 +16,7 @@ const props = defineProps<{
   lang: string
   autorun: boolean | 'once'
   height?: string
+  showOutputAt?: RawAtValue
   highlightOutput: boolean
   runnerOptions?: Record<string, unknown>
 }>()
@@ -24,7 +27,7 @@ const { isPrintMode } = useNav()
 
 const code = useVModel(props, 'modelValue', emit)
 
-const { $renderContext } = useSlideContext()
+const { $renderContext, $clicksContext } = useSlideContext()
 const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.value))
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
@@ -32,6 +35,25 @@ const isRunning = ref(autorun)
 const outputs = shallowRef<CodeRunnerOutput[]>()
 const runCount = ref(0)
 const highlightFn = ref<(code: string, lang: string) => string>()
+
+const hidden = ref(props.showOutputAt)
+if (props.showOutputAt) {
+  const id = makeId()
+  onMounted(() => {
+    const at = normalizeAtValue(props.showOutputAt)
+    const info = $clicksContext.calculate(at)
+    if (info) {
+      $clicksContext.register(id, info)
+      watchSyncEffect(() => {
+        hidden.value = !info.isActive.value
+      })
+    }
+    else {
+      hidden.value = false
+    }
+  })
+  onUnmounted(() => $clicksContext.unregister(id))
+}
 
 const triggerRun = debounce(200, async () => {
   if (disabled.value)
@@ -59,6 +81,7 @@ else if (autorun)
 
 <template>
   <div
+    v-show="!hidden"
     class="relative flex flex-col rounded-b border-t border-main"
     :style="{ height: props.height }"
     data-waitfor=".slidev-runner-output"

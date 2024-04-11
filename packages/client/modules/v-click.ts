@@ -1,6 +1,6 @@
-import type { ResolvedClicksInfo } from '@slidev/types'
 import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
+import type { ClicksElement, RawAtValue } from '@slidev/types'
 import {
   CLASS_VCLICK_CURRENT,
   CLASS_VCLICK_FADE,
@@ -8,32 +8,29 @@ import {
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
-  injectionClickVisibility,
   injectionClicksContext,
 } from '../constants'
-import { directiveInject, directiveProvide } from '../utils'
-
-export type VClickValue = undefined | string | number | [string | number, string | number] | boolean
+import { directiveInject } from '../utils'
+import { normalizeAtValue } from '../composables/useClicks'
 
 export function createVClickDirectives() {
   return {
     install(app: App) {
-      app.directive<HTMLElement, VClickValue>('click', {
+      app.directive<HTMLElement, RawAtValue>('click', {
         // @ts-expect-error extra prop
         name: 'v-click',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value, true)
+          const resolved = resolveClick(el, dir, dir.value)
           if (resolved == null)
             return
 
           el.classList.toggle(CLASS_VCLICK_TARGET, true)
 
           // Expose the resolved clicks info to the element to make it easier to understand and debug
-          const clicks = Array.isArray(resolved.clicks) ? resolved.clicks : [resolved.clicks, undefined]
-          el.dataset.slidevClicksStart = String(clicks[0])
-          if (clicks[1] != null)
-            el.dataset.slidevClicksEnd = String(clicks[1])
+          el.dataset.slidevClicksStart = String(resolved.start)
+          if (Number.isFinite(resolved.end))
+            el.dataset.slidevClicksEnd = String(resolved.end)
 
           // @ts-expect-error extra prop
           el.watchStopHandle = watchEffect(() => {
@@ -56,12 +53,12 @@ export function createVClickDirectives() {
         unmounted,
       })
 
-      app.directive<HTMLElement, VClickValue>('after', {
+      app.directive<HTMLElement, RawAtValue>('after', {
         // @ts-expect-error extra prop
         name: 'v-after',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value, true, true)
+          const resolved = resolveClick(el, dir, '+0')
           if (resolved == null)
             return
 
@@ -88,12 +85,12 @@ export function createVClickDirectives() {
         unmounted,
       })
 
-      app.directive<HTMLElement, VClickValue>('click-hide', {
+      app.directive<HTMLElement, RawAtValue>('click-hide', {
         // @ts-expect-error extra prop
         name: 'v-click-hide',
 
         mounted(el, dir) {
-          const resolved = resolveClick(el, dir, dir.value, true, false, true)
+          const resolved = resolveClick(el, dir, dir.value, true)
           if (resolved == null)
             return
 
@@ -118,75 +115,42 @@ export function createVClickDirectives() {
   }
 }
 
-function isClickActive(thisClick: number | [number, number], clicks: number) {
-  return Array.isArray(thisClick)
-    ? thisClick[0] <= clicks && clicks < thisClick[1]
-    : thisClick <= clicks
-}
+export const resolvedClickMap = new Map<ClicksElement, ReturnType<typeof resolveClick>>()
 
-function isClickCurrent(thisClick: number | [number, number], clicks: number) {
-  return Array.isArray(thisClick)
-    ? thisClick[0] === clicks
-    : thisClick === clicks
-}
-
-export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: VClickValue, provideVisibility = false, clickAfter = false, flagHide = false): ResolvedClicksInfo | null {
+export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: RawAtValue, explicitHide = false) {
   const ctx = directiveInject(dir, injectionClicksContext)?.value
 
   if (!el || !ctx)
     return null
 
-  if (value === false || value === 'false')
-    return null
-
-  flagHide ||= dir.modifiers.hide !== false && dir.modifiers.hide != null
+  const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-  if (clickAfter)
-    value = '+0'
-  else if (value == null || value === true || value === 'true')
-    value = '+1'
+  const at = normalizeAtValue(value)
+  const info = ctx.calculate(at)
+  if (!info)
+    return null
 
-  let delta: number
-  let thisClick: number | [number, number]
-  let maxClick: number
-  if (Array.isArray(value)) {
-    // range (absolute)
-    delta = 0
-    thisClick = [+value[0], +value[1]]
-    maxClick = +value[1]
-  }
-  else {
-    ({ start: thisClick, end: maxClick, delta } = ctx.resolve(value))
-  }
+  ctx.register(el, info)
 
-  const isActive = computed(() => isClickActive(thisClick, ctx.current))
-  const isCurrent = computed(() => isClickCurrent(thisClick, ctx.current))
-  const isShown = computed(() => flagHide ? !isActive.value : isActive.value)
+  const isShown = computed(() => flagHide ? !info.isActive.value : info.isActive.value)
+  const visibilityState = computed(() => {
+    if (isShown.value)
+      return 'shown'
+    if (Number.isFinite(info.end))
+      return ctx.current < info.start ? 'before' : 'after'
+    else
+      return flagHide ? 'after' : 'before'
+  })
 
-  const resolved: ResolvedClicksInfo = {
-    max: maxClick,
-    clicks: thisClick,
-    delta,
-    isActive,
-    isCurrent,
+  const resolved = {
+    ...info,
     isShown,
+    visibilityState,
     flagFade,
     flagHide,
   }
-  ctx.register(el, resolved)
-
-  if (provideVisibility) {
-    directiveProvide(dir, injectionClickVisibility, computed(() => {
-      if (isShown.value)
-        return true
-      if (Array.isArray(thisClick))
-        return ctx.current < thisClick[0] ? 'before' : 'after'
-      else
-        return flagHide ? 'after' : 'before'
-    }))
-  }
-
+  resolvedClickMap.set(el, resolved)
   return resolved
 }
 
