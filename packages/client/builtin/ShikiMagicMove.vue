@@ -36,14 +36,14 @@ onMounted(() => {
     throw new Error('[slidev] The length of stepRanges does not match the length of steps, this is an internal error.')
 
   const clickCounts = ranges.value.map(s => s.length).reduce((a, b) => a + b, 0)
-  const { start, end, delta } = clicks.resolve(props.at ?? '+1', clickCounts - 1)
-  clicks.register(id, { max: end, delta })
+  const clickInfo = clicks.calculateSince(props.at ?? '+1', clickCounts - 1)
+  clicks.register(id, clickInfo)
 
   watch(
     () => clicks.current,
     () => {
       // Calculate the step and rangeStr based on the current click count
-      const clickCount = clicks.current - start
+      const clickCount = clicks.current - clickInfo.start
       let step = steps.length - 1
       let currentClickSum = 0
       let rangeStr = 'all'

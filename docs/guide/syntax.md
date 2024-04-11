@@ -307,7 +307,15 @@ By default it will automatically runs the code when the slide is loaded, if you 
 
 ````md
 ```ts {monaco-run} {autorun:false}
-console.log('HelloWorld')
+console.log('Click the play button to run me')
+```
+````
+
+If you want to only show the output in certain clicks, you can use the `showOutputAt` prop. The value is the same as `v-click`.
+
+````md
+```ts {monaco-run} {showOutputAt:'+1'}
+console.log('Shown after 1 click')
 ```
 ````
 
