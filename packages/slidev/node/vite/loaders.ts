@@ -167,8 +167,6 @@ export function createSlidesLoader(
               slide.content = slide.source.content = body.content
             if (body.note)
               slide.note = slide.source.note = body.note
-            if (body.dragPos)
-              updateFrontmatterPatch(slide, { dragPos: body.dragPos })
             if (body.frontmatter)
               updateFrontmatterPatch(slide, body.frontmatter)
 
@@ -182,7 +180,7 @@ export function createSlidesLoader(
               server?.moduleGraph.invalidateModule(
                 server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.md`)!,
               )
-              if (body.dragPos) {
+              if (body.frontmatter) {
                 server?.moduleGraph.invalidateModule(
                   server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter`)!,
                 )

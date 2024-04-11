@@ -66,12 +66,12 @@ const top = computed(() => {
     @click="closeContextMenu"
   >
     <template v-for="item, index of currentContextMenu.items.value" :key="index">
-      <div v-if="item === 'separator'" class="w-full my1 border-t border-main" />
+      <div v-if="item === 'separator'" :key="index" class="w-full my1 border-t border-main" />
       <div
         v-else-if="item.small"
         class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded"
         :class="item.disabled ? `op40` : `hover:bg-active`"
-        :title="item.label as string"
+        :title="(item.label as string)"
         @click="item.action"
       >
         <component :is="item.icon" />
