@@ -104,6 +104,14 @@ exports[`md parser > frontmatter.md > slides 1`] = `
         },
         "layout": "cover",
       },
+      "frontmatterDoc": {
+        "fonts": {
+          "mono": "Fira Code",
+          "sans": "Roboto, Lato",
+          "serif": "Mate SC",
+        },
+        "layout": "cover",
+      },
       "frontmatterRaw": "layout: cover
 fonts:
   sans: Roboto, Lato
@@ -153,6 +161,13 @@ fonts:
           "title": "FooBar",
         },
       },
+      "frontmatterDoc": {
+        "layout": "center",
+        "meta": {
+          "duration": 12,
+          "title": "FooBar",
+        },
+      },
       "frontmatterRaw": "meta:
   title: FooBar
   duration: 12
@@ -192,6 +207,7 @@ This is note
 ",
       "end": 27,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 2,
@@ -221,6 +237,9 @@ Hey
 ",
       "end": 38,
       "frontmatter": {
+        "layout": "text",
+      },
+      "frontmatterDoc": {
         "layout": "text",
       },
       "frontmatterRaw": "layout: text
@@ -273,6 +292,7 @@ Also part of the code block
 ",
       "end": 50,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 4,
@@ -308,6 +328,9 @@ Content 1
 ",
       "end": 59,
       "frontmatter": {
+        "layout": "from yaml",
+      },
+      "frontmatterDoc": {
         "layout": "from yaml",
       },
       "frontmatterRaw": "
@@ -354,6 +377,9 @@ Content 2
 ",
       "end": 70,
       "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterDoc": {
         "layout": "cover",
       },
       "frontmatterRaw": "layout: cover
@@ -404,6 +430,7 @@ Content 3
 ",
       "end": 81,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 7,
@@ -514,6 +541,9 @@ exports[`md parser > mdc.md > slides 1`] = `
 ",
       "end": 8,
       "frontmatter": {
+        "mdc": true,
+      },
+      "frontmatterDoc": {
         "mdc": true,
       },
       "frontmatterRaw": "mdc: true
@@ -634,6 +664,7 @@ console.log('Hello World')
 ",
       "end": 10,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -677,6 +708,7 @@ console.log('Hello World')
 ",
       "end": 19,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 1,
@@ -707,6 +739,7 @@ Nice to meet you
 ",
       "end": 23,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 2,
@@ -802,6 +835,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "content": "# Page 1",
       "end": 2,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -831,6 +865,9 @@ exports[`md parser > multi-entries.md > slides 1`] = `
 <Tweet />",
       "end": 8,
       "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterDoc": {
         "layout": "cover",
       },
       "frontmatterRaw": "layout: cover
@@ -864,6 +901,7 @@ layout: cover
       "content": "# Page 3",
       "end": 2,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -893,6 +931,9 @@ layout: cover
 <Tweet />",
       "end": 10,
       "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterDoc": {
         "layout": "cover",
       },
       "frontmatterRaw": "layout: cover
@@ -926,6 +967,7 @@ layout: cover
       "content": "# Page 1",
       "end": 2,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -955,6 +997,9 @@ layout: cover
 <Tweet />",
       "end": 8,
       "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterDoc": {
         "layout": "cover",
       },
       "frontmatterRaw": "layout: cover
@@ -988,6 +1033,7 @@ layout: cover
       "content": "# Page 3",
       "end": 2,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 0,
@@ -1017,6 +1063,9 @@ layout: cover
 <Tweet />",
       "end": 10,
       "frontmatter": {
+        "layout": "cover",
+      },
+      "frontmatterDoc": {
         "layout": "cover",
       },
       "frontmatterRaw": "layout: cover
@@ -1054,6 +1103,7 @@ $x+2$
 ",
       "end": 25,
       "frontmatter": {},
+      "frontmatterDoc": null,
       "frontmatterRaw": undefined,
       "frontmatterStyle": undefined,
       "index": 4,

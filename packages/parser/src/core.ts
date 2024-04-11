@@ -1,5 +1,5 @@
-import YAML from 'js-yaml'
-import { ensurePrefix, isObject, objectMap } from '@antfu/utils'
+import YAML from 'yaml'
+import { ensurePrefix, objectMap } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevFeatureFlags, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
 export function stringify(data: SlidevMarkdown) {
@@ -15,10 +15,10 @@ export function stringifySlide(data: SourceSlideInfo, idx = 0) {
 export function prettifySlide(data: SourceSlideInfo) {
   const trimed = data.content.trim()
   data.content = trimed ? `\n${data.content.trim()}\n` : ''
-  data.raw = data.frontmatterRaw
+  data.raw = data.frontmatterDoc?.contents
     ? data.frontmatterStyle === 'yaml'
-      ? `\`\`\`yaml\n${data.frontmatterRaw.trim()}\n\`\`\`\n${data.content}`
-      : `---\n${data.frontmatterRaw.trim()}\n---\n${data.content}`
+      ? `\`\`\`yaml\n${data.frontmatterDoc.toString().trim()}\n\`\`\`\n${data.content}`
+      : `---\n${data.frontmatterDoc.toString().trim()}\n---\n${data.content}`
     : data.content
   if (data.note)
     data.raw += `\n<!--\n${data.note.trim()}\n-->\n`
@@ -30,39 +30,33 @@ export function prettify(data: SlidevMarkdown) {
   return data
 }
 
-function safeParseYAML(str: string) {
-  const res = YAML.load(str)
-  return isObject(res) ? res : {}
-}
-
 function matter(code: string) {
   let type: FrontmatterStyle | undefined
   let raw: string | undefined
-
-  const data: any = {}
 
   let content = code
     .replace(/^---.*\r?\n([\s\S]*?)---/, (_, f) => {
       type = 'frontmatter'
       raw = f
-      Object.assign(data, safeParseYAML(f))
       return ''
     })
 
   if (type !== 'frontmatter') {
     content = content
-      .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, d) => {
+      .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, f) => {
         type = 'yaml'
-        raw = d
-        Object.assign(data, safeParseYAML(d))
+        raw = f
         return ''
       })
   }
 
+  const doc = YAML.parseDocument(raw || '')
+
   return {
     type,
     raw,
-    data,
+    doc,
+    data: doc.toJSON(),
     content,
   }
 }
@@ -111,6 +105,7 @@ export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'ind
     content,
     frontmatter,
     frontmatterStyle: matterResult.type,
+    frontmatterDoc: matterResult.doc,
     frontmatterRaw: matterResult.raw,
     note,
   }

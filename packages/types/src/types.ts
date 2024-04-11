@@ -1,4 +1,5 @@
 import type { RouteComponent, RouteMeta } from 'vue-router'
+import type YAML from 'yaml'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -27,6 +28,7 @@ export interface SourceSlideInfo extends SlideInfoBase {
   end: number
   raw: string
   frontmatterRaw?: string
+  frontmatterDoc?: YAML.Document
   frontmatterStyle?: FrontmatterStyle
 }
 
@@ -43,8 +45,9 @@ export interface SlideInfo extends SlideInfoBase {
 /**
  * Editable fields for a slide
  */
-export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'frontmatter'>> & {
+export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note'>> & {
   skipHmr?: boolean
+  dragPos?: Record<string, string>
 }
 
 /**

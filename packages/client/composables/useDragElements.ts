@@ -52,7 +52,7 @@ export function useDragElementsUpdater(no: number) {
         return
       frontmatter.dragPos[id] = posStr
       newPatch = {
-        frontmatter,
+        dragPos: frontmatter.dragPos,
       }
     }
     else {
