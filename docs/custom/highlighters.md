@@ -42,7 +42,8 @@ export default defineShikiSetup(() => {
       light: 'min-light',
     },
     langs: [
-      customLanguage
+      'cpp',
+      customLanguage,
     ],
     transformers: [
       // ...
