@@ -202,6 +202,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://github-production-user-asset-6210df.s3.amazonaws.com/7693264/284304324-db973b4c-a043-4644-932c-826169a1b4d8.gif',
     datetime: '2022-09-01',
   },
+  {
+    title: 'How Rust error handling ease web development',
+    author: {
+      name: 'Nguyễn Hồng Quân',
+      link: 'https://quan.hoabinh.vn',
+    },
+    at: 'FOSSASIA Summit 2024',
+    slidesLink: 'https://talk.quan.hoabinh.vn/rust-error-handling-ease-web-dev/',
+    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev.git',
+    cover: 'https://i.imgur.com/2eBJofY.png',
+    datetime: '2024-04-10',
+  },
   // Add yours here!
   {
     title: 'Yours?',
