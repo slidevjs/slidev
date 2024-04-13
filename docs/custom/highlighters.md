@@ -33,6 +33,7 @@ Create `./setup/shiki.ts` file with the following content
 ```ts
 /* ./setup/shiki.ts */
 import { defineShikiSetup } from '@slidev/types'
+import customLanguage from './customLanguage.tmLanguage.json'
 
 export default defineShikiSetup(() => {
   return {
@@ -40,9 +41,13 @@ export default defineShikiSetup(() => {
       dark: 'min-dark',
       light: 'min-light',
     },
+    langs: [
+      'cpp',
+      customLanguage,
+    ],
     transformers: [
       // ...
-    ]
+    ],
   }
 })
 ```
