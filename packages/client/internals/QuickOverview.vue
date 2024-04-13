@@ -102,6 +102,11 @@ watchEffect(() => {
   // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
 })
+
+const activeSlidesLoaded = ref(false)
+setTimeout(() => {
+  activeSlidesLoaded.value = true
+}, 3000)
 </script>
 
 <template>
@@ -112,6 +117,7 @@ watchEffect(() => {
     leave-to-class="opacity-0 scale-102 !backdrop-blur-0px"
   >
     <div
+      v-if="value || activeSlidesLoaded"
       v-show="value"
       class="bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
       @click="close()"
