@@ -42,6 +42,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 </script>
 
 <template>
+  <PrintStyle />
   <PlayTemplate id="page-root">
     <template #slides="attrs">
       <SlideContainer
