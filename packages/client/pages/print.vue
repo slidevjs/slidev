@@ -1,57 +1,46 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
-import { windowSize } from '../state'
-import PrintContainer from '../internals/PrintContainer.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
-import { useNav } from '../composables/useNav'
+import { onMounted } from 'vue'
+import PrintTemplate from '#slidev/page-templates/print'
 
-const { isPrintMode } = useNav()
-
-watchEffect(() => {
-  if (isPrintMode)
-    (document.body.parentNode as HTMLElement).classList.add('print')
-  else
-    (document.body.parentNode as HTMLElement).classList.remove('print')
-})
+document.documentElement.classList.add('print')
 
 onMounted(() => {
-  recomputeAllPoppers()
+  setTimeout(recomputeAllPoppers, 300)
 })
 </script>
 
 <template>
-  <PrintStyle v-if="isPrintMode" />
-  <div id="page-root" class="grid grid-cols-[1fr_max-content]">
-    <PrintContainer
-      class="w-full h-full"
-      :style="{ background: 'var(--slidev-slide-container-background, black)' }"
-      :width="windowSize.width.value"
-    />
-    <div id="twoslash-container" />
+  <div id="page-root">
+    <PrintTemplate>
+      <template #floating="attrs">
+        <div id="twoslash-container" v-bind="attrs" />
+      </template>
+    </PrintTemplate>
   </div>
 </template>
 
-<style lang="postcss">
-html.print,
-html.print body,
-html.print #app {
+<style>
+html,
+html body,
+html #app {
   height: auto;
   overflow: auto;
 }
-html.print #page-root {
+html #page-root {
   height: auto;
   overflow: hidden;
 }
-html.print * {
+html * {
+  print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
 }
-html.print {
+html {
   width: 100%;
   height: 100%;
   overflow: visible;
 }
-html.print body {
+html body {
   margin: 0 auto;
   border: 0;
   padding: 0;

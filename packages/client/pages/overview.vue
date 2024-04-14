@@ -163,7 +163,7 @@ onMounted(() => {
             v-if="route.meta?.slide"
             class="mr--3 op0 group-hover:op80"
             title="Open in editor"
-            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide!.start}`)"
           >
             <carbon:cics-program />
           </IconButton>
@@ -190,9 +190,8 @@ onMounted(() => {
           </div>
           <ClicksSlider
             v-if="getSlideClicks(route)"
-            mt-2
             :clicks-context="getClicksContext(route)"
-            class="w-full"
+            class="w-full mt-2"
             @dblclick="getClicksContext(route).current = CLICKS_MAX"
           />
         </div>

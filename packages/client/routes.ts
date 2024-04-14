@@ -27,10 +27,6 @@ if (__SLIDEV_FEATURE_PRESENTER__) {
     return { path: '' }
   }
 
-  routes.push({
-    path: '/presenter/print',
-    component: () => import('./pages/presenter/print.vue'),
-  })
   if (__SLIDEV_HAS_SERVER__) {
     routes.push({
       name: 'entry',

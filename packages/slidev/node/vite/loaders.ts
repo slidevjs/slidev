@@ -105,8 +105,9 @@ export function createSlidesLoader(
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
-    getLayouts: createGlobResolver('layouts/**/*.{vue,ts}', options),
-    getPageTemplates: createGlobResolver('page-templates/**/*.{vue,ts}', options),
+    getLayouts: createGlobResolver('layouts/*.{vue,ts}', options),
+    getPageTemplates: createGlobResolver('page-templates/*.{vue,ts}', options),
+    getPrintTemplates: createGlobResolver('page-templates/print/*.{vue,ts}', options),
   }
 
   return [
@@ -377,7 +378,9 @@ export function createSlidesLoader(
         const VIRTUAL_PAGE_TEMPLATES_PREFIX = '/@slidev/page-templates/'
         if (id.startsWith(VIRTUAL_PAGE_TEMPLATES_PREFIX)) {
           const templateName = id.slice(VIRTUAL_PAGE_TEMPLATES_PREFIX.length)
-          const template = (await templateCtx.getPageTemplates())[templateName]
+          const template = templateName === 'print'
+            ? (await templateCtx.getPrintTemplates())[options.exportTemplate]
+            : (await templateCtx.getPageTemplates())[templateName]
           return {
             code: `import PageTemplate from "${toAtFS(template)}"\nexport default PageTemplate`,
             map: { mappings: '' },

@@ -59,3 +59,9 @@ provideLocal(injectionSlidevContext, reactive({
     <GlobalTop />
   </div>
 </template>
+
+<style scoped lang="postcss">
+.print-slide-container {
+  @apply relative overflow-hidden break-after-page translate-0;
+}
+</style>

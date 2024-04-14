@@ -89,7 +89,7 @@ export async function build(
     await exportSlides({
       port,
       base: config.base,
-      ...getExportOptions(args, options, outDir, 'slidev-exported.pdf'),
+      ...getExportOptions(args, options, outDir),
     })
     server.close()
   }

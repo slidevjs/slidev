@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import type { Slots } from 'vue'
-import { h } from 'vue'
-import { slideHeight, slideWidth } from '../env'
-
-function vStyle<Props>(props: Props, { slots }: { slots: Slots }) {
-  if (slots.default)
-    return h('style', slots.default())
-}
+defineProps<{
+  pageWidth: number
+  pageHeight: number
+}>()
 </script>
 
-<template>
-  <vStyle>
-    @page { size: {{ slideWidth }}px {{ slideHeight }}px; margin: 0px; }
-  </vStyle>
-</template>
+<style>
+@page {
+  size: v-bind('`${pageWidth}px`') v-bind('`${pageHeight}px`');
+  margin: 0;
+}
+</style>

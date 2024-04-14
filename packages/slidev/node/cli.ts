@@ -8,7 +8,7 @@ import fs from 'fs-extra'
 import openBrowser from 'open'
 import type { Argv } from 'yargs'
 import yargs from 'yargs'
-import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, gray, green, red, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { ResolvedSlidevOptions, SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
 import isInstalledGlobally from 'is-installed-globally'
@@ -451,17 +451,17 @@ cli.command(
 
 cli.command(
   'export [entry..]',
-  'Export slides to PDF',
+  'Export slides to PDF, PNG or Markdown',
   args => exportOptions(commonOptions(args))
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme } = args
+    const { entry, theme, template } = args
     const { exportSlides, getExportOptions } = await import('./commands/export')
     const port = await getPort(12445)
 
     for (const entryFile of entry as unknown as string) {
-      const options = await resolveOptions({ entry: entryFile, theme }, 'export')
+      const options = await resolveOptions({ entry: entryFile, theme }, 'export', template)
       const server = await createServer(
         options,
         {
@@ -486,62 +486,10 @@ cli.command(
 cli.command(
   'export-notes [entry..]',
   'Export slide notes to PDF',
-  args => args
-    .positional('entry', {
-      default: 'slides.md',
-      type: 'string',
-      describe: 'path to the slides markdown entry',
-    })
-    .option('output', {
-      type: 'string',
-      describe: 'path to the output',
-    })
-    .option('timeout', {
-      default: 30000,
-      type: 'number',
-      describe: 'timeout for rendering the print page',
-    })
-    .option('wait', {
-      default: 0,
-      type: 'number',
-      describe: 'wait for the specified ms before exporting',
-    })
-    .strict()
-    .help(),
-  async ({
-    entry,
-    output,
-    timeout,
-    wait,
-  }) => {
-    const { exportNotes } = await import('./commands/export')
-    const port = await getPort(12445)
-
-    for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile }, 'export')
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
-
-      printInfo(options)
-
-      const result = await exportNotes({
-        port,
-        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
-        timeout,
-        wait,
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
-
-      server.close()
-    }
-
-    process.exit(0)
+  args => args,
+  () => {
+    console.error(red('[Slidev] the `export-notes` command has been removed. Please run `slidev export -t notes` instead.'))
+    process.exit(1)
   },
 )
 
@@ -557,7 +505,6 @@ function commonOptions(args: Argv<object>) {
       describe: 'path to the slides markdown entry',
     })
     .option('theme', {
-      alias: 't',
       type: 'string',
       describe: 'override theme',
     })
@@ -573,6 +520,12 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'string',
       choices: ['pdf', 'png', 'md'],
       describe: 'output format',
+    })
+    .option('template', {
+      type: 'string',
+      alias: 't',
+      default: 'default',
+      describe: 'the export layout template',
     })
     .option('timeout', {
       type: 'number',

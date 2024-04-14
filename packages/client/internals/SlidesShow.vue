@@ -8,7 +8,6 @@ import { createFixedClicks } from '../composables/useClicks'
 import { activeDragElement } from '../state'
 import { CLICKS_MAX } from '../constants'
 import SlideWrapper from './SlideWrapper.vue'
-import PresenterMouse from './PresenterMouse.vue'
 import DragControl from './DragControl.vue'
 
 import GlobalTop from '#slidev/global-components/top'
@@ -22,11 +21,11 @@ const {
   currentSlideRoute,
   currentTransition,
   getPrimaryClicks,
-  isPresenter,
   nextRoute,
   slides,
   isPrintMode,
   isPrintWithClicks,
+  clicksDirection,
 } = useNav()
 
 // preload next route
@@ -64,6 +63,10 @@ function onAfterLeave() {
     v-bind="skipTransition ? {} : currentTransition"
     id="slideshow"
     tag="div"
+    :class="{
+      'slidev-nav-go-forward': clicksDirection > 0,
+      'slidev-nav-go-backward': clicksDirection < 0,
+    }"
     @after-leave="onAfterLeave"
   >
     <SlideWrapper
@@ -87,7 +90,6 @@ function onAfterLeave() {
   <template v-if="(__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__) && DrawingLayer">
     <DrawingLayer />
   </template>
-  <PresenterMouse v-if="!isPresenter" />
 </template>
 
 <style scoped>

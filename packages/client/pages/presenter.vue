@@ -21,6 +21,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
+import PresenterMouse from '../internals/PresenterMouse.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import PresenterTemplate from '#slidev/page-templates/presenter'
@@ -192,6 +193,7 @@ watchEffect(() => {
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
       <Goto />
       <QuickOverview v-model="showOverview" />
+      <PresenterMouse />
     </template>
   </PresenterTemplate>
 </template>

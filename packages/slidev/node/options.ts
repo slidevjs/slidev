@@ -11,6 +11,7 @@ const debug = Debug('slidev:options')
 export async function resolveOptions(
   options: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
+  exportTemplate: string = 'default',
 ): Promise<ResolvedSlidevOptions> {
   const entry = await resolveEntry(options.entry)
   const rootsInfo = await getRoots(entry)
@@ -49,6 +50,7 @@ export async function resolveOptions(
       themeMeta,
     },
     mode,
+    exportTemplate,
     entry,
     themeRaw,
     theme,

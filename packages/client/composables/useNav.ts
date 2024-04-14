@@ -6,6 +6,7 @@ import type { RouteLocationNormalized, Router } from 'vue-router'
 import { createSharedComposable } from '@vueuse/core'
 import { logicOr } from '@vueuse/math'
 import { clamp } from '@antfu/utils'
+import { parseRangeString } from '@slidev/parser'
 import { getCurrentTransition } from '../logic/transition'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { CLICKS_MAX } from '../constants'
@@ -67,6 +68,7 @@ export interface SlidevContextNavState {
   currentRoute: ComputedRef<RouteLocationNormalized>
   isPrintMode: ComputedRef<boolean>
   isPrintWithClicks: ComputedRef<boolean>
+  slidesToPrint: ComputedRef<SlideRoute[]>
   isEmbedded: ComputedRef<boolean>
   isPlaying: ComputedRef<boolean>
   isPresenter: ComputedRef<boolean>
@@ -258,7 +260,11 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     return new URLSearchParams(location.search)
   })
   const isPrintMode = computed(() => query.value.has('print'))
-  const isPrintWithClicks = computed(() => query.value.get('print') === 'clicks')
+  const isPrintWithClicks = computed(() => query.value.get('clicks') === 'true')
+  const slidesToPrint = computed(() => {
+    const range = query.value.get('range')
+    return range ? parseRangeString(slides.value.length, range).map(i => slides.value[i - 1]) : slides.value
+  })
   const isEmbedded = computed(() => query.value.has('embedded'))
   const isPlaying = computed(() => currentRoute.value.name === 'play')
   const isPresenter = computed(() => currentRoute.value.name === 'presenter')
@@ -328,6 +334,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     currentRoute,
     isPrintMode,
     isPrintWithClicks,
+    slidesToPrint,
     isEmbedded,
     isPlaying,
     isPresenter,

@@ -20,6 +20,7 @@ export interface ExportOptions {
   port?: number
   base?: string
   format?: 'pdf' | 'png' | 'md'
+  template?: string
   output?: string
   timeout?: number
   wait?: number
@@ -65,14 +66,6 @@ function makeOutline(tree: TocItem[]): string {
   }).filter(outline => !!outline).join('\n')
 }
 
-export interface ExportNotesOptions {
-  port?: number
-  base?: string
-  output?: string
-  timeout?: number
-  wait?: number
-}
-
 function createSlidevProgress(indeterminate = false) {
   function getSpinner(n = 0) {
     return [cyan('●'), green('◆'), blue('■'), yellow('▲')][n % 4]
@@ -107,50 +100,6 @@ function createSlidevProgress(indeterminate = false) {
       progress.stop()
     },
   }
-}
-
-export async function exportNotes({
-  port = 18724,
-  base = '/',
-  output = 'notes',
-  timeout = 30000,
-  wait = 0,
-}: ExportNotesOptions): Promise<string> {
-  const { chromium } = await importPlaywright()
-  const browser = await chromium.launch()
-  const context = await browser.newContext()
-  const page = await context.newPage()
-
-  const progress = createSlidevProgress(true)
-
-  progress.start(1)
-
-  if (!output.endsWith('.pdf'))
-    output = `${output}.pdf`
-
-  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
-  await page.waitForLoadState('networkidle')
-  await page.emulateMedia({ media: 'screen' })
-
-  if (wait)
-    await page.waitForTimeout(wait)
-
-  await page.pdf({
-    path: output,
-    margin: {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-    },
-    printBackground: true,
-    preferCSSPageSize: true,
-  })
-
-  progress.stop()
-  browser.close()
-
-  return output
 }
 
 export async function exportSlides({
@@ -191,20 +140,15 @@ export async function exportSlides({
   const progress = createSlidevProgress(!perSlide)
 
   async function go(no: number | string, clicks?: string) {
-    const query = new URLSearchParams()
-    if (withClicks)
-      query.set('print', 'clicks')
-    else
-      query.set('print', 'true')
+    let query = 'print'
     if (range)
-      query.set('range', range)
+      query += `&range=${range}`
     if (clicks)
-      query.set('clicks', clicks)
+      query += `&clicks=${clicks}`
+    else if (withClicks)
+      query += `&clicks`
 
-    const path = `${no}?${query.toString()}`
-    const url = routerMode === 'hash'
-      ? `http://localhost:${port}${base}#${path}`
-      : `http://localhost:${port}${base}${path}`
+    const url = `http://localhost:${port}${base}${routerMode === 'hash' ? '#' : ''}${no}?${query}`
     await page.goto(url, {
       waitUntil: 'networkidle',
       timeout,
@@ -213,7 +157,7 @@ export async function exportSlides({
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
     const slide = no === 'print'
       ? page.locator('body')
-      : page.locator(`[data-slidev-no="${no}"]`)
+      : page.locator(`#slideshow [data-slidev-no="${no}"]`)
     await slide.waitFor()
 
     // Wait for slides to be loaded
@@ -497,7 +441,7 @@ export async function exportSlides({
   return output
 }
 
-export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
+export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string): Omit<ExportOptions, 'port' | 'base'> {
   const config = {
     ...options.data.config.export,
     ...args,
@@ -512,6 +456,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     entry,
     output,
     format,
+    template = 'default',
     timeout,
     wait,
     range,
@@ -522,7 +467,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     perSlide,
     scale,
   } = config
-  outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
+  let outFilename = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export${template === 'default' ? '' : `-${template}`}`
   if (outDir)
     outFilename = path.join(outDir, outFilename)
   return {
@@ -531,6 +476,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     total: options.data.slides.length,
     range,
     format: (format || 'pdf') as 'pdf' | 'png' | 'md',
+    template,
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
     dark: dark || options.data.config.colorSchema === 'dark',
@@ -540,7 +486,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks: withClicks || false,
     executablePath,
     withToc: withToc || false,
-    perSlide: perSlide || false,
+    perSlide: template === 'per-slide' || perSlide || false,
     scale: scale || 1,
   }
 }

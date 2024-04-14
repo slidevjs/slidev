@@ -5,6 +5,7 @@ import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
+import { configs } from '../env'
 import SlideLoading from './SlideLoading.vue'
 
 const props = defineProps({
@@ -39,7 +40,7 @@ provideLocal(injectionActive, toRef(props, 'active'))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 provideLocal(injectionSlideZoom, zoom)
 
-const style = computed(() => {
+const zoomStyle = computed(() => {
   return zoom.value === 1
     ? undefined
     : {
@@ -49,6 +50,10 @@ const style = computed(() => {
         transform: `scale(${zoom.value})`,
       }
 })
+const style = computed(() => ({
+  ...zoomStyle.value,
+  'user-select': configs.selectable ? undefined : 'none',
+}))
 
 const SlideComponent = defineAsyncComponent({
   loader: async () => {

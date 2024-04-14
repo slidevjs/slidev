@@ -7,12 +7,11 @@ import Controls from '../internals/Controls.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import PlayTemplate from '#slidev/page-templates/play'
 
-const { next, prev, isPrintMode } = useNav()
+const { next, prev } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
@@ -41,7 +40,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 </script>
 
 <template>
-  <PrintStyle v-if="isPrintMode" />
   <PlayTemplate id="page-root">
     <template #slides="attrs">
       <SlideContainer
@@ -55,7 +53,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
         </template>
         <template #controls>
           <div
-            v-if="!isPrintMode"
             class="absolute bottom-0 left-0 transition duration-300 opacity-0 hover:opacity-100"
             :class="[
               persistNav ? '!opacity-100 right-0' : 'opacity-0 p-2',
@@ -71,7 +68,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
       <SideEditor :resize="true" />
     </template>
     <template #floating>
-      <Controls v-if="!isPrintMode" />
+      <Controls />
     </template>
   </PlayTemplate>
 </template>

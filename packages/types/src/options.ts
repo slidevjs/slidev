@@ -42,6 +42,7 @@ export interface ResolvedSlidevOptions extends RootsInfo {
    */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
+  exportTemplate: string
   remote?: string
   inspect?: boolean
 }
