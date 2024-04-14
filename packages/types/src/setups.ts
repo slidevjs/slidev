@@ -1,7 +1,7 @@
 import type { Awaitable } from '@antfu/utils'
 import type * as monaco from 'monaco-editor'
 import type { App, ComputedRef, Ref } from 'vue'
-import type { Router } from 'vue-router'
+import type { RouteRecordRaw, Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
@@ -73,6 +73,7 @@ export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type RootSetup = () => Awaitable<void>
+export type RoutesSetup = (routes: RouteRecordRaw[]) => RouteRecordRaw[]
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>
@@ -86,6 +87,8 @@ export const defineShikiSetup = defineSetup<ShikiSetup>
 export const defineUnoSetup = defineSetup<UnoSetup>
 export const defineMonacoSetup = defineSetup<MonacoSetup>
 export const defineAppSetup = defineSetup<AppSetup>
+export const defineRootSetup = defineSetup<RootSetup>
+export const defineRoutesSetup = defineSetup<RoutesSetup>
 export const defineMermaidSetup = defineSetup<MermaidSetup>
 export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
