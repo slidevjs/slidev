@@ -2,12 +2,12 @@
 import { computed, ref, shallowRef } from 'vue'
 import { isScreenVertical, showEditor } from '../state'
 import { useSwipeControls } from '../composables/useSwipeControls'
+import { usePrintStyle } from '../composables/usePrintStyle'
 import { registerShortcuts } from '../logic/shortcuts'
 import Controls from '../internals/Controls.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
@@ -20,6 +20,7 @@ const root = ref<HTMLDivElement>()
 
 useSwipeControls(root)
 registerShortcuts()
+usePrintStyle()
 
 function onClick(e: MouseEvent) {
   if (showEditor.value)
@@ -42,7 +43,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 </script>
 
 <template>
-  <PrintStyle />
   <PlayTemplate id="page-root">
     <template #slides="attrs">
       <SlideContainer
