@@ -6,6 +6,7 @@ import { useNav } from '../composables/useNav'
 import QuickOverview from './QuickOverview.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
+import ContextMenu from './ContextMenu.vue'
 
 const { isEmbedded } = useNav()
 const drawingEnabled = __SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded.value
@@ -30,4 +31,5 @@ if (__SLIDEV_FEATURE_RECORD__) {
   <WebCamera v-if="WebCamera" />
   <RecordingDialog v-if="RecordingDialog" v-model="showRecordingDialog" />
   <InfoDialog v-if="configs.info" v-model="showInfoDialog" />
+  <ContextMenu />
 </template>

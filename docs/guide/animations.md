@@ -188,12 +188,17 @@ The following example synchronizes the highlighting of the two code blocks:
 
 ### Enter & Leave
 
-> Available since v0.43.0
-
 You can also specify the enter and leave index for the `v-click` directive by passing an array. The end index is exclusive.
 
 ```md
-<div v-click="[2, 4]">This will be shown on the 2nd and 3rd clicks, and hide again after the 4th.</div>
+<div v-click.hide="[2, 4]">
+  This will be hidden at click 2 and 3.
+</div>
+
+<div v-click />
+<div v-click="'[+1, +1]'">
+  This will be shown at click 3, and hidden since click 4.
+</div>
 ```
 
 ### Custom Total Clicks Count

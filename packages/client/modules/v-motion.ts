@@ -1,18 +1,12 @@
 import type { App, ObjectDirective } from 'vue'
 import { watch } from 'vue'
 import { MotionDirective } from '@vueuse/motion'
-import type { ResolvedClicksInfo } from '@slidev/types'
-import { injectionClickVisibility, injectionClicksContext, injectionCurrentPage, injectionRenderContext } from '../constants'
+import type { ClicksInfo } from '@slidev/types'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext } from '../constants'
 import { useNav } from '../composables/useNav'
 import { makeId } from '../logic/utils'
 import { directiveInject } from '../utils'
-import type { VClickValue } from './v-click'
-import { resolveClick } from './v-click'
-
-export type MotionDirectiveValue = undefined | VClickValue | {
-  key?: string
-  at?: VClickValue
-}
+import { resolvedClickMap } from './v-click'
 
 export function createVMotionDirectives() {
   return {
@@ -22,6 +16,11 @@ export function createVMotionDirectives() {
         // @ts-expect-error extra prop
         name: 'v-motion',
         mounted(el, binding, node, prevNode) {
+          const clicksContext = directiveInject(binding, injectionClicksContext)
+          const thisPage = directiveInject(binding, injectionCurrentPage)
+          const renderContext = directiveInject(binding, injectionRenderContext)
+          const { currentPage, clicks: currentClicks, isPrintMode } = useNav()
+
           const props = node.props = { ...node.props }
 
           const variantInitial = { ...props.initial, ...props.variants?.['slidev-initial'] }
@@ -36,7 +35,7 @@ export function createVMotionDirectives() {
             id: string
             at: number | [number, number]
             variant: Record<string, unknown>
-            resolved: ResolvedClicksInfo | null
+            info: ClicksInfo | null | undefined
           }[] = []
 
           for (const k of Object.keys(props)) {
@@ -48,7 +47,7 @@ export function createVMotionDirectives() {
                 id,
                 at,
                 variant: { ...props[k] },
-                resolved: resolveClick(id, binding, at),
+                info: clicksContext?.value.calculate(at),
               })
               delete props[k]
             }
@@ -59,11 +58,6 @@ export function createVMotionDirectives() {
           original.created!(el, binding, node, prevNode)
           original.mounted!(el, binding, node, prevNode)
 
-          const thisPage = directiveInject(binding, injectionCurrentPage)
-          const renderContext = directiveInject(binding, injectionRenderContext)
-          const clickVisibility = directiveInject(binding, injectionClickVisibility)
-          const clicksContext = directiveInject(binding, injectionClicksContext)
-          const { currentPage, clicks: currentClicks, isPrintMode } = useNav()
           // @ts-expect-error extra prop
           const motion = el.motionInstance
           motion.clickIds = clicks.map(i => i.id)
@@ -71,7 +65,7 @@ export function createVMotionDirectives() {
           motion.watchStopHandle = watch(
             [thisPage, currentPage, currentClicks].filter(Boolean),
             () => {
-              const visibility = clickVisibility?.value ?? true
+              const visibility = resolvedClickMap.get(el)?.visibilityState.value ?? 'shown'
               if (!clicksContext?.value || !['slide', 'presenter'].includes(renderContext?.value ?? '')) {
                 const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
                 for (const { variant } of clicks)
@@ -80,10 +74,10 @@ export function createVMotionDirectives() {
                 motion.set(mixedVariant)
               }
               else if (isPrintMode.value || thisPage?.value === currentPage.value) {
-                if (visibility === true) {
+                if (visibility === 'shown') {
                   const mixedVariant: Record<string, unknown> = { ...variantInitial, ...variantEnter }
-                  for (const { variant, resolved: resolvedClick } of clicks) {
-                    if (!resolvedClick || resolvedClick.isActive.value)
+                  for (const { variant, info } of clicks) {
+                    if (!info || info.isActive.value)
                       Object.assign(mixedVariant, variant)
                   }
                   if (isPrintMode.value)
@@ -104,14 +98,9 @@ export function createVMotionDirectives() {
             },
           )
         },
-        unmounted(el, dir) {
-          if (!directiveInject(dir, injectionClicksContext)?.value)
-            return
-
-          const ctx = directiveInject(dir, injectionClicksContext)?.value
+        unmounted(el) {
           // @ts-expect-error extra prop
           const motion = el.motionInstance
-          motion.clickIds.map((id: string) => ctx?.unregister(id))
           motion.watchStopHandle()
         },
       })

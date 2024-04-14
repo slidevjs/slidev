@@ -14,7 +14,6 @@ export const injectionRenderContext = '$$slidev-render-context' as unknown as In
 export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
 export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
 export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionKey<ComputedRef<number>>
-export const injectionClickVisibility = '$$slidev-click-visibility' as unknown as InjectionKey<ComputedRef<true | 'before' | 'after'>>
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
@@ -77,4 +76,5 @@ export const HEADMATTER_FIELDS = [
   'drawings',
   'htmlAttrs',
   'mdc',
+  'contextMenu',
 ]

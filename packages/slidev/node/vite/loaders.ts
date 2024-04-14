@@ -1,8 +1,8 @@
+import path from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, range } from '@antfu/utils'
 import fs from 'fs-extra'
 import Markdown from 'markdown-it'
-import YAML from 'js-yaml'
 import { bold, gray, red, yellow } from 'kolorist'
 
 // @ts-expect-error missing types
@@ -12,7 +12,7 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import { stringifyMarkdownTokens } from '../utils'
+import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
 import { createGlobResolver, toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
@@ -101,7 +101,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, mode } = options
+  const { data, mode, userRoot } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
@@ -139,10 +139,8 @@ export function createSlidesLoader(
               slide.content = slide.source.content = body.content
             if (body.note)
               slide.note = slide.source.note = body.note
-            if (body.frontmatter) {
-              Object.assign(slide.frontmatter, body.frontmatter)
-              slide.source.frontmatterRaw = YAML.dump(slide.frontmatter)
-            }
+            if (body.frontmatter)
+              updateFrontmatterPatch(slide, body.frontmatter)
 
             parser.prettifySlide(slide.source)
             const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
@@ -169,13 +167,15 @@ export function createSlidesLoader(
           next()
         })
 
+        const snippetsPath = path.resolve(userRoot, 'snippets/__importer__.ts')
+
         server.middlewares.use(async (req, res, next) => {
-          const match = req.url?.match(/^\/\@slidev\/resolve-id\/(.*)$/)
+          const match = req.url?.match(/^\/\@slidev\/resolve-id\?specifier=(.*)$/)
           if (!match)
             return next()
 
           const [, specifier] = match
-          const resolved = await server!.pluginContainer.resolveId(specifier)
+          const resolved = await server!.pluginContainer.resolveId(specifier, snippetsPath)
           res.statusCode = 200
           res.write(resolved?.id ?? '')
           return res.end()

@@ -7,6 +7,7 @@ import { decreasePresenterFontSize, increasePresenterFontSize, presenterNotesFon
 import { slideTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
+import { onContextMenu } from '../logic/contextMenu'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { createFixedClicks } from '../composables/useClicks'
@@ -21,7 +22,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
-import PresenterMouse from '../internals/PresenterMouse.vue'
+import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import PresenterTemplate from '#slidev/page-templates/presenter'
@@ -107,7 +108,7 @@ watchEffect(() => {
       </SlideContainer>
     </template>
     <template v-if="nextFrame && nextFrameClicksCtx" #next-slide="attrs">
-      <SlideContainer v-bind="attrs">
+      <SlideContainer v-bind="attrs" @contextmenu="onContextMenu">
         <SlideWrapper
           :is="nextFrame[0].component!"
           :key="nextFrame[0].no"
@@ -192,8 +193,8 @@ watchEffect(() => {
     <template #floating>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
       <Goto />
+      <ContextMenu />
       <QuickOverview v-model="showOverview" />
-      <PresenterMouse />
     </template>
   </PresenterTemplate>
 </template>

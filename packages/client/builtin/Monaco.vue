@@ -16,7 +16,11 @@ import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
 import type * as monaco from 'monaco-editor'
 import { computed, nextTick, onMounted, ref } from 'vue'
+import type { RawAtValue } from '@slidev/types'
+import { whenever } from '@vueuse/core'
 import { makeId } from '../logic/utils'
+import { useSlideContext } from '../context'
+import { useNav } from '../composables/useNav'
 import CodeRunner from '../internals/CodeRunner.vue'
 
 const props = withDefaults(defineProps<{
@@ -30,6 +34,7 @@ const props = withDefaults(defineProps<{
   ata?: boolean
   runnable?: boolean
   autorun?: boolean | 'once'
+  showOutputAt?: RawAtValue
   outputHeight?: string
   highlightOutput?: boolean
   runnerOptions?: Record<string, unknown>
@@ -73,6 +78,19 @@ const height = computed(() => {
     return `${initialHeight.value}px`
   return props.height
 })
+
+const loadTypes = ref<() => void>()
+const { $page: thisSlideNo, $renderContext: renderContext } = useSlideContext()
+const { currentSlideNo } = useNav()
+const stopWatchTypesLoading = whenever(
+  () => Math.abs(thisSlideNo.value - currentSlideNo.value) <= 1 && loadTypes.value,
+  (loadTypes) => {
+    if (['slide', 'presenter'].includes(renderContext.value))
+      loadTypes()
+    else
+      setTimeout(loadTypes, 5000)
+  },
+)
 
 onMounted(async () => {
   // Lazy load monaco, so it will be bundled in async chunk
@@ -135,11 +153,15 @@ onMounted(async () => {
     })
     editableEditor = editor
   }
-  if (props.ata) {
-    ata(editableEditor.getValue())
-    editableEditor.onDidChangeModelContent(debounce(1000, () => {
+  loadTypes.value = () => {
+    stopWatchTypesLoading()
+    import('#slidev/monaco-types')
+    if (props.ata) {
       ata(editableEditor.getValue())
-    }))
+      editableEditor.onDidChangeModelContent(debounce(1000, () => {
+        ata(editableEditor.getValue())
+      }))
+    }
   }
   const originalLayoutContentWidget = editableEditor.layoutContentWidget.bind(editableEditor)
   editableEditor.layoutContentWidget = (widget: any) => {
@@ -165,6 +187,7 @@ onMounted(async () => {
       v-model="code"
       :lang="lang"
       :autorun="props.autorun"
+      :show-output-at="props.showOutputAt"
       :height="props.outputHeight"
       :highlight-output="props.highlightOutput"
       :runner-options="props.runnerOptions"
