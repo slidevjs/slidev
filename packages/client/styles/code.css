@@ -42,6 +42,7 @@ html:not(.dark) .shiki span {
   border-radius: var(--slidev-code-radius) !important;
   background: var(--slidev-code-background);
   overflow: auto;
+  scrollbar-width: thin;
 }
 
 .slidev-code .slidev-code-highlighted {

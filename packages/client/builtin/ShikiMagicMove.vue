@@ -93,7 +93,7 @@ onMounted(() => {
 <template>
   <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative">
     <ShikiMagicMovePrecompiled
-      class="slidev-code relative shiki overflow-visible"
+      class="slidev-code relative shiki overflow-y-clip overflow-x-auto"
       :steps="steps"
       :step="stepIndex"
       :animate="!isPrintMode"
