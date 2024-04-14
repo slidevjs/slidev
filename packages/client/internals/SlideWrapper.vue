@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
-import type { PropType } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
 import SlideLoading from './SlideLoading.vue'
+import SlideBottomTemplate from '#slidev/page-templates/slide-bottom'
+import SlideTopTemplate from '#slidev/page-templates/slide-top'
 
 const props = defineProps({
   clicksContext: {
@@ -50,7 +52,7 @@ const zoomStyle = computed(() => {
         transform: `scale(${zoom.value})`,
       }
 })
-const style = computed(() => ({
+const style = computed<CSSProperties>(() => ({
   ...zoomStyle.value,
   'user-select': configs.selectable ? undefined : 'none',
 }))
@@ -73,13 +75,13 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
-  <div :class="getSlideClass(route)">
-    <component
-      :is="SlideComponent"
-      :style="style"
-      :data-slidev-no="props.route.no"
-      :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
-    />
+  <div
+    :data-slidev-no="props.route.no"
+    :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
+  >
+    <SlideBottomTemplate :style="style" />
+    <SlideComponent :style="style" />
+    <SlideTopTemplate :style="style" />
   </div>
 </template>
 
@@ -90,7 +92,6 @@ const SlideComponent = defineAsyncComponent({
 
 .slidev-page {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 }
 </style>

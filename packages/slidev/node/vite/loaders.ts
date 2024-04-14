@@ -382,7 +382,9 @@ export function createSlidesLoader(
             ? (await templateCtx.getPrintTemplates())[options.exportTemplate]
             : (await templateCtx.getPageTemplates())[templateName]
           return {
-            code: `import PageTemplate from "${toAtFS(template)}"\nexport default PageTemplate`,
+            code: template
+              ? `import PageTemplate from "${toAtFS(template)}"\nexport default PageTemplate`
+              : `export default { render: () => [] }`,
             map: { mappings: '' },
           }
         }
