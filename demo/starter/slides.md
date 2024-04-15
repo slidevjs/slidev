@@ -374,8 +374,6 @@ also allows you to add
 </div>
 
 ---
-preload: false
----
 
 # Motions
 
@@ -385,18 +383,21 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
 <div
   v-motion
   :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
+  :enter="{ x: 0 }"
+  :click-3="{ x: 80 }"
+  :leave="{ x: 1000 }"
+>
   Slidev
 </div>
 ```
 
-<div class="w-60 relative mt-6">
+<div class="w-60 relative">
   <div class="relative w-40 h-40">
     <img
       v-motion
       :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-square.png"
       alt=""
     />
@@ -404,7 +405,7 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
       v-motion
       :initial="{ y: 500, x: -100, scale: 2 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-circle.png"
       alt=""
     />
@@ -412,7 +413,7 @@ Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), t
       v-motion
       :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
       :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
+      class="absolute inset-0"
       src="https://sli.dev/logo-triangle.png"
       alt=""
     />
@@ -445,7 +446,7 @@ const final = {
 
 <div
   v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
+  :initial="{ x:35, y: 30, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
 
 [Learn More](https://sli.dev/guide/animations.html#motion)
@@ -510,7 +511,7 @@ mindmap
       Popularisation
         British popular psychology author Tony Buzan
     Research
-      On effectivness<br/>and features
+      On effectiveness<br/>and features
       On Automatic creation
         Uses
             Creative techniques
@@ -559,6 +560,43 @@ database "MySql" {
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
 
 ---
+foo: bar
+dragPos:
+  square: 691,33,167,_,-16
+---
+
+# Draggable Elements
+
+Double-click on the draggable elements to edit their positions.
+
+<br>
+
+###### Directive Usage
+
+```md
+<img v-drag="'square'" src="https://sli.dev/logo.png">
+```
+
+<br>
+
+###### Component Usage
+
+```md
+<v-drag text-3xl>
+  <carbon:arrow-up />
+  Use the `v-drag` component to have a draggable container!
+</v-drag>
+```
+
+<v-drag pos="671,205,253,_,-15">
+  <div text-center text-3xl border border-main rounded>
+    Double-click me!
+  </div>
+</v-drag>
+
+<img v-drag="'square'" src="https://sli.dev/logo.png">
+
+---
 src: ./pages/multiple-entries.md
 hide: false
 ---
@@ -567,28 +605,26 @@ hide: false
 
 # Monaco Editor
 
-Slidev provides built-in Moanco Editor support.
+Slidev provides built-in Monaco Editor support.
 
 Add `{monaco}` to the code block to turn it into an editor:
 
 ```ts {monaco}
 import { ref } from 'vue'
-import hello from './external'
+import { emptyArray } from './external'
 
-const code = ref('const a = 1')
-hello()
+const arr = ref(emptyArray(10))
 ```
 
 Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
 
 ```ts {monaco-run}
-function fibonacci(n: number): number {
-  return n <= 1
-    ? n
-    : fibonacci(n - 1) + fibonacci(n - 2) // you know, this is NOT the best way to do it :P
-}
+import { version } from 'vue'
+import { emptyArray, sayHello } from './external'
 
-console.log(Array.from({ length: 10 }, (_, i) => fibonacci(i + 1)))
+sayHello()
+console.log(`vue ${version}`)
+console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
 ```
 
 ---

@@ -3,21 +3,22 @@ import { useFetch } from '@vueuse/core'
 import type { Ref } from 'vue'
 import { computed, ref, unref } from 'vue'
 import type { SlideInfo, SlidePatch } from '@slidev/types'
+import { getSlide } from '../logic/slides'
 
 export interface UseSlideInfo {
-  info: Ref<SlideInfo | undefined>
+  info: Ref<SlideInfo | null>
   update: (data: SlidePatch) => Promise<SlideInfo | void>
 }
 
 export function useSlideInfo(no: number): UseSlideInfo {
-  if (no == null) {
+  if (!__SLIDEV_HAS_SERVER__) {
     return {
-      info: ref() as Ref<SlideInfo | undefined>,
+      info: ref(getSlide(no)?.meta.slide ?? null) as Ref<SlideInfo | null>,
       update: async () => {},
     }
   }
   const url = `/@slidev/slide/${no}.json`
-  const { data: info, execute } = useFetch(url).json().get()
+  const { data: info, execute } = useFetch(url).json<SlideInfo>().get()
 
   execute()
 
@@ -41,7 +42,7 @@ export function useSlideInfo(no: number): UseSlideInfo {
         info.value = payload.data
     })
     import.meta.hot?.on('slidev:update-note', (payload) => {
-      if (payload.no === no && info.value.note?.trim() !== payload.note?.trim())
+      if (payload.no === no && info.value && info.value.note?.trim() !== payload.note?.trim())
         info.value = { ...info.value, ...payload }
     })
   }
@@ -60,7 +61,14 @@ export function useDynamicSlideInfo(no: MaybeRef<number>) {
   }
 
   return {
-    info: computed(() => get(unref(no)).info.value),
+    info: computed({
+      get() {
+        return get(unref(no)).info.value
+      },
+      set(newInfo) {
+        get(unref(no)).info.value = newInfo
+      },
+    }),
     update: async (data: SlidePatch, newId?: number) => {
       const info = get(newId ?? unref(no))
       const newData = await info.update(data)

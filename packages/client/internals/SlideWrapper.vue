@@ -3,7 +3,8 @@ import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toR
 import type { PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute } from '../constants'
+import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { getSlideClass } from '../utils'
 import SlideLoading from './SlideLoading.vue'
 
 const props = defineProps({
@@ -29,21 +30,23 @@ const props = defineProps({
   },
 })
 
+const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
+
 provideLocal(injectionRoute, props.route)
 provideLocal(injectionCurrentPage, ref(props.route.no))
 provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
 provideLocal(injectionActive, toRef(props, 'active'))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
+provideLocal(injectionSlideZoom, zoom)
 
 const style = computed(() => {
-  const zoom = props.route.meta?.slide?.frontmatter.zoom ?? 1
-  return zoom === 1
+  return zoom.value === 1
     ? undefined
     : {
-        width: `${100 / zoom}%`,
-        height: `${100 / zoom}%`,
+        width: `${100 / zoom.value}%`,
+        height: `${100 / zoom.value}%`,
         transformOrigin: 'top left',
-        transform: `scale(${zoom})`,
+        transform: `scale(${zoom.value})`,
       }
 })
 
@@ -53,7 +56,7 @@ const SlideComponent = defineAsyncComponent({
     return defineComponent({
       setup(_, { attrs }) {
         onMounted(() => {
-          props.clicksContext.onMounted()
+          props.clicksContext?.onMounted?.()
         })
         return () => h(component.default, attrs)
       },
@@ -65,15 +68,24 @@ const SlideComponent = defineAsyncComponent({
 </script>
 
 <template>
-  <component
-    :is="SlideComponent"
-    :style="style"
-    :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
-  />
+  <div :class="getSlideClass(route)">
+    <component
+      :is="SlideComponent"
+      :style="style"
+      :data-slidev-no="props.route.no"
+      :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
+    />
+  </div>
 </template>
 
 <style scoped>
 .disable-view-transition:deep(*) {
   view-transition-name: none !important;
+}
+
+.slidev-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>

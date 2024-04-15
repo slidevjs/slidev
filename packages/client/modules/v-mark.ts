@@ -2,14 +2,14 @@ import type { RoughAnnotationConfig } from '@slidev/rough-notation'
 import { annotate } from '@slidev/rough-notation'
 import type { App } from 'vue'
 import { computed, watchEffect } from 'vue'
-import type { VClickValue } from './v-click'
+import type { RawAtValue } from '@slidev/types'
 import { resolveClick } from './v-click'
 
 export interface RoughDirectiveOptions extends Partial<RoughAnnotationConfig> {
-  at: VClickValue
+  at: RawAtValue
 }
 
-export type RoughDirectiveValue = VClickValue | RoughDirectiveOptions
+export type RoughDirectiveValue = RawAtValue | RoughDirectiveOptions
 
 function addClass(options: RoughDirectiveOptions, cls: string) {
   options.class = [options.class, cls].filter(Boolean).join(' ')
@@ -121,7 +121,8 @@ export function createVMarkDirective() {
             return
           }
 
-          watchEffect(() => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle = watchEffect(() => {
             let shouldShow: boolean | undefined
 
             if (options.value.class)
@@ -146,6 +147,11 @@ export function createVMarkDirective() {
             else
               annotation.hide()
           })
+        },
+
+        unmounted: (el) => {
+          // @ts-expect-error extra prop
+          el.watchStopHandle?.()
         },
       })
     },

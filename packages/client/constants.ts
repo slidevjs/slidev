@@ -6,12 +6,14 @@ import type { SlidevContext } from './modules/context'
 // The value of the injections keys are implementation details, you should always use them with the reference to the constant instead of the value
 export const injectionClicksContext = '$$slidev-clicks-context' as unknown as InjectionKey<Ref<ClicksContext>>
 export const injectionCurrentPage = '$$slidev-page' as unknown as InjectionKey<Ref<number>>
+export const injectionSlideElement = '$$slidev-slide-element' as unknown as InjectionKey<Ref<HTMLElement | null>>
 export const injectionSlideScale = '$$slidev-slide-scale' as unknown as InjectionKey<ComputedRef<number>>
 export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
 export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<SlideRoute>
 export const injectionRenderContext = '$$slidev-render-context' as unknown as InjectionKey<Ref<RenderContext>>
 export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
 export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
+export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionKey<ComputedRef<number>>
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
@@ -30,6 +32,7 @@ export const TRUST_ORIGINS = [
 
 export const FRONTMATTER_FIELDS = [
   'clicks',
+  'clicksStart',
   'disabled',
   'hide',
   'hideInToc',
@@ -41,6 +44,7 @@ export const FRONTMATTER_FIELDS = [
   'title',
   'transition',
   'zoom',
+  'dragPos',
 ]
 
 export const HEADMATTER_FIELDS = [
@@ -72,4 +76,5 @@ export const HEADMATTER_FIELDS = [
   'drawings',
   'htmlAttrs',
   'mdc',
+  'contextMenu',
 ]

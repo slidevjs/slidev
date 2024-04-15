@@ -14,7 +14,7 @@ const { $clicksContext: clicks } = useSlideContext()
 
 onMounted(() => {
   watchEffect((onCleanup) => {
-    if (!clicks || clicks.disabled)
+    if (!clicks)
       return
 
     let delta = +props.size

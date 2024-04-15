@@ -1,0 +1,33 @@
+# Configure Context Menu
+
+<Environment type="client" />
+
+Customize the context menu items in Slidev.
+
+Create `./setup/context-menu.ts` with the following content:
+
+```ts
+import { defineContextMenuSetup } from '@slidev/types'
+import { computed } from 'vue'
+import Icon3DCursor from '~icons/carbon/3d-cursor'
+
+export default defineContextMenuSetup((items) => {
+  const { isPresenter } = useNav()
+  return computed(() => [
+    ...items.value,
+    {
+      small: false,
+      icon: Icon3DCursor, // Used as `title` if `small` is `true`
+      label: 'Custom Menu Item', // or a Vue component
+      action() {
+        alert('Custom Menu Item Clicked!')
+      },
+      disabled: isPresenter.value,
+    },
+  ])
+})
+```
+
+This will append a new menu item to the context menu.
+
+To disable context menu globally, set `contextMenu` to `false` in the frontmatter. `contextMenu` can also be set to `dev` or `build` to only enable the context menu in development or build mode.

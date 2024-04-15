@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import YAML from 'js-yaml'
+import YAML from 'yaml'
 import { slash } from '@antfu/utils'
 import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
@@ -35,7 +35,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
         hEnd++
       hm = lines.slice(1, hEnd).join('\n')
     }
-    const o = YAML.load(hm) as Record<string, unknown> ?? {}
+    const o = YAML.parse(hm) as Record<string, unknown> ?? {}
     extensions = await preparserExtensionLoader(o, filepath, mode)
   }
 
@@ -104,5 +104,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
 }
 
 export async function save(markdown: SlidevMarkdown) {
-  await fs.writeFile(markdown.filepath, stringify(markdown), 'utf-8')
+  const fileContent = stringify(markdown)
+  await fs.writeFile(markdown.filepath, fileContent, 'utf-8')
+  return fileContent
 }

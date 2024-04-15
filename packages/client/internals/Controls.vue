@@ -5,6 +5,7 @@ import { configs } from '../env'
 import QuickOverview from './QuickOverview.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
+import ContextMenu from './ContextMenu.vue'
 
 const WebCamera = shallowRef<any>()
 const RecordingDialog = shallowRef<any>()
@@ -20,4 +21,5 @@ if (__SLIDEV_FEATURE_RECORD__) {
   <WebCamera v-if="WebCamera" />
   <RecordingDialog v-if="RecordingDialog" v-model="showRecordingDialog" />
   <InfoDialog v-if="configs.info" v-model="showInfoDialog" />
+  <ContextMenu />
 </template>

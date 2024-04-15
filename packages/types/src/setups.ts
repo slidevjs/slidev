@@ -1,13 +1,14 @@
 import type { Awaitable } from '@antfu/utils'
 import type * as monaco from 'monaco-editor'
-import type { App, Ref } from 'vue'
-import type { Router } from 'vue-router'
+import type { App, ComputedRef, Ref } from 'vue'
+import type { RouteRecordRaw, Router } from 'vue-router'
 import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { SlidevPreparserExtension } from './types'
 import type { CodeRunnerProviders } from './code-runner'
+import type { ContextMenuItem } from './context-menu'
 
 export interface AppContext {
   app: App
@@ -52,13 +53,15 @@ export interface ShikiContext {
 }
 
 export type ShikiSetupReturn =
-  & Partial<Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>>
-  & CodeOptionsThemes<BuiltinTheme>
-  & CodeOptionsMeta
-  & {
-    setup?: (highlighter: Highlighter) => Awaitable<void>
-    langs?: (LanguageInput | BuiltinLanguage)[]
-  }
+  Partial<
+    & Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>
+    & CodeOptionsThemes<BuiltinTheme>
+    & CodeOptionsMeta
+    & {
+      setup: (highlighter: Highlighter) => Awaitable<void>
+      langs: (LanguageInput | BuiltinLanguage)[]
+    }
+  >
 
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
@@ -70,42 +73,25 @@ export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type RootSetup = () => Awaitable<void>
+export type RoutesSetup = (routes: RouteRecordRaw[]) => RouteRecordRaw[]
 export type MermaidSetup = () => Partial<MermaidOptions> | void
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>
+export type ContextMenuSetup = (items: ComputedRef<ContextMenuItem[]>) => ComputedRef<ContextMenuItem[]>
 
-export function defineShikiSetup(fn: ShikiSetup) {
+function defineSetup<Fn>(fn: Fn) {
   return fn
 }
 
-export function defineUnoSetup(fn: UnoSetup) {
-  return fn
-}
-
-export function defineMonacoSetup(fn: MonacoSetup) {
-  return fn
-}
-
-export function defineAppSetup(fn: AppSetup) {
-  return fn
-}
-
-export function defineMermaidSetup(fn: MermaidSetup) {
-  return fn
-}
-
-export function defineKatexSetup(fn: KatexSetup) {
-  return fn
-}
-
-export function defineShortcutsSetup(fn: ShortcutsSetup) {
-  return fn
-}
-
-export function definePreparserSetup(fn: PreparserSetup) {
-  return fn
-}
-
-export function defineCodeRunnersSetup(fn: CodeRunnersSetup) {
-  return fn
-}
+export const defineShikiSetup = defineSetup<ShikiSetup>
+export const defineUnoSetup = defineSetup<UnoSetup>
+export const defineMonacoSetup = defineSetup<MonacoSetup>
+export const defineAppSetup = defineSetup<AppSetup>
+export const defineRootSetup = defineSetup<RootSetup>
+export const defineRoutesSetup = defineSetup<RoutesSetup>
+export const defineMermaidSetup = defineSetup<MermaidSetup>
+export const defineKatexSetup = defineSetup<KatexSetup>
+export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
+export const definePreparserSetup = defineSetup<PreparserSetup>
+export const defineCodeRunnersSetup = defineSetup<CodeRunnersSetup>
+export const defineContextMenuSetup = defineSetup<ContextMenuSetup>

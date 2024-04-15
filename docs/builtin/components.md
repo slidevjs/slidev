@@ -1,3 +1,7 @@
+---
+outline: [2, 3]
+---
+
 # Components
 
 ## Built-in Components
@@ -119,7 +123,7 @@ routeAlias: solutions
 
 ### `RenderWhen`
 
-Render slot only when the context matches (for example when we are in presenter view).
+Render slots depending on whether the context matches (for example whether we are in presenter view).
 
 #### Usage
 
@@ -127,11 +131,24 @@ Render slot only when the context matches (for example when we are in presenter 
 <RenderWhen context="presenter">This will only be rendered in presenter view.</RenderWhen>
 ```
 
-Context type: `'main' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
+Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
 
 Parameters:
 
-- `context` (`Context | Context[]`): context or array of contexts you want the slot to be rendered
+- `context` (`Context | Context[]`): a context or array of contexts you want to check for
+  - `'main'`: Render in slides and presenter view (equivalent to ['slide', 'presenter']),
+  - `'visible'`: Render the content if it is visible
+  - `'print'`: Render in print mode
+  - `'slide'`: Render in slides
+  - `'overview'`: Render in overview
+  - `'presenter'`: Render in presenter view
+  - `'previewNext'`: Render in presenter's next slide view
+  - `'previewPrevious'`: Render in presenter's previous slide view
+
+Slots:
+
+- `#default`: Rendered when the context matches
+- `#fallback`: Rendered when the context does not match
 
 ### `SlideCurrentNo`
 
@@ -153,7 +170,7 @@ Total number of slides.
 <SlidesTotal />
 ```
 
-### `Titles`
+### `TitleRenderer`
 
 Insert the main title from a slide parsed as HTML.
 
@@ -254,6 +271,52 @@ Parameters:
 ### `VAfter`, `VClick` and `VClicks`
 
 See https://sli.dev/guide/animations.html
+
+### `VDrag`
+
+See https://sli.dev/guide/draggable.html
+
+### `SlidevVideo`
+
+Embed a video.
+
+#### Usage
+
+```md
+<SlidevVideo v-click autoplay controls>
+  <!-- Anything that can go in a HTML video element. -->
+  <source src="myMovie.mp4" type="video/mp4" />
+  <source src="myMovie.webm" type="video/webm" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="myMovie.mp4">here</a>.
+  </p>
+</SlidevVideo>
+```
+
+Check [HTML video element's doc](https://developer.mozilla.org/docs/Web/HTML/Element/Video) to see what can be included in this component's slot.
+
+Parameters:
+
+- `controls` (`boolean`, default: `false`): show the video controls
+- `autoplay` (`boolean | 'once'`, default: `false`):
+  - `true` or `'once'`: start the video only once and does not restart it once ended or paused
+  - `false`: never automatically start the video (rely on `controls` instead)
+- `autoreset` (`'slide' | 'click'`, default: `undefined`):
+  - `'slide'`: go back to the start of the video when going back to the slide
+  - `'click'`: go back to the start of the video when going back to the component's click turn
+- `poster` (`string | undefined`, default: `undefined`):
+  - The source of the image to print when the video is not playing.
+- `printPoster` (`string | undefined`, default: `undefined`):
+  - The override for `poster` when printing.
+- `timestamp` (`string | number`, default: `0`):
+  - The starting time of the video in seconds.
+- `printTimestamp` (`string | number | 'last' | undefined`, default: `undefined`):
+  - The override for `timestamp` when printing.
+
+::: warning
+When exporting, the video may fail to load because Chromium does not support some video formats. In this case, you can specify the executable path of the browser. See [Chromium executable path](/guide/exporting.html#executable-path) for more information.
+:::
 
 ### `Youtube`
 

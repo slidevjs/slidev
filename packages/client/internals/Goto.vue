@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue'
 import Fuse from 'fuse.js'
 import { activeElement, showGotoDialog } from '../state'
 import { useNav } from '../composables/useNav'
-import Titles from '#slidev/title-renderer'
+import TitleRenderer from '#slidev/title-renderer'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
@@ -161,7 +161,7 @@ watch(activeElement, () => {
         <div w-4 text-right op50 text-sm>
           {{ item.no }}
         </div>
-        <Titles :no="item.no" />
+        <TitleRenderer :no="item.no" />
       </li>
     </ul>
   </div>

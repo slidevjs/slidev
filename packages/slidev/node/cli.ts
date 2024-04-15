@@ -372,13 +372,17 @@ cli.command(
         options.data.config.download = download
 
       printInfo(options)
-      await build(options, {
-        base,
-        build: {
-          watch: watch ? {} : undefined,
-          outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+      await build(
+        options,
+        {
+          base,
+          build: {
+            watch: watch ? {} : undefined,
+            outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
+          },
         },
-      }, { ...args, entry: entryFile })
+        { ...args, entry: entryFile },
+      )
     }
   },
 )
@@ -499,12 +503,18 @@ cli.command(
       type: 'number',
       describe: 'timeout for rendering the print page',
     })
+    .option('wait', {
+      default: 0,
+      type: 'number',
+      describe: 'wait for the specified ms before exporting',
+    })
     .strict()
     .help(),
   async ({
     entry,
     output,
     timeout,
+    wait,
   }) => {
     const { exportNotes } = await import('./commands/export')
     const port = await getPort(12445)
@@ -526,6 +536,7 @@ cli.command(
         port,
         output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
         timeout,
+        wait,
       })
       console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
 
@@ -568,6 +579,10 @@ function exportOptions<T>(args: Argv<T>) {
     .option('timeout', {
       type: 'number',
       describe: 'timeout for rendering the print page',
+    })
+    .option('wait', {
+      type: 'number',
+      describe: 'wait for the specified ms before exporting',
     })
     .option('range', {
       type: 'string',

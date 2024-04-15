@@ -9,6 +9,7 @@ export interface ExportArgs extends CommonArgs {
   'cover'?: boolean
   'format'?: string
   'timeout'?: number
+  'wait'?: number
   'range'?: string
   'dark'?: boolean
   'with-clicks'?: boolean

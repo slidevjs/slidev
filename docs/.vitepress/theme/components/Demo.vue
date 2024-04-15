@@ -70,7 +70,7 @@ if (typeof window !== 'undefined') {
 }
 
 onMounted(() => {
-  new TypeIt(block.value, {
+  new TypeIt(block.value!, {
     speed: 50,
     startDelay: 900,
     afterStep: () => {

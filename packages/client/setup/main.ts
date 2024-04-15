@@ -1,5 +1,4 @@
 import type { AppContext } from '@slidev/types'
-import { MotionPlugin } from '@vueuse/motion'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import type { App } from 'vue'
 import { nextTick } from 'vue'
@@ -8,7 +7,9 @@ import { createHead } from '@unhead/vue'
 import { routeForceRefresh } from '../logic/route'
 import { createVClickDirectives } from '../modules/v-click'
 import { createVMarkDirective } from '../modules/v-mark'
-import { routes } from '../routes'
+import { createVDragDirective } from '../modules/v-drag'
+import { createVMotionDirectives } from '../modules/v-motion'
+import setupRoutes from '../setup/routes'
 import setups from '#slidev/setups/main'
 
 import '#slidev/styles'
@@ -27,15 +28,16 @@ export default async function setupMain(app: App) {
     history: __SLIDEV_HASH_ROUTE__
       ? createWebHashHistory(import.meta.env.BASE_URL)
       : createWebHistory(import.meta.env.BASE_URL),
-    routes,
+    routes: setupRoutes(),
   })
 
   app.use(router)
   app.use(createHead())
   app.use(createVClickDirectives())
   app.use(createVMarkDirective())
-  app.use(MotionPlugin)
-  app.use(TwoSlashFloatingVue as any, { container: '#slideshow' })
+  app.use(createVDragDirective())
+  app.use(createVMotionDirectives())
+  app.use(TwoSlashFloatingVue as any, { container: '#twoslash-container' })
 
   const context: AppContext = {
     app,

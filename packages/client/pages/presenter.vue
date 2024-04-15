@@ -7,6 +7,7 @@ import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, 
 import { configs } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
+import { onContextMenu } from '../logic/contextMenu'
 import { getSlideClass } from '../utils'
 import { useTimer } from '../logic/utils'
 import { createFixedClicks } from '../composables/useClicks'
@@ -21,6 +22,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
+import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 
@@ -112,6 +114,7 @@ onMounted(() => {
         <SlideContainer
           key="main"
           class="h-full w-full p-2 lg:p-4 flex-auto"
+          @contextmenu="onContextMenu"
         >
           <template #default>
             <SlidesShow render-context="presenter" />
@@ -209,6 +212,7 @@ onMounted(() => {
   </div>
   <Goto />
   <QuickOverview v-model="showOverview" />
+  <ContextMenu />
 </template>
 
 <style scoped>

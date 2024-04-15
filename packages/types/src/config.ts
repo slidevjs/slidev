@@ -86,6 +86,12 @@ export interface SlidevConfig {
    */
   highlighter: 'prism' | 'shiki'
   /**
+   * Enable Twoslash
+   *
+   * @default true
+   */
+  twoslash: boolean | 'dev' | 'build'
+  /**
    * Show line numbers in code blocks
    *
    * @default false
@@ -227,6 +233,12 @@ export interface SlidevConfig {
    * @default true
    */
   editor: boolean
+  /**
+   * Enable context menu
+   *
+   * @default true
+   */
+  contextMenu: boolean | 'dev' | 'build' | undefined
 }
 
 export interface FontOptions {

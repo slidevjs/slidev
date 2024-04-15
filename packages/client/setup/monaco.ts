@@ -66,9 +66,6 @@ const setup = createSingletonPromise(async () => {
     module: monaco.languages.typescript.ModuleKind.ESNext,
   })
 
-  // Load types from server
-  import('#slidev/monaco-types')
-
   const ata = configs.monacoTypesSource === 'cdn'
     ? setupTypeAcquisition({
       projectName: 'TypeScript Playground',

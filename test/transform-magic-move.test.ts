@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest'
 import { getHighlighter } from 'shiki'
 import { transformMagicMove } from '../packages/slidev/node/syntax/transform'
+import { createTransformContext } from './_tutils'
 
 it('basic', async () => {
   const code = `
@@ -25,13 +26,17 @@ Some text after
     langs: ['typescript'],
   })
 
-  expect(transformMagicMove(
-    code,
+  const ctx = createTransformContext(code)
+
+  transformMagicMove(
+    ctx,
     shiki,
     {
       theme: 'nord',
     },
-  ))
+  )
+
+  expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
       "
 
@@ -67,13 +72,17 @@ Some text after
     langs: ['angular-ts'],
   })
 
-  expect(transformMagicMove(
-    code,
+  const ctx = createTransformContext(code)
+
+  transformMagicMove(
+    ctx,
     shiki,
     {
       theme: 'nord',
     },
-  ))
+  )
+
+  expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
         "
 

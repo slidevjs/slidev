@@ -73,7 +73,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
             {
               find: 'vue',
-              replacement: await resolveImportPath('vue/dist/vue.esm-browser.js', true),
+              replacement: await resolveImportPath('vue/dist/vue.esm-bundler.js', true),
             },
           ],
           dedupe: ['vue'],

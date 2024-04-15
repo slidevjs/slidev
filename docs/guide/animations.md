@@ -188,12 +188,17 @@ The following example synchronizes the highlighting of the two code blocks:
 
 ### Enter & Leave
 
-> Available since v0.43.0
-
 You can also specify the enter and leave index for the `v-click` directive by passing an array. The end index is exclusive.
 
 ```md
-<div v-click="[2, 4]">This will be shown on the 2nd and 3rd clicks, and hide again after the 4th.</div>
+<div v-click.hide="[2, 4]">
+  This will be hidden at click 2 and 3.
+</div>
+
+<div v-click />
+<div v-click="'[+1, +1]'">
+  This will be shown at click 3, and hidden since click 4.
+</div>
 ```
 
 ### Custom Total Clicks Count
@@ -338,34 +343,64 @@ Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use th
 <div
   v-motion
   :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
+  :enter="{ x: 0 }"
+  :leave="{ x: 80 }"
+>
   Slidev
 </div>
 ```
 
-The text `Slidev` will move from `-80px` to its original position on initialization.
+The text `Slidev` will move from `-80px` to its original position when entering the slide. When leaving, it will move to `80px`.
 
-> Note: Slidev preloads the next slide for performance, which means the animations might start before you navigate to the page. To get it works properly, you can disable the preloading for the particular slide
->
-> ```md
-> ---
-> preload: false
-> ---
-> ```
->
-> Or control the element life-cycle with `v-if` to have fine-grained controls
->
-> ```html
-> <div
->   v-if="$slidev.nav.currentPage === 7"
->   v-motion
->   :initial="{ x: -80 }"
->   :enter="{ x: 0 }">
->   Slidev
-> </div>
-> ```
+> Before v0.48.9, you need to add `preload: false` to the slide's frontmatter to enable motion.
 
-Learn mode: [Demo](https://sli.dev/demo/starter/7) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/features/directive-usage) | [Presets](https://motion.vueuse.org/features/presets)
+### Motion with Clicks
+
+> Available since v0.48.9
+
+You can also trigger the motion by clicks. For example
+
+```html
+<div
+  v-motion
+  :initial="{ x: -80 }"
+  :enter="{ x: 0, y: 0 }"
+  :click-1="{ x: 0, y: 30 }"
+  :click-2="{ y: 60 }"
+  :click-2-4="{ x: 40 }"
+  :leave="{ y: 0, x: 80 }"
+>
+  Slidev
+</div>
+```
+
+Or combine `v-click` with `v-motion`:
+
+```html
+<div v-click="[2, 4]" v-motion
+  :initial="{ x: -50 }"
+  :enter="{ x: 0 }"
+  :leave="{ x: 50 }"
+>
+  Shown at click 2 and hidden at click 4.
+</div>
+```
+
+The meanings of variants:
+
+- `initial`: When `currentPage < thisPage`, or `v-click` hides the current element because `$clicks` is too small.
+- `enter`: When `currentPage === thisPage`, and `v-click` shows the element. _Priority: lowest_
+- `click-x`: `x` is a number representing the **absolute** click num. The variant will take effect if `$clicks >= x`. _Priority: `x`_
+- `click-x-y`: The variant will take effect if `x <= $clicks < y`. _Priority: `x`_
+- `leave`: `currentPage > thisPage`, or `v-click` hides the current element because `$clicks` is too large.
+
+The variants will be combined according to the priority defined above.
+
+::: warning
+Due to a Vue internal [bug](https://github.com/vuejs/core/issues/10295), currently **only** `v-click` to the same element of `v-motion` can control the motion animation. As a workaround, you can use something like `v-if="3 < $clicks"` to achieve the same effect.
+:::
+
+Learn mode: [Demo](https://sli.dev/demo/starter/10) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/features/directive-usage) | [Presets](https://motion.vueuse.org/features/presets)
 
 ## Slide Transitions
 
