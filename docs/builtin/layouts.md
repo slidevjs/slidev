@@ -39,7 +39,7 @@ Shows an image on the left side of the screen, the content will be placed on the
 layout: image-left
 
 # the image source
-image: ./path/to/the/image
+image: '/path/to/the/image'
 
 # a custom class name to the content
 class: my-cool-content-on-the-right
@@ -57,7 +57,7 @@ Shows an image on the right side of the screen, the content will be placed on th
 layout: image-right
 
 # the image source
-image: ./path/to/the/image
+image: '/path/to/the/image'
 
 # a custom class name to the content
 class: my-cool-content-on-the-left
@@ -75,7 +75,7 @@ Shows an image as the main content of the page.
 layout: image
 
 # the image source
-image: ./path/to/the/image
+image: '/path/to/the/image'
 ---
 ```
 
@@ -84,7 +84,7 @@ You can change the default background size (`cover`) by adding the `backgroundSi
 ```yaml
 ---
 layout: image
-image: ./path/to/the/image
+image: '/path/to/the/image'
 backgroundSize: contain
 ---
 ```
@@ -92,7 +92,7 @@ backgroundSize: contain
 ```yaml
 ---
 layout: image-left
-image: ./path/to/the/image
+image: '/path/to/the/image'
 backgroundSize: 20em 70%
 ---
 ```
@@ -154,11 +154,11 @@ To introduce the presentation, usually with the presentation title, a short desc
 
 ### `none`
 
-A layout without any existing styling.
+A layout without any existent styling.
 
 ### `quote`
 
-To display a quotation with prominence.
+To display a quotation with prominience.
 
 ### `section`
 
