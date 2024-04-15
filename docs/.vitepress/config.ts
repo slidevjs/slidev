@@ -149,6 +149,10 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/config-parser',
   },
   {
+    text: 'Configure Routes',
+    link: '/custom/config-routes',
+  },
+  {
     text: 'Configure Shortcuts',
     link: '/custom/config-shortcuts',
   },
