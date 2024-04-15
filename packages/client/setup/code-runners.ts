@@ -1,5 +1,5 @@
 import { createSingletonPromise } from '@antfu/utils'
-import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
+import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
 import type ts from 'typescript'
 import { isDark } from '../logic/dark'
