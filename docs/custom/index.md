@@ -49,6 +49,8 @@ monaco: true
 monacoTypesSource: local
 # explicitly specify extra local packages to import the types for
 monacoTypesAdditionalPackages: []
+# explicitly specify extra local modules as dependency of monaco runnable
+monacoRunAdditionalDeps: []
 # download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
 remoteAssets: false
 # controls whether texts in slides are selectable

@@ -53,6 +53,12 @@ export interface SlidevConfig {
    */
   monacoTypesAdditionalPackages: string[]
   /**
+   * Additional local modules to load as dependencies of monaco runnable
+   *
+   * @default []
+   */
+  monacoRunAdditionalDeps: string[]
+  /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
    *

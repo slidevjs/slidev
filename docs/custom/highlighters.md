@@ -28,7 +28,7 @@ highlighter: Prism
 
 <Environment type="node" />
 
-Create `./setup/shiki.ts` file with the following content
+Create `./setup/shiki.ts` file with the following content:
 
 ```ts
 /* ./setup/shiki.ts */
@@ -53,6 +53,10 @@ export default defineShikiSetup(() => {
 ```
 
 Refer to [Shiki's docs](https://shiki.style) for available theme names.
+
+:::info
+For now, Shiki Magic Move does not support transformers.
+:::
 
 ## Configure Prism
 
