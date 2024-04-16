@@ -149,6 +149,10 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/config-parser',
   },
   {
+    text: 'Configure Routes',
+    link: '/custom/config-routes',
+  },
+  {
     text: 'Configure Shortcuts',
     link: '/custom/config-shortcuts',
   },
@@ -249,7 +253,7 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     editLink: {
-      pattern: 'https://github.com/slidevjs/docs/edit/main/:path',
+      pattern: 'https://github.com/slidevjs/slidev/edit/main/docs/:path',
       text: 'Suggest changes to this page',
     },
 
