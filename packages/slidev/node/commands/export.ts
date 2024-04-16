@@ -216,7 +216,7 @@ export async function exportSlides({
     })
     await page.waitForLoadState('networkidle')
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
-    const slide = no === 'print'
+    const slide = (no === 'print' || no === 'handout' || no === 'cover')
       ? page.locator('body')
       : page.locator(`[data-slidev-no="${no}"]`)
     await slide.waitFor()
