@@ -7,6 +7,7 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 import { getIndexHtml } from '../commands/shared'
 import { resolveImportPath, toAtFS } from '../resolver'
 import { dependencies } from '../../../client/package.json'
+import type { SlidevServerApp } from '../slidev'
 
 const INCLUDE = [
   ...Object.keys(dependencies),
@@ -51,7 +52,8 @@ const ASYNC_MODULES = [
   '@vue',
 ]
 
-export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
+export function createConfigPlugin(app: SlidevServerApp): Plugin {
+  const { options } = app
   return {
     name: 'slidev:config',
     async config(config) {
@@ -165,7 +167,12 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 
       return mergeConfig(injection, config)
     },
+    configResolved(resolved) {
+      app.hooks.callHook('vite:configResolved', resolved)
+    },
     configureServer(server) {
+      app.viteServer = server
+      app.hooks.callHook('server:created', server)
       // serve our index.html after vite history fallback
       return () => {
         server.middlewares.use(async (req, res, next) => {
