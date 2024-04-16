@@ -97,6 +97,13 @@ declare module '#slidev/setups/shortcuts' {
   export default setups
 }
 
+declare module '#slidev/setups/routes' {
+  import type { RoutesSetup } from '@slidev/types'
+
+  const setups: RoutesSetup[]
+  export default setups
+}
+
 declare module '#slidev/setups/context-menu' {
   import type { ContextMenuSetup } from '@slidev/types'
 
