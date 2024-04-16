@@ -54,3 +54,17 @@ export interface CodeRunnerContext {
 ## Runner Output
 
 The runner can either return a text or HTML output, or an element to be mounted. Refer to https://github.com/slidevjs/slidev/blob/main/packages/types/src/code-runner.ts for more details.
+
+## Additional Runner Dependencies
+
+By default, Slidev will scan the Markdown source and automatically import the necessary dependencies for the code runners. If you want to manually import dependencies, you can use the `monacoRunAdditionalDeps` option in the slide frontmatter:
+
+```yaml
+monacoRunAdditionalDeps:
+  - ./path/to/dependency
+  - lodash-es
+```
+
+::: tip
+The paths are resolved relative to the `snippets` directory. And the names of the deps should be exactly the same as imported ones in the code.
+:::

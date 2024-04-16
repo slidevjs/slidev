@@ -1,8 +1,9 @@
-import { createSingletonPromise, ensurePrefix, slash } from '@antfu/utils'
-import type { CodeRunner, CodeRunnerContext, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
+import { createSingletonPromise } from '@antfu/utils'
+import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
 import type ts from 'typescript'
 import { isDark } from '../logic/dark'
+import deps from '#slidev/monaco-run-deps'
 import setups from '#slidev/setups/code-runners'
 
 export default createSingletonPromise(async () => {
@@ -25,18 +26,6 @@ export default createSingletonPromise(async () => {
     ...options,
   })
 
-  const resolveId = async (specifier: string) => {
-    if (!'./'.includes(specifier[0]) && !/^(@[^\/:]+?\/)?[^\/:]+$/.test(specifier))
-      return specifier // this might be a url or something else
-    const res = await fetch(`/@slidev/resolve-id?specifier=${specifier}`)
-    if (!res.ok)
-      return null
-    const id = await res.text()
-    if (!id)
-      return null
-    return `/@fs${ensurePrefix('/', slash(id))}`
-  }
-
   const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {
       const runner = runners[lang]
@@ -47,7 +36,6 @@ export default createSingletonPromise(async () => {
         {
           options,
           highlight,
-          resolveId,
           run: async (code, lang) => {
             return await run(code, lang, options)
           },
@@ -85,16 +73,20 @@ async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
   replace.clear = () => allLogs.length = 0
   const vmConsole = Object.assign({}, console, replace)
   try {
-    const safeJS = `return async (console) => {
-      window.console = console
+    const safeJS = `return async (console, __slidev_import) => {
       ${sanitizeJS(code)}
     }`
     // eslint-disable-next-line no-new-func
-    await (new Function(safeJS)())(vmConsole)
+    await (new Function(safeJS)())(vmConsole, (specifier: string) => {
+      const mod = deps[specifier]
+      if (!mod)
+        throw new Error(`Module not found: ${specifier}.\nAvailable modules: ${Object.keys(deps).join(', ')}. Please refer to https://sli.dev/custom/config-code-runners#additional-runner-dependencies`)
+      return mod
+    })
   }
   catch (error) {
     return {
-      error: `ERROR: ${error}`,
+      error: String(error),
     }
   }
 
@@ -175,7 +167,7 @@ async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
 
 let tsModule: typeof import('typescript') | undefined
 
-export async function runTypeScript(code: string, context: CodeRunnerContext) {
+export async function runTypeScript(code: string) {
   tsModule ??= await import('typescript')
 
   code = tsModule.transpileModule(code, {
@@ -188,11 +180,8 @@ export async function runTypeScript(code: string, context: CodeRunnerContext) {
     },
   }).outputText
 
-  const importRegex = /import\s*\(\s*(['"])(.+?)['"]\s*\)/g
-  const idMap: Record<string, string> = {}
-  for (const [,,specifier] of code.matchAll(importRegex)!)
-    idMap[specifier] = await context.resolveId(specifier) ?? specifier
-  code = code.replace(importRegex, (_full, quote, specifier) => `import(${quote}${idMap[specifier] ?? specifier}${quote})`)
+  const importRegex = /import\s*\((.+)\)/g
+  code = code.replace(importRegex, (_full, specifier) => `__slidev_import(${specifier})`)
 
   return await runJavaScript(code)
 }

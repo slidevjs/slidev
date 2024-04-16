@@ -118,3 +118,8 @@ declare module '#slidev/styles' {
 declare module '#slidev/monaco-types' {
   // side-effects only
 }
+
+declare module '#slidev/monaco-run-deps' {
+  const modules: Recored<string, unknown>
+  export default modules
+}
