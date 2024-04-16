@@ -1,7 +1,5 @@
-import path from 'node:path'
 import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
 import { isString, isTruthy, notNullish, range } from '@antfu/utils'
-import fs from 'fs-extra'
 import Markdown from 'markdown-it'
 import { bold, gray, red, yellow } from 'kolorist'
 
@@ -19,6 +17,8 @@ import type { VirtualModuleTempalteContext } from '../virtual/types'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
+import { templateMonacoRunDeps } from '../virtual/monaco-deps'
+import { templateMonacoTypes } from '../virtual/monaco-types'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -101,7 +101,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, mode, userRoot } = options
+  const { data, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
@@ -166,20 +166,6 @@ export function createSlidesLoader(
 
           next()
         })
-
-        const snippetsPath = path.resolve(userRoot, 'snippets/__importer__.ts')
-
-        server.middlewares.use(async (req, res, next) => {
-          const match = req.url?.match(/^\/\@slidev\/resolve-id\?specifier=(.*)$/)
-          if (!match)
-            return next()
-
-          const [, specifier] = match
-          const resolved = await server!.pluginContainer.resolveId(specifier, snippetsPath)
-          res.statusCode = 200
-          res.write(resolved?.id ?? '')
-          return res.end()
-        })
       },
 
       async handleHotUpdate(ctx) {
@@ -229,15 +215,6 @@ export function createSlidesLoader(
             && a.content.trim() === b.content.trim()
             && a.title?.trim() === b.title?.trim()
             && equal(a.frontmatter, b.frontmatter)
-            && Object.entries(a.snippetsUsed ?? {}).every(([file, oldContent]) => {
-              try {
-                const newContent = fs.readFileSync(file, 'utf-8')
-                return oldContent === newContent
-              }
-              catch {
-                return false
-              }
-            })
           ) {
             if (a.note !== b.note) {
               ctx.server.hot.send(
@@ -268,14 +245,22 @@ export function createSlidesLoader(
           moduleIds.add(templateTitleRendererMd.id)
 
         const vueModules = Array.from(hmrPages)
-          .flatMap(i => [
-            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.frontmatter`),
-            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.md`),
-          ])
+          .flatMap((i) => {
+            const id = `${VIRTUAL_SLIDE_PREFIX}${i + 1}`
+            const frontmatter = ctx.server.moduleGraph.getModuleById(`${id}.frontmatter`)
+            const main = ctx.server.moduleGraph.getModuleById(`${id}.md`)
+            const styles = main ? [...main.clientImportedModules].find(m => m.id?.startsWith(`${id}.md?vue&type=style`)) : undefined
+            return [
+              frontmatter,
+              main,
+              styles,
+            ]
+          })
 
         hmrPages.clear()
 
         const moduleEntries = [
+          ...ctx.modules.filter(i => i.id === templateMonacoRunDeps.id || i.id === templateMonacoTypes.id),
           ...vueModules,
           ...Array.from(moduleIds).map(id => ctx.server.moduleGraph.getModuleById(id)),
         ]
@@ -288,7 +273,7 @@ export function createSlidesLoader(
       },
 
       resolveId(id) {
-        if (id.startsWith(VIRTUAL_SLIDE_PREFIX) || id.startsWith('/@slidev/'))
+        if (id.startsWith('/@slidev/'))
           return id
         return null
       },
@@ -297,7 +282,7 @@ export function createSlidesLoader(
         const template = templates.find(i => i.id === id)
         if (template) {
           return {
-            code: await template.getContent(options, templateCtx),
+            code: await template.getContent(options, templateCtx, this),
             map: { mappings: '' },
           }
         }

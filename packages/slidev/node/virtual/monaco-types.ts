@@ -4,12 +4,13 @@ import { join, resolve } from 'node:path'
 import fg from 'fast-glob'
 import { uniq } from '@antfu/utils'
 import { toAtFS } from '../resolver'
-import { scanMonacoModules } from '../syntax/transform/monaco'
 import type { VirtualModuleTemplate } from './types'
 
 export const templateMonacoTypes: VirtualModuleTemplate = {
   id: '/@slidev/monaco-types',
   getContent: async ({ userRoot, data }) => {
+    if (!data.features.monaco)
+      return ''
     const typesRoot = join(userRoot, 'snippets')
     const files = await fg(['**/*.ts', '**/*.mts', '**/*.cts'], { cwd: typesRoot })
     let result = 'import { addFile } from "@slidev/client/setup/monaco.ts"\n'
@@ -23,7 +24,7 @@ export const templateMonacoTypes: VirtualModuleTemplate = {
     // Dependencies
     const deps = [...data.config.monacoTypesAdditionalPackages]
     if (data.config.monacoTypesSource === 'local')
-      deps.push(...scanMonacoModules(data.slides.map(s => s.source.raw).join()))
+      deps.push(...data.features.monaco.types)
 
     // Copied from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ata/src/edgeCases.ts
     // Converts some of the known global imports to node so that we grab the right info

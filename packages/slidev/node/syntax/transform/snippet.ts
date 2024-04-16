@@ -3,6 +3,7 @@
 import path from 'node:path'
 import fs from 'fs-extra'
 import type { MarkdownTransformContext, ResolvedSlidevOptions } from '@slidev/types'
+import { slash } from '@antfu/utils'
 
 function dedent(text: string): string {
   const lines = text.split('\n')
@@ -94,9 +95,11 @@ export function transformSnippet(ctx: MarkdownTransformContext, options: Resolve
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
       const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
 
-      const src = /^\@[\/]/.test(filepath)
-        ? path.resolve(options.userRoot, filepath.slice(2))
-        : path.resolve(dir, filepath)
+      const src = slash(
+        /^\@[\/]/.test(filepath)
+          ? path.resolve(options.userRoot, filepath.slice(2))
+          : path.resolve(dir, filepath),
+      )
 
       data.watchFiles.push(src)
 

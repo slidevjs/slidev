@@ -65,9 +65,15 @@ export interface SlidevThemeMeta {
 
 export type SlidevThemeConfig = Record<string, string | number>
 
-export interface SlidevFeatureFlags {
+export interface SlidevDetectedFeatures {
   katex: boolean
-  monaco: boolean
+  /**
+   * `false` or referenced module specifiers
+   */
+  monaco: false | {
+    types: string[]
+    deps: string[]
+  }
   tweet: boolean
   mermaid: boolean
 }
@@ -89,7 +95,7 @@ export interface SlidevData {
   entry: SlidevMarkdown
   config: SlidevConfig
   headmatter: Record<string, unknown>
-  features: SlidevFeatureFlags
+  features: SlidevDetectedFeatures
   themeMeta?: SlidevThemeMeta
   markdownFiles: Record<string, SlidevMarkdown>
   watchFiles: string[]
