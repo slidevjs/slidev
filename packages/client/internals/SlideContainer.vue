@@ -39,8 +39,8 @@ watchEffect(() => emit('update:slide-element', slideElement.value))
 </script>
 
 <template>
-  <div ref="container" class="slidev-slide-container" :style="containerStyle">
-    <div ref="slideElement" class="slidev-slide-content" :style="contentStyle">
+  <div :id="isMain ? 'slide-container' : undefined" ref="container" class="slidev-slide-container" :style="containerStyle">
+    <div :id="isMain ? 'slide-content' : undefined" ref="slideElement" class="slidev-slide-content" :style="contentStyle">
       <slot />
     </div>
     <slot name="controls" />
