@@ -296,10 +296,17 @@ export function createSlidesLoader(
           moduleIds.add(templateTitleRendererMd.id)
 
         const vueModules = Array.from(hmrPages)
-          .flatMap(i => [
-            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.frontmatter`),
-            ctx.server.moduleGraph.getModuleById(`${VIRTUAL_SLIDE_PREFIX}${i + 1}.md`),
-          ])
+          .flatMap((i) => {
+            const id = `${VIRTUAL_SLIDE_PREFIX}${i + 1}`
+            const frontmatter = ctx.server.moduleGraph.getModuleById(`${id}.frontmatter`)
+            const main = ctx.server.moduleGraph.getModuleById(`${id}.md`)
+            const styles = main ? [...main.clientImportedModules].find(m => m.id?.startsWith(`${id}.md?vue&type=style`)) : undefined
+            return [
+              frontmatter,
+              main,
+              styles,
+            ]
+          })
 
         hmrPages.clear()
 
@@ -316,7 +323,7 @@ export function createSlidesLoader(
       },
 
       resolveId(id) {
-        if (id.startsWith(VIRTUAL_SLIDE_PREFIX) || id.startsWith('/@slidev/'))
+        if (id.startsWith('/@slidev/'))
           return id
         return null
       },

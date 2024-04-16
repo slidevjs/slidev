@@ -44,7 +44,7 @@ export async function createVuePlugin(
   } = pluginOptions
 
   const VuePlugin = Vue({
-    include: [/\.vue$/, /\.md$/],
+    include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/, /\.md\?vue/],
     exclude: [],
     template: {
       compilerOptions: {
