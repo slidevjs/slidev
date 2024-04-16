@@ -259,7 +259,7 @@ export function createGlobResolver(source: string, { roots, clientRoot }: Resolv
     })))
 
     for (const filePath of allFiles.flat()) {
-      const name = basename(filePath).replace(/\.\w+$/, '')
+      const name = basename(filePath).replace(/\.\w+$/, '').toLowerCase()
       if (fileMap[name])
         continue
       fileMap[name] = filePath
