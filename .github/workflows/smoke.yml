@@ -43,8 +43,6 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v2
-        with:
-          version: latest
 
       - name: Install
         run: nci
