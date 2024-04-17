@@ -70,8 +70,7 @@ if (typeof window !== 'undefined') {
 }
 
 onMounted(() => {
-  // eslint-disable-next-line ts/ban-ts-comment
-  // @ts-expect-error
+  // @ts-expect-error wrong types provided by TypeIt
   new TypeIt(block.value!, {
     speed: 50,
     startDelay: 900,
