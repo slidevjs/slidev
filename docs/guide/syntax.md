@@ -108,7 +108,7 @@ console.log('Hello, World!')
 ```
 ````
 
-We support [Prism](https://prismjs.com), [Shiki](https://github.com/shikijs/shiki) as syntax highlighters. Refer to [the highlighters section](/custom/highlighters) for more details.
+We have [Shiki](https://github.com/shikijs/shiki) builtin as the syntax highlighter. Refer to [the highlighters section](/custom/highlighters) for more details.
 
 ### Line Highlighting
 

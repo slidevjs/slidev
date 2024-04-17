@@ -53,6 +53,7 @@ export async function createMarkdownPlugin(
     setups.push(md => md.use(result.plugin))
   }
   else {
+    console.warn('[Slidev] Highlighter: Prism highlighter is deprecated, and will be removed in v0.50. Refer to https://github.com/slidevjs/slidev/issues/1390')
     setups.push(md => md.use(MarkdownItPrism))
   }
 
