@@ -1,7 +1,7 @@
 import type { MarkdownTransformContext } from '@slidev/types'
 import { normalizeRangeStr } from './utils'
 
-export const reCodeBlock = /^```([\w'-]+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\n([\s\S]+?)^```$/mg
+export const reCodeBlock = /^```([\w'-]+?)(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?(.*?))?\r?\n([\s\S]+?)^```$/mg
 
 /**
  * Transform code block with wrapper
