@@ -8,25 +8,31 @@ import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import MagicString from 'magic-string-stack'
-
 // @ts-expect-error missing types
 import MarkdownItAttrs from 'markdown-it-link-attributes'
-
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
-import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
+import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevConfig, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
 
 import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
-import { transformCodeWrapper, transformKaTexWrapper, transformMagicMove, transformMermaid, transformMonaco, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../syntax/transform'
 import { escapeVueInCode } from '../syntax/transform/utils'
 
-let shiki: Highlighter | undefined
-let shikiOptions: MarkdownItShikiOptions | undefined
+import {
+  transformCodeWrapper,
+  transformKaTexWrapper,
+  transformMagicMove,
+  transformMermaid,
+  transformMonaco,
+  transformPageCSS,
+  transformPlantUml,
+  transformSlotSugar,
+  transformSnippet,
+} from '../syntax/transform'
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
@@ -37,54 +43,14 @@ export async function createMarkdownPlugin(
   const setups: ((md: MarkdownIt) => void)[] = []
   const entryPath = slash(entry)
 
+  let shiki: Highlighter | undefined
+  let shikiOptions: MarkdownItShikiOptions | undefined
+
   if (config.highlighter === 'shiki') {
-    const [
-      options,
-      { getHighlighter, bundledLanguages },
-      markdownItShiki,
-      transformerTwoslash,
-    ] = await Promise.all([
-      loadShikiSetups(clientRoot, roots),
-      import('shiki').then(({ getHighlighter, bundledLanguages }) => ({ bundledLanguages, getHighlighter })),
-      import('@shikijs/markdown-it/core').then(({ fromHighlighter }) => fromHighlighter),
-      import('@shikijs/vitepress-twoslash').then(({ transformerTwoslash }) => transformerTwoslash),
-    ] as const)
-
-    shikiOptions = options
-    shiki = await getHighlighter({
-      ...options as any,
-      langs: options.langs ?? Object.keys(bundledLanguages),
-      themes: 'themes' in options ? Object.values(options.themes) : [options.theme],
-    })
-
-    const twoslashEnabled = (config.twoslash === true || config.twoslash === mode)
-
-    const transformers = [
-      ...options.transformers || [],
-      twoslashEnabled && transformerTwoslash({
-        explicitTrigger: true,
-        twoslashOptions: {
-          handbookOptions: {
-            noErrorValidation: true,
-          },
-        },
-      }),
-      {
-        pre(pre) {
-          this.addClassToHast(pre, 'slidev-code')
-          delete pre.properties.tabindex
-        },
-        postprocess(code) {
-          return escapeVueInCode(code)
-        },
-      } as ShikiTransformer,
-    ].filter(isTruthy) as ShikiTransformer[]
-
-    const plugin = markdownItShiki(shiki, {
-      ...options,
-      transformers,
-    })
-    setups.push(md => md.use(plugin))
+    const result = await createMarkdownItShiki(clientRoot, roots, config, mode)
+    shiki = result.shiki
+    shikiOptions = result.shikiOptions
+    setups.push(md => md.use(result.plugin))
   }
   else {
     setups.push(md => md.use(MarkdownItPrism))
@@ -139,7 +105,7 @@ export async function createMarkdownPlugin(
           options,
         }
 
-        applyMarkdownTransform(ctx, shikiOptions)
+        applyMarkdownTransform(ctx, shiki, shikiOptions)
         markdownTransformMap.set(id, ctx.s)
         return ctx.s.toString()
       },
@@ -147,34 +113,58 @@ export async function createMarkdownPlugin(
   }) as Plugin
 }
 
-export function applyMarkdownTransform(
-  ctx: MarkdownTransformContext,
-  shikiOptions?: MarkdownItShikiOptions,
-) {
-  const transformers: MarkdownTransformer[] = []
+async function createMarkdownItShiki(clientRoot: string, roots: string[], config: SlidevConfig, mode: string) {
+  const [
+    shikiOptions,
+    { getHighlighter, bundledLanguages },
+    markdownItShiki,
+    transformerTwoslash,
+  ] = await Promise.all([
+    loadShikiSetups(clientRoot, roots),
+    import('shiki').then(({ getHighlighter, bundledLanguages }) => ({ bundledLanguages, getHighlighter })),
+    import('@shikijs/markdown-it/core').then(({ fromHighlighter }) => fromHighlighter),
+    import('@shikijs/vitepress-twoslash').then(({ transformerTwoslash }) => transformerTwoslash),
+  ] as const)
 
-  transformers.push(transformSnippet)
+  const shiki = await getHighlighter({
+    ...shikiOptions as any,
+    langs: shikiOptions.langs ?? Object.keys(bundledLanguages),
+    themes: 'themes' in shikiOptions ? Object.values(shikiOptions.themes) : [shikiOptions.theme],
+  })
 
-  if (ctx.options.data.config.highlighter === 'shiki')
-    transformers.push(transformMagicMove(shiki, shikiOptions))
+  const twoslashEnabled = (config.twoslash === true || config.twoslash === mode)
 
-  transformers.push(
-    transformMermaid,
-    transformPlantUml,
-    transformMonaco,
-    transformCodeWrapper,
-    transformKaTexWrapper,
-    transformPageCSS,
-    transformSlotSugar,
-  )
+  const transformers = [
+    ...shikiOptions.transformers || [],
+    twoslashEnabled && transformerTwoslash({
+      explicitTrigger: true,
+      twoslashOptions: {
+        handbookOptions: {
+          noErrorValidation: true,
+        },
+      },
+    }),
+    {
+      pre(pre) {
+        this.addClassToHast(pre, 'slidev-code')
+        delete pre.properties.tabindex
+      },
+      postprocess(code) {
+        return escapeVueInCode(code)
+      },
+    } as ShikiTransformer,
+  ].filter(isTruthy) as ShikiTransformer[]
 
-  for (const transformer of transformers) {
-    transformer(ctx)
-    if (!ctx.s.isEmpty())
-      ctx.s.commit()
+  const plugin = markdownItShiki(shiki, {
+    ...shikiOptions,
+    transformers,
+  })
+
+  return {
+    shiki,
+    shikiOptions,
+    plugin,
   }
-
-  return ctx
 }
 
 function MarkdownItEscapeInlineCode(md: MarkdownIt) {
@@ -183,4 +173,34 @@ function MarkdownItEscapeInlineCode(md: MarkdownIt) {
     const result = codeInline(tokens, idx, options, env, self)
     return result.replace(/^<code/, '<code v-pre')
   }
+}
+
+export function applyMarkdownTransform(
+  ctx: MarkdownTransformContext,
+  shiki?: Highlighter,
+  shikiOptions?: MarkdownItShikiOptions,
+) {
+  const transformers: (MarkdownTransformer | undefined)[] = [
+    transformSnippet,
+    ctx.options.data.config.highlighter
+      ? transformMagicMove(shiki, shikiOptions)
+      : undefined,
+    transformMermaid,
+    transformPlantUml,
+    transformMonaco,
+    transformCodeWrapper,
+    transformKaTexWrapper,
+    transformPageCSS,
+    transformSlotSugar,
+  ]
+
+  for (const transformer of transformers) {
+    if (!transformer)
+      continue
+    transformer(ctx)
+    if (!ctx.s.isEmpty())
+      ctx.s.commit()
+  }
+
+  return ctx
 }
