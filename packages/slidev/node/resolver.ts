@@ -273,8 +273,6 @@ export function createGlobResolver(source: string, { roots, clientRoot }: Resolv
 }
 
 export async function getPrintTemplate(options: ResolvedSlidevOptions) {
-  if (options.mode !== 'export')
-    return null
   const templates = await createGlobResolver('pages/print/*.{vue,ts}', options)()
   const template = templates[options.printTemplate.toLocaleLowerCase()]
   if (!template) {
