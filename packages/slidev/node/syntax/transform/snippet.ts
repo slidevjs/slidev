@@ -81,8 +81,9 @@ function findRegion(lines: Array<string>, regionName: string) {
  *
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
-export function transformSnippet(ctx: MarkdownTransformContext, options: ResolvedSlidevOptions, id: string) {
-  const slideId = (id as string).match(/(\d+)\.md$/)?.[1]
+export function transformSnippet(ctx: MarkdownTransformContext) {
+  const options = ctx.options
+  const slideId = (ctx.id as string).match(/(\d+)\.md$/)?.[1]
   if (!slideId)
     return
 
@@ -132,6 +133,4 @@ export function transformSnippet(ctx: MarkdownTransformContext, options: Resolve
       return `${firstLine}\n${content}\n\`\`\``
     },
   )
-
-  ctx.s.commit()
 }

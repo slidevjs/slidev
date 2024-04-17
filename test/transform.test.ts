@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { expect, it } from 'vitest'
 import { transformCodeWrapper, transformMermaid, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../packages/slidev/node/syntax/transform'
 import { createTransformContext } from './_tutils'
@@ -15,10 +14,10 @@ Right Slot
 `)
 
   transformCodeWrapper(ctx)
+  ctx.s.commit()
   transformSlotSugar(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
 })
 
 it('slot-sugar with default', () => {
@@ -35,7 +34,6 @@ Default Slot
   transformSlotSugar(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
 })
 
 it('slot-sugar with code', () => {
@@ -55,17 +53,10 @@ Slot Usage
 `)
 
   transformCodeWrapper(ctx)
+  ctx.s.commit()
   transformSlotSugar(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`
-      [
-        [
-          34,
-          73,
-        ],
-      ]
-    `)
 })
 
 it('slot-sugar with symbols in name', () => {
@@ -82,7 +73,6 @@ Second Slot
   transformSlotSugar(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
 })
 
 it('inline CSS', () => {
@@ -105,17 +95,10 @@ h1 {
 `)
 
   transformCodeWrapper(ctx)
-  transformPageCSS(ctx, '01.md')
+  ctx.s.commit()
+  transformPageCSS(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`
-      [
-        [
-          49,
-          99,
-        ],
-      ]
-    `)
 })
 
 it('mermaid', () => {
@@ -139,18 +122,6 @@ C -->|Two| E[Result 2]
   transformMermaid(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`
-      [
-        [
-          10,
-          126,
-        ],
-        [
-          128,
-          252,
-        ],
-      ]
-    `)
 })
 
 it('plantUML', () => {
@@ -182,21 +153,9 @@ Alice <- Bob : Hello, too!
 \`\`\`
 `)
 
-  transformPlantUml(ctx, 'https://www.plantuml.com/plantuml')
+  transformPlantUml(ctx)
 
   expect(ctx.s.toString()).toContain(`<PlantUml :code="'JOzD`)
-  expect(ctx.ignores).toMatchInlineSnapshot(`
-      [
-        [
-          9,
-          90,
-        ],
-        [
-          92,
-          338,
-        ],
-      ]
-    `)
 
   // TODO: not so sure on this,
   // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
@@ -209,20 +168,7 @@ it('external snippet', () => {
 <<< @/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
 `)
 
-  transformSnippet(
-    ctx,
-    {
-      userRoot: path.join(__dirname, './fixtures/'),
-      data: {
-        slides: [
-          {} as any,
-        ],
-        watchFiles: [],
-      },
-    } as any,
-    `/@slidev/slides/1.md`,
-  )
+  transformSnippet(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
-  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
 })

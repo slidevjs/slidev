@@ -16,7 +16,7 @@ import MarkdownItAttrs from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
-import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
+import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
@@ -133,7 +133,13 @@ export async function createMarkdownPlugin(
         if (id === entryPath)
           return ''
 
-        const ctx: MarkdownTransformContext = applyMarkdownTransform(code, id, options)
+        const ctx: MarkdownTransformContext = {
+          s: new MagicString(code),
+          id,
+          options,
+        }
+
+        applyMarkdownTransform(ctx, shikiOptions)
 
         const sourceMap = ctx.s.generateMap({ hires: true })
         sourceMapConsumers[id] = new SourceMapConsumer({
@@ -147,33 +153,31 @@ export async function createMarkdownPlugin(
 }
 
 export function applyMarkdownTransform(
-  code: string,
-  id: string,
-  options: ResolvedSlidevOptions,
+  ctx: MarkdownTransformContext,
+  shikiOptions?: MarkdownItShikiOptions,
 ) {
-  const { data: { config }, mode } = options
-  const monacoEnabled = (config.monaco === true || config.monaco === mode)
+  const transformers: MarkdownTransformer[] = []
 
-  const ctx: MarkdownTransformContext = {
-    s: new MagicString(code),
-    ignores: [],
-    isIgnored(index) {
-      return index < 0 || ctx.ignores.some(([start, end]) => start <= index && index < end)
-    },
+  transformers.push(transformSnippet)
+
+  if (ctx.options.data.config.highlighter === 'shiki')
+    transformers.push(transformMagicMove(shiki, shikiOptions))
+
+  transformers.push(
+    transformMermaid,
+    transformPlantUml,
+    transformMonaco,
+    transformCodeWrapper,
+    transformKaTexWrapper,
+    transformPageCSS,
+    transformSlotSugar,
+  )
+
+  for (const transformer of transformers) {
+    transformer(ctx)
+    if (!ctx.s.isEmpty())
+      ctx.s.commit()
   }
-
-  transformSnippet(ctx, options, id)
-
-  if (config.highlighter === 'shiki')
-    transformMagicMove(ctx, shiki, shikiOptions)
-
-  transformMermaid(ctx)
-  transformPlantUml(ctx, config.plantUmlServer)
-  transformMonaco(ctx, monacoEnabled)
-  transformCodeWrapper(ctx)
-  transformKaTexWrapper(ctx)
-  transformPageCSS(ctx, id)
-  transformSlotSugar(ctx)
 
   return ctx
 }

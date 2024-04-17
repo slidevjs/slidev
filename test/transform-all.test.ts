@@ -1,22 +1,9 @@
-import path from 'node:path'
 import { expect, it } from 'vitest'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { applyMarkdownTransform } from '../packages/slidev/node/vite/markdown'
+import { createTransformContext } from './_tutils'
 
 it('transform-all', async () => {
-  const options = {
-    entry: '1.md',
-    data: {
-      config: {},
-      slides: [
-        {},
-      ],
-      watchFiles: [] as any,
-    },
-    userRoot: path.join(__dirname, './fixtures/'),
-    mode: 'dev',
-  } as ResolvedSlidevOptions
-  const code = `
+  const ctx = createTransformContext(`
 # Page 
 
 Default Slot
@@ -39,9 +26,9 @@ Foo \`{{ code }}\`
 <style>
 .text-green { color: green; }
 </style>
-`
+`)
 
-  const ctx = applyMarkdownTransform(code, '1.md', options)
+  applyMarkdownTransform(ctx)
 
   expect(ctx.s.toString()).toMatchSnapshot()
 })
