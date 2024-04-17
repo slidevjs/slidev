@@ -96,7 +96,7 @@ export async function createMarkdownPlugin(
 
   const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
 
-  const sourceMapConsumers: Record<string, SourceMapConsumer> = {}
+  const markdownTransformMap = new Map<string, MagicString>()
 
   return Markdown({
     include: [/\.md$/],
@@ -123,7 +123,7 @@ export async function createMarkdownPlugin(
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
       md.use(MarkdownItKatex, KatexOptions)
-      md.use(MarkdownItVDrag, sourceMapConsumers)
+      md.use(MarkdownItVDrag, markdownTransformMap)
 
       setups.forEach(i => i(md))
       mdOptions?.markdownItSetup?.(md)
@@ -140,12 +140,7 @@ export async function createMarkdownPlugin(
         }
 
         applyMarkdownTransform(ctx, shikiOptions)
-
-        const sourceMap = ctx.s.generateMap({ hires: true })
-        sourceMapConsumers[id] = new SourceMapConsumer({
-          ...sourceMap,
-          version: sourceMap.version.toString(),
-        })
+        markdownTransformMap.set(id, ctx.s)
         return ctx.s.toString()
       },
     },
