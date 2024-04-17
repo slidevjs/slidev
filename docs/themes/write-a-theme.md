@@ -17,7 +17,7 @@ A theme can contribute to the following points:
 - Provide custom layouts or override the existing one
 - Provide custom components or override the existing one
 - Extend UnoCSS configurations
-- Configure tools like Shiki Monaco and
+- Configure tools like Shiki and Monaco
 
 ## Conventions
 
