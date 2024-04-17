@@ -7,7 +7,6 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
-import { SourceMapConsumer } from 'source-map-js'
 import MagicString from 'magic-string-stack'
 
 // @ts-expect-error missing types

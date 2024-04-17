@@ -2,7 +2,7 @@
 
 import path from 'node:path'
 import fs from 'fs-extra'
-import type { MarkdownTransformContext, ResolvedSlidevOptions } from '@slidev/types'
+import type { MarkdownTransformContext } from '@slidev/types'
 import { slash } from '@antfu/utils'
 
 function dedent(text: string): string {

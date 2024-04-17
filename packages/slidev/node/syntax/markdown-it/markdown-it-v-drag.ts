@@ -13,7 +13,7 @@ export default function markdownItVDrag(md: MarkdownIt, markdownTransformMap: Ma
     let smc = sourceMapConsumers.get(s)
     if (smc)
       return smc
-    const sourceMap = s.generateMap({ hires: true })
+    const sourceMap = s.generateMap()
     smc = new SourceMapConsumer({
       ...sourceMap,
       version: sourceMap.version.toString(),
