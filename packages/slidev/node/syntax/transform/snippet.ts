@@ -2,7 +2,7 @@
 
 import path from 'node:path'
 import fs from 'fs-extra'
-import type { MarkdownTransformContext, ResolvedSlidevOptions } from '@slidev/types'
+import type { MarkdownTransformContext } from '@slidev/types'
 import { slash } from '@antfu/utils'
 
 function dedent(text: string): string {
@@ -81,8 +81,9 @@ function findRegion(lines: Array<string>, regionName: string) {
  *
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
-export function transformSnippet(ctx: MarkdownTransformContext, options: ResolvedSlidevOptions, id: string) {
-  const slideId = (id as string).match(/(\d+)\.md$/)?.[1]
+export function transformSnippet(ctx: MarkdownTransformContext) {
+  const options = ctx.options
+  const slideId = (ctx.id as string).match(/(\d+)\.md$/)?.[1]
   if (!slideId)
     return
 

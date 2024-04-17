@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`markdown transform > external snippet 1`] = `
+exports[`external snippet 1`] = `
 "
 \`\`\`ts {2|3|4}{lines:true}
 function _foo() {
@@ -10,7 +10,7 @@ function _foo() {
 "
 `;
 
-exports[`markdown transform > inline CSS 1`] = `
+exports[`inline CSS 1`] = `
 "
 # Page 
 
@@ -36,7 +36,7 @@ h1 {
 "
 `;
 
-exports[`markdown transform > mermaid 1`] = `
+exports[`mermaid 1`] = `
 "
 # Page 
 
@@ -46,7 +46,7 @@ exports[`markdown transform > mermaid 1`] = `
 "
 `;
 
-exports[`markdown transform > slot-sugar 1`] = `
+exports[`slot-sugar 1`] = `
 "
 # Page 
 
@@ -66,7 +66,7 @@ Right Slot
 </template>"
 `;
 
-exports[`markdown transform > slot-sugar with code 1`] = `
+exports[`slot-sugar with code 1`] = `
 "
 # Page 
 
@@ -92,7 +92,7 @@ Slot Usage
 </template>"
 `;
 
-exports[`markdown transform > slot-sugar with default 1`] = `
+exports[`slot-sugar with default 1`] = `
 "
 
 <template v-slot:right="slotProps">
@@ -116,7 +116,7 @@ Default Slot
 </template>"
 `;
 
-exports[`markdown transform > slot-sugar with symbols in name 1`] = `
+exports[`slot-sugar with symbols in name 1`] = `
 "
 # Page 
 

@@ -29,12 +29,11 @@ Some text after
   const ctx = createTransformContext(code)
 
   transformMagicMove(
-    ctx,
     shiki,
     {
       theme: 'nord',
     },
-  )
+  )(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
@@ -75,23 +74,22 @@ Some text after
   const ctx = createTransformContext(code)
 
   transformMagicMove(
-    ctx,
     shiki,
     {
       theme: 'nord',
     },
-  )
+  )(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
-        "
+      "
 
-        Some text before
+      Some text before
 
-        <ShikiMagicMove v-bind="{}" steps-lz="NobwRAxg9gJgpmAXJKA7AzlANnAdFqAcwAoByACTiwIBoACAQVUIFcsBDAJwEJSBKMDTAALdumFIwABwBeABgBCAMQCcCgMwAtAG6CwAFygBrOBiSgUqfaf2ToGbAiFQAZi/RxbiOUOgFOkgDEACIAHMEAohEqei5o+gDK+gCeOEg+YCbJkrKKqho6ALRyYAC+NOD21laSuHqu7p5IAOy+2FAByIERAMIRSkoALLHxSakI3kJZOfLKalrahQCMZRWW1V5gBIT1bh5eoW3+QaGhPXLBJUJxVmNpk5lw2ci5cwWLAEyrlfE2ksS7RpeJZLI4dIJhSLRAYjW4pe4ZaYvWb5BaFdTfdZ/ZCkQH7JBLD5gzpgbp9AbDa6jeETRFPGZ5eZFYblH5WbFgSjUKD0JisDg8PFNRBLdTEoIMdQKCJnWGJGnpKb05GM96FACsmKqHNxzj2wo+hxQxy6vX6Qzld1pSue0hRTMWADYtb8asgBHqgUgPipxV1IVEVDCqXDxorHrbXqiis0Xey3WAADqoIVedR0yP2tWhMoAXSEACMdl0PnB1INBnI3LFi6SYKF4HAVNWhPphHAALZwABy7C7klQHRgeg4zEk7GYbC4hX06Bd8DsaEwOHwRDIXNojEnArogQ+vA9IjEEmQADUlgwINolgBFAAaAFkc63jKY54gLNqE/Zl04wA18QePxwX9cJA0tBUHiRMBz0va97yfYo4w2WpUxaP1STNCkILDKDlRgi8r1vR9QmWZCOW2NDECNYCSUCU5zkuHCERtSRYKIhDSK+VksQTAFPUAkEMJCMDoSUZjrQjNjCPgkj0XIhNdX/fVgSJY0QMw8kLRDeVcIzaS4OIxCWTWL9Ng3Hkt35Lhd33KjRWEyVpVlHSrXDaD2NkxDNR4szJCUgDhXUUF1LorDtLAG5dJYqSzxkozSOdXzXU2Q9ArTNTaIhUSg3E1zIP0uLDM4wpY2S+NNmTKj1DFWKCOKuSc1KfMwCLIJS3LSsW0i2tAnrRtmxcPQ207Hs+wmMBB04YchFHWsJ2szgZznZqgA" :step-ranges='[[],[]]' />
+      <ShikiMagicMove v-bind="{}" steps-lz="NobwRAxg9gJgpmAXJKA7AzlANnAdFqAcwAoByACTiwIBoACAQVUIFcsBDAJwEJSBKMDTAALdumFIwABwBeABgBCAMQCcCgMwAtAG6CwAFygBrOBiSgUqfaf2ToGbAiFQAZi/RxbiOUOgFOkgDEACIAHMEAohEqei5o+gDK+gCeOEg+YCbJkrKKqho6ALRyYAC+NOD21laSuHqu7p5IAOy+2FAByIERAMIRSkoALLHxSakI3kJZOfLKalrahQCMZRWW1V5gBIT1bh5eoW3+QaGhPXLBJUJxVmNpk5lw2ci5cwWLAEyrlfE2ksS7RpeJZLI4dIJhSLRAYjW4pe4ZaYvWb5BaFdTfdZ/ZCkQH7JBLD5gzpgbp9AbDa6jeETRFPGZ5eZFYblH5WbFgSjUKD0JisDg8PFNRBLdTEoIMdQKCJnWGJGnpKb05GM96FACsmKqHNxzj2wo+hxQxy6vX6Qzld1pSue0hRTMWADYtb8asgBHqgUgPipxV1IVEVDCqXDxorHrbXqiis0Xey3WAADqoIVedR0yP2tWhMoAXSEACMdl0PnB1INBnI3LFi6SYKF4HAVNWhPphHAALZwABy7C7klQHRgeg4zEk7GYbC4hX06Bd8DsaEwOHwRDIXNojEnArogQ+vA9IjEEmQADUlgwINolgBFAAaAFkc63jKY54gLNqE/Zl04wA18QePxwX9cJA0tBUHiRMBz0va97yfYo4w2WpUxaP1STNCkILDKDlRgi8r1vR9QmWZCOW2NDECNYCSUCU5zkuHCERtSRYKIhDSK+VksQTAFPUAkEMJCMDoSUZjrQjNjCPgkj0XIhNdX/fVgSJY0QMw8kLRDeVcIzaS4OIxCWTWL9Ng3Hkt35Lhd33KjRWEyVpVlHSrXDaD2NkxDNR4szJCUgDhXUUF1LorDtLAG5dJYqSzxkozSOdXzXU2Q9ArTNTaIhUSg3E1zIP0uLDM4wpY2S+NNmTKj1DFWKCOKuSc1KfMwCLIJS3LSsW0i2tAnrRtmxcPQ207Hs+wmMBB04YchFHWsJ2szgZznZqgA" :step-ranges='[[],[]]' />
 
-        Some text after
-          
-        "
-      `)
+      Some text after
+        
+      "
+    `)
 })

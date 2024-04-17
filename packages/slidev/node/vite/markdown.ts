@@ -7,8 +7,7 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
-import { SourceMapConsumer } from 'source-map-js'
-import MagicString from 'magic-string'
+import MagicString from 'magic-string-stack'
 
 // @ts-expect-error missing types
 import MarkdownItAttrs from 'markdown-it-link-attributes'
@@ -16,7 +15,7 @@ import MarkdownItAttrs from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
-import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
+import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
@@ -96,7 +95,7 @@ export async function createMarkdownPlugin(
 
   const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
 
-  const sourceMapConsumers: Record<string, SourceMapConsumer> = {}
+  const markdownTransformMap = new Map<string, MagicString>()
 
   return Markdown({
     include: [/\.md$/],
@@ -124,7 +123,7 @@ export async function createMarkdownPlugin(
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
       md.use(MarkdownItKatex, KatexOptions)
-      md.use(MarkdownItVDrag, sourceMapConsumers)
+      md.use(MarkdownItVDrag, markdownTransformMap)
 
       setups.forEach(i => i(md))
       mdOptions?.markdownItSetup?.(md)
@@ -134,39 +133,48 @@ export async function createMarkdownPlugin(
         if (id === entryPath)
           return ''
 
-        const monacoEnabled = (config.monaco === true || config.monaco === mode)
-
         const ctx: MarkdownTransformContext = {
           s: new MagicString(code),
-          ignores: [],
-          isIgnored(index) {
-            return index < 0 || ctx.ignores.some(([start, end]) => start <= index && index < end)
-          },
+          id,
+          options,
         }
 
-        transformSnippet(ctx, options, id)
-
-        if (config.highlighter === 'shiki')
-          transformMagicMove(ctx, shiki, shikiOptions)
-
-        transformMermaid(ctx)
-        transformPlantUml(ctx, config.plantUmlServer)
-        transformMonaco(ctx, monacoEnabled)
-        transformCodeWrapper(ctx)
-        transformKaTexWrapper(ctx)
-
-        transformPageCSS(ctx, id)
-        transformSlotSugar(ctx)
-
-        const sourceMap = ctx.s.generateMap()
-        sourceMapConsumers[id] = new SourceMapConsumer({
-          ...sourceMap,
-          version: sourceMap.version.toString(),
-        })
+        applyMarkdownTransform(ctx, shikiOptions)
+        markdownTransformMap.set(id, ctx.s)
         return ctx.s.toString()
       },
     },
   }) as Plugin
+}
+
+export function applyMarkdownTransform(
+  ctx: MarkdownTransformContext,
+  shikiOptions?: MarkdownItShikiOptions,
+) {
+  const transformers: MarkdownTransformer[] = []
+
+  transformers.push(transformSnippet)
+
+  if (ctx.options.data.config.highlighter === 'shiki')
+    transformers.push(transformMagicMove(shiki, shikiOptions))
+
+  transformers.push(
+    transformMermaid,
+    transformPlantUml,
+    transformMonaco,
+    transformCodeWrapper,
+    transformKaTexWrapper,
+    transformPageCSS,
+    transformSlotSugar,
+  )
+
+  for (const transformer of transformers) {
+    transformer(ctx)
+    if (!ctx.s.isEmpty())
+      ctx.s.commit()
+  }
+
+  return ctx
 }
 
 function MarkdownItEscapeInlineCode(md: MarkdownIt) {
