@@ -10,10 +10,12 @@ your-slidev/
   ├── layouts/          # custom layouts
   ├── public/           # static assets
   ├── setup/            # custom setup / hooks
-  ├── styles/           # custom style
+  ├── styles/           # custom styles
+  ├── snippets/         # code snippets
+  ├── pages/print/      # custom print templates
   ├── index.html        # injections to index.html
   ├── slides.md         # the main slides entry
-  └── vite.config.ts    # extending vite config
+  └── vite.config.ts    # extending the vite config
 ```
 
 All of them are optional.

@@ -11,6 +11,5 @@ export interface VirtualModuleTemplate {
 export interface VirtualModuleTempalteContext {
   md: MarkdownIt
   getLayouts: () => Promise<Record<string, string>>
-  getPageTemplates: () => Promise<Record<string, string>>
-  getPrintTemplates: () => Promise<Record<string, string>>
+  printTemplate: Promise<string | null>
 }

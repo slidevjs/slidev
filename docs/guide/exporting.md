@@ -53,6 +53,21 @@ By default, Slidev exports one page per slide with clicks animations disabled. I
 $ slidev export --with-clicks
 ```
 
+### Print Template
+
+By default, Slidev uses the `default` template to print your slides to PDF. You can also specify the print template with the `--template` (`-t`) option:
+
+```bash
+$ slidev export --template notes
+```
+
+Currently, Slidev provides the following templates:
+
+- `default`: Slides only template. Each
+- `notes`: Notes only.
+
+But it is also possible to create your own print template. See [Custom Print Templates](/guide/custom/print-templates) for details.
+
 ### Slide range
 
 You can also specify a range of slides to export with the `--range` option:
@@ -104,28 +119,16 @@ The example above would export slides 1,6,7,8 and 10.
 You can also export multiple slides at once:
 
 ```bash
-$ slidev export slides1.md slides1.md
+$ slidev export slides1.md slides2.md
 ```
 
 Or
 
 ```bash
-$ slidev export *.md
+$ slidev export *.md      # This based on your shell
 ```
 
 In this case, each input file will generate its own PDf file.
-
-## Presenter notes
-
-> Available since v0.36.8
-
-Export only the presenter notes (the last comment block for each slide) into a text document in PDF:
-
-```bash
-$ slidev export-notes
-```
-
-This command also accepts multiple entries like for the [export command](#multiple-entries)
 
 ## Single-Page Application (SPA)
 

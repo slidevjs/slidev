@@ -10,7 +10,7 @@ import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import prompts from 'prompts'
 import { parseNi, run } from '@antfu/ni'
-import { underline, yellow } from 'kolorist'
+import { red, underline, yellow } from 'kolorist'
 import fg from 'fast-glob'
 import type { ResolvedSlidevOptions, RootsInfo } from '@slidev/types'
 
@@ -270,4 +270,16 @@ export function createGlobResolver(source: string, { roots, clientRoot }: Resolv
 
     return fileMap
   }
+}
+
+export async function getPrintTemplate(options: ResolvedSlidevOptions) {
+  if (options.mode !== 'export')
+    return null
+  const templates = await createGlobResolver('pages/print/*.{vue,ts}', options)()
+  const template = templates[options.printTemplate.toLocaleLowerCase()]
+  if (!template) {
+    console.error(red(`Print template ${options.printTemplate} not found. Available templates: ${Object.keys(templates)}`))
+    process.exit(1)
+  }
+  return template
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { recomputeAllPoppers } from 'floating-vue'
 import { onMounted } from 'vue'
-import PrintTemplate from '#slidev/page-templates/print'
+import PrintTemplate from '#slidev/print-template'
 
 document.documentElement.classList.add('print')
 

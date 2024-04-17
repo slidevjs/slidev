@@ -1,22 +1,15 @@
-import { objectMap } from '@antfu/utils'
 import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
 
 export const templateLayouts: VirtualModuleTemplate = {
   id: '/@slidev/layouts',
   async getContent(_, { getLayouts }) {
-    const imports: string[] = []
-    const layouts = objectMap(
-      await getLayouts(),
-      (k, v) => {
-        imports.push(`import __layout_${k} from "${toAtFS(v)}"`)
-        return [k, `__layout_${k}`]
-      },
-    )
-
+    const layouts = await getLayouts()
     return [
-      imports.join('\n'),
-      `export default {\n${Object.entries(layouts).map(([k, v]) => `"${k}": ${v}`).join(',\n')}\n}`,
-    ].join('\n\n')
+      ...Object.values(layouts).map((path, idx) => `import _${idx} from "${toAtFS(path)}"`),
+      'export default {',
+      ...Object.keys(layouts).map((name, idx) => `"${name}": _${idx},`),
+      '}\n',
+    ].join('\n')
   },
 }

@@ -4,8 +4,10 @@ import { templateGlobalBottom, templateGlobalTop, templateNavControls } from './
 import { templateLayouts } from './layouts'
 import { templateMonacoRunDeps } from './monaco-deps'
 import { templateMonacoTypes } from './monaco-types'
+import { templatePrintTemplate } from './print-template'
 import { templateSetups } from './setups'
 import { templateShiki } from './shiki'
+import { templateSlideLayers } from './slide-layers'
 import { templateSlides } from './slides'
 import { templateStyle } from './styles'
 import { templateTitleRenderer, templateTitleRendererMd } from './titles'
@@ -23,6 +25,8 @@ export const templates = [
   templateLayouts,
   templateTitleRenderer,
   templateTitleRendererMd,
+  templatePrintTemplate,
+  templateSlideLayers,
   ...templateSetups,
 
   // Deprecated

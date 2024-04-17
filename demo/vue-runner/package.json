@@ -4,7 +4,7 @@
     "build": "slidev build",
     "dev": "nodemon -w '../../packages/slidev/dist/*.mjs' --exec \"slidev ./slides.md --open=false --log=info --inspect\"",
     "export": "slidev export",
-    "export-notes": "slidev export-notes"
+    "export-notes": "slidev export -t notes"
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",

@@ -113,8 +113,12 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/directory-structure',
   },
   {
-    text: 'Fonts',
-    link: '/custom/fonts',
+    text: 'Vue Global Context',
+    link: '/custom/vue-context',
+  },
+  {
+    text: 'Global Layers',
+    link: '/custom/global-layers',
   },
   {
     text: 'Highlighters',
@@ -165,12 +169,12 @@ const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildr
     link: '/custom/config-context-menu',
   },
   {
-    text: 'Vue Global Context',
-    link: '/custom/vue-context',
+    text: 'Custom Print Templates',
+    link: '/custom/print-templates',
   },
   {
-    text: 'Global Layers',
-    link: '/custom/global-layers',
+    text: 'Fonts',
+    link: '/custom/fonts',
   },
 ]
 

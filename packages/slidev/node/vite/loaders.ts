@@ -11,7 +11,7 @@ import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
 import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
-import { createGlobResolver, toAtFS } from '../resolver'
+import { createGlobResolver, getPrintTemplate, toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
 import { templateTitleRendererMd } from '../virtual/titles'
@@ -106,8 +106,7 @@ export function createSlidesLoader(
   const templateCtx: VirtualModuleTempalteContext = {
     md,
     getLayouts: createGlobResolver('layouts/*.{vue,ts}', options),
-    getPageTemplates: createGlobResolver('page-templates/*.{vue,ts}', options),
-    getPrintTemplates: createGlobResolver('page-templates/print/*.{vue,ts}', options),
+    printTemplate: getPrintTemplate(options),
   }
 
   return [
@@ -355,21 +354,6 @@ export function createSlidesLoader(
           }
           return {
             code: '',
-            map: { mappings: '' },
-          }
-        }
-
-        // page templates
-        const VIRTUAL_PAGE_TEMPLATES_PREFIX = '/@slidev/page-templates/'
-        if (id.startsWith(VIRTUAL_PAGE_TEMPLATES_PREFIX)) {
-          const templateName = id.slice(VIRTUAL_PAGE_TEMPLATES_PREFIX.length)
-          const template = templateName === 'print'
-            ? (await templateCtx.getPrintTemplates())[options.exportTemplate]
-            : (await templateCtx.getPageTemplates())[templateName]
-          return {
-            code: template
-              ? `import PageTemplate from "${toAtFS(template)}"\nexport default PageTemplate`
-              : `export default { render: () => [] }`,
             map: { mappings: '' },
           }
         }

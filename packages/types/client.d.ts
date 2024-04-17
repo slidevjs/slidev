@@ -44,11 +44,18 @@ declare module '#slidev/custom-nav-controls' {
   export default component
 }
 
-declare module '#slidev/page-templates/*' {
+declare module '#slidev/print-template' {
   import type { Component } from 'vue'
 
   const component: Component
   export default component
+}
+
+declare module '#slidev/slide-layers' {
+  import type { Component } from 'vue'
+
+  export const SlideTop: Component | null
+  export const SlideBottom: Component | null
 }
 
 declare module '#slidev/shiki' {

@@ -7,8 +7,7 @@ import { injectionActive, injectionClicksContext, injectionCurrentPage, injectio
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
 import SlideLoading from './SlideLoading.vue'
-import SlideBottomTemplate from '#slidev/page-templates/slide-bottom'
-import SlideTopTemplate from '#slidev/page-templates/slide-top'
+import { SlideBottom, SlideTop } from '#slidev/slide-layers'
 
 const props = defineProps({
   clicksContext: {
@@ -78,10 +77,15 @@ const SlideComponent = defineAsyncComponent({
   <div
     :data-slidev-no="props.route.no"
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
+    :style="style"
   >
-    <SlideBottomTemplate :style="style" />
-    <SlideComponent :style="style" />
-    <SlideTopTemplate :style="style" />
+    <div v-if="SlideBottom" class="absolute inset-0">
+      <SlideBottom />
+    </div>
+    <SlideComponent />
+    <div v-if="SlideTop" class="absolute inset-0">
+      <SlideTop />
+    </div>
   </div>
 </template>
 

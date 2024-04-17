@@ -173,6 +173,7 @@ Options:
 - `--log` (`'error', 'warn', 'info', 'silent'`, default: `'warn'`): Log level.
 - `--force`, `-f` (`boolean`, default: `false`): force the optimizer to ignore the cache and re-bundle.
 - `--theme`, `-t` (`string`): override theme.
+- `--print-template` (`string`): specify [the print template](/guide/exporting#print-template).
 
 ### `slidev build [entry]`
 
@@ -202,7 +203,8 @@ Options:
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.
 - `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animations).
-- `--theme`, `-t` (`string`): override theme.
+- `--theme` (`string`): override theme.
+- `--template`, `-t` (`string`, default: `default`): specify [the print template](/guide/exporting#print-template).
 
 ### `slidev format [entry]`
 

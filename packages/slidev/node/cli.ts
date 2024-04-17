@@ -41,8 +41,9 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
  * Files that triggers a restart when added or removed
  */
 const FILES_CREATE_RESTART_GLOBS = [
-  'global-bottom.vue',
-  'global-top.vue',
+  'global-bottom.{vue,ts}',
+  'global-top.{vue,ts}',
+  'layouts/*.{vue,ts}',
   'uno.config.js',
   'uno.config.ts',
   'unocss.config.js',
@@ -122,9 +123,14 @@ cli.command(
       default: '0.0.0.0',
       describe: 'specify which IP addresses the server should listen on in remote mode',
     })
+    .option('print-template', {
+      type: 'string',
+      default: 'default',
+      description: 'specify the print template to load',
+    })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind, printTemplate }) => {
     let server: ViteDevServer | undefined
     let port = 3030
 
@@ -142,7 +148,7 @@ cli.command(
     async function initServer() {
       if (server)
         await server.close()
-      const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev')
+      const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev', printTemplate)
       const host = remote !== undefined ? bind : 'localhost'
       port = userPort || await getPort({
         port: 3030,
@@ -211,6 +217,8 @@ cli.command(
         publicIp = await import('public-ip').then(r => r.publicIpv4())
 
       lastRemoteUrl = printInfo(options, port, remote, tunnelUrl, publicIp)
+
+      watchFileChange(options.userRoot)
     }
 
     async function openTunnel(port: number) {
@@ -300,32 +308,32 @@ cli.command(
       })
     }
 
+    async function watchFileChange(userRoot: string) {
+      // Start watcher to restart server on file changes
+      const { watch } = await import('chokidar')
+      const watchOptions = {
+        cwd: userRoot,
+        ignored: ['node_modules', '.git'],
+        ignoreInitial: true,
+      }
+      watch(FILES_CREATE_RESTART_GLOBS, watchOptions)
+        .on('unlink', (file) => {
+          console.log(yellow(`\n  file ${file} removed, restarting...\n`))
+          restartServer()
+        })
+        .on('add', (file) => {
+          console.log(yellow(`\n  file ${file} added, restarting...\n`))
+          restartServer()
+        })
+      watch(FILES_CHANGE_RESTART_GLOBS, watchOptions)
+        .on('change', (file) => {
+          console.log(yellow(`\n  file ${file} changed, restarting...\n`))
+          restartServer()
+        })
+    }
+
     initServer()
     bindShortcut()
-
-    // Start watcher to restart server on file changes
-    const { watch } = await import('chokidar')
-    const watcher = watch([
-      ...FILES_CREATE_RESTART_GLOBS,
-      ...FILES_CHANGE_RESTART_GLOBS,
-    ], {
-      ignored: ['node_modules', '.git'],
-      ignoreInitial: true,
-    })
-    watcher.on('unlink', (file) => {
-      console.log(yellow(`\n  file ${file} removed, restarting...\n`))
-      restartServer()
-    })
-    watcher.on('add', (file) => {
-      console.log(yellow(`\n  file ${file} added, restarting...\n`))
-      restartServer()
-    })
-    watcher.on('change', (file) => {
-      if (FILES_CREATE_RESTART_GLOBS.includes(file))
-        return
-      console.log(yellow(`\n  file ${file} changed, restarting...\n`))
-      restartServer()
-    })
   },
 )
 

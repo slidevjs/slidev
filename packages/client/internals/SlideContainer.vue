@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { provideLocal, useElementSize } from '@vueuse/core'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { useSlideScale } from '../composables/useSlideScale'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect } from '../env'
@@ -17,7 +17,6 @@ const props = defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['update:slide-element'])
 
 const container = ref<HTMLDivElement | null>(null)
 const containerSize = useElementSize(container)
@@ -35,7 +34,6 @@ const containerStyle = computed(() => props.width
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
-watchEffect(() => emit('update:slide-element', slideElement.value))
 </script>
 
 <template>
@@ -47,10 +45,9 @@ watchEffect(() => emit('update:slide-element', slideElement.value))
   </div>
 </template>
 
-<style lang="postcss">
+<style scoped lang="postcss">
 .slidev-slide-container {
   @apply relative w-full h-full overflow-hidden;
-  background: var(--slidev-slide-container-background, black);
 }
 
 .slidev-slide-content {
