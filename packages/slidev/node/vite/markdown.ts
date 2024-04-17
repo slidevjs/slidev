@@ -8,7 +8,7 @@ import MarkdownItMdc from 'markdown-it-mdc'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import { SourceMapConsumer } from 'source-map-js'
-import MagicString from 'magic-string'
+import MagicString from 'magic-string-stack'
 
 // @ts-expect-error missing types
 import MarkdownItAttrs from 'markdown-it-link-attributes'
@@ -133,31 +133,9 @@ export async function createMarkdownPlugin(
         if (id === entryPath)
           return ''
 
-        const monacoEnabled = (config.monaco === true || config.monaco === mode)
+        const ctx: MarkdownTransformContext = applyMarkdownTransform(code, id, options)
 
-        const ctx: MarkdownTransformContext = {
-          s: new MagicString(code),
-          ignores: [],
-          isIgnored(index) {
-            return index < 0 || ctx.ignores.some(([start, end]) => start <= index && index < end)
-          },
-        }
-
-        transformSnippet(ctx, options, id)
-
-        if (config.highlighter === 'shiki')
-          transformMagicMove(ctx, shiki, shikiOptions)
-
-        transformMermaid(ctx)
-        transformPlantUml(ctx, config.plantUmlServer)
-        transformMonaco(ctx, monacoEnabled)
-        transformCodeWrapper(ctx)
-        transformKaTexWrapper(ctx)
-
-        transformPageCSS(ctx, id)
-        transformSlotSugar(ctx)
-
-        const sourceMap = ctx.s.generateMap()
+        const sourceMap = ctx.s.generateMap({ hires: true })
         sourceMapConsumers[id] = new SourceMapConsumer({
           ...sourceMap,
           version: sourceMap.version.toString(),
@@ -166,4 +144,36 @@ export async function createMarkdownPlugin(
       },
     },
   }) as Plugin
+}
+
+export function applyMarkdownTransform(
+  code: string,
+  id: string,
+  options: ResolvedSlidevOptions,
+) {
+  const { data: { config }, mode } = options
+  const monacoEnabled = (config.monaco === true || config.monaco === mode)
+
+  const ctx: MarkdownTransformContext = {
+    s: new MagicString(code),
+    ignores: [],
+    isIgnored(index) {
+      return index < 0 || ctx.ignores.some(([start, end]) => start <= index && index < end)
+    },
+  }
+
+  transformSnippet(ctx, options, id)
+
+  if (config.highlighter === 'shiki')
+    transformMagicMove(ctx, shiki, shikiOptions)
+
+  transformMermaid(ctx)
+  transformPlantUml(ctx, config.plantUmlServer)
+  transformMonaco(ctx, monacoEnabled)
+  transformCodeWrapper(ctx)
+  transformKaTexWrapper(ctx)
+  transformPageCSS(ctx, id)
+  transformSlotSugar(ctx)
+
+  return ctx
 }

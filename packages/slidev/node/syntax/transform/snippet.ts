@@ -132,4 +132,6 @@ export function transformSnippet(ctx: MarkdownTransformContext, options: Resolve
       return `${firstLine}\n${content}\n\`\`\``
     },
   )
+
+  ctx.s.commit()
 }

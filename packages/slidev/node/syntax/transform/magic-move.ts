@@ -18,7 +18,7 @@ export function transformMagicMove(
 ) {
   ctx.s.replace(
     reMagicMoveBlock,
-    (full, options = '{}', _attrs = '', body: string, index: number) => {
+    (full, options = '{}', _attrs = '', body: string) => {
       if (!shiki || !shikiOptions)
         throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
 
@@ -34,10 +34,8 @@ export function transformMagicMove(
       }),
       )
       const compressed = lz.compressToBase64(JSON.stringify(steps))
-
-      ctx.ignores.push([index, index + full.length])
-
       return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
     },
   )
+  ctx.s.commit()
 }

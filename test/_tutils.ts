@@ -1,4 +1,4 @@
-import MagicString from 'magic-string'
+import MagicString from 'magic-string-stack'
 import type { MarkdownTransformContext } from '@slidev/types'
 
 export function createTransformContext(code: string): MarkdownTransformContext {

@@ -1,11 +1,10 @@
 import path from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { expect, it } from 'vitest'
 import { transformCodeWrapper, transformMermaid, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../packages/slidev/node/syntax/transform'
 import { createTransformContext } from './_tutils'
 
-describe('markdown transform', () => {
-  it('slot-sugar', () => {
-    const ctx = createTransformContext(`
+it('slot-sugar', () => {
+  const ctx = createTransformContext(`
 # Page 
 
 Default Slot
@@ -15,15 +14,15 @@ Right Slot
 <div>Left Slot</div>
 `)
 
-    transformCodeWrapper(ctx)
-    transformSlotSugar(ctx)
+  transformCodeWrapper(ctx)
+  transformSlotSugar(ctx)
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
-  })
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
+})
 
-  it('slot-sugar with default', () => {
-    const ctx = createTransformContext(`
+it('slot-sugar with default', () => {
+  const ctx = createTransformContext(`
 :: right::
 Right Slot
 ::left ::
@@ -33,14 +32,14 @@ Right Slot
 Default Slot
 `)
 
-    transformSlotSugar(ctx)
+  transformSlotSugar(ctx)
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
-  })
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
+})
 
-  it('slot-sugar with code', () => {
-    const ctx = createTransformContext(`
+it('slot-sugar with code', () => {
+  const ctx = createTransformContext(`
 # Page 
 
 Default Slot
@@ -55,11 +54,11 @@ Slot Usage
 
 `)
 
-    transformCodeWrapper(ctx)
-    transformSlotSugar(ctx)
+  transformCodeWrapper(ctx)
+  transformSlotSugar(ctx)
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`
       [
         [
           34,
@@ -67,10 +66,10 @@ Slot Usage
         ],
       ]
     `)
-  })
+})
 
-  it('slot-sugar with symbols in name', () => {
-    const ctx = createTransformContext(`
+it('slot-sugar with symbols in name', () => {
+  const ctx = createTransformContext(`
 # Page 
 
 Default Slot
@@ -80,14 +79,14 @@ First Slot
 Second Slot
 `)
 
-    transformSlotSugar(ctx)
+  transformSlotSugar(ctx)
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
-  })
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
+})
 
-  it('inline CSS', () => {
-    const ctx = createTransformContext(`
+it('inline CSS', () => {
+  const ctx = createTransformContext(`
 # Page 
 
 <style>
@@ -105,11 +104,11 @@ h1 {
 \`\`\`
 `)
 
-    transformCodeWrapper(ctx)
-    transformPageCSS(ctx, '01.md')
+  transformCodeWrapper(ctx)
+  transformPageCSS(ctx, '01.md')
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`
       [
         [
           49,
@@ -117,10 +116,10 @@ h1 {
         ],
       ]
     `)
-  })
+})
 
-  it('mermaid', () => {
-    const ctx = createTransformContext(`
+it('mermaid', () => {
+  const ctx = createTransformContext(`
 # Page 
 
 \`\`\`mermaid
@@ -137,10 +136,10 @@ C -->|Two| E[Result 2]
 \`\`\`
 `)
 
-    transformMermaid(ctx)
+  transformMermaid(ctx)
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`
       [
         [
           10,
@@ -152,10 +151,10 @@ C -->|Two| E[Result 2]
         ],
       ]
     `)
-  })
+})
 
-  it('plantUML', () => {
-    const ctx = createTransformContext(`
+it('plantUML', () => {
+  const ctx = createTransformContext(`
 # Page
 
 \`\`\`plantuml
@@ -183,10 +182,10 @@ Alice <- Bob : Hello, too!
 \`\`\`
 `)
 
-    transformPlantUml(ctx, 'https://www.plantuml.com/plantuml')
+  transformPlantUml(ctx, 'https://www.plantuml.com/plantuml')
 
-    expect(ctx.s.toString()).toContain(`<PlantUml :code="'JOzD`)
-    expect(ctx.ignores).toMatchInlineSnapshot(`
+  expect(ctx.s.toString()).toContain(`<PlantUml :code="'JOzD`)
+  expect(ctx.ignores).toMatchInlineSnapshot(`
       [
         [
           9,
@@ -199,32 +198,31 @@ Alice <- Bob : Hello, too!
       ]
     `)
 
-    // TODO: not so sure on this,
-    // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
-    // we may need to find a better way to test this
-    // expect(result).toMatchSnapshot()
-  })
+  // TODO: not so sure on this,
+  // it seems the encode result of `plantuml-encoder` is different across platforms since Node 18
+  // we may need to find a better way to test this
+  // expect(result).toMatchSnapshot()
+})
 
-  it('external snippet', () => {
-    const ctx = createTransformContext(`
+it('external snippet', () => {
+  const ctx = createTransformContext(`
 <<< @/snippets/snippet.ts#snippet ts {2|3|4}{lines:true}
 `)
 
-    transformSnippet(
-      ctx,
-      {
-        userRoot: path.join(__dirname, './fixtures/'),
-        data: {
-          slides: [
-            {} as any,
-          ],
-          watchFiles: [],
-        },
-      } as any,
-`/@slidev/slides/1.md`,
-    )
+  transformSnippet(
+    ctx,
+    {
+      userRoot: path.join(__dirname, './fixtures/'),
+      data: {
+        slides: [
+          {} as any,
+        ],
+        watchFiles: [],
+      },
+    } as any,
+    `/@slidev/slides/1.md`,
+  )
 
-    expect(ctx.s.toString()).toMatchSnapshot()
-    expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
-  })
+  expect(ctx.s.toString()).toMatchSnapshot()
+  expect(ctx.ignores).toMatchInlineSnapshot(`[]`)
 })

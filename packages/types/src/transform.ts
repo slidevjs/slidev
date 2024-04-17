@@ -1,4 +1,4 @@
-import type MagicString from 'magic-string'
+import type MagicString from 'magic-string-stack'
 
 export interface MarkdownTransformContext {
   s: MagicString
