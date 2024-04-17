@@ -11,7 +11,7 @@
   "dependencies": {
     "@antfu/utils": "^0.7.7",
     "@vueuse/core": "^10.9.0",
-    "typeit": "^8.8.3"
+    "typeit": "^8.1.0"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.201",
