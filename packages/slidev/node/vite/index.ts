@@ -8,8 +8,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 import ServerRef from 'vite-plugin-vue-server-ref'
 import { notNullish } from '@antfu/utils'
-import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import { loadDrawings, writeDrawings } from '../integrations/drawings'
+import type { SlidevServerApp } from '../slidev'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
 
@@ -18,11 +18,9 @@ import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createMonacoTypesLoader } from './monacoTypes'
 import { createVuePlugin } from './vue'
 
-export async function ViteSlidevPlugin(
-  options: ResolvedSlidevOptions,
-  pluginOptions: SlidevPluginOptions,
-  serverOptions: SlidevServerOptions = {},
-): Promise<Plugin[]> {
+export async function ViteSlidevPlugin(app: SlidevServerApp): Promise<Plugin[]> {
+  const { options, pluginOptions } = app
+
   const {
     components: componentsOptions = {},
     icons: iconsOptions = {},
@@ -43,10 +41,9 @@ export async function ViteSlidevPlugin(
   const publicRoots = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
 
   const plugins = [
-    createMarkdownPlugin(options, pluginOptions),
-
-    createVuePlugin(options, pluginOptions),
-    createSlidesLoader(options, pluginOptions, serverOptions),
+    createMarkdownPlugin(app),
+    createVuePlugin(app),
+    createSlidesLoader(app),
 
     Components({
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
@@ -115,7 +112,7 @@ export async function ViteSlidevPlugin(
       },
     }),
 
-    createConfigPlugin(options),
+    createConfigPlugin(app),
     createMonacoTypesLoader(options),
     createVueCompilerFlagsPlugin(options),
 
@@ -128,6 +125,7 @@ export async function ViteSlidevPlugin(
         })),
       }))
       : null,
+
     options.inspect
       ? import('vite-plugin-inspect').then(r => (r.default || r)({
         dev: true,

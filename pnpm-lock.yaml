@@ -525,6 +525,9 @@ importers:
       global-directory:
         specifier: ^4.0.1
         version: 4.0.1
+      hookable:
+        specifier: ^5.5.3
+        version: 5.5.3
       htmlparser2:
         specifier: ^9.1.0
         version: 9.1.0

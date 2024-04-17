@@ -21,6 +21,7 @@ import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
+import type { SlidevServerApp } from '../slidev'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -93,11 +94,7 @@ function withRenderedNote(data: SlideInfo): SlideInfo {
   }
 }
 
-export function createSlidesLoader(
-  options: ResolvedSlidevOptions,
-  pluginOptions: SlidevPluginOptions,
-  serverOptions: SlidevServerOptions,
-): Plugin[] {
+export function createSlidesLoader(app: SlidevServerApp): Plugin[] {
   const hmrPages = new Set<number>()
   let server: ViteDevServer | undefined
 
@@ -106,7 +103,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, clientRoot, roots, mode } = options
+  const { data, clientRoot, roots, mode } = app.options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md,
@@ -203,7 +200,7 @@ export function createSlidesLoader(
 
         await ctx.read()
 
-        const newData = await serverOptions.loadData?.()
+        const newData = await app.serverOptions?.loadData?.()
         if (!newData)
           return []
 
@@ -311,7 +308,7 @@ export function createSlidesLoader(
         const template = templates.find(i => i.id === id)
         if (template) {
           return {
-            code: await template.getContent(options, templateCtx, this),
+            code: await template.getContent(app.options, templateCtx, this),
             map: { mappings: '' },
           }
         }

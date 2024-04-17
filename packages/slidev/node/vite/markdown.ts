@@ -25,14 +25,13 @@ import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
 import { transformCodeWrapper, transformKaTexWrapper, transformMagicMove, transformMermaid, transformMonaco, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../syntax/transform'
 import { escapeVueInCode } from '../syntax/transform/utils'
+import type { SlidevServerApp } from '../slidev'
 
 let shiki: Highlighter | undefined
 let shikiOptions: MarkdownItShikiOptions | undefined
 
-export async function createMarkdownPlugin(
-  options: ResolvedSlidevOptions,
-  { markdown: mdOptions }: SlidevPluginOptions,
-): Promise<Plugin> {
+export async function createMarkdownPlugin(app: SlidevServerApp): Promise<Plugin> {
+  const { options, pluginOptions: { markdown: mdOptions } } = app
   const { data: { config }, roots, mode, entry, clientRoot } = options
 
   const setups: ((md: MarkdownIt) => void)[] = []
@@ -95,7 +94,6 @@ export async function createMarkdownPlugin(
     setups.push(md => md.use(MarkdownItMdc))
 
   const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
-
   const sourceMapConsumers: Record<string, SourceMapConsumer> = {}
 
   return Markdown({
@@ -112,7 +110,7 @@ export async function createMarkdownPlugin(
       ...mdOptions?.markdownItOptions,
     },
     ...mdOptions,
-    markdownItSetup(md) {
+    async markdownItSetup(md) {
       md.use(MarkdownItAttrs, {
         attrs: {
           target: '_blank',
@@ -127,7 +125,9 @@ export async function createMarkdownPlugin(
       md.use(MarkdownItVDrag, sourceMapConsumers)
 
       setups.forEach(i => i(md))
-      mdOptions?.markdownItSetup?.(md)
+
+      await mdOptions?.markdownItSetup?.(md)
+      await app.hooks.callHook('markdown:setup', md)
     },
     transforms: {
       before(code, id) {
@@ -144,6 +144,8 @@ export async function createMarkdownPlugin(
           },
         }
 
+        app.hooks.callHook('markdown:transform:pre', ctx, id)
+
         transformSnippet(ctx, options, id)
 
         if (config.highlighter === 'shiki')
@@ -157,6 +159,8 @@ export async function createMarkdownPlugin(
 
         transformPageCSS(ctx, id)
         transformSlotSugar(ctx)
+
+        app.hooks.callHook('markdown:transform:post', ctx, id)
 
         const sourceMap = ctx.s.generateMap()
         sourceMapConsumers[id] = new SourceMapConsumer({
