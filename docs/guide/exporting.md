@@ -66,7 +66,7 @@ Currently, Slidev provides the following templates:
 - `default`: Slides only template. Each
 - `notes`: Notes only.
 
-But it is also possible to create your own print template. See [Custom Print Templates](/guide/custom/print-templates) for details.
+But it is also possible to create your own print template. See [Custom Print Templates](/custom/print-templates) for details.
 
 ### Slide range
 
