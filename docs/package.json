@@ -2,7 +2,7 @@
   "name": "docs",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@8.15.6",
+  "packageManager": "pnpm@8.15.7",
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
@@ -11,10 +11,10 @@
   "dependencies": {
     "@antfu/utils": "^0.7.7",
     "@vueuse/core": "^10.9.0",
-    "typeit": "^8.8.3"
+    "typeit": "^8.1.0"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.200",
+    "@iconify/json": "^2.2.201",
     "@shikijs/vitepress-twoslash": "^1.3.0",
     "@slidev/client": "0.34.3",
     "@slidev/parser": "0.34.3",
@@ -22,12 +22,12 @@
     "@slidev/types": "0.34.3",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.12.7",
-    "@unocss/reset": "^0.59.2",
+    "@unocss/reset": "^0.59.3",
     "fs-extra": "^11.2.0",
     "markdown-it": "^14.1.0",
     "shiki": "^1.3.0",
     "typescript": "^5.4.5",
-    "unocss": "^0.59.2",
+    "unocss": "^0.59.3",
     "unplugin-icons": "^0.18.5",
     "unplugin-vue-components": "^0.26.0",
     "vite-plugin-inspect": "^0.8.3",
