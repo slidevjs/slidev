@@ -70,6 +70,7 @@ if (typeof window !== 'undefined') {
 }
 
 onMounted(() => {
+  // @ts-expect-error wrong types provided by TypeIt
   new TypeIt(block.value!, {
     speed: 50,
     startDelay: 900,
@@ -80,9 +81,9 @@ onMounted(() => {
   })
     .type('<br><span class="token title"># Welcome to Slidev!</span><br><br>', { delay: 400 })
     .type('Presentation Slides for Developers', { delay: 400 })
-    .move('START', { speed: 0 })
+    .move(null, { to: 'START', speed: 0 })
     .type('<br>')
-    .move('START')
+    .move(null, { to: 'START' })
     .exec(pause)
     .type('<span class="token punctuation">---<br><br>---</span>')
     .move(-4)
@@ -100,7 +101,7 @@ onMounted(() => {
     .type(COVER_URL, { speed: 0 })
     .exec(resume)
     .pause(1000)
-    .move('END', { speed: 0 })
+    .move(null, { to: 'END', speed: 0 })
     .exec(pause)
     .type('<br><br><span class="token punctuation">---</span><br><br>', { delay: 400 })
     .exec(resume)
