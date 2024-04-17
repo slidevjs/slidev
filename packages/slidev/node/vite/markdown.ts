@@ -103,7 +103,6 @@ export async function createMarkdownPlugin(
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,
-    escapeCodeTagInterpolation: false,
     markdownItOptions: {
       quotes: '""\'\'',
       html: true,
