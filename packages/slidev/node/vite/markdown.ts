@@ -9,7 +9,7 @@ import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import MagicString from 'magic-string-stack'
 // @ts-expect-error missing types
-import MarkdownItAttrs from 'markdown-it-link-attributes'
+import MarkdownItLinkAttrs from 'markdown-it-link-attributes'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
@@ -79,23 +79,14 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     markdownItSetup(md) {
-      md.use(MarkdownItAttrs, [
-        {
-          matcher(href) {
-            return href.startsWith("/");
-          },
-          attrs: {
-            target: "_self",
-          },
+      md.use(MarkdownItLinkAttrs, {
+        matcher(href: string) {
+          return !'/#.'.includes(href[0])
         },
-        {
-          attrs: {
-            target: "_blank",
-            rel: "noopener"
-          }
-        }
-      ])
-
+        attrs: {
+          target: "_blank",
+        },
+      })
       md.use(MarkdownItEscapeInlineCode)
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
