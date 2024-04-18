@@ -79,12 +79,22 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     markdownItSetup(md) {
-      md.use(MarkdownItAttrs, {
-        attrs: {
-          target: '_blank',
-          rel: 'noopener',
+      md.use(MarkdownItAttrs, [
+        {
+          matcher(href) {
+            return href.startsWith("/");
+          },
+          attrs: {
+            target: "_self",
+          },
         },
-      })
+        {
+          attrs: {
+            target: "_blank",
+            rel: "noopener"
+          }
+        }
+      ])
 
       md.use(MarkdownItEscapeInlineCode)
       md.use(MarkdownItFootnote)
