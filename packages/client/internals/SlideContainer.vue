@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { provideLocal, useElementSize } from '@vueuse/core'
+import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, ref } from 'vue'
-import { useSlideScale } from '../composables/useSlideScale'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
-import { slideAspect } from '../env'
+import { slideAspect, slideHeight, slideWidth } from '../env'
+import { useNav } from '../composables/useNav'
+import { slideScale } from '../state'
 
 const props = defineProps({
   width: {
@@ -18,11 +19,27 @@ const props = defineProps({
   },
 })
 
+const { isPrintMode } = useNav()
+
 const container = ref<HTMLDivElement | null>(null)
 const containerSize = useElementSize(container)
 const slideElement = ref<HTMLElement | null>(null)
 
-const { scale, style: contentStyle } = useSlideScale(containerSize, props.width, props.isMain)
+const width = computed(() => props.width ?? containerSize.width.value)
+const height = computed(() => props.width ? props.width / slideAspect.value : containerSize.height.value)
+
+const scale = computed(() => {
+  if (slideScale.value && !isPrintMode.value)
+    return +slideScale.value
+  return Math.min(width.value / slideWidth.value, height.value / slideHeight.value)
+})
+
+const contentStyle = computed(() => ({
+  'height': `${slideHeight.value}px`,
+  'width': `${slideWidth.value}px`,
+  'transform': `translate(-50%, -50%) scale(${scale.value})`,
+  '--slidev-slide-scale': scale.value,
+}))
 
 const containerStyle = computed(() => props.width
   ? {
@@ -31,6 +48,9 @@ const containerStyle = computed(() => props.width
     }
   : {},
 )
+
+if (props.isMain)
+  useStyleTag(computed(() => `:root { --slidev-slide-scale: ${scale.value}; }`))
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
@@ -51,6 +71,6 @@ provideLocal(injectionSlideElement, slideElement)
 }
 
 .slidev-slide-content {
-  @apply relative overflow-hidden bg-main absolute left-1/2 top-1/2;
+  @apply absolute left-1/2 top-1/2 overflow-hidden bg-main;
 }
 </style>

@@ -10,7 +10,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
-import { usePrintStyle } from '../composables/usePrintStyle'
+import { useSlidePageSize } from '../composables/useSlidePageSize'
 
 const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
@@ -31,7 +31,7 @@ function onClick(e: MouseEvent) {
 
 useSwipeControls(root)
 registerShortcuts()
-usePrintStyle()
+useSlidePageSize()
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 

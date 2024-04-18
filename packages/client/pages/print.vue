@@ -12,11 +12,8 @@ onMounted(() => {
 
 <template>
   <div id="page-root">
-    <PrintTemplate>
-      <template #floating="attrs">
-        <div id="twoslash-container" v-bind="attrs" />
-      </template>
-    </PrintTemplate>
+    <PrintTemplate />
+    <div id="twoslash-container" />
   </div>
 </template>
 
@@ -46,5 +43,6 @@ html body {
   padding: 0;
   float: none;
   overflow: visible;
+  background-color: white;
 }
 </style>
