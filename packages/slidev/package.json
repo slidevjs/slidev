@@ -85,7 +85,6 @@
     "magic-string-stack": "^0.1.0",
     "markdown-it": "^14.1.0",
     "markdown-it-footnote": "^4.0.0",
-    "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-mdc": "^0.2.3",
     "mlly": "^1.6.1",
     "monaco-editor": "^0.47.0",
