@@ -1,12 +1,30 @@
 import type MarkdownIt from 'markdown-it'
-import type { SourceMapConsumer } from 'source-map-js'
+import type MagicString from 'magic-string-stack'
+import { SourceMapConsumer } from 'source-map-js'
 
-export default function markdownItVDrag(md: MarkdownIt, sourceMapConsumers: Record<string, SourceMapConsumer>) {
+export default function markdownItVDrag(md: MarkdownIt, markdownTransformMap: Map<string, MagicString>) {
   const visited = new WeakSet()
+  const sourceMapConsumers = new WeakMap<MagicString, SourceMapConsumer>()
+
+  function getSourceMapConsumer(id: string) {
+    const s = markdownTransformMap.get(id)
+    if (!s)
+      return undefined
+    let smc = sourceMapConsumers.get(s)
+    if (smc)
+      return smc
+    const sourceMap = s.generateMap()
+    smc = new SourceMapConsumer({
+      ...sourceMap,
+      version: sourceMap.version.toString(),
+    })
+    sourceMapConsumers.set(s, smc)
+    return smc
+  }
 
   const _parse = md.parse
   md.parse = function (src, env) {
-    const smc = sourceMapConsumers[env.id]
+    const smc = getSourceMapConsumer(env.id)
     const toOriginalPos = smc
       ? (line: number) => smc.originalPositionFor({ line, column: 0 }).line
       : (line: number) => line

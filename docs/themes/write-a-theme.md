@@ -16,8 +16,8 @@ A theme can contribute to the following points:
 - Provide default configurations (fonts, color schema, highlighters, etc.)
 - Provide custom layouts or override the existing one
 - Provide custom components or override the existing one
-- Extend UnoCSS/Windi CSS configurations
-- Configure tools like Monaco and Prism
+- Extend UnoCSS configurations
+- Configure tools like Shiki and Monaco
 
 ## Conventions
 
@@ -118,20 +118,7 @@ Slidev toggles a `dark` class on the page's `html` element for switching color s
 
 ### Highlighter
 
-Syntax highlighting colors are also provided in the theme. We support both [Prism](https://prismjs.com/), [Shiki](https://github.com/shikijs/shiki). For more information please refer to [the syntax highlighting docs](/custom/highlighters).
-
-You can support either one of them, or both. Refer to the default theme for configuration examples [`./styles/code.css`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/styles/code.css) / [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/setup/shiki.ts).
-
-Also, remember to specify the supported highlighters in your `package.json`
-
-```json
-// package.json
-{
-  "slidev": {
-    "highlighter": "shiki" // or "prism" or "both"
-  }
-}
-```
+Syntax highlighting colors are also provided in the theme. For example [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/setup/shiki.ts). Refer to [the syntax highlighting docs](/custom/highlighters) for more information.
 
 ### Slidev Version
 

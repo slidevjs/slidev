@@ -1,7 +1,10 @@
-import type MagicString from 'magic-string'
+import type MagicString from 'magic-string-stack'
+import type { ResolvedSlidevOptions } from './options'
 
 export interface MarkdownTransformContext {
   s: MagicString
-  ignores: [number, number][]
-  isIgnored: (index: number) => boolean
+  id: string
+  options: ResolvedSlidevOptions
 }
+
+export type MarkdownTransformer = (ctx: MarkdownTransformContext) => void

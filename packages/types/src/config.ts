@@ -90,7 +90,7 @@ export interface SlidevConfig {
    * @see https://sli.dev/custom/highlighters.html
    * @default shiki
    */
-  highlighter: 'prism' | 'shiki'
+  highlighter: 'shiki' | 'prism'
   /**
    * Enable Twoslash
    *

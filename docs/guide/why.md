@@ -26,7 +26,7 @@ Check out the [theme gallery](/themes/gallery) or [learn how to write a theme](/
 
 ## Developer Friendly
 
-Slidev provides first-class support for code snippets for developers. It supports both [Prism](https://prismjs.com/) and [Shiki](https://github.com/shikijs/shiki) to get pixel-perfect syntax highlighting, while still being able to modify the code at any time. With [Monaco editor](https://microsoft.github.io/monaco-editor/) built-in, it also empowers you to do live coding / demonstration in your presentation with autocompletion, type hovering, and even TypeScript type check support.
+Slidev provides first-class support for code snippets for developers. It supports [Shiki](https://github.com/shikijs/shiki) to get pixel-perfect syntax highlighting, while still being able to modify the code at any time. With [Monaco editor](https://microsoft.github.io/monaco-editor/) built-in, it also empowers you to do live coding / demonstration in your presentation with autocompletion, type hovering, and even TypeScript type check support.
 
 Learn more about [highlighters](/custom/highlighters) and [Monaco configuration](/custom/config-monaco).
 
