@@ -84,7 +84,7 @@ export async function createMarkdownPlugin(
           return !'/#.'.includes(href[0])
         },
         attrs: {
-          target: "_blank",
+          target: '_blank',
         },
       })
       md.use(MarkdownItEscapeInlineCode)
