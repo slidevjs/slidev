@@ -10,7 +10,6 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
-import { useSlidePageSize } from '../composables/useSlidePageSize'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 
 const { next, prev, isPrintMode, isPresenter } = useNav()
@@ -32,7 +31,6 @@ function onClick(e: MouseEvent) {
 
 useSwipeControls(root)
 registerShortcuts()
-useSlidePageSize()
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 

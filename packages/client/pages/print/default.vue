@@ -2,16 +2,12 @@
 import { provideLocal } from '@vueuse/core'
 import { computed, shallowRef } from 'vue'
 import { injectionSlideScale } from '../../constants'
-import { useSlidePageSize } from '../../composables/useSlidePageSize'
-import { getSlideClass } from '../../utils'
 import { slideHeight, slideWidth } from '../../env'
 import PrintSlides from '../../internals/PrintSlides.vue'
 import SlideWrapper from '../../internals/SlideWrapper.vue'
 
 import GlobalTop from '#slidev/global-components/top'
 import GlobalBottom from '#slidev/global-components/bottom'
-
-useSlidePageSize()
 
 provideLocal(injectionSlideScale, computed(() => 1))
 
@@ -28,7 +24,6 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
       <SlideWrapper
         :is="route.component!"
         :clicks-context="nav.clicksContext.value"
-        :class="getSlideClass(route)"
         :route="route"
       />
       <DrawingPreview
@@ -42,6 +37,11 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 </template>
 
 <style scoped lang="postcss">
+@page {
+  size: v-bind('`${slideWidth}px`') v-bind('`${slideHeight}px`');
+  margin: 0;
+}
+
 .print-slide-container {
   @apply relative overflow-hidden break-before-page translate-0;
   width: v-bind('`${slideWidth}px`');

@@ -4,7 +4,6 @@ import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { getSlideClass } from '../utils'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 import SlideContainer from './SlideContainer.vue'
@@ -145,7 +144,6 @@ setTimeout(() => {
                 :is="route.component"
                 v-if="route?.component"
                 :clicks-context="createFixedClicks(route, CLICKS_MAX)"
-                :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />

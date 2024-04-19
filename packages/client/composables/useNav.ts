@@ -297,7 +297,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     router.currentRoute.value.query
     return new URLSearchParams(location.search)
   })
-  const isPrintMode = computed(() => query.value.has('print'))
+  const isPrintMode = computed(() => currentRoute.value.name === 'print')
   const isPrintWithClicks = computed(() => query.value.has('with-clicks'))
   const isPrintPerSlide = computed(() => query.value.has('per-slide'))
   const slidesToPrint = computed(() => {

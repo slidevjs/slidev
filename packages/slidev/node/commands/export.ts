@@ -115,26 +115,28 @@ export async function exportSlides({
   const progress = createSlidevProgress(!perSlide)
 
   async function gotoPrintPage() {
-    let query = 'print'
-    if (range)
-      query += `&range=${range}`
-    if (withClicks)
-      query += `&with-clicks`
-    if (perSlide)
-      query += `&per-slide`
-
+    const query = [
+      range && `range=${range}`,
+      range && `page=${pages[0]}`,
+      withClicks && `with-clicks`,
+      perSlide && `per-slide`,
+    ].filter(Boolean).join('&')
     const url = `http://localhost:${port}${base}${routerMode === 'hash' ? '#' : ''}print?${query}`
     await page.goto(url)
     await waitForReady()
   }
 
   async function waitForReady() {
+    await page.locator('#page-root').waitFor({ state: 'visible' })
     // Wait for slides to be loaded
     {
-      const elements = page.locator('.slidev-slide-loading')
+      const elements = page.locator('.slidev-page')
       const count = await elements.count()
-      for (let index = 0; index < count; index++)
-        await elements.nth(index).waitFor({ state: 'detached' })
+      for (let index = 0; index < count; index++) {
+        const element = elements.nth(index)
+        await element.waitFor({ state: 'visible' })
+        await element.locator('.slidev-slide-loading').nth(0).waitFor({ state: 'detached' })
+      }
     }
     // Check for "data-waitfor" attribute and wait for given element to be loaded
     {
@@ -180,11 +182,11 @@ export async function exportSlides({
         await element.evaluate(node => node.style.display = 'none')
       }
     }
-    // TODO: make this configurable
-    page.waitForLoadState('networkidle')
     // Wait for the given time
     if (wait)
       await page.waitForTimeout(wait)
+    // TODO: make this configurable
+    await page.waitForLoadState('networkidle')
   }
 
   async function perSlideNext() {
