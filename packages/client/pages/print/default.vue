@@ -15,10 +15,6 @@ useSlidePageSize()
 
 provideLocal(injectionSlideScale, computed(() => 1))
 
-function getElementId(no: number, clicks: number) {
-  return `${no.toString().padStart(3, '0')}-${(clicks + 1).toString().padStart(2, '0')}`
-}
-
 const DrawingPreview = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('../../internals/DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
@@ -26,7 +22,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 
 <template>
   <PrintSlides v-slot="{ nav, route }">
-    <div :id="getElementId(route.no, nav.clicks.value + 1)" class="print-slide-container">
+    <div class="print-slide-container">
       <GlobalBottom />
 
       <SlideWrapper

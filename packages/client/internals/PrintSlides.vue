@@ -5,12 +5,13 @@ import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX, injectionSlidevContext } from '../constants'
 import { configs } from '../env'
 
-const { slidesToPrint, isPrintWithClicks } = useNav()
+const globalNav = useNav()
+const { slidesToPrint, isPrintWithClicks, isPrintPerSlide, currentSlideNo, currentSlideRoute } = globalNav
 const clicks0 = computed(() =>
   slidesToPrint.value.map(route => createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MAX)),
 )
 
-const ProvideSlidevContext = defineComponent(({ navValue: nav }, { slots }) => {
+const ProvideSlidevContext = defineComponent(({ scopedNav: nav }, { slots }) => {
   provide(injectionSlidevContext, reactive({
     nav,
     configs,
@@ -18,25 +19,23 @@ const ProvideSlidevContext = defineComponent(({ navValue: nav }, { slots }) => {
   }))
   return () => slots?.default?.({ nav, clicks0 })
 }, {
-  // Avoid warnings caused by eslint bug
-  props: ['navValue'],
+  props: ['scopedNav'],
 })
 </script>
 
 <template>
-  <template v-for="(route, i) of slidesToPrint" :key="route.no">
-    <ProvideSlidevContext v-slot="{ nav }" :nav-value="useFixedNav(route, clicks0[i])">
+  <template v-if="isPrintPerSlide">
+    <slot :key="currentSlideNo" :route="currentSlideRoute" :nav="globalNav" />
+  </template>
+  <template v-for="(route, i) of slidesToPrint" v-else :key="route.no">
+    <ProvideSlidevContext v-slot="{ nav }" :scoped-nav="useFixedNav(route, clicks0[i])">
       <slot :route :nav />
     </ProvideSlidevContext>
     <template v-if="isPrintWithClicks">
-      <!--
-        clicks0.total can be any number >=0 when rendering.
-        So total-clicksStart can be negative in intermediate states.
-      -->
       <ProvideSlidevContext
         v-for="click in Math.max(0, clicks0[i].total - clicks0[i].clicksStart)"
         :key="click" v-slot="{ nav }"
-        :nav-value="useFixedNav(route, createFixedClicks(route, click + clicks0[i].clicksStart))"
+        :scoped-nav="useFixedNav(route, createFixedClicks(route, click + clicks0[i].clicksStart))"
       >
         <slot :route :nav />
       </ProvideSlidevContext>

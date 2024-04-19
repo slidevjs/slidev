@@ -88,7 +88,6 @@ export async function build(
     server.listen(port)
     await exportSlides({
       port,
-      base: config.base,
       ...getExportOptions(args, options, outDir),
     })
     server.close()

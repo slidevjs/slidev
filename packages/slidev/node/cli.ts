@@ -352,10 +352,6 @@ cli.command(
       default: 'dist',
       describe: 'output dir',
     })
-    .option('base', {
-      type: 'string',
-      describe: 'output base',
-    })
     .option('download', {
       alias: 'd',
       type: 'boolean',
@@ -527,6 +523,7 @@ function exportOptions<T>(args: Argv<T>) {
     .option('format', {
       type: 'string',
       choices: ['pdf', 'png', 'md'],
+      default: 'pdf',
       describe: 'output format',
     })
     .option('template', {
@@ -535,16 +532,24 @@ function exportOptions<T>(args: Argv<T>) {
       default: 'default',
       describe: 'the export layout template',
     })
+    .option('base', {
+      type: 'string',
+      default: '/',
+      describe: 'output base',
+    })
     .option('timeout', {
       type: 'number',
+      default: 30000,
       describe: 'timeout for rendering the print page',
     })
     .option('wait', {
       type: 'number',
+      default: 0,
       describe: 'wait for the specified ms before exporting',
     })
     .option('range', {
       type: 'string',
+      default: 'all',
       describe: 'page ranges to export, for example "1,4-5,6"',
     })
     .option('dark', {
@@ -554,6 +559,7 @@ function exportOptions<T>(args: Argv<T>) {
     .option('with-clicks', {
       alias: 'c',
       type: 'boolean',
+      default: false,
       describe: 'export pages for every clicks',
     })
     .option('executable-path', {
@@ -562,14 +568,17 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('with-toc', {
       type: 'boolean',
+      default: true,
       describe: 'export pages with outline',
     })
     .option('per-slide', {
       type: 'boolean',
+      default: false,
       describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
     })
     .option('scale', {
       type: 'number',
+      default: 1,
       describe: 'scale factor for image export',
     })
 }

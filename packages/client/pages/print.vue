@@ -30,6 +30,8 @@ html #page-root {
 }
 html * {
   -webkit-print-color-adjust: exact;
+  transition-delay: 0 !important;
+  transition-duration: 0 !important;
 }
 html {
   width: 100%;

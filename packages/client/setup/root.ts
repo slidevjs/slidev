@@ -27,7 +27,7 @@ export default function setupRoot() {
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))
 
   // allows controls from postMessages
-  if (__DEV__) {
+  if (__SLIDEV_HAS_SERVER__) {
     // @ts-expect-error expose global
     window.__slidev__ = context
     window.addEventListener('message', ({ data }) => {

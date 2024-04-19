@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
-// @ts-expect-error missing types
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'

@@ -10,13 +10,13 @@ import NoteStatic from '../../internals/NoteStatic.vue'
 import GlobalTop from '#slidev/global-components/top'
 import GlobalBottom from '#slidev/global-components/bottom'
 
-const { isPrintWithClicks } = useNav()
+const { isPrintWithClicks, isPrintPerSlide } = useNav()
 const { info } = useSlideInfo(1)
 </script>
 
 <template>
   <div class="text-black w-min">
-    <div class="handout-page px-25 b b-black">
+    <div v-if="!isPrintPerSlide" class="handout-page px-25">
       <div class="text-5xl text-black mt-48">
         {{ configs.title }}
       </div>
@@ -26,7 +26,7 @@ const { info } = useSlideInfo(1)
       </div>
     </div>
     <PrintSlides v-slot="{ nav, route }">
-      <div class="handout-page px-8 py-[15mm] b b-black">
+      <div class="handout-page px-8 py-[15mm]">
         <div class="tabular-nums mb-1">
           <span v-if="isPrintWithClicks" class="op-70 text-sm">
             Page
@@ -40,11 +40,11 @@ const { info } = useSlideInfo(1)
           </span>
         </div>
 
-        <SlideContainer :width="728" class="light:children:(border b-dark) dark:text-white">
+        <SlideContainer :width="728" class="light:children:(b b-dark) dark:text-white !overflow-visible">
           <GlobalBottom />
 
           <SlideWrapper
-            :is="route.component!"
+            :is="route.component"
             :clicks-context="nav.clicksContext.value"
             :route="route"
           />
