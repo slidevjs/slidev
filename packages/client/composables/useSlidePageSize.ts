@@ -4,7 +4,7 @@ import { slideHeight, slideWidth } from '../env'
 export function useSlidePageSize() {
   return useStyleTag(`
     @page {
-      size: ${slideWidth}px ${slideHeight}px;
+      size: ${slideWidth.value}px ${slideHeight.value}px;
       margin: 0;
     }
   `)

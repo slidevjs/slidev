@@ -47,7 +47,7 @@ if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
 
 <style scoped lang="postcss">
 .print-slide-container {
-  @apply relative overflow-hidden break-after-page translate-0;
+  @apply relative overflow-hidden break-before-page translate-0;
   width: v-bind('`${slideWidth}px`');
   height: v-bind('`${slideHeight}px`');
 }

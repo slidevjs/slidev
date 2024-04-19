@@ -300,8 +300,6 @@ export async function exportSlides({
     await go('print')
     await page.pdf({
       path: output,
-      width,
-      height,
       margin: {
         left: 0,
         top: 0,

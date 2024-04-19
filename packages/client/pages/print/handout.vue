@@ -15,7 +15,7 @@ const { info } = useSlideInfo(1)
 </script>
 
 <template>
-  <div class="text-black">
+  <div class="text-black w-min">
     <div class="handout-page px-25 b b-black">
       <div class="text-5xl text-black mt-48">
         {{ configs.title }}
@@ -40,7 +40,7 @@ const { info } = useSlideInfo(1)
           </span>
         </div>
 
-        <SlideContainer :width="728" class="light:children:(border b-dark box-border)">
+        <SlideContainer :width="728" class="light:children:(border b-dark)">
           <GlobalBottom />
 
           <SlideWrapper
@@ -71,15 +71,25 @@ const { info } = useSlideInfo(1)
   </div>
 </template>
 
-<style scoped>
+<style>
 @page {
   size: A4;
   margin: 0;
 }
 
 .handout-page {
+  width: 794px;
+  height: 1123px;
+  overflow: hidden;
+  break-before: page;
   position: relative;
-  width: 210mm;
-  height: 297mm;
+}
+
+.slidev-note-click-mark.slidev-note-click-mark-past {
+  filter: none;
+  opacity: 0.5;
+}
+.slidev-note-click-mark.slidev-note-click-mark-next {
+  opacity: 0.5;
 }
 </style>
