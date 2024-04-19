@@ -40,7 +40,7 @@ const { info } = useSlideInfo(1)
           </span>
         </div>
 
-        <SlideContainer :width="728" class="light:children:(border b-dark)">
+        <SlideContainer :width="728" class="light:children:(border b-dark) dark:text-white">
           <GlobalBottom />
 
           <SlideWrapper

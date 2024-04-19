@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { configs } from '../env'
+import { slidesTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
 
@@ -10,10 +10,7 @@ import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
 import { useNav } from '../composables/useNav'
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-useHead({
-  title: `Notes - ${slideTitle}`,
-})
+useHead({ title: `Notes - ${slidesTitle}` })
 
 const { slides, total } = useNav()
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen

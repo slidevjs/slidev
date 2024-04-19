@@ -11,8 +11,9 @@ import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import { useSlidePageSize } from '../composables/useSlidePageSize'
+import PresenterMouse from '../internals/PresenterMouse.vue'
 
-const { next, prev, isPrintMode } = useNav()
+const { next, prev, isPrintMode, isPresenter } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
@@ -46,7 +47,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
     :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"
   >
     <SlideContainer
-      class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="isPrintMode ? windowSize.width.value : undefined"
       is-main
@@ -55,6 +55,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
     >
       <template #default>
         <SlidesShow render-context="slide" />
+        <PresenterMouse v-if="!isPresenter" />
       </template>
       <template #controls>
         <div
@@ -69,7 +70,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
         </div>
       </template>
     </SlideContainer>
-    <SideEditor v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor" :resize="true" />
+    <SideEditor v-if="SideEditor && showEditor" :resize="true" />
   </div>
   <Controls v-if="!isPrintMode" />
 </template>

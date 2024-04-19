@@ -39,6 +39,8 @@ context('Basic', () => {
     cy.contains('Global Footer')
       .should('exist')
 
+    cy.get('#page-root > #slide-container > #slide-content')
+
     cy.rightArrow()
       .url()
       .should('eq', `${BASE}/2`)
@@ -46,15 +48,15 @@ context('Basic', () => {
     cy.contains('Global Footer')
       .should('not.exist')
 
-    cy.get('#slideshow .slidev-page-2 > div > p')
+    cy.get('#page-root > #slide-container > #slide-content > #slideshow .slidev-page-2 > div > p')
       .should('have.css', 'border-color', 'rgb(0, 128, 0)')
       .should('not.have.css', 'color', 'rgb(128, 0, 0)')
 
     goPage(5)
 
-    cy.get('#slideshow .slidev-page-5 .slidev-code')
+    cy.get('#page-root > #slide-container > #slide-content > #slideshow .slidev-page-5 .slidev-code')
       .should('have.text', '<div>{{$slidev.nav.currentPage}}</div>')
-      .get('#slideshow .slidev-page-5 > div > p')
+      .get('#page-root > #slide-container > #slide-content > #slideshow .slidev-page-5 > div > p')
       .should('have.text', 'Current Page: 5')
   })
 

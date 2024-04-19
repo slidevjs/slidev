@@ -4,7 +4,7 @@ import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
-import { configs } from '../env'
+import { slidesTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
 import { onContextMenu } from '../logic/contextMenu'
@@ -44,10 +44,7 @@ const {
 } = useNav()
 const { isDrawing } = useDrawings()
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-useHead({
-  title: `Presenter - ${slideTitle}`,
-})
+useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
 
@@ -113,7 +110,7 @@ onMounted(() => {
       <div ref="main" class="relative grid-section main flex flex-col">
         <SlideContainer
           key="main"
-          class="h-full w-full p-2 lg:p-4 flex-auto"
+          class="p-2 lg:p-4 flex-auto"
           is-main
           @contextmenu="onContextMenu"
         >
@@ -129,11 +126,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="relative grid-section next flex flex-col p-2 lg:p-4">
-        <SlideContainer
-          v-if="nextFrame && nextFrameClicksCtx"
-          key="next"
-          class="h-full w-full"
-        >
+        <SlideContainer v-if="nextFrame && nextFrameClicksCtx" key="next">
           <SlideWrapper
             :is="nextFrame[0].component!"
             :key="nextFrame[0].no"
@@ -147,7 +140,7 @@ onMounted(() => {
           Next
         </div>
       </div>
-      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor" class="grid-section note of-auto">
+      <div v-if="SideEditor && showEditor" class="grid-section note of-auto">
         <SideEditor />
       </div>
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">

@@ -168,7 +168,7 @@ setTimeout(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2">
+  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2 z-20">
     <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
     </IconButton>

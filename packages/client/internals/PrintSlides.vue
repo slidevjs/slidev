@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, defineComponent, provide, reactive } from 'vue'
-import type { SlidevContextNav } from '../composables/useNav'
 import { useFixedNav, useNav } from '../composables/useNav'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX, injectionSlidevContext } from '../constants'
@@ -11,9 +10,7 @@ const clicks0 = computed(() =>
   slidesToPrint.value.map(route => createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MAX)),
 )
 
-const ProvideSlidevContext = defineComponent<{
-  nav: SlidevContextNav
-}>(({ nav }, { slots }) => {
+const ProvideSlidevContext = defineComponent(({ navValue: nav }, { slots }) => {
   provide(injectionSlidevContext, reactive({
     nav,
     configs,
@@ -21,14 +18,15 @@ const ProvideSlidevContext = defineComponent<{
   }))
   return () => slots?.default?.({ nav, clicks0 })
 }, {
-  props: ['nav'],
+  // Avoid warnings caused by eslint bug
+  props: ['navValue'],
 })
 </script>
 
 <template>
   <template v-for="(route, i) of slidesToPrint" :key="route.no">
-    <ProvideSlidevContext v-slot="{ nav }" :nav="useFixedNav(route, clicks0[i])">
-      <slot :route="route" :nav="nav" />
+    <ProvideSlidevContext v-slot="{ nav }" :nav-value="useFixedNav(route, clicks0[i])">
+      <slot :route :nav />
     </ProvideSlidevContext>
     <template v-if="isPrintWithClicks">
       <!--
@@ -38,9 +36,9 @@ const ProvideSlidevContext = defineComponent<{
       <ProvideSlidevContext
         v-for="click in Math.max(0, clicks0[i].total - clicks0[i].clicksStart)"
         :key="click" v-slot="{ nav }"
-        :nav="useFixedNav(route, createFixedClicks(route, click + clicks0[i].clicksStart))"
+        :nav-value="useFixedNav(route, createFixedClicks(route, click + clicks0[i].clicksStart))"
       >
-        <slot :route="route" :nav="nav" />
+        <slot :route :nav />
       </ProvideSlidevContext>
     </template>
   </template>

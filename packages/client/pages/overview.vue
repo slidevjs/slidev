@@ -2,7 +2,7 @@
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { slideTitle } from '../env'
+import { slidesTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
@@ -18,9 +18,7 @@ import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 
-useHead({
-  title: `Overview - ${slideTitle}`,
-})
+useHead({ title: `Overview - ${slidesTitle}` })
 
 const { openInEditor, slides } = useNav()
 

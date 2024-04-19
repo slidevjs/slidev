@@ -29,7 +29,6 @@ html #page-root {
   overflow: hidden;
 }
 html * {
-  print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
 }
 html {
