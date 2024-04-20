@@ -1,6 +1,5 @@
 import path from 'node:path'
 import { Buffer } from 'node:buffer'
-import process from 'node:process'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
@@ -29,20 +28,7 @@ export interface ExportOptions {
   withClicks: boolean
   executablePath: string | undefined
   withToc: boolean
-  /**
-   * Render slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF.
-   * @default false
-   */
-  perSlide: boolean
   scale: number
-}
-
-function makeOutline(tree: TocItem[]): string {
-  return tree.map(({ title, no, level, children }) => {
-    const rootOutline = title ? `${no}|${'-'.repeat(level - 1)}|${title}` : null
-    const childrenOutline = makeOutline(children)
-    return childrenOutline ? `${rootOutline}\n${childrenOutline}` : rootOutline
-  }).filter(Boolean).join('\n')
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -96,7 +82,6 @@ export async function exportSlides({
   withClicks,
   executablePath,
   withToc,
-  perSlide,
   scale,
 }: ExportOptions) {
   const pages = parseRangeString(total, range)
@@ -110,102 +95,84 @@ export async function exportSlides({
   })
   const page = await context.newPage()
   page.setDefaultNavigationTimeout(timeout)
+  page.setDefaultTimeout(timeout)
   await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
 
-  const progress = createSlidevProgress(!perSlide)
+  const progress = createSlidevProgress()
+  await gotoPrintPage()
+  if (format === 'pdf') {
+    await genPagePdfPerSlide()
+  }
+  else {
+    await genPagePngPerSlide()
+    if (format === 'md')
+      await genPageMd(slides)
+  }
+
+  progress.stop()
+  browser.close()
 
   async function gotoPrintPage() {
     const query = [
       range && `range=${range}`,
-      range && `page=${pages[0]}`,
       withClicks && `with-clicks`,
-      perSlide && `per-slide`,
     ].filter(Boolean).join('&')
     const url = `http://localhost:${port}${base}${routerMode === 'hash' ? '#' : ''}print?${query}`
     await page.goto(url)
     await waitForReady()
   }
 
-  async function waitForReady() {
-    await page.locator('#page-root').waitFor({ state: 'visible' })
-    // Wait for slides to be loaded
-    {
-      const elements = page.locator('.slidev-page')
-      const count = await elements.count()
-      for (let index = 0; index < count; index++) {
-        const element = elements.nth(index)
-        await element.waitFor({ state: 'visible' })
-        await element.locator('.slidev-slide-loading').nth(0).waitFor({ state: 'detached' })
+  async function waitForReady(slideNo = -1) {
+    try {
+      // Wait for the given time
+      if (wait)
+        await page.waitForTimeout(wait)
+      await page.locator('#page-root').waitFor({ state: 'visible' })
+      // Wait for slides to be loaded
+      if (slideNo >= 0) {
+        const element = page.locator(`.slidev-page-${slideNo}`).first()
+        await element.waitFor()
+        const loading = element.locator('.slidev-slide-loading')
+        if (await loading.count() > 0)
+          await element.locator('.slidev-slide-loading').nth(0).waitFor({ state: 'detached' })
       }
-    }
-    // Check for "data-waitfor" attribute and wait for given element to be loaded
-    {
-      const elements = page.locator('[data-waitfor]')
-      const count = await elements.count()
-      for (let index = 0; index < count; index++) {
-        const element = elements.nth(index)
-        const attribute = await element.getAttribute('data-waitfor')
-        if (attribute) {
-          await element.locator(attribute).waitFor({ state: 'visible' })
-            .catch((e) => {
-              console.error(e)
-              process.exitCode = 1
-            })
+      // Wait for frames to load
+      {
+        const frames = page.frames()
+        await Promise.all(frames.map(frame => frame.waitForLoadState()))
+      }
+      // Hide Monaco aria container
+      {
+        const elements = page.locator('.monaco-aria-container')
+        const count = await elements.count()
+        for (let index = 0; index < count; index++) {
+          const element = elements.nth(index)
+          await element.evaluate(node => node.style.display = 'none')
         }
       }
+      // TODO: make this configurable
+      await page.waitForLoadState('load')
     }
-    // Wait for frames to load
-    {
-      const frames = page.frames()
-      await Promise.all(frames.map(frame => frame.waitForLoadState()))
+    catch (e) {
+      if (e instanceof Error && e.message.includes('Timeout'))
+        console.warn(`Page ${slideNo} did not reach load state. You may need to increase the timeout or use the --wait option.`)
+      else
+        throw e
     }
-    // Wait for Mermaid graphs to be rendered
-    {
-      const container = page.locator('#mermaid-rendering-container')
-      const count = await container.count()
-      if (count > 0) {
-        while (true) {
-          const element = container.locator('div').first()
-          if (await element.count() === 0)
-            break
-          await element.waitFor({ state: 'detached' })
-        }
-        await container.evaluate(node => node.style.display = 'none')
-      }
-    }
-    // Hide Monaco aria container
-    {
-      const elements = page.locator('.monaco-aria-container')
-      const count = await elements.count()
-      for (let index = 0; index < count; index++) {
-        const element = elements.nth(index)
-        await element.evaluate(node => node.style.display = 'none')
-      }
-    }
-    // Wait for the given time
-    if (wait)
-      await page.waitForTimeout(wait)
-    // TODO: make this configurable
-    await page.waitForLoadState('networkidle')
-  }
-
-  async function perSlideNext() {
-    const suffix = withClicks ? '' : 'Slide'
-    const hasNext = await page.evaluate(`__slidev__.nav.hasNext${suffix}`)
-    if (!hasNext)
-      return false
-    await page.evaluate(`__slidev__.nav.next${suffix}()`)
-    return true
   }
 
   async function genPagePdfPerSlide() {
     progress.start(pages.length)
     const mergedPdf = await PDFDocument.create()
-    while (true) {
-      const currentPage = await page.evaluate<number>(`__slidev__.nav.currentSlideNo`)
-      const indexInRange = pages.indexOf(currentPage)
-      if (indexInRange !== -1) {
-        await waitForReady()
+    const tocMap: Record<number, number> = {}
+    let index = 0
+    while (await page.evaluate(`__slidev_print__.next()`)) {
+      const currentSlideNo = await page.evaluate<number>(`__slidev_print__.slideNo`)
+      const indexInRange = pages.indexOf(currentSlideNo)
+      if (currentSlideNo < 0 || indexInRange !== -1) {
+        progress.update(indexInRange + 1)
+        tocMap[currentSlideNo] ??= index + 1
+        await waitForReady(currentSlideNo)
         const pdfBuffer = await page.pdf({
           pageRanges: '1',
           printBackground: true,
@@ -213,42 +180,27 @@ export async function exportSlides({
         })
         const [pdfPage] = await mergedPdf.copyPages(await PDFDocument.load(pdfBuffer), [0])
         mergedPdf.addPage(pdfPage)
-        progress.update(indexInRange + 1)
+        index++
       }
-      if (!await perSlideNext())
-        break
     }
-    return mergedPdf
+    const outputPdf = withToc ? await addTocToPdf(mergedPdf, tocMap) : mergedPdf
+    addPdfMetadata(outputPdf)
+    await fs.writeFile(output, Buffer.from(await outputPdf.save()))
   }
 
-  async function genPagePdfOnePiece() {
-    const pdfBuffer = await page.pdf({
-      printBackground: true,
-      preferCSSPageSize: true,
-    })
-    return await PDFDocument.load(pdfBuffer)
-  }
-
-  async function savePdf(pdf: PDFDocument) {
-    if (withToc)
-      pdf = await addTocToPdf(pdf)
-    addPdfMetadata(pdf)
-    await fs.writeFile(output, Buffer.from(await pdf.save()))
-  }
-
-  async function genPagePngOnePiece() {
-    // await go('print')
-    // await fs.emptyDir(output)
-    // const slides = page.locator('.print-slide-container')
-    // const count = await slides.count()
-    // for (let i = 0; i < count; i++) {
-    //   progress.update(i + 1)
-    //   let id = (await slides.nth(i).getAttribute('id')) || ''
-    //   id = withClicks ? id : id.split('-')[0]
-    //   const buffer = await slides.nth(i).screenshot()
-    //   await fs.writeFile(path.join(output, `${id}.png`), buffer)
-    // }
-  }
+  // async function genPagePngOnePiece() {
+  //   // await go('print')
+  //   // await fs.emptyDir(output)
+  //   // const slides = page.locator('.print-slide-container')
+  //   // const count = await slides.count()
+  //   // for (let i = 0; i < count; i++) {
+  //   //   progress.update(i + 1)
+  //   //   let id = (await slides.nth(i).getAttribute('id')) || ''
+  //   //   id = withClicks ? id : id.split('-')[0]
+  //   //   const buffer = await slides.nth(i).screenshot()
+  //   //   await fs.writeFile(path.join(output, `${id}.png`), buffer)
+  //   // }
+  // }
 
   async function genPagePngPerSlide() {
     // const genScreenshot = async (i: number, clicks?: string) => {
@@ -300,31 +252,20 @@ export async function exportSlides({
     }
   }
 
-  async function addTocToPdf(pdf: PDFDocument): Promise<PDFDocument> {
+  async function addTocToPdf(pdf: PDFDocument, tocMap: Record<number, number>): Promise<PDFDocument> {
+    function makeOutline(tree: TocItem[]): string {
+      return tree.map(({ title, no, level, children }) => {
+        const rootOutline = title ? `${tocMap[no]}|${'-'.repeat(level - 1)}|${title}` : null
+        const childrenOutline = makeOutline(children)
+        return childrenOutline ? `${rootOutline}\n${childrenOutline}` : rootOutline
+      }).filter(Boolean).join('\n')
+    }
+
     const outlinePdf = outlinePdfFactory(pdfLib)
-    const tocTree = await page.evaluate('__slidev__.nav.tocTree') as TocItem[]
+    const tocTree = await page.evaluate<TocItem[]>('__slidev__.nav.tocTree')
     const outline = makeOutline(tocTree)
     return await outlinePdf({ outline, pdf })
   }
-
-  await gotoPrintPage()
-  if (format === 'pdf') {
-    await savePdf(
-      perSlide
-        ? await genPagePdfPerSlide()
-        : await genPagePdfOnePiece(),
-    )
-  }
-  else {
-    if (perSlide)
-      await genPagePngPerSlide()
-    else await genPagePngOnePiece()
-    if (format === 'md')
-      await genPageMd(slides)
-  }
-
-  progress.stop()
-  browser.close()
   return output
 }
 
@@ -336,7 +277,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
       withClicks: args['with-clicks'],
       executablePath: args['executable-path'],
       withToc: args['with-toc'],
-      perSlide: args['per-slide'],
     }),
   }
   const {
@@ -352,7 +292,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks,
     executablePath,
     withToc,
-    perSlide,
     scale,
   } = config
   let outFilename = output || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export${template === 'default' ? '' : `-${template}`}`
@@ -374,7 +313,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withClicks,
     executablePath,
     withToc,
-    perSlide,
     scale,
   }
 }

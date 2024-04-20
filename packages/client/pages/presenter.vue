@@ -127,7 +127,6 @@ onMounted(() => {
       <div class="relative grid-section next flex flex-col p-2 lg:p-4">
         <SlideContainer v-if="nextFrame && nextFrameClicksCtx" key="next">
           <SlideWrapper
-            :is="nextFrame[0].component!"
             :key="nextFrame[0].no"
             :clicks-context="nextFrameClicksCtx"
             :route="nextFrame[0]"

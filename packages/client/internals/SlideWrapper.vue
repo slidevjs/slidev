@@ -18,10 +18,6 @@ const props = defineProps({
     type: String as PropType<RenderContext>,
     default: 'slide',
   },
-  is: {
-    type: Function as PropType<() => any>,
-    required: true,
-  },
   route: {
     type: Object as PropType<SlideRoute>,
     required: true,
@@ -51,21 +47,19 @@ const style = computed<CSSProperties>(() => ({
   'user-select': configs.selectable ? undefined : 'none',
 }))
 
-const SlideComponent = defineAsyncComponent({
+const SlideComponent = computed(() => props.route && defineAsyncComponent({
   loader: async () => {
-    const component = await props.is()
+    const component = await props.route.component()
     return defineComponent({
       setup(_, { attrs }) {
-        onMounted(() => {
-          props.clicksContext?.onMounted?.()
-        })
+        onMounted(() => props.clicksContext?.onMounted?.())
         return () => h(component.default, attrs)
       },
     })
   },
   delay: 300,
   loadingComponent: SlideLoading,
-})
+}))
 </script>
 
 <template>

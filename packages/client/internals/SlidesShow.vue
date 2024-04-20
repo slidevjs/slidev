@@ -4,9 +4,7 @@ import { recomputeAllPoppers } from 'floating-vue'
 import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
-import { createFixedClicks } from '../composables/useClicks'
 import { activeDragElement } from '../state'
-import { CLICKS_MAX } from '../constants'
 import SlideWrapper from './SlideWrapper.vue'
 import DragControl from './DragControl.vue'
 
@@ -23,8 +21,6 @@ const {
   getPrimaryClicks,
   nextRoute,
   slides,
-  isPrintMode,
-  isPrintWithClicks,
   clicksDirection,
 } = useNav()
 
@@ -70,11 +66,10 @@ function onAfterLeave() {
     @after-leave="onAfterLeave"
   >
     <SlideWrapper
-      :is="route.component!"
       v-for="route of loadedRoutes"
       v-show="route === currentSlideRoute"
       :key="route.no"
-      :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
+      :clicks-context="getPrimaryClicks(route)"
       :route="route"
       :render-context="renderContext"
     />

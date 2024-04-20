@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { RouteLocationNormalized, Router } from 'vue-router'
 import { createSharedComposable } from '@vueuse/core'
-import { logicAnd, logicOr } from '@vueuse/math'
+import { logicOr } from '@vueuse/math'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser'
 import { getCurrentTransition } from '../logic/transition'
@@ -75,7 +75,6 @@ export interface SlidevContextNavState {
   currentRoute: ComputedRef<RouteLocationNormalized>
   isPrintMode: ComputedRef<boolean>
   isPrintWithClicks: ComputedRef<boolean>
-  isPrintPerSlide: ComputedRef<boolean>
   slidesToPrint: ComputedRef<SlideRoute[]>
   isEmbedded: ComputedRef<boolean>
   isPlaying: ComputedRef<boolean>
@@ -106,7 +105,8 @@ export function useNavBase(
   const navDirection = ref(0)
   const clicksDirection = ref(0)
 
-  const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
+  const pathPrefix = computed(() => isPresenter.value ? '/presenter' : isPrintMode.value ? '/print' : '')
+  const currentPath = computed(() => getSlidePath(currentSlideRoute.value, pathPrefix.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
 
@@ -195,37 +195,26 @@ export function useNavBase(
     const meta = getSlide(page)?.meta
     const clicksStart = meta?.slide?.frontmatter.clicksStart ?? 0
     clicks = clamp(clicks, clicksStart, meta?.__clicksContext?.total ?? CLICKS_MAX)
-    const clicksQuery = clicks === 0 ? undefined : clicks.toString()
     if (pageChanged || clicksChanged) {
-      await router?.push(isPrintMode.value
-        ? {
-            path: '/print',
-            query: {
-              ...router.currentRoute.value.query,
-              page: page.toString(),
-              clicks: clicksQuery,
-            },
-          }
-        : {
-            path: getSlidePath(page, isPresenter.value),
-            query: {
-              ...router.currentRoute.value.query,
-              clicks: clicksQuery,
-            },
-          },
-      )
+      await router?.push({
+        path: getSlidePath(page, pathPrefix.value),
+        query: {
+          ...router.currentRoute.value.query,
+          clicks: clicks === 0 ? undefined : clicks.toString(),
+        },
+      })
     }
   }
 
   function enterPresenter() {
     router?.push({
-      path: getSlidePath(currentSlideNo.value, true),
+      path: getSlidePath(currentSlideNo.value, '/presenter'),
       query: { ...router.currentRoute.value.query },
     })
   }
   function exitPresenter() {
     router?.push({
-      path: getSlidePath(currentSlideNo.value, false),
+      path: getSlidePath(currentSlideNo.value, ''),
       query: { ...router.currentRoute.value.query },
     })
   }
@@ -299,7 +288,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   })
   const isPrintMode = computed(() => currentRoute.value.name === 'print')
   const isPrintWithClicks = computed(() => query.value.has('with-clicks'))
-  const isPrintPerSlide = computed(() => query.value.has('per-slide'))
   const slidesToPrint = computed(() => {
     const range = query.value.get('range')
     return range ? parseRangeString(slides.value.length, range).map(i => slides.value[i - 1]) : slides.value
@@ -309,15 +297,9 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const isPresenter = computed(() => currentRoute.value.name === 'presenter')
   const isNotesViewer = computed(() => currentRoute.value.name === 'notes')
   const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || query.value.get('password') === configs.remote))
-  const hasPrimarySlide = logicOr(isPlaying, isPresenter, logicAnd(isPrintMode, isPrintPerSlide))
+  const hasPrimarySlide = logicOr(isPlaying, isPresenter, isPrintMode)
 
-  const currentSlideNo = computed(() => hasPrimarySlide.value
-    ? getSlide(
-      isPrintMode.value
-        ? currentRoute.value.query.page as string
-        : currentRoute.value.params.no as string,
-    )?.no ?? 1
-    : 1)
+  const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.value.params.no as string)?.no ?? 1 : 1)
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
 
   const queryClicksRaw = useRouteQuery<string>('clicks', '0')
@@ -379,7 +361,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     currentRoute,
     isPrintMode,
     isPrintWithClicks,
-    isPrintPerSlide,
     slidesToPrint,
     isEmbedded,
     isPlaying,
@@ -412,9 +393,16 @@ export const useNav = createSharedComposable((): SlidevContextNavFull => {
   watch(
     [nav.total, state.currentRoute],
     async () => {
-      if (state.hasPrimarySlide.value && !getSlide(state.currentRoute.value.params.no as string)) {
-        // The current slide may has been removed. Redirect to the last slide.
-        await nav.goLast()
+      const no = state.currentRoute.value.params.no as string
+      if (state.hasPrimarySlide.value && !getSlide(no)) {
+        if (no && no !== 'index.html') {
+          // The current slide may has been removed. Redirect to the last slide.
+          await nav.goLast()
+        }
+        else {
+          // Redirect to the first slide
+          await nav.goFirst()
+        }
       }
     },
     { flush: 'pre', immediate: true },

@@ -544,7 +544,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('wait', {
       type: 'number',
-      default: 0,
+      default: 100,
       describe: 'wait for the specified ms before exporting',
     })
     .option('range', {
@@ -573,8 +573,8 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('per-slide', {
       type: 'boolean',
-      default: false,
-      describe: 'slide slides slide by slide. Works better with global components, but will break cross slide links and TOC in PDF',
+      deprecated: 'Always enabled now',
+      describe: 'print slides one by one',
     })
     .option('scale', {
       type: 'number',

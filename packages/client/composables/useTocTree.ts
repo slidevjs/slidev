@@ -13,7 +13,7 @@ function addToTree(tree: TocItem[], route: SlideRoute, level = 1) {
       no: route.no,
       children: [],
       level,
-      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no, false),
+      path: getSlidePath(route.meta.slide?.frontmatter?.routeAlias ?? route.no),
       hideInToc: Boolean(route.meta?.slide?.frontmatter?.hideInToc),
       title: route.meta?.slide?.title,
     })

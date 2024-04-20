@@ -141,8 +141,6 @@ setTimeout(() => {
               class="pointer-events-none"
             >
               <SlideWrapper
-                :is="route.component"
-                v-if="route?.component"
                 :clicks-context="createFixedClicks(route, CLICKS_MAX)"
                 :route="route"
                 render-context="overview"

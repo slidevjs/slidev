@@ -51,11 +51,17 @@ export default function setupRoutes() {
   }
 
   if (__SLIDEV_HAS_SERVER__) {
-    routes.push({
-      name: 'print',
-      path: '/print',
-      component: () => import('../pages/print.vue'),
-    })
+    routes.push(
+      {
+        name: 'print',
+        path: '/print/:no',
+        component: () => import('../pages/print.vue'),
+      },
+      {
+        path: '/print',
+        redirect: { path: '/print/1' },
+      },
+    )
   }
 
   routes.push(

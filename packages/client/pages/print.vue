@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { recomputeAllPoppers } from 'floating-vue'
-import { onMounted } from 'vue'
 import PrintTemplate from '#slidev/print-template'
 
 document.documentElement.classList.add('print')
-
-onMounted(() => {
-  setTimeout(recomputeAllPoppers, 300)
-})
 </script>
 
 <template>
@@ -30,8 +24,8 @@ html #page-root {
 }
 html * {
   -webkit-print-color-adjust: exact;
-  transition-delay: 0 !important;
-  transition-duration: 0 !important;
+  transition-delay: 0ms !important;
+  transition-duration: 50ms !important;
 }
 html {
   width: 100%;
@@ -44,6 +38,5 @@ html body {
   padding: 0;
   float: none;
   overflow: visible;
-  background-color: white;
 }
 </style>

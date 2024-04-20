@@ -152,7 +152,7 @@ onMounted(() => {
           <IconButton
             class="mr--3 op0 group-hover:op80"
             title="Play in new tab"
-            @click="openSlideInNewTab(getSlidePath(route, false))"
+            @click="openSlideInNewTab(getSlidePath(route))"
           >
             <carbon:presentation-file />
           </IconButton>
@@ -168,7 +168,7 @@ onMounted(() => {
         <div class="flex flex-col gap-2 my5">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
+            @dblclick="openSlideInNewTab(getSlidePath(route))"
           >
             <SlideContainer
               :key="route.no"
@@ -176,7 +176,6 @@ onMounted(() => {
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :is="route.component!"
                 :clicks-context="getClicksContext(route)"
                 :route="route"
                 render-context="overview"

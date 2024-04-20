@@ -84,7 +84,6 @@ else if (autorun)
     v-show="!hidden"
     class="relative flex flex-col rounded-b border-t border-main"
     :style="{ height: props.height }"
-    data-waitfor=".slidev-runner-output"
   >
     <div v-if="disabled" class="text-sm text-center opacity-50">
       Code is disabled in the "{{ $renderContext }}" mode

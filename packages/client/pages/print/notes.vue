@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useNav } from '../../composables/useNav'
+import { usePrintContext } from '../../composables/usePrintContext'
 import { configs } from '../../env'
 import NoteDisplay from '../../internals/NoteDisplay.vue'
 
 const { slidesToPrint, total } = useNav()
+usePrintContext()
 
 const slidesWithNote = computed(() => slidesToPrint.value
   .map(route => route.meta.slide)

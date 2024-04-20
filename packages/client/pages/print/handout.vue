@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import { useNav } from '../../composables/useNav'
 import { useSlideInfo } from '../../composables/useSlideInfo'
+import { usePrintContext } from '../../composables/usePrintContext'
 import { configs } from '../../env'
-import PrintSlides from '../../internals/PrintSlides.vue'
 import SlideContainer from '../../internals/SlideContainer.vue'
-import SlideWrapper from '../../internals/SlideWrapper.vue'
 import NoteStatic from '../../internals/NoteStatic.vue'
+import SlidesPrintShow from '../../internals/SlidesPrintShow.vue'
 
-import GlobalTop from '#slidev/global-components/top'
-import GlobalBottom from '#slidev/global-components/bottom'
-
-const { isPrintWithClicks, isPrintPerSlide } = useNav()
+const { isPrintWithClicks, clicksContext, total, currentSlideNo } = useNav()
+const { printState } = usePrintContext(1)
 const { info } = useSlideInfo(1)
 </script>
 
 <template>
   <div class="text-black w-min">
-    <div v-if="!isPrintPerSlide" class="handout-page px-25">
+    <div v-if="printState === 'before'" class="handout-page px-25">
       <div class="text-5xl text-black mt-48">
         {{ configs.title }}
       </div>
@@ -25,49 +23,40 @@ const { info } = useSlideInfo(1)
         {{ info.frontmatter.author }}
       </div>
     </div>
-    <PrintSlides v-slot="{ nav, route }">
-      <div class="handout-page px-8 py-[15mm]">
-        <div class="tabular-nums mb-1">
-          <span v-if="isPrintWithClicks" class="op-70 text-sm">
-            Page
+    <div v-show="printState === 'slides'" class="handout-page px-8 py-[15mm]">
+      <div class="tabular-nums mb-1">
+        <span v-if="isPrintWithClicks" class="op-70 text-sm">
+          Page
+        </span>
+        {{ currentSlideNo }} / {{ total }}
+        <span v-if="isPrintWithClicks && clicksContext.total" class="ml-4">
+          <span class="op-70 text-sm">
+            Clicks
           </span>
-          {{ route.no }} / {{ nav.total }}
-          <span v-if="isPrintWithClicks && nav.clicksContext.value.total" class="ml-4">
-            <span class="op-70 text-sm">
-              Clicks
-            </span>
-            {{ nav.clicksContext.value.current }} / {{ nav.clicksContext.value.total }}
-          </span>
+          {{ clicksContext.current }} / {{ clicksContext.total }}
+        </span>
+      </div>
+
+      <SlideContainer :width="728" class="light:children:(b b-dark) dark:text-white !overflow-visible">
+        <SlidesPrintShow />
+      </SlideContainer>
+
+      <NoteStatic
+        :key="currentSlideNo"
+        class="mt-10 mx-2 text-lg"
+        :no="currentSlideNo"
+        :clicks-context="isPrintWithClicks ? clicksContext : undefined"
+      />
+
+      <div class="absolute bottom-4 left-6 right-6 px-2 pt-2 b-t b-gray">
+        <div v-if="configs.title" class="text-right text-sm">
+          {{ configs.title }}
         </div>
-
-        <SlideContainer :width="728" class="light:children:(b b-dark) dark:text-white !overflow-visible">
-          <GlobalBottom />
-
-          <SlideWrapper
-            :is="route.component"
-            :clicks-context="nav.clicksContext.value"
-            :route="route"
-          />
-
-          <GlobalTop />
-        </SlideContainer>
-
-        <NoteStatic
-          class="mt-10 mx-2 text-lg"
-          :no="route.no"
-          :clicks-context="isPrintWithClicks ? nav.clicksContext.value : undefined"
-        />
-
-        <div class="absolute bottom-4 left-6 right-6 px-2 pt-2 b-t b-gray">
-          <div v-if="configs.title" class="text-right text-sm">
-            {{ configs.title }}
-          </div>
-          <div class="text-right text-sm tabular-nums">
-            {{ route.no }} / {{ nav.total }}
-          </div>
+        <div class="text-right text-sm tabular-nums">
+          {{ currentSlideNo }} / {{ total }}
         </div>
       </div>
-    </PrintSlides>
+    </div>
   </div>
 </template>
 
@@ -83,6 +72,7 @@ const { info } = useSlideInfo(1)
   overflow: hidden;
   break-before: page;
   position: relative;
+  background-color: white;
 }
 
 .slidev-note-click-mark.slidev-note-click-mark-past {

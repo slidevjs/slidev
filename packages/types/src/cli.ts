@@ -15,7 +15,6 @@ export interface ExportArgs extends CommonArgs {
   'with-clicks': boolean
   'executable-path'?: string
   'with-toc': boolean
-  'per-slide': boolean
   'scale': number
 }
 
