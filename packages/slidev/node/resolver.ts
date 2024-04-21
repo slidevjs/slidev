@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import isInstalledGlobally from 'is-installed-globally'
 import { resolveGlobal } from 'resolve-global'
-import { findDepPkgJsonPath } from 'vitefu'
+import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
 import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import prompts from 'prompts'
@@ -229,8 +229,9 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     throw new Error('[slidev] Cannot find roots without entry')
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const userRoot = dirname(entry)
-  const userPkgJson = getUserPkgJson(userRoot)
-  const userWorkspaceRoot = searchForWorkspaceRoot(userRoot)
+  const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)
+  const userPkgJson = getUserPkgJson(closestPkgRoot)
+  const userWorkspaceRoot = searchForWorkspaceRoot(closestPkgRoot)
   rootsInfo = {
     cliRoot,
     clientRoot,
