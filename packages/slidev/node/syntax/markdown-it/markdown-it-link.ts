@@ -9,7 +9,7 @@ export default function markdownItLink(md: MarkdownIt) {
     const hrefIndex = token.attrIndex('href')
     const attr = token.attrs?.[hrefIndex]
     const href = attr?.[1] ?? ''
-    if ('./#'.includes(href[0])) {
+    if ('./#'.includes(href[0]) || /^\d+$/.test(href)) {
       token.tag = 'Link'
       attr![0] = 'to'
 
