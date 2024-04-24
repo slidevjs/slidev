@@ -66,7 +66,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
             isDrawing ? 'pointer-events-none' : '',
           ]"
         >
-          <NavControls class="m-auto" :persist="persistNav" />
+          <NavControls :persist="persistNav" />
         </div>
       </template>
     </SlideContainer>

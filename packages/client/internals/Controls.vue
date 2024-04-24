@@ -23,9 +23,7 @@ if (__SLIDEV_FEATURE_RECORD__) {
 </script>
 
 <template>
-  <template v-if="drawingEnabled && DrawingControls">
-    <DrawingControls class="ml-0" />
-  </template>
+  <DrawingControls v-if="drawingEnabled && DrawingControls" />
   <QuickOverview v-model="showOverview" />
   <Goto />
   <WebCamera v-if="WebCamera" />
