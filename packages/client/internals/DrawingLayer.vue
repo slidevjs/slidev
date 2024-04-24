@@ -25,4 +25,4 @@ onBeforeUnmount(() => {
     class="w-full h-full absolute top-0"
     :class="{ 'pointer-events-none': !drawingEnabled, 'touch-none': drawingEnabled }"
   />
-</template>../composables/drawings
+</template>

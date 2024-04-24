@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import { isEditorVertical, isScreenVertical, showEditor, slideScale, windowSize } from '../state'
+import { isEditorVertical, isScreenVertical, showEditor, windowSize } from '../state'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { registerShortcuts } from '../logic/shortcuts'
-import { configs } from '../env'
 import Controls from '../internals/Controls.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import NavControls from '../internals/NavControls.vue'
@@ -12,10 +11,9 @@ import PrintStyle from '../internals/PrintStyle.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import PresenterMouse from '../internals/PresenterMouse.vue'
 
-registerShortcuts()
-
-const { next, prev, isEmbedded, isPrintMode } = useNav()
+const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
@@ -25,7 +23,7 @@ function onClick(e: MouseEvent) {
 
   if (e.button === 0 && (e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previous
-    if ((e.pageX / window.innerWidth) > 0.6)
+    if ((e.pageX / window.innerWidth) > 0.5)
       next()
     else
       prev()
@@ -33,16 +31,13 @@ function onClick(e: MouseEvent) {
 }
 
 useSwipeControls(root)
+registerShortcuts()
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
-
-const DrawingControls = shallowRef<any>()
-if (__SLIDEV_FEATURE_DRAWINGS__)
-  import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 </script>
 
 <template>
@@ -52,16 +47,15 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
     :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"
   >
     <SlideContainer
-      class="w-full h-full"
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       :width="isPrintMode ? windowSize.width.value : undefined"
-      :scale="slideScale"
-      :is-main="true"
+      is-main
       @pointerdown="onClick"
       @contextmenu="onContextMenu"
     >
       <template #default>
         <SlidesShow render-context="slide" />
+        <PresenterMouse />
       </template>
       <template #controls>
         <div
@@ -74,15 +68,9 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
         >
           <NavControls class="m-auto" :persist="persistNav" />
         </div>
-        <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded && DrawingControls">
-          <DrawingControls class="ml-0" />
-        </template>
       </template>
     </SlideContainer>
-
-    <template v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor">
-      <SideEditor :resize="true" />
-    </template>
+    <SideEditor v-if="SideEditor && showEditor" :resize="true" />
   </div>
   <Controls v-if="!isPrintMode" />
 </template>

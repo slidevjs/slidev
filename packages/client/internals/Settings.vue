@@ -16,7 +16,7 @@ const items: SelectionItem<number>[] = [
 </script>
 
 <template>
-  <div class="text-sm">
+  <div class="text-sm select-none">
     <SelectList v-model="slideScale" title="Scale" :items="items" />
   </div>
 </template>

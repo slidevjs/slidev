@@ -116,3 +116,7 @@ html {
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
 }
+
+#twoslash-container {
+  position: fixed;
+}

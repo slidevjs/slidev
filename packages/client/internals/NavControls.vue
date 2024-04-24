@@ -179,4 +179,4 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       <CustomNavControls />
     </div>
   </nav>
-</template>../composables/drawings
+</template>

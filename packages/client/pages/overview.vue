@@ -2,11 +2,10 @@
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { configs } from '../env'
+import { slidesTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { getSlideClass } from '../utils'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
 import DrawingPreview from '../internals/DrawingPreview.vue'
@@ -18,10 +17,7 @@ import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-useHead({
-  title: `Overview - ${slideTitle}`,
-})
+useHead({ title: `Overview - ${slidesTitle}` })
 
 const { openInEditor, slides } = useNav()
 
@@ -102,7 +98,7 @@ onMounted(() => {
   <div class="h-screen w-screen of-hidden flex">
     <nav class="grid grid-rows-[auto_max-content] border-r border-main select-none max-h-full h-full">
       <div class="relative">
-        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-scroll" style="direction:rtl">
+        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
           <div
             v-for="(route, idx) of slides"
             :key="route.no"
@@ -180,9 +176,7 @@ onMounted(() => {
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :is="route.component!"
                 :clicks-context="getClicksContext(route)"
-                :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />
@@ -191,9 +185,8 @@ onMounted(() => {
           </div>
           <ClicksSlider
             v-if="getSlideClicks(route)"
-            mt-2
             :clicks-context="getClicksContext(route)"
-            class="w-full"
+            class="w-full mt-2"
             @dblclick="getClicksContext(route).current = CLICKS_MAX"
           />
         </div>

@@ -4,7 +4,6 @@ import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { getSlideClass } from '../utils'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 import SlideContainer from './SlideContainer.vue'
@@ -119,7 +118,7 @@ setTimeout(() => {
     <div
       v-if="value || activeSlidesLoaded"
       v-show="value"
-      class="bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
       @click="close()"
     >
       <div
@@ -142,10 +141,7 @@ setTimeout(() => {
               class="pointer-events-none"
             >
               <SlideWrapper
-                :is="route.component"
-                v-if="route?.component"
                 :clicks-context="createFixedClicks(route, CLICKS_MAX)"
-                :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />
@@ -168,7 +164,7 @@ setTimeout(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2">
+  <div v-if="value" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
     </IconButton>
