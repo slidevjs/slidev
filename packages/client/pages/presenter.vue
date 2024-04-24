@@ -3,7 +3,7 @@ import { useHead } from '@unhead/vue'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
 import { useSwipeControls } from '../composables/useSwipeControls'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
+import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
 import { slidesTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { registerShortcuts } from '../logic/shortcuts'
@@ -199,7 +199,7 @@ onMounted(() => {
     </div>
   </div>
   <Goto />
-  <QuickOverview v-model="showOverview" />
+  <QuickOverview />
   <ContextMenu />
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener, useVModel } from '@vueuse/core'
+import { useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
@@ -11,14 +11,10 @@ import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
 
-const props = defineProps<{ modelValue: boolean }>()
-const emit = defineEmits(['update:modelValue'])
-const value = useVModel(props, 'modelValue', emit)
-
 const { currentSlideNo, go: goSlide, slides } = useNav()
 
 function close() {
-  value.value = false
+  showOverview.value = false
 }
 
 function go(page: number) {
@@ -116,10 +112,10 @@ setTimeout(() => {
     leave-to-class="opacity-0 scale-102 !backdrop-blur-0px"
   >
     <div
-      v-if="value || activeSlidesLoaded"
-      v-show="value"
+      v-if="showOverview || activeSlidesLoaded"
+      v-show="showOverview"
       class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
-      @click="close()"
+      @click="close"
     >
       <div
         class="grid gap-y-4 gap-x-8 w-full"
@@ -164,7 +160,7 @@ setTimeout(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="value" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
+  <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
     </IconButton>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
-import { showInfoDialog, showOverview, showRecordingDialog } from '../state'
+import { showInfoDialog, showRecordingDialog } from '../state'
 import { configs } from '../env'
 import { useNav } from '../composables/useNav'
 import QuickOverview from './QuickOverview.vue'
@@ -24,7 +24,7 @@ if (__SLIDEV_FEATURE_RECORD__) {
 
 <template>
   <DrawingControls v-if="drawingEnabled && DrawingControls" />
-  <QuickOverview v-model="showOverview" />
+  <QuickOverview />
   <Goto />
   <WebCamera v-if="WebCamera" />
   <RecordingDialog v-if="RecordingDialog" v-model="showRecordingDialog" />
