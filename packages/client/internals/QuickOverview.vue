@@ -165,7 +165,7 @@ setTimeout(() => {
       <carbon:close />
     </IconButton>
     <IconButton
-      v-if="__DEV__"
+      v-if="__SLIDEV_FEATURE_PRESENTER__"
       as="a"
       title="Slides Overview"
       target="_blank"
