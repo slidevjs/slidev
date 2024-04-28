@@ -15,7 +15,7 @@
     "Other"
   ],
   "main": "./dist/index.cjs",
-  "icon": "res/logo.png",
+  "icon": "dist/res/logo.png",
   "engines": {
     "vscode": "^1.52.0"
   },
@@ -40,7 +40,7 @@
         "command": "slidev.focus-side-panel",
         "category": "Slidev",
         "title": "Focus side panel",
-        "icon": "res/logo-mono.svg"
+        "icon": "dist/res/logo-mono.svg"
       },
       {
         "command": "slidev.move-up",
@@ -104,7 +104,7 @@
         {
           "id": "slidev",
           "title": "Slidev",
-          "icon": "res/logo-mono.svg",
+          "icon": "dist/res/logo-mono.svg",
           "when": "slidev-enabled"
         }
       ]

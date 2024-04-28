@@ -24,7 +24,7 @@ function getTreeItem(info: SlideInfo): TreeItem {
   return {
     label: `${info.index + 1} - ${info.title || ''}`,
     description: !info.title ? '(Untitled)' : undefined,
-    iconPath: iconName ? extCtx.value.asAbsolutePath(`res/icons/${iconName}.svg`) : undefined,
+    iconPath: iconName ? extCtx.value.asAbsolutePath(`dist/res/icons/${iconName}.svg`) : undefined,
     command: {
       command: 'slidev.goto',
       title: 'Goto',

@@ -20,7 +20,7 @@ export const useTerminal = createSingletonComposable(() => {
 
     terminal.value = window.createTerminal({
       name: 'Slidev',
-      iconPath: Uri.file(extCtx.value.asAbsolutePath('res/logo.svg')),
+      iconPath: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono.svg')),
       isTransient: true,
     })
   }
