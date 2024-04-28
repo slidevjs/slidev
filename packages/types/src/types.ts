@@ -37,6 +37,13 @@ export interface SlideInfo extends SlideInfoBase {
    * The index of the slide in the presentation
    */
   index: number
+  /**
+   * The importers of this slide. `[]` if this slide is the entry markdown file
+   */
+  importChain?: SourceSlideInfo[]
+  /**
+   * The source slide where the content is from
+   */
   source: SourceSlideInfo
   snippetsUsed?: LoadedSnippets
   noteHTML?: string

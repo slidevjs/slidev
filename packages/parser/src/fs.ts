@@ -42,7 +42,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
   const markdownFiles: Record<string, SlidevMarkdown> = {}
   const slides: SlideInfo[] = []
 
-  async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>) {
+  async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
       const raw = await fs.readFile(path, 'utf-8')
@@ -51,12 +51,12 @@ export async function load(userRoot: string, filepath: string, content?: string,
     }
 
     for (const index of parseRangeString(md.slides.length, range))
-      await loadSlide(md.slides[index - 1], frontmatterOverride)
+      await loadSlide(md.slides[index - 1], frontmatterOverride, importers)
 
     return md
   }
 
-  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>) {
+  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>, importChain?: SourceSlideInfo[]) {
     if (slide.frontmatter.disabled || slide.frontmatter.hide)
       return
     if (slide.frontmatter.src) {
@@ -71,11 +71,12 @@ export async function load(userRoot: string, filepath: string, content?: string,
       }
       delete frontmatterOverride.src
 
-      await loadMarkdown(path, rangeRaw, frontmatterOverride)
+      await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
     }
     else {
       slides.push({
         index: slides.length,
+        importChain,
         source: slide,
         frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
         content: slide.content,
