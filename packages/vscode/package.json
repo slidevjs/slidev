@@ -14,7 +14,7 @@
   "categories": [
     "Other"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "icon": "res/logo.png",
   "engines": {
     "vscode": "^1.52.0"
