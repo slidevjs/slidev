@@ -1,0 +1,142 @@
+{
+  "publisher": "antfu",
+  "name": "slidev",
+  "displayName": "Slidev",
+  "preview": true,
+  "version": "0.5.0",
+  "description": "Slidev support for VS Code",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/index.js",
+  "icon": "res/logo.png",
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "slidev.prev",
+        "category": "Slidev",
+        "title": "Go to previous slide",
+        "icon": "$(chevron-up)"
+      },
+      {
+        "command": "slidev.next",
+        "category": "Slidev",
+        "title": "Go to next slide",
+        "icon": "$(chevron-down)"
+      },
+      {
+        "command": "slidev.focus-side-panel",
+        "category": "Slidev",
+        "title": "Focus side panel",
+        "icon": "res/logo-mono.svg"
+      },
+      {
+        "command": "slidev.move-up",
+        "category": "Slidev",
+        "title": "Move slide up",
+        "icon": "$(triangle-up)"
+      },
+      {
+        "command": "slidev.move-down",
+        "category": "Slidev",
+        "title": "Move slide down",
+        "icon": "$(triangle-down)"
+      },
+      {
+        "command": "slidev.preview-refresh",
+        "category": "Slidev",
+        "title": "Preview Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "slidev.config-port",
+        "category": "Slidev",
+        "title": "Configure Preview Port"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "slidev-enabled && resourceLangId == markdown",
+          "command": "slidev.prev",
+          "group": "navigation"
+        },
+        {
+          "when": "slidev-enabled && resourceLangId == markdown",
+          "command": "slidev.next",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "slidev.move-up",
+          "when": "view =~ /slidev-slides/",
+          "group": "inline@1"
+        },
+        {
+          "command": "slidev.move-down",
+          "when": "view =~ /slidev-slides/",
+          "group": "inline@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "slidev.preview-refresh",
+          "when": "view =~ /slidev-preview/",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "slidev",
+          "title": "Slidev",
+          "icon": "res/logo-mono.svg",
+          "when": "slidev-enabled"
+        }
+      ]
+    },
+    "views": {
+      "slidev": [
+        {
+          "id": "slidev-slides",
+          "name": "Slides",
+          "when": "slidev-enabled"
+        },
+        {
+          "type": "webview",
+          "id": "slidev-preview",
+          "name": "Preview",
+          "when": "slidev-enabled"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "nr build",
+    "build": "tsup",
+    "dev": "nr build --watch"
+  },
+  "devDependencies": {
+    "@antfu/utils": "^0.7.7",
+    "@iconify-json/carbon": "^1.1.31",
+    "@slidev/parser": "workspace:*",
+    "@slidev/types": "workspace:*",
+    "@types/node": "^20.12.7",
+    "@types/vscode": "^1.88.0",
+    "@vue/runtime-core": "^3.4.22",
+    "get-port-please": "^3.1.2"
+  }
+}

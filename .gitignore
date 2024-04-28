@@ -21,3 +21,4 @@ packages/create-app/template/slides.md
 packages/create-app/template/snippets
 packages/slidev/README.md
 slides-export.md
+packages/vscode/res

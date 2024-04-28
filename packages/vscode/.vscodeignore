@@ -1,0 +1,4 @@
+.vscode/**
+.vscode-test/**
+src/**
+tsup.config.ts
