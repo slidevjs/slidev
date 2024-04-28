@@ -3,10 +3,8 @@ import { save as slidevSave } from '@slidev/parser/fs'
 import type { SlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
-import { Position, Range, Selection, TextEditorRevealType, commands, window } from 'vscode'
-import { useActiveTextEditor } from './composables/useActiveTextEditor'
+import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
-import { useMarkdownFromDoc } from './composables/useMarkdownFromDoc'
 import { configuredPort } from './config'
 import { activeSlidevData } from './state'
 import { usePreviewWebview } from './views/previewWebview'
@@ -17,14 +15,12 @@ export function useCommands() {
     disposables.push(commands.registerCommand(command, callback))
   }
 
-  const activeEditor = useActiveTextEditor()
-  const activeMd = useMarkdownFromDoc(() => activeEditor.value?.document)
-
-  async function gotoSlide(index: number) {
-    const editor = activeEditor.value
-    const slide = activeMd.value?.slides[index]
-    if (!editor || !slide)
+  async function gotoSlide(filepath: string, index: number) {
+    const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
+    if (!slide)
       return
+
+    const editor = await window.showTextDocument(await workspace.openTextDocument(Uri.file(filepath)))
 
     const pos = new Position(slide.start || 0, 0)
     const range = new Range(pos, pos)
@@ -32,11 +28,11 @@ export function useCommands() {
     editor.revealRange(range, TextEditorRevealType.AtTop)
   }
 
-  const editingSlideIndex = useEditingSlideSource().index
+  const editingSlide = useEditingSlideSource()
 
   registerCommand('slidev.goto', gotoSlide)
-  registerCommand('slidev.next', () => gotoSlide(editingSlideIndex.value + 1))
-  registerCommand('slidev.prev', () => gotoSlide(editingSlideIndex.value - 1))
+  registerCommand('slidev.next', () => gotoSlide(editingSlide.markdown.value!.filepath, editingSlide.index.value + 1))
+  registerCommand('slidev.prev', () => gotoSlide(editingSlide.markdown.value!.filepath, editingSlide.index.value - 1))
 
   registerCommand('slidev.move-up', async (slide: SlideInfo) => {
     const { index, filepath } = slide.source

@@ -11,12 +11,13 @@ export function useEditingSlideSource() {
 
   function updateSlideNo() {
     const md = markdown.value
-    if (!md || !editor.value)
+    if (!md || !editor.value) {
+      index.value = 0
       return
+    }
     const line = editor.value.selection.active.line + 1
-    const slide = md.slides.find(s => s.start <= line && line <= s.end)
-    if (slide)
-      index.value = slide.index
+    const slide = md.slides.find(s => line <= s.end)
+    index.value = slide ? slide.index : md.slides.length - 1
   }
 
   updateSlideNo()
@@ -24,7 +25,7 @@ export function useEditingSlideSource() {
   const disposable = window.onDidChangeTextEditorSelection(updateSlideNo)
   onScopeDispose(() => disposable.dispose())
 
-  watch(activeSlidevData, updateSlideNo)
+  watch([editor, activeSlidevData], updateSlideNo)
 
   return {
     markdown,

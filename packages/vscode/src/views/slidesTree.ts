@@ -28,7 +28,7 @@ function getTreeItem(info: SlideInfo): TreeItem {
     command: {
       command: 'slidev.goto',
       title: 'Goto',
-      arguments: [info.index],
+      arguments: [info.source.filepath, info.source.index],
     },
   }
 }
