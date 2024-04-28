@@ -75,9 +75,10 @@ export default defineConfig({
       copyFileSync(resolve(assetsDir, file), resolve(resDir, file))
 
     for (const icon of ICON_NAMES) {
+      const body = icons.icons[icon].body.replaceAll('fill="currentColor"', 'fill="#888888"')
       writeFileSync(
         resolve(iconsDir, `carbon-${icon}.svg`),
-        `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">${icons.icons[icon].body}</svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32">${body}</svg>`,
       )
     }
   },

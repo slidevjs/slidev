@@ -38,22 +38,20 @@ export function useCommands() {
   registerCommand('slidev.prev', () => gotoSlide(editingSlide.markdown.value!.filepath, editingSlide.index.value - 1))
 
   registerCommand('slidev.move-up', async (slide: SlideInfo) => {
-    const { index, filepath } = slide.source
     const data = activeSlidevData.value
-    const md = data?.markdownFiles[filepath]
-    if (!md || index <= 0)
+    const { index } = slide.importChain?.[0] ?? slide.source
+    if (!data || index <= 0)
       return
-    move(md.slides, index, index - 1)
-    slidevSave(md)
+    move(data.entry.slides, index, index - 1)
+    slidevSave(data.entry)
   })
   registerCommand('slidev.move-down', async (slide: SlideInfo) => {
-    const { index, filepath } = slide.source
     const data = activeSlidevData.value
-    const md = data?.markdownFiles[filepath]
-    if (!md || index >= data.slides.length - 1)
+    const { index } = slide.importChain?.[0] ?? slide.source
+    if (!data || index >= data.slides.length - 1)
       return
-    move(md.slides, index, index + 1)
-    slidevSave(md)
+    move(data.entry.slides, index, index + 1)
+    slidevSave(data.entry)
   })
 
   const { refresh } = usePreviewWebview()
