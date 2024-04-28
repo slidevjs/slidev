@@ -25,16 +25,21 @@ export async function useGlobalStates() {
   let pendingUpdate: { cancelled: boolean } | null = null
 
   async function updateSlidevData() {
+    const startMs = Date.now()
     pendingUpdate && (pendingUpdate.cancelled = true)
     const thisUpdate = pendingUpdate = { cancelled: false }
     const newSlidevData = activeEntry.value ? await load(activeUserRoot.value!, activeEntry.value) : null
     if (!thisUpdate.cancelled) {
       activeSlidevData.value = newSlidevData
-      logger.info('Slidev data updated.')
+      logger.info(`Slidev data updated in ${Date.now() - startMs}ms.`)
     }
   }
   watchEffect(updateSlidevData)
 
-  const disposable1 = workspace.onDidSaveTextDocument(updateSlidevData)
-  onScopeDispose(() => disposable1.dispose())
+  const fsWatcher = workspace.createFileSystemWatcher('**/*.md')
+  fsWatcher.onDidChange(updateSlidevData)
+
+  onScopeDispose(() => {
+    fsWatcher.dispose()
+  })
 }
