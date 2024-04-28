@@ -61,9 +61,11 @@ export async function load(userRoot: string, filepath: string, content?: string,
       return
     if (slide.frontmatter.src) {
       const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
-      const path = rawPath.startsWith('/')
-        ? resolve(userRoot, rawPath.substring(1))
-        : resolve(dirname(slide.filepath), rawPath)
+      const path = slash(
+        rawPath.startsWith('/')
+          ? resolve(userRoot, rawPath.substring(1))
+          : resolve(dirname(slide.filepath), rawPath),
+      )
 
       frontmatterOverride = {
         ...slide.frontmatter,

@@ -96,6 +96,7 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       "content": "
 # Hi
 ",
+      "contentStart": 7,
       "end": 10,
       "filepath": "frontmatter.md",
       "frontmatter": {
@@ -156,6 +157,7 @@ fonts:
       "content": "
 # Hello
 ",
+      "contentStart": 16,
       "end": 23,
       "filepath": "frontmatter.md",
       "frontmatter": {
@@ -210,6 +212,7 @@ This is note
       "content": "
 # Morning
 ",
+      "contentStart": 24,
       "end": 27,
       "filepath": "frontmatter.md",
       "frontmatter": {},
@@ -242,6 +245,7 @@ Hey",
 <!-- This is not note -->
 Hey
 ",
+      "contentStart": 30,
       "end": 38,
       "filepath": "frontmatter.md",
       "frontmatter": {
@@ -299,6 +303,7 @@ this should be treated as code block
 Also part of the code block
 \`\`\`
 ",
+      "contentStart": 39,
       "end": 50,
       "filepath": "frontmatter.md",
       "frontmatter": {},
@@ -337,6 +342,7 @@ Also part of the code block
       "content": "
 Content 1
 ",
+      "contentStart": 51,
       "end": 59,
       "filepath": "frontmatter.md",
       "frontmatter": {
@@ -388,6 +394,7 @@ layout: should not from yaml 1
 
 Content 2
 ",
+      "contentStart": 62,
       "end": 70,
       "filepath": "frontmatter.md",
       "frontmatter": {
@@ -443,6 +450,7 @@ layout: should not from yaml 2
 
 Content 3
 ",
+      "contentStart": 71,
       "end": 81,
       "filepath": "frontmatter.md",
       "frontmatter": {},
@@ -556,6 +564,7 @@ exports[`md parser > mdc.md > slides 1`] = `
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
+      "contentStart": 3,
       "end": 8,
       "filepath": "mdc.md",
       "frontmatter": {
@@ -681,6 +690,7 @@ Sample Text
 console.log('Hello World')
 \`\`\`
 ",
+      "contentStart": 0,
       "end": 10,
       "filepath": "minimal.md",
       "frontmatter": {},
@@ -727,6 +737,7 @@ console.log('Hello World')
 - Hey
 - Yo
 ",
+      "contentStart": 11,
       "end": 19,
       "filepath": "minimal.md",
       "frontmatter": {},
@@ -760,6 +771,7 @@ console.log('Hello World')
       "content": "
 Nice to meet you
 ",
+      "contentStart": 20,
       "end": 23,
       "filepath": "minimal.md",
       "frontmatter": {},
@@ -855,6 +867,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
     "importChain": [
       {
         "content": "",
+        "contentStart": 3,
         "end": 4,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -882,6 +895,7 @@ src: sub/page1.md
     "note": undefined,
     "source": {
       "content": "# Page 1",
+      "contentStart": 0,
       "end": 2,
       "filepath": "sub/page1.md",
       "frontmatter": {},
@@ -909,6 +923,7 @@ src: sub/page1.md
     "importChain": [
       {
         "content": "",
+        "contentStart": 8,
         "end": 9,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -942,6 +957,7 @@ background: https://sli.dev/demo-cover.png#2
       "content": "# Page 2
 
 <Tweet />",
+      "contentStart": 3,
       "end": 8,
       "filepath": "sub/page2.md",
       "frontmatter": {
@@ -977,6 +993,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentStart": 13,
         "end": 14,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1008,6 +1025,7 @@ background: https://sli.dev/demo-cover.png#34
     "note": undefined,
     "source": {
       "content": "# Page 3",
+      "contentStart": 0,
       "end": 2,
       "filepath": "sub/pages3-4.md",
       "frontmatter": {},
@@ -1035,6 +1053,7 @@ background: https://sli.dev/demo-cover.png#34
     "importChain": [
       {
         "content": "",
+        "contentStart": 13,
         "end": 14,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1068,6 +1087,7 @@ background: https://sli.dev/demo-cover.png#34
       "content": "# Page 4
 
 <Tweet />",
+      "contentStart": 5,
       "end": 10,
       "filepath": "sub/pages3-4.md",
       "frontmatter": {
@@ -1103,6 +1123,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1130,6 +1151,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentStart": 3,
         "end": 4,
         "filepath": "sub/nested1-4.md",
         "frontmatter": {
@@ -1157,6 +1179,7 @@ src: /sub/page1.md
     "note": undefined,
     "source": {
       "content": "# Page 1",
+      "contentStart": 0,
       "end": 2,
       "filepath": "sub/page1.md",
       "frontmatter": {},
@@ -1184,6 +1207,7 @@ src: /sub/page1.md
     "importChain": [
       {
         "content": "",
+        "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1211,6 +1235,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentStart": 7,
         "end": 8,
         "filepath": "sub/nested1-4.md",
         "frontmatter": {
@@ -1240,6 +1265,7 @@ src: page2.md
       "content": "# Page 2
 
 <Tweet />",
+      "contentStart": 3,
       "end": 8,
       "filepath": "sub/page2.md",
       "frontmatter": {
@@ -1275,6 +1301,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1302,6 +1329,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentStart": 11,
         "end": 12,
         "filepath": "sub/nested1-4.md",
         "frontmatter": {
@@ -1329,6 +1357,7 @@ src: ../sub/pages3-4.md
     "note": undefined,
     "source": {
       "content": "# Page 3",
+      "contentStart": 0,
       "end": 2,
       "filepath": "sub/pages3-4.md",
       "frontmatter": {},
@@ -1356,6 +1385,7 @@ src: ../sub/pages3-4.md
     "importChain": [
       {
         "content": "",
+        "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
         "frontmatter": {
@@ -1383,6 +1413,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentStart": 11,
         "end": 12,
         "filepath": "sub/nested1-4.md",
         "frontmatter": {
@@ -1412,6 +1443,7 @@ src: ../sub/pages3-4.md
       "content": "# Page 4
 
 <Tweet />",
+      "contentStart": 5,
       "end": 10,
       "filepath": "sub/pages3-4.md",
       "frontmatter": {
@@ -1454,6 +1486,7 @@ $x+2$",
 
 $x+2$
 ",
+      "contentStart": 20,
       "end": 25,
       "filepath": "multi-entries.md",
       "frontmatter": {},

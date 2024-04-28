@@ -22,10 +22,13 @@ export function useCommands() {
 
     const editor = await window.showTextDocument(await workspace.openTextDocument(Uri.file(filepath)))
 
-    const pos = new Position(slide.start || 0, 0)
-    const range = new Range(pos, pos)
-    editor.selection = new Selection(pos, pos)
-    editor.revealRange(range, TextEditorRevealType.AtTop)
+    const cursorPos = new Position(slide.contentStart, 0)
+    editor.selection = new Selection(cursorPos, cursorPos)
+
+    const startPos = new Position(slide.start, 0)
+    const endPos = new Position(slide.end, 0)
+    const slideRange = new Range(startPos, endPos)
+    editor.revealRange(slideRange, TextEditorRevealType.AtTop)
   }
 
   const editingSlide = useEditingSlideSource()

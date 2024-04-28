@@ -25,6 +25,7 @@ export interface SourceSlideInfo extends SlideInfoBase {
    * The range of the slide in the markdown file
    */
   start: number
+  contentStart: number
   end: number
   raw: string
   frontmatterRaw?: string
