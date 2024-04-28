@@ -1,7 +1,8 @@
-import { copyFileSync, existsSync, readdirSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { defineConfig } from 'tsup'
 import { icons } from '@iconify-json/carbon'
+import { copySync } from 'fs-extra'
 
 const ICON_NAMES = [
   'align-box-bottom-center',
@@ -70,7 +71,7 @@ export default defineConfig({
     console.warn('DEBUG', readdirSync(assetsDir), resolve(assetsDir, 'logo-mono.svg'), existsSync(resolve(assetsDir, 'logo-mono.svg')))
 
     for (const file of ['logo-mono.svg', 'logo.png', 'logo.svg'])
-      copyFileSync(resolve(assetsDir, file), resolve(resDir, file))
+      copySync(resolve(assetsDir, file), resolve(resDir, file))
 
     for (const icon of ICON_NAMES) {
       writeFileSync(
