@@ -1,6 +1,5 @@
-import { onScopeDispose, shallowRef, watchEffect } from '@vue/runtime-core'
-import type { MaybeRefOrGetter } from '@vueuse/core'
-import { toValue } from '@vueuse/core'
+import type { MaybeRefOrGetter } from '@vue/runtime-core'
+import { onScopeDispose, shallowRef, toValue, watchEffect } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
 import { workspace } from 'vscode'
 

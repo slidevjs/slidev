@@ -2,6 +2,7 @@
   "publisher": "antfu",
   "name": "slidev",
   "displayName": "Slidev",
+  "type": "module",
   "preview": true,
   "version": "0.5.0",
   "description": "Slidev support for VS Code",
@@ -126,7 +127,7 @@
   },
   "scripts": {
     "vscode:prepublish": "nr build",
-    "build": "tsup",
+    "build": "tsup --env.NODE_ENV production",
     "dev": "nr build --watch"
   },
   "devDependencies": {
