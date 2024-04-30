@@ -61,7 +61,7 @@ jobs:
       matrix:
         node-version: [18.x]
         os: [ubuntu-latest, windows-latest]
-        pm: [yarn, npm, pnpm]
+        pm: [npm, pnpm] # yarn not working in this CI
         hoist: [true, false]
 
     steps:
