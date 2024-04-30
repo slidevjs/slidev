@@ -34,7 +34,7 @@ async function pack() {
   await fs.mkdir(PKG_ROOT, { recursive: true })
   for (const [name, path] of Object.entries(packages)) {
     console.log('[pack] pack', path)
-    cd(join(WORKSPACE_ROOT, path))
+    cd(resolve(WORKSPACE_ROOT, path))
     const { stdout } = await $`pnpm pack`
     await fs.move(stdout.trim(), `${PKG_ROOT}/${name}.tgz`)
   }
