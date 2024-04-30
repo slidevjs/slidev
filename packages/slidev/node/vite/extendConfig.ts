@@ -42,7 +42,7 @@ const INCLUDE_LOCAL = [
   'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
   'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
   'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
-]
+].map(i => `@slidev/cli > @slidev/client > ${i}`)
 
 const EXCLUDE_GLOBAL = [
   '@slidev/types',
