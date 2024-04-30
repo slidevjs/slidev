@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build&pack:
+  pack:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +54,7 @@ jobs:
           path: /tmp/slidev-pkgs
 
   test:
-    needs: build&pack
+    needs: pack
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
