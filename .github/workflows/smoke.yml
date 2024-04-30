@@ -45,12 +45,12 @@ jobs:
         run: nr build
 
       - name: Pack
-        run: node ./scripts/pack.mjs ../temp/slidev-pkgs
+        run: node ./scripts/pack.mjs /tmp/slidev-pkgs
 
       - uses: actions/upload-artifact@v4
         with:
           name: slidev-packages
-          path: ${{ github.workspace }}/../temp/slidev-pkgs
+          path: /tmp/slidev-pkgs
 
   test:
     needs: build
@@ -89,11 +89,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: slidev-packages
-          path: ${{ github.workspace }}/../temp/slidev-pkgs
+          path: /tmp/slidev-pkgs
 
       - name: Create new project
         run: |
-          npm i -g ../temp/slidev-pkgs/create-app.tgz
+          npm i -g /tmp/slidev-pkgs/create-app.tgz
           echo "N" | create-slidev ../temp/slidev-project
 
       - name: Remove npmrc
@@ -106,12 +106,12 @@ jobs:
         working-directory: ../temp/slidev-project
 
       - name: Install project (npm, pnpm)
-        run: ${{ matrix.pm }} i ../slidev-pkgs/cli.tgz playwright-chromium
+        run: ${{ matrix.pm }} i /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm != 'yarn' }}
 
       - name: Install project (yarn)
-        run: yarn add ../slidev-pkgs/cli.tgz playwright-chromium
+        run: yarn add /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm == 'yarn' }}
 
@@ -130,7 +130,7 @@ jobs:
 
       - name: Install globally
         run: |
-          ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
+          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium
           ${{ matrix.pm }} i -g @slidev/theme-seriph
         if: ${{ matrix.pm != 'yarn' }}
 
