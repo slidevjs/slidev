@@ -4,7 +4,7 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
 import { resolveGlobal } from 'resolve-global'
-import { findDepPkgJsonPath } from 'vitefu'
+import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
 import { resolvePath } from 'mlly'
 import globalDirs from 'global-directory'
 import prompts from 'prompts'
@@ -233,8 +233,9 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     = !/^(\.\.\/)*node_modules\//i.test(slash(relative(userRoot, cliRoot)))
     || (await import('is-installed-globally')).default
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
-  const userPkgJson = getUserPkgJson(userRoot)
-  const userWorkspaceRoot = searchForWorkspaceRoot(userRoot)
+  const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)
+  const userPkgJson = getUserPkgJson(closestPkgRoot)
+  const userWorkspaceRoot = searchForWorkspaceRoot(closestPkgRoot)
   rootsInfo = {
     cliRoot,
     clientRoot,
