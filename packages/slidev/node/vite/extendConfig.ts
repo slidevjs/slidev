@@ -44,9 +44,8 @@ const INCLUDE_LOCAL = [
   'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
 ]
 
-const EXCLUDE = [
+const EXCLUDE_GLOBAL = [
   '@antfu/utils',
-  '@slidev/shared',
   '@slidev/types',
   '@slidev/client',
   '@slidev/client/constants',
@@ -62,6 +61,23 @@ const EXCLUDE = [
   'vue',
   'shiki',
 ]
+
+const EXCLUDE_LOCAL = [
+  '@slidev/client',
+  '@slidev/client/constants',
+  '@slidev/client/logic/dark',
+  '@slidev/client > @antfu/utils',
+  '@slidev/client > @slidev/types',
+  '@slidev/client > @vueuse/core',
+  '@slidev/client > @vueuse/math',
+  '@slidev/client > @vueuse/shared',
+  '@slidev/client > @vueuse/motion',
+  '@slidev/client > @unocss/reset',
+  '@slidev/client > unocss',
+  '@slidev/client > mermaid',
+  '@slidev/client > vue-demi',
+  '@slidev/client > vue',
+].map(i => `@slidev/cli > ${i}`)
 
 const ASYNC_MODULES = [
   'file-saver',
@@ -110,13 +126,13 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         },
         optimizeDeps: isInstalledGlobally.value
           ? {
-              exclude: EXCLUDE,
+              exclude: EXCLUDE_GLOBAL,
               include: INCLUDE_GLOBAL,
             }
           : {
             // We need to specify the full deps path for non-hoisted modules
-              exclude: EXCLUDE.map(i => `@slidev/cli > @slidev/client > ${i}`),
-              include: INCLUDE_LOCAL.map(i => `@slidev/cli > @slidev/client > ${i}`),
+              exclude: EXCLUDE_LOCAL,
+              include: INCLUDE_LOCAL,
             },
         css: options.data.config.css === 'unocss'
           ? {
