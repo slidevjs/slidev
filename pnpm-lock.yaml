@@ -335,6 +335,9 @@ importers:
       '@unhead/vue':
         specifier: ^1.9.5
         version: 1.9.5(vue@3.4.22)
+      '@unocss/reset':
+        specifier: ^0.59.3
+        version: 0.59.3
       '@vueuse/core':
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.22)
@@ -359,6 +362,9 @@ importers:
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
+      katex:
+        specifier: ^0.16.10
+        version: 0.16.10
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
