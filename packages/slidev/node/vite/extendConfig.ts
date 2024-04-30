@@ -109,15 +109,16 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ],
           dedupe: ['vue'],
         },
-        optimizeDeps: {
-          exclude: EXCLUDE,
-          include: isInstalledGlobally
-            ? INCLUDE_GLOBAL
-            : INCLUDE_LOCAL
-              .filter(i => !EXCLUDE.includes(i))
+        optimizeDeps: isInstalledGlobally
+          ? {
+              exclude: EXCLUDE,
+              include: INCLUDE_GLOBAL,
+            }
+          : {
             // We need to specify the full deps path for non-hoisted modules
-              .map(i => `@slidev/cli > @slidev/client > ${i}`),
-        },
+              exclude: EXCLUDE.map(i => `@slidev/cli > @slidev/client > ${i}`),
+              include: INCLUDE_LOCAL.map(i => `@slidev/cli > @slidev/client > ${i}`),
+            },
         css: options.data.config.css === 'unocss'
           ? {
               postcss: {
