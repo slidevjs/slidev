@@ -2,12 +2,11 @@ import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
-import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
 import { getIndexHtml } from '../commands/shared'
-import { resolveImportPath, toAtFS } from '../resolver'
+import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
   '@shikijs/monaco',
@@ -99,7 +98,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               find: 'vue',
               replacement: await resolveImportPath('vue/dist/vue.esm-bundler.js', true),
             },
-            ...(isInstalledGlobally
+            ...(isInstalledGlobally.value
               ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
                 find: dep,
                 replacement: fileURLToPath(await resolveClientDep(dep)),
@@ -109,7 +108,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ],
           dedupe: ['vue'],
         },
-        optimizeDeps: isInstalledGlobally
+        optimizeDeps: isInstalledGlobally.value
           ? {
               exclude: EXCLUDE,
               include: INCLUDE_GLOBAL,
@@ -192,7 +191,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
       // }
 
-      if (isInstalledGlobally) {
+      if (isInstalledGlobally.value) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
       }

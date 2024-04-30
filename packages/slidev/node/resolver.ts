@@ -1,9 +1,8 @@
-import { dirname, join, resolve } from 'node:path'
+import { dirname, join, relative, resolve } from 'node:path'
 import * as fs from 'node:fs'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { ensurePrefix, slash } from '@antfu/utils'
-import isInstalledGlobally from 'is-installed-globally'
 import { resolveGlobal } from 'resolve-global'
 import { findDepPkgJsonPath } from 'vitefu'
 import { resolvePath } from 'mlly'
@@ -14,6 +13,8 @@ import { underline, yellow } from 'kolorist'
 import type { RootsInfo } from '@slidev/types'
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
+
+export const isInstalledGlobally: { value?: boolean } = {}
 
 /**
  * Resolve path for import url on Vite client side
@@ -39,7 +40,7 @@ export async function resolveImportPath(importName: string, ensure = false) {
   }
   catch { }
 
-  if (isInstalledGlobally) {
+  if (isInstalledGlobally.value) {
     try {
       return resolveGlobal(importName)
     }
@@ -57,7 +58,7 @@ export async function findPkgRoot(dep: string, parent: string, ensure: true): Pr
 export async function findPkgRoot(dep: string, parent: string, ensure?: boolean): Promise<string | undefined>
 export async function findPkgRoot(dep: string, parent: string, ensure = false) {
   const pkgJsonPath = await findDepPkgJsonPath(dep, parent)
-  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally ? await findGlobalPkgRoot(dep, false) : undefined
+  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally.value ? await findGlobalPkgRoot(dep, false) : undefined
   if (ensure && !path)
     throw new Error(`Failed to resolve package "${dep}"`)
   return path
@@ -104,13 +105,13 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
       name: 'confirm',
       initial: 'Y',
       type: 'confirm',
-      message: `The ${type} "${pkgName}" was not found ${underline(isInstalledGlobally ? 'globally' : 'in your project')}, do you want to install it now?`,
+      message: `The ${type} "${pkgName}" was not found ${underline(isInstalledGlobally.value ? 'globally' : 'in your project')}, do you want to install it now?`,
     })
 
     if (!confirm)
       process.exit(1)
 
-    if (isInstalledGlobally)
+    if (isInstalledGlobally.value)
       await run(parseNi, ['-g', pkgName])
     else
       await run(parseNi, [pkgName])
@@ -227,8 +228,11 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     return rootsInfo
   if (!entry)
     throw new Error('[slidev] Cannot find roots without entry')
-  const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const userRoot = dirname(entry)
+  isInstalledGlobally.value
+    = !/^(\.\.\/)*node_modules\//i.test(slash(relative(userRoot, cliRoot)))
+    || (await import('is-installed-globally')).default
+  const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const userPkgJson = getUserPkgJson(userRoot)
   const userWorkspaceRoot = searchForWorkspaceRoot(userRoot)
   rootsInfo = {
