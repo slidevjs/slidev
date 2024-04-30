@@ -38,6 +38,8 @@ jobs:
 
       - name: Install
         run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
 
       - name: Build
         run: nr build
@@ -48,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: slidev-packages
-          path: ${{ github.workspace }}../temp/slidev-pkgs
+          path: ${{ github.workspace }}/../temp/slidev-pkgs
 
   test:
     needs: build
@@ -63,10 +65,31 @@ jobs:
         hoist: [true, false]
 
     steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Setup
+        run: npm i -g @antfu/ni
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+
+      - name: Install
+        run: nci
+
       - uses: actions/download-artifact@v4
         with:
           name: slidev-packages
-          path: ${{ github.workspace }}../temp/slidev-pkgs
+          path: ${{ github.workspace }}/../temp/slidev-pkgs
 
       - name: Create new project
         run: |
