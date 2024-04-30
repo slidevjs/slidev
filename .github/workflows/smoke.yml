@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build&pack:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -47,13 +47,14 @@ jobs:
       - name: Pack
         run: node ./scripts/pack.mjs /tmp/slidev-pkgs
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
 
   test:
-    needs: build
+    needs: build&pack
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
@@ -86,7 +87,8 @@ jobs:
       - name: Install
         run: nci
 
-      - uses: actions/download-artifact@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
