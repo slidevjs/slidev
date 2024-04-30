@@ -2,7 +2,7 @@ import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
-import { uniq } from '@antfu/utils'
+import { slash, uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
 import { getIndexHtml } from '../commands/shared'
@@ -148,8 +148,11 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             strict: true,
             allow: uniq([
               options.userWorkspaceRoot,
-              options.cliRoot,
               options.clientRoot,
+              isInstalledGlobally
+                ? options.cliRoot
+                // Special case for PNPM global installation
+                : slash(options.cliRoot).replace(/\/\.pnpm\/.*$/ig, ''),
               ...options.roots,
             ]),
           },
