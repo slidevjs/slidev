@@ -45,39 +45,39 @@ const INCLUDE_LOCAL = [
 ]
 
 const EXCLUDE_GLOBAL = [
-  '@antfu/utils',
   '@slidev/types',
   '@slidev/client',
   '@slidev/client/constants',
   '@slidev/client/logic/dark',
+  '@antfu/utils',
   '@vueuse/core',
   '@vueuse/math',
   '@vueuse/shared',
   '@vueuse/motion',
   '@unocss/reset',
-  'unocss',
   'mermaid',
   'vue-demi',
   'vue',
-  'shiki',
 ]
 
 const EXCLUDE_LOCAL = [
-  '@slidev/client',
-  '@slidev/client/constants',
-  '@slidev/client/logic/dark',
-  '@slidev/client > @antfu/utils',
-  '@slidev/client > @slidev/types',
-  '@slidev/client > @vueuse/core',
-  '@slidev/client > @vueuse/math',
-  '@slidev/client > @vueuse/shared',
-  '@slidev/client > @vueuse/motion',
-  '@slidev/client > @unocss/reset',
-  '@slidev/client > unocss',
-  '@slidev/client > mermaid',
-  '@slidev/client > vue-demi',
-  '@slidev/client > vue',
-].map(i => `@slidev/cli > ${i}`)
+  ...EXCLUDE_GLOBAL,
+  ...[
+    '@slidev/client',
+    '@slidev/client/constants',
+    '@slidev/client/logic/dark',
+    '@slidev/client > @antfu/utils',
+    '@slidev/client > @slidev/types',
+    '@slidev/client > @vueuse/core',
+    '@slidev/client > @vueuse/math',
+    '@slidev/client > @vueuse/shared',
+    '@slidev/client > @vueuse/motion',
+    '@slidev/client > @unocss/reset',
+    '@slidev/client > mermaid',
+    '@slidev/client > vue-demi',
+    '@slidev/client > vue',
+  ].map(i => `@slidev/cli > ${i}`),
+]
 
 const ASYNC_MODULES = [
   'file-saver',
