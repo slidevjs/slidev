@@ -335,9 +335,6 @@ importers:
       '@unhead/vue':
         specifier: ^1.9.5
         version: 1.9.5(vue@3.4.22)
-      '@unocss/reset':
-        specifier: ^0.59.3
-        version: 0.59.3
       '@vueuse/core':
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.22)
@@ -362,9 +359,6 @@ importers:
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
-      katex:
-        specifier: ^0.16.10
-        version: 0.16.10
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
@@ -395,9 +389,6 @@ importers:
       vue:
         specifier: ^3.4.22
         version: 3.4.22(typescript@5.4.5)
-      vue-demi:
-        specifier: ^0.14.7
-        version: 0.14.7(vue@3.4.22)
       vue-router:
         specifier: ^4.3.0
         version: 4.3.0(vue@3.4.22)
@@ -438,6 +429,9 @@ importers:
 
   packages/parser:
     dependencies:
+      '@antfu/utils':
+        specifier: ^0.7.7
+        version: 0.7.7
       '@slidev/types':
         specifier: workspace:*
         version: link:../types
@@ -483,9 +477,6 @@ importers:
       '@slidev/types':
         specifier: workspace:*
         version: link:../types
-      '@unocss/extractor-mdc':
-        specifier: ^0.59.3
-        version: 0.59.3
       '@unocss/reset':
         specifier: ^0.59.3
         version: 0.59.3
@@ -3071,10 +3062,6 @@ packages:
     resolution: {integrity: sha512-f0G6bhgqCIIx7KjfhOVpJvJF0fpAhfai3fRYgEcxRrDrf5kpK+CqYxphqBqphBzugiY3YOrYlx7ccPIdypsXQw==}
     dependencies:
       '@unocss/core': 0.59.3
-
-  /@unocss/extractor-mdc@0.59.3:
-    resolution: {integrity: sha512-vl0zf6GkLKGSzlQxUy+WCLGvI8ojenVjNbmJrSGzvQZxDJf0ZZuk/dJ2n/Zk0p88wJC45+r8sbKBuevYkB0peA==}
-    dev: false
 
   /@unocss/inspector@0.42.1:
     resolution: {integrity: sha512-U5DzzuhAySb4r8emywM8fTUplnXwcE3GrwJj4/YoE06YrA71Y/UQqXK3IhaSKx0Cs4wbu/9eJ2Fh1cDwGZPEQw==}
