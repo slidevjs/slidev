@@ -1,17 +1,37 @@
 import { join } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
 import isInstalledGlobally from 'is-installed-globally'
 import { uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import { createResolve } from 'mlly'
 import { getIndexHtml } from '../commands/shared'
 import { resolveImportPath, toAtFS } from '../resolver'
-import { dependencies } from '../../../client/package.json'
 
-const INCLUDE = [
-  ...Object.keys(dependencies),
+const INCLUDE_GLOBAL = [
+  '@shikijs/monaco',
+  '@shikijs/vitepress-twoslash/client',
+  '@slidev/rough-notation',
+  '@typescript/ata',
+  '@unhead/vue',
+  'drauu',
+  'file-saver',
+  'floating-vue',
+  'fuse.js',
+  'lz-string',
+  'prettier',
+  'recordrtc',
+  'typescript',
+  'vue-router',
+  'yaml',
+  'shiki-magic-move/vue',
+]
 
-  // CodeMirror
+const INCLUDE_LOCAL = [
+  ...INCLUDE_GLOBAL,
+
+  'codemirror',
   'codemirror/mode/javascript/javascript',
   'codemirror/mode/css/css',
   'codemirror/mode/markdown/markdown',
@@ -19,16 +39,14 @@ const INCLUDE = [
   'codemirror/mode/htmlmixed/htmlmixed',
   'codemirror/addon/display/placeholder',
 
-  // Monaco
-  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
+  'monaco-editor',
   'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
   'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
-
-  // Others
-  'shiki-magic-move/vue',
+  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
 ]
 
 const EXCLUDE = [
+  '@antfu/utils',
   '@slidev/shared',
   '@slidev/types',
   '@slidev/client',
@@ -37,6 +55,7 @@ const EXCLUDE = [
   '@vueuse/core',
   '@vueuse/math',
   '@vueuse/shared',
+  '@vueuse/motion',
   '@unocss/reset',
   'unocss',
   'mermaid',
@@ -52,6 +71,11 @@ const ASYNC_MODULES = [
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
+  const resolveClientDep = createResolve({
+    // Same as Vite's default resolve conditions
+    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    url: pathToFileURL(options.clientRoot),
+  })
   return {
     name: 'slidev:config',
     async config(config) {
@@ -75,15 +99,24 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               find: 'vue',
               replacement: await resolveImportPath('vue/dist/vue.esm-bundler.js', true),
             },
+            ...(isInstalledGlobally
+              ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
+                find: dep,
+                replacement: fileURLToPath(await resolveClientDep(dep)),
+              })))
+              : []
+            ),
           ],
           dedupe: ['vue'],
         },
         optimizeDeps: {
           exclude: EXCLUDE,
-          include: INCLUDE
-            .filter(i => !EXCLUDE.includes(i))
+          include: isInstalledGlobally
+            ? INCLUDE_GLOBAL
+            : INCLUDE_LOCAL
+              .filter(i => !EXCLUDE.includes(i))
             // We need to specify the full deps path for non-hoisted modules
-            .map(i => `@slidev/cli > @slidev/client > ${i}`),
+              .map(i => `@slidev/cli > @slidev/client > ${i}`),
         },
         css: options.data.config.css === 'unocss'
           ? {

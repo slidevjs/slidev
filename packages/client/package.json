@@ -39,7 +39,6 @@
     "@slidev/types": "workspace:*",
     "@typescript/ata": "^0.9.4",
     "@unhead/vue": "^1.9.5",
-    "@unocss/reset": "^0.59.3",
     "@vueuse/core": "^10.9.0",
     "@vueuse/math": "^10.9.0",
     "@vueuse/motion": "^2.1.0",
@@ -48,7 +47,6 @@
     "file-saver": "^2.0.5",
     "floating-vue": "^5.2.2",
     "fuse.js": "^7.0.0",
-    "katex": "^0.16.10",
     "lz-string": "^1.5.0",
     "mermaid": "^10.9.0",
     "monaco-editor": "^0.47.0",
@@ -59,7 +57,6 @@
     "typescript": "^5.4.5",
     "unocss": "^0.59.3",
     "vue": "^3.4.22",
-    "vue-demi": "^0.14.7",
     "vue-router": "^4.3.0",
     "yaml": "^2.4.1"
   },
