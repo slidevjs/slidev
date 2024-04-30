@@ -9,6 +9,7 @@ import {
   transformerVariantGroup,
 } from 'unocss'
 import { variantMatcher } from '@unocss/preset-mini/utils'
+import extractorMdc from '@unocss/extractor-mdc'
 
 export default defineConfig({
   safelist: [
@@ -47,5 +48,8 @@ export default defineConfig({
   transformers: [
     transformerDirectives({ enforce: 'pre' }),
     transformerVariantGroup(),
+  ],
+  extractors: [
+    extractorMdc(),
   ],
 })
