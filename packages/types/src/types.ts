@@ -28,6 +28,10 @@ export interface SourceSlideInfo extends SlideInfoBase {
   contentStart: number
   end: number
   raw: string
+  /**
+   * Slides import by this slide.
+   */
+  imports?: SourceSlideInfo[]
   frontmatterRaw?: string
   frontmatterDoc?: YAML.Document
   frontmatterStyle?: FrontmatterStyle

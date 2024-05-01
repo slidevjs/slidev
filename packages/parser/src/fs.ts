@@ -50,8 +50,13 @@ export async function load(userRoot: string, filepath: string, content?: string,
       markdownFiles[path] = md
     }
 
-    for (const index of parseRangeString(md.slides.length, range))
-      await loadSlide(md.slides[index - 1], frontmatterOverride, importers)
+    const directImporter = importers?.at(-1)
+    for (const index of parseRangeString(md.slides.length, range)) {
+      const subSlide = md.slides[index - 1]
+      await loadSlide(subSlide, frontmatterOverride, importers)
+      if (directImporter)
+        (directImporter.imports ??= []).push(subSlide)
+    }
 
     return md
   }
