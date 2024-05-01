@@ -1,8 +1,8 @@
-import { computed, onScopeDispose, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
+import { computed, onScopeDispose, reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
 import type { WebviewView } from 'vscode'
 import { commands, window } from 'vscode'
 import { useEditingSlideNo } from '../composables/useEditingSlideNo'
-import { isDarkTheme } from '../config'
+import { isDarkTheme, previewSync } from '../config'
 import { extCtx, previewPort, previewUrl } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useLogger } from './logger'
@@ -38,6 +38,7 @@ export function usePreviewHtml() {
       }
       return false
     }
+    // Not sure why we can't use `localhost:` here
     const ok = await pingUrl(`http://[::1]:${previewPort.value}`) || await pingUrl(`http://127.0.0.1:${previewPort.value}`)
     state.value = ok ? 'ready' : 'error'
     logger.info(`Preview state refreshed: ${state.value}. message: ${message.value}`)
@@ -62,6 +63,12 @@ export const usePreviewWebview = createSingletonComposable(() => {
   const { html, refreshState } = usePreviewHtml()
 
   const view = shallowRef<WebviewView>()
+  const previewNavState = reactive({
+    no: 0,
+    clicks: 0,
+    hasNext: true,
+    hasPrev: false,
+  })
 
   const disposable = window.registerWebviewViewProvider(
     'slidev-preview',
@@ -72,9 +79,11 @@ export const usePreviewWebview = createSingletonComposable(() => {
           enableScripts: true,
           localResourceRoots: [extCtx.value.extensionUri],
         }
-        view.value.webview.onDidReceiveMessage(async ({ command }) => {
-          if (command === 'config-port')
+        view.value.webview.onDidReceiveMessage(async (data) => {
+          if (data.command === 'config-port')
             commands.executeCommand('slidev.config-port')
+          else if (data.command === 'update-state')
+            Object.assign(previewNavState, data.navState)
         })
       },
     },
@@ -84,42 +93,40 @@ export const usePreviewWebview = createSingletonComposable(() => {
 
   const editingSlideNo = useEditingSlideNo()
 
-  function syncState() {
-    if (!view.value)
-      return
-    const webview = view.value.webview
-    webview.postMessage({
+  function postMessage(type: string, data: Record<string, unknown>) {
+    view.value?.webview.postMessage({
       target: 'slidev',
-      type: 'navigate',
-      no: editingSlideNo.value,
-    })
-    webview.postMessage({
-      target: 'slidev',
-      type: 'css-vars',
-      vars: {
-        '--slidev-slide-container-background': 'transparent',
-      },
-    })
-    webview.postMessage({
-      target: 'slidev',
-      type: 'color-schema',
-      color: isDarkTheme.value ? 'dark' : 'light',
+      sender: 'vscode',
+      type,
+      ...data,
     })
   }
-  watchEffect(syncState)
 
+  const pageId = ref(0)
   watchEffect(() => {
     if (!view.value)
       return
-
     view.value.webview.html = html.value
-
     logger.info(`Webview refreshed. Current URL: ${previewUrl.value}`)
+    setTimeout(() => pageId.value++, 300)
   })
+
+  watch([pageId, previewSync, editingSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no }))
+  watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
+  watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
+
+  function useNavOperation(operation: string) {
+    return () => postMessage('navigate', { operation })
+  }
 
   return {
     view,
     refresh: refreshState,
+    previewNavState,
+    nextClick: useNavOperation('next'),
+    prevClick: useNavOperation('prev'),
+    nextSlide: useNavOperation('nextSlide'),
+    prevSlide: useNavOperation('prevSlide'),
   }
 })
 
@@ -175,7 +182,13 @@ function generateReadyHtml() {
       var iframe = document.getElementById('iframe')
       window.addEventListener('message', ({ data }) => {
         if (data && data.target === 'slidev') {
-          iframe.contentWindow.postMessage(data, '*')
+          if (data.sender === 'vscode')
+            iframe.contentWindow.postMessage(data, '*')
+          else
+            vscode.postMessage({
+              command: 'update-state',
+              ...data,
+            })
         }
       })
     </script>

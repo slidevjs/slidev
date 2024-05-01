@@ -4,13 +4,13 @@ import type { SlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, window, workspace } from 'vscode'
+import { useEditingSlideNo } from './composables/useEditingSlideNo'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
-import { configuredPort } from './config'
-import { activeSlidevData, previewPort, previewUrl } from './state'
+import { configuredPort, previewSync } from './config'
+import { activeSlidevData, previewPort } from './state'
+import { getPort } from './utils/getPort'
 import { usePreviewWebview } from './views/previewWebview'
 import { useTerminal } from './views/terminal'
-import { getPort } from './utils/getPort'
-import { useEditingSlideNo } from './composables/useEditingSlideNo'
 
 export function useCommands() {
   const disposables: Disposable[] = []
@@ -35,11 +35,15 @@ export function useCommands() {
     editor.revealRange(slideRange, TextEditorRevealType.AtTop)
   }
 
-  const editingSlide = useEditingSlideSource()
-
   registerCommand('slidev.goto', gotoSlide)
-  registerCommand('slidev.next', () => gotoSlide(editingSlide.markdown.value!.filepath, editingSlide.index.value + 1))
-  registerCommand('slidev.prev', () => gotoSlide(editingSlide.markdown.value!.filepath, editingSlide.index.value - 1))
+  registerCommand('slidev.next', () => {
+    const { markdown, index } = useEditingSlideSource()
+    gotoSlide(markdown.value!.filepath, index.value + 1)
+  })
+  registerCommand('slidev.prev', () => {
+    const { markdown, index } = useEditingSlideSource()
+    gotoSlide(markdown.value!.filepath, index.value - 1)
+  })
 
   registerCommand('slidev.move-up', async (slide: SlideInfo) => {
     const data = activeSlidevData.value
@@ -95,4 +99,12 @@ export function useCommands() {
     const no = useEditingSlideNo().value
     env.openExternal(Uri.parse(`http://localhost:${previewPort.value}/${no}`))
   })
+
+  registerCommand('slidev.preview-prev-click', () => usePreviewWebview().prevClick())
+  registerCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())
+  registerCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
+  registerCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
+
+  registerCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
+  registerCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
 }

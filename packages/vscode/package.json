@@ -57,7 +57,7 @@
       {
         "command": "slidev.refresh-preview",
         "category": "Slidev",
-        "title": "Refresh preview window",
+        "title": "Refresh preview page",
         "icon": "$(refresh)"
       },
       {
@@ -76,6 +76,42 @@
         "category": "Slidev",
         "title": "Open slides in browser",
         "icon": "$(globe)"
+      },
+      {
+        "command": "slidev.preview-prev-click",
+        "category": "Slidev",
+        "title": "Navigate to prev click in preview window.",
+        "icon": "$(arrow-left)"
+      },
+      {
+        "command": "slidev.preview-next-click",
+        "category": "Slidev",
+        "title": "Navigate to next click in preview window.",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "slidev.preview-prev-slide",
+        "category": "Slidev",
+        "title": "Navigate to prev slide in preview window.",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "slidev.preview-next-slide",
+        "category": "Slidev",
+        "title": "Navigate to next slide in preview window.",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "slidev.enable-preview-sync",
+        "category": "Slidev",
+        "title": "Sync preview window with editor cursor",
+        "icon": "$(unlock)"
+      },
+      {
+        "command": "slidev.disable-preview-sync",
+        "category": "Slidev",
+        "title": "Unsync preview window with editor cursor",
+        "icon": "$(lock)"
       }
     ],
     "menus": {
@@ -118,8 +154,68 @@
           "command": "slidev.open-in-browser",
           "when": "view =~ /slidev-preview/ && slidev-connected",
           "group": "navigation"
+        },
+        {
+          "command": "slidev.preview-prev-click",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.preview-next-click",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.preview-prev-slide",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.preview-next-slide",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.enable-preview-sync",
+          "when": "view =~ /slidev-preview/ && !slidev-config.preview-sync",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.disable-preview-sync",
+          "when": "view =~ /slidev-preview/ && slidev-config.preview-sync",
+          "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Slidev",
+      "properties": {
+        "slidev.enabled": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Force enable extension",
+          "default": false
+        },
+        "slidev.port": {
+          "type": "number",
+          "scope": "window",
+          "description": "The port of Slidev server",
+          "default": 3030
+        },
+        "slidev.annotations": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Display annotations for slides markdown files",
+          "default": true
+        },
+        "slidev.preview-sync": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Sync preview window with editor cursor",
+          "default": true
+        }
+      }
     },
     "viewsContainers": {
       "activitybar": [

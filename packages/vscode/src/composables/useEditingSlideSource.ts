@@ -1,10 +1,11 @@
 import { onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { window } from 'vscode'
 import { activeSlidevData } from '../state'
+import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
 import { useMarkdownFromDoc } from './useMarkdownFromDoc'
 
-export function useEditingSlideSource() {
+export const useEditingSlideSource = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
   const markdown = useMarkdownFromDoc(() => editor.value?.document)
   const index = ref(0)
@@ -31,4 +32,4 @@ export function useEditingSlideSource() {
     markdown,
     index,
   }
-}
+})

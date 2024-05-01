@@ -9,8 +9,8 @@ import { skipTransition } from '../logic/hmr'
 import { makeId } from '../logic/utils'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
-import { isDark } from '../logic/dark'
 import { useNav } from '../composables/useNav'
+import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import setups from '#slidev/setups/root'
 
 export default function setupRoot() {
@@ -30,21 +30,7 @@ export default function setupRoot() {
   if (__DEV__) {
     // @ts-expect-error expose global
     window.__slidev__ = context
-    window.addEventListener('message', ({ data }) => {
-      if (data && data.target === 'slidev') {
-        if (data.type === 'navigate') {
-          context.nav.go(+data.no, +data.clicks || 0)
-        }
-        else if (data.type === 'css-vars') {
-          const root = document.documentElement
-          for (const [key, value] of Object.entries(data.vars || {}))
-            root.style.setProperty(key, value as any)
-        }
-        else if (data.type === 'color-schema') {
-          isDark.value = data.color === 'dark'
-        }
-      }
-    })
+    useEmbeddedControl()
   }
 
   // User Setups
