@@ -1,6 +1,6 @@
 import { move } from '@antfu/utils'
 import { save as slidevSave } from '@slidev/parser/fs'
-import type { SlideInfo } from '@slidev/types'
+import type { SourceSlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, window, workspace } from 'vscode'
@@ -45,21 +45,19 @@ export function useCommands() {
     gotoSlide(markdown.value!.filepath, index.value - 1)
   })
 
-  registerCommand('slidev.move-up', async (slide: SlideInfo) => {
-    const data = activeSlidevData.value
-    const { index } = slide.importChain?.[0] ?? slide.source
-    if (!data || index <= 0)
+  registerCommand('slidev.move-up', async ({ filepath, index }: SourceSlideInfo) => {
+    const md = activeSlidevData.value?.markdownFiles[filepath]
+    if (!md || index <= 0)
       return
-    move(data.entry.slides, index, index - 1)
-    slidevSave(data.entry)
+    move(md.slides, index, index - 1)
+    slidevSave(md)
   })
-  registerCommand('slidev.move-down', async (slide: SlideInfo) => {
-    const data = activeSlidevData.value
-    const { index } = slide.importChain?.[0] ?? slide.source
-    if (!data || index >= data.slides.length - 1)
+  registerCommand('slidev.move-down', async ({ filepath, index }: SourceSlideInfo) => {
+    const md = activeSlidevData.value?.markdownFiles[filepath]
+    if (!md || index >= md.slides.length - 1)
       return
-    move(data.entry.slides, index, index + 1)
-    slidevSave(data.entry)
+    move(md.slides, index, index + 1)
+    slidevSave(md)
   })
 
   registerCommand('slidev.refresh-preview', () => {

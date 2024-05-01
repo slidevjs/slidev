@@ -402,9 +402,7 @@ export function createSlidesLoader(
         const [, no, type] = match
         if (type !== 'md')
           return
-
-        const pageNo = Number.parseInt(no) - 1
-        return transformMarkdown(code, pageNo)
+        return transformMarkdown(code, +no - 1)
       },
     },
     {
@@ -476,10 +474,10 @@ export function createSlidesLoader(
     }
   }
 
-  async function transformMarkdown(code: string, pageNo: number) {
+  async function transformMarkdown(code: string, index: number) {
     const layouts = await templateCtx.getLayouts()
-    const frontmatter = getFrontmatter(pageNo)
-    let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+    const frontmatter = getFrontmatter(index)
+    let layoutName = frontmatter?.layout || (index === 0 ? 'cover' : 'default')
     if (!layouts[layoutName]) {
       console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
       + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
@@ -490,7 +488,7 @@ export function createSlidesLoader(
     delete frontmatter.title
     const imports = [
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (pageNo + 1)}.frontmatter`)}"`,
+      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (index + 1)}.frontmatter`)}"`,
       templateImportContextUtils,
       '_provideFrontmatter(frontmatter)',
       templateInitContext,
@@ -503,7 +501,7 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${index})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }

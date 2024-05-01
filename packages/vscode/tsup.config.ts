@@ -60,6 +60,7 @@ export default defineConfig({
   splitting: true,
   clean: true,
   shims: false,
+  sourcemap: true,
   external: [
     'vscode',
   ],

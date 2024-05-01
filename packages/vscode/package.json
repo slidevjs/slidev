@@ -130,12 +130,12 @@
       "view/item/context": [
         {
           "command": "slidev.move-up",
-          "when": "view =~ /slidev-slides/",
+          "when": "view =~ /slidev-slides-tree/",
           "group": "inline@1"
         },
         {
           "command": "slidev.move-down",
-          "when": "view =~ /slidev-slides/",
+          "when": "view =~ /slidev-slides-tree/",
           "group": "inline@1"
         }
       ],
@@ -230,7 +230,7 @@
     "views": {
       "slidev": [
         {
-          "id": "slidev-slides",
+          "id": "slidev-slides-tree",
           "name": "Slides",
           "when": "slidev-enabled"
         },

@@ -94,7 +94,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
     }
   }
 
-  const entry = await loadMarkdown(filepath)
+  const entry = await loadMarkdown(slash(filepath))
 
   const headmatter = {
     title: slides[0]?.title,

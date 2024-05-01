@@ -2,6 +2,7 @@ import { onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { window } from 'vscode'
 import { activeSlidevData } from '../state'
 import { useActiveTextEditor } from './useActiveTextEditor'
+import { useMarkdownFromDoc } from './useMarkdownFromDoc'
 
 export function useEditingSlideNo() {
   const editor = useActiveTextEditor()
@@ -10,13 +11,24 @@ export function useEditingSlideNo() {
 
   function updateSlideNo() {
     const data = activeSlidevData.value
-    if (!data || !editor.value)
+    const md = useMarkdownFromDoc(editor.value?.document).value
+    if (!data || !md || !editor.value)
       return
-    const docPath = editor.value.document.uri.fsPath
     const line = editor.value.selection.active.line + 1
-    const slide = data.slides.find(s => s.source.filepath === docPath && s.source.start <= line && line <= s.source.end)
-    if (slide)
-      slideNo.value = slide.index + 1
+    const slide = md.slides.find(s => s.start <= line && line <= s.end)
+    if (slide) {
+      let source = slide
+      while (true) {
+        const firstChild = source.imports?.[0]
+        if (firstChild)
+          source = firstChild
+        else
+          break
+      }
+      const no = data.slides.findIndex(s => s.source === source) + 1
+      if (no)
+        slideNo.value = no
+    }
   }
 
   updateSlideNo()

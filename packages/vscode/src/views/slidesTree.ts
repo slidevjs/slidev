@@ -1,10 +1,11 @@
-import { save as slidevSave } from '@slidev/parser/fs'
-import type { SlideInfo, SourceSlideInfo } from '@slidev/types'
+import type { SourceSlideInfo } from '@slidev/types'
 import { onScopeDispose, watch } from '@vue/runtime-core'
 import type { TreeItem } from 'vscode'
-import { DataTransferItem, EventEmitter, window } from 'vscode'
+import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, window } from 'vscode'
+import { save as slidevSave } from '@slidev/parser/fs'
 import { activeSlidevData, extCtx } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
+import { toRelativePath } from '../utils/toRelativePath'
 
 export const slideMineType = 'application/slidev.slide'
 
@@ -19,31 +20,35 @@ const layoutIconMap = Object.fromEntries([
   ['intro', 'carbon-identification'],
 ])
 
-function getTreeItem(info: SlideInfo): TreeItem {
-  const layoutName = info.frontmatter.layout || (info.index === 0 ? 'cover' : 'default')
-  const iconName = layoutIconMap[layoutName]
+function getTreeItem(info: SourceSlideInfo): TreeItem {
+  const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === info) === 0
+  const layoutName = info.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
+  const resIconName = layoutIconMap[layoutName] ?? ''
+  const resIconPath = resIconName ? extCtx.value.asAbsolutePath(`dist/res/icons/${resIconName}.svg`) : undefined
   return {
-    label: `${info.index + 1} - ${info.title || ''}`,
-    description: !info.title ? '(Untitled)' : undefined,
-    iconPath: iconName ? extCtx.value.asAbsolutePath(`dist/res/icons/${iconName}.svg`) : undefined,
+    label: `${info.title || ''}`,
+    description: info.imports ? toRelativePath(info.imports[0].filepath) : !info.title ? '(Untitled)' : undefined,
+    iconPath: info.imports ? undefined : resIconPath ?? new ThemeIcon('window'),
     command: {
       command: 'slidev.goto',
       title: 'Goto',
-      arguments: [info.source.filepath, info.source.index],
+      arguments: [info.filepath, info.index],
     },
+    collapsibleState: info.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None,
   }
 }
 
 export const useSlidesTree = createSingletonComposable(() => {
   const onChange = new EventEmitter<void>()
 
-  const treeView = window.createTreeView('slidev-slides', {
+  const treeView = window.createTreeView('slidev-slides-tree', {
     treeDataProvider: {
       onDidChangeTreeData: onChange.event,
       getTreeItem,
       getChildren(element) {
-        if (!element)
-          return activeSlidevData.value?.slides
+        return element
+          ? element.imports
+          : activeSlidevData.value?.entry.slides
       },
     },
     canSelectMany: true,
@@ -51,23 +56,30 @@ export const useSlidesTree = createSingletonComposable(() => {
       dragMimeTypes: [slideMineType],
       dropMimeTypes: [slideMineType],
       handleDrag(slides, dataTransfer) {
-        dataTransfer.set(slideMineType, new DataTransferItem(slides))
-      },
-      handleDrop(target, dataTransfer) {
-        const slides: SlideInfo[] = dataTransfer.get(slideMineType)?.value
-        if (!slides || !target)
-          return
         const data = activeSlidevData.value
         if (!data) {
           window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
           return
         }
-        const sourcesInEntry = slides.map(s => s.importChain?.[0] ?? s.source)
-        const targetIndex = (target.importChain?.[0] ?? target.source).index
-        const oldSlides = data.entry.slides.map(s => sourcesInEntry.includes(s) ? null : s)
+        const sourcesInEntry = slides.filter(s => s.filepath === data.entry.filepath)
+        if (sourcesInEntry.length === 0) {
+          window.showErrorMessage(`Cannot drag and drop slides: None of the selected slides are in the entry Markdown.`)
+          return
+        }
+        dataTransfer.set(slideMineType, new DataTransferItem(sourcesInEntry))
+      },
+      handleDrop(target, dataTransfer) {
+        const slides: SourceSlideInfo[] = dataTransfer.get(slideMineType)?.value
+        if (!slides || !target)
+          return
+        const data = activeSlidevData.value
+        if (!data)
+          return
+        const targetIndex = target.index
+        const oldSlides = data.entry.slides.map(s => slides.includes(s) ? null : s)
         data.entry.slides = [
           ...oldSlides.slice(0, targetIndex + 1),
-          ...sourcesInEntry,
+          ...slides,
           ...oldSlides.slice(targetIndex + 1),
         ].filter(Boolean) as SourceSlideInfo[]
         slidevSave(data.entry)
