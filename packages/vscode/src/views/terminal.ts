@@ -20,7 +20,10 @@ export const useTerminal = createSingletonComposable(() => {
 
     terminal.value = window.createTerminal({
       name: 'Slidev',
-      iconPath: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono.svg')),
+      iconPath: {
+        light: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono.svg')),
+        dark: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono-dark.svg')),
+      },
       isTransient: true,
     })
   }
@@ -48,6 +51,11 @@ export const useTerminal = createSingletonComposable(() => {
       extCtx.value?.globalState.update('pid', pid)
   }
 
+  async function showTerminal() {
+    ensureTerminal()
+    terminal.value!.show()
+  }
+
   return {
     terminal,
     isTerminalActive,
@@ -55,5 +63,6 @@ export const useTerminal = createSingletonComposable(() => {
     closeTerminal,
     endProcess,
     executeCommand,
+    showTerminal,
   }
 })

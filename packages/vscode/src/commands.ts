@@ -3,14 +3,18 @@ import { save as slidevSave } from '@slidev/parser/fs'
 import type { SlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
-import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
+import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, window, workspace } from 'vscode'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { configuredPort } from './config'
-import { activeSlidevData } from './state'
+import { activeSlidevData, previewPort, previewUrl } from './state'
 import { usePreviewWebview } from './views/previewWebview'
+import { useTerminal } from './views/terminal'
+import { getPort } from './utils/getPort'
+import { useEditingSlideNo } from './composables/useEditingSlideNo'
 
 export function useCommands() {
   const disposables: Disposable[] = []
+  onScopeDispose(() => disposables.forEach(d => d.dispose()))
   function registerCommand(command: string, callback: (...args: any[]) => any) {
     disposables.push(commands.registerCommand(command, callback))
   }
@@ -54,8 +58,10 @@ export function useCommands() {
     slidevSave(data.entry)
   })
 
-  const { refresh } = usePreviewWebview()
-  registerCommand('slidev.preview-refresh', refresh)
+  registerCommand('slidev.refresh-preview', () => {
+    const { refresh } = usePreviewWebview()
+    refresh()
+  })
 
   registerCommand('slidev.config-port', async () => {
     const port = await window.showInputBox({
@@ -74,5 +80,19 @@ export function useCommands() {
     configuredPort.value = +port
   })
 
-  onScopeDispose(() => disposables.forEach(d => d.dispose()))
+  registerCommand('slidev.start-dev', async () => {
+    const port = await getPort()
+    const { executeCommand, showTerminal } = useTerminal()
+
+    executeCommand(`pnpm slidev --port ${port}`)
+    showTerminal()
+
+    const { refresh } = usePreviewWebview()
+    setTimeout(refresh, 2000)
+  })
+
+  registerCommand('slidev.open-in-browser', async () => {
+    const no = useEditingSlideNo().value
+    env.openExternal(Uri.parse(`http://localhost:${previewPort.value}/${no}`))
+  })
 }

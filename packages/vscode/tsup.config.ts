@@ -71,7 +71,7 @@ export default defineConfig({
     if (!existsSync(iconsDir))
       mkdirSync(iconsDir, { recursive: true })
 
-    for (const file of ['logo-mono.svg', 'logo.png', 'logo.svg'])
+    for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
       copyFileSync(resolve(assetsDir, file), resolve(resDir, file))
 
     for (const icon of ICON_NAMES) {

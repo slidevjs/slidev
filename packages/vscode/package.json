@@ -55,15 +55,27 @@
         "icon": "$(triangle-down)"
       },
       {
-        "command": "slidev.preview-refresh",
+        "command": "slidev.refresh-preview",
         "category": "Slidev",
-        "title": "Preview Refresh",
+        "title": "Refresh preview window",
         "icon": "$(refresh)"
       },
       {
         "command": "slidev.config-port",
         "category": "Slidev",
-        "title": "Configure Preview Port"
+        "title": "Configure preview port"
+      },
+      {
+        "command": "slidev.start-dev",
+        "category": "Slidev",
+        "title": "Start slidev dev server",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "slidev.open-in-browser",
+        "category": "Slidev",
+        "title": "Open slides in browser",
+        "icon": "$(globe)"
       }
     ],
     "menus": {
@@ -93,8 +105,18 @@
       ],
       "view/title": [
         {
-          "command": "slidev.preview-refresh",
+          "command": "slidev.start-dev",
+          "when": "view =~ /slidev-preview/ && !slidev-connected",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.refresh-preview",
           "when": "view =~ /slidev-preview/",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.open-in-browser",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
           "group": "navigation"
         }
       ]
