@@ -11,7 +11,6 @@ import yargs from 'yargs'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { ResolvedSlidevOptions, SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
-import isInstalledGlobally from 'is-installed-globally'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
@@ -23,7 +22,7 @@ import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
 import { loadSetups } from './setups/load'
-import { getRoots, resolveEntry } from './resolver'
+import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import { resolveAddons } from './integrations/addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
@@ -623,7 +622,7 @@ function printInfo(
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally ? yellow('(global)') : ''}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value ? yellow('(global)') : ''}`)
   console.log()
 
   verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
