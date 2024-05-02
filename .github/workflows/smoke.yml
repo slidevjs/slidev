@@ -14,7 +14,47 @@ on:
   workflow_dispatch:
 
 jobs:
+  pack:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Setup
+        run: npm i -g @antfu/ni
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+
+      - name: Install
+        run: nci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: Build
+        run: nr build
+
+      - name: Pack
+        run: node ./scripts/pack.mjs /tmp/slidev-pkgs
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: slidev-packages
+          path: /tmp/slidev-pkgs
+
   test:
+    needs: pack
     timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
@@ -22,7 +62,7 @@ jobs:
       matrix:
         node-version: [18.x]
         os: [ubuntu-latest, windows-latest]
-        pm: [yarn, npm, pnpm]
+        pm: [npm, pnpm] # yarn not working in this CI
         hoist: [true, false]
 
     steps:
@@ -33,10 +73,10 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.x
 
       - name: Setup
         run: npm i -g @antfu/ni
@@ -47,15 +87,15 @@ jobs:
       - name: Install
         run: nci
 
-      - name: Build
-        run: nr build
-
-      - name: Pack
-        run: node ./scripts/pack.mjs ../temp/slidev-pkgs
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: slidev-packages
+          path: /tmp/slidev-pkgs
 
       - name: Create new project
         run: |
-          npm i -g ../temp/slidev-pkgs/create-app.tgz
+          npm i -g /tmp/slidev-pkgs/create-app.tgz
           echo "N" | create-slidev ../temp/slidev-project
 
       - name: Remove npmrc
@@ -68,12 +108,12 @@ jobs:
         working-directory: ../temp/slidev-project
 
       - name: Install project (npm, pnpm)
-        run: ${{ matrix.pm }} i ../slidev-pkgs/cli.tgz playwright-chromium
+        run: ${{ matrix.pm }} i /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm != 'yarn' }}
 
       - name: Install project (yarn)
-        run: yarn add ../slidev-pkgs/cli.tgz playwright-chromium
+        run: yarn add /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm == 'yarn' }}
 
@@ -92,7 +132,7 @@ jobs:
 
       - name: Install globally
         run: |
-          ${{ matrix.pm }} i -g ${{ github.workspace }}/../temp/slidev-pkgs/cli.tgz playwright-chromium
+          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium
           ${{ matrix.pm }} i -g @slidev/theme-seriph
         if: ${{ matrix.pm != 'yarn' }}
 

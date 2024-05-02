@@ -5,8 +5,6 @@ import fg from 'fast-glob'
 import Markdown from 'markdown-it'
 import { bold, gray, red, yellow } from 'kolorist'
 
-// @ts-expect-error missing types
-import mila from 'markdown-it-link-attributes'
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
@@ -21,6 +19,7 @@ import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
+import markdownItLink from '../syntax/markdown-it/markdown-it-link'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -66,12 +65,7 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
 }
 
 const md = Markdown({ html: true })
-md.use(mila, {
-  attrs: {
-    target: '_blank',
-    rel: 'noopener',
-  },
-})
+md.use(markdownItLink)
 
 function renderNote(text: string = '') {
   let clickCount = 0
