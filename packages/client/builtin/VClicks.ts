@@ -7,7 +7,7 @@
 import { toArray } from '@antfu/utils'
 import type { VNode, VNodeArrayChildren } from 'vue'
 import { Comment, createVNode, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
-import { normalizeAtValue } from '../composables/useClicks'
+import { normalizeSingleAtValue } from '../composables/useClicks'
 import VClickGap from './VClickGap.vue'
 
 const listTags = ['ul', 'ol']
@@ -37,9 +37,9 @@ export default defineComponent({
   },
   render() {
     const every = +this.every
-    const at = normalizeAtValue(this.at)
+    const at = normalizeSingleAtValue(this.at)
     const isRelative = typeof at === 'string'
-    if (typeof at !== 'string' && typeof at !== 'number') {
+    if (!at) {
       console.warn('[slidev] Invalid at prop for v-clicks component:', at)
       return
     }

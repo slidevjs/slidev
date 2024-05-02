@@ -194,12 +194,23 @@ You can also specify the enter and leave index for the `v-click` directive by pa
 <div v-click.hide="[2, 4]">
   This will be hidden at click 2 and 3.
 </div>
-
 <div v-click />
 <div v-click="'[+1, +1]'">
   This will be shown at click 3, and hidden since click 4.
 </div>
 ```
+
+You can also use `v-switch` to achieve the same effect:
+
+```md
+<v-switch>
+  <template #1> show at click 1, hide at click 2. </template>
+  <template #2> show at click 2, hide at click 5. </template>
+  <template #5-7> show at click 5, hide at click 7. </template>
+</v-switch>
+```
+
+See [`VSwitch` Component](/builtin/components#vswitch) for more details.
 
 ### Custom Total Clicks Count
 
