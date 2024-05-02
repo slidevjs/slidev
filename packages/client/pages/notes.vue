@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { configs } from '../env'
+import { slidesTitle } from '../env'
 import { sharedState } from '../state/shared'
 import { fullscreen } from '../state'
 
@@ -10,10 +10,7 @@ import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
 import { useNav } from '../composables/useNav'
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-useHead({
-  title: `Notes - ${slideTitle}`,
-})
+useHead({ title: `Notes - ${slidesTitle}` })
 
 const { slides, total } = useNav()
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
@@ -39,20 +36,20 @@ function decreaseFontSize() {
 
 <template>
   <div
-    class="fixed top-0 left-0 h-2px bg-teal-500 transition-all duration-500"
-    :style="{ width: `${(pageNo - 1) / total * 100}%` }"
+    class="fixed top-0 left-0 h-3px bg-primary transition-all duration-500"
+    :style="{ width: `${(pageNo - 1) / (total - 1) * 100 + 1}%` }"
   />
-  <div class="h-full flex flex-col">
+  <div class="h-full pt-2 flex flex-col">
     <div
       ref="scroller"
       class="px-5 flex-auto h-full overflow-auto"
       :style="{ fontSize: `${fontSize}px` }"
     >
       <NoteDisplay
-        :note="currentRoute?.meta?.slide?.note"
-        :note-html="currentRoute?.meta?.slide?.noteHTML"
+        :note="currentRoute?.meta.slide.note"
+        :note-html="currentRoute?.meta.slide.noteHTML"
         :placeholder="`No notes for Slide ${pageNo}.`"
-        :clicks-context="currentRoute?.meta?.__clicksContext"
+        :clicks-context="currentRoute?.meta.__clicksContext"
         :auto-scroll="true"
       />
     </div>

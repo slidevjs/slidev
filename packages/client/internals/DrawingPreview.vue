@@ -12,4 +12,4 @@ const { drawingState } = useDrawings()
     class="w-full h-full absolute top-0 pointer-events-none"
     v-html="drawingState[page]"
   />
-</template>../composables/drawings
+</template>

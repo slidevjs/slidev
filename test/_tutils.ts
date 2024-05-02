@@ -7,10 +7,6 @@ export function createTransformContext(code: string): MarkdownTransformContext {
   return {
     s,
     id: '1.md',
-    ignores: [],
-    isIgnored(index: number) {
-      return this.ignores.some(([start, end]) => index >= start && index < end)
-    },
     options: {
       userRoot: path.join(__dirname, './fixtures/'),
       data: {

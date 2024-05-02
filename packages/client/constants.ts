@@ -11,7 +11,6 @@ export const injectionSlideScale = '$$slidev-slide-scale' as unknown as Injectio
 export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
 export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<SlideRoute>
 export const injectionRenderContext = '$$slidev-render-context' as unknown as InjectionKey<Ref<RenderContext>>
-export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
 export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
 export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionKey<ComputedRef<number>>
 

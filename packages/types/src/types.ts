@@ -113,8 +113,8 @@ export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previ
 
 export interface SlideRoute {
   no: number
-  meta: RouteMeta
-  component: () => Promise<RouteComponent>
+  meta: RouteMeta & Required<Pick<RouteMeta, 'slide'>>
+  component: () => Promise<{ default: RouteComponent }>
 }
 
 export type LoadedSnippets = Record<string, string>
