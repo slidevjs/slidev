@@ -20,15 +20,12 @@ if (Number.isNaN(delta)) {
 }
 
 onMounted(() => {
-  if (!clicks)
-    return
-
   const max = clicks.currentOffset + delta - 1
   clicks.register(id, { max, delta })
 })
 
 onUnmounted(() => {
-  clicks?.unregister(id)
+  clicks.unregister(id)
 })
 </script>
 
