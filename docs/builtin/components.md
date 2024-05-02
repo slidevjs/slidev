@@ -276,7 +276,7 @@ See https://sli.dev/guide/animations.html
 
 Switch between multiple slots based on clicks.
 
-See http://localhost:5173/guide/animations#enter-leave
+See https://sli.dev/guide/animations.html#enter-leave
 
 - If the `unmount` prop is set to `true`, the previous slot will be unmounted when switching to the next slot. Default is `false`.
 - Use the `tag` and `childTag` props to change the default tag of the component and its children. Default is `div`.
