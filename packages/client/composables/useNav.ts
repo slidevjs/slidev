@@ -301,6 +301,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
       return v
     },
     set(v) {
+      skipTransition.value = false
       queryClicksRaw.value = v.toString()
     },
   })

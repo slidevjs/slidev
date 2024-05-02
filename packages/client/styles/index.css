@@ -49,6 +49,10 @@ html {
   user-select: none !important;
 }
 
+.slidev-vclick-display-none {
+  display: none !important;
+}
+
 .slidev-vclick-fade {
   opacity: 0.5;
 }
