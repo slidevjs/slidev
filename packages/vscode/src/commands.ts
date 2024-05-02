@@ -4,7 +4,7 @@ import type { SourceSlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, window, workspace } from 'vscode'
-import { useEditingSlideNo } from './composables/useEditingSlideNo'
+import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { configuredPort, previewSync } from './config'
 import { activeSlidevData, previewPort } from './state'
@@ -19,7 +19,7 @@ export function useCommands() {
     disposables.push(commands.registerCommand(command, callback))
   }
 
-  async function gotoSlide(filepath: string, index: number) {
+  async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
     const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
     if (!slide)
       return
@@ -33,16 +33,24 @@ export function useCommands() {
     const endPos = new Position(slide.end, 0)
     const slideRange = new Range(startPos, endPos)
     editor.revealRange(slideRange, TextEditorRevealType.AtTop)
+
+    const no = getNo?.()
+    if (no) {
+      const focusedSlideNo = useFocusedSlideNo()
+      focusedSlideNo.value = no
+    }
   }
 
   registerCommand('slidev.goto', gotoSlide)
   registerCommand('slidev.next', () => {
     const { markdown, index } = useEditingSlideSource()
-    gotoSlide(markdown.value!.filepath, index.value + 1)
+    const focusedSlideNo = useFocusedSlideNo()
+    gotoSlide(markdown.value!.filepath, index.value + 1, () => focusedSlideNo.value + 1)
   })
   registerCommand('slidev.prev', () => {
     const { markdown, index } = useEditingSlideSource()
-    gotoSlide(markdown.value!.filepath, index.value - 1)
+    const focusedSlideNo = useFocusedSlideNo()
+    gotoSlide(markdown.value!.filepath, index.value - 1, () => focusedSlideNo.value - 1)
   })
 
   registerCommand('slidev.move-up', async ({ filepath, index }: SourceSlideInfo) => {
@@ -94,7 +102,7 @@ export function useCommands() {
   })
 
   registerCommand('slidev.open-in-browser', async () => {
-    const no = useEditingSlideNo().value
+    const no = useFocusedSlideNo().value
     env.openExternal(Uri.parse(`http://localhost:${previewPort.value}/${no}`))
   })
 

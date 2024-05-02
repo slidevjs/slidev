@@ -6,6 +6,7 @@ import { save as slidevSave } from '@slidev/parser/fs'
 import { activeSlidevData, extCtx } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
+import { getSlideNo } from '../utils/getSlideNo'
 
 export const slideMineType = 'application/slidev.slide'
 
@@ -20,21 +21,22 @@ const layoutIconMap = Object.fromEntries([
   ['intro', 'carbon-identification'],
 ])
 
-function getTreeItem(info: SourceSlideInfo): TreeItem {
-  const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === info) === 0
-  const layoutName = info.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
+function getTreeItem(element: SourceSlideInfo[]): TreeItem {
+  const slide = element.at(-1)!
+  const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === slide) === 0
+  const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
   const resIconName = layoutIconMap[layoutName] ?? ''
   const resIconPath = resIconName ? extCtx.value.asAbsolutePath(`dist/res/icons/${resIconName}.svg`) : undefined
   return {
-    label: `${info.title || ''}`,
-    description: info.imports ? toRelativePath(info.imports[0].filepath) : !info.title ? '(Untitled)' : undefined,
-    iconPath: info.imports ? undefined : resIconPath ?? new ThemeIcon('window'),
+    label: slide.title,
+    description: slide.imports ? toRelativePath(slide.imports[0].filepath) : !slide.title ? '(Untitled)' : undefined,
+    iconPath: slide.imports ? undefined : resIconPath ?? new ThemeIcon('window'),
     command: {
       command: 'slidev.goto',
       title: 'Goto',
-      arguments: [info.filepath, info.index],
+      arguments: [slide.filepath, slide.index, () => getSlideNo(slide, element.slice(0, -1))],
     },
-    collapsibleState: info.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None,
+    collapsibleState: slide.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None,
   }
 }
 
@@ -47,21 +49,21 @@ export const useSlidesTree = createSingletonComposable(() => {
       getTreeItem,
       getChildren(element) {
         return element
-          ? element.imports
-          : activeSlidevData.value?.entry.slides
+          ? element.at(-1)!.imports?.map(s => element.concat(s))
+          : activeSlidevData.value?.entry.slides.map(s => [s])
       },
     },
     canSelectMany: true,
     dragAndDropController: {
       dragMimeTypes: [slideMineType],
       dropMimeTypes: [slideMineType],
-      handleDrag(slides, dataTransfer) {
+      handleDrag(elements, dataTransfer) {
         const data = activeSlidevData.value
         if (!data) {
           window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
           return
         }
-        const sourcesInEntry = slides.filter(s => s.filepath === data.entry.filepath)
+        const sourcesInEntry = elements.filter(s => s.at(-1)!.filepath === data.entry.filepath)
         if (sourcesInEntry.length === 0) {
           window.showErrorMessage(`Cannot drag and drop slides: None of the selected slides are in the entry Markdown.`)
           return
@@ -75,7 +77,7 @@ export const useSlidesTree = createSingletonComposable(() => {
         const data = activeSlidevData.value
         if (!data)
           return
-        const targetIndex = target.index
+        const targetIndex = target.at(-1)!.index
         const oldSlides = data.entry.slides.map(s => slides.includes(s) ? null : s)
         data.entry.slides = [
           ...oldSlides.slice(0, targetIndex + 1),

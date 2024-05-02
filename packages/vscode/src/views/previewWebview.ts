@@ -1,7 +1,7 @@
 import { computed, onScopeDispose, reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
 import type { WebviewView } from 'vscode'
 import { commands, window } from 'vscode'
-import { useEditingSlideNo } from '../composables/useEditingSlideNo'
+import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { isDarkTheme, previewSync } from '../config'
 import { extCtx, previewPort, previewUrl } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
@@ -91,7 +91,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
   )
   onScopeDispose(() => disposable.dispose())
 
-  const editingSlideNo = useEditingSlideNo()
+  const focusedSlideNo = useFocusedSlideNo()
 
   function postMessage(type: string, data: Record<string, unknown>) {
     view.value?.webview.postMessage({
@@ -111,7 +111,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
     setTimeout(() => pageId.value++, 300)
   })
 
-  watch([pageId, previewSync, editingSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no }))
+  watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no }))
   watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
   watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
 
