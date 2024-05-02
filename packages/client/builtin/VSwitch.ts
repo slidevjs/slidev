@@ -34,7 +34,7 @@ export default defineComponent({
     },
   },
   setup({ at, unmount, transition, tag, childTag }, { slots }) {
-    const slotEntries = Object.entries(slots).sort((a, b) => - a[0].split('-')[0] + +b[0].split('-')[0])
+    const slotEntries = Object.entries(slots).sort((a, b) => -a[0].split('-')[0] + +b[0].split('-')[0])
     const contents: [start: number, end: number, slot: Slot<any> | undefined, elRef: Ref<HTMLElement | undefined>][] = []
 
     let lastStart: number | undefined
@@ -43,7 +43,8 @@ export default defineComponent({
       if (Number.isFinite(+range)) {
         contents.push([+range, lastStart ?? +range + 1, slot, elRef])
         lastStart = +range
-      } else {
+      }
+      else {
         const [start, end] = range.split('-').map(Number)
         if (!Number.isFinite(start) || !Number.isFinite(end))
           throw new Error(`Invalid range for v-switch: ${range}`)
@@ -82,7 +83,7 @@ export default defineComponent({
     const transitionProps = transition && {
       ...resolveTransition(transition, nav.value.navDirection < 0),
       tag,
-      onAfterLeave
+      onAfterLeave,
     }
 
     return () => {
@@ -93,7 +94,7 @@ export default defineComponent({
         if (unmount && !visible)
           continue
         children.push(h(childTag, {
-          key: i,
+          'key': i,
           ref,
           'class': [
             CLASS_VCLICK_TARGET,
