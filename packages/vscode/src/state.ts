@@ -17,7 +17,8 @@ export const activeSlidevData = shallowRef<LoadedSlidevData | null>(null)
 
 export const detectedPort = ref<number | null>(null)
 export const previewPort = computed(() => detectedPort.value ?? configuredPort.value)
-export const previewUrl = computed(() => `http://localhost:${previewPort.value}?embedded`)
+export const previewOrigin = computed(() => `http://localhost:${previewPort.value}`)
+export const previewUrl = computed(() => `${previewOrigin.value}?embedded=true`)
 
 export async function useGlobalStates() {
   const logger = useLogger()

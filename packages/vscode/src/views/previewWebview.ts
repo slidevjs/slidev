@@ -3,11 +3,11 @@ import type { WebviewView } from 'vscode'
 import { commands, window } from 'vscode'
 import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { isDarkTheme, previewSync } from '../config'
-import { extCtx, previewPort, previewUrl } from '../state'
+import { extCtx, previewOrigin, previewPort, previewUrl } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useLogger } from './logger'
 
-export function usePreviewHtml() {
+const usePreviewHtml = createSingletonComposable(() => {
   const logger = useLogger()
 
   const state = ref<'pending' | 'ready' | 'error'>('pending')
@@ -22,11 +22,11 @@ export function usePreviewHtml() {
   )
 
   let isWorking = false
-  async function refreshState() {
+  async function refreshState(setPending: boolean) {
+    setPending && (state.value = 'pending')
     if (isWorking)
       return
     isWorking = true
-    state.value = 'pending'
     message.value = ''
     async function pingUrl(url: string) {
       try {
@@ -45,7 +45,11 @@ export function usePreviewHtml() {
     isWorking = false
   }
 
-  watch([previewPort], refreshState)
+  refreshState(true)
+  watch([previewPort], () => refreshState(true))
+
+  const interval = setInterval(() => refreshState(false), 4000)
+  onScopeDispose(() => clearInterval(interval))
 
   watchEffect(() => {
     if (state.value !== 'pending')
@@ -54,13 +58,15 @@ export function usePreviewHtml() {
 
   return {
     html,
+    state,
     refreshState,
   }
-}
+})
 
 export const usePreviewWebview = createSingletonComposable(() => {
   const logger = useLogger()
-  const { html, refreshState } = usePreviewHtml()
+  const { html, state, refreshState } = usePreviewHtml()
+  const focusedSlideNo = useFocusedSlideNo()
 
   const view = shallowRef<WebviewView>()
   const previewNavState = reactive({
@@ -69,6 +75,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
     hasNext: true,
     hasPrev: false,
   })
+  const initializedClientId = ref('')
 
   const disposable = window.registerWebviewViewProvider(
     'slidev-preview',
@@ -80,18 +87,28 @@ export const usePreviewWebview = createSingletonComposable(() => {
           localResourceRoots: [extCtx.value.extensionUri],
         }
         view.value.webview.onDidReceiveMessage(async (data) => {
-          if (data.command === 'config-port')
+          if (data.command === 'start-dev') {
+            commands.executeCommand('slidev.start-dev')
+          }
+          else if (data.command === 'config-port') {
             commands.executeCommand('slidev.config-port')
-          else if (data.command === 'update-state')
+          }
+          else if (data.command === 'update-state') {
             Object.assign(previewNavState, data.navState)
+            if (initializedClientId.value !== data.clientId) {
+              initializedClientId.value = data.clientId
+              setTimeout(() => {
+                if (previewSync.value && initializedClientId.value === data.clientId)
+                  postMessage('navigate', { no: focusedSlideNo.value })
+              }, 300)
+            }
+          }
         })
       },
     },
     { webviewOptions: { retainContextWhenHidden: true } },
   )
   onScopeDispose(() => disposable.dispose())
-
-  const focusedSlideNo = useFocusedSlideNo()
 
   function postMessage(type: string, data: Record<string, unknown>) {
     view.value?.webview.postMessage({
@@ -103,7 +120,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
   }
 
   const pageId = ref(0)
-  watchEffect(() => {
+  watch([view, html, previewUrl], () => {
     if (!view.value)
       return
     view.value.webview.html = html.value
@@ -121,7 +138,9 @@ export const usePreviewWebview = createSingletonComposable(() => {
 
   return {
     view,
-    refresh: refreshState,
+    state,
+    refresh: () => refreshState(true),
+    retry: () => state.value === 'error' && refreshState(false),
     previewNavState,
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
@@ -179,15 +198,16 @@ function generateReadyHtml() {
   <body>
     <iframe id="iframe" sandbox="allow-same-origin allow-scripts" src="${previewUrl.value}"></iframe>
     <script>
-      var iframe = document.getElementById('iframe')
+      const vscode = acquireVsCodeApi()
+      const iframe = document.getElementById('iframe')
       window.addEventListener('message', ({ data }) => {
         if (data && data.target === 'slidev') {
           if (data.sender === 'vscode')
             iframe.contentWindow.postMessage(data, '*')
           else
             vscode.postMessage({
-              command: 'update-state',
               ...data,
+              command: 'update-state',
             })
         }
       })
@@ -205,11 +225,7 @@ function generateErrorHtml() {
   <head>
   <script>
     const vscode = acquireVsCodeApi()
-    window.configPort = () => {
-      vscode.postMessage({
-        command: 'config-port'
-      })
-    }
+    window.sendCommand = (command) => void vscode.postMessage({ command })
   </script>
   <style>
   button {
@@ -217,6 +233,7 @@ function generateErrorHtml() {
     color: var(--vscode-button-secondaryForeground);
     border: none;
     padding: 8px 12px;
+    flex-grow: 1;
   }
   button:hover {
     background: var(--vscode-button-secondaryHoverBackground);
@@ -227,18 +244,29 @@ function generateErrorHtml() {
     background: var(--vscode-textBlockQuote-border);
     border-radius: 4px;
     padding: 3px 5px;
+    text-wrap: nowrap;
+  }
+  .action-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    max-width: 180px;
+    margin: 0 auto;
   }
   </style>
   <body>
     <div style="text-align: center">
       <p>
-        Slidev server is not found on <code>${previewUrl.value}</code>
+        Slidev server not found on <code>${previewOrigin.value}</code>
       </p>
       <p>
-        please run <code style="color: #679bbb">$ slidev</code> first
+        please start the server first.
       </p>
-      <br>
-      <button onclick="configPort()"> Config Server Port </button>
+      <div class="action-container">
+        <button onclick="sendCommand('start-dev')"> Start Dev Server </button>
+        <button onclick="sendCommand('config-port')"> Configure Port </button>
+      </div>
     </div>
   </body>
   `

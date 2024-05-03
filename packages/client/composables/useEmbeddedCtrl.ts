@@ -1,9 +1,12 @@
 import { throttledWatch } from '@vueuse/core'
 import { useNav } from '../composables/useNav'
 import { isDark } from '../logic/dark'
+import { makeId } from '../logic/utils'
 
 export function useEmbeddedControl() {
   const nav = useNav()
+  const clientId = makeId()
+
   window.addEventListener('message', ({ data }) => {
     if (data && data.target === 'slidev') {
       if (data.type === 'navigate') {
@@ -34,6 +37,7 @@ export function useEmbeddedControl() {
         window.parent.postMessage(
           {
             target: 'slidev',
+            clientId,
             navState: {
               no,
               clicks,
@@ -46,6 +50,7 @@ export function useEmbeddedControl() {
       },
       {
         throttle: 300,
+        immediate: true,
       },
     )
   }

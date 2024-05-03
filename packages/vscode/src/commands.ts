@@ -94,11 +94,14 @@ export function useCommands() {
     const port = await getPort()
     const { executeCommand, showTerminal } = useTerminal()
 
-    executeCommand(`pnpm slidev --port ${port}`)
-    showTerminal()
+    executeCommand(`npm exec slidev -- --port ${port}`)
+    await showTerminal()
 
-    const { refresh } = usePreviewWebview()
-    setTimeout(refresh, 2000)
+    const { retry } = usePreviewWebview()
+    setTimeout(retry, 3000)
+    setTimeout(retry, 5000)
+    setTimeout(retry, 7000)
+    setTimeout(retry, 9000)
   })
 
   registerCommand('slidev.open-in-browser', async () => {
