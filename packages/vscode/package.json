@@ -127,63 +127,51 @@
           "group": "navigation"
         }
       ],
-      "view/item/context": [
-        {
-          "command": "slidev.move-up",
-          "when": "view =~ /slidev-slides-tree/",
-          "group": "inline@1"
-        },
-        {
-          "command": "slidev.move-down",
-          "when": "view =~ /slidev-slides-tree/",
-          "group": "inline@1"
-        }
-      ],
       "view/title": [
-        {
-          "command": "slidev.start-dev",
-          "when": "view =~ /slidev-preview/ && !slidev-connected",
-          "group": "navigation"
-        },
-        {
-          "command": "slidev.refresh-preview",
-          "when": "view =~ /slidev-preview/",
-          "group": "navigation"
-        },
-        {
-          "command": "slidev.open-in-browser",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
-          "group": "navigation"
-        },
-        {
-          "command": "slidev.preview-prev-click",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
-          "group": "navigation"
-        },
-        {
-          "command": "slidev.preview-next-click",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
-          "group": "navigation"
-        },
         {
           "command": "slidev.preview-prev-slide",
           "when": "view =~ /slidev-preview/ && slidev-connected",
-          "group": "navigation"
+          "group": "navigation@1"
         },
         {
           "command": "slidev.preview-next-slide",
           "when": "view =~ /slidev-preview/ && slidev-connected",
-          "group": "navigation"
+          "group": "navigation@2"
+        },
+        {
+          "command": "slidev.preview-prev-click",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation@3"
+        },
+        {
+          "command": "slidev.preview-next-click",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation@4"
+        },
+        {
+          "command": "slidev.start-dev",
+          "when": "view =~ /slidev-preview/ && !slidev-connected",
+          "group": "navigation@5"
+        },
+        {
+          "command": "slidev.open-in-browser",
+          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "group": "navigation@5"
+        },
+        {
+          "command": "slidev.refresh-preview",
+          "when": "view =~ /slidev-preview/",
+          "group": "navigation@6"
         },
         {
           "command": "slidev.enable-preview-sync",
           "when": "view =~ /slidev-preview/ && !slidev-config.preview-sync",
-          "group": "navigation"
+          "group": "navigation@7"
         },
         {
           "command": "slidev.disable-preview-sync",
           "when": "view =~ /slidev-preview/ && slidev-config.preview-sync",
-          "group": "navigation"
+          "group": "navigation@7"
         }
       ]
     },
