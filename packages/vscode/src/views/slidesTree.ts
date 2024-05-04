@@ -20,6 +20,11 @@ const layoutIconMap = Object.fromEntries([
   ['image-right', 'carbon-open-panel-filled-right'],
   ['intro', 'carbon-identification'],
 ])
+/**
+ *
+ * @param element split-horizontal
+ * @returns
+ */
 
 function getTreeItem(element: SourceSlideInfo[]): TreeItem {
   const slide = element.at(-1)!
@@ -30,7 +35,7 @@ function getTreeItem(element: SourceSlideInfo[]): TreeItem {
   return {
     label: slide.title,
     description: slide.imports ? toRelativePath(slide.imports[0].filepath) : !slide.title ? '(Untitled)' : undefined,
-    iconPath: slide.imports ? undefined : resIconPath ?? new ThemeIcon('window'),
+    iconPath: slide.imports ? new ThemeIcon('symbol-reference') : resIconPath ?? new ThemeIcon('window'),
     command: {
       command: 'slidev.goto',
       title: 'Goto',
