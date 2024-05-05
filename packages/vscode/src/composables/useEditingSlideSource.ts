@@ -1,6 +1,6 @@
 import { onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { window } from 'vscode'
-import { activeSlidevData } from '../state'
+import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
 import { useMarkdownFromDoc } from './useMarkdownFromDoc'

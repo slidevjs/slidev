@@ -25,33 +25,43 @@
   "contributes": {
     "commands": [
       {
+        "command": "slidev.choose-entry",
+        "category": "Slidev",
+        "title": "Choose active slides entry."
+      },
+      {
+        "command": "slidev.add-entry",
+        "category": "Slidev",
+        "title": "Choose Markdown files to add as slides entries."
+      },
+      {
+        "command": "slidev.set-as-active",
+        "category": "Slidev",
+        "title": "Set the given entry file as the active one",
+        "icon": "$(eye)"
+      },
+      {
         "command": "slidev.prev",
         "category": "Slidev",
-        "title": "Go to previous slide",
+        "title": "Go to previous slide in this Markdown",
         "icon": "$(chevron-up)"
       },
       {
         "command": "slidev.next",
         "category": "Slidev",
-        "title": "Go to next slide",
+        "title": "Go to next slide in this Markdown",
         "icon": "$(chevron-down)"
-      },
-      {
-        "command": "slidev.focus-side-panel",
-        "category": "Slidev",
-        "title": "Focus side panel",
-        "icon": "dist/res/logo-mono.svg"
       },
       {
         "command": "slidev.move-up",
         "category": "Slidev",
-        "title": "Move slide up",
+        "title": "Move slide up in this Markdown",
         "icon": "$(triangle-up)"
       },
       {
         "command": "slidev.move-down",
         "category": "Slidev",
-        "title": "Move slide down",
+        "title": "Move slide down in this Markdown",
         "icon": "$(triangle-down)"
       },
       {
@@ -173,6 +183,13 @@
           "when": "view =~ /slidev-preview/ && slidev-config.preview-sync",
           "group": "navigation@7"
         }
+      ],
+      "view/item/context": [
+        {
+          "command": "slidev.set-as-active",
+          "when": "view == slidev-projects-tree && viewItem == inactive-project",
+          "group": "inline"
+        }
       ]
     },
     "configuration": {
@@ -218,18 +235,29 @@
     "views": {
       "slidev": [
         {
+          "id": "slidev-projects-tree",
+          "name": "Projects",
+          "visibility": "collapsed"
+        },
+        {
           "id": "slidev-slides-tree",
           "name": "Slides",
-          "when": "slidev-enabled"
+          "visibility": "visible"
         },
         {
           "type": "webview",
           "id": "slidev-preview",
           "name": "Preview",
-          "when": "slidev-enabled"
+          "visibility": "visible"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "slidev-slides-tree",
+        "contents": "No active slides entry.\n[Choose one](command:slidev.choose-entry)"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "nr build",

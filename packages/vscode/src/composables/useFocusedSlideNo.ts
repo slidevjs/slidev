@@ -1,6 +1,6 @@
 import { onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { TextEditorSelectionChangeKind, window } from 'vscode'
-import { activeSlidevData } from '../state'
+import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { getFirstDisplayedChild } from '../utils/getFirstDisplayedChild'
 import { useActiveTextEditor } from './useActiveTextEditor'

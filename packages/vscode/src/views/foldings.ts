@@ -2,7 +2,7 @@ import { onScopeDispose, watch } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
 import { EventEmitter, FoldingRange, FoldingRangeKind, languages } from 'vscode'
 import { useMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
-import { activeSlidevData } from '../state'
+import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 
 export const useFoldings = createSingletonComposable(() => {

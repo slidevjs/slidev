@@ -5,9 +5,9 @@ import { ref } from '@vue/runtime-core'
 import type { Terminal } from 'vscode'
 import { Uri, window } from 'vscode'
 import { extCtx } from '../state'
-import { createSingletonComposable } from '../utils/singletonComposable'
 
-export const useTerminal = createSingletonComposable(() => {
+// TODO: make terminal project specific
+export function useTerminal() {
   const terminal = ref<Terminal>()
 
   function isTerminalActive() {
@@ -65,4 +65,4 @@ export const useTerminal = createSingletonComposable(() => {
     executeCommand,
     showTerminal,
   }
-})
+}

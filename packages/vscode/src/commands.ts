@@ -7,10 +7,13 @@ import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, w
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { configuredPort, previewSync } from './config'
-import { activeSlidevData, previewPort } from './state'
+import { previewPort } from './state'
 import { getPort } from './utils/getPort'
 import { usePreviewWebview } from './views/previewWebview'
 import { useTerminal } from './views/terminal'
+import type { SlidevProject } from './projects'
+import { activeEntry, activeProject, activeSlidevData, addProject, projects } from './projects'
+import { findPossibleEntries } from './utils/findPossibleEntries'
 
 export function useCommands() {
   const disposables: Disposable[] = []
@@ -19,7 +22,35 @@ export function useCommands() {
     disposables.push(commands.registerCommand(command, callback))
   }
 
+  registerCommand('slidev.choose-entry', async () => {
+    const entry = await window.showQuickPick([...projects.keys()], {
+      title: 'Choose active slides entry.',
+    })
+    if (entry)
+      activeEntry.value = entry
+  })
+
+  registerCommand('slidev.add-entry', async () => {
+    const files = await findPossibleEntries()
+    const selected = await window.showQuickPick(files, {
+      title: 'Choose Markdown files to add as slides entries.',
+      canPickMany: true,
+    })
+    if (selected) {
+      for (const entry of selected)
+        await addProject(entry)
+    }
+  })
+
+  registerCommand('slidev.set-as-active', async (project: SlidevProject) => {
+    activeEntry.value = project.entry
+  })
+
   async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
+    const { markdown: currrentMarkdown, index: currentIndex } = useEditingSlideSource()
+    if (currrentMarkdown.value?.filepath === filepath && currentIndex.value === index)
+      return
+
     const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
     if (!slide)
       return
@@ -91,9 +122,14 @@ export function useCommands() {
   })
 
   registerCommand('slidev.start-dev', async () => {
-    const port = await getPort()
-    const { executeCommand, showTerminal } = useTerminal()
+    const project = activeProject.value
+    if (!project) {
+      window.showErrorMessage('Cannot start dev server: No active slides entry.')
+      return
+    }
+    const { executeCommand, showTerminal } = useTerminal(project)
 
+    const port = await getPort()
     executeCommand(`npm exec slidev -- --port ${port}`)
     await showTerminal()
 

@@ -2,7 +2,7 @@ import { slash } from '@antfu/utils'
 import type { MaybeRefOrGetter } from '@vue/runtime-core'
 import { computed, toValue } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
-import { activeSlidevData } from '../state'
+import { activeSlidevData } from '../projects'
 
 export function useMarkdownFromDoc(doc: MaybeRefOrGetter<TextDocument | undefined>) {
   return computed(() => {

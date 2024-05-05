@@ -1,8 +1,9 @@
 import path from 'node:path'
 import { onScopeDispose, watchEffect } from '@vue/runtime-core'
 import { languages } from 'vscode'
-import { activeEntry, previewPort, workspaceRoot } from '../state'
+import { previewPort, workspaceRoot } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
+import { activeEntry } from '../projects'
 
 export const useLanguageStatusItems = createSingletonComposable(() => {
   // const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 10)
