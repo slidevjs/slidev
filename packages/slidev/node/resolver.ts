@@ -230,7 +230,7 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     throw new Error('[slidev] Cannot find roots without entry')
   const userRoot = dirname(entry)
   isInstalledGlobally.value
-    = !/^(\.\.\/)*node_modules\//i.test(slash(relative(userRoot, cliRoot)))
+    = slash(relative(userRoot, process.argv[1])).includes('/.pnpm/')
     || (await import('is-installed-globally')).default
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)
