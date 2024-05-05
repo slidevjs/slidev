@@ -53,7 +53,7 @@
     "bumpp": "^9.4.1",
     "cross-env": "^7.0.3",
     "cypress": "^13.8.1",
-    "eslint": "^9.1.1",
+    "eslint": "^9.2.0",
     "eslint-plugin-format": "^0.1.1",
     "esno": "^4.7.0",
     "katex": "^0.16.10",
@@ -69,7 +69,7 @@
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
-    "vitest": "^1.5.3",
+    "vitest": "^1.6.0",
     "vue-tsc": "^2.0.16",
     "zx": "^8.0.2"
   },

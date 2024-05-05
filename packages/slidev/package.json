@@ -99,7 +99,7 @@
     "resolve-global": "^2.0.0",
     "semver": "^7.6.0",
     "shiki": "^1.4.0",
-    "shiki-magic-move": "^0.3.7",
+    "shiki-magic-move": "^0.4.0",
     "sirv": "^2.0.4",
     "source-map-js": "^1.2.0",
     "typescript": "^5.4.5",
