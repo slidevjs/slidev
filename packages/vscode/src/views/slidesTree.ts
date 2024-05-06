@@ -1,5 +1,5 @@
 import type { SourceSlideInfo } from '@slidev/types'
-import { computed, markRaw, onScopeDispose, watch } from '@vue/runtime-core'
+import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runtime-core'
 import type { TreeItem } from 'vscode'
 import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
 import { save as slidevSave } from '@slidev/parser/fs'
@@ -8,6 +8,7 @@ import { toRelativePath } from '../utils/toRelativePath'
 import { getSlideNo } from '../utils/getSlideNo'
 import { activeSlidevData } from '../projects'
 import { previewSync } from '../config'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { usePreviewWebview } from './previewWebview'
 
 export const slideMineType = 'application/slidev.slide'
@@ -41,7 +42,7 @@ interface SlidesTreeElement {
 }
 
 function getImportChain(element: SlidesTreeElement): SourceSlideInfo[] {
-  const chain = []
+  const chain: SourceSlideInfo[] = []
   let parent = element.parent
   while (parent) {
     chain.unshift(parent.slide)
@@ -165,6 +166,13 @@ export const useSlidesTree = createSingletonComposable(() => {
       }
     },
   )
+
+  watchEffect(() => {
+    if (activeSlidevData.value)
+      treeView.title = `Slides (${getSlidesTitle(activeSlidevData.value)})`
+    else
+      treeView.title = 'Slides'
+  })
 
   return treeView
 })

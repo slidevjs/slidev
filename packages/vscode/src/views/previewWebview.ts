@@ -5,6 +5,7 @@ import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { isDarkTheme, previewSync } from '../config'
 import { extCtx, previewOrigin, previewPort, previewUrl } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
+import { activeSlidevData } from '../projects'
 import { useLogger } from './logger'
 
 const usePreviewHtml = createSingletonComposable(() => {
@@ -131,6 +132,15 @@ export const usePreviewWebview = createSingletonComposable(() => {
   watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no }))
   watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
   watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
+
+  watchEffect(() => {
+    if (view.value) {
+      if (state.value === 'ready' && previewNavState.no > 0)
+        view.value.title = `Preview (${previewNavState.no}/${activeSlidevData.value?.slides.length})`
+      else
+        view.value.title = 'Preview'
+    }
+  })
 
   function useNavOperation(operation: string) {
     return () => postMessage('navigate', { operation })

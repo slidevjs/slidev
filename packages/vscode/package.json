@@ -237,18 +237,21 @@
         {
           "id": "slidev-projects-tree",
           "name": "Projects",
-          "visibility": "collapsed"
+          "visibility": "collapsed",
+          "initialSize": 1
         },
         {
           "id": "slidev-slides-tree",
           "name": "Slides",
-          "visibility": "visible"
+          "visibility": "visible",
+          "initialSize": 3
         },
         {
           "type": "webview",
           "id": "slidev-preview",
           "name": "Preview",
-          "visibility": "visible"
+          "visibility": "visible",
+          "initialSize": 3
         }
       ]
     },
