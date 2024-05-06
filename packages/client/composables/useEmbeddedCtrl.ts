@@ -16,7 +16,7 @@ export function useEmbeddedControl() {
         else if (typeof data.operation === 'string') {
           const fn = nav[data.operation as keyof typeof nav]
           if (typeof fn === 'function')
-            (fn as any)()
+            (fn as any)(...(data.args ?? []))
         }
       }
       else if (data.type === 'css-vars') {

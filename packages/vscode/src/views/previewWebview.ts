@@ -129,7 +129,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
     setTimeout(() => pageId.value++, 300)
   })
 
-  watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no }))
+  watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no, clicks: 999999 }))
   watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
   watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
 
@@ -142,8 +142,8 @@ export const usePreviewWebview = createSingletonComposable(() => {
     }
   })
 
-  function useNavOperation(operation: string) {
-    return () => postMessage('navigate', { operation })
+  function useNavOperation(operation: string, ...args: unknown[]) {
+    return () => postMessage('navigate', { operation, args })
   }
 
   return {
@@ -154,8 +154,8 @@ export const usePreviewWebview = createSingletonComposable(() => {
     previewNavState,
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
-    nextSlide: useNavOperation('nextSlide'),
-    prevSlide: useNavOperation('prevSlide'),
+    nextSlide: useNavOperation('nextSlide', true),
+    prevSlide: useNavOperation('prevSlide', true),
   }
 })
 

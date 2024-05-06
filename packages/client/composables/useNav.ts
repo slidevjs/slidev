@@ -149,34 +149,24 @@ export function useNavBase(
   async function prev() {
     clicksDirection.value = -1
     if (queryClicks.value <= clicksStart.value)
-      await prevSlide()
+      await prevSlide(true)
     else
       queryClicks.value -= 1
   }
 
   async function nextSlide(lastClicks = false) {
     clicksDirection.value = 1
-    const next = Math.min(currentSlideNo.value + 1, slides.value.length)
     await go(
-      next,
-      lastClicks
-        ? isPrint.value
-          ? undefined
-          : getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
-        : undefined,
+      Math.min(currentSlideNo.value + 1, slides.value.length),
+      lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
     )
   }
 
-  async function prevSlide(lastClicks = true) {
+  async function prevSlide(lastClicks = false) {
     clicksDirection.value = -1
-    const next = Math.max(1, currentSlideNo.value - 1)
     await go(
-      next,
-      lastClicks
-        ? isPrint.value
-          ? undefined
-          : getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
-        : undefined,
+      Math.max(1, currentSlideNo.value - 1),
+      lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
     )
   }
 
