@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { onScopeDispose, watchEffect } from '@vue/runtime-core'
+import type { DocumentSelector } from 'vscode'
 import { languages } from 'vscode'
 import { previewPort, workspaceRoot } from '../state'
 import { createSingletonComposable } from '../utils/singletonComposable'
@@ -9,7 +10,8 @@ export const useLanguageStatusItems = createSingletonComposable(() => {
   // const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 10)
 
   // TODO: Select by doc paths
-  const selector = {
+  const selector: DocumentSelector = {
+    scheme: 'file',
     language: 'markdown',
   }
 

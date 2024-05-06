@@ -9,7 +9,10 @@ export const useFoldings = createSingletonComposable(() => {
   const onChange = new EventEmitter<void>()
 
   const disposable = languages.registerFoldingRangeProvider(
-    { language: 'markdown' },
+    {
+      scheme: 'file',
+      language: 'markdown',
+    },
     {
       onDidChangeFoldingRanges: onChange.event,
       provideFoldingRanges(document: TextDocument): FoldingRange[] {
