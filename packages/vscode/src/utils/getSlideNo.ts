@@ -8,12 +8,12 @@ function arrayShallowEqual<T>(a: T[], b: T[]) {
 export function getSlideNo(data: LoadedSlidevData | undefined, source: SourceSlideInfo, importChain?: SourceSlideInfo[]) {
   if (!data)
     return null
-  const index = data?.slides.find(s =>
-    s.importChain?.includes(source)
-    || (s.source === source
-    && (!importChain || arrayShallowEqual(s.importChain ?? [], importChain)
-    )
-    ),
-  )?.index
+  const index = data?.slides.find((s) => {
+    if (s.importChain?.includes(source))
+      return true
+    if (s.source !== source)
+      return false
+    return !importChain || arrayShallowEqual(s.importChain ?? [], importChain)
+  })?.index
   return index ? index + 1 : null
 }

@@ -3,7 +3,7 @@ import { EventEmitter, ThemeIcon, TreeItemCollapsibleState, Uri, window } from '
 import { computed, onScopeDispose, watch } from '@vue/runtime-core'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import type { SlidevProject } from '../projects'
-import { activeEntry, multiProject, projects } from '../projects'
+import { activeEntry, projects } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
 

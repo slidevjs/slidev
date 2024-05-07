@@ -1,10 +1,10 @@
 import { onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { TextEditorSelectionChangeKind, window } from 'vscode'
 import { activeSlidevData } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { getFirstDisplayedChild } from '../utils/getFirstDisplayedChild'
+import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
-import { useMarkdownFromDoc } from './useMarkdownFromDoc'
+import { getMarkdownFromDoc } from './useMarkdownFromDoc'
 
 export const useFocusedSlideNo = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
@@ -13,7 +13,7 @@ export const useFocusedSlideNo = createSingletonComposable(() => {
 
   function updateSlideNo() {
     const data = activeSlidevData.value
-    const md = useMarkdownFromDoc(editor.value?.document).value
+    const md = getMarkdownFromDoc(editor.value?.document)
     if (!data || !md || !editor.value)
       return
     const line = editor.value.selection.active.line + 1

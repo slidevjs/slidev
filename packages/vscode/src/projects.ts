@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
-import { type LoadedSlidevData, load } from '@slidev/parser/fs'
+import type { LoadedSlidevData } from '@slidev/parser/fs'
+import { load } from '@slidev/parser/fs'
 import { computed, markRaw, onScopeDispose, reactive, ref } from '@vue/runtime-core'
 import { commands, window, workspace } from 'vscode'
 import { slash } from '@antfu/utils'
@@ -56,7 +57,7 @@ export function useProjects() {
         continue
 
       if (existsSync(project.entry)) {
-        const newData = await load(project.userRoot, project.entry)
+        const newData = markRaw(await load(project.userRoot, project.entry))
         maybeNewEntry &&= newData.watchFiles.includes(path)
         effects.push(() => {
           project.data = newData
@@ -110,14 +111,14 @@ export async function addProject(entry: string) {
 
 async function addProjectEffect(entry: string) {
   const userRoot = dirname(entry)
-  const data = await load(userRoot, entry)
+  const data = markRaw(await load(userRoot, entry))
   return () => {
-    projects.set(entry, markRaw({
+    projects.set(entry, {
       entry,
       userRoot,
       data,
       running: null,
-    }))
+    })
   }
 }
 

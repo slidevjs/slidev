@@ -1,27 +1,29 @@
-import { onScopeDispose, watch } from '@vue/runtime-core'
+import { parse } from '@slidev/parser'
+import { onScopeDispose } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
-import { EventEmitter, FoldingRange, FoldingRangeKind, languages } from 'vscode'
-import { useMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
-import { activeSlidevData } from '../projects'
+import { FoldingRangeKind, languages } from 'vscode'
 import { createSingletonComposable } from '../utils/singletonComposable'
+import { getMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
 
 export const useFoldings = createSingletonComposable(() => {
-  const onChange = new EventEmitter<void>()
-
   const disposable = languages.registerFoldingRangeProvider(
     {
       scheme: 'file',
       language: 'markdown',
     },
     {
-      onDidChangeFoldingRanges: onChange.event,
-      provideFoldingRanges(document: TextDocument): FoldingRange[] {
-        const md = useMarkdownFromDoc(document).value
-        return md?.slides.map(i => new FoldingRange(i.start - 1, i.end - 1, FoldingRangeKind.Region)) ?? []
+      async provideFoldingRanges(document: TextDocument) {
+        if (!getMarkdownFromDoc(document))
+          return // Not a slidev markdown file
+        // Not using global slides data because it updates too late
+        const md = await parse(document.getText(), document.uri.fsPath)
+        return md?.slides.map(slide => ({
+          start: slide.frontmatterStyle ? slide.start : slide.start - 1,
+          end: slide.end - 1,
+          kind: FoldingRangeKind.Region,
+        }))
       },
     },
   )
   onScopeDispose(() => disposable.dispose())
-
-  watch(activeSlidevData, () => onChange.fire())
 })
