@@ -10,10 +10,13 @@ import { findShallowestPath } from './utils/findShallowestPath'
 import { useVscodeContext } from './composables/useVscodeContext'
 
 export interface SlidevProject {
-  entry: string
-  userRoot: string
+  readonly entry: string
+  readonly userRoot: string
   data: LoadedSlidevData
-  running: number | null
+  /**
+   * Null if server is down
+   */
+  port: number | null
 }
 
 export const projects = reactive(new Map<string, SlidevProject>())
@@ -117,7 +120,7 @@ async function addProjectEffect(entry: string) {
       entry,
       userRoot,
       data,
-      running: null,
+      port: null,
     })
   }
 }

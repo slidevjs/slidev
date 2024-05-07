@@ -1,61 +1,76 @@
 import { computed, onScopeDispose, reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
 import type { WebviewView } from 'vscode'
-import { commands, window } from 'vscode'
+import { Uri, commands, env, window } from 'vscode'
 import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
-import { isDarkTheme, previewSync } from '../config'
-import { extCtx, previewOrigin, previewPort, previewUrl } from '../state'
+import { useVscodeContext } from '../composables/useVscodeContext'
+import { configuredPort, isDarkTheme, previewSync } from '../config'
+import { extCtx } from '../index'
+import { activeProject, activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
-import { activeSlidevData } from '../projects'
 import { useLogger } from './logger'
+
+const previewPort = computed(() => activeProject.value?.port)
+const detectingPort = computed(() => previewPort.value ?? configuredPort.value)
+const detectingOrigin = computed(() => `http://localhost:${detectingPort.value}`)
+const detectingUrl = computed(() => `${detectingOrigin.value}?embedded=true`)
 
 const usePreviewHtml = createSingletonComposable(() => {
   const logger = useLogger()
 
-  const state = ref<'pending' | 'ready' | 'error'>('pending')
-  const message = ref('')
+  const state = reactive({
+    type: 'pending' as 'pending' | 'ready' | 'error',
+    message: '',
+  })
 
   const html = computed(() =>
-    state.value === 'pending'
+    state.type === 'pending'
       ? generatePendingHtml()
-      : state.value === 'ready'
+      : state.type === 'ready'
         ? generateReadyHtml()
         : generateErrorHtml(),
   )
 
   let isWorking = false
   async function refreshState(setPending: boolean) {
-    setPending && (state.value = 'pending')
+    if (!previewPort.value) {
+      state.type = 'error'
+      state.message = 'Server is down'
+      return
+    }
+    setPending && (state.type = 'pending')
     if (isWorking)
       return
     isWorking = true
-    message.value = ''
+    state.message = ''
     async function pingUrl(url: string) {
       try {
         if ((await (await fetch(url)).text()).includes('Slidev.js'))
           return true
       }
       catch (err) {
-        message.value = String(err)
+        state.message = String(err)
       }
       return false
     }
     // Not sure why we can't use `localhost:` here
-    const ok = await pingUrl(`http://[::1]:${previewPort.value}`) || await pingUrl(`http://127.0.0.1:${previewPort.value}`)
-    state.value = ok ? 'ready' : 'error'
-    logger.info(`Preview state refreshed: ${state.value}. message: ${message.value}`)
+    const ok = await pingUrl(`http://[::1]:${detectingPort.value}`) || await pingUrl(`http://127.0.0.1:${detectingPort.value}`)
+    state.type = ok ? 'ready' : 'error'
+    logger.info(`Preview state refreshed: ${state.type}. message: ${state.message}`)
     isWorking = false
+    // if (ok && activeProject.value && !previewPort.value) {
+    //   // TODO: not active project?
+    //   activeProject.value.port = detectingPort.value
+    //   refreshState(true)
+    // }
   }
 
   refreshState(true)
-  watch([previewPort], () => refreshState(true))
+  watch([previewPort, detectingPort], () => refreshState(true))
 
   const interval = setInterval(() => refreshState(false), 4000)
   onScopeDispose(() => clearInterval(interval))
 
-  watchEffect(() => {
-    if (state.value !== 'pending')
-      commands.executeCommand('setContext', 'slidev-connected', state.value === 'ready')
-  })
+  useVscodeContext('slidev-connected', () => state.type === 'ready', () => state.type !== 'pending')
 
   return {
     html,
@@ -111,6 +126,15 @@ export const usePreviewWebview = createSingletonComposable(() => {
   )
   onScopeDispose(() => disposable.dispose())
 
+  const pageId = ref(0)
+  watch([view, html, detectingUrl], () => {
+    if (!view.value)
+      return
+    view.value.webview.html = html.value
+    logger.info(`Webview refreshed. Current URL: ${detectingUrl.value}`)
+    setTimeout(() => pageId.value++, 300)
+  })
+
   function postMessage(type: string, data: Record<string, unknown>) {
     view.value?.webview.postMessage({
       target: 'slidev',
@@ -120,22 +144,13 @@ export const usePreviewWebview = createSingletonComposable(() => {
     })
   }
 
-  const pageId = ref(0)
-  watch([view, html, previewUrl], () => {
-    if (!view.value)
-      return
-    view.value.webview.html = html.value
-    logger.info(`Webview refreshed. Current URL: ${previewUrl.value}`)
-    setTimeout(() => pageId.value++, 300)
-  })
-
   watch([pageId, previewSync, focusedSlideNo], ([_, sync, no]) => sync && postMessage('navigate', { no, clicks: 999999 }))
   watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
   watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
 
   watchEffect(() => {
     if (view.value) {
-      if (state.value === 'ready' && previewNavState.no > 0)
+      if (state.type === 'ready' && previewNavState.no > 0)
         view.value.title = `Preview (${previewNavState.no}/${activeSlidevData.value?.slides.length})`
       else
         view.value.title = 'Preview'
@@ -149,32 +164,27 @@ export const usePreviewWebview = createSingletonComposable(() => {
   return {
     view,
     state,
-    refresh: () => refreshState(true),
-    retry: () => state.value === 'error' && refreshState(false),
+    refresh: (setPending = true) => refreshState(setPending),
+    retry: () => state.type === 'error' && refreshState(false),
     previewNavState,
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
     nextSlide: useNavOperation('nextSlide', true),
     prevSlide: useNavOperation('prevSlide', true),
+    openExternal: () => {
+      const query = previewNavState.clicks > 0 ? `?clicks=${previewNavState.clicks}` : ''
+      const url = `${detectingOrigin.value}/${previewNavState.no}${query}`
+      return env.openExternal(Uri.parse(url))
+    },
   }
 })
 
 function generatePendingHtml() {
   return `
-  <head>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
-    />
-    <style>
-    </style>
-  <head>
   <body>
-    <div style="text-align: center">
-      <p>
-        Connecting to <code>${previewUrl.value}</code>
-      </p>
-    </div>
+    <p style="text-align: center">
+      Connecting to <code>${detectingUrl.value}</code>
+    </p>
   </body>`
 }
 
@@ -206,7 +216,7 @@ function generateReadyHtml() {
     </style>
   <head>
   <body>
-    <iframe id="iframe" sandbox="allow-same-origin allow-scripts" src="${previewUrl.value}"></iframe>
+    <iframe id="iframe" sandbox="allow-same-origin allow-scripts" src="${detectingUrl.value}"></iframe>
     <script>
       const vscode = acquireVsCodeApi()
       const iframe = document.getElementById('iframe')
@@ -228,47 +238,43 @@ function generateReadyHtml() {
 function generateErrorHtml() {
   return `
   <head>
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';"
-    />
-  <head>
-  <script>
-    const vscode = acquireVsCodeApi()
-    window.sendCommand = (command) => void vscode.postMessage({ command })
-  </script>
-  <style>
-  button {
-    background: var(--vscode-button-secondaryBackground);
-    color: var(--vscode-button-secondaryForeground);
-    border: none;
-    padding: 8px 12px;
-    flex-grow: 1;
-  }
-  button:hover {
-    background: var(--vscode-button-secondaryHoverBackground);
-  }
-  code {
-    font-size: 0.9em;
-    font-family: var(--vscode-editor-font-family);
-    background: var(--vscode-textBlockQuote-border);
-    border-radius: 4px;
-    padding: 3px 5px;
-    text-wrap: nowrap;
-  }
-  .action-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    justify-content: center;
-    max-width: 180px;
-    margin: 0 auto;
-  }
-  </style>
+    <script>
+      const vscode = acquireVsCodeApi()
+      window.sendCommand = (command) => void vscode.postMessage({ command })
+    </script>
+    <style>
+    button {
+      background: var(--vscode-button-secondaryBackground);
+      color: var(--vscode-button-secondaryForeground);
+      border: none;
+      padding: 8px 12px;
+      flex-grow: 1;
+    }
+    button:hover {
+      background: var(--vscode-button-secondaryHoverBackground);
+    }
+    code {
+      font-size: 0.9em;
+      font-family: var(--vscode-editor-font-family);
+      background: var(--vscode-textBlockQuote-border);
+      border-radius: 4px;
+      padding: 3px 5px;
+      text-wrap: nowrap;
+    }
+    .action-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      max-width: 180px;
+      margin: 0 auto;
+    }
+    </style>
+  </head>
   <body>
     <div style="text-align: center">
       <p>
-        Slidev server not found on <code>${previewOrigin.value}</code>
+        Slidev server not found on <code>${detectingOrigin.value}</code>
       </p>
       <p>
         please start the server first.

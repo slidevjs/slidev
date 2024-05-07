@@ -1,13 +1,28 @@
 // Ported from https://github.com/antfu/vscode-vite/blob/main/src/terminal.ts
 
-import { sleep } from '@antfu/utils'
-import { ref } from '@vue/runtime-core'
+import type { Ref } from '@vue/runtime-core'
+import { ref, watch } from '@vue/runtime-core'
 import type { Terminal } from 'vscode'
 import { Uri, window } from 'vscode'
-import { extCtx } from '../state'
+import { extCtx } from '../index'
+import type { SlidevProject } from '../projects'
+import { getPort } from '../utils/getPort'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
 
-// TODO: make terminal project specific
-export function useTerminal() {
+interface UseTerminal {
+  terminal: Ref<Terminal | undefined>
+  startDevServer: () => Promise<void>
+  showTerminal: () => Promise<void>
+  closeTerminal: () => void
+}
+
+const terminalMap = new WeakMap<SlidevProject, UseTerminal>()
+
+export function useTerminal(project: SlidevProject) {
+  const existing = terminalMap.get(project)
+  if (existing)
+    return existing
+
   const terminal = ref<Terminal>()
 
   function isTerminalActive() {
@@ -19,7 +34,8 @@ export function useTerminal() {
       return
 
     terminal.value = window.createTerminal({
-      name: 'Slidev',
+      name: getSlidesTitle(project.data),
+      cwd: project.userRoot,
       iconPath: {
         light: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono.svg')),
         dark: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono-dark.svg')),
@@ -28,27 +44,10 @@ export function useTerminal() {
     })
   }
 
-  function closeTerminal() {
-    if (isTerminalActive()) {
-      terminal.value!.sendText('\x03')
-      terminal.value!.dispose()
-      terminal.value = undefined
-    }
-  }
-
-  function endProcess() {
-    if (isTerminalActive())
-      terminal.value!.sendText('\x03')
-    extCtx.value?.globalState.update('pid', undefined)
-  }
-
-  async function executeCommand(cmd: string) {
+  async function startDevServer() {
+    const port = project.port ??= await getPort()
     ensureTerminal()
-    terminal.value!.sendText(cmd)
-    await sleep(2000)
-    const pid = await terminal.value?.processId
-    if (pid)
-      extCtx.value?.globalState.update('pid', pid)
+    terminal.value!.sendText(`npm exec slidev -- --port ${port}`)
   }
 
   async function showTerminal() {
@@ -56,13 +55,26 @@ export function useTerminal() {
     terminal.value!.show()
   }
 
-  return {
-    terminal,
-    isTerminalActive,
-    ensureTerminal,
-    closeTerminal,
-    endProcess,
-    executeCommand,
-    showTerminal,
+  function closeTerminal() {
+    if (isTerminalActive()) {
+      terminal.value!.sendText('\x03')
+      terminal.value!.dispose()
+      terminal.value = undefined
+      project.port = null
+    }
   }
+
+  watch(project, (project) => {
+    if (!project)
+      closeTerminal()
+  })
+
+  const result = {
+    terminal,
+    startDevServer,
+    showTerminal,
+    closeTerminal,
+  }
+  terminalMap.set(project, result)
+  return result
 }

@@ -3,17 +3,15 @@ import { save as slidevSave } from '@slidev/parser/fs'
 import type { SourceSlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
-import { Position, Range, Selection, TextEditorRevealType, Uri, commands, env, window, workspace } from 'vscode'
-import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
+import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
+import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { configuredPort, previewSync } from './config'
-import { previewPort } from './state'
-import { getPort } from './utils/getPort'
-import { usePreviewWebview } from './views/previewWebview'
-import { useTerminal } from './views/terminal'
 import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
+import { usePreviewWebview } from './views/previewWebview'
+import { useTerminal } from './views/terminal'
 
 export function useCommands() {
   const disposables: Disposable[] = []
@@ -44,6 +42,11 @@ export function useCommands() {
 
   registerCommand('slidev.set-as-active', async (project: SlidevProject) => {
     activeEntry.value = project.entry
+  })
+
+  registerCommand('slidev.stop-dev', async (project: SlidevProject) => {
+    useTerminal(project).closeTerminal()
+    setTimeout(() => usePreviewWebview().refresh(false), 100)
   })
 
   async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
@@ -124,13 +127,12 @@ export function useCommands() {
   registerCommand('slidev.start-dev', async () => {
     const project = activeProject.value
     if (!project) {
-      window.showErrorMessage('Cannot start dev server: No active slides entry.')
+      window.showErrorMessage('Cannot start dev server: No active slides project.')
       return
     }
-    const { executeCommand, showTerminal } = useTerminal(project)
 
-    const port = await getPort()
-    executeCommand(`npm exec slidev -- --port ${port}`)
+    const { startDevServer, showTerminal } = useTerminal(project)
+    await startDevServer()
     await showTerminal()
 
     const { retry } = usePreviewWebview()
@@ -140,10 +142,7 @@ export function useCommands() {
     setTimeout(retry, 9000)
   })
 
-  registerCommand('slidev.open-in-browser', async () => {
-    const no = useFocusedSlideNo().value
-    env.openExternal(Uri.parse(`http://localhost:${previewPort.value}/${no}`))
-  })
+  registerCommand('slidev.open-in-browser', () => usePreviewWebview().openExternal())
 
   registerCommand('slidev.preview-prev-click', () => usePreviewWebview().prevClick())
   registerCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())

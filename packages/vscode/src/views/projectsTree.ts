@@ -15,6 +15,7 @@ const nothingToCollapse = computed(() => [...projects.values()]
 
 function getTreeItem(element: SlidevProject | string): TreeItem {
   if (typeof element === 'string') {
+    // Imported file
     return {
       description: true,
       resourceUri: Uri.file(element),
@@ -28,14 +29,15 @@ function getTreeItem(element: SlidevProject | string): TreeItem {
     }
   }
   else {
+    // Slides project
     const active = activeEntry.value === element.entry
     return {
       label: getSlidesTitle(element.data),
-      description: toRelativePath(element.entry),
+      description: `${toRelativePath(element.entry)}${element.port ? ` (port: ${element.port})` : ''}`,
       resourceUri: Uri.file(element.entry),
       iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
       collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
-      contextValue: active ? 'active-project' : 'inactive-project',
+      contextValue: `${active ? 'active' : 'inactive'}-${element.port ? 'up' : 'down'}`,
       command: {
         title: 'Open',
         command: 'vscode.open',
@@ -64,7 +66,7 @@ export const useProjectsTree = createSingletonComposable(() => {
   })
   onScopeDispose(() => treeView.dispose())
 
-  watch([projects, activeEntry], () => onChange.fire(), { deep: false })
+  watch([projects, activeEntry], () => onChange.fire(), { deep: true })
 
   return treeView
 })

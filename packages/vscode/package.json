@@ -82,6 +82,12 @@
         "icon": "$(run-all)"
       },
       {
+        "command": "slidev.stop-dev",
+        "category": "Slidev",
+        "title": "Stop the dev server",
+        "icon": "$(debug-stop)"
+      },
+      {
         "command": "slidev.open-in-browser",
         "category": "Slidev",
         "title": "Open slides in browser",
@@ -187,8 +193,12 @@
       "view/item/context": [
         {
           "command": "slidev.set-as-active",
-          "when": "view == slidev-projects-tree && viewItem == inactive-project",
+          "when": "view == slidev-projects-tree && viewItem =~ /inactive/",
           "group": "inline"
+        },
+        {
+          "command": "slidev.stop-dev",
+          "when": "view == slidev-projects-tree && viewItem =~ /up/"
         }
       ]
     },
