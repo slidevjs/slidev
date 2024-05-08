@@ -1,8 +1,7 @@
 import path from 'node:path'
-import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, range } from '@antfu/utils'
+import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
-import Markdown from 'markdown-it'
 import { bold, gray, red, yellow } from 'kolorist'
 
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
@@ -10,7 +9,7 @@ import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
+import { updateFrontmatterPatch } from '../utils'
 import { toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
@@ -19,7 +18,7 @@ import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
-import markdownItLink from '../syntax/markdown-it/markdown-it-link'
+import { sharedMd } from '../commands/shared'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -64,12 +63,9 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-const md = Markdown({ html: true })
-md.use(markdownItLink)
-
 function renderNote(text: string = '') {
   let clickCount = 0
-  const html = md.render(text
+  const html = sharedMd.render(text
     // replace [click] marker with span
     .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
       clickCount += Number(count)
@@ -103,7 +99,7 @@ export function createSlidesLoader(
   const { data, clientRoot, roots, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
-    md,
+    md: sharedMd,
     async getLayouts() {
       const now = Date.now()
       if (now - _layouts_cache_time < 2000)
@@ -422,39 +418,6 @@ export function createSlidesLoader(
           return replaced
       },
     },
-    {
-      name: 'slidev:index-html-transform',
-      transformIndexHtml() {
-        const { info, author, keywords } = data.headmatter
-        return [
-          {
-            tag: 'title',
-            children: getTitle(),
-          },
-          info && {
-            tag: 'meta',
-            attrs: {
-              name: 'description',
-              content: info,
-            },
-          },
-          author && {
-            tag: 'meta',
-            attrs: {
-              name: 'author',
-              content: author,
-            },
-          },
-          keywords && {
-            tag: 'meta',
-            attrs: {
-              name: 'keywords',
-              content: Array.isArray(keywords) ? keywords.join(', ') : keywords,
-            },
-          },
-        ].filter(isTruthy) as HtmlTagDescriptor[]
-      },
-    },
   ]
 
   function updateServerWatcher() {
@@ -553,13 +516,5 @@ export function createSlidesLoader(
     }
     // no setup script and not a vue component
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
-  }
-
-  function getTitle() {
-    if (isString(data.config.title)) {
-      const tokens = md.parseInline(data.config.title, {})
-      return stringifyMarkdownTokens(tokens)
-    }
-    return data.config.title
   }
 }
