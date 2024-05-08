@@ -272,6 +272,16 @@ Parameters:
 
 See https://sli.dev/guide/animations.html
 
+### `VSwitch`
+
+Switch between multiple slots based on clicks.
+
+See https://sli.dev/guide/animations.html#enter-leave
+
+- If the `unmount` prop is set to `true`, the previous slot will be unmounted when switching to the next slot. Default is `false`.
+- Use the `tag` and `childTag` props to change the default tag of the component and its children. Default is `div`.
+- Use the `transition` prop to change the transition effect. Default is `false` (disabled).
+
 ### `VDrag`
 
 See https://sli.dev/guide/draggable.html

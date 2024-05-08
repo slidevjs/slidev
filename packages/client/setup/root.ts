@@ -5,9 +5,7 @@ import { configs, slidesTitle } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
 import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
-import { skipTransition } from '../logic/hmr'
 import { makeId } from '../logic/utils'
-import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { isDark } from '../logic/dark'
 import { useNav } from '../composables/useNav'
@@ -57,6 +55,7 @@ export default function setupRoot() {
     hasPrimarySlide,
     isNotesViewer,
     isPresenter,
+    go,
   } = useNav()
 
   useHead({
@@ -100,15 +99,7 @@ export default function setupRoot() {
   onPatch((state) => {
     if (!hasPrimarySlide.value)
       return
-    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
-      skipTransition.value = false
-      router.replace({
-        path: getSlidePath(state.page, isPresenter.value),
-        query: {
-          ...router.currentRoute.value.query,
-          clicks: state.clicks || 0,
-        },
-      })
-    }
+    if (state.lastUpdate?.type === 'presenter')
+      go(state.page, state.clicks)
   })
 }

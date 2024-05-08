@@ -12,7 +12,7 @@ import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 
-const { next, prev, isPrintMode, isPresenter } = useNav()
+const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
@@ -22,7 +22,7 @@ function onClick(e: MouseEvent) {
 
   if (e.button === 0 && (e.target as HTMLElement)?.id === 'slide-container') {
     // click right to next, left to previous
-    if ((e.pageX / window.innerWidth) > 0.6)
+    if ((e.pageX / window.innerWidth) > 0.5)
       next()
     else
       prev()
@@ -53,7 +53,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
     >
       <template #default>
         <SlidesShow render-context="slide" />
-        <PresenterMouse v-if="!isPresenter" />
+        <PresenterMouse />
       </template>
       <template #controls>
         <div
@@ -64,7 +64,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
             isDrawing ? 'pointer-events-none' : '',
           ]"
         >
-          <NavControls class="m-auto" :persist="persistNav" />
+          <NavControls :persist="persistNav" />
         </div>
       </template>
     </SlideContainer>

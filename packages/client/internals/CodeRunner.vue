@@ -7,7 +7,6 @@ import { useSlideContext } from '../context'
 import setupCodeRunners from '../setup/code-runners'
 import { useNav } from '../composables/useNav'
 import { makeId } from '../logic/utils'
-import { normalizeAtValue } from '../composables/useClicks'
 import IconButton from './IconButton.vue'
 import DomElement from './DomElement.vue'
 
@@ -40,8 +39,7 @@ const hidden = ref(props.showOutputAt)
 if (props.showOutputAt) {
   const id = makeId()
   onMounted(() => {
-    const at = normalizeAtValue(props.showOutputAt)
-    const info = $clicksContext.calculate(at)
+    const info = $clicksContext.calculate(props.showOutputAt)
     if (info) {
       $clicksContext.register(id, info)
       watchSyncEffect(() => {

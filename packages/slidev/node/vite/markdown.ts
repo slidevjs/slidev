@@ -9,14 +9,13 @@ import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { Highlighter, ShikiTransformer } from 'shiki'
 import MagicString from 'magic-string-stack'
 // @ts-expect-error missing types
-import MarkdownItAttrs from 'markdown-it-link-attributes'
-// @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 
 import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevConfig, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
 import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
+import MarkdownItLink from '../syntax/markdown-it/markdown-it-link'
 
 import { loadShikiSetups } from '../setups/shiki'
 import { loadSetups } from '../setups/load'
@@ -79,13 +78,7 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     markdownItSetup(md) {
-      md.use(MarkdownItAttrs, {
-        attrs: {
-          target: '_blank',
-          rel: 'noopener',
-        },
-      })
-
+      md.use(MarkdownItLink)
       md.use(MarkdownItEscapeInlineCode)
       md.use(MarkdownItFootnote)
       md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })

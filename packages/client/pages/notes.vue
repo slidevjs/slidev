@@ -39,7 +39,7 @@ function decreaseFontSize() {
     class="fixed top-0 left-0 h-3px bg-primary transition-all duration-500"
     :style="{ width: `${(pageNo - 1) / (total - 1) * 100 + 1}%` }"
   />
-  <div class="h-full flex flex-col">
+  <div class="h-full pt-2 flex flex-col">
     <div
       ref="scroller"
       class="px-5 flex-auto h-full overflow-auto"
@@ -47,9 +47,9 @@ function decreaseFontSize() {
     >
       <NoteDisplay
         :note="currentRoute?.meta.slide.note"
-        :note-html="currentRoute?.meta?.slide?.noteHTML"
+        :note-html="currentRoute?.meta.slide.noteHTML"
         :placeholder="`No notes for Slide ${pageNo}.`"
-        :clicks-context="currentRoute?.meta?.__clicksContext"
+        :clicks-context="currentRoute?.meta.__clicksContext"
         :auto-scroll="true"
       />
     </div>

@@ -1,17 +1,36 @@
 import { join } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { InlineConfig, Plugin } from 'vite'
 import { mergeConfig } from 'vite'
-import isInstalledGlobally from 'is-installed-globally'
-import { uniq } from '@antfu/utils'
+import { slash, uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import { createResolve } from 'mlly'
 import { getIndexHtml } from '../commands/shared'
-import { resolveImportPath, toAtFS } from '../resolver'
-import { dependencies } from '../../../client/package.json'
+import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
-const INCLUDE = [
-  ...Object.keys(dependencies),
+const INCLUDE_GLOBAL = [
+  '@shikijs/monaco',
+  '@shikijs/vitepress-twoslash/client',
+  '@slidev/rough-notation',
+  '@typescript/ata',
+  '@unhead/vue',
+  'drauu',
+  'file-saver',
+  'floating-vue',
+  'fuse.js',
+  'lz-string',
+  'prettier',
+  'recordrtc',
+  'typescript',
+  'vue-router',
+  'yaml',
+  'shiki-magic-move/vue',
+]
 
-  // CodeMirror
+const INCLUDE_LOCAL = [
+  ...INCLUDE_GLOBAL,
+
+  'codemirror',
   'codemirror/mode/javascript/javascript',
   'codemirror/mode/css/css',
   'codemirror/mode/markdown/markdown',
@@ -19,30 +38,45 @@ const INCLUDE = [
   'codemirror/mode/htmlmixed/htmlmixed',
   'codemirror/addon/display/placeholder',
 
-  // Monaco
-  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
+  'monaco-editor',
   'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
   'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
+  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
+].map(i => `@slidev/cli > @slidev/client > ${i}`)
 
-  // Others
-  'shiki-magic-move/vue',
-]
-
-const EXCLUDE = [
-  '@slidev/shared',
+const EXCLUDE_GLOBAL = [
   '@slidev/types',
   '@slidev/client',
   '@slidev/client/constants',
   '@slidev/client/logic/dark',
+  '@antfu/utils',
   '@vueuse/core',
   '@vueuse/math',
   '@vueuse/shared',
+  '@vueuse/motion',
   '@unocss/reset',
-  'unocss',
   'mermaid',
   'vue-demi',
   'vue',
-  'shiki',
+]
+
+const EXCLUDE_LOCAL = [
+  ...EXCLUDE_GLOBAL,
+  ...[
+    '@slidev/client',
+    '@slidev/client/constants',
+    '@slidev/client/logic/dark',
+    '@slidev/client > @antfu/utils',
+    '@slidev/client > @slidev/types',
+    '@slidev/client > @vueuse/core',
+    '@slidev/client > @vueuse/math',
+    '@slidev/client > @vueuse/shared',
+    '@slidev/client > @vueuse/motion',
+    '@slidev/client > @unocss/reset',
+    '@slidev/client > mermaid',
+    '@slidev/client > vue-demi',
+    '@slidev/client > vue',
+  ].map(i => `@slidev/cli > ${i}`),
 ]
 
 const ASYNC_MODULES = [
@@ -52,6 +86,11 @@ const ASYNC_MODULES = [
 ]
 
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
+  const resolveClientDep = createResolve({
+    // Same as Vite's default resolve conditions
+    conditions: ['import', 'module', 'browser', 'default', options.mode === 'build' ? 'production' : 'development'],
+    url: pathToFileURL(options.clientRoot),
+  })
   return {
     name: 'slidev:config',
     async config(config) {
@@ -75,16 +114,26 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               find: 'vue',
               replacement: await resolveImportPath('vue/dist/vue.esm-bundler.js', true),
             },
+            ...(isInstalledGlobally.value
+              ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
+                find: dep,
+                replacement: fileURLToPath(await resolveClientDep(dep)),
+              })))
+              : []
+            ),
           ],
           dedupe: ['vue'],
         },
-        optimizeDeps: {
-          exclude: EXCLUDE,
-          include: INCLUDE
-            .filter(i => !EXCLUDE.includes(i))
+        optimizeDeps: isInstalledGlobally.value
+          ? {
+              exclude: EXCLUDE_GLOBAL,
+              include: INCLUDE_GLOBAL,
+            }
+          : {
             // We need to specify the full deps path for non-hoisted modules
-            .map(i => `@slidev/cli > @slidev/client > ${i}`),
-        },
+              exclude: EXCLUDE_LOCAL,
+              include: INCLUDE_LOCAL,
+            },
         css: options.data.config.css === 'unocss'
           ? {
               postcss: {
@@ -99,8 +148,11 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             strict: true,
             allow: uniq([
               options.userWorkspaceRoot,
-              options.cliRoot,
               options.clientRoot,
+              // Special case for PNPM global installation
+              isInstalledGlobally.value
+                ? slash(options.cliRoot).replace(/\/\.pnpm\/.*$/ig, '')
+                : options.cliRoot,
               ...options.roots,
             ]),
           },
@@ -158,7 +210,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
       // }
 
-      if (isInstalledGlobally) {
+      if (isInstalledGlobally.value) {
         injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
         injection.root = options.cliRoot
       }

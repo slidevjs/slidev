@@ -21,6 +21,7 @@ export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
+export const CLASS_VCLICK_DISPLAY_NONE = 'slidev-vclick-display-none'
 
 export const CLICKS_MAX = 999999
 

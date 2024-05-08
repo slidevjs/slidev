@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "0.49.0-beta.4",
+  "version": "0.49.0-beta.6",
   "description": "Markdown parser for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -44,7 +44,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@antfu/utils": "^0.7.7",
     "@slidev/types": "workspace:*",
-    "yaml": "^2.4.1"
+    "yaml": "^2.4.2"
   }
 }
