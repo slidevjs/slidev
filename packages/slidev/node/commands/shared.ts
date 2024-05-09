@@ -40,7 +40,7 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
 
   const { info, author, keywords } = data.headmatter
   head += [
-    `<mata name="slidev:version" content="${version}">`,
+    `<meta name="slidev:version" content="${version}">`,
     `<meta charset="slidev:entry" content="${slash(entry)}">`,
     `<link rel="icon" href="${data.config.favicon}">`,
     `<title>${getTitle(data)}</title>`,
