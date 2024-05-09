@@ -36,13 +36,10 @@ export const usePreviewWebview = createSingletonComposable(() => {
           localResourceRoots: [extCtx.value.extensionUri],
         }
         view.value.webview.onDidReceiveMessage(async (data) => {
-          if (data.command === 'start-dev') {
-            commands.executeCommand('slidev.start-dev')
+          if (data.type === 'command') {
+            commands.executeCommand(`slidev.${data.command}`)
           }
-          else if (data.command === 'config-port') {
-            commands.executeCommand('slidev.config-port')
-          }
-          else if (data.command === 'update-state') {
+          else if (data.type === 'update-state') {
             Object.assign(previewNavState, data.navState)
             if (initializedClientId.value !== data.clientId) {
               initializedClientId.value = data.clientId

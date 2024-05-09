@@ -1,18 +1,34 @@
-import type { SlidevProject } from '../projects'
+import { activeProject, projects } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
 
-export function generateErrorHtml(project: SlidevProject | undefined, message: string) {
-  const infoText = project
+export function generateErrorHtml(message: string) {
+  const project = activeProject.value
+  const info = project
     ? `Slidev server for <i>${getSlidesTitle(project.data)}</i> ${project.port
       ? `not found on <code>http://localhost:${project.port}</code>`
       : `not started`
     }.`
-    : `No active project`
+    : projects.size
+      ? `No active project`
+      : `No projects found`
+  const errorMessage = message ? `(${message})` : ``
+  const instruction = project
+    ? `Please start the server first.`
+    : projects.size
+      ? `Please choose one first.`
+      : `Please add one first.`
+  const action = project
+    ? project.port
+      ? ``
+      : `<button onclick="sendCommand('start-dev')"> Start Dev Server </button>`
+    : projects.size
+      ? `<button onclick="sendCommand('choose-entry')"> Choose active project </button>`
+      : `<button onclick="sendCommand('add-entry')"> Add markdown file </button>`
   return `
   <head>
     <script>
       const vscode = acquireVsCodeApi()
-      window.sendCommand = (command) => void vscode.postMessage({ command })
+      window.sendCommand = (command) => void vscode.postMessage({ type: 'command', command })
     </script>
     <style>
     button {
@@ -45,17 +61,11 @@ export function generateErrorHtml(project: SlidevProject | undefined, message: s
   </head>
   <body>
     <div style="text-align: center">
-      <p>
-        ${infoText}
-      </p>
-      <p>
-        ${message ? `(${message})` : ''}
-      </p>
-      <p>
-        please start the server first.
-      </p>
+      <p> ${info} </p>
+      <p> ${errorMessage} </p>
+      <p> ${instruction} </p>
       <div class="action-container">
-        ${project?.port ? `<button onclick="sendCommand('start-dev')"> Start Dev Server </button>` : ''}
+        ${action}
         <button onclick="sendCommand('config-port')"> Configure Port </button>
       </div>
     </div>

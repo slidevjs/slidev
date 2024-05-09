@@ -37,7 +37,7 @@ export function generateReadyHtml(port: number) {
           else
             vscode.postMessage({
               ...data,
-              command: 'update-state',
+              type: 'update-state',
             })
         }
       })

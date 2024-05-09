@@ -16,10 +16,10 @@ export const usePreviewState = createSingletonComposable(() => {
   const port = computed(() => activeServer.value?.port.value)
   const compatMode = useVscodeContext('slidev:preview:compat', () => !!activeServer.value?.state.compatMode)
   const ready = useVscodeContext('slidev:preview:ready', () => !!activeServer.value?.state.ready)
-  const message = computed(() => activeServer.value?.state.message ?? 'No active project')
+  const message = computed(() => activeServer.value?.state.message ?? '')
   const html = computed(() => ready.value
     ? generateReadyHtml(port.value!)
-    : generateErrorHtml(activeProject.value, message.value),
+    : generateErrorHtml(message.value),
   )
 
   function refresh() {
