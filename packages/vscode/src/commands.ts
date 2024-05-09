@@ -60,14 +60,19 @@ export function useCommands() {
 
   async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
     const { markdown: currrentMarkdown, index: currentIndex } = useEditingSlideSource()
-    if (currrentMarkdown.value?.filepath === filepath && currentIndex.value === index)
+    const sameFile = currrentMarkdown.value?.filepath === filepath
+    if (sameFile && currentIndex.value === index)
       return
 
     const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
     if (!slide)
       return
 
-    const editor = await window.showTextDocument(await workspace.openTextDocument(Uri.file(filepath)))
+    const uri = Uri.file(filepath).with({
+      // Add a fragment to the URI will cause a flush. So we need to remove it if it's the same file.
+      fragment: sameFile ? undefined : `L${slide.contentStart + 1}`,
+    })
+    const editor = await window.showTextDocument(await workspace.openTextDocument(uri))
 
     const cursorPos = new Position(slide.contentStart, 0)
     editor.selection = new Selection(cursorPos, cursorPos)

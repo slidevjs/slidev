@@ -2,6 +2,7 @@ import type { SourceSlideInfo } from '@slidev/types'
 import { computed, watch } from '@vue/runtime-core'
 import type { DecorationOptions } from 'vscode'
 import { Position, Range, window } from 'vscode'
+import { clamp } from '@antfu/utils'
 import { useActiveTextEditor } from '../composables/useActiveTextEditor'
 import { useMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
 import { activeSlidevData } from '../projects'
@@ -44,9 +45,8 @@ export const useAnnotations = createSingletonComposable(() => {
       const frontmatterRanges: DecorationOptions[] = []
 
       for (const slide of md.slides) {
-        if (doc.lineCount <= slide.start)
-          continue
-        const line = doc.lineAt(slide.frontmatterStyle ? slide.start : slide.start - 1)
+        const lineNo = slide.frontmatterStyle ? slide.start : slide.start - 1
+        const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
 
         const start = new Position(line.lineNumber, 0)
         const startDividerRange = new Range(start, new Position(line.lineNumber, line.text.length))

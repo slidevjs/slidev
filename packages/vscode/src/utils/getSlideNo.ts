@@ -15,5 +15,5 @@ export function getSlideNo(data: LoadedSlidevData | undefined, source: SourceSli
       return false
     return !importChain || arrayShallowEqual(s.importChain ?? [], importChain)
   })?.index
-  return index ? index + 1 : null
+  return index != null ? index + 1 : null
 }
