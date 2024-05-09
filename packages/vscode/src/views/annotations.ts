@@ -5,6 +5,7 @@ import type { DecorationOptions } from 'vscode'
 import { Position, Range, window } from 'vscode'
 import { useActiveTextEditor } from '../composables/useActiveTextEditor'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
+import { displayAnnotations } from '../config'
 import { activeProject } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
@@ -26,10 +27,17 @@ export const useAnnotations = createSingletonComposable(() => {
   const doc = computed(() => editor.value?.document)
   const projectInfo = useProjectFromDoc(doc)
   watch(
-    [editor, doc, projectInfo, activeProject],
-    ([editor, doc, projectInfo, activeProject]) => {
+    [editor, doc, projectInfo, activeProject, displayAnnotations],
+    ([editor, doc, projectInfo, activeProject, enabled]) => {
       if (!editor || !doc || !projectInfo)
         return
+
+      if (!enabled) {
+        editor.setDecorations(firstLineDecoration, [])
+        editor.setDecorations(dividerDecoration, [])
+        editor.setDecorations(frontmatterDecoration, [])
+        return
+      }
 
       const { project, md } = projectInfo
       const isActive = project === activeProject
