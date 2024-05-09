@@ -65,18 +65,6 @@
         "icon": "$(chevron-down)"
       },
       {
-        "command": "slidev.move-up",
-        "category": "Slidev",
-        "title": "Move slide up in this Markdown",
-        "icon": "$(triangle-up)"
-      },
-      {
-        "command": "slidev.move-down",
-        "category": "Slidev",
-        "title": "Move slide down in this Markdown",
-        "icon": "$(triangle-down)"
-      },
-      {
         "command": "slidev.refresh-preview",
         "category": "Slidev",
         "title": "Refresh preview page",
@@ -146,6 +134,16 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "slidev.remove-entry",
+          "when": "false"
+        },
+        {
+          "command": "slidev.set-as-active",
+          "when": "false"
+        }
+      ],
       "editor/title": [
         {
           "when": "slidev-enabled && resourceLangId == markdown",

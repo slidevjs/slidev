@@ -1,6 +1,3 @@
-import { move } from '@antfu/utils'
-import { save as slidevSave } from '@slidev/parser/fs'
-import type { SourceSlideInfo } from '@slidev/types'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
@@ -99,21 +96,6 @@ export function useCommands() {
     const { markdown, index } = useEditingSlideSource()
     const focusedSlideNo = useFocusedSlideNo()
     gotoSlide(markdown.value!.filepath, index.value - 1, () => focusedSlideNo.value - 1)
-  })
-
-  registerCommand('slidev.move-up', async ({ filepath, index }: SourceSlideInfo) => {
-    const md = activeSlidevData.value?.markdownFiles[filepath]
-    if (!md || index <= 0)
-      return
-    move(md.slides, index, index - 1)
-    slidevSave(md)
-  })
-  registerCommand('slidev.move-down', async ({ filepath, index }: SourceSlideInfo) => {
-    const md = activeSlidevData.value?.markdownFiles[filepath]
-    if (!md || index >= md.slides.length - 1)
-      return
-    move(md.slides, index, index + 1)
-    slidevSave(md)
   })
 
   registerCommand('slidev.refresh-preview', () => {
