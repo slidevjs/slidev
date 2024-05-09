@@ -4,7 +4,7 @@ import { activeSlidevData } from '../projects'
 import { getFirstDisplayedChild } from '../utils/getFirstDisplayedChild'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
-import { getMarkdownFromDoc } from './useMarkdownFromDoc'
+import { getProjectFromDoc } from './useProjectFromDoc'
 
 export const useFocusedSlideNo = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
@@ -13,11 +13,11 @@ export const useFocusedSlideNo = createSingletonComposable(() => {
 
   function updateSlideNo() {
     const data = activeSlidevData.value
-    const md = getMarkdownFromDoc(editor.value?.document)
-    if (!data || !md || !editor.value)
+    const projectInfo = getProjectFromDoc(editor.value?.document)
+    if (!data || !projectInfo || !editor.value)
       return
     const line = editor.value.selection.active.line + 1
-    const slide = md.slides.find(s => s.start <= line && line <= s.end)
+    const slide = projectInfo.md.slides.find(s => s.start <= line && line <= s.end)
     if (slide) {
       const source = getFirstDisplayedChild(slide)
       const focusedSlide = data.slides[slideNo.value - 1]

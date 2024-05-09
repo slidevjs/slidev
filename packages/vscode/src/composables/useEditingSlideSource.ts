@@ -1,13 +1,14 @@
-import { onScopeDispose, ref, watch } from '@vue/runtime-core'
+import { computed, onScopeDispose, ref, watch } from '@vue/runtime-core'
 import { window } from 'vscode'
 import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
-import { useMarkdownFromDoc } from './useMarkdownFromDoc'
+import { useProjectFromDoc } from './useProjectFromDoc'
 
 export const useEditingSlideSource = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
-  const markdown = useMarkdownFromDoc(() => editor.value?.document)
+  const projectInfo = useProjectFromDoc(() => editor.value?.document)
+  const markdown = computed(() => projectInfo.value?.md)
   const index = ref(0)
 
   function updateSlideNo() {

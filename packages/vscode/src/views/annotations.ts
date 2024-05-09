@@ -1,12 +1,13 @@
+import { clamp } from '@antfu/utils'
 import type { SourceSlideInfo } from '@slidev/types'
 import { computed, watch } from '@vue/runtime-core'
 import type { DecorationOptions } from 'vscode'
 import { Position, Range, window } from 'vscode'
-import { clamp } from '@antfu/utils'
 import { useActiveTextEditor } from '../composables/useActiveTextEditor'
-import { useMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
-import { activeSlidevData } from '../projects'
+import { useProjectFromDoc } from '../composables/useProjectFromDoc'
+import { activeProject } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
+import { toRelativePath } from '../utils/toRelativePath'
 
 const dividerDecoration = window.createTextEditorDecorationType({
   color: '#8884',
@@ -22,23 +23,31 @@ const frontmatterDecoration = window.createTextEditorDecorationType({
 export const useAnnotations = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
   const doc = computed(() => editor.value?.document)
-  const md = useMarkdownFromDoc(doc)
+  const projectInfo = useProjectFromDoc(doc)
   watch(
-    [editor, doc, md, activeSlidevData],
-    ([editor, doc, md, data]) => {
-      if (!editor || !doc || !md)
+    [editor, doc, projectInfo, activeProject],
+    ([editor, doc, projectInfo, activeProject]) => {
+      if (!editor || !doc || !projectInfo)
         return
 
+      const { project, md } = projectInfo
+      const isActive = project === activeProject
       const docText = doc.getText()
 
       function getTextContent(source: SourceSlideInfo) {
-        if (!data)
-          return ''
-        const slides = data.slides.filter(
+        const slides = project.data.slides.filter(
           s => s.source === source || s.importChain?.includes(source),
         )
-        const content = slides?.length ? slides.map(s => `#${s.index + 1}`).join(', ') : '(hidden)'
-        return ` ${content}`
+        const posInfo = slides?.length
+          ? slides.map(s => `#${s.index + 1}`).join(', ')
+          : isActive ? '(hidden)' : ''
+        const entryInfo = source.index === 0 && project.data.entry !== md
+          ? ` (entry: ${toRelativePath(project.entry)})`
+          : ''
+        const activeInfo = source.index === 0 && !isActive
+          ? ' (inactive)'
+          : ''
+        return ` ${posInfo}${entryInfo}${activeInfo}`
       }
 
       const dividerRanges: DecorationOptions[] = []

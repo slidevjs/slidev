@@ -3,7 +3,7 @@ import { onScopeDispose } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
 import { FoldingRangeKind, languages } from 'vscode'
 import { createSingletonComposable } from '../utils/singletonComposable'
-import { getMarkdownFromDoc } from '../composables/useMarkdownFromDoc'
+import { getProjectFromDoc } from '../composables/useProjectFromDoc'
 
 export const useFoldings = createSingletonComposable(() => {
   const disposable = languages.registerFoldingRangeProvider(
@@ -13,7 +13,7 @@ export const useFoldings = createSingletonComposable(() => {
     },
     {
       async provideFoldingRanges(document: TextDocument) {
-        if (!getMarkdownFromDoc(document))
+        if (!getProjectFromDoc(document))
           return // Not a slidev markdown file
         // Not using global slides data because it updates too late
         const md = await parse(document.getText(), document.uri.fsPath)
