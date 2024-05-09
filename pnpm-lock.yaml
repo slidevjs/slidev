@@ -715,9 +715,6 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.7
         version: 0.7.7
-      '@iconify-json/carbon':
-        specifier: ^1.1.31
-        version: 1.1.32
       '@slidev/parser':
         specifier: workspace:*
         version: link:../parser

@@ -303,7 +303,6 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.7.7",
-    "@iconify-json/carbon": "^1.1.31",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "^20.12.7",
