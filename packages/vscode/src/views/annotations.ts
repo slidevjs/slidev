@@ -9,6 +9,7 @@ import { activeProject } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 
+const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
   color: '#8884',
   isWholeLine: true,
@@ -50,6 +51,7 @@ export const useAnnotations = createSingletonComposable(() => {
         return ` ${posInfo}${entryInfo}${activeInfo}`
       }
 
+      const firstLineRanges: DecorationOptions[] = []
       const dividerRanges: DecorationOptions[] = []
       const frontmatterRanges: DecorationOptions[] = []
 
@@ -59,7 +61,11 @@ export const useAnnotations = createSingletonComposable(() => {
 
         const start = new Position(line.lineNumber, 0)
         const startDividerRange = new Range(start, new Position(line.lineNumber, line.text.length))
-        dividerRanges.push({
+
+        // If a markdown has no headmatter, we should set `isWholeLine` to `false` for the first line
+        const isSpecialCase = slide.index === 0 && !slide.frontmatterStyle
+        const ranges = isSpecialCase ? firstLineRanges : dividerRanges
+        ranges.push({
           range: startDividerRange,
           renderOptions: {
             after: {
@@ -89,14 +95,9 @@ export const useAnnotations = createSingletonComposable(() => {
         }
       }
 
-      editor.setDecorations(
-        dividerDecoration,
-        dividerRanges,
-      )
-      editor.setDecorations(
-        frontmatterDecoration,
-        frontmatterRanges,
-      )
+      editor.setDecorations(firstLineDecoration, firstLineRanges)
+      editor.setDecorations(dividerDecoration, dividerRanges)
+      editor.setDecorations(frontmatterDecoration, frontmatterRanges)
     },
     { immediate: true },
   )
