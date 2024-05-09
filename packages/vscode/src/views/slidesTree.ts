@@ -1,14 +1,15 @@
+import { save as slidevSave } from '@slidev/parser/fs'
 import type { SourceSlideInfo } from '@slidev/types'
 import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runtime-core'
 import type { TreeItem } from 'vscode'
 import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
-import { save as slidevSave } from '@slidev/parser/fs'
+import { useViewVisibility } from '../composables/useViewVisibility'
+import { previewSync } from '../config'
+import { activeSlidevData } from '../projects'
+import { getSlideNo } from '../utils/getSlideNo'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
-import { getSlideNo } from '../utils/getSlideNo'
-import { activeSlidevData } from '../projects'
-import { previewSync } from '../config'
-import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { usePreviewWebview } from './previewWebview'
 
 export const slideMineType = 'application/slidev.slide'
@@ -141,10 +142,13 @@ export const useSlidesTree = createSingletonComposable(() => {
 
   watch(activeSlidevData, () => onChange.fire())
 
+  const visible = useViewVisibility(treeView)
   const { previewNavState } = usePreviewWebview()
   watch(
-    () => [previewNavState.no, activeSlidevData.value, slidesTreeData.value] as const,
-    ([no, data, tree]) => {
+    () => [visible.value, previewNavState.no, activeSlidevData.value, slidesTreeData.value] as const,
+    ([visible, no, data, tree]) => {
+      if (!visible)
+        return
       const slide = data?.slides[no - 1]
       if (!slide || !previewSync.value)
         return
