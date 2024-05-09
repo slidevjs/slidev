@@ -22,9 +22,10 @@ export function useGlobalConfigurations() {
   function updateConfigurations(ev: ConfigurationChangeEvent) {
     if (!ev.affectsConfiguration('slidev'))
       return
+    const newConfig = workspace.getConfiguration('slidev')
     for (const key in configKeys) {
       if (ev.affectsConfiguration(`slidev.${key}`))
-        configKeys[key].value = config.get(key)
+        configKeys[key].value = newConfig.get(key)
     }
   }
 
