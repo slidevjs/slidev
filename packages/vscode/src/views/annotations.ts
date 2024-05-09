@@ -44,6 +44,8 @@ export const useAnnotations = createSingletonComposable(() => {
       const frontmatterRanges: DecorationOptions[] = []
 
       for (const slide of md.slides) {
+        if (doc.lineCount <= slide.start)
+          continue
         const line = doc.lineAt(slide.frontmatterStyle ? slide.start : slide.start - 1)
 
         const start = new Position(line.lineNumber, 0)
