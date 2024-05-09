@@ -6,10 +6,8 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs'],
   target: 'node18',
-  splitting: true,
   clean: true,
-  shims: false,
-  sourcemap: true,
+  minify: true,
   external: [
     'vscode',
   ],
