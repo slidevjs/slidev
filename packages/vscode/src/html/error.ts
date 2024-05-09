@@ -13,7 +13,9 @@ export function generateErrorHtml(message: string) {
       : `No projects found`
   const errorMessage = message ? `(${message})` : ``
   const instruction = project
-    ? `Please start the server first.`
+    ? project.port
+      ? `Please check the server status.`
+      : `Please start the server first.`
     : projects.size
       ? `Please choose one first.`
       : `Please add one first.`

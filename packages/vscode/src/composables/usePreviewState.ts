@@ -33,7 +33,12 @@ export const usePreviewState = createSingletonComposable(() => {
   watchEffect(() => {
     if (!ready.value && detectServer.state.ready) {
       const detectedEntry = detectServer.state.entry
-      if (detectedEntry && projects.has(detectedEntry)) {
+      if (!detectedEntry)
+        return
+      if (detectedEntry.toLowerCase() === activeEntry.value?.toLowerCase()) {
+        activeProject.value!.port = configuredPort.value
+      }
+      else if (detectedEntry && projects.has(detectedEntry)) {
         window.showInformationMessage(`Slidev server detected on localhost:${configuredPort.value}.`, 'Start Preview', 'Ignore').then((res) => {
           if (res === 'Start Preview')
             activeEntry.value = detectServer.state.entry
