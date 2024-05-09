@@ -22,12 +22,12 @@ export const usePreviewState = createSingletonComposable(() => {
     : generateErrorHtml(message.value),
   )
 
-  function refresh() {
+  function refreshState() {
     activeServer.value?.refresh()
     if (!ready.value && activeServer.value?.port.value !== configuredPort.value)
       detectServer.refresh()
   }
-  const interval = setInterval(refresh, 4000)
+  const interval = setInterval(refreshState, 4000)
   onScopeDispose(() => clearInterval(interval))
 
   watchEffect(() => {
@@ -48,6 +48,6 @@ export const usePreviewState = createSingletonComposable(() => {
     compatMode,
     message,
     html,
-    refresh,
+    refreshState,
   }
 })

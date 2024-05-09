@@ -12,7 +12,7 @@ import { useLogger } from './logger'
 
 export const usePreviewWebview = createSingletonComposable(() => {
   const logger = useLogger()
-  const { port, ready, html, compatMode, refresh } = usePreviewState()
+  const { port, ready, html, compatMode, refreshState } = usePreviewState()
   const focusedSlideNo = useFocusedSlideNo()
 
   useVscodeContext('slidev:preview:sync', previewSync)
@@ -40,8 +40,10 @@ export const usePreviewWebview = createSingletonComposable(() => {
             commands.executeCommand(`slidev.${data.command}`)
           }
           else if (data.type === 'update-state') {
-            Object.assign(previewNavState, data.navState)
-            if (initializedClientId.value !== data.clientId) {
+            if (initializedClientId.value === data.clientId) {
+              Object.assign(previewNavState, data.navState)
+            }
+            else {
               initializedClientId.value = data.clientId
               setTimeout(() => {
                 if (previewSync.value && initializedClientId.value === data.clientId)
@@ -57,13 +59,16 @@ export const usePreviewWebview = createSingletonComposable(() => {
   onScopeDispose(() => disposable.dispose())
 
   const pageId = ref(0)
-  watch([view, html, port], () => {
+  let i = 0
+  function refresh() {
+    refreshState()
     if (!view.value)
       return
-    view.value.webview.html = html.value
+    view.value.webview.html = `${html.value}<!--${i++}-->`
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
-  })
+  }
+  watchEffect(refresh)
 
   function postMessage(type: string, data: Record<string, unknown>) {
     view.value?.webview.postMessage({
@@ -86,10 +91,9 @@ export const usePreviewWebview = createSingletonComposable(() => {
 
   watchEffect(() => {
     if (view.value) {
-      if (ready.value && previewNavState.no > 0)
-        view.value.title = `Preview (${previewNavState.no}/${activeSlidevData.value?.slides.length})`
-      else
-        view.value.title = 'Preview'
+      const slideNo = ready.value && previewNavState.no > 0 ? ` (${previewNavState.no}/${activeSlidevData.value?.slides.length})` : ''
+      const compatInfo = compatMode.value ? ' (compat mode)' : ''
+      view.value.title = `Preview${slideNo}${compatInfo}`
     }
   })
 

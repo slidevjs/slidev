@@ -53,6 +53,8 @@ export function useProjects() {
   }
   init()
 
+  useVscodeContext('slidev:hasActiveProject', () => !!activeEntry.value)
+
   let pendingUpdate: { cancelled: boolean } | null = null
   const fsWatcher = workspace.createFileSystemWatcher('**/*.md', false, false, false)
   fsWatcher.onDidChange(async (uri) => {
