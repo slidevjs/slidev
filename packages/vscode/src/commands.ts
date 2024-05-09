@@ -8,7 +8,7 @@ import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { configuredPort, previewSync } from './config'
 import type { SlidevProject } from './projects'
-import { activeEntry, activeProject, activeSlidevData, addProject, projects } from './projects'
+import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { usePreviewWebview } from './views/previewWebview'
 import { useDevServer } from './composables/useDevServer'
@@ -19,6 +19,8 @@ export function useCommands() {
   function registerCommand(command: string, callback: (...args: any[]) => any) {
     disposables.push(commands.registerCommand(command, callback))
   }
+
+  registerCommand('slidev.rescan-projects', rescanProjects)
 
   registerCommand('slidev.choose-entry', async () => {
     const entry = await window.showQuickPick([...projects.keys()], {
@@ -38,6 +40,13 @@ export function useCommands() {
       for (const entry of selected)
         await addProject(entry)
     }
+  })
+
+  registerCommand('slidev.remove-entry', async (project: SlidevProject) => {
+    const entry = project.entry
+    if (activeEntry.value === entry)
+      activeEntry.value = null
+    projects.delete(entry)
   })
 
   registerCommand('slidev.set-as-active', async (project: SlidevProject) => {

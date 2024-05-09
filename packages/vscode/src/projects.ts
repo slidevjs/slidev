@@ -23,25 +23,38 @@ export const activeSlidevData = computed(() => activeProject.value?.data)
 export const activeUserRoot = computed(() => activeProject.value?.userRoot)
 export const multiProject = useVscodeContext('slidev-multi-project', () => projects.size > 1)
 
+async function loadExistingProjects() {
+  const files = await workspace.findFiles('**/*.md', '**/node_modules/**')
+  for (const file of files) {
+    const path = slash(file.fsPath)
+    if (basename(path) === 'slides.md')
+      (await addProjectEffect(path))()
+  }
+}
+
+export async function rescanProjects() {
+  await loadExistingProjects()
+  for (const project of projects.values()) {
+    if (!existsSync(project.entry)) {
+      projects.delete(project.entry)
+      if (activeEntry.value === project.entry)
+        activeEntry.value = null
+    }
+  }
+  await autoSetActiveEntry()
+}
+
 export function useProjects() {
   const logger = useLogger()
 
-  async function loadIntialFiles() {
-    logger.info(`Start loading initial slides files`)
-    const startMs = Date.now()
-    const files = await workspace.findFiles('**/*.md', '**/node_modules/**')
-    for (const file of files) {
-      const path = slash(file.fsPath)
-      if (basename(path) === 'slides.md')
-        (await addProjectEffect(path))()
-    }
-    autoSetActiveEntry()
-    logger.info(`All initial slides files loaded in ${Date.now() - startMs}ms.`)
+  async function init() {
+    await loadExistingProjects()
+    await autoSetActiveEntry()
   }
-  loadIntialFiles()
+  init()
 
   let pendingUpdate: { cancelled: boolean } | null = null
-  const fsWatcher = workspace.createFileSystemWatcher('**/*.md')
+  const fsWatcher = workspace.createFileSystemWatcher('**/*.md', false, false, false)
   fsWatcher.onDidChange(async (uri) => {
     const path = slash(uri.fsPath)
     logger.info(`File ${path} changed.`)
@@ -113,12 +126,18 @@ async function addProjectEffect(entry: string) {
   const userRoot = dirname(entry)
   const data = markRaw(await load(userRoot, entry))
   return () => {
-    projects.set(entry, {
-      entry,
-      userRoot,
-      data,
-      port: null,
-    })
+    const existing = projects.get(entry)
+    if (existing) {
+      existing.data = data
+    }
+    else {
+      projects.set(entry, {
+        entry,
+        userRoot,
+        data,
+        port: null,
+      })
+    }
   }
 }
 

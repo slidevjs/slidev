@@ -25,6 +25,12 @@
   "contributes": {
     "commands": [
       {
+        "command": "slidev.rescan-projects",
+        "category": "Slidev",
+        "title": "Rescan Slidev projects",
+        "icon": "$(refresh)"
+      },
+      {
         "command": "slidev.choose-entry",
         "category": "Slidev",
         "title": "Choose active slides entry."
@@ -33,6 +39,12 @@
         "command": "slidev.add-entry",
         "category": "Slidev",
         "title": "Choose Markdown files to add as slides entries."
+      },
+      {
+        "command": "slidev.remove-entry",
+        "category": "Slidev",
+        "title": "Remove the given entry file from the active slides entries.",
+        "icon": "$(close)"
       },
       {
         "command": "slidev.set-as-active",
@@ -121,13 +133,15 @@
         "command": "slidev.enable-preview-sync",
         "category": "Slidev",
         "title": "Sync preview window with editor cursor",
-        "icon": "$(unlock)"
+        "icon": "$(unlock)",
+        "enablement": "!slidev:preview:sync"
       },
       {
         "command": "slidev.disable-preview-sync",
         "category": "Slidev",
         "title": "Unsync preview window with editor cursor",
-        "icon": "$(lock)"
+        "icon": "$(lock)",
+        "enablement": "slidev:preview:sync"
       }
     ],
     "menus": {
@@ -144,6 +158,11 @@
         }
       ],
       "view/title": [
+        {
+          "command": "slidev.rescan-projects",
+          "when": "view =~ /slidev-projects-tree/",
+          "group": "navigation"
+        },
         {
           "command": "slidev.preview-prev-slide",
           "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
@@ -193,12 +212,17 @@
       "view/item/context": [
         {
           "command": "slidev.set-as-active",
-          "when": "view == slidev-projects-tree && viewItem =~ /inactive/",
-          "group": "inline"
+          "when": "view == slidev-projects-tree && viewItem =~ /<inactive>/",
+          "group": "inline@1"
+        },
+        {
+          "command": "slidev.remove-entry",
+          "when": "view == slidev-projects-tree&& viewItem =~ /<project>/",
+          "group": "inline@2"
         },
         {
           "command": "slidev.stop-dev",
-          "when": "view == slidev-projects-tree && viewItem =~ /up/"
+          "when": "view == slidev-projects-tree && viewItem =~ /<up>/"
         }
       ]
     },

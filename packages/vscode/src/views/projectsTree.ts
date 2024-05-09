@@ -37,7 +37,7 @@ function getTreeItem(element: SlidevProject | string): TreeItem {
       resourceUri: Uri.file(element.entry),
       iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
       collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
-      contextValue: `${active ? 'active' : 'inactive'}-${element.port ? 'up' : 'down'}`,
+      contextValue: `<project><${active ? 'active' : 'inactive'}><${element.port ? 'up' : 'down'}>`,
       command: {
         title: 'Open',
         command: 'vscode.open',
