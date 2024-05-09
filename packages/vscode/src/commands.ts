@@ -11,7 +11,7 @@ import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { usePreviewWebview } from './views/previewWebview'
-import { useTerminal } from './views/terminal'
+import { useDevServer } from './composables/useDevServer'
 
 export function useCommands() {
   const disposables: Disposable[] = []
@@ -45,8 +45,8 @@ export function useCommands() {
   })
 
   registerCommand('slidev.stop-dev', async (project: SlidevProject) => {
-    useTerminal(project).closeTerminal()
-    setTimeout(() => usePreviewWebview().refresh(false), 100)
+    const { stop } = useDevServer(project)
+    stop()
   })
 
   async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
@@ -131,8 +131,8 @@ export function useCommands() {
       return
     }
 
-    const { startDevServer, showTerminal } = useTerminal(project)
-    await startDevServer()
+    const { start, showTerminal } = useDevServer(project)
+    await start()
     await showTerminal()
 
     const { retry } = usePreviewWebview()

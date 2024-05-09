@@ -146,32 +146,32 @@
       "view/title": [
         {
           "command": "slidev.preview-prev-slide",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
           "group": "navigation@1"
         },
         {
           "command": "slidev.preview-next-slide",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
           "group": "navigation@2"
         },
         {
           "command": "slidev.preview-prev-click",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
           "group": "navigation@3"
         },
         {
           "command": "slidev.preview-next-click",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
           "group": "navigation@4"
         },
         {
           "command": "slidev.start-dev",
-          "when": "view =~ /slidev-preview/ && !slidev-connected",
+          "when": "view =~ /slidev-preview/ && !slidev:preview:ready",
           "group": "navigation@5"
         },
         {
           "command": "slidev.open-in-browser",
-          "when": "view =~ /slidev-preview/ && slidev-connected",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready",
           "group": "navigation@5"
         },
         {
@@ -181,12 +181,12 @@
         },
         {
           "command": "slidev.enable-preview-sync",
-          "when": "view =~ /slidev-preview/ && !slidev-config.preview-sync",
+          "when": "view =~ /slidev-preview/ && !slidev:preview:sync",
           "group": "navigation@7"
         },
         {
           "command": "slidev.disable-preview-sync",
-          "when": "view =~ /slidev-preview/ && slidev-config.preview-sync",
+          "when": "view =~ /slidev-preview/ && slidev:preview:sync",
           "group": "navigation@7"
         }
       ],

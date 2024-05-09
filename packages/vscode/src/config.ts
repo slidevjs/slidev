@@ -1,35 +1,13 @@
-import type { Ref } from '@vue/runtime-core'
-import { onScopeDispose, ref, shallowRef, watchEffect } from '@vue/runtime-core'
-import { ColorThemeKind, commands, window, workspace } from 'vscode'
-import type { ColorTheme } from 'vscode'
+import type { Ref, ShallowRef } from '@vue/runtime-core'
+import { onScopeDispose, ref, shallowRef } from '@vue/runtime-core'
+import type { ColorTheme, ConfigurationChangeEvent } from 'vscode'
+import { ColorThemeKind, window, workspace } from 'vscode'
 
-const configurations = workspace.getConfiguration('slidev')
-
-// const forceUpdateSignal = ref(1)
-// function updateConfigurations(ev: ConfigurationChangeEvent) {
-//   if (ev.affectsConfiguration('slidev'))
-//     forceUpdateSignal.value++
-// }
+const config = workspace.getConfiguration('slidev')
+const configKeys: Record<string, ShallowRef<unknown>> = {}
 
 function useConfiguration<T>(key: string, defaultValue: T): Ref<T> {
-  const value = shallowRef<T>(configurations.get<T>(key) ?? defaultValue)
-  // watch(forceUpdateSignal, () => setTimeout(() => {
-  //   value.value = configurations.get<T>(key) ?? defaultValue
-  //   useLogger().info(`FORCEUPDATE CONFIG ${key} to ${configurations.get<T>(key) ?? defaultValue}`)
-  // }, 1000))
-  // return computed({
-  //   get: () => {
-  //     return value.value
-  //   },
-  //   set: (newVal) => {
-  //     configurations.update(key, newVal)
-  //     value.value = newVal
-  //   },
-  // })
-  watchEffect(() => {
-    commands.executeCommand('setContext', `slidev-config.${key}`, value.value)
-  })
-  return value
+  return configKeys[key] = shallowRef<T>(config.get<T>(key) ?? defaultValue)
 }
 
 export const forceEnabled = useConfiguration('enabled', false)
@@ -39,16 +17,27 @@ export const configuredEntry = useConfiguration('entry', '')
 export const previewSync = useConfiguration('preview-sync', true)
 
 export const isDarkTheme = ref(true)
-updateIsDark(window.activeColorTheme)
-function updateIsDark(theme: ColorTheme) {
-  isDarkTheme.value = theme.kind === ColorThemeKind.Dark || theme.kind === ColorThemeKind.HighContrast
-}
 
 export function useGlobalConfigurations() {
-  // const disposable1 = workspace.onDidChangeConfiguration(updateConfigurations)
+  function updateConfigurations(ev: ConfigurationChangeEvent) {
+    if (!ev.affectsConfiguration('slidev'))
+      return
+    for (const key in configKeys) {
+      if (ev.affectsConfiguration(`slidev.${key}`))
+        configKeys[key].value = config.get(key)
+    }
+  }
+
+  const disposable1 = workspace.onDidChangeConfiguration(updateConfigurations)
+
+  function updateIsDark(theme: ColorTheme) {
+    isDarkTheme.value = theme.kind === ColorThemeKind.Dark || theme.kind === ColorThemeKind.HighContrast
+  }
+  updateIsDark(window.activeColorTheme)
   const disposable2 = window.onDidChangeActiveColorTheme(updateIsDark)
+
   onScopeDispose(() => {
-    // disposable1.dispose()
+    disposable1.dispose()
     disposable2.dispose()
   })
 }

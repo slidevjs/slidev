@@ -13,9 +13,6 @@ export interface SlidevProject {
   readonly entry: string
   readonly userRoot: string
   data: LoadedSlidevData
-  /**
-   * Null if server is down
-   */
   port: number | null
 }
 
