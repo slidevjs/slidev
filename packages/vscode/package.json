@@ -5,6 +5,7 @@
   "type": "module",
   "preview": true,
   "version": "0.49.0",
+  "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
   "repository": {
