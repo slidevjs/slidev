@@ -8,7 +8,6 @@ import { slash } from '@antfu/utils'
 import { useLogger } from './views/logger'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { useVscodeContext } from './composables/useVscodeContext'
-import { toRelativePath } from './utils/toRelativePath'
 
 export interface SlidevProject {
   readonly entry: string
@@ -96,16 +95,7 @@ export function useProjects() {
         return
     }
 
-    async function askIfNewEntry() {
-      if (basename(path) === 'slides.md')
-        return true
-      if (!maybeNewEntry)
-        return false
-      const result = await window.showInformationMessage(`New Markdown file ${toRelativePath(path)} detected. Add it as a slides entry?`, 'Yes', 'No')
-      return result === 'Yes'
-    }
-
-    if (!projects.has(path) && await askIfNewEntry())
+    if (basename(path).toLocaleLowerCase() === 'slides.md' && !projects.has(path))
       effects.push(await addProjectEffect(path))
 
     if (thisUpdate.cancelled)
