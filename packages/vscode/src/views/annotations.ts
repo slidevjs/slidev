@@ -13,13 +13,12 @@ import { toRelativePath } from '../utils/toRelativePath'
 const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
   color: '#8884',
+  backgroundColor: '#8881',
   isWholeLine: true,
 })
 const frontmatterDecoration = window.createTextEditorDecorationType({
   isWholeLine: true,
   backgroundColor: '#8881',
-  borderColor: '#8882',
-  border: '1px',
 })
 
 export const useAnnotations = createSingletonComposable(() => {
@@ -89,15 +88,13 @@ export const useAnnotations = createSingletonComposable(() => {
           const match = range.match(/^---[\s\S]*?\n---/)
           if (match && match.index != null) {
             const endLine = doc.positionAt(doc.offsetAt(start) + match.index + match[0].length).line
-            const decoOptions = {
-              range: new Range(start, new Position(endLine, 0)),
-            }
-            frontmatterRanges.push(decoOptions)
+            frontmatterRanges.push({
+              range: new Range(new Position(line.lineNumber + 1, 0), new Position(endLine - 1, 0)),
+            })
             if (endLine !== start.line) {
-              const endDividerOptions = {
+              dividerRanges.push({
                 range: new Range(new Position(endLine, 0), new Position(endLine, 0)),
-              }
-              dividerRanges.push(endDividerOptions)
+              })
             }
           }
         }

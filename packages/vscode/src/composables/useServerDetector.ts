@@ -4,7 +4,7 @@ import { reactive, watch } from '@vue/runtime-core'
 const versionRE = /<meta name="slidev:version" content="([^"]+)">/
 const entryRE = /<meta charset="slidev:entry" content="([^"]+)">/
 
-export function useServerDetector(port: Ref<number | null>, forceEntry?: string) {
+export function useServerDetector(port: Ref<number | null>, ensureEntry?: string) {
   const state = reactive({
     ready: false,
     message: '',
@@ -31,7 +31,7 @@ export function useServerDetector(port: Ref<number | null>, forceEntry?: string)
         state.compatMode = !text.match(versionRE)
         const detectedEntry = text.match(entryRE)?.[1]
         if (detectedEntry) {
-          if (forceEntry && forceEntry.toLowerCase() !== detectedEntry.toLowerCase())
+          if (ensureEntry && ensureEntry.toLowerCase() !== detectedEntry.toLowerCase())
             return false
           state.entry = detectedEntry
         }

@@ -1,13 +1,14 @@
-import { onScopeDispose, reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
+import { reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
 import type { WebviewView } from 'vscode'
 import { Uri, commands, env, window } from 'vscode'
+import { useDisposable } from '../composables/useDisposable'
 import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { usePreviewState } from '../composables/usePreviewState'
+import { useVscodeContext } from '../composables/useVscodeContext'
 import { isDarkTheme, previewSync } from '../config'
 import { extCtx } from '../index'
 import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
-import { useVscodeContext } from '../composables/useVscodeContext'
 import { useLogger } from './logger'
 
 export const usePreviewWebview = createSingletonComposable(() => {
@@ -26,7 +27,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
   })
   const initializedClientId = ref('')
 
-  const disposable = window.registerWebviewViewProvider(
+  useDisposable(window.registerWebviewViewProvider(
     'slidev-preview',
     {
       resolveWebviewView(webviewView) {
@@ -55,8 +56,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
       },
     },
     { webviewOptions: { retainContextWhenHidden: true } },
-  )
-  onScopeDispose(() => disposable.dispose())
+  ))
 
   const pageId = ref(0)
   let i = 0
@@ -99,11 +99,8 @@ export const usePreviewWebview = createSingletonComposable(() => {
 
   function useNavOperation(operation: string, ...args: unknown[]) {
     return () => {
-      if (compatMode.value) {
-        window.showErrorMessage('Unsupported oprtation', {
-          detail: 'The current version of Slidev CLI does not support this operation. Please update the Slidev CLI.',
-        })
-      }
+      if (compatMode.value)
+        window.showErrorMessage('Unsupported operation: Slidev server too old.')
       postMessage('navigate', { operation, args })
     }
   }

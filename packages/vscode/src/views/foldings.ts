@@ -1,12 +1,12 @@
 import { parse } from '@slidev/parser'
-import { onScopeDispose } from '@vue/runtime-core'
 import type { TextDocument } from 'vscode'
 import { FoldingRangeKind, languages } from 'vscode'
-import { createSingletonComposable } from '../utils/singletonComposable'
+import { useDisposable } from '../composables/useDisposable'
 import { getProjectFromDoc } from '../composables/useProjectFromDoc'
+import { createSingletonComposable } from '../utils/singletonComposable'
 
 export const useFoldings = createSingletonComposable(() => {
-  const disposable = languages.registerFoldingRangeProvider(
+  useDisposable(languages.registerFoldingRangeProvider(
     {
       scheme: 'file',
       language: 'markdown',
@@ -24,6 +24,5 @@ export const useFoldings = createSingletonComposable(() => {
         }))
       },
     },
-  )
-  onScopeDispose(() => disposable.dispose())
+  ))
 })

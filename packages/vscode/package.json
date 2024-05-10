@@ -229,16 +229,10 @@
       "type": "object",
       "title": "Slidev",
       "properties": {
-        "slidev.enabled": {
-          "type": "boolean",
-          "scope": "window",
-          "description": "Force enable extension",
-          "default": false
-        },
         "slidev.port": {
           "type": "number",
           "scope": "window",
-          "description": "The port of Slidev server",
+          "description": "The default port of Slidev server",
           "default": 3030
         },
         "slidev.annotations": {

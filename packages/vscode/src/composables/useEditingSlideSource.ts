@@ -1,8 +1,9 @@
-import { computed, onScopeDispose, ref, watch } from '@vue/runtime-core'
+import { computed, ref, watch } from '@vue/runtime-core'
 import { window } from 'vscode'
 import { activeSlidevData } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { useActiveTextEditor } from './useActiveTextEditor'
+import { useDisposable } from './useDisposable'
 import { useProjectFromDoc } from './useProjectFromDoc'
 
 export const useEditingSlideSource = createSingletonComposable(() => {
@@ -24,8 +25,7 @@ export const useEditingSlideSource = createSingletonComposable(() => {
 
   updateSlideNo()
 
-  const disposable = window.onDidChangeTextEditorSelection(updateSlideNo)
-  onScopeDispose(() => disposable.dispose())
+  useDisposable(window.onDidChangeTextEditorSelection(updateSlideNo))
 
   watch([editor, activeSlidevData], updateSlideNo)
 
