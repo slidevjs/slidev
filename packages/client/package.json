@@ -39,7 +39,7 @@
     "@slidev/types": "workspace:*",
     "@typescript/ata": "^0.9.4",
     "@unhead/vue": "^1.9.10",
-    "@unocss/reset": "^0.59.4",
+    "@unocss/reset": "^0.60.0",
     "@vueuse/core": "^10.9.0",
     "@vueuse/math": "^10.9.0",
     "@vueuse/motion": "^2.1.0",
@@ -57,7 +57,7 @@
     "shiki": "^1.5.1",
     "shiki-magic-move": "^0.4.2",
     "typescript": "^5.4.5",
-    "unocss": "^0.59.4",
+    "unocss": "^0.60.0",
     "vue": "^3.4.27",
     "vue-router": "^4.3.2",
     "yaml": "^2.4.2"

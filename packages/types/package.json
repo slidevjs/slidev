@@ -35,7 +35,7 @@
     "mermaid": "^10.9.0",
     "monaco-editor": "^0.48.0",
     "shiki": "^1.5.1",
-    "unocss": "^0.59.4",
+    "unocss": "^0.60.0",
     "unplugin-icons": "^0.19.0",
     "unplugin-vue-markdown": "^0.26.2",
     "vite-plugin-remote-assets": "^0.4.1",
