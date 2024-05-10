@@ -315,7 +315,9 @@
     "@slidev/types": "workspace:*",
     "@types/node": "^20.12.7",
     "@types/vscode": "^1.88.0",
-    "@vue/runtime-core": "^3.4.22",
+    "@vue/reactivity": "^3.4.27",
+    "@vue/runtime-core": "^3.4.27",
+    "@vue/shared": "^3.4.27",
     "get-port-please": "^3.1.2"
   }
 }

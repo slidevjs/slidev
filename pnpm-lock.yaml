@@ -727,9 +727,15 @@ importers:
       '@types/vscode':
         specifier: ^1.88.0
         version: 1.88.0
+      '@vue/reactivity':
+        specifier: ^3.4.27
+        version: 3.4.27
       '@vue/runtime-core':
-        specifier: ^3.4.22
-        version: 3.4.26
+        specifier: ^3.4.27
+        version: 3.4.27
+      '@vue/shared':
+        specifier: ^3.4.27
+        version: 3.4.27
       get-port-please:
         specifier: ^3.1.2
         version: 3.1.2
@@ -2234,8 +2240,14 @@ packages:
   '@vue/reactivity@3.4.26':
     resolution: {integrity: sha512-E/ynEAu/pw0yotJeLdvZEsp5Olmxt+9/WqzvKff0gE67tw73gmbx6tRkiagE/eH0UCubzSlGRebCbidB1CpqZQ==}
 
+  '@vue/reactivity@3.4.27':
+    resolution: {integrity: sha512-kK0g4NknW6JX2yySLpsm2jlunZJl2/RJGZ0H9ddHdfBVHcNzxmQ0sS0b09ipmBoQpY8JM2KmUw+a6sO8Zo+zIA==}
+
   '@vue/runtime-core@3.4.26':
     resolution: {integrity: sha512-AFJDLpZvhT4ujUgZSIL9pdNcO23qVFh7zWCsNdGQBw8ecLNxOOnPcK9wTTIYCmBJnuPHpukOwo62a2PPivihqw==}
+
+  '@vue/runtime-core@3.4.27':
+    resolution: {integrity: sha512-7aYA9GEbOOdviqVvcuweTLe5Za4qBZkUY7SvET6vE8kyypxVgaT1ixHLg4urtOlrApdgcdgHoTZCUuTGap/5WA==}
 
   '@vue/runtime-dom@3.4.26':
     resolution: {integrity: sha512-UftYA2hUXR2UOZD/Fc3IndZuCOOJgFxJsWOxDkhfVcwLbsfh2CdXE2tG4jWxBZuDAs9J9PzRTUFt1PgydEtItw==}
@@ -2247,6 +2259,9 @@ packages:
 
   '@vue/shared@3.4.26':
     resolution: {integrity: sha512-Fg4zwR0GNnjzodMt3KRy2AWGMKQXByl56+4HjN87soxLNU9P5xcJkstAlIeEF3cU6UYOzmJl1tV0dVPGIljCnQ==}
+
+  '@vue/shared@3.4.27':
+    resolution: {integrity: sha512-DL3NmY2OFlqmYYrzp39yi3LDkKxa5vZVwxWdQ3rG0ekuWscHraeIbnI8t+aZK7qhYqEqWKTUdijadunb9pnrgA==}
 
   '@vueuse/core@10.9.0':
     resolution: {integrity: sha512-/1vjTol8SXnx6xewDEKfS0Ra//ncg4Hb0DaZiwKf7drgfMsKFExQ+FnnENcN6efPen+1kIzhLQoGSy0eDUVOMg==}
@@ -7724,7 +7739,7 @@ snapshots:
       '@volar/language-core': 1.11.1
       '@volar/source-map': 1.11.1
       '@vue/compiler-dom': 3.4.26
-      '@vue/shared': 3.4.26
+      '@vue/shared': 3.4.27
       computeds: 0.0.1
       minimatch: 9.0.4
       muggle-string: 0.3.1
@@ -7737,7 +7752,7 @@ snapshots:
     dependencies:
       '@volar/language-core': 2.2.0
       '@vue/compiler-dom': 3.4.26
-      '@vue/shared': 3.4.26
+      '@vue/shared': 3.4.27
       computeds: 0.0.1
       minimatch: 9.0.4
       path-browserify: 1.0.1
@@ -7749,10 +7764,19 @@ snapshots:
     dependencies:
       '@vue/shared': 3.4.26
 
+  '@vue/reactivity@3.4.27':
+    dependencies:
+      '@vue/shared': 3.4.27
+
   '@vue/runtime-core@3.4.26':
     dependencies:
       '@vue/reactivity': 3.4.26
       '@vue/shared': 3.4.26
+
+  '@vue/runtime-core@3.4.27':
+    dependencies:
+      '@vue/reactivity': 3.4.27
+      '@vue/shared': 3.4.27
 
   '@vue/runtime-dom@3.4.26':
     dependencies:
@@ -7767,6 +7791,8 @@ snapshots:
       vue: 3.4.26(typescript@5.4.5)
 
   '@vue/shared@3.4.26': {}
+
+  '@vue/shared@3.4.27': {}
 
   '@vueuse/core@10.9.0(vue@3.4.26(typescript@5.4.5))':
     dependencies:
