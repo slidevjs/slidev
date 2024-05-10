@@ -131,6 +131,11 @@
         "title": "Unsync preview window with editor cursor",
         "icon": "$(lock)",
         "enablement": "slidev:preview:sync"
+      },
+      {
+        "command": "slidev.remove-slide",
+        "category": "Slidev",
+        "title": "Remove this slide"
       }
     ],
     "menus": {
@@ -141,6 +146,10 @@
         },
         {
           "command": "slidev.set-as-active",
+          "when": "false"
+        },
+        {
+          "command": "slidev.remove-slide",
           "when": "false"
         }
       ],
@@ -222,6 +231,10 @@
         {
           "command": "slidev.stop-dev",
           "when": "view == slidev-projects-tree && viewItem =~ /<up>/"
+        },
+        {
+          "command": "slidev.remove-slide",
+          "when": "view == slidev-slides-tree"
         }
       ]
     },

@@ -1,6 +1,8 @@
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
+import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
+import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { configuredPort, previewSync } from './config'
@@ -8,7 +10,7 @@ import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { usePreviewWebview } from './views/previewWebview'
-import { useDevServer } from './composables/useDevServer'
+import type { SlidesTreeElement } from './views/slidesTree'
 
 export function useCommands() {
   const disposables: Disposable[] = []
@@ -147,4 +149,10 @@ export function useCommands() {
 
   registerCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
   registerCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
+
+  registerCommand('slidev.remove-slide', async ({ slide }: SlidesTreeElement) => {
+    const md = activeSlidevData.value!.markdownFiles[slide.filepath]
+    md.slides.splice(md.slides.indexOf(slide), 1)
+    await saveSlidevMarkdown(md)
+  })
 }

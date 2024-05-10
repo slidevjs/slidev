@@ -36,7 +36,7 @@ const layoutIconMap = {
   'two-cols': 'split-horizontal',
 } as Record<string, string>
 
-interface SlidesTreeElement {
+export interface SlidesTreeElement {
   parent: SlidesTreeElement | null
   children?: SlidesTreeElement[]
   slide: SourceSlideInfo
