@@ -8,7 +8,6 @@ import { slash } from '@antfu/utils'
 import { useLogger } from './views/logger'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { useVscodeContext } from './composables/useVscodeContext'
-import { toRelativePath } from './utils/toRelativePath'
 
 export interface SlidevProject {
   readonly entry: string
