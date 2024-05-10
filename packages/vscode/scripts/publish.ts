@@ -13,6 +13,15 @@ async function publish() {
     return
   }
 
+  if (!process.env.VSCE_TOKEN) {
+    console.error('Missing VSCE_TOKEN')
+    process.exit(1)
+  }
+  if (!process.env.OVSX_TOKEN) {
+    console.error('Missing OVSX_TOKEN')
+    process.exit(1)
+  }
+
   console.log('Publishing VS Code extension...')
 
   await execa('npm', ['run', 'build'], { cwd: root, stdio: 'inherit' })

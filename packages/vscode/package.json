@@ -18,7 +18,7 @@
   "main": "./dist/index.cjs",
   "icon": "dist/res/logo.png",
   "engines": {
-    "vscode": "^1.52.0"
+    "vscode": "^1.89.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -319,6 +319,7 @@
     "@vue/reactivity": "^3.4.27",
     "@vue/runtime-core": "^3.4.27",
     "@vue/shared": "^3.4.27",
-    "get-port-please": "^3.1.2"
+    "get-port-please": "^3.1.2",
+    "ovsx": "^0.9.1"
   }
 }
