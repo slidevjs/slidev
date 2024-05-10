@@ -310,11 +310,11 @@
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.7.7",
+    "@antfu/utils": "^0.7.8",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.12.7",
-    "@types/vscode": "^1.88.0",
+    "@types/node": "^20.12.11",
+    "@types/vscode": "^1.89.0",
     "@vue/reactivity": "^3.4.27",
     "@vue/runtime-core": "^3.4.27",
     "@vue/shared": "^3.4.27",
