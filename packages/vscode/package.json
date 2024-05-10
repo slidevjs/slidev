@@ -34,17 +34,18 @@
       {
         "command": "slidev.choose-entry",
         "category": "Slidev",
-        "title": "Choose active slides entry."
+        "title": "Choose active slides entry"
       },
       {
         "command": "slidev.add-entry",
         "category": "Slidev",
-        "title": "Choose Markdown files to add as slides entries."
+        "title": "Choose Markdown files to add as slides entries",
+        "icon": "$(add)"
       },
       {
         "command": "slidev.remove-entry",
         "category": "Slidev",
-        "title": "Remove the given entry file from the active slides entries.",
+        "title": "Remove the given entry file from the active slides entries",
         "icon": "$(close)"
       },
       {
@@ -98,25 +99,25 @@
       {
         "command": "slidev.preview-prev-click",
         "category": "Slidev",
-        "title": "Navigate to prev click in preview window.",
+        "title": "Navigate to prev click in preview window",
         "icon": "$(arrow-left)"
       },
       {
         "command": "slidev.preview-next-click",
         "category": "Slidev",
-        "title": "Navigate to next click in preview window.",
+        "title": "Navigate to next click in preview window",
         "icon": "$(arrow-right)"
       },
       {
         "command": "slidev.preview-prev-slide",
         "category": "Slidev",
-        "title": "Navigate to prev slide in preview window.",
+        "title": "Navigate to prev slide in preview window",
         "icon": "$(arrow-up)"
       },
       {
         "command": "slidev.preview-next-slide",
         "category": "Slidev",
-        "title": "Navigate to next slide in preview window.",
+        "title": "Navigate to next slide in preview window",
         "icon": "$(arrow-down)"
       },
       {
@@ -168,9 +169,14 @@
       ],
       "view/title": [
         {
+          "command": "slidev.add-entry",
+          "when": "view =~ /slidev-projects-tree/",
+          "group": "navigation@1"
+        },
+        {
           "command": "slidev.rescan-projects",
           "when": "view =~ /slidev-projects-tree/",
-          "group": "navigation"
+          "group": "navigation@2"
         },
         {
           "command": "slidev.preview-prev-slide",
