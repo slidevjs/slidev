@@ -46,10 +46,8 @@ export const usePreviewWebview = createSingletonComposable(() => {
             }
             else {
               initializedClientId.value = data.clientId
-              setTimeout(() => {
-                if (previewSync.value && initializedClientId.value === data.clientId)
-                  postMessage('navigate', { no: focusedSlideNo.value })
-              }, 300)
+              if (previewSync.value && initializedClientId.value === data.clientId)
+                postMessage('navigate', { no: focusedSlideNo.value })
             }
           }
         })

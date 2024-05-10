@@ -191,6 +191,7 @@ export function useNavBase(
         query: {
           ...router.currentRoute.value.query,
           clicks: clicks === 0 ? undefined : clicks.toString(),
+          embedded: location.search.includes('embedded') ? 'true' : undefined,
         },
       })
     }
