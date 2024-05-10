@@ -70,7 +70,7 @@ export function detectFeatures(code: string): SlidevDetectedFeatures {
   }
 }
 
-export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'end'> {
+export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
   const matterResult = matter(raw)
   let note: string | undefined
   const frontmatter = matterResult.data || {}
@@ -120,16 +120,18 @@ export async function parse(
   const slides: SourceSlideInfo[] = []
 
   let start = 0
+  let contentStart = 0
 
   async function slice(end: number) {
     if (start === end)
       return
     const raw = lines.slice(start, end).join('\n')
-    const slide = {
+    const slide: SourceSlideInfo = {
       ...parseSlide(raw),
       filepath,
       index: slides.length,
       start,
+      contentStart,
       end,
     }
     if (extensions) {
@@ -143,6 +145,7 @@ export async function parse(
     }
     slides.push(slide)
     start = end + 1
+    contentStart = end + 1
   }
 
   if (extensions) {
@@ -154,25 +157,31 @@ export async function parse(
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trimEnd()
-    if (line.match(/^---+/)) {
+    if (line.startsWith('---')) {
       await slice(i)
 
       const next = lines[i + 1]
       // found frontmatter, skip next dash
-      if (line.match(/^---([^-].*)?$/) && !next?.match(/^\s*$/)) {
+      if (line[3] !== '-' && next?.trim()) {
         start = i
         for (i += 1; i < lines.length; i++) {
-          if (lines[i].trimEnd().match(/^---$/))
+          if (lines[i].trimEnd() === '---')
             break
         }
+        contentStart = i + 1
       }
     }
     // skip code block
-    else if (line.startsWith('```')) {
-      for (i += 1; i < lines.length; i++) {
-        if (lines[i].startsWith('```'))
+    else if (line.trimStart().startsWith('```')) {
+      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      let j = i + 1
+      for (; j < lines.length; j++) {
+        if (lines[j].startsWith(codeBlockLevel))
           break
       }
+      // Update i only when code block ends
+      if (j !== lines.length)
+        i = j
     }
   }
 

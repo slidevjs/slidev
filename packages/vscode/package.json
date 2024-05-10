@@ -1,0 +1,323 @@
+{
+  "publisher": "antfu",
+  "name": "slidev",
+  "displayName": "Slidev",
+  "type": "module",
+  "preview": true,
+  "version": "0.5.0",
+  "description": "Slidev support for VS Code",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/index.cjs",
+  "icon": "dist/res/logo.png",
+  "engines": {
+    "vscode": "^1.52.0"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "slidev.rescan-projects",
+        "category": "Slidev",
+        "title": "Rescan Slidev projects",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "slidev.choose-entry",
+        "category": "Slidev",
+        "title": "Choose active slides entry."
+      },
+      {
+        "command": "slidev.add-entry",
+        "category": "Slidev",
+        "title": "Choose Markdown files to add as slides entries."
+      },
+      {
+        "command": "slidev.remove-entry",
+        "category": "Slidev",
+        "title": "Remove the given entry file from the active slides entries.",
+        "icon": "$(close)"
+      },
+      {
+        "command": "slidev.set-as-active",
+        "category": "Slidev",
+        "title": "Set the given entry file as the active one",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "slidev.prev",
+        "category": "Slidev",
+        "title": "Go to previous slide in this Markdown",
+        "icon": "$(chevron-up)"
+      },
+      {
+        "command": "slidev.next",
+        "category": "Slidev",
+        "title": "Go to next slide in this Markdown",
+        "icon": "$(chevron-down)"
+      },
+      {
+        "command": "slidev.refresh-preview",
+        "category": "Slidev",
+        "title": "Refresh preview page",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "slidev.config-port",
+        "category": "Slidev",
+        "title": "Configure preview port"
+      },
+      {
+        "command": "slidev.start-dev",
+        "category": "Slidev",
+        "title": "Start slidev dev server",
+        "icon": "$(run-all)",
+        "enablement": "slidev:hasActiveProject"
+      },
+      {
+        "command": "slidev.stop-dev",
+        "category": "Slidev",
+        "title": "Stop the dev server",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "slidev.open-in-browser",
+        "category": "Slidev",
+        "title": "Open slides in browser",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "slidev.preview-prev-click",
+        "category": "Slidev",
+        "title": "Navigate to prev click in preview window.",
+        "icon": "$(arrow-left)"
+      },
+      {
+        "command": "slidev.preview-next-click",
+        "category": "Slidev",
+        "title": "Navigate to next click in preview window.",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "slidev.preview-prev-slide",
+        "category": "Slidev",
+        "title": "Navigate to prev slide in preview window.",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "slidev.preview-next-slide",
+        "category": "Slidev",
+        "title": "Navigate to next slide in preview window.",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "slidev.enable-preview-sync",
+        "category": "Slidev",
+        "title": "Sync preview window with editor cursor",
+        "icon": "$(unlock)",
+        "enablement": "!slidev:preview:sync"
+      },
+      {
+        "command": "slidev.disable-preview-sync",
+        "category": "Slidev",
+        "title": "Unsync preview window with editor cursor",
+        "icon": "$(lock)",
+        "enablement": "slidev:preview:sync"
+      },
+      {
+        "command": "slidev.remove-slide",
+        "category": "Slidev",
+        "title": "Remove this slide"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "slidev.remove-entry",
+          "when": "false"
+        },
+        {
+          "command": "slidev.set-as-active",
+          "when": "false"
+        },
+        {
+          "command": "slidev.remove-slide",
+          "when": "false"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "slidev-enabled && resourceLangId == markdown",
+          "command": "slidev.prev",
+          "group": "navigation"
+        },
+        {
+          "when": "slidev-enabled && resourceLangId == markdown",
+          "command": "slidev.next",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "slidev.rescan-projects",
+          "when": "view =~ /slidev-projects-tree/",
+          "group": "navigation"
+        },
+        {
+          "command": "slidev.preview-prev-slide",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "group": "navigation@1"
+        },
+        {
+          "command": "slidev.preview-next-slide",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "group": "navigation@2"
+        },
+        {
+          "command": "slidev.preview-prev-click",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "group": "navigation@3"
+        },
+        {
+          "command": "slidev.preview-next-click",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "group": "navigation@4"
+        },
+        {
+          "command": "slidev.start-dev",
+          "when": "view =~ /slidev-preview/ && !slidev:preview:ready",
+          "group": "navigation@5"
+        },
+        {
+          "command": "slidev.open-in-browser",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready",
+          "group": "navigation@5"
+        },
+        {
+          "command": "slidev.refresh-preview",
+          "when": "view =~ /slidev-preview/",
+          "group": "navigation@6"
+        },
+        {
+          "command": "slidev.enable-preview-sync",
+          "when": "view =~ /slidev-preview/ && !slidev:preview:sync",
+          "group": "navigation@7"
+        },
+        {
+          "command": "slidev.disable-preview-sync",
+          "when": "view =~ /slidev-preview/ && slidev:preview:sync",
+          "group": "navigation@7"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "slidev.set-as-active",
+          "when": "view == slidev-projects-tree && viewItem =~ /<inactive>/",
+          "group": "inline@1"
+        },
+        {
+          "command": "slidev.remove-entry",
+          "when": "view == slidev-projects-tree&& viewItem =~ /<project>/",
+          "group": "inline@2"
+        },
+        {
+          "command": "slidev.stop-dev",
+          "when": "view == slidev-projects-tree && viewItem =~ /<up>/"
+        },
+        {
+          "command": "slidev.remove-slide",
+          "when": "view == slidev-slides-tree"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Slidev",
+      "properties": {
+        "slidev.port": {
+          "type": "number",
+          "scope": "window",
+          "description": "The default port of Slidev server",
+          "default": 3030
+        },
+        "slidev.annotations": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Display annotations for slides markdown files",
+          "default": true
+        },
+        "slidev.preview-sync": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Sync preview window with editor cursor",
+          "default": true
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "slidev",
+          "title": "Slidev",
+          "icon": "dist/res/logo-mono.svg",
+          "when": "slidev-enabled"
+        }
+      ]
+    },
+    "views": {
+      "slidev": [
+        {
+          "id": "slidev-projects-tree",
+          "name": "Projects",
+          "visibility": "collapsed",
+          "initialSize": 1
+        },
+        {
+          "id": "slidev-slides-tree",
+          "name": "Slides",
+          "visibility": "visible",
+          "initialSize": 3
+        },
+        {
+          "type": "webview",
+          "id": "slidev-preview",
+          "name": "Preview",
+          "visibility": "visible",
+          "initialSize": 3
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "slidev-slides-tree",
+        "contents": "No active slides entry.\n[Choose one](command:slidev.choose-entry)"
+      }
+    ]
+  },
+  "scripts": {
+    "publish": "esno scripts/publish.ts",
+    "pack": "vsce package --no-dependencies",
+    "build": "tsup --env.NODE_ENV production",
+    "dev": "nr build --watch",
+    "vscode:prepublish": "nr build"
+  },
+  "devDependencies": {
+    "@antfu/utils": "^0.7.8",
+    "@slidev/parser": "workspace:*",
+    "@slidev/types": "workspace:*",
+    "@types/node": "^20.12.11",
+    "@types/vscode": "^1.89.0",
+    "@vue/reactivity": "^3.4.27",
+    "@vue/runtime-core": "^3.4.27",
+    "@vue/shared": "^3.4.27",
+    "get-port-please": "^3.1.2"
+  }
+}

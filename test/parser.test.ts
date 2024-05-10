@@ -1,6 +1,7 @@
-import { basename, resolve } from 'node:path'
+import { basename, relative, resolve } from 'node:path'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
+import { objectMap, slash } from '@antfu/utils'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 
@@ -33,16 +34,18 @@ describe('md parser', () => {
 
       prettify(data.entry)
 
-      for (const slide of data.slides) {
-        if (slide.source?.filepath)
-          // eslint-disable-next-line ts/prefer-ts-expect-error
-          // @ts-ignore non-optional
-          delete slide.source.filepath
-        // @ts-expect-error extra prop
-        if (slide.filepath)
-          // @ts-expect-error extra prop
-          delete slide.filepath
-      }
+      // File path tests & convert to relative paths
+      data.markdownFiles = objectMap(data.markdownFiles, (path, md) => {
+        expect(md.filepath).toBe(path)
+        const relativePath = slash(relative(userRoot, path))
+        md.slides.forEach((slide) => {
+          expect(slide.filepath).toBe(path)
+          slide.filepath = relativePath
+        })
+        md.filepath = relativePath
+        return [relativePath, md]
+      })
+
       expect(data.slides).toMatchSnapshot('slides')
       expect(configDiff(resolveConfig(data.headmatter, {}))).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')

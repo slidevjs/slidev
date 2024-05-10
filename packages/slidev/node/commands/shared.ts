@@ -5,9 +5,11 @@ import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions, SlidevData } from '@slidev/types'
 import { isString } from 'unocss'
 import MarkdownIt from 'markdown-it'
+import { slash } from '@antfu/utils'
 import markdownItLink from '../syntax/markdown-it/markdown-it-link'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../utils'
 import { toAtFS } from '../resolver'
+import { version } from '../../package.json'
 
 export const sharedMd = MarkdownIt({ html: true })
 sharedMd.use(markdownItLink)
@@ -31,13 +33,15 @@ function escapeHtml(unsafe: unknown) {
   )
 }
 
-export async function getIndexHtml({ clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
 
   const { info, author, keywords } = data.headmatter
   head += [
+    `<meta name="slidev:version" content="${version}">`,
+    `<meta charset="slidev:entry" content="${slash(entry)}">`,
     `<link rel="icon" href="${data.config.favicon}">`,
     `<title>${getTitle(data)}</title>`,
     info && `<meta name="description" content=${escapeHtml(info)}>`,
