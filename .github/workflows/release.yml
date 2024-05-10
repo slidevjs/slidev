@@ -19,12 +19,19 @@ jobs:
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
+      - run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: npm i -g @antfu/ni
       - run: nci
       - run: nr ci:publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
           NPM_CONFIG_PROVENANCE: true
-      - run: npx changelogithub
+
+      - name: Publish to VSCE & OVSX
+        run: npm run publish
+        working-directory: ./packages/vscode
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
+          OVSX_TOKEN: ${{secrets.OVSX_TOKEN}}

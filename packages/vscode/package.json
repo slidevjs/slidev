@@ -303,9 +303,11 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "nr build",
+    "publish": "esno scripts/publish.ts",
+    "pack": "vsce package --no-dependencies",
     "build": "tsup --env.NODE_ENV production",
-    "dev": "nr build --watch"
+    "dev": "nr build --watch",
+    "vscode:prepublish": "nr build"
   },
   "devDependencies": {
     "@antfu/utils": "^0.7.7",
