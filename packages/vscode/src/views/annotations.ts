@@ -2,7 +2,7 @@ import { clamp } from '@antfu/utils'
 import type { SourceSlideInfo } from '@slidev/types'
 import { computed, watch } from '@vue/runtime-core'
 import type { DecorationOptions } from 'vscode'
-import { Position, Range, window } from 'vscode'
+import { Position, Range, ThemeColor, window } from 'vscode'
 import { useActiveTextEditor } from '../composables/useActiveTextEditor'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
 import { displayAnnotations } from '../config'
@@ -12,11 +12,19 @@ import { toRelativePath } from '../utils/toRelativePath'
 
 const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
-  color: '#8884',
-  backgroundColor: '#8881',
+  color: new ThemeColor('panelTitle.inactiveForeground'),
+  borderStyle: 'solid',
+  borderWidth: '1px 0 0 0',
+  borderColor: new ThemeColor('panelTitle.activeBorder'),
   isWholeLine: true,
+  backgroundColor: '#8881',
 })
-const frontmatterDecoration = window.createTextEditorDecorationType({
+const frontmatterContentDecoration = window.createTextEditorDecorationType({
+  isWholeLine: true,
+  backgroundColor: '#8881',
+})
+const frontmatterEndDecoration = window.createTextEditorDecorationType({
+  color: new ThemeColor('panelTitle.inactiveForeground'),
   isWholeLine: true,
   backgroundColor: '#8881',
 })
@@ -34,7 +42,7 @@ export const useAnnotations = createSingletonComposable(() => {
       if (!enabled) {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
-        editor.setDecorations(frontmatterDecoration, [])
+        editor.setDecorations(frontmatterContentDecoration, [])
         return
       }
 
@@ -60,10 +68,11 @@ export const useAnnotations = createSingletonComposable(() => {
 
       const firstLineRanges: DecorationOptions[] = []
       const dividerRanges: DecorationOptions[] = []
-      const frontmatterRanges: DecorationOptions[] = []
+      const frontmatterContentRanges: DecorationOptions[] = []
+      const frontmatterEndRanges: DecorationOptions[] = []
 
       for (const slide of md.slides) {
-        const lineNo = slide.frontmatterStyle ? slide.start : slide.start - 1
+        const lineNo = slide.frontmatterStyle === 'frontmatter' ? slide.start : slide.start - 1
         const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
 
         const start = new Position(line.lineNumber, 0)
@@ -78,7 +87,7 @@ export const useAnnotations = createSingletonComposable(() => {
             after: {
               contentText: getTextContent(slide),
               fontWeight: 'bold',
-              color: '#8888',
+              color: new ThemeColor('panelTitle.activeBorder'),
             },
           },
         })
@@ -88,11 +97,11 @@ export const useAnnotations = createSingletonComposable(() => {
           const match = range.match(/^---[\s\S]*?\n---/)
           if (match && match.index != null) {
             const endLine = doc.positionAt(doc.offsetAt(start) + match.index + match[0].length).line
-            frontmatterRanges.push({
+            frontmatterContentRanges.push({
               range: new Range(new Position(line.lineNumber + 1, 0), new Position(endLine - 1, 0)),
             })
             if (endLine !== start.line) {
-              dividerRanges.push({
+              frontmatterEndRanges.push({
                 range: new Range(new Position(endLine, 0), new Position(endLine, 0)),
               })
             }
@@ -102,7 +111,8 @@ export const useAnnotations = createSingletonComposable(() => {
 
       editor.setDecorations(firstLineDecoration, firstLineRanges)
       editor.setDecorations(dividerDecoration, dividerRanges)
-      editor.setDecorations(frontmatterDecoration, frontmatterRanges)
+      editor.setDecorations(frontmatterContentDecoration, frontmatterContentRanges)
+      editor.setDecorations(frontmatterEndDecoration, frontmatterEndRanges)
     },
     { immediate: true },
   )
