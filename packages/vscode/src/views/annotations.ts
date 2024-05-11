@@ -10,24 +10,25 @@ import { activeProject } from '../projects'
 import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 
+const dividerCommonOptions = {
+  color: new ThemeColor('panelTitle.inactiveForeground'),
+  fontWeight: 'bold',
+  isWholeLine: true,
+  backgroundColor: '#8881',
+}
+
 const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
-  color: new ThemeColor('panelTitle.inactiveForeground'),
+  ...dividerCommonOptions,
   borderStyle: 'solid',
   borderWidth: '1px 0 0 0',
   borderColor: new ThemeColor('panelTitle.activeBorder'),
-  isWholeLine: true,
-  backgroundColor: '#8881',
 })
 const frontmatterContentDecoration = window.createTextEditorDecorationType({
   isWholeLine: true,
   backgroundColor: '#8881',
 })
-const frontmatterEndDecoration = window.createTextEditorDecorationType({
-  color: new ThemeColor('panelTitle.inactiveForeground'),
-  isWholeLine: true,
-  backgroundColor: '#8881',
-})
+const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
 
 export const useAnnotations = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
