@@ -7,6 +7,7 @@ import { skipTransition } from '../logic/hmr'
 import { createFixedClicks } from '../composables/useClicks'
 import { activeDragElement } from '../state'
 import { CLICKS_MAX } from '../constants'
+import { useFeatures } from '../composables/useFeatures'
 import SlideWrapper from './SlideWrapper.vue'
 import DragControl from './DragControl.vue'
 
@@ -38,8 +39,10 @@ watch(currentSlideRoute, () => {
 
 const hasViewTransition = useViewTransition()
 
+const features = useFeatures()
+
 const DrawingLayer = shallowRef<any>()
-if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
+if (features.drawings)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
 const loadedRoutes = computed(() => slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
@@ -86,9 +89,7 @@ function onAfterLeave() {
   <!-- Global Top -->
   <GlobalTop />
 
-  <template v-if="(__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__) && DrawingLayer">
-    <DrawingLayer />
-  </template>
+  <DrawingLayer v-if="DrawingLayer" />
 </template>
 
 <style scoped>

@@ -10,7 +10,6 @@ import { getCurrentTransition } from '../logic/transition'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { CLICKS_MAX } from '../constants'
 import { skipTransition } from '../logic/hmr'
-import { configs } from '../env'
 import { useRouteQuery } from '../logic/route'
 import { useTocTree } from './useTocTree'
 import { createClicksContextBase } from './useClicks'
@@ -76,7 +75,6 @@ export interface SlidevContextNavState {
   isPlaying: ComputedRef<boolean>
   isPresenter: ComputedRef<boolean>
   isNotesViewer: ComputedRef<boolean>
-  isPresenterAvailable: ComputedRef<boolean>
   hasPrimarySlide: ComputedRef<boolean>
   currentSlideNo: ComputedRef<number>
   currentSlideRoute: ComputedRef<SlideRoute>
@@ -281,7 +279,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const isPlaying = computed(() => currentRoute.value.name === 'play')
   const isPresenter = computed(() => currentRoute.value.name === 'presenter')
   const isNotesViewer = computed(() => currentRoute.value.name === 'notes')
-  const isPresenterAvailable = computed(() => !isPresenter.value && (!configs.remote || query.value.get('password') === configs.remote))
   const hasPrimarySlide = logicOr(isPlaying, isPresenter)
 
   const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.value.params.no as string)?.no ?? 1 : 1)
@@ -351,7 +348,6 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     isPlaying,
     isPresenter,
     isNotesViewer,
-    isPresenterAvailable,
     hasPrimarySlide,
     currentSlideNo,
     currentSlideRoute,

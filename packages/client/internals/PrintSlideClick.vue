@@ -5,6 +5,7 @@ import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../composables/useNav'
+import { useFeatures } from '../composables/useFeatures'
 import SlideWrapper from './SlideWrapper.vue'
 
 import GlobalTop from '#slidev/global-components/top'
@@ -21,8 +22,10 @@ const style = computed(() => ({
   width: `${slideWidth.value}px`,
 }))
 
+const features = useFeatures()
+
 const DrawingPreview = shallowRef<any>()
-if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
+if (features.drawings)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
 
 const id = computed(() =>
@@ -46,15 +49,7 @@ provideLocal(injectionSlidevContext, reactive({
       :class="getSlideClass(route)"
       :route="route"
     />
-    <template
-      v-if="
-        (__SLIDEV_FEATURE_DRAWINGS__
-          || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
-          && DrawingPreview
-      "
-    >
-      <DrawingPreview :page="route.no" />
-    </template>
+    <DrawingPreview v-if="DrawingPreview" :page="route.no" />
 
     <GlobalTop />
   </div>

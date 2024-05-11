@@ -11,10 +11,12 @@ import PrintStyle from '../internals/PrintStyle.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useFeatures } from '../composables/useFeatures'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 
 const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
+const features = useFeatures()
 
 const root = ref<HTMLDivElement>()
 function onClick(e: MouseEvent) {
@@ -36,7 +38,7 @@ registerShortcuts()
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const SideEditor = shallowRef<any>()
-if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
+if (features.editor)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 </script>
 

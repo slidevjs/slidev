@@ -18,12 +18,12 @@ import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
 import Goto from '../internals/Goto.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
-import DrawingControls from '../internals/DrawingControls.vue'
 import IconButton from '../internals/IconButton.vue'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useFeatures } from '../composables/useFeatures'
 
 const main = ref<HTMLDivElement>()
 
@@ -42,6 +42,7 @@ const {
   total,
 } = useNav()
 const { isDrawing } = useDrawings()
+const features = useFeatures()
 
 useHead({ title: `Presenter - ${slidesTitle}` })
 
@@ -73,8 +74,12 @@ watch(
 )
 
 const SideEditor = shallowRef<any>()
-if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
+if (features.editor)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
+
+const DrawingControls = shallowRef<any>()
+if (features.allowToDraw)
+  import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {
@@ -189,7 +194,7 @@ onMounted(() => {
           {{ timer }}
         </div>
       </div>
-      <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
+      <DrawingControls v-if="DrawingControls" />
     </div>
     <div class="progress-bar">
       <div

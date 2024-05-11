@@ -1,11 +1,12 @@
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
+import { staticFeatures } from '../composables/useFeatures'
 import configs from '#slidev/configs'
 import setups from '#slidev/setups/routes'
 
 export default function setupRoutes() {
   const routes: RouteRecordRaw[] = []
 
-  if (__SLIDEV_FEATURE_PRESENTER__) {
+  if (staticFeatures.presenter) {
     function passwordGuard(to: RouteLocationNormalized) {
       if (!configs.remote || configs.remote === to.query.password)
         return true

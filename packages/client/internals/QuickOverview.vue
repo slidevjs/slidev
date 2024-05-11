@@ -6,12 +6,14 @@ import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
+import { useFeatures } from '../composables/useFeatures'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
 
 const { currentSlideNo, go: goSlide, slides } = useNav()
+const features = useFeatures()
 
 function close() {
   showOverview.value = false
@@ -165,7 +167,7 @@ setTimeout(() => {
       <carbon:close />
     </IconButton>
     <IconButton
-      v-if="__SLIDEV_FEATURE_PRESENTER__"
+      v-if="features.presenter"
       as="a"
       title="Slides Overview"
       target="_blank"
