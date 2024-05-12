@@ -26,6 +26,16 @@
   "contributes": {
     "commands": [
       {
+        "command": "slidev.enable-extension",
+        "category": "Slidev",
+        "title": "Force enable Slidev extension"
+      },
+      {
+        "command": "slidev.disable-extension",
+        "category": "Slidev",
+        "title": "Force disable Slidev extension"
+      },
+      {
         "command": "slidev.rescan-projects",
         "category": "Slidev",
         "title": "Rescan Slidev projects",
@@ -157,12 +167,12 @@
       ],
       "editor/title": [
         {
-          "when": "slidev-enabled && resourceLangId == markdown",
+          "when": "slidev:enabled && slidev:editing-markdown",
           "command": "slidev.prev",
           "group": "navigation"
         },
         {
-          "when": "slidev-enabled && resourceLangId == markdown",
+          "when": "slidev:enabled && slidev:editing-markdown",
           "command": "slidev.next",
           "group": "navigation"
         }
@@ -246,9 +256,14 @@
       ]
     },
     "configuration": {
-      "type": "object",
       "title": "Slidev",
       "properties": {
+        "slidev.force-enabled": {
+          "type": ["boolean", "null"],
+          "scope": "window",
+          "description": "Force enable Slidev extension",
+          "default": null
+        },
         "slidev.port": {
           "type": "number",
           "scope": "window",
@@ -274,8 +289,7 @@
         {
           "id": "slidev",
           "title": "Slidev",
-          "icon": "dist/res/logo-mono.svg",
-          "when": "slidev-enabled"
+          "icon": "dist/res/logo-mono.svg"
         }
       ]
     },
@@ -285,20 +299,23 @@
           "id": "slidev-projects-tree",
           "name": "Projects",
           "visibility": "collapsed",
-          "initialSize": 1
+          "initialSize": 1,
+          "when": "slidev:enabled"
         },
         {
           "id": "slidev-slides-tree",
           "name": "Slides",
           "visibility": "visible",
-          "initialSize": 3
+          "initialSize": 3,
+          "when": "slidev:enabled"
         },
         {
           "type": "webview",
           "id": "slidev-preview",
           "name": "Preview",
           "visibility": "visible",
-          "initialSize": 3
+          "initialSize": 3,
+          "when": "slidev:enabled"
         }
       ]
     },
