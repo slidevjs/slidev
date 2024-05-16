@@ -124,3 +124,8 @@ html {
 #twoslash-container {
   position: fixed;
 }
+
+#twoslash-container .v-popper__wrapper {
+  transform: scale(calc(1 * var(--slidev-slide-scale)));
+  transform-origin: 30px top;
+}
