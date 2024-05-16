@@ -36,3 +36,10 @@ Or in your `package.json` file:
   }
 }
 ```
+
+## Examples
+
+[slidev-addon-qrcode](https://github.com/kravetsone/slidev-addon-qrcode) is an addon that allows you to embed QR codes in your slides.
+
+
+[slidev-addon-remoji](https://github.com/twitwi/slidev-addon-remoji) is an addon that replaces emoji with icons in your slides for consistency / printing purposes.
