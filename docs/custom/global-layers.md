@@ -14,6 +14,8 @@ Layers relationship:
 - NavControls
   - Customized Navigation Controls (`custom-nav-controls.vue`)
 
+Note that this uses the terms "top" and "bottom" in the context of depth, not the screen position.
+
 ## Example
 
 ```html
