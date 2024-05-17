@@ -73,4 +73,5 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
     <SideEditor v-if="SideEditor && showEditor" :resize="true" />
   </div>
   <Controls v-if="!isPrintMode" />
+  <div id="twoslash-container" />
 </template>
