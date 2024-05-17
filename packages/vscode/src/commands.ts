@@ -5,7 +5,7 @@ import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
 import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
-import { configuredPort, previewSync } from './config'
+import { configuredPort, forceEnabled, previewSync } from './configs'
 import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
@@ -18,6 +18,9 @@ export function useCommands() {
   function registerCommand(command: string, callback: (...args: any[]) => any) {
     disposables.push(commands.registerCommand(command, callback))
   }
+
+  registerCommand('slidev.enable-extension', () => forceEnabled.value = true)
+  registerCommand('slidev.disable-extension', () => forceEnabled.value = false)
 
   registerCommand('slidev.rescan-projects', rescanProjects)
 

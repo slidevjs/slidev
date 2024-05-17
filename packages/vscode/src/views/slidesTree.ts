@@ -4,7 +4,7 @@ import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runt
 import type { TreeItem } from 'vscode'
 import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
 import { useViewVisibility } from '../composables/useViewVisibility'
-import { previewSync } from '../config'
+import { previewSync } from '../configs'
 import { activeSlidevData } from '../projects'
 import { getSlideNo } from '../utils/getSlideNo'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
