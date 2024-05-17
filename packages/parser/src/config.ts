@@ -204,7 +204,7 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
       : false
 
   return {

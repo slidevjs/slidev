@@ -120,8 +120,8 @@ function prepareTemplate(root, templateDir, packageName) {
     'README.md',
     fs
       .readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
-      .replace(/{{package-name}}/g, packageName)
-      .replace(/{{name}}/g, getThemeName(packageName)),
+      .replace(/\{\{package-name\}\}/g, packageName)
+      .replace(/\{\{name\}\}/g, getThemeName(packageName)),
   )
 }
 

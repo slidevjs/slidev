@@ -56,8 +56,8 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
 
     const index = await fs.readFile(path, 'utf-8')
 
-    head += `\n${(index.match(/<head>([\s\S]*?)<\/head>/im)?.[1] || '').trim()}`
-    body += `\n${(index.match(/<body>([\s\S]*?)<\/body>/im)?.[1] || '').trim()}`
+    head += `\n${(index.match(/<head>([\s\S]*?)<\/head>/i)?.[1] || '').trim()}`
+    body += `\n${(index.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
   }
 
   if (data.features.tweet)

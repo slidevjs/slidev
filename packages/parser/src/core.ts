@@ -64,7 +64,7 @@ function matter(code: string) {
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
     katex: !!code.match(/\$.*?\$/) || !!code.match(/\$\$/),
-    monaco: code.match(/{monaco.*}/) ? scanMonacoReferencedMods(code) : false,
+    monaco: code.match(/\{monaco.*\}/) ? scanMonacoReferencedMods(code) : false,
     tweet: !!code.match(/<Tweet\b/),
     mermaid: !!code.match(/^```mermaid/m),
   }
@@ -199,12 +199,12 @@ function scanMonacoReferencedMods(md: string) {
   const types = new Set<string>()
   const deps = new Set<string>()
   md.replace(
-    /^```(\w+?)\s*{monaco(.*?)}[\s\n]*([\s\S]+?)^```/mg,
+    /^```(\w+)\s*\{monaco([^}]*)\}\s*(\S[\s\S]*?)^```/gm,
     (full, lang = 'ts', kind: string, code: string) => {
       lang = lang.trim()
       const isDep = kind === '-run'
       if (['js', 'javascript', 'ts', 'typescript'].includes(lang)) {
-        for (const [, , specifier] of code.matchAll(/\s+from\s+(["'])([\/\.\w@-]+)\1/g)) {
+        for (const [, , specifier] of code.matchAll(/\s+from\s+(["'])([/.\w@-]+)\1/g)) {
           if (specifier) {
             if (!'./'.includes(specifier))
               types.add(specifier) // All local TS files are loaded by globbing

@@ -4,7 +4,7 @@ import type { ClicksContext } from '@slidev/types'
 import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
-  class?: string
+  class?: string | string[]
   noteHtml?: string
   note?: string
   placeholder?: string

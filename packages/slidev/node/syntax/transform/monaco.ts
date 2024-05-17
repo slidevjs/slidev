@@ -5,13 +5,13 @@ export function transformMonaco(ctx: MarkdownTransformContext) {
   const enabled = (ctx.options.data.config.monaco === true || ctx.options.data.config.monaco === ctx.options.mode)
 
   if (!enabled) {
-    ctx.s.replace(/{monaco([\w:,-]*)}/g, '')
+    ctx.s.replace(/\{monaco([\w:,-]*)\}/g, '')
     return
   }
 
   // transform monaco
   ctx.s.replace(
-    /^```(\w+?)\s*{monaco-diff}\s*?({.*?})?\s*?\n([\s\S]+?)^~~~\s*?\n([\s\S]+?)^```/mg,
+    /^```(\w+) *\{monaco-diff\} *(?:(\{[^\n}]*\}) *)?\n([\s\S]+?)^~~~ *\n([\s\S]+?)^```/gm,
     (full, lang = 'ts', options = '{}', code: string, diff: string) => {
       lang = lang.trim()
       options = options.trim() || '{}'
@@ -21,7 +21,7 @@ export function transformMonaco(ctx: MarkdownTransformContext) {
     },
   )
   ctx.s.replace(
-    /^```(\w+?)\s*{monaco}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg,
+    /^```(\w+) *\{monaco\} *(?:(\{[^}]*\}) *)?\n([\s\S]+?)^```/gm,
     (full, lang = 'ts', options = '{}', code: string) => {
       lang = lang.trim()
       options = options.trim() || '{}'
@@ -30,7 +30,7 @@ export function transformMonaco(ctx: MarkdownTransformContext) {
     },
   )
   ctx.s.replace(
-    /^```(\w+?)\s*{monaco-run}\s*?({.*?})?\s*?\n([\s\S]+?)^```/mg,
+    /^```(\w+) *\{monaco-run\} *(?:(\{[^}]*\}) *)?\n([\s\S]+?)^```/gm,
     (full, lang = 'ts', options = '{}', code: string) => {
       lang = lang.trim()
       options = options.trim() || '{}'

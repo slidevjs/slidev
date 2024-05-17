@@ -44,8 +44,8 @@ function findRegion(lines: Array<string>, regionName: string) {
     /^\/\* ?#((?:end)?region) ([\w*-]+) ?\*\/$/, // css, less, scss
     /^#pragma ((?:end)?region) ([\w*-]+)$/, // C, C++
     /^<!-- #?((?:end)?region) ([\w*-]+) -->$/, // HTML, markdown
-    /^#((?:End )Region) ([\w*-]+)$/, // Visual Basic
-    /^::#((?:end)region) ([\w*-]+)$/, // Bat
+    /^#(End Region) ([\w*-]+)$/, // Visual Basic
+    /^::#(endregion) ([\w*-]+)$/, // Bat
     /^# ?((?:end)?region) ([\w*-]+)$/, // C#, PHP, Powershell, Python, perl & misc
   ]
 
@@ -92,12 +92,13 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
   const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
 
   ctx.s.replace(
-    /^<<< *(.+?)(#[\w-]+)? *(?: (\S+?))? *(\{.*)?$/mg,
+    // eslint-disable-next-line regexp/no-super-linear-backtracking
+    /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
       const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
 
       const src = slash(
-        /^\@[\/]/.test(filepath)
+        /^@\//.test(filepath)
           ? path.resolve(options.userRoot, filepath.slice(2))
           : path.resolve(dir, filepath),
       )

@@ -291,7 +291,7 @@ export async function exportSlides({
   }
 
   function getClicksFromUrl(url: string) {
-    return url.match(/clicks=([1-9][0-9]*)/)?.[1]
+    return url.match(/clicks=([1-9]\d*)/)?.[1]
   }
 
   async function genPageWithClicks(

@@ -20,8 +20,8 @@ import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
 
-const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
-const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
+const regexId = /^\/@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
+const regexIdQuery = /(\d+)\.(md|json|frontmatter)$/
 
 const templateInjectionMarker = '/* @slidev-injection */'
 const templateImportContextUtils = `import {
@@ -471,6 +471,7 @@ export function createSlidesLoader(
       templateInitContext,
       templateInjectionMarker,
     ]
+    // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/optimal-quantifier-concatenation
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
       // setup script
@@ -478,7 +479,7 @@ export function createSlidesLoader(
     }
     else if (matchScript && !matchScript[2]) {
       // not a setup script
-      const matchExport = code.match(/export\s+default\s+{/)
+      const matchExport = code.match(/export\s+default\s+\{/)
       if (matchExport) {
         // script exports a component
         const exportIndex = (matchExport.index || 0) + matchExport[0].length
@@ -491,7 +492,7 @@ export function createSlidesLoader(
 
         let injectIndex = exportIndex + provideImport.length
         let injectObject = '$slidev: { from: injectionSlidevContext },'
-        const matchInject = component.match(/.*inject\s*:\s*([\[{])/)
+        const matchInject = component.match(/.*inject\s*:\s*([[{])/)
         if (matchInject) {
           // component has a inject option
           injectIndex += (matchInject.index || 0) + matchInject[0].length

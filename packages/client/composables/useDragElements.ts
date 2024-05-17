@@ -68,7 +68,7 @@ export function useDragElementsUpdater(no: number) {
       let replaced = false
 
       section = type === 'prop'
-        ? section.replace(/<(v-?drag)(.*?)>/ig, (full, tag, attrs, index) => {
+        ? section.replace(/<(v-?drag)(.*?)>/gi, (full, tag, attrs, index) => {
           if (index === idx) {
             replaced = true
             const posMatch = attrs.match(/pos=".*?"/)
@@ -80,7 +80,7 @@ export function useDragElementsUpdater(no: number) {
           }
           return full
         })
-        : section.replace(/(?<![</\w])v-drag(?:=".*?")?/ig, (full, index) => {
+        : section.replace(/(?<![</\w])v-drag(?:=".*?")?/gi, (full, index) => {
           if (index === idx) {
             replaced = true
             return `v-drag="${posStr}"`

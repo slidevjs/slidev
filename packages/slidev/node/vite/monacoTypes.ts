@@ -20,7 +20,7 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
     },
 
     async load(id) {
-      const matchResolve = id.match(/^\/\@slidev-monaco-types\/resolve\?pkg=(.*?)(?:&importer=(.*))?$/)
+      const matchResolve = id.match(/^\/@slidev-monaco-types\/resolve\?pkg=(.*?)(?:&importer=(.*))?$/)
       if (matchResolve) {
         const [_, pkg, importer = userRoot] = matchResolve
 
@@ -43,7 +43,7 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         ].join('\n')
       }
 
-      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\?root=(.*?)&name=(.*)$/)
+      const matchLoad = id.match(/^\/@slidev-monaco-types\/load\?root=(.*?)&name=(.*)$/)
       if (matchLoad) {
         const [_, root, name] = matchLoad
         const files = await fg(

@@ -4,7 +4,8 @@ export function normalizeRangeStr(rangeStr = '') {
 
 export function getCodeBlocks(md: string) {
   const codeblocks = Array
-    .from(md.matchAll(/^```[\s\S]*?^```/mg))
+    // eslint-disable-next-line regexp/no-contradiction-with-assertion
+    .from(md.matchAll(/^```[\s\S]*?^```/gm))
     .map((m) => {
       const start = m.index!
       const end = m.index! + m[0].length
@@ -28,5 +29,5 @@ export function getCodeBlocks(md: string) {
  * Escape `{{` in code block to prevent Vue interpret it, #99, #1316
  */
 export function escapeVueInCode(md: string) {
-  return md.replace(/{{/g, '&lbrace;&lbrace;')
+  return md.replace(/\{\{/g, '&lbrace;&lbrace;')
 }

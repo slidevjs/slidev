@@ -292,7 +292,7 @@ withSlideAfter
       })
       function project(s: string) {
         // like the trim in other tests, the goal is not to test newlines here
-        return s.replace(/%%%*/g, '%')
+        return s.replace(/%{2,}/g, '%')
       }
       expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([
