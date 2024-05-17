@@ -182,7 +182,6 @@ Build hostable SPA.
 
 Options:
 
-- `--watch`, `-w` (`boolean`, default: `false`): build watch.
 - `--out`, `-o` (`string`, default: `dist`): output dir.
 - `--base` (`string`, default: `/`): base URL (see https://cli.vuejs.org/config/#publicpath)
 - `--download` (`boolean`, default: `false`): allow to download the slides as PDF inside the SPA.
