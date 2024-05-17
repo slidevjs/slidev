@@ -332,11 +332,6 @@ cli.command(
   'build [entry..]',
   'Build hostable SPA',
   args => exportOptions(commonOptions(args))
-    .option('watch', {
-      alias: 'w',
-      default: false,
-      describe: 'build watch',
-    })
     .option('out', {
       alias: 'o',
       type: 'string',
@@ -360,7 +355,7 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, watch, base, download, out, inspect } = args
+    const { entry, theme, base, download, out, inspect } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
@@ -374,7 +369,6 @@ cli.command(
         {
           base,
           build: {
-            watch: watch ? {} : undefined,
             outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
           },
         },
