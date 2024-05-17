@@ -76,7 +76,7 @@ $ slidev build --watch
 You can also build multiple slides at once.
 
 ```bash
-$ slidev build slides1.md slides1.md
+$ slidev build slides1.md slides2.md
 ```
 
 Or
