@@ -51,11 +51,11 @@ export interface SlidevContextNav {
   /** Go to previous click */
   prev: () => Promise<void>
   /** Go to next slide */
-  nextSlide: () => Promise<void>
+  nextSlide: (lastClicks?: boolean) => Promise<void>
   /** Go to previous slide */
   prevSlide: (lastClicks?: boolean) => Promise<void>
   /** Go to slide */
-  go: (page: number | string, clicks?: number) => Promise<void>
+  go: (no: number | string, clicks?: number, force?: boolean) => Promise<void>
   /** Go to the first slide */
   goFirst: () => Promise<void>
   /** Go to the last slide */
@@ -86,7 +86,7 @@ export interface SlidevContextNavState {
   getPrimaryClicks: (route: SlideRoute) => ClicksContext
 }
 
-export interface SlidevContextNavFull extends SlidevContextNav, SlidevContextNavState {}
+export interface SlidevContextNavFull extends SlidevContextNav, SlidevContextNavState { }
 
 export function useNavBase(
   currentSlideRoute: ComputedRef<SlideRoute>,
@@ -149,27 +149,24 @@ export function useNavBase(
   async function prev() {
     clicksDirection.value = -1
     if (queryClicks.value <= clicksStart.value)
-      await prevSlide()
+      await prevSlide(true)
     else
       queryClicks.value -= 1
   }
 
-  async function nextSlide() {
+  async function nextSlide(lastClicks = false) {
     clicksDirection.value = 1
-    if (currentSlideNo.value < slides.value.length)
-      await go(currentSlideNo.value + 1)
+    await go(
+      Math.min(currentSlideNo.value + 1, slides.value.length),
+      lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
+    )
   }
 
-  async function prevSlide(lastClicks = true) {
+  async function prevSlide(lastClicks = false) {
     clicksDirection.value = -1
-    const next = Math.max(1, currentSlideNo.value - 1)
     await go(
-      next,
-      lastClicks
-        ? isPrint.value
-          ? undefined
-          : getSlide(next)?.meta.__clicksContext?.total ?? CLICKS_MAX
-        : undefined,
+      Math.max(1, currentSlideNo.value - 1),
+      lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
     )
   }
 
@@ -181,19 +178,20 @@ export function useNavBase(
     return go(total.value)
   }
 
-  async function go(page: number | string, clicks: number = 0) {
+  async function go(no: number | string, clicks: number = 0, force = false) {
     skipTransition.value = false
-    const pageChanged = currentSlideNo.value !== page
+    const pageChanged = currentSlideNo.value !== no
     const clicksChanged = clicks !== queryClicks.value
-    const meta = getSlide(page)?.meta
+    const meta = getSlide(no)?.meta
     const clicksStart = meta?.slide?.frontmatter.clicksStart ?? 0
     clicks = clamp(clicks, clicksStart, meta?.__clicksContext?.total ?? CLICKS_MAX)
-    if (pageChanged || clicksChanged) {
+    if (force || pageChanged || clicksChanged) {
       await router?.push({
-        path: getSlidePath(page, isPresenter.value),
+        path: getSlidePath(no, isPresenter.value),
         query: {
           ...router.currentRoute.value.query,
           clicks: clicks === 0 ? undefined : clicks.toString(),
+          embedded: location.search.includes('embedded') ? 'true' : undefined,
         },
       })
     }
@@ -301,6 +299,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
       return v
     },
     set(v) {
+      skipTransition.value = false
       queryClicksRaw.value = v.toString()
     },
   })
@@ -379,9 +378,16 @@ export const useNav = createSharedComposable((): SlidevContextNavFull => {
   watch(
     [nav.total, state.currentRoute],
     async () => {
-      if (state.hasPrimarySlide.value && !getSlide(state.currentRoute.value.params.no as string)) {
-        // The current slide may has been removed. Redirect to the last slide.
-        await nav.goLast()
+      const no = state.currentRoute.value.params.no as string
+      if (state.hasPrimarySlide.value && !getSlide(no)) {
+        if (no && no !== 'index.html') {
+          // The current slide may has been removed. Redirect to the last slide.
+          await nav.go(nav.total.value, 0, true)
+        }
+        else {
+          // Redirect to the first slide
+          await nav.go(1, 0, true)
+        }
       }
     },
     { flush: 'pre', immediate: true },

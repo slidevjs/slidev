@@ -45,5 +45,6 @@
     "json",
     "jsonc",
     "yaml"
-  ]
+  ],
+  "vitest.disableWorkspaceWarning": true
 }

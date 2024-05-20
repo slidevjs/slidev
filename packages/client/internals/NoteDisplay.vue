@@ -17,7 +17,7 @@ const emit = defineEmits<{
   (type: 'markerClick', e: MouseEvent, clicks: number): void
 }>()
 
-const withClicks = computed(() => props.clicksContext?.current != null && props.noteHtml?.includes('slidev-note-click-mark'))
+const withClicks = computed(() => props.clicksContext != null && props.noteHtml?.includes('slidev-note-click-mark'))
 const noteDisplay = ref<HTMLElement | null>(null)
 
 const CLASS_FADE = 'slidev-note-fade'

@@ -88,6 +88,7 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       },
       "layout": "cover",
     },
+    "importChain": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -95,7 +96,9 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       "content": "
 # Hi
 ",
+      "contentStart": 7,
       "end": 10,
+      "filepath": "frontmatter.md",
       "frontmatter": {
         "fonts": {
           "mono": "Fira Code",
@@ -146,6 +149,7 @@ fonts:
         "title": "FooBar",
       },
     },
+    "importChain": undefined,
     "index": 1,
     "level": 1,
     "note": "This is note",
@@ -153,7 +157,9 @@ fonts:
       "content": "
 # Hello
 ",
+      "contentStart": 16,
       "end": 23,
+      "filepath": "frontmatter.md",
       "frontmatter": {
         "layout": "center",
         "meta": {
@@ -198,6 +204,7 @@ This is note
   {
     "content": "# Morning",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 2,
     "level": 1,
     "note": undefined,
@@ -205,7 +212,9 @@ This is note
       "content": "
 # Morning
 ",
+      "contentStart": 24,
       "end": 27,
+      "filepath": "frontmatter.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -227,6 +236,7 @@ Hey",
     "frontmatter": {
       "layout": "text",
     },
+    "importChain": undefined,
     "index": 3,
     "level": undefined,
     "note": "This is note",
@@ -235,7 +245,9 @@ Hey",
 <!-- This is not note -->
 Hey
 ",
+      "contentStart": 30,
       "end": 38,
+      "filepath": "frontmatter.md",
       "frontmatter": {
         "layout": "text",
       },
@@ -275,6 +287,7 @@ this should be treated as code block
 Also part of the code block
 \`\`\`",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 4,
     "level": undefined,
     "note": undefined,
@@ -290,7 +303,9 @@ this should be treated as code block
 Also part of the code block
 \`\`\`
 ",
+      "contentStart": 39,
       "end": 50,
+      "filepath": "frontmatter.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -319,6 +334,7 @@ Also part of the code block
     "frontmatter": {
       "layout": "from yaml",
     },
+    "importChain": undefined,
     "index": 5,
     "level": undefined,
     "note": undefined,
@@ -326,7 +342,9 @@ Also part of the code block
       "content": "
 Content 1
 ",
+      "contentStart": 51,
       "end": 59,
+      "filepath": "frontmatter.md",
       "frontmatter": {
         "layout": "from yaml",
       },
@@ -363,6 +381,7 @@ Content 2",
     "frontmatter": {
       "layout": "cover",
     },
+    "importChain": undefined,
     "index": 6,
     "level": 1,
     "note": undefined,
@@ -375,7 +394,9 @@ layout: should not from yaml 1
 
 Content 2
 ",
+      "contentStart": 62,
       "end": 70,
+      "filepath": "frontmatter.md",
       "frontmatter": {
         "layout": "cover",
       },
@@ -414,6 +435,7 @@ layout: should not from yaml 2
 
 Content 3",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 7,
     "level": 1,
     "note": undefined,
@@ -428,7 +450,9 @@ layout: should not from yaml 2
 
 Content 3
 ",
+      "contentStart": 71,
       "end": 81,
+      "filepath": "frontmatter.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -530,6 +554,7 @@ exports[`md parser > mdc.md > slides 1`] = `
     "frontmatter": {
       "mdc": true,
     },
+    "importChain": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -539,7 +564,9 @@ exports[`md parser > mdc.md > slides 1`] = `
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
+      "contentStart": 3,
       "end": 8,
+      "filepath": "mdc.md",
       "frontmatter": {
         "mdc": true,
       },
@@ -647,6 +674,7 @@ Sample Text
 console.log('Hello World')
 \`\`\`",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
@@ -662,7 +690,9 @@ Sample Text
 console.log('Hello World')
 \`\`\`
 ",
+      "contentStart": 0,
       "end": 10,
+      "filepath": "minimal.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -694,6 +724,7 @@ console.log('Hello World')
 - Hey
 - Yo",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 1,
     "level": 1,
     "note": undefined,
@@ -706,7 +737,9 @@ console.log('Hello World')
 - Hey
 - Yo
 ",
+      "contentStart": 11,
       "end": 19,
+      "filepath": "minimal.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -730,6 +763,7 @@ console.log('Hello World')
   {
     "content": "Nice to meet you",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 2,
     "level": undefined,
     "note": undefined,
@@ -737,7 +771,9 @@ console.log('Hello World')
       "content": "
 Nice to meet you
 ",
+      "contentStart": 20,
       "end": 23,
+      "filepath": "minimal.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -828,12 +864,59 @@ exports[`md parser > multi-entries.md > slides 1`] = `
   {
     "content": "# Page 1",
     "frontmatter": {},
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 3,
+        "end": 4,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "src": "sub/page1.md",
+        },
+        "frontmatterDoc": {
+          "src": "sub/page1.md",
+        },
+        "frontmatterRaw": "src: sub/page1.md
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 1",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/page1.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 1
+",
+            "start": 0,
+            "title": "Page 1",
+          },
+        ],
+        "index": 0,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: sub/page1.md
+---
+",
+        "start": 0,
+        "title": undefined,
+      },
+    ],
     "index": 0,
     "level": 1,
     "note": undefined,
     "source": {
       "content": "# Page 1",
+      "contentStart": 0,
       "end": 2,
+      "filepath": "sub/page1.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -856,6 +939,68 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "background": "https://sli.dev/demo-cover.png#2",
       "layout": "cover",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 8,
+        "end": 9,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#2",
+          "src": "/sub/page2.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#2",
+          "src": "/sub/page2.md",
+        },
+        "frontmatterRaw": "src: /sub/page2.md
+background: https://sli.dev/demo-cover.png#2
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 2
+
+<Tweet />",
+            "contentStart": 3,
+            "end": 8,
+            "filepath": "sub/page2.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+            "start": 0,
+            "title": "Page 2",
+          },
+        ],
+        "index": 1,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: /sub/page2.md
+background: https://sli.dev/demo-cover.png#2
+---
+",
+        "start": 4,
+        "title": undefined,
+      },
+    ],
     "index": 1,
     "level": 1,
     "note": undefined,
@@ -863,7 +1008,9 @@ exports[`md parser > multi-entries.md > slides 1`] = `
       "content": "# Page 2
 
 <Tweet />",
+      "contentStart": 3,
       "end": 8,
+      "filepath": "sub/page2.md",
       "frontmatter": {
         "layout": "cover",
       },
@@ -894,12 +1041,93 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 13,
+        "end": 14,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#34",
+          "src": "./sub/pages3-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#34",
+          "src": "./sub/pages3-4.md",
+        },
+        "frontmatterRaw": "src: ./sub/pages3-4.md
+background: https://sli.dev/demo-cover.png#34
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 3",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 3
+",
+            "start": 0,
+            "title": "Page 3",
+          },
+          {
+            "content": "# Page 4
+
+<Tweet />",
+            "contentStart": 5,
+            "end": 10,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 1,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+            "start": 2,
+            "title": "Page 4",
+          },
+        ],
+        "index": 2,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: ./sub/pages3-4.md
+background: https://sli.dev/demo-cover.png#34
+---
+",
+        "start": 9,
+        "title": undefined,
+      },
+    ],
     "index": 2,
     "level": 1,
     "note": undefined,
     "source": {
       "content": "# Page 3",
+      "contentStart": 0,
       "end": 2,
+      "filepath": "sub/pages3-4.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -922,6 +1150,85 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#34",
       "layout": "cover",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 13,
+        "end": 14,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#34",
+          "src": "./sub/pages3-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#34",
+          "src": "./sub/pages3-4.md",
+        },
+        "frontmatterRaw": "src: ./sub/pages3-4.md
+background: https://sli.dev/demo-cover.png#34
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 3",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 3
+",
+            "start": 0,
+            "title": "Page 3",
+          },
+          {
+            "content": "# Page 4
+
+<Tweet />",
+            "contentStart": 5,
+            "end": 10,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 1,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+            "start": 2,
+            "title": "Page 4",
+          },
+        ],
+        "index": 2,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: ./sub/pages3-4.md
+background: https://sli.dev/demo-cover.png#34
+---
+",
+        "start": 9,
+        "title": undefined,
+      },
+    ],
     "index": 3,
     "level": 1,
     "note": undefined,
@@ -929,7 +1236,9 @@ layout: cover
       "content": "# Page 4
 
 <Tweet />",
+      "contentStart": 5,
       "end": 10,
+      "filepath": "sub/pages3-4.md",
       "frontmatter": {
         "layout": "cover",
       },
@@ -960,12 +1269,261 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 18,
+        "end": 19,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterRaw": "src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "",
+            "contentStart": 3,
+            "end": 4,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterDoc": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterRaw": "src: /sub/page1.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 1",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/page1.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 1
+",
+                "start": 0,
+                "title": "Page 1",
+              },
+            ],
+            "index": 0,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: /sub/page1.md
+---
+",
+            "start": 0,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 7,
+            "end": 8,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "page2.md",
+            },
+            "frontmatterDoc": {
+              "src": "page2.md",
+            },
+            "frontmatterRaw": "src: page2.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 2
+
+<Tweet />",
+                "contentStart": 3,
+                "end": 8,
+                "filepath": "sub/page2.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+                "start": 0,
+                "title": "Page 2",
+              },
+            ],
+            "index": 1,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: page2.md
+---
+",
+            "start": 4,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 11,
+            "end": 12,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterDoc": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 3",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 3
+",
+                "start": 0,
+                "title": "Page 3",
+              },
+              {
+                "content": "# Page 4
+
+<Tweet />",
+                "contentStart": 5,
+                "end": 10,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 1,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+                "start": 2,
+                "title": "Page 4",
+              },
+            ],
+            "index": 2,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+            "start": 8,
+            "title": undefined,
+          },
+        ],
+        "index": 3,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+---
+",
+        "start": 14,
+        "title": undefined,
+      },
+      {
+        "content": "",
+        "contentStart": 3,
+        "end": 4,
+        "filepath": "sub/nested1-4.md",
+        "frontmatter": {
+          "src": "/sub/page1.md",
+        },
+        "frontmatterDoc": {
+          "src": "/sub/page1.md",
+        },
+        "frontmatterRaw": "src: /sub/page1.md
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 1",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/page1.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 1
+",
+            "start": 0,
+            "title": "Page 1",
+          },
+        ],
+        "index": 0,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: /sub/page1.md
+---
+",
+        "start": 0,
+        "title": undefined,
+      },
+    ],
     "index": 4,
     "level": 1,
     "note": undefined,
     "source": {
       "content": "# Page 1",
+      "contentStart": 0,
       "end": 2,
+      "filepath": "sub/page1.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -988,6 +1546,266 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 18,
+        "end": 19,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterRaw": "src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "",
+            "contentStart": 3,
+            "end": 4,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterDoc": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterRaw": "src: /sub/page1.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 1",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/page1.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 1
+",
+                "start": 0,
+                "title": "Page 1",
+              },
+            ],
+            "index": 0,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: /sub/page1.md
+---
+",
+            "start": 0,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 7,
+            "end": 8,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "page2.md",
+            },
+            "frontmatterDoc": {
+              "src": "page2.md",
+            },
+            "frontmatterRaw": "src: page2.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 2
+
+<Tweet />",
+                "contentStart": 3,
+                "end": 8,
+                "filepath": "sub/page2.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+                "start": 0,
+                "title": "Page 2",
+              },
+            ],
+            "index": 1,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: page2.md
+---
+",
+            "start": 4,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 11,
+            "end": 12,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterDoc": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 3",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 3
+",
+                "start": 0,
+                "title": "Page 3",
+              },
+              {
+                "content": "# Page 4
+
+<Tweet />",
+                "contentStart": 5,
+                "end": 10,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 1,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+                "start": 2,
+                "title": "Page 4",
+              },
+            ],
+            "index": 2,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+            "start": 8,
+            "title": undefined,
+          },
+        ],
+        "index": 3,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+---
+",
+        "start": 14,
+        "title": undefined,
+      },
+      {
+        "content": "",
+        "contentStart": 7,
+        "end": 8,
+        "filepath": "sub/nested1-4.md",
+        "frontmatter": {
+          "src": "page2.md",
+        },
+        "frontmatterDoc": {
+          "src": "page2.md",
+        },
+        "frontmatterRaw": "src: page2.md
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 2
+
+<Tweet />",
+            "contentStart": 3,
+            "end": 8,
+            "filepath": "sub/page2.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+            "start": 0,
+            "title": "Page 2",
+          },
+        ],
+        "index": 1,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: page2.md
+---
+",
+        "start": 4,
+        "title": undefined,
+      },
+    ],
     "index": 5,
     "level": 1,
     "note": undefined,
@@ -995,7 +1813,9 @@ layout: cover
       "content": "# Page 2
 
 <Tweet />",
+      "contentStart": 3,
       "end": 8,
+      "filepath": "sub/page2.md",
       "frontmatter": {
         "layout": "cover",
       },
@@ -1026,12 +1846,291 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 18,
+        "end": 19,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterRaw": "src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "",
+            "contentStart": 3,
+            "end": 4,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterDoc": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterRaw": "src: /sub/page1.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 1",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/page1.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 1
+",
+                "start": 0,
+                "title": "Page 1",
+              },
+            ],
+            "index": 0,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: /sub/page1.md
+---
+",
+            "start": 0,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 7,
+            "end": 8,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "page2.md",
+            },
+            "frontmatterDoc": {
+              "src": "page2.md",
+            },
+            "frontmatterRaw": "src: page2.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 2
+
+<Tweet />",
+                "contentStart": 3,
+                "end": 8,
+                "filepath": "sub/page2.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+                "start": 0,
+                "title": "Page 2",
+              },
+            ],
+            "index": 1,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: page2.md
+---
+",
+            "start": 4,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 11,
+            "end": 12,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterDoc": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 3",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 3
+",
+                "start": 0,
+                "title": "Page 3",
+              },
+              {
+                "content": "# Page 4
+
+<Tweet />",
+                "contentStart": 5,
+                "end": 10,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 1,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+                "start": 2,
+                "title": "Page 4",
+              },
+            ],
+            "index": 2,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+            "start": 8,
+            "title": undefined,
+          },
+        ],
+        "index": 3,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+---
+",
+        "start": 14,
+        "title": undefined,
+      },
+      {
+        "content": "",
+        "contentStart": 11,
+        "end": 12,
+        "filepath": "sub/nested1-4.md",
+        "frontmatter": {
+          "src": "../sub/pages3-4.md",
+        },
+        "frontmatterDoc": {
+          "src": "../sub/pages3-4.md",
+        },
+        "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 3",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 3
+",
+            "start": 0,
+            "title": "Page 3",
+          },
+          {
+            "content": "# Page 4
+
+<Tweet />",
+            "contentStart": 5,
+            "end": 10,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 1,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+            "start": 2,
+            "title": "Page 4",
+          },
+        ],
+        "index": 2,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+        "start": 8,
+        "title": undefined,
+      },
+    ],
     "index": 6,
     "level": 1,
     "note": undefined,
     "source": {
       "content": "# Page 3",
+      "contentStart": 0,
       "end": 2,
+      "filepath": "sub/pages3-4.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,
@@ -1054,6 +2153,283 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
     },
+    "importChain": [
+      {
+        "content": "",
+        "contentStart": 18,
+        "end": 19,
+        "filepath": "multi-entries.md",
+        "frontmatter": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterDoc": {
+          "background": "https://sli.dev/demo-cover.png#14",
+          "src": "sub/nested1-4.md",
+        },
+        "frontmatterRaw": "src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "",
+            "contentStart": 3,
+            "end": 4,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterDoc": {
+              "src": "/sub/page1.md",
+            },
+            "frontmatterRaw": "src: /sub/page1.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 1",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/page1.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 1
+",
+                "start": 0,
+                "title": "Page 1",
+              },
+            ],
+            "index": 0,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: /sub/page1.md
+---
+",
+            "start": 0,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 7,
+            "end": 8,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "page2.md",
+            },
+            "frontmatterDoc": {
+              "src": "page2.md",
+            },
+            "frontmatterRaw": "src: page2.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 2
+
+<Tweet />",
+                "contentStart": 3,
+                "end": 8,
+                "filepath": "sub/page2.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 2
+
+<Tweet />
+",
+                "start": 0,
+                "title": "Page 2",
+              },
+            ],
+            "index": 1,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: page2.md
+---
+",
+            "start": 4,
+            "title": undefined,
+          },
+          {
+            "content": "",
+            "contentStart": 11,
+            "end": 12,
+            "filepath": "sub/nested1-4.md",
+            "frontmatter": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterDoc": {
+              "src": "../sub/pages3-4.md",
+            },
+            "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+            "frontmatterStyle": "frontmatter",
+            "imports": [
+              {
+                "content": "# Page 3",
+                "contentStart": 0,
+                "end": 2,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {},
+                "frontmatterDoc": null,
+                "frontmatterRaw": undefined,
+                "frontmatterStyle": undefined,
+                "index": 0,
+                "level": 1,
+                "note": undefined,
+                "raw": "# Page 3
+",
+                "start": 0,
+                "title": "Page 3",
+              },
+              {
+                "content": "# Page 4
+
+<Tweet />",
+                "contentStart": 5,
+                "end": 10,
+                "filepath": "sub/pages3-4.md",
+                "frontmatter": {
+                  "layout": "cover",
+                },
+                "frontmatterDoc": {
+                  "layout": "cover",
+                },
+                "frontmatterRaw": "layout: cover
+",
+                "frontmatterStyle": "frontmatter",
+                "index": 1,
+                "level": 1,
+                "note": undefined,
+                "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+                "start": 2,
+                "title": "Page 4",
+              },
+            ],
+            "index": 2,
+            "level": undefined,
+            "note": undefined,
+            "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+            "start": 8,
+            "title": undefined,
+          },
+        ],
+        "index": 3,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: sub/nested1-4.md
+background: https://sli.dev/demo-cover.png#14
+---
+",
+        "start": 14,
+        "title": undefined,
+      },
+      {
+        "content": "",
+        "contentStart": 11,
+        "end": 12,
+        "filepath": "sub/nested1-4.md",
+        "frontmatter": {
+          "src": "../sub/pages3-4.md",
+        },
+        "frontmatterDoc": {
+          "src": "../sub/pages3-4.md",
+        },
+        "frontmatterRaw": "src: ../sub/pages3-4.md
+",
+        "frontmatterStyle": "frontmatter",
+        "imports": [
+          {
+            "content": "# Page 3",
+            "contentStart": 0,
+            "end": 2,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {},
+            "frontmatterDoc": null,
+            "frontmatterRaw": undefined,
+            "frontmatterStyle": undefined,
+            "index": 0,
+            "level": 1,
+            "note": undefined,
+            "raw": "# Page 3
+",
+            "start": 0,
+            "title": "Page 3",
+          },
+          {
+            "content": "# Page 4
+
+<Tweet />",
+            "contentStart": 5,
+            "end": 10,
+            "filepath": "sub/pages3-4.md",
+            "frontmatter": {
+              "layout": "cover",
+            },
+            "frontmatterDoc": {
+              "layout": "cover",
+            },
+            "frontmatterRaw": "layout: cover
+",
+            "frontmatterStyle": "frontmatter",
+            "index": 1,
+            "level": 1,
+            "note": undefined,
+            "raw": "---
+layout: cover
+---
+
+# Page 4
+
+<Tweet />
+",
+            "start": 2,
+            "title": "Page 4",
+          },
+        ],
+        "index": 2,
+        "level": undefined,
+        "note": undefined,
+        "raw": "---
+src: ../sub/pages3-4.md
+---
+",
+        "start": 8,
+        "title": undefined,
+      },
+    ],
     "index": 7,
     "level": 1,
     "note": undefined,
@@ -1061,7 +2437,9 @@ layout: cover
       "content": "# Page 4
 
 <Tweet />",
+      "contentStart": 5,
       "end": 10,
+      "filepath": "sub/pages3-4.md",
       "frontmatter": {
         "layout": "cover",
       },
@@ -1092,6 +2470,7 @@ layout: cover
 
 $x+2$",
     "frontmatter": {},
+    "importChain": undefined,
     "index": 8,
     "level": 1,
     "note": undefined,
@@ -1101,7 +2480,9 @@ $x+2$",
 
 $x+2$
 ",
+      "contentStart": 20,
       "end": 25,
+      "filepath": "multi-entries.md",
       "frontmatter": {},
       "frontmatterDoc": null,
       "frontmatterRaw": undefined,

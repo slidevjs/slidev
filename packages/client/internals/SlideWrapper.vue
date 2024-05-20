@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
-import type { PropType } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionActive, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
+import { configs } from '../env'
 import SlideLoading from './SlideLoading.vue'
 
 const props = defineProps({
@@ -16,14 +17,6 @@ const props = defineProps({
     type: String as PropType<RenderContext>,
     default: 'slide',
   },
-  active: {
-    type: Boolean,
-    default: false,
-  },
-  is: {
-    type: Function as PropType<() => any>,
-    required: true,
-  },
   route: {
     type: Object as PropType<SlideRoute>,
     required: true,
@@ -34,12 +27,11 @@ const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
 
 provideLocal(injectionRoute, props.route)
 provideLocal(injectionCurrentPage, ref(props.route.no))
-provideLocal(injectionRenderContext, ref(props.renderContext as RenderContext))
-provideLocal(injectionActive, toRef(props, 'active'))
+provideLocal(injectionRenderContext, ref(props.renderContext))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
 provideLocal(injectionSlideZoom, zoom)
 
-const style = computed(() => {
+const zoomStyle = computed(() => {
   return zoom.value === 1
     ? undefined
     : {
@@ -49,32 +41,33 @@ const style = computed(() => {
         transform: `scale(${zoom.value})`,
       }
 })
+const style = computed<CSSProperties>(() => ({
+  ...zoomStyle.value,
+  'user-select': configs.selectable ? undefined : 'none',
+}))
 
-const SlideComponent = defineAsyncComponent({
+const SlideComponent = computed(() => props.route && defineAsyncComponent({
   loader: async () => {
-    const component = await props.is()
+    const component = await props.route.component()
     return defineComponent({
       setup(_, { attrs }) {
-        onMounted(() => {
-          props.clicksContext?.onMounted?.()
-        })
+        onMounted(() => props.clicksContext?.onMounted?.())
         return () => h(component.default, attrs)
       },
     })
   },
   delay: 300,
   loadingComponent: SlideLoading,
-})
+}))
 </script>
 
 <template>
-  <div :class="getSlideClass(route)">
-    <component
-      :is="SlideComponent"
-      :style="style"
-      :data-slidev-no="props.route.no"
-      :class="{ 'disable-view-transition': !['slide', 'presenter'].includes(props.renderContext) }"
-    />
+  <div
+    :data-slidev-no="props.route.no"
+    :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
+    :style="style"
+  >
+    <SlideComponent />
   </div>
 </template>
 
@@ -85,7 +78,6 @@ const SlideComponent = defineAsyncComponent({
 
 .slidev-page {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 }
 </style>

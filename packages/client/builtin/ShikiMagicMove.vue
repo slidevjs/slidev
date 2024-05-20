@@ -6,6 +6,7 @@ import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 import { useNav } from '../composables/useNav'
+import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
   at?: string | number
@@ -43,7 +44,7 @@ onMounted(() => {
     () => clicks.current,
     () => {
       // Calculate the step and rangeStr based on the current click count
-      const clickCount = clicks.current - clickInfo.start
+      const clickCount = clickInfo ? clicks.current - clickInfo.start : CLICKS_MAX
       let step = steps.length - 1
       let currentClickSum = 0
       let rangeStr = 'all'

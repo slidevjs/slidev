@@ -49,6 +49,10 @@ html {
   user-select: none !important;
 }
 
+.slidev-vclick-display-none {
+  display: none !important;
+}
+
 .slidev-vclick-fade {
   opacity: 0.5;
 }
@@ -115,4 +119,8 @@ html {
 /* Transform the position back for Rough Notation (v-mark) */
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
+}
+
+#twoslash-container {
+  position: fixed;
 }

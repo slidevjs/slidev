@@ -16,3 +16,5 @@ export const slideHeight = computed(() => Math.ceil(slideWidth.value / slideAspe
 export const themeVars = computed(() => {
   return objectMap(configs.themeConfig || {}, (k, v) => [`--slidev-theme-${k}`, v])
 })
+
+export const slidesTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')

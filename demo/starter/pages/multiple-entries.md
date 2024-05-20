@@ -10,8 +10,8 @@ You can split your slides.md into multiple files and organize them as you want u
 Page 2 from main entry.
 
 ---
-src: ./subpage.md
----
+
+## src: ./subpage.md
 ```
 
 <br>

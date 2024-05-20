@@ -1,7 +1,7 @@
 import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
 import { useHead } from '@unhead/vue'
 import { useRouter } from 'vue-router'
-import { configs } from '../env'
+import { configs, slidesTitle } from '../env'
 import { initSharedState, onPatch, patch } from '../state/shared'
 import { initDrawingState } from '../state/drawings'
 import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
@@ -9,8 +9,8 @@ import { skipTransition } from '../logic/hmr'
 import { makeId } from '../logic/utils'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
-import { isDark } from '../logic/dark'
 import { useNav } from '../composables/useNav'
+import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import setups from '#slidev/setups/root'
 
 export default function setupRoot() {
@@ -30,28 +30,12 @@ export default function setupRoot() {
   if (__DEV__) {
     // @ts-expect-error expose global
     window.__slidev__ = context
-    window.addEventListener('message', ({ data }) => {
-      if (data && data.target === 'slidev') {
-        if (data.type === 'navigate') {
-          context.nav.go(+data.no, +data.clicks || 0)
-        }
-        else if (data.type === 'css-vars') {
-          const root = document.documentElement
-          for (const [key, value] of Object.entries(data.vars || {}))
-            root.style.setProperty(key, value as any)
-        }
-        else if (data.type === 'color-schema') {
-          isDark.value = data.color === 'dark'
-        }
-      }
-    })
+    useEmbeddedControl()
   }
 
   // User Setups
   for (const setup of setups)
     setup()
-
-  const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 
   const {
     clicksContext,
@@ -62,12 +46,12 @@ export default function setupRoot() {
   } = useNav()
 
   useHead({
-    title,
+    title: slidesTitle,
     htmlAttrs: configs.htmlAttrs,
   })
 
-  initSharedState(`${title} - shared`)
-  initDrawingState(`${title} - drawings`)
+  initSharedState(`${slidesTitle} - shared`)
+  initDrawingState(`${slidesTitle} - drawings`)
 
   const id = `${location.origin}_${makeId()}`
 

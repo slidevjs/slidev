@@ -17,7 +17,7 @@ import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
 import { configs } from '../env'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
-import { CLASS_VCLICK_HIDDEN } from '../constants'
+import { CLASS_VCLICK_HIDDEN, CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
 
 const props = defineProps({
@@ -66,7 +66,7 @@ onMounted(() => {
   const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
   clicks.register(id, clicksInfo)
 
-  const index = computed(() => Math.max(0, clicks.current - clicksInfo.start + 1))
+  const index = computed(() => clicksInfo ? Math.max(0, clicks.current - clicksInfo.start + 1) : CLICKS_MAX)
 
   const finallyRange = computed(() => {
     return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()

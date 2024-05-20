@@ -53,10 +53,6 @@ const barStyle = computed(() => props.persist
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)
   import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
-
-const DrawingControls = shallowRef<any>()
-if (__SLIDEV_FEATURE_DRAWINGS__)
-  import('./DrawingControls.vue').then(v => DrawingControls.value = v.default)
 </script>
 
 <template>
@@ -179,4 +175,4 @@ if (__SLIDEV_FEATURE_DRAWINGS__)
       <CustomNavControls />
     </div>
   </nav>
-</template>../composables/drawings
+</template>

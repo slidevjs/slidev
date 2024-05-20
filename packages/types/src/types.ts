@@ -25,8 +25,13 @@ export interface SourceSlideInfo extends SlideInfoBase {
    * The range of the slide in the markdown file
    */
   start: number
+  contentStart: number
   end: number
   raw: string
+  /**
+   * Slides import by this slide.
+   */
+  imports?: SourceSlideInfo[]
   frontmatterRaw?: string
   frontmatterDoc?: YAML.Document
   frontmatterStyle?: FrontmatterStyle
@@ -37,6 +42,13 @@ export interface SlideInfo extends SlideInfoBase {
    * The index of the slide in the presentation
    */
   index: number
+  /**
+   * The importers of this slide. `[]` if this slide is the entry markdown file
+   */
+  importChain?: SourceSlideInfo[]
+  /**
+   * The source slide where the content is from
+   */
   source: SourceSlideInfo
   snippetsUsed?: LoadedSnippets
   noteHTML?: string
@@ -113,8 +125,8 @@ export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previ
 
 export interface SlideRoute {
   no: number
-  meta: RouteMeta
-  component: () => Promise<RouteComponent>
+  meta: RouteMeta & Required<Pick<RouteMeta, 'slide'>>
+  component: () => Promise<{ default: RouteComponent }>
 }
 
 export type LoadedSnippets = Record<string, string>

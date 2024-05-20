@@ -11,7 +11,6 @@ export const injectionSlideScale = '$$slidev-slide-scale' as unknown as Injectio
 export const injectionSlidevContext = '$$slidev-context' as unknown as InjectionKey<UnwrapNestedRefs<SlidevContext>>
 export const injectionRoute = '$$slidev-route' as unknown as InjectionKey<SlideRoute>
 export const injectionRenderContext = '$$slidev-render-context' as unknown as InjectionKey<Ref<RenderContext>>
-export const injectionActive = '$$slidev-active' as unknown as InjectionKey<Ref<boolean>>
 export const injectionFrontmatter = '$$slidev-fontmatter' as unknown as InjectionKey<Record<string, any>>
 export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionKey<ComputedRef<number>>
 
@@ -22,6 +21,7 @@ export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
+export const CLASS_VCLICK_DISPLAY_NONE = 'slidev-vclick-display-none'
 
 export const CLICKS_MAX = 999999
 

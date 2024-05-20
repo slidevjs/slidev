@@ -1,18 +1,15 @@
 import path from 'node:path'
-import type { Connect, HtmlTagDescriptor, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
-import { isString, isTruthy, notNullish, range } from '@antfu/utils'
+import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
-import Markdown from 'markdown-it'
 import { bold, gray, red, yellow } from 'kolorist'
 
-// @ts-expect-error missing types
-import mila from 'markdown-it-link-attributes'
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 
 import type { LoadResult } from 'rollup'
-import { stringifyMarkdownTokens, updateFrontmatterPatch } from '../utils'
+import { updateFrontmatterPatch } from '../utils'
 import { toAtFS } from '../resolver'
 import { templates } from '../virtual'
 import type { VirtualModuleTempalteContext } from '../virtual/types'
@@ -21,6 +18,7 @@ import { VIRTUAL_SLIDE_PREFIX, templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
+import { sharedMd } from '../commands/shared'
 
 const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
@@ -65,17 +63,9 @@ export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
   })
 }
 
-const md = Markdown({ html: true })
-md.use(mila, {
-  attrs: {
-    target: '_blank',
-    rel: 'noopener',
-  },
-})
-
 function renderNote(text: string = '') {
   let clickCount = 0
-  const html = md.render(text
+  const html = sharedMd.render(text
     // replace [click] marker with span
     .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
       clickCount += Number(count)
@@ -109,7 +99,7 @@ export function createSlidesLoader(
   const { data, clientRoot, roots, mode } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
-    md,
+    md: sharedMd,
     async getLayouts() {
       const now = Date.now()
       if (now - _layouts_cache_time < 2000)
@@ -402,9 +392,7 @@ export function createSlidesLoader(
         const [, no, type] = match
         if (type !== 'md')
           return
-
-        const pageNo = Number.parseInt(no) - 1
-        return transformMarkdown(code, pageNo)
+        return transformMarkdown(code, +no - 1)
       },
     },
     {
@@ -428,39 +416,6 @@ export function createSlidesLoader(
           return replaced
       },
     },
-    {
-      name: 'slidev:index-html-transform',
-      transformIndexHtml() {
-        const { info, author, keywords } = data.headmatter
-        return [
-          {
-            tag: 'title',
-            children: getTitle(),
-          },
-          info && {
-            tag: 'meta',
-            attrs: {
-              name: 'description',
-              content: info,
-            },
-          },
-          author && {
-            tag: 'meta',
-            attrs: {
-              name: 'author',
-              content: author,
-            },
-          },
-          keywords && {
-            tag: 'meta',
-            attrs: {
-              name: 'keywords',
-              content: Array.isArray(keywords) ? keywords.join(', ') : keywords,
-            },
-          },
-        ].filter(isTruthy) as HtmlTagDescriptor[]
-      },
-    },
   ]
 
   function updateServerWatcher() {
@@ -476,10 +431,10 @@ export function createSlidesLoader(
     }
   }
 
-  async function transformMarkdown(code: string, pageNo: number) {
+  async function transformMarkdown(code: string, index: number) {
     const layouts = await templateCtx.getLayouts()
-    const frontmatter = getFrontmatter(pageNo)
-    let layoutName = frontmatter?.layout || (pageNo === 0 ? 'cover' : 'default')
+    const frontmatter = getFrontmatter(index)
+    let layoutName = frontmatter?.layout || (index === 0 ? 'cover' : 'default')
     if (!layouts[layoutName]) {
       console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)
       + Object.keys(layouts).map((i, idx) => (idx % 3 === 0 ? '\n    ' : '') + gray(i.padEnd(15, ' '))).join('  '))
@@ -490,7 +445,7 @@ export function createSlidesLoader(
     delete frontmatter.title
     const imports = [
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (pageNo + 1)}.frontmatter`)}"`,
+      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (index + 1)}.frontmatter`)}"`,
       templateImportContextUtils,
       '_provideFrontmatter(frontmatter)',
       templateInitContext,
@@ -503,7 +458,7 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${pageNo})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${index})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }
@@ -559,13 +514,5 @@ export function createSlidesLoader(
     }
     // no setup script and not a vue component
     return `<script setup>\n${imports.join('\n')}\n</script>\n${code}`
-  }
-
-  function getTitle() {
-    if (isString(data.config.title)) {
-      const tokens = md.parseInline(data.config.title, {})
-      return stringifyMarkdownTokens(tokens)
-    }
-    return data.config.title
   }
 }

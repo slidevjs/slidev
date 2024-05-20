@@ -53,14 +53,6 @@ By default, Slidev exports one page per slide with clicks animations disabled. I
 $ slidev export --with-clicks
 ```
 
-### Slide range
-
-You can also specify a range of slides to export with the `--range` option:
-
-```bash
-$ slidev export --range 1,4-5,6
-```
-
 ### PDF outline
 
 > Available since v0.36.10
@@ -104,7 +96,7 @@ The example above would export slides 1,6,7,8 and 10.
 You can also export multiple slides at once:
 
 ```bash
-$ slidev export slides1.md slides1.md
+$ slidev export slides1.md slides2.md
 ```
 
 Or
@@ -113,7 +105,7 @@ Or
 $ slidev export *.md
 ```
 
-In this case, each input file will generate its own PDf file.
+In this case, each input file will generate its own PDF file.
 
 ## Presenter notes
 

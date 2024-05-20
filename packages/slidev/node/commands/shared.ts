@@ -2,16 +2,52 @@ import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
 import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import type { ResolvedSlidevOptions } from '@slidev/types'
-import { generateGoogleFontsUrl } from '../utils'
+import type { ResolvedSlidevOptions, SlidevData } from '@slidev/types'
+import { isString } from 'unocss'
+import MarkdownIt from 'markdown-it'
+import { slash } from '@antfu/utils'
+import markdownItLink from '../syntax/markdown-it/markdown-it-link'
+import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../utils'
 import { toAtFS } from '../resolver'
+import { version } from '../../package.json'
 
-export async function getIndexHtml({ clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
+export const sharedMd = MarkdownIt({ html: true })
+sharedMd.use(markdownItLink)
+
+export function getTitle(data: SlidevData) {
+  if (isString(data.config.title)) {
+    const tokens = sharedMd.parseInline(data.config.title, {})
+    return stringifyMarkdownTokens(tokens)
+  }
+  return data.config.title
+}
+
+function escapeHtml(unsafe: unknown) {
+  return JSON.stringify(
+    String(unsafe)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;'),
+  )
+}
+
+export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
 
-  head += `<link rel="icon" href="${data.config.favicon}">`
+  const { info, author, keywords } = data.headmatter
+  head += [
+    `<meta name="slidev:version" content="${version}">`,
+    `<meta charset="slidev:entry" content="${slash(entry)}">`,
+    `<link rel="icon" href="${data.config.favicon}">`,
+    `<title>${getTitle(data)}</title>`,
+    info && `<meta name="description" content=${escapeHtml(info)}>`,
+    author && `<meta name="author" content=${escapeHtml(author)}>`,
+    keywords && `<meta name="keywords" content=${escapeHtml(Array.isArray(keywords) ? keywords.join(', ') : keywords)}>`,
+  ].filter(Boolean).join('\n')
 
   for (const root of roots) {
     const path = join(root, 'index.html')

@@ -42,7 +42,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
   const markdownFiles: Record<string, SlidevMarkdown> = {}
   const slides: SlideInfo[] = []
 
-  async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>) {
+  async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
       const raw = await fs.readFile(path, 'utf-8')
@@ -50,20 +50,27 @@ export async function load(userRoot: string, filepath: string, content?: string,
       markdownFiles[path] = md
     }
 
-    for (const index of parseRangeString(md.slides.length, range))
-      await loadSlide(md.slides[index - 1], frontmatterOverride)
+    const directImporter = importers?.at(-1)
+    for (const index of parseRangeString(md.slides.length, range)) {
+      const subSlide = md.slides[index - 1]
+      await loadSlide(subSlide, frontmatterOverride, importers)
+      if (directImporter)
+        (directImporter.imports ??= []).push(subSlide)
+    }
 
     return md
   }
 
-  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>) {
+  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>, importChain?: SourceSlideInfo[]) {
     if (slide.frontmatter.disabled || slide.frontmatter.hide)
       return
     if (slide.frontmatter.src) {
       const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
-      const path = rawPath.startsWith('/')
-        ? resolve(userRoot, rawPath.substring(1))
-        : resolve(dirname(slide.filepath), rawPath)
+      const path = slash(
+        rawPath.startsWith('/')
+          ? resolve(userRoot, rawPath.substring(1))
+          : resolve(dirname(slide.filepath), rawPath),
+      )
 
       frontmatterOverride = {
         ...slide.frontmatter,
@@ -71,11 +78,12 @@ export async function load(userRoot: string, filepath: string, content?: string,
       }
       delete frontmatterOverride.src
 
-      await loadMarkdown(path, rangeRaw, frontmatterOverride)
+      await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
     }
     else {
       slides.push({
         index: slides.length,
+        importChain,
         source: slide,
         frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
         content: slide.content,
@@ -86,7 +94,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
     }
   }
 
-  const entry = await loadMarkdown(filepath)
+  const entry = await loadMarkdown(slash(filepath))
 
   const headmatter = {
     title: slides[0]?.title,

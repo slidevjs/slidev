@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
-import { computed, ref, watchEffect } from 'vue'
-import { configs, slideAspect, slideHeight, slideWidth } from '../env'
+import { computed, ref } from 'vue'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
+import { slideAspect, slideHeight, slideWidth } from '../env'
 import { useNav } from '../composables/useNav'
+import { slideScale } from '../state'
 
 const props = defineProps({
   width: {
@@ -12,83 +13,64 @@ const props = defineProps({
   meta: {
     default: () => ({}) as any,
   },
-  scale: {
-    type: [Number, String],
-  },
   isMain: {
     type: Boolean,
     default: false,
   },
 })
 
-const { clicksDirection, isPrintMode } = useNav()
+const { isPrintMode } = useNav()
 
-const root = ref<HTMLDivElement | null>(null)
-const rootSize = useElementSize(root)
+const container = ref<HTMLDivElement | null>(null)
+const containerSize = useElementSize(container)
 const slideElement = ref<HTMLElement | null>(null)
 
-const width = computed(() => props.width ? props.width : rootSize.width.value)
-const height = computed(() => props.width ? props.width / slideAspect.value : rootSize.height.value)
-
-if (props.width) {
-  watchEffect(() => {
-    if (root.value) {
-      root.value.style.width = `${width.value}px`
-      root.value.style.height = `${height.value}px`
-    }
-  })
-}
-
-const screenAspect = computed(() => width.value / height.value)
+const width = computed(() => props.width ?? containerSize.width.value)
+const height = computed(() => props.width ? props.width / slideAspect.value : containerSize.height.value)
 
 const scale = computed(() => {
-  if (props.scale && !isPrintMode.value)
-    return +props.scale
-  if (screenAspect.value < slideAspect.value)
-    return width.value / slideWidth.value
-  return height.value * slideAspect.value / slideWidth.value
+  if (slideScale.value && !isPrintMode.value)
+    return +slideScale.value
+  return Math.min(width.value / slideWidth.value, height.value / slideHeight.value)
 })
 
-const style = computed(() => ({
+const contentStyle = computed(() => ({
   'height': `${slideHeight.value}px`,
   'width': `${slideWidth.value}px`,
   'transform': `translate(-50%, -50%) scale(${scale.value})`,
   '--slidev-slide-scale': scale.value,
 }))
 
-const className = computed(() => ({
-  'select-none': !configs.selectable,
-  'slidev-nav-go-forward': clicksDirection.value > 0,
-  'slidev-nav-go-backward': clicksDirection.value < 0,
-}))
-
-if (props.isMain) {
-  useStyleTag(computed(() => `
-    :root {
-      --slidev-slide-scale: ${scale.value};
+const containerStyle = computed(() => props.width
+  ? {
+      width: `${props.width}px`,
+      height: `${props.width / slideAspect.value}px`,
     }
-  `))
-}
+  : {},
+)
+
+if (props.isMain)
+  useStyleTag(computed(() => `:root { --slidev-slide-scale: ${scale.value}; }`))
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
 </script>
 
 <template>
-  <div id="slide-container" ref="root" class="slidev-slides-container" :class="className">
-    <div id="slide-content" ref="slideElement" class="slidev-slide-content" :style="style">
+  <div :id="isMain ? 'slide-container' : undefined" ref="container" class="slidev-slide-container" :style="containerStyle">
+    <div :id="isMain ? 'slide-content' : undefined" ref="slideElement" class="slidev-slide-content" :style="contentStyle">
       <slot />
     </div>
     <slot name="controls" />
   </div>
 </template>
 
-<style lang="postcss">
-#slide-container {
-  @apply relative overflow-hidden break-after-page;
+<style scoped lang="postcss">
+.slidev-slide-container {
+  @apply relative w-full h-full overflow-hidden;
 }
 
-#slide-content {
-  @apply relative overflow-hidden bg-main absolute left-1/2 top-1/2;
+.slidev-slide-content {
+  @apply absolute left-1/2 top-1/2 overflow-hidden bg-main;
 }
 </style>
