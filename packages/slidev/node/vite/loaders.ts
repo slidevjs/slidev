@@ -47,22 +47,6 @@ export function getBodyJson(req: Connect.IncomingMessage) {
   })
 }
 
-export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
-  const timestamp = +Date.now()
-
-  modules.forEach(m => server.moduleGraph.invalidateModule(m))
-
-  server.ws.send({
-    type: 'update',
-    updates: modules.map<Update>(m => ({
-      acceptedPath: m.id || m.file!,
-      path: m.file!,
-      timestamp,
-      type: 'js-update',
-    })),
-  })
-}
-
 function renderNote(text: string = '') {
   let clickCount = 0
   const html = sharedMd.render(text
