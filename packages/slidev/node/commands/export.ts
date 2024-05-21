@@ -206,10 +206,9 @@ export async function exportSlides({
     if (clicks)
       query.set('clicks', clicks)
 
-    const path = `${no}?${query.toString()}`
     const url = routerMode === 'hash'
-      ? `http://localhost:${port}${base}#${path}`
-      : `http://localhost:${port}${base}${path}`
+      ? `http://localhost:${port}${base}?${query}#${no}`
+      : `http://localhost:${port}${base}${no}?${query}`
     await page.goto(url, {
       waitUntil: 'networkidle',
       timeout,
