@@ -179,6 +179,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install slidev
+        run:  npm i -g @slidev/cli
+
       - name: Build
         run: npm run build -- --base /<name_of_repo>/
 
