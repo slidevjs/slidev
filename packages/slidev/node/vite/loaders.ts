@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import type { Connect, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import { bold, gray, red, yellow } from 'kolorist'
