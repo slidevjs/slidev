@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useVirtualList } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
+import { slideAspect } from '../env'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
@@ -41,9 +42,28 @@ const cardWidth = computed(() => {
   return 300
 })
 
+const cardHeight = computed(() => cardWidth.value / slideAspect.value)
+
 const rowCount = computed(() => {
-  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + 2 * gap))
 })
+
+const numOfRows = computed(() => {
+  return Math.ceil(slides.value.length / rowCount.value)
+})
+
+const slideRows = computed(() => {
+  return [...Array(numOfRows.value)].map((_, i) => ({ rowIdx: i, slides: slides.value.slice(i * rowCount.value, (i + 1) * rowCount.value).map((route, j) => ({ route, idx: i * rowCount.value + j })) }))
+})
+
+const { list: vList, containerProps, wrapperProps } = useVirtualList(
+  slideRows,
+  {
+    itemHeight: cardHeight.value + gap,
+    itemWidth: (cardWidth.value + gap) * rowCount.value,
+    overscan: 3,
+  },
+)
 
 const keyboardBuffer = ref<string>('')
 
@@ -114,47 +134,51 @@ setTimeout(() => {
     <div
       v-if="showOverview || activeSlidesLoaded"
       v-show="showOverview"
+      v-bind="containerProps"
       class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
       @click="close"
     >
-      <div
-        class="grid gap-y-4 gap-x-8 w-full"
-        :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
-      >
+      <div v-bind="wrapperProps">
         <div
-          v-for="(route, idx) of slides"
-          :key="route.no"
-          class="relative"
+          v-for="{ data: { rowIdx, slides: row } } of vList"
+          :key="rowIdx"
+          class="flex mb-8"
         >
           <div
-            class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
-            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
-            @click="go(route.no)"
+            v-for="{ route, idx } of row"
+            :key="route.no"
+            class="relative flex-1"
           >
-            <SlideContainer
-              :key="route.no"
-              :width="cardWidth"
-              class="pointer-events-none"
+            <div
+              class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
+              :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
+              @click="go(route.no)"
             >
-              <SlideWrapper
-                :clicks-context="createFixedClicks(route, CLICKS_MAX)"
-                :route="route"
-                render-context="overview"
-              />
-              <DrawingPreview :page="route.no" />
-            </SlideContainer>
-          </div>
-          <div
-            class="absolute top-0"
-            :style="`left: ${cardWidth + 5}px`"
-          >
-            <template v-if="keyboardBuffer && String(idx + 1).startsWith(keyboardBuffer)">
-              <span class="text-green font-bold">{{ keyboardBuffer }}</span>
-              <span class="opacity-50">{{ String(idx + 1).slice(keyboardBuffer.length) }}</span>
-            </template>
-            <span v-else class="opacity-50">
-              {{ idx + 1 }}
-            </span>
+              <SlideContainer
+                :key="route.no"
+                :width="cardWidth"
+                class="pointer-events-none"
+              >
+                <SlideWrapper
+                  :clicks-context="createFixedClicks(route, CLICKS_MAX)"
+                  :route="route"
+                  render-context="overview"
+                />
+                <DrawingPreview :page="route.no" />
+              </SlideContainer>
+            </div>
+            <div
+              class="absolute top-0"
+              :style="`left: ${cardWidth + 5}px`"
+            >
+              <template v-if="keyboardBuffer && String(idx + 1).startsWith(keyboardBuffer)">
+                <span class="text-green font-bold">{{ keyboardBuffer }}</span>
+                <span class="opacity-50">{{ String(idx + 1).slice(keyboardBuffer.length) }}</span>
+              </template>
+              <span v-else class="opacity-50">
+                {{ idx + 1 }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
