@@ -122,7 +122,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div p2 border="t main">
+      <div class="p2 border-t border-main">
         <IconButton
           v-if="!isColorSchemaConfigured"
           :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
