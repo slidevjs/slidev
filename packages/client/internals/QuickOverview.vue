@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useEventListener, useVirtualList } from '@vueuse/core'
-import { computed, ref, watchEffect } from 'vue'
+import { debouncedWatch, useElementSize, useEventListener, useVirtualList } from '@vueuse/core'
+import { computed, effectScope, ref, shallowRef, watchEffect } from 'vue'
 import type { SlideRoute } from '@slidev/types'
-import { breakpoints, showOverview, windowSize } from '../state'
+import { breakpoints, showOverview } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
@@ -25,45 +25,61 @@ function go(page: number) {
 }
 
 const xs = breakpoints.smaller('xs')
-const sm = breakpoints.smaller('sm')
 
-const paddingX = 4 * 16 * 2 // px-16
 const gapX = 2 * 16
 const gapY = 4 * 8 // mb-8
 
+const containerEl = ref<HTMLElement>()
+const { width: containerWidth } = useElementSize(containerEl)
+
 const cardWidth = computed(() => {
-  if (xs.value)
-    return windowSize.width.value - paddingX
-  else if (sm.value)
-    return (windowSize.width.value - paddingX - gapX) / 2
-  return 300
+  return xs.value
+  ? containerWidth.value
+  : Math.min(300, (containerWidth.value - gapX) / 2)
+})
+
+const numOfCols = computed(() => {
+  return xs.value
+    ? 1
+    : Math.floor((containerWidth.value + gapX)/ (cardWidth.value + gapX))
 })
 
 const cardHeight = computed(() => cardWidth.value / slideAspect.value)
-
-const numOfCols = computed(() => {
-  return Math.floor((windowSize.width.value - paddingX) / (cardWidth.value + 2 * gapX))
-})
 
 const numOfRows = computed(() => {
   return Math.ceil(slides.value.length / numOfCols.value)
 })
 
+type VirtualListReturn = ReturnType<typeof useVirtualList<SlideRoute[]>>
+const virtualList = shallowRef<VirtualListReturn>()
+
 const slideRows = computed(() => {
   const cols = numOfCols.value
-  const rows: { route: SlideRoute, idx: number }[][] = []
-  for (let i = 0; i < numOfRows.value; i++) {
-    const row = slides.value.slice(i * cols, (i + 1) * cols)
-    rows.push(row.map((route, j) => ({ route, idx: i * cols + j })))
-  }
+  const rows: SlideRoute[][] = []
+  for (let i = 0; i < numOfRows.value; i++) 
+    rows.push(slides.value.slice(i * cols, (i + 1) * cols))
   return rows
 })
 
-const { list: vList, containerProps, wrapperProps } = useVirtualList(
-  slideRows,
-  {
-    itemHeight: cardHeight.value + gapY,
+// `useVirtualList`'s `itemHeight` is not reactive, so we need to re-create the virtual list when the card height changes.
+debouncedWatch(
+  cardHeight,
+  (cardHeight, _oldCardHeight, onCleanup) => {
+    const scope = effectScope()
+    scope.run(() => {
+      virtualList.value = useVirtualList(
+        slideRows,
+        {
+          itemHeight: cardHeight + gapY,
+        },
+      )
+    })
+    onCleanup(() => scope.stop())
   },
+  {
+    immediate: true,
+    debounce: 50,
+  }
 )
 
 const keyboardBuffer = ref<string>('')
@@ -135,24 +151,25 @@ setTimeout(() => {
     <div
       v-if="showOverview || activeSlidesLoaded"
       v-show="showOverview"
-      v-bind="containerProps"
+      v-bind="virtualList?.containerProps"
       class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 px-16 py-20 overflow-y-auto backdrop-blur-5px"
       @click="close"
     >
-      <div v-bind="wrapperProps">
+      <div ref="containerEl" v-bind="virtualList?.wrapperProps.value">
         <div
-          v-for="{ index: rowIdx, data: row } of vList"
+          v-for="{ index: rowIdx, data: row } of virtualList?.list.value"
           :key="rowIdx"
-          class="flex mb-8"
+          class="grid grid-rows-1 gap-x-8 w-full mb-8"
+          :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
         >
           <div
-            v-for="{ route, idx } of row"
+            v-for="route of row"
             :key="route.no"
-            class="relative flex-1"
+            class="relative"
           >
             <div
               class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
-              :class="currentOverviewPage === idx + 1 ? 'border-primary' : 'border-main'"
+              :class="currentOverviewPage === route.no ? 'border-primary' : 'border-main'"
               @click="go(route.no)"
             >
               <SlideContainer
@@ -172,12 +189,12 @@ setTimeout(() => {
               class="absolute top-0"
               :style="`left: ${cardWidth + 5}px`"
             >
-              <template v-if="keyboardBuffer && String(idx + 1).startsWith(keyboardBuffer)">
+              <template v-if="keyboardBuffer && String(route.no).startsWith(keyboardBuffer)">
                 <span class="text-green font-bold">{{ keyboardBuffer }}</span>
-                <span class="opacity-50">{{ String(idx + 1).slice(keyboardBuffer.length) }}</span>
+                <span class="opacity-50">{{ String(route.no).slice(keyboardBuffer.length) }}</span>
               </template>
               <span v-else class="opacity-50">
-                {{ idx + 1 }}
+                {{ route.no }}
               </span>
             </div>
           </div>
