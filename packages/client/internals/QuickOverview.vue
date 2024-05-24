@@ -53,7 +53,13 @@ const numOfRows = computed(() => {
 })
 
 const slideRows = computed(() => {
-  return [...Array(numOfRows.value)].map((_, i) => ({ rowIdx: i, slides: slides.value.slice(i * rowCount.value, (i + 1) * rowCount.value).map((route, j) => ({ route, idx: i * rowCount.value + j })) }))
+  const cols = rowCount.value
+  const slideRows = []
+  for (let i = 0; i < numOfRows.value; i++) {
+    const row = slides.value.slice(i * cols, (i + 1) * cols)
+    slideRows.push(row.map((route, j) => ({ route, idx: i * cols + j })))
+  }
+  return slideRows
 })
 
 const { list: vList, containerProps, wrapperProps } = useVirtualList(
@@ -140,7 +146,7 @@ setTimeout(() => {
     >
       <div v-bind="wrapperProps">
         <div
-          v-for="{ data: { rowIdx, slides: row } } of vList"
+          v-for="{ index: rowIdx, data: row } of vList"
           :key="rowIdx"
           class="flex mb-8"
         >
