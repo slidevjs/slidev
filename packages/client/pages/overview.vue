@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watchEffect } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { useVirtualList } from '@vueuse/core'
 import { slideAspect, slidesTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
+import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
@@ -17,13 +17,13 @@ import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
-
 const cardHeight = computed(() => cardWidth / slideAspect.value)
 
 useHead({ title: `Overview - ${slidesTitle}` })
 
 const { openInEditor, slides } = useNav()
 
+const indexContainer = ref<HTMLElement>()
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
@@ -31,12 +31,9 @@ const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
-const { list: vList, containerProps, wrapperProps, scrollTo: scrollToSlide } = useVirtualList(
-  slides,
-  {
-    itemHeight: cardHeight.value,
-  },
-)
+const virtualList = useDynamicVirtualList(slides, () => ({
+  itemHeight: cardHeight.value,
+}))
 
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
@@ -98,13 +95,19 @@ onMounted(() => {
     checkActiveBlocks()
   })
 })
+
+watchEffect(() => {
+  indexContainer.value?.children[activeBlocks.value[0]]?.scrollIntoView({
+    block: 'center',
+  })
+})
 </script>
 
 <template>
   <div class="h-screen w-screen of-hidden flex">
     <nav class="grid grid-rows-[auto_max-content] border-r border-main select-none max-h-full h-full">
       <div class="relative">
-        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
+        <div ref="indexContainer" class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
           <div
             v-for="(route, idx) of slides"
             :key="route.no"
@@ -114,7 +117,7 @@ onMounted(() => {
             <button
               class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
               :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
-              @click="scrollToSlide(idx)"
+              @click="virtualList?.scrollTo(idx)"
             >
               <div>{{ idx + 1 }}</div>
             </button>
@@ -142,12 +145,12 @@ onMounted(() => {
     <main
       class="flex-1 h-full of-auto"
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
-      v-bind="containerProps"
+      v-bind="virtualList?.containerProps"
       @scroll="checkActiveBlocks"
     >
-      <div v-bind="wrapperProps">
+      <div v-bind="virtualList?.wrapperProps.value">
         <div
-          v-for="{ data: route, index: idx } of vList"
+          v-for="{ data: route, index: idx } of virtualList?.list.value"
           :key="route.no"
           :ref="el => blocks.set(idx, el as any)"
           class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"

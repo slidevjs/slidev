@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { debouncedWatch, useElementSize, useEventListener, useVirtualList } from '@vueuse/core'
-import { computed, effectScope, ref, shallowRef, watchEffect } from 'vue'
+import { useElementSize, useEventListener } from '@vueuse/core'
+import { computed, ref, watchEffect } from 'vue'
 import type { SlideRoute } from '@slidev/types'
 import { breakpoints, showOverview } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
@@ -8,6 +8,7 @@ import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 import { slideAspect } from '../env'
+import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
@@ -34,14 +35,14 @@ const { width: containerWidth } = useElementSize(containerEl)
 
 const cardWidth = computed(() => {
   return xs.value
-  ? containerWidth.value
-  : Math.min(300, (containerWidth.value - gapX) / 2)
+    ? containerWidth.value
+    : Math.min(300, (containerWidth.value - gapX) / 2)
 })
 
 const numOfCols = computed(() => {
   return xs.value
     ? 1
-    : Math.floor((containerWidth.value + gapX)/ (cardWidth.value + gapX))
+    : Math.floor((containerWidth.value + gapX) / (cardWidth.value + gapX))
 })
 
 const cardHeight = computed(() => cardWidth.value / slideAspect.value)
@@ -50,37 +51,17 @@ const numOfRows = computed(() => {
   return Math.ceil(slides.value.length / numOfCols.value)
 })
 
-type VirtualListReturn = ReturnType<typeof useVirtualList<SlideRoute[]>>
-const virtualList = shallowRef<VirtualListReturn>()
-
 const slideRows = computed(() => {
   const cols = numOfCols.value
   const rows: SlideRoute[][] = []
-  for (let i = 0; i < numOfRows.value; i++) 
+  for (let i = 0; i < numOfRows.value; i++)
     rows.push(slides.value.slice(i * cols, (i + 1) * cols))
   return rows
 })
 
-// `useVirtualList`'s `itemHeight` is not reactive, so we need to re-create the virtual list when the card height changes.
-debouncedWatch(
-  cardHeight,
-  (cardHeight, _oldCardHeight, onCleanup) => {
-    const scope = effectScope()
-    scope.run(() => {
-      virtualList.value = useVirtualList(
-        slideRows,
-        {
-          itemHeight: cardHeight + gapY,
-        },
-      )
-    })
-    onCleanup(() => scope.stop())
-  },
-  {
-    immediate: true,
-    debounce: 50,
-  }
-)
+const virtualList = useDynamicVirtualList(slideRows, () => ({
+  itemHeight: cardHeight.value + gapY,
+}))
 
 const keyboardBuffer = ref<string>('')
 
