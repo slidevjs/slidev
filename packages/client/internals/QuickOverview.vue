@@ -51,7 +51,7 @@ const numOfRows = computed(() => {
 
 const slideRows = computed(() => {
   const cols = numOfCols.value
-  const rows: {route: SlideRoute, idx: number}[][] = []
+  const rows: { route: SlideRoute, idx: number }[][] = []
   for (let i = 0; i < numOfRows.value; i++) {
     const row = slides.value.slice(i * cols, (i + 1) * cols)
     rows.push(row.map((route, j) => ({ route, idx: i * cols + j })))
