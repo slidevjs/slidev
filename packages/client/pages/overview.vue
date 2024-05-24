@@ -18,6 +18,8 @@ import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
 const cardHeight = computed(() => cardWidth / slideAspect.value)
+const paddingY = 4 * 5 // py-5 (single side)
+const rowHeight = computed(() => cardHeight.value + paddingY * 2 + 2) // 2 for top and bottom border
 
 useHead({ title: `Overview - ${slidesTitle}` })
 
@@ -32,7 +34,7 @@ const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
 const virtualList = useDynamicVirtualList(slides, () => ({
-  itemHeight: cardHeight.value,
+  itemHeight: rowHeight.value,
 }))
 
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
@@ -143,7 +145,7 @@ watchEffect(() => {
       </div>
     </nav>
     <main
-      class="flex-1 h-full of-auto"
+      class="flex-1 h-full of-auto py-5"
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
       v-bind="virtualList?.containerProps"
       @scroll="checkActiveBlocks"
@@ -153,55 +155,61 @@ watchEffect(() => {
           v-for="{ data: route, index: idx } of virtualList?.list.value"
           :key="route.no"
           :ref="el => blocks.set(idx, el as any)"
-          class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
-          :class="idx === 0 ? 'pt5' : ''"
+          class="relative of-hidden flex group"
+          :class="idx === 0 ? '' : 'border-t border-main'"
+          :style="`height: ${rowHeight}px`"
         >
-          <div class="select-none w-13 text-right my4 flex flex-col gap-1 items-end">
-            <div class="text-3xl op20 mb2">
-              {{ idx + 1 }}
-            </div>
-            <IconButton
-              class="mr--3 op0 group-hover:op80"
-              title="Play in new tab"
-              @click="openSlideInNewTab(getSlidePath(route, false))"
-            >
-              <carbon:presentation-file />
-            </IconButton>
-            <IconButton
-              v-if="route.meta?.slide"
-              class="mr--3 op0 group-hover:op80"
-              title="Open in editor"
-              @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
-            >
-              <carbon:cics-program />
-            </IconButton>
-          </div>
-          <div class="flex flex-col gap-2 my5">
-            <div
-              class="border rounded border-main overflow-hidden bg-main select-none h-max"
-              @dblclick="openSlideInNewTab(getSlidePath(route, false))"
-            >
-              <SlideContainer
-                :key="route.no"
-                :width="cardWidth"
-                class="pointer-events-none important:[&_*]:select-none"
+          <div
+            class="ml-4 flex gap-4"
+            :style="`margin-bottom: ${paddingY}px; margin-top: ${paddingY}px;`"
+          >
+            <div class="select-none text-right flex flex-col gap-1 items-end">
+              <div class="text-3xl op20 mb2">
+                {{ idx + 1 }}
+              </div>
+              <IconButton
+                class="mr--3 op0 group-hover:op80"
+                title="Play in new tab"
+                @click="openSlideInNewTab(getSlidePath(route, false))"
               >
-                <SlideWrapper
-                  :clicks-context="getClicksContext(route)"
-                  :route="route"
-                  render-context="overview"
-                />
-                <DrawingPreview :page="route.no" />
-              </SlideContainer>
+                <carbon:presentation-file />
+              </IconButton>
+              <IconButton
+                v-if="route.meta?.slide"
+                class="mr--3 op0 group-hover:op80"
+                title="Open in editor"
+                @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+              >
+                <carbon:cics-program />
+              </IconButton>
             </div>
-            <ClicksSlider
-              v-if="getSlideClicks(route)"
-              :clicks-context="getClicksContext(route)"
-              class="w-full mt-2"
-              @dblclick="getClicksContext(route).current = CLICKS_MAX"
-            />
+            <div class="flex flex-col gap-2">
+              <div
+                class="border rounded border-main overflow-hidden bg-main select-none h-max"
+                @dblclick="openSlideInNewTab(getSlidePath(route, false))"
+              >
+                <SlideContainer
+                  :key="route.no"
+                  :width="cardWidth"
+                  class="pointer-events-none important:[&_*]:select-none"
+                >
+                  <SlideWrapper
+                    :clicks-context="getClicksContext(route)"
+                    :route="route"
+                    render-context="overview"
+                  />
+                  <DrawingPreview :page="route.no" />
+                </SlideContainer>
+              </div>
+              <ClicksSlider
+                v-if="getSlideClicks(route)"
+                :clicks-context="getClicksContext(route)"
+                class="w-full mt-2"
+                @dblclick="getClicksContext(route).current = CLICKS_MAX"
+              />
+            </div>
           </div>
-          <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
+          <div class="py3 mt-0.5 mr--4 op0 transition group-hover:op100">
             <IconButton
               title="Edit Note"
               class="rounded-full w-9 h-9 text-sm"
