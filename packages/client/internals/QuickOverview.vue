@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useEventListener, useVirtualList } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
+import type { SlideRoute } from '@slidev/types'
 import { breakpoints, showOverview, windowSize } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
@@ -23,51 +24,45 @@ function go(page: number) {
   close()
 }
 
-function focus(page: number) {
-  if (page === currentOverviewPage.value)
-    return true
-  return false
-}
-
 const xs = breakpoints.smaller('xs')
 const sm = breakpoints.smaller('sm')
 
-const padding = 4 * 16 * 2
-const gap = 2 * 16
+const paddingX = 4 * 16 * 2 // px-16
+const gapX = 2 * 16
+const gapY = 4 * 8 // mb-8
+
 const cardWidth = computed(() => {
   if (xs.value)
-    return windowSize.width.value - padding
+    return windowSize.width.value - paddingX
   else if (sm.value)
-    return (windowSize.width.value - padding - gap) / 2
+    return (windowSize.width.value - paddingX - gapX) / 2
   return 300
 })
 
 const cardHeight = computed(() => cardWidth.value / slideAspect.value)
 
-const rowCount = computed(() => {
-  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + 2 * gap))
+const numOfCols = computed(() => {
+  return Math.floor((windowSize.width.value - paddingX) / (cardWidth.value + 2 * gapX))
 })
 
 const numOfRows = computed(() => {
-  return Math.ceil(slides.value.length / rowCount.value)
+  return Math.ceil(slides.value.length / numOfCols.value)
 })
 
 const slideRows = computed(() => {
-  const cols = rowCount.value
-  const slideRows = []
+  const cols = numOfCols.value
+  const rows: {route: SlideRoute, idx: number}[][] = []
   for (let i = 0; i < numOfRows.value; i++) {
     const row = slides.value.slice(i * cols, (i + 1) * cols)
-    slideRows.push(row.map((route, j) => ({ route, idx: i * cols + j })))
+    rows.push(row.map((route, j) => ({ route, idx: i * cols + j })))
   }
-  return slideRows
+  return rows
 })
 
 const { list: vList, containerProps, wrapperProps } = useVirtualList(
   slideRows,
   {
-    itemHeight: cardHeight.value + gap,
-    itemWidth: (cardWidth.value + gap) * rowCount.value,
-    overscan: 3,
+    itemHeight: cardHeight.value + gapY,
   },
 )
 
@@ -121,7 +116,7 @@ watchEffect(() => {
   // we focus on the right page.
   currentOverviewPage.value = currentSlideNo.value
   // Watch rowCount, make sure up and down shortcut work correctly.
-  overviewRowCount.value = rowCount.value
+  overviewRowCount.value = numOfCols.value
 })
 
 const activeSlidesLoaded = ref(false)
@@ -141,7 +136,7 @@ setTimeout(() => {
       v-if="showOverview || activeSlidesLoaded"
       v-show="showOverview"
       v-bind="containerProps"
-      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 px-16 py-20 overflow-y-auto backdrop-blur-5px"
       @click="close"
     >
       <div v-bind="wrapperProps">
@@ -157,7 +152,7 @@ setTimeout(() => {
           >
             <div
               class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
-              :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
+              :class="currentOverviewPage === idx + 1 ? 'border-primary' : 'border-main'"
               @click="go(route.no)"
             >
               <SlideContainer
