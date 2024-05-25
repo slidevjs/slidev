@@ -190,6 +190,13 @@ cli.command(
               restartServer()
               return false
             }
+
+            if ((newData.features.katex && !oldData.features.katex) || (newData.features.monaco && !oldData.features.monaco)) {
+              console.log(yellow('\n  restarting on feature change\n'))
+              restartServer()
+              return false
+            }
+
             return newData
           },
         },
