@@ -18,7 +18,6 @@ export interface ExportArgs extends CommonArgs {
 }
 
 export interface BuildArgs extends ExportArgs {
-  watch: boolean
   out: string
   base?: string
   download?: boolean

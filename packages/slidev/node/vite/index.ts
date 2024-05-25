@@ -85,7 +85,7 @@ export async function ViteSlidevPlugin(
         rules: [
           ...r.DefaultRules,
           {
-            match: /\b(https?:\/\/image.unsplash\.com.*?)(?=[`'")\]])/ig,
+            match: /\b(https?:\/\/image.unsplash\.com.*?)(?=[`'")\]])/gi,
             ext: '.png',
           },
         ],

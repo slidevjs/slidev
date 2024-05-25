@@ -51,7 +51,7 @@ export default defineConfig({
       transform(code, id) {
         if (!id.endsWith('.md'))
           return
-        return code.replace(/\/\/```/mg, '```')
+        return code.replace(/\/\/```/g, '```')
       },
     },
     {

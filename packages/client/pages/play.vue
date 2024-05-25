@@ -75,4 +75,5 @@ if (features.editor)
     <SideEditor v-if="SideEditor && showEditor" :resize="true" />
   </div>
   <Controls v-if="!isPrintMode" />
+  <div id="twoslash-container" />
 </template>

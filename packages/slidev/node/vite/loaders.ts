@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import type { Connect, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import { bold, gray, red, yellow } from 'kolorist'
@@ -20,8 +20,8 @@ import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
 
-const regexId = /^\/\@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
-const regexIdQuery = /(\d+?)\.(md|json|frontmatter)$/
+const regexId = /^\/@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
+const regexIdQuery = /(\d+)\.(md|json|frontmatter)$/
 
 const templateInjectionMarker = '/* @slidev-injection */'
 const templateImportContextUtils = `import {
@@ -44,22 +44,6 @@ export function getBodyJson(req: Connect.IncomingMessage) {
         reject(e)
       }
     })
-  })
-}
-
-export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
-  const timestamp = +Date.now()
-
-  modules.forEach(m => server.moduleGraph.invalidateModule(m))
-
-  server.ws.send({
-    type: 'update',
-    updates: modules.map<Update>(m => ({
-      acceptedPath: m.id || m.file!,
-      path: m.file!,
-      timestamp,
-      type: 'js-update',
-    })),
   })
 }
 
@@ -471,6 +455,7 @@ export function createSlidesLoader(
       templateInitContext,
       templateInjectionMarker,
     ]
+    // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/optimal-quantifier-concatenation
     const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
     if (matchScript && matchScript[2]) {
       // setup script
@@ -478,7 +463,7 @@ export function createSlidesLoader(
     }
     else if (matchScript && !matchScript[2]) {
       // not a setup script
-      const matchExport = code.match(/export\s+default\s+{/)
+      const matchExport = code.match(/export\s+default\s+\{/)
       if (matchExport) {
         // script exports a component
         const exportIndex = (matchExport.index || 0) + matchExport[0].length
@@ -491,7 +476,7 @@ export function createSlidesLoader(
 
         let injectIndex = exportIndex + provideImport.length
         let injectObject = '$slidev: { from: injectionSlidevContext },'
-        const matchInject = component.match(/.*inject\s*:\s*([\[{])/)
+        const matchInject = component.match(/.*inject\s*:\s*([[{])/)
         if (matchInject) {
           // component has a inject option
           injectIndex += (matchInject.index || 0) + matchInject[0].length

@@ -6,7 +6,8 @@ import type { MarkdownTransformContext } from '@slidev/types'
 import { normalizeRangeStr } from './utils'
 import { reCodeBlock } from './code-wrapper'
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?:[ ]*(\{.*?\})?([^\n]*?))?\n([\s\S]+?)^````$/mg
+// eslint-disable-next-line regexp/no-useless-quantifier, regexp/no-super-linear-backtracking
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *(\{[^}]*\})?([^\n]*))?\n([\s\S]+?)^````$/gm
 
 /**
  * Transform magic-move code blocks

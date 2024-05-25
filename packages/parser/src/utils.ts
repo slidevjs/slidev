@@ -34,7 +34,7 @@ export function parseAspectRatio(str: string | number) {
     return str
   if (!Number.isNaN(+str))
     return +str
-  const [wStr = '', hStr = ''] = str.split(/[:\/x\|]/)
+  const [wStr = '', hStr = ''] = str.split(/[:/x|]/)
   const w = Number.parseFloat(wStr.trim())
   const h = Number.parseFloat(hStr.trim())
 

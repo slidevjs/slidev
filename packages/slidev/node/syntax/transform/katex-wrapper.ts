@@ -5,7 +5,7 @@ import type { MarkdownTransformContext } from '@slidev/types'
  */
 export function transformKaTexWrapper(ctx: MarkdownTransformContext) {
   ctx.s.replace(
-    /^\$\$(?:\s*{([\d\w*,\|-]+)}\s*?({.*?})?\s*?)?\n([\s\S]+?)^\$\$/mg,
+    /^\$\$(?:\s*\{([\w*,|-]+)\}\s*?(?:(\{[^}]*\})\s*?)?)?\n(\S[\s\S]*?)^\$\$/gm,
     (full, rangeStr: string = '', options = '', code: string) => {
       const ranges = !rangeStr.trim() ? [] : rangeStr.trim().split(/\|/g).map(i => i.trim())
       code = code.trimEnd()

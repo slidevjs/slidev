@@ -65,7 +65,7 @@ useEventListener('keypress', (e) => {
     }
     return
   }
-  const num = Number.parseInt(e.key.replace(/[^0-9]/g, ''))
+  const num = Number.parseInt(e.key.replace(/\D/g, ''))
   if (Number.isNaN(num)) {
     keyboardBuffer.value = ''
     return

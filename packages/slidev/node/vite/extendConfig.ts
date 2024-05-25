@@ -151,7 +151,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               options.clientRoot,
               // Special case for PNPM global installation
               isInstalledGlobally.value
-                ? slash(options.cliRoot).replace(/\/\.pnpm\/.*$/ig, '')
+                ? slash(options.cliRoot).replace(/\/\.pnpm\/.*$/gi, '')
                 : options.cliRoot,
               ...options.roots,
             ]),

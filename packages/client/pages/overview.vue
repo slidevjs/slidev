@@ -41,7 +41,7 @@ function getSlideClicks(route: SlideRoute) {
 }
 
 function wordCount(str: string) {
-  return str.match(/[\w\d\’\'-]+/gi)?.length || 0
+  return str.match(/[\w’'-]+/g)?.length || 0
 }
 
 function isElementInViewport(el: HTMLElement) {

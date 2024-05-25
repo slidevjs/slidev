@@ -18,7 +18,7 @@ export default defineCodeRunnersSetup(() => {
 
       // Replace Vue imports to object destructuring
       // Only for simple demo, it doesn't work with imports from other packages
-      scripts = scripts.replace(/import ({[^}]+}) from ['"]vue['"]/g, (_, imports) => `const ${imports.replace(/\sas\s/g, ':')} = Vue`)
+      scripts = scripts.replace(/import (\{[^}]+\}) from ['"]vue['"]/g, (_, imports) => `const ${imports.replace(/\sas\s/g, ':')} = Vue`)
       scripts += '\nreturn __Component'
 
       // Create function to evaluate the script and get the component

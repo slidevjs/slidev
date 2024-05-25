@@ -78,7 +78,7 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
 }
 
 export async function resolveEntry(entryRaw: string) {
-  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[\/\\]/.test(entryRaw))
+  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[/\\]/.test(entryRaw))
     entryRaw += '.md'
   const entry = resolve(entryRaw)
   if (!fs.existsSync(entry)) {

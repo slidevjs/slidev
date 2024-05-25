@@ -17,7 +17,7 @@ function getTreeItem(element: SlidevProject | string): TreeItem {
   if (typeof element === 'string') {
     // Imported file
     return {
-      description: true,
+      description: toRelativePath(element),
       resourceUri: Uri.file(element),
       iconPath: new ThemeIcon('file'),
       collapsibleState: TreeItemCollapsibleState.None,

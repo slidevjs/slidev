@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "0.49.1",
+  "version": "0.49.4",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -26,6 +26,16 @@
   "contributes": {
     "commands": [
       {
+        "command": "slidev.enable-extension",
+        "category": "Slidev",
+        "title": "Force enable Slidev extension"
+      },
+      {
+        "command": "slidev.disable-extension",
+        "category": "Slidev",
+        "title": "Force disable Slidev extension"
+      },
+      {
         "command": "slidev.rescan-projects",
         "category": "Slidev",
         "title": "Rescan Slidev projects",
@@ -34,17 +44,18 @@
       {
         "command": "slidev.choose-entry",
         "category": "Slidev",
-        "title": "Choose active slides entry."
+        "title": "Choose active slides entry"
       },
       {
         "command": "slidev.add-entry",
         "category": "Slidev",
-        "title": "Choose Markdown files to add as slides entries."
+        "title": "Choose Markdown files to add as slides entries",
+        "icon": "$(add)"
       },
       {
         "command": "slidev.remove-entry",
         "category": "Slidev",
-        "title": "Remove the given entry file from the active slides entries.",
+        "title": "Remove the given entry file from the active slides entries",
         "icon": "$(close)"
       },
       {
@@ -98,25 +109,25 @@
       {
         "command": "slidev.preview-prev-click",
         "category": "Slidev",
-        "title": "Navigate to prev click in preview window.",
+        "title": "Navigate to prev click in preview window",
         "icon": "$(arrow-left)"
       },
       {
         "command": "slidev.preview-next-click",
         "category": "Slidev",
-        "title": "Navigate to next click in preview window.",
+        "title": "Navigate to next click in preview window",
         "icon": "$(arrow-right)"
       },
       {
         "command": "slidev.preview-prev-slide",
         "category": "Slidev",
-        "title": "Navigate to prev slide in preview window.",
+        "title": "Navigate to prev slide in preview window",
         "icon": "$(arrow-up)"
       },
       {
         "command": "slidev.preview-next-slide",
         "category": "Slidev",
-        "title": "Navigate to next slide in preview window.",
+        "title": "Navigate to next slide in preview window",
         "icon": "$(arrow-down)"
       },
       {
@@ -156,21 +167,26 @@
       ],
       "editor/title": [
         {
-          "when": "slidev-enabled && resourceLangId == markdown",
+          "when": "slidev:enabled && slidev:editing-markdown",
           "command": "slidev.prev",
           "group": "navigation"
         },
         {
-          "when": "slidev-enabled && resourceLangId == markdown",
+          "when": "slidev:enabled && slidev:editing-markdown",
           "command": "slidev.next",
           "group": "navigation"
         }
       ],
       "view/title": [
         {
+          "command": "slidev.add-entry",
+          "when": "view =~ /slidev-projects-tree/",
+          "group": "navigation@1"
+        },
+        {
           "command": "slidev.rescan-projects",
           "when": "view =~ /slidev-projects-tree/",
-          "group": "navigation"
+          "group": "navigation@2"
         },
         {
           "command": "slidev.preview-prev-slide",
@@ -240,9 +256,17 @@
       ]
     },
     "configuration": {
-      "type": "object",
       "title": "Slidev",
       "properties": {
+        "slidev.force-enabled": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "scope": "window",
+          "description": "Force enable Slidev extension",
+          "default": null
+        },
         "slidev.port": {
           "type": "number",
           "scope": "window",
@@ -268,8 +292,7 @@
         {
           "id": "slidev",
           "title": "Slidev",
-          "icon": "dist/res/logo-mono.svg",
-          "when": "slidev-enabled"
+          "icon": "dist/res/logo-mono.svg"
         }
       ]
     },
@@ -279,20 +302,23 @@
           "id": "slidev-projects-tree",
           "name": "Projects",
           "visibility": "collapsed",
-          "initialSize": 1
+          "initialSize": 1,
+          "when": "slidev:enabled"
         },
         {
           "id": "slidev-slides-tree",
           "name": "Slides",
           "visibility": "visible",
-          "initialSize": 3
+          "initialSize": 3,
+          "when": "slidev:enabled"
         },
         {
           "type": "webview",
           "id": "slidev-preview",
           "name": "Preview",
           "visibility": "visible",
-          "initialSize": 3
+          "initialSize": 3,
+          "when": "slidev:enabled"
         }
       ]
     },
@@ -314,7 +340,7 @@
     "@antfu/utils": "^0.7.8",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.12.12",
     "@types/vscode": "^1.89.0",
     "@vue/reactivity": "^3.4.27",
     "@vue/runtime-core": "^3.4.27",

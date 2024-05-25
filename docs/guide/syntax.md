@@ -51,7 +51,7 @@ This is the cover page.
 
 ---
 layout: center
-background: './images/background-1.png'
+background: /background-1.png
 class: 'text-white'
 ---
 
@@ -89,7 +89,7 @@ This is the cover page.
 ```yaml
 # The first yaml block will be treated as the frontmatter of that slide
 layout: center
-background: './images/background-1.png'
+background: /background-1.png
 class: 'text-white'
 ```
 

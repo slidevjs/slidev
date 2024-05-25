@@ -36,6 +36,7 @@ export default defineComponent({
         at: this.at,
         hide: this.hide,
         fade: this.fade,
+        handleSpecialElements: false,
       },
       {
         default: () =>

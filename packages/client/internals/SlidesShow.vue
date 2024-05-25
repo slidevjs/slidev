@@ -84,8 +84,6 @@ function onAfterLeave() {
 
   <DragControl v-if="activeDragElement" :data="activeDragElement" />
 
-  <div id="twoslash-container" />
-
   <!-- Global Top -->
   <GlobalTop />
 

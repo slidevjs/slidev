@@ -22,7 +22,7 @@ export function transformSlotSugar(
     offset += line.length
     if (codeBlocks.isInsideCodeblocks(offset))
       return
-    const match = line.match(/^::\s*([\w\.\-\:]+)\s*::(\s*)?$/)
+    const match = line.match(/^::\s*([\w.\-:]+)\s*::(\s*)$/)
     if (match) {
       ctx.s.overwrite(start, offset - match[2].length, `${prevSlot ? '\n\n</template>\n' : '\n'}<template v-slot:${match[1]}="slotProps">\n`)
       prevSlot = true

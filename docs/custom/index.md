@@ -17,7 +17,7 @@ title: Slidev
 titleTemplate: '%s - Slidev'
 # information for your slides, can be a markdown string.
 info: false
-# author field for exported PDF
+# author field for exported PDF or PPTX
 author: Your Name Here
 # keywords field for exported PDF, comma-delimited.
 keywords: keyword1,keyword2

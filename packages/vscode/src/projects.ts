@@ -2,13 +2,13 @@ import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { load } from '@slidev/parser/fs'
-import { computed, markRaw, onScopeDispose, reactive, ref } from '@vue/runtime-core'
+import { computed, markRaw, onScopeDispose, reactive, ref, watchEffect } from '@vue/runtime-core'
 import { commands, window, workspace } from 'vscode'
 import { slash } from '@antfu/utils'
 import { useLogger } from './views/logger'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { useVscodeContext } from './composables/useVscodeContext'
-import { toRelativePath } from './utils/toRelativePath'
+import { forceEnabled } from './configs'
 
 export interface SlidevProject {
   readonly entry: string
@@ -22,7 +22,6 @@ export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
 export const activeSlidevData = computed(() => activeProject.value?.data)
 export const activeUserRoot = computed(() => activeProject.value?.userRoot)
-export const multiProject = useVscodeContext('slidev-multi-project', () => projects.size > 1)
 
 async function loadExistingProjects() {
   const files = await workspace.findFiles('**/*.md', '**/node_modules/**')
@@ -54,6 +53,18 @@ export function useProjects() {
   }
   init()
 
+  // In case all the projects are removed manually, and the user may not want to disable the extension.
+  const everHadProjects = ref(false)
+  watchEffect(() => {
+    if (projects.size > 0)
+      everHadProjects.value = true
+  })
+
+  useVscodeContext('slidev:enabled', () => {
+    const enabled = forceEnabled.value == null ? everHadProjects.value : forceEnabled.value
+    logger.info(`Slidev ${enabled ? 'enabled' : 'disabled'}.`)
+    return enabled
+  })
   useVscodeContext('slidev:hasActiveProject', () => !!activeEntry.value)
 
   let pendingUpdate: { cancelled: boolean } | null = null
@@ -96,16 +107,7 @@ export function useProjects() {
         return
     }
 
-    async function askIfNewEntry() {
-      if (basename(path) === 'slides.md')
-        return true
-      if (!maybeNewEntry)
-        return false
-      const result = await window.showInformationMessage(`New Markdown file ${toRelativePath(path)} detected. Add it as a slides entry?`, 'Yes', 'No')
-      return result === 'Yes'
-    }
-
-    if (!projects.has(path) && await askIfNewEntry())
+    if (basename(path).toLocaleLowerCase() === 'slides.md' && !projects.has(path))
       effects.push(await addProjectEffect(path))
 
     if (thisUpdate.cancelled)

@@ -17,9 +17,9 @@ export const useFoldings = createSingletonComposable(() => {
           return // Not a slidev markdown file
         // Not using global slides data because it updates too late
         const md = await parse(document.getText(), document.uri.fsPath)
-        return md?.slides.map(slide => ({
-          start: slide.frontmatterStyle ? slide.start : slide.start - 1,
-          end: slide.end - 1,
+        return md?.slides.map(source => ({
+          start: Math.max(0, source.frontmatterStyle === 'frontmatter' ? source.start : source.start - 1),
+          end: source.end - 1,
           kind: FoldingRangeKind.Region,
         }))
       },
