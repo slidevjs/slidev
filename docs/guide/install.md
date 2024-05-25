@@ -189,14 +189,14 @@ Options:
 
 ### `slidev export [entry]`
 
-Export slides to PDF (or other format).
+Export slides to PDF (or other format). See [Exporting](/guide/exporting.html) for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
 Options:
 
 - `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#frontmatter-configures) or use `[entry]-export`): path to the output.
-- `--format` (`'pdf', 'png', 'md'`, default: `'pdf'`): output format.
+- `--format` (`'pdf', 'png', 'pptx', 'md'`, default: `'pdf'`): output format.
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.

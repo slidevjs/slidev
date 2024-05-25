@@ -35,6 +35,18 @@ You can also compile a markdown file composed of compiled png using `--format md
 $ slidev export --format md
 ```
 
+### PPTX (Microsoft PowerPoint)
+
+Slidev can also export your slides to a PPTX file:
+
+```bash
+$ slidev export --format pptx
+```
+
+Note that all the slides in the PPTX file will be exported as images, so the text will not be selectable.
+
+In this mode, the `--with-clicks` option is enabled by default. To disable it, use `--with-clicks false`.
+
 ### Dark mode
 
 In case you want to export your slides using the dark version of the theme, use the `--dark` option:

@@ -190,6 +190,13 @@ cli.command(
               restartServer()
               return false
             }
+
+            if ((newData.features.katex && !oldData.features.katex) || (newData.features.monaco && !oldData.features.monaco)) {
+              console.log(yellow('\n  restarting on feature change\n'))
+              restartServer()
+              return false
+            }
+
             return newData
           },
         },
@@ -564,7 +571,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'md'],
+      choices: ['pdf', 'png', 'pptx', 'md'],
       describe: 'output format',
     })
     .option('timeout', {

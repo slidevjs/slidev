@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "version": "0.49.3",
+  "version": "0.49.4",
   "private": true,
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.1.2",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -23,13 +23,14 @@
     "docs": "pnpm -C docs run dev",
     "docs:build": "pnpm -C docs run build && pnpm demo:build",
     "release": "bumpp package.json packages/*/package.json --all -x \"zx scripts/update-versions.mjs\"",
-    "test": "vitest test"
+    "test": "vitest test",
+    "prepare": "simple-git-hooks"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.18.0",
+    "@antfu/eslint-config": "^2.18.1",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.8",
-    "@shikijs/markdown-it": "^1.5.2",
+    "@shikijs/markdown-it": "^1.6.0",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
@@ -52,18 +53,19 @@
     "@vueuse/core": "^10.9.0",
     "bumpp": "^9.4.1",
     "cross-env": "^7.0.3",
-    "cypress": "^13.9.0",
-    "eslint": "^9.2.0",
+    "cypress": "^13.10.0",
+    "eslint": "^9.3.0",
     "eslint-plugin-format": "^0.1.1",
     "esno": "^4.7.0",
+    "execa": "^8.0.1",
     "katex": "^0.16.10",
-    "lint-staged": "^15.2.2",
+    "lint-staged": "^15.2.4",
     "mermaid": "^10.9.1",
-    "playwright-chromium": "^1.44.0",
-    "pnpm": "^9.1.1",
+    "playwright-chromium": "^1.44.1",
+    "pnpm": "^9.1.2",
     "prettier-plugin-slidev": "^1.0.5",
     "rimraf": "^5.0.7",
-    "shiki": "^1.5.2",
+    "shiki": "^1.6.0",
     "simple-git-hooks": "^2.11.1",
     "taze": "^0.13.8",
     "tsup": "^8.0.2",
@@ -71,7 +73,7 @@
     "vite": "^5.2.11",
     "vitest": "^1.6.0",
     "vue-tsc": "^2.0.19",
-    "zx": "^8.1.0"
+    "zx": "^8.1.1"
   },
   "pnpm": {
     "patchedDependencies": {

@@ -1,5 +1,5 @@
 import path from 'node:path'
-import type { Connect, ModuleNode, Plugin, Update, ViteDevServer } from 'vite'
+import type { Connect, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import { bold, gray, red, yellow } from 'kolorist'
@@ -44,22 +44,6 @@ export function getBodyJson(req: Connect.IncomingMessage) {
         reject(e)
       }
     })
-  })
-}
-
-export function sendHmrReload(server: ViteDevServer, modules: ModuleNode[]) {
-  const timestamp = +Date.now()
-
-  modules.forEach(m => server.moduleGraph.invalidateModule(m))
-
-  server.ws.send({
-    type: 'update',
-    updates: modules.map<Update>(m => ({
-      acceptedPath: m.id || m.file!,
-      path: m.file!,
-      timestamp,
-      type: 'js-update',
-    })),
   })
 }
 

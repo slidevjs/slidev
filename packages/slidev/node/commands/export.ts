@@ -19,7 +19,7 @@ export interface ExportOptions {
   slides: SlideInfo[]
   port?: number
   base?: string
-  format?: 'pdf' | 'png' | 'md'
+  format?: 'pdf' | 'png' | 'pptx' | 'md'
   output?: string
   timeout?: number
   wait?: number
@@ -36,6 +36,11 @@ export interface ExportOptions {
    */
   perSlide?: boolean
   scale?: number
+}
+
+interface ExportPngResult {
+  slideIndex: number
+  buffer: Buffer
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -201,10 +206,9 @@ export async function exportSlides({
     if (clicks)
       query.set('clicks', clicks)
 
-    const path = `${no}?${query.toString()}`
     const url = routerMode === 'hash'
-      ? `http://localhost:${port}${base}#${path}`
-      : `http://localhost:${port}${base}${path}`
+      ? `http://localhost:${port}${base}?${query}#${no}`
+      : `http://localhost:${port}${base}${no}?${query}`
     await page.goto(url, {
       waitUntil: 'networkidle',
       timeout,
@@ -295,16 +299,16 @@ export async function exportSlides({
   }
 
   async function genPageWithClicks(
-    fn: (i: number, clicks?: string) => Promise<any>,
-    i: number,
+    fn: (no: number, clicks?: string) => Promise<any>,
+    no: number,
     clicks?: string,
   ) {
-    await fn(i, clicks)
+    await fn(no, clicks)
     if (withClicks) {
       await page.keyboard.press('ArrowRight', { delay: 100 })
       const _clicks = getClicksFromUrl(page.url())
       if (_clicks && clicks !== _clicks)
-        await genPageWithClicks(fn, i, _clicks)
+        await genPageWithClicks(fn, no, _clicks)
     }
   }
 
@@ -381,33 +385,40 @@ export async function exportSlides({
     await fs.writeFile(output, pdfData)
   }
 
-  async function genPagePngOnePiece() {
+  async function genPagePngOnePiece(writeToDisk: boolean) {
+    const result: ExportPngResult[] = []
     await go('print')
     await fs.emptyDir(output)
-    const slides = await page.locator('.print-slide-container')
-    const count = await slides.count()
+    const slideContainers = page.locator('.print-slide-container')
+    const count = await slideContainers.count()
     for (let i = 0; i < count; i++) {
       progress.update(i + 1)
-      let id = (await slides.nth(i).getAttribute('id')) || ''
-      id = withClicks ? id : id.split('-')[0]
-      const buffer = await slides.nth(i).screenshot()
-      await fs.writeFile(path.join(output, `${id}.png`), buffer)
+      const id = (await slideContainers.nth(i).getAttribute('id')) || ''
+      const slideNo = +id.split('-')[0]
+      const buffer = await slideContainers.nth(i).screenshot()
+      result.push({ slideIndex: slideNo - 1, buffer })
+      if (writeToDisk)
+        await fs.writeFile(path.join(output, `${withClicks ? id : slideNo}.png`), buffer)
     }
+    return result
   }
 
-  async function genPagePngPerSlide() {
-    const genScreenshot = async (i: number, clicks?: string) => {
-      await go(i, clicks)
-      await page.screenshot({
-        omitBackground: false,
-        path: path.join(
-          output,
-          `${i.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`,
-        ),
-      })
+  async function genPagePngPerSlide(writeToDisk: boolean) {
+    const result: ExportPngResult[] = []
+    const genScreenshot = async (no: number, clicks?: string) => {
+      await go(no, clicks)
+      const buffer = await page.screenshot()
+      result.push({ slideIndex: no - 1, buffer })
+      if (writeToDisk) {
+        await fs.writeFile(
+          path.join(output, `${no.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`),
+          buffer,
+        )
+      }
     }
-    for (const i of pages)
-      await genPageWithClicks(genScreenshot, i)
+    for (const no of pages)
+      await genPageWithClicks(genScreenshot, no)
+    return result
   }
 
   function genPagePdf() {
@@ -418,13 +429,13 @@ export async function exportSlides({
       : genPagePdfOnePiece()
   }
 
-  function genPagePng() {
+  function genPagePng(writeToDisk = true) {
     return perSlide
-      ? genPagePngPerSlide()
-      : genPagePngOnePiece()
+      ? genPagePngPerSlide(writeToDisk)
+      : genPagePngOnePiece(writeToDisk)
   }
 
-  async function genPageMd(slides: SlideInfo[]) {
+  async function genPageMd() {
     const files = await fs.readdir(output)
     const mds: string[] = files.map((file, i, files) => {
       const slideIndex = getSlideIndex(file)
@@ -437,6 +448,46 @@ export async function exportSlides({
     if (!output.endsWith('.md'))
       output = `${output}.md`
     await fs.writeFile(output, mds.join(''))
+  }
+
+  // Ported from https://github.com/marp-team/marp-cli/blob/main/src/converter.ts
+  async function genPagePptx(pngs: ExportPngResult[]) {
+    const { default: PptxGenJS } = await import('pptxgenjs')
+    const pptx = new PptxGenJS()
+
+    const layoutName = `${width}x${height}`
+    pptx.defineLayout({
+      name: layoutName,
+      width: width / 96,
+      height: height / 96,
+    })
+    pptx.layout = layoutName
+
+    const titleSlide = slides[0]
+    pptx.author = titleSlide?.frontmatter?.author
+    pptx.company = 'Created using Slidev'
+    if (titleSlide?.title)
+      pptx.title = titleSlide?.title
+    if (titleSlide?.frontmatter?.info)
+      pptx.subject = titleSlide?.frontmatter?.info
+
+    pngs.forEach(({ slideIndex, buffer }) => {
+      const slide = pptx.addSlide()
+      slide.background = {
+        data: `data:image/png;base64,${buffer.toString('base64')}`,
+      }
+
+      const note = slides[slideIndex].note
+      if (note)
+        slide.addNotes(note)
+    })
+
+    const buffer = await pptx.write({
+      outputType: 'nodebuffer',
+    }) as Buffer
+    if (!output.endsWith('.pptx'))
+      output = `${output}.pptx`
+    await fs.writeFile(output, buffer)
   }
 
   function getSlideIndex(file: string): number {
@@ -486,7 +537,11 @@ export async function exportSlides({
   }
   else if (format === 'md') {
     await genPagePng()
-    await genPageMd(slides)
+    await genPageMd()
+  }
+  else if (format === 'pptx') {
+    const buffers = await genPagePng(false)
+    await genPagePptx(buffers)
   }
   else {
     throw new Error(`Unsupported exporting format "${format}"`)
@@ -530,18 +585,18 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
-    format: (format || 'pdf') as 'pdf' | 'png' | 'md',
+    format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-    withClicks: withClicks || false,
+    withClicks: withClicks ?? format === 'pptx',
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
-    scale: scale || 1,
+    scale: scale || 2,
   }
 }
 
