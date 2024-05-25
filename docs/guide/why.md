@@ -48,7 +48,7 @@ Learn more about [recording here](/guide/recording).
 
 ## Portable
 
-Export your slides into PDF, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere.
+Export your slides into PDF, PPTX, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere.
 
 Read more about that in the [exporting docs](/guide/exporting).
 

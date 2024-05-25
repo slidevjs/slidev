@@ -571,7 +571,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'md'],
+      choices: ['pdf', 'png', 'pptx', 'md'],
       describe: 'output format',
     })
     .option('timeout', {
