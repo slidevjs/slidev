@@ -145,7 +145,7 @@ Then go to your Vercel dashboard and create a new site with the repository.
 To deploy your slides on GitHub Pages:
 
 - upload all the files of the project in your repo (i.e. named `name_of_repo`)
-- create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions. In this file, replace `<name_of_repo>` with `name_of_repo`. Make sure to leave the leading and trailing slashes in place.
+- create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
 
 ```yaml
 name: Deploy pages
@@ -180,7 +180,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build -- --base /<name_of_repo>/
+        run: npm run build -- --base /${{github.event.repository.name}}/
 
       - uses: actions/configure-pages@v4
 
