@@ -445,19 +445,6 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
-  // Add yours here!
-  {
-    id: '',
-    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/themes.ts',
-    name: 'Yours?',
-    description: 'Submit your theme to be list here!',
-    author: {
-      name: '',
-    },
-    previews: [
-      '/theme-placeholder.png',
-    ],
-  },
   {
     id: 'slidev-theme-excali-slide',
     name: 'Excali-slide',
@@ -474,6 +461,19 @@ export const community: ThemeInfo[] = [
     tags: [
       'dark',
       'light',
+    ],
+  },
+  // Add yours here!
+  {
+    id: '',
+    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/themes.ts',
+    name: 'Yours?',
+    description: 'Submit your theme to be list here!',
+    author: {
+      name: '',
+    },
+    previews: [
+      '/theme-placeholder.png',
     ],
   },
 ]
