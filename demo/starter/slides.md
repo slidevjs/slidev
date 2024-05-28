@@ -199,7 +199,7 @@ Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev sup
 
 Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
 
-````md magic-move
+````md magic-move {lines: true}
 ```ts {*|2|*}
 // step 1
 const author = reactive({
