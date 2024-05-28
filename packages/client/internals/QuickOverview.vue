@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import type { SlideRoute } from '@slidev/types'
 import { breakpoints, showOverview } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
@@ -47,20 +46,15 @@ const numOfCols = computed(() => {
 
 const cardHeight = computed(() => cardWidth.value / slideAspect.value)
 
-const numOfRows = computed(() => {
-  return Math.ceil(slides.value.length / numOfCols.value)
-})
-
-const slideRows = computed(() => {
-  const cols = numOfCols.value
-  const rows: SlideRoute[][] = []
-  for (let i = 0; i < numOfRows.value; i++)
-    rows.push(slides.value.slice(i * cols, (i + 1) * cols))
-  return rows
-})
-
-const virtualList = useDynamicVirtualList(slideRows, () => ({
-  itemHeight: cardHeight.value + gapY,
+const virtualList = useDynamicVirtualList(slides, () => ({
+  itemHeight: (i) => {
+    if (i === slides.value.length - 1)
+      return cardHeight.value + 2
+    if (i % numOfCols.value === numOfCols.value - 1)
+      return cardHeight.value + gapY + 2
+    return 0
+  },
+  overscan: 4 * numOfCols.value,
 }))
 
 const keyboardBuffer = ref<string>('')
@@ -138,13 +132,11 @@ setTimeout(() => {
     >
       <div ref="containerEl" v-bind="virtualList?.wrapperProps.value">
         <div
-          v-for="{ index: rowIdx, data: row } of virtualList?.list.value"
-          :key="rowIdx"
-          class="grid grid-rows-1 gap-x-8 w-full mb-8"
-          :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
+          class="grid w-full"
+          :style="`grid-template-columns: repeat(${numOfCols},minmax(${cardWidth}px,1fr)); grid-auto-rows: ${cardHeight + 2}px; gap: ${gapX}px ${gapY}px`"
         >
           <div
-            v-for="route of row"
+            v-for="{ data: route } of virtualList?.list.value"
             :key="route.no"
             class="relative"
           >
