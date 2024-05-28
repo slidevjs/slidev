@@ -9,12 +9,17 @@ import { reCodeBlock } from './code-wrapper'
 // eslint-disable-next-line regexp/no-useless-quantifier, regexp/no-super-linear-backtracking
 const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *(\{[^}]*\})?([^\n]*))?\n([\s\S]+?)^````$/gm
 
+function parseLineNumbersOption(options: string) {
+  return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
+}
+
 /**
  * Transform magic-move code blocks
  */
 export function transformMagicMove(
   shiki: Highlighter | undefined,
   shikiOptions: MarkdownItShikiOptions | undefined,
+  configLineNumbers: boolean,
 ) {
   return (ctx: MarkdownTransformContext) => {
     ctx.s.replace(
@@ -28,12 +33,16 @@ export function transformMagicMove(
         if (!matches.length)
           throw new Error('Magic Move block must contain at least one code block')
 
+        const defaultLineNumbers = parseLineNumbersOption(options) ?? configLineNumbers
+
         const ranges = matches.map(i => normalizeRangeStr(i[2]))
-        const steps = matches.map(i => codeToKeyedTokens(shiki, i[5].trimEnd(), {
-          ...shikiOptions,
-          lang: i[1] as any,
-        }),
-        )
+        const steps = matches.map((i) => {
+          const lineNumbers = parseLineNumbersOption(i[3]) ?? defaultLineNumbers
+          return codeToKeyedTokens(shiki, i[5].trimEnd(), {
+            ...shikiOptions,
+            lang: i[1] as any,
+          }, lineNumbers)
+        })
         const compressed = lz.compressToBase64(JSON.stringify(steps))
         return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
       },

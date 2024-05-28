@@ -125,19 +125,6 @@ function add(
 ```
 ````
 
-You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
-
-````md
-```ts {6,7}{lines:true,startLine:5}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-````
-
 To change the highlight in multiple clicks, you can use `|` to separate them:
 
 ````md
@@ -169,6 +156,23 @@ function add(
 ::: tip
 Learn more in the [clicks animations guide](./animations#positioning).
 :::
+
+### Line Numbers
+
+You can enable line number to all slides by setting `lineNumbers: true` on the config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly, defaults to 1:
+
+````md
+```ts {6,7}{lines:true,startLine:5}
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+```
+````
+
+### Max Height
 
 If the code doesn't fit into one slide, you use the `maxHeight` to set a fixed height and enable scrolling:
 
@@ -240,10 +244,10 @@ console.log(`Step ${3}` as string)
 ````
 `````
 
-It's also possible to mix Magic Move with [line highlighting](#line-highlighting), for example:
+It's also possible to mix Magic Move with [line highlighting](#line-highlighting) and [line numbers](#line-numbers), for example:
 
 `````md
-````md magic-move {at:4} // [!code hl]
+````md magic-move {at:4, lines: true} // [!code hl]
 ```js {*|1|2-5} // [!code hl]
 let count = 1
 function add() {
@@ -253,7 +257,7 @@ function add() {
 
 Non-code blocks in between as ignored, you can put some comments.
 
-```js
+```js {*}{lines: false} // [!code hl]
 let count = 1
 const add = () => count += 1
 ```

@@ -177,7 +177,7 @@ export function applyMarkdownTransform(
   const transformers: (MarkdownTransformer | undefined)[] = [
     transformSnippet,
     ctx.options.data.config.highlighter
-      ? transformMagicMove(shiki, shikiOptions)
+      ? transformMagicMove(shiki, shikiOptions, ctx.options.data.config.lineNumbers)
       : undefined,
     transformMermaid,
     transformPlantUml,
