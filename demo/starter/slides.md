@@ -598,7 +598,11 @@ Double-click on the draggable elements to edit their positions.
 
 ###### Draggable Arrow
 
-<v-drag-arrow two-way pos="71,428,245,56" op70 />
+```md
+<v-drag-arrow two-way />
+```
+
+<v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
 src: ./pages/multiple-entries.md
