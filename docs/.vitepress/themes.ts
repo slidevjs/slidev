@@ -445,6 +445,24 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-excali-slide',
+    name: 'Excali-slide',
+    description: 'A theme based on Excalidraw with animated highlighter effect',
+    author: {
+      name: 'Filip Hric',
+      link: 'https://github.com/filiphric',
+    },
+    repo: 'https://github.com/filiphric/slidev-theme-excali-slide',
+    previews: [
+      'https://raw.githubusercontent.com/filiphric/excali-slide/main/images/default_slide.png',
+      'https://raw.githubusercontent.com/filiphric/excali-slide/main/images/intro_slide.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
