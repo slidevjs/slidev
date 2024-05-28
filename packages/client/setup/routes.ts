@@ -50,7 +50,7 @@ export default function setupRoutes() {
     )
   }
 
-  if (__SLIDEV_HAS_SERVER__) {
+  if (__SLIDEV_FEATURE_PRINT__) {
     routes.push(
       {
         name: 'print',
