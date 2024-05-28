@@ -17,4 +17,4 @@ export const themeVars = computed(() => {
   return objectMap(configs.themeConfig || {}, (k, v) => [`--slidev-theme-${k}`, v])
 })
 
-export const slidesTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
+export const slidesTitle = configs.slidesTitle
