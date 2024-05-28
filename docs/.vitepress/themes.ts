@@ -456,7 +456,7 @@ export const community: ThemeInfo[] = [
     repo: 'https://github.com/filiphric/slidev-theme-excali-slide',
     previews: [
       'https://raw.githubusercontent.com/filiphric/excali-slide/main/images/default_slide.png',
-      'https://raw.githubusercontent.com/filiphric/excali-slide/main/images/intro_slide.png'
+      'https://raw.githubusercontent.com/filiphric/excali-slide/main/images/intro_slide.png',
     ],
     tags: [
       'dark',
