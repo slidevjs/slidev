@@ -34,14 +34,14 @@ export default function markdownItVDrag(md: MarkdownIt, markdownTransformMap: Ma
     }
     return _parse.call(this, src, env)
       .map((token) => {
-        if (token.type !== 'html_block' || !token.content.includes('v-drag') || visited.has(token))
+        if (!['html_block', 'html_inline'].includes(token.type) || !token.content.includes('v-drag') || visited.has(token))
           return token
 
         // Iterates all html tokens and replaces <v-drag> with <v-drag :markdownSource="..."> to pass the markdown source to the component
         token.content = token.content
           .replace(
-            /<v-drag([\s>])/g,
-            (_, space, idx) => `<v-drag :markdownSource="${toMarkdownSource(token.map!, idx)}"${space}`,
+            /<(v-?drag-?\w*)([\s>])/gi,
+            (_, tag, space, idx) => `<${tag} :markdownSource="${toMarkdownSource(token.map!, idx)}"${space}`,
           )
           .replace(
             /(?<![</\w])v-drag(=".*?")?/g,
