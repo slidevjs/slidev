@@ -19,7 +19,7 @@ import { useNav } from '../composables/useNav'
 const cardWidth = 450
 const cardHeight = computed(() => cardWidth / slideAspect.value)
 const paddingY = 4 * 5 // py-5 (single side)
-const rowHeight = computed(() => cardHeight.value + paddingY * 2 + 2) // 2 for top and bottom border
+const rowHeight = computed(() => cardHeight.value + paddingY * 2 + 3) // 2 for card border & 1 for row border
 
 useHead({ title: `Overview - ${slidesTitle}` })
 
@@ -145,19 +145,21 @@ watchEffect(() => {
       </div>
     </nav>
     <main
-      class="flex-1 h-full of-auto py-5"
-      :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
+      class="py-5"
       v-bind="virtualList?.containerProps"
       @scroll="checkActiveBlocks"
     >
-      <div v-bind="virtualList?.wrapperProps.value">
+      <div
+        class="grid grid-cols-1"
+        :style="`grid-auto-rows: ${rowHeight}px`"
+        v-bind="virtualList?.wrapperProps.value"
+      >
         <div
           v-for="{ data: route, index: idx } of virtualList?.list.value"
           :key="route.no"
           :ref="el => blocks.set(idx, el as any)"
           class="relative of-hidden flex group"
           :class="idx === 0 ? '' : 'border-t border-main'"
-          :style="`height: ${rowHeight}px`"
         >
           <div
             class="ml-4 flex gap-4"
