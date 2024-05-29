@@ -30,6 +30,17 @@ Parameters:
 - `y2` (`string | number`, required): end point x position
 - `width` (`string | number`, default: `2`): line width
 - `color` (`string`, default: `'currentColor'`): line color
+- `two-way` (`boolean`, default: `false`): draw a two-way arrow
+
+### `VDragArrow`
+
+An `Arrow` component that can be dragged.
+
+#### Usage
+
+See https://sli.dev/guide/draggable.html#draggable-arrow
+
+Parameters not related to position are the same as [the `Arrow` component](#arrow).
 
 ### `AutoFitText`
 
