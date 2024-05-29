@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   editorOptions?: monaco.editor.IEditorOptions
   ata?: boolean
   runnable?: boolean
+  writable?: string
   autorun?: boolean | 'once'
   showOutputAt?: RawAtValue
   outputHeight?: string
@@ -52,6 +53,7 @@ const props = withDefaults(defineProps<{
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
 const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
+const isWritable = computed(() => props.writable && !props.readonly && __DEV__)
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -151,6 +153,7 @@ onMounted(async () => {
       contentHeight.value = newHeight
       nextTick(() => editableEditor.layout())
     })
+
     editableEditor = editor
   }
   loadTypes.value = () => {
@@ -173,6 +176,23 @@ onMounted(async () => {
         : /* BELOW */ `` // reset
     }
   }
+
+  editableEditor.addAction({
+    id: 'slidev-save',
+    label: 'Save',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+    run: () => {
+      if (!isWritable.value || !import.meta.hot?.send) {
+        console.warn('[Slidev] this monaco editor is not writable, save action is ignored.')
+        return
+      }
+      import.meta.hot.send('slidev:monaco-write', {
+        file: props.writable!,
+        content: editableEditor.getValue(),
+      })
+    },
+  })
+
   nextTick(() => monaco.editor.remeasureFonts())
 })
 </script>
