@@ -8,6 +8,7 @@ declare global {
   const __SLIDEV_FEATURE_EDITOR__: boolean
   const __SLIDEV_FEATURE_RECORD__: boolean
   const __SLIDEV_FEATURE_PRESENTER__: boolean
+  const __SLIDEV_FEATURE_PRINT__: boolean
   const __SLIDEV_HAS_SERVER__: boolean
 }
 
@@ -21,6 +22,7 @@ declare module '@vue/runtime-core' {
     __SLIDEV_FEATURE_EDITOR__: boolean
     __SLIDEV_FEATURE_RECORD__: boolean
     __SLIDEV_FEATURE_PRESENTER__: boolean
+    __SLIDEV_FEATURE_PRINT__: boolean
     __SLIDEV_HAS_SERVER__: boolean
   }
 }

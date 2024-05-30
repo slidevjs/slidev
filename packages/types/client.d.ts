@@ -4,7 +4,7 @@
 declare module '#slidev/configs' {
   import type { SlidevConfig } from '@slidev/types'
 
-  const configs: SlidevConfig
+  const configs: SlidevConfig & { slidesTitle: string }
   export default configs
 }
 

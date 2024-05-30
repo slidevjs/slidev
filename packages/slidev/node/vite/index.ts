@@ -17,6 +17,7 @@ import { createMarkdownPlugin } from './markdown'
 import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createMonacoTypesLoader } from './monacoTypes'
 import { createVuePlugin } from './vue'
+import { createMonacoWriter } from './monacoWrite'
 
 export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
@@ -47,6 +48,7 @@ export async function ViteSlidevPlugin(
 
     createVuePlugin(options, pluginOptions),
     createSlidesLoader(options, pluginOptions, serverOptions),
+    createMonacoWriter(options),
 
     Components({
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],

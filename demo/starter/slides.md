@@ -61,7 +61,7 @@ Slidev is a slides maker and presenter designed for developers, consist of the f
 - 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
 - 🤹 **Interactive** - embedding Vue components to enhance your expressions
 - 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
+- 📤 **Portable** - export into PDF, PPTX, PNGs, or even a hostable SPA
 - 🛠 **Hackable** - anything possible on a webpage
 
 <br>
@@ -199,7 +199,7 @@ Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev sup
 
 Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
 
-````md magic-move
+````md magic-move {lines: true}
 ```ts {*|2|*}
 // step 1
 const author = reactive({
@@ -562,7 +562,7 @@ database "MySql" {
 ---
 foo: bar
 dragPos:
-  square: 691,33,167,_,-16
+  square: 691,32,167,_,-16
 ---
 
 # Draggable Elements
@@ -588,13 +588,21 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="671,205,253,_,-15">
+<v-drag pos="663,206,261,_,-15">
   <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>
 </v-drag>
 
 <img v-drag="'square'" src="https://sli.dev/logo.png">
+
+###### Draggable Arrow
+
+```md
+<v-drag-arrow two-way />
+```
+
+<v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
 src: ./pages/multiple-entries.md

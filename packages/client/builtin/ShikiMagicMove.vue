@@ -1,18 +1,33 @@
 <script setup lang="ts">
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
+import type { PropType } from 'vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import lz from 'lz-string'
 import { useSlideContext } from '../context'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
+import { configs } from '../env'
 
-const props = defineProps<{
-  at?: string | number
-  stepsLz: string
-  stepRanges: string[][]
-}>()
+const props = defineProps({
+  at: {
+    type: [String, Number],
+    default: '+1',
+  },
+  stepsLz: {
+    type: String,
+    required: true,
+  },
+  stepRanges: {
+    type: Array as PropType<string[][]>,
+    required: true,
+  },
+  lines: {
+    type: Boolean,
+    default: configs.lineNumbers,
+  },
+})
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
 const { $clicksContext: clicks, $scale: scale, $zoom: zoom } = useSlideContext()
@@ -37,7 +52,7 @@ onMounted(() => {
     throw new Error('[slidev] The length of stepRanges does not match the length of steps, this is an internal error.')
 
   const clickCounts = ranges.value.map(s => s.length).reduce((a, b) => a + b, 0)
-  const clickInfo = clicks.calculateSince(props.at ?? '+1', clickCounts - 1)
+  const clickInfo = clicks.calculateSince(props.at, clickCounts - 1)
   clicks.register(id, clickInfo)
 
   watch(

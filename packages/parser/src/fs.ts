@@ -96,10 +96,9 @@ export async function load(userRoot: string, filepath: string, content?: string,
 
   const entry = await loadMarkdown(slash(filepath))
 
-  const headmatter = {
-    title: slides[0]?.title,
-    ...entry.slides[0]?.frontmatter,
-  }
+  const headmatter = { ...entry.slides[0]?.frontmatter }
+  if (slides[0]?.title)
+    headmatter.title = slides[0].title
 
   return {
     slides,

@@ -68,7 +68,8 @@ export function useDragElementsUpdater(no: number) {
       let replaced = false
 
       section = type === 'prop'
-        ? section.replace(/<(v-?drag)(.*?)>/gi, (full, tag, attrs, index) => {
+      // eslint-disable-next-line regexp/no-super-linear-backtracking
+        ? section.replace(/<(v-?drag-?\w*)(.*?)>/gi, (full, tag, attrs, index) => {
           if (index === idx) {
             replaced = true
             const posMatch = attrs.match(/pos=".*?"/)
@@ -112,7 +113,7 @@ export function useDragElementsUpdater(no: number) {
   }
 }
 
-export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource) {
+export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource, isArrow?: boolean) {
   function inject<T>(key: InjectionKey<T> | string): T | undefined {
     return directive
       ? directiveInject(directive, key)
@@ -129,7 +130,7 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const enabled = ['slide', 'presenter'].includes(renderContext.value)
 
   let dataSource: DragElementDataSource = directive ? 'directive' : 'prop'
-  let id: string = makeId()
+  let dragId: string = makeId()
   let pos: number[] | undefined
   if (Array.isArray(posRaw)) {
     pos = posRaw
@@ -139,8 +140,8 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   }
   else if (posRaw != null) {
     dataSource = 'frontmatter'
-    id = `${posRaw}`
-    posRaw = frontmatter?.dragPos?.[id]
+    dragId = `${posRaw}`
+    posRaw = frontmatter?.dragPos?.[dragId]
     pos = (posRaw as string)?.split(',').map(Number)
   }
 
@@ -149,12 +150,12 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
 
   const watchStopHandles: WatchStopHandle[] = [stopWatchBounds]
 
-  const autoHeight = posRaw != null && !Number.isFinite(pos?.[3])
+  const autoHeight = !isArrow && posRaw != null && !Number.isFinite(pos?.[3])
   pos ??= [Number.NaN, Number.NaN, 0]
   const width = ref(pos[2])
   const x0 = ref(pos[0] + pos[2] / 2)
 
-  const rotate = ref(pos[4] ?? 0)
+  const rotate = ref(isArrow ? 0 : (pos[4] ?? 0))
   const rotateRad = computed(() => rotate.value * Math.PI / 180)
   const rotateSin = computed(() => Math.sin(rotateRad.value))
   const rotateCos = computed(() => Math.cos(rotateRad.value))
@@ -163,7 +164,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const bounds = ref({ left: 0, top: 0, width: 0, height: 0 })
   const actualHeight = ref(0)
   function updateBounds() {
-    const rect = container.value!.getBoundingClientRect()
+    if (!container.value)
+      return
+    const rect = container.value.getBoundingClientRect()
     bounds.value = {
       left: rect.left / zoom.value,
       top: rect.top / zoom.value,
@@ -175,32 +178,36 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   watchStopHandles.push(watch(width, updateBounds, { flush: 'post' }))
 
   const configuredHeight = ref(pos[3] ?? 0)
-  const height = computed({
-    get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
-    set: v => !autoHeight && (configuredHeight.value = v),
-  })
-  const configuredY0 = ref(pos[1])
-  const y0 = computed({
-    get: () => configuredY0.value + height.value / 2,
-    set: v => configuredY0.value = v - height.value / 2,
-  })
+  const height = autoHeight
+    ? computed({
+      get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
+      set: v => !autoHeight && (configuredHeight.value = v),
+    })
+    : configuredHeight
+  const configuredY0 = autoHeight ? ref(pos[1]) : ref(pos[1] + pos[3] / 2)
+  const y0 = autoHeight
+    ? computed({
+      get: () => configuredY0.value + height.value / 2,
+      set: v => configuredY0.value = v - height.value / 2,
+    })
+    : configuredY0
 
-  const containerStyle = computed<CSSProperties>(() => {
+  const containerStyle = computed(() => {
     return Number.isFinite(x0.value)
       ? {
-          position: 'absolute',
-          zIndex: 100,
-          left: `${x0.value - width.value / 2}px`,
-          top: `${y0.value - height.value / 2}px`,
-          width: `${width.value}px`,
-          height: autoHeight ? undefined : `${height.value}px`,
-          transformOrigin: 'center center',
-          transform: `rotate(${rotate.value}deg)`,
-        }
+        position: 'absolute',
+        zIndex: 100,
+        left: `${x0.value - width.value / 2}px`,
+        top: `${y0.value - height.value / 2}px`,
+        width: `${width.value}px`,
+        height: autoHeight ? undefined : `${height.value}px`,
+        transformOrigin: 'center center',
+        transform: `rotate(${rotate.value}deg)`,
+      } satisfies CSSProperties
       : {
-          position: 'absolute',
-          zIndex: 100,
-        }
+        position: 'absolute',
+        zIndex: 100,
+      } satisfies CSSProperties
   })
 
   watchStopHandles.push(
@@ -218,15 +225,16 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
         if (dataSource === 'directive')
           posStr = `[${posStr}]`
 
-        updater.value(id, posStr, dataSource, markdownSource)
+        updater.value(dragId, posStr, dataSource, markdownSource)
       },
     ),
   )
 
   const state = {
-    id,
+    dragId,
     dataSource,
     markdownSource,
+    isArrow,
     zoom,
     autoHeight,
     x0,

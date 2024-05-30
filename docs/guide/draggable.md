@@ -64,3 +64,13 @@ When you first create a draggable element, you don't need to specify the positio
 - You can also use the arrow keys to move the element.
 - Hold `Shift` while dragging to preserve its aspect ratio.
 - Click outside the draggable element to stop dragging it.
+
+## Draggable Arrow
+
+The `<v-drag-arrow>` component creates a draggable arrow element. Simply use it like this:
+
+```md
+<v-drag-arrow />
+```
+
+And you will get a draggable arrow element. Other props are the same as [the `Arrow` component](/builtin/components#arrow).

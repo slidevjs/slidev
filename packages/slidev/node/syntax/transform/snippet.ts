@@ -1,9 +1,11 @@
 // Ported from https://github.com/vuejs/vitepress/blob/main/src/node/markdown/plugins/snippet.ts
 
 import path from 'node:path'
+import lz from 'lz-string'
 import fs from 'fs-extra'
 import type { MarkdownTransformContext } from '@slidev/types'
 import { slash } from '@antfu/utils'
+import { monacoWriterWhitelist } from '../../vite/monacoWrite'
 
 function dedent(text: string): string {
   const lines = text.split('\n')
@@ -95,8 +97,6 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
     // eslint-disable-next-line regexp/no-super-linear-backtracking
     /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
-      const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
-
       const src = slash(
         /^@\//.test(filepath)
           ? path.resolve(options.userRoot, filepath.slice(2))
@@ -131,7 +131,19 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
         }
       }
 
-      return `${firstLine}\n${content}\n\`\`\``
+      meta = meta.trim()
+      lang = lang.trim()
+      lang = lang || path.extname(filepath).slice(1)
+
+      if (meta.match(/^\{monaco-write\}/)) {
+        monacoWriterWhitelist.add(filepath)
+        lang = lang.trim()
+        meta = meta.replace(/^\{monaco-write\}/, '').trim() || '{}'
+        const encoded = lz.compressToBase64(content)
+        return `<Monaco writable=${JSON.stringify(filepath)} code-lz="${encoded}" lang="${lang}" v-bind="${meta}" />`
+      }
+
+      return `\`\`\`${lang} ${meta}\n${content}\n\`\`\``
     },
   )
 }

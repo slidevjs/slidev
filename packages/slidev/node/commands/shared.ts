@@ -3,7 +3,6 @@ import { join } from 'node:path'
 import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions, SlidevData } from '@slidev/types'
-import { isString } from 'unocss'
 import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
 import markdownItLink from '../syntax/markdown-it/markdown-it-link'
@@ -14,12 +13,11 @@ import { version } from '../../package.json'
 export const sharedMd = MarkdownIt({ html: true })
 sharedMd.use(markdownItLink)
 
-export function getTitle(data: SlidevData) {
-  if (isString(data.config.title)) {
-    const tokens = sharedMd.parseInline(data.config.title, {})
-    return stringifyMarkdownTokens(tokens)
-  }
-  return data.config.title
+export function getSlideTitle(data: SlidevData) {
+  const tokens = sharedMd.parseInline(data.config.title, {})
+  const title = stringifyMarkdownTokens(tokens)
+  const slideTitle = data.config.titleTemplate.replace('%s', title)
+  return slideTitle === 'Slidev - Slidev' ? 'Slidev' : slideTitle
 }
 
 function escapeHtml(unsafe: unknown) {
@@ -43,7 +41,7 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
     `<meta name="slidev:version" content="${version}">`,
     `<meta charset="slidev:entry" content="${slash(entry)}">`,
     `<link rel="icon" href="${data.config.favicon}">`,
-    `<title>${getTitle(data)}</title>`,
+    `<title>${getSlideTitle(data)}</title>`,
     info && `<meta name="description" content=${escapeHtml(info)}>`,
     author && `<meta name="author" content=${escapeHtml(author)}>`,
     keywords && `<meta name="keywords" content=${escapeHtml(Array.isArray(keywords) ? keywords.join(', ') : keywords)}>`,
