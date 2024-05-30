@@ -114,7 +114,7 @@ export interface SlidevData {
 }
 
 export interface SlidevPreparserExtension {
-  name: string
+  name?: string
   transformRawLines?: (lines: string[]) => Promise<void> | void
   transformSlide?: (content: string, frontmatter: any) => Promise<string | undefined>
 }

@@ -67,7 +67,11 @@ export type ShikiSetupReturn =
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | void>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
-export type PreparserSetup = (filepath: string) => SlidevPreparserExtension
+export type PreparserSetup = (context: {
+  filepath: string
+  headmatter: Record<string, unknown>
+  mode: string
+}) => SlidevPreparserExtension[]
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
