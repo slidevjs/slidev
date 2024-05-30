@@ -97,7 +97,7 @@ const stopWatchTypesLoading = whenever(
 onMounted(async () => {
   // Lazy load monaco, so it will be bundled in async chunk
   const { default: setup } = await import('../setup/monaco')
-  const { ata, monaco } = await setup()
+  const { ata, monaco, editorOptions } = await setup()
   const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
   model.onDidChangeContent(() => code.value = model.getValue())
   const commonOptions = {
@@ -114,6 +114,7 @@ onMounted(async () => {
     fontSize: 11.5,
     fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
+    ...editorOptions,
     ...props.editorOptions,
   } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
 
