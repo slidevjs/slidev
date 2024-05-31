@@ -6,9 +6,7 @@ import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../composables/useNav'
 import SlideWrapper from './SlideWrapper.vue'
-
-import GlobalTop from '#slidev/global-components/top'
-import GlobalBottom from '#slidev/global-components/bottom'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 
 const { nav } = defineProps<{
   nav: SlidevContextNav
