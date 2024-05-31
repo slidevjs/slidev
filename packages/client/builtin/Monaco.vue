@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   editorOptions?: monaco.editor.IEditorOptions
   ata?: boolean
   runnable?: boolean
+  writable?: string
   autorun?: boolean | 'once'
   showOutputAt?: RawAtValue
   outputHeight?: string
@@ -52,6 +53,7 @@ const props = withDefaults(defineProps<{
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
 const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
+const isWritable = computed(() => props.writable && !props.readonly && __DEV__)
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -95,7 +97,7 @@ const stopWatchTypesLoading = whenever(
 onMounted(async () => {
   // Lazy load monaco, so it will be bundled in async chunk
   const { default: setup } = await import('../setup/monaco')
-  const { ata, monaco } = await setup()
+  const { ata, monaco, editorOptions } = await setup()
   const model = monaco.editor.createModel(code.value, lang, monaco.Uri.parse(`file:///${makeId()}.${ext}`))
   model.onDidChangeContent(() => code.value = model.getValue())
   const commonOptions = {
@@ -112,6 +114,7 @@ onMounted(async () => {
     fontSize: 11.5,
     fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
+    ...editorOptions,
     ...props.editorOptions,
   } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions
 
@@ -151,6 +154,7 @@ onMounted(async () => {
       contentHeight.value = newHeight
       nextTick(() => editableEditor.layout())
     })
+
     editableEditor = editor
   }
   loadTypes.value = () => {
@@ -173,6 +177,23 @@ onMounted(async () => {
         : /* BELOW */ `` // reset
     }
   }
+
+  editableEditor.addAction({
+    id: 'slidev-save',
+    label: 'Save',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+    run: () => {
+      if (!isWritable.value || !import.meta.hot?.send) {
+        console.warn('[Slidev] this monaco editor is not writable, save action is ignored.')
+        return
+      }
+      import.meta.hot.send('slidev:monaco-write', {
+        file: props.writable!,
+        content: editableEditor.getValue(),
+      })
+    },
+  })
+
   nextTick(() => monaco.editor.remeasureFonts())
 })
 </script>

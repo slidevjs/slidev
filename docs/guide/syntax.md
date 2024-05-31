@@ -325,6 +325,18 @@ console.log('Shown after 1 click')
 
 Currently Slidev supports running JavaScript and TypeScript code out-of-box. Refer to [Custom Code Runners](/custom/config-code-runners) for custom languages support.
 
+#### Writable Monaco Editor
+
+> Available since v0.49.5
+
+You can also use the [Import Code Snippets](#import-code-snippets) syntax combining with the `{monaco-write}` directive, to link your Monaco Editor with a file on your filesystem. This will allow you to edit the code directly in the editor and save the changes back to the file.
+
+```md
+<<< ./some-file.ts {monaco-write}
+```
+
+When using this, make sure to back up of your files beforehand, as the changes will be saved directly to the file.
+
 ## Embedded Styles
 
 You can use `<style>` tag in your Markdown directly to override styles for the **current slide**.
