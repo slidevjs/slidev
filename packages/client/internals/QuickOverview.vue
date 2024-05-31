@@ -170,7 +170,7 @@ setTimeout(() => {
       as="a"
       title="Slides Overview"
       target="_blank"
-      :href="`${pathPrefix}/overview`"
+      :href="`${pathPrefix}overview`"
       tab-index="-1"
       class="text-2xl"
     >
