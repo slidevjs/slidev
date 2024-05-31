@@ -7,9 +7,7 @@ import { findDepPkgJsonPath } from 'vitefu'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { toAtFS } from '../resolver'
 
-export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Plugin {
-  const resolvedDepsMap: Record<string, Set<string>> = {}
-
+export function createMonacoTypesLoader({ userRoot, utils }: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:monaco-types-loader',
 
@@ -29,23 +27,18 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         const pkg = query.get('pkg')!
         const importer = query.get('importer') ?? userRoot
 
-        const resolvedDeps = resolvedDepsMap[importer] ??= new Set()
-        if (resolvedDeps.has(pkg))
-          return `/** Package ${JSON.stringify(pkg)} already resolved **/`
-
-        resolvedDeps.add(pkg)
-
         const pkgJsonPath = await findDepPkgJsonPath(pkg, importer)
         if (!pkgJsonPath)
           throw new Error(`Package "${pkg}" not found in "${importer}"`)
         const root = slash(dirname(pkgJsonPath))
 
         const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, 'utf-8'))
-        const deps = pkgJson.dependencies ?? {}
+        let deps = Object.keys(pkgJson.dependencies ?? {})
+        deps = deps.filter(pkg => !utils.isMonacoTypesIgnored(pkg))
 
         return [
           `import "/@slidev-monaco-types/load?${new URLSearchParams({ root, name: pkgJson.name })}"`,
-          ...Object.keys(deps).map(dep => `import "/@slidev-monaco-types/resolve?${new URLSearchParams({ pkg: dep, importer: root })}"`),
+          ...deps.map(dep => `import "/@slidev-monaco-types/resolve?${new URLSearchParams({ pkg: dep, importer: root })}"`),
         ].join('\n')
       }
 

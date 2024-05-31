@@ -53,6 +53,12 @@ export interface SlidevConfig {
    */
   monacoTypesAdditionalPackages: string[]
   /**
+   * Packages to ignore when loading monaco types
+   *
+   * @default []
+   */
+  monacoTypesIgnorePackages: string[]
+  /**
    * Additional local modules to load as dependencies of monaco runnable
    *
    * @default []

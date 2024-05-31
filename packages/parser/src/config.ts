@@ -12,6 +12,7 @@ export function getDefaultConfig(): SlidevConfig {
     monaco: true,
     monacoTypesSource: 'local',
     monacoTypesAdditionalPackages: [],
+    monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
     download: false,
     export: {} as ResolvedExportOptions,

@@ -1,6 +1,7 @@
 import { uniq } from '@antfu/utils'
 import Debug from 'debug'
-import type { ResolvedSlidevOptions, SlidevEntryOptions } from '@slidev/types'
+import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
+import mm from 'micromatch'
 import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
@@ -40,14 +41,16 @@ export async function resolveOptions(
     roots,
   })
 
-  return {
+  const data: SlidevData = {
+    ...loaded,
+    config,
+    themeMeta,
+  }
+
+  const resolved: ResolvedSlidevOptions = {
     ...rootsInfo,
     ...options,
-    data: {
-      ...loaded,
-      config,
-      themeMeta,
-    },
+    data,
     mode,
     entry,
     themeRaw,
@@ -55,5 +58,16 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
+    utils: createDataUtils(data),
+  }
+
+  return resolved
+}
+
+export function createDataUtils(data: SlidevData): ResolvedSlidevUtils {
+  const monacoTypesIgnorePackagesMatches = (data.config.monacoTypesIgnorePackages || [])
+    .map(i => mm.matcher(i))
+  return {
+    isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
   }
 }

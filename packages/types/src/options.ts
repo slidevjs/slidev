@@ -44,6 +44,11 @@ export interface ResolvedSlidevOptions extends RootsInfo {
   mode: 'dev' | 'build' | 'export'
   remote?: string
   inspect?: boolean
+  utils: ResolvedSlidevUtils
+}
+
+export interface ResolvedSlidevUtils {
+  isMonacoTypesIgnored: (pkg: string) => boolean
 }
 
 export interface SlidevServerOptions {

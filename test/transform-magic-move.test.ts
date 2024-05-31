@@ -33,6 +33,7 @@ Some text after
     {
       theme: 'nord',
     },
+    false,
   )(ctx)
 
   expect(ctx.s.toString())
@@ -78,6 +79,7 @@ Some text after
     {
       theme: 'nord',
     },
+    false,
   )(ctx)
 
   expect(ctx.s.toString())

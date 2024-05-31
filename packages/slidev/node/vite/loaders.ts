@@ -19,6 +19,7 @@ import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
+import { createDataUtils } from '../options'
 
 const regexId = /^\/@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+)\.(md|json|frontmatter)$/
@@ -80,7 +81,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, clientRoot, roots, mode } = options
+  const { data, clientRoot, roots, mode, utils } = options
 
   const templateCtx: VirtualModuleTempalteContext = {
     md: sharedMd,
@@ -243,6 +244,7 @@ export function createSlidesLoader(
         }
 
         Object.assign(data, newData)
+        Object.assign(utils, createDataUtils(newData))
 
         if (hmrPages.size > 0)
           moduleIds.add(templateTitleRendererMd.id)
