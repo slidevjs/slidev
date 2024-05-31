@@ -95,10 +95,10 @@ const setup = createSingletonPromise(async () => {
   const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
-  const setupReturn: MonacoSetupReturn = {}
+  const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
   for (const setup of setups) {
     const result = await setup(monaco)
-    Object.assign(setupReturn, result)
+    Object.assign(editorOptions, result?.editorOptions)
   }
 
   // Use Shiki to highlight Monaco
@@ -117,7 +117,7 @@ const setup = createSingletonPromise(async () => {
   return {
     monaco,
     ata,
-    ...setupReturn,
+    editorOptions,
   }
 })
 

@@ -6,7 +6,7 @@ import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import { slideAspect } from '../env'
+import { pathPrefix, slideAspect } from '../env'
 import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
@@ -184,7 +184,7 @@ setTimeout(() => {
       as="a"
       title="Slides Overview"
       target="_blank"
-      href="/overview"
+      :href="`${pathPrefix}overview`"
       tab-index="-1"
       class="text-2xl"
     >
