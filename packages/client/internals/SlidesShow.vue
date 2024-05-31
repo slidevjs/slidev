@@ -10,9 +10,7 @@ import { CLICKS_MAX } from '../constants'
 import { useFeatures } from '../composables/useFeatures'
 import SlideWrapper from './SlideWrapper.vue'
 import DragControl from './DragControl.vue'
-
-import GlobalTop from '#slidev/global-components/top'
-import GlobalBottom from '#slidev/global-components/bottom'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 
 defineProps<{
   renderContext: 'slide' | 'presenter'

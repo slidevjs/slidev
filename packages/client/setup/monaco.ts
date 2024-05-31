@@ -95,10 +95,10 @@ const setup = createSingletonPromise(async () => {
   const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
-  const setupReturn: MonacoSetupReturn = {}
+  const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
   for (const setup of setups) {
     const result = await setup(monaco)
-    Object.assign(setupReturn, result)
+    Object.assign(editorOptions, result?.editorOptions)
   }
 
   // Use Shiki to highlight Monaco
@@ -117,14 +117,25 @@ const setup = createSingletonPromise(async () => {
   return {
     monaco,
     ata,
-    ...setupReturn,
+    editorOptions,
   }
 })
 
-export async function addFile(raw: Promise<{ default: string }>, path: string) {
+async function _addFile(raw: Promise<{ default: string }>, path: string) {
+  const uri = monaco.Uri.file(path)
   const code = (await raw).default
   monaco.languages.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
-  monaco.editor.createModel(code, 'javascript', monaco.Uri.file(path))
+  monaco.editor.createModel(code, 'javascript', uri)
+}
+
+const addFileCache = new Map<string, Promise<void>>()
+
+export async function addFile(raw: Promise<{ default: string }>, path: string) {
+  if (addFileCache.has(path))
+    return addFileCache.get(path)
+  const promise = _addFile(raw, path)
+  addFileCache.set(path, promise)
+  return promise
 }
 
 export default setup

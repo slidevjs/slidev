@@ -4,22 +4,18 @@
 declare module '#slidev/configs' {
   import type { SlidevConfig } from '@slidev/types'
 
-  const configs: SlidevConfig
+  const configs: SlidevConfig & { slidesTitle: string }
   export default configs
 }
 
-declare module '#slidev/global-components/top' {
+declare module '#slidev/global-layers' {
   import type { ComponentOptions } from 'vue'
 
-  const component: ComponentOptions
-  export default component
-}
+  export const GlobalTop: ComponentOptions
+  export const GlobalBottom: ComponentOptions
 
-declare module '#slidev/global-components/bottom' {
-  import type { ComponentOptions } from 'vue'
-
-  const component: ComponentOptions
-  export default component
+  export const SlideTop: ComponentOptions
+  export const SlideBottom: ComponentOptions
 }
 
 declare module '#slidev/slides' {

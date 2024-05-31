@@ -7,6 +7,7 @@ import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 import { useFeatures } from '../composables/useFeatures'
+import { pathPrefix } from '../env'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
@@ -171,7 +172,7 @@ setTimeout(() => {
       as="a"
       title="Slides Overview"
       target="_blank"
-      href="/overview"
+      :href="`${pathPrefix}overview`"
       tab-index="-1"
       class="text-2xl"
     >

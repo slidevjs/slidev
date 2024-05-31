@@ -1,4 +1,5 @@
 import type { SlideRoute } from '@slidev/types'
+import { pathPrefix } from '../env'
 import { slides } from '#slidev/slides'
 
 export { slides }
@@ -16,5 +17,5 @@ export function getSlidePath(
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return presenter ? `/presenter/${no}` : `/${no}`
+  return presenter ? `${pathPrefix}presenter/${no}` : `${pathPrefix}${no}`
 }

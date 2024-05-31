@@ -15,4 +15,6 @@ export const themeVars = computed(() => {
   return objectMap(configs.themeConfig || {}, (k, v) => [`--slidev-theme-${k}`, v])
 })
 
-export const slidesTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
+export const slidesTitle = configs.slidesTitle
+
+export const pathPrefix = import.meta.env.BASE_URL + (__SLIDEV_HASH_ROUTE__ ? '#/' : '')
