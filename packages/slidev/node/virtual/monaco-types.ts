@@ -18,7 +18,7 @@ export const templateMonacoTypes: VirtualModuleTemplate = {
     // User snippets
     for (const file of files) {
       const url = `${toAtFS(resolve(typesRoot, file))}?monaco-types&raw`
-      result += `addFile(import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
+      result += `addFile(() => import(${JSON.stringify(url)}), ${JSON.stringify(file)})\n`
     }
 
     // Dependencies

@@ -15,13 +15,12 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 import { debounce } from '@antfu/utils'
 import lz from 'lz-string'
 import type * as monaco from 'monaco-editor'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import type { RawAtValue } from '@slidev/types'
 import { whenever } from '@vueuse/core'
 import { makeId } from '../logic/utils'
 import { useSlideContext } from '../context'
 import { useNav } from '../composables/useNav'
-import CodeRunner from '../internals/CodeRunner.vue'
 
 const props = withDefaults(defineProps<{
   codeLz: string
@@ -50,6 +49,8 @@ const props = withDefaults(defineProps<{
   autorun: true,
   highlightOutput: true,
 })
+
+const CodeRunner = defineAsyncComponent(() => import('../internals/CodeRunner.vue').then(r => r.default))
 
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
 const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
