@@ -42,6 +42,8 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 const FILES_CREATE_RESTART_GLOBS = [
   'global-bottom.vue',
   'global-top.vue',
+  'handout-bottom.vue',
+  'handout-cover.vue',
   'uno.config.js',
   'uno.config.ts',
   'unocss.config.js',
@@ -610,6 +612,14 @@ function exportOptions<T>(args: Argv<T>) {
     .option('scale', {
       type: 'number',
       describe: 'scale factor for image export',
+    })
+    .option('cover', {
+      type: 'boolean',
+      describe: 'prepend cover to handout, needs handout-cover.vue in project',
+    })
+    .option('handout', {
+      type: 'boolean',
+      describe: 'Export handout with slides on top and notes on bottom, optionally prepending a cover',
     })
 }
 
