@@ -45,7 +45,7 @@ interface ExportPngResult {
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
   const titleLevel = info.level
-  if (titleLevel && titleLevel > level && tree.length > 0) {
+  if (titleLevel && titleLevel > level && tree.length > 0 && tree[tree.length - 1].titleLevel < titleLevel) {
     addToTree(tree[tree.length - 1].children, info, slideIndexes, level + 1)
   }
   else {
@@ -53,6 +53,7 @@ function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number
       no: info.index,
       children: [],
       level,
+      titleLevel: titleLevel ?? level,
       path: String(slideIndexes[info.index + 1]),
       hideInToc: Boolean(info.frontmatter?.hideInToc),
       title: info.title,

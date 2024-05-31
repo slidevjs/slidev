@@ -5,6 +5,7 @@ export interface TocItem {
   children: TocItem[]
   hasActiveParent?: boolean
   level: number
+  titleLevel: number
   path: string
   hideInToc?: boolean
   title?: string
