@@ -54,7 +54,7 @@ const FILES_CHANGE_RESTART_GLOBS = [
   'setup/preparser.ts',
 ]
 
-injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
+injectPreparserExtensionLoader(async (headmatter: Record<string, unknown>, filepath: string, mode?: string) => {
   const addons = headmatter?.addons as string[] ?? []
   const { clientRoot, userRoot } = await getRoots()
   const roots = uniq([

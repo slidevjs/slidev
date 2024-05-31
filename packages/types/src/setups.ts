@@ -70,7 +70,7 @@ export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
 export type PreparserSetup = (context: {
   filepath: string
   headmatter: Record<string, unknown>
-  mode: string
+  mode?: string
 }) => SlidevPreparserExtension[]
 
 // client side
