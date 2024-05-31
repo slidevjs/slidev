@@ -5,7 +5,6 @@ import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import type { SlidevContextNav } from '../composables/useNav'
-import { useFeatures } from '../composables/useFeatures'
 import SlideWrapper from './SlideWrapper.vue'
 import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 
@@ -20,10 +19,8 @@ const style = computed(() => ({
   width: `${slideWidth.value}px`,
 }))
 
-const features = useFeatures()
-
 const DrawingPreview = shallowRef<any>()
-if (features.drawings)
+if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingPreview.vue').then(v => (DrawingPreview.value = v.default))
 
 const id = computed(() =>

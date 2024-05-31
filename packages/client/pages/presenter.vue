@@ -74,11 +74,11 @@ watch(
 )
 
 const SideEditor = shallowRef<any>()
-if (features.editor)
+if (__SLIDEV_FEATURE_EDITOR__ && features.allowToEdit)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 const DrawingControls = shallowRef<any>()
-if (features.allowToDraw)
+if (__SLIDEV_FEATURE_DRAWINGS__ && features.allowToDraw)
   import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 
 // sync presenter cursor

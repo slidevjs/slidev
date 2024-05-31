@@ -78,12 +78,12 @@ export default () => {
         disabled: currentPage.value >= total.value,
       },
       'separator',
-      features.editor && {
+      __SLIDEV_FEATURE_EDITOR__ && features.allowToEdit && {
         icon: IconTextNotationToggle,
         label: showEditor.value ? 'Hide editor' : 'Show editor',
         action: () => (showEditor.value = !showEditor.value),
       },
-      (features.allowToDraw || drawingEnabled.value) && {
+      __SLIDEV_FEATURE_DRAWINGS__ && (features.allowToDraw || drawingEnabled.value) && {
         icon: IconPen,
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
         action: () => (drawingEnabled.value = !drawingEnabled.value),
@@ -93,12 +93,12 @@ export default () => {
         label: 'Show slide overview',
         action: toggleOverview,
       },
-      isPresenter.value && {
+      __SLIDEV_FEATURE_PRESENTER__ && isPresenter.value && {
         icon: IconPresentationFile,
         label: 'Exit Presenter Mode',
         action: exitPresenter,
       },
-      features.enterPresenter && {
+      __SLIDEV_FEATURE_PRESENTER__ && features.enterPresenter && {
         icon: IconUserSpeaker,
         label: 'Enter Presenter Mode',
         action: enterPresenter,

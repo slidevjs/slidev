@@ -1,5 +1,6 @@
 import { computed, ref } from 'vue'
 import { objectMap } from '@antfu/utils'
+import { useRouteQuery } from './logic/route'
 import configs from '#slidev/configs'
 
 export { configs }
@@ -18,3 +19,6 @@ export const themeVars = computed(() => {
 export const slidesTitle = configs.slidesTitle
 
 export const pathPrefix = import.meta.env.BASE_URL + (__SLIDEV_HASH_ROUTE__ ? '#/' : '')
+
+const password = useRouteQuery<string>('password')
+export const isTrusted = computed(() => !configs.remote || password.value === configs.remote)

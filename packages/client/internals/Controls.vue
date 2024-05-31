@@ -2,30 +2,28 @@
 import { shallowRef } from 'vue'
 import { showInfoDialog, showRecordingDialog } from '../state'
 import { configs } from '../env'
-import { useNav } from '../composables/useNav'
 import { useFeatures } from '../composables/useFeatures'
 import QuickOverview from './QuickOverview.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
 import ContextMenu from './ContextMenu.vue'
 
-const { isEmbedded } = useNav()
 const features = useFeatures()
-const drawingEnabled = features.drawings && !configs.drawings.presenterOnly && !isEmbedded.value
+
 const DrawingControls = shallowRef<any>()
-if (drawingEnabled)
+if (__SLIDEV_FEATURE_DRAWINGS__ && features.allowToDraw)
   import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 
 const WebCamera = shallowRef<any>()
 const RecordingDialog = shallowRef<any>()
-if (features.record) {
+if (__SLIDEV_FEATURE_RECORD__) {
   import('./WebCamera.vue').then(v => WebCamera.value = v.default)
   import('./RecordingDialog.vue').then(v => RecordingDialog.value = v.default)
 }
 </script>
 
 <template>
-  <DrawingControls v-if="drawingEnabled && DrawingControls" />
+  <DrawingControls v-if="DrawingControls" />
   <QuickOverview />
   <Goto />
   <WebCamera v-if="WebCamera" />

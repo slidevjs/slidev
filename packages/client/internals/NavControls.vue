@@ -52,7 +52,7 @@ const barStyle = computed(() => props.persist
   : 'rounded-md bg-main shadow dark:border dark:border-main')
 
 const RecordingControls = shallowRef<any>()
-if (features.record)
+if (__SLIDEV_FEATURE_RECORD__)
   import('./RecordingControls.vue').then(v => RecordingControls.value = v.default)
 </script>
 
@@ -103,7 +103,7 @@ if (features.record)
         </IconButton>
       </template>
 
-      <template v-if="features.allowToDraw">
+      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && features.allowToDraw">
         <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
           <carbon:pen />
           <div
@@ -119,12 +119,12 @@ if (features.record)
         <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
           <carbon:presentation-file />
         </IconButton>
-        <IconButton v-if="features.enterPresenter" title="Presenter Mode" @click="enterPresenter">
+        <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && features.enterPresenter" title="Presenter Mode" @click="enterPresenter">
           <carbon:user-speaker />
         </IconButton>
 
         <IconButton
-          v-if="features.editor"
+          v-if="__SLIDEV_FEATURE_EDITOR__ && features.allowToEdit"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
           class="lt-md:hidden"
           @click="showEditor = !showEditor"

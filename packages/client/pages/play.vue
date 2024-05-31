@@ -38,7 +38,7 @@ registerShortcuts()
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 
 const SideEditor = shallowRef<any>()
-if (features.editor)
+if (__SLIDEV_FEATURE_EDITOR__ && features.allowToEdit)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 </script>
 

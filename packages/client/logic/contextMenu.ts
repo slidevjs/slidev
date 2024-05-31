@@ -3,7 +3,6 @@ import type { ComputedRef } from 'vue'
 import { shallowRef } from 'vue'
 import setupContextMenu from '../setup/context-menu'
 import { useNav } from '../composables/useNav'
-import { useFeatures } from '../composables/useFeatures'
 
 export const currentContextMenu = shallowRef<null | {
   x: number
@@ -24,11 +23,10 @@ export function closeContextMenu() {
 }
 
 export function onContextMenu(ev: MouseEvent) {
-  if (ev.shiftKey || ev.defaultPrevented)
+  if (!__SLIDEV_FEATURE_CONTEXT_MENU__)
     return
 
-  const features = useFeatures()
-  if (!features.contextMenu)
+  if (ev.shiftKey || ev.defaultPrevented)
     return
 
   const { isEmbedded } = useNav()
