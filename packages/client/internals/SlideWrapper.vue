@@ -68,13 +68,9 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
   >
-    <div v-if="SlideBottom" class="absolute inset-0">
-      <SlideBottom />
-    </div>
+    <SlideBottom />
     <SlideComponent />
-    <div v-if="SlideTop" class="absolute inset-0">
-      <SlideTop />
-    </div>
+    <SlideTop />
   </div>
 </template>
 
