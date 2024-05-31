@@ -10,15 +10,17 @@ There are also layers for **each** slide: `layouts/slide-top.vue` and `layouts/s
 When exporting, the `--per-slide` option should be used to ensure the global layers are applied to each slide correctly.
 :::
 
-Layers relationship:
+## Layers relationship
 
-- Global Top (`global-top.vue`)
-- Slide Top (`slide-top.vue`)
-- Slides
-- Slide Bottom (`slide-bottom.vue`)
-- Global Bottom (`global-bottom.vue`)
+At z-axis, from top to bottom:
+
 - NavControls
   - Customized Navigation Controls (`custom-nav-controls.vue`)
+- Global Top (`global-top.vue`) - single instance
+- Slide Top (`slide-top.vue`) - instance per slide
+- Slide Content
+- Slide Bottom (`slide-bottom.vue`) - instance per slide
+- Global Bottom (`global-bottom.vue`) - single instance
 
 ## Example
 
