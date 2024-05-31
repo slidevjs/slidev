@@ -9,22 +9,13 @@ import { getIndexHtml } from '../commands/shared'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
-  '@shikijs/monaco',
-  '@shikijs/vitepress-twoslash/client',
-  '@slidev/rough-notation',
   '@typescript/ata',
-  '@unhead/vue',
-  'drauu',
   'file-saver',
-  'floating-vue',
-  'fuse.js',
   'lz-string',
   'prettier',
   'recordrtc',
   'typescript',
-  'vue-router',
   'yaml',
-  'shiki-magic-move/vue',
 ]
 
 const INCLUDE_LOCAL = [
@@ -37,47 +28,41 @@ const INCLUDE_LOCAL = [
   'codemirror/mode/xml/xml',
   'codemirror/mode/htmlmixed/htmlmixed',
   'codemirror/addon/display/placeholder',
-
-  'monaco-editor',
-  'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
-  'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
-  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
 ].map(i => `@slidev/cli > @slidev/client > ${i}`)
 
+// @keep-sorted
 const EXCLUDE_GLOBAL = [
-  '@slidev/types',
+  '@antfu/utils',
+  '@shikijs/monaco',
+  '@shikijs/vitepress-twoslash/client',
   '@slidev/client',
   '@slidev/client/constants',
+  '@slidev/client/context',
   '@slidev/client/logic/dark',
-  '@antfu/utils',
+  '@slidev/parser',
+  '@slidev/parser/core',
+  '@slidev/rough-notation',
+  '@slidev/types',
+  '@unhead/vue',
+  '@unocss/reset',
   '@vueuse/core',
   '@vueuse/math',
-  '@vueuse/shared',
   '@vueuse/motion',
-  '@unocss/reset',
+  '@vueuse/shared',
+  'drauu',
+  'floating-vue',
+  'fuse.js',
   'mermaid',
+  'monaco-editor',
+  'shiki-magic-move/vue',
+  'shiki',
+  'shiki/core',
   'vue-demi',
+  'vue-router',
   'vue',
 ]
 
-const EXCLUDE_LOCAL = [
-  ...EXCLUDE_GLOBAL,
-  ...[
-    '@slidev/client',
-    '@slidev/client/constants',
-    '@slidev/client/logic/dark',
-    '@slidev/client > @antfu/utils',
-    '@slidev/client > @slidev/types',
-    '@slidev/client > @vueuse/core',
-    '@slidev/client > @vueuse/math',
-    '@slidev/client > @vueuse/shared',
-    '@slidev/client > @vueuse/motion',
-    '@slidev/client > @unocss/reset',
-    '@slidev/client > mermaid',
-    '@slidev/client > vue-demi',
-    '@slidev/client > vue',
-  ].map(i => `@slidev/cli > ${i}`),
-]
+const EXCLUDE_LOCAL = EXCLUDE_GLOBAL
 
 const ASYNC_MODULES = [
   'file-saver',
@@ -130,7 +115,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               include: INCLUDE_GLOBAL,
             }
           : {
-            // We need to specify the full deps path for non-hoisted modules
+              // We need to specify the full deps path for non-hoisted modules
               exclude: EXCLUDE_LOCAL,
               include: INCLUDE_LOCAL,
             },
