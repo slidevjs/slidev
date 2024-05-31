@@ -1,6 +1,7 @@
 import { templateConfigs } from './configs'
 import { templateLegacyRoutes, templateLegacyTitles } from './deprecated'
-import { templateGlobalBottom, templateGlobalTop, templateNavControls } from './global-components'
+import { templateGlobalLayers } from './global-layers'
+import { templateNavControls } from './nav-controls'
 import { templateLayouts } from './layouts'
 import { templateMonacoRunDeps } from './monaco-deps'
 import { templateMonacoTypes } from './monaco-types'
@@ -16,8 +17,7 @@ export const templates = [
   templateMonacoRunDeps,
   templateConfigs,
   templateStyle,
-  templateGlobalBottom,
-  templateGlobalTop,
+  templateGlobalLayers,
   templateNavControls,
   templateSlides,
   templateLayouts,

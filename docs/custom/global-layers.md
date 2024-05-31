@@ -1,20 +1,26 @@
 # Global Layers
 
-> Available since v0.17
-
 Global layers allow you to have custom components that **persist** across slides. This could be useful for having footers, cross-slide animations, global effects, etc.
 
 Slidev provides three layers for this usage, create `global-top.vue`, `global-bottom.vue` or `custom-nav-controls.vue` under your project root and it will pick up automatically.
 
-Layers relationship:
+There are also layers for **each** slide: `layouts/slide-top.vue` and `layouts/slide-bottom.vue`. The usage is similar to the global layers, but they are applied to every slide, so there may be more than one instance of them.
 
-- Global Top (`global-top.vue`)
-- Slides
-- Global Bottom (`global-bottom.vue`)
+::: tip
+When exporting, the `--per-slide` option should be used to ensure the global layers are applied to each slide correctly.
+:::
+
+## Layers relationship
+
+At z-axis, from top to bottom:
+
 - NavControls
   - Customized Navigation Controls (`custom-nav-controls.vue`)
-
-Note that this uses the terms "top" and "bottom" in the context of depth, not the screen position.
+- Global Top (`global-top.vue`) - single instance
+- Slide Top (`slide-top.vue`) - instance per slide
+- Slide Content
+- Slide Bottom (`slide-bottom.vue`) - instance per slide
+- Global Bottom (`global-bottom.vue`) - single instance
 
 ## Example
 
@@ -30,7 +36,7 @@ The text `Your Name` will appear on all your slides.
 ```html
 <!-- custom-nav-controls -->
 <template>
-  <button class="icon-btn" title="Next" @click="$slidev.nav.next">
+  <button class="icon-btn" title="Next" @click="$nav.next">
     <carbon:arrow-right />
   </button>
 </template>
@@ -44,7 +50,7 @@ To enable it conditionally, you can apply it with the [Vue Global Context](/cust
 <!-- hide the footer from Page 4 -->
 <template>
   <footer
-    v-if="$slidev.nav.currentPage !== 4"
+    v-if="$nav.currentPage !== 4"
     class="absolute bottom-0 left-0 right-0 p-2"
   >
     Your Name
@@ -56,7 +62,7 @@ To enable it conditionally, you can apply it with the [Vue Global Context](/cust
 <!-- hide the footer from "cover" layout -->
 <template>
   <footer
-    v-if="$slidev.nav.currentLayout !== 'cover'"
+    v-if="$nav.currentLayout !== 'cover'"
     class="absolute bottom-0 left-0 right-0 p-2"
   >
     Your Name
@@ -68,10 +74,10 @@ To enable it conditionally, you can apply it with the [Vue Global Context](/cust
 <!-- an example footer for pages -->
 <template>
   <footer
-    v-if="$slidev.nav.currentLayout !== 'cover'"
+    v-if="$nav.currentLayout !== 'cover'"
     class="absolute bottom-0 left-0 right-0 p-2"
   >
-    {{ $slidev.nav.currentPage }} / {{ $slidev.nav.total }}
+    {{ $nav.currentPage }} / {{ $nav.total }}
   </footer>
 </template>
 ```
@@ -80,7 +86,7 @@ To enable it conditionally, you can apply it with the [Vue Global Context](/cust
 <!-- custom-nav-controls -->
 <!-- hide the button in Presenter model -->
 <template>
-  <button v-if="!$slidev.nav.isPresenter" class="icon-btn" title="Next" @click="$slidev.nav.next">
+  <button v-if="!$nav.isPresenter" class="icon-btn" title="Next" @click="$nav.next">
     <carbon:arrow-right />
   </button>
 </template>

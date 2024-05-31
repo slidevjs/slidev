@@ -7,6 +7,7 @@ import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, i
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
 import SlideLoading from './SlideLoading.vue'
+import { SlideBottom, SlideTop } from '#slidev/global-layers'
 
 const props = defineProps({
   clicksContext: {
@@ -67,7 +68,13 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
   >
+    <div v-if="SlideBottom" class="absolute inset-0">
+      <SlideBottom />
+    </div>
     <SlideComponent />
+    <div v-if="SlideTop" class="absolute inset-0">
+      <SlideTop />
+    </div>
   </div>
 </template>
 
