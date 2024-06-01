@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watchEffect } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { slidesTitle } from '../env'
+import { slideAspect, slidesTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
+import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
@@ -16,17 +17,25 @@ import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
 
 const cardWidth = 450
+const cardHeight = computed(() => cardWidth / slideAspect.value)
+const paddingY = 4 * 5 // py-5 (single side)
+const rowHeight = computed(() => cardHeight.value + paddingY * 2 + 3) // 2 for card border & 1 for row border
 
 useHead({ title: `Overview - ${slidesTitle}` })
 
 const { openInEditor, slides } = useNav()
 
+const indexContainer = ref<HTMLElement>()
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
 const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
+
+const virtualList = useDynamicVirtualList(slides, () => ({
+  itemHeight: rowHeight.value,
+}))
 
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
@@ -45,6 +54,8 @@ function wordCount(str: string) {
 }
 
 function isElementInViewport(el: HTMLElement) {
+  if (!el)
+    return false
   const rect = el.getBoundingClientRect()
   const delta = 20
   return (
@@ -72,12 +83,6 @@ function openSlideInNewTab(path: string) {
   a.click()
 }
 
-function scrollToSlide(idx: number) {
-  const el = blocks.get(idx)
-  if (el)
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
 function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
   const ctx = getClicksContext(route)
   if (ctx.current === clicks)
@@ -92,13 +97,19 @@ onMounted(() => {
     checkActiveBlocks()
   })
 })
+
+watchEffect(() => {
+  indexContainer.value?.children[activeBlocks.value[0]]?.scrollIntoView({
+    block: 'center',
+  })
+})
 </script>
 
 <template>
   <div class="h-screen w-screen of-hidden flex">
     <nav class="grid grid-rows-[auto_max-content] border-r border-main select-none max-h-full h-full">
       <div class="relative">
-        <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
+        <div ref="indexContainer" class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
           <div
             v-for="(route, idx) of slides"
             :key="route.no"
@@ -108,7 +119,7 @@ onMounted(() => {
             <button
               class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
               :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
-              @click="scrollToSlide(idx)"
+              @click="virtualList?.scrollTo(idx)"
             >
               <div>{{ idx + 1 }}</div>
             </button>
@@ -122,7 +133,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div p2 border="t main">
+      <div class="p2 border-t border-main">
         <IconButton
           v-if="!isColorSchemaConfigured"
           :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
@@ -134,87 +145,98 @@ onMounted(() => {
       </div>
     </nav>
     <main
-      class="flex-1 h-full of-auto"
-      :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
+      class="py-5"
+      v-bind="virtualList?.containerProps"
       @scroll="checkActiveBlocks"
     >
       <div
-        v-for="(route, idx) of slides"
-        :key="route.no"
-        :ref="el => blocks.set(idx, el as any)"
-        class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
-        :class="idx === 0 ? 'pt5' : ''"
+        class="grid grid-cols-1"
+        :style="`grid-auto-rows: ${rowHeight}px`"
+        v-bind="virtualList?.wrapperProps.value"
       >
-        <div class="select-none w-13 text-right my4 flex flex-col gap-1 items-end">
-          <div class="text-3xl op20 mb2">
-            {{ idx + 1 }}
-          </div>
-          <IconButton
-            class="mr--3 op0 group-hover:op80"
-            title="Play in new tab"
-            @click="openSlideInNewTab(getSlidePath(route, false))"
-          >
-            <carbon:presentation-file />
-          </IconButton>
-          <IconButton
-            v-if="route.meta?.slide"
-            class="mr--3 op0 group-hover:op80"
-            title="Open in editor"
-            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
-          >
-            <carbon:cics-program />
-          </IconButton>
-        </div>
-        <div class="flex flex-col gap-2 my5">
-          <div
-            class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
-          >
-            <SlideContainer
-              :key="route.no"
-              :width="cardWidth"
-              class="pointer-events-none important:[&_*]:select-none"
-            >
-              <SlideWrapper
-                :clicks-context="getClicksContext(route)"
-                :route="route"
-                render-context="overview"
-              />
-              <DrawingPreview :page="route.no" />
-            </SlideContainer>
-          </div>
-          <ClicksSlider
-            v-if="getSlideClicks(route)"
-            :clicks-context="getClicksContext(route)"
-            class="w-full mt-2"
-            @dblclick="getClicksContext(route).current = CLICKS_MAX"
-          />
-        </div>
-        <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
-          <IconButton
-            title="Edit Note"
-            class="rounded-full w-9 h-9 text-sm"
-            :class="edittingNote === route.no ? 'important:op0' : ''"
-            @click="edittingNote = route.no"
-          >
-            <carbon:pen />
-          </IconButton>
-        </div>
-        <NoteEditable
-          :no="route.no"
-          class="max-w-250 w-250 text-lg rounded p3"
-          :auto-height="true"
-          :editing="edittingNote === route.no"
-          :clicks-context="getClicksContext(route)"
-          @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"
-          @update:editing="edittingNote = null"
-          @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
-        />
         <div
-          v-if="wordCounts[idx] > 0"
-          class="select-none absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
+          v-for="{ data: route, index: idx } of virtualList?.list.value"
+          :key="route.no"
+          :ref="el => blocks.set(idx, el as any)"
+          class="relative of-hidden flex group"
+          :class="idx === 0 ? '' : 'border-t border-main'"
         >
-          {{ wordCounts[idx] }} words
+          <div
+            class="ml-4 flex gap-4"
+            :style="`margin-bottom: ${paddingY}px; margin-top: ${paddingY}px;`"
+          >
+            <div class="select-none text-right flex flex-col gap-1 items-end">
+              <div class="text-3xl op20 mb2">
+                {{ idx + 1 }}
+              </div>
+              <IconButton
+                class="mr--3 op0 group-hover:op80"
+                title="Play in new tab"
+                @click="openSlideInNewTab(getSlidePath(route, false))"
+              >
+                <carbon:presentation-file />
+              </IconButton>
+              <IconButton
+                v-if="route.meta?.slide"
+                class="mr--3 op0 group-hover:op80"
+                title="Open in editor"
+                @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+              >
+                <carbon:cics-program />
+              </IconButton>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div
+                class="border rounded border-main overflow-hidden bg-main select-none h-max"
+                @dblclick="openSlideInNewTab(getSlidePath(route, false))"
+              >
+                <SlideContainer
+                  :key="route.no"
+                  :width="cardWidth"
+                  class="pointer-events-none important:[&_*]:select-none"
+                >
+                  <SlideWrapper
+                    :clicks-context="getClicksContext(route)"
+                    :route="route"
+                    render-context="overview"
+                  />
+                  <DrawingPreview :page="route.no" />
+                </SlideContainer>
+              </div>
+              <ClicksSlider
+                v-if="getSlideClicks(route)"
+                :clicks-context="getClicksContext(route)"
+                class="w-full mt-2"
+                @dblclick="getClicksContext(route).current = CLICKS_MAX"
+              />
+            </div>
+          </div>
+          <div class="py3 mt-0.5 mr--4 op0 transition group-hover:op100">
+            <IconButton
+              title="Edit Note"
+              class="rounded-full w-9 h-9 text-sm"
+              :class="edittingNote === route.no ? 'important:op0' : ''"
+              @click="edittingNote = route.no"
+            >
+              <carbon:pen />
+            </IconButton>
+          </div>
+          <NoteEditable
+            :no="route.no"
+            class="max-w-250 w-250 text-lg rounded p3"
+            :auto-height="true"
+            :editing="edittingNote === route.no"
+            :clicks-context="getClicksContext(route)"
+            @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"
+            @update:editing="edittingNote = null"
+            @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
+          />
+          <div
+            v-if="wordCounts[idx] > 0"
+            class="select-none absolute bottom-0 right-0 bg-main rounded-tl p2 op35 text-xs"
+          >
+            {{ wordCounts[idx] }} words
+          </div>
         </div>
       </div>
     </main>

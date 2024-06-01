@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
+import { useElementSize, useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { breakpoints, showOverview, windowSize } from '../state'
+import { breakpoints, showOverview } from '../state'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import { pathPrefix } from '../env'
+import { pathPrefix, slideAspect } from '../env'
+import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
@@ -23,28 +24,38 @@ function go(page: number) {
   close()
 }
 
-function focus(page: number) {
-  if (page === currentOverviewPage.value)
-    return true
-  return false
-}
-
 const xs = breakpoints.smaller('xs')
-const sm = breakpoints.smaller('sm')
 
-const padding = 4 * 16 * 2
-const gap = 2 * 16
+const gapX = 2 * 16
+const gapY = 4 * 8 // mb-8
+
+const containerEl = ref<HTMLElement>()
+const { width: containerWidth } = useElementSize(containerEl)
+
 const cardWidth = computed(() => {
-  if (xs.value)
-    return windowSize.width.value - padding
-  else if (sm.value)
-    return (windowSize.width.value - padding - gap) / 2
-  return 300
+  return xs.value
+    ? containerWidth.value
+    : Math.min(300, (containerWidth.value - gapX) / 2)
 })
 
-const rowCount = computed(() => {
-  return Math.floor((windowSize.width.value - padding) / (cardWidth.value + gap))
+const numOfCols = computed(() => {
+  return xs.value
+    ? 1
+    : Math.floor((containerWidth.value + gapX) / (cardWidth.value + gapX))
 })
+
+const cardHeight = computed(() => cardWidth.value / slideAspect.value)
+
+const virtualList = useDynamicVirtualList(slides, () => ({
+  itemHeight: (i) => {
+    if (i === slides.value.length - 1)
+      return cardHeight.value + 2
+    if (i % numOfCols.value === numOfCols.value - 1)
+      return cardHeight.value + gapY + 2
+    return 0
+  },
+  overscan: 4 * numOfCols.value,
+}))
 
 const keyboardBuffer = ref<string>('')
 
@@ -96,7 +107,7 @@ watchEffect(() => {
   // we focus on the right page.
   currentOverviewPage.value = currentSlideNo.value
   // Watch rowCount, make sure up and down shortcut work correctly.
-  overviewRowCount.value = rowCount.value
+  overviewRowCount.value = numOfCols.value
 })
 
 const activeSlidesLoaded = ref(false)
@@ -115,47 +126,50 @@ setTimeout(() => {
     <div
       v-if="showOverview || activeSlidesLoaded"
       v-show="showOverview"
-      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px"
+      v-bind="virtualList?.containerProps"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 px-16 py-20 overflow-y-auto backdrop-blur-5px"
       @click="close"
     >
-      <div
-        class="grid gap-y-4 gap-x-8 w-full"
-        :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
-      >
+      <div ref="containerEl" v-bind="virtualList?.wrapperProps.value">
         <div
-          v-for="(route, idx) of slides"
-          :key="route.no"
-          class="relative"
+          class="grid w-full"
+          :style="`grid-template-columns: repeat(${numOfCols},minmax(${cardWidth}px,1fr)); grid-auto-rows: ${cardHeight + 2}px; gap: ${gapX}px ${gapY}px`"
         >
           <div
-            class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
-            :class="(focus(idx + 1) || currentOverviewPage === idx + 1) ? 'border-primary' : 'border-main'"
-            @click="go(route.no)"
+            v-for="{ data: route } of virtualList?.list.value"
+            :key="route.no"
+            class="relative"
           >
-            <SlideContainer
-              :key="route.no"
-              :width="cardWidth"
-              class="pointer-events-none"
+            <div
+              class="inline-block border rounded overflow-hidden bg-main hover:border-primary transition"
+              :class="currentOverviewPage === route.no ? 'border-primary' : 'border-main'"
+              @click="go(route.no)"
             >
-              <SlideWrapper
-                :clicks-context="createFixedClicks(route, CLICKS_MAX)"
-                :route="route"
-                render-context="overview"
-              />
-              <DrawingPreview :page="route.no" />
-            </SlideContainer>
-          </div>
-          <div
-            class="absolute top-0"
-            :style="`left: ${cardWidth + 5}px`"
-          >
-            <template v-if="keyboardBuffer && String(idx + 1).startsWith(keyboardBuffer)">
-              <span class="text-green font-bold">{{ keyboardBuffer }}</span>
-              <span class="opacity-50">{{ String(idx + 1).slice(keyboardBuffer.length) }}</span>
-            </template>
-            <span v-else class="opacity-50">
-              {{ idx + 1 }}
-            </span>
+              <SlideContainer
+                :key="route.no"
+                :width="cardWidth"
+                class="pointer-events-none"
+              >
+                <SlideWrapper
+                  :clicks-context="createFixedClicks(route, CLICKS_MAX)"
+                  :route="route"
+                  render-context="overview"
+                />
+                <DrawingPreview :page="route.no" />
+              </SlideContainer>
+            </div>
+            <div
+              class="absolute top-0"
+              :style="`left: ${cardWidth + 5}px`"
+            >
+              <template v-if="keyboardBuffer && String(route.no).startsWith(keyboardBuffer)">
+                <span class="text-green font-bold">{{ keyboardBuffer }}</span>
+                <span class="opacity-50">{{ String(route.no).slice(keyboardBuffer.length) }}</span>
+              </template>
+              <span v-else class="opacity-50">
+                {{ route.no }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
