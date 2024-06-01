@@ -31,7 +31,7 @@ const guessedSlide = computed(() => {
         <RouterLink v-if="guessedSlide !== 1" to="/" class="page-link">
           Go Home
         </RouterLink>
-        <RouterLink v-if="guessedSlide" :to="guessedSlide" class="page-link">
+        <RouterLink v-if="guessedSlide" :to="`/${guessedSlide}`" class="page-link">
           Go to Slide {{ guessedSlide }}
         </RouterLink>
       </div>
