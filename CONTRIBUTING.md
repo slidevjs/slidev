@@ -2,9 +2,9 @@
 
 Excited to hear that you are interested in contributing to this project! Thanks!
 
-## Documentations
+## Documentation
 
-Documentations are now moved to [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
+Documentation has now been moved to the [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
 
 ## Setup (in your browser)
 
