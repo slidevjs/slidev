@@ -74,6 +74,11 @@ export default function setupRoutes() {
       path: '',
       redirect: { path: '/1' },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../pages/404.vue'),
+    },
   )
 
   return setups.reduce((routes, setup) => setup(routes), routes)
