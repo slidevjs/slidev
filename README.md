@@ -36,7 +36,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ## Features
 
-- 📝 [**Markdown-based**](https://sli.dev/guide/syntax.html) - use your favorite editors and workflow
+- 📝 [**Markdown Based**](https://sli.dev/guide/syntax.html) - use your favorite editors and workflow
 - 🧑‍💻 [**Developer Friendly**](https://sli.dev/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
 - 🎨 [**Themable**](https://sli.dev/themes/gallery.html) - theme can be shared and used with npm packages.
 - 🌈 [**Stylish**](https://sli.dev/guide/syntax.html#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
@@ -67,7 +67,7 @@ Install [Node.js >=18](https://nodejs.org/) and run the following command:
 npm init slidev
 ```
 
-Documentations:
+Documentation:
 **[English](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev) | [Español](https://es.sli.dev) | [Русский](https://ru.sli.dev) | [Português-BR](https://br.sli.dev)
 
 Discord: [chat.sli.dev](https://chat.sli.dev)
@@ -82,7 +82,7 @@ For a full example, you can check the [demo](https://github.com/slidevjs/slidev/
 - [Shiki](https://github.com/shikijs/shiki), [Monaco Editor](https://github.com/Microsoft/monaco-editor) - First-class code snippets support with live coding capability
 - [RecordRTC](https://recordrtc.org) - Built-in recording and camera view
 - [VueUse](https://vueuse.org) family - [`@vueuse/core`](https://github.com/vueuse/vueuse), [`@vueuse/motion`](https://github.com/vueuse/motion), etc.
-- [Iconify](https://iconify.design/) - Iconsets collection.
+- [Iconify](https://iconify.design/) - Icon sets collection.
 - [Drauu](https://github.com/antfu/drauu) - Drawing and annotations support
 - [KaTeX](https://katex.org/) - LaTeX math rendering.
 - [Mermaid](https://mermaid-js.github.io/mermaid) - Textual Diagrams.
