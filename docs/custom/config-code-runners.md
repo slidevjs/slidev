@@ -4,7 +4,7 @@
 
 Define code runners for custom languages in your Monaco Editor.
 
-By default, JavaScript, TypeScript runners are supported built-in. They runs in the browser with **without** sandbox environment. If you want to more advanced integrations, you might want to provide your own code runners that sends the code to a remote server, runs in a Web Worker, or anything, up to you.
+By default, JavaScript, TypeScript runners are supported built-in. They run in the browser **without** a sandbox environment. If you want to more advanced integrations, you might want to provide your own code runner that sends the code to a remote server, runs in a Web Worker, or anything, up to you.
 
 Create `./setup/code-runners.ts` with the following content:
 
