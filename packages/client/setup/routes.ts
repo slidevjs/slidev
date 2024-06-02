@@ -67,7 +67,7 @@ export default function setupRoutes() {
   routes.push(
     {
       name: 'play',
-      path: '/:no(\\d+)',
+      path: '/:no',
       component: () => import('../pages/play.vue'),
     },
     {
