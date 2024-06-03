@@ -195,3 +195,65 @@ jobs:
 
 - In your repository, go to Settings>Pages. Under "Build and deployment", select "GitHub Actions".
 - Finally, after all workflows are executed, a link to the slides should appear under Settings>Pages.
+
+### Docker
+
+To deploy your slides in a Docker container:
+
+- Create a `.dockerignore` file in your project root with the following content.
+
+```dockerignore
+node_modules
+dist
+```
+
+- Create a `.htaccess` file in your project root with the following content.
+
+```apache
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+```
+
+- Create a `Dockerfile` in your project root with the following content.
+
+```Dockerfile
+FROM node:20 AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+# Uncomment the following line if you are using `download: true` or `--download`
+# RUN npx playwright install-deps
+
+COPY . .
+
+RUN npm build
+
+FROM httpd:2.4-alpine
+
+RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
+    sed -i 's#AllowOverride [Nn]one#AllowOverride All#' /usr/local/apache2/conf/httpd.conf
+
+COPY --from=build /app/dist/ /usr/local/apache2/htdocs/
+
+COPY .htaccess /usr/local/apache2/htdocs/.htaccess
+```
+
+- Build the Docker image.
+
+```bash
+$ docker build -t my-slidev .
+```
+
+- Run the Docker container (replace `8080` with the port you want to use).
+
+```bash
+$ docker run -p 8080:80 my-slidev
+```
