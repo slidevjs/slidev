@@ -315,7 +315,7 @@ export function createSlidesLoader(
                 frontmatter: undefined,
                 source: undefined,
                 // remove raw content in build, optimize the bundle size
-                ...(mode === 'build' ? { raw: '', content: '', note: '', importChain: '' } : {}),
+                ...(mode === 'build' ? { raw: '', content: '', note: '', importChain: undefined } : {}),
               }
               const fontmatter = getFrontmatter(pageNo)
 
