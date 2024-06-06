@@ -314,8 +314,9 @@ export function createSlidesLoader(
                 ...withRenderedNote(slide),
                 frontmatter: undefined,
                 source: undefined,
+                importChain: undefined,
                 // remove raw content in build, optimize the bundle size
-                ...(mode === 'build' ? { raw: '', content: '', note: '', importChain: undefined } : {}),
+                ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
               }
               const fontmatter = getFrontmatter(pageNo)
 
