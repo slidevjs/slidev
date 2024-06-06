@@ -23,7 +23,7 @@ const route = computed(() => props.route)
       <div class="">
         <HandoutBottom :page-number="index + 100" />
         <!-- I would like to do this in HandoutBottom, but somehow props don't get passed. -->
-        <div class="absolute bottom-5 right-0 text-right text-[11px] ">
+        <div class="absolute bottom-5 right-12 text-right text-[11px]">
           {{ index + 1 }}
         </div>
       </div>
