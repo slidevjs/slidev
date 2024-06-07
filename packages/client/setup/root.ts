@@ -67,10 +67,12 @@ export default function setupRoot() {
     if (isPresenter.value) {
       patch('page', +currentSlideNo.value)
       patch('clicks', clicksContext.value.current)
+      patch('clicksTotal', clicksContext.value.total)
     }
     else {
       patch('viewerPage', +currentSlideNo.value)
       patch('viewerClicks', clicksContext.value.current)
+      patch('viewerClicksTotal', clicksContext.value.total)
     }
 
     patch('lastUpdate', {

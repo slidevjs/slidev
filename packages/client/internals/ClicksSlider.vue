@@ -6,6 +6,7 @@ import { CLICKS_MAX } from '../constants'
 
 const props = defineProps<{
   clicksContext: ClicksContext
+  readonly?: boolean
 }>()
 
 const total = computed(() => props.clicksContext.total)
@@ -24,8 +25,16 @@ const current = computed({
 const clicksRange = computed(() => range(start.value, total.value + 1))
 
 function onMousedown() {
+  if (props.readonly)
+    return
   if (current.value < 0 || current.value > total.value)
     current.value = 0
+}
+
+function onDblClick() {
+  if (props.readonly)
+    return
+  current.value = props.clicksContext.total
 }
 </script>
 
@@ -46,7 +55,7 @@ function onMousedown() {
     </div>
     <div
       relative flex-auto h5 font-mono flex="~"
-      @dblclick="current = clicksContext.total"
+      @dblclick="onDblClick"
     >
       <div
         v-for="i of clicksRange" :key="i"
@@ -71,8 +80,10 @@ function onMousedown() {
       </div>
       <input
         v-model="current"
-        class="range" absolute inset-0
-        type="range" :min="start" :max="total" :step="1" z-10 op0
+        class="range"
+        type="range" :min="start" :max="total" :step="1"
+        absolute inset-0 z-10 op0
+        :class="readonly ? 'pointer-events-none' : ''"
         :style="{ '--thumb-width': `${1 / (length + 1) * 100}%` }"
         @mousedown="onMousedown"
         @focus="event => (event.currentTarget as HTMLElement)?.blur()"
