@@ -4,10 +4,13 @@ import { clamp, range } from '@antfu/utils'
 import { computed } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   clicksContext: ClicksContext
   readonly?: boolean
-}>()
+  active?: boolean
+}>(), {
+  active: true,
+})
 
 const total = computed(() => props.clicksContext.total)
 const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
@@ -30,12 +33,6 @@ function onMousedown() {
   if (current.value < 0 || current.value > total.value)
     current.value = 0
 }
-
-function onDblClick() {
-  if (props.readonly)
-    return
-  current.value = props.clicksContext.total
-}
 </script>
 
 <template>
@@ -47,7 +44,7 @@ function onDblClick() {
     <div class="flex gap-0.5 items-center min-w-16 font-mono mr1">
       <carbon:cursor-1 text-sm op50 />
       <div flex-auto />
-      <template v-if="current >= 0 && current !== CLICKS_MAX">
+      <template v-if="current >= 0 && current !== CLICKS_MAX && active">
         <span text-primary>{{ current }}</span>
         <span op25>/</span>
       </template>
@@ -55,7 +52,6 @@ function onDblClick() {
     </div>
     <div
       relative flex-auto h5 font-mono flex="~"
-      @dblclick="onDblClick"
     >
       <div
         v-for="i of clicksRange" :key="i"

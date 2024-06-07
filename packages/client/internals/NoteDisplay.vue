@@ -3,14 +3,20 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import type { ClicksContext } from '@slidev/types'
 import { CLICKS_MAX } from '../constants'
 
-const props = defineProps<{
-  class?: string | string[]
-  noteHtml?: string
-  note?: string
-  placeholder?: string
-  clicksContext?: ClicksContext
-  autoScroll?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    class?: string | string[]
+    noteHtml?: string
+    note?: string
+    highlight?: boolean
+    placeholder?: string
+    clicksContext?: ClicksContext
+    autoScroll?: boolean
+  }>(),
+  {
+    highlight: true,
+  },
+)
 
 const emit = defineEmits<{
   (type: 'markerDblclick', e: MouseEvent, clicks: number): void
@@ -30,7 +36,7 @@ function highlightNote() {
   const markers = Array.from(noteDisplay.value.querySelectorAll(`.${CLASS_MARKER}`)) as HTMLElement[]
 
   const current = +(props.clicksContext?.current ?? CLICKS_MAX)
-  const disabled = current < 0 || current >= CLICKS_MAX
+  const disabled = current < 0 || current >= CLICKS_MAX || !props.highlight
 
   const nodeToIgnores = new Set<Element>()
   function ignoreParent(node: Element) {
@@ -114,7 +120,7 @@ function highlightNote() {
 }
 
 watch(
-  () => [props.noteHtml, props.clicksContext?.current],
+  () => [props.noteHtml, props.clicksContext?.current, props.highlight],
   () => {
     nextTick(() => {
       highlightNote()

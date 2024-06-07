@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowRef } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { pathPrefix, slidesTitle } from '../env'
@@ -28,6 +28,7 @@ const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
 
+const activeSlide = shallowRef<SlideRoute>()
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
   // We create a local clicks context to calculate the total clicks of the slide
@@ -40,8 +41,15 @@ function getSlideClicks(route: SlideRoute) {
   return route.meta?.clicks || getClicksContext(route)?.total
 }
 
+function toggleRoute(route: SlideRoute) {
+  if (activeSlide.value === route)
+    activeSlide.value = undefined
+  else
+    activeSlide.value = route
+}
+
 function wordCount(str: string) {
-  return str.match(/[\w’'-]+/g)?.length || 0
+  return str.match(/[\w`'\-]+/g)?.length || 0
 }
 
 function isElementInViewport(el: HTMLElement) {
@@ -185,9 +193,11 @@ onMounted(() => {
           </div>
           <ClicksSlider
             v-if="getSlideClicks(route)"
+            :active="activeSlide === route"
             :clicks-context="getClicksContext(route)"
             class="w-full mt-2"
-            @dblclick="getClicksContext(route).current = CLICKS_MAX"
+            @dblclick="toggleRoute(route)"
+            @click="activeSlide = route"
           />
         </div>
         <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
@@ -204,6 +214,7 @@ onMounted(() => {
           :no="route.no"
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
+          :highlight="activeSlide === route"
           :editing="edittingNote === route.no"
           :clicks-context="getClicksContext(route)"
           @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"
