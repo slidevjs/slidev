@@ -26,6 +26,9 @@ const props = defineProps({
   clicksContext: {
     type: Object as PropType<ClicksContext>,
   },
+  highlight: {
+    default: true,
+  },
   autoHeight: {
     default: false,
   },
@@ -112,6 +115,7 @@ watch(
     :note-html="info?.noteHTML"
     :clicks-context="clicksContext"
     :auto-scroll="!autoHeight"
+    :highlight="props.highlight"
     @marker-click="(e, clicks) => emit('markerClick', e, clicks)"
     @marker-dblclick="(e, clicks) => emit('markerDblclick', e, clicks)"
   />
