@@ -8,7 +8,9 @@ import { fullscreen } from '../state'
 
 import NoteDisplay from '../internals/NoteDisplay.vue'
 import IconButton from '../internals/IconButton.vue'
+import ClicksSlider from '../internals/ClicksSlider.vue'
 import { useNav } from '../composables/useNav'
+import { createClicksContextBase } from '../composables/useClicks'
 
 useHead({ title: `Notes - ${slidesTitle}` })
 
@@ -32,6 +34,12 @@ function increaseFontSize() {
 function decreaseFontSize() {
   fontSize.value = fontSize.value - 1
 }
+
+const clicksContext = computed(() => {
+  const clicks = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicks : sharedState.clicks
+  const total = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicksTotal : sharedState.clicksTotal
+  return createClicksContextBase(ref(clicks), undefined, total)
+})
 </script>
 
 <template>
@@ -49,9 +57,12 @@ function decreaseFontSize() {
         :note="currentRoute?.meta.slide.note"
         :note-html="currentRoute?.meta.slide.noteHTML"
         :placeholder="`No notes for Slide ${pageNo}.`"
-        :clicks-context="currentRoute?.meta.__clicksContext"
+        :clicks-context="clicksContext"
         :auto-scroll="true"
       />
+    </div>
+    <div class="flex-none border-t border-main" px3 py2>
+      <ClicksSlider :clicks-context="clicksContext" readonly />
     </div>
     <div class="flex-none border-t border-main">
       <div class="flex gap-1 items-center px-6 py-3">
