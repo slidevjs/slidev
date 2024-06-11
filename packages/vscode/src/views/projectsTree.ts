@@ -1,11 +1,10 @@
+import { computed, createSingletonComposable, useTreeView } from 'reactive-vscode'
 import type { TreeItem } from 'vscode'
-import { EventEmitter, ThemeIcon, TreeItemCollapsibleState, Uri, window } from 'vscode'
-import { computed, onScopeDispose, watch } from '@vue/runtime-core'
-import { createSingletonComposable } from '../utils/singletonComposable'
+import { ThemeIcon, TreeItemCollapsibleState, Uri } from 'vscode'
 import type { SlidevProject } from '../projects'
 import { activeEntry, projects } from '../projects'
-import { toRelativePath } from '../utils/toRelativePath'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
+import { toRelativePath } from '../utils/toRelativePath'
 
 /**
  * No projects has dependency files. Then it would be weired to show a collapse button.
@@ -13,60 +12,59 @@ import { getSlidesTitle } from '../utils/getSlidesTitle'
 const nothingToCollapse = computed(() => [...projects.values()]
   .every(project => Object.keys(project.data.markdownFiles).length <= 1))
 
-function getTreeItem(element: SlidevProject | string): TreeItem {
-  if (typeof element === 'string') {
+interface ProjectsTreeNode {
+  data: SlidevProject | string
+  children?: ProjectsTreeNode[]
+}
+
+function getTreeItem({ data }: ProjectsTreeNode): TreeItem {
+  if (typeof data === 'string') {
     // Imported file
     return {
-      description: toRelativePath(element),
-      resourceUri: Uri.file(element),
+      description: toRelativePath(data),
+      resourceUri: Uri.file(data),
       iconPath: new ThemeIcon('file'),
       collapsibleState: TreeItemCollapsibleState.None,
       command: {
         title: 'Open',
         command: 'vscode.open',
-        arguments: [Uri.file(element)],
+        arguments: [Uri.file(data)],
       },
     }
   }
   else {
     // Slides project
-    const active = activeEntry.value === element.entry
+    const active = activeEntry.value === data.entry
     return {
-      label: getSlidesTitle(element.data),
-      description: `${toRelativePath(element.entry)}${element.port ? ` (port: ${element.port})` : ''}`,
-      resourceUri: Uri.file(element.entry),
+      label: getSlidesTitle(data.data),
+      description: `${toRelativePath(data.entry)}${data.port ? ` (port: ${data.port})` : ''}`,
+      resourceUri: Uri.file(data.entry),
       iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
       collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
-      contextValue: `<project><${active ? 'active' : 'inactive'}><${element.port ? 'up' : 'down'}>`,
+      contextValue: `<project><${active ? 'active' : 'inactive'}><${data.port ? 'up' : 'down'}>`,
       command: {
         title: 'Open',
         command: 'vscode.open',
-        arguments: [Uri.file(element.entry)],
+        arguments: [Uri.file(data.entry)],
       },
     }
   }
 }
 
 export const useProjectsTree = createSingletonComposable(() => {
-  const onChange = new EventEmitter<void>()
+  const treeData = computed<ProjectsTreeNode[]>(() => {
+    return [...projects.values()].map(project => ({
+      data: project,
+      children: project.data.watchFiles
+        .filter(file => file !== project.entry)
+        .map(file => ({ data: file })),
+    }))
+  })
 
-  const treeView = window.createTreeView('slidev-projects-tree', {
-    treeDataProvider: {
-      onDidChangeTreeData: onChange.event,
-      getTreeItem,
-      getChildren(element) {
-        return element
-          ? typeof element === 'string'
-            ? undefined
-            : element.data.watchFiles.filter(file => file !== element.entry)
-          : [...projects.values()]
-      },
-    },
+  const treeView = useTreeView('slidev-projects-tree', treeData, {
+    getTreeItem,
     showCollapseAll: true,
   })
-  onScopeDispose(() => treeView.dispose())
-
-  watch([projects, activeEntry], () => onChange.fire(), { deep: true })
 
   return treeView
 })

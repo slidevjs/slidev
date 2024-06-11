@@ -739,21 +739,15 @@ importers:
       '@types/vscode':
         specifier: ^1.89.0
         version: 1.89.0
-      '@vue/reactivity':
-        specifier: ^3.4.27
-        version: 3.4.27
-      '@vue/runtime-core':
-        specifier: ^3.4.27
-        version: 3.4.27
-      '@vue/shared':
-        specifier: ^3.4.27
-        version: 3.4.27
       get-port-please:
         specifier: ^3.1.2
         version: 3.1.2
       ovsx:
         specifier: ^0.9.1
         version: 0.9.1
+      reactive-vscode:
+        specifier: 0.0.1-beta.4
+        version: 0.0.1-beta.4(@types/vscode@1.89.0)
 
 packages:
 
@@ -5404,6 +5398,11 @@ packages:
 
   react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
+
+  reactive-vscode@0.0.1-beta.4:
+    resolution: {integrity: sha512-NdnXrVT1uI6k6L2LAp21EhDAjNO+9WCey27RlYZae0OeYgK/oiE5iBSViHHUAddHKXN+I+ugBs3N1lG6LTIZuw==}
+    peerDependencies:
+      '@types/vscode': ^1.89.0
 
   read-pkg-up@7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
@@ -11965,6 +11964,10 @@ snapshots:
     optional: true
 
   react-is@18.2.0: {}
+
+  reactive-vscode@0.0.1-beta.4(@types/vscode@1.89.0):
+    dependencies:
+      '@types/vscode': 1.89.0
 
   read-pkg-up@7.0.1:
     dependencies:

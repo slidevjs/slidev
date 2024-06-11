@@ -1,14 +1,12 @@
 import { save as slidevSave } from '@slidev/parser/fs'
 import type { SourceSlideInfo } from '@slidev/types'
-import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runtime-core'
+import { computed, createSingletonComposable, markRaw, useTreeView, useViewVisibility, watch, watchEffect } from 'reactive-vscode'
 import type { TreeItem } from 'vscode'
-import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
-import { useViewVisibility } from '../composables/useViewVisibility'
+import { DataTransferItem, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
 import { previewSync } from '../configs'
 import { activeSlidevData } from '../projects'
 import { getSlideNo } from '../utils/getSlideNo'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 import { usePreviewWebview } from './previewWebview'
 
@@ -80,30 +78,17 @@ function getTreeItem(element: SlidesTreeElement): TreeItem {
 }
 
 export const useSlidesTree = createSingletonComposable(() => {
-  const onChange = new EventEmitter<void>()
-
   const slidesTreeData = computed(() => {
     function createElement(parent: SlidesTreeElement | null, slide: SourceSlideInfo) {
       const element: SlidesTreeElement = markRaw({ parent, slide })
       element.children = slide.imports?.map(s => createElement(element, s))
       return element
     }
-    return activeSlidevData.value?.entry.slides.map(s => createElement(null, s))
+    return activeSlidevData.value?.entry.slides.map(s => createElement(null, s)) ?? []
   })
 
-  const treeView = window.createTreeView('slidev-slides-tree', {
-    treeDataProvider: {
-      onDidChangeTreeData: onChange.event,
-      getTreeItem,
-      getChildren(element) {
-        return element
-          ? element.children
-          : slidesTreeData.value
-      },
-      getParent(element) {
-        return element.parent
-      },
-    },
+  const treeView = useTreeView('slidev-slides-tree', slidesTreeData, {
+    getTreeItem,
     canSelectMany: true,
     dragAndDropController: {
       dragMimeTypes: [slideMineType],
@@ -138,9 +123,6 @@ export const useSlidesTree = createSingletonComposable(() => {
     },
     showCollapseAll: true,
   })
-  onScopeDispose(() => treeView.dispose())
-
-  watch(activeSlidevData, () => onChange.fire())
 
   const visible = useViewVisibility(treeView)
   const { previewNavState } = usePreviewWebview()

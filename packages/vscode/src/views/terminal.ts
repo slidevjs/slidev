@@ -1,9 +1,9 @@
 // Ported from https://github.com/antfu/vscode-vite/blob/main/src/terminal.ts
 
-import { ref } from '@vue/runtime-core'
+import { ref, useAbsolutePath } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import { Uri, window } from 'vscode'
-import { extCtx } from '../index'
+
 import type { SlidevProject } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
 
@@ -21,8 +21,8 @@ export function useTerminal(project: SlidevProject) {
       name: getSlidesTitle(project.data),
       cwd: project.userRoot,
       iconPath: {
-        light: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono.svg')),
-        dark: Uri.file(extCtx.value.asAbsolutePath('dist/res/logo-mono-dark.svg')),
+        light: Uri.file(useAbsolutePath('dist/res/logo-mono.svg').value),
+        dark: Uri.file(useAbsolutePath('dist/res/logo-mono-dark.svg').value),
       },
       isTransient: true,
     })

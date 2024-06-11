@@ -1,24 +1,19 @@
-import { reactive, ref, shallowRef, watch, watchEffect } from '@vue/runtime-core'
-import type { WebviewView } from 'vscode'
+import { createSingletonComposable, extensionContext, reactive, ref, useIsDarkTheme, useVscodeContext, useWebviewView, watch, watchEffect } from 'reactive-vscode'
 import { Uri, commands, env, window } from 'vscode'
-import { useDisposable } from '../composables/useDisposable'
+
 import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { usePreviewState } from '../composables/usePreviewState'
-import { useVscodeContext } from '../composables/useVscodeContext'
-import { isDarkTheme, previewSync } from '../configs'
-import { extCtx } from '../index'
+import { previewSync } from '../configs'
 import { activeSlidevData } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
-import { useLogger } from './logger'
+import { logger } from './logger'
 
 export const usePreviewWebview = createSingletonComposable(() => {
-  const logger = useLogger()
   const { port, ready, html, compatMode, refreshState } = usePreviewState()
   const focusedSlideNo = useFocusedSlideNo()
+  const isDarkTheme = useIsDarkTheme()
 
   useVscodeContext('slidev:preview:sync', previewSync)
 
-  const view = shallowRef<WebviewView>()
   const previewNavState = reactive({
     no: 0,
     clicks: 0,
@@ -26,50 +21,48 @@ export const usePreviewWebview = createSingletonComposable(() => {
     hasPrev: false,
   })
   const initializedClientId = ref('')
+  const forceRefreshId = ref(0)
 
-  useDisposable(window.registerWebviewViewProvider(
+  const { view, postMessage } = useWebviewView(
     'slidev-preview',
+    () => `${html.value}<!--${forceRefreshId.value}-->`,
     {
-      resolveWebviewView(webviewView) {
-        view.value = webviewView
-        view.value.webview.options = {
-          enableScripts: true,
-          localResourceRoots: [extCtx.value.extensionUri],
+      enableScripts: true,
+      localResourceRoots: [extensionContext.value!.extensionUri],
+    },
+    {
+      webviewOptions: { retainContextWhenHidden: true },
+      async onDidReceiveMessage(data) {
+        if (data.type === 'command') {
+          commands.executeCommand(`slidev.${data.command}`)
         }
-        view.value.webview.onDidReceiveMessage(async (data) => {
-          if (data.type === 'command') {
-            commands.executeCommand(`slidev.${data.command}`)
+        else if (data.type === 'update-state') {
+          if (initializedClientId.value === data.clientId) {
+            Object.assign(previewNavState, data.navState)
           }
-          else if (data.type === 'update-state') {
-            if (initializedClientId.value === data.clientId) {
-              Object.assign(previewNavState, data.navState)
-            }
-            else {
-              initializedClientId.value = data.clientId
-              if (previewSync.value && initializedClientId.value === data.clientId)
-                postMessage('navigate', { no: focusedSlideNo.value })
-            }
+          else {
+            initializedClientId.value = data.clientId
+            if (previewSync.value && initializedClientId.value === data.clientId)
+              postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
-        })
+        }
       },
     },
-    { webviewOptions: { retainContextWhenHidden: true } },
-  ))
+  )
 
   const pageId = ref(0)
-  let i = 0
   function refresh() {
     refreshState()
     if (!view.value)
       return
-    view.value.webview.html = `${html.value}<!--${i++}-->`
+    forceRefreshId.value++
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }
-  watchEffect(refresh)
+  watch([view, port], refresh)
 
-  function postMessage(type: string, data: Record<string, unknown>) {
-    view.value?.webview.postMessage({
+  function postSlidevMessage(type: string, data: Record<string, unknown>) {
+    postMessage({
       target: 'slidev',
       sender: 'vscode',
       type,
@@ -81,11 +74,11 @@ export const usePreviewWebview = createSingletonComposable(() => {
     if (sync) {
       if (compatMode.value)
         previewNavState.no = no
-      postMessage('navigate', { no, clicks: 999999 })
+      postSlidevMessage('navigate', { no, clicks: 999999 })
     }
   })
-  watch([pageId], () => postMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
-  watch([pageId, isDarkTheme], ([_, dark]) => postMessage('color-schema', { color: dark ? 'dark' : 'light' }))
+  watch([pageId], () => postSlidevMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
+  watch([pageId, isDarkTheme], ([_, dark]) => postSlidevMessage('color-schema', { color: dark ? 'dark' : 'light' }))
 
   watchEffect(() => {
     if (view.value) {
@@ -99,7 +92,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
     return () => {
       if (compatMode.value)
         window.showErrorMessage('Unsupported operation: Slidev server too old.')
-      postMessage('navigate', { operation, args })
+      postSlidevMessage('navigate', { operation, args })
     }
   }
 

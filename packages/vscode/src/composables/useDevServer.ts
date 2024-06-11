@@ -1,5 +1,5 @@
-import type { Ref } from '@vue/runtime-core'
-import { toRef } from '@vue/runtime-core'
+import type { Ref } from 'reactive-vscode'
+import { toRef } from 'reactive-vscode'
 import { getPort as getPortPlease } from 'get-port-please'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
