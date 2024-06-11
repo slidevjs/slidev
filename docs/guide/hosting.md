@@ -73,7 +73,7 @@ $ slidev build --watch
 
 ### Multiple entries
 
-You can build multiple slide deckss at once.
+You can build multiple slide decks at once.
 
 ```bash
 $ slidev build slides1.md slides2.md

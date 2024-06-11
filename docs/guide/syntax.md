@@ -100,7 +100,7 @@ This is a page with the layout `center` and a background image.
 
 ## Code Blocks
 
-One big reason that led to the creation of Slidev is the need to make code look just right in slides. Accordingly, you can use Markdown-flavored code blocks to highlight your code.
+One big reason that led to the creation of Slidev was the need to perfectly display code in slides. Consequently, you can use Markdown-flavored code blocks to highlight your code.
 
 ````md
 ```ts
@@ -159,7 +159,7 @@ Learn more in the [click animations guide](./animations#positioning).
 
 ### Line Numbers
 
-You can enable line numbers for all slides by setting `lineNumbers: true` in the global config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly; it defaults to 1:
+You can enable line numbering for all slides by setting `lineNumbers: true` in the global config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly; it defaults to 1:
 
 ````md
 ```ts {6,7}{lines:true,startLine:5}
@@ -377,7 +377,7 @@ blockquote {
 
 Just like you would do in markdown, you can use images pointing to a remote or local URL.
 
-For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com/antfu/vite-plugin-remote-assets) will cache them onto disk at first run so you can have instant loading--even for large images later on.
+For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com/antfu/vite-plugin-remote-assets) will cache them onto the disk at first run, ensuring instant loading even for large images later on.
 
 ```md
 ![Remote Image](https://sli.dev/favicon.png)

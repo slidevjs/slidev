@@ -1,6 +1,6 @@
 # Editor Support
 
-Since Slidev is using Markdown as the source entry, you can use any editor you'd lik' to write your slides.
+Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides.
 
 If you want some high-level management to your slides, we have provided the following editor integrations for you!
 
