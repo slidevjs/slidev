@@ -103,7 +103,7 @@ Run `docker exec -i slidev npx slidev build` on the running container `slidev`. 
 
 #### Host on Github Pages
 
-You can host `dist` as a static website via such services as [Github Pages](https://tangramor.github.io/slidev_docker/) or Gitlab Pages.
+You can host `dist` as a static website via services such as [GitHub Pages](https://tangramor.github.io/slidev_docker/) or GitLab Pages.
 
 Since in GitHub Pages the URL may contain subfolders, you may use `--base=/<subfolder>/` option during the build process, such as `docker exec -i slidev npx slidev build --base=/slidev_docker/`.
 
