@@ -1,6 +1,6 @@
 # Editor Support
 
-Since Slidev is using Markdown as the source entry, you can use ANY editors you love to write it.
+Since Slidev is using Markdown as the source entry, you can use any editor you'd lik' to write your slides.
 
 If you want some high-level management to your slides, we have provided the following editor integrations for you!
 
@@ -37,7 +37,7 @@ The VS Code extension provides some features to help you better organize your sl
 - Re-ordering slides
 - Folding for slide blocks
 - Multiple slides project support
-- Start dev server in one click
+- Start the dev server with one click
 
 ![](https://github.com/slidevjs/slidev/assets/63178754/2c9ba01a-d21f-4b33-b6b6-4e249873f865)
 
