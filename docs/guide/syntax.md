@@ -100,7 +100,7 @@ This is a page with the layout `center` and a background image.
 
 ## Code Blocks
 
-One big reason that led to the creation of Slidev is the need to make code look just right in  slides. Accordingly, you can use Markdown-flavored code blocks to highlight your code.
+One big reason that led to the creation of Slidev is the need to make code look just right in slides. Accordingly, you can use Markdown-flavored code blocks to highlight your code.
 
 ````md
 ```ts
