@@ -32,15 +32,38 @@ The VS Code extension provides some features to help you better organize your sl
 
 ### Features
 
-- View slides in the side panel
-- Go to next / prev buttons
+- Preview slides in the side panel
+- Slides tree view
 - Re-ordering slides
 - Folding for slide blocks
-- Convert Markdown to HTML
+- Multiple slides project support
+- Start dev server in one click
 
-![](https://user-images.githubusercontent.com/11247099/116809994-cc2caa00-ab73-11eb-879f-60585747c3c9.png)
+![](https://github.com/slidevjs/slidev/assets/63178754/2c9ba01a-d21f-4b33-b6b6-4e249873f865)
+
+::: code-group
 
 <TheTweet id="1395333405345148930" />
+
+<TheTweet id="1789684139152810151" />
+
+:::
+
+### Installation
+
+You can install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=antfu.slidev).
+
+### Usage
+
+Click the `Slidev` icon in the activity bar to open the **Slidev panel**. In the Slidev panel, you can see the projects tree view, slides tree view, and the preview webview.
+
+In the **projects tree view**, you can see all the Slidev projects in your workspace. You can dlick the item to open the corresponding file, and click the <codicon-eye /> icon over it to switch the active project. The <codicon-add /> icon allows you to load a slides project that wasn't scanned automatically.
+
+In the **slides tree view**, you can see all the slides in the active project. You can click the item to move you cursor to the slide in the editor, and drag and drop to reorder the slides.
+
+In the **preview webview**, you can click the <codicon-run-all /> icon to start the dev server and click the <codicon-globe /> icon to open the slides in the browser. Toggle <codicon-lock /> icon to sync/unsync the preview navigation with the editor cursor.
+
+There are also some **commands** you can use. Type `Slidev` in the command palette to see them.
 
 ## Prettier Plugin
 
