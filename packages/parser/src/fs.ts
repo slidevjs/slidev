@@ -98,7 +98,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
 
   const headmatter = { ...entry.slides[0]?.frontmatter }
   if (slides[0]?.title)
-    headmatter.title = slides[0].title
+    headmatter.title ??= slides[0].title
 
   return {
     slides,
