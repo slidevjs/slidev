@@ -28,7 +28,7 @@ const guessedSlide = computed(() => {
         Page <code class="op-60">{{ currentRoute.path }}</code> not found
       </p>
     </div>
-    <div class="mt-3 flex flex-col gap-2">
+    <div class="mt-3 flex flex-col gap-2 max-w-xs mx-auto w-full">
       <RouterLink v-if="guessedSlide !== 1" to="/" class="page-link">
         Go Home
       </RouterLink>
