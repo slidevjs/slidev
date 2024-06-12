@@ -32,6 +32,7 @@ export async function createServer(
     mergeConfig(
       config,
       {
+        configFile: false,
         plugins: [
           await ViteSlidevPlugin(options, config.slidev || {}, serverOptions),
         ],

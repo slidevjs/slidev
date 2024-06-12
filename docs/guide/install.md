@@ -4,7 +4,7 @@
 
 > Slidev requires [**Node.js >=18.0**](https://nodejs.org/)
 
-The best way to get started is by using our official starter template.
+The best way to get started is by using our official starter template:
 
 ::: code-group
 
@@ -22,13 +22,13 @@ pnpm create slidev
 
 :::
 
-Follow the prompts and it will open up the slideshow at `http://localhost:3030/` automatically for you.
+Follow the prompts and it will open the slideshow at `http://localhost:3030/` automatically for you.
 
-It also contains the basic setup and a short demo with instructions on how to get started with Slidev.
+It also contains a basic setup along with a short demo with instructions on how to get started with Slidev.
 
 ## Install Manually
 
-If you still prefer to install Slidev manually or would like to integrate it into your existing projects, you can do:
+If you prefer to install Slidev manually or would like to integrate it into an existing project, you can do:
 
 ```bash
 npm install @slidev/cli @slidev/theme-default
@@ -81,9 +81,9 @@ If your work folder is empty, it will generate a template `slides.md` and other 
 
 You can access your slides from `http://localhost:3030/`
 
-### Build deployable image
+### Build deployable images
 
-Or you can create your own slidev project to a docker image with Dockerfile:
+You can create your own slidev project as a docker image with Dockerfile:
 
 ```Dockerfile
 FROM tangramor/slidev:latest
@@ -97,11 +97,11 @@ And run the container: `docker run --name myslides --rm --user node -p 3030:3030
 
 You can visit your slides at `http://localhost:3030/`
 
-Refer to the [tangramor/slidev_docker](https://github.com/tangramor/slidev_docker) for more details.
+Refer to [tangramor/slidev_docker](https://github.com/tangramor/slidev_docker) for more details.
 
 ## Command Line Interface (CLI)
 
-`@slidev/cli` Expose a few commands you can use with `npx slidev ...` or by adding scripts in your `package.json`:
+`@slidev/cli` exposes a few commands you can use with `npx slidev ...` or by adding scripts in your `package.json`:
 
 ```json
 {
@@ -128,7 +128,7 @@ npm run slidev -- --open
 
 Start a local server for Slidev.
 
-- `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
+- `[entry]` (`string`, default: `slides.md`): path to the markdown file containing your slides.
 
 Options:
 
@@ -142,15 +142,15 @@ Options:
 
 ### `slidev build [entry]`
 
-Build hostable SPA.
+Build a hostable SPA.
 
-- `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
+- `[entry]` (`string`, default: `slides.md`): path to the slides markdown file.
 
 Options:
 
 - `--out`, `-o` (`string`, default: `dist`): output dir.
 - `--base` (`string`, default: `/`): base URL (see https://cli.vuejs.org/config/#publicpath)
-- `--download` (`boolean`, default: `false`): allow to download the slides as PDF inside the SPA.
+- `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA.
 - `--theme`, `-t` (`string`): override theme.
 
 ### `slidev export [entry]`
