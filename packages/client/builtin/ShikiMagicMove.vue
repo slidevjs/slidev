@@ -4,6 +4,7 @@ import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import type { PropType } from 'vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import lz from 'lz-string'
+import { sleep } from '@antfu/utils'
 import { useSlideContext } from '../context'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 import { useNav } from '../composables/useNav'
@@ -73,9 +74,11 @@ onMounted(() => {
         currentClickSum += current.length || 1
       }
 
-      setTimeout(() => {
+      setTimeout(async () => {
         // A workaround for #1608
         stepIndex.value = step
+
+        await sleep(0)
 
         const pre = container.value?.querySelector('.shiki') as HTMLElement
         if (!pre)
