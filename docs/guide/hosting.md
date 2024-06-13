@@ -198,7 +198,7 @@ jobs:
 
 ### Docker
 
-To deploy your slides in a Docker container:
+To build and deploy your slides in a Docker container:
 
 - Create a `.dockerignore` file in your project root with the following content.
 
@@ -222,27 +222,17 @@ RewriteRule . /index.html [L]
 
 ```Dockerfile
 FROM node:20 AS build
-
 WORKDIR /app
-
 COPY package*.json ./
-
 RUN npm ci
-
 # Uncomment the following line if you are using `download: true` or `--download`
 # RUN npx playwright install-deps
-
 COPY . .
-
 RUN npm build
-
 FROM httpd:2.4-alpine
-
 RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.conf && \
     sed -i 's#AllowOverride [Nn]one#AllowOverride All#' /usr/local/apache2/conf/httpd.conf
-
 COPY --from=build /app/dist/ /usr/local/apache2/htdocs/
-
 COPY .htaccess /usr/local/apache2/htdocs/.htaccess
 ```
 
