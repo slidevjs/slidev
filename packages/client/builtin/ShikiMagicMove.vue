@@ -72,9 +72,11 @@ onMounted(() => {
         }
         currentClickSum += current.length || 1
       }
-      stepIndex.value = step
 
       setTimeout(() => {
+        // A workaround for #1608
+        stepIndex.value = step
+
         const pre = container.value?.querySelector('.shiki') as HTMLElement
         if (!pre)
           return
