@@ -30,6 +30,20 @@ const frontmatterContentDecoration = window.createTextEditorDecorationType({
 })
 const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
 
+function mergeSlideNumbers(slides: { index: number }[]): string {
+  const indexes = slides.map(s => s.index + 1)
+  const merged = [[indexes[0], indexes[0]]]
+  for (let i = 1; i < indexes.length; i++) {
+    if (merged[merged.length - 1][1] + 1 === indexes[i]) {
+      merged[merged.length - 1][1] = indexes[i]
+    }
+    else {
+      merged.push([indexes[i], indexes[i]])
+    }
+  }
+  return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
+}
+
 export const useAnnotations = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
   const doc = computed(() => editor.value?.document)
@@ -56,7 +70,7 @@ export const useAnnotations = createSingletonComposable(() => {
           s => s.source === source || s.importChain?.includes(source),
         )
         const posInfo = slides?.length
-          ? slides.map(s => `#${s.index + 1}`).join(', ')
+          ? mergeSlideNumbers(slides)
           : isActive ? '(hidden)' : ''
         const entryInfo = source.index === 0 && project.data.entry !== md
           ? ` (entry: ${toRelativePath(project.entry)})`
