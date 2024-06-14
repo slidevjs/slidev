@@ -107,7 +107,7 @@ export async function resolveViteConfigs(
     ],
     define: {
       // Fixes Vue production mode breaking PDF Export #1245
-      __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+      __VUE_PROD_DEVTOOLS__: false,
     },
   })
 
