@@ -2,12 +2,11 @@ import { resolve } from 'node:path'
 import http from 'node:http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
-import { mergeConfig, build as viteBuild } from 'vite'
+import { build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
-import { ViteSlidevPlugin } from '../vite'
-import { getIndexHtml, mergeViteConfigs } from './shared'
+import { getIndexHtml, resolveViteConfigs } from './shared'
 
 export async function build(
   options: ResolvedSlidevOptions,
@@ -24,11 +23,9 @@ export async function build(
   let config: ResolvedConfig = undefined!
 
   try {
-    const inlineConfig = await mergeViteConfigs(
+    const inlineConfig = await resolveViteConfigs(
       options,
-      viteConfig,
-      <InlineConfig>({
-        root: options.userRoot,
+      {
         plugins: [
           {
             name: 'resolve-config',
@@ -40,18 +37,12 @@ export async function build(
         build: {
           chunkSizeWarningLimit: 2000,
         },
-      }),
+      } satisfies InlineConfig,
+      viteConfig,
       'build',
     )
 
-    await viteBuild(mergeConfig(
-      inlineConfig,
-      {
-        plugins: [
-          await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
-        ],
-      },
-    ))
+    await viteBuild(inlineConfig)
   }
   finally {
     if (originalIndexHTML != null)

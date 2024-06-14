@@ -1,14 +1,15 @@
 import { existsSync, promises as fs } from 'node:fs'
 import { join } from 'node:path'
-import { loadConfigFromFile, mergeConfig, resolveConfig } from 'vite'
+import { loadConfigFromFile, mergeConfig } from 'vite'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import type { ResolvedSlidevOptions, SlidevData } from '@slidev/types'
+import type { ResolvedSlidevOptions, SlidevData, SlidevServerOptions } from '@slidev/types'
 import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
 import markdownItLink from '../syntax/markdown-it/markdown-it-link'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../utils'
 import { toAtFS } from '../resolver'
 import { version } from '../../package.json'
+import { ViteSlidevPlugin } from '../vite'
 
 export const sharedMd = MarkdownIt({ html: true })
 sharedMd.use(markdownItLink)
@@ -72,30 +73,43 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
   return main
 }
 
-export async function mergeViteConfigs(
-  { roots }: ResolvedSlidevOptions,
+export async function resolveViteConfigs(
+  options: ResolvedSlidevOptions,
+  baseConfig: InlineConfig,
   overrideConfigs: InlineConfig,
-  config: InlineConfig,
   command: 'serve' | 'build',
+  serverOptions?: SlidevServerOptions,
 ) {
   const configEnv: ConfigEnv = {
     mode: command === 'build' ? 'production' : 'development',
     command,
   }
   // Merge theme & addon & user configs
-  const files = roots.map(i => join(i, 'vite.config.ts'))
+  const files = options.roots.map(i => join(i, 'vite.config.ts'))
 
-  for await (const file of files) {
+  for (const file of files) {
     if (!existsSync(file))
       continue
     const viteConfig = await loadConfigFromFile(configEnv, file)
     if (!viteConfig?.config)
       continue
-    config = mergeConfig(config, viteConfig.config)
+    baseConfig = mergeConfig(baseConfig, viteConfig.config)
   }
 
-  // Merge viteConfig argument
-  config = mergeConfig(config, overrideConfigs)
+  baseConfig = mergeConfig(baseConfig, overrideConfigs)
 
-  return config
+  // Merge common overrides
+  baseConfig = mergeConfig(baseConfig, {
+    configFile: false,
+    root: options.userRoot,
+    plugins: [
+      await ViteSlidevPlugin(options, baseConfig.slidev || {}, serverOptions),
+    ],
+    define: {
+      // Fixes Vue production mode breaking PDF Export #1245
+      __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+    },
+  })
+
+  return baseConfig
 }
