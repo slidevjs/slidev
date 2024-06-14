@@ -24,7 +24,7 @@ export async function build(
   let config: ResolvedConfig = undefined!
 
   try {
-    let inlineConfig = await mergeViteConfigs(
+    const inlineConfig = await mergeViteConfigs(
       options,
       viteConfig,
       <InlineConfig>({
@@ -44,16 +44,14 @@ export async function build(
       'build',
     )
 
-    inlineConfig = mergeConfig(
+    await viteBuild(mergeConfig(
       inlineConfig,
       {
         plugins: [
           await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
         ],
       },
-    )
-
-    await viteBuild(inlineConfig)
+    ))
   }
   finally {
     if (originalIndexHTML != null)

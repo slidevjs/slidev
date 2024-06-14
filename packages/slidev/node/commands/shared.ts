@@ -73,16 +73,16 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
 }
 
 export async function mergeViteConfigs(
-  { roots, entry }: ResolvedSlidevOptions,
-  viteConfig: InlineConfig,
+  { roots }: ResolvedSlidevOptions,
+  overrideConfigs: InlineConfig,
   config: InlineConfig,
   command: 'serve' | 'build',
 ) {
   const configEnv: ConfigEnv = {
-    mode: 'development',
+    mode: command === 'build' ? 'production' : 'development',
     command,
   }
-  // Merge theme & addon configs
+  // Merge theme & addon & user configs
   const files = roots.map(i => join(i, 'vite.config.ts'))
 
   for await (const file of files) {
@@ -95,11 +95,7 @@ export async function mergeViteConfigs(
   }
 
   // Merge viteConfig argument
-  config = mergeConfig(config, viteConfig)
-
-  // Merge local config (slidev options only)
-  const localConfig = await resolveConfig({}, command, entry)
-  config = mergeConfig(config, { slidev: localConfig.slidev || {} })
+  config = mergeConfig(config, overrideConfigs)
 
   return config
 }
