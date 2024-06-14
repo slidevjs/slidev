@@ -33,11 +33,11 @@ const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCo
 function mergeSlideNumbers(slides: { index: number }[]): string {
   const indexes = slides.map(s => s.index + 1)
   const merged = [[indexes[0], indexes[0]]]
-  for (const index of indexes) {
-    if (merged.at(-1)[1] + 1 === index)
-      merged.at(-1)[1] = index
+  for (let i = 1; i < indexes.length; i++) {
+    if (merged[merged.length - 1][1] + 1 === indexes[i])
+      merged[merged.length - 1][1] = indexes[i]
     else
-      merged.push([index, index])
+      merged.push([indexes[i], indexes[i]])
   }
   return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
 }
