@@ -21,17 +21,16 @@ export const usePreviewWebview = createSingletonComposable(() => {
     hasPrev: false,
   })
   const initializedClientId = ref('')
-  const forceRefreshId = ref(0)
 
-  const { view, postMessage } = useWebviewView(
+  const { view, postMessage, forceRefresh } = useWebviewView(
     'slidev-preview',
-    () => `${html.value}<!--${forceRefreshId.value}-->`,
+    html,
     {
-      enableScripts: true,
-      localResourceRoots: [extensionContext.value!.extensionUri],
-    },
-    {
-      webviewOptions: { retainContextWhenHidden: true },
+      retainContextWhenHidden: true,
+      webviewOptions: {
+        enableScripts: true,
+        localResourceRoots: [extensionContext.value!.extensionUri],
+      },
       async onDidReceiveMessage(data) {
         if (data.type === 'command') {
           commands.executeCommand(`slidev.${data.command}`)
@@ -55,7 +54,7 @@ export const usePreviewWebview = createSingletonComposable(() => {
     refreshState()
     if (!view.value)
       return
-    forceRefreshId.value++
+    forceRefresh()
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }

@@ -344,6 +344,6 @@
     "@types/vscode": "^1.89.0",
     "get-port-please": "^3.1.2",
     "ovsx": "^0.9.1",
-    "reactive-vscode": "0.0.1-beta.4"
+    "reactive-vscode": "0.2.0-beta.1"
   }
 }

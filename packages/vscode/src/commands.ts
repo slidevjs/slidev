@@ -9,7 +9,7 @@ import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { usePreviewWebview } from './views/previewWebview'
-import type { SlidesTreeElement } from './views/slidesTree'
+import type { SlidesTreeNode } from './views/slidesTree'
 
 export function useCommands() {
   useCommand('slidev.enable-extension', () => forceEnabled.value = true)
@@ -146,7 +146,7 @@ export function useCommands() {
   useCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
   useCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
 
-  useCommand('slidev.remove-slide', async ({ slide }: SlidesTreeElement) => {
+  useCommand('slidev.remove-slide', async ({ slide }: SlidesTreeNode) => {
     const md = activeSlidevData.value!.markdownFiles[slide.filepath]
     md.slides.splice(md.slides.indexOf(slide), 1)
     await saveSlidevMarkdown(md)

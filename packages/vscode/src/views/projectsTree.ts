@@ -12,57 +12,48 @@ import { toRelativePath } from '../utils/toRelativePath'
 const nothingToCollapse = computed(() => [...projects.values()]
   .every(project => Object.keys(project.data.markdownFiles).length <= 1))
 
-interface ProjectsTreeNode {
-  data: SlidevProject | string
-  children?: ProjectsTreeNode[]
+function getProjectTreeItem(project: SlidevProject): TreeItem {
+  const active = activeEntry.value === project.entry
+  return {
+    label: getSlidesTitle(project.data),
+    description: `${toRelativePath(project.entry)}${project.port ? ` (port: ${project.port})` : ''}`,
+    resourceUri: Uri.file(project.entry),
+    iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
+    collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
+    contextValue: `<project><${active ? 'active' : 'inactive'}><${project.port ? 'up' : 'down'}>`,
+    command: {
+      title: 'Open',
+      command: 'vscode.open',
+      arguments: [Uri.file(project.entry)],
+    },
+  }
 }
 
-function getTreeItem({ data }: ProjectsTreeNode): TreeItem {
-  if (typeof data === 'string') {
-    // Imported file
-    return {
-      description: toRelativePath(data),
-      resourceUri: Uri.file(data),
-      iconPath: new ThemeIcon('file'),
-      collapsibleState: TreeItemCollapsibleState.None,
-      command: {
-        title: 'Open',
-        command: 'vscode.open',
-        arguments: [Uri.file(data)],
-      },
-    }
-  }
-  else {
-    // Slides project
-    const active = activeEntry.value === data.entry
-    return {
-      label: getSlidesTitle(data.data),
-      description: `${toRelativePath(data.entry)}${data.port ? ` (port: ${data.port})` : ''}`,
-      resourceUri: Uri.file(data.entry),
-      iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
-      collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
-      contextValue: `<project><${active ? 'active' : 'inactive'}><${data.port ? 'up' : 'down'}>`,
-      command: {
-        title: 'Open',
-        command: 'vscode.open',
-        arguments: [Uri.file(data.entry)],
-      },
-    }
+function getFileTreeItem(file: string): TreeItem {
+  return {
+    description: toRelativePath(file),
+    resourceUri: Uri.file(file),
+    iconPath: new ThemeIcon('file'),
+    collapsibleState: TreeItemCollapsibleState.None,
+    command: {
+      title: 'Open',
+      command: 'vscode.open',
+      arguments: [Uri.file(file)],
+    },
   }
 }
 
 export const useProjectsTree = createSingletonComposable(() => {
-  const treeData = computed<ProjectsTreeNode[]>(() => {
+  const treeData = computed(() => {
     return [...projects.values()].map(project => ({
-      data: project,
+      treeItem: getProjectTreeItem(project),
       children: project.data.watchFiles
         .filter(file => file !== project.entry)
-        .map(file => ({ data: file })),
+        .map(file => ({ treeItem: getFileTreeItem(file) })),
     }))
   })
 
   const treeView = useTreeView('slidev-projects-tree', treeData, {
-    getTreeItem,
     showCollapseAll: true,
   })
 

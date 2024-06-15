@@ -746,8 +746,8 @@ importers:
         specifier: ^0.9.1
         version: 0.9.1
       reactive-vscode:
-        specifier: 0.0.1-beta.4
-        version: 0.0.1-beta.4(@types/vscode@1.89.0)
+        specifier: 0.2.0-beta.1
+        version: 0.2.0-beta.1(@types/vscode@1.89.0)
 
 packages:
 
@@ -5399,8 +5399,8 @@ packages:
   react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  reactive-vscode@0.0.1-beta.4:
-    resolution: {integrity: sha512-NdnXrVT1uI6k6L2LAp21EhDAjNO+9WCey27RlYZae0OeYgK/oiE5iBSViHHUAddHKXN+I+ugBs3N1lG6LTIZuw==}
+  reactive-vscode@0.2.0-beta.1:
+    resolution: {integrity: sha512-vIgEMX/8YReF5Llci0xffnfCAZCpCUPqachhANcSpNOeawC9t5PG80IhKV4BHm8oukG5xoLCrpWRS9g2PhmnvA==}
     peerDependencies:
       '@types/vscode': ^1.89.0
 
@@ -11965,7 +11965,7 @@ snapshots:
 
   react-is@18.2.0: {}
 
-  reactive-vscode@0.0.1-beta.4(@types/vscode@1.89.0):
+  reactive-vscode@0.2.0-beta.1(@types/vscode@1.89.0):
     dependencies:
       '@types/vscode': 1.89.0
 
