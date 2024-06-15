@@ -80,4 +80,5 @@ export const HEADMATTER_FIELDS = [
   'htmlAttrs',
   'mdc',
   'contextMenu',
+  'wakeLock',
 ]
