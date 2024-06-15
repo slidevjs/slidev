@@ -16,15 +16,15 @@ Presentation slides for developers
 
 # What is Slidev?
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+Slidev is a slide maker and presentation tool designed for developers. It includes the following features:
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
+- 📝 **Text-based** - focus on your content with Markdown, then style it later
+- 🎨 **Themable** - themes can be shared and reused as npm packages
 - 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
+- 🤹 **Interactive** - embed Vue components to enhance your expressions
 - 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
+- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
 
 <br>
 <br>
@@ -77,4 +77,4 @@ class: "text-center"
 
 # Learn More
 
-[Documentations](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)
+[Documentation](https://sli.dev) / [GitHub Repo](https://github.com/slidevjs/slidev)
