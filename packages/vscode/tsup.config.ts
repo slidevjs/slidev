@@ -1,4 +1,4 @@
-import { copyFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { defineConfig } from 'tsup'
 
@@ -14,6 +14,9 @@ export default defineConfig({
   async onSuccess() {
     const assetsDir = join(__dirname, '../../assets')
     const resDir = join(__dirname, './dist/res')
+
+    if (!existsSync(resDir))
+      mkdirSync(resDir, { recursive: true })
 
     for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
       copyFileSync(resolve(assetsDir, file), resolve(resDir, file))
