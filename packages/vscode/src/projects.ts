@@ -3,7 +3,7 @@ import { basename, dirname } from 'node:path'
 import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { load } from '@slidev/parser/fs'
 import { computed, markRaw, onScopeDispose, reactive, ref, watch, watchEffect } from '@vue/runtime-core'
-import { commands, window, workspace } from 'vscode'
+import { window, workspace } from 'vscode'
 import { slash } from '@antfu/utils'
 import { useLogger } from './views/logger'
 import { findShallowestPath } from './utils/findShallowestPath'
@@ -30,7 +30,9 @@ async function addExistingProjects() {
       .forEach(file => files.add(file.fsPath))
   }
   for (const file of files) {
-    (await addProjectEffect(slash(file)))()
+    const path = slash(file)
+    if (!projects.has(path))
+      (await addProjectEffect(path))()
   }
 }
 
@@ -75,14 +77,14 @@ export function useProjects() {
   onScopeDispose(() => fsWatcher.dispose())
 
   fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath)
+    const path = slash(uri.fsPath).toLowerCase()
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
     pendingUpdate && (pendingUpdate.cancelled = true)
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
-      if (!project.data.watchFiles.includes(path))
+      if (!project.data.watchFiles.some(f => f.toLowerCase() === path))
         continue
 
       if (existsSync(project.entry)) {
