@@ -284,6 +284,21 @@
           "scope": "window",
           "description": "Sync preview window with editor cursor",
           "default": true
+        },
+        "slidev.include": {
+          "type": "array",
+          "scope": "window",
+          "description": "Glob patterns to include slides entries",
+          "items": {
+            "type": "string"
+          },
+          "default": ["**/slides.md"]
+        },
+        "slidev.exclude": {
+          "type": "string",
+          "scope": "window",
+          "description": "A glob pattern to exclude slides entries",
+          "default": "**/node_modules/**"
         }
       }
     },

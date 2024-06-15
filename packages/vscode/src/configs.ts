@@ -18,6 +18,8 @@ export const forceEnabled = useConfiguration<boolean | null>('force-enabled', nu
 export const configuredPort = useConfiguration('port', 3030)
 export const displayAnnotations = useConfiguration('annotations', true)
 export const previewSync = useConfiguration('preview-sync', true)
+export const include = useConfiguration<string[]>('include', ['**/slides.md'])
+export const exclude = useConfiguration<string>('exclude', '**/node_modules/**')
 
 export const isDarkTheme = ref(true)
 

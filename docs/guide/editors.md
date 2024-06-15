@@ -65,6 +65,14 @@ In the **preview webview**, you can click the <codicon-run-all /> icon to start 
 
 There are also some **commands** you can use. Type `Slidev` in the command palette to see them.
 
+You can add glob patterns to the `slidev.include` configuration to include files as Slidev entries. The default value is `["**/*.md"]`. Example:
+
+```json
+{
+  "slidev.include": ["**/presentation.md"]
+}
+```
+
 ## Prettier Plugin
 
 Slidev also provides a Prettier plugin to format your slides. You can use it with your favorite editor that supports Prettier. Docs for the plugin can be found [here](https://github.com/slidevjs/prettier-plugin).
