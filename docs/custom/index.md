@@ -59,6 +59,8 @@ selectable: true
 record: dev
 # enable Slidev's context menu, can be boolean, 'dev' or 'build'
 contextMenu: true
+# enable wake lock, can be boolean, 'dev' or 'build'
+wakeLock: true
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto
