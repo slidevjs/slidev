@@ -1,13 +1,13 @@
 import { useWakeLock as useVueUseWakeLock } from '@vueuse/core'
-import { onMounted, onUnmounted } from 'vue'
+import { watchEffect } from 'vue'
+import { wakeLockEnabled } from '../state'
 
 export function useWakeLock() {
   const { request, release } = useVueUseWakeLock()
 
-  onMounted(() => {
-    request('screen')
-  })
-  onUnmounted(() => {
-    release()
+  watchEffect((onCleanup) => {
+    if (wakeLockEnabled.value)
+      request('screen')
+    onCleanup(release)
   })
 }
