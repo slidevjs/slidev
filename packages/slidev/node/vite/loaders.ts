@@ -92,7 +92,7 @@ export function createSlidesLoader(
 
       const layouts: Record<string, string> = {}
 
-      for (const root of [...roots, clientRoot]) {
+      for (const root of [clientRoot, ...roots]) {
         const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
           cwd: root,
           absolute: true,
@@ -100,10 +100,8 @@ export function createSlidesLoader(
         })
 
         for (const layoutPath of layoutPaths) {
-          const layout = path.basename(layoutPath).replace(/\.\w+$/, '')
-          if (layouts[layout])
-            continue
-          layouts[layout] = layoutPath
+          const layoutName = path.basename(layoutPath).replace(/\.\w+$/, '')
+          layouts[layoutName] = layoutPath
         }
       }
 
@@ -314,6 +312,7 @@ export function createSlidesLoader(
                 ...withRenderedNote(slide),
                 frontmatter: undefined,
                 source: undefined,
+                importChain: undefined,
                 // remove raw content in build, optimize the bundle size
                 ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
               }

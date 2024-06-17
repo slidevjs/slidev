@@ -6,7 +6,7 @@ import type { MarkdownTransformContext } from '@slidev/types'
  */
 export function transformMermaid(ctx: MarkdownTransformContext) {
   ctx.s.replace(
-    /^```mermaid *(\{[^}]*\})?\n([\s\S]+?)\n```/gm,
+    /^```mermaid *(\{[^\n]*\})?\n([\s\S]+?)\n```/gm,
     (full, options = '', code = '') => {
       code = code.trim()
       options = options.trim() || '{}'

@@ -4,8 +4,8 @@
 
 ### PDF
 
-> Exporting to PDF or PNG relies on [Playwright](https://playwright.dev) for rendering. You will therefore need to install [`playwright-chromium`](https://npmjs.com/package/playwright-chromium) to use this feature.
-> If you are doing exporting in a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
+> Exporting to PDF, PPTX, or PNG relies on [Playwright](https://playwright.dev) for rendering. You will therefore need to install [`playwright-chromium`](https://npmjs.com/package/playwright-chromium) to use this feature.
+> If you are exporting within a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
 
 1. Install `playwright-chromium`:
 
@@ -37,13 +37,13 @@ $ slidev export --format md
 
 ### PPTX (Microsoft PowerPoint)
 
-Slidev can also export your slides to a PPTX file:
+Slidev can also export your slides as a PPTX file:
 
 ```bash
 $ slidev export --format pptx
 ```
 
-Note that all the slides in the PPTX file will be exported as images, so the text will not be selectable.
+Note that all the slides in the PPTX file will be exported as images, so the text will not be selectable. Presenter notes will be conveyed into the PPTX file on a per-slide basis.
 
 In this mode, the `--with-clicks` option is enabled by default. To disable it, use `--with-clicks false`.
 
@@ -147,7 +147,7 @@ docker run --name slidev --rm -it \
     tangramor/slidev:playwright
 ```
 
-Then you can use the export feature like following under your work folder:
+Then you can use the export feature like the following under your work folder:
 
 ```bash
 docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
@@ -155,7 +155,7 @@ docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
 
 ## Troubleshooting
 
-### Timeout
+### Timeouts
 
 For big presentations you might want to increase the Playwright timeout with `--timeout`:
 

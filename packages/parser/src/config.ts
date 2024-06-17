@@ -39,6 +39,7 @@ export function getDefaultConfig(): SlidevConfig {
     transition: undefined,
     editor: true,
     contextMenu: undefined,
+    wakeLock: true,
   }
 }
 

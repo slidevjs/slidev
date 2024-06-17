@@ -49,23 +49,23 @@ transition: fade-out
 
 # What is Slidev?
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+Slidev is a slide maker and accompanying presentation tool designed for developers. It consists of the following features:
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
+- 📝 **Text-based** - focus on the content with Markdown, and apply styles later
+- 🎨 **Themable** - themes can be shared and used as npm packages
 - 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
+- 🤹 **Interactive** - embedding Vue components to enhance your slides
 - 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
+- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
 
 <br>
 <br>
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+Read more about Slidev in [Why Slidev?](https://sli.dev/guide/why)
 
 <!--
-You can have `style` tag in markdown to override the style for the current page.
+You can have `style` tags in markdown to override the style for the current page.
 Learn more: https://sli.dev/guide/syntax#embedded-styles
 -->
 
@@ -104,7 +104,7 @@ level: 2
 
 # Navigation
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+Hover on the bottom-left corner to see the navigation's control panel, [learn more](https://sli.dev/guide/navigation.html)
 
 ## Keyboard Shortcuts
 
@@ -131,7 +131,7 @@ image: https://cover.sli.dev
 
 # Code
 
-Use code snippets and get the highlighting directly, and even types hover![^1]
+Use code snippets and get automatic highlighting, and even types hover![^1]
 
 ```ts {all|5|7|7-8|10|all} twoslash
 // TwoSlash enables TypeScript hover information
@@ -176,7 +176,7 @@ doubled.value = 2
 
 You can use Vue components directly inside your slides.
 
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
+We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. Adding your own custom components is also super easy.
 
 ```html
 <Counter :count="10" />
@@ -200,7 +200,7 @@ Check out [the guides](https://sli.dev/builtin/components.html) for more.
 </div>
 
 <!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
+Presenter notes with **bold**, *italic*, and ~~strike~~ text.
 
 Also, HTML elements are valid:
 <div class="flex w-full">
@@ -215,7 +215,7 @@ class: px-20
 
 # Themes
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switch between themes on a per-slide basis with just **one change** in your frontmatter:
 
 <div grid="~ cols-2 gap-2" m="t-2">
 
@@ -294,7 +294,7 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
   </div>
 </div>
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
+<!-- vue script setup scripts can be directly used in markdown, and will only affect the current page -->
 <script setup lang="ts">
 const final = {
   x: 0,
@@ -432,4 +432,4 @@ class: text-center
 
 # Learn More
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)

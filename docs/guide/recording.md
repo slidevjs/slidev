@@ -1,6 +1,6 @@
 # Recording
 
-Slidev has a built-in recording and camera view. You can use them to record your presentation easily in one place.
+Slidev has a built-in recording feature, as well as a camera view. You can use them to record your presentation easily in one simple tool rather than juggling a bunch of disparate recording options while also giving a talk.
 
 ## Camera View
 
@@ -10,7 +10,7 @@ Click the <carbon-user-avatar class="inline-icon-btn"/> button in the navigation
 
 ## Recording
 
-Clicking the <carbon-video class="inline-icon-btn"/> button in the navigation panel will bring up a dialog for you. Here you can choose to either record your camera embedded in your slides or to separate them into two video files.
+Clicking the <carbon-video class="inline-icon-btn"/> button in the navigation panel will bring up a dialog for you. Here you can choose to either record your camera output embedded in your slides or to separate them into two video files.
 
 This feature is powered by [RecordRTC](https://github.com/muaz-khan/RecordRTC) and uses the [WebRTC API](https://webrtc.org/).
 
