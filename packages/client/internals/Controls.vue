@@ -2,16 +2,16 @@
 import { shallowRef } from 'vue'
 import { showInfoDialog, showRecordingDialog } from '../state'
 import { configs } from '../env'
-import { useNav } from '../composables/useNav'
+import { useFeatures } from '../composables/useFeatures'
 import QuickOverview from './QuickOverview.vue'
 import InfoDialog from './InfoDialog.vue'
 import Goto from './Goto.vue'
 import ContextMenu from './ContextMenu.vue'
 
-const { isEmbedded } = useNav()
-const drawingEnabled = __SLIDEV_FEATURE_DRAWINGS__ && !configs.drawings.presenterOnly && !isEmbedded.value
+const features = useFeatures()
+
 const DrawingControls = shallowRef<any>()
-if (drawingEnabled)
+if (__SLIDEV_FEATURE_DRAWINGS__ && features.allowToDraw)
   import('../internals/DrawingControls.vue').then(v => DrawingControls.value = v.default)
 
 const WebCamera = shallowRef<any>()
@@ -23,7 +23,7 @@ if (__SLIDEV_FEATURE_RECORD__) {
 </script>
 
 <template>
-  <DrawingControls v-if="drawingEnabled && DrawingControls" />
+  <DrawingControls v-if="DrawingControls" />
   <QuickOverview />
   <Goto />
   <WebCamera v-if="WebCamera" />

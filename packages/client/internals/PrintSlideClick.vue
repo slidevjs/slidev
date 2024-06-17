@@ -44,15 +44,7 @@ provideLocal(injectionSlidevContext, reactive({
       :class="getSlideClass(route)"
       :route="route"
     />
-    <template
-      v-if="
-        (__SLIDEV_FEATURE_DRAWINGS__
-          || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
-          && DrawingPreview
-      "
-    >
-      <DrawingPreview :page="route.no" />
-    </template>
+    <DrawingPreview v-if="DrawingPreview" :page="route.no" />
 
     <GlobalTop />
   </div>

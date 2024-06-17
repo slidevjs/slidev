@@ -82,9 +82,7 @@ function onAfterLeave() {
   <!-- Global Top -->
   <GlobalTop />
 
-  <template v-if="(__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__) && DrawingLayer">
-    <DrawingLayer />
-  </template>
+  <DrawingLayer v-if="DrawingLayer" />
 </template>
 
 <style scoped>

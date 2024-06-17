@@ -221,7 +221,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
 
 export function getDefine(options: ResolvedSlidevOptions): Record<string, string> {
   return {
+    __MODE__: JSON.stringify(options.mode),
     __DEV__: options.mode === 'dev' ? 'true' : 'false',
+    __SLIDEV_CONFIG__: JSON.stringify(options.data.config),
     __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
     __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
     __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
@@ -230,6 +232,7 @@ export function getDefine(options: ResolvedSlidevOptions): Record<string, string
     __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),
     __SLIDEV_FEATURE_PRESENTER__: JSON.stringify(options.data.config.presenter === true || options.data.config.presenter === options.mode),
     __SLIDEV_FEATURE_PRINT__: JSON.stringify(options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download))),
+    __SLIDEV_FEATURE_CONTEXT_MENU__: JSON.stringify(options.data.config.contextMenu === undefined || options.data.config.contextMenu === true || options.data.config.contextMenu === options.mode),
     __SLIDEV_HAS_SERVER__: options.mode !== 'build' ? 'true' : 'false',
   }
 }

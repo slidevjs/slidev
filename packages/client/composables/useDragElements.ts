@@ -7,6 +7,7 @@ import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, inj
 import { makeId } from '../logic/utils'
 import { activeDragElement } from '../state'
 import { directiveInject } from '../utils'
+import { isTrusted } from '../env'
 import { useSlideBounds } from './useSlideBounds'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
@@ -21,7 +22,7 @@ export type DragElementsUpdater = (id: string, posStr: string, type: DragElement
 const map: Record<number, DragElementsUpdater> = {}
 
 export function useDragElementsUpdater(no: number) {
-  if (!(__DEV__ && __SLIDEV_FEATURE_EDITOR__))
+  if (!(__SLIDEV_FEATURE_EDITOR__ && isTrusted.value))
     return () => {}
 
   if (map[no])

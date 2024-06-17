@@ -5,6 +5,7 @@ import type { ContextMenuItem } from '@slidev/types'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
 import { fullscreen, showEditor, toggleOverview } from '../state'
+import { useFeatures } from '../composables/useFeatures'
 import setups from '#slidev/setups/context-menu'
 
 import IconArrowLeft from '~icons/carbon/arrow-left'
@@ -37,10 +38,9 @@ export default () => {
     isPresenter,
     enterPresenter,
     exitPresenter,
-    isEmbedded,
-    isPresenterAvailable,
   } = useNav()
   const { drawingEnabled } = useDrawings()
+  const features = useFeatures()
   const {
     isFullscreen,
     toggle: toggleFullscreen,
@@ -78,12 +78,12 @@ export default () => {
         disabled: currentPage.value >= total.value,
       },
       'separator',
-      {
+      __SLIDEV_FEATURE_EDITOR__ && features.allowToEdit && {
         icon: IconTextNotationToggle,
         label: showEditor.value ? 'Hide editor' : 'Show editor',
         action: () => (showEditor.value = !showEditor.value),
       },
-      {
+      __SLIDEV_FEATURE_DRAWINGS__ && (features.allowToDraw || drawingEnabled.value) && {
         icon: IconPen,
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
         action: () => (drawingEnabled.value = !drawingEnabled.value),
@@ -93,17 +93,17 @@ export default () => {
         label: 'Show slide overview',
         action: toggleOverview,
       },
-      isPresenter.value && {
+      __SLIDEV_FEATURE_PRESENTER__ && isPresenter.value && {
         icon: IconPresentationFile,
         label: 'Exit Presenter Mode',
         action: exitPresenter,
       },
-      __SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable.value && {
+      __SLIDEV_FEATURE_PRESENTER__ && features.enterPresenter && {
         icon: IconUserSpeaker,
         label: 'Enter Presenter Mode',
         action: enterPresenter,
       },
-      !isEmbedded.value && {
+      {
         icon: isFullscreen.value ? IconMinimize : IconMaximize,
         label: isFullscreen.value ? 'Close fullscreen' : 'Enter fullscreen',
         action: toggleFullscreen,

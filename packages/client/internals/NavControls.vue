@@ -6,6 +6,7 @@ import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, sh
 import { configs } from '../env'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useFeatures } from '../composables/useFeatures'
 import Settings from './Settings.vue'
 import MenuButton from './MenuButton.vue'
 import VerticalDivider from './VerticalDivider.vue'
@@ -25,7 +26,6 @@ const {
   hasPrev,
   isEmbedded,
   isPresenter,
-  isPresenterAvailable,
   next,
   prev,
   total,
@@ -36,6 +36,7 @@ const {
   brush,
   drawingEnabled,
 } = useDrawings()
+const features = useFeatures()
 
 const md = breakpoints.smaller('md')
 const { isFullscreen, toggle: toggleFullscreen } = fullscreen
@@ -102,7 +103,7 @@ if (__SLIDEV_FEATURE_RECORD__)
         </IconButton>
       </template>
 
-      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
+      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && features.allowToDraw">
         <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
           <carbon:pen />
           <div
@@ -118,12 +119,12 @@ if (__SLIDEV_FEATURE_RECORD__)
         <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
           <carbon:presentation-file />
         </IconButton>
-        <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" title="Presenter Mode" @click="enterPresenter">
+        <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && features.enterPresenter" title="Presenter Mode" @click="enterPresenter">
           <carbon:user-speaker />
         </IconButton>
 
         <IconButton
-          v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
+          v-if="__SLIDEV_FEATURE_EDITOR__ && features.allowToEdit"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
           class="lt-md:hidden"
           @click="showEditor = !showEditor"

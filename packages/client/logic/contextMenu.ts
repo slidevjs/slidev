@@ -2,7 +2,6 @@ import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { shallowRef } from 'vue'
 import setupContextMenu from '../setup/context-menu'
-import { configs, mode } from '../env'
 import { useNav } from '../composables/useNav'
 
 export const currentContextMenu = shallowRef<null | {
@@ -24,8 +23,9 @@ export function closeContextMenu() {
 }
 
 export function onContextMenu(ev: MouseEvent) {
-  if (configs.contextMenu !== true && configs.contextMenu !== undefined && configs.contextMenu !== mode)
+  if (!__SLIDEV_FEATURE_CONTEXT_MENU__)
     return
+
   if (ev.shiftKey || ev.defaultPrevented)
     return
 
