@@ -29,7 +29,7 @@ export function useDevServer(project: SlidevProject) {
     if (isTerminalActive())
       return
     port.value ??= await getPort()
-    sendText(`npm exec slidev -- --port ${port.value} ${basename(project.entry)}`)
+    sendText(`npm exec slidev -- --port ${port.value} ${JSON.stringify(basename(project.entry))}`)
   }
 
   function stop() {
