@@ -10,6 +10,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
+import { useWakeLock } from '../composables/useWakeLock'
 import { useDrawings } from '../composables/useDrawings'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 
@@ -32,6 +33,8 @@ function onClick(e: MouseEvent) {
 
 useSwipeControls(root)
 registerShortcuts()
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 

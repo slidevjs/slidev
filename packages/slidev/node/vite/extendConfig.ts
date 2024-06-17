@@ -230,6 +230,7 @@ export function getDefine(options: ResolvedSlidevOptions): Record<string, string
     __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),
     __SLIDEV_FEATURE_PRESENTER__: JSON.stringify(options.data.config.presenter === true || options.data.config.presenter === options.mode),
     __SLIDEV_FEATURE_PRINT__: JSON.stringify(options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download))),
+    __SLIDEV_FEATURE_WAKE_LOCK__: JSON.stringify(options.data.config.wakeLock === true || options.data.config.wakeLock === options.mode),
     __SLIDEV_HAS_SERVER__: options.mode !== 'build' ? 'true' : 'false',
   }
 }

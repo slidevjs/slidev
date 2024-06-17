@@ -25,6 +25,7 @@ export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.v
 export const currentCamera = useLocalStorage<string>('slidev-camera', 'default', { listenToStorageChanges: false })
 export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
+export const wakeLockEnabled = useLocalStorage('slidev-wake-lock', true)
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
