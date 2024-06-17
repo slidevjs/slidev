@@ -24,11 +24,14 @@ import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useWakeLock } from '../composables/useWakeLock'
 
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
 
 const {
   clicksContext,
