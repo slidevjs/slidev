@@ -1,3 +1,4 @@
+import { isDeepEqual } from '@antfu/utils'
 import type { Ref, ShallowRef } from '@vue/runtime-core'
 import { ref, shallowRef, watch } from '@vue/runtime-core'
 import type { ColorTheme, ConfigurationChangeEvent } from 'vscode'
@@ -9,8 +10,12 @@ const configKeys: Record<string, ShallowRef<unknown>> = {}
 
 function useConfiguration<T>(key: string, defaultValue: T, writeBack = false): Ref<T> {
   const r = configKeys[key] = shallowRef<T>(config.get<T>(key) ?? defaultValue)
-  if (writeBack)
-    watch(r, v => config.update(key, v))
+  if (writeBack) {
+    watch(r, (v) => {
+      if (!isDeepEqual(v, config.get<T>(key)))
+        config.update(key, v)
+    })
+  }
   return r
 }
 
@@ -18,6 +23,8 @@ export const forceEnabled = useConfiguration<boolean | null>('force-enabled', nu
 export const configuredPort = useConfiguration('port', 3030)
 export const displayAnnotations = useConfiguration('annotations', true)
 export const previewSync = useConfiguration('preview-sync', true)
+export const include = useConfiguration<string[]>('include', ['**/slides.md'], true)
+export const exclude = useConfiguration<string>('exclude', '**/node_modules/**')
 
 export const isDarkTheme = ref(true)
 

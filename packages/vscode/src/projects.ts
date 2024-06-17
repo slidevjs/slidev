@@ -2,13 +2,13 @@ import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { load } from '@slidev/parser/fs'
-import { computed, markRaw, onScopeDispose, reactive, ref, watchEffect } from '@vue/runtime-core'
-import { commands, window, workspace } from 'vscode'
+import { computed, markRaw, onScopeDispose, reactive, ref, watch, watchEffect } from '@vue/runtime-core'
+import { window, workspace } from 'vscode'
 import { slash } from '@antfu/utils'
 import { useLogger } from './views/logger'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { useVscodeContext } from './composables/useVscodeContext'
-import { forceEnabled } from './configs'
+import { exclude, forceEnabled, include } from './configs'
 
 export interface SlidevProject {
   readonly entry: string
@@ -23,17 +23,21 @@ export const activeProject = computed(() => activeEntry.value ? projects.get(act
 export const activeSlidevData = computed(() => activeProject.value?.data)
 export const activeUserRoot = computed(() => activeProject.value?.userRoot)
 
-async function loadExistingProjects() {
-  const files = await workspace.findFiles('**/*.md', '**/node_modules/**')
+async function addExistingProjects() {
+  const files = new Set<string>()
+  for (const glob of include.value) {
+    (await workspace.findFiles(glob, exclude.value))
+      .forEach(file => files.add(file.fsPath))
+  }
   for (const file of files) {
-    const path = slash(file.fsPath)
-    if (basename(path) === 'slides.md')
+    const path = slash(file)
+    if (!projects.has(path))
       (await addProjectEffect(path))()
   }
 }
 
 export async function rescanProjects() {
-  await loadExistingProjects()
+  await addExistingProjects()
   for (const project of projects.values()) {
     if (!existsSync(project.entry)) {
       projects.delete(project.entry)
@@ -48,7 +52,7 @@ export function useProjects() {
   const logger = useLogger()
 
   async function init() {
-    await loadExistingProjects()
+    await addExistingProjects()
     await autoSetActiveEntry()
   }
   init()
@@ -69,55 +73,39 @@ export function useProjects() {
 
   let pendingUpdate: { cancelled: boolean } | null = null
 
-  // TODO: Not sure why file creation is not being detected
   const fsWatcher = workspace.createFileSystemWatcher('**/*.md')
+  onScopeDispose(() => fsWatcher.dispose())
+
   fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath)
+    const path = slash(uri.fsPath).toLowerCase()
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
     pendingUpdate && (pendingUpdate.cancelled = true)
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
-    let maybeNewEntry = path.endsWith('.md') && basename(path).toLowerCase() !== 'readme.md'
     for (const project of projects.values()) {
-      if (project.data.watchFiles.includes(path))
-        maybeNewEntry = false
-      else
+      if (!project.data.watchFiles.some(f => f.toLowerCase() === path))
         continue
 
       if (existsSync(project.entry)) {
         const newData = markRaw(await load(project.userRoot, project.entry))
-        maybeNewEntry &&= newData.watchFiles.includes(path)
         effects.push(() => {
           project.data = newData
           logger.info(`Project ${project.entry} updated.`)
         })
       }
-      else {
-        effects.push(() => {
-          projects.delete(project.entry)
-          logger.info(`Project ${project.entry} removed.`)
-          if (activeEntry.value === project.entry) {
-            window.showWarningMessage('The active slides file has been deleted. Please choose another one.', 'Choose another one')
-              .then(result => result && commands.executeCommand('slidev.choose-entry'))
-          }
-        })
-      }
+
       if (thisUpdate.cancelled)
         return
     }
 
-    if (basename(path).toLocaleLowerCase() === 'slides.md' && !projects.has(path))
-      effects.push(await addProjectEffect(path))
-
-    if (thisUpdate.cancelled)
-      return
-
     effects.map(effect => effect())
-    autoSetActiveEntry()
     logger.info(`All affected Slidev projects updated in ${Date.now() - startMs}ms.`)
   })
-  onScopeDispose(() => fsWatcher.dispose())
+  fsWatcher.onDidCreate(rescanProjects)
+  fsWatcher.onDidDelete(rescanProjects)
+
+  watch(include, rescanProjects)
 }
 
 export async function addProject(entry: string) {

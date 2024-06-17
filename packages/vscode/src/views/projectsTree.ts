@@ -58,7 +58,7 @@ export const useProjectsTree = createSingletonComposable(() => {
         return element
           ? typeof element === 'string'
             ? undefined
-            : element.data.watchFiles.filter(file => file !== element.entry)
+            : element.data.watchFiles.filter(file => file.toLowerCase() !== element.entry.toLowerCase())
           : [...projects.values()]
       },
     },

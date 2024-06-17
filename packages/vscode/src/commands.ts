@@ -1,11 +1,13 @@
+import { relative } from 'node:path'
 import { onScopeDispose } from '@vue/runtime-core'
 import type { Disposable } from 'vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, commands, window, workspace } from 'vscode'
 import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
+import { slash } from '@antfu/utils'
 import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
-import { configuredPort, forceEnabled, previewSync } from './configs'
+import { configuredPort, forceEnabled, include, previewSync } from './configs'
 import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
@@ -41,6 +43,11 @@ export function useCommands() {
     if (selected) {
       for (const entry of selected)
         await addProject(entry)
+      if (workspace.workspaceFolders) {
+        const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
+        const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
+        include.value = [...include.value, ...relatives]
+      }
     }
   })
 
