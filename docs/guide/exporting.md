@@ -174,7 +174,7 @@ $ slidev export --wait 10000
 There is also a `--wait-until` option to wait for a state before exporting each slide:
 
 ```bash
-$ slidev export --wait-until .my-selector
+$ slidev export --wait-until none
 ```
 
 - `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
