@@ -177,6 +177,8 @@ There is also a `--wait-until` option to wait for a state before exporting each 
 $ slidev export --wait-until none
 ```
 
+Possible values:
+
 - `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
 - `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
 - `'load'` - consider operation to be finished when the `load` event is fired.
