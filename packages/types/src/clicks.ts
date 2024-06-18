@@ -55,14 +55,16 @@ export interface ClicksInfo {
 export interface ClicksContext {
   current: number
   readonly clicksStart: number
-  readonly relativeOffsets: Map<ClicksElement, number>
+  readonly relativeSizeMap: Map<ClicksElement, number>
   readonly maxMap: Map<ClicksElement, number>
   calculateSince: (at: RawSingleAtValue, size?: number) => ClicksInfo | null
   calculateRange: (at: RawRangeAtValue) => ClicksInfo | null
   calculate: (at: RawAtValue) => ClicksInfo | null
   register: (el: ClicksElement, info: Pick<ClicksInfo, 'delta' | 'max'> | null) => void
   unregister: (el: ClicksElement) => void
+  readonly isMounted: boolean
   onMounted: () => void
+  onUnmounted: () => void
   readonly currentOffset: number
   readonly total: number
 }

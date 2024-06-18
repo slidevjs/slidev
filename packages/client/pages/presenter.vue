@@ -40,7 +40,6 @@ const {
   hasNext,
   nextRoute,
   slides,
-  queryClicks,
   getPrimaryClicks,
   total,
 } = useNav()
@@ -67,10 +66,10 @@ const nextFrameClicksCtx = computed(() => {
 })
 
 watch(
-  [currentSlideRoute, queryClicks],
+  nextFrame,
   () => {
-    if (nextFrameClicksCtx.value)
-      nextFrameClicksCtx.value.current = nextFrame.value![1]
+    if (nextFrameClicksCtx.value && nextFrame.value)
+      nextFrameClicksCtx.value.current = nextFrame.value[1]
   },
   { immediate: true },
 )

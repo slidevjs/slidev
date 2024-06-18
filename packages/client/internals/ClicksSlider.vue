@@ -39,7 +39,7 @@ function onMousedown() {
   <div
     class="flex gap-1 items-center select-none"
     :title="`Clicks in this slide: ${length}`"
-    :class="length ? '' : 'op50'"
+    :class="length && props.clicksContext.isMounted ? '' : 'op50'"
   >
     <div class="flex gap-0.5 items-center min-w-16 font-mono mr1">
       <carbon:cursor-1 text-sm op50 />
