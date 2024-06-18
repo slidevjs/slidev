@@ -182,7 +182,9 @@ $ slidev export --wait-until .my-selector
 - `'load'` - consider operation to be finished when the `load` event is fired.
 - `'none'` - do not wait for any event.
 
+::: warning
 When specifying values other than `'networkidle'`, please make sure the printed slides are complete and correct. If some contents are missing, you may need to use the `--wait` option.
+:::
 
 ### Executable path
 
