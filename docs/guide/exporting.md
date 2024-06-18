@@ -165,11 +165,24 @@ $ slidev export --timeout 60000
 
 ### Wait
 
-Some parts of your slides may require a longer time to render. You can use the `--wait` option to have an extra delay before exporting.
+Some parts of your slides may require a longer time to render. You can use the `--wait` option to have an extra delay before exporting:
 
 ```bash
 $ slidev export --wait 10000
 ```
+
+There is also a `--wait-until` option to wait for a state before exporting each slide:
+
+```bash
+$ slidev export --wait-until .my-selector
+```
+
+- `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
+- `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
+- `'load'` - consider operation to be finished when the `load` event is fired.
+- `'none'` - do not wait for any event.
+
+When specifying values other than `'networkidle'`, please make sure the printed slides are complete and correct. If some contents are missing, you may need to use the `--wait` option.
 
 ### Executable path
 

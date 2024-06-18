@@ -8,6 +8,7 @@ export interface ExportArgs extends CommonArgs {
   'format'?: string
   'timeout'?: number
   'wait'?: number
+  'wait-until'?: string
   'range'?: string
   'dark'?: boolean
   'with-clicks'?: boolean

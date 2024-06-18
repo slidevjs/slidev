@@ -582,6 +582,11 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'number',
       describe: 'wait for the specified ms before exporting',
     })
+    .option('wait-until', {
+      type: 'string',
+      choices: ['networkidle', 'load', 'domcontentloaded', 'none'],
+      describe: 'wait until the specified event before exporting each slide',
+    })
     .option('range', {
       type: 'string',
       describe: 'page ranges to export, for example "1,4-5,6"',
