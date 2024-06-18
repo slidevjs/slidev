@@ -139,7 +139,7 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-  const current = +(props.clicksContext?.current ?? CLICKS_MAX)
+  const current = props.clicksContext?.current ?? CLICKS_MAX
   applyHighlight.value?.(current)
 })
 </script>
