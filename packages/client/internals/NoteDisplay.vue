@@ -89,20 +89,19 @@ function processNote() {
 
   // Apply
   return (current: number) => {
-    const disabled = current < 0 || current >= CLICKS_MAX || !props.highlight
+    const enabled = props.highlight
     for (const [parent, clicks] of parentsMap)
-      parent.classList.toggle(CLASS_FADE, !disabled && !clicks.some(([_, c]) => c === current))
+      parent.classList.toggle(CLASS_FADE, enabled && !clicks.some(([_, c]) => c === current))
     for (const [parent, clicks] of siblingsMap)
-      parent.classList.toggle(CLASS_FADE, !disabled && clicks !== current)
+      parent.classList.toggle(CLASS_FADE, enabled && clicks !== current)
     for (const [marker, clicks] of markersMap) {
       marker.classList.remove(CLASS_FADE)
-      marker.classList.toggle(`${CLASS_MARKER}-past`, !disabled && clicks < current)
-      marker.classList.toggle(`${CLASS_MARKER}-active`, !disabled && clicks === current)
-      marker.classList.toggle(`${CLASS_MARKER}-next`, !disabled && clicks === current + 1)
-      marker.classList.toggle(`${CLASS_MARKER}-future`, !disabled && clicks > current + 1)
-      marker.ondblclick = disabled
-        ? null
-        : (e) => {
+      marker.classList.toggle(`${CLASS_MARKER}-past`, enabled && clicks < current)
+      marker.classList.toggle(`${CLASS_MARKER}-active`, enabled && clicks === current)
+      marker.classList.toggle(`${CLASS_MARKER}-next`, enabled && clicks === current + 1)
+      marker.classList.toggle(`${CLASS_MARKER}-future`, enabled && clicks > current + 1)
+      marker.ondblclick = enabled
+        ? (e) => {
             emit('markerDblclick', e, clicks)
             if (e.defaultPrevented)
               return
@@ -110,13 +109,14 @@ function processNote() {
             e.stopPropagation()
             e.stopImmediatePropagation()
           }
-      marker.onclick = disabled
-        ? null
-        : (e) => {
+        : null
+      marker.onclick = enabled
+        ? (e) => {
             emit('markerClick', e, clicks)
           }
+        : null
 
-      if (!disabled && props.autoScroll && clicks === current)
+      if (!enabled && props.autoScroll && clicks === current)
         marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
     }
   }
