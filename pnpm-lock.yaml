@@ -245,8 +245,8 @@ importers:
         specifier: ^10.10.0
         version: 10.10.0(vue@3.4.27(typescript@5.4.5))
       typeit:
-        specifier: ^8.8.3
-        version: 8.8.3
+        specifier: 8.1.0
+        version: 8.1.0
     devDependencies:
       '@iconify/json':
         specifier: ^2.2.215
@@ -2064,9 +2064,6 @@ packages:
 
   '@types/vscode@1.89.0':
     resolution: {integrity: sha512-TMfGKLSVxfGfoO8JfIE/neZqv7QLwS4nwPwL/NwMvxtAY2230H2I4Z5xx6836pmJvMAzqooRQ4pmLm7RUicP3A==}
-
-  '@types/web-animations-js@2.2.16':
-    resolution: {integrity: sha512-ATELeWMFwj8eQiH0KmvsCl1V2lu/qx/CjOBmv4ADSZS5u8r4reMyjCXtxG7khqyiwH3IOMNdrON/Ugn94OUcRA==}
 
   '@types/web-bluetooth@0.0.14':
     resolution: {integrity: sha512-5d2RhCard1nQUC3aHcq/gHzWYO6K0WJmAbjO7mQJgCQKtZpgXxv1rOM6O/dBDhDYYVutk1sciOgNSe+5YyfM8A==}
@@ -6012,8 +6009,8 @@ packages:
   typed-rest-client@1.8.11:
     resolution: {integrity: sha512-5UvfMpd1oelmUPRbbaVnq+rHP7ng2cE4qoQkQeAqxRL6PklkxsM0g32/HL0yfvruK6ojQ5x8EE+HF4YV6DtuCA==}
 
-  typeit@8.8.3:
-    resolution: {integrity: sha512-K7nChkj6iyylUi713VBDULUXXLF0pfB6nFPVhNnXTKO2An7NzVz5fjoAHk2FAC3TFLiSnU+QsqhDmap17oBELw==}
+  typeit@8.1.0:
+    resolution: {integrity: sha512-cbDoGmPJQLqiDfAjan1DouphW1KBYRWrgNKkyctg9CRHK0sMN7wL9Sg9ctCrSnimJoVmM/QDxlsnonjxaEGUUg==}
 
   typescript@5.4.5:
     resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
@@ -7964,8 +7961,6 @@ snapshots:
   '@types/unist@3.0.2': {}
 
   '@types/vscode@1.89.0': {}
-
-  '@types/web-animations-js@2.2.16': {}
 
   '@types/web-bluetooth@0.0.14': {}
 
@@ -12591,9 +12586,7 @@ snapshots:
       tunnel: 0.0.6
       underscore: 1.13.6
 
-  typeit@8.8.3:
-    dependencies:
-      '@types/web-animations-js': 2.2.16
+  typeit@8.1.0: {}
 
   typescript@5.4.5: {}
 
