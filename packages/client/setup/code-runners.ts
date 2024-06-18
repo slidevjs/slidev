@@ -63,7 +63,7 @@ export default createSingletonPromise(async () => {
 })
 
 // Ported from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/playground/src/sidebar/runtime.ts
-async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
+function runJavaScript(code: string): CodeRunnerOutputs {
   const result = ref<CodeRunnerOutput[]>([])
 
   const onError = (error: any) => result.value.push({ error: String(error) })
@@ -184,7 +184,7 @@ export async function runTypeScript(code: string) {
   const importRegex = /import\s*\((.+)\)/g
   code = code.replace(importRegex, (_full, specifier) => `__slidev_import(${specifier})`)
 
-  return await runJavaScript(code)
+  return runJavaScript(code)
 }
 
 /**
