@@ -32,7 +32,7 @@ function escapeHtml(unsafe: unknown) {
   )
 }
 
-export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
+export async function getIndexHtml({ mode, entry, clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
   let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
@@ -40,7 +40,7 @@ export async function getIndexHtml({ entry, clientRoot, roots, data }: ResolvedS
   const { info, author, keywords } = data.headmatter
   head += [
     `<meta name="slidev:version" content="${version}">`,
-    `<meta charset="slidev:entry" content="${slash(entry)}">`,
+    mode === 'dev' && `<meta charset="slidev:entry" content="${slash(entry)}">`,
     `<link rel="icon" href="${data.config.favicon}">`,
     `<title>${getSlideTitle(data)}</title>`,
     info && `<meta name="description" content=${escapeHtml(info)}>`,

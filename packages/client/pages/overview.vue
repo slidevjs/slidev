@@ -165,7 +165,7 @@ onMounted(() => {
             <carbon:presentation-file />
           </IconButton>
           <IconButton
-            v-if="route.meta?.slide"
+            v-if="__DEV__ && route.meta?.slide"
             class="mr--3 op0 group-hover:op80"
             title="Open in editor"
             @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
