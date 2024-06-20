@@ -7,6 +7,7 @@ export { useSlideContext } from './context'
 export { useNav } from './composables/useNav'
 export { useDrawings } from './composables/useDrawings'
 export { useDarkMode } from './composables/useDarkMode'
+export { useIsSlideActive, onSlideEnter, onSlideLeave } from './logic/slides'
 
 export * from './layoutHelper'
 export * from './env'
