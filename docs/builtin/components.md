@@ -132,6 +132,10 @@ routeAlias: solutions
 # Now some solutions!
 ```
 
+### `PoweredBySlidev`
+
+Renders "Powered by Slidev" with a link to the Slidev website.
+
 ### `RenderWhen`
 
 Render slots depending on whether the context matches (for example whether we are in presenter view).
