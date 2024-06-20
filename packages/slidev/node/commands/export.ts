@@ -23,6 +23,7 @@ export interface ExportOptions {
   output?: string
   timeout?: number
   wait?: number
+  waitUntil: 'networkidle' | 'load' | 'domcontentloaded' | undefined
   dark?: boolean
   routerMode?: 'hash' | 'history'
   width?: number
@@ -77,6 +78,7 @@ export interface ExportNotesOptions {
   output?: string
   timeout?: number
   wait?: number
+  waitUntil?: 'networkidle' | 'load' | 'domcontentloaded'
 }
 
 function createSlidevProgress(indeterminate = false) {
@@ -121,6 +123,7 @@ export async function exportNotes({
   output = 'notes',
   timeout = 30000,
   wait = 0,
+  waitUntil,
 }: ExportNotesOptions): Promise<string> {
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch()
@@ -134,8 +137,9 @@ export async function exportNotes({
   if (!output.endsWith('.pdf'))
     output = `${output}.pdf`
 
-  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
-  await page.waitForLoadState('networkidle')
+  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil, timeout })
+  if (waitUntil)
+    await page.waitForLoadState(waitUntil)
   await page.emulateMedia({ media: 'screen' })
 
   if (wait)
@@ -178,6 +182,7 @@ export async function exportSlides({
   withToc = false,
   perSlide = false,
   scale = 1,
+  waitUntil,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -211,10 +216,11 @@ export async function exportSlides({
       ? `http://localhost:${port}${base}?${query}#${no}`
       : `http://localhost:${port}${base}${no}?${query}`
     await page.goto(url, {
-      waitUntil: 'networkidle',
+      waitUntil,
       timeout,
     })
-    await page.waitForLoadState('networkidle')
+    if (waitUntil)
+      await page.waitForLoadState(waitUntil)
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
     const slide = no === 'print'
       ? page.locator('body')
@@ -558,6 +564,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     ...options.data.config.export,
     ...args,
     ...clearUndefined({
+      waitUntil: args['wait-until'],
       withClicks: args['with-clicks'],
       executablePath: args['executable-path'],
       withToc: args['with-toc'],
@@ -570,6 +577,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     format,
     timeout,
     wait,
+    waitUntil,
     range,
     dark,
     withClicks,
@@ -589,6 +597,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
+    waitUntil: waitUntil === 'none' ? undefined : waitUntil as 'networkidle' | 'load' | 'domcontentloaded',
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
