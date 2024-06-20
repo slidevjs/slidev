@@ -327,18 +327,12 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
         },
         set(v) {
           if (currentSlideNo.value === thisNo)
-            queryClicksRaw.value = clamp(v, context.clicksStart, context.total).toString()
+            queryClicksRaw.value = v.toString()
         },
       }),
       route?.meta.slide?.frontmatter.clicksStart ?? 0,
       route?.meta.clicks,
     )
-
-    // On slide mounted, make sure the query is not greater than the total
-    context.onMounted = () => {
-      if (currentSlideNo.value === thisNo)
-        queryClicksRaw.value = clamp(+queryClicksRaw.value, context.clicksStart, context.total).toString()
-    }
 
     if (route?.meta)
       route.meta.__clicksContext = context

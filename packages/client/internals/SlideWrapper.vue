@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, h, ref, toRef } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
@@ -51,10 +51,9 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
   loader: async () => {
     const component = await props.route.component()
     return defineComponent({
-      setup(_, { attrs }) {
-        onMounted(() => props.clicksContext?.onMounted?.())
-        return () => h(component.default, attrs)
-      },
+      mounted: props.clicksContext?.onMounted,
+      unmounted: props.clicksContext?.onUnmounted,
+      render: () => h(component.default),
     })
   },
   delay: 300,
