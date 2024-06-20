@@ -333,7 +333,7 @@ export function createSlidesLoader(
                     slide: {
                       ...(${JSON.stringify(slideBase)}),
                       frontmatter,
-                      filepath: ${JSON.stringify(slide.source.filepath)},
+                      filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},
                       start: ${JSON.stringify(slide.source.start)},
                       id: ${pageNo},
                       no: ${no},
