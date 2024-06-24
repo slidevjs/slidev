@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { throttledWatch, useEventListener, watchThrottled } from '@vueuse/core'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { activeElement, editorHeight, editorWidth, isEditorVertical, isInputting, showEditor, isEditorVertical as vertical } from '../state'
+import { throttledWatch, useEventListener } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import IconButton from './IconButton.vue'
