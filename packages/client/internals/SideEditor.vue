@@ -167,13 +167,9 @@ throttledWatch(
         <carbon:close />
       </IconButton>
     </div>
-    <div class="relative overflow-hidden">
-      <div v-show="tab === 'content'" class="w-full h-full">
-        <ShikiEditor v-model="contentRef" placeholder="Create slide content..." />
-      </div>
-      <div v-show="tab === 'note'" class="w-full h-full">
-        <ShikiEditor v-model="noteRef" placeholder="Write some notes..." />
-      </div>
+    <div class="relative overflow-hidden rounded" style="background-color: var(--slidev-code-background)">
+      <ShikiEditor v-show="tab === 'content'" v-model="contentRef" placeholder="Create slide content..." />
+      <ShikiEditor v-show="tab === 'note'" v-model="noteRef" placeholder="Write some notes..." />
     </div>
   </div>
 </template>

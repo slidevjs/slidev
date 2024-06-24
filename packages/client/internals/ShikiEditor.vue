@@ -30,7 +30,7 @@ watchEffect((onCleanup) => {
 </script>
 
 <template>
-  <div class="absolute inset-0 font-mono overflow-x-hidden overflow-y-auto">
+  <div class="absolute inset-x-3 inset-y-2 font-mono overflow-x-hidden overflow-y-auto">
     <div class="relative w-full h-max">
       <div class="relative w-full h-max" v-html="html" />
       <textarea
@@ -53,5 +53,8 @@ textarea {
   word-break: break-all;
   display: block;
   width: 100%;
+}
+:deep(pre.shiki) {
+  background-color: transparent;
 }
 </style>
