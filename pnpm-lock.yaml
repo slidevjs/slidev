@@ -37,9 +37,6 @@ importers:
       '@types/cli-progress':
         specifier: ^3.11.5
         version: 3.11.5
-      '@types/codemirror':
-        specifier: ^5.60.15
-        version: 5.60.15
       '@types/connect':
         specifier: ^3.4.38
         version: 3.4.38
@@ -350,9 +347,6 @@ importers:
       '@vueuse/motion':
         specifier: ^2.2.3
         version: 2.2.3(rollup@4.13.2)(vue@3.4.27(typescript@5.4.5))
-      codemirror:
-        specifier: ^5.65.16
-        version: 5.65.16
       drauu:
         specifier: ^0.4.0
         version: 0.4.0
@@ -504,9 +498,6 @@ importers:
       cli-progress:
         specifier: ^3.12.0
         version: 3.12.0
-      codemirror:
-        specifier: ^5.65.16
-        version: 5.65.16
       connect:
         specifier: ^3.7.0
         version: 3.7.0
@@ -1948,9 +1939,6 @@ packages:
   '@types/cli-progress@3.11.5':
     resolution: {integrity: sha512-D4PbNRbviKyppS5ivBGyFO29POlySLmA2HyUFE4p5QGazAMM3CwkKWcvTl8gvElSuxRh6FPKL8XmidX873ou4g==}
 
-  '@types/codemirror@5.60.15':
-    resolution: {integrity: sha512-dTOvwEQ+ouKJ/rE9LT1Ue2hmP6H1mZv5+CCnNWu2qtiOe2LQa9lCprEY20HxiDmV/Bxh+dXjywmy5aKvoGjULA==}
-
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
@@ -2052,9 +2040,6 @@ packages:
 
   '@types/sizzle@2.3.8':
     resolution: {integrity: sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==}
-
-  '@types/tern@0.23.9':
-    resolution: {integrity: sha512-ypzHFE/wBzh+BlH6rrBgS5I/Z7RD21pGhZ2rltb/+ZrVM1awdZwjx7hE5XfuYgHWk9uvV5HLZN3SloevCAp3Bw==}
 
   '@types/unist@2.0.10':
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
@@ -7844,10 +7829,6 @@ snapshots:
     dependencies:
       '@types/node': 20.13.0
 
-  '@types/codemirror@5.60.15':
-    dependencies:
-      '@types/tern': 0.23.9
-
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 20.13.0
@@ -7951,10 +7932,6 @@ snapshots:
   '@types/sinonjs__fake-timers@8.1.1': {}
 
   '@types/sizzle@2.3.8': {}
-
-  '@types/tern@0.23.9':
-    dependencies:
-      '@types/estree': 1.0.5
 
   '@types/unist@2.0.10': {}
 

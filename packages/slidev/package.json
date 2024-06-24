@@ -66,7 +66,6 @@
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "chokidar": "^3.6.0",
     "cli-progress": "^3.12.0",
-    "codemirror": "^5.65.16",
     "connect": "^3.7.0",
     "debug": "^4.3.5",
     "fast-deep-equal": "^3.1.3",

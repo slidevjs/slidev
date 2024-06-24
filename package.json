@@ -35,7 +35,6 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/cli-progress": "^3.11.5",
-    "@types/codemirror": "^5.60.15",
     "@types/connect": "^3.4.38",
     "@types/debug": "^4.1.12",
     "@types/file-saver": "^2.0.7",
