@@ -18,17 +18,7 @@ const INCLUDE_GLOBAL = [
   'yaml',
 ]
 
-const INCLUDE_LOCAL = [
-  ...INCLUDE_GLOBAL,
-
-  'codemirror',
-  'codemirror/mode/javascript/javascript',
-  'codemirror/mode/css/css',
-  'codemirror/mode/markdown/markdown',
-  'codemirror/mode/xml/xml',
-  'codemirror/mode/htmlmixed/htmlmixed',
-  'codemirror/addon/display/placeholder',
-].map(i => `@slidev/cli > @slidev/client > ${i}`)
+const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
 
 // @keep-sorted
 const EXCLUDE_GLOBAL = [

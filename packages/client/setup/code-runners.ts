@@ -1,9 +1,8 @@
 import { createSingletonPromise } from '@antfu/utils'
 import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
-import type { CodeToHastOptions } from 'shiki'
+
 import type ts from 'typescript'
 import { ref } from 'vue'
-import { isDark } from '../logic/dark'
 import deps from '#slidev/monaco-run-deps'
 import setups from '#slidev/setups/code-runners'
 
@@ -15,17 +14,8 @@ export default createSingletonPromise(async () => {
     ts: runTypeScript,
   }
 
-  const { shiki, themes } = await import('#slidev/shiki')
-  const highlighter = await shiki
-  const highlight = (code: string, lang: string, options: Partial<CodeToHastOptions> = {}) => highlighter.codeToHtml(code, {
-    lang,
-    theme: typeof themes === 'string'
-      ? themes
-      : isDark.value
-        ? themes.dark || 'vitesse-dark'
-        : themes.light || 'vitesse-light',
-    ...options,
-  })
+  const { getHighlighter } = await import('#slidev/shiki')
+  const highlight = await getHighlighter()
 
   const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {

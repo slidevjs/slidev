@@ -7,7 +7,7 @@ export const templateShiki: VirtualModuleTemplate = {
   id: '/@slidev/shiki',
   getContent: async ({ clientRoot, roots }) => {
     const options = await loadShikiSetups(clientRoot, roots)
-    const langs = await resolveLangs(options.langs || ['javascript', 'typescript', 'html', 'css'])
+    const langs = await resolveLangs(options.langs || ['markdown', 'vue', 'javascript', 'typescript', 'html', 'css'])
     const resolvedThemeOptions = 'themes' in options
       ? {
           themes: Object.fromEntries(await Promise.all(Object.entries(options.themes)
@@ -70,6 +70,20 @@ export const templateShiki: VirtualModuleTemplate = {
       `  langs: [${langsInit.join(',')}],`,
       `  loadWasm: import('${await resolveImportUrl('shiki/wasm')}'),`,
       '})',
+
+      'let highlight',
+      'export async function getHighlighter() {',
+      '  if (highlight) return highlight',
+      '  const highlighter = await shiki',
+      '  highlight = (code, lang, options) => highlighter.codeToHtml(code, {',
+      '    lang,',
+      `    theme: ${JSON.stringify(themeOptionsNames.theme)},`,
+      `    themes: ${JSON.stringify(themeOptionsNames.themes)},`,
+      '    defaultColor: false,',
+      '    ...options,',
+      '  })',
+      '  return highlight',
+      '}',
     )
 
     return lines.join('\n')

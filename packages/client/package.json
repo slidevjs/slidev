@@ -43,7 +43,6 @@
     "@vueuse/core": "^10.10.0",
     "@vueuse/math": "^10.10.0",
     "@vueuse/motion": "^2.2.3",
-    "codemirror": "^5.65.16",
     "drauu": "^0.4.0",
     "file-saver": "^2.0.5",
     "floating-vue": "^5.2.2",
