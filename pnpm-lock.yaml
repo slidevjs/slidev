@@ -64,9 +64,6 @@ importers:
       '@types/node':
         specifier: ^20.13.0
         version: 20.13.0
-      '@types/prismjs':
-        specifier: ^1.26.4
-        version: 1.26.4
       '@types/prompts':
         specifier: ^2.4.9
         version: 2.4.9
@@ -591,9 +588,6 @@ importers:
       pptxgenjs:
         specifier: ^3.12.0
         version: 3.12.0
-      prismjs:
-        specifier: ^1.29.0
-        version: 1.29.0
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
@@ -2031,9 +2025,6 @@ packages:
 
   '@types/plantuml-encoder@1.4.2':
     resolution: {integrity: sha512-R60SYlcXyTXQebyVwcarGSJUucuwYY5wetBWAOnRt3k52flBXgt4R1KrxaZ4xpk5MpVo9titpVBBhgl/A9JWRQ==}
-
-  '@types/prismjs@1.26.4':
-    resolution: {integrity: sha512-rlAnzkW2sZOjbqZ743IHUhFcvzaGbqijwOu8QZnZCjfQzBqFE3s4lOTJEsxikImav9uzz/42I+O7YUs1mWgMlg==}
 
   '@types/prompts@2.4.9':
     resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
@@ -5333,10 +5324,6 @@ packages:
   prism-theme-vars@0.2.4:
     resolution: {integrity: sha512-B3Pht+GCT87sZph7hMRLlCQXzCM0awW7Rhk08RavpqRW4LEQOeqN0uMG4QCWkul2tr8PB61YAOJGUrEW+1uuJA==}
 
-  prismjs@1.29.0:
-    resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
-    engines: {node: '>=6'}
-
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
 
@@ -7934,8 +7921,6 @@ snapshots:
   '@types/plantuml-encoder@1.4.2':
     dependencies:
       '@types/node': 20.12.11
-
-  '@types/prismjs@1.26.4': {}
 
   '@types/prompts@2.4.9':
     dependencies:
@@ -11895,8 +11880,6 @@ snapshots:
       react-is: 18.2.0
 
   prism-theme-vars@0.2.4: {}
-
-  prismjs@1.29.0: {}
 
   process-nextick-args@2.0.1: {}
 
