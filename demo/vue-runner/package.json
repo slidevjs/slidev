@@ -10,8 +10,8 @@
     "@slidev/cli": "workspace:*",
     "@slidev/theme-default": "^0.25.0",
     "@slidev/theme-seriph": "^0.25.0",
-    "@vue/compiler-sfc": "^3.4.27",
-    "nodemon": "^3.1.2",
-    "vue": "^3.4.27"
+    "@vue/compiler-sfc": "^3.4.30",
+    "nodemon": "^3.1.4",
+    "vue": "^3.4.30"
   }
 }
