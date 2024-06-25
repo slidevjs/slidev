@@ -59,13 +59,13 @@ export const templateShiki: VirtualModuleTemplate = {
 
     const lines: string[] = []
     lines.push(
-      `import { getHighlighterCore } from "${await resolveImportUrl('shiki/core')}"`,
+      `import { createHighlighterCore } from "${await resolveImportUrl('shiki/core')}"`,
       `export { shikiToMonaco } from "${await resolveImportUrl('@shikijs/monaco')}"`,
 
       `export const languages = ${JSON.stringify(langNames)}`,
       `export const themes = ${JSON.stringify(themeOptionsNames.themes || themeOptionsNames.theme)}`,
 
-      'export const shiki = getHighlighterCore({',
+      'export const shiki = createHighlighterCore({',
       `  themes: [${themesInit.join(',')}],`,
       `  langs: [${langsInit.join(',')}],`,
       `  loadWasm: import('${await resolveImportUrl('shiki/wasm')}'),`,
