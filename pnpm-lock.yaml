@@ -728,8 +728,8 @@ importers:
         specifier: ^20.14.8
         version: 20.14.8
       '@types/vscode':
-        specifier: ^1.90.0
-        version: 1.90.0
+        specifier: ~1.89.0
+        version: 1.89.0
       '@vue/reactivity':
         specifier: ^3.4.30
         version: 3.4.30
@@ -1898,8 +1898,8 @@ packages:
   '@types/unist@3.0.2':
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
 
-  '@types/vscode@1.90.0':
-    resolution: {integrity: sha512-oT+ZJL7qHS9Z8bs0+WKf/kQ27qWYR3trsXpq46YDjFqBsMLG4ygGGjPaJ2tyrH0wJzjOEmDyg9PDJBBhWg9pkQ==}
+  '@types/vscode@1.89.0':
+    resolution: {integrity: sha512-TMfGKLSVxfGfoO8JfIE/neZqv7QLwS4nwPwL/NwMvxtAY2230H2I4Z5xx6836pmJvMAzqooRQ4pmLm7RUicP3A==}
 
   '@types/web-bluetooth@0.0.14':
     resolution: {integrity: sha512-5d2RhCard1nQUC3aHcq/gHzWYO6K0WJmAbjO7mQJgCQKtZpgXxv1rOM6O/dBDhDYYVutk1sciOgNSe+5YyfM8A==}
@@ -7562,7 +7562,7 @@ snapshots:
 
   '@types/unist@3.0.2': {}
 
-  '@types/vscode@1.90.0': {}
+  '@types/vscode@1.89.0': {}
 
   '@types/web-bluetooth@0.0.14': {}
 
