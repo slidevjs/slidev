@@ -35,7 +35,7 @@ watchEffect((onCleanup) => {
       <div class="relative w-full h-max" v-html="html" />
       <textarea
         ref="textareaEl" v-model="content" :placeholder="props.placeholder"
-        class="absolute inset-0 resize-none text-transparent bg-transparent focus:outline-none caret-white overflow-y-hidden"
+        class="absolute inset-0 resize-none text-transparent bg-transparent focus:outline-none caret-black dark:caret-white overflow-y-hidden"
       />
     </div>
   </div>
