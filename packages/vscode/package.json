@@ -358,7 +358,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "^20.14.8",
-    "@types/vscode": "^1.90.0",
+    "@types/vscode": "~1.89.0",
     "@vue/reactivity": "^3.4.30",
     "@vue/runtime-core": "^3.4.30",
     "@vue/shared": "^3.4.30",
