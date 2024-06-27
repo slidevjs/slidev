@@ -48,7 +48,7 @@ export const useProjectsTree = createSingletonComposable(() => {
     return [...projects.values()].map(project => ({
       treeItem: getProjectTreeItem(project),
       children: project.data.watchFiles
-        .filter(file => file !== project.entry)
+        .filter(file => file.toLowerCase() !== project.entry.toLowerCase())
         .map(file => ({ treeItem: getFileTreeItem(file) })),
     }))
   })

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { getHighlighter } from 'shiki'
+import { createHighlighter } from 'shiki'
 import { transformMagicMove } from '../packages/slidev/node/syntax/transform'
 import { createTransformContext } from './_tutils'
 
@@ -21,7 +21,7 @@ let message = 'Hello, Slidev!'
 Some text after
   
 `
-  const shiki = await getHighlighter({
+  const shiki = await createHighlighter({
     themes: ['nord'],
     langs: ['typescript'],
   })
@@ -67,7 +67,7 @@ console.log('Hello, Angular #2!')
 Some text after
   
 `
-  const shiki = await getHighlighter({
+  const shiki = await createHighlighter({
     themes: ['nord'],
     langs: ['angular-ts'],
   })

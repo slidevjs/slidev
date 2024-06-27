@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { throttledWatch, useEventListener, watchThrottled } from '@vueuse/core'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { activeElement, editorHeight, editorWidth, isEditorVertical, isInputting, showEditor, isEditorVertical as vertical } from '../state'
-import { useCodeMirror } from '../modules/codemirror'
+import { throttledWatch, useEventListener } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import IconButton from './IconButton.vue'
+import ShikiEditor from './ShikiEditor.vue'
 
 const props = defineProps<{
   resize?: boolean
@@ -18,8 +18,6 @@ const content = ref('')
 const note = ref('')
 const dirty = ref(false)
 const frontmatter = ref<any>({})
-const contentInput = ref<HTMLTextAreaElement>()
-const noteInput = ref<HTMLTextAreaElement>()
 
 const { info, update } = useDynamicSlideInfo(currentSlideNo)
 
@@ -57,65 +55,22 @@ useEventListener('keydown', (e) => {
   }
 })
 
-onMounted(async () => {
-  const contentEditor = await useCodeMirror(
-    contentInput,
-    computed({
-      get() { return content.value },
-      set(v) {
-        if (content.value.trim() !== v.trim()) {
-          content.value = v
-          dirty.value = true
-        }
-      },
-    }),
-    {
-      mode: 'markdown',
-      lineWrapping: true,
-      // @ts-expect-error missing types
-      highlightFormatting: true,
-      fencedCodeBlockDefaultMode: 'javascript',
-    },
-  )
+const contentRef = computed({
+  get() { return content.value },
+  set(v) {
+    if (content.value.trim() !== v.trim()) {
+      content.value = v
+      dirty.value = true
+    }
+  },
+})
 
-  const noteEditor = await useCodeMirror(
-    noteInput,
-    computed({
-      get() { return note.value },
-      set(v) {
-        note.value = v
-        dirty.value = true
-      },
-    }),
-    {
-      mode: 'markdown',
-      lineWrapping: true,
-      // @ts-expect-error missing types
-      highlightFormatting: true,
-      fencedCodeBlockDefaultMode: 'javascript',
-    },
-  )
-
-  watchThrottled(
-    [tab, vertical, isEditorVertical, editorWidth, editorHeight],
-    () => {
-      nextTick(() => {
-        if (tab.value === 'content')
-          contentEditor.refresh()
-        else
-          noteEditor.refresh()
-      })
-    },
-    {
-      throttle: 100,
-      flush: 'post',
-    },
-  )
-
-  watch(currentSlideNo, () => {
-    contentEditor.clearHistory()
-    noteEditor.clearHistory()
-  }, { flush: 'post' })
+const noteRef = computed({
+  get() { return note.value },
+  set(v) {
+    note.value = v
+    dirty.value = true
+  },
 })
 
 const handlerDown = ref(false)
@@ -212,19 +167,9 @@ throttledWatch(
         <carbon:close />
       </IconButton>
     </div>
-    <div class="overflow-hidden">
-      <div v-show="tab === 'content'" class="w-full h-full">
-        <textarea ref="contentInput" placeholder="Create slide content..." />
-      </div>
-      <div v-show="tab === 'note'" class="w-full h-full">
-        <textarea ref="noteInput" placeholder="Write some notes..." />
-      </div>
+    <div class="relative overflow-hidden rounded" style="background-color: var(--slidev-code-background)">
+      <ShikiEditor v-show="tab === 'content'" v-model="contentRef" placeholder="Create slide content..." />
+      <ShikiEditor v-show="tab === 'note'" v-model="noteRef" placeholder="Write some notes..." />
     </div>
   </div>
 </template>
-
-<style lang="postcss">
-.CodeMirror {
-  @apply px-3 py-2 h-full overflow-hidden bg-transparent font-mono text-sm z-0;
-}
-</style>

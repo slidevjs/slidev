@@ -2,7 +2,7 @@
   "name": "docs",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.4.0",
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
@@ -11,26 +11,26 @@
   "dependencies": {
     "@antfu/utils": "^0.7.8",
     "@vueuse/core": "^10.10.0",
-    "typeit": "^8.8.3"
+    "typeit": "8.1.0"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.215",
-    "@shikijs/vitepress-twoslash": "^1.6.1",
+    "@iconify/json": "^2.2.222",
+    "@shikijs/vitepress-twoslash": "^1.9.1",
     "@slidev/client": "0.34.3",
     "@slidev/parser": "0.34.3",
     "@slidev/theme-default": "0.21.2",
     "@slidev/types": "0.34.3",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.13.0",
-    "@unocss/reset": "^0.60.4",
+    "@unocss/reset": "^0.61.0",
     "fs-extra": "^11.2.0",
     "markdown-it": "^14.1.0",
-    "shiki": "^1.6.1",
+    "shiki": "^1.9.1",
     "typescript": "^5.4.5",
-    "unocss": "^0.60.4",
+    "unocss": "^0.61.0",
     "unplugin-icons": "^0.19.0",
-    "unplugin-vue-components": "^0.27.0",
+    "unplugin-vue-components": "^0.27.1",
     "vite-plugin-inspect": "^0.8.4",
-    "vitepress": "^1.2.2"
+    "vitepress": "^1.2.3"
   }
 }

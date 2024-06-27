@@ -110,17 +110,17 @@ export async function createMarkdownPlugin(
 async function createMarkdownItShiki(clientRoot: string, roots: string[], config: SlidevConfig, mode: string) {
   const [
     shikiOptions,
-    { getHighlighter, bundledLanguages },
+    { createHighlighter, bundledLanguages },
     markdownItShiki,
     transformerTwoslash,
   ] = await Promise.all([
     loadShikiSetups(clientRoot, roots),
-    import('shiki').then(({ getHighlighter, bundledLanguages }) => ({ bundledLanguages, getHighlighter })),
+    import('shiki').then(({ createHighlighter, bundledLanguages }) => ({ bundledLanguages, createHighlighter })),
     import('@shikijs/markdown-it/core').then(({ fromHighlighter }) => fromHighlighter),
     import('@shikijs/vitepress-twoslash').then(({ transformerTwoslash }) => transformerTwoslash),
   ] as const)
 
-  const shiki = await getHighlighter({
+  const shiki = await createHighlighter({
     ...shikiOptions as any,
     langs: shikiOptions.langs ?? Object.keys(bundledLanguages),
     themes: 'themes' in shikiOptions ? Object.values(shikiOptions.themes) : [shikiOptions.theme],

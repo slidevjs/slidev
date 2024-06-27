@@ -251,6 +251,10 @@ export interface SlidevConfig {
    * @default true
    */
   contextMenu: boolean | 'dev' | 'build' | undefined
+  /**
+   * Enable wake lock
+   */
+  wakeLock: boolean | 'dev' | 'build'
 }
 
 export interface FontOptions {

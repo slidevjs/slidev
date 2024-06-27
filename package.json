@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "version": "0.49.10",
+  "version": "0.49.12",
   "private": true,
-  "packageManager": "pnpm@9.1.4",
+  "packageManager": "pnpm@9.4.0",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -27,15 +27,14 @@
     "prepare": "simple-git-hooks"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.19.2",
+    "@antfu/eslint-config": "^2.21.1",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.8",
-    "@shikijs/markdown-it": "^1.6.1",
+    "@shikijs/markdown-it": "^1.9.1",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/cli-progress": "^3.11.5",
-    "@types/codemirror": "^5.60.15",
     "@types/connect": "^3.4.38",
     "@types/debug": "^4.1.12",
     "@types/file-saver": "^2.0.7",
@@ -53,9 +52,9 @@
     "@vueuse/core": "^10.10.0",
     "bumpp": "^9.4.1",
     "cross-env": "^7.0.3",
-    "cypress": "^13.10.0",
+    "cypress": "^13.12.0",
     "eslint": "^9.4.0",
-    "eslint-plugin-format": "^0.1.1",
+    "eslint-plugin-format": "^0.1.2",
     "esno": "^4.7.0",
     "execa": "^8.0.1",
     "katex": "^0.16.10",

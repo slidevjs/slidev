@@ -24,11 +24,14 @@ import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useWakeLock } from '../composables/useWakeLock'
 
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
 
 const {
   clicksContext,
@@ -37,7 +40,6 @@ const {
   hasNext,
   nextRoute,
   slides,
-  queryClicks,
   getPrimaryClicks,
   total,
 } = useNav()
@@ -64,10 +66,10 @@ const nextFrameClicksCtx = computed(() => {
 })
 
 watch(
-  [currentSlideRoute, queryClicks],
+  nextFrame,
   () => {
-    if (nextFrameClicksCtx.value)
-      nextFrameClicksCtx.value.current = nextFrame.value![1]
+    if (nextFrameClicksCtx.value && nextFrame.value)
+      nextFrameClicksCtx.value.current = nextFrame.value[1]
   },
   { immediate: true },
 )

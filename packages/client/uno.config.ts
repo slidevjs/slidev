@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url'
+import { readFileSync } from 'node:fs'
 import {
   defineConfig,
   presetAttributify,
@@ -42,6 +43,14 @@ export default defineConfig({
     presetAttributify(),
     presetIcons({
       collectionsNodeResolvePath: fileURLToPath(import.meta.url),
+      collections: {
+        slidev: {
+          logo: async () => {
+            const content = readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8')
+            return content
+          },
+        },
+      },
     }),
     presetTypography(),
   ],

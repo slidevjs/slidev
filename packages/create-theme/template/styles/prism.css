@@ -1,6 +1,4 @@
 @import 'prism-theme-vars/base.css';
-@import 'codemirror-theme-vars/base.css';
-@import 'prism-theme-vars/to-codemirror.css';
 
 :root {
   --prism-font-family: var(--slidev-code-font-family);

@@ -1,8 +1,8 @@
 import { createSingletonPromise } from '@antfu/utils'
 import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
-import type { CodeToHastOptions } from 'shiki'
+
 import type ts from 'typescript'
-import { isDark } from '../logic/dark'
+import { ref } from 'vue'
 import deps from '#slidev/monaco-run-deps'
 import setups from '#slidev/setups/code-runners'
 
@@ -14,17 +14,8 @@ export default createSingletonPromise(async () => {
     ts: runTypeScript,
   }
 
-  const { shiki, themes } = await import('#slidev/shiki')
-  const highlighter = await shiki
-  const highlight = (code: string, lang: string, options: Partial<CodeToHastOptions> = {}) => highlighter.codeToHtml(code, {
-    lang,
-    theme: typeof themes === 'string'
-      ? themes
-      : isDark.value
-        ? themes.dark || 'vitesse-dark'
-        : themes.light || 'vitesse-light',
-    ...options,
-  })
+  const { getHighlighter } = await import('#slidev/shiki')
+  const highlight = await getHighlighter()
 
   const run = async (code: string, lang: string, options: Record<string, unknown>): Promise<CodeRunnerOutputs> => {
     try {
@@ -62,32 +53,32 @@ export default createSingletonPromise(async () => {
 })
 
 // Ported from https://github.com/microsoft/TypeScript-Website/blob/v2/packages/playground/src/sidebar/runtime.ts
-async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
-  const allLogs: CodeRunnerOutput[] = []
+function runJavaScript(code: string): CodeRunnerOutputs {
+  const result = ref<CodeRunnerOutput[]>([])
 
-  const replace = {} as any
-  const logger = function (...objs: any[]) {
-    allLogs.push(objs.map(printObject))
-  }
-  replace.info = replace.log = replace.debug = replace.warn = replace.error = logger
-  replace.clear = () => allLogs.length = 0
-  const vmConsole = Object.assign({}, console, replace)
+  const onError = (error: any) => result.value.push({ error: String(error) })
+  const logger = (...objs: any[]) => result.value.push(objs.map(printObject))
+  const vmConsole = Object.assign({}, console)
+  vmConsole.info = vmConsole.log = vmConsole.debug = vmConsole.warn = vmConsole.error = logger
+  vmConsole.clear = () => result.value.length = 0
   try {
-    const safeJS = `return async (console, __slidev_import) => {
-      ${sanitizeJS(code)}
+    const safeJS = `return async (console, __slidev_import, __slidev_on_error) => {
+      try {
+        ${sanitizeJS(code)}
+      } catch (e) {
+        __slidev_on_error(e)
+      }
     }`
     // eslint-disable-next-line no-new-func
-    await (new Function(safeJS)())(vmConsole, (specifier: string) => {
+    ;(new Function(safeJS)())(vmConsole, (specifier: string) => {
       const mod = deps[specifier]
       if (!mod)
         throw new Error(`Module not found: ${specifier}.\nAvailable modules: ${Object.keys(deps).join(', ')}. Please refer to https://sli.dev/custom/config-code-runners#additional-runner-dependencies`)
       return mod
-    })
+    }, onError)
   }
   catch (error) {
-    return {
-      error: String(error),
-    }
+    onError(error)
   }
 
   function printObject(arg: any): CodeRunnerOutputText {
@@ -162,7 +153,7 @@ async function runJavaScript(code: string): Promise<CodeRunnerOutputs> {
     return code
   }
 
-  return allLogs
+  return result
 }
 
 let tsModule: typeof import('typescript') | undefined
@@ -183,7 +174,7 @@ export async function runTypeScript(code: string) {
   const importRegex = /import\s*\((.+)\)/g
   code = code.replace(importRegex, (_full, specifier) => `__slidev_import(${specifier})`)
 
-  return await runJavaScript(code)
+  return runJavaScript(code)
 }
 
 /**

@@ -6,7 +6,7 @@ If you want some high-level management to your slides, we have provided the foll
 
 ## Integrated Editor
 
-Slidev comes with an integrated [CodeMirror](https://codemirror.net/) editor that will instantly reload and save the changes to your file.
+Slidev comes with an integrated editor that will instantly reload and save the changes to your file.
 
 Click the <carbon-edit class="inline-icon-btn"/> button to open it.
 
@@ -64,6 +64,14 @@ In the **slides tree view**, you can see all the slides in the active project. Y
 In the **preview webview**, you can click the <codicon-run-all /> icon to start the dev server and click the <codicon-globe /> icon to open the slides in the browser. Toggle <codicon-lock /> icon to sync/unsync the preview navigation with the editor cursor.
 
 There are also some **commands** you can use. Type `Slidev` in the command palette to see them.
+
+You can add glob patterns to the `slidev.include` configuration to include files as Slidev entries. The default value is `["**/*.md"]`. Example:
+
+```json
+{
+  "slidev.include": ["**/presentation.md"]
+}
+```
 
 ## Prettier Plugin
 

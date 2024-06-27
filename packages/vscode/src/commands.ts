@@ -1,10 +1,12 @@
+import { relative } from 'node:path'
+import { slash } from '@antfu/utils'
 import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
 import { useCommand } from 'reactive-vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
-import { configuredPort, forceEnabled, previewSync } from './configs'
+import { configuredPort, forceEnabled, include, previewSync } from './configs'
 import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
@@ -34,6 +36,12 @@ export function useCommands() {
     if (selected) {
       for (const entry of selected)
         await addProject(entry)
+      if (workspace.workspaceFolders) {
+        const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
+        const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
+        // write back to settings.json
+        include.update([...include.value, ...relatives])
+      }
     }
   })
 

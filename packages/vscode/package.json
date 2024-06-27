@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "0.49.10",
+  "version": "0.49.12",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -284,6 +284,23 @@
           "scope": "window",
           "description": "Sync preview window with editor cursor",
           "default": true
+        },
+        "slidev.include": {
+          "type": "array",
+          "scope": "window",
+          "description": "Glob patterns to include slides entries",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/slides.md"
+          ]
+        },
+        "slidev.exclude": {
+          "type": "string",
+          "scope": "window",
+          "description": "A glob pattern to exclude slides entries",
+          "default": "**/node_modules/**"
         }
       }
     },
@@ -340,8 +357,11 @@
     "@antfu/utils": "^0.7.8",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.13.0",
-    "@types/vscode": "^1.89.0",
+    "@types/node": "^20.14.8",
+    "@types/vscode": "~1.89.0",
+    "@vue/reactivity": "^3.4.30",
+    "@vue/runtime-core": "^3.4.30",
+    "@vue/shared": "^3.4.30",
     "get-port-please": "^3.1.2",
     "ovsx": "^0.9.1",
     "reactive-vscode": "0.2.0-beta.1"

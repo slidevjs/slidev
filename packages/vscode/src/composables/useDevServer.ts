@@ -1,5 +1,6 @@
-import type { Ref } from 'reactive-vscode'
-import { toRef } from 'reactive-vscode'
+import { basename } from 'node:path'
+import type { Ref } from '@vue/runtime-core'
+import { toRef } from '@vue/runtime-core'
 import { getPort as getPortPlease } from 'get-port-please'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
@@ -28,7 +29,7 @@ export function useDevServer(project: SlidevProject) {
     if (getIsActive())
       return
     port.value ??= await getPort()
-    sendText(`npm exec slidev -- --port ${port.value}`)
+    sendText(`npm exec slidev -- --port ${port.value} ${JSON.stringify(basename(project.entry))}`)
   }
 
   function stop() {
