@@ -23,7 +23,6 @@
   "//": "Learn more: https://sli.dev/themes/write-a-theme.html",
   "slidev": {
     "colorSchema": "both",
-    "highlighter": "all",
     "defaults": {
       "fonts": {
         "sans": "Nunito Sans",

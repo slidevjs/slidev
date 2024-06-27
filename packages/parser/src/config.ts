@@ -80,10 +80,8 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
   }
 
   // @ts-expect-error compat
-  if (config.highlighter === 'prism') {
-    console.warn(`[slidev] "prism" support has been dropped, fallback to "shiki"`)
-    config.highlighter = 'shiki'
-  }
+  if (config.highlighter === 'prism')
+    throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'

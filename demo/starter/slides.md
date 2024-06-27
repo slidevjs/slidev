@@ -13,8 +13,6 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 # apply unocss classes to the current slide
 class: text-center
-# https://sli.dev/custom/highlighters.html
-highlighter: shiki
 # https://sli.dev/guide/drawing
 drawings:
   persist: false

@@ -26,7 +26,6 @@ import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import { resolveAddons } from './integrations/addons'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
-  'highlighter',
   'monaco',
   'routerMode',
   'fonts',
