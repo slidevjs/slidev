@@ -305,6 +305,7 @@ export default defineConfig({
     ],
 
     sidebar: {
+      '/features/': [],
       '/guide/': slidebars,
       '/themes/': slidebars,
       '/addons/': slidebars,

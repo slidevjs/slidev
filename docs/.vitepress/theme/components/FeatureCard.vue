@@ -3,10 +3,14 @@ import { useData, useRoute } from 'vitepress'
 import { computed } from 'vue'
 import VPDocAside from 'vitepress/dist/client/theme-default/components/VPDocAside.vue'
 import VPDocFooter from 'vitepress/dist/client/theme-default/components/VPDocFooter.vue'
+import VPMenuLink from 'vitepress/dist/client/theme-default/components/VPMenuLink.vue'
+import { data as features } from '../../../features/index.data'
 
-const { theme, frontmatter } = useData()
-
+const { theme, page } = useData()
 const route = useRoute()
+
+const featureName = computed(() => page.value.filePath.match(/\/([\w-]+)\.md$/)![1])
+const data = computed(() => features[featureName.value])
 
 const pageName = computed(() =>
   route.path.replace(/[./]+/g, '_').replace(/_html$/, ''),
@@ -21,17 +25,21 @@ const pageName = computed(() =>
         <div class="aside-curtain" />
         <div class="aside-container">
           <div class="aside-content">
-            <VPDocAside>
-              <template #aside-top>
-                <FeatureCardLinks name="Depends on" :links="frontmatter.depends" />
-                <FeatureCardLinks name="Relates to" :links="frontmatter.relates" />
-                <FeatureCardLinks name="Derives" :links="frontmatter.derives" />
-                <FeatureCardSince :version="frontmatter.since" />
-              </template>
-              <template #aside-bottom>
-                <slot name="aside-bottom" />
-              </template>
-            </VPDocAside>
+            <div flex flex-col flex-grow>
+              <VPMenuLink :item="{ text: 'All features', link: '/features' }" />
+              <FeatureCardLinks name="Depends on" :links="data.depends" />
+              <FeatureCardLinks name="Relates to" :links="data.relates" />
+              <FeatureCardLinks name="Derives" :links="data.derives" />
+              <FeatureCardSince :version="data.since" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="aside">
+        <div class="aside-curtain" />
+        <div class="aside-container">
+          <div class="aside-content">
+            <VPDocAside />
           </div>
         </div>
       </div>

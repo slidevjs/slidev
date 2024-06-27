@@ -14,11 +14,14 @@ const items = computed<DefaultTheme.NavItemWithLink[]>(() => {
     if (typeof link === 'string') {
       const [kind, name] = link.split('/')
       switch (kind) {
-        case 'features': {
+        case 'feature': {
           const feature = features[name]
           if (!feature)
             throw new Error(`Feature "${name}" not found.`)
-          return { text: feature.title, link: feature.link }
+          return { text: `✨ ${feature.title}`, link: feature.link }
+        }
+        case 'guide': {
+          return { text: `📘 ${name}`, link: `/guide/${name}` }
         }
         default:
           throw new Error(`Invalid link: ${link}`)
