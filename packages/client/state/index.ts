@@ -19,7 +19,7 @@ export const isScreenVertical = computed(() => windowSize.height.value - windowS
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
-export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
+export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
 export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.value?.tagName || ''))
 
 export const currentCamera = useLocalStorage<string>('slidev-camera', 'default', { listenToStorageChanges: false })
