@@ -1,10 +1,8 @@
 import type { AppContext } from '@slidev/types'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import type { App } from 'vue'
-import { nextTick } from 'vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue'
-import { routeForceRefresh } from '../logic/route'
 import { createVClickDirectives } from '../modules/v-click'
 import { createVMarkDirective } from '../modules/v-mark'
 import { createVDragDirective } from '../modules/v-drag'
@@ -43,13 +41,6 @@ export default async function setupMain(app: App) {
     app,
     router,
   }
-
-  nextTick(() => {
-    router.afterEach(async () => {
-      await nextTick()
-      routeForceRefresh.value += 1
-    })
-  })
 
   for (const setup of setups)
     await setup(context)

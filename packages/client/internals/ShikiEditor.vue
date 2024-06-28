@@ -20,17 +20,28 @@ watchEffect((onCleanup) => {
     const highlight = await getHighlighter()
     if (canceled)
       return
-    const h = await highlight(c, 'markdown')
+    const h = await highlight(c, 'markdown', { mergeWhitespaces: 'never' })
+    let trailingEmptyLines = 0
+    for (const line of c.split('\n').reverse()) {
+      if (line.trim() === '')
+        trailingEmptyLines++
+      else
+        break
+    }
     if (canceled)
       return
-    html.value = h
+    html.value = `${h}${'<br>'.repeat(trailingEmptyLines)}`
   }
   updateHtml()
 })
+
+function setFocus() {
+  textareaEl.value?.focus()
+}
 </script>
 
 <template>
-  <div class="absolute left-3 right-0 inset-y-2 font-mono overflow-x-hidden overflow-y-auto">
+  <div class="absolute left-3 right-0 inset-y-2 font-mono overflow-x-hidden overflow-y-auto cursor-text" @click="setFocus">
     <div class="relative w-full h-max">
       <div class="relative w-full h-max" v-html="html" />
       <textarea

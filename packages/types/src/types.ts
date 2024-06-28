@@ -1,5 +1,6 @@
 import type { RouteComponent, RouteMeta } from 'vue-router'
 import type YAML from 'yaml'
+import type { Component } from 'vue'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -126,7 +127,14 @@ export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previ
 export interface SlideRoute {
   no: number
   meta: RouteMeta & Required<Pick<RouteMeta, 'slide'>>
-  component: () => Promise<{ default: RouteComponent }>
+  /**
+   * load the slide component itself
+   */
+  load: () => Promise<{ default: RouteComponent }>
+  /**
+   * Wrapped async component
+   */
+  component: Component
 }
 
 export type LoadedSnippets = Record<string, string>

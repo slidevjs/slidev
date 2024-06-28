@@ -58,10 +58,9 @@ useEventListener('keydown', (e) => {
 const contentRef = computed({
   get() { return content.value },
   set(v) {
-    if (content.value.trim() !== v.trim()) {
-      content.value = v
+    if (content.value.trim() !== v.trim())
       dirty.value = true
-    }
+    content.value = v
   },
 })
 

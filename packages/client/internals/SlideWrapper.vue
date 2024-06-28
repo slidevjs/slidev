@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, defineComponent, h, ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
-import SlideLoading from './SlideLoading.vue'
 import { SlideBottom, SlideTop } from '#slidev/global-layers'
 
 const props = defineProps({
@@ -46,25 +45,6 @@ const style = computed<CSSProperties>(() => ({
   ...zoomStyle.value,
   'user-select': configs.selectable ? undefined : 'none',
 }))
-
-const SlideComponent = computed(() => {
-  const loadComponent = props.route.component
-  const { onMounted, onUnmounted } = props.clicksContext
-  return defineAsyncComponent({
-    loader: async () => {
-      const component = await loadComponent()
-      return defineComponent({
-        mounted: onMounted,
-        unmounted: onUnmounted,
-        beforeUpdate: onUnmounted,
-        updated: onMounted,
-        render: () => h(component.default),
-      })
-    },
-    delay: 300,
-    loadingComponent: SlideLoading,
-  })
-})
 </script>
 
 <template>
@@ -74,7 +54,7 @@ const SlideComponent = computed(() => {
     :style="style"
   >
     <SlideBottom />
-    <SlideComponent />
+    <component :is="props.route.component" />
     <SlideTop />
   </div>
 </template>

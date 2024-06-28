@@ -31,7 +31,7 @@ const {
 function preloadRoute(route: SlideRoute) {
   if (route.meta.preload !== false) {
     route.meta.__preloaded = true
-    route.component()
+    route.load()
   }
 }
 // preload current, prev and next slides
