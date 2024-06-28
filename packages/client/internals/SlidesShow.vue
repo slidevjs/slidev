@@ -84,7 +84,7 @@ function onAfterLeave() {
   >
     <template v-for="route of loadedRoutes" :key="route.no">
       <SlideWrapper
-        v-if="Math.abs(route.no - currentSlideRoute.no) <= 6"
+        v-if="Math.abs(route.no - currentSlideRoute.no) <= 20"
         v-show="route === currentSlideRoute"
         :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
         :route="route"
