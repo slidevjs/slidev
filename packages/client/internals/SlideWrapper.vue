@@ -47,18 +47,22 @@ const style = computed<CSSProperties>(() => ({
   'user-select': configs.selectable ? undefined : 'none',
 }))
 
-const SlideComponent = computed(() => props.route && defineAsyncComponent({
-  loader: async () => {
-    const component = await props.route.component()
-    return defineComponent({
-      mounted: props.clicksContext?.onMounted,
-      unmounted: props.clicksContext?.onUnmounted,
-      render: () => h(component.default),
-    })
-  },
-  delay: 300,
-  loadingComponent: SlideLoading,
-}))
+const SlideComponent = computed(() => {
+  const loadComponent = props.route.component
+  const { onMounted, onUnmounted } = props.clicksContext
+  return defineAsyncComponent({
+    loader: async () => {
+      const component = await loadComponent()
+      return defineComponent({
+        mounted: onMounted,
+        unmounted: onUnmounted,
+        render: () => h(component.default),
+      })
+    },
+    delay: 300,
+    loadingComponent: SlideLoading,
+  })
+})
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, shallowRef, watch } from 'vue'
+import { TransitionGroup, computed, shallowRef, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
+import type { SlideRoute } from '@slidev/types'
 import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
 import { skipTransition } from '../logic/hmr'
@@ -19,6 +20,7 @@ const {
   currentSlideRoute,
   currentTransition,
   getPrimaryClicks,
+  prevRoute,
   nextRoute,
   slides,
   isPrintMode,
@@ -26,13 +28,23 @@ const {
   clicksDirection,
 } = useNav()
 
-// preload next route
-watch(currentSlideRoute, () => {
-  if (currentSlideRoute.value?.meta && currentSlideRoute.value.meta.preload !== false)
-    currentSlideRoute.value.meta.__preloaded = true
-  if (nextRoute.value?.meta && nextRoute.value.meta.preload !== false)
-    nextRoute.value.meta.__preloaded = true
-}, { immediate: true })
+function preloadRoute(route: SlideRoute) {
+  if (route.meta.preload !== false)
+    route.meta.__preloaded = true
+}
+// preload current, prev and next slides
+watchEffect(() => {
+  preloadRoute(currentSlideRoute.value)
+  preloadRoute(prevRoute.value)
+  preloadRoute(nextRoute.value)
+})
+// preload all slides after 5s
+watchEffect((onCleanup) => {
+  const timeout = setTimeout(() => {
+    slides.value.forEach(preloadRoute)
+  }, 3000)
+  onCleanup(() => clearTimeout(timeout))
+})
 
 const hasViewTransition = useViewTransition()
 
@@ -67,14 +79,15 @@ function onAfterLeave() {
     }"
     @after-leave="onAfterLeave"
   >
-    <SlideWrapper
-      v-for="route of loadedRoutes"
-      v-show="route === currentSlideRoute"
-      :key="route.no"
-      :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
-      :route="route"
-      :render-context="renderContext"
-    />
+    <template v-for="route of loadedRoutes" :key="route.no">
+      <SlideWrapper
+        v-if="Math.abs(route.no - currentSlideRoute.no) <= 6"
+        v-show="route === currentSlideRoute"
+        :clicks-context="isPrintMode && !isPrintWithClicks ? createFixedClicks(route, CLICKS_MAX) : getPrimaryClicks(route)"
+        :route="route"
+        :render-context="renderContext"
+      />
+    </template>
   </component>
 
   <DragControl v-if="activeDragElement" :data="activeDragElement" />
