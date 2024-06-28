@@ -34,12 +34,16 @@ const scale = computed(() => {
   return Math.min(width.value / slideWidth.value, height.value / slideHeight.value)
 })
 
-const contentStyle = computed(() => ({
-  'height': `${slideHeight.value}px`,
-  'width': `${slideWidth.value}px`,
-  'transform': `translate(-50%, -50%) scale(${scale.value})`,
-  '--slidev-slide-scale': scale.value,
-}))
+const contentStyle = computed(() => {
+  // For some unknown reason, remove the following line will cause the style not updated
+  void container.value
+  return {
+    'height': `${slideHeight.value}px`,
+    'width': `${slideWidth.value}px`,
+    'transform': `translate(-50%, -50%) scale(${scale.value})`,
+    '--slidev-slide-scale': scale.value,
+  }
+})
 
 const containerStyle = computed(() => props.width
   ? {

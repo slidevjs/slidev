@@ -29,8 +29,10 @@ const {
 } = useNav()
 
 function preloadRoute(route: SlideRoute) {
-  if (route.meta.preload !== false)
+  if (route.meta.preload !== false) {
     route.meta.__preloaded = true
+    route.component()
+  }
 }
 // preload current, prev and next slides
 watchEffect(() => {
@@ -38,10 +40,11 @@ watchEffect(() => {
   preloadRoute(prevRoute.value)
   preloadRoute(nextRoute.value)
 })
-// preload all slides after 5s
+// preload all slides after 3s
 watchEffect((onCleanup) => {
+  const routes = slides.value
   const timeout = setTimeout(() => {
-    slides.value.forEach(preloadRoute)
+    routes.forEach(preloadRoute)
   }, 3000)
   onCleanup(() => clearTimeout(timeout))
 })

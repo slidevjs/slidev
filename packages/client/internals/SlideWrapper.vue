@@ -48,11 +48,11 @@ const style = computed<CSSProperties>(() => ({
 }))
 
 const SlideComponent = computed(() => {
-  const loadComponent = props.route.component
+  const componentPromise = props.route.component()
   const { onMounted, onUnmounted } = props.clicksContext
   return defineAsyncComponent({
     loader: async () => {
-      const component = await loadComponent()
+      const component = await componentPromise
       return defineComponent({
         mounted: onMounted,
         unmounted: onUnmounted,
