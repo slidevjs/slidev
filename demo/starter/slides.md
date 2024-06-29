@@ -456,27 +456,21 @@ const final = {
 
 # LaTeX
 
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
+LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
 
-<br>
+<div h-3 />
 
-Inline $\sqrt{3x-1}+(1+x)^2$
+Inline $\sqrt{3x-1}+(1+x)^2$ 
 
 Block
 $$ {1|3|all}
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
+\begin{aligned}
+\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
+\nabla \cdot \vec{B} &= 0 \\
+\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
+\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
+\end{aligned}
 $$
-
-<br>
 
 [Learn more](https://sli.dev/guide/syntax#latex)
 
