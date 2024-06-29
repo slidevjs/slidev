@@ -64,6 +64,11 @@ jobs:
         hoist: [true, false]
 
     steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
       - uses: actions/checkout@v4
 
       - name: Use Node.js 20.x
@@ -71,10 +76,14 @@ jobs:
         with:
           node-version: 20.x
 
+      - name: Setup
+        run: npm i -g @antfu/ni
+
       - name: Setup PNPM
         uses: pnpm/action-setup@v2
-        with:
-          version: latest
+
+      - name: Install
+        run: nci
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
