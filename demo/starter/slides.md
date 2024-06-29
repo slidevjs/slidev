@@ -460,7 +460,7 @@ LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
 
 <div h-3 />
 
-Inline $\sqrt{3x-1}+(1+x)^2$ 
+Inline $\sqrt{3x-1}+(1+x)^2$
 
 Block
 $$ {1|3|all}
