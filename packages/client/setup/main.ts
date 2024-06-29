@@ -1,6 +1,6 @@
 import type { AppContext } from '@slidev/types'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
-import type { App, Ref } from 'vue'
+import type { App } from 'vue'
 import { nextTick } from 'vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue'
