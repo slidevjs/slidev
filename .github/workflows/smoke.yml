@@ -59,7 +59,6 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
         os: [ubuntu-latest, windows-latest]
         pm: [npm, pnpm] # yarn not working in this CI
         hoist: [true, false]
@@ -72,6 +71,8 @@ jobs:
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v2
+        with:
+          version: latest
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
