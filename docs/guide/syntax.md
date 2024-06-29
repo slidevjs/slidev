@@ -68,18 +68,6 @@ This is a default page without any additional metadata.
 
 Refer to [customization](/custom/) for more details.
 
-### Prettier Support
-
-> Available since v0.44
-
-The custom syntax might not be compatible with some formatters like Prettier.
-You can either install the [Prettier Plugin](/guide/editors#prettier-plugin) or use a direct `yaml` code block to define the frontmatter instead:
-
-````md
----
-layout: cover
----
-
 # Slidev
 
 This is the cover page.
@@ -109,233 +97,6 @@ console.log('Hello, World!')
 ````
 
 Slidev has [Shiki](https://github.com/shikijs/shiki) built in as the syntax highlighter. Refer to [the highlighters section](/custom/highlighters) for more details.
-
-### Line Highlighting
-
-To highlight specific lines, simply add line numbers within brackets `{}`. Line numbers start counting from 1 by default.
-
-````md
-```ts {2,3}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-````
-
-To change what's highlighted with multiple clicks, you can use `|` to separate each stage:
-
-````md
-```ts {2-3|5|all}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-````
-
-This will first highlight `a: Ref<number> | number` and `b: Ref<number> | number`, and then `return computed(() => unref(a) + unref(b))` after one click, and lastly, the whole block.
-
-You can set the line number to `hide` to hide the code block or `none` to not highlight any line:
-
-````md
-```ts {hide|none}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-````
-
-::: tip
-Learn more in the [click animations guide](./animations#positioning).
-:::
-
-### Line Numbers
-
-You can enable line numbering for all slides by setting `lineNumbers: true` in the global config or enable each code block individually by setting `lines: true`. You can also set the starting line for each code block and highlight the lines accordingly; it defaults to 1:
-
-````md
-```ts {6,7}{lines:true,startLine:5}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-```
-````
-
-### Max Height
-
-If the code doesn't fit into one slide, you use the `maxHeight` to set a fixed height and enable scrolling:
-
-````md
-```ts {2|3|7|12}{maxHeight:'100px'}
-function add(
-  a: Ref<number> | number,
-  b: Ref<number> | number
-) {
-  return computed(() => unref(a) + unref(b))
-}
-/// ...as many lines as you want
-const c = add(1, 2)
-```
-````
-
-### TwoSlash Integration
-
-> Available since v0.46
-
-This feature is only available when you [set `highlighter` to `shiki`](/custom/highlighters)
-
-[TwoSlash](https://twoslash.netlify.app/) is a powerful tool for rendering TypeScript code blocks with type information on hover or inlined. It's quite useful for preparing slides for JavaScript/TypeScript-related topics.
-
-To use it, you can add `twoslash` to the code block's language identifier:
-
-````md
-```ts twoslash
-import { ref } from 'vue'
-
-const count = ref(0)
-//            ^?
-```
-````
-
-It will be rendered as:
-
-```ts twoslash
-import { ref } from 'vue'
-
-const count = ref(0)
-//            ^?
-```
-
-<!-- For the popup to not overlap the content below -->
-<div class="py-20" />
-
-### Shiki Magic Move
-
-> Available since v0.48
-
-[Shiki Magic Move](https://github.com/shikijs/shiki-magic-move) enables you to have a granular transition between code changes, similar to Keynote's Magic Move. You can check [the playground](https://shiki-magic-move.netlify.app/) to see how it works.
-
-<video src="https://github.com/slidevjs/slidev/assets/11247099/79927794-27ba-4342-9911-9996cec889d6" controls rounded shadow w-full></video>
-
-In Slidev, we bind the magic-move to the [clicks system](/guide/animations#click-animations). The syntax is to wrap multiple code blocks representing each step with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphs to each step as you click.
-
-`````md
-````md magic-move
-```js
-console.log(`Step ${1}`)
-```
-```js
-console.log(`Step ${1 + 1}`)
-```
-```ts
-console.log(`Step ${3}` as string)
-```
-````
-`````
-
-It's also possible to mix Magic Move with [line highlighting](#line-highlighting) and [line numbers](#line-numbers), for example:
-
-`````md
-````md magic-move {at:4, lines: true} // [!code hl]
-```js {*|1|2-5} // [!code hl]
-let count = 1
-function add() {
-  count++
-}
-```
-
-Non-code blocks in between as ignored, you can put some comments.
-
-```js {*}{lines: false} // [!code hl]
-let count = 1
-const add = () => count += 1
-```
-````
-`````
-
-### Monaco Editor
-
-<video src="https://github.com/slidevjs/slidev/assets/11247099/0c6ce681-80d3-4555-93bf-9288ee533462" controls rounded shadow w-full></video>
-
-Whenever you want to do some modification in the presentation, simply add `{monaco}` after the language id — it turns the block into a fully-featured Monaco editor!
-
-````md
-```ts {monaco}
-console.log('HelloWorld')
-```
-````
-
-Learn more about [configuring Monaco](/custom/config-monaco).
-
-#### Monaco Diff Editor
-
-Monaco can also generate a diff between two code blocks. Use `{monaco-diff}` to turn the block into a [Monaco diff editor](https://microsoft.github.io/monaco-editor/playground.html?source=v0.36.1#example-creating-the-diffeditor-multi-line-example) and use `~~~` to separate the original and modified code!
-
-````md
-```ts {monaco-diff}
-console.log('Original text')
-~~~
-console.log('Modified text')
-```
-````
-
-#### Monaco Runner
-
-> Available since v0.48
-
-Slidev also provides the Monaco Runner Editor, which allows you to run the code directly in the editor and see the result. Use `{monaco-run}` to turn the block into a Monaco Runner Editor.
-
-````md
-```ts {monaco-run}
-function distance(x: number, y: number) {
-  return Math.sqrt(x ** 2 + y ** 2)
-}
-console.log(distance(3, 4))
-```
-````
-
-It provides the editor with a "Run" button, and shows the result of the code execution right below the code block. You may also modify the code and the result will be re-evaluated on the fly.
-
-By default it will automatically run the code when the slide is loaded; if you want to instead explicitly trigger the run, you can set `{autorun:false}`.
-
-````md
-```ts {monaco-run} {autorun:false}
-console.log('Click the play button to run me')
-```
-````
-
-If you want to only show the output in certain clicks, you can use the `showOutputAt` prop. The value is the same as `v-click`.
-
-````md
-```ts {monaco-run} {showOutputAt:'+1'}
-console.log('Shown after 1 click')
-```
-````
-
-Currently Slidev supports running JavaScript and TypeScript code out-of-box. Refer to [Custom Code Runners](/custom/config-code-runners) for custom languages support.
-
-#### Writable Monaco Editor
-
-> Available since v0.49.5
-
-You can also use the [Import Code Snippets](#import-code-snippets) syntax combining with the `{monaco-write}` directive, to link your Monaco Editor with a file on your filesystem. This will allow you to edit the code directly in the editor and save the changes back to the file.
-
-```md
-<<< ./some-file.ts {monaco-write}
-```
-
-When using this, be sure to back up your files beforehand, as the changes will be saved directly to the file.
 
 ## Embedded Styles
 
@@ -427,43 +188,6 @@ This is another note
 
 Basic Markdown and HTML are also supported in notes when the Presenter renders note content.
 
-### Click Markers
-
-> Available since v0.48
-
-For some slides you might have longer notes that could be hard to find your place. Slidev supports click markers that allow highlighting and auto-scrolling to the section of notes from your corresponding content. Put `[click]` markers in your notes for the timing you need to go to another [click](/guide/animations#click-animations), Slidev divides the content between the click markers and highlights it in presenter notes, synchronized with your slide progress.
-
-<video src="https://github.com/slidevjs/slidev/assets/11247099/40014e34-67cd-4830-8c8d-8431754a3672" controls rounded shadow w-full></video>
-
-## Icons
-
-Slidev allows you to have access to virtually all open-source icon sets **directly** in your markdown after installing the corresponding package. Powered by [`unplugin-icons`](https://github.com/antfu/unplugin-icons) and [Iconify](https://iconify.design/).
-
-The naming follows [Iconify](https://iconify.design/)'s convention of `{collection-name}-{icon-name}`. For example:
-
-- `<mdi-account-circle />` - <mdi-account-circle /> from [Material Design Icons](https://github.com/Templarian/MaterialDesign) - [`@iconify-json/mdi`](https://npmjs.com/package/@iconify-json/mdi)
-- `<carbon-badge />` - <carbon-badge /> from [Carbon](https://github.com/carbon-design-system/carbon/tree/main/packages/icons) - [`@iconify-json/carbon`](https://npmjs.com/package/@iconify-json/carbon)
-- `<uim-rocket />` - <uim-rocket /> from [Unicons Monochrome](https://github.com/Iconscout/unicons) - [`@iconify-json/uim`](https://npmjs.com/package/@iconify-json/uim)
-- `<twemoji-cat-with-tears-of-joy />` - <twemoji-cat-with-tears-of-joy /> from [Twemoji](https://github.com/twitter/twemoji) - [`@iconify-json/twemoji`](https://npmjs.com/package/@iconify-json/twemoji)
-- `<logos-vue />` - <logos-vue /> from [SVG Logos](https://github.com/gilbarbara/logos) - [`@iconify-json/logos`](https://npmjs.com/package/@iconify-json/logos)
-- And much more...
-
-Browse and search for all the icons available with [Icônes](https://icones.js.org/).
-
-### Styling Icons
-
-You can style the icons just like other HTML elements. For example:
-
-```html
-<uim-rocket />
-<uim-rocket class="text-3xl text-red-400 mx-2" />
-<uim-rocket class="text-3xl text-orange-400 animate-ping" />
-```
-
-<uim-rocket />
-<uim-rocket class="text-3xl text-red-400 mx-2" />
-<uim-rocket class="text-3xl text-orange-400 animate-ping ml-2" />
-
 ## Slots
 
 > Available since v0.18
@@ -542,39 +266,6 @@ This shows on the right
 This shows on the left
 ```
 
-## Import Code Snippets
-
-> Available since v0.47.0
-
-You can import code snippets from existing files via the following syntax:
-
-```md
-<<< @/snippets/snippet.js
-```
-
-::: tip
-The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets`, for compatibility with the Monaco editor. Alternatively, you can also import from relative paths.
-:::
-
-You can also use a [VS Code region](https://code.visualstudio.com/docs/editor/codebasics#_folding) to only include the corresponding part of the code file:
-
-```md
-<<< @/snippets/snippet.js#region-name
-```
-
-To explicitly specify the language of the imported code, you can add a language identifier after:
-
-```md
-<<< @/snippets/snippet.js ts
-```
-
-Any code block features like [line highlighting](#line-highlighting) and [Monaco editor](#monaco-editor) are also supported:
-
-```md
-<<< @/snippets/snippet.js {2,3|5}{lines:true}
-<<< @/snippets/snippet.js ts {monaco}{height:200px}
-```
-
 ## Configurations
 
 All configurations can be defined in the Markdown file. For example:
@@ -592,111 +283,6 @@ This is the cover page.
 ```
 
 Learn more about [frontmatter configurations](/custom/#frontmatter-configures).
-
-## LaTeX
-
-Slidev comes with LaTeX support out-of-box, powered by [KaTeX](https://katex.org/).
-
-<TheTweet id="1392246507793915904" />
-
-### Inline
-
-Surround your LaTeX with a single `$` on each side for inline rendering.
-
-```md
-$\sqrt{3x-1}+(1+x)^2$
-```
-
-### Block
-
-Use two (`$$`) for block rendering. This mode uses bigger symbols and centers
-the result.
-
-```latex
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-```
-
-Learn more: [Demo](https://sli.dev/demo/starter/11) | [KaTeX](https://katex.org/) | [`markdown-it-katex`](https://github.com/waylonflinn/markdown-it-katex)
-
-### LaTex line highlighting
-
-> Available since v0.43.1
-
-To highlight specific lines, simply add line numbers within bracket `{}`. Line numbers start counting from 1 by default.
-
-```latex
-$$ {1|3|all}
-\begin{array}{c}
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-\nabla \cdot \vec{\mathbf{B}} & = 0
-\end{array}
-$$
-```
-
-The `at` and `finally` options of [code blocks](#line-highlighting) are also available for LaTeX blocks.
-
-### Chemical equations
-
-To enable the rendering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
-KaTeX extension needs to be loaded.
-
-Create `vite.config.ts` with the following content:
-
-```ts
-import 'katex/contrib/mhchem'
-
-export default {}
-```
-
-Now chemical equations can be rendered properly.
-
-```latex
-$$
-\displaystyle{\ce{B(OH)3 + H2O <--> B(OH)4^- + H+}}
-$$
-```
-
-Learn more: [Syntax](https://mhchem.github.io/MathJax-mhchem)
-
-## Diagrams
-
-You can also create diagrams / graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
-
-Code blocks marked as `mermaid` will be converted to diagrams, for example:
-
-````md
-```mermaid
-sequenceDiagram
-  Alice->John: Hello John, how are you?
-  Note over Alice,John: A typical interaction
-```
-````
-
-You can further pass an options object to it to specify the scaling and theming. The syntax of the object is a JavaScript object literal, you will need to add quotes (`'`) for strings and use comma (`,`) between keys.
-
-````md
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-````
-
-Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-js.github.io/mermaid)
 
 ## Multiple Entries
 
@@ -816,3 +402,25 @@ The **default** slot
 ```
 
 Learn more about [MDC Syntax](https://content.nuxt.com/guide/writing/mdc).
+
+---
+
+# Prettier Support
+# Line Highlighting
+# Line Numbers
+# TwoSlash Integration
+# Shiki Magic Move
+# Monaco Editor
+# Monaco Diff Editor
+# Monaco Runner
+# Writable Monaco Editor
+# Click Markers
+# Icons
+# Styling Icons
+# Import Code Snippets
+# LaTeX
+<!-- # Inline -->
+<!-- # Block -->
+<!-- # Chemical equations -->
+# LaTex line highlighting
+# Diagrams

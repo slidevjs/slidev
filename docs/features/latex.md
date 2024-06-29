@@ -37,6 +37,29 @@ $$
 $$
 ```
 
+### Chemical equations
+
+To enable the rendering of chemical equations, the [mhchem](https://github.com/KaTeX/KaTeX/tree/main/contrib/mhchem)
+KaTeX extension needs to be loaded.
+
+Create `vite.config.ts` with the following content:
+
+```ts
+import 'katex/contrib/mhchem'
+
+export default {}
+```
+
+Now chemical equations can be rendered properly.
+
+```latex
+$$
+\displaystyle{\ce{B(OH)3 + H2O <--> B(OH)4^- + H+}}
+$$
+```
+
+Learn more: [Syntax](https://mhchem.github.io/MathJax-mhchem)
+
 ---
 
 <TheTweet id="1392246507793915904" />
