@@ -14,18 +14,15 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.mjs"
+      "import": "./dist/index.mjs"
     },
     "./core": {
       "types": "./dist/core.d.mts",
-      "import": "./dist/core.mjs",
-      "require": "./dist/core.mjs"
+      "import": "./dist/core.mjs"
     },
     "./fs": {
       "types": "./dist/fs.d.mts",
-      "import": "./dist/fs.mjs",
-      "require": "./dist/fs.mjs"
+      "import": "./dist/fs.mjs"
     }
   },
   "main": "dist/index.mjs",
