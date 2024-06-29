@@ -13,24 +13,24 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.mjs"
     },
     "./core": {
-      "types": "./dist/core.d.ts",
+      "types": "./dist/core.d.mts",
       "import": "./dist/core.mjs",
-      "require": "./dist/core.js"
+      "require": "./dist/core.mjs"
     },
     "./fs": {
-      "types": "./fs.d.ts",
+      "types": "./dist/fs.d.mts",
       "import": "./dist/fs.mjs",
-      "require": "./dist/fs.js"
+      "require": "./dist/fs.mjs"
     }
   },
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.d.mts",
   "files": [
     "*.d.ts",
     "dist"
