@@ -9,7 +9,7 @@ An addon can contribute to the following points:
 - Global styles (use with caution as it has more role than [themes](/themes/use))
 - Provide custom layouts or override the existing one
 - Provide custom components or override the existing one
-- Extend UnoCSS/Windi CSS configurations
+- Extend UnoCSS CSS configurations
 - Configure tools like Monaco and Prism
 
 ## Conventions

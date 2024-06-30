@@ -55,12 +55,10 @@ jobs:
 
   test:
     needs: pack
-    timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [18.x]
         os: [ubuntu-latest, windows-latest]
         pm: [npm, pnpm] # yarn not working in this CI
         hoist: [true, false]

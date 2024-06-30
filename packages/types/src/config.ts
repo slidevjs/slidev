@@ -200,9 +200,10 @@ export interface SlidevConfig {
    * Engine for Atomic CSS
    *
    * @see https://unocss.dev/
+   * @deprecated
    * @default 'unocss'
    */
-  css: 'unocss' | 'none'
+  css: 'unocss'
   /**
    * Enable presenter mode
    *

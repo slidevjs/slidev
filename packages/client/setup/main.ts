@@ -13,7 +13,6 @@ import setupRoutes from '../setup/routes'
 import setups from '#slidev/setups/main'
 
 import '#slidev/styles'
-import 'shiki-magic-move/style.css'
 
 export default async function setupMain(app: App) {
   function setMaxHeight() {
