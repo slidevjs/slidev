@@ -13,7 +13,6 @@ import MarkdownItFootnote from 'markdown-it-footnote'
 
 import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevConfig, SlidevPluginOptions } from '@slidev/types'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
-import MarkdownItPrism from '../syntax/markdown-it/markdown-it-prism'
 import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
 import MarkdownItLink from '../syntax/markdown-it/markdown-it-link'
 
@@ -42,19 +41,9 @@ export async function createMarkdownPlugin(
   const setups: ((md: MarkdownIt) => void)[] = []
   const entryPath = slash(entry)
 
-  let shiki: Highlighter | undefined
-  let shikiOptions: MarkdownItShikiOptions | undefined
+  const { plugin, shiki, shikiOptions } = await createMarkdownItShiki(clientRoot, roots, config, mode)
 
-  if (config.highlighter === 'shiki') {
-    const result = await createMarkdownItShiki(clientRoot, roots, config, mode)
-    shiki = result.shiki
-    shikiOptions = result.shikiOptions
-    setups.push(md => md.use(result.plugin))
-  }
-  else {
-    console.warn('[Slidev] Highlighter: Prism highlighter is deprecated, and will be removed in v0.50. Refer to https://github.com/slidevjs/slidev/issues/1390')
-    setups.push(md => md.use(MarkdownItPrism))
-  }
+  setups.push(md => md.use(plugin))
 
   if (config.mdc)
     setups.push(md => md.use(MarkdownItMdc))

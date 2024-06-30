@@ -45,7 +45,7 @@ export function getDefaultConfig(): SlidevConfig {
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
   const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -78,6 +78,10 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     console.warn(`[slidev] "shikiji" is merged back to "shiki", you can safely change it "highlighter: shiki"`)
     config.highlighter = 'shiki'
   }
+
+  // @ts-expect-error compat
+  if (config.highlighter === 'prism')
+    throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
