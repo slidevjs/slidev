@@ -13,10 +13,6 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/',
   },
   {
-    text: 'Installation',
-    link: '/guide/install',
-  },
-  {
     text: 'Markdown Syntax',
     link: '/guide/syntax',
   },

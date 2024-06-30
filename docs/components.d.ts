@@ -9,8 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     Arrow: typeof import('./.vitepress/@slidev/client/builtin/Arrow.vue')['default']
     AutoFitText: typeof import('./.vitepress/@slidev/client/builtin/AutoFitText.vue')['default']
-    'Carbon:chevronLeft': typeof import('~icons/carbon/chevron-left')['default']
-    'Carbon:chevronRight': typeof import('~icons/carbon/chevron-right')['default']
     CodeBlockWrapper: typeof import('./.vitepress/@slidev/client/builtin/CodeBlockWrapper.vue')['default']
     Demo: typeof import('./.vitepress/theme/components/Demo.vue')['default']
     DemoEditor: typeof import('./.vitepress/theme/components/DemoEditor.vue')['default']
