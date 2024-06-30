@@ -61,7 +61,6 @@
     "lint-staged": "^15.2.5",
     "mermaid": "^10.9.1",
     "playwright-chromium": "^1.44.1",
-    "pnpm": "^9.1.4",
     "prettier-plugin-slidev": "^1.0.5",
     "rimraf": "^5.0.7",
     "shiki": "^1.6.1",

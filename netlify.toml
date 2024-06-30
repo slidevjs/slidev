@@ -1,6 +1,6 @@
 [build]
 publish = "docs/.vitepress/dist"
-command = "corepack enable && pnpm run docs:build"
+command = "pnpm run docs:build"
 
 [build.environment]
 NODE_VERSION = "20"
