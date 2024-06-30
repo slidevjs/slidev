@@ -109,15 +109,13 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               exclude: EXCLUDE_LOCAL,
               include: INCLUDE_LOCAL,
             },
-        css: options.data.config.css === 'unocss'
-          ? {
-              postcss: {
-                plugins: [
-                  await import('postcss-nested').then(r => (r.default || r)()) as any,
-                ],
-              },
-            }
-          : {},
+        css: {
+          postcss: {
+            plugins: [
+              await import('postcss-nested').then(r => (r.default || r)()) as any,
+            ],
+          },
+        },
         server: {
           fs: {
             strict: true,
