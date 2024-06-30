@@ -395,7 +395,7 @@ cli.command(
     for (const entryFile of entry as unknown as string[]) {
       const md = await parser.parse(await fs.readFile(entryFile, 'utf-8'), entryFile)
       parser.prettify(md)
-      parser.save(md)
+      await parser.save(md)
     }
   },
 )
@@ -437,7 +437,7 @@ cli.command(
           const firstSlide = data.entry.slides[0]
           firstSlide.frontmatter.theme = dirPath
           parser.prettifySlide(firstSlide)
-          parser.save(data.entry)
+          await parser.save(data.entry)
 
           console.log(`Theme "${name}" ejected successfully to "${dirPath}"`)
         },

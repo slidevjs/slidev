@@ -160,9 +160,9 @@ export function useCommands() {
   registerCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
   registerCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
 
-  registerCommand('slidev.remove-slide', ({ slide }: SlidesTreeElement) => {
+  registerCommand('slidev.remove-slide', async ({ slide }: SlidesTreeElement) => {
     const md = activeSlidevData.value!.markdownFiles[slide.filepath]
     md.slides.splice(md.slides.indexOf(slide), 1)
-    saveSlidevMarkdown(md)
+    await saveSlidevMarkdown(md)
   })
 }
