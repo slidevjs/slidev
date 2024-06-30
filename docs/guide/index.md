@@ -20,11 +20,11 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 - 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
 - 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides
 - 🧮 [**LaTeX**](/guide/syntax.html#latex) - built-in LaTeX math equations support
-- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams with textual descriptions
+- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
 - 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any icon set directly
 - 💻 [**Editors**](/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
 - 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
-- 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
+- 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
 
@@ -85,6 +85,13 @@ slidev slides.md
 ```
 
 ::::
+
+## Basic Commands
+
+- `slidev slides.md` - Start the dev server
+- `slidev build slides.md` - Build the slides for production
+- `slidev export slides.md` - Export the slides to PDF, PNGs, or PPTX
+- `slidev format slides.md` - Format the slides content
 
 <!--
 
