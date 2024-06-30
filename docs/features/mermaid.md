@@ -3,11 +3,13 @@ layout: feature
 relates:
   - Mermaid: https://mermaid-js.github.io/mermaid/
   - Mermaid Live Editor: https://mermaid-js.github.io/mermaid-live-editor/
+description: |
+  Create diagrams/graphs from textual descriptions, powered by Mermaid.
 ---
 
 # Mermaid.js Diagrams
 
-You can also create diagrams / graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
+You can also create diagrams/graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
 
 Code blocks marked as `mermaid` will be converted to diagrams, for example:
 

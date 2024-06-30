@@ -6,6 +6,8 @@ relates:
   - feature/import-snippet
   - Custom Code Runners: /custom/config-code-runners
 since: v0.49.5
+description: |
+  A monaco editor that allows you to write code directly in the slides and save the changes back to the file.
 ---
 
 # Writable Monaco Editor

@@ -4,6 +4,8 @@ relates:
   - feature/monaco-write
   - feature/monaco-editor
 since: v0.47.0
+description: |
+  Import code snippets from existing files into your slides.
 ---
 
 # Import Code Snippets

@@ -7,6 +7,8 @@ relates:
   - feature/static-line-highlighting
   - feature/dynamic-line-highlighting
 since: v0.43.1
+description: |
+  Highlight specific lines in LaTeX blocks.
 ---
 
 # LaTex line highlighting

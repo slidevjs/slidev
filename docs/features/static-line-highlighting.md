@@ -2,6 +2,8 @@
 layout: feature
 depends:
   - feature/code-block
+description: |
+  Highlight specific lines in code blocks.
 ---
 
 # Static Line Highlighting

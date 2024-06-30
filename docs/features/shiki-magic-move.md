@@ -6,6 +6,8 @@ depends:
 relates:
   - Shiki Magic Move: https://github.com/shikijs/shiki-magic-move
 since: v0.48.0
+description: |
+  Enable granular transition between code changes, similar to Keynote's Magic Move.
 ---
 
 # Shiki Magic Move

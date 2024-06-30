@@ -5,6 +5,8 @@ depends:
 relates:
   - TwoSlash: https://twoslash.netlify.app/
 since: v0.46.0
+description: |
+  A powerful tool for rendering TypeScript code blocks with type information on hover or inlined.
 ---
 
 # TwoSlash Integration

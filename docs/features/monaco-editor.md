@@ -5,6 +5,8 @@ depends:
 relates:
   - Monaco Editor: https://microsoft.github.io/monaco-editor/
   - Configure Monaco Editor: /custom/config-monaco
+description: |
+  Use Monaco Editor to turn code blocks into fully-featured editors, or generate a diff between two code blocks.
 ---
 
 # Monaco Editor

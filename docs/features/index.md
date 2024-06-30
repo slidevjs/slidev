@@ -17,7 +17,7 @@ import { data as features } from './index.data'
   <a v-for="feature in features" :key="feature.id" :href="withBase(feature.link)">
     <div>
       <div font-bold > {{ feature.title }} </div>
-      <div h-20 text-wrap leading-5 op-80 pt-1> {{ feature.description }} </div>
+      <div h-20 text-wrap leading-5 op-80 pt-1 overflow-hidden text-sm> {{ feature.description }} </div>
     </div>
   </a>
 </div>

@@ -2,6 +2,8 @@
 layout: feature
 depends:
   - feature/code-block
+description: |
+  Enable line numbering for all code blocks across the slides or individually.
 ---
 
 # Line Numbers

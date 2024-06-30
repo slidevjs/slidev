@@ -2,6 +2,8 @@
 layout: feature
 depends:
   - feature/code-block
+description: |
+  Set a maximum height for a code block and enable scrolling.
 ---
 
 # Max Height

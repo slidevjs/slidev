@@ -4,15 +4,15 @@ outline: deep
 
 # Getting Started
 
-Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown while also having the power of HTML and Vue components to deliver pixel-perfect layouts and designs with embedded interactive demos in your presentations.
+Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown while having the power of HTML and Vue to deliver pixel-perfect designs with embedded interactive demos in your presentation.
 
-It uses a feature-rich markdown file to generate beautiful slides with an instant reloading experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are endless.
+It uses a feature-rich Markdown syntax to generate beautiful slides with an instant updating experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are limitless.
 
-You can learn more about the rationale behind the project in the [Why Slidev](/guide/why) section.
+You can learn more about the rationale behind this project in the [Why Slidev](/guide/why) section.
 
 ## Features
 
-- 📝 [**Markdown-based**](/guide/syntax.html) - use your favorite editors and workflow
+- 📝 [**Markdown-based**](/guide/syntax.html) - foucus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
 - 🎨 [**Themable**](/themes/gallery.html) - theme can be shared and used with npm packages
 - 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
@@ -26,17 +26,19 @@ You can learn more about the rationale behind the project in the [Why Slidev](/g
 - 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
 - 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or even a hostable SPA
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
-- 🛠 [**Hackable**](/custom/config-vite.html) - using Vite plugins, Vue components, or any npm packages
+- 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
 
-## Scaffolding Your First Presentation
+## Creating a Slides Project
 
 ### Try it Online
 
-Start Slidev right in your browser: [sli.dev/new](https://sli.dev/new)
+Start Slidev right now in your browser: [sli.dev/new](https://sli.dev/new)
 
 [![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://sli.dev/new)
 
 ### Create Locally
+
+You should have [Node.js](https://nodejs.org) installed. Then, create a new Slidev project with the following command:
 
 ::: code-group
 
@@ -44,21 +46,51 @@ Start Slidev right in your browser: [sli.dev/new](https://sli.dev/new)
 npm init slidev@latest
 ```
 
-```bash [yarn]
-yarn create slidev
-```
-
 ```bash [pnpm]
 pnpm create slidev
 ```
 
+```bash [yarn]
+yarn create slidev
+```
+
 :::
 
-Follow the prompts and start making your slides now! For more details about the markdown syntax, read through the [syntax guide](/guide/syntax).
+Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check the [syntax guide](/guide/syntax). <!-- TODO: -->
+
+:::: details Single file usage (not recommended)
+
+If you prefer to have a single Markdown file as your slides, you can install the Slidev CLI globally:
+
+::: code-group
+
+```bash [npm]
+npm i -g @slidev/cli
+```
+
+```bash [pnpm]
+pnpm i -g @slidev/cli
+```
+
+```bash [yarn]
+yarn global add @slidev/cli
+```
+
+:::
+
+Then, you can create and start a single file slides with:
+
+```bash
+slidev slides.md
+```
+
+::::
+
+<!--
 
 ## Command Line Interface
 
-In a project where Slidev is installed, you can use the `slidev` binary in your npm scripts.
+In a project where Slidev is installed, you can use the `slidev` field in your npm scripts:
 
 ```json
 {
@@ -70,7 +102,7 @@ In a project where Slidev is installed, you can use the `slidev` binary in your 
 }
 ```
 
-Otherwise, you can use it with [`npx`](https://www.npmjs.com/package/npx)
+Otherwise, you can use it with [`npx`](https://github.com/npm/cli/blob/latest/bin/npx):
 
 ```bash
 $ npx slidev
@@ -103,6 +135,8 @@ console.log('Hello, World!')
 ````
 
 Read more about the Slidev Markdown syntax in the [syntax guide](/guide/syntax).
+
+-->
 
 ## Tech Stack
 

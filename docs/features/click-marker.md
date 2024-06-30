@@ -4,6 +4,8 @@ depends:
   - guide/syntax#notes
   - feature/clicks-system
 since: v0.48.0
+description: |
+  Highlighting notes and auto-scrolling to the active section of notes.
 ---
 
 # Click Markers

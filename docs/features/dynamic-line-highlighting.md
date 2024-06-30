@@ -3,6 +3,8 @@ layout: feature
 depends:
   - feature/static-line-highlighting
   - feature/clicks-system
+description: |
+  Highlight specific lines in code blocks dynamically based on clicks.
 ---
 
 # Dynamic Line Highlighting

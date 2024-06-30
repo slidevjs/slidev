@@ -267,6 +267,10 @@ export default defineConfig({
         items: Guide,
       },
       {
+        text: 'Features',
+        link: '/features/',
+      },
+      {
         text: 'Theme',
         items: [
           ...Theme,
