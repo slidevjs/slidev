@@ -8,7 +8,7 @@ export const templateTitleRendererMd: VirtualModuleTemplate = {
 
     lines.push(
       `<script setup lang="ts">`,
-      `import { useSlideContext } from '@slidev/client'`,
+      `import { useSlideContext } from '@slidev/client/context.ts'`,
       `import { computed } from 'vue'`,
       `const props = defineProps<{ no?: number | string }>()`,
       `const { $page } = useSlideContext()`,

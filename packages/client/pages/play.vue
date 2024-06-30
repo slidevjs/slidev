@@ -37,18 +37,21 @@ registerShortcuts()
 if (__SLIDEV_FEATURE_WAKE_LOCK__)
   useWakeLock()
 
-useStyleTag(computed(() => `
-vite-error-overlay {
-  --width: calc(100vw - ${isEditorVertical.value ? 0 : editorWidth.value}px);
-  --height: calc(100vh - ${isEditorVertical.value ? editorHeight.value : 0}px);
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: calc(var(--width) / var(--slidev-slide-scale));
-  height: calc(var(--height) / var(--slidev-slide-scale));
-  transform-origin: top left;
-  transform: scale(var(--slidev-slide-scale));
-}`))
+if (import.meta.hot) {
+  useStyleTag(computed(() => `
+    vite-error-overlay {
+      --width: calc(100vw - ${isEditorVertical.value ? 0 : editorWidth.value}px);
+      --height: calc(100vh - ${isEditorVertical.value ? editorHeight.value : 0}px);
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: calc(var(--width) / var(--slidev-slide-scale));
+      height: calc(var(--height) / var(--slidev-slide-scale));
+      transform-origin: top left;
+      transform: scale(var(--slidev-slide-scale));
+    }`,
+  ))
+}
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 

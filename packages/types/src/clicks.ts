@@ -63,8 +63,7 @@ export interface ClicksContext {
   register: (el: ClicksElement, info: Pick<ClicksInfo, 'delta' | 'max'> | null) => void
   unregister: (el: ClicksElement) => void
   readonly isMounted: boolean
-  onMounted: () => void
-  onUnmounted: () => void
+  setup: () => void
   readonly currentOffset: number
   readonly total: number
 }

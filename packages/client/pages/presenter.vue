@@ -56,7 +56,7 @@ const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
-    return [nextRoute.value!, 0] as const
+    return [nextRoute.value, 0] as const
   else
     return null
 })
@@ -135,6 +135,11 @@ onMounted(() => {
             render-context="previewNext"
           />
         </SlideContainer>
+        <div v-else class="h-full flex justify-center items-center">
+          <div class="text-gray-500">
+            End of the presentation
+          </div>
+        </div>
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
           Next
         </div>

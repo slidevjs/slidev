@@ -1,8 +1,7 @@
 import { clamp, sum } from '@antfu/utils'
 import type { ClicksContext, NormalizedRangeClickValue, NormalizedSingleClickValue, RawAtValue, RawSingleAtValue, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
-import { computed, ref, shallowReactive } from 'vue'
-import { routeForceRefresh } from '../logic/route'
+import { computed, onMounted, onUnmounted, ref, shallowReactive } from 'vue'
 
 export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleClickValue {
   if (at === false || at === 'false')
@@ -54,17 +53,19 @@ export function createClicksContextBase(
     get isMounted() {
       return isMounted.value
     },
-    onMounted: () => {
-      isMounted.value = true
-      // Convert maxMap to reactive
-      maxMap = shallowReactive(maxMap)
-      // Make sure the query is not greater than the total
-      context.current = current.value
-    },
-    onUnmounted: () => {
-      isMounted.value = false
-      relativeSizeMap = new Map()
-      maxMap = new Map()
+    setup() {
+      onMounted(() => {
+        isMounted.value = true
+        // Convert maxMap to reactive
+        maxMap = shallowReactive(maxMap)
+        // Make sure the query is not greater than the total
+        context.current = current.value
+      })
+      onUnmounted(() => {
+        isMounted.value = false
+        relativeSizeMap = new Map()
+        maxMap = new Map()
+      })
     },
     calculateSince(rawAt, size = 1) {
       const at = normalizeSingleAtValue(rawAt)
@@ -144,13 +145,9 @@ export function createClicksContextBase(
       maxMap.delete(el)
     },
     get currentOffset() {
-      // eslint-disable-next-line no-unused-expressions
-      routeForceRefresh.value
       return sum(...relativeSizeMap.values())
     },
     get total() {
-      // eslint-disable-next-line no-unused-expressions
-      routeForceRefresh.value
       return clicksTotalOverrides
         ?? (isMounted.value
           ? Math.max(0, ...maxMap.values())

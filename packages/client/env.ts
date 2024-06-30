@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { objectMap } from '@antfu/utils'
 import configs from '#slidev/configs'
 
@@ -6,8 +6,8 @@ export { configs }
 
 export const mode = __DEV__ ? 'dev' : 'build'
 
-export const slideAspect = ref(configs.aspectRatio ?? (16 / 9))
-export const slideWidth = ref(configs.canvasWidth ?? 980)
+export const slideAspect = computed(() => configs.aspectRatio)
+export const slideWidth = computed(() => configs.canvasWidth)
 
 // To honor the aspect ratio more as possible, we need to approximate the height to the next integer.
 // Doing this, we will prevent on print, to create an additional empty white page after each page.

@@ -35,6 +35,3 @@ export function useRouteQuery<T extends string | string[]>(
     },
   })
 }
-
-// force update collected elements when the route is fully resolved
-export const routeForceRefresh = ref(0)
