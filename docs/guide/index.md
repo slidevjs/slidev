@@ -88,10 +88,29 @@ slidev slides.md
 
 ## Basic Commands
 
-- `slidev slides.md` - Start the dev server
-- `slidev build slides.md` - Build the slides for production
-- `slidev export slides.md` - Export the slides to PDF, PNGs, or PPTX
-- `slidev format slides.md` - Format the slides content
+Slidev provides a set of commands. Here are some of the most common ones:
+
+- `slidev` - Start the dev server ([learn more](../builtin/cli#dev))
+- `slidev build` - Build the slides for production ([learn more](../builtin/cli#build))
+- `slidev export` - Export the slides to PDF, PNGs, or PPTX ([learn more](../builtin/cli#export))
+- `slidev format` - Format the slides content ([learn more](../builtin/cli#format))
+- `slidev --help` - Show the help message
+
+To run these commands, you can add them to your `package.json` scripts (which is has been done for you if you used the `npm init slidev` command):
+
+```json
+{
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build",
+    "export": "slidev export"
+  }
+}
+```
+
+Then, you can run them with `npm run dev`, `npm run build`, and `npm run export`.
+
+For more information about the CLI, please check the [CLI guide](../builtin/cli).
 
 <!--
 
