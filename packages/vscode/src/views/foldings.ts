@@ -1,17 +1,20 @@
 import { parse } from '@slidev/parser'
 import type { TextDocument } from 'vscode'
 import { FoldingRangeKind, languages } from 'vscode'
-import { useDisposable } from '../composables/useDisposable'
+import { createSingletonComposable, useDisposable, useEventEmitter, watch } from 'reactive-vscode'
 import { getProjectFromDoc } from '../composables/useProjectFromDoc'
-import { createSingletonComposable } from '../utils/singletonComposable'
+import { projects } from '../projects'
 
 export const useFoldings = createSingletonComposable(() => {
+  const emitter = useEventEmitter<void>()
+  watch(projects, () => emitter.fire(), { deep: true })
   useDisposable(languages.registerFoldingRangeProvider(
     {
       scheme: 'file',
       language: 'markdown',
     },
     {
+      onDidChangeFoldingRanges: emitter.event,
       async provideFoldingRanges(document: TextDocument) {
         if (!getProjectFromDoc(document))
           return // Not a slidev markdown file

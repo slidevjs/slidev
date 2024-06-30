@@ -1,13 +1,11 @@
-import { computed, onScopeDispose, watchEffect } from '@vue/runtime-core'
+import { computed, createSingletonComposable, onScopeDispose, useVscodeContext, watchEffect } from 'reactive-vscode'
 import { window } from 'vscode'
-import { activeEntry, activeProject, projects } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { configuredPort } from '../configs'
-import { generateReadyHtml } from '../html/ready'
 import { generateErrorHtml } from '../html/error'
+import { generateReadyHtml } from '../html/ready'
+import { activeEntry, activeProject, projects } from '../projects'
 import { useDevServer } from './useDevServer'
 import { useServerDetector } from './useServerDetector'
-import { useVscodeContext } from './useVscodeContext'
 
 export const usePreviewState = createSingletonComposable(() => {
   const detectServer = useServerDetector(configuredPort)

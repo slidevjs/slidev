@@ -1,6 +1,6 @@
 import { slash } from '@antfu/utils'
-import type { MaybeRefOrGetter } from '@vue/runtime-core'
-import { computed, toValue } from '@vue/runtime-core'
+import type { MaybeRefOrGetter } from 'reactive-vscode'
+import { computed, toValue } from 'reactive-vscode'
 import type { TextDocument } from 'vscode'
 import { activeProject, projects } from '../projects'
 

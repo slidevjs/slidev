@@ -1,5 +1,5 @@
-import type { Ref } from '@vue/runtime-core'
-import { reactive, watch } from '@vue/runtime-core'
+import type { Ref } from 'reactive-vscode'
+import { reactive, watch } from 'reactive-vscode'
 
 const versionRE = /<meta name="slidev:version" content="([^"]+)">/
 const entryRE = /<meta charset="slidev:entry" content="([^"]+)">/

@@ -1,23 +1,21 @@
-import { ref, watch } from '@vue/runtime-core'
-import { TextEditorSelectionChangeKind, window } from 'vscode'
+import { createSingletonComposable, ref, useActiveTextEditor, useTextEditorSelection, watchEffect } from 'reactive-vscode'
+import { TextEditorSelectionChangeKind } from 'vscode'
 import { activeSlidevData } from '../projects'
 import { getFirstDisplayedChild } from '../utils/getFirstDisplayedChild'
-import { createSingletonComposable } from '../utils/singletonComposable'
-import { useActiveTextEditor } from './useActiveTextEditor'
-import { useDisposable } from './useDisposable'
 import { getProjectFromDoc } from './useProjectFromDoc'
 
 export const useFocusedSlideNo = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
+  const selection = useTextEditorSelection(editor, [TextEditorSelectionChangeKind.Command, undefined])
 
   const slideNo = ref(1)
 
-  function updateSlideNo() {
+  watchEffect(() => {
     const data = activeSlidevData.value
     const projectInfo = getProjectFromDoc(editor.value?.document)
     if (!data || !projectInfo || !editor.value)
       return
-    const line = editor.value.selection.active.line + 1
+    const line = selection.value.active.line + 1
     const slide = projectInfo.md.slides.find(s => s.start <= line && line <= s.end)
     if (slide) {
       const source = getFirstDisplayedChild(slide)
@@ -28,16 +26,7 @@ export const useFocusedSlideNo = createSingletonComposable(() => {
       if (no)
         slideNo.value = no
     }
-  }
-
-  updateSlideNo()
-
-  useDisposable(window.onDidChangeTextEditorSelection(({ kind }) => {
-    if (kind !== TextEditorSelectionChangeKind.Command)
-      updateSlideNo()
-  }))
-
-  watch(activeSlidevData, updateSlideNo)
+  })
 
   return slideNo
 })
