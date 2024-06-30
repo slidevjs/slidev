@@ -2,9 +2,9 @@
 
 Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [UnoCSS](/custom/config-unocss), [Monaco](/custom/config-monaco), etc.)
 
-## Frontmatter Configures
+## Slides project configurations {#headmatter}
 
-You can configure Slidev in the frontmatter of your first slide, the following shows the default value for each option.
+You can configure the whole slides project in the frontmatter of your **first** slide (i.e. headmatter). The following shows the default value for each option:
 
 ```yaml
 ---
@@ -105,11 +105,11 @@ htmlAttrs:
 ---
 ```
 
-Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more options.
+Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more details.
 
-## Per slide configuration
+## Per slide configurations {#frontmatter}
 
-In addition, every slide accepts the following configuration in the Frontmatter block:
+Also every slide accepts the following configuration in its frontmatter block:
 
 - `clicks` (`number`): Custom clicks count (learn more [here](/guide/animations.html#custom-total-clicks-count)).
 - `clicksStart` (`number`): Custom start clicks count.

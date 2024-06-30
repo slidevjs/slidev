@@ -4,20 +4,28 @@ outline: deep
 
 # Markdown Syntax
 
-Slides are written within **a single markdown file** (by default `./slides.md`).
+Slides are written within **a single Markdown file** as its entry. By default, it is named `slides.md`, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 
-You can use [the Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you normally would, with the additional support of inlined HTML and Vue Components. Styling using [UnoCSS](/custom/config-unocss) is also supported. Use `---` padded with a new line to separate your slides.
+Not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you usually use, Slidev also provides additional features to enhance your slides:
+
+- Use Vue Components in Markdown
+- Style with UnoCSS
+- ...
+
+## Slide Separators
+
+Use `---` padded with a new line to separate your slides.
 
 ````md
-# Slidev
+# Title
 
-Hello, World!
+Hello, **Slidev**!
 
 ---
 
-# Page 2
+# Slide 2
 
-Directly use code blocks for highlighting
+Use code blocks for highlighting
 
 ```ts
 console.log('Hello, World!')
@@ -25,16 +33,16 @@ console.log('Hello, World!')
 
 ---
 
-# Page 3
+# Slide 3
 
-You can directly use Windi CSS and Vue components to style and enrich your slides.
+Use UnoCSS and Vue components to style and enrich your slides
 
 <div class="p-3">
   <Tweet id="20" />
 </div>
 ````
 
-## Frontmatter & Layouts
+## Frontmatter & Headmatter
 
 Specify layouts and other metadata for each slide by converting the separators into [frontmatter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
@@ -42,7 +50,8 @@ Specify layouts and other metadata for each slide by converting the separators i
 
 ```md
 ---
-layout: cover
+theme: seriph
+title: Welcome to Slidev
 ---
 
 # Slidev
@@ -52,7 +61,7 @@ This is the cover page.
 ---
 layout: center
 background: /background-1.png
-class: 'text-white'
+class: text-white
 ---
 
 # Page 2
@@ -66,41 +75,11 @@ This is a page with the layout `center` and a background image.
 This is a default page without any additional metadata.
 ```
 
-Refer to [customization](/custom/) for more details.
-
-# Slidev
-
-This is the cover page.
-
----
-
-```yaml
-# The first yaml block will be treated as the frontmatter of that slide
-layout: center
-background: /background-1.png
-class: 'text-white'
-```
-
-# Page 2
-
-This is a page with the layout `center` and a background image.
-````
-
-## Code Blocks
-
-One big reason that led to the creation of Slidev was the need to perfectly display code in slides. Consequently, you can use Markdown-flavored code blocks to highlight your code.
-
-````md
-```ts
-console.log('Hello, World!')
-```
-````
-
-Slidev has [Shiki](https://github.com/shikijs/shiki) built in as the syntax highlighter. Refer to [the highlighters section](/custom/highlighters) for more details.
+Note that the first frontmatter block is called the **headmatter** and includes the metadata for the whole slide deck. The rest are **frontmatters** for individual slides. Options you can set are described in the [Slides project configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
 
 ## Embedded Styles
 
-You can use `<style>` tag in your Markdown directly to override styles for the **current slide**.
+You can use the `<style>` tag in your Markdown directly to define styles for **only the current slide**.
 
 ```md
 # This is Red
@@ -113,12 +92,12 @@ h1 {
 
 ---
 
-# Next slide is not affected
+# Other slides are not affected
 ```
 
-The `<style>` tag in Markdown is always [scoped](https://vuejs.org/api/sfc-css-features.html#scoped-css). As a result, a selector with a child combinator (`.a > .b`) is unusable as such; see the previous link. To have global style overrides, check out the [customization section](/custom/directory-structure#style).
+The `<style>` tag in Markdown is always [scoped](https://vuejs.org/api/sfc-css-features.html#scoped-css). As a result, a selector with a child combinator (`.a > .b`) is unusable as such; see the previous link. To have global style, check out the [customization section](/custom/directory-structure#style).
 
-Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and [directives](https://unocss.dev/transformers/directives) (e.g. `--uno:` or `@apply`)
+Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and [directives](https://unocss.dev/transformers/directives):
 
 ```md
 # Slidev
@@ -128,39 +107,17 @@ Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and 
 <style>
 blockquote {
   code {
-    --uno: text-teal-500 dark:text-teal-400;
+    --uno: 'text-teal-500 dark:text-teal-400';
   }
 }
 </style>
-```
-
-## Static Assets
-
-Just like you would do in markdown, you can use images pointing to a remote or local URL.
-
-For remote assets, the built-in [`vite-plugin-remote-assets`](https://github.com/antfu/vite-plugin-remote-assets) will cache them onto the disk at first run, ensuring instant loading even for large images later on.
-
-```md
-![Remote Image](https://sli.dev/favicon.png)
-```
-
-For local assets, put them into the [`public` folder](/custom/directory-structure.html#public) and reference them with a **leading slash** (i.e., `/pic.png`, NOT `./pic.png`, which is relative to the working file).
-
-```md
-![Local Image](/pic.png)
-```
-
-If you want to apply custom sizes or styles, you can convert them to the `<img>` tag:
-
-```html
-<img src="/pic.png" class="m-40 h-40 rounded shadow" />
 ```
 
 ## Notes
 
 You can also create presenter notes for each slide. They will show up in [Presenter Mode](/guide/presenter-mode) for you to reference during presentations.
 
-In Markdown, the last comment block in each slide will be treated as a note.
+The comment blocks at the end of each slide are treated as the note of the slide:
 
 ```md
 ---
@@ -171,13 +128,13 @@ layout: cover
 
 This is the cover page.
 
-<!-- This is a note -->
+<!-- This is a **note** -->
 
 ---
 
 # Page 2
 
-<!-- This is NOT a note because it precedes the content of the slide -->
+<!-- This is NOT a note because it is not at the end of the slide -->
 
 The second page
 
@@ -186,103 +143,7 @@ This is another note
 -->
 ```
 
-Basic Markdown and HTML are also supported in notes when the Presenter renders note content.
-
-## Slots
-
-> Available since v0.18
-
-Some layouts can provide multiple contributing points using [Vue's named slots](https://v3.vuejs.org/guide/component-slots.html).
-
-For example, in [`two-cols` layout](https://github.com/slidevjs/slidev/blob/main/packages/client/layouts/two-cols.vue), you can have two columns left (`default` slot) and right (`right` slot) side by side.
-
-```md
----
-layout: two-cols
----
-
-<template v-slot:default>
-
-# Left
-
-This shows on the left
-
-</template>
-<template v-slot:right>
-
-# Right
-
-This shows on the right
-
-</template>
-```
-
-<div class="grid grid-cols-2 rounded border border-gray-400 border-opacity-50 px-10 pb-4">
-<div>
-<h3>Left</h3>
-<p>This shows on the left</p>
-</div>
-<div>
-<h3>Right</h3>
-<p>This shows on the right</p>
-</div>
-</div>
-
-We also provide a shorthand syntactical sugar `::name::` for slot name. The following works exactly the same as the previous example.
-
-```md
----
-layout: two-cols
----
-
-# Left
-
-This shows on the left
-
-::right::
-
-# Right
-
-This shows on the right
-```
-
-You can also explicitly specify the default slot and provide in the custom order.
-
-```md
----
-layout: two-cols
----
-
-::right::
-
-# Right
-
-This shows on the right
-
-::default::
-
-# Left
-
-This shows on the left
-```
-
-## Configurations
-
-All configurations can be defined in the Markdown file. For example:
-
-```md
----
-theme: seriph
-layout: cover
-background: 'https://source.unsplash.com/1600x900/?nature,water'
----
-
-# Slidev
-
-This is the cover page.
-```
-
-Learn more about [frontmatter configurations](/custom/#frontmatter-configures).
+Basic Markdown and HTML are also supported in notes and will be rendered.
 
 ## Multiple Entries
 
@@ -379,33 +240,10 @@ src: ./content.md
 ---
 ```
 
-## MDC Syntax
-
-> Available since v0.43.0
-
-Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxtjs.org/guide/writing/mdc) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
-
-You can enable it by adding `mdc: true` to the frontmatter of your markdown file.
-
-```mdc
----
-mdc: true
----
-
-This is a [red text]{style="color:red"} :inline-component{prop="value"}
-
-![](/image.png){width=500px lazy}
-
-::block-component{prop="value"}
-The **default** slot
-::
-```
-
-Learn more about [MDC Syntax](https://content.nuxt.com/guide/writing/mdc).
-
----
+<!--
 
 # Prettier Support
+# Static Assets
 # Line Highlighting
 # Line Numbers
 # TwoSlash Integration
@@ -417,10 +255,14 @@ Learn more about [MDC Syntax](https://content.nuxt.com/guide/writing/mdc).
 # Click Markers
 # Icons
 # Styling Icons
+# Slots
 # Import Code Snippets
 # LaTeX
-<!-- # Inline -->
-<!-- # Block -->
-<!-- # Chemical equations -->
+## Inline
+## Block
+## Chemical equations
 # LaTex line highlighting
 # Diagrams
+# MDC Syntax
+
+-->
