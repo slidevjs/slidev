@@ -43,6 +43,7 @@ export const templateStyle: VirtualModuleTemplate = {
       imports.push(
         `import "${await resolveImportUrl('@shikijs/vitepress-twoslash/style.css')}"`,
         `import "${resolveUrlOfClient('styles/shiki-twoslash.css')}"`,
+        `import 'shiki-magic-move/style.css'`,
       )
     }
 
