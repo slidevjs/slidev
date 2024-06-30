@@ -46,15 +46,13 @@ export const templateStyle: VirtualModuleTemplate = {
       )
     }
 
-    if (data.config.css === 'unocss') {
-      imports.unshift(
-        `import "${await resolveImportUrl('@unocss/reset/tailwind.css')}"`,
-        'import "uno:preflights.css"',
-        'import "uno:typography.css"',
-        'import "uno:shortcuts.css"',
-      )
-      imports.push('import "uno.css"')
-    }
+    imports.unshift(
+      `import "${await resolveImportUrl('@unocss/reset/tailwind.css')}"`,
+      'import "uno:preflights.css"',
+      'import "uno:typography.css"',
+      'import "uno:shortcuts.css"',
+    )
+    imports.push('import "uno.css"')
 
     return imports.join('\n')
   },

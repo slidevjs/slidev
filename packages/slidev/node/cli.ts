@@ -634,7 +634,7 @@ function printInfo(
   verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
 
   console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
-  console.log(dim('  css engine  ') + (options.data.config.css ? blue(options.data.config.css) : gray('none')))
+  console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
 
   if (port) {
