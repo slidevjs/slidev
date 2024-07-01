@@ -9,7 +9,7 @@ declare module 'vue-router' {
 
   interface RouteMeta {
     // inherited from frontmatter
-    layout: string
+    layout?: string
     name?: string
     class?: string
     clicks?: number
@@ -26,7 +26,7 @@ declare module 'vue-router' {
     }
 
     // private fields
-    __clicksContext: import('@slidev/types').ClicksContext | undefined
+    __clicksContext: import('@slidev/types').ClicksContext | null
     __preloaded?: boolean
   }
 }
