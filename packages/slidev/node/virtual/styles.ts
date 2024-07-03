@@ -43,18 +43,17 @@ export const templateStyle: VirtualModuleTemplate = {
       imports.push(
         `import "${await resolveImportUrl('@shikijs/vitepress-twoslash/style.css')}"`,
         `import "${resolveUrlOfClient('styles/shiki-twoslash.css')}"`,
+        `import "${await resolveImportUrl('shiki-magic-move/style.css')}"`,
       )
     }
 
-    if (data.config.css === 'unocss') {
-      imports.unshift(
-        `import "${await resolveImportUrl('@unocss/reset/tailwind.css')}"`,
-        'import "uno:preflights.css"',
-        'import "uno:typography.css"',
-        'import "uno:shortcuts.css"',
-      )
-      imports.push('import "uno.css"')
-    }
+    imports.unshift(
+      `import "${await resolveImportUrl('@unocss/reset/tailwind.css')}"`,
+      'import "uno:preflights.css"',
+      'import "uno:typography.css"',
+      'import "uno:shortcuts.css"',
+    )
+    imports.push('import "uno.css"')
 
     return imports.join('\n')
   },

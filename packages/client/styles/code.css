@@ -5,6 +5,7 @@ html.dark:root {
 /* Shiki */
 html.dark .shiki {
   color: var(--shiki-dark, inherit);
+  background: var(--shiki-dark-bg, inherit);
   --twoslash-popup-bg: var(--shiki-dark-bg, inherit);
 }
 
@@ -81,9 +82,4 @@ html:not(.dark) .shiki span {
 .katex :after,
 .katex :before {
   border-color: currentColor;
-}
-
-/* CodeMirror */
-.CodeMirror pre.CodeMirror-placeholder {
-  opacity: 0.4;
 }

@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "0.49.11",
+  "version": "0.49.13",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -354,14 +354,14 @@
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.7.8",
+    "@antfu/utils": "^0.7.10",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.13.0",
-    "@types/vscode": "^1.89.0",
-    "@vue/reactivity": "^3.4.27",
-    "@vue/runtime-core": "^3.4.27",
-    "@vue/shared": "^3.4.27",
+    "@types/node": "^20.14.9",
+    "@types/vscode": "~1.89.0",
+    "@vue/reactivity": "^3.4.31",
+    "@vue/runtime-core": "^3.4.31",
+    "@vue/shared": "^3.4.31",
     "get-port-please": "^3.1.2",
     "ovsx": "^0.9.1"
   }
