@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# Markdown Syntax
+# Basic Syntax
 
 Slides are written within **a single Markdown file** as its entry. By default, it is named `slides.md`, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 

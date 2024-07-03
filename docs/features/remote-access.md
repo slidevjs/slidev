@@ -4,7 +4,7 @@ relates:
   - guide/ui
   - guide/cli
   - Cloudflare Quick Tunnels: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/
-details: |
+description: |
   Access your presentation remotely with Slidev's remote access feature.
 ---
 

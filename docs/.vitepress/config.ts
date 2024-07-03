@@ -13,7 +13,7 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/',
   },
   {
-    text: 'Markdown Syntax',
+    text: 'Basic Syntax',
     link: '/guide/syntax',
   },
   {
@@ -35,10 +35,6 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Static Hosting',
     link: '/guide/hosting',
-  },
-  {
-    text: 'Recording',
-    link: '/guide/recording',
   },
   {
     text: 'FAQ',

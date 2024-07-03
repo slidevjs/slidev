@@ -2,11 +2,13 @@
 layout: feature
 relates:
   - drauu: https://github.com/antfu/drauu
+description: |
+  Draw and annotate your slides with ease.
 ---
 
 # Drawing & Annotations
 
-[drauu](https://github.com/antfu/drauu) is built-in for drawing and annotation, should that help improve your presentation further.
+Slidev comes with a built-in drawing and annotation feature powered by [drauu](https://github.com/antfu/drauu). It allows you to draw and annotate your slides with ease.
 
 To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
 
