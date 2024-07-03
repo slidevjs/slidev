@@ -1,3 +1,9 @@
+---
+layout: feature
+description: |
+  Move, resize and rotate elements by dragging them with the mouse.
+---
+
 # Draggable Elements
 
 Draggable elements give you the ability to move, resize and rotate elements by dragging them with the mouse. This is useful for creating floating elements in your slides.
@@ -50,13 +56,13 @@ dragPos:
 </v-drag>
 ```
 
+## Create a Draggable Element
+
+When you create a new draggable element, you don't need to specify the position value (but you need to specify the position name if you want to use the frontmatter). Slidev will automatically generate the initial position value for you.
+
 ## Automatic Height
 
 You can set `Height` to `NaN` (if you use the directive) or `_` (if you use the component) to make the height of the draggable element automatically adjust to its content.
-
-## Create a Draggable Element
-
-When you first create a draggable element, you don't need to specify the position value (but you need to specify the position name if you want to use the frontmatter). Slidev will automatically generate the initial position value for you.
 
 ## Controls
 

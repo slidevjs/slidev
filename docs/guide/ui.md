@@ -31,7 +31,7 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 
 <br>
 
-## Quick Overview
+## Quick Overview {#quick-overview}
 
 By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have the overview of your slides so you can jump between them easily.
 
@@ -39,8 +39,21 @@ By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> 
 
 ## Presenter Mode
 
-You can click the <carbon-user-speaker class="inline-icon-btn"/> button in the navigation panel, or visit `http://localhost:<port>/presenter` manually to enter the presenter mode. To present, you may want to open two browser windows, one for the presenter and one for the audience. Generally maximizing the slideshow window on your projector screen, then controlling it from your laptop's screen is how people present with Slidev.
+To enter the presenter mode, you can click the <carbon-user-speaker class="inline-icon-btn"/> button in the navigation panel, or visit `http://localhost:<port>/presenter`.
 
-Whenever you navigate in the presenter mode, all other opened pages will automatically follow this navigation to stay in sync with the presenter.
+When giving a presentation, it's recommended to open two browser windows - one in the play mode for the audience, and another one in the presenter mode for you. Then you can share the first screen to the audience and keep the second screen for yourself.
+
+Whenever you navigate through the slides in the presenter mode, all other opened pages will automatically follow this navigation to stay in sync with the presenter.
 
 ![](/screenshots/presenter-mode.png)
+
+## Slide Overview
+
+> Available since v0.48.0
+
+<video src="https://github.com/slidevjs/slidev/assets/11247099/01bbf5b3-f916-4646-9ea4-cf269c0567cb"
+controls rounded shadow></video>
+
+You can visit an overview of all of your slides by first opening the [Quick Overview panel](#quick-overview) and then clicking the <carbon-list-boxes class="inline-icon-btn"/> on the top right, or by visiting `http://localhost:<port>/overview` directly.
+
+The overview page gives you a linear list of all your slides, with all of your notes on the side. You can double click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.

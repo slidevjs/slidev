@@ -4,6 +4,8 @@ outline: deep
 
 # Animations
 
+Animations are an essential part of slide presentations. Slidev provides a variety of ways to animate your slides, from the simple to the complex. This guide will show you how to use them effectively.
+
 ## Click Animations
 
 > [!NOTE]

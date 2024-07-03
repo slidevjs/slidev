@@ -1,10 +1,14 @@
-# Drawing & Annotations
+---
+layout: feature
+relates:
+  - drauu: https://github.com/antfu/drauu
+---
 
-> Available since v0.23
+# Drawing & Annotations
 
 [drauu](https://github.com/antfu/drauu) is built-in for drawing and annotation, should that help improve your presentation further.
 
-To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
+To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
 
 <TheTweet id="1424027510342250499" />
 
