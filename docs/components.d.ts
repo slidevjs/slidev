@@ -7,12 +7,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddonGallery: typeof import('./.vitepress/theme/components/AddonGallery.vue')['default']
     AddonInfo: typeof import('./.vitepress/theme/components/AddonInfo.vue')['default']
     Arrow: typeof import('./.vitepress/@slidev/client/builtin/Arrow.vue')['default']
     AutoFitText: typeof import('./.vitepress/@slidev/client/builtin/AutoFitText.vue')['default']
-    'Carbon:chevronLeft': typeof import('~icons/carbon/chevron-left')['default']
-    'Carbon:chevronRight': typeof import('~icons/carbon/chevron-right')['default']
+    'Carbon:logoGithub': typeof import('~icons/carbon/logo-github')['default']
     'Carbon:logoTwitter': typeof import('~icons/carbon/logo-twitter')['default']
+    'Carbon:presentationFile': typeof import('~icons/carbon/presentation-file')['default']
+    'Carbon:video': typeof import('~icons/carbon/video')['default']
     CarbonApps: typeof import('~icons/carbon/apps')['default']
     CarbonArrowLeft: typeof import('~icons/carbon/arrow-left')['default']
     CarbonArrowRight: typeof import('~icons/carbon/arrow-right')['default']
@@ -23,7 +25,6 @@ declare module 'vue' {
     CarbonMaximize: typeof import('~icons/carbon/maximize')['default']
     CarbonMinimize: typeof import('~icons/carbon/minimize')['default']
     CarbonMoon: typeof import('~icons/carbon/moon')['default']
-    CarbonPen: typeof import('~icons/carbon/pen')['default']
     CarbonSettingsAdjust: typeof import('~icons/carbon/settings-adjust')['default']
     CarbonSun: typeof import('~icons/carbon/sun')['default']
     CarbonUserAvatar: typeof import('~icons/carbon/user-avatar')['default']

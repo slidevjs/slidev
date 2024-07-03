@@ -1,25 +1,56 @@
+---
+outline: deep
+---
+
 # Exporting
 
-## Slides
+Usually the slides are displayed in a web browser, but you can also export them to PDF, PPTX, PNG, or Markdown files for sharing or printing. This feature is available through the CLI command [`slidev export`](../builtin/cli#export).
 
-### PDF
+However, interactive features in your slides may not be available in the exported files. You can build and host your slides as a web application to keep the interactivity. See [Building and Hosting](./hosting) for more information.
 
-> Exporting to PDF, PPTX, or PNG relies on [Playwright](https://playwright.dev) for rendering. You will therefore need to install [`playwright-chromium`](https://npmjs.com/package/playwright-chromium) to use this feature.
-> If you are exporting within a CI environment, [the playwright CI guide](https://playwright.dev/docs/ci) can be helpful.
+## Preparation
 
-1. Install `playwright-chromium`:
+Exporting to PDF, PPTX, or PNG relies on [Playwright](https://playwright.dev) for rendering the slides. Therefore [`playwright-chromium`](https://npmjs.com/package/playwright-chromium) is required to be installed in your project:
 
-```bash
+::: code-group
+
+```bash [npm]
 $ npm i -D playwright-chromium
 ```
 
-2. Now export your slides to PDF using the following command:
+```bash [pnpm]
+$ pnpm add -D playwright-chromium
+```
+
+```bash [yarn]
+$ yarn add -D playwright-chromium
+```
+
+:::
+
+## Formats
+
+### PDF
+
+After installing `playwright-chromium` as described above, you can export your slides to PDF using the following command:
 
 ```bash
 $ slidev export
 ```
 
-After a few seconds, your slides will be ready at `./slides-export.pdf`.
+By default, the PDF will be placed at `./slides-export.pdf`.
+
+### PPTX
+
+Slidev can also export your slides as a PPTX file:
+
+```bash
+$ slidev export --format pptx
+```
+
+Note that all the slides in the PPTX file will be exported as images, so the text will not be selectable. Presenter notes will be conveyed into the PPTX file on a per-slide basis.
+
+In this mode, the `--with-clicks` option is enabled by default. To disable it, pass `--with-clicks false`.
 
 ### PNGs and Markdown
 
@@ -35,25 +66,39 @@ You can also compile a markdown file composed of compiled png using `--format md
 $ slidev export --format md
 ```
 
-### PPTX (Microsoft PowerPoint)
+<!-- ### Presenter notes
 
-Slidev can also export your slides as a PPTX file:
+> Available since v0.36.8
 
-```bash
-$ slidev export --format pptx
-```
-
-Note that all the slides in the PPTX file will be exported as images, so the text will not be selectable. Presenter notes will be conveyed into the PPTX file on a per-slide basis.
-
-In this mode, the `--with-clicks` option is enabled by default. To disable it, use `--with-clicks false`.
-
-### Dark mode
-
-In case you want to export your slides using the dark version of the theme, use the `--dark` option:
+Export only the presenter notes (the last comment block for each slide) into a text document in PDF:
 
 ```bash
-$ slidev export --dark
+$ slidev export-notes
 ```
+
+This command also accepts multiple entries like for the [export command](#multiple-entries)
+
+## Exportable Docker Image
+
+To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintained by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
+
+```bash
+docker run --name slidev --rm -it \
+    -v ${PWD}:/slidev \
+    -p 3030:3030 \
+    -e NPM_MIRROR="https://registry.npmmirror.com" \
+    tangramor/slidev:playwright
+```
+
+Then you can use the export feature like the following under your work folder:
+
+```bash
+docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
+``` -->
+
+## Options
+
+Here are some common options you can use with the `slidev export` command. For a full list of options, see the [CLI documentation](../builtin/cli#export).
 
 ### Export Clicks Steps
 
@@ -63,16 +108,6 @@ By default, Slidev exports one page per slide with clicks animations disabled. I
 
 ```bash
 $ slidev export --with-clicks
-```
-
-### PDF outline
-
-> Available since v0.36.10
-
-You can generate the PDF outline by passing the `--with-toc` option:
-
-```bash
-$ slidev export --with-toc
 ```
 
 ### Output filename
@@ -119,41 +154,13 @@ $ slidev export *.md
 
 In this case, each input file will generate its own PDF file.
 
-## Presenter notes
+### Dark mode
 
-> Available since v0.36.8
-
-Export only the presenter notes (the last comment block for each slide) into a text document in PDF:
+In case you want to export your slides using the dark version of the theme, use the `--dark` option:
 
 ```bash
-$ slidev export-notes
+$ slidev export --dark
 ```
-
-This command also accepts multiple entries like for the [export command](#multiple-entries)
-
-## Single-Page Application (SPA)
-
-See [Static Hosting](/guide/hosting).
-
-## Exportable Docker Image
-
-To support the export feature, there is a [docker image](/guide/install#install-on-docker) (maintained by [@tangramor](https://github.com/tangramor)) with tag **playwright**. Run following command in your work folder:
-
-```bash
-docker run --name slidev --rm -it \
-    -v ${PWD}:/slidev \
-    -p 3030:3030 \
-    -e NPM_MIRROR="https://registry.npmmirror.com" \
-    tangramor/slidev:playwright
-```
-
-Then you can use the export feature like the following under your work folder:
-
-```bash
-docker exec -i slidev npx slidev export --timeout 2m --output slides.pdf
-```
-
-## Troubleshooting
 
 ### Timeouts
 
@@ -194,4 +201,14 @@ Chromium may miss some features like codecs that are required to decode some vid
 
 ```bash
 $ slidev export --executable-path [path_to_chromium]
+```
+
+### PDF outline
+
+> Available since v0.36.10
+
+You can generate the PDF outline by passing the `--with-toc` option:
+
+```bash
+$ slidev export --with-toc
 ```

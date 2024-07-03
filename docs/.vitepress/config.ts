@@ -57,7 +57,7 @@ const BuiltIn: DefaultTheme.NavItemWithLink[] = [
   },
 ]
 
-const Theme: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildren)[] = [
+const Theme: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Use Theme',
     link: '/themes/use',
@@ -89,7 +89,7 @@ const Addon: DefaultTheme.NavItemWithLink[] = [
 
 const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildren)[] = [
   {
-    text: 'Customizations',
+    text: 'Configurations',
     link: '/custom/',
   },
   {
@@ -170,6 +170,10 @@ const Resources: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Curated Covers',
     link: '/resources/covers',
+  },
+  {
+    text: 'Release Notes',
+    link: 'https://github.com/slidevjs/slidev/releases',
   },
 ]
 
@@ -252,12 +256,19 @@ export default defineConfig({
       },
       {
         text: 'Features',
-        link: '/features/',
-      },
-      {
-        text: 'Theme',
         items: [
-          ...Theme,
+          {
+            text: 'Features Map',
+            link: '/features/',
+          },
+          {
+            text: 'Themes',
+            items: Theme,
+          },
+          {
+            text: 'Addons',
+            items: Addon,
+          },
           {
             text: 'Built-in',
             items: BuiltIn,
@@ -266,23 +277,11 @@ export default defineConfig({
       },
       {
         text: 'Customize',
-        items: [
-          ...Customizations,
-          {
-            text: 'Addon',
-            items: Addon,
-          },
-        ],
+        items: Customizations,
       },
       {
         text: 'Resources',
         items: Resources,
-      },
-      {
-        text: `v${version}`,
-        items: [
-          { text: 'Release Notes', link: 'https://github.com/slidevjs/slidev/releases' },
-        ],
       },
     ],
 
@@ -311,7 +310,7 @@ export default defineConfig({
 
   locales: {
     root: {
-      label: 'English',
+      label: `English (v${version})`,
     },
     zh: {
       label: '简体中文',
