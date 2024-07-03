@@ -10,7 +10,7 @@ export interface CodeRunnerContext {
   /**
    * Highlight code with shiki.
    */
-  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => string
   /**
    * Use (other) code runner to run code.
    */

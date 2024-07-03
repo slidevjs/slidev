@@ -31,7 +31,7 @@ console.log('Hello, World!')
 
 # Slide 3
 
-Use UnoCSS and Vue components to style and enrich your slides
+You can directly use UnoCSS and Vue components to style and enrich your slides.
 
 <div class="p-3">
   <Tweet id="20" />
