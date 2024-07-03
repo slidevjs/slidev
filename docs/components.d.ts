@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddonInfo: typeof import('./.vitepress/theme/components/AddonInfo.vue')['default']
     Arrow: typeof import('./.vitepress/@slidev/client/builtin/Arrow.vue')['default']
     AutoFitText: typeof import('./.vitepress/@slidev/client/builtin/AutoFitText.vue')['default']
     'Carbon:chevronLeft': typeof import('~icons/carbon/chevron-left')['default']
@@ -34,7 +35,6 @@ declare module 'vue' {
     CodiconGlobe: typeof import('~icons/codicon/globe')['default']
     CodiconLock: typeof import('~icons/codicon/lock')['default']
     CodiconRunAll: typeof import('~icons/codicon/run-all')['default']
-    copy: typeof import('./.vitepress/theme/components/FeaturesAnimationInner copy.vue')['default']
     Demo: typeof import('./.vitepress/theme/components/Demo.vue')['default']
     DemoEditor: typeof import('./.vitepress/theme/components/DemoEditor.vue')['default']
     DemoSlide: typeof import('./.vitepress/theme/components/DemoSlide.vue')['default']
@@ -54,6 +54,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ShowCaseInfo: typeof import('./.vitepress/theme/components/ShowCaseInfo.vue')['default']
     ShowCases: typeof import('./.vitepress/theme/components/ShowCases.vue')['default']
+    SimpleIconsGithub: typeof import('~icons/simple-icons/github')['default']
+    SimpleIconsNpm: typeof import('~icons/simple-icons/npm')['default']
     SlideCurrentNo: typeof import('./.vitepress/@slidev/client/builtin/SlideCurrentNo.vue')['default']
     SlidesTotal: typeof import('./.vitepress/@slidev/client/builtin/SlidesTotal.vue')['default']
     Starport: typeof import('vue-starport')['Starport']

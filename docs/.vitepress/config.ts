@@ -78,6 +78,10 @@ const Addon: DefaultTheme.NavItemWithLink[] = [
     link: '/addons/use',
   },
   {
+    text: 'Addon Gallery',
+    link: '/addons/gallery',
+  },
+  {
     text: 'Write an Addon',
     link: '/addons/write-an-addon',
   },
