@@ -28,6 +28,8 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
 
+<!-- <FeaturesAnimation /> -->
+
 ## Creating a Slides Project
 
 ### Try it Online

@@ -1,33 +1,34 @@
-# Command Line Interface (CLI)
+# Slidev CLI
 
 `@slidev/cli` exposes a binary called `slidev` that you can use to develop, build, and export your slides.
 
+## Prerequisites
+
+To use the CLI, you can either install `@slidev/cli` globally or install it locally in your Node.js project. If you created your project with `npm init slidev`, the CLI is already installed locally.
+
 ::: warning
-`pnpx slidev` is not supported because the package name is `@slidev/cli`.
+Usually `npx slidev` is not supported because the package name is actually `@slidev/cli`.
 :::
 
-You can install `@slidev/cli` globally, or use it in a package.json script:
+Options of the commands obey the following conventions:
 
-```json
-{
-  "script": {
-    "dev": "slidev"
-  }
-}
-```
+- the value of the option can be passed after a space or a `=` character:
 
-In that case, you will be able to run `npm run dev`.
+  Example: `slidev --port 8080` is equivalent to `slidev --port=8080`
 
-You can pass options to any command:
+- `true` can be omitted for boolean options:
 
-- boolean option are `true` if they are present, false otherwise (example: `slidev --open`)
-- some options can have values you can add just after the option or by using the `=` character (example: `slidev --port 8080` or `slidev --port=8080`)
+  Example: `slidev --open` is equivalent to `slidev --open true`
+
+::: info
 
 If you use npm, please don't forget to add `--` before the options to pass them to Slidev:
 
 ```bash
-npm run slidev -- --open
+npm run slidev -- --remote --port 8080 --open
 ```
+
+:::
 
 ## `slidev [entry]` {#dev}
 
@@ -58,7 +59,7 @@ Options:
 - `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA.
 - `--theme`, `-t` (`string`): override theme.
 
-## `slidev export [entry]` {#export}
+## `slidev export [...entry]` {#export}
 
 Export slides to PDF (or other format). See [Exporting](/guide/exporting.html) for more details.
 

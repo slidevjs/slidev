@@ -303,12 +303,14 @@ So you can leverage this to apply different animations for different directions,
 }
 ```
 
-To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38), that you can add `forward:` or `backward:` prefix to any utility classes to apply them conditionally.
+To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38). You can use the `forward:` or `backward:` prefix to any UnoCSS classes to only enable them in the specific navigation direction:
 
 ```html
 <div v-click class="transition delay-300">Element</div> // [!code --]
 <div v-click class="transition forward:delay-300">Element</div> // [!code ++]
 ```
+
+In the above example, the animation is only delayed when going forward.
 
 ## Motion
 

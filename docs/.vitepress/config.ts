@@ -17,8 +17,8 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/syntax',
   },
   {
-    text: 'Navigation',
-    link: '/guide/navigation',
+    text: 'User Interface',
+    link: '/guide/ui',
   },
   {
     text: 'Animations',
@@ -63,6 +63,10 @@ const Guide: DefaultTheme.NavItemWithLink[] = [
 ]
 
 const BuiltIn: DefaultTheme.NavItemWithLink[] = [
+  {
+    text: 'CLI',
+    link: '/builtin/cli',
+  },
   {
     text: 'Components',
     link: '/builtin/components',

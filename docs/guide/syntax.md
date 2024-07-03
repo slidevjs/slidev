@@ -6,11 +6,7 @@ outline: deep
 
 Slides are written within **a single Markdown file** as its entry. By default, it is named `slides.md`, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 
-Not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) as you usually use, Slidev also provides additional features to enhance your slides:
-
-- Use Vue Components in Markdown
-- Style with UnoCSS
-- ...
+In a Slidev Markdown file, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](/features).
 
 ## Slide Separators
 
