@@ -33,9 +33,6 @@ jobs:
       - name: Setup
         run: npm i -g @antfu/ni
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
-
       - name: Install
         run: nci
         env:
@@ -78,9 +75,6 @@ jobs:
 
       - name: Setup
         run: npm i -g @antfu/ni
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
 
       - name: Install
         run: nci
