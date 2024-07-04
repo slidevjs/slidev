@@ -76,6 +76,9 @@ jobs:
       - name: Setup
         run: npm i -g @antfu/ni
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
       - name: Install
         run: nci
 
