@@ -179,7 +179,7 @@ $ slidev export --wait-until none
 
 Possible values:
 
-- `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. This is safest, but may cause timeouts.
+- `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. This is the safest, but may cause timeouts.
 - `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
 - `'load'` - consider operation to be finished when the `load` event is fired.
 - `'none'` - do not wait for any event.
