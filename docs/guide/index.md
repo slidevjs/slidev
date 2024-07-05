@@ -172,9 +172,9 @@ Read more about the Slidev Markdown syntax in the [syntax guide](/guide/syntax).
 
 Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides. We also provide tools to help you edit you slides more conveniently:
 
-- [✨ Integrated Editor](../features/side-editor)
-- [✨ VSCode Extension](../features/vscode-extension)
-- [✨ Prettier Plugin](../features/prettier-plugin)
+<LinkCard link="feature/vscode-extension" />
+<LinkCard link="feature/side-editor" />
+<LinkCard link="feature/prettier-plugin" />
 
 ## Tech Stack
 

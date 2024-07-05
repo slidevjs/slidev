@@ -21,7 +21,7 @@ Hello, **Slidev**!
 
 # Slide 2
 
-Use code blocks for highlighting
+Use code blocks for highlighting:
 
 ```ts
 console.log('Hello, World!')
@@ -31,10 +31,10 @@ console.log('Hello, World!')
 
 # Slide 3
 
-You can directly use UnoCSS and Vue components to style and enrich your slides.
+Use UnoCSS classes and Vue components to style and enrich your slides:
 
 <div class="p-3">
-  <Tweet id="20" />
+  <Tweet id="..." />
 </div>
 ````
 
@@ -72,6 +72,8 @@ This is a default page without any additional metadata.
 ```
 
 Note that the first frontmatter block is called the **headmatter** and includes the metadata for the whole slide deck. The rest are **frontmatters** for individual slides. Options you can set are described in the [Slides project configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
+
+<LinkCard link="feature/block-frontmatter" />
 
 ## Embedded Styles
 
@@ -143,98 +145,52 @@ Basic Markdown and HTML are also supported in notes and will be rendered.
 
 ## Multiple Entries
 
-> Available since v0.15
+You can split your `slides.md` into multiple files for better reusability and organization. To do this, you can use the `src` frontmatter option to specify the path to the external markdown file. For example:
 
-You can split your `slides.md` into multiple files and organize them however you'd like.
-
-`slides.md` :
+::: code-group
 
 <!-- eslint-skip -->
 
-```md
-# Page 1
+```md [./slides.md]
+# Title
 
 This is a normal page
 
 ---
-src: ./subpage2.md
+src: ./pages/toc.md // [!code highlight]
 ---
 
-<!-- this page will be loaded from './subpage2.md' -->
-Inline content will be ignored
-```
+<!-- this page will be loaded from './pages/toc.md' -->
 
-`subpage2.md` :
+Contents here are ignored
 
-```md
-# Page 2
-
-This page is from another file
-```
-
-### Frontmatter Merging
-
-You can provide frontmatter instructions from both your main entry and external markdown pages. If there are duplicate keys in them, the ones from the **main entry have the higher priority**. For example:
-
-`slides.md` :
-
-```md
 ---
-src: ./cover.md
-background: https://sli.dev/bar.png
-class: text-center
+
+# Page 4
+
+Another normal page
+
+---
+src: ./pages/toc.md   # Reuse the same file // [!code highlight]
 ---
 ```
 
-`cover.md` :
+```md [./pages/toc.md]
+# Table of Contents
 
-```md
+Part 1
+
 ---
-layout: cover
-background: https://sli.dev/foo.png
----
 
-# Cover
+# Table of Contents
 
-Cover Page
+Part 2
 ```
 
-They will end up being equivalent to the following page:
+:::
 
-```md
----
-layout: cover
-background: https://sli.dev/bar.png
-class: text-center
----
-
-# Cover
-
-Cover Page
-```
-
-### Page Reuse
-
-With the multi-entries support, reusing pages could be straightforward. For example:
-
-```yaml
----
-src: ./cover.md
----
-
----
-src: ./intro.md
----
-
----
-src: ./content.md
----
-
----
-# reuse
-src: ./content.md
----
-```
+<LinkCard link="feature/frontmatter-merging" />
+<LinkCard link="feature/import-with-range" />
 
 <!--
 
