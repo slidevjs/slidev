@@ -8,7 +8,7 @@
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^0.49.13",
+    "@slidev/cli": "^0.49.14",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "latest",
     "vue": "^3.4.31"
