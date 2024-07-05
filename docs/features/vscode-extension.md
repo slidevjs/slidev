@@ -3,6 +3,7 @@ layout: feature
 relates:
   - VS Code: https://code.visualstudio.com/
   - View in Marketplace: https://marketplace.visualstudio.com/items?itemName=antfu.slidev
+  - View in OVSX: https://open-vsx.org/extension/antfu/slidev
 description: |
   Help you better organize your slides and have a quick overview of them.
 ---
@@ -41,7 +42,7 @@ The VS Code extension provides some features to help you better organize your sl
 
 ### Installation
 
-You can install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=antfu.slidev).
+You can install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=antfu.slidev) or the [Open VSX Registry](https://open-vsx.org/extension/antfu/slidev).
 
 ### Usage
 

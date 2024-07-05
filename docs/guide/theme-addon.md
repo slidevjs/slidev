@@ -1,4 +1,8 @@
-# Use a Theme
+# Theme and Addons
+
+A slides project can have one theme and multiple addons. All of them can provide styles, components, layouts and other configs to your slides project.
+
+## Use a Theme
 
 Changing the theme in Slidev is surprisingly easy. All you need to do is to add the `theme` option in your [headmatter](../custom/index#headmatter):
 

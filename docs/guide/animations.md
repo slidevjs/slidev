@@ -8,8 +8,10 @@ Animations are an essential part of slide presentations. Slidev provides a varie
 
 ## Click Animations
 
+A "**click**" can be considered as the unit of animations in slides. A slide can have one or more clicks, and each click can trigger one or more animations - for example, revealing or hiding elements.
+
 > [!NOTE]
-> Since v0.48.0, we are rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
+> Since v0.48.0, we've rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
 
 ### `v-click`
 
@@ -33,26 +35,27 @@ To apply "click animations" for elements, you can use the `v-click` directive or
 
 ```md
 <div v-click> Hello </div>
-<div v-after> World </div>
+<div v-after> World </div>  <!-- or <v-after> World </v-after> -->
 ```
 
 When you press "next", both `Hello` and `World` will show up together.
 
 ### Hide after clicking
 
-Add a `.hide` modifier to `v-click` or `v-after` to make the element invisible after clicking, instead of showing up.
+Add a `.hide` modifier to `v-click` or `v-after` directives to make elements invisible after clicking, instead of showing up.
 
 ```md
 <div v-click> Visible after 1 click </div>
-<div v-click.hide> Hidden after 2 click </div>
-<div v-after.hide> Hidden after 2 click </div>
+<div v-click.hide> Hidden after 2 clicks </div>
+<div v-after.hide> Hidden after 2 clicks </div>
 ```
 
-For `v-click` component, you can use the `hide` prop to achieve the same effect:
+For the components, you can use the `hide` prop to achieve the same effect:
 
 ```md
 <v-click> Visible after 1 click </v-click>
-<v-click hide> Hidden after 2 click </v-click>
+<v-click hide> Hidden after 2 clicks </v-click>
+<v-after hide> Also hidden after 2 clicks </v-after>
 ```
 
 ### `v-clicks`
@@ -90,17 +93,17 @@ Also, you can use the `every` prop to specify the number of items to show after 
 ```md
 <v-clicks every="2">
 
-- Item 1 (part 1)
-- Item 1 (part 2)
-- Item 2 (part 1)
-- Item 2 (part 2)
+- Item 1.1
+- Item 1.2
+- Item 2.1
+- Item 2.2
 
 </v-clicks>
 ```
 
 ### Positioning
 
-By default, the clicking animations take place one by one. You can customize the animation position of elements by using the `at` prop or the `v-click` directive with value.
+By default, the clicking animations are triggered one by one. You can customize the animation "position" of elements by using the `at` prop or the `v-click` directive with value.
 
 Like the CSS layout system, click-animated elements can be "relative" or "absolute":
 
@@ -135,7 +138,7 @@ In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
 <v-click-gap size="1" /><img v-after />
 ```
 
-::: info
+::: tip `at` prop value format
 Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relative positions:
 
 | Value          | Kind     |
@@ -176,15 +179,15 @@ You can mix the absolute and relative positions:
 
 The following example synchronizes the highlighting of the two code blocks:
 
-````md
+````md {1,6}
 ```js {1|2}{at:1}
 1 + 1
 'a' + 'b'
 ```
 
 ```js {1|2}{at:1}
-2
-'ab'
+= 2
+= 'ab'
 ```
 ````
 
@@ -216,11 +219,11 @@ See [`VSwitch` Component](/builtin/components#vswitch) for more details.
 
 ### Custom Total Clicks Count
 
-By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
+By default, Slidev automatically calculates how many clicks are required before going to the next slide. You can override this via the `clicks` frontmatter option:
 
 ```yaml
 ---
-# 10 clicks in this slide, before going to the next
+# 10 clicks in this slide, before going to the next slide
 clicks: 10
 ---
 ```
@@ -286,33 +289,6 @@ To specify animations for only certain slides or layouts
 ```
 
 Learn more about [customizing styles](/custom/directory-structure#style).
-
-### Direction Specific Animations
-
-> Available since v0.48.0
-
-In some cases, you might want to have different animations going forward and backward. Slide will apply the `.slidev-nav-go-forward` or `.slidev-nav-go-backward` class to slide container when navigating.
-
-So you can leverage this to apply different animations for different directions, for example:
-
-```css
-/* example: delay on only forward but not backward */
-.slidev-nav-go-forward .slidev-vclick-target {
-  transition-delay: 500ms;
-}
-.slidev-nav-go-backward .slidev-vclick-target {
-  transition-delay: 0;
-}
-```
-
-To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38). You can use the `forward:` or `backward:` prefix to any UnoCSS classes to only enable them in the specific navigation direction:
-
-```html
-<div v-click class="transition delay-300">Element</div> // [!code --]
-<div v-click class="transition forward:delay-300">Element</div> // [!code ++]
-```
-
-In the above example, the animation is only delayed when going forward.
 
 ## Motion
 

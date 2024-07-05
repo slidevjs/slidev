@@ -4,33 +4,35 @@ outline: deep
 
 # Getting Started
 
-Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown while having the power of HTML and Vue to deliver pixel-perfect designs with embedded interactive demos in your presentation.
+Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown. With the power of web technologies like Vue, you are able to deliver pixel-perfect designs with interactive demos to your presentation.
 
+<!--
 It uses a feature-rich Markdown syntax to generate beautiful slides with an instant updating experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are limitless.
+-->
 
 You can learn more about the rationale behind this project in the [Why Slidev](/guide/why) section.
 
 ## Features
 
-- 📝 [**Markdown-based**](/guide/syntax.html) - foucus on content and use your favorite editor
-- 🧑‍💻 [**Developer Friendly**](/guide/syntax.html#code-blocks) - built-in syntax highlighting, live coding, etc.
-- 🎨 [**Themable**](/themes/gallery.html) - theme can be shared and used with npm packages
-- 🌈 [**Stylish**](/guide/syntax.html#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
-- 🤹 [**Interactive**](/custom/directory-structure.html#components) - embedding Vue components seamlessly
-- 🎙 [**Presenter Mode**](/guide/presenter-mode.html) - use another window, or even your phone to control your slides
-- 🎨 [**Drawing**](/guide/drawing.html) - draw and annotate on your slides
-- 🧮 [**LaTeX**](/guide/syntax.html#latex) - built-in LaTeX math equations support
-- 📰 [**Diagrams**](/guide/syntax.html#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
-- 🌟 [**Icons**](/guide/syntax.html#icons) - Access to icons from any icon set directly
-- 💻 [**Editors**](/guide/editors.html) - integrated editor, or [extension for VS Code](https://github.com/slidevjs/slidev-vscode)
-- 🎥 [**Recording**](/guide/recording.html) - built-in recording and camera view
-- 📤 [**Portable**](/guide/exporting.html) - export into PDF, PNGs, or PPTX
+- 📝 [**Markdown-based**](/guide/syntax) - foucus on content and use your favorite editor
+- 🧑‍💻 [**Developer Friendly**](/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
+- 🎨 [**Themable**](/themes/gallery) - theme can be shared and used with npm packages
+- 🌈 [**Stylish**](/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
+- 🤹 [**Interactive**](/custom/directory-structure#components) - embedding Vue components seamlessly
+- 🎙 [**Presenter Mode**](/guide/presenter-mode) - use another window, or even your phone to control your slides
+- 🎨 [**Drawing**](/guide/drawing) - draw and annotate on your slides
+- 🧮 [**LaTeX**](/guide/syntax#latex) - built-in LaTeX math equations support
+- 📰 [**Diagrams**](/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
+- 🌟 [**Icons**](/guide/syntax#icons) - access to icons from any icon set directly
+- 💻 [**Editors**](/guide/editors) - integrated editor, or the [VSCode extension](/features/vscode-extension)
+- 🎥 [**Recording**](/guide/recording) - built-in recording and camera view
+- 📤 [**Portable**](/guide/exporting) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
 
 <!-- <FeaturesAnimation /> -->
 
-## Creating a Slides Project
+## Create Slides
 
 ### Try it Online
 
@@ -165,6 +167,14 @@ console.log('Hello, World!')
 Read more about the Slidev Markdown syntax in the [syntax guide](/guide/syntax).
 
 -->
+
+## Setup Your Editor
+
+Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides. We also provide tools to help you edit you slides more conveniently:
+
+- [✨ Integrated Editor](../features/side-editor)
+- [✨ VSCode Extension](../features/vscode-extension)
+- [✨ Prettier Plugin](../features/prettier-plugin)
 
 ## Tech Stack
 

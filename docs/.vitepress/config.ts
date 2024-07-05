@@ -2,45 +2,7 @@ import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { version } from '../../package.json'
-
-const Guide: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Why Slidev',
-    link: '/guide/why',
-  },
-  {
-    text: 'Getting Started',
-    link: '/guide/',
-  },
-  {
-    text: 'Basic Syntax',
-    link: '/guide/syntax',
-  },
-  {
-    text: 'User Interface',
-    link: '/guide/ui',
-  },
-  {
-    text: 'Animations',
-    link: '/guide/animations',
-  },
-  {
-    text: 'Editor Integrations',
-    link: '/guide/editors',
-  },
-  {
-    text: 'Exporting',
-    link: '/guide/exporting',
-  },
-  {
-    text: 'Static Hosting',
-    link: '/guide/hosting',
-  },
-  {
-    text: 'FAQ',
-    link: '/guide/faq',
-  },
-]
+import { data as Guide } from './guides'
 
 const BuiltIn: DefaultTheme.NavItemWithLink[] = [
   {
@@ -57,29 +19,10 @@ const BuiltIn: DefaultTheme.NavItemWithLink[] = [
   },
 ]
 
-const Theme: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Use Theme',
-    link: '/themes/use',
-  },
-  {
-    text: 'Theme Gallery',
-    link: '/themes/gallery',
-  },
+const Advanced: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Write a Theme',
     link: '/themes/write-a-theme',
-  },
-]
-
-const Addon: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Use Addon',
-    link: '/addons/use',
-  },
-  {
-    text: 'Addon Gallery',
-    link: '/addons/gallery',
   },
   {
     text: 'Write an Addon',
@@ -87,7 +30,7 @@ const Addon: DefaultTheme.NavItemWithLink[] = [
   },
 ]
 
-const Customizations: (DefaultTheme.NavItemWithLink | DefaultTheme.NavItemChildren)[] = [
+const Customizations: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Configurations',
     link: '/custom/',
@@ -164,6 +107,14 @@ const Resources: DefaultTheme.NavItemWithLink[] = [
     link: '/showcases',
   },
   {
+    text: 'Theme Gallery',
+    link: '/themes/gallery',
+  },
+  {
+    text: 'Addon Gallery',
+    link: '/addons/gallery',
+  },
+  {
     text: 'Learning Resources',
     link: '/resources/learning',
   },
@@ -183,12 +134,8 @@ const slidebars: DefaultTheme.SidebarItem[] = [
     items: Guide,
   },
   {
-    text: 'Themes',
-    items: Theme,
-  },
-  {
-    text: 'Addons',
-    items: Addon,
+    text: 'Advanced',
+    items: Advanced,
   },
   {
     text: 'Customizations',
@@ -252,32 +199,30 @@ export default defineConfig({
     nav: [
       {
         text: 'Guide',
-        items: Guide,
+        items: [
+          ...Guide,
+          {
+            text: 'Advanced',
+            items: Advanced,
+          },
+        ],
       },
       {
-        text: 'Features',
+        text: 'Reference',
         items: [
           {
-            text: 'Features Map',
+            text: '✨ Features',
             link: '/features/',
-          },
-          {
-            text: 'Themes',
-            items: Theme,
-          },
-          {
-            text: 'Addons',
-            items: Addon,
           },
           {
             text: 'Built-in',
             items: BuiltIn,
           },
+          {
+            text: 'Customize',
+            items: Customizations,
+          },
         ],
-      },
-      {
-        text: 'Customize',
-        items: Customizations,
       },
       {
         text: 'Resources',
@@ -304,7 +249,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2020 Anthony Fu.',
+      copyright: 'Copyright © 2020-2024 Anthony Fu.',
     },
   },
 

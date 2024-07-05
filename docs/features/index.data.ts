@@ -21,7 +21,7 @@ export default createContentLoader('features/*.md', {
       if (name === 'index' || name === 'features')
         continue
       for (const depend of md.frontmatter.depends ?? []) {
-        const dependName = depend.match(/\/([\w-]+)$/)?.[1]
+        const dependName = depend.match(/\/([\w-]+)($|#)/)?.[1]
         if (dependName) {
           derivesMap[dependName] ??= []
           derivesMap[dependName].push(`feature/${name}`)
