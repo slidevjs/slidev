@@ -65,18 +65,5 @@ export default defineConfig({
         return 'export default {}'
       },
     },
-    // {
-    //   name: 'features-layout',
-    //   enforce: 'pre',
-    //   transform(code, id) {
-    //     if (!/\/features\/.*\.md$/.test(id))
-    //       return
-    //     return transformFeatureCard(code)
-    //   }
-    // }
   ],
 })
-
-// function transformFeatureCard(raw: string) {
-//   return `<FeatureCard> ${raw} </FeatureCard>`
-// }

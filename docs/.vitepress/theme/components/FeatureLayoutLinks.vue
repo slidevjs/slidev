@@ -3,7 +3,7 @@ import type { DefaultTheme } from 'vitepress'
 import VPMenuGroup from 'vitepress/dist/client/theme-default/components/VPMenuGroup.vue'
 import { computed } from 'vue'
 import { data as features } from '../../../features/index.data.js'
-import { data as guides } from '../../guides'
+import { data as guides } from '../../guides.js'
 
 const props = defineProps<{
   name: string

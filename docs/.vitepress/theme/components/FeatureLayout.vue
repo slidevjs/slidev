@@ -27,10 +27,10 @@ const pageName = computed(() =>
           <div class="aside-content">
             <div flex flex-col flex-grow>
               <VPMenuLink :item="{ text: 'All features', link: '/features' }" />
-              <FeatureCardLinks name="Depends on" :links="data.depends" />
-              <FeatureCardLinks name="Relates to" :links="data.relates" />
-              <FeatureCardLinks name="Derives" :links="data.derives" />
-              <FeatureCardSince :version="data.since" />
+              <FeatureLayoutLinks name="Depends on" :links="data.depends" />
+              <FeatureLayoutLinks name="Relates to" :links="data.relates" />
+              <FeatureLayoutLinks name="Derives" :links="data.derives" />
+              <FeatureLayoutSince :version="data.since" />
             </div>
           </div>
         </div>
