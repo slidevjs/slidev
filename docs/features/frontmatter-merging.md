@@ -5,7 +5,7 @@ depends:
 relates:
   - feature/import-with-range
 description: |
-  Merge frontmatter from multiple markdown files
+  Merge frontmatter from multiple markdown files.
 ---
 
 # Frontmatter Merging

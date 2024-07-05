@@ -2,7 +2,7 @@
 layout: feature
 depends:
   - feature/latex
-  - feature/clicks-system
+  - guide/animations
 relates:
   - feature/static-line-highlighting
   - feature/dynamic-line-highlighting
@@ -17,12 +17,12 @@ To highlight specific lines, simply add line numbers within bracket `{}`. Line n
 
 ```latex
 $$ {1|3|all}
-\begin{array}{c}
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-\nabla \cdot \vec{\mathbf{B}} & = 0
-\end{array}
+\begin{aligned}
+\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
+\nabla \cdot \vec{B} &= 0 \\
+\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
+\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
+\end{aligned}
 $$
 ```
 

@@ -2,7 +2,7 @@
 layout: feature
 depends:
   - feature/code-block
-  - feature/clicks-system
+  - guide/animations
 relates:
   - Shiki Magic Move: https://github.com/shikijs/shiki-magic-move
 since: v0.48.0
@@ -16,7 +16,7 @@ description: |
 
 <video src="https://github.com/slidevjs/slidev/assets/11247099/79927794-27ba-4342-9911-9996cec889d6" controls rounded shadow w-full></video>
 
-In Slidev, we bind the magic-move to the [clicks system](/guide/animations#click-animations). The syntax is to wrap multiple code blocks representing each step with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphs to each step as you click.
+In Slidev, we bind the magic-move to the [clicks system](/guide/animations#click-animation). The syntax is to wrap multiple code blocks representing each step with <code>````md magic-move</code> (mind it's **4** backticks), this will be transformed into one code block, that morphs to each step as you click.
 
 `````md
 ````md magic-move
@@ -30,6 +30,7 @@ console.log(`Step ${1 + 1}`)
 console.log(`Step ${3}` as string)
 ```
 ````
+
 `````
 
 It's also possible to mix Magic Move with [line highlighting](#line-highlighting) and [line numbers](#line-numbers), for example:
@@ -50,4 +51,5 @@ let count = 1
 const add = () => count += 1
 ```
 ````
+
 `````

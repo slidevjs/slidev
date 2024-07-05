@@ -2,13 +2,13 @@
 outline: deep
 ---
 
-# Animations
+# Animation
 
-Animations are an essential part of slide presentations. Slidev provides a variety of ways to animate your slides, from the simple to the complex. This guide will show you how to use them effectively.
+Animation is an essential part of slide presentations. Slidev provides a variety of ways to animate your slides, from the simple to the complex. This guide will show you how to use them effectively.
 
-## Click Animations
+## Click Animation
 
-A "**click**" can be considered as the unit of animations in slides. A slide can have one or more clicks, and each click can trigger one or more animations - for example, revealing or hiding elements.
+A "**click**" can be considered as the unit of animation steps in slides. A slide can have one or more clicks, and each click can trigger one or more animations - for example, revealing or hiding elements.
 
 > [!NOTE]
 > Since v0.48.0, we've rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).

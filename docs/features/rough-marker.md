@@ -1,7 +1,7 @@
 ---
 layout: feature
 depends:
-  - feature/clicks-system
+  - guide/animations
 relates:
   - Rough Notation: https://github.com/linkstrifer/react-rough-notation
 since: v0.48.0

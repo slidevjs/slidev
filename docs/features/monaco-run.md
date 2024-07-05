@@ -2,7 +2,7 @@
 layout: feature
 depends:
   - feature/monaco-editor
-  - feature/clicks-system
+  - guide/animations
 relates:
   - Custom Code Runners: /custom/config-code-runners
 since: v0.48.0

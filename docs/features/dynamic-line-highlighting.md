@@ -2,7 +2,7 @@
 layout: feature
 depends:
   - feature/static-line-highlighting
-  - feature/clicks-system
+  - guide/animations
 description: |
   Highlight specific lines in code blocks dynamically based on clicks.
 ---

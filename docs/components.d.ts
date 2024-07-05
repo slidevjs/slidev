@@ -22,6 +22,7 @@ declare module 'vue' {
     CarbonApps: typeof import('~icons/carbon/apps')['default']
     CarbonArrowLeft: typeof import('~icons/carbon/arrow-left')['default']
     CarbonArrowRight: typeof import('~icons/carbon/arrow-right')['default']
+    CarbonBadge: typeof import('~icons/carbon/badge')['default']
     CarbonDownload: typeof import('~icons/carbon/download')['default']
     CarbonEdit: typeof import('~icons/carbon/edit')['default']
     CarbonInformation: typeof import('~icons/carbon/information')['default']
@@ -54,6 +55,8 @@ declare module 'vue' {
     LinkCard: typeof import('./.vitepress/theme/components/LinkCard.vue')['default']
     LinkCardGroup: typeof import('./.vitepress/theme/components/LinkCardGroup.vue')['default']
     LinkInline: typeof import('./.vitepress/theme/components/LinkInline.vue')['default']
+    LogosVue: typeof import('~icons/logos/vue')['default']
+    MdiAccountCircle: typeof import('~icons/mdi/account-circle')['default']
     Mermaid: typeof import('./.vitepress/@slidev/client/builtin/Mermaid.vue')['default']
     Monaco: typeof import('./.vitepress/@slidev/client/builtin/Monaco.vue')['default']
     PlantUml: typeof import('./.vitepress/@slidev/client/builtin/PlantUml.vue')['default']
@@ -75,6 +78,8 @@ declare module 'vue' {
     TocList: typeof import('./.vitepress/@slidev/client/builtin/TocList.vue')['default']
     Transform: typeof import('./.vitepress/@slidev/client/builtin/Transform.vue')['default']
     Tweet: typeof import('./.vitepress/@slidev/client/builtin/Tweet.vue')['default']
+    TwemojiCatWithTearsOfJoy: typeof import('~icons/twemoji/cat-with-tears-of-joy')['default']
+    UimRocket: typeof import('~icons/uim/rocket')['default']
     Youtube: typeof import('./.vitepress/@slidev/client/builtin/Youtube.vue')['default']
   }
 }

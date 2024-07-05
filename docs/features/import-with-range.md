@@ -5,7 +5,7 @@ depends:
 relates:
   - feature/frontmatter-merging
 description: |
-  Import specific slides from another Markdown file
+  Import specific slides from another Markdown file.
 ---
 
 # Import Slides with Range

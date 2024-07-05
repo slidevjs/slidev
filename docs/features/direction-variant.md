@@ -3,6 +3,8 @@ layout: feature
 relates:
   - UnoCSS Variants: https://unocss.dev/config/variants#variants
 since: v0.48.0
+description: |
+  Apply different styles and animations based on the navigation direction.
 ---
 
 # Navigation Direction Variants
