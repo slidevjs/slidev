@@ -30,7 +30,6 @@ console.log(`Step ${1 + 1}`)
 console.log(`Step ${3}` as string)
 ```
 ````
-
 `````
 
 It's also possible to mix Magic Move with [line highlighting](#line-highlighting) and [line numbers](#line-numbers), for example:
@@ -51,5 +50,4 @@ let count = 1
 const add = () => count += 1
 ```
 ````
-
 `````
