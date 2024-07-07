@@ -4,12 +4,12 @@ outline: deep
 
 # User Interface
 
-## Navigation Bar
+## Navigation Bar {#navigation-bar}
 
 In Play mode, move your mouse to the bottom left corner of the page, you can see the navigation bar.
 ![](/screenshots/navbar.png)
 
-## Navigation Actions
+## Navigation Actions {#navigation-actions}
 
 | Keyboard Shortcut                   | Button in Navigation Bar                                                              | Description                                                                                |
 | ----------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -20,11 +20,11 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 | <kbd>down</kbd>                     | -                                                                                     | next slide                                                                                 |
 | <kbd>o</kbd>                        | <carbon-apps class="inline-icon-btn"/>                                                | toggle [slides overview](#slides-overview)                                                 |
 | <kbd>d</kbd>                        | <carbon-sun class="inline-icon-btn"/> <carbon-moon class="inline-icon-btn"/>          | toggle dark mode                                                                           |
-| -                                   | <carbon-user-avatar class="inline-icon-btn"/>                                         | toggle [camera view](/guide/recording#camera-view)                                         |
-| -                                   | <carbon-video class="inline-icon-btn"/>                                               | [recording](/guide/recording#camera-view)                                                  |
-| -                                   | <carbon-user-speaker class="inline-icon-btn"/>                                        | enter [presenter mode](/guide/presenter-mode)                                              |
+| -                                   | <carbon-user-avatar class="inline-icon-btn"/>                                         | toggle [camera view](../features/recording#camera-view)                                         |
+| -                                   | <carbon-video class="inline-icon-btn"/>                                               | [recording](../features/recording)                                                  |
+| -                                   | <carbon-user-speaker class="inline-icon-btn"/>                                        | enter [presenter mode](../guide/ui#presenter-mode)                                              |
 | -                                   | <carbon-edit class="inline-icon-btn"/>                                                | toggle [integrated editor](../features/side-editor)                                        |
-| -                                   | <carbon-download class="inline-icon-btn"/>                                            | download slides (only appear in [SPA build](/guide/exporting#single-page-application-spa)) |
+| -                                   | <carbon-download class="inline-icon-btn"/>                                            | download slides (only appear in [SPA build](../guide/hosting#spa)) |
 | -                                   | <carbon-information class="inline-icon-btn"/>                                         | show information about the slides                                                          |
 | -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | show settings menu                                                                         |
 | <kbd>g</kbd>                        | -                                                                                     | show goto...                                                                               |
@@ -37,7 +37,7 @@ By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> 
 
 ![](/screenshots/slides-overview.png)
 
-## Presenter Mode
+## Presenter Mode {#presenter-mode}
 
 To enter the presenter mode, you can click the <carbon-user-speaker class="inline-icon-btn"/> button in the navigation panel, or visit `http://localhost:<port>/presenter`.
 
@@ -47,7 +47,7 @@ Whenever you navigate through the slides in the presenter mode, all other opened
 
 ![](/screenshots/presenter-mode.png)
 
-## Slide Overview
+## Slide Overview {#slides-overview}
 
 > Available since v0.48.0
 

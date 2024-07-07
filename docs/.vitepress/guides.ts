@@ -1,6 +1,4 @@
-import type { DefaultTheme } from 'vitepress'
-
-export const data: DefaultTheme.NavItemWithLink[] = [
+export default [
   {
     text: 'Why Slidev',
     link: '/guide/why',

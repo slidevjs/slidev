@@ -2,7 +2,7 @@
 
 Slidev is fully customizable, from styling to tooling configurations. It allows you to configure the tools underneath ([Vite](/custom/config-vite), [UnoCSS](/custom/config-unocss), [Monaco](/custom/config-monaco), etc.)
 
-## Slides deck configurations {#headmatter}
+## Slides Deck Configs {#headmatter}
 
 You can configure the whole slides project in the frontmatter of your **first** slide (i.e. headmatter). The following shows the default value for each option:
 
@@ -111,7 +111,7 @@ htmlAttrs:
 
 Check out the [type definitions](https://github.com/slidevjs/slidev/blob/main/packages/types/src/config.ts) for more details.
 
-## Per slide configurations {#frontmatter}
+## Per-slide Configs {#frontmatter}
 
 Also every slide accepts the following configuration in its frontmatter block. The following shows the default value for each option:
 
@@ -163,10 +163,13 @@ Refer to the [Directory Structure](/custom/directory-structure) section.
 
 ## Config Tools
 
-- [Highlighters](/custom/highlighters)
-- [Configure Vue](/custom/config-vue)
-- [Configure Vite](/custom/config-vite)
-- [Configure UnoCSS](/custom/config-unocss)
-- [Configure Monaco](/custom/config-monaco)
-- [Configure KaTeX](/custom/config-katex)
-- [Configure Mermaid](/custom/config-mermaid)
+<script setup>
+import VPLink from 'vitepress/dist/client/theme-default/components/VPLink.vue'
+import customizations from '../.vitepress/customizations'
+</script>
+
+<li v-for="c of customizations.slice(2)" :key="c.text">
+  <VPLink :href="c.link">
+    {{ c.text }}
+  </VPLink>
+</li>

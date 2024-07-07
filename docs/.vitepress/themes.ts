@@ -1,10 +1,3 @@
-export type Tag =
-  | 'official'
-  | 'dark'
-  | 'light'
-  | 'colorful'
-  | 'minimalism'
-
 export interface ThemeInfo {
   id: string
   name: string
@@ -16,7 +9,7 @@ export interface ThemeInfo {
     link?: string
   }
   link?: string
-  tags?: Tag[]
+  tags?: string[]
 }
 
 export const official: ThemeInfo[] = [

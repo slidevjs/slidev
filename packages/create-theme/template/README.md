@@ -6,7 +6,7 @@ A (...) theme for [Slidev](https://github.com/slidevjs/slidev).
 
 <!--
   Learn more about how to write a theme:
-  https://sli.dev/themes/write-a-theme.html
+  https://sli.dev/guide/write-a-theme.html
 --->
 
 <!--

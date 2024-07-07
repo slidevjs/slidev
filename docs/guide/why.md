@@ -20,7 +20,7 @@ Learn more about [Slidev's Markdown Syntax](/guide/syntax).
 
 Themes for Slidev can be shared and installed using npm packages. You then apply them with only one line of config.
 
-Check out the [theme gallery](/themes/gallery) or [learn how to write a theme](/themes/write-a-theme).
+Check out the [theme gallery](../resources/theme-gallery) or [learn how to write a theme](../guide/write-theme).
 
 ## Developer Friendly
 
@@ -42,13 +42,13 @@ You can write custom Vue components and use them directly inside your markdown f
 
 Slidev provides built-in recording and camera view. You can share your presentation with your camera view inside, or record and save them separately for your screen and camera. All with one go, no additional tools are needed.
 
-Learn more about [recording here](/guide/recording).
+Learn more about [recording here](/features/recording).
 
 ## Portable
 
 Export your slides into PDF, PPTX, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere.
 
-Read more about that in the [exporting docs](/guide/exporting).
+Read more about that in the [exporting guide](/guide/exporting).
 
 ## Hackable
 

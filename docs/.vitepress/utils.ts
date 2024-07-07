@@ -1,5 +1,5 @@
 import { data as features } from '../features/index.data.js'
-import { data as guides } from './guides.js'
+import guides from './guides.js'
 
 function removeHash(link: string) {
   const idx = link.lastIndexOf('#')

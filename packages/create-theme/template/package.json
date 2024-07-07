@@ -20,7 +20,7 @@
   "devDependencies": {
     "@slidev/cli": "^0.49.13"
   },
-  "//": "Learn more: https://sli.dev/themes/write-a-theme.html",
+  "//": "Learn more: https://sli.dev/guide/write-a-theme.html",
   "slidev": {
     "colorSchema": "both",
     "highlighter": "all",

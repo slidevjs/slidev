@@ -2,7 +2,7 @@
 
 Browse awesome addons available for Slidev here.
 
-Read more about [how to use an addon](/addons/use), or [how to write your own](/addons/write-an-addon) and share with the community!
+Read more about [how to use addons](../guide/theme-addon#use-addon), or [how to write your own](../guide/write-an-addon) and share with the community!
 
 ## Official Addons
 

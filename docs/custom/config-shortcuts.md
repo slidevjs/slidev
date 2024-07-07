@@ -31,7 +31,7 @@ export default defineShortcutsSetup((nav: NavOperations, base: ShortcutOptions[]
 })
 ```
 
-With the setup, you can provide the custom setting for shortcuts mentioned in [Navigation](/guide/navigation#navigation-bar). The above configuration binds the next animation or slide to <kbd>enter</kbd> and the previous animation or slide to <kbd>backspace</kbd>.
+With the setup, you can provide the custom setting for shortcuts mentioned in [Navigation](../guide/ui#navigation-bar). The above configuration binds the next animation or slide to <kbd>enter</kbd> and the previous animation or slide to <kbd>backspace</kbd>.
 
 The configuration function receives an object with some navigation methods, and returns an array containing some shortcut configuration. Refer to the type definitions for more details.
 

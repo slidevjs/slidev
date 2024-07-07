@@ -13,13 +13,13 @@ description: |
 
 Slidev comes with a built-in camera view and recording feature. They make it simple for you to record your presentation without having to switch between another recording tool while delivering a presentation.
 
-## Camera View
+## Camera View {#camera-view}
 
 Click the <carbon-user-avatar class="inline-icon-btn"/> button in the [navigation bar](../guide/ui#navigation-bar) to show your camera view in the presentation. You can drag to move it, and use the handler on the right bottom corner to resize it. The size and position will persist across reloads.
 
 <TheTweet id="1395006771027120133" />
 
-## Recording
+## Start Recording {#start-recording}
 
 Clicking the <carbon-video class="inline-icon-btn"/> button in the [navigation bar](../guide/ui#navigation-bar) will bring up a dialog for you. Here you can choose to either record your camera output embedded in your slides or to separate them into two video files.
 

@@ -6,13 +6,13 @@ outline: deep
 
 Slides are written within **a single Markdown file**, which is called a **Slidev Markdown**. A presentation has a Slidev Markdown as its entry, which is `./slides.md` by default, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 
-In a Slidev Markdown, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](/features).
+In a Slidev Markdown, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](../features/).
 
 ## Slide Separators
 
 Use `---` padded with a new line to separate your slides.
 
-````md
+````md {5,15}
 # Title
 
 Hello, **Slidev**!
@@ -40,19 +40,19 @@ Use UnoCSS classes and Vue components to style and enrich your slides:
 
 ## Frontmatter & Headmatter
 
-Specify layouts and other metadata for each slide by converting the separators into [frontmatter blocks](https://jekyllrb.com/docs/front-matter/). Each frontmatter starts with a triple-dash and ends with another. Texts between them are data objects in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
+At the beginning of each slide, you can add a optional [frontmatter](https://jekyllrb.com/docs/front-matter/) to configure the slide. The first frontmatter block is called **headmatter** and can configure the whole slide deck. The rest are **frontmatters** for individual slides. Texts in the headmatter or the frontmatter should be a object in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
 <!-- eslint-skip -->
 
-```md
+```md {1-4,10-14,26-28}
 ---
 theme: seriph
 title: Welcome to Slidev
 ---
 
-# Slidev
+# Slide 1
 
-This is the cover page.
+The frontmatter of this slide is also the headmatter
 
 ---
 layout: center
@@ -60,30 +60,42 @@ background: /background-1.png
 class: text-white
 ---
 
-# Page 2
+# Slide 2
 
-This is a page with the layout `center` and a background image.
+A page with the layout `center` and a background image
 
 ---
 
-# Page 3
+# Slide 3
 
-This is a default page without any additional metadata.
+A page without frontmatter
+
+---
+src: ./pages/4.md  # This slide only contains a frontmatter
+---
+
+---
+
+# Slide 5
 ```
 
-Note that the first frontmatter block is called the **headmatter** and includes the metadata for the whole slide deck. The rest are **frontmatters** for individual slides. Options you can set are described in the [Slides project configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
+Configurations you can set are described in the [Slides deck configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
 
-<SeeAlso :links="[
-  'feature/block-frontmatter',
-]" />
+To make the headmatters more readable, you can installed the VSCode extension:
+
+<LinkCard link="feature/vscode-extension" />
+
+Also, there is another possible frontmatter format:
+
+<LinkCard link="feature/block-frontmatter" />
 
 ## Notes
 
-You can also create presenter notes for each slide. They will show up in [Presenter Mode](/guide/presenter-mode) for you to reference during presentations.
+You can also create presenter notes for each slide. They will show up in [Presenter Mode](../guide/ui#presenter-mode) for you to reference during presentations.
 
 The comment blocks at the end of each slide are treated as the note of the slide:
 
-```md
+```md {9,19-21}
 ---
 layout: cover
 ---
@@ -103,7 +115,7 @@ This is the cover page.
 The second page
 
 <!--
-This is another note
+This is _another_ note
 -->
 ```
 

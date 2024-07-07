@@ -2,15 +2,15 @@
 
 Browse awesome themes available for Slidev here.
 
-Read more about [how to use a theme](/themes/use), or [how to write your own](/themes/write-a-theme) and share with the community!
+Read more about [how to use a theme](../guide/theme-addon#use-theme), or [how to write your own](../guide/write-theme) and share with the community!
 
-## Official Themes
+## Official Themes {#official-themes}
 
 <ClientOnly>
   <ThemeGallery collection="official"/>
 </ClientOnly>
 
-## Community Themes
+## Community Themes {#community-themes}
 
 Here are the curated themes made by the community.
 
@@ -19,6 +19,6 @@ Here are the curated themes made by the community.
   <ThemeGallery collection="community"/>
 </ClientOnly>
 
-## More Themes
+## More Themes {#more-themes}
 
 Find all the [themes available on NPM](https://www.npmjs.com/search?q=keywords%3Aslidev-theme).

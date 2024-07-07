@@ -1,6 +1,6 @@
 # Write a Theme
 
-Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature is not related to the appearance and can be used separately, it should be implemented as an [addon](./write-an-addon).
+Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature is not related to the appearance and can be used separately, it should be implemented as an [addon](./write-addon).
 
 To get started, we recommend you use our generator for scaffolding your first theme
 
@@ -20,7 +20,7 @@ $ yarn create slidev-theme
 
 :::
 
-Then you can modify and play with it. You can also refer to the [official themes](/themes/gallery) as examples.
+Then you can modify and play with it. You can also refer to the [official themes](../resources/theme-gallery#official-themes) as examples.
 
 ## Capability
 
@@ -32,7 +32,7 @@ A theme can contribute to the following points:
 - Provide custom components
 - Configure tools like UnoCSS, Shiki, etc.
 
-However, the following points are **not** recommended to be done in a theme, and may be better implemented as an [addon](./write-an-addon):
+However, the following points are **not** recommended to be done in a theme, and may be better implemented as an [addon](./write-addon):
 
 - New code snippets
 - New code runners

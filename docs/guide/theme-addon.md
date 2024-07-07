@@ -14,13 +14,13 @@ theme: seriph
 # The first slide
 ```
 
-You can find the list of official themes and community themes in the [Themes Gallery](../themes/gallery).
+You can find the list of official themes and community themes in the [Themes Gallery](../resources/theme-gallery).
 
 ::: info Theme name convention
 
 - You can also pass a relative or absolute path to a local theme folder, like `../my-theme`
 - You can always use the full package name as the theme name
-- If the theme is [official](../themes/gallery#official-themes) or is named like `slidev-theme-name`, you can omit the `slidev-theme-` prefix
+- If the theme is [official](../resources/theme-gallery#official-themes) or is named like `slidev-theme-name`, you can omit the `slidev-theme-` prefix
 - For scoped packages like `@org/slidev-theme-name`, the full package name is required
 
 :::
@@ -59,4 +59,4 @@ addons:
 ---
 ```
 
-You can find the list of official addons and community addons in the [Addons Gallery](../addons/gallery).
+You can find the list of official addons and community addons in the [Addons Gallery](../resources/addon-gallery).

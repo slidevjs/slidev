@@ -16,16 +16,16 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 
 - 📝 [**Markdown-based**](/guide/syntax) - foucus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
-- 🎨 [**Themable**](/themes/gallery) - theme can be shared and used with npm packages
+- 🎨 [**Themable**](/resources/theme-gallery) - theme can be shared and used with npm packages
 - 🌈 [**Stylish**](/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
 - 🤹 [**Interactive**](/custom/directory-structure#components) - embedding Vue components seamlessly
-- 🎙 [**Presenter Mode**](/guide/presenter-mode) - use another window, or even your phone to control your slides
-- 🎨 [**Drawing**](/guide/drawing) - draw and annotate on your slides
+- 🎙 [**Presenter Mode**](/guide/ui#presenter-mode) - use another window, or even your phone to control your slides
+- 🎨 [**Drawing**](/features/drawing) - draw and annotate on your slides
 - 🧮 [**LaTeX**](/guide/syntax#latex) - built-in LaTeX math equations support
 - 📰 [**Diagrams**](/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
 - 🌟 [**Icons**](/guide/syntax#icons) - access to icons from any icon set directly
 - 💻 [**Editor**](/guide/index#editor) - integrated editor, or the [VSCode extension](/features/vscode-extension)
-- 🎥 [**Recording**](/guide/recording) - built-in recording and camera view
+- 🎥 [**Recording**](/features/recording) - built-in recording and camera view
 - 📤 [**Portable**](/guide/exporting) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages

@@ -32,4 +32,4 @@ Or install the [Vite extension for VS Code](https://marketplace.visualstudio.com
 
 ## Help on Translating
 
-See [TRANSLATIONS.md](/TRANSLATIONS.md)
+Please join our [Discord Server](https://chat.sli.dev) and contact the maintainers.

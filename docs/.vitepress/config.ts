@@ -2,7 +2,8 @@ import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { version } from '../../package.json'
-import { data as Guide } from './guides'
+import Guide from './guides'
+import Customizations from './customizations'
 
 const BuiltIn: DefaultTheme.NavItemWithLink[] = [
   {
@@ -25,79 +26,16 @@ const Advanced: DefaultTheme.NavItemWithLink[] = [
     link: '/guide/global-context',
   },
   {
+    text: 'Write a Layout',
+    link: '/guide/write-layout',
+  },
+  {
     text: 'Write a Theme',
-    link: '/guide/write-a-theme',
+    link: '/guide/write-theme',
   },
   {
     text: 'Write an Addon',
-    link: '/guide/write-an-addon',
-  },
-]
-
-const Customizations: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Configurations',
-    link: '/custom/',
-  },
-  {
-    text: 'Directory Structure',
-    link: '/custom/directory-structure',
-  },
-  {
-    text: 'Fonts',
-    link: '/custom/fonts',
-  },
-  {
-    text: 'Highlighters',
-    link: '/custom/highlighters',
-  },
-  {
-    text: 'Configure Vue',
-    link: '/custom/config-vue',
-  },
-  {
-    text: 'Configure Vite',
-    link: '/custom/config-vite',
-  },
-  {
-    text: 'Configure UnoCSS',
-    link: '/custom/config-unocss',
-  },
-  {
-    text: 'Configure Monaco',
-    link: '/custom/config-monaco',
-  },
-  {
-    text: 'Configure KaTeX',
-    link: '/custom/config-katex',
-  },
-  {
-    text: 'Configure Mermaid',
-    link: '/custom/config-mermaid',
-  },
-  {
-    text: 'Configure Parser',
-    link: '/custom/config-parser',
-  },
-  {
-    text: 'Configure Routes',
-    link: '/custom/config-routes',
-  },
-  {
-    text: 'Configure Shortcuts',
-    link: '/custom/config-shortcuts',
-  },
-  {
-    text: 'Configure Code Runners',
-    link: '/custom/config-code-runners',
-  },
-  {
-    text: 'Configure Context Menu',
-    link: '/custom/config-context-menu',
-  },
-  {
-    text: 'Global Layers',
-    link: '/custom/global-layers',
+    link: '/guide/write-addon',
   },
 ]
 
