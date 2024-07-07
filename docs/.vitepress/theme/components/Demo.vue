@@ -40,7 +40,7 @@ watch([code, paused], () => {
   try {
     info.value = parse(code.value)
   }
-  catch (_e) {
+  catch {
   }
 })
 
