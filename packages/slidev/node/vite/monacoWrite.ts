@@ -17,7 +17,7 @@ export function createMonacoWriter({ userRoot }: ResolvedSlidevOptions): Plugin 
           try {
             json = JSON.parse(data.toString())
           }
-          catch (e) {
+          catch (_e) {
             return
           }
           if (json.type === 'custom' && json.event === 'slidev:monaco-write') {
