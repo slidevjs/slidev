@@ -139,6 +139,14 @@ onMounted(() => {
           <carbon-moon v-if="isDark" />
           <carbon-sun v-else />
         </IconButton>
+        <IconButton
+          v-else
+          :title="isDark ? 'Dark mode' : 'Light mode'"
+          pointer-events-none op50
+        >
+          <carbon-moon v-if="isDark" />
+          <carbon-sun v-else />
+        </IconButton>
       </div>
     </nav>
     <main
@@ -173,7 +181,7 @@ onMounted(() => {
             <carbon:cics-program />
           </IconButton>
         </div>
-        <div class="flex flex-col gap-2 my5">
+        <div class="flex flex-col gap-2 my5" :style="{ width: `${cardWidth}px` }">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
             @dblclick="openSlideInNewTab(getSlidePath(route, false))"
