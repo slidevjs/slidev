@@ -1,8 +1,10 @@
 ---
 layout: feature
 relates:
-  - Mermaid: https://mermaid-js.github.io/mermaid/
-  - Mermaid Live Editor: https://mermaid-js.github.io/mermaid-live-editor/
+  - Mermaid: http://mermaid.js.org/
+  - Mermaid Live Editor: https://mermaid.live/
+  - Example side: https://sli.dev/demo/starter/12
+  - feature/plantuml
 description: |
   Create diagrams/graphs from textual descriptions, powered by Mermaid.
 ---
@@ -32,4 +34,4 @@ C -->|Two| E[Result 2]
 ```
 ````
 
-Learn more: [Demo](https://sli.dev/demo/starter/12) | [Mermaid](https://mermaid-js.github.io/mermaid)
+Visit the [Mermaid Website](http://mermaid.js.org/) for more information.
