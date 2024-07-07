@@ -1,69 +1,46 @@
 # Write an Addon
 
+Each slides project can only have one theme, but can have multiple addons. Please read [Write a Theme](./write-a-theme) first if you haven't.
+
 ## Capability
 
-An addon can contribute to the following points:
+Theoretically, all the capabilities of a theme can be done in an addon. However, an addon is more like a plugin that extends the functionalities of Slidev.
 
-- Global styles (use with caution as it has more role than [themes](/themes/use))
-- Provide custom layouts or override the existing one
-- Provide custom components or override the existing one
-- Extend UnoCSS CSS configurations
-- Configure tools like Monaco and Prism
+It's recommended to implement one or more of the following points in an addon:
 
-## Conventions
+- Provide custom components
+- Provide *new* layouts
+- Provide new code snippets
+- Provide new code runners
+- Configure tools like UnoCSS, Vite, etc.
 
-Addons are published to the NPM registry, and they should follow the conventions below:
+However, the following points are **not** recommended to be done in an addon, and may be better [implemented as a theme](./write-a-theme):
 
-- Package name should start with `slidev-addon-`, for example: `slidev-addon-awesome`
-- Add `slidev-addon` and `slidev` in the `keywords` field of your `package.json`
+- Wildcard global styles
+- Overriding existing layouts
+- Overriding configurations
+- Other things that may be incompatible with the theme and other addons
 
-## Setup
+An addon can also specify its required Slidev version in the same way as themes.
 
-### Initialization
+## Previewing
 
-To create your addon, start by creating a directory with a `package.json` file (you can use `npm init`).
+The same as themes, you can preview your addon via a `./slides.md` like this:
 
-Then, install Slidev dependencies:
-
-```bash
-$ npm install -D @slidev/cli
+```md
+---
+addons:
+  - ./
+---
 ```
 
-### Testing
+## Publishing
 
-To set up the testing playground for your addon, you can create an `example.md` file with some content.
+When publishing the addon, non-JS files like `.vue` and `.ts` files can be published directly without compiling. Slidev will automatically compile them when using the addon.
 
-And optionally, you can also add some scripts to your `packages.json`
+Addons should follow the following conventions:
 
-```json
-// package.json
-{
-  "scripts": {
-    "dev": "slidev example.md",
-    "build": "slidev build example.md",
-    "export": "slidev export example.md",
-    "screenshot": "slidev export example.md --format png"
-  }
-}
-```
+- Package name should start with `slidev-addon-`. For example, `slidev-addon-name` or `@scope/slidev-addon-name`
+- Add `"slidev-addon"` and `"slidev"` in the `keywords` field of your `package.json`
 
-To publish your addon, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
-
-Addon contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/).
-
-## Addon metadata
-
-### Slidev Version
-
-If the addon is relying on a specific feature of Slidev that is newly introduced, you can set the minimal Slidev version required to have your addon working properly:
-
-```json
-// package.json
-{
-  "engines": {
-    "slidev": ">=0.32.1"
-  }
-}
-```
-
-If users are using older versions of Slidev, an error will be thrown.
+Theme can be used locally without publishing to NPM. If your addon is only for personal use, you can simply use it as a local addon, or publish it as a private scoped package. However, it is recommended to publish it to the NPM registry if you want to share it with others.

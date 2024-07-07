@@ -1,10 +1,24 @@
 # Write a Theme
 
+Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature is not related to the appearance and can be used separately, it should be implemented as an [addon](./write-an-addon).
+
 To get started, we recommend you use our generator for scaffolding your first theme
 
-```bash
-$ npm init slidev-theme
+::: code-group
+
+```bash [npm]
+$ npm init slidev-theme@latest
 ```
+
+```bash [pnpm]
+$ pnpm init slidev-theme
+```
+
+```bash [yarn]
+$ yarn create slidev-theme
+```
+
+:::
 
 Then you can modify and play with it. You can also refer to the [official themes](/themes/gallery) as examples.
 
@@ -13,124 +27,77 @@ Then you can modify and play with it. You can also refer to the [official themes
 A theme can contribute to the following points:
 
 - Global styles
-- Provide default configurations (fonts, color schema, highlighters, etc.)
-- Provide custom layouts or override the existing one
-- Provide custom components or override the existing one
-- Extend UnoCSS configurations
-- Configure tools like Shiki and Monaco
+- Provide default configurations
+- Provide custom layouts or override the existing ones
+- Provide custom components
+- Configure tools like UnoCSS, Shiki, etc.
 
-## Conventions
+However, the following points are **not** recommended to be done in a theme, and may be better implemented as an [addon](./write-an-addon):
 
-Themes are published to the NPM registry, and they should follow the conventions below:
+- New code snippets
+- New code runners
+- Other things that can be used separately
 
-- Package name should start with `slidev-theme-`, for example, `slidev-theme-awesome`
-- Add `slidev-theme` and `slidev` in the `keywords` field of your `package.json`
+Basically, the way to provide global styles, layouts, components and configure tools is the same as doing these in a slides project. For example, to configure Shiki, you can create a `./setup/shiki.ts` as described in [Configure Highlighter](../custom/highlighters). You can refer to the [customization guide](/custom/) for more information.
 
-## Setup
-
-To set up the testing playground for your theme, you can create `example.md` with the following frontmatter, to tell Slidev you are using the current directory as a theme.
-
-```md
----
-theme: ./
----
-```
-
-Optionally, you can also add some scripts to your `packages.json`
+To provide default Slidev configurations, you can add a `slidev.defaults` field in the `package.json` file, which will be merged with the user's configurations:
 
 ```json
-// package.json
-{
-  "scripts": {
-    "dev": "slidev example.md",
-    "build": "slidev build example.md",
-    "export": "slidev export example.md",
-    "screenshot": "slidev export example.md --format png"
-  }
-}
-```
-
-To publish your theme, simply run `npm publish` and you are good to go. There is no build process required (which means you can directly publish `.vue` and `.ts` files, Slidev is smart enough to understand them).
-
-Theme contribution points follow the same conventions as local customization, please refer to [the docs for the naming conventions](/custom/).
-
-## Default Configurations
-
-> Available since v0.19
-
-A theme can provide default [configurations](/custom/#frontmatter-configures) via `package.json`.
-
-```json
-// package.json
 {
   "slidev": {
     "defaults": {
-      "aspectRatio": "16/9",
-      "canvasWidth": 980,
-      "fonts": {
-        "sans": "Robot",
-        "mono": "Fira Code"
-      }
+      "transition": "slide-left",
+      "aspectRatio": "4/3"
     }
   }
 }
 ```
 
-Fonts will be auto-imported from [Google Fonts](https://fonts.google.com/).
+### Require Slidev Version
 
-Learn more about [fonts](/custom/fonts) and [frontmatter configurations](/custom/#frontmatter-configures).
-
-## Theme Metadata
-
-### Color Schema
-
-By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme to be presented in a designed color schema, you will need to specify it explicitly in `package.json`
+If the theme is relying on a specific feature of Slidev that is newly introduced, you can set the minimal Slidev version required to have your theme working properly:
 
 ```json
-// package.json
 {
-  "name": "slidev-theme-my-cool-theme",
-  "keywords": [
-    "slidev-theme",
-    "slidev"
-  ],
+  "engines": {
+    "slidev": ">=0.48.0"
+  }
+}
+```
+
+A error message will be shown when the user is using an incompatible version.
+
+### Theme Metadata
+
+By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme to be presented in a specific color schema, you need to specify it explicitly in the `package.json`:
+
+```json
+{
   "slidev": {
     "colorSchema": "light" // or "dark" or "both"
   }
 }
 ```
 
-To access the dark mode when creating your theme styles, you can wrap the dark-mode-specific CSS inside a `dark` class:
+## Previewing
 
-```css
-/* general css here */
+You can preview you theme when developing by using a demo slide deck. To do so, create a `./slides.md` file with the following headmatter:
 
-html:not(.dark) {
-  /* light mode css here */
-}
-
-html.dark {
-  /* dark mode css here */
-}
+```md
+---
+theme: ./  # Use the theme in the current directory
+---
 ```
 
-Slidev toggles a `dark` class on the page's `html` element for switching color schema.
+Then you can start the demo slides as usual.
 
-### Highlighter
+## Publishing
 
-Syntax highlighting colors are also provided in the theme. For example [`./setup/shiki.ts`](https://github.com/slidevjs/slidev/blob/main/packages/create-theme/template/setup/shiki.ts). Refer to [the syntax highlighting docs](/custom/highlighters) for more information.
+When publishing the theme, non-JS files like `.vue` and `.ts` files can be published directly without compiling. Slidev will automatically compile them when using the theme.
 
-### Slidev Version
+Themes should follow the following conventions:
 
-If the theme is relying on a specific feature of Slidev that is newly introduced, you can set the minimal Slidev version required to have your theme working properly:
+- Package name should start with `slidev-theme-`. For example, `slidev-theme-name` or `@scope/slidev-theme-name`
+- Add `"slidev-theme"` and `"slidev"` in the `keywords` field of your `package.json`
 
-```json
-// package.json
-{
-  "engines": {
-    "slidev": ">=0.19.3"
-  }
-}
-```
-
-If users are using older versions of Slidev, an error will be thrown.
+Theme can be used locally without publishing to NPM. If your theme is only for personal use, you can simply use it as a local theme, or publish it as a private scoped package. However, it is recommended to publish it to the NPM registry if you want to share it with others.

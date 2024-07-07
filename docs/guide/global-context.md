@@ -11,15 +11,16 @@ You can access it anywhere in your Markdown and Vue components:
 
 # Page 1
 
-Current page is: {{ $slidev.nav.currentPage }}
+Current page is: {{ $nav.currentPage }}
 ```
 
-```html
+```vue
 <!-- Foo.vue -->
 
 <template>
   <div>Title: {{ $slidev.configs.title }}</div>
-  <button @click="$slidev.nav.next">Next Page</button>
+  <button @click="$nav.next">Next Click</button>
+  <button @click="$nav.nextSlide">Next Slide</button>
 </template>
 ```
 
@@ -44,7 +45,7 @@ The global context object.
 ```md
 Page: {{ $page }}
 
-Is current page active: {{ $page === $slidev.nav.currentPage }}
+Is current page active: {{ $page === $nav.currentPage }}
 ```
 
 ### `$renderContext`
@@ -77,7 +78,7 @@ $nav.currentLayout // current layout id
 
 For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).
 
-> Note: `$slidev.nav.clicks` is a global state while `$clicks` is local to each slide. It's recommended to **use `$clicks` over `$slidev.nav.clicks`** to avoid clicks changed been triggered on page transitions.
+> Note: `$nav.clicks` is a global state while `$clicks` is local to each slide. It's recommended to **use `$clicks` over `$nav.clicks`** to avoid clicks changed being triggered on page transitions.
 
 ### `$slidev.configs`
 

@@ -5,8 +5,7 @@
     "slidev"
   ],
   "engines": {
-    "node": ">=18.0.0",
-    "slidev": ">=0.19.3"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "build": "slidev build example.md",
