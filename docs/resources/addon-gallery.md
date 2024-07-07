@@ -1,4 +1,4 @@
-# Addons Gallery
+# Addon Gallery
 
 Browse awesome addons available for Slidev here.
 

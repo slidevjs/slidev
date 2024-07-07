@@ -21,12 +21,16 @@ const BuiltIn: DefaultTheme.NavItemWithLink[] = [
 
 const Advanced: DefaultTheme.NavItemWithLink[] = [
   {
+    text: 'Global Context',
+    link: '/guide/global-context',
+  },
+  {
     text: 'Write a Theme',
-    link: '/themes/write-a-theme',
+    link: '/guide/write-a-theme',
   },
   {
     text: 'Write an Addon',
-    link: '/addons/write-an-addon',
+    link: '/guide/write-an-addon',
   },
 ]
 
@@ -92,10 +96,6 @@ const Customizations: DefaultTheme.NavItemWithLink[] = [
     link: '/custom/config-context-menu',
   },
   {
-    text: 'Vue Global Context',
-    link: '/custom/vue-context',
-  },
-  {
     text: 'Global Layers',
     link: '/custom/global-layers',
   },
@@ -104,15 +104,15 @@ const Customizations: DefaultTheme.NavItemWithLink[] = [
 const Resources: DefaultTheme.NavItemWithLink[] = [
   {
     text: 'Showcases',
-    link: '/showcases',
+    link: '/resources/showcases',
   },
   {
     text: 'Theme Gallery',
-    link: '/themes/gallery',
+    link: '/resources/theme-gallery',
   },
   {
     text: 'Addon Gallery',
-    link: '/addons/gallery',
+    link: '/resources/addon-gallery',
   },
   {
     text: 'Learning Resources',

@@ -1,3 +1,9 @@
+---
+layout: feature
+description: |
+  Create custom components that persist across slides.
+---
+
 # Global Layers
 
 Global layers allow you to have custom components that **persist** across slides. This could be useful for having footers, cross-slide animations, global effects, etc.
