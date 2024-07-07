@@ -96,7 +96,7 @@ function loadPrismPlugin(name: string): void {
     require(`prismjs/plugins/${name}/prism-${name}`)
   }
   catch (e) {
-    throw new Error(`Cannot load Prism plugin "${name}". Please check the spelling.`)
+    throw new Error(`Cannot load Prism plugin "${name}". Please check the spelling.`, { cause: e })
   }
 }
 

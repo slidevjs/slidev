@@ -357,7 +357,7 @@
     "@antfu/utils": "^0.7.10",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.14.9",
+    "@types/node": "^20.14.10",
     "@types/vscode": "~1.89.0",
     "@vue/reactivity": "^3.4.31",
     "@vue/runtime-core": "^3.4.31",
