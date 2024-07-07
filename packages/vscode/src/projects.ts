@@ -80,7 +80,8 @@ export function useProjects() {
     const path = slash(uri.fsPath).toLowerCase()
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
-    pendingUpdate && (pendingUpdate.cancelled = true)
+    if (pendingUpdate)
+      pendingUpdate.cancelled = true
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
