@@ -1,6 +1,6 @@
 # Write an Addon
 
-Each slides project can only have one theme, but can have multiple addons. Please read [Write a Theme](./write-a-theme) first if you haven't.
+Each slides project can only have one theme, but can have multiple addons. Please read [Write a Theme](./write-theme) first if you haven't.
 
 ## Capability
 
@@ -14,7 +14,7 @@ It's recommended to implement one or more of the following points in an addon:
 - Provide new code runners
 - Configure tools like UnoCSS, Vite, etc.
 
-However, the following points are **not** recommended to be done in an addon, and may be better [implemented as a theme](./write-a-theme):
+However, the following points are **not** recommended to be done in an addon, and may be better [implemented as a theme](./write-theme):
 
 - Wildcard global styles
 - Overriding existing layouts
