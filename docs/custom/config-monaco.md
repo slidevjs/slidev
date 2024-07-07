@@ -14,21 +14,6 @@ export default defineMonacoSetup(async (monaco) => {
 
 Learn more about [configuring Monaco](https://github.com/Microsoft/monaco-editor).
 
-## Usage
-
-To use Monaco in your slides, simply append `{monaco}` to your code snippets:
-
-````md
-```js {monaco} // [!code ++]
-const count = ref(1)
-const plusOne = computed(() => count.value + 1)
-
-console.log(plusOne.value) // 2
-
-plusOne.value++ // error
-```
-````
-
 ## TypeScript Types
 
 When using TypeScript with Monaco, types for dependencies will be installed to the client-side automatically.

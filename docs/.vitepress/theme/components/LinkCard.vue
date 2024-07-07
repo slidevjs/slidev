@@ -32,7 +32,7 @@ const resolved = computed(() => resolveLink(props.link))
 }
 
 .link-card:hover {
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-soft);
   transition: border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 

@@ -24,7 +24,7 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 - 🧮 [**LaTeX**](/guide/syntax#latex) - built-in LaTeX math equations support
 - 📰 [**Diagrams**](/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
 - 🌟 [**Icons**](/guide/syntax#icons) - access to icons from any icon set directly
-- 💻 [**Editors**](/guide/editors) - integrated editor, or the [VSCode extension](/features/vscode-extension)
+- 💻 [**Editor**](/guide/index#editor) - integrated editor, or the [VSCode extension](/features/vscode-extension)
 - 🎥 [**Recording**](/guide/recording) - built-in recording and camera view
 - 📤 [**Portable**](/guide/exporting) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
@@ -116,59 +116,7 @@ Then, you can run them with `npm run dev`, `npm run build`, and `npm run export`
 
 For more information about the CLI, please check the [CLI guide](../builtin/cli).
 
-<!--
-
-## Command Line Interface
-
-In a project where Slidev is installed, you can use the `slidev` field in your npm scripts:
-
-```json
-{
-  "scripts": {
-    "dev": "slidev", // start dev server
-    "build": "slidev build", // build for production SPA
-    "export": "slidev export" // export slides to pdf
-  }
-}
-```
-
-Otherwise, you can use it with [`npx`](https://github.com/npm/cli/blob/latest/bin/npx):
-
-```bash
-$ npx slidev
-```
-
-Run `slidev --help` for more options available.
-
-## Markdown Syntax
-
-Slidev reads your `slides.md` file under your project root and converts them into slides. Whenever you make changes to it, the content of the slides will be updated immediately. For example:
-
-````md
-# Slidev
-
-Hello World
-
----
-
-# Page 2
-
-Directly use code blocks for highlighting
-
-```ts
-console.log('Hello, World!')
-```
-
----
-
-# Page 3
-````
-
-Read more about the Slidev Markdown syntax in the [syntax guide](/guide/syntax).
-
--->
-
-## Setup Your Editor
+## Setup Your Editor {#editor}
 
 Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides. We also provide tools to help you edit you slides more conveniently:
 

@@ -16,7 +16,7 @@ $ slidev build
 
 By default, the generated files are placed in the `dist` folder. You can test the built version of you slides by running: `npx vite preview` or any other static server.
 
-### Base Path
+### Base Path {#base}
 
 To deploy your slides under sub-routes, you need to pass the `--base` option. The `--base` path **must begin and end with a slash `/`**. For example:
 
@@ -67,30 +67,29 @@ We recommend using `npm init slidev@latest` to scaffold your project, which cont
 
 To deploy your slides on [GitHub Pages](https://pages.github.com/) via GitHub Actions, follow these steps:
 
-- upload all the files of the project in your repo (i.e. named `name_of_repo`)
-- create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
+- Upload all the files of the project in your repo (i.e. named `name_of_repo`)
+- Create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
 
 ```yaml
 name: Deploy pages
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
@@ -98,20 +97,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+      
+      - name: Setup @antfu/ni
+        run: npm i -g @antfu/ni
 
       - name: Install dependencies
-        run: npm install
+        run: nci
 
       - name: Build
-        run: npm run build -- --base /${{github.event.repository.name}}/
+        run: nr build --base /${{github.event.repository.name}}/
 
-      - uses: actions/configure-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-
-      - name: Deploy
+  
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 ```

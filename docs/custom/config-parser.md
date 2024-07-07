@@ -18,7 +18,7 @@ Configuring the markdown parser used in step 2 can be done by [configuring Vite 
 Important: when modifying the preparser configuration, you need to stop and start slidev again (restart might not be sufficient).
 :::
 
-The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](/guide/editors) due to implicit changes in the syntax.
+The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](../features/side-editor) due to implicit changes in the syntax.
 
 To customize it, create a `./setup/preparser.ts` file with the following content:
 

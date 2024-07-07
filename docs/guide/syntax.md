@@ -4,9 +4,9 @@ outline: deep
 
 # Basic Syntax
 
-Slides are written within **a single Markdown file** as its entry. By default, it is named `slides.md`, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
+Slides are written within **a single Markdown file**, which is called a **Slidev Markdown**. A presentation has a Slidev Markdown as its entry, which is `./slides.md` by default, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 
-In a Slidev Markdown file, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](/features).
+In a Slidev Markdown, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](/features).
 
 ## Slide Separators
 
@@ -73,43 +73,9 @@ This is a default page without any additional metadata.
 
 Note that the first frontmatter block is called the **headmatter** and includes the metadata for the whole slide deck. The rest are **frontmatters** for individual slides. Options you can set are described in the [Slides project configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
 
-<LinkCard link="feature/block-frontmatter" />
-
-## Embedded Styles
-
-You can use the `<style>` tag in your Markdown directly to define styles for **only the current slide**.
-
-```md
-# This is Red
-
-<style>
-h1 {
-  color: red;
-}
-</style>
-
----
-
-# Other slides are not affected
-```
-
-The `<style>` tag in Markdown is always [scoped](https://vuejs.org/api/sfc-css-features.html#scoped-css). As a result, a selector with a child combinator (`.a > .b`) is unusable as such; see the previous link. To have global style, check out the [customization section](/custom/directory-structure#style).
-
-Powered by [UnoCSS](/custom/config-unocss), you can directly use nested css and [directives](https://unocss.dev/transformers/directives):
-
-```md
-# Slidev
-
-> Hello `world`
-
-<style>
-blockquote {
-  code {
-    --uno: 'text-teal-500 dark:text-teal-400';
-  }
-}
-</style>
-```
+<SeeAlso :links="[
+  'feature/block-frontmatter',
+]" />
 
 ## Notes
 
@@ -189,8 +155,10 @@ Part 2
 
 :::
 
-<LinkCard link="feature/frontmatter-merging" />
-<LinkCard link="feature/import-with-range" />
+<SeeAlso :links="[
+  'feature/frontmatter-merging',
+  'feature/import-with-range',
+]" />
 
 <!--
 

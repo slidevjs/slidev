@@ -14,11 +14,13 @@ theme: seriph
 # The first slide
 ```
 
+You can find the list of official themes and community themes in the [Themes Gallery](../themes/gallery).
+
 ::: info Theme name convention
 
 - You can also pass a relative or absolute path to a local theme folder, like `../my-theme`
 - You can always use the full package name as the theme name
-- If the theme is built-in or is named like `slidev-theme-name`, you can omit the `slidev-theme-` prefix
+- If the theme is [official](../themes/gallery#official-themes) or is named like `slidev-theme-name`, you can omit the `slidev-theme-` prefix
 - For scoped packages like `@org/slidev-theme-name`, the full package name is required
 
 :::
@@ -39,34 +41,22 @@ $ npm install @slidev/theme-seriph
 
 And that's all, enjoy the new theme! For more details about the usage, you can refer to the theme's README.
 
-Want to share your theme? Learn about [how to write a theme](/themes/write-a-theme).
+<SeeAlso :links="[
+  'feature/eject-theme',
+]" />
 
-## Eject Theme
+## Use an Addon
 
-If you want to get full control of the current theme, you can **eject** it to your local file system and modify it as you want. By running the following command
+Addons are similar to themes, but they are more flexible and can be used to add extra features to your slides project. You can add multiple addons to your project, and they can be used to add extra features to your slides project.
 
-```bash
-$ slidev theme eject
-```
+To use an addon, you can add the `addons` option in your [headmatter](../custom/index#headmatter):
 
-It will eject the theme you are using currently into `./theme`, and change your frontmatter to
-
-```yaml
+```md
 ---
-theme: ./theme
----
-```
-
-This could also be helpful if you want to make a theme based on an existing one. If you do, remember to mention the original theme and the author :)
-
-## Local Theme
-
-As you probably found out from the previous section, you can have a local theme for your project. By having a **relative path** in your theme field.
-
-```yaml
----
-theme: ./path/to/theme
+addons:
+  - excalidraw
+  - '@slidev/plugin-notes'
 ---
 ```
 
-Refer to [how to write a theme](/themes/write-a-theme) for more details.
+You can find the list of official addons and community addons in the [Addons Gallery](../addons/gallery).

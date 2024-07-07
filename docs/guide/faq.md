@@ -1,129 +1,129 @@
+---
+outline: deep
+---
+
 # FAQ
 
-## Grids
+## Assets Handling
 
-Since Slidev is based on the Web, you can apply any grid layouts as you want. [CSS Grids](https://css-tricks.com/snippets/css/complete-guide-grid/), [flexboxes](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), or even [Masonry](https://css-tricks.com/native-css-masonry-layout-in-css-grid/), you get the full controls.
+You may use static assets like images and videos in your slides. Since Slidev is based on Vite, you can import them directly in your markdown files.
 
-Since [UnoCSS](https://unocss.dev/) is built-in, here's one way that you can reference:
+URLs that can be statically analyzed as assets can use relative paths:
 
-```html
-<div class="grid grid-cols-2 gap-4">
-<div>
-
-The first column
-
-</div>
-<div>
-
-The second column
-
-</div>
-</div>
+```md
+![alt](./image.png)
+<img src="./image.png" />
 ```
 
-Go further, you can customize the size of each column like:
+In the above case, the URLs will be resolved to `/BASE_URL/assets/image.png` after build.
 
-```html
-<div class="grid grid-cols-[200px_1fr_10%] gap-4">
-<div>
+However, relative paths in frontmatter and other components will be broken after build:
 
-The first column (200px)
+```md
+---
+background: ./image.png  # Broken after build
+---
 
-</div>
-<div>
-
-The second column (auto fit)
-
-</div>
-<div>
-
-The third column (10% width to parent container)
-
-</div>
-</div>
+<Comp src="./image.png" />
 ```
+
+In the above case, the URLs are not statically analyzable and will be preserved as-is, which will result in 404 errors after build.
+
+To solve this, you can place these assets in the [public folder](TODO:) and use an absolute path to import them:
+
+```md
+---
+background: /image.png
+---
+
+<Comp src="/image.png" />
+```
+
+For more details, refer to [Vite's documentation](https://vitejs.dev/guide/assets.html).
 
 ## Positioning
 
-Slides are defined in fixed sizes (default `980x552px`) and scaled to fit with the user screen. You can safely use absolute position in your slides as they will scale along with the screen.
+Since Slidev is web-based, CSS is the primary way to position elements. Here are some useful tips to position elements:
 
-For example:
+### Grids And Flexboxes
 
-```html
-<div class="absolute left-30px bottom-30px">
-This is a left-bottom aligned footer
+You can use CSS Grids to create complex layouts:
+
+::: code-group
+
+```md [Two columns]
+<div class="grid grid-cols-2 gap-4">
+  <div>
+    The first column
+  </div>
+  <div>
+    The second column
+  </div>
 </div>
 ```
 
-To change the canvas' actual size, you can pass the `canvasWidth` options in your first frontmatter:
-
-```yaml
----
-canvasWidth: 800
----
+```md [Complex case]
+<div class="grid grid-cols-[200px_1fr_10%] gap-4">
+  <div>
+    The first column (200px)
+  </div>
+  <div>
+    The second column (auto fit)
+  </div>
+  <div>
+    The third column (10% width to parent container)
+  </div>
+</div>
 ```
 
-## Font Size
+:::
 
-If you feel the font size in your slides is too small, you can adjust it in a few ways:
+And use Flexboxes to create more responsive layouts:
 
-### Override Local Style
+::: code-group
 
-You can override styles for each slide with the inlined `<style>` tag.
+```md [Horizontal]
+<div class="flex items-center">
+
+</div>
+```
+
+```md [Vertical]
+<div class="flex flex-col items-center">
+  <div>
+    Centered content
+  </div>
+</div>
+```
+
+:::
+
+Learn more: [CSS Grids](https://css-tricks.com/snippets/css/complete-guide-grid/), [flexboxes](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), or even [Masonry](https://css-tricks.com/native-css-masonry-layout-in-css-grid/),
+
+### Absolute Position
+
+You can use UnoCSS to position elements absolutely:
 
 ```md
-# Page 1
-
-<style>
-h1 {
-  font-size: 10em;
-}
-</style>
-
----
-
-# Page 2
-
-This will not be affected.
+<div class="absolute left-30px bottom-30px">
+  This is a left-bottom aligned footer
+</div>
 ```
 
-Learn more: [Embedded Styles](/guide/syntax.html#embedded-styles)
+Or use the draggable elements feature:
 
-### Override Global Style
+<LinkCard link="feature/draggable" />
 
-You can provide custom global styles by creating `./style.css`, for example
+## Adjust Sizes {#adjust-size}
 
-```css
-/* style.css */
+- Adjust all slides's size:
 
-h1 {
-  font-size: 10em !important;
-}
-```
+<LinkCard link="feature/canvas-size" />
 
-Learn more: [Global Style](/custom/directory-structure.html#style)
+- Adjust several slides' size:
 
-### Scale the Canvas
+<LinkCard link="feature/zoom-slide" />
 
-Changing the canvas' actual size will scale all your contents(text, images, components, etc.) and slides
+- Adjust some elements' size:
 
-```yaml
----
-# default: 980
-# since the canvas gets smaller, the visual size will become larger
-canvasWidth: 800
----
-```
-
-### Use Transform
-
-We provide a built-in component `<Transform />`, which is a thin wrapper of CSS transform property.
-
-```md
-<Transform :scale="1.4">
-
-- Item 1
-- Item 2
-
-</Transform>
-```
+<LinkCard link="feature/transform-component" />

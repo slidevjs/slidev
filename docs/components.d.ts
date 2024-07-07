@@ -63,6 +63,7 @@ declare module 'vue' {
     RenderWhen: typeof import('./.vitepress/@slidev/client/builtin/RenderWhen.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SeeAlso: typeof import('./.vitepress/theme/components/SeeAlso.vue')['default']
     ShowCaseInfo: typeof import('./.vitepress/theme/components/ShowCaseInfo.vue')['default']
     ShowCases: typeof import('./.vitepress/theme/components/ShowCases.vue')['default']
     SimpleIconsGithub: typeof import('~icons/simple-icons/github')['default']

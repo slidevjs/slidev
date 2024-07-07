@@ -1,7 +1,5 @@
 # Write an Addon
 
-> Available since v0.32.1
-
 ## Capability
 
 An addon can contribute to the following points:
