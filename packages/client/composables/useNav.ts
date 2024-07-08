@@ -275,7 +275,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
 
   const currentRoute = computed(() => router.currentRoute.value)
   const query = computed(() => {
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line ts/no-unused-expressions
     router.currentRoute.value.query
     return new URLSearchParams(location.search)
   })

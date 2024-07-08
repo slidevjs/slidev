@@ -3,7 +3,7 @@ import { computed, ref, toRef } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
 import { SlideBottom, SlideTop } from '#slidev/global-layers'
@@ -26,6 +26,7 @@ const props = defineProps({
 const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
 
 provideLocal(injectionRoute, props.route)
+provideLocal(injectionFrontmatter, props.route.meta.slide.frontmatter)
 provideLocal(injectionCurrentPage, ref(props.route.no))
 provideLocal(injectionRenderContext, ref(props.renderContext))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))

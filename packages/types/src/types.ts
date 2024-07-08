@@ -98,6 +98,7 @@ export interface SlidevMarkdown {
    * All slides in this markdown file
    */
   slides: SourceSlideInfo[]
+  errors?: { row: number, message: string }[]
 }
 
 export interface SlidevData {

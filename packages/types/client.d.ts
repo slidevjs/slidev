@@ -49,7 +49,7 @@ declare module '#slidev/shiki' {
   export const langs: BundledLanguage[]
   export const themes: BundledTheme | Record<string, BundledTheme>
   export const shiki: Promise<ShikiHighlighterCore>
-  export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>>
+  export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => string>
 }
 
 declare module '#slidev/setups/monaco' {

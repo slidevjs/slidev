@@ -94,6 +94,14 @@ function calculateEditorHeight() {
     inputEl.value.style.height = `${inputEl.value.scrollHeight}px`
 }
 
+function onKeyDown(e: KeyboardEvent) {
+  // Override save shortcut on editing mode
+  if (editing.value && e.metaKey && e.key === 's') {
+    e.preventDefault()
+    update({ note: note.value }, props.no)
+  }
+}
+
 watch(
   [note, editing],
   () => {
@@ -129,5 +137,6 @@ watch(
     :class="props.class"
     :placeholder="placeholder"
     @keydown.esc="editing = false"
+    @keydown="onKeyDown"
   />
 </template>

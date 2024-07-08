@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { getHighlighter } from '#slidev/shiki'
 
 const props = defineProps<{
@@ -9,41 +9,14 @@ const content = defineModel<string>({ required: true })
 
 const textareaEl = ref<HTMLTextAreaElement | null>(null)
 
-const html = ref('')
-
-watchEffect((onCleanup) => {
-  let canceled = false
-  onCleanup(() => canceled = true)
-
-  const c = content.value
-  async function updateHtml() {
-    const highlight = await getHighlighter()
-    if (canceled)
-      return
-    const h = await highlight(c, 'markdown', { mergeWhitespaces: 'never' })
-    let trailingEmptyLines = 0
-    for (const line of c.split('\n').reverse()) {
-      if (line.trim() === '')
-        trailingEmptyLines++
-      else
-        break
-    }
-    if (canceled)
-      return
-    html.value = `${h}${'<br>'.repeat(trailingEmptyLines)}`
-  }
-  updateHtml()
-})
-
-function setFocus() {
-  textareaEl.value?.focus()
-}
+const highlight = shallowRef<Awaited<ReturnType<typeof getHighlighter>> | null>(null)
+getHighlighter().then(h => highlight.value = h)
 </script>
 
 <template>
-  <div class="absolute left-3 right-0 inset-y-2 font-mono overflow-x-hidden overflow-y-auto cursor-text" @click="setFocus">
-    <div class="relative w-full h-max">
-      <div class="relative w-full h-max" v-html="html" />
+  <div class="absolute left-3 right-0 inset-y-2 font-mono overflow-x-hidden overflow-y-auto cursor-text">
+    <div v-if="highlight" class="relative w-full h-max min-h-full">
+      <div class="relative w-full h-max" v-html="`${highlight(content, 'markdown')}&nbsp;`" />
       <textarea
         ref="textareaEl" v-model="content" :placeholder="props.placeholder"
         class="absolute inset-0 resize-none text-transparent bg-transparent focus:outline-none caret-black dark:caret-white overflow-y-hidden"
