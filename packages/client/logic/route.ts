@@ -1,5 +1,5 @@
 import type { WritableComputedRef } from 'vue'
-import { computed, nextTick, ref, unref } from 'vue'
+import { computed, nextTick, unref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export function useRouteQuery<T extends string | string[]>(
