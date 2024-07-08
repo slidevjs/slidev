@@ -1,67 +1,67 @@
+---
+outline: deep
+---
+
 # Why Slidev
 
-There are a lot of feature-rich, general-purpose, WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/). They work pretty well for making nice slides with animations, charts, and many other things, while being very intuitive and easy to learn. So why bother making Slidev?
+There has been lots of feature-rich WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/). They are intuitive and easy to learn. So why bother making Slidev?
 
-Slidev aims to provide flexibility and interactivity for developers to make their presentations even more interesting, expressive, and attractive by using the tools and technologies they are already familiar with.
+Slidev aims to provide flexibility and interactivity for **developers** to make their presentations much more interesting, expressive, and attractive by using technologies they are familiar with. Slidev is also completely open source, and has a strong community to support it.
 
-When working with WYSIWYG editors, it is easy to get distracted by the styling options. Slidev remedies that by separating the content and visuals. This allows you to focus on one thing at a time, while also being able to reuse the themes from the community. Slidev does not seek to replace other slide deck builders entirely. Rather, it focuses on catering to the developer community.
+On one hand, Slidev is a Markdown-based presentation tool, which means you can write your slides in Markdown, and focus on the content. On the other hand, Slidev is also a Web-based tool, which means **nothing is impossible** - you can do anything you can do in a web app in Slidev.
 
-## ![](/screenshots/cover.png) {#welcome}
+![demo slide](/screenshots/cover.png) {#welcome}
 
-Here are a few of the coolest features of Slidev:
+## Coolest Features
 
-## Markdown-based
+### 📝 Markdown-based
 
-Slidev uses an extended Markdown format to store and organize your slides in a single plain text file. This lets you focus on making the content. And since the content and styles are separated, this also made it possible to switch between different themes effortlessly.
+Slidev uses an extended Markdown format to organize your slides in a single plain text file. This helps you focus on the content, and makes it easy to write and maintain your slides. You can use any text editor you like, and version control your slides with Git.
 
-Learn more about [Slidev's Markdown Syntax](/guide/syntax).
+> Learn more: <LinkInline link="guide/syntax"/>.
 
-## Themable
+### 🧑‍💻 Developer Friendly
 
-Themes for Slidev can be shared and installed using npm packages. You then apply them with only one line of config.
+Slidev provides first-class support for code snippets for developers. It uses [Shiki](https://github.com/shikijs/shiki) to get the most accurate syntax highlighting. Slidev also supports <LinkInline link="feature/shiki-magic-move"/> and <LinkInline link="feature/twoslash"/>. These make Slidev the best choice for tech talks.
 
-Check out the [theme gallery](../resources/theme-gallery) or [learn how to write a theme](../guide/write-theme).
+### 🎨 Themable
 
-## Developer Friendly
+Themes for Slidev can be shared via npm packages. You apply a theme within one line of code.
 
-Slidev provides first-class support for code snippets for developers. It supports [Shiki](https://github.com/shikijs/shiki) to get pixel-perfect syntax highlighting, while still being able to modify the code at any time. With [Monaco editor](https://microsoft.github.io/monaco-editor/) built-in, it also empowers you to do live coding / demonstration in your presentation with autocompletion, type hovering, and even TypeScript type check support.
+Check out the [Theme Gallery](../resources/theme-gallery) for the beautiful themes made by the official team and the community.
 
-Learn more about [highlighters](/custom/highlighters) and [Monaco configuration](/custom/config-monaco).
+### ⚡ Fast
 
-## Fast
+Every change you make in the editor will reflect to your slides in the browser **instantly** without reloading, thanks to [Vite's HMR feature](https://vitejs.dev/guide/features.html#hot-module-replacement).
 
-Slidev is powered by [Vite](https://vitejs.dev/), [Vue 3](https://v3.vuejs.org/) and [UnoCSS](https://unocss.dev/), which give you the most wonderful authoring experience. Every change you made will reflect to your slides **instantly**.
+### 🤹 Interactive & Expressive
 
-Find more about [our tech stack](/guide/#tech-stack).
+You can write Vue components and use them in your slides, which you can then interact with them during the presentation to express your idea in a more interesting and intuitive way.
 
-## Interactive & Expressive
+Slidev also has a built-in support of <LinkInline link="feature/monaco-editor"/>, which empowers you to do live coding in your presentation with autocompletion and hover message.
 
-You can write custom Vue components and use them directly inside your markdown file. You can also interact with them inside the presentation to express your idea in a more interesting and intuitive way.
+### 🎥 Recording Support
 
-## Recording Support
+Slidev provides built-in recording and camera view. You can share your presentation with your camera view inside, or record and save your screen and camera separately.
 
-Slidev provides built-in recording and camera view. You can share your presentation with your camera view inside, or record and save them separately for your screen and camera. All with one go, no additional tools are needed.
+> Learn more: <LinkInline link="feature/recording"/>.
 
-Learn more about [recording here](/features/recording).
+### 📤 Portable
 
-## Portable
+You can export your slides into PDF, PPTX, PNGs, or even a single-page application (SPA) within a single command. Then you can share or host it anywhere you like.
 
-Export your slides into PDF, PPTX, PNGs, or even a hostable Single-page Application (SPA) with a single command, and share them anywhere.
+> Learn more: <LinkInline link="guide/exporting"/> and <LinkInline link="guide/hosting"/>.
 
-Read more about that in the [exporting guide](/guide/exporting).
+### 🛠 Hackable
 
-## Hackable
+Because Slidev is web-based, everything that can be done in a normal web app can be applied to your slides. For example, WebGL, API requests, iframes, or even live sharing. It's up to your imagination!
 
-Being powered by web technologies, anything that can be done in a web app is also possible with Slidev. For example, WebGL, API requests, iframes, or even live sharing. It's up to your imagination!
+> Learn more: [Customization](../custom/).
 
 ## Give it a Try
 
-Playing around with Slidev will tell you more than a thousand words. You are just one command away:
+Playing around with Slidev will tell you more than thousands of words. Check the [Getting Started](./) guide to create your first Slidev project in one click or one command.
 
-```bash
-$ npm init slidev
-```
-
-Or have a quick preview of it:
+Or you can have a quick preview of it:
 
 <iframe class="aspect-16/9 rounded-xl w-full shadow-md border-none" src="https://www.youtube.com/embed/eW7v-2ZKZOU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

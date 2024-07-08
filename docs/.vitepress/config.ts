@@ -2,74 +2,13 @@ import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { version } from '../../package.json'
-import Guide from './guides'
+import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import Customizations from './customizations'
-
-const BuiltIn: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'CLI',
-    link: '/builtin/cli',
-  },
-  {
-    text: 'Components',
-    link: '/builtin/components',
-  },
-  {
-    text: 'Layouts',
-    link: '/builtin/layouts',
-  },
-]
-
-const Advanced: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Global Context',
-    link: '/guide/global-context',
-  },
-  {
-    text: 'Write a Layout',
-    link: '/guide/write-layout',
-  },
-  {
-    text: 'Write a Theme',
-    link: '/guide/write-theme',
-  },
-  {
-    text: 'Write an Addon',
-    link: '/guide/write-addon',
-  },
-]
-
-const Resources: DefaultTheme.NavItemWithLink[] = [
-  {
-    text: 'Showcases',
-    link: '/resources/showcases',
-  },
-  {
-    text: 'Theme Gallery',
-    link: '/resources/theme-gallery',
-  },
-  {
-    text: 'Addon Gallery',
-    link: '/resources/addon-gallery',
-  },
-  {
-    text: 'Learning Resources',
-    link: '/resources/learning',
-  },
-  {
-    text: 'Curated Covers',
-    link: '/resources/covers',
-  },
-  {
-    text: 'Release Notes',
-    link: 'https://github.com/slidevjs/slidev/releases',
-  },
-]
 
 const slidebars: DefaultTheme.SidebarItem[] = [
   {
     text: 'Guide',
-    items: Guide,
+    items: Guides,
   },
   {
     text: 'Advanced',
@@ -138,7 +77,7 @@ export default defineConfig({
       {
         text: 'Guide',
         items: [
-          ...Guide,
+          ...Guides,
           {
             text: 'Advanced',
             items: Advanced,

@@ -1,5 +1,5 @@
 import { data as features } from '../features/index.data.js'
-import guides from './guides.js'
+import { Advanced, Guides } from './pages'
 
 function removeHash(link: string) {
   const idx = link.lastIndexOf('#')
@@ -7,7 +7,7 @@ function removeHash(link: string) {
 }
 
 function getGuideTitle(id: string) {
-  return guides.find(g => g.link.endsWith(id))?.text ?? id
+  return Guides.find(g => g.link.endsWith(id))?.text ?? Advanced.find(g => g.link.endsWith(id))?.text ?? id
 }
 
 export function resolveLink(link: string): {

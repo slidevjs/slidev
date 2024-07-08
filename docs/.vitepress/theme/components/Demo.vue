@@ -157,7 +157,7 @@ onMounted(play)
         </SlideContainer>
       </div>
       <div
-        class="absolute left-2 bottom-1 flex text-gray-400"
+        class="absolute left-2 bottom-1 flex text-gray-200"
         opacity="0 hover:100"
       >
         <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">

@@ -14,6 +14,7 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 
 ## Features
 
+<!--
 - 📝 [**Markdown-based**](/guide/syntax) - foucus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
 - 🎨 [**Themable**](/resources/theme-gallery) - theme can be shared and used with npm packages
@@ -29,6 +30,7 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 - 📤 [**Portable**](/guide/exporting) - export into PDF, PNGs, or PPTX
 - ⚡️ [**Fast**](https://vitejs.dev) - instant reloading powered by [Vite](https://vitejs.dev)
 - 🛠 [**Hackable**](/custom/) - using Vite plugins, Vue components, or any npm packages
+-->
 
 <!-- <FeaturesAnimation /> -->
 
@@ -123,6 +125,12 @@ Since Slidev uses Markdown as the source entry, you can use any editor you prefe
 <LinkCard link="feature/vscode-extension" />
 <LinkCard link="feature/side-editor" />
 <LinkCard link="feature/prettier-plugin" />
+
+## Join the Community
+
+It's recommended to join our official [Discord Server](https://chat.sli.dev/) to get help, share your slides, or discuss anything about Slidev.
+
+If you're encountering bugs, feel free to open an issue on [GitHub](https://github.com/slidevjs/slidev/issues/new/choose).
 
 ## Tech Stack
 

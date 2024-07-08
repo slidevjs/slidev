@@ -1,7 +1,7 @@
 ---
 layout: feature
-# depends:
-#   - navigation bar: /guide/ui#navigation-bar
+depends:
+  - guide/ui#navigation-bar
 relates:
   - RecordRTC: https://github.com/muaz-khan/RecordRTC
   - WebRTC API: https://webrtc.org/
