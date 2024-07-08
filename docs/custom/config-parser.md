@@ -1,4 +1,8 @@
-# Configure and Extend the Parser
+# Configure Pre-Parser
+
+::: info
+Custom pre-parsers are not supposed to be used too often. Please only use it if you really want to have your custom syntax.
+:::
 
 Slidev parses your presentation file (e.g. `slides.md`) in three steps:
 

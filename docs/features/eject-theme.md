@@ -23,3 +23,5 @@ theme: ./theme
 ```
 
 This could also be helpful if you want to make a theme based on an existing one. If you do, remember to mention the original theme and the author :)
+
+For more options of the `theme` command, please refer to the [Theme Command](../builtin/cli#theme) section.

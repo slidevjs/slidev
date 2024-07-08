@@ -62,7 +62,7 @@ When you create a new draggable element, you don't need to specify the position 
 
 ## Automatic Height
 
-You can set `Height` to `NaN` (if you use the directive) or `_` (if you use the component) to make the height of the draggable element automatically adjust to its content.
+You can set `Height` to `NaN` (in) or `_` (if you use the component) to make the height of the draggable element automatically adjust to its content.
 
 ## Controls
 

@@ -16,12 +16,12 @@ export default [
     link: '/custom/highlighters',
   },
   {
-    text: 'Configure Vue',
-    link: '/custom/config-vue',
+    text: 'Configure Vite and Plugins',
+    link: '/custom/config-vite',
   },
   {
-    text: 'Configure Vite',
-    link: '/custom/config-vite',
+    text: 'Configure Vue App',
+    link: '/custom/config-vue',
   },
   {
     text: 'Configure UnoCSS',
@@ -40,8 +40,8 @@ export default [
     link: '/custom/config-mermaid',
   },
   {
-    text: 'Configure Parser',
-    link: '/custom/config-parser',
+    text: 'Configure Code Runners',
+    link: '/custom/config-code-runners',
   },
   {
     text: 'Configure Routes',
@@ -52,11 +52,11 @@ export default [
     link: '/custom/config-shortcuts',
   },
   {
-    text: 'Configure Code Runners',
-    link: '/custom/config-code-runners',
-  },
-  {
     text: 'Configure Context Menu',
     link: '/custom/config-context-menu',
+  },
+  {
+    text: 'Configure Pre-Parser',
+    link: '/custom/config-parser',
   },
 ]

@@ -2,7 +2,7 @@
 
 <Environment type="client" />
 
-Add your pages to the Slidev app.
+Add custom pages to the Slidev app.
 
 ## Usage
 

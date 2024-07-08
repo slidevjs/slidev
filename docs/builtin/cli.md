@@ -48,7 +48,7 @@ Options:
 
 ## `slidev build [entry]` {#build}
 
-Build a hostable SPA.
+Build a hostable SPA. See [Hosting](../guide/hosting) for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown file.
 
@@ -61,7 +61,7 @@ Options:
 
 ## `slidev export [...entry]` {#export}
 
-Export slides to PDF (or other format). See [Exporting](/guide/exporting.html) for more details.
+Export slides to PDF (or other format). See [Exporting](../guide/exporting) for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
@@ -77,7 +77,7 @@ Options:
 
 ## `slidev format [entry]` {#format}
 
-Format the markdown file.
+Format the markdown file. Note that this won't format the content of the slides, only the organization of the markdown file.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
@@ -87,7 +87,7 @@ Theme-related operations.
 
 Subcommands:
 
-- `eject [entry]`: Eject the current theme into the local file system
+- `eject [entry]`: Eject the current theme into the local file system. See <LinkInline link="feature/eject-theme" />.
   - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
   - Options:
     - `--dir` (`string`, default: `theme`): the output dir.
