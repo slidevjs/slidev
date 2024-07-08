@@ -355,10 +355,12 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.7.10",
+    "@slidev/language-server": "workspace:^",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "^20.14.10",
     "@types/vscode": "~1.89.0",
+    "@volar/vscode": "^2.4.0-alpha.15",
     "@vue/reactivity": "^3.4.31",
     "@vue/runtime-core": "^3.4.31",
     "@vue/shared": "^3.4.31",
