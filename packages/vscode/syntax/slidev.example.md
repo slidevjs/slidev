@@ -12,8 +12,8 @@ console.log('Hello World')
 ```
 
 ---
-
-## layout: center
+layout: center
+---
 
 # Centerered
 

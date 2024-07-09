@@ -2,6 +2,9 @@ import antfu from '@antfu/eslint-config'
 
 export default antfu(
   {
+    ignores: [
+      'packages/vscode/language/slidev.example.md',
+    ],
     overrides: {
       vue: {
         'vue/no-v-text-v-html-on-component': 'off',
@@ -17,7 +20,6 @@ export default antfu(
           '**/template.md',
           '**/example.md',
           'test/fixtures/markdown/**/*.md',
-          'packages/vscode/language/slidev.example.md',
         ],
       },
     },

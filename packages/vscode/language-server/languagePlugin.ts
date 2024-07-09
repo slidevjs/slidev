@@ -24,7 +24,7 @@ function* getEmbeddedCodes(snapshot: ts.IScriptSnapshot): Generator<VirtualCode>
   let i = 0
   for (const block of blocks) {
     yield {
-      id: `yaml_${i++}`,
+      id: `frontmatter_${i++}`,
       languageId: 'yaml',
       snapshot: {
         getText: (start, end) => block[1].substring(start, end),
