@@ -125,7 +125,6 @@ Basic Markdown and HTML are also supported in notes and will be rendered.
   'feature/click-marker',
 ]" />
 
-
 ## Code Blocks {#code-block}
 
 One big reason that led to the creation of Slidev was the need to perfectly display code in slides. Consequently, you can use Markdown-flavored code blocks to highlight your code.
