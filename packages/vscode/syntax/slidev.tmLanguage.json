@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": [],
+  "injectionSelector": "L:text.html.markdown",
+  "patterns": [
+    {
+      "include": "#vue-code-block"
+    }
+  ],
+  "repository": {
+    "frontMatter": {
+      "begin": "^-{3}\\s*$",
+      "contentName": "meta.embedded.block.frontmatter",
+      "end": "(^|\\G)-{3}|\\.{3}\\s*$",
+      "patterns": [
+        {
+          "include": "source.yaml"
+        }
+      ]
+    }
+  },
+  "scopeName": "markdown.vue.codeblock"
+}

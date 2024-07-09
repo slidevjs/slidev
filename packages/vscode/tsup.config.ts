@@ -1,28 +1,38 @@
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'tsup'
+import { resolvePath } from 'mlly'
 
-export default defineConfig([{
-  entry: ['src/index.ts'],
+export default defineConfig({
+  entry: {
+    'index': 'src/index.ts',
+    'language-server': 'language-server/bin.ts',
+  },
   format: ['cjs'],
   target: 'node18',
   clean: true,
-  minify: true,
+  // minify: true,
   external: [
     'vscode',
   ],
-  plugins: [
-    {
-      name: 'alias',
-      esbuildOptions(options) {
-        options.alias ||= {}
-        options.alias['@vue/runtime-core'] = fileURLToPath(new URL('../../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js', import.meta.url))
-        options.alias['@vue/reactivity'] = fileURLToPath(new URL('../../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js', import.meta.url))
-        options.alias['@vue/shared'] = fileURLToPath(new URL('../../node_modules/@vue/shared/dist/shared.esm-bundler.js', import.meta.url))
-      },
+  esbuildOptions(options) {
+    options.alias ||= {}
+    options.alias['@vue/runtime-core'] = fileURLToPath(new URL('../../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js', import.meta.url))
+    options.alias['@vue/reactivity'] = fileURLToPath(new URL('../../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js', import.meta.url))
+    options.alias['@vue/shared'] = fileURLToPath(new URL('../../node_modules/@vue/shared/dist/shared.esm-bundler.js', import.meta.url))
+  },
+  esbuildPlugins: [{
+    name: 'umd2esm',
+    setup(build) {
+      build.onResolve({ filter: /^(vscode-.*-languageservice|jsonc-parser)/ }, async (args) => {
+        const pathUmdMay = await resolvePath(args.path, { url: args.resolveDir })
+        // Call twice the replace is to solve the problem of the path in Windows
+        const pathEsm = pathUmdMay.replace('/umd/', '/esm/').replace('\\umd\\', '\\esm\\')
+        return { path: pathEsm }
+      })
     },
-  ],
+  }],
   async onSuccess() {
     const assetsDir = join(__dirname, '../../assets')
     const resDir = join(__dirname, './dist/res')
@@ -32,39 +42,6 @@ export default defineConfig([{
       mkdirSync(iconsDir, { recursive: true })
 
     for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
-      copyFileSync(resolve(assetsDir, file), resolve(resDir, file))
+      copyFileSync(join(assetsDir, file), join(resDir, file))
   },
-}, {
-  entry: ['node_modules/@slidev/language-server/src/index.ts'],
-  outDir: 'dist/server',
-  format: ['cjs'],
-  target: 'node18',
-  clean: true,
-  // minify: true,
-  external: [
-    '@slidev/language-server/out/protocol',
-  ],
-  plugins: [
-    {
-      name: 'alias',
-      esbuildOptions(options) {
-        options.alias ||= {}
-        options.alias['@vue/runtime-core'] = fileURLToPath(new URL('../../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js', import.meta.url))
-        options.alias['@vue/reactivity'] = fileURLToPath(new URL('../../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js', import.meta.url))
-        options.alias['@vue/shared'] = fileURLToPath(new URL('../../node_modules/@vue/shared/dist/shared.esm-bundler.js', import.meta.url))
-        options.plugins ??= []
-        options.plugins.push({
-          name: 'umd2esm',
-          setup(build) {
-            build.onResolve({ filter: /^(vscode-.*-languageservice|jsonc-parser)/ }, args => {
-              const pathUmdMay = require.resolve(args.path, { paths: [args.resolveDir] })
-              // Call twice the replace is to solve the problem of the path in Windows
-              const pathEsm = pathUmdMay.replace('/umd/', '/esm/').replace('\\umd\\', '\\esm\\')
-              return { path: pathEsm }
-            });
-          },
-        })
-      },
-    },
-  ],
-}])
+})

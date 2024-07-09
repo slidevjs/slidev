@@ -23,7 +23,54 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "extensionDependencies": [
+    "Vue.volar"
+  ],
   "contributes": {
+    "languages": [
+      {
+        "id": "markdown",
+        "configuration": "./language/language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "markdown.vue.codeblock",
+        "path": "./syntaxes/markdown-vue.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.vue": "vue",
+          "source.vue": "vue",
+          "text": "plaintext",
+          "text.html.derivative": "html",
+          "text.html.markdown": "markdown",
+          "text.pug": "jade",
+          "source.css": "css",
+          "source.css.scss": "scss",
+          "source.css.less": "less",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.postcss": "postcss",
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "source.js.jsx": "javascriptreact",
+          "source.tsx": "typescriptreact",
+          "source.coffee": "coffeescript",
+          "meta.tag.js": "jsx-tags",
+          "meta.tag.tsx": "jsx-tags",
+          "meta.tag.without-attributes.js": "jsx-tags",
+          "meta.tag.without-attributes.tsx": "jsx-tags",
+          "source.json": "json",
+          "source.json.comments": "jsonc",
+          "source.json5": "json5",
+          "source.yaml": "yaml",
+          "source.toml": "toml",
+          "source.graphql": "graphql"
+        }
+      }
+    ],
     "commands": [
       {
         "command": "slidev.enable-extension",
@@ -355,16 +402,18 @@
   },
   "devDependencies": {
     "@antfu/utils": "^0.7.10",
-    "@slidev/language-server": "workspace:^",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "^20.14.10",
     "@types/vscode": "~1.89.0",
+    "@volar/language-server": "~2.4.0-alpha.15",
     "@volar/vscode": "^2.4.0-alpha.15",
     "@vue/reactivity": "^3.4.31",
     "@vue/runtime-core": "^3.4.31",
     "@vue/shared": "^3.4.31",
     "get-port-please": "^3.1.2",
-    "ovsx": "^0.9.1"
+    "mlly": "^1.7.1",
+    "ovsx": "^0.9.1",
+    "volar-service-yaml": "^0.0.59"
   }
 }
