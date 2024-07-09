@@ -4,14 +4,82 @@
   "injectionSelector": "L:text.html.markdown",
   "patterns": [
     {
-      "include": "#vue-code-block"
+      "include": "#import-snippet"
+    },
+    {
+      "include": "#slide-frontmatter"
     }
   ],
   "repository": {
-    "frontMatter": {
-      "begin": "^-{3}\\s*$",
-      "contentName": "meta.embedded.block.frontmatter",
-      "end": "(^|\\G)-{3}|\\.{3}\\s*$",
+    "import-snippet": {
+      "match": "^(<<<)\\s*(\\S+)(\\s+[\\w-]+)?(?:\\s*(\\{)([^}]*)(\\}))?(?:\\s*(\\{.*\\}))?",
+      "name": "meta.import_snippet.block.slidev",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.slidev"
+        },
+        "2": {
+          "name": "meta.link.inline.slidev"
+        },
+        "3": {
+          "name": "import_snippet.block.language.slidev"
+        },
+        "4": {
+          "name": "punctuation.separator.range.slidev"
+        },
+        "5": {
+          "name": "meta.range_or_monaco.slidev",
+          "patterns": [
+            {
+              "include": "#monaco-type"
+            },
+            {
+              "include": "#range-with-steps"
+            }
+          ]
+        },
+        "6": {
+          "name": "punctuation.separator.range.slidev"
+        },
+        "7": {
+          "name": "meta.objectliteral.ts"
+        }
+      }
+    },
+    "range-with-steps": {
+      "match": "([^|]*)(\\|)?",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#range"
+            }
+          ]
+        },
+        "2": {
+          "name": "punctuation.separator.steps.slidev"
+        }
+      }
+    },
+    "range": {
+      "match": "(\\d+)([,-])?",
+      "captures": {
+        "1": {
+          "name": "constant.numeric.range.slidev"
+        },
+        "2": {
+          "name": "punctuation.separator.range.slidev"
+        }
+      }
+    },
+    "monaco-type": {
+      "match": "monaco(-(run|write|diff))?",
+      "name": "keyword.monaco.slidev"
+    },
+    "slide-frontmatter": {
+      "begin": "(^|\\G)---.*$",
+      "contentName": "meta.embedded.block.frontmatter.slidev",
+      "end": "\\A\\s*$|(^|\\G)---.*$",
       "patterns": [
         {
           "include": "source.yaml"
@@ -19,5 +87,5 @@
       ]
     }
   },
-  "scopeName": "markdown.vue.codeblock"
+  "scopeName": "markdown.slidev.codeblock"
 }

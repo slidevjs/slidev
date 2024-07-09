@@ -7,25 +7,29 @@ bar: 1
 
 **Hello** World
 
-```ts
+[](./a)
+
+```ts {a}
 console.log('Hello World')
 ```
 
 ---
+layout: center
 
-## layout: center
+text: 1
+---
 
 # Centerered
 
 ---
-
-## src: 1
-
+src: ../../../demo/starter/slides.md
 ---
 
-# Another
+# Import Snippets
 
-<<< @/a.js
+<<< @/snippets/snippet.js {2,3|5}
+<<< @/snippets/snippet.js {2,3|5}{lines:true}
+<<< @/snippets/snippet.js ts {monaco-run}{height:'200px'}
 
 ---
 

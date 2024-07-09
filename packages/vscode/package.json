@@ -35,8 +35,8 @@
     ],
     "grammars": [
       {
-        "scopeName": "markdown.vue.codeblock",
-        "path": "./syntaxes/markdown-vue.json",
+        "scopeName": "markdown.slidev.codeblock",
+        "path": "./syntax/slidev.tmLanguage.json",
         "injectTo": [
           "text.html.markdown"
         ],
@@ -67,7 +67,8 @@
           "source.json5": "json5",
           "source.yaml": "yaml",
           "source.toml": "toml",
-          "source.graphql": "graphql"
+          "source.graphql": "graphql",
+          "meta.objectliteral.ts": "typescript"
         }
       }
     ],
