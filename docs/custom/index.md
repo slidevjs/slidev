@@ -129,7 +129,7 @@ hide: false
 # hide the slide for the <Toc> components
 hideInToc: false
 # defines the layout component applied to the slide
-layout: "cover" if the slide is the first slide, otherwise "default"
+layout: <"cover" if the slide is the first slide, otherwise "default">
 # override the title level for the <TitleRenderer> and <Toc> components
 # only if `title` has also been declared
 level: 1

@@ -17,6 +17,7 @@ declare module 'vue' {
     'Carbon:logoTwitter': typeof import('~icons/carbon/logo-twitter')['default']
     'Carbon:presentationFile': typeof import('~icons/carbon/presentation-file')['default']
     'Carbon:reset': typeof import('~icons/carbon/reset')['default']
+    'Carbon:search': typeof import('~icons/carbon/search')['default']
     'Carbon:video': typeof import('~icons/carbon/video')['default']
     CarbonApps: typeof import('~icons/carbon/apps')['default']
     CarbonArrowLeft: typeof import('~icons/carbon/arrow-left')['default']

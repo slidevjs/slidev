@@ -26,6 +26,7 @@ This is a list of all the individual features that Slidev provides. Each feature
 You can also read <LinkInline link="guide/index" /> to learn the features by topic.
 
 <div class="flex items-center mt-6 pl-1">
+  <carbon:search text-sm mr-2 op-80 />
   <input v-model="search" type="search" placeholder="Search features..." class="input" />
 </div>
 
