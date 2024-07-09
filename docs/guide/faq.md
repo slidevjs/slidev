@@ -4,7 +4,7 @@ outline: deep
 
 # FAQ
 
-## Assets Handling
+## Assets Handling {#assets-handling}
 
 You may use static assets like images and videos in your slides. Since Slidev is based on Vite, you can import them directly in your markdown files.
 
@@ -41,7 +41,7 @@ background: /image.png
 
 For more details, refer to [Vite's documentation](https://vitejs.dev/guide/assets.html).
 
-## Positioning
+## Positioning {#positioning}
 
 Since Slidev is web-based, CSS is the primary way to position elements. Here are some useful tips to position elements:
 

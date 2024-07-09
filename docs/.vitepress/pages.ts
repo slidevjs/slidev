@@ -24,6 +24,14 @@ export const Guides = [
     link: '/guide/theme-addon',
   },
   {
+    text: 'Components',
+    link: '/guide/component',
+  },
+  {
+    text: 'Layouts',
+    link: '/guide/layout',
+  },
+  {
     text: 'Exporting',
     link: '/guide/exporting',
   },
@@ -58,15 +66,15 @@ export const Advanced = [
     link: '/guide/global-context',
   },
   {
-    text: 'Write a Layout',
+    text: 'Writing Layouts',
     link: '/guide/write-layout',
   },
   {
-    text: 'Write a Theme',
+    text: 'Writing Themes',
     link: '/guide/write-theme',
   },
   {
-    text: 'Write an Addon',
+    text: 'Writing Addons',
     link: '/guide/write-addon',
   },
 ]

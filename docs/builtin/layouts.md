@@ -2,7 +2,7 @@
 
 This page lists all the built-in layouts provided by Slidev. These layouts can be used via the `layout` option in the frontmatters of your slides.
 
-Note that [themes and addons](../guide/theme-addon) may provide additional layouts or override the existing ones. To add your own layouts, see [Write a Layout](../guide/write-layout).
+Note that <LinkInline link="guide/theme-addon" /> may provide additional layouts or override the existing ones. To add your own layouts, see <LinkInline link="guide/write-layout" />.
 
 ## `center`
 

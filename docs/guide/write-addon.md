@@ -1,4 +1,6 @@
-# Write an Addon
+# Writing Addons
+
+> Please read <LinkInline link="guide/theme-addon" /> first.
 
 Each slides project can only have one theme, but can have multiple addons. Please read [Write a Theme](./write-theme) first if you haven't.
 
@@ -9,7 +11,7 @@ Theoretically, all the capabilities of a theme can be done in an addon. However,
 It's recommended to implement one or more of the following points in an addon:
 
 - Provide custom components
-- Provide *new* layouts
+- Provide _new_ layouts
 - Provide new code snippets
 - Provide new code runners
 - Configure tools like UnoCSS, Vite, etc.

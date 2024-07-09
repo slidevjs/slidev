@@ -1,4 +1,6 @@
-# Write a Theme
+# Writing Themes
+
+> Please read <LinkInline link="guide/theme-addon" /> first.
 
 Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature is not related to the appearance and can be used separately, it should be implemented as an [addon](./write-addon).
 

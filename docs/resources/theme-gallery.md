@@ -1,8 +1,16 @@
+---
+aside: false
+---
+
+<script setup>
+import ThemeGallery from '../.vitepress/theme/components/ThemeGallery.vue'
+</script>
+
 # Theme Gallery
 
 Browse awesome themes available for Slidev here.
 
-Read more about [how to use a theme](../guide/theme-addon#use-theme), or [how to write your own](../guide/write-theme) and share with the community!
+Read more about <LinkInline link="guide/theme-addon#use-theme" /> to use them, and <LinkInline link="guide/write-theme" /> to create your own theme.
 
 ## Official Themes {#official-themes}
 

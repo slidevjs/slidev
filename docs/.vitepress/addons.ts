@@ -6,10 +6,10 @@ export const official: AddonInfo[] = [
   {
     id: '',
     link: '#',
-    name: 'TBD',
-    description: 'TBD',
+    name: 'Work in Progress',
+    description: '',
     author: {
-      name: 'TBD',
+      name: '',
     },
   },
 ]

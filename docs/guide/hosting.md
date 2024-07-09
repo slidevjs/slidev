@@ -57,7 +57,7 @@ Here are a few examples of the exported SPA:
 - [Starter Template](https://sli.dev/demo/starter)
 - [Composable Vue](https://talks.antfu.me/2021/composable-vue) by [Anthony Fu](https://github.com/antfu)
 
-For more, check out [Showcases](/showcases).
+For more, check out [Showcases](../resources/showcases).
 
 ## Hosting
 

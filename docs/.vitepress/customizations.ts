@@ -8,11 +8,7 @@ export default [
     link: '/custom/directory-structure',
   },
   {
-    text: 'Fonts',
-    link: '/custom/fonts',
-  },
-  {
-    text: 'Highlighters',
+    text: 'Configure Highlighter',
     link: '/custom/highlighters',
   },
   {
@@ -28,6 +24,10 @@ export default [
     link: '/custom/config-unocss',
   },
   {
+    text: 'Configure Code Runners',
+    link: '/custom/config-code-runners',
+  },
+  {
     text: 'Configure Monaco',
     link: '/custom/config-monaco',
   },
@@ -40,10 +40,6 @@ export default [
     link: '/custom/config-mermaid',
   },
   {
-    text: 'Configure Code Runners',
-    link: '/custom/config-code-runners',
-  },
-  {
     text: 'Configure Routes',
     link: '/custom/config-routes',
   },
@@ -54,6 +50,10 @@ export default [
   {
     text: 'Configure Context Menu',
     link: '/custom/config-context-menu',
+  },
+  {
+    text: 'Configure Fonts',
+    link: '/custom/fonts',
   },
   {
     text: 'Configure Pre-Parser',

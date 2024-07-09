@@ -38,6 +38,7 @@ export function resolveLink(link: string): {
       return {
         kind: 'guide',
         title: `📘 ${getGuideTitle(name)}`,
+        descripton: 'Click to read this guide',
         url: `/guide/${nameWithHash}`,
       }
     }

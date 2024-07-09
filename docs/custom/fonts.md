@@ -1,6 +1,4 @@
-# Fonts
-
-> Available since v0.20
+# Configure Fonts
 
 While you can use HTML and CSS to customize the fonts and style for your slides as you want, Slidev also provides a convenient way to use them effortlessly.
 

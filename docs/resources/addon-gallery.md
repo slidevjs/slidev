@@ -1,8 +1,16 @@
+---
+aside: false
+---
+
+<script setup>
+import AddonGallery from '../.vitepress/theme/components/AddonGallery.vue'
+</script>
+
 # Addon Gallery
 
 Browse awesome addons available for Slidev here.
 
-Read more about [how to use addons](../guide/theme-addon#use-addon), or [how to write your own](../guide/write-addon) and share with the community!
+Read more about <LinkInline link="guide/theme-addon#use-addon" /> to use them, and <LinkInline link="guide/write-addon" /> to create your own addon.
 
 ## Official Addons
 

@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Showcases
 
 Talks / Presentations using Slidev.

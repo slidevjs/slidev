@@ -6,9 +6,9 @@ description: |
   A syntax sugar for named slots in layouts.
 ---
 
-# Slots
+# Slot Sugar for Layouts
 
-Some layouts can provide multiple contributing points using [Vue's named slots](https://v3.vuejs.org/guide/component-slots.html).
+Some layouts can provide multiple contributing points using [Vue's named slots](https://vuejs.org/guide/components/slots.html).
 
 For example, in [`two-cols` layout](https://github.com/slidevjs/slidev/blob/main/packages/client/layouts/two-cols.vue), you can have two columns left (`default` slot) and right (`right` slot) side by side.
 
