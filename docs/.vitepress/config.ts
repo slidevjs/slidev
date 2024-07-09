@@ -55,6 +55,8 @@ export default defineConfig({
         'xml',
         'vue',
         'markdown',
+        'mermaid',
+        'latex',
       )
     },
     codeTransformers: [

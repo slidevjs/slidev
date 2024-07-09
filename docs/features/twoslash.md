@@ -1,7 +1,7 @@
 ---
 layout: feature
 depends:
-  - feature/code-block
+  - guide/syntax#code-block
 relates:
   - TwoSlash: https://twoslash.netlify.app/
 since: v0.46.0

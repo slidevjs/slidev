@@ -1,13 +1,28 @@
 ---
 layout: feature
 depends:
-  - feature/static-line-highlighting
+  - guide/syntax#code-block
   - guide/animations
 description: |
-  Highlight specific lines in code blocks dynamically based on clicks.
+  Highlight specific lines in code blocks based on clicks.
 ---
 
-# Dynamic Line Highlighting
+# Line Highlighting
+
+To highlight specific lines, simply add line numbers within brackets `{}`. Line numbers start counting from 1 by default.
+
+````md
+```ts {2,3}
+function add(
+  a: Ref<number> | number,
+  b: Ref<number> | number
+) {
+  return computed(() => unref(a) + unref(b))
+}
+```
+````
+
+## Dynamic Line Highlighting
 
 To change what's highlighted with multiple clicks, you can use `|` to separate each stage:
 

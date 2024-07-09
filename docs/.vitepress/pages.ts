@@ -5,10 +5,10 @@ export const Guides = [
   },
   {
     text: 'Getting Started',
-    link: '/guide/',
+    link: '/guide/index',
   },
   {
-    text: 'Basic Syntax',
+    text: 'Syntax Guide',
     link: '/guide/syntax',
   },
   {

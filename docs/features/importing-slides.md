@@ -1,0 +1,59 @@
+---
+layout: feature
+relates:
+  - feature/frontmatter-merging
+  - feature/import-with-range
+description: |
+  Split your `slides.md` into multiple files for better reusability and organization.
+---
+
+# Importing Slides
+
+You can split your `slides.md` into multiple files for better reusability and organization. To do this, you can use the `src` frontmatter option to specify the path to the external markdown file. For example:
+
+::: code-group
+
+<!-- eslint-skip -->
+
+```md [./slides.md]
+# Title
+
+This is a normal page
+
+---
+src: ./pages/toc.md // [!code highlight]
+---
+
+<!-- this page will be loaded from './pages/toc.md' -->
+
+Contents here are ignored
+
+---
+
+# Page 4
+
+Another normal page
+
+---
+src: ./pages/toc.md   # Reuse the same file // [!code highlight]
+---
+```
+
+```md [./pages/toc.md]
+# Table of Contents
+
+Part 1
+
+---
+
+# Table of Contents
+
+Part 2
+```
+
+:::
+
+<SeeAlso :links="[
+  'feature/frontmatter-merging',
+  'feature/import-with-range',
+]" />

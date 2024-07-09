@@ -40,7 +40,7 @@ However, the following points are **not** recommended to be done in a theme, and
 - New code runners
 - Other things that can be used separately
 
-Basically, the way to provide global styles, layouts, components and configure tools is the same as doing these in a slides project. For example, to configure Shiki, you can create a `./setup/shiki.ts` as described in [Configure Highlighter](../custom/highlighters). You can refer to the [customization guide](/custom/) for more information.
+Basically, the way to provide global styles, layouts, components and configure tools is the same as doing these in a slides project. For example, to configure Shiki, you can create a `./setup/shiki.ts` as described in [Configure Highlighter](../custom/config-highlighter). You can refer to the [customization guide](/custom/) for more information.
 
 To provide default Slidev configurations, you can add a `slidev.defaults` field in the `package.json` file, which will be merged with the user's configurations:
 

@@ -34,7 +34,7 @@ You can change the output directory using `--out`.
 $ slidev build --out my-build-folder
 ```
 
-### Multiple builds
+### Multiple Builds
 
 You can build multiple slide decks in one go by passing multiple markdown files as arguments:
 
@@ -54,10 +54,14 @@ In this case, each input file will generate a folder containing the build in the
 
 Here are a few examples of the exported SPA:
 
-- [Starter Template](https://sli.dev/demo/starter)
+- [Demo Slides](https://sli.dev/demo/starter)
 - [Composable Vue](https://talks.antfu.me/2021/composable-vue) by [Anthony Fu](https://github.com/antfu)
+- More in [Showcases](../resources/showcases)
 
-For more, check out [Showcases](../resources/showcases).
+### Options
+
+<LinkCard link="feature/build-with-pdf" />
+<LinkCard link="feature/bundle-remote-assets" />
 
 ## Hosting
 
@@ -67,8 +71,10 @@ We recommend using `npm init slidev@latest` to scaffold your project, which cont
 
 To deploy your slides on [GitHub Pages](https://pages.github.com/) via GitHub Actions, follow these steps:
 
-- Upload all the files of the project in your repo (i.e. named `name_of_repo`)
-- Create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
+1. Upload all the files of the project in your repo (i.e. named `name_of_repo`)
+2. Create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
+
+::: details deploy.yml
 
 ```yaml
 name: Deploy pages
@@ -127,14 +133,16 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-- In your repository, go to Settings>Pages. Under "Build and deployment", select "GitHub Actions".
-- Finally, after all workflows are executed, a link to the slides should appear under Settings>Pages.
+:::
+
+3. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`.
+4. Finally, after all workflows are executed, a link to the slides should appear under `Settings` > `Pages`.
 
 ### Netlify
 
-- [Netlify](https://netlify.com/)
+Create `netlify.toml` in your project root with the following content:
 
-Create `netlify.toml` in your project root with the following content.
+::: details netlify.toml
 
 ```toml
 [build]
@@ -150,13 +158,15 @@ to = '/index.html'
 status = 200
 ```
 
-Then go to your Netlify dashboard and create a new site with the repository.
+:::
+
+Then go to your [Netlify dashboard](https://netlify.com/) and create a new site with the repository.
 
 ### Vercel
 
-- [Vercel](https://vercel.com/)
+Create `vercel.json` in your project root with the following content:
 
-Create `vercel.json` in your project root with the following content.
+::: details vercel.json
 
 ```json
 {
@@ -166,11 +176,15 @@ Create `vercel.json` in your project root with the following content.
 }
 ```
 
-Then go to your Vercel dashboard and create a new site with the repository.
+:::
+
+Then go to your [Vercel dashboard](https://vercel.com/) and create a new site with the repository.
 
 ### Host on Docker
 
-If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker](https://hub.docker.com/r/tangramor/slidev) image maintained by [tangramor](https://github.com/tangramor), or build your own.
+If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker image](https://hub.docker.com/r/tangramor/slidev) maintained by [tangramor](https://github.com/tangramor), or build your own.
+
+::: details Use the Docker Image
 
 Just run the following command in your work folder:
 
@@ -202,3 +216,5 @@ Create the docker image: `docker build -t myslides .`
 And run the container: `docker run --name myslides --rm --user node -p 3030:3030 myslides`
 
 You can visit your slides at `http://localhost:3030/`
+
+:::

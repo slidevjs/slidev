@@ -1,7 +1,7 @@
 ---
 layout: feature
 depends:
-  - feature/code-block
+  - guide/syntax#code-block
   - guide/animations
 relates:
   - Shiki Magic Move: https://github.com/shikijs/shiki-magic-move

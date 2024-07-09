@@ -1,7 +1,7 @@
 ---
 layout: feature
 depends:
-  - guide/syntax#multiple-entries
+  - guide/syntax#importing-slides
 relates:
   - feature/frontmatter-merging
 description: |

@@ -55,7 +55,7 @@ This feature is powered by [`@typescript/ata`](https://github.com/microsoft/Type
 
 ## Configure Themes
 
-Since v0.48.0, Monaco will reuse the Shiki theme you configured in [Shiki's setup file](/custom/highlighters#configure-shiki), powered by [`@shikijs/monaco`](https://shiki.style/packages/monaco). You don't need to worry about it anymore and it will have a consistent style with the rest of your code blocks.
+Since v0.48.0, Monaco will reuse the Shiki theme you configured in [Shiki's setup file](/custom/config-highlighter#configure-shiki), powered by [`@shikijs/monaco`](https://shiki.style/packages/monaco). You don't need to worry about it anymore and it will have a consistent style with the rest of your code blocks.
 
 ## Configure the Editor
 

@@ -1,10 +1,10 @@
 # Global Context
 
-Slidev injected a [global Vue context](https://v3.vuejs.org/api/application-config.html#globalproperties) `$slidev` for advanced conditions or navigation controls.
+Slidev injects several global context values for advanced navigation controls.
 
-## Usage
+## Direct Usage
 
-You can access it anywhere in your Markdown and Vue components:
+You can access them directly in your slides or components:
 
 ```md
 <!-- slides.md -->
@@ -24,97 +24,9 @@ Current page is: {{ $nav.currentPage }}
 </template>
 ```
 
-## Properties
-
-### `$slidev`
-
-The global context object.
-
-### `$clicks`
-
-`$clicks` hold the number of clicks on the current slide. Can be used conditionally to show different content on clicks.
-
-```html
-<div v-if="$clicks > 3">Content</div>
-```
-
-### `$page`
-
-`$page` holds the number of the current page, 1-indexed.
-
-```md
-Page: {{ $page }}
-
-Is current page active: {{ $page === $nav.currentPage }}
-```
-
-### `$renderContext`
-
-`$renderContext` holds the current render context, which can be `slide`, `overview`, `presenter` or `previewNext`
-
-```md
-<div v-if="$renderContext === 'slide'">
-  This content will only be rendered in slides view
-</div>
-```
-
-### `$nav`
-
-A reactive object holding the properties and controls of the slide navigation. For examples:
-
-```js
-$nav.next() // go next step
-
-$nav.nextSlide() // go next slide (skip v-clicks)
-
-$nav.go(10) // go slide #10
-```
-
-```js
-$nav.currentPage // current slide number
-
-$nav.currentLayout // current layout id
-```
-
-For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).
-
-> Note: `$nav.clicks` is a global state while `$clicks` is local to each slide. It's recommended to **use `$clicks` over `$nav.clicks`** to avoid clicks changed being triggered on page transitions.
-
-### `$slidev.configs`
-
-A reactive object holding the parsed [configurations in the first frontmatter](/custom/#frontmatter-configures) of your `slides.md`. For example:
-
-```yaml
----
-title: My First Slidev!
----
-```
-
-```
-{{ $slidev.configs.title }} // 'My First Slidev!'
-```
-
-### `$slidev.themeConfigs`
-
-A reactive object holding the parsed theme configurations.
-
-```yaml
----
-title: My First Slidev!
-themeConfig:
-  primary: # 213435
----
-```
-
-```
-{{ $slidev.themeConfigs.primary }} // '#213435'
-```
-
 ## Composable Usage
 
 > Available since v0.48.0
-
-### Context
 
 If you want to get the context programmatically (also type-safely), you can import composables from `@slidev/client`:
 
@@ -133,9 +45,111 @@ onSlideLeave(() => { /* ... */ })
 ```
 
 > [!NOTE]
-> Previously, you might see the usage of importing nested modules like `import { isDark } from '@slidev/client/logic/dark.ts'`, this is **NOT RECOMMENDED** as they are internal implementation details and might be broken in the future. Try always to use the public API from `@slidev/client` whenever possible.
+> Previously, you might see the usage of importing nested modules like `import { isDark } from '@slidev/client/logic/dark.ts'`, this is **NOT RECOMMENDED** as they are internal implementation details and may change in the future. Always use the public APIs from `@slidev/client` if possible.
 
-### Types
+::: warning
+
+When the `useSlideContext` composable is used in a file, the automatic injection of `$slidev` will be disabled. You need to manually get the `$slidev` object to the `useSlideContext` function.
+
+:::
+
+## Properties
+
+### `$slidev`
+
+The global context object.
+
+### `$frontmatter`
+
+The frontmatter object of the current slide. Note that this is empty for components out of the slides like <LinkInline link="feature/global-layers" />.
+
+### `$clicks`
+
+`$clicks` hold the number of clicks on the current slide. Can be used conditionally to show different content on clicks.
+
+```html
+<div v-if="$clicks > 3">Content</div>
+```
+
+See the <LinkInline link="guide/animations" /> guide for more information.
+
+### `$nav`
+
+A reactive object holding the properties and controls of the slide navigation. For examples:
+
+```js
+$nav.next() // go next step
+$nav.nextSlide() // go next slide (skip clicks)
+$nav.go(10) // go slide #10
+
+$nav.currentPage // current slide number
+$nav.currentLayout // current layout name
+```
+
+For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).
+
+### `$page`
+
+`$page` holds the number of the current page, 1-indexed.
+
+```md
+Page: {{ $page }}
+
+Is current page active: {{ $page === $nav.currentPage }}
+```
+
+> [!Note]
+> `$nav.clicks` is a global state while `$clicks` is the local clicks number for each slide.
+
+### `$renderContext`
+
+`$renderContext` holds the current render context, which can be `slide`, `overview`, `presenter` or `previewNext`
+
+```md
+<div v-if="['slide', 'presenter'].includes($renderContext)">
+  This content will only be rendered in main slides view
+</div>
+```
+
+You can also use the [`<RenderWhen>` component](../builtin/components#renderwhen).
+
+### `$slidev.configs`
+
+A reactive object holding the configurations for the slide project. For example:
+
+```md
+---
+title: My First Slidev!
+---
+
+# Page 1
+
+---
+
+# Any Page
+
+{{ $slidev.configs.title }} // 'My First Slidev!'
+```
+
+### `$slidev.themeConfigs`
+
+A reactive object holding the parsed theme configurations:
+
+```yaml
+---
+title: My First Slidev!
+themeConfig:
+  primary: '#213435'
+---
+```
+
+Then the theme can access the primary color like:
+
+```md
+{{ $slidev.themeConfigs.primary }} // '#213435'
+```
+
+## Types
 
 If you want to get a type programmatically, you can import types like `TocItem` from `@slidev/types`:
 

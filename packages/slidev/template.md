@@ -6,7 +6,7 @@ theme: seriph
 background: https://cover.sli.dev
 # apply any unocss classes to the current slide
 class: 'text-center'
-# https://sli.dev/custom/highlighters.html
+# https://sli.dev/custom/config-highlighter.html
 highlighter: shiki
 # some information about the slides, markdown enabled
 info: |

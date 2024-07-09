@@ -3,7 +3,6 @@ import { useData, useRoute } from 'vitepress'
 import { computed } from 'vue'
 import VPDocAside from 'vitepress/dist/client/theme-default/components/VPDocAside.vue'
 import VPDocFooter from 'vitepress/dist/client/theme-default/components/VPDocFooter.vue'
-import VPMenuLink from 'vitepress/dist/client/theme-default/components/VPMenuLink.vue'
 import { data as features } from '../../../features/index.data'
 
 const { theme, page } = useData()
@@ -25,13 +24,7 @@ const pageName = computed(() =>
         <div class="aside-curtain" />
         <div class="aside-container">
           <div class="aside-content">
-            <div flex flex-col flex-grow>
-              <VPMenuLink :item="{ text: 'All features', link: '/features' }" />
-              <FeatureLayoutLinks name="Depends on" :links="data.depends" />
-              <FeatureLayoutLinks name="Relates to" :links="data.relates" />
-              <FeatureLayoutLinks name="Derives" :links="data.derives" />
-              <FeatureLayoutSince :version="data.since" />
-            </div>
+            <FeatureLayoutNav :data class="nav-left" />
           </div>
         </div>
       </div>
@@ -55,6 +48,7 @@ const pageName = computed(() =>
               ]"
             />
           </main>
+          <FeatureLayoutNav :data class="nav-bottom" />
           <VPDocFooter>
             <template #doc-footer-before>
               <slot name="doc-footer-before" />
@@ -96,7 +90,7 @@ const pageName = computed(() =>
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1100px) {
   .VPDoc .container {
     display: flex;
     justify-content: center;
@@ -186,7 +180,7 @@ const pageName = computed(() =>
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1100px) {
   .content {
     order: 1;
     margin: 0;
@@ -200,5 +194,19 @@ const pageName = computed(() =>
 
 .VPDoc.has-aside .content-container {
   max-width: 688px;
+}
+
+.nav-left {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .nav-left {
+    display: block;
+  }
+
+  .nav-bottom {
+    display: none;
+  }
 }
 </style>

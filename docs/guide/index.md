@@ -10,9 +10,11 @@ Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and
 It uses a feature-rich Markdown syntax to generate beautiful slides with an instant updating experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are limitless.
 -->
 
-You can learn more about the rationale behind this project in the [Why Slidev](/guide/why) section.
+::: tip
 
-## Features
+You can learn more about the rationale behind this project in <LinkInline link="guide/why" />.
+
+:::
 
 <!--
 - 📝 [**Markdown-based**](/guide/syntax) - foucus on content and use your favorite editor
@@ -38,13 +40,13 @@ You can learn more about the rationale behind this project in the [Why Slidev](/
 
 ### Try it Online
 
-Start Slidev right now in your browser: [sli.dev/new](https://sli.dev/new)
-
-[![](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://sli.dev/new)
+Start Slidev right in your browser with StackBlitz: [sli.dev/new](https://sli.dev/new)
 
 ### Create Locally
 
-You should have [Node.js](https://nodejs.org) installed. Then, create a new Slidev project with the following command:
+> Requires [Node.js](https://nodejs.org) >= 18.0 installed.
+
+Run the following command to create a new Slidev project locally:
 
 ::: code-group
 
@@ -62,7 +64,7 @@ yarn create slidev
 
 :::
 
-Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check the [syntax guide](/guide/syntax). <!-- TODO: -->
+Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check <LinkInline link="guide/syntax" />.
 
 :::: details Single file usage (not recommended)
 
@@ -84,7 +86,7 @@ yarn global add @slidev/cli
 
 :::
 
-Then, you can create and start a single file slides with:
+Then, you can create and start a single file slides via:
 
 ```bash
 slidev slides.md
@@ -94,15 +96,15 @@ slidev slides.md
 
 ## Basic Commands
 
-Slidev provides a set of commands. Here are some of the most common ones:
+Slidev provides a set of commands in its CLI. Here are some common ones:
 
-- `slidev` - Start the dev server ([learn more](../builtin/cli#dev))
-- `slidev build` - Build the slides for production ([learn more](../builtin/cli#build))
-- `slidev export` - Export the slides to PDF, PNGs, or PPTX ([learn more](../builtin/cli#export))
-- `slidev format` - Format the slides content ([learn more](../builtin/cli#format))
+- `slidev` - Start the dev server. See [the dev command](../builtin/cli#dev).
+- `slidev export` - Export the slides to PDF, PPTX, or PNGs. See <LinkInline link="guide/exporting" />.
+- `slidev build` - Build the slides as static web application. See <LinkInline link="guide/hosting" />.
+- `slidev format` - Format the slides content. See [the format command](../builtin/cli#format).
 - `slidev --help` - Show the help message
 
-To run these commands, you can add them to your `package.json` scripts (which is has been done for you if you used the `npm init slidev` command):
+To run these commands, you can add them to your `package.json` scripts (which has been done for you if the project was created via `npm init slidev`):
 
 ```json
 {
@@ -114,7 +116,7 @@ To run these commands, you can add them to your `package.json` scripts (which is
 }
 ```
 
-Then, you can run them with `npm run dev`, `npm run build`, and `npm run export`.
+Then, you can simply run `npm run dev`, `npm run build`, and `npm run export`.
 
 For more information about the CLI, please check the [CLI guide](../builtin/cli).
 

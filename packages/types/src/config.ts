@@ -93,7 +93,7 @@ export interface SlidevConfig {
   /**
    * Prefer highlighter
    *
-   * @see https://sli.dev/custom/highlighters.html
+   * @see https://sli.dev/custom/config-highlighter.html
    * @default shiki
    */
   highlighter: 'shiki' | 'prism'

@@ -13,12 +13,12 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 # apply unocss classes to the current slide
 class: text-center
-# https://sli.dev/guide/drawing
+# https://sli.dev/features/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations#slide-transitions
+# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
+# enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
 ---
 
@@ -68,7 +68,7 @@ Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 <!--
 You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
+Learn more: https://sli.dev/features/slide-scope-style
 -->
 
 <style>
@@ -161,7 +161,7 @@ doubled.value = 2
 <<< @/snippets/external.ts#snippet
 
 <!-- Footer -->
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+[^1]: [Learn More](https://sli.dev/guide/line-highlighting)
 
 <!-- Inline style -->
 <style>
@@ -470,7 +470,7 @@ $$ {1|3|all}
 \end{aligned}
 $$
 
-[Learn more](https://sli.dev/guide/syntax#latex)
+[Learn more](https://sli.dev/features/latex)
 
 ---
 
@@ -548,7 +548,7 @@ database "MySql" {
 
 </div>
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+Learn More: [Mermaid Diagrams](https://sli.dev/guide/features/mermaid) and [PlantUML Diagrams](https://sli.dev/guide/features/plantuml)
 
 ---
 foo: bar
@@ -596,7 +596,7 @@ Double-click on the draggable elements to edit their positions.
 <v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
-src: ./pages/multiple-entries.md
+src: ./pages/imported-slides.md
 hide: false
 ---
 

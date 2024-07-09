@@ -2,13 +2,13 @@
 outline: deep
 ---
 
-# Basic Syntax
+# Syntax Guide
 
-Slides are written within **a single Markdown file**, which is called a **Slidev Markdown**. A presentation has a Slidev Markdown as its entry, which is `./slides.md` by default, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
+Slidev's slides are written as Markdown files, which are called **Slidev Markdown**s. A presentation has a Slidev Markdown as its entry, which is `./slides.md` by default, but you can change it by passing the file path as an argument to [the CLI commands](../builtin/cli).
 
-In a Slidev Markdown, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the most basic ones to get you started, while the rest are covered as [features](../features/).
+In a Slidev Markdown, not only [the basic Markdown features](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) can be used as usual, Slidev also provides additional features to enhance your slides. This section covers the syntax introduced by Slidev. Please make sure you know the basic Markdown syntax before reading this guide.
 
-## Slide Separators
+## Slide Separators {#slide-separators}
 
 Use `---` padded with a new line to separate your slides.
 
@@ -38,7 +38,7 @@ Use UnoCSS classes and Vue components to style and enrich your slides:
 </div>
 ````
 
-## Frontmatter & Headmatter
+## Frontmatter & Headmatter {#frontmatter}
 
 At the beginning of each slide, you can add a optional [frontmatter](https://jekyllrb.com/docs/front-matter/) to configure the slide. The first frontmatter block is called **headmatter** and can configure the whole slide deck. The rest are **frontmatters** for individual slides. Texts in the headmatter or the frontmatter should be a object in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
@@ -79,7 +79,7 @@ src: ./pages/4.md  # This slide only contains a frontmatter
 # Slide 5
 ```
 
-Configurations you can set are described in the [Slides deck configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter-configures) sections.
+Configurations you can set are described in the [Slides deck configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter) sections.
 
 To make the headmatters more readable, you can installed the VSCode extension:
 
@@ -89,7 +89,7 @@ Also, there is another possible frontmatter format:
 
 <LinkCard link="feature/block-frontmatter" />
 
-## Notes
+## Notes {#notes}
 
 You can also create presenter notes for each slide. They will show up in [Presenter Mode](../guide/ui#presenter-mode) for you to reference during presentations.
 
@@ -121,80 +121,60 @@ This is _another_ note
 
 Basic Markdown and HTML are also supported in notes and will be rendered.
 
-## Multiple Entries
-
-You can split your `slides.md` into multiple files for better reusability and organization. To do this, you can use the `src` frontmatter option to specify the path to the external markdown file. For example:
-
-::: code-group
-
-<!-- eslint-skip -->
-
-```md [./slides.md]
-# Title
-
-This is a normal page
-
----
-src: ./pages/toc.md // [!code highlight]
----
-
-<!-- this page will be loaded from './pages/toc.md' -->
-
-Contents here are ignored
-
----
-
-# Page 4
-
-Another normal page
-
----
-src: ./pages/toc.md   # Reuse the same file // [!code highlight]
----
-```
-
-```md [./pages/toc.md]
-# Table of Contents
-
-Part 1
-
----
-
-# Table of Contents
-
-Part 2
-```
-
-:::
-
 <SeeAlso :links="[
-  'feature/frontmatter-merging',
-  'feature/import-with-range',
+  'feature/click-marker',
 ]" />
 
-<!--
 
-# Prettier Support
-# Static Assets
-# Line Highlighting
-# Line Numbers
-# TwoSlash Integration
-# Shiki Magic Move
-# Monaco Editor
-# Monaco Diff Editor
-# Monaco Runner
-# Writable Monaco Editor
-# Click Markers
-# Icons
-# Styling Icons
-# Slots
-# Import Code Snippets
-# LaTeX
-## Inline
-## Block
-## Chemical equations
-# LaTex line highlighting
-# Diagrams
-# MDC Syntax
+## Code Blocks {#code-block}
 
--->
+One big reason that led to the creation of Slidev was the need to perfectly display code in slides. Consequently, you can use Markdown-flavored code blocks to highlight your code.
+
+````md
+```ts
+console.log('Hello, World!')
+```
+````
+
+Slidev has [Shiki](https://github.com/shikijs/shiki) built in as the syntax highlighter. Refer to [Configure Shiki](/custom/config-highlighter) for more details.
+
+More about code blocks:
+
+<LinkCard link="feature/code-block-line-numbers" />
+<LinkCard link="feature/code-block-max-height" />
+<LinkCard link="feature/line-highlighting" />
+<LinkCard link="feature/monaco-editor" />
+<LinkCard link="feature/monaco-run" />
+<LinkCard link="feature/monaco-write" />
+<LinkCard link="feature/shiki-magic-move" />
+<LinkCard link="feature/twoslash" />
+<LinkCard link="feature/import-snippet" />
+
+## LaTeX Blocks {#latex-block}
+
+Slidev supports LaTeX blocks for mathematical and chemical formulas:
+
+<LinkCard link="feature/latex" />
+
+## Diagrams {#diagrams}
+
+Slidev supports [Mermaid.js](http://mermaid.js.org/) and [PlantUML](https://plantuml.com/) for creating diagrams from text:
+
+<LinkCard link="feature/mermaid" />
+<LinkCard link="feature/plantuml" />
+
+## MDC Syntax {#mdc-syntax}
+
+MDC Syntax is the easist way to apply styles and classes to elements:
+
+<LinkCard link="feature/mdc" />
+
+## Scoped CSS {#scoped-css}
+
+You can use scoped CSS to style your slides:
+
+<LinkCard link="feature/slide-scope-style" />
+
+## Importing Slides {#importing-slides}
+
+<LinkCard link="feature/importing-slides" />

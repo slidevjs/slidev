@@ -7,19 +7,38 @@ sidebar: false
 ---
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import { withBase } from 'vitepress'
 import { data as features } from './index.data'
+
+const search = ref('')
+const filteredFeatures = computed(() => {
+  const s = search.value.toLowerCase().trim()
+  if (!s) return features
+  return Object.values(features).filter(feature => feature.title.toLowerCase().includes(s) || feature.description.toLowerCase().includes(s))
+})
 </script>
 
 # Features
 
-<div class="features-grid mt-6">
-  <a v-for="feature in features" :key="feature.id" :href="withBase(feature.link)">
+This is a list of all the individual features that Slidev provides. Each feature can be used independently and is optional.
+
+You can also read <LinkInline link="guide/index" /> to learn the features by topic.
+
+<div class="flex items-center mt-6 pl-1">
+  <input v-model="search" type="search" placeholder="Search features..." class="input" />
+</div>
+
+<div class="features-grid mt-4">
+  <a v-for="feature in filteredFeatures" :key="feature.id" :href="withBase(feature.link)">
     <div>
-      <div font-bold > {{ feature.title }} </div>
+      <div font-bold text-wrap> {{ feature.title }} </div>
       <div h-20 text-wrap leading-5 op-80 pt-1 overflow-hidden text-sm> {{ feature.description }} </div>
     </div>
   </a>
+</div>
+<div v-if="filteredFeatures.length === 0" class="w-full text-center text-gray-500">
+  No results found
 </div>
 
 <style scoped>
@@ -52,5 +71,11 @@ import { data as features } from './index.data'
 <style>
 .content {
   max-width: 72vw !important;
+}
+</style>
+
+<style>
+:root {
+  overflow-y: scroll;
 }
 </style>

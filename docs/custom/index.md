@@ -83,7 +83,7 @@ favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
 # Learn mode: https://sli.dev/feature/plantuml.html
 plantUmlServer: https://www.plantuml.com/plantuml
 # fonts will be auto imported from Google fonts
-# Learn more: https://sli.dev/custom/fonts.html
+# Learn more: https://sli.dev/custom/config-fonts.html
 fonts:
   sans: Roboto
   serif: Roboto Slab
@@ -138,7 +138,7 @@ preload: true
 # create a route alias that can be used in the URL or with the <Link> component
 routeAlias: undefined # or string
 # includes a markdown file
-# Learn more: https://sli.dev/guide/syntax.html#multiple-entries
+# Learn more: https://sli.dev/guide/syntax.html#importing-slides
 src: undefined # or string
 # override the title for the <TitleRenderer> and <Toc> components
 # only if `title` has also been declared

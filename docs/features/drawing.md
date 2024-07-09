@@ -1,5 +1,7 @@
 ---
 layout: feature
+depends:
+  - guide/ui#navigation-bar
 relates:
   - drauu: https://github.com/antfu/drauu
 description: |
@@ -10,7 +12,7 @@ description: |
 
 Slidev comes with a built-in drawing and annotation feature powered by [drauu](https://github.com/antfu/drauu). It allows you to draw and annotate your slides with ease.
 
-To start, click the <carbon-pen class="inline-icon-btn"/> icon in the toolbar and start drawing. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
+To start, click the <carbon-pen class="inline-icon-btn"/> icon in the [navigation bar](../guide/ui#navigation-bar) to open the drawing toolbar. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
 
 <TheTweet id="1424027510342250499" />
 
