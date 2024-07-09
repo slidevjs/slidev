@@ -30,7 +30,7 @@
     "@antfu/eslint-config": "^2.22.0-beta.3",
     "@antfu/ni": "^0.21.12",
     "@antfu/utils": "^0.7.10",
-    "@shikijs/markdown-it": "^1.10.3",
+    "@shikijs/markdown-it": "^1.10.2",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
