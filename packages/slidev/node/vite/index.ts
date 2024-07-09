@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { existsSync } from 'node:fs'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -18,6 +17,9 @@ import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createMonacoTypesLoader } from './monacoTypes'
 import { createVuePlugin } from './vue'
 import { createMonacoWriter } from './monacoWrite'
+import { createLayoutWrapperPlugin } from './layoutWrapper'
+import { createContextInjectionPlugin } from './contextInjection'
+import { createHmrPatchPlugin } from './hmrPatch'
 
 export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
@@ -44,11 +46,12 @@ export async function ViteSlidevPlugin(
   const publicRoots = [...themeRoots, ...addonRoots].map(i => join(i, 'public')).filter(existsSync)
 
   const plugins = [
+    createSlidesLoader(options, serverOptions),
     createMarkdownPlugin(options, pluginOptions),
-
+    createLayoutWrapperPlugin(options),
+    createContextInjectionPlugin(),
     createVuePlugin(options, pluginOptions),
-    createSlidesLoader(options, pluginOptions, serverOptions),
-    createMonacoWriter(options),
+    createHmrPatchPlugin(),
 
     Components({
       extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
@@ -78,7 +81,7 @@ export async function ViteSlidevPlugin(
 
     Icons({
       defaultClass: 'slidev-icon',
-      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
+      collectionsNodeResolvePath: options.userRoot,
       ...iconsOptions,
     }),
 
@@ -120,6 +123,7 @@ export async function ViteSlidevPlugin(
 
     createConfigPlugin(options),
     createMonacoTypesLoader(options),
+    createMonacoWriter(options),
     createVueCompilerFlagsPlugin(options),
     createUnocssPlugin(options, pluginOptions),
 

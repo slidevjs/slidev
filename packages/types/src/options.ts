@@ -49,6 +49,7 @@ export interface ResolvedSlidevOptions extends RootsInfo {
 
 export interface ResolvedSlidevUtils {
   isMonacoTypesIgnored: (pkg: string) => boolean
+  getLayouts: () => Promise<Record<string, string>>
 }
 
 export interface SlidevServerOptions {

@@ -13,13 +13,13 @@ export const templateSlides: VirtualModuleTemplate = {
     const slides = data.slides
       .map((_, idx) => {
         const no = idx + 1
-        imports.push(`import { meta as f${no} } from '${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter'`)
+        imports.push(`import { meta as f${no} } from '${VIRTUAL_SLIDE_PREFIX}${no}/frontmatter'`)
         return `{
           no: ${no},
           meta: f${no},
           component: async () => {
             try {
-              return await import('${VIRTUAL_SLIDE_PREFIX}${no}.md')
+              return await import('${VIRTUAL_SLIDE_PREFIX}${no}/md')
             }
             catch(e) {
               console.error('Failed to load slide ${no}:', e)
