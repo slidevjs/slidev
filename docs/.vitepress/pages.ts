@@ -36,7 +36,7 @@ export const Guides = [
     link: '/guide/exporting',
   },
   {
-    text: 'Static Hosting',
+    text: 'Hosting',
     link: '/guide/hosting',
   },
   {
