@@ -144,12 +144,12 @@ export function createClicksContextBase(
       maxMap.delete(el)
     },
     get currentOffset() {
-      // eslint-disable-next-line ts/no-unused-expressions
+      // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
       return sum(...relativeSizeMap.values())
     },
     get total() {
-      // eslint-disable-next-line ts/no-unused-expressions
+      // eslint-disable-next-line no-unused-expressions
       routeForceRefresh.value
       return clicksTotalOverrides
         ?? (isMounted.value
