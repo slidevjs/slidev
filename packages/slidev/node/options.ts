@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { uniq } from '@antfu/utils'
 import Debug from 'debug'
-import type { ResolvedSlidevOptions, ResolvedSlidevUtils, RootsInfo, SlidevData, SlidevEntryOptions } from '@slidev/types'
+import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import mm from 'micromatch'
 import fg from 'fast-glob'
 import { parser } from './parser'
