@@ -113,7 +113,7 @@ export function useDragElementsUpdater(no: number) {
   }
 }
 
-export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource, isArrow = false) {
+export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource, isArrow?: boolean) {
   function inject<T>(key: InjectionKey<T> | string): T | undefined {
     return directive
       ? directiveInject(directive, key)
