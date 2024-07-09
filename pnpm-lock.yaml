@@ -23,7 +23,7 @@ importers:
         specifier: ^0.7.10
         version: 0.7.10
       '@shikijs/markdown-it':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       '@slidev/cli':
         specifier: workspace:*
@@ -122,7 +122,7 @@ importers:
         specifier: ^5.0.8
         version: 5.0.8
       shiki:
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       simple-git-hooks:
         specifier: ^2.11.1
@@ -246,7 +246,7 @@ importers:
         specifier: ^2.2.225
         version: 2.2.225
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/client':
         specifier: 0.34.3
@@ -276,7 +276,7 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0
       shiki:
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       typescript:
         specifier: ^5.5.3
@@ -312,10 +312,10 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       '@shikijs/monaco':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/parser':
         specifier: workspace:*
@@ -375,7 +375,7 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
       shiki:
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       shiki-magic-move:
         specifier: ^0.4.2
@@ -460,13 +460,13 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       '@shikijs/markdown-it':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       '@shikijs/twoslash':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2(typescript@5.5.3)
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/client':
         specifier: workspace:*
@@ -598,7 +598,7 @@ importers:
         specifier: ^7.6.2
         version: 7.6.2
       shiki:
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       shiki-magic-move:
         specifier: ^0.4.2
@@ -686,7 +686,7 @@ importers:
         specifier: ^0.50.0
         version: 0.50.0
       shiki:
-        specifier: ^1.10.2
+        specifier: 1.10.2
         version: 1.10.2
       unocss:
         specifier: ^0.61.3
