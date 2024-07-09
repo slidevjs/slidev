@@ -9,6 +9,8 @@ outline: deep
 In Play mode, move your mouse to the bottom left corner of the page, you can see the navigation bar.
 ![](/screenshots/navbar.png)
 
+> You can extend the navigation bar via <LinkInline link="feature/global-layers" />.
+
 ## Navigation Actions {#navigation-actions}
 
 | Keyboard Shortcut                   | Button in Navigation Bar                                                              | Description                                                        |
@@ -69,3 +71,9 @@ See:
 See:
 
 <LinkCard link="feature/recording"/>
+
+## Global Layers {#global-layers}
+
+You can add any custom UI below or above your slides globally, or per-slide:
+
+<LinkCard link="feature/global-layers" />
