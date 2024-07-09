@@ -19,8 +19,12 @@ Current page is: {{ $nav.currentPage }}
 
 <template>
   <div>Title: {{ $slidev.configs.title }}</div>
-  <button @click="$nav.next">Next Click</button>
-  <button @click="$nav.nextSlide">Next Slide</button>
+  <button @click="$nav.next">
+    Next Click
+  </button>
+  <button @click="$nav.nextSlide">
+    Next Slide
+  </button>
 </template>
 ```
 
@@ -98,8 +102,7 @@ Page: {{ $page }}
 Is current page active: {{ $page === $nav.currentPage }}
 ```
 
-> [!Note]
-> `$nav.clicks` is a global state while `$clicks` is the local clicks number for each slide.
+> [!Note] > `$nav.clicks` is a global state while `$clicks` is the local clicks number for each slide.
 
 ### `$renderContext`
 

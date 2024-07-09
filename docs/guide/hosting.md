@@ -103,7 +103,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      
+
       - name: Setup @antfu/ni
         run: npm i -g @antfu/ni
 
@@ -119,7 +119,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-  
+
   deploy:
     environment:
       name: github-pages
