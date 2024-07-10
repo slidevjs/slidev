@@ -727,15 +727,6 @@ importers:
       '@types/vscode':
         specifier: ~1.89.0
         version: 1.89.0
-      '@vue/reactivity':
-        specifier: ^3.4.31
-        version: 3.4.31
-      '@vue/runtime-core':
-        specifier: ^3.4.31
-        version: 3.4.31
-      '@vue/shared':
-        specifier: ^3.4.31
-        version: 3.4.31
       get-port-please:
         specifier: ^3.1.2
         version: 3.1.2

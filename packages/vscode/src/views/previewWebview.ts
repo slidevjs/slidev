@@ -1,6 +1,5 @@
 import { createSingletonComposable, extensionContext, reactive, ref, useIsDarkTheme, useVscodeContext, useWebviewView, watch, watchEffect } from 'reactive-vscode'
 import { Uri, commands, env, window } from 'vscode'
-
 import { useFocusedSlideNo } from '../composables/useFocusedSlideNo'
 import { usePreviewState } from '../composables/usePreviewState'
 import { previewSync } from '../configs'
