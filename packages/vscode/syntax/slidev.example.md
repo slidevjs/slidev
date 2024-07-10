@@ -14,15 +14,9 @@ console.log('Hello World')
 ```
 
 ---
-layout: center
-
-text: 1
----
-
-# Centerered
-
----
 src: ../../../demo/starter/slides.md
+---
+
 ---
 
 # Import Snippets
@@ -33,4 +27,14 @@ src: ../../../demo/starter/slides.md
 
 ---
 
-# Last
+# Vue Component
+
+<div title="1" />
+<Comp :x="1" />
+
+---
+layout: center
+text: 1
+---
+
+# Centerered

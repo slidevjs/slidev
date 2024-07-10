@@ -1,50 +1,89 @@
 import type { LanguagePlugin, VirtualCode } from '@volar/language-core'
-import type * as ts from 'typescript'
+import { parseSync } from '@slidev/parser'
 import type { URI } from 'vscode-uri'
+import type { SlidevMarkdown } from '@slidev/types'
 
 export const slidevLanguagePlugin: LanguagePlugin<URI> = {
   getLanguageId() {
     return undefined
   },
-  createVirtualCode(_uri, languageId, snapshot) {
+  createVirtualCode(uri, languageId, snapshot) {
     if (languageId === 'markdown') {
+      const source = snapshot.getText(0, snapshot.getLength())
+      const parsed = parseSync(source, uri.fsPath, {
+        noParseYAML: true,
+        preserveCR: true,
+      })
       return {
         id: 'root',
         languageId: 'markdown',
         mappings: [],
-        embeddedCodes: [...getEmbeddedCodes(snapshot)],
+        embeddedCodes: [...getEmbeddedCodes(parsed)],
         snapshot,
       }
     }
   },
 }
 
-function* getEmbeddedCodes(snapshot: ts.IScriptSnapshot): Generator<VirtualCode> {
-  const blocks = snapshot.getText(0, snapshot.getLength()).matchAll(/---\n([\s\S]*?)\n---/g)
-  let i = 0
-  for (const block of blocks) {
-    yield {
-      id: `frontmatter_${i++}`,
-      languageId: 'yaml',
-      snapshot: {
-        getText: (start, end) => block[1].substring(start, end),
-        getLength: () => block[1].length,
-        getChangeRange: () => undefined,
-      },
-      mappings: [{
-        sourceOffsets: [block.index],
-        generatedOffsets: [0],
-        lengths: [block[1].length],
-        data: {
-          verification: true,
-          completion: true,
-          semantic: true,
-          navigation: true,
-          structure: true,
-          format: true,
+function* getEmbeddedCodes(parsed: SlidevMarkdown): Generator<VirtualCode> {
+  const lines = parsed.raw.split('\n')
+  function lineToPos(line: number) {
+    let pos = 0
+    for (let i = 0; i <= line; i++) {
+      pos += lines[i].length + 1
+    }
+    return pos
+  }
+  for (const { frontmatterRaw, start, contentStart, content, index } of parsed.slides) {
+    if (frontmatterRaw != null) {
+      yield {
+        id: `frontmatter_${index}`,
+        languageId: 'yaml',
+        snapshot: {
+          getText: (start, end) => frontmatterRaw.substring(start, end),
+          getLength: () => frontmatterRaw.length,
+          getChangeRange: () => undefined,
         },
-      }],
-      embeddedCodes: [],
+        mappings: [{
+          sourceOffsets: [lineToPos(start)],
+          generatedOffsets: [0],
+          lengths: [frontmatterRaw.length],
+          data: {
+            verification: true,
+            completion: true,
+            semantic: true,
+            navigation: true,
+            structure: true,
+            format: true,
+          },
+        }],
+        embeddedCodes: [],
+      }
+    }
+    if (content) {
+      yield {
+        id: `content_${index}`,
+        languageId: 'markdown',
+        snapshot: {
+          getText: (start, end) => content.substring(start, end),
+          getLength: () => content.length,
+          getChangeRange: () => undefined,
+        },
+        mappings: [{
+          sourceOffsets: [lineToPos(contentStart)],
+          generatedOffsets: [0],
+          lengths: [content.length],
+          data: {
+            verification: true,
+            completion: true,
+            semantic: true,
+            navigation: true,
+            structure: true,
+            format: true,
+          },
+        }],
+        embeddedCodes: [],
+      }
     }
   }
 }

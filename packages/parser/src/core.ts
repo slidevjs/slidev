@@ -2,6 +2,11 @@ import YAML from 'yaml'
 import { ensurePrefix } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
 
+export interface SlidevParserOptions {
+  noParseYAML?: boolean
+  preserveCR?: boolean
+}
+
 export function stringify(data: SlidevMarkdown) {
   return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
 }
@@ -30,7 +35,7 @@ export function prettify(data: SlidevMarkdown) {
   return data
 }
 
-function matter(code: string) {
+function matter(code: string, options: SlidevParserOptions) {
   let type: FrontmatterStyle | undefined
   let raw: string | undefined
 
@@ -50,13 +55,13 @@ function matter(code: string) {
       })
   }
 
-  const doc = YAML.parseDocument(raw || '')
+  const doc = raw && !options.noParseYAML ? YAML.parseDocument(raw) : undefined
 
   return {
     type,
     raw,
     doc,
-    data: doc.toJSON(),
+    data: doc?.toJSON(),
     content,
   }
 }
@@ -70,8 +75,8 @@ export function detectFeatures(code: string): SlidevDetectedFeatures {
   }
 }
 
-export function parseSlide(raw: string): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
-  const matterResult = matter(raw)
+export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit<SourceSlideInfo, 'filepath' | 'index' | 'start' | 'contentStart' | 'end'> {
+  const matterResult = matter(raw, options)
   let note: string | undefined
   const frontmatter = matterResult.data || {}
   let content = matterResult.content.trim()
@@ -115,8 +120,9 @@ export async function parse(
   markdown: string,
   filepath: string,
   extensions?: SlidevPreparserExtension[],
+  options: SlidevParserOptions = {},
 ): Promise<SlidevMarkdown> {
-  const lines = markdown.split(/\r?\n/g)
+  const lines = markdown.split(options.preserveCR ? '\n' : /\r?\n/g)
   const slides: SourceSlideInfo[] = []
 
   let start = 0
@@ -127,7 +133,7 @@ export async function parse(
       return
     const raw = lines.slice(start, end).join('\n')
     const slide: SourceSlideInfo = {
-      ...parseSlide(raw),
+      ...parseSlide(raw, options),
       filepath,
       index: slides.length,
       start,
@@ -187,6 +193,74 @@ export async function parse(
 
   if (start <= lines.length - 1)
     await slice(lines.length)
+
+  return {
+    filepath,
+    raw: markdown,
+    slides,
+  }
+}
+
+export function parseSync(
+  markdown: string,
+  filepath: string,
+  options: SlidevParserOptions = {},
+): SlidevMarkdown {
+  const lines = markdown.split(options.preserveCR ? '\n' : /\r?\n/g)
+  const slides: SourceSlideInfo[] = []
+
+  let start = 0
+  let contentStart = 0
+
+  function slice(end: number) {
+    if (start === end)
+      return
+    const raw = lines.slice(start, end).join('\n')
+    const slide: SourceSlideInfo = {
+      ...parseSlide(raw, options),
+      filepath,
+      index: slides.length,
+      start,
+      contentStart,
+      end,
+    }
+    slides.push(slide)
+    start = end + 1
+    contentStart = end + 1
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trimEnd()
+    if (line.startsWith('---')) {
+      slice(i)
+
+      const next = lines[i + 1]
+      // found frontmatter, skip next dash
+      if (line[3] !== '-' && next?.trim()) {
+        start = i
+        for (i += 1; i < lines.length; i++) {
+          if (lines[i].trimEnd() === '---')
+            break
+        }
+        contentStart = i + 1
+      }
+    }
+    // skip code block
+    else if (line.trimStart().startsWith('```')) {
+      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      let j = i + 1
+      for (; j < lines.length; j++) {
+        if (lines[j].startsWith(codeBlockLevel))
+          break
+      }
+      // Update i only when code block ends
+      if (j !== lines.length)
+        i = j
+    }
+  }
+
+  if (start <= lines.length - 1)
+    slice(lines.length)
 
   return {
     filepath,
