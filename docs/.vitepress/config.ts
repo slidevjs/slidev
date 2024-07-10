@@ -87,12 +87,16 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Reference',
+        text: 'Features',
         items: [
           {
-            text: '✨ Features',
-            link: '/features/',
+            component: 'FeaturesDropdown',
           },
+        ],
+      },
+      {
+        text: 'Reference',
+        items: [
           {
             text: 'Built-in',
             items: BuiltIn,

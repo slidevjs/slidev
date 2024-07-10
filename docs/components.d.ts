@@ -52,6 +52,8 @@ declare module 'vue' {
     FeatureLayoutSince: typeof import('./.vitepress/theme/components/FeatureLayoutSince.vue')['default']
     FeaturesAnimation: typeof import('./.vitepress/theme/components/FeaturesAnimation.vue')['default']
     FeaturesAnimationInner: typeof import('./.vitepress/theme/components/FeaturesAnimationInner.vue')['default']
+    FeaturesDropdown: typeof import('./.vitepress/theme/components/FeaturesDropdown.vue')['default']
+    FeaturesOverview: typeof import('./.vitepress/theme/components/FeaturesOverview.vue')['default']
     LandingPage: typeof import('./.vitepress/theme/components/LandingPage.vue')['default']
     Link: typeof import('./.vitepress/@slidev/client/builtin/Link.vue')['default']
     LinkCard: typeof import('./.vitepress/theme/components/LinkCard.vue')['default']
