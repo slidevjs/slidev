@@ -4,15 +4,17 @@ outline: deep
 
 # Why Slidev
 
-There has been lots of feature-rich WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/). They are intuitive and easy to learn. So why bother making Slidev?
+There has been lots of feature-rich WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) _(see [Comparisons](#comparisons))_. They are intuitive and easy to learn. So why bother making Slidev?
 
-Slidev aims to provide flexibility and interactivity for **developers** to make their presentations much more interesting, expressive, and attractive by using technologies they are familiar with. Slidev is also completely open source, and has a strong community to support it.
+Slidev aims to provide flexibility and interactivity for **developers** to make their presentations much more interesting, expressive, and attractive by using technologies they are familiar with. Slidev is also open source with strong community.
 
-On one hand, Slidev is a Markdown-based presentation tool, which means you can write your slides in Markdown, and focus on the content. On the other hand, Slidev is also a Web-based tool, which means **nothing is impossible** - you can do anything you can do in a web app in Slidev.
+Slidev is Markdown-based, which helps you **focus on the content**. Slidev is also Web-based, which means **nothing is impossible** - everything you can do in a web app can apply to your slides.
+
+Slidev is also **progressive**. You can start with a super simple Markdown file, and then use the [built-in features](../features/) when you need them without any configuration. There are also [themes and addons](./theme-addon) you can optionally install to enhance your slides.
 
 ![demo slide](/screenshots/cover.png) {#welcome}
 
-## Coolest Features
+## Features
 
 ### 📝 Markdown-based
 
@@ -57,6 +59,49 @@ You can export your slides into PDF, PPTX, PNGs, or even a single-page applicati
 Because Slidev is web-based, everything that can be done in a normal web app can be applied to your slides. For example, WebGL, API requests, iframes, or even live sharing. It's up to your imagination!
 
 > Learn more: [Customization](../custom/).
+
+## Comparisons
+
+::: details Slidev vs. Microsoft PowerPoint / Apple Keynote
+
+[Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) are feature-rich WYSIWYG slides makers. They are intuitive and easy to learn, and are the best choice for non-developers.
+
+Compared to them, Slidev has the following advantages:
+
+- Developer-friendly: Code snippets are first-class citizens in Slidev.
+- Markdown-based: Focus on the content, and version control your slides with Git.
+- Web-based: Everything you can do in a web app can apply to your slides.
+- Hackable: Customize anything you like with web technologies.
+- Open source: Slidev is completely open source, and has a strong community.
+
+:::
+
+::: details Slidev vs. Reveal.js
+
+[Reveal.js](https://revealjs.com/) is a popular HTML presentation framework. It is also open source and supports Markdown.
+
+Compared to Reveal.js, Slidev has the following advantages:
+
+- More concise: Slidev uses an extended Markdown format, while Reveal.js encourages you to write HTML to organize your slides.
+- Vue support: You can use Vue components in Slidev to make your slides interactive.
+- Vite based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
+- Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
+
+:::
+
+::: details Slidev vs. Marp
+
+[Marp](https://marp.app/) is a Markdown presentation tool that focuses on simplicity and portability. It is also open source and supports Markdown.
+
+Compared to Marp, Slidev has the following advantages:
+
+- The same simplicity: Slidev's slides can start as simple as Marp's.
+- More features: Slidev supports many features that Marp doesn't.
+- Vue support: You can use Vue components in Slidev to make your slides interactive.
+- Vite based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
+- Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
+
+:::
 
 ## Give it a Try
 
