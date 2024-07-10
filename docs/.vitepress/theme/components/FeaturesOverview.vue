@@ -11,7 +11,7 @@ defineProps<{
   <div class="features-grid mt-4">
     <a v-for="feature in features" :key="feature.name" :href="withBase(feature.link)">
       <div>
-        <div font-bold text-wrap> {{ feature.title }} </div>
+        <div font-bold text-wrap leading-5 my-2> {{ feature.title }} </div>
         <div h-20 text-wrap leading-5 op-80 pt-1 overflow-hidden text-sm> {{ feature.description }} </div>
       </div>
     </a>
