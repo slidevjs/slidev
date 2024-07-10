@@ -597,7 +597,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
-    waitUntil: waitUntil === 'none' ? undefined : waitUntil as 'networkidle' | 'load' | 'domcontentloaded',
+    waitUntil: waitUntil === 'none' ? undefined : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,

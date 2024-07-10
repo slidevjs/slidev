@@ -70,7 +70,7 @@ In a project where Slidev is installed, you can use the `slidev` binary in your 
 }
 ```
 
-Otherwise, you can use it with [`npx`](https://www.npmjs.com/package/npx)
+Otherwise, you can use it with [`npx`](https://github.com/npm/cli/blob/latest/bin/npx)
 
 ```bash
 $ npx slidev

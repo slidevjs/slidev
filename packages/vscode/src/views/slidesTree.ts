@@ -104,7 +104,7 @@ export const useSlidesTree = createSingletonComposable(() => {
         const sourcesInEntry = source.map(node => node.slide).filter(s => s.filepath === data.entry.filepath)
         dataTransfer.set(slideMineType, new DataTransferItem(sourcesInEntry))
       },
-      handleDrop(target, dataTransfer) {
+      async handleDrop(target, dataTransfer) {
         const slides: SourceSlideInfo[] = dataTransfer.get(slideMineType)?.value
         if (!slides || !target)
           return
@@ -120,7 +120,7 @@ export const useSlidesTree = createSingletonComposable(() => {
           ...slides,
           ...oldSlides.slice(targetIndex + 1),
         ].filter(Boolean) as SourceSlideInfo[]
-        slidevSave(data.entry)
+        await slidevSave(data.entry)
       },
     },
     showCollapseAll: true,

@@ -21,7 +21,7 @@ export default function setupRoot() {
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   })
-  app.provide(injectionRenderContext, ref('none'))
+  app.provide(injectionRenderContext, ref('none' as const))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))

@@ -12,7 +12,7 @@ import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } 
 import { loadDrawings, writeDrawings } from '../integrations/drawings'
 import { createConfigPlugin } from './extendConfig'
 import { createSlidesLoader } from './loaders'
-
+import { createUnocssPlugin } from './unocss'
 import { createMarkdownPlugin } from './markdown'
 import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createMonacoTypesLoader } from './monacoTypes'
@@ -109,7 +109,8 @@ export async function ViteSlidevPlugin(
         ...serverRefOptions.state,
       },
       onChanged(key, data, patch, timestamp) {
-        serverRefOptions.onChanged && serverRefOptions.onChanged(key, data, patch, timestamp)
+        if (serverRefOptions.onChanged)
+          serverRefOptions.onChanged(key, data, patch, timestamp)
         if (!options.data.config.drawings.persist)
           return
         if (key === 'drawings')
@@ -120,6 +121,7 @@ export async function ViteSlidevPlugin(
     createConfigPlugin(options),
     createMonacoTypesLoader(options),
     createVueCompilerFlagsPlugin(options),
+    createUnocssPlugin(options, pluginOptions),
 
     publicRoots.length
       ? import('vite-plugin-static-copy').then(r => r.viteStaticCopy({
@@ -136,10 +138,6 @@ export async function ViteSlidevPlugin(
         build: true,
       }))
       : null,
-
-    config.css === 'none'
-      ? null
-      : import('./unocss').then(r => r.createUnocssPlugin(options, pluginOptions)),
   ]
 
   return (await Promise.all(plugins))

@@ -25,12 +25,8 @@ const regexId = /^\/@slidev\/slide\/(\d+)\.(md|json)(?:\?import)?$/
 const regexIdQuery = /(\d+)\.(md|json|frontmatter)$/
 
 const templateInjectionMarker = '/* @slidev-injection */'
-const templateImportContextUtils = `import {
-  useSlideContext,
-  provideFrontmatter as _provideFrontmatter,
-  frontmatterToProps as _frontmatterToProps,
-} from "@slidev/client/context.ts"`.replace(/\n\s*/g, ' ')
-const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = useSlideContext()`
+const templateImportContextUtils = `import { useSlideContext as _useSlideContext, frontmatterToProps as _frontmatterToProps } from "@slidev/client/context.ts"`
+const templateInitContext = `const { $slidev, $nav, $clicksContext, $clicks, $page, $renderContext, $frontmatter } = _useSlideContext()`
 
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -321,37 +317,42 @@ export function createSlidesLoader(
               return {
                 code: [
                   '// @unocss-include',
-                  'import { reactive, computed } from "vue"',
-                  `export const frontmatter = reactive(${JSON.stringify(fontmatter)})`,
-                  `export const meta = reactive({
-                    layout: computed(() => frontmatter.layout),
-                    transition: computed(() => frontmatter.transition),
-                    class: computed(() => frontmatter.class),
-                    clicks: computed(() => frontmatter.clicks),
-                    name: computed(() => frontmatter.name),
-                    preload: computed(() => frontmatter.preload),
-                    slide: {
-                      ...(${JSON.stringify(slideBase)}),
-                      frontmatter,
-                      filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},
-                      start: ${JSON.stringify(slide.source.start)},
-                      id: ${pageNo},
-                      no: ${no},
-                    },
-                    __clicksContext: null,
-                    __preloaded: false,
-                  })`,
-                  'export default frontmatter',
+                  'import { computed, reactive, shallowReactive } from "vue"',
+                  `export const frontmatterData = ${JSON.stringify(fontmatter)}`,
                   // handle HMR, update frontmatter with update
                   'if (import.meta.hot) {',
-                  '  import.meta.hot.accept(({ frontmatter: update }) => {',
-                  '    if(!update) return',
+                  '  const firstLoad = !import.meta.hot.data.frontmatter',
+                  '  import.meta.hot.data.frontmatter ??= reactive(frontmatterData)',
+                  '  import.meta.hot.accept(({ frontmatterData: update }) => {',
+                  '    if (firstLoad) return',
+                  '    const frontmatter = import.meta.hot.data.frontmatter',
                   '    Object.keys(frontmatter).forEach(key => {',
                   '      if (!(key in update)) delete frontmatter[key]',
                   '    })',
                   '    Object.assign(frontmatter, update)',
                   '  })',
                   '}',
+                  'export const frontmatter = import.meta.hot ? import.meta.hot.data.frontmatter : reactive(frontmatterData)',
+                  'export default frontmatter',
+                  'export const meta = shallowReactive({',
+                  '  get layout(){ return frontmatter.layout },',
+                  '  get transition(){ return frontmatter.transition },',
+                  '  get class(){ return frontmatter.class },',
+                  '  get clicks(){ return frontmatter.clicks },',
+                  '  get name(){ return frontmatter.name },',
+                  '  get preload(){ return frontmatter.preload },',
+                  // No need to be reactive, as it's only used once after reload
+                  '  slide: {',
+                  `    ...(${JSON.stringify(slideBase)}),`,
+                  `    frontmatter,`,
+                  `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
+                  `    start: ${JSON.stringify(slide.source.start)},`,
+                  `    id: ${pageNo},`,
+                  `    no: ${no},`,
+                  '  },',
+                  '  __clicksContext: null,',
+                  '  __preloaded: false,',
+                  '})',
                 ].join('\n'),
                 map: { mappings: '' },
               }
@@ -430,9 +431,7 @@ export function createSlidesLoader(
     delete frontmatter.title
     const imports = [
       `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      `import frontmatter from "${toAtFS(`${VIRTUAL_SLIDE_PREFIX + (index + 1)}.frontmatter`)}"`,
       templateImportContextUtils,
-      '_provideFrontmatter(frontmatter)',
       templateInitContext,
       templateInjectionMarker,
     ]
@@ -443,7 +442,7 @@ export function createSlidesLoader(
     let body = code.slice(injectA, injectB).trim()
     if (body.startsWith('<div>') && body.endsWith('</div>'))
       body = body.slice(5, -6)
-    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps(frontmatter,${index})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
+    code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps($frontmatter,${index})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
     return code
   }

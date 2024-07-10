@@ -1,4 +1,4 @@
-import { clamp } from '@antfu/utils'
+import { clamp, ensurePrefix } from '@antfu/utils'
 import type { SourceSlideInfo } from '@slidev/types'
 import { computed, createSingletonComposable, useActiveTextEditor, watch } from 'reactive-vscode'
 import type { DecorationOptions } from 'vscode'
@@ -27,6 +27,9 @@ const frontmatterContentDecoration = window.createTextEditorDecorationType({
   backgroundColor: '#8881',
 })
 const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
+const errorDecoration = window.createTextEditorDecorationType({
+  isWholeLine: true,
+})
 
 function mergeSlideNumbers(slides: { index: number }[]): string {
   const indexes = slides.map(s => s.index + 1)
@@ -54,6 +57,7 @@ export const useAnnotations = createSingletonComposable(() => {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
+        editor.setDecorations(errorDecoration, [])
         return
       }
 
@@ -81,7 +85,6 @@ export const useAnnotations = createSingletonComposable(() => {
       const dividerRanges: DecorationOptions[] = []
       const frontmatterContentRanges: DecorationOptions[] = []
       const frontmatterEndRanges: DecorationOptions[] = []
-
       for (const slide of md.slides) {
         const lineNo = slide.frontmatterStyle === 'frontmatter' ? slide.start : slide.start - 1
         const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
@@ -119,11 +122,25 @@ export const useAnnotations = createSingletonComposable(() => {
           }
         }
       }
-
       editor.setDecorations(firstLineDecoration, firstLineRanges)
       editor.setDecorations(dividerDecoration, dividerRanges)
       editor.setDecorations(frontmatterContentDecoration, frontmatterContentRanges)
       editor.setDecorations(frontmatterEndDecoration, frontmatterEndRanges)
+
+      const errors: DecorationOptions[] = []
+      for (const error of md.errors ?? []) {
+        errors.push({
+          range: new Range(error.row, 0, error.row, 0),
+          renderOptions: {
+            after: {
+              contentText: ensurePrefix(error.message, ' '),
+              color: new ThemeColor('editorError.foreground'),
+              backgroundColor: new ThemeColor('editorError.background'),
+            },
+          },
+        })
+      }
+      editor.setDecorations(errorDecoration, errors)
     },
     { immediate: true },
   )

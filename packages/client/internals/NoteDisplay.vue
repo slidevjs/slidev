@@ -116,7 +116,7 @@ function processNote() {
           }
         : null
 
-      if (!enabled && props.autoScroll && clicks === current)
+      if (enabled && props.autoScroll && clicks === current)
         marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
     }
   }

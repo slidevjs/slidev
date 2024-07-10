@@ -58,10 +58,9 @@ useEventListener('keydown', (e) => {
 const contentRef = computed({
   get() { return content.value },
   set(v) {
-    if (content.value.trim() !== v.trim()) {
-      content.value = v
+    if (content.value.trim() !== v.trim())
       dirty.value = true
-    }
+    content.value = v
   },
 })
 
@@ -126,7 +125,7 @@ throttledWatch(
     }" @pointerdown="onHandlerDown"
   />
   <div
-    class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
+    class="shadow bg-main p-2 pt-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
     :class="resize ? 'border-l border-gray-400 border-opacity-20' : ''"
     :style="resize ? {
       height: vertical ? `${editorHeight}px` : undefined,

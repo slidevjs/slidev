@@ -171,7 +171,7 @@ Some parts of your slides may require a longer time to render. You can use the `
 $ slidev export --wait 10000
 ```
 
-There is also a `--wait-until` option to wait for a state before exporting each slide:
+There is also a `--wait-until` option to wait for a state before exporting each slide. If you keep encountering timeout issues, you can try setting this option:
 
 ```bash
 $ slidev export --wait-until none
@@ -179,7 +179,7 @@ $ slidev export --wait-until none
 
 Possible values:
 
-- `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. Don't use this method for testing, rely on web assertions to assess readiness instead.
+- `'networkidle'` - (_default_) consider operation to be finished when there are no network connections for at least `500` ms. This is the safest, but may cause timeouts.
 - `'domcontentloaded'` - consider operation to be finished when the `DOMContentLoaded` event is fired.
 - `'load'` - consider operation to be finished when the `load` event is fired.
 - `'none'` - do not wait for any event.
