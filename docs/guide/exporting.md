@@ -134,7 +134,7 @@ $ slidev export --dark
 
 ### Timeouts
 
-For big presentations you might want to increase the Playwright timeout with `--timeout`:
+For big presentations, you might want to increase the Playwright timeout with `--timeout`:
 
 ```bash
 $ slidev export --timeout 60000

@@ -12,13 +12,13 @@ description: |
 
 Slidev comes with a built-in drawing and annotation feature powered by [drauu](https://github.com/antfu/drauu). It allows you to draw and annotate your slides with ease.
 
-To start, click the <carbon-pen class="inline-icon-btn"/> icon in the [navigation bar](../guide/ui#navigation-bar) to open the drawing toolbar. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real time.
+To start, click the <carbon-pen class="inline-icon-btn"/> icon in the [navigation bar](../guide/ui#navigation-bar) to open the drawing toolbar. It's also available in the [Presenter Mode](/guide/ui#presenter-mode). Drawings and annotations you created will be **synced** automatically across all instances in real-time.
 
 <TheTweet id="1424027510342250499" />
 
 ## Use with Stylus Pen
 
-When using a stylus pen on a tablet (for example, iPad with Apple Pencil), Slidev will intelligently detect the input type. You can directly draw on your slides with the pen without turning on the drawing mode, while having your fingers or mouse control the navigation.
+When using a stylus pen on a tablet (for example, iPad with Apple Pencil), Slidev will intelligently detect the input type. You can directly draw on your slides with the pen without turning on the drawing mode while having your fingers or mouse control the navigation.
 
 ## Persist Drawings
 

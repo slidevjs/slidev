@@ -21,14 +21,14 @@ layout: two-cols
 
 # Left
 
-This shows on the left
+This is shown on the left
 
 </template>
 <template v-slot:right>
 
 # Right
 
-This shows on the right
+This is shown on the right
 
 </template>
 ```
@@ -53,16 +53,16 @@ layout: two-cols
 
 # Left
 
-This shows on the left
+This is shown on the left
 
 ::right::
 
 # Right
 
-This shows on the right
+This is shown on the right
 ```
 
-You can also explicitly specify the default slot and provide in the custom order.
+You can also explicitly specify the default slot and provide it in the custom order.
 
 ```md
 ---
@@ -79,5 +79,5 @@ This shows on the right
 
 # Left
 
-This shows on the left
+This is shown on the left
 ```

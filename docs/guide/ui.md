@@ -35,7 +35,7 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 
 ## Quick Overview {#quick-overview}
 
-By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have the overview of your slides so you can jump between them easily.
+By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have an overview of your slides so you can jump between them easily.
 
 ![](/screenshots/slides-overview.png)
 
@@ -58,7 +58,7 @@ controls rounded shadow></video>
 
 You can visit an overview of all of your slides by first opening the [Quick Overview panel](#quick-overview) and then clicking the <carbon-list-boxes class="inline-icon-btn"/> on the top right, or by visiting `http://localhost:<port>/overview` directly.
 
-The overview page gives you a linear list of all your slides, with all of your notes on the side. You can double click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.
+The overview page gives you a linear list of all your slides, with all of your notes on the side. You can double-click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.
 
 ## Drawing UI {#drawing}
 
@@ -74,6 +74,6 @@ See:
 
 ## Global Layers {#global-layers}
 
-You can add any custom UI below or above your slides globally, or per-slide:
+You can add any custom UI below or above your slides for the whole presentation or per-slide:
 
 <LinkCard link="feature/global-layers" />

@@ -4,9 +4,9 @@ outline: deep
 
 # Why Slidev
 
-There has been lots of feature-rich WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) _(see [Comparisons](#comparisons))_. They are intuitive and easy to learn. So why bother making Slidev?
+There have been lots of feature-rich WYSIWYG slides makers like [Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) _(see [Comparisons](#comparisons))_. They are intuitive and easy to learn. So why bother making Slidev?
 
-Slidev aims to provide flexibility and interactivity for **developers** to make their presentations much more interesting, expressive, and attractive by using technologies they are familiar with. Slidev is also open source with strong community.
+Slidev aims to provide flexibility and interactivity for **developers** to make their presentations much more interesting, expressive, and attractive by using technologies they are familiar with. Slidev is also open source with a strong community.
 
 Slidev is Markdown-based, which helps you **focus on the content**. Slidev is also Web-based, which means **nothing is impossible** - everything you can do in a web app can apply to your slides.
 
@@ -18,7 +18,7 @@ Slidev is also **progressive**. You can start with a super simple Markdown file,
 
 ### 📝 Markdown-based
 
-Slidev uses an extended Markdown format to organize your slides in a single plain text file. This helps you focus on the content, and makes it easy to write and maintain your slides. You can use any text editor you like, and version control your slides with Git.
+Slidev uses an extended Markdown format to organize your slides in a single plain text file. This helps you focus on the content while allowing you to use Git and any editor you like.
 
 > Learn more: <LinkInline link="guide/syntax"/>.
 
@@ -34,13 +34,13 @@ Check out the [Theme Gallery](../resources/theme-gallery) for the beautiful them
 
 ### ⚡ Fast
 
-Every change you make in the editor will reflect to your slides in the browser **instantly** without reloading, thanks to [Vite's HMR feature](https://vitejs.dev/guide/features.html#hot-module-replacement).
+Every change you make in the editor will be updated to your slides in the browser **instantly** without reloading, thanks to [Vite's HMR feature](https://vitejs.dev/guide/features.html#hot-module-replacement).
 
 ### 🤹 Interactive & Expressive
 
-You can write Vue components and use them in your slides, which you can then interact with them during the presentation to express your idea in a more interesting and intuitive way.
+You can write Vue components and use them in your slides, which you can then interact with during the presentation to express your idea in a more interesting and intuitive way.
 
-Slidev also has a built-in support of <LinkInline link="feature/monaco-editor"/>, which empowers you to do live coding in your presentation with autocompletion and hover message.
+Slidev also has built-in support of <LinkInline link="feature/monaco-editor"/>, which empowers you to do live coding in your presentation with auto-completion and hover messages.
 
 ### 🎥 Recording Support
 
@@ -50,7 +50,7 @@ Slidev provides built-in recording and camera view. You can share your presentat
 
 ### 📤 Portable
 
-You can export your slides into PDF, PPTX, PNGs, or even a single-page application (SPA) within a single command. Then you can share or host it anywhere you like.
+You can export your slides into PDF, PPTX, PNGs, or even a single-page application (SPA) via a single command. Then you can share or host it anywhere you like.
 
 > Learn more: <LinkInline link="guide/exporting"/> and <LinkInline link="guide/hosting"/>.
 
@@ -64,7 +64,7 @@ Because Slidev is web-based, everything that can be done in a normal web app can
 
 ::: details Slidev vs. Microsoft PowerPoint / Apple Keynote
 
-[Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) are feature-rich WYSIWYG slides makers. They are intuitive and easy to learn, and are the best choice for non-developers.
+[Microsoft PowerPoint](https://www.microsoft.com/en-us/microsoft-365/powerpoint) and [Apple Keynote](https://www.apple.com/keynote/) are feature-rich WYSIWYG slides makers. They are intuitive and easy to learn, which makes them one of the best choices for non-developers.
 
 Compared to them, Slidev has the following advantages:
 
@@ -84,7 +84,7 @@ Compared to Reveal.js, Slidev has the following advantages:
 
 - More concise: Slidev uses an extended Markdown format, while Reveal.js encourages you to write HTML to organize your slides.
 - Vue support: You can use Vue components in Slidev to make your slides interactive.
-- Vite based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
+- Vite-based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
 - Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
 
 :::
@@ -98,7 +98,7 @@ Compared to Marp, Slidev has the following advantages:
 - The same simplicity: Slidev's slides can start as simple as Marp's.
 - More features: Slidev supports many features that Marp doesn't.
 - Vue support: You can use Vue components in Slidev to make your slides interactive.
-- Vite based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
+- Vite-based: Slidev is built on top of Vite, which provides instant HMR and flexible plugin API.
 - Atomatic CSS: You can [UnoCSS](https://unocss.dev/) out of the box to style your slides.
 
 :::

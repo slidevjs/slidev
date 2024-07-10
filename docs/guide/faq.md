@@ -43,7 +43,7 @@ For more details, refer to [Vite's documentation](https://vitejs.dev/guide/asset
 
 ## Positioning {#positioning}
 
-Since Slidev is web-based, CSS is the primary way to position elements. Here are some useful tips to position elements:
+Since Slidev is web-based, CSS is the primary way to position elements. Here are some useful tips for position elements:
 
 ### Grids And Flexboxes
 

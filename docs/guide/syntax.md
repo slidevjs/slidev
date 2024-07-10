@@ -40,7 +40,7 @@ Use UnoCSS classes and Vue components to style and enrich your slides:
 
 ## Frontmatter & Headmatter {#frontmatter}
 
-At the beginning of each slide, you can add a optional [frontmatter](https://jekyllrb.com/docs/front-matter/) to configure the slide. The first frontmatter block is called **headmatter** and can configure the whole slide deck. The rest are **frontmatters** for individual slides. Texts in the headmatter or the frontmatter should be a object in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
+At the beginning of each slide, you can add an optional [frontmatter](https://jekyllrb.com/docs/front-matter/) to configure the slide. The first frontmatter block is called **headmatter** and can configure the whole slide deck. The rest are **frontmatters** for individual slides. Texts in the headmatter or the frontmatter should be an object in [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started/) format. For example:
 
 <!-- eslint-skip -->
 
@@ -81,7 +81,7 @@ src: ./pages/4.md  # This slide only contains a frontmatter
 
 Configurations you can set are described in the [Slides deck configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter) sections.
 
-To make the headmatters more readable, you can installed the VSCode extension:
+To make the headmatter more readable, you can installed the VSCode extension:
 
 <LinkCard link="feature/vscode-extension" />
 
@@ -164,7 +164,7 @@ Slidev supports [Mermaid.js](http://mermaid.js.org/) and [PlantUML](https://plan
 
 ## MDC Syntax {#mdc-syntax}
 
-MDC Syntax is the easist way to apply styles and classes to elements:
+MDC Syntax is the easiest way to apply styles and classes to elements:
 
 <LinkCard link="feature/mdc" />
 

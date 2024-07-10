@@ -11,7 +11,7 @@ description: |
 
 # PlantUML Diagrams
 
-You can create PlantUML diagram easily in your slides, for example:
+You can create PlantUML diagrams easily in your slides, for example:
 
 ````md
 ```plantuml
@@ -21,6 +21,6 @@ Alice -> Bob : Hello!
 ```
 ````
 
-The source code will be send to https://www.plantuml.com/plantuml to render the diagram by default. You can also setup your own server by setting the `plantUmlServer` in the [Slidev configuration](../custom/index#headmatter).
+The source code will be sent to https://www.plantuml.com/plantuml to render the diagram by default. You can also set up your own server by setting the `plantUmlServer` in the [Slidev configuration](../custom/index#headmatter).
 
 Visit the [PlantUML Website](https://plantuml.com/) for more information.

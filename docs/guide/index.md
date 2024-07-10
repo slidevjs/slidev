@@ -6,10 +6,6 @@ outline: deep
 
 Slidev <sup>(slide + dev, **/slaɪdɪv/**)</sup> is a web-based slides maker and presenter. It's designed for developers to focus on writing content in Markdown. With the power of web technologies like Vue, you are able to deliver pixel-perfect designs with interactive demos to your presentation.
 
-<!--
-It uses a feature-rich Markdown syntax to generate beautiful slides with an instant updating experience, along with many built-in integrations such as live coding, PDF exporting, presentation recording, and so on. Since it's powered by the web, you can do anything with Slidev - the possibilities are limitless.
--->
-
 ::: tip
 
 You can learn more about the rationale behind this project in <LinkInline link="guide/why" />.
@@ -17,7 +13,7 @@ You can learn more about the rationale behind this project in <LinkInline link="
 :::
 
 <!--
-- 📝 [**Markdown-based**](/guide/syntax) - foucus on content and use your favorite editor
+- 📝 [**Markdown-based**](/guide/syntax) - focus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
 - 🎨 [**Themable**](/resources/theme-gallery) - theme can be shared and used with npm packages
 - 🌈 [**Stylish**](/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).
@@ -100,8 +96,8 @@ Slidev provides a set of commands in its CLI. Here are some common ones:
 
 - `slidev` - Start the dev server. See [the dev command](../builtin/cli#dev).
 - `slidev export` - Export the slides to PDF, PPTX, or PNGs. See <LinkInline link="guide/exporting" />.
-- `slidev build` - Build the slides as static web application. See <LinkInline link="guide/hosting" />.
-- `slidev format` - Format the slides content. See [the format command](../builtin/cli#format).
+- `slidev build` - Build the slides as a static web application. See <LinkInline link="guide/hosting" />.
+- `slidev format` - Format the slides. See [the format command](../builtin/cli#format).
 - `slidev --help` - Show the help message
 
 To run these commands, you can add them to your `package.json` scripts (which has been done for you if the project was created via `npm init slidev`):

@@ -8,7 +8,7 @@ description: |
 
 Global layers allow you to have custom components that **persist** across slides. This could be useful for having footers, cross-slide animations, global effects, etc.
 
-Slidev provides three layers for this usage, create `global-top.vue`, `global-bottom.vue` or `custom-nav-controls.vue` under your project root and it will pick up automatically.
+Slidev provides three layers for this usage, create `global-top.vue`, `global-bottom.vue`, or `custom-nav-controls.vue` under your project root and it will pick up automatically.
 
 There are also layers for **each** slide: `layouts/slide-top.vue` and `layouts/slide-bottom.vue`. The usage is similar to the global layers, but they are applied to every slide, so there may be more than one instance of them.
 

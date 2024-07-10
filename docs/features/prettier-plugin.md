@@ -14,9 +14,21 @@ The Slidev's syntax may be incompatible with the default Markdown parser of [Pre
 
 ## 1. Install
 
-```bash
+::: code-group
+
+```bash [npm]
 npm i -D prettier prettier-plugin-slidev
 ```
+
+```bash [pnpm]
+pnpm i -D prettier prettier-plugin-slidev
+```
+
+```bash [yarn]
+yarn add -D prettier prettier-plugin-slidev
+```
+
+:::
 
 ## 2. Activate the plugin
 

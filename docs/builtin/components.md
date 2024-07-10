@@ -136,7 +136,7 @@ Renders "Powered by Slidev" with a link to the Slidev website.
 
 ## `RenderWhen`
 
-Render slots depending on whether the context matches (for example whether we are in presenter view).
+Render slots depend on whether the context matches (for example whether we are in presenter view).
 
 ### Usage
 
@@ -307,7 +307,7 @@ Embed a video.
 
 ```md
 <SlidevVideo v-click autoplay controls>
-  <!-- Anything that can go in a HTML video element. -->
+  <!-- Anything that can go in an HTML video element. -->
   <source src="/myMovie.mp4" type="video/mp4" />
   <source src="/myMovie.webm" type="video/webm" />
   <p>

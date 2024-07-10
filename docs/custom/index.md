@@ -14,7 +14,7 @@ theme: default
 # addons, can be a list of package names or local paths
 # Learn more: https://sli.dev/guide/theme-addon.html#use-addon
 addons: []
-# title of your slide, will auto infer from the first header if not specified
+# title of your slide, will inferred from the first header if not specified
 title: Slidev
 # titleTemplate for the webpage, `%s` will be replaced by the slides deck's title
 titleTemplate: '%s - Slidev'
@@ -52,7 +52,7 @@ monaco: true
 monacoTypesSource: local
 # explicitly specify extra local packages to import the types for
 monacoTypesAdditionalPackages: []
-# explicitly specify extra local modules as dependency of monaco runnable
+# explicitly specify extra local modules as dependencies of monaco runnable
 monacoRunAdditionalDeps: []
 # download remote assets in local using vite-plugin-remote-assets, can be boolean, 'dev' or 'build'
 remoteAssets: false
@@ -82,7 +82,7 @@ favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
 # URL of PlantUML server used to render diagrams
 # Learn mode: https://sli.dev/feature/plantuml.html
 plantUmlServer: https://www.plantuml.com/plantuml
-# fonts will be auto imported from Google fonts
+# fonts will be auto-imported from Google fonts
 # Learn more: https://sli.dev/custom/config-fonts.html
 fonts:
   sans: Roboto

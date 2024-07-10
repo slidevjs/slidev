@@ -1,12 +1,12 @@
 ---
 layout: feature
 description: |
-  Move, resize and rotate elements by dragging them with the mouse.
+  Move, resize, and rotate elements by dragging them with the mouse.
 ---
 
 # Draggable Elements
 
-Draggable elements give you the ability to move, resize and rotate elements by dragging them with the mouse. This is useful for creating floating elements in your slides.
+Draggable elements give you the ability to move, resize, and rotate elements by dragging them with the mouse. This is useful for creating floating elements in your slides.
 
 ## Directive Usage
 
@@ -66,7 +66,7 @@ You can set `Height` to `NaN` (in) or `_` (if you use the component) to make the
 
 ## Controls
 
-- Double click the draggable element to start dragging it.
+- Double-click the draggable element to start dragging it.
 - You can also use the arrow keys to move the element.
 - Hold `Shift` while dragging to preserve its aspect ratio.
 - Click outside the draggable element to stop dragging it.

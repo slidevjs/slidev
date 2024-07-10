@@ -17,7 +17,7 @@ Slidev internally adds the following plugins to Vite:
 - [vite-plugin-remote-assets](https://github.com/antfu/vite-plugin-remote-assets)
 - [unocss/vite](https://github.com/unocss/unocss/tree/main/packages/vite)
 
-To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some default configurations options for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
+To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some default configurations for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
 
 ```ts
 import { defineConfig } from 'vite'

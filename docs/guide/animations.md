@@ -387,7 +387,7 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 
 > Available since v0.43.0
 
-The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more how it works in [View Transitions API - MDN Web Docs - Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
+The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more about it in [View Transitions API - MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
 
 :::warning
 Experimental: This is not supported by all browsers. Check the [Browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#browser_compatibility) carefully before using this.

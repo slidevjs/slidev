@@ -2,7 +2,7 @@
 
 > Please read <LinkInline link="guide/theme-addon" /> first.
 
-Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature is not related to the appearance and can be used separately, it should be implemented as an [addon](./write-addon).
+Each slides project can only have one theme. Themes should focus on providing the appearance of slides. If the feature isn't related to the appearance and can be used separately, it should be implemented as an [addon](./write-addon).
 
 To get started, we recommend you use our generator for scaffolding your first theme
 
@@ -67,7 +67,7 @@ If the theme is relying on a specific feature of Slidev that is newly introduced
 }
 ```
 
-A error message will be shown when the user is using an incompatible version.
+An error message will be shown when the an incompatible version is used.
 
 ### Theme Metadata
 
@@ -83,7 +83,7 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 
 ## Previewing
 
-You can preview you theme when developing by using a demo slide deck. To do so, create a `./slides.md` file with the following headmatter:
+You can preview your theme when developing by using a demo slide deck. To do so, create a `./slides.md` file with the following headmatter:
 
 ```md
 ---

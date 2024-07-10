@@ -90,10 +90,10 @@ Since v0.48.0, the Monaco editor is enabled by default and only be bundled when 
 
 ```yaml
 ---
-monaco: false # can also be `dev` or `build` tp conditionally enable it
+monaco: false # can also be `dev` or `build` to conditionally enable it
 ---
 ```
 
 ## Configure Code Runners
 
-To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference to [Configure Code Runners](/custom/config-code-runners).
+To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference [Configure Code Runners](/custom/config-code-runners).

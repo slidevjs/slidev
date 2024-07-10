@@ -17,7 +17,7 @@ You can import code snippets from existing files via the following syntax:
 ```
 
 ::: tip
-The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets` in order to be compatibile with the Monaco editor. Alternatively, you can also import from relative paths.
+The value of `@` corresponds to your package's root directory. It's recommended to put snippets in `@/snippets` in order to be compatible with the Monaco editor. Alternatively, you can also import from relative paths.
 :::
 
 You can also use a [VS Code region](https://code.visualstudio.com/docs/editor/codebasics#_folding) to only include the corresponding part of the code file:

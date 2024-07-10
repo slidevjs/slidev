@@ -136,7 +136,7 @@ jobs:
 :::
 
 3. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`.
-4. Finally, after all workflows are executed, a link to the slides should appear under `Settings` > `Pages`.
+4. Finally, after the workflows are executed, a link to the slides should appear under `Settings` > `Pages`.
 
 ### Netlify
 
@@ -203,7 +203,7 @@ If your work folder is empty, it will generate a template `slides.md` and other 
 
 You can access your slides from `http://localhost:3030/`
 
-To create a image for your slides, you can use the following Dockerfile:
+To create an Docker Image for your slides, you can use the following Dockerfile:
 
 ```Dockerfile
 FROM tangramor/slidev:latest

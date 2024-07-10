@@ -3,7 +3,7 @@ layout: feature
 relates:
   - Mermaid: http://mermaid.js.org/
   - Mermaid Live Editor: https://mermaid.live/
-  - Example side: https://sli.dev/demo/starter/12
+  - Demo Slide: https://sli.dev/demo/starter/12
   - feature/plantuml
 description: |
   Create diagrams/graphs from textual descriptions, powered by Mermaid.

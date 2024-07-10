@@ -1,6 +1,6 @@
 # Theme and Addons
 
-A slides project can have one theme and multiple addons. All of them can provide styles, components, layouts and other configs to your slides project.
+A slides project can have one theme and multiple addons. All of them can provide styles, components, layouts, and other configs to your slides project.
 
 ## Use a Theme {#use-theme}
 
@@ -25,7 +25,7 @@ You can find the list of official themes and community themes in the [Themes Gal
 
 :::
 
-You can start the server, and will be prompted to install the theme after a confirm.
+You can start the server and will be prompted to install the theme after a confirmation.
 
 <div class="language-md text-xs pl-6">
 <pre style="overflow: hidden; text-wrap: pretty;">

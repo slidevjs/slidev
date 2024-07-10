@@ -54,10 +54,10 @@ Build a hostable SPA. See [Hosting](../guide/hosting) for more details.
 
 Options:
 
-- `--out`, `-o` (`string`, default: `dist`): output dir.
+- `--out`, `-o` (`string`, default: `dist`): output directory
 - `--base` (`string`, default: `/`): base URL (see https://cli.vuejs.org/config/#publicpath)
-- `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA.
-- `--theme`, `-t` (`string`): override theme.
+- `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA
+- `--theme`, `-t` (`string`): override theme
 
 ## `slidev export [...entry]` {#export}
 

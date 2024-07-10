@@ -10,7 +10,7 @@ description: |
 
 # Block Frontmatter
 
-The usual way to define frontmatters of slides are concise, but may lack of highlighting and formatter support. To solve this, you can use a YAML block at the very beginning of the slide content as the frontmatter of the slide:
+The usual way to define frontmatters of slides is concise, but may lack of highlighting and formatter support. To solve this, you can use a YAML block at the very beginning of the slide content as the frontmatter of the slide:
 
 ````md
 ---

@@ -21,7 +21,7 @@ Rough Notation integrates comes with the `v-mark` directive.
 
 #### Type
 
-`v-mark.underline` for Underline mark, `v-mark.circle` for Circle mark, etc. Default to `underline`
+`v-mark.underline` for the underline mark, `v-mark.circle` for the circle mark, etc. Default to `underline`
 
 #### Color
 
