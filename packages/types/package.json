@@ -34,7 +34,7 @@
     "katex": "^0.16.11",
     "mermaid": "^10.9.1",
     "monaco-editor": "^0.50.0",
-    "shiki": "1.10.2",
+    "shiki": "^1.10.2",
     "unocss": "^0.61.3",
     "unplugin-icons": "^0.19.0",
     "unplugin-vue-markdown": "^0.26.2",
