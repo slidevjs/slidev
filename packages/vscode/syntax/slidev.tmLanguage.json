@@ -77,14 +77,21 @@
       "name": "keyword.monaco.slidev"
     },
     "slide-frontmatter": {
-      "begin": "(^|\\G)---.*$",
+      "begin": "^(---).*$",
       "contentName": "meta.embedded.block.frontmatter.slidev",
-      "end": "\\A\\s*$|(^|\\G)---.*$",
+      "end": "",
       "patterns": [
         {
-          "include": "source.yaml"
+          "begin": "^(?=[:space:]*\\S)",
+          "end": "(^|\\G)(?=---)",
+          "patterns": [
+            {
+              "include": "source.yaml"
+            }
+          ]
         }
-      ]
+      ],
+      "name": "markup.frontmatter.block.slidev"
     }
   },
   "scopeName": "markdown.slidev.codeblock"
