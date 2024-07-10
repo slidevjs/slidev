@@ -15,5 +15,5 @@ const demos = [
 
 for (const name of demos) {
   cd(path.resolve(__dirname, '../demo', name))
-  await $`npx slidev build --base /demo/${name}/ --out ${demo}/${name} --download`
+  await $`npx slidev build --base /demo/${name}/ --out ${demo}/${name}`
 }
