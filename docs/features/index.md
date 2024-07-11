@@ -4,6 +4,7 @@ footer: false
 aside: false
 outline: false
 sidebar: false
+pageClass: all-features-page
 ---
 
 <script setup lang="ts">
@@ -36,7 +37,7 @@ You can also read <LinkInline link="guide/index" /> to learn the features by top
 </div>
 
 <style>
-.content {
+.all-features-page .VPDoc > .container > .content {
   max-width: 72vw !important;
 }
 </style>
