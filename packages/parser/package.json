@@ -41,8 +41,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@antfu/utils": "^0.7.10",
+    "@antfu/utils": "catalog:",
     "@slidev/types": "workspace:*",
-    "yaml": "^2.4.5"
+    "yaml": "catalog:"
   }
 }
