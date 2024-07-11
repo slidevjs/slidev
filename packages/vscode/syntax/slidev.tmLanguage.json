@@ -83,23 +83,24 @@
           "name": "punctuation.definition.frontmatter.slidev"
         }
       },
-      "end": "(^|\\G)(---).*$|^\\s*$",
-      "endCaptures": {
-        "2": {
-          "name": "punctuation.definition.frontmatter.slidev"
-        }
-      },
+      "end": "(?=^\\s*$)",
       "name": "markup.frontmatter.slidev",
       "patterns": [
         {
-          "begin": "(^|\\G)(\\s*)(.*)",
-          "contentName": "meta.embedded.block.yaml",
+          "begin": "(?=^(?!\\s*$))",
+          "end": "(?=^\\s*$)",
           "patterns": [
             {
-              "include": "source.yaml"
+              "begin": "\\G",
+              "end": "(?=(^|\\G)(---).*$)",
+              "contentName": "meta.embedded.block.yaml",
+              "patterns": [
+                {
+                  "include": "source.yaml"
+                }
+              ]
             }
-          ],
-          "while": "(^|\\G)(?!(---.*|\\s*)$)"
+          ]
         }
       ]
     }
