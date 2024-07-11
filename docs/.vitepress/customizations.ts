@@ -9,7 +9,7 @@ export default [
   },
   {
     text: 'Configure Highlighter',
-    link: '/custom/config-highlighters',
+    link: '/custom/config-highlighter',
   },
   {
     text: 'Configure Vite and Plugins',

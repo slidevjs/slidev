@@ -4,7 +4,7 @@
 
 Create `./setup/monaco.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineMonacoSetup } from '@slidev/types'
 
 export default defineMonacoSetup(async (monaco) => {
@@ -71,7 +71,7 @@ console.log('HelloWorld')
 
 Alternatively if you would like these options to be applied to every Monaco instance, you can return them in the `defineMonacoSetup` function
 
-```ts
+```ts twoslash
 // ./setup/monaco.ts
 import { defineMonacoSetup } from '@slidev/types'
 

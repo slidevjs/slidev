@@ -10,7 +10,7 @@ description: |
 
 Slidev provides a set of hooks to help you manage the slide lifecycle:
 
-```ts
+```ts twoslash
 import { onSlideEnter, onSlideLeave, useIsSlideActive } from '@slidev/client'
 
 const isActive = useIsSlideActive()

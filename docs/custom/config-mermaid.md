@@ -4,7 +4,7 @@
 
 Create `./setup/mermaid.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineMermaidSetup } from '@slidev/types'
 
 export default defineMermaidSetup(() => {
@@ -20,7 +20,7 @@ The return value should be the custom configs for [Mermaid.js](https://mermaid.j
 
 In case you want to create your custom Mermaid themes or styles, you can do this by defining `themeVariables` like in the following example:
 
-```ts
+```ts twoslash
 import { defineMermaidSetup } from '@slidev/types'
 
 export default defineMermaidSetup(() => {

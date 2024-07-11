@@ -8,7 +8,7 @@ By default, JavaScript, TypeScript runners are supported built-in. They run in t
 
 Create `./setup/code-runners.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineCodeRunnersSetup } from '@slidev/types'
 
 export default defineCodeRunnersSetup(() => {
@@ -34,7 +34,7 @@ export default defineCodeRunnersSetup(() => {
 
 The second argument `ctx` is the runner context, which contains the following properties:
 
-```ts
+```ts twoslash
 export interface CodeRunnerContext {
   /**
    * Options passed to runner via the `runnerOptions` prop.
@@ -43,7 +43,7 @@ export interface CodeRunnerContext {
   /**
    * Highlight code with shiki.
    */
-  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => string
   /**
    * Use (other) code runner to run code.
    */

@@ -6,7 +6,7 @@
 
 Create `./setup/shortcuts.ts` with the following content:
 
-```ts
+```ts twoslash
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
 import { defineShortcutsSetup } from '@slidev/types'
 

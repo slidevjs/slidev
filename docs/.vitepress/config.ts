@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
@@ -60,7 +61,12 @@ export default defineConfig({
       )
     },
     codeTransformers: [
-      transformerTwoslash(),
+      transformerTwoslash({
+        twoslashOptions: {
+          // The @slidev/* installed in docs package are very old and should only be used in the homepage demo
+          vfsRoot: fileURLToPath(new URL('../../demo/starter/', import.meta.url)),
+        },
+      }),
     ],
   },
   cleanUrls: true,

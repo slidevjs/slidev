@@ -8,7 +8,7 @@ Slidev uses [Shiki](https://github.com/shikijs/shiki) as the code highlighter. I
 
 Create `./setup/shiki.ts` file with the following content:
 
-```ts
+```ts twoslash
 /* ./setup/shiki.ts */
 import { defineShikiSetup } from '@slidev/types'
 
@@ -27,7 +27,14 @@ export default defineShikiSetup(() => {
 
 If you want to add custom theme or language (TextMate grammar/themes in JSON), you can import them in the setup file:
 
-```ts
+<!-- eslint-disable import/first-->
+
+```ts twoslash
+declare module "*.tmTheme.json" {
+  const value: any
+  export default value
+}
+// ---cut---
 /* ./setup/shiki.ts */
 import { defineShikiSetup } from '@slidev/types'
 import customTheme from './customTheme.tmTheme.json'
