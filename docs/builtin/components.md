@@ -2,7 +2,7 @@
 
 This page lists all the built-in components provided by Slidev. These components can be **directly** used in your slides.
 
-Note that <LinkInline link="guide/theme-addon" /> can provide additional components. To add your own components, see <LinkInline link="guide/write-component" />
+Note that <LinkInline link="guide/theme-addon" /> can provide additional components. To add your own components, see <LinkInline link="guide/component#write" />.
 
 ## `Arrow`
 
