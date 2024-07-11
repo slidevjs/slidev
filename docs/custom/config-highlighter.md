@@ -30,7 +30,7 @@ If you want to add custom theme or language (TextMate grammar/themes in JSON), y
 <!-- eslint-disable import/first-->
 
 ```ts twoslash
-declare module "*.tmTheme.json" {
+declare module '*.tmTheme.json' {
   const value: any
   export default value
 }
