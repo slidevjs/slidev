@@ -93,12 +93,8 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Features',
-        items: [
-          {
-            component: 'FeaturesDropdown',
-          },
-        ],
+        text: '✨ Features',
+        link: '/features/',
       },
       {
         text: 'Reference',
