@@ -57,6 +57,8 @@ When the `useSlideContext` composable is used in a file, the automatic injection
 
 :::
 
+<SeeAlso :links="['feature/slide-hook']" />
+
 ## Properties
 
 ### `$slidev`

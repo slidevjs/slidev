@@ -11,7 +11,6 @@ defineProps<{
   <div flex flex-col flex-grow>
     <VPMenuGroup text="Back to" :items="[{ text: 'All features', link: '/features' }]" />
     <FeatureLayoutLinks name="Depends on" :links="data.depends" />
-    <FeatureLayoutLinks name="Depends on" :links="data.depends" />
     <FeatureLayoutLinks name="Relates to" :links="data.relates" />
     <FeatureLayoutLinks name="Derives" :links="data.derives" />
     <FeatureLayoutSince :version="data.since" />
