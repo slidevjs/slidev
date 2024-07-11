@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "fileTypes": [],
-  "injectionSelector": "L:text.html.markdown",
+  "injectionSelector": "L:text.html.markdown -markup.frontmatter.slidev",
   "patterns": [
     {
       "include": "#import-snippet"
@@ -77,21 +77,31 @@
       "name": "keyword.monaco.slidev"
     },
     "slide-frontmatter": {
-      "begin": "^(---).*$",
-      "contentName": "meta.embedded.block.frontmatter.slidev",
-      "end": "",
+      "begin": "(^|\\G)(---).*$",
+      "beginCaptures": {
+        "2": {
+          "name": "punctuation.definition.frontmatter.slidev"
+        }
+      },
+      "end": "(^|\\G)(---).*$|^\\s*$",
+      "endCaptures": {
+        "2": {
+          "name": "punctuation.definition.frontmatter.slidev"
+        }
+      },
+      "name": "markup.frontmatter.slidev",
       "patterns": [
         {
-          "begin": "^(?=[:space:]*\\S)",
-          "end": "(^|\\G)(?=---)",
+          "begin": "(^|\\G)(\\s*)(.*)",
+          "contentName": "meta.embedded.block.yaml",
           "patterns": [
             {
               "include": "source.yaml"
             }
-          ]
+          ],
+          "while": "(^|\\G)(?!(---.*|\\s*)$)"
         }
-      ],
-      "name": "markup.frontmatter.block.slidev"
+      ]
     }
   },
   "scopeName": "markdown.slidev.codeblock"
