@@ -4,6 +4,7 @@ depends:
   - guide/ui#navigation-bar
 relates:
   - drauu: https://github.com/antfu/drauu
+tags: [drawing]
 description: |
   Draw and annotate your slides with ease.
 ---

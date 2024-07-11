@@ -4,6 +4,7 @@ relates:
   - feature/block-frontmatter
   - GitHub Repo: https://github.com/slidevjs/prettier-plugin
   - Prettier: https://prettier.io/
+tags: [editor]
 description: |
   Use the Prettier plugin to format your slides.
 ---

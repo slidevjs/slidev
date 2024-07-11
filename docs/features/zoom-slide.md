@@ -4,6 +4,7 @@ relates:
   - guide/faq#adjust-size
   - feature/canvas-size
   - feature/transform-component
+tags: [layout]
 description: |
   Zoom the content of a slide to a specific scale.
 ---

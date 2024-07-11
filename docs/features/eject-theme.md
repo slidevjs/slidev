@@ -2,6 +2,7 @@
 layout: feature
 depends:
   - guide/theme-addon
+tags: [theme, cli]
 description: |
   Eject the installed theme from your project to customize it.
 ---

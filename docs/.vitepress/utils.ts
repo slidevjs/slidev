@@ -14,6 +14,7 @@ export function resolveLink(link: string): {
   kind: 'external' | 'feature' | 'guide'
   url: string
   title?: string
+  tags?: string[]
   descripton?: string
 } {
   const [kind, nameWithHash] = link.split('/')
@@ -30,6 +31,7 @@ export function resolveLink(link: string): {
       return {
         kind: 'feature',
         title: `✨ ${feature.title}`,
+        tags: feature.tags,
         descripton: feature.description,
         url: `/features/${nameWithHash}`,
       }
@@ -38,6 +40,7 @@ export function resolveLink(link: string): {
       return {
         kind: 'guide',
         title: `📘 ${getGuideTitle(name)}`,
+        tags: ['guide'],
         descripton: 'Click to read this guide',
         url: `/guide/${nameWithHash}`,
       }

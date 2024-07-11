@@ -5,6 +5,7 @@ relates:
   - Plant UML Live Editor: https://plantuml.com/plantuml
   - Example side: https://sli.dev/demo/starter/12
   - feature/mermaid
+tags: [diagram]
 description: |
   Create diagrams from textual descriptions, powered by PlantUML.
 ---

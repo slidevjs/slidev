@@ -4,6 +4,7 @@ depends:
   - guide/syntax#notes
   - guide/animations
 since: v0.48.0
+tags: [presenter, animation]
 description: |
   Highlighting notes and auto-scrolling to the active section of notes.
 ---

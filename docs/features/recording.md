@@ -5,6 +5,7 @@ depends:
 relates:
   - RecordRTC: https://github.com/muaz-khan/RecordRTC
   - WebRTC API: https://webrtc.org/
+tags: [presenter, tool]
 description: |
   Record your presentation with the built-in camera view and recording feature.
 ---

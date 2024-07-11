@@ -2,7 +2,7 @@
 layout: feature
 relates:
   - feature/frontmatter-merging
-  - feature/import-with-range
+tags: [syntax]
 description: |
   Split your `slides.md` into multiple files for better reusability and organization.
 ---
@@ -53,7 +53,18 @@ Part 2
 
 :::
 
-<SeeAlso :links="[
-  'feature/frontmatter-merging',
-  'feature/import-with-range',
-]" />
+## Importing Specific Slides
+
+To reuse some of the slides inside another Markdown file, you can use the hash part of the import path:
+
+```md
+---
+src: ./another-presentation.md#2,5-7
+---
+```
+
+This will import the slides 2, 5, 6, and 7 from `./another-presentation.md`.
+
+## Frontmatter Merging
+
+<LinkCard link="feature/frontmatter-merging" />

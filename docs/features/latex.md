@@ -3,6 +3,7 @@ layout: feature
 relates:
   - Demo: /demo/starter/11
   - KaTeX: https://katex.org/
+tags: [codeblock, syntax]
 description: |
   Slidev comes with LaTeX support out-of-box, powered by KaTeX.
 ---

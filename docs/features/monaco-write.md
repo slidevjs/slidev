@@ -2,10 +2,12 @@
 layout: feature
 depends:
   - feature/monaco-editor
+  - feature/import-snippet
 relates:
   - feature/import-snippet
   - Custom Code Runners: /custom/config-code-runners
 since: v0.49.5
+tags: [codeblock, editor]
 description: |
   A monaco editor that allows you to write code directly in the slides and save the changes back to the file.
 ---

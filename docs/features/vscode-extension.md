@@ -4,6 +4,7 @@ relates:
   - VS Code: https://code.visualstudio.com/
   - View in Marketplace: https://marketplace.visualstudio.com/items?itemName=antfu.slidev
   - View in OVSX: https://open-vsx.org/extension/antfu/slidev
+tags: [editor]
 description: |
   Help you better organize your slides and have a quick overview of them.
 ---

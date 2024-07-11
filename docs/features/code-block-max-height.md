@@ -2,6 +2,7 @@
 layout: feature
 depends:
   - guide/syntax#code-block
+tags: [codeblock, layout]
 description: |
   Set a maximum height for a code block and enable scrolling.
 ---

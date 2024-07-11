@@ -2,6 +2,7 @@
 layout: feature
 relates:
   - Vue's Named Slots: https://v3.vuejs.org/guide/component-slots.html
+tags: [layout, syntax]
 description: |
   A syntax sugar for named slots in layouts.
 ---

@@ -6,6 +6,7 @@ depends:
 relates:
   - Custom Code Runners: /custom/config-code-runners
 since: v0.48.0
+tags: [codeblock, editor]
 description: |
   Run code directly in the editor and see the result.
 ---

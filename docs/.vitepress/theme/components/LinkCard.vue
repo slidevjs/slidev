@@ -13,7 +13,11 @@ const resolved = computed(() => resolveLink(props.link))
 <template>
   <a class="link-card" :href="withBase(resolved.url)">
     <div class="title">
-      {{ resolved.title }}
+      <div>{{ resolved.title }}</div>
+      <div flex-grow />
+      <div flex gap-1>
+        <FeatureTag v-for="tag in resolved.tags" :key="tag" :tag />
+      </div>
     </div>
     <div class="description">
       {{ resolved.descripton }}
@@ -41,7 +45,7 @@ const resolved = computed(() => resolveLink(props.link))
   line-height: 1.4;
   letter-spacing: -0.02em;
   margin-bottom: 0.75em;
-  display: block;
+  display: flex;
   color: var(--vp-c-brand-1);
 }
 

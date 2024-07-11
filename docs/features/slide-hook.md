@@ -2,6 +2,7 @@
 layout: feature
 depends:
   - guide/global-context
+tags: [client-api]
 description: |
   Hooks to manage the slide lifecycle.
 ---

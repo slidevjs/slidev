@@ -3,6 +3,7 @@ layout: feature
 depends:
   - guide/syntax#code-block
   - guide/animations
+tags: [codeblock, animation]
 description: |
   Highlight specific lines in code blocks based on clicks.
 ---

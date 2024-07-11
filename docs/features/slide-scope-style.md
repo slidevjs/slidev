@@ -3,6 +3,7 @@ layout: feature
 relates:
   - Vue's <style scoped>: https://vue-loader.vuejs.org/guide/scoped-css.html
   - UnoCSS directives: https://unocss.dev/transformers/directives
+tags: [styling, syntax]
 description: |
   Define styles for only the current slide.
 ---

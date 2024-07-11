@@ -4,6 +4,7 @@ relates:
   - guide/faq#adjust-size
   - feature/zoom-slide
   - feature/transform-component
+tags: [layout]
 description: |
   Set the size for all your slides.
 ---

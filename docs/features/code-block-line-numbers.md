@@ -2,6 +2,7 @@
 layout: feature
 depends:
   - guide/syntax#code-block
+tags: [codeblock]
 description: |
   Enable line numbering for all code blocks across the slides or individually.
 ---

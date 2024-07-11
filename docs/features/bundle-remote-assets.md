@@ -2,6 +2,7 @@
 layout: feature
 relates:
   - vite-plugin-remote-assets: https://github.com/antfu/vite-plugin-remote-assets
+tags: [build]
 description: |
   Download and bundle remote assets when building your slides.
 ---

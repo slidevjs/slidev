@@ -4,6 +4,7 @@ relates:
   - Iconify: https://iconify.design/
   - Icones: https://icones.js.org/
   - unplugin-icons: https://github.com/antfu/unplugin-icons
+tags: [components]
 description: |
   Use icons from virtually all open-source icon sets directly in your markdown.
 ---

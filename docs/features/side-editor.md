@@ -4,6 +4,7 @@ depends:
   - guide/ui#navigation-actions
 relates:
   - feature/vscode-extension
+tags: [editor]
 description: |
   Edit your slides source file alongside the presentation.
 ---

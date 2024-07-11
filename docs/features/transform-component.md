@@ -4,6 +4,7 @@ relates:
   - guide/faq#adjust-size
   - feature/canvas-size
   - feature/zoom-slide
+tags: [layout]
 description: |
   A component for scaling some elements.
 ---

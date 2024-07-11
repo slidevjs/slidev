@@ -5,6 +5,7 @@ relates:
   - Mermaid Live Editor: https://mermaid.live/
   - Demo Slide: https://sli.dev/demo/starter/12
   - feature/plantuml
+tags: [diagram]
 description: |
   Create diagrams/graphs from textual descriptions, powered by Mermaid.
 ---

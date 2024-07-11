@@ -2,8 +2,8 @@
 layout: feature
 depends:
   - guide/syntax#importing-slides
-relates:
-  - feature/import-with-range
+  - feature/importing-slides
+tags: [syntax]
 description: |
   Merge frontmatter from multiple markdown files.
 ---

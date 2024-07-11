@@ -18,7 +18,18 @@ const resolved = computed(() => resolveLink(props.link))
     </a>
 
     <template #popper>
-      {{ resolved.descripton }}
+      <div flex>
+        <div text-lg>
+          {{ resolved.title }}
+        </div>
+        <div flex-grow />
+        <div flex gap-1>
+          <FeatureTag v-for="tag in resolved.tags" :key="tag" :tag />
+        </div>
+      </div>
+      <div mt-1>
+        {{ resolved.descripton }}
+      </div>
     </template>
   </Tooltip>
 </template>

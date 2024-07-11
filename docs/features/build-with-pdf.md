@@ -6,6 +6,7 @@ depends:
 relates:
   - CLI export options: /builtin/cli#export
   - Headmatter export options: /custom/#headmatter
+tags: [export, build]
 description: |
   Generate a downloadable PDF along with your slides build.
 ---

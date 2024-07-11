@@ -4,6 +4,7 @@ relates:
   - feature/monaco-write
   - feature/monaco-editor
 since: v0.47.0
+tags: [codeblock, syntax]
 description: |
   Import code snippets from existing files into your slides.
 ---
