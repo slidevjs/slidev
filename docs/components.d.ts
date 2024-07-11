@@ -50,6 +50,7 @@ declare module 'vue' {
     FeatureLayoutLinks: typeof import('./.vitepress/theme/components/FeatureLayoutLinks.vue')['default']
     FeatureLayoutNav: typeof import('./.vitepress/theme/components/FeatureLayoutNav.vue')['default']
     FeatureLayoutSince: typeof import('./.vitepress/theme/components/FeatureLayoutSince.vue')['default']
+    FeatureLayoutTags: typeof import('./.vitepress/theme/components/FeatureLayoutTags.vue')['default']
     FeaturesAnimation: typeof import('./.vitepress/theme/components/FeaturesAnimation.vue')['default']
     FeaturesAnimationInner: typeof import('./.vitepress/theme/components/FeaturesAnimationInner.vue')['default']
     FeaturesOverview: typeof import('./.vitepress/theme/components/FeaturesOverview.vue')['default']

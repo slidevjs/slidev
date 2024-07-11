@@ -13,6 +13,7 @@ defineProps<{
     <FeatureLayoutLinks name="Depends on" :links="data.depends" />
     <FeatureLayoutLinks name="Relates to" :links="data.relates" />
     <FeatureLayoutLinks name="Derives" :links="data.derives" />
+    <FeatureLayoutTags :tags="data.tags" />
     <FeatureLayoutSince :version="data.since" />
   </div>
 </template>

@@ -9,6 +9,7 @@ export interface Feature {
   depends: string[]
   relates: string[]
   derives: string[]
+  tags: string[]
   since?: string
 }
 
@@ -49,6 +50,7 @@ export default createContentLoader('features/*.md', {
         depends: md.frontmatter.depends ?? [],
         relates: md.frontmatter.relates ?? [],
         derives,
+        tags: md.frontmatter.tags ?? [],
         since: md.frontmatter.since,
       }
     }
