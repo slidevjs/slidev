@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": [],
+  "injectionSelector": "L:fenced_code.block.language.attributes.markdown",
+  "patterns": [
+    {
+      "match": "\\s*(\\{)([^}]*)(\\})",
+      "name": "meta.range_or_monaco.slidev",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "source.slidev#monaco-type"
+            },
+            {
+              "include": "source.slidev#range-with-steps"
+            }
+          ]
+        },
+        "3": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
+        }
+      }
+    }
+  ],
+  "scopeName": "inject-to-markdown.codeblock.slidev"
+}

@@ -31,44 +31,39 @@
       {
         "id": "markdown",
         "configuration": "./language/language-configuration.json"
+      },
+      {
+        "id": "slidev"
       }
     ],
     "grammars": [
       {
-        "scopeName": "markdown.slidev.codeblock",
-        "path": "./syntax/slidev.tmLanguage.json",
+        "language": "slidev",
+        "scopeName": "source.slidev",
+        "path": "./syntaxes/slidev.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.ts": "typescript",
+          "source.yaml": "yaml"
+        }
+      },
+      {
+        "path": "./syntaxes/markdown.json",
+        "scopeName": "inject-to-markdown.main.slidev",
         "injectTo": [
           "text.html.markdown"
         ],
         "embeddedLanguages": {
-          "meta.embedded.block.vue": "vue",
-          "source.vue": "vue",
-          "text": "plaintext",
-          "text.html.derivative": "html",
-          "text.html.markdown": "markdown",
-          "text.pug": "jade",
-          "source.css": "css",
-          "source.css.scss": "scss",
-          "source.css.less": "less",
-          "source.sass": "sass",
-          "source.stylus": "stylus",
-          "source.postcss": "postcss",
-          "source.js": "javascript",
-          "source.ts": "typescript",
-          "source.js.jsx": "javascriptreact",
-          "source.tsx": "typescriptreact",
-          "source.coffee": "coffeescript",
-          "meta.tag.js": "jsx-tags",
-          "meta.tag.tsx": "jsx-tags",
-          "meta.tag.without-attributes.js": "jsx-tags",
-          "meta.tag.without-attributes.tsx": "jsx-tags",
-          "source.json": "json",
-          "source.json.comments": "jsonc",
-          "source.json5": "json5",
-          "source.yaml": "yaml",
-          "source.toml": "toml",
-          "source.graphql": "graphql",
-          "meta.objectliteral.ts": "typescript"
+          "source.slidev": "slidev"
+        }
+      },
+      {
+        "path": "./syntaxes/codeblock.json",
+        "scopeName": "inject-to-markdown.codeblock.slidev",
+        "injectTo": [
+          "fenced_code.block.language.attributes.markdown"
+        ],
+        "embeddedLanguages": {
+          "source.slidev": "slidev"
         }
       }
     ],

@@ -1,15 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "fileTypes": [],
-  "injectionSelector": "L:text.html.markdown -markup.frontmatter.slidev",
-  "patterns": [
-    {
-      "include": "#import-snippet"
-    },
-    {
-      "include": "#slide-frontmatter"
-    }
-  ],
+  "name": "Slidev",
+  "scopeName": "source.slidev",
+  "patterns": [],
   "repository": {
     "import-snippet": {
       "match": "^(<<<)\\s*(\\S+)(\\s+[\\w-]+)?(?:\\s*(\\{)([^}]*)(\\}))?(?:\\s*(\\{.*\\}))?",
@@ -19,7 +12,7 @@
           "name": "punctuation.definition.slidev"
         },
         "2": {
-          "name": "meta.link.inline.slidev"
+          "name": "string.path.snippet.slidev"
         },
         "3": {
           "name": "import_snippet.block.language.slidev"
@@ -34,6 +27,9 @@
               "include": "#monaco-type"
             },
             {
+              "include": "#monaco-write"
+            },
+            {
               "include": "#range-with-steps"
             }
           ]
@@ -42,7 +38,11 @@
           "name": "punctuation.separator.range.slidev"
         },
         "7": {
-          "name": "meta.objectliteral.ts"
+          "patterns": [
+            {
+              "include": "source.ts#object-literal"
+            }
+          ]
         }
       }
     },
@@ -73,7 +73,11 @@
       }
     },
     "monaco-type": {
-      "match": "monaco(-(run|write|diff))?",
+      "match": "monaco(-(run|diff))?",
+      "name": "keyword.monaco.slidev"
+    },
+    "monaco-write": {
+      "match": "monaco-write",
       "name": "keyword.monaco.slidev"
     },
     "slide-frontmatter": {
@@ -104,6 +108,5 @@
         }
       ]
     }
-  },
-  "scopeName": "markdown.slidev.codeblock"
+  }
 }
