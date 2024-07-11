@@ -11,23 +11,23 @@ catalog:
   '@iconify-json/svg-spinners': ^1.1.2
   '@shikijs/vitepress-twoslash': ^1.10.3
   '@unocss/reset': ^0.61.3
-  'katex': ^0.16.11
-  'lz-string': ^1.5.0
-  'mermaid': ^10.9.1
-  'monaco-editor': ^0.50.0
-  'shiki': ^1.10.3
-  'shiki-magic-move': ^0.4.2
-  'typescript': ^5.5.3
-  'unocss': ^0.61.3
-  'vue': ^3.4.31
-  'vue-router': ^4.4.0
-  'yaml': ^2.4.5
-  'kolorist': ^1.8.0
-  'minimist': ^1.2.8
-  'prompts': ^2.4.2
+  katex: ^0.16.11
+  lz-string: ^1.5.0
+  mermaid: ^10.9.1
+  monaco-editor: ^0.50.0
+  shiki: ^1.10.3
+  shiki-magic-move: ^0.4.2
+  typescript: ^5.5.3
+  unocss: ^0.61.3
+  vue: ^3.4.31
+  vue-router: ^4.4.0
+  yaml: ^2.4.5
+  kolorist: ^1.8.0
+  minimist: ^1.2.8
+  prompts: ^2.4.2
   '@vitejs/plugin-vue': ^5.0.5
   '@vitejs/plugin-vue-jsx': ^4.0.0
-  'unplugin-icons': ^0.19.0
-  'unplugin-vue-markdown': ^0.26.2
-  'vite-plugin-remote-assets': ^0.5.0
-  'vite-plugin-vue-server-ref': ^0.4.2
+  unplugin-icons: ^0.19.0
+  unplugin-vue-markdown: ^0.26.2
+  vite-plugin-remote-assets: ^0.5.0
+  vite-plugin-vue-server-ref: ^0.4.2
