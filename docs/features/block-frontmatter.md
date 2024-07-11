@@ -4,7 +4,7 @@ depends:
   - guide/syntax
 relates:
   - feature/prettier-plugin
-tags: [codeblock]
+tags: [syntax]
 description: |
   Use a YAML code block as the frontmatter.
 ---
