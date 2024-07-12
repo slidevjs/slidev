@@ -14,8 +14,10 @@ console.log('Hello World')
 ```
 
 ---
+
 src: ../../../demo/starter/slides.md
 s: 1
+
 ---
 
 a: 23
@@ -36,8 +38,10 @@ a: 23
 <Comp :x="1" />
 
 ---
+
 layout: center
 text: 1
+
 ---
 
 # Code block
