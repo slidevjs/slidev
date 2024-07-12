@@ -42,6 +42,6 @@ Any code block features like [line highlighting](#line-highlighting) and [Monaco
 
 Note that you can use `{*}` as a placeholder of <LinkInline link="feature/line-highlighting" />:
 
-````md
-<<< @/snippets/snippet.js {*}{lines:true}
-````
+```md
+<<< @/snippets/snippet.js {\*}{lines:true}
+```
