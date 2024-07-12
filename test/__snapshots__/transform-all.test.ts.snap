@@ -50,15 +50,9 @@ Foo \`{{ code }}\`
 <CodeBlockWrapper v-bind="{}" :ranges='[]'>
 
 \`\`\`ts
-// line 1
-
-// #region snippet
 function _foo() {
   // ...
 }
-// #endregion snippet
-
-// line 9
 \`\`\`
 
 </CodeBlockWrapper>
