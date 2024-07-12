@@ -17,7 +17,7 @@ export default antfu(
           '**/template.md',
           '**/example.md',
           'test/fixtures/markdown/**/*.md',
-          'packages/vscode/syntax/slidev.example.md',
+          'packages/vscode/syntaxes/slidev.example.md',
         ],
       },
     },

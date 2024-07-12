@@ -14,10 +14,8 @@ console.log('Hello World')
 ```
 
 ---
-
 src: ../../../demo/starter/slides.md
 s: 1
-
 ---
 
 a: 23
