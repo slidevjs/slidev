@@ -24,7 +24,7 @@ h1 {
 
 <CodeBlockWrapper v-bind="{}" :ranges='[]'>
 
-\`\`\`css
+\`\`\`css 
 <style>
 h1 {
   color: green;
@@ -79,7 +79,7 @@ Default Slot
 
 <CodeBlockWrapper v-bind="{}" :ranges='[]'>
 
-\`\`\`md
+\`\`\`md 
 Slot Usage
 ::right::
 ::left::
