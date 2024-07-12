@@ -410,6 +410,8 @@
     "get-port-please": "^3.1.2",
     "mlly": "^1.7.1",
     "ovsx": "^0.9.1",
+    "prettier": "^3.3.2",
+    "volar-service-prettier": "^0.0.54",
     "volar-service-yaml": "^0.0.59"
   }
 }

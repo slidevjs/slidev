@@ -12,7 +12,8 @@ export default defineConfig({
   format: ['cjs'],
   target: 'node18',
   clean: true,
-  // minify: true,
+  minify: true,
+  sourcemap: true,
   external: [
     'vscode',
   ],
@@ -21,6 +22,10 @@ export default defineConfig({
     options.alias['@vue/runtime-core'] = fileURLToPath(new URL('../../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js', import.meta.url))
     options.alias['@vue/reactivity'] = fileURLToPath(new URL('../../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js', import.meta.url))
     options.alias['@vue/shared'] = fileURLToPath(new URL('../../node_modules/@vue/shared/dist/shared.esm-bundler.js', import.meta.url))
+  },
+  inject: ['./language-server/import-meta-url.ts'],
+  define: {
+    'import.meta.url': 'import_meta_url',
   },
   esbuildPlugins: [{
     name: 'umd2esm',
