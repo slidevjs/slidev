@@ -9,7 +9,7 @@ Default Slot
 
 <CodeBlockWrapper v-bind="{lines:true}" :ranges='["2","3","4"]'>
 
-\`\`\`ts 
+\`\`\`ts
 function _foo() {
   // ...
 }
@@ -33,7 +33,7 @@ Foo \`{{ code }}\`
 
 <CodeBlockWrapper v-bind="{}" :ranges='[]'>
 
-\`\`\`md 
+\`\`\`md
 <style>
 .text-red { color: red; }
 </style>
@@ -49,7 +49,7 @@ Foo \`{{ code }}\`
 
 <CodeBlockWrapper v-bind="{}" :ranges='[]'>
 
-\`\`\`ts 
+\`\`\`ts
 // line 1
 
 // #region snippet
