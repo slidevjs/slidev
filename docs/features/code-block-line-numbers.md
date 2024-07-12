@@ -23,3 +23,11 @@ function add(
 }
 ```
 ````
+
+Note that you can use `{*}` as a placeholder of <LinkInline link="feature/line-highlighting" />:
+
+````md
+```ts {*}{lines:true,startLine:5}
+// ...
+```
+````
