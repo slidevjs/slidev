@@ -1,13 +1,17 @@
 import { createLabsInfo } from '@volar/vscode'
-import type { LanguageClientOptions, ServerOptions } from '@volar/vscode/node'
+import type { ServerOptions } from '@volar/vscode/node'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
+import { computed } from '@vue/reactivity'
 import { watch } from '@vue/runtime-core'
-import { Uri } from 'vscode'
+import { Uri, window } from 'vscode'
 import * as serverProtocol from '../language-server/protocol'
 import { slidevFiles } from './projects'
+import { useLogger } from './views/logger'
 import { extCtx } from '.'
 
 export function useLanguageClient() {
+  const logger = useLogger()
+
   const serverModule = Uri.joinPath(extCtx.value.extensionUri, 'dist', 'language-server.cjs')
   const runOptions = { execArgv: <string[]>[] }
   const debugOptions = { execArgv: ['--nolazy', `--inspect=${6009}`] }
@@ -24,33 +28,30 @@ export function useLanguageClient() {
     },
   }
 
-  const labsInfo = createLabsInfo(serverProtocol)
+  const documentSelector = computed(() => slidevFiles.value.map(path => ({ language: 'markdown', pattern: path })))
+
+  const client = new LanguageClient(
+    'slidev-language-server',
+    'Slidev Language Server',
+    serverOptions,
+    { documentSelector: documentSelector.value },
+  )
+
+  async function restart() {
+    await client.stop()
+    client.clientOptions.documentSelector = documentSelector.value
+    await client.start()
+  }
 
   watch(
     () => slidevFiles.value.join('\n'),
-    (_, __, onCleanup) => {
-      if (!slidevFiles.value.length)
-        return
-      const clientOptions: LanguageClientOptions = {
-        // documentSelector: [{ language: 'markdown' }],
-        documentSelector: slidevFiles.value.map(path => ({ language: 'markdown', pattern: path })),
-      }
-      const client = new LanguageClient(
-        'slidev-language-server',
-        'Slidev Language Server',
-        serverOptions,
-        clientOptions,
-      )
-      const startPromise = client.start().then(() => {
-        labsInfo.addLanguageClient(client)
-      })
-      onCleanup(async () => {
-        await startPromise
-        client.stop()
-      })
+    () => {
+      logger.info('Slidev files changed, restarting language server...')
+      window.setStatusBarMessage('Restarting Slidev server...', restart())
     },
-    { immediate: true },
   )
 
+  const labsInfo = createLabsInfo(serverProtocol)
+  labsInfo.addLanguageClient(client)
   return labsInfo.extensionExports
 }
