@@ -1,11 +1,11 @@
 import type { ConfigType } from 'reactive-vscode'
-import { defineConfigs } from 'reactive-vscode'
+import { defineConfigs, ref } from 'reactive-vscode'
 
 export const {
   'force-enabled': forceEnabled,
-  'port': configuredPort,
+  'port': configuredPortInitial,
   'annotations': displayAnnotations,
-  'preview-sync': previewSync,
+  'preview-sync': previewSyncInitial,
   include,
   exclude,
 } = defineConfigs('slidev', {
@@ -16,3 +16,6 @@ export const {
   'include': Object as ConfigType<string[]>,
   'exclude': String,
 })
+
+export const configuredPort = ref(configuredPortInitial)
+export const previewSync = ref(previewSyncInitial)
