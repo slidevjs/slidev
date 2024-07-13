@@ -746,8 +746,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
       reactive-vscode:
-        specifier: 0.2.0-beta.4
-        version: 0.2.0-beta.4(@types/vscode@1.89.0)
+        specifier: 0.2.0-beta.5
+        version: 0.2.0-beta.5(@types/vscode@1.89.0)
       volar-service-prettier:
         specifier: ^0.0.54
         version: 0.0.54(prettier@3.3.2)
@@ -1607,8 +1607,8 @@ packages:
   '@polka/url@1.0.0-next.24':
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
 
-  '@reactive-vscode/reactivity@0.2.0-beta.4':
-    resolution: {integrity: sha512-g7z9tYRxUAqE5u/r9nLP6hkubUjY6/lp2S6Pr9vqnmxe+1LCXBoOjc97YHVd/BlGNiDsQrt9UbECvVohEoumuw==}
+  '@reactive-vscode/reactivity@0.2.0-beta.5':
+    resolution: {integrity: sha512-Cqp+CDFA+bYTV/U8o7e8WqTGs9PyOXNkz2x1cKd8nvn7y96p7rNgd0BqE/9L7qbwINCdqxGEoJx6E4Hk0MJJxw==}
 
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -5288,8 +5288,8 @@ packages:
   react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  reactive-vscode@0.2.0-beta.4:
-    resolution: {integrity: sha512-o7AdxVQj0QFbpC95Zz4ZcxmxbvA0fSRgMgoTSk8o1sqVun6VVctK+Nigt87aMFjR7StLpJ+rFpmzASR2s/Ryxw==}
+  reactive-vscode@0.2.0-beta.5:
+    resolution: {integrity: sha512-A0UTr+TVy8VjWaCUNGvgyKxlK4YuS8uXmjc8qGIvPNk6HJqk3TU/dzjoDQ4aRWBW0nmlKAhyAY/nFDsKaXMv8A==}
     peerDependencies:
       '@types/vscode': ^1.89.0
 
@@ -7411,7 +7411,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.24': {}
 
-  '@reactive-vscode/reactivity@0.2.0-beta.4': {}
+  '@reactive-vscode/reactivity@0.2.0-beta.5': {}
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -11846,9 +11846,9 @@ snapshots:
 
   react-is@18.2.0: {}
 
-  reactive-vscode@0.2.0-beta.4(@types/vscode@1.89.0):
+  reactive-vscode@0.2.0-beta.5(@types/vscode@1.89.0):
     dependencies:
-      '@reactive-vscode/reactivity': 0.2.0-beta.4
+      '@reactive-vscode/reactivity': 0.2.0-beta.5
       '@types/vscode': 1.89.0
 
   read-pkg-up@7.0.1:

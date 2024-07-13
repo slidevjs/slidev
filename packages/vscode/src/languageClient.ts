@@ -1,9 +1,7 @@
 import { createLabsInfo } from '@volar/vscode'
 import type { ServerOptions } from '@volar/vscode/node'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
-import { computed } from '@vue/reactivity'
-import { watch } from '@vue/runtime-core'
-import { extensionContext } from 'reactive-vscode'
+import { computed, extensionContext, watch } from 'reactive-vscode'
 import { Uri, window } from 'vscode'
 import * as serverProtocol from '../language-server/protocol'
 import { slidevFiles } from './projects'
@@ -35,26 +33,32 @@ export function useLanguageClient() {
     serverOptions,
     { documentSelector: documentSelector.value },
   )
-  async function start() {
-    await client.start()
-    const labsInfo = createLabsInfo(serverProtocol)
-    labsInfo.addLanguageClient(client)
-    return labsInfo.extensionExports
-  }
 
-  async function restart() {
-    await client.stop()
+  let shouldStop = false
+  async function doRestart() {
+    if (shouldStop)
+      await client.stop()
     client.clientOptions.documentSelector = documentSelector.value
     await client.start()
+    shouldStop = true
+  }
+
+  let restartPromise: Promise<void> | undefined
+  async function restart() {
+    await restartPromise
+    restartPromise = doRestart()
+    await restartPromise
   }
 
   watch(
     () => slidevFiles.value.join('\n'),
     () => {
-      logger.info('Slidev files changed, restarting language server...')
+      logger.info('Starting language server...')
       window.setStatusBarMessage('Restarting Slidev server...', restart())
     },
   )
 
-  return start()
+  const labsInfo = createLabsInfo(serverProtocol)
+  labsInfo.addLanguageClient(client)
+  return labsInfo.extensionExports
 }
