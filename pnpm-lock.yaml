@@ -23,8 +23,8 @@ importers:
         specifier: ^0.7.10
         version: 0.7.10
       '@shikijs/markdown-it':
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       '@slidev/cli':
         specifier: workspace:*
         version: link:packages/slidev
@@ -123,7 +123,7 @@ importers:
         version: 5.0.8
       shiki:
         specifier: ^1.10.2
-        version: 1.10.2
+        version: 1.10.3
       simple-git-hooks:
         specifier: ^2.11.1
         version: 2.11.1
@@ -246,8 +246,8 @@ importers:
         specifier: ^2.2.225
         version: 2.2.225
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
-        version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
+        specifier: ^1.10.3
+        version: 1.10.3(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/client':
         specifier: 0.34.3
         version: 0.34.3(rollup@4.13.2)(typescript@5.5.3)(vite@5.3.3(@types/node@20.14.10))
@@ -276,8 +276,8 @@ importers:
         specifier: ^14.1.0
         version: 14.1.0
       shiki:
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       typescript:
         specifier: ^5.5.3
         version: 5.5.3
@@ -312,11 +312,11 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       '@shikijs/monaco':
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
-        version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
+        specifier: ^1.10.3
+        version: 1.10.3(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/parser':
         specifier: workspace:*
         version: link:../parser
@@ -375,11 +375,11 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
       shiki:
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       shiki-magic-move:
         specifier: ^0.4.2
-        version: 0.4.2(shiki@1.10.2)(vue@3.4.31(typescript@5.5.3))
+        version: 0.4.2(shiki@1.10.3)(vue@3.4.31(typescript@5.5.3))
       typescript:
         specifier: ^5.5.3
         version: 5.5.3
@@ -460,14 +460,14 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       '@shikijs/markdown-it':
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       '@shikijs/twoslash':
-        specifier: ^1.10.2
-        version: 1.10.2(typescript@5.5.3)
+        specifier: ^1.10.3
+        version: 1.10.3(typescript@5.5.3)
       '@shikijs/vitepress-twoslash':
-        specifier: ^1.10.2
-        version: 1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
+        specifier: ^1.10.3
+        version: 1.10.3(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)
       '@slidev/client':
         specifier: workspace:*
         version: link:../client
@@ -598,11 +598,11 @@ importers:
         specifier: ^7.6.2
         version: 7.6.2
       shiki:
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       shiki-magic-move:
         specifier: ^0.4.2
-        version: 0.4.2(shiki@1.10.2)(vue@3.4.31(typescript@5.5.3))
+        version: 0.4.2(shiki@1.10.3)(vue@3.4.31(typescript@5.5.3))
       sirv:
         specifier: ^2.0.4
         version: 2.0.4
@@ -686,8 +686,8 @@ importers:
         specifier: ^0.50.0
         version: 0.50.0
       shiki:
-        specifier: ^1.10.2
-        version: 1.10.2
+        specifier: ^1.10.3
+        version: 1.10.3
       unocss:
         specifier: ^0.61.3
         version: 0.61.3(postcss@8.4.39)(rollup@4.13.2)(vite@5.3.3(@types/node@20.14.10))
@@ -1704,23 +1704,23 @@ packages:
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
 
-  '@shikijs/core@1.10.2':
-    resolution: {integrity: sha512-hCtKSC0PNmidU+TVBUiddE0sF1QsOPVbBBRQlugsKy0QJBfSj9aIQQ/pNEIv58wwM/9cAlWG1yihi+5ovZfYmA==}
+  '@shikijs/core@1.10.3':
+    resolution: {integrity: sha512-D45PMaBaeDHxww+EkcDQtDAtzv00Gcsp72ukBtaLSmqRvh0WgGMq3Al0rl1QQBZfuneO75NXMIzEZGFitThWbg==}
 
-  '@shikijs/markdown-it@1.10.2':
-    resolution: {integrity: sha512-GDPYSZ6B1VgQZ2D+1uJPapd5wvE5C21F/4Abz8uGlvFhV0jqz6S0QFcc3QNZHwbtx4OKUc8y4ZtvWPz5Te/WLA==}
+  '@shikijs/markdown-it@1.10.3':
+    resolution: {integrity: sha512-QH0SbMx+pnUNr6/CWrq3SbfT3myZ0uJGFTsp5+7mlzPbX+73FjRO9K03A7gmv+LutqSiDQCOfkeixSuP7a4sug==}
 
-  '@shikijs/monaco@1.10.2':
-    resolution: {integrity: sha512-RPxHdxTdP1inb9hbN+dLBLS+Sjq5GVN1uUkNN30jAi1UE65cAKyTSWMqPaEpXvfGYZgJpnx5ZTFNo9zt8566jA==}
+  '@shikijs/monaco@1.10.3':
+    resolution: {integrity: sha512-YXCSLFL45sS8BsHm0CWjFqUYURbuwInstFzeyrweMfx/CJ7Osdz4PIZqPQNaMjdZJPEDXa/4kWIqxpLGRQtvpA==}
 
-  '@shikijs/transformers@1.10.2':
-    resolution: {integrity: sha512-gSx8Z4ZIxP0iJlnm8gNolAf3Yxd0KYHJ0OFcT5RFGcZ73/ZhFBJgCfL9OQskHya74qlp3ExpGbrPm7zf7CSidw==}
+  '@shikijs/transformers@1.10.3':
+    resolution: {integrity: sha512-MNjsyye2WHVdxfZUSr5frS97sLGe6G1T+1P41QjyBFJehZphMcr4aBlRLmq6OSPBslYe9byQPVvt/LJCOfxw8Q==}
 
-  '@shikijs/twoslash@1.10.2':
-    resolution: {integrity: sha512-jFKYwFPKmJ2ie6xowAPuR1DY//Ve+CzP+mTZYKatxyCP/nR5AS1nzZ7pKwr+pzn0QG+2EaWBJqymwtzOXL3zLg==}
+  '@shikijs/twoslash@1.10.3':
+    resolution: {integrity: sha512-9HlQgvy51jnO46Tcr87A7v6gxlzdKzcpYk15/CQfO48svAslOf+6QYXf0Gao3HWPywOwVj2alMAe0zQhT59y9w==}
 
-  '@shikijs/vitepress-twoslash@1.10.2':
-    resolution: {integrity: sha512-gEBbjpBXVBwhoOX6LiHUwzzcLIvLsUBbWVZzd9qZHNgxtqrK5PGNToDN8QaY2exuCicmNn/zJfwxXL484PgvqA==}
+  '@shikijs/vitepress-twoslash@1.10.3':
+    resolution: {integrity: sha512-rTfayHA8J4B0z9J9XspwQRg40m0xYLzBgNRhjBWGVGgfymh3OdM0CpEsqwGEFxGgRmDRYCEpf3jqdBejWMekgQ==}
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -5498,8 +5498,8 @@ packages:
       vue:
         optional: true
 
-  shiki@1.10.2:
-    resolution: {integrity: sha512-wrddjiCJ6D8zB1MuAGZ37G37rGw+6Ntnqqbl2uXh3P8g5JxneJRRhccPnex/gqorJoXkbpTRC2x54QIsdx2b1Q==}
+  shiki@1.10.3:
+    resolution: {integrity: sha512-eneCLncGuvPdTutJuLyUGS8QNPAVFO5Trvld2wgEq1e002mwctAhJKeMGWtWVXOIEzmlcLRqcgPSorR6AVzOmQ==}
 
   side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -7469,40 +7469,40 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@shikijs/core@1.10.2':
+  '@shikijs/core@1.10.3':
     dependencies:
       '@types/hast': 3.0.4
 
-  '@shikijs/markdown-it@1.10.2':
+  '@shikijs/markdown-it@1.10.3':
     dependencies:
-      '@shikijs/transformers': 1.10.2
+      '@shikijs/transformers': 1.10.3
       markdown-it: 14.1.0
-      shiki: 1.10.2
+      shiki: 1.10.3
 
-  '@shikijs/monaco@1.10.2':
+  '@shikijs/monaco@1.10.3':
     dependencies:
-      '@shikijs/core': 1.10.2
+      '@shikijs/core': 1.10.3
 
-  '@shikijs/transformers@1.10.2':
+  '@shikijs/transformers@1.10.3':
     dependencies:
-      shiki: 1.10.2
+      shiki: 1.10.3
 
-  '@shikijs/twoslash@1.10.2(typescript@5.5.3)':
+  '@shikijs/twoslash@1.10.3(typescript@5.5.3)':
     dependencies:
-      '@shikijs/core': 1.10.2
+      '@shikijs/core': 1.10.3
       twoslash: 0.2.9(typescript@5.5.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@shikijs/vitepress-twoslash@1.10.2(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)':
+  '@shikijs/vitepress-twoslash@1.10.3(@nuxt/kit@3.11.2(rollup@4.13.2))(typescript@5.5.3)':
     dependencies:
-      '@shikijs/twoslash': 1.10.2(typescript@5.5.3)
+      '@shikijs/twoslash': 1.10.3(typescript@5.5.3)
       floating-vue: 5.2.2(@nuxt/kit@3.11.2(rollup@4.13.2))(vue@3.4.31(typescript@5.5.3))
       mdast-util-from-markdown: 2.0.1
       mdast-util-gfm: 3.0.0
       mdast-util-to-hast: 13.2.0
-      shiki: 1.10.2
+      shiki: 1.10.3
       twoslash: 0.2.9(typescript@5.5.3)
       twoslash-vue: 0.2.9(typescript@5.5.3)
       vue: 3.4.31(typescript@5.5.3)
@@ -12043,17 +12043,17 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shiki-magic-move@0.4.2(shiki@1.10.2)(vue@3.4.31(typescript@5.5.3)):
+  shiki-magic-move@0.4.2(shiki@1.10.3)(vue@3.4.31(typescript@5.5.3)):
     dependencies:
       diff-match-patch-es: 0.1.0
       ohash: 1.1.3
     optionalDependencies:
-      shiki: 1.10.2
+      shiki: 1.10.3
       vue: 3.4.31(typescript@5.5.3)
 
-  shiki@1.10.2:
+  shiki@1.10.3:
     dependencies:
-      '@shikijs/core': 1.10.2
+      '@shikijs/core': 1.10.3
       '@types/hast': 3.0.4
 
   side-channel@1.0.4:
@@ -12852,8 +12852,8 @@ snapshots:
     dependencies:
       '@docsearch/css': 3.6.0
       '@docsearch/js': 3.6.0(@algolia/client-search@4.22.1)(search-insights@2.13.0)
-      '@shikijs/core': 1.10.2
-      '@shikijs/transformers': 1.10.2
+      '@shikijs/core': 1.10.3
+      '@shikijs/transformers': 1.10.3
       '@types/markdown-it': 14.1.1
       '@vitejs/plugin-vue': 5.0.5(vite@5.3.3(@types/node@20.14.10))(vue@3.4.31(typescript@5.5.3))
       '@vue/devtools-api': 7.2.1(vue@3.4.31(typescript@5.5.3))
@@ -12863,7 +12863,7 @@ snapshots:
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 6.3.0
-      shiki: 1.10.2
+      shiki: 1.10.3
       vite: 5.3.3(@types/node@20.14.10)
       vue: 3.4.31(typescript@5.5.3)
     optionalDependencies:
