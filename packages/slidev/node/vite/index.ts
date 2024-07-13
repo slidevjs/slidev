@@ -109,7 +109,8 @@ export async function ViteSlidevPlugin(
         ...serverRefOptions.state,
       },
       onChanged(key, data, patch, timestamp) {
-        serverRefOptions.onChanged && serverRefOptions.onChanged(key, data, patch, timestamp)
+        if (serverRefOptions.onChanged)
+          serverRefOptions.onChanged(key, data, patch, timestamp)
         if (!options.data.config.drawings.persist)
           return
         if (key === 'drawings')
