@@ -18,6 +18,7 @@ export interface SlidevProject {
 }
 
 export const projects = reactive(new Map<string, SlidevProject>())
+export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
 export const activeSlidevData = computed(() => activeProject.value?.data)
@@ -80,7 +81,8 @@ export function useProjects() {
     const path = slash(uri.fsPath).toLowerCase()
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
-    pendingUpdate && (pendingUpdate.cancelled = true)
+    if (pendingUpdate)
+      pendingUpdate.cancelled = true
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
