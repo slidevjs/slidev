@@ -19,7 +19,7 @@ export async function renderMermaid(lzEncoded: string, options: any) {
 
   mermaid.initialize({
     startOnLoad: false,
-    ...clearUndefined(setupMermaid() || {}),
+    ...clearUndefined(await setupMermaid() || {}),
     ...clearUndefined(options),
   })
   const code = lz.decompressFromBase64(lzEncoded)
