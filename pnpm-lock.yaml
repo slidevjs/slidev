@@ -734,8 +734,8 @@ importers:
         specifier: ^0.9.1
         version: 0.9.1
       reactive-vscode:
-        specifier: 0.2.0-beta.3
-        version: 0.2.0-beta.3(@types/vscode@1.89.0)
+        specifier: 0.2.0-beta.4
+        version: 0.2.0-beta.4(@types/vscode@1.89.0)
 
 packages:
 
@@ -1589,8 +1589,8 @@ packages:
   '@polka/url@1.0.0-next.24':
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
 
-  '@reactive-vscode/reactivity@0.2.0-beta.3':
-    resolution: {integrity: sha512-ggZqWGEv3suZrpXxuGoi49IjU8mMtZ7uk7TpchqUFFpy5mHQimNRDwgifgEx/f8VWcTJJE0rgYCz4Ps9fwk2fg==}
+  '@reactive-vscode/reactivity@0.2.0-beta.4':
+    resolution: {integrity: sha512-g7z9tYRxUAqE5u/r9nLP6hkubUjY6/lp2S6Pr9vqnmxe+1LCXBoOjc97YHVd/BlGNiDsQrt9UbECvVohEoumuw==}
 
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -5243,8 +5243,8 @@ packages:
   react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  reactive-vscode@0.2.0-beta.3:
-    resolution: {integrity: sha512-yhKif5ggsHnPYGPIQNN0/PwRytDKwra2pQOVF+bVqXSTZ1fXAM6x1E+vHXu5jyZ5sRcvOIbNvrb2uu+/ny45fw==}
+  reactive-vscode@0.2.0-beta.4:
+    resolution: {integrity: sha512-o7AdxVQj0QFbpC95Zz4ZcxmxbvA0fSRgMgoTSk8o1sqVun6VVctK+Nigt87aMFjR7StLpJ+rFpmzASR2s/Ryxw==}
     peerDependencies:
       '@types/vscode': ^1.89.0
 
@@ -7287,7 +7287,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.24': {}
 
-  '@reactive-vscode/reactivity@0.2.0-beta.3': {}
+  '@reactive-vscode/reactivity@0.2.0-beta.4': {}
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -11674,9 +11674,9 @@ snapshots:
 
   react-is@18.2.0: {}
 
-  reactive-vscode@0.2.0-beta.3(@types/vscode@1.89.0):
+  reactive-vscode@0.2.0-beta.4(@types/vscode@1.89.0):
     dependencies:
-      '@reactive-vscode/reactivity': 0.2.0-beta.3
+      '@reactive-vscode/reactivity': 0.2.0-beta.4
       '@types/vscode': 1.89.0
 
   read-pkg-up@7.0.1:
