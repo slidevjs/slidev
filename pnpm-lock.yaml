@@ -733,15 +733,6 @@ importers:
       '@volar/vscode':
         specifier: ^2.4.0-alpha.15
         version: 2.4.0-alpha.15
-      '@vue/reactivity':
-        specifier: ^3.4.31
-        version: 3.4.31
-      '@vue/runtime-core':
-        specifier: ^3.4.31
-        version: 3.4.31
-      '@vue/shared':
-        specifier: ^3.4.31
-        version: 3.4.31
       get-port-please:
         specifier: ^3.1.2
         version: 3.1.2
@@ -754,15 +745,15 @@ importers:
       prettier:
         specifier: ^3.3.2
         version: 3.3.2
+      reactive-vscode:
+        specifier: 0.2.0-beta.3
+        version: 0.2.0-beta.3(@types/vscode@1.89.0)
       volar-service-prettier:
         specifier: ^0.0.54
         version: 0.0.54(prettier@3.3.2)
       volar-service-yaml:
         specifier: ^0.0.59
         version: 0.0.59
-      reactive-vscode:
-        specifier: 0.2.0-beta.3
-        version: 0.2.0-beta.3(@types/vscode@1.89.0)
 
 packages:
 
