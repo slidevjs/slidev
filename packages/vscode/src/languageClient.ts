@@ -3,16 +3,14 @@ import type { ServerOptions } from '@volar/vscode/node'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
 import { computed } from '@vue/reactivity'
 import { watch } from '@vue/runtime-core'
+import { extensionContext } from 'reactive-vscode'
 import { Uri, window } from 'vscode'
 import * as serverProtocol from '../language-server/protocol'
 import { slidevFiles } from './projects'
-import { useLogger } from './views/logger'
-import { extCtx } from '.'
+import { logger } from './views/logger'
 
 export function useLanguageClient() {
-  const logger = useLogger()
-
-  const serverModule = Uri.joinPath(extCtx.value.extensionUri, 'dist', 'language-server.cjs')
+  const serverModule = Uri.joinPath(extensionContext.value!.extensionUri, 'dist', 'language-server.cjs')
   const runOptions = { execArgv: <string[]>[] }
   const debugOptions = { execArgv: ['--nolazy', `--inspect=${6009}`] }
   const serverOptions: ServerOptions = {
@@ -30,12 +28,19 @@ export function useLanguageClient() {
 
   const documentSelector = computed(() => slidevFiles.value.map(path => ({ language: 'markdown', pattern: path })))
 
+  logger.info('Starting Slidev language server...')
   const client = new LanguageClient(
     'slidev-language-server',
     'Slidev Language Server',
     serverOptions,
     { documentSelector: documentSelector.value },
   )
+  async function start() {
+    await client.start()
+    const labsInfo = createLabsInfo(serverProtocol)
+    labsInfo.addLanguageClient(client)
+    return labsInfo.extensionExports
+  }
 
   async function restart() {
     await client.stop()
@@ -51,7 +56,5 @@ export function useLanguageClient() {
     },
   )
 
-  const labsInfo = createLabsInfo(serverProtocol)
-  labsInfo.addLanguageClient(client)
-  return labsInfo.extensionExports
+  return start()
 }
