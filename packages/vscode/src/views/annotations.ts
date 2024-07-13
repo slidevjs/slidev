@@ -1,13 +1,11 @@
 import { clamp, ensurePrefix } from '@antfu/utils'
 import type { SourceSlideInfo } from '@slidev/types'
-import { computed, watch } from '@vue/runtime-core'
+import { computed, createSingletonComposable, useActiveTextEditor, watch } from 'reactive-vscode'
 import type { DecorationOptions } from 'vscode'
 import { Position, Range, ThemeColor, window } from 'vscode'
-import { useActiveTextEditor } from '../composables/useActiveTextEditor'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
 import { displayAnnotations } from '../configs'
 import { activeProject } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 
 const dividerCommonOptions = {

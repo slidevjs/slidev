@@ -1,6 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'tsup'
 import { resolvePath } from 'mlly'
 
@@ -17,12 +16,6 @@ export default defineConfig({
   external: [
     'vscode',
   ],
-  esbuildOptions(options) {
-    options.alias ||= {}
-    options.alias['@vue/runtime-core'] = fileURLToPath(new URL('../../node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js', import.meta.url))
-    options.alias['@vue/reactivity'] = fileURLToPath(new URL('../../node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js', import.meta.url))
-    options.alias['@vue/shared'] = fileURLToPath(new URL('../../node_modules/@vue/shared/dist/shared.esm-bundler.js', import.meta.url))
-  },
   inject: ['./language-server/import-meta-url.ts'],
   define: {
     'import.meta.url': 'import_meta_url',
@@ -41,10 +34,9 @@ export default defineConfig({
   async onSuccess() {
     const assetsDir = join(__dirname, '../../assets')
     const resDir = join(__dirname, './dist/res')
-    const iconsDir = join(resDir, 'icons')
 
-    if (!existsSync(iconsDir))
-      mkdirSync(iconsDir, { recursive: true })
+    if (!existsSync(resDir))
+      mkdirSync(resDir, { recursive: true })
 
     for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
       copyFileSync(join(assetsDir, file), join(resDir, file))

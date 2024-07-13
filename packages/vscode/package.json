@@ -392,8 +392,8 @@
   "scripts": {
     "publish": "esno scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
-    "build": "tsup --env.NODE_ENV production",
-    "dev": "nr build --watch",
+    "build": "tsup --env.NODE_ENV production --treeshake",
+    "dev": "tsup --watch ./src --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
@@ -404,13 +404,11 @@
     "@types/vscode": "~1.89.0",
     "@volar/language-server": "~2.4.0-alpha.15",
     "@volar/vscode": "^2.4.0-alpha.15",
-    "@vue/reactivity": "^3.4.31",
-    "@vue/runtime-core": "^3.4.31",
-    "@vue/shared": "^3.4.31",
     "get-port-please": "^3.1.2",
     "mlly": "^1.7.1",
     "ovsx": "^0.9.1",
     "prettier": "^3.3.2",
+    "reactive-vscode": "0.2.0-beta.3",
     "volar-service-prettier": "^0.0.54",
     "volar-service-yaml": "^0.0.59"
   }
