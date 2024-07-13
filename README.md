@@ -43,9 +43,9 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 - 🤹 [**Interactive**](https://sli.dev/custom/directory-structure#components) - embedding Vue components seamlessly
 - 🎙 [**Presenter Mode**](https://sli.dev/guide/ui#presenter-mode) - use another window, or even your phone to control your slides
 - 🎨 [**Drawing**](https://sli.dev/features/drawing) - draw and annotate on your slides
-- 🧮 [**LaTeX**](https://sli.dev/guide/syntax#latex) - built-in LaTeX math equations support
+- 🧮 [**LaTeX**](https://sli.dev/features/latex) - built-in LaTeX math equations support
 - 📰 [**Diagrams**](https://sli.dev/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
-- 🌟 [**Icons**](https://sli.dev/guide/syntax#icons) - access to icons from any icon set directly
+- 🌟 [**Icons**](https://sli.dev/features/icons) - access to icons from any icon set directly
 - 💻 [**Editor**](https://sli.dev/guide/index#editor) - integrated editor, or the [VSCode extension](https://sli.dev/features/vscode-extension)
 - 🎥 [**Recording**](https://sli.dev/features/recording) - built-in recording and camera view
 - 📤 [**Portable**](https://sli.dev/guide/exporting) - export into PDF, PNGs, or PPTX
