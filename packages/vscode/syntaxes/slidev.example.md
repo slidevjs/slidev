@@ -30,8 +30,13 @@ s: 1
 
 # Vue Component
 
-<div title="1" />
-<Comp :x="1" />
+<div title="hi" />
+<Comp :x="a" />
+
+<script setup lang="ts">
+import { ref } from 'vue'
+let a = ref(1)
+</script>
 
 ---
 layout: center
@@ -51,3 +56,7 @@ const a = 1
 ```ts {moanco-run}{showOutputAt: '+1'}
 const a = 1
 ```
+
+$$
+\lambda = 1
+$$
