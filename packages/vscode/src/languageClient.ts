@@ -34,27 +34,31 @@ export function useLanguageClient() {
     { documentSelector: documentSelector.value },
   )
 
-  let shouldStop = false
-  async function doRestart() {
+  async function doStart(shouldStop: boolean) {
     if (shouldStop)
       await client.stop()
     client.clientOptions.documentSelector = documentSelector.value
     await client.start()
-    shouldStop = true
   }
 
   let restartPromise: Promise<void> | undefined
-  async function restart() {
+  async function start(shouldStop: boolean) {
     await restartPromise
-    restartPromise = doRestart()
+    restartPromise = doStart(shouldStop)
     await restartPromise
   }
 
+  let shouldStop = false
   watch(
     () => slidevFiles.value.join('\n'),
-    () => {
-      logger.info('Starting language server...')
-      window.setStatusBarMessage('Restarting Slidev server...', restart())
+    (files) => {
+      if (files.length === 0 && !shouldStop)
+        return
+      if (shouldStop)
+        window.setStatusBarMessage(`Restarting Slidev language server...`, start(true))
+      else
+        start(false)
+      shouldStop = true
     },
   )
 
