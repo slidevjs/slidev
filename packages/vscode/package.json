@@ -60,7 +60,7 @@
         "path": "./syntaxes/codeblock.json",
         "scopeName": "inject-to-markdown.codeblock.slidev",
         "injectTo": [
-          "fenced_code.block.language.attributes.markdown"
+          "text.html.markdown"
         ],
         "embeddedLanguages": {
           "source.slidev": "slidev"
@@ -393,7 +393,7 @@
     "publish": "esno scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
     "build": "tsup --env.NODE_ENV production --treeshake",
-    "dev": "tsup --watch ./src --env.NODE_ENV development",
+    "dev": "tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
