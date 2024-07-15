@@ -30,3 +30,5 @@ You can use https://sli.dev/new to create a new project to reproduce the issue.
 - Slidev version:
 - Browser:
 - OS:
+
+If you are using Slidev globally (i.e. `npx slidev` or `npm i -g slidev`), please try to reproduce the issue in a local project (i.e. `npm create slidev@latest`).
