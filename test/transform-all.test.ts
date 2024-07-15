@@ -26,6 +26,8 @@ Foo \`{{ code }}\`
 <style>
 .text-green { color: green; }
 </style>
+
+<<< ./fixtures/snippets/snippet.ts#snippet
 `)
 
   applyMarkdownTransform(ctx)

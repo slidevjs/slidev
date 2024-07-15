@@ -1,14 +1,13 @@
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
+import { slash } from '@antfu/utils'
 import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { load } from '@slidev/parser/fs'
-import { computed, markRaw, onScopeDispose, reactive, ref, watch, watchEffect } from '@vue/runtime-core'
+import { computed, markRaw, onScopeDispose, reactive, ref, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
 import { window, workspace } from 'vscode'
-import { slash } from '@antfu/utils'
-import { useLogger } from './views/logger'
-import { findShallowestPath } from './utils/findShallowestPath'
-import { useVscodeContext } from './composables/useVscodeContext'
 import { exclude, forceEnabled, include } from './configs'
+import { findShallowestPath } from './utils/findShallowestPath'
+import { logger } from './views/logger'
 
 export interface SlidevProject {
   readonly entry: string
@@ -49,8 +48,6 @@ export async function rescanProjects() {
 }
 
 export function useProjects() {
-  const logger = useLogger()
-
   async function init() {
     await addExistingProjects()
     await autoSetActiveEntry()
