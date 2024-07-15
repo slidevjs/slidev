@@ -23,9 +23,6 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "extensionDependencies": [
-    "Vue.volar"
-  ],
   "contributes": {
     "languages": [
       {
@@ -63,7 +60,8 @@
           "text.html.markdown"
         ],
         "embeddedLanguages": {
-          "source.slidev": "slidev"
+          "source.slidev": "slidev",
+          "source.ts": "typescript"
         }
       }
     ],

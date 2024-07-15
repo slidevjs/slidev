@@ -62,7 +62,7 @@
       }
     },
     "range": {
-      "match": "(\\d+)([,-])?",
+      "match": "(\\d+|\\*)([,-])?",
       "captures": {
         "1": {
           "name": "constant.numeric.range.slidev"

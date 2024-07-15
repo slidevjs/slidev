@@ -49,11 +49,11 @@ text: 1
 const a = 1
 ```
 
-```ts twoslash {1,2|3}
+```ts {1,2|3}{foo:'bar'} twoslash
 const a = 1
 ```
 
-```ts {moanco-run}{showOutputAt: '+1'}
+```ts {monaco-run}{showOutputAt: '+1'}
 const a = 1
 ```
 
