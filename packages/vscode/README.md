@@ -13,6 +13,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers<br>
 <p align="center">
 <a href="https://marketplace.visualstudio.com/items?itemName=antfu.slidev" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/antfu.slidev.svg?color=4EC5D4&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
 <a href="https://marketplace.visualstudio.com/items?itemName=antfu.slidev" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/d/antfu.slidev.svg?color=2B90B6" alt="Visual Studio Marketplace Downloads" /></a>
+<a href="https://kermanx.github.io/reactive-vscode/" target="__blank"><img src="https://img.shields.io/badge/made_with-reactive--vscode-%23007ACC?style=flat&labelColor=%23229863"  alt="Made with reacrive-vscode" /></a>
 </p>
 
 <br>
