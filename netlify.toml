@@ -4,6 +4,7 @@ command = "pnpm run docs:build"
 
 [build.environment]
 NODE_VERSION = "20"
+NODE_OPTIONS = "--max-old-space-size=8192"
 PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
@@ -20,6 +21,11 @@ status = 200
 [[redirects]]
 from = "/demo/starter/*"
 to = "/demo/starter/index.html"
+status = 200
+
+[[redirects]]
+from = "/demo/vue-runner/*"
+to = "/demo/vue-runner/index.html"
 status = 200
 
 [[redirects]]
