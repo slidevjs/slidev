@@ -1,14 +1,13 @@
 import { save as slidevSave } from '@slidev/parser/fs'
 import type { SourceSlideInfo } from '@slidev/types'
-import { computed, markRaw, onScopeDispose, watch, watchEffect } from '@vue/runtime-core'
+import type { TreeViewNode } from 'reactive-vscode'
+import { computed, createSingletonComposable, useTreeView, useViewVisibility, watch } from 'reactive-vscode'
 import type { TreeItem } from 'vscode'
-import { DataTransferItem, EventEmitter, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
-import { useViewVisibility } from '../composables/useViewVisibility'
+import { DataTransferItem, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
 import { previewSync } from '../configs'
 import { activeSlidevData } from '../projects'
 import { getSlideNo } from '../utils/getSlideNo'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 import { usePreviewWebview } from './previewWebview'
 
@@ -36,15 +35,14 @@ const layoutIconMap = {
   'two-cols': 'split-horizontal',
 } as Record<string, string>
 
-export interface SlidesTreeElement {
-  parent: SlidesTreeElement | null
-  children?: SlidesTreeElement[]
+export interface SlidesTreeNode {
+  parent: SlidesTreeNode | null
   slide: SourceSlideInfo
 }
 
-function getImportChain(element: SlidesTreeElement): SourceSlideInfo[] {
+function getImportChain(node: SlidesTreeNode): SourceSlideInfo[] {
   const chain: SourceSlideInfo[] = []
-  let parent = element.parent
+  let parent = node.parent
   while (parent) {
     chain.unshift(parent.slide)
     parent = parent.parent
@@ -52,17 +50,17 @@ function getImportChain(element: SlidesTreeElement): SourceSlideInfo[] {
   return chain
 }
 
-function getGotoCommandArgs(element: SlidesTreeElement) {
-  const slide = element.slide
+function getGotoCommandArgs(node: SlidesTreeNode) {
+  const slide = node.slide
   return [
     slide.filepath,
     slide.index,
-    () => getSlideNo(activeSlidevData.value, slide, getImportChain(element)),
+    () => getSlideNo(activeSlidevData.value, slide, getImportChain(node)),
   ]
 }
 
-function getTreeItem(element: SlidesTreeElement): TreeItem {
-  const slide = element.slide
+function getTreeItem(node: SlidesTreeNode): TreeItem {
+  const slide = node.slide
   const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === slide) === 0
   const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
   const icon = slide.imports ? 'link-external' : layoutIconMap[layoutName] ?? 'window'
@@ -73,48 +71,37 @@ function getTreeItem(element: SlidesTreeElement): TreeItem {
     command: {
       command: 'slidev.goto',
       title: 'Goto',
-      arguments: getGotoCommandArgs(element),
+      arguments: getGotoCommandArgs(node),
     },
     collapsibleState: slide.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None,
   }
 }
 
 export const useSlidesTree = createSingletonComposable(() => {
-  const onChange = new EventEmitter<void>()
-
   const slidesTreeData = computed(() => {
-    function createElement(parent: SlidesTreeElement | null, slide: SourceSlideInfo) {
-      const element: SlidesTreeElement = markRaw({ parent, slide })
-      element.children = slide.imports?.map(s => createElement(element, s))
-      return element
+    function createNode(parent: SlidesTreeNode | null, slide: SourceSlideInfo): TreeViewNode & SlidesTreeNode {
+      const node: SlidesTreeNode = { parent, slide }
+      return {
+        ...node,
+        children: slide.imports?.map(s => createNode(node, s)),
+        treeItem: getTreeItem(node),
+      }
     }
-    return activeSlidevData.value?.entry.slides.map(s => createElement(null, s))
+    return activeSlidevData.value?.entry.slides.map(s => createNode(null, s)) ?? []
   })
 
-  const treeView = window.createTreeView('slidev-slides-tree', {
-    treeDataProvider: {
-      onDidChangeTreeData: onChange.event,
-      getTreeItem,
-      getChildren(element) {
-        return element
-          ? element.children
-          : slidesTreeData.value
-      },
-      getParent(element) {
-        return element.parent
-      },
-    },
+  const treeView = useTreeView('slidev-slides-tree', slidesTreeData, {
     canSelectMany: true,
     dragAndDropController: {
       dragMimeTypes: [slideMineType],
       dropMimeTypes: [slideMineType],
-      handleDrag(elements, dataTransfer) {
+      handleDrag(source, dataTransfer) {
         const data = activeSlidevData.value
         if (!data) {
           window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
           return
         }
-        const sourcesInEntry = elements.map(element => element.slide).filter(s => s.filepath === data.entry.filepath)
+        const sourcesInEntry = source.map(node => node.slide).filter(s => s.filepath === data.entry.filepath)
         dataTransfer.set(slideMineType, new DataTransferItem(sourcesInEntry))
       },
       async handleDrop(target, dataTransfer) {
@@ -137,10 +124,10 @@ export const useSlidesTree = createSingletonComposable(() => {
       },
     },
     showCollapseAll: true,
+    title: () => activeSlidevData.value
+      ? `Slides (${getSlidesTitle(activeSlidevData.value)})`
+      : 'Slides',
   })
-  onScopeDispose(() => treeView.dispose())
-
-  watch(activeSlidevData, () => onChange.fire())
 
   const visible = useViewVisibility(treeView)
   const { previewNavState } = usePreviewWebview()
@@ -154,29 +141,22 @@ export const useSlidesTree = createSingletonComposable(() => {
         return
       const path = (slide.importChain ?? []).concat(slide.source)
       const source = path.shift()
-      let element = tree?.find(e => e.slide === source)
+      let node = tree?.find(e => e.slide === source)
       while (true) {
         const source = path.shift()
         if (!source) {
-          if (element) {
-            treeView.reveal(element, { select: true })
-            commands.executeCommand('slidev.goto', ...getGotoCommandArgs(element))
+          if (node) {
+            treeView.reveal(node, { select: true })
+            commands.executeCommand('slidev.goto', ...getGotoCommandArgs(node))
           }
           return
         }
-        element = element?.children?.find(e => e.slide === source)
-        if (!element)
+        node = node?.children?.find(e => e.slide === source)
+        if (!node)
           return
       }
     },
   )
-
-  watchEffect(() => {
-    if (activeSlidevData.value)
-      treeView.title = `Slides (${getSlidesTitle(activeSlidevData.value)})`
-    else
-      treeView.title = 'Slides'
-  })
 
   return treeView
 })

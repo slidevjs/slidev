@@ -47,5 +47,15 @@ Foo \`{{ code }}\`
 </style>
 
 
+<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+
+\`\`\`ts
+function _foo() {
+  // ...
+}
+\`\`\`
+
+</CodeBlockWrapper>
+
 </template>"
 `;

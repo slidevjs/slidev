@@ -27,22 +27,31 @@ export function createLayoutWrapperPlugin(
         layoutName = 'default'
       }
 
-      const imports = [
-        `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-        templateImportContextUtils,
-        templateInitContext,
-        templateInjectionMarker,
-      ]
+      const setupTag = code.match(/^<script setup.*>/m)
+      if (!setupTag)
+        throw new Error(`[Slidev] Internal error: <script setup> block not found in slide ${index + 1}.`)
 
-      code = code.replace(/(<script setup.*>)/g, `$1\n${imports.join('\n')}\n`)
-      const injectA = code.indexOf('<template>') + '<template>'.length
-      const injectB = code.lastIndexOf('</template>')
-      let body = code.slice(injectA, injectB).trim()
+      const templatePart = code.slice(0, setupTag.index!)
+      const scriptPart = code.slice(setupTag.index!)
+
+      const bodyStart = templatePart.indexOf('<template>') + 10
+      const bodyEnd = templatePart.lastIndexOf('</template>')
+      let body = code.slice(bodyStart, bodyEnd).trim()
       if (body.startsWith('<div>') && body.endsWith('</div>'))
         body = body.slice(5, -6)
-      code = `${code.slice(0, injectA)}\n<InjectedLayout v-bind="_frontmatterToProps($frontmatter,${index})">\n${body}\n</InjectedLayout>\n${code.slice(injectB)}`
 
-      return code
+      return [
+        templatePart.slice(0, bodyStart),
+      `<InjectedLayout v-bind="_frontmatterToProps($frontmatter,${index})">\n${body}\n</InjectedLayout>`,
+      templatePart.slice(bodyEnd),
+      scriptPart.slice(0, setupTag[0].length),
+      `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
+      templateImportContextUtils,
+      templateInitContext,
+      '$clicksContext.setup()',
+      templateInjectionMarker,
+      scriptPart.slice(setupTag[0].length),
+      ].join('\n')
     },
   }
 }
