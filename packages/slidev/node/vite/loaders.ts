@@ -14,9 +14,7 @@ import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
 import { createDataUtils } from '../options'
-import { regexSlideFacadeId, regexSlideSourceId } from './common'
-
-const regexSlideReqUrl = /^\/__slidev\/slides\/(\d+)\.json$/
+import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
 export function getBodyJson(req: Connect.IncomingMessage) {
   return new Promise<any>((resolve, reject) => {
@@ -71,7 +69,7 @@ export function createSlidesLoader(
   }
 
   function getSourceId(index: number, type: 'md' | 'frontmatter') {
-    return `${data.slides[index].source.filepath}?${type === 'md' ? '' : 'vue&'}slidev=${index + 1}.${type}`
+    return `${data.slides[index].source.filepath}__slidev_${index + 1}.${type}`
   }
 
   function updateServerWatcher() {
@@ -96,7 +94,7 @@ export function createSlidesLoader(
       updateServerWatcher()
 
       server.middlewares.use(async (req, res, next) => {
-        const match = req.url?.match(regexSlideReqUrl)
+        const match = req.url?.match(regexSlideReqPath)
         if (!match)
           return next()
 
@@ -253,7 +251,7 @@ export function createSlidesLoader(
     resolveId: {
       order: 'pre',
       handler(id) {
-        if (id.startsWith('/@slidev/') || id.includes('&slidev=') || id.includes('?slidev='))
+        if (id.startsWith('/@slidev/') || id.includes('__slidev_'))
           return id
         return null
       },
