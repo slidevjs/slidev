@@ -40,7 +40,7 @@
     "unplugin-vue-markdown": "^0.26.2",
     "vite-plugin-remote-assets": "^0.5.0",
     "vite-plugin-vue-server-ref": "^0.4.2",
-    "vue": "^3.4.31",
+    "vue": "^3.4.32",
     "vue-router": "^4.4.0"
   }
 }
