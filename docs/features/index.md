@@ -16,11 +16,15 @@ import { data as features } from './index.data'
 const query = useUrlSearchParams('hash-params', { removeFalsyValues: true })
 const search = toRef(query, 'search') as Ref<string | null>
 const tags = toRef(query, 'tags') as Ref<string | null>
-const tagsArr = computed(() => tags.value?.toLowerCase().split(',') ?? [])
+const tagsArr = computed({
+  get: () => tags.value?.toLowerCase().split(',').map(t => t.trim()).filter(Boolean) ?? [],
+  set: (val: string[]) => query.tags = val.join(','),
+})
 
 const filteredFeatures = computed(() => {
   const s = search.value?.toLowerCase().trim()
   const t = tagsArr.value
+  console.log(s, t)
   return Object.values(features).filter(feature => {
     return (!s || feature.title.toLowerCase().includes(s) || feature.description.toLowerCase().includes(s))
       && (!t?.length || t.every(tag => feature.tags?.includes(tag)))
@@ -30,6 +34,10 @@ const filteredFeatures = computed(() => {
 function resetFilters() {
   query.search = null
   query.tags = null
+}
+
+function removeTag(tag: string) {
+  tagsArr.value = tagsArr.value.filter(t => t !== tag)
 }
 </script>
 
@@ -44,7 +52,7 @@ You can also read <LinkInline link="guide/index" /> to learn the features by top
   <input v-model="search" type="search" placeholder="Search features..." class="b-b-.5 b-solid b-gray-200/40 focus:b-gray-200/80" />
   <div ml-12 flex items-center gap-1 v-if="tagsArr.length">
     <carbon:tag text-sm mr-1 op-80 />
-    <FeatureTag v-for="tag in tagsArr" :key="tag" :tag removable />
+    <FeatureTag v-for="tag in tagsArr" :key="tag" :tag removable @remove="removeTag(tag)"/>
   </div>
 </div>
 
