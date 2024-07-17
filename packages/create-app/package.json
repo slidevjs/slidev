@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "execa": "^8.0.1",
-    "kolorist": "^1.8.0",
+    "kolorist": "catalog:",
     "minimist": "^1.2.8",
-    "prompts": "^2.4.2"
+    "prompts": "catalog:"
   }
 }
