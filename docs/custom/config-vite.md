@@ -17,7 +17,7 @@ Slidev internally adds the following plugins to Vite:
 - [vite-plugin-remote-assets](https://github.com/antfu/vite-plugin-remote-assets)
 - [unocss/vite](https://github.com/unocss/unocss/tree/main/packages/vite)
 
-To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some default configurations for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
+To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some [default configurations](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/vite/index.ts) for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
 
 ```ts twoslash
 import { defineConfig } from 'vite'
@@ -39,7 +39,7 @@ export default defineConfig({
 })
 ```
 
-See the [type declarations](https://github.com/KermanX/slidev/blob/main/packages/types/src/vite.ts#L11) for more options.
+See the [type declarations](https://github.com/slidevjs/slidev/blob/main/packages/types/src/vite.ts#L11) for more options.
 
 ::: warning
 It is not allowed to re-add plugins that has been used internally be Slidev. For example, instead of
