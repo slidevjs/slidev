@@ -1,104 +1,58 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "fileTypes": [],
-  "injectionSelector": "L:fenced_code.block.language.attributes.markdown -markup.frontmatter.slidev",
+  "injectionSelector": "L:fenced_code.block.language.attributes.markdown -meta.code_block_attrs.slidev",
   "patterns": [
     {
-      "match": ".+",
+      "match": "twoslash",
       "name": "keyword.twoslash.slidev"
     },
     {
-      "include": "#codeblock-attributes"
-    }
-  ],
-  "repository": {
-    "fenced_code_block_ts": {
-      "begin": "(^|\\G)(\\s*)(`{3,}|~{3,})\\s*(?i:(typescript|ts)((\\s+|:|,|\\{|\\?)[^`]*)?$)",
-      "beginCaptures": {
-        "3": {
-          "name": "punctuation.definition.markdown"
+      "match": "\\s*(\\{)([^}]*)(\\})\\s*(.*)$",
+      "name": "meta.code_block_attrs.slidev",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
         },
-        "4": {
-          "name": "fenced_code.block.language.markdown"
-        },
-        "5": {
-          "name": "fenced_code.block.language.attributes.markdown",
+        "2": {
+          "name": "meta.range_or_monaco.slidev",
           "patterns": [
             {
-              "include": "#codeblock-attributes"
+              "include": "source.slidev#monaco-type"
+            },
+            {
+              "include": "source.slidev#range-with-steps"
+            }
+          ]
+        },
+        "3": {
+          "name": "punctuation.definition.range_or_monaco.slidev"
+        },
+        "4": {
+          "patterns": [
+            {
+              "match": "twoslash",
+              "name": "keyword.twoslash.slidev"
+            },
+            {
+              "begin": "(?=\\{)",
+              "end": "(?<=\\})(\\s*twoslash)?$",
+              "endCaptures": {
+                "1": {
+                  "name": "keyword.twoslash.slidev"
+                }
+              },
+              "contentName": "meta.embedded.block.code_block_options.ts",
+              "patterns": [
+                {
+                  "include": "source.ts#object-literal"
+                }
+              ]
             }
           ]
         }
-      },
-      "end": "(^|\\G)(\\2|\\s{0,3})(\\3)\\s*$",
-      "endCaptures": {
-        "3": {
-          "name": "punctuation.definition.markdown"
-        }
-      },
-      "name": "markup.fenced_code.block.markdown",
-      "patterns": [
-        {
-          "begin": "(^|\\G)(\\s*)(.*)",
-          "contentName": "meta.embedded.block.typescript",
-          "patterns": [
-            {
-              "include": "source.ts"
-            }
-          ],
-          "while": "(^|\\G)(?!\\s*([`~]{3,})\\s*$)"
-        }
-      ]
-    },
-    "codeblock-attributes": {
-      "patterns": [
-        {
-          "match": "\\s*(\\{)([^}]*)(\\})\\s*(.*)$",
-          "captures": {
-            "1": {
-              "name": "punctuation.definition.range_or_monaco.slidev"
-            },
-            "2": {
-              "name": "meta.range_or_monaco.slidev",
-              "patterns": [
-                {
-                  "include": "source.slidev#monaco-type"
-                },
-                {
-                  "include": "source.slidev#range-with-steps"
-                }
-              ]
-            },
-            "3": {
-              "name": "punctuation.definition.range_or_monaco.slidev"
-            },
-            "4": {
-              "patterns": [
-                {
-                  "match": "twoslash",
-                  "name": "keyword.twoslash.slidev"
-                },
-                {
-                  "begin": "(?=\\{)",
-                  "end": "(?<=\\})(\\s*twoslash)?$",
-                  "endCaptures": {
-                    "1": {
-                      "name": "keyword.twoslash.slidev"
-                    }
-                  },
-                  "contentName": "meta.embedded.block.code_block_options.slidev",
-                  "patterns": [
-                    {
-                      "include": "source.ts#object-literal"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      ]
+      }
     }
-  },
+  ],
   "scopeName": "inject-to-markdown.codeblock.slidev"
 }

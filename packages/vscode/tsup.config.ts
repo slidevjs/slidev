@@ -1,7 +1,8 @@
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { defineConfig } from 'tsup'
 import { resolvePath } from 'mlly'
+import { generateCodeblockPatch } from './syntaxes/codeblock-patch'
 
 export default defineConfig({
   entry: {
@@ -40,5 +41,10 @@ export default defineConfig({
 
     for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
       copyFileSync(join(assetsDir, file), join(resDir, file))
+
+    writeFileSync(
+      join(__dirname, 'syntaxes/codeblock-patch.json'),
+      JSON.stringify(generateCodeblockPatch(), null, 2),
+    )
   },
 })

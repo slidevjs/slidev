@@ -49,11 +49,17 @@ text: 1
 const a = 1
 ```
 
-```ts {1,2|3}{foo:'bar'} twoslash
+```ts twoslash
 const a = 1
 ```
 
-```ts {monaco-run}{showOutputAt: '+1'}
+```vue {monaco-run}{showOutputAt: '+1'}
+<template>
+  <div />
+</template>
+```
+
+```ts {monaco-run}{showOutputAt: '+1'} twoslash
 const a = 1
 ```
 
