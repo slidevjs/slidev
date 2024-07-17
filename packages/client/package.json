@@ -57,7 +57,7 @@
     "shiki-magic-move": "^0.4.2",
     "typescript": "^5.5.3",
     "unocss": "^0.61.3",
-    "vue": "^3.4.31",
+    "vue": "^3.4.32",
     "vue-router": "^4.4.0",
     "yaml": "^2.4.5"
   },
