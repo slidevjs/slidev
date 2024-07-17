@@ -15,7 +15,7 @@ Slidev has the following plugins preconfigured:
 - [vite-plugin-remote-assets](https://github.com/antfu/vite-plugin-remote-assets)
 - [unocss/vite](https://github.com/unocss/unocss/tree/main/packages/vite)
 
-Learn more about the [pre-configurations here](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/plugins/preset.ts).
+Learn more about the [pre-configurations here](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/vite/index.ts).
 
 ## Configure Internal Plugins
 
