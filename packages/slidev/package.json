@@ -116,7 +116,7 @@
     "vite-plugin-static-copy": "^1.0.6",
     "vite-plugin-vue-server-ref": "^0.4.2",
     "vitefu": "^0.2.5",
-    "vue": "^3.4.31",
+    "vue": "^3.4.32",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
