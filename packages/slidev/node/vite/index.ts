@@ -81,7 +81,7 @@ export async function ViteSlidevPlugin(
 
     Icons({
       defaultClass: 'slidev-icon',
-      collectionsNodeResolvePath: options.userRoot,
+      collectionsNodeResolvePath: options.cliRoot,
       ...iconsOptions,
     }),
 
