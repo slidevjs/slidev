@@ -87,7 +87,6 @@ export function createSlidesLoader(
 
   return {
     name: 'slidev:loader',
-    enforce: 'pre',
 
     configureServer(_server) {
       server = _server
