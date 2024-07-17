@@ -4,7 +4,7 @@ import { useData, withBase } from 'vitepress'
 
 const props = defineProps<{
   tag: string
-  removable: boolean
+  removable?: boolean
 }>()
 const emit = defineEmits(['remove'])
 
