@@ -8,7 +8,7 @@ export async function createUnocssPlugin(
 ) {
   return UnoCSS({
     configFile: false,
-    ...setupUnocss(options),
-    ...pluginOptions,
+    ...await setupUnocss(options),
+    ...pluginOptions.unocss,
   })
 }

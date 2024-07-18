@@ -6,7 +6,7 @@ import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
 import { updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
-import type { VirtualModuleTempalteContext } from '../virtual/types'
+import type { VirtualModuleTemplateContext } from '../virtual/types'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
@@ -14,6 +14,7 @@ import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
 import { createDataUtils } from '../options'
+import type { ShikiSetupResult } from '../setups/shiki'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
 export function getBodyJson(req: Connect.IncomingMessage) {
@@ -55,6 +56,7 @@ function withRenderedNote(data: SlideInfo): SlideInfo {
 export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
+  shiki: ShikiSetupResult,
 ): Plugin {
   const hmrPages = new Set<number>()
   let server: ViteDevServer | undefined
@@ -63,9 +65,10 @@ export function createSlidesLoader(
 
   const { data, clientRoot, roots, mode, utils } = options
 
-  const templateCtx: VirtualModuleTempalteContext = {
+  const templateCtx: VirtualModuleTemplateContext = {
     md: sharedMd,
     getLayouts: utils.getLayouts,
+    shiki,
   }
 
   function getSourceId(index: number, type: 'md' | 'frontmatter') {

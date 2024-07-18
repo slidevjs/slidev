@@ -622,7 +622,7 @@ function printInfo(
 
   console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  css engine  ') + blue('unocss'))
-  console.log(dim('  entry       ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+  console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
   if (port) {
     const query = remote ? `?password=${remote}` : ''

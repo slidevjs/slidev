@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
-import type { ShikiSetup } from '@slidev/types'
+import type { ResolvedSlidevOptions, ShikiSetup } from '@slidev/types'
 import type { HighlighterGeneric } from 'shiki'
 import { bundledLanguages, createHighlighter } from 'shiki'
 import { loadSetups } from './load'
@@ -10,7 +10,7 @@ export interface ShikiSetupResult {
   options: MarkdownItShikiOptions
 }
 
-export default async function setupShiki(roots: string[]): Promise<ShikiSetupResult> {
+export default async function setupShiki({ roots }: ResolvedSlidevOptions): Promise<ShikiSetupResult> {
   const options = await loadSetups<ShikiSetup>(
     roots,
     'shiki.ts',

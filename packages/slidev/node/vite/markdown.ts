@@ -4,15 +4,13 @@ import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptio
 import MagicString from 'magic-string-stack'
 import { applyMarkdownTransform } from '../syntax/transform'
 import { useMarkdownItPlugins } from '../syntax/markdown-it'
-import setupShiki from '../setups/shiki'
+import type { ShikiSetupResult } from '../setups/shiki'
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
+  shiki: ShikiSetupResult,
 ): Promise<Plugin> {
-  const { entry, roots } = options
-
-  const shiki = await setupShiki(roots)
   const markdownTransformMap = new Map<string, MagicString>()
 
   return Markdown({
@@ -36,7 +34,7 @@ export async function createMarkdownPlugin(
     transforms: {
       ...mdOptions?.transforms,
       before(code, id) {
-        if (id === entry)
+        if (id === options.entry)
           return ''
 
         const ctx: MarkdownTransformContext = {

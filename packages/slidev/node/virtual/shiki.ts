@@ -1,12 +1,12 @@
 import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
-import { loadShikiSetups } from '../setups/shiki'
+import { uniq } from '@antfu/utils'
 import { resolveImportUrl } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
 
 export const templateShiki: VirtualModuleTemplate = {
   id: '/@slidev/shiki',
-  getContent: async ({ clientRoot, roots }) => {
-    const options = await loadShikiSetups(clientRoot, roots)
+  getContent: async (_options, { shiki }) => {
+    const options = shiki.options
     const langs = await resolveLangs(options.langs || ['markdown', 'vue', 'javascript', 'typescript', 'html', 'css'])
     const resolvedThemeOptions = 'themes' in options
       ? {
@@ -27,14 +27,13 @@ export const templateShiki: VirtualModuleTemplate = {
       : { theme: typeof resolvedThemeOptions.theme === 'string' ? resolvedThemeOptions.theme : resolvedThemeOptions.theme.name }
 
     async function normalizeGetter<T>(p: MaybeGetter<T>): Promise<T> {
-      return Promise.resolve(typeof p === 'function' ? (p as any)() : p).then(r => r.default || r)
+      const r = typeof p === 'function' ? (p as any)() : p
+      return r.default || r
     }
 
     async function resolveLangs(langs: (LanguageInput | SpecialLanguage | string)[]): Promise<(LanguageRegistration | string)[]> {
-      return Array.from(new Set((
-        await Promise.all(
-          langs.map(async lang => await normalizeGetter(lang as LanguageInput).then(r => Array.isArray(r) ? r : [r])),
-        )).flat()))
+      const awaited = await Promise.all(langs.map(lang => normalizeGetter(lang)))
+      return uniq(awaited.flat())
     }
 
     async function resolveTheme(theme: string | ThemeInput): Promise<ThemeRegistration | string> {

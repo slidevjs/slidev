@@ -1,5 +1,6 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import type { PluginOption } from 'vite'
+import setupShiki from '../setups/shiki'
 import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createComponentsPlugin } from './components'
 import { createContextInjectionPlugin } from './contextInjection'
@@ -16,15 +17,17 @@ import { createRemoteAssetsPlugin } from './remoteAssets'
 import { createServerRefPlugin } from './serverRef'
 import { createUnocssPlugin } from './unocss'
 import { createVuePlugin } from './vue'
+import { createStaticCopyPlugin } from './staticCopy'
 
-export function ViteSlidevPlugin(
+export async function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions = {},
   serverOptions: SlidevServerOptions = {},
 ): Promise<PluginOption[]> {
+  const shiki = await setupShiki(options)
   return Promise.all([
-    createSlidesLoader(options, serverOptions),
-    createMarkdownPlugin(options, pluginOptions),
+    createSlidesLoader(options, serverOptions, shiki),
+    createMarkdownPlugin(options, pluginOptions, shiki),
     createLayoutWrapperPlugin(options),
     createContextInjectionPlugin(),
     createVuePlugin(options, pluginOptions),
@@ -38,6 +41,7 @@ export function ViteSlidevPlugin(
     createMonacoWriterPlugin(options),
     createVueCompilerFlagsPlugin(options),
     createUnocssPlugin(options, pluginOptions),
+    createStaticCopyPlugin(options, pluginOptions),
     createInspectPlugin(options, pluginOptions),
   ])
 }

@@ -1,4 +1,4 @@
-import type { Awaitable, Nullable } from '@antfu/utils'
+import type { Awaitable } from '@antfu/utils'
 import type * as monaco from 'monaco-editor'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { RouteRecordRaw, Router } from 'vue-router'
