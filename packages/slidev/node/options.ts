@@ -1,7 +1,9 @@
+import path from 'node:path'
 import { uniq } from '@antfu/utils'
 import Debug from 'debug'
 import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import mm from 'micromatch'
+import fg from 'fast-glob'
 import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
@@ -58,16 +60,45 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    utils: createDataUtils(data),
+    utils: createDataUtils(data, rootsInfo.clientRoot, roots),
   }
 
   return resolved
 }
 
-export function createDataUtils(data: SlidevData): ResolvedSlidevUtils {
+export function createDataUtils(data: SlidevData, clientRoot: string, roots: string[]): ResolvedSlidevUtils {
   const monacoTypesIgnorePackagesMatches = (data.config.monacoTypesIgnorePackages || [])
     .map(i => mm.matcher(i))
+
+  let _layouts_cache_time = 0
+  let _layouts_cache: Record<string, string> = {}
+
   return {
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
+    getLayouts: async () => {
+      const now = Date.now()
+      if (now - _layouts_cache_time < 2000)
+        return _layouts_cache
+
+      const layouts: Record<string, string> = {}
+
+      for (const root of [clientRoot, ...roots]) {
+        const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
+          cwd: root,
+          absolute: true,
+          suppressErrors: true,
+        })
+
+        for (const layoutPath of layoutPaths) {
+          const layoutName = path.basename(layoutPath).replace(/\.\w+$/, '')
+          layouts[layoutName] = layoutPath
+        }
+      }
+
+      _layouts_cache_time = now
+      _layouts_cache = layouts
+
+      return layouts
+    },
   }
 }
