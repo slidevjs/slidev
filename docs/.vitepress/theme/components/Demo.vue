@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 
-// @ts-expect-error missing types
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
@@ -19,6 +18,7 @@ import DemoSlide from './DemoSlide.vue'
 
 const page = ref(0)
 const paused = ref(false)
+const completed = ref(false)
 const code = ref('')
 const info = ref<SlidevMarkdown>()
 const block = ref<HTMLPreElement>()
@@ -68,7 +68,10 @@ if (typeof window !== 'undefined') {
   img1.src = COVER_URL
 }
 
-onMounted(() => {
+function play() {
+  code.value = ''
+  block.value!.innerHTML = ''
+  completed.value = false
   // @ts-expect-error wrong types provided by TypeIt
   new TypeIt(block.value!, {
     speed: 50,
@@ -76,6 +79,9 @@ onMounted(() => {
     afterStep: () => {
       // eslint-disable-next-line unicorn/prefer-dom-node-text-content
       code.value = JSON.parse(JSON.stringify(block.value!.innerText.replace('|', '')))
+    },
+    afterComplete: () => {
+      setTimeout(() => completed.value = true, 300)
     },
   })
     .type('<br><span class="token title"># Welcome to Slidev!</span><br><br>', { delay: 400 })
@@ -111,7 +117,9 @@ onMounted(() => {
     .type('- 😎 Read the docs to learn more!', { delay: 800 })
     .exec(() => setTimeout(() => page.value = 0))
     .go()
-})
+}
+
+onMounted(play)
 </script>
 
 <template>
@@ -119,6 +127,10 @@ onMounted(() => {
     <DemoEditor>
       <div class="text-sm opacity-50 text-center">
         ./slides.md
+      </div>
+
+      <div v-if="completed" class="absolute text-xs right-1 top-1 icon-btn opacity-50" title="Replay" @click="play()">
+        <carbon:reset />
       </div>
 
       <div class="language-md !bg-transparent px4 py1">
@@ -144,7 +156,7 @@ onMounted(() => {
         </SlideContainer>
       </div>
       <div
-        class="absolute left-2 bottom-1 flex text-gray-400"
+        class="absolute left-2 bottom-1 flex text-gray-200"
         opacity="0 hover:100"
       >
         <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">

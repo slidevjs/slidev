@@ -31,7 +31,7 @@ You can therefore style your content the way you want. For example:
 
 You can create `uno.config.ts` under the root of your project to extend the builtin configurations
 
-```ts
+```ts twoslash
 import { defineConfig } from 'unocss'
 
 export default defineConfig({
