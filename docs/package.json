@@ -1,6 +1,7 @@
 {
   "name": "docs",
   "type": "module",
+  "version": "0.49.16",
   "private": true,
   "packageManager": "pnpm@9.4.0",
   "scripts": {
