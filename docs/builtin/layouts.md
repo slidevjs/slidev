@@ -1,38 +1,38 @@
 # Layouts
 
-## Built-in Layouts
+This page lists all the built-in layouts provided by Slidev. These layouts can be used via the `layout` option in the frontmatters of your slides.
 
-> As themes may override layouts behaviour, the best way to know exactly the usage, parameters and examples is referring their documentation.
+Note that <LinkInline link="guide/theme-addon" /> may provide additional layouts or override the existing ones. To add your own layouts, see <LinkInline link="guide/write-layout" />.
 
-### `center`
+## `center`
 
 Displays the content in the middle of the screen.
 
-### `cover`
+## `cover`
 
 Used to display the cover page for the presentation, may contain the presentation title, contextualization, etc.
 
-### `default`
+## `default`
 
 The most basic layout, to display any kind of content.
 
-### `end`
+## `end`
 
 The final page for the presentation.
 
-### `fact`
+## `fact`
 
 To show some fact or data with a lot of prominence on the screen.
 
-### `full`
+## `full`
 
 Use all the space of the screen to display the content.
 
-### `image-left`
+## `image-left`
 
 Shows an image on the left side of the screen, the content will be placed on the right side.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -46,11 +46,11 @@ class: my-cool-content-on-the-right
 ---
 ```
 
-### `image-right`
+## `image-right`
 
 Shows an image on the right side of the screen, the content will be placed on the left side.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -64,11 +64,11 @@ class: my-cool-content-on-the-left
 ---
 ```
 
-### `image`
+## `image`
 
 Shows an image as the main content of the page.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -97,11 +97,11 @@ backgroundSize: 20em 70%
 ---
 ```
 
-### `iframe-left`
+## `iframe-left`
 
 Shows a web page on the left side of the screen, the content will be placed on the right side.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -115,11 +115,11 @@ class: my-cool-content-on-the-right
 ---
 ```
 
-### `iframe-right`
+## `iframe-right`
 
 Shows a web page on the right side of the screen, the content will be placed on the left side.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -133,11 +133,11 @@ class: my-cool-content-on-the-left
 ---
 ```
 
-### `iframe`
+## `iframe`
 
 Shows a web page as the main content of the page.
 
-#### Usage
+### Usage
 
 ```yaml
 ---
@@ -148,31 +148,31 @@ url: https://github.com/slidevjs/slidev
 ---
 ```
 
-### `intro`
+## `intro`
 
 To introduce the presentation, usually with the presentation title, a short description, the author, etc.
 
-### `none`
+## `none`
 
 A layout without any existing styling.
 
-### `quote`
+## `quote`
 
 To display a quotation with prominence.
 
-### `section`
+## `section`
 
 Used to mark the beginning of a new presentation section.
 
-### `statement`
+## `statement`
 
 Make an affirmation/statement as the main page content.
 
-### `two-cols`
+## `two-cols`
 
 Separates the page content in two columns.
 
-#### Usage
+### Usage
 
 ```md
 ---
@@ -190,11 +190,11 @@ This shows on the left
 This shows on the right
 ```
 
-### `two-cols-header`
+## `two-cols-header`
 
 Separates the upper and lower lines of the page content, and the second line separates the left and right columns.
 
-#### Usage
+### Usage
 
 ```md
 ---
@@ -215,13 +215,3 @@ This shows on the left
 
 This shows on the right
 ```
-
-## Custom Layouts
-
-Create a directory `layouts/` under your project root, and simply put your custom Vue layout components under it.
-
-Read more in the [Customization](/custom/directory-structure#layouts) section.
-
-## Theme-provided Layouts
-
-Themes can provide layouts or override existing ones. Please read their documentation for what they have provided.

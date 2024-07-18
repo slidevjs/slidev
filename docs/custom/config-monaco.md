@@ -4,7 +4,7 @@
 
 Create `./setup/monaco.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineMonacoSetup } from '@slidev/types'
 
 export default defineMonacoSetup(async (monaco) => {
@@ -13,21 +13,6 @@ export default defineMonacoSetup(async (monaco) => {
 ```
 
 Learn more about [configuring Monaco](https://github.com/Microsoft/monaco-editor).
-
-## Usage
-
-To use Monaco in your slides, simply append `{monaco}` to your code snippets:
-
-````md
-```js {monaco} // [!code ++]
-const count = ref(1)
-const plusOne = computed(() => count.value + 1)
-
-console.log(plusOne.value) // 2
-
-plusOne.value++ // error
-```
-````
 
 ## TypeScript Types
 
@@ -70,7 +55,7 @@ This feature is powered by [`@typescript/ata`](https://github.com/microsoft/Type
 
 ## Configure Themes
 
-Since v0.48.0, Monaco will reuse the Shiki theme you configured in [Shiki's setup file](/custom/highlighters#configure-shiki), powered by [`@shikijs/monaco`](https://shiki.style/packages/monaco). You don't need to worry about it anymore and it will have a consistent style with the rest of your code blocks.
+Since v0.48.0, Monaco will reuse the Shiki theme you configured in [Shiki's setup file](/custom/config-highlighter#configure-shiki), powered by [`@shikijs/monaco`](https://shiki.style/packages/monaco). You don't need to worry about it anymore and it will have a consistent style with the rest of your code blocks.
 
 ## Configure the Editor
 
@@ -86,7 +71,7 @@ console.log('HelloWorld')
 
 Alternatively if you would like these options to be applied to every Monaco instance, you can return them in the `defineMonacoSetup` function
 
-```ts
+```ts twoslash
 // ./setup/monaco.ts
 import { defineMonacoSetup } from '@slidev/types'
 
@@ -105,10 +90,10 @@ Since v0.48.0, the Monaco editor is enabled by default and only be bundled when 
 
 ```yaml
 ---
-monaco: false # can also be `dev` or `build` tp conditionally enable it
+monaco: false # can also be `dev` or `build` to conditionally enable it
 ---
 ```
 
 ## Configure Code Runners
 
-To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference to [Configure Code Runners](/custom/config-code-runners).
+To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference [Configure Code Runners](/custom/config-code-runners).

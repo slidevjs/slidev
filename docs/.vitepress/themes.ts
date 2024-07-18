@@ -1,10 +1,3 @@
-export type Tag =
-  | 'official'
-  | 'dark'
-  | 'light'
-  | 'colorful'
-  | 'minimalism'
-
 export interface ThemeInfo {
   id: string
   name: string
@@ -16,7 +9,7 @@ export interface ThemeInfo {
     link?: string
   }
   link?: string
-  tags?: Tag[]
+  tags?: string[]
 }
 
 export const official: ThemeInfo[] = [
@@ -218,7 +211,7 @@ export const community: ThemeInfo[] = [
     name: 'Unicorn',
     description: 'Based on Dawntraoz website design',
     author: {
-      name: 'Alba Silvente (dawntraoz)',
+      name: 'Alba Silvente',
       link: 'https://github.com/dawntraoz',
     },
     repo: 'https://github.com/dawntraoz/slidev-theme-unicorn',
@@ -259,7 +252,7 @@ export const community: ThemeInfo[] = [
     name: 'Penguin',
     description: 'A Penguin theme for Slidev',
     author: {
-      name: 'Alvaro Saburido (alvarosaburido)',
+      name: 'Alvaro Saburido',
       link: 'https://github.com/alvarosaburido',
     },
     repo: 'https://github.com/alvarosaburido/slidev-theme-penguin',
@@ -390,7 +383,7 @@ export const community: ThemeInfo[] = [
     name: 'Dracula',
     description: 'One the best dark theme meets slidev',
     author: {
-      name: 'JD Solanki (jd-solanki)',
+      name: 'JD Solanki',
       link: 'https://github.com/jd-solanki',
     },
     repo: 'https://github.com/jd-solanki/slidev-theme-dracula',

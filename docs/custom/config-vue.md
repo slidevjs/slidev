@@ -1,4 +1,4 @@
-# Configure Vue
+# Configure Vue App
 
 <Environment type="client" />
 
@@ -6,7 +6,7 @@ Slidev uses [Vue 3](https://v3.vuejs.org/) to render the application on the clie
 
 Create `./setup/main.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineAppSetup } from '@slidev/types'
 
 export default defineAppSetup(({ app, router }) => {
@@ -15,6 +15,6 @@ export default defineAppSetup(({ app, router }) => {
 })
 ```
 
-This could also be used as the main entrance of your Slidev app to do some initializations before the app starts.
+This can also be used as the main entrance of your Slidev app to do some initializations before the app starts.
 
 Learn more: [Vue Application API](https://v3.vuejs.org/api/application-api.html#component).

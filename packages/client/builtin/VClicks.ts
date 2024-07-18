@@ -1,7 +1,7 @@
 /**
  * <v-clicks/> click animations component
  *
- * Learn more: https://sli.dev/guide/animations.html#click-animations
+ * Learn more: https://sli.dev/guide/animations.html#click-animation
  */
 
 import { toArray } from '@antfu/utils'
