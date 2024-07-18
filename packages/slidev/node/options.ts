@@ -10,27 +10,27 @@ import { getRoots, resolveEntry } from './resolver'
 const debug = Debug('slidev:options')
 
 export async function resolveOptions(
-  options: SlidevEntryOptions,
+  entryOptions: SlidevEntryOptions,
   mode: ResolvedSlidevOptions['mode'],
 ): Promise<ResolvedSlidevOptions> {
-  const entry = await resolveEntry(options.entry)
+  const entry = await resolveEntry(entryOptions.entry)
   const rootsInfo = await getRoots(entry)
   const loaded = await parser.load(rootsInfo.userRoot, entry, undefined, mode)
 
   // Load theme data first, because it may affect the config
-  let themeRaw = options.theme || loaded.headmatter.theme as string | null | undefined
+  let themeRaw = entryOptions.theme || loaded.headmatter.theme as string | null | undefined
   themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
   const [theme, themeRoot] = await resolveTheme(themeRaw, entry)
   const themeRoots = themeRoot ? [themeRoot] : []
   const themeMeta = themeRoot ? await getThemeMeta(theme, themeRoot) : undefined
 
-  const config = parser.resolveConfig(loaded.headmatter, themeMeta, options.entry)
+  const config = parser.resolveConfig(loaded.headmatter, themeMeta, entryOptions.entry)
   const addonRoots = await resolveAddons(config.addons)
   const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
 
   debug({
     ...rootsInfo,
-    ...options,
+    ...entryOptions,
     config,
     mode,
     entry,
@@ -49,7 +49,7 @@ export async function resolveOptions(
 
   const resolved: ResolvedSlidevOptions = {
     ...rootsInfo,
-    ...options,
+    ...entryOptions,
     data,
     mode,
     entry,

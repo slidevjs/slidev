@@ -3,11 +3,9 @@ import type { Connect, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import fg from 'fast-glob'
 import { bold, gray, red, yellow } from 'kolorist'
-
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
-
 import type { LoadResult } from 'rollup'
 import { updateFrontmatterPatch } from '../utils'
 import { toAtFS } from '../resolver'

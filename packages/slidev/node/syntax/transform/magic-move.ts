@@ -1,13 +1,11 @@
-import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
-import type { Highlighter } from 'shiki'
 import { codeToKeyedTokens } from 'shiki-magic-move/core'
 import lz from 'lz-string'
 import type { MarkdownTransformContext } from '@slidev/types'
+import type { ShikiSetupResult } from '../../setups/shiki'
 import { normalizeRangeStr } from './utils'
 import { reCodeBlock } from './code-wrapper'
 
-// eslint-disable-next-line regexp/no-useless-quantifier, regexp/no-super-linear-backtracking
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *(\{[^}]*\})?([^\n]*))?\n([\s\S]+?)^````$/gm
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move *(\{[^}]*\})?([^ \n]*)\n([\s\S]+?)^````$/gm
 
 function parseLineNumbersOption(options: string) {
   return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
@@ -17,17 +15,13 @@ function parseLineNumbersOption(options: string) {
  * Transform magic-move code blocks
  */
 export function transformMagicMove(
-  shiki: Highlighter | undefined,
-  shikiOptions: MarkdownItShikiOptions | undefined,
+  shiki: ShikiSetupResult,
   configLineNumbers: boolean,
 ) {
   return (ctx: MarkdownTransformContext) => {
     ctx.s.replace(
       reMagicMoveBlock,
       (full, options = '{}', _attrs = '', body: string) => {
-        if (!shiki || !shikiOptions)
-          throw new Error('Shiki is required for Magic Move. You may need to set `highlighter: shiki` in your Slidev config.')
-
         const matches = Array.from(body.matchAll(reCodeBlock))
 
         if (!matches.length)
@@ -38,8 +32,8 @@ export function transformMagicMove(
         const ranges = matches.map(i => normalizeRangeStr(i[2]))
         const steps = matches.map((i) => {
           const lineNumbers = parseLineNumbersOption(i[3]) ?? defaultLineNumbers
-          return codeToKeyedTokens(shiki, i[5].trimEnd(), {
-            ...shikiOptions,
+          return codeToKeyedTokens(shiki.highlighter, i[5].trimEnd(), {
+            ...shiki.options,
             lang: i[1] as any,
           }, lineNumbers)
         })

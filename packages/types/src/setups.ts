@@ -1,4 +1,4 @@
-import type { Awaitable } from '@antfu/utils'
+import type { Awaitable, Nullable } from '@antfu/utils'
 import type * as monaco from 'monaco-editor'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { RouteRecordRaw, Router } from 'vue-router'
@@ -6,6 +6,7 @@ import type { KatexOptions } from 'katex'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { MermaidConfig } from 'mermaid'
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { SlidevPreparserExtension } from './types'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
@@ -69,7 +70,20 @@ export type PreparserSetup = (context: {
   filepath: string
   headmatter: Record<string, unknown>
   mode?: string
-}) => SlidevPreparserExtension[]
+}) => Awaitable<SlidevPreparserExtension[]>
+
+/**
+ *
+ */
+export interface NodeSideSetupResult {
+  katex: Promise<KatexOptions>
+  shiki: Promise<MarkdownItShikiOptions>
+  preparser: Promise<SlidevPreparserExtension[]>
+  /**
+   * Reload all setups
+   */
+  reload: () => void
+}
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>

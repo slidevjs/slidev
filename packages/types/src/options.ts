@@ -30,11 +30,9 @@ export interface SlidevEntryOptions {
   inspect?: boolean
 }
 
-export interface ResolvedSlidevOptions extends RootsInfo {
+export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
   data: SlidevData
-  entry: string
   themeRaw: string
-  theme: string
   themeRoots: string[]
   addonRoots: string[]
   /**
@@ -42,8 +40,6 @@ export interface ResolvedSlidevOptions extends RootsInfo {
    */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
-  remote?: string
-  inspect?: boolean
   utils: ResolvedSlidevUtils
 }
 
