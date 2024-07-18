@@ -23,10 +23,10 @@ export const templateSlides: VirtualModuleTemplate = {
       .map((_, idx) => {
         const no = idx + 1
         statements.push(
-          `import { meta as f${no} } from '${VIRTUAL_SLIDE_PREFIX}${no}.frontmatter'`,
+          `import { meta as f${no} } from '${VIRTUAL_SLIDE_PREFIX}${no}/frontmatter'`,
           // For some unknown reason, import error won't be caught by the error component. Catch it here.
           `const load${no} = async () => {`,
-          `  try { return componentsCache[${idx}] ??= await import('${VIRTUAL_SLIDE_PREFIX}${no}.md') }`,
+          `  try { return componentsCache[${idx}] ??= await import('${VIRTUAL_SLIDE_PREFIX}${no}/md') }`,
           `  catch (e) { return SlideError }`,
           `}`,
         )

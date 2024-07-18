@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
-import { version } from '../../package.json'
+import { version } from '../package.json'
 import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import Customizations from './customizations'
 
