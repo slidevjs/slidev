@@ -26,7 +26,7 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     async markdownItSetup(md) {
-      await useMarkdownItPlugins(md, options, shiki, markdownTransformMap)
+      await useMarkdownItPlugins(md, options, markdownTransformMap)
       await mdOptions?.markdownItSetup?.(md)
     },
     transforms: {
@@ -41,7 +41,7 @@ export async function createMarkdownPlugin(
           options,
         }
 
-        applyMarkdownTransform(ctx, shiki)
+        applyMarkdownTransform(ctx)
         markdownTransformMap.set(id, ctx.s)
 
         const s = ctx.s.toString()

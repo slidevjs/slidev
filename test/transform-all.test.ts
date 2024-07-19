@@ -28,7 +28,7 @@ Foo \`{{ code }}\`
 </style>
 
 <<< ./fixtures/snippets/snippet.ts#snippet
-`, null)
+`)
 
   applyMarkdownTransform(ctx)
 

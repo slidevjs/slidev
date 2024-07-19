@@ -1,6 +1,5 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import type { PluginOption } from 'vite'
-import setupShiki from '../setups/shiki'
 import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createComponentsPlugin } from './components'
 import { createContextInjectionPlugin } from './contextInjection'

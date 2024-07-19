@@ -4,7 +4,7 @@ import type { VirtualModuleTemplate } from './types'
 
 export const templateMonacoRunDeps: VirtualModuleTemplate = {
   id: '/@slidev/monaco-run-deps',
-  getContent: async ({ userRoot, data }, _ctx, pluginCtx) => {
+  getContent: async ({ userRoot, data }, pluginCtx) => {
     if (!data.features.monaco)
       return ''
     const deps = uniq(data.features.monaco.deps.concat(data.config.monacoTypesAdditionalPackages))
