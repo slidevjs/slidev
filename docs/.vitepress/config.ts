@@ -146,37 +146,5 @@ export default defineConfig({
       label: '简体中文',
       link: 'https://cn.sli.dev/',
     },
-    fr: {
-      label: 'Français',
-      link: 'https://fr.sli.dev/',
-    },
-    es: {
-      label: 'Español',
-      link: 'https://es.sli.dev/',
-    },
-    ru: {
-      label: 'Русский',
-      link: 'https://ru.sli.dev/',
-    },
-    vn: {
-      label: 'Việt Nam',
-      link: 'https://vn.sli.dev/',
-    },
-    de: {
-      label: 'Deutsch',
-      link: 'https://de.sli.dev/',
-    },
-    br: {
-      label: 'Português (BR)',
-      link: 'https://br.sli.dev/',
-    },
-    el: {
-      label: 'Ελληνικά',
-      link: 'https://el.sli.dev/',
-    },
-    ja: {
-      label: '日本語',
-      link: 'https://ja.sli.dev/',
-    },
   },
 })
