@@ -3,11 +3,10 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { ShikiTransformer } from 'shiki'
 import { fromHighlighter } from '@shikijs/markdown-it/core'
 import { escapeVueInCode } from '../transform/utils'
-import type { ShikiSetupResult } from '../../setups/shiki'
 
-export default async function MarkdownItShiki({ data: { config }, mode }: ResolvedSlidevOptions, shiki: ShikiSetupResult) {
+export default async function MarkdownItShiki({ data: { config }, mode, utils }: ResolvedSlidevOptions) {
   const transformers = [
-    ...shiki.options.transformers || [],
+    ...utils.shikiOptions.transformers || [],
     (config.twoslash === true || config.twoslash === mode)
     && (await import('@shikijs/vitepress-twoslash')).transformerTwoslash({
       explicitTrigger: true,
@@ -28,8 +27,8 @@ export default async function MarkdownItShiki({ data: { config }, mode }: Resolv
     } satisfies ShikiTransformer,
   ].filter(isTruthy) as ShikiTransformer[]
 
-  return fromHighlighter(shiki.highlighter, {
-    ...shiki.options,
+  return fromHighlighter(utils.shiki, {
+    ...utils.shikiOptions,
     transformers,
   })
 }

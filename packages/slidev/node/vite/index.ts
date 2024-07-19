@@ -24,10 +24,9 @@ export async function ViteSlidevPlugin(
   pluginOptions: SlidevPluginOptions = {},
   serverOptions: SlidevServerOptions = {},
 ): Promise<PluginOption[]> {
-  const shiki = await setupShiki(options)
   return Promise.all([
-    createSlidesLoader(options, serverOptions, shiki),
-    createMarkdownPlugin(options, pluginOptions, shiki),
+    createSlidesLoader(options, serverOptions),
+    createMarkdownPlugin(options, pluginOptions),
     createLayoutWrapperPlugin(options),
     createContextInjectionPlugin(),
     createVuePlugin(options, pluginOptions),

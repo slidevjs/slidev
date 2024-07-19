@@ -1,16 +1,10 @@
 import fs from 'node:fs/promises'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { ResolvedSlidevOptions, ShikiSetup } from '@slidev/types'
-import type { HighlighterGeneric } from 'shiki'
 import { bundledLanguages, createHighlighter } from 'shiki'
 import { loadSetups } from './load'
 
-export interface ShikiSetupResult {
-  highlighter: HighlighterGeneric<any, any>
-  options: MarkdownItShikiOptions
-}
-
-export default async function setupShiki({ roots }: ResolvedSlidevOptions): Promise<ShikiSetupResult> {
+export default async function setupShiki(roots: string[]) {
   const options = await loadSetups<ShikiSetup>(
     roots,
     'shiki.ts',
@@ -44,14 +38,14 @@ export default async function setupShiki({ roots }: ResolvedSlidevOptions): Prom
   if (mergedOptions.themes)
     mergedOptions.defaultColor = false
 
-  const highlighter = await createHighlighter({
+  const shiki = await createHighlighter({
     ...mergedOptions,
     langs: mergedOptions.langs ?? Object.keys(bundledLanguages),
     themes: 'themes' in mergedOptions ? Object.values(mergedOptions.themes) : [mergedOptions.theme],
   })
 
   return {
-    highlighter,
-    options: mergedOptions as MarkdownItShikiOptions,
+    shiki,
+    shikiOptions: mergedOptions as MarkdownItShikiOptions,
   }
 }

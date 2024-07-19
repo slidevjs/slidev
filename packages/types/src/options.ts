@@ -1,3 +1,5 @@
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it/index.mjs'
+import type { HighlighterGeneric } from 'shiki/types.mjs'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -44,6 +46,8 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 }
 
 export interface ResolvedSlidevUtils {
+  shiki: HighlighterGeneric<any, any>
+  shikiOptions: MarkdownItShikiOptions
   isMonacoTypesIgnored: (pkg: string) => boolean
   getLayouts: () => Record<string, string>
 }

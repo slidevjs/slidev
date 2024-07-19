@@ -8,6 +8,7 @@ import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
 import { getRoots, resolveEntry } from './resolver'
+import setupShiki from './setups/shiki'
 
 const debug = Debug('slidev:options')
 
@@ -60,13 +61,13 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    utils: createDataUtils(data, rootsInfo.clientRoot, roots),
+    utils: await createDataUtils(data, rootsInfo.clientRoot, roots),
   }
 
   return resolved
 }
 
-export function createDataUtils(data: SlidevData, clientRoot: string, roots: string[]): ResolvedSlidevUtils {
+export async function createDataUtils(data: SlidevData, clientRoot: string, roots: string[]): Promise<ResolvedSlidevUtils> {
   const monacoTypesIgnorePackagesMatches = (data.config.monacoTypesIgnorePackages || [])
     .map(i => mm.matcher(i))
 
@@ -74,6 +75,7 @@ export function createDataUtils(data: SlidevData, clientRoot: string, roots: str
   let _layouts_cache: Record<string, string> = {}
 
   return {
+    ...await setupShiki(roots),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()
