@@ -4,8 +4,8 @@ export const VIRTUAL_SLIDE_PREFIX = '/@slidev/slides/'
 
 export const templateSlides: VirtualModuleTemplate = {
   id: '/@slidev/slides',
-  async getContent({ data }, { getLayouts }) {
-    const layouts = await getLayouts()
+  getContent({ data, utils }) {
+    const layouts = utils.getLayouts()
     const statements = [
       `import { defineAsyncComponent, shallowRef } from 'vue'`,
       `import SlideError from '${layouts.error}'`,

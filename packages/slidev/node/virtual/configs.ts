@@ -4,7 +4,7 @@ import type { VirtualModuleTemplate } from './types'
 
 export const templateConfigs: VirtualModuleTemplate = {
   id: '/@slidev/configs',
-  getContent: async ({ data, remote }, { md }) => {
+  getContent({ data, remote }, { md }) {
     const config = {
       ...data.config,
       remote,

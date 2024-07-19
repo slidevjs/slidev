@@ -47,7 +47,7 @@ export async function createMarkdownPlugin(
         markdownTransformMap.set(id, ctx.s)
 
         const s = ctx.s.toString()
-        return mdOptions?.transforms?.before?.(ctx.s.toString(), id) ?? s
+        return mdOptions?.transforms?.before?.(s, id) ?? s
       },
     },
   }) as Plugin

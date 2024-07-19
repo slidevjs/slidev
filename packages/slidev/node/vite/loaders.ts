@@ -67,7 +67,6 @@ export function createSlidesLoader(
 
   const templateCtx: VirtualModuleTemplateContext = {
     md: sharedMd,
-    getLayouts: utils.getLayouts,
     shiki,
   }
 

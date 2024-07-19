@@ -20,8 +20,7 @@ export async function createServerRefPlugin(
       ...pluginOptions.serverRef?.state,
     },
     onChanged(key, data, patch, timestamp) {
-      if (pluginOptions.serverRef?.onChanged)
-        pluginOptions.serverRef.onChanged(key, data, patch, timestamp)
+      pluginOptions.serverRef?.onChanged?.(key, data, patch, timestamp)
       if (!options.data.config.drawings.persist)
         return
       if (key === 'drawings')

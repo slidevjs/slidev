@@ -42,15 +42,15 @@ export function createLayoutWrapperPlugin(
 
       return [
         templatePart.slice(0, bodyStart),
-      `<InjectedLayout v-bind="_frontmatterToProps($frontmatter,${index})">\n${body}\n</InjectedLayout>`,
-      templatePart.slice(bodyEnd),
-      scriptPart.slice(0, setupTag[0].length),
-      `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
-      templateImportContextUtils,
-      templateInitContext,
-      '$clicksContext.setup()',
-      templateInjectionMarker,
-      scriptPart.slice(setupTag[0].length),
+        `<InjectedLayout v-bind="_frontmatterToProps($frontmatter,${index})">\n${body}\n</InjectedLayout>`,
+        templatePart.slice(bodyEnd),
+        scriptPart.slice(0, setupTag[0].length),
+        `import InjectedLayout from "${toAtFS(layouts[layoutName])}"`,
+        templateImportContextUtils,
+        templateInitContext,
+        '$clicksContext.setup()',
+        templateInjectionMarker,
+        scriptPart.slice(setupTag[0].length),
       ].join('\n')
     },
   }

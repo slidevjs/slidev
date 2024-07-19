@@ -3,7 +3,7 @@ import { uniq } from '@antfu/utils'
 import Debug from 'debug'
 import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import mm from 'micromatch'
-import fg from 'fast-glob'
+import { globSync } from 'fast-glob'
 import { parser } from './parser'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
@@ -75,7 +75,7 @@ export function createDataUtils(data: SlidevData, clientRoot: string, roots: str
 
   return {
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
-    getLayouts: async () => {
+    getLayouts: () => {
       const now = Date.now()
       if (now - _layouts_cache_time < 2000)
         return _layouts_cache
@@ -83,7 +83,7 @@ export function createDataUtils(data: SlidevData, clientRoot: string, roots: str
       const layouts: Record<string, string> = {}
 
       for (const root of [clientRoot, ...roots]) {
-        const layoutPaths = await fg('layouts/**/*.{vue,ts}', {
+        const layoutPaths = globSync('layouts/**/*.{vue,ts}', {
           cwd: root,
           absolute: true,
           suppressErrors: true,

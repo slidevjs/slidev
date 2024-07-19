@@ -12,5 +12,4 @@ export interface VirtualModuleTemplate {
 export interface VirtualModuleTemplateContext {
   md: MarkdownIt
   shiki: ShikiSetupResult
-  getLayouts: () => Promise<Record<string, string>>
 }
