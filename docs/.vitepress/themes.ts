@@ -483,6 +483,30 @@ export const community: ThemeInfo[] = [
       'cool',
     ],
   },
+  {
+    id: 'slidev-theme-rich',
+    name: 'Rich',
+    description: 'A Slidev theme that offers rich UI components and stunning visual effects.',
+    author: {
+      name: 'Aaron Yang',
+      link: 'https://github.com/zillionare',
+    },
+    repo: 'https://github.com/zillionare/slidev-theme-rich',
+    previews: [
+      'https://images.jieyu.ai/images/2024/07/cover.gif',
+      'https://images.jieyu.ai/images/2024/07/mockup-device.gif',
+      'https://images.jieyu.ai/images/2024/07/markmap.gif',
+      'https://images.jieyu.ai/images/2024/07/soartext.gif',
+      'https://images.jieyu.ai/images/2024/07/timeline.gif'
+    ],
+    tags: [
+      'light',
+      'markmap',
+      'timeline',
+      'animation',
+      'mockup'
+    ],
+  },
   // Add yours here!
   {
     id: '',
