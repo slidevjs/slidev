@@ -6,7 +6,7 @@ Documentation for [Slidev](https://github.com/slidevjs/slidev)
 
 > [!WARNING]
 >
-> Translations with strikethroughs are no longer maintained. The contents are outdated. It's not encouraged to refer to them.
+> Translations with strikethroughs are no longer maintained. The content is outdated and not encouraged to refer.
 
 |                     | Repo                                           |                             Site | Maintainers                                                           |
 | ------------------- | ---------------------------------------------- | -------------------------------: | --------------------------------------------------------------------- |
