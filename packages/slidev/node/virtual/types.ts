@@ -4,5 +4,5 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 
 export interface VirtualModuleTemplate {
   id: string
-  getContent: (options: ResolvedSlidevOptions, pluginCtx: PluginContext) => Awaitable<string>
+  getContent: (this: PluginContext, options: ResolvedSlidevOptions) => Awaitable<string>
 }

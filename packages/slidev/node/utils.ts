@@ -4,6 +4,7 @@ import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
 import YAML from 'yaml'
 import type { JITI } from 'jiti'
 import createJiti from 'jiti'
+import type { Connect } from 'vite'
 
 let jiti: JITI | undefined
 export function loadModule(absolutePath: string) {
@@ -68,4 +69,20 @@ export function updateFrontmatterPatch(slide: SlideInfo, frontmatter: Record<str
       }
     }
   }
+}
+
+export function getBodyJson(req: Connect.IncomingMessage) {
+  return new Promise<any>((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => body += chunk)
+    req.on('error', reject)
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body) || {})
+      }
+      catch (e) {
+        reject(e)
+      }
+    })
+  })
 }
