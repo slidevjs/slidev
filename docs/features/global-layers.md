@@ -1,5 +1,4 @@
 ---
-layout: feature
 tags: [navigation, layout]
 description: |
   Create custom components that persist across slides.

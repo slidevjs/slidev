@@ -1,9 +1,8 @@
 ---
-layout: feature
 depends:
   - guide/syntax
 relates:
-  - feature/prettier-plugin
+  - features/prettier-plugin
 tags: [syntax]
 description: |
   Use a YAML code block as the frontmatter.

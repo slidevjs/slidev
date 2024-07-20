@@ -24,7 +24,7 @@ The layouts are loaded in the following order, and the last one loaded will over
 4. custom layouts in the `layouts` directory
 
 <SeeAlso :links="[
-  'feature/slot-sugar',
+  'features/slot-sugar',
 ]" />
 
 ## Writing Layouts {#write}

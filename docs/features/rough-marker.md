@@ -1,5 +1,4 @@
 ---
-layout: feature
 depends:
   - guide/animations
 relates:

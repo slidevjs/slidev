@@ -1,7 +1,6 @@
 ---
-layout: feature
 depends:
-  - feature/monaco-editor
+  - features/monaco-editor
   - guide/animations
 relates:
   - Custom Code Runners: /custom/config-code-runners

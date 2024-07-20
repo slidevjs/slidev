@@ -24,7 +24,6 @@ const tagsArr = computed({
 const filteredFeatures = computed(() => {
   const s = search.value?.toLowerCase().trim()
   const t = tagsArr.value
-  console.log(s, t)
   return Object.values(features).filter(feature => {
     return (!s || feature.title.toLowerCase().includes(s) || feature.description.toLowerCase().includes(s))
       && (!t?.length || t.every(tag => feature.tags?.includes(tag)))

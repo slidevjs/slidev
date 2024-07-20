@@ -83,11 +83,11 @@ Configurations you can set are described in the [Slides deck configurations](/cu
 
 To make the headmatter more readable, you can installed the VSCode extension:
 
-<LinkCard link="feature/vscode-extension" />
+<LinkCard link="features/vscode-extension" />
 
 Also, there is another possible frontmatter format:
 
-<LinkCard link="feature/block-frontmatter" />
+<LinkCard link="features/block-frontmatter" />
 
 ## Notes {#notes}
 
@@ -122,7 +122,7 @@ This is _another_ note
 Basic Markdown and HTML are also supported in notes and will be rendered.
 
 <SeeAlso :links="[
-  'feature/click-marker',
+  'features/click-marker',
 ]" />
 
 ## Code Blocks {#code-block}
@@ -139,41 +139,41 @@ Slidev has [Shiki](https://github.com/shikijs/shiki) built in as the syntax high
 
 More about code blocks:
 
-<LinkCard link="feature/code-block-line-numbers" />
-<LinkCard link="feature/code-block-max-height" />
-<LinkCard link="feature/line-highlighting" />
-<LinkCard link="feature/monaco-editor" />
-<LinkCard link="feature/monaco-run" />
-<LinkCard link="feature/monaco-write" />
-<LinkCard link="feature/shiki-magic-move" />
-<LinkCard link="feature/twoslash" />
-<LinkCard link="feature/import-snippet" />
+<LinkCard link="features/code-block-line-numbers" />
+<LinkCard link="features/code-block-max-height" />
+<LinkCard link="features/line-highlighting" />
+<LinkCard link="features/monaco-editor" />
+<LinkCard link="features/monaco-run" />
+<LinkCard link="features/monaco-write" />
+<LinkCard link="features/shiki-magic-move" />
+<LinkCard link="features/twoslash" />
+<LinkCard link="features/import-snippet" />
 
 ## LaTeX Blocks {#latex-block}
 
 Slidev supports LaTeX blocks for mathematical and chemical formulas:
 
-<LinkCard link="feature/latex" />
+<LinkCard link="features/latex" />
 
 ## Diagrams {#diagrams}
 
 Slidev supports [Mermaid.js](http://mermaid.js.org/) and [PlantUML](https://plantuml.com/) for creating diagrams from text:
 
-<LinkCard link="feature/mermaid" />
-<LinkCard link="feature/plantuml" />
+<LinkCard link="features/mermaid" />
+<LinkCard link="features/plantuml" />
 
 ## MDC Syntax {#mdc-syntax}
 
 MDC Syntax is the easiest way to apply styles and classes to elements:
 
-<LinkCard link="feature/mdc" />
+<LinkCard link="features/mdc" />
 
 ## Scoped CSS {#scoped-css}
 
 You can use scoped CSS to style your slides:
 
-<LinkCard link="feature/slide-scope-style" />
+<LinkCard link="features/slide-scope-style" />
 
 ## Importing Slides {#importing-slides}
 
-<LinkCard link="feature/importing-slides" />
+<LinkCard link="features/importing-slides" />

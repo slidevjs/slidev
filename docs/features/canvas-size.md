@@ -1,9 +1,8 @@
 ---
-layout: feature
 relates:
   - guide/faq#adjust-size
-  - feature/zoom-slide
-  - feature/transform-component
+  - features/zoom-slide
+  - features/transform-component
 tags: [layout]
 description: |
   Set the size for all your slides.
@@ -26,8 +25,8 @@ canvasWidth: 980
 
 To scale several slides in your presentation, you can use the `zoom` option:
 
-<LinkCard link="feature/zoom-slide" />
+<LinkCard link="features/zoom-slide" />
 
 To adjust the size of some elements on your slides, you can use the `Transform` component:
 
-<LinkCard link="feature/transform-component" />
+<LinkCard link="features/transform-component" />

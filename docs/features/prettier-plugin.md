@@ -1,7 +1,6 @@
 ---
-layout: feature
 relates:
-  - feature/block-frontmatter
+  - features/block-frontmatter
   - GitHub Repo: https://github.com/slidevjs/prettier-plugin
   - Prettier: https://prettier.io/
 tags: [editor]

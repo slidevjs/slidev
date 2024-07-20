@@ -1,5 +1,4 @@
 ---
-layout: feature
 relates:
   - Iconify: https://iconify.design/
   - Icones: https://icones.js.org/
