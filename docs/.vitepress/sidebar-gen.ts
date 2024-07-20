@@ -131,23 +131,6 @@ export async function getSidebarObject() {
     }
 
     map[`/${path}`] = items
-
-    //   {
-    //     text: 'Depends on',
-    //     items: [
-    //       {
-    //         text: 'Features',
-    //         link: '/features',
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     text: 'Related to',
-    //     items: matter.data.related?.map((related: string) => ({
-
-    //     })),
-    //   },
-    // ]
   })
 
   return map
