@@ -5,7 +5,7 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 
 export const monacoWriterWhitelist = new Set<string>()
 
-export function createMonacoWriter({ userRoot }: ResolvedSlidevOptions): Plugin {
+export function createMonacoWriterPlugin({ userRoot }: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:monaco-write',
     apply: 'serve',

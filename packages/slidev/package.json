@@ -1,6 +1,7 @@
 {
   "name": "@slidev/cli",
-  "version": "0.49.16",
+  "type": "module",
+  "version": "0.49.17",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -13,20 +14,19 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./*": "./*"
   },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "slidev": "./bin/slidev.mjs"
   },
   "files": [
     "bin",
-    "client",
     "dist",
     "template.md"
   ],
@@ -116,7 +116,7 @@
     "vite-plugin-static-copy": "^1.0.6",
     "vite-plugin-vue-server-ref": "^0.4.2",
     "vitefu": "^0.2.5",
-    "vue": "^3.4.31",
+    "vue": "^3.4.32",
     "yargs": "^17.7.2"
   },
   "devDependencies": {

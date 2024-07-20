@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { applyMarkdownTransform } from '../packages/slidev/node/vite/markdown'
+import { applyMarkdownTransform } from '../packages/slidev/node/syntax/transform'
 import { createTransformContext } from './_tutils'
 
 it('transform-all', async () => {
