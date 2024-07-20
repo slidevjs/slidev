@@ -504,14 +504,14 @@ export const community: ThemeInfo[] = [
       'https://images.jieyu.ai/images/2024/07/mockup-device.gif',
       'https://images.jieyu.ai/images/2024/07/markmap.gif',
       'https://images.jieyu.ai/images/2024/07/soartext.gif',
-      'https://images.jieyu.ai/images/2024/07/timeline.gif'
+      'https://images.jieyu.ai/images/2024/07/timeline.gif',
     ],
     tags: [
       'light',
       'markmap',
       'timeline',
       'animation',
-      'mockup'
+      'mockup',
     ],
   },
   // Add yours here!
