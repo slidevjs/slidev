@@ -27,8 +27,8 @@ const resolved = computed(() => resolveLink(props.link))
 
 <style scoped>
 .link-card {
-  @apply 'block my-4 px-8 py-6 rounded-lg bg-$vp-c-bg-soft';
-  border: 1px solid var(--vp-c-bg-soft);
+  --uno: 'block my-4 pl-8 pr-6 py-6 rounded-lg bg-$vp-c-bg-soft flex flex-col gap-2';
+  border: 2px solid var(--vp-c-bg-soft);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -44,7 +44,6 @@ const resolved = computed(() => resolveLink(props.link))
   font-size: 18px;
   line-height: 1.4;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75em;
   display: flex;
   color: var(--vp-c-brand-1);
 }

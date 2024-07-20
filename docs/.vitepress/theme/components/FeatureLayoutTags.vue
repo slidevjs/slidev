@@ -1,23 +1,7 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
-
 defineProps<{
   tags: string[]
 }>()
-
-const { isDark } = useData()
-
-function tagToColor(tag: string) {
-  const color = [0, 0, 0]
-  for (let i = 0; i < tag.length; i++) {
-    color[i % 3] += tag.charCodeAt(i) - 'a'.charCodeAt(0)
-  }
-  for (let i = 0; i < 3; i++) {
-    const t = (color[i] * 10) % 100
-    color[i] = isDark.value ? t : 155 + t
-  }
-  return `rgb(${color.join(',')})`
-}
 </script>
 
 <template>
@@ -26,10 +10,8 @@ function tagToColor(tag: string) {
       Tags
     </p>
 
-    <div pl-3 mt-1>
-      <span v-for="tag in tags" :key="tag" class="tag" :style="{ backgroundColor: tagToColor(tag) }">
-        {{ tag }}
-      </span>
+    <div pl-3 mt-1 flex gap-2 flex-wrap>
+      <FeatureTag v-for="tag in tags" :key="tag" :tag="tag" />
     </div>
   </div>
 </template>

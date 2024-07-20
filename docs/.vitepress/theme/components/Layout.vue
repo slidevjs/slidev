@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DefaultTheme from 'vitepress/theme'
-import { Tooltip } from 'floating-vue'
+import { Dropdown } from 'floating-vue'
 
 const { Layout } = DefaultTheme
 </script>
@@ -9,16 +9,22 @@ const { Layout } = DefaultTheme
   <Layout>
     <template #nav-bar-title-after>
       <a @click.prevent>
-        <Tooltip :triggers="['hover', 'click']" :popper-triggers="['hover']">
+        <Dropdown :triggers="['hover', 'click']" :popper-triggers="['hover']" theme="twoslash" popper-class="z-1000">
           <Badge class="scale-80 translate-x--1 select-none">
-            New Docs
+            New Docs!
           </Badge>
           <template #popper>
-            You are visiting the new Slidev documentation.<br>
-            The old one is available
-            <a href="https://docs-legacy.sli.dev/" class="underline text-primary">here</a>.
+            <div class="p3 text-sm">
+              <p>
+                You are viewing the new Slidev documentation.
+              </p>
+              <p>
+                The old one is available
+                <a href="https://docs-legacy.sli.dev/" class="underline text-primary" target="_blank">here</a>.
+              </p>
+            </div>
           </template>
-        </Tooltip>
+        </Dropdown>
       </a>
     </template>
   </Layout>
