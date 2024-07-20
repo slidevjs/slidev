@@ -1,12 +1,11 @@
-import type { Connect, Plugin, ViteDevServer } from 'vite'
+import type { Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevServerOptions } from '@slidev/types'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
-import { updateFrontmatterPatch } from '../utils'
+import { getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
-import type { VirtualModuleTempalteContext } from '../virtual/types'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { templateSlides } from '../virtual/slides'
 import { templateConfigs } from '../virtual/configs'
@@ -15,22 +14,6 @@ import { templateMonacoTypes } from '../virtual/monaco-types'
 import { sharedMd } from '../commands/shared'
 import { createDataUtils } from '../options'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
-
-export function getBodyJson(req: Connect.IncomingMessage) {
-  return new Promise<any>((resolve, reject) => {
-    let body = ''
-    req.on('data', chunk => body += chunk)
-    req.on('error', reject)
-    req.on('end', () => {
-      try {
-        resolve(JSON.parse(body) || {})
-      }
-      catch (e) {
-        reject(e)
-      }
-    })
-  })
-}
 
 function renderNote(text: string = '') {
   let clickCount = 0
@@ -62,11 +45,6 @@ export function createSlidesLoader(
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
   const { data, clientRoot, roots, mode, utils } = options
-
-  const templateCtx: VirtualModuleTempalteContext = {
-    md: sharedMd,
-    getLayouts: utils.getLayouts,
-  }
 
   function getSourceId(index: number, type: 'md' | 'frontmatter') {
     return `${data.slides[index].source.filepath}__slidev_${index + 1}.${type}`
@@ -260,7 +238,7 @@ export function createSlidesLoader(
       const template = templates.find(i => i.id === id)
       if (template) {
         return {
-          code: await template.getContent(options, templateCtx, this),
+          code: await template.getContent.call(this, options),
           map: { mappings: '' },
         }
       }

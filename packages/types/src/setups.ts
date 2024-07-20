@@ -69,7 +69,7 @@ export type PreparserSetup = (context: {
   filepath: string
   headmatter: Record<string, unknown>
   mode?: string
-}) => SlidevPreparserExtension[]
+}) => Awaitable<SlidevPreparserExtension[]>
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>

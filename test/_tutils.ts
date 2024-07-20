@@ -2,7 +2,7 @@ import path from 'node:path'
 import MagicString from 'magic-string-stack'
 import type { MarkdownTransformContext } from '@slidev/types'
 
-export function createTransformContext(code: string): MarkdownTransformContext {
+export function createTransformContext(code: string, shiki?: any): MarkdownTransformContext {
   const s = new MagicString(code)
   return {
     s,
@@ -15,6 +15,13 @@ export function createTransformContext(code: string): MarkdownTransformContext {
         ],
         watchFiles: [],
         config: {} as any,
+        features: {},
+      },
+      utils: {
+        shiki,
+        shikiOptions: {
+          theme: 'nord',
+        },
       },
     } as any,
   }
