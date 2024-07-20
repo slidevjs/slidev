@@ -6,10 +6,10 @@ import type { KatexOptions } from 'katex'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { MermaidConfig } from 'mermaid'
-import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { SlidevPreparserExtension } from './types'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
+import type { MarkdownTransformer } from './transform'
 
 export interface AppContext {
   app: App
@@ -62,10 +62,18 @@ export type ShikiSetupReturn =
     }
   >
 
+export interface TransformersSetupReturn {
+  pre: (MarkdownTransformer | false)[]
+  preCodeblock: (MarkdownTransformer | false)[]
+  postCodeblock: (MarkdownTransformer | false)[]
+  post: (MarkdownTransformer | false)[]
+}
+
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | void>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
+export type TransformersSetup = () => Awaitable<Partial<TransformersSetupReturn>>
 export type PreparserSetup = (context: {
   filepath: string
   headmatter: Record<string, unknown>
@@ -95,6 +103,7 @@ export const defineRoutesSetup = defineSetup<RoutesSetup>
 export const defineMermaidSetup = defineSetup<MermaidSetup>
 export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
+export const defineTransformersSetup = defineSetup<TransformersSetup>
 export const definePreparserSetup = defineSetup<PreparserSetup>
 export const defineCodeRunnersSetup = defineSetup<CodeRunnersSetup>
 export const defineContextMenuSetup = defineSetup<ContextMenuSetup>

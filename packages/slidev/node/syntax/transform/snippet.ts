@@ -83,17 +83,11 @@ function findRegion(lines: Array<string>, regionName: string) {
  *
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
-export function transformSnippet(ctx: MarkdownTransformContext) {
-  const options = ctx.options
-  const slideId = (ctx.id as string).match(/(\d+)\.md$/)?.[1]
-  if (!slideId)
-    return
-
+export function transformSnippet({ s, slide, options }: MarkdownTransformContext) {
   const data = options.data
-  const slideInfo = data.slides[+slideId - 1]
-  const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
+  const dir = path.dirname(slide.source?.filepath ?? options.entry ?? options.userRoot)
 
-  ctx.s.replace(
+  s.replace(
     // eslint-disable-next-line regexp/no-super-linear-backtracking
     /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
@@ -114,8 +108,8 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
 
       let content = fs.readFileSync(src, 'utf8')
 
-      slideInfo.snippetsUsed ??= {}
-      slideInfo.snippetsUsed[src] = content
+      slide.snippetsUsed ??= {}
+      slide.snippetsUsed[src] = content
 
       if (regionName) {
         const lines = content.split(/\r?\n/)
