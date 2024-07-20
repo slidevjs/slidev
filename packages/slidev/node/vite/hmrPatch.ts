@@ -10,7 +10,9 @@ export function createHmrPatchPlugin(): Plugin {
     transform(code, id) {
       if (!id.match(regexSlideSourceId))
         return
-      return code.replace('if (_rerender_only)', 'if (false)')
+      const replaced = code.replace('if (_rerender_only)', 'if (false)')
+      if (replaced !== code)
+        return replaced
     },
   }
 }
