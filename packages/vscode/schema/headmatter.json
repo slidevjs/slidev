@@ -223,6 +223,9 @@
             },
             {
               "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
             }
           ],
           "description": "Page transition, powered by Vue's <TransitionGroup/>\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down"
@@ -249,6 +252,9 @@
             {
               "type": "string",
               "const": "build"
+            },
+            {
+              "type": "null"
             }
           ],
           "description": "Enable context menu",
