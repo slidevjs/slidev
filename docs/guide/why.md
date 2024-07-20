@@ -110,3 +110,5 @@ Playing around with Slidev will tell you more than thousands of words. Check the
 Or you can have a quick preview of it:
 
 <iframe class="aspect-16/9 rounded-xl w-full shadow-md border-none" src="https://www.youtube.com/embed/eW7v-2ZKZOU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+> Or if you are in Chinese Mainland, you can view the unofficial [Reprinting videos](https://www.bilibili.com/video/BV1V88KekEaz).
