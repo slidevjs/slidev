@@ -24,7 +24,7 @@ Slidev uses an extended Markdown format to organize your slides in a single plai
 
 ### 🧑‍💻 Developer Friendly
 
-Slidev provides first-class support for code snippets for developers. It uses [Shiki](https://github.com/shikijs/shiki) to get the most accurate syntax highlighting. Slidev also supports <LinkInline link="feature/shiki-magic-move"/> and <LinkInline link="feature/twoslash"/>. These make Slidev the best choice for tech talks.
+Slidev provides first-class support for code snippets for developers. It uses [Shiki](https://github.com/shikijs/shiki) to get the most accurate syntax highlighting. Slidev also supports <LinkInline link="features/shiki-magic-move"/> and <LinkInline link="features/twoslash"/>. These make Slidev the best choice for tech talks.
 
 ### 🎨 Themable
 
@@ -40,13 +40,13 @@ Every change you make in the editor will be updated to your slides in the browse
 
 You can write Vue components and use them in your slides, which you can then interact with during the presentation to express your idea in a more interesting and intuitive way.
 
-Slidev also has built-in support of <LinkInline link="feature/monaco-editor"/>, which empowers you to do live coding in your presentation with auto-completion and hover messages.
+Slidev also has built-in support of <LinkInline link="features/monaco-editor"/>, which empowers you to do live coding in your presentation with auto-completion and hover messages.
 
 ### 🎥 Recording Support
 
 Slidev provides built-in recording and camera view. You can share your presentation with your camera view inside, or record and save your screen and camera separately.
 
-> Learn more: <LinkInline link="feature/recording"/>.
+> Learn more: <LinkInline link="features/recording"/>.
 
 ### 📤 Portable
 

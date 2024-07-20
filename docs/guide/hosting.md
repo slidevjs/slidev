@@ -60,8 +60,8 @@ Here are a few examples of the exported SPA:
 
 ### Options
 
-<LinkCard link="feature/build-with-pdf" />
-<LinkCard link="feature/bundle-remote-assets" />
+<LinkCard link="features/build-with-pdf" />
+<LinkCard link="features/bundle-remote-assets" />
 
 ## Hosting
 

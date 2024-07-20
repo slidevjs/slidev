@@ -1,5 +1,4 @@
 ---
-layout: feature
 depends:
   - guide/global-context
 tags: [client-api]

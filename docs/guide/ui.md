@@ -9,7 +9,7 @@ outline: deep
 In Play mode, move your mouse to the bottom left corner of the page, you can see the navigation bar.
 ![](/screenshots/navbar.png)
 
-> You can extend the navigation bar via <LinkInline link="feature/global-layers" />.
+> You can extend the navigation bar via <LinkInline link="features/global-layers" />.
 
 ## Navigation Actions {#navigation-actions}
 
@@ -23,10 +23,10 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 | <kbd>o</kbd>                        | <carbon-apps class="inline-icon-btn"/>                                                | Toggle [Quick Overview](#quick-overview)                       |
 | <kbd>d</kbd>                        | <carbon-sun class="inline-icon-btn"/> <carbon-moon class="inline-icon-btn"/>          | Toggle dark mode                                               |
 | -                                   | <carbon-user-avatar class="inline-icon-btn"/>                                         | Toggle [Camera View](../features/recording#camera-view)        |
-| -                                   | <carbon-video class="inline-icon-btn"/>                                               | Start <LinkInline link="feature/recording" />                  |
+| -                                   | <carbon-video class="inline-icon-btn"/>                                               | Start <LinkInline link="features/recording" />                  |
 | -                                   | <carbon-user-speaker class="inline-icon-btn"/>                                        | Enter [Presenter Mode](../guide/ui#presenter-mode)             |
-| -                                   | <carbon-edit class="inline-icon-btn"/>                                                | Toggle <LinkInline link="feature/side-editor" />               |
-| -                                   | <carbon-download class="inline-icon-btn"/>                                            | Download PDF. See <LinkInline link="feature/build-with-pdf" /> |
+| -                                   | <carbon-edit class="inline-icon-btn"/>                                                | Toggle <LinkInline link="features/side-editor" />               |
+| -                                   | <carbon-download class="inline-icon-btn"/>                                            | Download PDF. See <LinkInline link="features/build-with-pdf" /> |
 | -                                   | <carbon-information class="inline-icon-btn"/>                                         | Show information about the slides                              |
 | -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | Show settings menu                                             |
 | <kbd>g</kbd>                        | -                                                                                     | Show goto...                                                   |
@@ -64,16 +64,16 @@ The overview page gives you a linear list of all your slides, with all of your n
 
 See:
 
-<LinkCard link="feature/drawing" />
+<LinkCard link="features/drawing" />
 
 ## Recording UI {#recording}
 
 See:
 
-<LinkCard link="feature/recording"/>
+<LinkCard link="features/recording"/>
 
 ## Global Layers {#global-layers}
 
 You can add any custom UI below or above your slides for the whole presentation or per-slide:
 
-<LinkCard link="feature/global-layers" />
+<LinkCard link="features/global-layers" />

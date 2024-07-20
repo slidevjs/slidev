@@ -1,8 +1,7 @@
 ---
-layout: feature
 relates:
-  - feature/monaco-write
-  - feature/monaco-editor
+  - features/monaco-write
+  - features/monaco-editor
 since: v0.47.0
 tags: [codeblock, syntax]
 description: |
@@ -40,7 +39,7 @@ Any code block features like [line highlighting](#line-highlighting) and [Monaco
 <<< @/snippets/snippet.js ts {monaco}{height:200px}
 ```
 
-Note that you can use `{*}` as a placeholder of <LinkInline link="feature/line-highlighting" />:
+Note that you can use `{*}` as a placeholder of <LinkInline link="features/line-highlighting" />:
 
 <!-- eslint-skip -->
 

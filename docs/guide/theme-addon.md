@@ -42,7 +42,7 @@ $ npm install @slidev/theme-seriph
 And that's all, enjoy the new theme! For more details about the usage, you can refer to the theme's README.
 
 <SeeAlso :links="[
-  'feature/eject-theme',
+  'features/eject-theme',
 ]" />
 
 ## Use an Addon {#use-addon}

@@ -1,8 +1,7 @@
 ---
-layout: feature
 relates:
   - guide/ui
-  - guide/cli
+  - CLI: builtin/cli
   - Cloudflare Quick Tunnels: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/
 tags: [remote, tool]
 description: |

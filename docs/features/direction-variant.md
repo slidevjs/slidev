@@ -1,5 +1,4 @@
 ---
-layout: feature
 relates:
   - UnoCSS Variants: https://unocss.dev/config/variants#variants
 since: v0.48.0

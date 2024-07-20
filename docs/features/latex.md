@@ -1,5 +1,4 @@
 ---
-layout: feature
 relates:
   - Demo: /demo/starter/11
   - KaTeX: https://katex.org/

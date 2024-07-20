@@ -1,9 +1,8 @@
 ---
-layout: feature
 relates:
   - guide/faq#adjust-size
-  - feature/canvas-size
-  - feature/transform-component
+  - features/canvas-size
+  - features/transform-component
 tags: [layout]
 description: |
   Zoom the content of a slide to a specific scale.
@@ -27,8 +26,8 @@ zoom: 0.8
 
 To scale all the slides in your presentation, you can set the slide canvas size:
 
-<LinkCard link="feature/canvas-size" />
+<LinkCard link="features/canvas-size" />
 
 To adjust the size of some elements on your slides, you can use the `Transform` component:
 
-<LinkCard link="feature/transform-component" />
+<LinkCard link="features/transform-component" />

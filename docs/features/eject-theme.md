@@ -1,5 +1,4 @@
 ---
-layout: feature
 depends:
   - guide/theme-addon
 tags: [theme, cli]

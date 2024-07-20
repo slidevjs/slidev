@@ -1,9 +1,8 @@
 ---
-layout: feature
 relates:
   - guide/faq#adjust-size
-  - feature/canvas-size
-  - feature/zoom-slide
+  - features/canvas-size
+  - features/zoom-slide
 tags: [layout]
 description: |
   A component for scaling some elements.
@@ -23,8 +22,8 @@ This is useful when you want to adjust the size of some elements on your slides 
 
 To scale all the slides in your presentation, you can set the slide canvas size:
 
-<LinkCard link="feature/canvas-size" />
+<LinkCard link="features/canvas-size" />
 
 To scale several slides in your presentation, you can use the `zoom` option:
 
-<LinkCard link="feature/zoom-slide" />
+<LinkCard link="features/zoom-slide" />

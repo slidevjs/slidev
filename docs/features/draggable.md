@@ -1,5 +1,4 @@
 ---
-layout: feature
 tags: [layout]
 description: |
   Move, resize, and rotate elements by dragging them with the mouse.
