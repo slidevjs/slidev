@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": [],
+  "injectionSelector": "L:text.html.markdown -markup.frontmatter.slidev",
+  "patterns": [
+    {
+      "include": "source.slidev#import-snippet"
+    },
+    {
+      "include": "source.slidev#slide-frontmatter"
+    }
+  ],
+  "scopeName": "inject-to-markdown.main.slidev"
+}

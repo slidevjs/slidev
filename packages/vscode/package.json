@@ -24,6 +24,102 @@
     "onStartupFinished"
   ],
   "contributes": {
+    "languages": [
+      {
+        "id": "markdown",
+        "configuration": "./language/language-configuration.json"
+      },
+      {
+        "id": "slidev"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "slidev",
+        "scopeName": "source.slidev",
+        "path": "./syntaxes/slidev.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.ts": "typescript",
+          "source.yaml": "yaml"
+        }
+      },
+      {
+        "path": "./syntaxes/markdown.json",
+        "scopeName": "inject-to-markdown.main.slidev",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "source.slidev": "slidev"
+        }
+      },
+      {
+        "path": "./syntaxes/codeblock.json",
+        "scopeName": "inject-to-markdown.codeblock.slidev",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "source.slidev": "slidev",
+          "source.ts": "typescript"
+        }
+      },
+      {
+        "path": "./syntaxes/codeblock-patch.json",
+        "scopeName": "inject-to-markdown.codeblock.patch.slidev",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "source.slidev": "slidev",
+          "meta.embedded.block.html": "html",
+          "source.js": "javascript",
+          "source.css": "css",
+          "meta.embedded.block.frontmatter": "yaml",
+          "meta.embedded.block.css": "css",
+          "meta.embedded.block.ini": "ini",
+          "meta.embedded.block.java": "java",
+          "meta.embedded.block.lua": "lua",
+          "meta.embedded.block.makefile": "makefile",
+          "meta.embedded.block.perl": "perl",
+          "meta.embedded.block.r": "r",
+          "meta.embedded.block.ruby": "ruby",
+          "meta.embedded.block.php": "php",
+          "meta.embedded.block.sql": "sql",
+          "meta.embedded.block.vs_net": "vs_net",
+          "meta.embedded.block.xml": "xml",
+          "meta.embedded.block.xsl": "xsl",
+          "meta.embedded.block.yaml": "yaml",
+          "meta.embedded.block.dosbatch": "dosbatch",
+          "meta.embedded.block.clojure": "clojure",
+          "meta.embedded.block.coffee": "coffee",
+          "meta.embedded.block.c": "c",
+          "meta.embedded.block.cpp": "cpp",
+          "meta.embedded.block.diff": "diff",
+          "meta.embedded.block.dockerfile": "dockerfile",
+          "meta.embedded.block.go": "go",
+          "meta.embedded.block.groovy": "groovy",
+          "meta.embedded.block.pug": "jade",
+          "meta.embedded.block.javascript": "javascript",
+          "meta.embedded.block.json": "json",
+          "meta.embedded.block.jsonc": "jsonc",
+          "meta.embedded.block.latex": "latex",
+          "meta.embedded.block.less": "less",
+          "meta.embedded.block.objc": "objc",
+          "meta.embedded.block.scss": "scss",
+          "meta.embedded.block.perl6": "perl6",
+          "meta.embedded.block.powershell": "powershell",
+          "meta.embedded.block.python": "python",
+          "meta.embedded.block.rust": "rust",
+          "meta.embedded.block.scala": "scala",
+          "meta.embedded.block.shellscript": "shellscript",
+          "meta.embedded.block.typescript": "typescript",
+          "meta.embedded.block.typescriptreact": "typescriptreact",
+          "meta.embedded.block.csharp": "csharp",
+          "meta.embedded.block.fsharp": "fsharp"
+        }
+      }
+    ],
     "commands": [
       {
         "command": "slidev.enable-extension",
@@ -349,8 +445,9 @@
   "scripts": {
     "publish": "esno scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
+    "prepare": "esno scripts/schema.ts",
     "build": "tsup --env.NODE_ENV production --treeshake",
-    "dev": "tsup --watch ./src --env.NODE_ENV development",
+    "dev": "nr prepare && tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
@@ -359,8 +456,15 @@
     "@slidev/types": "workspace:*",
     "@types/node": "^20.14.10",
     "@types/vscode": "~1.89.0",
+    "@volar/language-server": "~2.4.0-alpha.15",
+    "@volar/vscode": "^2.4.0-alpha.15",
     "get-port-please": "^3.1.2",
+    "mlly": "^1.7.1",
     "ovsx": "^0.9.1",
-    "reactive-vscode": "0.2.0-beta.4"
+    "prettier": "^3.3.2",
+    "reactive-vscode": "0.2.0-beta.5",
+    "tm-grammars": "^1.13.11",
+    "volar-service-prettier": "^0.0.54",
+    "volar-service-yaml": "^0.0.59"
   }
 }
