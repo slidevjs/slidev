@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { applyMarkdownTransform } from '../packages/slidev/node/syntax/transform'
+import { getMarkdownTransformers } from '../packages/slidev/node/syntax/transform'
 import { createTransformContext } from './_tutils'
 
 it('transform-all', async () => {
@@ -30,7 +30,26 @@ Foo \`{{ code }}\`
 <<< ./fixtures/snippets/snippet.ts#snippet
 `)
 
-  applyMarkdownTransform(ctx)
+  const transformers = await getMarkdownTransformers({
+    roots: [],
+    data: {
+      config: {
+        highlighter: 'shiki',
+      },
+      features: {
+        monaco: true,
+        katex: true,
+      },
+    },
+  } as any)
+
+  for (const transformer of transformers) {
+    if (!transformer)
+      continue
+    transformer(ctx)
+    if (!ctx.s.isEmpty())
+      ctx.s.commit()
+  }
 
   expect(ctx.s.toString()).toMatchSnapshot()
 })

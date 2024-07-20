@@ -28,6 +28,10 @@ export default [
     link: '/custom/config-code-runners',
   },
   {
+    text: 'Configure Transformers',
+    link: '/custom/config-transformers',
+  },
+  {
     text: 'Configure Monaco',
     link: '/custom/config-monaco',
   },

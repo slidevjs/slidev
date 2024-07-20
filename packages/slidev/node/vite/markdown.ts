@@ -2,14 +2,16 @@ import Markdown from 'unplugin-vue-markdown/vite'
 import type { Plugin } from 'vite'
 import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import MagicString from 'magic-string-stack'
-import { applyMarkdownTransform } from '../syntax/transform'
+import { getMarkdownTransformers } from '../syntax/transform'
 import { useMarkdownItPlugins } from '../syntax/markdown-it'
+import { regexSlideSourceId } from './common'
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
   const markdownTransformMap = new Map<string, MagicString>()
+  const transformers = await getMarkdownTransformers(options)
 
   return Markdown({
     include: [/\.md$/],
@@ -32,20 +34,29 @@ export async function createMarkdownPlugin(
     transforms: {
       ...mdOptions?.transforms,
       before(code, id) {
-        if (id === options.entry)
-          return ''
+        code = mdOptions?.transforms?.before?.(code, id) ?? code
 
+        const match = id.match(regexSlideSourceId)
+        if (!match)
+          return code
+
+        const s = new MagicString(code)
+        markdownTransformMap.set(id, s)
         const ctx: MarkdownTransformContext = {
-          s: new MagicString(code),
-          id,
+          s,
+          slide: options.data.slides[+match[1] - 1],
           options,
         }
 
-        applyMarkdownTransform(ctx)
-        markdownTransformMap.set(id, ctx.s)
+        for (const transformer of transformers) {
+          if (!transformer)
+            continue
+          transformer(ctx)
+          if (!ctx.s.isEmpty())
+            ctx.s.commit()
+        }
 
-        const s = ctx.s.toString()
-        return mdOptions?.transforms?.before?.(s, id) ?? s
+        return s.toString()
       },
     },
   }) as Plugin

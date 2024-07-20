@@ -6,7 +6,7 @@ export function createTransformContext(code: string, shiki?: any): MarkdownTrans
   const s = new MagicString(code)
   return {
     s,
-    id: '1.md',
+    slide: { } as any,
     options: {
       userRoot: path.join(__dirname, './fixtures/'),
       data: {

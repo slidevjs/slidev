@@ -1,4 +1,5 @@
-import type { MarkdownTransformContext, MarkdownTransformer } from '@slidev/types'
+import type { MarkdownTransformer, ResolvedSlidevOptions } from '@slidev/types'
+import setupTransformers from '../../setups/transformers'
 import { transformCodeWrapper } from './code-wrapper'
 import { transformPageCSS } from './in-page-css'
 import { transformKaTexWrapper } from './katex-wrapper'
@@ -9,27 +10,27 @@ import { transformPlantUml } from './plant-uml'
 import { transformSlotSugar } from './slot-sugar'
 import { transformSnippet } from './snippet'
 
-export function applyMarkdownTransform(ctx: MarkdownTransformContext) {
-  const transformers: (MarkdownTransformer | false)[] = [
+export async function getMarkdownTransformers(options: ResolvedSlidevOptions): Promise<(false | MarkdownTransformer)[]> {
+  const extras = await setupTransformers(options.roots)
+  return [
+    ...extras.pre,
+
     transformSnippet,
-    ctx.options.data.config.highlighter === 'shiki'
-    && transformMagicMove,
+    options.data.config.highlighter === 'shiki' && transformMagicMove,
+
+    ...extras.preCodeblock,
+
     transformMermaid,
     transformPlantUml,
-    ctx.options.data.features.monaco
-    && transformMonaco,
+    options.data.features.monaco && transformMonaco,
+
+    ...extras.postCodeblock,
+
     transformCodeWrapper,
-    ctx.options.data.features.katex
-    && transformKaTexWrapper,
+    options.data.features.katex && transformKaTexWrapper,
     transformPageCSS,
     transformSlotSugar,
-  ]
 
-  for (const transformer of transformers) {
-    if (!transformer)
-      continue
-    transformer(ctx)
-    if (!ctx.s.isEmpty())
-      ctx.s.commit()
-  }
+    ...extras.post,
+  ]
 }
