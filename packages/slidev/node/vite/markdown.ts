@@ -44,7 +44,7 @@ export async function createMarkdownPlugin(
         markdownTransformMap.set(id, s)
         const ctx: MarkdownTransformContext = {
           s,
-          no: +match[1],
+          slide: options.data.slides[+match[1] - 1],
           options,
         }
 
