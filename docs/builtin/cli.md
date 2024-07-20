@@ -87,7 +87,7 @@ Theme-related operations.
 
 Subcommands:
 
-- `eject [entry]`: Eject the current theme into the local file system. See <LinkInline link="feature/eject-theme" />.
+- `eject [entry]`: Eject the current theme into the local file system. See <LinkInline link="features/eject-theme" />.
   - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
   - Options:
     - `--dir` (`string`, default: `theme`): the output dir.

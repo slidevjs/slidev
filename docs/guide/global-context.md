@@ -57,7 +57,7 @@ When the `useSlideContext` composable is used in a file, the automatic injection
 
 :::
 
-<SeeAlso :links="['feature/slide-hook']" />
+<SeeAlso :links="['features/slide-hook']" />
 
 ## Properties
 
@@ -67,7 +67,7 @@ The global context object.
 
 ### `$frontmatter`
 
-The frontmatter object of the current slide. Note that this is empty for components out of the slides like <LinkInline link="feature/global-layers" />.
+The frontmatter object of the current slide. Note that this is empty for components out of the slides like <LinkInline link="features/global-layers" />.
 
 ### `$clicks`
 

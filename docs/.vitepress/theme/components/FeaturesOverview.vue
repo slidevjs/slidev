@@ -9,14 +9,17 @@ defineProps<{
 
 <template>
   <div class="features-grid mt-4">
-    <a v-for="feature in features" :key="feature.name" :href="withBase(feature.link)">
-      <div flex flex-col h-full>
-        <div font-bold text-wrap leading-5 my-2> {{ feature.title }} </div>
-        <div h-20 text-wrap leading-5 op-80 pt-1 overflow-hidden text-sm> {{ feature.description }} </div>
-        <div flex-grow />
-        <div flex gap-1 mt-2 mb-1 pointer-events-auto>
-          <FeatureTag v-for="tag in feature.tags" :key="tag" :tag />
-        </div>
+    <a
+      v-for="feature in features"
+      :key="feature.name"
+      flex flex-col h-full p4 gap-3 rounded-md
+      :href="withBase(feature.link)"
+    >
+      <div font-bold text-wrap leading-5> {{ feature.title }} </div>
+      <div text-wrap leading-5 op-75 overflow-hidden text-sm> {{ feature.description }} </div>
+      <div flex-grow />
+      <div flex gap-1 pointer-events-auto>
+        <FeatureTag v-for="tag in feature.tags" :key="tag" :tag />
       </div>
     </a>
   </div>
@@ -25,28 +28,21 @@ defineProps<{
 <style scoped>
 .features-grid {
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 0.75rem;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 .features-grid > a {
-  display: block;
-  border-radius: 6px;
-  padding: 6px 12px;
-  line-height: 32px;
-  font-size: 16px;
-  font-weight: 500;
   color: var(--vp-c-text-1);
-  white-space: nowrap;
   text-decoration: none;
   transition:
     background-color 0.25s,
     color 0.25s;
-  background-color: var(--vp-c-default-soft);
+  background-color: var(--vp-c-bg-soft);
 }
 
 .features-grid > a:hover {
   color: var(--vp-c-brand-1);
-  background-color: var(--vp-c-default-3);
+  background-color: var(--vp-c-default-soft);
 }
 </style>

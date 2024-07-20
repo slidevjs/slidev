@@ -1,5 +1,4 @@
 ---
-layout: feature
 depends:
   - guide/syntax#code-block
 tags: [codeblock, layout]
@@ -24,7 +23,7 @@ const c = add(1, 2)
 ```
 ````
 
-Note that you can use `{*}` as a placeholder of <LinkInline link="feature/line-highlighting" />:
+Note that you can use `{*}` as a placeholder of <LinkInline link="features/line-highlighting" />:
 
 ````md
 ```ts {*}{maxHeight:'100px'}
