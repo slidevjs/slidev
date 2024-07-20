@@ -5,6 +5,105 @@
     "Headmatter": {
       "type": "object",
       "properties": {
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinLayouts"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest"
+        },
+        "class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ],
+          "description": "Custom class added to the slide root element"
+        },
+        "clicks": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations"
+        },
+        "clicksStart": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide to start",
+          "default": 0
+        },
+        "preload": {
+          "type": "boolean",
+          "description": "Preload the slide when the previous slide is active",
+          "default": true
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "Completely hide and disable the slide"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Same as `hide`, completely hide and disable the slide"
+        },
+        "hideInToc": {
+          "type": "boolean",
+          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "level": {
+          "type": "number",
+          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared"
+        },
+        "routeAlias": {
+          "type": "string",
+          "description": "Create a route alias that can be used in the URL or with the <Link> component"
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Custom zoom level for the slide",
+          "default": 1
+        },
+        "dragPos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
+        },
+        "src": {
+          "type": "string",
+          "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
+        },
         "title": {
           "type": "string",
           "description": "Title of the slides"
@@ -16,7 +115,7 @@
         },
         "theme": {
           "type": "string",
-          "description": "Theme to use for the slides",
+          "description": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
           "default": "default"
         },
         "addons": {
@@ -71,7 +170,7 @@
             "shiki",
             "prism"
           ],
-          "description": "Prefer highlighter",
+          "description": "Prefer highlighter\n\nSee https://sli.dev/custom/config-highlighter.html",
           "default": "shiki"
         },
         "twoslash": {
@@ -137,7 +236,7 @@
           "default": {}
         },
         "fonts": {
-          "$ref": "#/definitions/ResolvedFontOptions",
+          "$ref": "#/definitions/FontOptions",
           "description": "Configure fonts for the slides and app",
           "default": {}
         },
@@ -147,7 +246,7 @@
           "default": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png"
         },
         "drawings": {
-          "$ref": "#/definitions/ResolvedDrawingsOptions",
+          "$ref": "#/definitions/DrawingsOptions",
           "description": "Options for drawings",
           "default": {}
         },
@@ -184,7 +283,7 @@
         "css": {
           "type": "string",
           "const": "unocss",
-          "description": "Engine for Atomic CSS",
+          "description": "Engine for Atomic CSS\n\nSee https://unocss.dev/",
           "deprecated": true,
           "default": "unocss"
         },
@@ -213,26 +312,9 @@
           "description": "Attributes to apply to the HTML element",
           "default": {}
         },
-        "transition": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/BuiltinSlideTransition"
-            },
-            {
-              "type": "string"
-            },
-            {
-              "$ref": "#/definitions/TransitionGroupProps"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Page transition, powered by Vue's <TransitionGroup/>\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down"
-        },
         "mdc": {
           "type": "boolean",
-          "description": "Suppport MDC syntax",
+          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
           "default": false
         },
         "editor": {
@@ -276,11 +358,6 @@
           ],
           "description": "Enable wake lock"
         },
-        "export": {
-          "$ref": "#/definitions/ResolvedExportOptions",
-          "description": "Options for export",
-          "default": {}
-        },
         "exportFilename": {
           "type": [
             "string",
@@ -303,7 +380,7 @@
               "const": "build"
             }
           ],
-          "description": "Enable Monaco",
+          "description": "Enable Monaco\n\nSee https://sli.dev/custom/config-monaco.html",
           "default": true
         },
         "monacoTypesSource": {
@@ -339,116 +416,12 @@
           },
           "description": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
+        },
+        "defaults": {
+          "$ref": "#/definitions/Frontmatter",
+          "description": "Default frontmatter options applied to all slides"
         }
       }
-    },
-    "SlidevThemeConfig": {
-      "type": "object",
-      "additionalProperties": {
-        "type": [
-          "string",
-          "number"
-        ]
-      }
-    },
-    "ResolvedFontOptions": {
-      "type": "object",
-      "properties": {
-        "sans": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "mono": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "serif": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "weights": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "italic": {
-          "type": "boolean"
-        },
-        "provider": {
-          "type": "string",
-          "enum": [
-            "none",
-            "google"
-          ]
-        },
-        "webfonts": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "local": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [
-        "sans",
-        "mono",
-        "serif",
-        "weights",
-        "italic",
-        "provider",
-        "webfonts",
-        "local"
-      ]
-    },
-    "ResolvedDrawingsOptions": {
-      "type": "object",
-      "properties": {
-        "persist": {
-          "type": "boolean",
-          "enum": [
-            false
-          ]
-        },
-        "enabled": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "string",
-              "const": "dev"
-            },
-            {
-              "type": "string",
-              "const": "build"
-            }
-          ]
-        },
-        "presenterOnly": {
-          "type": "boolean"
-        },
-        "syncAll": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "persist",
-        "enabled",
-        "presenterOnly",
-        "syncAll"
-      ]
     },
     "BuiltinSlideTransition": {
       "type": "string",
@@ -465,21 +438,17 @@
     "TransitionGroupProps": {
       "type": "object",
       "properties": {
+        "appear": {
+          "type": "boolean"
+        },
+        "persisted": {
+          "type": "boolean"
+        },
         "tag": {
           "type": "string"
         },
         "moveClass": {
           "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "transition",
-            "animation"
-          ]
         },
         "css": {
           "type": "boolean"
@@ -532,86 +501,299 @@
         },
         "leaveToClass": {
           "type": "string"
-        },
-        "appear": {},
-        "persisted": {},
-        "onBeforeEnter": {},
-        "onEnter": {},
-        "onAfterEnter": {},
-        "onEnterCancelled": {},
-        "onBeforeLeave": {},
-        "onLeave": {},
-        "onAfterLeave": {},
-        "onLeaveCancelled": {},
-        "onBeforeAppear": {},
-        "onAppear": {},
-        "onAfterAppear": {},
-        "onAppearCancelled": {}
-      },
-      "required": [
-        "appear",
-        "onAfterAppear",
-        "onAfterEnter",
-        "onAfterLeave",
-        "onAppear",
-        "onAppearCancelled",
-        "onBeforeAppear",
-        "onBeforeEnter",
-        "onBeforeLeave",
-        "onEnter",
-        "onEnterCancelled",
-        "onLeave",
-        "onLeaveCancelled",
-        "persisted"
+        }
+      }
+    },
+    "BuiltinLayouts": {
+      "type": "string",
+      "enum": [
+        "404",
+        "center",
+        "cover",
+        "default",
+        "end",
+        "error",
+        "fact",
+        "full",
+        "iframe-left",
+        "iframe-right",
+        "iframe",
+        "image-left",
+        "image-right",
+        "image",
+        "intro",
+        "none",
+        "quote",
+        "section",
+        "statement",
+        "two-cols-header",
+        "two-cols"
       ]
     },
-    "ResolvedExportOptions": {
+    "SlidevThemeConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number"
+        ]
+      }
+    },
+    "FontOptions": {
       "type": "object",
       "properties": {
-        "output": {
-          "type": "string"
+        "sans": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Sans serif fonts (default fonts for most text)"
         },
-        "format": {
-          "type": "string"
+        "serif": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Serif fonts"
         },
-        "timeout": {
-          "type": "number"
+        "mono": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Monospace fonts, for code blocks and etc."
         },
-        "wait": {
-          "type": "number"
+        "custom": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Load webfonts for custom CSS (does not apply anywhere by default)"
         },
-        "wait-until": {
-          "type": "string"
+        "weights": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              }
+            }
+          ],
+          "description": "Weights for fonts",
+          "default": [
+            200,
+            400,
+            600
+          ]
         },
-        "range": {
-          "type": "string"
+        "italic": {
+          "type": "boolean",
+          "description": "Import italic fonts",
+          "default": false
         },
-        "dark": {
-          "type": "boolean"
+        "provider": {
+          "type": "string",
+          "enum": [
+            "none",
+            "google"
+          ],
+          "default": "google"
         },
-        "with-clicks": {
-          "type": "boolean"
+        "webfonts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided"
         },
-        "executable-path": {
-          "type": "string"
+        "local": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specify local fonts names, be excluded from webfonts"
         },
-        "with-toc": {
-          "type": "boolean"
+        "fallbacks": {
+          "type": "boolean",
+          "description": "Use fonts fallback",
+          "default": true
+        }
+      }
+    },
+    "DrawingsOptions": {
+      "type": "object",
+      "properties": {
+        "persist": {
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "description": "Persist the drawings to disk Passing string to specify the directory (default to `.slidev/drawings`)",
+          "default": false
         },
-        "per-slide": {
-          "type": "boolean"
+        "enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "default": true
         },
-        "scale": {
-          "type": "number"
+        "presenterOnly": {
+          "type": "boolean",
+          "description": "Only allow drawing from presenter mode",
+          "default": false
         },
-        "withClicks": {
-          "type": "boolean"
+        "syncAll": {
+          "type": "boolean",
+          "description": "Sync drawing for all instances",
+          "default": true
+        }
+      }
+    },
+    "Frontmatter": {
+      "type": "object",
+      "properties": {
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
-        "executablePath": {
-          "type": "string"
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinLayouts"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest"
         },
-        "withToc": {
-          "type": "boolean"
+        "class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ],
+          "description": "Custom class added to the slide root element"
+        },
+        "clicks": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations"
+        },
+        "clicksStart": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide to start",
+          "default": 0
+        },
+        "preload": {
+          "type": "boolean",
+          "description": "Preload the slide when the previous slide is active",
+          "default": true
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "Completely hide and disable the slide"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Same as `hide`, completely hide and disable the slide"
+        },
+        "hideInToc": {
+          "type": "boolean",
+          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "level": {
+          "type": "number",
+          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared"
+        },
+        "routeAlias": {
+          "type": "string",
+          "description": "Create a route alias that can be used in the URL or with the <Link> component"
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Custom zoom level for the slide",
+          "default": 1
+        },
+        "dragPos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
+        },
+        "src": {
+          "type": "string",
+          "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
         }
       }
     }

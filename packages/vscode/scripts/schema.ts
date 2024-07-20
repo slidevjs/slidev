@@ -3,10 +3,23 @@ import tsj from 'ts-json-schema-generator'
 
 const program = tsj
   .createGenerator({
-    path: '../../packages/types/src/config.ts',
+    path: '../../packages/types/src/frontmatter.ts',
     tsconfig: '../../tsconfig.json',
     additionalProperties: true,
+    jsDoc: 'extended',
+    skipTypeCheck: true,
   })
-  .createSchema('Headmatter')
 
-await fs.writeFile('./schema/headmatter.json', JSON.stringify(program, null, 2))
+await Promise.all([
+  fs.writeFile('./schema/headmatter.json', JSON.stringify(
+    program.createSchema('Headmatter'),
+    null,
+    2,
+  )),
+
+  fs.writeFile('./schema/frontmatter.json', JSON.stringify(
+    program.createSchema('Frontmatter'),
+    null,
+    2,
+  )),
+])

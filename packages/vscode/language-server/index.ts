@@ -22,10 +22,18 @@ connection.onInitialize((params) => {
             isKubernetes: false,
             validate: true,
             yamlVersion: '1.2',
+            parentSkeletonSelectedFirst: false,
+            disableDefaultProperties: true,
             schemas: [
               {
+                priority: 3,
                 fileMatch: ['volar-embedded-content://frontmatter_0/**/*.md'],
                 uri: fileURLToPath(new URL('../schema/headmatter.json', import.meta.url)),
+              },
+              {
+                priority: 2,
+                fileMatch: ['volar-embedded-content://**/*.md'],
+                uri: fileURLToPath(new URL('../schema/frontmatter.json', import.meta.url)),
               },
             ],
           }
