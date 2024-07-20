@@ -14,6 +14,7 @@ export const slidevLanguagePlugin: LanguagePlugin<URI> = {
         noParseYAML: true,
         preserveCR: true,
       })
+
       return {
         id: 'root',
         languageId: 'markdown',

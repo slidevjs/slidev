@@ -2,152 +2,108 @@ import type { TransitionGroupProps } from 'vue'
 import type { ExportArgs } from './cli'
 import type { SlidevThemeConfig } from './types'
 
-export interface SlidevConfig {
-  title: string
+export interface Headmatter {
+  /**
+   * Title of the slides
+   */
+  title?: string
   /**
    * String template to compose title
    *
    * @example "%s - Slidev" - to suffix " - Slidev" to all pages
    * @default '%s - Slidev'
    */
-  titleTemplate: string
+  titleTemplate?: string
   /**
    * Theme to use for the slides
    *
    * @see https://sli.dev/themes/use.html
    * @default 'default'
    */
-  theme: string
+  theme?: string
   /**
    * List of Slidev addons
    *
    * @default []
    */
-  addons: string[]
+  addons?: string[]
   /**
    * Download remote assets in local using vite-plugin-remote-assets
    *
    * @default false
    */
-  remoteAssets: boolean | 'dev' | 'build'
-  /**
-   * Enable Monaco
-   *
-   * @see https://sli.dev/custom/config-monaco.html
-   * @default true
-   */
-  monaco: boolean | 'dev' | 'build'
-  /**
-   * Where to load monaco types from
-   *
-   * - `cdn` - load from CDN with `@typescript/ata`
-   * - `local` - load from local node_modules
-   *
-   * @default 'local'
-   */
-  monacoTypesSource: 'cdn' | 'local' | 'none'
-  /**
-   * Additional node packages to load as monaco types
-   *
-   * @default []
-   */
-  monacoTypesAdditionalPackages: string[]
-  /**
-   * Packages to ignore when loading monaco types
-   *
-   * @default []
-   */
-  monacoTypesIgnorePackages: string[]
-  /**
-   * Additional local modules to load as dependencies of monaco runnable
-   *
-   * @default []
-   */
-  monacoRunAdditionalDeps: string[]
+  remoteAssets?: boolean | 'dev' | 'build'
   /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
    *
    * @default false
    */
-  download: boolean | string
-  /**
-   * Options for export
-   *
-   * @default {}
-   */
-  export: ResolvedExportOptions
+  download?: boolean | string
   /**
    * Show a copy button in code blocks
    *
    * @default true
    */
-  codeCopy: boolean
+  codeCopy?: boolean
   /**
    * Information shows on the built SPA
    * Can be a markdown string
    *
    * @default false
    */
-  info: string | boolean
+  info?: string | boolean
   /**
    * Prefer highlighter
    *
    * @see https://sli.dev/custom/config-highlighter.html
    * @default shiki
    */
-  highlighter: 'shiki' | 'prism'
+  highlighter?: 'shiki' | 'prism'
   /**
    * Enable Twoslash
    *
    * @default true
    */
-  twoslash: boolean | 'dev' | 'build'
+  twoslash?: boolean | 'dev' | 'build'
   /**
    * Show line numbers in code blocks
    *
    * @default false
    */
-  lineNumbers: boolean
+  lineNumbers?: boolean
   /**
    * Force slides color schema
    *
    * @default 'auto'
    */
-  colorSchema: 'dark' | 'light' | 'all' | 'auto'
+  colorSchema?: 'dark' | 'light' | 'all' | 'auto'
   /**
    * Router mode for vue-router
    *
    * @default 'history'
    */
-  routerMode: 'hash' | 'history'
+  routerMode?: 'hash' | 'history'
   /**
    * Aspect ratio for slides
    * should be like `16/9` or `1:1`
    *
    * @default '16/9'
    */
-  aspectRatio: number
+  aspectRatio?: number
   /**
    * The actual width for slides canvas.
    * unit in px.
    *
    * @default '980'
    */
-  canvasWidth: number
-  /**
-   * Force the filename used when exporting the presentation.
-   * The extension, e.g. .pdf, gets automatically added.
-   *
-   * @default ''
-   */
-  exportFilename: string | null
+  canvasWidth?: number
   /**
    * Controls whether texts in slides are selectable
    *
    * @default true
    */
-  selectable: boolean
+  selectable?: boolean
   /**
    * Configure for themes, will inject intro root styles as
    * `--slidev-theme-x` for attribute `x`
@@ -157,37 +113,37 @@ export interface SlidevConfig {
    *
    * @default {}
    */
-  themeConfig: SlidevThemeConfig
+  themeConfig?: SlidevThemeConfig
   /**
    * Configure fonts for the slides and app
    *
    * @default {}
    */
-  fonts: ResolvedFontOptions
+  fonts?: ResolvedFontOptions
   /**
    * Configure the icon for app
    *
    * @default 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
    */
-  favicon: string
+  favicon?: string
   /**
    * Options for drawings
    *
    * @default {}
    */
-  drawings: ResolvedDrawingsOptions
+  drawings?: ResolvedDrawingsOptions
   /**
    * URL of PlantUML server used to render diagrams
    *
    * @default https://www.plantuml.com/plantuml
    */
-  plantUmlServer: string
+  plantUmlServer?: string
   /**
    * Enable slides recording
    *
    * @default 'dev'
    */
-  record: boolean | 'dev' | 'build'
+  record?: boolean | 'dev' | 'build'
   /**
    * Expose the server to inbound requests (listen to `0.0.0.0`)
    *
@@ -203,19 +159,19 @@ export interface SlidevConfig {
    * @deprecated
    * @default 'unocss'
    */
-  css: 'unocss'
+  css?: 'unocss'
   /**
    * Enable presenter mode
    *
    * @default true
    */
-  presenter: boolean | 'dev' | 'build'
+  presenter?: boolean | 'dev' | 'build'
   /**
    * Attributes to apply to the HTML element
    *
    * @default {}
    */
-  htmlAttrs: Record<string, string>
+  htmlAttrs?: Record<string, string>
   /**
    * Page transition, powered by Vue's <TransitionGroup/>
    *
@@ -245,17 +201,67 @@ export interface SlidevConfig {
    *
    * @default true
    */
-  editor: boolean
+  editor?: boolean
   /**
    * Enable context menu
    *
    * @default true
    */
-  contextMenu: boolean | 'dev' | 'build' | undefined
+  contextMenu?: boolean | 'dev' | 'build' | undefined
   /**
    * Enable wake lock
    */
-  wakeLock: boolean | 'dev' | 'build'
+  wakeLock?: boolean | 'dev' | 'build'
+  /**
+   * Options for export
+   *
+   * @default {}
+   */
+  export?: ResolvedExportOptions
+  /**
+   * Force the filename used when exporting the presentation.
+   * The extension, e.g. .pdf, gets automatically added.
+   *
+   * @default ''
+   */
+  exportFilename?: string | null
+  /**
+   * Enable Monaco
+   *
+   * @see https://sli.dev/custom/config-monaco.html
+   * @default true
+   */
+  monaco?: boolean | 'dev' | 'build'
+  /**
+   * Where to load monaco types from
+   *
+   * - `cdn` - load from CDN with `@typescript/ata`
+   * - `local` - load from local node_modules
+   *
+   * @default 'local'
+   */
+  monacoTypesSource?: 'cdn' | 'local' | 'none'
+  /**
+   * Additional node packages to load as monaco types
+   *
+   * @default []
+   */
+  monacoTypesAdditionalPackages?: string[]
+  /**
+   * Packages to ignore when loading monaco types
+   *
+   * @default []
+   */
+  monacoTypesIgnorePackages?: string[]
+  /**
+   * Additional local modules to load as dependencies of monaco runnable
+   *
+   * @default []
+   */
+  monacoRunAdditionalDeps?: string[]
+}
+
+export interface SlidevConfig extends Required<Headmatter> {
 }
 
 export interface FontOptions {

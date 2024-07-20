@@ -1,5 +1,6 @@
+import { fileURLToPath } from 'node:url'
 import { createConnection, createServer, createSimpleProject } from '@volar/language-server/node'
-import { create as createYamlService } from 'volar-service-yaml'
+import { create as createYamlService } from './volar-service-yaml'
 import { slidevLanguagePlugin } from './languagePlugin'
 import { create as createPrettierService } from './prettierService'
 
@@ -10,7 +11,28 @@ connection.onInitialize((params) => {
   return server.initialize(
     params,
     createSimpleProject([slidevLanguagePlugin]),
-    [createYamlService(), createPrettierService()],
+    [
+      createYamlService({
+        getLanguageSettings() {
+          return {
+            completion: true,
+            customTags: [],
+            format: true,
+            hover: true,
+            isKubernetes: false,
+            validate: true,
+            yamlVersion: '1.2',
+            schemas: [
+              {
+                fileMatch: ['volar-embedded-content://frontmatter_0/**/*.md'],
+                uri: fileURLToPath(new URL('../schema/headmatter.json', import.meta.url)),
+              },
+            ],
+          }
+        },
+      }),
+      createPrettierService(),
+    ],
   )
 })
 

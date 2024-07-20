@@ -445,8 +445,9 @@
   "scripts": {
     "publish": "esno scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
+    "prepare": "esno scripts/schema.ts",
     "build": "tsup --env.NODE_ENV production --treeshake",
-    "dev": "tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
+    "dev": "nr prepare && tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {

@@ -66,6 +66,7 @@
     "shiki": "^1.10.2",
     "simple-git-hooks": "^2.11.1",
     "taze": "^0.14.2",
+    "ts-json-schema-generator": "^2.3.0",
     "tsup": "^8.1.0",
     "typescript": "^5.5.3",
     "vite": "^5.3.3",
