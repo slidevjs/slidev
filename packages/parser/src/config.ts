@@ -36,10 +36,12 @@ export function getDefaultConfig(): SlidevConfig {
     css: 'unocss',
     presenter: true,
     htmlAttrs: {},
-    transition: undefined,
+    transition: null,
     editor: true,
-    contextMenu: undefined,
+    contextMenu: null,
     wakeLock: true,
+    remote: false,
+    mdc: false,
   }
 }
 

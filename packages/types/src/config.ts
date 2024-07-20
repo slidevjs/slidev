@@ -186,7 +186,7 @@ export interface Headmatter {
    * @see https://sli.dev/guide/animations.html#pages-transitions
    * @see https://vuejs.org/guide/built-ins/transition.html
    */
-  transition?: BuiltinSlideTransition | string | TransitionGroupProps
+  transition?: BuiltinSlideTransition | string | TransitionGroupProps | null
   /**
    * Suppport MDC syntax
    *
@@ -207,7 +207,7 @@ export interface Headmatter {
    *
    * @default true
    */
-  contextMenu?: boolean | 'dev' | 'build' | undefined
+  contextMenu?: boolean | 'dev' | 'build' | null
   /**
    * Enable wake lock
    */
