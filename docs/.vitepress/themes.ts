@@ -503,12 +503,12 @@ export const community: ThemeInfo[] = [
       'https://gureckis.github.io/slidev-theme-neversink/screenshots/34.png',
       'https://gureckis.github.io/slidev-theme-neversink/screenshots/36.png',
       'https://gureckis.github.io/slidev-theme-neversink/screenshots/38.png',
-      'https://gureckis.github.io/slidev-theme-neversink/screenshots/35.png'
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/35.png',
     ],
     tags: [
       'light',
       'academic',
-      'education'
+      'education',
     ],
   },
   // Add yours here!
