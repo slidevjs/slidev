@@ -483,6 +483,34 @@ export const community: ThemeInfo[] = [
       'cool',
     ],
   },
+  {
+    id: 'slidev-theme-neversink',
+    name: 'neversink',
+    description: 'Slidev Theme Neversink',
+    author: {
+      name: 'Todd M. Gureckis',
+      link: 'https://github.com/gureckis',
+    },
+    repo: 'https://github.com/gureckis/slidev-theme-neversink',
+    previews: [
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/2.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/6.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/8.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/15.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/18.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/22.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/26.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/34.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/36.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/38.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/35.png',
+    ],
+    tags: [
+      'light',
+      'academic',
+      'education',
+    ],
+  },
   // Add yours here!
   {
     id: '',
