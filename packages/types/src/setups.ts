@@ -72,19 +72,6 @@ export type PreparserSetup = (context: {
   mode?: string
 }) => Awaitable<SlidevPreparserExtension[]>
 
-/**
- *
- */
-export interface NodeSideSetupResult {
-  katex: Promise<KatexOptions>
-  shiki: Promise<MarkdownItShikiOptions>
-  preparser: Promise<SlidevPreparserExtension[]>
-  /**
-   * Reload all setups
-   */
-  reload: () => void
-}
-
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
