@@ -1,4 +1,3 @@
-import { fileURLToPath } from 'node:url'
 import { createConnection, createServer, createSimpleProject } from '@volar/language-server/node'
 import { create as createYamlService } from './volar-service-yaml'
 import { slidevLanguagePlugin } from './languagePlugin'
@@ -17,7 +16,7 @@ connection.onInitialize((params) => {
           return {
             completion: true,
             customTags: [],
-            format: true,
+            format: false,
             hover: true,
             isKubernetes: false,
             validate: true,
@@ -28,12 +27,12 @@ connection.onInitialize((params) => {
               {
                 priority: 3,
                 fileMatch: ['volar-embedded-content://frontmatter_0/**/*.md'],
-                uri: fileURLToPath(new URL('../schema/headmatter.json', import.meta.url)),
+                uri: (new URL('../schema/headmatter.json', import.meta.url)).toString(),
               },
               {
                 priority: 2,
                 fileMatch: ['volar-embedded-content://**/*.md'],
-                uri: fileURLToPath(new URL('../schema/frontmatter.json', import.meta.url)),
+                uri: (new URL('../schema/frontmatter.json', import.meta.url)).toString(),
               },
             ],
           }
