@@ -6,6 +6,13 @@ export function create() {
     prettier,
     {
       documentSelector: ['yaml'],
+      async getFormattingOptions(_prettier, _document, formatOptions) {
+        return {
+          parser: 'yaml',
+          tabWidth: formatOptions.tabSize,
+          useTabs: !formatOptions.insertSpaces,
+        }
+      },
     },
   )
 }
