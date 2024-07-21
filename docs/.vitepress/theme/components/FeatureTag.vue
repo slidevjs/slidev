@@ -5,6 +5,7 @@ import { useData, withBase } from 'vitepress'
 const props = defineProps<{
   tag: string
   removable?: boolean
+  noclick?: boolean
 }>()
 const emit = defineEmits(['remove'])
 
@@ -56,7 +57,10 @@ const colors = computed(() => {
       <carbon:close />
     </button>
   </a>
-  <a v-else class="feature-tag" :href="withBase(`/features/#tags=${tag}`)">
+  <span v-else-if="props.noclick" class="feature-tag">
+    {{ formattedTag }}
+  </span>
+  <a v-else class="feature-tag" :href="withBase(`/features/#tags=${tag}`)" target="_blank">
     {{ formattedTag }}
   </a>
 </template>
