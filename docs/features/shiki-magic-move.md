@@ -32,7 +32,7 @@ console.log(`Step ${3}` as string)
 ````
 `````
 
-It's also possible to mix Magic Move with [line highlighting](#line-highlighting) and [line numbers](#line-numbers), for example:
+It's also possible to mix Magic Move with <LinkInline link="features/line-highlighting" /> and <LinkInline link="features/code-block-line-numbers" />, for example:
 
 `````md
 ````md magic-move {at:4, lines: true} // [!code hl]
