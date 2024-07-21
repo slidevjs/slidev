@@ -80,7 +80,7 @@ function* getEmbeddedCodes(parsed: SlidevMarkdown): Generator<VirtualCode> {
             semantic: true,
             navigation: true,
             structure: true,
-            format: true,
+            format: false,
           },
         }],
         embeddedCodes: [],
