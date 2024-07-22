@@ -27,7 +27,7 @@ Parameters:
 - `x1` (`string | number`, required): start point x position
 - `y1` (`string | number`, required): start point y position
 - `x2` (`string | number`, required): end point x position
-- `y2` (`string | number`, required): end point x position
+- `y2` (`string | number`, required): end point y position
 - `width` (`string | number`, default: `2`): line width
 - `color` (`string`, default: `'currentColor'`): line color
 - `two-way` (`boolean`, default: `false`): draw a two-way arrow
