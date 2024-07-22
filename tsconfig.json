@@ -31,6 +31,8 @@
   },
   "include": [
     "./*.ts",
+    "./docs/**/*.ts",
+    "./docs/**/*.vue",
     "./packages/**/*.ts",
     "./packages/**/*.vue",
     "./demo/**/*.ts",

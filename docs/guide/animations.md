@@ -2,12 +2,16 @@
 outline: deep
 ---
 
-# Animations
+# Animation
 
-## Click Animations
+Animation is an essential part of slide presentations. Slidev provides a variety of ways to animate your slides, from the simple to the complex. This guide will show you how to use them effectively.
+
+## Click Animation
+
+A "**click**" can be considered as the unit of animation steps in slides. A slide can have one or more clicks, and each click can trigger one or more animations - for example, revealing or hiding elements.
 
 > [!NOTE]
-> Since v0.48.0, we are rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
+> Since v0.48.0, we've rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
 
 ### `v-click`
 
@@ -31,26 +35,27 @@ To apply "click animations" for elements, you can use the `v-click` directive or
 
 ```md
 <div v-click> Hello </div>
-<div v-after> World </div>
+<div v-after> World </div>  <!-- or <v-after> World </v-after> -->
 ```
 
 When you press "next", both `Hello` and `World` will show up together.
 
 ### Hide after clicking
 
-Add a `.hide` modifier to `v-click` or `v-after` to make the element invisible after clicking, instead of showing up.
+Add a `.hide` modifier to `v-click` or `v-after` directives to make elements invisible after clicking, instead of showing up.
 
 ```md
 <div v-click> Visible after 1 click </div>
-<div v-click.hide> Hidden after 2 click </div>
-<div v-after.hide> Hidden after 2 click </div>
+<div v-click.hide> Hidden after 2 clicks </div>
+<div v-after.hide> Hidden after 2 clicks </div>
 ```
 
-For `v-click` component, you can use the `hide` prop to achieve the same effect:
+For the components, you can use the `hide` prop to achieve the same effect:
 
 ```md
 <v-click> Visible after 1 click </v-click>
-<v-click hide> Hidden after 2 click </v-click>
+<v-click hide> Hidden after 2 clicks </v-click>
+<v-after hide> Also hidden after 2 clicks </v-after>
 ```
 
 ### `v-clicks`
@@ -88,17 +93,17 @@ Also, you can use the `every` prop to specify the number of items to show after 
 ```md
 <v-clicks every="2">
 
-- Item 1 (part 1)
-- Item 1 (part 2)
-- Item 2 (part 1)
-- Item 2 (part 2)
+- Item 1.1
+- Item 1.2
+- Item 2.1
+- Item 2.2
 
 </v-clicks>
 ```
 
 ### Positioning
 
-By default, the clicking animations take place one by one. You can customize the animation position of elements by using the `at` prop or the `v-click` directive with value.
+By default, the clicking animations are triggered one by one. You can customize the animation "position" of elements by using the `at` prop or the `v-click` directive with value.
 
 Like the CSS layout system, click-animated elements can be "relative" or "absolute":
 
@@ -133,7 +138,7 @@ In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
 <v-click-gap size="1" /><img v-after />
 ```
 
-::: info
+::: tip `at` prop value format
 Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relative positions:
 
 | Value          | Kind     |
@@ -174,15 +179,15 @@ You can mix the absolute and relative positions:
 
 The following example synchronizes the highlighting of the two code blocks:
 
-````md
+````md {1,6}
 ```js {1|2}{at:1}
 1 + 1
 'a' + 'b'
 ```
 
 ```js {1|2}{at:1}
-2
-'ab'
+= 2
+= 'ab'
 ```
 ````
 
@@ -214,11 +219,11 @@ See [`VSwitch` Component](/builtin/components#vswitch) for more details.
 
 ### Custom Total Clicks Count
 
-By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
+By default, Slidev automatically calculates how many clicks are required before going to the next slide. You can override this via the `clicks` frontmatter option:
 
 ```yaml
 ---
-# 10 clicks in this slide, before going to the next
+# 10 clicks in this slide, before going to the next slide
 clicks: 10
 ---
 ```
@@ -284,67 +289,6 @@ To specify animations for only certain slides or layouts
 ```
 
 Learn more about [customizing styles](/custom/directory-structure#style).
-
-### Direction Specific Animations
-
-> Available since v0.48.0
-
-In some cases, you might want to have different animations going forward and backward. Slide will apply the `.slidev-nav-go-forward` or `.slidev-nav-go-backward` class to slide container when navigating.
-
-So you can leverage this to apply different animations for different directions, for example:
-
-```css
-/* example: delay on only forward but not backward */
-.slidev-nav-go-forward .slidev-vclick-target {
-  transition-delay: 500ms;
-}
-.slidev-nav-go-backward .slidev-vclick-target {
-  transition-delay: 0;
-}
-```
-
-To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38), that you can add `forward:` or `backward:` prefix to any utility classes to apply them conditionally.
-
-```html
-<div v-click class="transition delay-300">Element</div> // [!code --]
-<div v-click class="transition forward:delay-300">Element</div> // [!code ++]
-```
-
-## Rough Markers
-
-> Available since v0.48.0
-
-Slidev integrates [Rough Notation](https://github.com/linkstrifer/react-rough-notation) to allow marking or highlighting elements in your slides.
-
-### `v-mark`
-
-Rough Notation integrates comes with the `v-mark` directive.
-
-#### Type
-
-`v-mark.underline` for Underline mark, `v-mark.circle` for Circle mark, etc. Default to `underline`
-
-#### Color
-
-`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
-
-#### Clicks
-
-`v-mark` works like `v-click` and will trigger after a click. Same as `v-click`, it allows you to pass a custom click value, like `v-mark="5"` or `v-mark="'+1'"`.
-
-#### Options
-
-Optionally you can pass an object to `v-mark` to specify the options, for example:
-
-```vue
-<span v-mark="{ at: 5, color: '#234', type: 'circle' }">
-Important text
-</span>
-```
-
-#### Preview
-
-<video src="https://github.com/slidevjs/slidev/assets/11247099/c840340c-0aa1-4cde-b228-e6c67e5f6879" rounded-lg shadow controls></video>
 
 ## Motion
 
@@ -443,7 +387,7 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 
 > Available since v0.43.0
 
-The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more how it works in [View Transitions API - MDN Web Docs - Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
+The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more about it in [View Transitions API - MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
 
 :::warning
 Experimental: This is not supported by all browsers. Check the [Browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#browser_compatibility) carefully before using this.

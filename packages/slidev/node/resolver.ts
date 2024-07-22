@@ -93,7 +93,7 @@ export async function resolveEntry(entryRaw: string) {
     else
       process.exit(0)
   }
-  return entry
+  return slash(entry)
 }
 
 /**

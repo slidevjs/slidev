@@ -1,4 +1,8 @@
-# Configure and Extend the Parser
+# Configure Pre-Parser
+
+::: info
+Custom pre-parsers are not supposed to be used too often. Please only use it if you really want to have your custom syntax.
+:::
 
 Slidev parses your presentation file (e.g. `slides.md`) in three steps:
 
@@ -15,14 +19,14 @@ Configuring the markdown parser used in step 2 can be done by [configuring Vite 
 > Available since v0.37.0.
 
 ::: warning
-Important: when modifying the preparser configuration, you need to stop and start slidev again (restart might not be sufficient).
+Important: when modifying the preparser configuration, you need to stop and start Slidev again (restart might not be sufficient).
 :::
 
-The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](/guide/editors) due to implicit changes in the syntax.
+The preparser (step 1 above) is highly extensible and allows you to implement custom syntaxes for your md files. Extending the preparser is considered **an advanced feature** and is susceptible to breaking [editor integrations](../features/side-editor) due to implicit changes in the syntax.
 
 To customize it, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(({ filepath, headmatter, mode }) => {
@@ -71,7 +75,7 @@ see you next time
 
 To allow these `@src:` and `@cover:` syntaxes, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
@@ -152,7 +156,7 @@ Here we used an underscore in `_scale` to avoid possible conflicts with existing
 
 To handle this `_scale: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
 
-```ts
+```ts twoslash
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
