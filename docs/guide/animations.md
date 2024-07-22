@@ -191,7 +191,7 @@ The following example synchronizes the highlighting of the two code blocks:
 ```
 ````
 
-### Enter & Leave
+### Enter & Leave {#enter-leave}
 
 You can also specify the enter and leave index for the `v-click` directive by passing an array. The end index is exclusive.
 
