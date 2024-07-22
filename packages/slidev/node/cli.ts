@@ -154,9 +154,9 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          async loadData() {
+          async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
+            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {

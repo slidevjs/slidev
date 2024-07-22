@@ -56,5 +56,5 @@ export interface SlidevServerOptions {
   /**
    * @returns `false` if server should be restarted
    */
-  loadData?: () => Promise<SlidevData | false>
+  loadData?: (loadedSource: Record<string, string>) => Promise<SlidevData | false>
 }

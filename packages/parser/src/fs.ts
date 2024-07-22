@@ -19,8 +19,8 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, content?: string, mode?: string): Promise<LoadedSlidevData> {
-  const markdown = content ?? fs.readFileSync(filepath, 'utf-8')
+export async function load(userRoot: string, filepath: string, loadedSource: Record<string, string> = {}, mode?: string): Promise<LoadedSlidevData> {
+  const markdown = loadedSource[filepath] ?? fs.readFileSync(filepath, 'utf-8')
 
   let extensions: SlidevPreparserExtension[] | undefined
   if (preparserExtensionLoader) {
@@ -45,7 +45,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
-      const raw = fs.readFileSync(path, 'utf-8')
+      const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
     }
