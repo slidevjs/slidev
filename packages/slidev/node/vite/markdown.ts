@@ -34,6 +34,10 @@ export async function createMarkdownPlugin(
     transforms: {
       ...mdOptions?.transforms,
       before(code, id) {
+        // Skip entry Markdown files
+        if (options.data.markdownFiles[id])
+          return ''
+
         code = mdOptions?.transforms?.before?.(code, id) ?? code
 
         const match = id.match(regexSlideSourceId)

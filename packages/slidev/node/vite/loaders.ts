@@ -65,6 +65,7 @@ export function createSlidesLoader(
 
   return {
     name: 'slidev:loader',
+    enforce: 'pre',
 
     configureServer(_server) {
       server = _server
@@ -125,9 +126,10 @@ export function createSlidesLoader(
       if (!data.watchFiles.includes(ctx.file))
         return
 
-      await ctx.read()
+      const newData = await serverOptions.loadData?.({
+        [ctx.file]: await ctx.read(),
+      })
 
-      const newData = await serverOptions.loadData?.()
       if (!newData)
         return []
 
@@ -323,6 +325,10 @@ export function createSlidesLoader(
           }
         }
       }
+
+      // Entry files, shouldn't be processed by MarkdownIt
+      if (data.markdownFiles[id])
+        return ''
     },
   }
 }
