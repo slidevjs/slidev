@@ -1,5 +1,4 @@
 ---
-layout: feature
 depends:
   - guide/syntax#code-block
 tags: [codeblock]
@@ -24,7 +23,7 @@ function add(
 ```
 ````
 
-Note that you can use `{*}` as a placeholder of <LinkInline link="feature/line-highlighting" />:
+Note that you can use `{*}` as a placeholder of <LinkInline link="features/line-highlighting" />:
 
 ````md
 ```ts {*}{lines:true,startLine:5}

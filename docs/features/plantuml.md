@@ -1,10 +1,9 @@
 ---
-layout: feature
 relates:
   - Plant UML: https://plantuml.com/
   - Plant UML Live Editor: https://plantuml.com/plantuml
   - Example side: https://sli.dev/demo/starter/12
-  - feature/mermaid
+  - features/mermaid
 tags: [diagram]
 description: |
   Create diagrams from textual descriptions, powered by PlantUML.

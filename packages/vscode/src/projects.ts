@@ -17,6 +17,7 @@ export interface SlidevProject {
 }
 
 export const projects = reactive(new Map<string, SlidevProject>())
+export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
 export const activeSlidevData = computed(() => activeProject.value?.data)

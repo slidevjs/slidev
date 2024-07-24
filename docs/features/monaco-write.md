@@ -1,10 +1,9 @@
 ---
-layout: feature
 depends:
-  - feature/monaco-editor
-  - feature/import-snippet
+  - features/monaco-editor
+  - features/import-snippet
 relates:
-  - feature/import-snippet
+  - features/import-snippet
   - Custom Code Runners: /custom/config-code-runners
 since: v0.49.5
 tags: [codeblock, editor]

@@ -1,0 +1,878 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Headmatter",
+  "definitions": {
+    "Headmatter": {
+      "type": "object",
+      "properties": {
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinLayouts"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest",
+          "markdownDescription": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest"
+        },
+        "class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ],
+          "description": "Custom class added to the slide root element",
+          "markdownDescription": "Custom class added to the slide root element"
+        },
+        "clicks": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations",
+          "markdownDescription": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations"
+        },
+        "clicksStart": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide to start",
+          "markdownDescription": "Manually specified the total clicks needed to this slide to start",
+          "default": 0
+        },
+        "preload": {
+          "type": "boolean",
+          "description": "Preload the slide when the previous slide is active",
+          "markdownDescription": "Preload the slide when the previous slide is active",
+          "default": true
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "Completely hide and disable the slide",
+          "markdownDescription": "Completely hide and disable the slide"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Same as `hide`, completely hide and disable the slide",
+          "markdownDescription": "Same as `hide`, completely hide and disable the slide"
+        },
+        "hideInToc": {
+          "type": "boolean",
+          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
+          "markdownDescription": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "level": {
+          "type": "number",
+          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared",
+          "markdownDescription": "Override the title level for the <TitleRenderer> and <Toc> components\nOnly if `title` has also been declared"
+        },
+        "routeAlias": {
+          "type": "string",
+          "description": "Create a route alias that can be used in the URL or with the <Link> component",
+          "markdownDescription": "Create a route alias that can be used in the URL or with the <Link> component"
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Custom zoom level for the slide",
+          "markdownDescription": "Custom zoom level for the slide",
+          "default": 1
+        },
+        "dragPos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
+          "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
+        },
+        "src": {
+          "type": "string",
+          "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
+          "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the slides",
+          "markdownDescription": "Title of the slides"
+        },
+        "titleTemplate": {
+          "type": "string",
+          "description": "String template to compose title",
+          "markdownDescription": "String template to compose title",
+          "default": "%s - Slidev"
+        },
+        "theme": {
+          "type": "string",
+          "description": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
+          "markdownDescription": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
+          "default": "default"
+        },
+        "addons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of Slidev addons",
+          "markdownDescription": "List of Slidev addons",
+          "default": []
+        },
+        "remoteAssets": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Download remote assets in local using vite-plugin-remote-assets",
+          "markdownDescription": "Download remote assets in local using vite-plugin-remote-assets",
+          "default": false
+        },
+        "download": {
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "description": "Show a download button in the SPA build, could also be a link to custom pdf",
+          "markdownDescription": "Show a download button in the SPA build,\ncould also be a link to custom pdf",
+          "default": false
+        },
+        "codeCopy": {
+          "type": "boolean",
+          "description": "Show a copy button in code blocks",
+          "markdownDescription": "Show a copy button in code blocks",
+          "default": true
+        },
+        "info": {
+          "type": [
+            "string",
+            "boolean"
+          ],
+          "description": "Information shows on the built SPA Can be a markdown string",
+          "markdownDescription": "Information shows on the built SPA\nCan be a markdown string",
+          "default": false
+        },
+        "highlighter": {
+          "type": "string",
+          "enum": [
+            "shiki",
+            "prism"
+          ],
+          "description": "Prefer highlighter\n\nSee https://sli.dev/custom/config-highlighter.html",
+          "markdownDescription": "Prefer highlighter\n\nSee https://sli.dev/custom/config-highlighter.html",
+          "default": "shiki"
+        },
+        "twoslash": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable Twoslash",
+          "markdownDescription": "Enable Twoslash",
+          "default": true
+        },
+        "lineNumbers": {
+          "type": "boolean",
+          "description": "Show line numbers in code blocks",
+          "markdownDescription": "Show line numbers in code blocks",
+          "default": false
+        },
+        "colorSchema": {
+          "type": "string",
+          "enum": [
+            "dark",
+            "light",
+            "all",
+            "auto"
+          ],
+          "description": "Force slides color schema",
+          "markdownDescription": "Force slides color schema",
+          "default": "auto"
+        },
+        "routerMode": {
+          "type": "string",
+          "enum": [
+            "hash",
+            "history"
+          ],
+          "description": "Router mode for vue-router",
+          "markdownDescription": "Router mode for vue-router",
+          "default": "history"
+        },
+        "aspectRatio": {
+          "type": "number",
+          "description": "Aspect ratio for slides should be like `16/9` or `1:1`",
+          "markdownDescription": "Aspect ratio for slides\nshould be like `16/9` or `1:1`",
+          "default": "16/9"
+        },
+        "canvasWidth": {
+          "type": "number",
+          "description": "The actual width for slides canvas. unit in px.",
+          "markdownDescription": "The actual width for slides canvas.\nunit in px.",
+          "default": "980"
+        },
+        "selectable": {
+          "type": "boolean",
+          "description": "Controls whether texts in slides are selectable",
+          "markdownDescription": "Controls whether texts in slides are selectable",
+          "default": true
+        },
+        "themeConfig": {
+          "$ref": "#/definitions/SlidevThemeConfig",
+          "description": "Configure for themes, will inject intro root styles as `--slidev-theme-x` for attribute `x`\n\nThis allows themes to have customization options in frontmatter Refer to themes' document for options avaliable",
+          "markdownDescription": "Configure for themes, will inject intro root styles as\n`--slidev-theme-x` for attribute `x`\n\nThis allows themes to have customization options in frontmatter\nRefer to themes' document for options avaliable",
+          "default": {}
+        },
+        "fonts": {
+          "$ref": "#/definitions/FontOptions",
+          "description": "Configure fonts for the slides and app",
+          "markdownDescription": "Configure fonts for the slides and app",
+          "default": {}
+        },
+        "favicon": {
+          "type": "string",
+          "description": "Configure the icon for app",
+          "markdownDescription": "Configure the icon for app",
+          "default": "https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png"
+        },
+        "drawings": {
+          "$ref": "#/definitions/DrawingsOptions",
+          "description": "Options for drawings",
+          "markdownDescription": "Options for drawings",
+          "default": {}
+        },
+        "plantUmlServer": {
+          "type": "string",
+          "description": "URL of PlantUML server used to render diagrams",
+          "markdownDescription": "URL of PlantUML server used to render diagrams",
+          "default": "https://www.plantuml.com/plantuml"
+        },
+        "record": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable slides recording",
+          "markdownDescription": "Enable slides recording",
+          "default": "dev"
+        },
+        "remote": {
+          "type": [
+            "string",
+            "boolean"
+          ],
+          "description": "Expose the server to inbound requests (listen to `0.0.0.0`)\n\nPass a string to set the password for accessing presenter mode.",
+          "markdownDescription": "Expose the server to inbound requests (listen to `0.0.0.0`)\n\nPass a string to set the password for accessing presenter mode.",
+          "default": false
+        },
+        "css": {
+          "type": "string",
+          "const": "unocss",
+          "description": "Engine for Atomic CSS\n\nSee https://unocss.dev/",
+          "markdownDescription": "Engine for Atomic CSS\n\nSee https://unocss.dev/",
+          "deprecated": true,
+          "default": "unocss"
+        },
+        "presenter": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable presenter mode",
+          "markdownDescription": "Enable presenter mode",
+          "default": true
+        },
+        "htmlAttrs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Attributes to apply to the HTML element",
+          "markdownDescription": "Attributes to apply to the HTML element",
+          "default": {}
+        },
+        "mdc": {
+          "type": "boolean",
+          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "markdownDescription": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "default": false
+        },
+        "editor": {
+          "type": "boolean",
+          "description": "Enable built-in editor",
+          "markdownDescription": "Enable built-in editor",
+          "default": true
+        },
+        "contextMenu": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Enable context menu",
+          "markdownDescription": "Enable context menu",
+          "default": true
+        },
+        "wakeLock": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable wake lock",
+          "markdownDescription": "Enable wake lock"
+        },
+        "exportFilename": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Force the filename used when exporting the presentation. The extension, e.g. .pdf, gets automatically added.",
+          "markdownDescription": "Force the filename used when exporting the presentation.\nThe extension, e.g. .pdf, gets automatically added.",
+          "default": ""
+        },
+        "monaco": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable Monaco\n\nSee https://sli.dev/custom/config-monaco.html",
+          "markdownDescription": "Enable Monaco\n\nSee https://sli.dev/custom/config-monaco.html",
+          "default": true
+        },
+        "monacoTypesSource": {
+          "type": "string",
+          "enum": [
+            "cdn",
+            "local",
+            "none"
+          ],
+          "description": "Where to load monaco types from\n\n- `cdn` - load from CDN with `@typescript/ata`\n- `local` - load from local node_modules",
+          "markdownDescription": "Where to load monaco types from\n\n- `cdn` - load from CDN with `@typescript/ata`\n- `local` - load from local node_modules",
+          "default": "local"
+        },
+        "monacoTypesAdditionalPackages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional node packages to load as monaco types",
+          "markdownDescription": "Additional node packages to load as monaco types",
+          "default": []
+        },
+        "monacoTypesIgnorePackages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Packages to ignore when loading monaco types",
+          "markdownDescription": "Packages to ignore when loading monaco types",
+          "default": []
+        },
+        "monacoRunAdditionalDeps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional local modules to load as dependencies of monaco runnable",
+          "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
+          "default": []
+        },
+        "defaults": {
+          "$ref": "#/definitions/Frontmatter",
+          "description": "Default frontmatter options applied to all slides",
+          "markdownDescription": "Default frontmatter options applied to all slides"
+        }
+      }
+    },
+    "BuiltinSlideTransition": {
+      "type": "string",
+      "enum": [
+        "slide-up",
+        "slide-down",
+        "slide-left",
+        "slide-right",
+        "fade",
+        "zoom",
+        "none"
+      ]
+    },
+    "TransitionGroupProps": {
+      "type": "object",
+      "properties": {
+        "appear": {
+          "type": "boolean"
+        },
+        "persisted": {
+          "type": "boolean"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "moveClass": {
+          "type": "string"
+        },
+        "css": {
+          "type": "boolean"
+        },
+        "duration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "enter": {
+                  "type": "number"
+                },
+                "leave": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "enter",
+                "leave"
+              ]
+            }
+          ]
+        },
+        "enterFromClass": {
+          "type": "string"
+        },
+        "enterActiveClass": {
+          "type": "string"
+        },
+        "enterToClass": {
+          "type": "string"
+        },
+        "appearFromClass": {
+          "type": "string"
+        },
+        "appearActiveClass": {
+          "type": "string"
+        },
+        "appearToClass": {
+          "type": "string"
+        },
+        "leaveFromClass": {
+          "type": "string"
+        },
+        "leaveActiveClass": {
+          "type": "string"
+        },
+        "leaveToClass": {
+          "type": "string"
+        }
+      }
+    },
+    "BuiltinLayouts": {
+      "type": "string",
+      "enum": [
+        "404",
+        "center",
+        "cover",
+        "default",
+        "end",
+        "error",
+        "fact",
+        "full",
+        "iframe-left",
+        "iframe-right",
+        "iframe",
+        "image-left",
+        "image-right",
+        "image",
+        "intro",
+        "none",
+        "quote",
+        "section",
+        "statement",
+        "two-cols-header",
+        "two-cols"
+      ]
+    },
+    "SlidevThemeConfig": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number"
+        ]
+      }
+    },
+    "FontOptions": {
+      "type": "object",
+      "properties": {
+        "sans": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Sans serif fonts (default fonts for most text)",
+          "markdownDescription": "Sans serif fonts (default fonts for most text)"
+        },
+        "serif": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Serif fonts",
+          "markdownDescription": "Serif fonts"
+        },
+        "mono": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Monospace fonts, for code blocks and etc.",
+          "markdownDescription": "Monospace fonts, for code blocks and etc."
+        },
+        "custom": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Load webfonts for custom CSS (does not apply anywhere by default)",
+          "markdownDescription": "Load webfonts for custom CSS (does not apply anywhere by default)"
+        },
+        "weights": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              }
+            }
+          ],
+          "description": "Weights for fonts",
+          "markdownDescription": "Weights for fonts",
+          "default": [
+            200,
+            400,
+            600
+          ]
+        },
+        "italic": {
+          "type": "boolean",
+          "description": "Import italic fonts",
+          "markdownDescription": "Import italic fonts",
+          "default": false
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "none",
+            "google"
+          ],
+          "default": "google"
+        },
+        "webfonts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided",
+          "markdownDescription": "Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided"
+        },
+        "local": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Specify local fonts names, be excluded from webfonts",
+          "markdownDescription": "Specify local fonts names, be excluded from webfonts"
+        },
+        "fallbacks": {
+          "type": "boolean",
+          "description": "Use fonts fallback",
+          "markdownDescription": "Use fonts fallback",
+          "default": true
+        }
+      }
+    },
+    "DrawingsOptions": {
+      "type": "object",
+      "properties": {
+        "persist": {
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "description": "Persist the drawings to disk Passing string to specify the directory (default to `.slidev/drawings`)",
+          "markdownDescription": "Persist the drawings to disk\nPassing string to specify the directory (default to `.slidev/drawings`)",
+          "default": false
+        },
+        "enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "default": true
+        },
+        "presenterOnly": {
+          "type": "boolean",
+          "description": "Only allow drawing from presenter mode",
+          "markdownDescription": "Only allow drawing from presenter mode",
+          "default": false
+        },
+        "syncAll": {
+          "type": "boolean",
+          "description": "Sync drawing for all instances",
+          "markdownDescription": "Sync drawing for all instances",
+          "default": true
+        }
+      }
+    },
+    "Frontmatter": {
+      "type": "object",
+      "properties": {
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinLayouts"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest",
+          "markdownDescription": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest"
+        },
+        "class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ],
+          "description": "Custom class added to the slide root element",
+          "markdownDescription": "Custom class added to the slide root element"
+        },
+        "clicks": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations",
+          "markdownDescription": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations"
+        },
+        "clicksStart": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide to start",
+          "markdownDescription": "Manually specified the total clicks needed to this slide to start",
+          "default": 0
+        },
+        "preload": {
+          "type": "boolean",
+          "description": "Preload the slide when the previous slide is active",
+          "markdownDescription": "Preload the slide when the previous slide is active",
+          "default": true
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "Completely hide and disable the slide",
+          "markdownDescription": "Completely hide and disable the slide"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Same as `hide`, completely hide and disable the slide",
+          "markdownDescription": "Same as `hide`, completely hide and disable the slide"
+        },
+        "hideInToc": {
+          "type": "boolean",
+          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
+          "markdownDescription": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "level": {
+          "type": "number",
+          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared",
+          "markdownDescription": "Override the title level for the <TitleRenderer> and <Toc> components\nOnly if `title` has also been declared"
+        },
+        "routeAlias": {
+          "type": "string",
+          "description": "Create a route alias that can be used in the URL or with the <Link> component",
+          "markdownDescription": "Create a route alias that can be used in the URL or with the <Link> component"
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Custom zoom level for the slide",
+          "markdownDescription": "Custom zoom level for the slide",
+          "default": 1
+        },
+        "dragPos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
+          "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
+        },
+        "src": {
+          "type": "string",
+          "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
+          "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
+        }
+      }
+    }
+  }
+}

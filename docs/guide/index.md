@@ -120,9 +120,9 @@ For more information about the CLI, please check the [CLI guide](../builtin/cli)
 
 Since Slidev uses Markdown as the source entry, you can use any editor you prefer to create your slides. We also provide tools to help you edit you slides more conveniently:
 
-<LinkCard link="feature/vscode-extension" />
-<LinkCard link="feature/side-editor" />
-<LinkCard link="feature/prettier-plugin" />
+<LinkCard link="features/vscode-extension" />
+<LinkCard link="features/side-editor" />
+<LinkCard link="features/prettier-plugin" />
 
 ## Join the Community
 

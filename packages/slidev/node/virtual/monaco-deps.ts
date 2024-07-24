@@ -4,7 +4,7 @@ import type { VirtualModuleTemplate } from './types'
 
 export const templateMonacoRunDeps: VirtualModuleTemplate = {
   id: '/@slidev/monaco-run-deps',
-  getContent: async ({ userRoot, data }, _ctx, pluginCtx) => {
+  async getContent({ userRoot, data }) {
     if (!data.features.monaco)
       return ''
     const deps = uniq(data.features.monaco.deps.concat(data.config.monacoTypesAdditionalPackages))
@@ -12,7 +12,7 @@ export const templateMonacoRunDeps: VirtualModuleTemplate = {
     let result = ''
     for (let i = 0; i < deps.length; i++) {
       const specifier = deps[i]
-      const resolved = await pluginCtx.resolve(specifier, importerPath)
+      const resolved = await this.resolve(specifier, importerPath)
       if (!resolved)
         continue
       result += `import * as vendored${i} from ${JSON.stringify(resolved.id)}\n`

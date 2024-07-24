@@ -1,6 +1,6 @@
 import type MarkdownIt from 'markdown-it'
 
-export default function markdownItLink(md: MarkdownIt) {
+export default function MarkdownItLink(md: MarkdownIt) {
   const defaultRender = md.renderer.rules.link_open
     ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
 

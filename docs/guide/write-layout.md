@@ -42,4 +42,4 @@ You can also have [named slots](https://vuejs.org/guide/components/slots.html) f
 </template>
 ```
 
-And then use it with <LinkInline link="feature/slot-sugar" />.
+And then use it with <LinkInline link="features/slot-sugar" />.

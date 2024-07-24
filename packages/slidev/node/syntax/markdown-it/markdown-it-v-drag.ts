@@ -2,7 +2,7 @@ import type MarkdownIt from 'markdown-it'
 import type MagicString from 'magic-string-stack'
 import { SourceMapConsumer } from 'source-map-js'
 
-export default function markdownItVDrag(md: MarkdownIt, markdownTransformMap: Map<string, MagicString>) {
+export default function MarkdownItVDrag(md: MarkdownIt, markdownTransformMap: Map<string, MagicString>) {
   const visited = new WeakSet()
   const sourceMapConsumers = new WeakMap<MagicString, SourceMapConsumer>()
 

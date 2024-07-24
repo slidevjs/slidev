@@ -25,7 +25,7 @@ Parameters:
 - `x1` (`string | number`, required): start point x position
 - `y1` (`string | number`, required): start point y position
 - `x2` (`string | number`, required): end point x position
-- `y2` (`string | number`, required): end point x position
+- `y2` (`string | number`, required): end point y position
 - `width` (`string | number`, default: `2`): line width
 - `color` (`string`, default: `'currentColor'`): line color
 - `two-way` (`boolean`, default: `false`): draw a two-way arrow
@@ -36,7 +36,7 @@ An `Arrow` component that can be dragged.
 
 ### Usage
 
-See https://sli.dev/guide/draggable.html#draggable-arrow
+<LinkCard link="features/draggable#draggable-arrow" />
 
 Parameters not related to position are the same as [the `Arrow` component](#arrow).
 
@@ -283,13 +283,13 @@ Parameters:
 
 ## `VAfter`, `VClick` and `VClicks`
 
-See https://sli.dev/guide/animations.html
+<LinkCard link="guide/animations#click-animation" />
 
 ## `VSwitch`
 
 Switch between multiple slots based on clicks.
 
-See https://sli.dev/guide/animations.html#enter-leave
+<LinkCard link="guide/animations#enter-leave" />
 
 - If the `unmount` prop is set to `true`, the previous slot will be unmounted when switching to the next slot. Default is `false`.
 - Use the `tag` and `childTag` props to change the default tag of the component and its children. Default is `div`.
@@ -297,7 +297,7 @@ See https://sli.dev/guide/animations.html#enter-leave
 
 ## `VDrag`
 
-See https://sli.dev/guide/draggable.html
+<LinkCard link="features/draggable" />
 
 ## `SlidevVideo`
 

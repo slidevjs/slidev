@@ -3,6 +3,7 @@ import type { DefaultTheme } from 'vitepress'
 import { defineConfig } from 'vitepress'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { version } from '../package.json'
+import { getSidebarObject } from './sidebar-gen'
 import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import Customizations from './customizations'
 
@@ -83,7 +84,7 @@ export default defineConfig({
 
     nav: [
       {
-        text: 'Guide',
+        text: '📖 Guide',
         items: [
           ...Guides,
           {
@@ -122,13 +123,14 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/features/': [],
       '/guide/': slidebars,
       '/themes/': slidebars,
       '/addons/': slidebars,
       '/custom/': slidebars,
       '/builtin/': slidebars,
       '/resources/': slidebars,
+      ...await getSidebarObject(),
+      '/features/': [],
       '/': slidebars,
     },
 
@@ -145,38 +147,6 @@ export default defineConfig({
     zh: {
       label: '简体中文',
       link: 'https://cn.sli.dev/',
-    },
-    fr: {
-      label: 'Français',
-      link: 'https://fr.sli.dev/',
-    },
-    es: {
-      label: 'Español',
-      link: 'https://es.sli.dev/',
-    },
-    ru: {
-      label: 'Русский',
-      link: 'https://ru.sli.dev/',
-    },
-    vn: {
-      label: 'Việt Nam',
-      link: 'https://vn.sli.dev/',
-    },
-    de: {
-      label: 'Deutsch',
-      link: 'https://de.sli.dev/',
-    },
-    br: {
-      label: 'Português (BR)',
-      link: 'https://br.sli.dev/',
-    },
-    el: {
-      label: 'Ελληνικά',
-      link: 'https://el.sli.dev/',
-    },
-    ja: {
-      label: '日本語',
-      link: 'https://ja.sli.dev/',
     },
   },
 })

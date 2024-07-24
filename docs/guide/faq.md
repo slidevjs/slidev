@@ -112,18 +112,18 @@ You can use UnoCSS to position elements absolutely:
 
 Or use the draggable elements feature:
 
-<LinkCard link="feature/draggable" />
+<LinkCard link="features/draggable" />
 
 ## Adjust Sizes {#adjust-size}
 
 - Adjust all slides's size:
 
-<LinkCard link="feature/canvas-size" />
+<LinkCard link="features/canvas-size" />
 
 - Adjust several slides' size:
 
-<LinkCard link="feature/zoom-slide" />
+<LinkCard link="features/zoom-slide" />
 
 - Adjust some elements' size:
 
-<LinkCard link="feature/transform-component" />
+<LinkCard link="features/transform-component" />

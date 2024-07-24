@@ -24,7 +24,6 @@ const tagsArr = computed({
 const filteredFeatures = computed(() => {
   const s = search.value?.toLowerCase().trim()
   const t = tagsArr.value
-  console.log(s, t)
   return Object.values(features).filter(feature => {
     return (!s || feature.title.toLowerCase().includes(s) || feature.description.toLowerCase().includes(s))
       && (!t?.length || t.every(tag => feature.tags?.includes(tag)))
@@ -47,10 +46,23 @@ This is a list of all the individual features that Slidev provides. Each feature
 
 You can also read <LinkInline link="guide/index" /> to learn the features by topic.
 
-<div flex items-center mt-6 pl-1>
-  <carbon:search text-sm mr-2 op-80 />
-  <input v-model="search" type="search" placeholder="Search features..." class="b-b-.5 b-solid b-gray-200/40 focus:b-gray-200/80" />
-  <div ml-12 flex items-center gap-1 v-if="tagsArr.length">
+<div flex items-center mt-6 gap-6>
+  <div
+    flex items-center rounded-md
+    px3 py2 gap-2 border-2 border-solid border-transparent
+    class="bg-$vp-c-bg-alt focus-within:border-color-$vp-c-brand"
+  >
+    <carbon:search text-sm op-80 />
+    <input
+      v-model="search"
+      type="search" text-base
+      placeholder="Search features..."
+    />
+  </div>
+  <div
+    v-if="tagsArr.length"
+    flex items-center gap-1
+  >
     <carbon:tag text-sm mr-1 op-80 />
     <FeatureTag v-for="tag in tagsArr" :key="tag" :tag removable @remove="removeTag(tag)"/>
   </div>

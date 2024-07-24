@@ -1,7 +1,6 @@
 ---
-layout: feature
 relates:
-  - feature/frontmatter-merging
+  - features/frontmatter-merging
 tags: [syntax]
 description: |
   Split your `slides.md` into multiple files for better reusability and organization.
@@ -67,4 +66,4 @@ This will import the slides 2, 5, 6, and 7 from `./another-presentation.md`.
 
 ## Frontmatter Merging
 
-<LinkCard link="feature/frontmatter-merging" />
+<LinkCard link="features/frontmatter-merging" />

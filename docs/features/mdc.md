@@ -1,5 +1,4 @@
 ---
-layout: feature
 relates:
   - Nuxt's MDC Syntax: https://content.nuxt.com/usage/markdown
   - markdown-it-mdc: https://github.com/antfu/markdown-it-mdc

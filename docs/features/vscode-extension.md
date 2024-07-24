@@ -1,5 +1,4 @@
 ---
-layout: feature
 relates:
   - VS Code: https://code.visualstudio.com/
   - View in Marketplace: https://marketplace.visualstudio.com/items?itemName=antfu.slidev

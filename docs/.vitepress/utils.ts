@@ -11,7 +11,7 @@ function getGuideTitle(id: string) {
 }
 
 export function resolveLink(link: string): {
-  kind: 'external' | 'feature' | 'guide'
+  kind: 'external' | 'features' | 'guide'
   url: string
   title?: string
   tags?: string[]
@@ -24,12 +24,12 @@ export function resolveLink(link: string): {
     case 'https:':
     case 'mailto:':
       return { kind: 'external', url: link }
-    case 'feature': {
+    case 'features': {
       const feature = features[name]
       if (!feature)
         throw new Error(`Feature "${name}" not found.`)
       return {
-        kind: 'feature',
+        kind: 'features',
         title: `✨ ${feature.title}`,
         tags: feature.tags,
         descripton: feature.description,
@@ -39,7 +39,7 @@ export function resolveLink(link: string): {
     case 'guide': {
       return {
         kind: 'guide',
-        title: `📘 ${getGuideTitle(name)}`,
+        title: `📖  ${getGuideTitle(name)}`,
         tags: ['guide'],
         descripton: 'Click to read this guide',
         url: `/guide/${nameWithHash}`,
