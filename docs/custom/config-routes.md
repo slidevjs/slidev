@@ -16,9 +16,9 @@ export default defineRoutesSetup((routes) => {
     ...routes,
     {
       path: '/my-page',
-// ---cut-start---
-// @ts-expect-error missing types
-// ---cut-end---
+      // ---cut-start---
+      // @ts-expect-error missing types
+      // ---cut-end---
       component: () => import('../pages/my-page.vue'),
     },
   ]
