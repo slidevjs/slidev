@@ -6,9 +6,16 @@ Customize the context menu items in Slidev.
 
 Create `./setup/context-menu.ts` with the following content:
 
+<!-- eslint-disable import/first -->
+
 ```ts twoslash
+// ---cut---
 import { defineContextMenuSetup } from '@slidev/types'
+import { useNav } from '@slidev/client'
 import { computed } from 'vue'
+// ---cut-start---
+// @ts-expect-error missing types
+// ---cut-end---
 import Icon3DCursor from '~icons/carbon/3d-cursor'
 
 export default defineContextMenuSetup((items) => {

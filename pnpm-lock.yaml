@@ -251,18 +251,27 @@ importers:
       '@shikijs/vitepress-twoslash':
         specifier: ^1.11.1
         version: 1.11.1(@nuxt/kit@3.11.2(rollup@4.19.0))(typescript@5.5.4)
+      '@slidev-old/client':
+        specifier: npm:@slidev/client@0.34.3
+        version: '@slidev/client@0.34.3(rollup@4.19.0)(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.11))'
+      '@slidev-old/parser':
+        specifier: npm:@slidev/parser@0.34.3
+        version: '@slidev/parser@0.34.3'
+      '@slidev-old/theme-default':
+        specifier: npm:@slidev/theme-default@0.21.2
+        version: '@slidev/theme-default@0.21.2'
+      '@slidev-old/types':
+        specifier: npm:@slidev/types@0.34.3
+        version: '@slidev/types@0.34.3'
       '@slidev/client':
-        specifier: 0.34.3
-        version: 0.34.3(rollup@4.19.0)(typescript@5.5.4)(vite@5.3.4(@types/node@20.14.11))
+        specifier: workspace:*
+        version: link:../packages/client
       '@slidev/parser':
-        specifier: 0.34.3
-        version: 0.34.3
-      '@slidev/theme-default':
-        specifier: 0.21.2
-        version: 0.21.2
+        specifier: workspace:*
+        version: link:../packages/parser
       '@slidev/types':
-        specifier: 0.34.3
-        version: 0.34.3
+        specifier: workspace:*
+        version: link:../packages/types
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4

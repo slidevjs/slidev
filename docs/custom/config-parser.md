@@ -1,7 +1,7 @@
 # Configure Pre-Parser
 
 ::: info
-Custom pre-parsers are not supposed to be used too often. Please only use it if you really want to have your custom syntax.
+Custom pre-parsers are not supposed to be used too often. Usually you can use [Transformers](./config-transformers) for custom syntaxes.
 :::
 
 Slidev parses your presentation file (e.g. `slides.md`) in three steps:
@@ -162,7 +162,7 @@ import { definePreparserSetup } from '@slidev/types'
 export default definePreparserSetup(() => {
   return [
     {
-      transformSlide(content, frontmatter) {
+      async transformSlide(content, frontmatter) {
         if ('_scale' in frontmatter) {
           return [
             `<Transform :scale=${frontmatter._scale}>`,
