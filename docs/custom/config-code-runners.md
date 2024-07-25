@@ -8,7 +8,12 @@ By default, JavaScript, TypeScript runners are supported built-in. They run in t
 
 Create `./setup/code-runners.ts` with the following content:
 
+<!-- eslint-disable import/first -->
+
 ```ts twoslash
+declare const executePythonCodeRemotely: (code: string) => Promise<string>
+declare const sanitizeHtml: (html: string) => string
+// ---cut---
 import { defineCodeRunnersSetup } from '@slidev/types'
 
 export default defineCodeRunnersSetup(() => {
@@ -35,6 +40,9 @@ export default defineCodeRunnersSetup(() => {
 The second argument `ctx` is the runner context, which contains the following properties:
 
 ```ts twoslash
+import type { CodeRunnerOutputs } from '@slidev/types'
+import type { CodeToHastOptions } from 'shiki'
+// ---cut---
 export interface CodeRunnerContext {
   /**
    * Options passed to runner via the `runnerOptions` prop.

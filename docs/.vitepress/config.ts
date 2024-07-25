@@ -65,7 +65,10 @@ export default defineConfig({
       transformerTwoslash({
         twoslashOptions: {
           // The @slidev/* installed in docs package are very old and should only be used in the homepage demo
-          vfsRoot: fileURLToPath(new URL('../../demo/starter/', import.meta.url)),
+          vfsRoot: fileURLToPath(import.meta.url),
+          compilerOptions: {
+            resolveJsonModule: true,
+          },
         },
       }),
     ],
