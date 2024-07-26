@@ -9,7 +9,7 @@ export default async function setupTransformers(roots: string[]) {
     postCodeblock: [],
     post: [],
   }
-  for (const r of returns.toReversed()) {
+  for (const r of [...returns].reverse()) {
     if (r.pre)
       result.pre.push(...r.pre)
     if (r.preCodeblock)
