@@ -1,10 +1,22 @@
 import fs from 'node:fs/promises'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { ShikiSetup } from '@slidev/types'
+import type { Highlighter } from 'shiki'
 import { bundledLanguages, createHighlighter } from 'shiki'
 import { loadSetups } from './load'
 
+let cachedRoots: string[] | undefined
+let cachedShiki: {
+  shiki: Highlighter
+  shikiOptions: MarkdownItShikiOptions
+} | undefined
+
 export default async function setupShiki(roots: string[]) {
+  // Here we use shallow equality because when server is restarted, the roots will be different object.
+  if (cachedRoots === roots)
+    return cachedShiki!
+  cachedShiki?.shiki.dispose()
+
   const options = await loadSetups<ShikiSetup>(
     roots,
     'shiki.ts',
@@ -44,8 +56,9 @@ export default async function setupShiki(roots: string[]) {
     themes: 'themes' in mergedOptions ? Object.values(mergedOptions.themes) : [mergedOptions.theme],
   })
 
-  return {
+  cachedRoots = roots
+  return cachedShiki = {
     shiki,
-    shikiOptions: mergedOptions as MarkdownItShikiOptions,
+    shikiOptions: mergedOptions,
   }
 }
