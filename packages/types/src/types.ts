@@ -51,7 +51,6 @@ export interface SlideInfo extends SlideInfoBase {
    * The source slide where the content is from
    */
   source: SourceSlideInfo
-  snippetsUsed?: LoadedSnippets
   noteHTML?: string
 }
 
@@ -112,7 +111,10 @@ export interface SlidevData {
   features: SlidevDetectedFeatures
   themeMeta?: SlidevThemeMeta
   markdownFiles: Record<string, SlidevMarkdown>
-  watchFiles: string[]
+  /**
+   * From watched files to indexes of slides that must be reloaded regardless of the loaded content
+   */
+  watchFiles: Record<string, Set<number>>
 }
 
 export interface SlidevPreparserExtension {
@@ -137,5 +139,3 @@ export interface SlideRoute {
    */
   component: Component
 }
-
-export type LoadedSnippets = Record<string, string>

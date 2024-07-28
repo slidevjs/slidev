@@ -39,7 +39,7 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const hmrPages = new Set<number>()
+  const hmrSlidesIndexes = new Set<number>()
   let server: ViteDevServer | undefined
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
@@ -53,7 +53,7 @@ export function createSlidesLoader(
   function updateServerWatcher() {
     if (!server)
       return
-    server.watcher.add(data.watchFiles)
+    server.watcher.add(Object.keys(data.watchFiles))
   }
 
   function getFrontmatter(pageNo: number) {
@@ -87,7 +87,7 @@ export function createSlidesLoader(
           const slide = data.slides[idx]
 
           if (body.content && body.content !== slide.source.content)
-            hmrPages.add(idx)
+            hmrSlidesIndexes.add(idx)
 
           if (body.content)
             slide.content = slide.source.content = body.content
@@ -123,8 +123,13 @@ export function createSlidesLoader(
     },
 
     async handleHotUpdate(ctx) {
-      if (!data.watchFiles.includes(ctx.file))
+      const forceChangedSlides = data.watchFiles[ctx.file]
+      if (!forceChangedSlides)
         return
+
+      for (const index of forceChangedSlides) {
+        hmrSlidesIndexes.add(index)
+      }
 
       const newData = await serverOptions.loadData?.({
         [ctx.file]: await ctx.read(),
@@ -142,12 +147,12 @@ export function createSlidesLoader(
 
       if (data.slides.length !== newData.slides.length) {
         moduleIds.add(templateSlides.id)
-        range(newData.slides.length).map(i => hmrPages.add(i))
+        range(newData.slides.length).map(i => hmrSlidesIndexes.add(i))
       }
 
       if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
         moduleIds.add(templateSlides.id)
-        range(data.slides.length).map(i => hmrPages.add(i))
+        range(data.slides.length).map(i => hmrSlidesIndexes.add(i))
       }
 
       if (!equal(data.config, newData.config))
@@ -166,7 +171,7 @@ export function createSlidesLoader(
         const b = newData.slides[i]
 
         if (
-          !hmrPages.has(i)
+          !hmrSlidesIndexes.has(i)
           && a.content.trim() === b.content.trim()
           && a.title?.trim() === b.title?.trim()
           && equal(a.frontmatter, b.frontmatter)
@@ -191,16 +196,16 @@ export function createSlidesLoader(
             data: withRenderedNote(newData.slides[i]),
           },
         )
-        hmrPages.add(i)
+        hmrSlidesIndexes.add(i)
       }
 
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(newData, clientRoot, roots))
 
-      if (hmrPages.size > 0)
+      if (hmrSlidesIndexes.size > 0)
         moduleIds.add(templateTitleRendererMd.id)
 
-      const vueModules = Array.from(hmrPages)
+      const vueModules = Array.from(hmrSlidesIndexes)
         .flatMap((idx) => {
           const frontmatter = ctx.server.moduleGraph.getModuleById(getSourceId(idx, 'frontmatter'))
           const main = ctx.server.moduleGraph.getModuleById(getSourceId(idx, 'md'))
@@ -212,7 +217,7 @@ export function createSlidesLoader(
           ]
         })
 
-      hmrPages.clear()
+      hmrSlidesIndexes.clear()
 
       const moduleEntries = [
         ...ctx.modules.filter(i => i.id === templateMonacoRunDeps.id || i.id === templateMonacoTypes.id),
