@@ -40,6 +40,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}
+  const watchFiles: Record<string, Set<number>> = {}
   const slides: SlideInfo[] = []
 
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
@@ -48,6 +49,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
       const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
+      watchFiles[path] = new Set()
     }
 
     const directImporter = importers?.at(-1)
@@ -125,7 +127,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
     headmatter,
     features: detectFeatures(slides.map(s => s.source.raw).join('')),
     markdownFiles,
-    watchFiles: Object.keys(markdownFiles).map(slash),
+    watchFiles,
   }
 }
 

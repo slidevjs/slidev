@@ -13,7 +13,7 @@ export function createTransformContext(code: string, shiki?: any): MarkdownTrans
         slides: [
           {} as any,
         ],
-        watchFiles: [],
+        watchFiles: {},
         config: {} as any,
         features: {},
       },

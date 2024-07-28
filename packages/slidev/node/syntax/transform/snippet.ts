@@ -84,7 +84,7 @@ function findRegion(lines: Array<string>, regionName: string) {
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
 export function transformSnippet({ s, slide, options }: MarkdownTransformContext) {
-  const data = options.data
+  const watchFiles = options.data.watchFiles
   const dir = path.dirname(slide.source?.filepath ?? options.entry ?? options.userRoot)
 
   s.replace(
@@ -97,7 +97,8 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
           : path.resolve(dir, filepath),
       )
 
-      data.watchFiles.push(src)
+      watchFiles[src] ??= new Set()
+      watchFiles[src].add(slide.index)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {
@@ -107,9 +108,6 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
       }
 
       let content = fs.readFileSync(src, 'utf8')
-
-      slide.snippetsUsed ??= {}
-      slide.snippetsUsed[src] = content
 
       if (regionName) {
         const lines = content.split(/\r?\n/)
