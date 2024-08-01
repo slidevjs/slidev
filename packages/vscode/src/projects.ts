@@ -75,7 +75,7 @@ export function useProjects() {
   onScopeDispose(() => fsWatcher.dispose())
 
   fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath).toLowerCase()
+    const path = slash(uri.fsPath)
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
     if (pendingUpdate)
@@ -83,7 +83,7 @@ export function useProjects() {
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
-      if (!project.data.watchFiles.some(f => f.toLowerCase() === path))
+      if (!project.data.markdownFiles[path])
         continue
 
       if (existsSync(project.entry)) {

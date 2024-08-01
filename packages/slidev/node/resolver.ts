@@ -127,9 +127,9 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     if (name[0] === '/')
       return [name, name]
     if (name.startsWith('@/'))
-      return [name, join(userRoot, name.slice(2))]
+      return [name, resolve(userRoot, name.slice(2))]
     if (name[0] === '.' || (name[0] !== '@' && name.includes('/')))
-      return [name, join(dirname(importer), name)]
+      return [name, resolve(dirname(importer), name)]
 
     // definitely a package name
     if (name.startsWith(`@slidev/${type}-`) || name.startsWith(`slidev-${type}-`)) {
