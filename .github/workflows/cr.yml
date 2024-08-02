@@ -20,6 +20,6 @@ jobs:
       - name: Build
         run: nr build
 
-      - run: nlx pkg-pr-new publish './packages/client' './create-app' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
+      - run: nlx pkg-pr-new publish './packages/client' './packages/create-app' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
