@@ -614,7 +614,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withToc: withToc || false,
     perSlide: perSlide || false,
     scale: scale || 2,
-    transparent: transparent || false,
+    transparent: transparent ?? false,
   }
 }
 
