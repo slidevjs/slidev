@@ -74,6 +74,7 @@ Options:
 - `--dark` (`boolean`, default: `false`): export as dark theme.
 - `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
 - `--theme`, `-t` (`string`): override theme.
+- `--transparent` (`boolean`, default: `false`): remove the default browser background
 
 ## `slidev format [entry]` {#format}
 
