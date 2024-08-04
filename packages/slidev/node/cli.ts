@@ -603,7 +603,7 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'number',
       describe: 'scale factor for image export',
     })
-    .option('transparent', {
+    .option('omit-background', {
       type: 'boolean',
       describe: 'export png pages without the default browser background',
     })

@@ -185,10 +185,10 @@ $ slidev export --with-toc
 
 ### Transparent PNGs
 
-You can remove the default browser background by passing `--transparent`:
+You can remove the default browser background by passing `--omit-background`:
 
 ```bash
-$ slidev export --transparent
+$ slidev export --omit-background
 ```
 
 The default browser background is the white background visible on all browser windows and is different than other backgrounds applied throughout the application using CSS styling. [See Playwright docs](https://playwright.dev/docs/api/class-page#page-screenshot-option-omit-background). You will then need to apply additional CSS styling to the application to reveal the transparency.

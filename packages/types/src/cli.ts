@@ -16,7 +16,7 @@ export interface ExportArgs extends CommonArgs {
   'with-toc'?: boolean
   'per-slide'?: boolean
   'scale'?: number
-  'transparent'?: boolean
+  'omit-background'?: boolean
 }
 
 export interface BuildArgs extends ExportArgs {
