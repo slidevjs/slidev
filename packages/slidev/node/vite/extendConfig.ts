@@ -70,7 +70,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
     name: 'slidev:config',
     async config(config) {
       const injection: InlineConfig = {
-        define: getDefine(options),
+        define: options.utils.defines,
         resolve: {
           alias: [
             {

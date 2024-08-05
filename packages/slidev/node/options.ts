@@ -9,6 +9,7 @@ import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
 import { getRoots, resolveEntry } from './resolver'
 import setupShiki from './setups/shiki'
+import { getDefine } from './vite/extendConfig'
 
 const debug = Debug('slidev:options')
 
@@ -76,6 +77,7 @@ export async function createDataUtils(data: SlidevData, clientRoot: string, root
 
   return {
     ...await setupShiki(roots),
+    defines: getDefine(options),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()

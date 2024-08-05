@@ -23,6 +23,10 @@
     "./fs": {
       "types": "./dist/fs.d.mts",
       "import": "./dist/fs.mjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.mts",
+      "import": "./dist/utils.mjs"
     }
   },
   "main": "dist/index.mjs",

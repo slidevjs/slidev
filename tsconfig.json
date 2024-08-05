@@ -3,7 +3,6 @@
     "target": "es2022",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "node",
     "paths": {
