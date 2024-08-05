@@ -183,9 +183,9 @@ You can generate the PDF outline by passing the `--with-toc` option:
 $ slidev export --with-toc
 ```
 
-### Transparent PNGs
+### Omit Background
 
-You can remove the default browser background by passing `--omit-background`:
+When exporting to PNGs, you can remove the default browser background by passing `--omit-background`:
 
 ```bash
 $ slidev export --omit-background
