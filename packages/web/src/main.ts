@@ -1,7 +1,6 @@
 /// <reference types="@slidev/types/client" />
 
 import { createApp } from 'vue'
-import './styles'
 import setupMain from '../../client/setup/main'
 import App from '../../client/App.vue'
 

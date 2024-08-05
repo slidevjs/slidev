@@ -7,5 +7,3 @@ export const GlobalBottom = EmptyComponent
 
 export const SlideTop = EmptyComponent
 export const SlideBottom = EmptyComponent
-
-export default EmptyComponent

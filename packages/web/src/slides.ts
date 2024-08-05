@@ -1,27 +1,38 @@
-import { h, shallowRef } from 'vue'
-import type { SlideRoute } from '@slidev/types'
+import type { SlideInfo, SourceSlideInfo } from '@slidev/types'
+import { computed, reactive } from 'vue'
 
-const FakeComponent = {
-  render: () => h('div', 'FakeComponent'),
+export interface SlideSource {
+  frontmatter: Record<string, string>
+  content: string
+  note: string
 }
 
-export const slides = shallowRef<SlideRoute[]>([
+export const slidesSource = reactive<SlideSource[]>([
   {
-    no: 1,
-    meta: {
-      slide: {
-        index: 0,
-        frontmatter: {},
-        content: '# Hello',
-        noteHTML: '',
-        filepath: '/slides.md',
-        start: 0,
-        id: 0,
-        no: 1,
-      },
-      __clicksContext: null,
-    },
-    load: async () => ({ default: FakeComponent }),
-    component: FakeComponent,
+    frontmatter: {},
+    content: '# Hello',
+    note: '',
   },
 ])
+
+export const slidesSourcesInfo = computed<SourceSlideInfo[]>(() => slidesSource.map(
+  (s, i) => ({
+    frontmatter: s.frontmatter,
+    content: s.content,
+    filepath: `/slides.md__slidev_${i}.md`,
+    index: i,
+    start: 0,
+    contentStart: 0,
+    end: 0,
+    raw: '',
+  } satisfies SourceSlideInfo),
+))
+
+export const slidesInfo = computed<SlideInfo[]>(() => slidesSourcesInfo.value.map(
+  (s, i) => ({
+    frontmatter: s.frontmatter,
+    content: s.content,
+    index: i,
+    source: s,
+  } satisfies SlideInfo),
+))

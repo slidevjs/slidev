@@ -58,4 +58,8 @@ export async function compileFile(filename: string, code: string): Promise<Compi
   if (filename.endsWith('.md')) {
     return compileMd(filename, code)
   }
+
+  return {
+    errors: [`Unknown file extension for ${filename}`],
+  }
 }

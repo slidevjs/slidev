@@ -1,4 +1,4 @@
-import { createHighlighter } from 'shiki/index.mjs'
+import { createHighlighterCore } from 'shiki/core'
 
 export { shikiToMonaco } from '@shikijs/monaco'
 export const languages = ['markdown', 'vue', 'javascript', 'typescript', 'html', 'css']
@@ -6,7 +6,7 @@ export const themes = [
   'vitesse-dark',
   'vitesse-light',
 ]
-export const shiki = createHighlighter({
+export const shiki = createHighlighterCore({
   themes: [
     import('shiki/themes/vitesse-dark.mjs'),
     import('shiki/themes/vitesse-light.mjs'),
@@ -19,6 +19,7 @@ export const shiki = createHighlighter({
     import('shiki/langs/html.mjs'),
     import('shiki/langs/css.mjs'),
   ],
+  loadWasm: import('shiki/wasm'),
 })
 let highlight: any
 export async function getHighlighter() {

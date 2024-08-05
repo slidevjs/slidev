@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig, normalizePath } from 'vite'
 import UnoCSS from 'unocss/vite'
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import { createVueCompilerFlagsPlugin } from '../slidev/node/vite/compilerFlagsVue'
@@ -9,7 +9,7 @@ import { createComponentsPlugin } from '../slidev/node/vite/components'
 import { toAtFS } from '../slidev/node/resolver'
 import { createVuePlugin } from '../slidev/node/vite/vue'
 
-const absolute = (path: string) => fileURLToPath(new URL(path, import.meta.url))
+const absolute = (path: string) => normalizePath(fileURLToPath(new URL(path, import.meta.url)))
 const clientRoot = absolute('../client')
 const parserRoot = absolute('../parser')
 
@@ -35,7 +35,11 @@ const options = {
   },
 } as unknown as ResolvedSlidevOptions
 
-const pluginOptions = {} as SlidevPluginOptions
+const pluginOptions = {
+  components: {
+    dts: false,
+  },
+} as SlidevPluginOptions
 
 export default defineConfig({
   plugins: [
@@ -60,10 +64,10 @@ export default defineConfig({
       load(id) {
         if (id.startsWith('/@slidev/setups'))
           return 'export default []'
-        if (id === '/@slidev/styles')
-          return `export {}`
         if (id.startsWith('server-reactive:'))
           return `export default {}`
+        if (id.endsWith(absolute('../client/composables/useSlideInfo.ts')))
+          return `export * from '${toAtFS(absolute('./src/composables/useSlideInfo.ts'))}'`
       },
     },
   ],
@@ -73,13 +77,16 @@ export default defineConfig({
         '@rollup/pluginutils': absolute('./polyfills/rollup-pluginutils.ts'),
         'unplugin': absolute('./polyfills/unplugin.ts'),
         'module': absolute('./polyfills/node-module.ts'),
+        'assert': absolute('./polyfills/node-assert.ts'),
 
-        '#slidev/configs': absolute('./src/configs/slidev.ts'),
-        '#slidev/global-layers': absolute('./src/custom-components.ts'),
-        '#slidev/custom-nav-controls': absolute('./src/custom-components.ts'),
-        '#slidev/title-renderer': absolute('./src/title-renderer.vue'),
-        '#slidev/shiki': absolute('./src/shiki.ts'),
-        '#slidev/slides': absolute('./src/slides.ts'),
+        '#slidev/configs': absolute('./src/virtual/configs.ts'),
+        '#slidev/global-layers': absolute('./src/virtual/global-layers.ts'),
+        '#slidev/custom-nav-controls': absolute('./src/virtual/nav-controls.ts'),
+        '#slidev/styles': absolute('./src/virtual/styles.ts'),
+        '#slidev/title-renderer': absolute('./src/virtual/title-renderer.vue'),
+        '#slidev/shiki': absolute('./src/virtual/shiki.ts'),
+        '#slidev/slides': absolute('./src/virtual/slides.ts'),
+
         '@slidev/parser/utils': absolute('../parser/src/utils.ts'),
       }).map(([find, replacement]) => ({ find, replacement })),
       {
