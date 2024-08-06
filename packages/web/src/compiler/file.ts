@@ -11,20 +11,20 @@ export interface CompileResult {
   errors?: (string | Error)[]
 }
 
-export async function compileFile(filename: string, code: string): Promise<CompileResult> {
+export async function compileFile(filepath: string, code: string): Promise<CompileResult> {
   if (!code.trim()) {
     return {}
   }
 
-  if (filename.endsWith('.css')) {
+  if (filepath.endsWith('.css')) {
     return {
       css: code,
     }
   }
 
-  if (isJsLikeFile(filename)) {
-    const isJSX = isJsxFile(filename)
-    if (isTsFile(filename)) {
+  if (isJsLikeFile(filepath)) {
+    const isJSX = isJsxFile(filepath)
+    if (isTsFile(filepath)) {
       code = await transformTS(code, isJSX)
     }
     if (isJSX) {
@@ -35,13 +35,13 @@ export async function compileFile(filename: string, code: string): Promise<Compi
     }
   }
 
-  if (filename.endsWith('.json')) {
+  if (filepath.endsWith('.json')) {
     let parsed
     try {
       parsed = JSON.parse(code)
     }
     catch (err: any) {
-      console.error(`Error parsing ${filename}`, err.message)
+      console.error(`Error parsing ${filepath}`, err.message)
       return {
         errors: [err.message],
       }
@@ -51,15 +51,15 @@ export async function compileFile(filename: string, code: string): Promise<Compi
     }
   }
 
-  if (filename.endsWith('.vue')) {
-    return compileVue(filename, code)
+  if (filepath.endsWith('.vue')) {
+    return compileVue(filepath, code)
   }
 
-  if (filename.endsWith('.md')) {
-    return compileMd(filename, code)
+  if (filepath.endsWith('.md')) {
+    return compileMd(filepath, code)
   }
 
   return {
-    errors: [`Unknown file extension for ${filename}`],
+    errors: [`Unknown file extension for ${filepath}`],
   }
 }

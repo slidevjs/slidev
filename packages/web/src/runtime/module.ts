@@ -10,8 +10,9 @@ const importKey = `__import__`
 const exportKey = `__export__`
 const moduleKey = `__module__`
 
-const moduleLoaders: Record<string, () => Promise<any>> = Object.create(null)
+export const moduleLoaders: Record<string, () => Promise<any>> = Object.create(null)
 moduleLoaders.vue = async () => vueModule
+moduleLoaders['@slidev/client/context.ts'] = async () => import('@slidev/client/context')
 
 // Similar to `Function`, but async
 const AsyncFunction: any = async function () {}.constructor
@@ -45,7 +46,7 @@ export function evalJs(src: string, filepath: string): () => Promise<any> {
         }
       }
 
-      // Node module
+      // Special module
       if (moduleLoaders[specifier]) {
         return moduleLoaders[specifier]()
       }
@@ -76,12 +77,12 @@ function processModule(src: string, filename: string) {
   const importToIdMap = new Map<string, string>()
 
   function defineImport(node: Node, source: string) {
-    if (importedFiles.has(filename)) {
-      return importToIdMap.get(filename)!
+    if (importedFiles.has(source)) {
+      return importToIdMap.get(source)!
     }
-    importedFiles.add(filename)
+    importedFiles.add(source)
     const id = `__import_${importedFiles.size}__`
-    importToIdMap.set(filename, id)
+    importToIdMap.set(source, id)
     s.appendLeft(
       node.start!,
       `const ${id} = await ${importKey}(${JSON.stringify(source)})\n`,

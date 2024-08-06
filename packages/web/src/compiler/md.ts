@@ -24,6 +24,7 @@ import { transformSlotSugar } from '@slidev/cli/node/syntax/transform/slot-sugar
 // import { transformSnippet } from '@slidev/cli/node/syntax/transform/snippet'
 import { slidesInfo } from '../slides'
 import { mdOptions } from '../configs/plugins'
+import { layoutWrapperPlugin } from '../layouts'
 import type { CompileResult } from './file'
 import { compileVue } from './vue'
 
@@ -112,8 +113,12 @@ const plugin = computed(() => {
 })
 
 export async function compileMd(filename: string, code: string): Promise<CompileResult> {
-  const vue = (await (plugin.value.transform?.call({
+  let vue = (await (plugin.value.transform?.call({
     error: console.error,
   } as any, code, filename)) as any).code
+
+  // @ts-expect-error uwu
+  vue = layoutWrapperPlugin.transform!.call({} as any, vue, filename)
+
   return await compileVue(filename, vue)
 }

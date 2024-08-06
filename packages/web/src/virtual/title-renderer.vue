@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSlideContext } from '@slidev/client/context.ts'
 import { computed } from 'vue'
+import { useSlideContext } from '@slidev/client/context'
 
 const props = defineProps<{ no?: number | string }>()
 const { $page } = useSlideContext()
