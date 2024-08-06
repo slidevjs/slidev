@@ -200,7 +200,7 @@ export function createSlidesLoader(
       }
 
       Object.assign(data, newData)
-      Object.assign(utils, createDataUtils(newData, clientRoot, roots))
+      Object.assign(utils, createDataUtils(newData, clientRoot, roots, mode))
 
       if (hmrSlidesIndexes.size > 0)
         moduleIds.add(templateTitleRendererMd.id)
