@@ -81,7 +81,7 @@ export default defineConfig({
 
         '#slidev/configs': absolute('./src/virtual/configs.ts'),
         '#slidev/global-layers': absolute('./src/virtual/global-layers.ts'),
-        '#slidev/custom-nav-controls': absolute('./src/virtual/nav-controls.ts'),
+        '#slidev/custom-nav-controls': absolute('./src/virtual/nav-controls.vue'),
         '#slidev/styles': absolute('./src/virtual/styles.ts'),
         '#slidev/title-renderer': absolute('./src/virtual/title-renderer.vue'),
         '#slidev/shiki': absolute('./src/virtual/shiki.ts'),
