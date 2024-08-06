@@ -10,6 +10,7 @@
     "@babel/standalone": "^7.25.3",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
+    "@slidev/theme-seriph": "^0.25.0",
     "@types/babel__standalone": "^7.1.7",
     "@vue/babel-plugin-jsx": "^1.2.2",
     "magic-string": "^0.30.10",

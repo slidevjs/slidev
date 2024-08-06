@@ -10,7 +10,7 @@ export interface SlideSource {
 export const slidesSource = reactive<SlideSource[]>([
   {
     frontmatter: {},
-    content: '# Hello',
+    content: `# Hello\n\nThis is a slide\n\nCompiled in the **browser**`,
     note: '',
   },
 ])

@@ -799,6 +799,9 @@ importers:
       '@slidev/parser':
         specifier: workspace:*
         version: link:../parser
+      '@slidev/theme-seriph':
+        specifier: ^0.25.0
+        version: 0.25.0
       '@types/babel__standalone':
         specifier: ^7.1.7
         version: 7.1.7
