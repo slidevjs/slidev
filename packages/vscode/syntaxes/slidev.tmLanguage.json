@@ -96,7 +96,7 @@
           "patterns": [
             {
               "begin": "\\G",
-              "end": "(?=(^|\\G)(---).*$)",
+              "while": "^(?!(^|\\G)(---).*$)",
               "contentName": "meta.embedded.block.yaml",
               "patterns": [
                 {
