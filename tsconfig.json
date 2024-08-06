@@ -4,7 +4,7 @@
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "paths": {
       "@slidev/client": ["./packages/client/index.ts"],
       "@slidev/client/*": ["./packages/client/*"],
