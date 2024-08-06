@@ -6,4 +6,4 @@ const __dirname = path.dirname(__filename)
 const dist = path.resolve(__dirname, '../docs/.vitepress/dist/web')
 
 cd(path.resolve(__dirname, '../packages/web'))
-await $(`pnpm build --base /web/ --out ${dist}`)
+await $(`pnpm build --base /web/ --outDir ${dist}`)
