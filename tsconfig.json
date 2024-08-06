@@ -3,8 +3,9 @@
     "target": "es2022",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
+    "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "paths": {
       "@slidev/client": ["./packages/client/index.ts"],
       "@slidev/client/*": ["./packages/client/*"],
