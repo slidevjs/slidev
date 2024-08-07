@@ -24,7 +24,7 @@ mdc: true
 
 # Welcome to Slidev
 
-Presentation slides for developers11111111111111
+Presentation slides for developers
 
 <div class="pt-12">
   <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
@@ -47,8 +47,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 -->
 
 ---
-transition: fade-1
-class: text-center
+transition: fade-out
 ---
 
 # What is Slidev?
@@ -118,7 +117,6 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 ---
 layout: two-cols
 layoutClass: gap-16
-class: text-center
 ---
 
 # Table of contents
@@ -555,7 +553,7 @@ Learn More: [Mermaid Diagrams](https://sli.dev/guide/features/mermaid) and [Plan
 ---
 foo: bar
 dragPos:
-  square: 655,30,167,_,-16
+  square: 691,32,167,_,-16
 ---
 
 # Draggable Elements
@@ -581,7 +579,7 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="577,349,261,_,-15">
+<v-drag pos="663,206,261,_,-15">
   <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>
@@ -595,7 +593,7 @@ Double-click on the draggable elements to edit their positions.
 <v-drag-arrow two-way />
 ```
 
-<v-drag-arrow pos="67,452,436,-8" two-way op70 />
+<v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
 src: ./pages/imported-slides.md
