@@ -669,6 +669,9 @@ importers:
       vue:
         specifier: ^3.4.33
         version: 3.4.33(typescript@5.5.4)
+      yaml:
+        specifier: ^2.4.5
+        version: 2.4.5
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
