@@ -103,14 +103,11 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
     }
     else {
       slides.push({
+        ...slide,
         index: slides.length,
         importChain,
         source: slide,
         frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
-        content: slide.content,
-        note: slide.note,
-        title: slide.title,
-        level: slide.level,
       })
     }
   }

@@ -4,6 +4,7 @@ import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevServerOptions 
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
 import type { LoadResult } from 'rollup'
+import YAML from 'yaml'
 import { getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateTitleRendererMd } from '../virtual/titles'
@@ -91,6 +92,18 @@ export function createSlidesLoader(
 
           if (body.content)
             slide.content = slide.source.content = body.content
+          if (body.frontmatterRaw != null) {
+            if (body.frontmatterRaw.trim() === '') {
+              slide.source.frontmatterDoc = slide.source.frontmatterStyle = undefined
+            }
+            else {
+              const parsed = YAML.parseDocument(body.frontmatterRaw)
+              if (parsed.errors.length)
+                console.error('ERROR when saving frontmatter', parsed.errors)
+              else
+                slide.source.frontmatterDoc = parsed
+            }
+          }
           if (body.note)
             slide.note = slide.source.note = body.note
           if (body.frontmatter)

@@ -8,6 +8,7 @@ export type FrontmatterStyle = 'frontmatter' | 'yaml'
 export interface SlideInfoBase {
   frontmatter: Record<string, any>
   content: string
+  frontmatterRaw?: string
   note?: string
   title?: string
   level?: number
@@ -33,7 +34,6 @@ export interface SourceSlideInfo extends SlideInfoBase {
    * Slides import by this slide.
    */
   imports?: SourceSlideInfo[]
-  frontmatterRaw?: string
   frontmatterDoc?: YAML.Document
   frontmatterStyle?: FrontmatterStyle
 }
@@ -57,7 +57,7 @@ export interface SlideInfo extends SlideInfoBase {
 /**
  * Editable fields for a slide
  */
-export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note'>> & {
+export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'frontmatterRaw'>> & {
   skipHmr?: boolean
   /**
    * The frontmatter patch (only the changed fields)

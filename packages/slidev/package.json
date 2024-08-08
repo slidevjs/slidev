@@ -117,6 +117,7 @@
     "vite-plugin-vue-server-ref": "^0.4.2",
     "vitefu": "^0.2.5",
     "vue": "^3.4.33",
+    "yaml": "^2.4.5",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
