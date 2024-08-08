@@ -9,6 +9,7 @@ import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
 import { getRoots, resolveEntry } from './resolver'
 import setupShiki from './setups/shiki'
+import setupIndexHtml from './setups/indexHtml'
 
 const debug = Debug('slidev:options')
 
@@ -50,7 +51,7 @@ export async function resolveOptions(
     themeMeta,
   }
 
-  const resolved: ResolvedSlidevOptions = {
+  const resolved: Omit<ResolvedSlidevOptions, 'utils'> = {
     ...rootsInfo,
     ...entryOptions,
     data,
@@ -61,21 +62,24 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    utils: await createDataUtils(data, rootsInfo.clientRoot, roots),
   }
 
-  return resolved
+  return {
+    ...resolved,
+    utils: await createDataUtils(resolved),
+  }
 }
 
-export async function createDataUtils(data: SlidevData, clientRoot: string, roots: string[]): Promise<ResolvedSlidevUtils> {
-  const monacoTypesIgnorePackagesMatches = (data.config.monacoTypesIgnorePackages || [])
+export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'utils'>): Promise<ResolvedSlidevUtils> {
+  const monacoTypesIgnorePackagesMatches = (resolved.data.config.monacoTypesIgnorePackages || [])
     .map(i => mm.matcher(i))
 
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
   return {
-    ...await setupShiki(roots),
+    ...await setupShiki(resolved.roots),
+    indexHtml: setupIndexHtml(resolved),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()
@@ -84,7 +88,7 @@ export async function createDataUtils(data: SlidevData, clientRoot: string, root
 
       const layouts: Record<string, string> = {}
 
-      for (const root of [clientRoot, ...roots]) {
+      for (const root of [resolved.clientRoot, ...resolved.roots]) {
         const layoutPaths = fg.sync('layouts/**/*.{vue,ts}', {
           cwd: root,
           absolute: true,

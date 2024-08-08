@@ -1,14 +1,11 @@
-import { existsSync, promises as fs } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import { loadConfigFromFile, mergeConfig } from 'vite'
-import type { ConfigEnv, InlineConfig } from 'vite'
 import type { ResolvedSlidevOptions, SlidevData, SlidevServerOptions } from '@slidev/types'
 import MarkdownIt from 'markdown-it'
-import { slash } from '@antfu/utils'
+import type { ConfigEnv, InlineConfig } from 'vite'
+import { loadConfigFromFile, mergeConfig } from 'vite'
 import markdownItLink from '../syntax/markdown-it/markdown-it-link'
-import { generateGoogleFontsUrl, stringifyMarkdownTokens } from '../utils'
-import { toAtFS } from '../resolver'
-import { version } from '../../package.json'
+import { stringifyMarkdownTokens } from '../utils'
 import { ViteSlidevPlugin } from '../vite'
 
 export const sharedMd = MarkdownIt({ html: true })
@@ -19,58 +16,6 @@ export function getSlideTitle(data: SlidevData) {
   const title = stringifyMarkdownTokens(tokens)
   const slideTitle = data.config.titleTemplate.replace('%s', title)
   return slideTitle === 'Slidev - Slidev' ? 'Slidev' : slideTitle
-}
-
-function escapeHtml(unsafe: unknown) {
-  return JSON.stringify(
-    String(unsafe)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;'),
-  )
-}
-
-export async function getIndexHtml({ mode, entry, clientRoot, roots, data }: ResolvedSlidevOptions): Promise<string> {
-  let main = await fs.readFile(join(clientRoot, 'index.html'), 'utf-8')
-  let head = ''
-  let body = ''
-
-  const { info, author, keywords } = data.headmatter
-  head += [
-    `<meta name="slidev:version" content="${version}">`,
-    mode === 'dev' && `<meta charset="slidev:entry" content="${slash(entry)}">`,
-    `<link rel="icon" href="${data.config.favicon}">`,
-    `<title>${getSlideTitle(data)}</title>`,
-    info && `<meta name="description" content=${escapeHtml(info)}>`,
-    author && `<meta name="author" content=${escapeHtml(author)}>`,
-    keywords && `<meta name="keywords" content=${escapeHtml(Array.isArray(keywords) ? keywords.join(', ') : keywords)}>`,
-  ].filter(Boolean).join('\n')
-
-  for (const root of roots) {
-    const path = join(root, 'index.html')
-    if (!existsSync(path))
-      continue
-
-    const index = await fs.readFile(path, 'utf-8')
-
-    head += `\n${(index.match(/<head>([\s\S]*?)<\/head>/i)?.[1] || '').trim()}`
-    body += `\n${(index.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
-  }
-
-  if (data.features.tweet)
-    body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
-
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
-    head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
-
-  main = main
-    .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
-    .replace('<!-- head -->', head)
-    .replace('<!-- body -->', body)
-
-  return main
 }
 
 export async function resolveViteConfigs(
