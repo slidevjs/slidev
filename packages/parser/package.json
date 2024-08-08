@@ -23,6 +23,10 @@
     "./fs": {
       "types": "./dist/fs.d.mts",
       "import": "./dist/fs.mjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.mts",
+      "import": "./dist/utils.mjs"
     }
   },
   "main": "dist/index.mjs",
@@ -36,7 +40,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts",
+    "build": "rimraf dist && tsup src/index.ts src/core.ts src/fs.ts src/utils.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },

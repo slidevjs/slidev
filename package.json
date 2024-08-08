@@ -21,7 +21,10 @@
     "lint:fix": "nr lint --fix",
     "typecheck": "vue-tsc --noEmit",
     "docs": "pnpm -C docs run dev",
-    "docs:build": "pnpm run --filter {./docs}... build && pnpm demo:build",
+    "docs:build": "pnpm run --filter {./docs}... build",
+    "web": "pnpm -C packages/web run dev",
+    "web:build": "zx ./scripts/web.mjs",
+    "website:build": "pnpm docs:build && pnpm demo:build && pnpm web:build",
     "release": "bumpp package.json packages/*/package.json docs/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test",
     "prepare": "simple-git-hooks"

@@ -1,7 +1,6 @@
 import type { Plugin } from 'vite'
 import { objectEntries } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
-import { getDefine } from './extendConfig'
 
 /**
  * Replace compiler flags like `__DEV__` in Vue SFC
@@ -9,7 +8,7 @@ import { getDefine } from './extendConfig'
 export function createVueCompilerFlagsPlugin(
   options: ResolvedSlidevOptions,
 ): Plugin[] {
-  const define = objectEntries(getDefine(options))
+  const define = objectEntries(options.utils.defines)
   return [
     {
       name: 'slidev:flags',

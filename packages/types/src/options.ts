@@ -48,6 +48,7 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 export interface ResolvedSlidevUtils {
   shiki: HighlighterGeneric<any, any>
   shikiOptions: MarkdownItShikiOptions
+  defines: Record<string, string>
   isMonacoTypesIgnored: (pkg: string) => boolean
   getLayouts: () => Record<string, string>
 }

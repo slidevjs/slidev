@@ -1,15 +1,19 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import { bold, gray, red, yellow } from 'kolorist'
-import { toAtFS } from '../resolver'
+import { ensurePrefix, slash } from '@antfu/utils'
 import { regexSlideSourceId, templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
+
+export function toAtFS(path: string) {
+  return `/@fs${ensurePrefix('/', slash(path))}`
+}
 
 export function createLayoutWrapperPlugin(
   { data, utils }: ResolvedSlidevOptions,
 ): Plugin {
   return {
     name: 'slidev:layout-wrapper',
-    async transform(code, id) {
+    transform(code, id) {
       const match = id.match(regexSlideSourceId)
       if (!match)
         return
@@ -17,7 +21,7 @@ export function createLayoutWrapperPlugin(
       if (type !== 'md')
         return
       const index = +no - 1
-      const layouts = await utils.getLayouts()
+      const layouts = utils.getLayouts()
       const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.default?.layout
       let layoutName = rawLayoutName || (index === 0 ? 'cover' : 'default')
       if (!layouts[layoutName]) {

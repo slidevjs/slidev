@@ -1,6 +1,6 @@
 [build]
 publish = "docs/.vitepress/dist"
-command = "pnpm run docs:build"
+command = "pnpm run website:build"
 
 [build.environment]
 NODE_VERSION = "20"
@@ -26,6 +26,11 @@ status = 200
 [[redirects]]
 from = "/demo/vue-runner/*"
 to = "/demo/vue-runner/index.html"
+status = 200
+
+[[redirects]]
+from = "/web/*"
+to = "/web/index.html"
 status = 200
 
 [[redirects]]
