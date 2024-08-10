@@ -9,6 +9,7 @@ import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveAddons } from './integrations/addons'
 import { getRoots, resolveEntry } from './resolver'
 import setupShiki from './setups/shiki'
+import { getDefine } from './vite/extendConfig'
 
 const debug = Debug('slidev:options')
 
@@ -61,13 +62,13 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    utils: await createDataUtils(data, rootsInfo.clientRoot, roots),
+    utils: await createDataUtils(data, rootsInfo.clientRoot, roots, mode),
   }
 
   return resolved
 }
 
-export async function createDataUtils(data: SlidevData, clientRoot: string, roots: string[]): Promise<ResolvedSlidevUtils> {
+export async function createDataUtils(data: SlidevData, clientRoot: string, roots: string[], mode: string): Promise<ResolvedSlidevUtils> {
   const monacoTypesIgnorePackagesMatches = (data.config.monacoTypesIgnorePackages || [])
     .map(i => mm.matcher(i))
 
@@ -76,6 +77,7 @@ export async function createDataUtils(data: SlidevData, clientRoot: string, root
 
   return {
     ...await setupShiki(roots),
+    defines: getDefine({ data, clientRoot, mode } as any),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()
