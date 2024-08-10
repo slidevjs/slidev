@@ -65,7 +65,7 @@ Styles will be processed by [UnoCSS](https://unocss.dev/) and [PostCSS](https://
 
 <!-- eslint-skip -->
 
-```less
+```css
 .slidev-layout {
   --uno: px-14 py-10 text-[1.1rem];
 
