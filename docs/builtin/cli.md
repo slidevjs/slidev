@@ -55,13 +55,13 @@ Build a hostable SPA. See <LinkInline link="guide/hosting" /> for more details.
 Options:
 
 - `--out`, `-o` (`string`, default: `dist`): output directory
-- `--base` (`string`, default: `/`): base URL (see https://cli.vuejs.org/config/#publicpath)
+- `--base` (`string`, default: `/`): base URL (see https://vitejs.dev/config/shared-options.html#base)
 - `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA
 - `--theme`, `-t` (`string`): override theme
 
 ## `slidev export [...entry]` {#export}
 
-Export slides to PDF (or other format). See [Exporting](../guide/exporting) for more details.
+Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /> for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
