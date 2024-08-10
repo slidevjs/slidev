@@ -29,7 +29,7 @@ background: ./image.png  # Broken after build
 
 In the above case, the URLs are not statically analyzable and will be preserved as-is, which will result in 404 errors after build.
 
-To solve this, you can place these assets in the [public folder](TODO:) and use an absolute path to import them:
+To solve this, you can place these assets in the [public folder](../custom/directory-structure#public) and use an absolute path to import them:
 
 ```md
 ---
@@ -84,7 +84,12 @@ And use Flexboxes to create more responsive layouts:
 
 ```md [Horizontal]
 <div class="flex items-center">
-
+  <div>
+    First block
+  </div>
+  <div>
+    Second block
+  </div>
 </div>
 ```
 
@@ -98,7 +103,7 @@ And use Flexboxes to create more responsive layouts:
 
 :::
 
-Learn more: [CSS Grids](https://css-tricks.com/snippets/css/complete-guide-grid/), [flexboxes](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), or even [Masonry](https://css-tricks.com/native-css-masonry-layout-in-css-grid/),
+Learn more: [CSS Grids](https://css-tricks.com/snippets/css/complete-guide-grid/), [flexboxes](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), or even [Masonry](https://css-tricks.com/native-css-masonry-layout-in-css-grid/).
 
 ### Absolute Position
 

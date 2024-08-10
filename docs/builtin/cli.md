@@ -10,7 +10,7 @@ To use the CLI, you can either install `@slidev/cli` globally or install it loca
 Usually `npx slidev` is not supported because the package name is actually `@slidev/cli`.
 :::
 
-Options of the commands obey the following conventions:
+The CLI options of the commands obey the following conventions:
 
 - the value of the option can be passed after a space or a `=` character:
 
@@ -48,7 +48,7 @@ Options:
 
 ## `slidev build [entry]` {#build}
 
-Build a hostable SPA. See [Hosting](../guide/hosting) for more details.
+Build a hostable SPA. See <LinkInline link="guide/hosting" /> for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown file.
 
