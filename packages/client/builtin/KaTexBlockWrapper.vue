@@ -22,7 +22,7 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
-import { parseRangeString } from '@slidev/parser'
+import { parseRangeString } from '@slidev/parser/utils'
 import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, CLICKS_MAX } from '../constants'
 import { makeId } from '../logic/utils'
 import { useSlideContext } from '../context'

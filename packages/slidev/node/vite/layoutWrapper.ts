@@ -17,7 +17,7 @@ export function createLayoutWrapperPlugin(
       if (type !== 'md')
         return
       const index = +no - 1
-      const layouts = await utils.getLayouts()
+      const layouts = utils.getLayouts()
       const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.default?.layout
       let layoutName = rawLayoutName || (index === 0 ? 'cover' : 'default')
       if (!layouts[layoutName]) {

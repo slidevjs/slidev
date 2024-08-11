@@ -49,6 +49,7 @@ export interface ResolvedSlidevUtils {
   shiki: HighlighterGeneric<any, any>
   shikiOptions: MarkdownItShikiOptions
   indexHtml: string
+  define: Record<string, string>
   isMonacoTypesIgnored: (pkg: string) => boolean
   getLayouts: () => Record<string, string>
 }
