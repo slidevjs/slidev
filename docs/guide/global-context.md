@@ -2,7 +2,7 @@
 
 Slidev injects several global context values for advanced navigation controls.
 
-## Direct Usage
+## Direct Usage {#direct-usage}
 
 You can access them directly in your slides or components:
 
@@ -28,7 +28,7 @@ Current page is: {{ $nav.currentPage }}
 </template>
 ```
 
-## Composable Usage
+## Composable Usage {#composable-usage}
 
 > Available since v0.48.0
 
@@ -59,17 +59,17 @@ When the `useSlideContext` composable is used in a file, the automatic injection
 
 <SeeAlso :links="['features/slide-hook']" />
 
-## Properties
+## Properties {#properties}
 
-### `$slidev`
+### `$slidev` {#slidev}
 
 The global context object.
 
-### `$frontmatter`
+### `$frontmatter` {#frontmatter}
 
 The frontmatter object of the current slide. Note that this is empty for components out of the slides like <LinkInline link="features/global-layers" />.
 
-### `$clicks`
+### `$clicks` {#clicks}
 
 `$clicks` hold the number of clicks on the current slide. Can be used conditionally to show different content on clicks.
 
@@ -79,7 +79,7 @@ The frontmatter object of the current slide. Note that this is empty for compone
 
 See the <LinkInline link="guide/animations" /> guide for more information.
 
-### `$nav`
+### `$nav` {#nav}
 
 A reactive object holding the properties and controls of the slide navigation. For examples:
 
@@ -94,7 +94,7 @@ $nav.currentLayout // current layout name
 
 For more properties available, refer to the [`SlidevContextNav` interface](https://github.com/slidevjs/slidev/blob/main/packages/client/composables/useNav.ts).
 
-### `$page`
+### `$page` {#page}
 
 `$page` holds the number of the current page, 1-indexed.
 
@@ -106,7 +106,7 @@ Is current page active: {{ $page === $nav.currentPage }}
 
 > [!Note] > `$nav.clicks` is a global state while `$clicks` is the local clicks number for each slide.
 
-### `$renderContext`
+### `$renderContext` {#render-context}
 
 `$renderContext` holds the current render context, which can be `slide`, `overview`, `presenter` or `previewNext`
 
@@ -118,7 +118,7 @@ Is current page active: {{ $page === $nav.currentPage }}
 
 You can also use the [`<RenderWhen>` component](../builtin/components#renderwhen).
 
-### `$slidev.configs`
+### `$slidev.configs` {#configs}
 
 A reactive object holding the configurations for the slide project. For example:
 
@@ -136,7 +136,7 @@ title: My First Slidev!
 {{ $slidev.configs.title }} // 'My First Slidev!'
 ```
 
-### `$slidev.themeConfigs`
+### `$slidev.themeConfigs` {#theme-configs}
 
 A reactive object holding the parsed theme configurations:
 
@@ -154,7 +154,7 @@ Then the theme can access the primary color like:
 {{ $slidev.themeConfigs.primary }} // '#213435'
 ```
 
-## Types
+## Types {#types}
 
 If you want to get a type programmatically, you can import types like `TocItem` from `@slidev/types`:
 

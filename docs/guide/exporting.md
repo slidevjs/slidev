@@ -72,8 +72,6 @@ Here are some common options you can use with the `slidev export` command. For a
 
 ### Export Clicks Steps
 
-> Available since v0.21
-
 By default, Slidev exports one page per slide with clicks animations disabled. If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
 
 ```bash
@@ -88,7 +86,7 @@ You can specify the output filename with the `--output` option:
 $ slidev export --output my-pdf-export
 ```
 
-Or in the frontmatter configuration:
+Or in the headmatter configuration:
 
 ```yaml
 ---
@@ -104,9 +102,7 @@ By default, all slides in the presentation are exported. If you want to export a
 $ slidev export --range 1,6-8,10
 ```
 
-This option accepts both specific slide numbers and ranges.
-
-The example above would export slides 1,6,7,8 and 10.
+This option accepts both specific slide numbers and ranges. The example above would export slides 1,6,7,8 and 10.
 
 ### Multiple Exports
 
@@ -116,7 +112,7 @@ You can also export multiple slides at once:
 $ slidev export slides1.md slides2.md
 ```
 
-Or
+Or (only available in certain shells):
 
 ```bash
 $ slidev export *.md

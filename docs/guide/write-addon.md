@@ -1,8 +1,8 @@
 # Writing Addons
 
-> Please read <LinkInline link="guide/theme-addon" /> first.
+> Please read <LinkInline link="guide/theme-addon" /> and <LinkInline link="guide/write-theme" /> first.
 
-Each slides project can only have one theme, but can have multiple addons. Please read [Write a Theme](./write-theme) first if you haven't.
+Each slides project can only have one theme, but can have multiple addons.
 
 ## Capability
 

@@ -26,7 +26,7 @@ $ slidev build --base /talks/my-cool-talk/
 
 Refer to [Vite's documentation](https://vitejs.dev/guide/build.html#public-base-path) for more details.
 
-### Output directory
+### Output directory {#output-directory}
 
 You can change the output directory using `--out`.
 
@@ -34,7 +34,7 @@ You can change the output directory using `--out`.
 $ slidev build --out my-build-folder
 ```
 
-### Multiple Builds
+### Multiple Builds {#multiple-builds}
 
 You can build multiple slide decks in one go by passing multiple markdown files as arguments:
 
@@ -50,7 +50,7 @@ $ slidev build *.md
 
 In this case, each input file will generate a folder containing the build in the output directory.
 
-### Examples
+### Examples {#examples}
 
 Here are a few examples of the exported SPA:
 
@@ -58,16 +58,16 @@ Here are a few examples of the exported SPA:
 - [Composable Vue](https://talks.antfu.me/2021/composable-vue) by [Anthony Fu](https://github.com/antfu)
 - More in [Showcases](../resources/showcases)
 
-### Options
+### Options {#options}
 
 <LinkCard link="features/build-with-pdf" />
 <LinkCard link="features/bundle-remote-assets" />
 
-## Hosting
+## Hosting {#hosting}
 
 We recommend using `npm init slidev@latest` to scaffold your project, which contains the necessary configuration files for hosting services out-of-the-box.
 
-### GitHub Pages
+### GitHub Pages {#github-pages}
 
 To deploy your slides on [GitHub Pages](https://pages.github.com/) via GitHub Actions, follow these steps:
 
@@ -180,7 +180,7 @@ Create `vercel.json` in your project root with the following content:
 
 Then go to your [Vercel dashboard](https://vercel.com/) and create a new site with the repository.
 
-### Host on Docker
+### Host on Docker {#docker}
 
 If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker image](https://hub.docker.com/r/tangramor/slidev) maintained by [tangramor](https://github.com/tangramor), or build your own.
 

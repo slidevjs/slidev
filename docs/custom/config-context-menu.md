@@ -24,7 +24,7 @@ export default defineContextMenuSetup((items) => {
     ...items.value,
     {
       small: false,
-      icon: Icon3DCursor, // Used as `title` if `small` is `true`
+      icon: Icon3DCursor, // if `small` is `true`, only the icon is shown
       label: 'Custom Menu Item', // or a Vue component
       action() {
         alert('Custom Menu Item Clicked!')

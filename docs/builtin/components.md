@@ -20,7 +20,7 @@ Or:
 <Arrow v-bind="{ x1:10, y1:10, x2:200, y2:200 }" />
 ```
 
-Parameters:
+Props:
 
 - `x1` (`string | number`, required): start point x position
 - `y1` (`string | number`, required): start point y position
@@ -38,7 +38,7 @@ An `Arrow` component that can be dragged.
 
 <LinkCard link="features/draggable#draggable-arrow" />
 
-Parameters not related to position are the same as [the `Arrow` component](#arrow).
+Props not related to position are the same as [the `Arrow` component](#arrow).
 
 ## `AutoFitText`
 
@@ -52,7 +52,7 @@ Box inside which the font size will automatically adapt to fit the content. Simi
 <AutoFitText :max="200" :min="100" modelValue="Some text"/>
 ```
 
-Parameters:
+Props:
 
 - `max` (`string | number`, default `100`): Maximum font size
 - `min` (`string | number`, default `30`): Minimum font size
@@ -115,7 +115,7 @@ Insert a link you can use to navigate to a given slide.
 <Link to="solutions" title="Go to solutions"/>
 ```
 
-Parameters:
+Props:
 
 - `to` (`string | number`): The path of the slide to navigate to (slides path starts from `1`)
 - `title` (`string`): The title to display
@@ -146,7 +146,7 @@ Render slots depend on whether the context matches (for example whether we are i
 
 Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
 
-Parameters:
+Props:
 
 - `context` (`Context | Context[]`): a context or array of contexts you want to check for
   - `'main'`: Render in slides and presenter view (equivalent to ['slide', 'presenter']),
@@ -156,7 +156,6 @@ Parameters:
   - `'overview'`: Render in overview
   - `'presenter'`: Render in presenter view
   - `'previewNext'`: Render in presenter's next slide view
-  - `'previewPrevious'`: Render in presenter's previous slide view
 
 Slots:
 
@@ -212,7 +211,7 @@ Then you can use it with:
 <TitleRenderer no="42" />
 ```
 
-Parameters:
+Props:
 
 - `no` (`string | number`): The number of the slide to display the title from (slides starts from `1`)
 
@@ -236,7 +235,7 @@ Titles are displayed using the [`<Titles>` component](#titles)
 <Toc />
 ```
 
-Parameters:
+Props:
 
 - `columns` (`string | number`, default: `1`): The number of columns of the display
 - `listClass` (`string | string[]`, default: `''`): Classes to apply to the table of contents list
@@ -259,7 +258,7 @@ Apply scaling or transforming to elements.
 </Transform>
 ```
 
-Parameters:
+Props:
 
 - `scale` (`number | string`, default `1`): transform scale value
 - `origin` (`string`, default `'top left'`): transform origin value
@@ -274,7 +273,7 @@ Embed a tweet.
 <Tweet id="20" />
 ```
 
-Parameters:
+Props:
 
 - `id` (`number | string`, required): id of the tweet
 - `scale` (`number | string`, default `1`): transform scale value
@@ -319,7 +318,7 @@ Embed a video.
 
 Check [HTML video element's doc](https://developer.mozilla.org/docs/Web/HTML/Element/Video) to see what can be included in this component's slot.
 
-Parameters:
+Props:
 
 - `controls` (`boolean`, default: `false`): show the video controls
 - `autoplay` (`boolean | 'once'`, default: `false`):
@@ -351,7 +350,7 @@ Embed a YouTube video.
 <Youtube id="luoMHjh-XcQ" />
 ```
 
-Parameters:
+Props:
 
 - `id` (`string`, required): id of the YouTube video
 - `width` (`number`): width of the video
