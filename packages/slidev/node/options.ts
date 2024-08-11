@@ -84,8 +84,8 @@ export async function createDataUtils(data: SlidevData, clientRoot: string, root
 
       const layouts: Record<string, string> = {}
 
-      for (const root of [clientRoot, ...roots]) {
-        const layoutPaths = fg.sync('layouts/**/*.{vue,ts}', {
+      for (const root of [path.join(clientRoot, 'dist'), ...roots]) {
+        const layoutPaths = fg.sync('layouts/**/*.{vue,ts,js}', {
           cwd: root,
           absolute: true,
           suppressErrors: true,

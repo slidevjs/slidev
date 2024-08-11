@@ -1,0 +1,5 @@
+import '@unocss/reset/tailwind.css'
+import 'uno:preflights.css'
+import 'uno:typography.css'
+import 'uno:shortcuts.css'
+import 'uno.css'

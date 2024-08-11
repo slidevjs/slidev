@@ -11,7 +11,7 @@ export function createComponentsPlugin(
     extensions: ['vue', 'md', 'js', 'ts', 'jsx', 'tsx'],
 
     dirs: [
-      join(clientRoot, 'builtin'),
+      join(clientRoot, 'dist/components'),
       ...roots.map(i => join(i, 'components')),
     ],
 

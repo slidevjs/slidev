@@ -17,6 +17,7 @@ export const templateStyle: VirtualModuleTemplate = {
       `import "${resolveUrlOfClient('styles/code.css')}"`,
       `import "${resolveUrlOfClient('styles/katex.css')}"`,
       `import "${resolveUrlOfClient('styles/transitions.css')}"`,
+      `import "${resolveUrlOfClient('dist/style.css')}"`,
     ]
 
     for (const root of roots) {

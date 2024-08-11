@@ -68,7 +68,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   })
   return {
     name: 'slidev:config',
-    async config(config) {
+    async config() {
       const injection: InlineConfig = {
         define: getDefine(options),
         resolve: {
@@ -188,7 +188,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         injection.root = options.cliRoot
       }
 
-      return mergeConfig(injection, config)
+      return injection
     },
     configureServer(server) {
       // serve our index.html after vite history fallback

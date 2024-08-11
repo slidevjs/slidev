@@ -27,6 +27,10 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
   "dependencies": {
     "@antfu/utils": "^0.7.10",
     "@iconify-json/carbon": "^1.1.36",

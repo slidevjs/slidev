@@ -66,7 +66,7 @@ export async function getIndexHtml({ mode, entry, clientRoot, roots, data }: Res
     head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
 
   main = main
-    .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
+    .replace('__ENTRY__', toAtFS(join(clientRoot, 'dist/main.js')))
     .replace('<!-- head -->', head)
     .replace('<!-- body -->', body)
 
