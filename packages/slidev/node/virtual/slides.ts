@@ -27,7 +27,7 @@ export const templateSlides: VirtualModuleTemplate = {
           // For some unknown reason, import error won't be caught by the error component. Catch it here.
           `const load${no} = async () => {`,
           `  try { return componentsCache[${idx}] ??= await import('${VIRTUAL_SLIDE_PREFIX}${no}/md') }`,
-          `  catch (e) { console.error('slide import failed', e); return SlideError }`,
+          `  catch (e) { console.error('slide failed to load', e); return SlideError }`,
           `}`,
         )
         return `{ no: ${no}, meta: f${no}, load: load${no}, component: getAsyncComponent(${idx}, load${no}) }`
