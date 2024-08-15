@@ -29,19 +29,19 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.10",
-    "@iconify-json/carbon": "^1.1.36",
-    "@iconify-json/ph": "^1.1.13",
-    "@iconify-json/svg-spinners": "^1.1.2",
-    "@shikijs/monaco": "^1.11.1",
-    "@shikijs/vitepress-twoslash": "^1.11.1",
+    "@iconify-json/carbon": "^1.1.37",
+    "@iconify-json/ph": "^1.1.14",
+    "@iconify-json/svg-spinners": "^1.1.3",
+    "@shikijs/monaco": "^1.13.0",
+    "@shikijs/vitepress-twoslash": "^1.13.0",
     "@slidev/parser": "workspace:*",
     "@slidev/rough-notation": "^0.1.0",
     "@slidev/types": "workspace:*",
-    "@typescript/ata": "^0.9.6",
+    "@typescript/ata": "^0.9.7",
     "@unhead/vue": "^1.9.16",
-    "@unocss/reset": "^0.61.5",
-    "@vueuse/core": "^10.11.0",
-    "@vueuse/math": "^10.11.0",
+    "@unocss/reset": "^0.62.1",
+    "@vueuse/core": "^10.11.1",
+    "@vueuse/math": "^10.11.1",
     "@vueuse/motion": "^2.2.3",
     "drauu": "^0.4.0",
     "file-saver": "^2.0.5",
@@ -53,15 +53,15 @@
     "monaco-editor": "^0.50.0",
     "prettier": "^3.3.3",
     "recordrtc": "^5.6.2",
-    "shiki": "^1.11.1",
+    "shiki": "^1.13.0",
     "shiki-magic-move": "^0.4.3",
     "typescript": "^5.5.4",
-    "unocss": "^0.61.5",
-    "vue": "^3.4.33",
-    "vue-router": "^4.4.0",
-    "yaml": "^2.4.5"
+    "unocss": "^0.62.1",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3",
+    "yaml": "^2.5.0"
   },
   "devDependencies": {
-    "vite": "^5.3.4"
+    "vite": "^5.4.1"
   }
 }

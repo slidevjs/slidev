@@ -43,6 +43,6 @@
   "dependencies": {
     "@antfu/utils": "^0.7.10",
     "@slidev/types": "workspace:*",
-    "yaml": "^2.4.5"
+    "yaml": "^2.5.0"
   }
 }
