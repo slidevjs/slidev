@@ -15,6 +15,16 @@ export const official: AddonInfo[] = [
 ]
 
 export const community: AddonInfo[] = [
+  {
+    id: 'slidev-addon-tldraw',
+    name: 'tldraw for Slidev',
+    description: 'Embed tldraw diagrams directly in Slidev, with in-slide editing support',
+    author: {
+      name: 'Albert Brand',
+      link: 'https://github.com/AlbertBrand',
+    },
+    repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
+  },
   // Add yours here!
   {
     id: '',
