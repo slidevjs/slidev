@@ -7,7 +7,7 @@ import { parseSync } from '@slidev/parser'
 import Cover from '@slidev/theme-default/layouts/cover.vue'
 import Default from '@slidev/client/layouts/default.vue'
 import Center from '@slidev/client/layouts/center.vue'
-import SlideContainer from '@slidev/client/internals/SlideContainer.vue'
+import SlideContainer from './SlideContainer.vue'
 import '@slidev/client/styles/layouts-base.css'
 import '@slidev/theme-default/styles/layouts.css'
 
