@@ -28,7 +28,7 @@ export const community: AddonInfo[] = [
   // Add yours here!
   {
     id: '',
-    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/addons.ts',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/addons.ts',
     name: 'Yours?',
     description: 'Submit your addon to be list here!',
     author: {
