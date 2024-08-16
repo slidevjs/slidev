@@ -3,3 +3,31 @@ packages:
   - demo/*
   - cypress/fixtures/*
   - docs
+
+catalog:
+  '@antfu/utils': ^0.7.10
+  '@iconify-json/carbon': ^1.1.37
+  '@iconify-json/ph': ^1.1.14
+  '@iconify-json/svg-spinners': ^1.1.3
+  '@shikijs/vitepress-twoslash': ^1.13.0
+  '@unocss/reset': ^0.62.2
+  katex: ^0.16.11
+  lz-string: ^1.5.0
+  mermaid: ^10.9.1
+  monaco-editor: ^0.50.0
+  shiki: ^1.13.0
+  shiki-magic-move: ^0.4.3
+  typescript: ^5.5.4
+  unocss: ^0.62.2
+  vue: ^3.4.38
+  vue-router: ^4.4.3
+  yaml: ^2.5.0
+  kolorist: ^1.8.0
+  minimist: ^1.2.8
+  prompts: ^2.4.2
+  '@vitejs/plugin-vue': ^5.1.2
+  '@vitejs/plugin-vue-jsx': ^4.0.1
+  unplugin-icons: ^0.19.2
+  unplugin-vue-markdown: ^0.26.2
+  vite-plugin-remote-assets: ^0.5.0
+  vite-plugin-vue-server-ref: ^0.4.2
