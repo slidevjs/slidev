@@ -451,7 +451,7 @@
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.7.10",
+    "@antfu/utils": "catalog:",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "^22.3.0",

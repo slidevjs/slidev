@@ -12,6 +12,6 @@
     "@slidev/theme-seriph": "^0.25.0",
     "@vue/compiler-sfc": "^3.4.38",
     "nodemon": "^3.1.4",
-    "vue": "^3.4.38"
+    "vue": "catalog:"
   }
 }
