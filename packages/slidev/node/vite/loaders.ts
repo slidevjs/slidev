@@ -45,7 +45,7 @@ export function createSlidesLoader(
 
   let skipHmr: { filePath: string, fileContent: string } | null = null
 
-  const { data, clientRoot, roots, mode, utils } = options
+  const { data, mode, utils } = options
 
   function getSourceId(index: number, type: 'md' | 'frontmatter') {
     return `${data.slides[index].source.filepath}__slidev_${index + 1}.${type}`
@@ -213,7 +213,7 @@ export function createSlidesLoader(
       }
 
       Object.assign(data, newData)
-      Object.assign(utils, createDataUtils(newData, clientRoot, roots))
+      Object.assign(utils, createDataUtils(options))
 
       if (hmrSlidesIndexes.size > 0)
         moduleIds.add(templateTitleRendererMd.id)
