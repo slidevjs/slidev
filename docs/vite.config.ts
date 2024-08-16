@@ -6,13 +6,6 @@ import Inspect from 'vite-plugin-inspect'
 import UnoCSS from 'unocss/vite'
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@slidev/client/': '@slidev-old/client/',
-      '@slidev/parser': '@slidev-old/parser',
-      '@slidev/theme-default': '@slidev-old/theme-default',
-    },
-  },
   optimizeDeps: {
     exclude: [
       'vue-demi',
@@ -29,7 +22,7 @@ export default defineConfig({
     Components({
       dirs: [
         './.vitepress/theme/components',
-        './node_modules/@slidev-old/client/builtin',
+        './node_modules/@slidev/client/builtin',
       ],
       extensions: ['vue', 'md'],
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.md\?vue/],
