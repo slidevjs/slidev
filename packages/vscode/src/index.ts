@@ -7,6 +7,7 @@ import { logger } from './views/logger'
 import { usePreviewWebview } from './views/previewWebview'
 import { useSlidesTree } from './views/slidesTree'
 import { useProjectsTree } from './views/projectsTree'
+import { useLanguageClient } from './languageClient'
 
 // eslint-disable-next-line no-restricted-syntax
 export = defineExtension(() => {
@@ -23,6 +24,11 @@ export = defineExtension(() => {
   useAnnotations()
   useFoldings()
 
+  // language server
+  const labsInfo = useLanguageClient()
+
   logger.info('Slidev activated.')
   logger.info(`Entry: ${activeEntry.value}`)
+
+  return labsInfo
 })

@@ -19,8 +19,8 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, content?: string, mode?: string): Promise<LoadedSlidevData> {
-  const markdown = content ?? fs.readFileSync(filepath, 'utf-8')
+export async function load(userRoot: string, filepath: string, loadedSource: Record<string, string> = {}, mode?: string): Promise<LoadedSlidevData> {
+  const markdown = loadedSource[filepath] ?? fs.readFileSync(filepath, 'utf-8')
 
   let extensions: SlidevPreparserExtension[] | undefined
   if (preparserExtensionLoader) {
@@ -40,14 +40,16 @@ export async function load(userRoot: string, filepath: string, content?: string,
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}
+  const watchFiles: Record<string, Set<number>> = {}
   const slides: SlideInfo[] = []
 
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
-      const raw = fs.readFileSync(path, 'utf-8')
+      const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
+      watchFiles[path] = new Set()
     }
 
     const directImporter = importers?.at(-1)
@@ -125,7 +127,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
     headmatter,
     features: detectFeatures(slides.map(s => s.source.raw).join('')),
     markdownFiles,
-    watchFiles: Object.keys(markdownFiles).map(slash),
+    watchFiles,
   }
 }
 

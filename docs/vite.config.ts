@@ -33,7 +33,7 @@ export default defineConfig({
         './.vitepress/@slidev/client/builtin',
       ],
       extensions: ['vue', 'md'],
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.md\?vue/],
       resolvers: [
         IconsResolver({
           prefix: '',
@@ -45,15 +45,6 @@ export default defineConfig({
     }),
     Inspect(),
     UnoCSS(),
-    {
-      name: 'code-block-escape',
-      enforce: 'post',
-      transform(code, id) {
-        if (!id.endsWith('.md'))
-          return
-        return code.replace(/\/\/```/g, '```')
-      },
-    },
     {
       name: 'virtual-modules',
       resolveId(id) {

@@ -4,11 +4,16 @@
 
 Define code runners for custom languages in your Monaco Editor.
 
-By default, JavaScript, TypeScript runners are supported built-in. They run in the browser **without** a sandbox environment. If you want to more advanced integrations, you might want to provide your own code runner that sends the code to a remote server, runs in a Web Worker, or anything, up to you.
+By default, JavaScript, TypeScript runners are supported built-in. They run in the browser **without** a sandbox environment. If you want more advanced integrations, you can provide your own code runner that sends the code to a remote server, runs in a Web Worker, or anything, up to you.
 
 Create `./setup/code-runners.ts` with the following content:
 
-```ts
+<!-- eslint-disable import/first -->
+
+```ts twoslash
+declare const executePythonCodeRemotely: (code: string) => Promise<string>
+declare const sanitizeHtml: (html: string) => string
+// ---cut---
 import { defineCodeRunnersSetup } from '@slidev/types'
 
 export default defineCodeRunnersSetup(() => {
@@ -34,7 +39,10 @@ export default defineCodeRunnersSetup(() => {
 
 The second argument `ctx` is the runner context, which contains the following properties:
 
-```ts
+```ts twoslash
+import type { CodeRunnerOutputs } from '@slidev/types'
+import type { CodeToHastOptions } from 'shiki'
+// ---cut---
 export interface CodeRunnerContext {
   /**
    * Options passed to runner via the `runnerOptions` prop.
@@ -43,7 +51,7 @@ export interface CodeRunnerContext {
   /**
    * Highlight code with shiki.
    */
-  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => string
   /**
    * Use (other) code runner to run code.
    */
@@ -66,5 +74,5 @@ monacoRunAdditionalDeps:
 ```
 
 ::: tip
-The paths are resolved relative to the `snippets` directory. And the names of the deps should be exactly the same as imported ones in the code.
+The paths are resolved relative to the `snippets` directory. And the names of the deps should be exactly the same as the imported ones in the code.
 :::

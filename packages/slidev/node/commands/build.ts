@@ -6,7 +6,7 @@ import { build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
-import { getIndexHtml, resolveViteConfigs } from './shared'
+import { resolveViteConfigs } from './shared'
 
 export async function build(
   options: ResolvedSlidevOptions,
@@ -19,7 +19,7 @@ export async function build(
   if (fs.existsSync(indexPath))
     originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
 
-  await fs.writeFile(indexPath, await getIndexHtml(options), 'utf-8')
+  await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
   let config: ResolvedConfig = undefined!
 
   try {

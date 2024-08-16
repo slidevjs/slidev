@@ -1,0 +1,231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/Frontmatter",
+  "definitions": {
+    "Frontmatter": {
+      "type": "object",
+      "properties": {
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+        },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinLayouts"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest",
+          "markdownDescription": "Slide layout to use\n\nDefault to 'cover' for the first slide, 'default' for the rest"
+        },
+        "class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ],
+          "description": "Custom class added to the slide root element",
+          "markdownDescription": "Custom class added to the slide root element"
+        },
+        "clicks": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations",
+          "markdownDescription": "Manually specified the total clicks needed to this slide\n\nWhen not specified, the clicks will be calculated by the usage of v-clicks\n\nSee https://sli.dev/guide/animations"
+        },
+        "clicksStart": {
+          "type": "number",
+          "description": "Manually specified the total clicks needed to this slide to start",
+          "markdownDescription": "Manually specified the total clicks needed to this slide to start",
+          "default": 0
+        },
+        "preload": {
+          "type": "boolean",
+          "description": "Preload the slide when the previous slide is active",
+          "markdownDescription": "Preload the slide when the previous slide is active",
+          "default": true
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "Completely hide and disable the slide",
+          "markdownDescription": "Completely hide and disable the slide"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Same as `hide`, completely hide and disable the slide",
+          "markdownDescription": "Same as `hide`, completely hide and disable the slide"
+        },
+        "hideInToc": {
+          "type": "boolean",
+          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
+          "markdownDescription": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "level": {
+          "type": "number",
+          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared",
+          "markdownDescription": "Override the title level for the <TitleRenderer> and <Toc> components\nOnly if `title` has also been declared"
+        },
+        "routeAlias": {
+          "type": "string",
+          "description": "Create a route alias that can be used in the URL or with the <Link> component",
+          "markdownDescription": "Create a route alias that can be used in the URL or with the <Link> component"
+        },
+        "zoom": {
+          "type": "number",
+          "description": "Custom zoom level for the slide",
+          "markdownDescription": "Custom zoom level for the slide",
+          "default": 1
+        },
+        "dragPos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
+          "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
+        },
+        "src": {
+          "type": "string",
+          "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
+          "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
+        }
+      }
+    },
+    "BuiltinSlideTransition": {
+      "type": "string",
+      "enum": [
+        "slide-up",
+        "slide-down",
+        "slide-left",
+        "slide-right",
+        "fade",
+        "zoom",
+        "none"
+      ]
+    },
+    "TransitionGroupProps": {
+      "type": "object",
+      "properties": {
+        "appear": {
+          "type": "boolean"
+        },
+        "persisted": {
+          "type": "boolean"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "moveClass": {
+          "type": "string"
+        },
+        "css": {
+          "type": "boolean"
+        },
+        "duration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "enter": {
+                  "type": "number"
+                },
+                "leave": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "enter",
+                "leave"
+              ]
+            }
+          ]
+        },
+        "enterFromClass": {
+          "type": "string"
+        },
+        "enterActiveClass": {
+          "type": "string"
+        },
+        "enterToClass": {
+          "type": "string"
+        },
+        "appearFromClass": {
+          "type": "string"
+        },
+        "appearActiveClass": {
+          "type": "string"
+        },
+        "appearToClass": {
+          "type": "string"
+        },
+        "leaveFromClass": {
+          "type": "string"
+        },
+        "leaveActiveClass": {
+          "type": "string"
+        },
+        "leaveToClass": {
+          "type": "string"
+        }
+      }
+    },
+    "BuiltinLayouts": {
+      "type": "string",
+      "enum": [
+        "404",
+        "center",
+        "cover",
+        "default",
+        "end",
+        "error",
+        "fact",
+        "full",
+        "iframe-left",
+        "iframe-right",
+        "iframe",
+        "image-left",
+        "image-right",
+        "image",
+        "intro",
+        "none",
+        "quote",
+        "section",
+        "statement",
+        "two-cols-header",
+        "two-cols"
+      ]
+    }
+  }
+}

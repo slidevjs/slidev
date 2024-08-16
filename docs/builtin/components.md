@@ -1,16 +1,14 @@
----
-outline: [2, 3]
----
-
 # Components
 
-## Built-in Components
+This page lists all the built-in components provided by Slidev. These components can be **directly** used in your slides.
 
-### `Arrow`
+Note that <LinkInline link="guide/theme-addon" /> can provide additional components. To add your own components, see <LinkInline link="guide/component#write" />.
+
+## `Arrow`
 
 Draw an arrow.
 
-#### Usage
+### Usage
 
 ```md
 <Arrow x1="10" y1="20" x2="100" y2="200" />
@@ -22,49 +20,49 @@ Or:
 <Arrow v-bind="{ x1:10, y1:10, x2:200, y2:200 }" />
 ```
 
-Parameters:
+Props:
 
 - `x1` (`string | number`, required): start point x position
 - `y1` (`string | number`, required): start point y position
 - `x2` (`string | number`, required): end point x position
-- `y2` (`string | number`, required): end point x position
+- `y2` (`string | number`, required): end point y position
 - `width` (`string | number`, default: `2`): line width
 - `color` (`string`, default: `'currentColor'`): line color
 - `two-way` (`boolean`, default: `false`): draw a two-way arrow
 
-### `VDragArrow`
+## `VDragArrow`
 
 An `Arrow` component that can be dragged.
 
-#### Usage
+### Usage
 
-See https://sli.dev/guide/draggable.html#draggable-arrow
+<LinkCard link="features/draggable#draggable-arrow" />
 
-Parameters not related to position are the same as [the `Arrow` component](#arrow).
+Props not related to position are the same as [the `Arrow` component](#arrow).
 
-### `AutoFitText`
+## `AutoFitText`
 
 > Experimental
 
 Box inside which the font size will automatically adapt to fit the content. Similar to PowerPoint or Keynote TextBox.
 
-#### Usage
+### Usage
 
 ```md
 <AutoFitText :max="200" :min="100" modelValue="Some text"/>
 ```
 
-Parameters:
+Props:
 
 - `max` (`string | number`, default `100`): Maximum font size
 - `min` (`string | number`, default `30`): Minimum font size
 - `modelValue` (`string`, default `''`): text content
 
-### `LightOrDark`
+## `LightOrDark`
 
 Use it to display one thing or another depending on the active light or dark theme.
 
-#### Usage
+### Usage
 
 Use it with the two named Slots `#dark` and `#light`:
 
@@ -105,11 +103,11 @@ You can provide markdown in the slots, but you will need to surround the content
 </LightOrDark>
 ```
 
-### `Link`
+## `Link`
 
 Insert a link you can use to navigate to a given slide.
 
-#### Usage
+### Usage
 
 ```md
 <Link to="42">Go to slide 42</Link>
@@ -117,7 +115,7 @@ Insert a link you can use to navigate to a given slide.
 <Link to="solutions" title="Go to solutions"/>
 ```
 
-Parameters:
+Props:
 
 - `to` (`string | number`): The path of the slide to navigate to (slides path starts from `1`)
 - `title` (`string`): The title to display
@@ -132,15 +130,15 @@ routeAlias: solutions
 # Now some solutions!
 ```
 
-### `PoweredBySlidev`
+## `PoweredBySlidev`
 
 Renders "Powered by Slidev" with a link to the Slidev website.
 
-### `RenderWhen`
+## `RenderWhen`
 
-Render slots depending on whether the context matches (for example whether we are in presenter view).
+Render slots depend on whether the context matches (for example whether we are in presenter view).
 
-#### Usage
+### Usage
 
 ```md
 <RenderWhen context="presenter">This will only be rendered in presenter view.</RenderWhen>
@@ -148,7 +146,7 @@ Render slots depending on whether the context matches (for example whether we ar
 
 Context type: `'main' | 'visible' | 'print' | 'slide' | 'overview' | 'presenter' | 'previewNext'`
 
-Parameters:
+Props:
 
 - `context` (`Context | Context[]`): a context or array of contexts you want to check for
   - `'main'`: Render in slides and presenter view (equivalent to ['slide', 'presenter']),
@@ -158,34 +156,33 @@ Parameters:
   - `'overview'`: Render in overview
   - `'presenter'`: Render in presenter view
   - `'previewNext'`: Render in presenter's next slide view
-  - `'previewPrevious'`: Render in presenter's previous slide view
 
 Slots:
 
 - `#default`: Rendered when the context matches
 - `#fallback`: Rendered when the context does not match
 
-### `SlideCurrentNo`
+## `SlideCurrentNo`
 
 Current slide number.
 
-#### Usage
+### Usage
 
 ```md
 <SlideCurrentNo />
 ```
 
-### `SlidesTotal`
+## `SlidesTotal`
 
 Total number of slides.
 
-#### Usage
+### Usage
 
 ```md
 <SlidesTotal />
 ```
 
-### `TitleRenderer`
+## `TitleRenderer`
 
 Insert the main title from a slide parsed as HTML.
 
@@ -200,7 +197,7 @@ level: 2
 ---
 ```
 
-#### Usage
+### Usage
 
 The `<TitleRenderer>` component is a virtual component you can import with:
 
@@ -214,11 +211,11 @@ Then you can use it with:
 <TitleRenderer no="42" />
 ```
 
-Parameters:
+Props:
 
 - `no` (`string | number`): The number of the slide to display the title from (slides starts from `1`)
 
-### `Toc`
+## `Toc`
 
 Insert a Table Of Content.
 
@@ -232,13 +229,13 @@ hideInToc: true
 
 Titles are displayed using the [`<Titles>` component](#titles)
 
-#### Usage
+### Usage
 
 ```md
 <Toc />
 ```
 
-Parameters:
+Props:
 
 - `columns` (`string | number`, default: `1`): The number of columns of the display
 - `listClass` (`string | string[]`, default: `''`): Classes to apply to the table of contents list
@@ -249,11 +246,11 @@ Parameters:
   - `'onlyCurrentTree'`: Display only items that are in current tree (active item, parents and children of active item)
   - `'onlySiblings'`: Display only items that are in current tree and their direct siblings
 
-### `Transform`
+## `Transform`
 
 Apply scaling or transforming to elements.
 
-#### Usage
+### Usage
 
 ```md
 <Transform :scale="0.5">
@@ -261,55 +258,55 @@ Apply scaling or transforming to elements.
 </Transform>
 ```
 
-Parameters:
+Props:
 
 - `scale` (`number | string`, default `1`): transform scale value
 - `origin` (`string`, default `'top left'`): transform origin value
 
-### `Tweet`
+## `Tweet`
 
 Embed a tweet.
 
-#### Usage
+### Usage
 
 ```md
 <Tweet id="20" />
 ```
 
-Parameters:
+Props:
 
 - `id` (`number | string`, required): id of the tweet
 - `scale` (`number | string`, default `1`): transform scale value
 - `conversation` (`string`, default `'none'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 - `cards` (`'hidden' | 'visible'`, default `'visible'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 
-### `VAfter`, `VClick` and `VClicks`
+## `VAfter`, `VClick` and `VClicks`
 
-See https://sli.dev/guide/animations.html
+<LinkCard link="guide/animations#click-animation" />
 
-### `VSwitch`
+## `VSwitch`
 
 Switch between multiple slots based on clicks.
 
-See https://sli.dev/guide/animations.html#enter-leave
+<LinkCard link="guide/animations#enter-leave" />
 
 - If the `unmount` prop is set to `true`, the previous slot will be unmounted when switching to the next slot. Default is `false`.
 - Use the `tag` and `childTag` props to change the default tag of the component and its children. Default is `div`.
 - Use the `transition` prop to change the transition effect. Default is `false` (disabled).
 
-### `VDrag`
+## `VDrag`
 
-See https://sli.dev/guide/draggable.html
+<LinkCard link="features/draggable" />
 
-### `SlidevVideo`
+## `SlidevVideo`
 
 Embed a video.
 
-#### Usage
+### Usage
 
 ```md
 <SlidevVideo v-click autoplay controls>
-  <!-- Anything that can go in a HTML video element. -->
+  <!-- Anything that can go in an HTML video element. -->
   <source src="/myMovie.mp4" type="video/mp4" />
   <source src="/myMovie.webm" type="video/webm" />
   <p>
@@ -321,7 +318,7 @@ Embed a video.
 
 Check [HTML video element's doc](https://developer.mozilla.org/docs/Web/HTML/Element/Video) to see what can be included in this component's slot.
 
-Parameters:
+Props:
 
 - `controls` (`boolean`, default: `false`): show the video controls
 - `autoplay` (`boolean | 'once'`, default: `false`):
@@ -343,32 +340,20 @@ Parameters:
 When exporting, the video may fail to load because Chromium does not support some video formats. In this case, you can specify the executable path of the browser. See [Chromium executable path](/guide/exporting.html#executable-path) for more information.
 :::
 
-### `Youtube`
+## `Youtube`
 
 Embed a YouTube video.
 
-#### Usage
+### Usage
 
 ```md
 <Youtube id="luoMHjh-XcQ" />
 ```
 
-Parameters:
+Props:
 
 - `id` (`string`, required): id of the YouTube video
 - `width` (`number`): width of the video
 - `height` (`number`): height of the video
 
 You can also make the video start at a specific time if you add `?start=1234` to the id value (where `1234` is seconds),
-
-## Custom Components
-
-Create a directory `components/` under your project root, and simply put your custom Vue components under it, then you can use it with the same name in your markdown file!
-
-Read more in the [Customization](/custom/directory-structure#components) section.
-
-## Theme-provided Components
-
-Themes can provide components as well. Please read their documentation for what they have provided.
-
-Check more in the [directory structure](/custom/directory-structure) section.

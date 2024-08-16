@@ -1,5 +1,6 @@
 import type { RouteComponent, RouteMeta } from 'vue-router'
 import type YAML from 'yaml'
+import type { Component } from 'vue'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
@@ -50,7 +51,6 @@ export interface SlideInfo extends SlideInfoBase {
    * The source slide where the content is from
    */
   source: SourceSlideInfo
-  snippetsUsed?: LoadedSnippets
   noteHTML?: string
 }
 
@@ -111,7 +111,10 @@ export interface SlidevData {
   features: SlidevDetectedFeatures
   themeMeta?: SlidevThemeMeta
   markdownFiles: Record<string, SlidevMarkdown>
-  watchFiles: string[]
+  /**
+   * From watched files to indexes of slides that must be reloaded regardless of the loaded content
+   */
+  watchFiles: Record<string, Set<number>>
 }
 
 export interface SlidevPreparserExtension {
@@ -127,7 +130,12 @@ export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previ
 export interface SlideRoute {
   no: number
   meta: RouteMeta & Required<Pick<RouteMeta, 'slide'>>
-  component: () => Promise<{ default: RouteComponent }>
+  /**
+   * load the slide component itself
+   */
+  load: () => Promise<{ default: RouteComponent }>
+  /**
+   * Wrapped async component
+   */
+  component: Component
 }
-
-export type LoadedSnippets = Record<string, string>

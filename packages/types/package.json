@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.49.16",
+  "version": "0.49.25",
   "description": "Shared types declarations for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -41,6 +41,9 @@
     "vite-plugin-remote-assets": "catalog:",
     "vite-plugin-vue-server-ref": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "@shikijs/markdown-it": "^1.13.0",
+    "vite-plugin-inspect": "^0.8.5",
+    "vite-plugin-static-copy": "^1.0.6"
   }
 }

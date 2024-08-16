@@ -6,7 +6,7 @@ import type { VirtualModuleTemplate } from './types'
 
 export const templateStyle: VirtualModuleTemplate = {
   id: '/@slidev/styles',
-  getContent: async ({ data, clientRoot, roots }) => {
+  async getContent({ data, clientRoot, roots }) {
     function resolveUrlOfClient(name: string) {
       return toAtFS(join(clientRoot, name))
     }

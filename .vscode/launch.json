@@ -6,7 +6,8 @@
       "type": "extensionHost",
       "request": "launch",
       "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode"
+        "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode",
+        "--folder-uri=${workspaceRoot}/packages/vscode/syntaxes"
       ],
       "outFiles": [
         "${workspaceFolder}/out/**/*.js"

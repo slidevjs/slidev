@@ -10,20 +10,17 @@ import type { Argv } from 'yargs'
 import yargs from 'yargs'
 import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { ResolvedSlidevOptions, SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
+import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/types'
 import equal from 'fast-deep-equal'
 import { verifyConfig } from '@slidev/parser'
-import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
-import { uniq } from '@antfu/utils'
 import { getPort } from 'get-port-please'
 import { version } from '../package.json'
-import { createServer } from './commands/server'
+import { createServer } from './commands/serve'
 import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
-import { loadSetups } from './setups/load'
 import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
-import { resolveAddons } from './integrations/addons'
+import setupPreparser from './setups/preparser'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'highlighter',
@@ -54,17 +51,7 @@ const FILES_CHANGE_RESTART_GLOBS = [
   'setup/preparser.ts',
 ]
 
-injectPreparserExtensionLoader(async (headmatter: Record<string, unknown>, filepath: string, mode?: string) => {
-  const addons = headmatter?.addons as string[] ?? []
-  const { clientRoot, userRoot } = await getRoots()
-  const roots = uniq([
-    clientRoot,
-    userRoot,
-    ...await resolveAddons(addons),
-  ])
-  const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter, mode }, [], mergeArrays)
-})
+setupPreparser()
 
 const cli = yargs(process.argv.slice(2))
   .scriptName('slidev')
@@ -167,9 +154,9 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          async loadData() {
+          async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
+            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -616,6 +603,10 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'number',
       describe: 'scale factor for image export',
     })
+    .option('omit-background', {
+      type: 'boolean',
+      describe: 'export png pages without the default browser background',
+    })
 }
 
 function printInfo(
@@ -635,7 +626,7 @@ function printInfo(
 
   console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
   console.log(dim('  css engine  ') + blue('unocss'))
-  console.log(dim('  entry       ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+  console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
   if (port) {
     const query = remote ? `?password=${remote}` : ''

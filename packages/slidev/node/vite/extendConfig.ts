@@ -5,7 +5,6 @@ import { mergeConfig } from 'vite'
 import { slash, uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
-import { getIndexHtml } from '../commands/shared'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
@@ -197,7 +196,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           if (req.url!.endsWith('.html')) {
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(await getIndexHtml(options))
+            res.end(options.utils.indexHtml)
             return
           }
           next()

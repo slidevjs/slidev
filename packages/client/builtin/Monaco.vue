@@ -115,6 +115,7 @@ onMounted(async () => {
     fontSize: 11.5,
     fontFamily: 'var(--slidev-code-font-family)',
     scrollBeyondLastLine: false,
+    useInlineViewWhenSpaceIsLimited: false,
     ...editorOptions,
     ...props.editorOptions,
   } satisfies monaco.editor.IStandaloneEditorConstructionOptions & monaco.editor.IDiffEditorConstructionOptions

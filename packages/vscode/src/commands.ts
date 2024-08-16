@@ -134,8 +134,8 @@ export function useCommands() {
     }
 
     const { start, showTerminal } = useDevServer(project)
-    await start()
-    await showTerminal()
+    start()
+    showTerminal()
 
     const { retry } = usePreviewWebview()
     setTimeout(retry, 3000)

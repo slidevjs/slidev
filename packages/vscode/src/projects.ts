@@ -17,6 +17,7 @@ export interface SlidevProject {
 }
 
 export const projects = reactive(new Map<string, SlidevProject>())
+export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
 export const activeSlidevData = computed(() => activeProject.value?.data)
@@ -74,7 +75,7 @@ export function useProjects() {
   onScopeDispose(() => fsWatcher.dispose())
 
   fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath).toLowerCase()
+    const path = slash(uri.fsPath)
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
     if (pendingUpdate)
@@ -82,7 +83,7 @@ export function useProjects() {
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
-      if (!project.data.watchFiles.some(f => f.toLowerCase() === path))
+      if (!project.data.markdownFiles[path])
         continue
 
       if (existsSync(project.entry)) {
