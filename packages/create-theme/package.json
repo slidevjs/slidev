@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "kolorist": "catalog:",
-    "minimist": "^1.2.8",
+    "minimist": "catalog:",
     "prompts": "catalog:"
   }
 }

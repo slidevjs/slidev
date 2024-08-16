@@ -26,7 +26,7 @@
   "dependencies": {
     "execa": "^9.3.1",
     "kolorist": "catalog:",
-    "minimist": "^1.2.8",
+    "minimist": "catalog:",
     "prompts": "catalog:"
   }
 }
