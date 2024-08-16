@@ -10,7 +10,7 @@ To use the CLI, you can either install `@slidev/cli` globally or install it loca
 Usually `npx slidev` is not supported because the package name is actually `@slidev/cli`.
 :::
 
-Options of the commands obey the following conventions:
+The CLI options of the commands obey the following conventions:
 
 - the value of the option can be passed after a space or a `=` character:
 
@@ -48,20 +48,20 @@ Options:
 
 ## `slidev build [entry]` {#build}
 
-Build a hostable SPA. See [Hosting](../guide/hosting) for more details.
+Build a hostable SPA. See <LinkInline link="guide/hosting" /> for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown file.
 
 Options:
 
 - `--out`, `-o` (`string`, default: `dist`): output directory
-- `--base` (`string`, default: `/`): base URL (see https://cli.vuejs.org/config/#publicpath)
+- `--base` (`string`, default: `/`): base URL (see https://vitejs.dev/config/shared-options.html#base)
 - `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA
 - `--theme`, `-t` (`string`): override theme
 
 ## `slidev export [...entry]` {#export}
 
-Export slides to PDF (or other format). See [Exporting](../guide/exporting) for more details.
+Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /> for more details.
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
@@ -74,6 +74,7 @@ Options:
 - `--dark` (`boolean`, default: `false`): export as dark theme.
 - `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
 - `--theme`, `-t` (`string`): override theme.
+- `--omit-background` (`boolean`, default: `false`): remove the default browser background
 
 ## `slidev format [entry]` {#format}
 

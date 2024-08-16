@@ -91,7 +91,7 @@ Also, there is another possible frontmatter format:
 
 ## Notes {#notes}
 
-You can also create presenter notes for each slide. They will show up in [Presenter Mode](../guide/ui#presenter-mode) for you to reference during presentations.
+You can also create presenter notes for each slide. They will show up in <LinkInline link="guide/ui#presenter-mode" /> for you to reference during presentations.
 
 The comment blocks at the end of each slide are treated as the note of the slide:
 
@@ -100,7 +100,7 @@ The comment blocks at the end of each slide are treated as the note of the slide
 layout: cover
 ---
 
-# Page 1
+# Slide 1
 
 This is the cover page.
 
@@ -108,7 +108,7 @@ This is the cover page.
 
 ---
 
-# Page 2
+# Slide 2
 
 <!-- This is NOT a note because it is not at the end of the slide -->
 
