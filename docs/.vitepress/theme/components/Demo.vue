@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-
 import TypeIt from 'typeit'
 import Markdown from 'markdown-it'
-import type { SlidevMarkdown } from '@slidev/types'
-
-import { parse } from '@slidev/parser'
+import type { SlidevMarkdown } from '@slidev-old/types'
+import { parse } from '@slidev-old/parser'
 import Cover from '@slidev/theme-default/layouts/cover.vue'
 import Default from '@slidev/client/layouts/default.vue'
 import Center from '@slidev/client/layouts/center.vue'

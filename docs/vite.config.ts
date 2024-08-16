@@ -1,4 +1,3 @@
-import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -9,9 +8,9 @@ import UnoCSS from 'unocss/vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@slidev/client/': `${resolve(__dirname, '.vitepress/@slidev/client')}/`,
-      '@slidev/parser': resolve(__dirname, '.vitepress/@slidev/parser'),
-      '@slidev/theme-default': resolve(__dirname, '.vitepress/@slidev/theme-default'),
+      '@slidev/client/': '@slidev-old/client/',
+      '@slidev/parser': '@slidev-old/parser',
+      '@slidev/theme-default': '@slidev-old/theme-default',
     },
   },
   optimizeDeps: {
@@ -30,7 +29,7 @@ export default defineConfig({
     Components({
       dirs: [
         './.vitepress/theme/components',
-        './.vitepress/@slidev/client/builtin',
+        './node_modules/@slidev-old/client/builtin',
       ],
       extensions: ['vue', 'md'],
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.md\?vue/],
