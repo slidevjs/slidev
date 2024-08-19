@@ -11,6 +11,7 @@ Usage:
 import { computed } from 'vue'
 import type { TocItem } from '@slidev/types'
 import { useSlideContext } from '../context'
+import TocList from './TocList.vue'
 
 const props = withDefaults(
   defineProps<{

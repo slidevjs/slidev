@@ -462,7 +462,7 @@
     "mlly": "^1.7.1",
     "ovsx": "^0.9.2",
     "prettier": "^3.3.3",
-    "reactive-vscode": "0.2.0-beta.5",
+    "reactive-vscode": "0.2.0",
     "tm-grammars": "^1.17.1",
     "volar-service-prettier": "^0.0.54",
     "volar-service-yaml": "^0.0.59"

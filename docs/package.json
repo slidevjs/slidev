@@ -6,8 +6,7 @@
   "packageManager": "pnpm@9.7.1",
   "scripts": {
     "dev": "vitepress",
-    "build": "vitepress build",
-    "postinstall": "node .vitepress/scripts/prepare.js"
+    "build": "vitepress build"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.10",
@@ -17,10 +16,6 @@
   "devDependencies": {
     "@iconify/json": "^2.2.237",
     "@shikijs/vitepress-twoslash": "^1.13.0",
-    "@slidev-old/client": "npm:@slidev/client@0.34.3",
-    "@slidev-old/parser": "npm:@slidev/parser@0.34.3",
-    "@slidev-old/theme-default": "npm:@slidev/theme-default@0.21.2",
-    "@slidev-old/types": "npm:@slidev/types@0.34.3",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",

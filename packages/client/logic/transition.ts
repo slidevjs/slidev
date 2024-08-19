@@ -44,7 +44,7 @@ export function getCurrentTransition(direction: number, currentRoute?: SlideRout
     ? prevRoute?.meta?.transition
     : currentRoute?.meta?.transition
   if (!transition)
-    transition = configs.transition
+    transition = configs.transition || undefined
 
   return resolveTransition(transition, direction < 0)
 }
