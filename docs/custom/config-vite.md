@@ -24,7 +24,7 @@ To configure the built-in plugins listed above, create a `vite.config.ts` with t
 ```ts twoslash
 /// <reference types="@slidev/types" />
 import type MarkdownIt from 'markdown-it'
-declare const MyPlugin: (md: MarkdownIt) => void
+declare const MyPlugin: (md: any) => void
 // ---cut---
 import { defineConfig } from 'vite'
 
@@ -37,7 +37,7 @@ export default defineConfig({
       /* markdown-it options */
       markdownItSetup(md) {
         /* custom markdown-it plugins */
-        md.use(MyPlugin/* ... */)
+        md.use(MyPlugin)
       },
     },
     /* options for other plugins */
