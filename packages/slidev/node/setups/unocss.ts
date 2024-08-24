@@ -1,14 +1,15 @@
 import { resolve } from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import type { Theme } from '@unocss/preset-uno'
 import type { UserConfig } from '@unocss/core'
-import { mergeConfigs } from 'unocss'
+import { mergeConfigs, presetIcons } from 'unocss'
 import type { ResolvedSlidevOptions, UnoSetup } from '@slidev/types'
 import { loadSetups } from '../setups/load'
 import { loadModule } from '../utils'
 
 export default async function setupUnocss(
-  { clientRoot, roots, data }: ResolvedSlidevOptions,
+  { clientRoot, roots, data, utils }: ResolvedSlidevOptions,
 ) {
   function loadFileConfigs(root: string): UserConfig<Theme>[] {
     return [
@@ -23,6 +24,18 @@ export default async function setupUnocss(
   }
 
   const configs = [
+    {
+      presets: [
+        presetIcons({
+          collectionsNodeResolvePath: utils.iconsResolvePath,
+          collections: {
+            slidev: {
+              logo: () => readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8'),
+            },
+          },
+        }),
+      ],
+    },
     ...loadFileConfigs(clientRoot),
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
   ].filter(Boolean) as UserConfig<Theme>[]

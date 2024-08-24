@@ -64,7 +64,7 @@ export async function resolveOptions(
     roots,
   }
 
-  return globalThis.__SLIDEV_OPTIONS__ = {
+  return {
     ...resolved,
     utils: await createDataUtils(resolved),
   }

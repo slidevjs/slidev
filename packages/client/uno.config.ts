@@ -1,9 +1,6 @@
-import { fileURLToPath } from 'node:url'
-import { readFileSync } from 'node:fs'
 import {
   defineConfig,
   presetAttributify,
-  presetIcons,
   presetTypography,
   presetUno,
   transformerDirectives,
@@ -41,14 +38,6 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
-    presetIcons({
-      collectionsNodeResolvePath: globalThis.__SLIDEV_OPTIONS__?.utils.iconsResolvePath ?? fileURLToPath(import.meta.url),
-      collections: {
-        slidev: {
-          logo: () => readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8'),
-        },
-      },
-    }),
     presetTypography(),
   ],
   transformers: [
