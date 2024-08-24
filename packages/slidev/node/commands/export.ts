@@ -4,7 +4,7 @@ import process from 'node:process'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
-import { clearUndefined } from '@antfu/utils'
+import { clearUndefined, slash } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
@@ -452,7 +452,7 @@ export async function exportSlides({
     const files = await fs.readdir(output)
     const mds: string[] = files.map((file, i, files) => {
       const slideIndex = getSlideIndex(file)
-      const mdImg = `![${slides[slideIndex]?.title}](./${path.join(output, file)})\n\n`
+      const mdImg = `![${slides[slideIndex]?.title}](./${slash(path.join(output, file))})\n\n`
       if ((i + 1 === files.length || getSlideIndex(files[i + 1]) !== slideIndex) && slides[slideIndex]?.note)
         return `${mdImg}${slides[slideIndex]?.note}\n\n`
       return mdImg
