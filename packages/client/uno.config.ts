@@ -42,13 +42,10 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
     presetIcons({
-      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
+      collectionsNodeResolvePath: globalThis.__SLIDEV_OPTIONS__?.utils.iconsResolvePath ?? fileURLToPath(import.meta.url),
       collections: {
         slidev: {
-          logo: async () => {
-            const content = readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8')
-            return content
-          },
+          logo: () => readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8'),
         },
       },
     }),

@@ -64,7 +64,7 @@ export async function resolveOptions(
     roots,
   }
 
-  return {
+  return globalThis.__SLIDEV_OPTIONS__ = {
     ...resolved,
     utils: await createDataUtils(resolved),
   }
@@ -80,6 +80,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   return {
     ...await setupShiki(resolved.roots),
     indexHtml: setupIndexHtml(resolved),
+    iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()
