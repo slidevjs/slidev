@@ -1,6 +1,5 @@
 import { resolve } from 'node:path'
 import { existsSync, readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 import type { Theme } from '@unocss/preset-uno'
 import type { UserConfig } from '@unocss/core'
 import { mergeConfigs, presetIcons } from 'unocss'
@@ -30,7 +29,7 @@ export default async function setupUnocss(
           collectionsNodeResolvePath: utils.iconsResolvePath,
           collections: {
             slidev: {
-              logo: () => readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8'),
+              logo: () => readFileSync(resolve(clientRoot, 'assets/logo.svg'), 'utf-8'),
             },
           },
         }),
