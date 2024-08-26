@@ -131,7 +131,7 @@ catalog:
   vite-plugin-remote-assets: ^0.5.0
   vite-plugin-static-copy: ^1.0.6
   vite-plugin-vue-server-ref: ^0.4.2
-  vitefu: ^1.0.0
+  vitefu: ^0.2.5
   vitepress: ^1.3.4
   vitest: ^2.0.5
   volar-service-prettier: ^0.0.61

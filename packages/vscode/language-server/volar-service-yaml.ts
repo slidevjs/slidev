@@ -61,7 +61,10 @@ export function create({
         triggerCharacters: [' ', ':'],
       },
       definitionProvider: true,
-      diagnosticProvider: {},
+      diagnosticProvider: {
+        interFileDependencies: true,
+        workspaceDiagnostics: false,
+      },
       documentOnTypeFormattingProvider: {
         triggerCharacters: ['\n'],
       },

@@ -388,8 +388,8 @@ catalogs:
       specifier: ^0.4.2
       version: 0.4.2
     vitefu:
-      specifier: ^1.0.0
-      version: 1.0.0
+      specifier: ^0.2.5
+      version: 0.2.5
     vitepress:
       specifier: ^1.3.4
       version: 1.3.4
@@ -1070,7 +1070,7 @@ importers:
         version: 0.4.2(vite@5.4.2(@types/node@22.5.0))(vue@3.4.38(typescript@5.5.4))
       vitefu:
         specifier: 'catalog:'
-        version: 1.0.0(vite@5.4.2(@types/node@22.5.0))
+        version: 0.2.5(vite@5.4.2(@types/node@22.5.0))
       vue:
         specifier: 'catalog:'
         version: 3.4.38(typescript@5.5.4)
@@ -6543,8 +6543,8 @@ packages:
       terser:
         optional: true
 
-  vitefu@1.0.0:
-    resolution: {integrity: sha512-cl+sr2i4+f/kfpaOflRnAgI/5+pf4CKzy1nRGKGi6p69KLyvhndQtdkwjSFM0IvZ9g2HfeCLzOJCGY4TNa2h6Q==}
+  vitefu@0.2.5:
+    resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
     peerDependenciesMeta:
@@ -12967,7 +12967,7 @@ snapshots:
       '@types/node': 22.5.0
       fsevents: 2.3.3
 
-  vitefu@1.0.0(vite@5.4.2(@types/node@22.5.0)):
+  vitefu@0.2.5(vite@5.4.2(@types/node@22.5.0)):
     optionalDependencies:
       vite: 5.4.2(@types/node@22.5.0)
 
