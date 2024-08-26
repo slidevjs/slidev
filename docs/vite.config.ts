@@ -37,16 +37,5 @@ export default defineConfig({
     }),
     Inspect(),
     UnoCSS(),
-    {
-      name: 'virtual-modules',
-      resolveId(id) {
-        return id === '/@slidev/configs' ? id : null
-      },
-      load(id) {
-        if (id !== '/@slidev/configs')
-          return
-        return 'export default {}'
-      },
-    },
   ],
 })

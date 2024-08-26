@@ -6,7 +6,8 @@
   "packageManager": "pnpm@9.7.1",
   "scripts": {
     "dev": "vitepress",
-    "build": "vitepress build"
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.10",
