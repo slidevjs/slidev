@@ -39,6 +39,7 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
     presetTypography(),
+    /* Preset Icons is added in ../node/setups/unocss.ts */
   ],
   transformers: [
     transformerDirectives({ enforce: 'pre' }),
