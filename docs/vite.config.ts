@@ -38,7 +38,4 @@ export default defineConfig({
     Inspect(),
     UnoCSS(),
   ],
-  build: {
-    sourcemap: true,
-  },
 })
