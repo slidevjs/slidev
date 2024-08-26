@@ -32,29 +32,27 @@ const route = useRoute()
       </a>
     </template>
     <template #sidebar-nav-after>
-      <ClientOnly>
-        <div flex="~ col gap-2">
-          <div v-if="route.data?.frontmatter?.tags" class="bg-$vp-c-bg-soft p4 rounded-lg" flex="~ col gap-2">
-            <div font-bold text-sm op75>
-              Tags
-            </div>
-            <div flex="~ wrap gap-2">
-              <FeatureTag v-for="tag in route.data.frontmatter.tags" :key="tag" :tag="tag" />
-            </div>
+      <div flex="~ col gap-2">
+        <div v-if="route.data?.frontmatter?.tags" class="bg-$vp-c-bg-soft p4 rounded-lg" flex="~ col gap-2">
+          <div font-bold text-sm op75>
+            Tags
           </div>
-          <div v-if="route.data?.frontmatter?.since" class="bg-$vp-c-bg-soft px2 pb2 rounded-lg" flex="~ col gap-1">
-            <div font-bold text-sm op75 px2 pt4>
-              Since
-            </div>
-            <VPMenuLink
-              :item="{
-                text: route.data.frontmatter.since,
-                link: `https://github.com/slidevjs/slidev/releases/tag/${route.data.frontmatter.since}`,
-              }"
-            />
+          <div flex="~ wrap gap-2">
+            <FeatureTag v-for="tag in route.data.frontmatter.tags" :key="tag" :tag="tag" />
           </div>
         </div>
-      </ClientOnly>
+        <div v-if="route.data?.frontmatter?.since" class="bg-$vp-c-bg-soft px2 pb2 rounded-lg" flex="~ col gap-1">
+          <div font-bold text-sm op75 px2 pt4>
+            Since
+          </div>
+          <VPMenuLink
+            :item="{
+              text: route.data.frontmatter.since,
+              link: `https://github.com/slidevjs/slidev/releases/tag/${route.data.frontmatter.since}`,
+            }"
+          />
+        </div>
+      </div>
     </template>
   </Layout>
 </template>
