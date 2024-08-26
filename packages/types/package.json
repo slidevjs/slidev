@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@antfu/utils": "catalog:",
-    "@shikijs/markdown-it": "^1.13.0",
+    "@shikijs/markdown-it": "^1.14.1",
     "@vitejs/plugin-vue": "catalog:",
     "@vitejs/plugin-vue-jsx": "catalog:",
     "katex": "catalog:",
@@ -39,7 +39,7 @@
     "unocss": "catalog:",
     "unplugin-icons": "catalog:",
     "unplugin-vue-markdown": "catalog:",
-    "vite-plugin-inspect": "^0.8.5",
+    "vite-plugin-inspect": "^0.8.7",
     "vite-plugin-remote-assets": "catalog:",
     "vite-plugin-static-copy": "^1.0.6",
     "vite-plugin-vue-server-ref": "catalog:",

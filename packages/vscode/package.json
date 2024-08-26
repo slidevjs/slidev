@@ -454,17 +454,17 @@
     "@antfu/utils": "catalog:",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^22.3.0",
+    "@types/node": "^22.5.0",
     "@types/vscode": "^1.89.0",
-    "@volar/language-server": "~2.4.0-alpha.18",
-    "@volar/vscode": "^2.4.0-alpha.18",
+    "@volar/language-server": "~2.4.0",
+    "@volar/vscode": "^2.4.0",
     "get-port-please": "^3.1.2",
     "mlly": "^1.7.1",
     "ovsx": "^0.9.2",
     "prettier": "^3.3.3",
     "reactive-vscode": "0.2.0",
-    "tm-grammars": "^1.17.1",
-    "volar-service-prettier": "^0.0.54",
-    "volar-service-yaml": "^0.0.59"
+    "tm-grammars": "^1.17.4",
+    "volar-service-prettier": "^0.0.61",
+    "volar-service-yaml": "^0.0.61"
   }
 }
