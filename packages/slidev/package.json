@@ -117,6 +117,7 @@
     "vite-plugin-vue-server-ref": "catalog:",
     "vitefu": "^0.2.5",
     "vue": "catalog:",
+    "yaml": "catalog:",
     "yargs": "^17.7.2"
   },
   "devDependencies": {

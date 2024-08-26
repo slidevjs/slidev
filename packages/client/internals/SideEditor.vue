@@ -17,18 +17,16 @@ const tab = ref<'content' | 'note'>('content')
 const content = ref('')
 const note = ref('')
 const dirty = ref(false)
-const frontmatter = ref<any>({})
 
 const { info, update } = useDynamicSlideInfo(currentSlideNo)
 
 watch(
   info,
   (v) => {
-    frontmatter.value = v?.frontmatter || {}
-
     if (!isInputting.value) {
       note.value = (v?.note || '').trim()
-      content.value = (v?.content || '').trim()
+      const frontmatterPart = v?.frontmatterRaw?.trim() ? `---\n${v.frontmatterRaw.trim()}\n---\n\n` : ''
+      content.value = frontmatterPart + (v?.content || '').trim()
       dirty.value = false
     }
   },
@@ -37,10 +35,17 @@ watch(
 
 async function save() {
   dirty.value = false
+
+  let frontmatterRaw: string | undefined
+  const contentOnly = content.value.trim().replace(/^---\n([\s\S]*?)\n---\n/, (_, f) => {
+    frontmatterRaw = f
+    return ''
+  })
+
   await update({
     note: note.value || undefined,
-    content: content.value,
-    // frontmatter: frontmatter.value,
+    content: contentOnly,
+    frontmatterRaw,
   })
 }
 

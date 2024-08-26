@@ -738,6 +738,9 @@ importers:
       vue:
         specifier: 'catalog:'
         version: 3.4.38(typescript@5.5.4)
+      yaml:
+        specifier: 'catalog:'
+        version: 2.5.0
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
