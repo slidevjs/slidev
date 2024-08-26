@@ -7,9 +7,9 @@
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "^0.25.0",
-    "@slidev/theme-seriph": "^0.25.0",
+    "@slidev/theme-default": "catalog:",
+    "@slidev/theme-seriph": "catalog:",
     "@slidev/types": "workspace:*",
-    "nodemon": "^3.1.4"
+    "nodemon": "catalog:"
   }
 }

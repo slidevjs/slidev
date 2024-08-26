@@ -24,7 +24,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "execa": "^9.3.1",
+    "execa": "catalog:",
     "kolorist": "catalog:",
     "minimist": "catalog:",
     "prompts": "catalog:"
