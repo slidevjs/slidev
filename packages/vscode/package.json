@@ -455,7 +455,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "catalog:",
-    "@types/vscode": "catalog:",
+    "@types/vscode": "^1.89.0",
     "@volar/language-server": "catalog:",
     "@volar/vscode": "catalog:",
     "get-port-please": "catalog:",
