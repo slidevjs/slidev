@@ -210,6 +210,9 @@ catalogs:
     gray-matter:
       specifier: ^4.0.3
       version: 4.0.3
+    html-to-image:
+      specifier: ^1.11.11
+      version: 1.11.11
     htmlparser2:
       specifier: ^9.1.0
       version: 9.1.0
@@ -779,6 +782,9 @@ importers:
       fuse.js:
         specifier: 'catalog:'
         version: 7.0.0
+      html-to-image:
+        specifier: 'catalog:'
+        version: 1.11.11
       katex:
         specifier: 'catalog:'
         version: 0.16.11
@@ -4273,6 +4279,9 @@ packages:
   html-tags@3.3.1:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
     engines: {node: '>=8'}
+
+  html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
 
   htmlparser2@9.1.0:
     resolution: {integrity: sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==}
@@ -10475,6 +10484,8 @@ snapshots:
   html-entities@2.5.2: {}
 
   html-tags@3.3.1: {}
+
+  html-to-image@1.11.11: {}
 
   htmlparser2@9.1.0:
     dependencies:

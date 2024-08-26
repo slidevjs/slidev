@@ -6,6 +6,7 @@ import type { SlidevConfig } from './config'
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
 
 export interface SlideInfoBase {
+  revision: string
   frontmatter: Record<string, any>
   content: string
   frontmatterRaw?: string
