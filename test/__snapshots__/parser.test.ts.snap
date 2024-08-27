@@ -88,6 +88,12 @@ exports[`md parser > frontmatter.md > slides 1`] = `
       },
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+fonts:
+  sans: Roboto, Lato
+  serif: Mate SC
+  mono: Fira Code
+",
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -149,6 +155,11 @@ fonts:
         "title": "FooBar",
       },
     },
+    "frontmatterRaw": "meta:
+  title: FooBar
+  duration: 12
+layout: center
+",
     "importChain": undefined,
     "index": 1,
     "level": 1,
@@ -204,6 +215,7 @@ This is note
   {
     "content": "# Morning",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 2,
     "level": 1,
@@ -236,6 +248,8 @@ Hey",
     "frontmatter": {
       "layout": "text",
     },
+    "frontmatterRaw": "layout: text
+",
     "importChain": undefined,
     "index": 3,
     "level": undefined,
@@ -287,6 +301,7 @@ this should be treated as code block
 Also part of the code block
 \`\`\`",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 4,
     "level": undefined,
@@ -334,6 +349,10 @@ Also part of the code block
     "frontmatter": {
       "layout": "from yaml",
     },
+    "frontmatterRaw": "
+# The first yaml block should be treated as frontmatter
+layout: from yaml
+",
     "importChain": undefined,
     "index": 5,
     "level": undefined,
@@ -381,6 +400,8 @@ Content 2",
     "frontmatter": {
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "importChain": undefined,
     "index": 6,
     "level": 1,
@@ -435,6 +456,7 @@ layout: should not from yaml 2
 
 Content 3",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 7,
     "level": 1,
@@ -554,6 +576,8 @@ exports[`md parser > mdc.md > slides 1`] = `
     "frontmatter": {
       "mdc": true,
     },
+    "frontmatterRaw": "mdc: true
+",
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -674,6 +698,7 @@ Sample Text
 console.log('Hello World')
 \`\`\`",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -724,6 +749,7 @@ console.log('Hello World')
 - Hey
 - Yo",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 1,
     "level": 1,
@@ -763,6 +789,7 @@ console.log('Hello World')
   {
     "content": "Nice to meet you",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 2,
     "level": undefined,
@@ -864,6 +891,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
   {
     "content": "# Page 1",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": [
       {
         "content": "",
@@ -939,6 +967,8 @@ src: sub/page1.md
       "background": "https://sli.dev/demo-cover.png#2",
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "importChain": [
       {
         "content": "",
@@ -1041,6 +1071,7 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#34",
     },
+    "frontmatterRaw": undefined,
     "importChain": [
       {
         "content": "",
@@ -1150,6 +1181,8 @@ background: https://sli.dev/demo-cover.png#34
       "background": "https://sli.dev/demo-cover.png#34",
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "importChain": [
       {
         "content": "",
@@ -1269,6 +1302,7 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
     },
+    "frontmatterRaw": undefined,
     "importChain": [
       {
         "content": "",
@@ -1546,6 +1580,8 @@ src: /sub/page1.md
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "importChain": [
       {
         "content": "",
@@ -1846,6 +1882,7 @@ layout: cover
     "frontmatter": {
       "background": "https://sli.dev/demo-cover.png#14",
     },
+    "frontmatterRaw": undefined,
     "importChain": [
       {
         "content": "",
@@ -2153,6 +2190,8 @@ src: ../sub/pages3-4.md
       "background": "https://sli.dev/demo-cover.png#14",
       "layout": "cover",
     },
+    "frontmatterRaw": "layout: cover
+",
     "importChain": [
       {
         "content": "",
@@ -2470,6 +2509,7 @@ layout: cover
 
 $x+2$",
     "frontmatter": {},
+    "frontmatterRaw": undefined,
     "importChain": undefined,
     "index": 8,
     "level": 1,

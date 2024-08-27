@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.49.28",
+  "version": "0.49.29",
   "description": "Shared types declarations for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@antfu/utils": "catalog:",
-    "@shikijs/markdown-it": "^1.13.0",
+    "@shikijs/markdown-it": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
     "@vitejs/plugin-vue-jsx": "catalog:",
     "katex": "catalog:",
@@ -39,9 +39,9 @@
     "unocss": "catalog:",
     "unplugin-icons": "catalog:",
     "unplugin-vue-markdown": "catalog:",
-    "vite-plugin-inspect": "^0.8.5",
+    "vite-plugin-inspect": "catalog:",
     "vite-plugin-remote-assets": "catalog:",
-    "vite-plugin-static-copy": "^1.0.6",
+    "vite-plugin-static-copy": "catalog:",
     "vite-plugin-vue-server-ref": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:"

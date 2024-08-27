@@ -1,6 +1,6 @@
 ---
 relates:
-  - Vue's <style scoped>: https://vue-loader.vuejs.org/guide/scoped-css.html
+  - Vue's Scoped CSS: https://vuejs.org/api/sfc-css-features.html#scoped-css
   - UnoCSS directives: https://unocss.dev/transformers/directives
 tags: [styling, syntax]
 description: |
