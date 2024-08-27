@@ -5,7 +5,7 @@ import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect, slideHeight, slideWidth } from '../env'
 import { useNav } from '../composables/useNav'
 import { slideScale } from '../state'
-import { snapshotManger } from '../logic/snapshot'
+import { snapshotManager } from '../logic/snapshot'
 
 const props = defineProps({
   width: {
@@ -67,12 +67,12 @@ provideLocal(injectionSlideElement, slideElement)
 const snapshot = computed(() => {
   if (!props.useSnapshot || props.no == null)
     return undefined
-  return snapshotManger.getSnapshot(props.no)
+  return snapshotManager.getSnapshot(props.no)
 })
 
 onMounted(() => {
   if (container.value && props.useSnapshot && props.no != null) {
-    snapshotManger.captureSnapshot(props.no, container.value)
+    snapshotManager.captureSnapshot(props.no, container.value)
   }
 })
 </script>

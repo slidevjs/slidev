@@ -83,4 +83,4 @@ export class SlideSnapshotManager {
   }
 }
 
-export const snapshotManger = new SlideSnapshotManager()
+export const snapshotManager = new SlideSnapshotManager()
