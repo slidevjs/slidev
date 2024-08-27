@@ -7,11 +7,7 @@ function removeHash(link: string) {
 }
 
 function getGuideTitle(id: string) {
-  return Guides.find(g => g.link.endsWith(id))?.text ?? Advanced.find(g => g.link.endsWith(id))?.text ?? id
-}
-
-function ignoreIndex(name: string) {
-  return name === 'index' ? '' : name
+  return Guides.find(g => g.link.endsWith(`/${id}`))?.text ?? Advanced.find(g => g.link.endsWith(id))?.text ?? id
 }
 
 export function resolveLink(link: string): {
@@ -37,7 +33,7 @@ export function resolveLink(link: string): {
         title: `✨ ${feature.title}`,
         tags: feature.tags,
         descripton: feature.description,
-        url: `/features/${ignoreIndex(nameWithHash)}`,
+        url: `/features/${nameWithHash}`,
       }
     }
     case 'guide': {
@@ -46,7 +42,7 @@ export function resolveLink(link: string): {
         title: `📖  ${getGuideTitle(name)}`,
         tags: ['guide'],
         descripton: 'Click to read this guide',
-        url: `/guide/${ignoreIndex(nameWithHash)}`,
+        url: `/guide/${nameWithHash}`,
       }
     }
     default:
