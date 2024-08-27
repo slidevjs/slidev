@@ -20,7 +20,7 @@ drawings:
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
-# take snapshot for each slides for overview mode
+# take snapshot for each slide in the overview
 overviewSnapshots: true
 ---
 
