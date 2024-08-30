@@ -49,14 +49,16 @@ function toggleRoute(route: SlideRoute) {
 }
 
 function wordCount(str: string) {
-  const pattern = /[\w`'\-\u0392-\u03c9\u00c0-\u00ff\u0600-\u06ff\u0400-\u04ff]+|[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g
+  const pattern = /[\w`'\-\u0392-\u03C9\u00C0-\u00FF\u0600-\u06FF\u0400-\u04FF]+|[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF\u3040-\u309F\uAC00-\uD7AF]+/g
   const m = str.match(pattern)
   let count = 0
-  if (!m) return 0
+  if (!m)
+    return 0
   for (let i = 0; i < m.length; i++) {
-    if (m[i].charCodeAt(0) >= 0x4e00) {
+    if (m[i].charCodeAt(0) >= 0x4E00) {
       count += m[i].length
-    } else {
+    }
+    else {
       count += 1
     }
   }
