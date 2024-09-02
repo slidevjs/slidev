@@ -24,9 +24,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "execa": "catalog:",
     "kolorist": "catalog:",
     "minimist": "catalog:",
-    "prompts": "catalog:"
+    "prompts": "catalog:",
+    "tinyexec": "catalog:"
   }
 }
