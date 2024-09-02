@@ -123,8 +123,8 @@ async function init() {
     if (!agent)
       return
 
-    await x(agent, ['install'], { nodeOptions: {stdio: 'inherit', cwd: root }})
-    await x(agent, ['run', 'dev'], { nodeOptions: {stdio: 'inherit', cwd: root} })
+    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
     console.log(dim('\n  start it later by:\n'))
