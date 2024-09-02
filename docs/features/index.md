@@ -44,7 +44,7 @@ function removeTag(tag: string) {
 
 This is a list of all the individual features that Slidev provides. Each feature can be used independently and is optional.
 
-You can also read <LinkInline link="guide/index" /> to learn the features by topic.
+You can also read <LinkInline link="guide/" /> to learn the features by topic.
 
 <div flex items-center mt-6 gap-6>
   <div

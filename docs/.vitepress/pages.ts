@@ -5,7 +5,7 @@ export const Guides = [
   },
   {
     text: 'Getting Started',
-    link: '/guide/index',
+    link: '/guide/',
   },
   {
     text: 'Syntax Guide',

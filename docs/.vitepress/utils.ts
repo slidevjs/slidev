@@ -7,7 +7,7 @@ function removeHash(link: string) {
 }
 
 function getGuideTitle(id: string) {
-  return Guides.find(g => g.link.endsWith(id))?.text ?? Advanced.find(g => g.link.endsWith(id))?.text ?? id
+  return Guides.find(g => g.link.endsWith(`/${id}`))?.text ?? Advanced.find(g => g.link.endsWith(id))?.text ?? id
 }
 
 export function resolveLink(link: string): {
