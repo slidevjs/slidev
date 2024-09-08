@@ -51,7 +51,7 @@ export async function resolveOptions(
     themeMeta,
   }
 
-  const resolved: ResolvedSlidevOptions = {
+  const resolved: Omit<ResolvedSlidevOptions, 'utils'> = {
     ...rootsInfo,
     ...entryOptions,
     data,
@@ -62,27 +62,25 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
-    utils: null!,
   }
 
-  resolved.utils = await createDataUtils(resolved)
-
-  return resolved
+  return {
+    ...resolved,
+    utils: await createDataUtils(resolved),
+  }
 }
 
-type OptionsWithoutUtils = Omit<ResolvedSlidevOptions, 'utils'>
-
-export async function createDataUtils(options: OptionsWithoutUtils): Promise<ResolvedSlidevUtils> {
-  const monacoTypesIgnorePackagesMatches = (options.data.config.monacoTypesIgnorePackages || [])
+export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'utils'>): Promise<ResolvedSlidevUtils> {
+  const monacoTypesIgnorePackagesMatches = (resolved.data.config.monacoTypesIgnorePackages || [])
     .map(i => mm.matcher(i))
 
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
   return {
-    ...await setupShiki(options.roots),
-    indexHtml: setupIndexHtml(options),
-    define: getDefine(options),
+    ...await setupShiki(resolved.roots),
+    indexHtml: setupIndexHtml(resolved),
+    define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
@@ -92,7 +90,7 @@ export async function createDataUtils(options: OptionsWithoutUtils): Promise<Res
 
       const layouts: Record<string, string> = {}
 
-      for (const root of [options.clientRoot, ...options.roots]) {
+      for (const root of [resolved.clientRoot, ...resolved.roots]) {
         const layoutPaths = fg.sync('layouts/**/*.{vue,ts}', {
           cwd: root,
           absolute: true,
@@ -113,7 +111,7 @@ export async function createDataUtils(options: OptionsWithoutUtils): Promise<Res
   }
 }
 
-function getDefine(options: OptionsWithoutUtils): Record<string, string> {
+function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string, string> {
   return {
     __DEV__: options.mode === 'dev' ? 'true' : 'false',
     __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
