@@ -11,18 +11,23 @@ const resolved = computed(() => resolveLink(props.link))
 </script>
 
 <template>
-  <a class="link-card" :href="withBase(resolved.url)">
-    <div class="title">
-      <div>{{ resolved.title }}</div>
-      <div flex-grow />
-      <div flex gap-1>
-        <FeatureTag v-for="tag in resolved.tags" :key="tag" :tag />
+  <div class="sr-only">
+    {{ resolved.title }}
+  </div>
+  <ClientOnly>
+    <a class="link-card" :href="withBase(resolved.url)">
+      <div class="title">
+        <div>{{ resolved.title }}</div>
+        <div flex-grow />
+        <div flex gap-1>
+          <FeatureTag v-for="tag in resolved.tags" :key="tag" :tag />
+        </div>
       </div>
-    </div>
-    <div class="description">
-      {{ resolved.descripton }}
-    </div>
-  </a>
+      <div class="description">
+        {{ resolved.descripton }}
+      </div>
+    </a>
+  </ClientOnly>
 </template>
 
 <style scoped>

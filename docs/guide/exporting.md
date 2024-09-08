@@ -178,3 +178,21 @@ You can generate the PDF outline by passing the `--with-toc` option:
 ```bash
 $ slidev export --with-toc
 ```
+
+### Omit Background
+
+When exporting to PNGs, you can remove the default browser background by passing `--omit-background`:
+
+```bash
+$ slidev export --omit-background
+```
+
+The default browser background is the white background visible on all browser windows and is different than other backgrounds applied throughout the application using CSS styling. [See Playwright docs](https://playwright.dev/docs/api/class-page#page-screenshot-option-omit-background). You will then need to apply additional CSS styling to the application to reveal the transparency.
+
+Here is a basic example that covers all backgrounds in the application:
+
+```css
+* {
+  background: transparent !important;
+}
+```

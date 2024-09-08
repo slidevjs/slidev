@@ -14,7 +14,7 @@ import TitleRenderer from '#slidev/title-renderer'
 
 const props = withDefaults(defineProps<{
   level: number
-  start?: number
+  start?: string | number
   listStyle?: string | string[]
   list: TocItem[]
   listClass?: string | string[]

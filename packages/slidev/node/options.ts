@@ -83,6 +83,7 @@ export async function createDataUtils(options: OptionsWithoutUtils): Promise<Res
     ...await setupShiki(options.roots),
     indexHtml: setupIndexHtml(options),
     define: getDefine(options),
+    iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
       const now = Date.now()

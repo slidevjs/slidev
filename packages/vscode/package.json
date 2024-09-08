@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "0.49.24",
+  "version": "0.49.29",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -451,20 +451,20 @@
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
-    "@antfu/utils": "^0.7.10",
+    "@antfu/utils": "catalog:",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "^20.14.11",
-    "@types/vscode": "~1.89.0",
-    "@volar/language-server": "~2.4.0-alpha.18",
-    "@volar/vscode": "^2.4.0-alpha.18",
-    "get-port-please": "^3.1.2",
-    "mlly": "^1.7.1",
-    "ovsx": "^0.9.1",
-    "prettier": "^3.3.3",
-    "reactive-vscode": "0.2.0-beta.5",
-    "tm-grammars": "^1.14.0",
-    "volar-service-prettier": "^0.0.54",
-    "volar-service-yaml": "^0.0.59"
+    "@types/node": "catalog:",
+    "@types/vscode": "^1.89.0",
+    "@volar/language-server": "catalog:",
+    "@volar/vscode": "catalog:",
+    "get-port-please": "catalog:",
+    "mlly": "catalog:",
+    "ovsx": "catalog:",
+    "prettier": "catalog:",
+    "reactive-vscode": "catalog:",
+    "tm-grammars": "catalog:",
+    "volar-service-prettier": "catalog:",
+    "volar-service-yaml": "catalog:"
   }
 }

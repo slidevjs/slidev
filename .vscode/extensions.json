@@ -5,6 +5,7 @@
     "antfu.iconify",
     "dbaeumer.vscode-eslint",
     "antfu.unocss",
-    "csstools.postcss"
+    "csstools.postcss",
+    "antfu.pnpm-catalog-lens"
   ]
 }

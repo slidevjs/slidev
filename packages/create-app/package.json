@@ -1,7 +1,7 @@
 {
   "name": "create-slidev",
   "type": "module",
-  "version": "0.49.24",
+  "version": "0.49.29",
   "description": "Create starter template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -24,9 +24,9 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "execa": "^8.0.1",
-    "kolorist": "^1.8.0",
-    "minimist": "^1.2.8",
-    "prompts": "^2.4.2"
+    "execa": "catalog:",
+    "kolorist": "catalog:",
+    "minimist": "catalog:",
+    "prompts": "catalog:"
   }
 }

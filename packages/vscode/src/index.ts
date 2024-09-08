@@ -9,8 +9,7 @@ import { useSlidesTree } from './views/slidesTree'
 import { useProjectsTree } from './views/projectsTree'
 import { useLanguageClient } from './languageClient'
 
-// eslint-disable-next-line no-restricted-syntax
-export = defineExtension(() => {
+const { activate, deactivate } = defineExtension(() => {
   // states
   useProjects()
 
@@ -32,3 +31,5 @@ export = defineExtension(() => {
 
   return labsInfo
 })
+
+export { activate, deactivate }

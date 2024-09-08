@@ -1,9 +1,6 @@
-import { fileURLToPath } from 'node:url'
-import { readFileSync } from 'node:fs'
 import {
   defineConfig,
   presetAttributify,
-  presetIcons,
   presetTypography,
   presetUno,
   transformerDirectives,
@@ -41,18 +38,8 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
-    presetIcons({
-      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
-      collections: {
-        slidev: {
-          logo: async () => {
-            const content = readFileSync(fileURLToPath(new URL('assets/logo.svg', import.meta.url)), 'utf-8')
-            return content
-          },
-        },
-      },
-    }),
     presetTypography(),
+    /* Preset Icons is added in ../node/setups/unocss.ts */
   ],
   transformers: [
     transformerDirectives({ enforce: 'pre' }),

@@ -4,7 +4,7 @@ import process from 'node:process'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { Presets, SingleBar } from 'cli-progress'
-import { clearUndefined } from '@antfu/utils'
+import { clearUndefined, slash } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/core'
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
@@ -37,6 +37,7 @@ export interface ExportOptions {
    */
   perSlide?: boolean
   scale?: number
+  omitBackground?: boolean
 }
 
 interface ExportPngResult {
@@ -183,6 +184,7 @@ export async function exportSlides({
   perSlide = false,
   scale = 1,
   waitUntil,
+  omitBackground = false,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -402,7 +404,9 @@ export async function exportSlides({
       progress.update(i + 1)
       const id = (await slideContainers.nth(i).getAttribute('id')) || ''
       const slideNo = +id.split('-')[0]
-      const buffer = await slideContainers.nth(i).screenshot()
+      const buffer = await slideContainers.nth(i).screenshot({
+        omitBackground,
+      })
       result.push({ slideIndex: slideNo - 1, buffer })
       if (writeToDisk)
         await fs.writeFile(path.join(output, `${withClicks ? id : slideNo}.png`), buffer)
@@ -414,7 +418,9 @@ export async function exportSlides({
     const result: ExportPngResult[] = []
     const genScreenshot = async (no: number, clicks?: string) => {
       await go(no, clicks)
-      const buffer = await page.screenshot()
+      const buffer = await page.screenshot({
+        omitBackground,
+      })
       result.push({ slideIndex: no - 1, buffer })
       if (writeToDisk) {
         await fs.writeFile(
@@ -446,7 +452,7 @@ export async function exportSlides({
     const files = await fs.readdir(output)
     const mds: string[] = files.map((file, i, files) => {
       const slideIndex = getSlideIndex(file)
-      const mdImg = `![${slides[slideIndex]?.title}](./${path.join(output, file)})\n\n`
+      const mdImg = `![${slides[slideIndex]?.title}](./${slash(path.join(output, file))})\n\n`
       if ((i + 1 === files.length || getSlideIndex(files[i + 1]) !== slideIndex) && slides[slideIndex]?.note)
         return `${mdImg}${slides[slideIndex]?.note}\n\n`
       return mdImg
@@ -569,6 +575,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
       executablePath: args['executable-path'],
       withToc: args['with-toc'],
       perSlide: args['per-slide'],
+      omitBackground: args['omit-background'],
     }),
   }
   const {
@@ -585,6 +592,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withToc,
     perSlide,
     scale,
+    omitBackground,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
   if (outDir)
@@ -607,6 +615,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     withToc: withToc || false,
     perSlide: perSlide || false,
     scale: scale || 2,
+    omitBackground: omitBackground ?? false,
   }
 }
 

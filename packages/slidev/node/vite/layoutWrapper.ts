@@ -18,7 +18,7 @@ export function createLayoutWrapperPlugin(
         return
       const index = +no - 1
       const layouts = utils.getLayouts()
-      const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.default?.layout
+      const rawLayoutName = data.slides[index]?.frontmatter?.layout ?? data.slides[0]?.frontmatter?.defaults?.layout
       let layoutName = rawLayoutName || (index === 0 ? 'cover' : 'default')
       if (!layouts[layoutName]) {
         console.error(red(`\nUnknown layout "${bold(layoutName)}".${yellow(' Available layouts are:')}`)

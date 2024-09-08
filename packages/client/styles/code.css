@@ -5,7 +5,6 @@ html.dark:root {
 /* Shiki */
 html.dark .shiki {
   color: var(--shiki-dark, inherit);
-  background: var(--shiki-dark-bg, inherit);
   --twoslash-popup-bg: var(--shiki-dark-bg, inherit);
 }
 
