@@ -13,7 +13,7 @@ $ npm init slidev-theme@latest
 ```
 
 ```bash [pnpm]
-$ pnpm init slidev-theme
+$ pnpm create slidev-theme
 ```
 
 ```bash [yarn]
