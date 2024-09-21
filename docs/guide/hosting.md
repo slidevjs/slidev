@@ -138,6 +138,8 @@ jobs:
 3. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`.
 4. Finally, after the workflows are executed, a link to the slides should appear under `Settings` > `Pages`.
 
+PS: Note that selecting `Deploy from a branch` to deploy `dist/` HTML commited into the repo [is not recommended](https://github.com/slidevjs/slidev/issues/1873).
+
 ### Netlify
 
 Create `netlify.toml` in your project root with the following content:
