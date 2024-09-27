@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { parseRangeString } from '@slidev/parser/core'
+import { parseRangeString } from '@slidev/parser/utils'
 import { computed } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import { configs, slideAspect, slideWidth } from '../env'
