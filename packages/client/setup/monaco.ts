@@ -92,7 +92,7 @@ const setup = createSingletonPromise(async () => {
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
 
-  const { shiki, langs, themes, shikiToMonaco } = await import('#slidev/shiki')
+  const { shiki, languages, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
   const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
@@ -114,7 +114,7 @@ const setup = createSingletonPromise(async () => {
     })
   }
   // Register all languages, otherwise Monaco will not highlight them
-  for (const lang of langs) {
+  for (const lang of languages) {
     monaco.languages.register({ id: lang })
   }
 

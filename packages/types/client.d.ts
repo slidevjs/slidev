@@ -46,7 +46,7 @@ declare module '#slidev/shiki' {
 
   export { shikiToMonaco } from '@shikijs/monaco'
 
-  export const langs: BundledLanguage[]
+  export const languages: BundledLanguage[]
   export const themes: BundledTheme | Record<string, BundledTheme>
   export const shiki: Promise<ShikiHighlighterCore>
   export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => string>

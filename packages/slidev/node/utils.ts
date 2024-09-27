@@ -1,15 +1,15 @@
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
-import type { JITI } from 'jiti'
 import type { Token } from 'markdown-it'
 import type { Connect } from 'vite'
 import { fileURLToPath } from 'node:url'
-import createJiti from 'jiti'
+import { createJiti } from 'jiti'
 import YAML from 'yaml'
 
-let jiti: JITI | undefined
-export function loadModule(absolutePath: string) {
+type Jiti = ReturnType<typeof createJiti>
+let jiti: Jiti | undefined
+export function loadModule<T = unknown>(absolutePath: string): Promise<T> {
   jiti ??= createJiti(fileURLToPath(import.meta.url))
-  return jiti(absolutePath)
+  return jiti.import(absolutePath) as Promise<T>
 }
 
 export function stringifyMarkdownTokens(tokens: Token[]) {

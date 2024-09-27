@@ -1,12 +1,12 @@
-import type { ContextMenuItem } from '@slidev/types'
 /// <reference types="unplugin-icons/types/vue3" />
+
+import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import setups from '#slidev/setups/context-menu'
 import IconApps from '~icons/carbon/apps'
 import IconArrowDown from '~icons/carbon/arrow-down'
 import IconArrowLeft from '~icons/carbon/arrow-left'
 import IconArrowRight from '~icons/carbon/arrow-right'
-
 import IconArrowUp from '~icons/carbon/arrow-up'
 import IconMaximize from '~icons/carbon/maximize'
 import IconMinimize from '~icons/carbon/minimize'

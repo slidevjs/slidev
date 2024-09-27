@@ -10,16 +10,19 @@ import { loadModule } from '../utils'
 export default async function setupUnocss(
   { clientRoot, roots, data, utils }: ResolvedSlidevOptions,
 ) {
-  function loadFileConfigs(root: string): UserConfig<Theme>[] {
-    return [
-      resolve(root, 'uno.config.ts'),
-      resolve(root, 'unocss.config.ts'),
-    ].map((i) => {
-      if (!existsSync(i))
-        return undefined
-      const loaded = loadModule(i)
-      return 'default' in loaded ? loaded.default : loaded
-    })
+  async function loadFileConfigs(root: string): Promise<UserConfig<Theme>[]> {
+    return (await Promise
+      .all([
+        resolve(root, 'uno.config.ts'),
+        resolve(root, 'unocss.config.ts'),
+      ]
+        .map(async (i) => {
+          if (!existsSync(i))
+            return undefined
+          const loaded = await loadModule(i) as UserConfig<Theme> | { default: UserConfig<Theme> }
+          return 'default' in loaded ? loaded.default : loaded
+        })))
+      .filter(x => !!x)
   }
 
   const configs = [
@@ -35,7 +38,7 @@ export default async function setupUnocss(
         }),
       ],
     },
-    ...loadFileConfigs(clientRoot),
+    ...await loadFileConfigs(clientRoot),
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
   ].filter(Boolean) as UserConfig<Theme>[]
 

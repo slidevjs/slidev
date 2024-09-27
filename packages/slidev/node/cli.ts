@@ -35,7 +35,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 /**
  * Files that triggers a restart when added or removed
  */
-const FILES_CREATE_RESTART_GLOBS = [
+const FILES_CREATE_RESTART = [
   'global-bottom.vue',
   'global-top.vue',
   'uno.config.js',
@@ -44,7 +44,7 @@ const FILES_CREATE_RESTART_GLOBS = [
   'unocss.config.ts',
 ]
 
-const FILES_CHANGE_RESTART_GLOBS = [
+const FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
@@ -298,8 +298,8 @@ cli.command(
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
     const watcher = watch([
-      ...FILES_CREATE_RESTART_GLOBS,
-      ...FILES_CHANGE_RESTART_GLOBS,
+      ...FILES_CREATE_RESTART,
+      ...FILES_CHANGE_RESTART,
     ], {
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
@@ -313,7 +313,7 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
-      if (FILES_CREATE_RESTART_GLOBS.includes(file))
+      if (FILES_CREATE_RESTART.includes(file))
         return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))
       restartServer()
