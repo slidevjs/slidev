@@ -73,7 +73,7 @@ export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'front
 export interface SlidevThemeMeta {
   defaults?: Partial<SlidevConfig>
   colorSchema?: 'dark' | 'light' | 'both'
-  highlighter?: 'prism' | 'shiki' | 'both'
+  highlighter?: 'shiki'
 }
 
 export type SlidevThemeConfig = Record<string, string | number>

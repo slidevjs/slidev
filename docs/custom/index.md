@@ -40,8 +40,6 @@ export:
   dark: false
   withClicks: false
   withToc: false
-# syntax highlighter, can be 'prism', 'shiki'
-highlighter: shiki
 # enable twoslash, can be boolean, 'dev' or 'build'
 twoslash: true
 # show line numbers in code blocks

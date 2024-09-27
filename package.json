@@ -43,7 +43,6 @@
     "@types/katex": "catalog:",
     "@types/markdown-it": "catalog:",
     "@types/node": "catalog:",
-    "@types/prismjs": "catalog:",
     "@types/prompts": "catalog:",
     "@types/recordrtc": "catalog:",
     "@types/resolve": "catalog:",
