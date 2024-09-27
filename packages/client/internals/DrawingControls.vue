@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Menu } from 'floating-vue'
 import { useDrawings } from '../composables/useDrawings'
-import VerticalDivider from './VerticalDivider.vue'
 import Draggable from './Draggable.vue'
 import IconButton from './IconButton.vue'
+import VerticalDivider from './VerticalDivider.vue'
 
 const {
   brush,

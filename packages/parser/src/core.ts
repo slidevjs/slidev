@@ -1,6 +1,6 @@
-import YAML from 'yaml'
-import { ensurePrefix } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import { ensurePrefix } from '@antfu/utils'
+import YAML from 'yaml'
 
 export interface SlidevParserOptions {
   noParseYAML?: boolean
@@ -307,5 +307,5 @@ function hash(str: string) {
   return hash.toString(36).slice(0, 12)
 }
 
-export * from './utils'
 export * from './config'
+export * from './utils'

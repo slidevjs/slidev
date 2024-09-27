@@ -1,6 +1,6 @@
 import type { App } from 'vue'
-import { watch } from 'vue'
 import type { DragElementState } from '../composables/useDragElements'
+import { watch } from 'vue'
 import { useDragElement } from '../composables/useDragElements'
 
 export function createVDragDirective() {

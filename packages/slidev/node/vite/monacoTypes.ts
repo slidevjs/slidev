@@ -1,10 +1,10 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Plugin } from 'vite'
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import fg from 'fast-glob'
-import type { Plugin } from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { toAtFS } from '../resolver'
 
 export function createMonacoTypesLoader({ userRoot, utils }: ResolvedSlidevOptions): Plugin {

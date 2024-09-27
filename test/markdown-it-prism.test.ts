@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
-import Markdown from 'markdown-it'
 import markdownItPrism from '@slidev/cli/node/syntax/markdown-it/markdown-it-prism'
+import Markdown from 'markdown-it'
+import { describe, expect, it } from 'vitest'
 
 describe('markdown-it-prism', () => {
   const md = Markdown()

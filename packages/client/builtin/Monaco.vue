@@ -12,15 +12,15 @@ Learn more: https://sli.dev/guide/syntax.html#monaco-editor
 -->
 
 <script setup lang="ts">
-import { debounce } from '@antfu/utils'
-import lz from 'lz-string'
-import type * as monaco from 'monaco-editor'
-import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import type { RawAtValue } from '@slidev/types'
+import type * as monaco from 'monaco-editor'
+import { debounce } from '@antfu/utils'
 import { whenever } from '@vueuse/core'
-import { makeId } from '../logic/utils'
-import { useSlideContext } from '../context'
+import lz from 'lz-string'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
+import { makeId } from '../logic/utils'
 
 const props = withDefaults(defineProps<{
   codeLz: string

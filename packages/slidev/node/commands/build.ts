@@ -1,11 +1,11 @@
-import { resolve } from 'node:path'
-import http from 'node:http'
-import fs from 'fs-extra'
-import type { InlineConfig, ResolvedConfig } from 'vite'
-import { build as viteBuild } from 'vite'
-import connect from 'connect'
-import sirv from 'sirv'
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
+import type { InlineConfig, ResolvedConfig } from 'vite'
+import http from 'node:http'
+import { resolve } from 'node:path'
+import connect from 'connect'
+import fs from 'fs-extra'
+import sirv from 'sirv'
+import { build as viteBuild } from 'vite'
 import { resolveViteConfigs } from './shared'
 
 export async function build(

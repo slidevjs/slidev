@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
 import type { DragElementMarkdownSource } from '../composables/useDragElements'
+import { onMounted, onUnmounted } from 'vue'
 import { useDragElement } from '../composables/useDragElements'
 
 const props = defineProps<{

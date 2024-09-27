@@ -1,5 +1,5 @@
-import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
 
 export function getDefaultConfig(): SlidevConfig {

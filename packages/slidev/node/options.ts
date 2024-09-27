@@ -1,15 +1,15 @@
+import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import path from 'node:path'
 import { uniq } from '@antfu/utils'
 import Debug from 'debug'
-import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
-import mm from 'micromatch'
 import fg from 'fast-glob'
-import { parser } from './parser'
-import { getThemeMeta, resolveTheme } from './integrations/themes'
+import mm from 'micromatch'
 import { resolveAddons } from './integrations/addons'
+import { getThemeMeta, resolveTheme } from './integrations/themes'
+import { parser } from './parser'
 import { getRoots, resolveEntry } from './resolver'
-import setupShiki from './setups/shiki'
 import setupIndexHtml from './setups/indexHtml'
+import setupShiki from './setups/shiki'
 
 const debug = Debug('slidev:options')
 

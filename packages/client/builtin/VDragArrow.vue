@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
 import type { DragElementMarkdownSource } from '../composables/useDragElements'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { useDragElement } from '../composables/useDragElements'
 import Arrow from './Arrow.vue'
 

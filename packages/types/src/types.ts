@@ -1,6 +1,6 @@
+import type { Component } from 'vue'
 import type { RouteComponent, RouteMeta } from 'vue-router'
 import type YAML from 'yaml'
-import type { Component } from 'vue'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'

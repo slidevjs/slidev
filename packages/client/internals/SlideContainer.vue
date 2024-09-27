@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
+import { useNav } from '../composables/useNav'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect, slideHeight, slideWidth } from '../env'
-import { useNav } from '../composables/useNav'
-import { slideScale } from '../state'
 import { snapshotManager } from '../logic/snapshot'
+import { slideScale } from '../state'
 
 const props = defineProps({
   width: {

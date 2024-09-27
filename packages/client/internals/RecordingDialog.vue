@@ -2,8 +2,8 @@
 import { useVModel } from '@vueuse/core'
 import { nextTick } from 'vue'
 import { getFilename, mimeType, recordCamera, recorder, recordingName } from '../logic/recording'
-import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
+import Modal from './Modal.vue'
 
 const props = defineProps({
   modelValue: {

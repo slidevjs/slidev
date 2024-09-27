@@ -1,12 +1,12 @@
 // forked from https://github.com/jGleitz/markdown-it-prism
 // it's modified to output line wrapper `<div class="line" />` for each line
 
-import { createRequire } from 'node:module'
+import type MarkdownIt from 'markdown-it'
 import type { Grammar } from 'prismjs'
+import { createRequire } from 'node:module'
+import * as htmlparser2 from 'htmlparser2'
 import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/index.js'
-import type MarkdownIt from 'markdown-it'
-import * as htmlparser2 from 'htmlparser2'
 import { escapeVueInCode } from '../transform/utils'
 
 const require = createRequire(import.meta.url)

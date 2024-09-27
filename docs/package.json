@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.49.29",
   "private": true,
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.11.0",
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",

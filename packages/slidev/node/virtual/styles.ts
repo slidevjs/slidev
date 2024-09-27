@@ -1,8 +1,8 @@
-import { join } from 'node:path'
+import type { VirtualModuleTemplate } from './types'
 import { existsSync } from 'node:fs'
 
+import { join } from 'node:path'
 import { resolveImportUrl, toAtFS } from '../resolver'
-import type { VirtualModuleTemplate } from './types'
 
 export const templateStyle: VirtualModuleTemplate = {
   id: '/@slidev/styles',

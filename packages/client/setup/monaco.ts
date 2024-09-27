@@ -1,9 +1,9 @@
-import { createSingletonPromise } from '@antfu/utils'
 import type { MonacoSetupReturn } from '@slidev/types'
-import * as monaco from 'monaco-editor'
-import { watchEffect } from 'vue'
+import configs from '#slidev/configs'
+import setups from '#slidev/setups/monaco'
+import { createSingletonPromise } from '@antfu/utils'
 import { setupTypeAcquisition } from '@typescript/ata'
-import ts from 'typescript'
+import * as monaco from 'monaco-editor'
 
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -11,18 +11,18 @@ import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
+import ts from 'typescript'
+
+import { watchEffect } from 'vue'
+
 // @ts-expect-error missing types
 import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
 
 // @ts-expect-error missing types
 import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
-
 // @ts-expect-error missing types
 import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
-
 import { isDark } from '../logic/dark'
-import configs from '#slidev/configs'
-import setups from '#slidev/setups/monaco'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {

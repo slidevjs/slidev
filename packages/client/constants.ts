@@ -1,5 +1,5 @@
-import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
+import type { ComputedRef, InjectionKey, Ref, UnwrapNestedRefs } from 'vue'
 import type { SlidevContext } from './modules/context'
 
 // Here we use string literal instead of symbols to make HMR more stable

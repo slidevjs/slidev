@@ -1,9 +1,9 @@
-import Markdown from 'unplugin-vue-markdown/vite'
-import type { Plugin } from 'vite'
 import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
+import type { Plugin } from 'vite'
 import MagicString from 'magic-string-stack'
-import { getMarkdownTransformers } from '../syntax/transform'
+import Markdown from 'unplugin-vue-markdown/vite'
 import { useMarkdownItPlugins } from '../syntax/markdown-it'
+import { getMarkdownTransformers } from '../syntax/transform'
 import { regexSlideSourceId } from './common'
 
 export async function createMarkdownPlugin(

@@ -1,10 +1,10 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { InlineConfig, Plugin } from 'vite'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import type { InlineConfig, Plugin } from 'vite'
-import { mergeConfig } from 'vite'
 import { slash, uniq } from '@antfu/utils'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
+import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [

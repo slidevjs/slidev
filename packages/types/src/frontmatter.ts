@@ -1,5 +1,5 @@
-import type { SlidevThemeConfig } from './types'
 import type { BuiltinLayouts } from './builtin-layouts'
+import type { SlidevThemeConfig } from './types'
 
 export interface Headmatter extends HeadmatterConfig, Frontmatter {
   /**

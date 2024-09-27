@@ -1,11 +1,11 @@
+import type { ShortcutOptions } from '@slidev/types'
 import type { Fn, KeyFilter } from '@vueuse/core'
+import type { Ref } from 'vue'
 import { onKeyStroke } from '@vueuse/core'
 import { and, not } from '@vueuse/math'
-import type { Ref } from 'vue'
 import { watch } from 'vue'
-import type { ShortcutOptions } from '@slidev/types'
-import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled } from '../state'
 import setupShortcuts from '../setup/shortcuts'
+import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled } from '../state'
 
 const _shortcut = and(not(isInputting), not(isOnFocus), shortcutsEnabled)
 

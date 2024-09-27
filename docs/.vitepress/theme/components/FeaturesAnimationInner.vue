@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { withBase } from 'vitepress'
 import type { Feature } from '../../../features/index.data'
+import { withBase } from 'vitepress'
+import { computed, ref } from 'vue'
 import { data as features } from '../../../features/index.data'
 
 const rows = 6

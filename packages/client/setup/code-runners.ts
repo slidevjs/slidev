@@ -1,10 +1,10 @@
-import { createSingletonPromise } from '@antfu/utils'
-import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputText, CodeRunnerOutputs } from '@slidev/types'
-
+import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputs, CodeRunnerOutputText } from '@slidev/types'
 import type ts from 'typescript'
-import { ref } from 'vue'
+
 import deps from '#slidev/monaco-run-deps'
 import setups from '#slidev/setups/code-runners'
+import { createSingletonPromise } from '@antfu/utils'
+import { ref } from 'vue'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {

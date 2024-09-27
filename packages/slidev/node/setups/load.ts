@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
-import fs from 'fs-extra'
 import { deepMergeWithArray } from '@antfu/utils'
+import fs from 'fs-extra'
 import { loadModule } from '../utils'
 
 export async function loadSetups<F extends (...args: any) => any>(

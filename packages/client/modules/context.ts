@@ -1,6 +1,6 @@
 import type { ComputedRef } from '@vue/reactivity'
-import type { configs } from '../env'
 import type { SlidevContextNav } from '../composables/useNav'
+import type { configs } from '../env'
 
 export interface SlidevContext {
   nav: SlidevContextNav

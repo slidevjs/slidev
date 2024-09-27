@@ -1,3 +1,5 @@
+import type { SlidevProject } from './projects'
+import type { SlidesTreeNode } from './views/slidesTree'
 import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
 import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
@@ -7,11 +9,9 @@ import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
 import { configuredPort, forceEnabled, include, previewSync } from './configs'
-import type { SlidevProject } from './projects'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { usePreviewWebview } from './views/previewWebview'
-import type { SlidesTreeNode } from './views/slidesTree'
 
 export function useCommands() {
   useCommand('slidev.enable-extension', () => forceEnabled.value = true)

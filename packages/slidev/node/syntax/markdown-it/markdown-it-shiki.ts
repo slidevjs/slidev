@@ -1,6 +1,6 @@
-import { isTruthy } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { ShikiTransformer } from 'shiki'
+import { isTruthy } from '@antfu/utils'
 import { fromHighlighter } from '@shikijs/markdown-it/core'
 import { escapeVueInCode } from '../transform/utils'
 

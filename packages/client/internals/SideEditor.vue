@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import IconButton from './IconButton.vue'
 import ShikiEditor from './ShikiEditor.vue'
 

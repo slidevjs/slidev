@@ -1,6 +1,6 @@
+import type { PreparserSetup } from '@slidev/types'
 import { uniq } from '@antfu/utils'
 import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
-import type { PreparserSetup } from '@slidev/types'
 import { resolveAddons } from '../integrations/addons'
 import { getRoots } from '../resolver'
 import { loadSetups } from './load'

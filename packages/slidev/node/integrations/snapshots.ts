@@ -1,6 +1,6 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
 import { dirname, join, resolve } from 'node:path'
 import fs from 'fs-extra'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 
 function resolveSnapshotsDir(options: ResolvedSlidevOptions): string {
   return resolve(dirname(options.entry), '.slidev/snapshots')

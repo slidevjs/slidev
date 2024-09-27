@@ -1,16 +1,16 @@
-import path from 'node:path'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
+import path from 'node:path'
 import process from 'node:process'
+import { clearUndefined, slash } from '@antfu/utils'
+import { outlinePdfFactory } from '@lillallol/outline-pdf'
+import { parseRangeString } from '@slidev/parser/core'
+import { Presets, SingleBar } from 'cli-progress'
 import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
-import { Presets, SingleBar } from 'cli-progress'
-import { clearUndefined, slash } from '@antfu/utils'
-import { parseRangeString } from '@slidev/parser/core'
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
-import { outlinePdfFactory } from '@lillallol/outline-pdf'
+import { resolve } from 'mlly'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
-import { resolve } from 'mlly'
 import { getRoots } from '../resolver'
 
 export interface ExportOptions {
@@ -244,11 +244,10 @@ export async function exportSlides({
         const element = elements.nth(index)
         const attribute = await element.getAttribute('data-waitfor')
         if (attribute) {
-          await element.locator(attribute).waitFor({ state: 'visible' })
-            .catch((e) => {
-              console.error(e)
-              process.exitCode = 1
-            })
+          await element.locator(attribute).waitFor({ state: 'visible' }).catch((e) => {
+            console.error(e)
+            process.exitCode = 1
+          })
         }
       }
     }

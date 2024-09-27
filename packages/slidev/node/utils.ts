@@ -1,10 +1,10 @@
-import { fileURLToPath } from 'node:url'
-import type { Token } from 'markdown-it'
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
-import YAML from 'yaml'
 import type { JITI } from 'jiti'
-import createJiti from 'jiti'
+import type { Token } from 'markdown-it'
 import type { Connect } from 'vite'
+import { fileURLToPath } from 'node:url'
+import createJiti from 'jiti'
+import YAML from 'yaml'
 
 let jiti: JITI | undefined
 export function loadModule(absolutePath: string) {

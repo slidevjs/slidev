@@ -1,9 +1,9 @@
 import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import { shallowRef } from 'vue'
-import setupContextMenu from '../setup/context-menu'
-import { configs, mode } from '../env'
 import { useNav } from '../composables/useNav'
+import { configs, mode } from '../env'
+import setupContextMenu from '../setup/context-menu'
 
 export const currentContextMenu = shallowRef<null | {
   x: number

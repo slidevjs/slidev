@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import type { CodeRunnerOutputs, RawAtValue } from '@slidev/types'
 import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
-import type { CodeRunnerOutputs, RawAtValue } from '@slidev/types'
 import { computed, onMounted, onUnmounted, ref, shallowRef, toValue, watch, watchSyncEffect } from 'vue'
-import { useSlideContext } from '../context'
-import setupCodeRunners from '../setup/code-runners'
 import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
-import IconButton from './IconButton.vue'
+import setupCodeRunners from '../setup/code-runners'
 import DomElement from './DomElement.vue'
+import IconButton from './IconButton.vue'
 
 const props = defineProps<{
   modelValue: string

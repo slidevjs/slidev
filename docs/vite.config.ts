@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import Components from 'unplugin-vue-components/vite'
-import Inspect from 'vite-plugin-inspect'
 import UnoCSS from 'unocss/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Icons from 'unplugin-icons/vite'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
+import Inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
   optimizeDeps: {

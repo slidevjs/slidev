@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
-import { windowSize } from '../state'
+import { onMounted, watchEffect } from 'vue'
+import { useNav } from '../composables/useNav'
 import PrintContainer from '../internals/PrintContainer.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
-import { useNav } from '../composables/useNav'
+import { windowSize } from '../state'
 
 const { isPrintMode } = useNav()
 

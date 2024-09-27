@@ -1,7 +1,7 @@
-import fs from 'node:fs/promises'
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { ShikiSetup } from '@slidev/types'
 import type { Highlighter } from 'shiki'
+import fs from 'node:fs/promises'
 import { bundledLanguages, createHighlighter } from 'shiki'
 import { loadSetups } from './load'
 
