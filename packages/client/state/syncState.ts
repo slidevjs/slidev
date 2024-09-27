@@ -7,13 +7,13 @@ export interface Sync {
   init: <State extends object>(channelKey: string, onUpdate: (data: Partial<State>) => void, state: State, persist?: boolean) => SyncWrite<State> | undefined
 }
 
-interface SlidevSync extends Sync {
+interface BuiltinSync extends Sync {
   channels: BroadcastChannel[]
   disable: () => void
   listener?: (event: StorageEvent) => void
 }
 
-const slidevSync: SlidevSync = {
+const builtinSync: BuiltinSync = {
   channels: [],
   enabled: true,
   init<State extends object>(channelKey: string, onUpdate: (data: Partial<State>) => void, state: State, persist = false) {
@@ -50,12 +50,12 @@ const slidevSync: SlidevSync = {
     }
   },
 }
-const syncInterfaces: Sync[] = reactive([slidevSync])
+const syncInterfaces: Sync[] = reactive([builtinSync])
 const channels: Map<string, { onUpdate: (data: Partial<object>) => void, persist?: boolean, state: object }> = new Map()
 const syncWrites = ref<Record<string, SyncWrite<object>[]>>({})
 
-export function disableSlidevSync() {
-  slidevSync.disable()
+export function disableBuiltinSync() {
+  builtinSync.disable()
 }
 
 export function addSyncMethod(sync: Sync) {
