@@ -9,5 +9,11 @@ export { useNav } from './composables/useNav'
 export { useSlideContext } from './context'
 export * from './env'
 
+export { createSyncState, disableSlidevSync, addSyncMethod } from './state/syncState'
+export { onDrawingUpdate, drawingState } from './state/drawings'
+export { onSharedUpdate, sharedState } from './state/shared'
+export type { DrawingsState } from './state/drawings'
+export type { SharedState } from './state/shared'
+
 export * from './layoutHelper'
 export { onSlideEnter, onSlideLeave, useIsSlideActive } from './logic/slides'
