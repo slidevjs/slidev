@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect, slideHeight, slideWidth } from '../env'
 import { useNav } from '../composables/useNav'
 import { slideScale } from '../state'
+import { snapshotManager } from '../logic/snapshot'
 
 const props = defineProps({
   width: {
@@ -14,6 +15,14 @@ const props = defineProps({
     default: () => ({}) as any,
   },
   isMain: {
+    type: Boolean,
+    default: false,
+  },
+  no: {
+    type: Number,
+    required: false,
+  },
+  useSnapshot: {
     type: Boolean,
     default: false,
   },
@@ -54,15 +63,35 @@ if (props.isMain)
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
+
+const snapshot = computed(() => {
+  if (!props.useSnapshot || props.no == null)
+    return undefined
+  return snapshotManager.getSnapshot(props.no)
+})
+
+onMounted(() => {
+  if (container.value && props.useSnapshot && props.no != null) {
+    snapshotManager.captureSnapshot(props.no, container.value)
+  }
+})
 </script>
 
 <template>
-  <div :id="isMain ? 'slide-container' : undefined" ref="container" class="slidev-slide-container" :style="containerStyle">
+  <div v-if="!snapshot" :id="isMain ? 'slide-container' : undefined" ref="container" class="slidev-slide-container" :style="containerStyle">
     <div :id="isMain ? 'slide-content' : undefined" ref="slideElement" class="slidev-slide-content" :style="contentStyle">
       <slot />
     </div>
     <slot name="controls" />
   </div>
+  <!-- Image preview -->
+  <template v-else>
+    <img
+      :src="snapshot"
+      class="w-full object-cover"
+      :style="containerStyle"
+    >
+  </template>
 </template>
 
 <style scoped lang="postcss">

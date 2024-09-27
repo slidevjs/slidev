@@ -212,6 +212,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   exportFilename?: string | null
   /**
+   * Use image snapshot for quick overview
+   *
+   * @experimental
+   * @default false
+   */
+  overviewSnapshots?: boolean
+  /**
    * Enable Monaco
    *
    * See https://sli.dev/custom/config-monaco.html

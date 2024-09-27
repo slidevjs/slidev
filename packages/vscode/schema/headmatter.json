@@ -411,6 +411,12 @@
           "markdownDescription": "Force the filename used when exporting the presentation.\nThe extension, e.g. .pdf, gets automatically added.",
           "default": ""
         },
+        "overviewSnapshots": {
+          "type": "boolean",
+          "description": "Use image snapshot for quick overview",
+          "markdownDescription": "Use image snapshot for quick overview",
+          "default": false
+        },
         "monaco": {
           "anyOf": [
             {

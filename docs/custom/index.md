@@ -64,6 +64,8 @@ record: dev
 contextMenu: true
 # enable wake lock, can be boolean, 'dev' or 'build'
 wakeLock: true
+# take snapshot for each slide in the overview
+overviewSnapshots: false
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto

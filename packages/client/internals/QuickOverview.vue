@@ -6,7 +6,7 @@ import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
 import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import { pathPrefix } from '../env'
+import { configs, pathPrefix } from '../env'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 import DrawingPreview from './DrawingPreview.vue'
@@ -128,6 +128,8 @@ watchEffect(() => {
           >
             <SlideContainer
               :key="route.no"
+              :no="route.no"
+              :use-snapshot="configs.overviewSnapshots"
               :width="cardWidth"
               class="pointer-events-none"
             >

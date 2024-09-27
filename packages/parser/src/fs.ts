@@ -105,6 +105,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
       slides.push({
         frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
         content: slide.content,
+        revision: slide.revision,
         frontmatterRaw: slide.frontmatterRaw,
         note: slide.note,
         title: slide.title,
