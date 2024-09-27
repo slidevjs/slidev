@@ -65,7 +65,7 @@ export interface HeadmatterConfig extends TransitionOptions {
    * See https://sli.dev/custom/config-highlighter.html
    * @default shiki
    */
-  highlighter?: 'shiki' | 'prism'
+  highlighter?: 'shiki'
   /**
    * Enable Twoslash
    *

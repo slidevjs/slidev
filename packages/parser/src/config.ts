@@ -104,8 +104,8 @@ export function verifyConfig(
   themeMeta: SlidevThemeMeta = {},
   warn = (v: string) => console.warn(`[slidev] ${v}`),
 ) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+  const themeHightlighter = themeMeta.highlighter === 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'

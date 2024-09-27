@@ -18,11 +18,6 @@ export async function useMarkdownItPlugins(md: MarkdownIt, options: ResolvedSlid
   if (config.highlighter === 'shiki') {
     md.use(await MarkdownItShiki(options))
   }
-  else {
-    console.warn('[Slidev] Highlighter: Prism highlighter is deprecated, and will be removed in v0.50. Refer to https://github.com/slidevjs/slidev/issues/1390')
-    const { default: MarkdownItPrism } = await import('./markdown-it-prism')
-    md.use(MarkdownItPrism)
-  }
 
   md.use(MarkdownItLink)
   md.use(MarkdownItEscapeInlineCode)
