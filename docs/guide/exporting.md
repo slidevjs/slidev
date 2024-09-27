@@ -196,3 +196,17 @@ Here is a basic example that covers all backgrounds in the application:
   background: transparent !important;
 }
 ```
+
+## Troubleshooting
+
+### Broken Emojis
+
+If the PDF or PNG are missing Emojis, you are likely missing required fonts (such as. e.g. [Google's _Noto Emoji_](https://fonts.google.com/noto/specimen/Noto+Emoji)) in your environment.
+
+This can affect e.g. CI/CD-like in-container sort of Linux environments. It can be fixed e.g. like this:
+
+```bash
+$ curl -L --output NotoColorEmoji.ttf https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf
+$ sudo mv NotoColorEmoji.ttf /usr/local/share/fonts/
+$ fc-cache -fv
+```
