@@ -1,56 +1,17 @@
-import Markdown from 'unplugin-vue-markdown/vite'
+import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
-import { isTruthy, slash } from '@antfu/utils'
-import type { KatexOptions } from 'katex'
-import type MarkdownIt from 'markdown-it'
-import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
-import MarkdownItMdc from 'markdown-it-mdc'
-import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
-import type { Highlighter, ShikiTransformer } from 'shiki'
 import MagicString from 'magic-string-stack'
-// @ts-expect-error missing types
-import MarkdownItFootnote from 'markdown-it-footnote'
-
-import type { MarkdownTransformContext, MarkdownTransformer, ResolvedSlidevOptions, SlidevConfig, SlidevPluginOptions } from '@slidev/types'
-import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
-import MarkdownItVDrag from '../syntax/markdown-it/markdown-it-v-drag'
-import MarkdownItLink from '../syntax/markdown-it/markdown-it-link'
-
-import { loadShikiSetups } from '../setups/shiki'
-import { loadSetups } from '../setups/load'
-import { escapeVueInCode } from '../syntax/transform/utils'
-
-import {
-  transformCodeWrapper,
-  transformKaTexWrapper,
-  transformMagicMove,
-  transformMermaid,
-  transformMonaco,
-  transformPageCSS,
-  transformPlantUml,
-  transformSlotSugar,
-  transformSnippet,
-} from '../syntax/transform'
+import Markdown from 'unplugin-vue-markdown/vite'
+import { useMarkdownItPlugins } from '../syntax/markdown-it'
+import { getMarkdownTransformers } from '../syntax/transform'
+import { regexSlideSourceId } from './common'
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
-  const { data: { config }, roots, mode, entry, clientRoot } = options
-
-  const setups: ((md: MarkdownIt) => void)[] = []
-  const entryPath = slash(entry)
-
-  const { plugin, shiki, shikiOptions } = await createMarkdownItShiki(clientRoot, roots, config, mode)
-
-  setups.push(md => md.use(plugin))
-
-  if (config.mdc)
-    setups.push(md => md.use(MarkdownItMdc))
-
-  const KatexOptions: KatexOptions = await loadSetups(options.clientRoot, roots, 'katex.ts', {}, { strict: false }, false)
-
   const markdownTransformMap = new Map<string, MagicString>()
+  const transformers = await getMarkdownTransformers(options)
 
   return Markdown({
     include: [/\.md$/],
@@ -66,124 +27,41 @@ export async function createMarkdownPlugin(
       ...mdOptions?.markdownItOptions,
     },
     ...mdOptions,
-    markdownItSetup(md) {
-      md.use(MarkdownItLink)
-      md.use(MarkdownItEscapeInlineCode)
-      md.use(MarkdownItFootnote)
-      md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
-      md.use(MarkdownItKatex, KatexOptions)
-      md.use(MarkdownItVDrag, markdownTransformMap)
-
-      setups.forEach(i => i(md))
-      mdOptions?.markdownItSetup?.(md)
+    async markdownItSetup(md) {
+      await useMarkdownItPlugins(md, options, markdownTransformMap)
+      await mdOptions?.markdownItSetup?.(md)
     },
     transforms: {
+      ...mdOptions?.transforms,
       before(code, id) {
-        if (id === entryPath)
+        // Skip entry Markdown files
+        if (options.data.markdownFiles[id])
           return ''
 
+        code = mdOptions?.transforms?.before?.(code, id) ?? code
+
+        const match = id.match(regexSlideSourceId)
+        if (!match)
+          return code
+
+        const s = new MagicString(code)
+        markdownTransformMap.set(id, s)
         const ctx: MarkdownTransformContext = {
-          s: new MagicString(code),
-          id,
+          s,
+          slide: options.data.slides[+match[1] - 1],
           options,
         }
 
-        applyMarkdownTransform(ctx, shiki, shikiOptions)
-        markdownTransformMap.set(id, ctx.s)
-        return ctx.s.toString()
+        for (const transformer of transformers) {
+          if (!transformer)
+            continue
+          transformer(ctx)
+          if (!ctx.s.isEmpty())
+            ctx.s.commit()
+        }
+
+        return s.toString()
       },
     },
   }) as Plugin
-}
-
-async function createMarkdownItShiki(clientRoot: string, roots: string[], config: SlidevConfig, mode: string) {
-  const [
-    shikiOptions,
-    { createHighlighter, bundledLanguages },
-    markdownItShiki,
-    transformerTwoslash,
-  ] = await Promise.all([
-    loadShikiSetups(clientRoot, roots),
-    import('shiki').then(({ createHighlighter, bundledLanguages }) => ({ bundledLanguages, createHighlighter })),
-    import('@shikijs/markdown-it/core').then(({ fromHighlighter }) => fromHighlighter),
-    import('@shikijs/vitepress-twoslash').then(({ transformerTwoslash }) => transformerTwoslash),
-  ] as const)
-
-  const shiki = await createHighlighter({
-    ...shikiOptions as any,
-    langs: shikiOptions.langs ?? Object.keys(bundledLanguages),
-    themes: 'themes' in shikiOptions ? Object.values(shikiOptions.themes) : [shikiOptions.theme],
-  })
-
-  const twoslashEnabled = (config.twoslash === true || config.twoslash === mode)
-
-  const transformers = [
-    ...shikiOptions.transformers || [],
-    twoslashEnabled && transformerTwoslash({
-      explicitTrigger: true,
-      twoslashOptions: {
-        handbookOptions: {
-          noErrorValidation: true,
-        },
-      },
-    }),
-    {
-      pre(pre) {
-        this.addClassToHast(pre, 'slidev-code')
-        delete pre.properties.tabindex
-      },
-      postprocess(code) {
-        return escapeVueInCode(code)
-      },
-    } as ShikiTransformer,
-  ].filter(isTruthy) as ShikiTransformer[]
-
-  const plugin = markdownItShiki(shiki, {
-    ...shikiOptions,
-    transformers,
-  })
-
-  return {
-    shiki,
-    shikiOptions,
-    plugin,
-  }
-}
-
-function MarkdownItEscapeInlineCode(md: MarkdownIt) {
-  const codeInline = md.renderer.rules.code_inline!
-  md.renderer.rules.code_inline = (tokens, idx, options, env, self) => {
-    const result = codeInline(tokens, idx, options, env, self)
-    return result.replace(/^<code/, '<code v-pre')
-  }
-}
-
-export function applyMarkdownTransform(
-  ctx: MarkdownTransformContext,
-  shiki?: Highlighter,
-  shikiOptions?: MarkdownItShikiOptions,
-) {
-  const transformers: (MarkdownTransformer | undefined)[] = [
-    transformSnippet,
-    ctx.options.data.config.highlighter
-      ? transformMagicMove(shiki, shikiOptions, ctx.options.data.config.lineNumbers)
-      : undefined,
-    transformMermaid,
-    transformPlantUml,
-    transformMonaco,
-    transformCodeWrapper,
-    transformKaTexWrapper,
-    transformPageCSS,
-    transformSlotSugar,
-  ]
-
-  for (const transformer of transformers) {
-    if (!transformer)
-      continue
-    transformer(ctx)
-    if (!ctx.s.isEmpty())
-      ctx.s.commit()
-  }
-
-  return ctx
 }

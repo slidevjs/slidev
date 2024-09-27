@@ -1,10 +1,10 @@
-import { isString } from '@antfu/utils'
-import { getSlideTitle } from '../commands/shared'
 import type { VirtualModuleTemplate } from './types'
+import { isString } from '@antfu/utils'
+import { getSlideTitle, sharedMd } from '../commands/shared'
 
 export const templateConfigs: VirtualModuleTemplate = {
   id: '/@slidev/configs',
-  getContent: async ({ data, remote }, { md }) => {
+  getContent({ data, remote }) {
     const config = {
       ...data.config,
       remote,
@@ -12,7 +12,7 @@ export const templateConfigs: VirtualModuleTemplate = {
     }
 
     if (isString(config.info))
-      config.info = md.render(config.info)
+      config.info = sharedMd.render(config.info)
 
     return `export default ${JSON.stringify(config)}`
   },

@@ -1,11 +1,10 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { InlineConfig, Plugin } from 'vite'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import type { InlineConfig, Plugin } from 'vite'
-import { mergeConfig } from 'vite'
 import { slash, uniq } from '@antfu/utils'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
-import { getIndexHtml } from '../commands/shared'
+import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
@@ -109,15 +108,13 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               exclude: EXCLUDE_LOCAL,
               include: INCLUDE_LOCAL,
             },
-        css: options.data.config.css === 'unocss'
-          ? {
-              postcss: {
-                plugins: [
-                  await import('postcss-nested').then(r => (r.default || r)()) as any,
-                ],
-              },
-            }
-          : {},
+        css: {
+          postcss: {
+            plugins: [
+              await import('postcss-nested').then(r => (r.default || r)()) as any,
+            ],
+          },
+        },
         server: {
           fs: {
             strict: true,
@@ -199,7 +196,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           if (req.url!.endsWith('.html')) {
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(await getIndexHtml(options))
+            res.end(options.utils.indexHtml)
             return
           }
           next()

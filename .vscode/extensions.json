@@ -4,7 +4,8 @@
     "Vue.volar",
     "antfu.iconify",
     "dbaeumer.vscode-eslint",
-    "voorjaar.windicss-intellisense",
-    "csstools.postcss"
+    "antfu.unocss",
+    "csstools.postcss",
+    "antfu.pnpm-catalog-lens"
   ]
 }

@@ -113,7 +113,7 @@ Hover on the bottom-left corner to see the navigation's control panel, [learn mo
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
+<!-- https://sli.dev/guide/animations.html#click-animation -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"

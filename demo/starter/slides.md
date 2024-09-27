@@ -13,13 +13,15 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 # apply unocss classes to the current slide
 class: text-center
-# https://sli.dev/guide/drawing
+# https://sli.dev/features/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations#slide-transitions
+# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
+# enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
+# take snapshot for each slide in the overview
+overviewSnapshots: true
 ---
 
 # Welcome to Slidev
@@ -68,7 +70,7 @@ Read more about [Why Slidev?](https://sli.dev/guide/why)
 
 <!--
 You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
+Learn more: https://sli.dev/features/slide-scope-style
 -->
 
 <style>
@@ -94,7 +96,7 @@ level: 2
 
 # Navigation
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
 
 ## Keyboard Shortcuts
 
@@ -105,7 +107,7 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 | <kbd>up</kbd> | previous slide |
 | <kbd>down</kbd> | next slide |
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
+<!-- https://sli.dev/guide/animations.html#click-animation -->
 <img
   v-click
   class="absolute -bottom-9 -left-7 w-80 opacity-50"
@@ -140,7 +142,7 @@ image: https://cover.sli.dev
 
 # Code
 
-Use code snippets and get the highlighting directly, and even types hover![^1]
+Use code snippets and get the highlighting directly, and even types hover!
 
 ```ts {all|5|7|7-8|10|all} twoslash
 // TwoSlash enables TypeScript hover information
@@ -161,7 +163,8 @@ doubled.value = 2
 <<< @/snippets/external.ts#snippet
 
 <!-- Footer -->
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+
+[Learn more](https://sli.dev/features/line-highlighting)
 
 <!-- Inline style -->
 <style>
@@ -330,8 +333,8 @@ theme: seriph
 
 </div>
 
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
+check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
 
 ---
 
@@ -366,7 +369,7 @@ also allows you to add
 
 <div mt-20 v-click>
 
-[Learn More](https://sli.dev/guide/animations#click-animations)
+[Learn more](https://sli.dev/guide/animations#click-animation)
 
 </div>
 
@@ -446,7 +449,7 @@ const final = {
   :initial="{ x:35, y: 30, opacity: 0}"
   :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
 
-[Learn More](https://sli.dev/guide/animations.html#motion)
+[Learn more](https://sli.dev/guide/animations.html#motion)
 
 </div>
 
@@ -454,29 +457,23 @@ const final = {
 
 # LaTeX
 
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
+LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
 
-<br>
+<div h-3 />
 
 Inline $\sqrt{3x-1}+(1+x)^2$
 
 Block
 $$ {1|3|all}
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
+\begin{aligned}
+\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
+\nabla \cdot \vec{B} &= 0 \\
+\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
+\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
+\end{aligned}
 $$
 
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
+[Learn more](https://sli.dev/features/latex)
 
 ---
 
@@ -554,7 +551,7 @@ database "MySql" {
 
 </div>
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
 
 ---
 foo: bar
@@ -602,7 +599,7 @@ Double-click on the draggable elements to edit their positions.
 <v-drag-arrow pos="67,452,253,46" two-way op70 />
 
 ---
-src: ./pages/multiple-entries.md
+src: ./pages/imported-slides.md
 hide: false
 ---
 
@@ -639,6 +636,6 @@ class: text-center
 
 # Learn More
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
 
 <PoweredBySlidev mt-10 />

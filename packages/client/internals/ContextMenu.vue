@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onClickOutside, useElementBounding, useEventListener, useWindowFocus } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
-import { windowSize } from '../state'
 import { configs } from '../env'
+import { closeContextMenu, currentContextMenu } from '../logic/contextMenu'
+import { windowSize } from '../state'
 
 const container = ref<HTMLElement>()
 

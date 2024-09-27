@@ -1,8 +1,8 @@
-import { promises as fs } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import YAML from 'yaml'
-import { slash } from '@antfu/utils'
 import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import fs from 'node:fs'
+import { dirname, resolve } from 'node:path'
+import { slash } from '@antfu/utils'
+import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
 
 export * from './core'
@@ -19,8 +19,8 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, content?: string, mode?: string): Promise<LoadedSlidevData> {
-  const markdown = content ?? await fs.readFile(filepath, 'utf-8')
+export async function load(userRoot: string, filepath: string, loadedSource: Record<string, string> = {}, mode?: string): Promise<LoadedSlidevData> {
+  const markdown = loadedSource[filepath] ?? fs.readFileSync(filepath, 'utf-8')
 
   let extensions: SlidevPreparserExtension[] | undefined
   if (preparserExtensionLoader) {
@@ -40,20 +40,32 @@ export async function load(userRoot: string, filepath: string, content?: string,
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}
+  const watchFiles: Record<string, Set<number>> = {}
   const slides: SlideInfo[] = []
 
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
-      const raw = await fs.readFile(path, 'utf-8')
+      const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
+      watchFiles[path] = new Set()
     }
 
     const directImporter = importers?.at(-1)
     for (const index of parseRangeString(md.slides.length, range)) {
       const subSlide = md.slides[index - 1]
-      await loadSlide(subSlide, frontmatterOverride, importers)
+      try {
+        await loadSlide(md, subSlide, frontmatterOverride, importers)
+      }
+      catch (e) {
+        md.errors ??= []
+        md.errors.push({
+          row: subSlide.start,
+          message: `Error when loading slide: ${e}`,
+        })
+        continue
+      }
       if (directImporter)
         (directImporter.imports ??= []).push(subSlide)
     }
@@ -61,7 +73,7 @@ export async function load(userRoot: string, filepath: string, content?: string,
     return md
   }
 
-  async function loadSlide(slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>, importChain?: SourceSlideInfo[]) {
+  async function loadSlide(md: SlidevMarkdown, slide: SourceSlideInfo, frontmatterOverride?: Record<string, unknown>, importChain?: SourceSlideInfo[]) {
     if (slide.frontmatter.disabled || slide.frontmatter.hide)
       return
     if (slide.frontmatter.src) {
@@ -78,18 +90,29 @@ export async function load(userRoot: string, filepath: string, content?: string,
       }
       delete frontmatterOverride.src
 
-      await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+      if (!fs.existsSync(path)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Imported markdown file not found: ${path}`,
+        })
+      }
+      else {
+        await loadMarkdown(path, rangeRaw, frontmatterOverride, importChain ? [...importChain, slide] : [slide])
+      }
     }
     else {
       slides.push({
-        index: slides.length,
-        importChain,
-        source: slide,
         frontmatter: { ...slide.frontmatter, ...frontmatterOverride },
         content: slide.content,
+        revision: slide.revision,
+        frontmatterRaw: slide.frontmatterRaw,
         note: slide.note,
         title: slide.title,
         level: slide.level,
+        index: slides.length,
+        importChain,
+        source: slide,
       })
     }
   }
@@ -106,12 +129,12 @@ export async function load(userRoot: string, filepath: string, content?: string,
     headmatter,
     features: detectFeatures(slides.map(s => s.source.raw).join('')),
     markdownFiles,
-    watchFiles: Object.keys(markdownFiles).map(slash),
+    watchFiles,
   }
 }
 
 export async function save(markdown: SlidevMarkdown) {
   const fileContent = stringify(markdown)
-  await fs.writeFile(markdown.filepath, fileContent, 'utf-8')
+  fs.writeFileSync(markdown.filepath, fileContent, 'utf-8')
   return fileContent
 }

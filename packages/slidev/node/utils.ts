@@ -1,6 +1,16 @@
-import type { Token } from 'markdown-it'
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
+import type { Token } from 'markdown-it'
+import type { Connect } from 'vite'
+import { fileURLToPath } from 'node:url'
+import { createJiti } from 'jiti'
 import YAML from 'yaml'
+
+type Jiti = ReturnType<typeof createJiti>
+let jiti: Jiti | undefined
+export function loadModule<T = unknown>(absolutePath: string): Promise<T> {
+  jiti ??= createJiti(fileURLToPath(import.meta.url))
+  return jiti.import(absolutePath) as Promise<T>
+}
 
 export function stringifyMarkdownTokens(tokens: Token[]) {
   return tokens.map(token => token.children
@@ -59,4 +69,20 @@ export function updateFrontmatterPatch(slide: SlideInfo, frontmatter: Record<str
       }
     }
   }
+}
+
+export function getBodyJson(req: Connect.IncomingMessage) {
+  return new Promise<any>((resolve, reject) => {
+    let body = ''
+    req.on('data', chunk => body += chunk)
+    req.on('error', reject)
+    req.on('end', () => {
+      try {
+        resolve(JSON.parse(body) || {})
+      }
+      catch (e) {
+        reject(e)
+      }
+    })
+  })
 }

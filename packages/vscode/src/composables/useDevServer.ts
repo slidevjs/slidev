@@ -1,17 +1,17 @@
-import { basename } from 'node:path'
-import type { Ref } from '@vue/runtime-core'
-import { toRef } from '@vue/runtime-core'
-import { getPort as getPortPlease } from 'get-port-please'
+import type { Ref } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
-import { useTerminal } from '../views/terminal'
+import { basename } from 'node:path'
+import { getPort as getPortPlease } from 'get-port-please'
+import { toRef } from 'reactive-vscode'
+import { useServerTerminal } from '../views/serverTerminal'
 import { useServerDetector } from './useServerDetector'
 
 export type Server = {
   port: Ref<number | null>
   terminal: Ref<Terminal | null>
-  start: () => Promise<void>
-  showTerminal: () => Promise<void>
+  start: () => void
+  showTerminal: () => void
   stop: () => void
 } & ReturnType<typeof useServerDetector>
 
@@ -22,18 +22,18 @@ export function useDevServer(project: SlidevProject) {
   if (existing)
     return existing
 
-  const { terminal, isTerminalActive, showTerminal, sendText, closeTerminal } = useTerminal(project)
+  const { terminal, getIsActive, show: showTerminal, sendText, close } = useServerTerminal(project)
   const port = toRef(project, 'port')
 
   async function start() {
-    if (isTerminalActive())
+    if (getIsActive())
       return
     port.value ??= await getPort()
     sendText(`npm exec slidev -- --port ${port.value} ${JSON.stringify(basename(project.entry))}`)
   }
 
   function stop() {
-    closeTerminal()
+    close()
     port.value = null
   }
 

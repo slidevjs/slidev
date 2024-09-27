@@ -1,8 +1,8 @@
-import mermaid from 'mermaid/dist/mermaid.esm.mjs'
-import lz from 'lz-string'
 import { clearUndefined } from '@antfu/utils'
-import setupMermaid from '../setup/mermaid'
+import lz from 'lz-string'
+import mermaid from 'mermaid/dist/mermaid.esm.mjs'
 import { makeId } from '../logic/utils'
+import setupMermaid from '../setup/mermaid'
 
 mermaid.startOnLoad = false
 mermaid.initialize({ startOnLoad: false })
@@ -19,7 +19,7 @@ export async function renderMermaid(lzEncoded: string, options: any) {
 
   mermaid.initialize({
     startOnLoad: false,
-    ...clearUndefined(setupMermaid() || {}),
+    ...clearUndefined(await setupMermaid() || {}),
     ...clearUndefined(options),
   })
   const code = lz.decompressFromBase64(lzEncoded)

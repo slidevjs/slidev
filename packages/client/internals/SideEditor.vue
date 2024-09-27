@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import IconButton from './IconButton.vue'
 import ShikiEditor from './ShikiEditor.vue'
 
@@ -17,18 +17,16 @@ const tab = ref<'content' | 'note'>('content')
 const content = ref('')
 const note = ref('')
 const dirty = ref(false)
-const frontmatter = ref<any>({})
 
 const { info, update } = useDynamicSlideInfo(currentSlideNo)
 
 watch(
   info,
   (v) => {
-    frontmatter.value = v?.frontmatter || {}
-
     if (!isInputting.value) {
       note.value = (v?.note || '').trim()
-      content.value = (v?.content || '').trim()
+      const frontmatterPart = v?.frontmatterRaw?.trim() ? `---\n${v.frontmatterRaw.trim()}\n---\n\n` : ''
+      content.value = frontmatterPart + (v?.content || '').trim()
       dirty.value = false
     }
   },
@@ -37,10 +35,17 @@ watch(
 
 async function save() {
   dirty.value = false
+
+  let frontmatterRaw: string | undefined
+  const contentOnly = content.value.trim().replace(/^---\n([\s\S]*?)\n---\n/, (_, f) => {
+    frontmatterRaw = f
+    return ''
+  })
+
   await update({
     note: note.value || undefined,
-    content: content.value,
-    // frontmatter: frontmatter.value,
+    content: contentOnly,
+    frontmatterRaw,
   })
 }
 
@@ -58,10 +63,9 @@ useEventListener('keydown', (e) => {
 const contentRef = computed({
   get() { return content.value },
   set(v) {
-    if (content.value.trim() !== v.trim()) {
-      content.value = v
+    if (content.value.trim() !== v.trim())
       dirty.value = true
-    }
+    content.value = v
   },
 })
 
@@ -126,7 +130,7 @@ throttledWatch(
     }" @pointerdown="onHandlerDown"
   />
   <div
-    class="shadow bg-main p-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
+    class="shadow bg-main p-2 pt-4 grid grid-rows-[max-content_1fr] h-full overflow-hidden"
     :class="resize ? 'border-l border-gray-400 border-opacity-20' : ''"
     :style="resize ? {
       height: vertical ? `${editorHeight}px` : undefined,

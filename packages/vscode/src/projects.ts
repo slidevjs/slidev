@@ -1,14 +1,13 @@
+import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
-import type { LoadedSlidevData } from '@slidev/parser/fs'
-import { load } from '@slidev/parser/fs'
-import { computed, markRaw, onScopeDispose, reactive, ref, watch, watchEffect } from '@vue/runtime-core'
-import { window, workspace } from 'vscode'
 import { slash } from '@antfu/utils'
-import { useLogger } from './views/logger'
-import { findShallowestPath } from './utils/findShallowestPath'
-import { useVscodeContext } from './composables/useVscodeContext'
+import { load } from '@slidev/parser/fs'
+import { computed, markRaw, onScopeDispose, reactive, ref, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
+import { window, workspace } from 'vscode'
 import { exclude, forceEnabled, include } from './configs'
+import { findShallowestPath } from './utils/findShallowestPath'
+import { logger } from './views/logger'
 
 export interface SlidevProject {
   readonly entry: string
@@ -18,6 +17,7 @@ export interface SlidevProject {
 }
 
 export const projects = reactive(new Map<string, SlidevProject>())
+export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
 export const activeSlidevData = computed(() => activeProject.value?.data)
@@ -49,8 +49,6 @@ export async function rescanProjects() {
 }
 
 export function useProjects() {
-  const logger = useLogger()
-
   async function init() {
     await addExistingProjects()
     await autoSetActiveEntry()
@@ -77,14 +75,15 @@ export function useProjects() {
   onScopeDispose(() => fsWatcher.dispose())
 
   fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath).toLowerCase()
+    const path = slash(uri.fsPath)
     logger.info(`File ${path} changed.`)
     const startMs = Date.now()
-    pendingUpdate && (pendingUpdate.cancelled = true)
+    if (pendingUpdate)
+      pendingUpdate.cancelled = true
     const thisUpdate = pendingUpdate = { cancelled: false }
     const effects: (() => void)[] = []
     for (const project of projects.values()) {
-      if (!project.data.watchFiles.some(f => f.toLowerCase() === path))
+      if (!project.data.markdownFiles[path])
         continue
 
       if (existsSync(project.entry)) {

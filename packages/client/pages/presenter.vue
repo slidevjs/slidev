@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { useSwipeControls } from '../composables/useSwipeControls'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
-import { slidesTitle } from '../env'
-import { sharedState } from '../state/shared'
-import { registerShortcuts } from '../logic/shortcuts'
-import { onContextMenu } from '../logic/contextMenu'
-import { useTimer } from '../logic/utils'
+import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
-import SlideWrapper from '../internals/SlideWrapper.vue'
-import SlideContainer from '../internals/SlideContainer.vue'
-import NavControls from '../internals/NavControls.vue'
-import QuickOverview from '../internals/QuickOverview.vue'
-import NoteEditable from '../internals/NoteEditable.vue'
-import NoteStatic from '../internals/NoteStatic.vue'
-import Goto from '../internals/Goto.vue'
-import SlidesShow from '../internals/SlidesShow.vue'
-import DrawingControls from '../internals/DrawingControls.vue'
-import IconButton from '../internals/IconButton.vue'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
+import { useSwipeControls } from '../composables/useSwipeControls'
+import { useWakeLock } from '../composables/useWakeLock'
+import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
-import { useWakeLock } from '../composables/useWakeLock'
+import DrawingControls from '../internals/DrawingControls.vue'
+import Goto from '../internals/Goto.vue'
+import IconButton from '../internals/IconButton.vue'
+import NavControls from '../internals/NavControls.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
+import NoteStatic from '../internals/NoteStatic.vue'
+import QuickOverview from '../internals/QuickOverview.vue'
+import SlideContainer from '../internals/SlideContainer.vue'
+import SlidesShow from '../internals/SlidesShow.vue'
+import SlideWrapper from '../internals/SlideWrapper.vue'
+import { onContextMenu } from '../logic/contextMenu'
+import { registerShortcuts } from '../logic/shortcuts'
+import { useTimer } from '../logic/utils'
+import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
+import { sharedState } from '../state/shared'
 
 const main = ref<HTMLDivElement>()
 
@@ -56,7 +56,7 @@ const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
-    return [nextRoute.value!, 0] as const
+    return [nextRoute.value, 0] as const
   else
     return null
 })
@@ -135,6 +135,11 @@ onMounted(() => {
             render-context="previewNext"
           />
         </SlideContainer>
+        <div v-else class="h-full flex justify-center items-center">
+          <div class="text-gray-500">
+            End of the presentation
+          </div>
+        </div>
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
           Next
         </div>

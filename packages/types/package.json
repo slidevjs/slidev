@@ -1,6 +1,6 @@
 {
   "name": "@slidev/types",
-  "version": "0.49.12",
+  "version": "0.50.0-beta.1",
   "description": "Shared types declarations for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -28,19 +28,22 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@antfu/utils": "^0.7.8",
-    "@vitejs/plugin-vue": "^5.0.5",
-    "@vitejs/plugin-vue-jsx": "^4.0.0",
-    "katex": "^0.16.10",
-    "mermaid": "^10.9.1",
-    "monaco-editor": "^0.50.0",
-    "shiki": "^1.9.1",
-    "unocss": "^0.61.0",
-    "unplugin-icons": "^0.19.0",
-    "unplugin-vue-markdown": "^0.26.2",
-    "vite-plugin-remote-assets": "^0.4.1",
-    "vite-plugin-vue-server-ref": "^0.4.2",
-    "vue": "^3.4.30",
-    "vue-router": "^4.4.0"
+    "@antfu/utils": "catalog:",
+    "@shikijs/markdown-it": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue-jsx": "catalog:",
+    "katex": "catalog:",
+    "mermaid": "catalog:",
+    "monaco-editor": "catalog:",
+    "shiki": "catalog:",
+    "unocss": "catalog:",
+    "unplugin-icons": "catalog:",
+    "unplugin-vue-markdown": "catalog:",
+    "vite-plugin-inspect": "catalog:",
+    "vite-plugin-remote-assets": "catalog:",
+    "vite-plugin-static-copy": "catalog:",
+    "vite-plugin-vue-server-ref": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   }
 }

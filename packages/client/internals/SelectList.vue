@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
 import type { PropType } from 'vue'
 import type { SelectionItem } from './types'
+import { useVModel } from '@vueuse/core'
 
 const props = defineProps({
   modelValue: {

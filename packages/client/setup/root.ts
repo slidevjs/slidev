@@ -1,17 +1,17 @@
-import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
-import { useHead } from '@unhead/vue'
-import { useRouter } from 'vue-router'
-import { configs, slidesTitle } from '../env'
-import { initSharedState, onPatch, patch } from '../state/shared'
-import { initDrawingState } from '../state/drawings'
-import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
-import { skipTransition } from '../logic/hmr'
-import { makeId } from '../logic/utils'
-import { getSlidePath } from '../logic/slides'
-import { createFixedClicks } from '../composables/useClicks'
-import { useNav } from '../composables/useNav'
-import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import setups from '#slidev/setups/root'
+import { useHead } from '@unhead/vue'
+import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { createFixedClicks } from '../composables/useClicks'
+import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
+import { useNav } from '../composables/useNav'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
+import { configs, slidesTitle } from '../env'
+import { skipTransition } from '../logic/hmr'
+import { getSlidePath } from '../logic/slides'
+import { makeId } from '../logic/utils'
+import { initDrawingState } from '../state/drawings'
+import { initSharedState, onPatch, patch } from '../state/shared'
 
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
@@ -21,7 +21,7 @@ export default function setupRoot() {
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   })
-  app.provide(injectionRenderContext, ref('none'))
+  app.provide(injectionRenderContext, ref('none' as const))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))

@@ -1,20 +1,20 @@
 import type { ClicksContext, SlideRoute, TocItem } from '@slidev/types'
 import type { ComputedRef, Ref, TransitionGroupProps, WritableComputedRef } from 'vue'
-import { computed, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import type { RouteLocationNormalized, Router } from 'vue-router'
+import { slides } from '#slidev/slides'
+import { clamp } from '@antfu/utils'
 import { createSharedComposable } from '@vueuse/core'
 import { logicOr } from '@vueuse/math'
-import { clamp } from '@antfu/utils'
-import { getCurrentTransition } from '../logic/transition'
-import { getSlide, getSlidePath } from '../logic/slides'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { CLICKS_MAX } from '../constants'
-import { skipTransition } from '../logic/hmr'
 import { configs } from '../env'
+import { skipTransition } from '../logic/hmr'
 import { useRouteQuery } from '../logic/route'
-import { useTocTree } from './useTocTree'
+import { getSlide, getSlidePath } from '../logic/slides'
+import { getCurrentTransition } from '../logic/transition'
 import { createClicksContextBase } from './useClicks'
-import { slides } from '#slidev/slides'
+import { useTocTree } from './useTocTree'
 
 export interface SlidevContextNav {
   slides: Ref<SlideRoute[]>
@@ -275,7 +275,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
 
   const currentRoute = computed(() => router.currentRoute.value)
   const query = computed(() => {
-    // eslint-disable-next-line no-unused-expressions
+    // eslint-disable-next-line ts/no-unused-expressions
     router.currentRoute.value.query
     return new URLSearchParams(location.search)
   })

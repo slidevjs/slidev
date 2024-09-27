@@ -1,31 +1,34 @@
+import type { Awaitable } from '@antfu/utils'
 import { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import fs from 'fs-extra'
 import { deepMergeWithArray } from '@antfu/utils'
-import jiti from 'jiti'
+import fs from 'fs-extra'
+import { loadModule } from '../utils'
 
-export async function loadSetups<T, R extends object>(
-  clientRoot: string,
+export async function loadSetups<F extends (...args: any) => any>(
   roots: string[],
-  name: string,
-  arg: T,
-  initial: R,
-  merge: boolean | ((a: R, o: R) => R) = true,
-): Promise<R> {
-  let returns = initial
-  for (const root of [clientRoot, ...roots].reverse()) {
-    const path = resolve(root, 'setup', name)
+  filename: string,
+  args: Parameters<F>,
+  extraLoader?: (root: string) => Awaitable<Awaited<ReturnType<F>>[]>,
+) {
+  const returns: Awaited<ReturnType<F>>[] = []
+  for (const root of roots) {
+    const path = resolve(root, 'setup', filename)
     if (fs.existsSync(path)) {
-      const { default: setup } = jiti(fileURLToPath(import.meta.url))(path)
-      const result = await setup(arg)
-      if (result !== null) {
-        returns = typeof merge === 'function'
-          ? merge(returns, result)
-          : merge
-            ? deepMergeWithArray(returns, result)
-            : result
-      }
+      const { default: setup } = await loadModule(path) as { default: F }
+      const ret = await setup(...args)
+      if (ret)
+        returns.push(ret)
     }
+    if (extraLoader)
+      returns.push(...await extraLoader(root))
   }
   return returns
+}
+
+export function mergeOptions<T, S extends Partial<T> = T>(
+  base: T,
+  options: S[],
+  merger: (base: T, options: S) => T = deepMergeWithArray as any,
+): T {
+  return options.reduce((acc, cur) => merger(acc, cur), base)
 }

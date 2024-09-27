@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, shallowRef } from 'vue'
-import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { pathPrefix, slidesTitle } from '../env'
-import { getSlidePath } from '../logic/slides'
+import { useHead } from '@unhead/vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowRef } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
-import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import SlideContainer from '../internals/SlideContainer.vue'
-import SlideWrapper from '../internals/SlideWrapper.vue'
+import { useNav } from '../composables/useNav'
+import { CLICKS_MAX } from '../constants'
+import { pathPrefix, slidesTitle } from '../env'
+import ClicksSlider from '../internals/ClicksSlider.vue'
 import DrawingPreview from '../internals/DrawingPreview.vue'
 import IconButton from '../internals/IconButton.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
-import ClicksSlider from '../internals/ClicksSlider.vue'
-import { CLICKS_MAX } from '../constants'
-import { useNav } from '../composables/useNav'
+import SlideContainer from '../internals/SlideContainer.vue'
+import SlideWrapper from '../internals/SlideWrapper.vue'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
+import { getSlidePath } from '../logic/slides'
 
 const cardWidth = 450
 
@@ -49,7 +49,20 @@ function toggleRoute(route: SlideRoute) {
 }
 
 function wordCount(str: string) {
-  return str.match(/[\w`'\-]+/g)?.length || 0
+  const pattern = /[\w`'\-\u0392-\u03C9\u00C0-\u00FF\u0600-\u06FF\u0400-\u04FF]+|[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF\u3040-\u309F\uAC00-\uD7AF]+/g
+  const m = str.match(pattern)
+  let count = 0
+  if (!m)
+    return 0
+  for (let i = 0; i < m.length; i++) {
+    if (m[i].charCodeAt(0) >= 0x4E00) {
+      count += m[i].length
+    }
+    else {
+      count += 1
+    }
+  }
+  return count
 }
 
 function isElementInViewport(el: HTMLElement) {
@@ -139,6 +152,14 @@ onMounted(() => {
           <carbon-moon v-if="isDark" />
           <carbon-sun v-else />
         </IconButton>
+        <IconButton
+          v-else
+          :title="isDark ? 'Dark mode' : 'Light mode'"
+          pointer-events-none op50
+        >
+          <carbon-moon v-if="isDark" />
+          <carbon-sun v-else />
+        </IconButton>
       </div>
     </nav>
     <main
@@ -173,7 +194,7 @@ onMounted(() => {
             <carbon:cics-program />
           </IconButton>
         </div>
-        <div class="flex flex-col gap-2 my5">
+        <div class="flex flex-col gap-2 my5" :style="{ width: `${cardWidth}px` }">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
             @dblclick="openSlideInNewTab(getSlidePath(route, false))"

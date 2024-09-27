@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { isClient, useIntervalFn } from '@vueuse/core'
 import type { ThemeInfo } from '../../themes'
+import { isClient, useIntervalFn } from '@vueuse/core'
+import { ref } from 'vue'
 
 const props = defineProps<{
   theme: ThemeInfo
@@ -35,11 +35,12 @@ if (props.theme.previews.length > 1 && isClient) {
         :style="{ transform: idx > index ? 'scale(1.05) translate(110%)' : 'scale(1.05) translate(0)' }"
       >
     </a>
-    <div class="font-bold">
+    <a :href="theme.link || theme.repo" class="font-bold !text-$vp-c-text-1 !decoration-none">
       {{ theme.name }}
-    </div>
+    </a>
     <div
-      class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden overflow-ellipsis"
+      class="text-current text-xs opacity-75 whitespace-nowrap overflow-hidden text-ellipsis"
+      :title="theme.description"
     >
       {{ theme.description }}
     </div>

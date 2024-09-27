@@ -1,11 +1,11 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Plugin } from 'vite'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Plugin } from 'vite'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 
 export const monacoWriterWhitelist = new Set<string>()
 
-export function createMonacoWriter({ userRoot }: ResolvedSlidevOptions): Plugin {
+export function createMonacoWriterPlugin({ userRoot }: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:monaco-write',
     apply: 'serve',
@@ -17,7 +17,7 @@ export function createMonacoWriter({ userRoot }: ResolvedSlidevOptions): Plugin 
           try {
             json = JSON.parse(data.toString())
           }
-          catch (e) {
+          catch {
             return
           }
           if (json.type === 'custom' && json.event === 'slidev:monaco-write') {

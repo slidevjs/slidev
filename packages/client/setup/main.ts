@@ -1,19 +1,16 @@
 import type { AppContext } from '@slidev/types'
-import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import type { App } from 'vue'
-import { nextTick } from 'vue'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import setups from '#slidev/setups/main'
+import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import { createHead } from '@unhead/vue'
-import { routeForceRefresh } from '../logic/route'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { createVClickDirectives } from '../modules/v-click'
-import { createVMarkDirective } from '../modules/v-mark'
 import { createVDragDirective } from '../modules/v-drag'
+import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
 import setupRoutes from '../setup/routes'
-import setups from '#slidev/setups/main'
 
 import '#slidev/styles'
-import 'shiki-magic-move/style.css'
 
 export default async function setupMain(app: App) {
   function setMaxHeight() {
@@ -43,13 +40,6 @@ export default async function setupMain(app: App) {
     app,
     router,
   }
-
-  nextTick(() => {
-    router.afterEach(async () => {
-      await nextTick()
-      routeForceRefresh.value += 1
-    })
-  })
 
   for (const setup of setups)
     await setup(context)

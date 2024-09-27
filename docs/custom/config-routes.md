@@ -2,13 +2,13 @@
 
 <Environment type="client" />
 
-Add your pages to the Slidev app.
+Add custom pages to the Slidev app.
 
 ## Usage
 
 Create `./setup/routes.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineRoutesSetup } from '@slidev/types'
 
 export default defineRoutesSetup((routes) => {
@@ -16,6 +16,9 @@ export default defineRoutesSetup((routes) => {
     ...routes,
     {
       path: '/my-page',
+      // ---cut-start---
+      // @ts-expect-error missing types
+      // ---cut-end---
       component: () => import('../pages/my-page.vue'),
     },
   ]

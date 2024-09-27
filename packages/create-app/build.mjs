@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import fs from 'fs-extra'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -12,7 +12,7 @@ const shouldCreatePagesDict = () => !fs.existsSync(__pagesDir)
 // value: origin (relative ./template)
 const needCopyFiles = {
   'slides.md': '../../../demo/starter/slides.md',
-  'pages/multiple-entries.md': '../../../demo/starter/pages/multiple-entries.md',
+  'pages/imported-slides.md': '../../../demo/starter/pages/imported-slides.md',
   'snippets/external.ts': '../../../demo/starter/snippets/external.ts',
 }
 

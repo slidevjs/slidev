@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import type { ClicksContext } from '@slidev/types'
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
 const props = withDefaults(
@@ -116,7 +116,7 @@ function processNote() {
           }
         : null
 
-      if (!enabled && props.autoScroll && clicks === current)
+      if (enabled && props.autoScroll && clicks === current)
         marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
     }
   }

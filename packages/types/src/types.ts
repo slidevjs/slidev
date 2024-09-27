@@ -1,3 +1,4 @@
+import type { Component } from 'vue'
 import type { RouteComponent, RouteMeta } from 'vue-router'
 import type YAML from 'yaml'
 import type { SlidevConfig } from './config'
@@ -5,8 +6,10 @@ import type { SlidevConfig } from './config'
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
 
 export interface SlideInfoBase {
+  revision: string
   frontmatter: Record<string, any>
   content: string
+  frontmatterRaw?: string
   note?: string
   title?: string
   level?: number
@@ -32,7 +35,6 @@ export interface SourceSlideInfo extends SlideInfoBase {
    * Slides import by this slide.
    */
   imports?: SourceSlideInfo[]
-  frontmatterRaw?: string
   frontmatterDoc?: YAML.Document
   frontmatterStyle?: FrontmatterStyle
 }
@@ -50,14 +52,13 @@ export interface SlideInfo extends SlideInfoBase {
    * The source slide where the content is from
    */
   source: SourceSlideInfo
-  snippetsUsed?: LoadedSnippets
   noteHTML?: string
 }
 
 /**
  * Editable fields for a slide
  */
-export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note'>> & {
+export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'frontmatterRaw'>> & {
   skipHmr?: boolean
   /**
    * The frontmatter patch (only the changed fields)
@@ -97,6 +98,7 @@ export interface SlidevMarkdown {
    * All slides in this markdown file
    */
   slides: SourceSlideInfo[]
+  errors?: { row: number, message: string }[]
 }
 
 export interface SlidevData {
@@ -110,7 +112,10 @@ export interface SlidevData {
   features: SlidevDetectedFeatures
   themeMeta?: SlidevThemeMeta
   markdownFiles: Record<string, SlidevMarkdown>
-  watchFiles: string[]
+  /**
+   * From watched files to indexes of slides that must be reloaded regardless of the loaded content
+   */
+  watchFiles: Record<string, Set<number>>
 }
 
 export interface SlidevPreparserExtension {
@@ -126,7 +131,12 @@ export type RenderContext = 'none' | 'slide' | 'overview' | 'presenter' | 'previ
 export interface SlideRoute {
   no: number
   meta: RouteMeta & Required<Pick<RouteMeta, 'slide'>>
-  component: () => Promise<{ default: RouteComponent }>
+  /**
+   * load the slide component itself
+   */
+  load: () => Promise<{ default: RouteComponent }>
+  /**
+   * Wrapped async component
+   */
+  component: Component
 }
-
-export type LoadedSnippets = Record<string, string>

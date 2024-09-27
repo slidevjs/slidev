@@ -33,9 +33,6 @@ jobs:
       - name: Setup
         run: npm i -g @antfu/ni
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
-
       - name: Install
         run: nci
         env:
@@ -55,12 +52,10 @@ jobs:
 
   test:
     needs: pack
-    timeout-minutes: 10
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [18.x]
         os: [ubuntu-latest, windows-latest]
         pm: [npm, pnpm] # yarn not working in this CI
         hoist: [true, false]
@@ -82,7 +77,7 @@ jobs:
         run: npm i -g @antfu/ni
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
 
       - name: Install
         run: nci

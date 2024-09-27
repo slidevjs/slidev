@@ -1,12 +1,12 @@
-import { resolve } from 'node:path'
-import http from 'node:http'
-import fs from 'fs-extra'
-import type { InlineConfig, ResolvedConfig } from 'vite'
-import { build as viteBuild } from 'vite'
-import connect from 'connect'
-import sirv from 'sirv'
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
-import { getIndexHtml, resolveViteConfigs } from './shared'
+import type { InlineConfig, ResolvedConfig } from 'vite'
+import http from 'node:http'
+import { resolve } from 'node:path'
+import connect from 'connect'
+import fs from 'fs-extra'
+import sirv from 'sirv'
+import { build as viteBuild } from 'vite'
+import { resolveViteConfigs } from './shared'
 
 export async function build(
   options: ResolvedSlidevOptions,
@@ -19,7 +19,7 @@ export async function build(
   if (fs.existsSync(indexPath))
     originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
 
-  await fs.writeFile(indexPath, await getIndexHtml(options), 'utf-8')
+  await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
   let config: ResolvedConfig = undefined!
 
   try {

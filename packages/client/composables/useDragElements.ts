@@ -1,7 +1,7 @@
-import { debounce, ensureSuffix } from '@antfu/utils'
 import type { SlidePatch } from '@slidev/types'
-import { injectLocal, onClickOutside, useWindowFocus } from '@vueuse/core'
 import type { CSSProperties, DirectiveBinding, InjectionKey, WatchStopHandle } from 'vue'
+import { debounce, ensureSuffix } from '@antfu/utils'
+import { injectLocal, onClickOutside, useWindowFocus } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionSlideElement, injectionSlideScale, injectionSlideZoom } from '../constants'
 import { makeId } from '../logic/utils'
@@ -69,15 +69,15 @@ export function useDragElementsUpdater(no: number) {
 
       section = type === 'prop'
       // eslint-disable-next-line regexp/no-super-linear-backtracking
-        ? section.replace(/<(v-?drag-?\w*)(.*?)>/gi, (full, tag, attrs, index) => {
+        ? section.replace(/<(v-?drag-?\w*)(.*?)(\/)?>/gi, (full, tag, attrs, selfClose, index) => {
           if (index === idx) {
             replaced = true
             const posMatch = attrs.match(/pos=".*?"/)
             if (!posMatch)
-              return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}">`
+              return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}"${selfClose}>`
             const start = posMatch.index
             const end = start + posMatch[0].length
-            return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}>`
+            return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}${selfClose}>`
           }
           return full
         })
@@ -113,7 +113,7 @@ export function useDragElementsUpdater(no: number) {
   }
 }
 
-export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource, isArrow?: boolean) {
+export function useDragElement(directive: DirectiveBinding | null, posRaw?: string | number | number[], markdownSource?: DragElementMarkdownSource, isArrow = false) {
   function inject<T>(key: InjectionKey<T> | string): T | undefined {
     return directive
       ? directiveInject(directive, key)

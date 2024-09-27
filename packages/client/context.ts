@@ -1,5 +1,5 @@
+import { injectLocal, objectOmit } from '@vueuse/core'
 import { computed, ref, toRef } from 'vue'
-import { injectLocal, objectOmit, provideLocal } from '@vueuse/core'
 import {
   FRONTMATTER_FIELDS,
   HEADMATTER_FIELDS,
@@ -9,8 +9,8 @@ import {
   injectionRenderContext,
   injectionRoute,
   injectionSlideScale,
-  injectionSlideZoom,
   injectionSlidevContext,
+  injectionSlideZoom,
 } from './constants'
 
 /**
@@ -43,28 +43,6 @@ export function useSlideContext() {
 }
 
 export type SlideContext = ReturnType<typeof useSlideContext>
-
-/**
- * @internal
- */
-export function provideFrontmatter(frontmatter: Record<string, any>) {
-  provideLocal(injectionFrontmatter, frontmatter)
-
-  const {
-    $slidev,
-    $page,
-  } = useSlideContext()
-
-  // update frontmatter in router to make HMR work better
-  const route = $slidev.nav.slides.find(i => i.no === $page.value)
-  if (route?.meta?.slide?.frontmatter) {
-    for (const key of Object.keys(route.meta.slide.frontmatter)) {
-      if (!(key in frontmatter))
-        delete route.meta.slide.frontmatter[key]
-    }
-    Object.assign(route.meta.slide.frontmatter, frontmatter)
-  }
-}
 
 /**
  * Convert frontmatter options to props for v-bind

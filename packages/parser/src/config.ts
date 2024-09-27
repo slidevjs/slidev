@@ -1,5 +1,5 @@
-import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
 
 export function getDefaultConfig(): SlidevConfig {
@@ -36,10 +36,13 @@ export function getDefaultConfig(): SlidevConfig {
     css: 'unocss',
     presenter: true,
     htmlAttrs: {},
-    transition: undefined,
+    transition: null,
     editor: true,
-    contextMenu: undefined,
+    contextMenu: null,
+    overviewSnapshots: false,
     wakeLock: true,
+    remote: false,
+    mdc: false,
   }
 }
 
@@ -114,7 +117,7 @@ export function verifyConfig(
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
-  if (!['unocss', undefined].includes(config.css)) {
+  if (config.css !== 'unocss') {
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
     config.css = 'unocss'
   }

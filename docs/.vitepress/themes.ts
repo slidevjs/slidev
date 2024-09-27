@@ -1,10 +1,3 @@
-export type Tag =
-  | 'official'
-  | 'dark'
-  | 'light'
-  | 'colorful'
-  | 'minimalism'
-
 export interface ThemeInfo {
   id: string
   name: string
@@ -16,7 +9,7 @@ export interface ThemeInfo {
     link?: string
   }
   link?: string
-  tags?: Tag[]
+  tags?: string[]
 }
 
 export const official: ThemeInfo[] = [
@@ -218,7 +211,7 @@ export const community: ThemeInfo[] = [
     name: 'Unicorn',
     description: 'Based on Dawntraoz website design',
     author: {
-      name: 'Alba Silvente (dawntraoz)',
+      name: 'Alba Silvente',
       link: 'https://github.com/dawntraoz',
     },
     repo: 'https://github.com/dawntraoz/slidev-theme-unicorn',
@@ -259,7 +252,7 @@ export const community: ThemeInfo[] = [
     name: 'Penguin',
     description: 'A Penguin theme for Slidev',
     author: {
-      name: 'Alvaro Saburido (alvarosaburido)',
+      name: 'Alvaro Saburido',
       link: 'https://github.com/alvarosaburido',
     },
     repo: 'https://github.com/alvarosaburido/slidev-theme-penguin',
@@ -390,7 +383,7 @@ export const community: ThemeInfo[] = [
     name: 'Dracula',
     description: 'One the best dark theme meets slidev',
     author: {
-      name: 'JD Solanki (jd-solanki)',
+      name: 'JD Solanki',
       link: 'https://github.com/jd-solanki',
     },
     repo: 'https://github.com/jd-solanki/slidev-theme-dracula',
@@ -461,6 +454,61 @@ export const community: ThemeInfo[] = [
     tags: [
       'dark',
       'light',
+    ],
+  },
+  {
+    id: 'slidev-theme-mint',
+    name: 'mint',
+    description: 'Slidev Theme Mint',
+    author: {
+      name: 'Alfatta Rezqa',
+      link: 'https://github.com/alfatta',
+    },
+    repo: 'https://github.com/alfatta/slidev-theme-mint',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/1.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/2.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/3.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/4.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/5.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/6.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/7.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/8.png',
+      'https://cdn.jsdelivr.net/gh/alfatta/slidev-theme-mint/screenshot/9.png',
+    ],
+    tags: [
+      'light',
+      'mint',
+      'green',
+      'cool',
+    ],
+  },
+  {
+    id: 'slidev-theme-neversink',
+    name: 'neversink',
+    description: 'Slidev Theme Neversink',
+    author: {
+      name: 'Todd M. Gureckis',
+      link: 'https://github.com/gureckis',
+    },
+    repo: 'https://github.com/gureckis/slidev-theme-neversink',
+    previews: [
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/2.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/6.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/8.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/15.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/18.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/22.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/26.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/34.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/36.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/38.png',
+      'https://gureckis.github.io/slidev-theme-neversink/screenshots/35.png',
+    ],
+    tags: [
+      'light',
+      'academic',
+      'education',
     ],
   },
   // Add yours here!

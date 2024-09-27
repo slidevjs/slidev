@@ -1,10 +1,10 @@
-import { builtinModules } from 'node:module'
-import { join, resolve } from 'node:path'
-
-import fg from 'fast-glob'
-import { uniq } from '@antfu/utils'
-import { toAtFS } from '../resolver'
 import type { VirtualModuleTemplate } from './types'
+import { builtinModules } from 'node:module'
+
+import { join, resolve } from 'node:path'
+import { uniq } from '@antfu/utils'
+import fg from 'fast-glob'
+import { toAtFS } from '../resolver'
 
 export const templateMonacoTypes: VirtualModuleTemplate = {
   id: '/@slidev/monaco-types',

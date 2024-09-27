@@ -1,10 +1,10 @@
 // Ported from https://github.com/vuejs/vitepress/blob/main/src/node/markdown/plugins/snippet.ts
 
-import path from 'node:path'
-import lz from 'lz-string'
-import fs from 'fs-extra'
 import type { MarkdownTransformContext } from '@slidev/types'
+import path from 'node:path'
 import { slash } from '@antfu/utils'
+import fs from 'fs-extra'
+import lz from 'lz-string'
 import { monacoWriterWhitelist } from '../../vite/monacoWrite'
 
 function dedent(text: string): string {
@@ -83,17 +83,11 @@ function findRegion(lines: Array<string>, regionName: string) {
  *
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
-export function transformSnippet(ctx: MarkdownTransformContext) {
-  const options = ctx.options
-  const slideId = (ctx.id as string).match(/(\d+)\.md$/)?.[1]
-  if (!slideId)
-    return
+export function transformSnippet({ s, slide, options }: MarkdownTransformContext) {
+  const watchFiles = options.data.watchFiles
+  const dir = path.dirname(slide.source?.filepath ?? options.entry ?? options.userRoot)
 
-  const data = options.data
-  const slideInfo = data.slides[+slideId - 1]
-  const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
-
-  ctx.s.replace(
+  s.replace(
     // eslint-disable-next-line regexp/no-super-linear-backtracking
     /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
@@ -103,7 +97,8 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
           : path.resolve(dir, filepath),
       )
 
-      data.watchFiles.push(src)
+      watchFiles[src] ??= new Set()
+      watchFiles[src].add(slide.index)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {
@@ -113,9 +108,6 @@ export function transformSnippet(ctx: MarkdownTransformContext) {
       }
 
       let content = fs.readFileSync(src, 'utf8')
-
-      slideInfo.snippetsUsed ??= {}
-      slideInfo.snippetsUsed[src] = content
 
       if (regionName) {
         const lines = content.split(/\r?\n/)
