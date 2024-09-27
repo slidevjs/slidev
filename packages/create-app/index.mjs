@@ -9,7 +9,7 @@ import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import { execa } from 'execa'
+import { x } from 'tinyexec'
 import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 
 const argv = minimist(process.argv.slice(2))
@@ -123,8 +123,8 @@ async function init() {
     if (!agent)
       return
 
-    await execa(agent, ['install'], { stdio: 'inherit', cwd: root })
-    await execa(agent, ['run', 'dev'], { stdio: 'inherit', cwd: root })
+    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
     console.log(dim('\n  start it later by:\n'))
