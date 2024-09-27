@@ -15,6 +15,7 @@ const INCLUDE_GLOBAL = [
   'recordrtc',
   'typescript',
   'yaml',
+  'html-to-image',
 ]
 
 const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
