@@ -23,7 +23,7 @@ export interface HeadmatterConfig extends TransitionOptions {
   /**
    * Theme to use for the slides
    *
-   * See https://sli.dev/themes/use.html
+   * See https://sli.dev/guide/theme-addon#use-theme
    * @default 'default'
    */
   theme?: string

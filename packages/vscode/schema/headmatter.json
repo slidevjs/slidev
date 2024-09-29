@@ -131,8 +131,8 @@
         },
         "theme": {
           "type": "string",
-          "description": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
-          "markdownDescription": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
+          "description": "Theme to use for the slides\n\nSee https://sli.dev/guide/theme-addon#use-theme",
+          "markdownDescription": "Theme to use for the slides\n\nSee https://sli.dev/guide/theme-addon#use-theme",
           "default": "default"
         },
         "addons": {
