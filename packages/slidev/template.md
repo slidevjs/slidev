@@ -235,8 +235,8 @@ theme: seriph
 
 </div>
 
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
+check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
 
 ---
 preload: false
