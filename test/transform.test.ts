@@ -1,5 +1,10 @@
 import { expect, it } from 'vitest'
-import { transformCodeWrapper, transformMermaid, transformPageCSS, transformPlantUml, transformSlotSugar, transformSnippet } from '../packages/slidev/node/syntax/transform'
+import { transformCodeWrapper } from 'packages/slidev/node/syntax/transform/code-wrapper'
+import { transformPageCSS } from 'packages/slidev/node/syntax/transform/in-page-css'
+import { transformMermaid } from 'packages/slidev/node/syntax/transform/mermaid'
+import { transformPlantUml } from 'packages/slidev/node/syntax/transform/plant-uml'
+import { transformSlotSugar } from 'packages/slidev/node/syntax/transform/slot-sugar'
+import { transformSnippet } from 'packages/slidev/node/syntax/transform/snippet'
 import { createTransformContext } from './_tutils'
 
 it('slot-sugar', () => {

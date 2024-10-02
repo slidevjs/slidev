@@ -2,7 +2,7 @@
 
 <Environment type="node" />
 
-[UnoCSS](https://unocss.dev) is now the default CSS framework for Slidev since v0.42.0. UnoCSS is a fast atomic CSS engine that has full flexibility and extensibility.
+[UnoCSS](https://unocss.dev) is now the default CSS framework for Slidev since v0.42.0. UnoCSS is a fast atomic CSS engine that has full flexibility and extensibility. Most of the Tailwind CSS classes are supported **out-of-box**, and you can also extend it with your own configurations.
 
 By default, Slidev enables the following presets out-of-box:
 
@@ -31,7 +31,7 @@ You can therefore style your content the way you want. For example:
 
 You can create `uno.config.ts` under the root of your project to extend the builtin configurations
 
-```ts
+```ts twoslash
 import { defineConfig } from 'unocss'
 
 export default defineConfig({

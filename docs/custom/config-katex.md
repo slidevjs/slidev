@@ -4,14 +4,15 @@
 
 Create `./setup/katex.ts` with the following content:
 
-```ts
+```ts twoslash
 import { defineKatexSetup } from '@slidev/types'
 
 export default defineKatexSetup(() => {
   return {
+    maxExpand: 2000,
     /* ... */
   }
 })
 ```
 
-With the setup, you can provide the custom setting for [KaTex Options](https://katex.org/docs/options.html). Refer to the type definitions and their documentation for more details.
+The return value should be the custom options for KaTeX. Refer to [KaTeX's documentation](https://katex.org/docs/options.html) or the type definition for the full options list.

@@ -8,6 +8,7 @@ export interface ExportArgs extends CommonArgs {
   'format'?: string
   'timeout'?: number
   'wait'?: number
+  'wait-until'?: string
   'range'?: string
   'dark'?: boolean
   'with-clicks'?: boolean
@@ -15,6 +16,7 @@ export interface ExportArgs extends CommonArgs {
   'with-toc'?: boolean
   'per-slide'?: boolean
   'scale'?: number
+  'omit-background'?: boolean
 }
 
 export interface BuildArgs extends ExportArgs {

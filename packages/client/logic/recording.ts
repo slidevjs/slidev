@@ -151,6 +151,7 @@ export function useRecording() {
         cursor: 'motion',
         resizeMode: 'crop-and-scale',
       },
+      selfBrowserSurface: 'include',
     })
     streamCapture.value.addEventListener('inactive', stopRecording)
 

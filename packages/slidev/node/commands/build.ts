@@ -2,12 +2,11 @@ import { resolve } from 'node:path'
 import http from 'node:http'
 import fs from 'fs-extra'
 import type { InlineConfig, ResolvedConfig } from 'vite'
-import { mergeConfig, build as viteBuild } from 'vite'
+import { build as viteBuild } from 'vite'
 import connect from 'connect'
 import sirv from 'sirv'
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
-import { ViteSlidevPlugin } from '../vite'
-import { getIndexHtml, mergeViteConfigs } from './shared'
+import { resolveViteConfigs } from './shared'
 
 export async function build(
   options: ResolvedSlidevOptions,
@@ -20,15 +19,13 @@ export async function build(
   if (fs.existsSync(indexPath))
     originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
 
-  await fs.writeFile(indexPath, await getIndexHtml(options), 'utf-8')
+  await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
   let config: ResolvedConfig = undefined!
 
   try {
-    let inlineConfig = await mergeViteConfigs(
+    const inlineConfig = await resolveViteConfigs(
       options,
-      viteConfig,
-      <InlineConfig>({
-        root: options.userRoot,
+      {
         plugins: [
           {
             name: 'resolve-config',
@@ -40,17 +37,9 @@ export async function build(
         build: {
           chunkSizeWarningLimit: 2000,
         },
-      }),
+      } satisfies InlineConfig,
+      viteConfig,
       'build',
-    )
-
-    inlineConfig = mergeConfig(
-      inlineConfig,
-      {
-        plugins: [
-          await ViteSlidevPlugin(options, inlineConfig.slidev || {}),
-        ],
-      },
     )
 
     await viteBuild(inlineConfig)

@@ -82,8 +82,3 @@ html:not(.dark) .shiki span {
 .katex :before {
   border-color: currentColor;
 }
-
-/* CodeMirror */
-.CodeMirror pre.CodeMirror-placeholder {
-  opacity: 0.4;
-}

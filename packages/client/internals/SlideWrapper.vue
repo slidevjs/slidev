@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, defineComponent, h, onMounted, ref, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { getSlideClass } from '../utils'
 import { configs } from '../env'
-import SlideLoading from './SlideLoading.vue'
+import { SlideBottom, SlideTop } from '#slidev/global-layers'
 
 const props = defineProps({
   clicksContext: {
@@ -26,6 +26,7 @@ const props = defineProps({
 const zoom = computed(() => props.route.meta?.slide?.frontmatter.zoom ?? 1)
 
 provideLocal(injectionRoute, props.route)
+provideLocal(injectionFrontmatter, props.route.meta.slide.frontmatter)
 provideLocal(injectionCurrentPage, ref(props.route.no))
 provideLocal(injectionRenderContext, ref(props.renderContext))
 provideLocal(injectionClicksContext, toRef(props, 'clicksContext'))
@@ -45,20 +46,6 @@ const style = computed<CSSProperties>(() => ({
   ...zoomStyle.value,
   'user-select': configs.selectable ? undefined : 'none',
 }))
-
-const SlideComponent = computed(() => props.route && defineAsyncComponent({
-  loader: async () => {
-    const component = await props.route.component()
-    return defineComponent({
-      setup(_, { attrs }) {
-        onMounted(() => props.clicksContext?.onMounted?.())
-        return () => h(component.default, attrs)
-      },
-    })
-  },
-  delay: 300,
-  loadingComponent: SlideLoading,
-}))
 </script>
 
 <template>
@@ -67,7 +54,9 @@ const SlideComponent = computed(() => props.route && defineAsyncComponent({
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
   >
-    <SlideComponent />
+    <SlideBottom />
+    <component :is="props.route.component" />
+    <SlideTop />
   </div>
 </template>
 

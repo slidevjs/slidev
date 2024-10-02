@@ -1,0 +1,25 @@
+# Continuous Releases provided by https://pkg.pr.new
+name: CR (Continuous Releases)
+on: [pull_request]
+
+jobs:
+  cr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - run: npm i -g @antfu/ni
+      - run: nci
+
+      - name: Build
+        run: nr build
+
+      - run: nlx pkg-pr-new publish './packages/create-app' './packages/client' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

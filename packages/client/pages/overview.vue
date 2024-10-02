@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watchEffect } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowRef, watchEffect } from 'vue'
 import { useHead } from '@unhead/vue'
 import type { ClicksContext, SlideRoute } from '@slidev/types'
-import { slideAspect, slidesTitle } from '../env'
+import { pathPrefix, slideAspect, slidesTitle } from '../env'
 import { getSlidePath } from '../logic/slides'
 import { createFixedClicks } from '../composables/useClicks'
 import { useDynamicVirtualList } from '../composables/useDynamicVirtualList'
@@ -37,6 +37,7 @@ const virtualList = useDynamicVirtualList(slides, () => ({
   itemHeight: rowHeight.value,
 }))
 
+const activeSlide = shallowRef<SlideRoute>()
 const clicksContextMap = new WeakMap<SlideRoute, ClicksContext>()
 function getClicksContext(route: SlideRoute) {
   // We create a local clicks context to calculate the total clicks of the slide
@@ -49,8 +50,15 @@ function getSlideClicks(route: SlideRoute) {
   return route.meta?.clicks || getClicksContext(route)?.total
 }
 
+function toggleRoute(route: SlideRoute) {
+  if (activeSlide.value === route)
+    activeSlide.value = undefined
+  else
+    activeSlide.value = route
+}
+
 function wordCount(str: string) {
-  return str.match(/[\w’'-]+/g)?.length || 0
+  return str.match(/[\w`'\-]+/g)?.length || 0
 }
 
 function isElementInViewport(el: HTMLElement) {
@@ -79,7 +87,7 @@ function checkActiveBlocks() {
 function openSlideInNewTab(path: string) {
   const a = document.createElement('a')
   a.target = '_blank'
-  a.href = path
+  a.href = pathPrefix + path.slice(1)
   a.click()
 }
 
@@ -142,6 +150,14 @@ watchEffect(() => {
           <carbon-moon v-if="isDark" />
           <carbon-sun v-else />
         </IconButton>
+        <IconButton
+          v-else
+          :title="isDark ? 'Dark mode' : 'Light mode'"
+          pointer-events-none op50
+        >
+          <carbon-moon v-if="isDark" />
+          <carbon-sun v-else />
+        </IconButton>
       </div>
     </nav>
     <main
@@ -177,7 +193,7 @@ watchEffect(() => {
                 <carbon:presentation-file />
               </IconButton>
               <IconButton
-                v-if="route.meta?.slide"
+                v-if="__DEV__ && route.meta?.slide"
                 class="mr--3 op0 group-hover:op80"
                 title="Open in editor"
                 @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
@@ -185,7 +201,7 @@ watchEffect(() => {
                 <carbon:cics-program />
               </IconButton>
             </div>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2" :style="{ width: `${cardWidth}px` }">
               <div
                 class="border rounded border-main overflow-hidden bg-main select-none h-max"
                 @dblclick="openSlideInNewTab(getSlidePath(route, false))"
@@ -205,9 +221,11 @@ watchEffect(() => {
               </div>
               <ClicksSlider
                 v-if="getSlideClicks(route)"
+                :active="activeSlide === route"
                 :clicks-context="getClicksContext(route)"
                 class="w-full mt-2"
-                @dblclick="getClicksContext(route).current = CLICKS_MAX"
+                @dblclick="toggleRoute(route)"
+                @click="activeSlide = route"
               />
             </div>
           </div>
@@ -225,6 +243,7 @@ watchEffect(() => {
             :no="route.no"
             class="max-w-250 w-250 text-lg rounded p3"
             :auto-height="true"
+            :highlight="activeSlide === route"
             :editing="edittingNote === route.no"
             :clicks-context="getClicksContext(route)"
             @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"

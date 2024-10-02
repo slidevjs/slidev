@@ -12,6 +12,7 @@ export function getDefaultConfig(): SlidevConfig {
     monaco: true,
     monacoTypesSource: 'local',
     monacoTypesAdditionalPackages: [],
+    monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
     download: false,
     export: {} as ResolvedExportOptions,
@@ -35,9 +36,12 @@ export function getDefaultConfig(): SlidevConfig {
     css: 'unocss',
     presenter: true,
     htmlAttrs: {},
-    transition: undefined,
+    transition: null,
     editor: true,
-    contextMenu: undefined,
+    contextMenu: null,
+    wakeLock: true,
+    remote: false,
+    mdc: false,
   }
 }
 
@@ -108,7 +112,7 @@ export function verifyConfig(
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
-  if (!['unocss', undefined].includes(config.css)) {
+  if (config.css !== 'unocss') {
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
     config.css = 'unocss'
   }

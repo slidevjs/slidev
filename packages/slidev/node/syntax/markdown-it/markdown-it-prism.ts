@@ -96,7 +96,7 @@ function loadPrismPlugin(name: string): void {
     require(`prismjs/plugins/${name}/prism-${name}`)
   }
   catch (e) {
-    throw new Error(`Cannot load Prism plugin "${name}". Please check the spelling.`)
+    throw new Error(`Cannot load Prism plugin "${name}". Please check the spelling.`, { cause: e })
   }
 }
 
@@ -208,7 +208,7 @@ function checkLanguageOption(
  * @param useroptions
  *        The options this plugin is being initialised with.
  */
-export default function markdownItPrism(markdownit: MarkdownIt, useroptions: Options): void {
+export default function MarkdownItPrism(markdownit: MarkdownIt, useroptions: Options): void {
   const options = Object.assign({}, DEFAULTS, useroptions)
 
   checkLanguageOption(options, 'defaultLanguage')

@@ -1,13 +1,11 @@
-import { clamp } from '@antfu/utils'
+import { clamp, ensurePrefix } from '@antfu/utils'
 import type { SourceSlideInfo } from '@slidev/types'
-import { computed, watch } from '@vue/runtime-core'
+import { computed, createSingletonComposable, useActiveTextEditor, watch } from 'reactive-vscode'
 import type { DecorationOptions } from 'vscode'
 import { Position, Range, ThemeColor, window } from 'vscode'
-import { useActiveTextEditor } from '../composables/useActiveTextEditor'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
 import { displayAnnotations } from '../configs'
 import { activeProject } from '../projects'
-import { createSingletonComposable } from '../utils/singletonComposable'
 import { toRelativePath } from '../utils/toRelativePath'
 
 const dividerCommonOptions = {
@@ -29,6 +27,21 @@ const frontmatterContentDecoration = window.createTextEditorDecorationType({
   backgroundColor: '#8881',
 })
 const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
+const errorDecoration = window.createTextEditorDecorationType({
+  isWholeLine: true,
+})
+
+function mergeSlideNumbers(slides: { index: number }[]): string {
+  const indexes = slides.map(s => s.index + 1)
+  const merged = [[indexes[0], indexes[0]]]
+  for (let i = 1; i < indexes.length; i++) {
+    if (merged[merged.length - 1][1] + 1 === indexes[i])
+      merged[merged.length - 1][1] = indexes[i]
+    else
+      merged.push([indexes[i], indexes[i]])
+  }
+  return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
+}
 
 export const useAnnotations = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
@@ -44,6 +57,7 @@ export const useAnnotations = createSingletonComposable(() => {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
+        editor.setDecorations(errorDecoration, [])
         return
       }
 
@@ -56,7 +70,7 @@ export const useAnnotations = createSingletonComposable(() => {
           s => s.source === source || s.importChain?.includes(source),
         )
         const posInfo = slides?.length
-          ? slides.map(s => `#${s.index + 1}`).join(', ')
+          ? mergeSlideNumbers(slides)
           : isActive ? '(hidden)' : ''
         const entryInfo = source.index === 0 && project.data.entry !== md
           ? ` (entry: ${toRelativePath(project.entry)})`
@@ -71,7 +85,6 @@ export const useAnnotations = createSingletonComposable(() => {
       const dividerRanges: DecorationOptions[] = []
       const frontmatterContentRanges: DecorationOptions[] = []
       const frontmatterEndRanges: DecorationOptions[] = []
-
       for (const slide of md.slides) {
         const lineNo = slide.frontmatterStyle === 'frontmatter' ? slide.start : slide.start - 1
         const line = doc.lineAt(clamp(lineNo, 0, doc.lineCount))
@@ -109,11 +122,25 @@ export const useAnnotations = createSingletonComposable(() => {
           }
         }
       }
-
       editor.setDecorations(firstLineDecoration, firstLineRanges)
       editor.setDecorations(dividerDecoration, dividerRanges)
       editor.setDecorations(frontmatterContentDecoration, frontmatterContentRanges)
       editor.setDecorations(frontmatterEndDecoration, frontmatterEndRanges)
+
+      const errors: DecorationOptions[] = []
+      for (const error of md.errors ?? []) {
+        errors.push({
+          range: new Range(error.row, 0, error.row, 0),
+          renderOptions: {
+            after: {
+              contentText: ensurePrefix(error.message, ' '),
+              color: new ThemeColor('editorError.foreground'),
+              backgroundColor: new ThemeColor('editorError.background'),
+            },
+          },
+        })
+      }
+      editor.setDecorations(errorDecoration, errors)
     },
     { immediate: true },
   )

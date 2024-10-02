@@ -1,8 +1,7 @@
 import { clamp, sum } from '@antfu/utils'
 import type { ClicksContext, NormalizedRangeClickValue, NormalizedSingleClickValue, RawAtValue, RawSingleAtValue, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
-import { computed, ref, shallowReactive } from 'vue'
-import { routeForceRefresh } from '../logic/route'
+import { computed, onMounted, onUnmounted, ref, shallowReactive } from 'vue'
 
 export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleClickValue {
   if (at === false || at === 'false')
@@ -30,18 +29,44 @@ export function createClicksContextBase(
   clicksStart = 0,
   clicksTotalOverrides?: number,
 ): ClicksContext {
+  const isMounted = ref(false)
+  let relativeSizeMap: ClicksContext['relativeSizeMap'] = new Map()
+  let maxMap: ClicksContext['maxMap'] = new Map()
   const context: ClicksContext = {
     get current() {
-      // Here we haven't know clicksTotal yet.
       return clamp(+current.value, clicksStart, context.total)
     },
     set current(value) {
-      current.value = clamp(+value, clicksStart, context.total)
+      current.value = isMounted.value
+        ? clamp(value, clicksStart, context.total)
+        : value /* context.total is not available yet */
     },
     clicksStart,
-    relativeOffsets: new Map(),
-    maxMap: shallowReactive(new Map()),
-    onMounted() { },
+    get relativeSizeMap() {
+      if (__DEV__ && isMounted.value)
+        console.warn('[slidev] ClicksContext: Unexpected access to relativeSizeMap after mounted')
+      return relativeSizeMap
+    },
+    get maxMap() {
+      return maxMap
+    },
+    get isMounted() {
+      return isMounted.value
+    },
+    setup() {
+      onMounted(() => {
+        isMounted.value = true
+        // Convert maxMap to reactive
+        maxMap = shallowReactive(maxMap)
+        // Make sure the query is not greater than the total
+        context.current = current.value
+      })
+      onUnmounted(() => {
+        isMounted.value = false
+        relativeSizeMap = new Map()
+        maxMap = new Map()
+      })
+    },
     calculateSince(rawAt, size = 1) {
       const at = normalizeSingleAtValue(rawAt)
       if (at == null)
@@ -109,23 +134,25 @@ export function createClicksContextBase(
     register(el, info) {
       if (!info)
         return
+      if (__DEV__ && isMounted.value)
+        console.warn('[slidev] ClicksContext: Unexpected register after mounted')
       const { delta, max } = info
-      context.relativeOffsets.set(el, delta)
-      context.maxMap.set(el, max)
+      relativeSizeMap.set(el, delta)
+      maxMap.set(el, max)
     },
     unregister(el) {
-      context.relativeOffsets.delete(el)
-      context.maxMap.delete(el)
+      relativeSizeMap.delete(el)
+      maxMap.delete(el)
     },
     get currentOffset() {
-      // eslint-disable-next-line no-unused-expressions
-      routeForceRefresh.value
-      return sum(...context.relativeOffsets.values())
+      return sum(...relativeSizeMap.values())
     },
     get total() {
-      // eslint-disable-next-line no-unused-expressions
-      routeForceRefresh.value
-      return clicksTotalOverrides ?? Math.max(0, ...context.maxMap.values())
+      return clicksTotalOverrides
+        ?? (isMounted.value
+          ? Math.max(0, ...maxMap.values())
+          : 0 /* fallback value */
+        )
     },
   }
   return context

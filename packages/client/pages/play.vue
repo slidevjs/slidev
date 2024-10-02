@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
-import { isEditorVertical, isScreenVertical, showEditor, windowSize } from '../state'
+import { useStyleTag } from '@vueuse/core'
+import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor, windowSize } from '../state'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { registerShortcuts } from '../logic/shortcuts'
 import Controls from '../internals/Controls.vue'
@@ -10,6 +11,7 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import PrintStyle from '../internals/PrintStyle.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { useNav } from '../composables/useNav'
+import { useWakeLock } from '../composables/useWakeLock'
 import { useDrawings } from '../composables/useDrawings'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 
@@ -32,6 +34,24 @@ function onClick(e: MouseEvent) {
 
 useSwipeControls(root)
 registerShortcuts()
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
+
+if (import.meta.hot) {
+  useStyleTag(computed(() => `
+    vite-error-overlay {
+      --width: calc(100vw - ${isEditorVertical.value ? 0 : editorWidth.value}px);
+      --height: calc(100vh - ${isEditorVertical.value ? editorHeight.value : 0}px);
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: calc(var(--width) / var(--slidev-slide-scale));
+      height: calc(var(--height) / var(--slidev-slide-scale));
+      transform-origin: top left;
+      transform: scale(var(--slidev-slide-scale));
+    }`,
+  ))
+}
 
 const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 

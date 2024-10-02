@@ -14,6 +14,10 @@
   --uno: border border-primary border-opacity-20 border-solid;
 }
 
+kbd {
+  --uno: border-rounded bg-$vp-c-gray-1 bg-opacity-10 px-1 py-.5;
+}
+
 [data-tweet-id] {
   border-radius: 13px;
 }

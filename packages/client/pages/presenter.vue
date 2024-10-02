@@ -24,11 +24,14 @@ import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
 import { useNav } from '../composables/useNav'
 import { useDrawings } from '../composables/useDrawings'
+import { useWakeLock } from '../composables/useWakeLock'
 
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
 
 const {
   clicksContext,
@@ -37,7 +40,6 @@ const {
   hasNext,
   nextRoute,
   slides,
-  queryClicks,
   getPrimaryClicks,
   total,
 } = useNav()
@@ -54,7 +56,7 @@ const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
-    return [nextRoute.value!, 0] as const
+    return [nextRoute.value, 0] as const
   else
     return null
 })
@@ -64,10 +66,10 @@ const nextFrameClicksCtx = computed(() => {
 })
 
 watch(
-  [currentSlideRoute, queryClicks],
+  nextFrame,
   () => {
-    if (nextFrameClicksCtx.value)
-      nextFrameClicksCtx.value.current = nextFrame.value![1]
+    if (nextFrameClicksCtx.value && nextFrame.value)
+      nextFrameClicksCtx.value.current = nextFrame.value[1]
   },
   { immediate: true },
 )
@@ -133,6 +135,11 @@ onMounted(() => {
             render-context="previewNext"
           />
         </SlideContainer>
+        <div v-else class="h-full flex justify-center items-center">
+          <div class="text-gray-500">
+            End of the presentation
+          </div>
+        </div>
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
           Next
         </div>

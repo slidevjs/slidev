@@ -2,16 +2,20 @@
 outline: deep
 ---
 
-# Animations
+# Animation
 
-## Click Animations
+Animation is an essential part of slide presentations. Slidev provides a variety of ways to animate your slides, from the simple to the complex. This guide will show you how to use them effectively.
+
+## Click Animation {#click-animation}
+
+A "**click**" can be considered as the unit of animation steps in slides. A slide can have one or more clicks, and each click can trigger one or more animations - for example, revealing or hiding elements.
 
 > [!NOTE]
-> Since v0.48.0, we are rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
+> Since v0.48.0, we've rewritten the click animations system with much more consistent behaviors. It might change the behaviors of your existing slides in edge cases. While this page is showing the new click system, you can find more details about the refactor in [#1279](https://github.com/slidevjs/slidev/pull/1279).
 
-### `v-click`
+### `v-click` {#v-click}
 
-To apply "click animations" for elements, you can use the `v-click` directive or `<v-click>` components
+To apply show/hide "click animations" for elements, you can use the `<v-click>` component or the `v-click` directive.
 
 <!-- eslint-skip -->
 
@@ -25,35 +29,36 @@ To apply "click animations" for elements, you can use the `v-click` directive or
 <div v-click class="text-xl"> Hey! </div>
 ```
 
-### `v-after`
+### `v-after` {#v-after}
 
-`v-after` is only provided as a directive. It will turn the element visible when the previous `v-click` is triggered.
+`v-after` will turn the element visible when the previous `v-click` is triggered.
 
 ```md
 <div v-click> Hello </div>
-<div v-after> World </div>
+<div v-after> World </div>  <!-- or <v-after> World </v-after> -->
 ```
 
 When you press "next", both `Hello` and `World` will show up together.
 
-### Hide after clicking
+### Hide after clicking {#hide-after-clicking}
 
-Add a `.hide` modifier to `v-click` or `v-after` to make the element invisible after clicking, instead of showing up.
+Add a `.hide` modifier to `v-click` or `v-after` directives to make elements invisible after clicking, instead of showing up.
 
 ```md
 <div v-click> Visible after 1 click </div>
-<div v-click.hide> Hidden after 2 click </div>
-<div v-after.hide> Hidden after 2 click </div>
+<div v-click.hide> Hidden after 2 clicks </div>
+<div v-after.hide> Hidden after 2 clicks </div>
 ```
 
-For `v-click` component, you can use the `hide` prop to achieve the same effect:
+For the components, you can use the `hide` prop to achieve the same effect:
 
 ```md
 <v-click> Visible after 1 click </v-click>
-<v-click hide> Hidden after 2 click </v-click>
+<v-click hide> Hidden after 2 clicks </v-click>
+<v-after hide> Also hidden after 2 clicks </v-after>
 ```
 
-### `v-clicks`
+### `v-clicks` {#v-clicks}
 
 `v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists and tables.
 
@@ -88,21 +93,21 @@ Also, you can use the `every` prop to specify the number of items to show after 
 ```md
 <v-clicks every="2">
 
-- Item 1 (part 1)
-- Item 1 (part 2)
-- Item 2 (part 1)
-- Item 2 (part 2)
+- Item 1.1
+- Item 1.2
+- Item 2.1
+- Item 2.2
 
 </v-clicks>
 ```
 
-### Positioning
+### Positioning {#positioning}
 
-By default, the clicking animations take place one by one. You can customize the animation position of elements by using the `at` prop or the `v-click` directive with value.
+By default, the clicking animations are triggered one by one. You can customize the animation "position" of elements by using the `at` prop or the `v-click` directive with value.
 
 Like the CSS layout system, click-animated elements can be "relative" or "absolute":
 
-#### Relative Position
+#### Relative Position {#relative-position}
 
 This actual position of relative elements is calculated based on the previous relative elements:
 
@@ -133,7 +138,7 @@ In fact, `v-after` are just shortcuts for `v-click` with `at` prop:
 <v-click-gap size="1" /><img v-after />
 ```
 
-::: info
+::: tip `at` prop value format
 Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relative positions:
 
 | Value          | Kind     |
@@ -145,9 +150,9 @@ Only string values starting with `'+'` or `'-'` like `'+1'` are treated as relat
 So don't forget the single quotes for the relative values.
 :::
 
-#### Absolute Position
+#### Absolute Position {#absolute-position}
 
-The given value is the exact click count to show the element:
+The given value is the exact click count to trigger this animation:
 
 ````md
 <div v-click="3"> visible after 3 clicks </div>
@@ -160,7 +165,7 @@ The given value is the exact click count to show the element:
 ```
 ````
 
-#### Mixed Case
+#### Mixed Case {#mixed-case}
 
 You can mix the absolute and relative positions:
 
@@ -174,19 +179,19 @@ You can mix the absolute and relative positions:
 
 The following example synchronizes the highlighting of the two code blocks:
 
-````md
+````md {1,6}
 ```js {1|2}{at:1}
 1 + 1
 'a' + 'b'
 ```
 
 ```js {1|2}{at:1}
-2
-'ab'
+= 2
+= 'ab'
 ```
 ````
 
-### Enter & Leave
+### Enter & Leave {#enter-leave}
 
 You can also specify the enter and leave index for the `v-click` directive by passing an array. The end index is exclusive.
 
@@ -212,18 +217,18 @@ You can also use `v-switch` to achieve the same effect:
 
 See [`VSwitch` Component](/builtin/components#vswitch) for more details.
 
-### Custom Total Clicks Count
+### Custom Total Clicks Count {#total}
 
-By default, Slidev counts how many steps are needed before going to the next slide. You can override this setting by passing the `clicks` frontmatter option:
+By default, Slidev automatically calculates how many clicks are required before going to the next slide. You can override this via the `clicks` frontmatter option:
 
 ```yaml
 ---
-# 10 clicks in this slide, before going to the next
+# 10 clicks in this slide, before going to the next slide
 clicks: 10
 ---
 ```
 
-### Element Transitions
+### Element Transitions {#element-transitions}
 
 When you apply the `v-click` directive to your elements, it will attach the class name `slidev-vclick-target` to it. When the elements are hidden, the class name `slidev-vclick-hidden` will also be attached. For example:
 
@@ -231,7 +236,7 @@ When you apply the `v-click` directive to your elements, it will attach the clas
 <div class="slidev-vclick-target slidev-vclick-hidden">Text</div>
 ```
 
-After a click, it will become
+After a click, it may become:
 
 ```html
 <div class="slidev-vclick-target">Text</div>
@@ -252,9 +257,7 @@ By default, a subtle opacity transition is applied to those classes:
 }
 ```
 
-You can override them to customize the transition effects in your custom stylesheets.
-
-For example, you can achieve the scaling up transitions by:
+You can override them to customize the transition effects in your custom stylesheets. For example, you can achieve the scaling up transitions by:
 
 ```css
 /* styles.css */
@@ -268,7 +271,7 @@ For example, you can achieve the scaling up transitions by:
 }
 ```
 
-To specify animations for only certain slides or layouts
+To specify animations for only certain slides or layouts:
 
 ```scss
 .slidev-page-7,
@@ -285,68 +288,7 @@ To specify animations for only certain slides or layouts
 
 Learn more about [customizing styles](/custom/directory-structure#style).
 
-### Direction Specific Animations
-
-> Available since v0.48.0
-
-In some cases, you might want to have different animations going forward and backward. Slide will apply the `.slidev-nav-go-forward` or `.slidev-nav-go-backward` class to slide container when navigating.
-
-So you can leverage this to apply different animations for different directions, for example:
-
-```css
-/* example: delay on only forward but not backward */
-.slidev-nav-go-forward .slidev-vclick-target {
-  transition-delay: 500ms;
-}
-.slidev-nav-go-backward .slidev-vclick-target {
-  transition-delay: 0;
-}
-```
-
-To make it easier, we also provided some [UnoCSS variants built-in](https://github.com/slidevjs/slidev/blob/6adcf2016b8fb0cab65cf150221f1f67a76a2dd8/packages/client/uno.config.ts#L32-L38), that you can add `forward:` or `backward:` prefix to any utility classes to apply them conditionally.
-
-```html
-<div v-click class="transition delay-300">Element</div> // [!code --]
-<div v-click class="transition forward:delay-300">Element</div> // [!code ++]
-```
-
-## Rough Markers
-
-> Available since v0.48.0
-
-Slidev integrates [Rough Notation](https://github.com/linkstrifer/react-rough-notation) to allow marking or highlighting elements in your slides.
-
-### `v-mark`
-
-Rough Notation integrates comes with the `v-mark` directive.
-
-#### Type
-
-`v-mark.underline` for Underline mark, `v-mark.circle` for Circle mark, etc. Default to `underline`
-
-#### Color
-
-`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
-
-#### Clicks
-
-`v-mark` works like `v-click` and will trigger after a click. Same as `v-click`, it allows you to pass a custom click value, like `v-mark="5"` or `v-mark="'+1'"`.
-
-#### Options
-
-Optionally you can pass an object to `v-mark` to specify the options, for example:
-
-```vue
-<span v-mark="{ at: 5, color: '#234', type: 'circle' }">
-Important text
-</span>
-```
-
-#### Preview
-
-<video src="https://github.com/slidevjs/slidev/assets/11247099/c840340c-0aa1-4cde-b228-e6c67e5f6879" rounded-lg shadow controls></video>
-
-## Motion
+## Motion {#motion}
 
 Slidev has [@vueuse/motion](https://motion.vueuse.org/) built-in. You can use the `v-motion` directive to any elements to apply motion to them. For example
 
@@ -365,11 +307,11 @@ The text `Slidev` will move from `-80px` to its original position when entering 
 
 > Before v0.48.9, you need to add `preload: false` to the slide's frontmatter to enable motion.
 
-### Motion with Clicks
+### Motion with Clicks {#motion-with-clicks}
 
 > Available since v0.48.9
 
-You can also trigger the motion by clicks. For example
+You can also trigger the motion by clicks:
 
 ```html
 <div
@@ -408,16 +350,14 @@ The meanings of variants:
 The variants will be combined according to the priority defined above.
 
 ::: warning
-Due to a Vue internal [bug](https://github.com/vuejs/core/issues/10295), currently **only** `v-click` to the same element of `v-motion` can control the motion animation. As a workaround, you can use something like `v-if="3 < $clicks"` to achieve the same effect.
+Due to a Vue internal [bug](https://github.com/vuejs/core/issues/10295), currently **only** `v-click` applied to the same element as `v-motion` can control the motion animation. As a workaround, you can use something like `v-if="3 < $clicks"` to achieve the same effect.
 :::
 
 Learn mode: [Demo](https://sli.dev/demo/starter/10) | [@vueuse/motion](https://motion.vueuse.org/) | [v-motion](https://motion.vueuse.org/features/directive-usage) | [Presets](https://motion.vueuse.org/features/presets)
 
-## Slide Transitions
+## Slide Transitions {#slide-transitions}
 
 <div id="pages-transitions" />
-
-> Available since v0.39.0
 
 Slidev supports slide transitions out of the box. You can enable it by setting the `transition` frontmatter option:
 
@@ -427,9 +367,9 @@ transition: slide-left
 ---
 ```
 
-This will give you a nice sliding effects on slide switching. Setting it in the frontmatter will apply to all slides. You can also set different transitions per slide.
+This will give you a nice sliding effects on slide switching. Setting it in the headmatter will apply this to all slides. You can also set different transitions per slide in frontmatters.
 
-### Builtin Transitions
+### Builtin Transitions {#builtin-transitions}
 
 - `fade` - Crossfade in/out
 - `fade-out` - Fade out and then fade in
@@ -437,13 +377,11 @@ This will give you a nice sliding effects on slide switching. Setting it in the 
 - `slide-right` - Slides to the right (slide to left when going backward)
 - `slide-up` - Slides to the top (slide to bottom when going backward)
 - `slide-down` - Slides to the bottom (slide to top when going backward)
-- `view-transition` - Slides with the view transitions API
+- `view-transition` - Via the view transitions API
 
-### View Transitions
+### View Transition API {#view-transitions}
 
-> Available since v0.43.0
-
-The **View Transitions API** provides a mechanism for easily creating animated transitions between different DOM states. Learn more how it works in [View Transitions API - MDN Web Docs - Mozilla](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
+The View Transitions API provides a mechanism for easily creating animated transitions between different DOM states. Learn more about it in [View Transitions API - MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API).
 
 :::warning
 Experimental: This is not supported by all browsers. Check the [Browser compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API#browser_compatibility) carefully before using this.
@@ -466,7 +404,7 @@ mdc: true
 # View Transition {.inline-block.view-transition-title}
 ```
 
-### Custom Transitions
+### Custom Transitions {#custom-transitions}
 
 Slidev's slide transitions are powered by [Vue Transition](https://vuejs.org/guide/built-ins/transition.html). You can provide your custom transitions by:
 
@@ -492,7 +430,7 @@ and then in your custom stylesheets:
 
 Learn more about how it works in [Vue Transition](https://vuejs.org/guide/built-ins/transition.html).
 
-### Forward & Backward Transitions
+### Forward & Backward Transitions {#forward-backward-transitions}
 
 You can specify different transitions for forward and backward navigation using `|` as a separator in the transition name:
 
@@ -504,7 +442,7 @@ transition: go-forward | go-backward
 
 With this, when you go from slide 1 to slide 2, the `go-forward` transition will be applied. When you go from slide 2 to slide 1, the `go-backward` transition will be applied.
 
-### Advanced Usage
+### Advanced Usage {#advanced-usage}
 
 The `transition` field accepts an option that will passed to the [`<TransitionGroup>`](https://vuejs.org/api/built-in-components.html#transition) component. For example:
 

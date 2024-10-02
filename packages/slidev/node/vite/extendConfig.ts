@@ -5,79 +5,53 @@ import { mergeConfig } from 'vite'
 import { slash, uniq } from '@antfu/utils'
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
-import { getIndexHtml } from '../commands/shared'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
-  '@shikijs/monaco',
-  '@shikijs/vitepress-twoslash/client',
-  '@slidev/rough-notation',
   '@typescript/ata',
-  '@unhead/vue',
-  'drauu',
   'file-saver',
-  'floating-vue',
-  'fuse.js',
   'lz-string',
   'prettier',
   'recordrtc',
   'typescript',
-  'vue-router',
   'yaml',
-  'shiki-magic-move/vue',
 ]
 
-const INCLUDE_LOCAL = [
-  ...INCLUDE_GLOBAL,
+const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
 
-  'codemirror',
-  'codemirror/mode/javascript/javascript',
-  'codemirror/mode/css/css',
-  'codemirror/mode/markdown/markdown',
-  'codemirror/mode/xml/xml',
-  'codemirror/mode/htmlmixed/htmlmixed',
-  'codemirror/addon/display/placeholder',
-
-  'monaco-editor',
-  'monaco-editor/esm/vs/platform/contextview/browser/contextViewService',
-  'monaco-editor/esm/vs/platform/instantiation/common/descriptors',
-  'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices',
-].map(i => `@slidev/cli > @slidev/client > ${i}`)
-
+// @keep-sorted
 const EXCLUDE_GLOBAL = [
-  '@slidev/types',
+  '@antfu/utils',
+  '@shikijs/monaco',
+  '@shikijs/vitepress-twoslash/client',
   '@slidev/client',
   '@slidev/client/constants',
+  '@slidev/client/context',
   '@slidev/client/logic/dark',
-  '@antfu/utils',
+  '@slidev/parser',
+  '@slidev/parser/core',
+  '@slidev/rough-notation',
+  '@slidev/types',
+  '@unhead/vue',
+  '@unocss/reset',
   '@vueuse/core',
   '@vueuse/math',
-  '@vueuse/shared',
   '@vueuse/motion',
-  '@unocss/reset',
+  '@vueuse/shared',
+  'drauu',
+  'floating-vue',
+  'fuse.js',
   'mermaid',
+  'monaco-editor',
+  'shiki-magic-move/vue',
+  'shiki',
+  'shiki/core',
   'vue-demi',
+  'vue-router',
   'vue',
 ]
 
-const EXCLUDE_LOCAL = [
-  ...EXCLUDE_GLOBAL,
-  ...[
-    '@slidev/client',
-    '@slidev/client/constants',
-    '@slidev/client/logic/dark',
-    '@slidev/client > @antfu/utils',
-    '@slidev/client > @slidev/types',
-    '@slidev/client > @vueuse/core',
-    '@slidev/client > @vueuse/math',
-    '@slidev/client > @vueuse/shared',
-    '@slidev/client > @vueuse/motion',
-    '@slidev/client > @unocss/reset',
-    '@slidev/client > mermaid',
-    '@slidev/client > vue-demi',
-    '@slidev/client > vue',
-  ].map(i => `@slidev/cli > ${i}`),
-]
+const EXCLUDE_LOCAL = EXCLUDE_GLOBAL
 
 const ASYNC_MODULES = [
   'file-saver',
@@ -130,19 +104,17 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               include: INCLUDE_GLOBAL,
             }
           : {
-            // We need to specify the full deps path for non-hoisted modules
+              // We need to specify the full deps path for non-hoisted modules
               exclude: EXCLUDE_LOCAL,
               include: INCLUDE_LOCAL,
             },
-        css: options.data.config.css === 'unocss'
-          ? {
-              postcss: {
-                plugins: [
-                  await import('postcss-nested').then(r => (r.default || r)()) as any,
-                ],
-              },
-            }
-          : {},
+        css: {
+          postcss: {
+            plugins: [
+              await import('postcss-nested').then(r => (r.default || r)()) as any,
+            ],
+          },
+        },
         server: {
           fs: {
             strict: true,
@@ -224,7 +196,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           if (req.url!.endsWith('.html')) {
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
-            res.end(await getIndexHtml(options))
+            res.end(options.utils.indexHtml)
             return
           }
           next()
@@ -245,6 +217,7 @@ export function getDefine(options: ResolvedSlidevOptions): Record<string, string
     __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),
     __SLIDEV_FEATURE_PRESENTER__: JSON.stringify(options.data.config.presenter === true || options.data.config.presenter === options.mode),
     __SLIDEV_FEATURE_PRINT__: JSON.stringify(options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download))),
+    __SLIDEV_FEATURE_WAKE_LOCK__: JSON.stringify(options.data.config.wakeLock === true || options.data.config.wakeLock === options.mode),
     __SLIDEV_HAS_SERVER__: options.mode !== 'build' ? 'true' : 'false',
   }
 }

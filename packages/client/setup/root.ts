@@ -21,7 +21,7 @@ export default function setupRoot() {
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   })
-  app.provide(injectionRenderContext, ref('none'))
+  app.provide(injectionRenderContext, ref('none' as const))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))
@@ -67,10 +67,12 @@ export default function setupRoot() {
     if (isPresenter.value) {
       patch('page', +currentSlideNo.value)
       patch('clicks', clicksContext.value.current)
+      patch('clicksTotal', clicksContext.value.total)
     }
     else {
       patch('viewerPage', +currentSlideNo.value)
       patch('viewerClicks', clicksContext.value.current)
+      patch('viewerClicksTotal', clicksContext.value.total)
     }
 
     patch('lastUpdate', {

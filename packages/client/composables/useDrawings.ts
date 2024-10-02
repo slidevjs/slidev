@@ -2,7 +2,7 @@ import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import type { Brush, Options as DrauuOptions, DrawingMode } from 'drauu'
 import { createDrauu } from 'drauu'
 import { createSharedComposable, toReactive, useLocalStorage } from '@vueuse/core'
-import { drawingState, onPatch, patch } from '../state/drawings'
+import { drawingState, onPatchDrawingState, patchDrawingState } from '../state/drawings'
 import { configs } from '../env'
 import { isInputting } from '../state'
 import { useNav } from './useNav'
@@ -67,7 +67,7 @@ export const useDrawings = createSharedComposable(() => {
   function clearDrauu() {
     drauu.clear()
     if (syncUp.value)
-      patch(currentSlideNo.value, '')
+      patchDrawingState(currentSlideNo.value, '')
   }
 
   function updateState() {
@@ -93,11 +93,11 @@ export const useDrawings = createSharedComposable(() => {
       const dump = drauu.dump()
       const key = currentSlideNo.value
       if ((drawingState[key] || '') !== dump && syncUp.value)
-        patch(key, drauu.dump())
+        patchDrawingState(key, drauu.dump())
     }
   })
 
-  onPatch((state) => {
+  onPatchDrawingState((state) => {
     disableDump = true
     if (state[currentSlideNo.value] != null)
       drauu.load(state[currentSlideNo.value] || '')

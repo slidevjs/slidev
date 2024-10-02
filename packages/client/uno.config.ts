@@ -1,8 +1,6 @@
-import { fileURLToPath } from 'node:url'
 import {
   defineConfig,
   presetAttributify,
-  presetIcons,
   presetTypography,
   presetUno,
   transformerDirectives,
@@ -40,10 +38,8 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
-    presetIcons({
-      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
-    }),
     presetTypography(),
+    /* Preset Icons is added in ../node/setups/unocss.ts */
   ],
   transformers: [
     transformerDirectives({ enforce: 'pre' }),

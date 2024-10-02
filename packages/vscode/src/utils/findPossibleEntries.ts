@@ -9,7 +9,6 @@ export async function findPossibleEntries() {
     .map(uri => slash(uri.fsPath))
     .filter(path => !projects.has(path))
     .filter(path => ![
-      'readme.md',
       'code_of_conduct.md',
       'contributing.md',
       'license.md',

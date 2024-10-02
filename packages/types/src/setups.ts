@@ -2,13 +2,14 @@ import type { Awaitable } from '@antfu/utils'
 import type * as monaco from 'monaco-editor'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { RouteRecordRaw, Router } from 'vue-router'
-import type mermaid from 'mermaid'
 import type { KatexOptions } from 'katex'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
+import type { MermaidConfig } from 'mermaid'
 import type { SlidevPreparserExtension } from './types'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
+import type { MarkdownTransformer } from './transform'
 
 export interface AppContext {
   app: App
@@ -18,8 +19,6 @@ export interface AppContext {
 export interface MonacoSetupReturn {
   editorOptions?: monaco.editor.IEditorOptions
 }
-
-export type MermaidOptions = (typeof mermaid.initialize) extends (a: infer A) => any ? A : never
 
 export interface NavOperations {
   next: () => void
@@ -63,22 +62,30 @@ export type ShikiSetupReturn =
     }
   >
 
+export interface TransformersSetupReturn {
+  pre: (MarkdownTransformer | false)[]
+  preCodeblock: (MarkdownTransformer | false)[]
+  postCodeblock: (MarkdownTransformer | false)[]
+  post: (MarkdownTransformer | false)[]
+}
+
 // node side
 export type ShikiSetup = (shiki: ShikiContext) => Awaitable<ShikiSetupReturn | void>
 export type KatexSetup = () => Awaitable<Partial<KatexOptions> | void>
 export type UnoSetup = () => Awaitable<Partial<UnoCssConfig> | void>
+export type TransformersSetup = () => Awaitable<Partial<TransformersSetupReturn>>
 export type PreparserSetup = (context: {
   filepath: string
   headmatter: Record<string, unknown>
   mode?: string
-}) => SlidevPreparserExtension[]
+}) => Awaitable<SlidevPreparserExtension[]>
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
 export type AppSetup = (context: AppContext) => Awaitable<void>
 export type RootSetup = () => Awaitable<void>
 export type RoutesSetup = (routes: RouteRecordRaw[]) => RouteRecordRaw[]
-export type MermaidSetup = () => Partial<MermaidOptions> | void
+export type MermaidSetup = () => Awaitable<Partial<MermaidConfig> | void>
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>
 export type ContextMenuSetup = (items: ComputedRef<ContextMenuItem[]>) => ComputedRef<ContextMenuItem[]>
@@ -96,6 +103,7 @@ export const defineRoutesSetup = defineSetup<RoutesSetup>
 export const defineMermaidSetup = defineSetup<MermaidSetup>
 export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
+export const defineTransformersSetup = defineSetup<TransformersSetup>
 export const definePreparserSetup = defineSetup<PreparserSetup>
 export const defineCodeRunnersSetup = defineSetup<CodeRunnersSetup>
 export const defineContextMenuSetup = defineSetup<ContextMenuSetup>
