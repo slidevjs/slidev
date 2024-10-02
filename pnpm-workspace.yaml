@@ -13,7 +13,7 @@ catalog:
   '@iconify-json/ph': ^1.2.0
   '@iconify-json/ri': ^1.2.0
   '@iconify-json/svg-spinners': ^1.2.0
-  '@iconify/json': ^2.2.254
+  '@iconify/json': ^2.2.255
   '@lillallol/outline-pdf': ^4.0.0
   '@shikijs/markdown-it': ^1.21.0
   '@shikijs/monaco': ^1.21.0
@@ -39,9 +39,9 @@ catalog:
   '@types/semver': ^7.5.8
   '@types/yargs': ^17.0.33
   '@typescript/ata': ^0.9.7
-  '@unhead/vue': ^1.11.6
-  '@unocss/extractor-mdc': ^0.63.1
-  '@unocss/reset': ^0.63.1
+  '@unhead/vue': ^1.11.7
+  '@unocss/extractor-mdc': ^0.63.2
+  '@unocss/reset': ^0.63.2
   '@vitejs/plugin-vue': ^5.1.4
   '@vitejs/plugin-vue-jsx': ^4.0.1
   '@volar/language-server': ~2.4.5
@@ -73,7 +73,7 @@ catalog:
   html-to-image: ^1.11.11
   htmlparser2: ^9.1.0
   is-installed-globally: ^1.0.0
-  jiti: ^2.0.0
+  jiti: ^2.1.0
   katex: ^0.16.11
   kolorist: ^1.8.0
   lint-staged: ^15.2.10
@@ -108,7 +108,7 @@ catalog:
   rimraf: ^6.0.1
   semver: ^7.6.3
   shiki: ^1.21.0
-  shiki-magic-move: ^0.4.4
+  shiki-magic-move: ^0.4.5
   simple-git-hooks: ^2.11.1
   sirv: ^2.0.4
   source-map-js: ^1.2.1
@@ -119,7 +119,7 @@ catalog:
   tsup: ^8.3.0
   typeit: 8.1.0
   typescript: ^5.6.2
-  unocss: ^0.63.1
+  unocss: ^0.63.2
   unplugin-icons: ^0.19.3
   unplugin-vue-components: ^0.27.4
   unplugin-vue-markdown: ^0.26.2
