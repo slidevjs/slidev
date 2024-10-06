@@ -28,7 +28,7 @@ export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-rabbit',
     name: 'slidev-addon-rabbit',
-    description: 'Presentation time management for slidev inspired by Rabbit.',
+    description: 'Presentation time management for Slidev inspired by Rabbit',
     author: {
       name: 'kaakaa',
       link: 'https://github.com/kaakaa',
