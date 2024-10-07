@@ -222,7 +222,7 @@ export const showcases: ShowCaseInfo[] = [
     },
     at: 'FOSSASIA Summit 2024',
     slidesLink: 'https://talk.quan.hoabinh.vn/rust-error-handling-ease-web-dev/',
-    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev.git',
+    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev',
     cover: 'https://i.imgur.com/2eBJofY.png',
     datetime: '2024-04-10',
   },
