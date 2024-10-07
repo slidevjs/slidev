@@ -25,6 +25,16 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
   },
+  {
+    id: 'slidev-addon-rabbit',
+    name: 'slidev-addon-rabbit',
+    description: 'Presentation time management for Slidev inspired by Rabbit',
+    author: {
+      name: 'kaakaa',
+      link: 'https://github.com/kaakaa',
+    },
+    repo: 'https://github.com/kaakaa/slidev-addon-rabbit',
+  },
   // Add yours here!
   {
     id: '',
