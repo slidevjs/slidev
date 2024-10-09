@@ -25,6 +25,76 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
   },
+  {
+    id: 'slidev-addon-sync',
+    name: 'slidev-addon-sync',
+    description: 'Sync component for Slidev build that uses a SSE or WS server',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-addon-sync',
+  },
+  {
+    id: 'slidev-component-pager',
+    name: 'slidev-component-pager',
+    description: 'Show current page and total page number',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-pager',
+  },
+  {
+    id: 'slidev-component-poll',
+    name: 'slidev-component-poll',
+    description: 'Poll and Quiz components for Slidev',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-poll',
+  },
+  {
+    id: 'slidev-component-progress',
+    name: 'slidev-component-progress',
+    description: 'Show interactive progress bar for Slidev',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-progress',
+  },
+  {
+    id: 'slidev-component-scroll',
+    name: 'slidev-component-scroll',
+    description: 'Use mouse wheel for navigating',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-scroll',
+  },
+  {
+    id: 'slidev-component-spotlight',
+    name: 'slidev-component-spotlight',
+    description: 'Activate a spotlight to highlight a specific region by holding a key',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-spotlight',
+  },
+  {
+    id: 'slidev-component-zoom',
+    name: 'slidev-component-zoom',
+    description: 'Allow zooming inside the slides',
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/lidev-component-zoom',
+  },
   // Add yours here!
   {
     id: '',
