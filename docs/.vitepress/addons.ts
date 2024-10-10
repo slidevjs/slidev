@@ -28,7 +28,7 @@ export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-sync',
     name: 'slidev-addon-sync',
-    description: 'Sync component for Slidev build that uses a SSE or WS server',
+    description: 'Sync component for Slidev static build that uses a SSE or WS server',
     author: {
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
@@ -43,7 +43,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-pager',
+    repo: 'https://github.com/Smile-SA/slidev-component-pager',
   },
   {
     id: 'slidev-component-poll',
@@ -53,7 +53,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-poll',
+    repo: 'https://github.com/Smile-SA/slidev-component-poll',
   },
   {
     id: 'slidev-component-progress',
@@ -63,7 +63,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-progress',
+    repo: 'https://github.com/Smile-SA/slidev-component-progress',
   },
   {
     id: 'slidev-component-scroll',
@@ -73,7 +73,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-scroll',
+    repo: 'https://github.com/Smile-SA/slidev-component-scroll',
   },
   {
     id: 'slidev-component-spotlight',
@@ -83,7 +83,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-spotlight',
+    repo: 'https://github.com/Smile-SA/slidev-component-spotlight',
   },
   {
     id: 'slidev-component-zoom',
@@ -93,7 +93,7 @@ export const community: AddonInfo[] = [
       name: 'Tony Cabaye',
       link: 'https://github.com/tonai',
     },
-    repo: 'https://github.com/Smile-SA/lidev-component-zoom',
+    repo: 'https://github.com/Smile-SA/slidev-component-zoom',
   },
   // Add yours here!
   {
