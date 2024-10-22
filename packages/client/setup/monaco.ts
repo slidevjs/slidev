@@ -51,14 +51,13 @@ class ContextViewService2 extends ContextViewService {
   }
 }
 
+// Initialize services first, otherwise we can't override them.
+StandaloneServices.initialize({
+  contextViewService: new SyncDescriptor(ContextViewService2, [], true),
+})
+
 const setup = createSingletonPromise(async () => {
-  // Initialize services first, otherwise we can't override them.
-  StandaloneServices.initialize({
-    contextViewService: new SyncDescriptor(ContextViewService2, [], true),
-  })
-
   const defaults = monaco.languages.typescript.typescriptDefaults
-
   defaults.setCompilerOptions({
     ...defaults.getCompilerOptions(),
     strict: true,
