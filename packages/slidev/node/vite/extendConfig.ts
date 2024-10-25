@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { slash, uniq } from '@antfu/utils'
 import { createResolve } from 'mlly'
+import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
 const INCLUDE_GLOBAL = [
@@ -67,7 +68,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   })
   return {
     name: 'slidev:config',
-    async config() {
+    async config(config) {
       const injection: UserConfig = {
         define: options.utils.define,
         resolve: {
@@ -183,7 +184,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
       // }
 
-      return injection
+      return mergeConfig(injection, config)
     },
     configureServer(server) {
       // serve our index.html after vite history fallback
