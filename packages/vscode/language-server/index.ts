@@ -1,7 +1,7 @@
 import { createConnection, createServer, createSimpleProject } from '@volar/language-server/node'
-import { create as createYamlService } from './volar-service-yaml'
 import { slidevLanguagePlugin } from './languagePlugin'
 import { create as createPrettierService } from './prettierService'
+import { create as createYamlService } from './volar-service-yaml'
 
 const connection = createConnection()
 const server = createServer(connection)

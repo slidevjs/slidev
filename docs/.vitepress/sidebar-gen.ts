@@ -1,7 +1,7 @@
-import { fileURLToPath } from 'node:url'
-import { join } from 'node:path'
-import fg from 'fast-glob'
 import type { DefaultTheme } from 'vitepress'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import fg from 'fast-glob'
 import graymatter from 'gray-matter'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))

@@ -65,7 +65,8 @@ context('Basic', () => {
 
     cy.get('body')
       .type('{DownArrow}')
-      .url().should('eq', `${BASE}/6`)
+      .url()
+      .should('eq', `${BASE}/6`)
 
     cy.rightArrow()
 
@@ -75,7 +76,8 @@ context('Basic', () => {
 
     cy.get('body')
       .type('{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}{RightArrow}')
-      .url().should('eq', `${BASE}/7`)
+      .url()
+      .should('eq', `${BASE}/7`)
 
     cy.get('body')
       .type('{LeftArrow}')

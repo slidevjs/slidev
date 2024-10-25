@@ -1,7 +1,7 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { white, yellow } from 'kolorist'
 import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
 import { version } from '../../package.json'

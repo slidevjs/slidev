@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { RenderContext } from '@slidev/types'
-import { computed, ref } from 'vue'
 import { useElementVisibility } from '@vueuse/core'
-import { useSlideContext } from '../context'
+import { computed, ref } from 'vue'
 import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
 
 type Context = 'main' | 'visible' | 'print' | RenderContext
 

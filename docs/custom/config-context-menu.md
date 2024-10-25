@@ -10,8 +10,8 @@ Create `./setup/context-menu.ts` with the following content:
 
 ```ts twoslash
 // ---cut---
-import { defineContextMenuSetup } from '@slidev/types'
 import { useNav } from '@slidev/client'
+import { defineContextMenuSetup } from '@slidev/types'
 import { computed } from 'vue'
 // ---cut-start---
 // @ts-expect-error missing types

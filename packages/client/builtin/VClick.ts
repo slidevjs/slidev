@@ -5,7 +5,7 @@
  */
 
 import type { PropType, VNode } from 'vue'
-import { Text, defineComponent, h } from 'vue'
+import { defineComponent, h, Text } from 'vue'
 import { CLICKS_MAX } from '../constants'
 import VClicks from './VClicks'
 

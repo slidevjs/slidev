@@ -7,10 +7,10 @@ Usage:
 <TocList :list="list"/>
 -->
 <script setup lang="ts">
-import { computed } from 'vue'
-import { toArray } from '@antfu/utils'
 import type { TocItem } from '@slidev/types'
 import TitleRenderer from '#slidev/title-renderer'
+import { toArray } from '@antfu/utils'
+import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   level: number

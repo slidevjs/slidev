@@ -1,8 +1,8 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Plugin, UserConfig } from 'vite'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import type { Plugin, UserConfig } from 'vite'
 import { slash, uniq } from '@antfu/utils'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { createResolve } from 'mlly'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
@@ -14,6 +14,7 @@ const INCLUDE_GLOBAL = [
   'recordrtc',
   'typescript',
   'yaml',
+  'html-to-image',
 ]
 
 const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)

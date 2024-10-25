@@ -1,7 +1,7 @@
+import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 import { slash } from '@antfu/utils'
-import type { LoadedSlidevData } from '@slidev/parser/fs'
 import { load } from '@slidev/parser/fs'
 import { computed, markRaw, onScopeDispose, reactive, ref, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
 import { window, workspace } from 'vscode'

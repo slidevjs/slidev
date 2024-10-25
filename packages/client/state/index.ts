@@ -1,7 +1,7 @@
+import type { DragElementState } from '../composables/useDragElements'
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
-import type { DragElementState } from '../composables/useDragElements'
 
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)

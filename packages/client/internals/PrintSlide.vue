@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import { useFixedNav, useNav } from '../composables/useNav'
 import { createFixedClicks } from '../composables/useClicks'
+import { useFixedNav, useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
 import PrintSlideClick from './PrintSlideClick.vue'
 

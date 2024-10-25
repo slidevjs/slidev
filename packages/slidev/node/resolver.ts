@@ -1,16 +1,16 @@
-import { dirname, join, relative, resolve } from 'node:path'
+import type { RootsInfo } from '@slidev/types'
 import * as fs from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
+import { parseNi, run } from '@antfu/ni'
 import { ensurePrefix, slash } from '@antfu/utils'
+import globalDirs from 'global-directory'
+import { underline, yellow } from 'kolorist'
+import { resolvePath } from 'mlly'
+import prompts from 'prompts'
 import { resolveGlobal } from 'resolve-global'
 import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
-import { resolvePath } from 'mlly'
-import globalDirs from 'global-directory'
-import prompts from 'prompts'
-import { parseNi, run } from '@antfu/ni'
-import { underline, yellow } from 'kolorist'
-import type { RootsInfo } from '@slidev/types'
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 

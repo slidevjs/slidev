@@ -1,7 +1,7 @@
-import { parse } from '@slidev/parser'
 import type { TextDocument } from 'vscode'
-import { FoldingRangeKind, languages } from 'vscode'
+import { parse } from '@slidev/parser'
 import { createSingletonComposable, useDisposable, useEventEmitter, watch } from 'reactive-vscode'
+import { FoldingRangeKind, languages } from 'vscode'
 import { getProjectFromDoc } from '../composables/useProjectFromDoc'
 import { projects } from '../projects'
 

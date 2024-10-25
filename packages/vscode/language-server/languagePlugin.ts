@@ -1,7 +1,7 @@
-import type { LanguagePlugin, VirtualCode } from '@volar/language-core'
-import { parseSync } from '@slidev/parser'
-import type { URI } from 'vscode-uri'
 import type { SlidevMarkdown } from '@slidev/types'
+import type { LanguagePlugin, VirtualCode } from '@volar/language-core'
+import type { URI } from 'vscode-uri'
+import { parseSync } from '@slidev/parser'
 
 export const slidevLanguagePlugin: LanguagePlugin<URI> = {
   getLanguageId() {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { SelectionItem } from './types'
 import { computed } from 'vue'
-import { currentCamera, currentMic } from '../state'
 import {
   cameras,
   ensureDevicesListPermissions,
@@ -9,8 +9,8 @@ import {
   mimeType,
   supportedMimeTypes,
 } from '../logic/recording'
+import { currentCamera, currentMic } from '../state'
 import SelectList from './SelectList.vue'
-import type { SelectionItem } from './types'
 
 const camerasItems = computed<SelectionItem<string>[]>(() => [
   {

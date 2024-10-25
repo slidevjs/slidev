@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress'
 import { Tooltip } from 'floating-vue'
+import { withBase } from 'vitepress'
 import { computed } from 'vue'
 import { resolveLink } from '../../utils'
 

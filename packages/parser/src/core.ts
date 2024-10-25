@@ -1,6 +1,6 @@
-import YAML from 'yaml'
-import { ensurePrefix } from '@antfu/utils'
 import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import { ensurePrefix } from '@antfu/utils'
+import YAML from 'yaml'
 
 export interface SlidevParserOptions {
   noParseYAML?: boolean
@@ -80,6 +80,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
   let note: string | undefined
   const frontmatter = matterResult.data || {}
   let content = matterResult.content.trim()
+  const revision = hash(raw.trim())
 
   const comments = Array.from(content.matchAll(/<!--([\s\S]*?)-->/g))
   if (comments.length) {
@@ -107,6 +108,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     raw,
     title,
     level,
+    revision,
     content,
     frontmatter,
     frontmatterStyle: matterResult.type,
@@ -296,5 +298,14 @@ function scanMonacoReferencedMods(md: string) {
   }
 }
 
-export * from './utils'
+function hash(str: string) {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i)
+    hash |= 0
+  }
+  return hash.toString(36).slice(0, 12)
+}
+
 export * from './config'
+export * from './utils'

@@ -1,6 +1,6 @@
-import { clamp, sum } from '@antfu/utils'
 import type { ClicksContext, NormalizedRangeClickValue, NormalizedSingleClickValue, RawAtValue, RawSingleAtValue, SlideRoute } from '@slidev/types'
 import type { Ref } from 'vue'
+import { clamp, sum } from '@antfu/utils'
 import { computed, onMounted, onUnmounted, ref, shallowReactive } from 'vue'
 
 export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleClickValue {

@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest'
 import { createHighlighter } from 'shiki'
+import { expect, it } from 'vitest'
 import { transformMagicMove } from '../packages/slidev/node/syntax/transform/magic-move'
 import { createTransformContext } from './_tutils'
 

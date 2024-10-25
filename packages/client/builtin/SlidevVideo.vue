@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
 import { and } from '@vueuse/math'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useNav } from '../composables/useNav'
 import { useSlideContext } from '../context'
 import { resolvedClickMap } from '../modules/v-click'
-import { useNav } from '../composables/useNav'
 
 const props = defineProps<{
   autoplay?: boolean | 'once'

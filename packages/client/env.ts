@@ -1,6 +1,6 @@
-import { computed } from 'vue'
-import { objectMap } from '@antfu/utils'
 import configs from '#slidev/configs'
+import { objectMap } from '@antfu/utils'
+import { computed } from 'vue'
 
 export { configs }
 

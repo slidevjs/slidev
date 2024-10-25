@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue'
-import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { downloadPDF } from '../utils'
-import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
-import { configs } from '../env'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
-import Settings from './Settings.vue'
-import MenuButton from './MenuButton.vue'
-import VerticalDivider from './VerticalDivider.vue'
-import IconButton from './IconButton.vue'
-
 import CustomNavControls from '#slidev/custom-nav-controls'
+import { computed, ref, shallowRef } from 'vue'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
+import { configs } from '../env'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
+import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
+import { downloadPDF } from '../utils'
+import IconButton from './IconButton.vue'
+import MenuButton from './MenuButton.vue'
+import Settings from './Settings.vue'
+
+import VerticalDivider from './VerticalDivider.vue'
 
 const props = defineProps({
   persist: {

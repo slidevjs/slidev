@@ -1,5 +1,5 @@
-import { encode as encodePlantUml } from 'plantuml-encoder'
 import type { MarkdownTransformContext } from '@slidev/types'
+import { encode as encodePlantUml } from 'plantuml-encoder'
 
 export function transformPlantUml(ctx: MarkdownTransformContext) {
   const server = ctx.options.data.config.plantUmlServer

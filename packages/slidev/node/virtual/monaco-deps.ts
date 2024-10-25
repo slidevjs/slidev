@@ -1,6 +1,6 @@
+import type { VirtualModuleTemplate } from './types'
 import { resolve } from 'node:path'
 import { uniq } from '@antfu/utils'
-import type { VirtualModuleTemplate } from './types'
 
 export const templateMonacoRunDeps: VirtualModuleTemplate = {
   id: '/@slidev/monaco-run-deps',

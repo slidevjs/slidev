@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import Fuse from 'fuse.js'
-import { activeElement, showGotoDialog } from '../state'
-import { useNav } from '../composables/useNav'
 import TitleRenderer from '#slidev/title-renderer'
+import Fuse from 'fuse.js'
+import { computed, ref, watch } from 'vue'
+import { useNav } from '../composables/useNav'
+import { activeElement, showGotoDialog } from '../state'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()

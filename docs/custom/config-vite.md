@@ -51,8 +51,8 @@ See the [type declarations](https://github.com/slidevjs/slidev/blob/main/package
 It is not allowed to re-add plugins that has been used internally be Slidev. For example, instead of
 
 ```ts twoslash
-import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [

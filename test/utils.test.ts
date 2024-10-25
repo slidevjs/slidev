@@ -1,11 +1,11 @@
+import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
 import { relative, resolve } from 'node:path'
-import MarkdownIt from 'markdown-it'
 import { slash } from '@antfu/utils'
+import MarkdownIt from 'markdown-it'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
-import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
-import { getRoots } from '../packages/slidev/node/resolver'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
+import { getRoots } from '../packages/slidev/node/resolver'
 import { generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
 describe('utils', () => {

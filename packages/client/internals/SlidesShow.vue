@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { TransitionGroup, computed, shallowRef, watchEffect } from 'vue'
-import { recomputeAllPoppers } from 'floating-vue'
 import type { SlideRoute } from '@slidev/types'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
+import { recomputeAllPoppers } from 'floating-vue'
+import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
+import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
-import { skipTransition } from '../logic/hmr'
-import { createFixedClicks } from '../composables/useClicks'
-import { activeDragElement } from '../state'
 import { CLICKS_MAX } from '../constants'
-import SlideWrapper from './SlideWrapper.vue'
+import { skipTransition } from '../logic/hmr'
+import { activeDragElement } from '../state'
 import DragControl from './DragControl.vue'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
+import SlideWrapper from './SlideWrapper.vue'
 
 defineProps<{
   renderContext: 'slide' | 'presenter'

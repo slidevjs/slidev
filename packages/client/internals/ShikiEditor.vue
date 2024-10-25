@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
 import { getHighlighter } from '#slidev/shiki'
+import { ref, shallowRef } from 'vue'
 
 const props = defineProps<{
   placeholder?: string

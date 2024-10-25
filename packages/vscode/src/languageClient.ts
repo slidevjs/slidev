@@ -1,5 +1,5 @@
-import { createLabsInfo } from '@volar/vscode'
 import type { ServerOptions } from '@volar/vscode/node'
+import { createLabsInfo } from '@volar/vscode'
 import { LanguageClient, TransportKind } from '@volar/vscode/node'
 import { computed, extensionContext, watch } from 'reactive-vscode'
 import { Uri, window } from 'vscode'

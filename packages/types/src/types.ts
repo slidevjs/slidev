@@ -1,11 +1,12 @@
+import type { Component } from 'vue'
 import type { RouteComponent, RouteMeta } from 'vue-router'
 import type YAML from 'yaml'
-import type { Component } from 'vue'
 import type { SlidevConfig } from './config'
 
 export type FrontmatterStyle = 'frontmatter' | 'yaml'
 
 export interface SlideInfoBase {
+  revision: string
   frontmatter: Record<string, any>
   content: string
   frontmatterRaw?: string
@@ -72,7 +73,7 @@ export type SlidePatch = Partial<Pick<SlideInfoBase, 'content' | 'note' | 'front
 export interface SlidevThemeMeta {
   defaults?: Partial<SlidevConfig>
   colorSchema?: 'dark' | 'light' | 'both'
-  highlighter?: 'prism' | 'shiki' | 'both'
+  highlighter?: 'shiki'
 }
 
 export type SlidevThemeConfig = Record<string, string | number>

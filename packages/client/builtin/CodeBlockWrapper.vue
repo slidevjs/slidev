@@ -12,13 +12,13 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
+import type { PropType } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import type { PropType } from 'vue'
-import { configs } from '../env'
-import { makeId, updateCodeHighlightRange } from '../logic/utils'
 import { CLASS_VCLICK_HIDDEN, CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
+import { configs } from '../env'
+import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
 const props = defineProps({
   ranges: {

@@ -40,8 +40,6 @@ export:
   dark: false
   withClicks: false
   withToc: false
-# syntax highlighter, can be 'prism', 'shiki'
-highlighter: shiki
 # enable twoslash, can be boolean, 'dev' or 'build'
 twoslash: true
 # show line numbers in code blocks
@@ -64,6 +62,8 @@ record: dev
 contextMenu: true
 # enable wake lock, can be boolean, 'dev' or 'build'
 wakeLock: true
+# take snapshot for each slide in the overview
+overviewSnapshots: false
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto

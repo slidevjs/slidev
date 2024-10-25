@@ -14,9 +14,9 @@ import { createMonacoTypesLoader } from './monacoTypes'
 import { createMonacoWriterPlugin } from './monacoWrite'
 import { createRemoteAssetsPlugin } from './remoteAssets'
 import { createServerRefPlugin } from './serverRef'
+import { createStaticCopyPlugin } from './staticCopy'
 import { createUnocssPlugin } from './unocss'
 import { createVuePlugin } from './vue'
-import { createStaticCopyPlugin } from './staticCopy'
 
 export function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,

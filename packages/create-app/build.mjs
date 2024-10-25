@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import fs from 'fs-extra'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))

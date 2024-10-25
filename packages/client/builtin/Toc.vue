@@ -8,8 +8,8 @@ Usage:
 <Toc columns='2' maxDepth='3' mode='onlySiblings'/>
 -->
 <script setup lang='ts'>
-import { computed } from 'vue'
 import type { TocItem } from '@slidev/types'
+import { computed } from 'vue'
 import { useSlideContext } from '../context'
 import TocList from './TocList.vue'
 

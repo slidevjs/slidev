@@ -1,9 +1,9 @@
+import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 import { basename, relative, resolve } from 'node:path'
+import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { objectMap, slash } from '@antfu/utils'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
-import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 
 function configDiff(v: SlidevConfig) {
   const defaults = getDefaultConfig()

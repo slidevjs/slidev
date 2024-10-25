@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { SelectionItem } from './types'
 import { useWakeLock } from '@vueuse/core'
 import { slideScale, wakeLockEnabled } from '../state'
 import SelectList from './SelectList.vue'
-import type { SelectionItem } from './types'
 
 const scaleItems: SelectionItem<number>[] = [
   {

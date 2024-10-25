@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { computed, ref, watch } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { slidesTitle } from '../env'
-import { sharedState } from '../state/shared'
-import { fullscreen } from '../state'
-
-import NoteDisplay from '../internals/NoteDisplay.vue'
-import IconButton from '../internals/IconButton.vue'
-import ClicksSlider from '../internals/ClicksSlider.vue'
-import { useNav } from '../composables/useNav'
+import { computed, ref, watch } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
+import { useNav } from '../composables/useNav'
+import { slidesTitle } from '../env'
+
+import ClicksSlider from '../internals/ClicksSlider.vue'
+import IconButton from '../internals/IconButton.vue'
+import NoteDisplay from '../internals/NoteDisplay.vue'
+import { fullscreen } from '../state'
+import { sharedState } from '../state/shared'
 
 useHead({ title: `Notes - ${slidesTitle}` })
 

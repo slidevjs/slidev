@@ -4,8 +4,8 @@
  * Learn more: https://sli.dev/guide/animations.html#click-animation
  */
 
-import { toArray } from '@antfu/utils'
 import type { VNode, VNodeArrayChildren } from 'vue'
+import { toArray } from '@antfu/utils'
 import { Comment, createVNode, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
 import { normalizeSingleAtValue } from '../composables/useClicks'
 import VClickGap from './VClickGap.vue'

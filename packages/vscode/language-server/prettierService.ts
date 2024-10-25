@@ -1,5 +1,5 @@
-import { create as createPrettierPlugin } from 'volar-service-prettier'
 import prettier from 'prettier'
+import { create as createPrettierPlugin } from 'volar-service-prettier'
 
 export function create() {
   return createPrettierPlugin(

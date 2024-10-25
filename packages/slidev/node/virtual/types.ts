@@ -1,6 +1,6 @@
 import type { Awaitable } from '@antfu/utils'
-import type { PluginContext } from 'rollup'
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { PluginContext } from 'rollup'
 
 export interface VirtualModuleTemplate {
   id: string

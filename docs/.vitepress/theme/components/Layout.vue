@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme'
 import { Dropdown } from 'floating-vue'
 import { useRoute } from 'vitepress'
 import VPMenuLink from 'vitepress/dist/client/theme-default/components/VPMenuLink.vue'
+import DefaultTheme from 'vitepress/theme'
 import FeatureTag from './FeatureTag.vue'
 
 const { Layout } = DefaultTheme

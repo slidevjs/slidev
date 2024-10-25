@@ -1,13 +1,13 @@
 import { defineExtension } from 'reactive-vscode'
 import { useCommands } from './commands'
+import { useLanguageClient } from './languageClient'
 import { activeEntry, useProjects } from './projects'
 import { useAnnotations } from './views/annotations'
 import { useFoldings } from './views/foldings'
 import { logger } from './views/logger'
 import { usePreviewWebview } from './views/previewWebview'
-import { useSlidesTree } from './views/slidesTree'
 import { useProjectsTree } from './views/projectsTree'
-import { useLanguageClient } from './languageClient'
+import { useSlidesTree } from './views/slidesTree'
 
 const { activate, deactivate } = defineExtension(() => {
   // states

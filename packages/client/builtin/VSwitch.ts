@@ -1,11 +1,11 @@
 import type { PropType, Ref, Slot, TransitionGroupProps, VNode } from 'vue'
-import { TransitionGroup, defineComponent, h, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { recomputeAllPoppers } from 'floating-vue'
-import { useSlideContext } from '../context'
-import { makeId } from '../logic/utils'
-import { resolveTransition } from '../logic/transition'
-import { skipTransition } from '../logic/hmr'
+import { defineComponent, h, onMounted, onUnmounted, ref, TransitionGroup, watchEffect } from 'vue'
 import { CLASS_VCLICK_CURRENT, CLASS_VCLICK_DISPLAY_NONE, CLASS_VCLICK_PRIOR, CLASS_VCLICK_TARGET, CLICKS_MAX } from '../constants'
+import { useSlideContext } from '../context'
+import { skipTransition } from '../logic/hmr'
+import { resolveTransition } from '../logic/transition'
+import { makeId } from '../logic/utils'
 
 export default defineComponent({
   props: {

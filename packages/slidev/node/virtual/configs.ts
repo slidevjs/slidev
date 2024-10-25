@@ -1,6 +1,6 @@
+import type { VirtualModuleTemplate } from './types'
 import { isString } from '@antfu/utils'
 import { getSlideTitle, sharedMd } from '../commands/shared'
-import type { VirtualModuleTemplate } from './types'
 
 export const templateConfigs: VirtualModuleTemplate = {
   id: '/@slidev/configs',

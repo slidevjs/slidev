@@ -1,10 +1,10 @@
-import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import type { Brush, Options as DrauuOptions, DrawingMode } from 'drauu'
-import { createDrauu } from 'drauu'
 import { createSharedComposable, toReactive, useLocalStorage } from '@vueuse/core'
-import { drawingState, onPatchDrawingState, patchDrawingState } from '../state/drawings'
+import { createDrauu } from 'drauu'
+import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import { configs } from '../env'
 import { isInputting } from '../state'
+import { drawingState, onPatchDrawingState, patchDrawingState } from '../state/drawings'
 import { useNav } from './useNav'
 
 export const useDrawings = createSharedComposable(() => {

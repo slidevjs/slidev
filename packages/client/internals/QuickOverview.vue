@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { breakpoints, showOverview, windowSize } from '../state'
-import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import { pathPrefix } from '../env'
-import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import { CLICKS_MAX } from '../constants'
+import { configs, pathPrefix } from '../env'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { breakpoints, showOverview, windowSize } from '../state'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
+import SlideContainer from './SlideContainer.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 const { currentSlideNo, go: goSlide, slides } = useNav()
 
@@ -128,6 +128,8 @@ watchEffect(() => {
           >
             <SlideContainer
               :key="route.no"
+              :no="route.no"
+              :use-snapshot="configs.overviewSnapshots"
               :width="cardWidth"
               class="pointer-events-none"
             >
