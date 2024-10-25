@@ -170,6 +170,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
           },
         },
+        cacheDir: isInstalledGlobally.value ? join(options.cliRoot, 'node_modules/.vite') : undefined,
       }
 
       function isSlidevClient(id: string) {
@@ -181,11 +182,6 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       //   if (nodeModuelsMatch.length)
       //     return nodeModuelsMatch[nodeModuelsMatch.length - 1][1]
       // }
-
-      if (isInstalledGlobally.value) {
-        injection.cacheDir = join(options.cliRoot, 'node_modules/.vite')
-        injection.root = options.cliRoot
-      }
 
       return injection
     },
