@@ -15,7 +15,7 @@ export async function createRemoteAssetsPlugin(
     rules: [
       ...DefaultRules,
       {
-        match: /\b(https?:\/\/cover\.sli\.dev.*?)(?=[`'")\]])/gi,
+        match: /\b(https?:\/\/image.unsplash\.com.*?)(?=[`'")\]])/gi,
         ext: '.png',
       },
       ...pluginOptions.remoteAssets?.rules ?? [],
