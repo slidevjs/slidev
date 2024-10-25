@@ -38,7 +38,8 @@ if (__SLIDEV_FEATURE_WAKE_LOCK__)
   useWakeLock()
 
 if (import.meta.hot) {
-  useStyleTag(computed(() => `
+  useStyleTag(computed(() => showEditor.value
+    ? `
     vite-error-overlay {
       --width: calc(100vw - ${isEditorVertical.value ? 0 : editorWidth.value}px);
       --height: calc(100vh - ${isEditorVertical.value ? editorHeight.value : 0}px);
@@ -49,7 +50,8 @@ if (import.meta.hot) {
       height: calc(var(--height) / var(--slidev-slide-scale));
       transform-origin: top left;
       transform: scale(var(--slidev-slide-scale));
-    }`,
+    }`
+    : '',
   ))
 }
 
