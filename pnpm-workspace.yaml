@@ -4,21 +4,21 @@ packages:
   - cypress/fixtures/*
   - docs
 catalog:
-  '@antfu/eslint-config': ^3.7.3
+  '@antfu/eslint-config': ^3.8.0
   '@antfu/ni': ^0.23.0
   '@antfu/utils': ^0.7.10
   '@hedgedoc/markdown-it-plugins': ^2.1.4
   '@iconify-json/carbon': ^1.2.3
   '@iconify-json/mdi': ^1.2.1
   '@iconify-json/ph': ^1.2.1
-  '@iconify-json/ri': ^1.2.1
+  '@iconify-json/ri': ^1.2.2
   '@iconify-json/svg-spinners': ^1.2.1
-  '@iconify/json': ^2.2.261
+  '@iconify/json': ^2.2.263
   '@lillallol/outline-pdf': ^4.0.0
-  '@shikijs/markdown-it': ^1.22.0
-  '@shikijs/monaco': ^1.22.0
-  '@shikijs/twoslash': ^1.22.0
-  '@shikijs/vitepress-twoslash': ^1.22.0
+  '@shikijs/markdown-it': ^1.22.1
+  '@shikijs/monaco': ^1.22.1
+  '@shikijs/twoslash': ^1.22.1
+  '@shikijs/vitepress-twoslash': ^1.22.1
   '@slidev/rough-notation': ^0.1.0
   '@slidev/theme-default': ^0.25.0
   '@slidev/theme-seriph': ^0.25.0
@@ -31,7 +31,7 @@ catalog:
   '@types/katex': ^0.16.7
   '@types/markdown-it': ^14.1.2
   '@types/micromatch': ^4.0.9
-  '@types/node': ^22.7.5
+  '@types/node': ^22.8.1
   '@types/plantuml-encoder': ^1.4.2
   '@types/prompts': ^2.4.9
   '@types/recordrtc': ^5.6.14
@@ -40,12 +40,12 @@ catalog:
   '@types/yargs': ^17.0.33
   '@typescript/ata': ^0.9.7
   '@unhead/vue': ^1.11.10
-  '@unocss/extractor-mdc': ^0.63.4
-  '@unocss/reset': ^0.63.4
+  '@unocss/extractor-mdc': ^0.63.6
+  '@unocss/reset': ^0.63.6
   '@vitejs/plugin-vue': ^5.1.4
   '@vitejs/plugin-vue-jsx': ^4.0.1
-  '@volar/language-server': ~2.4.6
-  '@volar/vscode': ^2.4.6
+  '@volar/language-server': ~2.4.7
+  '@volar/vscode': ^2.4.7
   '@vue/compiler-sfc': ^3.5.12
   '@vueuse/core': ^11.1.0
   '@vueuse/math': ^11.1.0
@@ -55,10 +55,10 @@ catalog:
   cli-progress: ^3.12.0
   connect: ^3.7.0
   cross-env: ^7.0.3
-  cypress: ^13.15.0
+  cypress: ^13.15.1
   debug: ^4.3.7
   drauu: ^0.4.1
-  eslint: ^9.12.0
+  eslint: ^9.13.0
   eslint-plugin-format: ^0.1.2
   esno: ^4.8.0
   fast-deep-equal: ^3.1.3
