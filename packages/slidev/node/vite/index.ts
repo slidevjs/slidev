@@ -18,7 +18,7 @@ import { createStaticCopyPlugin } from './staticCopy'
 import { createUnocssPlugin } from './unocss'
 import { createVuePlugin } from './vue'
 
-export async function ViteSlidevPlugin(
+export function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions = {},
   serverOptions: SlidevServerOptions = {},

@@ -85,13 +85,12 @@ onMounted(() => {
     <slot name="controls" />
   </div>
   <!-- Image preview -->
-  <template v-else>
-    <img
-      :src="snapshot"
-      class="w-full object-cover"
-      :style="containerStyle"
-    >
-  </template>
+  <img
+    v-else
+    :src="snapshot"
+    class="w-full object-cover"
+    :style="containerStyle"
+  >
 </template>
 
 <style scoped lang="postcss">

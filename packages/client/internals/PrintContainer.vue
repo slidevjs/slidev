@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { parseRangeString } from '@slidev/parser/core'
+import { parseRangeString } from '@slidev/parser/utils'
 import { provideLocal } from '@vueuse/core'
 import { computed } from 'vue'
 import { useNav } from '../composables/useNav'

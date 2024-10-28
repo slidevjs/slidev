@@ -48,12 +48,13 @@ export async function createVuePlugin(
     exclude: [],
     ...vueOptions,
     template: {
+      ...vueOptions?.template,
       compilerOptions: {
+        ...vueOptions?.template?.compilerOptions,
         isCustomElement(tag) {
           return customElements.has(tag) || vueOptions?.template?.compilerOptions?.isCustomElement?.(tag)
         },
       },
-      ...vueOptions?.template,
     },
   })
   const VueJsxPlugin = VueJsx(vuejsxOptions)

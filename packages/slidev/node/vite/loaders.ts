@@ -1,4 +1,5 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevServerOptions } from '@slidev/types'
+import type { SlidevData } from 'packages/types'
 import type { LoadResult } from 'rollup'
 import type { Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
@@ -12,7 +13,7 @@ import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
 import { templateMonacoTypes } from '../virtual/monaco-types'
-import { templateSlides } from '../virtual/slides'
+import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
@@ -40,15 +41,29 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const hmrSlidesIndexes = new Set<number>()
-  let server: ViteDevServer | undefined
-
-  let skipHmr: { filePath: string, fileContent: string } | null = null
-
   const { data, mode, utils } = options
 
-  function getSourceId(index: number, type: 'md' | 'frontmatter') {
-    return `${data.slides[index].source.filepath}__slidev_${index + 1}.${type}`
+  const hmrSlidesIndexes = new Set<number>()
+  let server: ViteDevServer | undefined
+  let skipHmr: { filePath: string, fileContent: string } | null = null
+
+  interface ResolvedSourceIds {
+    md: string[]
+    frontmatter: string[]
+  }
+  let sourceIds = resolveSourceIds(data)
+
+  function resolveSourceIds(data: SlidevData) {
+    const ids: ResolvedSourceIds = {
+      md: [],
+      frontmatter: [],
+    }
+    for (const type of ['md', 'frontmatter'] as const) {
+      for (let i = 0; i < data.slides.length; i++) {
+        ids[type].push(`${data.slides[i].source.filepath}__slidev_${i + 1}.${type}`)
+      }
+    }
+    return ids
   }
 
   function updateServerWatcher() {
@@ -117,11 +132,11 @@ export function createSlidesLoader(
               fileContent,
             }
             server?.moduleGraph.invalidateModule(
-              server.moduleGraph.getModuleById(getSourceId(idx, 'md'))!,
+              server.moduleGraph.getModuleById(sourceIds.md[idx])!,
             )
             if (body.frontmatter) {
               server?.moduleGraph.invalidateModule(
-                server.moduleGraph.getModuleById(getSourceId(idx, 'frontmatter'))!,
+                server.moduleGraph.getModuleById(sourceIds.frontmatter[idx])!,
               )
             }
           }
@@ -158,9 +173,20 @@ export function createSlidesLoader(
 
       const moduleIds = new Set<string>()
 
+      const newSourceIds = resolveSourceIds(newData)
+      for (const type of ['md', 'frontmatter'] as const) {
+        const old = sourceIds[type]
+        const newIds = newSourceIds[type]
+        for (let i = 0; i < newIds.length; i++) {
+          if (old[i] !== newIds[i]) {
+            moduleIds.add(`${VIRTUAL_SLIDE_PREFIX}${i + 1}/${type}`)
+          }
+        }
+      }
+      sourceIds = newSourceIds
+
       if (data.slides.length !== newData.slides.length) {
         moduleIds.add(templateSlides.id)
-        range(newData.slides.length).map(i => hmrSlidesIndexes.add(i))
       }
 
       if (!equal(data.headmatter.defaults, newData.headmatter.defaults)) {
@@ -220,8 +246,8 @@ export function createSlidesLoader(
 
       const vueModules = Array.from(hmrSlidesIndexes)
         .flatMap((idx) => {
-          const frontmatter = ctx.server.moduleGraph.getModuleById(getSourceId(idx, 'frontmatter'))
-          const main = ctx.server.moduleGraph.getModuleById(getSourceId(idx, 'md'))
+          const frontmatter = ctx.server.moduleGraph.getModuleById(sourceIds.frontmatter[idx])
+          const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
           const styles = main ? [...main.clientImportedModules].find(m => m.id?.includes(`&type=style`)) : undefined
           return [
             frontmatter,
@@ -267,7 +293,7 @@ export function createSlidesLoader(
       if (matchFacade) {
         const [, no, type] = matchFacade
         const idx = +no - 1
-        const sourceId = JSON.stringify(getSourceId(idx, type as 'md' | 'frontmatter'))
+        const sourceId = JSON.stringify(sourceIds[type as 'md' | 'frontmatter'][idx])
         return [
           `export * from ${sourceId}`,
           `export { default } from ${sourceId}`,

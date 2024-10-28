@@ -6,7 +6,7 @@ import { regexSlideSourceId } from './common'
  */
 export function createHmrPatchPlugin(): Plugin {
   return {
-    name: 'slidev:slide-transform:post',
+    name: 'slidev:hmr-patch',
     transform(code, id) {
       if (!id.match(regexSlideSourceId))
         return

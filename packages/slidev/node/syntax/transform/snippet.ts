@@ -24,48 +24,44 @@ function dedent(text: string): string {
   return text
 }
 
-function testLine(
-  line: string,
-  regexp: RegExp,
-  regionName: string,
-  end: boolean = false,
-) {
-  const [full, tag, name] = regexp.exec(line.trim()) || []
-
-  return (
-    full
-    && tag
-    && name === regionName
-    && tag.match(end ? /^[Ee]nd ?[rR]egion$/ : /^[rR]egion$/)
-  )
-}
-
 function findRegion(lines: Array<string>, regionName: string) {
   const regionRegexps = [
-    /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/, // javascript, typescript, java
-    /^\/\* ?#((?:end)?region) ([\w*-]+) ?\*\/$/, // css, less, scss
-    /^#pragma ((?:end)?region) ([\w*-]+)$/, // C, C++
-    /^<!-- #?((?:end)?region) ([\w*-]+) -->$/, // HTML, markdown
-    /^#(End Region) ([\w*-]+)$/, // Visual Basic
-    /^::#(endregion) ([\w*-]+)$/, // Bat
-    /^# ?((?:end)?region) ([\w*-]+)$/, // C#, PHP, Powershell, Python, perl & misc
+    // javascript, typescript, java
+    [/^\/\/ ?#?region ([\w*-]+)$/, /^\/\/ ?#?endregion/],
+    // css, less, scss
+    [/^\/\* ?#region ([\w*-]+) ?\*\/$/, /^\/\* ?#endregion[\s\w*-]*\*\/$/],
+    // C, C++
+    [/^#pragma region ([\w*-]+)$/, /^#pragma endregion/],
+    // HTML, markdown
+    [/^<!-- #?region ([\w*-]+) -->$/, /^<!-- #?region[\s\w*-]*-->$/],
+    // Visual Basic
+    [/^#Region ([\w*-]+)$/, /^#End Region/],
+    // Bat
+    [/^::#region ([\w*-]+)$/, /^::#endregion/],
+    // C#, PHP, Powershell, Python, perl & misc
+    [/^# ?region ([\w*-]+)$/, /^# ?endregion/],
   ]
 
-  let regexp = null
+  let endReg = null
   let start = -1
 
   for (const [lineId, line] of lines.entries()) {
-    if (regexp === null) {
-      for (const reg of regionRegexps) {
-        if (testLine(line, reg, regionName)) {
+    if (endReg === null) {
+      for (const [startReg, end] of regionRegexps) {
+        const match = line.trim().match(startReg)
+        if (match && match[1] === regionName) {
           start = lineId + 1
-          regexp = reg
+          endReg = end
           break
         }
       }
     }
-    else if (testLine(line, regexp, regionName, true)) {
-      return { start, end: lineId, regexp }
+    else if (endReg.test(line.trim())) {
+      return {
+        start,
+        end: lineId,
+        regexp: endReg,
+      }
     }
   }
 
