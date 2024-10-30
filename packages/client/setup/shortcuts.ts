@@ -63,8 +63,7 @@ export default function setupShortcuts() {
   const baseShortcutNames = new Set(shortcuts.map(s => s.name))
 
   for (const setup of setups) {
-    const result = setup(context, shortcuts)
-    shortcuts = shortcuts.concat(result)
+    shortcuts = setup(context, shortcuts)
   }
 
   const remainingBaseShortcutNames = shortcuts.filter(s => s.name && baseShortcutNames.has(s.name))
