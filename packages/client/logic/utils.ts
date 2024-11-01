@@ -1,32 +1,27 @@
 import { parseRangeString } from '@slidev/parser/core'
-import { useTimestamp } from '@vueuse/core'
+import { useInterval } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 export function useTimer() {
-  const tsStart = ref(Date.now())
   const stop = ref(false)
-  const now = useTimestamp({
-    interval: 1000,
-  })
+  const { counter, reset, pause, resume } = useInterval(1000, { controls: true })
   const timer = computed(() => {
-    const passed = (now.value - tsStart.value) / 1000
+    const passed = counter.value
     const sec = Math.floor(passed % 60).toString().padStart(2, '0')
     const min = Math.floor(passed / 60).toString().padStart(2, '0')
     return `${min}:${sec}`
   })
-  function resetTimer() {
-    tsStart.value = now.value
-  }
 
-  function stopTimer() {
+  function toggleTimer() {
     stop.value = !stop.value
+    stop.value ? pause() : resume()
   }
 
   return {
     timer,
     stop,
-    resetTimer,
-    stopTimer,
+    resetTimer: reset,
+    toggleTimer,
   }
 }
 

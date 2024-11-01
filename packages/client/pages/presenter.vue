@@ -49,7 +49,7 @@ useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
 
-const { timer, stop, resetTimer, stopTimer } = useTimer()
+const { timer, stop, resetTimer, toggleTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
 const nextFrame = computed(() => {
@@ -198,7 +198,7 @@ onMounted(() => {
         <label
           class="stop-button my-auto mr-4 relative w-19px h-19px cursor-pointer"
         >
-          <input class="hidden" type="checkbox" @change="stopTimer">
+          <input class="hidden" type="checkbox" @change="toggleTimer">
           <carbon:pause v-if="!stop" class="absolute" />
           <carbon:play v-if="stop" class="absolute opacity-0" />
         </label>
