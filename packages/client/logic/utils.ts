@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 
 export function useTimer() {
   const tsStart = ref(Date.now())
+  const stop = ref(false)
   const now = useTimestamp({
     interval: 1000,
   })
@@ -17,9 +18,15 @@ export function useTimer() {
     tsStart.value = now.value
   }
 
+  function stopTimer() {
+    stop.value = !stop.value
+  }
+
   return {
     timer,
+    stop,
     resetTimer,
+    stopTimer,
   }
 }
 

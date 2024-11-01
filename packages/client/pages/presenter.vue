@@ -49,7 +49,7 @@ useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
 
-const { timer, resetTimer } = useTimer()
+const { timer, stop, resetTimer, stopTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
 const nextFrame = computed(() => {
@@ -192,9 +192,16 @@ onMounted(() => {
           <carbon:time class="absolute" />
           <carbon:renew class="absolute opacity-0" />
         </div>
-        <div class="text-2xl pl-2 pr-6 my-auto tabular-nums">
+        <div class="text-2xl px-3 my-auto tabular-nums">
           {{ timer }}
         </div>
+        <label
+          class="stop-button my-auto mr-4 relative w-19px h-19px cursor-pointer"
+        >
+          <input class="hidden" type="checkbox" @change="stopTimer">
+          <carbon:pause v-if="!stop" class="absolute" />
+          <carbon:play v-if="stop" class="absolute opacity-0" />
+        </label>
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>
@@ -219,6 +226,13 @@ onMounted(() => {
   opacity: 0;
 }
 .timer-btn:hover > :last-child {
+  opacity: 1;
+}
+
+.stop-button:has(input[checked]) > :first-child {
+  opacity: 0;
+}
+.stop-button:not(:has(input[checked])) > :last-child {
   opacity: 1;
 }
 
