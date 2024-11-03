@@ -6,6 +6,7 @@ import { createFixedClicks } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
+import { useTimer } from '../composables/useTimer'
 import { useWakeLock } from '../composables/useWakeLock'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
@@ -22,7 +23,6 @@ import SlidesShow from '../internals/SlidesShow.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { useTimer } from '../logic/utils'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
 import { sharedState } from '../state/shared'
 
@@ -49,7 +49,7 @@ useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
 
-const { timer, stop, resetTimer, toggleTimer } = useTimer()
+const { timer, isTimerAvctive, resetTimer, toggleTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
 const nextFrame = computed(() => {
@@ -184,24 +184,23 @@ onMounted(() => {
       <div class="grid-section bottom flex">
         <NavControls :persist="true" />
         <div flex-auto />
-        <div
-          class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
-          opacity="50 hover:100"
-          @click="resetTimer"
-        >
-          <carbon:time class="absolute" />
-          <carbon:renew class="absolute opacity-0" />
+        <div class="group flex items-center justify-center pl-4 select-none">
+          <div class="w-22px cursor-pointer">
+            <carbon:time class="group-hover:hidden text-xl" />
+            <div class="group-not-hover:hidden flex flex-col items-center">
+              <div class="relative op-80 hover:op-100" @click="toggleTimer">
+                <carbon:pause v-if="isTimerAvctive" class="text-lg" />
+                <carbon:play v-else />
+              </div>
+              <div class="op-80 hover:op-100" @click="resetTimer">
+                <carbon:renew />
+              </div>
+            </div>
+          </div>
+          <div class="text-2xl px-3 my-auto tabular-nums">
+            {{ timer }}
+          </div>
         </div>
-        <div class="text-2xl px-3 my-auto tabular-nums">
-          {{ timer }}
-        </div>
-        <label
-          class="stop-button my-auto mr-4 relative w-19px h-19px cursor-pointer"
-        >
-          <input class="hidden" type="checkbox" @change="toggleTimer">
-          <carbon:pause v-if="!stop" class="absolute" />
-          <carbon:play v-if="stop" class="absolute opacity-0" />
-        </label>
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>
@@ -220,20 +219,6 @@ onMounted(() => {
 <style scoped>
 .slidev-presenter {
   --slidev-controls-foreground: current;
-}
-
-.timer-btn:hover > :first-child {
-  opacity: 0;
-}
-.timer-btn:hover > :last-child {
-  opacity: 1;
-}
-
-.stop-button:has(input[checked]) > :first-child {
-  opacity: 0;
-}
-.stop-button:not(:has(input[checked])) > :last-child {
-  opacity: 1;
 }
 
 .grid-container {
