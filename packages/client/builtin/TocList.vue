@@ -57,7 +57,7 @@ const styles = computed(() => {
         :list-style="listStyle"
         :list="item.children"
         :list-class="listClass"
-        :isPresenter="isPresenter"
+        :is-presenter="isPresenter"
       />
     </li>
   </ol>

@@ -95,7 +95,7 @@ const toc = computed(() => {
       :list-style="listStyle"
       :list="toc"
       :list-class="listClass"
-      :isPresenter="$slidev.nav.isPresenter"
+      :is-presenter="$slidev.nav.isPresenter"
     />
   </div>
 </template>
