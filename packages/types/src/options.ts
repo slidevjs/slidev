@@ -30,6 +30,11 @@ export interface SlidevEntryOptions {
    * Enable inspect plugin
    */
   inspect?: boolean
+
+  /**
+   * Build with --download option
+   */
+  download?: boolean
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {

@@ -32,6 +32,9 @@ export async function resolveOptions(
   const addonRoots = await resolveAddons(config.addons)
   const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
 
+  if (entryOptions.download)
+    config.download ||= entryOptions.download
+
   debug({
     ...rootsInfo,
     ...entryOptions,
