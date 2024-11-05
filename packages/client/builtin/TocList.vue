@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<{
   listStyle?: string | string[]
   list: TocItem[]
   listClass?: string | string[]
+  isPresenter: boolean
 }>(), { level: 1 })
 
 const classes = computed(() => {
@@ -47,7 +48,7 @@ const styles = computed(() => {
       :key="item.path" class="slidev-toc-item"
       :class="[{ 'slidev-toc-item-active': item.active }, { 'slidev-toc-item-parent-active': item.activeParent }]"
     >
-      <Link :to="item.path">
+      <Link :to="isPresenter ? `/presenter${item.path}` : item.path">
         <TitleRenderer :no="item.no" />
       </Link>
       <TocList
@@ -56,6 +57,7 @@ const styles = computed(() => {
         :list-style="listStyle"
         :list="item.children"
         :list-class="listClass"
+        :isPresenter="isPresenter"
       />
     </li>
   </ol>
