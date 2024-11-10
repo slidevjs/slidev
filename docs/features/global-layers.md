@@ -13,7 +13,7 @@ Slidev provides three layers for this usage, create `global-top.vue`, `global-bo
 There are also layers for **each** slide: `slide-top.vue` and `slide-bottom.vue`. The usage is similar to the global layers, but they are applied to every slide, so there may be more than one instance of them.
 
 ::: tip
-When exporting, the `--per-slide` option should be used to ensure the global layers are applied to each slide correctly.
+If you are using `global-top.vue` or `global-bottom.vue` depending on the current navigation state, when exporting, the `--per-slide` option should be used to ensure the correct state is applied to each slide. Or you can use `slide-top.vue` and `slide-bottom.vue` instead.
 :::
 
 ## Layers relationship
