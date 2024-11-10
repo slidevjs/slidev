@@ -351,9 +351,7 @@ cli.command(
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect }, 'build')
-      if (download && !options.data.config.download)
-        options.data.config.download = download
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download }, 'build')
 
       printInfo(options)
       await build(
