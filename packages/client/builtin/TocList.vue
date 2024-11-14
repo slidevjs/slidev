@@ -11,6 +11,7 @@ import type { TocItem } from '@slidev/types'
 import TitleRenderer from '#slidev/title-renderer'
 import { toArray } from '@antfu/utils'
 import { computed } from 'vue'
+import { useNav } from '../composables/useNav'
 
 const props = withDefaults(defineProps<{
   level: number
@@ -18,8 +19,9 @@ const props = withDefaults(defineProps<{
   listStyle?: string | string[]
   list: TocItem[]
   listClass?: string | string[]
-  isPresenter: boolean
 }>(), { level: 1 })
+
+const { isPresenter } = useNav()
 
 const classes = computed(() => {
   return [
@@ -57,7 +59,6 @@ const styles = computed(() => {
         :list-style="listStyle"
         :list="item.children"
         :list-class="listClass"
-        :is-presenter="isPresenter"
       />
     </li>
   </ol>
