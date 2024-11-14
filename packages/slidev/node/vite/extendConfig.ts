@@ -190,7 +190,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       // serve our index.html after vite history fallback
       return () => {
         server.middlewares.use(async (req, res, next) => {
-          if (req.url!.endsWith('.html')) {
+          if (req.url === '/index.html') {
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
             res.end(options.utils.indexHtml)
