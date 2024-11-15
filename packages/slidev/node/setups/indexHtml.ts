@@ -52,6 +52,9 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
   if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
     head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
 
+  if (data.headmatter.lang)
+    main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
+
   main = main
     .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
     .replace('<!-- head -->', head)
