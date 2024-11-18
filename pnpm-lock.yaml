@@ -259,8 +259,8 @@ catalogs:
       specifier: ^1.7.3
       version: 1.7.3
     monaco-editor:
-      specifier: ^0.52.0
-      version: 0.52.0
+      specifier: 0.51.0
+      version: 0.51.0
     nodemon:
       specifier: ^3.1.7
       version: 3.1.7
@@ -787,7 +787,7 @@ importers:
         version: 11.4.0
       monaco-editor:
         specifier: 'catalog:'
-        version: 0.52.0
+        version: 0.51.0
       prettier:
         specifier: 'catalog:'
         version: 3.3.3
@@ -980,7 +980,7 @@ importers:
         version: 1.7.3
       monaco-editor:
         specifier: 'catalog:'
-        version: 0.52.0
+        version: 0.51.0
       open:
         specifier: 'catalog:'
         version: 10.1.0
@@ -1107,7 +1107,7 @@ importers:
         version: 11.4.0
       monaco-editor:
         specifier: 'catalog:'
-        version: 0.52.0
+        version: 0.51.0
       shiki:
         specifier: 'catalog:'
         version: 1.23.1
@@ -5561,8 +5561,8 @@ packages:
   mlly@1.7.3:
     resolution: {integrity: sha512-xUsx5n/mN0uQf4V548PKQ+YShA4/IW0KI1dZhrNrPCLG+xizETbHTkOa1f8/xut9JRPp8kQuMnz0oqwkTiLo/A==}
 
-  monaco-editor@0.52.0:
-    resolution: {integrity: sha512-OeWhNpABLCeTqubfqLMXGsqf6OmPU6pHM85kF3dhy6kq5hnhuVS1p3VrEW/XhWHc71P2tHyS5JFySD8mgs1crw==}
+  monaco-editor@0.51.0:
+    resolution: {integrity: sha512-xaGwVV1fq343cM7aOYB6lVE4Ugf0UyimdD/x5PWcWBMKENwectaEu77FAN7c5sFiyumqeJdX1RPTh1ocioyDjw==}
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -12421,7 +12421,7 @@ snapshots:
       pkg-types: 1.2.1
       ufo: 1.5.4
 
-  monaco-editor@0.52.0: {}
+  monaco-editor@0.51.0: {}
 
   mri@1.2.0:
     optional: true

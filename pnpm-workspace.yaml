@@ -88,7 +88,8 @@ catalog:
   micromatch: ^4.0.8
   minimist: ^1.2.8
   mlly: ^1.7.3
-  monaco-editor: ^0.52.0
+  # https://github.com/microsoft/monaco-editor/issues/4712
+  monaco-editor: 0.51.0
   nodemon: ^3.1.7
   open: ^10.1.0
   ovsx: ^0.10.0
