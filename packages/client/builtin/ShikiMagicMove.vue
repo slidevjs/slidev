@@ -1,17 +1,34 @@
 <script setup lang="ts">
-import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import type { PropType } from 'vue'
+import { sleep } from '@antfu/utils'
 import lz from 'lz-string'
-import { useSlideContext } from '../context'
-import { makeId, updateCodeHighlightRange } from '../logic/utils'
+import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
+import { CLICKS_MAX } from '../constants'
+import { useSlideContext } from '../context'
+import { configs } from '../env'
+import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
-const props = defineProps<{
-  at?: string | number
-  stepsLz: string
-  stepRanges: string[][]
-}>()
+const props = defineProps({
+  at: {
+    type: [String, Number],
+    default: '+1',
+  },
+  stepsLz: {
+    type: String,
+    required: true,
+  },
+  stepRanges: {
+    type: Array as PropType<string[][]>,
+    required: true,
+  },
+  lines: {
+    type: Boolean,
+    default: configs.lineNumbers,
+  },
+})
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
 const { $clicksContext: clicks, $scale: scale, $zoom: zoom } = useSlideContext()
@@ -36,14 +53,14 @@ onMounted(() => {
     throw new Error('[slidev] The length of stepRanges does not match the length of steps, this is an internal error.')
 
   const clickCounts = ranges.value.map(s => s.length).reduce((a, b) => a + b, 0)
-  const clickInfo = clicks.calculateSince(props.at ?? '+1', clickCounts - 1)
+  const clickInfo = clicks.calculateSince(props.at, clickCounts - 1)
   clicks.register(id, clickInfo)
 
   watch(
     () => clicks.current,
     () => {
       // Calculate the step and rangeStr based on the current click count
-      const clickCount = clicks.current - clickInfo.start
+      const clickCount = clickInfo ? clicks.current - clickInfo.start : CLICKS_MAX
       let step = steps.length - 1
       let currentClickSum = 0
       let rangeStr = 'all'
@@ -56,9 +73,12 @@ onMounted(() => {
         }
         currentClickSum += current.length || 1
       }
-      stepIndex.value = step
 
-      setTimeout(() => {
+      nextTick(async () => {
+        stepIndex.value = step
+
+        await sleep(0)
+
         const pre = container.value?.querySelector('.shiki') as HTMLElement
         if (!pre)
           return

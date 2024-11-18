@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { computed, reactive, shallowRef } from 'vue'
+import type { SlidevContextNav } from '../composables/useNav'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
+import { computed, reactive, shallowRef } from 'vue'
 import { injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
-import type { SlidevContextNav } from '../composables/useNav'
 import SlideWrapper from './SlideWrapper.vue'
-
-import GlobalTop from '#slidev/global-components/top'
-import GlobalBottom from '#slidev/global-components/bottom'
 
 const { nav } = defineProps<{
   nav: SlidevContextNav
@@ -41,7 +39,6 @@ provideLocal(injectionSlidevContext, reactive({
     <GlobalBottom />
 
     <SlideWrapper
-      :is="route.component!"
       :clicks-context="nav.clicksContext.value"
       :class="getSlideClass(route)"
       :route="route"

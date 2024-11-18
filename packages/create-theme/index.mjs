@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 // @ts-check
 import process from 'node:process'
-import fs from 'node:fs'
-import path from 'node:path'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
+import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 
 const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
@@ -120,8 +120,8 @@ function prepareTemplate(root, templateDir, packageName) {
     'README.md',
     fs
       .readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
-      .replace(/{{package-name}}/g, packageName)
-      .replace(/{{name}}/g, getThemeName(packageName)),
+      .replace(/\{\{package-name\}\}/g, packageName)
+      .replace(/\{\{name\}\}/g, getThemeName(packageName)),
   )
 }
 

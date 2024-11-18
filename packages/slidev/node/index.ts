@@ -1,5 +1,4 @@
-export * from './vite'
-export * from './commands/server'
-export * from './vite'
+export { createServer } from './commands/serve'
 export * from './options'
 export { parser } from './parser'
+export { ViteSlidevPlugin } from './vite'

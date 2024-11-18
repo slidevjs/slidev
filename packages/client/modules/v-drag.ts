@@ -1,6 +1,6 @@
 import type { App } from 'vue'
-import { watch } from 'vue'
 import type { DragElementState } from '../composables/useDragElements'
+import { watch } from 'vue'
 import { useDragElement } from '../composables/useDragElements'
 
 export function createVDragDirective() {
@@ -18,12 +18,12 @@ export function createVDragDirective() {
           }
           state.container.value = el
           el.draggingState = state
-          el.dataset.dragId = state.id
+          el.dataset.dragId = state.dragId
           state.watchStopHandles.push(
             watch(state.containerStyle, (style) => {
               for (const [k, v] of Object.entries(style)) {
                 if (v)
-                  el.style[k as any] = v
+                  el.style[k as any] = v as any
               }
             }, { immediate: true }),
           )

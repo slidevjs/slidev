@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ type: 'node' | 'client' }>()
+defineProps<{ type: 'node' | 'client' | 'both' }>()
 </script>
 
 <template>
@@ -10,10 +10,13 @@ defineProps<{ type: 'node' | 'client' }>()
     </summary>
 
     <div class="pt2 opacity-75">
-      <span v-if="type === 'node'">
+      <span v-if="type === 'both'">
+        This setup function will run on <b>both</b> Node.js and client side. Avoid using Node.js or DOM API to prevent runtime errors.
+      </span>
+      <span v-else-if="type === 'node'">
         This setup function will only run on Node.js environment, you can have access to Node's API.
       </span>
-      <span v-else>
+      <span v-else-if="type === 'client'">
         This setup function will only run on client side. Make sure the browser compatibility when importing packages.
       </span>
     </div>

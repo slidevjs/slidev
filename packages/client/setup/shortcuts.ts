@@ -1,12 +1,12 @@
-import { and, not, or } from '@vueuse/math'
 import type { NavOperations, ShortcutOptions } from '@slidev/types'
-import { downloadPDF } from '../utils'
+import setups from '#slidev/setups/shortcuts'
+import { and, not, or } from '@vueuse/math'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
 import { toggleDark } from '../logic/dark'
 import { activeDragElement, magicKeys, showGotoDialog, showOverview, toggleOverview } from '../state'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
+import { downloadPDF } from '../utils'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
-import setups from '#slidev/setups/shortcuts'
 
 export default function setupShortcuts() {
   const { go, goFirst, goLast, next, nextSlide, prev, prevSlide } = useNav()
@@ -39,9 +39,9 @@ export default function setupShortcuts() {
     { name: 'next_page_key', key: 'pageDown', fn: next, autoRepeat: true },
     { name: 'prev_page_key', key: 'pageUp', fn: prev, autoRepeat: true },
     { name: 'next_down', key: and(down, navViaArrowKeys), fn: nextSlide, autoRepeat: true },
-    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: () => prevSlide(false), autoRepeat: true },
+    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: prevSlide, autoRepeat: true },
     { name: 'next_shift', key: and(right, shift), fn: nextSlide, autoRepeat: true },
-    { name: 'prev_shift', key: and(left, shift), fn: () => prevSlide(false), autoRepeat: true },
+    { name: 'prev_shift', key: and(left, shift), fn: prevSlide, autoRepeat: true },
     { name: 'toggle_dark', key: and(d, not(drawingEnabled)), fn: toggleDark },
     { name: 'toggle_overview', key: and(or(o, backtick), not(drawingEnabled)), fn: toggleOverview },
     { name: 'hide_overview', key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },

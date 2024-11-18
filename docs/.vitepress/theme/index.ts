@@ -1,6 +1,7 @@
-import Theme from 'vitepress/theme'
 import type { EnhanceAppContext } from 'vitepress'
 import TwoSlash from '@shikijs/vitepress-twoslash/client'
+import Theme from 'vitepress/theme'
+import Layout from './components/Layout.vue'
 
 import '@shikijs/vitepress-twoslash/style.css'
 import './styles/vars.css'
@@ -13,4 +14,5 @@ export default {
   enhanceApp({ app }: EnhanceAppContext) {
     app.use(TwoSlash as any)
   },
+  Layout,
 }

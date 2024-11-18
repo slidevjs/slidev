@@ -1,9 +1,9 @@
-import { join } from 'node:path'
+import { resolve } from 'node:path'
 import process from 'node:process'
 import { $, argv, cd, fs } from 'zx'
 
 const WORKSPACE_ROOT = process.cwd()
-const PKG_ROOT = join(WORKSPACE_ROOT, argv._[0])
+const PKG_ROOT = resolve(WORKSPACE_ROOT, argv._[0])
 
 const packages = {
   'types': './packages/types',
@@ -34,7 +34,7 @@ async function pack() {
   await fs.mkdir(PKG_ROOT, { recursive: true })
   for (const [name, path] of Object.entries(packages)) {
     console.log('[pack] pack', path)
-    cd(join(WORKSPACE_ROOT, path))
+    cd(resolve(WORKSPACE_ROOT, path))
     const { stdout } = await $`pnpm pack`
     await fs.move(stdout.trim(), `${PKG_ROOT}/${name}.tgz`)
   }

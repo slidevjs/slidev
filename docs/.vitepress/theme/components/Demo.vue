@@ -1,24 +1,22 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-
-// @ts-expect-error missing types
-import TypeIt from 'typeit'
-import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
-
-import { parse } from '@slidev/parser'
-import Cover from '@slidev/theme-default/layouts/cover.vue'
-import Default from '@slidev/client/layouts/default.vue'
 import Center from '@slidev/client/layouts/center.vue'
-import SlideContainer from '@slidev/client/internals/SlideContainer.vue'
+import Default from '@slidev/client/layouts/default.vue'
+import { parseSync } from '@slidev/parser'
+import Cover from '@slidev/theme-default/layouts/cover.vue'
+import Markdown from 'markdown-it'
+import TypeIt from 'typeit'
+import { onMounted, ref, watch } from 'vue'
+import DemoEditor from './DemoEditor.vue'
+import DemoSlide from './DemoSlide.vue'
+import SlideContainer from './SlideContainer.vue'
+
 import '@slidev/client/styles/layouts-base.css'
 import '@slidev/theme-default/styles/layouts.css'
 
-import DemoEditor from './DemoEditor.vue'
-import DemoSlide from './DemoSlide.vue'
-
 const page = ref(0)
 const paused = ref(false)
+const completed = ref(false)
 const code = ref('')
 const info = ref<SlidevMarkdown>()
 const block = ref<HTMLPreElement>()
@@ -38,10 +36,9 @@ watch([code, paused], () => {
   if (paused.value)
     return
   try {
-    info.value = parse(code.value)
+    info.value = parseSync(code.value, '')
   }
-  catch (e) {
-
+  catch {
   }
 })
 
@@ -69,7 +66,11 @@ if (typeof window !== 'undefined') {
   img1.src = COVER_URL
 }
 
-onMounted(() => {
+function play() {
+  code.value = ''
+  block.value!.innerHTML = ''
+  completed.value = false
+  // @ts-expect-error wrong types provided by TypeIt
   new TypeIt(block.value!, {
     speed: 50,
     startDelay: 900,
@@ -77,12 +78,15 @@ onMounted(() => {
       // eslint-disable-next-line unicorn/prefer-dom-node-text-content
       code.value = JSON.parse(JSON.stringify(block.value!.innerText.replace('|', '')))
     },
+    afterComplete: () => {
+      setTimeout(() => completed.value = true, 300)
+    },
   })
     .type('<br><span class="token title"># Welcome to Slidev!</span><br><br>', { delay: 400 })
     .type('Presentation Slides for Developers', { delay: 400 })
-    .move('START', { speed: 0 })
+    .move(null, { to: 'START', speed: 0 })
     .type('<br>')
-    .move('START')
+    .move(null, { to: 'START' })
     .exec(pause)
     .type('<span class="token punctuation">---<br><br>---</span>')
     .move(-4)
@@ -100,7 +104,7 @@ onMounted(() => {
     .type(COVER_URL, { speed: 0 })
     .exec(resume)
     .pause(1000)
-    .move('END', { speed: 0 })
+    .move(null, { to: 'END', speed: 0 })
     .exec(pause)
     .type('<br><br><span class="token punctuation">---</span><br><br>', { delay: 400 })
     .exec(resume)
@@ -111,7 +115,9 @@ onMounted(() => {
     .type('- 😎 Read the docs to learn more!', { delay: 800 })
     .exec(() => setTimeout(() => page.value = 0))
     .go()
-})
+}
+
+onMounted(play)
 </script>
 
 <template>
@@ -119,6 +125,10 @@ onMounted(() => {
     <DemoEditor>
       <div class="text-sm opacity-50 text-center">
         ./slides.md
+      </div>
+
+      <div v-if="completed" class="absolute text-xs right-1 top-1 icon-btn opacity-50" title="Replay" @click="play()">
+        <carbon:reset />
       </div>
 
       <div class="language-md !bg-transparent px4 py1">
@@ -144,7 +154,7 @@ onMounted(() => {
         </SlideContainer>
       </div>
       <div
-        class="absolute left-2 bottom-1 flex text-gray-400"
+        class="absolute left-2 bottom-1 flex text-gray-200"
         opacity="0 hover:100"
       >
         <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">

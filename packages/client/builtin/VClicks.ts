@@ -1,13 +1,13 @@
 /**
  * <v-clicks/> click animations component
  *
- * Learn more: https://sli.dev/guide/animations.html#click-animations
+ * Learn more: https://sli.dev/guide/animations.html#click-animation
  */
 
-import { toArray } from '@antfu/utils'
 import type { VNode, VNodeArrayChildren } from 'vue'
+import { toArray } from '@antfu/utils'
 import { Comment, createVNode, defineComponent, h, isVNode, resolveDirective, withDirectives } from 'vue'
-import { normalizeAtValue } from '../composables/useClicks'
+import { normalizeSingleAtValue } from '../composables/useClicks'
 import VClickGap from './VClickGap.vue'
 
 const listTags = ['ul', 'ol']
@@ -34,12 +34,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    handleSpecialElements: {
+      type: Boolean,
+      default: true,
+    },
   },
   render() {
     const every = +this.every
-    const at = normalizeAtValue(this.at)
+    const at = normalizeSingleAtValue(this.at)
     const isRelative = typeof at === 'string'
-    if (typeof at !== 'string' && typeof at !== 'number') {
+    if (!at) {
       console.warn('[slidev] Invalid at prop for v-clicks component:', at)
       return
     }
@@ -120,21 +124,23 @@ export default defineComponent({
       size: +at + Math.ceil((globalIdx - 1) / every) - 1 - execIdx,
     })
 
-    // handle ul, ol list
-    if (elements.length === 1 && listTags.includes(elements[0].type as string) && Array.isArray(elements[0].children))
-      return h(elements[0], {}, [...mapChildren(elements[0].children), lastGap()])
+    if (this.handleSpecialElements) {
+      // handle ul, ol list
+      if (elements.length === 1 && listTags.includes(elements[0].type as string) && Array.isArray(elements[0].children))
+        return h(elements[0], {}, [...mapChildren(elements[0].children), lastGap()])
 
-    if (elements.length === 1 && elements[0].type as string === 'table') {
-      const tableNode = elements[0]
-      if (Array.isArray(tableNode.children)) {
-        return h(tableNode, {}, tableNode.children.map((i) => {
-          if (!isVNode(i))
-            return i
-          else if (i.type === 'tbody' && Array.isArray(i.children))
-            return h(i, {}, [...mapChildren(i.children), lastGap()])
-          else
-            return h(i)
-        }))
+      if (elements.length === 1 && elements[0].type as string === 'table') {
+        const tableNode = elements[0]
+        if (Array.isArray(tableNode.children)) {
+          return h(tableNode, {}, tableNode.children.map((i) => {
+            if (!isVNode(i))
+              return i
+            else if (i.type === 'tbody' && Array.isArray(i.children))
+              return h(i, {}, [...mapChildren(i.children), lastGap()])
+            else
+              return h(i)
+          }))
+        }
       }
     }
 

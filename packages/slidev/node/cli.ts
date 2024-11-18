@@ -1,33 +1,27 @@
-/* eslint-disable no-console */
-import path from 'node:path'
-import os from 'node:os'
-import { exec } from 'node:child_process'
-import * as readline from 'node:readline'
-import process from 'node:process'
-import fs from 'fs-extra'
-import openBrowser from 'open'
-import type { Argv } from 'yargs'
-import yargs from 'yargs'
-import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
+import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/types'
 import type { LogLevel, ViteDevServer } from 'vite'
-import type { ResolvedSlidevOptions, SlidevConfig, SlidevData, SlidevPreparserExtension } from '@slidev/types'
-import isInstalledGlobally from 'is-installed-globally'
-import equal from 'fast-deep-equal'
+import type { Argv } from 'yargs'
+import { exec } from 'node:child_process'
+import os from 'node:os'
+import path from 'node:path'
+import process from 'node:process'
+import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
-import { injectPreparserExtensionLoader } from '@slidev/parser/fs'
-import { uniq } from '@antfu/utils'
+import equal from 'fast-deep-equal'
+import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
+import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
+import openBrowser from 'open'
+import yargs from 'yargs'
 import { version } from '../package.json'
-import { createServer } from './commands/server'
-import { resolveOptions } from './options'
+import { createServer } from './commands/serve'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
+import { resolveOptions } from './options'
 import { parser } from './parser'
-import { loadSetups } from './setups/load'
-import { getRoots, resolveEntry } from './resolver'
-import { resolveAddons } from './integrations/addons'
+import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
+import setupPreparser from './setups/preparser'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
-  'highlighter',
   'monaco',
   'routerMode',
   'fonts',
@@ -40,7 +34,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 /**
  * Files that triggers a restart when added or removed
  */
-const FILES_CREATE_RESTART_GLOBS = [
+const FILES_CREATE_RESTART = [
   'global-bottom.vue',
   'global-top.vue',
   'handout-bottom.vue',
@@ -51,23 +45,13 @@ const FILES_CREATE_RESTART_GLOBS = [
   'unocss.config.ts',
 ]
 
-const FILES_CHANGE_RESTART_GLOBS = [
+const FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
 ]
 
-injectPreparserExtensionLoader(async (headmatter?: Record<string, unknown>, filepath?: string, mode?: string) => {
-  const addons = headmatter?.addons as string[] ?? []
-  const { clientRoot, userRoot } = await getRoots()
-  const roots = uniq([
-    clientRoot,
-    userRoot,
-    ...await resolveAddons(addons),
-  ])
-  const mergeArrays = (a: SlidevPreparserExtension[], b: SlidevPreparserExtension[]) => a.concat(b)
-  return await loadSetups(clientRoot, roots, 'preparser.ts', { filepath, headmatter, mode }, [], mergeArrays)
-})
+setupPreparser()
 
 const cli = yargs(process.argv.slice(2))
   .scriptName('slidev')
@@ -170,9 +154,9 @@ cli.command(
           logLevel: log as LogLevel,
         },
         {
-          async loadData() {
+          async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, undefined, 'dev')
+            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -193,6 +177,13 @@ cli.command(
               restartServer()
               return false
             }
+
+            if ((newData.features.katex && !oldData.features.katex) || (newData.features.monaco && !oldData.features.monaco)) {
+              console.log(yellow('\n  restarting on feature change\n'))
+              restartServer()
+              return false
+            }
+
             return newData
           },
         },
@@ -308,8 +299,8 @@ cli.command(
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
     const watcher = watch([
-      ...FILES_CREATE_RESTART_GLOBS,
-      ...FILES_CHANGE_RESTART_GLOBS,
+      ...FILES_CREATE_RESTART,
+      ...FILES_CHANGE_RESTART,
     ], {
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
@@ -323,7 +314,7 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
-      if (FILES_CREATE_RESTART_GLOBS.includes(file))
+      if (FILES_CREATE_RESTART.includes(file))
         return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))
       restartServer()
@@ -335,11 +326,6 @@ cli.command(
   'build [entry..]',
   'Build hostable SPA',
   args => exportOptions(commonOptions(args))
-    .option('watch', {
-      alias: 'w',
-      default: false,
-      describe: 'build watch',
-    })
     .option('out', {
       alias: 'o',
       type: 'string',
@@ -363,13 +349,11 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, watch, base, download, out, inspect } = args
+    const { entry, theme, base, download, out, inspect } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect }, 'build')
-      if (download && !options.data.config.download)
-        options.data.config.download = download
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download }, 'build')
 
       printInfo(options)
       await build(
@@ -377,7 +361,6 @@ cli.command(
         {
           base,
           build: {
-            watch: watch ? {} : undefined,
             outDir: entry.length === 1 ? out : path.join(out, path.basename(entryFile, '.md')),
           },
         },
@@ -573,7 +556,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'md'],
+      choices: ['pdf', 'png', 'pptx', 'md'],
       describe: 'output format',
     })
     .option('timeout', {
@@ -583,6 +566,11 @@ function exportOptions<T>(args: Argv<T>) {
     .option('wait', {
       type: 'number',
       describe: 'wait for the specified ms before exporting',
+    })
+    .option('wait-until', {
+      type: 'string',
+      choices: ['networkidle', 'load', 'domcontentloaded', 'none'],
+      describe: 'wait until the specified event before exporting each slide',
     })
     .option('range', {
       type: 'string',
@@ -613,6 +601,10 @@ function exportOptions<T>(args: Argv<T>) {
       type: 'number',
       describe: 'scale factor for image export',
     })
+    .option('omit-background', {
+      type: 'boolean',
+      describe: 'export png pages without the default browser background',
+    })
     .option('cover', {
       type: 'boolean',
       describe: 'prepend cover to handout, needs handout-cover.vue in project',
@@ -633,14 +625,14 @@ function printInfo(
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
-  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally ? yellow('(global)') : ''}`)
+  console.log(`${bold('  Slidev')}  ${blue(`v${version}`)} ${isInstalledGlobally.value ? yellow('(global)') : ''}`)
   console.log()
 
   verifyConfig(options.data.config, options.data.themeMeta, v => console.warn(yellow(`  ! ${v}`)))
 
   console.log(dim('  theme       ') + (options.theme ? green(options.theme) : gray('none')))
-  console.log(dim('  css engine  ') + (options.data.config.css ? blue(options.data.config.css) : gray('none')))
-  console.log(dim('  entry       ') + dim(path.dirname(options.entry) + path.sep) + path.basename(options.entry))
+  console.log(dim('  css engine  ') + blue('unocss'))
+  console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
   if (port) {
     const query = remote ? `?password=${remote}` : ''

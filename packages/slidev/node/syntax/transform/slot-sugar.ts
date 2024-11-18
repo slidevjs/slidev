@@ -1,9 +1,12 @@
 import type { MarkdownTransformContext } from '@slidev/types'
+import { getCodeBlocks } from './utils'
 
 export function transformSlotSugar(
   ctx: MarkdownTransformContext,
 ) {
   const linesWithNewline = ctx.s.original.split(/(\r?\n)/g)
+  const codeBlocks = getCodeBlocks(ctx.s.original)
+
   const lines: string[] = []
   for (let i = 0; i < linesWithNewline.length; i += 2) {
     const line = linesWithNewline[i]
@@ -17,10 +20,9 @@ export function transformSlotSugar(
   lines.forEach((line) => {
     const start = offset
     offset += line.length
-    if (ctx.isIgnored(start))
+    if (codeBlocks.isInsideCodeblocks(offset))
       return
-
-    const match = line.match(/^::\s*([\w\.\-\:]+)\s*::(\s*)?$/)
+    const match = line.match(/^::\s*([\w.\-:]+)\s*::(\s*)$/)
     if (match) {
       ctx.s.overwrite(start, offset - match[2].length, `${prevSlot ? '\n\n</template>\n' : '\n'}<template v-slot:${match[1]}="slotProps">\n`)
       prevSlot = true

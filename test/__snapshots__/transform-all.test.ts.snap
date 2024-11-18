@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transform-all 1`] = `
+"
+# Page 
+
+Default Slot
+
+
+<CodeBlockWrapper v-bind="{lines:true}" :ranges='["2","3","4"]'>
+
+\`\`\`ts
+function _foo() {
+  // ...
+}
+\`\`\`
+
+</CodeBlockWrapper>
+
+
+<template v-slot:right="slotProps">
+
+
+Foo \`{{ code }}\`
+
+
+
+</template>
+<template v-slot:left="slotProps">
+
+<div>Left Slot</div>
+
+
+<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+
+\`\`\`md
+<style>
+.text-red { color: red; }
+</style>
+\`\`\`
+
+</CodeBlockWrapper>
+
+<style scoped>
+
+.text-green { color: green; }
+</style>
+
+
+<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+
+\`\`\`ts
+function _foo() {
+  // ...
+}
+\`\`\`
+
+</CodeBlockWrapper>
+
+</template>"
+`;

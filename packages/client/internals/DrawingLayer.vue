@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useSlideContext } from '../context'
 import { useDrawings } from '../composables/useDrawings'
+import { useSlideContext } from '../context'
 
 const { drauu, drawingEnabled, loadCanvas } = useDrawings()
 
@@ -25,4 +25,4 @@ onBeforeUnmount(() => {
     class="w-full h-full absolute top-0"
     :class="{ 'pointer-events-none': !drawingEnabled, 'touch-none': drawingEnabled }"
   />
-</template>../composables/drawings
+</template>

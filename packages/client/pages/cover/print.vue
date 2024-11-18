@@ -2,7 +2,7 @@
 import { watchEffect } from 'vue'
 import { useNav } from '../../composables/useNav'
 import { themeVars } from '../../env'
-import HandoutCover from '#slidev/global-components/handout-cover'
+import { HandoutCover } from '#slidev/global-layers'
 
 const { isPrintMode } = useNav()
 

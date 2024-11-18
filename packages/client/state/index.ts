@@ -1,7 +1,7 @@
+import type { DragElementState } from '../composables/useDragElements'
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
-import type { DragElementState } from '../composables/useDragElements'
 
 export const showRecordingDialog = ref(false)
 export const showInfoDialog = ref(false)
@@ -19,12 +19,13 @@ export const isScreenVertical = computed(() => windowSize.height.value - windowS
 export const fullscreen = useFullscreen(isClient ? document.body : null)
 
 export const activeElement = useActiveElement()
-export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || '') || activeElement.value?.classList.contains('CodeMirror-code'))
+export const isInputting = computed(() => ['INPUT', 'TEXTAREA'].includes(activeElement.value?.tagName || ''))
 export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.value?.tagName || ''))
 
 export const currentCamera = useLocalStorage<string>('slidev-camera', 'default', { listenToStorageChanges: false })
 export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
+export const wakeLockEnabled = useLocalStorage('slidev-wake-lock', true)
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })

@@ -1,13 +1,28 @@
-import MagicString from 'magic-string'
 import type { MarkdownTransformContext } from '@slidev/types'
+import path from 'node:path'
+import MagicString from 'magic-string-stack'
 
-export function createTransformContext(code: string): MarkdownTransformContext {
+export function createTransformContext(code: string, shiki?: any): MarkdownTransformContext {
   const s = new MagicString(code)
   return {
     s,
-    ignores: [],
-    isIgnored(index: number) {
-      return this.ignores.some(([start, end]) => index >= start && index < end)
-    },
+    slide: { } as any,
+    options: {
+      userRoot: path.join(__dirname, './fixtures/'),
+      data: {
+        slides: [
+          {} as any,
+        ],
+        watchFiles: {},
+        config: {} as any,
+        features: {},
+      },
+      utils: {
+        shiki,
+        shikiOptions: {
+          theme: 'nord',
+        },
+      },
+    } as any,
   }
 }

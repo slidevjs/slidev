@@ -4,8 +4,8 @@ import { onMounted, watch } from 'vue'
 import { recorder } from '../logic/recording'
 import { currentCamera, showRecordingDialog } from '../state'
 import DevicesList from './DevicesList.vue'
-import MenuButton from './MenuButton.vue'
 import IconButton from './IconButton.vue'
+import MenuButton from './MenuButton.vue'
 
 const {
   recording,

@@ -1,9 +1,10 @@
 import { templateConfigs } from './configs'
 import { templateLegacyRoutes, templateLegacyTitles } from './deprecated'
-import { templateGlobalBottom, templateGlobalHandoutBottom, templateGlobalHandoutCover, templateGlobalTop, templateNavControls } from './global-components'
+import { templateGlobalLayers } from './global-layers'
 import { templateLayouts } from './layouts'
 import { templateMonacoRunDeps } from './monaco-deps'
 import { templateMonacoTypes } from './monaco-types'
+import { templateNavControls } from './nav-controls'
 import { templateSetups } from './setups'
 import { templateShiki } from './shiki'
 import { templateSlides } from './slides'
@@ -16,10 +17,7 @@ export const templates = [
   templateMonacoRunDeps,
   templateConfigs,
   templateStyle,
-  templateGlobalBottom,
-  templateGlobalTop,
-  templateGlobalHandoutBottom,
-  templateGlobalHandoutCover,
+  templateGlobalLayers,
   templateNavControls,
   templateSlides,
   templateLayouts,

@@ -1,5 +1,5 @@
-import { toArray, uniq } from '@antfu/utils'
 import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
 
 export function getDefaultConfig(): SlidevConfig {
@@ -12,6 +12,7 @@ export function getDefaultConfig(): SlidevConfig {
     monaco: true,
     monacoTypesSource: 'local',
     monacoTypesAdditionalPackages: [],
+    monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
     download: false,
     export: {} as ResolvedExportOptions,
@@ -35,15 +36,19 @@ export function getDefaultConfig(): SlidevConfig {
     css: 'unocss',
     presenter: true,
     htmlAttrs: {},
-    transition: undefined,
+    transition: null,
     editor: true,
-    contextMenu: undefined,
+    contextMenu: null,
+    overviewSnapshots: false,
+    wakeLock: true,
+    remote: false,
+    mdc: false,
   }
 }
 
 export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, filepath?: string, verify = false) {
   const themeHightlighter = ['prism', 'shiki', 'shikiji'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -77,6 +82,10 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
     config.highlighter = 'shiki'
   }
 
+  // @ts-expect-error compat
+  if (config.highlighter === 'prism')
+    throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
+
   if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
     config.colorSchema = 'auto'
   if (themeColorSchema && config.colorSchema === 'auto')
@@ -95,8 +104,8 @@ export function verifyConfig(
   themeMeta: SlidevThemeMeta = {},
   warn = (v: string) => console.warn(`[slidev] ${v}`),
 ) {
-  const themeHightlighter = ['prism', 'shiki'].includes(themeMeta.highlighter || '')
-    ? themeMeta.highlighter as 'prism' | 'shiki'
+  const themeHightlighter = themeMeta.highlighter === 'shiki'
+    ? themeMeta.highlighter as 'shiki'
     : undefined
   const themeColorSchema = ['light', 'dark'].includes(themeMeta.colorSchema || '')
     ? themeMeta.colorSchema as 'light' | 'dark'
@@ -108,7 +117,7 @@ export function verifyConfig(
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
 
-  if (!['unocss', undefined].includes(config.css)) {
+  if (config.css !== 'unocss') {
     warn(`Unsupported Atomic CSS engine "${config.css}", fallback to UnoCSS`)
     config.css = 'unocss'
   }
@@ -204,7 +213,7 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
       : false
 
   return {

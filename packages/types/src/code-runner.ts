@@ -1,5 +1,6 @@
-import type { CodeToHastOptions } from 'shiki'
 import type { Arrayable, Awaitable } from '@antfu/utils'
+import type { CodeToHastOptions } from 'shiki'
+import type { MaybeRefOrGetter } from 'vue'
 
 export interface CodeRunnerContext {
   /**
@@ -9,7 +10,7 @@ export interface CodeRunnerContext {
   /**
    * Highlight code with shiki.
    */
-  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => Promise<string>
+  highlight: (code: string, lang: string, options?: Partial<CodeToHastOptions>) => string
   /**
    * Use (other) code runner to run code.
    */
@@ -58,7 +59,7 @@ export type CodeRunnerOutputTextArray = CodeRunnerOutputText[]
 
 export type CodeRunnerOutput = CodeRunnerOutputHtml | CodeRunnerOutputError | CodeRunnerOutputText | CodeRunnerOutputTextArray | CodeRunnerOutputDom
 
-export type CodeRunnerOutputs = Arrayable<CodeRunnerOutput>
+export type CodeRunnerOutputs = MaybeRefOrGetter<Arrayable<CodeRunnerOutput>>
 
 export type CodeRunner = (code: string, ctx: CodeRunnerContext) => Awaitable<CodeRunnerOutputs>
 

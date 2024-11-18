@@ -9,7 +9,7 @@ const transitionResolveMap: Record<string, string | undefined> = {
   'slide-down': 'slide-down | slide-up',
 }
 
-function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
+export function resolveTransition(transition?: string | TransitionGroupProps, isBackward = false): TransitionGroupProps | undefined {
   if (!transition)
     return undefined
   if (typeof transition === 'string') {
@@ -44,7 +44,7 @@ export function getCurrentTransition(direction: number, currentRoute?: SlideRout
     ? prevRoute?.meta?.transition
     : currentRoute?.meta?.transition
   if (!transition)
-    transition = configs.transition
+    transition = configs.transition || undefined
 
   return resolveTransition(transition, direction < 0)
 }

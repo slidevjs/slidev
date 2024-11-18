@@ -1,14 +1,13 @@
-import { fileURLToPath } from 'node:url'
+import extractorMdc from '@unocss/extractor-mdc'
+import { variantMatcher } from '@unocss/preset-mini/utils'
 import {
   defineConfig,
   presetAttributify,
-  presetIcons,
   presetTypography,
   presetUno,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
-import { variantMatcher } from '@unocss/preset-mini/utils'
 
 export default defineConfig({
   safelist: [
@@ -39,13 +38,14 @@ export default defineConfig({
   presets: [
     presetUno(),
     presetAttributify(),
-    presetIcons({
-      collectionsNodeResolvePath: fileURLToPath(import.meta.url),
-    }),
     presetTypography(),
+    /* Preset Icons is added in ../node/setups/unocss.ts */
   ],
   transformers: [
     transformerDirectives({ enforce: 'pre' }),
     transformerVariantGroup(),
+  ],
+  extractors: [
+    extractorMdc(),
   ],
 })

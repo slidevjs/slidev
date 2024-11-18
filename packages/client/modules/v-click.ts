@@ -1,6 +1,6 @@
+import type { ClicksElement, RawAtValue } from '@slidev/types'
 import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
-import type { ClicksElement, RawAtValue } from '@slidev/types'
 import {
   CLASS_VCLICK_CURRENT,
   CLASS_VCLICK_FADE,
@@ -11,7 +11,6 @@ import {
   injectionClicksContext,
 } from '../constants'
 import { directiveInject } from '../utils'
-import { normalizeAtValue } from '../composables/useClicks'
 
 export function createVClickDirectives() {
   return {
@@ -126,8 +125,7 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-  const at = normalizeAtValue(value)
-  const info = ctx.calculate(at)
+  const info = ctx.calculate(value)
   if (!info)
     return null
 

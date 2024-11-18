@@ -31,11 +31,13 @@
   },
   "include": [
     "./*.ts",
+    "./docs/**/*.ts",
+    "./docs/**/*.vue",
     "./packages/**/*.ts",
     "./packages/**/*.vue",
     "./demo/**/*.ts",
     "./demo/**/*.vue",
     "./test/**/*.ts"
   ],
-  "exclude": ["**/dist/**", "node_modules"]
+  "exclude": ["**/dist/**", "**/node_modules/**"]
 }

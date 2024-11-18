@@ -1,3 +1,5 @@
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it/index.mjs'
+import type { HighlighterGeneric } from 'shiki/types.mjs'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -28,13 +30,16 @@ export interface SlidevEntryOptions {
    * Enable inspect plugin
    */
   inspect?: boolean
+
+  /**
+   * Build with --download option
+   */
+  download?: boolean
 }
 
-export interface ResolvedSlidevOptions extends RootsInfo {
+export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
   data: SlidevData
-  entry: string
   themeRaw: string
-  theme: string
   themeRoots: string[]
   addonRoots: string[]
   /**
@@ -42,13 +47,22 @@ export interface ResolvedSlidevOptions extends RootsInfo {
    */
   roots: string[]
   mode: 'dev' | 'build' | 'export'
-  remote?: string
-  inspect?: boolean
+  utils: ResolvedSlidevUtils
+}
+
+export interface ResolvedSlidevUtils {
+  shiki: HighlighterGeneric<any, any>
+  shikiOptions: MarkdownItShikiOptions
+  indexHtml: string
+  define: Record<string, string>
+  iconsResolvePath: string[]
+  isMonacoTypesIgnored: (pkg: string) => boolean
+  getLayouts: () => Record<string, string>
 }
 
 export interface SlidevServerOptions {
   /**
    * @returns `false` if server should be restarted
    */
-  loadData?: () => Promise<SlidevData | false>
+  loadData?: (loadedSource: Record<string, string>) => Promise<SlidevData | false>
 }

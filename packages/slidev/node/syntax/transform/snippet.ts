@@ -1,9 +1,11 @@
 // Ported from https://github.com/vuejs/vitepress/blob/main/src/node/markdown/plugins/snippet.ts
 
+import type { MarkdownTransformContext } from '@slidev/types'
 import path from 'node:path'
-import fs from 'fs-extra'
-import type { MarkdownTransformContext, ResolvedSlidevOptions } from '@slidev/types'
 import { slash } from '@antfu/utils'
+import fs from 'fs-extra'
+import lz from 'lz-string'
+import { monacoWriterWhitelist } from '../../vite/monacoWrite'
 
 function dedent(text: string): string {
   const lines = text.split('\n')
@@ -22,53 +24,51 @@ function dedent(text: string): string {
   return text
 }
 
-function testLine(
-  line: string,
-  regexp: RegExp,
-  regionName: string,
-  end: boolean = false,
-) {
-  const [full, tag, name] = regexp.exec(line.trim()) || []
-
-  return (
-    full
-    && tag
-    && name === regionName
-    && tag.match(end ? /^[Ee]nd ?[rR]egion$/ : /^[rR]egion$/)
-  )
-}
-
 function findRegion(lines: Array<string>, regionName: string) {
   const regionRegexps = [
-    /^\/\/ ?#?((?:end)?region) ([\w*-]+)$/, // javascript, typescript, java
-    /^\/\* ?#((?:end)?region) ([\w*-]+) ?\*\/$/, // css, less, scss
-    /^#pragma ((?:end)?region) ([\w*-]+)$/, // C, C++
-    /^<!-- #?((?:end)?region) ([\w*-]+) -->$/, // HTML, markdown
-    /^#((?:End )Region) ([\w*-]+)$/, // Visual Basic
-    /^::#((?:end)region) ([\w*-]+)$/, // Bat
-    /^# ?((?:end)?region) ([\w*-]+)$/, // C#, PHP, Powershell, Python, perl & misc
+    // javascript, typescript, java
+    [/^\/\/ ?#?region ([\w*-]+)$/, /^\/\/ ?#?endregion/],
+    // css, less, scss
+    [/^\/\* ?#region ([\w*-]+) ?\*\/$/, /^\/\* ?#endregion[\s\w*-]*\*\/$/],
+    // C, C++
+    [/^#pragma region ([\w*-]+)$/, /^#pragma endregion/],
+    // HTML, markdown
+    [/^<!-- #?region ([\w*-]+) -->$/, /^<!-- #?region[\s\w*-]*-->$/],
+    // Visual Basic
+    [/^#Region ([\w*-]+)$/, /^#End Region/],
+    // Bat
+    [/^::#region ([\w*-]+)$/, /^::#endregion/],
+    // C#, PHP, Powershell, Python, perl & misc
+    [/^# ?region ([\w*-]+)$/, /^# ?endregion/],
   ]
 
-  let regexp = null
+  let endReg = null
   let start = -1
 
   for (const [lineId, line] of lines.entries()) {
-    if (regexp === null) {
-      for (const reg of regionRegexps) {
-        if (testLine(line, reg, regionName)) {
+    if (endReg === null) {
+      for (const [startReg, end] of regionRegexps) {
+        const match = line.trim().match(startReg)
+        if (match && match[1] === regionName) {
           start = lineId + 1
-          regexp = reg
+          endReg = end
           break
         }
       }
     }
-    else if (testLine(line, regexp, regionName, true)) {
-      return { start, end: lineId, regexp }
+    else if (endReg.test(line.trim())) {
+      return {
+        start,
+        end: lineId,
+        regexp: endReg,
+      }
     }
   }
 
   return null
 }
+
+const reMonacoWrite = /^\{monaco-write\}/
 
 /**
  * format: ">>> /path/to/file.extension#region language meta..."
@@ -81,27 +81,23 @@ function findRegion(lines: Array<string>, regionName: string) {
  *
  * captures: ['/path/to/file.extension', '#region', 'language', '{meta}']
  */
-export function transformSnippet(ctx: MarkdownTransformContext, options: ResolvedSlidevOptions, id: string) {
-  const slideId = (id as string).match(/(\d+)\.md$/)?.[1]
-  if (!slideId)
-    return
+export function transformSnippet({ s, slide, options }: MarkdownTransformContext) {
+  const watchFiles = options.data.watchFiles
+  const dir = path.dirname(slide.source?.filepath ?? options.entry ?? options.userRoot)
 
-  const data = options.data
-  const slideInfo = data.slides[+slideId - 1]
-  const dir = path.dirname(slideInfo.source?.filepath ?? options.entry ?? options.userRoot)
-
-  ctx.s.replace(
-    /^<<< *(.+?)(#[\w-]+)? *(?: (\S+?))? *(\{.*)?$/mg,
+  s.replace(
+    // eslint-disable-next-line regexp/no-super-linear-backtracking
+    /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
-      const firstLine = `\`\`\`${lang || path.extname(filepath).slice(1)} ${meta}`
-
       const src = slash(
-        /^\@[\/]/.test(filepath)
+        /^@\//.test(filepath)
           ? path.resolve(options.userRoot, filepath.slice(2))
           : path.resolve(dir, filepath),
       )
 
-      data.watchFiles.push(src)
+      meta = meta.trim()
+      lang = lang.trim()
+      lang = lang || path.extname(filepath).slice(1)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {
@@ -111,9 +107,6 @@ export function transformSnippet(ctx: MarkdownTransformContext, options: Resolve
       }
 
       let content = fs.readFileSync(src, 'utf8')
-
-      slideInfo.snippetsUsed ??= {}
-      slideInfo.snippetsUsed[src] = content
 
       if (regionName) {
         const lines = content.split(/\r?\n/)
@@ -129,7 +122,19 @@ export function transformSnippet(ctx: MarkdownTransformContext, options: Resolve
         }
       }
 
-      return `${firstLine}\n${content}\n\`\`\``
+      if (meta.match(reMonacoWrite)) {
+        monacoWriterWhitelist.add(filepath)
+        lang = lang.trim()
+        meta = meta.replace(reMonacoWrite, '').trim() || '{}'
+        const encoded = lz.compressToBase64(content)
+        return `<Monaco writable=${JSON.stringify(filepath)} code-lz="${encoded}" lang="${lang}" v-bind="${meta}" />`
+      }
+      else {
+        watchFiles[src] ??= new Set()
+        watchFiles[src].add(slide.index)
+      }
+
+      return `\`\`\`${lang} ${meta}\n${content}\n\`\`\``
     },
   )
 }

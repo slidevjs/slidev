@@ -203,6 +203,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2022-09-01',
   },
   {
+    title: 'Comparison of Packaging Tools in 2023',
+    author: {
+      name: 'Peacock (Yoichi Takai)',
+      link: 'https://p3ac0ck.net',
+    },
+    at: 'PyCon APAC 2023',
+    slidesLink: 'https://slides.p3ac0ck.net/pyconapac2023/1',
+    sourceLink: 'https://github.com/peacock0803sz/slidev-slides/blob/7d41aa5e89ad8627cb68ae2cdbfe1681017b0408/talks/pyconapac2023/pyconapac2023.md',
+    cover: 'https://slides.p3ac0ck.net/pyconapac2023/cover.png',
+    datetime: '2023-10-28',
+  },
+  {
     title: 'How Rust error handling ease web development',
     author: {
       name: 'Nguyễn Hồng Quân',
@@ -210,9 +222,21 @@ export const showcases: ShowCaseInfo[] = [
     },
     at: 'FOSSASIA Summit 2024',
     slidesLink: 'https://talk.quan.hoabinh.vn/rust-error-handling-ease-web-dev/',
-    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev.git',
+    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev',
     cover: 'https://i.imgur.com/2eBJofY.png',
     datetime: '2024-04-10',
+  },
+  {
+    title: 'Hacker Numerology',
+    author: {
+      name: 'HD Moore',
+      link: 'https://hdm.io',
+    },
+    at: 'LASCON 2024',
+    slidesLink: 'https://hdm.io/decks/2024-LASCON-Numerology/',
+    sourceLink: 'https://github.com/hdm/decks-2024-lascon-numerology.git',
+    cover: 'https://raw.githubusercontent.com/hdm/decks-2024-lascon-numerology/refs/heads/main/screenshot.png',
+    datetime: '2024-10-25',
   },
   // Add yours here!
   {

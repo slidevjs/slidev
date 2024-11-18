@@ -162,11 +162,7 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
   return true
 }
 
-export default function math_plugin(md: any, options: KatexOptions) {
-  // Default options
-
-  options = options || {}
-
+export default function MarkdownItKatex(md: any, options: KatexOptions) {
   // set KaTeX as the renderer for markdown-it-simplemath
   const katexInline = function (latex: string) {
     options.displayMode = false

@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import { useEventListener, useVModel } from '@vueuse/core'
+import { useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { breakpoints, showOverview, windowSize } from '../state'
-import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { getSlideClass } from '../utils'
-import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import { CLICKS_MAX } from '../constants'
+import { configs, pathPrefix } from '../env'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { breakpoints, showOverview, windowSize } from '../state'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
-
-const props = defineProps<{ modelValue: boolean }>()
-const emit = defineEmits(['update:modelValue'])
-const value = useVModel(props, 'modelValue', emit)
+import SlideContainer from './SlideContainer.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 const { currentSlideNo, go: goSlide, slides } = useNav()
 
 function close() {
-  value.value = false
+  showOverview.value = false
 }
 
 function go(page: number) {
@@ -68,7 +64,7 @@ useEventListener('keypress', (e) => {
     }
     return
   }
-  const num = Number.parseInt(e.key.replace(/[^0-9]/g, ''))
+  const num = Number.parseInt(e.key.replace(/\D/g, ''))
   if (Number.isNaN(num)) {
     keyboardBuffer.value = ''
     return
@@ -102,11 +98,6 @@ watchEffect(() => {
   // Watch rowCount, make sure up and down shortcut work correctly.
   overviewRowCount.value = rowCount.value
 })
-
-const activeSlidesLoaded = ref(false)
-setTimeout(() => {
-  activeSlidesLoaded.value = true
-}, 3000)
 </script>
 
 <template>
@@ -117,10 +108,9 @@ setTimeout(() => {
     leave-to-class="opacity-0 scale-102 !backdrop-blur-0px"
   >
     <div
-      v-if="value || activeSlidesLoaded"
-      v-show="value"
-      class="bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)]"
-      @click="close()"
+      v-if="showOverview"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px select-none"
+      @click="close"
     >
       <div
         class="grid gap-y-4 gap-x-8 w-full"
@@ -138,14 +128,13 @@ setTimeout(() => {
           >
             <SlideContainer
               :key="route.no"
+              :no="route.no"
+              :use-snapshot="configs.overviewSnapshots"
               :width="cardWidth"
               class="pointer-events-none"
             >
               <SlideWrapper
-                :is="route.component"
-                v-if="route?.component"
                 :clicks-context="createFixedClicks(route, CLICKS_MAX)"
-                :class="getSlideClass(route)"
                 :route="route"
                 render-context="overview"
               />
@@ -168,16 +157,16 @@ setTimeout(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="value" class="fixed top-4 right-4 text-gray-400 flex flex-col items-center gap-2">
+  <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
       <carbon:close />
     </IconButton>
     <IconButton
-      v-if="__DEV__"
+      v-if="__SLIDEV_FEATURE_PRESENTER__"
       as="a"
       title="Slides Overview"
       target="_blank"
-      href="/overview"
+      :href="`${pathPrefix}overview`"
       tab-index="-1"
       class="text-2xl"
     >

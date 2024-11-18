@@ -1,8 +1,9 @@
-import { basename, resolve } from 'node:path'
+import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
+import { basename, relative, resolve } from 'node:path'
+import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
-import type { SlidevConfig, SlidevPreparserExtension } from '../packages/types/src'
 
 function configDiff(v: SlidevConfig) {
   const defaults = getDefaultConfig()
@@ -33,16 +34,18 @@ describe('md parser', () => {
 
       prettify(data.entry)
 
-      for (const slide of data.slides) {
-        if (slide.source?.filepath)
-          // eslint-disable-next-line ts/prefer-ts-expect-error
-          // @ts-ignore non-optional
-          delete slide.source.filepath
-        // @ts-expect-error extra prop
-        if (slide.filepath)
-          // @ts-expect-error extra prop
-          delete slide.filepath
-      }
+      // File path tests & convert to relative paths
+      data.markdownFiles = objectMap(data.markdownFiles, (path, md) => {
+        expect(md.filepath).toBe(path)
+        const relativePath = slash(relative(userRoot, path))
+        md.slides.forEach((slide) => {
+          expect(slide.filepath).toBe(path)
+          slide.filepath = relativePath
+        })
+        md.filepath = relativePath
+        return [relativePath, md]
+      })
+
       expect(data.slides).toMatchSnapshot('slides')
       expect(configDiff(resolveConfig(data.headmatter, {}))).toMatchSnapshot('config')
       expect(data.features).toMatchSnapshot('features')
@@ -239,57 +242,74 @@ a.a.A.A
   for (const desc of cartesian(...Bs)) {
     const [withSlideBefore, withFrontmatter, withSlideAfter, prependContent, appendContent, addFrontmatter] = desc
     it(`parse with-extension wrap ${desc.map((b, i) => bNames[b * (i + 1)]).join('')}`, async () => {
-      const data = await parseWithExtension(`${
-withSlideBefore
-? `
-.
+      const code = [
+        withSlideBefore
+          ? [
+              '.',
+              '',
+              '---',
+            ]
+          : [],
+        (!withSlideBefore && withFrontmatter)
+          ? [
+              '---',
+            ]
+          : [],
+        withFrontmatter
+          ? [
+              'm: M',
+              'n: N',
+              '---',
+            ]
+          : [],
+        '',
+        'ccc',
+        '@a',
+        '@b',
+        'ddd',
+        '',
+        withSlideAfter
+          ? [
+              '',
+              '---',
+              '',
+              '..',
+            ]
+          : [],
+      ].flat().join('\n')
 
----
-`
-: ''}${(!withSlideBefore && withFrontmatter) ? '---\n' : ''}${withFrontmatter
-? `m: M
-n: N
----`
-: ''}
-
-ccc
-@a
-@b
-ddd
-${
-withSlideAfter
-? `
----
-
-..
-`
-: ''}`, undefined, {
-        transformSlide(content: string, frontmatter: any) {
-          const lines = content.split('\n')
-          let i = 0
-          let appendBeforeCount = 0
-          let appendAfterCount = 0
-          while (i < lines.length) {
-            const l = lines[i]
-            if (l.startsWith('@')) {
-              const t = l.substring(1)
-              lines.splice(i, 1)
-              if (prependContent)
-                lines.splice(appendBeforeCount++, 0, `<${t}>`)
-              if (appendContent)
-                lines.splice(lines.length - appendAfterCount++, 0, `</${t}>`)
-              if (addFrontmatter)
-                frontmatter[`add${t}`] = 'add'
-              i--
+      const data = await parseWithExtension(
+        code,
+        undefined,
+        {
+          transformSlide(content: string, frontmatter: any) {
+            const lines = content.split('\n')
+            let i = 0
+            let appendBeforeCount = 0
+            let appendAfterCount = 0
+            while (i < lines.length) {
+              const l = lines[i]
+              if (l.startsWith('@')) {
+                const t = l.substring(1)
+                lines.splice(i, 1)
+                if (prependContent)
+                  lines.splice(appendBeforeCount++, 0, `<${t}>`)
+                if (appendContent)
+                  lines.splice(lines.length - appendAfterCount++, 0, `</${t}>`)
+                if (addFrontmatter)
+                  frontmatter[`add${t}`] = 'add'
+                i--
+              }
+              i++
             }
-            i++
-          }
-          return lines.join('\n')
+            return lines.join('\n')
+          },
         },
-      })
+      )
+
       function project(s: string) {
         // like the trim in other tests, the goal is not to test newlines here
-        return s.replace(/%%%*/g, '%')
+        return s.replace(/%{2,}/g, '%')
       }
       expect(project(data.slides.map(i => i.content.replace(/\n/g, '%')).join('/')))
         .toEqual(project([

@@ -1,15 +1,13 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { Plugin } from 'vite'
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import fg from 'fast-glob'
-import type { Plugin } from 'vite'
 import { findDepPkgJsonPath } from 'vitefu'
-import type { ResolvedSlidevOptions } from '@slidev/types'
 import { toAtFS } from '../resolver'
 
-export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Plugin {
-  const resolvedDepsMap: Record<string, Set<string>> = {}
-
+export function createMonacoTypesLoader({ userRoot, utils }: ResolvedSlidevOptions): Plugin {
   return {
     name: 'slidev:monaco-types-loader',
 
@@ -20,32 +18,34 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
     },
 
     async load(id) {
-      const matchResolve = id.match(/^\/\@slidev-monaco-types\/resolve\?pkg=(.*?)(?:&importer=(.*))?$/)
-      if (matchResolve) {
-        const [_, pkg, importer = userRoot] = matchResolve
+      if (!id.startsWith('/@slidev-monaco-types/'))
+        return null
 
-        const resolvedDeps = resolvedDepsMap[importer] ??= new Set()
-        if (resolvedDeps.has(pkg))
-          return ''
-        resolvedDeps.add(pkg)
+      const url = new URL(id, 'http://localhost')
+      if (url.pathname === '/@slidev-monaco-types/resolve') {
+        const query = new URLSearchParams(url.search)
+        const pkg = query.get('pkg')!
+        const importer = query.get('importer') ?? userRoot
 
         const pkgJsonPath = await findDepPkgJsonPath(pkg, importer)
         if (!pkgJsonPath)
           throw new Error(`Package "${pkg}" not found in "${importer}"`)
-        const root = dirname(pkgJsonPath)
+        const root = slash(dirname(pkgJsonPath))
 
         const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, 'utf-8'))
-        const deps = pkgJson.dependencies ?? {}
+        let deps = Object.keys(pkgJson.dependencies ?? {})
+        deps = deps.filter(pkg => !utils.isMonacoTypesIgnored(pkg))
 
         return [
-          `import "/@slidev-monaco-types/load?root=${slash(root)}&name=${pkgJson.name}"`,
-          ...Object.keys(deps).map(dep => `import "/@slidev-monaco-types/resolve?pkg=${dep}&importer=${slash(root)}"`),
+          `import "/@slidev-monaco-types/load?${new URLSearchParams({ root, name: pkgJson.name })}"`,
+          ...deps.map(dep => `import "/@slidev-monaco-types/resolve?${new URLSearchParams({ pkg: dep, importer: root })}"`),
         ].join('\n')
       }
 
-      const matchLoad = id.match(/^\/\@slidev-monaco-types\/load\?root=(.*?)&name=(.*)$/)
-      if (matchLoad) {
-        const [_, root, name] = matchLoad
+      if (url.pathname === '/@slidev-monaco-types/load') {
+        const query = new URLSearchParams(url.search)
+        const root = query.get('root')!
+        const name = query.get('name')!
         const files = await fg(
           [
             '**/*.ts',
@@ -61,11 +61,11 @@ export function createMonacoTypesLoader({ userRoot }: ResolvedSlidevOptions): Pl
         )
 
         if (!files.length)
-          return ''
+          return '/** No files found **/'
 
         return [
           'import { addFile } from "@slidev/client/setup/monaco.ts"',
-          ...files.map(file => `addFile(import(${
+          ...files.map(file => `addFile(() => import(${
             JSON.stringify(`${toAtFS(resolve(root, file))}?monaco-types&raw`)
           }), ${JSON.stringify(`node_modules/${name}/${file}`)})`),
         ].join('\n')

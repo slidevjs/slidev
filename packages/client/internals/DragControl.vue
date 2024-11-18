@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { clamp } from '@antfu/utils'
 import type { Pausable } from '@vueuse/core'
+import type { DragElementState } from '../composables/useDragElements'
+import { clamp } from '@antfu/utils'
 import { useIntervalFn } from '@vueuse/core'
 import { computed, inject, ref, watchEffect } from 'vue'
-import type { DragElementState } from '../composables/useDragElements'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { slideHeight, slideWidth } from '../env'
 import { magicKeys } from '../state'
 
 const { data } = defineProps<{ data: DragElementState }>()
-const { id, zoom, autoHeight, x0, y0, width, height, rotate } = data
+const { dragId, zoom, autoHeight, x0, y0, width, height, rotate, isArrow } = data
 
 const slideScale = inject(injectionSlideScale, ref(1))
 const scale = computed(() => slideScale.value * zoom.value)
 const { left: slideLeft, top: slideTop } = useSlideBounds()
 
 const ctrlSize = 10
-const minSize = 40
+const minSize = isArrow ? Number.NEGATIVE_INFINITY : 40
 const minRemain = 10
 
 const rotateRad = computed(() => rotate.value * Math.PI / 180)
@@ -31,6 +31,9 @@ const boundingLeft = computed(() => x0.value - boundingWidth.value / 2)
 const boundingTop = computed(() => y0.value - boundingHeight.value / 2)
 const boundingRight = computed(() => x0.value + boundingWidth.value / 2)
 const boundingBottom = computed(() => y0.value + boundingHeight.value / 2)
+
+const arrowRevX = computed(() => isArrow && width.value < 0)
+const arrowRevY = computed(() => isArrow && height.value < 0)
 
 let currentDrag: {
   x0: number
@@ -206,11 +209,12 @@ function getCornerProps(isLeft: boolean, isTop: boolean) {
       width: `${ctrlSize}px`,
       height: `${ctrlSize}px`,
       margin: `-${ctrlSize / 2}px`,
-      left: isLeft ? '0' : undefined,
-      right: isLeft ? undefined : '0',
-      top: isTop ? '0' : undefined,
-      bottom: isTop ? undefined : '0',
-      cursor: +isLeft + +isTop === 1 ? 'nesw-resize' : 'nwse-resize',
+      left: isLeft !== arrowRevX.value ? '0' : undefined,
+      right: isLeft !== arrowRevX.value ? undefined : '0',
+      top: isTop !== arrowRevY.value ? '0' : undefined,
+      bottom: isTop !== arrowRevY.value ? undefined : '0',
+      cursor: isArrow ? 'move' : +isLeft + +isTop === 1 ? 'nesw-resize' : 'nwse-resize',
+      borderRadius: isArrow ? '50%' : undefined,
     },
     class: ctrlClasses,
   }
@@ -356,14 +360,14 @@ watchEffect(() => {
   <div
     v-if="Number.isFinite(x0)"
     id="drag-control-container"
-    :data-drag-id="id"
+    :data-drag-id="dragId"
     :style="{
       position: 'absolute',
       zIndex: 100,
-      left: `${zoom * (x0 - width / 2)}px`,
-      top: `${zoom * (y0 - height / 2)}px`,
-      width: `${zoom * width}px`,
-      height: `${zoom * height}px`,
+      left: `${zoom * (x0 - Math.abs(width) / 2)}px`,
+      top: `${zoom * (y0 - Math.abs(height) / 2)}px`,
+      width: `${zoom * Math.abs(width)}px`,
+      height: `${zoom * Math.abs(height)}px`,
       transformOrigin: 'center center',
       transform: `rotate(${rotate}deg)`,
     }"
@@ -371,27 +375,31 @@ watchEffect(() => {
     @pointermove="onPointermove"
     @pointerup="onPointerup"
   >
-    <div class="absolute inset-0 z-100 b b-dark dark:b-gray-400">
+    <div class="absolute inset-0 z-100 dark:b-gray-400" :class="isArrow ? '' : 'b b-dark'">
       <template v-if="!autoHeight">
         <div v-bind="getCornerProps(true, true)" />
-        <div v-bind="getCornerProps(true, false)" />
-        <div v-bind="getCornerProps(false, true)" />
         <div v-bind="getCornerProps(false, false)" />
+        <template v-if="!isArrow">
+          <div v-bind="getCornerProps(true, false)" />
+          <div v-bind="getCornerProps(false, true)" />
+        </template>
       </template>
-      <div v-bind="getBorderProps('l')" />
-      <div v-bind="getBorderProps('r')" />
-      <template v-if="!autoHeight">
-        <div v-bind="getBorderProps('t')" />
-        <div v-bind="getBorderProps('b')" />
+      <template v-if="!isArrow">
+        <div v-bind="getBorderProps('l')" />
+        <div v-bind="getBorderProps('r')" />
+        <template v-if="!autoHeight">
+          <div v-bind="getBorderProps('t')" />
+          <div v-bind="getBorderProps('b')" />
+        </template>
+        <div v-bind="getRotateProps()" />
+        <div
+          class="absolute -top-15px w-0 b b-dashed b-dark dark:b-gray-400"
+          :style="{
+            left: 'calc(50% - 1px)',
+            height: autoHeight ? '14px' : '10px',
+          }"
+        />
       </template>
-      <div v-bind="getRotateProps()" />
-      <div
-        class="absolute -top-15px w-0 b b-dashed b-dark dark:b-gray-400"
-        :style="{
-          left: 'calc(50% - 1px)',
-          height: autoHeight ? '14px' : '10px',
-        }"
-      />
     </div>
   </div>
 </template>

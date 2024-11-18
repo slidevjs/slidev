@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
-import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import type { ClicksContext } from '@slidev/types'
+import type { PropType } from 'vue'
+import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
+import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
 import NoteDisplay from './NoteDisplay.vue'
 
@@ -25,6 +25,9 @@ const props = defineProps({
   },
   clicksContext: {
     type: Object as PropType<ClicksContext>,
+  },
+  highlight: {
+    default: true,
   },
   autoHeight: {
     default: false,
@@ -91,6 +94,14 @@ function calculateEditorHeight() {
     inputEl.value.style.height = `${inputEl.value.scrollHeight}px`
 }
 
+function onKeyDown(e: KeyboardEvent) {
+  // Override save shortcut on editing mode
+  if (editing.value && e.metaKey && e.key === 's') {
+    e.preventDefault()
+    update({ note: note.value }, props.no)
+  }
+}
+
 watch(
   [note, editing],
   () => {
@@ -112,6 +123,7 @@ watch(
     :note-html="info?.noteHTML"
     :clicks-context="clicksContext"
     :auto-scroll="!autoHeight"
+    :highlight="props.highlight"
     @marker-click="(e, clicks) => emit('markerClick', e, clicks)"
     @marker-dblclick="(e, clicks) => emit('markerDblclick', e, clicks)"
   />
@@ -125,5 +137,6 @@ watch(
     :class="props.class"
     :placeholder="placeholder"
     @keydown.esc="editing = false"
+    @keydown="onKeyDown"
   />
 </template>

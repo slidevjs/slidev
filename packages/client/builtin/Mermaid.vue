@@ -14,9 +14,9 @@ pie
 
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch, watchEffect } from 'vue'
-import { renderMermaid } from '../modules/mermaid'
 import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
+import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
   codeLz: string

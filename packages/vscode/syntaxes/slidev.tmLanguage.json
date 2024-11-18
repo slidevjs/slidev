@@ -1,0 +1,112 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Slidev",
+  "scopeName": "source.slidev",
+  "patterns": [],
+  "repository": {
+    "import-snippet": {
+      "match": "^(<<<)\\s*(\\S+)(\\s+[\\w-]+)?(?:\\s*(\\{)([^}]*)(\\}))?(?:\\s*(\\{.*\\}))?",
+      "name": "meta.import_snippet.block.slidev",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.slidev"
+        },
+        "2": {
+          "name": "string.path.snippet.slidev"
+        },
+        "3": {
+          "name": "import_snippet.block.language.slidev"
+        },
+        "4": {
+          "name": "punctuation.separator.range.slidev"
+        },
+        "5": {
+          "name": "meta.range_or_monaco.slidev",
+          "patterns": [
+            {
+              "include": "#monaco-type"
+            },
+            {
+              "include": "#monaco-write"
+            },
+            {
+              "include": "#range-with-steps"
+            }
+          ]
+        },
+        "6": {
+          "name": "punctuation.separator.range.slidev"
+        },
+        "7": {
+          "patterns": [
+            {
+              "include": "source.ts#object-literal"
+            }
+          ]
+        }
+      }
+    },
+    "range-with-steps": {
+      "match": "([^|]*)(\\|)?",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#range"
+            }
+          ]
+        },
+        "2": {
+          "name": "punctuation.separator.steps.slidev"
+        }
+      }
+    },
+    "range": {
+      "match": "(\\d+|\\*|all)([,-])?",
+      "captures": {
+        "1": {
+          "name": "constant.numeric.range.slidev"
+        },
+        "2": {
+          "name": "punctuation.separator.range.slidev"
+        }
+      }
+    },
+    "monaco-type": {
+      "match": "monaco(-(run|diff))?",
+      "name": "keyword.monaco.slidev"
+    },
+    "monaco-write": {
+      "match": "monaco-write",
+      "name": "keyword.monaco.slidev"
+    },
+    "slide-frontmatter": {
+      "begin": "(^|\\G)(---).*$",
+      "beginCaptures": {
+        "2": {
+          "name": "punctuation.definition.frontmatter.slidev"
+        }
+      },
+      "end": "(?=^\\s*$)",
+      "name": "markup.frontmatter.slidev",
+      "patterns": [
+        {
+          "begin": "(?=^(?!\\s*$))",
+          "end": "(?=^\\s*$)",
+          "patterns": [
+            {
+              "begin": "\\G",
+              "while": "^(?!(^|\\G)(---).*$)",
+              "contentName": "meta.embedded.block.yaml",
+              "patterns": [
+                {
+                  "include": "source.yaml"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

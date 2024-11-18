@@ -50,7 +50,7 @@ export default function setupRoutes() {
     )
   }
 
-  if (__SLIDEV_HAS_SERVER__) {
+  if (__SLIDEV_FEATURE_PRINT__) {
     routes.push(
       {
         name: 'print',
@@ -83,6 +83,11 @@ export default function setupRoutes() {
     {
       path: '',
       redirect: { path: '/1' },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../pages/404.vue'),
     },
   )
 

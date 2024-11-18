@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 
+import fs from 'node:fs'
+import { createRequire } from 'node:module'
+import path from 'node:path'
 // @ts-check
 import process from 'node:process'
-import fs from 'node:fs'
-import path from 'node:path'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
+import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
 import minimist from 'minimist'
 import prompts from 'prompts'
-import { execa } from 'execa'
-import { blue, bold, cyan, dim, green, yellow } from 'kolorist'
+import { x } from 'tinyexec'
 
 const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
@@ -123,8 +123,8 @@ async function init() {
     if (!agent)
       return
 
-    await execa(agent, ['install'], { stdio: 'inherit', cwd: root })
-    await execa(agent, ['run', 'dev'], { stdio: 'inherit', cwd: root })
+    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
     console.log(dim('\n  start it later by:\n'))

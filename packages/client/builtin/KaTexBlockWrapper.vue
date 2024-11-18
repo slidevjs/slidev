@@ -20,12 +20,12 @@ Learn more: https://sli.dev/guide/syntax.html#latex-line-highlighting
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import type { PropType } from 'vue'
-import { parseRangeString } from '@slidev/parser'
-import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET } from '../constants'
-import { makeId } from '../logic/utils'
+import { parseRangeString } from '@slidev/parser/utils'
+import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   ranges: {
@@ -61,7 +61,7 @@ onMounted(() => {
   const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
   clicks.register(id, clicksInfo)
 
-  const index = computed(() => Math.max(0, clicks.current - clicksInfo.start + 1))
+  const index = computed(() => clicksInfo ? Math.max(0, clicks.current - clicksInfo.start + 1) : CLICKS_MAX)
 
   const finallyRange = computed(() => {
     return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()

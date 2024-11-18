@@ -1,17 +1,17 @@
-import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
-import { useHead } from '@unhead/vue'
-import { useRouter } from 'vue-router'
-import { configs } from '../env'
-import { initSharedState, onPatch, patch } from '../state/shared'
-import { initDrawingState } from '../state/drawings'
-import { TRUST_ORIGINS, injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext } from '../constants'
-import { skipTransition } from '../logic/hmr'
-import { makeId } from '../logic/utils'
-import { getSlidePath } from '../logic/slides'
-import { createFixedClicks } from '../composables/useClicks'
-import { isDark } from '../logic/dark'
-import { useNav } from '../composables/useNav'
 import setups from '#slidev/setups/root'
+import { useHead } from '@unhead/vue'
+import { computed, getCurrentInstance, reactive, ref, shallowRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { createFixedClicks } from '../composables/useClicks'
+import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
+import { useNav } from '../composables/useNav'
+import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
+import { configs, slidesTitle } from '../env'
+import { skipTransition } from '../logic/hmr'
+import { getSlidePath } from '../logic/slides'
+import { makeId } from '../logic/utils'
+import { initDrawingState } from '../state/drawings'
+import { initSharedState, onPatch, patch } from '../state/shared'
 
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
@@ -21,7 +21,7 @@ export default function setupRoot() {
     configs,
     themeConfigs: computed(() => configs.themeConfig),
   })
-  app.provide(injectionRenderContext, ref('none'))
+  app.provide(injectionRenderContext, ref('none' as const))
   app.provide(injectionSlidevContext, context)
   app.provide(injectionCurrentPage, computed(() => context.nav.currentSlideNo))
   app.provide(injectionClicksContext, shallowRef(createFixedClicks()))
@@ -30,28 +30,12 @@ export default function setupRoot() {
   if (__DEV__) {
     // @ts-expect-error expose global
     window.__slidev__ = context
-    window.addEventListener('message', ({ data }) => {
-      if (data && data.target === 'slidev') {
-        if (data.type === 'navigate') {
-          context.nav.go(+data.no, +data.clicks || 0)
-        }
-        else if (data.type === 'css-vars') {
-          const root = document.documentElement
-          for (const [key, value] of Object.entries(data.vars || {}))
-            root.style.setProperty(key, value as any)
-        }
-        else if (data.type === 'color-schema') {
-          isDark.value = data.color === 'dark'
-        }
-      }
-    })
+    useEmbeddedControl()
   }
 
   // User Setups
   for (const setup of setups)
     setup()
-
-  const title = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
 
   const {
     clicksContext,
@@ -62,12 +46,12 @@ export default function setupRoot() {
   } = useNav()
 
   useHead({
-    title,
+    title: slidesTitle,
     htmlAttrs: configs.htmlAttrs,
   })
 
-  initSharedState(`${title} - shared`)
-  initDrawingState(`${title} - drawings`)
+  initSharedState(`${slidesTitle} - shared`)
+  initDrawingState(`${slidesTitle} - drawings`)
 
   const id = `${location.origin}_${makeId()}`
 
@@ -83,10 +67,12 @@ export default function setupRoot() {
     if (isPresenter.value) {
       patch('page', +currentSlideNo.value)
       patch('clicks', clicksContext.value.current)
+      patch('clicksTotal', clicksContext.value.total)
     }
     else {
       patch('viewerPage', +currentSlideNo.value)
       patch('viewerClicks', clicksContext.value.current)
+      patch('viewerClicksTotal', clicksContext.value.total)
     }
 
     patch('lastUpdate', {

@@ -23,6 +23,7 @@ html {
   cursor: pointer;
   @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
+  @apply focus-visible:(opacity-100 outline outline-2 outline-offset-2 outline-black dark:outline-white);
   @apply md:p-2;
 }
 
@@ -47,6 +48,10 @@ html {
   opacity: 0 !important;
   pointer-events: none !important;
   user-select: none !important;
+}
+
+.slidev-vclick-display-none {
+  display: none !important;
 }
 
 .slidev-vclick-fade {
@@ -77,8 +82,7 @@ html {
   user-select: none;
   font-size: 0.7em;
   display: inline-flex;
-  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border
-    border-transparent;
+  --uno: text-violet bg-violet/10 px1 font-mono rounded items-center border border-transparent;
 }
 .slidev-note-click-mark.slidev-note-click-mark-active {
   --uno: border border-violet;
@@ -115,4 +119,13 @@ html {
 /* Transform the position back for Rough Notation (v-mark) */
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
+}
+
+#twoslash-container {
+  position: fixed;
+}
+
+#twoslash-container .v-popper__wrapper {
+  transform: scale(calc(1 * var(--slidev-slide-scale)));
+  transform-origin: 30px top;
 }

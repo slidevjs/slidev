@@ -4,22 +4,18 @@
 declare module '#slidev/configs' {
   import type { SlidevConfig } from '@slidev/types'
 
-  const configs: SlidevConfig
+  const configs: SlidevConfig & { slidesTitle: string }
   export default configs
 }
 
-declare module '#slidev/global-components/top' {
+declare module '#slidev/global-layers' {
   import type { ComponentOptions } from 'vue'
 
-  const component: ComponentOptions
-  export default component
-}
+  export const GlobalTop: ComponentOptions
+  export const GlobalBottom: ComponentOptions
 
-declare module '#slidev/global-components/bottom' {
-  import type { ComponentOptions } from 'vue'
-
-  const component: ComponentOptions
-  export default component
+  export const SlideTop: ComponentOptions
+  export const SlideBottom: ComponentOptions
 }
 
 declare module '#slidev/global-components/handout-bottom' {
@@ -37,8 +33,8 @@ declare module '#slidev/global-components/handout-cover' {
 }
 
 declare module '#slidev/slides' {
-  import type { ShallowRef } from 'vue'
   import type { SlideRoute } from '@slidev/types'
+  import type { ShallowRef } from 'vue'
 
   const slides: ShallowRef<SlideRoute[]>
   export { slides }
@@ -59,14 +55,15 @@ declare module '#slidev/custom-nav-controls' {
 }
 
 declare module '#slidev/shiki' {
+  import type { BundledLanguage, BundledTheme, CodeToHastOptions } from 'shiki'
   import type { ShikiHighlighterCore } from 'shiki/core'
-  import type { BundledLanguage, BundledTheme } from 'shiki'
 
   export { shikiToMonaco } from '@shikijs/monaco'
 
-  export const langs: BundledLanguage[]
+  export const languages: BundledLanguage[]
   export const themes: BundledTheme | Record<string, BundledTheme>
   export const shiki: Promise<ShikiHighlighterCore>
+  export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => string>
 }
 
 declare module '#slidev/setups/monaco' {

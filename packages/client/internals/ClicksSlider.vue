@@ -4,9 +4,13 @@ import { clamp, range } from '@antfu/utils'
 import { computed } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   clicksContext: ClicksContext
-}>()
+  readonly?: boolean
+  active?: boolean
+}>(), {
+  active: true,
+})
 
 const total = computed(() => props.clicksContext.total)
 const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
@@ -24,6 +28,8 @@ const current = computed({
 const clicksRange = computed(() => range(start.value, total.value + 1))
 
 function onMousedown() {
+  if (props.readonly)
+    return
   if (current.value < 0 || current.value > total.value)
     current.value = 0
 }
@@ -33,20 +39,25 @@ function onMousedown() {
   <div
     class="flex gap-1 items-center select-none"
     :title="`Clicks in this slide: ${length}`"
-    :class="length ? '' : 'op50'"
+    :class="length && props.clicksContext.isMounted ? '' : 'op50'"
   >
-    <div class="flex gap-0.5 items-center min-w-16 font-mono mr1">
+    <div class="flex gap-0.2 items-center min-w-16 font-mono mr1">
       <carbon:cursor-1 text-sm op50 />
-      <div flex-auto />
-      <template v-if="current >= 0 && current !== CLICKS_MAX">
+      <template v-if="current >= 0 && current !== CLICKS_MAX && active">
+        <div flex-auto />
         <span text-primary>{{ current }}</span>
-        <span op25>/</span>
+        <span op25 text-sm>/</span>
+        <span op50 text-sm>{{ total }}</span>
       </template>
-      <span op50>{{ total }}</span>
+      <div
+        v-else
+        op50 flex-auto pl1
+      >
+        {{ total }}
+      </div>
     </div>
     <div
       relative flex-auto h5 font-mono flex="~"
-      @dblclick="current = clicksContext.total"
     >
       <div
         v-for="i of clicksRange" :key="i"
@@ -57,10 +68,13 @@ function onMousedown() {
         ]"
         :style="{ width: length > 0 ? `${1 / length * 100}%` : '100%' }"
       >
-        <div absolute inset-0 :class="i <= current ? 'bg-primary op15' : ''" />
+        <div
+          absolute inset-0
+          :class="(i <= current && active) ? 'bg-primary op15' : ''"
+        />
         <div
           :class="[
-            +i === +current ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',
+            (+i === +current && active) ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',
             i === 0 ? 'rounded-l' : '',
             i === total ? 'rounded-r' : 'border-r-2',
           ]"
@@ -71,8 +85,10 @@ function onMousedown() {
       </div>
       <input
         v-model="current"
-        class="range" absolute inset-0
-        type="range" :min="start" :max="total" :step="1" z-10 op0
+        class="range"
+        type="range" :min="start" :max="total" :step="1"
+        absolute inset-0 z-10 op0
+        :class="readonly ? 'pointer-events-none' : ''"
         :style="{ '--thumb-width': `${1 / (length + 1) * 100}%` }"
         @mousedown="onMousedown"
         @focus="event => (event.currentTarget as HTMLElement)?.blur()"

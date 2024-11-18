@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import Fuse from 'fuse.js'
-import { activeElement, showGotoDialog } from '../state'
-import { useNav } from '../composables/useNav'
 import TitleRenderer from '#slidev/title-renderer'
+import Fuse from 'fuse.js'
+import { computed, ref, watch } from 'vue'
+import { useNav } from '../composables/useNav'
+import { activeElement, showGotoDialog } from '../state'
 
 const container = ref<HTMLDivElement>()
 const input = ref<HTMLInputElement>()
@@ -135,35 +135,35 @@ watch(activeElement, () => {
         @input="updateText"
       >
     </div>
-    <ul
+    <div
       v-if="result.length > 0"
       ref="list"
       class="autocomplete-list"
       shadow="~"
       border="~ transparent rounded dark:main"
     >
-      <li
-        v-for="(item, index) of result"
-        ref="items"
-        :key="item.id"
-        role="button"
-        tabindex="0"
-        p="x-4 y-2"
-        cursor-pointer
-        hover="op100"
-        flex="~ gap-2"
-        w-90
-        items-center
-        :border="index === 0 ? '' : 't main'"
-        :class="selectedIndex === index ? 'bg-active op100' : 'op80'"
-        @click.stop.prevent="select(item.no)"
-      >
-        <div w-4 text-right op50 text-sm>
-          {{ item.no }}
-        </div>
-        <TitleRenderer :no="item.no" />
-      </li>
-    </ul>
+      <ul table w-full border-collapse>
+        <li
+          v-for="(item, index) of result"
+          ref="items"
+          :key="item.id"
+          role="button"
+          tabindex="0"
+          cursor-pointer
+          hover="op100"
+          table-row
+          items-center
+          :border="index === 0 ? undefined : 't main'"
+          :class="selectedIndex === index ? 'bg-active op100' : 'op80'"
+          @click.stop.prevent="select(item.no)"
+        >
+          <div text-right op50 text-sm table-cell py-2 pl-4 pr-3 vertical-middle>
+            {{ item.no }}
+          </div>
+          <TitleRenderer table-cell py-2 pr-4 w-full :no="item.no" />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

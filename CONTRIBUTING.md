@@ -2,9 +2,20 @@
 
 Excited to hear that you are interested in contributing to this project! Thanks!
 
-## Documentations
+## Documentation
 
-Documentations are now moved to [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
+Documentation is now being synced from the [`/docs`](https://github.com/slidevjs/slidev/tree/main/docs) folder to the [`slidevjs/docs`](https://github.com/slidevjs/docs) repo.
+
+All Pull Requests for documentation changes should still be made to this repository. Any merged changes will be automatically mirrored to the new documentation repo.
+
+The easiest way to contribute documentation to this project is to follow these steps:
+
+1. [Fork the repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo), for example to `https://github.com/octocat/slidev`, where `octocat` is your GitHub username.
+2. Clone the newly forked repo from your GitHub account
+3. Create a new branch to add your work to, i.e. `git checkout -b docs/update-contributing-guidelines`
+4. Make your changes and commit them
+5. Push the branch to your fork
+6. Go to [https://github.com/slidevjs/slidev/pulls](https://github.com/slidevjs/slidev/pulls), there should be a "Compare & Pull Request" button, where you can create a PR.
 
 ## Setup (in your browser)
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
 import type { PropType } from 'vue'
 import type { SelectionItem } from './types'
+import { useVModel } from '@vueuse/core'
 
 const props = defineProps({
   modelValue: {
-    type: [Object, String, Number] as PropType<any>,
+    type: [Object, String, Number, Boolean] as PropType<any>,
   },
   title: {
     type: String,
@@ -43,7 +43,7 @@ const value = useVModel(props, 'modelValue', emit, { passive: true })
 
 <style lang="postcss" scoped>
 .select-list {
-  @apply py-2;
+  @apply my-2;
 }
 
 .item {
@@ -55,6 +55,6 @@ const value = useVModel(props, 'modelValue', emit, { passive: true })
 }
 
 .title {
-  @apply text-xs uppercase opacity-50 tracking-widest px-7 py-1;
+  @apply text-xs uppercase opacity-50 tracking-widest px-7 py-1 select-none text-nowrap;
 }
 </style>

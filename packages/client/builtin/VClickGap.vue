@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Fragment, onMounted, watchEffect } from 'vue'
-import { makeId } from '../logic/utils'
+import { Fragment, onMounted, onUnmounted } from 'vue'
 import { useSlideContext } from '../context'
+import { makeId } from '../logic/utils'
 
 const props = defineProps({
   size: {
@@ -11,23 +11,21 @@ const props = defineProps({
 })
 
 const { $clicksContext: clicks } = useSlideContext()
+const id = makeId()
+
+let delta = +props.size
+if (Number.isNaN(delta)) {
+  console.warn(`[slidev] Invalid size for VClickGap: ${props.size}`)
+  delta = 1
+}
 
 onMounted(() => {
-  watchEffect((onCleanup) => {
-    if (!clicks)
-      return
+  const max = clicks.currentOffset + delta - 1
+  clicks.register(id, { max, delta })
+})
 
-    let delta = +props.size
-    if (Number.isNaN(delta)) {
-      console.warn(`[slidev] Invalid size for VClickGap: ${props.size}`)
-      delta = 1
-    }
-    const max = clicks.currentOffset + delta - 1
-
-    const id = makeId()
-    clicks.register(id, { max, delta })
-    onCleanup(() => clicks.unregister(id))
-  })
+onUnmounted(() => {
+  clicks.unregister(id)
 })
 </script>
 

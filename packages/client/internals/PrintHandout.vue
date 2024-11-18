@@ -2,7 +2,7 @@
 import type { SlideRoute } from '@slidev/types'
 import { computed } from 'vue'
 import NoteDisplay from './NoteDisplay.vue'
-import HandoutBottom from '#slidev/global-components/handout-bottom'
+import { HandoutBottom } from '#slidev/global-layers'
 
 const props = defineProps<{
   route: SlideRoute

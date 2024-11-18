@@ -1,5 +1,8 @@
 import type { SlideRoute } from '@slidev/types'
 import { slides } from '#slidev/slides'
+import { computed, watch, watchEffect } from 'vue'
+import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
 
 export { slides }
 
@@ -17,4 +20,20 @@ export function getSlidePath(
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
   return presenter ? `/presenter/${no}` : `/${no}`
+}
+
+export function useIsSlideActive() {
+  const { $page } = useSlideContext()
+  const { currentSlideNo } = useNav()
+  return computed(() => $page.value === currentSlideNo.value)
+}
+
+export function onSlideEnter(cb: () => void) {
+  const isActive = useIsSlideActive()
+  watchEffect(() => isActive.value && cb())
+}
+
+export function onSlideLeave(cb: () => void) {
+  const isActive = useIsSlideActive()
+  watch(isActive, () => !isActive.value && cb())
 }

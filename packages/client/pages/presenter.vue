@@ -1,35 +1,37 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { useMouse, useWindowFocus } from '@vueuse/core'
-import { useSwipeControls } from '../composables/useSwipeControls'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showOverview, showPresenterCursor } from '../state'
-import { configs } from '../env'
-import { sharedState } from '../state/shared'
-import { registerShortcuts } from '../logic/shortcuts'
-import { onContextMenu } from '../logic/contextMenu'
-import { getSlideClass } from '../utils'
-import { useTimer } from '../logic/utils'
+import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
-import SlideWrapper from '../internals/SlideWrapper.vue'
-import SlideContainer from '../internals/SlideContainer.vue'
-import NavControls from '../internals/NavControls.vue'
-import QuickOverview from '../internals/QuickOverview.vue'
-import NoteEditable from '../internals/NoteEditable.vue'
-import NoteStatic from '../internals/NoteStatic.vue'
-import Goto from '../internals/Goto.vue'
-import SlidesShow from '../internals/SlidesShow.vue'
-import DrawingControls from '../internals/DrawingControls.vue'
-import IconButton from '../internals/IconButton.vue'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
+import { useSwipeControls } from '../composables/useSwipeControls'
+import { useTimer } from '../composables/useTimer'
+import { useWakeLock } from '../composables/useWakeLock'
+import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
+import DrawingControls from '../internals/DrawingControls.vue'
+import Goto from '../internals/Goto.vue'
+import IconButton from '../internals/IconButton.vue'
+import NavControls from '../internals/NavControls.vue'
+import NoteEditable from '../internals/NoteEditable.vue'
+import NoteStatic from '../internals/NoteStatic.vue'
+import QuickOverview from '../internals/QuickOverview.vue'
+import SlideContainer from '../internals/SlideContainer.vue'
+import SlidesShow from '../internals/SlidesShow.vue'
+import SlideWrapper from '../internals/SlideWrapper.vue'
+import { onContextMenu } from '../logic/contextMenu'
+import { registerShortcuts } from '../logic/shortcuts'
+import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
+import { sharedState } from '../state/shared'
 
 const main = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
+if (__SLIDEV_FEATURE_WAKE_LOCK__)
+  useWakeLock()
 
 const {
   clicksContext,
@@ -38,27 +40,23 @@ const {
   hasNext,
   nextRoute,
   slides,
-  queryClicks,
   getPrimaryClicks,
   total,
 } = useNav()
 const { isDrawing } = useDrawings()
 
-const slideTitle = configs.titleTemplate.replace('%s', configs.title || 'Slidev')
-useHead({
-  title: `Presenter - ${slideTitle}`,
-})
+useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
 
-const { timer, resetTimer } = useTimer()
+const { timer, isTimerAvctive, resetTimer, toggleTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
 const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
   else if (hasNext.value)
-    return [nextRoute.value!, 0] as const
+    return [nextRoute.value, 0] as const
   else
     return null
 })
@@ -68,10 +66,10 @@ const nextFrameClicksCtx = computed(() => {
 })
 
 watch(
-  [currentSlideRoute, queryClicks],
+  nextFrame,
   () => {
-    if (nextFrameClicksCtx.value)
-      nextFrameClicksCtx.value.current = nextFrame.value![1]
+    if (nextFrameClicksCtx.value && nextFrame.value)
+      nextFrameClicksCtx.value.current = nextFrame.value[1]
   },
   { immediate: true },
 )
@@ -113,12 +111,11 @@ onMounted(() => {
       <div ref="main" class="relative grid-section main flex flex-col">
         <SlideContainer
           key="main"
-          class="h-full w-full p-2 lg:p-4 flex-auto"
+          class="p-2 lg:p-4 flex-auto"
+          is-main
           @contextmenu="onContextMenu"
         >
-          <template #default>
-            <SlidesShow render-context="presenter" />
-          </template>
+          <SlidesShow render-context="presenter" />
         </SlideContainer>
         <ClicksSlider
           :key="currentSlideRoute?.no"
@@ -130,26 +127,24 @@ onMounted(() => {
         </div>
       </div>
       <div class="relative grid-section next flex flex-col p-2 lg:p-4">
-        <SlideContainer
-          v-if="nextFrame && nextFrameClicksCtx"
-          key="next"
-          class="h-full w-full"
-        >
+        <SlideContainer v-if="nextFrame && nextFrameClicksCtx" key="next">
           <SlideWrapper
-            :is="nextFrame[0].component!"
             :key="nextFrame[0].no"
             :clicks-context="nextFrameClicksCtx"
-            :class="getSlideClass(nextFrame[0])"
             :route="nextFrame[0]"
             render-context="previewNext"
           />
         </SlideContainer>
+        <div v-else class="h-full flex justify-center items-center">
+          <div class="text-gray-500">
+            End of the presentation
+          </div>
+        </div>
         <div class="absolute left-0 top-0 bg-main border-b border-r border-main px2 py1 op50 text-sm">
           Next
         </div>
       </div>
-      <!-- Notes -->
-      <div v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__ && SideEditor && showEditor" class="grid-section note of-auto">
+      <div v-if="SideEditor && showEditor" class="grid-section note of-auto">
         <SideEditor />
       </div>
       <div v-else class="grid-section note grid grid-rows-[1fr_min-content] overflow-hidden">
@@ -189,16 +184,22 @@ onMounted(() => {
       <div class="grid-section bottom flex">
         <NavControls :persist="true" />
         <div flex-auto />
-        <div
-          class="timer-btn my-auto relative w-22px h-22px cursor-pointer text-lg"
-          opacity="50 hover:100"
-          @click="resetTimer"
-        >
-          <carbon:time class="absolute" />
-          <carbon:renew class="absolute opacity-0" />
-        </div>
-        <div class="text-2xl pl-2 pr-6 my-auto tabular-nums">
-          {{ timer }}
+        <div class="group flex items-center justify-center pl-4 select-none">
+          <div class="w-22px cursor-pointer">
+            <carbon:time class="group-hover:hidden text-xl" />
+            <div class="group-not-hover:hidden flex flex-col items-center">
+              <div class="relative op-80 hover:op-100" @click="toggleTimer">
+                <carbon:pause v-if="isTimerAvctive" class="text-lg" />
+                <carbon:play v-else />
+              </div>
+              <div class="op-80 hover:op-100" @click="resetTimer">
+                <carbon:renew />
+              </div>
+            </div>
+          </div>
+          <div class="text-2xl px-3 my-auto tabular-nums">
+            {{ timer }}
+          </div>
         </div>
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
@@ -206,29 +207,18 @@ onMounted(() => {
     <div class="progress-bar">
       <div
         class="progress h-3px bg-primary transition-all"
-        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100}%` }"
+        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100 + 1}%` }"
       />
     </div>
   </div>
   <Goto />
-  <QuickOverview v-model="showOverview" />
+  <QuickOverview />
   <ContextMenu />
 </template>
 
 <style scoped>
 .slidev-presenter {
   --slidev-controls-foreground: current;
-}
-
-.timer-btn:hover > :first-child {
-  opacity: 0;
-}
-.timer-btn:hover > :last-child {
-  opacity: 1;
-}
-
-.section-title {
-  --uno: px-4 py-2 text-xl;
 }
 
 .grid-container {
@@ -303,4 +293,4 @@ onMounted(() => {
 .grid-section.bottom {
   grid-area: bottom;
 }
-</style>../composables/drawings
+</style>

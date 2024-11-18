@@ -1,15 +1,14 @@
 <script setup lang="ts">
+import type { CodeRunnerOutputs, RawAtValue } from '@slidev/types'
 import { debounce, toArray } from '@antfu/utils'
 import { useVModel } from '@vueuse/core'
-import type { CodeRunnerOutput, RawAtValue } from '@slidev/types'
-import { computed, onMounted, onUnmounted, ref, shallowRef, watch, watchSyncEffect } from 'vue'
-import { useSlideContext } from '../context'
-import setupCodeRunners from '../setup/code-runners'
+import { computed, onMounted, onUnmounted, ref, shallowRef, toValue, watch, watchSyncEffect } from 'vue'
 import { useNav } from '../composables/useNav'
+import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
-import { normalizeAtValue } from '../composables/useClicks'
-import IconButton from './IconButton.vue'
+import setupCodeRunners from '../setup/code-runners'
 import DomElement from './DomElement.vue'
+import IconButton from './IconButton.vue'
 
 const props = defineProps<{
   modelValue: string
@@ -32,7 +31,7 @@ const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
 const isRunning = ref(autorun)
-const outputs = shallowRef<CodeRunnerOutput[]>()
+const outputs = shallowRef<CodeRunnerOutputs>()
 const runCount = ref(0)
 const highlightFn = ref<(code: string, lang: string) => string>()
 
@@ -40,8 +39,7 @@ const hidden = ref(props.showOutputAt)
 if (props.showOutputAt) {
   const id = makeId()
   onMounted(() => {
-    const at = normalizeAtValue(props.showOutputAt)
-    const info = $clicksContext.calculate(at)
+    const info = $clicksContext.calculate(props.showOutputAt)
     if (info) {
       $clicksContext.register(id, info)
       watchSyncEffect(() => {
@@ -66,7 +64,7 @@ const triggerRun = debounce(200, async () => {
     isRunning.value = true
   }, 500)
 
-  outputs.value = toArray(await run(code.value, props.lang, props.runnerOptions ?? {}))
+  outputs.value = await run(code.value, props.lang, props.runnerOptions ?? {})
   runCount.value += 1
   isRunning.value = false
 
@@ -92,11 +90,11 @@ else if (autorun)
     <div v-else-if="isRunning" class="text-sm text-center opacity-50">
       Running...
     </div>
-    <div v-else-if="!outputs?.length" class="text-sm text-center opacity-50">
+    <div v-else-if="!outputs" class="text-sm text-center opacity-50">
       Click the play button to run the code
     </div>
     <div v-else :key="`run-${runCount}`" class="slidev-runner-output">
-      <template v-for="output, _idx1 of outputs" :key="_idx1">
+      <template v-for="output, _idx1 of toArray(toValue(outputs))" :key="_idx1">
         <div v-if="'html' in output" v-html="output.html" />
         <div v-else-if="'error' in output" class="text-red-500">
           {{ output.error }}

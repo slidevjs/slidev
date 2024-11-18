@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Menu } from 'floating-vue'
 import { useDrawings } from '../composables/useDrawings'
-import VerticalDivider from './VerticalDivider.vue'
 import Draggable from './Draggable.vue'
 import IconButton from './IconButton.vue'
+import VerticalDivider from './VerticalDivider.vue'
 
 const {
   brush,
@@ -41,8 +41,9 @@ function setBrushColor(color: typeof brush.color) {
 
 <template>
   <Draggable
+    v-if="drawingEnabled || drawingPinned"
     class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 z-20 border border-main"
-    :class="drawingEnabled ? '' : drawingPinned ? 'opacity-40 hover:opacity-90' : 'opacity-0 pointer-events-none'"
+    :class="!drawingEnabled && drawingPinned ? 'opacity-40 hover:opacity-90' : ''"
     storage-key="slidev-drawing-pos"
     :initial-x="10"
     :initial-y="10"
@@ -136,4 +137,4 @@ function setBrushColor(color: typeof brush.color) {
 .v-popper--theme-menu .v-popper__arrow-inner {
   --uno: border-main;
 }
-</style>../composables/drawings
+</style>
