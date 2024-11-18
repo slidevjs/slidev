@@ -68,6 +68,8 @@ function findRegion(lines: Array<string>, regionName: string) {
   return null
 }
 
+const reMonacoWrite = /^\{monaco-write\}/
+
 /**
  * format: ">>> /path/to/file.extension#region language meta..."
  *    where #region, language and meta are optional
@@ -93,8 +95,9 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
           : path.resolve(dir, filepath),
       )
 
-      watchFiles[src] ??= new Set()
-      watchFiles[src].add(slide.index)
+      meta = meta.trim()
+      lang = lang.trim()
+      lang = lang || path.extname(filepath).slice(1)
 
       const isAFile = fs.statSync(src).isFile()
       if (!fs.existsSync(src) || !isAFile) {
@@ -119,16 +122,16 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
         }
       }
 
-      meta = meta.trim()
-      lang = lang.trim()
-      lang = lang || path.extname(filepath).slice(1)
-
-      if (meta.match(/^\{monaco-write\}/)) {
+      if (meta.match(reMonacoWrite)) {
         monacoWriterWhitelist.add(filepath)
         lang = lang.trim()
-        meta = meta.replace(/^\{monaco-write\}/, '').trim() || '{}'
+        meta = meta.replace(reMonacoWrite, '').trim() || '{}'
         const encoded = lz.compressToBase64(content)
         return `<Monaco writable=${JSON.stringify(filepath)} code-lz="${encoded}" lang="${lang}" v-bind="${meta}" />`
+      }
+      else {
+        watchFiles[src] ??= new Set()
+        watchFiles[src].add(slide.index)
       }
 
       return `\`\`\`${lang} ${meta}\n${content}\n\`\`\``
