@@ -8,8 +8,8 @@ import { loadSetups } from './load'
 export default function setupPreparser() {
   injectPreparserExtensionLoader(async (headmatter: Record<string, unknown>, filepath: string, mode?: string) => {
     const addons = headmatter?.addons as string[]
-    if (!addons?.length)
-      return []
+    // if (!addons?.length)
+    //   return []
     const { userRoot } = await getRoots()
     const roots = uniq([
       ...await resolveAddons(addons),
