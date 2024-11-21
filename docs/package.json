@@ -33,6 +33,7 @@
     "unplugin-icons": "catalog:",
     "unplugin-vue-components": "catalog:",
     "vite-plugin-inspect": "catalog:",
-    "vitepress": "catalog:"
+    "vitepress": "catalog:",
+    "vue": "catalog:"
   }
 }
