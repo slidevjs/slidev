@@ -2,7 +2,7 @@
   "type": "module",
   "version": "0.50.0-beta.7",
   "private": true,
-  "packageManager": "pnpm@9.13.2",
+  "packageManager": "pnpm@9.14.3",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -74,6 +74,9 @@
     "zx": "catalog:"
   },
   "pnpm": {
+    "overrides": {
+      "vite": "catalog:"
+    },
     "patchedDependencies": {
       "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
     }

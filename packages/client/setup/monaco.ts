@@ -6,22 +6,19 @@ import { setupTypeAcquisition } from '@typescript/ata'
 import * as monaco from 'monaco-editor'
 
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+// @ts-expect-error missing types
+import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-
-import ts from 'typescript'
-
-import { watchEffect } from 'vue'
-
 // @ts-expect-error missing types
 import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
-
 // @ts-expect-error missing types
 import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
-// @ts-expect-error missing types
-import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
+
+import ts from 'typescript'
+import { watchEffect } from 'vue'
 import { isDark } from '../logic/dark'
 
 window.MonacoEnvironment = {
