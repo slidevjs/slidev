@@ -54,7 +54,7 @@ const colors = computed(() => {
   <a v-if="props.removable" class="feature-tag flex gap-1 items-center">
     {{ formattedTag }}
     <button class="flex items-center op-70 hover:bg-gray-200/20 hover:op90 rounded-full mr--1" @click="emit('remove')">
-      <carbon:close />
+      <div class="i-carbon:close" />
     </button>
   </a>
   <span v-else-if="props.noclick" class="feature-tag">

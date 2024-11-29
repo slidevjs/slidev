@@ -69,12 +69,13 @@ const top = computed(() => {
       <div v-if="item === 'separator'" :key="index" class="w-full my1 border-t border-main" />
       <div
         v-else-if="item.small"
-        class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded"
+        class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded flex"
         :class="item.disabled ? `op40` : `hover:bg-active`"
         :title="(item.label as string)"
         @click="item.action"
       >
-        <component :is="item.icon" />
+        <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
+        <component :is="item.icon" v-else />
       </div>
       <div
         v-else
@@ -82,8 +83,9 @@ const top = computed(() => {
         :class="item.disabled ? `op40` : `hover:bg-active`"
         @click="item.action"
       >
-        <div class="mx-auto">
-          <component :is="item.icon" />
+        <div class="mx-auto flex">
+          <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
+          <component :is="item.icon" v-else />
         </div>
         <div v-if="typeof item.label === 'string'">
           {{ item.label }}

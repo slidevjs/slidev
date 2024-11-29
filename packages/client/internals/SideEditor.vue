@@ -143,13 +143,13 @@ throttledWatch(
           title="Switch to content tab" :class="tab === 'content' ? 'text-primary' : ''"
           @click="switchTab('content')"
         >
-          <carbon:account />
+          <div class="i-carbon:account" />
         </IconButton>
         <IconButton
           title="Switch to notes tab" :class="tab === 'note' ? 'text-primary' : ''"
           @click="switchTab('note')"
         >
-          <carbon:align-box-bottom-right />
+          <div class="i-carbon:align-box-bottom-right" />
         </IconButton>
       </div>
       <span class="text-2xl pt-1">
@@ -158,17 +158,17 @@ throttledWatch(
       <div class="flex-auto" />
       <template v-if="resize">
         <IconButton v-if="vertical" title="Dock to right" @click="vertical = false">
-          <carbon:open-panel-right />
+          <div class="i-carbon:open-panel-right" />
         </IconButton>
         <IconButton v-else title="Dock to bottom" @click="vertical = true">
-          <carbon:open-panel-bottom />
+          <div class="i-carbon:open-panel-bottom" />
         </IconButton>
       </template>
       <IconButton title="Open in editor" @click="openInEditor()">
-        <carbon:launch />
+        <div class="i-carbon:launch" />
       </IconButton>
       <IconButton title="Close" @click="close">
-        <carbon:close />
+        <div class="i-carbon:close" />
       </IconButton>
     </div>
     <div class="relative overflow-hidden rounded" style="background-color: var(--slidev-code-background)">

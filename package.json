@@ -74,12 +74,13 @@
     "zx": "catalog:"
   },
   "pnpm": {
-    "overrides": {
-      "vite": "catalog:"
-    },
     "patchedDependencies": {
       "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
     }
+  },
+  "resolutions": {
+    "typescript": "catalog:",
+    "vite": "catalog:"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

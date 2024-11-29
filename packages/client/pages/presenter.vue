@@ -167,17 +167,17 @@ onMounted(() => {
         />
         <div class="border-t border-main py-1 px-2 text-sm">
           <IconButton title="Increase font size" @click="increasePresenterFontSize">
-            <carbon:zoom-in />
+            <div class="i-carbon:zoom-in" />
           </IconButton>
           <IconButton title="Decrease font size" @click="decreasePresenterFontSize">
-            <carbon:zoom-out />
+            <div class="i-carbon:zoom-out" />
           </IconButton>
           <IconButton
             v-if="__DEV__"
             title="Edit Notes"
             @click="notesEditing = !notesEditing"
           >
-            <carbon:edit />
+            <div class="i-carbon:edit" />
           </IconButton>
         </div>
       </div>
@@ -186,14 +186,14 @@ onMounted(() => {
         <div flex-auto />
         <div class="group flex items-center justify-center pl-4 select-none">
           <div class="w-22px cursor-pointer">
-            <carbon:time class="group-hover:hidden text-xl" />
+            <div class="i-carbon:time group-hover:hidden text-xl" />
             <div class="group-not-hover:hidden flex flex-col items-center">
               <div class="relative op-80 hover:op-100" @click="toggleTimer">
-                <carbon:pause v-if="isTimerAvctive" class="text-lg" />
-                <carbon:play v-else />
+                <div v-if="isTimerAvctive" class="i-carbon:pause text-lg" />
+                <div v-else class="i-carbon:play" />
               </div>
               <div class="op-80 hover:op-100" @click="resetTimer">
-                <carbon:renew />
+                <div class="i-carbon:renew" />
               </div>
             </div>
           </div>

@@ -4,20 +4,11 @@ import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
 import setups from '#slidev/setups/context-menu'
 import { computed } from 'vue'
-import IconApps from '~icons/carbon/apps'
-import IconArrowDown from '~icons/carbon/arrow-down'
-import IconArrowLeft from '~icons/carbon/arrow-left'
-import IconArrowRight from '~icons/carbon/arrow-right'
-import IconArrowUp from '~icons/carbon/arrow-up'
-import IconMaximize from '~icons/carbon/maximize'
-import IconMinimize from '~icons/carbon/minimize'
-import IconPen from '~icons/carbon/pen'
-import IconPresentationFile from '~icons/carbon/presentation-file'
-import IconTextNotationToggle from '~icons/carbon/text-annotation-toggle'
-import IconUserSpeaker from '~icons/carbon/user-speaker'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { fullscreen, showEditor, toggleOverview } from '../state'
+
+// @unocss-include
 
 let items: ComputedRef<ContextMenuItem[]> | undefined
 
@@ -51,60 +42,60 @@ export default () => {
     computed(() => [
       {
         small: true,
-        icon: IconArrowLeft,
+        icon: 'i-carbon:arrow-left',
         label: 'Previous Click',
         action: prev,
         disabled: !hasPrev.value,
       },
       {
         small: true,
-        icon: IconArrowRight,
+        icon: 'i-carbon:arrow-right',
         label: 'Next Click',
         action: next,
         disabled: !hasNext.value,
       },
       {
         small: true,
-        icon: IconArrowUp,
+        icon: 'i-carbon:arrow-up',
         label: 'Previous Slide',
         action: prevSlide,
         disabled: currentPage.value <= 1,
       },
       {
         small: true,
-        icon: IconArrowDown,
+        icon: 'i-carbon:arrow-down',
         label: 'Next Slide',
         action: nextSlide,
         disabled: currentPage.value >= total.value,
       },
       'separator',
       {
-        icon: IconTextNotationToggle,
+        icon: 'i-carbon:text-annotation-toggle', // IconTextNotationToggle,
         label: showEditor.value ? 'Hide editor' : 'Show editor',
         action: () => (showEditor.value = !showEditor.value),
       },
       {
-        icon: IconPen,
+        icon: 'i-carbon:pen',
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
         action: () => (drawingEnabled.value = !drawingEnabled.value),
       },
       {
-        icon: IconApps,
+        icon: 'i-carbon:apps',
         label: 'Show slide overview',
         action: toggleOverview,
       },
       isPresenter.value && {
-        icon: IconPresentationFile,
+        icon: 'i-carbon:presentation-file',
         label: 'Exit Presenter Mode',
         action: exitPresenter,
       },
       __SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable.value && {
-        icon: IconUserSpeaker,
+        icon: 'i-carbon:user-speaker',
         label: 'Enter Presenter Mode',
         action: enterPresenter,
       },
       !isEmbedded.value && {
-        icon: isFullscreen.value ? IconMinimize : IconMaximize,
+        icon: isFullscreen.value ? 'i-carbon:minimize' : 'i-carbon:maximize',
         label: isFullscreen.value ? 'Close fullscreen' : 'Enter fullscreen',
         action: toggleFullscreen,
       },
