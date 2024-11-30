@@ -1,5 +1,6 @@
 import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { env } from 'node:process'
 import { resolvePath } from 'mlly'
 import { defineConfig } from 'tsup'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch'
@@ -12,7 +13,7 @@ export default defineConfig({
   format: ['cjs'],
   target: 'node18',
   clean: true,
-  minify: true,
+  minify: env.NODE_ENV === 'production',
   sourcemap: true,
   external: [
     'vscode',

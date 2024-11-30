@@ -5,13 +5,18 @@
       "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
+      "autoAttachChildProcesses": true,
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode",
         "--folder-uri=${workspaceRoot}/packages/vscode/syntaxes"
       ],
       "outFiles": [
-        "${workspaceFolder}/out/**/*.js"
-      ]
+        "${workspaceFolder}/packages/vscode/dist/**/*.js"
+      ],
+      "preLaunchTask": {
+        "type": "npm",
+        "script": "vscode:dev"
+      }
     }
   ]
 }
