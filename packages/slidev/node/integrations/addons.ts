@@ -1,8 +1,8 @@
 import { resolve } from 'node:path'
 import fs from 'fs-extra'
 import { satisfies } from 'semver'
-import { createResolver, getRoots } from '../resolver'
 import { version } from '../../package.json'
+import { createResolver, getRoots } from '../resolver'
 
 export async function resolveAddons(addonsInConfig: string[]) {
   const { userRoot, userPkgJson } = await getRoots()

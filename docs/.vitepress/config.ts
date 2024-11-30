@@ -1,11 +1,11 @@
-import { fileURLToPath } from 'node:url'
 import type { DefaultTheme } from 'vitepress'
-import { defineConfig } from 'vitepress'
+import { fileURLToPath } from 'node:url'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
+import { defineConfig } from 'vitepress'
 import { version } from '../package.json'
-import { getSidebarObject } from './sidebar-gen'
-import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import Customizations from './customizations'
+import { Advanced, BuiltIn, Guides, Resources } from './pages'
+import { getSidebarObject } from './sidebar-gen'
 
 const slidebars: DefaultTheme.SidebarItem[] = [
   {
@@ -132,6 +132,7 @@ export default defineConfig({
       '/custom/': slidebars,
       '/builtin/': slidebars,
       '/resources/': slidebars,
+      // eslint-disable-next-line antfu/no-top-level-await
       ...await getSidebarObject(),
       '/features/': [],
       '/': slidebars,

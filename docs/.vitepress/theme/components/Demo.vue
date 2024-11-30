@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import TypeIt from 'typeit'
-import Markdown from 'markdown-it'
 import type { SlidevMarkdown } from '@slidev/types'
+import Center from '@slidev/client/layouts/center.vue'
+import Default from '@slidev/client/layouts/default.vue'
 import { parseSync } from '@slidev/parser'
 import Cover from '@slidev/theme-default/layouts/cover.vue'
-import Default from '@slidev/client/layouts/default.vue'
-import Center from '@slidev/client/layouts/center.vue'
-import SlideContainer from './SlideContainer.vue'
-import '@slidev/client/styles/layouts-base.css'
-import '@slidev/theme-default/styles/layouts.css'
-
+import Markdown from 'markdown-it'
+import TypeIt from 'typeit'
+import { onMounted, ref, watch } from 'vue'
 import DemoEditor from './DemoEditor.vue'
 import DemoSlide from './DemoSlide.vue'
+import SlideContainer from './SlideContainer.vue'
+
+import '@slidev/client/styles/layouts-base.css'
+import '@slidev/theme-default/styles/layouts.css'
 
 const page = ref(0)
 const paused = ref(false)
@@ -128,7 +128,7 @@ onMounted(play)
       </div>
 
       <div v-if="completed" class="absolute text-xs right-1 top-1 icon-btn opacity-50" title="Replay" @click="play()">
-        <carbon:reset />
+        <div class="i-carbon:reset" />
       </div>
 
       <div class="language-md !bg-transparent px4 py1">
@@ -158,10 +158,10 @@ onMounted(play)
         opacity="0 hover:100"
       >
         <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">
-          <carbon:chevron-left />
+          <div class="i-carbon:chevron-left" />
         </div>
         <div class="icon-btn" :class="{ disabled: page === 1 }" @click="page = 1">
-          <carbon:chevron-right />
+          <div class="i-carbon:chevron-right" />
         </div>
       </div>
     </DemoSlide>

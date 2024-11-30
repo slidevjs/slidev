@@ -6,8 +6,6 @@ theme: seriph
 background: https://cover.sli.dev
 # apply any unocss classes to the current slide
 class: 'text-center'
-# https://sli.dev/custom/config-highlighter.html
-highlighter: shiki
 # some information about the slides, markdown enabled
 info: |
   ## Slidev Starter Template
@@ -24,14 +22,14 @@ mdc: true
 Presentation slides for developers
 
 <div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
+  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" flex="~ justify-center items-center gap-2" hover="bg-white bg-opacity-10">
+    Press Space for next page <div class="i-carbon:arrow-right inline-block"/>
   </span>
 </div>
 
 <div class="abs-br m-6 flex gap-2">
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
+    <div class="i-carbon:edit" />
   </button>
   <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
@@ -237,8 +235,8 @@ theme: seriph
 
 </div>
 
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
+check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
 
 ---
 preload: false

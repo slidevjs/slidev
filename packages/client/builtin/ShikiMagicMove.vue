@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import type { PropType } from 'vue'
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import lz from 'lz-string'
 import { sleep } from '@antfu/utils'
-import { useSlideContext } from '../context'
-import { makeId, updateCodeHighlightRange } from '../logic/utils'
+import lz from 'lz-string'
+import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
+import { useSlideContext } from '../context'
 import { configs } from '../env'
+import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
 const props = defineProps({
   at: {

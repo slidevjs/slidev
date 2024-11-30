@@ -19,8 +19,8 @@ declare module '#slidev/global-layers' {
 }
 
 declare module '#slidev/slides' {
-  import type { ShallowRef } from 'vue'
   import type { SlideRoute } from '@slidev/types'
+  import type { ShallowRef } from 'vue'
 
   const slides: ShallowRef<SlideRoute[]>
   export { slides }
@@ -41,12 +41,12 @@ declare module '#slidev/custom-nav-controls' {
 }
 
 declare module '#slidev/shiki' {
-  import type { ShikiHighlighterCore } from 'shiki/core'
   import type { BundledLanguage, BundledTheme, CodeToHastOptions } from 'shiki'
+  import type { ShikiHighlighterCore } from 'shiki/core'
 
   export { shikiToMonaco } from '@shikijs/monaco'
 
-  export const langs: BundledLanguage[]
+  export const languages: BundledLanguage[]
   export const themes: BundledTheme | Record<string, BundledTheme>
   export const shiki: Promise<ShikiHighlighterCore>
   export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => string>

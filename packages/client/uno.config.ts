@@ -1,3 +1,5 @@
+import extractorMdc from '@unocss/extractor-mdc'
+import { variantMatcher } from '@unocss/preset-mini/utils'
 import {
   defineConfig,
   presetAttributify,
@@ -6,8 +8,6 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
-import { variantMatcher } from '@unocss/preset-mini/utils'
-import extractorMdc from '@unocss/extractor-mdc'
 
 export default defineConfig({
   safelist: [

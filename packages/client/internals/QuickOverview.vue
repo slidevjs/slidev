@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useEventListener } from '@vueuse/core'
 import { computed, ref, watchEffect } from 'vue'
-import { breakpoints, showOverview, windowSize } from '../state'
-import { currentOverviewPage, overviewRowCount } from '../logic/overview'
 import { createFixedClicks } from '../composables/useClicks'
-import { CLICKS_MAX } from '../constants'
 import { useNav } from '../composables/useNav'
-import { pathPrefix } from '../env'
-import SlideContainer from './SlideContainer.vue'
-import SlideWrapper from './SlideWrapper.vue'
+import { CLICKS_MAX } from '../constants'
+import { configs, pathPrefix } from '../env'
+import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { breakpoints, showOverview, windowSize } from '../state'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
+import SlideContainer from './SlideContainer.vue'
+import SlideWrapper from './SlideWrapper.vue'
 
 const { currentSlideNo, go: goSlide, slides } = useNav()
 
@@ -128,6 +128,8 @@ watchEffect(() => {
           >
             <SlideContainer
               :key="route.no"
+              :no="route.no"
+              :use-snapshot="configs.overviewSnapshots"
               :width="cardWidth"
               class="pointer-events-none"
             >
@@ -157,7 +159,7 @@ watchEffect(() => {
   </Transition>
   <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
-      <carbon:close />
+      <div class="i-carbon:close" />
     </IconButton>
     <IconButton
       v-if="__SLIDEV_FEATURE_PRESENTER__"
@@ -168,7 +170,7 @@ watchEffect(() => {
       tab-index="-1"
       class="text-2xl"
     >
-      <carbon:list-boxes />
+      <div class="i-carbon:list-boxes" />
     </IconButton>
   </div>
 </template>

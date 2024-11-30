@@ -1,14 +1,14 @@
+import type { ArgumentsType } from '@antfu/utils'
 import type Vue from '@vitejs/plugin-vue'
 import type VueJsx from '@vitejs/plugin-vue-jsx'
+import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
 import type Icons from 'unplugin-icons/vite'
 import type Components from 'unplugin-vue-components/vite'
 import type Markdown from 'unplugin-vue-markdown/vite'
-import type { VitePluginConfig as UnoCSSConfig } from 'unocss/vite'
+import type { ViteInspectOptions } from 'vite-plugin-inspect'
 import type RemoteAssets from 'vite-plugin-remote-assets'
-import type ServerRef from 'vite-plugin-vue-server-ref'
 import type { ViteStaticCopyOptions } from 'vite-plugin-static-copy'
-import type { Options as ViteInspectOptions } from 'vite-plugin-inspect'
-import type { ArgumentsType } from '@antfu/utils'
+import type ServerRef from 'vite-plugin-vue-server-ref'
 
 export interface SlidevPluginOptions {
   vue?: ArgumentsType<typeof Vue>[0]

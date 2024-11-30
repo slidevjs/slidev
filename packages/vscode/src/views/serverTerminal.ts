@@ -1,6 +1,6 @@
+import type { SlidevProject } from '../projects'
 import { useAbsolutePath, useControlledTerminal } from 'reactive-vscode'
 import { Uri } from 'vscode'
-import type { SlidevProject } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
 
 export function useServerTerminal(project: SlidevProject) {

@@ -2,8 +2,8 @@
 import { useVModel } from '@vueuse/core'
 import { nextTick } from 'vue'
 import { getFilename, mimeType, recordCamera, recorder, recordingName } from '../logic/recording'
-import Modal from './Modal.vue'
 import DevicesList from './DevicesList.vue'
+import Modal from './Modal.vue'
 
 const props = defineProps({
   modelValue: {
@@ -34,7 +34,7 @@ async function start() {
 <template>
   <Modal v-model="value" class="px-6 py-4 recording-dialog flex flex-col gap-2">
     <div class="flex gap-2 text-xl">
-      <carbon:video class="my-auto" />Recording
+      <div class="i-carbon:video my-auto" />Recording
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="flex flex-col gap-2 py-2">

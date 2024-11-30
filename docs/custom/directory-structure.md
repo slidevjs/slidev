@@ -129,6 +129,6 @@ The final hosted `index.html` will be:
 
 ## Global Layers
 
-Pattern: `global-top.vue` | `global-bottom.vue` | `custom-nav-controls.vue` | `layouts/slide-top.vue` | `layouts/slide-bottom.vue`
+Pattern: `global-top.vue` | `global-bottom.vue` | `custom-nav-controls.vue` | `slide-top.vue` | `slide-bottom.vue`
 
 <LinkCard link="features/global-layers" />

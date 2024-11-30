@@ -1,5 +1,5 @@
-import { computed, ref, toRef } from 'vue'
 import { injectLocal, objectOmit } from '@vueuse/core'
+import { computed, ref, toRef } from 'vue'
 import {
   FRONTMATTER_FIELDS,
   HEADMATTER_FIELDS,
@@ -9,8 +9,8 @@ import {
   injectionRenderContext,
   injectionRoute,
   injectionSlideScale,
-  injectionSlideZoom,
   injectionSlidevContext,
+  injectionSlideZoom,
 } from './constants'
 
 /**

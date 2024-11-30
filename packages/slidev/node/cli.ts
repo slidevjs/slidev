@@ -1,29 +1,27 @@
-/* eslint-disable no-console */
-import path from 'node:path'
-import os from 'node:os'
-import { exec } from 'node:child_process'
-import * as readline from 'node:readline'
-import process from 'node:process'
-import fs from 'fs-extra'
-import openBrowser from 'open'
-import type { Argv } from 'yargs'
-import yargs from 'yargs'
-import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
-import type { LogLevel, ViteDevServer } from 'vite'
 import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/types'
-import equal from 'fast-deep-equal'
+import type { LogLevel, ViteDevServer } from 'vite'
+import type { Argv } from 'yargs'
+import { exec } from 'node:child_process'
+import os from 'node:os'
+import path from 'node:path'
+import process from 'node:process'
+import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
+import equal from 'fast-deep-equal'
+import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
+import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
+import openBrowser from 'open'
+import yargs from 'yargs'
 import { version } from '../package.json'
 import { createServer } from './commands/serve'
-import { resolveOptions } from './options'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
+import { resolveOptions } from './options'
 import { parser } from './parser'
 import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
-  'highlighter',
   'monaco',
   'routerMode',
   'fonts',
@@ -36,7 +34,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 /**
  * Files that triggers a restart when added or removed
  */
-const FILES_CREATE_RESTART_GLOBS = [
+const FILES_CREATE_RESTART = [
   'global-bottom.vue',
   'global-top.vue',
   'uno.config.js',
@@ -45,7 +43,7 @@ const FILES_CREATE_RESTART_GLOBS = [
   'unocss.config.ts',
 ]
 
-const FILES_CHANGE_RESTART_GLOBS = [
+const FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
@@ -299,8 +297,8 @@ cli.command(
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
     const watcher = watch([
-      ...FILES_CREATE_RESTART_GLOBS,
-      ...FILES_CHANGE_RESTART_GLOBS,
+      ...FILES_CREATE_RESTART,
+      ...FILES_CHANGE_RESTART,
     ], {
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
@@ -314,7 +312,7 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
-      if (FILES_CREATE_RESTART_GLOBS.includes(file))
+      if (FILES_CREATE_RESTART.includes(file))
         return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))
       restartServer()
@@ -353,9 +351,7 @@ cli.command(
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect }, 'build')
-      if (download && !options.data.config.download)
-        options.data.config.download = download
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download }, 'build')
 
       printInfo(options)
       await build(

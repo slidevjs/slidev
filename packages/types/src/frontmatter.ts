@@ -1,5 +1,5 @@
-import type { SlidevThemeConfig } from './types'
 import type { BuiltinLayouts } from './builtin-layouts'
+import type { SlidevThemeConfig } from './types'
 
 export interface Headmatter extends HeadmatterConfig, Frontmatter {
   /**
@@ -23,7 +23,7 @@ export interface HeadmatterConfig extends TransitionOptions {
   /**
    * Theme to use for the slides
    *
-   * See https://sli.dev/themes/use.html
+   * See https://sli.dev/guide/theme-addon#use-theme
    * @default 'default'
    */
   theme?: string
@@ -65,7 +65,7 @@ export interface HeadmatterConfig extends TransitionOptions {
    * See https://sli.dev/custom/config-highlighter.html
    * @default shiki
    */
-  highlighter?: 'shiki' | 'prism'
+  highlighter?: 'shiki'
   /**
    * Enable Twoslash
    *
@@ -211,6 +211,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default ''
    */
   exportFilename?: string | null
+  /**
+   * Use image snapshot for quick overview
+   *
+   * @experimental
+   * @default false
+   */
+  overviewSnapshots?: boolean
   /**
    * Enable Monaco
    *

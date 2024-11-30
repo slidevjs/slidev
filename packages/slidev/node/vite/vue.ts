@@ -1,7 +1,7 @@
+import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 
 const customElements = new Set([
   // katex
@@ -48,12 +48,13 @@ export async function createVuePlugin(
     exclude: [],
     ...vueOptions,
     template: {
+      ...vueOptions?.template,
       compilerOptions: {
+        ...vueOptions?.template?.compilerOptions,
         isCustomElement(tag) {
           return customElements.has(tag) || vueOptions?.template?.compilerOptions?.isCustomElement?.(tag)
         },
       },
-      ...vueOptions?.template,
     },
   })
   const VueJsxPlugin = VueJsx(vuejsxOptions)

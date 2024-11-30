@@ -4,8 +4,8 @@ import { onMounted, watch } from 'vue'
 import { recorder } from '../logic/recording'
 import { currentCamera, showRecordingDialog } from '../state'
 import DevicesList from './DevicesList.vue'
-import MenuButton from './MenuButton.vue'
 import IconButton from './IconButton.vue'
+import MenuButton from './MenuButton.vue'
 
 const {
   recording,
@@ -41,7 +41,7 @@ onMounted(() => {
     title="Toggle camera view"
     @click="toggleAvatar"
   >
-    <carbon:user-avatar />
+    <div class="i-carbon:user-avatar" />
   </IconButton>
 
   <IconButton
@@ -49,13 +49,13 @@ onMounted(() => {
     :title="recording ? 'Stop record video' : 'Record video'"
     @click="toggleRecording"
   >
-    <carbon:stop-outline v-if="recording" />
-    <carbon:video v-else />
+    <div v-if="recording" class="i-carbon:stop-outline" />
+    <div v-else class="i-carbon:video" />
   </IconButton>
   <MenuButton :disabled="recording">
     <template #button>
       <IconButton title="Select recording device" class="h-full !text-sm !px-0 aspect-initial">
-        <carbon:chevron-up class="opacity-50" />
+        <div class="i-carbon:chevron-up opacity-50" />
       </IconButton>
     </template>
     <template #menu>

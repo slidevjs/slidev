@@ -1,9 +1,9 @@
-import { basename } from 'node:path'
 import type { Ref } from 'reactive-vscode'
-import { toRef } from 'reactive-vscode'
-import { getPort as getPortPlease } from 'get-port-please'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
+import { basename } from 'node:path'
+import { getPort as getPortPlease } from 'get-port-please'
+import { toRef } from 'reactive-vscode'
 import { useServerTerminal } from '../views/serverTerminal'
 import { useServerDetector } from './useServerDetector'
 

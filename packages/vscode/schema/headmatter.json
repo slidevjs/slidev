@@ -131,8 +131,8 @@
         },
         "theme": {
           "type": "string",
-          "description": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
-          "markdownDescription": "Theme to use for the slides\n\nSee https://sli.dev/themes/use.html",
+          "description": "Theme to use for the slides\n\nSee https://sli.dev/guide/theme-addon#use-theme",
+          "markdownDescription": "Theme to use for the slides\n\nSee https://sli.dev/guide/theme-addon#use-theme",
           "default": "default"
         },
         "addons": {
@@ -188,10 +188,7 @@
         },
         "highlighter": {
           "type": "string",
-          "enum": [
-            "shiki",
-            "prism"
-          ],
+          "const": "shiki",
           "description": "Prefer highlighter\n\nSee https://sli.dev/custom/config-highlighter.html",
           "markdownDescription": "Prefer highlighter\n\nSee https://sli.dev/custom/config-highlighter.html",
           "default": "shiki"
@@ -410,6 +407,12 @@
           "description": "Force the filename used when exporting the presentation. The extension, e.g. .pdf, gets automatically added.",
           "markdownDescription": "Force the filename used when exporting the presentation.\nThe extension, e.g. .pdf, gets automatically added.",
           "default": ""
+        },
+        "overviewSnapshots": {
+          "type": "boolean",
+          "description": "Use image snapshot for quick overview",
+          "markdownDescription": "Use image snapshot for quick overview",
+          "default": false
         },
         "monaco": {
           "anyOf": [

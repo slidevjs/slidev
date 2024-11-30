@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue'
-import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { downloadPDF } from '../utils'
-import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
-import { configs } from '../env'
-import { useNav } from '../composables/useNav'
-import { useDrawings } from '../composables/useDrawings'
-import Settings from './Settings.vue'
-import MenuButton from './MenuButton.vue'
-import VerticalDivider from './VerticalDivider.vue'
-import IconButton from './IconButton.vue'
-
 import CustomNavControls from '#slidev/custom-nav-controls'
+import { computed, ref, shallowRef } from 'vue'
+import { useDrawings } from '../composables/useDrawings'
+import { useNav } from '../composables/useNav'
+import { configs } from '../env'
+import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
+import { activeElement, breakpoints, fullscreen, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
+import { downloadPDF } from '../utils'
+import IconButton from './IconButton.vue'
+import MenuButton from './MenuButton.vue'
+import Settings from './Settings.vue'
+
+import VerticalDivider from './VerticalDivider.vue'
 
 const props = defineProps({
   persist: {
@@ -63,17 +63,17 @@ if (__SLIDEV_FEATURE_RECORD__)
       @mouseleave="onMouseLeave"
     >
       <IconButton v-if="!isEmbedded" :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
-        <carbon:minimize v-if="isFullscreen" />
-        <carbon:maximize v-else />
+        <div v-if="isFullscreen" class="i-carbon:minimize" />
+        <div v-else class="i-carbon:maximize" />
       </IconButton>
       <IconButton :class="{ disabled: !hasPrev }" title="Go to previous slide" @click="prev">
-        <carbon:arrow-left />
+        <div class="i-carbon:arrow-left" />
       </IconButton>
       <IconButton :class="{ disabled: !hasNext }" title="Go to next slide" @click="next">
-        <carbon:arrow-right />
+        <div class="i-carbon:arrow-right" />
       </IconButton>
       <IconButton v-if="!isEmbedded" title="Show slide overview" @click="toggleOverview()">
-        <carbon:apps />
+        <div class="i-carbon:apps" />
       </IconButton>
       <IconButton
         v-if="!isColorSchemaConfigured"
@@ -104,7 +104,7 @@ if (__SLIDEV_FEATURE_RECORD__)
 
       <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
         <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
-          <carbon:pen />
+          <div class="i-carbon:pen" />
           <div
             v-if="drawingEnabled"
             class="absolute left-1 right-1 bottom-0 h-0.7 rounded-full"
@@ -116,10 +116,10 @@ if (__SLIDEV_FEATURE_RECORD__)
 
       <template v-if="!isEmbedded">
         <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
-          <carbon:presentation-file />
+          <div class="i-carbon:presentation-file" />
         </IconButton>
         <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" title="Presenter Mode" @click="enterPresenter">
-          <carbon:user-speaker />
+          <div class="i-carbon:user-speaker" />
         </IconButton>
 
         <IconButton
@@ -128,17 +128,17 @@ if (__SLIDEV_FEATURE_RECORD__)
           class="lt-md:hidden"
           @click="showEditor = !showEditor"
         >
-          <carbon:text-annotation-toggle />
+          <div class="i-carbon:text-annotation-toggle" />
         </IconButton>
 
         <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial" @click="togglePresenterLayout">
-          <carbon:template />
+          <div class="i-carbon:template" />
           {{ presenterLayout }}
         </IconButton>
       </template>
       <template v-if="!__DEV__">
         <IconButton v-if="configs.download" title="Download as PDF" @click="downloadPDF">
-          <carbon:download />
+          <div class="i-carbon:download" />
         </IconButton>
       </template>
 
@@ -147,14 +147,14 @@ if (__SLIDEV_FEATURE_RECORD__)
         title="Show info"
         @click="showInfoDialog = !showInfoDialog"
       >
-        <carbon:information />
+        <div class="i-carbon:information" />
       </IconButton>
 
       <template v-if="!isPresenter && !isEmbedded">
         <MenuButton>
           <template #button>
             <IconButton title="Adjust settings">
-              <carbon:settings-adjust />
+              <div class="i-carbon:settings-adjust" />
             </IconButton>
           </template>
           <template #menu>

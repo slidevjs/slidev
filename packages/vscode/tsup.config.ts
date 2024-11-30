@@ -1,7 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { defineConfig } from 'tsup'
 import { resolvePath } from 'mlly'
+import { defineConfig } from 'tsup'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch'
 
 export default defineConfig({

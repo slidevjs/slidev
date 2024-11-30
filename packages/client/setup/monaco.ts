@@ -1,28 +1,25 @@
-import { createSingletonPromise } from '@antfu/utils'
 import type { MonacoSetupReturn } from '@slidev/types'
-import * as monaco from 'monaco-editor'
-import { watchEffect } from 'vue'
+import configs from '#slidev/configs'
+import setups from '#slidev/setups/monaco'
+import { createSingletonPromise } from '@antfu/utils'
 import { setupTypeAcquisition } from '@typescript/ata'
-import ts from 'typescript'
+import * as monaco from 'monaco-editor'
 
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+// @ts-expect-error missing types
+import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-
 // @ts-expect-error missing types
 import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
-
 // @ts-expect-error missing types
 import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
 
-// @ts-expect-error missing types
-import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
-
+import ts from 'typescript'
+import { watchEffect } from 'vue'
 import { isDark } from '../logic/dark'
-import configs from '#slidev/configs'
-import setups from '#slidev/setups/monaco'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -51,14 +48,13 @@ class ContextViewService2 extends ContextViewService {
   }
 }
 
+// Initialize services first, otherwise we can't override them.
+StandaloneServices.initialize({
+  contextViewService: new SyncDescriptor(ContextViewService2, [], true),
+})
+
 const setup = createSingletonPromise(async () => {
-  // Initialize services first, otherwise we can't override them.
-  StandaloneServices.initialize({
-    contextViewService: new SyncDescriptor(ContextViewService2, [], true),
-  })
-
   const defaults = monaco.languages.typescript.typescriptDefaults
-
   defaults.setCompilerOptions({
     ...defaults.getCompilerOptions(),
     strict: true,
@@ -92,7 +88,7 @@ const setup = createSingletonPromise(async () => {
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
 
-  const { shiki, themes, shikiToMonaco } = await import('#slidev/shiki')
+  const { shiki, languages, themes, shikiToMonaco } = await import('#slidev/shiki')
   const highlighter = await shiki
 
   const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
@@ -112,6 +108,10 @@ const setup = createSingletonPromise(async () => {
         ? themes.dark || 'vitesse-dark'
         : themes.light || 'vitesse-light')
     })
+  }
+  // Register all languages, otherwise Monaco will not highlight them
+  for (const lang of languages) {
+    monaco.languages.register({ id: lang })
   }
 
   return {

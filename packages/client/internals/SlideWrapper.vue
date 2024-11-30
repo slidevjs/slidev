@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, toRef } from 'vue'
-import type { CSSProperties, PropType } from 'vue'
-import { provideLocal } from '@vueuse/core'
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
-import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
-import { getSlideClass } from '../utils'
-import { configs } from '../env'
+import type { CSSProperties, PropType } from 'vue'
 import { SlideBottom, SlideTop } from '#slidev/global-layers'
+import { provideLocal } from '@vueuse/core'
+import { computed, ref, toRef } from 'vue'
+import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
+import { configs } from '../env'
+import { getSlideClass } from '../utils'
 
 const props = defineProps({
   clicksContext: {

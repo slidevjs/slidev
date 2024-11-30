@@ -1,7 +1,7 @@
 import type { LanguageInput, LanguageRegistration, MaybeGetter, SpecialLanguage, ThemeInput, ThemeRegistration } from 'shiki'
+import type { VirtualModuleTemplate } from './types'
 import { uniq } from '@antfu/utils'
 import { resolveImportUrl } from '../resolver'
-import type { VirtualModuleTemplate } from './types'
 
 export const templateShiki: VirtualModuleTemplate = {
   id: '/@slidev/shiki',

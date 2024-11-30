@@ -30,6 +30,11 @@ export interface SlidevEntryOptions {
    * Enable inspect plugin
    */
   inspect?: boolean
+
+  /**
+   * Build with --download option
+   */
+  download?: boolean
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
@@ -49,6 +54,7 @@ export interface ResolvedSlidevUtils {
   shiki: HighlighterGeneric<any, any>
   shikiOptions: MarkdownItShikiOptions
   indexHtml: string
+  define: Record<string, string>
   iconsResolvePath: string[]
   isMonacoTypesIgnored: (pkg: string) => boolean
   getLayouts: () => Record<string, string>

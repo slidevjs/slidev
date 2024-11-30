@@ -1,15 +1,15 @@
 import type { Awaitable } from '@antfu/utils'
-import type * as monaco from 'monaco-editor'
-import type { App, ComputedRef, Ref } from 'vue'
-import type { RouteRecordRaw, Router } from 'vue-router'
 import type { KatexOptions } from 'katex'
+import type { MermaidConfig } from 'mermaid'
+import type * as monaco from 'monaco-editor'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
-import type { MermaidConfig } from 'mermaid'
-import type { SlidevPreparserExtension } from './types'
+import type { App, ComputedRef, Ref } from 'vue'
+import type { Router, RouteRecordRaw } from 'vue-router'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
 import type { MarkdownTransformer } from './transform'
+import type { SlidevPreparserExtension } from './types'
 
 export interface AppContext {
   app: App

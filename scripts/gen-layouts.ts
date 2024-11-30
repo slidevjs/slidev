@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url'
 import fs from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
 import fg from 'fast-glob'
 
 const files = await fg('*.vue', {

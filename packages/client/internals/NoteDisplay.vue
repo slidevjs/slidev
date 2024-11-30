@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import type { ClicksContext } from '@slidev/types'
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
 const props = withDefaults(

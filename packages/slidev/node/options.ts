@@ -1,15 +1,15 @@
+import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import path from 'node:path'
 import { uniq } from '@antfu/utils'
 import Debug from 'debug'
-import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
-import mm from 'micromatch'
 import fg from 'fast-glob'
-import { parser } from './parser'
-import { getThemeMeta, resolveTheme } from './integrations/themes'
+import mm from 'micromatch'
 import { resolveAddons } from './integrations/addons'
-import { getRoots, resolveEntry } from './resolver'
-import setupShiki from './setups/shiki'
+import { getThemeMeta, resolveTheme } from './integrations/themes'
+import { parser } from './parser'
+import { getRoots, resolveEntry, toAtFS } from './resolver'
 import setupIndexHtml from './setups/indexHtml'
+import setupShiki from './setups/shiki'
 
 const debug = Debug('slidev:options')
 
@@ -31,6 +31,9 @@ export async function resolveOptions(
   const config = parser.resolveConfig(loaded.headmatter, themeMeta, entryOptions.entry)
   const addonRoots = await resolveAddons(config.addons)
   const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
+
+  if (entryOptions.download)
+    config.download ||= entryOptions.download
 
   debug({
     ...rootsInfo,
@@ -80,6 +83,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   return {
     ...await setupShiki(resolved.roots),
     indexHtml: setupIndexHtml(resolved),
+    define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
     getLayouts: () => {
@@ -107,5 +111,21 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
 
       return layouts
     },
+  }
+}
+
+function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string, string> {
+  return {
+    __DEV__: options.mode === 'dev' ? 'true' : 'false',
+    __SLIDEV_CLIENT_ROOT__: JSON.stringify(toAtFS(options.clientRoot)),
+    __SLIDEV_HASH_ROUTE__: JSON.stringify(options.data.config.routerMode === 'hash'),
+    __SLIDEV_FEATURE_DRAWINGS__: JSON.stringify(options.data.config.drawings.enabled === true || options.data.config.drawings.enabled === options.mode),
+    __SLIDEV_FEATURE_EDITOR__: JSON.stringify(options.mode === 'dev' && options.data.config.editor !== false),
+    __SLIDEV_FEATURE_DRAWINGS_PERSIST__: JSON.stringify(!!options.data.config.drawings.persist === true),
+    __SLIDEV_FEATURE_RECORD__: JSON.stringify(options.data.config.record === true || options.data.config.record === options.mode),
+    __SLIDEV_FEATURE_PRESENTER__: JSON.stringify(options.data.config.presenter === true || options.data.config.presenter === options.mode),
+    __SLIDEV_FEATURE_PRINT__: JSON.stringify(options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download))),
+    __SLIDEV_FEATURE_WAKE_LOCK__: JSON.stringify(options.data.config.wakeLock === true || options.data.config.wakeLock === options.mode),
+    __SLIDEV_HAS_SERVER__: options.mode !== 'build' ? 'true' : 'false',
   }
 }

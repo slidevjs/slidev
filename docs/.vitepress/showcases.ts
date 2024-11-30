@@ -222,9 +222,21 @@ export const showcases: ShowCaseInfo[] = [
     },
     at: 'FOSSASIA Summit 2024',
     slidesLink: 'https://talk.quan.hoabinh.vn/rust-error-handling-ease-web-dev/',
-    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev.git',
+    sourceLink: 'https://hongquan@bitbucket.org/hongquan/rust-error-handling-ease-web-dev',
     cover: 'https://i.imgur.com/2eBJofY.png',
     datetime: '2024-04-10',
+  },
+  {
+    title: 'Hacker Numerology',
+    author: {
+      name: 'HD Moore',
+      link: 'https://hdm.io',
+    },
+    at: 'LASCON 2024',
+    slidesLink: 'https://hdm.io/decks/2024-LASCON-Numerology/',
+    sourceLink: 'https://github.com/hdm/decks-2024-lascon-numerology.git',
+    cover: 'https://raw.githubusercontent.com/hdm/decks-2024-lascon-numerology/refs/heads/main/screenshot.png',
+    datetime: '2024-10-25',
   },
   // Add yours here!
   {

@@ -1,27 +1,22 @@
+import type { ResolvedSlidevOptions } from '@slidev/types'
+import type MagicString from 'magic-string'
+import type MarkdownIt from 'markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
-import MarkdownItMdc from 'markdown-it-mdc'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
-import type { ResolvedSlidevOptions } from '@slidev/types'
-import type MarkdownIt from 'markdown-it'
-import type MagicString from 'magic-string'
+import MarkdownItMdc from 'markdown-it-mdc'
 import setupKatex from '../../setups/katex'
-import MarkdownItKatex from './markdown-it-katex'
-import MarkdownItVDrag from './markdown-it-v-drag'
-import MarkdownItShiki from './markdown-it-shiki'
-import MarkdownItLink from './markdown-it-link'
 import MarkdownItEscapeInlineCode from './markdown-it-escape-code'
+import MarkdownItKatex from './markdown-it-katex'
+import MarkdownItLink from './markdown-it-link'
+import MarkdownItShiki from './markdown-it-shiki'
+import MarkdownItVDrag from './markdown-it-v-drag'
 
 export async function useMarkdownItPlugins(md: MarkdownIt, options: ResolvedSlidevOptions, markdownTransformMap: Map<string, MagicString>) {
   const { roots, data: { features, config } } = options
 
   if (config.highlighter === 'shiki') {
     md.use(await MarkdownItShiki(options))
-  }
-  else {
-    console.warn('[Slidev] Highlighter: Prism highlighter is deprecated, and will be removed in v0.50. Refer to https://github.com/slidevjs/slidev/issues/1390')
-    const { default: MarkdownItPrism } = await import('./markdown-it-prism')
-    md.use(MarkdownItPrism)
   }
 
   md.use(MarkdownItLink)

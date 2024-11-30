@@ -35,11 +35,11 @@ import { defineShikiSetup } from '@slidev/types'
 // ---cut-start---
 // @ts-expect-error missing types
 // ---cut-end---
-import customTheme from './customTheme.tmTheme.json'
+import customLanguage from './customLanguage.tmLanguage.json'
 // ---cut-start---
 // @ts-expect-error missing types
 // ---cut-end---
-import customLanguage from './customLanguage.tmLanguage.json'
+import customTheme from './customTheme.tmTheme.json'
 
 export default defineShikiSetup(() => {
   return {
@@ -70,7 +70,5 @@ For now, Shiki Magic Move does not support transformers.
 ## Configure Prism
 
 :::warning
-Prism support is deprecated and will be removed in the future. Please consider using Shiki instead.
+Prism support has been removed since v0.50. Please use Shiki instead.
 :::
-
-To configure your Prism, you can just import the theme CSS or use [`prism-theme-vars`](https://github.com/antfu/prism-theme-vars) to configure themes for both light and dark mode. Refer to its docs for more details.

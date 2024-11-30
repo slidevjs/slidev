@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { parseRangeString } from '@slidev/parser/core'
-import { computed } from 'vue'
+import { parseRangeString } from '@slidev/parser/utils'
 import { provideLocal } from '@vueuse/core'
-import { configs, slideAspect, slideWidth } from '../env'
-import { injectionSlideScale } from '../constants'
+import { computed } from 'vue'
 import { useNav } from '../composables/useNav'
+import { injectionSlideScale } from '../constants'
+import { configs, slideAspect, slideWidth } from '../env'
 import PrintSlide from './PrintSlide.vue'
 
 const props = defineProps<{

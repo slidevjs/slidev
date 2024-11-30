@@ -1,14 +1,14 @@
 import type { AppContext } from '@slidev/types'
-import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import type { App } from 'vue'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import setups from '#slidev/setups/main'
+import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import { createHead } from '@unhead/vue'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { createVClickDirectives } from '../modules/v-click'
-import { createVMarkDirective } from '../modules/v-mark'
 import { createVDragDirective } from '../modules/v-drag'
+import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
 import setupRoutes from '../setup/routes'
-import setups from '#slidev/setups/main'
 
 import '#slidev/styles'
 

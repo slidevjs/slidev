@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { clamp } from '@antfu/utils'
 import type { Pausable } from '@vueuse/core'
+import type { DragElementState } from '../composables/useDragElements'
+import { clamp } from '@antfu/utils'
 import { useIntervalFn } from '@vueuse/core'
 import { computed, inject, ref, watchEffect } from 'vue'
-import type { DragElementState } from '../composables/useDragElements'
 import { useSlideBounds } from '../composables/useSlideBounds'
 import { injectionSlideScale } from '../constants'
 import { slideHeight, slideWidth } from '../env'

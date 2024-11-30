@@ -1,6 +1,6 @@
+import type { VirtualModuleTemplate } from './types'
 import { objectMap } from '@antfu/utils'
 import { toAtFS } from '../resolver'
-import type { VirtualModuleTemplate } from './types'
 
 export const templateLayouts: VirtualModuleTemplate = {
   id: '/@slidev/layouts',

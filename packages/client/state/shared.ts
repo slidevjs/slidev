@@ -22,7 +22,7 @@ export interface SharedState {
   }
 }
 
-const { init, onPatch, patch, state } = createSyncState<SharedState>(serverState, {
+const { init, onPatch, onUpdate, patch, state } = createSyncState<SharedState>(serverState, {
   page: 1,
   clicks: 0,
   clicksTotal: 0,
@@ -34,6 +34,7 @@ const { init, onPatch, patch, state } = createSyncState<SharedState>(serverState
 export {
   init as initSharedState,
   onPatch,
+  onUpdate as onSharedUpdate,
   patch,
   state as sharedState,
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Menu } from 'floating-vue'
 import { useDrawings } from '../composables/useDrawings'
-import VerticalDivider from './VerticalDivider.vue'
 import Draggable from './Draggable.vue'
 import IconButton from './IconButton.vue'
+import VerticalDivider from './VerticalDivider.vue'
 
 const {
   brush,
@@ -41,14 +41,15 @@ function setBrushColor(color: typeof brush.color) {
 
 <template>
   <Draggable
+    v-if="drawingEnabled || drawingPinned"
     class="flex flex-wrap text-xl p-2 gap-1 rounded-md bg-main shadow transition-opacity duration-200 z-20 border border-main"
-    :class="drawingEnabled ? '' : drawingPinned ? 'opacity-40 hover:opacity-90' : 'opacity-0 pointer-events-none'"
+    :class="!drawingEnabled && drawingPinned ? 'opacity-40 hover:opacity-90' : ''"
     storage-key="slidev-drawing-pos"
     :initial-x="10"
     :initial-y="10"
   >
     <IconButton title="Draw with stylus" :class="{ shallow: drawingMode !== 'stylus' }" @click="setDrawingMode('stylus')">
-      <carbon:pen />
+      <div class="i-carbon:pen" />
     </IconButton>
     <IconButton title="Draw a line" :class="{ shallow: drawingMode !== 'line' }" @click="setDrawingMode('line')">
       <svg width="1em" height="1em" class="-mt-0.5" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -56,16 +57,16 @@ function setBrushColor(color: typeof brush.color) {
       </svg>
     </IconButton>
     <IconButton title="Draw an arrow" :class="{ shallow: drawingMode !== 'arrow' }" @click="setDrawingMode('arrow')">
-      <carbon:arrow-up-right />
+      <div class="i-carbon:arrow-up-right" />
     </IconButton>
     <IconButton title="Draw an ellipse" :class="{ shallow: drawingMode !== 'ellipse' }" @click="setDrawingMode('ellipse')">
-      <carbon:radio-button />
+      <div class="i-carbon:radio-button" />
     </IconButton>
     <IconButton title="Draw a rectangle" :class="{ shallow: drawingMode !== 'rectangle' }" @click="setDrawingMode('rectangle')">
-      <carbon:checkbox />
+      <div class="i-carbon:checkbox" />
     </IconButton>
     <IconButton title="Erase" :class="{ shallow: drawingMode !== 'eraseLine' }" @click="setDrawingMode('eraseLine')">
-      <carbon:erase />
+      <div class="i-carbon:erase" />
     </IconButton>
 
     <VerticalDivider />
@@ -106,19 +107,19 @@ function setBrushColor(color: typeof brush.color) {
     <VerticalDivider />
 
     <IconButton title="Undo" :class="{ disabled: !canUndo }" @click="undo()">
-      <carbon:undo />
+      <div class="i-carbon:undo" />
     </IconButton>
     <IconButton title="Redo" :class="{ disabled: !canRedo }" @click="redo()">
-      <carbon:redo />
+      <div class="i-carbon:redo" />
     </IconButton>
     <IconButton title="Delete" :class="{ disabled: !canClear }" @click="clear()">
-      <carbon:trash-can />
+      <div class="i-carbon:trash-can" />
     </IconButton>
 
     <VerticalDivider />
     <IconButton :title="drawingPinned ? 'Unpin drawing' : 'Pin drawing'" :class="{ shallow: !drawingPinned }" @click="drawingPinned = !drawingPinned">
-      <carbon:pin-filled v-show="drawingPinned" class="transform -rotate-45" />
-      <carbon:pin v-show="!drawingPinned" />
+      <div v-show="drawingPinned" class="i-carbon:pin-filled transform -rotate-45" />
+      <div v-show="!drawingPinned" class="i-carbon:pin" />
     </IconButton>
     <IconButton
       v-if="drawingEnabled"
@@ -126,8 +127,8 @@ function setBrushColor(color: typeof brush.color) {
       :class="{ shallow: !drawingEnabled }"
       @click="drawingEnabled = !drawingEnabled"
     >
-      <carbon:error v-show="drawingPinned" />
-      <carbon:close-outline v-show="!drawingPinned" />
+      <div v-show="drawingPinned" class="i-carbon:error" />
+      <div v-show="!drawingPinned" class="i-carbon:close-outline" />
     </IconButton>
   </Draggable>
 </template>

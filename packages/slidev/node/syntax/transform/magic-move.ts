@@ -1,8 +1,8 @@
-import { codeToKeyedTokens } from 'shiki-magic-move/core'
-import lz from 'lz-string'
 import type { MarkdownTransformContext } from '@slidev/types'
-import { normalizeRangeStr } from './utils'
+import lz from 'lz-string'
+import { codeToKeyedTokens } from 'shiki-magic-move/core'
 import { reCodeBlock } from './code-wrapper'
+import { normalizeRangeStr } from './utils'
 
 const reMagicMoveBlock = /^````(?:md|markdown) magic-move *(\{[^}]*\})?([^ \n]*)\n([\s\S]+?)^````$/gm
 

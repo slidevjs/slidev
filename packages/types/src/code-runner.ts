@@ -1,5 +1,5 @@
-import type { CodeToHastOptions } from 'shiki'
 import type { Arrayable, Awaitable } from '@antfu/utils'
+import type { CodeToHastOptions } from 'shiki'
 import type { MaybeRefOrGetter } from 'vue'
 
 export interface CodeRunnerContext {

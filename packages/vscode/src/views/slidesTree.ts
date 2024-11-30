@@ -1,9 +1,9 @@
-import { save as slidevSave } from '@slidev/parser/fs'
 import type { SourceSlideInfo } from '@slidev/types'
 import type { TreeViewNode } from 'reactive-vscode'
-import { computed, createSingletonComposable, useTreeView, useViewVisibility, watch } from 'reactive-vscode'
 import type { TreeItem } from 'vscode'
-import { DataTransferItem, ThemeIcon, TreeItemCollapsibleState, commands, window } from 'vscode'
+import { save as slidevSave } from '@slidev/parser/fs'
+import { computed, createSingletonComposable, useTreeView, useViewVisibility, watch } from 'reactive-vscode'
+import { commands, DataTransferItem, ThemeIcon, TreeItemCollapsibleState, window } from 'vscode'
 import { previewSync } from '../configs'
 import { activeSlidevData } from '../projects'
 import { getSlideNo } from '../utils/getSlideNo'
@@ -132,16 +132,16 @@ export const useSlidesTree = createSingletonComposable(() => {
   const visible = useViewVisibility(treeView)
   const { previewNavState } = usePreviewWebview()
   watch(
-    () => [visible.value, previewNavState.no, activeSlidevData.value, slidesTreeData.value] as const,
-    ([visible, no, data, tree]) => {
-      if (!visible)
+    () => previewNavState.no,
+    (no) => {
+      if (!visible.value)
         return
-      const slide = data?.slides[no - 1]
+      const slide = activeSlidevData.value?.slides[no - 1]
       if (!slide || !previewSync.value)
         return
       const path = (slide.importChain ?? []).concat(slide.source)
       const source = path.shift()
-      let node = tree?.find(e => e.slide === source)
+      let node = slidesTreeData.value?.find(e => e.slide === source)
       while (true) {
         const source = path.shift()
         if (!source) {
