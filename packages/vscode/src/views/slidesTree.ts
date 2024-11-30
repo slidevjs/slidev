@@ -132,16 +132,16 @@ export const useSlidesTree = createSingletonComposable(() => {
   const visible = useViewVisibility(treeView)
   const { previewNavState } = usePreviewWebview()
   watch(
-    () => [visible.value, previewNavState.no, activeSlidevData.value, slidesTreeData.value] as const,
-    ([visible, no, data, tree]) => {
-      if (!visible)
+    () => previewNavState.no,
+    (no) => {
+      if (!visible.value)
         return
-      const slide = data?.slides[no - 1]
+      const slide = activeSlidevData.value?.slides[no - 1]
       if (!slide || !previewSync.value)
         return
       const path = (slide.importChain ?? []).concat(slide.source)
       const source = path.shift()
-      let node = tree?.find(e => e.slide === source)
+      let node = slidesTreeData.value?.find(e => e.slide === source)
       while (true) {
         const source = path.shift()
         if (!source) {

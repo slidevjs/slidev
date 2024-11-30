@@ -35,11 +35,11 @@ import { defineShikiSetup } from '@slidev/types'
 // ---cut-start---
 // @ts-expect-error missing types
 // ---cut-end---
-import customTheme from './customTheme.tmTheme.json'
+import customLanguage from './customLanguage.tmLanguage.json'
 // ---cut-start---
 // @ts-expect-error missing types
 // ---cut-end---
-import customLanguage from './customLanguage.tmLanguage.json'
+import customTheme from './customTheme.tmTheme.json'
 
 export default defineShikiSetup(() => {
   return {

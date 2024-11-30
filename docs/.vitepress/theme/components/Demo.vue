@@ -128,7 +128,7 @@ onMounted(play)
       </div>
 
       <div v-if="completed" class="absolute text-xs right-1 top-1 icon-btn opacity-50" title="Replay" @click="play()">
-        <carbon:reset />
+        <div class="i-carbon:reset" />
       </div>
 
       <div class="language-md !bg-transparent px4 py1">
@@ -158,10 +158,10 @@ onMounted(play)
         opacity="0 hover:100"
       >
         <div class="icon-btn" :class="{ disabled: page === 0 }" @click="page = 0">
-          <carbon:chevron-left />
+          <div class="i-carbon:chevron-left" />
         </div>
         <div class="icon-btn" :class="{ disabled: page === 1 }" @click="page = 1">
-          <carbon:chevron-right />
+          <div class="i-carbon:chevron-right" />
         </div>
       </div>
     </DemoSlide>

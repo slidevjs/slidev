@@ -19,3 +19,4 @@
 
 - [開発者のためのスライド作成ツール Slidev がすごい](https://zenn.dev/ryo_kawamata/articles/introduce-slidev) by [ryo_kawamata](https://zenn.dev/ryo_kawamata)
 - [Markdownでオシャレなスライドを作るSli.dev](https://qiita.com/e99h2121/items/a115f8865a0dc21bb462) by [Nobuko YAMADA](https://qiita.com/e99h2121)
+- [【Slidev 超入門】エンジニアだからこそ作れるつよつよスライドの作り方！](https://zenn.dev/takumaru/articles/3faa75c2f09493) by [takuma-ru](https://zenn.dev/takumaru)

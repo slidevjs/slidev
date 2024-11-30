@@ -159,7 +159,7 @@ watchEffect(() => {
   </Transition>
   <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
-      <carbon:close />
+      <div class="i-carbon:close" />
     </IconButton>
     <IconButton
       v-if="__SLIDEV_FEATURE_PRESENTER__"
@@ -170,7 +170,7 @@ watchEffect(() => {
       tab-index="-1"
       class="text-2xl"
     >
-      <carbon:list-boxes />
+      <div class="i-carbon:list-boxes" />
     </IconButton>
   </div>
 </template>

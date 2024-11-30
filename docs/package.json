@@ -1,9 +1,9 @@
 {
   "name": "docs",
   "type": "module",
-  "version": "0.50.0-beta.5",
+  "version": "0.50.0-beta.7",
   "private": true,
-  "packageManager": "pnpm@9.12.2",
+  "packageManager": "pnpm@9.14.3",
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
@@ -33,6 +33,7 @@
     "unplugin-icons": "catalog:",
     "unplugin-vue-components": "catalog:",
     "vite-plugin-inspect": "catalog:",
-    "vitepress": "catalog:"
+    "vitepress": "catalog:",
+    "vue": "catalog:"
   }
 }

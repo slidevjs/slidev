@@ -6,12 +6,12 @@ type ContextMenuOption = {
 } & (
   | {
     small?: false
-    icon?: Component
+    icon?: Component | string
     label: string | Component
   }
   | {
     small: true
-    icon: Component
+    icon: Component | string
     label: string
   }
   )

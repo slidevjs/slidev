@@ -119,7 +119,7 @@ else if (autorun)
   </div>
   <div v-if="code.trim()" class="absolute right-1 top-1 max-h-full flex gap-1">
     <IconButton class="w-8 h-8 max-h-full flex justify-center items-center" title="Run code" @click="triggerRun">
-      <carbon:play />
+      <div class="i-carbon:play" />
     </IconButton>
   </div>
 </template>

@@ -67,14 +67,14 @@ const clicksContext = computed(() => {
     <div class="flex-none border-t border-main">
       <div class="flex gap-1 items-center px-6 py-3">
         <IconButton :title="isFullscreen ? 'Close fullscreen' : 'Enter fullscreen'" @click="toggleFullscreen">
-          <carbon:minimize v-if="isFullscreen" />
-          <carbon:maximize v-else />
+          <div v-if="isFullscreen" class="i-carbon:minimize" />
+          <div v-else class="i-carbon:maximize" />
         </IconButton>
         <IconButton title="Increase font size" @click="increaseFontSize">
-          <carbon:zoom-in />
+          <div class="i-carbon:zoom-in" />
         </IconButton>
         <IconButton title="Decrease font size" @click="decreaseFontSize">
-          <carbon:zoom-out />
+          <div class="i-carbon:zoom-out" />
         </IconButton>
         <div class="flex-auto" />
         <div class="p2 text-center">

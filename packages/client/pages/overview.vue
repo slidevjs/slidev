@@ -183,7 +183,7 @@ onMounted(() => {
             title="Play in new tab"
             @click="openSlideInNewTab(getSlidePath(route, false))"
           >
-            <carbon:presentation-file />
+            <div class="i-carbon:presentation-file" />
           </IconButton>
           <IconButton
             v-if="__DEV__ && route.meta?.slide"
@@ -191,7 +191,7 @@ onMounted(() => {
             title="Open in editor"
             @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
           >
-            <carbon:cics-program />
+            <div class="i-carbon:cics-program" />
           </IconButton>
         </div>
         <div class="flex flex-col gap-2 my5" :style="{ width: `${cardWidth}px` }">
@@ -228,7 +228,7 @@ onMounted(() => {
             :class="edittingNote === route.no ? 'important:op0' : ''"
             @click="edittingNote = route.no"
           >
-            <carbon:pen />
+            <div class="i-carbon:pen" />
           </IconButton>
         </div>
         <NoteEditable
