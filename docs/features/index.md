@@ -52,7 +52,7 @@ You can also read <LinkInline link="guide/" /> to learn the features by topic.
     px3 py2 gap-2 border-2 border-solid border-transparent
     class="bg-$vp-c-bg-alt focus-within:border-color-$vp-c-brand"
   >
-    <carbon:search text-sm op-80 />
+    <div class="i-carbon:search" text-sm op-80 />
     <input
       v-model="search"
       type="search" text-base
@@ -63,7 +63,7 @@ You can also read <LinkInline link="guide/" /> to learn the features by topic.
     v-if="tagsArr.length"
     flex items-center gap-1
   >
-    <carbon:tag text-sm mr-1 op-80 />
+    <div class="i-carbon:tag" text-sm mr-1 op-80 />
     <FeatureTag v-for="tag in tagsArr" :key="tag" :tag removable @remove="removeTag(tag)"/>
   </div>
 </div>
@@ -73,7 +73,7 @@ You can also read <LinkInline link="guide/" /> to learn the features by topic.
 <div v-if="filteredFeatures.length === 0" class="w-full mt-6 op-80 flex flex-col items-center">
   No results found
   <button class="block select-button flex-inline gap-1 items-center px-2 py-1 hover:bg-gray-400/10 rounded" @click="resetFilters()">
-    <carbon:filter-remove />
+    <div class="i-carbon:filter-remove" />
     Clear Filters
   </button>
 </div>

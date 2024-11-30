@@ -12,6 +12,7 @@
       "@slidev/types": ["./packages/types/src/index.ts"],
       "@slidev/parser/fs": ["./packages/parser/src/fs.ts"],
       "@slidev/parser/core": ["./packages/parser/src/core.ts"],
+      "@slidev/parser/utils": ["./packages/parser/src/utils.ts"],
       "@slidev/parser": ["./packages/parser/src/index.ts"]
     },
     "resolveJsonModule": true,

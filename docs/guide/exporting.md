@@ -199,6 +199,14 @@ Here is a basic example that covers all backgrounds in the application:
 
 ## Troubleshooting
 
+### Missing Content or Animation not Finished
+
+If you find that some content is missing or the animations are not finished in the exported PDF, you can try adding a wait time before exporting each slide:
+
+```bash
+$ slidev export --wait 1000
+```
+
 ### Broken Emojis
 
 If the PDF or PNG are missing Emojis, you are likely missing required fonts (such as. e.g. [Google's _Noto Emoji_](https://fonts.google.com/noto/specimen/Noto+Emoji)) in your environment.
@@ -210,3 +218,7 @@ $ curl -L --output NotoColorEmoji.ttf https://github.com/googlefonts/noto-emoji/
 $ sudo mv NotoColorEmoji.ttf /usr/local/share/fonts/
 $ fc-cache -fv
 ```
+
+### Wrong Context in Global Layers
+
+See the tip in https://sli.dev/features/global-layers.

@@ -42,7 +42,7 @@ function onMousedown() {
     :class="length && props.clicksContext.isMounted ? '' : 'op50'"
   >
     <div class="flex gap-0.2 items-center min-w-16 font-mono mr1">
-      <carbon:cursor-1 text-sm op50 />
+      <div class="i-carbon:cursor-1 text-sm op50" />
       <template v-if="current >= 0 && current !== CLICKS_MAX && active">
         <div flex-auto />
         <span text-primary>{{ current }}</span>

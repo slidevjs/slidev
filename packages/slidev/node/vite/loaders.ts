@@ -1,5 +1,4 @@
-import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevServerOptions } from '@slidev/types'
-import type { SlidevData } from 'packages/types'
+import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { LoadResult } from 'rollup'
 import type { Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
