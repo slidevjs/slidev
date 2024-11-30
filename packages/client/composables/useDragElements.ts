@@ -69,7 +69,7 @@ export function useDragElementsUpdater(no: number) {
 
       section = type === 'prop'
       // eslint-disable-next-line regexp/no-super-linear-backtracking
-        ? section.replace(/<(v-?drag-?\w*)(.*?)(\/)?>/gi, (full, tag, attrs, selfClose, index) => {
+        ? section.replace(/<(v-?drag-?\w*)(.*?)(\/)?>/gi, (full, tag, attrs, selfClose = '', index) => {
           if (index === idx) {
             replaced = true
             const posMatch = attrs.match(/pos=".*?"/)

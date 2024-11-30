@@ -53,6 +53,7 @@ const style = computed<CSSProperties>(() => ({
     :data-slidev-no="props.route.no"
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
+    :lang="props.route.meta.slide.frontmatter.lang"
   >
     <SlideBottom />
     <component :is="props.route.component" />

@@ -197,6 +197,7 @@ onMounted(async () => {
   })
 
   nextTick(() => monaco.editor.remeasureFonts())
+  setTimeout(() => monaco.editor.remeasureFonts(), 1000)
 })
 </script>
 
