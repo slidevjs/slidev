@@ -30,9 +30,7 @@ function* getEmbeddedCodes(parsed: SlidevMarkdown): Generator<VirtualCode> {
   const lines = parsed.raw.split('\n')
   function lineToPos(line: number) {
     let pos = 0
-    for (let i = 0; i <= line; i++) {
-      if (i >= lines.length)
-        break
+    for (let i = 0; i <= line && i < lines.length; i++) {
       pos += lines[i].length + 1
     }
     return pos
