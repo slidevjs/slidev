@@ -71,7 +71,7 @@ We recommend using `npm init slidev@latest` to scaffold your project, which cont
 
 To deploy your slides on [GitHub Pages](https://pages.github.com/) via GitHub Actions, follow these steps:
 
-1. Upload all the files of the project in your repo (i.e. named `name_of_repo`)
+1. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`. (Do not choose `Deploy from a branch` and upload the `dist` directory, which is not recommended.)
 2. Create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
 
 ::: details deploy.yml
@@ -135,8 +135,8 @@ jobs:
 
 :::
 
-3. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`.
-4. Finally, after the workflows are executed, a link to the slides should appear under `Settings` > `Pages`.
+3. Commit and push the changes to your repository. The GitHub Actions workflow will automatically deploy your slides to GitHub Pages every time you push to the `main` branch.
+4. You can access your slides at `https://<username>.github.io/<repository-name>/`.
 
 ### Netlify
 
