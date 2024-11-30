@@ -45,6 +45,7 @@ export const FRONTMATTER_FIELDS = [
   'transition',
   'zoom',
   'dragPos',
+  'lang',
 ]
 
 export const HEADMATTER_FIELDS = [
