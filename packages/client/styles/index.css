@@ -40,6 +40,10 @@ html {
   pointer-events: none;
 }
 
+.slidev-layout a.slidev-icon-btn {
+  @apply border-none hover:border-none hover:text-white;
+}
+
 .slidev-vclick-target {
   @apply transition-opacity duration-100;
 }
