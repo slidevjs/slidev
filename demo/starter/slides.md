@@ -26,11 +26,11 @@ mdc: true
 
 Presentation slides for developers
 
-<div @click="$slidev.nav.next" mt-12 py-1 hover:bg="white op-10">
+<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
   Press Space for next page <carbon:arrow-right />
 </div>
 
-<div abs-br m-6 text-xl>
+<div class="abs-br m-6 text-xl">
   <button @click="$slidev.nav.openInEditor" title="Open in Editor" class="slidev-icon-btn">
     <carbon:edit />
   </button>
