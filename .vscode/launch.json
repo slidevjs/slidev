@@ -12,7 +12,7 @@
       ],
       "outFiles": [
         "${workspaceFolder}/packages/vscode/dist/**/*.js"
-      ],
+      ]
     }
   ]
 }
