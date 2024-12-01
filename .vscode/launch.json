@@ -13,10 +13,6 @@
       "outFiles": [
         "${workspaceFolder}/packages/vscode/dist/**/*.js"
       ],
-      "preLaunchTask": {
-        "type": "npm",
-        "script": "vscode:dev"
-      }
     }
   ]
 }
