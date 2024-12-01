@@ -26,19 +26,16 @@ mdc: true
 
 Presentation slides for developers
 
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" flex="~ justify-center items-center gap-2" hover="bg-white bg-opacity-10">
-    Press Space for next page <div class="i-carbon:arrow-right inline-block"/>
-  </span>
+<div @click="$slidev.nav.next" mt-12 py-1 hover:bg="white op-10">
+  Press Space for next page <carbon:arrow-right />
 </div>
 
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <div class="i-carbon:edit" />
+<div abs-br m-6 text-xl>
+  <button @click="$slidev.nav.openInEditor" title="Open in Editor" class="slidev-icon-btn">
+    <carbon:edit />
   </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
+  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
+    <carbon:logo-github />
   </a>
 </div>
 
@@ -98,12 +95,12 @@ Hover on the bottom-left corner to see the navigation's controls panel, [learn m
 
 ## Keyboard Shortcuts
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
+|                                                     |                             |
+| --------------------------------------------------- | --------------------------- |
+| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
 | <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+| <kbd>up</kbd>                                       | previous slide              |
+| <kbd>down</kbd>                                     | next slide                  |
 
 <!-- https://sli.dev/guide/animations.html#click-animation -->
 <img
@@ -124,14 +121,14 @@ layoutClass: gap-16
 You can use the `Toc` component to generate a table of contents for your slides:
 
 ```html
-<Toc minDepth="1" maxDepth="1"></Toc>
+<Toc minDepth="1" maxDepth="1" />
 ```
 
 The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
 
 ::right::
 
-<Toc v-click minDepth="1" maxDepth="2"></Toc>
+<Toc text-sm minDepth="1" maxDepth="2" />
 
 ---
 layout: image-right
