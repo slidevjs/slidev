@@ -15,6 +15,7 @@
     "demo:composable-vue": "pnpm -C demo/composable-vue run dev",
     "demo:vue-runner": "pnpm -C demo/vue-runner run dev",
     "demo:dev": "pnpm -C demo/starter run dev",
+    "vscode:dev": "pnpm -C packages/vscode run dev",
     "play": "pnpm demo:dev",
     "dev": "pnpm -r --filter=./packages/** --parallel run dev",
     "lint": "eslint . --cache",
