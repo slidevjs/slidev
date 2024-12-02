@@ -13,6 +13,8 @@ export default defineConfig({
   safelist: [
     '!opacity-0',
     'prose',
+    'grid-rows-[1fr_max-content]',
+    'grid-cols-[1fr_max-content]',
   ],
   shortcuts: {
     'bg-main': 'bg-white dark:bg-[#121212]',
