@@ -43,16 +43,11 @@ provideLocal(injectionSlideScale, scale)
     <div id="print-content">
       <PrintSlide v-for="route of routes" :key="route.no" :route="route" />
     </div>
-    <slot name="controls" />
   </div>
 </template>
 
-<style lang="postcss">
+<style scoped lang="postcss">
 #print-content {
   @apply bg-main;
-}
-
-.print-slide-container {
-  @apply relative overflow-hidden break-after-page translate-0;
 }
 </style>

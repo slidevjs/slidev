@@ -71,7 +71,7 @@ export interface SlidevContextNavState {
   router: Router
   currentRoute: ComputedRef<RouteLocationNormalized>
   isPrintMode: ComputedRef<boolean>
-  isPrintWithClicks: ComputedRef<boolean>
+  isPrintWithClicks: Ref<boolean>
   isEmbedded: ComputedRef<boolean>
   isPlaying: ComputedRef<boolean>
   isPresenter: ComputedRef<boolean>
@@ -279,8 +279,8 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     router.currentRoute.value.query
     return new URLSearchParams(location.search)
   })
-  const isPrintMode = computed(() => query.value.has('print'))
-  const isPrintWithClicks = computed(() => query.value.get('print') === 'clicks')
+  const isPrintMode = computed(() => query.value.has('print') || currentRoute.value.name === 'export')
+  const isPrintWithClicks = ref(query.value.get('print') === 'clicks')
   const isEmbedded = computed(() => query.value.has('embedded'))
   const isPlaying = computed(() => currentRoute.value.name === 'play')
   const isPresenter = computed(() => currentRoute.value.name === 'presenter')

@@ -8,7 +8,6 @@ import { useWakeLock } from '../composables/useWakeLock'
 import Controls from '../internals/Controls.vue'
 import NavControls from '../internals/NavControls.vue'
 import PresenterMouse from '../internals/PresenterMouse.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
@@ -63,7 +62,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 </script>
 
 <template>
-  <PrintStyle v-if="isPrintMode" />
   <div
     id="page-root" ref="root" class="grid"
     :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"

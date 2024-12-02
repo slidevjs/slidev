@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { createFixedClicks } from '../composables/useClicks'
 import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import { useNav } from '../composables/useNav'
+import { usePrintStyles } from '../composables/usePrintStyles'
 import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
 import { configs, slidesTitle } from '../env'
 import { skipTransition } from '../logic/hmr'
@@ -49,6 +50,8 @@ export default function setupRoot() {
     title: slidesTitle,
     htmlAttrs: configs.htmlAttrs,
   })
+
+  usePrintStyles()
 
   initSharedState(`${slidesTitle} - shared`)
   initDrawingState(`${slidesTitle} - drawings`)

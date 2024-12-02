@@ -47,6 +47,11 @@ export default function setupRoutes() {
         path: '/presenter',
         redirect: { path: '/presenter/1' },
       },
+      {
+        name: 'export',
+        path: '/export',
+        component: () => import('../pages/export.vue'),
+      },
     )
   }
 
