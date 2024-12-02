@@ -7,7 +7,7 @@ import PrintSlideClick from './PrintSlideClick.vue'
 
 const { route } = defineProps<{ route: SlideRoute }>()
 const { isPrintWithClicks } = useNav()
-const clicks0 = createFixedClicks(route, isPrintWithClicks.value ? 0 : CLICKS_MAX)
+const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLICKS_MAX)
 </script>
 
 <template>

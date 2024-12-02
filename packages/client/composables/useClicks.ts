@@ -1,7 +1,7 @@
 import type { ClicksContext, NormalizedRangeClickValue, NormalizedSingleClickValue, RawAtValue, RawSingleAtValue, SlideRoute } from '@slidev/types'
-import type { Ref } from 'vue'
+import type { MaybeRefOrGetter, Ref } from 'vue'
 import { clamp, sum } from '@antfu/utils'
-import { computed, onMounted, onUnmounted, ref, shallowReactive } from 'vue'
+import { computed, onMounted, onUnmounted, ref, shallowReactive, toValue } from 'vue'
 
 export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleClickValue {
   if (at === false || at === 'false')
@@ -160,11 +160,11 @@ export function createClicksContextBase(
 
 export function createFixedClicks(
   route?: SlideRoute | undefined,
-  currentInit = 0,
+  currentInit: MaybeRefOrGetter<number> = 0,
 ): ClicksContext {
   const clicksStart = route?.meta.slide?.frontmatter.clicksStart ?? 0
   return createClicksContextBase(
-    ref(Math.max(currentInit, clicksStart)),
+    computed(() => Math.max(toValue(currentInit), clicksStart)),
     clicksStart,
     route?.meta?.clicks,
   )
