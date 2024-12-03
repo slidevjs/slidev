@@ -4,6 +4,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import setupMain from './setup/main'
 
-const app = createApp(App)
-setupMain(app)
-app.mount('#app')
+async function main() {
+  const app = createApp(App)
+  await setupMain(app)
+  app.mount('#app')
+}
+
+main()
