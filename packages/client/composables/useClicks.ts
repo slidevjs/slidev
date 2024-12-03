@@ -1,7 +1,7 @@
 import type { ClicksContext, NormalizedRangeClickValue, NormalizedSingleClickValue, RawAtValue, RawSingleAtValue, SlideRoute } from '@slidev/types'
 import type { MaybeRefOrGetter, Ref } from 'vue'
 import { clamp, sum } from '@antfu/utils'
-import { computed, onMounted, onUnmounted, ref, shallowReactive, toValue } from 'vue'
+import { computed, isReadonly, onMounted, onUnmounted, ref, shallowReactive, toValue } from 'vue'
 
 export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleClickValue {
   if (at === false || at === 'false')
@@ -59,7 +59,8 @@ export function createClicksContextBase(
         // Convert maxMap to reactive
         maxMap = shallowReactive(maxMap)
         // Make sure the query is not greater than the total
-        context.current = current.value
+        if (!isReadonly(current))
+          context.current = current.value
       })
       onUnmounted(() => {
         isMounted.value = false

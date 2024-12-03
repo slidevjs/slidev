@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { parseRangeString } from '@slidev/parser/utils'
+import { useHead } from '@unhead/vue'
 import { provideLocal, useElementSize } from '@vueuse/core'
 import { computed, ref, useTemplateRef } from 'vue'
 import { useNav } from '../composables/useNav'
 import { injectionSlideScale } from '../constants'
-import { slideWidth } from '../env'
+import { slidesTitle, slideWidth } from '../env'
 import PrintSlide from '../internals/PrintSlide.vue'
 
 const { slides, isPrintWithClicks } = useNav()
 const { width } = useElementSize(useTemplateRef('print-container'))
 const scale = computed(() => width.value / slideWidth.value)
 const ranges = ref('')
+const title = ref(slidesTitle)
 const routes = computed(() => parseRangeString(slides.value.length, ranges.value).map(i => slides.value[i - 1]))
+
+useHead({
+  title,
+})
 
 provideLocal(injectionSlideScale, scale)
 
@@ -22,15 +28,22 @@ function pdf() {
 
 <template>
   <div class="fixed inset-6 flex flex-col md:flex-row gap-8 print:position-unset print:inset-0 print:block print:min-h-max">
-    <div class="print:hidden min-w-fit">
-      <h1 class="text-3xl m-4 print:hidden">
+    <div class="print:hidden min-w-fit flex md:flex-col gap-4">
+      <h1 class="text-3xl my-4 print:hidden">
         Export Slides
       </h1>
-      <label class="text-xl flex gap-2 items-center select-none">
-        <input v-model="isPrintWithClicks" type="checkbox">
-        <span> with clicks </span>
-      </label>
-      <div class="flex flex-col gap-2 items-start">
+      <div class="flex flex-col">
+        <label class="text-xl flex gap-2 items-center select-none">
+          <span> With clicks </span>
+          <input v-model="isPrintWithClicks" type="checkbox">
+        </label>
+        <label class="text-xl flex gap-2 items-center select-none">
+          <span> Title </span>
+          <input v-model="title" type="text">
+        </label>
+      </div>
+      <div class="flex-grow" />
+      <div class="flex flex-col gap-2 items-start min-w-max">
         <button @click="pdf">
           Export to PDF
         </button>
@@ -71,7 +84,7 @@ function pdf() {
 }
 
 button {
-  @apply w-full rounded bg-gray:10 p4 hover:bg-gray/20;
+  @apply w-full rounded bg-gray:10 px-4 py-2 hover:bg-gray/20;
 }
 </style>
 
