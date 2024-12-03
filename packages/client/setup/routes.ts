@@ -49,7 +49,7 @@ export default function setupRoutes() {
       },
       {
         name: 'export',
-        path: '/export',
+        path: '/export/:no?',
         component: () => import('../pages/export.vue'),
       },
     )

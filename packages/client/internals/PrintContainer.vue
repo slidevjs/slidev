@@ -45,9 +45,3 @@ provideLocal(injectionSlideScale, scale)
     </div>
   </div>
 </template>
-
-<style scoped lang="postcss">
-#print-content {
-  @apply bg-main;
-}
-</style>

@@ -28,7 +28,7 @@ const props = defineProps({
   },
 })
 
-const { isPrintMode } = useNav()
+const { isPrintMode, isExporting } = useNav()
 
 const container = ref<HTMLDivElement | null>(null)
 const containerSize = useElementSize(container)
@@ -38,7 +38,7 @@ const width = computed(() => props.width ?? containerSize.width.value)
 const height = computed(() => props.width ? props.width / slideAspect.value : containerSize.height.value)
 
 const scale = computed(() => {
-  if (slideScale.value && !isPrintMode.value)
+  if (slideScale.value && (isExporting.value || !isPrintMode.value))
     return +slideScale.value
   return Math.min(width.value / slideWidth.value, height.value / slideHeight.value)
 })

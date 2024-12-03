@@ -89,6 +89,7 @@ catalog:
   minimist: ^1.2.8
   mlly: ^1.7.3
   monaco-editor: 0.51.0
+  nanotar: ^0.1.1
   nodemon: ^3.1.7
   open: ^10.1.0
   ovsx: ^0.10.1

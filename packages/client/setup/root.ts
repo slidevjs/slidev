@@ -44,6 +44,7 @@ export default function setupRoot() {
     hasPrimarySlide,
     isNotesViewer,
     isPresenter,
+    isPrintMode,
   } = useNav()
 
   useHead({
@@ -60,7 +61,7 @@ export default function setupRoot() {
 
   // update shared state
   function updateSharedState() {
-    if (isNotesViewer.value)
+    if (isNotesViewer.value || isPrintMode.value)
       return
 
     // we allow Presenter mode, or Viewer mode from trusted origins to update the shared state
@@ -89,7 +90,7 @@ export default function setupRoot() {
   watch(clicksContext, updateSharedState)
 
   onPatch((state) => {
-    if (!hasPrimarySlide.value)
+    if (!hasPrimarySlide.value || isPrintMode.value)
       return
     if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
       skipTransition.value = false

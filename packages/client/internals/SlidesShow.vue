@@ -55,7 +55,10 @@ const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
-const loadedRoutes = computed(() => slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
+const loadedRoutes = computed(() => isPrintMode.value
+  ? slides.value
+  : slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value),
+)
 
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
