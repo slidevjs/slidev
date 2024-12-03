@@ -1,12 +1,11 @@
-export async function startScreenshotSession<Extras>(width: number, height: number) {
+export async function startScreenshotSession(width: number, height: number) {
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
   const context = canvas.getContext('2d')!
   const video = document.createElement('video')
-  canvas.width = width
-  canvas.height = height
-  const results: ScreenshotResult<Extras> = []
+  video.width = width
+  video.height = height
 
   let captureStream: MediaStream | null = await navigator.mediaDevices.getDisplayMedia({
     video: {
@@ -18,33 +17,39 @@ export async function startScreenshotSession<Extras>(width: number, height: numb
     selfBrowserSurface: 'include',
     preferCurrentTab: true,
   })
-  captureStream.addEventListener('inactive', finish)
+  captureStream.addEventListener('inactive', dispose)
 
   video.srcObject = captureStream
   video.play()
 
-  function screenshot(element: HTMLElement, extras: Extras) {
+  function screenshot(element: HTMLElement) {
     if (!captureStream)
       throw new Error('captureStream inactive')
     context.clearRect(0, 0, width, height)
     const { left, top, width: elWidth } = element.getBoundingClientRect()
-    const sourceWidth = elWidth * window.devicePixelRatio
-    const sourceHeight = height / width * sourceWidth
-    context.drawImage(video, left + 1, top + 1, sourceWidth, sourceHeight, 0, 0, width, height)
-    setTimeout(() => results.push({ ...extras, dataUrl: canvas.toDataURL('image/png') }), 50)
+    context.drawImage(
+      video,
+      left * window.devicePixelRatio,
+      top * window.devicePixelRatio,
+      elWidth * window.devicePixelRatio,
+      elWidth / width * height * window.devicePixelRatio,
+      0,
+      0,
+      width,
+      height,
+    )
+    return canvas.toDataURL('image/png')
   }
 
-  function finish() {
+  function dispose() {
     captureStream?.getTracks().forEach(track => track.stop())
     captureStream = null
-    return results
   }
 
   return {
     screenshot,
-    finish,
+    dispose,
   }
 }
 
-export type ScreenshotSession<Extras> = Awaited<ReturnType<typeof startScreenshotSession<Extras>>>
-export type ScreenshotResult<Extras> = (Extras & { dataUrl: string })[]
+export type ScreenshotSession = Awaited<ReturnType<typeof startScreenshotSession>>

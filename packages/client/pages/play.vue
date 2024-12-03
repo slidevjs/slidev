@@ -12,7 +12,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor, windowSize } from '../state'
+import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor } from '../state'
 
 const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
@@ -68,7 +68,6 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
   >
     <SlideContainer
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
-      :width="isPrintMode ? windowSize.width.value : undefined"
       is-main
       @pointerdown="onClick"
       @contextmenu="onContextMenu"

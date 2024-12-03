@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ScreenshotResult, ScreenshotSession } from '../logic/screenshot'
+import type { ScreenshotSession } from '../logic/screenshot'
 import { sleep } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
@@ -24,10 +24,10 @@ const { width: containerWidth } = useElementSize(container)
 const scale = computed(() => containerWidth.value / slideWidth.value)
 const ranges = ref('')
 const initialWait = ref(1000)
-const nextWait = ref(100)
-interface ScreenshotExtras { slideIndex: number, clickIndex: number }
-const screenshotSession = ref<ScreenshotSession<ScreenshotExtras> | null>(null)
-const capturedImages = ref<ScreenshotResult<ScreenshotExtras> | null>(null)
+const nextWait = ref(600)
+type ScreenshotResult = { slideIndex: number, clickIndex: number, dataUrl: string }[]
+const screenshotSession = ref<ScreenshotSession | null>(null)
+const capturedImages = ref<ScreenshotResult | null>(null)
 const title = ref(configs.exportFilename || slidesTitle)
 const routes = computed(() => parseRangeString(slides.value.length, ranges.value).map(i => slides.value[i - 1]))
 
@@ -42,24 +42,29 @@ function pdf() {
 }
 
 async function capturePngs() {
+  if (screenshotSession.value) {
+    screenshotSession.value.dispose()
+    screenshotSession.value = null
+  }
+  if (capturedImages.value)
+    return capturedImages.value
   try {
     const scale = 2
     screenshotSession.value = await startScreenshotSession(slideWidth.value * scale, slideHeight.value * scale)
+    const result: ScreenshotResult = []
 
-    go(0, 0, true)
+    go(1, 0, true)
 
     await sleep(initialWait.value)
     while (true) {
       if (!screenshotSession.value) {
         break
       }
-      screenshotSession.value.screenshot(
-        document.getElementById('page-root')!,
-        {
-          slideIndex: currentSlideNo.value - 1,
-          clickIndex: clicks.value,
-        },
-      )
+      result.push({
+        slideIndex: currentSlideNo.value - 1,
+        clickIndex: clicks.value,
+        dataUrl: screenshotSession.value.screenshot(document.getElementById('slide-content')!),
+      })
       if (hasNext.value) {
         await sleep(nextWait.value)
         next()
@@ -71,8 +76,8 @@ async function capturePngs() {
     }
 
     if (screenshotSession.value) {
-      router.push('/export')
-      capturedImages.value = screenshotSession.value.finish()
+      screenshotSession.value.dispose()
+      capturedImages.value = result
       screenshotSession.value = null
     }
   }
@@ -80,35 +85,14 @@ async function capturePngs() {
     console.error(e)
     capturedImages.value = null
   }
+  finally {
+    router.push('/export')
+  }
+  return capturedImages.value
 }
 
-// async function capturePngs2() {
-//   const slides = Array.from(container.value!.querySelectorAll('.print-slide-container'))
-//   return await Promise.all(slides.map(async (slide) => {
-//     const slideIndex = +slide.id.split('-')[0] - 1
-//     // TODO: assert slideIndex
-//     const dataUrl = await toPng(slide as HTMLElement, {
-//       width: slideWidth.value,
-//       height: slideHeight.value,
-//       skipFonts: true,
-//       cacheBust: true,
-//       pixelRatio: 1.5,
-//       fetchRequestInit: {
-//         mode: 'no-cors',
-//         cache: 'no-cache',
-//       },
-//     })
-//     return {
-//       id: slide.id,
-//       slideIndex,
-//       dataUrl,
-//     }
-//   }))
-// }
-
 async function pptx() {
-  await capturePngs()
-  const pngs = capturedImages.value
+  const pngs = await capturePngs()
   if (!pngs)
     return
   const pptx = new PptxGenJS()
@@ -149,8 +133,7 @@ async function pptx() {
 }
 
 async function pngsZip() {
-  await capturePngs()
-  const pngs = capturedImages.value
+  const pngs = await capturePngs()
   if (!pngs)
     return
   const data = await createTarGzip(
@@ -178,12 +161,19 @@ useStyleTag(computed(() => screenshotSession.value
 `
   : ''))
 
-// clear preview when settings changed
+// clear captured images when settings changed
 watch([
   isDark,
   ranges,
   isPrintWithClicks,
 ], () => capturedImages.value = null)
+
+// clear captured images when HMR
+if (import.meta.hot) {
+  import.meta.hot.on('vite:beforeUpdate', () => {
+    capturedImages.value = null
+  })
+}
 </script>
 
 <template>
