@@ -22,7 +22,7 @@ const { width: containerWidth } = useElementSize(container)
 const scale = computed(() => containerWidth.value / slideWidth.value)
 const rangesRaw = ref('')
 const initialWait = ref(1000)
-const nextWait = ref(400)
+const delay = ref(400)
 type ScreenshotResult = { slideIndex: number, clickIndex: number, dataUrl: string }[]
 const screenshotSession = ref<ScreenshotSession | null>(null)
 const capturedImages = ref<ScreenshotResult | null>(null)
@@ -52,7 +52,7 @@ async function capturePngs() {
 
     go(1, 0, true)
 
-    await sleep(initialWait.value)
+    await sleep(initialWait.value + delay.value)
     while (true) {
       if (!screenshotSession.value) {
         break
@@ -63,9 +63,9 @@ async function capturePngs() {
         dataUrl: screenshotSession.value.screenshot(document.getElementById('slide-content')!),
       })
       if (hasNext.value) {
-        await sleep(nextWait.value)
+        await sleep(delay.value)
         next()
-        await sleep(nextWait.value)
+        await sleep(delay.value)
       }
       else {
         break
@@ -216,7 +216,7 @@ if (import.meta.hot) {
         </label>
         <label>
           <span> Delay (ms) </span>
-          <input v-model="nextWait" type="number" step="100">
+          <input v-model="delay" type="number" step="100">
         </label>
       </div>
       <div class="flex-grow" />
