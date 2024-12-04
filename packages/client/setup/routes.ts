@@ -61,6 +61,16 @@ export default function setupRoutes() {
         path: '/presenter/print',
         component: () => import('../pages/presenter/print.vue'),
       },
+      {
+        name: 'handout',
+        path: '/handout',
+        component: () => import('../pages/handout/print.vue'),
+      },
+      {
+        name: 'cover',
+        path: '/cover',
+        component: () => import('../pages/cover/print.vue'),
+      },
     )
   }
 
