@@ -16,6 +16,17 @@ export const official: AddonInfo[] = [
 
 export const community: AddonInfo[] = [
   {
+    id: 'slidev-addon-python-runner',
+    name: 'Python Runner',
+    description: 'Run actual Python code in your slides',
+    tags: ['Code runner'],
+    author: {
+      name: '_Kerman',
+      link: 'https://github.com/KermanX',
+    },
+    repo: 'https://github.com/KermanX/slidev-addon-python-runner',
+  },
+  {
     id: 'slidev-addon-tldraw',
     name: 'tldraw for Slidev',
     description: 'Embed tldraw diagrams directly in Slidev, with in-slide editing support',
