@@ -4,8 +4,6 @@ import { sleep } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
 import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
-import { createTarGzip } from 'nanotar'
-import PptxGenJS from 'pptxgenjs'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDarkMode } from '../composables/useDarkMode'
@@ -19,7 +17,7 @@ import Play from './play.vue'
 const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks } = useNav()
 const router = useRouter()
 const { isColorSchemaConfigured, isDark } = useDarkMode()
-const container = useTemplateRef('print-container')
+const container = useTemplateRef('export-container')
 const { width: containerWidth } = useElementSize(container)
 const scale = computed(() => containerWidth.value / slideWidth.value)
 const ranges = ref('')
@@ -95,7 +93,9 @@ async function pptx() {
   const pngs = await capturePngs()
   if (!pngs)
     return
-  const pptx = new PptxGenJS()
+  const pptx = await import('pptxgenjs')
+    .then(r => r.default)
+    .then(PptxGen => new PptxGen())
 
   const layoutName = `${slideWidth.value}x${slideHeight.value}`
   pptx.defineLayout({
@@ -136,6 +136,7 @@ async function pngsZip() {
   const pngs = await capturePngs()
   if (!pngs)
     return
+  const { createTarGzip } = await import('nanotar')
   const data = await createTarGzip(
     pngs.map(({ slideIndex, dataUrl }) => ({
       name: `${slideIndex}.png`,
@@ -162,11 +163,14 @@ useStyleTag(computed(() => screenshotSession.value
   : ''))
 
 // clear captured images when settings changed
-watch([
-  isDark,
-  ranges,
-  isPrintWithClicks,
-], () => capturedImages.value = null)
+watch(
+  [
+    isDark,
+    ranges,
+    isPrintWithClicks,
+  ],
+  () => capturedImages.value = null,
+)
 
 // clear captured images when HMR
 if (import.meta.hot) {
@@ -177,22 +181,23 @@ if (import.meta.hot) {
 </script>
 
 <template>
+  <Play v-if="screenshotSession" />
   <div
-    v-if="!screenshotSession"
-    class="fixed inset-6 flex flex-col md:flex-row gap-8 print:position-unset print:inset-0 print:block print:min-h-max"
+    v-else
+    class="fixed inset-0 flex flex-col md:flex-row gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden"
   >
-    <div class="print:hidden min-w-fit flex md:flex-col gap-4">
+    <div class="print:hidden min-w-fit flex md:flex-col gap-4 p6 max-w-100">
       <h1 class="text-3xl my-4 print:hidden">
         Export Slides
       </h1>
       <div class="flex flex-col">
         <label class="text-xl flex gap-2 items-center select-none">
-          <span> Dark mode </span>
           <input v-model="isDark" type="checkbox" :disabled="isColorSchemaConfigured">
+          <span> Dark mode </span>
         </label>
         <label class="text-xl flex gap-2 items-center select-none">
-          <span> With clicks </span>
           <input v-model="isPrintWithClicks" type="checkbox">
+          <span> With clicks </span>
         </label>
         <label class="text-xl flex gap-2 items-center select-none">
           <span> Title </span>
@@ -200,50 +205,58 @@ if (import.meta.hot) {
         </label>
       </div>
       <div class="flex-grow" />
+      <span>Rendering as {{ capturedImages ? 'Images' : 'DOM' }}</span>
       <div class="flex flex-col gap-2 items-start min-w-max">
         <button v-if="capturedImages" @click="capturedImages = null">
           Clear Captured Images
         </button>
         <button v-else @click="capturePngs">
-          Capture Images
+          Capture as Images
         </button>
+      </div>
+      <span>Exports To</span>
+      <div class="flex flex-col gap-2 items-start min-w-max">
         <button @click="pdf">
-          Export to PDF
+          PDF
         </button>
         <button @click="pptx">
-          Export to PPTX
+          PPTX
         </button>
         <button @click="pngsZip">
-          Export to Images
+          Images
         </button>
       </div>
     </div>
-    <div id="print-container" ref="print-container">
-      <div v-show="!capturedImages" id="print-content">
+    <div id="export-container" ref="export-container">
+      <div v-show="!capturedImages" id="export-content">
         <PrintSlide v-for="route of routes" :key="route.no" :route="route" />
         <div id="twoslash-container" />
       </div>
-      <div v-if="capturedImages" class="print:hidden grid">
-        <div v-for="png, i of capturedImages" :key="i">
+      <div v-if="capturedImages" id="export-content-images" class="print:hidden grid">
+        <div v-for="png, i of capturedImages" :key="i" class="print-slide-container">
           <img :src="png.dataUrl">
         </div>
       </div>
     </div>
   </div>
-  <Play v-else />
 </template>
 
 <style scoped>
 @media not print {
-  #print-container {
+  #export-container {
     scrollbar-width: thin;
     scroll-behavior: smooth;
-    @apply w-full overflow-x-hidden overflow-y-auto outline outline-main outline-solid max-h-full;
+    --uno: w-full overflow-x-hidden overflow-y-auto max-h-full max-w-300 p6;
   }
 
-  #print-content {
+  #export-content {
     transform: v-bind('`scale(${scale})`');
-    @apply origin-tl flex flex-col;
+    --uno: origin-tl;
+  }
+
+  #export-content,
+  #export-content-images {
+    --uno: flex flex-col gap-2;
   }
 }
 
@@ -252,17 +265,17 @@ if (import.meta.hot) {
     transform: scale(1);
   }
 
-  #print-content {
+  #export-content {
     display: block !important;
   }
 }
 
 button {
-  @apply w-full rounded bg-gray:10 px-4 py-2 hover:bg-gray/20;
+  --uno: 'w-full rounded bg-gray:10 px-4 py-2 hover:bg-gray/20';
 }
 
-#print-content {
-  @apply pointer-events-none;
+#export-content {
+  --uno: pointer-events-none;
 }
 </style>
 
@@ -272,6 +285,13 @@ button {
   body,
   #app {
     overflow: unset !important;
+  }
+}
+
+@media not print {
+  #export-content-images .print-slide-container,
+  #export-content .print-slide-container {
+    --uno: border border-main rounded-md shadow of-hidden;
   }
 }
 </style>
