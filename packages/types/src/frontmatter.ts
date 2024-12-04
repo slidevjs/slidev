@@ -53,6 +53,10 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   codeCopy?: boolean
   /**
+   * The author of the slides
+   */
+  author?: string
+  /**
    * Information shows on the built SPA
    * Can be a markdown string
    *

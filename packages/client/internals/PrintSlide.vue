@@ -5,13 +5,14 @@ import { useFixedNav, useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
 import PrintSlideClick from './PrintSlideClick.vue'
 
-const { route } = defineProps<{ route: SlideRoute }>()
+const { route } = defineProps<{ hidden?: boolean, route: SlideRoute }>()
 const { isPrintWithClicks } = useNav()
 const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLICKS_MAX)
 </script>
 
 <template>
   <PrintSlideClick
+    v-show="!hidden"
     :clicks-context="clicks0"
     :nav="useFixedNav(route, clicks0)"
   />
@@ -22,6 +23,7 @@ const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLI
     -->
     <PrintSlideClick
       v-for="i in Math.max(0, clicks0.total - clicks0.clicksStart)"
+      v-show="!hidden"
       :key="i"
       :nav="useFixedNav(route, createFixedClicks(route, i + clicks0.clicksStart))"
     />

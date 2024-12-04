@@ -3,6 +3,7 @@ import type { RawAtValue } from '@slidev/types'
 import type { App } from 'vue'
 import { annotate } from '@slidev/rough-notation'
 import { computed, watchEffect } from 'vue'
+import { useNav } from '../composables/useNav'
 import { resolveClick } from './v-click'
 
 export interface RoughDirectiveOptions extends Partial<RoughAnnotationConfig> {
@@ -78,6 +79,8 @@ export function createVMarkDirective() {
         name: 'v-mark',
 
         mounted: (el, binding) => {
+          const { isPrintMode } = useNav()
+
           const options = computed(() => {
             const bindingOptions = (typeof binding.value === 'object' && !Array.isArray(binding.value))
               ? { ...binding.value }
@@ -108,6 +111,9 @@ export function createVMarkDirective() {
               ...bindingOptions,
             }
             options.type ||= 'underline'
+
+            if (isPrintMode.value)
+              options.animationDuration = 1 /* millisecond */
 
             return options
           })

@@ -7,6 +7,7 @@ import { injectionCurrentPage, injectionFrontmatter, injectionRenderContext, inj
 import { makeId } from '../logic/utils'
 import { activeDragElement } from '../state'
 import { directiveInject } from '../utils'
+import { useNav } from './useNav'
 import { useSlideBounds } from './useSlideBounds'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
@@ -127,7 +128,8 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const scale = inject(injectionSlideScale) ?? ref(1)
   const zoom = inject(injectionSlideZoom) ?? ref(1)
   const { left: slideLeft, top: slideTop, stop: stopWatchBounds } = useSlideBounds(inject(injectionSlideElement) ?? ref())
-  const enabled = ['slide', 'presenter'].includes(renderContext.value)
+  const { isPrintMode } = useNav()
+  const enabled = ['slide', 'presenter'].includes(renderContext.value) && !isPrintMode.value
 
   let dataSource: DragElementDataSource = directive ? 'directive' : 'prop'
   let dragId: string = makeId()
@@ -266,10 +268,14 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       state.stopDragging()
     },
     startDragging(): void {
+      if (!enabled)
+        return
       updateBounds()
       activeDragElement.value = state
     },
     stopDragging(): void {
+      if (!enabled)
+        return
       if (activeDragElement.value === state)
         activeDragElement.value = null
     },

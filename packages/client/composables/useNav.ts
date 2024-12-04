@@ -3,6 +3,7 @@ import type { ComputedRef, Ref, TransitionGroupProps, WritableComputedRef } from
 import type { RouteLocationNormalized, Router } from 'vue-router'
 import { slides } from '#slidev/slides'
 import { clamp } from '@antfu/utils'
+import { parseRangeString } from '@slidev/parser/utils'
 import { createSharedComposable } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -82,6 +83,7 @@ export interface SlidevContextNavState {
   clicksContext: ComputedRef<ClicksContext>
   queryClicksRaw: Ref<string>
   queryClicks: WritableComputedRef<number>
+  printRange: Ref<number[]>
   getPrimaryClicks: (route: SlideRoute) => ClicksContext
 }
 
@@ -288,6 +290,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const hasPrimarySlide = computed(() => !!currentRoute.params.no)
   const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.params.no as string)?.no ?? 1 : 1)
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
+  const printRange = ref(parseRangeString(slides.value.length, currentRoute.query.range as string | undefined))
 
   const queryClicksRaw = useRouteQuery<string>('clicks', '0')
 
@@ -354,6 +357,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
     clicksContext,
     queryClicksRaw,
     queryClicks,
+    printRange,
     getPrimaryClicks,
   }
 })

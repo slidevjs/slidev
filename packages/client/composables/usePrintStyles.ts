@@ -8,10 +8,16 @@ export function usePrintStyles() {
 
   useStyleTag(computed(() => isPrintMode.value
     ? `
-    @page {
-      size: ${slideWidth.value}px ${slideHeight.value}px;
-      margin: 0px;
-    }
-  `
+@page {
+  size: ${slideWidth.value}px ${slideHeight.value}px;
+  margin: 0px;
+}
+
+* {
+  transition: none !important;
+  transition-duration: 0s !important;
+}
+
+`
     : ''))
 }

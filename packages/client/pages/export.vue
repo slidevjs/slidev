@@ -3,7 +3,7 @@ import type { ScreenshotSession } from '../logic/screenshot'
 import { sleep } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
-import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
+import { provideLocal, useElementSize, useStyleTag, watchDebounced } from '@vueuse/core'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDarkMode } from '../composables/useDarkMode'
@@ -14,20 +14,19 @@ import PrintSlide from '../internals/PrintSlide.vue'
 import { startScreenshotSession } from '../logic/screenshot'
 import Play from './play.vue'
 
-const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks } = useNav()
+const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks, printRange } = useNav()
 const router = useRouter()
 const { isColorSchemaConfigured, isDark } = useDarkMode()
 const container = useTemplateRef('export-container')
 const { width: containerWidth } = useElementSize(container)
 const scale = computed(() => containerWidth.value / slideWidth.value)
-const ranges = ref('')
+const rangesRaw = ref('')
 const initialWait = ref(1000)
-const nextWait = ref(600)
+const nextWait = ref(400)
 type ScreenshotResult = { slideIndex: number, clickIndex: number, dataUrl: string }[]
 const screenshotSession = ref<ScreenshotSession | null>(null)
 const capturedImages = ref<ScreenshotResult | null>(null)
 const title = ref(configs.exportFilename || slidesTitle)
-const routes = computed(() => parseRangeString(slides.value.length, ranges.value).map(i => slides.value[i - 1]))
 
 useHead({
   title,
@@ -107,7 +106,7 @@ async function pptx() {
   pptx.author = configs.author
   pptx.company = 'Created using Slidev'
   pptx.title = title.value
-  if (configs.info)
+  if (typeof configs.info === 'string')
     pptx.subject = configs.info
 
   pngs.forEach(({ slideIndex, dataUrl }) => {
@@ -166,10 +165,16 @@ useStyleTag(computed(() => screenshotSession.value
 watch(
   [
     isDark,
-    ranges,
+    printRange,
     isPrintWithClicks,
   ],
   () => capturedImages.value = null,
+)
+
+watchDebounced(
+  [slides, rangesRaw],
+  () => printRange.value = parseRangeString(slides.value.length, rangesRaw.value),
+  { debounce: 300 },
 )
 
 // clear captured images when HMR
@@ -186,35 +191,47 @@ if (import.meta.hot) {
     v-else
     class="fixed inset-0 flex flex-col md:flex-row gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden"
   >
-    <div class="print:hidden min-w-fit flex md:flex-col gap-4 p6 max-w-100">
-      <h1 class="text-3xl my-4 print:hidden">
+    <div class="print:hidden min-w-fit flex md:flex-col gap-2 p6 max-w-100">
+      <h1 class="text-3xl my-4 flex items-center gap-2">
+        <RouterLink to="/" class="i-carbon:previous-outline op-70 hover:op-100" />
         Export Slides
       </h1>
-      <div class="flex flex-col">
-        <label class="text-xl flex gap-2 items-center select-none">
+      <h2> Settings </h2>
+      <div class="flex flex-col gap-1">
+        <label>
           <input v-model="isDark" type="checkbox" :disabled="isColorSchemaConfigured">
           <span> Dark mode </span>
         </label>
-        <label class="text-xl flex gap-2 items-center select-none">
+        <label>
           <input v-model="isPrintWithClicks" type="checkbox">
           <span> With clicks </span>
         </label>
-        <label class="text-xl flex gap-2 items-center select-none">
+        <label>
           <span> Title </span>
           <input v-model="title" type="text">
         </label>
+        <label>
+          <span> Ranges </span>
+          <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
+        </label>
+        <label>
+          <span> Delay (ms) </span>
+          <input v-model="nextWait" type="number" step="100">
+        </label>
       </div>
       <div class="flex-grow" />
-      <span>Rendering as {{ capturedImages ? 'Images' : 'DOM' }}</span>
+      <h2> Rendered as {{ capturedImages ? 'Images' : 'DOM' }} </h2>
       <div class="flex flex-col gap-2 items-start min-w-max">
-        <button v-if="capturedImages" @click="capturedImages = null">
+        <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
+          <span class="i-carbon:trash-can inline-block text-xl" />
           Clear Captured Images
         </button>
-        <button v-else @click="capturePngs">
-          Capture as Images
+        <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
+          <div class="i-carbon:camera-action inline-block text-xl" />
+          Capture Images
         </button>
       </div>
-      <span>Exports To</span>
+      <h2> Export as </h2>
       <div class="flex flex-col gap-2 items-start min-w-max">
         <button @click="pdf">
           PDF
@@ -223,13 +240,13 @@ if (import.meta.hot) {
           PPTX
         </button>
         <button @click="pngsZip">
-          Images
+          PNGs
         </button>
       </div>
     </div>
     <div id="export-container" ref="export-container">
       <div v-show="!capturedImages" id="export-content">
-        <PrintSlide v-for="route of routes" :key="route.no" :route="route" />
+        <PrintSlide v-for="route, index in slides" :key="index" :hidden="!printRange.includes(index + 1)" :route />
         <div id="twoslash-container" />
       </div>
       <div v-if="capturedImages" id="export-content-images" class="print:hidden grid">
@@ -272,6 +289,23 @@ if (import.meta.hot) {
 
 button {
   --uno: 'w-full rounded bg-gray:10 px-4 py-2 hover:bg-gray/20';
+}
+
+label {
+  --uno: text-xl flex gap-2 items-center select-none;
+
+  span {
+    --uno: flex-grow;
+  }
+
+  input[type='text'],
+  input[type='number'] {
+    --uno: border border-main rounded px-2 py-1;
+  }
+}
+
+h2 {
+  --uno: uppercase pt-1 tracking-widest font-500 op-70 mt-2;
 }
 
 #export-content {
