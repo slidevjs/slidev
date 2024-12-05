@@ -13,7 +13,6 @@ const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLI
 <template>
   <PrintSlideClick
     v-show="!hidden"
-    :clicks-context="clicks0"
     :nav="useFixedNav(route, clicks0)"
   />
   <template v-if="isPrintWithClicks">

@@ -18,8 +18,8 @@ import Play from './play.vue'
 const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks, printRange } = useNav()
 const router = useRouter()
 const { isColorSchemaConfigured, isDark } = useDarkMode()
-const container = useTemplateRef('export-container')
-const { width: containerWidth } = useElementSize(container)
+const { width: containerWidth } = useElementSize(useTemplateRef('export-container'))
+const { height: contentHeight } = useElementSize(useTemplateRef('export-content'))
 const scale = computed(() => containerWidth.value / slideWidth.value)
 const rangesRaw = ref('')
 const initialWait = ref(1000)
@@ -132,7 +132,7 @@ async function pptx() {
   a.click()
 }
 
-async function pngsZip() {
+async function pngsGz() {
   const pngs = await capturePngs()
   if (!pngs)
     return
@@ -150,7 +150,7 @@ async function pngsZip() {
   a.click()
 }
 
-useStyleTag(computed(() => screenshotSession.value
+useStyleTag(computed(() => screenshotSession.value?.isActive
   ? `
   html {
     cursor: none;
@@ -187,81 +187,85 @@ if (import.meta.hot) {
 </script>
 
 <template>
-  <Play v-if="screenshotSession" />
+  <Play v-if="screenshotSession?.isActive" />
   <div
     v-else
-    class="fixed inset-0 flex flex-col md:flex-row gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden"
+    class="fixed inset-0 flex flex-col md:flex-row md:gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden"
   >
-    <div class="print:hidden min-w-fit flex md:flex-col gap-2 p6 max-w-100">
-      <h1 class="text-3xl my-4 flex items-center gap-2">
+    <div class="print:hidden min-w-fit flex flex-wrap md:flex-col gap-2 p-6 max-w-100">
+      <h1 class="text-3xl md:my-4 flex items-center gap-2 w-full">
         <RouterLink to="/" class="i-carbon:previous-outline op-70 hover:op-100" />
         Export Slides
       </h1>
-      <h2> Settings </h2>
-      <div class="flex flex-col gap-1">
-        <label>
-          <input v-model="isDark" type="checkbox" :disabled="isColorSchemaConfigured">
-          <span> Dark mode </span>
-        </label>
-        <label>
-          <input v-model="isPrintWithClicks" type="checkbox">
-          <span> With clicks </span>
-        </label>
-        <label>
-          <span> Title </span>
-          <input v-model="title" type="text">
-        </label>
-        <label>
-          <span> Ranges </span>
-          <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
-        </label>
-        <label>
-          <span class="flex gap-1">
-            Delay
-            <Tooltip>
-              <sup class="i-carbon:information inline-block text-4 op-70" />
-              <template #popper>
-                <div class="w-max text-sm p-2">
-                  Delay between capturing each slide in milliseconds. <br>
-                  Increase this value if slides are captured incompletely. <br>
-                  (Not related to PDF export)
-                </div>
-              </template>
-            </Tooltip>
-          </span>
-          <input v-model="delay" type="number" step="50" min="50">
-        </label>
+      <div>
+        <h2> Settings </h2>
+        <div class="flex flex-col gap-1">
+          <label>
+            <input v-model="isDark" type="checkbox" :disabled="isColorSchemaConfigured">
+            <span> Dark mode </span>
+          </label>
+          <label>
+            <input v-model="isPrintWithClicks" type="checkbox">
+            <span> With clicks </span>
+          </label>
+          <label>
+            <span> Title </span>
+            <input v-model="title" type="text">
+          </label>
+          <label>
+            <span> Ranges </span>
+            <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
+          </label>
+          <label>
+            <span class="flex gap-1">
+              Delay
+              <Tooltip>
+                <sup class="i-carbon:information inline-block text-4 op-70" />
+                <template #popper>
+                  <div class="w-max text-sm p-2">
+                    Delay between capturing each slide in milliseconds. <br>
+                    Increase this value if slides are captured incompletely. <br>
+                    (Not related to PDF export)
+                  </div>
+                </template>
+              </Tooltip>
+            </span>
+            <input v-model="delay" type="number" step="50" min="50">
+          </label>
+        </div>
       </div>
       <div class="flex-grow" />
-      <h2> Export as vector file </h2>
-      <div class="flex flex-col gap-2 items-start min-w-max">
-        <button @click="pdf">
-          PDF
-        </button>
-      </div>
-      <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
-      <div class="flex flex-col gap-2 items-start min-w-max">
-        <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
-          <span class="i-carbon:trash-can inline-block text-xl" />
-          Clear Captured Images
-        </button>
-        <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
-          <div class="i-carbon:camera-action inline-block text-xl" />
-          Capture Images
-        </button>
-      </div>
-      <h2> Export as images </h2>
-      <div class="flex flex-col gap-2 items-start min-w-max">
-        <button @click="pptx">
-          PPTX
-        </button>
-        <button @click="pngsZip">
-          PNGs
-        </button>
+      <div class="min-w-fit">
+        <h2> Export as vector file </h2>
+        <div class="flex flex-col gap-2 items-start min-w-max">
+          <button @click="pdf">
+            PDF
+          </button>
+        </div>
+        <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
+        <div class="flex flex-col gap-2 items-start min-w-max">
+          <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
+            <span class="i-carbon:trash-can inline-block text-xl" />
+            Clear Captured Images
+          </button>
+          <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
+            <div class="i-carbon:camera-action inline-block text-xl" />
+            Capture Images
+          </button>
+        </div>
+        <h2> Export as images </h2>
+        <div class="flex flex-col gap-2 items-start min-w-max">
+          <button @click="pptx">
+            PPTX
+          </button>
+          <button @click="pngsGz">
+            PNGs.gz
+          </button>
+        </div>
       </div>
     </div>
     <div id="export-container" ref="export-container">
-      <div v-show="!capturedImages" id="export-content">
+      <div v-show="!capturedImages" id="export-content" ref="export-content">
         <PrintSlide v-for="route, index in slides" :key="index" :hidden="!printRange.includes(index + 1)" :route />
       </div>
       <div v-if="capturedImages" id="export-content-images" class="print:hidden grid">
@@ -284,6 +288,7 @@ if (import.meta.hot) {
 
   #export-content {
     transform: v-bind('`scale(${scale})`');
+    margin-bottom: v-bind('`${contentHeight * (scale - 1)}px`');
     --uno: origin-tl;
   }
 
@@ -294,11 +299,8 @@ if (import.meta.hot) {
 }
 
 @media print {
-  .scaler {
-    transform: scale(1);
-  }
-
   #export-content {
+    transform: scale(1);
     display: block !important;
   }
 }
@@ -321,7 +323,7 @@ label {
 }
 
 h2 {
-  --uno: uppercase pt-1 tracking-widest font-500 op-70 mt-2;
+  --uno: uppercase pt-1 tracking-widest font-500 op-70 my-2;
 }
 
 #export-content {

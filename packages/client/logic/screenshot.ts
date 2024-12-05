@@ -1,3 +1,5 @@
+import { computed, ref } from 'vue'
+
 export async function startScreenshotSession(width: number, height: number) {
   const canvas = document.createElement('canvas')
   canvas.width = width
@@ -7,7 +9,7 @@ export async function startScreenshotSession(width: number, height: number) {
   video.width = width
   video.height = height
 
-  let captureStream: MediaStream | null = await navigator.mediaDevices.getDisplayMedia({
+  const captureStream = ref<MediaStream | null>(await navigator.mediaDevices.getDisplayMedia({
     video: {
       // Use a rather small frame rate
       frameRate: 10,
@@ -16,14 +18,14 @@ export async function startScreenshotSession(width: number, height: number) {
     },
     selfBrowserSurface: 'include',
     preferCurrentTab: true,
-  })
-  captureStream.addEventListener('inactive', dispose)
+  }))
+  captureStream.value!.addEventListener('inactive', dispose)
 
-  video.srcObject = captureStream
+  video.srcObject = captureStream.value!
   video.play()
 
   function screenshot(element: HTMLElement) {
-    if (!captureStream)
+    if (!captureStream.value)
       throw new Error('captureStream inactive')
     context.clearRect(0, 0, width, height)
     const { left, top, width: elWidth } = element.getBoundingClientRect()
@@ -42,11 +44,12 @@ export async function startScreenshotSession(width: number, height: number) {
   }
 
   function dispose() {
-    captureStream?.getTracks().forEach(track => track.stop())
-    captureStream = null
+    captureStream.value?.getTracks().forEach(track => track.stop())
+    captureStream.value = null
   }
 
   return {
+    isActive: computed(() => !!captureStream.value),
     screenshot,
     dispose,
   }
