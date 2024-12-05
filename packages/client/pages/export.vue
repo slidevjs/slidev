@@ -153,15 +153,18 @@ async function pngsGz() {
 
 useStyleTag(computed(() => screenshotSession.value?.isActive
   ? `
-  html {
-    cursor: none;
-    margin-bottom: 20px;
-  }
-  body {
-    pointer-events: none;
-  }
-`
-  : ''))
+html {
+  cursor: none;
+  margin-bottom: 20px;
+}
+body {
+  pointer-events: none;
+}`
+  : `
+:root {
+  --slidev-slide-scale: ${scale.value};
+}
+`))
 
 // clear captured images when settings changed
 watch(
@@ -220,7 +223,7 @@ if (import.meta.hot) {
           <label>
             <span class="flex gap-1">
               Delay
-              <Tooltip>
+              <Tooltip popper-class="no-slide-scale">
                 <sup class="i-carbon:information inline-block text-4 op-70" />
                 <template #popper>
                   <div class="w-max text-sm p-2">
@@ -291,11 +294,6 @@ if (import.meta.hot) {
     transform: v-bind('`scale(${scale})`');
     margin-bottom: v-bind('contentMarginBottom');
     --uno: origin-tl;
-
-    /* TODO: avoid this */
-    & :deep(svg.rough-annotation) {
-      transform: v-bind('`scale(${1 / scale})`');
-    }
   }
 
   #export-content,
