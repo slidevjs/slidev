@@ -47,11 +47,6 @@ export default function setupRoutes() {
         path: '/presenter',
         redirect: { path: '/presenter/1' },
       },
-      {
-        name: 'export',
-        path: '/export/:no?',
-        component: () => import('../pages/export.vue'),
-      },
     )
   }
 
@@ -65,6 +60,16 @@ export default function setupRoutes() {
       {
         path: '/presenter/print',
         component: () => import('../pages/presenter/print.vue'),
+      },
+    )
+  }
+
+  if (__SLDIEV_FEATURE_EXPORTING_UI__) {
+    routes.push(
+      {
+        name: 'export',
+        path: '/export/:no?',
+        component: () => import('../pages/export.vue'),
       },
     )
   }

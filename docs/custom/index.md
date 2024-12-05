@@ -27,6 +27,8 @@ keywords: keyword1,keyword2
 
 # enable presenter mode, can be boolean, 'dev' or 'build'
 presenter: true
+# enable exporting UI, can be boolean, 'dev' or 'build'
+exportingUI: dev
 # enabled pdf downloading in SPA build, can also be a custom url
 download: false
 # filename of the export file

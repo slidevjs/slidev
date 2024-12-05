@@ -105,7 +105,8 @@ async function pptx() {
     height: slideHeight.value / 96,
   })
   pptx.layout = layoutName
-  pptx.author = configs.author
+  if (configs.author)
+    pptx.author = configs.author
   pptx.company = 'Created using Slidev'
   pptx.title = title.value
   if (typeof configs.info === 'string')

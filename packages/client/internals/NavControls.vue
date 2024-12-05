@@ -153,7 +153,7 @@ if (__SLIDEV_FEATURE_RECORD__)
       <template v-if="!isPresenter && !isEmbedded">
         <MenuButton>
           <template #button>
-            <IconButton title="Adjust settings">
+            <IconButton title="More Options">
               <div class="i-carbon:settings-adjust" />
             </IconButton>
           </template>

@@ -30,8 +30,15 @@ const wakeLockItems: SelectionItem<boolean>[] = [
 </script>
 
 <template>
-  <div class="text-sm select-none">
+  <div class="text-sm select-none mb-2">
     <SelectList v-model="slideScale" title="Scale" :items="scaleItems" />
     <SelectList v-if="__SLIDEV_FEATURE_WAKE_LOCK__ && isSupported" v-model="wakeLockEnabled" title="Wake lock" :items="wakeLockItems" />
+    <div class="text-xs uppercase opacity-50 tracking-widest px-7 py-1 select-none text-nowrap">
+      Actions
+    </div>
+    <RouterLink v-if="__SLDIEV_FEATURE_EXPORTING_UI__" to="/export" class="block px-2 flex gap-1 py-1 hover:bg-gray-400 hover:bg-opacity-10">
+      <div class="i-carbon:export text-3 w-4 op-80 my-a" />
+      Export as
+    </RouterLink>
   </div>
 </template>
