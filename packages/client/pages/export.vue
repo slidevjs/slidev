@@ -21,6 +21,7 @@ const { isColorSchemaConfigured, isDark } = useDarkMode()
 const { width: containerWidth } = useElementSize(useTemplateRef('export-container'))
 const { height: contentHeight } = useElementSize(useTemplateRef('export-content'))
 const scale = computed(() => containerWidth.value / slideWidth.value)
+const contentMarginBottom = computed(() => `${contentHeight.value * (scale.value - 1)}px`)
 const rangesRaw = ref('')
 const initialWait = ref(1000)
 const delay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
@@ -288,8 +289,13 @@ if (import.meta.hot) {
 
   #export-content {
     transform: v-bind('`scale(${scale})`');
-    margin-bottom: v-bind('`${contentHeight * (scale - 1)}px`');
+    margin-bottom: v-bind('contentMarginBottom');
     --uno: origin-tl;
+
+    /* TODO: avoid this */
+    & :deep(svg.rough-annotation) {
+      transform: v-bind('`scale(${1 / scale})`');
+    }
   }
 
   #export-content,
