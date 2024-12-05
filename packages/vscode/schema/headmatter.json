@@ -177,6 +177,11 @@
           "markdownDescription": "Show a copy button in code blocks",
           "default": true
         },
+        "author": {
+          "type": "string",
+          "description": "The author of the slides",
+          "markdownDescription": "The author of the slides"
+        },
         "info": {
           "type": [
             "string",
