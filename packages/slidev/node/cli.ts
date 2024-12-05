@@ -443,8 +443,20 @@ cli.command(
     const { exportSlides, getExportOptions } = await import('./commands/export')
     const port = await getPort(12445)
 
+    console.log('！！！')
+    let warned = false
     for (const entryFile of entry as unknown as string) {
       const options = await resolveOptions({ entry: entryFile, theme }, 'export')
+
+      if (options.data.config.exportingUI !== false && !warned) {
+        warned = true
+        console.warn(yellow('[Slidev] Exporting via CLI is no longer recommended.'))
+        console.warn(
+          yellow('You can use the exporting UI instead by starting the dev server as normal and visit'),
+          `${blue('localhost:')}${dim('<port>')}${blue('/export')}`,
+        )
+      }
+
       const server = await createServer(
         options,
         {
@@ -633,8 +645,11 @@ function printInfo(
     console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
     if (query)
       console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
-    console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
+    if (options.utils.define.__SLIDEV_FEATURE_PRESENTER__)
+      console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
     console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
+    if (options.utils.define.__SLDIEV_FEATURE_EXPORTING_UI__)
+      console.log(`${dim('  export slides')}       > ${blue(`http://localhost:${bold(port)}/export/`)}`)
     if (options.inspect)
       console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
 
