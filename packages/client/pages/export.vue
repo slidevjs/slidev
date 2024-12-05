@@ -3,7 +3,8 @@ import type { ScreenshotSession } from '../logic/screenshot'
 import { sleep } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
-import { provideLocal, useElementSize, useStyleTag, watchDebounced } from '@vueuse/core'
+import { provideLocal, useElementSize, useLocalStorage, useStyleTag, watchDebounced } from '@vueuse/core'
+import { Tooltip } from 'floating-vue'
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDarkMode } from '../composables/useDarkMode'
@@ -22,7 +23,7 @@ const { width: containerWidth } = useElementSize(container)
 const scale = computed(() => containerWidth.value / slideWidth.value)
 const rangesRaw = ref('')
 const initialWait = ref(1000)
-const delay = ref(400)
+const delay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 type ScreenshotResult = { slideIndex: number, clickIndex: number, dataUrl: string }[]
 const screenshotSession = ref<ScreenshotSession | null>(null)
 const capturedImages = ref<ScreenshotResult | null>(null)
@@ -215,12 +216,30 @@ if (import.meta.hot) {
           <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
         </label>
         <label>
-          <span> Delay (ms) </span>
-          <input v-model="delay" type="number" step="100">
+          <span class="flex gap-1">
+            Delay
+            <Tooltip>
+              <sup class="i-carbon:information inline-block text-4 op-70" />
+              <template #popper>
+                <div class="w-max text-sm p-2">
+                  Delay between capturing each slide in milliseconds. <br>
+                  Increase this value if slides are captured incompletely. <br>
+                  (Not related to PDF export)
+                </div>
+              </template>
+            </Tooltip>
+          </span>
+          <input v-model="delay" type="number" step="50" min="50">
         </label>
       </div>
       <div class="flex-grow" />
-      <h2> Rendered as {{ capturedImages ? 'Images' : 'DOM' }} </h2>
+      <h2> Export as vector file </h2>
+      <div class="flex flex-col gap-2 items-start min-w-max">
+        <button @click="pdf">
+          PDF
+        </button>
+      </div>
+      <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
       <div class="flex flex-col gap-2 items-start min-w-max">
         <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
           <span class="i-carbon:trash-can inline-block text-xl" />
@@ -231,11 +250,8 @@ if (import.meta.hot) {
           Capture Images
         </button>
       </div>
-      <h2> Export as </h2>
+      <h2> Export as images </h2>
       <div class="flex flex-col gap-2 items-start min-w-max">
-        <button @click="pdf">
-          PDF
-        </button>
         <button @click="pptx">
           PPTX
         </button>
@@ -247,7 +263,6 @@ if (import.meta.hot) {
     <div id="export-container" ref="export-container">
       <div v-show="!capturedImages" id="export-content">
         <PrintSlide v-for="route, index in slides" :key="index" :hidden="!printRange.includes(index + 1)" :route />
-        <div id="twoslash-container" />
       </div>
       <div v-if="capturedImages" id="export-content-images" class="print:hidden grid">
         <div v-for="png, i of capturedImages" :key="i" class="print-slide-container">
@@ -255,6 +270,7 @@ if (import.meta.hot) {
         </div>
       </div>
     </div>
+    <div id="twoslash-container" />
   </div>
 </template>
 
