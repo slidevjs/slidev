@@ -16,8 +16,6 @@ export function usePrintStyles() {
 * {
   transition: none !important;
   transition-duration: 0s !important;
-}
-
-`
+}`
     : ''))
 }
