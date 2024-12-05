@@ -345,6 +345,24 @@
           "markdownDescription": "Enable presenter mode",
           "default": true
         },
+        "exportingUI": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable exporting user interface",
+          "markdownDescription": "Enable exporting user interface",
+          "default": "dev"
+        },
         "htmlAttrs": {
           "type": "object",
           "additionalProperties": {
