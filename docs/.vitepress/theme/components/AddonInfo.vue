@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <a :href="addon.link || addon.repo" class="block !decoration-none !text-unset !cursor-unset !hover:bg-gray-400/10 p-2 rounded-lg transition-all">
+  <a :href="addon.link || addon.repo" class="block flex flex-col !decoration-none !text-unset !cursor-unset !hover:bg-gray-400/10 p-2 rounded-lg transition-all">
     <div class="flex flex-wrap">
       <a :href="addon.link || addon.repo" class="font-bold text-lg !text-$vp-c-text-1 !decoration-none">
         {{ addon.name }}
@@ -20,7 +20,7 @@ defineProps<{
       </div>
     </div>
     <div
-      class="text-current text-xs opacity-90"
+      class="flex-grow text-current text-xs opacity-90"
       :title="addon.description"
     >
       {{ addon.description }}
