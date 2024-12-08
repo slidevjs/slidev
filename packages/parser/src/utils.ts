@@ -10,20 +10,20 @@ export function parseRangeString(total: number, rangeStr?: string) {
   if (rangeStr === 'none')
     return []
 
-  const pages: number[] = []
+  const indexes: number[] = []
   for (const part of rangeStr.split(/[,;]/g)) {
     if (!part.includes('-')) {
-      pages.push(+part)
+      indexes.push(+part)
     }
     else {
       const [start, end] = part.split('-', 2)
-      pages.push(
+      indexes.push(
         ...range(+start, !end ? (total + 1) : (+end + 1)),
       )
     }
   }
 
-  return uniq(pages).filter(i => i <= total).sort((a, b) => a - b)
+  return uniq(indexes).filter(i => i <= total).sort((a, b) => a - b)
 }
 
 /**

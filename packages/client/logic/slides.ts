@@ -15,11 +15,12 @@ export function getSlide(no: number | string) {
 export function getSlidePath(
   route: SlideRoute | number | string,
   presenter: boolean,
+  exporting: boolean = false,
 ) {
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return presenter ? `/presenter/${no}` : `/${no}`
+  return exporting ? `/export/${no}` : presenter ? `/presenter/${no}` : `/${no}`
 }
 
 export function useIsSlideActive() {
