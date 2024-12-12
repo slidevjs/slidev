@@ -40,7 +40,7 @@ export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1, { l
 
 export function togglePresenterLayout() {
   presenterLayout.value = presenterLayout.value + 1
-  if (presenterLayout.value > 2)
+  if (presenterLayout.value > 3)
     presenterLayout.value = 1
 }
 
