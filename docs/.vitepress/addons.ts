@@ -8,6 +8,7 @@ export const official: AddonInfo[] = [
     link: '#',
     name: 'Work in Progress',
     description: '',
+    tags: [],
     author: {
       name: '',
     },
@@ -25,6 +26,83 @@ export const community: AddonInfo[] = [
       link: 'https://github.com/AlbertBrand',
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
+  },
+  {
+    id: 'slidev-addon-sync',
+    name: 'slidev-addon-sync',
+    description: 'Sync component for Slidev static build that uses a SSE or WS server',
+    tags: ['Remote control', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-addon-sync',
+  },
+  {
+    id: 'slidev-component-pager',
+    name: 'slidev-component-pager',
+    description: 'Show current page and total page number',
+    tags: ['Component', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-pager',
+  },
+  {
+    id: 'slidev-component-poll',
+    name: 'slidev-component-poll',
+    description: 'Poll and Quiz components for Slidev',
+    tags: ['Component'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-poll',
+  },
+  {
+    id: 'slidev-component-progress',
+    name: 'slidev-component-progress',
+    description: 'Show interactive progress bar for Slidev',
+    tags: ['Tool', 'Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-progress',
+  },
+  {
+    id: 'slidev-component-scroll',
+    name: 'slidev-component-scroll',
+    description: 'Use mouse wheel for navigating',
+    tags: ['Navigation'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-scroll',
+  },
+  {
+    id: 'slidev-component-spotlight',
+    name: 'slidev-component-spotlight',
+    description: 'Activate a spotlight to highlight a specific region by holding a key',
+    tags: ['Tool'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-spotlight',
+  },
+  {
+    id: 'slidev-component-zoom',
+    name: 'slidev-component-zoom',
+    description: 'Allow zooming inside the slides',
+    tags: ['Tool'],
+    author: {
+      name: 'Tony Cabaye',
+      link: 'https://github.com/tonai',
+    },
+    repo: 'https://github.com/Smile-SA/slidev-component-zoom',
   },
   {
     id: 'slidev-addon-rabbit',
