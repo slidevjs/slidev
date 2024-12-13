@@ -9,27 +9,27 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'print'])
 const value = useVModel(props, 'modelValue', emit)
 
 function print() {
   value.value = false
-  setTimeout(window.print, 100)
+  emit('print')
 }
 </script>
 
 <template>
   <Modal v-model="value" class="px-6 py-4 flex flex-col gap-2">
     <div class="flex gap-2 text-xl">
-      <div class="i-carbon:information my-auto" />Tips
+      <div class="i-carbon:information my-auto" /> Tips
     </div>
     <div>
       Slidev will open your browser's built-in print dialog to export the slides as PDF. <br>
       To export the slides correctly, please:
       <ul class="list-disc my-4 pl-4">
         <li>
-          Choose "Save to PDF" as the Destination.
-          <span class="op-70 text-xs"> (Not "Microsoft print to PDF") </span>
+          Choose "Save as PDF" as the Destination.
+          <span class="op-70 text-xs"> (Not "Microsoft Print to PDF") </span>
         </li>
         <li> Choose "Default" as the Margin. </li>
         <li> Toggle on "Print backgrounds". </li>

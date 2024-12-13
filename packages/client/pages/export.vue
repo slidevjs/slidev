@@ -9,6 +9,7 @@ import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDarkMode } from '../composables/useDarkMode'
 import { useNav } from '../composables/useNav'
+import { patchMonacoColors } from '../composables/usePrintStyles'
 import { injectionSlideScale } from '../constants'
 import { configs, slideHeight, slidesTitle, slideWidth } from '../env'
 import ExportPdfTip from '../internals/ExportPdfTip.vue'
@@ -41,11 +42,16 @@ provideLocal(injectionSlideScale, scale)
 const showExportPdfTip = ref(false)
 function pdf() {
   if (skipExportPdfTip.value) {
-    window.print()
+    doPrint()
   }
   else {
     showExportPdfTip.value = true
   }
+}
+
+function doPrint() {
+  patchMonacoColors()
+  setTimeout(window.print, 100)
 }
 
 async function capturePngs() {
@@ -299,7 +305,7 @@ if (import.meta.hot) {
       </div>
     </div>
     <div id="twoslash-container" />
-    <ExportPdfTip v-model="showExportPdfTip" />
+    <ExportPdfTip v-model="showExportPdfTip" @print="doPrint" />
   </div>
 </template>
 
@@ -308,7 +314,7 @@ if (import.meta.hot) {
   #export-container {
     scrollbar-width: thin;
     scroll-behavior: smooth;
-    --uno: w-full overflow-x-hidden overflow-y-auto max-h-full max-w-300 p6;
+    --uno: w-full overflow-x-hidden overflow-y-auto max-h-full max-w-300 p-6;
   }
 
   #export-content {

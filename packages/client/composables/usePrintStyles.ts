@@ -19,3 +19,10 @@ export function usePrintStyles() {
 }`
     : ''))
 }
+
+// Monaco uses `<style media="screen" class="monaco-colors">` to apply colors, which will be ignored in print mode.
+export function patchMonacoColors() {
+  document.querySelectorAll<HTMLStyleElement>('style.monaco-colors').forEach((el) => {
+    el.media = ''
+  })
+}
