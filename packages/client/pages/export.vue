@@ -13,7 +13,7 @@ import { injectionSlideScale } from '../constants'
 import { configs, slideHeight, slidesTitle, slideWidth } from '../env'
 import ExportPdfTip from '../internals/ExportPdfTip.vue'
 import PrintSlide from '../internals/PrintSlide.vue'
-import { startScreenshotSession } from '../logic/screenshot'
+import { isScreenshotSupported, startScreenshotSession } from '../logic/screenshot'
 import { skipExportPdfTip } from '../state'
 import Play from './play.vue'
 
@@ -203,9 +203,9 @@ if (import.meta.hot) {
   <Play v-if="screenshotSession?.isActive" />
   <div
     v-else
-    class="fixed inset-0 flex flex-col md:flex-row md:gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden"
+    class="fixed inset-0 flex flex-col md:flex-row md:gap-8 print:position-unset print:inset-0 print:block print:min-h-max justify-center of-hidden bg-main"
   >
-    <div class="print:hidden min-w-fit flex flex-wrap md:flex-col gap-2 p-6 max-w-100">
+    <div class="print:hidden min-w-fit flex flex-wrap md:flex-nowrap md:of-y-auto md:flex-col gap-2 p-6 max-w-100">
       <h1 class="text-3xl md:my-4 flex items-center gap-2 w-full">
         <RouterLink to="/" class="i-carbon:previous-outline op-70 hover:op-100" />
         Export Slides
@@ -255,25 +255,36 @@ if (import.meta.hot) {
             PDF
           </button>
         </div>
-        <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
-        <div class="flex flex-col gap-2 items-start min-w-max">
-          <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
-            <span class="i-carbon:trash-can inline-block text-xl" />
-            Clear Captured Images
-          </button>
-          <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
-            <div class="i-carbon:camera-action inline-block text-xl" />
-            Capture Images
-          </button>
-        </div>
-        <h2> Export as images </h2>
-        <div class="flex flex-col gap-2 items-start min-w-max">
-          <button @click="pptx">
-            PPTX
-          </button>
-          <button @click="pngsGz">
-            PNGs.gz
-          </button>
+        <div class="relative flex flex-col gap-2 flex-nowrap pb-2" :class="isScreenshotSupported ? '' : 'op-70 mt-4'">
+          <template v-if="!isScreenshotSupported">
+            <div class="absolute inset-x--2 inset-y-0 b-2 b-orange/50 rounded-lg pointer-events-none" />
+            <div class="min-w-full w-0 text-orange/100 p-1 mb--4">
+              <span class="i-carbon:warning-alt inline-block mb--.5" />
+              Your browser may not support image capturing.
+              If you encounter issues, please use a modern Chromium-based browser,
+              or export via the CLI.
+            </div>
+          </template>
+          <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
+          <div class="flex flex-col gap-2 items-start min-w-max">
+            <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
+              <span class="i-carbon:trash-can inline-block text-xl" />
+              Clear Captured Images
+            </button>
+            <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
+              <div class="i-carbon:camera-action inline-block text-xl" />
+              Capture Images
+            </button>
+          </div>
+          <h2> Export as images </h2>
+          <div class="flex flex-col gap-2 items-start min-w-max">
+            <button @click="pptx">
+              PPTX
+            </button>
+            <button @click="pngsGz">
+              PNGs.gz
+            </button>
+          </div>
         </div>
       </div>
     </div>
