@@ -10,7 +10,7 @@ import { verifyConfig } from '@slidev/parser'
 import equal from 'fast-deep-equal'
 import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
-import { blue, bold, cyan, dim, gray, green, underline, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, gray, green, lightCyan, underline, yellow } from 'kolorist'
 import openBrowser from 'open'
 import yargs from 'yargs'
 import { version } from '../package.json'
@@ -443,17 +443,16 @@ cli.command(
     const { exportSlides, getExportOptions } = await import('./commands/export')
     const port = await getPort(12445)
 
-    console.log('！！！')
     let warned = false
     for (const entryFile of entry as unknown as string) {
       const options = await resolveOptions({ entry: entryFile, theme }, 'export')
 
       if (options.data.config.exportingUI !== false && !warned) {
         warned = true
-        console.warn(yellow('[Slidev] Exporting via CLI is no longer recommended.'))
-        console.warn(
-          yellow('You can use the exporting UI instead by starting the dev server as normal and visit'),
-          `${blue('localhost:')}${dim('<port>')}${blue('/export')}`,
+        console.log(lightCyan('[Slidev] Try the new exporting UI!'))
+        console.log(
+          lightCyan('You can use the exporting UI instead by starting the dev server as normal and visit'),
+          `${blue('localhost:')}${dim('<port>')}${blue('/export')}\n`,
         )
       }
 

@@ -11,8 +11,10 @@ import { useDarkMode } from '../composables/useDarkMode'
 import { useNav } from '../composables/useNav'
 import { injectionSlideScale } from '../constants'
 import { configs, slideHeight, slidesTitle, slideWidth } from '../env'
+import ExportPdfTip from '../internals/ExportPdfTip.vue'
 import PrintSlide from '../internals/PrintSlide.vue'
 import { startScreenshotSession } from '../logic/screenshot'
+import { skipExportPdfTip } from '../state'
 import Play from './play.vue'
 
 const { slides, isPrintWithClicks, hasNext, go, next, currentSlideNo, clicks, printRange } = useNav()
@@ -36,8 +38,14 @@ useHead({
 
 provideLocal(injectionSlideScale, scale)
 
+const showExportPdfTip = ref(false)
 function pdf() {
-  window.print()
+  if (skipExportPdfTip.value) {
+    window.print()
+  }
+  else {
+    showExportPdfTip.value = true
+  }
 }
 
 async function capturePngs() {
@@ -280,6 +288,7 @@ if (import.meta.hot) {
       </div>
     </div>
     <div id="twoslash-container" />
+    <ExportPdfTip v-model="showExportPdfTip" />
   </div>
 </template>
 
