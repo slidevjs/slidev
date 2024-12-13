@@ -27,7 +27,10 @@ function print() {
       Slidev will open your browser's built-in print dialog to export the slides as PDF. <br>
       To export the slides correctly, please:
       <ul class="list-disc my-4 pl-4">
-        <li> Choose "Save to PDF" as the Destination. </li>
+        <li>
+          Choose "Save to PDF" as the Destination.
+          <span class="op-70 text-xs"> (Not "Microsoft print to PDF") </span>
+        </li>
         <li> Choose "Default" as the Margin. </li>
         <li> Toggle on "Print backgrounds". </li>
       </ul>
