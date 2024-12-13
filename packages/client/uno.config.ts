@@ -13,6 +13,9 @@ export default defineConfig({
   safelist: [
     '!opacity-0',
     'prose',
+    // See https://github.com/slidevjs/slidev/issues/1705
+    'grid-rows-[1fr_max-content]',
+    'grid-cols-[1fr_max-content]',
   ],
   shortcuts: {
     'bg-main': 'bg-white dark:bg-[#121212]',
