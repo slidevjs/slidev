@@ -25,7 +25,7 @@ function print() {
     </div>
     <div>
       Slidev will open your browser's built-in print dialog to export the slides as PDF. <br>
-      To export the slides correctly, please:
+      In the print dialog, please:
       <ul class="list-disc my-4 pl-4">
         <li>
           Choose "Save as PDF" as the Destination.
@@ -35,7 +35,10 @@ function print() {
         <li> Toggle on "Print backgrounds". </li>
       </ul>
       <div class="mb-2 op-70 text-sm">
-        If you're encountering problems, please try the CLI or open an issue on GitHub.
+        If you're encountering problems, please try
+        <a href="https://sli.dev/builtin/cli#export"> the CLI </a>
+        or
+        <a href="https://github.com/slidevjs/slidev/issues/new"> open an issue</a>.
       </div>
       <div class="form-check op-70">
         <input
@@ -67,6 +70,10 @@ button {
 button.cancel {
   @apply bg-gray-400 bg-opacity-50 text-white px-4 py-1 rounded border-b-2 border-main;
   @apply hover:(bg-opacity-75 border-opacity-75);
+}
+
+a {
+  @apply border-current border-b border-dashed hover:text-primary hover:border-solid;
 }
 
 .form-check {
