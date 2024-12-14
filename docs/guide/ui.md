@@ -72,6 +72,12 @@ See:
 
 <LinkCard link="features/recording"/>
 
+## Exporting UI {#exporting}
+
+See:
+
+<LinkCard link="guide/exporting#ui"/>
+
 ## Global Layers {#global-layers}
 
 You can add any custom UI below or above your slides for the whole presentation or per-slide:
