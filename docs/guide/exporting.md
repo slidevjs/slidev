@@ -12,7 +12,7 @@ However, interactive features in your slides may not be available in the exporte
 
 > Available since v0.50.0-beta.11
 
-Slidev provides a UI for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the navigation bar, or go to `http://localhost:<port>/export` directly.
+Slidev provides a UI for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
 
 In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file.
 
