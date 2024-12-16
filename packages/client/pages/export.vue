@@ -215,6 +215,7 @@ if (import.meta.hot) {
       <h1 class="text-3xl md:my-4 flex items-center gap-2 w-full">
         <RouterLink to="/" class="i-carbon:previous-outline op-70 hover:op-100" />
         Export Slides
+        <sup op50 italic text-sm>Experimental</sup>
       </h1>
       <div>
         <h2> Settings </h2>
