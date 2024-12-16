@@ -4,7 +4,7 @@ import { sleep } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { useHead } from '@unhead/vue'
 import { provideLocal, useElementSize, useLocalStorage, useStyleTag, watchDebounced } from '@vueuse/core'
-import { Tooltip } from 'floating-vue'
+
 import { computed, ref, useTemplateRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDarkMode } from '../composables/useDarkMode'
@@ -13,6 +13,8 @@ import { patchMonacoColors } from '../composables/usePrintStyles'
 import { injectionSlideScale } from '../constants'
 import { configs, slideHeight, slidesTitle, slideWidth } from '../env'
 import ExportPdfTip from '../internals/ExportPdfTip.vue'
+import FormCheckbox from '../internals/FormCheckbox.vue'
+import FormItem from '../internals/FormItem.vue'
 import PrintSlide from '../internals/PrintSlide.vue'
 import { isScreenshotSupported, startScreenshotSession } from '../logic/screenshot'
 import { skipExportPdfTip } from '../state'
@@ -217,73 +219,40 @@ if (import.meta.hot) {
         Export Slides
         <sup op50 italic text-sm>Experimental</sup>
       </h1>
-      <div>
-        <h2> Settings </h2>
-        <div class="flex flex-col gap-1">
-          <label>
-            <input v-model="isDark" type="checkbox" :disabled="isColorSchemaConfigured">
-            <span> Dark mode </span>
-          </label>
-          <label>
-            <input v-model="isPrintWithClicks" type="checkbox">
-            <span> With clicks </span>
-          </label>
-          <label>
-            <span> Title </span>
-            <input v-model="title" type="text">
-          </label>
-          <label>
-            <span> Ranges </span>
-            <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
-          </label>
-          <label>
-            <span class="flex gap-1">
-              Delay
-              <Tooltip popper-class="no-slide-scale">
-                <sup class="i-carbon:information inline-block text-4 op-70" />
-                <template #popper>
-                  <div class="w-max text-sm p-2">
-                    Delay between capturing each slide in milliseconds. <br>
-                    Increase this value if slides are captured incompletely. <br>
-                    (Not related to PDF export)
-                  </div>
-                </template>
-              </Tooltip>
-            </span>
-            <input v-model="delay" type="number" step="50" min="50">
-          </label>
-        </div>
+      <div flex="~ col gap-2">
+        <h2>Options</h2>
+        <FormItem title="Title">
+          <input v-model="title" type="text">
+        </FormItem>
+        <FormItem title="Range">
+          <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
+        </FormItem>
+        <FormItem title="Dark mode">
+          <FormCheckbox v-model="isDark" :disabled="isColorSchemaConfigured" />
+        </FormItem>
+        <FormItem title="With clicks">
+          <FormCheckbox v-model="isPrintWithClicks" />
+        </FormItem>
       </div>
       <div class="flex-grow" />
-      <div class="min-w-fit">
-        <h2> Export as vector file </h2>
-        <div class="flex flex-col gap-2 items-start min-w-max">
-          <button @click="pdf">
-            PDF
-          </button>
-        </div>
-        <div class="relative flex flex-col gap-2 flex-nowrap pb-2" :class="isScreenshotSupported ? '' : 'op-70 mt-4'">
-          <template v-if="!isScreenshotSupported">
-            <div class="absolute inset-x--2 inset-y-0 b-2 b-orange/50 rounded-lg pointer-events-none" />
-            <div class="min-w-full w-0 text-orange/100 p-1 mb--4">
-              <span class="i-carbon:warning-alt inline-block mb--.5" />
-              Your browser may not support image capturing.
-              If you encounter issues, please use a modern Chromium-based browser,
-              or export via the CLI.
-            </div>
-          </template>
-          <h2> Rendered as <span border="b-1.5 gray" px-.2> {{ capturedImages ? 'Images' : 'DOM' }} </span> </h2>
+      <div class="min-w-fit" flex="~ col gap-3">
+        <div border="~ main rounded-lg" p3 flex="~ col gap-2">
+          <h2>Export as Vector File</h2>
           <div class="flex flex-col gap-2 items-start min-w-max">
-            <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
-              <span class="i-carbon:trash-can inline-block text-xl" />
-              Clear Captured Images
-            </button>
-            <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
-              <div class="i-carbon:camera-action inline-block text-xl" />
-              Capture Images
+            <button @click="pdf">
+              PDF
             </button>
           </div>
-          <h2> Export as images </h2>
+        </div>
+
+        <div border="~ main rounded-lg" p3 flex="~ col gap-2" :class="isScreenshotSupported ? '' : 'border-orange'">
+          <h2>Export as Images</h2>
+          <div v-if="!isScreenshotSupported" class="min-w-full w-0 text-orange/100 p-1 mb--4 bg-orange/10 rounded">
+            <span class="i-carbon:warning-alt inline-block mb--.5" />
+            Your browser may not support image capturing.
+            If you encounter issues, please use a modern Chromium-based browser,
+            or export via the CLI.
+          </div>
           <div class="flex flex-col gap-2 items-start min-w-max">
             <button @click="pptx">
               PPTX
@@ -292,10 +261,29 @@ if (import.meta.hot) {
               PNGs.gz
             </button>
           </div>
+          <div w-full h-1px border="t main" my2 />
+          <div class="relative flex flex-col gap-2 flex-nowrap">
+            <div class="flex flex-col gap-2 items-start min-w-max">
+              <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
+                <span class="i-carbon:trash-can inline-block text-xl" />
+                Clear Captured Images
+              </button>
+              <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
+                <div class="i-carbon:camera-action inline-block text-xl" />
+                Pre-capture Slides as Images
+              </button>
+              <FormItem title="Delay" description="Delay between capturing each slide in milliseconds.\nIncrease this value if slides are captured incompletely. \n(Not related to PDF export)">
+                <input v-model="delay" type="number" step="50" min="50">
+              </FormItem>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div id="export-container" ref="export-container">
+    <div id="export-container" ref="export-container" relative>
+      <div print:hidden fixed right-5 bottom-5 bg-main px2 py0 rounded shadow z-1000>
+        <span op75>Rendering as {{ capturedImages ? 'Captured Images' : 'DOM' }} </span>
+      </div>
       <div v-show="!capturedImages" id="export-content" ref="export-content">
         <PrintSlide v-for="route, index in slides" :key="index" :hidden="!printRange.includes(index + 1)" :route />
       </div>
@@ -355,7 +343,7 @@ label {
 }
 
 h2 {
-  --uno: uppercase pt-1 tracking-widest font-500 op-70 my-2;
+  --uno: font-500 op-70;
 }
 
 #export-content {
