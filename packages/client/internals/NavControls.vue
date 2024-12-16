@@ -131,7 +131,7 @@ if (__SLIDEV_FEATURE_RECORD__)
           <div class="i-carbon:text-annotation-toggle" />
         </IconButton>
 
-        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial" @click="togglePresenterLayout">
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial flex items-center" @click="togglePresenterLayout">
           <div class="i-carbon:template" />
           {{ presenterLayout }}
         </IconButton>
