@@ -247,6 +247,15 @@ onMounted(() => {
     'bottom bottom';
 }
 
+.grid-container.layout3 {
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: 1fr 1fr min-content;
+  grid-template-areas:
+    'note next'
+    'main next'
+    'bottom bottom';
+}
+
 @media (max-aspect-ratio: 3/5) {
   .grid-container.layout1 {
     grid-template-columns: 1fr;
