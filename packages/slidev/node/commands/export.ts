@@ -1,7 +1,7 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import path from 'node:path'
 import process from 'node:process'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { clearUndefined, slash } from '@antfu/utils'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import { parseRangeString } from '@slidev/parser/core'
@@ -10,7 +10,7 @@ import fs from 'fs-extra'
 import { blue, cyan, dim, green, yellow } from 'kolorist'
 import { resolve } from 'mlly'
 import * as pdfLib from 'pdf-lib'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDict, PDFDocument, PDFName, PDFString, PageSizes, asPDFName, rgb } from 'pdf-lib'
 import { getRoots } from '../resolver'
 
 export interface ExportOptions {
@@ -21,6 +21,8 @@ export interface ExportOptions {
   base?: string
   format?: 'pdf' | 'png' | 'pptx' | 'md'
   output?: string
+  handout?: boolean
+  cover?: boolean
   timeout?: number
   wait?: number
   waitUntil: 'networkidle' | 'load' | 'domcontentloaded' | undefined
@@ -167,6 +169,8 @@ export async function exportSlides({
   range,
   format = 'pdf',
   output = 'slides',
+  handout = false,
+  cover = false,
   slides,
   base = '/',
   timeout = 30000,
@@ -221,7 +225,7 @@ export async function exportSlides({
     if (waitUntil)
       await page.waitForLoadState(waitUntil)
     await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
-    const slide = no === 'print'
+    const slide = (no === 'print' || no === 'handout' || no === 'cover')
       ? page.locator('body')
       : page.locator(`[data-slidev-no="${no}"]`)
     await slide.waitFor()
@@ -359,6 +363,7 @@ export async function exportSlides({
 
     const buffer = await mergedPdf.save()
     await fs.writeFile(output, buffer)
+    return output
   }
 
   async function genPagePdfOnePiece() {
@@ -388,6 +393,7 @@ export async function exportSlides({
 
     pdfData = Buffer.from(await pdf.save())
     await fs.writeFile(output, pdfData)
+    return output
   }
 
   async function genPagePngOnePiece(writeToDisk: boolean) {
@@ -425,9 +431,335 @@ export async function exportSlides({
         )
       }
     }
+
     for (const no of pages)
       await genPageWithClicks(genScreenshot, no)
     return result
+  }
+
+  async function genNotesPdfOnePiece() {
+    const baseName = output.replace('.pdf', '')
+    const output_notes = `${baseName}-notes.pdf`
+
+    await go('handout')
+    await page.pdf({
+      path: output_notes,
+      width,
+      height,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
+
+    return output_notes
+  }
+
+  async function genCoverPdfOnePiece() {
+    const baseName = output.replace('.pdf', '')
+    const output_notes = `${baseName}-cover.pdf`
+
+    await go('cover')
+    await page.pdf({
+      path: output_notes,
+      width,
+      height,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
+    return output_notes
+  }
+
+  const createPageLinkAnnotation = (
+    page: pdfLib.PDFPage,
+    uri: string,
+    llx = 0,
+    lly = 30,
+    urx = 40,
+    ury = 230,
+  ) =>
+    page.doc.context.register(
+      page.doc.context.obj({
+        Type: 'Annot',
+        Subtype: 'Link',
+        Rect: [llx, lly, urx, ury],
+        Border: [0, 0, 0],
+        C: [0, 0, 1],
+        A: {
+          Type: 'Action',
+          S: 'URI',
+          URI: PDFString.of(uri),
+        },
+      }),
+    )
+
+  async function mergeSlidesWithNotes(
+    slides: pdfLib.PDFDocument,
+    pdfNotes: pdfLib.PDFDocument,
+    pdfCover: pdfLib.PDFDocument | undefined,
+  ) {
+    const pdfSlidePages = slides.getPages()
+    const numSlides = pdfSlidePages.length
+
+    const pdf = await PDFDocument.create()
+
+    if (pdfCover) {
+      for (let i = 0; i < pdfCover.getPages().length; i++) {
+        const coverPage = pdf.addPage(PageSizes.A4)
+        const coverEmbedded = await pdf.embedPage(pdfCover.getPages()[i])
+        const coverEmbeddedDims = coverEmbedded.scale(1)
+        coverPage.drawPage(coverEmbedded, {
+          ...coverEmbeddedDims,
+          x: coverPage.getWidth() / 2 - coverEmbeddedDims.width / 2,
+          y: 0,
+        })
+      }
+    }
+
+    const notesPages = pdfNotes.getPages()
+
+    for (let i = 0; i < numSlides; i++) {
+      const slideEmbedded = await pdf.embedPage(pdfSlidePages[i])
+      const slideEmbeddedDims = slideEmbedded.scale(0.72)
+
+      const currentPage = pdf.addPage(PageSizes.A4)
+
+      // firstPage.drawPage(slideEmbedded as pdfLib.PDFEmbeddedPage, {
+      currentPage.drawPage(slideEmbedded, {
+        ...slideEmbeddedDims,
+        x: currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2,
+        y: currentPage.getHeight() - slideEmbeddedDims.height - 30,
+        width: slideEmbeddedDims.width,
+        height: slideEmbeddedDims.height,
+      })
+
+      currentPage.drawRectangle({
+        x: currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2,
+        y: currentPage.getHeight() - slideEmbeddedDims.height - 30,
+        width: slideEmbeddedDims.width,
+        height: slideEmbeddedDims.height,
+        borderColor: rgb(0, 0, 0),
+        borderWidth: 0.1,
+      })
+
+      let noteEmbeddedDims: {
+        width: number
+        height: number
+      }
+
+      /* add notes */
+      try {
+        const noteEmbedded = await pdf.embedPage(notesPages[i], {
+          left: 0,
+          bottom: 0,
+          right: 600,
+          top: 530,
+        })
+
+        noteEmbeddedDims = noteEmbedded.scale(0.93)
+
+        currentPage.drawPage(noteEmbedded, {
+          ...noteEmbeddedDims,
+          x: currentPage.getWidth() / 2 - noteEmbeddedDims.width / 2,
+          y: 0,
+        })
+      }
+      catch (error) {
+        console.error(`Could not embed note as page does not exist: ${error}`)
+      }
+
+      /* add links for slides */
+      const annots = pdfSlidePages[i].node.Annots()
+
+      const newLinkAnnotations: PDFRef[] = [] // Initialize an empty array to accumulate new link annotations
+
+      try {
+        annots?.asArray().forEach((a) => {
+          const dict = slides.context.lookupMaybe(a, PDFDict)
+          if (!dict)
+            return
+
+          const aRecord = dict.get(asPDFName(`A`))
+          if (!aRecord)
+            return
+
+          const subtype = dict.get(PDFName.of('Subtype'))?.toString()
+          if (!subtype)
+            return
+
+          if (subtype === '/Link') {
+            const rect = dict.get(PDFName.of('Rect'))!
+            const link = slides.context.lookupMaybe(aRecord, PDFDict)
+            if (!link)
+              return
+
+            const uri = link.get(asPDFName('URI'))!.toString().slice(1, -1) // get the original link, remove parenthesis
+
+            const scale = slideEmbeddedDims.width / pdfSlidePages[i].getWidth() // Calculate scale based on the width (or height)
+            const offsetX
+              = currentPage.getWidth() / 2 - slideEmbeddedDims.width / 2
+            const offsetY
+              = currentPage.getHeight() - slideEmbeddedDims.height - 30
+
+            // @ts-expect-error missing types
+            const newRect = rect.array.map((value, index) => {
+              if (index % 2 === 0) {
+                // x values (llx, urx)
+                return value * scale + offsetX
+              }
+              else {
+                // y values (lly, ury)
+                // Y values need to be inverted due to PDF's coordinate system (0 at bottom)
+
+                const scaledY = (pdfSlidePages[i].getHeight() - value) * scale
+                // Then, adjust for the slide's position on the page, considering the slide is at the top
+                return offsetY - scaledY + slideEmbeddedDims.height
+              }
+            })
+
+            const newLink = createPageLinkAnnotation(
+              currentPage,
+              uri,
+              newRect[0], // llx
+              newRect[1], // lly
+              newRect[2], // urx
+              newRect[3], // ury
+            )
+            newLinkAnnotations.push(newLink)
+          }
+        })
+      }
+      catch (e) {
+        console.error(e)
+      }
+
+      /* add links for handouts */
+      const notesAnnots = notesPages[i]?.node.Annots()
+      try {
+        notesAnnots?.asArray().forEach((a) => {
+          let dict: PDFDict | undefined
+          try {
+            dict = pdfNotes.context.lookupMaybe(a, PDFDict)
+          }
+          catch (e) {
+          }
+
+          if (!dict)
+            return
+
+          const aRecord = dict.get(PDFName.of(`A`))
+          const subtype = dict.get(PDFName.of('Subtype'))?.toString()
+
+          if (subtype === '/Link') {
+            const rect = dict.get(PDFName.of('Rect'))!
+            const link = pdfNotes.context.lookupMaybe(aRecord, PDFDict)!
+            const uri = link.get(PDFName.of('URI'))!.toString().slice(1, -1)
+
+            const scale = noteEmbeddedDims.width / notesPages[i].getWidth()
+            const offsetX = currentPage.getWidth() / 2 - noteEmbeddedDims.width / 2
+            const offsetY = 0 // Notes are drawn at the bottom, so offsetY is 0
+
+            // @ts-expect-error missing types
+            const newRect = rect.array.map((value, index) => {
+              if (index % 2 === 0) {
+                return value * scale + offsetX // x values
+              }
+              else {
+                // y values need to be adjusted differently for notes
+                return -2 + offsetY + value * scale // Adjust y values for position
+              }
+            })
+
+            const newLink = createPageLinkAnnotation(
+              currentPage,
+              uri,
+              newRect[0], // llx
+              newRect[1], // lly
+              newRect[2], // urx
+              newRect[3], // ury
+            )
+            newLinkAnnotations.push(newLink)
+          }
+        })
+      }
+      catch (e) {
+        console.error(e)
+      }
+
+      if (newLinkAnnotations.length > 0) {
+        currentPage.node.set(
+          PDFName.of('Annots'),
+          pdf.context.obj(newLinkAnnotations),
+        )
+      }
+    }
+
+    return pdf
+  }
+
+  async function genHandoutAndMerge(pdfSlidesPath: string) {
+    if (format !== 'pdf')
+      throw new Error(`Unsupported exporting format for handout "${format}"`)
+
+    /* 1. Read generated slides */
+    const slidesData = await fs.readFile(pdfSlidesPath)
+    const pdfSlides = await PDFDocument.load(slidesData)
+
+    /* 2. Generate notes pdf */
+    const notesPath = await genNotesPdfOnePiece()
+    const notesData = await fs.readFile(notesPath)
+    const pdfNotes = await PDFDocument.load(notesData)
+
+    /* 3. Generate cover pdf */
+    let pdfCover
+    let coverPath
+    if (cover) {
+      coverPath = await genCoverPdfOnePiece()
+      const coverData = await fs.readFile(coverPath)
+      pdfCover = await PDFDocument.load(coverData)
+    }
+
+    const pdf = await mergeSlidesWithNotes(pdfSlides, pdfNotes, pdfCover)
+
+    /* cleanup */
+    await fs.unlink(notesPath)
+    if (cover && coverPath)
+      await fs.unlink(coverPath)
+
+    if (!pdf)
+      throw new Error('PDF could not be generated')
+
+    {
+      const titleSlide = slides[0]
+      if (titleSlide?.title)
+        pdf.setTitle(titleSlide.title)
+      if (titleSlide?.frontmatter?.info)
+        pdf.setSubject(titleSlide.frontmatter.info)
+      if (titleSlide?.frontmatter?.author)
+        pdf.setAuthor(titleSlide.frontmatter.author)
+      if (titleSlide?.frontmatter?.keywords) {
+        if (Array.isArray(titleSlide?.frontmatter?.keywords))
+          pdf.setKeywords(titleSlide?.frontmatter?.keywords)
+        else
+          pdf.setKeywords(titleSlide?.frontmatter?.keywords.split(','))
+      }
+    }
+
+    const pdfData = Buffer.from(await pdf.save())
+    const baseName = output.replace('.pdf', '')
+    const handOut = `${baseName}-handout.pdf`
+
+    await fs.writeFile(handOut, pdfData)
   }
 
   function genPagePdf() {
@@ -538,8 +870,10 @@ export async function exportSlides({
 
   progress.start(pages.length)
 
+  let pdfSlidesPath
+
   if (format === 'pdf') {
-    await genPagePdf()
+    pdfSlidesPath = await genPagePdf()
   }
   else if (format === 'png') {
     await genPagePng()
@@ -555,6 +889,9 @@ export async function exportSlides({
   else {
     throw new Error(`Unsupported exporting format "${format}"`)
   }
+
+  if (pdfSlidesPath && handout)
+    await genHandoutAndMerge(pdfSlidesPath)
 
   progress.stop()
   browser.close()
@@ -577,6 +914,8 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
   const {
     entry,
     output,
+    handout,
+    cover,
     format,
     timeout,
     wait,
@@ -595,6 +934,8 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     outFilename = path.join(outDir, outFilename)
   return {
     output: outFilename,
+    handout: handout || false,
+    cover: cover || false,
     slides: options.data.slides,
     total: options.data.slides.length,
     range,

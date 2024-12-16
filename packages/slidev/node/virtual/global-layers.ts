@@ -1,7 +1,7 @@
-import type { VirtualModuleTemplate } from './types'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { toAtFS } from '../resolver'
+import type { VirtualModuleTemplate } from './types'
 
 export const templateGlobalLayers: VirtualModuleTemplate = {
   id: `/@slidev/global-layers`,
@@ -22,6 +22,8 @@ export const templateGlobalLayers: VirtualModuleTemplate = {
       return `{ render: () => [${render}] }`
     }
 
+    const handoutCover = getComponent(['handout-cover.vue', 'HandoutCover.vue'])
+    const handoutBottom = getComponent(['handout-bottom', 'HandoutBottom.vue'])
     const globalTop = getComponent(['global.vue', 'global-top.vue', 'GlobalTop.vue'])
     const globalBottom = getComponent(['global-bottom.vue', 'GlobalBottom.vue'])
     const slideTop = getComponent(['slide-top.vue', 'SlideTop.vue'])
@@ -34,6 +36,8 @@ export const templateGlobalLayers: VirtualModuleTemplate = {
       `export const GlobalBottom = ${globalBottom}`,
       `export const SlideTop = ${slideTop}`,
       `export const SlideBottom = ${slideBottom}`,
+      `export const HandoutCover = ${handoutCover}`,
+      `export const HandoutBottom = ${handoutBottom}`,
     ].join('\n')
   },
 }
