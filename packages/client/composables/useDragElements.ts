@@ -70,24 +70,24 @@ export function useDragElementsUpdater(no: number) {
       section = type === 'prop'
       // eslint-disable-next-line regexp/no-super-linear-backtracking
         ? section.replace(/<(v-?drag-?\w*)(.*?)(\/)?>/gi, (full, tag, attrs, selfClose = '', index) => {
-          if (index === idx) {
-            replaced = true
-            const posMatch = attrs.match(/pos=".*?"/)
-            if (!posMatch)
-              return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}"${selfClose}>`
-            const start = posMatch.index
-            const end = start + posMatch[0].length
-            return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}${selfClose}>`
-          }
-          return full
-        })
+            if (index === idx) {
+              replaced = true
+              const posMatch = attrs.match(/pos=".*?"/)
+              if (!posMatch)
+                return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}"${selfClose}>`
+              const start = posMatch.index
+              const end = start + posMatch[0].length
+              return `<${tag}${attrs.slice(0, start)}pos="${posStr}"${attrs.slice(end)}${selfClose}>`
+            }
+            return full
+          })
         : section.replace(/(?<![</\w])v-drag(?:=".*?")?/gi, (full, index) => {
-          if (index === idx) {
-            replaced = true
-            return `v-drag="${posStr}"`
-          }
-          return full
-        })
+            if (index === idx) {
+              replaced = true
+              return `v-drag="${posStr}"`
+            }
+            return full
+          })
 
       if (!replaced)
         throw new Error(`[Slidev] VDrag Element ${id} is not found in the markdown source`)
@@ -180,16 +180,16 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const configuredHeight = ref(pos[3] ?? 0)
   const height = autoHeight
     ? computed({
-      get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
-      set: v => !autoHeight && (configuredHeight.value = v),
-    })
+        get: () => (autoHeight ? actualHeight.value : configuredHeight.value) || 0,
+        set: v => !autoHeight && (configuredHeight.value = v),
+      })
     : configuredHeight
   const configuredY0 = autoHeight ? ref(pos[1]) : ref(pos[1] + pos[3] / 2)
   const y0 = autoHeight
     ? computed({
-      get: () => configuredY0.value + height.value / 2,
-      set: v => configuredY0.value = v - height.value / 2,
-    })
+        get: () => configuredY0.value + height.value / 2,
+        set: v => configuredY0.value = v - height.value / 2,
+      })
     : configuredY0
 
   const containerStyle = computed(() => {
