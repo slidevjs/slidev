@@ -28,14 +28,12 @@ function reset() {
       <div v-if="!description" op75 @dblclick="reset">
         {{ title }}
       </div>
-      <Tooltip v-else placement="left" distance="10">
+      <Tooltip v-else distance="10">
         <div op75 text-right @dblclick="reset">
           {{ title }}
         </div>
         <template #popper>
-          <div text-sm>
-            {{ description }}
-          </div>
+          <div text-sm min-w-90 v-html="description" />
         </template>
       </Tooltip>
     </div>

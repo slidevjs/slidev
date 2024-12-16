@@ -272,7 +272,7 @@ if (import.meta.hot) {
                 <div class="i-carbon:camera-action inline-block text-xl" />
                 Pre-capture Slides as Images
               </button>
-              <FormItem title="Delay" description="Delay between capturing each slide in milliseconds.\nIncrease this value if slides are captured incompletely. \n(Not related to PDF export)">
+              <FormItem title="Delay" description="Delay between capturing each slide in milliseconds.<br>Increase this value if slides are captured incompletely. <br>(Not related to PDF export)">
                 <input v-model="delay" type="number" step="50" min="50">
               </FormItem>
             </div>
@@ -281,7 +281,7 @@ if (import.meta.hot) {
       </div>
     </div>
     <div id="export-container" ref="export-container" relative>
-      <div print:hidden fixed right-5 bottom-5 bg-main px2 py0 rounded shadow z-1000>
+      <div print:hidden fixed right-5 bottom-5 bg-main px2 py0 shadow z-1000 border="~ main rounded">
         <span op75>Rendering as {{ capturedImages ? 'Captured Images' : 'DOM' }} </span>
       </div>
       <div v-show="!capturedImages" id="export-content" ref="export-content">
