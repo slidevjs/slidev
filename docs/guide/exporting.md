@@ -8,11 +8,11 @@ Usually the slides are displayed in a web browser, but you can also export them 
 
 However, interactive features in your slides may not be available in the exported files. You can build and host your slides as a web application to keep the interactivity. See [Building and Hosting](./hosting) for more information.
 
-## The Exporting UI <Badge> Recommended </Badge> {#ui}
+## The Browser Exporter <Badge> Recommended </Badge> {#browser}
 
 > Available since v0.50.0-beta.11
 
-Slidev provides a UI for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
+Slidev provides a UI in the browser for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
 
 In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file.
 
