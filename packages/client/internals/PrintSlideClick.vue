@@ -2,8 +2,8 @@
 import type { SlidevContextNav } from '../composables/useNav'
 import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
-import { computed, reactive, shallowRef } from 'vue'
-import { injectionSlidevContext } from '../constants'
+import { computed, reactive, shallowRef, useTemplateRef } from 'vue'
+import { injectionSlideElement, injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'
 import SlideWrapper from './SlideWrapper.vue'
@@ -32,10 +32,12 @@ provideLocal(injectionSlidevContext, reactive({
   configs,
   themeConfigs: computed(() => configs.themeConfig),
 }))
+
+provideLocal(injectionSlideElement, useTemplateRef('slide-element'))
 </script>
 
 <template>
-  <div :id="id" class="print-slide-container" :style="style">
+  <div :id="id" ref="slide-element" class="print-slide-container" :style="style">
     <GlobalBottom />
 
     <SlideWrapper
@@ -56,3 +58,9 @@ provideLocal(injectionSlidevContext, reactive({
     <GlobalTop />
   </div>
 </template>
+
+<style scoped lang="postcss">
+.print-slide-container {
+  @apply relative overflow-hidden break-after-page translate-0 bg-main;
+}
+</style>

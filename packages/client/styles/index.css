@@ -8,6 +8,8 @@ body,
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
   @apply font-sans;
 }
 
@@ -17,11 +19,10 @@ html {
 
 .slidev-icon-btn {
   aspect-ratio: 1;
-  display: inline-block;
   user-select: none;
   outline: none;
   cursor: pointer;
-  @apply opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
+  @apply inline-flex items-center justify-center opacity-75 transition duration-200 ease-in-out align-middle rounded p-1;
   @apply hover:(opacity-100 bg-gray-400 bg-opacity-10);
   @apply focus-visible:(opacity-100 outline outline-2 outline-offset-2 outline-black dark:outline-white);
   @apply md:p-2;
@@ -129,7 +130,7 @@ html {
   position: fixed;
 }
 
-#twoslash-container .v-popper__wrapper {
+#twoslash-container .v-popper__wrapper:not(.no-slide-scale > *) {
   transform: scale(calc(1 * var(--slidev-slide-scale)));
   transform-origin: 30px top;
 }

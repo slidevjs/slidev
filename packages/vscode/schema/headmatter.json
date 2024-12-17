@@ -177,6 +177,11 @@
           "markdownDescription": "Show a copy button in code blocks",
           "default": true
         },
+        "author": {
+          "type": "string",
+          "description": "The author of the slides",
+          "markdownDescription": "The author of the slides"
+        },
         "info": {
           "type": [
             "string",
@@ -339,6 +344,24 @@
           "description": "Enable presenter mode",
           "markdownDescription": "Enable presenter mode",
           "default": true
+        },
+        "browserExporter": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable browser exporter",
+          "markdownDescription": "Enable browser exporter",
+          "default": "dev"
         },
         "htmlAttrs": {
           "type": "object",

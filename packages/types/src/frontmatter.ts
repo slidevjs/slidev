@@ -53,6 +53,10 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   codeCopy?: boolean
   /**
+   * The author of the slides
+   */
+  author?: string
+  /**
    * Information shows on the built SPA
    * Can be a markdown string
    *
@@ -172,6 +176,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default true
    */
   presenter?: boolean | 'dev' | 'build'
+  /**
+   * Enable browser exporter
+   *
+   * @default 'dev'
+   */
+  browserExporter?: boolean | 'dev' | 'build'
   /**
    * Attributes to apply to the HTML element
    *

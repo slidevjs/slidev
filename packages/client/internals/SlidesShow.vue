@@ -26,6 +26,7 @@ const {
   isPrintMode,
   isPrintWithClicks,
   clicksDirection,
+  printRange,
 } = useNav()
 
 function preloadRoute(route: SlideRoute) {
@@ -55,7 +56,10 @@ const DrawingLayer = shallowRef<any>()
 if (__SLIDEV_FEATURE_DRAWINGS__ || __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
   import('./DrawingLayer.vue').then(v => DrawingLayer.value = v.default)
 
-const loadedRoutes = computed(() => slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value))
+const loadedRoutes = computed(() => isPrintMode.value
+  ? printRange.value.map(no => slides.value[no - 1])
+  : slides.value.filter(r => r.meta?.__preloaded || r === currentSlideRoute.value),
+)
 
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
@@ -72,8 +76,8 @@ function onAfterLeave() {
 
   <!-- Slides -->
   <component
-    :is="hasViewTransition ? 'div' : TransitionGroup"
-    v-bind="skipTransition ? {} : currentTransition"
+    :is="hasViewTransition && !isPrintMode ? 'div' : TransitionGroup"
+    v-bind="skipTransition || isPrintMode ? {} : currentTransition"
     id="slideshow"
     tag="div"
     :class="{

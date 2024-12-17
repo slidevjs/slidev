@@ -28,7 +28,7 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 | -                                   | <carbon-edit class="inline-icon-btn"/>                                                | Toggle <LinkInline link="features/side-editor" />               |
 | -                                   | <carbon-download class="inline-icon-btn"/>                                            | Download PDF. See <LinkInline link="features/build-with-pdf" /> |
 | -                                   | <carbon-information class="inline-icon-btn"/>                                         | Show information about the slides                               |
-| -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | Show settings menu                                              |
+| -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | More options                                                    |
 | <kbd>g</kbd>                        | -                                                                                     | Show goto...                                                    |
 
 > You can [configure the shortcuts](../custom/config-shortcuts).
@@ -71,6 +71,12 @@ See:
 See:
 
 <LinkCard link="features/recording"/>
+
+## Exporting UI {#exporting}
+
+See:
+
+<LinkCard link="guide/exporting#ui"/>
 
 ## Global Layers {#global-layers}
 

@@ -30,8 +30,11 @@ const wakeLockItems: SelectionItem<boolean>[] = [
 </script>
 
 <template>
-  <div class="text-sm select-none">
+  <div class="text-sm select-none mb-2">
     <SelectList v-model="slideScale" title="Scale" :items="scaleItems" />
-    <SelectList v-if="__SLIDEV_FEATURE_WAKE_LOCK__ && isSupported" v-model="wakeLockEnabled" title="Wake lock" :items="wakeLockItems" />
+    <SelectList
+      v-if="__SLIDEV_FEATURE_WAKE_LOCK__ && isSupported"
+      v-model="wakeLockEnabled" title="Wake lock" :items="wakeLockItems"
+    />
   </div>
 </template>

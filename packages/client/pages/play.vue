@@ -8,12 +8,11 @@ import { useWakeLock } from '../composables/useWakeLock'
 import Controls from '../internals/Controls.vue'
 import NavControls from '../internals/NavControls.vue'
 import PresenterMouse from '../internals/PresenterMouse.vue'
-import PrintStyle from '../internals/PrintStyle.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor, windowSize } from '../state'
+import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor } from '../state'
 
 const { next, prev, isPrintMode } = useNav()
 const { isDrawing } = useDrawings()
@@ -63,14 +62,12 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 </script>
 
 <template>
-  <PrintStyle v-if="isPrintMode" />
   <div
     id="page-root" ref="root" class="grid"
     :class="isEditorVertical ? 'grid-rows-[1fr_max-content]' : 'grid-cols-[1fr_max-content]'"
   >
     <SlideContainer
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
-      :width="isPrintMode ? windowSize.width.value : undefined"
       is-main
       @pointerdown="onClick"
       @contextmenu="onContextMenu"

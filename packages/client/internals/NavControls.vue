@@ -58,7 +58,7 @@ if (__SLIDEV_FEATURE_RECORD__)
 <template>
   <nav ref="root" class="flex flex-col">
     <div
-      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:gap-1 lg:p-2"
+      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:p-2"
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
@@ -142,6 +142,12 @@ if (__SLIDEV_FEATURE_RECORD__)
         </IconButton>
       </template>
 
+      <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__">
+        <IconButton title="Browser Explorer" to="/export">
+          <div class="i-carbon:document-pdf" />
+        </IconButton>
+      </template>
+
       <IconButton
         v-if="!isPresenter && configs.info && !isEmbedded"
         title="Show info"
@@ -153,7 +159,7 @@ if (__SLIDEV_FEATURE_RECORD__)
       <template v-if="!isPresenter && !isEmbedded">
         <MenuButton>
           <template #button>
-            <IconButton title="Adjust settings">
+            <IconButton title="More Options">
               <div class="i-carbon:settings-adjust" />
             </IconButton>
           </template>
