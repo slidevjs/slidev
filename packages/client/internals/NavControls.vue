@@ -143,7 +143,7 @@ if (__SLIDEV_FEATURE_RECORD__)
       </template>
 
       <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__">
-        <IconButton title="Browser Explorer" to="/export">
+        <IconButton title="Browser Exporter" to="/export">
           <div class="i-carbon:document-pdf" />
         </IconButton>
       </template>

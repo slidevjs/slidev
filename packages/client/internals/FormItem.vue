@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Tooltip } from 'floating-vue'
-import { defineEmits, defineProps } from 'vue'
 
 defineProps<{
   title: string
