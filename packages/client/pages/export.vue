@@ -216,7 +216,7 @@ if (import.meta.hot) {
     <div class="print:hidden min-w-fit flex flex-wrap md:flex-nowrap md:of-y-auto md:flex-col gap-2 p-6 max-w-100">
       <h1 class="text-3xl md:my-4 flex items-center gap-2 w-full">
         <RouterLink to="/" class="i-carbon:previous-outline op-70 hover:op-100" />
-        Export Slides
+        Browser Exporter
         <sup op50 italic text-sm>Experimental</sup>
       </h1>
       <div flex="~ col gap-2">

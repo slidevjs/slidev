@@ -447,11 +447,11 @@ cli.command(
     for (const entryFile of entry as unknown as string) {
       const options = await resolveOptions({ entry: entryFile, theme }, 'export')
 
-      if (options.data.config.exportingUI !== false && !warned) {
+      if (options.data.config.browserExporter !== false && !warned) {
         warned = true
-        console.log(lightCyan('[Slidev] Try the new exporting UI!'))
+        console.log(lightCyan('[Slidev] Try the new browser exporter!'))
         console.log(
-          lightCyan('You can use the exporting UI instead by starting the dev server as normal and visit'),
+          lightCyan('You can use the browser exporter instead by starting the dev server as normal and visit'),
           `${blue('localhost:')}${dim('<port>')}${blue('/export')}\n`,
         )
       }
@@ -647,7 +647,7 @@ function printInfo(
     if (options.utils.define.__SLIDEV_FEATURE_PRESENTER__)
       console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
     console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
-    if (options.utils.define.__SLDIEV_FEATURE_EXPORTING_UI__)
+    if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__)
       console.log(`${dim('  export slides')}       > ${blue(`http://localhost:${bold(port)}/export/`)}`)
     if (options.inspect)
       console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)

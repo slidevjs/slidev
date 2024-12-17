@@ -64,7 +64,7 @@ export default function setupRoutes() {
     )
   }
 
-  if (__SLDIEV_FEATURE_EXPORTING_UI__) {
+  if (__SLIDEV_FEATURE_BROWSER_EXPORTER__) {
     routes.push(
       {
         name: 'export',

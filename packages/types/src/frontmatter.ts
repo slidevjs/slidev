@@ -177,11 +177,11 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   presenter?: boolean | 'dev' | 'build'
   /**
-   * Enable exporting user interface
+   * Enable browser exporter
    *
    * @default 'dev'
    */
-  exportingUI?: boolean | 'dev' | 'build'
+  browserExporter?: boolean | 'dev' | 'build'
   /**
    * Attributes to apply to the HTML element
    *

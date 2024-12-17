@@ -56,7 +56,7 @@ export const HEADMATTER_FIELDS = [
   'author',
   'keywords',
   'presenter',
-  'exportingUI',
+  'browserExporter',
   'download',
   'exportFilename',
   'export',

@@ -36,7 +36,7 @@ export function getDefaultConfig(): SlidevConfig {
     record: 'dev',
     css: 'unocss',
     presenter: true,
-    exportingUI: 'dev',
+    browserExporter: 'dev',
     htmlAttrs: {},
     transition: null,
     editor: true,

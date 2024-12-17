@@ -345,7 +345,7 @@
           "markdownDescription": "Enable presenter mode",
           "default": true
         },
-        "exportingUI": {
+        "browserExporter": {
           "anyOf": [
             {
               "type": "boolean"
@@ -359,8 +359,8 @@
               "const": "build"
             }
           ],
-          "description": "Enable exporting user interface",
-          "markdownDescription": "Enable exporting user interface",
+          "description": "Enable browser exporter",
+          "markdownDescription": "Enable browser exporter",
           "default": "dev"
         },
         "htmlAttrs": {

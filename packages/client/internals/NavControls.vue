@@ -58,7 +58,7 @@ if (__SLIDEV_FEATURE_RECORD__)
 <template>
   <nav ref="root" class="flex flex-col">
     <div
-      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:gap-1 lg:p-2"
+      class="flex flex-wrap-reverse text-xl gap-0.5 p-1 lg:p-2"
       :class="barStyle"
       @mouseleave="onMouseLeave"
     >
@@ -139,6 +139,12 @@ if (__SLIDEV_FEATURE_RECORD__)
       <template v-if="!__DEV__">
         <IconButton v-if="configs.download" title="Download as PDF" @click="downloadPDF">
           <div class="i-carbon:download" />
+        </IconButton>
+      </template>
+
+      <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__">
+        <IconButton title="Browser Explorer" to="/export">
+          <div class="i-carbon:document-pdf" />
         </IconButton>
       </template>
 
