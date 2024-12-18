@@ -61,7 +61,7 @@ const top = computed(() => {
     v-if="currentContextMenu"
     ref="container"
     :style="`left:${left}px;top:${top}px`"
-    class="fixed z-100 w-60 flex flex-wrap justify-items-start p-1 animate-fade-in animate-duration-100 backdrop-blur bg-main bg-opacity-75! border border-main rounded-md shadow overflow-hidden select-none"
+    class="slidev-glass-effect fixed z-context-menu w-60 flex flex-wrap justify-items-start p-1 animate-fade-in animate-duration-100 rounded-md shadow overflow-hidden select-none"
     @contextmenu.prevent=""
     @click="closeContextMenu"
   >

@@ -87,7 +87,7 @@ function onMousedown() {
         v-model="current"
         class="range"
         type="range" :min="start" :max="total" :step="1"
-        absolute inset-0 z-10 op0
+        absolute inset-0 z-label op0
         :class="readonly ? 'pointer-events-none' : ''"
         :style="{ '--thumb-width': `${1 / (length + 1) * 100}%` }"
         @mousedown="onMousedown"

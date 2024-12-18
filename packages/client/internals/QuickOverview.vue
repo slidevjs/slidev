@@ -109,7 +109,7 @@ watchEffect(() => {
   >
     <div
       v-if="showOverview"
-      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-20 bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px select-none"
+      class="fixed left-0 right-0 top-0 h-[calc(var(--vh,1vh)*100)] z-modal bg-main !bg-opacity-75 p-16 py-20 overflow-y-auto backdrop-blur-5px select-none"
       @click="close"
     >
       <div
@@ -157,7 +157,7 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="showOverview" class="fixed top-4 right-4 z-20 text-gray-400 flex flex-col items-center gap-2">
+  <div v-if="showOverview" class="fixed top-4 right-4 z-modal text-gray-400 flex flex-col items-center gap-2">
     <IconButton title="Close" class="text-2xl" @click="close">
       <div class="i-carbon:close" />
     </IconButton>

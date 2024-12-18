@@ -121,7 +121,7 @@ throttledWatch(
 
 <template>
   <div
-    v-if="resize" class="fixed bg-gray-400 select-none opacity-0 hover:opacity-10 z-100"
+    v-if="resize" class="fixed bg-gray-400 select-none opacity-0 hover:opacity-10 z-dragging"
     :class="vertical ? 'left-0 right-0 w-full h-10px' : 'top-0 bottom-0 w-10px h-full'" :style="{
       opacity: handlerDown ? '0.3' : undefined,
       bottom: vertical ? `${editorHeight - 5}px` : undefined,

@@ -375,7 +375,7 @@ watchEffect(() => {
     @pointermove="onPointermove"
     @pointerup="onPointerup"
   >
-    <div class="absolute inset-0 z-100 dark:b-gray-400" :class="isArrow ? '' : 'b b-dark'">
+    <div class="absolute inset-0 z-nav dark:b-gray-400" :class="isArrow ? '' : 'b b-dark'">
       <template v-if="!autoHeight">
         <div v-bind="getCornerProps(true, true)" />
         <div v-bind="getCornerProps(false, false)" />
