@@ -7,7 +7,7 @@ import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
-import { generateGoogleFontsUrl } from '../utils'
+import { generateCoollabsFontsUrl, generateGoogleFontsUrl } from '../utils'
 
 function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
@@ -49,8 +49,11 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
   if (data.features.tweet)
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
+  if (data.config.fonts.webfonts.length && data.config.fonts.provider === 'google')
     head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
+
+  if (data.config.fonts.webfonts.length && data.config.fonts.provider === 'coollabs')
+    head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
 
   if (data.headmatter.lang)
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
