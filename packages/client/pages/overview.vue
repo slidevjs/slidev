@@ -135,7 +135,7 @@ onMounted(() => {
             </button>
             <div
               v-if="route.meta?.slide?.title"
-              class="pointer-events-none select-none absolute left-110% backdrop-blur-8 top-50% translate-y--50% ws-nowrap z-10 px2 shadow-xl rounded border border-main transition duration-400 op0 group-hover:op100"
+              class="pointer-events-none select-none absolute left-110% top-50% translate-y--50% ws-nowrap z-label px2 slidev-glass-effect transition duration-400 op0 group-hover:op100"
               :class="activeBlocks.includes(idx) ? 'text-primary' : 'text-main important-text-op-50'"
             >
               {{ route.meta?.slide?.title }}

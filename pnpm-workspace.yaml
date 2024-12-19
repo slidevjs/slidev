@@ -8,12 +8,12 @@ catalog:
   '@antfu/ni': ^0.23.1
   '@antfu/utils': ^0.7.10
   '@hedgedoc/markdown-it-plugins': ^2.1.4
-  '@iconify-json/carbon': ^1.2.4
-  '@iconify-json/mdi': ^1.2.1
-  '@iconify-json/ph': ^1.2.1
-  '@iconify-json/ri': ^1.2.3
-  '@iconify-json/svg-spinners': ^1.2.1
-  '@iconify/json': ^2.2.283
+  '@iconify-json/carbon': ^1.2.5
+  '@iconify-json/mdi': ^1.2.2
+  '@iconify-json/ph': ^1.2.2
+  '@iconify-json/ri': ^1.2.5
+  '@iconify-json/svg-spinners': ^1.2.2
+  '@iconify/json': ^2.2.285
   '@lillallol/outline-pdf': ^4.0.0
   '@shikijs/markdown-it': ^1.24.2
   '@shikijs/monaco': ^1.24.2
@@ -51,11 +51,11 @@ catalog:
   '@vueuse/math': ^12.0.0
   '@vueuse/motion': ^2.2.6
   bumpp: ^9.9.1
-  chokidar: ^4.0.1
+  chokidar: ^4.0.2
   cli-progress: ^3.12.0
   connect: ^3.7.0
   cross-env: ^7.0.3
-  cypress: ^13.16.1
+  cypress: ^13.17.0
   debug: ^4.4.0
   drauu: ^0.4.2
   eslint: ^9.17.0
@@ -73,8 +73,8 @@ catalog:
   html-to-image: ^1.11.11
   htmlparser2: ^9.1.0
   is-installed-globally: ^1.0.0
-  jiti: ^2.4.1
-  katex: ^0.16.15
+  jiti: ^2.4.2
+  katex: ^0.16.17
   kolorist: ^1.8.0
   lint-staged: ^15.2.11
   local-pkg: ^0.5.1
@@ -115,7 +115,7 @@ catalog:
   source-map-js: ^1.2.1
   taze: ^0.18.0
   tinyexec: ^0.3.1
-  tm-grammars: ^1.21.5
+  tm-grammars: ^1.21.7
   ts-json-schema-generator: ^2.3.0
   tsup: ^8.3.5
   typeit: 8.1.0

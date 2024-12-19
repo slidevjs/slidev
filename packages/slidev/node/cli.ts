@@ -312,6 +312,8 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
+      if (typeof file !== 'string')
+        return
       if (FILES_CREATE_RESTART.includes(file))
         return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))

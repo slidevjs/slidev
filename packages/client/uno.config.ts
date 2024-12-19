@@ -30,6 +30,17 @@ export default defineConfig({
     'abs-b': 'absolute bottom-0 left-0 right-0',
     'abs-bl': 'absolute bottom-0 left-0',
     'abs-br': 'absolute bottom-0 right-0',
+
+    'z-drawing': 'z-10',
+    'z-camera': 'z-15',
+    'z-dragging': 'z-18',
+    'z-menu': 'z-20',
+    'z-label': 'z-40',
+    'z-nav': 'z-50',
+    'z-context-menu': 'z-60',
+    'z-modal': 'z-70',
+
+    'slidev-glass-effect': 'shadow-xl backdrop-blur-8 border border-main bg-main bg-opacity-75!',
   },
   // Slidev Specific Variants, probably extrat to a preset later
   variants: [
