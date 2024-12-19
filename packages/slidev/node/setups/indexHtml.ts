@@ -49,11 +49,13 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
   if (data.features.tweet)
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider === 'google')
-    head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
-
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider === 'coollabs')
-    head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
+  if (data.config.fonts.webfonts.length) {
+    const { provider } = data.config.fonts
+    if (provider === 'google')
+      head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
+    else if (provider === 'coollabs')
+      head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
+  }
 
   if (data.headmatter.lang)
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
