@@ -398,7 +398,7 @@ export interface FontOptions {
   /**
    * @default 'google'
    */
-  provider?: 'none' | 'google'
+  provider?: 'none' | 'google' | 'coollabs'
   /**
    * Specify web fonts names, will detect from `sans`, `mono`, `serif` if not provided
    */

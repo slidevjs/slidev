@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
 import { getRoots } from '../packages/slidev/node/resolver'
-import { generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
+import { generateCoollabsFontsUrl, generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
   it('page-range', () => {
@@ -53,6 +53,25 @@ describe('utils', () => {
 
     expect(
       generateGoogleFontsUrl({
+        webfonts: ['Fira Code', 'PT Serif'],
+        weights: ['200', '400', '600'],
+        italic: true,
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toMatchSnapshot()
+  })
+
+  it('coollabs-fonts', () => {
+    expect(
+      generateCoollabsFontsUrl({
+        webfonts: ['Fira Code', 'PT Serif'],
+        weights: ['200', '400', '600'],
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toMatchSnapshot()
+
+    expect(
+      generateCoollabsFontsUrl({
         webfonts: ['Fira Code', 'PT Serif'],
         weights: ['200', '400', '600'],
         italic: true,
