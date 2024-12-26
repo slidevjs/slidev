@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useFocus } from '@vueuse/core'
+import { useWindowFocus } from '@vueuse/core'
 
-const inFocus = useFocus(document.body)
+const inFocus = useWindowFocus()
 </script>
 
 <template>
