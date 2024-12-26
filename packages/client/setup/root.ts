@@ -11,6 +11,7 @@ import { configs, slidesTitle } from '../env'
 import { skipTransition } from '../logic/hmr'
 import { getSlidePath } from '../logic/slides'
 import { makeId } from '../logic/utils'
+import { syncDirections } from '../state'
 import { initDrawingState } from '../state/drawings'
 import { initSharedState, onPatch, patch } from '../state/shared'
 
@@ -58,30 +59,28 @@ export default function setupRoot() {
   initDrawingState(`${slidesTitle} - drawings`)
 
   const id = `${location.origin}_${makeId()}`
+  const syncType = computed(() => isPresenter.value ? 'presenter' : 'viewer')
 
   // update shared state
   function updateSharedState() {
+    const shouldSend = isPresenter.value
+      ? syncDirections.value.presenterSend
+      : syncDirections.value.viewerSend
+
+    if (!shouldSend)
+      return
     if (isNotesViewer.value || isPrintMode.value)
       return
-
     // we allow Presenter mode, or Viewer mode from trusted origins to update the shared state
     if (!isPresenter.value && !TRUST_ORIGINS.includes(location.host.split(':')[0]))
       return
 
-    if (isPresenter.value) {
-      patch('page', +currentSlideNo.value)
-      patch('clicks', clicksContext.value.current)
-      patch('clicksTotal', clicksContext.value.total)
-    }
-    else {
-      patch('viewerPage', +currentSlideNo.value)
-      patch('viewerClicks', clicksContext.value.current)
-      patch('viewerClicksTotal', clicksContext.value.total)
-    }
-
+    patch('page', +currentSlideNo.value)
+    patch('clicks', clicksContext.value.current)
+    patch('clicksTotal', clicksContext.value.total)
     patch('lastUpdate', {
       id,
-      type: isPresenter.value ? 'presenter' : 'viewer',
+      type: syncType.value,
       time: new Date().getTime(),
     })
   }
@@ -90,17 +89,26 @@ export default function setupRoot() {
   watch(clicksContext, updateSharedState)
 
   onPatch((state) => {
+    const shouldReceive = isPresenter.value
+      ? syncDirections.value.presenterReceive
+      : syncDirections.value.viewerReceive
+    if (!shouldReceive)
+      return
     if (!hasPrimarySlide.value || isPrintMode.value)
       return
-    if (state.lastUpdate?.type === 'presenter' && (+state.page !== +currentSlideNo.value || +clicksContext.value.current !== +state.clicks)) {
-      skipTransition.value = false
-      router.replace({
-        path: getSlidePath(state.page, isPresenter.value),
-        query: {
-          ...router.currentRoute.value.query,
-          clicks: state.clicks || 0,
-        },
-      })
-    }
+    if (state.lastUpdate?.type === syncType.value)
+      return
+    if ((+state.page === +currentSlideNo.value && +clicksContext.value.current === +state.clicks))
+      return
+    // if (state.lastUpdate?.type === 'presenter') {
+    skipTransition.value = false
+    router.replace({
+      path: getSlidePath(state.page, isPresenter.value),
+      query: {
+        ...router.currentRoute.value.query,
+        clicks: state.clicks || 0,
+      },
+    })
+    // }
   })
 }

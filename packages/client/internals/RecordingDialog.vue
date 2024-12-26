@@ -2,7 +2,7 @@
 import { useVModel } from '@vueuse/core'
 import { nextTick } from 'vue'
 import { getFilename, mimeType, recordCamera, recorder, recordingName } from '../logic/recording'
-import DevicesList from './DevicesList.vue'
+import DevicesSelectors from './DevicesSelectors.vue'
 import Modal from './Modal.vue'
 
 const props = defineProps({
@@ -72,7 +72,7 @@ async function start() {
           </div>
         </div>
       </div>
-      <DevicesList />
+      <DevicesSelectors />
     </div>
     <div class="flex my-1">
       <button class="cancel" @click="close">

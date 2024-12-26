@@ -43,13 +43,21 @@ ensureDevicesListPermissions()
 </script>
 
 <template>
-  <div class="text-sm">
-    <SelectList v-model="currentCamera" title="Camera" :items="camerasItems" />
-    <SelectList v-model="currentMic" title="Microphone" :items="microphonesItems" />
+  <div text-sm flex="~ col gap-2">
+    <SelectList
+      v-model="currentCamera"
+      title="Camera"
+      :items="camerasItems"
+    />
+    <SelectList
+      v-model="currentMic"
+      title="Microphone"
+      :items="microphonesItems"
+    />
     <SelectList
       v-if="mimeTypeItems.length"
       v-model="mimeType"
-      title="mimeType"
+      title="Video Format"
       :items="mimeTypeItems"
     />
   </div>

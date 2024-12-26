@@ -3,7 +3,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { onMounted, watch } from 'vue'
 import { recorder } from '../logic/recording'
 import { currentCamera, showRecordingDialog } from '../state'
-import DevicesList from './DevicesList.vue'
+import DevicesSelectors from './DevicesSelectors.vue'
 import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
 
@@ -59,7 +59,7 @@ onMounted(() => {
       </IconButton>
     </template>
     <template #menu>
-      <DevicesList />
+      <DevicesSelectors />
     </template>
   </MenuButton>
 </template>

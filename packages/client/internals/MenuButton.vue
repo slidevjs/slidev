@@ -30,8 +30,8 @@ onClickOutside(el, () => {
     <KeepAlive>
       <div
         v-if="value"
-        class="rounded-md bg-main text-main shadow-xl absolute bottom-10 left-0 z-menu"
-        dark:border="~ main"
+        class="bg-main text-main shadow-xl absolute bottom-10 left-0 z-menu"
+        border="~ main rounded-md"
       >
         <slot name="menu" />
       </div>

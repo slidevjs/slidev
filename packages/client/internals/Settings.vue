@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { SelectionItem } from './types'
 import { useWakeLock } from '@vueuse/core'
+import { useNav } from '../composables/useNav'
 import { slideScale, wakeLockEnabled } from '../state'
 import SelectList from './SelectList.vue'
+
+const { isPresenter } = useNav()
 
 const scaleItems: SelectionItem<number>[] = [
   {
@@ -30,11 +33,18 @@ const wakeLockItems: SelectionItem<boolean>[] = [
 </script>
 
 <template>
-  <div class="text-sm select-none mb-2">
-    <SelectList v-model="slideScale" title="Scale" :items="scaleItems" />
+  <div text-sm select-none flex="~ col gap-2" min-w-30>
+    <SelectList
+      v-if="!isPresenter"
+      v-model="slideScale"
+      title="Scale"
+      :items="scaleItems"
+    />
     <SelectList
       v-if="__SLIDEV_FEATURE_WAKE_LOCK__ && isSupported"
-      v-model="wakeLockEnabled" title="Wake lock" :items="wakeLockItems"
+      v-model="wakeLockEnabled"
+      title="Wake lock"
+      :items="wakeLockItems"
     />
   </div>
 </template>

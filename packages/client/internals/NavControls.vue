@@ -10,6 +10,7 @@ import { downloadPDF } from '../utils'
 import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
 import Settings from './Settings.vue'
+import SyncControls from './SyncControls.vue'
 
 import VerticalDivider from './VerticalDivider.vue'
 
@@ -48,7 +49,7 @@ function onMouseLeave() {
 
 const barStyle = computed(() => props.persist
   ? 'text-$slidev-controls-foreground bg-transparent'
-  : 'rounded-md bg-main shadow-xl dark:border dark:border-main')
+  : 'rounded-md bg-main shadow-xl border border-main')
 
 const RecordingControls = shallowRef<any>()
 if (__SLIDEV_FEATURE_RECORD__)
@@ -130,19 +131,15 @@ if (__SLIDEV_FEATURE_RECORD__)
         >
           <div class="i-carbon:text-annotation-toggle" />
         </IconButton>
-
-        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial flex items-center" @click="togglePresenterLayout">
-          <div class="i-carbon:template" />
-          {{ presenterLayout }}
-        </IconButton>
       </template>
+
       <template v-if="!__DEV__">
         <IconButton v-if="configs.download" title="Download as PDF" @click="downloadPDF">
           <div class="i-carbon:download" />
         </IconButton>
       </template>
 
-      <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__">
+      <template v-if="__SLIDEV_FEATURE_BROWSER_EXPORTER__ && !isEmbedded && !isPresenter">
         <IconButton title="Browser Exporter" to="/export">
           <div class="i-carbon:document-pdf" />
         </IconButton>
@@ -156,7 +153,16 @@ if (__SLIDEV_FEATURE_RECORD__)
         <div class="i-carbon:information" />
       </IconButton>
 
-      <template v-if="!isPresenter && !isEmbedded">
+      <template v-if="!isEmbedded">
+        <VerticalDivider />
+
+        <IconButton v-if="isPresenter" title="Toggle Presenter Layout" class="aspect-ratio-initial flex items-center" @click="togglePresenterLayout">
+          <div class="i-carbon:template" />
+          {{ presenterLayout }}
+        </IconButton>
+
+        <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__" />
+
         <MenuButton>
           <template #button>
             <IconButton title="More Options">

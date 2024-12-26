@@ -19,7 +19,7 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 
 const scroller = ref<HTMLDivElement>()
 const fontSize = useLocalStorage('slidev-notes-font-size', 18)
-const pageNo = computed(() => sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerPage : sharedState.page)
+const pageNo = computed(() => sharedState.page)
 const currentRoute = computed(() => slides.value.find(i => i.no === pageNo.value))
 
 watch(pageNo, () => {
@@ -36,8 +36,8 @@ function decreaseFontSize() {
 }
 
 const clicksContext = computed(() => {
-  const clicks = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicks : sharedState.clicks
-  const total = sharedState.lastUpdate?.type === 'viewer' ? sharedState.viewerClicksTotal : sharedState.clicksTotal
+  const clicks = sharedState.clicks
+  const total = sharedState.clicksTotal
   return createClicksContextBase(ref(clicks), undefined, total)
 })
 </script>

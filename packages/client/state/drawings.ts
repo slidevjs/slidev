@@ -9,4 +9,8 @@ export const {
   onUpdate: onDrawingUpdate,
   patch: patchDrawingState,
   state: drawingState,
-} = createSyncState<DrawingsState>(serverDrawingState, serverDrawingState, __SLIDEV_FEATURE_DRAWINGS_PERSIST__)
+} = createSyncState<DrawingsState>(
+  serverDrawingState,
+  serverDrawingState,
+  __SLIDEV_FEATURE_DRAWINGS_PERSIST__,
+)

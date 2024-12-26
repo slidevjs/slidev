@@ -11,10 +11,6 @@ export interface SharedState {
     y: number
   }
 
-  viewerPage: number
-  viewerClicks: number
-  viewerClicksTotal: number
-
   lastUpdate?: {
     id: string
     type: 'presenter' | 'viewer'
@@ -26,9 +22,6 @@ const { init, onPatch, onUpdate, patch, state } = createSyncState<SharedState>(s
   page: 1,
   clicks: 0,
   clicksTotal: 0,
-  viewerPage: 1,
-  viewerClicks: 0,
-  viewerClicksTotal: 0,
 })
 
 export {

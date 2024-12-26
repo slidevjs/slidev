@@ -44,10 +44,6 @@ const value = useVModel(props, 'modelValue', emit, { passive: true })
 </template>
 
 <style lang="postcss" scoped>
-.select-list {
-  @apply my-2;
-}
-
 .item {
   @apply flex rounded whitespace-nowrap py-1 gap-1 px-2 cursor-default hover:bg-gray-400 hover:bg-opacity-10;
 
@@ -57,6 +53,6 @@ const value = useVModel(props, 'modelValue', emit, { passive: true })
 }
 
 .title {
-  @apply text-xs uppercase opacity-50 tracking-widest px-7 py-1 select-none text-nowrap;
+  @apply text-sm op75 px4 pt2 pb1 select-none text-nowrap font-bold border-t border-main;
 }
 </style>
