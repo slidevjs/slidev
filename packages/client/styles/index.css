@@ -121,10 +121,9 @@ html {
   transform: translateY(0.1em);
 }
 
-
 .slidev-form-button {
   --uno: text-white px-4 py-1 rounded border-b-2;
-  --uno: bg-gray-400:50 border-gray8:50;
+  --uno: 'bg-gray-400:50 border-gray-800:50';
   --uno: 'hover:(bg-gray-400:75 border-gray8:75)';
 }
 .slidev-form-button.primary {
