@@ -39,6 +39,7 @@ export default defineConfig({
     'z-nav': 'z-50',
     'z-context-menu': 'z-60',
     'z-modal': 'z-70',
+    'z-focus-indicator': 'z-200',
 
     'slidev-glass-effect': 'shadow-xl backdrop-blur-8 border border-main bg-main bg-opacity-75!',
   },

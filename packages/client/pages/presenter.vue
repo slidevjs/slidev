@@ -12,6 +12,7 @@ import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
+import FocusIndicator from '../internals/FocusIndicator.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
 import NavControls from '../internals/NavControls.vue'
@@ -214,6 +215,7 @@ onMounted(() => {
   <Goto />
   <QuickOverview />
   <ContextMenu />
+  <FocusIndicator />
 </template>
 
 <style scoped>

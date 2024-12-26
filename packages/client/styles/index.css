@@ -121,6 +121,15 @@ html {
   transform: translateY(0.1em);
 }
 
+/* Focus Indicator */
+.slidev-focus-indicator {
+  --uno: fixed inset-0 pointer-events-none z-focus-indicator op0;
+}
+
+.slidev-focus-indicator-active {
+  --uno: op100 border-2 border-cyan;
+}
+
 /* Transform the position back for Rough Notation (v-mark) */
 .rough-annotation {
   transform: scale(calc(1 / var(--slidev-slide-scale)));
