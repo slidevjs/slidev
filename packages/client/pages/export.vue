@@ -238,8 +238,8 @@ if (import.meta.hot) {
       <div class="min-w-fit" flex="~ col gap-3">
         <div border="~ main rounded-lg" p3 flex="~ col gap-2">
           <h2>Export as Vector File</h2>
-          <div class="flex flex-col gap-2 items-start min-w-max">
-            <button @click="pdf">
+          <div class="flex flex-col gap-2 min-w-max">
+            <button class="slidev-form-button" @click="pdf">
               PDF
             </button>
           </div>
@@ -253,22 +253,22 @@ if (import.meta.hot) {
             If you encounter issues, please use a modern Chromium-based browser,
             or export via the CLI.
           </div>
-          <div class="flex flex-col gap-2 items-start min-w-max">
-            <button @click="pptx">
+          <div class="flex flex-col gap-2 min-w-max">
+            <button class="slidev-form-button" @click="pptx">
               PPTX
             </button>
-            <button @click="pngsGz">
+            <button class="slidev-form-button" @click="pngsGz">
               PNGs.gz
             </button>
           </div>
           <div w-full h-1px border="t main" my2 />
           <div class="relative flex flex-col gap-2 flex-nowrap">
-            <div class="flex flex-col gap-2 items-start min-w-max">
-              <button v-if="capturedImages" class="flex justify-center items-center gap-2" @click="capturedImages = null">
+            <div class="flex flex-col gap-2 min-w-max">
+              <button v-if="capturedImages" class="slidev-form-button flex justify-center items-center gap-2" @click="capturedImages = null">
                 <span class="i-carbon:trash-can inline-block text-xl" />
                 Clear Captured Images
               </button>
-              <button v-else class="flex justify-center items-center gap-2" @click="capturePngs">
+              <button v-else class="slidev-form-button flex justify-center items-center gap-2" @click="capturePngs">
                 <div class="i-carbon:camera-action inline-block text-xl" />
                 Pre-capture Slides as Images
               </button>
@@ -323,10 +323,6 @@ if (import.meta.hot) {
     transform: scale(1);
     display: block !important;
   }
-}
-
-button {
-  --uno: 'w-full rounded bg-gray:10 px-4 py-2 hover:bg-gray/20';
 }
 
 label {

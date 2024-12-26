@@ -121,13 +121,15 @@ html {
   transform: translateY(0.1em);
 }
 
-/* Focus Indicator */
-.slidev-focus-indicator {
-  --uno: fixed inset-0 pointer-events-none z-focus-indicator op0;
-}
 
-.slidev-focus-indicator-active {
-  --uno: op100 border-2 border-cyan;
+.slidev-form-button {
+  --uno: text-white px-4 py-1 rounded border-b-2;
+  --uno: bg-gray-400:50 border-gray8:50;
+  --uno: 'hover:(bg-gray-400:75 border-gray8:75)';
+}
+.slidev-form-button.primary {
+  --uno: bg-teal-600 border-teal-800;
+  --uno: 'hover:(bg-teal-500 border-teal-700)';
 }
 
 /* Transform the position back for Rough Notation (v-mark) */

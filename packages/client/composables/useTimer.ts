@@ -13,7 +13,7 @@ export function useTimer() {
 
   return {
     timer,
-    isTimerAvctive: isActive,
+    isTimerActive: isActive,
     resetTimer: reset,
     toggleTimer: () => (isActive.value ? pause() : resume()),
   }
