@@ -59,10 +59,9 @@ export class SlideSnapshotManager {
     }
 
     try {
-      const scale = 2
       this._screenshotSession = await startScreenshotSession(
-        slideWidth.value * scale,
-        slideHeight.value * scale,
+        slideWidth.value,
+        slideHeight.value,
       )
 
       disableTransition.value = true
