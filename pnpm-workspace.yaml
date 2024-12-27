@@ -70,7 +70,6 @@ catalog:
   get-port-please: ^3.1.2
   global-directory: ^4.0.1
   gray-matter: ^4.0.3
-  html-to-image: ^1.11.11
   htmlparser2: ^10.0.0
   is-installed-globally: ^1.0.0
   jiti: ^2.4.2

@@ -1,11 +1,25 @@
+import type { SlidevContextNavFull } from '../composables/useNav'
+import type { ScreenshotSession } from './screenshot'
+import { sleep } from '@antfu/utils'
+import { slideHeight, slideWidth } from '../env'
+import { captureDelay } from '../state'
 import { snapshotState } from '../state/snapshot'
+import { isDark } from './dark'
+import { disableTransition } from './hmr'
+import { startScreenshotSession } from './screenshot'
 import { getSlide } from './slides'
 
-export class SlideSnapshotManager {
-  private _capturePromises = new Map<number, Promise<void>>()
+const chromeVersion = window.navigator.userAgent.match(/Chrome\/(\d+)/)?.[1]
+export const isScreenshotSupported = chromeVersion ? Number(chromeVersion) >= 94 : false
 
-  getSnapshot(slideNo: number) {
-    const data = snapshotState.state[slideNo]
+const initialWait = 100
+
+export class SlideSnapshotManager {
+  private _screenshotSession: ScreenshotSession | null = null
+
+  getSnapshot(slideNo: number, isDark: boolean) {
+    const id = slideNo + (isDark ? '-dark' : '-light')
+    const data = snapshotState.state[id]
     if (!data) {
       return
     }
@@ -18,67 +32,75 @@ export class SlideSnapshotManager {
     }
   }
 
-  async captureSnapshot(slideNo: number, el: HTMLElement, delay = 1000) {
+  private async saveSnapshot(slideNo: number, dataUrl: string, isDark: boolean) {
     if (!__DEV__)
-      return
-    if (this.getSnapshot(slideNo)) {
-      return
-    }
-    if (this._capturePromises.has(slideNo)) {
-      await this._capturePromises.get(slideNo)
-    }
-    const promise = this._captureSnapshot(slideNo, el, delay)
-      .finally(() => {
-        this._capturePromises.delete(slideNo)
-      })
-    this._capturePromises.set(slideNo, promise)
-    await promise
-  }
-
-  private async _captureSnapshot(slideNo: number, el: HTMLElement, delay: number) {
-    if (!__DEV__)
-      return
+      return false
     const slide = getSlide(slideNo)
     if (!slide)
-      return
+      return false
 
+    const id = slideNo + (isDark ? '-dark' : '-light')
     const revision = slide.meta.slide.revision
+    snapshotState.patch(id, {
+      revision,
+      image: dataUrl,
+    })
+  }
 
-    // Retry until the slide is loaded
-    let retries = 100
-    while (retries-- > 0) {
-      if (!el.querySelector('.slidev-slide-loading'))
-        break
-      await new Promise(r => setTimeout(r, 100))
+  async startCapturing(nav: SlidevContextNavFull) {
+    if (!__DEV__)
+      return false
+
+    // TODO: show a dialog to confirm
+
+    if (this._screenshotSession) {
+      this._screenshotSession.dispose()
+      this._screenshotSession = null
     }
 
-    // Artificial delay for the content to be loaded
-    await new Promise(r => setTimeout(r, delay))
-
-    // Capture the snapshot
-    const toImage = await import('html-to-image')
     try {
-      const dataUrl = await toImage.toPng(el, {
-        width: el.offsetWidth,
-        height: el.offsetHeight,
-        skipFonts: true,
-        cacheBust: true,
-        pixelRatio: 1.5,
-      })
-      if (revision !== slide.meta.slide.revision) {
-        // eslint-disable-next-line no-console
-        console.info('[Slidev] Slide', slideNo, 'changed, discarding the snapshot')
-        return
+      this._screenshotSession = await startScreenshotSession(
+        slideWidth.value,
+        slideHeight.value,
+      )
+
+      disableTransition.value = true
+      nav.go(1, 0, true)
+
+      await sleep(initialWait + captureDelay.value)
+      while (true) {
+        if (!this._screenshotSession) {
+          break
+        }
+        this.saveSnapshot(
+          nav.currentSlideNo.value,
+          this._screenshotSession.screenshot(document.getElementById('slide-content')!),
+          isDark.value,
+        )
+        if (nav.hasNext.value) {
+          await sleep(captureDelay.value)
+          nav.nextSlide(true)
+          await sleep(captureDelay.value)
+        }
+        else {
+          break
+        }
       }
-      snapshotState.patch(slideNo, {
-        revision,
-        image: dataUrl,
-      })
-      // eslint-disable-next-line no-console
-      console.info('[Slidev] Snapshot captured for slide', slideNo)
+
+      // TODO: show a message when done
+
+      return true
     }
     catch (e) {
-      console.error('[Slidev] Failed to capture snapshot for slide', slideNo, e)
+      console.error(e)
+      return false
+    }
+    finally {
+      disableTransition.value = false
+      if (this._screenshotSession) {
+        this._screenshotSession.dispose()
+        this._screenshotSession = null
+      }
     }
   }
 }

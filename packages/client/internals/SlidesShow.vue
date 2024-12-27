@@ -7,7 +7,7 @@ import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
 import { CLICKS_MAX } from '../constants'
-import { skipTransition } from '../logic/hmr'
+import { disableTransition, skipTransition } from '../logic/hmr'
 import { activeDragElement } from '../state'
 import DragControl from './DragControl.vue'
 import SlideWrapper from './SlideWrapper.vue'
@@ -76,8 +76,8 @@ function onAfterLeave() {
 
   <!-- Slides -->
   <component
-    :is="hasViewTransition && !isPrintMode ? 'div' : TransitionGroup"
-    v-bind="skipTransition || isPrintMode ? {} : currentTransition"
+    :is="(hasViewTransition && !isPrintMode && !skipTransition && !disableTransition) ? 'div' : TransitionGroup"
+    v-bind="(skipTransition || disableTransition || isPrintMode) ? {} : currentTransition"
     id="slideshow"
     tag="div"
     :class="{

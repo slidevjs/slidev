@@ -4,15 +4,18 @@ import { computed, ref, watchEffect } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
-import { configs, pathPrefix } from '../env'
+import { pathPrefix } from '../env'
 import { currentOverviewPage, overviewRowCount } from '../logic/overview'
+import { isScreenshotSupported } from '../logic/screenshot'
+import { snapshotManager } from '../logic/snapshot'
 import { breakpoints, showOverview, windowSize } from '../state'
 import DrawingPreview from './DrawingPreview.vue'
 import IconButton from './IconButton.vue'
 import SlideContainer from './SlideContainer.vue'
 import SlideWrapper from './SlideWrapper.vue'
 
-const { currentSlideNo, go: goSlide, slides } = useNav()
+const nav = useNav()
+const { currentSlideNo, go: goSlide, slides } = nav
 
 function close() {
   showOverview.value = false
@@ -47,6 +50,12 @@ const rowCount = computed(() => {
 })
 
 const keyboardBuffer = ref<string>('')
+
+async function captureSlidesOverview() {
+  showOverview.value = false
+  await snapshotManager.startCapturing(nav)
+  showOverview.value = true
+}
 
 useEventListener('keypress', (e) => {
   if (!showOverview.value) {
@@ -129,7 +138,7 @@ watchEffect(() => {
             <SlideContainer
               :key="route.no"
               :no="route.no"
-              :use-snapshot="configs.overviewSnapshots"
+              :use-snapshot="true"
               :width="cardWidth"
               class="pointer-events-none"
             >
@@ -157,7 +166,10 @@ watchEffect(() => {
       </div>
     </div>
   </Transition>
-  <div v-if="showOverview" class="fixed top-4 right-4 z-modal text-gray-400 flex flex-col items-center gap-2">
+  <div
+    v-show="showOverview"
+    class="fixed top-4 right-4 z-modal text-gray-400 flex flex-col items-center gap-2"
+  >
     <IconButton title="Close" class="text-2xl" @click="close">
       <div class="i-carbon:close" />
     </IconButton>
@@ -171,6 +183,14 @@ watchEffect(() => {
       class="text-2xl"
     >
       <div class="i-carbon:list-boxes" />
+    </IconButton>
+    <IconButton
+      v-if="__DEV__ && isScreenshotSupported"
+      title="Capture slides as images"
+      class="text-2xl"
+      @click="captureSlidesOverview"
+    >
+      <div class="i-carbon:drop-photo" />
     </IconButton>
   </div>
 </template>

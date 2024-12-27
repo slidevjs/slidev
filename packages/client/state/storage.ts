@@ -27,6 +27,7 @@ export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { lis
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 export const wakeLockEnabled = useLocalStorage('slidev-wake-lock', true)
 export const skipExportPdfTip = useLocalStorage('slidev-skip-export-pdf-tip', false)
+export const captureDelay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
