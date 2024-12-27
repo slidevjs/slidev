@@ -5,10 +5,14 @@ import { wakeLockEnabled } from '../state'
 export function useWakeLock() {
   const { request, release } = useVueUseWakeLock()
 
-  watch(wakeLockEnabled, (enabled) => {
-    if (enabled)
-      request('screen')
-    else
-      release()
-  }, { immediate: true })
+  watch(
+    wakeLockEnabled,
+    (enabled) => {
+      if (enabled)
+        request('screen')
+      else
+        release()
+    },
+    { immediate: true },
+  )
 }

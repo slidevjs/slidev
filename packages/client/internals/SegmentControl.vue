@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div flex="~ gap-1 items-center" rounded bg-gray:2 p1>
+  <div flex="~ gap-1 items-center" rounded bg-gray:4 p1 m--1>
     <Badge
       v-for="option in options"
       :key="option.value"

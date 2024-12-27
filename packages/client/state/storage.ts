@@ -33,6 +33,7 @@ export const currentCamera = useLocalStorage<string>('slidev-camera', 'default',
 export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 export const wakeLockEnabled = useLocalStorage('slidev-wake-lock', true)
+export const hideCursorIdle = useLocalStorage('slidev-hide-cursor-idle', true)
 export const skipExportPdfTip = useLocalStorage('slidev-skip-export-pdf-tip', false)
 export const captureDelay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 

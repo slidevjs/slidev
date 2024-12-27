@@ -2,6 +2,7 @@
 import { useStyleTag } from '@vueuse/core'
 import { computed, ref, shallowRef } from 'vue'
 import { useDrawings } from '../composables/useDrawings'
+import { useHideCursorIdle } from '../composables/useHideCursorIdle'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { useWakeLock } from '../composables/useWakeLock'
@@ -14,7 +15,7 @@ import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor } from '../state'
 
-const { next, prev, isPrintMode } = useNav()
+const { next, prev, isPrintMode, isPresenter } = useNav()
 const { isDrawing } = useDrawings()
 
 const root = ref<HTMLDivElement>()
@@ -35,6 +36,7 @@ useSwipeControls(root)
 registerShortcuts()
 if (__SLIDEV_FEATURE_WAKE_LOCK__)
   useWakeLock()
+useHideCursorIdle(computed(() => !isPresenter.value && !isPrintMode.value))
 
 if (import.meta.hot) {
   useStyleTag(computed(() => showEditor.value

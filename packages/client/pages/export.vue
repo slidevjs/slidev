@@ -15,6 +15,7 @@ import ExportPdfTip from '../internals/ExportPdfTip.vue'
 import FormCheckbox from '../internals/FormCheckbox.vue'
 import FormItem from '../internals/FormItem.vue'
 import PrintSlide from '../internals/PrintSlide.vue'
+import SegmentControl from '../internals/SegmentControl.vue'
 import { isScreenshotSupported, startScreenshotSession } from '../logic/screenshot'
 import { captureDelay, skipExportPdfTip } from '../state'
 import Play from './play.vue'
@@ -225,8 +226,15 @@ if (import.meta.hot) {
         <FormItem title="Range">
           <input v-model="rangesRaw" type="text" :placeholder="`1-${slides.length}`">
         </FormItem>
-        <FormItem title="Dark mode">
-          <FormCheckbox v-model="isDark" :disabled="isColorSchemaConfigured" />
+        <FormItem title="Color Mode">
+          <SegmentControl
+            v-model="isDark"
+            :options="[
+              { value: false, label: 'Light' },
+              { value: true, label: 'Dark' },
+            ]"
+            :disabled="isColorSchemaConfigured"
+          />
         </FormItem>
         <FormItem title="With clicks">
           <FormCheckbox v-model="isPrintWithClicks" />

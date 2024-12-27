@@ -18,6 +18,8 @@ import { isDark } from './dark'
 const predefinedColorMap = {
   error: 0,
   client: 60,
+  Light: 60,
+  Dark: 240,
 } as Record<string, number>
 
 export function getHashColorFromString(
