@@ -11,7 +11,6 @@ import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
 import Settings from './Settings.vue'
 import SyncControls from './SyncControls.vue'
-
 import VerticalDivider from './VerticalDivider.vue'
 
 const props = defineProps({
@@ -161,7 +160,7 @@ if (__SLIDEV_FEATURE_RECORD__)
           {{ presenterLayout }}
         </IconButton>
 
-        <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__" />
+        <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__ && __SLIDEV_HAS_SERVER__" />
 
         <MenuButton>
           <template #button>
