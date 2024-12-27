@@ -27,6 +27,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  contentStyle: {
+    type: Object,
+    default: () => ({}),
+  },
 })
 
 const { isPrintMode } = useNav()
@@ -45,6 +49,7 @@ const scale = computed(() => {
 })
 
 const contentStyle = computed(() => ({
+  ...props.contentStyle,
   'height': `${slideHeight.value}px`,
   'width': `${slideWidth.value}px`,
   'transform': `translate(-50%, -50%) scale(${scale.value})`,
@@ -73,8 +78,19 @@ const snapshot = computed(() => {
 </script>
 
 <template>
-  <div v-if="!snapshot" :id="isMain ? 'slide-container' : undefined" ref="container" class="slidev-slide-container" :style="containerStyle">
-    <div :id="isMain ? 'slide-content' : undefined" ref="slideElement" class="slidev-slide-content" :style="contentStyle">
+  <div
+    v-if="!snapshot"
+    :id="isMain ? 'slide-container' : undefined"
+    ref="container"
+    class="slidev-slide-container"
+    :style="containerStyle"
+  >
+    <div
+      :id="isMain ? 'slide-content' : undefined"
+      ref="slideElement"
+      class="slidev-slide-content"
+      :style="contentStyle"
+    >
       <slot />
     </div>
     <slot name="controls" />

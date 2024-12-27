@@ -48,6 +48,24 @@ export const activeDragElement = shallowRef<DragElementState | null>(null)
 export const presenterNotesFontSize = useLocalStorage('slidev-presenter-font-size', 1, { listenToStorageChanges: false })
 export const presenterLayout = useLocalStorage('slidev-presenter-layout', 1, { listenToStorageChanges: false })
 
+export const viewerCssFilterDefaults = {
+  invert: false,
+  contrast: 1,
+  brightness: 1,
+  hueRotate: 0,
+  saturate: 1,
+  sepia: 0,
+}
+export const viewerCssFilter = useLocalStorage(
+  'slidev-viewer-css-filter',
+  viewerCssFilterDefaults,
+  { listenToStorageChanges: false, mergeDefaults: true, deep: true },
+)
+export const hasViewerCssFilter = computed(() => {
+  return (Object.keys(viewerCssFilterDefaults) as (keyof typeof viewerCssFilterDefaults)[])
+    .some(k => viewerCssFilter.value[k] !== viewerCssFilterDefaults[k])
+})
+
 export function togglePresenterLayout() {
   presenterLayout.value = presenterLayout.value + 1
   if (presenterLayout.value > 3)

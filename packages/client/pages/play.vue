@@ -13,7 +13,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor } from '../state'
+import { editorHeight, editorWidth, isEditorVertical, isScreenVertical, showEditor, viewerCssFilter, viewerCssFilterDefaults } from '../state'
 
 const { next, prev, isPrintMode, isPresenter } = useNav()
 const { isDrawing } = useDrawings()
@@ -61,6 +61,25 @@ const persistNav = computed(() => isScreenVertical.value || showEditor.value)
 const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
+
+const contentStyle = computed(() => {
+  let filter = ''
+
+  if (viewerCssFilter.value.brightness !== viewerCssFilterDefaults.brightness)
+    filter += `brightness(${viewerCssFilter.value.brightness}) `
+  if (viewerCssFilter.value.contrast !== viewerCssFilterDefaults.contrast)
+    filter += `contrast(${viewerCssFilter.value.contrast}) `
+  if (viewerCssFilter.value.sepia !== viewerCssFilterDefaults.sepia)
+    filter += `sepia(${viewerCssFilter.value.sepia}) `
+  if (viewerCssFilter.value.hueRotate !== viewerCssFilterDefaults.hueRotate)
+    filter += `hue-rotate(${viewerCssFilter.value.hueRotate}deg) `
+  if (viewerCssFilter.value.invert)
+    filter += 'invert(1) '
+
+  return {
+    filter,
+  }
+})
 </script>
 
 <template>
@@ -71,6 +90,7 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
     <SlideContainer
       :style="{ background: 'var(--slidev-slide-container-background, black)' }"
       is-main
+      :content-style="contentStyle"
       @pointerdown="onClick"
       @contextmenu="onContextMenu"
     >
