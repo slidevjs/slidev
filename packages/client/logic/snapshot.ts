@@ -1,8 +1,8 @@
 import type { SlidevContextNavFull } from '../composables/useNav'
 import type { ScreenshotSession } from './screenshot'
 import { sleep } from '@antfu/utils'
-import { useLocalStorage } from '@vueuse/core'
 import { slideHeight, slideWidth } from '../env'
+import { captureDelay } from '../state'
 import { snapshotState } from '../state/snapshot'
 import { isDark } from './dark'
 import { disableTransition } from './hmr'
@@ -13,7 +13,6 @@ const chromeVersion = window.navigator.userAgent.match(/Chrome\/(\d+)/)?.[1]
 export const isScreenshotSupported = chromeVersion ? Number(chromeVersion) >= 94 : false
 
 const initialWait = 100
-const delay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 
 export class SlideSnapshotManager {
   private _screenshotSession: ScreenshotSession | null = null
@@ -69,7 +68,7 @@ export class SlideSnapshotManager {
       disableTransition.value = true
       nav.go(1, 0, true)
 
-      await sleep(initialWait + delay.value)
+      await sleep(initialWait + captureDelay.value)
       while (true) {
         if (!this._screenshotSession) {
           break
@@ -80,9 +79,9 @@ export class SlideSnapshotManager {
           isDark.value,
         )
         if (nav.hasNext.value) {
-          await sleep(delay.value)
+          await sleep(captureDelay.value)
           nav.nextSlide(true)
-          await sleep(delay.value)
+          await sleep(captureDelay.value)
         }
         else {
           break
