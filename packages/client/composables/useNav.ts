@@ -9,10 +9,10 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CLICKS_MAX } from '../constants'
 import { configs } from '../env'
-import { skipTransition } from '../logic/hmr'
 import { useRouteQuery } from '../logic/route'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { getCurrentTransition } from '../logic/transition'
+import { hmrSkipTransition } from '../state'
 import { createClicksContextBase } from './useClicks'
 import { useTocTree } from './useTocTree'
 
@@ -184,7 +184,7 @@ export function useNavBase(
   }
 
   async function go(no: number | string, clicks: number = 0, force = false) {
-    skipTransition.value = false
+    hmrSkipTransition.value = false
     const pageChanged = currentSlideNo.value !== no
     const clicksChanged = clicks !== queryClicks.value
     const meta = getSlide(no)?.meta
@@ -304,7 +304,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
       return v
     },
     set(v) {
-      skipTransition.value = false
+      hmrSkipTransition.value = false
       queryClicksRaw.value = v.toString()
     },
   })

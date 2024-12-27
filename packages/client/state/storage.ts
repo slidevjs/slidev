@@ -8,6 +8,13 @@ export const showInfoDialog = ref(false)
 export const showGotoDialog = ref(false)
 export const showOverview = ref(false)
 
+/**
+ * Skip slides transition when triggered by HMR.
+ * Will reset automatically after user navigations
+ */
+export const hmrSkipTransition = ref(false)
+export const disableTransition = ref(false)
+
 export const shortcutsEnabled = ref(true)
 export const breakpoints = useBreakpoints({
   xs: 460,

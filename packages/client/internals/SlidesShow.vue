@@ -7,8 +7,7 @@ import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { useViewTransition } from '../composables/useViewTransition'
 import { CLICKS_MAX } from '../constants'
-import { disableTransition, skipTransition } from '../logic/hmr'
-import { activeDragElement } from '../state'
+import { activeDragElement, disableTransition, hmrSkipTransition } from '../state'
 import DragControl from './DragControl.vue'
 import SlideWrapper from './SlideWrapper.vue'
 
@@ -64,7 +63,7 @@ const loadedRoutes = computed(() => isPrintMode.value
 function onAfterLeave() {
   // After transition, we disable it so HMR won't trigger it again
   // We will turn it back on `nav.go` so the normal navigation would still work
-  skipTransition.value = true
+  hmrSkipTransition.value = true
   // recompute poppers after transition
   recomputeAllPoppers()
 }
@@ -76,8 +75,8 @@ function onAfterLeave() {
 
   <!-- Slides -->
   <component
-    :is="(hasViewTransition && !isPrintMode && !skipTransition && !disableTransition) ? 'div' : TransitionGroup"
-    v-bind="(skipTransition || disableTransition || isPrintMode) ? {} : currentTransition"
+    :is="(hasViewTransition && !isPrintMode && !hmrSkipTransition && !disableTransition) ? 'div' : TransitionGroup"
+    v-bind="(hmrSkipTransition || disableTransition || isPrintMode) ? {} : currentTransition"
     id="slideshow"
     tag="div"
     :class="{

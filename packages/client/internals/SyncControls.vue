@@ -82,10 +82,11 @@ const state = computed({
     </template>
     <template #menu>
       <div text-sm flex="~ col gap-2">
-        <div px4 pt3 pb1 ws-nowrap>
+        <div px3 ws-nowrap>
           <span op75>Slides navigation syncing for </span>
           <span font-bold text-primary>{{ isPresenter ? 'presenter' : 'viewer' }}</span>
         </div>
+        <div class="h-1px opacity-10 bg-current w-full" />
         <SelectList
           v-model="state"
           title="Sync Mode"

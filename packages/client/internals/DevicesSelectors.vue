@@ -49,11 +49,13 @@ ensureDevicesListPermissions()
       title="Camera"
       :items="camerasItems"
     />
+    <div class="h-1px opacity-10 bg-current w-full" />
     <SelectList
       v-model="currentMic"
       title="Microphone"
       :items="microphonesItems"
     />
+    <div class="h-1px opacity-10 bg-current w-full" />
     <SelectList
       v-if="mimeTypeItems.length"
       v-model="mimeType"

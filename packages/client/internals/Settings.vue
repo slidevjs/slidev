@@ -6,6 +6,7 @@ import { slideScale, wakeLockEnabled } from '../state'
 import SelectList from './SelectList.vue'
 
 const { isPresenter } = useNav()
+const { isSupported } = useWakeLock()
 
 const scaleItems: SelectionItem<number>[] = [
   {
@@ -17,8 +18,6 @@ const scaleItems: SelectionItem<number>[] = [
     value: 1,
   },
 ]
-
-const { isSupported } = useWakeLock()
 
 const wakeLockItems: SelectionItem<boolean>[] = [
   {
@@ -40,6 +39,7 @@ const wakeLockItems: SelectionItem<boolean>[] = [
       title="Scale"
       :items="scaleItems"
     />
+    <div class="h-1px opacity-10 bg-current w-full" />
     <SelectList
       v-if="__SLIDEV_FEATURE_WAKE_LOCK__ && isSupported"
       v-model="wakeLockEnabled"

@@ -8,10 +8,9 @@ import { useNav } from '../composables/useNav'
 import { usePrintStyles } from '../composables/usePrintStyles'
 import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
 import { configs, slidesTitle } from '../env'
-import { skipTransition } from '../logic/hmr'
 import { getSlidePath } from '../logic/slides'
 import { makeId } from '../logic/utils'
-import { syncDirections } from '../state'
+import { hmrSkipTransition, syncDirections } from '../state'
 import { initDrawingState } from '../state/drawings'
 import { initSharedState, onPatch, patch } from '../state/shared'
 
@@ -101,7 +100,7 @@ export default function setupRoot() {
     if ((+state.page === +currentSlideNo.value && +clicksContext.value.current === +state.clicks))
       return
     // if (state.lastUpdate?.type === 'presenter') {
-    skipTransition.value = false
+    hmrSkipTransition.value = false
     router.replace({
       path: getSlidePath(state.page, isPresenter.value),
       query: {
