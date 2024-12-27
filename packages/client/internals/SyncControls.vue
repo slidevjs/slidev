@@ -35,6 +35,41 @@ const shouldSend = computed({
     }
   },
 })
+
+const state = computed({
+  get: () => {
+    if (shouldReceive.value && shouldSend.value) {
+      return 'bidirectional'
+    }
+    if (shouldReceive.value && !shouldSend.value) {
+      return 'receive-only'
+    }
+    if (!shouldReceive.value && shouldSend.value) {
+      return 'send-only'
+    }
+    return 'off'
+  },
+  set(v) {
+    switch (v) {
+      case 'bidirectional':
+        shouldReceive.value = true
+        shouldSend.value = true
+        break
+      case 'receive-only':
+        shouldReceive.value = true
+        shouldSend.value = false
+        break
+      case 'send-only':
+        shouldReceive.value = false
+        shouldSend.value = true
+        break
+      case 'off':
+        shouldReceive.value = false
+        shouldSend.value = false
+        break
+    }
+  },
+})
 </script>
 
 <template>
@@ -52,19 +87,13 @@ const shouldSend = computed({
           <span font-bold text-primary>{{ isPresenter ? 'presenter' : 'viewer' }}</span>
         </div>
         <SelectList
-          v-model="shouldSend"
-          title="Send Changes"
+          v-model="state"
+          title="Sync Mode"
           :items="[
-            { value: true, display: 'On' },
-            { value: false, display: 'Off' },
-          ]"
-        />
-        <SelectList
-          v-model="shouldReceive"
-          title="Receive Changes"
-          :items="[
-            { value: true, display: 'On' },
-            { value: false, display: 'Off' },
+            { value: 'bidirectional', display: 'Bidirectional Sync' },
+            { value: 'receive-only', display: 'Receive Only' },
+            { value: 'send-only', display: 'Send Only' },
+            { value: 'off', display: 'Disable' },
           ]"
         />
       </div>
