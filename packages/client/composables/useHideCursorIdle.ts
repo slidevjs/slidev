@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { hideCursorIdle } from '../state'
 
 const TIMEOUT = 2000
@@ -19,15 +19,24 @@ export function useHideCursorIdle(
 
   let timer: ReturnType<typeof setTimeout> | null = null
 
+  // If disabled, immediately show the cursor
+  watch(
+    shouldHide,
+    (value) => {
+      if (!value)
+        show()
+    },
+  )
+
   useEventListener(
     document.body,
     ['pointermove', 'pointerdown'],
     () => {
       show()
-      if (!shouldHide.value)
-        return
       if (timer)
         clearTimeout(timer)
+      if (!shouldHide.value)
+        return
       timer = setTimeout(hide, TIMEOUT)
     },
     { passive: true },
