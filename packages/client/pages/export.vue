@@ -275,8 +275,8 @@ if (import.meta.hot) {
                 Clear Captured Images
               </button>
               <button v-else class="slidev-form-button flex justify-center items-center gap-2" @click="capturePngs">
-                <div class="i-carbon:camera-action inline-block text-xl" />
-                Pre-capture Slides as Images
+                <div class="i-carbon:drop-photo inline-block text-xl" />
+                Pre-capture slides as Images
               </button>
               <FormItem title="Delay" description="Delay between capturing each slide in milliseconds.<br>Increase this value if slides are captured incompletely. <br>(Not related to PDF export)">
                 <input v-model="captureDelay" type="number" step="50" min="50">
