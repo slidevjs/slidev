@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "0.51.0-beta.3",
+  "version": "0.51.0-beta.4",
   "description": "Presentation slides for developers",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
