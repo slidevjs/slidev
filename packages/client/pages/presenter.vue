@@ -127,16 +127,17 @@ onMounted(() => {
         <template v-if="mainSlideMode === 'mirror'">
           <ScreenCaptureMirror />
         </template>
-        <template v-else>
-          <SlideContainer
-            key="main"
-            class="p-2 lg:p-4 flex-auto"
-            is-main
-            @contextmenu="onContextMenu"
-          >
-            <SlidesShow render-context="presenter" />
-          </SlideContainer>
-        </template>
+
+        <!-- We use v-show here to still infer the clicks context -->
+        <SlideContainer
+          v-show="mainSlideMode === 'slides'"
+          key="main"
+          class="p-2 lg:p-4 flex-auto"
+          is-main
+          @contextmenu="onContextMenu"
+        >
+          <SlidesShow render-context="presenter" />
+        </SlideContainer>
 
         <ClicksSlider
           :key="currentSlideRoute?.no"

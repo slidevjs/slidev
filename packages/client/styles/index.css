@@ -123,8 +123,8 @@ html {
 
 .slidev-form-button {
   --uno: text-white px-4 py-1 rounded border-b-2;
-  --uno: 'bg-gray-400:50 border-gray-800:50';
-  --uno: 'hover:(bg-gray-400:75 border-gray8:75)';
+  --uno: 'bg-gray-500 border-gray-700';
+  --uno: 'hover:(bg-gray-400 border-gray6)';
 }
 .slidev-form-button.primary {
   --uno: bg-teal-600 border-teal-800;
