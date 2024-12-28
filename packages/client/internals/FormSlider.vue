@@ -28,7 +28,7 @@ const value = defineModel<number>('modelValue', {
     />
   </div>
   <div relative h-22px>
-    <input v-model.number="value" type="number" v-bind="props" border="~ base rounded" m0 w-20 bg-gray:5 pl2 align-top text-sm>
+    <input v-model.number="value" type="number" v-bind="props" border="~ main rounded" m0 w-20 bg-gray:5 pl2 align-top text-sm>
     <span v-if="props.unit" pointer-events-none absolute right-1 top-0.5 text-xs op25>{{ props.unit }}</span>
   </div>
 </template>
