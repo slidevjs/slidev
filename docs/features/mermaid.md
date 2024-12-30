@@ -9,9 +9,9 @@ description: |
   Create diagrams/graphs from textual descriptions, powered by Mermaid.
 ---
 
-# Mermaid.js Diagrams
+# Mermaid Diagrams
 
-You can also create diagrams/graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid-js.github.io/mermaid).
+You can also create diagrams/graphs from textual descriptions in your Markdown, powered by [Mermaid](https://mermaid.js.org/).
 
 Code blocks marked as `mermaid` will be converted to diagrams, for example:
 
@@ -34,4 +34,4 @@ C -->|Two| E[Result 2]
 ```
 ````
 
-Visit the [Mermaid Website](http://mermaid.js.org/) for more information.
+Visit the [Mermaid Website](https://mermaid.js.org/) for more information.
