@@ -82,7 +82,7 @@ themeConfig:
 # favicon, can be a local file path or URL
 favicon: 'https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png'
 # URL of PlantUML server used to render diagrams
-# Learn mode: https://sli.dev/features/plantuml.html
+# Learn more: https://sli.dev/features/plantuml.html
 plantUmlServer: https://www.plantuml.com/plantuml
 # fonts will be auto-imported from Google fonts
 # Learn more: https://sli.dev/custom/config-fonts.html
