@@ -44,7 +44,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 - 🎙 [**Presenter Mode**](https://sli.dev/guide/ui#presenter-mode) - use another window, or even your phone to control your slides
 - 🎨 [**Drawing**](https://sli.dev/features/drawing) - draw and annotate on your slides
 - 🧮 [**LaTeX**](https://sli.dev/features/latex) - built-in LaTeX math equations support
-- 📰 [**Diagrams**](https://sli.dev/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid.js](https://mermaid.js.org/)
+- 📰 [**Diagrams**](https://sli.dev/guide/syntax#diagrams) - creates diagrams using textual descriptions with [Mermaid](https://mermaid.js.org/)
 - 🌟 [**Icons**](https://sli.dev/features/icons) - access to icons from any icon set directly
 - 💻 [**Editor**](https://sli.dev/guide/index#editor) - integrated editor, or the [VSCode extension](https://sli.dev/features/vscode-extension)
 - 🎥 [**Recording**](https://sli.dev/features/recording) - built-in recording and camera view

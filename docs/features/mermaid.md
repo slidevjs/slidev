@@ -1,6 +1,6 @@
 ---
 relates:
-  - Mermaid: http://mermaid.js.org/
+  - Mermaid: https://mermaid.js.org/
   - Mermaid Live Editor: https://mermaid.live/
   - Demo Slide: https://sli.dev/demo/starter/12
   - features/plantuml

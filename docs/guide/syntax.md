@@ -157,7 +157,7 @@ Slidev supports LaTeX blocks for mathematical and chemical formulas:
 
 ## Diagrams {#diagrams}
 
-Slidev supports [Mermaid.js](http://mermaid.js.org/) and [PlantUML](https://plantuml.com/) for creating diagrams from text:
+Slidev supports [Mermaid](https://mermaid.js.org/) and [PlantUML](https://plantuml.com/) for creating diagrams from text:
 
 <LinkCard link="features/mermaid" />
 <LinkCard link="features/plantuml" />
