@@ -14,7 +14,7 @@ export default defineMermaidSetup(() => {
 })
 ```
 
-The return value should be the custom configs for [Mermaid.js](https://mermaid.js.org/). Refer to the [Mermaid's documentation](http://mermaid.js.org/config/schema-docs/config.html) or the type definition for the full config list.
+The return value should be the custom configs for [Mermaid](https://mermaid.js.org/). Refer to the [Mermaid documentation](https://mermaid.js.org/config/schema-docs/config.html) or the type definition for the full config list.
 
 ## Custom theme/styles
 
