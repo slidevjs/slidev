@@ -706,7 +706,8 @@
           "type": "string",
           "enum": [
             "none",
-            "google"
+            "google",
+            "coollabs"
           ],
           "default": "google"
         },

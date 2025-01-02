@@ -21,16 +21,23 @@ export function stringifyMarkdownTokens(tokens: Token[]) {
     .join(' ')
 }
 
-export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
+export function generateFontParams(options: ResolvedFontOptions) {
   const weights = options.weights
     .flatMap(i => options.italic ? [`0,${i}`, `1,${i}`] : [`${i}`])
     .sort()
     .join(';')
-  const fonts = options.webfonts
+  const fontParams = options.webfonts
     .map(i => `family=${i.replace(/^(['"])(.*)\1$/, '$1').replace(/\s+/g, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
     .join('&')
+  return fontParams
+}
 
-  return `https://fonts.googleapis.com/css2?${fonts}&display=swap`
+export function generateGoogleFontsUrl(options: ResolvedFontOptions) {
+  return `https://fonts.googleapis.com/css2?${generateFontParams(options)}&display=swap`
+}
+
+export function generateCoollabsFontsUrl(options: ResolvedFontOptions) {
+  return `https://api.fonts.coollabs.io/fonts?${generateFontParams(options)}&display=swap`
 }
 
 /**
