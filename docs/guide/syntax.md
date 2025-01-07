@@ -81,7 +81,7 @@ src: ./pages/4.md  # This slide only contains a frontmatter
 
 Configurations you can set are described in the [Slides deck configurations](/custom/#headmatter) and [Per slide configurations](/custom/#frontmatter) sections.
 
-To make the headmatter more readable, you can installed the VSCode extension:
+To make the headmatter more readable, you can install the VSCode extension:
 
 <LinkCard link="features/vscode-extension" />
 
