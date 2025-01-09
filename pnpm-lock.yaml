@@ -418,7 +418,7 @@ overrides:
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4':
-    hash: 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
+    hash: tuyuxytl56b2vxulpkzt2wf4o4
     path: patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 
 importers:
@@ -1081,7 +1081,7 @@ importers:
     devDependencies:
       '@hedgedoc/markdown-it-plugins':
         specifier: 'catalog:'
-        version: 2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)
+        version: 2.1.4(patch_hash=tuyuxytl56b2vxulpkzt2wf4o4)(markdown-it@14.1.0)
       '@types/micromatch':
         specifier: 'catalog:'
         version: 4.0.9
@@ -7523,7 +7523,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.7': {}
 
-  '@hedgedoc/markdown-it-plugins@2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)':
+  '@hedgedoc/markdown-it-plugins@2.1.4(patch_hash=tuyuxytl56b2vxulpkzt2wf4o4)(markdown-it@14.1.0)':
     dependencies:
       '@mrdrogdrog/optional': 1.2.1
       html-entities: 2.5.2
