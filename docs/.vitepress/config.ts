@@ -140,7 +140,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2020-2024 Anthony Fu.',
+      copyright: 'Copyright © 2020-2025 Anthony Fu.',
     },
   },
 

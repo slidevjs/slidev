@@ -51,4 +51,4 @@ There are also some **commands** you can use. Type `Slidev` in the command palet
 
 ## License
 
-MIT License © 2021-2024 [Anthony Fu](https://github.com/antfu)
+MIT License © 2021-2025 [Anthony Fu](https://github.com/antfu)
