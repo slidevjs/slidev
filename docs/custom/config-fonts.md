@@ -18,7 +18,7 @@ fonts:
 
 And that's all.
 
-Fonts will be **imported automatically from [Google Fonts](https://fonts.google.com/)**. That means you can use any fonts available on Google Fonts directly.
+Fonts will be **imported automatically from a provider via CDN, by default it is [Google Fonts](https://fonts.google.com/)**. That means you can use any fonts available on Google Fonts directly.
 
 ## Local Fonts
 
@@ -92,10 +92,10 @@ fonts:
 
 ## Providers
 
-- Options: `google` | `none`
+- Options: `google` | `coollabs` | `none`
 - Default: `google`
 
-Currently, only Google Fonts is supported, we are planning to add more providers in the future. Specify to `none` will disable the auto-importing feature entirely and treat all the fonts locally.
+Currently, only [Google Fonts](https://fonts.google.com/) and [coolLabs](https://fonts.coollabs.io/) supported, we are planning to add more providers in the future. Specify to `none` will disable the auto-importing feature entirely and treat all the fonts locally.
 
 ```yaml
 ---
