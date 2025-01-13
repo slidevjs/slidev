@@ -238,6 +238,13 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://raw.githubusercontent.com/hdm/decks-2024-lascon-numerology/refs/heads/main/screenshot.png',
     datetime: '2024-10-25',
   },
+  {
+    title: 'Python Zero To Hero - Episode 1',
+    cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDxJOR7JGUM5LQJmcs96i2l2est7w',
+    author: {
+      name: 'Kareim Tarek',
+      link: 'https://github.com/KareimGazer',
+    },
   // Add yours here!
   {
     title: 'Yours?',
