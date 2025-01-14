@@ -3,7 +3,7 @@ publish = "docs/.vitepress/dist"
 command = "pnpm run docs:build"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 NODE_OPTIONS = "--max-old-space-size=8192"
 PLAYWRIGHT_BROWSERS_PATH = "0"
 
