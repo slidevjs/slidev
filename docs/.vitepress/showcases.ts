@@ -245,6 +245,7 @@ export const showcases: ShowCaseInfo[] = [
       name: 'Kareim Tarek',
       link: 'https://github.com/KareimGazer',
     },
+  },
   // Add yours here!
   {
     title: 'Yours?',
