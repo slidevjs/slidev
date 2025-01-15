@@ -240,11 +240,15 @@ export const showcases: ShowCaseInfo[] = [
   },
   {
     title: 'Python Zero To Hero - Episode 1',
-    cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDxJOR7JGUM5LQJmcs96i2l2est7w',
     author: {
       name: 'Kareim Tarek',
-      link: 'https://github.com/KareimGazer',
+      link: 'https://kareimgazer.github.io/',
     },
+    at: 'Kareem Kreates YouTube Channel',
+    slidesLink: 'https://kareimgazer.github.io/py-intro/',
+    sourceLink: 'https://github.com/KareimGazer/py-intro',
+    cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDxJOR7JGUM5LQJmcs96i2l2est7w',
+    datetime: '2025-01-12',
   },
   // Add yours here!
   {
