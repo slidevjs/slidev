@@ -253,7 +253,7 @@ if (import.meta.hot) {
 
         <div border="~ main rounded-lg" p3 flex="~ col gap-2" :class="isScreenshotSupported ? '' : 'border-orange'">
           <h2>Export as Images</h2>
-          <div v-if="!isScreenshotSupported" class="min-w-full w-0 text-orange/100 p-1 mb--4 bg-orange/10 rounded">
+          <div v-if="!isScreenshotSupported" class="min-w-full w-0 text-orange/100 p-1 mb-2 bg-orange/10 rounded">
             <span class="i-carbon:warning-alt inline-block mb--.5" />
             Your browser may not support image capturing.
             If you encounter issues, please use a modern Chromium-based browser,
