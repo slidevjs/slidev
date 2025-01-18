@@ -53,12 +53,12 @@ export const community: AddonInfo[] = [
     id: 'slidev-addon-tikzjax',
     name: 'slidev-addon-tikzjax',
     description: 'Compile TikZ/Chemfig/... to SVG and display them in Slidev',
-    tags: ['TikZ', 'LaTeX'],
+    tags: ['Integration', 'Diagram'],
     author: {
       name: 'Ethan Goh',
-      link: 'https://github.com/7086cmd'
+      link: 'https://github.com/7086cmd',
     },
-    repo: 'https://github.com/7086cmd/slidev-addon-tikzjax'
+    repo: 'https://github.com/7086cmd/slidev-addon-tikzjax',
   },
   {
     id: 'slidev-component-pager',
