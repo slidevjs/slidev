@@ -33,12 +33,12 @@ export async function createMarkdownPlugin(
     },
     transforms: {
       ...mdOptions?.transforms,
-      before(code, id) {
+      async before(code, id) {
         // Skip entry Markdown files
         if (options.data.markdownFiles[id])
           return ''
 
-        code = mdOptions?.transforms?.before?.(code, id) ?? code
+        code = await mdOptions?.transforms?.before?.(code, id) ?? code
 
         const match = id.match(regexSlideSourceId)
         if (!match)
@@ -55,7 +55,7 @@ export async function createMarkdownPlugin(
         for (const transformer of transformers) {
           if (!transformer)
             continue
-          transformer(ctx)
+          await transformer(ctx)
           if (!ctx.s.isEmpty())
             ctx.s.commit()
         }

@@ -358,8 +358,8 @@ catalogs:
       specifier: ^28.0.0
       version: 28.0.0
     unplugin-vue-markdown:
-      specifier: ^28.0.0
-      version: 28.0.0
+      specifier: ^28.1.0
+      version: 28.1.0
     untun:
       specifier: ^0.1.3
       version: 0.1.3
@@ -1044,7 +1044,7 @@ importers:
         version: 28.0.0(@babel/parser@7.26.2)(@nuxt/kit@3.13.0(rollup@4.27.4))(rollup@4.27.4)(vue@3.5.13(typescript@5.7.3))
       unplugin-vue-markdown:
         specifier: 'catalog:'
-        version: 28.0.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0))
+        version: 28.1.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0))
       untun:
         specifier: 'catalog:'
         version: 0.1.3
@@ -1123,7 +1123,7 @@ importers:
         version: 22.0.0(@vue/compiler-sfc@3.5.13)
       unplugin-vue-markdown:
         specifier: 'catalog:'
-        version: 28.0.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0))
+        version: 28.1.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0))
       vite-plugin-inspect:
         specifier: 'catalog:'
         version: 10.0.6(@nuxt/kit@3.13.0(rollup@4.27.4))(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0))
@@ -4895,8 +4895,8 @@ packages:
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
 
-  markdown-it-async@0.1.3:
-    resolution: {integrity: sha512-R0oC5NCrGhAZGZXQ923+RUNbv6vAFCyHebC2SA9Q2TR7yYBowAboLhrsRJrfB9s9cL3epF+JaHrg5WSeoh+CRA==}
+  markdown-it-async@1.0.0:
+    resolution: {integrity: sha512-E6IbFxSOdygoQFqBh2UmVUz90jl4VKZwHQb5vjify1hrGOHK373bFjkW1FPWkYxhL7lNx0G+ut2tUo6mJ0adUQ==}
 
   markdown-it-footnote@4.0.0:
     resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
@@ -6392,8 +6392,8 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  unplugin-vue-markdown@28.0.0:
-    resolution: {integrity: sha512-8UsgvTpe/0om4qAE1YOMfDB/R5W/L3G5fTkBQ9cShjqKsklnbkizVZe7B/CepIreVolJZNQBzc5ZQqA5PCSCmQ==}
+  unplugin-vue-markdown@28.1.0:
+    resolution: {integrity: sha512-OcweFC2A/PJB6+/swBbgA5UPryYdhktzR4eqKhpk44zCh5JBljnWhArM5z4py7IwgCQr5XFuXc5u3spggv8Tvg==}
     peerDependencies:
       vite: ^6.0.7
 
@@ -11115,7 +11115,7 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  markdown-it-async@0.1.3:
+  markdown-it-async@1.0.0:
     dependencies:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0
@@ -12865,7 +12865,7 @@ snapshots:
       - rollup
       - supports-color
 
-  unplugin-vue-markdown@28.0.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0)):
+  unplugin-vue-markdown@28.1.0(rollup@4.27.4)(vite@6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0)):
     dependencies:
       '@mdit-vue/plugin-component': 2.1.3
       '@mdit-vue/plugin-frontmatter': 2.1.3
@@ -12873,7 +12873,7 @@ snapshots:
       '@rollup/pluginutils': 5.1.4(rollup@4.27.4)
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0
-      markdown-it-async: 0.1.3
+      markdown-it-async: 1.0.0
       unplugin: 2.1.2
       vite: 6.0.7(@types/node@22.10.5)(jiti@2.4.2)(tsx@4.19.1)(yaml@2.7.0)
     transitivePeerDependencies:

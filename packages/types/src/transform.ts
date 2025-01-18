@@ -1,3 +1,4 @@
+import type { Awaitable } from '@antfu/utils'
 import type MagicString from 'magic-string-stack'
 import type { ResolvedSlidevOptions } from './options'
 import type { SlideInfo } from './types'
@@ -19,4 +20,4 @@ export interface MarkdownTransformContext {
   options: ResolvedSlidevOptions
 }
 
-export type MarkdownTransformer = (ctx: MarkdownTransformContext) => void
+export type MarkdownTransformer = (ctx: MarkdownTransformContext) => Awaitable<void>
