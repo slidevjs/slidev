@@ -247,7 +247,7 @@ export const showcases: ShowCaseInfo[] = [
     at: 'Kareem Kreates YouTube Channel',
     slidesLink: 'https://kareimgazer.github.io/py-intro/',
     sourceLink: 'https://github.com/KareimGazer/py-intro',
-    cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDxJOR7JGUM5LQJmcs96i2l2est7w',
+    cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg',
     datetime: '2025-01-12',
   },
   // Add yours here!
