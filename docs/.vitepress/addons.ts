@@ -50,6 +50,17 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/Smile-SA/slidev-addon-sync',
   },
   {
+    id: 'slidev-addon-tikzjax',
+    name: 'slidev-addon-tikzjax',
+    description: 'Compile TikZ/Chemfig/... to SVG and display them in Slidev',
+    tags: ['Integration', 'Diagram'],
+    author: {
+      name: 'Ethan Goh',
+      link: 'https://github.com/7086cmd',
+    },
+    repo: 'https://github.com/7086cmd/slidev-addon-tikzjax',
+  },
+  {
     id: 'slidev-component-pager',
     name: 'slidev-component-pager',
     description: 'Show current page and total page number',
