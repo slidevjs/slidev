@@ -59,6 +59,7 @@ export const templateShiki: VirtualModuleTemplate = {
     const lines: string[] = []
     lines.push(
       `import { createHighlighterCore } from "${await resolveImportUrl('shiki/core')}"`,
+      `import { createJavaScriptRegexEngine } from "${await resolveImportUrl('@shikijs/engine-javascript')}"`,
       `export { shikiToMonaco } from "${await resolveImportUrl('@shikijs/monaco')}"`,
 
       `export const languages = ${JSON.stringify(langNames)}`,
@@ -67,7 +68,7 @@ export const templateShiki: VirtualModuleTemplate = {
       'export const shiki = createHighlighterCore({',
       `  themes: [${themesInit.join(',')}],`,
       `  langs: [${langsInit.join(',')}],`,
-      `  loadWasm: import('${await resolveImportUrl('shiki/wasm')}'),`,
+      `  engine: createJavaScriptRegexEngine(),`,
       '})',
 
       'let highlight',

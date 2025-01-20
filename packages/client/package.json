@@ -32,6 +32,7 @@
     "@iconify-json/carbon": "catalog:",
     "@iconify-json/ph": "catalog:",
     "@iconify-json/svg-spinners": "catalog:",
+    "@shikijs/engine-javascript": "catalog:",
     "@shikijs/monaco": "catalog:",
     "@shikijs/vitepress-twoslash": "catalog:",
     "@slidev/parser": "workspace:*",
