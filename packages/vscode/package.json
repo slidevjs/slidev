@@ -194,7 +194,7 @@
         "command": "slidev.stop-dev",
         "category": "Slidev",
         "title": "Stop the dev server",
-        "icon": "$(debug-stop)"
+        "icon": "$(stop-circle)"
       },
       {
         "command": "slidev.open-in-browser",
@@ -239,11 +239,6 @@
         "title": "Unsync preview window with editor cursor",
         "icon": "$(lock)",
         "enablement": "slidev:preview:sync"
-      },
-      {
-        "command": "slidev.remove-slide",
-        "category": "Slidev",
-        "title": "Remove this slide"
       }
     ],
     "menus": {
@@ -254,10 +249,6 @@
         },
         {
           "command": "slidev.set-as-active",
-          "when": "false"
-        },
-        {
-          "command": "slidev.remove-slide",
           "when": "false"
         }
       ],
@@ -338,16 +329,13 @@
         },
         {
           "command": "slidev.remove-entry",
-          "when": "view == slidev-projects-tree&& viewItem =~ /<project>/",
+          "when": "view == slidev-projects-tree && viewItem =~ /<project>/",
           "group": "inline@2"
         },
         {
           "command": "slidev.stop-dev",
-          "when": "view == slidev-projects-tree && viewItem =~ /<up>/"
-        },
-        {
-          "command": "slidev.remove-slide",
-          "when": "view == slidev-slides-tree"
+          "when": "view == slidev-projects-tree && viewItem =~ /<up>/",
+          "group": "inline"
         }
       ]
     },
