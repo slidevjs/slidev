@@ -4,9 +4,11 @@ import type { Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
+import MarkdownIt from 'markdown-it'
 import YAML from 'yaml'
-import { sharedMd } from '../commands/shared'
 import { createDataUtils } from '../options'
+import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
+import markdownItLink from '../syntax/markdown-it/markdown-it-link'
 import { getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
@@ -16,31 +18,16 @@ import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
-function renderNote(text: string = '') {
-  let clickCount = 0
-  const html = sharedMd.render(text
-    // replace [click] marker with span
-    .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
-      clickCount += Number(count)
-      return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
-    }),
-  )
-
-  return html
-}
-
-function withRenderedNote(data: SlideInfo): SlideInfo {
-  return {
-    ...data,
-    noteHTML: renderNote(data?.note),
-  }
-}
-
 export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
   const { data, mode, utils } = options
+
+  const notesMd = MarkdownIt({ html: true })
+  notesMd.use(markdownItLink)
+  if (data.features.katex)
+    notesMd.use(MarkdownItKatex, utils.katexOptions)
 
   const hmrSlidesIndexes = new Set<number>()
   let server: ViteDevServer | undefined
@@ -373,5 +360,25 @@ export function createSlidesLoader(
       if (data.markdownFiles[id])
         return ''
     },
+  }
+
+  function renderNote(text: string = '') {
+    let clickCount = 0
+    const html = notesMd.render(text
+    // replace [click] marker with span
+      .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
+        clickCount += Number(count)
+        return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
+      }),
+    )
+
+    return html
+  }
+
+  function withRenderedNote(data: SlideInfo): SlideInfo {
+    return {
+      ...data,
+      noteHTML: renderNote(data?.note),
+    }
   }
 }
