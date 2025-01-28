@@ -231,7 +231,7 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
   const userRoot = dirname(entry)
   isInstalledGlobally.value
     = slash(relative(userRoot, process.argv[1])).includes('/.pnpm/')
-    || (await import('is-installed-globally')).default
+      || (await import('is-installed-globally')).default
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)
   const userPkgJson = getUserPkgJson(closestPkgRoot)
