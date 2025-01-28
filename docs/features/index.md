@@ -46,6 +46,7 @@ This is a list of all the individual features that Slidev provides. Each feature
 
 You can also read <LinkInline link="guide/" /> to learn the features by topic.
 
+<ClientOnly>
 <div flex items-center mt-6 gap-6>
   <div
     flex items-center rounded-md
@@ -77,6 +78,7 @@ You can also read <LinkInline link="guide/" /> to learn the features by topic.
     Clear Filters
   </button>
 </div>
+</ClientOnly>
 
 <style>
 .all-features-page .VPDoc > .container > .content {
