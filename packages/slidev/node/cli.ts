@@ -116,7 +116,6 @@ cli.command(
   async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind, base }) => {
     let server: ViteDevServer | undefined
     let port = 3030
-    base = `/${base.replaceAll('/', '')}/`
 
     let lastRemoteUrl: string | undefined
 
