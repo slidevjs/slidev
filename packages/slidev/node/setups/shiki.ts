@@ -30,8 +30,9 @@ export default async function setupShiki(roots: string[]) {
       },
     }],
   )
-  const mergedOptions = Object.assign({}, ...options)
-  const mergedLanguages: Record<string, LanguageInput> = bundledLanguages
+
+  const browserLanguages: any[] = []
+  const nodeLanguages: Record<string, LanguageInput> = bundledLanguages
   for (const option of options) {
     const langs = option?.langs
     if (Array.isArray(langs)) {
@@ -40,25 +41,32 @@ export default async function setupShiki(roots: string[]) {
           console.error(red('[slidev] `langs` option in shiki setup cannot be array containing functions. Please use `{ name: loaderFunction }` format instead.'))
         }
         else if (typeof lang === 'string') {
-          // Shiki's built-in languages
-          // In Node environment, they can be loaded on demand
-          // So all languages are available
-          // The language names are only used in the browser environment
+          // Name of a Shiki built-in language
+          // In Node environment, they can be loaded on demand without overhead, so all built-in languages are available.
+          // Only need to include them explicitly in browser environment.
+          browserLanguages.push(lang)
         }
-        else {
-          mergedLanguages[lang.name] = lang
+        else if (lang.name) {
+          // Custom grammar object
+          browserLanguages.push(lang)
+          nodeLanguages[lang.name] = lang
           for (const alias of lang.aliases || [])
-            mergedLanguages[alias] = lang
+            nodeLanguages[alias] = lang
         }
       }
     }
     else if (typeof option?.langs === 'object') {
-      Object.assign(mergedLanguages, option.langs)
+      // Map from name to loader or grammar object
+      Object.assign(nodeLanguages, option.langs)
+      browserLanguages.push(...Object.values(option.langs).filter(lang => lang?.name))
     }
     else {
       console.error(red('[slidev] Invalid langs option in shiki setup:'), langs)
     }
   }
+
+  const mergedOptions = Object.assign({}, ...options)
+  mergedOptions.langs = browserLanguages
 
   if ('theme' in mergedOptions && 'themes' in mergedOptions)
     delete mergedOptions.theme
@@ -81,7 +89,7 @@ export default async function setupShiki(roots: string[]) {
     mergedOptions.defaultColor = false
 
   const createHighlighter = createdBundledHighlighter<string, string>({
-    langs: mergedLanguages,
+    langs: nodeLanguages,
     themes: bundledThemes,
     engine: createJavaScriptRegexEngine,
   })

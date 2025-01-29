@@ -7,7 +7,7 @@ export const templateShiki: VirtualModuleTemplate = {
   id: '/@slidev/shiki',
   getContent: async ({ utils }) => {
     const options = utils.shikiOptions
-    const langs = await resolveLangs(options.langs || ['markdown', 'vue', 'javascript', 'typescript', 'html', 'css'])
+    const langs = await resolveLangs(options.langs?.length ? options.langs : ['markdown', 'vue', 'javascript', 'typescript', 'html', 'css'])
     const resolvedThemeOptions = 'themes' in options
       ? {
           themes: Object.fromEntries(await Promise.all(Object.entries(options.themes)
