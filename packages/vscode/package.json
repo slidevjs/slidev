@@ -397,6 +397,12 @@
           "scope": "window",
           "description": "A glob pattern to exclude slides entries",
           "default": "**/node_modules/**"
+        },
+        "slidev.dev-command": {
+          "type": "string",
+          "scope": "window",
+          "description": "The command to start Slidev dev server. See https://sli.dev/features/vscode-extension#dev-command",
+          "default": "npm exec -c 'slidev ${args}'"
         }
       }
     },

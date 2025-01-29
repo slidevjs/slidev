@@ -1,9 +1,10 @@
 import type { Ref } from 'reactive-vscode'
-import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
 import { basename } from 'node:path'
 import { getPort as getPortPlease } from 'get-port-please'
 import { toRef } from 'reactive-vscode'
+import { env, type Terminal } from 'vscode'
+import { devCommand } from '../configs'
 import { useServerTerminal } from '../views/serverTerminal'
 import { useServerDetector } from './useServerDetector'
 
@@ -29,7 +30,13 @@ export function useDevServer(project: SlidevProject) {
     if (getIsActive())
       return
     port.value ??= await getPort()
-    sendText(`npm exec -c 'slidev ${JSON.stringify(basename(project.entry))} --port ${port.value}'`)
+    const args = [
+      JSON.stringify(basename(project.entry)),
+      `--port ${port.value}`,
+      env.remoteName != null ? '--remote' : '',
+    ].filter(Boolean).join(' ')
+    // eslint-disable-next-line no-template-curly-in-string
+    sendText(devCommand.value.replaceAll('${args}', args))
   }
 
   function stop() {
