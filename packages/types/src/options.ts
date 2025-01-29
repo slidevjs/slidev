@@ -35,6 +35,11 @@ export interface SlidevEntryOptions {
    * Build with --download option
    */
   download?: boolean
+
+  /**
+   * Base URL in dev or build mode
+   */
+  base?: string
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
