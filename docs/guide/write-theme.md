@@ -8,12 +8,12 @@ To get started, we recommend you use our generator for scaffolding your first th
 
 ::: code-group
 
-```bash [npm]
-$ npm init slidev-theme@latest
-```
-
 ```bash [pnpm]
 $ pnpm create slidev-theme
+```
+
+```bash [npm]
+$ npm init slidev-theme@latest
 ```
 
 ```bash [yarn]

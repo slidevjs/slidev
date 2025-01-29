@@ -80,7 +80,7 @@ packages
   parser/          - parser for Slidev's extended Markdown format
   create-app/      - scripts and template for `npm init slidev`
   create-theme/    - scripts and template for `npm init slidev-theme`
-  theme-*/         - official themes
+  vscode/          - the VSCode extension
 ```
 
 ## Code Style
