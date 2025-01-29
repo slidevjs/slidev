@@ -1,13 +1,16 @@
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { ShikiSetup } from '@slidev/types'
-import type { Highlighter } from 'shiki'
+import type { LanguageInput, ShorthandsBundle } from 'shiki/core'
 import fs from 'node:fs/promises'
-import { bundledLanguages, createHighlighter } from 'shiki'
+import { red } from 'kolorist'
+import { bundledLanguages, bundledThemes } from 'shiki/bundle/full'
+import { createdBundledHighlighter, createSingletonShorthands } from 'shiki/core'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import { loadSetups } from './load'
 
 let cachedRoots: string[] | undefined
 let cachedShiki: {
-  shiki: Highlighter
+  shiki: ShorthandsBundle<string, string>
   shikiOptions: MarkdownItShikiOptions
 } | undefined
 
@@ -15,7 +18,6 @@ export default async function setupShiki(roots: string[]) {
   // Here we use shallow equality because when server is restarted, the roots will be different object.
   if (cachedRoots === roots)
     return cachedShiki!
-  cachedShiki?.shiki.dispose()
 
   const options = await loadSetups<ShikiSetup>(
     roots,
@@ -29,6 +31,34 @@ export default async function setupShiki(roots: string[]) {
     }],
   )
   const mergedOptions = Object.assign({}, ...options)
+  const mergedLanguages: Record<string, LanguageInput> = bundledLanguages
+  for (const option of options) {
+    const langs = option?.langs
+    if (Array.isArray(langs)) {
+      for (const lang of langs.flat()) {
+        if (typeof lang === 'function') {
+          console.error(red('[slidev] `langs` option in shiki setup cannot be array containing functions. Please use `{ name: loaderFunction }` format instead.'))
+        }
+        else if (typeof lang === 'string') {
+          // Shiki's built-in languages
+          // In Node environment, they can be loaded on demand
+          // So all languages are available
+          // The language names are only used in the browser environment
+        }
+        else {
+          mergedLanguages[lang.name] = lang
+          for (const alias of lang.aliases || [])
+            mergedLanguages[alias] = lang
+        }
+      }
+    }
+    else if (typeof option?.langs === 'object') {
+      Object.assign(mergedLanguages, option.langs)
+    }
+    else {
+      console.error(red('[slidev] Invalid langs option in shiki setup:'), langs)
+    }
+  }
 
   if ('theme' in mergedOptions && 'themes' in mergedOptions)
     delete mergedOptions.theme
@@ -50,11 +80,12 @@ export default async function setupShiki(roots: string[]) {
   if (mergedOptions.themes)
     mergedOptions.defaultColor = false
 
-  const shiki = await createHighlighter({
-    ...mergedOptions,
-    langs: mergedOptions.langs ?? Object.keys(bundledLanguages),
-    themes: 'themes' in mergedOptions ? Object.values(mergedOptions.themes) : [mergedOptions.theme],
+  const createHighlighter = createdBundledHighlighter<string, string>({
+    langs: mergedLanguages,
+    themes: bundledThemes,
+    engine: createJavaScriptRegexEngine,
   })
+  const shiki = createSingletonShorthands<string, string>(createHighlighter)
 
   cachedRoots = roots
   return cachedShiki = {

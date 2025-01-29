@@ -1,5 +1,5 @@
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it/index.mjs'
-import type { HighlighterGeneric } from 'shiki/types.mjs'
+import type { ShorthandsBundle } from 'shiki/core'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -51,7 +51,7 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 }
 
 export interface ResolvedSlidevUtils {
-  shiki: HighlighterGeneric<any, any>
+  shiki: ShorthandsBundle<string, string>
   shikiOptions: MarkdownItShikiOptions
   indexHtml: string
   define: Record<string, string>

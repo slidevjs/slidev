@@ -1,6 +1,6 @@
 import type { MarkdownTransformContext } from '@slidev/types'
 import lz from 'lz-string'
-import { codeToKeyedTokens } from 'shiki-magic-move/core'
+import { toKeyedTokens } from 'shiki-magic-move/core'
 import { reCodeBlock } from './code-wrapper'
 import { normalizeRangeStr } from './utils'
 
@@ -14,6 +14,7 @@ function parseLineNumbersOption(options: string) {
  * Transform magic-move code blocks
  */
 export function transformMagicMove(ctx: MarkdownTransformContext) {
+  const { codeToTokens } = ctx.options.utils.shiki
   ctx.s.replace(
     reMagicMoveBlock,
     (full, options = '{}', _attrs = '', body: string) => {
@@ -25,13 +26,17 @@ export function transformMagicMove(ctx: MarkdownTransformContext) {
       const defaultLineNumbers = parseLineNumbersOption(options) ?? ctx.options.data.config.lineNumbers
 
       const ranges = matches.map(i => normalizeRangeStr(i[2]))
-      const steps = matches.map((i) => {
+      const steps = Promise.all(matches.map(async (i) => {
+        const lang = i[1]
         const lineNumbers = parseLineNumbersOption(i[3]) ?? defaultLineNumbers
-        return codeToKeyedTokens(ctx.options.utils.shiki, i[5].trimEnd(), {
+        const code = i[5].trimEnd()
+        const options = {
           ...ctx.options.utils.shikiOptions,
-          lang: i[1] as any,
-        }, lineNumbers)
-      })
+          lang,
+        }
+        const { tokens } = await codeToTokens(code, options)
+        return toKeyedTokens(code, tokens, JSON.stringify([lang, 'themes' in options ? options.themes : options.theme]), lineNumbers)
+      }))
       const compressed = lz.compressToBase64(JSON.stringify(steps))
       return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
     },

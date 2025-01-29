@@ -15,11 +15,11 @@ catalog:
   '@iconify-json/svg-spinners': ^1.2.2
   '@iconify/json': ^2.2.297
   '@lillallol/outline-pdf': ^4.0.0
-  '@shikijs/markdown-it': ^2.0.0
-  '@shikijs/monaco': ^2.0.0
-  '@shikijs/engine-javascript': ^2.0.0
-  '@shikijs/twoslash': ^2.0.0
-  '@shikijs/vitepress-twoslash': ^2.0.0
+  '@shikijs/markdown-it': ^2.1.0
+  '@shikijs/monaco': ^2.1.0
+  '@shikijs/engine-javascript': ^2.1.0
+  '@shikijs/twoslash': ^2.1.0
+  '@shikijs/vitepress-twoslash': ^2.1.0
   '@slidev/rough-notation': ^0.1.0
   '@slidev/theme-default': ^0.25.0
   '@slidev/theme-seriph': ^0.25.0
@@ -108,8 +108,8 @@ catalog:
   resolve-global: ^2.0.0
   rimraf: ^6.0.1
   semver: ^7.6.3
-  shiki: ^2.0.0
-  shiki-magic-move: ^0.5.2
+  shiki: ^2.1.0
+  shiki-magic-move: ^1.0.0
   simple-git-hooks: ^2.11.1
   sirv: ^3.0.0
   source-map-js: ^1.2.1

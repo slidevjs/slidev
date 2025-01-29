@@ -2,7 +2,7 @@ import type { Awaitable } from '@antfu/utils'
 import type { KatexOptions } from 'katex'
 import type { MermaidConfig } from 'mermaid'
 import type * as monaco from 'monaco-editor'
-import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
+import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, LanguageInput, LanguageRegistration, MaybeArray } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
@@ -57,8 +57,7 @@ export type ShikiSetupReturn =
     & CodeOptionsThemes<BuiltinTheme>
     & CodeOptionsMeta
     & {
-      setup: (highlighter: Highlighter) => Awaitable<void>
-      langs: (LanguageInput | BuiltinLanguage)[]
+      langs: (MaybeArray<LanguageRegistration> | BuiltinLanguage)[] | Record<string, LanguageInput>
     }
   >
 
