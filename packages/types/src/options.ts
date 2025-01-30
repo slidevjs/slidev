@@ -1,4 +1,5 @@
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it/index.mjs'
+import type { KatexOptions } from 'katex'
 import type { HighlighterGeneric } from 'shiki/types.mjs'
 import type { SlidevData } from './types'
 
@@ -58,6 +59,7 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 export interface ResolvedSlidevUtils {
   shiki: HighlighterGeneric<any, any>
   shikiOptions: MarkdownItShikiOptions
+  katexOptions: KatexOptions | null
   indexHtml: string
   define: Record<string, string>
   iconsResolvePath: string[]
