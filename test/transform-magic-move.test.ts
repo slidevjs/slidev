@@ -28,7 +28,7 @@ Some text after
 
   const ctx = createTransformContext(code, shiki)
 
-  transformMagicMove(ctx)
+  await transformMagicMove(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
@@ -68,7 +68,7 @@ Some text after
 
   const ctx = createTransformContext(code, shiki)
 
-  transformMagicMove(ctx)
+  await transformMagicMove(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
