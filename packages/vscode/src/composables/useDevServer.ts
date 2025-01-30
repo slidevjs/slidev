@@ -37,7 +37,7 @@ export function useDevServer(project: SlidevProject) {
       env.remoteName != null ? '--remote' : '',
     ].filter(Boolean).join(' ')
     // eslint-disable-next-line no-template-curly-in-string
-    sendText(devCommand.value.replaceAll('${args}', args))
+    sendText(devCommand.value.replaceAll('${args}', args).replaceAll('${port}', `${port.value}`))
   }
 
   function stop() {
