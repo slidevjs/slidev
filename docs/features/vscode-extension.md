@@ -63,3 +63,18 @@ You can add glob patterns to the `slidev.include` configuration to include files
   "slidev.include": ["**/presentation.md"]
 }
 ```
+
+#### Dev Command {#dev-command}
+
+You can customize the command to start dev server by setting the `slidev.dev-command` configuration. The default value is `npm exec -c 'slidev ${args}'`.
+
+The configured command can contain placeholders:
+
+- `${args}`: All CLI arguments. e.g. `slides.md --port 3000 --remote`
+- `${port}`: The port number. e.g. `3000`
+
+Examples:
+
+- Global installation: `slidev ${args}`
+- For PNPM users, you can set it to `pnpm slidev ${args}`.
+- For [code-server](https://coder.com/docs/code-server/) users, you can set it to `pnpm slidev ${args} --base /proxy/${port}/`. This will make the dev server accessible at `http://localhost:8080/proxy/3000/`.

@@ -60,7 +60,7 @@ const colors = computed(() => {
   <span v-else-if="props.noclick" class="feature-tag">
     {{ formattedTag }}
   </span>
-  <a v-else class="feature-tag" :href="withBase(`/features/#tags=${tag}`)" target="_blank">
+  <a v-else class="feature-tag" :href="withBase(`/features/#tags=${tag}`)">
     {{ formattedTag }}
   </a>
 </template>

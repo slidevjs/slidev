@@ -26,7 +26,8 @@ const layoutIconMap = {
   'image-left': 'layout-sidebar-left',
   'image-right': 'layout-sidebar-right',
   'image': 'file-media', // TODO: a better icon
-  'intro': 'go-to-file',
+  'intro': 'debug-step-into',
+  'outro': 'debug-step-out',
   'none': 'layout-statusbar',
   'quote': 'quote',
   'section': 'symbol-module', // TODO: a better icon

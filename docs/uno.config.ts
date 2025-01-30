@@ -1,4 +1,4 @@
-import { defineConfig, presetAttributify, presetUno, presetWebFonts, transformerDirectives } from 'unocss'
+import { defineConfig, presetAttributify, presetIcons, presetUno, presetWebFonts, transformerDirectives } from 'unocss'
 
 export default defineConfig({
   presets: [
@@ -9,6 +9,7 @@ export default defineConfig({
         mono: ['IBM Plex Mono', 'monospace'],
       },
     }),
+    presetIcons(),
   ],
   transformers: [
     transformerDirectives(),

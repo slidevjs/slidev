@@ -9,6 +9,7 @@ import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
 import { getRoots, resolveEntry, toAtFS } from './resolver'
 import setupIndexHtml from './setups/indexHtml'
+import setupKatex from './setups/katex'
 import setupShiki from './setups/shiki'
 
 const debug = Debug('slidev:options')
@@ -82,6 +83,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
 
   return {
     ...await setupShiki(resolved.roots),
+    katexOptions: await setupKatex(resolved.roots),
     indexHtml: setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
