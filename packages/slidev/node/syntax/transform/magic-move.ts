@@ -40,8 +40,15 @@ export async function transformMagicMove(ctx: MarkdownTransformContext) {
             ...ctx.options.utils.shikiOptions,
             lang,
           }
-          const { tokens } = await codeToTokens(code, options)
-          return toKeyedTokens(code, tokens, JSON.stringify([lang, 'themes' in options ? options.themes : options.theme]), lineNumbers)
+          const { tokens, bg, fg, rootStyle, themeName } = await codeToTokens(code, options)
+          return {
+            ...toKeyedTokens(code, tokens, JSON.stringify([lang, 'themes' in options ? options.themes : options.theme]), lineNumbers),
+            bg,
+            fg,
+            rootStyle,
+            themeName,
+            lang,
+          }
         }))
         const compressed = lz.compressToBase64(JSON.stringify(steps))
         return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
