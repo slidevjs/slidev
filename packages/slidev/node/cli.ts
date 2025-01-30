@@ -99,16 +99,21 @@ cli.command(
       alias: 'f',
       default: false,
       type: 'boolean',
-      describe: 'force the optimizer to ignore the cache and re-bundle  ',
+      describe: 'force the optimizer to ignore the cache and re-bundle',
     })
     .option('bind', {
       type: 'string',
       default: '0.0.0.0',
       describe: 'specify which IP addresses the server should listen on in remote mode',
     })
+    .option('base', {
+      type: 'string',
+      describe: 'base URL. Example: /demo/',
+      default: '/',
+    })
     .strict()
     .help(),
-  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind }) => {
+  async ({ entry, theme, port: userPort, open, log, remote, tunnel, force, inspect, bind, base }) => {
     let server: ViteDevServer | undefined
     let port = 3030
 
@@ -126,7 +131,7 @@ cli.command(
     async function initServer() {
       if (server)
         await server.close()
-      const options = await resolveOptions({ entry, remote, theme, inspect }, 'dev')
+      const options = await resolveOptions({ entry, remote, theme, inspect, base }, 'dev')
       const host = remote !== undefined ? bind : 'localhost'
       port = userPort || await getPort({
         port: 3030,
@@ -150,6 +155,7 @@ cli.command(
             force,
           },
           logLevel: log as LogLevel,
+          base,
         },
         {
           async loadData(loadedSource) {
@@ -201,7 +207,7 @@ cli.command(
       if (remote)
         publicIp = await import('public-ip').then(r => r.publicIpv4())
 
-      lastRemoteUrl = printInfo(options, port, remote, tunnelUrl, publicIp)
+      lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
     }
 
     async function openTunnel(port: number) {
@@ -225,7 +231,7 @@ cli.command(
         name: 'o',
         fullname: 'open',
         action() {
-          openBrowser(`http://localhost:${port}`)
+          openBrowser(`http://localhost:${port}${base}`)
         },
       },
       {
@@ -334,7 +340,7 @@ cli.command(
     })
     .option('base', {
       type: 'string',
-      describe: 'output base',
+      describe: 'output base. Example: /demo/',
     })
     .option('download', {
       alias: 'd',
@@ -353,7 +359,7 @@ cli.command(
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download }, 'build')
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base }, 'build')
 
       printInfo(options)
       await build(
@@ -621,10 +627,13 @@ function exportOptions<T>(args: Argv<T>) {
 function printInfo(
   options: ResolvedSlidevOptions,
   port?: number,
+  base?: string,
   remote?: string,
   tunnelUrl?: string,
   publicIp?: string,
 ) {
+  const baseUrl = port && `http://localhost:${bold(port + (base?.slice(0, -1) || ''))}`
+
   console.log()
   console.log()
   console.log(`  ${cyan('●') + blue('■') + yellow('▲')}`)
@@ -637,22 +646,22 @@ function printInfo(
   console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
-  if (port) {
+  if (baseUrl) {
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
     const overviewPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}overview${query}/`
     console.log()
-    console.log(`${dim('  public slide show ')}  > ${cyan(`http://localhost:${bold(port)}/`)}`)
+    console.log(`${dim('  public slide show ')}  > ${cyan(`${baseUrl}/`)}`)
     if (query)
-      console.log(`${dim('  private slide show ')} > ${cyan(`http://localhost:${bold(port)}/${query}`)}`)
+      console.log(`${dim('  private slide show ')} > ${cyan(`${baseUrl}/${query}`)}`)
     if (options.utils.define.__SLIDEV_FEATURE_PRESENTER__)
-      console.log(`${dim('  presenter mode ')}     > ${blue(`http://localhost:${bold(port)}${presenterPath}`)}`)
-    console.log(`${dim('  slides overview ')}    > ${blue(`http://localhost:${bold(port)}${overviewPath}`)}`)
+      console.log(`${dim('  presenter mode ')}     > ${blue(`${baseUrl}${presenterPath}`)}`)
+    console.log(`${dim('  slides overview ')}    > ${blue(`${baseUrl}${overviewPath}`)}`)
     if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__)
-      console.log(`${dim('  export slides')}       > ${blue(`http://localhost:${bold(port)}/export/`)}`)
+      console.log(`${dim('  export slides')}       > ${blue(`${baseUrl}/export/`)}`)
     if (options.inspect)
-      console.log(`${dim('  vite inspector')}      > ${yellow(`http://localhost:${bold(port)}/__inspect/`)}`)
+      console.log(`${dim('  vite inspector')}      > ${yellow(`${baseUrl}/__inspect/`)}`)
 
     let lastRemoteUrl = ''
 

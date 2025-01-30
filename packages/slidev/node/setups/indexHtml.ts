@@ -13,7 +13,7 @@ function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
 }
 
-export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data }: Omit<ResolvedSlidevOptions, 'utils'>): string {
+export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): string {
   let main = readFileSync(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
@@ -55,8 +55,9 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
   if (data.headmatter.lang)
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
 
+  const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
   main = main
-    .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
+    .replace('__ENTRY__', baseInDev + toAtFS(join(clientRoot, 'main.ts')))
     .replace('<!-- head -->', head)
     .replace('<!-- body -->', body)
 
