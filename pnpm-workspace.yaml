@@ -15,9 +15,9 @@ catalog:
   '@iconify-json/svg-spinners': ^1.2.2
   '@iconify/json': ^2.2.300
   '@lillallol/outline-pdf': ^4.0.0
+  '@shikijs/engine-javascript': ^2.1.0
   '@shikijs/markdown-it': ^2.1.0
   '@shikijs/monaco': ^2.1.0
-  '@shikijs/engine-javascript': ^2.1.0
   '@shikijs/twoslash': ^2.1.0
   '@shikijs/vitepress-twoslash': ^2.1.0
   '@slidev/rough-notation': ^0.1.0
