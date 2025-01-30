@@ -5,7 +5,6 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 import MarkdownItMdc from 'markdown-it-mdc'
-import setupKatex from '../../setups/katex'
 import MarkdownItEscapeInlineCode from './markdown-it-escape-code'
 import MarkdownItKatex from './markdown-it-katex'
 import MarkdownItLink from './markdown-it-link'
@@ -13,7 +12,7 @@ import MarkdownItShiki from './markdown-it-shiki'
 import MarkdownItVDrag from './markdown-it-v-drag'
 
 export async function useMarkdownItPlugins(md: MarkdownItAsync, options: ResolvedSlidevOptions, markdownTransformMap: Map<string, MagicString>) {
-  const { roots, data: { features, config } } = options
+  const { data: { features, config }, utils: { katexOptions } } = options
 
   if (config.highlighter === 'shiki') {
     md.use(await MarkdownItShiki(options))
@@ -24,7 +23,7 @@ export async function useMarkdownItPlugins(md: MarkdownItAsync, options: Resolve
   md.use(MarkdownItFootnote)
   md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
   if (features.katex)
-    md.use(MarkdownItKatex, await setupKatex(roots))
+    md.use(MarkdownItKatex, katexOptions)
   md.use(MarkdownItVDrag, markdownTransformMap)
   if (config.mdc)
     md.use(MarkdownItMdc)

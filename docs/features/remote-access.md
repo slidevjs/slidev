@@ -14,13 +14,13 @@ You can run your presentation with remote access by using the `--remote` flag:
 
 ::: code-group
 
-```bash [npm]
-npm run dev -- --remote
+```bash [pnpm]
+pnpm dev --remote
 # i.e. slidev --remote
 ```
 
-```bash [pnpm]
-pnpm dev -- --remote
+```bash [npm]
+npm run dev -- --remote
 # i.e. slidev --remote
 ```
 
@@ -41,13 +41,13 @@ You can open a [Cloudflare Quick Tunnels](https://developers.cloudflare.com/clou
 
 ::: code-group
 
-```bash [npm]
-npm run dev -- --remote --tunnel
+```bash [pnpm]
+pnpm dev -- --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 
-```bash [pnpm]
-pnpm dev -- --remote --tunnel
+```bash [npm]
+npm run dev -- --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 

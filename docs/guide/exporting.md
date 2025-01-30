@@ -26,12 +26,12 @@ Exporting to PDF, PPTX, or PNG relies on [Playwright](https://playwright.dev) fo
 
 ::: code-group
 
-```bash [npm]
-$ npm i -D playwright-chromium
-```
-
 ```bash [pnpm]
 $ pnpm add -D playwright-chromium
+```
+
+```bash [npm]
+$ npm i -D playwright-chromium
 ```
 
 ```bash [yarn]

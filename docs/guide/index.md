@@ -46,12 +46,19 @@ Run the following command to create a new Slidev project locally:
 
 ::: code-group
 
-```bash [npm]
-npm init slidev@latest
+```bash [pnpm]
+# If you haven't installed pnpm
+npm i -g pnpm
+
+pnpm create slidev
 ```
 
-```bash [pnpm]
-pnpm create slidev
+```bash [npm]
+# Not recommended -
+# NPM will download the packages each time you create a new project,
+# which is slow and takes up a lot of space
+
+npm init slidev@latest
 ```
 
 ```bash [yarn]
@@ -68,12 +75,12 @@ If you prefer to have a single Markdown file as your slides, you can install the
 
 ::: code-group
 
-```bash [npm]
-npm i -g @slidev/cli
-```
-
 ```bash [pnpm]
 pnpm i -g @slidev/cli
+```
+
+```bash [npm]
+npm i -g @slidev/cli
 ```
 
 ```bash [yarn]

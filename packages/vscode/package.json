@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "51.0.2",
+  "version": "51.1.0",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -194,7 +194,7 @@
         "command": "slidev.stop-dev",
         "category": "Slidev",
         "title": "Stop the dev server",
-        "icon": "$(debug-stop)"
+        "icon": "$(stop-circle)"
       },
       {
         "command": "slidev.open-in-browser",
@@ -239,11 +239,6 @@
         "title": "Unsync preview window with editor cursor",
         "icon": "$(lock)",
         "enablement": "slidev:preview:sync"
-      },
-      {
-        "command": "slidev.remove-slide",
-        "category": "Slidev",
-        "title": "Remove this slide"
       }
     ],
     "menus": {
@@ -254,10 +249,6 @@
         },
         {
           "command": "slidev.set-as-active",
-          "when": "false"
-        },
-        {
-          "command": "slidev.remove-slide",
           "when": "false"
         }
       ],
@@ -338,16 +329,13 @@
         },
         {
           "command": "slidev.remove-entry",
-          "when": "view == slidev-projects-tree&& viewItem =~ /<project>/",
+          "when": "view == slidev-projects-tree && viewItem =~ /<project>/",
           "group": "inline@2"
         },
         {
           "command": "slidev.stop-dev",
-          "when": "view == slidev-projects-tree && viewItem =~ /<up>/"
-        },
-        {
-          "command": "slidev.remove-slide",
-          "when": "view == slidev-slides-tree"
+          "when": "view == slidev-projects-tree && viewItem =~ /<up>/",
+          "group": "inline"
         }
       ]
     },
@@ -397,6 +385,12 @@
           "scope": "window",
           "description": "A glob pattern to exclude slides entries",
           "default": "**/node_modules/**"
+        },
+        "slidev.dev-command": {
+          "type": "string",
+          "scope": "window",
+          "description": "The command to start Slidev dev server. See https://sli.dev/features/vscode-extension#dev-command",
+          "default": "npm exec -c 'slidev ${args}'"
         }
       }
     },

@@ -7,13 +7,13 @@ import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
-import { generateGoogleFontsUrl } from '../utils'
+import { generateCoollabsFontsUrl, generateGoogleFontsUrl } from '../utils'
 
 function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
 }
 
-export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data }: Omit<ResolvedSlidevOptions, 'utils'>): string {
+export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): string {
   let main = readFileSync(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
@@ -49,14 +49,20 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
   if (data.features.tweet)
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
 
-  if (data.config.fonts.webfonts.length && data.config.fonts.provider !== 'none')
-    head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
+  if (data.config.fonts.webfonts.length) {
+    const { provider } = data.config.fonts
+    if (provider === 'google')
+      head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
+    else if (provider === 'coollabs')
+      head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
+  }
 
   if (data.headmatter.lang)
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
 
+  const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
   main = main
-    .replace('__ENTRY__', toAtFS(join(clientRoot, 'main.ts')))
+    .replace('__ENTRY__', baseInDev + toAtFS(join(clientRoot, 'main.ts')))
     .replace('<!-- head -->', head)
     .replace('<!-- body -->', body)
 

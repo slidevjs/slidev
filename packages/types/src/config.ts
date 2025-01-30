@@ -18,7 +18,7 @@ export interface ResolvedFontOptions {
   serif: string[]
   weights: string[]
   italic: boolean
-  provider: 'none' | 'google'
+  provider: 'none' | 'google' | 'coollabs'
   webfonts: string[]
   local: string[]
 }

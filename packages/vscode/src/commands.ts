@@ -1,8 +1,5 @@
-import type { SlidevProject } from './projects'
-import type { SlidesTreeNode } from './views/slidesTree'
 import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
-import { save as saveSlidevMarkdown } from '@slidev/parser/fs'
 import { useCommand } from 'reactive-vscode'
 import { Position, Range, Selection, TextEditorRevealType, Uri, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
@@ -45,19 +42,24 @@ export function useCommands() {
     }
   })
 
-  useCommand('slidev.remove-entry', async (project: SlidevProject) => {
-    const entry = project.entry
+  useCommand('slidev.remove-entry', async (node: any) => {
+    const entry = slash(node.treeItem.resourceUri.fsPath)
     if (activeEntry.value === entry)
       activeEntry.value = null
     projects.delete(entry)
   })
 
-  useCommand('slidev.set-as-active', async (project: SlidevProject) => {
-    activeEntry.value = project.entry
+  useCommand('slidev.set-as-active', async (node: any) => {
+    const entry = slash(node.treeItem.resourceUri.fsPath)
+    activeEntry.value = entry
   })
 
-  useCommand('slidev.stop-dev', async (project: SlidevProject) => {
-    const { stop } = useDevServer(project)
+  useCommand('slidev.stop-dev', async (node: any) => {
+    const entry = node ? slash(node.treeItem.resourceUri.fsPath) : activeEntry.value
+    if (!entry)
+      return
+    const project = projects.get(entry)
+    const { stop } = useDevServer(project!)
     stop()
   })
 
@@ -153,10 +155,4 @@ export function useCommands() {
 
   useCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
   useCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
-
-  useCommand('slidev.remove-slide', async ({ slide }: SlidesTreeNode) => {
-    const md = activeSlidevData.value!.markdownFiles[slide.filepath]
-    md.slides.splice(md.slides.indexOf(slide), 1)
-    await saveSlidevMarkdown(md)
-  })
 }
