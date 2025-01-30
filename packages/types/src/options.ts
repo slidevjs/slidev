@@ -1,6 +1,6 @@
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { KatexOptions } from 'katex'
-import type { ShorthandsBundle } from 'shiki/core'
+import type { CodeOptionsThemes, ShorthandsBundle } from 'shiki/core'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -58,7 +58,7 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 
 export interface ResolvedSlidevUtils {
   shiki: ShorthandsBundle<string, string>
-  shikiOptions: MarkdownItShikiOptions
+  shikiOptions: MarkdownItShikiOptions & CodeOptionsThemes
   katexOptions: KatexOptions | null
   indexHtml: string
   define: Record<string, string>
