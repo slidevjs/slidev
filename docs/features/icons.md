@@ -27,12 +27,12 @@ The naming follows [Iconify](https://iconify.design/)'s convention of `{collecti
 pnpm add @iconify-json/[the-collection-you-want]
 ```
 
-```bash [yarn]
-yarn add @iconify-json/[the-collection-you-want]
-```
-
 ```bash [npm]
 npm install @iconify-json/[the-collection-you-want]
+```
+
+```bash [yarn]
+yarn add @iconify-json/[the-collection-you-want]
 ```
 
 :::
