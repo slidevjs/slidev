@@ -632,7 +632,10 @@ function printInfo(
   tunnelUrl?: string,
   publicIp?: string,
 ) {
-  const baseUrl = port && `http://localhost:${bold(port + (base?.slice(0, -1) || ''))}`
+  if (base && (!base.startsWith('/') || !base.endsWith('/'))) {
+    console.error('Base URL must start and end with a slash "/"')
+    process.exit(1)
+  }
 
   console.log()
   console.log()
@@ -646,7 +649,10 @@ function printInfo(
   console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
-  if (baseUrl) {
+  if (port) {
+    const baseText = base?.slice(0, -1) || ''
+    const portAndBase = port + baseText
+    const baseUrl = `http://localhost:${bold(portAndBase)}`
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
@@ -670,17 +676,17 @@ function printInfo(
         .forEach(v => (v || [])
           .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            lastRemoteUrl = `http://${address}:${port}${entryPath}`
+            lastRemoteUrl = `http://${address}:${portAndBase}${entryPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
           }))
 
       if (publicIp) {
-        lastRemoteUrl = `http://${publicIp}:${port}${entryPath}`
+        lastRemoteUrl = `http://${publicIp}:${portAndBase}${entryPath}`
         console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
       }
 
       if (tunnelUrl) {
-        lastRemoteUrl = `${tunnelUrl}${entryPath}`
+        lastRemoteUrl = `${tunnelUrl}${baseText}${entryPath}`
         console.log(`${dim('  remote via tunnel')}   > ${yellow(lastRemoteUrl)}`)
       }
     }
