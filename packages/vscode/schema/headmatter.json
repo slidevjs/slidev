@@ -85,23 +85,10 @@
           "default": 1
         },
         "dragPos": {
-          "anyOf": [
-            {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            }
-          ],
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
           "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
         },
@@ -896,23 +883,10 @@
           "default": 1
         },
         "dragPos": {
-          "anyOf": [
-            {
-              "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            }
-          ],
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
           "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
         },

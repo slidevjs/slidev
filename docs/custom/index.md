@@ -153,7 +153,7 @@ transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProp
 zoom: 1
 # used as positions of draggable elements
 # Learn more: https://sli.dev/features/draggable.html
-dragPos: {} # type: Record<string, string> | Record<string, string>[]
+dragPos: {} # type: Record<string, string>
 ---
 ```
 
