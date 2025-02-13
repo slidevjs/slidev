@@ -326,7 +326,7 @@ export interface Frontmatter extends TransitionOptions {
    *
    * See https://sli.dev/features/draggable
    */
-  dragPos?: Record<string, string> | Record<string, string>[]
+  dragPos?: Record<string, string>
   /**
    * Includes a markdown file
    *
