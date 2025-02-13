@@ -1,7 +1,7 @@
 import type { BuiltinLayouts } from './builtin-layouts'
 import type { SlidevThemeConfig } from './types'
 
-export interface Headmatter extends HeadmatterConfig, Frontmatter {
+export interface Headmatter extends HeadmatterConfig, Omit<Frontmatter, 'title'> {
   /**
    * Default frontmatter options applied to all slides
    */
@@ -296,18 +296,23 @@ export interface Frontmatter extends TransitionOptions {
    */
   disabled?: boolean
   /**
-   * hide the slide for the `<Toc>` components
+   * Hide the slide for the `<Toc>` components
    *
    * See https://sli.dev/builtin/components#toc
    */
   hideInToc?: boolean
   /**
-   * Override the title level for the <TitleRenderer> and <Toc> components
+   * Override the title for the `<TitleRenderer>` and `<Toc>` components
+   * Only if `title` has also been declared
+   */
+  title?: string
+  /**
+   * Override the title level for the `<TitleRenderer>` and `<Toc>` components
    * Only if `title` has also been declared
    */
   level?: number
   /**
-   * Create a route alias that can be used in the URL or with the <Link> component
+   * Create a route alias that can be used in the URL or with the `<Link>` component
    */
   routeAlias?: string
   /**
@@ -321,7 +326,7 @@ export interface Frontmatter extends TransitionOptions {
    *
    * See https://sli.dev/features/draggable
    */
-  dragPos?: Record<string, string>[]
+  dragPos?: Record<string, string> | Record<string, string>[]
   /**
    * Includes a markdown file
    *
