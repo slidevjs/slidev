@@ -85,11 +85,11 @@
     "markdown-it": "catalog:",
     "markdown-it-footnote": "catalog:",
     "markdown-it-mdc": "catalog:",
-    "micromatch": "catalog:",
     "mlly": "catalog:",
     "monaco-editor": "catalog:",
     "open": "catalog:",
     "pdf-lib": "catalog:",
+    "picomatch": "catalog:",
     "plantuml-encoder": "catalog:",
     "postcss-nested": "catalog:",
     "pptxgenjs": "catalog:",
@@ -121,7 +121,7 @@
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:",
-    "@types/micromatch": "catalog:",
+    "@types/picomatch": "catalog:",
     "@types/plantuml-encoder": "catalog:"
   }
 }
