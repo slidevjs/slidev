@@ -19,7 +19,7 @@ const needCopyFiles = {
 
 async function main() {
   if (shouldCreatePagesDict())
-    await fs.ensureDir(__pagesDir)
+    await fs.mkdir(__pagesDir, { recursive: true })
 
   await Promise.all(
     Object.keys(needCopyFiles).map(async (relativeTargetPath) => {

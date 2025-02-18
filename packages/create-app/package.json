@@ -16,6 +16,10 @@
   "bin": {
     "create-slidev": "index.mjs"
   },
+  "files": [
+    "index.mjs",
+    "template"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
