@@ -130,7 +130,7 @@ catalog:
   vite-plugin-static-copy: ^2.2.0
   vite-plugin-vue-server-ref: ^1.0.0
   vitefu: ^1.0.5
-  vitepress: ^1.6.3
+  vitepress: ^2.0.0-alpha.2
   vitest: ^3.0.6
   volar-service-prettier: ^0.0.62
   volar-service-yaml: ^0.0.62
