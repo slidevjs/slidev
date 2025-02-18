@@ -24,7 +24,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "kolorist": "catalog:",
+    "ansis": "catalog:",
     "minimist": "catalog:",
     "prompts": "catalog:",
     "tinyexec": "catalog:"

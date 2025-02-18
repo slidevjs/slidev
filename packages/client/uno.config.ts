@@ -4,7 +4,7 @@ import {
   defineConfig,
   presetAttributify,
   presetTypography,
-  presetUno,
+  presetWind3,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -51,7 +51,7 @@ export default defineConfig({
     variantMatcher('backward', input => ({ prefix: `.slidev-nav-go-backward ${input.prefix}` })),
   ],
   presets: [
-    presetUno(),
+    presetWind3(),
     presetAttributify(),
     presetTypography(),
     /* Preset Icons is added in ../node/setups/unocss.ts */

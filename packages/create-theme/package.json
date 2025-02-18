@@ -20,7 +20,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "kolorist": "catalog:",
+    "ansis": "catalog:",
     "minimist": "catalog:",
     "prompts": "catalog:"
   }
