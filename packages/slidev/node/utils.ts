@@ -1,9 +1,11 @@
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
-import type { Token } from 'markdown-it'
+import type MarkdownIt from 'markdown-it'
 import type { Connect } from 'vite'
 import { fileURLToPath } from 'node:url'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
+
+type Token = ReturnType<MarkdownIt['parseInline']>[number]
 
 type Jiti = ReturnType<typeof createJiti>
 let jiti: Jiti | undefined

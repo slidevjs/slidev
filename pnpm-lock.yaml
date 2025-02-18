@@ -75,9 +75,6 @@ catalogs:
     '@types/file-saver':
       specifier: ^2.0.7
       version: 2.0.7
-    '@types/fs-extra':
-      specifier: ^11.0.4
-      version: 11.0.4
     '@types/js-yaml':
       specifier: ^4.0.9
       version: 4.0.9
@@ -195,9 +192,6 @@ catalogs:
     floating-vue:
       specifier: ^5.2.2
       version: 5.2.2
-    fs-extra:
-      specifier: ^11.3.0
-      version: 11.3.0
     fuse.js:
       specifier: ^7.1.0
       version: 7.1.0
@@ -461,9 +455,6 @@ importers:
       '@types/file-saver':
         specifier: 'catalog:'
         version: 2.0.7
-      '@types/fs-extra':
-        specifier: 'catalog:'
-        version: 11.0.4
       '@types/js-yaml':
         specifier: 'catalog:'
         version: 4.0.9
@@ -672,9 +663,6 @@ importers:
       '@slidev/types':
         specifier: workspace:*
         version: link:../packages/types
-      '@types/fs-extra':
-        specifier: 'catalog:'
-        version: 11.0.4
       '@types/node':
         specifier: 'catalog:'
         version: 22.13.4
@@ -684,9 +672,6 @@ importers:
       fast-glob:
         specifier: 'catalog:'
         version: 3.3.3
-      fs-extra:
-        specifier: 'catalog:'
-        version: 11.3.0
       gray-matter:
         specifier: 'catalog:'
         version: 4.0.3
@@ -940,9 +925,6 @@ importers:
       fast-glob:
         specifier: 'catalog:'
         version: 3.3.3
-      fs-extra:
-        specifier: 'catalog:'
-        version: 11.3.0
       get-port-please:
         specifier: 'catalog:'
         version: 3.1.2
@@ -8155,6 +8137,7 @@ snapshots:
     dependencies:
       '@types/jsonfile': 6.1.4
       '@types/node': 22.13.4
+    optional: true
 
   '@types/geojson@7946.0.14': {}
 
@@ -8171,6 +8154,7 @@ snapshots:
   '@types/jsonfile@6.1.4':
     dependencies:
       '@types/node': 22.13.4
+    optional: true
 
   '@types/katex@0.16.7': {}
 

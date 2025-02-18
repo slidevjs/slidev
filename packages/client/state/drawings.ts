@@ -1,3 +1,4 @@
+// @ts-expect-error - virtual module
 import serverDrawingState from 'server-reactive:drawings?diff'
 import { createSyncState } from './syncState'
 

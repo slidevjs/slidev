@@ -2,6 +2,7 @@ import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/ty
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { Argv } from 'yargs'
 import { exec } from 'node:child_process'
+import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
@@ -9,7 +10,6 @@ import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
 import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } from 'ansis'
 import equal from 'fast-deep-equal'
-import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
 import openBrowser from 'open'
 import yargs from 'yargs'
@@ -420,9 +420,13 @@ cli.command(
           }
           const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
-          await fs.copy(root, path.resolve(dir), {
-            filter: i => !/node_modules|.git/.test(path.relative(root, i)),
-          })
+          await fs.cp(
+            root,
+            path.resolve(dir),
+            {
+              filter: i => !/node_modules|.git/.test(path.relative(root, i)),
+            },
+          )
 
           const dirPath = `./${dir}`
           const firstSlide = data.entry.slides[0]

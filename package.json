@@ -39,7 +39,6 @@
     "@types/connect": "catalog:",
     "@types/debug": "catalog:",
     "@types/file-saver": "catalog:",
-    "@types/fs-extra": "catalog:",
     "@types/js-yaml": "catalog:",
     "@types/katex": "catalog:",
     "@types/markdown-it": "catalog:",

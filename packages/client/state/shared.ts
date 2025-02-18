@@ -1,3 +1,4 @@
+// @ts-expect-error - virtual module
 import serverState from 'server-reactive:nav'
 import { createSyncState } from './syncState'
 

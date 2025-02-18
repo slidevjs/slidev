@@ -1,5 +1,6 @@
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { clearUndefined, slash } from '@antfu/utils'
@@ -7,7 +8,6 @@ import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import { parseRangeString } from '@slidev/parser/core'
 import { blue, cyan, dim, green, yellow } from 'ansis'
 import { Presets, SingleBar } from 'cli-progress'
-import fs from 'fs-extra'
 import { resolve } from 'mlly'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
@@ -393,7 +393,8 @@ export async function exportSlides({
   async function genPagePngOnePiece(writeToDisk: boolean) {
     const result: ExportPngResult[] = []
     await go('print')
-    await fs.emptyDir(output)
+    await fs.rm(output, { force: true, recursive: true })
+    await fs.mkdir(output, { recursive: true })
     const slideContainers = page.locator('.print-slide-container')
     const count = await slideContainers.count()
     for (let i = 0; i < count; i++) {

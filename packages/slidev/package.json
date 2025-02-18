@@ -71,7 +71,6 @@
     "debug": "catalog:",
     "fast-deep-equal": "catalog:",
     "fast-glob": "catalog:",
-    "fs-extra": "catalog:",
     "get-port-please": "catalog:",
     "global-directory": "catalog:",
     "htmlparser2": "catalog:",

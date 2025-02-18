@@ -1,7 +1,8 @@
 import type MagicString from 'magic-string-stack'
 import type MarkdownIt from 'markdown-it'
-import type { Token } from 'markdown-it'
 import { SourceMapConsumer } from 'source-map-js'
+
+type Token = ReturnType<MarkdownIt['parseInline']>[number]
 
 const dragComponentRegex = /<(v-?drag-?\w*)([\s>])/i
 const dragDirectiveRegex = /(?<![</\w])v-drag(=".*?")?/i

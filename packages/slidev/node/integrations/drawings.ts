@@ -1,7 +1,8 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
+import { existsSync } from 'node:fs'
+import fs from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
 import fg from 'fast-glob'
-import fs from 'fs-extra'
 
 function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined {
   return options.data.config.drawings.persist
@@ -14,7 +15,7 @@ function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined 
 
 export async function loadDrawings(options: ResolvedSlidevOptions) {
   const dir = resolveDrawingsDir(options)
-  if (!dir || !fs.existsSync(dir))
+  if (!dir || !existsSync(dir))
     return {}
 
   const files = await fg('*.svg', {
@@ -46,7 +47,7 @@ export async function writeDrawings(options: ResolvedSlidevOptions, drawing: Rec
   const height = Math.round(width / options.data.config.aspectRatio)
   const SVG_HEAD = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`
 
-  await fs.ensureDir(dir)
+  await fs.mkdir(dir, { recursive: true })
 
   return Promise.all(
     Object.entries(drawing).map(async ([key, value]) => {

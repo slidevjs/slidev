@@ -1,9 +1,9 @@
 // Ported from https://github.com/vuejs/vitepress/blob/main/src/node/markdown/plugins/snippet.ts
 
 import type { MarkdownTransformContext } from '@slidev/types'
+import fs from 'node:fs'
 import path from 'node:path'
 import { slash } from '@antfu/utils'
-import fs from 'fs-extra'
 import lz from 'lz-string'
 import { monacoWriterWhitelist } from '../../vite/monacoWrite'
 

@@ -27,7 +27,6 @@ catalog:
   '@types/connect': ^3.4.38
   '@types/debug': ^4.1.12
   '@types/file-saver': ^2.0.7
-  '@types/fs-extra': ^11.0.4
   '@types/js-yaml': ^4.0.9
   '@types/katex': ^0.16.7
   '@types/markdown-it': ^14.1.2
@@ -66,7 +65,6 @@ catalog:
   fast-glob: ^3.3.3
   file-saver: ^2.0.5
   floating-vue: ^5.2.2
-  fs-extra: ^11.3.0
   fuse.js: ^7.1.0
   get-port-please: ^3.1.2
   global-directory: ^4.0.1
