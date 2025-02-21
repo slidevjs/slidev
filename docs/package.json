@@ -1,9 +1,8 @@
 {
   "name": "docs",
   "type": "module",
-  "version": "51.1.1",
+  "version": "51.2.2",
   "private": true,
-  "packageManager": "pnpm@10.4.0",
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
@@ -20,11 +19,9 @@
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
     "@unocss/reset": "catalog:",
     "fast-glob": "catalog:",
-    "fs-extra": "catalog:",
     "gray-matter": "catalog:",
     "markdown-it": "catalog:",
     "shiki": "catalog:",

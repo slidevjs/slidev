@@ -1,6 +1,7 @@
 import type { SlidevThemeMeta } from '@slidev/types'
+import { existsSync } from 'node:fs'
+import fs from 'node:fs/promises'
 import { join } from 'node:path'
-import fs from 'fs-extra'
 import { satisfies } from 'semver'
 import { version } from '../../package.json'
 import { createResolver } from '../resolver'
@@ -18,10 +19,10 @@ export const resolveTheme = createResolver('theme', officialThemes)
 
 export async function getThemeMeta(name: string, root: string) {
   const path = join(root, 'package.json')
-  if (!fs.existsSync(path))
+  if (!existsSync(path))
     return {}
 
-  const { slidev = {}, engines = {} } = await fs.readJSON(path)
+  const { slidev = {}, engines = {} } = JSON.parse(await fs.readFile(path, 'utf-8'))
 
   if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
     throw new Error(`[slidev] theme "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)

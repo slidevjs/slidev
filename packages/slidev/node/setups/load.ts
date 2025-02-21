@@ -1,7 +1,7 @@
 import type { Awaitable } from '@antfu/utils'
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { deepMergeWithArray } from '@antfu/utils'
-import fs from 'fs-extra'
 import { loadModule } from '../utils'
 
 export async function loadSetups<F extends (...args: any) => any>(
@@ -13,7 +13,7 @@ export async function loadSetups<F extends (...args: any) => any>(
   const returns: Awaited<ReturnType<F>>[] = []
   for (const root of roots) {
     const path = resolve(root, 'setup', filename)
-    if (fs.existsSync(path)) {
+    if (existsSync(path)) {
       const { default: setup } = await loadModule(path) as { default: F }
       const ret = await setup(...args)
       if (ret)

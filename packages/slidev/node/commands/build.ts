@@ -1,9 +1,10 @@
 import type { BuildArgs, ResolvedSlidevOptions } from '@slidev/types'
 import type { InlineConfig, ResolvedConfig } from 'vite'
+import { existsSync } from 'node:fs'
+import fs from 'node:fs/promises'
 import http from 'node:http'
 import { resolve } from 'node:path'
 import connect from 'connect'
-import fs from 'fs-extra'
 import sirv from 'sirv'
 import { build as viteBuild } from 'vite'
 import { resolveViteConfigs } from './shared'
@@ -16,7 +17,7 @@ export async function build(
   const indexPath = resolve(options.userRoot, 'index.html')
 
   let originalIndexHTML: string | undefined
-  if (fs.existsSync(indexPath))
+  if (existsSync(indexPath))
     originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
 
   await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
@@ -57,7 +58,7 @@ export async function build(
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
   // _redirects for SPA
   const redirectsPath = resolve(outDir, '_redirects')
-  if (!fs.existsSync(redirectsPath))
+  if (!existsSync(redirectsPath))
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
   if ([true, 'true', 'auto'].includes(options.data.config.download)) {

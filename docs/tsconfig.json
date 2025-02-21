@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ESNext",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
     "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "types": [
       "vite/client",

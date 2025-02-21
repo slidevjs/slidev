@@ -1,5 +1,5 @@
+import fs from 'node:fs/promises'
 import { resolve } from 'node:path'
-import fs from 'fs-extra'
 import { satisfies } from 'semver'
 import { version } from '../../package.json'
 import { createResolver, getRoots } from '../resolver'
@@ -15,7 +15,7 @@ export async function resolveAddons(addonsInConfig: string[]) {
     if (!pkgRoot)
       return
     resolved.push(pkgRoot)
-    const { slidev = {}, engines = {} } = await fs.readJSON(resolve(pkgRoot, 'package.json'))
+    const { slidev = {}, engines = {} } = JSON.parse(await fs.readFile(resolve(pkgRoot, 'package.json'), 'utf-8'))
 
     if (engines.slidev && !satisfies(version, engines.slidev, { includePrerelease: true }))
       throw new Error(`[slidev] addon "${name}" requires Slidev version range "${engines.slidev}" but found "${version}"`)
