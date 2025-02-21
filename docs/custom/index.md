@@ -147,15 +147,17 @@ src: undefined # or string
 title: undefined # or string
 # defines the transition between the slide and the next one
 # Learn more: https://sli.dev/guide/animations.html#slide-transitions
-transition: undefined # or string | TransitionProps
+transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
 # custom zoom scale
 # useful for slides with a lot of content
 zoom: 1
 # used as positions of draggable elements
 # Learn more: https://sli.dev/features/draggable.html
-dragPos: {} # type: Record<string,string>
+dragPos: {} # type: Record<string, string>
 ---
 ```
+
+Check out the [type definition](https://github.com/slidevjs/slidev/blob/main/packages/types/src/frontmatter.ts#L260) for more details.
 
 ## Directory Structure
 

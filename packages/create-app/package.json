@@ -1,7 +1,7 @@
 {
   "name": "create-slidev",
   "type": "module",
-  "version": "51.1.0",
+  "version": "51.2.2",
   "description": "Create starter template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -16,6 +16,10 @@
   "bin": {
     "create-slidev": "index.mjs"
   },
+  "files": [
+    "index.mjs",
+    "template"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
@@ -24,7 +28,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "kolorist": "catalog:",
+    "ansis": "catalog:",
     "minimist": "catalog:",
     "prompts": "catalog:",
     "tinyexec": "catalog:"

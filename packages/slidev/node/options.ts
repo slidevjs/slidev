@@ -3,7 +3,7 @@ import path from 'node:path'
 import { objectMap, uniq } from '@antfu/utils'
 import Debug from 'debug'
 import fg from 'fast-glob'
-import mm from 'micromatch'
+import pm from 'picomatch'
 import { resolveAddons } from './integrations/addons'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
@@ -76,7 +76,7 @@ export async function resolveOptions(
 
 export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'utils'>): Promise<ResolvedSlidevUtils> {
   const monacoTypesIgnorePackagesMatches = (resolved.data.config.monacoTypesIgnorePackages || [])
-    .map(i => mm.matcher(i))
+    .map(i => pm.makeRe(i))
 
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
@@ -87,7 +87,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
     indexHtml: setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
-    isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i(pkg)),
+    isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i.test(pkg)),
     getLayouts: () => {
       const now = Date.now()
       if (now - _layouts_cache_time < 2000)

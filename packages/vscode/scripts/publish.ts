@@ -1,5 +1,5 @@
+import fs from 'node:fs/promises'
 import process from 'node:process'
-import fs from 'fs-extra'
 import { x } from 'tinyexec'
 
 async function publish() {

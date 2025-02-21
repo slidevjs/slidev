@@ -2,15 +2,15 @@ import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/ty
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { Argv } from 'yargs'
 import { exec } from 'node:child_process'
+import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
 import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
+import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } from 'ansis'
 import equal from 'fast-deep-equal'
-import fs from 'fs-extra'
 import { getPort } from 'get-port-please'
-import { blue, bold, cyan, dim, gray, green, lightCyan, underline, yellow } from 'kolorist'
 import openBrowser from 'open'
 import yargs from 'yargs'
 import { version } from '../package.json'
@@ -420,9 +420,13 @@ cli.command(
           }
           const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
-          await fs.copy(root, path.resolve(dir), {
-            filter: i => !/node_modules|.git/.test(path.relative(root, i)),
-          })
+          await fs.cp(
+            root,
+            path.resolve(dir),
+            {
+              filter: i => !/node_modules|.git/.test(path.relative(root, i)),
+            },
+          )
 
           const dirPath = `./${dir}`
           const firstSlide = data.entry.slides[0]
@@ -457,9 +461,9 @@ cli.command(
 
       if (options.data.config.browserExporter !== false && !warned) {
         warned = true
-        console.log(lightCyan('[Slidev] Try the new browser exporter!'))
+        console.log(cyanBright('[Slidev] Try the new browser exporter!'))
         console.log(
-          lightCyan('You can use the browser exporter instead by starting the dev server as normal and visit'),
+          cyanBright('You can use the browser exporter instead by starting the dev server as normal and visit'),
           `${blue('localhost:')}${dim('<port>')}${blue('/export')}\n`,
         )
       }
@@ -632,7 +636,10 @@ function printInfo(
   tunnelUrl?: string,
   publicIp?: string,
 ) {
-  const baseUrl = port && `http://localhost:${bold(port + (base?.slice(0, -1) || ''))}`
+  if (base && (!base.startsWith('/') || !base.endsWith('/'))) {
+    console.error('Base URL must start and end with a slash "/"')
+    process.exit(1)
+  }
 
   console.log()
   console.log()
@@ -646,7 +653,10 @@ function printInfo(
   console.log(dim('  css engine  ') + blue('unocss'))
   console.log(dim('  entry       ') + dim(path.normalize(path.dirname(options.entry)) + path.sep) + path.basename(options.entry))
 
-  if (baseUrl) {
+  if (port) {
+    const baseText = base?.slice(0, -1) || ''
+    const portAndBase = port + baseText
+    const baseUrl = `http://localhost:${bold(portAndBase)}`
     const query = remote ? `?password=${remote}` : ''
     const presenterPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}presenter/${query}`
     const entryPath = `${options.data.config.routerMode === 'hash' ? '/#/' : '/'}entry${query}/`
@@ -670,17 +680,17 @@ function printInfo(
         .forEach(v => (v || [])
           .filter(details => String(details.family).slice(-1) === '4' && !details.address.includes('127.0.0.1'))
           .forEach(({ address }) => {
-            lastRemoteUrl = `http://${address}:${port}${entryPath}`
+            lastRemoteUrl = `http://${address}:${portAndBase}${entryPath}`
             console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
           }))
 
       if (publicIp) {
-        lastRemoteUrl = `http://${publicIp}:${port}${entryPath}`
+        lastRemoteUrl = `http://${publicIp}:${portAndBase}${entryPath}`
         console.log(`${dim('  remote control ')}     > ${blue(lastRemoteUrl)}`)
       }
 
       if (tunnelUrl) {
-        lastRemoteUrl = `${tunnelUrl}${entryPath}`
+        lastRemoteUrl = `${tunnelUrl}${baseText}${entryPath}`
         console.log(`${dim('  remote via tunnel')}   > ${yellow(lastRemoteUrl)}`)
       }
     }

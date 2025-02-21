@@ -1,7 +1,7 @@
 {
   "name": "create-slidev-theme",
   "type": "module",
-  "version": "51.1.0",
+  "version": "51.2.2",
   "description": "Create starter theme template for Slidev",
   "author": "antfu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "kolorist": "catalog:",
+    "ansis": "catalog:",
     "minimist": "catalog:",
     "prompts": "catalog:"
   }

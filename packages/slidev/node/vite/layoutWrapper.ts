@@ -1,6 +1,6 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
-import { bold, gray, red, yellow } from 'kolorist'
+import { bold, gray, red, yellow } from 'ansis'
 import { toAtFS } from '../resolver'
 import { regexSlideSourceId, templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
 
