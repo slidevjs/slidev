@@ -137,6 +137,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/kaakaa/slidev-addon-rabbit',
   },
+  {
+    id: 'slidev-addon-stem',
+    name: 'slidev-addon-stem',
+    description: 'Slidev addon for scientific presentation',
+    tags: ['Component', 'Layout'],
+    author: {
+      name: 'yutaka-shoji',
+      link: 'https://github.com/yutaka-shoji',
+    },
+    repo: 'https://github.com/yutaka-shoji/slidev-addon-stem',
+  },
   // Add yours here!
   {
     id: '',
