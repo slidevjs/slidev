@@ -1,9 +1,9 @@
 import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
-import path from 'node:path'
+import path, { dirname, relative } from 'node:path'
 import process from 'node:process'
-import { clearUndefined, slash } from '@antfu/utils'
+import { clearUndefined, ensureSuffix, slash } from '@antfu/utils'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import { parseRangeString } from '@slidev/parser/core'
 import { blue, cyan, dim, green, yellow } from 'ansis'
@@ -43,6 +43,7 @@ export interface ExportOptions {
 interface ExportPngResult {
   slideIndex: number
   buffer: Buffer
+  filename: string
 }
 
 function addToTree(tree: TocItem[], info: SlideInfo, slideIndexes: Record<number, number>, level = 1) {
@@ -199,6 +200,30 @@ export async function exportSlides({
   })
   const page = await context.newPage()
   const progress = createSlidevProgress(!perSlide)
+  progress.start(pages.length)
+
+  if (format === 'pdf') {
+    await genPagePdf()
+  }
+  else if (format === 'png') {
+    await genPagePng(output)
+  }
+  else if (format === 'md') {
+    await genPageMd()
+  }
+  else if (format === 'pptx') {
+    const buffers = await genPagePng(false)
+    await genPagePptx(buffers)
+  }
+  else {
+    throw new Error(`[slidev] Unsupported exporting format "${format}"`)
+  }
+
+  progress.stop()
+  browser.close()
+
+  const relativeOutput = slash(relative('.', output))
+  return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
 
   async function go(no: number | string, clicks?: string) {
     const query = new URLSearchParams()
@@ -390,11 +415,9 @@ export async function exportSlides({
     await fs.writeFile(output, pdfData)
   }
 
-  async function genPagePngOnePiece(writeToDisk: boolean) {
+  async function genPagePngOnePiece(writeToDisk: string | false) {
     const result: ExportPngResult[] = []
     await go('print')
-    await fs.rm(output, { force: true, recursive: true })
-    await fs.mkdir(output, { recursive: true })
     const slideContainers = page.locator('.print-slide-container')
     const count = await slideContainers.count()
     for (let i = 0; i < count; i++) {
@@ -404,24 +427,26 @@ export async function exportSlides({
       const buffer = await slideContainers.nth(i).screenshot({
         omitBackground,
       })
-      result.push({ slideIndex: slideNo - 1, buffer })
+      const filename = `${withClicks ? id : slideNo}.png`
+      result.push({ slideIndex: slideNo - 1, buffer, filename })
       if (writeToDisk)
-        await fs.writeFile(path.join(output, `${withClicks ? id : slideNo}.png`), buffer)
+        await fs.writeFile(path.join(writeToDisk, filename), buffer)
     }
     return result
   }
 
-  async function genPagePngPerSlide(writeToDisk: boolean) {
+  async function genPagePngPerSlide(writeToDisk: string | false) {
     const result: ExportPngResult[] = []
     const genScreenshot = async (no: number, clicks?: string) => {
       await go(no, clicks)
       const buffer = await page.screenshot({
         omitBackground,
       })
-      result.push({ slideIndex: no - 1, buffer })
+      const filename = `${no.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`
+      result.push({ slideIndex: no - 1, buffer, filename })
       if (writeToDisk) {
         await fs.writeFile(
-          path.join(output, `${no.toString().padStart(2, '0')}${clicks ? `-${clicks}` : ''}.png`),
+          path.join(writeToDisk, filename),
           buffer,
         )
       }
@@ -439,25 +464,25 @@ export async function exportSlides({
       : genPagePdfOnePiece()
   }
 
-  function genPagePng(writeToDisk = true) {
+  async function genPagePng(writeToDisk: string | false) {
+    if (writeToDisk) {
+      await fs.rm(writeToDisk, { force: true, recursive: true })
+      await fs.mkdir(writeToDisk, { recursive: true })
+    }
     return perSlide
       ? genPagePngPerSlide(writeToDisk)
       : genPagePngOnePiece(writeToDisk)
   }
 
   async function genPageMd() {
-    const files = await fs.readdir(output)
-    const mds: string[] = files.map((file, i, files) => {
-      const slideIndex = getSlideIndex(file)
-      const mdImg = `![${slides[slideIndex]?.title}](./${slash(path.join(output, file))})\n\n`
-      if ((i + 1 === files.length || getSlideIndex(files[i + 1]) !== slideIndex) && slides[slideIndex]?.note)
-        return `${mdImg}${slides[slideIndex]?.note}\n\n`
-      return mdImg
-    })
-
-    if (!output.endsWith('.md'))
-      output = `${output}.md`
-    await fs.writeFile(output, mds.join(''))
+    const pngs = await genPagePng(dirname(output))
+    const content = slides.map(({ title, index, note }) =>
+      pngs.filter(({ slideIndex }) => slideIndex === index)
+        .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
+        .join('')
+        + (note ? `${note.trim()}\n\n` : ''),
+    ).join('---\n\n')
+    await fs.writeFile(ensureSuffix('.md', output), content)
   }
 
   // Ported from https://github.com/marp-team/marp-cli/blob/main/src/converter.ts
@@ -500,11 +525,6 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
 
-  function getSlideIndex(file: string): number {
-    const slideId = file.substring(0, file.indexOf('.')).split('-')[0]
-    return Number(slideId) - 1
-  }
-
   // Adds metadata (title, author, keywords) to PDF document, mutating it
   function addPdfMetadata(pdf: PDFDocument): void {
     const titleSlide = slides[0]
@@ -536,33 +556,9 @@ export async function exportSlides({
 
     return await outlinePdf({ outline, pdf })
   }
-
-  progress.start(pages.length)
-
-  if (format === 'pdf') {
-    await genPagePdf()
-  }
-  else if (format === 'png') {
-    await genPagePng()
-  }
-  else if (format === 'md') {
-    await genPagePng()
-    await genPageMd()
-  }
-  else if (format === 'pptx') {
-    const buffers = await genPagePng(false)
-    await genPagePptx(buffers)
-  }
-  else {
-    throw new Error(`Unsupported exporting format "${format}"`)
-  }
-
-  progress.stop()
-  browser.close()
-  return output
 }
 
-export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outDir?: string, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
+export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOptions, outFilename?: string): Omit<ExportOptions, 'port' | 'base'> {
   const config = {
     ...options.data.config.export,
     ...args,
@@ -592,8 +588,6 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     omitBackground,
   } = config
   outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
-  if (outDir)
-    outFilename = path.join(outDir, outFilename)
   return {
     output: outFilename,
     slides: options.data.slides,
