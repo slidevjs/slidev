@@ -25,11 +25,13 @@ export default function setupRoutes() {
         name: 'entry',
         path: '/entry',
         component: () => import('../pages/entry.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         name: 'overview',
         path: '/overview',
         component: () => import('../pages/overview.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         name: 'notes',
@@ -56,10 +58,12 @@ export default function setupRoutes() {
         name: 'print',
         path: '/print',
         component: () => import('../pages/print.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         path: '/presenter/print',
         component: () => import('../pages/presenter/print.vue'),
+        beforeEnter: passwordGuard,
       },
     )
   }
