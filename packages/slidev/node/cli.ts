@@ -224,7 +224,7 @@ cli.command(
         name: 'r',
         fullname: 'restart',
         action() {
-          initServer()
+          restartServer()
         },
       },
       {
