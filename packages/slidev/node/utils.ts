@@ -10,7 +10,10 @@ type Token = ReturnType<MarkdownIt['parseInline']>[number]
 type Jiti = ReturnType<typeof createJiti>
 let jiti: Jiti | undefined
 export function loadModule<T = unknown>(absolutePath: string): Promise<T> {
-  jiti ??= createJiti(fileURLToPath(import.meta.url))
+  jiti ??= createJiti(fileURLToPath(import.meta.url), {
+    // Allows changes to take effect
+    moduleCache: false,
+  })
   return jiti.import(absolutePath) as Promise<T>
 }
 
