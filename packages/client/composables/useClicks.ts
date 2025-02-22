@@ -165,7 +165,7 @@ export function createFixedClicks(
 ): ClicksContext {
   const clicksStart = route?.meta.slide?.frontmatter.clicksStart ?? 0
   return createClicksContextBase(
-    ref(Math.max(toValue(currentInit), clicksStart)),
+    computed(() => Math.max(toValue(currentInit), clicksStart)),
     clicksStart,
     route?.meta?.clicks,
   )
