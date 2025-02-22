@@ -17,17 +17,6 @@ export const official: AddonInfo[] = [
 
 export const community: AddonInfo[] = [
   {
-    id: 'slidev-addon-naive',
-    name: 'Naive UI for Slidev',
-    description: 'Brings Naive UI components into Slidev',
-    tags: ['Component'],
-    author: {
-      name: 'Samuel Huang',
-      link: 'https://sghuang.com',
-    },
-    repo: 'https://github.com/sghuang19/slidev-addon-naive',
-  },
-  {
     id: 'slidev-addon-python-runner',
     name: 'Python Runner',
     description: 'Run actual Python code in your slides',
@@ -158,6 +147,17 @@ export const community: AddonInfo[] = [
       link: 'https://github.com/yutaka-shoji',
     },
     repo: 'https://github.com/yutaka-shoji/slidev-addon-stem',
+  },
+  {
+    id: 'slidev-addon-naive',
+    name: 'Naive UI for Slidev',
+    description: 'Brings Naive UI components into Slidev',
+    tags: ['Component'],
+    author: {
+      name: 'Samuel Huang',
+      link: 'https://sghuang.com',
+    },
+    repo: 'https://github.com/sghuang19/slidev-addon-naive',
   },
   // Add yours here!
   {
