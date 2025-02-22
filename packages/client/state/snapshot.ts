@@ -1,3 +1,4 @@
+// @ts-expect-error - virtual module
 import serverSnapshotState from 'server-reactive:snapshots?diff'
 import { createSyncState } from './syncState'
 

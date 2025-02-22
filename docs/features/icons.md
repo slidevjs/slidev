@@ -21,7 +21,23 @@ The naming follows [Iconify](https://iconify.design/)'s convention of `{collecti
 - `<logos-vue />` - <logos-vue /> from [SVG Logos](https://github.com/gilbarbara/logos) - [`@iconify-json/logos`](https://npmjs.com/package/@iconify-json/logos)
 - And much more...
 
-Browse and search for all the icons available with [Icônes](https://icones.js.org/).
+::: code-group
+
+```bash [pnpm]
+pnpm add @iconify-json/[the-collection-you-want]
+```
+
+```bash [npm]
+npm install @iconify-json/[the-collection-you-want]
+```
+
+```bash [yarn]
+yarn add @iconify-json/[the-collection-you-want]
+```
+
+:::
+
+We use [Iconify](https://iconify.design) as our data source of icons. You need to install the corresponding icon-set in `dependencies` by following the `@iconify-json/*` pattern. For example, `@iconify-json/mdi` for [Material Design Icons](https://materialdesignicons.com/), `@iconify-json/tabler` for [Tabler](https://tabler-icons.io/). You can refer to [Icônes](https://icones.js.org/) or [Iconify](https://icon-sets.iconify.design/) for all the collections available.
 
 ### Styling Icons
 

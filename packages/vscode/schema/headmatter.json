@@ -5,24 +5,6 @@
     "Headmatter": {
       "type": "object",
       "properties": {
-        "transition": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/BuiltinSlideTransition"
-            },
-            {
-              "type": "string"
-            },
-            {
-              "$ref": "#/definitions/TransitionGroupProps"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
-          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
-        },
         "layout": {
           "anyOf": [
             {
@@ -83,18 +65,18 @@
         },
         "hideInToc": {
           "type": "boolean",
-          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
-          "markdownDescription": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+          "description": "Hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
+          "markdownDescription": "Hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
         },
         "level": {
           "type": "number",
-          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared",
-          "markdownDescription": "Override the title level for the <TitleRenderer> and <Toc> components\nOnly if `title` has also been declared"
+          "description": "Override the title level for the `<TitleRenderer>` and `<Toc>` components Only if `title` has also been declared",
+          "markdownDescription": "Override the title level for the `<TitleRenderer>` and `<Toc>` components\nOnly if `title` has also been declared"
         },
         "routeAlias": {
           "type": "string",
-          "description": "Create a route alias that can be used in the URL or with the <Link> component",
-          "markdownDescription": "Create a route alias that can be used in the URL or with the <Link> component"
+          "description": "Create a route alias that can be used in the URL or with the `<Link>` component",
+          "markdownDescription": "Create a route alias that can be used in the URL or with the `<Link>` component"
         },
         "zoom": {
           "type": "number",
@@ -103,12 +85,9 @@
           "default": 1
         },
         "dragPos": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
           },
           "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
           "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"
@@ -117,6 +96,24 @@
           "type": "string",
           "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
           "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
+        },
+        "transition": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/BuiltinSlideTransition"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/TransitionGroupProps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
         "title": {
           "type": "string",
@@ -492,7 +489,36 @@
           "description": "Default frontmatter options applied to all slides",
           "markdownDescription": "Default frontmatter options applied to all slides"
         }
-      }
+      },
+      "required": [
+        "transition"
+      ]
+    },
+    "BuiltinLayouts": {
+      "type": "string",
+      "enum": [
+        "404",
+        "center",
+        "cover",
+        "default",
+        "end",
+        "error",
+        "fact",
+        "full",
+        "iframe-left",
+        "iframe-right",
+        "iframe",
+        "image-left",
+        "image-right",
+        "image",
+        "intro",
+        "none",
+        "quote",
+        "section",
+        "statement",
+        "two-cols-header",
+        "two-cols"
+      ]
     },
     "BuiltinSlideTransition": {
       "type": "string",
@@ -574,32 +600,6 @@
           "type": "string"
         }
       }
-    },
-    "BuiltinLayouts": {
-      "type": "string",
-      "enum": [
-        "404",
-        "center",
-        "cover",
-        "default",
-        "end",
-        "error",
-        "fact",
-        "full",
-        "iframe-left",
-        "iframe-right",
-        "iframe",
-        "image-left",
-        "image-right",
-        "image",
-        "intro",
-        "none",
-        "quote",
-        "section",
-        "statement",
-        "two-cols-header",
-        "two-cols"
-      ]
     },
     "SlidevThemeConfig": {
       "type": "object",
@@ -858,18 +858,23 @@
         },
         "hideInToc": {
           "type": "boolean",
-          "description": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
-          "markdownDescription": "hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+          "description": "Hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc",
+          "markdownDescription": "Hide the slide for the `<Toc>` components\n\nSee https://sli.dev/builtin/components#toc"
+        },
+        "title": {
+          "type": "string",
+          "description": "Override the title for the `<TitleRenderer>` and `<Toc>` components Only if `title` has also been declared",
+          "markdownDescription": "Override the title for the `<TitleRenderer>` and `<Toc>` components\nOnly if `title` has also been declared"
         },
         "level": {
           "type": "number",
-          "description": "Override the title level for the <TitleRenderer> and <Toc> components Only if `title` has also been declared",
-          "markdownDescription": "Override the title level for the <TitleRenderer> and <Toc> components\nOnly if `title` has also been declared"
+          "description": "Override the title level for the `<TitleRenderer>` and `<Toc>` components Only if `title` has also been declared",
+          "markdownDescription": "Override the title level for the `<TitleRenderer>` and `<Toc>` components\nOnly if `title` has also been declared"
         },
         "routeAlias": {
           "type": "string",
-          "description": "Create a route alias that can be used in the URL or with the <Link> component",
-          "markdownDescription": "Create a route alias that can be used in the URL or with the <Link> component"
+          "description": "Create a route alias that can be used in the URL or with the `<Link>` component",
+          "markdownDescription": "Create a route alias that can be used in the URL or with the `<Link>` component"
         },
         "zoom": {
           "type": "number",
@@ -878,12 +883,9 @@
           "default": 1
         },
         "dragPos": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
           },
           "description": "Store the positions of draggable elements Normally you don't need to set this manually\n\nSee https://sli.dev/features/draggable",
           "markdownDescription": "Store the positions of draggable elements\nNormally you don't need to set this manually\n\nSee https://sli.dev/features/draggable"

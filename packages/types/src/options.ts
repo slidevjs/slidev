@@ -1,6 +1,6 @@
-import type { MarkdownItShikiOptions } from '@shikijs/markdown-it/index.mjs'
+import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { KatexOptions } from 'katex'
-import type { HighlighterGeneric } from 'shiki/types.mjs'
+import type { HighlighterGeneric } from 'shiki'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
