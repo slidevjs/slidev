@@ -481,7 +481,7 @@ cli.command(
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
       server.close()
     }
 
@@ -542,7 +542,7 @@ cli.command(
         timeout,
         wait,
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
 
       server.close()
     }

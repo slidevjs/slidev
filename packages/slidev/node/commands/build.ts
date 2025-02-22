@@ -3,7 +3,7 @@ import type { InlineConfig, ResolvedConfig } from 'vite'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import http from 'node:http'
-import { resolve } from 'node:path'
+import { join, resolve } from 'node:path'
 import connect from 'connect'
 import sirv from 'sirv'
 import { build as viteBuild } from 'vite'
@@ -79,7 +79,7 @@ export async function build(
     await exportSlides({
       port,
       base: config.base,
-      ...getExportOptions(args, options, outDir, 'slidev-exported.pdf'),
+      ...getExportOptions(args, options, join(outDir, 'slidev-exported.pdf')),
     })
     server.close()
   }
