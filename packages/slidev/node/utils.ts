@@ -1,4 +1,4 @@
-import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
+import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
 import type MarkdownIt from 'markdown-it'
 import type { Connect } from 'vite'
 import { fileURLToPath } from 'node:url'
@@ -48,15 +48,14 @@ export function generateCoollabsFontsUrl(options: ResolvedFontOptions) {
 /**
  * Update frontmatter patch and preserve the comments
  */
-export function updateFrontmatterPatch(slide: SlideInfo, frontmatter: Record<string, any>) {
-  const source = slide.source
+export function updateFrontmatterPatch(source: SourceSlideInfo, frontmatter: Record<string, any>) {
   let doc = source.frontmatterDoc
   if (!doc) {
     source.frontmatterStyle = 'frontmatter'
     source.frontmatterDoc = doc = new YAML.Document({})
   }
   for (const [key, value] of Object.entries(frontmatter)) {
-    slide.frontmatter[key] = source.frontmatter[key] = value
+    source.frontmatter[key] = value
     if (value == null) {
       doc.delete(key)
     }

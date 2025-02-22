@@ -107,8 +107,10 @@ export function createSlidesLoader(
           }
           if (body.note)
             slide.note = slide.source.note = body.note
-          if (body.frontmatter)
-            updateFrontmatterPatch(slide, body.frontmatter)
+          if (body.frontmatter) {
+            updateFrontmatterPatch(slide.source, body.frontmatter)
+            Object.assign(slide.frontmatter, body.frontmatter)
+          }
 
           parser.prettifySlide(slide.source)
           const fileContent = await parser.save(data.markdownFiles[slide.source.filepath])
