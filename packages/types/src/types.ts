@@ -31,6 +31,7 @@ export interface SourceSlideInfo extends SlideInfoBase {
   contentStart: number
   end: number
   raw: string
+  contentRaw: string
   /**
    * Slides import by this slide.
    */

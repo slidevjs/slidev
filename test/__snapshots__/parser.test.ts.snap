@@ -103,6 +103,7 @@ fonts:
       "content": "
 # Hi
 ",
+      "contentRaw": "# Hi",
       "contentStart": 7,
       "end": 10,
       "filepath": "frontmatter.md",
@@ -171,6 +172,7 @@ layout: center
       "content": "
 # Hello
 ",
+      "contentRaw": "# Hello",
       "contentStart": 16,
       "end": 23,
       "filepath": "frontmatter.md",
@@ -229,6 +231,7 @@ This is note
       "content": "
 # Morning
 ",
+      "contentRaw": "# Morning",
       "contentStart": 24,
       "end": 27,
       "filepath": "frontmatter.md",
@@ -266,6 +269,8 @@ Hey",
 <!-- This is not note -->
 Hey
 ",
+      "contentRaw": "<!-- This is not note -->
+Hey",
       "contentStart": 30,
       "end": 38,
       "filepath": "frontmatter.md",
@@ -327,6 +332,15 @@ this should be treated as code block
 Also part of the code block
 \`\`\`
 ",
+      "contentRaw": "\`\`\`md
+---
+this should be treated as code block
+---
+
+---
+
+Also part of the code block
+\`\`\`",
       "contentStart": 39,
       "end": 50,
       "filepath": "frontmatter.md",
@@ -372,6 +386,7 @@ layout: from yaml
       "content": "
 Content 1
 ",
+      "contentRaw": "Content 1",
       "contentStart": 51,
       "end": 59,
       "filepath": "frontmatter.md",
@@ -428,6 +443,12 @@ layout: should not from yaml 1
 
 Content 2
 ",
+      "contentRaw": "\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 1
+\`\`\`
+
+Content 2",
       "contentStart": 62,
       "end": 70,
       "filepath": "frontmatter.md",
@@ -487,6 +508,14 @@ layout: should not from yaml 2
 
 Content 3
 ",
+      "contentRaw": "# Title
+
+\`\`\`yaml
+# When there is already a frontmatter, the first yaml block should be treated as content
+layout: should not from yaml 2
+\`\`\`
+
+Content 3",
       "contentStart": 71,
       "end": 81,
       "filepath": "frontmatter.md",
@@ -605,6 +634,9 @@ exports[`md parser > mdc.md > slides 1`] = `
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
+      "contentRaw": "# MDC{style="color:red"}
+
+:arrow{x1=1 y1=1 x2=2 y2=2}",
       "contentStart": 3,
       "end": 8,
       "filepath": "mdc.md",
@@ -734,6 +766,15 @@ Sample Text
 console.log('Hello World')
 \`\`\`
 ",
+      "contentRaw": "# H1
+## H2
+### H3
+
+Sample Text
+
+\`\`\`ts
+console.log('Hello World')
+\`\`\`",
       "contentStart": 0,
       "end": 10,
       "filepath": "minimal.md",
@@ -784,6 +825,12 @@ console.log('Hello World')
 - Hey
 - Yo
 ",
+      "contentRaw": "# Hello
+
+- Hello
+- Hi
+- Hey
+- Yo",
       "contentStart": 11,
       "end": 19,
       "filepath": "minimal.md",
@@ -821,6 +868,7 @@ console.log('Hello World')
       "content": "
 Nice to meet you
 ",
+      "contentRaw": "Nice to meet you",
       "contentStart": 20,
       "end": 23,
       "filepath": "minimal.md",
@@ -919,6 +967,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 3,
         "end": 4,
         "filepath": "multi-entries.md",
@@ -934,6 +983,7 @@ exports[`md parser > multi-entries.md > slides 1`] = `
         "imports": [
           {
             "content": "# Page 1",
+            "contentRaw": "# Page 1",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/page1.md",
@@ -969,6 +1019,7 @@ src: sub/page1.md
     "revision": "q9078d",
     "source": {
       "content": "# Page 1",
+      "contentRaw": "# Page 1",
       "contentStart": 0,
       "end": 2,
       "filepath": "sub/page1.md",
@@ -1000,6 +1051,7 @@ src: sub/page1.md
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 8,
         "end": 9,
         "filepath": "multi-entries.md",
@@ -1018,6 +1070,9 @@ background: https://sli.dev/demo-cover.png#2
         "imports": [
           {
             "content": "# Page 2
+
+<Tweet />",
+            "contentRaw": "# Page 2
 
 <Tweet />",
             "contentStart": 3,
@@ -1069,6 +1124,9 @@ background: https://sli.dev/demo-cover.png#2
       "content": "# Page 2
 
 <Tweet />",
+      "contentRaw": "# Page 2
+
+<Tweet />",
       "contentStart": 3,
       "end": 8,
       "filepath": "sub/page2.md",
@@ -1107,6 +1165,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 13,
         "end": 14,
         "filepath": "multi-entries.md",
@@ -1125,6 +1184,7 @@ background: https://sli.dev/demo-cover.png#34
         "imports": [
           {
             "content": "# Page 3",
+            "contentRaw": "# Page 3",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/pages3-4.md",
@@ -1143,6 +1203,9 @@ background: https://sli.dev/demo-cover.png#34
           },
           {
             "content": "# Page 4
+
+<Tweet />",
+            "contentRaw": "# Page 4
 
 <Tweet />",
             "contentStart": 5,
@@ -1192,6 +1255,7 @@ background: https://sli.dev/demo-cover.png#34
     "revision": "q9078f",
     "source": {
       "content": "# Page 3",
+      "contentRaw": "# Page 3",
       "contentStart": 0,
       "end": 2,
       "filepath": "sub/pages3-4.md",
@@ -1223,6 +1287,7 @@ background: https://sli.dev/demo-cover.png#34
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 13,
         "end": 14,
         "filepath": "multi-entries.md",
@@ -1241,6 +1306,7 @@ background: https://sli.dev/demo-cover.png#34
         "imports": [
           {
             "content": "# Page 3",
+            "contentRaw": "# Page 3",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/pages3-4.md",
@@ -1259,6 +1325,9 @@ background: https://sli.dev/demo-cover.png#34
           },
           {
             "content": "# Page 4
+
+<Tweet />",
+            "contentRaw": "# Page 4
 
 <Tweet />",
             "contentStart": 5,
@@ -1310,6 +1379,9 @@ background: https://sli.dev/demo-cover.png#34
       "content": "# Page 4
 
 <Tweet />",
+      "contentRaw": "# Page 4
+
+<Tweet />",
       "contentStart": 5,
       "end": 10,
       "filepath": "sub/pages3-4.md",
@@ -1348,6 +1420,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
@@ -1366,6 +1439,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 3,
             "end": 4,
             "filepath": "sub/nested1-4.md",
@@ -1381,6 +1455,7 @@ background: https://sli.dev/demo-cover.png#14
             "imports": [
               {
                 "content": "# Page 1",
+                "contentRaw": "# Page 1",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/page1.md",
@@ -1411,6 +1486,7 @@ src: /sub/page1.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 7,
             "end": 8,
             "filepath": "sub/nested1-4.md",
@@ -1426,6 +1502,9 @@ src: /sub/page1.md
             "imports": [
               {
                 "content": "# Page 2
+
+<Tweet />",
+                "contentRaw": "# Page 2
 
 <Tweet />",
                 "contentStart": 3,
@@ -1469,6 +1548,7 @@ src: page2.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 11,
             "end": 12,
             "filepath": "sub/nested1-4.md",
@@ -1484,6 +1564,7 @@ src: page2.md
             "imports": [
               {
                 "content": "# Page 3",
+                "contentRaw": "# Page 3",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/pages3-4.md",
@@ -1502,6 +1583,9 @@ src: page2.md
               },
               {
                 "content": "# Page 4
+
+<Tweet />",
+                "contentRaw": "# Page 4
 
 <Tweet />",
                 "contentStart": 5,
@@ -1558,6 +1642,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 3,
         "end": 4,
         "filepath": "sub/nested1-4.md",
@@ -1573,6 +1658,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "# Page 1",
+            "contentRaw": "# Page 1",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/page1.md",
@@ -1608,6 +1694,7 @@ src: /sub/page1.md
     "revision": "q9078d",
     "source": {
       "content": "# Page 1",
+      "contentRaw": "# Page 1",
       "contentStart": 0,
       "end": 2,
       "filepath": "sub/page1.md",
@@ -1639,6 +1726,7 @@ src: /sub/page1.md
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
@@ -1657,6 +1745,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 3,
             "end": 4,
             "filepath": "sub/nested1-4.md",
@@ -1672,6 +1761,7 @@ background: https://sli.dev/demo-cover.png#14
             "imports": [
               {
                 "content": "# Page 1",
+                "contentRaw": "# Page 1",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/page1.md",
@@ -1702,6 +1792,7 @@ src: /sub/page1.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 7,
             "end": 8,
             "filepath": "sub/nested1-4.md",
@@ -1717,6 +1808,9 @@ src: /sub/page1.md
             "imports": [
               {
                 "content": "# Page 2
+
+<Tweet />",
+                "contentRaw": "# Page 2
 
 <Tweet />",
                 "contentStart": 3,
@@ -1760,6 +1854,7 @@ src: page2.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 11,
             "end": 12,
             "filepath": "sub/nested1-4.md",
@@ -1775,6 +1870,7 @@ src: page2.md
             "imports": [
               {
                 "content": "# Page 3",
+                "contentRaw": "# Page 3",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/pages3-4.md",
@@ -1793,6 +1889,9 @@ src: page2.md
               },
               {
                 "content": "# Page 4
+
+<Tweet />",
+                "contentRaw": "# Page 4
 
 <Tweet />",
                 "contentStart": 5,
@@ -1849,6 +1948,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 7,
         "end": 8,
         "filepath": "sub/nested1-4.md",
@@ -1864,6 +1964,9 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "# Page 2
+
+<Tweet />",
+            "contentRaw": "# Page 2
 
 <Tweet />",
             "contentStart": 3,
@@ -1914,6 +2017,9 @@ src: page2.md
       "content": "# Page 2
 
 <Tweet />",
+      "contentRaw": "# Page 2
+
+<Tweet />",
       "contentStart": 3,
       "end": 8,
       "filepath": "sub/page2.md",
@@ -1952,6 +2058,7 @@ layout: cover
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
@@ -1970,6 +2077,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 3,
             "end": 4,
             "filepath": "sub/nested1-4.md",
@@ -1985,6 +2093,7 @@ background: https://sli.dev/demo-cover.png#14
             "imports": [
               {
                 "content": "# Page 1",
+                "contentRaw": "# Page 1",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/page1.md",
@@ -2015,6 +2124,7 @@ src: /sub/page1.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 7,
             "end": 8,
             "filepath": "sub/nested1-4.md",
@@ -2030,6 +2140,9 @@ src: /sub/page1.md
             "imports": [
               {
                 "content": "# Page 2
+
+<Tweet />",
+                "contentRaw": "# Page 2
 
 <Tweet />",
                 "contentStart": 3,
@@ -2073,6 +2186,7 @@ src: page2.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 11,
             "end": 12,
             "filepath": "sub/nested1-4.md",
@@ -2088,6 +2202,7 @@ src: page2.md
             "imports": [
               {
                 "content": "# Page 3",
+                "contentRaw": "# Page 3",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/pages3-4.md",
@@ -2106,6 +2221,9 @@ src: page2.md
               },
               {
                 "content": "# Page 4
+
+<Tweet />",
+                "contentRaw": "# Page 4
 
 <Tweet />",
                 "contentStart": 5,
@@ -2162,6 +2280,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 11,
         "end": 12,
         "filepath": "sub/nested1-4.md",
@@ -2177,6 +2296,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "# Page 3",
+            "contentRaw": "# Page 3",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/pages3-4.md",
@@ -2195,6 +2315,9 @@ background: https://sli.dev/demo-cover.png#14
           },
           {
             "content": "# Page 4
+
+<Tweet />",
+            "contentRaw": "# Page 4
 
 <Tweet />",
             "contentStart": 5,
@@ -2243,6 +2366,7 @@ src: ../sub/pages3-4.md
     "revision": "q9078f",
     "source": {
       "content": "# Page 3",
+      "contentRaw": "# Page 3",
       "contentStart": 0,
       "end": 2,
       "filepath": "sub/pages3-4.md",
@@ -2274,6 +2398,7 @@ src: ../sub/pages3-4.md
     "importChain": [
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 18,
         "end": 19,
         "filepath": "multi-entries.md",
@@ -2292,6 +2417,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 3,
             "end": 4,
             "filepath": "sub/nested1-4.md",
@@ -2307,6 +2433,7 @@ background: https://sli.dev/demo-cover.png#14
             "imports": [
               {
                 "content": "# Page 1",
+                "contentRaw": "# Page 1",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/page1.md",
@@ -2337,6 +2464,7 @@ src: /sub/page1.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 7,
             "end": 8,
             "filepath": "sub/nested1-4.md",
@@ -2352,6 +2480,9 @@ src: /sub/page1.md
             "imports": [
               {
                 "content": "# Page 2
+
+<Tweet />",
+                "contentRaw": "# Page 2
 
 <Tweet />",
                 "contentStart": 3,
@@ -2395,6 +2526,7 @@ src: page2.md
           },
           {
             "content": "",
+            "contentRaw": "",
             "contentStart": 11,
             "end": 12,
             "filepath": "sub/nested1-4.md",
@@ -2410,6 +2542,7 @@ src: page2.md
             "imports": [
               {
                 "content": "# Page 3",
+                "contentRaw": "# Page 3",
                 "contentStart": 0,
                 "end": 2,
                 "filepath": "sub/pages3-4.md",
@@ -2428,6 +2561,9 @@ src: page2.md
               },
               {
                 "content": "# Page 4
+
+<Tweet />",
+                "contentRaw": "# Page 4
 
 <Tweet />",
                 "contentStart": 5,
@@ -2484,6 +2620,7 @@ background: https://sli.dev/demo-cover.png#14
       },
       {
         "content": "",
+        "contentRaw": "",
         "contentStart": 11,
         "end": 12,
         "filepath": "sub/nested1-4.md",
@@ -2499,6 +2636,7 @@ background: https://sli.dev/demo-cover.png#14
         "imports": [
           {
             "content": "# Page 3",
+            "contentRaw": "# Page 3",
             "contentStart": 0,
             "end": 2,
             "filepath": "sub/pages3-4.md",
@@ -2517,6 +2655,9 @@ background: https://sli.dev/demo-cover.png#14
           },
           {
             "content": "# Page 4
+
+<Tweet />",
+            "contentRaw": "# Page 4
 
 <Tweet />",
             "contentStart": 5,
@@ -2567,6 +2708,9 @@ src: ../sub/pages3-4.md
       "content": "# Page 4
 
 <Tweet />",
+      "contentRaw": "# Page 4
+
+<Tweet />",
       "contentStart": 5,
       "end": 10,
       "filepath": "sub/pages3-4.md",
@@ -2613,6 +2757,9 @@ $x+2$",
 
 $x+2$
 ",
+      "contentRaw": "# Inline Page
+
+$x+2$",
       "contentStart": 20,
       "end": 25,
       "filepath": "multi-entries.md",
