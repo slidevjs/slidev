@@ -1,4 +1,4 @@
-import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { OpenGraphMetadata, ResolvedSlidevOptions } from '@slidev/types'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
@@ -59,6 +59,17 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
 
   if (data.headmatter.lang)
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
+
+  if (data.headmatter.openGraph) {
+    const openGraph: OpenGraphMetadata = data.headmatter.openGraph
+
+    head += [
+      openGraph.title && `<meta property="og:title" content="${escapeHtml(openGraph.title)}">`,
+      openGraph.image && `<meta property="og:image" content="${escapeHtml(openGraph.image)}">`,
+      openGraph.url && `<meta property="og:url" content="${escapeHtml(openGraph.url)}">`,
+      openGraph.description && `<meta property="og:description" content="${escapeHtml(openGraph.description)}">`,
+    ].filter(Boolean).join('\n')
+  }
 
   const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
   main = main

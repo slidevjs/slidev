@@ -484,6 +484,12 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "openGraph": {
+          "$ref": "#/definitions/OpenGraphMetadata",
+          "description": "Open Graph Protocol",
+          "markdownDescription": "Open Graph Protocol",
+          "default": {}
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",
@@ -776,6 +782,33 @@
           "default": true
         }
       }
+    },
+    "OpenGraphMetadata": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "og:title",
+          "markdownDescription": "og:title"
+        },
+        "image": {
+          "type": "string",
+          "description": "og:image",
+          "markdownDescription": "og:image"
+        },
+        "url": {
+          "type": "string",
+          "description": "og:url",
+          "markdownDescription": "og:url"
+        },
+        "description": {
+          "type": "string",
+          "description": "og:description",
+          "markdownDescription": "og:description"
+        }
+      },
+      "description": "Represents the Open Graph metadata.",
+      "markdownDescription": "Represents the Open Graph metadata."
     },
     "Frontmatter": {
       "type": "object",

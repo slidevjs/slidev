@@ -255,6 +255,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default []
    */
   monacoRunAdditionalDeps?: string[]
+  /**
+   * Open Graph Protocol
+   *
+   * @default {}
+   */
+  openGraph?: OpenGraphMetadata
 }
 
 export interface Frontmatter extends TransitionOptions {
@@ -453,4 +459,18 @@ export interface TransitionGroupProps {
   leaveFromClass?: string
   leaveActiveClass?: string
   leaveToClass?: string
+}
+
+/**
+ * Represents the Open Graph metadata.
+ */
+export interface OpenGraphMetadata {
+  /** og:title */
+  title?: string
+  /** og:image */
+  image?: string
+  /** og:url */
+  url?: string
+  /** og:description */
+  description?: string
 }
