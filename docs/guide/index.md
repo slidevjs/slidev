@@ -65,6 +65,11 @@ npm init slidev@latest
 yarn create slidev
 ```
 
+
+```bash [bun]
+bun create slidev
+```
+
 :::
 
 Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check <LinkInline link="guide/syntax" />.
