@@ -108,6 +108,13 @@ drawings:
 htmlAttrs:
   dir: ltr
   lang: en
+
+# Open Graph Protocol
+openGraph:
+  title: Slidev Starter Template
+  description: Presentation slides for developers
+  image: https://cover.sli.dev
+  url: https://example.com
 ---
 ```
 
