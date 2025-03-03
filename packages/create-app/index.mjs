@@ -117,7 +117,7 @@ async function init() {
       name: 'agent',
       type: 'select',
       message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm'].map(i => ({ value: i, title: i })),
+      choices: ['npm', 'yarn', 'pnpm', 'bun'].map(i => ({ value: i, title: i })),
     })
 
     if (!agent)
