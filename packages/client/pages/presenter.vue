@@ -54,7 +54,13 @@ const notesEditing = ref(false)
 
 const { timer, isTimerActive, resetTimer, toggleTimer } = useTimer()
 
-const clicksCtxMap = computed(() => slides.value.map(route => createFixedClicks(route)))
+const clicksCtxMap = computed(() => slides.value.map((route) => {
+  const clicks = ref(0)
+  return {
+    context: createFixedClicks(route, clicks),
+    clicks,
+  }
+}))
 const nextFrame = computed(() => {
   if (clicksContext.value.current < clicksContext.value.total)
     return [currentSlideRoute.value!, clicksContext.value.current + 1] as const
@@ -72,7 +78,7 @@ watch(
   nextFrame,
   () => {
     if (nextFrameClicksCtx.value && nextFrame.value)
-      nextFrameClicksCtx.value.current = nextFrame.value[1]
+      nextFrameClicksCtx.value.clicks.value = nextFrame.value[1]
   },
   { immediate: true },
 )
@@ -149,7 +155,7 @@ onMounted(() => {
         <SlideContainer v-if="nextFrame && nextFrameClicksCtx" key="next">
           <SlideWrapper
             :key="nextFrame[0].no"
-            :clicks-context="nextFrameClicksCtx"
+            :clicks-context="nextFrameClicksCtx.context"
             :route="nextFrame[0]"
             render-context="previewNext"
           />
