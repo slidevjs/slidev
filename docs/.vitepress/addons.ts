@@ -169,7 +169,7 @@ export const community: AddonInfo[] = [
       link: 'https://github.com/whitphx',
     },
     repo: 'https://github.com/whitphx/slidev-addon-fancy-arrow',
-  }
+  },
   // Add yours here!
   {
     id: '',
