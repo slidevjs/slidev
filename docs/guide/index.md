@@ -65,7 +65,6 @@ npm init slidev@latest
 yarn create slidev
 ```
 
-
 ```bash [bun]
 bun create slidev
 ```
