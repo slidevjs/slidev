@@ -109,7 +109,7 @@ describe('utils', () => {
     }
 
     const slide1 = createFakeSource(``)
-    updateFrontmatterPatch(slide1, { dragPos })
+    updateFrontmatterPatch(slide1.source, { dragPos })
     expectFrontmatter(slide1).toMatchInlineSnapshot(`
       "dragPos:
         foo: 1,2,3,4
@@ -122,7 +122,7 @@ describe('utils', () => {
       dragPos:
         bar: 5,6,7,8
     `)
-    updateFrontmatterPatch(slide2, { dragPos })
+    updateFrontmatterPatch(slide2.source, { dragPos })
     expectFrontmatter(slide2).toMatchInlineSnapshot(`
       "# comment
       title: Hello # another comment
@@ -138,7 +138,7 @@ describe('utils', () => {
       dragPos:
         bar: 5,6,7,8
     `)
-    updateFrontmatterPatch(slide3, { title: null })
+    updateFrontmatterPatch(slide3.source, { title: null })
     expectFrontmatter(slide3).toMatchInlineSnapshot(`
       "dragPos:
         bar: 5,6,7,8
