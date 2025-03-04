@@ -92,6 +92,10 @@ npm i -g @slidev/cli
 yarn global add @slidev/cli
 ```
 
+```bash [bun]
+bun i -g @slidev/cli
+```
+
 :::
 
 Then, you can create and start a single file slides via:

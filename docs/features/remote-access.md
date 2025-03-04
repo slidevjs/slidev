@@ -29,6 +29,11 @@ yarn dev --remote
 # i.e. slidev --remote
 ```
 
+```bash [bun]
+bun dev --remote
+# i.e. slidev --remote
+```
+
 :::
 
 ## Password Protection
@@ -53,6 +58,11 @@ npm run dev -- --remote --tunnel
 
 ```bash [yarn]
 yarn dev --remote --tunnel
+# i.e. slidev --remote --tunnel
+```
+
+```bash [bun]
+bun dev --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 
