@@ -148,6 +148,12 @@ export async function parse(
           const newContent = await e.transformSlide(slide.content, slide.frontmatter)
           if (newContent !== undefined)
             slide.content = newContent
+          if (typeof slide.frontmatter.title === 'string') {
+            slide.title = slide.frontmatter.title
+          }
+          if (typeof slide.frontmatter.level === 'number') {
+            slide.level = slide.frontmatter.level
+          }
         }
       }
     }
