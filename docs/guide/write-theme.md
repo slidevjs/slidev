@@ -20,6 +20,10 @@ $ npm init slidev-theme@latest
 $ yarn create slidev-theme
 ```
 
+```bash [bun]
+$ bun create slidev-theme
+```
+
 :::
 
 Then you can modify and play with it. You can also refer to the [official themes](../resources/theme-gallery#official-themes) as examples.
