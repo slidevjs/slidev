@@ -256,11 +256,11 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   monacoRunAdditionalDeps?: string[]
   /**
-   * Open Graph Protocol
+   * Seo meta tags settings
    *
    * @default {}
    */
-  openGraph?: OpenGraphMetadata
+  seoMeta?: SeoMeta
 }
 
 export interface Frontmatter extends TransitionOptions {
@@ -462,15 +462,17 @@ export interface TransitionGroupProps {
 }
 
 /**
- * Represents the Open Graph metadata.
+ * The following type should map to zhead MataFlat type
  */
-export interface OpenGraphMetadata {
-  /** og:title */
-  title?: string
-  /** og:image */
-  image?: string
-  /** og:url */
-  url?: string
-  /** og:description */
-  description?: string
+export interface SeoMeta {
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  ogUrl?: string
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
+  twitterSite?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: string
+  twitterUrl?: string
 }

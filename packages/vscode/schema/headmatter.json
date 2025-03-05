@@ -484,10 +484,10 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
-        "openGraph": {
-          "$ref": "#/definitions/OpenGraphMetadata",
-          "description": "Open Graph Protocol",
-          "markdownDescription": "Open Graph Protocol",
+        "seoMeta": {
+          "$ref": "#/definitions/SeoMeta",
+          "description": "Seo meta tags settings",
+          "markdownDescription": "Seo meta tags settings",
           "default": {}
         },
         "defaults": {
@@ -783,32 +783,48 @@
         }
       }
     },
-    "OpenGraphMetadata": {
+    "SeoMeta": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string",
-          "description": "og:title",
-          "markdownDescription": "og:title"
+        "ogTitle": {
+          "type": "string"
         },
-        "image": {
-          "type": "string",
-          "description": "og:image",
-          "markdownDescription": "og:image"
+        "ogDescription": {
+          "type": "string"
         },
-        "url": {
-          "type": "string",
-          "description": "og:url",
-          "markdownDescription": "og:url"
+        "ogImage": {
+          "type": "string"
         },
-        "description": {
+        "ogUrl": {
+          "type": "string"
+        },
+        "twitterCard": {
           "type": "string",
-          "description": "og:description",
-          "markdownDescription": "og:description"
+          "enum": [
+            "summary",
+            "summary_large_image",
+            "app",
+            "player"
+          ]
+        },
+        "twitterSite": {
+          "type": "string"
+        },
+        "twitterTitle": {
+          "type": "string"
+        },
+        "twitterDescription": {
+          "type": "string"
+        },
+        "twitterImage": {
+          "type": "string"
+        },
+        "twitterUrl": {
+          "type": "string"
         }
       },
-      "description": "Represents the Open Graph metadata.",
-      "markdownDescription": "Represents the Open Graph metadata."
+      "description": "The following type should map to zhead MataFlat type",
+      "markdownDescription": "The following type should map to zhead MataFlat type"
     },
     "Frontmatter": {
       "type": "object",
