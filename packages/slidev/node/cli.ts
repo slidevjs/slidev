@@ -30,7 +30,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'mdc',
   'editor',
   'theme',
-  'openGraph',
+  'seoMeta',
 ]
 
 /**
