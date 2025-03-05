@@ -1,9 +1,11 @@
-import type { OpenGraphMetadata, ResolvedSlidevOptions } from '@slidev/types'
+import type { ResolvedSlidevOptions, SeoMeta } from '@slidev/types'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
 import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
+
+import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
@@ -13,7 +15,7 @@ function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
 }
 
-export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): string {
+export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): Promise<string> {
   let main = readFileSync(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
@@ -57,19 +59,30 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
       head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
   }
 
-  if (data.headmatter.lang)
+  if (data.headmatter.lang) {
     main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
-
-  if (data.headmatter.openGraph) {
-    const openGraph: OpenGraphMetadata = data.headmatter.openGraph
-
-    head += [
-      openGraph.title && `<meta property="og:title" content="${escapeHtml(openGraph.title)}">`,
-      openGraph.image && `<meta property="og:image" content="${escapeHtml(openGraph.image)}">`,
-      openGraph.url && `<meta property="og:url" content="${escapeHtml(openGraph.url)}">`,
-      openGraph.description && `<meta property="og:description" content="${escapeHtml(openGraph.description)}">`,
-    ].filter(Boolean).join('\n')
   }
+
+  const seoMeta = (data.headmatter.seoMeta ?? {}) as SeoMeta
+
+  const unhead = createHead({
+    init: [
+      {
+        meta: [
+          { property: 'og:title', content: seoMeta.ogTitle },
+          { property: 'og:description', content: seoMeta.ogDescription },
+          { property: 'og:image', content: seoMeta.ogImage },
+          { property: 'og:url', content: seoMeta.ogUrl },
+          { property: 'twitter:card', content: seoMeta.twitterCard },
+          { property: 'twitter:site', content: seoMeta.twitterSite },
+          { property: 'twitter:title', content: seoMeta.twitterTitle },
+          { property: 'twitter:description', content: seoMeta.twitterDescription },
+          { property: 'twitter:image', content: seoMeta.twitterImage },
+          { property: 'twitter:url', content: seoMeta.twitterUrl },
+        ],
+      },
+    ],
+  })
 
   const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
   main = main
@@ -77,5 +90,7 @@ export default function setupIndexHtml({ mode, entry, clientRoot, userRoot, root
     .replace('<!-- head -->', head)
     .replace('<!-- body -->', body)
 
-  return main
+  const html = await transformHtmlTemplate(unhead, main)
+
+  return html
 }

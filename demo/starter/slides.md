@@ -21,11 +21,11 @@ transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
 # open graph
-openGraph:
-  title: Slidev Starter Template
-  description: Presentation slides for developers
-  image: https://cover.sli.dev
-  url: https://example.com
+seoMeta:
+  ogTitle: Slidev Starter Templat
+  ogDescription: Presentation slides for developers
+  ogImage: https://cover.sli.dev
+  ogUrl: https://example.com
 ---
 
 # Welcome to Slidev
