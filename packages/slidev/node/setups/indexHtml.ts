@@ -1,10 +1,10 @@
 import type { ResolvedSlidevOptions, SeoMeta } from '@slidev/types'
+import type { ResolvableLink } from 'unhead/types'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
 import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
-
 import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
@@ -19,17 +19,6 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
   let main = readFileSync(join(clientRoot, 'index.html'), 'utf-8')
   let head = ''
   let body = ''
-
-  const { info, author, keywords } = data.headmatter
-  head += [
-    `<meta name="slidev:version" content="${version}">`,
-    mode === 'dev' && `<meta charset="slidev:entry" content="${slash(entry)}">`,
-    `<link rel="icon" href="${data.config.favicon}">`,
-    `<title>${getSlideTitle(data)}</title>`,
-    info && `<meta name="description" content=${toAttrValue(info)}>`,
-    author && `<meta name="author" content=${toAttrValue(author)}>`,
-    keywords && `<meta name="keywords" content=${toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords)}>`,
-  ].filter(Boolean).join('\n')
 
   for (const root of roots) {
     const path = join(root, 'index.html')
@@ -48,27 +37,39 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     body += `\n${(index.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
   }
 
-  if (data.features.tweet)
+  if (data.features.tweet) {
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
+  }
 
+  const webFontsLink: ResolvableLink[] = []
   if (data.config.fonts.webfonts.length) {
     const { provider } = data.config.fonts
-    if (provider === 'google')
-      head += `\n<link rel="stylesheet" href="${generateGoogleFontsUrl(data.config.fonts)}" type="text/css">`
-    else if (provider === 'coollabs')
-      head += `\n<link rel="stylesheet" href="${generateCoollabsFontsUrl(data.config.fonts)}" type="text/css">`
+    if (provider === 'google') {
+      webFontsLink.push({ rel: 'stylesheet', href: generateGoogleFontsUrl(data.config.fonts), type: 'text/css' })
+    }
+    else if (provider === 'coollabs') {
+      webFontsLink.push({ rel: 'stylesheet', href: generateCoollabsFontsUrl(data.config.fonts), type: 'text/css' })
+    }
   }
 
-  if (data.headmatter.lang) {
-    main = main.replace('<html lang="en">', `<html lang="${data.headmatter.lang}">`)
-  }
-
+  const { info, author, keywords } = data.headmatter
   const seoMeta = (data.headmatter.seoMeta ?? {}) as SeoMeta
 
   const unhead = createHead({
     init: [
       {
+        htmlAttrs: { lang: (data.headmatter.lang as string | undefined) ?? 'en' },
+        title: getSlideTitle(data),
+        link: [
+          { rel: 'icon', href: data.config.favicon },
+          ...webFontsLink,
+        ],
         meta: [
+          { property: 'slidev:version', content: version },
+          { charset: 'slidev:entry', content: mode === 'dev' && slash(entry) },
+          { name: 'description', content: toAttrValue(info) },
+          { name: 'author', content: toAttrValue(author) },
+          { name: 'keywords', content: toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) },
           { property: 'og:title', content: seoMeta.ogTitle },
           { property: 'og:description', content: seoMeta.ogDescription },
           { property: 'og:image', content: seoMeta.ogImage },
