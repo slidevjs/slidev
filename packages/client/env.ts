@@ -1,12 +1,13 @@
 import configs from '#slidev/configs'
 import { objectMap } from '@antfu/utils'
+import { parseAspectRatio } from '@slidev/parser/utils'
 import { computed } from 'vue'
 
 export { configs }
 
 export const mode = __DEV__ ? 'dev' : 'build'
 
-export const slideAspect = computed(() => configs.aspectRatio)
+export const slideAspect = computed(() => parseAspectRatio(configs.aspectRatio))
 export const slideWidth = computed(() => configs.canvasWidth)
 
 // To honor the aspect ratio more as possible, we need to approximate the height to the next integer.

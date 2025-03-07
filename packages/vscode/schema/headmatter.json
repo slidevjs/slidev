@@ -242,7 +242,10 @@
           "default": "history"
         },
         "aspectRatio": {
-          "type": "number",
+          "type": [
+            "number",
+            "string"
+          ],
           "description": "Aspect ratio for slides should be like `16/9` or `1:1`",
           "markdownDescription": "Aspect ratio for slides\nshould be like `16/9` or `1:1`",
           "default": "16/9"

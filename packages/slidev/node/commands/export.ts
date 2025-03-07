@@ -6,6 +6,8 @@ import process from 'node:process'
 import { clearUndefined, ensureSuffix, slash } from '@antfu/utils'
 import { outlinePdfFactory } from '@lillallol/outline-pdf'
 import { parseRangeString } from '@slidev/parser/core'
+import { parseAspectRatio } from '@slidev/parser/utils'
+
 import { blue, cyan, dim, green, yellow } from 'ansis'
 import { Presets, SingleBar } from 'cli-progress'
 import { resolve } from 'mlly'
@@ -600,7 +602,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     dark: dark || options.data.config.colorSchema === 'dark',
     routerMode: options.data.config.routerMode,
     width: options.data.config.canvasWidth,
-    height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
+    height: Math.round(options.data.config.canvasWidth / parseAspectRatio(options.data.config.aspectRatio)),
     withClicks: withClicks ?? format === 'pptx',
     executablePath,
     withToc: withToc || false,
