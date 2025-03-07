@@ -83,4 +83,5 @@ export const HEADMATTER_FIELDS = [
   'mdc',
   'contextMenu',
   'wakeLock',
+  'seoMeta',
 ]
