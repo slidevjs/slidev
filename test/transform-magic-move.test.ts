@@ -1,4 +1,3 @@
-import { createHighlighter } from 'shiki'
 import { expect, it } from 'vitest'
 import { transformMagicMove } from '../packages/slidev/node/syntax/transform/magic-move'
 import { createTransformContext } from './_tutils'
@@ -21,14 +20,10 @@ let message = 'Hello, Slidev!'
 Some text after
   
 `
-  const shiki = await createHighlighter({
-    themes: ['nord'],
-    langs: ['typescript'],
-  })
 
-  const ctx = createTransformContext(code, shiki)
+  const ctx = createTransformContext(code)
 
-  transformMagicMove(ctx)
+  await transformMagicMove(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
@@ -61,14 +56,9 @@ console.log('Hello, Angular #2!')
 Some text after
   
 `
-  const shiki = await createHighlighter({
-    themes: ['nord'],
-    langs: ['angular-ts'],
-  })
+  const ctx = createTransformContext(code)
 
-  const ctx = createTransformContext(code, shiki)
-
-  transformMagicMove(ctx)
+  await transformMagicMove(ctx)
 
   expect(ctx.s.toString())
     .toMatchInlineSnapshot(`
