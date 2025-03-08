@@ -32,6 +32,10 @@ export interface SourceSlideInfo extends SlideInfoBase {
   end: number
   raw: string
   /**
+   * Raw content before being processed by preparsers (if any)
+   */
+  contentRaw: string
+  /**
    * Slides import by this slide.
    */
   imports?: SourceSlideInfo[]
