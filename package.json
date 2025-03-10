@@ -2,7 +2,7 @@
   "type": "module",
   "version": "51.3.0",
   "private": true,
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.6.2",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -72,14 +72,6 @@
     "vitest": "catalog:",
     "vue-tsc": "catalog:",
     "zx": "catalog:"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@hedgedoc/markdown-it-plugins@2.1.4": "patches/@hedgedoc__markdown-it-plugins@2.1.4.patch"
-    },
-    "onlyBuiltDependencies": [
-      "cypress"
-    ]
   },
   "resolutions": {
     "typescript": "catalog:",
