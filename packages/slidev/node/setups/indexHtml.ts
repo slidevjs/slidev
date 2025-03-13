@@ -67,9 +67,9 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         meta: [
           { property: 'slidev:version', content: version },
           { charset: 'slidev:entry', content: mode === 'dev' && slash(entry) },
-          { name: 'description', content: toAttrValue(info) },
-          { name: 'author', content: toAttrValue(author) },
-          { name: 'keywords', content: toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) },
+          { name: 'description', content: info ? toAttrValue(info) : null },
+          { name: 'author', content: author ? toAttrValue(author) : null },
+          { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
           { property: 'og:title', content: seoMeta.ogTitle },
           { property: 'og:description', content: seoMeta.ogDescription },
           { property: 'og:image', content: seoMeta.ogImage },
