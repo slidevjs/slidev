@@ -84,6 +84,9 @@ catalogs:
     '@types/markdown-it':
       specifier: ^14.1.2
       version: 14.1.2
+    '@types/markdown-it-emoji':
+      specifier: ^3.0.1
+      version: 3.0.1
     '@types/node':
       specifier: ^22.13.10
       version: 22.13.10
@@ -234,6 +237,9 @@ catalogs:
     markdown-it:
       specifier: ^14.1.0
       version: 14.1.0
+    markdown-it-emoji:
+      specifier: ^3.0.0
+      version: 3.0.0
     markdown-it-footnote:
       specifier: ^4.0.0
       version: 4.0.0
@@ -414,7 +420,10 @@ overrides:
   vite: ^6.2.1
 
 patchedDependencies:
-  markdown-it-mdc:
+  '@hedgedoc/markdown-it-plugins@2.1.4':
+    hash: 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
+    path: patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
+  markdown-it-mdc@0.2.5:
     hash: 426a74e1d91fcb1a0bc1418e5ffdd394a23a9579c00ca32b0ea673044f7e9c69
     path: patches/markdown-it-mdc.patch
 
@@ -958,6 +967,9 @@ importers:
       markdown-it:
         specifier: 'catalog:'
         version: 14.1.0
+      markdown-it-emoji:
+        specifier: 'catalog:'
+        version: 3.0.0
       markdown-it-footnote:
         specifier: 'catalog:'
         version: 4.0.0
@@ -1069,7 +1081,10 @@ importers:
     devDependencies:
       '@hedgedoc/markdown-it-plugins':
         specifier: 'catalog:'
-        version: 2.1.4(markdown-it@14.1.0)
+        version: 2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)
+      '@types/markdown-it-emoji':
+        specifier: 'catalog:'
+        version: 3.0.1
       '@types/picomatch':
         specifier: 'catalog:'
         version: 3.0.2
@@ -2393,6 +2408,9 @@ packages:
 
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
+
+  '@types/markdown-it-emoji@3.0.1':
+    resolution: {integrity: sha512-cz1j8R35XivBqq9mwnsrP2fsz2yicLhB8+PDtuVkKOExwEdsVBNI+ROL3sbhtR5occRZ66vT0QnwFZCqdjf3pA==}
 
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
@@ -4889,6 +4907,9 @@ packages:
 
   markdown-it-async@2.0.0:
     resolution: {integrity: sha512-jBthmQR5MwXR9Y8Y0teRoZAenaKQMdjuTfpbNARqMBSRPvyzyXCVduHZHakyyhL3ugIacCobXJrO07t277sIjw==}
+
+  markdown-it-emoji@3.0.0:
+    resolution: {integrity: sha512-+rUD93bXHubA4arpEZO3q80so0qgoFJEKRkRbjKX8RTdca89v2kfyF+xR3i2sQTwql9tpPZPOQN5B+PunspXRg==}
 
   markdown-it-footnote@4.0.0:
     resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
@@ -7560,7 +7581,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.7': {}
 
-  '@hedgedoc/markdown-it-plugins@2.1.4(markdown-it@14.1.0)':
+  '@hedgedoc/markdown-it-plugins@2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)':
     dependencies:
       '@mrdrogdrog/optional': 1.2.1
       html-entities: 2.5.2
@@ -8099,6 +8120,10 @@ snapshots:
   '@types/katex@0.16.7': {}
 
   '@types/linkify-it@5.0.0': {}
+
+  '@types/markdown-it-emoji@3.0.1':
+    dependencies:
+      '@types/markdown-it': 14.1.2
 
   '@types/markdown-it@14.1.2':
     dependencies:
@@ -10994,6 +11019,8 @@ snapshots:
     dependencies:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0
+
+  markdown-it-emoji@3.0.0: {}
 
   markdown-it-footnote@4.0.0: {}
 

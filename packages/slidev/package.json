@@ -82,6 +82,7 @@
     "magic-string": "catalog:",
     "magic-string-stack": "catalog:",
     "markdown-it": "catalog:",
+    "markdown-it-emoji": "catalog:",
     "markdown-it-footnote": "catalog:",
     "markdown-it-mdc": "catalog:",
     "mlly": "catalog:",
@@ -120,6 +121,7 @@
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:",
+    "@types/markdown-it-emoji": "catalog:",
     "@types/picomatch": "catalog:",
     "@types/plantuml-encoder": "catalog:"
   }

@@ -44,6 +44,7 @@ catalog:
   '@types/semver': ^7.5.8
   '@types/vscode': ^1.89.0
   '@types/yargs': ^17.0.33
+  '@types/markdown-it-emoji': ^3.0.1
   '@typescript/ata': ^0.9.7
   '@unhead/vue': ^1.11.20
   '@unocss/extractor-mdc': ^66.0.0
@@ -88,6 +89,7 @@ catalog:
   markdown-it: ^14.1.0
   markdown-it-footnote: ^4.0.0
   markdown-it-mdc: ^0.2.5
+  markdown-it-emoji: ^3.0.0
   mermaid: ^11.4.1
   picomatch: ^4.0.2
   minimist: ^1.2.8

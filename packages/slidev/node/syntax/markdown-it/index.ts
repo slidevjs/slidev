@@ -2,6 +2,7 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 import type MagicString from 'magic-string'
 import type { MarkdownItAsync } from 'markdown-it-async'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
+import { full as MarkdownItEmoji } from 'markdown-it-emoji'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 import MarkdownItMdc from 'markdown-it-mdc'
@@ -27,4 +28,5 @@ export async function useMarkdownItPlugins(md: MarkdownItAsync, options: Resolve
   md.use(MarkdownItVDrag, markdownTransformMap)
   if (config.mdc)
     md.use(MarkdownItMdc)
+  md.use(MarkdownItEmoji)
 }
