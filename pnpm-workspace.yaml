@@ -5,6 +5,7 @@ packages:
   - docs
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
+  markdown-it-mdc@0.2.5: patches/markdown-it-mdc.patch
 catalog:
   '@antfu/eslint-config': ^4.8.1
   '@antfu/ni': ^24.1.0

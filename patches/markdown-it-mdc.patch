@@ -1,0 +1,72 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 7673b034c94b8e6b63363a9b0632bb98e402d3e4..8b19e7ecc7099f821f943c7274e8ad8cb29d2e21 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -142,32 +142,32 @@ const MarkdownItMdcBlock = (md) => {
+   const min_markers = 2;
+   const marker_str = ":";
+   const marker_char = marker_str.charCodeAt(0);
+-  md.block.ruler.before(
+-    "fence",
+-    "mdc_block_shorthand",
+-    // eslint-disable-next-line prefer-arrow-callback
+-    function mdc_block_shorthand(state, startLine, endLine, silent) {
+-      const line = state.src.slice(state.bMarks[startLine] + state.tShift[startLine], state.eMarks[startLine]);
+-      if (!line.match(/^:\w/))
+-        return false;
+-      const {
+-        name,
+-        props
+-      } = parseBlockParams(line.slice(1));
+-      state.lineMax = startLine + 1;
+-      if (!silent) {
+-        const token = state.push("mdc_block_shorthand", name, 0);
+-        props?.forEach(([key, value]) => {
+-          if (key === "class")
+-            token.attrJoin(key, value);
+-          else
+-            token.attrSet(key, value);
+-        });
+-      }
+-      state.line = startLine + 1;
+-      return true;
+-    }
+-  );
++  // md.block.ruler.before(
++  //   "fence",
++  //   "mdc_block_shorthand",
++  //   // eslint-disable-next-line prefer-arrow-callback
++  //   function mdc_block_shorthand(state, startLine, endLine, silent) {
++  //     const line = state.src.slice(state.bMarks[startLine] + state.tShift[startLine], state.eMarks[startLine]);
++  //     if (!line.match(/^:\w/))
++  //       return false;
++  //     const {
++  //       name,
++  //       props
++  //     } = parseBlockParams(line.slice(1));
++  //     state.lineMax = startLine + 1;
++  //     if (!silent) {
++  //       const token = state.push("mdc_block_shorthand", name, 0);
++  //       props?.forEach(([key, value]) => {
++  //         if (key === "class")
++  //           token.attrJoin(key, value);
++  //         else
++  //           token.attrSet(key, value);
++  //       });
++  //     }
++  //     state.line = startLine + 1;
++  //     return true;
++  //   }
++  // );
+   md.block.ruler.before(
+     "fence",
+     "mdc_block",
+@@ -548,7 +548,7 @@ const MarkdownItMdc = (md, options = {}) => {
+     blockComponent = true,
+     inlineProps = true,
+     inlineSpan = true,
+-    inlineComponent = true
++    inlineComponent = false
+   } = options.syntax || {};
+   if (blockComponent)
+     md.use(MarkdownItMdcBlock);
