@@ -10,7 +10,7 @@ description: |
 
 # MDC Syntax
 
-Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxt.com/docs/files/markdown) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
+Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxt.com/docs/files/markdown#mdc-syntax) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
 
 You can enable it by adding `mdc: true` to the frontmatter of your markdown file.
 
