@@ -28,4 +28,4 @@ The **default** slot
 ::
 ```
 
-Learn more about [MDC Syntax](https://content.nuxt.com/guide/writing/mdc).
+Learn more about [MDC Syntax](https://content.nuxt.com/docs/files/markdown#mdc-syntax).
