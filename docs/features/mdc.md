@@ -1,6 +1,6 @@
 ---
 relates:
-  - Nuxt's MDC Syntax: https://content.nuxt.com/usage/markdown
+  - Nuxt's MDC Syntax: https://content.nuxt.com/docs/files/markdown#mdc-syntax
   - markdown-it-mdc: https://github.com/antfu/markdown-it-mdc
 since: v0.43.0
 tags: [syntax, styling]
