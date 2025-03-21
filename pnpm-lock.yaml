@@ -1021,6 +1021,9 @@ importers:
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
+      unhead:
+        specifier: 2.0.0-rc.1
+        version: 2.0.0-rc.1
       unocss:
         specifier: 'catalog:'
         version: 66.0.0(postcss@8.5.3)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
@@ -6286,6 +6289,9 @@ packages:
 
   unhead@1.11.20:
     resolution: {integrity: sha512-3AsNQC0pjwlLqEYHLjtichGWankK8yqmocReITecmpB1H0aOabeESueyy+8X1gyJx4ftZVwo9hqQ4O3fPWffCA==}
+
+  unhead@2.0.0-rc.1:
+    resolution: {integrity: sha512-jy/rBmC8Q+9EvSpkMYL4gvozSJGe7XTPPcC6NCzh8dUhNxC5eiwtIYdS/gyxvgOnItb9e+B/fHvrFFgLUkwuzQ==}
 
   unicorn-magic@0.1.0:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
@@ -12606,6 +12612,10 @@ snapshots:
       '@unhead/dom': 1.11.20
       '@unhead/schema': 1.11.20
       '@unhead/shared': 1.11.20
+      hookable: 5.5.3
+
+  unhead@2.0.0-rc.1:
+    dependencies:
       hookable: 5.5.3
 
   unicorn-magic@0.1.0: {}

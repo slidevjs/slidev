@@ -44,6 +44,7 @@ export function getDefaultConfig(): SlidevConfig {
     wakeLock: true,
     remote: false,
     mdc: false,
+    seoMeta: {},
   }
 }
 

@@ -20,6 +20,12 @@ drawings:
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
+# open graph
+seoMeta:
+  ogTitle: Slidev Starter Templat
+  ogDescription: Presentation slides for developers
+  ogImage: https://cover.sli.dev
+  ogUrl: https://example.com
 ---
 
 # Welcome to Slidev
