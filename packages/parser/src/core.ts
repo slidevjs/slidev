@@ -110,6 +110,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     level,
     revision,
     content,
+    contentRaw: content,
     frontmatter,
     frontmatterStyle: matterResult.type,
     frontmatterDoc: matterResult.doc,
