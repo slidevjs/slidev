@@ -159,6 +159,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/sghuang19/slidev-addon-naive',
   },
+  {
+    id: 'slidev-addon-fancy-arrow',
+    name: 'Fancy Arrow',
+    description: 'Hand drawn arrows with various styling and positioning options',
+    tags: ['Component'],
+    author: {
+      name: 'whitphx',
+      link: 'https://github.com/whitphx',
+    },
+    repo: 'https://github.com/whitphx/slidev-addon-fancy-arrow',
+  },
   // Add yours here!
   {
     id: '',
