@@ -1,10 +1,11 @@
 import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
 import { useCommand } from 'reactive-vscode'
-import { Position, Range, Selection, TextEditorRevealType, Uri, window, workspace } from 'vscode'
+import { commands, env, Position, Range, Selection, TextEditorRevealType, Uri, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
 import { useEditingSlideSource } from './composables/useEditingSlideSource'
 import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
+import { useMcpServer } from './composables/useMcpServer'
 import { configuredPort, forceEnabled, include, previewSync } from './configs'
 import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
@@ -155,4 +156,30 @@ export function useCommands() {
 
   useCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
   useCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
+  useCommand('slidev.mcp.start', () => {
+    const { start } = useMcpServer()
+    start()
+  })
+  useCommand('slidev.mcp.stop', () => {
+    const { stop } = useMcpServer()
+    stop()
+  })
+  useCommand('slidev.open-mcp-settings', () => {
+    return commands.executeCommand('workbench.action.openSettings', 'slidev.mcp')
+  })
+  useCommand('slidev.mcp.copy-tool', (tool: string) => {
+    env.clipboard.writeText(tool).then(() => {
+      window.showInformationMessage(`Tool Name "${tool}" copied to clipboard.`)
+    }, (error) => {
+      window.showErrorMessage(`Copy Error: ${error}`)
+    })
+  })
+  useCommand('slidev.mcp.copy-url', () => {
+    const { url } = useMcpServer()
+    env.clipboard.writeText(url.value).then(() => {
+      window.showInformationMessage(`URL "${url.value}" copied to clipboard.`)
+    }, (error) => {
+      window.showErrorMessage(`Copy Error: ${error}`)
+    })
+  })
 }
