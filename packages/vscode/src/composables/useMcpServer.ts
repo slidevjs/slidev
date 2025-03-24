@@ -202,6 +202,7 @@ export async function createMcpServerDefault(): Promise<FastMCP> {
 }
 
 export const useMcpServer = createSingletonComposable(() => {
+  const endpoint = '/sse'
   const state = reactive({
     status: false,
     tools,
@@ -239,7 +240,7 @@ export const useMcpServer = createSingletonComposable(() => {
       server.start({
         transportType: 'sse',
         sse: {
-          endpoint: '/sse',
+          endpoint,
           port: mcpPort.value,
         },
       })
@@ -248,7 +249,7 @@ export const useMcpServer = createSingletonComposable(() => {
         const rootPath = workspace.workspaceFolders[0].uri.fsPath
         await updateCursorMcpConfig(
           rootPath,
-          mcpUrl.value,
+          `${mcpUrl.value}${endpoint}`,
           mcpIDE.value,
         )
       }
@@ -278,7 +279,7 @@ export const useMcpServer = createSingletonComposable(() => {
   return {
     state,
     server: computed(() => serverInstance),
-    url: computed(() => `${mcpUrl.value}/sse`),
+    url: computed(() => `${mcpUrl.value}${endpoint}`),
     start,
     stop,
   }
