@@ -180,3 +180,57 @@ export default definePreparserSetup(() => {
 ```
 
 And that's it.
+
+
+
+### Use case 3: using custom frontmatter to transform note
+
+Imagine a case where you want to replace the slides default notes with custom notes.
+For instance, you might want to write your `slides.md` as follows:
+
+<!-- eslint-skip -->
+
+```md
+---
+layout: quote
+_note: notes/note.md
+---
+
+# Welcome
+
+> great!
+
+<!--
+Default slide notes
+-->
+```
+
+Here we used an underscore in `_note` to avoid possible conflicts with existing frontmatter properties.
+
+To handle this `_note: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
+
+```ts twoslash
+import { definePreparserSetup } from '@slidev/types'
+import fs from 'fs'
+import { promises as fsp } from 'fs'
+
+export default definePreparserSetup(() => {
+  return [
+    {
+      async transformNote(note, frontmatter) {
+        if ('_note' in frontmatter && fs.existsSync(frontmatter._note)) {
+          try {
+            const newNote = await fsp.readFile(frontmatter._note, 'utf8')
+            return newNote
+          } catch (err) {
+          }
+        }
+
+        return note
+      },
+    },
+  ]
+})
+```
+
+And that's it.
