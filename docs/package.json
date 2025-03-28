@@ -31,6 +31,7 @@
     "unplugin-vue-components": "catalog:",
     "vite-plugin-inspect": "catalog:",
     "vitepress": "catalog:",
+    "vitepress-plugin-llms": "^0.0.16",
     "vue": "catalog:"
   }
 }
