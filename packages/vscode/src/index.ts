@@ -5,6 +5,7 @@ import { activeEntry, useProjects } from './projects'
 import { useAnnotations } from './views/annotations'
 import { useFoldings } from './views/foldings'
 import { logger } from './views/logger'
+import { useMcpTreeView } from './views/mcpTreeView'
 import { usePreviewWebview } from './views/previewWebview'
 import { useProjectsTree } from './views/projectsTree'
 import { useSlidesTree } from './views/slidesTree'
@@ -22,6 +23,7 @@ const { activate, deactivate } = defineExtension(() => {
   usePreviewWebview()
   useAnnotations()
   useFoldings()
+  useMcpTreeView()
 
   // language server
   const labsInfo = useLanguageClient()

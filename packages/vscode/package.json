@@ -239,6 +239,36 @@
         "title": "Unsync preview window with editor cursor",
         "icon": "$(lock)",
         "enablement": "slidev:preview:sync"
+      },
+      {
+        "command": "slidev.mcp.start",
+        "category": "Slidev",
+        "title": "Start MCP server",
+        "icon": "$(play)"
+      },
+      {
+        "command": "slidev.mcp.stop",
+        "category": "Slidev",
+        "title": "Stop MCP server",
+        "icon": "$(stop-circle)"
+      },
+      {
+        "command": "slidev.open-mcp-settings",
+        "category": "Slidev",
+        "title": "Open MCP settings",
+        "icon": "$(settings)"
+      },
+      {
+        "command": "slidev.mcp.copy-tool",
+        "title": "Copy MCP Tool Name",
+        "category": "Slidev",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "slidev.mcp.copy-url",
+        "title": "Copy MCP URL",
+        "category": "Slidev",
+        "icon": "$(link)"
       }
     ],
     "menus": {
@@ -319,6 +349,21 @@
           "command": "slidev.disable-preview-sync",
           "when": "view =~ /slidev-preview/ && slidev:preview:sync",
           "group": "navigation@7"
+        },
+        {
+          "command": "slidev.mcp.stop",
+          "when": "view =~ /slidev-mcp-tree/ && slidev:mcp:status",
+          "group": "navigation@1"
+        },
+        {
+          "command": "slidev.mcp.start",
+          "when": "view =~ /slidev-mcp-tree/ && !slidev:mcp:status",
+          "group": "navigation@1"
+        },
+        {
+          "command": "slidev.mcp.copy-url",
+          "when": "view =~ /slidev-mcp-tree/ && slidev:mcp:status",
+          "group": "navigation@2"
         }
       ],
       "view/item/context": [
@@ -391,6 +436,17 @@
           "scope": "window",
           "description": "The command to start Slidev dev server. See https://sli.dev/features/vscode-extension#dev-command",
           "default": "npm exec -c 'slidev ${args}'"
+        },
+        "slidev.mcp.port": {
+          "type": "number",
+          "scope": "window",
+          "description": "The port of Model Context Protocol (MCP) server.",
+          "default": 4000
+        },
+        "slidev.mcp.ide": {
+          "type": "string",
+          "scope": "window",
+          "description": "The IDE name to be used in MCP server."
         }
       }
     },
@@ -426,6 +482,12 @@
           "visibility": "visible",
           "initialSize": 3,
           "when": "slidev:enabled"
+        },
+        {
+          "id": "slidev-mcp-tree",
+          "name": "MCP Server",
+          "visibility": "collapsed",
+          "when": "slidev:enabled"
         }
       ]
     },
@@ -433,6 +495,10 @@
       {
         "view": "slidev-slides-tree",
         "contents": "No active slides entry.\n[Choose one](command:slidev.choose-entry)"
+      },
+      {
+        "view": "slidev-mcp-tree",
+        "contents": "MCP server is not running.\n[Start MCP server](command:slidev.mcp.start)\n[Open MCP settings](command:slidev.open-mcp-settings)"
       }
     ]
   },
@@ -452,6 +518,7 @@
     "@types/vscode": "^1.89.0",
     "@volar/language-server": "catalog:",
     "@volar/vscode": "catalog:",
+    "fastmcp": "^1.20.5",
     "get-port-please": "catalog:",
     "mlly": "catalog:",
     "ovsx": "catalog:",
@@ -459,6 +526,7 @@
     "reactive-vscode": "catalog:",
     "tm-grammars": "catalog:",
     "volar-service-prettier": "catalog:",
-    "volar-service-yaml": "catalog:"
+    "volar-service-yaml": "catalog:",
+    "zod": "^3.24.2"
   }
 }
