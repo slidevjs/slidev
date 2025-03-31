@@ -699,6 +699,9 @@ importers:
       vitepress:
         specifier: 'catalog:'
         version: 2.0.0-alpha.4(@algolia/client-search@5.19.0)(@types/node@22.13.10)(axios@1.7.8)(drauu@0.4.3)(fuse.js@7.1.0)(jiti@2.4.2)(postcss@8.5.3)(search-insights@2.17.0)(tsx@4.19.2)(typescript@5.8.2)(yaml@2.7.0)
+      vitepress-plugin-llms:
+        specifier: ^0.0.16
+        version: 0.0.16
       vue:
         specifier: 'catalog:'
         version: 3.5.13(typescript@5.8.2)
@@ -918,7 +921,7 @@ importers:
         version: 3.7.0
       debug:
         specifier: 'catalog:'
-        version: 4.4.0(supports-color@8.1.1)
+        version: 4.4.0(supports-color@5.5.0)
       fast-deep-equal:
         specifier: 'catalog:'
         version: 3.1.3
@@ -2384,6 +2387,12 @@ packages:
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
+  '@types/lodash-es@4.17.12':
+    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
+
+  '@types/lodash@4.17.16':
+    resolution: {integrity: sha512-HX7Em5NYQAXKW+1T+FiuG27NGwzJfCX3s1GjOa7ujxZa52kjJLOr4FUxT+giF6Tgxv1e+/czV/iTtBw27WTU9g==}
+
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
 
@@ -3255,6 +3264,10 @@ packages:
 
   codemirror-theme-vars@0.1.2:
     resolution: {integrity: sha512-WTau8X2q58b0SOAY9DO+iQVw8JKVEgyQIqArp2D732tcc+pobbMta3bnVMdQdmgwuvNrOFFr6HoxPRoQOgooFA==}
+
+  codsen-utils@1.6.7:
+    resolution: {integrity: sha512-M+9D3IhFAk4T8iATX62herVuIx1sp5kskWgxEegKD/JwTTSSGjGQs5Q5J4vVJ4mLcn1uhfxDYv6Yzr8zleHF3w==}
+    engines: {node: '>=14.18.0'}
 
   color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
@@ -4896,6 +4909,10 @@ packages:
   markdown-table@3.0.3:
     resolution: {integrity: sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==}
 
+  markdown-title@1.0.2:
+    resolution: {integrity: sha512-MqIQVVkz+uGEHi3TsHx/czcxxCbRIL7sv5K5DnYw/tI+apY54IbPefV/cmgxp6LoJSEx/TqcHdLs/298afG5QQ==}
+    engines: {node: '>=6'}
+
   marked@13.0.3:
     resolution: {integrity: sha512-rqRix3/TWzE9rIoFGIn8JmsVfhiuC8VIQ8IdX5TfzmeBucdY05/0UlzKaw0eVtpcN/OdVFpBk7CjKGo9iHJ/zA==}
     engines: {node: '>= 18'}
@@ -5594,6 +5611,22 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
+  ranges-apply@7.0.19:
+    resolution: {integrity: sha512-imA03KuTSuSpQtq9SDhavUz7BtiddCPj+fsYM/XpdypRN/s8vyTayKzni6m5nYs7VMds1kSNK1V3jfwVrPUWBQ==}
+    engines: {node: '>=14.18.0'}
+
+  ranges-merge@9.0.18:
+    resolution: {integrity: sha512-2+6Eh4yxi5sudUmvCdvxVOSdXIXV+Brfutw8chhZmqkT0REqlzilpyQps1S5n8c7f0+idblqSAHGahTbf/Ar5g==}
+    engines: {node: '>=14.18.0'}
+
+  ranges-push@7.0.18:
+    resolution: {integrity: sha512-wzGHipEklSlY0QloQ88PNt+PkTURIB42PLLcQGY+WyYBlNpnrzps6EYooD3RqNXtdqMQ9kR8IVaF9itRYtuzLA==}
+    engines: {node: '>=14.18.0'}
+
+  ranges-sort@6.0.13:
+    resolution: {integrity: sha512-M3P0/dUnU3ihLPX2jq0MT2NJA1ls/q6cUAUVPD28xdFFqm3VFarPjTKKhnsBSvYCpZD8HdiElAGAyoPu6uOQjA==}
+    engines: {node: '>=14.18.0'}
+
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
 
@@ -5946,6 +5979,22 @@ packages:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
 
+  string-collapse-leading-whitespace@7.0.9:
+    resolution: {integrity: sha512-lEuTHlogBT9PWipfk0FOyvoMKX8syiE03QoFk5MDh8oS0AJ2C07IlstR5cGkxz48nKkOIuvkC28w9Rx/cVRNDg==}
+    engines: {node: '>=14.18.0'}
+
+  string-left-right@6.0.20:
+    resolution: {integrity: sha512-dz2mUgmsI7m/FMe+BoxZ2+73X1TUoQvjCdnq8vbIAnHlvWfVZleNUR+lw+QgHA2dlJig+hUWC9bFYdNFGGy2bA==}
+    engines: {node: '>=14.18.0'}
+
+  string-strip-html@13.4.12:
+    resolution: {integrity: sha512-mr1GM1TFcwDkYwLE7TNkHY+Lf3YFEBa19W9KntZoJJSbrKF07W4xmLkPnqf8cypEGyr+dc1H9hsdTw5VSNVGxg==}
+    engines: {node: '>=14.18.0'}
+
+  string-trim-spaces-only@5.0.12:
+    resolution: {integrity: sha512-Un5nIO1av+hzfnKGmY+bWe0AD4WH37TuDW+jeMPm81rUvU2r3VPRj9vEKdZkPmuhYAMuKlzarm7jDSKwJKOcpQ==}
+    engines: {node: '>=14.18.0'}
+
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
     engines: {node: '>=8'}
@@ -6086,6 +6135,9 @@ packages:
   time-span@5.1.0:
     resolution: {integrity: sha512-75voc/9G4rDIJleOo4jPvN4/YC4GRZrY8yy1uU4lwrB3XEQbWve8zXoO5No4eFrGcTAMYyoY67p8jRQdtA1HbA==}
     engines: {node: '>=12'}
+
+  tiny-invariant@1.3.3:
+    resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
@@ -6526,6 +6578,9 @@ packages:
     peerDependenciesMeta:
       vite:
         optional: true
+
+  vitepress-plugin-llms@0.0.16:
+    resolution: {integrity: sha512-wtA8EhtXELhrwmSxgDuj3nX0iCL99igffFJsj8T1Mb98RsqZl1rYdy5PNFpF3jfjP96xAwT+q9LjfRYvtoLIuA==}
 
   vitepress@2.0.0-alpha.4:
     resolution: {integrity: sha512-3/tiBTx47d4to5RqfYwWeht9ND0la0C8Vc0gtbdY3RMffFnWGmAQryODTXDN9Cm1exXZr8ywcxA2eJcpxa3igQ==}
@@ -7070,7 +7125,7 @@ snapshots:
       '@babel/traverse': 7.25.9
       '@babel/types': 7.26.0
       convert-source-map: 2.0.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -7207,7 +7262,7 @@ snapshots:
       '@babel/parser': 7.26.2
       '@babel/template': 7.25.9
       '@babel/types': 7.26.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -7492,7 +7547,7 @@ snapshots:
   '@eslint/config-array@0.19.2':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -7510,7 +7565,7 @@ snapshots:
   '@eslint/eslintrc@3.3.0':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       espree: 10.3.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -7605,7 +7660,7 @@ snapshots:
       '@antfu/install-pkg': 1.0.0
       '@antfu/utils': 8.1.0
       '@iconify/types': 2.0.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       globals: 15.15.0
       kolorist: 1.8.0
       local-pkg: 1.1.1
@@ -8090,6 +8145,12 @@ snapshots:
 
   '@types/linkify-it@5.0.0': {}
 
+  '@types/lodash-es@4.17.12':
+    dependencies:
+      '@types/lodash': 4.17.16
+
+  '@types/lodash@4.17.16': {}
+
   '@types/markdown-it@14.1.2':
     dependencies:
       '@types/linkify-it': 5.0.0
@@ -8177,7 +8238,7 @@ snapshots:
       '@typescript-eslint/types': 8.26.0
       '@typescript-eslint/typescript-estree': 8.26.0(typescript@5.8.2)
       '@typescript-eslint/visitor-keys': 8.26.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       eslint: 9.22.0(jiti@2.4.2)
       typescript: 5.8.2
     transitivePeerDependencies:
@@ -8192,7 +8253,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.26.0(typescript@5.8.2)
       '@typescript-eslint/utils': 8.26.0(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       eslint: 9.22.0(jiti@2.4.2)
       ts-api-utils: 2.0.1(typescript@5.8.2)
       typescript: 5.8.2
@@ -8205,7 +8266,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.26.0
       '@typescript-eslint/visitor-keys': 8.26.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -8237,7 +8298,7 @@ snapshots:
 
   '@typescript/vfs@1.6.1(typescript@5.8.2)':
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       typescript: 5.8.2
     transitivePeerDependencies:
       - supports-color
@@ -8792,7 +8853,7 @@ snapshots:
 
   agent-base@7.1.1:
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -9202,6 +9263,10 @@ snapshots:
   cockatiel@3.2.1: {}
 
   codemirror-theme-vars@0.1.2: {}
+
+  codsen-utils@1.6.7:
+    dependencies:
+      rfdc: 1.4.1
 
   color-convert@1.9.3:
     dependencies:
@@ -9870,7 +9935,7 @@ snapshots:
       '@types/doctrine': 0.0.9
       '@typescript-eslint/scope-manager': 8.26.0
       '@typescript-eslint/utils': 8.26.0(eslint@9.22.0(jiti@2.4.2))(typescript@5.8.2)
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       doctrine: 3.0.0
       enhanced-resolve: 5.17.1
       eslint: 9.22.0(jiti@2.4.2)
@@ -9890,7 +9955,7 @@ snapshots:
       '@es-joy/jsdoccomment': 0.49.0
       are-docs-informative: 0.0.2
       comment-parser: 1.4.1
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint: 9.22.0(jiti@2.4.2)
       espree: 10.3.0
@@ -9960,7 +10025,7 @@ snapshots:
 
   eslint-plugin-toml@0.12.0(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       eslint: 9.22.0(jiti@2.4.2)
       eslint-compat-utils: 0.6.3(eslint@9.22.0(jiti@2.4.2))
       lodash: 4.17.21
@@ -10007,7 +10072,7 @@ snapshots:
 
   eslint-plugin-yml@1.17.0(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint: 9.22.0(jiti@2.4.2)
       eslint-compat-utils: 0.6.3(eslint@9.22.0(jiti@2.4.2))
@@ -10048,7 +10113,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.3.0
       eslint-visitor-keys: 4.2.0
@@ -10514,7 +10579,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -10532,7 +10597,7 @@ snapshots:
   https-proxy-agent@7.0.5:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -10856,7 +10921,7 @@ snapshots:
     dependencies:
       chalk: 5.4.1
       commander: 13.1.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       execa: 8.0.1
       lilconfig: 3.1.3
       listr2: 8.2.5
@@ -11003,6 +11068,8 @@ snapshots:
       uc.micro: 2.1.0
 
   markdown-table@3.0.3: {}
+
+  markdown-title@1.0.2: {}
 
   marked@13.0.3: {}
 
@@ -11324,7 +11391,7 @@ snapshots:
   micromark@4.0.0:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       decode-named-character-reference: 1.0.2
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.1
@@ -11865,6 +11932,25 @@ snapshots:
 
   quick-lru@5.1.1: {}
 
+  ranges-apply@7.0.19:
+    dependencies:
+      ranges-merge: 9.0.18
+      tiny-invariant: 1.3.3
+
+  ranges-merge@9.0.18:
+    dependencies:
+      ranges-push: 7.0.18
+      ranges-sort: 6.0.13
+
+  ranges-push@7.0.18:
+    dependencies:
+      codsen-utils: 1.6.7
+      ranges-sort: 6.0.13
+      string-collapse-leading-whitespace: 7.0.9
+      string-trim-spaces-only: 5.0.12
+
+  ranges-sort@6.0.13: {}
+
   rc9@2.1.2:
     dependencies:
       defu: 6.1.4
@@ -12237,6 +12323,25 @@ snapshots:
 
   string-argv@0.3.2: {}
 
+  string-collapse-leading-whitespace@7.0.9: {}
+
+  string-left-right@6.0.20:
+    dependencies:
+      codsen-utils: 1.6.7
+      rfdc: 1.4.1
+
+  string-strip-html@13.4.12:
+    dependencies:
+      '@types/lodash-es': 4.17.12
+      codsen-utils: 1.6.7
+      html-entities: 2.5.2
+      lodash-es: 4.17.21
+      ranges-apply: 7.0.19
+      ranges-push: 7.0.18
+      string-left-right: 6.0.20
+
+  string-trim-spaces-only@5.0.12: {}
+
   string-width@4.2.3:
     dependencies:
       emoji-regex: 8.0.0
@@ -12410,6 +12515,8 @@ snapshots:
     dependencies:
       convert-hrtime: 5.0.0
 
+  tiny-invariant@1.3.3: {}
+
   tinybench@2.9.0: {}
 
   tinyexec@0.3.2: {}
@@ -12490,7 +12597,7 @@ snapshots:
       cac: 6.7.14
       chokidar: 4.0.3
       consola: 3.4.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       esbuild: 0.25.0
       joycon: 3.1.1
       picocolors: 1.1.1
@@ -12687,7 +12794,7 @@ snapshots:
     dependencies:
       '@antfu/install-pkg': 1.0.0
       '@iconify/utils': 2.3.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       local-pkg: 1.1.1
       unplugin: 2.2.0
     optionalDependencies:
@@ -12703,7 +12810,7 @@ snapshots:
   unplugin-vue-components@28.4.1(@babel/parser@7.26.2)(@nuxt/kit@3.13.0(rollup@4.35.0))(vue@3.5.13(typescript@5.8.2)):
     dependencies:
       chokidar: 3.6.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       local-pkg: 1.1.1
       magic-string: 0.30.17
       mlly: 1.7.4
@@ -12818,7 +12925,7 @@ snapshots:
   vite-node@3.0.8(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       es-module-lexer: 1.6.0
       pathe: 2.0.3
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)
@@ -12839,7 +12946,7 @@ snapshots:
   vite-plugin-inspect@11.0.0(@nuxt/kit@3.13.0(rollup@4.35.0))(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)):
     dependencies:
       ansis: 3.17.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       error-stack-parser-es: 1.0.5
       ohash: 2.0.4
       open: 10.1.0
@@ -12855,7 +12962,7 @@ snapshots:
 
   vite-plugin-remote-assets@1.0.0(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       magic-string: 0.30.17
       node-fetch-native: 1.6.6
       ohash: 1.1.4
@@ -12874,7 +12981,7 @@ snapshots:
 
   vite-plugin-vue-server-ref@1.0.0(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       klona: 2.0.6
       mlly: 1.7.4
       ufo: 1.5.4
@@ -12898,6 +13005,14 @@ snapshots:
   vitefu@1.0.6(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)):
     optionalDependencies:
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)
+
+  vitepress-plugin-llms@0.0.16:
+    dependencies:
+      gray-matter: 4.0.3
+      markdown-title: 1.0.2
+      minimatch: 10.0.1
+      picocolors: 1.1.1
+      string-strip-html: 13.4.12
 
   vitepress@2.0.0-alpha.4(@algolia/client-search@5.19.0)(@types/node@22.13.10)(axios@1.7.8)(drauu@0.4.3)(fuse.js@7.1.0)(jiti@2.4.2)(postcss@8.5.3)(search-insights@2.17.0)(tsx@4.19.2)(typescript@5.8.2)(yaml@2.7.0):
     dependencies:
@@ -12960,7 +13075,7 @@ snapshots:
       '@vitest/spy': 3.0.8
       '@vitest/utils': 3.0.8
       chai: 5.2.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       expect-type: 1.1.0
       magic-string: 0.30.17
       pathe: 2.0.3
@@ -13051,7 +13166,7 @@ snapshots:
 
   vue-eslint-parser@10.1.1(eslint@9.22.0(jiti@2.4.2)):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@5.5.0)
       eslint: 9.22.0(jiti@2.4.2)
       eslint-scope: 8.3.0
       eslint-visitor-keys: 4.2.0
