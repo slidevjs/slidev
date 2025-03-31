@@ -484,6 +484,12 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "seoMeta": {
+          "$ref": "#/definitions/SeoMeta",
+          "description": "Seo meta tags settings",
+          "markdownDescription": "Seo meta tags settings",
+          "default": {}
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",
@@ -776,6 +782,49 @@
           "default": true
         }
       }
+    },
+    "SeoMeta": {
+      "type": "object",
+      "properties": {
+        "ogTitle": {
+          "type": "string"
+        },
+        "ogDescription": {
+          "type": "string"
+        },
+        "ogImage": {
+          "type": "string"
+        },
+        "ogUrl": {
+          "type": "string"
+        },
+        "twitterCard": {
+          "type": "string",
+          "enum": [
+            "summary",
+            "summary_large_image",
+            "app",
+            "player"
+          ]
+        },
+        "twitterSite": {
+          "type": "string"
+        },
+        "twitterTitle": {
+          "type": "string"
+        },
+        "twitterDescription": {
+          "type": "string"
+        },
+        "twitterImage": {
+          "type": "string"
+        },
+        "twitterUrl": {
+          "type": "string"
+        }
+      },
+      "description": "The following type should map to unhead MataFlat type",
+      "markdownDescription": "The following type should map to unhead MataFlat type"
     },
     "Frontmatter": {
       "type": "object",

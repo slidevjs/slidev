@@ -102,6 +102,7 @@
     "sirv": "catalog:",
     "source-map-js": "catalog:",
     "typescript": "catalog:",
+    "unhead": "catalog:",
     "unocss": "catalog:",
     "unplugin-icons": "catalog:",
     "unplugin-vue-components": "catalog:",
