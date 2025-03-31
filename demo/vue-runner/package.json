@@ -8,10 +8,10 @@
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "catalog:",
-    "@slidev/theme-seriph": "catalog:",
-    "@vue/compiler-sfc": "catalog:",
-    "nodemon": "catalog:",
-    "vue": "catalog:"
+    "@slidev/theme-default": "catalog:themes",
+    "@slidev/theme-seriph": "catalog:themes",
+    "@vue/compiler-sfc": "catalog:demo",
+    "nodemon": "catalog:dev",
+    "vue": "catalog:frontend"
   }
 }

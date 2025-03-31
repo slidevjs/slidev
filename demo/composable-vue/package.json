@@ -7,12 +7,12 @@
     "export:clicks": "slidev export --with-clicks"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "catalog:",
-    "@iconify-json/ri": "catalog:",
+    "@iconify-json/mdi": "catalog:icons",
+    "@iconify-json/ri": "catalog:icons",
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "catalog:",
-    "@slidev/theme-seriph": "catalog:",
+    "@slidev/theme-default": "catalog:themes",
+    "@slidev/theme-seriph": "catalog:themes",
     "@slidev/types": "workspace:*",
-    "nodemon": "catalog:"
+    "nodemon": "catalog:dev"
   }
 }

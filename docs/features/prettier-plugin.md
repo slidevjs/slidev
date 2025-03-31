@@ -28,6 +28,10 @@ pnpm i -D prettier prettier-plugin-slidev
 yarn add -D prettier prettier-plugin-slidev
 ```
 
+```bash [bun]
+bun add -D prettier prettier-plugin-slidev
+```
+
 :::
 
 ## 2. Activate the plugin

@@ -4,6 +4,7 @@ import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
+import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
   optimizeDeps: {
@@ -19,6 +20,12 @@ export default defineConfig({
     },
   },
   plugins: [
+    llmstxt({
+      ignoreFiles: [
+        'index.md',
+        'README.md',
+      ],
+    }),
     Components({
       dirs: [
         './.vitepress/theme/components',
