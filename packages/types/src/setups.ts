@@ -4,10 +4,12 @@ import type { MermaidConfig } from 'mermaid'
 import type * as monaco from 'monaco-editor'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, Highlighter, LanguageInput } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
+import type { Plugin as VitePlugin } from 'vite'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
 import type { CodeRunnerProviders } from './code-runner'
 import type { ContextMenuItem } from './context-menu'
+import type { ResolvedSlidevOptions } from './options'
 import type { MarkdownTransformer } from './transform'
 import type { SlidevPreparserExtension } from './types'
 
@@ -79,6 +81,7 @@ export type PreparserSetup = (context: {
   headmatter: Record<string, unknown>
   mode?: string
 }) => Awaitable<SlidevPreparserExtension[]>
+export type VitePluginsSetup = (options: ResolvedSlidevOptions) => Awaitable<VitePlugin[]>
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
@@ -105,5 +108,6 @@ export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
 export const defineTransformersSetup = defineSetup<TransformersSetup>
 export const definePreparserSetup = defineSetup<PreparserSetup>
+export const defineVitePluginsSetup = defineSetup<VitePluginsSetup>
 export const defineCodeRunnersSetup = defineSetup<CodeRunnersSetup>
 export const defineContextMenuSetup = defineSetup<ContextMenuSetup>

@@ -65,3 +65,19 @@ export default defineConfig({
 
 Please pass the Vue options to the `slidev.vue` field as described above
 :::
+
+## Add Custom Plugins based on Slide data
+
+Usually you can add Vite plugins into your `vite.config.ts` (see above).
+However, if you want to add plugins based on the slide data, you need to add a `./setup/vite-plugins.ts` with the following content:
+
+```ts twoslash
+import { defineVitePluginSetup } from '@slidev/types'
+
+export default defineVitePluginSetup((options) => {
+  return [
+    // Your plugins here
+    // Slide data is available as options.data.slides
+  ]
+})
+```
