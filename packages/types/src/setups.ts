@@ -81,7 +81,7 @@ export type PreparserSetup = (context: {
   headmatter: Record<string, unknown>
   mode?: string
 }) => Awaitable<SlidevPreparserExtension[]>
-export type VitePluginSetup = (options: ResolvedSlidevOptions) => Awaitable<VitePlugin[]>
+export type VitePluginsSetup = (options: ResolvedSlidevOptions) => Awaitable<VitePlugin[]>
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
@@ -108,6 +108,6 @@ export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
 export const defineTransformersSetup = defineSetup<TransformersSetup>
 export const definePreparserSetup = defineSetup<PreparserSetup>
-export const defineVitePluginSetup = defineSetup<VitePluginSetup>
+export const defineVitePluginsSetup = defineSetup<VitePluginsSetup>
 export const defineCodeRunnersSetup = defineSetup<CodeRunnersSetup>
 export const defineContextMenuSetup = defineSetup<ContextMenuSetup>

@@ -19,7 +19,7 @@ import { createUnocssPlugin } from './unocss'
 import { createUserVitePlugins } from './userPlugins'
 import { createVuePlugin } from './vue'
 
-export async function ViteSlidevPlugin(
+export function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions = {},
   serverOptions: SlidevServerOptions = {},
@@ -42,6 +42,6 @@ export async function ViteSlidevPlugin(
     createUnocssPlugin(options, pluginOptions),
     createStaticCopyPlugin(options, pluginOptions),
     createInspectPlugin(options, pluginOptions),
-    ...(await createUserVitePlugins(options)),
+    createUserVitePlugins(options),
   ])
 }
