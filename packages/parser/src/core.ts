@@ -155,6 +155,12 @@ export async function parse(
             slide.level = slide.frontmatter.level
           }
         }
+
+        if (e.transformNote) {
+          const newNote = await e.transformNote(slide.note, slide.frontmatter)
+          if (newNote !== undefined)
+            slide.note = newNote
+        }
       }
     }
     slides.push(slide)

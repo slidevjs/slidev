@@ -51,6 +51,7 @@ This example systematically replaces any `@@@` line with a line with `hello`. It
 - An extension can contain:
   - a `transformRawLines(lines)` function that runs just after parsing the headmatter of the md file and receives a list of all lines (from the md file). The function can mutate the list arbitrarily.
   - a `transformSlide(content, frontmatter)` function that is called for each slide, just after splitting the file, and receives the slide content as a string and the frontmatter of the slide as an object. The function can mutate the frontmatter and must return the content string (possibly modified, possibly `undefined` if no modifications have been done).
+  - a `transformNote(note, frontmatter)` function that is called for each slide, just after splitting the file, and receives the slide note as a string or undefined and the frontmatter of the slide as an object. The function can mutate the frontmatter and must return the note string (possibly modified, possibly `undefined` if no modifications have been done).
   - a `name`
 
 ## Example Preparser Extensions
@@ -172,6 +173,60 @@ export default definePreparserSetup(() => {
             '</Transform>'
           ].join('\n')
         }
+      },
+    },
+  ]
+})
+```
+
+And that's it.
+
+
+
+### Use case 3: using custom frontmatter to transform note
+
+Imagine a case where you want to replace the slides default notes with custom notes.
+For instance, you might want to write your `slides.md` as follows:
+
+<!-- eslint-skip -->
+
+```md
+---
+layout: quote
+_note: notes/note.md
+---
+
+# Welcome
+
+> great!
+
+<!--
+Default slide notes
+-->
+```
+
+Here we used an underscore in `_note` to avoid possible conflicts with existing frontmatter properties.
+
+To handle this `_note: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
+
+```ts twoslash
+import { definePreparserSetup } from '@slidev/types'
+import fs from 'fs'
+import { promises as fsp } from 'fs'
+
+export default definePreparserSetup(() => {
+  return [
+    {
+      async transformNote(note, frontmatter) {
+        if ('_note' in frontmatter && fs.existsSync(frontmatter._note)) {
+          try {
+            const newNote = await fsp.readFile(frontmatter._note, 'utf8')
+            return newNote
+          } catch (err) {
+          }
+        }
+
+        return note
       },
     },
   ]
