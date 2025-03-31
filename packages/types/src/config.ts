@@ -5,6 +5,7 @@ export interface ResolvedSlidevConfigSub {
   export: ResolvedExportOptions
   drawings: ResolvedDrawingsOptions
   fonts: ResolvedFontOptions
+  aspectRatio: number
 }
 
 export interface SlidevConfig extends

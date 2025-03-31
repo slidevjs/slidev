@@ -100,7 +100,7 @@ export interface HeadmatterConfig extends TransitionOptions {
    *
    * @default '16/9'
    */
-  aspectRatio?: number
+  aspectRatio?: number | string
   /**
    * The actual width for slides canvas.
    * unit in px.
