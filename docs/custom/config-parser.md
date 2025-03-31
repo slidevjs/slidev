@@ -181,8 +181,6 @@ export default definePreparserSetup(() => {
 
 And that's it.
 
-
-
 ### Use case 3: using custom frontmatter to transform note
 
 Imagine a case where you want to replace the slides default notes with custom notes.
@@ -210,9 +208,8 @@ Here we used an underscore in `_note` to avoid possible conflicts with existing 
 To handle this `_note: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
 
 ```ts twoslash
+import fs, { promises as fsp } from 'node:fs'
 import { definePreparserSetup } from '@slidev/types'
-import fs from 'fs'
-import { promises as fsp } from 'fs'
 
 export default definePreparserSetup(() => {
   return [
@@ -222,7 +219,8 @@ export default definePreparserSetup(() => {
           try {
             const newNote = await fsp.readFile(frontmatter._note, 'utf8')
             return newNote
-          } catch (err) {
+          }
+          catch (err) {
           }
         }
 
@@ -232,5 +230,3 @@ export default definePreparserSetup(() => {
   ]
 })
 ```
-
-And that's it.
