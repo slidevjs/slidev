@@ -44,7 +44,8 @@ catalog:
   '@types/vscode': ^1.89.0
   '@types/yargs': ^17.0.33
   '@typescript/ata': ^0.9.7
-  '@unhead/vue': ^1.11.20
+  '@unhead/vue': ^2.0.2
+  unhead: ^2.0.2
   '@unocss/extractor-mdc': ^66.0.0
   '@unocss/reset': ^66.0.0
   '@vitejs/plugin-vue': ^5.2.1

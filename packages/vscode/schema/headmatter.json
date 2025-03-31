@@ -823,8 +823,8 @@
           "type": "string"
         }
       },
-      "description": "The following type should map to zhead MataFlat type",
-      "markdownDescription": "The following type should map to zhead MataFlat type"
+      "description": "The following type should map to unhead MataFlat type",
+      "markdownDescription": "The following type should map to unhead MataFlat type"
     },
     "Frontmatter": {
       "type": "object",

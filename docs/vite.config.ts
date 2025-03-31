@@ -23,7 +23,7 @@ export default defineConfig({
     llmstxt({
       ignoreFiles: [
         'index.md',
-        'README.md'
+        'README.md',
       ],
     }),
     Components({
