@@ -6,8 +6,8 @@ packages:
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalog:
-  '@antfu/eslint-config': ^4.8.1
-  '@antfu/ni': ^24.1.0
+  '@antfu/eslint-config': ^4.11.0
+  '@antfu/ni': ^24.3.0
   '@antfu/utils': ^9.1.0
   '@hedgedoc/markdown-it-plugins': ^2.1.4
   '@iconify-json/carbon': ^1.2.8
@@ -15,18 +15,18 @@ catalog:
   '@iconify-json/ph': ^1.2.2
   '@iconify-json/ri': ^1.2.5
   '@iconify-json/svg-spinners': ^1.2.2
-  '@iconify/json': ^2.2.315
+  '@iconify/json': ^2.2.321
   '@lillallol/outline-pdf': ^4.0.0
-  '@shikijs/engine-javascript': ^3.1.0
-  '@shikijs/markdown-it': ^3.1.0
-  '@shikijs/monaco': ^3.1.0
-  '@shikijs/twoslash': ^3.1.0
-  '@shikijs/vitepress-twoslash': ^3.1.0
-  '@slidev/cli': ^51.3.0
+  '@shikijs/engine-javascript': ^3.2.1
+  '@shikijs/markdown-it': ^3.2.1
+  '@shikijs/monaco': ^3.2.1
+  '@shikijs/twoslash': ^3.2.1
+  '@shikijs/vitepress-twoslash': ^3.2.1
+  '@slidev/cli': ^51.4.0
   '@slidev/rough-notation': ^0.1.0
   '@slidev/theme-default': latest
   '@slidev/theme-seriph': latest
-  '@slidev/types': ^51.3.0
+  '@slidev/types': ^51.4.0
   '@types/cli-progress': ^3.11.6
   '@types/connect': ^3.4.38
   '@types/debug': ^4.1.12
@@ -34,29 +34,30 @@ catalog:
   '@types/js-yaml': ^4.0.9
   '@types/katex': ^0.16.7
   '@types/markdown-it': ^14.1.2
+  '@types/node': ^22.13.14
   '@types/picomatch': ^3.0.2
-  '@types/node': ^22.13.10
   '@types/plantuml-encoder': ^1.4.2
   '@types/prompts': ^2.4.9
   '@types/recordrtc': ^5.6.14
   '@types/resolve': ^1.20.6
-  '@types/semver': ^7.5.8
+  '@types/semver': ^7.7.0
   '@types/vscode': ^1.89.0
   '@types/yargs': ^17.0.33
   '@typescript/ata': ^0.9.7
   '@unhead/vue': ^2.0.2
-  unhead: ^2.0.2
   '@unocss/extractor-mdc': ^66.0.0
   '@unocss/reset': ^66.0.0
-  '@vitejs/plugin-vue': ^5.2.1
-  '@vitejs/plugin-vue-jsx': ^4.1.1
+  '@vitejs/plugin-vue': ^5.2.3
+  '@vitejs/plugin-vue-jsx': ^4.1.2
   '@volar/language-server': ~2.4.12
   '@volar/vscode': ^2.4.12
   '@vue/compiler-sfc': ^3.5.13
   '@vueuse/core': ^13.0.0
   '@vueuse/math': ^13.0.0
-  '@vueuse/motion': ^3.0.1
-  bumpp: ^10.0.3
+  '@vueuse/motion': ^3.0.3
+  unhead: ^2.0.2
+  ansis: ^3.17.0
+  bumpp: ^10.1.0
   chokidar: ^4.0.3
   cli-progress: ^3.12.0
   connect: ^3.7.0
@@ -64,7 +65,7 @@ catalog:
   cypress: ^13.17.0
   debug: ^4.4.0
   drauu: ^0.4.3
-  eslint: ^9.22.0
+  eslint: ^9.23.0
   eslint-plugin-format: ^1.0.1
   esno: ^4.8.0
   fast-deep-equal: ^3.1.3
@@ -79,8 +80,7 @@ catalog:
   is-installed-globally: ^1.0.0
   jiti: ^2.4.2
   katex: ^0.16.21
-  ansis: ^3.17.0
-  lint-staged: ^15.4.3
+  lint-staged: ^15.5.0
   local-pkg: ^1.1.1
   lz-string: ^1.5.0
   magic-string: ^0.30.17
@@ -88,8 +88,7 @@ catalog:
   markdown-it: ^14.1.0
   markdown-it-footnote: ^4.0.0
   markdown-it-mdc: ^0.2.5
-  mermaid: ^11.4.1
-  picomatch: ^4.0.2
+  mermaid: ^11.6.0
   minimist: ^1.2.8
   mlly: ^1.7.4
   monaco-editor: 0.51.0
@@ -98,28 +97,29 @@ catalog:
   open: ^10.1.0
   ovsx: ^0.10.1
   pdf-lib: ^1.17.1
+  picomatch: ^4.0.2
   plantuml-encoder: ^1.4.0
-  playwright-chromium: ^1.51.0
+  playwright-chromium: ^1.51.1
   postcss-nested: ^7.0.2
   pptxgenjs: ^3.12.0
   prettier: ^3.5.3
   prettier-plugin-slidev: ^1.0.5
   prompts: ^2.4.2
   public-ip: ^7.0.1
-  reactive-vscode: ^0.2.13
+  reactive-vscode: ^0.2.14
   recordrtc: ^5.6.2
   resolve-from: ^5.0.0
   resolve-global: ^2.0.0
   rimraf: ^6.0.1
   semver: ^7.7.1
-  shiki: ^3.1.0
-  shiki-magic-move: ^1.0.1
-  simple-git-hooks: ^2.11.1
+  shiki: ^3.2.1
+  shiki-magic-move: ^1.1.0
+  simple-git-hooks: ^2.12.1
   sirv: ^3.0.1
   source-map-js: ^1.2.1
-  taze: ^19.0.1
-  tinyexec: ^0.3.2
-  tm-grammars: ^1.22.19
+  taze: ^19.0.4
+  tinyexec: ^1.0.1
+  tm-grammars: ^1.23.7
   ts-json-schema-generator: ^2.3.0
   tsup: ^8.4.0
   typeit: 8.1.0
@@ -130,22 +130,22 @@ catalog:
   unplugin-vue-markdown: ^28.3.1
   untun: ^0.1.3
   uqr: ^0.1.2
-  vite: ^6.2.1
+  vite: ^6.2.3
   vite-plugin-inspect: ^11.0.0
-  vite-plugin-remote-assets: ^1.0.0
+  vite-plugin-remote-assets: ^2.0.0
   vite-plugin-static-copy: ^2.3.0
   vite-plugin-vue-server-ref: ^1.0.0
   vitefu: ^1.0.6
   vitepress: ^2.0.0-alpha.4
-  vitest: ^3.0.8
-  volar-service-prettier: ^0.0.63
-  volar-service-yaml: ^0.0.63
+  vitest: ^3.0.9
+  volar-service-prettier: ^0.0.64
+  volar-service-yaml: ^0.0.64
   vue: ^3.5.13
   vue-router: ^4.5.0
   vue-tsc: ^2.2.8
-  yaml: ^2.7.0
+  yaml: ^2.7.1
   yargs: ^17.7.2
-  zx: ^8.4.0
+  zx: ^8.4.1
 onlyBuiltDependencies:
   - cypress
   - esbuild
