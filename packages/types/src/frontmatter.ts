@@ -462,7 +462,7 @@ export interface TransitionGroupProps {
 }
 
 /**
- * The following type should map to zhead MataFlat type
+ * The following type should map to unhead MataFlat type
  */
 export interface SeoMeta {
   ogTitle?: string
