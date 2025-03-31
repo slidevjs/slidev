@@ -437,28 +437,29 @@
     ]
   },
   "scripts": {
-    "publish": "esno scripts/publish.ts",
+    "publish": "tsx scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
-    "prepare": "esno scripts/schema.ts",
+    "prepare": "tsx scripts/schema.ts",
     "build": "tsup --env.NODE_ENV production --treeshake",
     "dev": "nr prepare && tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
-    "@antfu/utils": "catalog:",
+    "@antfu/utils": "catalog:frontend",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "catalog:",
-    "@types/vscode": "^1.89.0",
-    "@volar/language-server": "catalog:",
-    "@volar/vscode": "catalog:",
-    "get-port-please": "catalog:",
-    "mlly": "catalog:",
-    "ovsx": "catalog:",
-    "prettier": "catalog:",
-    "reactive-vscode": "catalog:",
-    "tm-grammars": "catalog:",
-    "volar-service-prettier": "catalog:",
-    "volar-service-yaml": "catalog:"
+    "@types/node": "catalog:types",
+    "@types/vscode": "catalog:types",
+    "@volar/language-server": "catalog:vscode",
+    "@volar/vscode": "catalog:vscode",
+    "get-port-please": "catalog:prod",
+    "mlly": "catalog:prod",
+    "ovsx": "catalog:dev",
+    "prettier": "catalog:dev",
+    "reactive-vscode": "catalog:vscode",
+    "tm-grammars": "catalog:frontend",
+    "ts-json-schema-generator": "catalog:vscode",
+    "volar-service-prettier": "catalog:vscode",
+    "volar-service-yaml": "catalog:vscode"
   }
 }

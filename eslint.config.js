@@ -1,7 +1,7 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
-  // pnpm: true,
+  pnpm: true,
   formatters: {
     markdown: true,
     css: true,
@@ -20,9 +20,9 @@ export default antfu({
     'vue/no-v-text-v-html-on-component',
     'vue/component-name-in-template-casing',
   )
-  // .override('antfu/yaml/pnpm-workspace', {
-  //   ignores: [
-  //     'packages/create-theme/template/**',
-  //     'packages/create-app/template/**',
-  //   ],
-  // })
+  .override('antfu/pnpm/package-json', {
+    ignores: [
+      'packages/create-theme/template/package.json',
+      'packages/create-app/template/package.json',
+    ],
+  })

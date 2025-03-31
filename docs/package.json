@@ -9,29 +9,29 @@
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "@antfu/utils": "catalog:",
-    "@vueuse/core": "catalog:",
-    "typeit": "catalog:"
+    "@antfu/utils": "catalog:frontend",
+    "@vueuse/core": "catalog:frontend",
+    "typeit": "catalog:docs"
   },
   "devDependencies": {
-    "@iconify/json": "catalog:",
-    "@shikijs/vitepress-twoslash": "catalog:",
+    "@iconify/json": "catalog:icons",
+    "@shikijs/vitepress-twoslash": "catalog:prod",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "catalog:",
-    "@unocss/reset": "catalog:",
-    "fast-glob": "catalog:",
-    "gray-matter": "catalog:",
-    "markdown-it": "catalog:",
-    "shiki": "catalog:",
-    "typescript": "catalog:",
-    "unocss": "catalog:",
-    "unplugin-icons": "catalog:",
-    "unplugin-vue-components": "catalog:",
-    "vite-plugin-inspect": "catalog:",
-    "vitepress": "catalog:",
-    "vitepress-plugin-llms": "^0.0.20",
-    "vue": "catalog:"
+    "@types/node": "catalog:types",
+    "@unocss/reset": "catalog:frontend",
+    "fast-glob": "catalog:prod",
+    "gray-matter": "catalog:prod",
+    "markdown-it": "catalog:prod",
+    "shiki": "catalog:frontend",
+    "typescript": "catalog:dev",
+    "unocss": "catalog:prod",
+    "unplugin-icons": "catalog:prod",
+    "unplugin-vue-components": "catalog:prod",
+    "vite-plugin-inspect": "catalog:prod",
+    "vitepress": "catalog:docs",
+    "vitepress-plugin-llms": "catalog:docs",
+    "vue": "catalog:frontend"
   }
 }
