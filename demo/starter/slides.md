@@ -34,7 +34,7 @@ Presentation slides for developers
 </div>
 
 <div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor" title="Open in Editor" class="slidev-icon-btn">
+  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
     <carbon:edit />
   </button>
   <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
