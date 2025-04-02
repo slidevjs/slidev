@@ -1,3 +1,5 @@
+import { slidebars } from '.vitepress/config'
+import { getSidebarObject } from '.vitepress/sidebar-gen'
 import UnoCSS from 'unocss/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
@@ -25,6 +27,7 @@ export default defineConfig({
         'index.md',
         'README.md',
       ],
+      sidebar: slidebars
     }),
     Components({
       dirs: [
