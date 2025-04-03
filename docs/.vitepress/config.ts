@@ -7,7 +7,7 @@ import Customizations from './customizations'
 import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import { getSidebarObject } from './sidebar-gen'
 
-const slidebars: DefaultTheme.SidebarItem[] = [
+export const slidebars: DefaultTheme.SidebarItem[] = [
   {
     text: 'Guide',
     items: Guides,

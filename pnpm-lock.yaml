@@ -84,8 +84,8 @@ catalogs:
       specifier: ^2.0.0-alpha.4
       version: 2.0.0-alpha.4
     vitepress-plugin-llms:
-      specifier: ^0.0.20
-      version: 0.0.20
+      specifier: ^1.0.1
+      version: 1.0.1
   frontend:
     '@antfu/utils':
       specifier: ^9.1.0
@@ -716,7 +716,7 @@ importers:
         version: 2.0.0-alpha.4(@algolia/client-search@5.19.0)(@types/node@22.13.14)(axios@1.7.8)(drauu@0.4.3)(fuse.js@7.1.0)(jiti@2.4.2)(postcss@8.5.3)(search-insights@2.17.0)(tsx@4.19.3)(typescript@5.8.2)(yaml@2.7.1)
       vitepress-plugin-llms:
         specifier: catalog:docs
-        version: 0.0.20
+        version: 1.0.1
       vue:
         specifier: catalog:frontend
         version: 3.5.13(typescript@5.8.2)
@@ -6546,8 +6546,8 @@ packages:
       vite:
         optional: true
 
-  vitepress-plugin-llms@0.0.20:
-    resolution: {integrity: sha512-DI+EMvkGryZ8KC7kiQ3Olig0pVtywOklJIr/g3pJAm30IkqaXZKZXVxQybQHEnMz53kBrHd+fJHGkQLd/j+RfA==}
+  vitepress-plugin-llms@1.0.1:
+    resolution: {integrity: sha512-jcmu+ECeFDPr4VNmCZlaiilblxnSoWDB8VnEn2EaHCUfNweKZVPthEVHGVoUccLGGdcbtZfneQPYJcTTAj7mAQ==}
 
   vitepress@2.0.0-alpha.4:
     resolution: {integrity: sha512-3/tiBTx47d4to5RqfYwWeht9ND0la0C8Vc0gtbdY3RMffFnWGmAQryODTXDN9Cm1exXZr8ywcxA2eJcpxa3igQ==}
@@ -12978,7 +12978,7 @@ snapshots:
     optionalDependencies:
       vite: 6.2.3(@types/node@22.13.14)(jiti@2.4.2)(tsx@4.19.3)(yaml@2.7.1)
 
-  vitepress-plugin-llms@0.0.20:
+  vitepress-plugin-llms@1.0.1:
     dependencies:
       gray-matter: 4.0.3
       markdown-title: 1.0.2
