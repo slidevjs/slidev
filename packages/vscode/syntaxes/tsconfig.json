@@ -6,5 +6,8 @@
   ],
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
+  },
+  "compilerOptions": {
+    "module": "Preserve"
   }
 }

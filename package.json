@@ -7,7 +7,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** run build",
+    "build": "pnpm -r --filter=./packages/** --parallel run build",
     "ci:publish": "zx scripts/publish.mjs",
     "cy": "cypress open",
     "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
@@ -64,7 +64,7 @@
     "simple-git-hooks": "catalog:dev",
     "taze": "catalog:dev",
     "tinyexec": "catalog:prod",
-    "tsup": "catalog:dev",
+    "tsdown": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "vite": "catalog:prod",
