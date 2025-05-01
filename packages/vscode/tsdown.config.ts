@@ -19,7 +19,7 @@ export default defineConfig({
   external: [
     'vscode',
   ],
-  inject: ['./language-server/import-meta-url.ts'],
+  shims: ['./language-server/import-meta-url.ts'],
   define: {
     'import.meta.url': 'import_meta_url',
   },
