@@ -27,13 +27,13 @@ catalogs:
     rimraf: ^6.0.1
     simple-git-hooks: ^2.12.1
     taze: ^19.0.4
+    tsdown: ^0.10.2
     tsx: ^4.19.3
     typescript: ^5.8.3
     vitefu: ^1.0.6
     vitest: ^3.1.2
     vue-tsc: ^2.2.8
     zx: ^8.5.3
-    tsdown: ^0.10.2
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.5

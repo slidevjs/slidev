@@ -22,14 +22,14 @@
       "node",
       "vite-plugin-vue-server-ref/client"
     ],
+    "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
+    "skipLibCheck": true
   },
   "include": [
     "./*.ts",

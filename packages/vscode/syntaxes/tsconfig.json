@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "module": "Preserve"
+  },
   "include": [
     "*.ts",
     "*.vue",
@@ -6,8 +9,5 @@
   ],
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
-  },
-  "compilerOptions": {
-    "module": "Preserve"
   }
 }
