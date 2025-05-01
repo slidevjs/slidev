@@ -27,7 +27,7 @@ catalogs:
     rimraf: ^6.0.1
     simple-git-hooks: ^2.12.1
     taze: ^19.0.4
-    tsup: ^8.4.0
+    tsdown: ^0.10.2
     tsx: ^4.19.3
     typescript: ^5.8.3
     vitefu: ^1.0.6

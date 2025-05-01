@@ -4,5 +4,5 @@ node_modules/**
 language-server/**
 scripts/**
 src/**
-tsup.config.ts
+tsdown.config.ts
 *.map

@@ -23,7 +23,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsdown src/index.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },

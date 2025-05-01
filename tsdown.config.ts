@@ -1,11 +1,10 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   format: [
     'esm',
   ],
   target: 'node18',
-  splitting: true,
   dts: true,
   clean: true,
   shims: false,

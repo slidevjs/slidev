@@ -440,8 +440,8 @@
     "publish": "tsx scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
     "prepare": "tsx scripts/schema.ts",
-    "build": "tsup --env.NODE_ENV production --treeshake",
-    "dev": "nr prepare && tsup --watch ./src --watch ./language-server --env.NODE_ENV development",
+    "build": "tsdown --env.NODE_ENV production --treeshake",
+    "dev": "nr prepare && tsdown --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
   "devDependencies": {
