@@ -6,6 +6,7 @@ import { defineConfig } from 'tsdown'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch.ts'
 
 export default defineConfig({
+  // @ts-expect-error `entry` is valid option
   entry: {
     'index': 'src/index.ts',
     'language-server': 'language-server/bin.ts',
