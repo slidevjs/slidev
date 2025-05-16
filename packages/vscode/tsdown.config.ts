@@ -1,6 +1,7 @@
 import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 import { resolvePath } from 'mlly'
 import { defineConfig } from 'tsdown'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch.ts'
@@ -22,6 +23,12 @@ export default defineConfig({
   shims: ['./language-server/import-meta-url.ts'],
   define: {
     'import.meta.url': 'import_meta_url',
+  },
+  alias: {
+    '@slidev/parser/fs': fileURLToPath(new URL('../parser/src/fs.ts', import.meta.url)),
+    '@slidev/parser/core': fileURLToPath(new URL('../parser/src/core.ts', import.meta.url)),
+    '@slidev/parser/types': fileURLToPath(new URL('../parser/src/types.ts', import.meta.url)),
+    '@slidev/parser': fileURLToPath(new URL('../parser/src/index.ts', import.meta.url)),
   },
   plugins: [{
     name: 'umd2esm',
