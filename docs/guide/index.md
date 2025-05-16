@@ -117,7 +117,7 @@ Slidev provides a set of commands in its CLI. Here are some common ones:
 
 To run these commands, you can add them to your `package.json` scripts (which has been done for you if the project was created via `npm init slidev`):
 
-```json
+```json [package.json]
 {
   "scripts": {
     "dev": "slidev --open",

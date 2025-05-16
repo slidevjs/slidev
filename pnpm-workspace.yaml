@@ -3,6 +3,8 @@ packages:
   - demo/*
   - cypress/fixtures/*
   - docs
+patchedDependencies:
+  '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.14
@@ -33,6 +35,7 @@ catalogs:
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.5
+    vitepress-plugin-group-icons: ^1.5.5
     vitepress-plugin-llms: ^1.1.4
   frontend:
     '@antfu/utils': ^9.2.0
@@ -159,5 +162,3 @@ onlyBuiltDependencies:
   - playwright-chromium
   - simple-git-hooks
   - unrs-resolver
-patchedDependencies:
-  '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch

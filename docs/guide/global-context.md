@@ -6,17 +6,13 @@ Slidev injects several global context values for advanced navigation controls.
 
 You can access them directly in your slides or components:
 
-```md
-<!-- slides.md -->
-
+```md [slides.md]
 # Page 1
 
 Current page is: {{ $nav.currentPage }}
 ```
 
-```vue
-<!-- Foo.vue -->
-
+```vue [Foo.vue]
 <template>
   <div>Title: {{ $slidev.configs.title }}</div>
   <button @click="$nav.next">
