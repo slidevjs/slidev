@@ -1,7 +1,7 @@
 {
   "name": "@slidev/docs",
   "type": "module",
-  "version": "51.6.0",
+  "version": "51.6.1",
   "files": [
     "**/*.md",
     "!.vitepress/**"
