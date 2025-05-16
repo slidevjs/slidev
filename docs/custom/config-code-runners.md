@@ -10,7 +10,7 @@ Create `./setup/code-runners.ts` with the following content:
 
 <!-- eslint-disable import/first -->
 
-```ts twoslash
+```ts twoslash [setup/code-runners.ts]
 declare const executePythonCodeRemotely: (code: string) => Promise<string>
 declare const sanitizeHtml: (html: string) => string
 // ---cut---

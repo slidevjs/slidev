@@ -41,6 +41,7 @@
     "unplugin-vue-components": "catalog:prod",
     "vite-plugin-inspect": "catalog:prod",
     "vitepress": "catalog:docs",
+    "vitepress-plugin-group-icons": "catalog:docs",
     "vitepress-plugin-llms": "catalog:docs",
     "vue": "catalog:frontend"
   }

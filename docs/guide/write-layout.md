@@ -17,8 +17,7 @@ Layouts are Vue components, so you can use all the features of Vue in them.
 
 In the layout component, use `<slot/>` (the default slot) for the slide content:
 
-```vue
-<!-- default.vue -->
+```vue [default.vue]
 <template>
   <div class="slidev-layout default">
     <slot />
@@ -28,8 +27,7 @@ In the layout component, use `<slot/>` (the default slot) for the slide content:
 
 You can also have [named slots](https://vuejs.org/guide/components/slots.html) for more complex layouts:
 
-```vue
-<!-- split.vue -->
+```vue [split.vue]
 <template>
   <div class="slidev-layout split">
     <div class="left">

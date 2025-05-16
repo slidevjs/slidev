@@ -4,7 +4,7 @@
 
 Create `./setup/mermaid.ts` with the following content:
 
-```ts twoslash
+```ts twoslash [setup/mermaid.ts]
 import { defineMermaidSetup } from '@slidev/types'
 
 export default defineMermaidSetup(() => {

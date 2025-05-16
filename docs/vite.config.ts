@@ -5,6 +5,7 @@ import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
+import { groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
@@ -46,5 +47,6 @@ export default defineConfig({
     }),
     Inspect(),
     UnoCSS(),
+    groupIconVitePlugin(),
   ],
 })

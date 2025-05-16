@@ -93,8 +93,7 @@ The `index.html` provides the ability to inject meta tags and/or scripts to the 
 
 For example, for the following custom `index.html`:
 
-```html
-<!-- ./index.html -->
+```html [index.html]
 <head>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Nunito+Sans:wght@200;400;600&display=swap" rel="stylesheet">

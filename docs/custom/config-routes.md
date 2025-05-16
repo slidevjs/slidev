@@ -8,7 +8,7 @@ Add custom pages to the Slidev app.
 
 Create `./setup/routes.ts` with the following content:
 
-```ts twoslash
+```ts twoslash [./setup/routes.ts]
 import { defineRoutesSetup } from '@slidev/types'
 
 export default defineRoutesSetup((routes) => {
