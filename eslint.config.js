@@ -19,6 +19,7 @@ export default antfu({
   .removeRules(
     'vue/no-v-text-v-html-on-component',
     'vue/component-name-in-template-casing',
+    'jsonc/sort-array-values',
   )
   .override('antfu/pnpm/package-json', {
     ignores: [

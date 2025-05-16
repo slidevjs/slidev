@@ -652,17 +652,10 @@ importers:
         version: 3.5.13(typescript@5.8.3)
 
   docs:
-    dependencies:
+    devDependencies:
       '@antfu/utils':
         specifier: catalog:frontend
         version: 9.2.0
-      '@vueuse/core':
-        specifier: catalog:frontend
-        version: 13.1.0(vue@3.5.13(typescript@5.8.3))
-      typeit:
-        specifier: catalog:docs
-        version: 8.1.0
-    devDependencies:
       '@iconify/json':
         specifier: catalog:icons
         version: 2.2.330
@@ -684,6 +677,9 @@ importers:
       '@unocss/reset':
         specifier: catalog:frontend
         version: 66.0.0
+      '@vueuse/core':
+        specifier: catalog:frontend
+        version: 13.1.0(vue@3.5.13(typescript@5.8.3))
       fast-glob:
         specifier: catalog:prod
         version: 3.3.3
@@ -696,6 +692,9 @@ importers:
       shiki:
         specifier: catalog:frontend
         version: 3.3.0
+      typeit:
+        specifier: catalog:docs
+        version: 8.1.0
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
