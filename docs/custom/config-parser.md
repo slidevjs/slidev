@@ -26,7 +26,7 @@ The preparser (step 1 above) is highly extensible and allows you to implement cu
 
 To customize it, create a `./setup/preparser.ts` file with the following content:
 
-```ts twoslash
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(({ filepath, headmatter, mode }) => {
@@ -76,7 +76,7 @@ see you next time
 
 To allow these `@src:` and `@cover:` syntaxes, create a `./setup/preparser.ts` file with the following content:
 
-```ts twoslash
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
@@ -157,7 +157,7 @@ Here we used an underscore in `_scale` to avoid possible conflicts with existing
 
 To handle this `_scale: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
 
-```ts twoslash
+```ts twoslash [./setup/preparser.ts]
 import { definePreparserSetup } from '@slidev/types'
 
 export default definePreparserSetup(() => {
@@ -207,7 +207,7 @@ Here we used an underscore in `_note` to avoid possible conflicts with existing 
 
 To handle this `_note: ...` syntax in the frontmatter, create a `./setup/preparser.ts` file with the following content:
 
-```ts twoslash
+```ts twoslash [./setup/preparser.ts]
 import fs, { promises as fsp } from 'node:fs'
 import { definePreparserSetup } from '@slidev/types'
 

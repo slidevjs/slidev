@@ -2,6 +2,7 @@ import type { DefaultTheme } from 'vitepress'
 import { fileURLToPath } from 'node:url'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { defineConfig } from 'vitepress'
+import { groupIconMdPlugin } from 'vitepress-plugin-group-icons'
 import { version } from '../package.json'
 import Customizations from './customizations'
 import { Advanced, BuiltIn, Guides, Resources } from './pages'
@@ -72,6 +73,9 @@ export default defineConfig({
         },
       }),
     ],
+    config(md) {
+      md.use(groupIconMdPlugin)
+    },
   },
   cleanUrls: true,
   themeConfig: {

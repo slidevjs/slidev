@@ -29,7 +29,7 @@ An addon can also specify its required Slidev version in the same way as themes.
 
 The same as themes, you can preview your addon via a `./slides.md` like this:
 
-```md
+```md [slides.md]
 ---
 addons:
   - ./
