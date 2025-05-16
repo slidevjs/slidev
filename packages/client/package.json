@@ -54,6 +54,7 @@
     "monaco-editor": "catalog:monaco",
     "nanotar": "catalog:frontend",
     "pptxgenjs": "catalog:prod",
+    "prettier": "catalog:frontend",
     "recordrtc": "catalog:frontend",
     "shiki": "catalog:frontend",
     "shiki-magic-move": "catalog:frontend",

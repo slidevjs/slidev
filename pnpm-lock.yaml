@@ -43,9 +43,6 @@ catalogs:
     postcss-nested:
       specifier: ^7.0.2
       version: 7.0.2
-    prettier:
-      specifier: ^3.5.3
-      version: 3.5.3
     prettier-plugin-slidev:
       specifier: ^1.0.5
       version: 1.0.5
@@ -141,6 +138,9 @@ catalogs:
     plantuml-encoder:
       specifier: ^1.4.0
       version: 1.4.0
+    prettier:
+      specifier: ^3.5.3
+      version: 3.5.3
     recordrtc:
       specifier: ^5.6.2
       version: 5.6.2
@@ -531,7 +531,7 @@ importers:
         specifier: catalog:dev
         version: 1.52.0
       prettier:
-        specifier: catalog:dev
+        specifier: catalog:frontend
         version: 3.5.3
       prettier-plugin-slidev:
         specifier: catalog:dev
@@ -803,6 +803,9 @@ importers:
       pptxgenjs:
         specifier: catalog:prod
         version: 4.0.0
+      prettier:
+        specifier: catalog:frontend
+        version: 3.5.3
       recordrtc:
         specifier: catalog:frontend
         version: 5.6.2
@@ -1184,7 +1187,7 @@ importers:
         specifier: catalog:dev
         version: 0.10.2
       prettier:
-        specifier: catalog:dev
+        specifier: catalog:frontend
         version: 3.5.3
       reactive-vscode:
         specifier: catalog:vscode
