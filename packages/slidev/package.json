@@ -34,7 +34,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "rimraf dist && tsup node/index.ts node/cli.ts",
+    "build": "tsdown node/index.ts node/cli.ts",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build",
     "start": "tsx node/cli.ts"

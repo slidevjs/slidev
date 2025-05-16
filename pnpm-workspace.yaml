@@ -9,7 +9,7 @@ catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.14
   dev:
-    '@antfu/eslint-config': ^4.13.0
+    '@antfu/eslint-config': ^4.13.1
     bumpp: ^10.1.1
     cross-env: ^7.0.3
     cypress: ^14.3.3
@@ -24,7 +24,7 @@ catalogs:
     rimraf: ^6.0.1
     simple-git-hooks: ^2.13.0
     taze: ^19.1.0
-    tsup: ^8.4.0
+    tsdown: ^0.11.9
     tsx: ^4.19.4
     typescript: ^5.8.3
     vitefu: ^1.0.6
