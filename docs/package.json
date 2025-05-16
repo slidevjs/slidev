@@ -2,6 +2,15 @@
   "name": "@slidev/docs",
   "type": "module",
   "version": "51.6.1",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/antfu",
+  "homepage": "https://sli.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev",
+    "directory": "docs"
+  },
+  "bugs": "https://github.com/slidevjs/slidev/issues",
   "files": [
     "**/*.md",
     "!.vitepress/**"
