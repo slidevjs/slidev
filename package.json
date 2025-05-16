@@ -1,13 +1,13 @@
 {
   "type": "module",
-  "version": "51.6.1",
+  "version": "51.6.2",
   "private": true,
   "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** run build",
+    "build": "pnpm -r --filter=./packages/** --parallel run build",
     "ci:publish": "zx scripts/publish.mjs",
     "cy": "cypress open",
     "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
@@ -58,13 +58,14 @@
     "lint-staged": "catalog:dev",
     "mermaid": "catalog:frontend",
     "playwright-chromium": "catalog:dev",
+    "prettier": "catalog:frontend",
     "prettier-plugin-slidev": "catalog:dev",
     "rimraf": "catalog:dev",
     "shiki": "catalog:frontend",
     "simple-git-hooks": "catalog:dev",
     "taze": "catalog:dev",
     "tinyexec": "catalog:prod",
-    "tsup": "catalog:dev",
+    "tsdown": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "vite": "catalog:prod",
