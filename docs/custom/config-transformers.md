@@ -4,7 +4,7 @@
 
 This setup function allows you to define custom transformers for the markdown content of **each slide**. This is useful when you want to add custom Markdown syntax and render custom code blocks. To start, create a `./setup/transformers.ts` file with the following content:
 
-````ts twoslash
+````ts twoslash [setup/transformers.ts]
 import type { MarkdownTransformContext } from '@slidev/types'
 import { defineTransformersSetup } from '@slidev/types'
 

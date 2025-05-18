@@ -34,6 +34,7 @@ catalogs:
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.5
+    vitepress-plugin-group-icons: ^1.5.5
     vitepress-plugin-llms: ^1.2.0
   frontend:
     '@antfu/utils': ^9.2.0

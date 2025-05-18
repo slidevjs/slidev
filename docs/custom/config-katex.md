@@ -4,7 +4,7 @@
 
 Create `./setup/katex.ts` with the following content:
 
-```ts twoslash
+```ts twoslash [setup/katex.ts]
 import { defineKatexSetup } from '@slidev/types'
 
 export default defineKatexSetup(() => {
