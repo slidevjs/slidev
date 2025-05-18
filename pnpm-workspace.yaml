@@ -13,7 +13,7 @@ catalogs:
     bumpp: ^10.1.1
     cross-env: ^7.0.3
     cypress: ^14.3.3
-    eslint: ^9.26.0
+    eslint: ^9.27.0
     eslint-plugin-format: ^1.0.1
     lint-staged: ^16.0.0
     nodemon: ^3.1.10
@@ -24,7 +24,7 @@ catalogs:
     rimraf: ^6.0.1
     simple-git-hooks: ^2.13.0
     taze: ^19.1.0
-    tsdown: ^0.11.9
+    tsdown: ^0.11.11
     tsx: ^4.19.4
     typescript: ^5.8.3
     vitefu: ^1.0.6
@@ -35,13 +35,13 @@ catalogs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.5
     vitepress-plugin-group-icons: ^1.5.5
-    vitepress-plugin-llms: ^1.1.4
+    vitepress-plugin-llms: ^1.2.0
   frontend:
     '@antfu/utils': ^9.2.0
     '@shikijs/engine-javascript': ^3.4.2
     '@shikijs/markdown-it': ^3.4.2
     '@slidev/rough-notation': ^0.1.0
-    '@unhead/vue': ^2.0.8
+    '@unhead/vue': ^2.0.9
     '@unocss/reset': ^66.1.2
     '@vueuse/core': ^13.2.0
     '@vueuse/math': ^13.2.0
@@ -60,7 +60,7 @@ catalogs:
     shiki: ^3.4.2
     shiki-magic-move: ^1.1.0
     tm-grammars: ^1.23.21
-    unhead: ^2.0.8
+    unhead: ^2.0.9
     vue: ^3.5.14
     vue-router: ^4.5.1
   icons:
@@ -69,13 +69,13 @@ catalogs:
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.5
     '@iconify-json/svg-spinners': ^1.2.2
-    '@iconify/json': ^2.2.338
+    '@iconify/json': ^2.2.339
   monaco:
     '@shikijs/monaco': ^3.4.2
     '@typescript/ata': ^0.9.7
-    monaco-editor: 0.51.0
+    monaco-editor: ^0.52.2
   prod:
-    '@antfu/ni': ^24.3.0
+    '@antfu/ni': ^24.4.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@shikijs/twoslash': ^3.4.2
@@ -150,8 +150,8 @@ catalogs:
     '@types/vscode': ^1.89.0
     '@types/yargs': ^17.0.33
   vscode:
-    '@volar/language-server': ~2.4.13
-    '@volar/vscode': ^2.4.13
+    '@volar/language-server': ~2.4.14
+    '@volar/vscode': ^2.4.14
     reactive-vscode: ^0.2.17
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64
