@@ -23,11 +23,11 @@ const emit = defineEmits<{
   (type: 'markerClick', e: MouseEvent, clicks: number): void
 }>()
 
-const withClicks = computed(() => props.clicksContext != null && props.noteHtml?.includes('slidev-note-click-mark'))
-const noteDisplay = ref<HTMLElement | null>(null)
-
 const CLASS_FADE = 'slidev-note-fade'
 const CLASS_MARKER = 'slidev-note-click-mark'
+
+const withClicks = computed(() => props.clicksContext != null && props.noteHtml?.includes(CLASS_MARKER))
+const noteDisplay = ref<HTMLElement | null>(null)
 
 function processNote() {
   if (!noteDisplay.value || !withClicks.value)
@@ -100,21 +100,21 @@ function processNote() {
       marker.classList.toggle(`${CLASS_MARKER}-active`, enabled && clicks === current)
       marker.classList.toggle(`${CLASS_MARKER}-next`, enabled && clicks === current + 1)
       marker.classList.toggle(`${CLASS_MARKER}-future`, enabled && clicks > current + 1)
-      marker.ondblclick = enabled
-        ? (e) => {
-            emit('markerDblclick', e, clicks)
-            if (e.defaultPrevented)
-              return
-            props.clicksContext!.current = clicks
-            e.stopPropagation()
-            e.stopImmediatePropagation()
-          }
-        : null
-      marker.onclick = enabled
-        ? (e) => {
-            emit('markerClick', e, clicks)
-          }
-        : null
+      marker.ondblclick = (e) => {
+        if (!enabled)
+          return
+        emit('markerDblclick', e, clicks)
+        if (e.defaultPrevented)
+          return
+        props.clicksContext!.current = clicks
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+      }
+      marker.onclick = (e) => {
+        if (enabled) {
+          emit('markerClick', e, clicks)
+        }
+      }
 
       if (enabled && props.autoScroll && clicks === current)
         marker.scrollIntoView({ block: 'center', behavior: 'smooth' })
