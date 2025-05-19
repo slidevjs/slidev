@@ -12,6 +12,9 @@ type MimeType = Defined<RecorderOptions['mimeType']>
 export const recordingName = ref('')
 export const recordCamera = ref(true)
 export const mimeType = useLocalStorage<MimeType>('slidev-record-mimetype', 'video/webm')
+export const frameRate = useLocalStorage<number>('slidev-record-framerate', 30)
+export const bitRate = useLocalStorage<number>('slidev-record-bitrate', 8192)
+export const resolution = useLocalStorage<string>('slidev-record-resolution', '1920x1080')
 
 export const mimeExtMap: Record<string, string> = {
   'video/webm': 'webm',
@@ -78,7 +81,6 @@ export function useRecording() {
 
   const config: RecorderOptions = {
     type: 'video',
-    bitsPerSecond: 4 * 256 * 8 * 1024,
     // Extending recording limit as default is only 1h (see https://github.com/muaz-khan/RecordRTC/issues/144)
     timeSlice: 24 * 60 * 60 * 1000,
   }
@@ -141,12 +143,13 @@ export function useRecording() {
     const { default: Recorder } = await import('recordrtc')
     await startCameraStream()
 
+    const [width, height] = resolution.value.split('x').map(Number)
     streamCapture.value = await navigator.mediaDevices.getDisplayMedia({
       video: {
         // aspectRatio: 1.6,
-        frameRate: 15,
-        width: 3840,
-        height: 2160,
+        frameRate: frameRate.value,
+        width,
+        height,
         // @ts-expect-error missing types
         cursor: 'motion',
         resizeMode: 'crop-and-scale',
