@@ -43,6 +43,7 @@ declare module 'vue' {
     CarbonUserSpeaker: typeof import('~icons/carbon/user-speaker')['default']
     CarbonVideo: typeof import('~icons/carbon/video')['default']
     CodeBlockWrapper: typeof import('./node_modules/@slidev/client/builtin/CodeBlockWrapper.vue')['default']
+    CodeGroup: typeof import('./node_modules/@slidev/client/builtin/CodeGroup.vue')['default']
     CodiconAdd: typeof import('~icons/codicon/add')['default']
     CodiconEye: typeof import('~icons/codicon/eye')['default']
     CodiconGlobe: typeof import('~icons/codicon/globe')['default']

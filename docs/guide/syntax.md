@@ -148,6 +148,7 @@ More about code blocks:
 <LinkCard link="features/shiki-magic-move" />
 <LinkCard link="features/twoslash" />
 <LinkCard link="features/import-snippet" />
+<LinkCard link="features/code-groups" />
 
 ## LaTeX Blocks {#latex-block}
 
