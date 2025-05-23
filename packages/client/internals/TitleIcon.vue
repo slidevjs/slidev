@@ -64,6 +64,12 @@ const builtinIcons: Record<string, string> = {
 }
 
 function matchIcon(title: string) {
+  const colonMatch = title.match(/~([^~]+)~/g)
+  if (colonMatch && colonMatch.length > 0) {
+    const icon = colonMatch[0].slice(1, -1)
+    return icon
+  }
+
   const sortedKeys = Object.keys(builtinIcons).sort((a, b) => b.length - a.length)
   for (const key of sortedKeys) {
     if (title.toLowerCase().includes(key.toLowerCase())) {

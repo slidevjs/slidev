@@ -147,7 +147,7 @@ const isBlockTitleShow = computed(() => {
     <div v-if="isBlockTitleShow" class="slidev-code-block-title">
       <TitleIcon :title="title" />
       <div class="text-14px font-500 leading-38px text-[var(--slidev-code-tab-text-color)]">
-        {{ title }}
+        {{ title.replace(/~([^~]+)~/g, '').trim() }}
       </div>
     </div>
     <slot />

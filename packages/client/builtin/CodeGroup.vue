@@ -40,7 +40,7 @@ onMounted(() => {
           <TitleIcon :title="tab" />
 
           <div>
-            {{ tab }}
+            {{ tab.replace(/~([^~]+)~/g, '').trim() }}
           </div>
         </div>
       </div>
