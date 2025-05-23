@@ -50,7 +50,7 @@ const a = 1
 
 </CodeBlockWrapper>
 
-:::code-group
+::code-group
 
 
 <CodeBlockWrapper v-bind="{}" :title='"npm"' :ranges='[]'>
@@ -78,7 +78,7 @@ pnpm add slidev
 \`\`\`
 
 </CodeBlockWrapper>
-:::
+::
 
 <style scoped>
 

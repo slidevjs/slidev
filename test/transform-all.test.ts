@@ -27,7 +27,7 @@ Foo \`{{ code }}\`
 const a = 1
 \`\`\`
 
-:::code-group
+::code-group
 
 \`\`\`sh [npm]
 npm i slidev
@@ -40,7 +40,7 @@ yarn add slidev
 \`\`\`sh [pnpm]
 pnpm add slidev
 \`\`\`
-:::
+::
 
 <style>
 .text-green { color: green; }
