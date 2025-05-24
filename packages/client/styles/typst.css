@@ -1,0 +1,16 @@
+.slidev-typst-wrapper .typst-line.highlighted {
+}
+.slidev-typst-wrapper .typst-line.dishonored {
+  opacity: 0.3;
+}
+
+/* Basic styling for Typst elements */
+.typst-inline, .typst-block {
+  font-family: var(--slidev-font-mono);
+}
+
+.typst-block {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
