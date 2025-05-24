@@ -7,7 +7,7 @@ exports[`transform-all 1`] = `
 Default Slot
 
 
-<CodeBlockWrapper v-bind="{lines:true}" :ranges='["2","3","4"]'>
+<CodeBlockWrapper v-bind="{lines:true}" :title='""' :ranges='["2","3","4"]'>
 
 \`\`\`ts
 function _foo() {
@@ -31,7 +31,7 @@ Foo \`{{ code }}\`
 <div>Left Slot</div>
 
 
-<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+<CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
 
 \`\`\`md
 <style>
@@ -41,13 +41,52 @@ Foo \`{{ code }}\`
 
 </CodeBlockWrapper>
 
+
+<CodeBlockWrapper v-bind="{}" :title='"with-title"' :ranges='[]'>
+
+\`\`\`js [with-title]
+const a = 1
+\`\`\`
+
+</CodeBlockWrapper>
+
+::code-group
+
+
+<CodeBlockWrapper v-bind="{}" :title='"npm"' :ranges='[]'>
+
+\`\`\`sh [npm]
+npm i slidev
+\`\`\`
+
+</CodeBlockWrapper>
+
+
+<CodeBlockWrapper v-bind="{}" :title='"yarn"' :ranges='[]'>
+
+\`\`\`sh [yarn]
+yarn add slidev
+\`\`\`
+
+</CodeBlockWrapper>
+
+
+<CodeBlockWrapper v-bind="{}" :title='"pnpm"' :ranges='[]'>
+
+\`\`\`sh [pnpm]
+pnpm add slidev
+\`\`\`
+
+</CodeBlockWrapper>
+::
+
 <style scoped>
 
 .text-green { color: green; }
 </style>
 
 
-<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+<CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
 
 \`\`\`ts
 function _foo() {

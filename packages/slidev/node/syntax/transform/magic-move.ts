@@ -24,10 +24,10 @@ export function transformMagicMove(ctx: MarkdownTransformContext) {
 
       const defaultLineNumbers = parseLineNumbersOption(options) ?? ctx.options.data.config.lineNumbers
 
-      const ranges = matches.map(i => normalizeRangeStr(i[2]))
+      const ranges = matches.map(i => normalizeRangeStr(i[3]))
       const steps = matches.map((i) => {
-        const lineNumbers = parseLineNumbersOption(i[3]) ?? defaultLineNumbers
-        return codeToKeyedTokens(ctx.options.utils.shiki, i[5].trimEnd(), {
+        const lineNumbers = parseLineNumbersOption(i[4]) ?? defaultLineNumbers
+        return codeToKeyedTokens(ctx.options.utils.shiki, i[6].trimEnd(), {
           ...ctx.options.utils.shikiOptions,
           lang: i[1] as any,
         }, lineNumbers)

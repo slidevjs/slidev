@@ -12,12 +12,13 @@ Learn more: https://sli.dev/guide/syntax.html#line-highlighting
 -->
 
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import type { PropType, Ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { CLASS_VCLICK_HIDDEN, CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
 import { configs } from '../env'
+import TitleIcon from '../internals/TitleIcon.vue'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
 const props = defineProps({
@@ -42,6 +43,10 @@ const props = defineProps({
     default: '+1',
   },
   maxHeight: {
+    type: String,
+    default: undefined,
+  },
+  title: {
     type: String,
     default: undefined,
   },
@@ -115,6 +120,13 @@ function copyCode() {
   if (code)
     copy(code)
 }
+
+// code block title
+const activeTitle = inject<Ref<string> | null>('activeTitle', null)
+
+const isBlockTitleShow = computed(() => {
+  return activeTitle === null && props.title
+})
 </script>
 
 <template>
@@ -123,17 +135,26 @@ function copyCode() {
     class="slidev-code-wrapper relative group"
     :class="{
       'slidev-code-line-numbers': props.lines,
+      'active': activeTitle === title,
     }"
     :style="{
       'max-height': props.maxHeight,
       'overflow-y': props.maxHeight ? 'scroll' : undefined,
       '--start': props.startLine,
     }"
+    :data-title="title"
   >
+    <div v-if="isBlockTitleShow" class="slidev-code-block-title">
+      <TitleIcon :title="title" />
+      <div class="leading-1em">
+        {{ title.replace(/~([^~]+)~/g, '').trim() }}
+      </div>
+    </div>
     <slot />
     <button
       v-if="configs.codeCopy"
-      class="slidev-code-copy absolute top-0 right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
+      class="slidev-code-copy absolute right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
+      :class="isBlockTitleShow ? 'top-10' : 'top-0'"
       :title="copied ? 'Copied' : 'Copy'" @click="copyCode()"
     >
       <ph-check-circle v-if="copied" class="p-2 w-8 h-8" />
