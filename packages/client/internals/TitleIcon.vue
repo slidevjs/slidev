@@ -81,5 +81,5 @@ function matchIcon(title: string) {
 </script>
 
 <template>
-  <div v-if="matchIcon(title)" :class="`${matchIcon(title)} w-3 h-3 relative top-1px`" />
+  <div v-if="matchIcon(title)" :class="`${matchIcon(title)} w-3.5 h-3.5 relative`" />
 </template>

@@ -17,15 +17,15 @@ You can group multiple code blocks like this:
 ::code-group
 
 ```sh [npm]
-npm i slidev
+npm i @slidev/cli
 ```
 
 ```sh [yarn]
-yarn add slidev
+yarn add @slidev/cli
 ```
 
 ```sh [pnpm]
-pnpm add slidev
+pnpm add @slidev/cli
 ```
 
 ::
@@ -111,6 +111,7 @@ You can also specify the icon manually by the following steps:
 
 ```ts [uno.config.ts] {3-5}
 import { defineConfig } from 'unocss'
+
 export default defineConfig({
   safelist: [
     'i-vscode-icons:file-type-coverage',
@@ -122,6 +123,6 @@ export default defineConfig({
 
 ````md
 ```sh [npm ~i-vscode-icons:file-type-coverage~]
-npm i slidev
+npm i @slidev/cli
 ```
 ````

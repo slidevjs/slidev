@@ -146,7 +146,7 @@ const isBlockTitleShow = computed(() => {
   >
     <div v-if="isBlockTitleShow" class="slidev-code-block-title">
       <TitleIcon :title="title" />
-      <div class="text-14px font-500 leading-38px text-[var(--slidev-code-tab-text-color)]">
+      <div class="leading-1em">
         {{ title.replace(/~([^~]+)~/g, '').trim() }}
       </div>
     </div>
@@ -162,16 +162,3 @@ const isBlockTitleShow = computed(() => {
     </button>
   </div>
 </template>
-
-<style>
-.slidev-code-block-title {
-  background: var(--slidev-code-background);
-  padding-left: var(--slidev-code-padding);
-  padding-right: var(--slidev-code-padding);
-  border-radius: var(--slidev-code-radius) var(--slidev-code-radius) 0 0;
-  box-shadow: inset 0 -1px var(--slidev-code-tab-divider);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-</style>
