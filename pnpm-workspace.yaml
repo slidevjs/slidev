@@ -3,6 +3,8 @@ packages:
   - demo/*
   - cypress/fixtures/*
   - docs
+patchedDependencies:
+  '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.14
@@ -163,5 +165,3 @@ onlyBuiltDependencies:
   - simple-git-hooks
   - typeit
   - unrs-resolver
-patchedDependencies:
-  '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch

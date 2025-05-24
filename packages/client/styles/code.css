@@ -44,7 +44,8 @@ html:not(.dark) .shiki span {
   overflow: auto;
 }
 
-.slidev-code-block-title, .slidev-code-group-tabs {
+.slidev-code-block-title,
+.slidev-code-group-tabs {
   background: var(--slidev-code-background);
   color: var(--slidev-code-tab-text-color);
   padding-left: var(--slidev-code-padding);
