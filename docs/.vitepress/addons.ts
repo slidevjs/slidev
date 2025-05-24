@@ -170,6 +170,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/whitphx/slidev-addon-fancy-arrow',
   },
+  {
+    id: 'slidev-addon-typst',
+    name: 'Typst',
+    description: 'Typst addon for Slidev',
+    tags: ['Integration', 'Diagram'],
+    author: {
+      name: 'Shigma',
+      link: 'https://github.com/shigma',
+    },
+    repo: 'https://github.com/shigma/slidev-addon-typst',
+  },
   // Add yours here!
   {
     id: '',
