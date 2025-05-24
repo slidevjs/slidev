@@ -34,6 +34,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   addons?: string[]
   /**
+   * Formula renderer to use
+   * 
+   * @default 'katex'
+   */
+  formulaRenderer?: 'katex' | 'typst'
+  /**
    * Download remote assets in local using vite-plugin-remote-assets
    *
    * @default false

@@ -144,3 +144,21 @@ html {
   transform: scale(calc(1 * var(--slidev-slide-scale)));
   transform-origin: 30px top;
 }
+
+/* Typst styles */
+.typst-inline, .typst-block {
+  font-family: var(--slidev-font-mono);
+}
+
+.typst-block {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+.slidev-typst-wrapper .typst-line.highlighted {
+}
+
+.slidev-typst-wrapper .typst-line.dishonored {
+  opacity: 0.3;
+}

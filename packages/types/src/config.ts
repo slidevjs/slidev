@@ -36,3 +36,7 @@ export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme
   executablePath?: string
   withToc?: boolean
 }
+
+export interface TypstSetup {
+  // Add any Typst-specific configuration options here
+}
