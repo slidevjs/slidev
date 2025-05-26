@@ -33,11 +33,17 @@ pnpm add @slidev/cli
 
 ## Title Icon Matching
 
-`code groups` and `code block` also supports the automatically icon matching by the title name:
+`code groups` and `code block` also supports the automatically icon matching by the title name.
 
 ![code-groups-demo](/assets/code-groups-demo.png)
 
-::: details All builtin icons
+::: info
+
+By default, we provide some built-in icons, you can use them by install [@iconify-json/vscode-icons](https://www.npmjs.com/package/@iconify-json/vscode-icons).
+
+:::
+
+::: details All built-in icons
 
 ```js
 const builtinIcons = {
@@ -103,26 +109,47 @@ const builtinIcons = {
 
 :::
 
-## Custom Icon
+## Custom Icons
 
-You can also specify the icon manually by the following steps:
+You can use any name from the [iconify](https://icones.js.org) collection by using the `~icon~` syntax, for example:
 
-1. Add the icon to the `uno.config.ts` file:
+````md
+```js [npm ~i-uil:github~]
+console.log('Hello, GitHub!')
+```
+````
+
+To make it work, you need to:
+
+1. Install the icon's collection.
+
+:::code-group
+
+```sh [npm]
+npm add @iconify-json/uil
+```
+
+```sh [yarn]
+yarn add @iconify-json/uil
+```
+
+```sh [pnpm]
+pnpm add @iconify-json/uil
+```
+
+```sh [bun]
+bun add @iconify-json/uil
+```
+
+:::
+
+2. Add the icon to the `uno.config.ts` file.
 
 ```ts [uno.config.ts] {3-5}
 import { defineConfig } from 'unocss'
-
 export default defineConfig({
   safelist: [
-    'i-vscode-icons:file-type-coverage',
+    'i-uil:github',
   ],
 })
 ```
-
-2. Use the icon in the code block with the `~icon~` syntax:
-
-````md
-```sh [npm ~i-vscode-icons:file-type-coverage~]
-npm i @slidev/cli
-```
-````
