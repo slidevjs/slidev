@@ -33,7 +33,7 @@ pnpm add @slidev/cli
 
 ## Title Icon Matching
 
-`code groups` and `code block` also supports the automatically icon matching by the title name.
+`code groups`, `code block` and [`Shiki Magic Move`](/features/shiki-magic-move) also supports the automatically icon matching by the title name.
 
 ![code-groups-demo](/assets/code-groups-demo.png)
 
