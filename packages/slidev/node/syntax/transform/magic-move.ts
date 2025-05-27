@@ -4,7 +4,7 @@ import { codeToKeyedTokens } from 'shiki-magic-move/core'
 import { reCodeBlock } from './code-wrapper'
 import { normalizeRangeStr } from './utils'
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move *(\{[^}]*\})?([^ \n]*)\n([\s\S]+?)^````$/gm
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *\[([^\]]*)\])?(?: *(\{[^}]*\}))? *([^ \n]*)\n([\s\S]+?)^````$/gm
 
 function parseLineNumbersOption(options: string) {
   return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
@@ -16,7 +16,7 @@ function parseLineNumbersOption(options: string) {
 export function transformMagicMove(ctx: MarkdownTransformContext) {
   ctx.s.replace(
     reMagicMoveBlock,
-    (full, options = '{}', _attrs = '', body: string) => {
+    (full, title = '', options = '{}', _attrs = '', body: string) => {
       const matches = Array.from(body.matchAll(reCodeBlock))
 
       if (!matches.length)
@@ -33,7 +33,7 @@ export function transformMagicMove(ctx: MarkdownTransformContext) {
         }, lineNumbers)
       })
       const compressed = lz.compressToBase64(JSON.stringify(steps))
-      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
+      return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :title='${JSON.stringify(title)}' :step-ranges='${JSON.stringify(ranges)}' />`
     },
   )
 }

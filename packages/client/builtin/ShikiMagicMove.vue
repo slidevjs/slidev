@@ -9,6 +9,7 @@ import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
 import { configs } from '../env'
+import TitleIcon from '../internals/TitleIcon.vue'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
 const props = defineProps({
@@ -27,6 +28,10 @@ const props = defineProps({
   lines: {
     type: Boolean,
     default: configs.lineNumbers,
+  },
+  title: {
+    type: String,
+    default: '',
   },
 })
 
@@ -112,6 +117,12 @@ onMounted(() => {
 
 <template>
   <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative">
+    <div v-if="title" class="slidev-code-block-title">
+      <TitleIcon :title="title" />
+      <div class="leading-1em">
+        {{ title.replace(/~([^~]+)~/g, '').trim() }}
+      </div>
+    </div>
     <ShikiMagicMovePrecompiled
       class="slidev-code relative shiki overflow-visible"
       :steps="steps"
