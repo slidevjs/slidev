@@ -87,7 +87,7 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
 
   s.replace(
     // eslint-disable-next-line regexp/no-super-linear-backtracking
-    /^<<<\s*(\S.*?)(#[\w-]+)?\s*(?:\s(\S+?))?\s*(\{.*)?$/gm,
+    /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/gm,
     (full, filepath = '', regionName = '', lang = '', meta = '') => {
       const src = slash(
         /^@\//.test(filepath)
