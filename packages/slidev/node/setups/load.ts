@@ -1,34 +1,26 @@
-import type { Awaitable } from '@antfu/utils'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { deepMergeWithArray } from '@antfu/utils'
-import { loadModule } from '../utils'
+import { pathToFileURL } from 'node:url'
+import { isObject } from '@antfu/utils'
 
-export async function loadSetups<F extends (...args: any) => any>(
-  roots: string[],
-  filename: string,
-  args: Parameters<F>,
-  extraLoader?: (root: string) => Awaitable<Awaited<ReturnType<F>>[]>,
-) {
-  const returns: Awaited<ReturnType<F>>[] = []
+export async function loadSetups<T>(roots: string[], name: string, defaults: T[]): Promise<T[]> {
+  const result = [...defaults]
+
   for (const root of roots) {
-    const path = resolve(root, 'setup', filename)
-    if (existsSync(path)) {
-      const { default: setup } = await loadModule(path) as { default: F }
-      const ret = await setup(...args)
-      if (ret)
-        returns.push(ret)
-    }
-    if (extraLoader)
-      returns.push(...await extraLoader(root))
-  }
-  return returns
-}
+    const path = resolve(root, 'setup', name)
+    if (!existsSync(path))
+      continue
 
-export function mergeOptions<T, S extends Partial<T> = T>(
-  base: T,
-  options: S[],
-  merger: (base: T, options: S) => T = deepMergeWithArray as any,
-): T {
-  return options.reduce((acc, cur) => merger(acc, cur), base)
+    try {
+      const { default: setup } = await import(pathToFileURL(path).href)
+      if (isObject(setup))
+        result.push(setup as T)
+    }
+    catch (e) {
+      console.error(`Failed to load setup file "${path}"`)
+      console.error(e)
+    }
+  }
+
+  return result
 }

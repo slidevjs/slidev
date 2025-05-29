@@ -9,7 +9,7 @@ import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { parser } from './parser'
 import { getRoots, resolveEntry, toAtFS } from './resolver'
 import setupIndexHtml from './setups/indexHtml'
-import setupKatex from './setups/katex'
+import { setupFormulaRenderer } from './setups'
 import setupShiki from './setups/shiki'
 
 const debug = Debug('slidev:options')
@@ -81,9 +81,14 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   let _layouts_cache_time = 0
   let _layouts_cache: Record<string, string> = {}
 
+  // Setup formula renderer (KaTeX or Typst)
+  const { renderer, options: formulaOptions } = await setupFormulaRenderer(resolved.roots, resolved.data.headmatter)
+
   return {
     ...await setupShiki(resolved.roots),
-    katexOptions: await setupKatex(resolved.roots),
+    katexOptions: renderer === 'katex' ? formulaOptions : {},
+    typstOptions: renderer === 'typst' ? formulaOptions : {},
+    formulaRenderer: renderer,
     indexHtml: await setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
@@ -103,7 +108,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
         })
 
         for (const layoutPath of layoutPaths) {
-          const layoutName = path.basename(layoutPath).replace(/\.\w+$/, '')
+          const layoutName = path.basename(layoutPath).replace(/\\.\\w+$/, '')
           layouts[layoutName] = layoutPath
         }
       }
@@ -132,6 +137,7 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __SLIDEV_FEATURE_BROWSER_EXPORTER__: matchMode(options.data.config.browserExporter),
       __SLIDEV_FEATURE_WAKE_LOCK__: matchMode(options.data.config.wakeLock),
       __SLIDEV_HAS_SERVER__: options.mode !== 'build',
+      __SLIDEV_FEATURE_TYPST__: options.data.headmatter.formulaRenderer === 'typst',
     },
     (v, k) => [v, JSON.stringify(k)],
   )
