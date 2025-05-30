@@ -15,6 +15,10 @@ export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleCl
     console.error(`Invalid "at" prop value: ${at}`)
     return null
   }
+  if (v <= 0) {
+    console.warn(`[Slidev] "at" prop value must be greater than 0, but got ${at}, has been set to 1`)
+    return 1
+  }
   return v
 }
 
