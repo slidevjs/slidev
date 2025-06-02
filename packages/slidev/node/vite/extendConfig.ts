@@ -190,6 +190,12 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
       return () => {
         server.middlewares.use(async (req, res, next) => {
           if (req.url === '/index.html') {
+            const headers = server.config.server.headers ?? {}
+
+            for (const header in headers) {
+              res.setHeader(header, headers[header]!)
+            }
+
             res.setHeader('Content-Type', 'text/html')
             res.statusCode = 200
             res.end(options.utils.indexHtml)
