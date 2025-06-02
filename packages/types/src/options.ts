@@ -2,6 +2,7 @@ import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { KatexOptions } from 'katex'
 import type { HighlighterGeneric } from 'shiki'
 import type { SlidevData } from './types'
+import type { TypstSetup } from './config'
 
 export interface RootsInfo {
   cliRoot: string
@@ -60,6 +61,8 @@ export interface ResolvedSlidevUtils {
   shiki: HighlighterGeneric<any, any>
   shikiOptions: MarkdownItShikiOptions
   katexOptions: KatexOptions | null
+  typstOptions: Record<string, any> | null
+  formulaRenderer: 'katex' | 'typst'
   indexHtml: string
   define: Record<string, string>
   iconsResolvePath: string[]
