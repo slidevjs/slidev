@@ -123,11 +123,17 @@ html:not(.dark) .shiki span {
 }
 
 /* Inline Code */
+.slidev-note :not(pre) > code,
 .slidev-layout :not(pre) > code {
   font-size: 0.9em;
   background: var(--slidev-code-background);
   border-radius: var(--slidev-code-radius);
   --uno: font-light py-0.5 px-1.5;
+}
+
+.slidev-note :not(pre) > code:after,
+.slidev-note :not(pre) > code:before {
+  content: '';
 }
 
 .slidev-layout :not(pre) > code:before {
