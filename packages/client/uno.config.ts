@@ -53,14 +53,7 @@ export default defineConfig({
   presets: [
     presetWind3(),
     presetAttributify(),
-    presetTypography({
-      cssExtend: {
-        ul: {
-          'margin': '0',
-          'line-height': 1.75,
-        },
-      },
-    }),
+    presetTypography(),
     /* Preset Icons is added in ../node/setups/unocss.ts */
   ],
   transformers: [
