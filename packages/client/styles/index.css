@@ -144,3 +144,7 @@ html {
   transform: scale(calc(1 * var(--slidev-slide-scale)));
   transform-origin: 30px top;
 }
+
+.slidev-note ul {
+  margin: 0;
+}

@@ -136,10 +136,6 @@ html:not(.dark) .shiki span {
   content: '';
 }
 
-.slidev-note ul {
-  margin: 0;
-}
-
 .slidev-layout :not(pre) > code:before {
   margin-right: -0.08em;
 }
