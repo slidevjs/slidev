@@ -42,6 +42,10 @@ $ yarn add -D playwright-chromium
 $ bun add -D playwright-chromium
 ```
 
+```bash [deno]
+$ deno add -D npm:playwright-chromium
+```
+
 :::
 
 ## Formats
