@@ -90,9 +90,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
             ...(isInstalledGlobally.value
               ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
-                find: dep,
-                replacement: fileURLToPath(await resolveClientDep(dep)),
-              })))
+                  find: dep,
+                  replacement: fileURLToPath(await resolveClientDep(dep)),
+                })))
               : []
             ),
           ],
