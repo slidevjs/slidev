@@ -434,6 +434,11 @@ overrides:
   typescript: ^5.8.3
   vite: ^6.3.5
 
+patchedDependencies:
+  '@hedgedoc/markdown-it-plugins@2.1.4':
+    hash: 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
+    path: patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
+
 importers:
 
   .:
@@ -1090,7 +1095,7 @@ importers:
     devDependencies:
       '@hedgedoc/markdown-it-plugins':
         specifier: catalog:prod
-        version: 2.1.4(markdown-it@14.1.0)
+        version: 2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)
       '@types/picomatch':
         specifier: catalog:types
         version: 4.0.0
@@ -7627,7 +7632,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.7': {}
 
-  '@hedgedoc/markdown-it-plugins@2.1.4(markdown-it@14.1.0)':
+  '@hedgedoc/markdown-it-plugins@2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.1.0)':
     dependencies:
       '@mrdrogdrog/optional': 1.2.1
       html-entities: 2.5.2
