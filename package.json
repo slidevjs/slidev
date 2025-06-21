@@ -58,7 +58,7 @@
     "lint-staged": "catalog:dev",
     "mermaid": "catalog:frontend",
     "playwright-chromium": "catalog:dev",
-    "prettier": "catalog:frontend",
+    "prettier": "catalog:dev",
     "prettier-plugin-slidev": "catalog:dev",
     "rimraf": "catalog:dev",
     "shiki": "catalog:frontend",

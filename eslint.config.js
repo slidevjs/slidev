@@ -25,5 +25,7 @@ export default antfu({
     ignores: [
       'packages/create-theme/template/package.json',
       'packages/create-app/template/package.json',
+      // VSCE and OVSX do not support pnpm catalog when reading `@types/vscode`'s version.
+      'packages/vscode/package.json',
     ],
   })
