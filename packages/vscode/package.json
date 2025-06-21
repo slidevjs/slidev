@@ -434,6 +434,51 @@
         "view": "slidev-slides-tree",
         "contents": "No active slides entry.\n[Choose one](command:slidev.choose-entry)"
       }
+    ],
+    "languageModelTools": [
+      {
+        "name": "slidev_getActiveSlide",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getActiveSlide",
+        "displayName": "Get Active Slide",
+        "modelDescription": "Get the information of the active slide the user is currently focused on in a Slidev presentation.",
+        "userDescription": "Get the information of the active slide in a Slidev presentation.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(debug-stackframe-active)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+          }
+        }
+      },
+      {
+        "name": "slidev_getSlideContent",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getSlideContent",
+        "displayName": "Get Slide Content",
+        "modelDescription": "Get the content of a specific slide in a Slidev presentation by providing the slide number.",
+        "userDescription": "Get the content of a specific slide in a Slidev presentation by providing the slide number.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(file-code)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file (e.g., `./slides.md`). Empty string means the active slide entry.",
+              "default": "$ACTIVE_SLIDE_ENTRY"
+            },
+            "slideNo": {
+              "type": "number",
+              "description": "The slide number to retrieve content from. Starts from 1. Hidden slides are not counted."
+            }
+          }
+        }
+      }
     ]
   },
   "scripts": {
