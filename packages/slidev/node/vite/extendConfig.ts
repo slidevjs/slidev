@@ -11,7 +11,6 @@ const INCLUDE_GLOBAL = [
   '@typescript/ata',
   'file-saver',
   'lz-string',
-  'prettier',
   'recordrtc',
   'typescript',
   'yaml',
@@ -90,9 +89,9 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
             },
             ...(isInstalledGlobally.value
               ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
-                find: dep,
-                replacement: fileURLToPath(await resolveClientDep(dep)),
-              })))
+                  find: dep,
+                  replacement: fileURLToPath(await resolveClientDep(dep)),
+                })))
               : []
             ),
           ],

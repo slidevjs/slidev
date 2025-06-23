@@ -20,6 +20,7 @@ catalogs:
     ovsx: ^0.10.4
     playwright-chromium: ^1.53.0
     postcss-nested: ^7.0.2
+    prettier: ^3.5.3
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.0.1
     simple-git-hooks: ^2.13.0
@@ -55,7 +56,6 @@ catalogs:
     mermaid: ^11.6.0
     nanotar: ^0.2.0
     plantuml-encoder: ^1.4.0
-    prettier: ^3.5.3
     recordrtc: ^5.6.2
     shiki: ^3.6.0
     shiki-magic-move: ^1.1.0
@@ -147,12 +147,12 @@ catalogs:
     '@types/recordrtc': ^5.6.14
     '@types/resolve': ^1.20.6
     '@types/semver': ^7.7.0
-    '@types/vscode': ^1.89.0
     '@types/yargs': ^17.0.33
   vscode:
     '@volar/language-server': ~2.4.14
     '@volar/vscode': ^2.4.14
-    reactive-vscode: ^0.2.19
+    prettier: ^2.8.7
+    reactive-vscode: ^0.3.0
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64
     volar-service-yaml: ^0.0.64

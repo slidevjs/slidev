@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import process from 'node:process'
-import { x } from 'tinyexec'
+import { type Options, x } from 'tinyexec'
 
 async function publish() {
   const root = new URL('..', import.meta.url)
@@ -23,11 +23,19 @@ async function publish() {
 
   console.log('Publishing VS Code extension...')
 
-  await x('npm', ['run', 'build'], { nodeOptions: { cwd: root, stdio: 'inherit' } })
+  const options: Partial<Options> = {
+    nodeOptions: {
+      cwd: root,
+      stdio: 'inherit',
+    },
+    throwOnError: true,
+  }
+
+  await x('npm', ['run', 'build'], options)
   console.log('\nPublish to VSCE...\n')
-  await x('npx', ['@vscode/vsce', 'publish', '--no-dependencies', '-p', process.env.VSCE_TOKEN!], { nodeOptions: { cwd: root, stdio: 'inherit' } })
+  await x('npx', ['@vscode/vsce', 'publish', '--no-dependencies', '-p', process.env.VSCE_TOKEN!], options)
   console.log('\nPublish to OVSE...\n')
-  await x('npx', ['ovsx', 'publish', '--no-dependencies', '-p', process.env.OVSX_TOKEN!], { nodeOptions: { cwd: root, stdio: 'inherit' } })
+  await x('npx', ['ovsx', 'publish', '--no-dependencies', '-p', process.env.OVSX_TOKEN!], options)
 }
 
 publish()

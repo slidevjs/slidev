@@ -4,20 +4,20 @@ export type RawSingleAtValue = null | undefined | boolean | string | number
 export type RawRangeAtValue = null | undefined | false | [string | number, string | number]
 export type RawAtValue = RawSingleAtValue | RawRangeAtValue
 
-export type NormalizedSingleClickValue =
-  | number // since absolute click
-  | string // since relative click
-  | null // disabled
-export type NormalizedRangeClickValue =
-  | [number, number] // [absolute start, absolute end]
-  | [number, string] // [absolute start, absolute end based on start]
-  | [string, number] // [relative start, absolute end]
-  | [string, string] // [relative start, relative end]
-  | [string | number, string | number] // make TypeScript happy
-  | null // disabled
-export type NormalizedAtValue =
-  | NormalizedSingleClickValue // since
-  | NormalizedRangeClickValue // range
+export type NormalizedSingleClickValue
+  = | number // since absolute click
+    | string // since relative click
+    | null // disabled
+export type NormalizedRangeClickValue
+  = | [number, number] // [absolute start, absolute end]
+    | [number, string] // [absolute start, absolute end based on start]
+    | [string, number] // [relative start, absolute end]
+    | [string, string] // [relative start, relative end]
+    | [string | number, string | number] // make TypeScript happy
+    | null // disabled
+export type NormalizedAtValue
+  = | NormalizedSingleClickValue // since
+    | NormalizedRangeClickValue // range
 
 export type ClicksElement = Element | string
 
