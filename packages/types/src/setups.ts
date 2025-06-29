@@ -53,8 +53,8 @@ export interface ShikiContext {
   loadTheme: (path: string) => Promise<any>
 }
 
-export type ShikiSetupReturn =
-  Partial<
+export type ShikiSetupReturn
+  = Partial<
     & Omit<CodeToHastOptionsCommon<BuiltinLanguage>, 'lang'>
     & CodeOptionsThemes<BuiltinTheme>
     & CodeOptionsMeta
