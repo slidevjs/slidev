@@ -181,6 +181,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/sghuang19/slidev-addon-naive',
   },
+  {
+    id: 'slidev-addon-hls-player',
+    name: 'HLS player',
+    description: 'Add a basic hls.js powered video player on your slides to show HTTP Live Streaming videos',
+    tags: ['hls', 'video'],
+    author: {
+      name: 'Albert Brand',
+      link: 'https://github.com/AlbertBrand',
+    },
+    repo: 'https://github.com/AlbertBrand/slidev-addon-hls-player',
+  },
   // Add yours here!
   {
     id: '',
