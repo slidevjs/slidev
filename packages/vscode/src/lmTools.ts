@@ -41,6 +41,56 @@ export const useLmTools = createSingletonComposable(() => {
 
     return `Content of slide number ${input.slideNo} in entry "${project.entry}" in file "${slide.source.filepath}":\n\n${stringifySlide(slide.source, 1)}`
   })
+
+  // Get all slide titles
+  registerSimpleTool('slidev_getAllSlideTitles', (input: { entrySlidePath: string }) => {
+    const project = resolveProjectFromEntry(input.entrySlidePath)
+    const titles = project.data.slides.map((slide, idx) => `#${idx + 1}: ${slide.title || '(Untitled)'}`)
+    return formatList(titles)
+  })
+
+  // Find slide number by title
+  registerSimpleTool('slidev_findSlideNoByTitle', (input: { entrySlidePath: string, title: string }) => {
+    const project = resolveProjectFromEntry(input.entrySlidePath)
+    const idx = project.data.slides.findIndex(slide => slide.title === input.title)
+    if (idx === -1) {
+      throw new Error(`No slide found with title: "${input.title}".`)
+    }
+    return formatObject({
+      'Title': input.title,
+      'Slide number': idx + 1,
+    })
+  })
+
+  // List all loaded Slidev entries
+  registerSimpleTool('slidev_listEntries', () => {
+    const entries = [...projects.keys()]
+    if (entries.length === 0) {
+      return 'No loaded Slidev project entries.'
+    }
+    return formatList(entries)
+  })
+
+  // Get project preview port
+  registerSimpleTool('slidev_getPreviewPort', (input: { entrySlidePath: string }) => {
+    const project = resolveProjectFromEntry(input.entrySlidePath)
+    return formatObject({
+      'Project entry': project.entry,
+      'Preview port': project.port || 'Not running',
+    })
+  })
+
+  // Choose active Slidev entry
+  registerSimpleTool('slidev_chooseEntry', (input: { entrySlidePath: string }) => {
+    if (!input.entrySlidePath) {
+      throw new Error('entrySlidePath is required.')
+    }
+    const project = resolveProjectFromEntry(input.entrySlidePath)
+    activeEntry.value = project.entry
+    return formatObject({
+      'Active entry switched to': project.entry,
+    })
+  })
 })
 
 function registerSimpleTool<T>(name: string, invoke: (input: T) => string) {
