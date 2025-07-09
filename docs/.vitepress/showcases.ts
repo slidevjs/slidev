@@ -235,7 +235,7 @@ export const showcases: ShowCaseInfo[] = [
     at: 'KubeCon 2024 China',
     slidesLink: 'https://talks.ayaka.io/nekoayaka/2024-08-21-kubecon-hk/',
     sourceLink: 'https://github.com/nekomeowww/talks/tree/main/packages/2024-08-21-kubecon-hk',
-    cover: 'https://github.com/user-attachments/assets/2f05c71f-15cf-4198-b2c1-5f831ad437d6',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2024-08-21-kubecon-hk/public/screenshot.png',
     datetime: '2024-08-21',
   },
   {
@@ -271,7 +271,7 @@ export const showcases: ShowCaseInfo[] = [
     at: 'KubeCon 2025 China',
     slidesLink: 'https://baizeai.github.io/talks/2025-06-11-kubecon-hk/',
     sourceLink: 'https://github.com/BaizeAI/talks/tree/main/packages/2025-06-11-kubecon-hk',
-    cover: 'https://github.com/user-attachments/assets/fabbdb94-f42b-48eb-be40-951b232544d9',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2025-06-11-kubecon-hk/public/screenshot.png',
     datetime: '2025-06-11',
   },
   {
