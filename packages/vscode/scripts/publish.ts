@@ -1,6 +1,7 @@
+import type { Options } from 'tinyexec'
 import fs from 'node:fs/promises'
 import process from 'node:process'
-import { type Options, x } from 'tinyexec'
+import { x } from 'tinyexec'
 
 async function publish() {
   const root = new URL('..', import.meta.url)
