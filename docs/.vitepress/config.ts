@@ -69,6 +69,7 @@ export default defineConfig({
           vfsRoot: fileURLToPath(import.meta.url),
           compilerOptions: {
             resolveJsonModule: true,
+            moduleResolution: /* Bundler */ 100,
           },
         },
       }),
