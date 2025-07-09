@@ -227,6 +227,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2024-04-10',
   },
   {
+    title: 'Sit Back and Relax with Fault Awareness and Robust Instant Recovery for Large Scale AI Workloads',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2024 China',
+    slidesLink: 'https://talks.ayaka.io/nekoayaka/2024-08-21-kubecon-hk/',
+    sourceLink: 'https://github.com/nekomeowww/talks/tree/main/packages/2024-08-21-kubecon-hk',
+    cover: 'https://github.com/user-attachments/assets/2f05c71f-15cf-4198-b2c1-5f831ad437d6',
+    datetime: '2024-08-21',
+  },
+  {
     title: 'Hacker Numerology',
     author: {
       name: 'HD Moore',
@@ -249,6 +261,18 @@ export const showcases: ShowCaseInfo[] = [
     sourceLink: 'https://github.com/KareimGazer/py-intro',
     cover: 'https://i.ytimg.com/vi/hVMaPBrWvAo/hqdefault.jpg',
     datetime: '2025-01-12',
+  },
+  {
+    title: 'Taming Dependency Chaos for LLM in K8s',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2025 China',
+    slidesLink: 'https://baizeai.github.io/talks/2025-06-11-kubecon-hk/',
+    sourceLink: 'https://github.com/BaizeAI/talks/tree/main/packages/2025-06-11-kubecon-hk',
+    cover: 'https://github.com/user-attachments/assets/fabbdb94-f42b-48eb-be40-951b232544d9',
+    datetime: '2025-06-11',
   },
   {
     title: 'Single Image Super-Resolution Based on Capsule Neural Networks',
