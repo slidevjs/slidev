@@ -36,7 +36,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ## Features
 
-- 📝 [**Markdown-based**](https://sli.dev/guide/syntax) - foucus on content and use your favorite editor
+- 📝 [**Markdown-based**](https://sli.dev/guide/syntax) - focus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](https://sli.dev/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
 - 🎨 [**Themable**](https://sli.dev/resources/theme-gallery) - theme can be shared and used with npm packages
 - 🌈 [**Stylish**](https://sli.dev/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).

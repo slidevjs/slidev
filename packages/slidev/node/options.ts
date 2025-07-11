@@ -84,7 +84,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   return {
     ...await setupShiki(resolved.roots),
     katexOptions: await setupKatex(resolved.roots),
-    indexHtml: setupIndexHtml(resolved),
+    indexHtml: await setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i.test(pkg)),

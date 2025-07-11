@@ -227,6 +227,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2024-04-10',
   },
   {
+    title: 'Sit Back and Relax with Fault Awareness and Robust Instant Recovery for Large Scale AI Workloads',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2024 China',
+    slidesLink: 'https://talks.ayaka.io/nekoayaka/2024-08-21-kubecon-hk/',
+    sourceLink: 'https://github.com/nekomeowww/talks/tree/main/packages/2024-08-21-kubecon-hk',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2024-08-21-kubecon-hk/public/screenshot.png',
+    datetime: '2024-08-21',
+  },
+  {
     title: 'Hacker Numerology',
     author: {
       name: 'HD Moore',
@@ -251,6 +263,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2025-01-12',
   },
   {
+    title: 'Taming Dependency Chaos for LLM in K8s',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2025 China',
+    slidesLink: 'https://baizeai.github.io/talks/2025-06-11-kubecon-hk/',
+    sourceLink: 'https://github.com/BaizeAI/talks/tree/main/packages/2025-06-11-kubecon-hk',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2025-06-11-kubecon-hk/public/screenshot.png',
+    datetime: '2025-06-11',
+  },
+  {
     title: 'Single Image Super-Resolution Based on Capsule Neural Networks',
     author: {
       name: 'George Corrêa de Araújo',
@@ -272,7 +296,19 @@ export const showcases: ShowCaseInfo[] = [
     slidesLink: 'https://guisso.dev/talks/threat-modeling',
     sourceLink: 'https://github.com/fguisso/talks/tree/main/slides/threat-modeling',
     cover: 'https://guisso.dev/posts/threat-modeling-intro/featured-threat-modeling_hu12396ec5bf9ecba1dda33f1443a5eb10_76776_600x0_resize_box_3.png',
-    datetime: '2023-09-22',
+    datetime: '2023-09-22', 
+  },
+  {
+    title: 'A 14-year journey developing nCine, an open-source 2D game framework',
+    author: {
+      name: 'Angelo Theodorou',
+      link: 'https://encelo.github.io',
+    },
+    at: '/dev/games/2025',
+    slidesLink: 'https://encelo.github.io/nCine_14Years_Presentation/',
+    sourceLink: 'https://github.com/encelo/nCine_14Years_Presentation',
+    cover: 'https://i.imgur.com/AbTdfhg.png',
+    datetime: '2025-06-05',
   },
   // Add yours here!
   {
@@ -281,7 +317,7 @@ export const showcases: ShowCaseInfo[] = [
       name: '',
     },
     at: 'Submit your talk/presentation to be list here!',
-    slidesLink: 'https://github.com/slidevjs/docs/edit/main/.vitepress/showcases.ts',
+    slidesLink: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/showcases.ts',
     cover: `${import.meta.env.BASE_URL}theme-placeholder.png`,
     datetime: '2020-1-1',
   },

@@ -100,7 +100,7 @@ export interface HeadmatterConfig extends TransitionOptions {
    *
    * @default '16/9'
    */
-  aspectRatio?: number
+  aspectRatio?: number | string
   /**
    * The actual width for slides canvas.
    * unit in px.
@@ -255,6 +255,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default []
    */
   monacoRunAdditionalDeps?: string[]
+  /**
+   * Seo meta tags settings
+   *
+   * @default {}
+   */
+  seoMeta?: SeoMeta
 }
 
 export interface Frontmatter extends TransitionOptions {
@@ -453,4 +459,20 @@ export interface TransitionGroupProps {
   leaveFromClass?: string
   leaveActiveClass?: string
   leaveToClass?: string
+}
+
+/**
+ * The following type should map to unhead MataFlat type
+ */
+export interface SeoMeta {
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  ogUrl?: string
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
+  twitterSite?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: string
+  twitterUrl?: string
 }

@@ -9,9 +9,9 @@
   },
   "devDependencies": {
     "@slidev/cli": "workspace:*",
-    "@slidev/theme-default": "catalog:",
-    "@slidev/theme-seriph": "catalog:",
-    "nodemon": "catalog:",
-    "vue": "catalog:"
+    "@slidev/theme-default": "catalog:themes",
+    "@slidev/theme-seriph": "catalog:themes",
+    "nodemon": "catalog:dev",
+    "vue": "catalog:frontend"
   }
 }

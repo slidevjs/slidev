@@ -110,6 +110,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     level,
     revision,
     content,
+    contentRaw: content,
     frontmatter,
     frontmatterStyle: matterResult.type,
     frontmatterDoc: matterResult.doc,
@@ -154,6 +155,12 @@ export async function parse(
           if (typeof slide.frontmatter.level === 'number') {
             slide.level = slide.frontmatter.level
           }
+        }
+
+        if (e.transformNote) {
+          const newNote = await e.transformNote(slide.note, slide.frontmatter)
+          if (newNote !== undefined)
+            slide.note = newNote
         }
       }
     }

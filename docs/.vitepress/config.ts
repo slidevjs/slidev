@@ -2,12 +2,13 @@ import type { DefaultTheme } from 'vitepress'
 import { fileURLToPath } from 'node:url'
 import { transformerTwoslash } from '@shikijs/vitepress-twoslash'
 import { defineConfig } from 'vitepress'
+import { groupIconMdPlugin } from 'vitepress-plugin-group-icons'
 import { version } from '../package.json'
 import Customizations from './customizations'
 import { Advanced, BuiltIn, Guides, Resources } from './pages'
 import { getSidebarObject } from './sidebar-gen'
 
-const slidebars: DefaultTheme.SidebarItem[] = [
+export const slidebars: DefaultTheme.SidebarItem[] = [
   {
     text: 'Guide',
     items: Guides,
@@ -68,10 +69,14 @@ export default defineConfig({
           vfsRoot: fileURLToPath(import.meta.url),
           compilerOptions: {
             resolveJsonModule: true,
+            moduleResolution: /* Bundler */ 100,
           },
         },
       }),
     ],
+    config(md) {
+      md.use(groupIconMdPlugin)
+    },
   },
   cleanUrls: true,
   themeConfig: {

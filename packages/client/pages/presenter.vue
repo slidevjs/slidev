@@ -2,7 +2,7 @@
 import { useHead } from '@unhead/vue'
 import { useLocalStorage, useMouse, useWindowFocus } from '@vueuse/core'
 import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
-import { createFixedClicks } from '../composables/useClicks'
+import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
@@ -57,7 +57,7 @@ const { timer, isTimerActive, resetTimer, toggleTimer } = useTimer()
 const clicksCtxMap = computed(() => slides.value.map((route) => {
   const clicks = ref(0)
   return {
-    context: createFixedClicks(route, clicks),
+    context: createClicksContextBase(clicks, route?.meta.slide?.frontmatter.clicksStart ?? 0, route?.meta.clicks),
     clicks,
   }
 }))

@@ -17,17 +17,30 @@ export function useHideCursorIdle(
     document.body.style.cursor = ''
   }
 
-  // If disabled, immediately show the cursor
+  let timer: ReturnType<typeof setTimeout> | null = null
+
+  // If disabled, immediately show the cursor and stop the timer
   watch(
     shouldHide,
     (value) => {
-      if (!value)
+      if (!value) {
         show()
+        if (timer) {
+          clearTimeout(timer)
+        }
+        timer = null
+      }
     },
   )
-  onScopeDispose(show)
 
-  let timer: ReturnType<typeof setTimeout> | null = null
+  onScopeDispose(() => {
+    show()
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = null
+  })
+
   useEventListener(
     document.body,
     ['pointermove', 'pointerdown'],

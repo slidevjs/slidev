@@ -30,6 +30,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'mdc',
   'editor',
   'theme',
+  'seoMeta',
 ]
 
 /**
@@ -280,7 +281,7 @@ cli.command(
       if (process.stdin.isTTY)
         process.stdin.setRawMode(true)
 
-      process.stdin.on('keypress', (str, key) => {
+      const onKeyPress = (str: string, key: { ctrl: boolean, name: string }) => {
         if (key.ctrl && key.name === 'c') {
           process.exit()
         }
@@ -295,6 +296,11 @@ cli.command(
             }
           }
         }
+      }
+
+      process.stdin.on('keypress', onKeyPress)
+      server?.httpServer?.on('close', () => {
+        process.stdin.off('keypress', onKeyPress)
       })
     }
 

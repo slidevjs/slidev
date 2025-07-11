@@ -8,8 +8,9 @@ Create `./setup/main.ts` with the following content:
 
 <!-- eslint-disable import/first -->
 
-```ts twoslash
+```ts twoslash [setup/main.ts]
 import type { Plugin } from 'vue'
+
 declare const YourPlugin: Plugin
 // ---cut---
 import { defineAppSetup } from '@slidev/types'

@@ -32,6 +32,10 @@ export interface SourceSlideInfo extends SlideInfoBase {
   end: number
   raw: string
   /**
+   * Raw content before being processed by preparsers (if any)
+   */
+  contentRaw: string
+  /**
    * Slides import by this slide.
    */
   imports?: SourceSlideInfo[]
@@ -122,6 +126,7 @@ export interface SlidevPreparserExtension {
   name?: string
   transformRawLines?: (lines: string[]) => Promise<void> | void
   transformSlide?: (content: string, frontmatter: any) => Promise<string | undefined>
+  transformNote?: (note: string | undefined, frontmatter: any) => Promise<string | undefined>
 }
 
 export type PreparserExtensionLoader = (headmatter: Record<string, unknown>, filepath: string, mode?: string) => Promise<SlidevPreparserExtension[]>

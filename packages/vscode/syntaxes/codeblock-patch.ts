@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const Markdown = JSON.parse(
-  readFileSync(join(__dirname, '../node_modules/tm-grammars/grammars/markdown.json'), 'utf8'),
+  readFileSync(join(import.meta.dirname, '../node_modules/tm-grammars/grammars/markdown.json'), 'utf8'),
 )
 
 const base = {

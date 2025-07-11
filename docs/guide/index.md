@@ -69,6 +69,10 @@ yarn create slidev
 bun create slidev
 ```
 
+```bash [deno]
+deno init --npm slidev
+```
+
 :::
 
 Follow the prompts to start your slides project. The slides content is in `slides.md`, which initially includes demos of most the Slidev features. For more information about the Markdown syntax, please check <LinkInline link="guide/syntax" />.
@@ -95,6 +99,10 @@ yarn global add @slidev/cli
 bun i -g @slidev/cli
 ```
 
+```bash [deno]
+deno i -g npm:@slidev/cli
+```
+
 :::
 
 Then, you can create and start a single file slides via:
@@ -117,7 +125,7 @@ Slidev provides a set of commands in its CLI. Here are some common ones:
 
 To run these commands, you can add them to your `package.json` scripts (which has been done for you if the project was created via `npm init slidev`):
 
-```json
+```json [package.json]
 {
   "scripts": {
     "dev": "slidev --open",

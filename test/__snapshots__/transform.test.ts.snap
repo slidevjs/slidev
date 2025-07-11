@@ -22,7 +22,7 @@ h1 {
 </style>
 
 
-<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+<CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
 
 \`\`\`css
 <style>
@@ -77,7 +77,7 @@ Default Slot
 
 
 
-<CodeBlockWrapper v-bind="{}" :ranges='[]'>
+<CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
 
 \`\`\`md
 Slot Usage

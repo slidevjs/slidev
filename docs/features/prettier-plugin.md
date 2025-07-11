@@ -32,6 +32,10 @@ yarn add -D prettier prettier-plugin-slidev
 bun add -D prettier prettier-plugin-slidev
 ```
 
+```bash [deno]
+deno add -D npm:prettier npm:prettier-plugin-slidev
+```
+
 :::
 
 ## 2. Activate the plugin
