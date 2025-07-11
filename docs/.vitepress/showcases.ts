@@ -227,6 +227,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2024-04-10',
   },
   {
+    title: 'Sit Back and Relax with Fault Awareness and Robust Instant Recovery for Large Scale AI Workloads',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2024 China',
+    slidesLink: 'https://talks.ayaka.io/nekoayaka/2024-08-21-kubecon-hk/',
+    sourceLink: 'https://github.com/nekomeowww/talks/tree/main/packages/2024-08-21-kubecon-hk',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2024-08-21-kubecon-hk/public/screenshot.png',
+    datetime: '2024-08-21',
+  },
+  {
     title: 'Hacker Numerology',
     author: {
       name: 'HD Moore',
@@ -251,6 +263,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2025-01-12',
   },
   {
+    title: 'Taming Dependency Chaos for LLM in K8s',
+    author: {
+      name: 'Neko',
+      link: 'https://github.com/nekomeowww',
+    },
+    at: 'KubeCon 2025 China',
+    slidesLink: 'https://baizeai.github.io/talks/2025-06-11-kubecon-hk/',
+    sourceLink: 'https://github.com/BaizeAI/talks/tree/main/packages/2025-06-11-kubecon-hk',
+    cover: 'https://raw.githubusercontent.com/BaizeAI/talks/main/packages/2025-06-11-kubecon-hk/public/screenshot.png',
+    datetime: '2025-06-11',
+  },
+  {
     title: 'Single Image Super-Resolution Based on Capsule Neural Networks',
     author: {
       name: 'George Corrêa de Araújo',
@@ -269,7 +293,7 @@ export const showcases: ShowCaseInfo[] = [
       name: '',
     },
     at: 'Submit your talk/presentation to be list here!',
-    slidesLink: 'https://github.com/slidevjs/docs/edit/main/.vitepress/showcases.ts',
+    slidesLink: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/showcases.ts',
     cover: `${import.meta.env.BASE_URL}theme-placeholder.png`,
     datetime: '2020-1-1',
   },
