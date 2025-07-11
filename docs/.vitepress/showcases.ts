@@ -287,6 +287,18 @@ export const showcases: ShowCaseInfo[] = [
     datetime: '2023-09-27',
   },
   {
+    title: 'Threat Modeling',
+    author: {
+      name: 'guisso',
+      link: 'https://github.com/fguisso',
+    },
+    at: 'OWASP Meetup',
+    slidesLink: 'https://guisso.dev/talks/threat-modeling',
+    sourceLink: 'https://github.com/fguisso/talks/tree/main/slides/threat-modeling',
+    cover: 'https://guisso.dev/posts/threat-modeling-intro/featured-threat-modeling_hu12396ec5bf9ecba1dda33f1443a5eb10_76776_600x0_resize_box_3.png',
+    datetime: '2023-09-22',
+  },
+  {
     title: 'A 14-year journey developing nCine, an open-source 2D game framework',
     author: {
       name: 'Angelo Theodorou',
