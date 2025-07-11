@@ -7,7 +7,7 @@
 
 <p align="center">
 Presentation <b>slide</b>s for <b>dev</b>elopers<br>
-<sup><del>who uses VS Code 🤣</del></sup>
+<sup><del>who use VS Code 🤣</del></sup>
 </p>
 
 <p align="center">
