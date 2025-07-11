@@ -286,6 +286,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://raw.githubusercontent.com/george-gca/bracis_2023_srcaps/refs/heads/main/cover.png',
     datetime: '2023-09-27',
   },
+  {
+    title: 'A 14-year journey developing nCine, an open-source 2D game framework',
+    author: {
+      name: 'Angelo Theodorou',
+      link: 'https://encelo.github.io',
+    },
+    at: '/dev/games/2025',
+    slidesLink: 'https://encelo.github.io/nCine_14Years_Presentation/',
+    sourceLink: 'https://github.com/encelo/nCine_14Years_Presentation',
+    cover: 'https://i.imgur.com/AbTdfhg.png',
+    datetime: '2025-06-05',
+  },
   // Add yours here!
   {
     title: 'Yours?',
