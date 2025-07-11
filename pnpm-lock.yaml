@@ -43,6 +43,9 @@ catalogs:
     postcss-nested:
       specifier: ^7.0.2
       version: 7.0.2
+    prettier:
+      specifier: ^3.5.3
+      version: 3.6.2
     prettier-plugin-slidev:
       specifier: ^1.0.5
       version: 1.0.5
@@ -141,9 +144,6 @@ catalogs:
     plantuml-encoder:
       specifier: ^1.4.0
       version: 1.4.0
-    prettier:
-      specifier: ^3.6.2
-      version: 3.6.2
     recordrtc:
       specifier: ^5.6.2
       version: 5.6.2
@@ -404,19 +404,19 @@ catalogs:
     '@types/semver':
       specifier: ^7.7.0
       version: 7.7.0
-    '@types/vscode':
-      specifier: ^1.89.0
-      version: 1.92.0
     '@types/yargs':
       specifier: ^17.0.33
       version: 17.0.33
   vscode:
     '@volar/language-server':
-      specifier: ~2.4.15
+      specifier: ~2.4.14
       version: 2.4.15
     '@volar/vscode':
-      specifier: ^2.4.15
+      specifier: ^2.4.14
       version: 2.4.15
+    prettier:
+      specifier: ^2.8.7
+      version: 2.8.7
     reactive-vscode:
       specifier: ^0.3.0
       version: 0.3.0
@@ -534,7 +534,7 @@ importers:
         specifier: catalog:dev
         version: 1.53.1
       prettier:
-        specifier: catalog:frontend
+        specifier: catalog:dev
         version: 3.6.2
       prettier-plugin-slidev:
         specifier: catalog:dev
@@ -809,9 +809,6 @@ importers:
       pptxgenjs:
         specifier: catalog:prod
         version: 4.0.1
-      prettier:
-        specifier: catalog:frontend
-        version: 3.6.2
       recordrtc:
         specifier: catalog:frontend
         version: 5.6.2
@@ -1175,8 +1172,8 @@ importers:
         specifier: catalog:types
         version: 24.0.7
       '@types/vscode':
-        specifier: catalog:types
-        version: 1.92.0
+        specifier: ^1.101.0
+        version: 1.101.0
       '@volar/language-server':
         specifier: catalog:vscode
         version: 2.4.15
@@ -1193,11 +1190,11 @@ importers:
         specifier: catalog:dev
         version: 0.10.4
       prettier:
-        specifier: catalog:frontend
-        version: 3.6.2
+        specifier: catalog:vscode
+        version: 2.8.7
       reactive-vscode:
         specifier: catalog:vscode
-        version: 0.3.0(@types/vscode@1.92.0)
+        version: 0.3.0(@types/vscode@1.101.0)
       tm-grammars:
         specifier: catalog:frontend
         version: 1.23.26
@@ -1206,7 +1203,7 @@ importers:
         version: 2.4.0
       volar-service-prettier:
         specifier: catalog:vscode
-        version: 0.0.64(@volar/language-service@2.4.15)(prettier@3.6.2)
+        version: 0.0.64(@volar/language-service@2.4.15)(prettier@2.8.7)
       volar-service-yaml:
         specifier: catalog:vscode
         version: 0.0.64(@volar/language-service@2.4.15)
@@ -2569,8 +2566,8 @@ packages:
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
 
-  '@types/vscode@1.92.0':
-    resolution: {integrity: sha512-DcZoCj17RXlzB4XJ7IfKdPTcTGDLYvTOcTNkvtjXWF+K2TlKzHHkBEXNWQRpBIXixNEUgx39cQeTFunY0E2msw==}
+  '@types/vscode@1.101.0':
+    resolution: {integrity: sha512-ZWf0IWa+NGegdW3iU42AcDTFHWW7fApLdkdnBqwYEtHVIBGbTu0ZNQKP/kX3Ds/uMJXIMQNAojHR4vexCEEz5Q==}
 
   '@types/web-bluetooth@0.0.21':
     resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
@@ -8670,7 +8667,7 @@ snapshots:
 
   '@types/unist@3.0.3': {}
 
-  '@types/vscode@1.92.0': {}
+  '@types/vscode@1.101.0': {}
 
   '@types/web-bluetooth@0.0.21': {}
 
@@ -9306,7 +9303,7 @@ snapshots:
 
   '@vue/language-core@2.2.10(typescript@5.8.3)':
     dependencies:
-      '@volar/language-core': 2.4.14
+      '@volar/language-core': 2.4.15
       '@vue/compiler-dom': 3.5.16
       '@vue/compiler-vue2': 2.7.16
       '@vue/shared': 3.5.16
@@ -9319,7 +9316,7 @@ snapshots:
 
   '@vue/language-core@2.2.4(typescript@5.8.3)':
     dependencies:
-      '@volar/language-core': 2.4.14
+      '@volar/language-core': 2.4.15
       '@vue/compiler-dom': 3.5.16
       '@vue/compiler-vue2': 2.7.16
       '@vue/shared': 3.5.16
@@ -12539,8 +12536,7 @@ snapshots:
       '@slidev/parser': 0.47.5
       prettier: 3.6.2
 
-  prettier@2.8.7:
-    optional: true
+  prettier@2.8.7: {}
 
   prettier@3.6.2: {}
 
@@ -12608,10 +12604,10 @@ snapshots:
       strip-json-comments: 2.0.1
     optional: true
 
-  reactive-vscode@0.3.0(@types/vscode@1.92.0):
+  reactive-vscode@0.3.0(@types/vscode@1.101.0):
     dependencies:
       '@reactive-vscode/reactivity': 0.3.0
-      '@types/vscode': 1.92.0
+      '@types/vscode': 1.101.0
 
   read@1.0.7:
     dependencies:
@@ -13792,12 +13788,12 @@ snapshots:
       - tsx
       - yaml
 
-  volar-service-prettier@0.0.64(@volar/language-service@2.4.15)(prettier@3.6.2):
+  volar-service-prettier@0.0.64(@volar/language-service@2.4.15)(prettier@2.8.7):
     dependencies:
       vscode-uri: 3.0.8
     optionalDependencies:
       '@volar/language-service': 2.4.15
-      prettier: 3.6.2
+      prettier: 2.8.7
 
   volar-service-yaml@0.0.64(@volar/language-service@2.4.15):
     dependencies:
