@@ -511,10 +511,35 @@ export const community: ThemeInfo[] = [
       'education',
     ],
   },
+  {
+    id: 'slidev-theme-ktym4a',
+    name: 'ktym4a',
+    description: 'Based on ktym4a website design',
+    author: {
+      name: 'ktym4a',
+      link: 'https://github.com/ktym4a',
+    },
+    repo: 'https://github.com/ktym4a/slidev-theme-ktym4a',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/0.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/1.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/6.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/7.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/rotation/8.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/0.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/1.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/3.png',
+      'https://cdn.jsdelivr.net/gh/ktym4a/slidev-theme-ktym4a@main/example-export/single/4.png',
+    ],
+    tags: [
+      'dark',
+      'catppuccin',
+    ],
+  },
   // Add yours here!
   {
     id: '',
-    link: 'https://github.com/slidevjs/docs/edit/main/.vitepress/themes.ts',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Yours?',
     description: 'Click here to submit your theme :)',
     author: {

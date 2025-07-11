@@ -25,6 +25,8 @@ export default async function setupUnocss(
       .filter(x => !!x)
   }
 
+  const tokens: string[] = await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts'))
+
   const configs = [
     {
       presets: [
@@ -37,6 +39,7 @@ export default async function setupUnocss(
           },
         }),
       ],
+      safelist: tokens,
     },
     ...await loadFileConfigs(clientRoot),
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),

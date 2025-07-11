@@ -145,8 +145,9 @@ bun add @iconify-json/uil
 
 2. Add the icon to the `uno.config.ts` file.
 
-```ts [uno.config.ts] {3-5}
+```ts [uno.config.ts] {4-6}
 import { defineConfig } from 'unocss'
+
 export default defineConfig({
   safelist: [
     'i-uil:github',

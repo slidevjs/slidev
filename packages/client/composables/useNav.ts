@@ -277,7 +277,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
 
   const query = computed(() => {
     // eslint-disable-next-line ts/no-unused-expressions
-    router.currentRoute.value.query
+    router?.currentRoute?.value?.query
     return new URLSearchParams(location.search)
   })
   const isPrintMode = computed(() => query.value.has('print') || currentRoute.name === 'export')
