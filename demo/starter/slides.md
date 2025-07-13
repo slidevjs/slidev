@@ -21,8 +21,10 @@ transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
 # open graph
-# seoMeta:
-#  ogImage: https://cover.sli.dev
+seoMeta:
+  # Custom OG image URL or 'auto' to generate from first slide
+  #  ogImage: https://cover.sli.dev
+  ogImage: auto
 ---
 
 # Welcome to Slidev

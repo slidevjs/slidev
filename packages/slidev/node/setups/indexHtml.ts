@@ -75,7 +75,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
           { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
           { property: 'og:title', content: seoMeta.ogTitle || title },
           { property: 'og:description', content: seoMeta.ogDescription || description },
-          { property: 'og:image', content: seoMeta.ogImage },
+          { property: 'og:image', content: seoMeta.ogImage === 'auto' ? './og-image.png' : seoMeta.ogImage },
           { property: 'og:url', content: seoMeta.ogUrl },
           { property: 'twitter:card', content: seoMeta.twitterCard },
           { property: 'twitter:site', content: seoMeta.twitterSite },
