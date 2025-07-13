@@ -101,9 +101,12 @@ export async function build(
 
     const outputIndexPath = resolve(outDir, 'index.html')
     let html = await fs.readFile(outputIndexPath, 'utf-8')
+    const ogImagePath = config.base.endsWith('/')
+      ? `${config.base}og-image.png`
+      : `${config.base}/og-image.png`
     html = html.replace(
       /<meta property="og:image" content="auto">/g,
-      '<meta property="og:image" content="./og-image.png">',
+      `<meta property="og:image" content="${ogImagePath}">`,
     )
     await fs.writeFile(outputIndexPath, html, 'utf-8')
 
