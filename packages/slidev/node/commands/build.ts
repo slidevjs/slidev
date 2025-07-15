@@ -54,63 +54,60 @@ export async function build(
 
   const outDir = resolve(options.userRoot, config.build.outDir)
 
-  if (options.data.config.seoMeta?.ogImage === 'auto') {
-    const port = 12445
-    const app = connect()
-    const server = http.createServer(app)
-    app.use(
-      config.base,
-      sirv(outDir, {
-        etag: true,
-        single: true,
-        dev: true,
-      }),
-    )
-    server.listen(port)
+  if (!options.data.config.seoMeta?.ogImage) {
+    const projectOgImagePath = resolve(options.userRoot, 'og-image.png')
+    const outputOgImagePath = resolve(outDir, 'og-image.png')
 
-    const { exportSlides } = await import('./export')
-    const tempDir = resolve(outDir, 'temp')
-    await fs.mkdir(tempDir, { recursive: true })
-
-    await exportSlides({
-      port,
-      base: config.base,
-      slides: options.data.slides,
-      total: options.data.slides.length,
-      format: 'png',
-      output: tempDir,
-      range: '1',
-      width: options.data.config.canvasWidth,
-      height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-      routerMode: options.data.config.routerMode,
-      waitUntil: 'networkidle',
-      timeout: 30000,
-      perSlide: true,
-      omitBackground: false,
-    })
-
-    const tempFiles = await fs.readdir(tempDir)
-    const pngFile = tempFiles.find(file => file.endsWith('.png'))
-    if (pngFile) {
-      const generatedPath = resolve(tempDir, pngFile)
-      const ogImagePath = resolve(outDir, 'og-image.png')
-      await fs.copyFile(generatedPath, ogImagePath)
+    const projectOgImageExists = await fs.access(projectOgImagePath).then(() => true).catch(() => false)
+    if (projectOgImageExists) {
+      await fs.copyFile(projectOgImagePath, outputOgImagePath)
     }
+    else {
+      const port = 12445
+      const app = connect()
+      const server = http.createServer(app)
+      app.use(
+        config.base,
+        sirv(outDir, {
+          etag: true,
+          single: true,
+          dev: true,
+        }),
+      )
+      server.listen(port)
 
-    await fs.rm(tempDir, { recursive: true, force: true })
+      const { exportSlides } = await import('./export')
+      const tempDir = resolve(outDir, 'temp')
+      await fs.mkdir(tempDir, { recursive: true })
 
-    const outputIndexPath = resolve(outDir, 'index.html')
-    let html = await fs.readFile(outputIndexPath, 'utf-8')
-    const ogImagePath = config.base.endsWith('/')
-      ? `${config.base}og-image.png`
-      : `${config.base}/og-image.png`
-    html = html.replace(
-      /<meta property="og:image" content="auto">/g,
-      `<meta property="og:image" content="${ogImagePath}">`,
-    )
-    await fs.writeFile(outputIndexPath, html, 'utf-8')
+      await exportSlides({
+        port,
+        base: config.base,
+        slides: options.data.slides,
+        total: options.data.slides.length,
+        format: 'png',
+        output: tempDir,
+        range: '1',
+        width: options.data.config.canvasWidth,
+        height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
+        routerMode: options.data.config.routerMode,
+        waitUntil: 'networkidle',
+        timeout: 30000,
+        perSlide: true,
+        omitBackground: false,
+      })
 
-    server.close()
+      const tempFiles = await fs.readdir(tempDir)
+      const pngFile = tempFiles.find(file => file.endsWith('.png'))
+      if (pngFile) {
+        const generatedPath = resolve(tempDir, pngFile)
+        await fs.copyFile(generatedPath, projectOgImagePath)
+        await fs.copyFile(generatedPath, outputOgImagePath)
+      }
+
+      await fs.rm(tempDir, { recursive: true, force: true })
+      server.close()
+    }
   }
 
   // copy index.html to 404.html for GitHub Pages
