@@ -68,6 +68,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
           ...webFontsLink,
         ].filter(x => x),
         meta: [
+          { "http-equiv": "Content-Type", content: "text/html; charset=UTF-8" },
           { property: 'slidev:version', content: version },
           { charset: 'slidev:entry', content: mode === 'dev' && slash(entry) },
           { name: 'description', content: description },
