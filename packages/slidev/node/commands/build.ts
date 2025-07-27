@@ -54,15 +54,17 @@ export async function build(
 
   const outDir = resolve(options.userRoot, config.build.outDir)
 
-  if (!options.data.config.seoMeta?.ogImage) {
-    const projectOgImagePath = resolve(options.userRoot, 'og-image.png')
-    const outputOgImagePath = resolve(outDir, 'og-image.png')
+  // copy or generate ogImage if it's a relative path, skip if not
+  if (options.data.config.seoMeta?.ogImage === 'auto' || options.data.config.seoMeta?.ogImage?.startsWith('.')) {
+    const filename = options.data.config.seoMeta?.ogImage === 'auto' ? 'og-image.png' : options.data.config.seoMeta.ogImage
+    const projectOgImagePath = resolve(options.userRoot, filename)
+    const outputOgImagePath = resolve(outDir, filename)
 
     const projectOgImageExists = await fs.access(projectOgImagePath).then(() => true).catch(() => false)
     if (projectOgImageExists) {
       await fs.copyFile(projectOgImagePath, outputOgImagePath)
     }
-    else {
+    else if (options.data.config.seoMeta?.ogImage === 'auto') {
       const port = 12445
       const app = connect()
       const server = http.createServer(app)
@@ -107,6 +109,9 @@ export async function build(
 
       await fs.rm(tempDir, { recursive: true, force: true })
       server.close()
+    }
+    else {
+      throw new Error(`[Slidev] ogImage: ${filename} not found`)
     }
   }
 
