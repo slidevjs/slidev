@@ -33,4 +33,4 @@ seoMeta:
 ---
 ```
 
-This feature is powered by [unhead](https://unhead.unjs.io/)'s `useHead` hook, please refer to the [documentation](https://unhead.unjs.io/docs/head/api/composables/use-seo-meta) for more details.     
+This feature is powered by [unhead](https://unhead.unjs.io/)'s `useHead` hook, please refer to the [documentation](https://unhead.unjs.io/docs/head/api/composables/use-seo-meta) for more details.

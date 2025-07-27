@@ -27,7 +27,7 @@ If you have `./og-image.png` in your project root, Slidev will grab it as the Op
 
 ## Auto-generate
 
-Since v52.1.0, Slidev supports auto-generating the Open Graph image from the first slide. 
+Since v52.1.0, Slidev supports auto-generating the Open Graph image from the first slide.
 
 You can set `seoMeta.ogImage` to `auto` to enable this feature.
 
@@ -39,4 +39,3 @@ seoMeta:
 ```
 
 It will use [playwright](https://playwright.dev/) to capture the first slide and save it as `./og-image.png` (same as `slidev export`). You may also commit the generated image to your repository to avoid the auto-generation. Or if you generate it on CI, you might also want to setup the playwright environment.
-
