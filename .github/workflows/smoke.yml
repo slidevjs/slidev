@@ -107,6 +107,10 @@ jobs:
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm != 'yarn' }}
 
+      - name: Install Playwright browsers
+        run: pnpx playwright install chromium
+        working-directory: ../temp/slidev-project
+
       - name: Install project (yarn)
         run: yarn add /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
