@@ -18,7 +18,7 @@
   "main": "./dist/index.cjs",
   "icon": "dist/res/logo.png",
   "engines": {
-    "vscode": "^1.89.0"
+    "vscode": "^1.101.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -449,13 +449,13 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "catalog:types",
-    "@types/vscode": "catalog:types",
+    "@types/vscode": "^1.101.0",
     "@volar/language-server": "catalog:vscode",
     "@volar/vscode": "catalog:vscode",
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
-    "prettier": "catalog:frontend",
+    "prettier": "catalog:vscode",
     "reactive-vscode": "catalog:vscode",
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",
