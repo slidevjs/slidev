@@ -2,7 +2,7 @@
   "type": "module",
   "version": "52.0.1",
   "private": true,
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.1",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -50,7 +50,6 @@
     "@types/yargs": "catalog:types",
     "@vueuse/core": "catalog:frontend",
     "bumpp": "catalog:dev",
-    "cross-env": "catalog:dev",
     "cypress": "catalog:dev",
     "eslint": "catalog:dev",
     "eslint-plugin-format": "catalog:dev",
