@@ -40,5 +40,3 @@ Will play **3.5s**, then pause, then **2.5s**, then pause, then **3s**, then pau
 Based on [`Slidev`](https://github.com/slidevjs/slidev), with custom `SlidevVideo` component.
 
 ```
-
-```
