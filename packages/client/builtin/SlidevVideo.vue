@@ -1,74 +1,111 @@
 <script setup lang="ts">
-import { and } from '@vueuse/math'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useNav } from '../composables/useNav'
-import { useSlideContext } from '../context'
-import { resolvedClickMap } from '../modules/v-click'
+import videojs from 'video.js'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import 'video.js/dist/video-js.css'
 
 const props = defineProps<{
-  autoplay?: boolean | 'once'
-  autoreset?: 'slide' | 'click'
+  pause?: (number | 'end')[]
   poster?: string
-  printPoster?: string
-  timestamp?: string | number
-  printTimestamp?: string | number | 'last'
   controls?: boolean
 }>()
 
-const printPoster = computed(() => props.printPoster ?? props.poster)
-const printTimestamp = computed(() => props.printTimestamp ?? props.timestamp ?? 0)
+const videoRef = ref()
+const player = ref<ReturnType<typeof videojs> | null>(null)
+const currentInterval = ref<any>(null)
 
-const { $slidev, $renderContext, $route } = useSlideContext()
-const { isPrintMode } = useNav()
-
-const noPlay = computed(() => isPrintMode.value || !['slide', 'presenter'].includes($renderContext.value))
-
-const video = ref<HTMLMediaElement>()
-const played = ref(false)
-
-onMounted(() => {
-  if (noPlay.value)
-    return
-
-  const timestamp = +(props.timestamp ?? 0)
-  video.value!.currentTime = timestamp
-
-  const matchRoute = computed(() => !!$route && $route.no === $slidev?.nav.currentSlideNo)
-  const matchClick = computed(() => !!video.value && (resolvedClickMap.get(video.value)?.isShown?.value ?? true))
-  const matchRouteAndClick = and(matchRoute, matchClick)
-
-  watch(matchRouteAndClick, () => {
-    if (matchRouteAndClick.value) {
-      if (props.autoplay === true || (props.autoplay === 'once' && !played.value))
-        video.value!.play()
+const rawPause = props.pause ?? []
+const pauseTimestamps = computed(() => {
+  const out: (number | 'end')[] = [0]
+  for (const segment of rawPause) {
+    const last = out[out.length - 1]
+    if (segment === 'end') {
+      out.push('end')
     }
     else {
-      video.value!.pause()
-      if (props.autoreset === 'click' || (props.autoreset === 'slide' && !matchRoute.value))
-        video.value!.currentTime = timestamp
+      const lastNum = typeof last === 'number' ? last : 0
+      out.push(lastNum + segment)
     }
-  }, { immediate: true })
+  }
+  return out
 })
 
-function onLoadedMetadata(ev: Event) {
-  // The video may be loaded before component mounted
-  const element = ev.target as HTMLMediaElement
-  if (noPlay.value && (!printPoster.value || props.printTimestamp)) {
-    element.currentTime = printTimestamp.value === 'last'
-      ? element.duration
-      : +printTimestamp.value
+const pauseIndex = ref(1)
+const isPlaying = ref(false)
+
+function playNextSegment() {
+  const from = pauseTimestamps.value[pauseIndex.value - 1]
+  const to = pauseTimestamps.value[pauseIndex.value]
+
+  if (!player.value || from == null || to == null)
+    return
+
+  if (typeof from === 'number') {
+    player.value.currentTime(from)
   }
+
+  try {
+    isPlaying.value = true
+    player.value.play()
+  }
+  catch {
+    isPlaying.value = false
+    return
+  }
+
+  if (to === 'end') {
+    pauseIndex.value++
+    return
+  }
+
+  if (currentInterval.value)
+    clearInterval(currentInterval.value)
+
+  currentInterval.value = setInterval(() => {
+    if (!player.value)
+      return
+    if (player.value.currentTime() >= to) {
+      player.value.pause()
+      clearInterval(currentInterval.value)
+      isPlaying.value = false
+      pauseIndex.value++
+    }
+  }, 100)
 }
+
+onMounted(() => {
+  player.value = videojs(videoRef.value, {
+    controls: props.controls !== false,
+    autoplay: false,
+    preload: 'auto',
+    poster: props.poster,
+  })
+
+  player.value.ready(() => {
+    player.value.controls(true)
+    player.value.trigger('resize')
+    player.value.pause()
+    player.value.currentTime(0)
+
+    player.value.on('play', () => {
+      if (!isPlaying.value) {
+        playNextSegment()
+      }
+      else {
+        player.value?.pause()
+      }
+    })
+  })
+})
+
+onBeforeUnmount(() => {
+  if (currentInterval.value)
+    clearInterval(currentInterval.value)
+  player.value?.dispose()
+})
 </script>
 
 <template>
-  <video
-    ref="video"
-    :poster="noPlay ? printPoster : props.poster"
-    :controls="!noPlay && props.controls"
-    @play="played = true"
-    @loadedmetadata="onLoadedMetadata"
-  >
+  <video ref="videoRef" class="video-js vjs-default-skin" playsinline>
     <slot />
   </video>
 </template>
