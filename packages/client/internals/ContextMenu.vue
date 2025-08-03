@@ -67,7 +67,7 @@ const top = computed(() => {
   >
     <template v-for="item, index of currentContextMenu.items.value" :key="index">
       <div v-if="item === 'separator'" :key="index" class="w-full my1 border-t border-main" />
-      <template v-else-if="item.show">
+      <template v-else-if="item.show ?? true">
         <div
           v-if="item.small"
           class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded flex"
