@@ -16,7 +16,7 @@ You can also create diagrams/graphs from textual descriptions in your Markdown, 
 Code blocks marked as `mermaid` will be converted to diagrams, for example:
 
 ````md
-```mermaid
+```{mermaid}
 sequenceDiagram
   Alice->John: Hello John, how are you?
   Note over Alice,John: A typical interaction
