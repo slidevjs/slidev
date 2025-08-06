@@ -73,6 +73,7 @@ export default () => {
         icon: 'i-carbon:text-annotation-toggle', // IconTextNotationToggle,
         label: showEditor.value ? 'Hide editor' : 'Show editor',
         action: () => (showEditor.value = !showEditor.value),
+        show: __DEV__,
       },
       {
         icon: 'i-carbon:pen',
