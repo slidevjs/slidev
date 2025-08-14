@@ -197,11 +197,11 @@ You can also specify the enter and leave index for the `v-click` directive by pa
 
 ```md
 <div v-click.hide="[2, 4]">
-  This will be hidden at click 2 and 3.
+  This will be hidden at click 2 and 3 (and shown otherwise).
 </div>
 <div v-click />
 <div v-click="['+1', '+1']">
-  This will be shown at click 3, and hidden since click 4.
+  This will be shown only at click 2 (and hidden otherwise).
 </div>
 ```
 
