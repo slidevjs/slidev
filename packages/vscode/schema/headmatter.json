@@ -498,10 +498,7 @@
           "description": "Default frontmatter options applied to all slides",
           "markdownDescription": "Default frontmatter options applied to all slides"
         }
-      },
-      "required": [
-        "transition"
-      ]
+      }
     },
     "BuiltinLayouts": {
       "type": "string",
