@@ -17,15 +17,15 @@ Slidev integrates [Rough Notation](https://github.com/linkstrifer/react-rough-no
 
 ### `v-mark` directive
 
-Rough Notation integrates comes with the `v-mark` directive.
+Rough Notation integration comes with the `v-mark` directive.
 
 #### Type
 
-`v-mark.underline` for the underline mark, `v-mark.circle` for the circle mark, etc. Default to `underline`
+Use `v-mark.underline` for the underline mark, `v-mark.circle` for the circle mark, etc. (defaults to `underline`).
 
 #### Color
 
-`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`
+`v-mark.red` makes the notation `red`. Supported built-in color themes from UnoCSS. For custom colors, use object syntax `v-mark="{ color: '#234' }"`.
 
 #### Clicks
 
@@ -33,7 +33,7 @@ Rough Notation integrates comes with the `v-mark` directive.
 
 #### Options
 
-Optionally you can pass an object to `v-mark` to specify the options, for example:
+Optionally, you can pass an object to `v-mark` to specify the options, for example:
 
 ```vue
 <span v-mark="{ at: 5, color: '#234', type: 'circle' }">
