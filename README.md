@@ -26,9 +26,9 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <table>
 <tbody>
 <td align="center">
-<img width="2000" height="0" alt="" aria-hiden><br>
+<img width="2000" height="0" alt="" aria-hidden><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/antfu">Sponsor Program 💖</a></sub><br>
-<img width="2000" height="0" alt="" aria-hiden>
+<img width="2000" height="0" alt="" aria-hidden>
 </td>
 </tbody>
 </table>
