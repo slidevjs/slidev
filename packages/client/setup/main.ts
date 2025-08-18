@@ -3,12 +3,17 @@ import type { App } from 'vue'
 import setups from '#slidev/setups/main'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import { createHead } from '@unhead/vue/client'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from 'vue-router'
 import { createVClickDirectives } from '../modules/v-click'
 import { createVDragDirective } from '../modules/v-drag'
 import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
 import setupRoutes from '../setup/routes'
+import 'video.js/dist/video-js.css'
 
 import '#slidev/styles'
 
@@ -16,7 +21,10 @@ export default async function setupMain(app: App) {
   function setMaxHeight() {
     // disable the mobile navbar scroll
     // see https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`)
+    document.documentElement.style.setProperty(
+      '--vh',
+      `${window.innerHeight * 0.01}px`,
+    )
   }
   setMaxHeight()
   window.addEventListener('resize', setMaxHeight)
@@ -41,6 +49,5 @@ export default async function setupMain(app: App) {
     router,
   }
 
-  for (const setup of setups)
-    await setup(context)
+  for (const setup of setups) await setup(context)
 }
