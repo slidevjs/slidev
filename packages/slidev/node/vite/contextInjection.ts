@@ -17,13 +17,20 @@ export function createContextInjectionPlugin(): Plugin {
         templateInitContext,
         templateInjectionMarker,
       ]
-      // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/optimal-quantifier-concatenation
-      const matchScript = code.match(/<script((?!setup).)*(setup)?.*>/)
-      if (matchScript && matchScript[2]) {
-        // setup script
-        return code.replace(/(<script.*>)/g, `$1\n${imports.join('\n')}\n`)
+
+      // Find all <script> blocks
+      const matchScripts = [...code.matchAll(/<script([^>]*)>/g)]
+      // Find the <script ... setup> block
+      const setupScriptMatch = [...code.matchAll(/<script([^>]*)setup([^>]*)>/g)].at(0)
+      if (setupScriptMatch) {
+        // Only inject into the <script setup> block
+        const setupTag = setupScriptMatch[0]
+        const setupTagIndex = setupScriptMatch.index || 0
+        const setupTagEnd = setupTagIndex + setupTag.length
+        // Insert imports right after the <script setup ...> tag
+        return `${code.slice(0, setupTagEnd)}\n${imports.join('\n')}\n${code.slice(setupTagEnd)}`
       }
-      else if (matchScript && !matchScript[2]) {
+      else if (!setupScriptMatch && matchScripts.length === 1) {
         // not a setup script
         const matchExport = code.match(/export\s+default\s+\{/)
         if (matchExport) {
@@ -32,7 +39,7 @@ export function createContextInjectionPlugin(): Plugin {
           let component = code.slice(exportIndex)
           component = component.slice(0, component.indexOf('</script>'))
 
-          const scriptIndex = (matchScript.index || 0) + matchScript[0].length
+          const scriptIndex = (matchScripts[0].index || 0) + matchScripts[0][0].length
           const provideImport = '\nimport { injectionSlidevContext } from "@slidev/client/constants.ts"\n'
           code = `${code.slice(0, scriptIndex)}${provideImport}${code.slice(scriptIndex)}`
 
