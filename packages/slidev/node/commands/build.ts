@@ -97,6 +97,7 @@ export async function build(
         timeout: args.timeout || 30000,
         perSlide: true,
         omitBackground: false,
+        dark: args.dark,
       })
 
       const tempFiles = await fs.readdir(tempDir)
