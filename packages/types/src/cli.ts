@@ -5,6 +5,8 @@ export interface CommonArgs {
 
 export interface ExportArgs extends CommonArgs {
   'output'?: string
+  'handout'?: boolean
+  'cover'?: boolean
   'format'?: string
   'timeout'?: number
   'wait'?: number

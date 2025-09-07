@@ -1,12 +1,16 @@
 import { useStyleTag } from '@vueuse/core'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { slideHeight, slideWidth } from '../env'
 import { useNav } from './useNav'
 
 export function usePrintStyles() {
   const { isPrintMode } = useNav()
+  const route = useRoute()
 
-  useStyleTag(computed(() => isPrintMode.value
+  // Only inject slide-sized @page for the default print/export view.
+  // Handout and cover have their own A4 page sizing and should not be overridden.
+  useStyleTag(computed(() => (isPrintMode.value && !['handout', 'cover'].includes((route.name as string) || ''))
     ? `
 @page {
   size: ${slideWidth.value}px ${slideHeight.value}px;
