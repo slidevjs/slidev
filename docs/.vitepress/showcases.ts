@@ -310,6 +310,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://i.imgur.com/AbTdfhg.png',
     datetime: '2025-06-05',
   },
+  {
+    title: '代码管理及集成 (基本Git)',
+    author: {
+      name: 'heng1025',
+      link: 'https://github.com/heng1025',
+    },
+    at: 'Bayconnect Internal',
+    slidesLink: 'https://git.chenggang.win/',
+    sourceLink: 'https://github.com/heng1025/git-slides',
+    cover: 'https://picsum.photos/1920/1080',
+    datetime: '2021-08-05',
+  },
   // Add yours here!
   {
     title: 'Yours?',
