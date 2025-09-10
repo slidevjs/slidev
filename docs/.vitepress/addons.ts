@@ -192,6 +192,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-hls-player',
   },
+  {
+    id: 'slidev-addon-inalia',
+    name: 'Inalia',
+    description: 'Make your talks more engaging with real-time interactions.',
+    tags: ['Real-Time', 'Interactive'],
+    author: {
+      name: 'Barbapapazes',
+      link: 'https://github.com/Barbapapazes',
+    },
+    repo: 'https://github.com/inalia-app/slidev-addon-inalia',
+  },
   // Add yours here!
   {
     id: '',
