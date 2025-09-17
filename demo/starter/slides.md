@@ -1,5 +1,5 @@
 ---
-# You can also start simply with 'default'
+# try also 'default' to start simple
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
@@ -11,7 +11,7 @@ info: |
   Presentation slides for developers.
 
   Learn more at [Sli.dev](https://sli.dev)
-# apply unocss classes to the current slide
+# apply UnoCSS classes to the current slide
 class: text-center
 # https://sli.dev/features/drawing
 drawings:
@@ -20,12 +20,6 @@ drawings:
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
-# open graph
-seoMeta:
-  # By default, Slidev will use ./og-image.png if it exists,
-  # or generate one from the first slide if not found.
-  ogImage: auto
-  # ogImage: https://cover.sli.dev
 ---
 
 # Welcome to Slidev
