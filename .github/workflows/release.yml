@@ -29,6 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - run: pnpm i -g npm@latest
+      - run: pnpm i
       - run: pnpm run ci:publish
 
       - name: Publish to VSCE & OVSX
