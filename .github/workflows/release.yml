@@ -17,6 +17,8 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v5
         with:
           node-version: lts/*
@@ -26,12 +28,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - run: npm i -g @antfu/ni npm@latest
-      - run: nci
-      - run: nr ci:publish
+      - run: pnpm i -g npm@latest
+      - run: pnpm run ci:publish
 
       - name: Publish to VSCE & OVSX
-        run: npm run publish
+        run: pnpm run publish
         working-directory: ./packages/vscode
         env:
           VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
