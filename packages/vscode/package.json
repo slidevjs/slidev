@@ -449,8 +449,7 @@
         "icon": "$(debug-stackframe-active)",
         "inputSchema": {
           "type": "object",
-          "properties": {
-          }
+          "properties": {}
         }
       },
       {
@@ -481,7 +480,9 @@
       },
       {
         "name": "slidev_getAllSlideTitles",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "getAllSlideTitles",
         "displayName": "Get All Slide Titles",
         "modelDescription": "Get the list of all slide titles in the specified Slidev project.",
@@ -501,7 +502,9 @@
       },
       {
         "name": "slidev_findSlideNoByTitle",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "findSlideNoByTitle",
         "displayName": "Find Slide Number by Title",
         "modelDescription": "Find the slide number in the specified Slidev project by its title.",
@@ -525,7 +528,9 @@
       },
       {
         "name": "slidev_listEntries",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "listEntries",
         "displayName": "List All Loaded Slidev Entries",
         "modelDescription": "Get all loaded Slidev project entry file paths.",
@@ -539,7 +544,9 @@
       },
       {
         "name": "slidev_getPreviewPort",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "getPreviewPort",
         "displayName": "Get Project Preview Port",
         "modelDescription": "Get the preview port number of the specified Slidev project.",
@@ -559,7 +566,9 @@
       },
       {
         "name": "slidev_chooseEntry",
-        "tags": ["slidev"],
+        "tags": [
+          "slidev"
+        ],
         "toolReferenceName": "chooseEntry",
         "displayName": "Choose Active Slidev Entry",
         "modelDescription": "Switch the active Slidev project entry to the specified entry file path.",
@@ -575,7 +584,9 @@
               "default": ""
             }
           },
-          "required": ["entrySlidePath"]
+          "required": [
+            "entrySlidePath"
+          ]
         }
       }
     ]
