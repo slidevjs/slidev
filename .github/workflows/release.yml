@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-      - run: pnpm i -g npm@latest
+      - run: npm i -g npm@latest
       - run: pnpm i
       - run: pnpm run ci:publish
 
