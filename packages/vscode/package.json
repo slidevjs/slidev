@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "52.2.2",
+  "version": "52.2.3",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
