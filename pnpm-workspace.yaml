@@ -72,7 +72,7 @@ catalogs:
   monaco:
     '@shikijs/monaco': ^3.8.1
     '@typescript/ata': ^0.9.8
-    monaco-editor: ^0.52.2
+    monaco-editor: ^0.53.0
   prod:
     '@antfu/ni': ^25.0.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4

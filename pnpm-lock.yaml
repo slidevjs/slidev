@@ -189,8 +189,8 @@ catalogs:
       specifier: ^0.9.8
       version: 0.9.8
     monaco-editor:
-      specifier: ^0.52.2
-      version: 0.52.2
+      specifier: ^0.53.0
+      version: 0.53.0
   prod:
     '@antfu/ni':
       specifier: ^25.0.0
@@ -796,7 +796,7 @@ importers:
         version: 11.9.0
       monaco-editor:
         specifier: catalog:monaco
-        version: 0.52.2
+        version: 0.53.0
       nanotar:
         specifier: catalog:frontend
         version: 0.2.0
@@ -989,7 +989,7 @@ importers:
         version: 1.7.4
       monaco-editor:
         specifier: catalog:monaco
-        version: 0.52.2
+        version: 0.53.0
       open:
         specifier: catalog:prod
         version: 10.2.0
@@ -1122,7 +1122,7 @@ importers:
         version: 11.9.0
       monaco-editor:
         specifier: catalog:monaco
-        version: 0.52.2
+        version: 0.53.0
       shiki:
         specifier: catalog:frontend
         version: 3.8.1
@@ -2416,6 +2416,9 @@ packages:
 
   '@types/sizzle@2.3.8':
     resolution: {integrity: sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==}
+
+  '@types/trusted-types@1.0.6':
+    resolution: {integrity: sha512-230RC8sFeHoT6sSUlRO6a8cAnclO06eeiq1QDfiv2FGCLWFvvERWgwIQD4FWqD9A69BN7Lzee4OXwoMVnnsWDw==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -5218,8 +5221,8 @@ packages:
   mlly@1.7.4:
     resolution: {integrity: sha512-qmdSIPC4bDJXgZTCR7XosJiNKySV7O215tsPtDN9iEO/7q/76b/ijtgRu/+epFXSJhijtTCCGp3DWS549P3xKw==}
 
-  monaco-editor@0.52.2:
-    resolution: {integrity: sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==}
+  monaco-editor@0.53.0:
+    resolution: {integrity: sha512-0WNThgC6CMWNXXBxTbaYYcunj08iB5rnx4/G56UOPeL9UVIUGGHA1GR0EWIh9Ebabj7NpCRawQ5b0hfN1jQmYQ==}
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -8169,6 +8172,8 @@ snapshots:
   '@types/sinonjs__fake-timers@8.1.1': {}
 
   '@types/sizzle@2.3.8': {}
+
+  '@types/trusted-types@1.0.6': {}
 
   '@types/trusted-types@2.0.7':
     optional: true
@@ -11499,7 +11504,9 @@ snapshots:
       pkg-types: 1.3.0
       ufo: 1.5.4
 
-  monaco-editor@0.52.2: {}
+  monaco-editor@0.53.0:
+    dependencies:
+      '@types/trusted-types': 1.0.6
 
   mri@1.2.0:
     optional: true
