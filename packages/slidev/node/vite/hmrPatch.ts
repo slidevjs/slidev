@@ -7,10 +7,17 @@ import { regexSlideSourceId } from './common'
 export function createHmrPatchPlugin(): Plugin {
   return {
     name: 'slidev:hmr-patch',
-    transform(code, id) {
-      if (!id.match(regexSlideSourceId))
-        return
-      return code.replace('if (_rerender_only)', 'if (false)')
+    transform: {
+      filter: {
+        id: {
+          include: regexSlideSourceId,
+        },
+      },
+      handler(code, id) {
+        if (!id.match(regexSlideSourceId))
+          return
+        return code.replace('if (_rerender_only)', 'if (false)')
+      },
     },
   }
 }

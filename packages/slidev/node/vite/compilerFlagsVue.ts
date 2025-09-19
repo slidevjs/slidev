@@ -12,15 +12,18 @@ export function createVueCompilerFlagsPlugin(
   return {
     name: 'slidev:flags',
     enforce: 'pre',
-    transform(code, id) {
-      if (!id.match(/\.vue($|\?)/) && !id.includes('?vue&'))
-        return
-      const original = code
-      define.forEach(([from, to]) => {
-        code = code.replaceAll(from, to)
-      })
-      if (original !== code)
-        return code
+    transform: {
+      // TODO: static filter
+      handler(code, id) {
+        if (!id.match(/\.vue($|\?)/) && !id.includes('?vue&'))
+          return
+        const original = code
+        define.forEach(([from, to]) => {
+          code = code.replaceAll(from, to)
+        })
+        if (original !== code)
+          return code
+      },
     },
   }
 }

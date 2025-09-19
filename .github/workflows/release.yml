@@ -16,12 +16,12 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-        
+
       - uses: actions/setup-node@v5
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
-  
+
       - run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
