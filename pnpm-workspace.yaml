@@ -3,6 +3,12 @@ packages:
   - demo/*
   - cypress/fixtures/*
   - docs
+
+shamefullyHoist: true
+ignoreWorkspaceRootCheck: true
+strictPeerDependencies: false
+linkWorkspacePackages: true
+
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
