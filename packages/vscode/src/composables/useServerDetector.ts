@@ -1,8 +1,8 @@
 import type { Ref } from 'reactive-vscode'
 import { reactive, watch } from 'reactive-vscode'
 
-const versionRE = /<meta name="slidev:version" content="([^"]+)">/
-const entryRE = /<meta charset="slidev:entry" content="([^"]+)">/
+const versionRE = /<meta (name|property)="slidev:version" content="([^"]+)">/
+const entryRE = /<meta (property|charset)="slidev:entry" content="([^"]+)">/
 
 export function useServerDetector(port: Ref<number | null>, ensureEntry?: string) {
   const state = reactive({
