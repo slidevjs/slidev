@@ -78,7 +78,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },
           { property: 'slidev:version', content: version },
-          { charset: 'slidev:entry', content: mode === 'dev' && slash(entry) },
+          { property: 'slidev:entry', content: mode === 'dev' && slash(entry) },
           { name: 'description', content: description },
           { name: 'author', content: author ? toAttrValue(author) : null },
           { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
