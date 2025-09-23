@@ -431,6 +431,12 @@
           "markdownDescription": "Force the filename used when exporting the presentation.\nThe extension, e.g. .pdf, gets automatically added.",
           "default": ""
         },
+        "handout": {
+          "$ref": "#/definitions/HandoutOptions",
+          "description": "Options for exported handouts (page size, orientation, margins).",
+          "markdownDescription": "Options for exported handouts (page size, orientation, margins).",
+          "default": {}
+        },
         "monaco": {
           "anyOf": [
             {
@@ -785,6 +791,117 @@
           "default": true
         }
       }
+    },
+    "HandoutOptions": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "$ref": "#/definitions/HandoutPredefinedSize",
+          "description": "Predefined page size to use. Set `width`/`height` for custom sizes.",
+          "markdownDescription": "Predefined page size to use. Set `width`/`height` for custom sizes."
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "portrait",
+            "landscape"
+          ],
+          "description": "Page orientation.",
+          "markdownDescription": "Page orientation.",
+          "default": "portrait"
+        },
+        "width": {
+          "type": "number",
+          "description": "Custom page width.",
+          "markdownDescription": "Custom page width."
+        },
+        "height": {
+          "type": "number",
+          "description": "Custom page height.",
+          "markdownDescription": "Custom page height."
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "in"
+          ],
+          "description": "Units for `width`/`height` when provided.",
+          "markdownDescription": "Units for `width`/`height` when provided.",
+          "default": "mm"
+        },
+        "margins": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "string"
+                },
+                "right": {
+                  "type": "string"
+                },
+                "bottom": {
+                  "type": "string"
+                },
+                "left": {
+                  "type": "string"
+                }
+              }
+            }
+          ],
+          "description": "Margins applied to the handout pages. Can be a CSS shorthand string or per-side object.",
+          "markdownDescription": "Margins applied to the handout pages. Can be a CSS shorthand string or per-side object."
+        },
+        "coverMargins": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "top": {
+                  "type": "string"
+                },
+                "right": {
+                  "type": "string"
+                },
+                "bottom": {
+                  "type": "string"
+                },
+                "left": {
+                  "type": "string"
+                }
+              }
+            }
+          ],
+          "description": "Margins applied specifically to the optional cover pages.",
+          "markdownDescription": "Margins applied specifically to the optional cover pages."
+        }
+      }
+    },
+    "HandoutPredefinedSize": {
+      "type": "string",
+      "enum": [
+        "A5",
+        "A4",
+        "A3",
+        "Letter",
+        "Legal",
+        "Tabloid",
+        "Executive",
+        "a5",
+        "a4",
+        "a3",
+        "letter",
+        "legal",
+        "tabloid",
+        "executive"
+      ]
     },
     "SeoMeta": {
       "type": "object",
