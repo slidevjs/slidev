@@ -1,21 +1,34 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
 import HandoutCover from '#slidev/global-components/handout-cover'
+import HandoutEnding from '#slidev/global-components/handout-ending'
 import { useElementSize } from '@vueuse/core'
-import { computed, nextTick, onMounted, ref, watchEffect } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useNav } from '../../composables/useNav'
+import { useHandoutPageSetup } from '../../composables/usePrintStyles'
 import { themeVars } from '../../env'
 import PrintContainerHandout from '../../internals/PrintContainerHandout.vue'
 import { windowSize } from '../../state'
 
-const { isPrintMode } = useNav()
+const { isPrintMode, printRange } = useNav()
+
+useHandoutPageSetup('handout')
 
 const root = ref<HTMLElement | null>(null)
 const { width: rootWidth } = useElementSize(root)
 const route = useRoute()
 const includeCover = computed(() => route.query.cover != null)
+const includeEnding = computed(() => route.query.ending != null)
 const coverRoot = ref<HTMLElement | null>(null)
+const endingRoot = ref<HTMLElement | null>(null)
 const pageOffset = ref(0)
+const endingPageCount = ref(0)
+
+const slidePageCount = computed(() => printRange.value.length)
+const endingPageDisplayCount = computed(() => includeEnding.value ? endingPageCount.value : 0)
+const endingPageStart = computed(() => pageOffset.value + slidePageCount.value + 1)
+const totalPageCount = computed(() => pageOffset.value + slidePageCount.value + endingPageDisplayCount.value)
 
 watchEffect(() => {
   const html = document.body.parentNode as HTMLElement
@@ -25,32 +38,81 @@ watchEffect(() => {
     html.classList.remove('print')
 })
 
+function detectPageBlocks(el: HTMLElement | null, fallback: number) {
+  if (!el)
+    return fallback
+  const hasContent = el.childElementCount > 0
+  const selectors = ['.break-after-page', '[data-handout-page]']
+  const candidates = new Set<HTMLElement>(Array.from(el.querySelectorAll<HTMLElement>(selectors.join(','))))
+  const inlineBreaks = Array.from(el.querySelectorAll<HTMLElement>('[style]')).filter((node) => {
+    const style = node.getAttribute('style') || ''
+    return /page-break-after\s*:\s*always/i.test(style) || /break-after\s*:\s*page/i.test(style)
+  })
+  inlineBreaks.forEach(node => candidates.add(node))
+  if (candidates.size > 0)
+    return candidates.size
+  const directChildren = Array.from(el.children).filter((node): node is HTMLElement => node instanceof HTMLElement)
+  const directCount = directChildren.filter(node => node.classList.contains('break-after-page') || node.hasAttribute('data-handout-page')).length
+  if (directCount > 0)
+    return directCount
+  return hasContent ? Math.max(1, fallback) : fallback
+}
+
 function recountCoverPages() {
   if (!includeCover.value) {
     pageOffset.value = 0
     return
   }
-  const el = coverRoot.value
-  if (!el) {
-    pageOffset.value = 1
+  pageOffset.value = Math.max(1, detectPageBlocks(coverRoot.value, 1))
+}
+
+function recountEndingPages() {
+  if (!includeEnding.value) {
+    endingPageCount.value = 0
     return
   }
-  // Heuristic: count elements intended to force page breaks.
-  // UnoCSS utility `break-after-page` is commonly used.
-  // If none found, assume a single-page cover.
-  const blocks = el.querySelectorAll('.break-after-page')
-  pageOffset.value = Math.max(1, blocks.length)
+  endingPageCount.value = detectPageBlocks(endingRoot.value, 0)
 }
+
+function setupMutationObserver(target: Ref<HTMLElement | null>, callback: () => void) {
+  if (typeof MutationObserver === 'undefined')
+    return
+  let observer: MutationObserver | null = null
+  watch(target, (el) => {
+    observer?.disconnect()
+    if (el) {
+      observer = new MutationObserver(() => callback())
+      observer.observe(el, { childList: true, subtree: true, attributes: true })
+    }
+  }, { immediate: true })
+  onBeforeUnmount(() => observer?.disconnect())
+}
+
+setupMutationObserver(coverRoot, () => recountCoverPages())
+setupMutationObserver(endingRoot, () => recountEndingPages())
 
 onMounted(async () => {
   await nextTick()
   recountCoverPages()
+  recountEndingPages()
 })
 
 watchEffect(() => {
   // Recount when toggling cover or when printing state changes
-  if (isPrintMode.value)
+  if (isPrintMode.value) {
     recountCoverPages()
+    recountEndingPages()
+  }
+})
+
+watch(includeCover, async () => {
+  await nextTick()
+  recountCoverPages()
+})
+
+watch(includeEnding, async () => {
+  await nextTick()
+  recountEndingPages()
 })
 </script>
 
@@ -65,6 +127,15 @@ watchEffect(() => {
       :width="rootWidth || windowSize.width.value"
       :page-offset="pageOffset"
     />
+    <div v-if="includeEnding" ref="endingRoot">
+      <HandoutEnding
+        :page-start="endingPageStart"
+        :page-count="endingPageDisplayCount"
+        :total-pages="totalPageCount"
+        :cover-count="pageOffset"
+        :slide-count="slidePageCount"
+      />
+    </div>
   </div>
 </template>
 
@@ -102,13 +173,5 @@ html.print body {
   overflow: visible;
 }
 
-/* Cover content may contain its own break-after-page blocks to form pages */
-
-@page {
-  size: A4;
-  margin-top: 0cm;
-  margin-bottom: 0cm;
-  margin-left: 0cm;
-  margin-right: 0cm;
-}
+/* Cover/ending content may contain their own break-after-page blocks to form pages */
 </style>

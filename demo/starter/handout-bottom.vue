@@ -6,7 +6,8 @@ defineProps<{ pageNumber: number }>()
 const year = new Date().getFullYear()
 // Replace these with your flavor system if needed
 const company = 'Slidev'
-const rightText = 'Presentation slides for developers'
+const rightText = 'Professional courses for developers'
+const series = 'Engineering Enablement Series'
 </script>
 
 <template>
@@ -15,8 +16,14 @@ const rightText = 'Presentation slides for developers'
       <div class="left">
         © {{ year }} {{ company }}
       </div>
+      <div class="center">
+        Page {{ pageNumber }}
+      </div>
       <div class="right">
-        {{ rightText }}
+        <span class="block font-semibold uppercase tracking-wide text-xs text-gray-500">
+          {{ series }}
+        </span>
+        <span>{{ rightText }}</span>
       </div>
     </div>
   </div>
@@ -35,7 +42,15 @@ const rightText = 'Presentation slides for developers'
   padding-top: 3mm; /* space below the rule drawn by container */
 }
 .left,
+.center,
 .right {
   white-space: nowrap;
+}
+.center {
+  font-variant-numeric: tabular-nums;
+  color: rgba(0, 0, 0, 0.7);
+}
+.right {
+  text-align: right;
 }
 </style>

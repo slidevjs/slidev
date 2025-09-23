@@ -2,9 +2,12 @@
 import HandoutCover from '#slidev/global-components/handout-cover'
 import { watchEffect } from 'vue'
 import { useNav } from '../../composables/useNav'
+import { useHandoutPageSetup } from '../../composables/usePrintStyles'
 import { themeVars } from '../../env'
 
 const { isPrintMode } = useNav()
+
+useHandoutPageSetup('cover')
 
 watchEffect(() => {
   const html = document.body.parentNode as HTMLElement
@@ -50,13 +53,5 @@ html.print body {
   padding: 0;
   float: none;
   overflow: visible;
-}
-
-@page {
-  size: A4;
-  margin-top: 1cm;
-  margin-bottom: 1cm;
-  margin-left: 1.5cm;
-  margin-right: 1.5cm;
 }
 </style>

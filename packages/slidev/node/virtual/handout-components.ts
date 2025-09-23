@@ -3,13 +3,15 @@ import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { toAtFS } from '../resolver'
 
-function createHandoutComponentTemplate(name: 'handout-bottom' | 'handout-cover'): VirtualModuleTemplate {
+function createHandoutComponentTemplate(name: 'handout-bottom' | 'handout-cover' | 'handout-ending'): VirtualModuleTemplate {
   return {
     id: `/@slidev/global-components/${name}`,
     getContent({ roots }) {
       const candidates = name === 'handout-bottom'
         ? ['handout-bottom.vue', 'HandoutBottom.vue']
-        : ['handout-cover.vue', 'HandoutCover.vue']
+        : name === 'handout-cover'
+          ? ['handout-cover.vue', 'HandoutCover.vue']
+          : ['handout-ending.vue', 'HandoutEnding.vue']
 
       const components = roots
         .flatMap(root => candidates.map(n => join(root, n)))
@@ -32,3 +34,4 @@ function createHandoutComponentTemplate(name: 'handout-bottom' | 'handout-cover'
 
 export const templateGlobalHandoutBottom = createHandoutComponentTemplate('handout-bottom')
 export const templateGlobalHandoutCover = createHandoutComponentTemplate('handout-cover')
+export const templateGlobalHandoutEnding = createHandoutComponentTemplate('handout-ending')

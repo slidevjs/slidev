@@ -1,7 +1,7 @@
 import { useStyleTag } from '@vueuse/core'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { slideHeight, slideWidth } from '../env'
+import { configs, slideHeight, slideWidth } from '../env'
 import { useNav } from './useNav'
 
 export function usePrintStyles() {
@@ -29,4 +29,39 @@ export function patchMonacoColors() {
   document.querySelectorAll<HTMLStyleElement>('style.monaco-colors').forEach((el) => {
     el.media = ''
   })
+}
+
+export type HandoutPageContext = 'handout' | 'cover' | 'ending'
+
+export function useHandoutPageSetup(context: HandoutPageContext = 'handout') {
+  const { isPrintMode } = useNav()
+  const route = useRoute()
+
+  const allowedRoute = computed(() => {
+    if (context === 'cover')
+      return route.name === 'cover'
+    return route.name === 'handout'
+  })
+
+  const margins = computed(() => context === 'cover'
+    ? configs.handout.coverMargins
+    : configs.handout.margins)
+  const pageSize = computed(() => configs.handout.cssPageSize)
+
+  useStyleTag(computed(() => (isPrintMode.value && allowedRoute.value)
+    ? `
+@page {
+  size: ${pageSize.value};
+  margin-top: ${margins.value.top};
+  margin-right: ${margins.value.right};
+  margin-bottom: ${margins.value.bottom};
+  margin-left: ${margins.value.left};
+}
+`
+    : ''))
+
+  return {
+    margins,
+    pageSize,
+  }
 }

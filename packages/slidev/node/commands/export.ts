@@ -1,4 +1,4 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedHandoutOptions, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import path, { dirname, relative } from 'node:path'
@@ -23,6 +23,7 @@ export interface ExportOptions {
   output?: string
   handout?: boolean
   cover?: boolean
+  ending?: boolean
   timeout?: number
   wait?: number
   waitUntil: 'networkidle' | 'load' | 'domcontentloaded' | undefined
@@ -40,6 +41,7 @@ export interface ExportOptions {
   perSlide?: boolean
   scale?: number
   omitBackground?: boolean
+  handoutOptions?: ResolvedHandoutOptions
 }
 
 interface ExportPngResult {
@@ -173,6 +175,7 @@ export async function exportSlides({
   output = 'slides',
   handout = false,
   cover = false,
+  ending = false,
   slides,
   base = '/',
   timeout = 30000,
@@ -188,6 +191,7 @@ export async function exportSlides({
   scale = 1,
   waitUntil,
   omitBackground = false,
+  handoutOptions,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -198,11 +202,21 @@ export async function exportSlides({
   // Use a sane, stable viewport for handout printing to avoid extremely tall pages
   // that can cause Chromium to render black/blank pages when printing.
   // For regular slide export, keep the original large viewport behavior.
-  const A4_WIDTH_PX = Math.round(210 / 25.4 * 96)
-  const A4_HEIGHT_PX = Math.round(297 / 25.4 * 96)
+  const fallbackHandout: ResolvedHandoutOptions = {
+    size: 'A4',
+    orientation: 'portrait',
+    widthMm: 210,
+    heightMm: 297,
+    widthPx: Math.round(210 / 25.4 * 96),
+    heightPx: Math.round(297 / 25.4 * 96),
+    cssPageSize: 'A4',
+    margins: { top: '0cm', right: '0cm', bottom: '0cm', left: '0cm' },
+    coverMargins: { top: '1cm', right: '1.5cm', bottom: '1cm', left: '1.5cm' },
+  }
+  const handoutConfig = handoutOptions || fallbackHandout
   const context = await browser.newContext({
     viewport: handout
-      ? { width: A4_WIDTH_PX, height: A4_HEIGHT_PX }
+      ? { width: handoutConfig.widthPx, height: handoutConfig.heightPx }
       : {
           width,
           // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
@@ -228,6 +242,8 @@ export async function exportSlides({
       qs.set('range', range)
     if (cover)
       qs.set('cover', 'true')
+    if (ending)
+      qs.set('ending', 'true')
     const handoutQuery = `?${qs.toString()}`
     const handoutPath = routerMode === 'hash'
       ? `http://localhost:${port}${base}${handoutQuery}#/handout`
@@ -272,7 +288,8 @@ export async function exportSlides({
     if (wait)
       await page.waitForTimeout(wait)
     await page.pdf({
-      format: 'A4',
+      width: `${handoutConfig.widthMm}mm`,
+      height: `${handoutConfig.heightMm}mm`,
       path: handoutOut,
       margin: { left: 0, top: 0, right: 0, bottom: 0 },
       printBackground: true,
@@ -659,6 +676,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     output,
     handout,
     cover,
+    ending,
     format,
     timeout,
     wait,
@@ -677,6 +695,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     output: outFilename,
     handout: handout || false,
     cover: cover || false,
+    ending: ending || false,
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
@@ -694,6 +713,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     perSlide: perSlide || false,
     scale: scale || 2,
     omitBackground: omitBackground ?? false,
+    handoutOptions: options.data.config.handout,
   }
 }
 

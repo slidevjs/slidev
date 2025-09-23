@@ -6,6 +6,7 @@ export interface ResolvedSlidevConfigSub {
   drawings: ResolvedDrawingsOptions
   fonts: ResolvedFontOptions
   aspectRatio: number
+  handout: ResolvedHandoutOptions
 }
 
 export interface SlidevConfig extends
@@ -35,4 +36,23 @@ export interface ResolvedExportOptions extends Omit<ExportArgs, 'entry' | 'theme
   withClicks?: boolean
   executablePath?: string
   withToc?: boolean
+}
+
+export interface ResolvedHandoutOptions {
+  size: string
+  orientation: 'portrait' | 'landscape'
+  widthMm: number
+  heightMm: number
+  widthPx: number
+  heightPx: number
+  cssPageSize: string
+  margins: HandoutPageMargins
+  coverMargins: HandoutPageMargins
+}
+
+export interface HandoutPageMargins {
+  top: string
+  right: string
+  bottom: string
+  left: string
 }

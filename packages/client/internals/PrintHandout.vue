@@ -2,7 +2,7 @@
 import type { SlideRoute } from '@slidev/types'
 import HandoutBottom from '#slidev/global-components/handout-bottom'
 import { computed } from 'vue'
-import { slideHeight, slideWidth } from '../env'
+import { configs, slideHeight, slideWidth } from '../env'
 import NoteDisplay from './NoteDisplay.vue'
 import PrintSlide from './PrintSlide.vue'
 
@@ -14,12 +14,11 @@ const props = defineProps<{
 const route = computed(() => props.route)
 const pageOffset = computed(() => props.pageOffset ?? 0)
 
-// Use fixed A4 dimensions in CSS pixels (96 DPI) to avoid relying on
+// Use configured dimensions (converted to CSS pixels at 96 DPI) to avoid relying on
 // runtime viewport sizes which can skew scaling during headless export
-const PAGE_WIDTH_PX = Math.round(210 / 25.4 * 96)
-const PAGE_HEIGHT_PX = Math.round(297 / 25.4 * 96)
-const pageWidth = computed(() => PAGE_WIDTH_PX)
-const pageHeight = computed(() => PAGE_HEIGHT_PX)
+const handoutOptions = computed(() => configs.handout)
+const pageWidth = computed(() => handoutOptions.value.widthPx)
+const pageHeight = computed(() => handoutOptions.value.heightPx)
 
 // Target layout: slide ~50% height, notes the rest, footer pinned
 const SLIDE_PORTION = 0.5
@@ -47,10 +46,14 @@ const slideAreaStyle = computed(() => ({
   height: `${slideHeightScaled.value}px`,
   padding: `${SLIDE_TOP_MARGIN_MM}mm ${SLIDE_SIDE_MARGIN_MM}mm 0`,
 }))
+const pageBoxStyle = computed(() => ({
+  width: `${handoutOptions.value.widthMm}mm`,
+  minHeight: `${handoutOptions.value.heightMm}mm`,
+}))
 </script>
 
 <template>
-  <div class="break-after-page page">
+  <div class="break-after-page page" :style="pageBoxStyle">
     <div class="slide-area" :style="slideAreaStyle">
       <div class="slide-scale-wrap" :style="{ width: `${slideWidth}px`, height: `${slideHeight}px`, transform: `scale(${scale})` }">
         <PrintSlide :route="route" />
@@ -72,12 +75,10 @@ const slideAreaStyle = computed(() => ({
 </template>
 
 <style scoped>
-/* One handout page per printed page, sized to A4 with internal padding */
+/* One handout page per printed page, sized via inline styles with internal padding */
 .page {
   display: flex;
   flex-direction: column;
-  width: 210mm;
-  min-height: 297mm;
   margin: 0 auto;
   padding: 10mm 12mm 4mm; /* top, sides, bottom */
 
