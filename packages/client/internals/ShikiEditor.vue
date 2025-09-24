@@ -13,45 +13,26 @@ const highlight = shallowRef<Awaited<ReturnType<typeof getHighlighter>> | null>(
 getHighlighter().then(h => highlight.value = h)
 
 const localContent = ref(content.value)
-const composing = ref(false)
-
 watch(content, (v) => {
-  if (v !== localContent.value && !composing.value) {
+  if (v !== localContent.value) {
     localContent.value = v
   }
 })
 
-let preText = ''
-let postText = ''
-
-function onCompositionStart() {
-  composing.value = true
-  if (textareaEl.value) {
-    const start = textareaEl.value.selectionStart
-    const end = textareaEl.value.selectionEnd
-    preText = textareaEl.value.value.slice(0, start)
-    postText = textareaEl.value.value.slice(end)
-  }
-}
-
-function onCompositionUpdate(e: CompositionEvent) {
-  if (composing.value) {
-    localContent.value = preText + e.data + postText
-    e.preventDefault()
-  }
-}
-
 function onCompositionEnd() {
-  composing.value = false
-  preText = ''
-  postText = ''
-  // apply composition result
   content.value = localContent.value
 }
 
 function onInput(e: Event) {
-  if (!composing.value) {
-    content.value = (e.target as HTMLTextAreaElement).value
+  if (!(e instanceof InputEvent) || !(e.target instanceof HTMLTextAreaElement)) {
+    return
+  }
+
+  if (e.isComposing) {
+    localContent.value = e.target.value
+  }
+  else {
+    content.value = e.target.value
   }
 }
 </script>
@@ -63,8 +44,6 @@ function onInput(e: Event) {
       <textarea
         ref="textareaEl" v-model="localContent" :placeholder="props.placeholder"
         class="absolute inset-0 resize-none text-transparent bg-transparent focus:outline-none caret-black dark:caret-white overflow-y-hidden"
-        @compositionstart="onCompositionStart"
-        @compositionupdate="onCompositionUpdate"
         @compositionend="onCompositionEnd"
         @input="onInput"
       />
