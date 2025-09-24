@@ -2,6 +2,7 @@
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import type { PropType } from 'vue'
 import { sleep } from '@antfu/utils'
+import { useClipboard } from '@vueuse/core'
 import lz from 'lz-string'
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -42,6 +43,33 @@ const id = makeId()
 
 const stepIndex = ref(0)
 const container = ref<HTMLElement>()
+
+const showCopyButton = computed(() => {
+  if (!configs.codeCopy)
+    return false
+
+  const magicCopy = configs.magicMoveCopy
+  if (!magicCopy)
+    return false
+
+  if (magicCopy === true || magicCopy === 'always')
+    return true
+
+  if (magicCopy === 'final')
+    return stepIndex.value === steps.length - 1
+
+  return false
+})
+const { copied, copy } = useClipboard()
+
+function copyCode() {
+  // Use the code property directly from KeyedTokensInfo
+  const currentStep = steps[stepIndex.value]
+  if (!currentStep || !currentStep.code)
+    return
+
+  copy(currentStep.code.trim())
+}
 
 // Normalized the ranges, to at least have one range
 const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
@@ -116,7 +144,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative">
+  <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative group">
     <div v-if="title" class="slidev-code-block-title">
       <TitleIcon :title="title" />
       <div class="leading-1em">
@@ -135,6 +163,15 @@ onMounted(() => {
         stagger: 1,
       }"
     />
+    <button
+      v-if="showCopyButton"
+      class="slidev-code-copy absolute right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
+      :class="title ? 'top-10' : 'top-0'"
+      :title="copied ? 'Copied' : 'Copy'" @click="copyCode()"
+    >
+      <ph-check-circle v-if="copied" class="p-2 w-8 h-8" />
+      <ph-clipboard v-else class="p-2 w-8 h-8" />
+    </button>
   </div>
 </template>
 

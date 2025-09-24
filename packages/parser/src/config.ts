@@ -32,6 +32,7 @@ export function getDefaultConfig(): SlidevConfig {
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
     codeCopy: true,
+    magicMoveCopy: true,
     author: '',
     record: 'dev',
     css: 'unocss',
