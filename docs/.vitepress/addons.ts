@@ -192,6 +192,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/AlbertBrand/slidev-addon-hls-player',
   },
+  {
+    id: 'slidev-addon-window-mockup',
+    name: 'Window Mockup',
+    description: 'Styled window frames',
+    tags: ['Component'],
+    author: {
+      name: 'whitphx',
+      link: 'https://github.com/whitphx',
+    },
+    repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
+  },
   // Add yours here!
   {
     id: '',

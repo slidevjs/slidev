@@ -94,9 +94,10 @@ export async function build(
         height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
         routerMode: options.data.config.routerMode,
         waitUntil: 'networkidle',
-        timeout: 30000,
+        timeout: args.timeout || 30000,
         perSlide: true,
         omitBackground: false,
+        dark: args.dark,
       })
 
       const tempFiles = await fs.readdir(tempDir)

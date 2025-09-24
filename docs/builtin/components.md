@@ -253,7 +253,7 @@ Apply scaling or transforming to elements.
 ### Usage
 
 ```md
-<Transform :scale="0.5">
+<Transform :scale="0.5" origin="top center">
   <YourElements />
 </Transform>
 ```

@@ -13,7 +13,7 @@ description: |
 The `Transform` component allows you to scale the size of the elements on your slides:
 
 ```md
-<Transform :scale="0.5">
+<Transform :scale="0.5" origin="top center">
   <YourElements />
 </Transform>
 ```
