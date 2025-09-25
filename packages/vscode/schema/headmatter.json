@@ -181,11 +181,15 @@
             },
             {
               "type": "string",
-              "enum": ["final", "always"]
+              "const": "final"
+            },
+            {
+              "type": "string",
+              "const": "always"
             }
           ],
-          "description": "Show copy button in magic move code blocks. false: No copy button, 'final': Only on final step, 'always': On all steps, true: Same as 'always'",
-          "markdownDescription": "Show copy button in magic move code blocks.\n- `false` - No copy button\n- `'final'` - Only show copy button on the final step\n- `'always'` - Show copy button on all steps\n- `true` - Same as `'always'`",
+          "description": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step `'always'` or `true` for show copy button on all steps",
+          "markdownDescription": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step\n`'always'` or `true` for show copy button on all steps",
           "default": true
         },
         "author": {
