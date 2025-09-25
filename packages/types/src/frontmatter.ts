@@ -53,6 +53,15 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   codeCopy?: boolean
   /**
+   * Show copy button in magic move code blocks
+   *
+   * `'final'` for only show copy button on the final step
+   * `'always'` or `true` for show copy button on all steps
+   *
+   * @default true
+   */
+  magicMoveCopy?: boolean | 'final' | 'always'
+  /**
    * The author of the slides
    */
   author?: string
