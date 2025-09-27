@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
 import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
-import { recomputeAllPoppers } from 'floating-vue'
+import { hideAllPoppers, recomputeAllPoppers } from 'floating-vue'
 import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
@@ -39,12 +39,18 @@ watchEffect(() => {
   preloadRoute(currentSlideRoute.value)
   preloadRoute(prevRoute.value)
   preloadRoute(nextRoute.value)
+  setTimeout(() => {
+    hideAllPoppers()
+  }, 150)
 })
 // preload all slides after 3s
 watchEffect((onCleanup) => {
   const routes = slides.value
   const timeout = setTimeout(() => {
     routes.forEach(preloadRoute)
+    setTimeout(() => {
+      hideAllPoppers()
+    }, 150)
   }, 3000)
   onCleanup(() => clearTimeout(timeout))
 })
