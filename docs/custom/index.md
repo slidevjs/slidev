@@ -133,7 +133,7 @@ Also every slide accepts the following configuration in its frontmatter block. T
 ```yaml
 ---
 # custom clicks count
-# Learn more: https://sli.dev/guide/animations.html#custom-total-clicks-count
+# Learn more: https://sli.dev/guide/animations#total
 clicks: 0
 # custom start clicks count
 clicksStart: 0
