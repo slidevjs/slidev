@@ -69,13 +69,22 @@ Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /
 Options:
 
 - `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#frontmatter-configures) or use `[entry]-export`): path to the output.
+- `--handout` (`boolean`, default: `false`): generate a companion handout PDF (notes + footer) using the configured paper size.
+- `--cover` (`boolean`, default: `false`): prepend global cover pages from `handout-cover.vue` when handouts are exported.
+- `--ending` (`boolean`, default: `false`): append closing pages from `handout-ending.vue` when handouts are exported.
 - `--format` (`'pdf', 'png', 'pptx', 'md'`, default: `'pdf'`): output format.
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
+- `--wait` (`number`, default: `0`): wait the specified milliseconds before capturing each slide.
+- `--wait-until` (`'networkidle', 'load', 'domcontentloaded', 'none'`, default: `'networkidle'`): wait for a specific Playwright event before each capture.
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.
 - `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
 - `--theme`, `-t` (`string`): override theme.
+- `--executable-path` (`string`): provide a custom Chromium/Chrome executable for Playwright.
 - `--omit-background` (`boolean`, default: `false`): remove the default browser background
+- `--with-toc` (`boolean`, default: `false`): generate a PDF outline when exporting to PDF.
+- `--per-slide` (`boolean`, default: `false`): render each slide in isolation. Useful for heavy global components.
+- `--scale` (`number`, default: `2`): device scale factor for non-handout exports.
 
 ## `slidev format [entry]` {#format}
 

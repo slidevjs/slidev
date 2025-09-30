@@ -18,6 +18,27 @@ declare module '#slidev/global-layers' {
   export const SlideBottom: ComponentOptions
 }
 
+declare module '#slidev/global-components/handout-bottom' {
+  import type { ComponentOptions } from 'vue'
+
+  const component: ComponentOptions
+  export default component
+}
+
+declare module '#slidev/global-components/handout-cover' {
+  import type { ComponentOptions } from 'vue'
+
+  const component: ComponentOptions
+  export default component
+}
+
+declare module '#slidev/global-components/handout-ending' {
+  import type { ComponentOptions } from 'vue'
+
+  const component: ComponentOptions
+  export default component
+}
+
 declare module '#slidev/slides' {
   import type { SlideRoute } from '@slidev/types'
   import type { ShallowRef } from 'vue'

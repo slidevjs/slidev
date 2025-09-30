@@ -1,4 +1,4 @@
-import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
+import type { DrawingsOptions, FontOptions, HandoutOptions, ResolvedDrawingsOptions, ResolvedExportOptions, ResolvedFontOptions, ResolvedHandoutOptions, SlidevConfig, SlidevThemeMeta } from '@slidev/types'
 import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
 
@@ -46,6 +46,7 @@ export function getDefaultConfig(): SlidevConfig {
     remote: false,
     mdc: false,
     seoMeta: {},
+    handout: resolveHandoutOptions(),
   }
 }
 
@@ -78,6 +79,8 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter?.htmlAttrs,
     },
   }
+
+  config.handout = resolveHandoutOptions(config.handout)
 
   // @ts-expect-error compat
   if (config.highlighter === 'shikiji') {
@@ -202,6 +205,103 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
     local,
     italic,
     weights,
+  }
+}
+
+const PAPER_SIZES_MM: Record<string, { label: string, mm: [number, number] }> = {
+  a5: { label: 'A5', mm: [148, 210] },
+  a4: { label: 'A4', mm: [210, 297] },
+  a3: { label: 'A3', mm: [297, 420] },
+  letter: { label: 'letter', mm: [215.9, 279.4] },
+  legal: { label: 'legal', mm: [215.9, 355.6] },
+  tabloid: { label: 'tabloid', mm: [279.4, 431.8] },
+  executive: { label: 'executive', mm: [184.15, 266.7] },
+}
+
+const PX_PER_MM = 96 / 25.4
+const DEFAULT_HANDOUT_MARGINS = { top: '0cm', right: '0cm', bottom: '0cm', left: '0cm' } as const
+const DEFAULT_HANDOUT_COVER_MARGINS = { top: '1cm', right: '1.5cm', bottom: '1cm', left: '1.5cm' } as const
+
+function formatMm(value: number): string {
+  return `${Number(value.toFixed(3))}mm`
+}
+
+function normalizeMargins(
+  input: string | Partial<Record<'top' | 'right' | 'bottom' | 'left', string>> | undefined,
+  fallback: ResolvedHandoutOptions['margins'],
+): ResolvedHandoutOptions['margins'] {
+  if (!input)
+    return { ...fallback }
+  if (typeof input === 'string') {
+    return {
+      top: input,
+      right: input,
+      bottom: input,
+      left: input,
+    }
+  }
+  return {
+    top: input.top ?? fallback.top,
+    right: input.right ?? fallback.right,
+    bottom: input.bottom ?? fallback.bottom,
+    left: input.left ?? fallback.left,
+  }
+}
+
+export function resolveHandoutOptions(
+  options: HandoutOptions | ResolvedHandoutOptions | undefined = undefined,
+): ResolvedHandoutOptions {
+  if (options && typeof options === 'object' && 'widthMm' in options && 'heightMm' in options && 'cssPageSize' in options) {
+    return {
+      ...options,
+      margins: { ...options.margins },
+      coverMargins: { ...options.coverMargins },
+    }
+  }
+
+  const normalized = typeof options === 'string' ? { size: options } : options || {}
+  const requestedKey = normalized.size ? normalized.size.toLowerCase() : 'a4'
+  const preset = PAPER_SIZES_MM[requestedKey] || PAPER_SIZES_MM.a4
+
+  let widthMm = normalized.width && normalized.height
+    ? normalized.unit === 'in'
+      ? normalized.width * 25.4
+      : normalized.width
+    : preset.mm[0]
+  let heightMm = normalized.width && normalized.height
+    ? normalized.unit === 'in'
+      ? normalized.height * 25.4
+      : normalized.height
+    : preset.mm[1]
+
+  const orientation = normalized.orientation
+    ?? (widthMm >= heightMm ? 'landscape' : 'portrait')
+
+  if (orientation === 'landscape' && heightMm > widthMm)
+    [widthMm, heightMm] = [heightMm, widthMm]
+  else if (orientation === 'portrait' && widthMm > heightMm)
+    [widthMm, heightMm] = [heightMm, widthMm]
+
+  const widthPx = Math.round(widthMm * PX_PER_MM)
+  const heightPx = Math.round(heightMm * PX_PER_MM)
+
+  const cssKeyword = preset.label
+  const cssPageSize = normalized.width && normalized.height
+    ? `${formatMm(widthMm)} ${formatMm(heightMm)}`
+    : orientation === 'landscape'
+      ? `${cssKeyword} landscape`
+      : cssKeyword
+
+  return {
+    size: normalized.width && normalized.height ? 'custom' : cssKeyword,
+    orientation,
+    widthMm,
+    heightMm,
+    widthPx,
+    heightPx,
+    cssPageSize,
+    margins: normalizeMargins(normalized.margins, DEFAULT_HANDOUT_MARGINS),
+    coverMargins: normalizeMargins(normalized.coverMargins, DEFAULT_HANDOUT_COVER_MARGINS),
   }
 }
 
