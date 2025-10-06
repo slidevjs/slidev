@@ -80,11 +80,11 @@ html {
 /* Note Clicks */
 
 .slidev-note-with-clicks .slidev-note-fade {
-  color: #888888ab;
+  color: #888888cc;
 }
 
 .dark .slidev-note-with-clicks .slidev-note-fade {
-  color: #a1a1a1ab;
+  color: #a1a1a1cc;
 }
 
 .slidev-note-click-mark {
