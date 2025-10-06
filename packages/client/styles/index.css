@@ -83,6 +83,10 @@ html {
   color: #888888ab;
 }
 
+.dark .slidev-note-with-clicks .slidev-note-fade {
+  color: #a1a1a1ab;
+}
+
 .slidev-note-click-mark {
   user-select: none;
   font-size: 0.7em;
