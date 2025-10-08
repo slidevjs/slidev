@@ -97,10 +97,17 @@ const setup = createSingletonPromise(async () => {
     Object.assign(editorOptions, result?.editorOptions)
   }
 
-  // Prevent Slidev hotkeys from triggering when typing in the editor.
+  // Prevent slidev hotkeys to trigger when typing in the editor.
+  const alphabetCodes = new Set(
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      .split('')
+      .map(letter => `Key${letter}`),
+  )
   monaco.editor.onDidCreateEditor((editor) => {
     editor.onKeyDown((e) => {
-      e.stopPropagation()
+      if (alphabetCodes.has(e.code)) {
+        e.stopPropagation()
+      }
     })
   })
 
