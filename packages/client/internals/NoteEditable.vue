@@ -131,7 +131,7 @@ watch(
     v-else
     ref="inputEl"
     v-model="note"
-    class="prose resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
+    class="prose dark:prose-invert resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
     style="line-height: 1.75;"
     :style="[props.style, inputHeight != null ? { height: `${inputHeight}px` } : {}]"
     :class="props.class"
