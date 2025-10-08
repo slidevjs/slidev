@@ -5,6 +5,7 @@
 ### Videos
 
 - [Slidev - one of the best presentation software and it is free!](https://www.youtube.com/watch?v=oSgM6GoSwyY) - by [Federico Tartarini](https://www.youtube.com/@FedericoTartarini)
+- [Slides + developers = slidev](https://www.youtube.com/watch?v=nleqgO38pPU) by Murilo Cunha
 
 ### Articles
 
