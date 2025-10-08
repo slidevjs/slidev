@@ -20,6 +20,7 @@ import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/comm
 import ts from 'typescript'
 import { watchEffect } from 'vue'
 import { isDark } from '../logic/dark'
+import { lockShortcuts, unlockShortcuts } from '../state'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -96,6 +97,16 @@ const setup = createSingletonPromise(async () => {
     const result = await setup(monaco)
     Object.assign(editorOptions, result?.editorOptions)
   }
+
+  // Disable shortcuts when focusing Monaco editor.
+  monaco.editor.onDidCreateEditor((editor) => {
+    editor.onDidFocusEditorWidget(() => {
+      lockShortcuts()
+    })
+    editor.onDidBlurEditorWidget(() => {
+      unlockShortcuts()
+    })
+  })
 
   // Use Shiki to highlight Monaco
   shikiToMonaco(highlighter, monaco)

@@ -15,7 +15,30 @@ export const showOverview = ref(false)
 export const hmrSkipTransition = ref(false)
 export const disableTransition = ref(false)
 
-export const shortcutsEnabled = ref(true)
+const mutableShortcutsEnabled = ref(true)
+/**
+ * Whether the keyboard shortcuts are enabled. Readonly,
+ * use `lockShortcuts` and `unlockShortcuts` to modify.
+ */
+export const shortcutsEnabled = computed(() => mutableShortcutsEnabled.value)
+
+// Use a lock counter to support multiple simultaneous locks
+// and avoid race conditions. Race conditions may occur, for example,
+// when locking shortcuts on editor focus and moving from one editor
+// to another, as blur events can be triggered after focus.
+let shortcutsLockCounter = 0
+export function lockShortcuts() {
+  shortcutsLockCounter++
+  mutableShortcutsEnabled.value = false
+}
+export function unlockShortcuts() {
+  shortcutsLockCounter--
+  if (shortcutsLockCounter <= 0) {
+    shortcutsLockCounter = 0
+    mutableShortcutsEnabled.value = true
+  }
+}
+
 export const breakpoints = useBreakpoints({
   xs: 460,
   ...breakpointsTailwind,
