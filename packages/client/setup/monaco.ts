@@ -97,6 +97,13 @@ const setup = createSingletonPromise(async () => {
     Object.assign(editorOptions, result?.editorOptions)
   }
 
+  // Prevent Slidev hotkeys from triggering when typing in the editor.
+  monaco.editor.onDidCreateEditor((editor) => {
+    editor.onKeyDown((e) => {
+      e.stopPropagation()
+    })
+  })
+
   // Use Shiki to highlight Monaco
   shikiToMonaco(highlighter, monaco)
   if (typeof themes === 'string') {
