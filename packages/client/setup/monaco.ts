@@ -4,8 +4,8 @@ import setups from '#slidev/setups/monaco'
 import { createSingletonPromise } from '@antfu/utils'
 import { setupTypeAcquisition } from '@typescript/ata'
 import * as monaco from 'monaco-editor'
-
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+
 // @ts-expect-error missing types
 import { StandaloneServices } from 'monaco-editor/esm/vs/editor/standalone/browser/standaloneServices'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -16,10 +16,11 @@ import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import { ContextViewService } from 'monaco-editor/esm/vs/platform/contextview/browser/contextViewService'
 // @ts-expect-error missing types
 import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/common/descriptors'
-
 import ts from 'typescript'
+
 import { watchEffect } from 'vue'
 import { isDark } from '../logic/dark'
+import { shortcutsEnabled } from '../state'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -97,17 +98,13 @@ const setup = createSingletonPromise(async () => {
     Object.assign(editorOptions, result?.editorOptions)
   }
 
-  // Prevent slidev hotkeys to trigger when typing in the editor.
-  const alphabetCodes = new Set(
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-      .split('')
-      .map(letter => `Key${letter}`),
-  )
+  // Disable shortcuts when focusing Monaco editor.
   monaco.editor.onDidCreateEditor((editor) => {
-    editor.onKeyDown((e) => {
-      if (alphabetCodes.has(e.code)) {
-        e.stopPropagation()
-      }
+    editor.onDidFocusEditorWidget(() => {
+      shortcutsEnabled.value = false
+    })
+    editor.onDidBlurEditorWidget(() => {
+      shortcutsEnabled.value = true
     })
   })
 
