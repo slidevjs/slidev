@@ -18,23 +18,24 @@ export const disableTransition = ref(false)
 const mutableShortcutsEnabled = ref(true)
 /**
  * Whether the keyboard shortcuts are enabled. Readonly,
- * use `lockShortcuts` and `unlockShortcuts` to modify.
+ * use `lockShortcuts` and `releaseShortcuts` to modify.
  */
 export const shortcutsEnabled = computed(() => mutableShortcutsEnabled.value)
 
-// Use a lock counter to support multiple simultaneous locks
+// Use a locking mechanism to support multiple simultaneous locks
 // and avoid race conditions. Race conditions may occur, for example,
 // when locking shortcuts on editor focus and moving from one editor
 // to another, as blur events can be triggered after focus.
-let shortcutsLockCounter = 0
+const shortcutsLocks = new Set<symbol>()
 export function lockShortcuts() {
-  shortcutsLockCounter++
+  const lock = Symbol('shortcuts lock')
+  shortcutsLocks.add(lock)
   mutableShortcutsEnabled.value = false
+  return lock
 }
-export function unlockShortcuts() {
-  shortcutsLockCounter--
-  if (shortcutsLockCounter <= 0) {
-    shortcutsLockCounter = 0
+export function releaseShortcuts(lock: symbol) {
+  shortcutsLocks.delete(lock)
+  if (shortcutsLocks.size === 0) {
     mutableShortcutsEnabled.value = true
   }
 }
