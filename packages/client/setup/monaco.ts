@@ -107,6 +107,7 @@ const setup = createSingletonPromise(async () => {
     editor.onDidBlurEditorWidget(() => {
       if (lock != null) {
         releaseShortcuts(lock)
+        lock = null
       }
     })
   })
