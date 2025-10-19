@@ -20,7 +20,7 @@ import { SyncDescriptor } from 'monaco-editor/esm/vs/platform/instantiation/comm
 import ts from 'typescript'
 import { watchEffect } from 'vue'
 import { isDark } from '../logic/dark'
-import { lockShortcuts, releaseShortcuts } from '../state'
+import { lockShortcuts } from '../state'
 
 window.MonacoEnvironment = {
   getWorker(_, label) {
@@ -100,15 +100,13 @@ const setup = createSingletonPromise(async () => {
 
   // Disable shortcuts when focusing Monaco editor.
   monaco.editor.onDidCreateEditor((editor) => {
-    let lock: symbol | null = null
+    let release: (() => void) | null = null
     editor.onDidFocusEditorWidget(() => {
-      lock = lockShortcuts()
+      release = lockShortcuts()
     })
     editor.onDidBlurEditorWidget(() => {
-      if (lock != null) {
-        releaseShortcuts(lock)
-        lock = null
-      }
+      release?.()
+      release = null
     })
   })
 

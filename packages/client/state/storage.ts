@@ -1,6 +1,6 @@
 import type { DragElementState } from '../composables/useDragElements'
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, reactive, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
 
 export const showRecordingDialog = ref(false)
@@ -15,28 +15,26 @@ export const showOverview = ref(false)
 export const hmrSkipTransition = ref(false)
 export const disableTransition = ref(false)
 
-const mutableShortcutsEnabled = ref(true)
+export const shortcutsEnabled = ref(true)
+
 /**
  * Whether the keyboard shortcuts are enabled. Readonly,
  * use `lockShortcuts` and `releaseShortcuts` to modify.
  */
-export const shortcutsEnabled = computed(() => mutableShortcutsEnabled.value)
 
 // Use a locking mechanism to support multiple simultaneous locks
 // and avoid race conditions. Race conditions may occur, for example,
 // when locking shortcuts on editor focus and moving from one editor
 // to another, as blur events can be triggered after focus.
-const shortcutsLocks = new Set<symbol>()
+const shortcutsLocks = reactive(new Set<symbol>())
+
+export const shortcutsLocked = computed(() => shortcutsLocks.size > 0)
+
 export function lockShortcuts() {
   const lock = Symbol('shortcuts lock')
   shortcutsLocks.add(lock)
-  mutableShortcutsEnabled.value = false
-  return lock
-}
-export function releaseShortcuts(lock: symbol) {
-  shortcutsLocks.delete(lock)
-  if (shortcutsLocks.size === 0) {
-    mutableShortcutsEnabled.value = true
+  return () => {
+    shortcutsLocks.delete(lock)
   }
 }
 
