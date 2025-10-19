@@ -6,11 +6,11 @@ import { and, not } from '@vueuse/math'
 import { watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import setupShortcuts from '../setup/shortcuts'
-import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled } from '../state'
+import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled, shortcutsLocked } from '../state'
 
 export function registerShortcuts() {
   const { isPrintMode } = useNav()
-  const enabled = and(not(isInputting), not(isOnFocus), not(isPrintMode), shortcutsEnabled)
+  const enabled = and(not(isInputting), not(isOnFocus), not(isPrintMode), shortcutsEnabled, not(shortcutsLocked))
 
   const allShortcuts = setupShortcuts()
   const shortcuts = new Map<string | Ref<boolean>, ShortcutOptions>(
