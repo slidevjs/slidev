@@ -2,6 +2,7 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { ShikiTransformer } from 'shiki'
 import { isTruthy } from '@antfu/utils'
 import { fromHighlighter } from '@shikijs/markdown-it/core'
+import { transformerTwoslashConditional } from '../transform/twoslash-conditional'
 import { escapeVueInCode } from '../transform/utils'
 
 export default async function MarkdownItShiki({ data: { config }, mode, utils }: ResolvedSlidevOptions) {
@@ -16,6 +17,8 @@ export default async function MarkdownItShiki({ data: { config }, mode, utils }:
         },
       },
     }),
+    (config.twoslash === true || config.twoslash === mode)
+    && transformerTwoslashConditional(),
     {
       pre(pre) {
         this.addClassToHast(pre, 'slidev-code')
