@@ -3,7 +3,7 @@ import { parseTimestampString } from './timestamp'
 export interface TimesplitInput {
   no: number
   timesplit: string
-  name?: string
+  title?: string
 }
 
 export interface TimesplitOutput {
@@ -11,7 +11,7 @@ export interface TimesplitOutput {
   timestampEnd: number
   noStart: number
   noEnd: number
-  name?: string
+  title?: string
 }
 
 export function parseTimesplits(inputs: TimesplitInput[]): TimesplitOutput[] {
@@ -22,7 +22,7 @@ export function parseTimesplits(inputs: TimesplitInput[]): TimesplitOutput[] {
     timestampEnd: ts,
     noStart: 0,
     noEnd: 0,
-    name: '[start]',
+    title: '[start]',
   }
   outputs.push(current)
   for (const input of inputs) {
@@ -35,8 +35,8 @@ export function parseTimesplits(inputs: TimesplitInput[]): TimesplitOutput[] {
     }
     current.timestampEnd = end
     current.noEnd = input.no
-    if (input.name) {
-      current.name = input.name
+    if (input.title) {
+      current.title = input.title
     }
     ts = end
     current = {

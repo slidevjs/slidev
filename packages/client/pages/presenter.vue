@@ -6,7 +6,6 @@ import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
-import { useTimer } from '../composables/useTimer'
 import { useWakeLock } from '../composables/useWakeLock'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
@@ -23,6 +22,7 @@ import SegmentControl from '../internals/SegmentControl.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
+import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
@@ -51,8 +51,6 @@ const { isDrawing } = useDrawings()
 useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
-
-const { timer, isTimerActive, resetTimer, toggleTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map((route) => {
   const clicks = ref(0)
@@ -210,23 +208,7 @@ onMounted(() => {
       <div class="grid-section bottom flex">
         <NavControls :persist="true" class="transition" :class="inFocus ? '' : 'op25'" />
         <div flex-auto />
-        <div class="group flex items-center justify-center pl-4 select-none">
-          <div class="w-22px cursor-pointer">
-            <div class="i-carbon:time group-hover:hidden text-xl" />
-            <div class="group-not-hover:hidden flex flex-col items-center">
-              <div class="relative op-80 hover:op-100" @click="toggleTimer">
-                <div v-if="isTimerActive" class="i-carbon:pause text-lg" />
-                <div v-else class="i-carbon:play" />
-              </div>
-              <div class="op-80 hover:op-100" @click="resetTimer">
-                <div class="i-carbon:renew" />
-              </div>
-            </div>
-          </div>
-          <div class="text-2xl px-3 my-auto font-mono">
-            {{ timer }}
-          </div>
-        </div>
+        <TimerInlined />
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>

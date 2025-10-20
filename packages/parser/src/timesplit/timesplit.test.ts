@@ -11,11 +11,11 @@ describe('parseTimesplits', () => {
     ])).toMatchInlineSnapshot(`
       [
         {
-          "name": "[start]",
           "noEnd": 1,
           "noStart": 0,
           "timestampEnd": 10,
           "timestampStart": 0,
+          "title": "[start]",
         },
         {
           "noEnd": 5,
