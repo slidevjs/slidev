@@ -511,6 +511,15 @@
           "markdownDescription": "Seo meta tags settings",
           "default": {}
         },
+        "notesAutoRuby": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Auto replace words with `<ruby>` tags in notes",
+          "markdownDescription": "Auto replace words with `<ruby>` tags in notes",
+          "default": {}
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",

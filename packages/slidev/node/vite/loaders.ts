@@ -366,14 +366,35 @@ export function createSlidesLoader(
 
   function renderNote(text: string = '') {
     let clickCount = 0
-    const html = notesMd.render(text
-    // replace [click] marker with span
+    const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
+
+    // Apply [click] marker
+    let md = text
+      // replace [click] marker with span
       .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
         clickCount += Number(count)
         return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
-      }),
-    )
+      })
 
+    // Apply notesAutoRuby
+    const keys = Object.keys(notesAutoRuby)
+      .sort((b, a) => b.length - a.length)
+      // Add word boundaries to the keys when they are simple alphabets or numbers
+      .map(i => /^[\w-]+$/.test(i) ? `\\b${i}\\b` : i)
+
+    if (keys.length) {
+      const regex = new RegExp(`(${keys.join('|')})`, 'g')
+      md = md.replace(
+        regex,
+        (match) => {
+          if (notesAutoRuby[match])
+            return `<ruby>${match}<rt>${notesAutoRuby[match]}</rt></ruby>`
+          return match
+        },
+      )
+    }
+
+    const html = notesMd.render(md)
     return html
   }
 

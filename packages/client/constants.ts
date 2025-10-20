@@ -84,4 +84,5 @@ export const HEADMATTER_FIELDS = [
   'contextMenu',
   'wakeLock',
   'seoMeta',
+  'notesAutoRuby',
 ]

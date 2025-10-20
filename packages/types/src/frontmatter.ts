@@ -270,6 +270,18 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default {}
    */
   seoMeta?: SeoMeta
+  /**
+   * Auto replace words with `<ruby>` tags in notes
+   *
+   * @default {}
+   *
+   * @example
+   * ```yaml
+   * notesAutoRuby:
+   *   大丈夫: だいじょうぶ
+   * ```
+   */
+  notesAutoRuby?: Record<string, string>
 }
 
 export interface Frontmatter extends TransitionOptions {
