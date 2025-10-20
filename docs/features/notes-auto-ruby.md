@@ -28,4 +28,3 @@ notesAutoRuby:
 And the notes will be rendered as:
 
 <p>私は<ruby>日本語<rt>ni hon go</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しています。</p>
-
