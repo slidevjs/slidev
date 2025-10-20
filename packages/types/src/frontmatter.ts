@@ -362,8 +362,19 @@ export interface Frontmatter extends TransitionOptions {
   src?: string
   /**
    * Set time split for the end of the slide
+   *
+   * Accepts:
+   * - 10:05
+   * - 10m5s
+   * - +10s (relative to the previous point)
    */
   timesplit?: string
+  /**
+   * Set title for the time split
+   *
+   * Default to slide title
+   */
+  timesplitTitle?: string
 }
 
 export interface DrawingsOptions {

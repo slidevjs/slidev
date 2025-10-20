@@ -13,7 +13,7 @@
  * - 1h4s
  * - 1:1:1
  */
-export function parseTimestamp(timestamp: string): {
+export function parseTimestampString(timestamp: string): {
   seconds: number
   relative: boolean
 } {

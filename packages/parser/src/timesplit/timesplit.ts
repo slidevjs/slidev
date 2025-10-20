@@ -1,4 +1,4 @@
-import { parseTimestamp } from './timestamp'
+import { parseTimestampString } from './timestamp'
 
 export interface TimesplitInput {
   no: number
@@ -26,7 +26,7 @@ export function parseTimesplits(inputs: TimesplitInput[]): TimesplitOutput[] {
   }
   outputs.push(current)
   for (const input of inputs) {
-    const time = parseTimestamp(input.timesplit)
+    const time = parseTimestampString(input.timesplit)
     const end = time.relative
       ? ts + time.seconds
       : time.seconds
