@@ -360,6 +360,10 @@ export interface Frontmatter extends TransitionOptions {
    * See https://sli.dev/guide/syntax.html#importing-slides
    */
   src?: string
+  /**
+   * Set time split for the end of the slide
+   */
+  timesplit?: string
 }
 
 export interface DrawingsOptions {
