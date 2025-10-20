@@ -15,39 +15,39 @@ catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.22
   dev:
-    '@antfu/eslint-config': ^5.4.1
+    '@antfu/eslint-config': ^6.0.0
     bumpp: ^10.3.1
     cypress: ^14.5.4
-    eslint: ^9.37.0
+    eslint: ^9.38.0
     eslint-plugin-format: ^1.0.2
-    lint-staged: ^16.2.3
+    lint-staged: ^16.2.4
     nodemon: ^3.1.10
     ovsx: ^0.10.6
-    playwright-chromium: ^1.55.1
+    playwright-chromium: ^1.56.1
     postcss-nested: ^7.0.2
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.0.1
     simple-git-hooks: ^2.13.1
-    taze: ^19.7.0
-    tsdown: ^0.15.6
+    taze: ^19.8.1
+    tsdown: ^0.15.8
     tsx: ^4.20.6
     typescript: ^5.9.3
     vitefu: ^1.1.1
     vitest: ^3.2.4
-    vue-tsc: ^3.1.0
-    zx: ^8.8.4
+    vue-tsc: ^3.1.1
+    zx: ^8.8.5
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.12
-    vitepress-plugin-group-icons: ^1.6.3
+    vitepress-plugin-group-icons: ^1.6.4
     vitepress-plugin-llms: ^1.8.0
   frontend:
     '@antfu/utils': ^9.3.0
     '@shikijs/engine-javascript': ^3.13.0
     '@shikijs/markdown-it': ^3.13.0
     '@slidev/rough-notation': ^0.1.0
-    '@unhead/vue': ^2.0.17
-    '@unocss/reset': ^66.5.2
+    '@unhead/vue': ^2.0.19
+    '@unocss/reset': ^66.5.4
     '@vueuse/core': ^13.9.0
     '@vueuse/math': ^13.9.0
     '@vueuse/motion': ^3.0.3
@@ -55,7 +55,7 @@ catalogs:
     file-saver: ^2.0.5
     floating-vue: ^5.2.2
     fuse.js: ^7.1.0
-    katex: ^0.16.23
+    katex: ^0.16.25
     lz-string: ^1.5.0
     mermaid: ^11.12.0
     nanotar: ^0.2.0
@@ -64,28 +64,28 @@ catalogs:
     recordrtc: ^5.6.2
     shiki: ^3.13.0
     shiki-magic-move: ^1.2.0
-    tm-grammars: ^1.24.15
-    unhead: ^2.0.17
+    tm-grammars: ^1.24.23
+    unhead: ^2.0.19
     vue: ^3.5.22
-    vue-router: ^4.5.1
+    vue-router: ^4.6.3
   icons:
-    '@iconify-json/carbon': ^1.2.13
+    '@iconify-json/carbon': ^1.2.14
     '@iconify-json/mdi': ^1.2.3
     '@iconify-json/ph': ^1.2.2
-    '@iconify-json/ri': ^1.2.5
+    '@iconify-json/ri': ^1.2.6
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.392
+    '@iconify/json': ^2.2.397
   monaco:
     '@shikijs/monaco': ^3.13.0
     '@typescript/ata': ^0.9.8
     monaco-editor: ^0.53.0
   prod:
-    '@antfu/ni': ^25.0.0
+    '@antfu/ni': ^27.0.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@shikijs/twoslash': ^3.13.0
     '@shikijs/vitepress-twoslash': ^3.13.0
-    '@unocss/extractor-mdc': ^66.5.2
+    '@unocss/extractor-mdc': ^66.5.4
     '@vitejs/plugin-vue': ^6.0.1
     '@vitejs/plugin-vue-jsx': ^5.1.1
     ansis: ^4.2.0
@@ -114,23 +114,23 @@ catalogs:
     picomatch: ^4.0.3
     pptxgenjs: ^4.0.1
     prompts: ^2.4.2
-    public-ip: ^7.0.1
+    public-ip: ^8.0.0
     resolve-from: ^5.0.0
     resolve-global: ^2.0.0
-    semver: ^7.7.2
+    semver: ^7.7.3
     sirv: ^3.0.2
     source-map-js: ^1.2.1
     tinyexec: ^1.0.1
-    unocss: ^66.5.2
-    unplugin-icons: ^22.4.2
-    unplugin-vue-components: ^28.8.0
+    unocss: ^66.5.4
+    unplugin-icons: ^22.5.0
+    unplugin-vue-components: ^30.0.0
     unplugin-vue-markdown: ^29.2.0
     untun: ^0.1.3
     uqr: ^0.1.2
-    vite: ^7.1.9
+    vite: ^7.1.10
     vite-plugin-inspect: ^11.3.3
     vite-plugin-remote-assets: ^2.1.0
-    vite-plugin-static-copy: ^3.1.3
+    vite-plugin-static-copy: ^3.1.4
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.8.1
     yargs: ^18.0.0
@@ -145,7 +145,7 @@ catalogs:
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.7
     '@types/markdown-it': ^14.1.2
-    '@types/node': ^24.7.0
+    '@types/node': ^24.8.1
     '@types/picomatch': ^4.0.2
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
@@ -157,7 +157,7 @@ catalogs:
   vscode:
     '@volar/language-server': ~2.4.23
     '@volar/vscode': ^2.4.23
-    reactive-vscode: ^0.3.3
+    reactive-vscode: ^0.4.0
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64
     volar-service-yaml: ^0.0.64
