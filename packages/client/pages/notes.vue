@@ -5,9 +5,9 @@ import { computed, ref, watch } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { slidesTitle } from '../env'
-
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import IconButton from '../internals/IconButton.vue'
+import Modal from '../internals/Modal.vue'
 import NoteDisplay from '../internals/NoteDisplay.vue'
 import { fullscreen } from '../state'
 import { sharedState } from '../state/shared'
@@ -20,6 +20,7 @@ const { isFullscreen, toggle: toggleFullscreen } = fullscreen
 const scroller = ref<HTMLDivElement>()
 const fontSize = useLocalStorage('slidev-notes-font-size', 18)
 const pageNo = computed(() => sharedState.page)
+const showHelp = ref(false)
 const currentRoute = computed(() => slides.value.find(i => i.no === pageNo.value))
 
 watch(pageNo, () => {
@@ -43,6 +44,20 @@ const clicksContext = computed(() => {
 </script>
 
 <template>
+  <Modal v-model="showHelp" class="px-6 py-4 flex flex-col gap-2">
+    <div class="flex gap-2 text-xl">
+      <div class="i-carbon:information my-auto" /> Help
+    </div>
+    <div class="prose dark:prose-invert">
+      <p>This is the hands-free live notes viewer.</p>
+      <p>It's designed to be used in a separate view or device. The progress is controlled by and auto synced with the main presenter or slide.</p>
+    </div>
+    <div class="flex my-1">
+      <button class="slidev-form-button" @click="showHelp = false">
+        Close
+      </button>
+    </div>
+  </Modal>
   <div
     class="fixed top-0 left-0 h-3px bg-primary transition-all duration-500"
     :style="{ width: `${(pageNo - 1) / (total - 1) * 100 + 1}%` }"
@@ -75,6 +90,12 @@ const clicksContext = computed(() => {
         </IconButton>
         <IconButton title="Decrease font size" @click="decreaseFontSize">
           <div class="i-carbon:zoom-out" />
+        </IconButton>
+        <IconButton title="Edit notes" to="/notes-edit" target="_blank">
+          <div class="i-carbon:edit" />
+        </IconButton>
+        <IconButton title="Help" class="rounded-full" @click="showHelp = true">
+          <div class="i-carbon:help" />
         </IconButton>
         <div class="flex-auto" />
         <div class="p2 text-center">
