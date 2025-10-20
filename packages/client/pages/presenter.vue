@@ -223,7 +223,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <div class="text-2xl px-3 my-auto tabular-nums">
+          <div class="text-2xl px-3 my-auto font-mono">
             {{ timer }}
           </div>
         </div>
