@@ -10,6 +10,7 @@ import { useWakeLock } from '../composables/useWakeLock'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
+import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
@@ -44,7 +45,6 @@ const {
   nextRoute,
   slides,
   getPrimaryClicks,
-  total,
 } = useNav()
 const { isDrawing } = useDrawings()
 
@@ -114,7 +114,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-main h-full slidev-presenter" pt-2px>
+  <div class="bg-main h-full slidev-presenter grid grid-rows-[min-content_1fr]">
+    <CurrentProgressBar />
     <div class="grid-container" :class="`layout${presenterLayout}`">
       <div ref="main" class="relative grid-section main flex flex-col">
         <div flex="~ gap-4 items-center" border="b main" p1>
@@ -212,12 +213,6 @@ onMounted(() => {
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
     </div>
-    <div class="progress-bar">
-      <div
-        class="progress h-3px bg-primary transition-all"
-        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100 + 1}%` }"
-      />
-    </div>
   </div>
   <Goto />
   <QuickOverview />
@@ -287,14 +282,9 @@ onMounted(() => {
   }
 }
 
-.progress-bar {
-  --uno: fixed left-0 right-0 top-0;
-}
-
 .grid-section {
   --uno: bg-main;
 }
-
 .grid-section.top {
   grid-area: top;
 }
