@@ -14,6 +14,9 @@ export async function createServerRefPlugin(
       nav: {
         page: 0,
         clicks: 0,
+        timerStatus: 'stopped',
+        timerStartedAt: 0,
+        timerPausedAt: 0,
       },
       drawings: await loadDrawings(options),
       snapshots: await loadSnapshots(options),
@@ -21,6 +24,7 @@ export async function createServerRefPlugin(
     },
     onChanged(key, data, patch, timestamp) {
       pluginOptions.serverRef?.onChanged?.(key, data, patch, timestamp)
+
       if (options.data.config.drawings.persist && key === 'drawings')
         writeDrawings(options, patch ?? data)
 

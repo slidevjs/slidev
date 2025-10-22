@@ -6,6 +6,7 @@ import { createClicksContextBase } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
+import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import IconButton from '../internals/IconButton.vue'
 import Modal from '../internals/Modal.vue'
 import NoteDisplay from '../internals/NoteDisplay.vue'
@@ -58,14 +59,11 @@ const clicksContext = computed(() => {
       </button>
     </div>
   </Modal>
-  <div
-    class="fixed top-0 left-0 h-3px bg-primary transition-all duration-500"
-    :style="{ width: `${(pageNo - 1) / (total - 1) * 100 + 1}%` }"
-  />
-  <div class="h-full pt-2 flex flex-col">
+  <div class="h-full flex flex-col">
+    <CurrentProgressBar :clicks-context="clicksContext" :current="pageNo" />
     <div
       ref="scroller"
-      class="px-5 flex-auto h-full overflow-auto"
+      class="px-5 py-3 flex-auto h-full overflow-auto"
       :style="{ fontSize: `${fontSize}px` }"
     >
       <NoteDisplay
@@ -98,8 +96,9 @@ const clicksContext = computed(() => {
           <div class="i-carbon:help" />
         </IconButton>
         <div class="flex-auto" />
-        <div class="p2 text-center">
-          {{ pageNo }} / {{ total }}
+        <div class="px2 my-auto">
+          <span class="text-lg">{{ pageNo }}</span>
+          <span class="opacity-50 text-sm"> / {{ total }}</span>
         </div>
       </div>
     </div>

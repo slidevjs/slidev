@@ -6,6 +6,9 @@ export interface SharedState {
   page: number
   clicks: number
   clicksTotal: number
+  timerStatus: 'stopped' | 'running' | 'paused'
+  timerStartedAt: number
+  timerPausedAt: number
 
   cursor?: {
     x: number
@@ -23,6 +26,9 @@ const { init, onPatch, onUpdate, patch, state } = createSyncState<SharedState>(s
   page: 1,
   clicks: 0,
   clicksTotal: 0,
+  timerStatus: 'stopped',
+  timerStartedAt: 0,
+  timerPausedAt: 0,
 })
 
 export {
