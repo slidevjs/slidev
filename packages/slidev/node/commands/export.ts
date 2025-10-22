@@ -587,7 +587,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     scale,
     omitBackground,
   } = config
-  outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
+  outFilename = output || outFilename || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
   return {
     output: outFilename,
     slides: options.data.slides,
