@@ -10,6 +10,7 @@ import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import IconButton from '../internals/IconButton.vue'
 import Modal from '../internals/Modal.vue'
 import NoteDisplay from '../internals/NoteDisplay.vue'
+import TimesplitBar from '../internals/TimesplitBar.vue'
 import { fullscreen } from '../state'
 import { sharedState } from '../state/shared'
 
@@ -61,6 +62,7 @@ const clicksContext = computed(() => {
   </Modal>
   <div class="h-full flex flex-col">
     <CurrentProgressBar :clicks-context="clicksContext" :current="pageNo" />
+    <TimesplitBar />
     <div
       ref="scroller"
       class="px-5 py-3 flex-auto h-full overflow-auto"
@@ -96,8 +98,9 @@ const clicksContext = computed(() => {
           <div class="i-carbon:help" />
         </IconButton>
         <div class="flex-auto" />
-        <div class="p2 text-center">
-          {{ pageNo }} / {{ total }}
+        <div class="px2 my-auto">
+          <span class="text-lg">{{ pageNo }}</span>
+          <span class="opacity-50 text-sm"> / {{ total }}</span>
         </div>
       </div>
     </div>

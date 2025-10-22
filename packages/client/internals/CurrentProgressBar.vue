@@ -15,19 +15,20 @@ const { total } = nav
 </script>
 
 <template>
-  <div class="border-b border-main relative flex">
+  <div class="relative flex gap-px">
     <div
-      v-for="i of total"
-      :key="i" class="absolute top-0 bottom-0 border-r border-main w-px"
-      :style="{ left: `${(i - 1) / (total - 1) * 100}%` }"
-    />
-    <div
-      class="h-5px bg-primary transition-all"
-      :style="{ width: `${(current - 1) / (total - 1) * 100}%` }"
-    />
-    <div
-      class="h-5px bg-primary op50 transition-all"
-      :style="{ width: `${clicksContext.total === 0 ? 0 : clicksContext.current / (clicksContext.total + 1) * (1 / (total - 1)) * 100}%` }"
-    />
+      v-for="i of total - 1"
+      :key="i" class="border-x border-b border-main h-4px transition-all"
+      :style="{ width: `${(1 / (total - 1) * 100)}%` }"
+      :class="i < current ? 'bg-primary border-primary' : ''"
+    >
+      <Transition name="fade">
+        <div
+          v-if="i === current"
+          class="h-full bg-primary op75 transition-all"
+          :style="{ width: `${clicksContext.total === 0 ? 0 : clicksContext.current / (clicksContext.total + 1) * 100}%` }"
+        />
+      </Transition>
+    </div>
   </div>
 </template>

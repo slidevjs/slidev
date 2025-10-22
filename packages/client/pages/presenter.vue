@@ -24,6 +24,7 @@ import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
+import TimesplitBar from '../internals/TimesplitBar.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
@@ -114,8 +115,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-main h-full slidev-presenter grid grid-rows-[min-content_1fr]">
-    <CurrentProgressBar />
+  <div class="bg-main h-full slidev-presenter grid grid-rows-[max-content_1fr] of-hidden">
+    <div>
+      <CurrentProgressBar />
+      <TimesplitBar />
+    </div>
     <div class="grid-container" :class="`layout${presenterLayout}`">
       <div ref="main" class="relative grid-section main flex flex-col">
         <div flex="~ gap-4 items-center" border="b main" p1>
@@ -225,9 +229,7 @@ onMounted(() => {
 }
 
 .grid-container {
-  --uno: bg-gray/20;
-  height: 100%;
-  width: 100%;
+  --uno: bg-gray/20 flex-1 of-hidden;
   display: grid;
   gap: 1px 1px;
 }
