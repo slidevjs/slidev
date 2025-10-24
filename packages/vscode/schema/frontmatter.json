@@ -119,16 +119,6 @@
           "type": "string",
           "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
           "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
-        },
-        "timesplit": {
-          "type": "string",
-          "description": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)",
-          "markdownDescription": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)"
-        },
-        "timesplitTitle": {
-          "type": "string",
-          "description": "Set title for the time split\n\nDefault to slide title",
-          "markdownDescription": "Set title for the time split\n\nDefault to slide title"
         }
       }
     },
