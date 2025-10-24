@@ -97,16 +97,6 @@
           "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
           "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
         },
-        "timesplit": {
-          "type": "string",
-          "description": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)",
-          "markdownDescription": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)"
-        },
-        "timesplitTitle": {
-          "type": "string",
-          "description": "Set title for the time split\n\nDefault to slide title",
-          "markdownDescription": "Set title for the time split\n\nDefault to slide title"
-        },
         "transition": {
           "anyOf": [
             {
@@ -538,6 +528,16 @@
           "description": "The expected duration of the slide",
           "markdownDescription": "The expected duration of the slide",
           "default": "30min"
+        },
+        "timer": {
+          "type": "string",
+          "enum": [
+            "stopwatch",
+            "countdown"
+          ],
+          "description": "Timer mode",
+          "markdownDescription": "Timer mode",
+          "default": "stopwatch"
         },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
@@ -992,16 +992,6 @@
           "type": "string",
           "description": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides",
           "markdownDescription": "Includes a markdown file\n\nSee https://sli.dev/guide/syntax.html#importing-slides"
-        },
-        "timesplit": {
-          "type": "string",
-          "description": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)",
-          "markdownDescription": "Set time split for the end of the slide\n\nAccepts:\n- 10:05\n- 10m5s\n- +10s (relative to the previous point)"
-        },
-        "timesplitTitle": {
-          "type": "string",
-          "description": "Set title for the time split\n\nDefault to slide title",
-          "markdownDescription": "Set title for the time split\n\nDefault to slide title"
         }
       }
     }
