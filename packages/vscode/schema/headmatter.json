@@ -530,6 +530,15 @@
           "markdownDescription": "Auto replace words with `<ruby>` tags in notes",
           "default": {}
         },
+        "duration": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "The expected duration of the slide",
+          "markdownDescription": "The expected duration of the slide",
+          "default": "30min"
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",

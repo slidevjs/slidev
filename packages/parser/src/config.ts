@@ -46,6 +46,9 @@ export function getDefaultConfig(): SlidevConfig {
     remote: false,
     mdc: false,
     seoMeta: {},
+    notesAutoRuby: {},
+    duration: '30min',
+    timer: 'stopwatch',
   }
 }
 

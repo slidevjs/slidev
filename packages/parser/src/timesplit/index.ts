@@ -1,2 +1,2 @@
 export * from './timesplit'
-export * from './timestamp'
+export * from './timestring'

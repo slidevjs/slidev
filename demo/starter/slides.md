@@ -20,6 +20,8 @@ drawings:
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
+# duration of the presentation
+duration: 35min
 ---
 
 # Welcome to Slidev
@@ -551,7 +553,6 @@ Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML D
 foo: bar
 dragPos:
   square: 691,32,167,_,-16
-timesplit: +30s
 ---
 
 # Draggable Elements
@@ -627,7 +628,6 @@ console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-
 ---
 layout: center
 class: text-center
-timesplit: 10m
 ---
 
 # Learn More

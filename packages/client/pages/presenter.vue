@@ -23,8 +23,8 @@ import SegmentControl from '../internals/SegmentControl.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
+import TimerBar from '../internals/TimerBar.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
-import TimesplitBar from '../internals/TimesplitBar.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
@@ -118,7 +118,7 @@ onMounted(() => {
   <div class="bg-main h-full slidev-presenter grid grid-rows-[max-content_1fr] of-hidden">
     <div>
       <CurrentProgressBar />
-      <TimesplitBar />
+      <TimerBar />
     </div>
     <div class="grid-container" :class="`layout${presenterLayout}`">
       <div ref="main" class="relative grid-section main flex flex-col">

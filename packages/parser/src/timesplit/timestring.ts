@@ -13,10 +13,17 @@
  * - 1h4s
  * - 1:1:1
  */
-export function parseTimestampString(timestamp: string): {
+export function parseTimeString(timestamp: string | number): {
   seconds: number
   relative: boolean
 } {
+  if (typeof timestamp === 'number') {
+    return {
+      seconds: timestamp,
+      relative: false,
+    }
+  }
+
   const relative = timestamp.startsWith('+')
   if (relative) {
     timestamp = timestamp.slice(1)
