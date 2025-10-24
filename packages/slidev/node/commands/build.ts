@@ -138,10 +138,11 @@ export async function build(
       }),
     )
     server.listen(port)
+    const filename = options.data.config.exportFilename || 'slidev-exported'
     await exportSlides({
       port,
       base: config.base,
-      ...getExportOptions(args, options, join(outDir, 'slidev-exported.pdf')),
+      ...getExportOptions(args, options, join(outDir, `${filename}.pdf`)),
     })
     server.close()
   }
