@@ -189,6 +189,38 @@ Chromium may miss some features like codecs that are required to decode some vid
 $ slidev export --executable-path [path_to_chromium]
 ```
 
+### Handout exports
+
+Use the `--handout` flag to render an A4 (or customised) PDF that places each slide above its speaker notes and a shared footer component. Slidev writes this PDF alongside your primary export using the suffix `-handout.pdf`:
+
+```bash
+$ slidev export --handout
+```
+
+You can prepend multi-page covers with `--cover` and append closing/appendix pages with `--ending`. Both switches look for global Vue components in the project root (`handout-cover.vue` and `handout-ending.vue`). Any element with the UnoCSS utility `break-after-page` (or a `data-handout-page` attribute) forces an additional printed page, making it easy to create multi-page introductions or wrap-up sections.
+
+Paper size and margins are configurable from the deck headmatter:
+
+```yaml
+---
+handout:
+  size: letter # or A4, Legal, Tabloid …
+  orientation: landscape
+  margins:
+    top: 0.5in
+    bottom: 0.5in
+    left: 0.75in
+    right: 0.75in
+  coverMargins:
+    top: 1cm
+    bottom: 1cm
+    left: 1.5cm
+    right: 1.5cm
+---
+```
+
+The `size` option accepts common international formats (A3, A4, A5) and North American sizes (Letter, Legal, Tabloid, Executive). Provide both `width` and `height` to specify a custom paper size.
+
 ### PDF Outline
 
 > Available since v0.36.10

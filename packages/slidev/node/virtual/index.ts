@@ -1,6 +1,7 @@
 import { templateConfigs } from './configs'
 import { templateLegacyRoutes, templateLegacyTitles } from './deprecated'
 import { templateGlobalLayers } from './global-layers'
+import { templateGlobalHandoutBottom, templateGlobalHandoutCover, templateGlobalHandoutEnding } from './handout-components'
 import { templateLayouts } from './layouts'
 import { templateMonacoRunDeps } from './monaco-deps'
 import { templateMonacoTypes } from './monaco-types'
@@ -18,6 +19,9 @@ export const templates = [
   templateConfigs,
   templateStyle,
   templateGlobalLayers,
+  templateGlobalHandoutBottom,
+  templateGlobalHandoutCover,
+  templateGlobalHandoutEnding,
   templateNavControls,
   templateSlides,
   templateLayouts,

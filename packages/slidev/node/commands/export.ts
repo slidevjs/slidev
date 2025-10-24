@@ -1,4 +1,4 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedHandoutOptions, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import path, { dirname, relative } from 'node:path'
@@ -21,6 +21,9 @@ export interface ExportOptions {
   base?: string
   format?: 'pdf' | 'png' | 'pptx' | 'md'
   output?: string
+  handout?: boolean
+  cover?: boolean
+  ending?: boolean
   timeout?: number
   wait?: number
   waitUntil: 'networkidle' | 'load' | 'domcontentloaded' | undefined
@@ -38,6 +41,7 @@ export interface ExportOptions {
   perSlide?: boolean
   scale?: number
   omitBackground?: boolean
+  handoutOptions?: ResolvedHandoutOptions
 }
 
 interface ExportPngResult {
@@ -139,7 +143,8 @@ export async function exportNotes({
 
   await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
   await page.waitForLoadState('networkidle')
-  await page.emulateMedia({ media: 'screen' })
+  // Use print media so @page rules (e.g. A4) apply
+  await page.emulateMedia({ media: 'print' })
 
   if (wait)
     await page.waitForTimeout(wait)
@@ -168,6 +173,9 @@ export async function exportSlides({
   range,
   format = 'pdf',
   output = 'slides',
+  handout = false,
+  cover = false,
+  ending = false,
   slides,
   base = '/',
   timeout = 30000,
@@ -183,6 +191,7 @@ export async function exportSlides({
   scale = 1,
   waitUntil,
   omitBackground = false,
+  handoutOptions,
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
@@ -190,17 +199,107 @@ export async function exportSlides({
   const browser = await chromium.launch({
     executablePath,
   })
+  // Use a sane, stable viewport for handout printing to avoid extremely tall pages
+  // that can cause Chromium to render black/blank pages when printing.
+  // For regular slide export, keep the original large viewport behavior.
+  const fallbackHandout: ResolvedHandoutOptions = {
+    size: 'A4',
+    orientation: 'portrait',
+    widthMm: 210,
+    heightMm: 297,
+    widthPx: Math.round(210 / 25.4 * 96),
+    heightPx: Math.round(297 / 25.4 * 96),
+    cssPageSize: 'A4',
+    margins: { top: '0cm', right: '0cm', bottom: '0cm', left: '0cm' },
+    coverMargins: { top: '1cm', right: '1.5cm', bottom: '1cm', left: '1.5cm' },
+  }
+  const handoutConfig = handoutOptions || fallbackHandout
   const context = await browser.newContext({
-    viewport: {
-      width,
-      // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
-      height: perSlide ? height : height * pages.length,
-    },
-    deviceScaleFactor: scale,
+    viewport: handout
+      ? { width: handoutConfig.widthPx, height: handoutConfig.heightPx }
+      : {
+          width,
+          // Calculate height for every slides to be in the viewport to trigger the rendering of iframes (twitter, youtube...)
+          height: perSlide ? height : height * pages.length,
+        },
+    // Keep device scale modest for handout to reduce rasterization artifacts
+    deviceScaleFactor: handout ? 1 : scale,
   })
   const page = await context.newPage()
   const progress = createSlidevProgress(!perSlide)
   progress.start(pages.length)
+
+  // Simple handout export mode: directly print the handout route
+  if (handout) {
+    if (!output.endsWith('.pdf'))
+      output = `${output}.pdf`
+    const baseName = output.replace(/\.pdf$/, '')
+    const handoutOut = `${baseName}-handout.pdf`
+    // Build query string, optionally including cover
+    const qs = new URLSearchParams()
+    qs.set('print', 'true')
+    if (range)
+      qs.set('range', range)
+    if (cover)
+      qs.set('cover', 'true')
+    if (ending)
+      qs.set('ending', 'true')
+    const handoutQuery = `?${qs.toString()}`
+    const handoutPath = routerMode === 'hash'
+      ? `http://localhost:${port}${base}${handoutQuery}#/handout`
+      : `http://localhost:${port}${base}handout${handoutQuery}`
+    // Avoid hanging on networkidle due to dev server websockets; prefer 'load'
+    const gotoWaitUntil = (waitUntil === 'networkidle' || !waitUntil) ? 'load' : waitUntil
+    await page.goto(handoutPath, { waitUntil: gotoWaitUntil, timeout })
+    if (gotoWaitUntil)
+      await page.waitForLoadState(gotoWaitUntil)
+    // For handouts, use print media and a light color scheme to avoid dark backgrounds
+    await page.emulateMedia({ colorScheme: 'light', media: 'print' })
+    // Ensure the app has switched to print mode (adds `html.print`)
+    try {
+      await page.waitForSelector('html.print', { state: 'attached', timeout: 5000 })
+    }
+    catch {}
+    // Wait until the handout pages are rendered (best-effort, non-blocking)
+    try {
+      // Limit how long we wait for initial container
+      await page.waitForSelector('#print-content', { state: 'attached', timeout: Math.min(timeout, 10000) })
+
+      // Wait briefly for page containers to appear and stabilize in count
+      const maxWait = 5000
+      const start = Date.now()
+      let lastCount = -1
+      while (Date.now() - start < maxWait) {
+        const cnt = await page.locator('.page').count()
+        if (cnt > 0 && cnt === lastCount)
+          break
+        lastCount = cnt
+        await page.waitForTimeout(200)
+      }
+
+      // Do not block on slide loading indicators; hide them if present
+      await page.locator('.slidev-slide-loading').evaluateAll((nodes) => {
+        nodes.forEach((n) => {
+          (n as HTMLElement).style.display = 'none'
+        })
+      }).catch(() => {})
+    }
+    catch {}
+    if (wait)
+      await page.waitForTimeout(wait)
+    await page.pdf({
+      width: `${handoutConfig.widthMm}mm`,
+      height: `${handoutConfig.heightMm}mm`,
+      path: handoutOut,
+      margin: { left: 0, top: 0, right: 0, bottom: 0 },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
+    progress.stop()
+    browser.close()
+    const relativeOutput = slash(relative('.', handoutOut))
+    return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
+  }
 
   if (format === 'pdf') {
     await genPagePdf()
@@ -469,6 +568,7 @@ export async function exportSlides({
       await fs.rm(writeToDisk, { force: true, recursive: true })
       await fs.mkdir(writeToDisk, { recursive: true })
     }
+    // Typo fix: perSlidei -> perSlide
     return perSlide
       ? genPagePngPerSlide(writeToDisk)
       : genPagePngOnePiece(writeToDisk)
@@ -574,6 +674,9 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
   const {
     entry,
     output,
+    handout,
+    cover,
+    ending,
     format,
     timeout,
     wait,
@@ -590,6 +693,9 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
   outFilename = output || outFilename || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
   return {
     output: outFilename,
+    handout: handout || false,
+    cover: cover || false,
+    ending: ending || false,
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
@@ -607,6 +713,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     perSlide: perSlide || false,
     scale: scale || 2,
     omitBackground: omitBackground ?? false,
+    handoutOptions: options.data.config.handout,
   }
 }
 

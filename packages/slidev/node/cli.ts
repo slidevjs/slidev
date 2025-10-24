@@ -39,6 +39,12 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 const FILES_CREATE_RESTART = [
   'global-bottom.vue',
   'global-top.vue',
+  'handout-bottom.vue',
+  'handout-cover.vue',
+  'handout-ending.vue',
+  'HandoutBottom.vue',
+  'HandoutCover.vue',
+  'HandoutEnding.vue',
   'uno.config.js',
   'uno.config.ts',
   'unocss.config.js',
@@ -583,6 +589,18 @@ function exportOptions<T>(args: Argv<T>) {
     .option('output', {
       type: 'string',
       describe: 'path to the output',
+    })
+    .option('handout', {
+      type: 'boolean',
+      describe: 'export handout PDF (configurable page size, one page per slide with notes and header/footer) to a separate file',
+    })
+    .option('cover', {
+      type: 'boolean',
+      describe: 'prepend handout cover page(s) if available (requires handout-cover.vue)',
+    })
+    .option('ending', {
+      type: 'boolean',
+      describe: 'append handout ending page(s) if available (requires handout-ending.vue)',
     })
     .option('format', {
       type: 'string',

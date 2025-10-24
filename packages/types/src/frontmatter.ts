@@ -231,6 +231,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   exportFilename?: string | null
   /**
+   * Options for exported handouts (page size, orientation, margins).
+   *
+   * @default {}
+   */
+  handout?: HandoutOptions
+  /**
    * Enable Monaco
    *
    * See https://sli.dev/custom/config-monaco.html
@@ -438,6 +444,45 @@ export interface FontOptions {
    * @default true
    */
   fallbacks?: boolean
+}
+
+export type HandoutPredefinedSize = 'A5' | 'A4' | 'A3' | 'Letter' | 'Legal' | 'Tabloid' | 'Executive' | Lowercase<'A5' | 'A4' | 'A3' | 'Letter' | 'Legal' | 'Tabloid' | 'Executive'>
+
+export type HandoutPageMarginInput = Record<'top' | 'right' | 'bottom' | 'left', string>
+
+export interface HandoutOptions {
+  /**
+   * Predefined page size to use. Set `width`/`height` for custom sizes.
+   */
+  size?: HandoutPredefinedSize
+  /**
+   * Page orientation.
+   *
+   * @default 'portrait'
+   */
+  orientation?: 'portrait' | 'landscape'
+  /**
+   * Custom page width.
+   */
+  width?: number
+  /**
+   * Custom page height.
+   */
+  height?: number
+  /**
+   * Units for `width`/`height` when provided.
+   *
+   * @default 'mm'
+   */
+  unit?: 'mm' | 'in'
+  /**
+   * Margins applied to the handout pages. Can be a CSS shorthand string or per-side object.
+   */
+  margins?: string | Partial<HandoutPageMarginInput>
+  /**
+   * Margins applied specifically to the optional cover pages.
+   */
+  coverMargins?: string | Partial<HandoutPageMarginInput>
 }
 
 export type BuiltinSlideTransition = 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade' | 'zoom' | 'none'

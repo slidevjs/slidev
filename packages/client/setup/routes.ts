@@ -74,12 +74,33 @@ export default function setupRoutes() {
     )
   }
 
+  // Enable the browser exporter UI only when configured
   if (__SLIDEV_FEATURE_BROWSER_EXPORTER__) {
     routes.push(
       {
         name: 'export',
         path: '/export/:no?',
         component: () => import('../pages/export.vue'),
+        beforeEnter: passwordGuard,
+      },
+    )
+  }
+
+  // Handout/Cover print routes are needed for both the browser exporter
+  // and the CLI exporter (print mode). Make them available when either
+  // feature is enabled so Playwright can navigate to them during CLI export.
+  if (__SLIDEV_FEATURE_BROWSER_EXPORTER__ || __SLIDEV_FEATURE_PRINT__) {
+    routes.push(
+      {
+        name: 'handout',
+        path: '/handout',
+        component: () => import('../pages/handout/print.vue'),
+        beforeEnter: passwordGuard,
+      },
+      {
+        name: 'cover',
+        path: '/cover',
+        component: () => import('../pages/cover/print.vue'),
         beforeEnter: passwordGuard,
       },
     )
