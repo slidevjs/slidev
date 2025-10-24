@@ -34,7 +34,7 @@ export function useTimer() {
     let h = Math.floor(total / 1000 / 60 / 60).toString()
     if (h === '0')
       h = ''
-    let min = Math.floor(total / 1000 / 60).toString()
+    let min = Math.floor(total / 1000 / 60 % 60).toString()
     if (h)
       min = min.padStart(2, '0')
     const sec = Math.floor(total / 1000 % 60).toString().padStart(2, '0')
