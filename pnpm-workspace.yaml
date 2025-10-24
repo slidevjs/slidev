@@ -20,7 +20,7 @@ catalogs:
     cypress: ^14.5.4
     eslint: ^9.38.0
     eslint-plugin-format: ^1.0.2
-    lint-staged: ^16.2.4
+    lint-staged: ^16.2.6
     nodemon: ^3.1.10
     ovsx: ^0.10.6
     playwright-chromium: ^1.56.1
@@ -29,18 +29,18 @@ catalogs:
     rimraf: ^6.0.1
     simple-git-hooks: ^2.13.1
     taze: ^19.8.1
-    tsdown: ^0.15.8
+    tsdown: ^0.15.9
     tsx: ^4.20.6
     typescript: ^5.9.3
     vitefu: ^1.1.1
-    vitest: ^3.2.4
+    vitest: ^4.0.2
     vue-tsc: ^3.1.1
     zx: ^8.8.5
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.12
-    vitepress-plugin-group-icons: ^1.6.4
-    vitepress-plugin-llms: ^1.8.0
+    vitepress-plugin-group-icons: ^1.6.5
+    vitepress-plugin-llms: ^1.8.1
   frontend:
     '@antfu/utils': ^9.3.0
     '@shikijs/engine-javascript': ^3.13.0
@@ -48,8 +48,8 @@ catalogs:
     '@slidev/rough-notation': ^0.1.0
     '@unhead/vue': ^2.0.19
     '@unocss/reset': ^66.5.4
-    '@vueuse/core': ^13.9.0
-    '@vueuse/math': ^13.9.0
+    '@vueuse/core': ^14.0.0
+    '@vueuse/math': ^14.0.0
     '@vueuse/motion': ^3.0.3
     drauu: ^0.4.3
     file-saver: ^2.0.5
@@ -64,7 +64,7 @@ catalogs:
     recordrtc: ^5.6.2
     shiki: ^3.13.0
     shiki-magic-move: ^1.2.0
-    tm-grammars: ^1.24.23
+    tm-grammars: ^1.25.0
     unhead: ^2.0.19
     vue: ^3.5.22
     vue-router: ^4.6.3
@@ -74,7 +74,7 @@ catalogs:
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.6
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.397
+    '@iconify/json': ^2.2.399
   monaco:
     '@shikijs/monaco': ^3.13.0
     '@typescript/ata': ^0.9.8
@@ -102,7 +102,7 @@ catalogs:
     is-installed-globally: ^1.0.0
     jiti: ^2.6.1
     local-pkg: ^1.1.2
-    magic-string: ^0.30.19
+    magic-string: ^0.30.21
     magic-string-stack: ^1.1.0
     markdown-it: ^14.1.0
     markdown-it-footnote: ^4.0.0
@@ -127,7 +127,7 @@ catalogs:
     unplugin-vue-markdown: ^29.2.0
     untun: ^0.1.3
     uqr: ^0.1.2
-    vite: ^7.1.10
+    vite: ^7.1.12
     vite-plugin-inspect: ^11.3.3
     vite-plugin-remote-assets: ^2.1.0
     vite-plugin-static-copy: ^3.1.4
@@ -145,7 +145,7 @@ catalogs:
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.7
     '@types/markdown-it': ^14.1.2
-    '@types/node': ^24.8.1
+    '@types/node': ^24.9.1
     '@types/picomatch': ^4.0.2
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
@@ -153,7 +153,7 @@ catalogs:
     '@types/resolve': ^1.20.6
     '@types/semver': ^7.7.1
     '@types/vscode': ^1.89.0
-    '@types/yargs': ^17.0.33
+    '@types/yargs': ^17.0.34
   vscode:
     '@volar/language-server': ~2.4.23
     '@volar/vscode': ^2.4.23
