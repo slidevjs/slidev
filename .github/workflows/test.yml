@@ -29,10 +29,10 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -55,9 +55,9 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
 
@@ -74,7 +74,7 @@ jobs:
         run: cp pnpm-lock.yaml package-lock.json
 
       - name: Cypress
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v6
         with:
           install-command: echo
           build: nr build
