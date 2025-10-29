@@ -363,6 +363,12 @@
           "description": "Display annotations for slides markdown files",
           "default": true
         },
+        "slidev.annotations-line-numbers": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Display line numbers in code blocks",
+          "default": true
+        },
         "slidev.preview-sync": {
           "type": "boolean",
           "scope": "window",

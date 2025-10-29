@@ -61,8 +61,29 @@ const a = 1
 
 ```ts {monaco-run}{showOutputAt: '+1'} twoslash
 const a = 1
+const b = 2
 ```
 
 $$
 \lambda = 1
 $$
+
+---
+layout: center
+text: 2
+---
+
+# Magic Move
+
+````md magic-move
+```ts
+const a = 1
+```
+
+```ts
+const a = 1
+const b = 2
+```
+````
+
+---
