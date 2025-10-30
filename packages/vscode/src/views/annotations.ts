@@ -44,7 +44,7 @@ function mergeSlideNumbers(slides: { index: number }[]): string {
     else
       merged.push([indexes[i], indexes[i]])
   }
-  return merged.map(([start, end]) => start === end ? `#@${start}` : `#${start}-${end}`).join(', ')
+  return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
 }
 
 interface CodeBlockInfo {
