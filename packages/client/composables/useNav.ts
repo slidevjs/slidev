@@ -5,6 +5,7 @@ import { slides } from '#slidev/slides'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { createSharedComposable } from '@vueuse/core'
+import { hideAllPoppers } from 'floating-vue'
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CLICKS_MAX } from '../constants'
@@ -118,6 +119,8 @@ export function useNavBase(
 
   watch(currentSlideRoute, (next, prev) => {
     navDirection.value = next.no - prev.no
+    if (prev)
+      hideAllPoppers()
   })
 
   async function openInEditor(url?: string) {
