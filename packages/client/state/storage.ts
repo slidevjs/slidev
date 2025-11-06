@@ -17,11 +17,6 @@ export const disableTransition = ref(false)
 
 export const shortcutsEnabled = ref(true)
 
-/**
- * Whether the keyboard shortcuts are enabled. Readonly,
- * use `lockShortcuts` and `releaseShortcuts` to modify.
- */
-
 // Use a locking mechanism to support multiple simultaneous locks
 // and avoid race conditions. Race conditions may occur, for example,
 // when locking shortcuts on editor focus and moving from one editor
