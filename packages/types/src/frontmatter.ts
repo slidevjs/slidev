@@ -265,6 +265,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   monacoRunAdditionalDeps?: string[]
   /**
+   * Whether to run monaco runnable code in strict mode
+   *
+   * @default true
+   */
+  monacoRunUseStrict?: boolean
+  /**
    * Seo meta tags settings
    *
    * @default {}
