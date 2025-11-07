@@ -13,7 +13,7 @@ patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
   demo:
-    '@vue/compiler-sfc': ^3.5.23
+    '@vue/compiler-sfc': ^3.5.24
   dev:
     '@antfu/eslint-config': ^6.2.0
     bumpp: ^10.3.1
@@ -33,7 +33,7 @@ catalogs:
     tsx: ^4.20.6
     typescript: ^5.9.3
     vitefu: ^1.1.1
-    vitest: ^4.0.7
+    vitest: ^4.0.8
     vue-tsc: ^3.1.3
     zx: ^8.8.5
   docs:
@@ -47,7 +47,7 @@ catalogs:
     '@shikijs/markdown-it': ^3.15.0
     '@slidev/rough-notation': ^0.1.0
     '@unhead/vue': ^2.0.19
-    '@unocss/reset': ^66.5.4
+    '@unocss/reset': ^66.5.5
     '@vueuse/core': ^14.0.0
     '@vueuse/math': ^14.0.0
     '@vueuse/motion': ^3.0.3
@@ -66,7 +66,7 @@ catalogs:
     shiki-magic-move: ^1.2.1
     tm-grammars: ^1.25.3
     unhead: ^2.0.19
-    vue: ^3.5.23
+    vue: ^3.5.24
     vue-router: ^4.6.3
   icons:
     '@iconify-json/carbon': ^1.2.14
@@ -85,7 +85,7 @@ catalogs:
     '@lillallol/outline-pdf': ^4.0.0
     '@shikijs/twoslash': ^3.15.0
     '@shikijs/vitepress-twoslash': ^3.15.0
-    '@unocss/extractor-mdc': ^66.5.4
+    '@unocss/extractor-mdc': ^66.5.5
     '@vitejs/plugin-vue': ^6.0.1
     '@vitejs/plugin-vue-jsx': ^5.1.1
     ansis: ^4.2.0
@@ -121,7 +121,7 @@ catalogs:
     sirv: ^3.0.2
     source-map-js: ^1.2.1
     tinyexec: ^1.0.2
-    unocss: ^66.5.4
+    unocss: ^66.5.5
     unplugin-icons: ^22.5.0
     unplugin-vue-components: ^30.0.0
     unplugin-vue-markdown: ^29.2.0
