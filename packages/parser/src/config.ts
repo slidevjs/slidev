@@ -50,6 +50,7 @@ export function getDefaultConfig(): SlidevConfig {
     notesAutoRuby: {},
     duration: '30min',
     timer: 'stopwatch',
+    magicMoveDuration: 800,
   }
 }
 
