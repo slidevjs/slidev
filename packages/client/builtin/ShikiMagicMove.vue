@@ -34,6 +34,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  duration: {
+    type: Number,
+    default: 800,
+  },
 })
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
@@ -158,8 +162,7 @@ onMounted(() => {
       :animate="!isPrintMode"
       :options="{
         globalScale: scale * zoom,
-        // TODO: make this configurable later
-        duration: 800,
+        duration: $props.duration,
         stagger: 1,
       }"
     />
