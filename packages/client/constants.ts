@@ -85,4 +85,5 @@ export const HEADMATTER_FIELDS = [
   'wakeLock',
   'seoMeta',
   'notesAutoRuby',
+  'magicMoveDuration',
 ]

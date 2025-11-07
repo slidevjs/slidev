@@ -299,6 +299,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 'stopwatch'
    */
   timer?: 'stopwatch' | 'countdown'
+  /**
+   * Duration for shiki magic move transitions in milliseconds
+   *
+   * @default 800
+   */
+  magicMoveDuration?: number
 }
 
 export interface Frontmatter extends TransitionOptions {

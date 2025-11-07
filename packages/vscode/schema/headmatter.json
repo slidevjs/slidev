@@ -539,6 +539,12 @@
           "markdownDescription": "Timer mode",
           "default": "stopwatch"
         },
+        "magicMoveDuration": {
+          "type": "number",
+          "description": "Duration for shiki magic move transitions in milliseconds",
+          "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
+          "default": 800
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",

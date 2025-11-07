@@ -36,7 +36,7 @@ const props = defineProps({
   },
   duration: {
     type: Number,
-    default: 800,
+    default: configs.magicMoveDuration,
   },
 })
 
