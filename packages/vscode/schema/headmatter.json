@@ -505,6 +505,12 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "monacoRunUseStrict": {
+          "type": "boolean",
+          "description": "Whether to run monaco runnable code in strict mode",
+          "markdownDescription": "Whether to run monaco runnable code in strict mode",
+          "default": true
+        },
         "seoMeta": {
           "$ref": "#/definitions/SeoMeta",
           "description": "Seo meta tags settings",

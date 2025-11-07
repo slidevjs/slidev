@@ -66,6 +66,7 @@ export const HEADMATTER_FIELDS = [
   'monacoTypesSource',
   'monacoTypesAdditionalPackages',
   'monacoRunAdditionalDeps',
+  'monacoRunUseStrict',
   'remoteAssets',
   'selectable',
   'record',

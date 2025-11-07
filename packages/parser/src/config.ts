@@ -14,6 +14,7 @@ export function getDefaultConfig(): SlidevConfig {
     monacoTypesAdditionalPackages: [],
     monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
+    monacoRunUseStrict: true,
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,

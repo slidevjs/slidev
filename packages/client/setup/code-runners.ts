@@ -5,6 +5,7 @@ import deps from '#slidev/monaco-run-deps'
 import setups from '#slidev/setups/code-runners'
 import { createSingletonPromise } from '@antfu/utils'
 import { ref } from 'vue'
+import { configs } from '../env'
 
 export default createSingletonPromise(async () => {
   const runners: Record<string, CodeRunner> = {
@@ -63,6 +64,7 @@ function runJavaScript(code: string): CodeRunnerOutputs {
   vmConsole.clear = () => result.value.length = 0
   try {
     const safeJS = `return async (console, __slidev_import, __slidev_on_error) => {
+    ${configs.monacoRunUseStrict ? `"use strict";` : ''}
       try {
         ${sanitizeJS(code)}
       } catch (e) {
