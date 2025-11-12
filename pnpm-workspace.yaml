@@ -8,6 +8,7 @@ shamefullyHoist: true
 ignoreWorkspaceRootCheck: true
 strictPeerDependencies: false
 linkWorkspacePackages: true
+trustPolicy: no-downgrade
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
