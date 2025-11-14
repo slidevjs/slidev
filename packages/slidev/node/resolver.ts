@@ -82,6 +82,11 @@ export async function resolveEntry(entryRaw: string) {
     entryRaw += '.md'
   const entry = resolve(entryRaw)
   if (!fs.existsSync(entry)) {
+    // Check if stdin is available for prompts (i.e., is a TTY)
+    if (!process.stdin.isTTY) {
+      console.error(`Entry file "${entry}" does not exist and cannot prompt for confirmation (stdin is not a TTY)`)
+      process.exit(1)
+    }
     const { create } = await prompts({
       name: 'create',
       type: 'confirm',
@@ -101,6 +106,12 @@ export async function resolveEntry(entryRaw: string) {
  */
 export function createResolver(type: 'theme' | 'addon', officials: Record<string, string>) {
   async function promptForInstallation(pkgName: string) {
+    // Check if stdin is available for prompts (i.e., is a TTY)
+    if (!process.stdin.isTTY) {
+      console.error(`The ${type} "${pkgName}" was not found and cannot prompt for installation (stdin is not a TTY)`)
+      process.exit(1)
+    }
+
     const { confirm } = await prompts({
       name: 'confirm',
       initial: 'Y',
