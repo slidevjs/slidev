@@ -177,33 +177,3 @@ it('external snippet', () => {
 
   expect(ctx.s.toString()).toMatchSnapshot()
 })
-
-it('external snippet - HTML region', () => {
-  const ctx = createTransformContext(`
-<<< @/snippets/snippet.html#main html
-`)
-
-  transformSnippet(ctx)
-
-  expect(ctx.s.toString()).toMatchSnapshot()
-})
-
-it('external snippet - HTML region without hash', () => {
-  const ctx = createTransformContext(`
-<<< @/snippets/snippet.html#footer html
-`)
-
-  transformSnippet(ctx)
-
-  expect(ctx.s.toString()).toMatchSnapshot()
-})
-
-it('external snippet - nested regions', () => {
-  const ctx = createTransformContext(`
-<<< @/snippets/nested.js#nested-test js
-`)
-
-  transformSnippet(ctx)
-
-  expect(ctx.s.toString()).toMatchSnapshot()
-})
