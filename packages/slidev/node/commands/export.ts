@@ -420,10 +420,17 @@ export async function exportSlides({
     await go('print')
     const slideContainers = page.locator('.print-slide-container')
     const count = await slideContainers.count()
+
     for (let i = 0; i < count; i++) {
-      progress.update(i + 1)
       const id = (await slideContainers.nth(i).getAttribute('id')) || ''
       const slideNo = +id.split('-')[0]
+
+      // Only process slides that are in the specified range
+      if (!pages.includes(slideNo))
+        continue
+
+      progress.update(result.length + 1)
+
       const buffer = await slideContainers.nth(i).screenshot({
         omitBackground,
       })
@@ -476,12 +483,15 @@ export async function exportSlides({
 
   async function genPageMd() {
     const pngs = await genPagePng(dirname(output))
-    const content = slides.map(({ title, index, note }) =>
-      pngs.filter(({ slideIndex }) => slideIndex === index)
-        .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
-        .join('')
-        + (note ? `${note.trim()}\n\n` : ''),
-    ).join('---\n\n')
+    const content = slides
+      .filter(({ index }) => pages.includes(index + 1))
+      .map(({ title, index, note }) =>
+        pngs.filter(({ slideIndex }) => slideIndex === index)
+          .map(({ filename }) => `![${title || (index + 1)}](./${filename})\n\n`)
+          .join('')
+          + (note ? `${note.trim()}\n\n` : ''),
+      )
+      .join('---\n\n')
     await fs.writeFile(ensureSuffix('.md', output), content)
   }
 
@@ -587,7 +597,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     scale,
     omitBackground,
   } = config
-  outFilename = output || options.data.config.exportFilename || outFilename || `${path.basename(entry, '.md')}-export`
+  outFilename = output || outFilename || options.data.config.exportFilename || `${path.basename(entry, '.md')}-export`
   return {
     output: outFilename,
     slides: options.data.slides,

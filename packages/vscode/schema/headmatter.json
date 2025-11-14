@@ -174,6 +174,24 @@
           "markdownDescription": "Show a copy button in code blocks",
           "default": true
         },
+        "magicMoveCopy": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "final"
+            },
+            {
+              "type": "string",
+              "const": "always"
+            }
+          ],
+          "description": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step `'always'` or `true` for show copy button on all steps",
+          "markdownDescription": "Show copy button in magic move code blocks\n\n`'final'` for only show copy button on the final step\n`'always'` or `true` for show copy button on all steps",
+          "default": true
+        },
         "author": {
           "type": "string",
           "description": "The author of the slides",
@@ -487,11 +505,51 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "monacoRunUseStrict": {
+          "type": "boolean",
+          "description": "Whether to run monaco runnable code in strict mode",
+          "markdownDescription": "Whether to run monaco runnable code in strict mode",
+          "default": true
+        },
         "seoMeta": {
           "$ref": "#/definitions/SeoMeta",
           "description": "Seo meta tags settings",
           "markdownDescription": "Seo meta tags settings",
           "default": {}
+        },
+        "notesAutoRuby": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Auto replace words with `<ruby>` tags in notes",
+          "markdownDescription": "Auto replace words with `<ruby>` tags in notes",
+          "default": {}
+        },
+        "duration": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "The expected duration of the slide",
+          "markdownDescription": "The expected duration of the slide",
+          "default": "30min"
+        },
+        "timer": {
+          "type": "string",
+          "enum": [
+            "stopwatch",
+            "countdown"
+          ],
+          "description": "Timer mode",
+          "markdownDescription": "Timer mode",
+          "default": "stopwatch"
+        },
+        "magicMoveDuration": {
+          "type": "number",
+          "description": "Duration for shiki magic move transitions in milliseconds",
+          "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
+          "default": 800
         },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",

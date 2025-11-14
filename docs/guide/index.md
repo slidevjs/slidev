@@ -100,7 +100,7 @@ bun i -g @slidev/cli
 ```
 
 ```bash [deno]
-deno i -g npm:@slidev/cli --name slidev
+deno i -g npm:@slidev/cli
 ```
 
 :::

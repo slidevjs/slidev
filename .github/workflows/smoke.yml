@@ -23,10 +23,10 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node.js 20.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20.x
 
@@ -66,10 +66,10 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Use Node.js 20.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20.x
 
@@ -83,7 +83,7 @@ jobs:
         run: nci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
@@ -106,6 +106,10 @@ jobs:
         run: ${{ matrix.pm }} i /tmp/slidev-pkgs/cli.tgz playwright-chromium
         working-directory: ../temp/slidev-project
         if: ${{ matrix.pm != 'yarn' }}
+
+      - name: Install Playwright browsers
+        run: pnpx playwright install chromium
+        working-directory: ../temp/slidev-project
 
       - name: Install project (yarn)
         run: yarn add /tmp/slidev-pkgs/cli.tgz playwright-chromium

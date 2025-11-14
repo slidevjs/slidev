@@ -10,27 +10,30 @@ jobs:
     permissions:
       id-token: write
       contents: write
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
+
       - run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: npm i -g @antfu/ni
-      - run: nci
-      - run: nr ci:publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-          NPM_CONFIG_PROVENANCE: true
+
+      - run: npm i -g npm@latest
+      - run: pnpm i
+      - run: pnpm run ci:publish
 
       - name: Publish to VSCE & OVSX
-        run: npm run publish
+        run: pnpm run publish
         working-directory: ./packages/vscode
         env:
           VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}

@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "52.0.0",
+  "version": "52.8.0",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -434,13 +434,168 @@
         "view": "slidev-slides-tree",
         "contents": "No active slides entry.\n[Choose one](command:slidev.choose-entry)"
       }
+    ],
+    "languageModelTools": [
+      {
+        "name": "slidev_getActiveSlide",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getActiveSlide",
+        "displayName": "Get Active Slide",
+        "modelDescription": "Get the information of the active slide the user is currently focused on in a Slidev presentation.",
+        "userDescription": "Get the information of the active slide in a Slidev presentation.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(debug-stackframe-active)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "slidev_getSlideContent",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getSlideContent",
+        "displayName": "Get Slide Content",
+        "modelDescription": "Get the content of a specific slide in a Slidev presentation by providing the slide number.",
+        "userDescription": "Get the content of a specific slide in a Slidev presentation by providing the slide number.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(file-code)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file (e.g., `./slides.md`). Empty string means the active slide entry.",
+              "default": "$ACTIVE_SLIDE_ENTRY"
+            },
+            "slideNo": {
+              "type": "number",
+              "description": "The slide number to retrieve content from. Starts from 1. Hidden slides are not counted."
+            }
+          }
+        }
+      },
+      {
+        "name": "slidev_getAllSlideTitles",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getAllSlideTitles",
+        "displayName": "Get All Slide Titles",
+        "modelDescription": "Get the list of all slide titles in the specified Slidev project.",
+        "userDescription": "Get the list of all slide titles in the specified Slidev project.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(list-unordered)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file (e.g., ./slides.md). Empty string means the active slide entry.",
+              "default": "$ACTIVE_SLIDE_ENTRY"
+            }
+          }
+        }
+      },
+      {
+        "name": "slidev_findSlideNoByTitle",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "findSlideNoByTitle",
+        "displayName": "Find Slide Number by Title",
+        "modelDescription": "Find the slide number in the specified Slidev project by its title.",
+        "userDescription": "Find the slide number in the specified Slidev project by its title.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(search)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file (e.g., ./slides.md). Empty string means the active slide entry.",
+              "default": "$ACTIVE_SLIDE_ENTRY"
+            },
+            "title": {
+              "type": "string",
+              "description": "The title of the slide to search for."
+            }
+          }
+        }
+      },
+      {
+        "name": "slidev_listEntries",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "listEntries",
+        "displayName": "List All Loaded Slidev Entries",
+        "modelDescription": "Get all loaded Slidev project entry file paths.",
+        "userDescription": "Get all loaded Slidev project entry file paths.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(file-directory)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "slidev_getPreviewPort",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "getPreviewPort",
+        "displayName": "Get Project Preview Port",
+        "modelDescription": "Get the preview port number of the specified Slidev project.",
+        "userDescription": "Get the preview port number of the specified Slidev project.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(plug)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file (e.g., ./slides.md). Empty string means the active slide entry.",
+              "default": "$ACTIVE_SLIDE_ENTRY"
+            }
+          }
+        }
+      },
+      {
+        "name": "slidev_chooseEntry",
+        "tags": [
+          "slidev"
+        ],
+        "toolReferenceName": "chooseEntry",
+        "displayName": "Choose Active Slidev Entry",
+        "modelDescription": "Switch the active Slidev project entry to the specified entry file path.",
+        "userDescription": "Switch the active Slidev project entry to the specified entry file path.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(arrow-swap)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "entrySlidePath": {
+              "type": "string",
+              "description": "The path to the Slidev entry file to activate (e.g., ./slides.md).",
+              "default": ""
+            }
+          },
+          "required": [
+            "entrySlidePath"
+          ]
+        }
+      }
     ]
   },
   "scripts": {
     "publish": "tsx scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
     "prepare": "tsx scripts/schema.ts",
-    "build": "tsdown --env.NODE_ENV production --treeshake",
+    "build": "tsdown --env.NODE_ENV production --treeshake --minify",
     "dev": "nr prepare && tsdown --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
@@ -455,7 +610,7 @@
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
-    "prettier": "catalog:vscode",
+    "prettier": "catalog:dev",
     "reactive-vscode": "catalog:vscode",
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",

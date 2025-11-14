@@ -67,31 +67,33 @@ const top = computed(() => {
   >
     <template v-for="item, index of currentContextMenu.items.value" :key="index">
       <div v-if="item === 'separator'" :key="index" class="w-full my1 border-t border-main" />
-      <div
-        v-else-if="item.small"
-        class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded flex"
-        :class="item.disabled ? `op40` : `hover:bg-active`"
-        :title="(item.label as string)"
-        @click="item.action"
-      >
-        <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
-        <component :is="item.icon" v-else />
-      </div>
-      <div
-        v-else
-        class="w-full grid grid-cols-[35px_1fr] p-2 pl-0 cursor-pointer rounded"
-        :class="item.disabled ? `op40` : `hover:bg-active`"
-        @click="item.action"
-      >
-        <div class="mx-auto flex">
+      <template v-else-if="item.show ?? true">
+        <div
+          v-if="item.small"
+          class="p-2 w-[40px] h-[40px] inline-block text-center cursor-pointer rounded flex"
+          :class="item.disabled ? `op40` : `hover:bg-active`"
+          :title="(item.label as string)"
+          @click="item.action"
+        >
           <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
           <component :is="item.icon" v-else />
         </div>
-        <div v-if="typeof item.label === 'string'">
-          {{ item.label }}
+        <div
+          v-else
+          class="w-full grid grid-cols-[35px_1fr] p-2 pl-0 cursor-pointer rounded"
+          :class="item.disabled ? `op40` : `hover:bg-active`"
+          @click="item.action"
+        >
+          <div class="mx-auto flex">
+            <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
+            <component :is="item.icon" v-else />
+          </div>
+          <div v-if="typeof item.label === 'string'">
+            {{ item.label }}
+          </div>
+          <component :is="item.label" v-else />
         </div>
-        <component :is="item.label" v-else />
-      </div>
+      </template>
     </template>
     <template v-if="!isExplicitEnabled">
       <div class="w-full my1 border-t border-main" />

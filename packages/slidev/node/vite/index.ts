@@ -12,6 +12,7 @@ import { createSlidesLoader } from './loaders'
 import { createMarkdownPlugin } from './markdown'
 import { createMonacoTypesLoader } from './monacoTypes'
 import { createMonacoWriterPlugin } from './monacoWrite'
+import { createPatchMonacoSourceMapPlugin } from './patchMonacoSourceMap'
 import { createRemoteAssetsPlugin } from './remoteAssets'
 import { createServerRefPlugin } from './serverRef'
 import { createStaticCopyPlugin } from './staticCopy'
@@ -43,5 +44,6 @@ export function ViteSlidevPlugin(
     createStaticCopyPlugin(options, pluginOptions),
     createInspectPlugin(options, pluginOptions),
     createUserVitePlugins(options),
+    createPatchMonacoSourceMapPlugin(),
   ])
 }

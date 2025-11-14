@@ -40,6 +40,12 @@ export default function setupRoutes() {
         beforeEnter: passwordGuard,
       },
       {
+        name: 'notes-edit',
+        path: '/notes-edit',
+        component: () => import('../pages/notes-edit.vue'),
+        beforeEnter: passwordGuard,
+      },
+      {
         name: 'presenter',
         path: '/presenter/:no',
         component: () => import('../pages/presenter.vue'),

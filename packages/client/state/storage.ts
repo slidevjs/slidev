@@ -1,6 +1,6 @@
 import type { DragElementState } from '../composables/useDragElements'
 import { breakpointsTailwind, isClient, useActiveElement, useBreakpoints, useFullscreen, useLocalStorage, useMagicKeys, useToggle, useWindowSize } from '@vueuse/core'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, reactive, ref, shallowRef } from 'vue'
 import { slideAspect } from '../env'
 
 export const showRecordingDialog = ref(false)
@@ -16,6 +16,23 @@ export const hmrSkipTransition = ref(false)
 export const disableTransition = ref(false)
 
 export const shortcutsEnabled = ref(true)
+
+// Use a locking mechanism to support multiple simultaneous locks
+// and avoid race conditions. Race conditions may occur, for example,
+// when locking shortcuts on editor focus and moving from one editor
+// to another, as blur events can be triggered after focus.
+const shortcutsLocks = reactive(new Set<symbol>())
+
+export const shortcutsLocked = computed(() => shortcutsLocks.size > 0)
+
+export function lockShortcuts() {
+  const lock = Symbol('shortcuts lock')
+  shortcutsLocks.add(lock)
+  return () => {
+    shortcutsLocks.delete(lock)
+  }
+}
+
 export const breakpoints = useBreakpoints({
   xs: 460,
   ...breakpointsTailwind,

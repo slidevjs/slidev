@@ -61,6 +61,7 @@ const builtinIcons: Record<string, string> = {
   '.yml': 'i-vscode-icons:file-type-light-yaml',
   '.yaml': 'i-vscode-icons:file-type-light-yaml',
   '.php': 'i-vscode-icons:file-type-php',
+  '.svg': 'i-vscode-icons:file-type-svg',
 }
 
 function matchIcon(title: string) {
