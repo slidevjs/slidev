@@ -6,15 +6,15 @@ it('katex with double braces', async () => {
   const ctx = createTransformContext(`
 # Page with KaTeX
 
-Inline math with double braces: $\{\{\alpha\}\}^T$
+Inline math with double braces: ${{\\alpha}}^T$
 
 Block math with double braces:
 
 $$
-\{\{\alpha\}^i\}^T
+{{\\alpha}^i}^T
 $$
 
-Another example: $\{\{x\}\}$
+Another example: ${{x}}$
 `)
 
   const transformers = await getMarkdownTransformers({
