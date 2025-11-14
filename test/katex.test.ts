@@ -38,13 +38,13 @@ Another example: $\{\{x\}\}$
   }
 
   const result = ctx.s.toString()
-  
+
   // The result should NOT contain {{ or }} that Vue would try to interpret
   // Instead, they should be escaped as &lbrace;&lbrace; and &rbrace;&rbrace;
   // We check that the annotation element doesn't have unescaped braces
   expect(result).not.toMatch(/annotation[^>]*>\{\{/)
   expect(result).not.toMatch(/\}\}<\/annotation/)
-  
+
   // Verify that the escaping is present
   expect(result).toContain('&lbrace;&lbrace;')
 })
