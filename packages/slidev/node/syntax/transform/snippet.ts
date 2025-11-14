@@ -24,6 +24,7 @@ function dedent(text: string): string {
   return text
 }
 
+/* eslint-disable regexp/no-super-linear-backtracking */
 const markers = [
   {
     start: /^\s*\/\/\s*#?region\b\s*(.*?)\s*$/,
@@ -58,6 +59,7 @@ const markers = [
     end: /^\s*\(\*\s*#endregion\b\s*(.*?)\s*\*\)/,
   },
 ]
+/* eslint-enable regexp/no-super-linear-backtracking */
 
 function findRegion(lines: Array<string>, regionName: string) {
   let chosen: { re: (typeof markers)[number], start: number } | null = null
