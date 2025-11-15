@@ -84,7 +84,7 @@ useEventListener('keypress', (e) => {
   keyboardBuffer.value += String(num)
 
   // beyond the number of slides, reset
-  if (+keyboardBuffer.value >= slides.value.length) {
+  if (+keyboardBuffer.value > slides.value.length) {
     keyboardBuffer.value = ''
     return
   }
