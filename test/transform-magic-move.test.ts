@@ -83,3 +83,45 @@ Some text after
       "
     `)
 })
+
+it('trailing whitespace after magic-move', async () => {
+  const code = `
+
+# magic-move issue repro
+
+\`\`\`\`md magic-move
+\`\`\`tsx
+import { useState } from 'react';
+\`\`\`
+
+\`\`\`tsx
+import { useState } from 'react';
+import router from 'next/router';
+\`\`\`
+\`\`\`\` 
+
+any further content
+
+<!-- 
+some speaker node
+-->
+
+`
+  const shiki = await createHighlighter({
+    themes: ['nord'],
+    langs: ['tsx'],
+  })
+
+  const ctx = createTransformContext(code, shiki)
+
+  transformMagicMove(ctx)
+
+  const result = ctx.s.toString()
+
+  // Should transform the magic-move block
+  expect(result).toContain('<ShikiMagicMove')
+  expect(result).toContain('any further content')
+  expect(result).toContain('some speaker node')
+  // Should not have weird code rendering
+  expect(result).not.toContain('````')
+})
