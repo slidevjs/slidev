@@ -74,6 +74,25 @@ export function useProjects() {
   const fsWatcher = workspace.createFileSystemWatcher('**/*.md')
   onScopeDispose(() => fsWatcher.dispose())
 
+  let throttleTimeout: NodeJS.Timeout | null = null
+  let scheduledRescan = false
+  async function onFsChange() {
+    if (throttleTimeout) {
+      scheduledRescan = true
+    }
+    else {
+      throttleTimeout = setTimeout(async () => {
+        if (scheduledRescan) {
+          scheduledRescan = false
+          await rescanProjects()
+        }
+        throttleTimeout = null
+      }, 500)
+      scheduledRescan = false
+      await rescanProjects()
+    }
+  }
+
   fsWatcher.onDidChange(async (uri) => {
     const path = slash(uri.fsPath)
     logger.info(`File ${path} changed.`)
@@ -101,8 +120,8 @@ export function useProjects() {
     effects.map(effect => effect())
     logger.info(`All affected Slidev projects updated in ${Date.now() - startMs}ms.`)
   })
-  fsWatcher.onDidCreate(rescanProjects)
-  fsWatcher.onDidDelete(rescanProjects)
+  fsWatcher.onDidCreate(onFsChange)
+  fsWatcher.onDidDelete(onFsChange)
 
   watch(include, rescanProjects)
 }
