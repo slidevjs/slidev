@@ -52,7 +52,6 @@ const contentStyle = computed(() => ({
   ...props.contentStyle,
   'height': `${slideHeight.value}px`,
   'width': `${slideWidth.value}px`,
-  'transform': `translate(-50%, -50%) scale(${scale.value})`,
   '--slidev-slide-scale': scale.value,
 }))
 
@@ -117,6 +116,8 @@ const snapshot = computed(() => {
 }
 
 .slidev-slide-content {
+  --slidev-slide-container-scale: var(--slidev-slide-scale);
+  transform: translate(-50%, -50%) scale(var(--slidev-slide-scale));
   @apply absolute left-1/2 top-1/2 overflow-hidden bg-main;
 }
 </style>
