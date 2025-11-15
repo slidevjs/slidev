@@ -24,43 +24,76 @@ function dedent(text: string): string {
   return text
 }
 
+/* eslint-disable regexp/no-super-linear-backtracking */
+const markers = [
+  {
+    start: /^\s*\/\/\s*#?region\b\s*(.*?)\s*$/,
+    end: /^\s*\/\/\s*#?endregion\b\s*(.*?)\s*$/,
+  },
+  {
+    start: /^\s*<!--\s*#?region\b\s*(.*?)\s*-->/,
+    end: /^\s*<!--\s*#?endregion\b\s*(.*?)\s*-->/,
+  },
+  {
+    start: /^\s*\/\*\s*#region\b\s*(.*?)\s*\*\//,
+    end: /^\s*\/\*\s*#endregion\b\s*(.*?)\s*\*\//,
+  },
+  {
+    start: /^\s*#[rR]egion\b\s*(.*?)\s*$/,
+    end: /^\s*#[eE]nd ?[rR]egion\b\s*(.*?)\s*$/,
+  },
+  {
+    start: /^\s*#\s*#?region\b\s*(.*?)\s*$/,
+    end: /^\s*#\s*#?endregion\b\s*(.*?)\s*$/,
+  },
+  {
+    start: /^\s*(?:--|::|@?REM)\s*#region\b\s*(.*?)\s*$/,
+    end: /^\s*(?:--|::|@?REM)\s*#endregion\b\s*(.*?)\s*$/,
+  },
+  {
+    start: /^\s*#pragma\s+region\b\s*(.*?)\s*$/,
+    end: /^\s*#pragma\s+endregion\b\s*(.*?)\s*$/,
+  },
+  {
+    start: /^\s*\(\*\s*#region\b\s*(.*?)\s*\*\)/,
+    end: /^\s*\(\*\s*#endregion\b\s*(.*?)\s*\*\)/,
+  },
+]
+/* eslint-enable regexp/no-super-linear-backtracking */
+
 function findRegion(lines: Array<string>, regionName: string) {
-  const regionRegexps = [
-    // javascript, typescript, java
-    [/^\/\/ ?#?region ([\w*-]+)$/, /^\/\/ ?#?endregion/],
-    // css, less, scss
-    [/^\/\* ?#region ([\w*-]+) ?\*\/$/, /^\/\* ?#endregion[\s\w*-]*\*\/$/],
-    // C, C++
-    [/^#pragma region ([\w*-]+)$/, /^#pragma endregion/],
-    // HTML, markdown
-    [/^<!-- #?region ([\w*-]+) -->$/, /^<!-- #?region[\s\w*-]*-->$/],
-    // Visual Basic
-    [/^#Region ([\w*-]+)$/, /^#End Region/],
-    // Bat
-    [/^::#region ([\w*-]+)$/, /^::#endregion/],
-    // C#, PHP, Powershell, Python, perl & misc
-    [/^# ?region ([\w*-]+)$/, /^# ?endregion/],
-  ]
-
-  let endReg = null
-  let start = -1
-
-  for (const [lineId, line] of lines.entries()) {
-    if (endReg === null) {
-      for (const [startReg, end] of regionRegexps) {
-        const match = line.trim().match(startReg)
-        if (match && match[1] === regionName) {
-          start = lineId + 1
-          endReg = end
-          break
-        }
+  let chosen: { re: (typeof markers)[number], start: number } | null = null
+  // find the regex pair for a start marker that matches the given region name
+  for (let i = 0; i < lines.length; i++) {
+    for (const re of markers) {
+      if (re.start.exec(lines[i])?.[1] === regionName) {
+        chosen = { re, start: i + 1 }
+        break
       }
     }
-    else if (endReg.test(line.trim())) {
-      return {
-        start,
-        end: lineId,
-        regexp: endReg,
+    if (chosen)
+      break
+  }
+  if (!chosen)
+    return null
+
+  let counter = 1
+  // scan the rest of the lines to find the matching end marker, handling nested markers
+  for (let i = chosen.start; i < lines.length; i++) {
+    // check for an inner start marker for the same region
+    if (chosen.re.start.exec(lines[i])?.[1] === regionName) {
+      counter++
+      continue
+    }
+    // check for an end marker for the same region
+    const endRegion = chosen.re.end.exec(lines[i])?.[1]
+    // allow empty region name on the end marker as a fallback
+    if (endRegion === regionName || endRegion === '') {
+      if (--counter === 0) {
+        return {
+          ...chosen,
+          end: i,
+        }
       }
     }
   }
@@ -116,7 +149,7 @@ export function transformSnippet({ s, slide, options }: MarkdownTransformContext
           content = dedent(
             lines
               .slice(region.start, region.end)
-              .filter(line => !region.regexp.test(line.trim()))
+              .filter(l => !(region.re.start.test(l) || region.re.end.test(l)))
               .join('\n'),
           )
         }
