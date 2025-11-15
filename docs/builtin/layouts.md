@@ -221,3 +221,34 @@ This shows on the right
 }
 </style>
 ```
+
+### Usage:
+
+```md
+---
+layout: two-cols-footer
+---
+
+This spans both columns at the bottom (footer)
+
+::top::
+This shows at the top, aligned to the start (top) of the grid
+
+::left::
+
+# Left
+
+This shows on the left
+
+::right::
+
+# Right
+
+This shows on the right
+
+<style>
+.two-cols-footer {
+  column-gap: 20px; /* Adjust the gap size as needed */
+}
+</style>
+```
