@@ -11,6 +11,7 @@ for rendering output.
 
 import type { KatexOptions } from 'katex'
 import katex from 'katex'
+import { escapeVueInCode } from '../transform/utils'
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
@@ -167,7 +168,7 @@ export default function MarkdownItKatex(md: any, options: KatexOptions) {
   const katexInline = function (latex: string) {
     options.displayMode = false
     try {
-      return katex.renderToString(latex, options)
+      return escapeVueInCode(katex.renderToString(latex, options))
     }
     catch (error) {
       if (options.throwOnError)
@@ -184,7 +185,7 @@ export default function MarkdownItKatex(md: any, options: KatexOptions) {
   const katexBlock = function (latex: string) {
     options.displayMode = true
     try {
-      return `<p>${katex.renderToString(latex, options)}</p>`
+      return `<p>${escapeVueInCode(katex.renderToString(latex, options))}</p>`
     }
     catch (error) {
       if (options.throwOnError)
