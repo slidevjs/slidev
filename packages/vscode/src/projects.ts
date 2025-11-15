@@ -1,4 +1,5 @@
 import type { LoadedSlidevData } from '@slidev/parser/fs'
+import type { Uri } from 'vscode'
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 import { slash } from '@antfu/utils'
@@ -76,7 +77,9 @@ export function useProjects() {
 
   let throttleTimeout: NodeJS.Timeout | null = null
   let scheduledRescan = false
-  async function onFsChange() {
+  async function onFsChange(uri: Uri) {
+    if (uri.toString().includes('node_modules'))
+      return
     if (throttleTimeout) {
       scheduledRescan = true
     }
