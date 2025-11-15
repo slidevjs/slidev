@@ -4,7 +4,8 @@ import { codeToKeyedTokens } from 'shiki-magic-move/core'
 import { reCodeBlock } from './code-wrapper'
 import { normalizeRangeStr } from './utils'
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *\[([^\]]*)\])?(?: *(\{[^}]*\}))? *([^ \n]*)\n([\s\S]+?)^````$/gm
+// eslint-disable-next-line regexp/no-super-linear-backtracking
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *\[([^\]]*)\])?(?: *(\{[^}]*\}))? *([^\n]*)\n([\s\S]+?)^````\s*?$/gm
 
 function parseLineNumbersOption(options: string) {
   return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
