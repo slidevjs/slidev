@@ -451,9 +451,9 @@ const final = {
 
 ---
 
-# LaTeX
+# $\LaTeX$
 
-LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
+$\LaTeX$ is supported out-of-box. Powered by [$\KaTeX$](https://katex.org/).
 
 <div h-3 />
 
