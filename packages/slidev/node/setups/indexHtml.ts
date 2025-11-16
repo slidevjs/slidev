@@ -98,11 +98,16 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     ],
   })
 
-  const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
+  const mainUrl = toAtFS(join(clientRoot, 'main.ts'))
+  if (mode === 'build') {
+    main = main.replace('__ENTRY__', mainUrl)
+  }
+  else {
+    const basePrefix = base ? base.slice(0, -1) : ''
+    main = main.replace('__ENTRY__', encodeURI(basePrefix + mainUrl))
+  }
 
-  main = main
-    .replace('__ENTRY__', baseInDev + encodeURI(toAtFS(join(clientRoot, 'main.ts'))))
-    .replace('<!-- body -->', body)
+  main = main.replace('<!-- body -->', body)
 
   const html = await transformHtmlTemplate(unhead, main)
   return html
