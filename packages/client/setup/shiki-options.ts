@@ -55,6 +55,8 @@ export function resolveShikiOptions(options: (ShikiSetupReturn | void)[]) {
   const languageInput: Record<string, LanguageInput> = Object.assign({}, bundledLanguages)
   for (const option of options) {
     const langs = option?.langs
+    if (langs == null)
+      continue
     if (Array.isArray(langs)) {
       for (const lang of langs.flat()) {
         if (typeof lang === 'function') {

@@ -12,12 +12,12 @@ export default createSingletonPromise(async () => {
     langs: languageInput,
     themes: themeInput,
   })
-  const getEagerHighlighter = createSingletonPromise(() => createHighlighter({
+  const shorthands = createSingletonShorthands(createHighlighter)
+  const getEagerHighlighter = createSingletonPromise(() => shorthands.getSingletonHighlighter({
     ...options,
     langs: [...languageNames],
     themes: themeNames,
   }))
-  const shorthands = createSingletonShorthands(createHighlighter)
 
   return {
     defaultHighlightOptions: options,

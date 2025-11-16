@@ -7,7 +7,7 @@ import { escapeVueInCode } from '../transform/utils'
 export default async function MarkdownItShiki({ data: { config }, mode, utils: { shiki, shikiOptions } }: ResolvedSlidevOptions) {
   async function getTwoslashTransformer() {
     const [,,{ transformerTwoslash }] = await Promise.all([
-      // trigger the shiki to load the langs
+      // trigger shiki to load the langs
       shiki.codeToHast('', { lang: 'js', ...shikiOptions }),
       shiki.codeToHast('', { lang: 'ts', ...shikiOptions }),
 
