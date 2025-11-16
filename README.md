@@ -15,7 +15,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <a href="https://sli.dev/" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=45b8cd" alt="Docs & Demos"></a>
 <a href="https://sli.dev/resources/theme-gallery" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=themes&color=4ec5d4" alt="Themes"></a>
 <br>
-<a href="https://github.com/slidevjs/slidev" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
+<a href="https://github.com/slidevjs/slidev/stargazers" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
 </p>
 
 <p align="center">
@@ -26,9 +26,9 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <table>
 <tbody>
 <td align="center">
-<img width="2000" height="0" alt="" aria-hiden><br>
+<img width="2000" height="0" alt="" aria-hidden><br>
 <sub>Made possible by my <a href="https://github.com/sponsors/antfu">Sponsor Program 💖</a></sub><br>
-<img width="2000" height="0" alt="" aria-hiden>
+<img width="2000" height="0" alt="" aria-hidden>
 </td>
 </tbody>
 </table>
@@ -36,7 +36,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 
 ## Features
 
-- 📝 [**Markdown-based**](https://sli.dev/guide/syntax) - foucus on content and use your favorite editor
+- 📝 [**Markdown-based**](https://sli.dev/guide/syntax) - focus on content and use your favorite editor
 - 🧑‍💻 [**Developer Friendly**](https://sli.dev/guide/syntax#code-blocks) - built-in code highlighting, live coding, etc.
 - 🎨 [**Themable**](https://sli.dev/resources/theme-gallery) - theme can be shared and used with npm packages
 - 🌈 [**Stylish**](https://sli.dev/guide/syntax#embedded-styles) - on-demand utilities via [UnoCSS](https://github.com/unocss/unocss).

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { provideLocal, useElementSize, useStyleTag } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { provideLocal, useElementSize } from '@vueuse/core'
+import { computed, onUnmounted, ref, watchEffect } from 'vue'
 import { useNav } from '../composables/useNav'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect, slideHeight, slideWidth } from '../env'
@@ -64,8 +64,11 @@ const containerStyle = computed(() => props.width
   : {},
 )
 
-if (props.isMain)
-  useStyleTag(computed(() => `:root { --slidev-slide-scale: ${scale.value}; }`))
+if (props.isMain) {
+  const rootStyle = document.documentElement.style
+  watchEffect(() => rootStyle.setProperty('--slidev-slide-scale', scale.value.toString()))
+  onUnmounted(() => rootStyle.removeProperty('--slidev-slide-scale'))
+}
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)

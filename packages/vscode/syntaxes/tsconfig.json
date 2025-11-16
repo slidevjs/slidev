@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "module": "Preserve"
+  },
   "include": [
     "*.ts",
     "*.vue",

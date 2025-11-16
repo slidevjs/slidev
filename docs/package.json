@@ -1,36 +1,48 @@
 {
-  "name": "docs",
+  "name": "@slidev/docs",
   "type": "module",
-  "version": "51.2.2",
-  "private": true,
+  "version": "52.8.0",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/antfu",
+  "homepage": "https://sli.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slidevjs/slidev",
+    "directory": "docs"
+  },
+  "bugs": "https://github.com/slidevjs/slidev/issues",
+  "files": [
+    "**/*.md",
+    "!.vitepress/**"
+  ],
   "scripts": {
     "dev": "vitepress",
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
-  "dependencies": {
-    "@antfu/utils": "catalog:",
-    "@vueuse/core": "catalog:",
-    "typeit": "catalog:"
-  },
   "devDependencies": {
-    "@iconify/json": "catalog:",
-    "@shikijs/vitepress-twoslash": "catalog:",
+    "@antfu/utils": "catalog:frontend",
+    "@iconify/json": "catalog:icons",
+    "@shikijs/vitepress-twoslash": "catalog:prod",
     "@slidev/client": "workspace:*",
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
-    "@types/node": "catalog:",
-    "@unocss/reset": "catalog:",
-    "fast-glob": "catalog:",
-    "gray-matter": "catalog:",
-    "markdown-it": "catalog:",
-    "shiki": "catalog:",
-    "typescript": "catalog:",
-    "unocss": "catalog:",
-    "unplugin-icons": "catalog:",
-    "unplugin-vue-components": "catalog:",
-    "vite-plugin-inspect": "catalog:",
-    "vitepress": "catalog:",
-    "vue": "catalog:"
+    "@types/node": "catalog:types",
+    "@unocss/reset": "catalog:frontend",
+    "@vueuse/core": "catalog:frontend",
+    "fast-glob": "catalog:prod",
+    "gray-matter": "catalog:prod",
+    "markdown-it": "catalog:prod",
+    "shiki": "catalog:frontend",
+    "typeit": "catalog:docs",
+    "typescript": "catalog:dev",
+    "unocss": "catalog:prod",
+    "unplugin-icons": "catalog:prod",
+    "unplugin-vue-components": "catalog:prod",
+    "vite-plugin-inspect": "catalog:prod",
+    "vitepress": "catalog:docs",
+    "vitepress-plugin-group-icons": "catalog:docs",
+    "vitepress-plugin-llms": "catalog:docs",
+    "vue": "catalog:frontend"
   }
 }

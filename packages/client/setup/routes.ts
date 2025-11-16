@@ -25,16 +25,24 @@ export default function setupRoutes() {
         name: 'entry',
         path: '/entry',
         component: () => import('../pages/entry.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         name: 'overview',
         path: '/overview',
         component: () => import('../pages/overview.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         name: 'notes',
         path: '/notes',
         component: () => import('../pages/notes.vue'),
+        beforeEnter: passwordGuard,
+      },
+      {
+        name: 'notes-edit',
+        path: '/notes-edit',
+        component: () => import('../pages/notes-edit.vue'),
         beforeEnter: passwordGuard,
       },
       {
@@ -56,10 +64,12 @@ export default function setupRoutes() {
         name: 'print',
         path: '/print',
         component: () => import('../pages/print.vue'),
+        beforeEnter: passwordGuard,
       },
       {
         path: '/presenter/print',
         component: () => import('../pages/presenter/print.vue'),
+        beforeEnter: passwordGuard,
       },
     )
   }

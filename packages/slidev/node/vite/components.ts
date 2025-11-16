@@ -14,6 +14,7 @@ export function createComponentsPlugin(
       join(clientRoot, 'builtin'),
       ...roots.map(i => join(i, 'components')),
     ],
+    globsExclude: [],
 
     include: [/\.vue$/, /\.vue\?vue/, /\.vue\?v=/, /\.md$/, /\.md\?vue/],
     exclude: [],

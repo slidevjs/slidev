@@ -21,9 +21,10 @@ To configure the built-in plugins listed above, create a `vite.config.ts` with t
 
 <!-- eslint-disable import/first -->
 
-```ts twoslash
+```ts twoslash [vite.config.ts]
 /// <reference types="@slidev/types" />
 import type MarkdownIt from 'markdown-it'
+
 declare const MyPlugin: (md: any) => void
 // ---cut---
 import { defineConfig } from 'vite'
@@ -65,3 +66,19 @@ export default defineConfig({
 
 Please pass the Vue options to the `slidev.vue` field as described above
 :::
+
+## Add Custom Plugins based on Slide data
+
+Usually you can add Vite plugins into your `vite.config.ts` (see above).
+However, if you want to add plugins based on the slide data, you need to add a `./setup/vite-plugins.ts` with the following content:
+
+```ts twoslash
+import { defineVitePluginsSetup } from '@slidev/types'
+
+export default defineVitePluginsSetup((options) => {
+  return [
+    // Your plugins here
+    // Slide data is available as options.data.slides
+  ]
+})
+```

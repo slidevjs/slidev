@@ -1,6 +1,6 @@
 # Slide Layout
 
-Layouts in Slidev are used to define the structure for each slides. They are Vue components that wrap the content of the slides.
+Layouts in Slidev are used to define the structure for each slide. They are Vue components that wrap the content of the slides.
 
 ## Using Layouts {#use}
 

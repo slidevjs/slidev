@@ -8,6 +8,7 @@ import './styles/vars.css'
 import './styles/demo.css'
 import './styles/custom.css'
 import 'uno.css'
+import 'virtual:group-icons.css'
 
 export default {
   extends: Theme,

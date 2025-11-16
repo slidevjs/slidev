@@ -23,6 +23,25 @@ Foo \`{{ code }}\`
 </style>
 \`\`\`
 
+\`\`\`js [with-title]
+const a = 1
+\`\`\`
+
+::code-group
+
+\`\`\`sh [npm]
+npm i slidev
+\`\`\`
+
+\`\`\`sh [yarn]
+yarn add slidev
+\`\`\`
+
+\`\`\`sh [pnpm]
+pnpm add slidev
+\`\`\`
+::
+
 <style>
 .text-green { color: green; }
 </style>

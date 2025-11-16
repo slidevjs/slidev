@@ -108,6 +108,19 @@ drawings:
 htmlAttrs:
   dir: ltr
   lang: en
+
+# SEO meta tags
+seoMeta:
+  ogTitle: Slidev Starter Template
+  ogDescription: Presentation slides for developers
+  ogImage: https://cover.sli.dev
+  ogUrl: https://example.com
+  twitterCard: summary_large_image
+  twitterTitle: Slidev Starter Template
+  twitterDescription: Presentation slides for developers
+  twitterImage: https://cover.sli.dev
+  twitterSite: username
+  twitterUrl: https://example.com
 ---
 ```
 
@@ -120,7 +133,7 @@ Also every slide accepts the following configuration in its frontmatter block. T
 ```yaml
 ---
 # custom clicks count
-# Learn more: https://sli.dev/guide/animations.html#custom-total-clicks-count
+# Learn more: https://sli.dev/guide/animations#total
 clicks: 0
 # custom start clicks count
 clicksStart: 0

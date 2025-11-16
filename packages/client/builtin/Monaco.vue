@@ -22,33 +22,36 @@ import { useNav } from '../composables/useNav'
 import { useSlideContext } from '../context'
 import { makeId } from '../logic/utils'
 
-const props = withDefaults(defineProps<{
-  codeLz: string
-  diffLz?: string
-  lang?: string
-  readonly?: boolean
-  lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
-  height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
-  editorOptions?: monaco.editor.IEditorOptions
-  ata?: boolean
-  runnable?: boolean
-  writable?: string
-  autorun?: boolean | 'once'
-  showOutputAt?: RawAtValue
-  outputHeight?: string
-  highlightOutput?: boolean
-  runnerOptions?: Record<string, unknown>
-}>(), {
-  codeLz: '',
-  lang: 'typescript',
-  readonly: false,
-  lineNumbers: 'off',
-  height: 'initial',
-  ata: true,
-  runnable: false,
-  autorun: true,
-  highlightOutput: true,
-})
+const props = withDefaults(
+  defineProps<{
+    codeLz?: string
+    diffLz?: string
+    lang?: string
+    readonly?: boolean
+    lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
+    height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
+    editorOptions?: monaco.editor.IEditorOptions
+    ata?: boolean
+    runnable?: boolean
+    writable?: string
+    autorun?: boolean | 'once'
+    showOutputAt?: RawAtValue
+    outputHeight?: string
+    highlightOutput?: boolean
+    runnerOptions?: Record<string, unknown>
+  }>(),
+  {
+    codeLz: '',
+    lang: 'typescript',
+    readonly: false,
+    lineNumbers: 'off',
+    height: 'initial',
+    ata: true,
+    runnable: false,
+    autorun: true,
+    highlightOutput: true,
+  },
+)
 
 const CodeRunner = defineAsyncComponent(() => import('../internals/CodeRunner.vue').then(r => r.default))
 

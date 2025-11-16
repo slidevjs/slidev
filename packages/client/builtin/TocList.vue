@@ -13,13 +13,16 @@ import { toArray } from '@antfu/utils'
 import { computed } from 'vue'
 import { useNav } from '../composables/useNav'
 
-const props = withDefaults(defineProps<{
-  level: number
-  start?: string | number
-  listStyle?: string | string[]
-  list: TocItem[]
-  listClass?: string | string[]
-}>(), { level: 1 })
+const props = withDefaults(
+  defineProps<{
+    level?: number
+    start?: string | number
+    listStyle?: string | string[]
+    list: TocItem[]
+    listClass?: string | string[]
+  }>(),
+  { level: 1 },
+)
 
 const { isPresenter } = useNav()
 

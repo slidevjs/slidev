@@ -1,9 +1,9 @@
 {
   "name": "create-slidev-theme",
   "type": "module",
-  "version": "51.2.2",
+  "version": "52.8.0",
   "description": "Create starter theme template for Slidev",
-  "author": "antfu <anthonyfu117@hotmail.com>",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "homepage": "https://sli.dev",
@@ -20,8 +20,8 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "ansis": "catalog:",
-    "minimist": "catalog:",
-    "prompts": "catalog:"
+    "ansis": "catalog:prod",
+    "minimist": "catalog:prod",
+    "prompts": "catalog:prod"
   }
 }

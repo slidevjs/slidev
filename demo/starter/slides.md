@@ -1,5 +1,5 @@
 ---
-# You can also start simply with 'default'
+# try also 'default' to start simple
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
@@ -11,7 +11,7 @@ info: |
   Presentation slides for developers.
 
   Learn more at [Sli.dev](https://sli.dev)
-# apply unocss classes to the current slide
+# apply UnoCSS classes to the current slide
 class: text-center
 # https://sli.dev/features/drawing
 drawings:
@@ -20,6 +20,8 @@ drawings:
 transition: slide-left
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
+# duration of the presentation
+duration: 35min
 ---
 
 # Welcome to Slidev
@@ -31,7 +33,7 @@ Presentation slides for developers
 </div>
 
 <div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor" title="Open in Editor" class="slidev-icon-btn">
+  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
     <carbon:edit />
   </button>
   <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
@@ -139,11 +141,10 @@ image: https://cover.sli.dev
 
 Use code snippets and get the highlighting directly, and even types hover!
 
-```ts {all|5|7|7-8|10|all} twoslash
+```ts [filename-example.ts] {all|4|6|6-7|9|all} twoslash
 // TwoSlash enables TypeScript hover information
 // and errors in markdown code blocks
 // More at https://shiki.style/packages/twoslash
-
 import { computed, ref } from 'vue'
 
 const count = ref(0)
@@ -152,7 +153,7 @@ const doubled = computed(() => count.value * 2)
 doubled.value = 2
 ```
 
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
+<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="342" color="#953" width="2" arrowSize="1" />
 
 <!-- This allow you to embed external code blocks -->
 <<< @/snippets/external.ts#snippet

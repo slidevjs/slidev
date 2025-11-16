@@ -38,6 +38,14 @@ $ npm i -D playwright-chromium
 $ yarn add -D playwright-chromium
 ```
 
+```bash [bun]
+$ bun add -D playwright-chromium
+```
+
+```bash [deno]
+$ deno add -D npm:playwright-chromium
+```
+
 :::
 
 ## Formats

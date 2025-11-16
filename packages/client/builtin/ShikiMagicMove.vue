@@ -2,6 +2,7 @@
 import type { KeyedTokensInfo } from 'shiki-magic-move/types'
 import type { PropType } from 'vue'
 import { sleep } from '@antfu/utils'
+import { useClipboard } from '@vueuse/core'
 import lz from 'lz-string'
 import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -9,6 +10,7 @@ import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
 import { useSlideContext } from '../context'
 import { configs } from '../env'
+import TitleIcon from '../internals/TitleIcon.vue'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
 
 const props = defineProps({
@@ -28,6 +30,14 @@ const props = defineProps({
     type: Boolean,
     default: configs.lineNumbers,
   },
+  title: {
+    type: String,
+    default: '',
+  },
+  duration: {
+    type: Number,
+    default: configs.magicMoveDuration,
+  },
 })
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
@@ -36,7 +46,36 @@ const { isPrintMode } = useNav()
 const id = makeId()
 
 const stepIndex = ref(0)
+// Used to skip the animation on the first tick.
+const isFirstTick = ref(true)
 const container = ref<HTMLElement>()
+
+const showCopyButton = computed(() => {
+  if (!configs.codeCopy)
+    return false
+
+  const magicCopy = configs.magicMoveCopy
+  if (!magicCopy)
+    return false
+
+  if (magicCopy === true || magicCopy === 'always')
+    return true
+
+  if (magicCopy === 'final')
+    return stepIndex.value === steps.length - 1
+
+  return false
+})
+const { copied, copy } = useClipboard()
+
+function copyCode() {
+  // Use the code property directly from KeyedTokensInfo
+  const currentStep = steps[stepIndex.value]
+  if (!currentStep || !currentStep.code)
+    return
+
+  copy(currentStep.code.trim())
+}
 
 // Normalized the ranges, to at least have one range
 const ranges = computed(() => props.stepRanges.map(i => i.length ? i : ['all']))
@@ -56,6 +95,7 @@ onMounted(() => {
   const clickInfo = clicks.calculateSince(props.at, clickCounts - 1)
   clicks.register(id, clickInfo)
 
+  let cancelTick: () => void = () => { }
   watch(
     () => clicks.current,
     () => {
@@ -74,9 +114,24 @@ onMounted(() => {
         currentClickSum += current.length || 1
       }
 
-      nextTick(async () => {
-        stepIndex.value = step
+      // It seems ticks may not be executed in order. Cancel previous ones, because
+      // clicks.current is first 0 then immediately updated when refreshing the slide.
+      cancelTick()
+      let isCanceled = false
+      cancelTick = () => {
+        isCanceled = true
+      }
 
+      nextTick(async () => {
+        if (isCanceled) {
+          return
+        }
+        stepIndex.value = step
+        if (isFirstTick.value) {
+          nextTick(() => {
+            isFirstTick.value = false
+          })
+        }
         await sleep(0)
 
         const pre = container.value?.querySelector('.shiki') as HTMLElement
@@ -111,7 +166,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative">
+  <div ref="container" class="slidev-code-wrapper slidev-code-magic-move relative group">
+    <div v-if="title" class="slidev-code-block-title">
+      <TitleIcon :title="title" />
+      <div class="leading-1em">
+        {{ title.replace(/~([^~]+)~/g, '').trim() }}
+      </div>
+    </div>
     <ShikiMagicMovePrecompiled
       class="slidev-code relative shiki overflow-visible"
       :steps="steps"
@@ -119,11 +180,22 @@ onMounted(() => {
       :animate="!isPrintMode"
       :options="{
         globalScale: scale * zoom,
-        // TODO: make this configurable later
-        duration: 800,
+        // Use duration 0 to skip animation instead of using the animate prop,
+        // because moving from non-animated to animated causes issues with
+        // new elements. Unfortunately, this causes a flash.
+        duration: isFirstTick ? 0 : $props.duration,
         stagger: 1,
       }"
     />
+    <button
+      v-if="showCopyButton"
+      class="slidev-code-copy absolute right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
+      :class="title ? 'top-10' : 'top-0'"
+      :title="copied ? 'Copied' : 'Copy'" @click="copyCode()"
+    >
+      <ph-check-circle v-if="copied" class="p-2 w-8 h-8" />
+      <ph-clipboard v-else class="p-2 w-8 h-8" />
+    </button>
   </div>
 </template>
 

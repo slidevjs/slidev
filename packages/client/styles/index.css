@@ -80,7 +80,11 @@ html {
 /* Note Clicks */
 
 .slidev-note-with-clicks .slidev-note-fade {
-  color: #888888ab;
+  color: #888888cc;
+}
+
+.dark .slidev-note-with-clicks .slidev-note-fade {
+  color: #a1a1a1cc;
 }
 
 .slidev-note-click-mark {
@@ -143,4 +147,8 @@ html {
 #twoslash-container .v-popper__wrapper:not(.no-slide-scale > *) {
   transform: scale(calc(1 * var(--slidev-slide-scale)));
   transform-origin: 30px top;
+}
+
+.slidev-note ul {
+  margin: 0;
 }

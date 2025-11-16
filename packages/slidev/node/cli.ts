@@ -20,6 +20,7 @@ import { resolveOptions } from './options'
 import { parser } from './parser'
 import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
+import { updateFrontmatterPatch } from './utils'
 
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
@@ -29,6 +30,7 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'mdc',
   'editor',
   'theme',
+  'seoMeta',
 ]
 
 /**
@@ -224,7 +226,7 @@ cli.command(
         name: 'r',
         fullname: 'restart',
         action() {
-          initServer()
+          restartServer()
         },
       },
       {
@@ -279,7 +281,7 @@ cli.command(
       if (process.stdin.isTTY)
         process.stdin.setRawMode(true)
 
-      process.stdin.on('keypress', (str, key) => {
+      const onKeyPress = (str: string, key: { ctrl: boolean, name: string }) => {
         if (key.ctrl && key.name === 'c') {
           process.exit()
         }
@@ -294,6 +296,11 @@ cli.command(
             }
           }
         }
+      }
+
+      process.stdin.on('keypress', onKeyPress)
+      server?.httpServer?.on('close', () => {
+        process.stdin.off('keypress', onKeyPress)
       })
     }
 
@@ -420,17 +427,19 @@ cli.command(
           }
           const [name, root] = (await resolveTheme(themeRaw, entry)) as [string, string]
 
+          await fs.mkdir(path.resolve(dir), { recursive: true })
           await fs.cp(
             root,
             path.resolve(dir),
             {
-              filter: i => !/node_modules|.git/.test(path.relative(root, i)),
+              recursive: true,
+              filter: i => !/node_modules|\.git/.test(path.relative(root, i)),
             },
           )
 
           const dirPath = `./${dir}`
           const firstSlide = data.entry.slides[0]
-          firstSlide.frontmatter.theme = dirPath
+          updateFrontmatterPatch(firstSlide, { theme: dirPath })
           parser.prettifySlide(firstSlide)
           await parser.save(data.entry)
 
@@ -481,7 +490,7 @@ cli.command(
         port,
         ...getExportOptions({ ...args, entry: entryFile }, options),
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
       server.close()
     }
 
@@ -542,7 +551,7 @@ cli.command(
         timeout,
         wait,
       })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}./${result}\n`)
+      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
 
       server.close()
     }

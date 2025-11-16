@@ -1,5 +1,7 @@
 import { isNumber, range, uniq } from '@antfu/utils'
 
+export * from './timesplit'
+
 /**
  * 1,3-5,8 => [1, 3, 4, 5, 8]
  */

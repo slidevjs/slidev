@@ -29,6 +29,16 @@ yarn dev --remote
 # i.e. slidev --remote
 ```
 
+```bash [bun]
+bun dev --remote
+# i.e. slidev --remote
+```
+
+```bash [deno]
+deno run dev --remote
+# i.e. slidev --remote
+```
+
 :::
 
 ## Password Protection
@@ -42,7 +52,7 @@ You can open a [Cloudflare Quick Tunnels](https://developers.cloudflare.com/clou
 ::: code-group
 
 ```bash [pnpm]
-pnpm dev -- --remote --tunnel
+pnpm dev --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 
@@ -53,6 +63,16 @@ npm run dev -- --remote --tunnel
 
 ```bash [yarn]
 yarn dev --remote --tunnel
+# i.e. slidev --remote --tunnel
+```
+
+```bash [bun]
+bun dev --remote --tunnel
+# i.e. slidev --remote --tunnel
+```
+
+```bash [deno]
+deno run dev --remote --tunnel
 # i.e. slidev --remote --tunnel
 ```
 

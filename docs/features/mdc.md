@@ -1,6 +1,6 @@
 ---
 relates:
-  - Nuxt's MDC Syntax: https://content.nuxt.com/usage/markdown
+  - Nuxt's MDC Syntax: https://content.nuxt.com/docs/files/markdown#mdc-syntax
   - markdown-it-mdc: https://github.com/antfu/markdown-it-mdc
 since: v0.43.0
 tags: [syntax, styling]
@@ -10,7 +10,7 @@ description: |
 
 # MDC Syntax
 
-Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxt.com/docs/files/markdown) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
+Slidev supports optional [MDC (Markdown Components) Syntax](https://content.nuxt.com/docs/files/markdown#mdc-syntax) powered by [`markdown-it-mdc`](https://github.com/antfu/markdown-it-mdc).
 
 You can enable it by adding `mdc: true` to the frontmatter of your markdown file.
 
@@ -28,4 +28,4 @@ The **default** slot
 ::
 ```
 
-Learn more about [MDC Syntax](https://content.nuxt.com/guide/writing/mdc).
+Learn more about [MDC Syntax](https://content.nuxt.com/docs/files/markdown#mdc-syntax).

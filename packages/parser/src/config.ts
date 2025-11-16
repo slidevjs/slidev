@@ -14,6 +14,7 @@ export function getDefaultConfig(): SlidevConfig {
     monacoTypesAdditionalPackages: [],
     monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
+    monacoRunUseStrict: true,
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
@@ -32,6 +33,7 @@ export function getDefaultConfig(): SlidevConfig {
     drawings: {} as ResolvedDrawingsOptions,
     plantUmlServer: 'https://www.plantuml.com/plantuml',
     codeCopy: true,
+    magicMoveCopy: true,
     author: '',
     record: 'dev',
     css: 'unocss',
@@ -44,6 +46,11 @@ export function getDefaultConfig(): SlidevConfig {
     wakeLock: true,
     remote: false,
     mdc: false,
+    seoMeta: {},
+    notesAutoRuby: {},
+    duration: '30min',
+    timer: 'stopwatch',
+    magicMoveDuration: 800,
   }
 }
 

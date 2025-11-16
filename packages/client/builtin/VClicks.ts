@@ -43,9 +43,11 @@ export default defineComponent({
     const every = +this.every
     const at = normalizeSingleAtValue(this.at)
     const isRelative = typeof at === 'string'
-    if (!at) {
-      console.warn('[slidev] Invalid at prop for v-clicks component:', at)
-      return
+
+    let elements = this.$slots.default?.()
+
+    if (at == null || !elements) {
+      return elements
     }
 
     const click = resolveDirective('click')!
@@ -70,11 +72,6 @@ export default defineComponent({
           return [i]
       }) as T
     }
-
-    let elements = this.$slots.default?.()
-
-    if (!elements)
-      return
 
     elements = openAllTopLevelSlots(toArray(elements))
 

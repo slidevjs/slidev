@@ -20,6 +20,14 @@ $ npm init slidev-theme@latest
 $ yarn create slidev-theme
 ```
 
+```bash [bun]
+$ bun create slidev-theme
+```
+
+```bash [deno]
+$ deno init --npm slidev-theme
+```
+
 :::
 
 Then you can modify and play with it. You can also refer to the [official themes](../resources/theme-gallery#official-themes) as examples.
@@ -44,7 +52,7 @@ Basically, the way to provide global styles, layouts, components and configure t
 
 To provide default Slidev configurations, you can add a `slidev.defaults` field in the `package.json` file, which will be merged with the user's configurations:
 
-```json
+```json [package.json]
 {
   "slidev": {
     "defaults": {
@@ -73,7 +81,7 @@ An error message will be shown when the an incompatible version is used.
 
 By default, Slidev assumes themes support both light mode and dark mode. If you only want your theme to be presented in a specific color schema, you need to specify it explicitly in the `package.json`:
 
-```json
+```json [package.json]
 {
   "slidev": {
     "colorSchema": "light" // or "dark" or "both"
@@ -85,7 +93,7 @@ By default, Slidev assumes themes support both light mode and dark mode. If you 
 
 You can preview your theme when developing by using a demo slide deck. To do so, create a `./slides.md` file with the following headmatter:
 
-```md
+```md [slides.md]
 ---
 theme: ./  # Use the theme in the current directory
 ---

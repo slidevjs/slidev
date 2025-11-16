@@ -6,7 +6,7 @@
 
 By default, Slidev enables the following presets out-of-box:
 
-- [@unocss/preset-uno](https://unocss.dev/presets/uno) - Tailwind / Windi CSS compatible utilities
+- [@unocss/preset-wind3](https://unocss.dev/presets/wind3) - Tailwind / Windi CSS compatible utilities
 - [@unocss/preset-attributify](https://unocss.dev/presets/attributify) - Attributify mode
 - [@unocss/preset-icons](https://unocss.dev/presets/icons) - Use any icons as class
 - [@unocss/preset-web-fonts](https://unocss.dev/presets/web-fonts) - Use web fonts at ease
@@ -31,7 +31,7 @@ You can therefore style your content the way you want. For example:
 
 You can create `uno.config.ts` under the root of your project to extend the builtin configurations
 
-```ts twoslash
+```ts twoslash [uno.config.ts]
 import { defineConfig } from 'unocss'
 
 export default defineConfig({

@@ -1,6 +1,7 @@
 import { defineExtension } from 'reactive-vscode'
 import { useCommands } from './commands'
 import { useLanguageClient } from './languageClient'
+import { useLmTools } from './lmTools'
 import { activeEntry, useProjects } from './projects'
 import { useAnnotations } from './views/annotations'
 import { useFoldings } from './views/foldings'
@@ -25,6 +26,9 @@ const { activate, deactivate } = defineExtension(() => {
 
   // language server
   const labsInfo = useLanguageClient()
+
+  // language model tools
+  useLmTools()
 
   logger.info('Slidev activated.')
   logger.info(`Entry: ${activeEntry.value}`)

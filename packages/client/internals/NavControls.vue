@@ -178,11 +178,9 @@ if (__SLIDEV_FEATURE_RECORD__)
 
       <VerticalDivider v-if="!isEmbedded" />
 
-      <div class="h-40px flex" p="l-1 t-0.5 r-2" text="sm leading-2">
-        <div class="my-auto">
-          {{ currentSlideNo }}
-          <span class="opacity-50">/ {{ total }}</span>
-        </div>
+      <div class="px2 my-auto">
+        <span class="text-lg">{{ currentSlideNo }}</span>
+        <span class="opacity-50 text-sm"> / {{ total }}</span>
       </div>
 
       <CustomNavControls />

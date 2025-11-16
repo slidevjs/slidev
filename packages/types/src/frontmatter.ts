@@ -53,6 +53,15 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   codeCopy?: boolean
   /**
+   * Show copy button in magic move code blocks
+   *
+   * `'final'` for only show copy button on the final step
+   * `'always'` or `true` for show copy button on all steps
+   *
+   * @default true
+   */
+  magicMoveCopy?: boolean | 'final' | 'always'
+  /**
    * The author of the slides
    */
   author?: string
@@ -100,7 +109,7 @@ export interface HeadmatterConfig extends TransitionOptions {
    *
    * @default '16/9'
    */
-  aspectRatio?: number
+  aspectRatio?: number | string
   /**
    * The actual width for slides canvas.
    * unit in px.
@@ -255,6 +264,53 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default []
    */
   monacoRunAdditionalDeps?: string[]
+  /**
+   * Whether to run monaco runnable code in strict mode
+   *
+   * @default true
+   */
+  monacoRunUseStrict?: boolean
+  /**
+   * Seo meta tags settings
+   *
+   * @default {}
+   */
+  seoMeta?: SeoMeta
+  /**
+   * Auto replace words with `<ruby>` tags in notes
+   *
+   * @default {}
+   *
+   * @example
+   * ```yaml
+   * notesAutoRuby:
+   *   大丈夫: だいじょうぶ
+   * ```
+   */
+  notesAutoRuby?: Record<string, string>
+  /**
+   * The expected duration of the slide
+   *
+   * @example
+   * ```yaml
+   * duration: 35min
+   * ```
+   *
+   * @default '30min'
+   */
+  duration?: string | number
+  /**
+   * Timer mode
+   *
+   * @default 'stopwatch'
+   */
+  timer?: 'stopwatch' | 'countdown'
+  /**
+   * Duration for shiki magic move transitions in milliseconds
+   *
+   * @default 800
+   */
+  magicMoveDuration?: number
 }
 
 export interface Frontmatter extends TransitionOptions {
@@ -333,6 +389,21 @@ export interface Frontmatter extends TransitionOptions {
    * See https://sli.dev/guide/syntax.html#importing-slides
    */
   src?: string
+  // /**
+  //  * Set time split for the end of the slide
+  //  *
+  //  * Accepts:
+  //  * - 10:05
+  //  * - 10m5s
+  //  * - +10s (relative to the previous point)
+  //  */
+  // timesplit?: string
+  // /**
+  //  * Set title for the time split
+  //  *
+  //  * Default to slide title
+  //  */
+  // timesplitTitle?: string
 }
 
 export interface DrawingsOptions {
@@ -453,4 +524,20 @@ export interface TransitionGroupProps {
   leaveFromClass?: string
   leaveActiveClass?: string
   leaveToClass?: string
+}
+
+/**
+ * The following type should map to unhead MataFlat type
+ */
+export interface SeoMeta {
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  ogUrl?: string
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
+  twitterSite?: string
+  twitterTitle?: string
+  twitterDescription?: string
+  twitterImage?: string
+  twitterUrl?: string
 }

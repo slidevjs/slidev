@@ -4,7 +4,7 @@ import { toKeyedTokens } from 'shiki-magic-move/core'
 import { reCodeBlock } from './code-wrapper'
 import { normalizeRangeStr } from './utils'
 
-const reMagicMoveBlock = /^````(?:md|markdown) magic-move *(\{[^}]*\})?([^ \n]*)\n([\s\S]+?)^````$/gm
+const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *\[([^\]]*)\])?(?: *(\{[^}]*\}))? *([^ \n]*)\n([\s\S]+?)^````$/gm
 
 function parseLineNumbersOption(options: string) {
   return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
@@ -19,7 +19,7 @@ export async function transformMagicMove(ctx: MarkdownTransformContext) {
 
   ctx.s.replace(
     reMagicMoveBlock,
-    (full, options = '{}', _attrs = '', body: string, start: number) => {
+    (full, title = '', options = '{}', _attrs = '', body: string, start: number) => {
       const end = start + full.length
       replacements.push([start, end, worker()])
       return ''
@@ -31,11 +31,11 @@ export async function transformMagicMove(ctx: MarkdownTransformContext) {
 
         const defaultLineNumbers = parseLineNumbersOption(options) ?? ctx.options.data.config.lineNumbers
 
-        const ranges = matches.map(i => normalizeRangeStr(i[2]))
+        const ranges = matches.map(i => normalizeRangeStr(i[3]))
         const steps = await Promise.all(matches.map(async (i) => {
           const lang = i[1]
-          const lineNumbers = parseLineNumbersOption(i[3]) ?? defaultLineNumbers
-          const code = i[5].trimEnd()
+          const lineNumbers = parseLineNumbersOption(i[4]) ?? defaultLineNumbers
+          const code = i[6].trimEnd()
           const options = {
             ...ctx.options.utils.shikiOptions,
             lang,
@@ -51,7 +51,7 @@ export async function transformMagicMove(ctx: MarkdownTransformContext) {
           }
         }))
         const compressed = lz.compressToBase64(JSON.stringify(steps))
-        return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :step-ranges='${JSON.stringify(ranges)}' />`
+        return `<ShikiMagicMove v-bind="${options}" steps-lz="${compressed}" :title='${JSON.stringify(title)}' :step-ranges='${JSON.stringify(ranges)}' />`
       }
     },
   )
