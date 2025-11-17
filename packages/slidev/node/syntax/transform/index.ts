@@ -4,6 +4,7 @@ import { transformCodeWrapper } from './code-wrapper'
 import { transformPageCSS } from './in-page-css'
 import { transformKaTexWrapper } from './katex-wrapper'
 import { transformMagicMove } from './magic-move'
+import { transformHtmlListIndent } from './html-list-indent'
 import { transformMermaid } from './mermaid'
 import { transformMonaco } from './monaco'
 import { transformPlantUml } from './plant-uml'
@@ -14,6 +15,9 @@ export async function getMarkdownTransformers(options: ResolvedSlidevOptions): P
   const extras = await setupTransformers(options.roots)
   return [
     ...extras.pre,
+
+    // Ensure list items inside raw HTML blocks keep indentation
+    transformHtmlListIndent,
 
     transformSnippet,
     options.data.config.highlighter === 'shiki' && transformMagicMove,
