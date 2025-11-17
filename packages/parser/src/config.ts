@@ -14,6 +14,7 @@ export function getDefaultConfig(): SlidevConfig {
     monacoTypesAdditionalPackages: [],
     monacoTypesIgnorePackages: [],
     monacoRunAdditionalDeps: [],
+    monacoRunUseStrict: true,
     download: false,
     export: {} as ResolvedExportOptions,
     info: false,
@@ -49,6 +50,7 @@ export function getDefaultConfig(): SlidevConfig {
     notesAutoRuby: {},
     duration: '30min',
     timer: 'stopwatch',
+    magicMoveDuration: 800,
   }
 }
 

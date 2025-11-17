@@ -505,6 +505,12 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "monacoRunUseStrict": {
+          "type": "boolean",
+          "description": "Whether to run monaco runnable code in strict mode",
+          "markdownDescription": "Whether to run monaco runnable code in strict mode",
+          "default": true
+        },
         "seoMeta": {
           "$ref": "#/definitions/SeoMeta",
           "description": "Seo meta tags settings",
@@ -538,6 +544,12 @@
           "description": "Timer mode",
           "markdownDescription": "Timer mode",
           "default": "stopwatch"
+        },
+        "magicMoveDuration": {
+          "type": "number",
+          "description": "Duration for shiki magic move transitions in milliseconds",
+          "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
+          "default": 800
         },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",

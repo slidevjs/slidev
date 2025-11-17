@@ -265,6 +265,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   monacoRunAdditionalDeps?: string[]
   /**
+   * Whether to run monaco runnable code in strict mode
+   *
+   * @default true
+   */
+  monacoRunUseStrict?: boolean
+  /**
    * Seo meta tags settings
    *
    * @default {}
@@ -299,6 +305,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 'stopwatch'
    */
   timer?: 'stopwatch' | 'countdown'
+  /**
+   * Duration for shiki magic move transitions in milliseconds
+   *
+   * @default 800
+   */
+  magicMoveDuration?: number
 }
 
 export interface Frontmatter extends TransitionOptions {
