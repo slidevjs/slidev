@@ -7,7 +7,7 @@ import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { toRelativePath } from '../utils/toRelativePath'
 
 /**
- * No projects has dependency files. Then it would be weired to show a collapse button.
+ * No projects has dependency files. Then it would be weird to show a collapse button.
  */
 const nothingToCollapse = computed(() => [...projects.values()]
   .every(project => Object.keys(project.data.markdownFiles).length <= 1))
