@@ -64,7 +64,7 @@ export interface ResolvedSlidevUtils {
   define: Record<string, string>
   iconsResolvePath: string[]
   isMonacoTypesIgnored: (pkg: string) => boolean
-  getLayouts: () => Record<string, string>
+  getLayouts: () => Promise<Record<string, string>>
 }
 
 export interface SlidevServerOptions {

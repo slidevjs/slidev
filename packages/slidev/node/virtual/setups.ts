@@ -1,18 +1,11 @@
 import type { VirtualModuleTemplate } from './types'
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
-import { toAtFS } from '../resolver'
+import { resolveSourceFiles, toAtFS } from '../resolver'
 
 function createSetupTemplate(name: string): VirtualModuleTemplate {
   return {
     id: `/@slidev/setups/${name}`,
     getContent({ roots }) {
-      const setups = roots
-        .flatMap((i) => {
-          const path = join(i, 'setup', name)
-          return ['.ts', '.mts', '.js', '.mjs'].map(ext => path + ext)
-        })
-        .filter(i => existsSync(i))
+      const setups = resolveSourceFiles(roots, `setup/${name}`)
 
       const imports: string[] = []
 
