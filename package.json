@@ -37,7 +37,6 @@
     "@slidev/types": "workspace:*",
     "@types/cli-progress": "catalog:types",
     "@types/connect": "catalog:types",
-    "@types/debug": "catalog:types",
     "@types/file-saver": "catalog:types",
     "@types/js-yaml": "catalog:types",
     "@types/katex": "catalog:types",

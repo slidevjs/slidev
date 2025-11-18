@@ -1,8 +1,8 @@
 import type { ResolvedSlidevOptions, ResolvedSlidevUtils, SlidevData, SlidevEntryOptions } from '@slidev/types'
 import path from 'node:path'
 import { objectMap, uniq } from '@antfu/utils'
-import Debug from 'debug'
 import fg from 'fast-glob'
+import { createDebug } from 'obug'
 import pm from 'picomatch'
 import { resolveAddons } from './integrations/addons'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
@@ -12,7 +12,7 @@ import setupIndexHtml from './setups/indexHtml'
 import setupKatex from './setups/katex'
 import setupShiki from './setups/shiki'
 
-const debug = Debug('slidev:options')
+const debug = createDebug('slidev:options')
 
 export async function resolveOptions(
   entryOptions: SlidevEntryOptions,
