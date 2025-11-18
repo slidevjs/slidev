@@ -89,6 +89,7 @@ export function transformHtmlListIndent(ctx: MarkdownTransformContext) {
   let fenceChar: '`' | '~' | null = null
   let fenceSize = 0
   let changed = false
+  let hasVueComponentAfterLastHtml = false
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
@@ -117,6 +118,12 @@ export function transformHtmlListIndent(ctx: MarkdownTransformContext) {
     const closeMatch = closeTagRE.exec(trimmed)
     if (closeMatch) {
       const tagName = closeMatch[1].toLowerCase()
+      // Check if this is a Vue component closing tag
+      const isVueComponent = tagName.startsWith('v-') || tagName === 'template'
+      if (isVueComponent) {
+        hasVueComponentAfterLastHtml = false
+        continue
+      }
       for (let idx = stack.length - 1; idx >= 0; idx--) {
         if (stack[idx].tag === tagName) {
           stack.splice(idx)
@@ -131,10 +138,18 @@ export function transformHtmlListIndent(ctx: MarkdownTransformContext) {
 
     const openMatch = openTagRE.exec(trimmed)
     if (openMatch) {
-      const tagName = openMatch[1].toLowerCase()
-      if (!voidTags.has(tagName) && !trimmed.endsWith('/>')) {
+      const tagName = openMatch[1]
+      const tagNameLower = tagName.toLowerCase()
+      // Skip Vue components (v-*), PascalCase components, and template tags
+      const isPascalCase = tagName.length > 1 && tagName[0] >= 'A' && tagName[0] <= 'Z' && tagName[1] >= 'a' && tagName[1] <= 'z'
+      if (tagNameLower.startsWith('v-') || isPascalCase || tagNameLower === 'template') {
+        hasVueComponentAfterLastHtml = true
+        continue
+      }
+      if (!voidTags.has(tagNameLower) && !trimmed.endsWith('/>')) {
+        hasVueComponentAfterLastHtml = false
         stack.push({
-          tag: tagName,
+          tag: tagNameLower,
           indent: countIndent(line),
         })
       }
@@ -145,6 +160,10 @@ export function transformHtmlListIndent(ctx: MarkdownTransformContext) {
       continue
 
     if (stack.some(item => rawContentTags.has(item.tag)))
+      continue
+
+    // Skip lists if there's a Vue component after the last HTML tag
+    if (hasVueComponentAfterLastHtml)
       continue
 
     const listMatch = listMarkerRE.exec(line)
