@@ -44,6 +44,7 @@
     "@vueuse/core": "catalog:frontend",
     "@vueuse/math": "catalog:frontend",
     "@vueuse/motion": "catalog:frontend",
+    "ansis": "catalog:prod",
     "drauu": "catalog:frontend",
     "file-saver": "catalog:frontend",
     "floating-vue": "catalog:frontend",

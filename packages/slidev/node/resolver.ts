@@ -1,5 +1,6 @@
 import type { RootsInfo } from '@slidev/types'
-import * as fs from 'node:fs'
+import { existsSync } from 'node:fs'
+import { copyFile, readFile } from 'node:fs/promises'
 import { dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -71,20 +72,20 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
   if (localPath)
     return dirname(localPath)
   const yarnPath = join(globalDirs.yarn.packages, name)
-  if (fs.existsSync(`${yarnPath}/package.json`))
+  if (existsSync(`${yarnPath}/package.json`))
     return yarnPath
   const npmPath = join(globalDirs.npm.packages, name)
-  if (fs.existsSync(`${npmPath}/package.json`))
+  if (existsSync(`${npmPath}/package.json`))
     return npmPath
   if (ensure)
     throw new Error(`Failed to resolve global package "${name}"`)
 }
 
 export async function resolveEntry(entryRaw: string) {
-  if (!fs.existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[/\\]/.test(entryRaw))
+  if (!existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[/\\]/.test(entryRaw))
     entryRaw += '.md'
   const entry = resolve(entryRaw)
-  if (!fs.existsSync(entry)) {
+  if (!existsSync(entry)) {
     // Check if stdin is available for prompts (i.e., is a TTY)
     if (!process.stdin.isTTY) {
       console.error(`Entry file "${entry}" does not exist and cannot prompt for confirmation`)
@@ -97,7 +98,7 @@ export async function resolveEntry(entryRaw: string) {
       message: `Entry file ${yellow(`"${entry}"`)} does not exist, do you want to create it?`,
     })
     if (create)
-      fs.copyFileSync(resolve(cliRoot, 'template.md'), entry)
+      await copyFile(resolve(cliRoot, 'template.md'), entry)
     else
       process.exit(0)
   }
@@ -170,24 +171,20 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
   }
 }
 
-function getUserPkgJson(userRoot: string) {
+async function getUserPkgJson(userRoot: string) {
   const path = resolve(userRoot, 'package.json')
-  if (fs.existsSync(path))
-    return JSON.parse(fs.readFileSync(path, 'utf-8')) as Record<string, any>
+  if (existsSync(path))
+    return JSON.parse(await readFile(path, 'utf-8')) as Record<string, any>
   return {}
 }
 
 // npm: https://docs.npmjs.com/cli/v7/using-npm/workspaces#installing-workspaces
 // yarn: https://classic.yarnpkg.com/en/docs/workspaces/#toc-how-to-use-it
-function hasWorkspacePackageJSON(root: string): boolean {
+async function hasWorkspacePackageJSON(root: string): Promise<boolean> {
   const path = join(root, 'package.json')
-  try {
-    fs.accessSync(path, fs.constants.R_OK)
-  }
-  catch {
+  if (!existsSync(path))
     return false
-  }
-  const content = JSON.parse(fs.readFileSync(path, 'utf-8')) || {}
+  const content = JSON.parse(await readFile(path, 'utf-8')) || {}
   return !!content.workspaces
 }
 
@@ -207,19 +204,19 @@ function hasRootFile(root: string): boolean {
     // 'nx.json'
   ]
 
-  return ROOT_FILES.some(file => fs.existsSync(join(root, file)))
+  return ROOT_FILES.some(file => existsSync(join(root, file)))
 }
 
 /**
  * Search up for the nearest workspace root
  */
-function searchForWorkspaceRoot(
+async function searchForWorkspaceRoot(
   current: string,
   root = current,
-): string {
+): Promise<string> {
   if (hasRootFile(current))
     return current
-  if (hasWorkspacePackageJSON(current))
+  if (await hasWorkspacePackageJSON(current))
     return current
 
   const dir = dirname(current)
@@ -243,8 +240,8 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
       || (await import('is-installed-globally')).default
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)
-  const userPkgJson = getUserPkgJson(closestPkgRoot)
-  const userWorkspaceRoot = searchForWorkspaceRoot(closestPkgRoot)
+  const userPkgJson = await getUserPkgJson(closestPkgRoot)
+  const userWorkspaceRoot = await searchForWorkspaceRoot(closestPkgRoot)
   rootsInfo = {
     cliRoot,
     clientRoot,
@@ -253,4 +250,22 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
     userWorkspaceRoot,
   }
   return rootsInfo
+}
+
+export function resolveSourceFiles(
+  roots: string[],
+  subpath: string,
+  extensions = ['.mjs', '.js', '.mts', '.ts'], // The same order as https://vite.dev/config/shared-options#resolve-extensions
+) {
+  const results: string[] = []
+  for (const root of roots) {
+    for (const ext of extensions) {
+      const fullPath = join(root, subpath + ext)
+      if (existsSync(fullPath)) {
+        results.push(fullPath)
+        break
+      }
+    }
+  }
+  return results
 }

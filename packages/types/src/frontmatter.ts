@@ -484,7 +484,7 @@ export interface FontOptions {
   fallbacks?: boolean
 }
 
-export type BuiltinSlideTransition = 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade' | 'zoom' | 'none'
+export type BuiltinSlideTransition = 'fade' | 'fade-out' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'view-transition'
 
 export interface TransitionOptions {
   /**
@@ -497,6 +497,7 @@ export interface TransitionOptions {
    * - slide-right
    * - slide-up
    * - slide-down
+   * - view-transition
    *
    * See https://sli.dev/guide/animations.html#pages-transitions
    *

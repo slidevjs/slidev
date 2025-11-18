@@ -310,6 +310,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://i.imgur.com/AbTdfhg.png',
     datetime: '2025-06-05',
   },
+  {
+    title: 'Reverse Engineering Denuvo in Hogwarts Legacy',
+    author: {
+      name: 'Maurice Heumann',
+      link: 'https://momo5502.com',
+    },
+    at: 'Navaja Negra 2025',
+    slidesLink: 'https://momo5502.com/slides/denuvo',
+    sourceLink: 'https://github.com/momo5502/denuvo-slides',
+    cover: 'https://raw.githubusercontent.com/momo5502/denuvo-slides/refs/heads/master/images/preview.png',
+    datetime: '2025-10-03',
+  },
   // Add yours here!
   {
     title: 'Yours?',
