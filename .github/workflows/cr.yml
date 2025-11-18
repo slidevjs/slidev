@@ -20,6 +20,8 @@ jobs:
       - name: Build
         run: nr build
 
-      - run: nlx pkg-pr-new publish './packages/create-app' './packages/client' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
+      - name: Publish packages (skip on forks)
+        if: github.repository == 'slidevjs/slidev'
+        run: nlx pkg-pr-new publish './packages/create-app' './packages/client' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
