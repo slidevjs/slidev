@@ -79,7 +79,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
     .map(i => pm.makeRe(i))
 
   let _layouts_cache_time = 0
-  let _layouts_cache: Record<string, string> = {}
+  let _layouts_cache: Promise<Record<string, string>> | null = null
 
   return {
     ...await setupShiki(resolved.roots),
@@ -90,28 +90,27 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
     isMonacoTypesIgnored: pkg => monacoTypesIgnorePackagesMatches.some(i => i.test(pkg)),
     getLayouts: () => {
       const now = Date.now()
-      if (now - _layouts_cache_time < 2000)
+      if (_layouts_cache && now - _layouts_cache_time < 2000)
         return _layouts_cache
+      _layouts_cache_time = now
+      return _layouts_cache = worker()
 
-      const layouts: Record<string, string> = {}
-
-      for (const root of [resolved.clientRoot, ...resolved.roots]) {
-        const layoutPaths = fg.sync('layouts/**/*.{vue,ts}', {
-          cwd: root,
-          absolute: true,
-          suppressErrors: true,
-        })
-
-        for (const layoutPath of layoutPaths) {
+      async function worker() {
+        const layouts: Record<string, string> = {}
+        const layoutPaths = await Promise.all(
+          [resolved.clientRoot, ...resolved.roots]
+            .map(root => fg('layouts/**/*.{vue,js,ts}', {
+              cwd: root,
+              absolute: true,
+              suppressErrors: true,
+            })),
+        )
+        for (const layoutPath of layoutPaths.flat(1)) {
           const layoutName = path.basename(layoutPath).replace(/\.\w+$/, '')
           layouts[layoutName] = layoutPath
         }
+        return layouts
       }
-
-      _layouts_cache_time = now
-      _layouts_cache = layouts
-
-      return layouts
     },
   }
 }
