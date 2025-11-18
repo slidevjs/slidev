@@ -2,6 +2,7 @@ import type { MonacoSetupReturn } from '@slidev/types'
 import configs from '#slidev/configs'
 import setups from '#slidev/setups/monaco'
 import { createSingletonPromise } from '@antfu/utils'
+import { shikiToMonaco } from '@shikijs/monaco'
 import { setupTypeAcquisition } from '@typescript/ata'
 import * as monaco from 'monaco-editor'
 
@@ -83,14 +84,16 @@ const setup = createSingletonPromise(async () => {
       })
     : () => { }
 
+  const { getEagerHighlighter, languageNames, themeOption } = await (await import('./shiki')).default()
+
   monaco.languages.register({ id: 'vue' })
   monaco.languages.register({ id: 'html' })
   monaco.languages.register({ id: 'css' })
   monaco.languages.register({ id: 'typescript' })
   monaco.languages.register({ id: 'javascript' })
-
-  const { shiki, languages, themes, shikiToMonaco } = await import('#slidev/shiki')
-  const highlighter = await shiki
+  for (const lang of languageNames) {
+    monaco.languages.register({ id: lang })
+  }
 
   const editorOptions: MonacoSetupReturn['editorOptions'] & object = {}
   for (const setup of setups) {
@@ -111,20 +114,17 @@ const setup = createSingletonPromise(async () => {
   })
 
   // Use Shiki to highlight Monaco
+  const highlighter = await getEagerHighlighter()
   shikiToMonaco(highlighter, monaco)
-  if (typeof themes === 'string') {
-    monaco.editor.setTheme(themes)
+  if (typeof themeOption === 'string') {
+    monaco.editor.setTheme(themeOption)
   }
   else {
     watchEffect(() => {
       monaco.editor.setTheme(isDark.value
-        ? themes.dark || 'vitesse-dark'
-        : themes.light || 'vitesse-light')
+        ? themeOption.dark || 'vitesse-dark'
+        : themeOption.light || 'vitesse-light')
     })
-  }
-  // Register all languages, otherwise Monaco will not highlight them
-  for (const lang of languages) {
-    monaco.languages.register({ id: lang })
   }
 
   return {
