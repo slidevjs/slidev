@@ -99,7 +99,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
         const layouts: Record<string, string> = {}
         const layoutPaths = await Promise.all(
           [resolved.clientRoot, ...resolved.roots]
-            .map(root => fg('layouts/**/*.{vue,js,ts}', {
+            .map(root => fg('layouts/**/*.{vue,js,mjs,ts,mts}', {
               cwd: root,
               absolute: true,
               suppressErrors: true,
