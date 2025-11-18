@@ -1,7 +1,6 @@
 import type { MarkdownTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import setupTransformers from '../../setups/transformers'
 import { transformCodeWrapper } from './code-wrapper'
-import { transformHtmlListIndent } from './html-list-indent'
 import { transformPageCSS } from './in-page-css'
 import { transformKaTexWrapper } from './katex-wrapper'
 import { transformMagicMove } from './magic-move'
@@ -16,7 +15,6 @@ export async function getMarkdownTransformers(options: ResolvedSlidevOptions): P
   return [
     ...extras.pre,
 
-    transformHtmlListIndent,
     transformSnippet,
     options.data.config.highlighter === 'shiki' && transformMagicMove,
 
