@@ -1,6 +1,7 @@
 import type { ResolvedSlidevOptions, SeoMeta } from '@slidev/types'
 import type { ResolvableLink } from 'unhead/types'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
@@ -16,7 +17,7 @@ function toAttrValue(unsafe: unknown) {
 }
 
 export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): Promise<string> {
-  let main = readFileSync(join(clientRoot, 'index.html'), 'utf-8')
+  let main = await readFile(join(clientRoot, 'index.html'), 'utf-8')
   let body = ''
 
   const inputs: any[] = []
@@ -26,7 +27,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     if (!existsSync(path))
       continue
 
-    const html = readFileSync(path, 'utf-8')
+    const html = await readFile(path, 'utf-8')
 
     if (root === userRoot && html.includes('<!DOCTYPE')) {
       console.error(yellow(`[Slidev] Ignored provided index.html with doctype declaration. (${white(path)})`))
@@ -98,11 +99,16 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     ],
   })
 
-  const baseInDev = mode === 'dev' && base ? base.slice(0, -1) : ''
+  const mainUrl = toAtFS(join(clientRoot, 'main.ts'))
+  if (mode === 'build') {
+    main = main.replace('__ENTRY__', mainUrl)
+  }
+  else {
+    const basePrefix = base ? base.slice(0, -1) : ''
+    main = main.replace('__ENTRY__', encodeURI(basePrefix + mainUrl))
+  }
 
-  main = main
-    .replace('__ENTRY__', baseInDev + encodeURI(toAtFS(join(clientRoot, 'main.ts'))))
-    .replace('<!-- body -->', body)
+  main = main.replace('<!-- body -->', body)
 
   const html = await transformHtmlTemplate(unhead, main)
   return html
