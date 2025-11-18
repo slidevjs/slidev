@@ -1,10 +1,10 @@
 import type { SourceSlideInfo } from '@slidev/types'
 import type { DecorationOptions } from 'vscode'
-import { clamp, ensurePrefix } from '@antfu/utils'
-import { computed, createSingletonComposable, useActiveTextEditor, watch } from 'reactive-vscode'
-import { Position, Range, ThemeColor, window } from 'vscode'
+import { clamp, debounce, ensurePrefix } from '@antfu/utils'
+import { computed, createSingletonComposable, onScopeDispose, useActiveTextEditor, watch } from 'reactive-vscode'
+import { Position, Range, ThemeColor, window, workspace } from 'vscode'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
-import { displayAnnotations } from '../configs'
+import { displayAnnotations, displayCodeBlockLineNumbers } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
@@ -30,6 +30,10 @@ const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCo
 const errorDecoration = window.createTextEditorDecorationType({
   isWholeLine: true,
 })
+const codeBlockLineNumberDecoration = window.createTextEditorDecorationType({
+  isWholeLine: false,
+  rangeBehavior: 1,
+})
 
 function mergeSlideNumbers(slides: { index: number }[]): string {
   const indexes = slides.map(s => s.index + 1)
@@ -43,13 +47,134 @@ function mergeSlideNumbers(slides: { index: number }[]): string {
   return merged.map(([start, end]) => start === end ? `#${start}` : `#${start}-${end}`).join(', ')
 }
 
+interface CodeBlockInfo {
+  startLine: number
+  endLine: number
+  indent: string
+}
+
+function findCodeBlocks(docText: string): CodeBlockInfo[] {
+  const lines = docText.split(/\r?\n/)
+  const codeBlocks: CodeBlockInfo[] = []
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const trimmedLine = line.trimStart()
+
+    if (trimmedLine.startsWith('```')) {
+      const indent = line.slice(0, line.length - trimmedLine.length)
+      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const backtickCount = codeBlockLevel.trim().length
+      const startLine = i
+
+      if (backtickCount !== 3) {
+        continue
+      }
+
+      let endLine = i
+      for (let j = i + 1; j < lines.length; j++) {
+        if (lines[j].startsWith(codeBlockLevel)) {
+          endLine = j
+          break
+        }
+      }
+
+      if (endLine > startLine) {
+        codeBlocks.push({
+          startLine: startLine + 1,
+          endLine,
+          indent,
+        })
+      }
+
+      i = endLine
+    }
+  }
+
+  return codeBlocks
+}
+
+function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEditor>['value'], docText: string) {
+  if (!editor || !displayCodeBlockLineNumbers.value)
+    return
+
+  const codeBlockLineNumbers: DecorationOptions[] = []
+  const codeBlocks = findCodeBlocks(docText)
+
+  for (const block of codeBlocks) {
+    const lineCount = block.endLine - block.startLine
+    const maxLineNumber = lineCount
+    const numberWidth = String(maxLineNumber).length
+
+    for (let i = 0; i < lineCount; i++) {
+      const lineNumber = i + 1
+      const currentLine = block.startLine + i
+
+      if (currentLine >= editor.document.lineCount)
+        continue
+
+      const paddedNumber = String(lineNumber).padStart(numberWidth, '⠀')
+
+      codeBlockLineNumbers.push({
+        range: new Range(
+          new Position(currentLine, 0),
+          new Position(currentLine, 0),
+        ),
+        renderOptions: {
+          before: {
+            contentText: `${paddedNumber}│`,
+            color: new ThemeColor('editorLineNumber.foreground'),
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            margin: '0 0.5em 0 0',
+          },
+        },
+      })
+    }
+  }
+
+  editor.setDecorations(codeBlockLineNumberDecoration, codeBlockLineNumbers)
+}
+
 export const useAnnotations = createSingletonComposable(() => {
   const editor = useActiveTextEditor()
   const doc = computed(() => editor.value?.document)
   const projectInfo = useProjectFromDoc(doc)
+
+  let debouncedUpdateLineNumbers: ((docText: string) => void) | null = null
+
   watch(
-    [editor, doc, projectInfo, activeProject, displayAnnotations],
-    ([editor, doc, projectInfo, activeProject, enabled]) => {
+    [editor, displayCodeBlockLineNumbers],
+    ([currentEditor, lineNumbersEnabled]) => {
+      debouncedUpdateLineNumbers = null
+
+      if (!currentEditor || !lineNumbersEnabled) {
+        if (currentEditor)
+          currentEditor.setDecorations(codeBlockLineNumberDecoration, [])
+        return
+      }
+
+      debouncedUpdateLineNumbers = debounce(150, (docText: string) => {
+        if (editor.value === currentEditor)
+          updateCodeBlockLineNumbers(currentEditor, docText)
+      })
+    },
+    { immediate: true },
+  )
+
+  const textChangeDisposable = workspace.onDidChangeTextDocument((e) => {
+    if (editor.value?.document === e.document && displayCodeBlockLineNumbers.value && debouncedUpdateLineNumbers) {
+      debouncedUpdateLineNumbers(e.document.getText())
+    }
+  })
+
+  onScopeDispose(() => {
+    textChangeDisposable.dispose()
+  })
+
+  watch(
+    [editor, doc, projectInfo, activeProject, displayAnnotations, displayCodeBlockLineNumbers],
+    ([editor, doc, projectInfo, activeProject, enabled, lineNumbersEnabled]) => {
       if (!editor || !doc || !projectInfo)
         return
 
@@ -58,6 +183,7 @@ export const useAnnotations = createSingletonComposable(() => {
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
         editor.setDecorations(errorDecoration, [])
+        editor.setDecorations(codeBlockLineNumberDecoration, [])
         return
       }
 
@@ -141,6 +267,13 @@ export const useAnnotations = createSingletonComposable(() => {
         })
       }
       editor.setDecorations(errorDecoration, errors)
+
+      if (lineNumbersEnabled) {
+        updateCodeBlockLineNumbers(editor, docText)
+      }
+      else {
+        editor.setDecorations(codeBlockLineNumberDecoration, [])
+      }
     },
     { immediate: true },
   )
