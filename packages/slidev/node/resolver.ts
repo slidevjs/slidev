@@ -68,6 +68,9 @@ export async function findPkgRoot(dep: string, parent: string, ensure = false) {
 export async function findGlobalPkgRoot(name: string, ensure: true): Promise<string>
 export async function findGlobalPkgRoot(name: string, ensure?: boolean): Promise<string | undefined>
 export async function findGlobalPkgRoot(name: string, ensure = false) {
+  const localPath = await findDepPkgJsonPath(name, cliRoot)
+  if (localPath)
+    return dirname(localPath)
   const yarnPath = join(globalDirs.yarn.packages, name)
   if (existsSync(`${yarnPath}/package.json`))
     return yarnPath
@@ -83,6 +86,11 @@ export async function resolveEntry(entryRaw: string) {
     entryRaw += '.md'
   const entry = resolve(entryRaw)
   if (!existsSync(entry)) {
+    // Check if stdin is available for prompts (i.e., is a TTY)
+    if (!process.stdin.isTTY) {
+      console.error(`Entry file "${entry}" does not exist and cannot prompt for confirmation`)
+      process.exit(1)
+    }
     const { create } = await prompts({
       name: 'create',
       type: 'confirm',
@@ -102,6 +110,12 @@ export async function resolveEntry(entryRaw: string) {
  */
 export function createResolver(type: 'theme' | 'addon', officials: Record<string, string>) {
   async function promptForInstallation(pkgName: string) {
+    // Check if stdin is available for prompts (i.e., is a TTY)
+    if (!process.stdin.isTTY) {
+      console.error(`The ${type} "${pkgName}" was not found and cannot prompt for installation`)
+      process.exit(1)
+    }
+
     const { confirm } = await prompts({
       name: 'confirm',
       initial: 'Y',
@@ -132,21 +146,16 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     if (name[0] === '.' || (name[0] !== '@' && name.includes('/')))
       return [name, resolve(dirname(importer), name)]
 
-    // definitely a package name
-    if (name.startsWith(`@slidev/${type}-`) || name.startsWith(`slidev-${type}-`)) {
-      const pkgRoot = await findPkgRoot(name, importer)
-      if (!pkgRoot)
-        await promptForInstallation(name)
-      return [name, await findPkgRoot(name, importer, true)]
-    }
-
     // search for local packages first
     {
-      const possiblePkgNames = [
-        `@slidev/${type}-${name}`,
-        `slidev-${type}-${name}`,
-        name,
-      ]
+      const possiblePkgNames = [name]
+
+      if (!name.includes('/') && !name.startsWith('@')) {
+        possiblePkgNames.push(
+          `@slidev/${type}-${name}`,
+          `slidev-${type}-${name}`,
+        )
+      }
 
       for (const pkgName of possiblePkgNames) {
         const pkgRoot = await findPkgRoot(pkgName, importer)

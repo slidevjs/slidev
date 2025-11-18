@@ -2,7 +2,7 @@
 depends:
   - guide/animations
 relates:
-  - Rough Notation: https://github.com/linkstrifer/react-rough-notation
+  - Rough Notation: https://github.com/slidevjs/rough-notation
 since: v0.48.0
 tags: [drawing, animation]
 description: |
@@ -11,7 +11,7 @@ description: |
 
 # Rough Markers
 
-Slidev integrates [Rough Notation](https://github.com/linkstrifer/react-rough-notation) to allow marking or highlighting elements in your slides.
+Slidev integrates [Rough Notation](https://github.com/slidevjs/rough-notation) to allow marking or highlighting elements in your slides.
 
 ---
 
