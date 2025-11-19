@@ -65,7 +65,7 @@ const style = computed<CSSProperties>(() => ({
   width: calc(100% / var(--slidev-slide-zoom-scale));
   height: calc(100% / var(--slidev-slide-zoom-scale));
   transform-origin: top left;
-  transform: scale(var(--slidev-slide-zoom-scale));
+  scale: var(--slidev-slide-zoom-scale);
   /* slide scale = container scale * zoom scale */
   --slidev-slide-scale: calc(var(--slidev-slide-container-scale) * var(--slidev-slide-zoom-scale));
 }
