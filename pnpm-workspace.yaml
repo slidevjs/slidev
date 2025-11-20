@@ -8,7 +8,6 @@ shamefullyHoist: true
 ignoreWorkspaceRootCheck: true
 strictPeerDependencies: false
 linkWorkspacePackages: true
-trustPolicy: no-downgrade
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
@@ -26,11 +25,12 @@ catalogs:
     ovsx: ^0.10.6
     playwright-chromium: ^1.56.1
     postcss-nested: ^7.0.2
+    prettier: ^3.6.2
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.0
     simple-git-hooks: ^2.13.1
     taze: ^19.9.0
-    tsdown: ^0.16.0
+    tsdown: ^0.16.6
     tsx: ^4.20.6
     typescript: ^5.9.3
     vitefu: ^1.1.1
@@ -61,7 +61,6 @@ catalogs:
     mermaid: ^11.12.1
     nanotar: ^0.2.0
     plantuml-encoder: ^1.4.0
-    prettier: ^3.6.2
     recordrtc: ^5.6.2
     shiki: ^3.15.0
     shiki-magic-move: ^1.2.1
@@ -152,11 +151,11 @@ catalogs:
     '@types/recordrtc': ^5.6.15
     '@types/resolve': ^1.20.6
     '@types/semver': ^7.7.1
-    '@types/vscode': ^1.89.0
     '@types/yargs': ^17.0.34
   vscode:
     '@volar/language-server': ~2.4.23
     '@volar/vscode': ^2.4.23
+    prettier: ^2.8.7
     reactive-vscode: ^0.4.1
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64

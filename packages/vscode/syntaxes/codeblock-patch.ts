@@ -1,9 +1,4 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
-
-const Markdown = JSON.parse(
-  readFileSync(join(import.meta.dirname, '../node_modules/tm-grammars/grammars/markdown.json'), 'utf8'),
-)
+import Markdown from 'tm-grammars/grammars/markdown.json' with { type: 'json' }
 
 const base = {
   $schema: 'https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json',

@@ -20,10 +20,13 @@ export default antfu({
     'vue/no-v-text-v-html-on-component',
     'vue/component-name-in-template-casing',
     'jsonc/sort-array-values',
+    'pnpm/yaml-no-duplicate-catalog-item',
   )
   .override('antfu/pnpm/package-json', {
     ignores: [
       'packages/create-theme/template/package.json',
       'packages/create-app/template/package.json',
+      // VSCE and OVSX do not support pnpm catalog when reading `@types/vscode`'s version.
+      'packages/vscode/package.json',
     ],
   })
