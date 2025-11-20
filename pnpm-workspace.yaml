@@ -155,7 +155,7 @@ catalogs:
   vscode:
     '@volar/language-server': ~2.4.23
     '@volar/vscode': ^2.4.23
-    prettier: ^3.6.2
+    prettier: ^2.8.7
     reactive-vscode: ^0.4.1
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64

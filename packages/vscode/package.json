@@ -18,7 +18,7 @@
   "main": "./dist/index.cjs",
   "icon": "dist/res/logo.png",
   "engines": {
-    "vscode": "^1.101.0"
+    "vscode": "^1.99.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -610,7 +610,7 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "catalog:types",
-    "@types/vscode": "^1.101.0",
+    "@types/vscode": "^1.99.0",
     "@volar/language-server": "catalog:vscode",
     "@volar/vscode": "catalog:vscode",
     "get-port-please": "catalog:prod",
