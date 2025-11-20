@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "52.8.0",
+  "version": "52.9.1",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -361,6 +361,12 @@
           "type": "boolean",
           "scope": "window",
           "description": "Display annotations for slides markdown files",
+          "default": true
+        },
+        "slidev.annotations-line-numbers": {
+          "type": "boolean",
+          "scope": "window",
+          "description": "Display line numbers in code blocks",
           "default": true
         },
         "slidev.preview-sync": {

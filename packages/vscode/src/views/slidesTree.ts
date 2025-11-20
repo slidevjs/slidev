@@ -65,9 +65,11 @@ function getTreeItem(node: SlidesTreeNode): TreeItem {
   const isFirstSlide = activeSlidevData.value?.entry.slides.findIndex(s => s === slide) === 0
   const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
   const icon = slide.imports ? 'link-external' : layoutIconMap[layoutName] ?? 'window'
+  const slideNo = getSlideNo(activeSlidevData.value, slide, getImportChain(node))
+  const label = slideNo != null ? `${slideNo}. ${slide.title || '(Untitled)'}` : slide.title || '(Untitled)'
   return {
-    label: slide.title,
-    description: slide.imports ? toRelativePath(slide.imports[0].filepath) : !slide.title ? '(Untitled)' : undefined,
+    label,
+    description: slide.imports ? toRelativePath(slide.imports[0].filepath) : undefined,
     iconPath: new ThemeIcon(icon),
     command: {
       command: 'slidev.goto',

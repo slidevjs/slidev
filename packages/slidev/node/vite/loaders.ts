@@ -320,10 +320,8 @@ export function createSlidesLoader(
               `export const frontmatterData = ${JSON.stringify(fontmatter)}`,
               // handle HMR, update frontmatter with update
               'if (import.meta.hot) {',
-              '  const firstLoad = !import.meta.hot.data.frontmatter',
               '  import.meta.hot.data.frontmatter ??= reactive(frontmatterData)',
               '  import.meta.hot.accept(({ frontmatterData: update }) => {',
-              '    if (firstLoad) return',
               '    const frontmatter = import.meta.hot.data.frontmatter',
               '    Object.keys(frontmatter).forEach(key => {',
               '      if (!(key in update)) delete frontmatter[key]',

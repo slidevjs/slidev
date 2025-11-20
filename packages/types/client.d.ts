@@ -40,16 +40,11 @@ declare module '#slidev/custom-nav-controls' {
   export default component
 }
 
-declare module '#slidev/shiki' {
-  import type { BundledLanguage, BundledTheme, CodeToHastOptions } from 'shiki'
-  import type { ShikiHighlighterCore } from 'shiki/core'
+declare module '#slidev/setups/shiki' {
+  import type { ShikiSetup } from '@slidev/types'
 
-  export { shikiToMonaco } from '@shikijs/monaco'
-
-  export const languages: BundledLanguage[]
-  export const themes: BundledTheme | Record<string, BundledTheme>
-  export const shiki: Promise<ShikiHighlighterCore>
-  export function getHighlighter(): Promise<(code: string, lang: string, options?: Partial<CodeToHastOptions>) => string>
+  const setups: ShikiSetup[]
+  export default setups
 }
 
 declare module '#slidev/setups/monaco' {
