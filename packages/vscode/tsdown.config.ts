@@ -1,4 +1,5 @@
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
+import { copyFile, mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -30,7 +31,7 @@ export default defineConfig({
       name: 'umd2esm',
       resolveId: {
         filter: {
-          id: /^(vscode-.*-languageservice|vscode-languageserver-types|jsonc-parser)$/,
+          id: /^(vscode-.*-languageservice|vscode-languageserver-types|jsonc-parser)/,
         },
         async handler(source, importer) {
           const pathUmdMay = await resolvePath(source, { url: importer })
@@ -46,12 +47,12 @@ export default defineConfig({
     const resDir = join(import.meta.dirname, './dist/res')
 
     if (!existsSync(resDir))
-      mkdirSync(resDir, { recursive: true })
+      await mkdir(resDir, { recursive: true })
 
     for (const file of ['logo-mono.svg', 'logo-mono-dark.svg', 'logo.png', 'logo.svg'])
-      copyFileSync(join(assetsDir, file), join(resDir, file))
+      await copyFile(join(assetsDir, file), join(resDir, file))
 
-    writeFileSync(
+    await writeFile(
       join(import.meta.dirname, 'syntaxes/codeblock-patch.json'),
       JSON.stringify(generateCodeblockPatch(), null, 2),
     )
