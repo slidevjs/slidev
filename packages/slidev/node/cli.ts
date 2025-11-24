@@ -33,22 +33,15 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'seoMeta',
 ]
 
-/**
- * Files that triggers a restart when added or removed
- */
-const FILES_CREATE_RESTART = [
-  'global-bottom.vue',
-  'global-top.vue',
-  'uno.config.js',
-  'uno.config.ts',
-  'unocss.config.js',
-  'unocss.config.ts',
-]
-
 const FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
+  'setup/transformers.ts',
+  'setup/unocss.ts',
+  'setup/vite-plugins.ts',
+  'uno.config.ts',
+  'unocss.config.ts',
 ]
 
 setupPreparser()
@@ -122,8 +115,10 @@ cli.command(
     let lastRemoteUrl: string | undefined
 
     let restartTimer: ReturnType<typeof setTimeout> | undefined
-    function restartServer() {
-      clearTimeout(restartTimer!)
+    async function restartServer() {
+      await server?.close()
+      server = undefined
+      clearTimeout(restartTimer)
       restartTimer = setTimeout(() => {
         console.log(yellow('\n  restarting...\n'))
         initServer()
@@ -131,8 +126,6 @@ cli.command(
     }
 
     async function initServer() {
-      if (server)
-        await server.close()
       const options = await resolveOptions({ entry, remote, theme, inspect, base }, 'dev')
       const host = remote !== undefined ? bind : 'localhost'
       port = userPort || await getPort({
@@ -210,6 +203,8 @@ cli.command(
         publicIp = await import('public-ip').then(r => r.publicIpv4())
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
+
+      return options
     }
 
     async function openTunnel(port: number) {
@@ -304,17 +299,19 @@ cli.command(
       })
     }
 
-    initServer()
+    const { roots } = await initServer()
     bindShortcut()
 
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
-    const watcher = watch([
-      ...FILES_CREATE_RESTART,
-      ...FILES_CHANGE_RESTART,
-    ], {
+    const watchGlobs = roots
+      .filter(i => !i.includes('node_modules'))
+      .flatMap(root => FILES_CHANGE_RESTART.map(i => path.join(root, i)))
+    const watcher = watch(watchGlobs, {
+      usePolling: true,
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
+      ignorePermissionErrors: true,
     })
     watcher.on('unlink', (file) => {
       console.log(yellow(`\n  file ${file} removed, restarting...\n`))
@@ -325,10 +322,6 @@ cli.command(
       restartServer()
     })
     watcher.on('change', (file) => {
-      if (typeof file !== 'string')
-        return
-      if (FILES_CREATE_RESTART.includes(file))
-        return
       console.log(yellow(`\n  file ${file} changed, restarting...\n`))
       restartServer()
     })

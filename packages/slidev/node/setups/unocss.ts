@@ -4,6 +4,8 @@ import type { Theme } from '@unocss/preset-uno'
 import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import GeneratedTokens from '@slidev/client/.generated/unocss-tokens.ts'
+import ClientUnoCssConfig from '@slidev/client/uno.config.ts'
 import { mergeConfigs, presetIcons } from 'unocss'
 import { loadSetups } from '../setups/load'
 import { loadModule } from '../utils'
@@ -11,22 +13,17 @@ import { loadModule } from '../utils'
 export default async function setupUnocss(
   { clientRoot, roots, data, utils }: ResolvedSlidevOptions,
 ) {
-  async function loadFileConfigs(root: string): Promise<UserConfig<Theme>[]> {
-    return (await Promise
-      .all([
-        resolve(root, 'uno.config.ts'),
-        resolve(root, 'unocss.config.ts'),
-      ]
-        .map(async (i) => {
-          if (!existsSync(i))
-            return undefined
-          const loaded = await loadModule(i) as UserConfig<Theme> | { default: UserConfig<Theme> }
-          return 'default' in loaded ? loaded.default : loaded
-        })))
-      .filter(x => !!x)
+  function loadFileConfigs(root: string) {
+    return [
+      resolve(root, 'uno.config.ts'),
+      resolve(root, 'unocss.config.ts'),
+    ].map(async (i) => {
+      if (!existsSync(i))
+        return undefined
+      const loaded = await loadModule(i) as UserConfig<Theme> | { default: UserConfig<Theme> }
+      return 'default' in loaded ? loaded.default : loaded
+    })
   }
-
-  const tokens: string[] = await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts'))
 
   const configs = [
     {
@@ -40,9 +37,9 @@ export default async function setupUnocss(
           },
         }),
       ],
-      safelist: tokens,
+      safelist: GeneratedTokens,
     },
-    ...await loadFileConfigs(clientRoot),
+    ClientUnoCssConfig,
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
   ].filter(Boolean) as UserConfig<Theme>[]
 
