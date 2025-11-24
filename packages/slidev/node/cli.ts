@@ -308,7 +308,6 @@ cli.command(
       .filter(i => !i.includes('node_modules'))
       .flatMap(root => FILES_CHANGE_RESTART.map(i => path.join(root, i)))
     const watcher = watch(watchGlobs, {
-      usePolling: true,
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
       ignorePermissionErrors: true,
