@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "version": "52.4.0",
+  "version": "52.9.1",
   "private": true,
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@10.21.0",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -37,7 +37,6 @@
     "@slidev/types": "workspace:*",
     "@types/cli-progress": "catalog:types",
     "@types/connect": "catalog:types",
-    "@types/debug": "catalog:types",
     "@types/file-saver": "catalog:types",
     "@types/js-yaml": "catalog:types",
     "@types/katex": "catalog:types",

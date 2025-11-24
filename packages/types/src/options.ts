@@ -1,6 +1,6 @@
 import type { MarkdownItShikiOptions } from '@shikijs/markdown-it'
 import type { KatexOptions } from 'katex'
-import type { HighlighterGeneric } from 'shiki'
+import type { CodeOptionsThemes, ShorthandsBundle } from 'shiki/core'
 import type { SlidevData } from './types'
 
 export interface RootsInfo {
@@ -57,14 +57,14 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
 }
 
 export interface ResolvedSlidevUtils {
-  shiki: HighlighterGeneric<any, any>
-  shikiOptions: MarkdownItShikiOptions
+  shiki: ShorthandsBundle<string, string>
+  shikiOptions: MarkdownItShikiOptions & CodeOptionsThemes
   katexOptions: KatexOptions | null
   indexHtml: string
   define: Record<string, string>
   iconsResolvePath: string[]
   isMonacoTypesIgnored: (pkg: string) => boolean
-  getLayouts: () => Record<string, string>
+  getLayouts: () => Promise<Record<string, string>>
 }
 
 export interface SlidevServerOptions {

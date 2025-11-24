@@ -1,11 +1,12 @@
 import type { MarkdownTransformContext } from '@slidev/types'
-import { getCodeBlocks } from './utils'
+import { getCodeBlocks, getCommentBlocks } from './utils'
 
 export function transformSlotSugar(
   ctx: MarkdownTransformContext,
 ) {
   const linesWithNewline = ctx.s.original.split(/(\r?\n)/g)
   const codeBlocks = getCodeBlocks(ctx.s.original)
+  const commentBlocks = getCommentBlocks(ctx.s.original)
 
   const lines: string[] = []
   for (let i = 0; i < linesWithNewline.length; i += 2) {
@@ -20,7 +21,7 @@ export function transformSlotSugar(
   lines.forEach((line) => {
     const start = offset
     offset += line.length
-    if (codeBlocks.isInsideCodeblocks(offset))
+    if (codeBlocks.isInsideCodeblocks(offset) || commentBlocks.isInsideCommentBlocks(offset))
       return
     const match = line.match(/^::\s*([\w.\-:]+)\s*::(\s*)$/)
     if (match) {

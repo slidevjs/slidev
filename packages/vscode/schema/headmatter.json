@@ -112,8 +112,8 @@
               "type": "null"
             }
           ],
-          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
-          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
         "title": {
           "type": "string",
@@ -505,6 +505,12 @@
           "markdownDescription": "Additional local modules to load as dependencies of monaco runnable",
           "default": []
         },
+        "monacoRunUseStrict": {
+          "type": "boolean",
+          "description": "Whether to run monaco runnable code in strict mode",
+          "markdownDescription": "Whether to run monaco runnable code in strict mode",
+          "default": true
+        },
         "seoMeta": {
           "$ref": "#/definitions/SeoMeta",
           "description": "Seo meta tags settings",
@@ -519,6 +525,31 @@
           "description": "Auto replace words with `<ruby>` tags in notes",
           "markdownDescription": "Auto replace words with `<ruby>` tags in notes",
           "default": {}
+        },
+        "duration": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "The expected duration of the slide",
+          "markdownDescription": "The expected duration of the slide",
+          "default": "30min"
+        },
+        "timer": {
+          "type": "string",
+          "enum": [
+            "stopwatch",
+            "countdown"
+          ],
+          "description": "Timer mode",
+          "markdownDescription": "Timer mode",
+          "default": "stopwatch"
+        },
+        "magicMoveDuration": {
+          "type": "number",
+          "description": "Duration for shiki magic move transitions in milliseconds",
+          "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
+          "default": 800
         },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
@@ -559,13 +590,13 @@
     "BuiltinSlideTransition": {
       "type": "string",
       "enum": [
+        "fade",
+        "fade-out",
         "slide-up",
         "slide-down",
         "slide-left",
         "slide-right",
-        "fade",
-        "zoom",
-        "none"
+        "view-transition"
       ]
     },
     "TransitionGroupProps": {
@@ -874,8 +905,8 @@
               "type": "null"
             }
           ],
-          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
-          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
+          "description": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html",
+          "markdownDescription": "Page transition, powered by Vue's `<TransitionGroup/>`\n\nBuilt-in transitions:\n- fade\n- fade-out\n- slide-left\n- slide-right\n- slide-up\n- slide-down\n- view-transition\n\nSee https://sli.dev/guide/animations.html#pages-transitions\n\nSee https://vuejs.org/guide/built-ins/transition.html"
         },
         "layout": {
           "anyOf": [

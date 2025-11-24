@@ -1,7 +1,8 @@
 import type { ResolvedSlidevOptions, UnoSetup } from '@slidev/types'
 import type { UserConfig } from '@unocss/core'
 import type { Theme } from '@unocss/preset-uno'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { mergeConfigs, presetIcons } from 'unocss'
 import { loadSetups } from '../setups/load'
@@ -34,7 +35,7 @@ export default async function setupUnocss(
           collectionsNodeResolvePath: utils.iconsResolvePath,
           collections: {
             slidev: {
-              logo: () => readFileSync(resolve(clientRoot, 'assets/logo.svg'), 'utf-8'),
+              logo: () => readFile(resolve(clientRoot, 'assets/logo.svg'), 'utf-8'),
             },
           },
         }),

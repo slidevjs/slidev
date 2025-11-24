@@ -66,6 +66,7 @@ export const HEADMATTER_FIELDS = [
   'monacoTypesSource',
   'monacoTypesAdditionalPackages',
   'monacoRunAdditionalDeps',
+  'monacoRunUseStrict',
   'remoteAssets',
   'selectable',
   'record',
@@ -85,4 +86,5 @@ export const HEADMATTER_FIELDS = [
   'wakeLock',
   'seoMeta',
   'notesAutoRuby',
+  'magicMoveDuration',
 ]

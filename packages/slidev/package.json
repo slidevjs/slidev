@@ -1,7 +1,7 @@
 {
   "name": "@slidev/cli",
   "type": "module",
-  "version": "52.4.0",
+  "version": "52.9.1",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -14,14 +14,14 @@
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "./*": "./*"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
   "bin": {
     "slidev": "./bin/slidev.mjs"
   },
@@ -68,7 +68,6 @@
     "chokidar": "catalog:prod",
     "cli-progress": "catalog:prod",
     "connect": "catalog:prod",
-    "debug": "catalog:prod",
     "fast-deep-equal": "catalog:prod",
     "fast-glob": "catalog:prod",
     "get-port-please": "catalog:prod",
@@ -86,6 +85,7 @@
     "markdown-it-mdc": "catalog:prod",
     "mlly": "catalog:prod",
     "monaco-editor": "catalog:monaco",
+    "obug": "catalog:prod",
     "open": "catalog:prod",
     "pdf-lib": "catalog:prod",
     "picomatch": "catalog:prod",

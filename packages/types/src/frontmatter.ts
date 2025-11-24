@@ -265,6 +265,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   monacoRunAdditionalDeps?: string[]
   /**
+   * Whether to run monaco runnable code in strict mode
+   *
+   * @default true
+   */
+  monacoRunUseStrict?: boolean
+  /**
    * Seo meta tags settings
    *
    * @default {}
@@ -282,6 +288,29 @@ export interface HeadmatterConfig extends TransitionOptions {
    * ```
    */
   notesAutoRuby?: Record<string, string>
+  /**
+   * The expected duration of the slide
+   *
+   * @example
+   * ```yaml
+   * duration: 35min
+   * ```
+   *
+   * @default '30min'
+   */
+  duration?: string | number
+  /**
+   * Timer mode
+   *
+   * @default 'stopwatch'
+   */
+  timer?: 'stopwatch' | 'countdown'
+  /**
+   * Duration for shiki magic move transitions in milliseconds
+   *
+   * @default 800
+   */
+  magicMoveDuration?: number
 }
 
 export interface Frontmatter extends TransitionOptions {
@@ -360,6 +389,21 @@ export interface Frontmatter extends TransitionOptions {
    * See https://sli.dev/guide/syntax.html#importing-slides
    */
   src?: string
+  // /**
+  //  * Set time split for the end of the slide
+  //  *
+  //  * Accepts:
+  //  * - 10:05
+  //  * - 10m5s
+  //  * - +10s (relative to the previous point)
+  //  */
+  // timesplit?: string
+  // /**
+  //  * Set title for the time split
+  //  *
+  //  * Default to slide title
+  //  */
+  // timesplitTitle?: string
 }
 
 export interface DrawingsOptions {
@@ -440,7 +484,7 @@ export interface FontOptions {
   fallbacks?: boolean
 }
 
-export type BuiltinSlideTransition = 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade' | 'zoom' | 'none'
+export type BuiltinSlideTransition = 'fade' | 'fade-out' | 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'view-transition'
 
 export interface TransitionOptions {
   /**
@@ -453,6 +497,7 @@ export interface TransitionOptions {
    * - slide-right
    * - slide-up
    * - slide-down
+   * - view-transition
    *
    * See https://sli.dev/guide/animations.html#pages-transitions
    *

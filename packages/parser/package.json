@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "52.4.0",
+  "version": "52.9.1",
   "description": "Markdown parser for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -12,26 +12,15 @@
   },
   "bugs": "https://github.com/slidevjs/slidev/issues",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs"
-    },
-    "./core": {
-      "types": "./dist/core.d.mts",
-      "import": "./dist/core.mjs"
-    },
-    "./fs": {
-      "types": "./dist/fs.d.mts",
-      "import": "./dist/fs.mjs"
-    },
-    "./utils": {
-      "types": "./dist/utils.d.mts",
-      "import": "./dist/utils.mjs"
-    }
+    ".": "./dist/index.mjs",
+    "./core": "./dist/core.mjs",
+    "./fs": "./dist/fs.mjs",
+    "./utils": "./dist/utils.mjs",
+    "./package.json": "./package.json"
   },
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.mts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "*.d.ts",
     "dist"
@@ -40,7 +29,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsdown src/index.ts src/core.ts src/fs.ts src/utils.ts",
+    "build": "tsdown",
     "dev": "nr build --watch",
     "prepublishOnly": "npm run build"
   },

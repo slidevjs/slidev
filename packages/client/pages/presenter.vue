@@ -6,11 +6,11 @@ import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
-import { useTimer } from '../composables/useTimer'
 import { useWakeLock } from '../composables/useWakeLock'
 import { slidesTitle } from '../env'
 import ClicksSlider from '../internals/ClicksSlider.vue'
 import ContextMenu from '../internals/ContextMenu.vue'
+import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
@@ -23,6 +23,8 @@ import SegmentControl from '../internals/SegmentControl.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
 import SlidesShow from '../internals/SlidesShow.vue'
 import SlideWrapper from '../internals/SlideWrapper.vue'
+import TimerBar from '../internals/TimerBar.vue'
+import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
 import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
@@ -44,15 +46,12 @@ const {
   nextRoute,
   slides,
   getPrimaryClicks,
-  total,
 } = useNav()
 const { isDrawing } = useDrawings()
 
 useHead({ title: `Presenter - ${slidesTitle}` })
 
 const notesEditing = ref(false)
-
-const { timer, isTimerActive, resetTimer, toggleTimer } = useTimer()
 
 const clicksCtxMap = computed(() => slides.value.map((route) => {
   const clicks = ref(0)
@@ -116,7 +115,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-main h-full slidev-presenter" pt-2px>
+  <div class="bg-main h-full slidev-presenter grid grid-rows-[max-content_1fr] of-hidden">
+    <div>
+      <CurrentProgressBar />
+      <TimerBar />
+    </div>
     <div class="grid-container" :class="`layout${presenterLayout}`">
       <div ref="main" class="relative grid-section main flex flex-col">
         <div flex="~ gap-4 items-center" border="b main" p1>
@@ -210,31 +213,9 @@ onMounted(() => {
       <div class="grid-section bottom flex">
         <NavControls :persist="true" class="transition" :class="inFocus ? '' : 'op25'" />
         <div flex-auto />
-        <div class="group flex items-center justify-center pl-4 select-none">
-          <div class="w-22px cursor-pointer">
-            <div class="i-carbon:time group-hover:hidden text-xl" />
-            <div class="group-not-hover:hidden flex flex-col items-center">
-              <div class="relative op-80 hover:op-100" @click="toggleTimer">
-                <div v-if="isTimerActive" class="i-carbon:pause text-lg" />
-                <div v-else class="i-carbon:play" />
-              </div>
-              <div class="op-80 hover:op-100" @click="resetTimer">
-                <div class="i-carbon:renew" />
-              </div>
-            </div>
-          </div>
-          <div class="text-2xl px-3 my-auto font-mono">
-            {{ timer }}
-          </div>
-        </div>
+        <TimerInlined />
       </div>
       <DrawingControls v-if="__SLIDEV_FEATURE_DRAWINGS__" />
-    </div>
-    <div class="progress-bar">
-      <div
-        class="progress h-3px bg-primary transition-all"
-        :style="{ width: `${(currentSlideNo - 1) / (total - 1) * 100 + 1}%` }"
-      />
     </div>
   </div>
   <Goto />
@@ -248,9 +229,7 @@ onMounted(() => {
 }
 
 .grid-container {
-  --uno: bg-gray/20;
-  height: 100%;
-  width: 100%;
+  --uno: bg-gray/20 flex-1 of-hidden;
   display: grid;
   gap: 1px 1px;
 }
@@ -305,14 +284,9 @@ onMounted(() => {
   }
 }
 
-.progress-bar {
-  --uno: fixed left-0 right-0 top-0;
-}
-
 .grid-section {
   --uno: bg-main;
 }
-
 .grid-section.top {
   grid-area: top;
 }

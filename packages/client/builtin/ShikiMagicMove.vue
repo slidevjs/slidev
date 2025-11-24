@@ -34,6 +34,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  duration: {
+    type: Number,
+    default: configs.magicMoveDuration,
+  },
 })
 
 const steps = JSON.parse(lz.decompressFromBase64(props.stepsLz)) as KeyedTokensInfo[]
@@ -42,6 +46,8 @@ const { isPrintMode } = useNav()
 const id = makeId()
 
 const stepIndex = ref(0)
+// Used to skip the animation on the first tick.
+const isFirstTick = ref(true)
 const container = ref<HTMLElement>()
 
 const showCopyButton = computed(() => {
@@ -89,6 +95,7 @@ onMounted(() => {
   const clickInfo = clicks.calculateSince(props.at, clickCounts - 1)
   clicks.register(id, clickInfo)
 
+  let cancelTick: () => void = () => { }
   watch(
     () => clicks.current,
     () => {
@@ -107,9 +114,24 @@ onMounted(() => {
         currentClickSum += current.length || 1
       }
 
-      nextTick(async () => {
-        stepIndex.value = step
+      // It seems ticks may not be executed in order. Cancel previous ones, because
+      // clicks.current is first 0 then immediately updated when refreshing the slide.
+      cancelTick()
+      let isCanceled = false
+      cancelTick = () => {
+        isCanceled = true
+      }
 
+      nextTick(async () => {
+        if (isCanceled) {
+          return
+        }
+        stepIndex.value = step
+        if (isFirstTick.value) {
+          nextTick(() => {
+            isFirstTick.value = false
+          })
+        }
         await sleep(0)
 
         const pre = container.value?.querySelector('.shiki') as HTMLElement
@@ -158,8 +180,10 @@ onMounted(() => {
       :animate="!isPrintMode"
       :options="{
         globalScale: scale * zoom,
-        // TODO: make this configurable later
-        duration: 800,
+        // Use duration 0 to skip animation instead of using the animate prop,
+        // because moving from non-animated to animated causes issues with
+        // new elements. Unfortunately, this causes a flash.
+        duration: isFirstTick ? 0 : $props.duration,
         stagger: 1,
       }"
     />
