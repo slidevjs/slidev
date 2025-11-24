@@ -1,7 +1,6 @@
 import type { Awaitable } from '@antfu/utils'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { deepMergeWithArray } from '@antfu/utils'
 import { loadModule } from '../utils'
 
 export async function loadSetups<F extends (...args: any) => any>(
@@ -21,12 +20,4 @@ export async function loadSetups<F extends (...args: any) => any>(
     }
     return tasks
   }))
-}
-
-export function mergeOptions<T, S extends Partial<T> = T>(
-  base: T,
-  options: S[],
-  merger: (base: T, options: S) => T = deepMergeWithArray as any,
-): T {
-  return options.reduce((acc, cur) => merger(acc, cur), base)
 }

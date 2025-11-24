@@ -42,6 +42,7 @@ const FILES_CHANGE_RESTART = [
   'setup/vite-plugins.ts',
   'uno.config.ts',
   'unocss.config.ts',
+  'vite.config.{js,ts,mjs,mts}',
 ]
 
 setupPreparser()
