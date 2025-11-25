@@ -18,7 +18,7 @@
   "main": "./dist/index.cjs",
   "icon": "dist/res/logo.png",
   "engines": {
-    "vscode": "^1.89.0"
+    "vscode": "^1.99.0"
   },
   "activationEvents": [
     "onStartupFinished"
@@ -601,7 +601,7 @@
     "publish": "tsx scripts/publish.ts",
     "pack": "vsce package --no-dependencies",
     "prepare": "tsx scripts/schema.ts",
-    "build": "tsdown --env.NODE_ENV production --treeshake",
+    "build": "tsdown --env.NODE_ENV production --treeshake --minify",
     "dev": "nr prepare && tsdown --watch ./src --watch ./language-server --env.NODE_ENV development",
     "vscode:prepublish": "nr build"
   },
@@ -610,13 +610,13 @@
     "@slidev/parser": "workspace:*",
     "@slidev/types": "workspace:*",
     "@types/node": "catalog:types",
-    "@types/vscode": "catalog:types",
+    "@types/vscode": "^1.99.0",
     "@volar/language-server": "catalog:vscode",
     "@volar/vscode": "catalog:vscode",
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
-    "prettier": "catalog:frontend",
+    "prettier": "catalog:vscode",
     "reactive-vscode": "catalog:vscode",
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",

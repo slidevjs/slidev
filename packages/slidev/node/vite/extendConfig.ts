@@ -11,7 +11,6 @@ const INCLUDE_GLOBAL = [
   '@typescript/ata',
   'file-saver',
   'lz-string',
-  'prettier',
   'recordrtc',
   'typescript',
   'yaml',
