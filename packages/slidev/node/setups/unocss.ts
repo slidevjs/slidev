@@ -11,22 +11,17 @@ import { loadModule } from '../utils'
 export default async function setupUnocss(
   { clientRoot, roots, data, utils }: ResolvedSlidevOptions,
 ) {
-  async function loadFileConfigs(root: string): Promise<UserConfig<Theme>[]> {
-    return (await Promise
-      .all([
-        resolve(root, 'uno.config.ts'),
-        resolve(root, 'unocss.config.ts'),
-      ]
-        .map(async (i) => {
-          if (!existsSync(i))
-            return undefined
-          const loaded = await loadModule(i) as UserConfig<Theme> | { default: UserConfig<Theme> }
-          return 'default' in loaded ? loaded.default : loaded
-        })))
-      .filter(x => !!x)
+  function loadFileConfigs(root: string) {
+    return [
+      resolve(root, 'uno.config.ts'),
+      resolve(root, 'unocss.config.ts'),
+    ].map(async (i) => {
+      if (!existsSync(i))
+        return undefined
+      const loaded = await loadModule(i) as UserConfig | { default: UserConfig }
+      return 'default' in loaded ? loaded.default : loaded
+    })
   }
-
-  const tokens: string[] = await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts'))
 
   const configs = [
     {
@@ -40,9 +35,9 @@ export default async function setupUnocss(
           },
         }),
       ],
-      safelist: tokens,
+      safelist: await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts')),
     },
-    ...await loadFileConfigs(clientRoot),
+    (await loadModule<{ default: UserConfig }>(resolve(clientRoot, 'uno.config.ts'))).default,
     ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
   ].filter(Boolean) as UserConfig<Theme>[]
 
