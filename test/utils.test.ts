@@ -1,6 +1,7 @@
-import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
+import type { ResolvedFontOptions, SlideInfo, SlideRoute } from '@slidev/types'
 import { relative, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
+import { getSlidePath } from '@slidev/client/logic/slides'
 import MarkdownIt from 'markdown-it'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
@@ -144,5 +145,29 @@ describe('utils', () => {
         bar: 5,6,7,8
       "
     `)
+  })
+
+  it('getSlidePath with base path', () => {
+    const originalBaseUrl = import.meta.env.BASE_URL
+
+    import.meta.env.BASE_URL = '/my_monorepo/my_prez/'
+
+    const mockRoute: SlideRoute = {
+      no: 2,
+      meta: {
+        slide: {
+          frontmatter: {},
+        },
+      },
+    }
+
+    expect(getSlidePath(mockRoute, false, false)).toBe('/my_monorepo/my_prez/2')
+    expect(getSlidePath(mockRoute, true, false)).toBe('/my_monorepo/my_prez/presenter/2')
+    expect(getSlidePath(mockRoute, false, true)).toBe('/my_monorepo/my_prez/export/2')
+
+    import.meta.env.BASE_URL = '/'
+    expect(getSlidePath(mockRoute, false, false)).toBe('/2')
+
+    import.meta.env.BASE_URL = originalBaseUrl
   })
 })
