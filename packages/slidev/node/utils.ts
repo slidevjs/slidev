@@ -1,6 +1,7 @@
 import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
 import type MarkdownIt from 'markdown-it'
-import type { Connect } from 'vite'
+import type { Connect, GeneralImportGlobOptions } from 'vite'
+import { relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
@@ -96,4 +97,20 @@ export function getBodyJson(req: Connect.IncomingMessage) {
       }
     })
   })
+}
+
+export function makeAbsoluteImportGlob(
+  userRoot: string,
+  globs: string[],
+  options: Partial<GeneralImportGlobOptions> = {},
+) {
+  // Vite's import.meta.glob only supports relative paths
+  const relativeGlobs = globs.map(glob => `./${relative(userRoot, glob)}`)
+  const opts: GeneralImportGlobOptions = {
+    eager: true,
+    exhaustive: true,
+    base: '/',
+    ...options,
+  }
+  return `import.meta.glob(${JSON.stringify(relativeGlobs)}, ${JSON.stringify(opts)})`
 }
