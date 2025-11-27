@@ -347,6 +347,10 @@ cli.command(
       type: 'boolean',
       describe: 'allow download as PDF',
     })
+    .option('without-notes', {
+      type: 'boolean',
+      describe: 'exclude speaker notes from the built output',
+    })
     .option('inspect', {
       default: false,
       type: 'boolean',
@@ -355,11 +359,11 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base }, 'build')
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes }, 'build')
 
       printInfo(options)
       await build(
