@@ -59,6 +59,7 @@ Options:
 - `--base` (`string`, default: `/`): base URL (see https://vitejs.dev/config/shared-options.html#base)
 - `--download` (`boolean`, default: `false`): allow the download of the slides as a PDF inside the SPA
 - `--theme`, `-t` (`string`): override theme
+- `--without-notes` (`boolean`, default: `false`): exclude speaker notes from the SPA
 
 ## `slidev export [...entry]` {#export}
 
