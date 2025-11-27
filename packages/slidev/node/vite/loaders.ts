@@ -22,8 +22,7 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const { data, mode, utils } = options
-  const withoutNotes = mode === 'build' && options.withoutNotes
+  const { data, mode, utils, withoutNotes } = options
 
   const notesMd = MarkdownIt({ html: true })
   notesMd.use(markdownItLink)
@@ -401,17 +400,9 @@ export function createSlidesLoader(
   }
 
   function withRenderedNote(data: SlideInfo): SlideInfo {
-    if (withoutNotes) {
-      const { note: _note, noteHTML: _noteHTML, ...rest } = data
-      return {
-        ...rest,
-        note: '',
-        noteHTML: '',
-      }
-    }
-
     return {
       ...data,
+      ...withoutNotes && { note: '' },
       noteHTML: renderNote(data?.note),
     }
   }
