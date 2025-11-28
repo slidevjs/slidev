@@ -22,7 +22,7 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const { data, mode, utils } = options
+  const { data, mode, utils, withoutNotes } = options
 
   const notesMd = MarkdownIt({ html: true })
   notesMd.use(markdownItLink)
@@ -363,6 +363,9 @@ export function createSlidesLoader(
   }
 
   function renderNote(text: string = '') {
+    if (withoutNotes)
+      return ''
+
     let clickCount = 0
     const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
 
@@ -399,6 +402,7 @@ export function createSlidesLoader(
   function withRenderedNote(data: SlideInfo): SlideInfo {
     return {
       ...data,
+      ...withoutNotes && { note: '' },
       noteHTML: renderNote(data?.note),
     }
   }
