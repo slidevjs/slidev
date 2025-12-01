@@ -3,6 +3,7 @@ import type MarkdownIt from 'markdown-it'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
 import { relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
 
@@ -105,7 +106,7 @@ export function makeAbsoluteImportGlob(
   options: Partial<GeneralImportGlobOptions> = {},
 ) {
   // Vite's import.meta.glob only supports relative paths
-  const relativeGlobs = globs.map(glob => `./${relative(userRoot, glob)}`)
+  const relativeGlobs = globs.map(glob => `./${slash(relative(userRoot, glob))}`)
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,

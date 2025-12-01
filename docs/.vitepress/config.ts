@@ -157,5 +157,9 @@ export default defineConfig({
       label: '简体中文',
       link: 'https://cn.sli.dev/',
     },
+    ja: {
+      label: '日本語',
+      link: 'https://ja.sli.dev/',
+    },
   },
 })
