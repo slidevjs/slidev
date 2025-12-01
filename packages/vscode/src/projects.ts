@@ -144,11 +144,16 @@ export async function addProject(entry: string) {
 
   scope.run(() => {
     // Handle changes
+    let pendingReload: Promise<LoadedSlidevData> | null = null
     useDisposable(workspace.onDidChangeTextDocument(async ({ document }) => {
       const path = slash(document.uri.fsPath)
       if (data.value?.watchFiles[path]) {
-        // FIXME: Data race
-        data.value = await loadProject(entry)
+        const thisReload = pendingReload = loadProject(entry)
+        const newData = await thisReload
+        if (pendingReload === thisReload) {
+          data.value = newData
+          pendingReload = null
+        }
       }
     }))
 

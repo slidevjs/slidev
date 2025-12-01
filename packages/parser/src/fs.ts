@@ -20,7 +20,12 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, sources: Record<string, string> | ((path: string) => Promise<string>) = {}, mode?: string): Promise<LoadedSlidevData> {
+export async function load(
+  userRoot: string,
+  filepath: string,
+  sources: Record<string, string> | ((path: string) => Promise<string>) = {},
+  mode?: string,
+): Promise<LoadedSlidevData> {
   const loadSource = typeof sources === 'function' ? sources : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
 
   const markdown = await loadSource(filepath)
