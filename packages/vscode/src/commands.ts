@@ -89,13 +89,13 @@ export function useCommands() {
     const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
     if (!focusedMarkdown.value || focusedSourceSlide.value == null)
       return
-    gotoSlide(focusedMarkdown.value!.filepath, focusedSourceSlide.value.index + 1)
+    gotoSlide(focusedMarkdown.value.filepath, focusedSourceSlide.value.index + 1)
   })
   useCommand('slidev.prev', () => {
     const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
     if (!focusedMarkdown.value || focusedSourceSlide.value == null)
       return
-    gotoSlide(focusedMarkdown.value!.filepath, focusedSourceSlide.value.index - 1)
+    gotoSlide(focusedMarkdown.value.filepath, focusedSourceSlide.value.index - 1)
   })
 
   useCommand('slidev.refresh-preview', () => {

@@ -140,17 +140,16 @@ export async function addProject(entry: string) {
     port: ref(null),
     detected: computed(() => getDetected(project)),
   }
-  projects.set(entry, project)
 
   scope.run(() => {
-    // Handle changes
+    // Handle changes. VSCode already debounces rapid changes itself.
     let pendingReload: Promise<LoadedSlidevData> | null = null
     useDisposable(workspace.onDidChangeTextDocument(async ({ document }) => {
       const path = slash(document.uri.fsPath)
       if (data.value?.watchFiles[path]) {
         const thisReload = pendingReload = loadProject(entry)
         const newData = await thisReload
-        if (pendingReload === thisReload) {
+        if (pendingReload === thisReload) { // still the latest
           data.value = newData
           pendingReload = null
         }
@@ -176,6 +175,9 @@ export async function addProject(entry: string) {
       projects.get(entry)?.server.value?.scope.stop()
     })
   })
+
+  projects.set(entry, project)
+  return project
 }
 
 export function removeProject(entry: string) {
