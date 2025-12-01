@@ -48,7 +48,7 @@ export function useEmbeddedControl() {
         )
       },
       {
-        throttle: 300,
+        throttle: 50,
         immediate: true,
       },
     )

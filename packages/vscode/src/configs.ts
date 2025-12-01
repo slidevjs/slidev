@@ -1,12 +1,12 @@
 import type { ConfigType } from 'reactive-vscode'
-import { defineConfigs, ref } from 'reactive-vscode'
+import { defineConfigs } from 'reactive-vscode'
 
 export const {
   'force-enabled': forceEnabled,
-  'port': configuredPortInitial,
+  'port': configuredPort,
   'annotations': displayAnnotations,
   'annotations-line-numbers': displayCodeBlockLineNumbers,
-  'preview-sync': previewSyncInitial,
+  'preview-sync': previewSync,
   include,
   exclude,
   'dev-command': devCommand,
@@ -20,6 +20,3 @@ export const {
   'exclude': String,
   'dev-command': String,
 })
-
-export const configuredPort = ref(configuredPortInitial)
-export const previewSync = ref(previewSyncInitial)

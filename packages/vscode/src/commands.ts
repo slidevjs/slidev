@@ -1,13 +1,13 @@
 import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
 import { useCommand } from 'reactive-vscode'
-import { Position, Range, Selection, TextEditorRevealType, Uri, window, workspace } from 'vscode'
+import { ConfigurationTarget, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
-import { useEditingSlideSource } from './composables/useEditingSlideSource'
-import { useFocusedSlideNo } from './composables/useFocusedSlideNo'
+import { useFocusedSlide } from './composables/useFocusedSlide'
 import { configuredPort, forceEnabled, include, previewSync } from './configs'
-import { activeEntry, activeProject, activeSlidevData, addProject, projects, rescanProjects } from './projects'
+import { activeEntry, activeProject, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
+import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
 
 export function useCommands() {
@@ -32,7 +32,7 @@ export function useCommands() {
     })
     if (selected) {
       for (const entry of selected)
-        await addProject(entry)
+        addProject(entry)
       if (workspace.workspaceFolders) {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
@@ -59,51 +59,24 @@ export function useCommands() {
     if (!entry)
       return
     const project = projects.get(entry)
-    const { stop } = useDevServer(project!)
-    stop()
+    project?.server.value?.scope.stop()
   })
 
-  async function gotoSlide(filepath: string, index: number, getNo?: () => number | null) {
-    const { markdown: currrentMarkdown, index: currentIndex } = useEditingSlideSource()
-    const sameFile = currrentMarkdown.value?.filepath === filepath
-    if (sameFile && currentIndex.value === index)
-      return
-
-    const slide = activeSlidevData.value?.markdownFiles[filepath]?.slides[index]
-    if (!slide)
-      return
-
-    const uri = Uri.file(filepath).with({
-      // Add a fragment to the URI will cause a flush. So we need to remove it if it's the same file.
-      fragment: sameFile ? undefined : `L${slide.contentStart + 1}`,
-    })
-    const editor = await window.showTextDocument(await workspace.openTextDocument(uri))
-
-    const cursorPos = new Position(slide.contentStart, 0)
-    editor.selection = new Selection(cursorPos, cursorPos)
-
-    const startPos = new Position(slide.start, 0)
-    const endPos = new Position(slide.end, 0)
-    const slideRange = new Range(startPos, endPos)
-    editor.revealRange(slideRange, TextEditorRevealType.AtTop)
-
-    const no = getNo?.()
-    if (no) {
-      const focusedSlideNo = useFocusedSlideNo()
-      focusedSlideNo.value = no
-    }
-  }
-
-  useCommand('slidev.goto', gotoSlide)
+  useCommand('slidev.goto', (filepath: string, index: number) => {
+    const { gotoSlide } = useFocusedSlide()
+    gotoSlide(filepath, index)
+  })
   useCommand('slidev.next', () => {
-    const { markdown, index } = useEditingSlideSource()
-    const focusedSlideNo = useFocusedSlideNo()
-    gotoSlide(markdown.value!.filepath, index.value + 1, () => focusedSlideNo.value + 1)
+    const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
+    if (!focusedMarkdown.value || focusedSourceSlide.value == null)
+      return
+    gotoSlide(focusedMarkdown.value!.filepath, focusedSourceSlide.value.index + 1)
   })
   useCommand('slidev.prev', () => {
-    const { markdown, index } = useEditingSlideSource()
-    const focusedSlideNo = useFocusedSlideNo()
-    gotoSlide(markdown.value!.filepath, index.value - 1, () => focusedSlideNo.value - 1)
+    const { focusedMarkdown, focusedSourceSlide, gotoSlide } = useFocusedSlide()
+    if (!focusedMarkdown.value || focusedSourceSlide.value == null)
+      return
+    gotoSlide(focusedMarkdown.value!.filepath, focusedSourceSlide.value.index - 1)
   })
 
   useCommand('slidev.refresh-preview', () => {
@@ -112,8 +85,12 @@ export function useCommands() {
   })
 
   useCommand('slidev.config-port', async () => {
+    if (!activeProject.value) {
+      window.showErrorMessage('No active project to configure port.')
+      return
+    }
     const port = await window.showInputBox({
-      prompt: 'Slidev Preview Port',
+      prompt: `Slidev Preview Port for ${getSlidesTitle(activeProject.value.data)}`,
       value: configuredPort.value.toString(),
       validateInput: (v) => {
         if (!v.match(/^\d+$/))
@@ -123,9 +100,9 @@ export function useCommands() {
         return null
       },
     })
-    if (!port)
-      return
-    configuredPort.value = +port
+    if (port && activeProject.value) {
+      activeProject.value.port.value = +port
+    }
   })
 
   useCommand('slidev.start-dev', async () => {
@@ -153,6 +130,6 @@ export function useCommands() {
   useCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
   useCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
 
-  useCommand('slidev.enable-preview-sync', () => (previewSync.value = true))
-  useCommand('slidev.disable-preview-sync', () => (previewSync.value = false))
+  useCommand('slidev.enable-preview-sync', () => (previewSync.update(true, ConfigurationTarget.Global)))
+  useCommand('slidev.disable-preview-sync', () => (previewSync.update(false, ConfigurationTarget.Global)))
 }

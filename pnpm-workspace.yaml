@@ -155,11 +155,13 @@ catalogs:
   vscode:
     '@volar/language-server': ~2.4.26
     '@volar/vscode': ^2.4.26
+    picomatch: ^4.0.3
     prettier: ^2.8.8
     reactive-vscode: ^0.4.1
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64
     volar-service-yaml: ^0.0.64
+    yaml-language-server: ^1.19.2
 onlyBuiltDependencies:
   - '@vscode/vsce-sign'
   - cypress

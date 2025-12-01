@@ -1,60 +1,48 @@
 import type { LoadedSlidevData } from '@slidev/parser/fs'
-import type { Uri } from 'vscode'
+import type { ComputedRef, EffectScope, Ref, ShallowRef } from 'reactive-vscode'
+import type { SlidevServer } from './composables/useDevServer'
+import type { DetectedServerState } from './composables/useServerDetector'
 import { existsSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
-import { slash } from '@antfu/utils'
+import { debounce, slash } from '@antfu/utils'
 import { load } from '@slidev/parser/fs'
-import { computed, markRaw, onScopeDispose, reactive, ref, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
-import { window, workspace } from 'vscode'
+import { isMatch } from 'picomatch'
+import { computed, effectScope, extensionContext, markRaw, onScopeDispose, ref, shallowReactive, shallowRef, useDisposable, useFsWatcher, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
+import { FileSystemError, Uri, window, workspace } from 'vscode'
+import { useServerDetector } from './composables/useServerDetector'
 import { exclude, forceEnabled, include } from './configs'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { logger } from './views/logger'
 
 export interface SlidevProject {
+  readonly scope: EffectScope
   readonly entry: string
   readonly userRoot: string
-  data: LoadedSlidevData
-  port: number | null
+  readonly data: LoadedSlidevData
+  readonly port: Ref<number | null>
+  readonly server: ShallowRef<SlidevServer | null>
+  readonly detected: ComputedRef<DetectedServerState | null>
 }
 
-export const projects = reactive(new Map<string, SlidevProject>())
+export const projects = shallowReactive(new Map<string, SlidevProject>())
 export const slidevFiles = computed(() => [...projects.values()].flatMap(p => Object.keys(p.data.markdownFiles)))
 export const activeEntry = ref<string | null>(null)
 export const activeProject = computed(() => activeEntry.value ? projects.get(activeEntry.value) : undefined)
-export const activeSlidevData = computed(() => activeProject.value?.data)
-export const activeUserRoot = computed(() => activeProject.value?.userRoot)
-
-async function addExistingProjects() {
-  const files = new Set<string>()
-  for (const glob of include.value) {
-    (await workspace.findFiles(glob, exclude.value))
-      .forEach(file => files.add(file.fsPath))
-  }
-  for (const file of files) {
-    const path = slash(file)
-    if (!projects.has(path))
-      (await addProjectEffect(path))()
-  }
-}
-
-export async function rescanProjects() {
-  await addExistingProjects()
-  for (const project of projects.values()) {
-    if (!existsSync(project.entry)) {
-      projects.delete(project.entry)
-      if (activeEntry.value === project.entry)
-        activeEntry.value = null
-    }
-  }
-  await autoSetActiveEntry()
-}
+export const activeData = computed(() => activeProject.value?.data)
 
 export function useProjects() {
-  async function init() {
-    await addExistingProjects()
-    await autoSetActiveEntry()
-  }
-  init()
+  const watcher = useFsWatcher(include, false, true, false)
+  watcher.onDidCreate(async (uri) => {
+    const path = slash(uri.fsPath)
+    if (!isMatch(path, exclude.value))
+      await addProject(path)
+  })
+  watcher.onDidDelete(async (uri) => {
+    removeProject(slash(uri.fsPath))
+  })
+
+  rescanProjects()
+  watch([include, exclude], debounce(200, rescanProjects))
 
   // In case all the projects are removed manually, and the user may not want to disable the extension.
   const everHadProjects = ref(false)
@@ -63,6 +51,34 @@ export function useProjects() {
       everHadProjects.value = true
   })
 
+  // Save active project to workspace state
+  watchEffect(() => {
+    if (activeEntry.value)
+      extensionContext.value!.workspaceState.update('slidev:activeProject', activeEntry.value)
+  })
+
+  // Auto set active project
+  watch(() => [...projects.keys(), activeEntry.value], () => {
+    if (!activeEntry.value) {
+      const previous = extensionContext.value!.workspaceState.get('slidev:activeProject', null)
+      if (previous && projects.has(previous)) {
+        activeEntry.value = previous
+        return
+      }
+      const firstKind = findShallowestPath(
+        [...projects.keys()].filter(path => basename(path) === 'slides.md'),
+      )
+      if (firstKind) {
+        activeEntry.value = firstKind
+        return
+      }
+      const secondKind = findShallowestPath(projects.keys())
+      if (secondKind) {
+        activeEntry.value = secondKind
+      }
+    }
+  }, { immediate: true })
+
   useVscodeContext('slidev:enabled', () => {
     const enabled = forceEnabled.value == null ? everHadProjects.value : forceEnabled.value
     logger.info(`Slidev ${enabled ? 'enabled' : 'disabled'}.`)
@@ -70,104 +86,127 @@ export function useProjects() {
   })
   useVscodeContext('slidev:hasActiveProject', () => !!activeEntry.value)
 
-  let pendingUpdate: { cancelled: boolean } | null = null
-
-  const fsWatcher = workspace.createFileSystemWatcher('**/*.md')
-  onScopeDispose(() => fsWatcher.dispose())
-
-  let throttleTimeout: NodeJS.Timeout | null = null
-  let scheduledRescan = false
-  async function onFsChange(uri: Uri) {
-    if (uri.toString().includes('node_modules'))
-      return
-    if (throttleTimeout) {
-      scheduledRescan = true
+  onScopeDispose(() => {
+    for (const project of projects.values()) {
+      project.scope.stop()
     }
-    else {
-      throttleTimeout = setTimeout(async () => {
-        if (scheduledRescan) {
-          scheduledRescan = false
-          await rescanProjects()
-        }
-        throttleTimeout = null
-      }, 500)
-      scheduledRescan = false
-      await rescanProjects()
+    projects.clear()
+  })
+}
+
+let scanningProjects = false
+export const scannedProjects = ref(false)
+export async function rescanProjects() {
+  if (scanningProjects)
+    return
+  scanningProjects = true
+  try {
+    const entries = new Set<string>()
+    for (const glob of include.value) {
+      (await workspace.findFiles(glob, exclude.value))
+        .forEach(file => entries.add(file.fsPath))
+    }
+    for (const entry of entries) {
+      await addProject(slash(entry))
+    }
+    for (const project of projects.values()) {
+      if (!existsSync(project.entry)) {
+        removeProject(project.entry)
+      }
     }
   }
-
-  fsWatcher.onDidChange(async (uri) => {
-    const path = slash(uri.fsPath)
-    logger.info(`File ${path} changed.`)
-    const startMs = Date.now()
-    if (pendingUpdate)
-      pendingUpdate.cancelled = true
-    const thisUpdate = pendingUpdate = { cancelled: false }
-    const effects: (() => void)[] = []
-    for (const project of projects.values()) {
-      if (!project.data.markdownFiles[path])
-        continue
-
-      if (existsSync(project.entry)) {
-        const newData = markRaw(await load(project.userRoot, project.entry))
-        effects.push(() => {
-          project.data = newData
-          logger.info(`Project ${project.entry} updated.`)
-        })
-      }
-
-      if (thisUpdate.cancelled)
-        return
-    }
-
-    effects.map(effect => effect())
-    logger.info(`All affected Slidev projects updated in ${Date.now() - startMs}ms.`)
-  })
-  fsWatcher.onDidCreate(onFsChange)
-  fsWatcher.onDidDelete(onFsChange)
-
-  watch(include, rescanProjects)
+  finally {
+    scanningProjects = false
+    scannedProjects.value = true
+  }
 }
 
 export async function addProject(entry: string) {
-  if (projects.has(entry)) {
-    window.showErrorMessage('Cannot add slides entry: This Markdown has already been a entry.')
+  if (projects.has(entry))
+    return projects.get(entry)!
+
+  const { getDetected } = useServerDetector()
+
+  const scope = effectScope(true)
+  const data = shallowRef<LoadedSlidevData>(await loadProject(entry))
+  const project: SlidevProject = {
+    scope,
+    entry,
+    userRoot: dirname(entry),
+    get data() {
+      return data.value
+    },
+    server: shallowRef(null),
+    port: ref(null),
+    detected: computed(() => getDetected(project)),
+  }
+  projects.set(entry, project)
+
+  scope.run(() => {
+    // Handle changes
+    useDisposable(workspace.onDidChangeTextDocument(async ({ document }) => {
+      const path = slash(document.uri.fsPath)
+      if (data.value?.watchFiles[path]) {
+        // FIXME: Data race
+        data.value = await loadProject(entry)
+      }
+    }))
+
+    useDisposable(workspace.onDidCloseTextDocument(async (document) => {
+      const path = slash(document.uri.fsPath)
+      if (path !== entry) {
+        return
+      }
+      try {
+        await workspace.fs.stat(document.uri)
+      }
+      catch (err) {
+        if (err instanceof FileSystemError && err.code === 'FileNotFound') {
+          removeProject(entry)
+        }
+      }
+    }))
+
+    onScopeDispose(() => {
+      projects.get(entry)?.server.value?.scope.stop()
+    })
+  })
+}
+
+export function removeProject(entry: string) {
+  const project = projects.get(entry)
+  if (!project)
+    return
+  if (activeEntry.value === entry)
+    activeEntry.value = null
+  project.scope.stop()
+  projects.delete(entry)
+}
+
+async function loadProject(entry: string) {
+  const userRoot = dirname(entry)
+  return markRaw(await load(userRoot, entry, async (path: string) => {
+    const document = workspace.textDocuments.find(d => slash(d.uri.fsPath) === path)
+    if (document) {
+      return document.getText()
+    }
+    const buffer = await workspace.fs.readFile(Uri.file(path))
+    return (new TextDecoder('utf-8')).decode(buffer)
+  }))
+}
+
+const ignoredEntries = new Set<string>()
+export async function askAddProject(entry: string, message: string) {
+  if (projects.has(entry) || ignoredEntries.has(entry))
+    return
+  if (!workspace.getWorkspaceFolder(Uri.file(entry))) {
     return
   }
-  (await addProjectEffect(entry))()
-  autoSetActiveEntry()
-}
-
-async function addProjectEffect(entry: string) {
-  const userRoot = dirname(entry)
-  const data = markRaw(await load(userRoot, entry))
-  return () => {
-    const existing = projects.get(entry)
-    if (existing) {
-      existing.data = data
-    }
-    else {
-      projects.set(entry, {
-        entry,
-        userRoot,
-        data,
-        port: null,
-      })
-    }
+  const result = await window.showInformationMessage(`${message}\nDo you want to add ${entry} as a Slidev project?`, 'Yes', 'No')
+  if (result === 'Yes') {
+    await addProject(entry)
   }
-}
-
-async function autoSetActiveEntry() {
-  if (!activeEntry.value) {
-    const firstKind = findShallowestPath(
-      [...projects.keys()].filter(path => basename(path) === 'slides.md'),
-    )
-    if (firstKind) {
-      activeEntry.value = firstKind
-      return
-    }
-    const secondKind = findShallowestPath(projects.keys())
-    if (secondKind)
-      activeEntry.value = secondKind
+  else {
+    ignoredEntries.add(entry)
   }
 }
