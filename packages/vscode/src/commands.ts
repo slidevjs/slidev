@@ -17,14 +17,32 @@ export function useCommands() {
   useCommand('slidev.rescan-projects', rescanProjects)
 
   useCommand('slidev.choose-entry', async () => {
-    const entry = await window.showQuickPick([...projects.keys()], {
-      title: 'Choose active slides entry.',
-    })
-    if (entry)
-      activeEntry.value = entry
+    while (true) {
+      const addNewEntry = '$(add) Add new slides entry...'
+      const entry = await window.showQuickPick(
+        [...projects.keys(), addNewEntry],
+        {
+          title: 'Choose active slides entry.',
+        },
+      )
+      if (entry === addNewEntry) {
+        if (!await addEntry()) {
+          break
+        }
+      }
+      else if (entry) {
+        activeEntry.value = entry
+        break
+      }
+      else {
+        break
+      }
+    }
   })
 
-  useCommand('slidev.add-entry', async () => {
+  useCommand('slidev.add-entry', addEntry)
+
+  async function addEntry() {
     const files = await findPossibleEntries()
     const selected = await window.showQuickPick(files, {
       title: 'Choose Markdown files to add as slides entries.',
@@ -32,15 +50,16 @@ export function useCommands() {
     })
     if (selected) {
       for (const entry of selected)
-        addProject(entry)
+        await addProject(entry)
       if (workspace.workspaceFolders) {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
         // write back to settings.json
-        include.update([...include.value, ...relatives])
+        await include.update([...include.value, ...relatives])
       }
     }
-  })
+    return !!selected
+  }
 
   useCommand('slidev.remove-entry', async (node: any) => {
     const entry = slash(node.treeItem.resourceUri.fsPath)

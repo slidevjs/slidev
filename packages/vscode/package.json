@@ -145,7 +145,7 @@
       {
         "command": "slidev.add-entry",
         "category": "Slidev",
-        "title": "Choose Markdown files to add as slides entries",
+        "title": "Add Slidev markdown files as projects",
         "icon": "$(add)"
       },
       {
