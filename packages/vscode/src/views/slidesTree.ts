@@ -107,7 +107,7 @@ export const useSlidesTree = defineService(() => {
             window.showErrorMessage(`Cannot drag and drop slides: No active slides project.`)
             return
           }
-          const sources = source.map(node => data.markdownFiles[node.markdownPath]?.slides[node.slideIndex])
+          const sources = source.map(node => data.markdownFiles[node.markdownPath]?.slides[node.slideIndex]).filter(Boolean)
           dataTransfer.set(slideMineType, new DataTransferItem(sources))
         },
         async handleDrop(target, dataTransfer) {
