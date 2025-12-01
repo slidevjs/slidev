@@ -113,7 +113,7 @@ export const useSlidesTree = defineService(() => {
         async handleDrop(target, dataTransfer) {
           const slides: SourceSlideInfo[] = dataTransfer.get(slideMineType)?.value
           const data = activeData.value
-          if (!slides || !target || !data)
+          if (!slides?.length || !target || !data)
             return
           if (slides.length === 0) {
             window.showErrorMessage(`Cannot drag and drop slides: None of the selected slides are in the entry Markdown.`)
@@ -122,23 +122,28 @@ export const useSlidesTree = defineService(() => {
           const targetIndex = target.slideIndex
           const targetMarkdown = data.markdownFiles[target.markdownPath]
           const oldSlides = targetMarkdown.slides.map(s => slides.includes(s) ? null : s)
-          targetMarkdown.slides = [
-            ...oldSlides.slice(0, targetIndex + 1),
-            ...slides,
-            ...oldSlides.slice(targetIndex + 1),
-          ].filter(Boolean) as SourceSlideInfo[]
+          const before = oldSlides.slice(0, targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
+          const after = oldSlides.slice(targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
+          const newTargetMarkdown = {
+            ...targetMarkdown,
+            slides: [
+              ...before,
+              ...slides,
+              ...after,
+            ],
+          }
 
-          const changedMarkdown = new Set<SlidevMarkdown>([targetMarkdown])
+          const changedMarkdown = new Set<SlidevMarkdown>([newTargetMarkdown])
           for (const markdown of Object.values(data.markdownFiles)) {
             if (markdown === targetMarkdown)
               continue // already handled
-            markdown.slides = markdown.slides.filter((s) => {
-              if (slides.includes(s)) {
-                changedMarkdown.add(markdown)
-                return false
-              }
-              return true
-            })
+            const newSlides = markdown.slides.filter(s => !slides.includes(s))
+            if (newSlides.length !== markdown.slides.length) {
+              changedMarkdown.add({
+                ...markdown,
+                slides: newSlides,
+              })
+            }
           }
 
           for (const markdown of changedMarkdown) {
@@ -149,7 +154,9 @@ export const useSlidesTree = defineService(() => {
             )
           }
 
-          await gotoSlide(target.markdownPath, targetIndex + 1)
+          setTimeout(async () => {
+            await gotoSlide(target.markdownPath, before.length)
+          }, 100)
         },
       },
       showCollapseAll: true,
