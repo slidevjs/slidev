@@ -8,6 +8,7 @@
 *-export
 *.local
 *.pdf
+.env
 assets/demo
 components.d.ts
 composable-vue-cn

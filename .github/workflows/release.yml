@@ -36,5 +36,5 @@ jobs:
         run: pnpm run publish
         working-directory: ./packages/vscode
         env:
-          VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
-          OVSX_TOKEN: ${{secrets.OVSX_TOKEN}}
+          VSCE_TOKEN: ${{secrets.VSCE_PAT}}
+          OVSX_TOKEN: ${{secrets.OVSX_PAT}}
