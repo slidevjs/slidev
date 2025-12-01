@@ -1,5 +1,4 @@
-import type { SourceSlideInfo } from '@slidev/types'
-import type { SlidevMarkdown } from '@slidev/types'
+import type { SlidevMarkdown, SourceSlideInfo } from '@slidev/types'
 import type { TreeViewNode } from 'reactive-vscode'
 import { isDeepEqual } from '@antfu/utils'
 import { stringify } from '@slidev/parser/core'
