@@ -27,7 +27,7 @@
     "languages": [
       {
         "id": "markdown",
-        "configuration": "./language/language-configuration.json"
+        "configuration": "./syntaxes/language-configuration.json"
       },
       {
         "id": "slidev"
