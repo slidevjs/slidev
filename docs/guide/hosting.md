@@ -34,6 +34,14 @@ You can change the output directory using `--out`.
 $ slidev build --out my-build-folder
 ```
 
+### Remove speaker notes {#without-notes}
+
+If you are sharing the built slides publicly and don't want to include your speaker notes, run the build with `--without-notes`:
+
+```bash
+$ slidev build --without-notes
+```
+
 ### Multiple Builds {#multiple-builds}
 
 You can build multiple slide decks in one go by passing multiple markdown files as arguments:
