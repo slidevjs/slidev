@@ -66,18 +66,19 @@ export const usePreviewWebview = defineService(() => {
   )
 
   const pageId = ref(0)
-  function refresh() {
-    redetect(port.value)
+  async function refresh() {
+    if (!ready.value)
+      await redetect(port.value)
     if (!view.value)
       return
     forceRefresh()
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }
-  watch([view, port], refresh)
+  watch([ready, view, port], refresh)
 
   function postSlidevMessage(type: string, data: Record<string, unknown>) {
-    postMessage({
+    return postMessage({
       target: 'slidev',
       sender: 'vscode',
       type,
@@ -124,7 +125,6 @@ export const usePreviewWebview = defineService(() => {
   return {
     view,
     refresh,
-    retry: () => !ready.value && refresh(),
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
     nextSlide: useNavOperation('nextSlide', true),

@@ -73,14 +73,6 @@ export function useCommands() {
     activeEntry.value = entry
   })
 
-  useCommand('slidev.stop-dev', async (node: any) => {
-    const entry = node ? slash(node.treeItem.resourceUri.fsPath) : activeEntry.value
-    if (!entry)
-      return
-    const project = projects.get(entry)
-    project?.server.value?.scope.stop()
-  })
-
   useCommand('slidev.goto', (filepath: string, index: number) => {
     const { gotoSlide } = useFocusedSlide()
     gotoSlide(filepath, index)
@@ -98,9 +90,9 @@ export function useCommands() {
     gotoSlide(focusedMarkdown.value.filepath, focusedSourceSlide.value.index - 1)
   })
 
-  useCommand('slidev.refresh-preview', () => {
+  useCommand('slidev.refresh-preview', async () => {
     const { refresh } = usePreviewWebview()
-    refresh()
+    await refresh()
   })
 
   useCommand('slidev.config-port', async () => {
@@ -134,12 +126,6 @@ export function useCommands() {
     const { start, showTerminal } = useDevServer(project)
     start()
     showTerminal()
-
-    const { retry } = usePreviewWebview()
-    setTimeout(retry, 3000)
-    setTimeout(retry, 5000)
-    setTimeout(retry, 7000)
-    setTimeout(retry, 9000)
   })
 
   useCommand('slidev.open-in-browser', () => usePreviewWebview().openExternal())
