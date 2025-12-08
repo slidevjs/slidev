@@ -151,7 +151,7 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
       const possiblePkgNames = [name]
 
       if (!name.includes('/') && !name.startsWith('@')) {
-        possiblePkgNames.push(
+        possiblePkgNames.unshift(
           `@slidev/${type}-${name}`,
           `slidev-${type}-${name}`,
         )
