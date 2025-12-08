@@ -1,6 +1,8 @@
+import type { TreeViewNode } from 'reactive-vscode'
 import type { TreeItem } from 'vscode'
 import type { SlidevProject } from '../projects'
-import { computed, createSingletonComposable, useTreeView } from 'reactive-vscode'
+import { isDeepEqual } from '@antfu/utils'
+import { computed, defineService, shallowRef, useTreeView, watch } from 'reactive-vscode'
 import { ThemeIcon, TreeItemCollapsibleState, Uri } from 'vscode'
 import { activeEntry, projects } from '../projects'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
@@ -15,12 +17,12 @@ const nothingToCollapse = computed(() => [...projects.values()]
 function getProjectTreeItem(project: SlidevProject): TreeItem {
   const active = activeEntry.value === project.entry
   return {
-    label: getSlidesTitle(project.data),
-    description: `${toRelativePath(project.entry)}${project.port ? ` (port: ${project.port})` : ''}`,
+    label: toRelativePath(project.entry),
+    description: `${getSlidesTitle(project.data)}${project.detected.value?.ready ? ` (port: ${project.detected.value.port})` : ''}`,
     resourceUri: Uri.file(project.entry),
     iconPath: new ThemeIcon(active ? 'eye' : 'eye-closed'),
     collapsibleState: nothingToCollapse.value ? TreeItemCollapsibleState.None : active ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.Collapsed,
-    contextValue: `<project><${active ? 'active' : 'inactive'}><${project.port ? 'up' : 'down'}>`,
+    contextValue: `<project><${active ? 'active' : 'inactive'}>`,
     command: {
       title: 'Open',
       command: 'vscode.open',
@@ -31,7 +33,6 @@ function getProjectTreeItem(project: SlidevProject): TreeItem {
 
 function getFileTreeItem(file: string): TreeItem {
   return {
-    description: toRelativePath(file),
     resourceUri: Uri.file(file),
     iconPath: new ThemeIcon('file'),
     collapsibleState: TreeItemCollapsibleState.None,
@@ -43,7 +44,7 @@ function getFileTreeItem(file: string): TreeItem {
   }
 }
 
-export const useProjectsTree = createSingletonComposable(() => {
+export const useProjectsTree = defineService(() => {
   const treeData = computed(() => {
     return [...projects.values()].map(project => ({
       treeItem: getProjectTreeItem(project),
@@ -53,7 +54,14 @@ export const useProjectsTree = createSingletonComposable(() => {
     }))
   })
 
-  const treeView = useTreeView('slidev-projects-tree', treeData, {
+  const treeItems = shallowRef<TreeViewNode[]>([])
+  watch(treeData, (treeData) => {
+    if (!isDeepEqual(treeItems.value, treeData)) {
+      treeItems.value = treeData
+    }
+  }, { immediate: true })
+
+  const treeView = useTreeView('slidev-projects-tree', treeItems, {
     showCollapseAll: true,
   })
 

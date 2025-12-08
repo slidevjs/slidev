@@ -21,13 +21,13 @@
     "vscode": "^1.99.0"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "workspaceContains:**/*.md"
   ],
   "contributes": {
     "languages": [
       {
         "id": "markdown",
-        "configuration": "./language/language-configuration.json"
+        "configuration": "./syntaxes/language-configuration.json"
       },
       {
         "id": "slidev"
@@ -145,7 +145,7 @@
       {
         "command": "slidev.add-entry",
         "category": "Slidev",
-        "title": "Choose Markdown files to add as slides entries",
+        "title": "Add Slidev markdown files as projects",
         "icon": "$(add)"
       },
       {
@@ -191,12 +191,6 @@
         "enablement": "slidev:hasActiveProject"
       },
       {
-        "command": "slidev.stop-dev",
-        "category": "Slidev",
-        "title": "Stop the dev server",
-        "icon": "$(stop-circle)"
-      },
-      {
         "command": "slidev.open-in-browser",
         "category": "Slidev",
         "title": "Open slides in browser",
@@ -206,25 +200,29 @@
         "command": "slidev.preview-prev-click",
         "category": "Slidev",
         "title": "Navigate to prev click in preview window",
-        "icon": "$(arrow-left)"
+        "icon": "$(arrow-left)",
+        "enablement": "slidev:preview:has-prev-click"
       },
       {
         "command": "slidev.preview-next-click",
         "category": "Slidev",
         "title": "Navigate to next click in preview window",
-        "icon": "$(arrow-right)"
+        "icon": "$(arrow-right)",
+        "enablement": "slidev:preview:has-next-click"
       },
       {
         "command": "slidev.preview-prev-slide",
         "category": "Slidev",
         "title": "Navigate to prev slide in preview window",
-        "icon": "$(arrow-up)"
+        "icon": "$(arrow-up)",
+        "enablement": "slidev:preview:has-prev-slide"
       },
       {
         "command": "slidev.preview-next-slide",
         "category": "Slidev",
         "title": "Navigate to next slide in preview window",
-        "icon": "$(arrow-down)"
+        "icon": "$(arrow-down)",
+        "enablement": "slidev:preview:has-next-slide"
       },
       {
         "command": "slidev.enable-preview-sync",
@@ -331,11 +329,6 @@
           "command": "slidev.remove-entry",
           "when": "view == slidev-projects-tree && viewItem =~ /<project>/",
           "group": "inline@2"
-        },
-        {
-          "command": "slidev.stop-dev",
-          "when": "view == slidev-projects-tree && viewItem =~ /<up>/",
-          "group": "inline"
         }
       ]
     },
@@ -616,11 +609,13 @@
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
+    "picomatch": "catalog:vscode",
     "prettier": "catalog:vscode",
     "reactive-vscode": "catalog:vscode",
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",
     "volar-service-prettier": "catalog:vscode",
-    "volar-service-yaml": "catalog:vscode"
+    "volar-service-yaml": "catalog:vscode",
+    "yaml-language-server": "catalog:vscode"
   }
 }

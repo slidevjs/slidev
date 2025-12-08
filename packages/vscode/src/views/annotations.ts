@@ -1,32 +1,31 @@
 import type { SourceSlideInfo } from '@slidev/types'
 import type { DecorationOptions } from 'vscode'
 import { clamp, debounce, ensurePrefix } from '@antfu/utils'
-import { computed, createSingletonComposable, onScopeDispose, useActiveTextEditor, watch } from 'reactive-vscode'
+import { computed, defineService, onScopeDispose, useActiveTextEditor, watch } from 'reactive-vscode'
 import { Position, Range, ThemeColor, window, workspace } from 'vscode'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
 import { displayAnnotations, displayCodeBlockLineNumbers } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
-const dividerCommonOptions = {
-  color: new ThemeColor('panelTitle.inactiveForeground'),
-  fontWeight: 'bold',
+const frontmatterBgOptions = {
   isWholeLine: true,
   backgroundColor: '#8881',
 }
 
 const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
-  ...dividerCommonOptions,
+  ...frontmatterBgOptions,
+  color: new ThemeColor('panelTitle.inactiveForeground'),
   borderStyle: 'solid',
   borderWidth: '1px 0 0 0',
   borderColor: new ThemeColor('panelTitle.activeBorder'),
 })
-const frontmatterContentDecoration = window.createTextEditorDecorationType({
-  isWholeLine: true,
-  backgroundColor: '#8881',
+const frontmatterContentDecoration = window.createTextEditorDecorationType(frontmatterBgOptions)
+const frontmatterEndDecoration = window.createTextEditorDecorationType({
+  ...frontmatterBgOptions,
+  color: new ThemeColor('panelTitle.inactiveForeground'),
 })
-const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
 const errorDecoration = window.createTextEditorDecorationType({
   isWholeLine: true,
 })
@@ -113,7 +112,8 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
       if (currentLine >= editor.document.lineCount)
         continue
 
-      const paddedNumber = String(lineNumber).padStart(numberWidth, '⠀')
+      // \u2800 renders as a space but won't be trimmed
+      const paddedNumber = String(lineNumber).padStart(numberWidth, '\u2800')
 
       codeBlockLineNumbers.push({
         range: new Range(
@@ -136,7 +136,7 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
   editor.setDecorations(codeBlockLineNumberDecoration, codeBlockLineNumbers)
 }
 
-export const useAnnotations = createSingletonComposable(() => {
+export const useAnnotations = defineService(() => {
   const editor = useActiveTextEditor()
   const doc = computed(() => editor.value?.document)
   const projectInfo = useProjectFromDoc(doc)
@@ -182,6 +182,7 @@ export const useAnnotations = createSingletonComposable(() => {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
+        editor.setDecorations(frontmatterEndDecoration, [])
         editor.setDecorations(errorDecoration, [])
         editor.setDecorations(codeBlockLineNumberDecoration, [])
         return
@@ -248,6 +249,7 @@ export const useAnnotations = createSingletonComposable(() => {
           }
         }
       }
+
       editor.setDecorations(firstLineDecoration, firstLineRanges)
       editor.setDecorations(dividerDecoration, dividerRanges)
       editor.setDecorations(frontmatterContentDecoration, frontmatterContentRanges)
