@@ -538,7 +538,6 @@ export const community: ThemeInfo[] = [
   },
   {
     id: 'slidev-theme-nord',
-    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Nord',
     description: 'Based on the Nord theme',
     author: {
