@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createResolver, getRoots } from './resolver'
 
-const mocks = vi.hoisted(() => {
+const vitefuMocks = vi.hoisted(() => {
   const FAKE_ROOT = '/user/project'
   return {
     findDepPkgJsonPath: vi.fn((name: string) => {
@@ -19,10 +19,7 @@ const mocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('vitefu', () => ({
-  findDepPkgJsonPath: mocks.findDepPkgJsonPath,
-  findClosestPkgJsonPath: mocks.findClosestPkgJsonPath,
-}))
+vi.mock('vitefu', () => vitefuMocks)
 
 describe('createResolver', () => {
   beforeEach(async () => {
