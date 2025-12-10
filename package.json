@@ -17,7 +17,7 @@
     "demo:dev": "pnpm -C demo/starter run dev",
     "vscode:dev": "pnpm -C packages/vscode run dev",
     "play": "pnpm demo:dev",
-    "dev": "pnpm -r --filter=./packages/** --parallel run dev",
+    "dev": "pnpm -r --filter=\"./packages/**\" --parallel run dev",
     "lint": "eslint . --cache",
     "lint:fix": "nr lint --fix",
     "typecheck": "vue-tsc --noEmit",
