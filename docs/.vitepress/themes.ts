@@ -542,7 +542,7 @@ export const community: ThemeInfo[] = [
     description: 'Based on the Nord theme',
     author: {
       name: 'David Ollerhead',
-      link: 'https://github.com/oller'
+      link: 'https://github.com/oller',
     },
     repo: 'https://github.com/oller/slidev-theme-nord',
     previews: [

@@ -39,7 +39,7 @@ catalogs:
     typescript: ^5.9.3
     vitefu: ^1.1.1
     vitest: ^4.0.15
-    vue-tsc: ^3.1.7
+    vue-tsc: ^3.1.8
     zx: ^8.8.5
   docs:
     typeit: 8.1.0
