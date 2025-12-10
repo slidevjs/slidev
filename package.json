@@ -7,7 +7,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** --parallel run build",
+    "build": "pnpm -r --filter=\"./packages/**\" --parallel run build",
     "ci:publish": "zx scripts/publish.mjs",
     "cy": "cypress open",
     "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
