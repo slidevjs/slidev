@@ -1,6 +1,6 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { LoadResult } from 'rollup'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
@@ -232,19 +232,31 @@ export function createSlidesLoader(
       if (hmrSlidesIndexes.size > 0)
         moduleIds.add(templateTitleRendererMd.id)
 
-      const vueModules = Array.from(hmrSlidesIndexes)
-        .flatMap((idx) => {
-          const frontmatter = ctx.server.moduleGraph.getModuleById(sourceIds.frontmatter[idx])
-          const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
-          const styles = main ? [...main.clientImportedModules].find(m => m.id?.includes(`&type=style`)) : undefined
-          return [
-            frontmatter,
-            main,
-            styles,
-          ]
-        })
+      for (const idx of hmrSlidesIndexes) {
+        moduleIds.add(sourceIds.frontmatter[idx])
+      }
+
+      const reloadBeforeOthers: ModuleNode[] = []
+      const vueModules: ModuleNode[] = []
+      for (const idx of hmrSlidesIndexes) {
+        const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
+        if (main) {
+          const styles = [...main.clientImportedModules].filter(m => m.id?.includes(`&type=style`))
+          if (styles.length) {
+            // `pluginVue.transform(mainModule)` must be called before `pluginVue.load(styleModule)`
+            // to refresh the internal descriptor cache of `@vitejs/plugin-vue`
+            reloadBeforeOthers.push(main)
+            vueModules.push(...styles)
+          }
+          else {
+            vueModules.push(main)
+          }
+        }
+      }
 
       hmrSlidesIndexes.clear()
+
+      await Promise.all(reloadBeforeOthers.map(m => ctx.server.reloadModule(m)))
 
       const moduleEntries = [
         ...ctx.modules.filter(i => i.id === templateMonacoRunDeps.id || i.id === templateMonacoTypes.id),
