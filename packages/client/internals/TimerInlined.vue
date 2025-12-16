@@ -10,10 +10,10 @@ const color = computed(() => {
   if (status.value === 'paused')
     return 'text-blue6 dark:text-blue3'
 
-  if (percentage.value > 80)
-    return 'text-yellow6 dark:text-yellow3'
-  else if (percentage.value > 100)
+  if (percentage.value > 100)
     return 'text-red6 dark:text-red3'
+  else if (percentage.value > 80)
+    return 'text-yellow6 dark:text-yellow3'
   else
     return 'text-green6 dark:text-green3'
 })
