@@ -2,7 +2,7 @@
   "type": "module",
   "version": "52.11.0",
   "private": true,
-  "packageManager": "pnpm@10.25.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -72,7 +72,9 @@
     "zx": "catalog:dev"
   },
   "resolutions": {
+    "semver": "catalog:dev",
     "typescript": "catalog:dev",
+    "undici-types": "catalog:dev",
     "vite": "catalog:prod"
   },
   "simple-git-hooks": {
