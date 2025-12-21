@@ -39,6 +39,17 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/AlbertBrand/slidev-addon-tldraw',
   },
   {
+    id: 'slidev-addon-react',
+    name: 'React Components',
+    description: 'Use React components with JSX/TSX in your Slidev presentations.',
+    tags: ['React', 'Component', 'Integration'],
+    author: {
+      name: 'YGilany',
+      link: 'https://github.com/YGilany'
+    },
+    repo: 'https://github.com/Ygilany/slidev-addon-react',
+  },
+  {
     id: 'slidev-addon-typst',
     name: 'Typst',
     description: 'Typst addon for Slidev',
