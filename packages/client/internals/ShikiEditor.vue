@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
 import { useIME } from '../composables/useIME'
+import { useTextDirection } from '../composables/useTextDirection'
 
 const props = defineProps<{
   placeholder?: string
@@ -9,6 +10,7 @@ const content = defineModel<string>({ required: true })
 const { composingContent, onInput, onCompositionEnd } = useIME(content)
 
 const textareaEl = ref<HTMLTextAreaElement | null>(null)
+useTextDirection(textareaEl)
 
 const highlight = shallowRef<((code: string) => string) | null>(null)
 import('../setup/shiki').then(async (m) => {
