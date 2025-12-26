@@ -16,7 +16,7 @@ export const useFocusedSlide = defineService(() => {
   const focusedSourceSlide = useDebouncedComputed(
     () => {
       const md = focusedMarkdown.value
-      if (!md || !debouncedEditor.value) {
+      if (!md || !debouncedEditor.value || !selection.value) {
         return null
       }
       const line = selection.value.active.line + 1
