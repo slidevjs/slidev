@@ -1,10 +1,10 @@
 import type { SourceSlideInfo } from '@slidev/types'
 import type { DecorationOptions } from 'vscode'
-import { clamp, debounce, ensurePrefix } from '@antfu/utils'
-import { computed, defineService, onScopeDispose, useActiveTextEditor, watch } from 'reactive-vscode'
-import { Position, Range, ThemeColor, window, workspace } from 'vscode'
+import { clamp, ensurePrefix } from '@antfu/utils'
+import { computed, defineService, useActiveTextEditor, watch } from 'reactive-vscode'
+import { Position, Range, ThemeColor, window } from 'vscode'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
-import { displayAnnotations, displayCodeBlockLineNumbers } from '../configs'
+import { config } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
@@ -94,7 +94,7 @@ function findCodeBlocks(docText: string): CodeBlockInfo[] {
 }
 
 function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEditor>['value'], docText: string) {
-  if (!editor || !displayCodeBlockLineNumbers.value)
+  if (!editor || !config['annotations-line-numbers'])
     return
 
   const codeBlockLineNumbers: DecorationOptions[] = []
@@ -141,44 +141,13 @@ export const useAnnotations = defineService(() => {
   const doc = computed(() => editor.value?.document)
   const projectInfo = useProjectFromDoc(doc)
 
-  let debouncedUpdateLineNumbers: ((docText: string) => void) | null = null
-
   watch(
-    [editor, displayCodeBlockLineNumbers],
-    ([currentEditor, lineNumbersEnabled]) => {
-      debouncedUpdateLineNumbers = null
-
-      if (!currentEditor || !lineNumbersEnabled) {
-        if (currentEditor)
-          currentEditor.setDecorations(codeBlockLineNumberDecoration, [])
-        return
-      }
-
-      debouncedUpdateLineNumbers = debounce(150, (docText: string) => {
-        if (editor.value === currentEditor)
-          updateCodeBlockLineNumbers(currentEditor, docText)
-      })
-    },
-    { immediate: true },
-  )
-
-  const textChangeDisposable = workspace.onDidChangeTextDocument((e) => {
-    if (editor.value?.document === e.document && displayCodeBlockLineNumbers.value && debouncedUpdateLineNumbers) {
-      debouncedUpdateLineNumbers(e.document.getText())
-    }
-  })
-
-  onScopeDispose(() => {
-    textChangeDisposable.dispose()
-  })
-
-  watch(
-    [editor, doc, projectInfo, activeProject, displayAnnotations, displayCodeBlockLineNumbers],
+    [editor, doc, projectInfo, activeProject, () => config.annotations, () => config['annotations-line-numbers']],
     ([editor, doc, projectInfo, activeProject, enabled, lineNumbersEnabled]) => {
-      if (!editor || !doc || !projectInfo)
+      if (!editor || !doc)
         return
 
-      if (!enabled) {
+      if (!projectInfo || !enabled) {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
