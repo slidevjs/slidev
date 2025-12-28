@@ -1,18 +1,17 @@
-import type { EffectScope, Ref } from 'reactive-vscode'
+import type { EffectScope, ShallowRef } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
 import { basename } from 'node:path'
-import { effectScope, onScopeDispose, useAbsolutePath, useControlledTerminal } from 'reactive-vscode'
-import { env, Uri } from 'vscode'
-import { devCommand } from '../configs'
+import { effectScope, onScopeDispose, shallowRef, useAbsoluteUri, useDisposable } from 'reactive-vscode'
+import { env, window } from 'vscode'
+import { config } from '../configs'
 import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { useServerDetector } from './useServerDetector'
 
 export interface SlidevServer {
   scope: EffectScope
-  terminal: Ref<Terminal | null>
+  terminal: ShallowRef<Terminal | null>
   start: () => void
-  showTerminal: () => void
 }
 
 export function useDevServer(project: SlidevProject) {
@@ -24,19 +23,22 @@ export function useDevServer(project: SlidevProject) {
 
   const scope = effectScope(true)
   return server.value = scope.run(() => {
-    const { terminal, getIsActive, show: showTerminal, sendText, close } = useControlledTerminal({
-      name: getSlidesTitle(project.data),
-      cwd: project.userRoot,
-      iconPath: {
-        light: Uri.file(useAbsolutePath('dist/res/logo-mono.svg').value),
-        dark: Uri.file(useAbsolutePath('dist/res/logo-mono-dark.svg').value),
-      },
-      isTransient: true,
-    })
+    const terminal = shallowRef<Terminal | null>(null)
 
     async function start() {
-      if (getIsActive())
+      if (terminal.value && terminal.value.exitStatus == null)
         return
+
+      terminal.value = useDisposable(window.createTerminal({
+        name: getSlidesTitle(project.data),
+        cwd: project.userRoot,
+        iconPath: {
+          light: useAbsoluteUri('dist/res/logo-mono.svg').value,
+          dark: useAbsoluteUri('dist/res/logo-mono-dark.svg').value,
+        },
+        isTransient: true,
+      }))
+
       const p = port.value ??= await allocPort()
       const args = [
         JSON.stringify(basename(project.entry)),
@@ -44,7 +46,7 @@ export function useDevServer(project: SlidevProject) {
         env.remoteName != null ? '--remote' : '',
       ].filter(Boolean).join(' ')
       // eslint-disable-next-line no-template-curly-in-string
-      sendText(devCommand.value.replaceAll('${args}', args).replaceAll('${port}', `${p}`))
+      terminal.value.sendText(config['dev-command'].replaceAll('${args}', args).replaceAll('${port}', `${p}`))
 
       let intervalCount = 0
       const maxIntervals = 100
@@ -66,7 +68,6 @@ export function useDevServer(project: SlidevProject) {
       scope,
       terminal,
       start,
-      showTerminal,
     }
   })!
 }

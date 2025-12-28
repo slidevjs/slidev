@@ -2,7 +2,7 @@ import type { SlidevProject } from '../projects'
 import { createControlledPromise } from '@antfu/utils'
 import { getPort as getPortPlease } from 'get-port-please'
 import { computed, defineService, onScopeDispose, reactive, watch } from 'reactive-vscode'
-import { configuredPort } from '../configs'
+import { config } from '../configs'
 import { activeProject, askAddProject, projects, scannedProjects } from '../projects'
 import { logger } from '../views/logger'
 
@@ -68,7 +68,7 @@ export const useServerDetector = defineService(() => {
   }
 
   const portsToDetect = computed(() => {
-    const ports = new Set([configuredPort.value])
+    const ports = new Set([config.port])
     for (const project of projects.values()) {
       if (project.port.value)
         ports.add(project.port.value)
@@ -92,7 +92,7 @@ export const useServerDetector = defineService(() => {
   onScopeDispose(() => clearInterval(interval))
 
   function getDetected(project: SlidevProject) {
-    const port = project.port.value || configuredPort.value
+    const port = project.port.value || config.port
     const detected = detectedPorts.get(port)
     if (detected?.entry === project.entry)
       return detected

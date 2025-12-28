@@ -2,7 +2,7 @@ import type { SlidevMarkdown, SourceSlideInfo } from '@slidev/types'
 import type { TreeViewNode } from 'reactive-vscode'
 import { isDeepEqual } from '@antfu/utils'
 import { stringify } from '@slidev/parser/core'
-import { computed, defineService, shallowRef, useTreeView, useViewVisibility, watch, watchEffect } from 'reactive-vscode'
+import { computed, defineService, shallowRef, useTreeView, watch, watchEffect } from 'reactive-vscode'
 import { DataTransferItem, ThemeIcon, TreeItemCollapsibleState, Uri, window, workspace } from 'vscode'
 import { useFocusedSlide } from '../composables/useFocusedSlide'
 import { activeData } from '../projects'
@@ -166,7 +166,6 @@ export const useSlidesTree = defineService(() => {
     },
   )
 
-  const visible = useViewVisibility(treeView)
   const focusedNode = computed(() => {
     if (!focusedSourceSlide.value)
       return null
@@ -174,7 +173,7 @@ export const useSlidesTree = defineService(() => {
     return sourceToNode.value.get(`${filepath}:${index}`)
   })
   watchEffect(() => {
-    if (visible.value && focusedNode.value) {
+    if (treeView.visible.value && focusedNode.value) {
       treeView.reveal(focusedNode.value, { select: true })
     }
   })
