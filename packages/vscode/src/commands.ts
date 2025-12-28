@@ -11,8 +11,8 @@ import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
 
 export function useCommands() {
-  useCommand('slidev.enable-extension', () => config.update('enabled', true, ConfigurationTarget.Workspace))
-  useCommand('slidev.disable-extension', () => config.update('enabled', false, ConfigurationTarget.Workspace))
+  useCommand('slidev.enable-extension', () => config.update('force-enabled', true, ConfigurationTarget.Workspace))
+  useCommand('slidev.disable-extension', () => config.update('force-enabled', false, ConfigurationTarget.Workspace))
 
   useCommand('slidev.rescan-projects', rescanProjects)
 
