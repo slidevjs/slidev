@@ -2,7 +2,7 @@ import type { MarkdownTransformContext } from '@slidev/types'
 import { normalizeRangeStr } from './utils'
 
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-export const reCodeBlock = /^```([\w'-]+)?\s*(?:\[(.*?)\])?\s*(?:\{([\w*,|-]+)\}\s*?(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
+export const reCodeBlock = /^```([\w'-]+)?[ \t]*(?:\[(.*?)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 
 /**
  * Transform code block with wrapper
