@@ -46,8 +46,8 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/Ygilany/slidev-addon-react',
     author: {
       name: 'YGilany',
-      link: 'https://github.com/YGilany'
-    }
+      link: 'https://github.com/YGilany',
+    },
   },
   {
     id: 'slidev-addon-typst',
