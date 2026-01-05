@@ -15,6 +15,7 @@ const INCLUDE_GLOBAL = [
   'typescript',
   'yaml',
   'pptxgenjs',
+  'ansis',
 ]
 
 const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
