@@ -47,7 +47,6 @@ const color = computed(() => {
       <span>{{ timer.m }}</span>
       <span op50>:</span>
       <span>{{ timer.s }}</span>
-      <span class="text-base op50">.{{ timer.ms }}</span>
     </div>
   </div>
 </template>
