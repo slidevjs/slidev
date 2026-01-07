@@ -83,13 +83,13 @@ export async function getSidebarObject() {
         if (match?.type === 'features') {
           return [{
             text: `✨ ${match.item.title}`,
-            link: `/${match.item.path}`,
+            link: `/${path}`,
           }]
         }
         if (match?.type === 'guide') {
           return [{
-            text: `📖  ${match.item.title}`,
-            link: `/${match.item.path}`,
+            text: `📖 ${match.item.title}`,
+            link: `/${path}`,
           }]
         }
         console.warn(`Dependent file not found: ${path}`)
