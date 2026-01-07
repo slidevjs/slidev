@@ -2,7 +2,7 @@
   "type": "module",
   "version": "52.11.1",
   "private": true,
-  "packageManager": "pnpm@10.26.1",
+  "packageManager": "pnpm@10.27.0",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -72,8 +72,10 @@
     "zx": "catalog:dev"
   },
   "resolutions": {
+    "chokidar": "catalog:prod",
     "semver": "catalog:dev",
     "typescript": "catalog:dev",
+    "undici": "catalog:dev",
     "undici-types": "catalog:dev",
     "vite": "catalog:prod"
   },
