@@ -7,10 +7,10 @@ import { basename, dirname } from 'node:path'
 import { debounce, slash } from '@antfu/utils'
 import { load } from '@slidev/parser/fs'
 import { isMatch } from 'picomatch'
-import { computed, effectScope, extensionContext, markRaw, onScopeDispose, ref, shallowReactive, shallowRef, useDisposable, useFsWatcher, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
+import { computed, effectScope, extensionContext, markRaw, onScopeDispose, ref, shallowReactive, shallowRef, useDisposable, useFileSystemWatcher, useVscodeContext, watch, watchEffect } from 'reactive-vscode'
 import { FileSystemError, Uri, window, workspace } from 'vscode'
 import { useServerDetector } from './composables/useServerDetector'
-import { exclude, forceEnabled, include } from './configs'
+import { config } from './configs'
 import { findShallowestPath } from './utils/findShallowestPath'
 import { logger } from './views/logger'
 
@@ -31,18 +31,20 @@ export const activeProject = computed(() => activeEntry.value ? projects.get(act
 export const activeData = computed(() => activeProject.value?.data)
 
 export function useProjects() {
-  const watcher = useFsWatcher(include, false, true, false)
-  watcher.onDidCreate(async (uri) => {
-    const path = slash(uri.fsPath)
-    if (!isMatch(path, exclude.value))
-      await addProject(path)
-  })
-  watcher.onDidDelete(async (uri) => {
-    removeProject(slash(uri.fsPath))
+  useFileSystemWatcher(() => config.include, {
+    async onDidCreate(uri) {
+      const path = slash(uri.fsPath)
+      if (!isMatch(path, config.exclude))
+        await addProject(path)
+    },
+    onDidChange: false,
+    async onDidDelete(uri) {
+      removeProject(slash(uri.fsPath))
+    },
   })
 
   rescanProjects()
-  watch([include, exclude], debounce(200, rescanProjects))
+  watch(() => [config.include, config.exclude], debounce(200, rescanProjects))
 
   // In case all the projects are removed manually, and the user may not want to disable the extension.
   const everHadProjects = ref(false)
@@ -80,7 +82,8 @@ export function useProjects() {
   }, { immediate: true })
 
   useVscodeContext('slidev:enabled', () => {
-    const enabled = forceEnabled.value == null ? everHadProjects.value : forceEnabled.value
+    const forceEnabled = config['force-enabled']
+    const enabled = forceEnabled == null ? everHadProjects.value : forceEnabled
     logger.info(`Slidev ${enabled ? 'enabled' : 'disabled'}.`)
     return enabled
   })
@@ -102,8 +105,8 @@ export async function rescanProjects() {
   scanningProjects = true
   try {
     const entries = new Set<string>()
-    for (const glob of include.value) {
-      (await workspace.findFiles(glob, exclude.value))
+    for (const glob of config.include) {
+      (await workspace.findFiles(glob, config.exclude))
         .forEach(file => entries.add(file.fsPath))
     }
     for (const entry of entries) {

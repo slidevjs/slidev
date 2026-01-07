@@ -163,7 +163,7 @@ catalogs:
     '@volar/vscode': ^2.4.27
     picomatch: ^4.0.3
     prettier: ^2.8.8
-    reactive-vscode: ^0.4.1
+    reactive-vscode: ^1.0.0-beta.1
     ts-json-schema-generator: ^2.4.0
     volar-service-prettier: ^0.0.64
     volar-service-yaml: ^0.0.64

@@ -2,7 +2,7 @@ import { computed, defineService, extensionContext, reactive, ref, useIsDarkThem
 import { commands, env, Uri, window } from 'vscode'
 import { useFocusedSlide } from '../composables/useFocusedSlide'
 import { useServerDetector } from '../composables/useServerDetector'
-import { configuredPort, previewSync } from '../configs'
+import { config } from '../configs'
 import { generateErrorHtml } from '../html/error'
 import { generateReadyHtml } from '../html/ready'
 import { activeData, activeProject } from '../projects'
@@ -13,7 +13,7 @@ export const usePreviewWebview = defineService(() => {
   const isDarkTheme = useIsDarkTheme()
 
   const { redetect } = useServerDetector()
-  const port = computed(() => activeProject.value?.port.value || configuredPort.value)
+  const port = computed(() => activeProject.value?.port.value || config.port)
   const detected = computed(() => activeProject.value ? activeProject.value.detected.value : null)
   const message = computed(() => detected.value?.message ?? '')
   const compatMode = useVscodeContext('slidev:preview:compat', () => !!detected.value?.compatMode)
@@ -22,7 +22,7 @@ export const usePreviewWebview = defineService(() => {
     ? generateReadyHtml(port.value)
     : generateErrorHtml(message.value),
   )
-  useVscodeContext('slidev:preview:sync', previewSync)
+  useVscodeContext('slidev:preview:sync', () => config['preview-sync'])
 
   const previewNavState = reactive({
     no: 0,
@@ -38,7 +38,7 @@ export const usePreviewWebview = defineService(() => {
 
   const initializedClientId = ref('')
 
-  const { view, postMessage, forceRefresh } = useWebviewView(
+  const { view, postMessage, forceReload } = useWebviewView(
     'slidev-preview',
     html,
     {
@@ -57,7 +57,7 @@ export const usePreviewWebview = defineService(() => {
           }
           else {
             initializedClientId.value = data.clientId
-            if (previewSync.value && initializedClientId.value === data.clientId)
+            if (config['preview-sync'] && initializedClientId.value === data.clientId)
               postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
         }
@@ -71,7 +71,7 @@ export const usePreviewWebview = defineService(() => {
       await redetect(port.value)
     if (!view.value)
       return
-    forceRefresh()
+    forceReload()
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }
@@ -108,13 +108,13 @@ export const usePreviewWebview = defineService(() => {
   watch(
     () => previewNavState.no,
     (no) => {
-      if (ready.value && previewSync.value && activeProject.value) {
+      if (ready.value && config['preview-sync'] && activeProject.value) {
         focusSlide(activeProject.value, no)
       }
     },
   )
   watch(
-    () => [previewSync.value, focusedSlideNo.value] as const,
+    [() => config['preview-sync'], focusedSlideNo],
     ([enabled, no]) => {
       if (enabled && no != null && previewNavState.no !== no) {
         postSlidevMessage('navigate', { no, clicks: 999999 })

@@ -4,15 +4,15 @@ import { useCommand } from 'reactive-vscode'
 import { ConfigurationTarget, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'
 import { useFocusedSlide } from './composables/useFocusedSlide'
-import { configuredPort, forceEnabled, include, previewSync } from './configs'
+import { config } from './configs'
 import { activeEntry, activeProject, addProject, projects, rescanProjects } from './projects'
 import { findPossibleEntries } from './utils/findPossibleEntries'
 import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
 
 export function useCommands() {
-  useCommand('slidev.enable-extension', () => forceEnabled.value = true)
-  useCommand('slidev.disable-extension', () => forceEnabled.value = false)
+  useCommand('slidev.enable-extension', () => config.update('force-enabled', true, ConfigurationTarget.Workspace))
+  useCommand('slidev.disable-extension', () => config.update('force-enabled', false, ConfigurationTarget.Workspace))
 
   useCommand('slidev.rescan-projects', rescanProjects)
 
@@ -55,7 +55,7 @@ export function useCommands() {
         const workspaceRoot = workspace.workspaceFolders[0].uri.fsPath
         const relatives = selected.map(s => slash(relative(workspaceRoot, s)))
         // write back to settings.json
-        await include.update([...include.value, ...relatives])
+        await config.update('include', [...config.include, ...relatives])
       }
     }
     return !!selected
@@ -102,7 +102,7 @@ export function useCommands() {
     }
     const port = await window.showInputBox({
       prompt: `Slidev Preview Port for ${getSlidesTitle(activeProject.value.data)}`,
-      value: configuredPort.value.toString(),
+      value: config.port.toString(),
       validateInput: (v) => {
         if (!v.match(/^\d+$/))
           return 'Port should be a number'
@@ -123,9 +123,9 @@ export function useCommands() {
       return
     }
 
-    const { start, showTerminal } = useDevServer(project)
+    const { start, terminal } = useDevServer(project)
     start()
-    showTerminal()
+    terminal.value?.show()
   })
 
   useCommand('slidev.open-in-browser', () => usePreviewWebview().openExternal())
@@ -135,6 +135,6 @@ export function useCommands() {
   useCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
   useCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
 
-  useCommand('slidev.enable-preview-sync', () => (previewSync.update(true, ConfigurationTarget.Global)))
-  useCommand('slidev.disable-preview-sync', () => (previewSync.update(false, ConfigurationTarget.Global)))
+  useCommand('slidev.enable-preview-sync', () => (config.update('preview-sync', true, ConfigurationTarget.Global)))
+  useCommand('slidev.disable-preview-sync', () => (config.update('preview-sync', false, ConfigurationTarget.Global)))
 }
