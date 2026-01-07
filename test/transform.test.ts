@@ -203,3 +203,22 @@ enum MyEnum {}
 
   expect(ctx.s.toString()).toMatchSnapshot()
 })
+
+it('code-wrapper with twoslash', () => {
+  const ctx = createTransformContext(`
+
+
+\`\`\`ts [filename.ts]
+const a = 1
+\`\`\`
+
+\`\`\`ts twoslash [filename.ts]
+const a = 1
+\`\`\`
+
+`)
+
+  transformCodeWrapper(ctx)
+
+  expect(ctx.s.toString()).toMatchSnapshot()
+})

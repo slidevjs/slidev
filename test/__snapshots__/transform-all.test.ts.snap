@@ -9,7 +9,7 @@ Default Slot
 
 <CodeBlockWrapper v-bind="{lines:true}" :title='""' :ranges='["2","3","4"]'>
 
-\`\`\`ts
+\`\`\`ts 
 function _foo() {
   // ...
 }
@@ -44,7 +44,7 @@ Foo \`{{ code }}\`
 
 <CodeBlockWrapper v-bind="{}" :title='"with-title"' :ranges='[]'>
 
-\`\`\`js [with-title]
+\`\`\`js  [with-title]
 const a = 1
 \`\`\`
 
@@ -55,7 +55,7 @@ const a = 1
 
 <CodeBlockWrapper v-bind="{}" :title='"npm"' :ranges='[]'>
 
-\`\`\`sh [npm]
+\`\`\`sh  [npm]
 npm i slidev
 \`\`\`
 
@@ -64,7 +64,7 @@ npm i slidev
 
 <CodeBlockWrapper v-bind="{}" :title='"yarn"' :ranges='[]'>
 
-\`\`\`sh [yarn]
+\`\`\`sh  [yarn]
 yarn add slidev
 \`\`\`
 
@@ -73,7 +73,7 @@ yarn add slidev
 
 <CodeBlockWrapper v-bind="{}" :title='"pnpm"' :ranges='[]'>
 
-\`\`\`sh [pnpm]
+\`\`\`sh  [pnpm]
 pnpm add slidev
 \`\`\`
 
@@ -88,7 +88,7 @@ pnpm add slidev
 
 <CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
 
-\`\`\`ts
+\`\`\`ts 
 function _foo() {
   // ...
 }
