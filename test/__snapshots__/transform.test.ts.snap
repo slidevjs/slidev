@@ -1,5 +1,33 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`code-wrapper with square brackets in code 1`] = `
+"
+
+<CodeBlockWrapper v-bind="{}" :title='""' :ranges='[]'>
+
+\`\`\`csharp
+[Flags]
+enum MyEnum {}
+\`\`\`
+
+</CodeBlockWrapper>
+"
+`;
+
+exports[`code-wrapper with title and square brackets in code 1`] = `
+"
+
+<CodeBlockWrapper v-bind="{}" :title='"MyEnum.cs"' :ranges='[]'>
+
+\`\`\`csharp [MyEnum.cs]
+[Flags]
+enum MyEnum {}
+\`\`\`
+
+</CodeBlockWrapper>
+"
+`;
+
 exports[`external snippet 1`] = `
 "
 \`\`\`ts {2|3|4}{lines:true}
