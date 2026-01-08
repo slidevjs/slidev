@@ -14,7 +14,7 @@ export function transformCodeWrapper(ctx: MarkdownTransformContext) {
       const ranges = normalizeRangeStr(rangeStr)
       code = code.trimEnd()
       options = options.trim() || '{}'
-      return `\n<CodeBlockWrapper v-bind="${options}" :title='${JSON.stringify(title)}' :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${title ? ` [${title}]` : ''}${attrs}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
+      return `\n<CodeBlockWrapper v-bind="${options}" :title='${JSON.stringify(title)}' :ranges='${JSON.stringify(ranges)}'>\n\n\`\`\`${lang}${title ? ` [${title}]` : ''}${attrs ? ` ${attrs.trim()}` : ''}\n${code}\n\`\`\`\n\n</CodeBlockWrapper>`
     },
   )
 }
