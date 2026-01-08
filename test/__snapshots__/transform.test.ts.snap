@@ -19,7 +19,7 @@ exports[`code-wrapper with title and square brackets in code 1`] = `
 
 <CodeBlockWrapper v-bind="{}" :title='"MyEnum.cs"' :ranges='[]'>
 
-\`\`\`csharp  [MyEnum.cs]
+\`\`\`csharp [MyEnum.cs]
 [Flags]
 enum MyEnum {}
 \`\`\`
@@ -35,7 +35,7 @@ exports[`code-wrapper with twoslash 1`] = `
 
 <CodeBlockWrapper v-bind="{}" :title='"filename.ts"' :ranges='[]'>
 
-\`\`\`ts  [filename.ts]
+\`\`\`ts [filename.ts]
 const a = 1
 \`\`\`
 
@@ -44,7 +44,7 @@ const a = 1
 
 <CodeBlockWrapper v-bind="{}" :title='"filename.ts"' :ranges='[]'>
 
-\`\`\`ts twoslash  [filename.ts]
+\`\`\`ts [filename.ts]
 const a = 1
 \`\`\`
 
