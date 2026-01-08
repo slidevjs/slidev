@@ -2,7 +2,7 @@ import type { MarkdownTransformContext } from '@slidev/types'
 import { normalizeRangeStr } from './utils'
 
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-export const reCodeBlock = /^```([\w '-]+)?[ \t]*(?:\[(.*?)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
+export const reCodeBlock = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 
 /**
  * Transform code block with wrapper
@@ -10,7 +10,7 @@ export const reCodeBlock = /^```([\w '-]+)?[ \t]*(?:\[(.*?)\])?[ \t]*(?:\{([\w*,
 export function transformCodeWrapper(ctx: MarkdownTransformContext) {
   ctx.s.replace(
     reCodeBlock,
-    (full, lang = '', title = '', rangeStr: string = '', options = '', attrs = '', code: string) => {
+    (full, lang = '', title = '', rangeStr = '', options = '', attrs = '', code: string) => {
       const ranges = normalizeRangeStr(rangeStr)
       code = code.trimEnd()
       options = options.trim() || '{}'
