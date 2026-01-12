@@ -253,9 +253,9 @@ export const community: ThemeInfo[] = [
     description: 'A Penguin theme for Slidev',
     author: {
       name: 'Alvaro Saburido',
-      link: 'https://github.com/alvarosaburido',
+      link: 'https://github.com/alvarosabu',
     },
-    repo: 'https://github.com/alvarosaburido/slidev-theme-penguin',
+    repo: 'https://github.com/alvarosabu/slidev-theme-penguin',
     previews: [
       'https://cdn.jsdelivr.net/gh/alvarosaburido/slidev-theme-penguin@master/screenshots/dark/01.png',
       'https://cdn.jsdelivr.net/gh/alvarosaburido/slidev-theme-penguin@master/screenshots/light/02.png',
