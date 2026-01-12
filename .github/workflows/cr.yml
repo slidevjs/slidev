@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   cr:
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'slidevjs/slidev' }}
 
     steps:
       - name: Checkout code
@@ -20,6 +21,6 @@ jobs:
       - name: Build
         run: nr build
 
-      - run: nlx pkg-pr-new publish './packages/create-app' './packages/client' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm
+      - run: nlx pkg-pr-new publish './packages/create-app' './packages/client' './packages/create-theme' './packages/parser' './packages/slidev' './packages/types' --pnpm --packageManager=pnpm,npm,yarn
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
