@@ -16,6 +16,7 @@ dist
 dist-ssr
 docs/.vitepress/@slidev
 docs/.vitepress/cache
+docs-*
 node_modules
 cypress/downloads
 packages/create-app/template/pages
