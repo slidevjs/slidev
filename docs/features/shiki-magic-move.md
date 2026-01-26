@@ -79,7 +79,7 @@ You can customize the animation duration for magic move transitions globally via
 
 ```yaml
 ---
-magicMoveDuration: 500  # duration in milliseconds, default is 800
+magicMoveDuration: 500 # duration in milliseconds, default is 800
 ---
 ```
 
