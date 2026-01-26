@@ -51,3 +51,64 @@ const add = () => count += 1
 ```
 ````
 `````
+
+## Title Bar {#title-bar}
+
+> Available since v0.52.0
+
+You can add a title bar to magic move blocks by specifying a filename in the opening fence of each step:
+
+`````md
+````md magic-move
+```js [app.js]
+console.log('Step 1')
+```
+```js [app.js]
+console.log('Step 2')
+```
+````
+`````
+
+The title bar will also display an automatically matched icon based on the filename (see <LinkInline link="features/code-groups#title-icon-matching" />).
+
+## Animation Duration {#duration}
+
+> Available since v0.52.0
+
+You can customize the animation duration for magic move transitions globally via the headmatter:
+
+```yaml
+---
+magicMoveDuration: 500  # duration in milliseconds, default is 800
+---
+```
+
+Or per-block by passing the `duration` option:
+
+`````md
+````md magic-move {duration:500}
+```js
+console.log('Step 1')
+```
+```js
+console.log('Step 2')
+```
+````
+`````
+
+## Copy Button {#copy-button}
+
+> Available since v0.52.0
+
+Magic move code blocks support a copy button that appears on hover. Configure this behavior globally with the `magicMoveCopy` headmatter option:
+
+```yaml
+---
+# Options: true | false | 'always' | 'final'
+magicMoveCopy: true     # show copy button on all steps (default)
+magicMoveCopy: false    # disable copy button
+magicMoveCopy: 'final'  # only show copy button on the final step
+---
+```
+
+The copy button respects the global `codeCopy` setting. If `codeCopy` is `false`, the magic move copy button will also be disabled.

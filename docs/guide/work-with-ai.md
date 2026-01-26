@@ -46,3 +46,14 @@ The Slidev skill provides knowledge about:
 - Diagrams (Mermaid, PlantUML) and LaTeX math
 - Built-in layouts and components
 - Exporting and hosting options
+
+## VS Code Extension
+
+The <LinkInline link="features/vscode-extension" /> provides Language Model Tools that allow VS Code's Copilot and other AI assistants to interact with your Slidev project directly. These tools enable AI to:
+
+- Get information about the active slide and project
+- Retrieve content of specific slides
+- List and search slides by title
+- Navigate between slides
+
+See <LinkInline link="features/vscode-extension#ai-integration" /> for more details.
