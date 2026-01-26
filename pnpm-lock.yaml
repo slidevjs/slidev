@@ -285,9 +285,6 @@ catalogs:
     picomatch:
       specifier: ^4.0.3
       version: 4.0.3
-    postcss:
-      specifier: ^8.5.6
-      version: 8.5.6
     pptxgenjs:
       specifier: ^4.0.1
       version: 4.0.1
@@ -1124,9 +1121,6 @@ importers:
       monaco-editor:
         specifier: catalog:monaco
         version: 0.55.1
-      postcss:
-        specifier: catalog:prod
-        version: 8.5.6
       shiki:
         specifier: catalog:frontend
         version: 3.21.0
