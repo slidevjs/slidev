@@ -5,7 +5,7 @@ Agent skills that help Claude Code understand and work with [Slidev](https://sli
 ## Installation
 
 ```bash
-npx add-skill slidevjs/slidev
+npx skills add slidevjs/slidev
 ```
 
 This will add the Slidev skill to your Claude Code configuration.

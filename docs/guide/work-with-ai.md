@@ -11,7 +11,7 @@ Slidev provides official [skills](https://code.claude.com/docs/en/skills) for AI
 Install the Slidev skill to your AI coding agent:
 
 ```bash
-npx add-skill slidevjs/slidev
+npx skills add slidevjs/slidev
 ```
 
 The source code of the skill is [here](https://github.com/slidevjs/slidev/tree/main/skills/slidev).
