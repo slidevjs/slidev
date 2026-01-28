@@ -102,6 +102,8 @@ console.log('Step 2')
 
 Magic move code blocks support a copy button that appears on hover. Configure this behavior globally with the `magicMoveCopy` headmatter option:
 
+<!-- eslint-skip -->
+
 ```yaml
 ---
 # Options: true | false | 'always' | 'final'
