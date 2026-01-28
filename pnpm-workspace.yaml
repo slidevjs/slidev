@@ -40,11 +40,11 @@ catalogs:
     tsdown: ^0.18.4
     tsx: ^4.21.0
     typescript: ^5.9.3
-    undici: ^7.19.1
-    undici-types: ^7.19.1
+    undici: ^7.19.2
+    undici-types: ^7.19.2
     vitefu: ^1.1.1
     vitest: ^4.0.18
-    vue-tsc: ^3.2.3
+    vue-tsc: ^3.2.4
     zx: ^8.8.5
   docs:
     typeit: 8.1.0
@@ -73,7 +73,7 @@ catalogs:
     recordrtc: ^5.6.2
     shiki: ^3.21.0
     shiki-magic-move: ^1.2.1
-    tm-grammars: ^1.29.1
+    tm-grammars: ^1.30.0
     unhead: ^2.1.2
     vue: ^3.5.27
     vue-router: ^4.6.4
@@ -83,7 +83,7 @@ catalogs:
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.7
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.431
+    '@iconify/json': ^2.2.432
   monaco:
     '@shikijs/monaco': ^3.21.0
     '@typescript/ata': ^0.9.8
@@ -139,7 +139,7 @@ catalogs:
     vite: ^7.3.1
     vite-plugin-inspect: ^11.3.3
     vite-plugin-remote-assets: ^2.1.0
-    vite-plugin-static-copy: ^3.1.6
+    vite-plugin-static-copy: ^3.2.0
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.8.2
     yargs: ^18.0.0
