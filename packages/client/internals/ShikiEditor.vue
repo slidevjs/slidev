@@ -43,7 +43,8 @@ textarea {
   font-variation-settings: normal;
   font-size: 1em;
   text-wrap: wrap;
-  word-break: break-all;
+  word-break: normal;
+  overflow-wrap: break-word;
   display: block;
   width: 100%;
 }
