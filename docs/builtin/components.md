@@ -335,6 +335,10 @@ Props:
   - The starting time of the video in seconds.
 - `printTimestamp` (`string | number | 'last' | undefined`, default: `undefined`):
   - The override for `timestamp` when printing.
+- `pause` (`(number | 'end')[] | undefined`, default: `undefined`):
+  - Control video playback in segments. Each number is the duration in seconds for that segment.
+  - Use `'end'` to play until the end. Click the video to play the next segment.
+  - Example: `:pause="[3, 5, 2, 'end']"` plays 3s → pause → 5s → pause → 2s → pause → end.
 
 ::: warning
 When exporting, the video may fail to load because Chromium does not support some video formats. In this case, you can specify the executable path of the browser. See [Chromium executable path](/guide/exporting.html#executable-path) for more information.
