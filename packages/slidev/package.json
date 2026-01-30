@@ -28,6 +28,7 @@
   "files": [
     "bin",
     "dist",
+    "skills",
     "template.md"
   ],
   "engines": {
