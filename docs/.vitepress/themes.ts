@@ -560,6 +560,33 @@ export const community: ThemeInfo[] = [
       'nord',
     ],
   },
+  {
+    id: 'slidev-theme-scholarly',
+    name: 'Scholarly',
+    description: 'Based on the Nord theme',
+    author: {
+      name: 'Jiaxin Peng',
+      link: 'https://github.com/jxpeng98',
+    },
+    repo: 'https://github.com/jxpeng98/slidev-theme-scholarly',
+    previews: [
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/oxford/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/cambridge/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/princeton/1.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/2.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/3.png',
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/4.png'
+    ],
+    tags: [
+      'dark',
+      'light',
+      'academic',
+      'oxford',
+      'cambridge',
+      'princeton'
+    ],
+  },
   // Add yours here!
   {
     id: '',
