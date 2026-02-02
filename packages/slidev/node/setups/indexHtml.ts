@@ -16,11 +16,46 @@ function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
 }
 
+function shouldEnable(option: boolean | 'dev' | 'build' | undefined, mode: string): boolean {
+  if (option === true)
+    return true
+  if (option === mode)
+    return true
+  return false
+}
+
+function collectPreloadImages(data: ResolvedSlidevOptions['data'], mode: string, base: string): string[] {
+  if (!shouldEnable(data.config.preloadImages, mode))
+    return []
+
+  const images = new Set<string>()
+
+  for (const slide of data.slides) {
+    const image = slide.frontmatter.image
+    if (image && typeof image === 'string') {
+      // Handle relative paths - prefix with base
+      if (image.startsWith('/') && !image.startsWith('//')) {
+        images.add(`${base}${image.slice(1)}`)
+      }
+      else if (!image.startsWith('http://') && !image.startsWith('https://') && !image.startsWith('//')) {
+        // Relative path without leading slash
+        images.add(`${base}${image}`)
+      }
+      else {
+        images.add(image)
+      }
+    }
+  }
+
+  return Array.from(images)
+}
+
 export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): Promise<string> {
   let main = await readFile(join(clientRoot, 'index.html'), 'utf-8')
   let body = ''
 
   const inputs: any[] = []
+  const preloadImages = collectPreloadImages(data, mode, base || '/')
 
   for (const root of roots) {
     const path = join(root, 'index.html')
@@ -75,6 +110,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         link: [
           data.config.favicon ? { rel: 'icon', href: data.config.favicon } : null,
           ...webFontsLink,
+          ...preloadImages.map(href => ({ rel: 'preload', as: 'image', href })),
         ].filter(x => x),
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },

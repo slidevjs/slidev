@@ -159,6 +159,24 @@
           "markdownDescription": "Download remote assets in local using vite-plugin-remote-assets",
           "default": false
         },
+        "preloadImages": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Preload slide images (from `image` frontmatter) on page load\n\nThis improves presentation smoothness by loading all background images immediately rather than on-demand when each slide is displayed.",
+          "markdownDescription": "Preload slide images (from `image` frontmatter) on page load\n\nThis improves presentation smoothness by loading all background images\nimmediately rather than on-demand when each slide is displayed.",
+          "default": false
+        },
         "download": {
           "type": [
             "boolean",

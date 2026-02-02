@@ -40,6 +40,15 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   remoteAssets?: boolean | 'dev' | 'build'
   /**
+   * Preload slide images (from `image` frontmatter) on page load
+   *
+   * This improves presentation smoothness by loading all background images
+   * immediately rather than on-demand when each slide is displayed.
+   *
+   * @default false
+   */
+  preloadImages?: boolean | 'dev' | 'build'
+  /**
    * Show a download button in the SPA build,
    * could also be a link to custom pdf
    *
