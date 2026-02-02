@@ -29,17 +29,19 @@ function collectPreloadImages(data: ResolvedSlidevOptions['data'], mode: string,
     return []
 
   const images = new Set<string>()
+  // Normalize base to always end with /
+  const normalizedBase = base ? (base.endsWith('/') ? base : `${base}/`) : '/'
 
   for (const slide of data.slides) {
     const image = slide.frontmatter.image
     if (image && typeof image === 'string') {
       // Handle relative paths - prefix with base
       if (image.startsWith('/') && !image.startsWith('//')) {
-        images.add(`${base}${image.slice(1)}`)
+        images.add(`${normalizedBase}${image.slice(1)}`)
       }
       else if (!image.startsWith('http://') && !image.startsWith('https://') && !image.startsWith('//')) {
         // Relative path without leading slash
-        images.add(`${base}${image}`)
+        images.add(`${normalizedBase}${image}`)
       }
       else {
         images.add(image)
@@ -55,7 +57,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
   let body = ''
 
   const inputs: any[] = []
-  const preloadImages = collectPreloadImages(data, mode, base || '/')
+  const preloadImages = collectPreloadImages(data, mode, base || '')
 
   for (const root of roots) {
     const path = join(root, 'index.html')
