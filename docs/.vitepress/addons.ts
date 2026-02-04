@@ -214,6 +214,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
   },
+  {
+    id: 'slidev-addon-bpmn',
+    name: 'BPMN viewer',
+    description: 'Visualize bpmn-files in your slidev',
+    tags: ['Component'],
+    author: {
+      name: 'emaarco',
+      link: 'https://github.com/emaarco',
+    },
+    repo: 'https://github.com/emaarco/slidev-addon-bpmn',
+  },
   // Add yours here!
   {
     id: '',
