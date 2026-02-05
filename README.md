@@ -68,6 +68,13 @@ Install [Node.js >=18](https://nodejs.org/) and run the following command:
 npm init slidev
 ```
 
+Install via Homebrew:
+
+```bash
+brew tap slidevjs/slidev
+brew install slidev
+```
+
 Documentation:
 **[English](https://sli.dev)** | [中文文档](https://cn.sli.dev) | [Français](https://fr.sli.dev) | [Español](https://es.sli.dev) | [Русский](https://ru.sli.dev) | [Português-BR](https://br.sli.dev)
 
