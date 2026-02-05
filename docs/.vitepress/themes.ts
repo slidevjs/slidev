@@ -576,7 +576,7 @@ export const community: ThemeInfo[] = [
       'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/princeton/1.png',
       'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/2.png',
       'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/3.png',
-      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/4.png'
+      'https://raw.githubusercontent.com/jxpeng98/slidev-theme-scholarly/HEAD/images/themes/classic-blue/4.png',
     ],
     tags: [
       'dark',
@@ -584,7 +584,7 @@ export const community: ThemeInfo[] = [
       'academic',
       'oxford',
       'cambridge',
-      'princeton'
+      'princeton',
     ],
   },
   // Add yours here!
