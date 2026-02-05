@@ -23,7 +23,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v6
@@ -45,7 +45,7 @@ jobs:
         run: node ./scripts/pack.mjs /tmp/slidev-pkgs
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
@@ -66,7 +66,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v6
@@ -83,7 +83,7 @@ jobs:
         run: nci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: slidev-packages
           path: /tmp/slidev-pkgs
@@ -121,7 +121,7 @@ jobs:
         working-directory: ../temp/slidev-project
 
       - name: E2E Smoke Test
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v7
         if: ${{ matrix.os != 'windows-latest' }}
         with:
           install-command: echo
@@ -146,7 +146,7 @@ jobs:
 
       # Commented out because it's not working
       # - name: E2E test in global mode
-      #   uses: cypress-io/github-action@v4
+      #   uses: cypress-io/github-action@v7
       #   if: ${{ matrix.os != 'windows' }}
       #   with:
       #     project: ${{ github.workspace }}

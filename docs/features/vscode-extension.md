@@ -28,11 +28,12 @@ The VS Code extension provides some features to help you better organize your sl
 ### Features
 
 - Preview slides in the side panel
-- Slides tree view
-- Re-ordering slides
+- Slides tree view with slide numbers
+- Re-ordering slides via drag and drop
 - Folding for slide blocks
 - Multiple slides project support
 - Start the dev server with one click
+- AI/Copilot integration via Language Model Tools
 
 ![](https://github.com/slidevjs/slidev/assets/63178754/2c9ba01a-d21f-4b33-b6b6-4e249873f865)
 
@@ -78,3 +79,25 @@ Examples:
 - Global installation: `slidev ${args}`
 - For PNPM users, you can set it to `pnpm slidev ${args}`.
 - For [code-server](https://coder.com/docs/code-server/) users, you can set it to `pnpm slidev ${args} --base /proxy/${port}/`. This will make the dev server accessible at `http://localhost:8080/proxy/3000/`.
+
+#### Slides Tree View {#slides-tree}
+
+> Available since v0.52.0
+
+The slides tree view shows all slides in your presentation with their slide numbers and titles. Each slide is displayed as `{slideNo}. {title}` making it easy to navigate to specific slides.
+
+#### AI/Copilot Integration {#ai-integration}
+
+> Available since v0.52.0
+
+The extension provides Language Model Tools that allow VSCode's Copilot and other AI assistants to interact with your Slidev project. The following tools are available:
+
+- `slidev_getActiveSlide` - Get information about the current active slide and project
+- `slidev_getSlideContent` - Retrieve the content of a specific slide by number
+- `slidev_getAllSlideTitles` - List all slide titles in the presentation
+- `slidev_findSlideNoByTitle` - Find a slide number by its title
+- `slidev_listEntries` - List all loaded Slidev project entries
+- `slidev_getPreviewPort` - Get the preview server port for a project
+- `slidev_chooseEntry` - Switch the active Slidev entry
+
+These tools enable AI assistants to help you navigate, edit, and understand your slides more effectively.

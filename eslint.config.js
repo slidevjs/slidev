@@ -15,6 +15,9 @@ export default antfu({
       ],
     },
   },
+  ignores: [
+    'skills/**/*.md',
+  ],
 })
   .removeRules(
     'vue/no-v-text-v-html-on-component',

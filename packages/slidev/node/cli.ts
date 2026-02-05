@@ -295,9 +295,6 @@ cli.command(
       }
 
       process.stdin.on('keypress', onKeyPress)
-      server?.httpServer?.on('close', () => {
-        process.stdin.off('keypress', onKeyPress)
-      })
     }
 
     const { roots } = await initServer()

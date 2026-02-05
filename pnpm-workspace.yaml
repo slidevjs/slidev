@@ -19,19 +19,19 @@ patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
   demo:
-    '@vue/compiler-sfc': ^3.5.26
+    '@vue/compiler-sfc': ^3.5.27
   dev:
-    '@antfu/eslint-config': ^6.7.3
-    bumpp: ^10.3.2
+    '@antfu/eslint-config': ^7.2.0
+    bumpp: ^10.4.0
     cypress: ^14.5.4
     eslint: ^9.39.2
-    eslint-plugin-format: ^1.3.0
+    eslint-plugin-format: ^1.3.1
     lint-staged: ^16.2.7
     nodemon: ^3.1.11
     ovsx: ^0.10.8
-    playwright-chromium: ^1.57.0
+    playwright-chromium: ^1.58.0
     postcss-nested: ^7.0.2
-    prettier: ^3.7.4
+    prettier: ^3.8.1
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.2
     semver: ^7.7.3
@@ -40,16 +40,16 @@ catalogs:
     tsdown: ^0.18.4
     tsx: ^4.21.0
     typescript: ^5.9.3
-    undici: ^7.18.2
-    undici-types: ^7.18.2
+    undici: ^7.19.2
+    undici-types: ^7.19.2
     vitefu: ^1.1.1
-    vitest: ^4.0.17
-    vue-tsc: ^3.2.2
+    vitest: ^4.0.18
+    vue-tsc: ^3.2.4
     zx: ^8.8.5
   docs:
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.15
-    vitepress-plugin-group-icons: ^1.6.5
+    vitepress-plugin-group-icons: ^1.7.1
     vitepress-plugin-llms: ^1.10.0
   frontend:
     '@antfu/utils': ^9.3.0
@@ -57,7 +57,7 @@ catalogs:
     '@shikijs/markdown-it': ^3.21.0
     '@slidev/rough-notation': ^0.1.0
     '@unhead/vue': ^2.1.2
-    '@unocss/reset': ^66.5.12
+    '@unocss/reset': ^66.6.0
     '@vueuse/core': ^14.1.0
     '@vueuse/math': ^14.1.0
     '@vueuse/motion': ^3.0.3
@@ -65,7 +65,7 @@ catalogs:
     file-saver: ^2.0.5
     floating-vue: ^5.2.2
     fuse.js: ^7.1.0
-    katex: ^0.16.27
+    katex: ^0.16.28
     lz-string: ^1.5.0
     mermaid: ^11.12.2
     nanotar: ^0.2.0
@@ -73,28 +73,28 @@ catalogs:
     recordrtc: ^5.6.2
     shiki: ^3.21.0
     shiki-magic-move: ^1.2.1
-    tm-grammars: ^1.28.0
+    tm-grammars: ^1.30.0
     unhead: ^2.1.2
-    vue: ^3.5.26
+    vue: ^3.5.27
     vue-router: ^4.6.4
   icons:
-    '@iconify-json/carbon': ^1.2.16
+    '@iconify-json/carbon': ^1.2.18
     '@iconify-json/mdi': ^1.2.3
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.7
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.427
+    '@iconify/json': ^2.2.432
   monaco:
     '@shikijs/monaco': ^3.21.0
     '@typescript/ata': ^0.9.8
     monaco-editor: ^0.55.1
   prod:
-    '@antfu/ni': ^28.1.0
+    '@antfu/ni': ^28.2.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@shikijs/twoslash': ^3.21.0
     '@shikijs/vitepress-twoslash': ^3.21.0
-    '@unocss/extractor-mdc': ^66.5.12
+    '@unocss/extractor-mdc': ^66.6.0
     '@vitejs/plugin-vue': ^6.0.3
     '@vitejs/plugin-vue-jsx': ^5.1.3
     ansis: ^4.2.0
@@ -106,7 +106,7 @@ catalogs:
     get-port-please: ^3.2.0
     global-directory: ^4.0.1
     gray-matter: ^4.0.3
-    htmlparser2: ^10.0.0
+    htmlparser2: ^10.1.0
     is-installed-globally: ^1.0.0
     jiti: ^2.6.1
     local-pkg: ^1.1.2
@@ -114,7 +114,7 @@ catalogs:
     magic-string-stack: ^1.1.0
     markdown-it: ^14.1.0
     markdown-it-footnote: ^4.0.0
-    markdown-it-mdc: ^0.2.6
+    markdown-it-mdc: ^0.2.8
     minimist: ^1.2.8
     mlly: ^1.8.0
     obug: ^2.1.1
@@ -130,16 +130,16 @@ catalogs:
     sirv: ^3.0.2
     source-map-js: ^1.2.1
     tinyexec: ^1.0.2
-    unocss: ^66.5.12
-    unplugin-icons: ^22.5.0
-    unplugin-vue-components: ^30.0.0
+    unocss: ^66.6.0
+    unplugin-icons: ^23.0.1
+    unplugin-vue-components: ^31.0.0
     unplugin-vue-markdown: ^29.2.0
     untun: ^0.1.3
     uqr: ^0.1.2
     vite: ^7.3.1
     vite-plugin-inspect: ^11.3.3
     vite-plugin-remote-assets: ^2.1.0
-    vite-plugin-static-copy: ^3.1.4
+    vite-plugin-static-copy: ^3.2.0
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.8.2
     yargs: ^18.0.0
@@ -153,7 +153,7 @@ catalogs:
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.8
     '@types/markdown-it': ^14.1.2
-    '@types/node': ^25.0.7
+    '@types/node': ^25.0.10
     '@types/picomatch': ^4.0.2
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
