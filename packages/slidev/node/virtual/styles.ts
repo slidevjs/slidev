@@ -11,12 +11,12 @@ export const templateStyle: VirtualModuleTemplate = {
     }
 
     const imports: string[] = [
-      `import "${resolveUrlOfClient('styles/vars.css')}"`,
-      `import "${resolveUrlOfClient('styles/index.css')}"`,
-      `import "${resolveUrlOfClient('styles/code.css')}"`,
-      `import "${resolveUrlOfClient('styles/katex.css')}"`,
-      `import "${resolveUrlOfClient('styles/transitions.css')}"`,
-    ]
+      'styles/vars.css',
+      'styles/index.css',
+      'styles/code.css',
+      'styles/katex.css',
+      'styles/transitions.css',
+    ].map(path => makeAbsoluteImportGlob(userRoot, [join(clientRoot, path)]))
 
     for (const root of roots) {
       imports.push(makeAbsoluteImportGlob(userRoot, [
