@@ -45,6 +45,14 @@ export async function getSidebarObject() {
   })
     .then(files => files.map(parseFile))
 
+  const parsedCustoms: ParsedFile[] = await fg([
+    'docs/custom/*.md',
+  ], {
+    onlyFiles: true,
+    cwd: root,
+  })
+    .then(files => files.map(parseFile))
+
   parsedFeatures.forEach(({ matter, path }) => {
     const items: DefaultTheme.SidebarItem[] = [
       {
@@ -74,6 +82,13 @@ export async function getSidebarObject() {
           item: guide,
         }
       }
+      const custom = parsedCustoms.find(file => file.path === related)
+      if (custom) {
+        return {
+          type: 'custom',
+          item: custom,
+        }
+      }
       return undefined
     }
 
@@ -83,13 +98,19 @@ export async function getSidebarObject() {
         if (match?.type === 'features') {
           return [{
             text: `✨ ${match.item.title}`,
-            link: `/${match.item.path}`,
+            link: `/${path}`,
           }]
         }
         if (match?.type === 'guide') {
           return [{
-            text: `📖  ${match.item.title}`,
-            link: `/${match.item.path}`,
+            text: `📖 ${match.item.title}`,
+            link: `/${path}`,
+          }]
+        }
+        if (match?.type === 'custom') {
+          return [{
+            text: `🛠️ ${match.item.title}`,
+            link: `/${path}`,
           }]
         }
         console.warn(`Dependent file not found: ${path}`)
