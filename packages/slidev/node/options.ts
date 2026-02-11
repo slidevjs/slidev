@@ -122,6 +122,7 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __DEV__: options.mode === 'dev',
       __SLIDEV_CLIENT_ROOT__: toAtFS(options.clientRoot),
       __SLIDEV_HASH_ROUTE__: options.data.config.routerMode === 'hash',
+      __SLIDEV_FEATURE_TWOSLASH_AUTOSHOW__: false,
       __SLIDEV_FEATURE_DRAWINGS__: matchMode(options.data.config.drawings.enabled),
       __SLIDEV_FEATURE_EDITOR__: options.mode === 'dev' && options.data.config.editor !== false,
       __SLIDEV_FEATURE_DRAWINGS_PERSIST__: !!options.data.config.drawings.persist,
