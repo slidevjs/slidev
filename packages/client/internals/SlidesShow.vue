@@ -5,6 +5,7 @@ import { recomputeAllPoppers } from 'floating-vue'
 import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
+import { usePreloadImages } from '../composables/usePreloadImages'
 import { useViewTransition } from '../composables/useViewTransition'
 import { CLICKS_MAX } from '../constants'
 import { activeDragElement, disableTransition, hmrSkipTransition } from '../state'
@@ -48,6 +49,9 @@ watchEffect((onCleanup) => {
   }, 3000)
   onCleanup(() => clearTimeout(timeout))
 })
+
+// preload images for nearby slides
+usePreloadImages(currentSlideRoute, prevRoute, nextRoute, slides)
 
 const hasViewTransition = useViewTransition()
 

@@ -13,6 +13,11 @@ export interface SlideInfoBase {
   note?: string
   title?: string
   level?: number
+  /**
+   * Image URLs extracted from the slide content (frontmatter, markdown, Vue components, CSS).
+   * Populated at parse time to survive build-mode content stripping.
+   */
+  images?: string[]
 }
 
 export interface SourceSlideInfo extends SlideInfoBase {

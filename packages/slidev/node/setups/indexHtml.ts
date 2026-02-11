@@ -16,6 +16,33 @@ function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))
 }
 
+function collectPreloadImages(data: Omit<ResolvedSlidevOptions, 'utils'>['data'], base?: string): ResolvableLink[] {
+  const config = data.config
+  if (config.preloadImages === false)
+    return []
+
+  const seen = new Set<string>()
+  const links: ResolvableLink[] = []
+  const basePrefix = base ? base.replace(/\/$/, '') : ''
+
+  for (const slide of data.slides) {
+    const images = slide.images || slide.source?.images
+    if (!images?.length)
+      continue
+    for (const url of images) {
+      if (seen.has(url))
+        continue
+      seen.add(url)
+      const href = url.startsWith('http') || url.startsWith('//')
+        ? url
+        : `${basePrefix}${url.startsWith('/') ? url : `/${url}`}`
+      links.push({ rel: 'preload', as: 'image', href })
+    }
+  }
+
+  return links
+}
+
 export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot, roots, data, base }: Omit<ResolvedSlidevOptions, 'utils'>): Promise<string> {
   let main = await readFile(join(clientRoot, 'index.html'), 'utf-8')
   let body = ''
@@ -75,6 +102,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         link: [
           data.config.favicon ? { rel: 'icon', href: data.config.favicon } : null,
           ...webFontsLink,
+          ...collectPreloadImages(data, base),
         ].filter(x => x),
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },
