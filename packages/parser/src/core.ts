@@ -72,7 +72,7 @@ const IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|bmp|tiff?)$/i
  * Extract image URLs from slide content and frontmatter.
  * Strips code blocks first to avoid false positives.
  */
-export function extractImages(content: string, frontmatter: Record<string, any>): string[] {
+export function extractImagesUsage(content: string, frontmatter: Record<string, any>): string[] {
   const images = new Set<string>()
 
   // Collect from frontmatter keys
@@ -158,7 +158,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
   if (frontmatter.level)
     level = frontmatter.level || 1
 
-  const images = extractImages(content, frontmatter)
+  const images = extractImagesUsage(content, frontmatter)
 
   return {
     raw,

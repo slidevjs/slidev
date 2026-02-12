@@ -3,6 +3,7 @@ import { basename, relative, resolve } from 'node:path'
 import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
+import { extractImagesUsage } from '../packages/parser/src/core'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 
 function configDiff(v: SlidevConfig) {
@@ -329,4 +330,185 @@ a.a.A.A
       }
     })
   }
+
+  describe('extractImagesUsage', () => {
+    it('extracts from frontmatter image key', () => {
+      const images = extractImagesUsage('', { image: '/path/to/image.png' })
+      expect(images).toEqual(['/path/to/image.png'])
+    })
+
+    it('extracts from frontmatter backgroundImage key', () => {
+      const images = extractImagesUsage('', { backgroundImage: 'https://example.com/bg.jpg' })
+      expect(images).toEqual(['https://example.com/bg.jpg'])
+    })
+
+    it('extracts from frontmatter background key with image extension', () => {
+      const images = extractImagesUsage('', { background: '/assets/bg.webp' })
+      expect(images).toEqual(['/assets/bg.webp'])
+    })
+
+    it('extracts from frontmatter background key with URL', () => {
+      const images = extractImagesUsage('', { background: 'https://example.com/image.png' })
+      expect(images).toEqual(['https://example.com/image.png'])
+    })
+
+    it('ignores frontmatter background key without image extension or URL', () => {
+      const images = extractImagesUsage('', { background: 'gradient-to-r' })
+      expect(images).toEqual([])
+    })
+
+    it('ignores data URLs in frontmatter', () => {
+      const images = extractImagesUsage('', { image: 'data:image/png;base64,abc123' })
+      expect(images).toEqual([])
+    })
+
+    it('extracts markdown image syntax', () => {
+      const content = '![alt text](/images/photo.jpg)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/photo.jpg'])
+    })
+
+    it('extracts multiple markdown images', () => {
+      const content = `
+![first](/img1.png)
+Some text
+![second](https://example.com/img2.jpg)
+![third](./relative/path.svg)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/img1.png', 'https://example.com/img2.jpg', './relative/path.svg'])
+    })
+
+    it('ignores data URLs in markdown images', () => {
+      const content = '![inline](data:image/png;base64,abc123)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('extracts Vue component src prop', () => {
+      const content = '<img src="/assets/logo.png" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/assets/logo.png'])
+    })
+
+    it('extracts Vue component image prop', () => {
+      const content = '<MyImage image="/path/to/image.jpg" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/path/to/image.jpg'])
+    })
+
+    it('ignores Vue props without image extensions', () => {
+      const content = '<div src="/some/path" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('ignores Vue props with template expressions', () => {
+      const content = '<img src="{{imagePath}}.png" />'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('extracts Vue bound props with string literals', () => {
+      const content = `<img :src="'/static/image.png'" />`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/static/image.png'])
+    })
+
+    it('extracts CSS url()', () => {
+      const content = `
+<div style="background: url(/bg/image.png)">
+<style>
+  .class { background-image: url('/another/image.jpg'); }
+</style>
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/bg/image.png', '/another/image.jpg'])
+    })
+
+    it('ignores CSS url() without image extensions', () => {
+      const content = `<div style="background: url(/fonts/font.woff2)">`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual([])
+    })
+
+    it('strips code blocks to avoid false positives', () => {
+      const content = `
+Some content
+![real image](/real.png)
+
+\`\`\`markdown
+![fake image](/fake.png)
+<img src="/also-fake.jpg" />
+\`\`\`
+
+![another real](/real2.jpg)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/real.png', '/real2.jpg'])
+    })
+
+    it('handles multiple sources combined', () => {
+      const content = `
+# Title
+![markdown](/md.png)
+<img src="/vue.jpg" />
+<div style="background: url(/css.webp)">
+      `
+      const frontmatter = {
+        image: '/frontmatter.png',
+        background: 'https://example.com/bg.svg',
+      }
+      const images = extractImagesUsage(content, frontmatter)
+      expect(images).toContain('/frontmatter.png')
+      expect(images).toContain('https://example.com/bg.svg')
+      expect(images).toContain('/md.png')
+      expect(images).toContain('/vue.jpg')
+      expect(images).toContain('/css.webp')
+      expect(images).toHaveLength(5)
+    })
+
+    it('deduplicates identical URLs', () => {
+      const content = `
+![img](/same.png)
+![img2](/same.png)
+<img src="/same.png" />
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/same.png'])
+    })
+
+    it('trims whitespace from extracted URLs', () => {
+      const content = '![img]( /path/with/spaces.png )'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/path/with/spaces.png'])
+    })
+
+    it('handles various image extensions', () => {
+      const content = `
+![png](/img.png)
+![jpg](/img.jpg)
+![jpeg](/img.jpeg)
+![gif](/img.gif)
+![svg](/img.svg)
+![webp](/img.webp)
+![avif](/img.avif)
+![ico](/img.ico)
+![bmp](/img.bmp)
+![tiff](/img.tiff)
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toHaveLength(10)
+    })
+
+    it('handles case-insensitive image extensions', () => {
+      const content = `
+<img src="/image.PNG" />
+<img src="/image.JpG" />
+<img src="/image.WEBP" />
+      `
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/image.PNG', '/image.JpG', '/image.WEBP'])
+    })
+  })
 })
