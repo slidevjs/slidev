@@ -145,6 +145,8 @@ cli.command(
             host,
             // @ts-expect-error Vite <= 4
             force,
+            // Allow Cloudflare Quick Tunnel domains when tunneling is enabled
+            ...(tunnel && remote != null ? { allowedHosts: ['.trycloudflare.com'] } : {}),
           },
           optimizeDeps: {
             // Vite 5
