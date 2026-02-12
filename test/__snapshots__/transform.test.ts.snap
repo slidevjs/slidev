@@ -63,6 +63,19 @@ function _foo() {
 "
 `;
 
+exports[`html list indent within html blocks 1`] = `
+"
+<div>
+  <div>
+
+  - A
+  - B
+
+  </div>
+</div>
+"
+`;
+
 exports[`inline CSS 1`] = `
 "
 # Page 
