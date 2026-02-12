@@ -1,7 +1,7 @@
 {
   "name": "create-slidev",
   "type": "module",
-  "version": "52.11.5",
+  "version": "52.12.0",
   "description": "Create starter template for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
