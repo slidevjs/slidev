@@ -311,6 +311,16 @@ export interface HeadmatterConfig extends TransitionOptions {
    * @default 800
    */
   magicMoveDuration?: number
+  /**
+   * Preload images extracted from slides for faster navigation.
+   *
+   * - `true` - enable with default look-ahead of 3 slides
+   * - `false` - disable image preloading
+   * - `{ ahead: number }` - enable with custom look-ahead window
+   *
+   * @default true
+   */
+  preloadImages?: boolean | { ahead?: number }
 }
 
 export interface Frontmatter extends TransitionOptions {

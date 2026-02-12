@@ -551,6 +551,24 @@
           "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
           "default": 800
         },
+        "preloadImages": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "ahead": {
+                  "type": "number"
+                }
+              }
+            }
+          ],
+          "description": "Preload images extracted from slides for faster navigation.\n\n- `true` - enable with default look-ahead of 3 slides\n- `false` - disable image preloading\n- `{ ahead: number }` - enable with custom look-ahead window",
+          "markdownDescription": "Preload images extracted from slides for faster navigation.\n\n- `true` - enable with default look-ahead of 3 slides\n- `false` - disable image preloading\n- `{ ahead: number }` - enable with custom look-ahead window",
+          "default": true
+        },
         "defaults": {
           "$ref": "#/definitions/Frontmatter",
           "description": "Default frontmatter options applied to all slides",
