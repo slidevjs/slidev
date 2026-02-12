@@ -47,6 +47,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 ---
 transition: fade-out
+split: 30
 ---
 
 # What is Slidev?
@@ -89,6 +90,7 @@ Here is another comment.
 ---
 transition: slide-up
 level: 2
+split: 60
 ---
 
 # Navigation

@@ -5,7 +5,7 @@ import { slides } from '#slidev/slides'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { createSharedComposable } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, toRaw, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { CLICKS_MAX } from '../constants'
 import { configs } from '../env'
@@ -291,6 +291,16 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   const currentSlideNo = computed(() => hasPrimarySlide.value ? getSlide(currentRoute.params.no as string)?.no ?? 1 : 1)
   const currentSlideRoute = computed(() => slides.value[currentSlideNo.value - 1])
   const printRange = ref(parseRangeString(slides.value.length, currentRoute?.query?.range as string | undefined))
+
+  watch(currentSlideRoute, () => {
+    window.dispatchEvent(new CustomEvent('slidev-slide-changed', {
+      detail: {
+        slideNumber: currentSlideNo.value,
+        slide: toRaw(currentSlideRoute.value?.meta.slide),
+        frontmatter: toRaw(currentSlideRoute.value?.meta.slide.frontmatter),
+      },
+    }))
+  })
 
   const queryClicksRaw = useRouteQuery<string>('clicks', '0')
 

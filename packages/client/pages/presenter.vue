@@ -87,6 +87,21 @@ const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
   import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
+function parseTimerString(timeString: string) {
+  const [seconds, minutes = 0, hours = 0] = timeString.split(':').toReversed().map(n => Number.parseInt(n, 10))
+  return hours * 3600 + minutes * 60 + seconds
+}
+
+window.addEventListener('slidev-slide-changed', (e) => {
+  const timerCounter = parseTimerString(timer.value)
+  const splitCounter = typeof (e as CustomEvent).detail.frontmatter.split === 'string' ? parseTimerString((e as CustomEvent).detail.frontmatter.split) : (e as CustomEvent).detail.frontmatter.split || 0
+
+  if (splitCounter) {
+    const delta = timerCounter - splitCounter
+    console.warn('delta', delta)
+  }
+})
+
 // sync presenter cursor
 onMounted(() => {
   const slidesContainer = main.value!.querySelector('#slide-content')!
