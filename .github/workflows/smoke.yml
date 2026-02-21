@@ -120,6 +120,9 @@ jobs:
         run: pnpm build
         working-directory: ../temp/slidev-project
 
+      - name: Integration test export command in project
+        run: node ${{ github.workspace }}/scripts/test-export-concurrency.mjs ../temp/slidev-project
+
       - name: E2E Smoke Test
         uses: cypress-io/github-action@v7
         if: ${{ matrix.os != 'windows-latest' }}
