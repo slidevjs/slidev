@@ -46,3 +46,13 @@ Note that you can use `{*}` as a placeholder of <LinkInline link="features/line-
 ```md
 <<< @/snippets/snippet.js {*}{lines:true}
 ```
+
+::: warning
+If you need to use `<<<` in your code without loading a code snippet, simply add one or more characters such as `space` at the beginning of the line.
+:::
+
+For example:
+
+```md
+ <<< This line will not load a code snippet.
+```
