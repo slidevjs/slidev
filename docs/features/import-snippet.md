@@ -54,5 +54,5 @@ If you need to use `<<<` in your code without loading a code snippet, simply add
 For example:
 
 ```md
- <<< This line will not load a code snippet.
+<<< This line will not load a code snippet.
 ```
