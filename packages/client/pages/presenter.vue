@@ -86,7 +86,24 @@ watch(
 
 const mainSlideMode = useLocalStorage<'slides' | 'mirror'>('slidev-presenter-main-slide-mode', 'slides')
 const notesWidth = useLocalStorage('slidev-presenter-notes-width', 360)
-const notesRowSize = useLocalStorage<number | null>('slidev-presenter-notes-row-size', null)
+const legacyNotesRowSize = useLocalStorage<number | null>('slidev-presenter-notes-row-size', null)
+const notesRowSizeByLayout = useLocalStorage<Record<string, number | null>>(
+  'slidev-presenter-notes-row-size-by-layout',
+  {
+    1: null,
+    2: null,
+    3: null,
+  },
+)
+const notesRowSize = computed<number | null>({
+  get: () => notesRowSizeByLayout.value[String(presenterLayout.value)] ?? null,
+  set: (value) => {
+    notesRowSizeByLayout.value = {
+      ...notesRowSizeByLayout.value,
+      [String(presenterLayout.value)]: value,
+    }
+  },
+})
 const isResizingNotes = ref(false)
 const isResizingNotesRow = ref(false)
 const resizeStartX = ref(0)
@@ -141,10 +158,11 @@ function onNotesResizeStart(e: PointerEvent) {
   isResizingNotes.value = true
 }
 
-function clampNotesRowSize(size: number) {
-  if (!Number.isFinite(size))
+function clampNotesRowSize(size: number | string) {
+  const parsed = typeof size === 'string' ? Number(size) : size
+  if (!Number.isFinite(parsed))
     return MIN_NOTES_ROW_SIZE
-  return Math.max(MIN_NOTES_ROW_SIZE, Math.round(size))
+  return Math.max(MIN_NOTES_ROW_SIZE, Math.round(parsed))
 }
 
 function updateNotesRowSizeFromPointer(clientY: number) {
@@ -206,6 +224,22 @@ watch(notesRowSize, (value) => {
   if (value == null)
     return
   notesRowSize.value = clampNotesRowSize(value)
+}, { immediate: true })
+
+watch(legacyNotesRowSize, (value) => {
+  if (value == null)
+    return
+
+  const hasPerLayoutValues = Object.values(notesRowSizeByLayout.value).some(v => v != null)
+  if (hasPerLayoutValues)
+    return
+
+  const migrated = clampNotesRowSize(value)
+  notesRowSizeByLayout.value = {
+    1: migrated,
+    2: migrated,
+    3: migrated,
+  }
 }, { immediate: true })
 
 // sync presenter cursor
