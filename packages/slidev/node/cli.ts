@@ -481,7 +481,7 @@ cli.command(
           },
         )
         await server.listen(candidatePort)
-        const port = getViteServerPort(server) || candidatePort
+        const port = getViteServerPort(server)
         printInfo(options)
         const result = await exportSlides({
           port,
@@ -544,7 +544,7 @@ cli.command(
           },
         )
         await server.listen(candidatePort)
-        const port = getViteServerPort(server) || candidatePort
+        const port = getViteServerPort(server)
 
         printInfo(options)
 
@@ -569,10 +569,11 @@ cli
   .help()
   .parse()
 
-function getViteServerPort(server: ViteDevServer): number | undefined {
+function getViteServerPort(server: ViteDevServer): number {
   const address = server.httpServer?.address()
-  if (typeof address === 'object' && address && typeof address.port === 'number')
+  if (address && typeof address === 'object')
     return address.port
+  throw new Error('Failed to get Vite server port')
 }
 
 function commonOptions(args: Argv<object>) {
