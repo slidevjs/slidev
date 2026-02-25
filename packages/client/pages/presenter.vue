@@ -98,11 +98,14 @@ const resizeStartWidth = ref(360)
 const resizeStartY = ref(0)
 const resizeStartRowSize = ref(280)
 
-const MIN_NOTES_WIDTH = 240
-const MAX_NOTES_WIDTH = 720
-const MIN_NOTES_ROW_SIZE = 160
-const MAX_NOTES_WIDTH_RATIO = 0.7
-const MAX_NOTES_ROW_HEIGHT_RATIO = 0.75
+const RESIZER_LIMITS = {
+  minNotesWidth: 240,
+  maxNotesWidth: 720,
+  minNotesRowSize: 160,
+  maxNotesWidthRatio: 0.7,
+  maxNotesRowHeightRatio: 0.75,
+}
+
 const isLayout1Wide = useMediaQuery('(min-aspect-ratio: 1/1)')
 const isLayout1Stacked = useMediaQuery('(max-aspect-ratio: 3/5)')
 const isNotesOnRight = computed(() => presenterLayout.value === 1 && isLayout1Wide.value)
@@ -114,8 +117,11 @@ const isNotesOnBottom = computed(() => presenterLayout.value === 1)
 
 function clampNotesWidth(width: number) {
   if (!Number.isFinite(width))
-    return MIN_NOTES_WIDTH
-  return Math.max(MIN_NOTES_WIDTH, Math.min(MAX_NOTES_WIDTH, Math.round(width)))
+    return RESIZER_LIMITS.minNotesWidth
+  return Math.max(
+    RESIZER_LIMITS.minNotesWidth,
+    Math.min(RESIZER_LIMITS.maxNotesWidth, Math.round(width)),
+  )
 }
 
 function updateNotesWidthFromPointer(clientX: number) {
@@ -129,8 +135,8 @@ function updateNotesWidthFromPointer(clientX: number) {
     ? resizeStartWidth.value - deltaX
     : resizeStartWidth.value + deltaX
   const nextWidth = clampNotesWidth(proposedWidth)
-  const maxByViewport = Math.round(rect.width * MAX_NOTES_WIDTH_RATIO)
-  notesWidth.value = Math.min(nextWidth, Math.max(MIN_NOTES_WIDTH, maxByViewport))
+  const maxByViewport = Math.round(rect.width * RESIZER_LIMITS.maxNotesWidthRatio)
+  notesWidth.value = Math.min(nextWidth, Math.max(RESIZER_LIMITS.minNotesWidth, maxByViewport))
 }
 
 function onNotesResizeStart(e: PointerEvent) {
@@ -146,8 +152,8 @@ function onNotesResizeStart(e: PointerEvent) {
 
 function clampNotesRowSize(size: number) {
   if (!Number.isFinite(size))
-    return MIN_NOTES_ROW_SIZE
-  return Math.max(MIN_NOTES_ROW_SIZE, Math.round(size))
+    return RESIZER_LIMITS.minNotesRowSize
+  return Math.max(RESIZER_LIMITS.minNotesRowSize, Math.round(size))
 }
 
 function updateNotesRowSizeFromPointer(clientY: number) {
@@ -160,9 +166,9 @@ function updateNotesRowSizeFromPointer(clientY: number) {
   const proposed = isNotesOnBottom.value
     ? resizeStartRowSize.value - deltaY
     : resizeStartRowSize.value + deltaY
-  const maxByViewport = Math.round(rect.height * MAX_NOTES_ROW_HEIGHT_RATIO)
+  const maxByViewport = Math.round(rect.height * RESIZER_LIMITS.maxNotesRowHeightRatio)
   // In layout 2, notesRowSize actually controls the height of the top section (main slide)
-  notesRowSize.value = Math.min(clampNotesRowSize(proposed), Math.max(MIN_NOTES_ROW_SIZE, maxByViewport))
+  notesRowSize.value = Math.min(clampNotesRowSize(proposed), Math.max(RESIZER_LIMITS.minNotesRowSize, maxByViewport))
 }
 
 function onNotesRowResizeStart(e: PointerEvent) {
@@ -187,6 +193,16 @@ function updateBottomSectionHeight() {
   bottomSectionHeight.value = Math.round(element.getBoundingClientRect().height)
 }
 
+function stopResizing() {
+  isResizingNotes.value = false
+  isResizingNotesRow.value = false
+}
+
+function syncResizerLayoutState() {
+  updateBottomSectionHeight()
+  normalizeResizerState()
+}
+
 useEventListener(window, 'pointermove', (e) => {
   if (isResizingNotes.value)
     updateNotesWidthFromPointer(e.clientX)
@@ -194,26 +210,15 @@ useEventListener(window, 'pointermove', (e) => {
     updateNotesRowSizeFromPointer(e.clientY)
 })
 
-useEventListener(window, 'pointerup', () => {
-  if (isResizingNotes.value)
-    isResizingNotes.value = false
-  if (isResizingNotesRow.value)
-    isResizingNotesRow.value = false
-})
-
-useEventListener(window, 'pointercancel', () => {
-  isResizingNotes.value = false
-  isResizingNotesRow.value = false
-})
+useEventListener(window, 'pointerup', stopResizing)
+useEventListener(window, 'pointercancel', stopResizing)
 
 onMounted(() => {
-  updateBottomSectionHeight()
-  normalizeResizerState()
+  syncResizerLayoutState()
 })
 
 useEventListener(window, 'resize', () => {
-  updateBottomSectionHeight()
-  normalizeResizerState()
+  syncResizerLayoutState()
 })
 
 function normalizeResizerState() {
@@ -225,11 +230,11 @@ function normalizeResizerState() {
     return
 
   const rect = container.getBoundingClientRect()
-  const maxWidth = Math.round(rect.width * MAX_NOTES_WIDTH_RATIO)
-  const maxRowSize = Math.round(rect.height * MAX_NOTES_ROW_HEIGHT_RATIO)
+  const maxWidth = Math.round(rect.width * RESIZER_LIMITS.maxNotesWidthRatio)
+  const maxRowSize = Math.round(rect.height * RESIZER_LIMITS.maxNotesRowHeightRatio)
 
-  notesWidth.value = Math.min(notesWidth.value, Math.max(MIN_NOTES_WIDTH, maxWidth))
-  notesRowSize.value = Math.min(notesRowSize.value, Math.max(MIN_NOTES_ROW_SIZE, maxRowSize))
+  notesWidth.value = Math.min(notesWidth.value, Math.max(RESIZER_LIMITS.minNotesWidth, maxWidth))
+  notesRowSize.value = Math.min(notesRowSize.value, Math.max(RESIZER_LIMITS.minNotesRowSize, maxRowSize))
 }
 
 const SideEditor = shallowRef<any>()
