@@ -208,11 +208,29 @@ useEventListener(window, 'pointercancel', () => {
 
 onMounted(() => {
   updateBottomSectionHeight()
+  normalizeResizerState()
 })
 
 useEventListener(window, 'resize', () => {
   updateBottomSectionHeight()
+  normalizeResizerState()
 })
+
+function normalizeResizerState() {
+  notesWidth.value = clampNotesWidth(notesWidth.value)
+  notesRowSize.value = clampNotesRowSize(notesRowSize.value)
+
+  const container = gridContainer.value
+  if (!container)
+    return
+
+  const rect = container.getBoundingClientRect()
+  const maxWidth = Math.round(rect.width * MAX_NOTES_WIDTH_RATIO)
+  const maxRowSize = Math.round(rect.height * MAX_NOTES_ROW_HEIGHT_RATIO)
+
+  notesWidth.value = Math.min(notesWidth.value, Math.max(MIN_NOTES_WIDTH, maxWidth))
+  notesRowSize.value = Math.min(notesRowSize.value, Math.max(MIN_NOTES_ROW_SIZE, maxRowSize))
+}
 
 const SideEditor = shallowRef<any>()
 if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
@@ -256,8 +274,8 @@ onMounted(() => {
       class="grid-container"
       :class="`layout${presenterLayout}`"
       :style="{
-        '--slidev-presenter-notes-width': `min(${notesWidth}px, 45vw)`,
-        '--slidev-presenter-notes-row-size': `min(${notesRowSize}px, 40vh)`,
+        '--slidev-presenter-notes-width': `${notesWidth}px`,
+        '--slidev-presenter-notes-row-size': `${notesRowSize}px`,
         '--slidev-presenter-bottom-height': `${bottomSectionHeight}px`,
       }"
     >
