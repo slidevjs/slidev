@@ -34,6 +34,7 @@ const inFocus = useWindowFocus()
 const main = ref<HTMLDivElement>()
 const gridContainer = ref<HTMLDivElement>()
 const noteSection = ref<HTMLDivElement>()
+const bottomSection = ref<HTMLDivElement>()
 
 registerShortcuts()
 useSwipeControls(main)
@@ -85,38 +86,23 @@ watch(
 )
 
 const mainSlideMode = useLocalStorage<'slides' | 'mirror'>('slidev-presenter-main-slide-mode', 'slides')
-const notesWidth = useLocalStorage('slidev-presenter-notes-width', 360)
-const legacyNotesRowSize = useLocalStorage<number | null>('slidev-presenter-notes-row-size', null)
-const notesRowSizeByLayout = useLocalStorage<Record<string, number | null>>(
-  'slidev-presenter-notes-row-size-by-layout',
-  {
-    1: null,
-    2: null,
-    3: null,
-  },
-)
-const notesRowSize = computed<number | null>({
-  get: () => notesRowSizeByLayout.value[String(presenterLayout.value)] ?? null,
-  set: (value) => {
-    notesRowSizeByLayout.value = {
-      ...notesRowSizeByLayout.value,
-      [String(presenterLayout.value)]: value,
-    }
-  },
-})
+
+// Resize state (not persisted)
+const notesWidth = ref(360)
+const notesRowSize = ref(280)
+const bottomSectionHeight = ref(0)
 const isResizingNotes = ref(false)
 const isResizingNotesRow = ref(false)
 const resizeStartX = ref(0)
 const resizeStartWidth = ref(360)
 const resizeStartY = ref(0)
-const resizeStartRowSize = ref(0)
-const SideEditor = shallowRef<any>()
-if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
-  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
+const resizeStartRowSize = ref(280)
 
 const MIN_NOTES_WIDTH = 240
 const MAX_NOTES_WIDTH = 720
 const MIN_NOTES_ROW_SIZE = 160
+const MAX_NOTES_WIDTH_RATIO = 0.7
+const MAX_NOTES_ROW_HEIGHT_RATIO = 0.75
 const isLayout1Wide = useMediaQuery('(min-aspect-ratio: 1/1)')
 const isLayout1Stacked = useMediaQuery('(max-aspect-ratio: 3/5)')
 const isNotesOnRight = computed(() => presenterLayout.value === 1 && isLayout1Wide.value)
@@ -143,7 +129,7 @@ function updateNotesWidthFromPointer(clientX: number) {
     ? resizeStartWidth.value - deltaX
     : resizeStartWidth.value + deltaX
   const nextWidth = clampNotesWidth(proposedWidth)
-  const maxByViewport = Math.round(rect.width * 0.7)
+  const maxByViewport = Math.round(rect.width * MAX_NOTES_WIDTH_RATIO)
   notesWidth.value = Math.min(nextWidth, Math.max(MIN_NOTES_WIDTH, maxByViewport))
 }
 
@@ -158,11 +144,10 @@ function onNotesResizeStart(e: PointerEvent) {
   isResizingNotes.value = true
 }
 
-function clampNotesRowSize(size: number | string) {
-  const parsed = typeof size === 'string' ? Number(size) : size
-  if (!Number.isFinite(parsed))
+function clampNotesRowSize(size: number) {
+  if (!Number.isFinite(size))
     return MIN_NOTES_ROW_SIZE
-  return Math.max(MIN_NOTES_ROW_SIZE, Math.round(parsed))
+  return Math.max(MIN_NOTES_ROW_SIZE, Math.round(size))
 }
 
 function updateNotesRowSizeFromPointer(clientY: number) {
@@ -175,7 +160,7 @@ function updateNotesRowSizeFromPointer(clientY: number) {
   const proposed = isNotesOnBottom.value
     ? resizeStartRowSize.value - deltaY
     : resizeStartRowSize.value + deltaY
-  const maxByViewport = Math.round(rect.height * 0.75)
+  const maxByViewport = Math.round(rect.height * MAX_NOTES_ROW_HEIGHT_RATIO)
   notesRowSize.value = Math.min(clampNotesRowSize(proposed), Math.max(MIN_NOTES_ROW_SIZE, maxByViewport))
 }
 
@@ -190,9 +175,15 @@ function onNotesRowResizeStart(e: PointerEvent) {
     ? main.value?.getBoundingClientRect().height
     : noteSection.value?.getBoundingClientRect().height
   resizeStartY.value = e.clientY
-  resizeStartRowSize.value = clampNotesRowSize(currentHeight ?? notesRowSize.value ?? MIN_NOTES_ROW_SIZE)
-  notesRowSize.value = resizeStartRowSize.value
+  resizeStartRowSize.value = clampNotesRowSize(currentHeight ?? notesRowSize.value)
   isResizingNotesRow.value = true
+}
+
+function updateBottomSectionHeight() {
+  const element = bottomSection.value
+  if (!element)
+    return
+  bottomSectionHeight.value = Math.round(element.getBoundingClientRect().height)
 }
 
 useEventListener(window, 'pointermove', (e) => {
@@ -210,37 +201,21 @@ useEventListener(window, 'pointerup', () => {
 })
 
 useEventListener(window, 'pointercancel', () => {
-  if (isResizingNotes.value)
-    isResizingNotes.value = false
-  if (isResizingNotesRow.value)
-    isResizingNotesRow.value = false
+  isResizingNotes.value = false
+  isResizingNotesRow.value = false
 })
 
-watch(notesWidth, (value) => {
-  notesWidth.value = clampNotesWidth(value)
-}, { immediate: true })
+onMounted(() => {
+  updateBottomSectionHeight()
+})
 
-watch(notesRowSize, (value) => {
-  if (value == null)
-    return
-  notesRowSize.value = clampNotesRowSize(value)
-}, { immediate: true })
+useEventListener(window, 'resize', () => {
+  updateBottomSectionHeight()
+})
 
-watch(legacyNotesRowSize, (value) => {
-  if (value == null)
-    return
-
-  const hasPerLayoutValues = Object.values(notesRowSizeByLayout.value).some(v => v != null)
-  if (hasPerLayoutValues)
-    return
-
-  const migrated = clampNotesRowSize(value)
-  notesRowSizeByLayout.value = {
-    1: migrated,
-    2: migrated,
-    3: migrated,
-  }
-}, { immediate: true })
+const SideEditor = shallowRef<any>()
+if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
+  import('../internals/SideEditor.vue').then(v => SideEditor.value = v.default)
 
 // sync presenter cursor
 onMounted(() => {
@@ -281,9 +256,24 @@ onMounted(() => {
       :class="`layout${presenterLayout}`"
       :style="{
         '--slidev-presenter-notes-width': `${notesWidth}px`,
-        '--slidev-presenter-notes-row-size': notesRowSize != null ? `${notesRowSize}px` : undefined,
+        '--slidev-presenter-notes-row-size': `${notesRowSize}px`,
+        '--slidev-presenter-bottom-height': `${bottomSectionHeight}px`,
       }"
     >
+      <!-- Unified vertical resizer for wide layout -->
+      <div
+        v-if="isNotesResizable && isNotesOnRight"
+        class="notes-vertical-resizer"
+        title="Resize notes panel"
+        @pointerdown="onNotesResizeStart"
+      />
+      <!-- Unified vertical resizer for layout 3 -->
+      <div
+        v-if="isNotesResizable && presenterLayout === 3"
+        class="notes-vertical-resizer-left"
+        title="Resize notes panel"
+        @pointerdown="onNotesResizeStart"
+      />
       <div ref="main" class="relative grid-section main flex flex-col">
         <div flex="~ gap-4 items-center" border="b main" p1>
           <span op50 px2>Current</span>
@@ -320,7 +310,7 @@ onMounted(() => {
       <div class="relative grid-section next flex flex-col p-2 lg:p-4">
         <div
           v-if="isNotesRowResizable && presenterLayout === 2"
-          class="notes-row-resizer top-[-3px]"
+          class="notes-row-resizer top-[-6px]"
           title="Resize notes panel height"
           @pointerdown="onNotesRowResizeStart"
         />
@@ -343,15 +333,15 @@ onMounted(() => {
       </div>
       <div ref="noteSection" class="relative grid-section note overflow-hidden">
         <div
-          class="notes-resizer"
-          :class="isNotesOnRight ? 'left-[-3px]' : 'right-[-3px]'"
+          v-if="isNotesResizable && !isNotesOnRight && presenterLayout !== 3"
+          class="notes-resizer right-[-6px]"
           title="Resize notes panel"
           @pointerdown="onNotesResizeStart"
         />
         <div
           v-if="isNotesRowResizable && presenterLayout !== 2"
           class="notes-row-resizer"
-          :class="isNotesOnBottom ? 'top-[-3px]' : 'bottom-[-3px]'"
+          :class="isNotesOnBottom ? 'top-[-6px]' : 'bottom-[-6px]'"
           title="Resize notes panel height"
           @pointerdown="onNotesRowResizeStart"
         />
@@ -394,7 +384,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="grid-section bottom flex">
+      <div ref="bottomSection" class="grid-section bottom flex">
         <NavControls :persist="true" class="transition" :class="inFocus ? '' : 'op25'" />
         <div flex-auto />
         <TimerInlined />
@@ -414,6 +404,7 @@ onMounted(() => {
 
 .grid-container {
   --slidev-presenter-notes-width: 360px;
+  --slidev-presenter-notes-row-size: 280px;
   --uno: bg-gray/20 flex-1 of-hidden;
   display: grid;
   gap: 1px 1px;
@@ -421,7 +412,7 @@ onMounted(() => {
 
 .grid-container.layout1 {
   grid-template-columns: var(--slidev-presenter-notes-width) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 2fr) minmax(0, var(--slidev-presenter-notes-row-size, 1fr)) min-content;
+  grid-template-rows: minmax(0, 2fr) minmax(0, var(--slidev-presenter-notes-row-size)) min-content;
   grid-template-areas:
     'main main'
     'note next'
@@ -430,7 +421,7 @@ onMounted(() => {
 
 .grid-container.layout2 {
   grid-template-columns: var(--slidev-presenter-notes-width) minmax(0, 1fr);
-  grid-template-rows: minmax(0, var(--slidev-presenter-notes-row-size, 2fr)) minmax(0, 1fr) min-content;
+  grid-template-rows: minmax(0, var(--slidev-presenter-notes-row-size)) minmax(0, 1fr) min-content;
   grid-template-areas:
     'note main'
     'note next'
@@ -440,7 +431,7 @@ onMounted(() => {
 @media (max-aspect-ratio: 3/5) {
   .grid-container.layout1 {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr min-content;
+    grid-template-rows: 2fr 1fr 1fr min-content;
     grid-template-areas:
       'main'
       'note'
@@ -452,7 +443,7 @@ onMounted(() => {
 @media (min-aspect-ratio: 1/1) {
   .grid-container.layout1 {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) var(--slidev-presenter-notes-width);
-    grid-template-rows: minmax(0, 1fr) minmax(0, var(--slidev-presenter-notes-row-size, 2fr)) min-content;
+    grid-template-rows: minmax(0, 1fr) minmax(0, var(--slidev-presenter-notes-row-size)) min-content;
     grid-template-areas:
       'main main next'
       'main main note'
@@ -462,7 +453,7 @@ onMounted(() => {
 
 .grid-container.layout3 {
   grid-template-columns: var(--slidev-presenter-notes-width) minmax(0, 1fr);
-  grid-template-rows: minmax(0, var(--slidev-presenter-notes-row-size, 1fr)) minmax(0, 1fr) min-content;
+  grid-template-rows: minmax(0, var(--slidev-presenter-notes-row-size)) minmax(0, 1fr) min-content;
   grid-template-areas:
     'note next'
     'main next'
@@ -491,7 +482,7 @@ onMounted(() => {
 .notes-resizer {
   position: absolute;
   top: 0;
-  width: 6px;
+  width: 12px;
   height: 100%;
   cursor: col-resize;
   z-index: 10;
@@ -501,19 +492,20 @@ onMounted(() => {
 .notes-resizer::before {
   content: '';
   position: absolute;
-  left: 2px;
+  left: 50%;
   top: 0;
   width: 1px;
   height: 100%;
   background-color: currentColor;
   opacity: 0.2;
+  transform: translateX(-50%);
 }
 
 .notes-row-resizer {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 6px;
+  height: 12px;
   cursor: row-resize;
   z-index: 10;
   touch-action: none;
@@ -523,10 +515,59 @@ onMounted(() => {
   content: '';
   position: absolute;
   left: 0;
-  top: 2px;
+  top: 50%;
   width: 100%;
   height: 1px;
   background-color: currentColor;
   opacity: 0.2;
+  transform: translateY(-50%);
+}
+
+.notes-vertical-resizer {
+  position: absolute;
+  right: var(--slidev-presenter-notes-width);
+  top: 0;
+  bottom: var(--slidev-presenter-bottom-height, 0px);
+  width: 12px;
+  cursor: col-resize;
+  z-index: 10;
+  touch-action: none;
+  transform: translateX(50%);
+}
+
+.notes-vertical-resizer::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background-color: currentColor;
+  opacity: 0.2;
+  transform: translateX(-50%);
+}
+
+.notes-vertical-resizer-left {
+  position: absolute;
+  left: var(--slidev-presenter-notes-width);
+  top: 0;
+  bottom: var(--slidev-presenter-bottom-height, 0px);
+  width: 12px;
+  cursor: col-resize;
+  z-index: 10;
+  touch-action: none;
+  transform: translateX(-50%);
+}
+
+.notes-vertical-resizer-left::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background-color: currentColor;
+  opacity: 0.2;
+  transform: translateX(-50%);
 }
 </style>
