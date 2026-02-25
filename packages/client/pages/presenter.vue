@@ -87,9 +87,9 @@ watch(
 
 const mainSlideMode = useLocalStorage<'slides' | 'mirror'>('slidev-presenter-main-slide-mode', 'slides')
 
-// Resize state (not persisted)
-const notesWidth = ref(360)
-const notesRowSize = ref(280)
+// Resize state (persisted)
+const notesWidth = useLocalStorage('slidev-presenter-notes-width', 360)
+const notesRowSize = useLocalStorage('slidev-presenter-notes-row-size', 280)
 const bottomSectionHeight = ref(0)
 const isResizingNotes = ref(false)
 const isResizingNotesRow = ref(false)
@@ -161,6 +161,7 @@ function updateNotesRowSizeFromPointer(clientY: number) {
     ? resizeStartRowSize.value - deltaY
     : resizeStartRowSize.value + deltaY
   const maxByViewport = Math.round(rect.height * MAX_NOTES_ROW_HEIGHT_RATIO)
+  // In layout 2, notesRowSize actually controls the height of the top section (main slide)
   notesRowSize.value = Math.min(clampNotesRowSize(proposed), Math.max(MIN_NOTES_ROW_SIZE, maxByViewport))
 }
 
@@ -264,6 +265,8 @@ onMounted(() => {
       <div
         v-if="isNotesResizable && isNotesOnRight"
         class="notes-vertical-resizer"
+        role="separator"
+        aria-orientation="vertical"
         title="Resize notes panel"
         @pointerdown="onNotesResizeStart"
       />
@@ -271,6 +274,8 @@ onMounted(() => {
       <div
         v-if="isNotesResizable && presenterLayout === 3"
         class="notes-vertical-resizer-left"
+        role="separator"
+        aria-orientation="vertical"
         title="Resize notes panel"
         @pointerdown="onNotesResizeStart"
       />
@@ -311,6 +316,8 @@ onMounted(() => {
         <div
           v-if="isNotesRowResizable && presenterLayout === 2"
           class="notes-row-resizer top-[-6px]"
+          role="separator"
+          aria-orientation="horizontal"
           title="Resize notes panel height"
           @pointerdown="onNotesRowResizeStart"
         />
@@ -335,6 +342,8 @@ onMounted(() => {
         <div
           v-if="isNotesResizable && !isNotesOnRight && presenterLayout !== 3"
           class="notes-resizer right-[-6px]"
+          role="separator"
+          aria-orientation="vertical"
           title="Resize notes panel"
           @pointerdown="onNotesResizeStart"
         />
@@ -342,6 +351,8 @@ onMounted(() => {
           v-if="isNotesRowResizable && presenterLayout !== 2"
           class="notes-row-resizer"
           :class="isNotesOnBottom ? 'top-[-6px]' : 'bottom-[-6px]'"
+          role="separator"
+          aria-orientation="horizontal"
           title="Resize notes panel height"
           @pointerdown="onNotesRowResizeStart"
         />
