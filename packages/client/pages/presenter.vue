@@ -113,7 +113,7 @@ const isNotesResizable = computed(() => !(presenterLayout.value === 1 && isLayou
 const isNotesRowResizable = computed(() =>
   (presenterLayout.value === 1 && !isLayout1Stacked.value) || presenterLayout.value === 2 || presenterLayout.value === 3,
 )
-const isNotesOnBottom = computed(() => presenterLayout.value === 1)
+const isNotesOnBottom = computed(() => presenterLayout.value === 1 && !isLayout1Stacked.value)
 
 function clampNotesWidth(width: number) {
   if (!Number.isFinite(width))
@@ -167,7 +167,6 @@ function updateNotesRowSizeFromPointer(clientY: number) {
     ? resizeStartRowSize.value - deltaY
     : resizeStartRowSize.value + deltaY
   const maxByViewport = Math.round(rect.height * RESIZER_LIMITS.maxNotesRowHeightRatio)
-  // In layout 2, notesRowSize actually controls the height of the top section (main slide)
   notesRowSize.value = Math.min(clampNotesRowSize(proposed), Math.max(RESIZER_LIMITS.minNotesRowSize, maxByViewport))
 }
 
@@ -178,6 +177,8 @@ function onNotesRowResizeStart(e: PointerEvent) {
     return
   e.preventDefault()
 
+  // In layout 2, notesRowSize controls the top section (main slide) height
+  // In other layouts, it represents the notes area height
   const currentHeight = presenterLayout.value === 2
     ? main.value?.getBoundingClientRect().height
     : noteSection.value?.getBoundingClientRect().height
