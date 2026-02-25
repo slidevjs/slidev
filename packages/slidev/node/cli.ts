@@ -456,7 +456,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     const { exportSlides, getExportOptions } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     let warned = false
     for (const entryFile of entry as unknown as string) {
@@ -471,21 +471,27 @@ cli.command(
         )
       }
 
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
-      printInfo(options)
-      const result = await exportSlides({
-        port,
-        ...getExportOptions({ ...args, entry: entryFile }, options),
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-      server.close()
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
+        printInfo(options)
+        const result = await exportSlides({
+          port,
+          ...getExportOptions({ ...args, entry: entryFile }, options),
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -524,30 +530,35 @@ cli.command(
     wait,
   }) => {
     const { exportNotes } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile }, 'export')
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
 
-      printInfo(options)
+        printInfo(options)
 
-      const result = await exportNotes({
-        port,
-        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
-        timeout,
-        wait,
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-
-      server.close()
+        const result = await exportNotes({
+          port,
+          output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
+          timeout,
+          wait,
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -557,6 +568,13 @@ cli.command(
 cli
   .help()
   .parse()
+
+function getViteServerPort(server: ViteDevServer): number {
+  const address = server.httpServer?.address()
+  if (address && typeof address === 'object')
+    return address.port
+  throw new Error('Failed to get Vite server port')
+}
 
 function commonOptions(args: Argv<object>) {
   return args
