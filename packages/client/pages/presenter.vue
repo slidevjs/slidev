@@ -256,8 +256,8 @@ onMounted(() => {
       class="grid-container"
       :class="`layout${presenterLayout}`"
       :style="{
-        '--slidev-presenter-notes-width': `${notesWidth}px`,
-        '--slidev-presenter-notes-row-size': `${notesRowSize}px`,
+        '--slidev-presenter-notes-width': `min(${notesWidth}px, 45vw)`,
+        '--slidev-presenter-notes-row-size': `min(${notesRowSize}px, 40vh)`,
         '--slidev-presenter-bottom-height': `${bottomSectionHeight}px`,
       }"
     >
