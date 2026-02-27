@@ -1,5 +1,5 @@
 import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
-import type MarkdownIt from 'markdown-it'
+import type MarkdownExit from 'markdown-exit'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
 import { relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -7,7 +7,7 @@ import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
 
-type Token = ReturnType<MarkdownIt['parseInline']>[number]
+type Token = ReturnType<MarkdownExit['parseInline']>[number]
 
 type Jiti = ReturnType<typeof createJiti>
 let jiti: Jiti | undefined

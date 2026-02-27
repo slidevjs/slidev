@@ -1,13 +1,13 @@
 import type MagicString from 'magic-string-stack'
-import type MarkdownIt from 'markdown-it'
+import type MarkdownExit from 'markdown-exit'
 import { SourceMapConsumer } from 'source-map-js'
 
-type Token = ReturnType<MarkdownIt['parseInline']>[number]
+type Token = ReturnType<MarkdownExit['parseInline']>[number]
 
 const dragComponentRegex = /<(v-?drag-?\w*)([\s>])/i
 const dragDirectiveRegex = /(?<![</\w])v-drag(=".*?")?/i
 
-export default function MarkdownItVDrag(md: MarkdownIt, markdownTransformMap: Map<string, MagicString>) {
+export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: Map<string, MagicString>) {
   const visited = new WeakSet()
   const sourceMapConsumers = new WeakMap<MagicString, SourceMapConsumer>()
 
