@@ -32,7 +32,6 @@
     "@vueuse/core": "catalog:frontend",
     "fast-glob": "catalog:prod",
     "gray-matter": "catalog:prod",
-    "markdown-it": "catalog:prod",
     "shiki": "catalog:frontend",
     "typeit": "catalog:docs",
     "typescript": "catalog:dev",

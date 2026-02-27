@@ -23,7 +23,7 @@ To configure the built-in plugins listed above, create a `vite.config.ts` with t
 
 ```ts twoslash [vite.config.ts]
 /// <reference types="@slidev/types" />
-import type MarkdownIt from 'markdown-it'
+import type MarkdownExit from 'markdown-exit'
 
 declare const MyPlugin: (md: any) => void
 // ---cut---
@@ -35,9 +35,9 @@ export default defineConfig({
       /* vue options */
     },
     markdown: {
-      /* markdown-it options */
-      markdownItSetup(md) {
-        /* custom markdown-it plugins */
+      /* markdown-exit options */
+      markdownSetup(md) {
+        /* custom markdown-exit plugins */
         md.use(MyPlugin)
       },
     },

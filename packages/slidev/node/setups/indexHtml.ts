@@ -5,12 +5,20 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
-import { escapeHtml } from 'markdown-it/lib/common/utils.mjs'
 import { createHead, extractUnheadInputFromHtml, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
 import { generateCoollabsFontsUrl, generateGoogleFontsUrl } from '../utils'
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
 
 function toAttrValue(unsafe: unknown) {
   return JSON.stringify(escapeHtml(String(unsafe)))

@@ -40,7 +40,6 @@
     "@types/file-saver": "catalog:types",
     "@types/js-yaml": "catalog:types",
     "@types/katex": "catalog:types",
-    "@types/markdown-it": "catalog:types",
     "@types/node": "catalog:types",
     "@types/prompts": "catalog:types",
     "@types/recordrtc": "catalog:types",

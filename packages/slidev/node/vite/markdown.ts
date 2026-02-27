@@ -19,17 +19,17 @@ export async function createMarkdownPlugin(
     headEnabled: false,
     frontmatter: false,
     escapeCodeTagInterpolation: false,
-    markdownItOptions: {
+    markdownOptions: {
       quotes: '""\'\'',
       html: true,
       xhtmlOut: true,
       linkify: true,
-      ...mdOptions?.markdownItOptions,
+      ...mdOptions?.markdownOptions,
     },
     ...mdOptions,
-    async markdownItSetup(md) {
+    async markdownSetup(md) {
       await useMarkdownItPlugins(md, options, markdownTransformMap)
-      await mdOptions?.markdownItSetup?.(md)
+      await mdOptions?.markdownSetup?.(md)
     },
     transforms: {
       ...mdOptions?.transforms,

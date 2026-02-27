@@ -81,7 +81,7 @@
     "lz-string": "catalog:frontend",
     "magic-string": "catalog:prod",
     "magic-string-stack": "catalog:prod",
-    "markdown-it": "catalog:prod",
+    "markdown-exit": "catalog:prod",
     "markdown-it-footnote": "catalog:prod",
     "markdown-it-mdc": "catalog:prod",
     "mlly": "catalog:prod",
