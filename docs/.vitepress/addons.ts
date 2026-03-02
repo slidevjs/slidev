@@ -228,13 +228,13 @@ export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-p5',
     name: 'Runner for p5js',
-    description: 'Edit and run p5js sketches in your slidev',
-    tags: ['tool', 'Code runner'],
+    description: 'Display, edit and run p5js sketches in your slidev',
+    tags: ['Component', 'Code runner'],
     author: {
       name: 'mjvo',
       link: 'https://github.com/mjvo',
     },
-    repo: 'https://github.com/slidev-addon-p5',
+    repo: 'https://github.com/mjvo/slidev-addon-p5',
   },
   // Add yours here!
   {
