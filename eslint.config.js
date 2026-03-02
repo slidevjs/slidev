@@ -33,3 +33,4 @@ export default antfu({
       'packages/vscode/package.json',
     ],
   })
+  .remove('antfu/markdown/rules')

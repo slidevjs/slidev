@@ -555,6 +555,7 @@ Content 3
 
 exports[`md parser > mdc.md > config 1`] = `
 {
+  "comark": true,
   "drawings": {
     "enabled": true,
     "persist": false,
@@ -606,8 +607,7 @@ exports[`md parser > mdc.md > config 1`] = `
       "600",
     ],
   },
-  "mdc": true,
-  "title": "MDC{style="color:red"}",
+  "title": "Comark{style="color:red"}",
 }
 `;
 
@@ -623,38 +623,38 @@ exports[`md parser > mdc.md > features 1`] = `
 exports[`md parser > mdc.md > slides 1`] = `
 [
   {
-    "content": "# MDC{style="color:red"}
+    "content": "# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}",
     "frontmatter": {
-      "mdc": true,
+      "comark": true,
     },
-    "frontmatterRaw": "mdc: true
+    "frontmatterRaw": "comark: true
 ",
     "importChain": undefined,
     "index": 0,
     "level": 1,
     "note": undefined,
-    "revision": "kb2y4a",
+    "revision": "hmgmac",
     "source": {
       "content": "
-# MDC{style="color:red"}
+# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
-      "contentRaw": "# MDC{style="color:red"}
+      "contentRaw": "# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}",
       "contentStart": 3,
       "end": 8,
       "filepath": "mdc.md",
       "frontmatter": {
-        "mdc": true,
+        "comark": true,
       },
       "frontmatterDoc": {
-        "mdc": true,
+        "comark": true,
       },
-      "frontmatterRaw": "mdc: true
+      "frontmatterRaw": "comark: true
 ",
       "frontmatterStyle": "frontmatter",
       "images": [],
@@ -662,18 +662,18 @@ exports[`md parser > mdc.md > slides 1`] = `
       "level": 1,
       "note": undefined,
       "raw": "---
-mdc: true
+comark: true
 ---
 
-# MDC{style="color:red"}
+# Comark{style="color:red"}
 
 :arrow{x1=1 y1=1 x2=2 y2=2}
 ",
-      "revision": "kb2y4a",
+      "revision": "hmgmac",
       "start": 0,
-      "title": "MDC{style="color:red"}",
+      "title": "Comark{style="color:red"}",
     },
-    "title": "MDC{style="color:red"}",
+    "title": "Comark{style="color:red"}",
   },
 ]
 `;

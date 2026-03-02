@@ -4,7 +4,7 @@ import type { ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
@@ -24,7 +24,7 @@ export function createSlidesLoader(
 ): Plugin {
   const { data, mode, utils, withoutNotes } = options
 
-  const notesMd = MarkdownIt({ html: true })
+  const notesMd = MarkdownExit({ html: true })
   notesMd.use(markdownItLink)
   if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)

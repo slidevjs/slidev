@@ -8,9 +8,8 @@ By default, JavaScript, TypeScript runners are supported built-in. They run in t
 
 Create `./setup/code-runners.ts` with the following content:
 
-<!-- eslint-disable import/first -->
-
 ```ts twoslash [setup/code-runners.ts]
+/* eslint-disable import/first */
 declare const executePythonCodeRemotely: (code: string) => Promise<string>
 declare const sanitizeHtml: (html: string) => string
 // ---cut---

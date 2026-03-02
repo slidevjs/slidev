@@ -392,8 +392,8 @@
         },
         "mdc": {
           "type": "boolean",
-          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
-          "markdownDescription": "Suppport MDC syntax\n\nSee https://github.com/antfu/markdown-it-mdc\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/@comark/markdown-it\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "markdownDescription": "Suppport MDC syntax\n\nSee https://github.com/antfu/@comark/markdown-it\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
           "default": false
         },
         "editor": {

@@ -76,7 +76,7 @@ Presenter notes go here
 | Click-based highlighting | `` ```ts {1\|2-3\|all} `` | [code-line-highlighting](references/code-line-highlighting.md) |
 | Line numbers | `lineNumbers: true` or `{lines:true}` | [code-line-numbers](references/code-line-numbers.md) |
 | Scrollable code | `{maxHeight:'100px'}` | [code-max-height](references/code-max-height.md) |
-| Code tabs | `::code-group` (requires `mdc: true`) | [code-groups](references/code-groups.md) |
+| Code tabs | `::code-group` (requires `comark: true`) | [code-groups](references/code-groups.md) |
 | Monaco editor | `` ```ts {monaco} `` | [editor-monaco](references/editor-monaco.md) |
 | Run code | `` ```ts {monaco-run} `` | [editor-monaco-run](references/editor-monaco-run.md) |
 | Edit files | `<<< ./file.ts {monaco-write}` | [editor-monaco-write](references/editor-monaco-write.md) |
@@ -119,7 +119,7 @@ Presenter notes go here
 
 | Feature | Usage | Reference |
 |---------|-------|-----------|
-| MDC syntax | `mdc: true` + `{style="color:red"}` | [syntax-mdc](references/syntax-mdc.md) |
+| Comark syntax | `comark: true` + `{style="color:red"}` | [syntax-comark](references/syntax-comark.md) |
 | Block frontmatter | `` ```yaml `` instead of `---` | [syntax-block-frontmatter](references/syntax-block-frontmatter.md) |
 | Import slides | `src: ./other.md` | [syntax-importing-slides](references/syntax-importing-slides.md) |
 | Merge frontmatter | Main entry wins | [syntax-frontmatter-merging](references/syntax-frontmatter-merging.md) |

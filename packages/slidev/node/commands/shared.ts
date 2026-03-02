@@ -1,13 +1,13 @@
 import type { ResolvedSlidevOptions, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { ConfigEnv, InlineConfig } from 'vite'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import { loadConfigFromFile, mergeConfig } from 'vite'
 import { resolveSourceFiles } from '../resolver'
 import markdownItLink from '../syntax/markdown-it/markdown-it-link'
 import { stringifyMarkdownTokens } from '../utils'
 import { ViteSlidevPlugin } from '../vite'
 
-export const sharedMd = MarkdownIt({ html: true })
+export const sharedMd = MarkdownExit({ html: true })
 sharedMd.use(markdownItLink)
 
 export function getSlideTitle(data: SlidevData) {

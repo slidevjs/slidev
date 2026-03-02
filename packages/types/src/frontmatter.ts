@@ -198,12 +198,15 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   htmlAttrs?: Record<string, string>
   /**
-   * Suppport MDC syntax
+   * Suppport Comark syntax
    *
-   * See https://github.com/antfu/markdown-it-mdc
+   * https://comark.dev/syntax/markdown
    *
-   * See https://content.nuxtjs.org/guide/writing/mdc
-   *
+   * @default false
+   */
+  comark?: boolean
+  /**
+   * @deprecated MDC is now Comark. Use the `comark` option instead
    * @default false
    */
   mdc?: boolean
