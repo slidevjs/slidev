@@ -40,6 +40,8 @@
     "@slidev/types": "workspace:*",
     "@typescript/ata": "catalog:monaco",
     "@unhead/vue": "catalog:frontend",
+    "@unocss/extractor-mdc": "catalog:prod",
+    "@unocss/preset-mini": "catalog:prod",
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "@vueuse/math": "catalog:frontend",

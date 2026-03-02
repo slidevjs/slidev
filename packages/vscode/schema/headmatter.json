@@ -390,10 +390,15 @@
           "markdownDescription": "Attributes to apply to the HTML element",
           "default": {}
         },
+        "comark": {
+          "type": "boolean",
+          "description": "Suppport Comark syntax\n\nhttps://comark.dev/syntax/markdown",
+          "markdownDescription": "Suppport Comark syntax\n\nhttps://comark.dev/syntax/markdown",
+          "default": false
+        },
         "mdc": {
           "type": "boolean",
-          "description": "Suppport MDC syntax\n\nSee https://github.com/antfu/@comark/markdown-it\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
-          "markdownDescription": "Suppport MDC syntax\n\nSee https://github.com/antfu/@comark/markdown-it\n\nSee https://content.nuxtjs.org/guide/writing/mdc",
+          "deprecated": "MDC is now Comark. Use the `comark` option instead",
           "default": false
         },
         "editor": {

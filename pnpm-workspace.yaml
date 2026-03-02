@@ -96,6 +96,7 @@ catalogs:
     '@shikijs/twoslash': ^4.0.0
     '@shikijs/vitepress-twoslash': ^4.0.0
     '@unocss/extractor-mdc': ^66.6.2
+    '@unocss/preset-mini': ^66.6.2
     '@vitejs/plugin-vue': ^6.0.4
     '@vitejs/plugin-vue-jsx': ^5.1.4
     ansis: ^4.2.0

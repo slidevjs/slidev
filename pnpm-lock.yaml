@@ -213,6 +213,9 @@ catalogs:
     '@unocss/extractor-mdc':
       specifier: ^66.6.2
       version: 66.6.2
+    '@unocss/preset-mini':
+      specifier: ^66.6.2
+      version: 66.6.2
     '@vitejs/plugin-vue':
       specifier: ^6.0.4
       version: 6.0.4
@@ -750,6 +753,12 @@ importers:
       '@unhead/vue':
         specifier: catalog:frontend
         version: 2.1.9(vue@3.5.29(typescript@5.9.3))
+      '@unocss/extractor-mdc':
+        specifier: catalog:prod
+        version: 66.6.2
+      '@unocss/preset-mini':
+        specifier: catalog:prod
+        version: 66.6.2
       '@unocss/reset':
         specifier: catalog:frontend
         version: 66.6.2
@@ -3412,9 +3421,6 @@ packages:
     peerDependenciesMeta:
       ajv:
         optional: true
-
-  ajv@6.12.6:
-    resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
 
   ajv@6.14.0:
     resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
@@ -9298,7 +9304,7 @@ snapshots:
       '@typescript-eslint/parser': 8.56.1(eslint@10.0.2(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/typescript-estree': 8.56.1(typescript@5.9.3)
       '@typescript-eslint/utils': 8.56.1(eslint@10.0.2(jiti@2.6.1))(typescript@5.9.3)
-      ajv: 6.12.6
+      ajv: 6.14.0
       eslint: 10.0.2(jiti@2.6.1)
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
@@ -9988,13 +9994,6 @@ snapshots:
   ajv-draft-04@1.0.0(ajv@8.17.1):
     optionalDependencies:
       ajv: 8.17.1
-
-  ajv@6.12.6:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-json-stable-stringify: 2.1.0
-      json-schema-traverse: 0.4.1
-      uri-js: 4.4.1
 
   ajv@6.14.0:
     dependencies:
@@ -12206,7 +12205,7 @@ snapshots:
   markdown-it-async@2.2.0:
     dependencies:
       '@types/markdown-it': 14.1.2
-      markdown-it: 14.1.0
+      markdown-it: 14.1.1
     optional: true
 
   markdown-it-footnote@4.0.0: {}
