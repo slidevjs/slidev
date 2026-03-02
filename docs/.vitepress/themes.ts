@@ -597,6 +597,7 @@ export const community: ThemeInfo[] = [
       name: 'PJ Doland',
       link: 'https://github.com/pjdoland',
     },
+    repo: 'https://github.com/pjdoland/slidev-theme-field-manual',
     previews: [
       'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/1.jpg',
       'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/2.jpg',
