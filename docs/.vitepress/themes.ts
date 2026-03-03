@@ -587,7 +587,6 @@ export const community: ThemeInfo[] = [
       'princeton',
     ],
   },
-  // Add yours here!
   {
     id: 'slidev-theme-field-manual',
     name: 'Field Manual',
@@ -639,6 +638,7 @@ export const community: ThemeInfo[] = [
       'military',
     ],
   },
+  // Add yours here!
   {
     id: '',
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
