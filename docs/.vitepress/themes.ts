@@ -590,7 +590,6 @@ export const community: ThemeInfo[] = [
   // Add yours here!
   {
     id: 'slidev-theme-field-manual',
-    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Field Manual',
     description: 'A 24-layout theme modeled on the style of vintage military field manuals',
     author: {
@@ -638,6 +637,18 @@ export const community: ThemeInfo[] = [
       'dark',
       'vintage',
       'military',
+    ],
+  },
+  {
+    id: '',
+    link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
+    name: 'Yours?',
+    description: 'Click here to submit your theme :)',
+    author: {
+      name: '',
+    },
+    previews: [
+      '/theme-placeholder.png',
     ],
   },
 ]
