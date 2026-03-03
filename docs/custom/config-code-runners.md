@@ -64,7 +64,7 @@ The runner can either return a text or HTML output, or an element to be mounted.
 
 ## Additional Runner Dependencies
 
-By default, Slidev will scan the Markdown source and automatically import the necessary dependencies for the code runners. If you want to manually import dependencies, you can use the `monacoRunAdditionalDeps` option in the slide frontmatter:
+By default, Slidev will scan the Markdown source and automatically import the necessary dependencies for the code runners. If you want to manually import dependencies, you can use the `monacoRunAdditionalDeps` option in the [headmatter](./index#headmatter):
 
 ```yaml
 monacoRunAdditionalDeps:

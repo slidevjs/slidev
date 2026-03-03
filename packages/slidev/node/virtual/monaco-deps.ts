@@ -7,7 +7,11 @@ export const templateMonacoRunDeps: VirtualModuleTemplate = {
   async getContent({ userRoot, data }) {
     if (!data.features.monaco)
       return ''
-    const deps = uniq(data.features.monaco.deps.concat(data.config.monacoTypesAdditionalPackages))
+    const deps = uniq([
+      ...data.features.monaco.deps,
+      ...(data.config.monacoTypesAdditionalPackages || []),
+      ...(data.config.monacoRunAdditionalDeps || []),
+    ])
     const importerPath = resolve(userRoot, './snippets/__importer__.ts')
     let result = ''
     for (let i = 0; i < deps.length; i++) {
