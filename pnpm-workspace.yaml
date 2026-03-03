@@ -170,6 +170,7 @@ catalogs:
     ts-json-schema-generator: ^2.5.0
     volar-service-prettier: ^0.0.64
     volar-service-yaml: ^0.0.64
+    vscode-uri: ^3.1.0
     yaml-language-server: ^1.21.0
 onlyBuiltDependencies:
   - '@vscode/vsce-sign'

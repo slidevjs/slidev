@@ -420,6 +420,9 @@ catalogs:
     volar-service-yaml:
       specifier: ^0.0.64
       version: 0.0.64
+    vscode-uri:
+      specifier: ^3.1.0
+      version: 3.1.0
     yaml-language-server:
       specifier: ^1.21.0
       version: 1.21.0
@@ -1205,6 +1208,9 @@ importers:
       volar-service-yaml:
         specifier: catalog:vscode
         version: 0.0.64(@volar/language-service@2.4.28)
+      vscode-uri:
+        specifier: catalog:vscode
+        version: 3.1.0
       yaml-language-server:
         specifier: catalog:vscode
         version: 1.21.0
