@@ -26,7 +26,7 @@ catalogs:
     cypress: ^14.5.4
     eslint: ^10.0.2
     eslint-plugin-format: ^2.0.1
-    lint-staged: ^16.2.7
+    lint-staged: ^16.3.1
     nodemon: ^3.1.14
     ovsx: ^0.10.9
     playwright-chromium: ^1.58.2
@@ -53,11 +53,11 @@ catalogs:
     vitepress-plugin-llms: ^1.11.0
   frontend:
     '@antfu/utils': ^9.3.0
-    '@shikijs/engine-javascript': ^4.0.0
-    '@shikijs/markdown-it': ^4.0.0
+    '@shikijs/engine-javascript': ^4.0.1
+    '@shikijs/markdown-it': ^4.0.1
     '@slidev/rough-notation': ^0.1.0
-    '@unhead/vue': ^2.1.9
-    '@unocss/reset': ^66.6.2
+    '@unhead/vue': ^2.1.10
+    '@unocss/reset': ^66.6.3
     '@vueuse/core': ^14.2.1
     '@vueuse/math': ^14.2.1
     '@vueuse/motion': ^3.0.3
@@ -71,21 +71,21 @@ catalogs:
     nanotar: ^0.3.0
     plantuml-encoder: ^1.4.0
     recordrtc: ^5.6.2
-    shiki: ^4.0.0
+    shiki: ^4.0.1
     shiki-magic-move: ^1.2.1
-    tm-grammars: ^1.31.1
-    unhead: ^2.1.9
+    tm-grammars: ^1.31.2
+    unhead: ^2.1.10
     vue: ^3.5.29
     vue-router: ^5.0.3
   icons:
-    '@iconify-json/carbon': ^1.2.18
+    '@iconify-json/carbon': ^1.2.19
     '@iconify-json/mdi': ^1.2.3
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.10
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.443
+    '@iconify/json': ^2.2.445
   monaco:
-    '@shikijs/monaco': ^4.0.0
+    '@shikijs/monaco': ^4.0.1
     '@typescript/ata': ^0.9.8
     monaco-editor: ^0.55.1
   prod:
@@ -93,10 +93,10 @@ catalogs:
     '@comark/markdown-it': ^0.3.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
-    '@shikijs/twoslash': ^4.0.0
-    '@shikijs/vitepress-twoslash': ^4.0.0
-    '@unocss/extractor-mdc': ^66.6.2
-    '@unocss/preset-mini': ^66.6.2
+    '@shikijs/twoslash': ^4.0.1
+    '@shikijs/vitepress-twoslash': ^4.0.1
+    '@unocss/extractor-mdc': ^66.6.3
+    '@unocss/preset-mini': ^66.6.3
     '@vitejs/plugin-vue': ^6.0.4
     '@vitejs/plugin-vue-jsx': ^5.1.4
     ansis: ^4.2.0
@@ -153,7 +153,7 @@ catalogs:
     '@types/file-saver': ^2.0.7
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.8
-    '@types/node': ^25.3.2
+    '@types/node': ^25.3.3
     '@types/picomatch': ^4.0.2
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
