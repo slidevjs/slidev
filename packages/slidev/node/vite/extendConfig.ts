@@ -152,10 +152,12 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                 return DEFAULT
               },
               manualChunks(id) {
+                // Let Rollup decide chunking for Monaco types and Shiki.
+                // Assigning both manually can create circular chunk references.
                 if (id.startsWith('/@slidev-monaco-types/') || id.includes('/@slidev/monaco-types') || id.endsWith('?monaco-types&raw'))
-                  return 'monaco/bundled-types'
+                  return
                 if (id.includes('/shiki/') || id.includes('/@shikijs/'))
-                  return `modules/shiki`
+                  return
                 if (id.startsWith('~icons/'))
                   return 'modules/unplugin-icons'
                 // It seems that moving slides out will breaks the production build
