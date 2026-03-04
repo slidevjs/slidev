@@ -1,7 +1,7 @@
 <template>
   <div
     data-handout-page
-    class="break-after-page px-16 py-20 bg-white text-slate-900"
+    class="px-16 py-20 bg-white text-slate-900"
   >
     <h2 class="text-3xl font-bold">
       Thank You
