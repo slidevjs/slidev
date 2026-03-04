@@ -63,7 +63,7 @@ const pageBoxStyle = computed(() => ({
       <NoteDisplay
         v-if="route.meta?.slide!.noteHTML"
         :note-html="route.meta?.slide!.noteHTML"
-        class="w-full mx-auto px-4 slidev-handout-notes"
+        class="w-full slidev-handout-notes"
       />
     </div>
     <div class="slidev-handout-footer-area">

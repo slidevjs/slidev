@@ -193,12 +193,13 @@ html {
   flex: 1 1 auto;
   overflow: hidden;
   display: flex;
-  padding: 8mm 3mm 12mm;
+  padding: 8mm 6mm 12mm;
 }
 
 .slidev-handout-notes {
-  margin: 0 auto;
-  max-width: none;
+  width: 100%;
+  margin: 0;
+  max-width: none !important;
 }
 
 .slidev-handout-footer-area {
