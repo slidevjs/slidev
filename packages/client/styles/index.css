@@ -152,3 +152,87 @@ html {
 .slidev-note ul {
   margin: 0;
 }
+
+/* Handout page layout. Global selectors allow user overrides from custom styles. */
+.slidev-handout-page {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 10mm 12mm 4mm;
+  box-sizing: border-box;
+  break-after: page;
+  page-break-after: always;
+  break-inside: avoid-page;
+}
+
+.slidev-handout-slide-area {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: visible;
+  margin-bottom: 4mm;
+}
+
+.slidev-handout-slide-scale-wrap {
+  transform-origin: top center;
+  margin: 0 auto;
+}
+
+.slidev-handout-slide-scale-wrap .print-slide-container {
+  /* Override print slide defaults to keep slide+notes+footer on the same handout page. */
+  break-after: auto !important;
+  page-break-after: auto !important;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+}
+
+.slidev-handout-notes-area {
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: flex;
+  padding: 8mm 6mm 12mm;
+}
+
+.slidev-handout-notes {
+  width: 100%;
+  margin: 0;
+  max-width: none !important;
+}
+
+.slidev-handout-footer-area {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 6mm;
+  flex: 0 0 auto;
+  min-height: 14mm;
+}
+
+.slidev-handout-footer-area::before {
+  content: '';
+  position: absolute;
+  left: -12mm;
+  right: -12mm;
+  top: 0;
+  height: 1px;
+  background: #222;
+  opacity: 0.9;
+}
+
+.slidev-handout-footer-bleed {
+  flex: 1 1 auto;
+  position: relative;
+  margin: 0;
+  overflow: visible;
+  padding-top: 2mm;
+}
+
+.slidev-handout-footer-bleed * {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-top-width: 0 !important;
+}

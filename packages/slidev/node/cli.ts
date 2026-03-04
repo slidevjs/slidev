@@ -34,6 +34,9 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
 ]
 
 const FILES_CHANGE_RESTART = [
+  'handout-bottom.vue',
+  'handout-cover.vue',
+  'handout-ending.vue',
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
@@ -595,6 +598,10 @@ function exportOptions<T>(args: Argv<T>) {
     .option('output', {
       type: 'string',
       describe: 'path to the output',
+    })
+    .option('handout', {
+      type: 'boolean',
+      describe: 'export handout PDF (configurable page size, one page per slide with notes and header/footer) to a separate file',
     })
     .option('format', {
       type: 'string',
