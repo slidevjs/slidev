@@ -180,7 +180,11 @@ html {
 }
 
 .slidev-handout-slide-scale-wrap .print-slide-container {
-  break-after: auto;
+  /* Override print slide defaults to keep slide+notes+footer on the same handout page. */
+  break-after: auto !important;
+  page-break-after: auto !important;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
   border: 1px solid rgba(0, 0, 0, 0.6);
   border-radius: 2px;
 }

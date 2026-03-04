@@ -48,9 +48,6 @@ provideLocal(injectionSlideScale, scale)
 #print-content {
   @apply bg-main;
 }
-.print-slide-container {
-  @apply relative overflow-hidden break-after-page translate-0;
-}
 /* Ensure printed background is white regardless of theme */
 html.print #print-content {
   background: #ffffff !important;
