@@ -4,6 +4,7 @@ import type { PropType } from 'vue'
 import { ignorableWatch, onClickOutside, useVModel } from '@vueuse/core'
 import { nextTick, ref, toRef, watch, watchEffect } from 'vue'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import { useTextDirection } from '../composables/useTextDirection'
 import NoteDisplay from './NoteDisplay.vue'
 
 const props = defineProps({
@@ -77,6 +78,7 @@ watch(
 
 const inputEl = ref<HTMLTextAreaElement>()
 const inputHeight = ref<number | null>()
+useTextDirection(inputEl)
 
 watchEffect(() => {
   if (editing.value)
