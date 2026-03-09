@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { useHead } from '@unhead/vue'
-import { computed, nextTick, onMounted, reactive, ref, shallowRef } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, shallowRef, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
@@ -20,10 +21,13 @@ const cardWidth = 450
 useHead({ title: `Overview - ${slidesTitle}` })
 
 const { openInEditor, slides } = useNav()
+const route = useRoute()
+const router = useRouter()
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
 const edittingNote = ref<number | null>(null)
+const skipHashScroll = ref<string>()
 const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
@@ -93,10 +97,54 @@ function openSlideInNewTab(path: string) {
   a.click()
 }
 
-function scrollToSlide(idx: number) {
+function getSlideHashId(no: number) {
+  return `slide-${no}`
+}
+
+function getSlideHash(no: number) {
+  return `#${getSlideHashId(no)}`
+}
+
+function getSlideIndexFromHash(hash: string) {
+  const match = hash.match(/^#(?:slide-)?(\d+)$/)
+  if (!match)
+    return
+
+  const no = Number.parseInt(match[1], 10)
+  const idx = slides.value.findIndex(route => route.no === no)
+  return idx >= 0 ? idx : undefined
+}
+
+function scrollToSlide(idx: number, behavior: ScrollBehavior = 'smooth') {
   const el = blocks.get(idx)
-  if (el)
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  if (el) {
+    el.scrollIntoView({ behavior, block: 'start' })
+    checkActiveBlocks()
+  }
+}
+
+async function scrollToSlideAndUpdateHash(idx: number) {
+  const target = slides.value[idx]
+  if (!target)
+    return
+
+  const hash = getSlideHash(target.no)
+  if (route.hash !== hash) {
+    skipHashScroll.value = hash // Used to bypass the scroll triggered by hash change
+    await router.replace({
+      path: route.path,
+      query: route.query,
+      hash,
+    })
+  }
+
+  scrollToSlide(idx)
+}
+
+function scrollToRouteHash(behavior: ScrollBehavior = 'auto') {
+  const idx = getSlideIndexFromHash(route.hash)
+  if (idx != null)
+    scrollToSlide(idx, behavior)
 }
 
 function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
@@ -108,8 +156,27 @@ function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
   e.preventDefault()
 }
 
+// Handle browser back/forward and hash change
+watch(
+  () => route.hash,
+  async (hash) => {
+    if (!hash)
+      return
+
+    await nextTick()
+
+    if (skipHashScroll.value === hash) {
+      skipHashScroll.value = undefined
+      return
+    }
+
+    scrollToRouteHash('smooth')
+  },
+)
+
 onMounted(() => {
   nextTick(() => {
+    scrollToRouteHash()
     checkActiveBlocks()
   })
 })
@@ -121,24 +188,24 @@ onMounted(() => {
       <div class="relative">
         <div class="absolute left-0 top-0 bottom-0 w-200 flex flex-col flex-auto items-end group p2 gap-1 max-h-full of-x-visible of-y-auto" style="direction:rtl">
           <div
-            v-for="(route, idx) of slides"
-            :key="route.no"
+            v-for="(slide, idx) of slides"
+            :key="slide.no"
             class="relative"
             style="direction:ltr"
           >
             <button
               class="relative transition duration-300 w-8 h-8 rounded hover:bg-active hover:op100"
               :class="activeBlocks.includes(idx) ? 'op100 text-primary bg-gray:5' : 'op20'"
-              @click="scrollToSlide(idx)"
+              @click="scrollToSlideAndUpdateHash(idx)"
             >
               <div>{{ idx + 1 }}</div>
             </button>
             <div
-              v-if="route.meta?.slide?.title"
+              v-if="slide.meta?.slide?.title"
               class="pointer-events-none select-none absolute left-110% top-50% translate-y--50% ws-nowrap z-label px2 slidev-glass-effect transition duration-400 op0 group-hover:op100"
               :class="activeBlocks.includes(idx) ? 'text-primary' : 'text-main important-text-op-50'"
             >
-              {{ route.meta?.slide?.title }}
+              {{ slide.meta?.slide?.title }}
             </div>
           </div>
         </div>
@@ -168,8 +235,9 @@ onMounted(() => {
       @scroll="checkActiveBlocks"
     >
       <div
-        v-for="(route, idx) of slides"
-        :key="route.no"
+        v-for="(slide, idx) of slides"
+        :id="getSlideHashId(slide.no)"
+        :key="slide.no"
         :ref="el => blocks.set(idx, el as any)"
         class="relative border-t border-main of-hidden flex gap-4 min-h-50 group"
         :class="idx === 0 ? 'pt5' : ''"
@@ -181,15 +249,15 @@ onMounted(() => {
           <IconButton
             class="mr--3 op0 group-hover:op80"
             title="Play in new tab"
-            @click="openSlideInNewTab(getSlidePath(route, false))"
+            @click="openSlideInNewTab(getSlidePath(slide, false))"
           >
             <div class="i-carbon:presentation-file" />
           </IconButton>
           <IconButton
-            v-if="__DEV__ && route.meta?.slide"
+            v-if="__DEV__ && slide.meta?.slide"
             class="mr--3 op0 group-hover:op80"
             title="Open in editor"
-            @click="openInEditor(`${route.meta.slide.filepath}:${route.meta.slide.start}`)"
+            @click="openInEditor(`${slide.meta.slide.filepath}:${slide.meta.slide.start}`)"
           >
             <div class="i-carbon:cics-program" />
           </IconButton>
@@ -197,50 +265,50 @@ onMounted(() => {
         <div class="flex flex-col gap-2 my5" :style="{ width: `${cardWidth}px` }">
           <div
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
+            @dblclick="openSlideInNewTab(getSlidePath(slide, false))"
           >
             <SlideContainer
-              :key="route.no"
+              :key="slide.no"
               :width="cardWidth"
               class="pointer-events-none important:[&_*]:select-none"
             >
               <SlideWrapper
-                :clicks-context="getClicksContext(route)"
-                :route="route"
+                :clicks-context="getClicksContext(slide)"
+                :route="slide"
                 render-context="overview"
               />
-              <DrawingPreview :page="route.no" />
+              <DrawingPreview :page="slide.no" />
             </SlideContainer>
           </div>
           <ClicksSlider
-            v-if="getSlideClicks(route)"
-            :active="activeSlide === route"
-            :clicks-context="getClicksContext(route)"
+            v-if="getSlideClicks(slide)"
+            :active="activeSlide === slide"
+            :clicks-context="getClicksContext(slide)"
             class="w-full mt-2"
-            @dblclick="toggleRoute(route)"
-            @click="activeSlide = route"
+            @dblclick="toggleRoute(slide)"
+            @click="activeSlide = slide"
           />
         </div>
         <div class="py3 mt-0.5 mr--8 ml--4 op0 transition group-hover:op100">
           <IconButton
             title="Edit Note"
             class="rounded-full w-9 h-9 text-sm"
-            :class="edittingNote === route.no ? 'important:op0' : ''"
-            @click="edittingNote = route.no"
+            :class="edittingNote === slide.no ? 'important:op0' : ''"
+            @click="edittingNote = slide.no"
           >
             <div class="i-carbon:pen" />
           </IconButton>
         </div>
         <NoteEditable
-          :no="route.no"
+          :no="slide.no"
           class="max-w-250 w-250 text-lg rounded p3"
           :auto-height="true"
-          :highlight="activeSlide === route"
-          :editing="edittingNote === route.no"
-          :clicks-context="getClicksContext(route)"
-          @dblclick="edittingNote !== route.no ? edittingNote = route.no : null"
+          :highlight="activeSlide === slide"
+          :editing="edittingNote === slide.no"
+          :clicks-context="getClicksContext(slide)"
+          @dblclick="edittingNote !== slide.no ? edittingNote = slide.no : null"
           @update:editing="edittingNote = null"
-          @marker-click="(e, clicks) => onMarkerClick(e, clicks, route)"
+          @marker-click="(e, clicks) => onMarkerClick(e, clicks, slide)"
         />
         <div
           v-if="wordCounts[idx] > 0"
