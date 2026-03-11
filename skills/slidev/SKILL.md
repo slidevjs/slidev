@@ -1,6 +1,6 @@
 ---
 name: slidev
-description: Create and present web-based slides for developers using Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, or teaching materials.
+description: Create and present web-based slidedecks for developers using Slidev with Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, code walkthroughs, teaching materials, or developer decks.
 ---
 
 # Slidev - Presentation Slides for Developers
@@ -9,20 +9,24 @@ Web-based slides maker built on Vite, Vue, and Markdown.
 
 ## When to Use
 
-- Technical presentations with live code examples
+- Technical presentations or slidedecks with live code examples
 - Syntax-highlighted code snippets with animations
 - Interactive demos (Monaco editor, runnable code)
 - Mathematical equations (LaTeX) or diagrams (Mermaid, PlantUML)
 - Record presentations with presenter notes
 - Export to PDF, PPTX, or host as SPA
+- Code walkthroughs for developer talks or workshops
 
 ## Quick Start
 
 ```bash
 pnpm create slidev    # Create project
-pnpm run dev          # Start dev server
-pnpm run export       # Export to PDF
+pnpm run dev          # Start dev server (opens http://localhost:3030)
+pnpm run build        # Build static SPA
+pnpm run export       # Export to PDF (requires playwright-chromium)
 ```
+
+**Verify**: After `pnpm run dev`, confirm slides load at `http://localhost:3030`. After `pnpm run export`, check the output PDF exists in the project root.
 
 ## Basic Syntax
 
@@ -143,6 +147,8 @@ Presenter notes go here
 | Cache images | Automatic for remote URLs | [build-remote-assets](references/build-remote-assets.md) |
 | OG image | `seoMeta.ogImage` or `og-image.png` | [build-og-image](references/build-og-image.md) |
 | SEO tags | `seoMeta:` | [build-seo-meta](references/build-seo-meta.md) |
+
+**Export prerequisite**: `pnpm add -D playwright-chromium` is required for PDF/PPTX/PNG export. If export fails with a browser error, install this dependency first.
 
 ### Editor & Tools
 
