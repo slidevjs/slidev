@@ -7,18 +7,19 @@ import { createResolve } from 'mlly'
 import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
-const INCLUDE_GLOBAL = [
-  '@typescript/ata',
+const INCLUDE_GLOBAL_BASE = [
   'file-saver',
   'lz-string',
   'recordrtc',
-  'typescript',
   'yaml',
   'pptxgenjs',
   'ansis',
 ]
 
-const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
+const INCLUDE_GLOBAL_MONACO = [
+  '@typescript/ata',
+  'typescript',
+]
 
 // @keep-sorted
 const EXCLUDE_GLOBAL = [
@@ -60,6 +61,11 @@ const ASYNC_MODULES = [
   '@vue',
 ]
 
+function isMonacoEnabled(options: ResolvedSlidevOptions): boolean {
+  const monaco = options.data.config.monaco ?? true
+  return monaco === true || (typeof monaco === 'string' && monaco === options.mode)
+}
+
 export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
   const resolveClientDep = createResolve({
     // Same as Vite's default resolve conditions
@@ -90,7 +96,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
               replacement: await resolveImportPath('vue/dist/vue.esm-bundler.js', true),
             },
             ...(isInstalledGlobally.value
-              ? await Promise.all(INCLUDE_GLOBAL.map(async dep => ({
+              ? await Promise.all([...INCLUDE_GLOBAL_BASE, ...(isMonacoEnabled(options) ? INCLUDE_GLOBAL_MONACO : [])].map(async dep => ({
                   find: dep,
                   replacement: fileURLToPath(await resolveClientDep(dep)),
                 })))
@@ -99,16 +105,22 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
           ],
           dedupe: ['vue'],
         },
-        optimizeDeps: isInstalledGlobally.value
-          ? {
-              exclude: EXCLUDE_GLOBAL,
-              include: INCLUDE_GLOBAL,
-            }
-          : {
-              // We need to specify the full deps path for non-hoisted modules
-              exclude: EXCLUDE_LOCAL,
-              include: INCLUDE_LOCAL,
-            },
+        optimizeDeps: (() => {
+          const monacoEnabled = isMonacoEnabled(options)
+          const include = [
+            ...INCLUDE_GLOBAL_BASE,
+            ...(monacoEnabled ? INCLUDE_GLOBAL_MONACO : []),
+          ]
+          return isInstalledGlobally.value
+            ? {
+                exclude: EXCLUDE_GLOBAL,
+                include,
+              }
+            : {
+                exclude: EXCLUDE_LOCAL,
+                include: include.map(i => `@slidev/cli > @slidev/client > ${i}`),
+              }
+        })(),
         css: {
           postcss: {
             plugins: [

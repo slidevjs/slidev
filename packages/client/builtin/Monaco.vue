@@ -99,6 +99,9 @@ const stopWatchTypesLoading = whenever(
 )
 
 onMounted(async () => {
+  if (!__SLIDEV_FEATURE_MONACO__)
+    return
+
   // Lazy load monaco, so it will be bundled in async chunk
   const { default: setup } = await import('../setup/monaco')
   const { ata, monaco, editorOptions } = await setup()

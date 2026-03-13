@@ -20,11 +20,17 @@ import { createStaticCopyPlugin } from './staticCopy'
 import { createUnocssPlugin } from './unocss'
 import { createVuePlugin } from './vue'
 
+function isMonacoEnabled(options: ResolvedSlidevOptions): boolean {
+  const monaco = options.data.config.monaco ?? true
+  return monaco === true || (typeof monaco === 'string' && monaco === options.mode)
+}
+
 export function ViteSlidevPlugin(
   options: ResolvedSlidevOptions,
   pluginOptions: SlidevPluginOptions = {},
   serverOptions: SlidevServerOptions = {},
 ): Promise<PluginOption[]> {
+  const monacoEnabled = isMonacoEnabled(options)
   return Promise.all([
     createSlidesLoader(options, serverOptions),
     createMarkdownPlugin(options, pluginOptions),
@@ -37,13 +43,13 @@ export function ViteSlidevPlugin(
     createRemoteAssetsPlugin(options, pluginOptions),
     createServerRefPlugin(options, pluginOptions),
     createConfigPlugin(options),
-    createMonacoTypesLoader(options),
-    createMonacoWriterPlugin(options),
+    monacoEnabled && createMonacoTypesLoader(options),
+    monacoEnabled && createMonacoWriterPlugin(options),
     createVueCompilerFlagsPlugin(options),
     createUnocssPlugin(options, pluginOptions),
     createStaticCopyPlugin(options, pluginOptions),
     createInspectPlugin(options, pluginOptions),
-    createPatchMonacoSourceMapPlugin(),
+    monacoEnabled && createPatchMonacoSourceMapPlugin(),
 
     setupVitePlugins(options),
   ])

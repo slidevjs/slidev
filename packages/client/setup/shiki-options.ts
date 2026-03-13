@@ -39,7 +39,12 @@ export function resolveShikiOptions(options: (ShikiSetupReturn | void)[]) {
   const themeOption = extractThemeName(mergedOptions.theme) || extractThemeNames(mergedOptions.themes || {})
   const themeNames = typeof themeOption === 'string' ? [themeOption] : Object.values(themeOption)
 
-  const themeInput: Record<string, ThemeInput> = Object.assign({}, bundledThemes)
+  const themeInput: Record<string, ThemeInput> = {}
+  for (const name of themeNames) {
+    const bundled = (bundledThemes as Record<string, ThemeInput>)[name]
+    if (bundled)
+      themeInput[name] = bundled
+  }
   if (typeof mergedOptions.theme === 'object' && mergedOptions.theme?.name) {
     themeInput[mergedOptions.theme.name] = mergedOptions.theme
   }
