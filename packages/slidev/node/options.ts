@@ -125,6 +125,7 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __SLIDEV_FEATURE_DRAWINGS__: matchMode(options.data.config.drawings.enabled),
       __SLIDEV_FEATURE_EDITOR__: options.mode === 'dev' && options.data.config.editor !== false,
       __SLIDEV_FEATURE_DRAWINGS_PERSIST__: !!options.data.config.drawings.persist,
+      __SLIDEV_FEATURE_MERMAID__: !!options.data.features.mermaid,
       __SLIDEV_FEATURE_RECORD__: matchMode(options.data.config.record),
       __SLIDEV_FEATURE_PRESENTER__: matchMode(options.data.config.presenter),
       __SLIDEV_FEATURE_PRINT__: options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download)),

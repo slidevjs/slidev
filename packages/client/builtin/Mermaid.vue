@@ -16,7 +16,6 @@ pie
 import { getCurrentInstance, ref, watch, watchEffect } from 'vue'
 import ShadowRoot from '../internals/ShadowRoot.vue'
 import { isDark } from '../logic/dark'
-import { renderMermaid } from '../modules/mermaid'
 
 const props = defineProps<{
   codeLz: string
@@ -30,12 +29,16 @@ const error = ref<string | null>(null)
 const html = ref('')
 
 watchEffect(async (onCleanup) => {
+  if (!__SLIDEV_FEATURE_MERMAID__)
+    return
+
   let disposed = false
   onCleanup(() => {
     disposed = true
   })
   error.value = null
   try {
+    const { renderMermaid } = await import('../modules/mermaid')
     const svg = await renderMermaid(
       props.codeLz || '',
       {
