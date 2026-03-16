@@ -193,7 +193,7 @@ Then go to your [Vercel dashboard](https://vercel.com/) and create a new site wi
 To deploy your Slidev deck on [Zephyr Cloud](https://zephyr-cloud.io/), you can add Zephyr support to an existing Slidev project with:
 
 ```bash
-pnpx with-zephyr@latest
+npx with-zephyr@latest
 ```
 
 This codemod detects your bundler (Slidev uses Vite) and updates your config for Zephyr Cloud.
@@ -205,6 +205,10 @@ npm run build
 ```
 
 When the build runs with Zephyr enabled, your app is deployed and Zephyr Cloud returns a preview URL.
+
+::: info
+Zephyr Cloud is a bit different from most hosting providers: every `build` run triggers a deployment.
+:::
 
 ### Host on Docker {#docker}
 
