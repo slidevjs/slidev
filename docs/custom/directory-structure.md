@@ -43,6 +43,11 @@ Pattern: `./style.css` | `./styles/index.{css,js,ts}`
 
 Files following this convention will be injected to the App root. If you need to import multiple CSS entries, you can create the following structure and manage the import order yourself.
 
+:::warning
+Global CSS here also applies to the presenter UI. Prefer scoping styles to individual slides, or wrap your selectors under `.slidev-layout` to avoid leaking styles into presenter mode.
+
+**Example:** Use `.slidev-layout .grid { ... }` instead of just `.grid { ... }`.
+:::
 ```bash
 your-slidev/
   ├── ...
