@@ -49,6 +49,7 @@
     "ansis": "catalog:prod",
     "drauu": "catalog:frontend",
     "file-saver": "catalog:frontend",
+    "fix-webm-duration": "catalog:frontend",
     "floating-vue": "catalog:frontend",
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",

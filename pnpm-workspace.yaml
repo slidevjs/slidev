@@ -63,6 +63,7 @@ catalogs:
     '@vueuse/motion': ^3.0.3
     drauu: ^1.0.0
     file-saver: ^2.0.5
+    fix-webm-duration: ^1.0.6
     floating-vue: ^5.2.2
     fuse.js: ^7.1.0
     katex: ^0.16.33

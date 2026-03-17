@@ -120,6 +120,9 @@ catalogs:
     file-saver:
       specifier: ^2.0.5
       version: 2.0.5
+    fix-webm-duration:
+      specifier: ^1.0.6
+      version: 1.0.6
     floating-vue:
       specifier: ^5.2.2
       version: 5.2.2
@@ -786,6 +789,9 @@ importers:
       file-saver:
         specifier: catalog:frontend
         version: 2.0.5
+      fix-webm-duration:
+        specifier: catalog:frontend
+        version: 1.0.6
       floating-vue:
         specifier: catalog:frontend
         version: 5.2.2(@nuxt/kit@3.13.0(rollup@4.44.1))(vue@3.5.29(typescript@5.9.3))
@@ -4535,6 +4541,9 @@ packages:
   find-up@5.0.0:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
+
+  fix-webm-duration@1.0.6:
+    resolution: {integrity: sha512-zVAqi4gE+8ywxJuAyV/rlJVX6CMtvyapEbQx6jyoeX9TMjdqAlt/FdG5d7rXSSkDVzTvS0H7CtwzHcH/vh4FPA==}
 
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
@@ -11020,6 +11029,8 @@ snapshots:
     dependencies:
       locate-path: 6.0.0
       path-exists: 4.0.0
+
+  fix-webm-duration@1.0.6: {}
 
   flat-cache@4.0.1:
     dependencies:

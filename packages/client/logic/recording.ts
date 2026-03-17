@@ -3,6 +3,7 @@ import type { Options as RecorderOptions } from 'recordrtc'
 import type { Ref } from 'vue'
 import { isTruthy } from '@antfu/utils'
 import { useDevicesList, useEventListener, useLocalStorage } from '@vueuse/core'
+import fixWebmDuration from 'fix-webm-duration'
 import { nextTick, ref, shallowRef, watch } from 'vue'
 import { currentCamera, currentMic } from '../state'
 
@@ -78,6 +79,7 @@ export function useRecording() {
   const streamCamera: Ref<MediaStream | undefined> = shallowRef()
   const streamCapture: Ref<MediaStream | undefined> = shallowRef()
   const streamSlides: Ref<MediaStream | undefined> = shallowRef()
+  let recordingStartTime = 0
 
   const config: RecorderOptions = {
     type: 'video',
@@ -183,17 +185,18 @@ export function useRecording() {
     )
 
     recorderSlides.value.startRecording()
+    recordingStartTime = Date.now()
     recording.value = true
   }
 
   async function stopRecording() {
     recording.value = false
+    const duration = Date.now() - recordingStartTime
+
     recorderCamera.value?.stopRecording(() => {
       if (recordCamera.value) {
         const blob = recorderCamera.value!.getBlob()
-        const url = URL.createObjectURL(blob)
-        download(getFilename('camera', config.mimeType), url)
-        window.URL.revokeObjectURL(url)
+        downloadBlob(blob, duration, getFilename('camera', config.mimeType))
       }
       recorderCamera.value = undefined
       if (!showAvatar.value)
@@ -201,13 +204,18 @@ export function useRecording() {
     })
     recorderSlides.value?.stopRecording(() => {
       const blob = recorderSlides.value!.getBlob()
-      const url = URL.createObjectURL(blob)
-      download(getFilename('screen', config.mimeType), url)
-      window.URL.revokeObjectURL(url)
+      downloadBlob(blob, duration, getFilename('screen', config.mimeType))
       closeStream(streamCapture)
       closeStream(streamSlides)
       recorderSlides.value = undefined
     })
+  }
+
+  async function downloadBlob(blob: Blob, duration: number, filename: string) {
+    const fixedBlob = await fixWebmDuration(blob, duration, { logger: false })
+    const url = URL.createObjectURL(fixedBlob)
+    download(filename, url)
+    window.URL.revokeObjectURL(url)
   }
 
   function closeStream(stream: Ref<MediaStream | undefined>) {
