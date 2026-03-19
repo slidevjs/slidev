@@ -48,6 +48,7 @@ Global CSS here also applies to the presenter UI. Prefer scoping styles to indiv
 
 **Example:** Use `.slidev-layout .grid { ... }` instead of just `.grid { ... }`.
 :::
+
 ```bash
 your-slidev/
   ├── ...
