@@ -67,7 +67,18 @@ export function useVirtualBackground(rawStream: Ref<MediaStream | undefined>) {
   let ctx: CanvasRenderingContext2D | null = null
   let bgCanvas: HTMLCanvasElement | null = null
   let bgCtx: CanvasRenderingContext2D | null = null
+  // fgCanvas holds the video frame; mask is applied via destination-in composite
+  let fgCanvas: HTMLCanvasElement | null = null
+  let fgCtx: CanvasRenderingContext2D | null = null
+  // maskCanvas holds the mask as per-pixel alpha for GPU compositing
+  let maskCanvas: HTMLCanvasElement | null = null
+  let maskCtx: CanvasRenderingContext2D | null = null
   let bgImage: HTMLImageElement | null = null
+
+  // Pre-allocated reusable buffers — no per-frame GC pressure
+  let prevMask: Float32Array | null = null
+  let smoothedBuf: Float32Array | null = null
+  let maskImageData: ImageData | null = null
 
   // Load background image when URL/path changes
   watch(virtualBgImage, (url: string) => {
@@ -136,43 +147,58 @@ export function useVirtualBackground(rawStream: Ref<MediaStream | undefined>) {
   }
 
   /**
-   * Per-frame render: composite foreground (person) over background using the
-   * segmentation confidence mask.
+   * Per-frame render — all blending done on the GPU via canvas compositing.
+   *
+   * Pipeline (zero getImageData calls on the hot path):
+   *   1. Motion-adaptive EMA smooth the mask into pre-allocated smoothedBuf
+   *   2. Write smoothedBuf to maskImageData alpha channel → putImageData to maskCanvas
+   *   3. Draw video to fgCanvas; composite mask via 'destination-in' (GPU)
+   *   4. Draw bgCanvas; draw fgCanvas with 'blur(1px)' feather → output canvas
    */
   function renderFrame(
     sourceVideo: HTMLVideoElement,
-    mask: Float32Array | Uint8Array,
+    rawMask: Float32Array | Uint8Array,
     w: number,
     h: number,
   ) {
-    if (!ctx || !bgCtx)
+    if (!ctx || !bgCtx || !fgCtx || !maskCtx || !maskImageData || !smoothedBuf || !prevMask)
       return
 
-    // 1. Draw background
-    drawBackground(sourceVideo, w, h)
-
-    // 2. Draw the source frame on the main canvas
-    ctx.save()
-    ctx.clearRect(0, 0, w, h)
-    ctx.drawImage(sourceVideo, 0, 0, w, h)
-
-    // 3. Blend person and background using mask
-    const frame = ctx.getImageData(0, 0, w, h)
-    const bgFrame = bgCtx.getImageData(0, 0, w, h)
-    const data = frame.data
-    const bgData = bgFrame.data
-
-    for (let i = 0; i < mask.length; i++) {
-      const alpha = mask[i]
-      const idx = i * 4
-      data[idx] = data[idx] * alpha + bgData[idx] * (1 - alpha)
-      data[idx + 1] = data[idx + 1] * alpha + bgData[idx + 1] * (1 - alpha)
-      data[idx + 2] = data[idx + 2] * alpha + bgData[idx + 2] * (1 - alpha)
-      data[idx + 3] = 255
+    // --- Step 1: Motion-adaptive temporal EMA (reuse smoothedBuf, no allocation) ---
+    const n = smoothedBuf.length
+    for (let i = 0; i < n; i++) {
+      const cur = rawMask[i]
+      const prev = prevMask[i]
+      const diff = cur > prev ? cur - prev : prev - cur // |diff| without Math.abs
+      const alpha = diff > 0.15 ? 0.8 : 0.15
+      smoothedBuf[i] = alpha * cur + (1 - alpha) * prev
     }
+    // Swap: prevMask ← smoothedBuf (no copy, just swap references)
+    const tmp = prevMask
+    prevMask = smoothedBuf
+    smoothedBuf = tmp
 
-    ctx.putImageData(frame, 0, 0)
-    ctx.restore()
+    // --- Step 2: Write mask to maskCanvas alpha channel ---
+    // maskImageData is pre-allocated; only write alpha bytes (no RGB work)
+    const maskData = maskImageData.data
+    for (let i = 0; i < n; i++)
+      maskData[i * 4 + 3] = prevMask[i] * 255 + 0.5 // +0.5 for rounding without Math.round
+    maskCtx.putImageData(maskImageData, 0, 0)
+
+    // --- Step 3: Draw video frame; cut out person using mask (GPU composite) ---
+    fgCtx.globalCompositeOperation = 'source-over'
+    fgCtx.drawImage(sourceVideo, 0, 0, w, h)
+    fgCtx.globalCompositeOperation = 'destination-in'
+    fgCtx.drawImage(maskCanvas!, 0, 0) // GPU discards background pixels
+    fgCtx.globalCompositeOperation = 'source-over' // reset
+
+    // --- Step 4: Output = background + person (with 1px edge feather) ---
+    drawBackground(sourceVideo, w, h)
+    ctx.clearRect(0, 0, w, h)
+    ctx.drawImage(bgCanvas!, 0, 0)
+    ctx.filter = 'blur(1px)'
+    ctx.drawImage(fgCanvas!, 0, 0)
+    ctx.filter = 'none'
   }
 
   async function startProcessing() {
@@ -198,12 +224,37 @@ export function useVirtualBackground(rawStream: Ref<MediaStream | undefined>) {
       canvas = document.createElement('canvas')
       canvas.width = w
       canvas.height = h
-      ctx = canvas.getContext('2d', { willReadFrequently: true })!
+      ctx = canvas.getContext('2d')!
 
       bgCanvas = document.createElement('canvas')
       bgCanvas.width = w
       bgCanvas.height = h
       bgCtx = bgCanvas.getContext('2d', { willReadFrequently: true })!
+
+      // Foreground canvas: video frame; mask applied via destination-in (no getImageData needed)
+      fgCanvas = document.createElement('canvas')
+      fgCanvas.width = w
+      fgCanvas.height = h
+      fgCtx = fgCanvas.getContext('2d')!
+
+      // Mask canvas: holds mask as RGBA alpha data for GPU compositing
+      maskCanvas = document.createElement('canvas')
+      maskCanvas.width = w
+      maskCanvas.height = h
+      maskCtx = maskCanvas.getContext('2d')!
+
+      // Pre-allocate buffers — reused every frame, no GC pressure
+      const n = w * h
+      prevMask = new Float32Array(n)
+      smoothedBuf = new Float32Array(n)
+      // maskImageData: RGBA, but only alpha channel is used; pre-fill RGB to 255
+      maskImageData = new ImageData(w, h)
+      for (let i = 0; i < n; i++) {
+        maskImageData.data[i * 4] = 255 // R
+        maskImageData.data[i * 4 + 1] = 255 // G
+        maskImageData.data[i * 4 + 2] = 255 // B
+        // alpha written per-frame
+      }
 
       // Output stream from canvas
       processedStream.value = canvas.captureStream(30)
@@ -272,6 +323,13 @@ export function useVirtualBackground(rawStream: Ref<MediaStream | undefined>) {
     ctx = null
     bgCanvas = null
     bgCtx = null
+    fgCanvas = null
+    fgCtx = null
+    maskCanvas = null
+    maskCtx = null
+    prevMask = null
+    smoothedBuf = null
+    maskImageData = null
   }
 
   // Watch for mode changes: start or stop processing
