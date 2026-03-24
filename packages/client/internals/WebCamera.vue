@@ -14,7 +14,7 @@ const frame = ref<HTMLDivElement | undefined>()
 const handler = ref<HTMLDivElement | undefined>()
 const video = ref<HTMLVideoElement | undefined>()
 
-const { streamCamera, showAvatar } = recorder
+const { streamCamera, processedStreamCamera, showAvatar } = recorder
 
 const { style: containerStyle } = useDraggable(frame, {
   initialValue: position,
@@ -31,7 +31,7 @@ const { isDragging: handlerDown } = useDraggable(handler, {
 
 watchEffect(() => {
   if (video.value)
-    video.value.srcObject = streamCamera.value!
+    video.value.srcObject = processedStreamCamera.value ?? streamCamera.value!
 }, { flush: 'post' })
 
 const frameStyle = computed(() => ({

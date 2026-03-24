@@ -32,6 +32,7 @@
     "@iconify-json/carbon": "catalog:icons",
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",
+    "@mediapipe/tasks-vision": "catalog:frontend",
     "@shikijs/engine-javascript": "catalog:frontend",
     "@shikijs/monaco": "catalog:monaco",
     "@shikijs/vitepress-twoslash": "catalog:prod",

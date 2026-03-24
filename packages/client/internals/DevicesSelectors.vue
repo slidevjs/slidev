@@ -11,6 +11,7 @@ import {
 } from '../logic/recording'
 import { currentCamera, currentMic } from '../state'
 import SelectList from './SelectList.vue'
+import VirtualBackgroundSettings from './VirtualBackgroundSettings.vue'
 
 const camerasItems = computed<SelectionItem<string>[]>(() => [
   {
@@ -62,5 +63,7 @@ ensureDevicesListPermissions()
       title="Video Format"
       :items="mimeTypeItems"
     />
+    <div class="h-1px opacity-10 bg-current w-full" />
+    <VirtualBackgroundSettings />
   </div>
 </template>

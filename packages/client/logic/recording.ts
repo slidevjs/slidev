@@ -3,8 +3,9 @@ import type { Options as RecorderOptions } from 'recordrtc'
 import type { Ref } from 'vue'
 import { isTruthy } from '@antfu/utils'
 import { useDevicesList, useEventListener, useLocalStorage } from '@vueuse/core'
-import { nextTick, ref, shallowRef, watch } from 'vue'
-import { currentCamera, currentMic } from '../state'
+import { computed, nextTick, ref, shallowRef, watch } from 'vue'
+import { currentCamera, currentMic, virtualBgMode } from '../state'
+import { useVirtualBackground } from './virtualBackground'
 
 type Defined<T> = T extends undefined ? never : T
 type MimeType = Defined<RecorderOptions['mimeType']>
@@ -78,6 +79,16 @@ export function useRecording() {
   const streamCamera: Ref<MediaStream | undefined> = shallowRef()
   const streamCapture: Ref<MediaStream | undefined> = shallowRef()
   const streamSlides: Ref<MediaStream | undefined> = shallowRef()
+
+  // Virtual background: intercepts streamCamera and outputs processed stream
+  const { processedStream: vbProcessedStream, isProcessing: vbIsProcessing, isLoading: vbIsLoading } = useVirtualBackground(streamCamera)
+
+  // Use processed stream when virtual bg is active, otherwise raw stream
+  const processedStreamCamera = computed(() => {
+    if (virtualBgMode.value !== 'none' && vbProcessedStream.value)
+      return vbProcessedStream.value
+    return streamCamera.value
+  })
 
   const config: RecorderOptions = {
     type: 'video',
@@ -165,13 +176,15 @@ export function useRecording() {
     // merge config
     Object.assign(config, customConfig)
 
-    if (streamCamera.value) {
-      const audioTrack = streamCamera.value!.getAudioTracks()?.[0]
+    // Use the processed stream (with virtual bg) for recording if available
+    const cameraStreamForRecording = processedStreamCamera.value
+    if (cameraStreamForRecording) {
+      const audioTrack = cameraStreamForRecording.getAudioTracks()?.[0]
       if (audioTrack)
         streamSlides.value!.addTrack(audioTrack)
 
       recorderCamera.value = new Recorder(
-        streamCamera.value!,
+        cameraStreamForRecording,
         config,
       )
       recorderCamera.value.startRecording()
@@ -248,8 +261,11 @@ export function useRecording() {
     recorderCamera,
     recorderSlides,
     streamCamera,
+    processedStreamCamera,
     streamCapture,
     streamSlides,
+    vbIsProcessing,
+    vbIsLoading,
   }
 }
 

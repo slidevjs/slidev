@@ -48,6 +48,10 @@ export const isOnFocus = computed(() => ['BUTTON', 'A'].includes(activeElement.v
 
 export const currentCamera = useLocalStorage<string>('slidev-camera', 'default', { listenToStorageChanges: false })
 export const currentMic = useLocalStorage<string>('slidev-mic', 'default', { listenToStorageChanges: false })
+export const virtualBgMode = useLocalStorage<'none' | 'blur' | 'color' | 'image'>('slidev-virtual-bg-mode', 'none', { listenToStorageChanges: false })
+export const virtualBgColor = useLocalStorage('slidev-virtual-bg-color', '#00A86B', { listenToStorageChanges: false })
+export const virtualBgImage = useLocalStorage('slidev-virtual-bg-image', '', { listenToStorageChanges: false })
+export const virtualBgBlurRadius = useLocalStorage('slidev-virtual-bg-blur', 10, { listenToStorageChanges: false })
 export const slideScale = useLocalStorage<number>('slidev-scale', 0)
 export const wakeLockEnabled = useLocalStorage('slidev-wake-lock', true)
 export const hideCursorIdle = useLocalStorage('slidev-hide-cursor-idle', true)

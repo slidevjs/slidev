@@ -735,6 +735,9 @@ importers:
       '@iconify-json/svg-spinners':
         specifier: catalog:icons
         version: 1.2.4
+      '@mediapipe/tasks-vision':
+        specifier: ^0.10.18
+        version: 0.10.34
       '@shikijs/engine-javascript':
         specifier: catalog:frontend
         version: 4.0.1
@@ -1886,6 +1889,9 @@ packages:
   '@mdit-vue/types@3.0.2':
     resolution: {integrity: sha512-00aAZ0F0NLik6I6Yba2emGbHLxv+QYrPH00qQ5dFKXlAo1Ll2RHDXwY7nN2WAfrx2pP+WrvSRFTGFCNGdzBDHw==}
     engines: {node: '>=20.0.0'}
+
+  '@mediapipe/tasks-vision@0.10.34':
+    resolution: {integrity: sha512-KFGyhDsjJ+9WUMcMfjTOpcEp3LJNS3KwC7BfvKrCYELn/7G/5kmwnU7z6Spps+iWQoTGL8xW8i68r65OTa3DwA==}
 
   '@mermaid-js/parser@1.0.0':
     resolution: {integrity: sha512-vvK0Hi/VWndxoh03Mmz6wa1KDriSPjS2XMZL/1l19HFwygiObEEoEwSDxOqyLzzAI6J2PU3261JjTMTO7x+BPw==}
@@ -8086,6 +8092,8 @@ snapshots:
       markdown-it: 14.1.1
 
   '@mdit-vue/types@3.0.2': {}
+
+  '@mediapipe/tasks-vision@0.10.34': {}
 
   '@mermaid-js/parser@1.0.0':
     dependencies:

@@ -53,6 +53,7 @@ catalogs:
     vitepress-plugin-llms: ^1.11.0
   frontend:
     '@antfu/utils': ^9.3.0
+    '@mediapipe/tasks-vision': ^0.10.18
     '@shikijs/engine-javascript': ^4.0.1
     '@shikijs/markdown-it': ^4.0.1
     '@slidev/rough-notation': ^0.1.0
