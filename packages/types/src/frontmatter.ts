@@ -315,6 +315,10 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   magicMoveDuration?: number
   /**
+   * Default click animation for the slides
+   */
+  clickAnimation?: string
+  /**
    * Preload images extracted from slides for faster navigation.
    *
    * - `true` - enable with default look-ahead of 3 slides
