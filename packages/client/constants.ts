@@ -23,6 +23,18 @@ export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
 export const CLASS_VCLICK_PRIOR = 'slidev-vclick-prior'
 export const CLASS_VCLICK_DISPLAY_NONE = 'slidev-vclick-display-none'
 
+export const CLICK_ANIMATION_PRESETS = [
+  'fade',
+  'fade-up',
+  'fade-down',
+  'fade-left',
+  'fade-right',
+  'scale',
+  'none',
+] as const
+
+export const RESERVED_CLICK_MODIFIERS = ['hide', 'fade'] as const
+
 export const CLICKS_MAX = 999999
 
 export const TRUST_ORIGINS = [

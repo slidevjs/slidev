@@ -8,9 +8,11 @@ import {
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
+  CLICK_ANIMATION_PRESETS,
   injectionClicksContext,
   injectionFrontmatter,
   injectionSlidevContext,
+  RESERVED_CLICK_MODIFIERS,
 } from '../constants'
 import { directiveInject } from '../utils'
 
@@ -50,9 +52,9 @@ export function createVClickDirectives() {
               el.classList.toggle(className, !active)
             }
 
-            if (animation)
+            if (animation && el.dataset.clickAnimation !== animation)
               el.dataset.clickAnimation = animation
-            else
+            else if (!animation && el.dataset.clickAnimation)
               delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -90,9 +92,9 @@ export function createVClickDirectives() {
               el.classList.toggle(className, !active)
             }
 
-            if (animation)
+            if (animation && el.dataset.clickAnimation !== animation)
               el.dataset.clickAnimation = animation
-            else
+            else if (!animation && el.dataset.clickAnimation)
               delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -125,9 +127,9 @@ export function createVClickDirectives() {
             el.classList.toggle(className, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
-            if (animation)
+            if (animation && el.dataset.clickAnimation !== animation)
               el.dataset.clickAnimation = animation
-            else
+            else if (!animation && el.dataset.clickAnimation)
               delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -154,10 +156,17 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
   const flagAnimation = computed(() => {
-    const modifier = Object.keys(dir.modifiers).find(m => !['hide', 'fade'].includes(m))
-    if (modifier)
-      return modifier
-    return frontmatter?.clickAnimation ?? slidev?.configs.clickAnimation
+    const modifiers = Object.keys(dir.modifiers).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
+    const modifier = modifiers[0]
+    if (modifiers.length > 1 && __DEV__)
+      console.warn(`[slidev] Multiple animation presets detected on v-click: ${modifiers.join(', ')}. Only the first one will be used.`)
+
+    const animation = modifier || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+
+    if (animation && !(CLICK_ANIMATION_PRESETS as readonly string[]).includes(animation) && __DEV__)
+      console.warn(`[slidev] Unknown animation preset: "${animation}". Available presets are: ${CLICK_ANIMATION_PRESETS.join(', ')}`)
+
+    return animation
   })
 
   const info = ctx.calculate(value)
