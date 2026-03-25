@@ -257,4 +257,37 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEFZ')
   })
+
+  it('click animation presets', () => {
+    goPage(14)
+
+    // Check data-click-animation attributes are set on mount
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(0).should('have.attr', 'data-click-animation', 'fade-up')
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(1).should('have.attr', 'data-click-animation', 'scale')
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(2).should('have.attr', 'data-click-animation', 'none')
+
+    // After clicks, elements become visible
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'fade-up')
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.length', 2)
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.length', 3)
+  })
+
+  it('click animation from frontmatter', () => {
+    goPage(15)
+
+    cy.get('#slideshow .slidev-page-15 .cy-animation-frontmatter .slidev-vclick-target')
+      .should('have.attr', 'data-click-animation', 'fade-down')
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-15 .cy-animation-frontmatter .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'from-frontmatter')
+  })
 })
