@@ -155,6 +155,11 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
+  /**
+   * Resolves the animation preset for this element.
+   * Priority: directive modifier > slide frontmatter > global config.
+   * Valid presets are defined in `CLICK_ANIMATION_PRESETS`.
+   */
   const flagAnimation = computed(() => {
     const modifiers = Object.keys(dir.modifiers).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
     const modifier = modifiers[0]
