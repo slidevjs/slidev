@@ -161,17 +161,19 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
    * Valid presets are defined in `CLICK_ANIMATION_PRESETS`.
    */
   const flagAnimation = computed(() => {
+    const presets = CLICK_ANIMATION_PRESETS as readonly string[]
     const modifiers = Object.keys(dir.modifiers).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
-    const modifier = modifiers[0]
-    if (modifiers.length > 1 && __DEV__)
-      console.warn(`[slidev] Multiple animation presets detected on v-click: ${modifiers.join(', ')}. Only the first one will be used.`)
+    const validModifiers = modifiers.filter(m => presets.includes(m))
+    const invalidModifiers = modifiers.filter(m => !presets.includes(m))
 
-    const animation = modifier || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+    if (__DEV__) {
+      if (invalidModifiers.length > 0)
+        console.warn(`[slidev] Unknown animation preset(s) on v-click: ${invalidModifiers.join(', ')}. Available presets are: ${CLICK_ANIMATION_PRESETS.join(', ')}`)
+      if (validModifiers.length > 1)
+        console.warn(`[slidev] Multiple animation presets detected on v-click: ${validModifiers.join(', ')}. Only "${validModifiers[0]}" will be used.`)
+    }
 
-    if (animation && !(CLICK_ANIMATION_PRESETS as readonly string[]).includes(animation) && __DEV__)
-      console.warn(`[slidev] Unknown animation preset: "${animation}". Available presets are: ${CLICK_ANIMATION_PRESETS.join(', ')}`)
-
-    return animation
+    return validModifiers[0] || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
   })
 
   const info = ctx.calculate(value)
