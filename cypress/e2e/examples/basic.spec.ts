@@ -310,4 +310,19 @@ context('Basic', () => {
     cy.get(`${targets}:not(.slidev-vclick-hidden)`)
       .should('have.length', 3)
   })
+  it('invalid click animation preset does not break v-click', () => {
+    goPage(17)
+
+    const target = '#slideshow .slidev-page-17 .cy-animation-invalid-frontmatter .slidev-vclick-target'
+
+    // Unknown preset should still be reflected and not crash interactions
+    cy.get(target)
+      .should('have.attr', 'data-click-animation', 'foo')
+      .should('have.class', 'slidev-vclick-hidden')
+
+    cy.rightArrow()
+
+    cy.get(`${target}:not(.slidev-vclick-hidden)`)
+      .should('have.text', 'invalid-frontmatter-still-works')
+  })
 })
