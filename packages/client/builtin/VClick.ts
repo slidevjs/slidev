@@ -23,6 +23,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    animation: {
+      type: String,
+      default: undefined,
+    },
     wrapText: {
       type: Function as PropType<(text: VNode) => VNode>,
       default: (text: VNode) => h('span', text),
@@ -36,6 +40,7 @@ export default defineComponent({
         at: this.at,
         hide: this.hide,
         fade: this.fade,
+        animation: this.animation,
         handleSpecialElements: false,
       },
       {

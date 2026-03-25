@@ -11,6 +11,7 @@ import {
   injectionClicksContext,
   injectionFrontmatter,
 } from '../constants'
+import { configs } from '../env'
 import { directiveInject } from '../utils'
 
 export function createVClickDirectives() {
@@ -39,17 +40,18 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const animation = resolved.flagAnimation.value
 
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-              if (resolved.flagAnimation)
-                el.classList.toggle(resolved.flagAnimation, active)
+              if (animation)
+                el.classList.toggle(animation, active)
             }
             else {
               el.classList.toggle(className, !active)
-              if (resolved.flagAnimation)
-                el.classList.toggle(resolved.flagAnimation, !active)
+              if (animation)
+                el.classList.toggle(animation, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -77,17 +79,18 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const animation = resolved.flagAnimation.value
 
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-              if (resolved.flagAnimation)
-                el.classList.toggle(resolved.flagAnimation, active)
+              if (animation)
+                el.classList.toggle(animation, active)
             }
             else {
               el.classList.toggle(className, !active)
-              if (resolved.flagAnimation)
-                el.classList.toggle(resolved.flagAnimation, !active)
+              if (animation)
+                el.classList.toggle(animation, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -115,11 +118,12 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const animation = resolved.flagAnimation.value
 
             el.classList.toggle(className, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-            if (resolved.flagAnimation)
-              el.classList.toggle(resolved.flagAnimation, active)
+            if (animation)
+              el.classList.toggle(animation, active)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -145,9 +149,12 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
-  let flagAnimation = PRESETS.find(i => dir.modifiers[i])
-  if (!flagAnimation && frontmatter?.clickAnimation)
-    flagAnimation = frontmatter.clickAnimation
+  const flagAnimation = computed(() => {
+    const modifier = PRESETS.find(i => dir.modifiers[i])
+    if (modifier)
+      return modifier
+    return frontmatter?.clickAnimation ?? configs.clickAnimation
+  })
 
   const info = ctx.calculate(value)
   if (!info)

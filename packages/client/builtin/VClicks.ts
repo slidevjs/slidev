@@ -34,6 +34,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    animation: {
+      type: String,
+      default: undefined,
+    },
     handleSpecialElements: {
       type: Boolean,
       default: true,
@@ -53,14 +57,18 @@ export default defineComponent({
     const click = resolveDirective('click')!
 
     const applyDirective = (node: VNode, value: number | string) => {
+      const modifiers: Record<string, boolean> = {
+        hide: this.hide,
+        fade: this.fade,
+      }
+      if (this.animation)
+        modifiers[this.animation] = true
+
       return withDirectives(node, [[
         click,
         value,
         '',
-        {
-          hide: this.hide,
-          fade: this.fade,
-        },
+        modifiers,
       ]])
     }
 
