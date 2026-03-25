@@ -1,4 +1,4 @@
-import type { ClicksElement, RawAtValue } from '@slidev/types'
+import type { ClicksElement, Frontmatter, RawAtValue } from '@slidev/types'
 import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
 import {
@@ -10,8 +10,8 @@ import {
   CLASS_VCLICK_TARGET,
   injectionClicksContext,
   injectionFrontmatter,
+  injectionSlidevContext,
 } from '../constants'
-import { configs } from '../env'
 import { directiveInject } from '../utils'
 
 export function createVClickDirectives() {
@@ -45,14 +45,15 @@ export function createVClickDirectives() {
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-              if (animation)
-                el.classList.toggle(animation, active)
             }
             else {
               el.classList.toggle(className, !active)
-              if (animation)
-                el.classList.toggle(animation, !active)
             }
+
+            if (animation)
+              el.dataset.clickAnimation = animation
+            else
+              delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -84,14 +85,15 @@ export function createVClickDirectives() {
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
-              if (animation)
-                el.classList.toggle(animation, active)
             }
             else {
               el.classList.toggle(className, !active)
-              if (animation)
-                el.classList.toggle(animation, !active)
             }
+
+            if (animation)
+              el.dataset.clickAnimation = animation
+            else
+              delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -122,8 +124,11 @@ export function createVClickDirectives() {
 
             el.classList.toggle(className, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+
             if (animation)
-              el.classList.toggle(animation, active)
+              el.dataset.clickAnimation = animation
+            else
+              delete el.dataset.clickAnimation
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -137,11 +142,10 @@ export function createVClickDirectives() {
 
 export const resolvedClickMap = new Map<ClicksElement, ReturnType<typeof resolveClick>>()
 
-const PRESETS = ['fade', 'fade-up', 'fade-down', 'fade-left', 'fade-right', 'scale']
-
 export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: RawAtValue, explicitHide = false) {
   const ctx = directiveInject(dir, injectionClicksContext)?.value
-  const frontmatter = directiveInject(dir, injectionFrontmatter)
+  const frontmatter = directiveInject<Frontmatter>(dir, injectionFrontmatter)
+  const slidev = directiveInject(dir, injectionSlidevContext)
 
   if (!el || !ctx)
     return null
@@ -150,10 +154,10 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
   const flagAnimation = computed(() => {
-    const modifier = PRESETS.find(i => dir.modifiers[i])
+    const modifier = Object.keys(dir.modifiers).find(m => !['hide', 'fade'].includes(m))
     if (modifier)
       return modifier
-    return frontmatter?.clickAnimation ?? configs.clickAnimation
+    return frontmatter?.clickAnimation ?? slidev?.configs.clickAnimation
   })
 
   const info = ctx.calculate(value)

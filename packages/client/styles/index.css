@@ -55,24 +55,28 @@ html {
   user-select: none !important;
 }
 
-.slidev-vclick-hidden.fade-up {
+.slidev-vclick-target[data-click-animation='fade-up'].slidev-vclick-hidden {
   transform: translateY(20px);
 }
 
-.slidev-vclick-hidden.fade-down {
+.slidev-vclick-target[data-click-animation='fade-down'].slidev-vclick-hidden {
   transform: translateY(-20px);
 }
 
-.slidev-vclick-hidden.fade-left {
+.slidev-vclick-target[data-click-animation='fade-left'].slidev-vclick-hidden {
   transform: translateX(20px);
 }
 
-.slidev-vclick-hidden.fade-right {
+.slidev-vclick-target[data-click-animation='fade-right'].slidev-vclick-hidden {
   transform: translateX(-20px);
 }
 
-.slidev-vclick-hidden.scale {
+.slidev-vclick-target[data-click-animation='scale'].slidev-vclick-hidden {
   transform: scale(0.9);
+}
+
+.slidev-vclick-target[data-click-animation='none'] {
+  transition: none;
 }
 
 .slidev-vclick-display-none {
