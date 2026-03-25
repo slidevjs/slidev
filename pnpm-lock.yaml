@@ -90,6 +90,9 @@ catalogs:
     '@antfu/utils':
       specifier: ^9.3.0
       version: 9.3.0
+    '@mediapipe/tasks-vision':
+      specifier: ^0.10.18
+      version: 0.10.34
     '@shikijs/engine-javascript':
       specifier: ^4.0.1
       version: 4.0.1
@@ -736,7 +739,7 @@ importers:
         specifier: catalog:icons
         version: 1.2.4
       '@mediapipe/tasks-vision':
-        specifier: ^0.10.18
+        specifier: catalog:frontend
         version: 0.10.34
       '@shikijs/engine-javascript':
         specifier: catalog:frontend
