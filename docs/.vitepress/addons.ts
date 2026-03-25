@@ -15,6 +15,7 @@ export const official: AddonInfo[] = [
   },
 ]
 
+// Please add your addon to the end of the list.
 export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-python-runner',
