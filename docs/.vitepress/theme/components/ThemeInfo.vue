@@ -33,6 +33,7 @@ if (props.theme.previews.length > 1 && isClient) {
         :src="url"
         class="absolute top-0 bottom-0 left-0 right-0 transition-transform transform duration-500"
         :style="{ transform: idx > index ? 'scale(1.05) translate(110%)' : 'scale(1.05) translate(0)' }"
+        loading="lazy"
       >
     </a>
     <a :href="theme.link || theme.repo" class="font-bold !text-$vp-c-text-1 !decoration-none">
