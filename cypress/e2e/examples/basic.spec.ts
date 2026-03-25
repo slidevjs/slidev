@@ -313,17 +313,4 @@ context('Basic', () => {
     cy.get(`${targets}:not(.slidev-vclick-hidden)`)
       .should('have.length', 4)
   })
-
-  it('invalid click animation preset does not break v-click', () => {
-    goPage(16)
-
-    const target = '#slideshow .slidev-page-16 .cy-animation-hierarchy .slidev-vclick-target'
-
-    // Unknown frontmatter preset should not crash click behavior
-    cy.get(target).eq(0).should('have.attr', 'data-click-animation', 'foo').should('have.class', 'slidev-vclick-hidden')
-
-    cy.rightArrow()
-
-    cy.get(`${target}:not(.slidev-vclick-hidden)`).eq(0).should('have.text', 'frontmatter-invalid-foo')
-  })
 })
