@@ -296,8 +296,8 @@ context('Basic', () => {
 
     const targets = '#slideshow .slidev-page-16 .cy-animation-hierarchy .slidev-vclick-target'
 
-    // frontmatter applies when no animation modifier is present
-    cy.get(targets).eq(0).should('have.attr', 'data-click-animation', 'scale')
+    // invalid frontmatter still gets reflected for elements without modifiers
+    cy.get(targets).eq(0).should('have.attr', 'data-click-animation', 'foo')
 
     // element modifier overrides slide frontmatter preset
     cy.get(targets).eq(1).should('have.attr', 'data-click-animation', 'fade-right')
@@ -305,24 +305,25 @@ context('Basic', () => {
     // none modifier also overrides slide frontmatter preset
     cy.get(targets).eq(2).should('have.attr', 'data-click-animation', 'none').should('have.css', 'transition', 'none')
 
+    // another valid modifier should also override invalid frontmatter
+    cy.get(targets).eq(3).should('have.attr', 'data-click-animation', 'scale')
+
     // reveal sequence remains functional with mixed presets
-    cy.rightArrow(3)
+    cy.rightArrow(4)
     cy.get(`${targets}:not(.slidev-vclick-hidden)`)
-      .should('have.length', 3)
+      .should('have.length', 4)
   })
+
   it('invalid click animation preset does not break v-click', () => {
-    goPage(17)
+    goPage(16)
 
-    const target = '#slideshow .slidev-page-17 .cy-animation-invalid-frontmatter .slidev-vclick-target'
+    const target = '#slideshow .slidev-page-16 .cy-animation-hierarchy .slidev-vclick-target'
 
-    // Unknown preset should still be reflected and not crash interactions
-    cy.get(target)
-      .should('have.attr', 'data-click-animation', 'foo')
-      .should('have.class', 'slidev-vclick-hidden')
+    // Unknown frontmatter preset should not crash click behavior
+    cy.get(target).eq(0).should('have.attr', 'data-click-animation', 'foo').should('have.class', 'slidev-vclick-hidden')
 
     cy.rightArrow()
 
-    cy.get(`${target}:not(.slidev-vclick-hidden)`)
-      .should('have.text', 'invalid-frontmatter-still-works')
+    cy.get(`${target}:not(.slidev-vclick-hidden)`).eq(0).should('have.text', 'frontmatter-invalid-foo')
   })
 })
