@@ -271,6 +271,8 @@ cli.command(
     ]
 
     function bindShortcut() {
+      if (!process.stdin.isTTY)
+        return
       process.stdin.resume()
       process.stdin.setEncoding('utf8')
       readline.emitKeypressEvents(process.stdin)
