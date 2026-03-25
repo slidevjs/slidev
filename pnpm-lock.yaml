@@ -498,6 +498,9 @@ importers:
       '@types/yargs':
         specifier: catalog:types
         version: 17.0.35
+      '@vue/compiler-sfc':
+        specifier: catalog:demo
+        version: 3.5.29
       '@vueuse/core':
         specifier: catalog:frontend
         version: 14.2.1(vue@3.5.29(typescript@5.9.3))
