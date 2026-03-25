@@ -50,7 +50,9 @@ html {
 }
 
 .slidev-vclick-target[data-click-animation]:not([data-click-animation='none']) {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 .slidev-vclick-hidden {

@@ -86,9 +86,8 @@
         },
         "clickAnimation": {
           "type": "string",
-          "description": "Default click animation preset for v-click elements on this slide",
-          "markdownDescription": "Default click animation preset for `v-click` elements on this slide",
-          "enum": ["fade", "fade-up", "fade-down", "fade-left", "fade-right", "scale", "none"]
+          "description": "Default click animation for the slides",
+          "markdownDescription": "Default click animation for the slides"
         },
         "dragPos": {
           "type": "object",
@@ -1023,9 +1022,8 @@
         },
         "clickAnimation": {
           "type": "string",
-          "description": "Default click animation preset for v-click elements on this slide",
-          "markdownDescription": "Default click animation preset for `v-click` elements on this slide",
-          "enum": ["fade", "fade-up", "fade-down", "fade-left", "fade-right", "scale", "none"]
+          "description": "Default click animation for the slide",
+          "markdownDescription": "Default click animation for the slide"
         },
         "dragPos": {
           "type": "object",
