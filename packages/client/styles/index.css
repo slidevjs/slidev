@@ -46,6 +46,10 @@ html {
 }
 
 .slidev-vclick-target {
+  transition: opacity 0.1s ease;
+}
+
+.slidev-vclick-target[data-click-animation]:not([data-click-animation='none']) {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -75,7 +79,8 @@ html {
   transform: scale(0.9);
 }
 
-.slidev-vclick-target[data-click-animation='none'] {
+.slidev-vclick-target[data-click-animation='none'],
+.slidev-vclick-target[data-click-animation='none'].slidev-vclick-hidden {
   transition: none;
 }
 
