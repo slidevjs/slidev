@@ -290,4 +290,24 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-15 .cy-animation-frontmatter .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'from-frontmatter')
   })
+
+  it('click animation hierarchy and override', () => {
+    goPage(16)
+
+    const targets = '#slideshow .slidev-page-16 .cy-animation-hierarchy .slidev-vclick-target'
+
+    // frontmatter applies when no animation modifier is present
+    cy.get(targets).eq(0).should('have.attr', 'data-click-animation', 'scale')
+
+    // element modifier overrides slide frontmatter preset
+    cy.get(targets).eq(1).should('have.attr', 'data-click-animation', 'fade-right')
+
+    // none modifier also overrides slide frontmatter preset
+    cy.get(targets).eq(2).should('have.attr', 'data-click-animation', 'none').should('have.css', 'transition', 'none')
+
+    // reveal sequence remains functional with mixed presets
+    cy.rightArrow(3)
+    cy.get(`${targets}:not(.slidev-vclick-hidden)`)
+      .should('have.length', 3)
+  })
 })
