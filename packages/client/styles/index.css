@@ -46,13 +46,33 @@ html {
 }
 
 .slidev-vclick-target {
-  @apply transition-opacity duration-100;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .slidev-vclick-hidden {
   opacity: 0 !important;
   pointer-events: none !important;
   user-select: none !important;
+}
+
+.slidev-vclick-hidden.fade-up {
+  transform: translateY(20px);
+}
+
+.slidev-vclick-hidden.fade-down {
+  transform: translateY(-20px);
+}
+
+.slidev-vclick-hidden.fade-left {
+  transform: translateX(20px);
+}
+
+.slidev-vclick-hidden.fade-right {
+  transform: translateX(-20px);
+}
+
+.slidev-vclick-hidden.scale {
+  transform: scale(0.9);
 }
 
 .slidev-vclick-display-none {

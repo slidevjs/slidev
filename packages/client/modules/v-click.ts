@@ -9,6 +9,7 @@ import {
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
   injectionClicksContext,
+  injectionFrontmatter,
 } from '../constants'
 import { directiveInject } from '../utils'
 
@@ -37,12 +38,18 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
+            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+
             if (resolved.flagHide) {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+              if (resolved.flagAnimation)
+                el.classList.toggle(resolved.flagAnimation, active)
             }
             else {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+              el.classList.toggle(className, !active)
+              if (resolved.flagAnimation)
+                el.classList.toggle(resolved.flagAnimation, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -69,12 +76,18 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
+            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+
             if (resolved.flagHide) {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(className, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+              if (resolved.flagAnimation)
+                el.classList.toggle(resolved.flagAnimation, active)
             }
             else {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+              el.classList.toggle(className, !active)
+              if (resolved.flagAnimation)
+                el.classList.toggle(resolved.flagAnimation, !active)
             }
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
@@ -101,8 +114,12 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+
+            el.classList.toggle(className, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+            if (resolved.flagAnimation)
+              el.classList.toggle(resolved.flagAnimation, active)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -116,14 +133,21 @@ export function createVClickDirectives() {
 
 export const resolvedClickMap = new Map<ClicksElement, ReturnType<typeof resolveClick>>()
 
+const PRESETS = ['fade', 'fade-up', 'fade-down', 'fade-left', 'fade-right', 'scale']
+
 export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: RawAtValue, explicitHide = false) {
   const ctx = directiveInject(dir, injectionClicksContext)?.value
+  const frontmatter = directiveInject(dir, injectionFrontmatter)
 
   if (!el || !ctx)
     return null
 
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
   const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+
+  let flagAnimation = PRESETS.find(i => dir.modifiers[i])
+  if (!flagAnimation && frontmatter?.clickAnimation)
+    flagAnimation = frontmatter.clickAnimation
 
   const info = ctx.calculate(value)
   if (!info)
@@ -147,6 +171,7 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
     visibilityState,
     flagFade,
     flagHide,
+    flagAnimation,
   }
   resolvedClickMap.set(el, resolved)
   return resolved

@@ -390,6 +390,10 @@ export interface Frontmatter extends TransitionOptions {
    */
   zoom?: number
   /**
+   * Default click animation for the slide
+   */
+  clickAnimation?: string
+  /**
    * Store the positions of draggable elements
    * Normally you don't need to set this manually
    *
