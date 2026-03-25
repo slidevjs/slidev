@@ -5,7 +5,8 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
-import { createHead, extractUnheadInputFromHtml, transformHtmlTemplate } from 'unhead/server'
+import { parseHtmlForUnheadExtraction } from 'unhead/parser'
+import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
@@ -70,7 +71,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
       continue
     }
 
-    inputs.push(extractUnheadInputFromHtml(html).input)
+    inputs.push(parseHtmlForUnheadExtraction(html).input)
     body += `\n${(html.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
   }
 
