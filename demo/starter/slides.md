@@ -379,7 +379,7 @@ Use `clickAnimation` in frontmatter to set a default animation, then override pe
 
 ```yaml
 ---
-clickAnimation: fade up  # space-separated, composable
+clickAnimation: fade up # space-separated, composable
 ---
 ```
 
@@ -411,7 +411,9 @@ clickAnimation: fade up  # space-separated, composable
 Custom presets via CSS — target `.slidev-vclick-anim-<name>` on `.slidev-vclick-hidden`:
 
 ```css
-.slidev-vclick-anim-pop.slidev-vclick-hidden { transform: scale(0.9) translateY(8px); }
+.slidev-vclick-anim-pop.slidev-vclick-hidden {
+  transform: scale(0.9) translateY(8px);
+}
 ```
 
 </div>
