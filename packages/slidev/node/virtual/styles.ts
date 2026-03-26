@@ -16,7 +16,7 @@ export const templateStyle: VirtualModuleTemplate = {
       'styles/code.css',
       'styles/katex.css',
       'styles/transitions.css',
-    ].map(path => makeAbsoluteImportGlob(userRoot, [join(clientRoot, path)]))
+    ].map(path => `import "${resolveUrlOfClient(path)}"`)
 
     for (const root of roots) {
       imports.push(makeAbsoluteImportGlob(userRoot, [

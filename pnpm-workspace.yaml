@@ -47,6 +47,7 @@ catalogs:
     vue-tsc: ^3.2.5
     zx: ^8.8.5
   docs:
+    oxc-minify: ^0.121.0
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.16
     vitepress-plugin-group-icons: ^1.7.1
