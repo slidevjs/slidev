@@ -1,9 +1,10 @@
 import type { MarkdownTransformContext } from '@slidev/types'
 import lz from 'lz-string'
 import { toKeyedTokens } from 'shiki-magic-move/core'
-import { reCodeBlock } from './code-wrapper'
 import { normalizeRangeStr } from './utils'
 
+// eslint-disable-next-line regexp/no-super-linear-backtracking
+const reCodeBlock = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 const reMagicMoveBlock = /^````(?:md|markdown) magic-move(?: *\[([^\]]*)\])?(?: *(\{[^}]*\}))? *([^\n]*)\n([\s\S]+?)^````\s*?$/gm
 
