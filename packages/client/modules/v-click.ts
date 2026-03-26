@@ -40,7 +40,7 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = CLASS_VCLICK_HIDDEN
-            const animation = resolved.flagAnimation.value
+            const animations = resolved.flagAnimations.value
 
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
@@ -50,10 +50,18 @@ export function createVClickDirectives() {
               el.classList.toggle(className, !active)
             }
 
-            if (animation && el.dataset.clickAnimation !== animation)
-              el.dataset.clickAnimation = animation
-            else if (!animation && el.dataset.clickAnimation)
-              delete el.dataset.clickAnimation
+            // Sync animation classes
+            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
+            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
+
+            currentClasses.forEach((c) => {
+              if (!targetClasses.includes(c))
+                el.classList.remove(c)
+            })
+            targetClasses.forEach((c) => {
+              if (!el.classList.contains(c))
+                el.classList.add(c)
+            })
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -80,7 +88,7 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = CLASS_VCLICK_HIDDEN
-            const animation = resolved.flagAnimation.value
+            const animations = resolved.flagAnimations.value
 
             if (resolved.flagHide) {
               el.classList.toggle(className, active)
@@ -90,10 +98,18 @@ export function createVClickDirectives() {
               el.classList.toggle(className, !active)
             }
 
-            if (animation && el.dataset.clickAnimation !== animation)
-              el.dataset.clickAnimation = animation
-            else if (!animation && el.dataset.clickAnimation)
-              delete el.dataset.clickAnimation
+            // Sync animation classes
+            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
+            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
+
+            currentClasses.forEach((c) => {
+              if (!targetClasses.includes(c))
+                el.classList.remove(c)
+            })
+            targetClasses.forEach((c) => {
+              if (!el.classList.contains(c))
+                el.classList.add(c)
+            })
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -120,15 +136,23 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             const className = CLASS_VCLICK_HIDDEN
-            const animation = resolved.flagAnimation.value
+            const animations = resolved.flagAnimations.value
 
             el.classList.toggle(className, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
-            if (animation && el.dataset.clickAnimation !== animation)
-              el.dataset.clickAnimation = animation
-            else if (!animation && el.dataset.clickAnimation)
-              delete el.dataset.clickAnimation
+            // Sync animation classes
+            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
+            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
+
+            currentClasses.forEach((c) => {
+              if (!targetClasses.includes(c))
+                el.classList.remove(c)
+            })
+            targetClasses.forEach((c) => {
+              if (!el.classList.contains(c))
+                el.classList.add(c)
+            })
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -153,18 +177,21 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
 
   /**
-   * Resolves the animation preset for this element.
-   * Priority: directive modifier > slide frontmatter > global config.
-   * Built-in presets are defined in `CLICK_ANIMATION_PRESETS`, but custom presets
-   * can also be used by targeting `data-click-animation='my-preset'` in CSS.
+   * Resolves the animation presets for this element.
+   * Priority: directive modifiers (stacked) > slide frontmatter > global config.
+   * Modifiers allow composition, e.g., v-click.fade.up.scale.
    */
   const elModifiers = Object.keys({ ...dir.modifiers }).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
 
-  if (__DEV__ && elModifiers.length > 1)
-    console.warn(`[slidev] Multiple animation modifiers detected on v-click: ${elModifiers.join(', ')}. Only "${elModifiers[0]}" will be used.`)
+  const flagAnimations = computed(() => {
+    if (elModifiers.length > 0)
+      return elModifiers
 
-  const flagAnimation = computed(() => {
-    return elModifiers[0] || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+    const preset = frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+    if (preset)
+      return preset.split(/\s+/).filter(Boolean)
+
+    return []
   })
 
   const info = ctx.calculate(value)
@@ -188,7 +215,7 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
     isShown,
     visibilityState,
     flagHide,
-    flagAnimation,
+    flagAnimations,
   }
   resolvedClickMap.set(el, resolved)
   return resolved

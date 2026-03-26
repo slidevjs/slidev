@@ -56,8 +56,12 @@ export default defineComponent({
       const modifiers: Record<string, boolean> = {
         hide: this.hide,
       }
-      if (this.animation)
-        modifiers[this.animation] = true
+      if (this.animation) {
+        this.animation.split(/\s+/).forEach((a) => {
+          if (a)
+            modifiers[a] = true
+        })
+      }
 
       return withDirectives(node, [[
         click,

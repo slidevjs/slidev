@@ -370,28 +370,28 @@ also allows you to add
 </div>
 
 ---
-clickAnimation: fade-up
+clickAnimation: fade up
 ---
 
 # Click Animation Presets
 
-Set a slide default with frontmatter, then override on specific elements.
+Set slide defaults with frontmatter, then compose or override on specific elements.
 
 ```yaml
 ---
-clickAnimation: fade-up
+clickAnimation: fade up
 ---
 ```
 
 <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-  <div v-click class="p-3 rounded border border-primary/20 bg-primary/10">Uses slide preset (fade-up)</div>
-  <div v-click.fade-left class="p-3 rounded border border-primary/20 bg-primary/10">Modifier override (fade-left)</div>
-  <div v-click.scale class="p-3 rounded border border-primary/20 bg-primary/10">Modifier override (scale)</div>
+  <div v-click class="p-3 rounded border border-primary/20 bg-primary/10">Uses slide presets (fade + up)</div>
+  <div v-click.fade.left class="p-3 rounded border border-primary/20 bg-primary/10">Compose: fade + left</div>
+  <div v-click.fade.up.scale class="p-3 rounded border border-primary/20 bg-primary/10">Compose: fade + up + scale</div>
   <div v-click.none class="p-3 rounded border border-primary/20 bg-primary/10">No transition (none)</div>
-  <div v-click.fade class="p-3 rounded border border-primary/20 bg-primary/10">Fade only (fade)</div>
 </div>
 
-`hide` is reserved. `fade` is a standard preset.
+Modifiers like `.fade.up.scale` are applied as atomic CSS classes.
+`hide` is reserved. Custom CSS can target `.slidev-vclick-anim-<name>`.
 
 ---
 

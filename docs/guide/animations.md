@@ -60,46 +60,46 @@ For the components, you can use the `hide` prop to achieve the same effect:
 
 ### Animation Presets {#click-animation-presets}
 
-You can define a default click animation preset in frontmatter and override it per element with directive modifiers.
+You can define default click animation presets in frontmatter and override them per element with directive modifiers. Animation presets are applied as CSS classes with the `.slidev-vclick-anim-` prefix.
 
 ```yaml
 ---
-clickAnimation: fade-up
+clickAnimation: fade up
 ---
 ```
 
 ```md
-<div v-click>Uses slide default preset</div>
-<div v-click.scale>Overrides slide preset for this element</div>
+<div v-click>Uses slide default presets (fade and up)</div>
+<div v-click.scale>Overrides slide preset for this element with scale</div>
+<div v-click.fade.right>Composes multiple animations: fade and right</div>
 <div v-click.none>No transition for this element</div>
 ```
 
-Built-in presets:
+Built-in atomic presets:
 
-- `fade`
-- `fade-up`
-- `fade-down`
-- `fade-left`
-- `fade-right`
-- `scale`
-- `none`
+- `fade`: Only opacity transition (standard)
+- `up`: Translate 20px up
+- `down`: Translate 20px down
+- `left`: Translate 20px left
+- `right`: Translate 20px right
+- `scale`: Scale to 0.9
+- `none`: Disables transition on that specific element
 
 Preset resolution order:
 
-1. Directive modifier on the element (for example, `.scale`)
-2. Slide frontmatter `clickAnimation`
-3. Global headmatter `clickAnimation`
+1. Directive modifiers on the element (e.g., `.fade.up`)
+2. Slide frontmatter `clickAnimation` (space-separated)
+3. Global headmatter `clickAnimation` (space-separated)
 
 Notes:
 
 - `.hide` is the only reserved click modifier. All other modifiers are treated as animation presets.
-- `.fade` is a standard animation preset.
-- `.none` disables transition on that specific element.
-- In development mode, multiple animation modifiers on the same element show a warning and only the first one is used.
+- Presets are **composable**. Using `v-click.fade.up.scale` will apply all three effects.
+- In frontmatter, use a space-separated string for composition: `clickAnimation: fade up scale`.
 
 #### Custom Presets with CSS {#click-animation-custom-presets}
 
-You can define your own animation names via `clickAnimation` and style them in CSS.
+You can define your own animation names and style them in CSS using the `.slidev-vclick-anim-` prefix.
 
 ```yaml
 ---
@@ -108,7 +108,7 @@ clickAnimation: pop
 ```
 
 ```css
-.slidev-vclick-target[data-click-animation='pop'].slidev-vclick-hidden {
+.slidev-vclick-anim-pop.slidev-vclick-hidden {
   transform: scale(0.96) translateY(8px);
 }
 ```
