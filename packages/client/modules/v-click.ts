@@ -14,6 +14,14 @@ import {
 } from '../constants'
 import { directiveInject } from '../utils'
 
+function syncAnimationClasses(el: HTMLElement, animations: string[]) {
+  const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
+  Array.from(el.classList)
+    .filter(c => c.startsWith('slidev-vclick-anim-') && !targetClasses.includes(c))
+    .forEach(c => el.classList.remove(c))
+  targetClasses.forEach(c => el.classList.add(c))
+}
+
 export function createVClickDirectives() {
   return {
     install(app: App) {
@@ -39,29 +47,15 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = CLASS_VCLICK_HIDDEN
-            const animations = resolved.flagAnimations.value
-
             if (resolved.flagHide) {
-              el.classList.toggle(className, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(className, !active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, !active)
             }
 
-            // Sync animation classes
-            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
-            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
-
-            currentClasses.forEach((c) => {
-              if (!targetClasses.includes(c))
-                el.classList.remove(c)
-            })
-            targetClasses.forEach((c) => {
-              if (!el.classList.contains(c))
-                el.classList.add(c)
-            })
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -87,29 +81,15 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = CLASS_VCLICK_HIDDEN
-            const animations = resolved.flagAnimations.value
-
             if (resolved.flagHide) {
-              el.classList.toggle(className, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(className, !active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, !active)
             }
 
-            // Sync animation classes
-            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
-            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
-
-            currentClasses.forEach((c) => {
-              if (!targetClasses.includes(c))
-                el.classList.remove(c)
-            })
-            targetClasses.forEach((c) => {
-              if (!el.classList.contains(c))
-                el.classList.add(c)
-            })
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -135,24 +115,10 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = CLASS_VCLICK_HIDDEN
-            const animations = resolved.flagAnimations.value
-
-            el.classList.toggle(className, active)
+            el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
 
-            // Sync animation classes
-            const currentClasses = Array.from(el.classList).filter(c => c.startsWith('slidev-vclick-anim-'))
-            const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
-
-            currentClasses.forEach((c) => {
-              if (!targetClasses.includes(c))
-                el.classList.remove(c)
-            })
-            targetClasses.forEach((c) => {
-              if (!el.classList.contains(c))
-                el.classList.add(c)
-            })
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
