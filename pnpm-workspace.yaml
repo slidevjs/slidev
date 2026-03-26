@@ -43,7 +43,7 @@ catalogs:
     undici: ^7.22.0
     undici-types: ^7.22.0
     vitefu: ^1.1.2
-    vitest: ^4.0.18
+    vitest: ^4.1.1
     vue-tsc: ^3.2.5
     zx: ^8.8.5
   docs:
@@ -137,10 +137,10 @@ catalogs:
     unplugin-vue-markdown: ^30.0.0
     untun: ^0.1.3
     uqr: ^0.1.2
-    vite: ^7.3.1
-    vite-plugin-inspect: ^11.3.3
+    vite: ^8.0.3
+    vite-plugin-inspect: ^12.0.0-beta.1
     vite-plugin-remote-assets: ^2.1.0
-    vite-plugin-static-copy: ^3.2.0
+    vite-plugin-static-copy: ^4.0.0
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.8.2
     yargs: ^18.0.0

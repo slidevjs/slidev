@@ -1,5 +1,4 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
-import type { LoadResult } from 'rollup'
 import type { ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
@@ -280,7 +279,7 @@ export function createSlidesLoader(
       },
     },
 
-    async load(id): Promise<LoadResult> {
+    async load(id) {
       const template = templates.find(i => i.id === id)
       if (template) {
         return {

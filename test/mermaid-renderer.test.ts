@@ -1,5 +1,5 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
-import type { PluginContext } from 'rollup'
+import type { Rolldown } from 'vite'
 import { describe, expect, it } from 'vitest'
 import { templateSetups } from '../packages/slidev/node/virtual/setups'
 
@@ -11,7 +11,7 @@ describe('mermaid-renderer virtual module', () => {
 
   it('generates content with mermaid-renderer glob', () => {
     const template = templateSetups.find(t => t.id === '/@slidev/setups/mermaid-renderer')!
-    const content = template.getContent.call({} as PluginContext, {
+    const content = template.getContent.call({} as Rolldown.PluginContext, {
       userRoot: '/user/project',
       roots: ['/user/project'],
     } as ResolvedSlidevOptions)
