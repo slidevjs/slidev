@@ -375,23 +375,46 @@ clickAnimation: fade up
 
 # Click Animation Presets
 
-Set slide defaults with frontmatter, then compose or override on specific elements.
+Use `clickAnimation` in frontmatter to set a default animation, then override per element with modifiers.
 
 ```yaml
 ---
-clickAnimation: fade up
+clickAnimation: fade up  # space-separated, composable
 ---
 ```
 
-<div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-  <div v-click class="p-3 rounded border border-primary/20 bg-primary/10">Uses slide presets (fade + up)</div>
-  <div v-click.fade.left class="p-3 rounded border border-primary/20 bg-primary/10">Compose: fade + left</div>
-  <div v-click.fade.up.scale class="p-3 rounded border border-primary/20 bg-primary/10">Compose: fade + up + scale</div>
-  <div v-click.none class="p-3 rounded border border-primary/20 bg-primary/10">No transition (none)</div>
+<div class="grid grid-cols-3 gap-3 mt-4 text-sm">
+  <div v-click class="p-3 rounded border border-primary/20 bg-primary/10">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click</div>
+    <div>Default (fade + up)</div>
+  </div>
+  <div v-click.fade.right class="p-3 rounded border border-primary/30 bg-primary/15">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right</div>
+    <div>Slide from right</div>
+  </div>
+  <div v-click.scale class="p-3 rounded border border-primary/40 bg-primary/20">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.scale</div>
+    <div>Scale in</div>
+  </div>
+  <div v-click.fade.up.scale class="p-3 rounded border border-primary/50 bg-primary/25">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.up.scale</div>
+    <div>Composed</div>
+  </div>
+  <div v-click.none class="p-3 rounded border border-primary/60 bg-primary/30">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.none</div>
+    <div>No transition</div>
+  </div>
 </div>
 
-Modifiers like `.fade.up.scale` are applied as atomic CSS classes.
-`hide` is reserved. Custom CSS can target `.slidev-vclick-anim-<name>`.
+<div v-click mt-4 text-sm>
+
+Custom presets via CSS — target `.slidev-vclick-anim-<name>` on `.slidev-vclick-hidden`:
+
+```css
+.slidev-vclick-anim-pop.slidev-vclick-hidden { transform: scale(0.9) translateY(8px); }
+```
+
+</div>
 
 ---
 
