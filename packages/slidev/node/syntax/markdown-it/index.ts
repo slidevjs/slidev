@@ -6,14 +6,14 @@ import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 import { MarkdownItCodeblocks } from '../codeblock'
-import MarkdownItEscapeInlineCode from './markdown-it-escape-code'
-import MarkdownItKatex from './markdown-it-katex'
-import MarkdownItLink from './markdown-it-link'
-import MarkdownItShiki from './markdown-it-shiki'
-import MarkdownItSlotSugar from './markdown-it-slot-sugar'
-import MarkdownItSnippet from './markdown-it-snippet'
-import MarkdownItStyleScoped from './markdown-it-style-scoped'
-import MarkdownItVDrag from './markdown-it-v-drag'
+import MarkdownItVDrag from './drag'
+import MarkdownItEscapeInlineCode from './escape-code'
+import MarkdownItKatex from './katex'
+import MarkdownItLink from './link'
+import MarkdownItStyleScoped from './scoped'
+import MarkdownItShiki from './shiki'
+import MarkdownItSlotSugar from './slot-sugar'
+import MarkdownItSnippet from './snippet'
 
 export async function useMarkdownItPlugins(
   md: MarkdownExit,
