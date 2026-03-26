@@ -9,6 +9,7 @@ import MarkdownItEscapeInlineCode from './markdown-it-escape-code'
 import MarkdownItKatex from './markdown-it-katex'
 import MarkdownItLink from './markdown-it-link'
 import MarkdownItShiki from './markdown-it-shiki'
+import MarkdownItStyleScoped from './markdown-it-style-scoped'
 import MarkdownItVDrag from './markdown-it-v-drag'
 
 export async function useMarkdownItPlugins(md: MarkdownExit, options: ResolvedSlidevOptions, markdownTransformMap: Map<string, MagicString>) {
@@ -27,4 +28,5 @@ export async function useMarkdownItPlugins(md: MarkdownExit, options: ResolvedSl
   md.use(MarkdownItVDrag, markdownTransformMap)
   if (config.comark || config.mdc)
     md.use(MarkdownItComark)
+  md.use(MarkdownItStyleScoped)
 }
