@@ -12,7 +12,7 @@ for rendering output.
 import type { KatexOptions } from 'katex'
 import type { MarkdownExit, RuleBlock, Token } from 'markdown-exit'
 import katex from 'katex'
-import { escapeVueInCode, normalizeRangeStr } from '../transform/utils'
+import { escapeVueInCode, normalizeRangeStr } from '../utils'
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
@@ -208,7 +208,7 @@ export default function MarkdownItKatex(md: MarkdownExit, options: KatexOptions)
 
   const blockRenderer = function (tokens: Token[], idx: number) {
     const token = tokens[idx]
-    const [, rangeStr, options] = /^\{([\w*,|-]+)\}\s*(?:(\{[^}]*\})\s*?)?/.exec(token.info) || []
+    const [, rangeStr, options] = /^\{([\w*,|-]+)\}\s*(\{[^}]*\})?/.exec(token.info) || []
     const ranges = normalizeRangeStr(rangeStr)
     const optionsProp = options ? `v-bind="${options}"` : ''
     return `<KaTexBlockWrapper ${optionsProp} :ranges='${JSON.stringify(ranges)}'>${katexBlock(tokens[idx].content)}</KaTexBlockWrapper>\n`

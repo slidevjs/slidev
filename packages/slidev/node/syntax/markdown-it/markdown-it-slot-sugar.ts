@@ -1,7 +1,7 @@
 import type { MarkdownExit } from 'markdown-exit'
 
 export default function MarkdownItSlotSugar(md: MarkdownExit) {
-  md.block.ruler.before('paragraph', 'slot_marker', (state, startLine, _endLine, silent) => {
+  md.block.ruler.before('fence', 'slot_marker', (state, startLine, _endLine, silent) => {
     if (state.sCount[startLine] - state.blkIndent > 0)
       return false
 
