@@ -58,6 +58,61 @@ For the components, you can use the `hide` prop to achieve the same effect:
 <v-after hide> Also hidden after 2 clicks </v-after>
 ```
 
+### Animation Presets {#click-animation-presets}
+
+You can define a default click animation preset in frontmatter and override it per element with directive modifiers.
+
+```yaml
+---
+clickAnimation: fade-up
+---
+```
+
+```md
+<div v-click>Uses slide default preset</div>
+<div v-click.scale>Overrides slide preset for this element</div>
+<div v-click.none>No transition for this element</div>
+```
+
+Built-in presets:
+
+- `fade`
+- `fade-up`
+- `fade-down`
+- `fade-left`
+- `fade-right`
+- `scale`
+- `none`
+
+Preset resolution order:
+
+1. Directive modifier on the element (for example, `.scale`)
+2. Slide frontmatter `clickAnimation`
+3. Global headmatter `clickAnimation`
+
+Notes:
+
+- `.hide` is the only reserved click modifier. All other modifiers are treated as animation presets.
+- `.fade` is a standard animation preset.
+- `.none` disables transition on that specific element.
+- In development mode, multiple animation modifiers on the same element show a warning and only the first one is used.
+
+#### Custom Presets with CSS {#click-animation-custom-presets}
+
+You can define your own animation names via `clickAnimation` and style them in CSS.
+
+```yaml
+---
+clickAnimation: pop
+---
+```
+
+```css
+.slidev-vclick-target[data-click-animation='pop'].slidev-vclick-hidden {
+  transform: scale(0.96) translateY(8px);
+}
+```
+
 ### `v-clicks` {#v-clicks}
 
 `v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists and tables.

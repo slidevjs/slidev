@@ -3,12 +3,10 @@ import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
 import {
   CLASS_VCLICK_CURRENT,
-  CLASS_VCLICK_FADE,
   CLASS_VCLICK_HIDDEN,
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
-  CLICK_ANIMATION_PRESETS,
   injectionClicksContext,
   injectionFrontmatter,
   injectionSlidevContext,
@@ -41,7 +39,7 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const className = CLASS_VCLICK_HIDDEN
             const animation = resolved.flagAnimation.value
 
             if (resolved.flagHide) {
@@ -81,7 +79,7 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const className = CLASS_VCLICK_HIDDEN
             const animation = resolved.flagAnimation.value
 
             if (resolved.flagHide) {
@@ -121,7 +119,7 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            const className = resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN
+            const className = CLASS_VCLICK_HIDDEN
             const animation = resolved.flagAnimation.value
 
             el.classList.toggle(className, active)
@@ -153,27 +151,20 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
     return null
 
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
-  const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
 
   /**
    * Resolves the animation preset for this element.
    * Priority: directive modifier > slide frontmatter > global config.
-   * Valid presets are defined in `CLICK_ANIMATION_PRESETS`.
+   * Built-in presets are defined in `CLICK_ANIMATION_PRESETS`, but custom presets
+   * can also be used by targeting `data-click-animation='my-preset'` in CSS.
    */
-  const presets = CLICK_ANIMATION_PRESETS as readonly string[]
-  const elModifiers = Object.keys(dir.modifiers).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
-  const validModifiers = elModifiers.filter(m => presets.includes(m))
-  const invalidModifiers = elModifiers.filter(m => !presets.includes(m))
+  const elModifiers = Object.keys({ ...dir.modifiers }).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
 
-  if (__DEV__) {
-    if (invalidModifiers.length > 0)
-      console.warn(`[slidev] Unknown animation preset(s) on v-click: ${invalidModifiers.join(', ')}. Available presets are: ${CLICK_ANIMATION_PRESETS.join(', ')}`)
-    if (validModifiers.length > 1)
-      console.warn(`[slidev] Multiple animation presets detected on v-click: ${validModifiers.join(', ')}. Only "${validModifiers[0]}" will be used.`)
-  }
+  if (__DEV__ && elModifiers.length > 1)
+    console.warn(`[slidev] Multiple animation modifiers detected on v-click: ${elModifiers.join(', ')}. Only "${elModifiers[0]}" will be used.`)
 
   const flagAnimation = computed(() => {
-    return validModifiers[0] || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+    return elModifiers[0] || frontmatter?.clickAnimation || slidev?.configs.clickAnimation
   })
 
   const info = ctx.calculate(value)
@@ -196,7 +187,6 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
     ...info,
     isShown,
     visibilityState,
-    flagFade,
     flagHide,
     flagAnimation,
   }

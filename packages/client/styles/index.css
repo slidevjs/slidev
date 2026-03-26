@@ -61,6 +61,15 @@ html {
   user-select: none !important;
 }
 
+.slidev-vclick-target[data-click-animation='fade'],
+.slidev-vclick-target[data-click-animation='fade'].slidev-vclick-hidden {
+  transition: opacity 0.3s ease;
+}
+
+.slidev-vclick-target[data-click-animation='fade'].slidev-vclick-hidden {
+  transform: none;
+}
+
 .slidev-vclick-target[data-click-animation='fade-up'].slidev-vclick-hidden {
   transform: translateY(20px);
 }
@@ -88,10 +97,6 @@ html {
 
 .slidev-vclick-display-none {
   display: none !important;
-}
-
-.slidev-vclick-fade {
-  opacity: 0.5;
 }
 
 .slidev-icon {

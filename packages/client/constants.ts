@@ -16,7 +16,6 @@ export const injectionSlideZoom = '$$slidev-slide-zoom' as unknown as InjectionK
 
 export const CLASS_VCLICK_TARGET = 'slidev-vclick-target'
 export const CLASS_VCLICK_HIDDEN = 'slidev-vclick-hidden'
-export const CLASS_VCLICK_FADE = 'slidev-vclick-fade'
 export const CLASS_VCLICK_GONE = 'slidev-vclick-gone'
 export const CLASS_VCLICK_HIDDEN_EXP = 'slidev-vclick-hidden-explicitly'
 export const CLASS_VCLICK_CURRENT = 'slidev-vclick-current'
@@ -33,7 +32,7 @@ export const CLICK_ANIMATION_PRESETS = [
   'none',
 ] as const
 
-export const RESERVED_CLICK_MODIFIERS = ['hide', 'fade'] as const
+export const RESERVED_CLICK_MODIFIERS = ['hide'] as const
 
 export const CLICKS_MAX = 999999
 

@@ -30,10 +30,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    fade: {
-      type: Boolean,
-      default: false,
-    },
     animation: {
       type: String,
       default: undefined,
@@ -59,7 +55,6 @@ export default defineComponent({
     const applyDirective = (node: VNode, value: number | string) => {
       const modifiers: Record<string, boolean> = {
         hide: this.hide,
-        fade: this.fade,
       }
       if (this.animation)
         modifiers[this.animation] = true
