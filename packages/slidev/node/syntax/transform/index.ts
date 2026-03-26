@@ -1,6 +1,5 @@
 import type { MarkdownTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import setupTransformers from '../../setups/transformers'
-import { transformPageCSS } from './in-page-css'
 import { transformMagicMove } from './magic-move'
 import { transformMermaid } from './mermaid'
 import { transformPlantUml } from './plant-uml'
@@ -22,7 +21,6 @@ export async function getMarkdownTransformers(options: ResolvedSlidevOptions): P
 
     ...extras.postCodeblock,
 
-    transformPageCSS,
     transformSlotSugar,
 
     ...extras.post,
