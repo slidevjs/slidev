@@ -35,7 +35,7 @@ The return value should be the custom options for the transformers. The `pre`, `
 3. Import snippets syntax and Shiki magic move
 4. `preCodeblock` from your project
 5. `preCodeblock` from addons and themes
-6. Built-in special code blocks like Mermaid, Monaco and PlantUML
+6. Built-in special code blocks like Mermaid and PlantUML
 7. `postCodeblock` from addons and themes
 8. `postCodeblock` from your project
 9. Other built-in transformers like code block wrapping

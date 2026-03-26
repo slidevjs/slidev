@@ -40,9 +40,9 @@ text: 1
 
 # Code block
 
-```ts {1,2|3}
-const a = 1
-```
+  ```ts {1,2|3}
+  const a = 1
+  ```
 
 ```ts twoslash
 const a = 1

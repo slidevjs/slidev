@@ -15,7 +15,6 @@ export async function useMarkdownItPlugins(md: MarkdownExit, options: ResolvedSl
   const { data: { features, config }, utils: { katexOptions } } = options
 
   if (config.highlighter === 'shiki') {
-    // @ts-expect-error @shikijs/markdown-it types expect MarkdownItAsync, but MarkdownExit is API-compatible
     md.use(await MarkdownItShiki(options))
   }
 

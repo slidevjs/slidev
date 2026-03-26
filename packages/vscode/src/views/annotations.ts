@@ -49,7 +49,7 @@ function mergeSlideNumbers(slides: { index: number }[]): string {
 interface CodeBlockInfo {
   startLine: number
   endLine: number
-  indent: string
+  indent: number
 }
 
 function findCodeBlocks(docText: string): CodeBlockInfo[] {
@@ -61,7 +61,7 @@ function findCodeBlocks(docText: string): CodeBlockInfo[] {
     const trimmedLine = line.trimStart()
 
     if (trimmedLine.startsWith('```')) {
-      const indent = line.slice(0, line.length - trimmedLine.length)
+      const indent = line.length - trimmedLine.length
       const codeBlockLevel = line.match(/^\s*`+/)![0]
       const backtickCount = codeBlockLevel.trim().length
       const startLine = i
@@ -115,11 +115,9 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
       // \u2800 renders as a space but won't be trimmed
       const paddedNumber = String(lineNumber).padStart(numberWidth, '\u2800')
 
+      const position = new Position(currentLine, block.indent)
       codeBlockLineNumbers.push({
-        range: new Range(
-          new Position(currentLine, 0),
-          new Position(currentLine, 0),
-        ),
+        range: new Range(position, position),
         renderOptions: {
           before: {
             contentText: `${paddedNumber}│`,
