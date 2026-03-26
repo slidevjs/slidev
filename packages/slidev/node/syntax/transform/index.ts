@@ -3,7 +3,6 @@ import setupTransformers from '../../setups/transformers'
 import { transformMagicMove } from './magic-move'
 import { transformMermaid } from './mermaid'
 import { transformPlantUml } from './plant-uml'
-import { transformSlotSugar } from './slot-sugar'
 import { transformSnippet } from './snippet'
 
 export async function getMarkdownTransformers(options: ResolvedSlidevOptions): Promise<(false | MarkdownTransformer)[]> {
@@ -20,9 +19,6 @@ export async function getMarkdownTransformers(options: ResolvedSlidevOptions): P
     transformPlantUml,
 
     ...extras.postCodeblock,
-
-    transformSlotSugar,
-
     ...extras.post,
   ]
 }

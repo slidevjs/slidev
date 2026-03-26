@@ -9,6 +9,7 @@ import MarkdownItEscapeInlineCode from './markdown-it-escape-code'
 import MarkdownItKatex from './markdown-it-katex'
 import MarkdownItLink from './markdown-it-link'
 import MarkdownItShiki from './markdown-it-shiki'
+import MarkdownItSlotSugar from './markdown-it-slot-sugar'
 import MarkdownItStyleScoped from './markdown-it-style-scoped'
 import MarkdownItVDrag from './markdown-it-v-drag'
 
@@ -29,4 +30,5 @@ export async function useMarkdownItPlugins(md: MarkdownExit, options: ResolvedSl
   if (config.comark || config.mdc)
     md.use(MarkdownItComark)
   md.use(MarkdownItStyleScoped)
+  md.use(MarkdownItSlotSugar)
 }
