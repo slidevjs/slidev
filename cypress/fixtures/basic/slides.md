@@ -183,13 +183,13 @@ Left
 # Page 14
 
 <div class="cy-animation-presets">
-  <div v-click.fade-up>fade-up</div>
+  <div v-click.fade.up>fade-up</div>
   <div v-click.scale>scale</div>
   <div v-click.none>none</div>
 </div>
 
 ---
-clickAnimation: fade-down
+clickAnimation: fade down
 ---
 
 # Page 15
@@ -206,7 +206,7 @@ clickAnimation: foo
 
 <div class="cy-animation-hierarchy">
   <div v-click>frontmatter-invalid-foo</div>
-  <div v-click.fade-right>modifier-overrides-frontmatter</div>
+  <div v-click.fade.right>modifier-overrides-frontmatter</div>
   <div v-click.none>modifier-none-overrides-frontmatter</div>
   <div v-click.scale>modifier-scale-overrides-frontmatter</div>
 </div>
