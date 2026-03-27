@@ -8,7 +8,7 @@ const RE_MAGIC_MOVE_INFO = /^(?:md|markdown) magic-move\s*(?:\[([^\]]*)\])?\s*(\
 const RE_CODE_BLOCK = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 
 function parseLineNumbersOption(options: string) {
-  return /lines: *true/.test(options) ? true : /lines: *false/.test(options) ? false : undefined
+  return /\blines: *true\b/.test(options) ? true : /\blines: *false\b/.test(options) ? false : undefined
 }
 
 export default defineCodeblockTransformer(async ({ info, fence, code, options: { data: { config }, utils: { shikiOptions, shiki } } }) => {
