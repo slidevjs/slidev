@@ -3,7 +3,7 @@ import type { Plugin } from 'vite'
 import MagicString from 'magic-string-stack'
 import Markdown from 'unplugin-vue-markdown/vite'
 import setupTransformers from '../setups/transformers'
-import { useMarkdownItPlugins } from '../syntax/markdown-it'
+import { useMarkdownItPlugins } from '../syntax'
 import { regexSlideSourceId } from './common'
 
 export async function createMarkdownPlugin(

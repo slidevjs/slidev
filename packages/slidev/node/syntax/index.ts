@@ -5,7 +5,7 @@ import MarkdownItComark from '@comark/markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
-import { MarkdownItCodeblocks } from '../codeblock'
+import { MarkdownItCodeblocks } from './codeblock'
 import MarkdownItVDrag from './drag'
 import MarkdownItEscapeInlineCode from './escape-code'
 import MarkdownItKatex from './katex'
