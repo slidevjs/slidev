@@ -4,6 +4,10 @@
   &.slidev-vclick-anim-none {
     transition: none;
   }
+
+  &.slidev-vclick-anim-fade-in {
+    transition: all 0.3s ease;
+  }
 }
 
 .slidev-vclick-hidden {
@@ -13,6 +17,10 @@
 
   &.slidev-vclick-anim-fade {
     opacity: 0.5 !important;
+  }
+
+  &.slidev-vclick-anim-fade-in {
+    opacity: 0 !important;
   }
 
   &.slidev-vclick-anim-up {

@@ -357,9 +357,13 @@ You can also add modifiers to change the animation:
     <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
     <div>Slide from bottom</div>
   </div>
-  <div v-click.fade class="p-3 rounded border border-primary/30 bg-primary/15">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
+  <div v-click.fade-in class="p-3 rounded border border-primary/30 bg-primary/15">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade-in</div>
     <div>Fade in</div>
+  </div>
+  <div v-click.fade class="p-3 rounded border border-primary/40 bg-primary/20">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
+    <div>Dim (0.5 opacity)</div>
   </div>
   <div v-click.fade.right.scale class="p-3 rounded border border-primary/50 bg-primary/25">
     <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right.scale</div>

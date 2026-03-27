@@ -250,6 +250,7 @@ Or specify them per element with directive modifiers:
 There are some built-in presets available for you to use:
 
 - `fade`: Fade in from opacity 0.5 to 1
+- `fade-in`: Fade in from opacity 0 to 1
 - `up`: Translate 20px up
 - `down`: Translate 20px down
 - `left`: Translate 20px left
