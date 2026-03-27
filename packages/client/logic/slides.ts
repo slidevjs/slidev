@@ -25,8 +25,8 @@ export function getSlidePath(
 
 export function useIsSlideActive() {
   const { $page } = useSlideContext()
-  const { currentSlideNo } = useNav()
-  return computed(() => $page.value === currentSlideNo.value)
+  const { currentSlideNo, isPrintMode } = useNav()
+  return computed(() => isPrintMode.value || $page.value === currentSlideNo.value)
 }
 
 export function onSlideEnter(cb: () => void) {
