@@ -15,7 +15,8 @@ export default defineCodeblockTransformer(async ({ info, code, renderHighlighted
     return renderHighlighted({ info: `${lang} ${rest}` })
   }
 
-  let encoded, diff
+  let encoded
+  let diff = ''
   if (monaco === 'monaco-diff') {
     const [original, modified] = code.split(/^\s*~~~\s*\n/m, 2)
     encoded = lz.compressToBase64(original)

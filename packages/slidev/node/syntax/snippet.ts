@@ -5,8 +5,8 @@ import path from 'node:path'
 import { slash } from '@antfu/utils'
 import { yellow } from 'ansis'
 import lz from 'lz-string'
-import { regexSlideSourceId } from '../../vite/common'
-import { monacoWriterWhitelist } from '../../vite/monacoWrite'
+import { regexSlideSourceId } from '../vite/common'
+import { monacoWriterWhitelist } from '../vite/monacoWrite'
 
 function dedent(text: string): string {
   const lines = text.split('\n')

@@ -1,5 +1,6 @@
 import type { CodeblockTransformContext, CodeblockTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import type { MarkdownExit } from 'markdown-exit'
+import { ensureSuffix } from '@antfu/utils'
 import { regexSlideSourceId } from '../../vite/common'
 import magicMoveTransformer from './magic-move'
 import mermaidTransformer from './mermaid'
@@ -42,7 +43,7 @@ export function MarkdownItCodeblocks(md: MarkdownExit, options: ResolvedSlidevOp
         continue
       const res = await transformer(ctx)
       if (res != null)
-        return res
+        return ensureSuffix('\n', res)
     }
 
     throw new Error('Should not reach here')

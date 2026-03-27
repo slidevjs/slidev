@@ -12,9 +12,7 @@ export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: 
   const sourceMapConsumers = new WeakMap<MagicString, SourceMapConsumer>()
 
   function getSourceMapConsumer(id: string | undefined) {
-    if (!id)
-      return undefined
-    const s = markdownTransformMap.get(id)
+    const s = id && markdownTransformMap.get(id)
     if (!s)
       return undefined
     let smc = sourceMapConsumers.get(s)

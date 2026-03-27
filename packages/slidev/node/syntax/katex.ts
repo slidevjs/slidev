@@ -12,7 +12,7 @@ for rendering output.
 import type { KatexOptions } from 'katex'
 import type { MarkdownExit, RuleBlock, Token } from 'markdown-exit'
 import katex from 'katex'
-import { escapeVueInCode, normalizeRangeStr } from '../utils'
+import { escapeVueInCode, normalizeRangeStr } from './utils'
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
