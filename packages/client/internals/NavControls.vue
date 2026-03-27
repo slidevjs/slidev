@@ -5,9 +5,10 @@ import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { configs } from '../env'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { activeElement, breakpoints, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterLayout } from '../state'
+import { activeElement, breakpoints, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showLaserPointer, showPresenterCursor, toggleLaserPointer, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
 import { downloadPDF } from '../utils'
 import IconButton from './IconButton.vue'
+import LaserPointerIcon from './LaserPointerIcon.vue'
 import MenuButton from './MenuButton.vue'
 import Settings from './Settings.vue'
 import SyncControls from './SyncControls.vue'
@@ -96,10 +97,18 @@ if (__SLIDEV_FEATURE_RECORD__)
         <IconButton
           v-if="isPresenter"
           :title="showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor'"
-          @click="showPresenterCursor = !showPresenterCursor"
+          @click="togglePresenterCursor()"
         >
           <ph-cursor-fill v-if="showPresenterCursor" />
           <ph-cursor-duotone v-else />
+        </IconButton>
+        <IconButton
+          v-if="!isEmbedded"
+          :title="showLaserPointer ? 'Disable laser pointer' : 'Enable laser pointer'"
+          :class="{ active: showLaserPointer }"
+          @click="toggleLaserPointer()"
+        >
+          <LaserPointerIcon class="text-[0.82em]" />
         </IconButton>
       </template>
 

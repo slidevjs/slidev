@@ -6,7 +6,8 @@ import setups from '#slidev/setups/context-menu'
 import { computed } from 'vue'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
-import { fullscreen, showEditor, toggleOverview } from '../state'
+import LaserPointerIcon from '../internals/LaserPointerIcon.vue'
+import { fullscreen, showEditor, showLaserPointer, toggleLaserPointer, toggleOverview } from '../state'
 
 // @unocss-include
 
@@ -79,6 +80,11 @@ export default () => {
         icon: 'i-carbon:pen',
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
         action: () => (drawingEnabled.value = !drawingEnabled.value),
+      },
+      !isEmbedded.value && {
+        icon: LaserPointerIcon,
+        label: showLaserPointer.value ? 'Disable laser pointer' : 'Enable laser pointer',
+        action: toggleLaserPointer,
       },
       {
         icon: 'i-carbon:apps',

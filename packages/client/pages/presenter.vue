@@ -17,6 +17,7 @@ import IconButton from '../internals/IconButton.vue'
 import NavControls from '../internals/NavControls.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
+import PresenterMouse from '../internals/PresenterMouse.vue'
 import QuickOverview from '../internals/QuickOverview.vue'
 import ScreenCaptureMirror from '../internals/ScreenCaptureMirror.vue'
 import SegmentControl from '../internals/SegmentControl.vue'
@@ -27,7 +28,7 @@ import TimerBar from '../internals/TimerBar.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
+import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showLaserPointer, showPresenterCursor } from '../state'
 import { sharedState } from '../state/shared'
 
 const inFocus = useWindowFocus()
@@ -75,6 +76,7 @@ const nextFrame = computed(() => {
 const nextFrameClicksCtx = computed(() => {
   return nextFrame.value && clicksCtxMap.value[nextFrame.value[0].no - 1]
 })
+const isLaserVisible = computed(() => sharedState.cursor?.style === 'laser')
 
 watch(
   nextFrame,
@@ -250,7 +252,7 @@ onMounted(() => {
 
   watch(
     () => {
-      if (!focus.value || isDrawing.value || !showPresenterCursor.value || !slidesContainer)
+      if (!focus.value || isDrawing.value || (!showPresenterCursor.value && !showLaserPointer.value) || !slidesContainer)
         return undefined
 
       const rect = slidesContainer.getBoundingClientRect()
@@ -260,7 +262,11 @@ onMounted(() => {
       if (x < 0 || x > 100 || y < 0 || y > 100)
         return undefined
 
-      return { x, y }
+      return {
+        x,
+        y,
+        style: showLaserPointer.value ? 'laser' as const : 'cursor' as const,
+      }
     },
     (pos) => {
       sharedState.cursor = pos
@@ -324,10 +330,12 @@ onMounted(() => {
           v-show="mainSlideMode === 'slides'"
           key="main"
           class="p-2 lg:p-4 flex-auto"
+          :class="{ 'slidev-laser-active': isLaserVisible }"
           is-main
           @contextmenu="onContextMenu"
         >
           <SlidesShow render-context="presenter" />
+          <PresenterMouse />
         </SlideContainer>
 
         <ClicksSlider
@@ -604,5 +612,9 @@ onMounted(() => {
   background-color: currentColor;
   opacity: 0.2;
   transform: translateX(-50%);
+}
+
+.slidev-laser-active :deep(#slide-content) {
+  cursor: none;
 }
 </style>

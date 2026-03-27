@@ -76,7 +76,7 @@ const top = computed(() => {
           @click="item.action"
         >
           <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
-          <component :is="item.icon" v-else />
+          <component :is="item.icon" v-else class="ma" />
         </div>
         <div
           v-else
@@ -86,7 +86,7 @@ const top = computed(() => {
         >
           <div class="mx-auto flex">
             <div v-if="typeof item.icon === 'string'" :class="item.icon" class="text-1.2em ma" />
-            <component :is="item.icon" v-else />
+            <component :is="item.icon" v-else class="ma" />
           </div>
           <div v-if="typeof item.label === 'string'">
             {{ item.label }}
