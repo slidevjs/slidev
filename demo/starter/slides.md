@@ -340,64 +340,29 @@ You can add `v-click` to elements to add a click animation.
 
 <div v-click>
 
-This shows up when you click the slide:
+This shows up when you press <kbd>space</kbd> or <kbd>right</kbd>, or click outside the slide on the right.
 
 ```html
-<div v-click>This shows up when you click the slide.</div>
+<div v-click>This shows up when you trigger a click animation.</div>
 ```
 
 </div>
 
-<br>
+<p v-click>
+You can also add modifiers to change the animation:
+</p>
 
-<v-click>
-
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
-</div>
-
----
-clickAnimation: fade up
----
-
-# Click Animation Presets
-
-Use `clickAnimation` in frontmatter to set a default animation, then override per element with modifiers.
-
-```yaml
----
-clickAnimation: fade up # space-separated, composable
----
-```
-
-<div class="grid grid-cols-3 gap-3 mt-4 text-sm">
-  <div v-click class="p-3 rounded border border-primary/20 bg-primary/10">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click</div>
-    <div>Default (fade + up)</div>
+<div class="grid grid-cols-4 gap-3 mt-4 text-sm">
+  <div v-after.up class="p-3 rounded border border-primary/20 bg-primary/10">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
+    <div>Slide from bottom</div>
   </div>
-  <div v-click.fade.right class="p-3 rounded border border-primary/30 bg-primary/15">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right</div>
-    <div>Slide from right</div>
+  <div v-click.fade class="p-3 rounded border border-primary/30 bg-primary/15">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
+    <div>Fade in</div>
   </div>
-  <div v-click.scale class="p-3 rounded border border-primary/40 bg-primary/20">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.scale</div>
-    <div>Scale in</div>
-  </div>
-  <div v-click.fade.up.scale class="p-3 rounded border border-primary/50 bg-primary/25">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.up.scale</div>
+  <div v-click.fade.right.scale class="p-3 rounded border border-primary/50 bg-primary/25">
+    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right.scale</div>
     <div>Composed</div>
   </div>
   <div v-click.none class="p-3 rounded border border-primary/60 bg-primary/30">
@@ -406,15 +371,22 @@ clickAnimation: fade up # space-separated, composable
   </div>
 </div>
 
-<div v-click mt-4 text-sm>
+<v-click>
 
-Custom presets via CSS — target `.slidev-vclick-anim-<name>` on `.slidev-vclick-hidden`:
+The <span v-mark.red="7"><code>v-mark</code> directive</span>
+also allows you to add
+<span v-mark.circle.orange="8">inline marks</span>
+, powered by [Rough Notation](https://roughnotation.com/):
 
-```css
-.slidev-vclick-anim-pop.slidev-vclick-hidden {
-  transform: scale(0.9) translateY(8px);
-}
+```html
+<span v-mark.underline.orange>inline markers</span>
 ```
+
+</v-click>
+
+<div v-click mt-12>
+
+[Learn more](https://sli.dev/guide/animations#click-animation)
 
 </div>
 

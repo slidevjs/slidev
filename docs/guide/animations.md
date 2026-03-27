@@ -58,61 +58,6 @@ For the components, you can use the `hide` prop to achieve the same effect:
 <v-after hide> Also hidden after 2 clicks </v-after>
 ```
 
-### Animation Presets {#click-animation-presets}
-
-You can define default click animation presets in frontmatter and override them per element with directive modifiers. Animation presets are applied as CSS classes with the `.slidev-vclick-anim-` prefix.
-
-```yaml
----
-clickAnimation: fade up
----
-```
-
-```md
-<div v-click>Uses slide default presets (fade and up)</div>
-<div v-click.scale>Overrides slide preset for this element with scale</div>
-<div v-click.fade.right>Composes multiple animations: fade and right</div>
-<div v-click.none>No transition for this element</div>
-```
-
-Built-in atomic presets:
-
-- `fade`: Only opacity transition (standard)
-- `up`: Translate 20px up
-- `down`: Translate 20px down
-- `left`: Translate 20px left
-- `right`: Translate 20px right
-- `scale`: Scale to 0.9
-- `none`: Disables transition on that specific element
-
-Preset resolution order:
-
-1. Directive modifiers on the element (e.g., `.fade.up`)
-2. Slide frontmatter `clickAnimation` (space-separated)
-3. Global headmatter `clickAnimation` (space-separated)
-
-Notes:
-
-- `.hide` is the only reserved click modifier. All other modifiers are treated as animation presets.
-- Presets are **composable**. Using `v-click.fade.up.scale` will apply all three effects.
-- In frontmatter, use a space-separated string for composition: `clickAnimation: fade up scale`.
-
-#### Custom Presets with CSS {#click-animation-custom-presets}
-
-You can define your own animation names and style them in CSS using the `.slidev-vclick-anim-` prefix.
-
-```yaml
----
-clickAnimation: pop
----
-```
-
-```css
-.slidev-vclick-anim-pop.slidev-vclick-hidden {
-  transform: scale(0.96) translateY(8px);
-}
-```
-
 ### `v-clicks` {#v-clicks}
 
 `v-clicks` is only provided as a component. It's a shorthand to apply the `v-click` directive to all its child elements. It is especially useful when working with lists and tables.
@@ -281,6 +226,43 @@ By default, Slidev automatically calculates how many clicks are required before 
 # 10 clicks in this slide, before going to the next slide
 clicks: 10
 ---
+```
+
+### Click Animation Presets {#click-animation-presets}
+
+You can define default click animation presets in headmatter/frontmatter:
+
+```yaml
+---
+clickAnimation: up
+---
+```
+
+Or specify them per element with directive modifiers:
+
+```md
+<div v-click>Uses default animation preset defined in frontmatter</div>
+<div v-click.scale>Scales up when showing and scales down when hiding</div>
+<div v-click.fade.right>Composes multiple animations: fade and right</div>
+<div v-click.none>No animation for this element</div>
+```
+
+There are some built-in presets available for you to use:
+
+- `fade`: Fade in from opacity 0.5 to 1
+- `up`: Translate 20px up
+- `down`: Translate 20px down
+- `left`: Translate 20px left
+- `right`: Translate 20px right
+- `scale`: Scale to 0.9
+- `none`: Disables animation for this element
+
+And you can also define your own presets with custom CSS rules for `.slidev-vclick-anim-{presetName}`:
+
+```css
+.slidev-vclick-anim-pop.slidev-vclick-hidden {
+  transform: scale(0.96) translateY(8px);
+}
 ```
 
 ### Element Transitions {#element-transitions}

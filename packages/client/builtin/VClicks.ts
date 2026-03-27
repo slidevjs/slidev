@@ -30,8 +30,15 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @deprecated use `animation` instead
+     */
+    fade: {
+      type: Boolean,
+      default: false,
+    },
     animation: {
-      type: String,
+      type: [String, Array<string>],
       default: undefined,
     },
     handleSpecialElements: {
@@ -56,12 +63,17 @@ export default defineComponent({
       const modifiers: Record<string, boolean> = {
         hide: this.hide,
       }
-      if (this.animation) {
-        this.animation.split(/\s+/).forEach((a) => {
+      if (typeof this.animation === 'string') {
+        this.animation.split(/[\s,]+/).forEach((a) => {
           if (a)
             modifiers[a] = true
         })
       }
+      else if (Array.isArray(this.animation)) {
+        this.animation.forEach(a => modifiers[a] = true)
+      }
+      if (this.fade)
+        modifiers.fade = true
 
       return withDirectives(node, [[
         click,

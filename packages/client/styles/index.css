@@ -45,55 +45,6 @@ html {
   @apply border-none hover:border-none hover:text-white;
 }
 
-.slidev-vclick-target {
-  transition: opacity 0.1s ease;
-}
-
-.slidev-vclick-target[class*='slidev-vclick-anim-']:not(.slidev-vclick-anim-none) {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.slidev-vclick-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
-.slidev-vclick-anim-none.slidev-vclick-target,
-.slidev-vclick-anim-none.slidev-vclick-target.slidev-vclick-hidden {
-  transition: none !important;
-}
-
-.slidev-vclick-anim-fade.slidev-vclick-hidden {
-  transform: none;
-}
-
-.slidev-vclick-anim-up.slidev-vclick-hidden {
-  transform: translateY(20px);
-}
-
-.slidev-vclick-anim-down.slidev-vclick-hidden {
-  transform: translateY(-20px);
-}
-
-.slidev-vclick-anim-left.slidev-vclick-hidden {
-  transform: translateX(20px);
-}
-
-.slidev-vclick-anim-right.slidev-vclick-hidden {
-  transform: translateX(-20px);
-}
-
-.slidev-vclick-anim-scale.slidev-vclick-hidden {
-  transform: scale(0.9);
-}
-
-.slidev-vclick-display-none {
-  display: none !important;
-}
-
 .slidev-icon {
   display: inline-block;
   vertical-align: sub;

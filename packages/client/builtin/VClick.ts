@@ -19,6 +19,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @deprecated use `animation` instead
+     */
+    fade: {
+      type: Boolean,
+      default: false,
+    },
     animation: {
       type: String,
       default: undefined,
@@ -35,6 +42,7 @@ export default defineComponent({
         every: CLICKS_MAX,
         at: this.at,
         hide: this.hide,
+        fade: this.fade,
         animation: this.animation,
         handleSpecialElements: false,
       },

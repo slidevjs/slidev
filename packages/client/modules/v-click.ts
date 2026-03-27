@@ -1,7 +1,8 @@
-import type { ClicksElement, Frontmatter, RawAtValue } from '@slidev/types'
+import type { ClicksElement, RawAtValue } from '@slidev/types'
 import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
 import {
+  CLASS_VCLICK_ANIMATION_PREFIX,
   CLASS_VCLICK_CURRENT,
   CLASS_VCLICK_HIDDEN,
   CLASS_VCLICK_HIDDEN_EXP,
@@ -9,16 +10,16 @@ import {
   CLASS_VCLICK_TARGET,
   injectionClicksContext,
   injectionFrontmatter,
-  injectionSlidevContext,
-  RESERVED_CLICK_MODIFIERS,
 } from '../constants'
+import { configs } from '../env'
 import { directiveInject } from '../utils'
 
 function syncAnimationClasses(el: HTMLElement, animations: string[]) {
-  const targetClasses = animations.map(a => `slidev-vclick-anim-${a}`)
-  Array.from(el.classList)
-    .filter(c => c.startsWith('slidev-vclick-anim-') && !targetClasses.includes(c))
-    .forEach(c => el.classList.remove(c))
+  const targetClasses = animations.map(a => `${CLASS_VCLICK_ANIMATION_PREFIX}${a}`)
+  el.classList.forEach((c) => {
+    if (c.startsWith(CLASS_VCLICK_ANIMATION_PREFIX) && !targetClasses.includes(c))
+      el.classList.remove(c)
+  })
   targetClasses.forEach(c => el.classList.add(c))
 }
 
@@ -134,8 +135,7 @@ export const resolvedClickMap = new Map<ClicksElement, ReturnType<typeof resolve
 
 export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: RawAtValue, explicitHide = false) {
   const ctx = directiveInject(dir, injectionClicksContext)?.value
-  const frontmatter = directiveInject<Frontmatter>(dir, injectionFrontmatter)
-  const slidev = directiveInject(dir, injectionSlidevContext)
+  const frontmatter = directiveInject(dir, injectionFrontmatter)
 
   if (!el || !ctx)
     return null
@@ -147,16 +147,13 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
    * Priority: directive modifiers (stacked) > slide frontmatter > global config.
    * Modifiers allow composition, e.g., v-click.fade.up.scale.
    */
-  const elModifiers = Object.keys({ ...dir.modifiers }).filter(m => !(RESERVED_CLICK_MODIFIERS as readonly string[]).includes(m))
-
+  const elModifiers = Object.keys({ ...dir.modifiers }).filter(m => m !== 'hide')
   const flagAnimations = computed(() => {
     if (elModifiers.length > 0)
       return elModifiers
-
-    const preset = frontmatter?.clickAnimation || slidev?.configs.clickAnimation
+    const preset = frontmatter?.clickAnimation || configs.clickAnimation
     if (preset)
-      return preset.split(/\s+/).filter(Boolean)
-
+      return preset.split(/[\s,]+/).filter(Boolean)
     return []
   })
 
