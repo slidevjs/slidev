@@ -352,7 +352,7 @@ This shows up when you press <kbd>space</kbd> or <kbd>right</kbd>, or click outs
 You can also add modifiers to change the animation:
 </p>
 
-<div class="grid grid-cols-4 gap-3 mt-4 text-sm">
+<div class="grid gap-3 mt-4 text-sm" style="grid-template-columns: repeat(3, 1fr) 1.5fr 1fr">
   <div v-after.up class="p-3 rounded border border-primary/20 bg-primary/10">
     <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
     <div>Slide from bottom</div>
