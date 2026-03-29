@@ -9,8 +9,7 @@ import { createVDragDirective } from '../modules/v-drag'
 import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
 import setupRoutes from '../setup/routes'
-
-import '#slidev/styles'
+import '../styles/index.ts'
 
 export default async function setupMain(app: App) {
   function setMaxHeight() {

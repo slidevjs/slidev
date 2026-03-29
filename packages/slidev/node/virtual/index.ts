@@ -1,3 +1,4 @@
+import { templateStyle } from './conditional-styles'
 import { templateConfigs } from './configs'
 import { templateLegacyRoutes, templateLegacyTitles } from './deprecated'
 import { templateGlobalLayers } from './global-layers'
@@ -7,7 +8,6 @@ import { templateMonacoTypes } from './monaco-types'
 import { templateNavControls } from './nav-controls'
 import { templateSetups } from './setups'
 import { templateSlides } from './slides'
-import { templateStyle } from './styles'
 import { templateTitleRenderer, templateTitleRendererMd } from './titles'
 
 export const templates = [
