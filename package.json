@@ -46,6 +46,7 @@
     "@types/resolve": "catalog:types",
     "@types/semver": "catalog:types",
     "@types/yargs": "catalog:types",
+    "@vue/compiler-sfc": "catalog:demo",
     "@vueuse/core": "catalog:frontend",
     "bumpp": "catalog:dev",
     "cypress": "catalog:dev",

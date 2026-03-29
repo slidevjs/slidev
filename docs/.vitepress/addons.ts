@@ -226,6 +226,17 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/emaarco/slidev-addon-bpmn',
   },
   {
+    id: 'slidev-addon-dmn',
+    name: 'DMN viewer',
+    description: 'Display DMN decision tables and DRD diagrams in your slidev',
+    tags: ['Component'],
+    author: {
+      name: 'emaarco',
+      link: 'https://github.com/emaarco',
+    },
+    repo: 'https://github.com/emaarco/slidev-addon-dmn',
+  },
+  {
     id: 'slidev-addon-p5',
     name: 'Runner for p5js',
     description: 'Display, edit and run p5js sketches in your slidev',
