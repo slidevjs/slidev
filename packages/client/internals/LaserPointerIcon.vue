@@ -3,26 +3,18 @@ import { showLaserPointer } from '../state'
 </script>
 
 <template>
-  <div class="laser-toggle-icon">
-    <div class="laser-toggle-ring" :class="{ active: showLaserPointer }" />
-    <div class="laser-toggle-core" :class="{ active: showLaserPointer }" />
+  <div class="laser-toggle-icon" :class="{ active: showLaserPointer }">
+    <div class="laser-toggle-ring" />
+    <div class="laser-toggle-core" />
   </div>
 </template>
 
 <style scoped>
 .laser-toggle-icon {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.15em;
-  height: 1.15em;
-  min-width: 1.15em;
-  min-height: 1.15em;
-  aspect-ratio: 1;
-  line-height: 1;
-  flex: none;
-  box-sizing: border-box;
+  margin: auto;
+  width: 1em;
+  height: 1em;
 }
 
 .laser-toggle-ring,
@@ -30,33 +22,32 @@ import { showLaserPointer } from '../state'
   position: absolute;
   left: 50%;
   top: 50%;
-  box-sizing: border-box;
   border-radius: 9999px;
   transform: translate(-50%, -50%);
   transition: all 0.2s ease;
 }
 
 .laser-toggle-ring {
-  width: 100%;
-  height: 100%;
-  border: 2px solid currentColor;
+  width: 98%;
+  height: 98%;
+  border: 1.8px solid currentColor;
+  box-shadow: 0 0 2px currentColor;
 }
 
-.laser-toggle-ring.active {
+.active .laser-toggle-ring {
   border-color: rgb(239 68 68);
-  box-shadow: 0 0 6px rgb(239 68 68 / 45%);
-  opacity: 1;
+  box-shadow: 0 0 6px rgb(239 68 68 / 60%);
 }
 
 .laser-toggle-core {
-  width: 48%;
-  height: 48%;
+  width: 42%;
+  height: 42%;
   background: currentColor;
+  box-shadow: 0 0 6px currentColor;
 }
 
-.laser-toggle-core.active {
+.active .laser-toggle-core {
   background: rgb(239 68 68);
   box-shadow: 0 0 10px rgb(239 68 68 / 70%);
-  opacity: 1;
 }
 </style>

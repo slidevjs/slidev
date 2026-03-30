@@ -103,12 +103,12 @@ if (__SLIDEV_FEATURE_RECORD__)
           <ph-cursor-duotone v-else />
         </IconButton>
         <IconButton
-          v-if="!isEmbedded"
+          v-if="isPresenter"
           :title="showLaserPointer ? 'Disable laser pointer' : 'Enable laser pointer'"
           :class="{ active: showLaserPointer }"
           @click="toggleLaserPointer()"
         >
-          <LaserPointerIcon class="text-[0.82em]" />
+          <LaserPointerIcon />
         </IconButton>
       </template>
 

@@ -22,7 +22,7 @@ export const useDrawings = createSharedComposable(() => {
 
   const drawingEnabled = useLocalStorage('slidev-drawing-enabled', false)
   const drawingPinned = useLocalStorage('slidev-drawing-pinned', false)
-  const brush = toReactive(useLocalStorage<Brush>('slidev-drawing-brush', {
+  const brush = toReactive<Brush>(useLocalStorage<Brush>('slidev-drawing-brush', {
     color: brushColors[0],
     size: 4,
     mode: 'stylus',

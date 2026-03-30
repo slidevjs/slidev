@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { useEventListener, useLocalStorage, useMediaQuery, useMouse, useWindowFocus } from '@vueuse/core'
-import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
+import { useEventListener, useLocalStorage, useMediaQuery, useWindowFocus } from '@vueuse/core'
+import { computed, onMounted, ref, shallowRef, watch, watchEffect } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
+import { useMousePosInSlide } from '../composables/useMousePosInSlide'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { useWakeLock } from '../composables/useWakeLock'
@@ -14,10 +15,10 @@ import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
+import LaserPointer from '../internals/LaserPointer.vue'
 import NavControls from '../internals/NavControls.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
-import PresenterMouse from '../internals/PresenterMouse.vue'
 import QuickOverview from '../internals/QuickOverview.vue'
 import ScreenCaptureMirror from '../internals/ScreenCaptureMirror.vue'
 import SegmentControl from '../internals/SegmentControl.vue'
@@ -76,7 +77,6 @@ const nextFrame = computed(() => {
 const nextFrameClicksCtx = computed(() => {
   return nextFrame.value && clicksCtxMap.value[nextFrame.value[0].no - 1]
 })
-const isLaserVisible = computed(() => sharedState.cursor?.style === 'laser')
 
 watch(
   nextFrame,
@@ -246,32 +246,20 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 
 // sync presenter cursor
 onMounted(() => {
-  const slidesContainer = main.value!.querySelector('#slide-content')!
-  const mouse = reactive(useMouse())
+  const mouse = useMousePosInSlide()
   const focus = useWindowFocus()
 
-  watch(
-    () => {
-      if (!focus.value || isDrawing.value || (!showPresenterCursor.value && !showLaserPointer.value) || !slidesContainer)
-        return undefined
-
-      const rect = slidesContainer.getBoundingClientRect()
-      const x = (mouse.x - rect.left) / rect.width * 100
-      const y = (mouse.y - rect.top) / rect.height * 100
-
-      if (x < 0 || x > 100 || y < 0 || y > 100)
-        return undefined
-
-      return {
-        x,
-        y,
+  watchEffect(() => {
+    if (!mouse.value || !focus.value || isDrawing.value || (!showPresenterCursor.value && !showLaserPointer.value)) {
+      sharedState.cursor = undefined
+    }
+    else {
+      sharedState.cursor = {
+        ...mouse.value,
         style: showLaserPointer.value ? 'laser' as const : 'cursor' as const,
       }
-    },
-    (pos) => {
-      sharedState.cursor = pos
-    },
-  )
+    }
+  })
 })
 </script>
 
@@ -330,12 +318,11 @@ onMounted(() => {
           v-show="mainSlideMode === 'slides'"
           key="main"
           class="p-2 lg:p-4 flex-auto"
-          :class="{ 'slidev-laser-active': isLaserVisible }"
           is-main
           @contextmenu="onContextMenu"
         >
           <SlidesShow render-context="presenter" />
-          <PresenterMouse />
+          <LaserPointer />
         </SlideContainer>
 
         <ClicksSlider
@@ -612,9 +599,5 @@ onMounted(() => {
   background-color: currentColor;
   opacity: 0.2;
   transform: translateX(-50%);
-}
-
-.slidev-laser-active :deep(#slide-content) {
-  cursor: none;
 }
 </style>
