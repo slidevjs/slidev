@@ -199,6 +199,16 @@ You can generate the PDF outline by passing the `--with-toc` option:
 $ slidev export --with-toc
 ```
 
+### Overview
+
+You can export the overview page (slides with presenter notes side by side) as an A4 portrait PDF by passing the `--overview` option:
+
+```bash
+$ slidev export --overview
+```
+
+This is useful when you want a printable summary of your entire presentation including all speaker notes. Each slide is rendered alongside its notes, and slides are never split across page boundaries.
+
 ### Omit Background
 
 When exporting to PNGs, you can remove the default browser background by passing `--omit-background`:
