@@ -491,7 +491,7 @@ cli.command(
           const exportOpts = getExportOptions({ ...args, entry: entryFile }, options)
           result = await exportOverview({
             port,
-            output: exportOpts.output || `${path.basename(entryFile, '.md')}-overview`,
+            output: args.output || `${path.basename(entryFile, '.md')}-overview`,
             timeout: exportOpts.timeout,
             wait: exportOpts.wait,
             dark: exportOpts.dark,
