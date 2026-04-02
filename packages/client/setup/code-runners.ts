@@ -71,16 +71,16 @@ function runJavaScript(code: string): CodeRunnerOutputs {
   vmConsole.info = vmConsole.log = vmConsole.debug = vmConsole.warn = vmConsole.error = logger
   vmConsole.clear = () => result.value.length = 0
   try {
-    const safeJS = `return async (console, __slidev_import, __slidev_on_error) => {
+    const wrappedCode = `return async (console, __slidev_import, __slidev_on_error) => {
     ${configs.monacoRunUseStrict ? `"use strict";` : ''}
       try {
-        ${sanitizeJS(code)}
+        ${fixupCode(code)}
       } catch (e) {
         __slidev_on_error(e)
       }
     }`
     // eslint-disable-next-line no-new-func
-    ;(new Function(safeJS)())(vmConsole, (specifier: string) => {
+    ;(new Function(wrappedCode)())(vmConsole, (specifier: string) => {
       const mod = deps[specifier]
       if (!mod)
         throw new Error(`Module not found: ${specifier}.\nAvailable modules: ${Object.keys(deps).join(', ')}. Please refer to https://sli.dev/custom/config-code-runners#additional-runner-dependencies`)
@@ -154,7 +154,7 @@ function runJavaScript(code: string): CodeRunnerOutputs {
     return textRep
   }
 
-  function sanitizeJS(code: string) {
+  function fixupCode(code: string) {
     // The reflect-metadata runtime is available, so allow that to go through
     code = code.replace(`import "reflect-metadata"`, '').replace(`require("reflect-metadata")`, '')
     // Transpiled typescript sometimes contains an empty export, remove it.
@@ -181,7 +181,7 @@ export async function runTypeScript(code: string) {
     },
   }).outputText
 
-  const importRegex = /import\s*\((.+)\)/g
+  const importRegex = /\bimport\s*\((.+)\)/g
   code = code.replace(importRegex, (_full, specifier) => `__slidev_import(${specifier})`)
 
   return runJavaScript(code)

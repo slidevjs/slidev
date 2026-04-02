@@ -25,10 +25,10 @@ const color = computed(() => {
   if (timer.status === 'paused')
     return 'bg-blue'
 
-  if (timer.percentage > 80)
-    return 'bg-yellow'
-  else if (timer.percentage > 100)
+  if (timer.percentage > 100)
     return 'bg-red'
+  else if (timer.percentage > 80)
+    return 'bg-yellow'
   else
     return 'bg-green'
 })

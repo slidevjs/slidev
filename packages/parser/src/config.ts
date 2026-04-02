@@ -46,11 +46,13 @@ export function getDefaultConfig(): SlidevConfig {
     wakeLock: true,
     remote: false,
     mdc: false,
+    comark: false,
     seoMeta: {},
     notesAutoRuby: {},
     duration: '30min',
     timer: 'stopwatch',
     magicMoveDuration: 800,
+    preloadImages: true,
   }
 }
 
@@ -147,10 +149,8 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom])
+      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
       : []
-
-  webfonts.filter(i => local.includes(i))
 
   function toQuoted(font: string) {
     if (/^(['"]).*\1$/.test(font))

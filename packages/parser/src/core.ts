@@ -66,6 +66,60 @@ function matter(code: string, options: SlidevParserOptions) {
   }
 }
 
+const IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|bmp|tiff?)$/i
+
+/**
+ * Extract image URLs from slide content and frontmatter.
+ * Strips code blocks first to avoid false positives.
+ */
+export function extractImagesUsage(content: string, frontmatter: Record<string, any>): string[] {
+  const images = new Set<string>()
+
+  // Collect from frontmatter keys
+  for (const key of ['image', 'backgroundImage', 'background']) {
+    const val = frontmatter[key]
+    if (typeof val === 'string' && val && !val.startsWith('data:')) {
+      // For `background`, only include if it looks like an image URL
+      if (key === 'background') {
+        if (IMAGE_EXTENSIONS.test(val) || val.startsWith('/') || val.startsWith('http'))
+          images.add(val)
+      }
+      else {
+        images.add(val)
+      }
+    }
+  }
+
+  // Strip code blocks to avoid false positives
+  const stripped = content.replace(/^```[\s\S]+?^```/gm, '')
+
+  // Markdown images: ![alt](url)
+  for (const [, url] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+    if (url && !url.startsWith('data:'))
+      images.add(url.trim())
+  }
+
+  // Vue component props: src="url", image="url"
+  for (const [, url] of stripped.matchAll(/\b(?:src|image)=["']([^"']+)["']/g)) {
+    if (url && !url.startsWith('data:') && !url.includes('{{') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  // Vue bound props: :src="'/path/to/img.png'"
+  for (const [, url] of stripped.matchAll(/:(?:src|image)=["']'([^']+)'["']/g)) {
+    if (url && !url.startsWith('data:') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  // CSS url() with image extension filter
+  for (const [, url] of stripped.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+    if (url && !url.startsWith('data:') && IMAGE_EXTENSIONS.test(url))
+      images.add(url.trim())
+  }
+
+  return Array.from(images)
+}
+
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
     katex: !!code.match(/\$.*?\$/) || !!code.match(/\$\$/),
@@ -104,6 +158,8 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
   if (frontmatter.level)
     level = frontmatter.level || 1
 
+  const images = extractImagesUsage(content, frontmatter)
+
   return {
     raw,
     title,
@@ -116,6 +172,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     frontmatterDoc: matterResult.doc,
     frontmatterRaw: matterResult.raw,
     note,
+    images,
   }
 }
 

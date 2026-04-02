@@ -7,6 +7,9 @@ import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 import { groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 import llmstxt from 'vitepress-plugin-llms'
+import config from './.vitepress/config'
+
+const IS_ROOT_ENGLISH_DOC = config.locales?.root.label.includes('English') || false
 
 export default defineConfig({
   optimizeDeps: {
@@ -22,7 +25,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    llmstxt({
+    IS_ROOT_ENGLISH_DOC && llmstxt({
       ignoreFiles: [
         'index.md',
         'README.md',

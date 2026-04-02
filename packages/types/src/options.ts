@@ -41,6 +41,11 @@ export interface SlidevEntryOptions {
    * Base URL in dev or build mode
    */
   base?: string
+
+  /**
+   * Exclude speaker notes from the built output
+   */
+  withoutNotes?: boolean
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {

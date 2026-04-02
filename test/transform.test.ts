@@ -177,3 +177,48 @@ it('external snippet', () => {
 
   expect(ctx.s.toString()).toMatchSnapshot()
 })
+
+it('code-wrapper with square brackets in code', () => {
+  const ctx = createTransformContext(`
+\`\`\`csharp
+[Flags]
+enum MyEnum {}
+\`\`\`
+`)
+
+  transformCodeWrapper(ctx)
+
+  expect(ctx.s.toString()).toMatchSnapshot()
+})
+
+it('code-wrapper with title and square brackets in code', () => {
+  const ctx = createTransformContext(`
+\`\`\`csharp [MyEnum.cs]
+[Flags]
+enum MyEnum {}
+\`\`\`
+`)
+
+  transformCodeWrapper(ctx)
+
+  expect(ctx.s.toString()).toMatchSnapshot()
+})
+
+it('code-wrapper with twoslash', () => {
+  const ctx = createTransformContext(`
+
+
+\`\`\`ts [filename.ts]
+const a = 1
+\`\`\`
+
+\`\`\`ts twoslash [filename.ts]
+const a = 1
+\`\`\`
+
+`)
+
+  transformCodeWrapper(ctx)
+
+  expect(ctx.s.toString()).toMatchSnapshot()
+})

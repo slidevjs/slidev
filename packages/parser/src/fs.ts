@@ -1,5 +1,6 @@
 import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
-import fs from 'node:fs'
+import { existsSync } from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import YAML from 'yaml'
@@ -19,8 +20,15 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
  */
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
-export async function load(userRoot: string, filepath: string, loadedSource: Record<string, string> = {}, mode?: string): Promise<LoadedSlidevData> {
-  const markdown = loadedSource[filepath] ?? fs.readFileSync(filepath, 'utf-8')
+export async function load(
+  userRoot: string,
+  filepath: string,
+  sources: Record<string, string> | ((path: string) => Promise<string>) = {},
+  mode?: string,
+): Promise<LoadedSlidevData> {
+  const loadSource = typeof sources === 'function' ? sources : async (path: string) => sources[path] ?? readFile(path, 'utf-8')
+
+  const markdown = await loadSource(filepath)
 
   let extensions: SlidevPreparserExtension[] | undefined
   if (preparserExtensionLoader) {
@@ -46,7 +54,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
   async function loadMarkdown(path: string, range?: string, frontmatterOverride?: Record<string, unknown>, importers?: SourceSlideInfo[]) {
     let md = markdownFiles[path]
     if (!md) {
-      const raw = loadedSource[path] ?? fs.readFileSync(path, 'utf-8')
+      const raw = await loadSource(path)
       md = await parse(raw, path, extensions)
       markdownFiles[path] = md
       watchFiles[path] = new Set()
@@ -90,7 +98,7 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
       }
       delete frontmatterOverride.src
 
-      if (!fs.existsSync(path)) {
+      if (!existsSync(path)) {
         md.errors ??= []
         md.errors.push({
           row: slide.start,
@@ -135,6 +143,6 @@ export async function load(userRoot: string, filepath: string, loadedSource: Rec
 
 export async function save(markdown: SlidevMarkdown) {
   const fileContent = stringify(markdown)
-  fs.writeFileSync(markdown.filepath, fileContent, 'utf-8')
+  await writeFile(markdown.filepath, fileContent, 'utf-8')
   return fileContent
 }

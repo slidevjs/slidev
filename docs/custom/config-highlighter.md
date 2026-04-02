@@ -26,8 +26,6 @@ export default defineShikiSetup(() => {
 
 If you want to add custom theme or language (TextMate grammar/themes in JSON), you can import them in the setup file:
 
-<!-- eslint-disable import/first-->
-
 ```ts twoslash [setup/shiki.ts]
 import { defineShikiSetup } from '@slidev/types'
 // ---cut-start---

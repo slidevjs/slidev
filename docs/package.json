@@ -1,7 +1,7 @@
 {
   "name": "@slidev/docs",
   "type": "module",
-  "version": "52.9.1",
+  "version": "52.14.1",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "homepage": "https://sli.dev",
@@ -32,7 +32,6 @@
     "@vueuse/core": "catalog:frontend",
     "fast-glob": "catalog:prod",
     "gray-matter": "catalog:prod",
-    "markdown-it": "catalog:prod",
     "shiki": "catalog:frontend",
     "typeit": "catalog:docs",
     "typescript": "catalog:dev",

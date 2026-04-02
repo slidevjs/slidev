@@ -4,7 +4,7 @@ import type { MermaidConfig } from 'mermaid'
 import type * as monaco from 'monaco-editor'
 import type { BuiltinLanguage, BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptionsCommon, LanguageInput, LanguageRegistration, MaybeArray } from 'shiki'
 import type { VitePluginConfig as UnoCssConfig } from 'unocss/vite'
-import type { Plugin as VitePlugin } from 'vite'
+import type { PluginOption as VitePluginOption } from 'vite'
 import type { App, ComputedRef, Ref } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
 import type { CodeRunnerProviders } from './code-runner'
@@ -80,7 +80,7 @@ export type PreparserSetup = (context: {
   headmatter: Record<string, unknown>
   mode?: string
 }) => Awaitable<SlidevPreparserExtension[]>
-export type VitePluginsSetup = (options: ResolvedSlidevOptions) => Awaitable<VitePlugin[]>
+export type VitePluginsSetup = (options: ResolvedSlidevOptions) => VitePluginOption
 
 // client side
 export type MonacoSetup = (m: typeof monaco) => Awaitable<MonacoSetupReturn | void>
@@ -88,6 +88,8 @@ export type AppSetup = (context: AppContext) => Awaitable<void>
 export type RootSetup = () => Awaitable<void>
 export type RoutesSetup = (routes: RouteRecordRaw[]) => RouteRecordRaw[]
 export type MermaidSetup = () => Awaitable<Partial<MermaidConfig> | void>
+export type MermaidRenderFn = (code: string, options: Record<string, any>) => Awaitable<string>
+export type MermaidRendererSetup = () => Awaitable<MermaidRenderFn | void>
 export type ShortcutsSetup = (nav: NavOperations, defaultShortcuts: ShortcutOptions[]) => Array<ShortcutOptions>
 export type CodeRunnersSetup = (runners: CodeRunnerProviders) => Awaitable<CodeRunnerProviders | void>
 export type ContextMenuSetup = (items: ComputedRef<ContextMenuItem[]>) => ComputedRef<ContextMenuItem[]>
@@ -103,6 +105,7 @@ export const defineAppSetup = defineSetup<AppSetup>
 export const defineRootSetup = defineSetup<RootSetup>
 export const defineRoutesSetup = defineSetup<RoutesSetup>
 export const defineMermaidSetup = defineSetup<MermaidSetup>
+export const defineMermaidRendererSetup = defineSetup<MermaidRendererSetup>
 export const defineKatexSetup = defineSetup<KatexSetup>
 export const defineShortcutsSetup = defineSetup<ShortcutsSetup>
 export const defineTransformersSetup = defineSetup<TransformersSetup>

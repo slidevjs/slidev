@@ -1,39 +1,29 @@
 import type { VirtualModuleTemplate } from './types'
-import { existsSync } from 'node:fs'
-
 import { join } from 'node:path'
 import { resolveImportUrl, toAtFS } from '../resolver'
+import { makeAbsoluteImportGlob } from '../utils'
 
 export const templateStyle: VirtualModuleTemplate = {
   id: '/@slidev/styles',
-  async getContent({ data, clientRoot, roots }) {
+  async getContent({ data, clientRoot, userRoot, roots }) {
     function resolveUrlOfClient(name: string) {
       return toAtFS(join(clientRoot, name))
     }
 
     const imports: string[] = [
-      `import "${resolveUrlOfClient('styles/vars.css')}"`,
-      `import "${resolveUrlOfClient('styles/index.css')}"`,
-      `import "${resolveUrlOfClient('styles/code.css')}"`,
-      `import "${resolveUrlOfClient('styles/katex.css')}"`,
-      `import "${resolveUrlOfClient('styles/transitions.css')}"`,
-    ]
+      'styles/vars.css',
+      'styles/index.css',
+      'styles/code.css',
+      'styles/katex.css',
+      'styles/transitions.css',
+    ].map(path => makeAbsoluteImportGlob(userRoot, [join(clientRoot, path)]))
 
     for (const root of roots) {
-      const styles = [
-        join(root, 'styles', 'index.ts'),
-        join(root, 'styles', 'index.js'),
-        join(root, 'styles', 'index.css'),
-        join(root, 'styles.css'),
-        join(root, 'style.css'),
-      ]
-
-      for (const style of styles) {
-        if (existsSync(style)) {
-          imports.push(`import "${toAtFS(style)}"`)
-          continue
-        }
-      }
+      imports.push(makeAbsoluteImportGlob(userRoot, [
+        join(root, 'styles/index.{ts,js,css}'),
+        join(root, 'styles.{ts,js,css}'),
+        join(root, 'style.{ts,js,css}'),
+      ]))
     }
 
     if (data.features.katex)

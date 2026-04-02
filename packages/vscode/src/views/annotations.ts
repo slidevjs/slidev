@@ -1,32 +1,31 @@
 import type { SourceSlideInfo } from '@slidev/types'
 import type { DecorationOptions } from 'vscode'
-import { clamp, debounce, ensurePrefix } from '@antfu/utils'
-import { computed, createSingletonComposable, onScopeDispose, useActiveTextEditor, watch } from 'reactive-vscode'
-import { Position, Range, ThemeColor, window, workspace } from 'vscode'
+import { clamp, ensurePrefix } from '@antfu/utils'
+import { computed, defineService, useActiveTextEditor, watch } from 'reactive-vscode'
+import { Position, Range, ThemeColor, window } from 'vscode'
 import { useProjectFromDoc } from '../composables/useProjectFromDoc'
-import { displayAnnotations, displayCodeBlockLineNumbers } from '../configs'
+import { config } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
-const dividerCommonOptions = {
-  color: new ThemeColor('panelTitle.inactiveForeground'),
-  fontWeight: 'bold',
+const frontmatterBgOptions = {
   isWholeLine: true,
   backgroundColor: '#8881',
 }
 
 const firstLineDecoration = window.createTextEditorDecorationType({})
 const dividerDecoration = window.createTextEditorDecorationType({
-  ...dividerCommonOptions,
+  ...frontmatterBgOptions,
+  color: new ThemeColor('panelTitle.inactiveForeground'),
   borderStyle: 'solid',
   borderWidth: '1px 0 0 0',
   borderColor: new ThemeColor('panelTitle.activeBorder'),
 })
-const frontmatterContentDecoration = window.createTextEditorDecorationType({
-  isWholeLine: true,
-  backgroundColor: '#8881',
+const frontmatterContentDecoration = window.createTextEditorDecorationType(frontmatterBgOptions)
+const frontmatterEndDecoration = window.createTextEditorDecorationType({
+  ...frontmatterBgOptions,
+  color: new ThemeColor('panelTitle.inactiveForeground'),
 })
-const frontmatterEndDecoration = window.createTextEditorDecorationType(dividerCommonOptions)
 const errorDecoration = window.createTextEditorDecorationType({
   isWholeLine: true,
 })
@@ -95,7 +94,7 @@ function findCodeBlocks(docText: string): CodeBlockInfo[] {
 }
 
 function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEditor>['value'], docText: string) {
-  if (!editor || !displayCodeBlockLineNumbers.value)
+  if (!editor || !config['annotations-line-numbers'])
     return
 
   const codeBlockLineNumbers: DecorationOptions[] = []
@@ -113,7 +112,8 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
       if (currentLine >= editor.document.lineCount)
         continue
 
-      const paddedNumber = String(lineNumber).padStart(numberWidth, '⠀')
+      // \u2800 renders as a space but won't be trimmed
+      const paddedNumber = String(lineNumber).padStart(numberWidth, '\u2800')
 
       codeBlockLineNumbers.push({
         range: new Range(
@@ -136,52 +136,22 @@ function updateCodeBlockLineNumbers(editor: ReturnType<typeof useActiveTextEdito
   editor.setDecorations(codeBlockLineNumberDecoration, codeBlockLineNumbers)
 }
 
-export const useAnnotations = createSingletonComposable(() => {
+export const useAnnotations = defineService(() => {
   const editor = useActiveTextEditor()
   const doc = computed(() => editor.value?.document)
   const projectInfo = useProjectFromDoc(doc)
 
-  let debouncedUpdateLineNumbers: ((docText: string) => void) | null = null
-
   watch(
-    [editor, displayCodeBlockLineNumbers],
-    ([currentEditor, lineNumbersEnabled]) => {
-      debouncedUpdateLineNumbers = null
-
-      if (!currentEditor || !lineNumbersEnabled) {
-        if (currentEditor)
-          currentEditor.setDecorations(codeBlockLineNumberDecoration, [])
-        return
-      }
-
-      debouncedUpdateLineNumbers = debounce(150, (docText: string) => {
-        if (editor.value === currentEditor)
-          updateCodeBlockLineNumbers(currentEditor, docText)
-      })
-    },
-    { immediate: true },
-  )
-
-  const textChangeDisposable = workspace.onDidChangeTextDocument((e) => {
-    if (editor.value?.document === e.document && displayCodeBlockLineNumbers.value && debouncedUpdateLineNumbers) {
-      debouncedUpdateLineNumbers(e.document.getText())
-    }
-  })
-
-  onScopeDispose(() => {
-    textChangeDisposable.dispose()
-  })
-
-  watch(
-    [editor, doc, projectInfo, activeProject, displayAnnotations, displayCodeBlockLineNumbers],
+    [editor, doc, projectInfo, activeProject, () => config.annotations, () => config['annotations-line-numbers']],
     ([editor, doc, projectInfo, activeProject, enabled, lineNumbersEnabled]) => {
-      if (!editor || !doc || !projectInfo)
+      if (!editor || !doc)
         return
 
-      if (!enabled) {
+      if (!projectInfo || !enabled) {
         editor.setDecorations(firstLineDecoration, [])
         editor.setDecorations(dividerDecoration, [])
         editor.setDecorations(frontmatterContentDecoration, [])
+        editor.setDecorations(frontmatterEndDecoration, [])
         editor.setDecorations(errorDecoration, [])
         editor.setDecorations(codeBlockLineNumberDecoration, [])
         return
@@ -248,6 +218,7 @@ export const useAnnotations = createSingletonComposable(() => {
           }
         }
       }
+
       editor.setDecorations(firstLineDecoration, firstLineRanges)
       editor.setDecorations(dividerDecoration, dividerRanges)
       editor.setDecorations(frontmatterContentDecoration, frontmatterContentRanges)

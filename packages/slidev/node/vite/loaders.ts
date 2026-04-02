@@ -1,10 +1,10 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { LoadResult } from 'rollup'
-import type { Plugin, ViteDevServer } from 'vite'
+import type { ModuleNode, Plugin, ViteDevServer } from 'vite'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/markdown-it/markdown-it-katex'
@@ -22,9 +22,9 @@ export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
 ): Plugin {
-  const { data, mode, utils } = options
+  const { data, mode, utils, withoutNotes } = options
 
-  const notesMd = MarkdownIt({ html: true })
+  const notesMd = MarkdownExit({ html: true })
   notesMd.use(markdownItLink)
   if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)
@@ -232,19 +232,31 @@ export function createSlidesLoader(
       if (hmrSlidesIndexes.size > 0)
         moduleIds.add(templateTitleRendererMd.id)
 
-      const vueModules = Array.from(hmrSlidesIndexes)
-        .flatMap((idx) => {
-          const frontmatter = ctx.server.moduleGraph.getModuleById(sourceIds.frontmatter[idx])
-          const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
-          const styles = main ? [...main.clientImportedModules].find(m => m.id?.includes(`&type=style`)) : undefined
-          return [
-            frontmatter,
-            main,
-            styles,
-          ]
-        })
+      for (const idx of hmrSlidesIndexes) {
+        moduleIds.add(sourceIds.frontmatter[idx])
+      }
+
+      const reloadBeforeOthers: ModuleNode[] = []
+      const vueModules: ModuleNode[] = []
+      for (const idx of hmrSlidesIndexes) {
+        const main = ctx.server.moduleGraph.getModuleById(sourceIds.md[idx])
+        if (main) {
+          const styles = [...main.clientImportedModules].filter(m => m.id?.includes(`&type=style`))
+          if (styles.length) {
+            // `pluginVue.transform(mainModule)` must be called before `pluginVue.load(styleModule)`
+            // to refresh the internal descriptor cache of `@vitejs/plugin-vue`
+            reloadBeforeOthers.push(main)
+            vueModules.push(...styles)
+          }
+          else {
+            vueModules.push(main)
+          }
+        }
+      }
 
       hmrSlidesIndexes.clear()
+
+      await Promise.all(reloadBeforeOthers.map(m => ctx.server.reloadModule(m)))
 
       const moduleEntries = [
         ...ctx.modules.filter(i => i.id === templateMonacoRunDeps.id || i.id === templateMonacoTypes.id),
@@ -363,6 +375,9 @@ export function createSlidesLoader(
   }
 
   function renderNote(text: string = '') {
+    if (withoutNotes)
+      return ''
+
     let clickCount = 0
     const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
 
@@ -399,6 +414,7 @@ export function createSlidesLoader(
   function withRenderedNote(data: SlideInfo): SlideInfo {
     return {
       ...data,
+      ...withoutNotes && { note: '' },
       noteHTML: renderNote(data?.note),
     }
   }

@@ -9,7 +9,7 @@ description: |
 # Code Groups
 
 > [!NOTE]
-> This feature requires [MDC Syntax](/features/mdc#mdc-syntax). Enable `mdc: true` to use it.
+> This feature requires [Comark Syntax](/features/comark#comark-syntax). Enable `comark: true` to use it.
 
 You can group multiple code blocks like this:
 

@@ -68,6 +68,13 @@ declare module '#slidev/setups/mermaid' {
   export default setups
 }
 
+declare module '#slidev/setups/mermaid-renderer' {
+  import type { MermaidRendererSetup } from '@slidev/types'
+
+  const setups: MermaidRendererSetup[]
+  export default setups
+}
+
 declare module '#slidev/setups/main' {
   import type { AppSetup } from '@slidev/types'
 

@@ -27,8 +27,13 @@ const { activate, deactivate } = defineExtension(() => {
   // language server
   const labsInfo = useLanguageClient()
 
-  // language model tools
-  useLmTools()
+  // language model tools. Wrap in try-catch for older vscode versions that do not support it.
+  try {
+    useLmTools()
+  }
+  catch (e) {
+    logger.warn(`Failed to initialize language model tools: ${e}`)
+  }
 
   logger.info('Slidev activated.')
   logger.info(`Entry: ${activeEntry.value}`)

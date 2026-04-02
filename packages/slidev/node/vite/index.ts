@@ -1,5 +1,6 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions, SlidevServerOptions } from '@slidev/types'
 import type { PluginOption } from 'vite'
+import setupVitePlugins from '../setups/vite-plugins'
 import { createVueCompilerFlagsPlugin } from './compilerFlagsVue'
 import { createComponentsPlugin } from './components'
 import { createContextInjectionPlugin } from './contextInjection'
@@ -17,7 +18,6 @@ import { createRemoteAssetsPlugin } from './remoteAssets'
 import { createServerRefPlugin } from './serverRef'
 import { createStaticCopyPlugin } from './staticCopy'
 import { createUnocssPlugin } from './unocss'
-import { createUserVitePlugins } from './userPlugins'
 import { createVuePlugin } from './vue'
 
 export function ViteSlidevPlugin(
@@ -43,7 +43,8 @@ export function ViteSlidevPlugin(
     createUnocssPlugin(options, pluginOptions),
     createStaticCopyPlugin(options, pluginOptions),
     createInspectPlugin(options, pluginOptions),
-    createUserVitePlugins(options),
     createPatchMonacoSourceMapPlugin(),
+
+    setupVitePlugins(options),
   ])
 }

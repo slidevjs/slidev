@@ -82,9 +82,11 @@ export const HEADMATTER_FIELDS = [
   'drawings',
   'htmlAttrs',
   'mdc',
+  'comark',
   'contextMenu',
   'wakeLock',
   'seoMeta',
   'notesAutoRuby',
   'magicMoveDuration',
+  'preloadImages',
 ]
