@@ -457,7 +457,7 @@ cli.command(
     .help(),
   async (args) => {
     const { entry, theme } = args
-    const { exportSlides, getExportOptions } = await import('./commands/export')
+    const { exportSlides, exportOverview, getExportOptions } = await import('./commands/export')
     const candidatePort = await getPort(12445)
 
     let warned = false
@@ -485,10 +485,26 @@ cli.command(
         await server.listen(candidatePort)
         const port = getViteServerPort(server)
         printInfo(options)
-        const result = await exportSlides({
-          port,
-          ...getExportOptions({ ...args, entry: entryFile }, options),
-        })
+
+        let result: string
+        if (args.overview) {
+          const exportOpts = getExportOptions({ ...args, entry: entryFile }, options)
+          result = await exportOverview({
+            port,
+            output: exportOpts.output || `${path.basename(entryFile, '.md')}-overview`,
+            timeout: exportOpts.timeout,
+            wait: exportOpts.wait,
+            dark: exportOpts.dark,
+            waitUntil: exportOpts.waitUntil,
+            executablePath: exportOpts.executablePath,
+          })
+        }
+        else {
+          result = await exportSlides({
+            port,
+            ...getExportOptions({ ...args, entry: entryFile }, options),
+          })
+        }
         console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
       }
       finally {
@@ -648,6 +664,10 @@ function exportOptions<T>(args: Argv<T>) {
     .option('omit-background', {
       type: 'boolean',
       describe: 'export png pages without the default browser background',
+    })
+    .option('overview', {
+      type: 'boolean',
+      describe: 'export the overview page (slides + notes) as a single PDF',
     })
 }
 

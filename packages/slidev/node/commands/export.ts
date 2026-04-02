@@ -162,6 +162,64 @@ export async function exportNotes({
   return output
 }
 
+export interface ExportOverviewOptions {
+  port?: number
+  base?: string
+  output?: string
+  timeout?: number
+  wait?: number
+  dark?: boolean
+  waitUntil?: 'networkidle' | 'load' | 'domcontentloaded' | undefined
+  executablePath?: string
+}
+
+export async function exportOverview({
+  port = 18724,
+  base = '/',
+  output = 'slides-overview',
+  timeout = 30000,
+  wait = 0,
+  dark = false,
+  waitUntil,
+  executablePath,
+}: ExportOverviewOptions): Promise<string> {
+  if (!output.endsWith('.pdf'))
+    output = `${output}.pdf`
+
+  const { chromium } = await importPlaywright()
+  const browser = await chromium.launch({ executablePath })
+  const context = await browser.newContext()
+  const page = await context.newPage()
+
+  const progress = createSlidevProgress(true)
+  progress.start(1)
+
+  await page.goto(`http://localhost:${port}${base}overview/print`, { waitUntil: waitUntil || 'networkidle', timeout })
+  await page.waitForLoadState('networkidle')
+  await page.emulateMedia({ colorScheme: dark ? 'dark' : 'light', media: 'screen' })
+
+  if (wait)
+    await page.waitForTimeout(wait)
+
+  await page.pdf({
+    path: output,
+    margin: {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+    },
+    printBackground: true,
+    preferCSSPageSize: true,
+  })
+
+  progress.stop()
+  browser.close()
+
+  const relativeOutput = slash(relative('.', output))
+  return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
+}
+
 export async function exportSlides({
   port = 18724,
   total = 0,

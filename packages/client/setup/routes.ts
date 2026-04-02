@@ -71,6 +71,11 @@ export default function setupRoutes() {
         component: () => import('../pages/presenter/print.vue'),
         beforeEnter: passwordGuard,
       },
+      {
+        path: '/overview/print',
+        component: () => import('../pages/overview/print.vue'),
+        beforeEnter: passwordGuard,
+      },
     )
   }
 

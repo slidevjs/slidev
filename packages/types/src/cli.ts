@@ -17,6 +17,7 @@ export interface ExportArgs extends CommonArgs {
   'per-slide'?: boolean
   'scale'?: number
   'omit-background'?: boolean
+  'overview'?: boolean
 }
 
 export interface BuildArgs extends ExportArgs {
