@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { resolveImportUrl } from '../resolver'
 import { makeAbsoluteImportGlob } from '../utils'
 
-export const templateStyle: VirtualModuleTemplate = {
+export const templateConditionalStyles: VirtualModuleTemplate = {
   id: '/@slidev/conditional-styles',
   async getContent({ data, userRoot, roots }) {
     const imports: string[] = []
