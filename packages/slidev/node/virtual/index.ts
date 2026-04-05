@@ -1,4 +1,4 @@
-import { templateStyle } from './conditional-styles'
+import { templateConditionalStyles } from './conditional-styles'
 import { templateConfigs } from './configs'
 import { templateLegacyRoutes, templateLegacyTitles } from './deprecated'
 import { templateGlobalLayers } from './global-layers'
@@ -14,7 +14,7 @@ export const templates = [
   templateMonacoTypes,
   templateMonacoRunDeps,
   templateConfigs,
-  templateStyle,
+  templateConditionalStyles,
   templateGlobalLayers,
   templateNavControls,
   templateSlides,
