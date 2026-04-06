@@ -258,6 +258,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/xunz3/slidev-pane',
   },
+  {
+    id: 'slidev-agent',
+    name: 'slidev-agent',
+    description: 'Slidev addon and wrapper CLI for LangChain-powered slide authoring.',
+    tags: ['Component', 'Integration'],
+    author: {
+      name: 'Christian Bromann',
+      link: 'https://github.com/christian-bromann',
+    },
+    repo: 'https://github.com/christian-bromann/slidev-agent',
+  },
   // Add yours here!
   {
     id: '',
