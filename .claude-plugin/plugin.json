@@ -1,0 +1,6 @@
+{
+  "name": "slidev",
+  "description": "Claude Code skill for creating and presenting Slidev slidedecks",
+  "version": "1.0.0",
+  "repository": "https://github.com/slidevjs/slidev"
+}

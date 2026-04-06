@@ -123,7 +123,7 @@ Presenter notes go here
 
 | Feature | Usage | Reference |
 |---------|-------|-----------|
-| Comark syntax | `comark: true` + `{style="color:red"}` | [syntax-comark](references/syntax-comark.md) |
+| Comark syntax | `comark: true` + `{style="color:red"}` | [syntax-mdc](references/syntax-mdc.md) |
 | Block frontmatter | `` ```yaml `` instead of `---` | [syntax-block-frontmatter](references/syntax-block-frontmatter.md) |
 | Import slides | `src: ./other.md` | [syntax-importing-slides](references/syntax-importing-slides.md) |
 | Merge frontmatter | Main entry wins | [syntax-frontmatter-merging](references/syntax-frontmatter-merging.md) |
