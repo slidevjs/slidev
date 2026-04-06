@@ -247,15 +247,22 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/mjvo/slidev-addon-p5',
   },
+  {
+    id: 'slidev-pane',
+    name: 'slidev-pane',
+    description: 'PowerPoint-style pane presenter for Slidev with slide thumbnails, quick navigation, and a zoomable main canvas.',
+    tags: ['Navigation'],
+    author: {
+      name: 'xunz',
+      link: 'https://github.com/xunz3',
+    },
+    repo: 'https://github.com/xunz3/slidev-pane',
+  },
   // Add yours here!
   {
     id: '',
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/addons.ts',
     name: 'Yours?',
     description: 'Click here to submit your addon :)',
-    tags: [],
-    author: {
-      name: '',
-    },
   },
 ]
