@@ -123,7 +123,7 @@ graph TD
     <ol>
     <li>
     <p>foo</p>
-    <PlantUml v-bind="{scale:0.5}" code="SoWkIImgAStDuNBCoKnELT2rKt3AJx9Iy4ZDoSddSaZDIodDpG40" server=undefined />
+    <PlantUml v-bind="{scale:0.5}" code="SoWkIImgAStDuNBCoKnELT2rKt3AJx9Iy4ZDoSddSaZDIodDpG40" />
     </li>
     <li>
     <p>bar</p>
