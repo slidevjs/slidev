@@ -30,7 +30,7 @@ export default defineTransformersSetup(() => {
     // This applies before the Markdown is parsed, per slide
     pre: [mySyntax],
     // This applies per Markdown code block
-    codeblock: [myCodeblock],
+    codeblocks: [myCodeblock],
   }
 })
 ```

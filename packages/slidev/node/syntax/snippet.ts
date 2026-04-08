@@ -162,10 +162,11 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
       monacoWriterWhitelist.add(filepath)
       lang = lang.trim()
       meta = meta.replace('{monaco-write}', '').trim() || '{}'
+      const safeFilepath = JSON.stringify(filepath).slice(1, -1)
       const encoded = lz.compressToBase64(content)
 
       const token = state.push('html_block', '', 0)
-      token.content = `<Monaco writable="${filepath}" code-lz="${encoded}" lang="${lang}" v-bind="${meta}" />\n`
+      token.content = `<Monaco writable="${safeFilepath}" code-lz="${encoded}" lang="${lang}" v-bind="${meta}" />\n`
       token.map = [startLine, startLine + 1]
     }
     else {

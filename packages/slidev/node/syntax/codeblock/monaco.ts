@@ -4,15 +4,15 @@ import lz from 'lz-string'
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 const RE_MONACO = /^([\w'-]+)?\s*\{(monaco[\w-]*)\}\s*(\{[^}]*\})?(.*)$/
 
-export default defineCodeblockTransformer(async ({ info, code, renderHighlighted, options: { data: { config }, mode } }) => {
+export default defineCodeblockTransformer(async ({ info, code, options: { data: { config }, mode } }) => {
   const match = info.match(RE_MONACO)
   if (!match)
     return
-  const [, lang = '', monaco, options, rest = ''] = match
+  const [, lang = '', monaco, options] = match
 
   const monacoEnabled = config.monaco === true || config.monaco === mode
   if (!monacoEnabled) {
-    return renderHighlighted({ info: `${lang} ${rest}` })
+    return
   }
 
   let encoded
