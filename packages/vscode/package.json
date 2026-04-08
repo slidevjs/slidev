@@ -4,7 +4,7 @@
   "displayName": "Slidev",
   "type": "module",
   "preview": true,
-  "version": "52.13.0",
+  "version": "52.14.2",
   "private": true,
   "description": "Slidev support for VS Code",
   "license": "MIT",
@@ -616,6 +616,7 @@
     "ts-json-schema-generator": "catalog:vscode",
     "volar-service-prettier": "catalog:vscode",
     "volar-service-yaml": "catalog:vscode",
+    "vscode-uri": "catalog:vscode",
     "yaml-language-server": "catalog:vscode"
   }
 }

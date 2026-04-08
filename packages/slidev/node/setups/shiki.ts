@@ -1,6 +1,6 @@
 import type { ResolvedSlidevUtils, ShikiSetup } from '@slidev/types'
 import fs from 'node:fs/promises'
-import { createdBundledHighlighter, createSingletonShorthands } from 'shiki/core'
+import { createBundledHighlighter, createSingletonShorthands } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import { resolveShikiOptions } from '../../../client/setup/shiki-options'
 import { loadSetups } from './load'
@@ -26,7 +26,7 @@ export default async function setupShiki(roots: string[]) {
   )
   const { options, languageInput, themeInput } = resolveShikiOptions(optionsRaw)
 
-  const createHighlighter = createdBundledHighlighter<string, string>({
+  const createHighlighter = createBundledHighlighter<string, string>({
     engine: createJavaScriptRegexEngine,
     langs: languageInput,
     themes: themeInput,

@@ -198,12 +198,15 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   htmlAttrs?: Record<string, string>
   /**
-   * Suppport MDC syntax
+   * Suppport Comark syntax
    *
-   * See https://github.com/antfu/markdown-it-mdc
+   * https://comark.dev/syntax/markdown
    *
-   * See https://content.nuxtjs.org/guide/writing/mdc
-   *
+   * @default false
+   */
+  comark?: boolean
+  /**
+   * @deprecated MDC is now Comark. Use the `comark` option instead
    * @default false
    */
   mdc?: boolean
@@ -312,6 +315,10 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   magicMoveDuration?: number
   /**
+   * Default click animation for the slides
+   */
+  clickAnimation?: string
+  /**
    * Preload images extracted from slides for faster navigation.
    *
    * - `true` - enable with default look-ahead of 3 slides
@@ -386,6 +393,10 @@ export interface Frontmatter extends TransitionOptions {
    * @default 1
    */
   zoom?: number
+  /**
+   * Default click animation for the slide
+   */
+  clickAnimation?: string
   /**
    * Store the positions of draggable elements
    * Normally you don't need to set this manually

@@ -1,6 +1,6 @@
 ---
 name: slidev
-description: Create and present web-based slides for developers using Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, or teaching materials.
+description: Create and present web-based slidedecks for developers using Slidev with Markdown, Vue components, code highlighting, animations, and interactive features. Use when building technical presentations, conference talks, code walkthroughs, teaching materials, or developer decks.
 ---
 
 # Slidev - Presentation Slides for Developers
@@ -9,20 +9,24 @@ Web-based slides maker built on Vite, Vue, and Markdown.
 
 ## When to Use
 
-- Technical presentations with live code examples
+- Technical presentations or slidedecks with live code examples
 - Syntax-highlighted code snippets with animations
 - Interactive demos (Monaco editor, runnable code)
 - Mathematical equations (LaTeX) or diagrams (Mermaid, PlantUML)
 - Record presentations with presenter notes
 - Export to PDF, PPTX, or host as SPA
+- Code walkthroughs for developer talks or workshops
 
 ## Quick Start
 
 ```bash
 pnpm create slidev    # Create project
-pnpm run dev          # Start dev server
-pnpm run export       # Export to PDF
+pnpm run dev          # Start dev server (opens http://localhost:3030)
+pnpm run build        # Build static SPA
+pnpm run export       # Export to PDF (requires playwright-chromium)
 ```
+
+**Verify**: After `pnpm run dev`, confirm slides load at `http://localhost:3030`. After `pnpm run export`, check the output PDF exists in the project root.
 
 ## Basic Syntax
 
@@ -76,7 +80,7 @@ Presenter notes go here
 | Click-based highlighting | `` ```ts {1\|2-3\|all} `` | [code-line-highlighting](references/code-line-highlighting.md) |
 | Line numbers | `lineNumbers: true` or `{lines:true}` | [code-line-numbers](references/code-line-numbers.md) |
 | Scrollable code | `{maxHeight:'100px'}` | [code-max-height](references/code-max-height.md) |
-| Code tabs | `::code-group` (requires `mdc: true`) | [code-groups](references/code-groups.md) |
+| Code tabs | `::code-group` (requires `comark: true`) | [code-groups](references/code-groups.md) |
 | Monaco editor | `` ```ts {monaco} `` | [editor-monaco](references/editor-monaco.md) |
 | Run code | `` ```ts {monaco-run} `` | [editor-monaco-run](references/editor-monaco-run.md) |
 | Edit files | `<<< ./file.ts {monaco-write}` | [editor-monaco-write](references/editor-monaco-write.md) |
@@ -119,7 +123,7 @@ Presenter notes go here
 
 | Feature | Usage | Reference |
 |---------|-------|-----------|
-| MDC syntax | `mdc: true` + `{style="color:red"}` | [syntax-mdc](references/syntax-mdc.md) |
+| Comark syntax | `comark: true` + `{style="color:red"}` | [syntax-comark](references/syntax-comark.md) |
 | Block frontmatter | `` ```yaml `` instead of `---` | [syntax-block-frontmatter](references/syntax-block-frontmatter.md) |
 | Import slides | `src: ./other.md` | [syntax-importing-slides](references/syntax-importing-slides.md) |
 | Merge frontmatter | Main entry wins | [syntax-frontmatter-merging](references/syntax-frontmatter-merging.md) |
@@ -143,6 +147,8 @@ Presenter notes go here
 | Cache images | Automatic for remote URLs | [build-remote-assets](references/build-remote-assets.md) |
 | OG image | `seoMeta.ogImage` or `og-image.png` | [build-og-image](references/build-og-image.md) |
 | SEO tags | `seoMeta:` | [build-seo-meta](references/build-seo-meta.md) |
+
+**Export prerequisite**: `pnpm add -D playwright-chromium` is required for PDF/PPTX/PNG export. If export fails with a browser error, install this dependency first.
 
 ### Editor & Tools
 

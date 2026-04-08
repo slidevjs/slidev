@@ -4,7 +4,7 @@ export interface ThemeInfo {
   description: string
   previews: string[]
   repo?: string
-  author: {
+  author?: {
     name: string
     link?: string
   }
@@ -119,6 +119,7 @@ export const official: ThemeInfo[] = [
   },
 ]
 
+// Please add your theme to the end of the list.
 export const community: ThemeInfo[] = [
   {
     id: 'slidev-theme-geist',
@@ -175,11 +176,11 @@ export const community: ThemeInfo[] = [
     },
     repo: 'https://github.com/zthxxx/slides/tree/master/packages/slidev-theme-eloc',
     previews: [
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/01.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/02.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/03.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/04.png',
-      'https://cdn.jsdelivr.net/gh/zthxxx/slides@master/packages/slidev-theme-eloc/screenshot/05.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/01.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/02.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/03.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/04.png',
+      'https://media.githubusercontent.com/media/zthxxx/slides/refs/heads/master/packages/slidev-theme-eloc/screenshot/05.png',
     ],
     tags: [
       'dark',
@@ -587,15 +588,83 @@ export const community: ThemeInfo[] = [
       'princeton',
     ],
   },
+  {
+    id: 'slidev-theme-field-manual',
+    name: 'Field Manual',
+    description: 'A 24-layout theme modeled on the style of vintage military field manuals',
+    author: {
+      name: 'PJ Doland',
+      link: 'https://github.com/pjdoland',
+    },
+    repo: 'https://github.com/pjdoland/slidev-theme-field-manual',
+    previews: [
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/1.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/2.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/3.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/4.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/5.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/6.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/7.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/8.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/9.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/10.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/11.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/12.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/13.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/14.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/15.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/16.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/17.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/18.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/19.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/20.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/21.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/22.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/23.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/24.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/25.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/26.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/27.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/28.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/29.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/30.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/31.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/32.jpg',
+      'https://raw.githubusercontent.com/pjdoland/slidev-theme-field-manual/main/screenshots/33.jpg',
+    ],
+    tags: [
+      'light',
+      'dark',
+      'vintage',
+      'military',
+    ],
+  },
+  {
+    id: 'slidev-theme-touying',
+    name: 'Touying',
+    description: 'A theme based on the design of the Typst Touying',
+    author: {
+      name: '_Kerman',
+      link: 'https://github.com/kermanx',
+    },
+    repo: 'https://github.com/kermanx/slidev-theme-touying',
+    previews: [
+      'https://github.com/user-attachments/assets/a075a45c-7ee7-4ede-b3e7-90f29edf3845',
+      'https://github.com/user-attachments/assets/5ddea6cb-e604-41f9-a857-9f43b439c91b',
+      'https://github.com/user-attachments/assets/2b649cbc-537d-4306-adcd-3877bbeeb87a',
+      'https://github.com/user-attachments/assets/e2258aef-1c80-4db0-af2f-eb430b83f2e7',
+      'https://github.com/user-attachments/assets/f3010e84-7b9c-42b7-bffc-bdf48fdfbd2e',
+    ],
+    tags: [
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Yours?',
     description: 'Click here to submit your theme :)',
-    author: {
-      name: '',
-    },
     previews: [
       '/theme-placeholder.png',
     ],

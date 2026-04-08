@@ -68,6 +68,13 @@ declare module '#slidev/setups/mermaid' {
   export default setups
 }
 
+declare module '#slidev/setups/mermaid-renderer' {
+  import type { MermaidRendererSetup } from '@slidev/types'
+
+  const setups: MermaidRendererSetup[]
+  export default setups
+}
+
 declare module '#slidev/setups/main' {
   import type { AppSetup } from '@slidev/types'
 
@@ -103,7 +110,7 @@ declare module '#slidev/setups/context-menu' {
   export default setups
 }
 
-declare module '#slidev/styles' {
+declare module '#slidev/conditional-styles' {
   // side-effects only
 }
 

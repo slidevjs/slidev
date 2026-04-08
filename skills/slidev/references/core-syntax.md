@@ -117,9 +117,9 @@ Alice -> Bob : Hello
 ```
 ````
 
-## MDC Syntax
+## Comark Syntax
 
-Enable with `mdc: true`:
+Enable with `comark: true`:
 
 ```md
 [styled text]{style="color:red"}

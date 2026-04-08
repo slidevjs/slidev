@@ -228,6 +228,44 @@ clicks: 10
 ---
 ```
 
+### Click Animation Presets {#click-animation-presets}
+
+You can define default click animation presets in headmatter/frontmatter:
+
+```yaml
+---
+clickAnimation: up
+---
+```
+
+Or specify them per element with directive modifiers:
+
+```md
+<div v-click>Uses default animation preset defined in frontmatter</div>
+<div v-click.scale>Scales up when showing and scales down when hiding</div>
+<div v-click.fade.right>Composes multiple animations: fade and right</div>
+<div v-click.none>No animation for this element</div>
+```
+
+There are some built-in presets available for you to use:
+
+- `fade`: Fade in from opacity 0.5 to 1
+- `fade-in`: Fade in from opacity 0 to 1
+- `up`: Translate 20px up
+- `down`: Translate 20px down
+- `left`: Translate 20px left
+- `right`: Translate 20px right
+- `scale`: Scale to 0.9
+- `none`: Disables animation for this element
+
+And you can also define your own presets with custom CSS rules for `.slidev-vclick-anim-{presetName}`:
+
+```css
+.slidev-vclick-anim-pop.slidev-vclick-hidden {
+  transform: scale(0.96) translateY(8px);
+}
+```
+
 ### Element Transitions {#element-transitions}
 
 When you apply the `v-click` directive to your elements, it will attach the class name `slidev-vclick-target` to it. When the elements are hidden, the class name `slidev-vclick-hidden` will also be attached. For example:
@@ -389,12 +427,12 @@ Experimental: This is not supported by all browsers. Check the [Browser compatib
 
 You can use the `view-transition-name` CSS property to name view transitions, which creates connections between different page elements and smooth transitions when switching slides.
 
-You can enable [MDC (Markdown Component) Syntax](/guide/syntax#mdc-syntax) support to conveniently name view-transitions:
+You can enable [Comark Syntax](/guide/syntax#comark-syntax) support to conveniently name view-transitions:
 
 ```md
 ---
 transition: view-transition
-mdc: true
+comark: true
 ---
 
 # View Transition {.inline-block.view-transition-title}

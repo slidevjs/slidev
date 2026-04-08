@@ -19,9 +19,8 @@ Slidev internally adds the following plugins to Vite:
 
 To configure the built-in plugins listed above, create a `vite.config.ts` with the following content. Please note that Slidev has some [default configurations](https://github.com/slidevjs/slidev/blob/main/packages/slidev/node/vite/index.ts) for those plugins, this usage will override some of them, which may potentially cause the app to break. Please treat this as **an advanced feature**, and make sure you know what you are doing before moving on.
 
-<!-- eslint-disable import/first -->
-
 ```ts twoslash [vite.config.ts]
+/* eslint-disable import/first */
 /// <reference types="@slidev/types" />
 import type MarkdownExit from 'markdown-exit'
 

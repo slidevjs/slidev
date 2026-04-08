@@ -30,9 +30,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @deprecated use `animation` instead
+     */
     fade: {
       type: Boolean,
       default: false,
+    },
+    animation: {
+      type: [String, Array<string>],
+      default: undefined,
     },
     handleSpecialElements: {
       type: Boolean,
@@ -53,14 +60,26 @@ export default defineComponent({
     const click = resolveDirective('click')!
 
     const applyDirective = (node: VNode, value: number | string) => {
+      const modifiers: Record<string, boolean> = {
+        hide: this.hide,
+      }
+      if (typeof this.animation === 'string') {
+        this.animation.split(/[\s,]+/).forEach((a) => {
+          if (a)
+            modifiers[a] = true
+        })
+      }
+      else if (Array.isArray(this.animation)) {
+        this.animation.forEach(a => modifiers[a] = true)
+      }
+      if (this.fade)
+        modifiers.fade = true
+
       return withDirectives(node, [[
         click,
         value,
         '',
-        {
-          hide: this.hide,
-          fade: this.fade,
-        },
+        modifiers,
       ]])
     }
 

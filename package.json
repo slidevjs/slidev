@@ -1,10 +1,10 @@
 {
   "type": "module",
-  "version": "52.13.0",
+  "version": "52.14.2",
   "private": true,
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.30.3",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.12.0"
   },
   "scripts": {
     "build": "pnpm -r --filter=\"./packages/**\" --parallel run build",
@@ -46,6 +46,7 @@
     "@types/resolve": "catalog:types",
     "@types/semver": "catalog:types",
     "@types/yargs": "catalog:types",
+    "@vue/compiler-sfc": "catalog:demo",
     "@vueuse/core": "catalog:frontend",
     "bumpp": "catalog:dev",
     "cypress": "catalog:dev",

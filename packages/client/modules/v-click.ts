@@ -2,15 +2,26 @@ import type { ClicksElement, RawAtValue } from '@slidev/types'
 import type { App, DirectiveBinding } from 'vue'
 import { computed, watchEffect } from 'vue'
 import {
+  CLASS_VCLICK_ANIMATION_PREFIX,
   CLASS_VCLICK_CURRENT,
-  CLASS_VCLICK_FADE,
   CLASS_VCLICK_HIDDEN,
   CLASS_VCLICK_HIDDEN_EXP,
   CLASS_VCLICK_PRIOR,
   CLASS_VCLICK_TARGET,
   injectionClicksContext,
+  injectionFrontmatter,
 } from '../constants'
+import { configs } from '../env'
 import { directiveInject } from '../utils'
+
+function syncAnimationClasses(el: HTMLElement, animations: string[]) {
+  const targetClasses = animations.map(a => `${CLASS_VCLICK_ANIMATION_PREFIX}${a}`)
+  el.classList.forEach((c) => {
+    if (c.startsWith(CLASS_VCLICK_ANIMATION_PREFIX) && !targetClasses.includes(c))
+      el.classList.remove(c)
+  })
+  targetClasses.forEach(c => el.classList.add(c))
+}
 
 export function createVClickDirectives() {
   return {
@@ -38,12 +49,14 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             if (resolved.flagHide) {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, !active)
             }
+
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -70,12 +83,14 @@ export function createVClickDirectives() {
             const prior = active && !current
 
             if (resolved.flagHide) {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
               el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
             }
             else {
-              el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, !active)
+              el.classList.toggle(CLASS_VCLICK_HIDDEN, !active)
             }
+
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -101,8 +116,10 @@ export function createVClickDirectives() {
             const current = resolved.isCurrent.value
             const prior = active && !current
 
-            el.classList.toggle(resolved.flagFade ? CLASS_VCLICK_FADE : CLASS_VCLICK_HIDDEN, active)
+            el.classList.toggle(CLASS_VCLICK_HIDDEN, active)
             el.classList.toggle(CLASS_VCLICK_HIDDEN_EXP, active)
+
+            syncAnimationClasses(el, resolved.flagAnimations.value)
 
             el.classList.toggle(CLASS_VCLICK_CURRENT, current)
             el.classList.toggle(CLASS_VCLICK_PRIOR, prior)
@@ -118,12 +135,27 @@ export const resolvedClickMap = new Map<ClicksElement, ReturnType<typeof resolve
 
 export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, value: RawAtValue, explicitHide = false) {
   const ctx = directiveInject(dir, injectionClicksContext)?.value
+  const frontmatter = directiveInject(dir, injectionFrontmatter)
 
   if (!el || !ctx)
     return null
 
   const flagHide = explicitHide || (dir.modifiers.hide !== false && dir.modifiers.hide != null)
-  const flagFade = dir.modifiers.fade !== false && dir.modifiers.fade != null
+
+  /**
+   * Resolves the animation presets for this element.
+   * Priority: directive modifiers (stacked) > slide frontmatter > global config.
+   * Modifiers allow composition, e.g., v-click.fade.up.scale.
+   */
+  const elModifiers = Object.keys({ ...dir.modifiers }).filter(m => m !== 'hide')
+  const flagAnimations = computed(() => {
+    if (elModifiers.length > 0)
+      return elModifiers
+    const preset = frontmatter?.clickAnimation || configs.clickAnimation
+    if (preset)
+      return preset.split(/[\s,]+/).filter(Boolean)
+    return []
+  })
 
   const info = ctx.calculate(value)
   if (!info)
@@ -145,8 +177,8 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
     ...info,
     isShown,
     visibilityState,
-    flagFade,
     flagHide,
+    flagAnimations,
   }
   resolvedClickMap.set(el, resolved)
   return resolved
