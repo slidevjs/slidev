@@ -1,0 +1,24 @@
+{
+  "name": "@slidev/playground",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Slidev playground - paste markdown and preview slides",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@shikijs/engine-javascript": "catalog:frontend",
+    "@shikijs/markdown-it": "catalog:frontend",
+    "markdown-it": "catalog:prod",
+    "shiki": "catalog:frontend",
+    "vue": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "catalog:prod",
+    "typescript": "catalog:dev",
+    "vite": "catalog:prod"
+  }
+}
