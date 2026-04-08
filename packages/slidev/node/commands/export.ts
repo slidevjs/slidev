@@ -275,26 +275,76 @@ export async function exportSlides({
       // Limit how long we wait for initial container
       await page.waitForSelector('#print-content', { state: 'attached', timeout: Math.min(timeout, 10000) })
 
-      // Wait briefly for page containers to appear and stabilize in count
-      const maxWait = 5000
-      const start = Date.now()
-      let lastCount = -1
-      while (Date.now() - start < maxWait) {
-        const cnt = await page.locator('.page').count()
-        if (cnt > 0 && cnt === lastCount)
-          break
-        lastCount = cnt
-        await page.waitForTimeout(200)
+      // Wait for the handout DOM to settle. This avoids printing during a Vite
+      // dependency optimization reload, which can otherwise produce tiny/blank PDFs.
+      const settleStart = Date.now()
+      let stableChecks = 0
+      let lastSignature = ''
+      while (Date.now() - settleStart < timeout) {
+        const snapshot = await page.evaluate(() => {
+          const pages = document.querySelectorAll('.slidev-handout-page').length
+          const loaders = document.querySelectorAll('.slidev-slide-loading').length
+          const pending = document.querySelectorAll('[data-handout-pagination-ready="false"]').length
+          const readyState = document.readyState
+          const textLength = document.body?.textContent?.trim().length || 0
+          return { pages, loaders, pending, readyState, textLength }
+        })
+
+        const isReady = snapshot.readyState === 'complete'
+          && snapshot.pages > 0
+          && snapshot.loaders === 0
+          && snapshot.pending === 0
+          && snapshot.textLength > 50
+
+        const signature = JSON.stringify(snapshot)
+        if (isReady) {
+          stableChecks = signature === lastSignature ? stableChecks + 1 : 1
+          if (stableChecks >= 4)
+            break
+        }
+        else {
+          stableChecks = 0
+        }
+
+        lastSignature = signature
+        await page.waitForTimeout(500)
       }
 
-      // Do not block on slide loading indicators; hide them if present
-      await page.locator('.slidev-slide-loading').evaluateAll((nodes) => {
-        nodes.forEach((n) => {
-          (n as HTMLElement).style.display = 'none'
-        })
-      }).catch(() => {})
+      if (stableChecks < 4) {
+        const snapshot = await page.evaluate(() => ({
+          pages: document.querySelectorAll('.slidev-handout-page').length,
+          loaders: document.querySelectorAll('.slidev-slide-loading').length,
+          pending: document.querySelectorAll('[data-handout-pagination-ready="false"]').length,
+          readyState: document.readyState,
+          textLength: document.body?.textContent?.trim().length || 0,
+        }))
+        throw new Error(`Handout export aborted: handout DOM did not settle (${JSON.stringify(snapshot)})`)
+      }
+
+      // Check for "data-waitfor" attribute and wait for given element to be loaded
+      const waitForElements = page.locator('#print-content [data-waitfor]')
+      const waitForCount = await waitForElements.count()
+      for (let index = 0; index < waitForCount; index++) {
+        const element = waitForElements.nth(index)
+        const attribute = await element.getAttribute('data-waitfor')
+        if (attribute) {
+          await element.locator(attribute).waitFor({ state: 'visible' }).catch((e) => {
+            console.error(e)
+            process.exitCode = 1
+          })
+        }
+      }
+
+      // Wait for frames to load
+      const frames = page.frames()
+      await Promise.all(frames.map(frame => frame.waitForLoadState().catch(() => {})))
     }
     catch {}
+
+    const remainingLoaders = await page.locator('.slidev-slide-loading').count().catch(() => 0)
+    if (remainingLoaders > 0)
+      throw new Error(`Handout export aborted: ${remainingLoaders} slide preview(s) still loading`)
+
     if (wait)
       await page.waitForTimeout(wait)
     await page.pdf({

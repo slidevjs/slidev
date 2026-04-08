@@ -48,6 +48,7 @@ export interface ResolvedHandoutOptions {
   cssPageSize: string
   margins: HandoutPageMargins
   coverMargins: HandoutPageMargins
+  paginateOverflow: boolean
 }
 
 export interface HandoutPageMargins {

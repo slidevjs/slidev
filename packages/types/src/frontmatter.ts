@@ -541,6 +541,15 @@ export interface HandoutOptions {
    * Margins applied specifically to the optional cover pages.
    */
   coverMargins?: string | Partial<HandoutPageMarginInput>
+  /**
+   * Split overflowing handout notes into additional printed pages.
+   *
+   * Disabled by default to preserve the existing handout export behavior and
+   * avoid the extra client-side pagination work for decks that do not need it.
+   *
+   * @default false
+   */
+  paginateOverflow?: boolean
 }
 
 export interface TransitionOptions {

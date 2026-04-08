@@ -5,9 +5,9 @@ defineProps<{ pageNumber: number }>()
 // container can reserve space and prevent overlaps.
 const year = new Date().getFullYear()
 // Replace these with your flavor system if needed
-const company = 'Slidev'
-const rightText = 'Professional courses for developers'
-const series = 'Engineering Enablement Series'
+const company = 'Slidev Starter'
+const rightText = 'Minimal example for handout footers'
+const series = 'Handout Footer'
 </script>
 
 <template>

@@ -24,8 +24,8 @@ const coverRoot = ref<HTMLElement | null>(null)
 const endingRoot = ref<HTMLElement | null>(null)
 const pageOffset = ref(0)
 const endingPageCount = ref(0)
+const slidePageCount = ref(printRange.value.length)
 
-const slidePageCount = computed(() => printRange.value.length)
 const endingPageDisplayCount = computed(() => includeEnding.value ? endingPageCount.value : 0)
 const endingPageStart = computed(() => pageOffset.value + slidePageCount.value + 1)
 const totalPageCount = computed(() => pageOffset.value + slidePageCount.value + endingPageDisplayCount.value)
@@ -119,15 +119,16 @@ watch(includeEnding, async () => {
 <template>
   <div id="page-root" ref="root" :style="themeVars">
     <!-- Optional cover block(s) when ?cover is present -->
-    <div v-if="includeCover" ref="coverRoot">
+    <div v-if="includeCover" ref="coverRoot" class="slidev-handout-extra-root">
       <HandoutCover />
     </div>
     <PrintContainerHandout
       class="w-full h-full"
       :width="rootWidth || windowSize.width.value"
       :page-offset="pageOffset"
+      @page-count-change="slidePageCount = $event"
     />
-    <div v-if="includeEnding" ref="endingRoot">
+    <div v-if="includeEnding" ref="endingRoot" class="slidev-handout-extra-root">
       <HandoutEnding
         :page-start="endingPageStart"
         :page-count="endingPageDisplayCount"
@@ -156,6 +157,10 @@ html.print #page-root {
   height: auto;
   /* Allow content to extend across multiple printed pages */
   overflow: visible;
+}
+html.print .slidev-handout-extra-root {
+  background: #fff;
+  color: #111827;
 }
 html.print * {
   -webkit-print-color-adjust: exact;

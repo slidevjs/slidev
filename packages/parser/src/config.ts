@@ -307,6 +307,7 @@ export function resolveHandoutOptions(
     cssPageSize,
     margins: normalizeMargins(normalized.margins, DEFAULT_HANDOUT_MARGINS),
     coverMargins: normalizeMargins(normalized.coverMargins, DEFAULT_HANDOUT_COVER_MARGINS),
+    paginateOverflow: normalized.paginateOverflow ?? false,
   }
 }
 
