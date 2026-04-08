@@ -45,24 +45,6 @@ html {
   @apply border-none hover:border-none hover:text-white;
 }
 
-.slidev-vclick-target {
-  @apply transition-opacity duration-100;
-}
-
-.slidev-vclick-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
-.slidev-vclick-display-none {
-  display: none !important;
-}
-
-.slidev-vclick-fade {
-  opacity: 0.5;
-}
-
 .slidev-icon {
   display: inline-block;
   vertical-align: sub;

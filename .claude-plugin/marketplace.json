@@ -1,0 +1,17 @@
+{
+  "name": "slidev-plugins",
+  "owner": {
+    "name": "Anthony Fu",
+    "url": "https://github.com/antfu"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for the Slidev presentation framework"
+  },
+  "plugins": [
+    {
+      "name": "slidev",
+      "source": "./",
+      "description": "Claude Code skill for creating and presenting Slidev slidedecks"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ export const official: AddonInfo[] = [
   },
 ]
 
+// Please add your addon to the end of the list.
 export const community: AddonInfo[] = [
   {
     id: 'slidev-addon-python-runner',
@@ -226,6 +227,17 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/emaarco/slidev-addon-bpmn',
   },
   {
+    id: 'slidev-addon-dmn',
+    name: 'DMN viewer',
+    description: 'Display DMN decision tables and DRD diagrams in your slidev',
+    tags: ['Component'],
+    author: {
+      name: 'emaarco',
+      link: 'https://github.com/emaarco',
+    },
+    repo: 'https://github.com/emaarco/slidev-addon-dmn',
+  },
+  {
     id: 'slidev-addon-p5',
     name: 'Runner for p5js',
     description: 'Display, edit and run p5js sketches in your slidev',
@@ -236,15 +248,33 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/mjvo/slidev-addon-p5',
   },
+  {
+    id: 'slidev-pane',
+    name: 'slidev-pane',
+    description: 'PowerPoint-style pane presenter for Slidev with slide thumbnails, quick navigation, and a zoomable main canvas.',
+    tags: ['Navigation'],
+    author: {
+      name: 'xunz',
+      link: 'https://github.com/xunz3',
+    },
+    repo: 'https://github.com/xunz3/slidev-pane',
+  },
+  {
+    id: 'slidev-agent',
+    name: 'slidev-agent',
+    description: 'Slidev addon and wrapper CLI for LangChain-powered slide authoring.',
+    tags: ['Component', 'Integration'],
+    author: {
+      name: 'Christian Bromann',
+      link: 'https://github.com/christian-bromann',
+    },
+    repo: 'https://github.com/christian-bromann/slidev-agent',
+  },
   // Add yours here!
   {
     id: '',
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/addons.ts',
     name: 'Yours?',
     description: 'Click here to submit your addon :)',
-    tags: [],
-    author: {
-      name: '',
-    },
   },
 ]

@@ -5,11 +5,15 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { slash } from '@antfu/utils'
 import { white, yellow } from 'ansis'
-import { createHead, extractUnheadInputFromHtml, transformHtmlTemplate } from 'unhead/server'
+import { parseHtmlForUnheadExtraction } from 'unhead/parser'
+import { createHead, transformHtmlTemplate } from 'unhead/server'
 import { version } from '../../package.json'
 import { getSlideTitle } from '../commands/shared'
 import { toAtFS } from '../resolver'
 import { generateCoollabsFontsUrl, generateGoogleFontsUrl } from '../utils'
+
+const RE_TRAILING_SLASH = /\/$/
+const RE_BODY_CONTENT = /<body>([\s\S]*?)<\/body>/i
 
 function escapeHtml(str: string): string {
   return str
@@ -31,7 +35,7 @@ function collectPreloadImages(data: Omit<ResolvedSlidevOptions, 'utils'>['data']
 
   const seen = new Set<string>()
   const links: ResolvableLink[] = []
-  const basePrefix = base ? base.replace(/\/$/, '') : ''
+  const basePrefix = base ? base.replace(RE_TRAILING_SLASH, '') : ''
 
   for (const slide of data.slides) {
     const images = slide.images || slide.source?.images
@@ -70,8 +74,8 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
       continue
     }
 
-    inputs.push(extractUnheadInputFromHtml(html).input)
-    body += `\n${(html.match(/<body>([\s\S]*?)<\/body>/i)?.[1] || '').trim()}`
+    inputs.push(parseHtmlForUnheadExtraction(html).input)
+    body += `\n${(html.match(RE_BODY_CONTENT)?.[1] || '').trim()}`
   }
 
   if (data.features.tweet) {

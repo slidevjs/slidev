@@ -5,11 +5,12 @@ import { watchEffect } from 'vue'
 
 const loaded = new Set<string>()
 const loading = new Set<string>()
+const RE_TRAILING_SLASH = /\/$/
 
 function resolveUrl(url: string): string {
   if (url.startsWith('http') || url.startsWith('//'))
     return url
-  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+  const base = (import.meta.env.BASE_URL || '/').replace(RE_TRAILING_SLASH, '')
   return `${base}${url.startsWith('/') ? url : `/${url}`}`
 }
 

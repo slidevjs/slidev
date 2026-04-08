@@ -80,15 +80,21 @@ contextMenu: true
 wakeLock: true
 # take snapshot for each slide in the overview
 overviewSnapshots: false
+# router mode for vue-router, can be "history" or "hash"
+routerMode: history
 
 # force color schema for the slides, can be 'auto', 'light', or 'dark'
 colorSchema: auto
-# router mode for vue-router, can be "history" or "hash"
-routerMode: history
 # aspect ratio for the slides
 aspectRatio: 16/9
 # real width of the canvas, unit in px
 canvasWidth: 980
+# defines the default transition between slides
+# Learn more: https://sli.dev/guide/animations.html#slide-transitions
+transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
 # used for theme customization, will inject root styles as `--slidev-theme-x` for attribute `x`
 themeConfig:
   primary: '#5d8392'
@@ -175,6 +181,9 @@ title: undefined # or string
 # defines the transition between the slide and the next one
 # Learn more: https://sli.dev/guide/animations.html#slide-transitions
 transition: undefined # or BuiltinSlideTransition | string | TransitionGroupProps | null
+# defines the default animation presets for click animations in this slide
+# Learn more: https://sli.dev/guide/animations.html#click-animation-presets
+clickAnimation: undefined # or comma-delimited string
 # custom zoom scale
 # useful for slides with a lot of content
 zoom: 1

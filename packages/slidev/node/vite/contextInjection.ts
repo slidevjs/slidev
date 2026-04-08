@@ -1,6 +1,9 @@
 import type { Plugin } from 'vite'
 import { templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
 
+const RE_EXPORT_DEFAULT_OBJECT = /export\s+default\s+\{/
+const RE_INJECT_OPTION = /.*inject\s*:\s*([[{])/
+
 /**
  * Inject `$slidev` into the script block of a Vue component
  */
@@ -34,7 +37,7 @@ export function createContextInjectionPlugin(): Plugin {
         }
         else if (!setupScriptMatch && matchScripts.length === 1) {
         // not a setup script
-          const matchExport = code.match(/export\s+default\s+\{/)
+          const matchExport = code.match(RE_EXPORT_DEFAULT_OBJECT)
           if (matchExport) {
           // script exports a component
             const exportIndex = (matchExport.index || 0) + matchExport[0].length
@@ -47,7 +50,7 @@ export function createContextInjectionPlugin(): Plugin {
 
             let injectIndex = exportIndex + provideImport.length
             let injectObject = '$slidev: { from: injectionSlidevContext },'
-            const matchInject = component.match(/.*inject\s*:\s*([[{])/)
+            const matchInject = component.match(RE_INJECT_OPTION)
             if (matchInject) {
             // component has a inject option
               injectIndex += (matchInject.index || 0) + matchInject[0].length

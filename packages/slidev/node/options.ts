@@ -12,6 +12,8 @@ import setupIndexHtml from './setups/indexHtml'
 import setupKatex from './setups/katex'
 import setupShiki from './setups/shiki'
 
+const RE_FILE_EXTENSION = /\.\w+$/
+
 const debug = createDebug('slidev:options')
 
 export async function resolveOptions(
@@ -106,7 +108,7 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
             })),
         )
         for (const layoutPath of layoutPaths.flat(1)) {
-          const layoutName = path.basename(layoutPath).replace(/\.\w+$/, '')
+          const layoutName = path.basename(layoutPath).replace(RE_FILE_EXTENSION, '')
           layouts[layoutName] = layoutPath
         }
         return layouts

@@ -4,6 +4,8 @@ import { bold, gray, red, yellow } from 'ansis'
 import { toAtFS } from '../resolver'
 import { regexSlideSourceId, templateImportContextUtils, templateInitContext, templateInjectionMarker } from './common'
 
+const RE_SCRIPT_SETUP_TAG = /^<script setup.*>/m
+
 export function createLayoutWrapperPlugin(
   { data, utils }: ResolvedSlidevOptions,
 ): Plugin {
@@ -33,7 +35,7 @@ export function createLayoutWrapperPlugin(
           layoutName = 'default'
         }
 
-        const setupTag = code.match(/^<script setup.*>/m)
+        const setupTag = code.match(RE_SCRIPT_SETUP_TAG)
         if (!setupTag)
           throw new Error(`[Slidev] Internal error: <script setup> block not found in slide ${index + 1}.`)
 
