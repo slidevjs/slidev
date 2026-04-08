@@ -134,3 +134,163 @@ html {
 .slidev-note ul {
   margin: 0;
 }
+
+/* Handout page layout. Global selectors allow user overrides from custom styles. */
+.slidev-handout-page {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 10mm 12mm 4mm;
+  background: #fff;
+  box-sizing: border-box;
+  break-after: page;
+  page-break-after: always;
+  break-inside: auto;
+  page-break-inside: auto;
+}
+
+.slidev-handout-page--paginated {
+  overflow: hidden;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+
+.slidev-handout-slide-area {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: visible;
+  margin-bottom: 4mm;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+
+.slidev-handout-slide-scale-wrap {
+  transform-origin: top center;
+  margin: 0 auto;
+}
+
+.slidev-handout-slide-scale-wrap .print-slide-container {
+  /* Override print slide defaults to keep slide+notes+footer on the same handout page. */
+  break-after: auto !important;
+  page-break-after: auto !important;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+}
+
+.slidev-handout-notes-area {
+  flex: 1 0 auto;
+  overflow: visible;
+  display: block;
+  padding: 8mm 6mm 12mm;
+}
+
+.slidev-handout-page--paginated .slidev-handout-notes-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.slidev-handout-notes-area--continuation {
+  padding-top: 4mm;
+}
+
+.slidev-handout-notes {
+  width: 100%;
+  margin: 0;
+  max-width: none !important;
+  color: #111827;
+  line-height: 1.55;
+  overflow: visible !important;
+}
+
+.slidev-handout-notes :where(h1, h2, h3, h4, h5, h6, p, li, strong, em, blockquote, th, td) {
+  color: inherit;
+}
+
+.slidev-handout-notes :where(h1, h2, h3, h4, h5, h6) {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.slidev-handout-notes :where(p, ul, ol, blockquote, table) {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.slidev-handout-notes :where(ul, ol) {
+  padding-left: 1.25rem;
+}
+
+.slidev-handout-notes :where(li) {
+  margin: 0 0 0.35rem;
+}
+
+.slidev-handout-footer-area {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 6mm;
+  flex: 0 0 auto;
+  min-height: 14mm;
+  color: #111827;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+
+.slidev-handout-footer-area::before {
+  content: '';
+  position: absolute;
+  left: -12mm;
+  right: -12mm;
+  top: 0;
+  height: 1px;
+  background: #222;
+  opacity: 0.9;
+}
+
+.slidev-handout-footer-bleed {
+  flex: 1 1 auto;
+  position: relative;
+  margin: 0;
+  overflow: visible;
+  padding-top: 2mm;
+}
+
+.slidev-handout-footer-bleed * {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border-top-width: 0 !important;
+}
+
+.slidev-handout-continuation-header {
+  flex: 0 0 auto;
+  padding: 3mm 6mm 0;
+  color: rgba(17, 24, 39, 0.72);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.slidev-handout-pagination-measure {
+  position: fixed;
+  top: 0;
+  left: -200vw;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.slidev-handout-page--measure {
+  break-after: auto !important;
+  page-break-after: auto !important;
+}
+
+.slidev-handout-pagination-status {
+  display: none;
+}

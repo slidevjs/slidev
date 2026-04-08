@@ -189,6 +189,64 @@ Chromium may miss some features like codecs that are required to decode some vid
 $ slidev export --executable-path [path_to_chromium]
 ```
 
+### Handout exports
+
+Use the `--handout` flag to render an A4 (or customised) PDF that places each slide above its speaker notes and a footer area. Slidev writes this PDF alongside your primary export using the suffix `-handout.pdf`:
+
+```bash
+$ slidev export --handout
+```
+
+Handout exports support three optional project-level components:
+
+- `handout-bottom.vue` renders the footer content for each handout page.
+- `handout-cover.vue` renders extra page(s) before the slide handout pages.
+- `handout-ending.vue` renders extra page(s) after the slide handout pages.
+
+Slidev reserves the footer area and divider line by default, but it does **not** provide any built-in footer text or page labels. If `handout-bottom.vue` is missing, the footer area stays empty.
+
+If `handout-cover.vue` and `handout-ending.vue` exist in your project roots, Slidev auto-includes them in handout exports. Any element with the UnoCSS utility `break-after-page` (or a `data-handout-page` attribute) forces an additional printed page, making it easy to create multi-page introductions or wrap-up sections.
+
+A minimal `handout-bottom.vue` can look like this:
+
+```vue
+<script setup lang="ts">
+defineProps<{ pageNumber: number }>()
+</script>
+
+<template>
+  <div class="w-full flex justify-between text-xs">
+    <span>My course</span>
+    <span>Page {{ pageNumber }}</span>
+  </div>
+</template>
+```
+
+Paper size and margins are configurable from the deck headmatter:
+
+```yaml
+---
+handout:
+  size: letter # or A4, Legal, Tabloid …
+  orientation: landscape
+  margins:
+    top: 0.5in
+    bottom: 0.5in
+    left: 0.75in
+    right: 0.75in
+  coverMargins:
+    top: 1cm
+    bottom: 1cm
+    left: 1.5cm
+    right: 1.5cm
+  paginateOverflow: true
+---
+```
+
+The `size` option accepts common international formats (A3, A4, A5) and North American sizes (Letter, Legal, Tabloid, Executive). Provide both `width` and `height` to specify a custom paper size.
+
+By default, handout notes keep the legacy behavior and can continue naturally across printed pages when they are very long. Set `handout.paginateOverflow: true` to opt into DOM-based pagination, which splits overflowing notes into dedicated continuation pages with their own footer area.
+
 ### PDF Outline
 
 > Available since v0.36.10

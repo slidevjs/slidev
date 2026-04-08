@@ -42,6 +42,20 @@ export:
   dark: false
   withClicks: false
   withToc: false
+# handout export presets (paper size, margins, cover margins)
+handout:
+  size: A4
+  orientation: portrait
+  margins:
+    top: 0cm
+    bottom: 0cm
+    left: 0cm
+    right: 0cm
+  coverMargins:
+    top: 1cm
+    bottom: 1cm
+    left: 1.5cm
+    right: 1.5cm
 # enable twoslash, can be boolean, 'dev' or 'build'
 twoslash: true
 # show line numbers in code blocks

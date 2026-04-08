@@ -9,12 +9,14 @@ const props = withDefaults(
     noteHtml?: string
     note?: string
     highlight?: boolean
+    invert?: boolean
     placeholder?: string
     clicksContext?: ClicksContext
     autoScroll?: boolean
   }>(),
   {
     highlight: true,
+    invert: true,
   },
 )
 
@@ -148,21 +150,21 @@ watchEffect(() => {
   <div
     v-if="noteHtml"
     ref="noteDisplay"
-    class="prose dark:prose-invert overflow-auto outline-none slidev-note"
-    :class="[props.class, withClicks ? 'slidev-note-with-clicks' : '']"
+    class="prose overflow-auto outline-none slidev-note"
+    :class="[props.class, props.invert ? 'dark:prose-invert' : '', withClicks ? 'slidev-note-with-clicks' : '']"
     v-html="noteHtml"
   />
   <div
     v-else-if="note"
-    class="prose dark:prose-invert overflow-auto outline-none slidev-note"
-    :class="props.class"
+    class="prose overflow-auto outline-none slidev-note"
+    :class="[props.class, props.invert ? 'dark:prose-invert' : '']"
   >
     <p v-text="note" />
   </div>
   <div
     v-else
-    class="prose dark:prose-invert overflow-auto outline-none opacity-50 italic select-none slidev-note"
-    :class="props.class"
+    class="prose overflow-auto outline-none opacity-50 italic select-none slidev-note"
+    :class="[props.class, props.invert ? 'dark:prose-invert' : '']"
   >
     <p v-text="props.placeholder || 'No notes.'" />
   </div>
