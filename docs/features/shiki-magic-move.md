@@ -59,11 +59,11 @@ const add = () => count += 1
 You can add a title bar to magic move blocks by specifying a filename in the opening fence of each step:
 
 `````md
-````md magic-move
-```js [app.js]
+````md magic-move [app.js]
+```js
 console.log('Step 1')
 ```
-```js [app.js]
+```js
 console.log('Step 2')
 ```
 ````

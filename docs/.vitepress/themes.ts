@@ -4,7 +4,7 @@ export interface ThemeInfo {
   description: string
   previews: string[]
   repo?: string
-  author: {
+  author?: {
     name: string
     link?: string
   }
@@ -665,9 +665,6 @@ export const community: ThemeInfo[] = [
     link: 'https://github.com/slidevjs/slidev/edit/main/docs/.vitepress/themes.ts',
     name: 'Yours?',
     description: 'Click here to submit your theme :)',
-    author: {
-      name: '',
-    },
     previews: [
       '/theme-placeholder.png',
     ],

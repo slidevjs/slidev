@@ -47,12 +47,12 @@ if (props.theme.previews.length > 1 && isClient) {
     </div>
     <div class="mt-2 flex">
       <a
-        v-if="theme.author.link"
+        v-if="theme.author?.link"
         :href="theme.author.link"
         class="text-current text-sm opacity-60 hover:opacity-100"
         target="_blank"
       >{{ theme.author.name }}</a>
-      <div v-else class="text-current text-sm opacity-60 hover:opacity-100">
+      <div v-else-if="theme.author?.name" class="text-current text-sm opacity-60 hover:opacity-100">
         {{ theme.author.name }}
       </div>
       <div class="flex-auto" />
