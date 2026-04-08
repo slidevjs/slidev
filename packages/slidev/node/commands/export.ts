@@ -51,6 +51,8 @@ interface ExportPngResult {
   filename: string
 }
 
+const PDF_EXTENSION_REGEX = /\.pdf$/
+
 export function resolveHandoutPageInclusion(roots: string[]) {
   const includeCover = roots.some(root => existsSync(path.join(root, 'handout-cover.vue')))
   const includeEnding = roots.some(root => existsSync(path.join(root, 'handout-ending.vue')))
@@ -243,7 +245,7 @@ export async function exportSlides({
   if (handout) {
     if (!output.endsWith('.pdf'))
       output = `${output}.pdf`
-    const baseName = output.replace(/\.pdf$/, '')
+    const baseName = output.replace(PDF_EXTENSION_REGEX, '')
     const handoutOut = `${baseName}-handout.pdf`
     // Build query string and auto-include handout extras when corresponding files exist.
     const qs = new URLSearchParams()

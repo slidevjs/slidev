@@ -11,6 +11,9 @@ import { themeVars } from '../../env'
 import PrintContainerHandout from '../../internals/PrintContainerHandout.vue'
 import { windowSize } from '../../state'
 
+const PAGE_BREAK_AFTER_REGEX = /page-break-after\s*:\s*always/i
+const BREAK_AFTER_PAGE_REGEX = /break-after\s*:\s*page/i
+
 const { isPrintMode, printRange } = useNav()
 
 useHandoutPageSetup()
@@ -46,7 +49,7 @@ function detectPageBlocks(el: HTMLElement | null, fallback: number) {
   const candidates = new Set<HTMLElement>(Array.from(el.querySelectorAll<HTMLElement>(selectors.join(','))))
   const inlineBreaks = Array.from(el.querySelectorAll<HTMLElement>('[style]')).filter((node) => {
     const style = node.getAttribute('style') || ''
-    return /page-break-after\s*:\s*always/i.test(style) || /break-after\s*:\s*page/i.test(style)
+    return PAGE_BREAK_AFTER_REGEX.test(style) || BREAK_AFTER_PAGE_REGEX.test(style)
   })
   inlineBreaks.forEach(node => candidates.add(node))
   if (candidates.size > 0)
