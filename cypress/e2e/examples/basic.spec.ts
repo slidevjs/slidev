@@ -257,4 +257,61 @@ context('Basic', () => {
     cy.get('#slideshow .slidev-page-13 .cy-wrapdecorate > ul > .slidev-vclick-target:not(.slidev-vclick-hidden)')
       .should('have.text', 'AEFZ')
   })
+
+  it('click animation presets', () => {
+    goPage(14)
+
+    // Check animation classes are set on mount
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(0).should('have.class', 'slidev-vclick-anim-fade').and('have.class', 'slidev-vclick-anim-up')
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(1).should('have.class', 'slidev-vclick-anim-scale')
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target').eq(2).should('have.class', 'slidev-vclick-anim-none')
+
+    // After clicks, elements become visible
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'fade-up')
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.length', 2)
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-14 .cy-animation-presets .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.length', 3)
+  })
+
+  it('click animation from frontmatter', () => {
+    goPage(15)
+
+    cy.get('#slideshow .slidev-page-15 .cy-animation-frontmatter .slidev-vclick-target')
+      .should('have.class', 'slidev-vclick-anim-fade')
+      .and('have.class', 'slidev-vclick-anim-down')
+
+    cy.rightArrow()
+    cy.get('#slideshow .slidev-page-15 .cy-animation-frontmatter .slidev-vclick-target:not(.slidev-vclick-hidden)')
+      .should('have.text', 'from-frontmatter')
+  })
+
+  it('click animation hierarchy and override', () => {
+    goPage(16)
+
+    const targets = '#slideshow .slidev-page-16 .cy-animation-hierarchy .slidev-vclick-target'
+
+    // custom frontmatter still gets reflected for elements without modifiers
+    cy.get(targets).eq(0).should('have.class', 'slidev-vclick-anim-foo')
+
+    // element modifiers override slide frontmatter preset
+    cy.get(targets).eq(1).should('not.have.class', 'slidev-vclick-anim-foo').and('have.class', 'slidev-vclick-anim-fade').and('have.class', 'slidev-vclick-anim-right')
+
+    // none modifier also overrides slide frontmatter preset
+    cy.get(targets).eq(2).should('not.have.class', 'slidev-vclick-anim-foo').and('have.class', 'slidev-vclick-anim-none').invoke('css', 'transition').should('match', /^none/)
+
+    // another valid modifier should also override invalid frontmatter
+    cy.get(targets).eq(3).should('not.have.class', 'slidev-vclick-anim-foo').and('have.class', 'slidev-vclick-anim-scale')
+
+    // reveal sequence remains functional with mixed presets
+    cy.rightArrow(4)
+    cy.get(`${targets}:not(.slidev-vclick-hidden)`)
+      .should('have.length', 4)
+  })
 })
