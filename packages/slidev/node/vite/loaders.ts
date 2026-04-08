@@ -18,6 +18,8 @@ import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
+const RE_WORD_CHARS_ONLY = /^[\w-]+$/
+
 export function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
@@ -393,7 +395,7 @@ export function createSlidesLoader(
     const keys = Object.keys(notesAutoRuby)
       .sort((b, a) => b.length - a.length)
       // Add word boundaries to the keys when they are simple alphabets or numbers
-      .map(i => /^[\w-]+$/.test(i) ? `\\b${i}\\b` : i)
+      .map(i => RE_WORD_CHARS_ONLY.test(i) ? `\\b${i}\\b` : i)
 
     if (keys.length) {
       const regex = new RegExp(`(${keys.join('|')})`, 'g')

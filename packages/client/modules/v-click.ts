@@ -14,6 +14,8 @@ import {
 import { configs } from '../env'
 import { directiveInject } from '../utils'
 
+const RE_WHITESPACE_OR_COMMA = /[\s,]+/
+
 function syncAnimationClasses(el: HTMLElement, animations: string[]) {
   const targetClasses = animations.map(a => `${CLASS_VCLICK_ANIMATION_PREFIX}${a}`)
   el.classList.forEach((c) => {
@@ -153,7 +155,7 @@ export function resolveClick(el: Element | string, dir: DirectiveBinding<any>, v
       return elModifiers
     const preset = frontmatter?.clickAnimation || configs.clickAnimation
     if (preset)
-      return preset.split(/[\s,]+/).filter(Boolean)
+      return preset.split(RE_WHITESPACE_OR_COMMA).filter(Boolean)
     return []
   })
 

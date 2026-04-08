@@ -51,11 +51,11 @@ export const {
 } = useDevicesList({
   onUpdated() {
     if (currentCamera.value !== 'none') {
-      if (!cameras.value.find(i => i.deviceId === currentCamera.value))
+      if (!cameras.value.some(i => i.deviceId === currentCamera.value))
         currentCamera.value = cameras.value[0]?.deviceId || 'default'
     }
     if (currentMic.value !== 'none') {
-      if (!microphones.value.find(i => i.deviceId === currentMic.value))
+      if (!microphones.value.some(i => i.deviceId === currentMic.value))
         currentMic.value = microphones.value[0]?.deviceId || 'default'
     }
   },

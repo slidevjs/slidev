@@ -86,7 +86,7 @@ export default definePreparserSetup(() => {
         let i = 0
         while (i < lines.length) {
           const l = lines[i]
-          if (l.match(/^@cover:/i)) {
+          if (/^@cover:/i.test(l)) {
             lines.splice(
               i,
               1,
@@ -98,7 +98,7 @@ export default definePreparserSetup(() => {
             )
             continue
           }
-          if (l.match(/^@src:/i)) {
+          if (/^@src:/i.test(l)) {
             lines.splice(
               i,
               1,

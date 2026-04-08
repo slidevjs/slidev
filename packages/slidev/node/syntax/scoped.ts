@@ -1,9 +1,12 @@
 import type MarkdownExit from 'markdown-exit'
 
+const RE_STYLE_TAG_OPEN = /<style\b([^>]*)>/gi
+const RE_SCOPED_ATTR = /\bscoped\b/i
+
 export default function MarkdownItStyleScoped(md: MarkdownExit) {
   const addScoped = (html: string) => {
-    return html.replace(/<style\b([^>]*)>/gi, (match, attrs) => {
-      if (/\bscoped\b/i.test(attrs))
+    return html.replace(RE_STYLE_TAG_OPEN, (match, attrs) => {
+      if (RE_SCOPED_ATTR.test(attrs))
         return match
       return `<style scoped${attrs}>`
     })

@@ -3,6 +3,7 @@ import lz from 'lz-string'
 
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 const RE_MONACO = /^([\w'-]+)?\s*\{(monaco[\w-]*)\}\s*(\{[^}]*\})?(.*)$/
+const RE_DIFF_SEPARATOR = /^\s*~~~\s*\n/m
 
 export default defineCodeblockTransformer(async ({ info, code, options: { data: { config }, mode } }) => {
   const match = info.match(RE_MONACO)
@@ -18,7 +19,7 @@ export default defineCodeblockTransformer(async ({ info, code, options: { data: 
   let encoded
   let diff = ''
   if (monaco === 'monaco-diff') {
-    const [original, modified] = code.split(/^\s*~~~\s*\n/m, 2)
+    const [original, modified] = code.split(RE_DIFF_SEPARATOR, 2)
     encoded = lz.compressToBase64(original)
     diff = modified === undefined ? '' : `diff-lz="${lz.compressToBase64(modified)}"`
   }

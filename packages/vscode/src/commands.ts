@@ -10,6 +10,8 @@ import { findPossibleEntries } from './utils/findPossibleEntries'
 import { getSlidesTitle } from './utils/getSlidesTitle'
 import { usePreviewWebview } from './views/previewWebview'
 
+const RE_DIGITS = /^\d+$/
+
 export function useCommands() {
   useCommand('slidev.enable-extension', () => config.update('force-enabled', true, ConfigurationTarget.Workspace))
   useCommand('slidev.disable-extension', () => config.update('force-enabled', false, ConfigurationTarget.Workspace))
@@ -104,7 +106,7 @@ export function useCommands() {
       prompt: `Slidev Preview Port for ${getSlidesTitle(activeProject.value.data)}`,
       value: config.port.toString(),
       validateInput: (v) => {
-        if (!v.match(/^\d+$/))
+        if (!RE_DIGITS.test(v))
           return 'Port should be a number'
         if (+v < 1024 || +v > 65535)
           return 'Port should be between 1024 and 65535'

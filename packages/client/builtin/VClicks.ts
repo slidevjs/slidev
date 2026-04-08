@@ -11,6 +11,7 @@ import { normalizeSingleAtValue } from '../composables/useClicks'
 import VClickGap from './VClickGap.vue'
 
 const listTags = ['ul', 'ol']
+const RE_WHITESPACE_OR_COMMA = /[\s,]+/
 
 export default defineComponent({
   props: {
@@ -64,7 +65,7 @@ export default defineComponent({
         hide: this.hide,
       }
       if (typeof this.animation === 'string') {
-        this.animation.split(/[\s,]+/).forEach((a) => {
+        this.animation.split(RE_WHITESPACE_OR_COMMA).forEach((a) => {
           if (a)
             modifiers[a] = true
         })
