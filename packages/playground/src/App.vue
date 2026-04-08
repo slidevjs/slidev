@@ -4,11 +4,13 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { defaultContent } from './default-content'
 import { parseMarkdown } from './parser'
 import { renderMarkdown } from './renderer'
+import './styles/transitions.css'
 
 // State
 const markdown = ref('')
 const presenting = ref(false)
 const currentSlide = ref(0)
+const navDirection = ref<'forward' | 'backward'>('forward')
 const dragging = ref(false)
 const splitPercent = ref(50)
 
@@ -43,6 +45,8 @@ const renderedSlides = computed(() =>
   })),
 )
 
+const transitionName = computed(() => navDirection.value === 'forward' ? 'slide-left' : 'slide-right')
+
 // Share URL
 function shareUrl() {
   const compressed = compressToEncodedURIComponent(markdown.value)
@@ -71,13 +75,17 @@ function stopPresenting() {
 }
 
 function nextSlide() {
-  if (currentSlide.value < renderedSlides.value.length - 1)
+  if (currentSlide.value < renderedSlides.value.length - 1) {
+    navDirection.value = 'forward'
     currentSlide.value++
+  }
 }
 
 function prevSlide() {
-  if (currentSlide.value > 0)
+  if (currentSlide.value > 0) {
+    navDirection.value = 'backward'
     currentSlide.value--
+  }
 }
 
 // Keyboard navigation
@@ -157,9 +165,15 @@ onUnmounted(() => {
   <!-- Presentation Mode -->
   <div v-if="presenting" class="present-overlay" @click.self="stopPresenting">
     <div class="present-slide">
-      <div class="slide-content" :class="`layout-${renderedSlides[currentSlide]?.layout}`">
-        <div v-html="renderedSlides[currentSlide]?.html" />
-      </div>
+      <Transition :name="transitionName" mode="out-in">
+        <div
+          :key="currentSlide"
+          class="slide-content"
+          :class="`layout-${renderedSlides[currentSlide]?.layout}`"
+        >
+          <div v-html="renderedSlides[currentSlide]?.html" />
+        </div>
+      </Transition>
     </div>
 
     <div class="present-controls">
@@ -624,6 +638,8 @@ body {
 }
 
 .present-slide {
+  position: relative;
+  overflow: hidden;
   width: 100vw;
   height: 100vh;
   display: flex;
