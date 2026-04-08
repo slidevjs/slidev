@@ -315,6 +315,10 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   magicMoveDuration?: number
   /**
+   * Default click animation for the slides
+   */
+  clickAnimation?: string
+  /**
    * Preload images extracted from slides for faster navigation.
    *
    * - `true` - enable with default look-ahead of 3 slides
@@ -389,6 +393,10 @@ export interface Frontmatter extends TransitionOptions {
    * @default 1
    */
   zoom?: number
+  /**
+   * Default click animation for the slide
+   */
+  clickAnimation?: string
   /**
    * Store the positions of draggable elements
    * Normally you don't need to set this manually
