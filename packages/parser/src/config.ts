@@ -56,6 +56,7 @@ export function getDefaultConfig(): SlidevConfig {
     timer: 'stopwatch',
     magicMoveDuration: 800,
     preloadImages: true,
+    clickAnimation: '',
   }
 }
 

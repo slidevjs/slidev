@@ -1,5 +1,5 @@
 import type { Brush, Options as DrauuOptions, DrawingMode } from 'drauu'
-import { createSharedComposable, toReactive, useLocalStorage } from '@vueuse/core'
+import { createSharedComposable, useLocalStorage } from '@vueuse/core'
 import { createDrauu } from 'drauu'
 import { computed, markRaw, nextTick, reactive, ref, watch } from 'vue'
 import { configs } from '../env'
@@ -22,11 +22,11 @@ export const useDrawings = createSharedComposable(() => {
 
   const drawingEnabled = useLocalStorage('slidev-drawing-enabled', false)
   const drawingPinned = useLocalStorage('slidev-drawing-pinned', false)
-  const brush = toReactive(useLocalStorage<Brush>('slidev-drawing-brush', {
+  const brush = useLocalStorage<Brush>('slidev-drawing-brush', {
     color: brushColors[0],
     size: 4,
     mode: 'stylus',
-  }))
+  })
 
   const isDrawing = ref(false)
   const canUndo = ref(false)
@@ -46,12 +46,12 @@ export const useDrawings = createSharedComposable(() => {
       if (v === 'arrow') {
         // eslint-disable-next-line ts/no-use-before-define
         drauu.mode = 'line'
-        brush.arrowEnd = true
+        brush.value.arrowEnd = true
       }
       else {
         // eslint-disable-next-line ts/no-use-before-define
         drauu.mode = v
-        brush.arrowEnd = false
+        brush.value.arrowEnd = false
       }
     },
   })
@@ -150,7 +150,7 @@ export const useDrawings = createSharedComposable(() => {
       clearDrauu()
     }
     else if (e.code.startsWith('Digit') && noModifier && +e.code[5] <= brushColors.length) {
-      brush.color = brushColors[+e.code[5] - 1]
+      brush.value.color = brushColors[+e.code[5] - 1]
     }
     else {
       handled = false
