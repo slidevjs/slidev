@@ -91,7 +91,7 @@ catalogs:
     monaco-editor: ^0.55.1
   prod:
     '@antfu/ni': ^30.0.0
-    '@comark/markdown-it': ^0.3.2
+    '@comark/markdown-it': ^0.3.3
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@shikijs/twoslash': ^4.0.2
