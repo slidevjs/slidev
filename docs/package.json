@@ -32,6 +32,7 @@
     "@vueuse/core": "catalog:frontend",
     "fast-glob": "catalog:prod",
     "gray-matter": "catalog:prod",
+    "oxc-minify": "catalog:docs",
     "shiki": "catalog:frontend",
     "typeit": "catalog:docs",
     "typescript": "catalog:dev",
