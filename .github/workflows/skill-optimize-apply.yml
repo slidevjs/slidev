@@ -1,0 +1,25 @@
+# Apply Skill Optimization — triggered when a contributor comments /apply-optimize on a PR.
+# Commits the AI-suggested SKILL.md improvements from the review step directly to the branch.
+# Docs: https://github.com/tesslio/skill-review-and-optimize
+name: Apply Skill Optimization
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  apply:
+    if: >
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '/apply-optimize')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: tesslio/skill-review-and-optimize@bff9490027d60847df6494fdac7dccfb3ad82948
+        with:
+          mode: apply
