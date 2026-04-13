@@ -1,7 +1,7 @@
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
 import { relative, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
-import MarkdownIt from 'markdown-it'
+import MarkdownExit from 'markdown-exit'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
@@ -32,7 +32,7 @@ describe('utils', () => {
   })
 
   it('stringify-markdown-tokens', () => {
-    const md = MarkdownIt({ html: true })
+    const md = MarkdownExit({ html: true })
     const stringify = (src: string) => stringifyMarkdownTokens(md.parseInline(src, {}))
 
     expect(stringify('<span style="color:red">Composable</span> Vue')).toBe('Composable Vue')

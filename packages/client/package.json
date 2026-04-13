@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "52.9.1",
+  "version": "52.14.2",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -25,7 +25,7 @@
   },
   "main": "./public.ts",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.12.0"
   },
   "dependencies": {
     "@antfu/utils": "catalog:frontend",
@@ -40,6 +40,8 @@
     "@slidev/types": "workspace:*",
     "@typescript/ata": "catalog:monaco",
     "@unhead/vue": "catalog:frontend",
+    "@unocss/extractor-mdc": "catalog:prod",
+    "@unocss/preset-mini": "catalog:prod",
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "@vueuse/math": "catalog:frontend",
@@ -47,6 +49,7 @@
     "ansis": "catalog:prod",
     "drauu": "catalog:frontend",
     "file-saver": "catalog:frontend",
+    "fix-webm-duration": "catalog:frontend",
     "floating-vue": "catalog:frontend",
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",
@@ -55,7 +58,6 @@
     "monaco-editor": "catalog:monaco",
     "nanotar": "catalog:frontend",
     "pptxgenjs": "catalog:prod",
-    "prettier": "catalog:frontend",
     "recordrtc": "catalog:frontend",
     "shiki": "catalog:frontend",
     "shiki-magic-move": "catalog:frontend",

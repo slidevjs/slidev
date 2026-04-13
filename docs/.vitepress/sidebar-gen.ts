@@ -6,6 +6,9 @@ import graymatter from 'gray-matter'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 
+const RE_HEADING1 = /^#\s+(.*)/m
+const RE_HASH_FRAGMENT = /#.*$/
+
 interface ParsedFile {
   filepath: string
   path: string
@@ -17,7 +20,7 @@ function parseFile(file: string) {
   const filepath = join(root, file)
   const path = file.replace('docs/', '').replace('.md', '')
   const matter = graymatter.read(filepath)
-  const title = matter.data.title || matter.content.match(/^#\s+(.*)/m)?.[1] || path
+  const title = matter.data.title || matter.content.match(RE_HEADING1)?.[1] || path
   return {
     filepath,
     path,
@@ -45,6 +48,14 @@ export async function getSidebarObject() {
   })
     .then(files => files.map(parseFile))
 
+  const parsedCustoms: ParsedFile[] = await fg([
+    'docs/custom/*.md',
+  ], {
+    onlyFiles: true,
+    cwd: root,
+  })
+    .then(files => files.map(parseFile))
+
   parsedFeatures.forEach(({ matter, path }) => {
     const items: DefaultTheme.SidebarItem[] = [
       {
@@ -59,7 +70,7 @@ export async function getSidebarObject() {
     ]
 
     function findParsed(related: string) {
-      related = related.replace(/#.*$/, '')
+      related = related.replace(RE_HASH_FRAGMENT, '')
       const feature = parsedFeatures.find(file => file.path === related)
       if (feature) {
         return {
@@ -74,6 +85,13 @@ export async function getSidebarObject() {
           item: guide,
         }
       }
+      const custom = parsedCustoms.find(file => file.path === related)
+      if (custom) {
+        return {
+          type: 'custom',
+          item: custom,
+        }
+      }
       return undefined
     }
 
@@ -83,13 +101,19 @@ export async function getSidebarObject() {
         if (match?.type === 'features') {
           return [{
             text: `✨ ${match.item.title}`,
-            link: `/${match.item.path}`,
+            link: `/${path}`,
           }]
         }
         if (match?.type === 'guide') {
           return [{
-            text: `📖  ${match.item.title}`,
-            link: `/${match.item.path}`,
+            text: `📖 ${match.item.title}`,
+            link: `/${path}`,
+          }]
+        }
+        if (match?.type === 'custom') {
+          return [{
+            text: `🛠️ ${match.item.title}`,
+            link: `/${path}`,
           }]
         }
         console.warn(`Dependent file not found: ${path}`)

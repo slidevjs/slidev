@@ -18,6 +18,13 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
+const RE_PNPM = /pnpm/
+const RE_YARN = /yarn/
+const RE_VALID_PACKAGE_NAME = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+const RE_WHITESPACE = /\s+/g
+const RE_LEADING_DOT_UNDERSCORE = /^[._]/
+const RE_NON_ALPHANUMERIC = /[^a-z0-9-~]+/g
+
 const renameFiles = {
   _gitignore: '.gitignore',
   _npmrc: '.npmrc',
@@ -94,9 +101,9 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (/pnpm/.test(process.env.npm_execpath || '') || /pnpm/.test(process.env.npm_config_user_agent || ''))
+  const pkgManager = (RE_PNPM.test(process.env.npm_execpath || '') || RE_PNPM.test(process.env.npm_config_user_agent || ''))
     ? 'pnpm'
-    : /yarn/.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
+    : RE_YARN.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -150,7 +157,7 @@ function copy(src, dest) {
 
 async function getValidPackageName(projectName) {
   projectName = path.basename(projectName)
-  const packageNameRegExp = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+  const packageNameRegExp = RE_VALID_PACKAGE_NAME
   if (packageNameRegExp.test(projectName)) {
     return projectName
   }
@@ -158,9 +165,9 @@ async function getValidPackageName(projectName) {
     const suggestedPackageName = projectName
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/^[._]/, '')
-      .replace(/[^a-z0-9-~]+/g, '-')
+      .replace(RE_WHITESPACE, '-')
+      .replace(RE_LEADING_DOT_UNDERSCORE, '')
+      .replace(RE_NON_ALPHANUMERIC, '-')
 
     /**
      * @type {{ inputPackageName: string }}

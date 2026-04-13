@@ -10,10 +10,10 @@ const color = computed(() => {
   if (status.value === 'paused')
     return 'text-blue6 dark:text-blue3'
 
-  if (percentage.value > 80)
-    return 'text-yellow6 dark:text-yellow3'
-  else if (percentage.value > 100)
+  if (percentage.value > 100)
     return 'text-red6 dark:text-red3'
+  else if (percentage.value > 80)
+    return 'text-yellow6 dark:text-yellow3'
   else
     return 'text-green6 dark:text-green3'
 })
@@ -47,7 +47,6 @@ const color = computed(() => {
       <span>{{ timer.m }}</span>
       <span op50>:</span>
       <span>{{ timer.s }}</span>
-      <span class="text-base op50">.{{ timer.ms }}</span>
     </div>
   </div>
 </template>

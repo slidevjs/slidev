@@ -13,6 +13,8 @@ import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { getRoots } from '../resolver'
 
+const RE_CLICKS_PARAM = /clicks=([1-9]\d*)/
+
 export interface ExportOptions {
   total: number
   range?: string
@@ -325,7 +327,7 @@ export async function exportSlides({
   }
 
   function getClicksFromUrl(url: string) {
-    return url.match(/clicks=([1-9]\d*)/)?.[1]
+    return url.match(RE_CLICKS_PARAM)?.[1]
   }
 
   async function genPageWithClicks(

@@ -93,6 +93,18 @@ monaco: false # can also be `dev` or `build` to conditionally enable it
 ---
 ```
 
+## Strict Mode {#strict-mode}
+
+> Available since v0.52.0
+
+By default, Monaco runnable code executes in strict mode (`"use strict"`). You can disable this if your code relies on non-strict mode behavior:
+
+```yaml
+---
+monacoRunUseStrict: false
+---
+```
+
 ## Configure Code Runners
 
 To configure how the Monaco Runner runs the code, or to add support for custom languages, please reference [Configure Code Runners](/custom/config-code-runners).

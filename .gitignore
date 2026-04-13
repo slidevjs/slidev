@@ -8,6 +8,7 @@
 *-export
 *.local
 *.pdf
+.env
 assets/demo
 components.d.ts
 composable-vue-cn
@@ -21,6 +22,9 @@ packages/create-app/template/pages
 packages/create-app/template/slides.md
 packages/create-app/template/snippets
 packages/slidev/README.md
+packages/slidev/skills
 packages/vscode/syntaxes/codeblock-patch.json
 slides-export.md
 *slides-export.pptx
+.agents
+.claude

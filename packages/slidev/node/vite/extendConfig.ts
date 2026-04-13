@@ -7,15 +7,20 @@ import { createResolve } from 'mlly'
 import { mergeConfig } from 'vite'
 import { isInstalledGlobally, resolveImportPath, toAtFS } from '../resolver'
 
+const RE_SLIDEV_CLIENT = /^@slidev\/client$/
+const RE_SLIDEV_CLIENT_SUBPATH = /^@slidev\/client\/(.*)/
+const RE_SLIDEV_VIRTUAL = /^#slidev\/(.*)/
+const RE_MONACO_EDITOR = /\/monaco-editor(?:-core)?\//
+
 const INCLUDE_GLOBAL = [
   '@typescript/ata',
   'file-saver',
   'lz-string',
-  'prettier',
   'recordrtc',
   'typescript',
   'yaml',
   'pptxgenjs',
+  'ansis',
 ]
 
 const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${i}`)
@@ -74,15 +79,15 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
         resolve: {
           alias: [
             {
-              find: /^@slidev\/client$/,
+              find: RE_SLIDEV_CLIENT,
               replacement: `${toAtFS(options.clientRoot)}/index.ts`,
             },
             {
-              find: /^@slidev\/client\/(.*)/,
+              find: RE_SLIDEV_CLIENT_SUBPATH,
               replacement: `${toAtFS(options.clientRoot)}/$1`,
             },
             {
-              find: /^#slidev\/(.*)/,
+              find: RE_SLIDEV_VIRTUAL,
               replacement: '/@slidev/$1',
             },
             {
@@ -146,7 +151,7 @@ export function createConfigPlugin(options: ResolvedSlidevOptions): Plugin {
                   return 'assets/slidev/[name]-[hash].js'
 
                 // Monaco Editor
-                if (chunkInfo.moduleIds.filter(i => i.match(/\/monaco-editor(-core)?\//)).length > chunkInfo.moduleIds.length * 0.6)
+                if (chunkInfo.moduleIds.filter(i => i.match(RE_MONACO_EDITOR)).length > chunkInfo.moduleIds.length * 0.6)
                   return 'assets/monaco/[name]-[hash].js'
 
                 return DEFAULT

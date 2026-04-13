@@ -4,8 +4,8 @@ import { getSlidesTitle } from '../utils/getSlidesTitle'
 export function generateErrorHtml(message: string) {
   const project = activeProject.value
   const info = project
-    ? `Slidev server for <i>${getSlidesTitle(project.data)}</i> ${project.port
-      ? `not found on <code>http://localhost:${project.port}</code>`
+    ? `Slidev server for <i>${getSlidesTitle(project.data)}</i> ${project.port.value
+      ? `not found on <code>http://localhost:${project.port.value}</code>`
       : `not started`
     }.`
     : projects.size
@@ -13,14 +13,14 @@ export function generateErrorHtml(message: string) {
       : `No projects found`
   const errorMessage = message ? `(${message})` : ``
   const instruction = project
-    ? project.port
+    ? project.port.value
       ? `Please check the server status.`
       : `Please start the server first.`
     : projects.size
       ? `Please choose one first.`
       : `Please add one first.`
   const action = project
-    ? project.port
+    ? project.port.value
       ? ``
       : `<button onclick="sendCommand('start-dev')"> Start Dev Server </button>`
     : projects.size

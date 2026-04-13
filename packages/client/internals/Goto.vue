@@ -26,7 +26,7 @@ const fuse = computed(() => new Fuse(slides.value.map(i => i.meta?.slide).filter
 }))
 
 const path = computed(() => text.value.startsWith('/') ? text.value.substring(1) : text.value)
-const result = computed(() => fuse.value.search(path.value).map(result => result.item))
+const result = computed(() => path.value ? fuse.value.search(path.value).map(result => result.item) : [])
 const valid = computed(() => !!result.value.length)
 
 function goTo() {

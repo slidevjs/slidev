@@ -11,6 +11,8 @@ const props = defineProps<{
   resize?: boolean
 }>()
 
+const RE_FRONTMATTER_BLOCK = /^---\n([\s\S]*?)\n---\n/
+
 const { currentSlideNo, openInEditor } = useNav()
 
 const tab = ref<'content' | 'note'>('content')
@@ -37,7 +39,7 @@ async function save() {
   dirty.value = false
 
   let frontmatterRaw: string | undefined
-  const contentOnly = content.value.trim().replace(/^---\n([\s\S]*?)\n---\n/, (_, f) => {
+  const contentOnly = content.value.trim().replace(RE_FRONTMATTER_BLOCK, (_, f) => {
     frontmatterRaw = f
     return ''
   })

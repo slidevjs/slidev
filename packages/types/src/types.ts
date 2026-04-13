@@ -13,6 +13,11 @@ export interface SlideInfoBase {
   note?: string
   title?: string
   level?: number
+  /**
+   * Image URLs extracted from the slide content (frontmatter, markdown, Vue components, CSS).
+   * Populated at parse time to survive build-mode content stripping.
+   */
+  images?: string[]
 }
 
 export interface SourceSlideInfo extends SlideInfoBase {
@@ -36,10 +41,10 @@ export interface SourceSlideInfo extends SlideInfoBase {
    */
   contentRaw: string
   /**
-   * Slides import by this slide.
+   * Slides imported by this slide.
    */
   imports?: SourceSlideInfo[]
-  frontmatterDoc?: YAML.Document
+  frontmatterDoc?: YAML.Document<YAML.Node, true>
   frontmatterStyle?: FrontmatterStyle
 }
 

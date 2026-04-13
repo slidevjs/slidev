@@ -34,6 +34,14 @@ You can change the output directory using `--out`.
 $ slidev build --out my-build-folder
 ```
 
+### Remove speaker notes {#without-notes}
+
+If you are sharing the built slides publicly and don't want to include your speaker notes, run the build with `--without-notes`:
+
+```bash
+$ slidev build --without-notes
+```
+
 ### Multiple Builds {#multiple-builds}
 
 You can build multiple slide decks in one go by passing multiple markdown files as arguments:
@@ -82,12 +90,10 @@ name: Deploy pages
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, master]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -121,6 +127,9 @@ jobs:
           path: dist
 
   deploy:
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -179,6 +188,28 @@ Create `vercel.json` in your project root with the following content:
 :::
 
 Then go to your [Vercel dashboard](https://vercel.com/) and create a new site with the repository.
+
+### Zephyr Cloud {#zephyr-cloud}
+
+To deploy your Slidev deck on [Zephyr Cloud](https://zephyr-cloud.io/), you can add Zephyr support to an existing Slidev project with:
+
+```bash
+npx with-zephyr@latest
+```
+
+This codemod detects your bundler (Slidev uses Vite) and updates your config for Zephyr Cloud.
+
+After setup, run your normal build command, for example:
+
+```bash
+npm run build
+```
+
+When the build runs with Zephyr enabled, your app is deployed and Zephyr Cloud returns a preview URL.
+
+::: info
+Zephyr Cloud is a bit different from most hosting providers: every `build` run triggers a deployment.
+:::
 
 ### Host on Docker {#docker}
 

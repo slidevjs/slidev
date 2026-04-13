@@ -27,7 +27,7 @@ async function create(retries = 10) {
   if (!window.twttr?.widgets?.createTweet) {
     if (retries <= 0)
       return console.error('Failed to load Twitter widget after 10 retries.')
-    setTimeout(() => create(retries - 1), 1000)
+    setTimeout(create, 1000, retries - 1)
     return
   }
   // @ts-expect-error global
