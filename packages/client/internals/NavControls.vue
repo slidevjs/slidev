@@ -8,7 +8,6 @@ import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
 import { activeElement, breakpoints, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showLaserPointer, showPresenterCursor, toggleLaserPointer, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
 import { downloadPDF } from '../utils'
 import IconButton from './IconButton.vue'
-import LaserPointerIcon from './LaserPointerIcon.vue'
 import MenuButton from './MenuButton.vue'
 import Settings from './Settings.vue'
 import SyncControls from './SyncControls.vue'
@@ -68,10 +67,10 @@ if (__SLIDEV_FEATURE_RECORD__)
         <div v-if="isFullscreen" class="i-carbon:minimize" />
         <div v-else class="i-carbon:maximize" />
       </IconButton>
-      <IconButton :class="{ disabled: !hasPrev }" title="Go to previous slide" @click="prev">
+      <IconButton :disabled="!hasPrev" title="Go to previous slide" @click="prev">
         <div class="i-carbon:arrow-left" />
       </IconButton>
-      <IconButton :class="{ disabled: !hasNext }" title="Go to next slide" @click="next">
+      <IconButton :disabled="!hasNext" title="Go to next slide" @click="next">
         <div class="i-carbon:arrow-right" />
       </IconButton>
       <IconButton v-if="!isEmbedded" title="Show slide overview" @click="toggleOverview()">
@@ -82,8 +81,8 @@ if (__SLIDEV_FEATURE_RECORD__)
         :title="isDark ? 'Switch to light mode theme' : 'Switch to dark mode theme'"
         @click="toggleDark()"
       >
-        <carbon-moon v-if="isDark" />
-        <carbon-sun v-else />
+        <div v-if="isDark" class="i-carbon-moon" />
+        <div v-else class="i-carbon-sun" />
       </IconButton>
 
       <VerticalDivider />
@@ -97,23 +96,27 @@ if (__SLIDEV_FEATURE_RECORD__)
         <IconButton
           v-if="isPresenter"
           :title="showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor'"
+          :active="showPresenterCursor"
           @click="togglePresenterCursor()"
         >
-          <ph-cursor-fill v-if="showPresenterCursor" />
-          <ph-cursor-duotone v-else />
+          <div v-if="showPresenterCursor" class="i-ph-cursor-fill" />
+          <div v-else class="i-ph-cursor-duotone" />
         </IconButton>
         <IconButton
-          v-if="isPresenter"
           :title="showLaserPointer ? 'Disable laser pointer' : 'Enable laser pointer'"
-          :class="{ active: showLaserPointer }"
+          :active="showLaserPointer"
           @click="toggleLaserPointer()"
         >
-          <LaserPointerIcon />
+          <div v-if="showLaserPointer" class="i-carbon-magic-wand-filled" />
+          <div v-else class="i-carbon-magic-wand" />
         </IconButton>
-      </template>
-
-      <template v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter) && !isEmbedded">
-        <IconButton class="relative" :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'" @click="drawingEnabled = !drawingEnabled">
+        <IconButton
+          v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter)"
+          class="relative"
+          :title="drawingEnabled ? 'Hide drawing toolbar' : 'Show drawing toolbar'"
+          :active="drawingEnabled"
+          @click="drawingEnabled = !drawingEnabled"
+        >
           <div class="i-carbon:pen" />
           <div
             v-if="drawingEnabled"
@@ -121,17 +124,15 @@ if (__SLIDEV_FEATURE_RECORD__)
             :style="{ background: brush.color }"
           />
         </IconButton>
-        <VerticalDivider />
-      </template>
 
-      <template v-if="!isEmbedded">
+        <VerticalDivider />
+
         <IconButton v-if="isPresenter" title="Play Mode" @click="exitPresenter">
           <div class="i-carbon:presentation-file" />
         </IconButton>
         <IconButton v-if="__SLIDEV_FEATURE_PRESENTER__ && isPresenterAvailable" title="Presenter Mode" @click="enterPresenter">
           <div class="i-carbon:user-speaker" />
         </IconButton>
-
         <IconButton
           v-if="__DEV__ && __SLIDEV_FEATURE_EDITOR__"
           :title="showEditor ? 'Hide editor' : 'Show editor'"
@@ -173,8 +174,8 @@ if (__SLIDEV_FEATURE_RECORD__)
         <SyncControls v-if="__SLIDEV_FEATURE_PRESENTER__" />
 
         <MenuButton>
-          <template #button>
-            <IconButton title="More Options">
+          <template #button="{ value }">
+            <IconButton title="More Options" :active="value">
               <div class="i-carbon:settings-adjust" />
               <div v-if="hasViewerCssFilter" w-2 h-2 bg-primary rounded-full absolute top-0.5 right-0.5 />
             </IconButton>

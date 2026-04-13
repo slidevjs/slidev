@@ -1,11 +1,12 @@
 import { useMouse } from '@vueuse/core'
 import { computed } from 'vue'
+import { mainSlideElement } from '../internals/SlideContainer.vue'
 
 export function useMousePosInSlide() {
   const mouse = useMouse()
 
   return computed(() => {
-    const rect = document.querySelector('#slide-content')?.getBoundingClientRect()
+    const rect = mainSlideElement.value?.getBoundingClientRect()
     if (!rect)
       return undefined
 

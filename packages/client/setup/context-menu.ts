@@ -6,7 +6,6 @@ import setups from '#slidev/setups/context-menu'
 import { computed } from 'vue'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
-import LaserPointerIcon from '../internals/LaserPointerIcon.vue'
 import { fullscreen, showEditor, showLaserPointer, toggleLaserPointer, toggleOverview } from '../state'
 
 // @unocss-include
@@ -82,7 +81,7 @@ export default () => {
         action: () => (drawingEnabled.value = !drawingEnabled.value),
       },
       !isEmbedded.value && {
-        icon: LaserPointerIcon,
+        icon: showLaserPointer.value ? 'i-carbon:magic-wand-filled' : 'i-carbon:magic-wand',
         label: showLaserPointer.value ? 'Disable laser pointer' : 'Enable laser pointer',
         action: toggleLaserPointer,
       },

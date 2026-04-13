@@ -9,11 +9,11 @@ const selfMouse = useMousePosInSlide()
 const { isPresenter } = useNav()
 
 const laserPointer = computed(() => {
-  if (showLaserPointer.value) {
-    return selfMouse.value
-  }
   if (!isPresenter.value && sharedState.cursor?.style === 'laser') {
     return sharedState.cursor
+  }
+  if (showLaserPointer.value) {
+    return selfMouse.value
   }
   return null
 })
