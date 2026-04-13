@@ -2,19 +2,27 @@ import type { MarkdownTransformContext, ResolvedSlidevOptions, SlidevPluginOptio
 import type { Plugin } from 'vite'
 import MagicString from 'magic-string-stack'
 import Markdown from 'unplugin-vue-markdown/vite'
-import { useMarkdownItPlugins } from '../syntax/markdown-it'
-import { getMarkdownTransformers } from '../syntax/transform'
+import setupTransformers from '../setups/transformers'
+import { useMarkdownItPlugins } from '../syntax'
 import { regexSlideSourceId } from './common'
+
+const RE_MD_EXT = /\.md$/
 
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
   const markdownTransformMap = new Map<string, MagicString>()
-  const transformers = await getMarkdownTransformers(options)
+  const extras = await setupTransformers(options.roots)
+  const transformers = [
+    ...extras.pre,
+    ...extras.preCodeblock,
+    ...extras.postCodeblock,
+    ...extras.post,
+  ]
 
   return Markdown({
-    include: [/\.md$/],
+    include: [RE_MD_EXT],
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,
@@ -28,7 +36,7 @@ export async function createMarkdownPlugin(
     },
     ...mdOptions,
     async markdownSetup(md) {
-      await useMarkdownItPlugins(md, options, markdownTransformMap)
+      await useMarkdownItPlugins(md, options, markdownTransformMap, extras.codeblocks)
       await mdOptions?.markdownSetup?.(md)
     },
     transforms: {

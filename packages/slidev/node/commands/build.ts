@@ -14,43 +14,51 @@ export async function build(
   viteConfig: InlineConfig = {},
   args: BuildArgs,
 ) {
-  const indexPath = resolve(options.userRoot, 'index.html')
+  const indexHtmlId = resolve(options.userRoot, 'index.html')
 
-  let originalIndexHTML: string | undefined
-  if (existsSync(indexPath))
-    originalIndexHTML = await fs.readFile(indexPath, 'utf-8')
-
-  await fs.writeFile(indexPath, options.utils.indexHtml, 'utf-8')
   let config: ResolvedConfig = undefined!
 
-  try {
-    const inlineConfig = await resolveViteConfigs(
-      options,
-      {
-        plugins: [
-          {
-            name: 'resolve-config',
-            configResolved(_config) {
-              config = _config
+  const inlineConfig = await resolveViteConfigs(
+    options,
+    {
+      plugins: [
+        {
+          name: 'slidev:build',
+          configResolved(_config) {
+            config = _config
+          },
+          resolveId: {
+            order: 'pre',
+            handler(id) {
+              if (id === indexHtmlId)
+                return id
+              return null
             },
           },
-        ],
-        build: {
-          chunkSizeWarningLimit: 2000,
+          load: {
+            order: 'pre',
+            handler(id) {
+              if (id === indexHtmlId) {
+                return options.utils.indexHtml
+              }
+            },
+          },
         },
-      } satisfies InlineConfig,
-      viteConfig,
-      'build',
-    )
+      ],
+      build: {
+        chunkSizeWarningLimit: 2000,
+        rollupOptions: {
+          input: {
+            index: indexHtmlId,
+          },
+        },
+      },
+    } satisfies InlineConfig,
+    viteConfig,
+    'build',
+  )
 
-    await viteBuild(inlineConfig)
-  }
-  finally {
-    if (originalIndexHTML != null)
-      await fs.writeFile(indexPath, originalIndexHTML, 'utf-8')
-    else
-      await fs.unlink(indexPath)
-  }
+  await viteBuild(inlineConfig)
 
   const outDir = resolve(options.userRoot, config.build.outDir)
 

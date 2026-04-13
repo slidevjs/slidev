@@ -72,7 +72,6 @@ const extMap: Record<string, string> = {
 }
 const ext = extMap[props.lang] ?? props.lang
 
-const outer = ref<HTMLDivElement>()
 const container = ref<HTMLDivElement>()
 
 const contentHeight = ref(0)
@@ -206,7 +205,7 @@ onMounted(async () => {
 
 <template>
   <div class="relative slidev-monaco-container">
-    <div ref="outer" class="relative slidev-monaco-container-inner" :style="{ height }">
+    <div class="relative slidev-monaco-container-inner" :style="{ height }">
       <div ref="container" class="absolute inset-0.5" />
     </div>
     <CodeRunner

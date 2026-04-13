@@ -11,8 +11,8 @@ export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: 
   const visited = new WeakSet()
   const sourceMapConsumers = new WeakMap<MagicString, SourceMapConsumer>()
 
-  function getSourceMapConsumer(id: string) {
-    const s = markdownTransformMap.get(id)
+  function getSourceMapConsumer(id: string | undefined) {
+    const s = id && markdownTransformMap.get(id)
     if (!s)
       return undefined
     let smc = sourceMapConsumers.get(s)
@@ -29,7 +29,7 @@ export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: 
 
   const _parse = md.parse
   md.parse = function (src, env) {
-    const smc = getSourceMapConsumer(env.id)
+    const smc = getSourceMapConsumer(env?.id)
     const toOriginalPos = smc
       ? (line: number) => smc.originalPositionFor({ line: line + 1, column: 0 }).line - 1
       : (line: number) => line

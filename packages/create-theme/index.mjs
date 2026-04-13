@@ -17,6 +17,10 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
+const RE_PNPM = /pnpm/
+const RE_YARN = /yarn/
+const RE_SLIDEV_THEME_PREFIX = /^slidev-theme-/
+
 const renameFiles = {
   _gitignore: '.gitignore',
   _npmrc: '.npmrc',
@@ -72,9 +76,9 @@ async function init() {
 
   prepareTemplate(root, path.join(__dirname, 'template'), packageName)
 
-  const pkgManager = (/pnpm/.test(process.env.npm_execpath) || /pnpm/.test(process.env.npm_config_user_agent))
+  const pkgManager = (RE_PNPM.test(process.env.npm_execpath) || RE_PNPM.test(process.env.npm_config_user_agent))
     ? 'pnpm'
-    : /yarn/.test(process.env.npm_execpath) ? 'yarn' : 'npm'
+    : RE_YARN.test(process.env.npm_execpath) ? 'yarn' : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -142,7 +146,7 @@ function getValidPackageName(projectName) {
 }
 
 function getThemeName(pkgName) {
-  return pkgName.replace(/^slidev-theme-/, '')
+  return pkgName.replace(RE_SLIDEV_THEME_PREFIX, '')
 }
 
 function copyDir(srcDir, destDir) {

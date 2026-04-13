@@ -34,7 +34,7 @@
     @apply text-sm pt-1 uppercase tracking-widest font-500;
   }
 
-  h6:not(.opacity-100) {
+  :where(&) h6 {
     @apply opacity-40;
   }
 

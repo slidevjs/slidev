@@ -13,6 +13,8 @@ import prompts from 'prompts'
 import { resolveGlobal } from 'resolve-global'
 import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
 
+const RE_PATH_SEPARATOR = /[/\\]/
+
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 
 export const isInstalledGlobally: { value?: boolean } = {}
@@ -82,7 +84,7 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
 }
 
 export async function resolveEntry(entryRaw: string) {
-  if (!existsSync(entryRaw) && !entryRaw.endsWith('.md') && !/[/\\]/.test(entryRaw))
+  if (!existsSync(entryRaw) && !entryRaw.endsWith('.md') && !RE_PATH_SEPARATOR.test(entryRaw))
     entryRaw += '.md'
   const entry = resolve(entryRaw)
   if (!existsSync(entry)) {

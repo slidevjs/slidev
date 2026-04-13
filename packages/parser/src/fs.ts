@@ -6,6 +6,11 @@ import { slash } from '@antfu/utils'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
 
+const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
+const RE_BLANK_LINE = /^\s*$/
+const RE_FRONTMATTER_END = /^---$/
+const RE_CRLF = /\r?\n/g
+
 export * from './core'
 
 let preparserExtensionLoader: PreparserExtensionLoader | null = null
@@ -35,11 +40,11 @@ export async function load(
     // #703
     // identify the headmatter, to be able to load preparser extensions
     // (strict parsing based on the parsing code)
-    const lines = markdown.split(/\r?\n/g)
+    const lines = markdown.split(RE_CRLF)
     let hm = ''
-    if (lines[0].match(/^---([^-].*)?$/) && !lines[1]?.match(/^\s*$/)) {
+    if (RE_FRONTMATTER_START.test(lines[0]) && !lines[1]?.match(RE_BLANK_LINE)) {
       let hEnd = 1
-      while (hEnd < lines.length && !lines[hEnd].trimEnd().match(/^---$/))
+      while (hEnd < lines.length && !RE_FRONTMATTER_END.test(lines[hEnd].trimEnd()))
         hEnd++
       hm = lines.slice(1, hEnd).join('\n')
     }

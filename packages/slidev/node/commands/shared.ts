@@ -3,7 +3,7 @@ import type { ConfigEnv, InlineConfig } from 'vite'
 import MarkdownExit from 'markdown-exit'
 import { loadConfigFromFile, mergeConfig } from 'vite'
 import { resolveSourceFiles } from '../resolver'
-import markdownItLink from '../syntax/markdown-it/markdown-it-link'
+import markdownItLink from '../syntax/link'
 import { stringifyMarkdownTokens } from '../utils'
 import { ViteSlidevPlugin } from '../vite'
 
