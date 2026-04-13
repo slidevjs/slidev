@@ -1,0 +1,26 @@
+# Tessl Skill Review & Optimize — runs on PRs that change any SKILL.md.
+# Posts scores and AI-suggested improvements as a single PR comment.
+# Contributors can comment /apply-optimize to commit the suggestions automatically.
+# Docs: https://github.com/tesslio/skill-review-and-optimize
+name: Tessl Skill Review & Optimize
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/SKILL.md"
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tesslio/skill-review-and-optimize@bff9490027d60847df6494fdac7dccfb3ad82948
+        with:
+          optimize: true
+          tessl-token: ${{ secrets.TESSL_API_TOKEN }}
+          # Optional quality gate (off by default):
+          # fail-threshold: 70
