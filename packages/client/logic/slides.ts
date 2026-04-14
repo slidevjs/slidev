@@ -1,6 +1,6 @@
 import type { SlideRoute } from '@slidev/types'
 import { slides } from '#slidev/slides'
-import { computed, watch, watchEffect } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useSlideContext } from '../context'
 
 export { slides }
@@ -28,12 +28,30 @@ export function useIsSlideActive() {
   return computed(() => $page.value === $nav.value.currentSlideNo)
 }
 
-export function onSlideEnter(cb: () => void) {
-  const isActive = useIsSlideActive()
-  watchEffect(() => isActive.value && cb())
+export function useIsMounted() {
+  const ismounted = ref<boolean>(false)
+  onMounted(() => {
+    ismounted.value = true
+  })
+  onUnmounted(() => {
+    ismounted.value = false
+  })
+  return ismounted
 }
 
-export function onSlideLeave(cb: () => void) {
-  const isActive = useIsSlideActive()
-  watch(isActive, () => !isActive.value && cb())
+export function onSlideEnter(cb: (to: number, from: number | undefined) => any) {
+  const ismounted = useIsMounted()
+  const { $page, $nav } = useSlideContext()
+
+  // Note: using watch + immediate rather than watchEffect since the latter could have
+  //   unexpected reloads triggered by references used in `cb`
+  // Note: using `ismounted` to make sure `onSliderEnter` is only called after `onMounted`
+  watch(() => [$nav.value.currentSlideNo, ismounted.value], ([to, mounted], from) =>
+    $page.value === to && mounted && cb(to, from ? from[0] as number : undefined), { immediate: true, flush: 'post' })
+}
+
+export function onSlideLeave(cb: (to: number, from: number | undefined) => any) {
+  const { $page, $nav } = useSlideContext()
+  watch(() => $nav.value.currentSlideNo, (to, from) =>
+    $page.value === from && cb(to, from))
 }
