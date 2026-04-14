@@ -202,8 +202,8 @@ catalogs:
       specifier: ^30.0.0
       version: 30.0.0
     '@comark/markdown-it':
-      specifier: ^0.3.2
-      version: 0.3.2
+      specifier: ^0.3.3
+      version: 0.3.3
     '@hedgedoc/markdown-it-plugins':
       specifier: ^2.1.4
       version: 2.1.4
@@ -900,7 +900,7 @@ importers:
         version: 9.3.0
       '@comark/markdown-it':
         specifier: catalog:prod
-        version: 0.3.2(@types/markdown-it@14.1.2)(markdown-it@14.1.1)
+        version: 0.3.3(@types/markdown-it@14.1.2)(markdown-it@14.1.1)
       '@iconify-json/carbon':
         specifier: catalog:icons
         version: 1.2.20
@@ -1507,8 +1507,8 @@ packages:
   '@clack/prompts@1.2.0':
     resolution: {integrity: sha512-4jmztR9fMqPMjz6H/UZXj0zEmE43ha1euENwkckKKel4XpSfokExPo5AiVStdHSAlHekz4d0CA/r45Ok1E4D3w==}
 
-  '@comark/markdown-it@0.3.2':
-    resolution: {integrity: sha512-h+zwwsqr2zLBajKqdzLiLjhccO8+euTAKiBRLJcJvaMGma4yPCrYfWM0dgO0AFz3gK030cf5I5qBN0a3C3jzpQ==}
+  '@comark/markdown-it@0.3.3':
+    resolution: {integrity: sha512-qG+dbiwPKcaO3kzABw0dxtLqTxHAgqpklLwnu56jiYX3V/0dpVYCTIhXRhKgAo1JasBhcPP+OeHAENziXxGYbg==}
     peerDependencies:
       '@types/markdown-it': '*'
       markdown-it: ^14.0.0
@@ -8192,7 +8192,7 @@ snapshots:
       fast-wrap-ansi: 0.1.6
       sisteransi: 1.0.5
 
-  '@comark/markdown-it@0.3.2(@types/markdown-it@14.1.2)(markdown-it@14.1.1)':
+  '@comark/markdown-it@0.3.3(@types/markdown-it@14.1.2)(markdown-it@14.1.1)':
     dependencies:
       '@types/markdown-it': 14.1.2
       js-yaml: 4.1.1
