@@ -19,9 +19,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /**
+     * @deprecated use `animation` instead
+     */
     fade: {
       type: Boolean,
       default: false,
+    },
+    animation: {
+      type: String,
+      default: undefined,
     },
     wrapText: {
       type: Function as PropType<(text: VNode) => VNode>,
@@ -36,6 +43,7 @@ export default defineComponent({
         at: this.at,
         hide: this.hide,
         fade: this.fade,
+        animation: this.animation,
         handleSpecialElements: false,
       },
       {

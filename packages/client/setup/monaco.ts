@@ -56,12 +56,12 @@ StandaloneServices.initialize({
 })
 
 const setup = createSingletonPromise(async () => {
-  const defaults = monaco.languages.typescript.typescriptDefaults
+  const defaults = monaco.typescript.typescriptDefaults
   defaults.setCompilerOptions({
     ...defaults.getCompilerOptions(),
     strict: true,
-    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-    module: monaco.languages.typescript.ModuleKind.ESNext,
+    moduleResolution: monaco.typescript.ModuleResolutionKind.NodeJs,
+    module: monaco.typescript.ModuleKind.ESNext,
   })
 
   const ata = configs.monacoTypesSource === 'cdn'
@@ -137,7 +137,7 @@ const setup = createSingletonPromise(async () => {
 async function _addFile(raw: () => Promise<{ default: string }>, path: string) {
   const uri = monaco.Uri.file(path)
   const code = (await raw()).default
-  monaco.languages.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
+  monaco.typescript.typescriptDefaults.addExtraLib(code, `file:///${path}`)
   monaco.editor.createModel(code, 'javascript', uri)
 }
 

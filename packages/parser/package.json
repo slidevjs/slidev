@@ -1,6 +1,6 @@
 {
   "name": "@slidev/parser",
-  "version": "52.14.1",
+  "version": "52.14.2",
   "description": "Markdown parser for Slidev",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.12.0"
   },
   "scripts": {
     "build": "tsdown",

@@ -83,7 +83,7 @@ export function useProjects() {
 
   useVscodeContext('slidev:enabled', () => {
     const forceEnabled = config['force-enabled']
-    const enabled = forceEnabled == null ? everHadProjects.value : forceEnabled
+    const enabled = forceEnabled ?? everHadProjects.value
     logger.info(`Slidev ${enabled ? 'enabled' : 'disabled'}.`)
     return enabled
   })

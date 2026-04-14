@@ -1,4 +1,3 @@
-import { slidebars } from '.vitepress/config'
 import UnoCSS from 'unocss/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
@@ -7,7 +6,7 @@ import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 import { groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 import llmstxt from 'vitepress-plugin-llms'
-import config from './.vitepress/config'
+import config, { slidebars } from './.vitepress/config'
 
 const IS_ROOT_ENGLISH_DOC = config.locales?.root.label.includes('English') || false
 

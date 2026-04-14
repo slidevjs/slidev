@@ -10,8 +10,11 @@ for rendering output.
 */
 
 import type { KatexOptions } from 'katex'
+import type { MarkdownExit, RuleBlock, Token } from 'markdown-exit'
 import katex from 'katex'
-import { escapeVueInCode } from '../transform/utils'
+import { escapeVueInCode, normalizeRangeStr } from './utils'
+
+const RE_KATEX_BLOCK_INFO = /^\{([\w*,|-]+)\}\s*(\{[^}]*\})?/
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
@@ -105,7 +108,7 @@ function math_inline(state: any, silent: boolean) {
   return true
 }
 
-function math_block(state: any, start: number, end: number, silent: boolean) {
+const math_block: RuleBlock = function (state, start, end, silent) {
   let firstLine
   let lastLine
   let next
@@ -120,14 +123,17 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
     return false
 
   pos += 2
-  firstLine = state.src.slice(pos, max)
+  firstLine = state.src.slice(pos, max).trim()
 
   if (silent)
     return true
-  if (firstLine.trim().slice(-2) === '$$') {
+
+  let singleLine = false
+  if (firstLine.slice(-2) === '$$') {
     // Single line expression
-    firstLine = firstLine.trim().slice(0, -2)
+    firstLine = firstLine.slice(0, -2).trim()
     found = true
+    singleLine = true
   }
 
   for (next = start; !found;) {
@@ -155,15 +161,22 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 
   const token = state.push('math_block', 'math', 0)
   token.block = true
-  token.content = (firstLine && firstLine.trim() ? `${firstLine}\n` : '')
-    + state.getLines(start + 1, next, state.tShift[start], true)
-    + (lastLine && lastLine.trim() ? lastLine : '')
+
+  if (singleLine) {
+    token.content = firstLine
+  }
+  else {
+    token.info = firstLine
+    token.content = state.getLines(start + 1, next, state.tShift[start], true)
+      + (lastLine && lastLine.trim() ? lastLine : '')
+  }
+
   token.map = [start, state.line]
   token.markup = '$$'
   return true
 }
 
-export default function MarkdownItKatex(md: any, options: KatexOptions) {
+export default function MarkdownItKatex(md: MarkdownExit, options: KatexOptions) {
   // set KaTeX as the renderer for markdown-it-simplemath
   const katexInline = function (latex: string) {
     options.displayMode = false
@@ -195,8 +208,12 @@ export default function MarkdownItKatex(md: any, options: KatexOptions) {
     }
   }
 
-  const blockRenderer = function (tokens: any, idx: number) {
-    return `${katexBlock(tokens[idx].content)}\n`
+  const blockRenderer = function (tokens: Token[], idx: number) {
+    const token = tokens[idx]
+    const [, rangeStr, options] = RE_KATEX_BLOCK_INFO.exec(token.info) || []
+    const ranges = normalizeRangeStr(rangeStr)
+    const optionsProp = options ? `v-bind="${options}"` : ''
+    return `<KaTexBlockWrapper ${optionsProp} :ranges='${JSON.stringify(ranges)}'>${katexBlock(tokens[idx].content)}</KaTexBlockWrapper>\n`
   }
 
   md.inline.ruler.after('escape', 'math_inline', math_inline)

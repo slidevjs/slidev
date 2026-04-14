@@ -2,6 +2,17 @@ import type { FrontmatterStyle, SlidevDetectedFeatures, SlidevMarkdown, SlidevPr
 import { ensurePrefix } from '@antfu/utils'
 import YAML from 'yaml'
 
+const RE_FRONTMATTER = /^---.*\r?\n([\s\S]*?)---/
+const RE_YAML_CODEBLOCK = /^\s*```ya?ml([\s\S]*?)```/
+const RE_DOLLAR_INLINE = /\$.*?\$/
+const RE_DOLLAR_BLOCK = /\$\$/
+const RE_MONACO_BLOCK = /\{monaco.*\}/
+const RE_TWEET_TAG = /<Tweet\b/
+const RE_MERMAID_CODEBLOCK = /^```mermaid/m
+const RE_HEADING = /^(#+) (.*)$/m
+const RE_LEADING_BACKTICKS = /^\s*`+/
+const RE_CRLF = /\r?\n/g
+
 export interface SlidevParserOptions {
   noParseYAML?: boolean
   preserveCR?: boolean
@@ -40,7 +51,7 @@ function matter(code: string, options: SlidevParserOptions) {
   let raw: string | undefined
 
   let content = code
-    .replace(/^---.*\r?\n([\s\S]*?)---/, (_, f) => {
+    .replace(RE_FRONTMATTER, (_, f) => {
       type = 'frontmatter'
       raw = f
       return ''
@@ -48,7 +59,7 @@ function matter(code: string, options: SlidevParserOptions) {
 
   if (type !== 'frontmatter') {
     content = content
-      .replace(/^\s*```ya?ml([\s\S]*?)```/, (_, f) => {
+      .replace(RE_YAML_CODEBLOCK, (_, f) => {
         type = 'yaml'
         raw = f
         return ''
@@ -122,10 +133,10 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
 
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
-    katex: !!code.match(/\$.*?\$/) || !!code.match(/\$\$/),
-    monaco: code.match(/\{monaco.*\}/) ? scanMonacoReferencedMods(code) : false,
-    tweet: !!code.match(/<Tweet\b/),
-    mermaid: !!code.match(/^```mermaid/m),
+    katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
+    monaco: RE_MONACO_BLOCK.test(code) ? scanMonacoReferencedMods(code) : false,
+    tweet: !!code.match(RE_TWEET_TAG),
+    mermaid: !!code.match(RE_MERMAID_CODEBLOCK),
   }
 }
 
@@ -151,7 +162,7 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     title = frontmatter.title || frontmatter.name
   }
   else {
-    const match = content.match(/^(#+) (.*)$/m)
+    const match = content.match(RE_HEADING)
     title = match?.[2]?.trim()
     level = match?.[1]?.length
   }
@@ -182,7 +193,7 @@ export async function parse(
   extensions?: SlidevPreparserExtension[],
   options: SlidevParserOptions = {},
 ): Promise<SlidevMarkdown> {
-  const lines = markdown.split(options.preserveCR ? '\n' : /\r?\n/g)
+  const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
   let start = 0
@@ -251,7 +262,7 @@ export async function parse(
     }
     // skip code block
     else if (line.trimStart().startsWith('```')) {
-      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
         if (lines[j].startsWith(codeBlockLevel))
@@ -278,7 +289,7 @@ export function parseSync(
   filepath: string,
   options: SlidevParserOptions = {},
 ): SlidevMarkdown {
-  const lines = markdown.split(options.preserveCR ? '\n' : /\r?\n/g)
+  const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
   let start = 0
@@ -319,7 +330,7 @@ export function parseSync(
     }
     // skip code block
     else if (line.trimStart().startsWith('```')) {
-      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
       let j = i + 1
       for (; j < lines.length; j++) {
         if (lines[j].startsWith(codeBlockLevel))

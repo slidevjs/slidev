@@ -12,11 +12,11 @@ Browse awesome addons available for Slidev here.
 
 Read more about <LinkInline link="guide/theme-addon#use-addon" /> to use them, and <LinkInline link="guide/write-addon" /> to create your own addon.
 
-## Official Addons
+<!-- ## Official Addons
 
 <ClientOnly>
   <AddonGallery collection="official"/>
-</ClientOnly>
+</ClientOnly> -->
 
 ## Community Addons
 

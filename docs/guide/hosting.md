@@ -90,12 +90,10 @@ name: Deploy pages
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, master]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -129,6 +127,9 @@ jobs:
           path: dist
 
   deploy:
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

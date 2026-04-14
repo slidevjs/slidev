@@ -40,7 +40,7 @@ Start Slidev right in your browser with StackBlitz: [sli.dev/new](https://sli.de
 
 ### Create Locally
 
-> Requires [Node.js](https://nodejs.org) >= 18.0 installed.
+> Requires [Node.js](https://nodejs.org) >= 20.12.0 installed.
 
 Run the following command to create a new Slidev project locally:
 

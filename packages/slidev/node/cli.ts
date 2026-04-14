@@ -22,6 +22,8 @@ import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
 
+const RE_NODE_MODULES_OR_GIT = /node_modules|\.git/
+
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
   'routerMode',
@@ -429,7 +431,7 @@ cli.command(
             path.resolve(dir),
             {
               recursive: true,
-              filter: i => !/node_modules|\.git/.test(path.relative(root, i)),
+              filter: i => !RE_NODE_MODULES_OR_GIT.test(path.relative(root, i)),
             },
           )
 
