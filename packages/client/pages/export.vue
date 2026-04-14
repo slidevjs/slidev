@@ -351,6 +351,10 @@ h2 {
 #export-content {
   --uno: pointer-events-none;
 }
+
+#export-container {
+  --slidev-slide-container-scale: var(--slidev-slide-scale);
+}
 </style>
 
 <style>
