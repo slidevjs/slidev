@@ -92,7 +92,7 @@ async function init() {
   }
 
   const files = fs.readdirSync(templateDir)
-  for (const file of files.filter(f => f !== 'package.json'))
+  for (const file of files.filter(f => f !== 'package.json' && f !== 'README.md'))
     write(file)
 
   const pkg = require(path.join(templateDir, 'package.json'))
@@ -101,9 +101,17 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (RE_PNPM.test(process.env.npm_execpath || '') || RE_PNPM.test(process.env.npm_config_user_agent || ''))
-    ? 'pnpm'
-    : RE_YARN.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
+  const userAgent = process.env.npm_config_user_agent || ''
+  const execPath = process.env.npm_execpath || ''
+  const pkgManager = typeof Deno !== 'undefined'
+    ? 'deno'
+    : typeof Bun !== 'undefined'
+      ? 'bun'
+      : (RE_PNPM.test(execPath) || RE_PNPM.test(userAgent))
+          ? 'pnpm'
+          : RE_YARN.test(execPath) || RE_YARN.test(userAgent)
+            ? 'yarn'
+            : 'npm'
 
   const related = path.relative(cwd, root)
 
@@ -130,19 +138,29 @@ async function init() {
     if (!agent)
       return
 
+    writeReadme(agent)
     await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
     await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
+    writeReadme(pkgManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
       console.log(blue(`  cd ${bold(related)}`))
 
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+    console.log(blue(`  ${pkgManager} install`))
+    console.log(blue(`  ${pkgManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
+  }
+
+  function writeReadme(pm) {
+    const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
+    const readmeContent = readmeTemplate
+      .replace('{{PM_INSTALL}}', `${pm} install`)
+      .replace('{{PM_DEV}}', `${pm} run dev`)
+    write('README.md', readmeContent)
   }
 }
 
