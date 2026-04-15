@@ -29,17 +29,24 @@ const renameFiles = {
 }
 
 function detectPkgManager() {
-  if (typeof Deno !== 'undefined') return 'deno';
-  if (typeof Bun !== 'undefined') return 'bun';
+  if (typeof Deno !== 'undefined')
+    return 'deno'
+  if (typeof Bun !== 'undefined')
+    return 'bun'
 
-  const ua = process.env.npm_config_user_agent || '';
-  if (ua.includes('deno')) return 'deno';
-  if (ua.includes('bun')) return 'bun';
-  if (ua.includes('pnpm')) return 'pnpm';
-  if (ua.includes('yarn')) return 'yarn';
-  if (ua.includes('npm')) return 'npm';
+  const ua = process.env.npm_config_user_agent || ''
+  if (ua.includes('deno'))
+    return 'deno'
+  if (ua.includes('bun'))
+    return 'bun'
+  if (ua.includes('pnpm'))
+    return 'pnpm'
+  if (ua.includes('yarn'))
+    return 'yarn'
+  if (ua.includes('npm'))
+    return 'npm'
 
-  return null;
+  return null
 }
 
 async function init() {
@@ -130,7 +137,6 @@ async function init() {
   let pkgManager = detectPkgManager()
 
   if (yes) {
-
     if (!pkgManager) {
       pkgManager = await prompts({
         name: 'agent',
