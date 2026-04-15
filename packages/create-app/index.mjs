@@ -18,8 +18,6 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
-const RE_PNPM = /pnpm/
-const RE_YARN = /yarn/
 const RE_VALID_PACKAGE_NAME = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 const RE_WHITESPACE = /\s+/g
 const RE_LEADING_DOT_UNDERSCORE = /^[._]/
@@ -28,6 +26,20 @@ const RE_NON_ALPHANUMERIC = /[^a-z0-9-~]+/g
 const renameFiles = {
   _gitignore: '.gitignore',
   _npmrc: '.npmrc',
+}
+
+function detectPkgManager() {
+  if (typeof Deno !== 'undefined') return 'deno';
+  if (typeof Bun !== 'undefined') return 'bun';
+
+  const ua = process.env.npm_config_user_agent || '';
+  if (ua.includes('deno')) return 'deno';
+  if (ua.includes('bun')) return 'bun';
+  if (ua.includes('pnpm')) return 'pnpm';
+  if (ua.includes('yarn')) return 'yarn';
+  if (ua.includes('npm')) return 'npm';
+
+  return null;
 }
 
 async function init() {
@@ -101,10 +113,6 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (RE_PNPM.test(process.env.npm_execpath || '') || RE_PNPM.test(process.env.npm_config_user_agent || ''))
-    ? 'pnpm'
-    : RE_YARN.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
-
   const related = path.relative(cwd, root)
 
   console.log(green('  Done.\n'))
@@ -119,27 +127,32 @@ async function init() {
     message: 'Install and start it now?',
   })
 
-  if (yes) {
-    const { agent } = await prompts({
-      name: 'agent',
-      type: 'select',
-      message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    })
+  let pkgManager = detectPkgManager()
 
-    if (!agent)
+  if (yes) {
+
+    if (!pkgManager) {
+      pkgManager = await prompts({
+        name: 'agent',
+        type: 'select',
+        message: 'Choose the package manager',
+        choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
+      })
+    }
+
+    if (!pkgManager)
       return
 
-    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
-    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(pkgManager, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(pkgManager, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
       console.log(blue(`  cd ${bold(related)}`))
 
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+    console.log(blue(`  ${pkgManager} install`))
+    console.log(blue(`  ${pkgManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
