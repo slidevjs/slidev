@@ -47,6 +47,6 @@ export function onSlideLeave(cb: (to: number, from: number | undefined) => any) 
     watch(() => $nav.value.currentSlideNo, (to, from) => {
       if ($page.value === from)
         cb(to, from)
-    }, { immediate: true })
+    })
   })
 }
