@@ -105,6 +105,7 @@ export function getBodyJson(req: Connect.IncomingMessage) {
 }
 
 export function makeAbsoluteImportGlob(
+  mode: string,
   userRoot: string,
   globs: string[],
   options: Partial<GeneralImportGlobOptions> = {},
@@ -114,7 +115,7 @@ export function makeAbsoluteImportGlob(
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,
-    base: '/',
+    base: mode === 'build' ? userRoot : '/',
     ...options,
   }
   return `import.meta.glob(${JSON.stringify(relativeGlobs)}, ${JSON.stringify(opts)})`
