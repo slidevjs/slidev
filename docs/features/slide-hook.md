@@ -15,11 +15,11 @@ import { onSlideEnter, onSlideLeave, useIsSlideActive } from '@slidev/client'
 
 const isActive = useIsSlideActive()
 
-onSlideEnter(() => {
+onSlideEnter((to, from) => {
   /* Called whenever the slide becomes active */
 })
 
-onSlideLeave(() => {
+onSlideLeave((to, from) => {
   /* Called whenever the slide becomes inactive */
 })
 ```
