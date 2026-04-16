@@ -82,7 +82,6 @@ export function create({
           sendError: noop,
           sendTrack: noop,
         },
-        // @ts-expect-error https://github.com/redhat-developer/yaml-language-server/pull/910
         clientCapabilities: context.env?.clientCapabilities,
         workspaceContext: getWorkspaceContextService(context),
       })

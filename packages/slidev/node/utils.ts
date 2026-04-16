@@ -1,12 +1,17 @@
 import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
-import type MarkdownIt from 'markdown-it'
+import type MarkdownExit from 'markdown-exit'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
 import { relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
 
-type Token = ReturnType<MarkdownIt['parseInline']>[number]
+const RE_WHITESPACE_ONLY = /^\s*$/
+const RE_QUOTED_STRING = /^(['"])(.*)\1$/
+const RE_WHITESPACE = /\s+/g
+
+type Token = ReturnType<MarkdownExit['parseInline']>[number]
 
 type Jiti = ReturnType<typeof createJiti>
 let jiti: Jiti | undefined
@@ -20,7 +25,7 @@ export function loadModule<T = unknown>(absolutePath: string): Promise<T> {
 
 export function stringifyMarkdownTokens(tokens: Token[]) {
   return tokens.map(token => token.children
-    ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(/^\s*$/))
+    ?.filter(t => ['text', 'code_inline'].includes(t.type) && !t.content.match(RE_WHITESPACE_ONLY))
     .map(t => t.content.trim())
     .join(' '))
     .filter(Boolean)
@@ -33,7 +38,7 @@ export function generateFontParams(options: ResolvedFontOptions) {
     .sort()
     .join(';')
   const fontParams = options.webfonts
-    .map(i => `family=${i.replace(/^(['"])(.*)\1$/, '$1').replace(/\s+/g, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
+    .map(i => `family=${i.replace(RE_QUOTED_STRING, '$1').replace(RE_WHITESPACE, '+')}:${options.italic ? 'ital,' : ''}wght@${weights}`)
     .join('&')
   return fontParams
 }
@@ -105,7 +110,7 @@ export function makeAbsoluteImportGlob(
   options: Partial<GeneralImportGlobOptions> = {},
 ) {
   // Vite's import.meta.glob only supports relative paths
-  const relativeGlobs = globs.map(glob => `./${relative(userRoot, glob)}`)
+  const relativeGlobs = globs.map(glob => `./${slash(relative(userRoot, glob))}`)
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,

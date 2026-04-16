@@ -22,6 +22,8 @@ import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
 
+const RE_NODE_MODULES_OR_GIT = /node_modules|\.git/
+
 const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'monaco',
   'routerMode',
@@ -271,6 +273,8 @@ cli.command(
     ]
 
     function bindShortcut() {
+      if (!process.stdin.isTTY)
+        return
       process.stdin.resume()
       process.stdin.setEncoding('utf8')
       readline.emitKeypressEvents(process.stdin)
@@ -295,9 +299,6 @@ cli.command(
       }
 
       process.stdin.on('keypress', onKeyPress)
-      server?.httpServer?.on('close', () => {
-        process.stdin.off('keypress', onKeyPress)
-      })
     }
 
     const { roots } = await initServer()
@@ -347,6 +348,10 @@ cli.command(
       type: 'boolean',
       describe: 'allow download as PDF',
     })
+    .option('without-notes', {
+      type: 'boolean',
+      describe: 'exclude speaker notes from the built output',
+    })
     .option('inspect', {
       default: false,
       type: 'boolean',
@@ -355,11 +360,11 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base }, 'build')
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes }, 'build')
 
       printInfo(options)
       await build(
@@ -426,7 +431,7 @@ cli.command(
             path.resolve(dir),
             {
               recursive: true,
-              filter: i => !/node_modules|\.git/.test(path.relative(root, i)),
+              filter: i => !RE_NODE_MODULES_OR_GIT.test(path.relative(root, i)),
             },
           )
 
@@ -455,7 +460,7 @@ cli.command(
   async (args) => {
     const { entry, theme } = args
     const { exportSlides, getExportOptions } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     let warned = false
     for (const entryFile of entry as unknown as string) {
@@ -470,21 +475,27 @@ cli.command(
         )
       }
 
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
-      printInfo(options)
-      const result = await exportSlides({
-        port,
-        ...getExportOptions({ ...args, entry: entryFile }, options),
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-      server.close()
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
+        printInfo(options)
+        const result = await exportSlides({
+          port,
+          ...getExportOptions({ ...args, entry: entryFile }, options),
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -523,30 +534,35 @@ cli.command(
     wait,
   }) => {
     const { exportNotes } = await import('./commands/export')
-    const port = await getPort(12445)
+    const candidatePort = await getPort(12445)
 
     for (const entryFile of entry as unknown as string[]) {
       const options = await resolveOptions({ entry: entryFile }, 'export')
-      const server = await createServer(
-        options,
-        {
-          server: { port },
-          clearScreen: false,
-        },
-      )
-      await server.listen(port)
+      let server: ViteDevServer | undefined
+      try {
+        server = await createServer(
+          options,
+          {
+            server: { port: candidatePort },
+            clearScreen: false,
+          },
+        )
+        await server.listen(candidatePort)
+        const port = getViteServerPort(server)
 
-      printInfo(options)
+        printInfo(options)
 
-      const result = await exportNotes({
-        port,
-        output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
-        timeout,
-        wait,
-      })
-      console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
-
-      server.close()
+        const result = await exportNotes({
+          port,
+          output: output || (options.data.config.exportFilename ? `${options.data.config.exportFilename}-notes` : `${path.basename(entryFile, '.md')}-export-notes`),
+          timeout,
+          wait,
+        })
+        console.log(`${green('  ✓ ')}${dim('exported to ')}${result}\n`)
+      }
+      finally {
+        await server?.close()
+      }
     }
 
     process.exit(0)
@@ -556,6 +572,13 @@ cli.command(
 cli
   .help()
   .parse()
+
+function getViteServerPort(server: ViteDevServer): number {
+  const address = server.httpServer?.address()
+  if (address && typeof address === 'object')
+    return address.port
+  throw new Error('Failed to get Vite server port')
+}
 
 function commonOptions(args: Argv<object>) {
   return args

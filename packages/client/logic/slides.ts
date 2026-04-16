@@ -1,7 +1,6 @@
 import type { SlideRoute } from '@slidev/types'
 import { slides } from '#slidev/slides'
 import { computed, watch, watchEffect } from 'vue'
-import { useNav } from '../composables/useNav'
 import { useSlideContext } from '../context'
 
 export { slides }
@@ -25,9 +24,9 @@ export function getSlidePath(
 }
 
 export function useIsSlideActive() {
-  const { $page } = useSlideContext()
-  const { currentSlideNo } = useNav()
-  return computed(() => $page.value === currentSlideNo.value)
+  const { $page, $nav } = useSlideContext()
+  // Use `$nav.value.currentSlideNo` rather than `useNav().currentSlideNo` to make it work in print/export mode. See https://github.com/slidevjs/slidev/issues/2310.
+  return computed(() => $page.value === $nav.value.currentSlideNo)
 }
 
 export function onSlideEnter(cb: () => void) {

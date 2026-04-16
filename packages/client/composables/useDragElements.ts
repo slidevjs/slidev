@@ -11,6 +11,9 @@ import { useNav } from './useNav'
 import { useSlideBounds } from './useSlideBounds'
 import { useDynamicSlideInfo } from './useSlideInfo'
 
+const RE_NEWLINE = /\r?\n/g
+const RE_POS_ATTR = /pos=".*?"/
+
 export type DragElementDataSource = 'frontmatter' | 'prop' | 'directive'
 /**
  * Markdown source position, injected by markdown-it plugin
@@ -63,7 +66,7 @@ export function useDragElementsUpdater(no: number) {
         throw new Error(`[Slidev] VDrag Element ${id} is missing markdown source`)
 
       const [startLine, endLine, idx] = markdownSource
-      const lines = info.value.content.split(/\r?\n/g)
+      const lines = info.value.content.split(RE_NEWLINE)
 
       let section = lines.slice(startLine, endLine).join('\n')
       let replaced = false
@@ -73,7 +76,7 @@ export function useDragElementsUpdater(no: number) {
         ? section.replace(/<(v-?drag-?\w*)(.*?)(\/)?>/gi, (full, tag, attrs, selfClose = '', index) => {
             if (index === idx) {
               replaced = true
-              const posMatch = attrs.match(/pos=".*?"/)
+              const posMatch = attrs.match(RE_POS_ATTR)
               if (!posMatch)
                 return `<${tag}${ensureSuffix(' ', attrs)}pos="${posStr}"${selfClose}>`
               const start = posMatch.index

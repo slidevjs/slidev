@@ -80,7 +80,7 @@ export default function setupRoot() {
     patch('lastUpdate', {
       id,
       type: syncType.value,
-      time: new Date().getTime(),
+      time: Date.now(),
     })
   }
   const router = useRouter()

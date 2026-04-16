@@ -15,6 +15,9 @@ export default antfu({
       ],
     },
   },
+  ignores: [
+    'skills/**/*.md',
+  ],
 })
   .removeRules(
     'vue/no-v-text-v-html-on-component',
@@ -30,3 +33,4 @@ export default antfu({
       'packages/vscode/package.json',
     ],
   })
+  .remove('antfu/markdown/rules')

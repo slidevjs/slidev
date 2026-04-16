@@ -1,13 +1,13 @@
 {
   "type": "module",
-  "version": "52.9.1",
+  "version": "52.14.2",
   "private": true,
-  "packageManager": "pnpm@10.21.0",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.12.0"
   },
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** --parallel run build",
+    "build": "pnpm -r --filter=\"./packages/**\" --parallel run build",
     "ci:publish": "zx scripts/publish.mjs",
     "cy": "cypress open",
     "cy:fixture": "pnpm -C cypress/fixtures/basic run dev",
@@ -17,12 +17,12 @@
     "demo:dev": "pnpm -C demo/starter run dev",
     "vscode:dev": "pnpm -C packages/vscode run dev",
     "play": "pnpm demo:dev",
-    "dev": "pnpm -r --filter=./packages/** --parallel run dev",
+    "dev": "pnpm -r --filter=\"./packages/**\" --parallel run dev",
     "lint": "eslint . --cache",
     "lint:fix": "nr lint --fix",
     "typecheck": "vue-tsc --noEmit",
     "docs": "pnpm -C docs run dev",
-    "docs:build": "pnpm run --filter {./docs}... build && pnpm demo:build",
+    "docs:build": "pnpm run --filter=\"./docs...\" build && pnpm demo:build",
     "release": "bumpp package.json packages/*/package.json docs/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test",
     "prepare": "simple-git-hooks"
@@ -40,13 +40,13 @@
     "@types/file-saver": "catalog:types",
     "@types/js-yaml": "catalog:types",
     "@types/katex": "catalog:types",
-    "@types/markdown-it": "catalog:types",
     "@types/node": "catalog:types",
     "@types/prompts": "catalog:types",
     "@types/recordrtc": "catalog:types",
     "@types/resolve": "catalog:types",
     "@types/semver": "catalog:types",
     "@types/yargs": "catalog:types",
+    "@vue/compiler-sfc": "catalog:demo",
     "@vueuse/core": "catalog:frontend",
     "bumpp": "catalog:dev",
     "cypress": "catalog:dev",
@@ -72,7 +72,11 @@
     "zx": "catalog:dev"
   },
   "resolutions": {
+    "chokidar": "catalog:prod",
+    "semver": "catalog:dev",
     "typescript": "catalog:dev",
+    "undici": "catalog:dev",
+    "undici-types": "catalog:dev",
     "vite": "catalog:prod"
   },
   "simple-git-hooks": {

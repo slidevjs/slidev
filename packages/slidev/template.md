@@ -14,7 +14,7 @@ info: |
   Learn more at [Sli.dev](https://sli.dev)
 transition: slide-left
 title: Welcome to Slidev
-mdc: true
+comark: true
 ---
 
 # Welcome to Slidev

@@ -177,3 +177,36 @@ Left
   <li>step j</li>
 </wrap-in-component-in-clicks>
 </div>
+
+---
+
+# Page 14
+
+<div class="cy-animation-presets">
+  <div v-click.fade.up>fade-up</div>
+  <div v-click.scale>scale</div>
+  <div v-click.none>none</div>
+</div>
+
+---
+clickAnimation: fade down
+---
+
+# Page 15
+
+<div class="cy-animation-frontmatter">
+  <div v-click>from-frontmatter</div>
+</div>
+
+---
+clickAnimation: foo
+---
+
+# Page 16
+
+<div class="cy-animation-hierarchy">
+  <div v-click>frontmatter-invalid-foo</div>
+  <div v-click.fade.right>modifier-overrides-frontmatter</div>
+  <div v-click.none>modifier-none-overrides-frontmatter</div>
+  <div v-click.scale>modifier-scale-overrides-frontmatter</div>
+</div>
