@@ -20,9 +20,8 @@ export function getSlidePath(
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  const basePath = import.meta.env.BASE_URL.replace(/\/$/, '') ?? ''
-  const path = exporting ? `/export/${no}` : presenter ? `/presenter/${no}` : `/${no}`
-  return `${basePath}${path}`
+  const path = exporting ? `export/${no}` : presenter ? `presenter/${no}` : `${no}`
+  return `${import.meta.env.BASE_URL}${path}`
 }
 
 export function useIsSlideActive() {
