@@ -3,13 +3,15 @@ import { join } from 'node:path'
 import { resolveImportUrl } from '../resolver'
 import { makeAbsoluteImportGlob } from '../utils'
 
+const id = '/@slidev/conditional-styles'
+
 export const templateConditionalStyles: VirtualModuleTemplate = {
-  id: '/@slidev/conditional-styles',
-  async getContent({ data, userRoot, roots }) {
+  id,
+  async getContent({ data, roots }) {
     const imports: string[] = []
 
     for (const root of roots) {
-      imports.push(makeAbsoluteImportGlob(userRoot, [
+      imports.push(makeAbsoluteImportGlob(id, [
         join(root, 'styles/index.{ts,js,css}'),
         join(root, 'styles.{ts,js,css}'),
         join(root, 'style.{ts,js,css}'),

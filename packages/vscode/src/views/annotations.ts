@@ -8,6 +8,10 @@ import { config } from '../configs'
 import { activeProject } from '../projects'
 import { toRelativePath } from '../utils/toRelativePath'
 
+const RE_NEWLINE = /\r?\n/
+const RE_LEADING_BACKTICKS = /^\s*`+/
+const RE_FRONTMATTER_BLOCK = /^---[\s\S]*?\n---/
+
 const frontmatterBgOptions = {
   isWholeLine: true,
   backgroundColor: '#8881',
@@ -53,7 +57,7 @@ interface CodeBlockInfo {
 }
 
 function findCodeBlocks(docText: string): CodeBlockInfo[] {
-  const lines = docText.split(/\r?\n/)
+  const lines = docText.split(RE_NEWLINE)
   const codeBlocks: CodeBlockInfo[] = []
 
   for (let i = 0; i < lines.length; i++) {
@@ -62,7 +66,7 @@ function findCodeBlocks(docText: string): CodeBlockInfo[] {
 
     if (trimmedLine.startsWith('```')) {
       const indent = line.length - trimmedLine.length
-      const codeBlockLevel = line.match(/^\s*`+/)![0]
+      const codeBlockLevel = line.match(RE_LEADING_BACKTICKS)![0]
       const backtickCount = codeBlockLevel.trim().length
       const startLine = i
 
@@ -202,7 +206,7 @@ export const useAnnotations = defineService(() => {
 
         if (slide.frontmatterRaw != null) {
           const range = docText.slice(doc.offsetAt(start))
-          const match = range.match(/^---[\s\S]*?\n---/)
+          const match = range.match(RE_FRONTMATTER_BLOCK)
           if (match && match.index != null) {
             const endLine = doc.positionAt(doc.offsetAt(start) + match.index + match[0].length).line
             frontmatterContentRanges.push({

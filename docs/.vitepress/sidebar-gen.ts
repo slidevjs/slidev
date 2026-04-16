@@ -6,6 +6,9 @@ import graymatter from 'gray-matter'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 
+const RE_HEADING1 = /^#\s+(.*)/m
+const RE_HASH_FRAGMENT = /#.*$/
+
 interface ParsedFile {
   filepath: string
   path: string
@@ -17,7 +20,7 @@ function parseFile(file: string) {
   const filepath = join(root, file)
   const path = file.replace('docs/', '').replace('.md', '')
   const matter = graymatter.read(filepath)
-  const title = matter.data.title || matter.content.match(/^#\s+(.*)/m)?.[1] || path
+  const title = matter.data.title || matter.content.match(RE_HEADING1)?.[1] || path
   return {
     filepath,
     path,
@@ -67,7 +70,7 @@ export async function getSidebarObject() {
     ]
 
     function findParsed(related: string) {
-      related = related.replace(/#.*$/, '')
+      related = related.replace(RE_HASH_FRAGMENT, '')
       const feature = parsedFeatures.find(file => file.path === related)
       if (feature) {
         return {

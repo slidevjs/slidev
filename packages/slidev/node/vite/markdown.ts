@@ -6,6 +6,8 @@ import setupTransformers from '../setups/transformers'
 import { useMarkdownItPlugins } from '../syntax'
 import { regexSlideSourceId } from './common'
 
+const RE_MD_EXT = /\.md$/
+
 export async function createMarkdownPlugin(
   options: ResolvedSlidevOptions,
   { markdown: mdOptions }: SlidevPluginOptions,
@@ -20,7 +22,7 @@ export async function createMarkdownPlugin(
   ]
 
   return Markdown({
-    include: [/\.md$/],
+    include: [RE_MD_EXT],
     wrapperClasses: '',
     headEnabled: false,
     frontmatter: false,

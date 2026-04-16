@@ -13,6 +13,7 @@ import './code.css'
 import './katex.css'
 import './transitions.css'
 import './shiki-twoslash.css'
+import './vclick.css'
 
 import '#slidev/conditional-styles'
 

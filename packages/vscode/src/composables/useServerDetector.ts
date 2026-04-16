@@ -8,6 +8,7 @@ import { logger } from '../views/logger'
 
 const versionRE = /<meta (?:name|property)="slidev:version" content="([^"]+)">/
 const entryRE = /<meta (?:property|charset)="slidev:entry" content="([^"]+)">/
+const RE_SLIDEV = /slidev/i
 
 export interface DetectedServerState {
   port: number
@@ -39,7 +40,7 @@ export const useServerDetector = defineService(() => {
     async function pingUrl(url: string) {
       try {
         const text = await (await fetch(url)).text()
-        if (!text.match(/slidev/i))
+        if (!RE_SLIDEV.test(text))
           return false
         // Use semver to compare in the future
         state.compatMode = !text.match(versionRE)

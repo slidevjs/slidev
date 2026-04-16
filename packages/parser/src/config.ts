@@ -2,6 +2,9 @@ import type { DrawingsOptions, FontOptions, ResolvedDrawingsOptions, ResolvedExp
 import { toArray, uniq } from '@antfu/utils'
 import { parseAspectRatio } from './utils'
 
+const RE_QUOTED_STRING = /^(['"]).*\1$/
+const RE_FILENAME_STEM = /([^\\/]+?)(?:\.\w+)?$/
+
 export function getDefaultConfig(): SlidevConfig {
   return {
     theme: 'default',
@@ -53,6 +56,7 @@ export function getDefaultConfig(): SlidevConfig {
     timer: 'stopwatch',
     magicMoveDuration: 800,
     preloadImages: true,
+    clickAnimation: '',
   }
 }
 
@@ -161,7 +165,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
       : []
 
   function toQuoted(font: string) {
-    if (/^(['"]).*\1$/.test(font))
+    if (RE_QUOTED_STRING.test(font))
       return font
     return `"${font}"`
   }
@@ -229,7 +233,7 @@ function resolveDrawings(options: DrawingsOptions = {}, filepath?: string): Reso
   const persistPath = typeof persist === 'string'
     ? persist
     : persist
-      ? `.slidev/drawings${filepath ? `/${filepath.match(/([^\\/]+?)(\.\w+)?$/)?.[1]}` : ''}`
+      ? `.slidev/drawings${filepath ? `/${filepath.match(RE_FILENAME_STEM)?.[1]}` : ''}`
       : false
 
   return {

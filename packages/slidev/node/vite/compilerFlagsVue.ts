@@ -2,6 +2,8 @@ import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import { objectEntries } from '@antfu/utils'
 
+const RE_VUE_FILE = /\.vue(?:$|\?)/
+
 /**
  * Replace compiler flags like `__DEV__` in Vue SFC
  */
@@ -15,7 +17,7 @@ export function createVueCompilerFlagsPlugin(
     transform: {
       // TODO: static filter
       handler(code, id) {
-        if (!id.match(/\.vue($|\?)/) && !id.includes('?vue&'))
+        if (!RE_VUE_FILE.test(id) && !id.includes('?vue&'))
           return
         const original = code
         define.forEach(([from, to]) => {

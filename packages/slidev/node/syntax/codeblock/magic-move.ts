@@ -6,9 +6,11 @@ import { normalizeRangeStr } from '../utils'
 const RE_MAGIC_MOVE_INFO = /^(?:md|markdown) magic-move\s*(?:\[([^\]]*)\])?\s*(\{[^}]*\})?/
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 const RE_CODE_BLOCK = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
+const RE_LINES_TRUE = /\blines: *true\b/
+const RE_LINES_FALSE = /\blines: *false\b/
 
 function parseLineNumbersOption(options: string) {
-  return /\blines: *true\b/.test(options) ? true : /\blines: *false\b/.test(options) ? false : undefined
+  return RE_LINES_TRUE.test(options) ? true : RE_LINES_FALSE.test(options) ? false : undefined
 }
 
 export default defineCodeblockTransformer(async ({ info, fence, code, options: { data: { config }, utils: { shikiOptions, shiki } } }) => {

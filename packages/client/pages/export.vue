@@ -161,7 +161,7 @@ async function pngsGz() {
     })),
   )
   const a = document.createElement('a')
-  const blob = new Blob([data], { type: 'application/gzip' })
+  const blob = new Blob([data as any], { type: 'application/gzip' })
   a.href = URL.createObjectURL(blob)
   a.download = `${title.value}.tar.gz`
   a.click()
@@ -350,6 +350,10 @@ h2 {
 
 #export-content {
   --uno: pointer-events-none;
+}
+
+#export-container {
+  --slidev-slide-container-scale: var(--slidev-slide-scale);
 }
 </style>
 

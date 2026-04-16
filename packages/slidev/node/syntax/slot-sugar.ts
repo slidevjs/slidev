@@ -1,5 +1,7 @@
 import type { MarkdownExit } from 'markdown-exit'
 
+const RE_SLOT_MARKER = /^::\s*([\w.\-:]+)\s*::\s*$/
+
 export default function MarkdownItSlotSugar(md: MarkdownExit) {
   md.block.ruler.before('fence', 'slot_marker', (state, startLine, _endLine, silent) => {
     if (state.sCount[startLine] - state.blkIndent > 0)
@@ -9,7 +11,7 @@ export default function MarkdownItSlotSugar(md: MarkdownExit) {
     const max = state.eMarks[startLine]
     const lineText = state.src.slice(pos, max)
 
-    const match = lineText.match(/^::\s*([\w.\-:]+)\s*::\s*$/)
+    const match = lineText.match(RE_SLOT_MARKER)
     if (!match)
       return false
 

@@ -9,6 +9,8 @@ import { slidesTitle } from '../env'
 import IconButton from '../internals/IconButton.vue'
 import Modal from '../internals/Modal.vue'
 
+const RE_SLIDE_HEADER = /^---\s*#(\d+)\s*$/
+
 useHead({ title: `Notes Edit - ${slidesTitle}` })
 
 const { slides } = useNav()
@@ -35,7 +37,7 @@ function deserializeNotes(notes: string, slides: SlideRoute[]) {
   const lines = notes.split(/^(---\s*#\d+\s*)$/gm)
 
   lines.forEach((line, index) => {
-    const match = line.match(/^---\s*#(\d+)\s*$/)
+    const match = line.match(RE_SLIDE_HEADER)
     if (match) {
       const no = Number.parseInt(match[1])
       const note = lines[index + 1].trim()

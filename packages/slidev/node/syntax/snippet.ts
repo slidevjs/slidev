@@ -8,6 +8,8 @@ import lz from 'lz-string'
 import { regexSlideSourceId } from '../vite/common'
 import { monacoWriterWhitelist } from '../vite/monacoWrite'
 
+const RE_NEWLINE = /\r?\n/
+
 function dedent(text: string): string {
   const lines = text.split('\n')
 
@@ -146,7 +148,7 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
     let content = fs.readFileSync(src, 'utf8')
 
     if (regionName) {
-      const lines = content.split(/\r?\n/)
+      const lines = content.split(RE_NEWLINE)
       const region = findRegion(lines, regionName.slice(1))
       if (region) {
         content = dedent(

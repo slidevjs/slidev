@@ -32,8 +32,8 @@ function setDrawingMode(mode: typeof drawingMode.value) {
   if (mode !== 'eraseLine')
     lastDrawingMode = mode
 }
-function setBrushColor(color: typeof brush.color) {
-  brush.color = color
+function setBrushColor(color: string) {
+  brush.value.color = color
   drawingEnabled.value = true
   drawingMode.value = lastDrawingMode
 }
