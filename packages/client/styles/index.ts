@@ -6,6 +6,9 @@ import 'uno:shortcuts.css'
 
 import '@shikijs/vitepress-twoslash/style.css'
 import 'shiki-magic-move/style.css'
+import 'markdown-it-github-alerts/styles/github-colors-light.css'
+import 'markdown-it-github-alerts/styles/github-colors-dark-media.css'
+import 'markdown-it-github-alerts/styles/github-base.css'
 
 import './vars.css'
 import './index.css'
@@ -18,7 +21,3 @@ import './vclick.css'
 import '#slidev/conditional-styles'
 
 import 'uno.css'
-
-import 'markdown-it-github-alerts/styles/github-colors-light.css'
-import 'markdown-it-github-alerts/styles/github-colors-dark-media.css'
-import 'markdown-it-github-alerts/styles/github-base.css'
