@@ -3,12 +3,13 @@ import { join } from 'node:path'
 import { makeAbsoluteImportGlob } from '../utils'
 
 function createSetupTemplate(name: string): VirtualModuleTemplate {
+  const id = `/@slidev/setups/${name}`
   return {
-    id: `/@slidev/setups/${name}`,
-    getContent({ mode, userRoot, roots }) {
+    id,
+    getContent({ roots }) {
       const globs = roots.map((root) => {
         const glob = join(root, `setup/${name}.{ts,js,mts,mjs}`)
-        return `Object.values(${makeAbsoluteImportGlob(mode, userRoot, [glob], { import: 'default' })})[0]`
+        return `Object.values(${makeAbsoluteImportGlob(id, [glob], { import: 'default' })})[0]`
       })
       return `export default [${globs.join(', ')}].filter(Boolean)`
     },

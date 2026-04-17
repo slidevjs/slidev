@@ -105,17 +105,15 @@ export function getBodyJson(req: Connect.IncomingMessage) {
 }
 
 export function makeAbsoluteImportGlob(
-  mode: string,
-  userRoot: string,
+  self: string,
   globs: string[],
   options: Partial<GeneralImportGlobOptions> = {},
 ) {
   // Vite's import.meta.glob only supports relative paths
-  const relativeGlobs = globs.map(glob => `./${slash(relative(userRoot, glob))}`)
+  const relativeGlobs = globs.map(glob => `${slash(relative(self, glob))}`)
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,
-    base: mode === 'build' ? userRoot : '/',
     ...options,
   }
   return `import.meta.glob(${JSON.stringify(relativeGlobs)}, ${JSON.stringify(opts)})`
