@@ -18,3 +18,7 @@ import './vclick.css'
 import '#slidev/conditional-styles'
 
 import 'uno.css'
+
+import 'markdown-it-github-alerts/styles/github-colors-light.css'
+import 'markdown-it-github-alerts/styles/github-colors-dark-media.css'
+import 'markdown-it-github-alerts/styles/github-base.css'

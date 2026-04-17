@@ -1,10 +1,13 @@
 import type { CodeblockTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import type MagicString from 'magic-string'
 import type MarkdownExit from 'markdown-exit'
+import type { PluginWithOptions } from 'markdown-exit'
+import type { MarkdownItGitHubAlertsOptions } from 'markdown-it-github-alerts'
 import MarkdownItComark from '@comark/markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
+import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
 import { MarkdownItCodeblocks } from './codeblock'
 import MarkdownItVDrag from './drag'
 import MarkdownItEscapeInlineCode from './escape-code'
@@ -14,6 +17,8 @@ import MarkdownItStyleScoped from './scoped'
 import MarkdownItShiki from './shiki'
 import MarkdownItSlotSugar from './slot-sugar'
 import MarkdownItSnippet from './snippet'
+
+const MarkdownItGitHubAlertsPlugin = MarkdownItGitHubAlerts as unknown as PluginWithOptions<MarkdownItGitHubAlertsOptions>
 
 export async function useMarkdownItPlugins(
   md: MarkdownExit,
@@ -39,4 +44,5 @@ export async function useMarkdownItPlugins(
   if (config.comark || config.mdc)
     md.use(MarkdownItComark)
   md.use(MarkdownItStyleScoped)
+  md.use(MarkdownItGitHubAlertsPlugin, {})
 }
