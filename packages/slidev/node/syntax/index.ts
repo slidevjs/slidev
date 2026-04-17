@@ -44,5 +44,5 @@ export async function useMarkdownItPlugins(
   if (config.comark || config.mdc)
     md.use(MarkdownItComark)
   md.use(MarkdownItStyleScoped)
-  md.use(MarkdownItGitHubAlertsPlugin, {})
+  md.use(MarkdownItGitHubAlertsPlugin)
 }
