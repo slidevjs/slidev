@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Menu } from 'floating-vue'
+import { computed, ref } from 'vue'
 import { useDrawings } from '../composables/useDrawings'
 import Draggable from './Draggable.vue'
 import IconButton from './IconButton.vue'
@@ -18,6 +18,15 @@ const {
   brushColors,
 } = useDrawings()
 
+const strokePopoverOpen = ref(false)
+const strokeBtnRef = ref<HTMLElement>()
+const strokePopoverStyle = computed(() => {
+  const el = strokeBtnRef.value
+  if (!el)
+    return {}
+  const rect = el.getBoundingClientRect()
+  return { top: `${rect.bottom + 4}px`, left: `${rect.left}px` }
+})
 function undo() {
   drauu.undo()
 }
@@ -71,25 +80,26 @@ function setBrushColor(color: string) {
 
     <VerticalDivider />
 
-    <Menu>
-      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }">
+    <div ref="strokeBtnRef">
+      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }" @click="strokePopoverOpen = !strokePopoverOpen">
         <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
           <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
           <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           <line x1="7" y1="31" x2="29" y2="19" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
         </svg>
       </IconButton>
-      <template #popper>
-        <div class="flex bg-main p-2">
+      <Teleport to="body">
+        <div v-if="strokePopoverOpen" class="fixed inset-0" style="z-index: 9998" @click="strokePopoverOpen = false" />
+        <div v-if="strokePopoverOpen" class="fixed bg-main p-2 rounded-md shadow-lg border border-main" style="z-index: 9999" :style="strokePopoverStyle">
           <div class="inline-block w-7 text-center">
             {{ brush.size }}
           </div>
           <div class="pt-.5">
-            <input v-model="brush.size" type="range" min="1" max="15" @change="drawingMode = lastDrawingMode">
+            <input v-model="brush.size" type="range" min="1" max="15" @change="drawingMode = lastDrawingMode; strokePopoverOpen = false">
           </div>
         </div>
-      </template>
-    </Menu>
+      </Teleport>
+    </div>
     <IconButton
       v-for="color of brushColors"
       :key="color"
@@ -132,9 +142,3 @@ function setBrushColor(color: string) {
     </IconButton>
   </Draggable>
 </template>
-
-<style>
-.v-popper--theme-menu .v-popper__arrow-inner {
-  --uno: border-main;
-}
-</style>
