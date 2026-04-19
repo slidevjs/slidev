@@ -18,8 +18,6 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
-const RE_PNPM = /pnpm/
-const RE_YARN = /yarn/
 const RE_VALID_PACKAGE_NAME = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 const RE_WHITESPACE = /\s+/g
 const RE_LEADING_DOT_UNDERSCORE = /^[._]/
@@ -101,17 +99,20 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const userAgent = process.env.npm_config_user_agent || ''
-  const execPath = process.env.npm_execpath || ''
-  const pkgManager = typeof Deno !== 'undefined'
-    ? 'deno'
-    : typeof Bun !== 'undefined'
-      ? 'bun'
-      : (RE_PNPM.test(execPath) || RE_PNPM.test(userAgent))
-          ? 'pnpm'
-          : RE_YARN.test(execPath) || RE_YARN.test(userAgent)
-            ? 'yarn'
-            : 'npm'
+  function getPkgManager() {
+    if (typeof Deno !== 'undefined')
+      return 'deno'
+    if (typeof Bun !== 'undefined')
+      return 'bun'
+    const userAgent = process.env.npm_config_user_agent || ''
+    const execPath = process.env.npm_execpath || ''
+    if (execPath.includes('pnpm') || userAgent.includes('pnpm'))
+      return 'pnpm'
+    if (execPath.includes('yarn') || userAgent.includes('yarn'))
+      return 'yarn'
+    return 'npm'
+  }
+  const pkgManager = getPkgManager()
 
   const related = path.relative(cwd, root)
 
