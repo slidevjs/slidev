@@ -18,8 +18,6 @@ const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const { version } = require('./package.json')
 
-const RE_PNPM = /pnpm/
-const RE_YARN = /yarn/
 const RE_VALID_PACKAGE_NAME = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 const RE_WHITESPACE = /\s+/g
 const RE_LEADING_DOT_UNDERSCORE = /^[._]/
@@ -81,18 +79,15 @@ async function init() {
   const templateDir = path.join(__dirname, 'template')
 
   const write = (file, content) => {
-    const targetPath = renameFiles[file]
-      ? path.join(root, renameFiles[file])
-      : path.join(root, file)
+    const targetPath = path.join(root, renameFiles[file] ?? file)
     if (content)
       fs.writeFileSync(targetPath, content)
-
     else
       copy(path.join(templateDir, file), targetPath)
   }
 
   const files = fs.readdirSync(templateDir)
-  for (const file of files.filter(f => f !== 'package.json'))
+  for (const file of files.filter(f => f !== 'package.json' && f !== 'README.md'))
     write(file)
 
   const pkg = require(path.join(templateDir, 'package.json'))
@@ -101,13 +96,23 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
-  const pkgManager = (RE_PNPM.test(process.env.npm_execpath || '') || RE_PNPM.test(process.env.npm_config_user_agent || ''))
-    ? 'pnpm'
-    : RE_YARN.test(process.env.npm_execpath || '') ? 'yarn' : 'npm'
-
-  const related = path.relative(cwd, root)
-
   console.log(green('  Done.\n'))
+
+  function getPkgManager() {
+    const pm = []
+    if (typeof Deno !== 'undefined')
+      pm.push('deno')
+    if (typeof Bun !== 'undefined')
+      pm.push('bun')
+    const userAgent = process.env.npm_config_user_agent || ''
+    const execPath = process.env.npm_execpath || ''
+    if (execPath.includes('pnpm') || userAgent.includes('pnpm'))
+      pm.push('pnpm')
+    if (execPath.includes('yarn') || userAgent.includes('yarn'))
+      pm.push('yarn')
+    return pm.length === 1 ? pm[0] : null
+  }
+  const pkgManager = getPkgManager()
 
   /**
    * @type {{ yes: boolean }}
@@ -116,33 +121,43 @@ async function init() {
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
-    message: 'Install and start it now?',
+    message: `Install and start it now${pkgManager ? ` using ${pkgManager}` : ''}?`,
   })
 
   if (yes) {
-    const { agent } = await prompts({
+    const agent = pkgManager || (await prompts({
       name: 'agent',
       type: 'select',
       message: 'Choose the package manager',
       choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    })
+    }).agent)
 
     if (!agent)
       return
 
+    writeReadme(agent)
     await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
     await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
+    writeReadme(pkgManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
-      console.log(blue(`  cd ${bold(related)}`))
+      console.log(blue(`  cd ${bold(path.relative(cwd, root))}`))
 
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`))
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`))
+    console.log(blue(`  ${pkgManager} install`))
+    console.log(blue(`  ${pkgManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
+  }
+
+  function writeReadme(pm = 'npm') {
+    const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
+    const readmeContent = readmeTemplate
+      .replace('npm install', `${pm} install`)
+      .replace('npm run dev', `${pm} run dev`)
+    write('README.md', readmeContent)
   }
 }
 
@@ -150,7 +165,6 @@ function copy(src, dest) {
   const stat = fs.statSync(src)
   if (stat.isDirectory())
     copyDir(src, dest)
-
   else
     fs.copyFileSync(src, dest)
 }
