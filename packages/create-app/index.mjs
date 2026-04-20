@@ -79,12 +79,9 @@ async function init() {
   const templateDir = path.join(__dirname, 'template')
 
   const write = (file, content) => {
-    const targetPath = renameFiles[file]
-      ? path.join(root, renameFiles[file])
-      : path.join(root, file)
+    const targetPath = path.join(root, renameFiles[file] ?? file)
     if (content)
       fs.writeFileSync(targetPath, content)
-
     else
       copy(path.join(templateDir, file), targetPath)
   }
@@ -99,24 +96,23 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2))
 
+  console.log(green('  Done.\n'))
+
   function getPkgManager() {
+    const pm = []
     if (typeof Deno !== 'undefined')
-      return 'deno'
+      pm.push('deno')
     if (typeof Bun !== 'undefined')
-      return 'bun'
+      pm.push('bun')
     const userAgent = process.env.npm_config_user_agent || ''
     const execPath = process.env.npm_execpath || ''
     if (execPath.includes('pnpm') || userAgent.includes('pnpm'))
-      return 'pnpm'
+      pm.push('pnpm')
     if (execPath.includes('yarn') || userAgent.includes('yarn'))
-      return 'yarn'
-    return 'npm'
+      pm.push('yarn')
+    return pm.length === 1 ? pm[0] : null
   }
   const pkgManager = getPkgManager()
-
-  const related = path.relative(cwd, root)
-
-  console.log(green('  Done.\n'))
 
   /**
    * @type {{ yes: boolean }}
@@ -125,16 +121,16 @@ async function init() {
     type: 'confirm',
     name: 'yes',
     initial: 'Y',
-    message: 'Install and start it now?',
+    message: `Install and start it now${pkgManager ? ` using ${pkgManager}` : ''}?`,
   })
 
   if (yes) {
-    const { agent } = await prompts({
+    const agent = pkgManager || (await prompts({
       name: 'agent',
       type: 'select',
       message: 'Choose the package manager',
       choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    })
+    }).agent)
 
     if (!agent)
       return
@@ -147,7 +143,7 @@ async function init() {
     writeReadme(pkgManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
-      console.log(blue(`  cd ${bold(related)}`))
+      console.log(blue(`  cd ${bold(path.relative(cwd, root))}`))
 
     console.log(blue(`  ${pkgManager} install`))
     console.log(blue(`  ${pkgManager} run dev`))
@@ -156,11 +152,11 @@ async function init() {
     console.log()
   }
 
-  function writeReadme(pm) {
+  function writeReadme(pm = 'npm') {
     const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
     const readmeContent = readmeTemplate
-      .replace('{{PM_INSTALL}}', `${pm} install`)
-      .replace('{{PM_DEV}}', `${pm} run dev`)
+      .replace('npm install', `${pm} install`)
+      .replace('npm run dev', `${pm} run dev`)
     write('README.md', readmeContent)
   }
 }
@@ -169,7 +165,6 @@ function copy(src, dest) {
   const stat = fs.statSync(src)
   if (stat.isDirectory())
     copyDir(src, dest)
-
   else
     fs.copyFileSync(src, dest)
 }
