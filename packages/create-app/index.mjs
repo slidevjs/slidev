@@ -87,13 +87,11 @@ async function init() {
   }
 
   const files = fs.readdirSync(templateDir)
-  for (const file of files.filter(f => f !== 'package.json' && f !== 'README.md'))
+  for (const file of files.filter(f => f !== 'package.json'))
     write(file)
 
   const pkg = require(path.join(templateDir, 'package.json'))
-
   pkg.name = packageName
-
   write('package.json', JSON.stringify(pkg, null, 2))
 
   console.log(green('  Done.\n'))
