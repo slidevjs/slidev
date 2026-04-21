@@ -280,6 +280,22 @@ Props:
 - `conversation` (`string`, default `'none'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 - `cards` (`'hidden' | 'visible'`, default `'visible'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 
+## `BlueSky`
+
+Embed a Bluesky post.
+
+### Usage
+
+```md
+<BlueSky uri="https://bsky.app/profile/sli.dev/post/3la7gcgfwpe2n" />
+<BlueSky uri="at://did:plc:432mbsu2xucyvxl6sluohidu/app.bsky.feed.post/3la7gcgfwpe2n" />
+```
+
+Props:
+
+- `uri` (`string`, required): AT-URI of the Bluesky post, or a `https://bsky.app/profile/.../post/...` URL
+- `scale` (`number | string`, default `1`): transform scale value
+
 ## `VAfter`, `VClick` and `VClicks`
 
 <LinkCard link="guide/animations#click-animation" />

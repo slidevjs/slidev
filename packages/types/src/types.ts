@@ -97,6 +97,7 @@ export interface SlidevDetectedFeatures {
     deps: string[]
   }
   tweet: boolean
+  bluesky: boolean
   mermaid: boolean
 }
 
