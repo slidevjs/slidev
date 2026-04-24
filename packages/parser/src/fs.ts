@@ -61,7 +61,7 @@ export async function load(
       hm = lines.slice(1, hEnd).join('\n')
     }
     const o = YAML.parse(hm) as Record<string, unknown> ?? {}
-    extensions = await preparserExtensionLoader(o, filepath, mode)
+    extensions = await preparserExtensionLoader(options.roots, o, filepath, mode)
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}

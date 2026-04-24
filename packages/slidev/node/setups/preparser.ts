@@ -6,7 +6,7 @@ import { getRoots } from '../resolver'
 import { loadSetups } from './load'
 
 export default function setupPreparser() {
-  injectPreparserExtensionLoader(async (headmatter: Record<string, unknown>, filepath: string, mode?: string) => {
+  injectPreparserExtensionLoader(async (_: string[], headmatter: Record<string, unknown>, filepath: string, mode?: string) => {
     // Ensure addons is an array or an empty array if undefined
     const addons = Array.isArray(headmatter?.addons) ? headmatter.addons as string[] : []
 
