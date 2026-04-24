@@ -195,7 +195,7 @@ export function removeProject(entry: string) {
 
 async function loadProject(entry: string) {
   const userRoot = dirname(entry)
-  return markRaw(await load(userRoot, entry, async (path: string) => {
+  return markRaw(await load({ userRoot, roots: [userRoot] }, entry, async (path: string) => {
     const document = workspace.textDocuments.find(d => slash(d.uri.fsPath) === path)
     if (document) {
       return document.getText()

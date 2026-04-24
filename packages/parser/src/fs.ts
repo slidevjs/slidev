@@ -1,4 +1,11 @@
-import type { PreparserExtensionLoader, SlideInfo, SlidevData, SlidevMarkdown, SlidevPreparserExtension, SourceSlideInfo } from '@slidev/types'
+import type {
+  PreparserExtensionLoader,
+  SlideInfo,
+  SlidevData,
+  SlidevMarkdown,
+  SlidevPreparserExtension,
+  SourceSlideInfo,
+} from '@slidev/types'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
@@ -19,6 +26,11 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
   preparserExtensionLoader = fn
 }
 
+export interface LoadRootsInfo {
+  roots: string[]
+  userRoot: string
+}
+
 /**
  * Slidev data without config and themeMeta,
  * because config and themeMeta depends on the theme to be loaded.
@@ -26,7 +38,7 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>
 
 export async function load(
-  userRoot: string,
+  options: LoadRootsInfo,
   filepath: string,
   sources: Record<string, string> | ((path: string) => Promise<string>) = {},
   mode?: string,
@@ -93,7 +105,7 @@ export async function load(
       const [rawPath, rangeRaw] = slide.frontmatter.src.split('#')
       const path = slash(
         rawPath.startsWith('/')
-          ? resolve(userRoot, rawPath.substring(1))
+          ? resolve(options.userRoot, rawPath.substring(1))
           : resolve(dirname(slide.filepath), rawPath),
       )
 
