@@ -7,6 +7,7 @@ import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { useWakeLock } from '../composables/useWakeLock'
 import Controls from '../internals/Controls.vue'
+import LaserPointer from '../internals/LaserPointer.vue'
 import NavControls from '../internals/NavControls.vue'
 import PresenterMouse from '../internals/PresenterMouse.vue'
 import SlideContainer from '../internals/SlideContainer.vue'
@@ -97,6 +98,7 @@ const contentStyle = computed(() => {
       <template #default>
         <SlidesShow render-context="slide" />
         <PresenterMouse />
+        <LaserPointer />
       </template>
       <template #controls>
         <div
