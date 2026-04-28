@@ -43,8 +43,8 @@ onMounted(() => {
 <style scoped>
 .laser-pointer {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
   border-radius: 9999px;
   transform: translate(-50%, -50%);
   background: radial-gradient(

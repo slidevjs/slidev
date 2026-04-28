@@ -103,11 +103,12 @@ if (__SLIDEV_FEATURE_RECORD__)
           <div v-else class="i-ph-cursor-duotone" />
         </IconButton>
         <IconButton
+          v-if="isPresenter"
           :title="showLaserPointer ? 'Disable laser pointer' : 'Enable laser pointer'"
           :active="showLaserPointer"
           @click="toggleLaserPointer()"
         >
-          <div v-if="showLaserPointer" class="i-carbon-magic-wand-filled" />
+          <div v-if="showLaserPointer" class="i-carbon-magic-wand-filled color-red-600 dark:color-red-400" />
           <div v-else class="i-carbon-magic-wand" />
         </IconButton>
         <IconButton
