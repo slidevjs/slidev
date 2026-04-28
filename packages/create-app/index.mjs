@@ -25,7 +25,6 @@ const RE_NON_ALPHANUMERIC = /[^a-z0-9-~]+/g
 
 const renameFiles = {
   _gitignore: '.gitignore',
-  _npmrc: '.npmrc',
 }
 
 async function init() {
