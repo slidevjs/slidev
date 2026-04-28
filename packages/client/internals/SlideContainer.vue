@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { provideLocal, useElementSize } from '@vueuse/core'
-import { computed, onUnmounted, ref, watchEffect } from 'vue'
+import { recomputeAllPoppers } from 'floating-vue'
+import { computed, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import { useNav } from '../composables/useNav'
 import { injectionSlideElement, injectionSlideScale } from '../constants'
 import { slideAspect, slideHeight, slideWidth } from '../env'
@@ -71,6 +72,12 @@ if (props.isMain) {
 
 provideLocal(injectionSlideScale, scale)
 provideLocal(injectionSlideElement, slideElement)
+
+onMounted(() => {
+  watch(() => props.isMain && scale.value, () => {
+    recomputeAllPoppers()
+  })
+})
 
 const snapshot = computed(() => {
   if (props.no == null || !props.useSnapshot)

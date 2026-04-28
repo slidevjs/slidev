@@ -25,6 +25,7 @@ export default async function MarkdownItShiki({ data: { config }, mode, utils: {
   const transformers = [
     ...shikiOptions.transformers || [],
     (config.twoslash === true || config.twoslash === mode) && await getTwoslashTransformer(),
+    (config.twoslash === true || config.twoslash === mode) && transformerTwoslashConditional(),
     {
       pre(pre) {
         this.addClassToHast(pre, 'slidev-code')
@@ -37,4 +38,23 @@ export default async function MarkdownItShiki({ data: { config }, mode, utils: {
     ...shikiOptions,
     transformers,
   })
+}
+
+// Fix #2202
+function transformerTwoslashConditional(): ShikiTransformer {
+  return {
+    name: 'slidev:twoslash-conditional',
+    code: function applyConditionalFlag(this: any, node) {
+      if (node.tagName === 'v-menu') {
+        if (node.properties[':shown'] === 'true')
+          node.properties[':shown'] = '$nav.currentPage === $page'
+      }
+      else {
+        for (const child of node.children) {
+          if (child.type === 'element')
+            applyConditionalFlag(child)
+        }
+      }
+    },
+  }
 }
