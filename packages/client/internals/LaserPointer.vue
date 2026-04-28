@@ -2,7 +2,7 @@
 import { computed, onMounted, watchEffect } from 'vue'
 import { useMousePosInSlide } from '../composables/useMousePosInSlide'
 import { useNav } from '../composables/useNav'
-import { showLaserPointer } from '../state'
+import { cursorStyle } from '../state'
 import { sharedState } from '../state/shared'
 
 const selfMouse = useMousePosInSlide()
@@ -12,7 +12,7 @@ const laserPointer = computed(() => {
   if (!isPresenter.value && sharedState.cursor?.style === 'laser') {
     return sharedState.cursor
   }
-  if (showLaserPointer.value) {
+  if (cursorStyle.value === 'laser') {
     return selfMouse.value
   }
   return null
@@ -20,7 +20,7 @@ const laserPointer = computed(() => {
 
 onMounted(() => {
   watchEffect(() => {
-    document.body.classList.toggle('slidev-self-laser-active', showLaserPointer.value && !!laserPointer.value)
+    document.body.classList.toggle('slidev-self-laser-active', cursorStyle.value === 'laser' && !!laserPointer.value)
   })
 })
 </script>

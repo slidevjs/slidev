@@ -5,7 +5,7 @@ import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { configs } from '../env'
 import { isColorSchemaConfigured, isDark, toggleDark } from '../logic/dark'
-import { activeElement, breakpoints, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showLaserPointer, showPresenterCursor, toggleLaserPointer, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
+import { activeElement, breakpoints, cursorStyle, fullscreen, hasViewerCssFilter, presenterLayout, showEditor, showInfoDialog, showPresenterCursor, toggleOverview, togglePresenterCursor, togglePresenterLayout } from '../state'
 import { downloadPDF } from '../utils'
 import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
@@ -95,21 +95,20 @@ if (__SLIDEV_FEATURE_RECORD__)
 
         <IconButton
           v-if="isPresenter"
-          :title="showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor'"
+          :title="cursorStyle === 'laser'
+            ? (showPresenterCursor ? 'Disable laser pointer' : 'Enable laser pointer')
+            : (showPresenterCursor ? 'Hide presenter cursor' : 'Show presenter cursor')"
           :active="showPresenterCursor"
           @click="togglePresenterCursor()"
         >
-          <div v-if="showPresenterCursor" class="i-ph-cursor-fill" />
-          <div v-else class="i-ph-cursor-duotone" />
-        </IconButton>
-        <IconButton
-          v-if="isPresenter"
-          :title="showLaserPointer ? 'Disable laser pointer' : 'Enable laser pointer'"
-          :active="showLaserPointer"
-          @click="toggleLaserPointer()"
-        >
-          <div v-if="showLaserPointer" class="i-carbon-magic-wand-filled color-red-600 dark:color-red-400" />
-          <div v-else class="i-carbon-magic-wand" />
+          <template v-if="cursorStyle === 'laser'">
+            <div v-if="showPresenterCursor" class="i-carbon-magic-wand-filled color-red-600 dark:color-red-400" />
+            <div v-else class="i-carbon-magic-wand" />
+          </template>
+          <template v-else>
+            <div v-if="showPresenterCursor" class="i-ph-cursor-fill" />
+            <div v-else class="i-ph-cursor-duotone" />
+          </template>
         </IconButton>
         <IconButton
           v-if="__SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter)"

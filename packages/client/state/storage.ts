@@ -55,20 +55,11 @@ export const skipExportPdfTip = useLocalStorage('slidev-skip-export-pdf-tip', fa
 export const captureDelay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
-export const showLaserPointer = useLocalStorage('slidev-laser-pointer', false, { listenToStorageChanges: false })
+
+export const cursorStyle = useLocalStorage<'cursor' | 'laser'>('slidev-cursor-style', 'cursor', { listenToStorageChanges: false })
 
 export function togglePresenterCursor() {
-  const next = !showPresenterCursor.value
-  showPresenterCursor.value = next
-  if (next)
-    showLaserPointer.value = false
-}
-
-export function toggleLaserPointer() {
-  const next = !showLaserPointer.value
-  showLaserPointer.value = next
-  if (next)
-    showPresenterCursor.value = false
+  showPresenterCursor.value = !showPresenterCursor.value
 }
 
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })

@@ -29,7 +29,7 @@ import TimerBar from '../internals/TimerBar.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showLaserPointer, showPresenterCursor } from '../state'
+import { cursorStyle, decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
 import { sharedState } from '../state/shared'
 
 const inFocus = useWindowFocus()
@@ -250,13 +250,13 @@ onMounted(() => {
   const focus = useWindowFocus()
 
   watchEffect(() => {
-    if (!mouse.value || !focus.value || isDrawing.value || (!showPresenterCursor.value && !showLaserPointer.value)) {
+    if (!mouse.value || !focus.value || isDrawing.value || !showPresenterCursor.value) {
       sharedState.cursor = undefined
     }
     else {
       sharedState.cursor = {
         ...mouse.value,
-        style: showLaserPointer.value ? 'laser' as const : 'cursor' as const,
+        style: cursorStyle.value,
       }
     }
   })

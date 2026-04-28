@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useWakeLock } from '@vueuse/core'
 import { useNav } from '../composables/useNav'
-import { hideCursorIdle, slideScale, viewerCssFilter, viewerCssFilterDefaults, wakeLockEnabled } from '../state'
+import { cursorStyle, hideCursorIdle, slideScale, viewerCssFilter, viewerCssFilterDefaults, wakeLockEnabled } from '../state'
 import FormCheckbox from './FormCheckbox.vue'
 import FormItem from './FormItem.vue'
 import FormSlider from './FormSlider.vue'
@@ -86,6 +86,15 @@ const { isSupported } = useWakeLock()
       />
     </FormItem>
     <div class="h-1px opacity-5 bg-current w-full my2" />
+    <FormItem title="Cursor Style">
+      <SegmentControl
+        v-model="cursorStyle"
+        :options="[
+          { label: 'Cursor', value: 'cursor' },
+          { label: 'Laser', value: 'laser' },
+        ]"
+      />
+    </FormItem>
     <FormItem
       v-if="!isPresenter"
       title="Slide Scale"
