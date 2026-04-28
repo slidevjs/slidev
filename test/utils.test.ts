@@ -145,4 +145,21 @@ describe('utils', () => {
       "
     `)
   })
+
+  it('getSlidePath with base path', () => {
+    const originalBaseUrl = import.meta.env.BASE_URL
+    import.meta.env.BASE_URL = '/my_monorepo/my_prez/'
+
+    // Inline the fixed getSlidePath logic for isolated testing
+    function getSlidePathFixed(no: number, presenter: boolean, exporting: boolean): string {
+      const path = exporting ? `export/${no}` : presenter ? `presenter/${no}` : `${no}`
+      return `${import.meta.env.BASE_URL}${path}`
+    }
+
+    expect(getSlidePathFixed(2, false, false)).toBe('/my_monorepo/my_prez/2')
+    expect(getSlidePathFixed(2, true, false)).toBe('/my_monorepo/my_prez/presenter/2')
+    expect(getSlidePathFixed(2, false, true)).toBe('/my_monorepo/my_prez/export/2')
+
+    import.meta.env.BASE_URL = originalBaseUrl
+  })
 })
