@@ -84,6 +84,7 @@
     "magic-string-stack": "catalog:prod",
     "markdown-exit": "catalog:prod",
     "markdown-it-footnote": "catalog:prod",
+    "markdown-it-github-alerts": "catalog:prod",
     "mlly": "catalog:prod",
     "monaco-editor": "catalog:monaco",
     "obug": "catalog:prod",

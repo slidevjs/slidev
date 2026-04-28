@@ -276,6 +276,9 @@ catalogs:
     markdown-it-footnote:
       specifier: ^4.0.0
       version: 4.0.0
+    markdown-it-github-alerts:
+      specifier: ^1.0.1
+      version: 1.0.1
     minimist:
       specifier: ^1.2.8
       version: 1.2.8
@@ -997,6 +1000,9 @@ importers:
       markdown-it-footnote:
         specifier: catalog:prod
         version: 4.0.0
+      markdown-it-github-alerts:
+        specifier: catalog:prod
+        version: 1.0.1(markdown-it@14.1.1)
       mlly:
         specifier: catalog:prod
         version: 1.8.2
@@ -5802,6 +5808,11 @@ packages:
 
   markdown-it-footnote@4.0.0:
     resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
+
+  markdown-it-github-alerts@1.0.1:
+    resolution: {integrity: sha512-NNATF4QdoGI07hyCitoB2YqJ1YcNVCKT89ut2VtfFY9rkeFCXe/V2lOonKQLpJiq5DjiZZepf97BJx5xOjFIAw==}
+    peerDependencies:
+      markdown-it: '>= 13.0.0'
 
   markdown-it@14.1.1:
     resolution: {integrity: sha512-BuU2qnTti9YKgK5N+IeMubp14ZUKUUw7yeJbkjtosvHiP0AZ5c8IAgEMk79D0eC8F23r4Ac/q8cAIFdm2FtyoA==}
@@ -12560,6 +12571,10 @@ snapshots:
     optional: true
 
   markdown-it-footnote@4.0.0: {}
+
+  markdown-it-github-alerts@1.0.1(markdown-it@14.1.1):
+    dependencies:
+      markdown-it: 14.1.1
 
   markdown-it@14.1.1:
     dependencies:

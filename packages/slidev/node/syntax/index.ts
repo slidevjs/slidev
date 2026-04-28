@@ -5,6 +5,7 @@ import MarkdownItComark from '@comark/markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
+import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
 import { MarkdownItCodeblocks } from './codeblock'
 import MarkdownItVDrag from './drag'
 import MarkdownItEscapeInlineCode from './escape-code'
@@ -39,4 +40,5 @@ export async function useMarkdownItPlugins(
   if (config.comark || config.mdc)
     md.use(MarkdownItComark)
   md.use(MarkdownItStyleScoped)
+  md.use(MarkdownItGitHubAlerts as any)
 }
