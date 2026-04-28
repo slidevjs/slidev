@@ -55,6 +55,13 @@ export const skipExportPdfTip = useLocalStorage('slidev-skip-export-pdf-tip', fa
 export const captureDelay = useLocalStorage('slidev-export-capture-delay', 400, { listenToStorageChanges: false })
 
 export const showPresenterCursor = useLocalStorage('slidev-presenter-cursor', true, { listenToStorageChanges: false })
+
+export const cursorStyle = useLocalStorage<'cursor' | 'laser'>('slidev-cursor-style', 'cursor', { listenToStorageChanges: false })
+
+export function togglePresenterCursor() {
+  showPresenterCursor.value = !showPresenterCursor.value
+}
+
 export const showEditor = useLocalStorage('slidev-show-editor', false, { listenToStorageChanges: false })
 export const isEditorVertical = useLocalStorage('slidev-editor-vertical', false, { listenToStorageChanges: false })
 export const editorWidth = useLocalStorage('slidev-editor-width', isClient ? window.innerWidth * 0.4 : 318, { listenToStorageChanges: false })

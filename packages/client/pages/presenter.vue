@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useHead } from '@unhead/vue'
-import { useEventListener, useLocalStorage, useMediaQuery, useMouse, useWindowFocus } from '@vueuse/core'
-import { computed, onMounted, reactive, ref, shallowRef, watch } from 'vue'
+import { useEventListener, useLocalStorage, useMediaQuery, useWindowFocus } from '@vueuse/core'
+import { computed, onMounted, ref, shallowRef, watch, watchEffect } from 'vue'
 import { createClicksContextBase } from '../composables/useClicks'
 import { useDrawings } from '../composables/useDrawings'
+import { useMousePosInSlide } from '../composables/useMousePosInSlide'
 import { useNav } from '../composables/useNav'
 import { useSwipeControls } from '../composables/useSwipeControls'
 import { useWakeLock } from '../composables/useWakeLock'
@@ -14,6 +15,7 @@ import CurrentProgressBar from '../internals/CurrentProgressBar.vue'
 import DrawingControls from '../internals/DrawingControls.vue'
 import Goto from '../internals/Goto.vue'
 import IconButton from '../internals/IconButton.vue'
+import LaserPointer from '../internals/LaserPointer.vue'
 import NavControls from '../internals/NavControls.vue'
 import NoteEditable from '../internals/NoteEditable.vue'
 import NoteStatic from '../internals/NoteStatic.vue'
@@ -27,7 +29,7 @@ import TimerBar from '../internals/TimerBar.vue'
 import TimerInlined from '../internals/TimerInlined.vue'
 import { onContextMenu } from '../logic/contextMenu'
 import { registerShortcuts } from '../logic/shortcuts'
-import { decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
+import { cursorStyle, decreasePresenterFontSize, increasePresenterFontSize, presenterLayout, presenterNotesFontSize, showEditor, showPresenterCursor } from '../state'
 import { sharedState } from '../state/shared'
 
 const inFocus = useWindowFocus()
@@ -244,28 +246,20 @@ if (__DEV__ && __SLIDEV_FEATURE_EDITOR__)
 
 // sync presenter cursor
 onMounted(() => {
-  const slidesContainer = main.value!.querySelector('#slide-content')!
-  const mouse = reactive(useMouse())
+  const mouse = useMousePosInSlide()
   const focus = useWindowFocus()
 
-  watch(
-    () => {
-      if (!focus.value || isDrawing.value || !showPresenterCursor.value || !slidesContainer)
-        return undefined
-
-      const rect = slidesContainer.getBoundingClientRect()
-      const x = (mouse.x - rect.left) / rect.width * 100
-      const y = (mouse.y - rect.top) / rect.height * 100
-
-      if (x < 0 || x > 100 || y < 0 || y > 100)
-        return undefined
-
-      return { x, y }
-    },
-    (pos) => {
-      sharedState.cursor = pos
-    },
-  )
+  watchEffect(() => {
+    if (!mouse.value || !focus.value || isDrawing.value || !showPresenterCursor.value) {
+      sharedState.cursor = undefined
+    }
+    else {
+      sharedState.cursor = {
+        ...mouse.value,
+        style: cursorStyle.value,
+      }
+    }
+  })
 })
 </script>
 
@@ -328,6 +322,7 @@ onMounted(() => {
           @contextmenu="onContextMenu"
         >
           <SlidesShow render-context="presenter" />
+          <LaserPointer />
         </SlideContainer>
 
         <ClicksSlider
