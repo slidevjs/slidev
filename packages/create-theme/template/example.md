@@ -1,5 +1,6 @@
 ---
 theme: ./
+background: https://cover.sli.dev
 ---
 
 # Slidev Theme Starter
