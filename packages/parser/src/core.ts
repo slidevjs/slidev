@@ -8,6 +8,7 @@ const RE_DOLLAR_INLINE = /\$.*?\$/
 const RE_DOLLAR_BLOCK = /\$\$/
 const RE_MONACO_BLOCK = /\{monaco.*\}/
 const RE_TWEET_TAG = /<Tweet\b/
+const RE_BLUESKY_TAG = /<BlueSky\b/
 const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
 const RE_LEADING_BACKTICKS = /^\s*`+/
@@ -136,6 +137,7 @@ export function detectFeatures(code: string): SlidevDetectedFeatures {
     katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
     monaco: RE_MONACO_BLOCK.test(code) ? scanMonacoReferencedMods(code) : false,
     tweet: !!code.match(RE_TWEET_TAG),
+    bluesky: !!code.match(RE_BLUESKY_TAG),
     mermaid: !!code.match(RE_MERMAID_CODEBLOCK),
   }
 }
