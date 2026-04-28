@@ -113,6 +113,27 @@ f
       .toEqual({ })
   })
 
+  it('ignores slide separators inside HTML comments', async () => {
+    const data = await parse(`---
+src: ./pages/one.md
+---
+
+<!--
+---
+src: ./pages/two.md
+---
+-->
+
+---
+src: ./pages/three.md
+---
+`, 'slides.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(slide => slide.frontmatter.src))
+      .toEqual(['./pages/one.md', './pages/three.md'])
+  })
+
   async function parseWithExtension(
     src: string,
     transformRawLines: (lines: string[]) => void | Promise<void> = () => {},
