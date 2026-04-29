@@ -1,10 +1,13 @@
 import type { ResolvedFontOptions, SlideInfo } from '@slidev/types'
-import { relative, resolve } from 'node:path'
+import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join, relative, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import MarkdownExit from 'markdown-exit'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
+import { preparePngExportDirectory } from '../packages/slidev/node/commands/export-utils'
 import { getRoots } from '../packages/slidev/node/resolver'
 import { generateCoollabsFontsUrl, generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
@@ -87,6 +90,36 @@ describe('utils', () => {
     expectRelative(clientRoot).toMatchInlineSnapshot(`"../packages/client"`)
     expectRelative(userRoot).toMatchInlineSnapshot(`".."`)
     expectRelative(userWorkspaceRoot).toMatchInlineSnapshot(`".."`)
+  })
+
+  it('prepares PNG output directories without cleaning when requested', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'slidev-md-export-'))
+    const existingFile = join(dir, 'existing.txt')
+
+    try {
+      await writeFile(existingFile, 'keep')
+      await preparePngExportDirectory(dir, false)
+
+      await expect(readFile(existingFile, 'utf8')).resolves.toBe('keep')
+    }
+    finally {
+      await rm(dir, { force: true, recursive: true })
+    }
+  })
+
+  it('cleans PNG output directories by default', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'slidev-png-export-'))
+    const existingFile = join(dir, 'existing.txt')
+
+    try {
+      await writeFile(existingFile, 'remove')
+      await preparePngExportDirectory(dir)
+
+      await expect(access(existingFile)).rejects.toThrow()
+    }
+    finally {
+      await rm(dir, { force: true, recursive: true })
+    }
   })
 
   it('update frontmatter patch', async () => {
