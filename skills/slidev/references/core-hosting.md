@@ -88,6 +88,34 @@ Create `netlify.toml`:
   status = 200
 ```
 
+## Cloudflare Pages
+
+Slidev auto-detects Cloudflare Pages when a `wrangler.toml` or `wrangler.json` is present in the project root.
+
+Create `wrangler.toml`:
+
+```toml
+name = "my-slidev"
+compatibility_date = "2026-04-29"
+```
+
+Build and deploy:
+
+```bash
+slidev build
+npx wrangler pages deploy dist
+```
+
+Cloudflare Pages supports Netlify-style `_redirects` out of the box. When detected, Slidev also generates a `_headers` file with optimal cache settings for hashed assets.
+
+### Local preview
+
+Test with Wrangler locally:
+
+```bash
+npx wrangler pages dev dist
+```
+
 ## Vercel
 
 Create `vercel.json`:
