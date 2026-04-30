@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Menu } from 'floating-vue'
+import { Dropdown } from 'floating-vue'
+import { ref } from 'vue'
 import { useDrawings } from '../composables/useDrawings'
 import Draggable from './Draggable.vue'
 import IconButton from './IconButton.vue'
@@ -17,6 +18,23 @@ const {
   drawingPinned,
   brushColors,
 } = useDrawings()
+
+const strokeWidthDropdownShown = ref(false)
+
+function showStrokeWidthDropdown(event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      strokeWidthDropdownShown.value = true
+    })
+  })
+}
+
+function showStrokeWidthDropdownForPointer(event: PointerEvent) {
+  if (event.pointerType !== 'mouse')
+    showStrokeWidthDropdown(event)
+}
 
 function undo() {
   drauu.undo()
@@ -71,8 +89,8 @@ function setBrushColor(color: string) {
 
     <VerticalDivider />
 
-    <Menu>
-      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }">
+    <Dropdown v-model:shown="strokeWidthDropdownShown" :triggers="[]">
+      <IconButton title="Adjust stroke width" :class="{ shallow: drawingMode === 'eraseLine' }" @click="showStrokeWidthDropdown" @pointerdown="showStrokeWidthDropdownForPointer" @pointerup="showStrokeWidthDropdownForPointer" @touchend="showStrokeWidthDropdown">
         <svg viewBox="0 0 32 32" width="1.2em" height="1.2em">
           <line x1="2" y1="15" x2="22" y2="4" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
           <line x1="2" y1="24" x2="28" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -89,7 +107,7 @@ function setBrushColor(color: string) {
           </div>
         </div>
       </template>
-    </Menu>
+    </Dropdown>
     <IconButton
       v-for="color of brushColors"
       :key="color"
@@ -134,7 +152,7 @@ function setBrushColor(color: string) {
 </template>
 
 <style>
-.v-popper--theme-menu .v-popper__arrow-inner {
+.v-popper--theme-dropdown .v-popper__arrow-inner {
   --uno: border-main;
 }
 </style>
