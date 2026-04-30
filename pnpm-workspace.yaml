@@ -54,6 +54,7 @@ catalogs:
     vitepress-plugin-llms: ^1.12.1
   frontend:
     '@antfu/utils': ^9.3.0
+    '@fix-webm-duration/fix': ^1.0.1
     '@shikijs/engine-javascript': ^4.0.2
     '@shikijs/markdown-it': ^4.0.2
     '@slidev/rough-notation': ^0.1.0
@@ -64,7 +65,6 @@ catalogs:
     '@vueuse/motion': ^3.0.3
     drauu: ^1.0.0
     file-saver: ^2.0.5
-    fix-webm-duration: ^1.0.6
     floating-vue: ^5.2.2
     fuse.js: ^7.3.0
     katex: ^0.16.45
