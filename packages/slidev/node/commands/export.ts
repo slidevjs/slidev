@@ -12,7 +12,6 @@ import { resolve } from 'mlly'
 import * as pdfLib from 'pdf-lib'
 import { PDFDocument } from 'pdf-lib'
 import { getRoots } from '../resolver'
-import { preparePngExportDirectory } from './export-utils'
 
 const RE_CLICKS_PARAM = /clicks=([1-9]\d*)/
 
@@ -475,7 +474,11 @@ export async function exportSlides({
   }
 
   async function genPagePng(writeToDisk: string | false, cleanOutput = true) {
-    await preparePngExportDirectory(writeToDisk, cleanOutput)
+    if (writeToDisk) {
+      if (cleanOutput)
+        await fs.rm(writeToDisk, { force: true, recursive: true })
+      await fs.mkdir(writeToDisk, { recursive: true })
+    }
     return perSlide
       ? genPagePngPerSlide(writeToDisk)
       : genPagePngOnePiece(writeToDisk)
