@@ -278,7 +278,7 @@ export async function exportSlides({
     // Wait for frames to load
     {
       const frames = page.frames()
-      await Promise.all(frames.map(frame => frame.waitForLoadState()))
+      await Promise.all(frames.map(frame => frame.waitForLoadState(undefined, { timeout })))
     }
     // Wait for Mermaid graphs to be rendered
     {
