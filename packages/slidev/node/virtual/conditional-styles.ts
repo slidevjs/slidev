@@ -7,7 +7,7 @@ const id = '/@slidev/conditional-styles'
 
 export const templateConditionalStyles: VirtualModuleTemplate = {
   id,
-  async getContent({ data, roots }) {
+  async getContent({ data, roots, userRoot }) {
     const imports: string[] = []
 
     for (const root of roots) {
@@ -15,7 +15,7 @@ export const templateConditionalStyles: VirtualModuleTemplate = {
         join(root, 'styles/index.{ts,js,css}'),
         join(root, 'styles.{ts,js,css}'),
         join(root, 'style.{ts,js,css}'),
-      ]))
+      ], {}, userRoot))
     }
 
     if (data.features.katex)
