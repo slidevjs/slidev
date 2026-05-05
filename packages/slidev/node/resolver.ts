@@ -14,6 +14,7 @@ import { resolveGlobal } from 'resolve-global'
 import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
 
 const RE_PATH_SEPARATOR = /[/\\]/
+const RE_SAFE_PKG_NAME = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -147,6 +148,10 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
       return [name, resolve(userRoot, name.slice(2))]
     if (name[0] === '.' || (name[0] !== '@' && name.includes('/')))
       return [name, resolve(dirname(importer), name)]
+
+    // Validate that the name is a safe npm package name before resolving
+    if (!RE_SAFE_PKG_NAME.test(name))
+      throw new Error(`Invalid ${type} name "${name}". Only valid npm package names are allowed.`)
 
     // search for local packages first
     {
