@@ -126,10 +126,26 @@ export async function build(
 
   // copy index.html to 404.html for GitHub Pages
   await fs.copyFile(resolve(outDir, 'index.html'), resolve(outDir, '404.html'))
-  // _redirects for SPA
+
+  // _redirects for SPA (supported by Netlify and Cloudflare Pages)
   const redirectsPath = resolve(outDir, '_redirects')
-  if (!existsSync(redirectsPath))
-    await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
+  if (!existsSync(redirectsPath)) {
+    const base = config.base
+    await fs.writeFile(
+      redirectsPath,
+      `${base}index.html   ${base}index.html   200\n${base}*    ${base}index.html   200\n`,
+      'utf-8',
+    )
+  }
+
+  // _headers for Cloudflare Pages (auto-detected via wrangler config)
+  const hasWranglerConfig = existsSync(resolve(options.userRoot, 'wrangler.toml')) || existsSync(resolve(options.userRoot, 'wrangler.json'))
+  if (hasWranglerConfig) {
+    const headersPath = resolve(outDir, '_headers')
+    if (!existsSync(headersPath)) {
+      await fs.writeFile(headersPath, `\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n`, 'utf-8')
+    }
+  }
 
   if ([true, 'true', 'auto'].includes(options.data.config.download)) {
     const { exportSlides, getExportOptions } = await import('./export')
