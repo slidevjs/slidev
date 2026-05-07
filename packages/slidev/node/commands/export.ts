@@ -473,9 +473,10 @@ export async function exportSlides({
       : genPagePdfOnePiece()
   }
 
-  async function genPagePng(writeToDisk: string | false) {
+  async function genPagePng(writeToDisk: string | false, cleanOutput = true) {
     if (writeToDisk) {
-      await fs.rm(writeToDisk, { force: true, recursive: true })
+      if (cleanOutput)
+        await fs.rm(writeToDisk, { force: true, recursive: true })
       await fs.mkdir(writeToDisk, { recursive: true })
     }
     return perSlide
@@ -484,7 +485,7 @@ export async function exportSlides({
   }
 
   async function genPageMd() {
-    const pngs = await genPagePng(dirname(output))
+    const pngs = await genPagePng(dirname(output), false)
     const content = slides
       .filter(({ index }) => pages.includes(index + 1))
       .map(({ title, index, note }) =>
