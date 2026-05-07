@@ -2,7 +2,6 @@ import type { CodeblockTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import type MagicString from 'magic-string'
 import type MarkdownExit from 'markdown-exit'
 import MarkdownItComark from '@comark/markdown-it'
-import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
 import MarkdownItFootnote from 'markdown-it-footnote'
 import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
@@ -15,6 +14,7 @@ import MarkdownItStyleScoped from './scoped'
 import MarkdownItShiki from './shiki'
 import MarkdownItSlotSugar from './slot-sugar'
 import MarkdownItSnippet from './snippet'
+import MarkdownItTaskList from './task-list'
 
 export async function useMarkdownItPlugins(
   md: MarkdownExit,
