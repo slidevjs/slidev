@@ -38,8 +38,8 @@ const { $slidev } = useSlideContext()
 const { currentPage, currentLayout, currentSlideRoute } = useNav()
 const { isDark } = useDarkMode()
 const isActive = useIsSlideActive()
-onSlideEnter(() => { /* ... */ })
-onSlideLeave(() => { /* ... */ })
+onSlideEnter((to, from) => { /* ... */ })
+onSlideLeave((to, from) => { /* ... */ })
 // ...
 </script>
 ```

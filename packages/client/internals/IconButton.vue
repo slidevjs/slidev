@@ -6,13 +6,15 @@ const props = defineProps<{
   icon?: string
   as?: string
   to?: string
+  disabled?: boolean
+  active?: boolean
 }>()
 
 const type = computed(() => props.as || (props.to ? 'router-link' : 'button'))
 </script>
 
 <template>
-  <component :is="type" class="slidev-icon-btn" :title="title" :to="to">
+  <component :is="type" class="slidev-icon-btn" :class="{ disabled, active }" :title="title" :to="to">
     <span class="sr-only">{{ title }}</span>
     <slot>
       <div :class="icon" />

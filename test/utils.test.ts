@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
 import { getRoots } from '../packages/slidev/node/resolver'
-import { generateCoollabsFontsUrl, generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
+import { generateCoollabsFontsUrl, generateGoogleFontsUrl, makeAbsoluteImportGlob, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
   it('page-range', () => {
@@ -87,6 +87,16 @@ describe('utils', () => {
     expectRelative(clientRoot).toMatchInlineSnapshot(`"../packages/client"`)
     expectRelative(userRoot).toMatchInlineSnapshot(`".."`)
     expectRelative(userWorkspaceRoot).toMatchInlineSnapshot(`".."`)
+  })
+
+  it('uses root-relative glob patterns for Windows drive paths', () => {
+    expect(makeAbsoluteImportGlob('/@slidev/conditional-styles', [
+      'C:\\Users\\Donald\\Documents\\slides\\styles\\index.{ts,js,css}',
+      'C:\\Users\\Donald\\Documents\\slides\\styles.{ts,js,css}',
+      'C:\\Users\\Donald\\Documents\\slides\\style.{ts,js,css}',
+    ], {}, 'C:\\Users\\Donald\\Documents\\slides')).toMatchInlineSnapshot(
+      `"import.meta.glob([\"./styles/index.{ts,js,css}\",\"./styles.{ts,js,css}\",\"./style.{ts,js,css}\"], {\"eager\":true,\"exhaustive\":true,\"base\":\"/\"})"`,
+    )
   })
 
   it('update frontmatter patch', async () => {

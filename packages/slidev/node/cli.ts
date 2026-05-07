@@ -352,6 +352,11 @@ cli.command(
       type: 'boolean',
       describe: 'exclude speaker notes from the built output',
     })
+    .option('router-mode', {
+      type: 'string',
+      choices: ['hash', 'history'],
+      describe: 'override routerMode in the built output (hash for subdirectory deploys like GitHub Pages)',
+    })
     .option('inspect', {
       default: false,
       type: 'boolean',
@@ -360,11 +365,11 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes }, 'build')
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes, routerMode: routerMode as 'hash' | 'history' | undefined }, 'build')
 
       printInfo(options)
       await build(

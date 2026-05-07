@@ -113,12 +113,12 @@ const { $page, $clicks, $frontmatter } = useSlideContext()
 ```ts
 import { onSlideEnter, onSlideLeave } from '@slidev/client'
 
-onSlideEnter(() => {
+onSlideEnter((to, from) => {
   // Slide became active
   startAnimation()
 })
 
-onSlideLeave(() => {
+onSlideLeave((to, from) => {
   // Slide became inactive
   cleanup()
 })

@@ -270,6 +270,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/christian-bromann/slidev-agent',
   },
+  {
+    id: 'slidev-addon-animated-text',
+    name: 'Animated text',
+    description: 'Stroke by stroke animated text with any font using tegaki.',
+    tags: ['Component'],
+    author: {
+      name: 'Andreas Taranetz',
+      link: 'https://andreas.taranetz.com/',
+    },
+    repo: 'https://github.com/andreas-taranetz/slidev-addon-animated-text',
+  },
   // Add yours here!
   {
     id: '',

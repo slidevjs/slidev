@@ -1,7 +1,7 @@
 import type { BuiltinLayouts } from './builtin-layouts'
 import type { SlidevThemeConfig } from './types'
 
-export interface Headmatter extends HeadmatterConfig, Omit<Frontmatter, 'title'> {
+export interface Headmatter extends HeadmatterConfig, Omit<Frontmatter, 'title' | 'transition'> {
   /**
    * Default frontmatter options applied to all slides
    */

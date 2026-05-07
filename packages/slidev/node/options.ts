@@ -38,6 +38,9 @@ export async function resolveOptions(
   if (entryOptions.download)
     config.download ||= entryOptions.download
 
+  if (entryOptions.routerMode)
+    config.routerMode = entryOptions.routerMode
+
   debug({
     ...rootsInfo,
     ...entryOptions,

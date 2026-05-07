@@ -82,6 +82,10 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
     body += '\n<script async src="https://platform.twitter.com/widgets.js"></script>'
   }
 
+  if (data.features.bluesky) {
+    body += '\n<script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>'
+  }
+
   const webFontsLink: ResolvableLink[] = []
   if (data.config.fonts.webfonts.length) {
     const { provider } = data.config.fonts

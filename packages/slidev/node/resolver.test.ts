@@ -61,4 +61,79 @@ describe('createResolver', () => {
     ],
     )
   })
+
+  it('resolves valid scoped name through validation', async () => {
+    const resolver = createResolver('theme', {})
+
+    const res = await resolver('@slidev/theme-official', '/')
+
+    expect(res).toEqual([
+      '@slidev/theme-official',
+      '/user/project/node_modules/@slidev/theme-official',
+    ])
+  })
+
+  it('passes through "none" without validation', async () => {
+    const resolver = createResolver('theme', {})
+
+    const res = await resolver('none', '/')
+
+    expect(res).toEqual(['', null])
+  })
+
+  it('rejects names with shell metacharacters', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('evil$(rm -rf)', '/')).rejects.toThrowError(
+      'Invalid theme name "evil$(rm -rf)". Only valid npm package names are allowed.',
+    )
+  })
+
+  it('rejects names with backslashes', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('evil\\package', '/')).rejects.toThrowError(
+      /Invalid theme name/,
+    )
+  })
+
+  it('rejects names with uppercase letters', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('EvilTheme', '/')).rejects.toThrowError(
+      /Invalid theme name/,
+    )
+  })
+
+  it('rejects scoped names with extra slash segments', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('@scope/foo/bar', '/')).rejects.toThrowError(
+      /Invalid theme name/,
+    )
+  })
+
+  it('rejects scoped names with parent traversal segment', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('@evil/../escape', '/')).rejects.toThrowError(
+      /Invalid theme name/,
+    )
+  })
+
+  it('rejects empty string', async () => {
+    const resolver = createResolver('theme', {})
+
+    await expect(resolver('', '/')).rejects.toThrowError(
+      /Invalid theme name/,
+    )
+  })
+
+  it('reflects the resolver type in the error message', async () => {
+    const resolver = createResolver('addon', {})
+
+    await expect(resolver('evil$(rm -rf)', '/')).rejects.toThrowError(
+      'Invalid addon name "evil$(rm -rf)". Only valid npm package names are allowed.',
+    )
+  })
 })

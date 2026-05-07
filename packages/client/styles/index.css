@@ -124,11 +124,15 @@ html {
 
 #twoslash-container {
   position: fixed;
-}
 
-#twoslash-container .v-popper__wrapper:not(.no-slide-scale > *) {
-  transform: scale(calc(1 * var(--slidev-slide-scale)));
-  transform-origin: 30px top;
+  .v-popper__wrapper:not(.no-slide-scale > *) {
+    zoom: var(--slidev-slide-scale);
+  }
+
+  .v-popper__popper:not(.no-slide-scale > *) {
+    translate: calc(10px * (1 - var(--slidev-slide-scale))) 0;
+    width: max-content;
+  }
 }
 
 .slidev-note ul {

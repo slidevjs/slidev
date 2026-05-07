@@ -46,6 +46,11 @@ export interface SlidevEntryOptions {
    * Exclude speaker notes from the built output
    */
   withoutNotes?: boolean
+
+  /**
+   * Override routerMode at build time
+   */
+  routerMode?: 'hash' | 'history'
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
