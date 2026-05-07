@@ -14,7 +14,7 @@ import { resolveGlobal } from 'resolve-global'
 import { findClosestPkgJsonPath, findDepPkgJsonPath } from 'vitefu'
 
 const RE_PATH_SEPARATOR = /[/\\]/
-const RE_SAFE_PKG_NAME = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
+const RE_SAFE_PKG_NAME = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
 
