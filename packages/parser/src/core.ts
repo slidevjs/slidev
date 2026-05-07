@@ -19,6 +19,31 @@ export interface SlidevParserOptions {
   preserveCR?: boolean
 }
 
+function advanceHtmlCommentState(line: string, inHtmlComment: boolean) {
+  let cursor = 0
+
+  while (cursor < line.length) {
+    if (inHtmlComment) {
+      const end = line.indexOf('-->', cursor)
+      if (end < 0)
+        return true
+      inHtmlComment = false
+      cursor = end + 3
+    }
+    else {
+      const start = line.indexOf('<!--', cursor)
+      if (start < 0)
+        return false
+      const end = line.indexOf('-->', start + 4)
+      if (end < 0)
+        return true
+      cursor = end + 3
+    }
+  }
+
+  return inHtmlComment
+}
+
 export function stringify(data: SlidevMarkdown) {
   return `${data.slides.map(stringifySlide).join('\n').trim()}\n`
 }
@@ -200,6 +225,7 @@ export async function parse(
 
   let start = 0
   let contentStart = 0
+  let inHtmlComment = false
 
   async function slice(end: number) {
     if (start === end)
@@ -247,7 +273,13 @@ export async function parse(
   }
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trimEnd()
+    const rawLine = lines[i]
+    const line = rawLine.trimEnd()
+    if (inHtmlComment) {
+      inHtmlComment = advanceHtmlCommentState(rawLine, true)
+      continue
+    }
+
     if (line.startsWith('---')) {
       await slice(i)
 
@@ -274,6 +306,9 @@ export async function parse(
       if (j !== lines.length)
         i = j
     }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
+    }
   }
 
   if (start <= lines.length - 1)
@@ -296,6 +331,7 @@ export function parseSync(
 
   let start = 0
   let contentStart = 0
+  let inHtmlComment = false
 
   function slice(end: number) {
     if (start === end)
@@ -315,7 +351,13 @@ export function parseSync(
   }
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trimEnd()
+    const rawLine = lines[i]
+    const line = rawLine.trimEnd()
+    if (inHtmlComment) {
+      inHtmlComment = advanceHtmlCommentState(rawLine, true)
+      continue
+    }
+
     if (line.startsWith('---')) {
       slice(i)
 
@@ -341,6 +383,9 @@ export function parseSync(
       // Update i only when code block ends
       if (j !== lines.length)
         i = j
+    }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
     }
   }
 
