@@ -18,7 +18,7 @@ import { createServer } from './commands/serve'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveOptions } from './options'
 import { parser } from './parser'
-import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
+import { isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
 
@@ -158,7 +158,7 @@ cli.command(
         {
           async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
+            const loaded = await parser.load(options, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -416,8 +416,8 @@ cli.command(
           }),
         async ({ entry: entryRaw, dir, theme: themeInput }) => {
           const entry = await resolveEntry(entryRaw)
-          const roots = await getRoots(entry)
-          const data = await parser.load(roots.userRoot, entry)
+          const options = await resolveOptions({ entry }, 'dev')
+          const data = await parser.load(options, entry)
           let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
           themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
           if (themeRaw === 'none') {
