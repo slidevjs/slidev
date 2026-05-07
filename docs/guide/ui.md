@@ -81,6 +81,8 @@ You can visit an overview of all of your slides by first opening the [Quick Over
 
 The overview page gives you a linear list of all your slides, with all of your notes on the side. You can double-click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.
 
+Clicking a slide number in the left rail updates the URL hash (for example `http://localhost:<port>/overview#slide-24`), making it easy to refresh the page or share a direct link to a specific slide section in long decks.
+
 ## Notes Editor {#notes-editor}
 
 > Available since v0.52.0
