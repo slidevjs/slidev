@@ -280,10 +280,6 @@ export async function parse(
       continue
     }
 
-    inHtmlComment = advanceHtmlCommentState(rawLine, false)
-    if (inHtmlComment)
-      continue
-
     if (line.startsWith('---')) {
       await slice(i)
 
@@ -309,6 +305,9 @@ export async function parse(
       // Update i only when code block ends
       if (j !== lines.length)
         i = j
+    }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
     }
   }
 
@@ -359,10 +358,6 @@ export function parseSync(
       continue
     }
 
-    inHtmlComment = advanceHtmlCommentState(rawLine, false)
-    if (inHtmlComment)
-      continue
-
     if (line.startsWith('---')) {
       slice(i)
 
@@ -388,6 +383,9 @@ export function parseSync(
       // Update i only when code block ends
       if (j !== lines.length)
         i = j
+    }
+    else {
+      inHtmlComment = advanceHtmlCommentState(rawLine, false)
     }
   }
 

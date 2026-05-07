@@ -134,6 +134,20 @@ src: ./pages/three.md
       .toEqual(['./pages/one.md', './pages/three.md'])
   })
 
+  it('detects slide separator even when comment opens on the same line', async () => {
+    const data = await parse(`a
+
+----<!--
+hidden
+-->
+
+b
+`, 'file.md')
+
+    expect(data.slides).toHaveLength(2)
+    expect(data.slides.map(s => s.content.trim())).toEqual(['a', 'hidden\n-->\n\nb'])
+  })
+
   async function parseWithExtension(
     src: string,
     transformRawLines: (lines: string[]) => void | Promise<void> = () => {},
