@@ -1,4 +1,4 @@
-import type { ResolvedSlidevOptions } from '@slidev/types'
+import type { ResolvedSlidevOptions, SlideInfo } from '@slidev/types'
 import type { MarkdownExit } from 'markdown-exit'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -105,7 +105,46 @@ function findRegion(lines: Array<string>, regionName: string) {
 }
 
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
+export const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
+
+export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo) {
+  const match = lineText.trimStart().match(RE_SNIPPET_IMPORT)
+  if (!match)
+    return null
+
+  let [, filepath = '', regionName = '', lang = '', meta = ''] = match
+  const dir = path.dirname(slide.source.filepath)
+  const src = slash(
+    filepath.startsWith('@/')
+      ? path.resolve(userRoot, filepath.slice(2))
+      : path.resolve(dir, filepath),
+  )
+
+  lang = lang.trim() || path.extname(filepath).slice(1)
+  meta = meta.trim()
+
+  const isAFile = fs.existsSync(src) && fs.statSync(src).isFile()
+  if (!isAFile) {
+    throw new Error(`Code snippet path not found: ${src}`)
+  }
+
+  let content = fs.readFileSync(src, 'utf8')
+
+  if (regionName) {
+    const lines = content.split(RE_NEWLINE)
+    const region = findRegion(lines, regionName.slice(1))
+    if (region) {
+      content = dedent(
+        lines
+          .slice(region.start, region.end)
+          .filter(l => !(region.re.start.test(l) || region.re.end.test(l)))
+          .join('\n'),
+      )
+    }
+  }
+
+  return { content, filepath, lang, meta, src }
+}
 
 export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
@@ -120,8 +159,6 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
     if (silent)
       return true
 
-    let [, filepath = '', regionName = '', lang = '', meta = ''] = match
-
     const slideNo = state.env.id?.match(regexSlideSourceId)
     const slide = slideNo ? slides[slideNo[1] - 1] : null
 
@@ -130,35 +167,12 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
       return false
     }
 
-    const dir = path.dirname(slide.source.filepath)
-    const src = slash(
-      filepath.startsWith('@/')
-        ? path.resolve(userRoot, filepath.slice(2))
-        : path.resolve(dir, filepath),
-    )
+    const snippet = resolveSnippetImport(lineText, userRoot, slide)
+    if (!snippet)
+      return false
 
-    lang = lang.trim() || path.extname(filepath).slice(1)
-    meta = meta.trim()
-
-    const isAFile = fs.existsSync(src) && fs.statSync(src).isFile()
-    if (!isAFile) {
-      throw new Error(`Code snippet path not found: ${src}`)
-    }
-
-    let content = fs.readFileSync(src, 'utf8')
-
-    if (regionName) {
-      const lines = content.split(RE_NEWLINE)
-      const region = findRegion(lines, regionName.slice(1))
-      if (region) {
-        content = dedent(
-          lines
-            .slice(region.start, region.end)
-            .filter(l => !(region.re.start.test(l) || region.re.end.test(l)))
-            .join('\n'),
-        )
-      }
-    }
+    const { content, filepath, src } = snippet
+    let { lang, meta } = snippet
 
     if (meta.includes('{monaco-write}')) {
       monacoWriterWhitelist.add(filepath)
