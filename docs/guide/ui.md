@@ -62,13 +62,307 @@ The presenter view offers three different layouts that you can cycle through by 
 
 Each layout is optimized for different screen sizes and presentation preferences.
 
-### Screen Mirror {#screen-mirror}
+# Screen Mirror
 
 > Available since v0.50.0
 
-In the presenter view, you can switch the main slide area to "Screen Mirror" mode. This allows you to capture and display another monitor or window directly in the presenter view.
+Screen Mirror allows you to capture and display another monitor or window directly in the presenter view. This feature is useful for live coding demos, terminal output, or any situation where you need to see what's happening on another screen while presenting.
 
-Click the "Screen Mirror" option in the presenter view's segment control, then select the screen or window you want to mirror. This is useful when you want to see exactly what your audience sees on the projector or external display (e.g. live coding / live demo).
+## Use Cases
+
+### Live Coding Demos
+
+When doing live coding presentations, you can mirror your code editor or terminal in the presenter view. This allows you to:
+
+- See exactly what your audience sees on the projector
+- Keep your presenter notes visible while coding
+- Switch between slides and code without losing context
+
+### Terminal Output
+
+If your presentation includes running commands or showing terminal output, Screen Mirror lets you:
+
+- Display real-time command output in the presenter view
+- Keep your notes and next slide preview visible
+- Maintain a smooth presentation flow without switching windows
+
+### External Applications
+
+Any application or window can be mirrored, including:
+
+- Browser windows with web applications
+- Database management tools
+- API testing tools (like Postman)
+- Design tools (like Figma)
+
+## How to Use
+
+### Step 1: Open Presenter Mode
+
+1. Start your Slidev presentation
+2. Open two browser windows:
+   - One for the audience (play mode): `http://localhost:3030`
+   - One for you (presenter mode): `http://localhost:3030/presenter`
+
+### Step 2: Enable Screen Mirror
+
+1. In the presenter view, look at the main slide area
+2. You'll see a segment control with options like "Slide" and "Screen Mirror"
+3. Click "Screen Mirror" to enable it
+
+### Step 3: Select Screen or Window
+
+1. A dialog will appear asking you to select a screen or window
+2. Choose the screen or window you want to mirror
+3. The selected content will appear in the presenter view
+
+### Step 4: Present
+
+1. Share the audience view (play mode) with your audience
+2. Use the presenter view with Screen Mirror to see:
+   - Your mirrored screen/window
+   - Your presenter notes
+   - Next slide preview
+   - Timer and other tools
+
+## Important Notes
+
+### Screen Mirror Only Shows in Presenter View
+
+**Screen Mirror content only appears in the presenter view, not in the audience view.** This is by design because:
+
+1. **Purpose**: Screen Mirror is meant to help the presenter see what's happening on another screen, not to replace the presentation content
+2. **Audience Experience**: The audience should see your slides, not your mirrored screen
+3. **Use Case**: It's for monitoring purposes (e.g., seeing your terminal while presenting)
+
+### If You Want to Show Screen Content to Audience
+
+If you need to show screen content to your audience, you have several options:
+
+#### Option 1: Use Slidev's Built-in Features
+
+- **Code Blocks**: Use Slidev's code block feature to show code snippets
+- **Monaco Editor**: Use the Monaco Editor feature for interactive code demos
+- **Import Snippets**: Import code from files directly into your slides
+
+#### Option 2: Use Your Operating System's Screen Sharing
+
+1. Share your entire screen or specific window using your OS screen sharing
+2. This will show the content to your audience
+3. Use Slidev's presenter mode for your notes and controls
+
+#### Option 3: Use a Separate Application
+
+1. Open the application you want to show in a separate window
+2. Share that window with your audience
+3. Use Slidev's presenter mode for your notes
+
+## Configuration
+
+### Frontmatter Configuration
+
+You can configure Screen Mirror behavior in your slide's frontmatter:
+
+```yaml
+---
+# Enable Screen Mirror by default
+screenMirror: true
+
+# Or configure specific options
+screenMirror:
+  enabled: true
+  autoSelect: 'screen' # or 'window'
+---
+```
+
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| <kbd>m</kbd> | Toggle Screen Mirror mode |
+| <kbd>Escape</kbd> | Exit Screen Mirror selection |
+
+## Troubleshooting
+
+### Screen Mirror Not Working
+
+1. **Browser Permissions**: Make sure your browser has permission to capture screens
+2. **HTTPS Required**: Screen capture may require HTTPS in some browsers
+3. **Browser Support**: Check if your browser supports the Screen Capture API
+
+### Poor Performance
+
+1. **Reduce Resolution**: Try capturing a smaller window or area
+2. **Close Unnecessary Tabs**: Free up browser resources
+3. **Use Hardware Acceleration**: Enable hardware acceleration in your browser
+
+### Content Not Showing in Presenter View
+
+1. **Check Selection**: Make sure you selected the correct screen/window
+2. **Refresh**: Try refreshing the presenter view
+3. **Re-select**: Click "Screen Mirror" again and re-select your screen
+
+## Best Practices
+
+### For Live Coding
+
+1. **Use a Dedicated Monitor**: If possible, use a separate monitor for your code
+2. **Position Windows**: Arrange your windows so you can see both Slidev and your code
+3. **Practice Transitions**: Get comfortable switching between slides and code
+
+### For Terminal Demos
+
+1. **Use a Large Font**: Make sure your terminal text is large enough to read
+2. **Clear Terminal**: Clear your terminal before starting the demo
+3. **Prepare Commands**: Have your commands ready to avoid typing during the presentation
+
+### For General Use
+
+1. **Test Before Presenting**: Always test Screen Mirror before your actual presentation
+2. **Have a Backup**: Prepare alternative ways to show your content if Screen Mirror fails
+3. **Keep It Simple**: Don't mirror too many things at once
+
+## Technical Details
+
+### How Screen Mirror Works
+
+1. **Screen Capture API**: Uses the browser's Screen Capture API (`getDisplayMedia`)
+2. **Real-time Streaming**: Captures and streams the screen content in real-time
+3. **Presenter View Only**: The stream is only displayed in the presenter view
+4. **No Recording**: Screen Mirror does not record your screen
+
+### Browser Support
+
+| Browser | Support |
+|---------|---------|
+| Chrome | ✅ Full support |
+| Edge | ✅ Full support |
+| Firefox | ✅ Full support |
+| Safari | ⚠️ Limited support |
+
+### Security Considerations
+
+1. **User Permission**: Browser will ask for permission before capturing
+2. **No Persistence**: Screen capture is not saved or recorded
+3. **Local Only**: Capture is local to your browser
+
+## Examples
+
+### Example 1: Live Coding Presentation
+
+```yaml
+---
+theme: default
+title: Live Coding Demo
+---
+
+# Live Coding Demo
+
+We'll build a React component together!
+
+---
+layout: center
+---
+
+## Let's Code!
+
+Open your editor and follow along.
+```
+
+**Presenter Setup:**
+1. Open presenter mode
+2. Enable Screen Mirror
+3. Select your code editor
+4. Present your slides while seeing your code in the presenter view
+
+### Example 2: Terminal Demo
+
+```yaml
+---
+theme: default
+title: CLI Tools Demo
+---
+
+# CLI Tools Demo
+
+Let's explore some useful CLI tools!
+
+---
+layout: center
+---
+
+## Try It Yourself!
+
+Open your terminal and follow along.
+```
+
+**Presenter Setup:**
+1. Open presenter mode
+2. Enable Screen Mirror
+3. Select your terminal window
+4. Present your slides while seeing your terminal in the presenter view
+
+## Related Features
+
+- [Presenter Mode](/guide/ui#presenter-mode) - Learn about presenter mode
+- [Presenter Layouts](/guide/ui#presenter-layouts) - Different presenter layouts
+- [Remote Access](/features/remote-access) - Control presentations remotely
+- [Recording](/features/recording) - Record your presentations
+
+## FAQ
+
+### Q: Can I show Screen Mirror content to my audience?
+
+**A:** No, Screen Mirror is only for the presenter view. If you need to show screen content to your audience, use your operating system's screen sharing feature or Slidev's built-in code display features.
+
+### Q: Why doesn't Screen Mirror show in the audience view?
+
+**A:** Screen Mirror is designed to help the presenter monitor another screen, not to replace presentation content. The audience should see your slides, not your mirrored screen.
+
+### Q: Can I mirror multiple screens at once?
+
+**A:** No, you can only mirror one screen or window at a time. If you need to show multiple things, consider using Slidev's code blocks or switching between different mirrors during your presentation.
+
+### Q: Does Screen Mirror record my screen?
+
+**A:** No, Screen Mirror only captures and displays your screen in real-time. It does not record or save any content.
+
+### Q: Can I use Screen Mirror with Zoom/Teams/etc?
+
+**A:** Yes! You can use Screen Mirror in Slidev while also sharing your screen in video conferencing tools. Just make sure you're sharing the correct screen or window with your audience.
+
+## Tips and Tricks
+
+### Quick Switching
+
+- Use keyboard shortcut <kbd>m</kbd> to quickly toggle Screen Mirror
+- Practice switching between slides and mirrored content
+
+### Multiple Monitors
+
+- If you have multiple monitors, you can dedicate one to your code
+- Use Screen Mirror to see that monitor in your presenter view
+
+### Performance Optimization
+
+- Close unnecessary browser tabs and applications
+- Use a wired internet connection if possible
+- Reduce the resolution of the mirrored content if needed
+
+### Presentation Flow
+
+1. **Start with slides**: Begin your presentation with slides
+2. **Switch to code**: When ready, switch to Screen Mirror for live coding
+3. **Switch back**: Return to slides for explanations and conclusions
+4. **Use notes**: Keep your presenter notes visible throughout
+
+## Conclusion
+
+Screen Mirror is a powerful feature for presenters who need to monitor another screen while presenting. It's designed to help you see what's happening on another screen without interrupting your presentation flow.
+
+Remember: **Screen Mirror is for the presenter only**. If you need to show screen content to your audience, use your operating system's screen sharing or Slidev's built-in features.
+
+For more information, see the [Presenter Mode documentation](/guide/ui#presenter-mode).
 
 ## Slide Overview {#slides-overview}
 
