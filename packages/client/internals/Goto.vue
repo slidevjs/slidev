@@ -136,7 +136,7 @@ watch(activeElement, () => {
       >
     </div>
     <div
-      v-if="result.length > 0"
+      v-if="showGotoDialog && result.length > 0"
       ref="list"
       class="autocomplete-list"
       shadow="~"
