@@ -1,7 +1,7 @@
 import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
 import type MarkdownExit from 'markdown-exit'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
-import { relative } from 'node:path'
+import { relative, win32 } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
@@ -10,6 +10,7 @@ import YAML from 'yaml'
 const RE_WHITESPACE_ONLY = /^\s*$/
 const RE_QUOTED_STRING = /^(['"])(.*)\1$/
 const RE_WHITESPACE = /\s+/g
+const RE_WINDOWS_DRIVE = /^[A-Z]:\//i
 
 type Token = ReturnType<MarkdownExit['parseInline']>[number]
 
@@ -104,16 +105,38 @@ export function getBodyJson(req: Connect.IncomingMessage) {
   })
 }
 
+function getImportGlobRelativePath(from: string, to: string) {
+  const normalizedFrom = slash(from)
+  const normalizedTo = slash(to)
+  return slash(
+    RE_WINDOWS_DRIVE.test(normalizedFrom) || RE_WINDOWS_DRIVE.test(normalizedTo)
+      ? win32.relative(normalizedFrom, normalizedTo)
+      : relative(normalizedFrom, normalizedTo),
+  )
+}
+
 export function makeAbsoluteImportGlob(
   self: string,
   globs: string[],
   options: Partial<GeneralImportGlobOptions> = {},
+  baseRoot?: string,
 ) {
-  // Vite's import.meta.glob only supports relative paths
-  const relativeGlobs = globs.map(glob => `${slash(relative(self, glob))}`)
+  // Vite's import.meta.glob only supports relative paths. On Windows, though,
+  // resolving drive-letter paths from a virtual /@slidev module can drop the
+  // drive prefix. Use Vite's root-relative form for those paths instead.
+  const root = baseRoot && globs.some(glob => RE_WINDOWS_DRIVE.test(slash(glob)))
+    ? baseRoot
+    : undefined
+  const relativeGlobs = globs.map((glob) => {
+    const relativeGlob = getImportGlobRelativePath(root ?? self, glob)
+    return root && !relativeGlob.startsWith('.') && !RE_WINDOWS_DRIVE.test(relativeGlob)
+      ? `./${relativeGlob}`
+      : relativeGlob
+  })
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,
+    ...(root ? { base: '/' } : {}),
     ...options,
   }
   return `import.meta.glob(${JSON.stringify(relativeGlobs)}, ${JSON.stringify(opts)})`

@@ -7,6 +7,7 @@ import { createContextInjectionPlugin } from './contextInjection'
 import { createConfigPlugin } from './extendConfig'
 import { createHmrPatchPlugin } from './hmrPatch'
 import { createIconsPlugin } from './icons'
+import { createSlideImportGuardPlugin } from './importGuard'
 import { createInspectPlugin } from './inspect'
 import { createLayoutWrapperPlugin } from './layoutWrapper'
 import { createSlidesLoader } from './loaders'
@@ -31,6 +32,7 @@ export function ViteSlidevPlugin(
     createLayoutWrapperPlugin(options),
     createContextInjectionPlugin(),
     createVuePlugin(options, pluginOptions),
+    createSlideImportGuardPlugin(),
     createHmrPatchPlugin(),
     createComponentsPlugin(options, pluginOptions),
     createIconsPlugin(options, pluginOptions),

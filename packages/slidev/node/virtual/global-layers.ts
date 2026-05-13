@@ -6,13 +6,13 @@ const id = `/@slidev/global-layers`
 
 export const templateGlobalLayers: VirtualModuleTemplate = {
   id,
-  getContent({ roots }) {
+  getContent({ roots, userRoot }) {
     function* getComponent(name: string, names: string[]) {
       yield `const ${name}Components = [\n`
       for (const root of roots) {
         const globs = names.map(name => join(root, `${name}.{ts,js,vue}`))
         yield '  Object.values('
-        yield makeAbsoluteImportGlob(id, globs, { import: 'default' })
+        yield makeAbsoluteImportGlob(id, globs, { import: 'default' }, userRoot)
         yield ')[0],\n'
       }
       yield `].filter(Boolean)\n`
