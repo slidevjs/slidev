@@ -303,6 +303,35 @@ export async function exportSlides({
         await element.evaluate(node => node.style.display = 'none')
       }
     }
+    // Wait for the client-side settle signal (only when `--with-clicks` is set;
+    // matches the cases where v-click ordering matters for the snapshot).
+    if (withClicks) {
+      try {
+        if (no === 'print') {
+          await page.waitForFunction(() => {
+            const all = document.querySelectorAll('[data-slidev-no]')
+            const ready = document.querySelectorAll('[data-slidev-no][data-slidev-print-ready]')
+            return all.length > 0 && all.length === ready.length
+          }, null, { timeout })
+        }
+        else {
+          const expected = clicks ?? '0'
+          await page.waitForFunction(
+            ({ slideNo, expectedClicks }) => {
+              const sel = `[data-slidev-no="${slideNo}"][data-slidev-print-ready="${expectedClicks}"]`
+              return !!document.querySelector(sel)
+            },
+            { slideNo: no, expectedClicks: expected },
+            { timeout },
+          )
+        }
+      }
+      catch (e) {
+        console.error(`[slidev] Timed out waiting for clicks to settle on slide ${no}${clicks ? ` (clicks=${clicks})` : ''}:`, e)
+        process.exitCode = 1
+      }
+    }
+
     // Wait for the given time
     if (wait)
       await page.waitForTimeout(wait)
@@ -330,43 +359,134 @@ export async function exportSlides({
     return url.match(RE_CLICKS_PARAM)?.[1]
   }
 
+  function getSlideSegmentFromUrl(url: string) {
+    // Matches both history-mode (".../3?...") and hash-mode (".../?...#3") URLs.
+    // Returns the slide number as a string, or '' if not found.
+    const hashMatch = url.match(/#(\d+)(?:\b|$)/)
+    if (hashMatch)
+      return hashMatch[1]
+    const pathMatch = url.match(/\/(\d+)(?:[?#]|$)/)
+    return pathMatch?.[1] ?? ''
+  }
+
   async function genPageWithClicks(
     fn: (no: number, clicks?: string) => Promise<any>,
     no: number,
     clicks?: string,
   ) {
     await fn(no, clicks)
-    if (withClicks) {
-      await page.keyboard.press('ArrowRight', { delay: 100 })
-      const _clicks = getClicksFromUrl(page.url())
-      if (_clicks && clicks !== _clicks)
-        await genPageWithClicks(fn, no, _clicks)
+    if (!withClicks)
+      return
+    const prevUrl = page.url()
+    const prevSlide = getSlideSegmentFromUrl(prevUrl)
+    const prevClicks = clicks ?? '0'
+    await page.keyboard.press('ArrowRight')
+    try {
+      await page.waitForFunction(
+        ({ slideNo, previousClicks }) => {
+          // Stop waiting when the slide segment changes (we've left this slide)
+          // OR the URL clicks param changes (per-slide mode advances click state)
+          // OR a settle attribute with a value other than the previous clicks
+          // appears on the current slide (one-piece mode).
+          const hashMatch = location.hash.match(/#(\d+)(?:\b|$)/)
+          const pathMatch = location.pathname.match(/\/(\d+)$/)
+          const currentSlide = hashMatch?.[1] ?? pathMatch?.[1] ?? ''
+          if (currentSlide && currentSlide !== String(slideNo))
+            return true
+          // Detect URL clicks param change (per-slide print mode)
+          const urlClicksMatch = location.search.match(/[?&]clicks=(\d+)/)
+          const urlClicks = urlClicksMatch?.[1] ?? '0'
+          if (urlClicks !== previousClicks)
+            return true
+          // Detect settle attribute change (one-piece print mode): use
+          // querySelectorAll so that a v-for-rendered multi-state layout
+          // (which can have several [data-slidev-no="N"] elements) does not
+          // always return the initial-state element via querySelector.
+          const els = Array.from(document.querySelectorAll(`[data-slidev-no="${slideNo}"][data-slidev-print-ready]`))
+          return els.some(el => el.getAttribute('data-slidev-print-ready') !== previousClicks)
+        },
+        { slideNo: no, previousClicks: prevClicks },
+        { timeout },
+      )
     }
+    catch (e) {
+      console.error(`[slidev] Timed out waiting for next click state on slide ${no}:`, e)
+      process.exitCode = 1
+      return
+    }
+    const newUrl = page.url()
+    const newSlide = getSlideSegmentFromUrl(newUrl)
+    if (newSlide && newSlide !== prevSlide)
+      return // moved to the next slide; stop recursion
+    const _clicks = getClicksFromUrl(newUrl)
+    if (_clicks && clicks !== _clicks)
+      await genPageWithClicks(fn, no, _clicks)
   }
 
   async function genPagePdfPerSlide() {
     const buffers: Buffer[] = []
-    const genPdfBuffer = async (i: number, clicks?: string) => {
-      await go(i, clicks)
-      const pdf = await page.pdf({
-        width,
-        height,
-        margin: {
-          left: 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
-        },
-        pageRanges: '1',
-        printBackground: true,
-        preferCSSPageSize: true,
-      })
-      buffers.push(pdf)
-    }
     let idx = 0
-    for (const i of pages) {
-      await genPageWithClicks(genPdfBuffer, i)
-      progress.update(++idx)
+
+    if (withClicks) {
+      // Keyboard shortcuts are disabled in print mode, so ArrowRight cannot
+      // advance click states. Navigate to the print route once to render all
+      // click states (each as a .print-slide-container page). Use getSlidesIndex()
+      // to map each slide to its page range, then capture each page as a
+      // separate PDF buffer.
+      await go('print')
+      const slideIndexes = await getSlidesIndex()
+      // Build cumulative offset map: slideNo → [firstPage, lastPage] (1-based)
+      const pagesPerSlide: Record<number, [number, number]> = {}
+      const sortedSlides = Object.keys(slideIndexes).map(Number).sort((a, b) => a - b)
+      for (const slideNo of sortedSlides) {
+        const endPage = slideIndexes[slideNo]
+        const prevSlide = sortedSlides[sortedSlides.indexOf(slideNo) - 1]
+        const startPage = prevSlide !== undefined ? slideIndexes[prevSlide] + 1 : 1
+        pagesPerSlide[slideNo] = [startPage, endPage]
+      }
+      for (const i of pages) {
+        const [startPage, endPage] = pagesPerSlide[i] ?? [1, 1]
+        for (let p = startPage; p <= endPage; p++) {
+          const pdf = await page.pdf({
+            width,
+            height,
+            margin: {
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+            },
+            pageRanges: String(p),
+            printBackground: true,
+            preferCSSPageSize: true,
+          })
+          buffers.push(pdf)
+        }
+        progress.update(++idx)
+      }
+    }
+    else {
+      const genPdfBuffer = async (i: number, clicks?: string) => {
+        await go(i, clicks)
+        const pdf = await page.pdf({
+          width,
+          height,
+          margin: {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+          },
+          pageRanges: '1',
+          printBackground: true,
+          preferCSSPageSize: true,
+        })
+        buffers.push(pdf)
+      }
+      for (const i of pages) {
+        await genPageWithClicks(genPdfBuffer, i)
+        progress.update(++idx)
+      }
     }
 
     let mergedPdf = await PDFDocument.create({})
@@ -460,8 +580,31 @@ export async function exportSlides({
         )
       }
     }
-    for (const no of pages)
-      await genPageWithClicks(genScreenshot, no)
+    if (withClicks) {
+      // Keyboard shortcuts are disabled in print mode, so ArrowRight cannot
+      // advance click states. Navigate to the print route once; the layout
+      // renders all click states as .print-slide-container elements. For each
+      // requested slide, screenshot each of its click-state containers directly.
+      await go('print')
+      for (const no of pages) {
+        const noStr = String(no).padStart(3, '0')
+        const clickContainers = page.locator(`.print-slide-container[id^="${noStr}-"]`)
+        const clickCount = await clickContainers.count()
+        for (let c = 0; c < clickCount; c++) {
+          const container = clickContainers.nth(c)
+          const idAttr = await container.getAttribute('id') || ''
+          const buffer = await container.screenshot({ omitBackground })
+          const filename = `${idAttr}.png`
+          result.push({ slideIndex: no - 1, buffer, filename })
+          if (writeToDisk)
+            await fs.writeFile(path.join(writeToDisk, filename), buffer)
+        }
+      }
+    }
+    else {
+      for (const no of pages)
+        await genPageWithClicks(genScreenshot, no)
+    }
     return result
   }
 
