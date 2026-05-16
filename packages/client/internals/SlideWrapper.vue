@@ -3,7 +3,8 @@ import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import type { CSSProperties, PropType } from 'vue'
 import { SlideBottom, SlideTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
-import { computed, ref, toRef } from 'vue'
+import { computed, nextTick, ref, toRef, watchEffect } from 'vue'
+import { useNav } from '../composables/useNav'
 import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { configs } from '../env'
 import { getSlideClass } from '../utils'
@@ -36,10 +37,43 @@ const style = computed<CSSProperties>(() => ({
   'user-select': configs.selectable ? undefined : 'none',
   '--slidev-slide-zoom-scale': zoom.value === 1 ? undefined : zoom.value,
 }))
+
+const rootEl = ref<HTMLDivElement>()
+
+// Print-mode settle signal: write `data-slidev-print-ready="<clicks>"` on the
+// root [data-slidev-no] div once Vue reactivity has flushed and one paint frame
+// has fired. Playwright's PDF/PNG export waits on this attribute to know it is
+// safe to snapshot. The attribute is removed at the start of each cycle so a
+// partial state can never be observed as settled.
+const { isPrintMode } = useNav()
+
+watchEffect((onCleanup) => {
+  if (!isPrintMode.value)
+    return
+  const el = rootEl.value
+  if (!el)
+    return
+  const target = String(props.clicksContext.current)
+  el.removeAttribute('data-slidev-print-ready')
+  let cancelled = false
+  onCleanup(() => {
+    cancelled = true
+  })
+  nextTick(() => {
+    if (cancelled)
+      return
+    requestAnimationFrame(() => {
+      if (cancelled)
+        return
+      el.setAttribute('data-slidev-print-ready', target)
+    })
+  })
+})
 </script>
 
 <template>
   <div
+    ref="rootEl"
     :data-slidev-no="props.route.no"
     :class="getSlideClass(route, ['slide', 'presenter'].includes(props.renderContext) ? '' : 'disable-view-transition')"
     :style="style"
