@@ -5,26 +5,39 @@ import { useFixedNav, useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
 import PrintSlideClick from './PrintSlideClick.vue'
 
-const { route } = defineProps<{ hidden?: boolean, route: SlideRoute }>()
+const { route, hidden } = defineProps<{ hidden?: boolean, route: SlideRoute }>()
 const { isPrintWithClicks } = useNav()
-const clicks0 = createFixedClicks(route, () => isPrintWithClicks.value ? 0 : CLICKS_MAX)
+
+// Snapshot the value ONCE at component setup time. The upstream code used a
+// reactive getter here, which on initial hydration could resolve to CLICKS_MAX
+// before useNav had finished initialising isPrintWithClicks — producing the
+// "final state appears as the first exported page" bug reported in #2034.
+// Reading .value once captures a stable Number.
+const initialClicks = isPrintWithClicks.value ? 0 : CLICKS_MAX
+const clicksRef = createFixedClicks(route, initialClicks)
 </script>
 
 <template>
+  <!--
+    Always-on instance. Two roles:
+      1. Renders state `clicksStart` in with-clicks mode (the empty/initial
+         state) or `CLICKS_MAX` in non-clicks mode (the final-state preview).
+      2. Its rendered slide component injects `clicksRef` and calls
+         `clicksRef.setup()` (injected by the slidev layout wrapper). When the
+         slide mounts, `clicksRef.isMounted` flips true and `maxMap` becomes
+         shallowReactive — which makes `clicksRef.total` accurate for the
+         v-for below.
+  -->
   <PrintSlideClick
     v-show="!hidden"
-    :nav="useFixedNav(route, clicks0)"
+    :nav="useFixedNav(route, clicksRef)"
   />
   <template v-if="isPrintWithClicks">
-    <!--
-      clicks0.total can be any number >=0 when rendering.
-      So total-clicksStart can be negative in intermediate states.
-    -->
     <PrintSlideClick
-      v-for="i in Math.max(0, clicks0.total - clicks0.clicksStart)"
+      v-for="i in Math.max(0, clicksRef.total - clicksRef.clicksStart)"
       v-show="!hidden"
-      :key="i"
-      :nav="useFixedNav(route, createFixedClicks(route, i + clicks0.clicksStart))"
+      :key="i + clicksRef.clicksStart"
+      :nav="useFixedNav(route, createFixedClicks(route, i + clicksRef.clicksStart))"
     />
   </template>
 </template>
