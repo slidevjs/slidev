@@ -143,7 +143,6 @@ cli.command(
           server: {
             port,
             strictPort: true,
-            open,
             host,
             // @ts-expect-error Vite <= 4
             force,
@@ -206,8 +205,20 @@ cli.command(
         publicIp = await import('public-ip').then(r => r.publicIpv4())
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
+      if (open)
+        await openSlidevInBrowser()
 
       return options
+    }
+
+    async function openSlidevInBrowser() {
+      const url = `http://localhost:${port}${base}`
+      try {
+        await openBrowser(url)
+      }
+      catch {
+        console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
     }
 
     async function openTunnel(port: number) {
@@ -231,7 +242,7 @@ cli.command(
         name: 'o',
         fullname: 'open',
         action() {
-          openBrowser(`http://localhost:${port}${base}`)
+          openSlidevInBrowser()
         },
       },
       {
