@@ -7,6 +7,7 @@ import { config } from '../configs'
 import { generateErrorHtml } from '../html/error'
 import { generateReadyHtml } from '../html/ready'
 import { activeData, activeProject } from '../projects'
+import { getSlidesTitle } from '../utils/getSlidesTitle'
 import { logger } from './logger'
 
 export const usePreviewWebview = defineService(() => {
@@ -22,10 +23,7 @@ export const usePreviewWebview = defineService(() => {
   const savedPreviewMode = extensionContext.value?.globalState.get<PreviewMode>('slidev:preview:mode')
   const previewMode = ref<PreviewMode>(savedPreviewMode === 'overview' ? 'overview' : 'slide')
   const hashRoute = computed(() => activeData.value?.slides[0]?.frontmatter.routerMode === 'hash')
-  const html = computed(() => ready.value
-    ? generateReadyHtml(port.value, previewMode.value, hashRoute.value)
-    : generateErrorHtml(message.value),
-  )
+  const overviewInitialSlideNo = ref<number>()
   useVscodeContext('slidev:preview:sync', () => config['preview-sync'])
   useVscodeContext('slidev:preview:overview', () => previewMode.value === 'overview')
 
@@ -35,6 +33,34 @@ export const usePreviewWebview = defineService(() => {
     hasNext: true,
     hasPrev: false,
   })
+  let overviewSlideNoForUrl: number | undefined
+
+  function normalizeSlideNo(no: unknown) {
+    const slideNo = Number(no)
+    return Number.isFinite(slideNo) && slideNo > 0 ? slideNo : undefined
+  }
+
+  function getOverviewSlideNoForUrl() {
+    return normalizeSlideNo(
+      overviewSlideNoForUrl
+      ?? viewportSlideNo.value
+      ?? focusedSlideNo.value
+      ?? previewNavState.no,
+    )
+  }
+
+  function updateOverviewInitialSlideNo() {
+    overviewInitialSlideNo.value = previewMode.value === 'overview'
+      ? getOverviewSlideNoForUrl()
+      : undefined
+  }
+
+  updateOverviewInitialSlideNo()
+
+  const html = computed(() => ready.value
+    ? generateReadyHtml(port.value, previewMode.value, hashRoute.value, overviewInitialSlideNo.value)
+    : generateErrorHtml(message.value),
+  )
 
   useVscodeContext('slidev:preview:has-prev-slide', () => previewMode.value === 'slide' && previewNavState.no > 1)
   useVscodeContext('slidev:preview:has-next-slide', () => previewMode.value === 'slide' && activeData.value && previewNavState.no < activeData.value.slides.length)
@@ -81,8 +107,13 @@ export const usePreviewWebview = defineService(() => {
           syncEditorToOverviewUntil = Date.now() + 300
           cancelPendingOverviewScroll()
           const no = Number(data.no)
+          if (Number.isFinite(no))
+            overviewSlideNoForUrl = no
           if (previewMode.value === 'overview' && config['preview-sync'] && Number.isFinite(no))
             revealViewportSlide(no)
+        }
+        else if (data.type === 'open-external' && typeof data.url === 'string') {
+          env.openExternal(Uri.parse(data.url))
         }
       },
     },
@@ -94,6 +125,7 @@ export const usePreviewWebview = defineService(() => {
       await redetect(port.value)
     if (!view.value)
       return
+    updateOverviewInitialSlideNo()
     forceReload()
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
@@ -112,6 +144,7 @@ export const usePreviewWebview = defineService(() => {
   function scrollOverviewToSlide(no: number) {
     if (Date.now() < syncEditorToOverviewUntil)
       return
+    overviewSlideNoForUrl = no
     pendingOverviewScroll = { no }
     if (overviewScrollTimer)
       return
@@ -133,10 +166,13 @@ export const usePreviewWebview = defineService(() => {
 
   watchEffect(() => {
     if (view.value) {
+      if (previewMode.value === 'overview' && activeData.value) {
+        view.value.title = getSlidesTitle(activeData.value)
+        return
+      }
       const slideNo = ready.value && previewMode.value === 'slide' && previewNavState.no > 0 ? ` (${previewNavState.no}/${activeData.value?.slides.length})` : ''
-      const modeInfo = previewMode.value === 'overview' ? ' (overview)' : ''
       const compatInfo = compatMode.value ? ' (compat mode)' : ''
-      view.value.title = `Preview${slideNo}${modeInfo}${compatInfo}`
+      view.value.title = `Preview${slideNo}${compatInfo}`
     }
   })
 
@@ -175,6 +211,11 @@ export const usePreviewWebview = defineService(() => {
     refresh,
     setPreviewMode: (mode: PreviewMode) => {
       initializedClientId.value = ''
+      if (mode !== previewMode.value)
+        overviewSlideNoForUrl = undefined
+      overviewInitialSlideNo.value = mode === 'overview'
+        ? getOverviewSlideNoForUrl()
+        : undefined
       previewMode.value = mode
       void extensionContext.value?.globalState.update('slidev:preview:mode', mode)
     },
@@ -184,12 +225,14 @@ export const usePreviewWebview = defineService(() => {
     prevSlide: useNavOperation('prevSlide', true),
     openExternal: () => {
       const hashRoute = activeData.value?.slides[0]?.frontmatter.routerMode === 'hash'
-      if (previewMode.value === 'overview') {
-        const url = `http://localhost:${port.value}${hashRoute ? '#/' : '/'}overview?mode=preview`
-        return env.openExternal(Uri.parse(url))
-      }
+      const no = previewMode.value === 'overview'
+        ? getOverviewSlideNoForUrl()
+        : previewNavState.no
+      if (!no)
+        return
+      const slideNo = activeData.value ? Math.min(Math.max(Math.round(no), 1), activeData.value.slides.length) : no
       const query = previewNavState.clicks > 0 ? `?clicks=${previewNavState.clicks}` : ''
-      const url = `http://localhost:${port.value}/${hashRoute ? '#' : ''}${previewNavState.no}${query}`
+      const url = `http://localhost:${port.value}/${hashRoute ? '#' : ''}${slideNo}${previewMode.value === 'slide' ? query : ''}`
       return env.openExternal(Uri.parse(url))
     },
   }

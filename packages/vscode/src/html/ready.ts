@@ -1,10 +1,11 @@
 export type PreviewMode = 'slide' | 'overview'
 
-export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: boolean) {
+export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: boolean, initialSlideNo?: number) {
+  const slideNoQuery = initialSlideNo == null ? '' : `&slideNo=${encodeURIComponent(String(initialSlideNo))}`
   const iframeSrc = mode === 'overview'
     ? hashRoute
-      ? `http://localhost:${port}?embedded=true#/overview?mode=preview`
-      : `http://localhost:${port}/overview?mode=preview&embedded=true`
+      ? `http://localhost:${port}?embedded=true#/overview?mode=preview${slideNoQuery}`
+      : `http://localhost:${port}/overview?mode=preview&embedded=true${slideNoQuery}`
     : `http://localhost:${port}?embedded=true`
   return `
   <head>
@@ -41,7 +42,7 @@ export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: bo
         if (data && data.target === 'slidev') {
           if (data.sender === 'vscode')
             iframe.contentWindow.postMessage(data, '*')
-          else if (data.type === 'command' || data.type === 'overview-scroll')
+          else if (data.type === 'command' || data.type === 'overview-scroll' || data.type === 'open-external')
             vscode.postMessage(data)
           else
             vscode.postMessage({

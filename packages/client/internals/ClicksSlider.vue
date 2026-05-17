@@ -45,6 +45,7 @@ const current = computed({
 const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
 const sliderEl = ref<HTMLElement>()
+let pointerDown: { id: number, x: number, y: number, dragging: boolean } | undefined
 
 function getPointerRatio(event: PointerEvent) {
   const rect = sliderEl.value!.getBoundingClientRect()
@@ -59,7 +60,13 @@ function syncCurrentFromPointer(event: PointerEvent) {
     current.value = -1
     return
   }
-  const next = Math.round(start.value + clamp(0, ratio, 1) * (total.value - start.value))
+  const position = clamp(0, ratio, 1) * length.value
+  const currentOffset = clamp(0, current.value - start.value, length.value - 1)
+  let next = current.value
+  if (position >= currentOffset + 1.5)
+    next = start.value + Math.floor(position - 0.5)
+  else if (position < currentOffset - 0.5)
+    next = start.value + Math.ceil(position - 0.5)
   current.value = clamp(start.value, next, total.value)
 }
 
@@ -74,27 +81,46 @@ function onPointerDown(event: PointerEvent) {
   if (props.readonly)
     return
   sliderEl.value?.setPointerCapture(event.pointerId)
+  pointerDown = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false }
   syncCurrentFromVisibleBlock(event)
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (pointerDown?.id === event.pointerId) {
+    pointerDown.dragging ||= Math.abs(event.clientX - pointerDown.x) > 3 || Math.abs(event.clientY - pointerDown.y) > 3
+    if (!pointerDown.dragging)
+      return
+  }
+  syncCurrentFromPointer(event)
+}
+
+function onPointerUp(event: PointerEvent) {
+  if (pointerDown?.id === event.pointerId)
+    pointerDown = undefined
+}
+
+function onPointerCancel() {
+  pointerDown = undefined
 }
 </script>
 
 <template>
   <div
-    class="flex gap-1 items-center select-none"
+    class="flex gap-1 select-none"
     :title="`Clicks in this slide: ${length}`"
-    :class="length && props.clicksContext.isMounted ? '' : 'op50'"
+    :class="[attached ? 'items-end' : 'items-center', length && props.clicksContext.isMounted ? '' : 'op50']"
   >
     <div
       class="flex items-center font-mono"
-      :class="compact ? 'gap-1 min-w-0 mr0' : 'gap-0.2 min-w-16 mr1'"
+      :class="[compact ? 'gap-1 min-w-0 mr0' : 'gap-0.2 min-w-16 mr1', attached ? 'h-[22px]' : '']"
     >
-      <div class="i-carbon:cursor-1 text-sm op50" />
+      <div class="i-carbon:cursor-1 text-sm op50" :class="compact ? 'ml-1' : ''" />
       <template v-if="current >= 0 && current !== CLICKS_MAX && active">
         <div v-if="!compact" flex-auto />
         <span>
           <span text-primary>{{ current }}</span>
-          <span op25 :class="compact ? '' : 'text-sm'">/</span>
-          <span op50 :class="compact ? '' : 'text-sm'">{{ total }}</span>
+          <span op25 text-sm>/</span>
+          <span op50 text-sm>{{ total }}</span>
         </span>
       </template>
       <div
@@ -102,25 +128,30 @@ function onPointerDown(event: PointerEvent) {
         op50
         :class="compact ? '' : 'flex-auto pl1'"
       >
-        <span>{{ total }}</span>
-        <span v-if="compact" invisible>/{{ total }}</span>
+        <span
+          :class="compact ? 'inline-block text-center' : ''"
+          :style="compact ? { width: `${String(total).length * 2 + 1}ch`, marginLeft: '-0.25ch' } : undefined"
+        >{{ total }}</span>
       </div>
     </div>
     <div
       ref="sliderEl"
-      relative flex-auto h5 font-mono flex="~"
+      relative flex-auto font-mono flex="~"
       touch-none
-      :class="isReset ? 'op80' : ''"
+      :class="[attached ? 'h-[22px]' : 'h5', isReset ? 'op80' : '']"
       @pointerdown.capture="onPointerDown"
-      @pointermove="syncCurrentFromPointer"
+      @pointermove="onPointerMove"
+      @pointerup="onPointerUp"
+      @pointercancel="onPointerCancel"
     >
       <div
         v-for="i of clicksRange" :key="i"
         border="y main" of-hidden relative
         :class="[
-          i === 0 ? 'rounded-l border-l' : '',
+          i === 0 ? 'border-l' : '',
+          i === 0 ? attached ? 'rounded-tl' : 'rounded-l' : '',
           i === total ? 'border-r' : '',
-          i === total && +i !== +current ? 'rounded-r' : '',
+          i === total && +i !== +current ? attached ? 'rounded-tr' : 'rounded-r' : '',
           attached ? 'border-b-0' : '',
         ]"
         :style="{ width: length > 0 ? `${1 / length * 100}%` : '100%' }"
@@ -136,8 +167,8 @@ function onPointerDown(event: PointerEvent) {
         <div
           :class="[
             (+i === +current && active) ? 'text-primary font-bold op100' : 'op30',
-            i === 0 ? 'rounded-l' : '',
-            i === total && +i !== +current && !attached ? 'rounded-r' : '',
+            i === 0 ? attached ? 'rounded-tl' : 'rounded-l' : '',
+            i === total && +i !== +current ? attached ? 'rounded-tr' : 'rounded-r' : '',
             i !== total ? 'border-r-2 border-main' : '',
           ]"
           w-full h-full text-xs flex items-center justify-center z-1

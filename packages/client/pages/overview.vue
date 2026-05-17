@@ -2,7 +2,7 @@
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { useHead } from '@unhead/vue'
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, shallowRef } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
@@ -22,6 +22,7 @@ const cardWidth = 450
 useHead({ title: `Overview - ${slidesTitle}` })
 
 const currentRoute = useRoute()
+const router = useRouter()
 const { openInEditor, slides, isEmbedded } = useNav()
 const isPreviewMode = computed(() => currentRoute.query.mode === 'preview')
 const isEmbeddedPreviewMode = computed(() => isPreviewMode.value && isEmbedded.value)
@@ -106,8 +107,22 @@ function checkActiveBlocks() {
 function openSlideInNewTab(path: string) {
   const a = document.createElement('a')
   a.target = '_blank'
-  a.href = pathPrefix + path.slice(1)
+  a.href = new URL(pathPrefix + path.slice(1), location.origin).href
   a.click()
+}
+
+function openSlideInBrowser(path: string) {
+  const url = new URL(pathPrefix + path.slice(1), location.origin).href
+  if (isEmbedded.value) {
+    window.parent.postMessage({
+      target: 'slidev',
+      sender: 'slidev',
+      type: 'open-external',
+      url,
+    }, '*')
+    return
+  }
+  openSlideInNewTab(path)
 }
 
 function scrollToSlide(idx: number) {
@@ -143,6 +158,26 @@ function scrollSlideNoIntoCenter(no: number) {
   scroller.value.scrollTo({ top })
 }
 
+function getInitialSlideNo() {
+  const value = currentRoute.query.slideNo
+  const no = Number(Array.isArray(value) ? value[0] : value)
+  return Number.isFinite(no) && no > 0 ? no : undefined
+}
+
+function updateSlideNoQuery(no: number) {
+  if (!isEmbeddedPreviewMode.value)
+    return
+  const slideNo = Number(no.toFixed(3)).toString()
+  if (currentRoute.query.slideNo === slideNo)
+    return
+  router.replace({
+    query: {
+      ...currentRoute.query,
+      slideNo,
+    },
+  })
+}
+
 function getCenteredSlideNo() {
   if (!scroller.value || slides.value.length === 0)
     return null
@@ -171,7 +206,10 @@ function postOverviewScroll(no: number) {
     overviewScrollTimer = undefined
     const no = pendingOverviewScrollNo
     pendingOverviewScrollNo = undefined
-    if (no == null || Date.now() < ignoreOverviewScrollUntil)
+    if (no == null)
+      return
+    updateSlideNoQuery(no)
+    if (Date.now() < ignoreOverviewScrollUntil)
       return
     window.parent.postMessage({
       target: 'slidev',
@@ -204,6 +242,7 @@ function onOverviewMessage({ data }: MessageEvent) {
   if (no > 0) {
     ignoreOverviewScrollUntil = Date.now() + 300
     pendingOverviewScrollNo = undefined
+    updateSlideNoQuery(no)
     scrollSlideNoIntoCenter(no)
   }
 }
@@ -217,7 +256,12 @@ function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
   e.preventDefault()
 }
 
-function openOverviewSlideSource(route: SlideRoute) {
+function openOverviewSlideSource(e: MouseEvent, route: SlideRoute) {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault()
+    openSlideInBrowser(getSlidePath(route, false))
+    return
+  }
   const slide = route.meta?.slide
   if (!slide)
     return
@@ -231,7 +275,14 @@ function openOverviewSlideSource(route: SlideRoute) {
 
 onMounted(() => {
   window.addEventListener('message', onOverviewMessage)
+  const initialSlideNo = isEmbeddedPreviewMode.value ? getInitialSlideNo() : undefined
+  if (initialSlideNo != null) {
+    ignoreOverviewScrollUntil = Date.now() + 300
+    scrollSlideNoIntoCenter(initialSlideNo)
+  }
   nextTick(() => {
+    if (initialSlideNo != null)
+      scrollSlideNoIntoCenter(initialSlideNo)
     checkActiveBlocks()
   })
 })
@@ -342,12 +393,12 @@ onUnmounted(() => {
         >
           <div
             v-if="isEmbeddedPreviewMode"
-            class="flex items-center gap-2"
+            class="flex items-end gap-2"
           >
             <button
               type="button"
-              class="select-none pl-1 text-base op60 tabular-nums hover:op90 hover:underline underline-offset-2"
-              @click="openOverviewSlideSource(route)"
+              class="select-none pl-1 text-lg leading-tight op60 tabular-nums hover:op90 hover:underline underline-offset-2"
+              @click="openOverviewSlideSource($event, route)"
             >
               {{ idx + 1 }}
             </button>
@@ -358,7 +409,7 @@ onUnmounted(() => {
               resettable
               compact
               attached
-              class="ml-auto w-88 max-w-[calc(100%-3rem)]"
+              class="ml-auto w-88 min-w-[70%] max-w-[calc(100%-3rem)]"
               @dblclick="toggleRoute(route)"
               @activate="activeSlide = route"
               @reset="activeSlide = undefined"
@@ -366,14 +417,14 @@ onUnmounted(() => {
           </div>
           <div
             :ref="el => slidePreviews.set(idx, el as any)"
-            class="border rounded border-main overflow-hidden bg-main select-none h-max"
-            :class="isEmbeddedPreviewMode && getSlideClicks(route) ? 'rounded-tr-0' : ''"
-            @dblclick="openSlideInNewTab(getSlidePath(route, false))"
+            class="border rounded border-main overflow-hidden bg-main h-max"
+            :class="[isEmbeddedPreviewMode && getSlideClicks(route) ? 'rounded-tr-0' : '', isEmbeddedPreviewMode ? '' : 'select-none']"
+            @dblclick="!isEmbeddedPreviewMode && openSlideInNewTab(getSlidePath(route, false))"
           >
             <SlideContainer
               :key="route.no"
               :width="overviewCardWidth"
-              class="pointer-events-none important:[&_*]:select-none"
+              :class="isEmbeddedPreviewMode ? '' : 'pointer-events-none important:[&_*]:select-none'"
             >
               <SlideWrapper
                 :clicks-context="getClicksContext(route)"

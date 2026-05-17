@@ -315,32 +315,32 @@
         {
           "command": "slidev.open-in-browser",
           "when": "view =~ /slidev-preview/ && slidev:preview:ready",
-          "group": "navigation@5"
+          "group": "navigation@7"
         },
         {
           "command": "slidev.show-slide-preview",
           "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && slidev:preview:overview",
-          "group": "navigation@6"
+          "group": "navigation@8"
         },
         {
           "command": "slidev.show-overview-preview",
           "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
-          "group": "navigation@6"
+          "group": "navigation@8"
         },
         {
           "command": "slidev.refresh-preview",
           "when": "view =~ /slidev-preview/",
-          "group": "navigation@7"
+          "group": "navigation@6"
         },
         {
           "command": "slidev.enable-preview-sync",
           "when": "view =~ /slidev-preview/ && !slidev:preview:sync",
-          "group": "navigation@8"
+          "group": "navigation@5"
         },
         {
           "command": "slidev.disable-preview-sync",
           "when": "view =~ /slidev-preview/ && slidev:preview:sync",
-          "group": "navigation@8"
+          "group": "navigation@5"
         }
       ],
       "view/item/context": [
