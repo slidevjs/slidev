@@ -357,6 +357,7 @@ onUnmounted(() => {
               :clicks-context="getClicksContext(route)"
               resettable
               compact
+              attached
               class="ml-auto w-88 max-w-[calc(100%-3rem)]"
               @dblclick="toggleRoute(route)"
               @activate="activeSlide = route"
@@ -366,6 +367,7 @@ onUnmounted(() => {
           <div
             :ref="el => slidePreviews.set(idx, el as any)"
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
+            :class="isEmbeddedPreviewMode && getSlideClicks(route) ? 'rounded-tr-0' : ''"
             @dblclick="openSlideInNewTab(getSlidePath(route, false))"
           >
             <SlideContainer

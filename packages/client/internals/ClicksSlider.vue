@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<{
   active?: boolean
   resettable?: boolean
   compact?: boolean
+  attached?: boolean
 }>(), {
   active: true,
 })
@@ -120,6 +121,7 @@ function onPointerDown(event: PointerEvent) {
           i === 0 ? 'rounded-l border-l' : '',
           i === total ? 'border-r' : '',
           i === total && +i !== +current ? 'rounded-r' : '',
+          attached ? 'border-b-0' : '',
         ]"
         :style="{ width: length > 0 ? `${1 / length * 100}%` : '100%' }"
       >
@@ -135,7 +137,7 @@ function onPointerDown(event: PointerEvent) {
           :class="[
             (+i === +current && active) ? 'text-primary font-bold op100' : 'op30',
             i === 0 ? 'rounded-l' : '',
-            i === total && +i !== +current ? 'rounded-r' : '',
+            i === total && +i !== +current && !attached ? 'rounded-r' : '',
             i !== total ? 'border-r-2 border-main' : '',
           ]"
           w-full h-full text-xs flex items-center justify-center z-1
