@@ -45,62 +45,50 @@ const current = computed({
 const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
 const sliderEl = ref<HTMLElement>()
-let pointerDown: { id: number, x: number, y: number, dragging: boolean } | undefined
+let pointerDown: { id: number, x: number, y: number } | undefined
 
 function getPointerRatio(event: PointerEvent) {
   const rect = sliderEl.value!.getBoundingClientRect()
   return (event.clientX - rect.left) / Math.max(1, rect.width)
 }
 
-function syncCurrentFromPointer(event: PointerEvent) {
-  if (props.readonly || !(event.buttons & 1) || !sliderEl.value)
+// Presses snap to a cell; drags switch only after crossing half a cell.
+function setCurrentFromPointer(event: PointerEvent, snap: boolean) {
+  if (props.readonly || !sliderEl.value || (!snap && !(event.buttons & 1)))
     return
   const ratio = getPointerRatio(event)
+  // In resettable mode, dragging left of the rail restores the inactive state.
   if (props.resettable && ratio < 0) {
     current.value = -1
     return
   }
-  const position = clamp(0, ratio, 1) * length.value
+  // Keep press-at-right-edge inside the last cell.
+  const position = clamp(0, ratio, snap ? 0.999999 : 1) * length.value
   const currentOffset = clamp(0, current.value - start.value, length.value - 1)
-  let next = current.value
-  if (position >= currentOffset + 1.5)
+  let next = snap ? start.value + Math.floor(position) : current.value
+  if (!snap && position >= currentOffset + 1.5)
     next = start.value + Math.floor(position - 0.5)
-  else if (position < currentOffset - 0.5)
+  else if (!snap && position < currentOffset - 0.5)
     next = start.value + Math.ceil(position - 0.5)
   current.value = clamp(start.value, next, total.value)
-}
-
-function syncCurrentFromVisibleBlock(event: PointerEvent) {
-  if (props.readonly || !sliderEl.value)
-    return
-  const ratio = clamp(0, getPointerRatio(event), 0.999999)
-  current.value = clamp(start.value, start.value + Math.floor(ratio * length.value), total.value)
 }
 
 function onPointerDown(event: PointerEvent) {
   if (props.readonly)
     return
   sliderEl.value?.setPointerCapture(event.pointerId)
-  pointerDown = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false }
-  syncCurrentFromVisibleBlock(event)
+  pointerDown = { id: event.pointerId, x: event.clientX, y: event.clientY }
+  setCurrentFromPointer(event, true)
 }
 
 function onPointerMove(event: PointerEvent) {
   if (pointerDown?.id === event.pointerId) {
-    pointerDown.dragging ||= Math.abs(event.clientX - pointerDown.x) > 3 || Math.abs(event.clientY - pointerDown.y) > 3
-    if (!pointerDown.dragging)
+    // Treat tiny movement after pointerdown as part of the click.
+    if (Math.abs(event.clientX - pointerDown.x) <= 3 && Math.abs(event.clientY - pointerDown.y) <= 3)
       return
-  }
-  syncCurrentFromPointer(event)
-}
-
-function onPointerUp(event: PointerEvent) {
-  if (pointerDown?.id === event.pointerId)
     pointerDown = undefined
-}
-
-function onPointerCancel() {
-  pointerDown = undefined
+  }
+  setCurrentFromPointer(event, false)
 }
 </script>
 
@@ -141,8 +129,8 @@ function onPointerCancel() {
       :class="[attached ? 'h-[22px]' : 'h5', isReset ? 'op80' : '']"
       @pointerdown.capture="onPointerDown"
       @pointermove="onPointerMove"
-      @pointerup="onPointerUp"
-      @pointercancel="onPointerCancel"
+      @pointerup="pointerDown = undefined"
+      @pointercancel="pointerDown = undefined"
     >
       <div
         v-for="i of clicksRange" :key="i"
@@ -167,8 +155,6 @@ function onPointerCancel() {
         <div
           :class="[
             (+i === +current && active) ? 'text-primary font-bold op100' : 'op30',
-            i === 0 ? attached ? 'rounded-tl' : 'rounded-l' : '',
-            i === total && +i !== +current ? attached ? 'rounded-tr' : 'rounded-r' : '',
             i !== total ? 'border-r-2 border-main' : '',
           ]"
           w-full h-full text-xs flex items-center justify-center z-1
