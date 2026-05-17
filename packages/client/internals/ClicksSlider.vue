@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ClicksContext } from '@slidev/types'
 import { clamp, range } from '@antfu/utils'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { CLICKS_MAX } from '../constants'
 
 const props = withDefaults(defineProps<{
@@ -44,6 +44,7 @@ const current = computed({
 
 const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
+const sliderEl = ref<HTMLElement>()
 
 function onMousedown() {
   if (props.readonly)
@@ -52,6 +53,31 @@ function onMousedown() {
     return
   if (current.value < 0 || current.value > total.value)
     current.value = 0
+}
+
+function syncCurrentFromPointer(event: PointerEvent) {
+  if (props.readonly || !(event.buttons & 1) || !sliderEl.value)
+    return
+  const rect = sliderEl.value.getBoundingClientRect()
+  const ratio = clamp(0, (event.clientX - rect.left) / Math.max(1, rect.width), 1)
+  const next = Math.round(inputStart.value + ratio * (total.value - inputStart.value))
+  current.value = clamp(inputStart.value, next, total.value)
+}
+
+function syncCurrentFromVisibleBlock(event: PointerEvent) {
+  if (props.readonly || !sliderEl.value)
+    return
+  const rect = sliderEl.value.getBoundingClientRect()
+  const ratio = clamp(0, (event.clientX - rect.left) / Math.max(1, rect.width), 0.999999)
+  current.value = clamp(start.value, start.value + Math.floor(ratio * length.value), total.value)
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (props.readonly)
+    return
+  event.preventDefault()
+  sliderEl.value?.setPointerCapture(event.pointerId)
+  syncCurrentFromVisibleBlock(event)
 }
 </script>
 
@@ -84,15 +110,18 @@ function onMousedown() {
       </div>
     </div>
     <div
+      ref="sliderEl"
       relative flex-auto h5 font-mono flex="~"
       :class="isReset ? 'op80' : ''"
+      @pointerdown.capture="onPointerDown"
+      @pointermove="syncCurrentFromPointer"
     >
       <div
         v-for="i of clicksRange" :key="i"
         border="y main" of-hidden relative
         :class="[
           i === 0 ? 'rounded-l border-l' : '',
-          i === total ? 'rounded-r border-r' : '',
+          i === total && +i !== +current ? 'rounded-r border-r' : '',
         ]"
         :style="{ width: length > 0 ? `${1 / length * 100}%` : '100%' }"
       >
@@ -101,10 +130,15 @@ function onMousedown() {
           :class="(i <= current && active) ? 'bg-primary op15' : ''"
         />
         <div
+          v-if="+i === +current && active"
+          absolute inset-y-0 right-0 w-0.5 bg-primary z-1
+        />
+        <div
           :class="[
-            (+i === +current && active) ? 'text-primary font-bold op100 border-primary' : 'op30 border-main',
+            (+i === +current && active) ? 'text-primary font-bold op100' : 'op30',
             i === 0 ? 'rounded-l' : '',
-            i === total ? 'rounded-r' : 'border-r-2',
+            i === total && +i !== +current ? 'rounded-r' : '',
+            i !== total ? 'border-r-2 border-main' : '',
           ]"
           w-full h-full text-xs flex items-center justify-center z-1
         >
