@@ -107,12 +107,12 @@ function checkActiveBlocks() {
 function openSlideInNewTab(path: string) {
   const a = document.createElement('a')
   a.target = '_blank'
-  a.href = new URL(pathPrefix + path.slice(1), location.origin).href
+  a.href = pathPrefix + path.slice(1)
   a.click()
 }
 
 function openSlideInBrowser(path: string) {
-  const url = new URL(pathPrefix + path.slice(1), location.origin).href
+  const url = new URL(pathPrefix + path.slice(1), location.href).href
   if (isEmbedded.value) {
     window.parent.postMessage({
       target: 'slidev',

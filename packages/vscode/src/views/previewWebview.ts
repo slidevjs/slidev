@@ -35,18 +35,14 @@ export const usePreviewWebview = defineService(() => {
   })
   let overviewSlideNoForUrl: number | undefined
 
-  function normalizeSlideNo(no: unknown) {
-    const slideNo = Number(no)
-    return Number.isFinite(slideNo) && slideNo > 0 ? slideNo : undefined
-  }
-
   function getOverviewSlideNoForUrl() {
-    return normalizeSlideNo(
+    const slideNo = Number(
       overviewSlideNoForUrl
       ?? viewportSlideNo.value
       ?? focusedSlideNo.value
       ?? previewNavState.no,
     )
+    return Number.isFinite(slideNo) && slideNo > 0 ? slideNo : undefined
   }
 
   function updateOverviewInitialSlideNo() {
