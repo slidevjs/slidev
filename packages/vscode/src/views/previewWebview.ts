@@ -184,6 +184,10 @@ export const usePreviewWebview = defineService(() => {
     prevSlide: useNavOperation('prevSlide', true),
     openExternal: () => {
       const hashRoute = activeData.value?.slides[0]?.frontmatter.routerMode === 'hash'
+      if (previewMode.value === 'overview') {
+        const url = `http://localhost:${port.value}${hashRoute ? '#/' : '/'}overview?mode=preview`
+        return env.openExternal(Uri.parse(url))
+      }
       const query = previewNavState.clicks > 0 ? `?clicks=${previewNavState.clicks}` : ''
       const url = `http://localhost:${port.value}/${hashRoute ? '#' : ''}${previewNavState.no}${query}`
       return env.openExternal(Uri.parse(url))
