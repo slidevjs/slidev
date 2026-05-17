@@ -199,14 +199,14 @@
       {
         "command": "slidev.show-slide-preview",
         "category": "Slidev",
-        "title": "Show slide preview",
+        "title": "Switch to slide preview",
         "icon": "$(preview)",
         "enablement": "slidev:preview:overview"
       },
       {
         "command": "slidev.show-overview-preview",
         "category": "Slidev",
-        "title": "Show overview preview",
+        "title": "Switch to overview preview",
         "icon": "$(multiple-windows)",
         "enablement": "!slidev:preview:overview"
       },
