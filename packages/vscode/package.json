@@ -197,6 +197,20 @@
         "icon": "$(globe)"
       },
       {
+        "command": "slidev.show-slide-preview",
+        "category": "Slidev",
+        "title": "Show slide preview",
+        "icon": "$(preview)",
+        "enablement": "slidev:preview:overview"
+      },
+      {
+        "command": "slidev.show-overview-preview",
+        "category": "Slidev",
+        "title": "Show overview preview",
+        "icon": "$(list-tree)",
+        "enablement": "!slidev:preview:overview"
+      },
+      {
         "command": "slidev.preview-prev-click",
         "category": "Slidev",
         "title": "Navigate to prev click in preview window",
@@ -275,22 +289,22 @@
         },
         {
           "command": "slidev.preview-prev-slide",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@1"
         },
         {
           "command": "slidev.preview-next-slide",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@2"
         },
         {
           "command": "slidev.preview-prev-click",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@3"
         },
         {
           "command": "slidev.preview-next-click",
-          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
           "group": "navigation@4"
         },
         {
@@ -304,19 +318,29 @@
           "group": "navigation@5"
         },
         {
+          "command": "slidev.show-slide-preview",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && slidev:preview:overview",
+          "group": "navigation@6"
+        },
+        {
+          "command": "slidev.show-overview-preview",
+          "when": "view =~ /slidev-preview/ && slidev:preview:ready && !slidev:preview:compat && !slidev:preview:overview",
+          "group": "navigation@6"
+        },
+        {
           "command": "slidev.refresh-preview",
           "when": "view =~ /slidev-preview/",
-          "group": "navigation@6"
+          "group": "navigation@7"
         },
         {
           "command": "slidev.enable-preview-sync",
           "when": "view =~ /slidev-preview/ && !slidev:preview:sync",
-          "group": "navigation@7"
+          "group": "navigation@8"
         },
         {
           "command": "slidev.disable-preview-sync",
           "when": "view =~ /slidev-preview/ && slidev:preview:sync",
-          "group": "navigation@7"
+          "group": "navigation@8"
         }
       ],
       "view/item/context": [
@@ -409,14 +433,14 @@
           "name": "Projects",
           "visibility": "collapsed",
           "initialSize": 1,
-          "when": "slidev:enabled"
+          "when": "slidev:enabled && (!slidev:preview:overview || !slidev:preview:ready)"
         },
         {
           "id": "slidev-slides-tree",
           "name": "Slides",
           "visibility": "visible",
           "initialSize": 3,
-          "when": "slidev:enabled"
+          "when": "slidev:enabled && (!slidev:preview:overview || !slidev:preview:ready)"
         },
         {
           "type": "webview",

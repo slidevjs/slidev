@@ -8,27 +8,46 @@ const props = withDefaults(defineProps<{
   clicksContext: ClicksContext
   readonly?: boolean
   active?: boolean
+  resettable?: boolean
 }>(), {
   active: true,
 })
 
+const emit = defineEmits<{
+  (type: 'activate'): void
+  (type: 'reset'): void
+}>()
+
 const total = computed(() => props.clicksContext.total)
 const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
+const inputStart = computed(() => props.resettable ? -1 : start.value)
 const length = computed(() => total.value - start.value + 1)
 const current = computed({
   get() {
+    if (props.resettable && !props.active)
+      return -1
     return props.clicksContext.current > total.value ? -1 : props.clicksContext.current
   },
   set(value: number) {
+    if (props.resettable && value < 0) {
+      emit('reset')
+      // eslint-disable-next-line vue/no-mutating-props
+      props.clicksContext.current = CLICKS_MAX
+      return
+    }
+    emit('activate')
     // eslint-disable-next-line vue/no-mutating-props
     props.clicksContext.current = value
   },
 })
 
+const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
 
 function onMousedown() {
   if (props.readonly)
+    return
+  if (props.resettable)
     return
   if (current.value < 0 || current.value > total.value)
     current.value = 0
@@ -58,6 +77,7 @@ function onMousedown() {
     </div>
     <div
       relative flex-auto h5 font-mono flex="~"
+      :class="isReset ? 'op80' : ''"
     >
       <div
         v-for="i of clicksRange" :key="i"
@@ -86,7 +106,7 @@ function onMousedown() {
       <input
         v-model="current"
         class="range"
-        type="range" :min="start" :max="total" :step="1"
+        type="range" :min="inputStart" :max="total" :step="1"
         absolute inset-0 z-label op0
         :class="readonly ? 'pointer-events-none' : ''"
         :style="{ '--thumb-width': `${1 / (length + 1) * 100}%` }"

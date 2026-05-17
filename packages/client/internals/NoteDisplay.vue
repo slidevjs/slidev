@@ -172,4 +172,9 @@ watchEffect(() => {
 .slidev-note :first-child {
   margin-top: 0;
 }
+
+.slidev-note {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 </style>

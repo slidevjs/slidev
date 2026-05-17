@@ -1,3 +1,4 @@
+import type { PreviewMode } from '../html/ready'
 import { computed, defineService, extensionContext, reactive, ref, useIsDarkTheme, useVscodeContext, useWebviewView, watch, watchEffect } from 'reactive-vscode'
 import { commands, env, Uri, window } from 'vscode'
 import { useFocusedSlide } from '../composables/useFocusedSlide'
@@ -18,11 +19,15 @@ export const usePreviewWebview = defineService(() => {
   const message = computed(() => detected.value?.message ?? '')
   const compatMode = useVscodeContext('slidev:preview:compat', () => !!detected.value?.compatMode)
   const ready = useVscodeContext('slidev:preview:ready', () => activeProject.value && !!detected.value?.ready)
+  const savedPreviewMode = extensionContext.value?.globalState.get<PreviewMode>('slidev:preview:mode')
+  const previewMode = ref<PreviewMode>(savedPreviewMode === 'overview' ? 'overview' : 'slide')
+  const hashRoute = computed(() => activeData.value?.slides[0]?.frontmatter.routerMode === 'hash')
   const html = computed(() => ready.value
-    ? generateReadyHtml(port.value)
+    ? generateReadyHtml(port.value, previewMode.value, hashRoute.value)
     : generateErrorHtml(message.value),
   )
   useVscodeContext('slidev:preview:sync', () => config['preview-sync'])
+  useVscodeContext('slidev:preview:overview', () => previewMode.value === 'overview')
 
   const previewNavState = reactive({
     no: 0,
@@ -31,10 +36,10 @@ export const usePreviewWebview = defineService(() => {
     hasPrev: false,
   })
 
-  useVscodeContext('slidev:preview:has-prev-slide', () => previewNavState.no > 1)
-  useVscodeContext('slidev:preview:has-next-slide', () => activeData.value && previewNavState.no < activeData.value.slides.length)
-  useVscodeContext('slidev:preview:has-next-click', () => previewNavState.hasNext)
-  useVscodeContext('slidev:preview:has-prev-click', () => previewNavState.hasPrev)
+  useVscodeContext('slidev:preview:has-prev-slide', () => previewMode.value === 'slide' && previewNavState.no > 1)
+  useVscodeContext('slidev:preview:has-next-slide', () => previewMode.value === 'slide' && activeData.value && previewNavState.no < activeData.value.slides.length)
+  useVscodeContext('slidev:preview:has-next-click', () => previewMode.value === 'slide' && previewNavState.hasNext)
+  useVscodeContext('slidev:preview:has-prev-click', () => previewMode.value === 'slide' && previewNavState.hasPrev)
 
   const initializedClientId = ref('')
 
@@ -49,7 +54,7 @@ export const usePreviewWebview = defineService(() => {
       },
       async onDidReceiveMessage(data) {
         if (data.type === 'command') {
-          commands.executeCommand(`slidev.${data.command}`)
+          commands.executeCommand(`slidev.${data.command}`, ...(data.args ?? []))
         }
         else if (data.type === 'update-state') {
           if (initializedClientId.value === data.clientId) {
@@ -57,7 +62,7 @@ export const usePreviewWebview = defineService(() => {
           }
           else {
             initializedClientId.value = data.clientId
-            if (config['preview-sync'] && initializedClientId.value === data.clientId)
+            if (previewMode.value === 'slide' && config['preview-sync'] && initializedClientId.value === data.clientId)
               postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
         }
@@ -75,7 +80,7 @@ export const usePreviewWebview = defineService(() => {
     logger.info(`Webview refreshed. Current URL: http://localhost:${port.value}`)
     setTimeout(() => pageId.value++, 300)
   }
-  watch([ready, view, port], refresh)
+  watch([ready, view, port, previewMode], refresh)
 
   function postSlidevMessage(type: string, data: Record<string, unknown>) {
     return postMessage({
@@ -91,14 +96,17 @@ export const usePreviewWebview = defineService(() => {
 
   watchEffect(() => {
     if (view.value) {
-      const slideNo = ready.value && previewNavState.no > 0 ? ` (${previewNavState.no}/${activeData.value?.slides.length})` : ''
+      const slideNo = ready.value && previewMode.value === 'slide' && previewNavState.no > 0 ? ` (${previewNavState.no}/${activeData.value?.slides.length})` : ''
+      const modeInfo = previewMode.value === 'overview' ? ' (overview)' : ''
       const compatInfo = compatMode.value ? ' (compat mode)' : ''
-      view.value.title = `Preview${slideNo}${compatInfo}`
+      view.value.title = `Preview${slideNo}${modeInfo}${compatInfo}`
     }
   })
 
   function useNavOperation(operation: string, ...args: unknown[]) {
     return () => {
+      if (previewMode.value !== 'slide')
+        return
       if (compatMode.value)
         window.showErrorMessage('Unsupported operation: Slidev server too old.')
       postSlidevMessage('navigate', { operation, args })
@@ -108,15 +116,15 @@ export const usePreviewWebview = defineService(() => {
   watch(
     () => previewNavState.no,
     (no) => {
-      if (ready.value && config['preview-sync'] && activeProject.value) {
+      if (previewMode.value === 'slide' && ready.value && config['preview-sync'] && activeProject.value) {
         focusSlide(activeProject.value, no)
       }
     },
   )
   watch(
-    [() => config['preview-sync'], focusedSlideNo],
-    ([enabled, no]) => {
-      if (enabled && no != null && previewNavState.no !== no) {
+    [() => config['preview-sync'], focusedSlideNo, previewMode],
+    ([enabled, no, mode]) => {
+      if (enabled && mode === 'slide' && no != null && previewNavState.no !== no) {
         postSlidevMessage('navigate', { no, clicks: 999999 })
       }
     },
@@ -125,6 +133,11 @@ export const usePreviewWebview = defineService(() => {
   return {
     view,
     refresh,
+    setPreviewMode: (mode: PreviewMode) => {
+      initializedClientId.value = ''
+      previewMode.value = mode
+      void extensionContext.value?.globalState.update('slidev:preview:mode', mode)
+    },
     nextClick: useNavOperation('next'),
     prevClick: useNavOperation('prev'),
     nextSlide: useNavOperation('nextSlide', true),

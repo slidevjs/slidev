@@ -131,10 +131,9 @@ watch(
     v-else
     ref="inputEl"
     v-model="note"
-    class="prose dark:prose-invert resize-none overflow-auto outline-none bg-transparent block border-primary border-2"
-    style="line-height: 1.75;"
+    class="prose dark:prose-invert resize-none overflow-auto outline-none bg-transparent block border-primary border-2 slidev-note placeholder:op25"
     :style="[props.style, inputHeight != null ? { height: `${inputHeight}px` } : {}]"
-    :class="props.class"
+    :class="[props.class, note ? '' : 'italic']"
     :placeholder="placeholder"
     @keydown.esc="editing = false"
     @keydown="onKeyDown"
