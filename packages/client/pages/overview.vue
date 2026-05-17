@@ -337,7 +337,7 @@ onUnmounted(() => {
         </div>
         <div
           class="flex flex-col"
-          :class="isEmbeddedPreviewMode ? 'my1 gap-1' : 'my5 gap-2'"
+          :class="isEmbeddedPreviewMode ? 'my1 gap-0' : 'my5 gap-2'"
           :style="{ width: `${overviewCardWidth}px` }"
         >
           <div

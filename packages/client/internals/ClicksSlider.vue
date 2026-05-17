@@ -21,7 +21,6 @@ const emit = defineEmits<{
 
 const total = computed(() => props.clicksContext.total)
 const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
-const dragStart = computed(() => props.resettable ? -1 : start.value)
 const length = computed(() => total.value - start.value + 1)
 const current = computed({
   get() {
@@ -46,27 +45,33 @@ const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
 const sliderEl = ref<HTMLElement>()
 
+function getPointerRatio(event: PointerEvent) {
+  const rect = sliderEl.value!.getBoundingClientRect()
+  return (event.clientX - rect.left) / Math.max(1, rect.width)
+}
+
 function syncCurrentFromPointer(event: PointerEvent) {
   if (props.readonly || !(event.buttons & 1) || !sliderEl.value)
     return
-  const rect = sliderEl.value.getBoundingClientRect()
-  const ratio = clamp(0, (event.clientX - rect.left) / Math.max(1, rect.width), 1)
-  const next = Math.round(dragStart.value + ratio * (total.value - dragStart.value))
-  current.value = clamp(dragStart.value, next, total.value)
+  const ratio = getPointerRatio(event)
+  if (props.resettable && ratio < 0) {
+    current.value = -1
+    return
+  }
+  const next = Math.round(start.value + clamp(0, ratio, 1) * (total.value - start.value))
+  current.value = clamp(start.value, next, total.value)
 }
 
 function syncCurrentFromVisibleBlock(event: PointerEvent) {
   if (props.readonly || !sliderEl.value)
     return
-  const rect = sliderEl.value.getBoundingClientRect()
-  const ratio = clamp(0, (event.clientX - rect.left) / Math.max(1, rect.width), 0.999999)
+  const ratio = clamp(0, getPointerRatio(event), 0.999999)
   current.value = clamp(start.value, start.value + Math.floor(ratio * length.value), total.value)
 }
 
 function onPointerDown(event: PointerEvent) {
   if (props.readonly)
     return
-  event.preventDefault()
   sliderEl.value?.setPointerCapture(event.pointerId)
   syncCurrentFromVisibleBlock(event)
 }
@@ -103,6 +108,7 @@ function onPointerDown(event: PointerEvent) {
     <div
       ref="sliderEl"
       relative flex-auto h5 font-mono flex="~"
+      touch-none
       :class="isReset ? 'op80' : ''"
       @pointerdown.capture="onPointerDown"
       @pointermove="syncCurrentFromPointer"
