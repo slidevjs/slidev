@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<{
   readonly?: boolean
   active?: boolean
   resettable?: boolean
+  compact?: boolean
 }>(), {
   active: true,
 })
@@ -60,19 +61,26 @@ function onMousedown() {
     :title="`Clicks in this slide: ${length}`"
     :class="length && props.clicksContext.isMounted ? '' : 'op50'"
   >
-    <div class="flex gap-0.2 items-center min-w-16 font-mono mr1">
+    <div
+      class="flex items-center font-mono"
+      :class="compact ? 'gap-1 min-w-0 mr0' : 'gap-0.2 min-w-16 mr1'"
+    >
       <div class="i-carbon:cursor-1 text-sm op50" />
       <template v-if="current >= 0 && current !== CLICKS_MAX && active">
-        <div flex-auto />
-        <span text-primary>{{ current }}</span>
-        <span op25 text-sm>/</span>
-        <span op50 text-sm>{{ total }}</span>
+        <div v-if="!compact" flex-auto />
+        <span>
+          <span text-primary>{{ current }}</span>
+          <span op25 :class="compact ? '' : 'text-sm'">/</span>
+          <span op50 :class="compact ? '' : 'text-sm'">{{ total }}</span>
+        </span>
       </template>
       <div
         v-else
-        op50 flex-auto pl1
+        op50
+        :class="compact ? '' : 'flex-auto pl1'"
       >
-        {{ total }}
+        <span>{{ total }}</span>
+        <span v-if="compact" invisible>/{{ total }}</span>
       </div>
     </div>
     <div

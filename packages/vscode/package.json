@@ -207,7 +207,7 @@
         "command": "slidev.show-overview-preview",
         "category": "Slidev",
         "title": "Show overview preview",
-        "icon": "$(list-tree)",
+        "icon": "$(multiple-windows)",
         "enablement": "!slidev:preview:overview"
       },
       {

@@ -43,6 +43,8 @@ export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: bo
             iframe.contentWindow.postMessage(data, '*')
           else if (data.type === 'command')
             vscode.postMessage(data)
+          else if (data.type === 'overview-scroll')
+            vscode.postMessage(data)
           else
             vscode.postMessage({
               ...data,

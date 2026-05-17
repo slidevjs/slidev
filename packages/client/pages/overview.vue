@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ClicksContext, SlideRoute } from '@slidev/types'
 import { useHead } from '@unhead/vue'
-import { computed, nextTick, onMounted, reactive, ref, shallowRef } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
@@ -29,14 +29,19 @@ const overviewCardWidth = computed(() => {
   if (!isPreviewMode.value)
     return cardWidth
   if (isEmbeddedPreviewMode.value)
-    return Math.max(320, windowSize.width.value - 16)
+    return windowSize.width.value - 16
   return Math.min(900, Math.max(320, windowSize.width.value - 160))
 })
 const overviewSlideHeight = computed(() => overviewCardWidth.value / slideAspect.value)
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
+const slidePreviews: Map<number, HTMLElement> = reactive(new Map())
 const activeBlocks = ref<number[]>([])
+const scroller = ref<HTMLElement>()
 const edittingNote = ref<number | null>(null)
+let ignoreOverviewScrollUntil = 0
+let pendingOverviewScrollNo: number | undefined
+let overviewScrollTimer: ReturnType<typeof setTimeout> | undefined
 const wordCounts = computed(() => slides.value.map(route => wordCount(route.meta?.slide?.note || '')))
 const totalWords = computed(() => wordCounts.value.reduce((a, b) => a + b, 0))
 const totalClicks = computed(() => slides.value.map(route => getSlideClicks(route)).reduce((a, b) => a + b, 0))
@@ -111,6 +116,98 @@ function scrollToSlide(idx: number) {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
+function getSlidePreviewTop(idx: number) {
+  const el = slidePreviews.get(idx) || blocks.get(idx)
+  if (!el || !scroller.value)
+    return null
+  const scrollerRect = scroller.value.getBoundingClientRect()
+  const elRect = el.getBoundingClientRect()
+  return elRect.top - scrollerRect.top + scroller.value.scrollTop
+}
+
+function scrollSlideNoIntoCenter(no: number) {
+  if (!scroller.value || slides.value.length === 0)
+    return
+  const clamped = Math.min(Math.max(no, 1), slides.value.length)
+  const idx = Math.floor(clamped) - 1
+  const progress = clamped - (idx + 1)
+  const start = getSlidePreviewTop(idx)
+  const end = getSlidePreviewTop(idx + 1)
+  if (start == null)
+    return
+  const top = start
+    + (end == null ? 0 : (end - start) * progress)
+    - scroller.value.clientHeight * 0.5
+  if (Math.abs(scroller.value.scrollTop - top) < 1)
+    return
+  scroller.value.scrollTo({ top })
+}
+
+function getCenteredSlideNo() {
+  if (!scroller.value || slides.value.length === 0)
+    return null
+  const center = scroller.value.scrollTop + scroller.value.clientHeight * 0.5
+  const tops = slides.value
+    .map((_, idx) => getSlidePreviewTop(idx))
+    .filter((top): top is number => top != null)
+  if (tops.length === 0)
+    return null
+  if (tops.length === 1 || center <= tops[0])
+    return 1
+  for (let i = 1; i < tops.length; i++) {
+    if (center <= tops[i]) {
+      const span = Math.max(1, tops[i] - tops[i - 1])
+      return i + (center - tops[i - 1]) / span
+    }
+  }
+  return slides.value.length
+}
+
+function postOverviewScroll(no: number) {
+  pendingOverviewScrollNo = no
+  if (overviewScrollTimer)
+    return
+  overviewScrollTimer = setTimeout(() => {
+    overviewScrollTimer = undefined
+    const no = pendingOverviewScrollNo
+    pendingOverviewScrollNo = undefined
+    if (no == null || Date.now() < ignoreOverviewScrollUntil)
+      return
+    window.parent.postMessage({
+      target: 'slidev',
+      sender: 'slidev',
+      type: 'overview-scroll',
+      no,
+    }, '*')
+  }, 50)
+}
+
+function onOverviewScroll() {
+  checkActiveBlocks()
+  if (!isEmbeddedPreviewMode.value || Date.now() < ignoreOverviewScrollUntil)
+    return
+  const no = getCenteredSlideNo()
+  if (no != null)
+    postOverviewScroll(no)
+}
+
+function onOverviewMessage({ data }: MessageEvent) {
+  if (
+    !isEmbeddedPreviewMode.value
+    || data?.target !== 'slidev'
+    || data.sender !== 'vscode'
+    || data.type !== 'overview-scroll'
+  ) {
+    return
+  }
+  const no = Number(data.no)
+  if (no > 0) {
+    ignoreOverviewScrollUntil = Date.now() + 300
+    pendingOverviewScrollNo = undefined
+    scrollSlideNoIntoCenter(no)
+  }
+}
+
 function onMarkerClick(e: MouseEvent, clicks: number, route: SlideRoute) {
   const ctx = getClicksContext(route)
   if (ctx.current === clicks)
@@ -133,9 +230,16 @@ function openOverviewSlideSource(route: SlideRoute) {
 }
 
 onMounted(() => {
+  window.addEventListener('message', onOverviewMessage)
   nextTick(() => {
     checkActiveBlocks()
   })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('message', onOverviewMessage)
+  if (overviewScrollTimer)
+    clearTimeout(overviewScrollTimer)
 })
 </script>
 
@@ -190,9 +294,10 @@ onMounted(() => {
       </div>
     </nav>
     <main
+      ref="scroller"
       class="flex-1 h-full of-auto"
       :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
-      @scroll="checkActiveBlocks"
+      @scroll="onOverviewScroll"
     >
       <div
         v-for="(route, idx) of slides"
@@ -251,13 +356,15 @@ onMounted(() => {
               :active="activeSlide === route"
               :clicks-context="getClicksContext(route)"
               resettable
-              class="min-w-0 flex-1"
+              compact
+              class="ml-auto w-88 max-w-[calc(100%-3rem)]"
               @dblclick="toggleRoute(route)"
               @activate="activeSlide = route"
               @reset="activeSlide = undefined"
             />
           </div>
           <div
+            :ref="el => slidePreviews.set(idx, el as any)"
             class="border rounded border-main overflow-hidden bg-main select-none h-max"
             @dblclick="openSlideInNewTab(getSlidePath(route, false))"
           >

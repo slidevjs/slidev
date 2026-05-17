@@ -10,7 +10,7 @@ import { activeData, activeProject } from '../projects'
 import { logger } from './logger'
 
 export const usePreviewWebview = defineService(() => {
-  const { focusedSlideNo, focusSlide } = useFocusedSlide()
+  const { focusedSlideNo, viewportSlideNo, focusSlide, revealViewportSlide } = useFocusedSlide()
   const isDarkTheme = useIsDarkTheme()
 
   const { redetect } = useServerDetector()
@@ -42,6 +42,17 @@ export const usePreviewWebview = defineService(() => {
   useVscodeContext('slidev:preview:has-prev-click', () => previewMode.value === 'slide' && previewNavState.hasPrev)
 
   const initializedClientId = ref('')
+  let pendingOverviewScroll: { no: number } | undefined
+  let overviewScrollTimer: ReturnType<typeof setTimeout> | undefined
+  let syncEditorToOverviewUntil = 0
+
+  function cancelPendingOverviewScroll() {
+    pendingOverviewScroll = undefined
+    if (overviewScrollTimer) {
+      clearTimeout(overviewScrollTimer)
+      overviewScrollTimer = undefined
+    }
+  }
 
   const { view, postMessage, forceReload } = useWebviewView(
     'slidev-preview',
@@ -62,9 +73,16 @@ export const usePreviewWebview = defineService(() => {
           }
           else {
             initializedClientId.value = data.clientId
-            if (previewMode.value === 'slide' && config['preview-sync'] && initializedClientId.value === data.clientId)
+            if (previewMode.value === 'slide' && config['preview-sync'] && initializedClientId.value === data.clientId && focusedSlideNo.value != null)
               postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
+        }
+        else if (data.type === 'overview-scroll') {
+          syncEditorToOverviewUntil = Date.now() + 300
+          cancelPendingOverviewScroll()
+          const no = Number(data.no)
+          if (previewMode.value === 'overview' && config['preview-sync'] && Number.isFinite(no))
+            revealViewportSlide(no)
         }
       },
     },
@@ -91,7 +109,26 @@ export const usePreviewWebview = defineService(() => {
     })
   }
 
-  watch([pageId], () => postSlidevMessage('css-vars', { '--slidev-slide-container-background': 'transparent' }))
+  function scrollOverviewToSlide(no: number) {
+    if (Date.now() < syncEditorToOverviewUntil)
+      return
+    pendingOverviewScroll = { no }
+    if (overviewScrollTimer)
+      return
+    overviewScrollTimer = setTimeout(() => {
+      overviewScrollTimer = undefined
+      const scroll = pendingOverviewScroll
+      pendingOverviewScroll = undefined
+      if (scroll && Date.now() >= syncEditorToOverviewUntil && previewMode.value === 'overview' && config['preview-sync'])
+        postSlidevMessage('overview-scroll', scroll)
+    }, 50)
+  }
+
+  watch([pageId], () => {
+    postSlidevMessage('css-vars', { '--slidev-slide-container-background': 'transparent' })
+    if (previewMode.value === 'overview' && config['preview-sync'] && viewportSlideNo.value != null)
+      scrollOverviewToSlide(viewportSlideNo.value)
+  })
   watch([pageId, isDarkTheme], ([_, dark]) => postSlidevMessage('color-schema', { color: dark ? 'dark' : 'light' }))
 
   watchEffect(() => {
@@ -116,16 +153,19 @@ export const usePreviewWebview = defineService(() => {
   watch(
     () => previewNavState.no,
     (no) => {
-      if (previewMode.value === 'slide' && ready.value && config['preview-sync'] && activeProject.value) {
+      if (previewMode.value === 'slide' && no > 0 && ready.value && config['preview-sync'] && activeProject.value) {
         focusSlide(activeProject.value, no)
       }
     },
   )
   watch(
-    [() => config['preview-sync'], focusedSlideNo, previewMode],
-    ([enabled, no, mode]) => {
-      if (enabled && mode === 'slide' && no != null && previewNavState.no !== no) {
-        postSlidevMessage('navigate', { no, clicks: 999999 })
+    [() => config['preview-sync'], focusedSlideNo, viewportSlideNo, previewMode],
+    ([enabled, focusedNo, viewportNo, mode]) => {
+      if (enabled && mode === 'slide' && focusedNo != null && previewNavState.no !== focusedNo) {
+        postSlidevMessage('navigate', { no: focusedNo, clicks: 999999 })
+      }
+      else if (enabled && mode === 'overview' && viewportNo != null) {
+        scrollOverviewToSlide(viewportNo)
       }
     },
   )
