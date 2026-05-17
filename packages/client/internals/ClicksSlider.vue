@@ -21,7 +21,7 @@ const emit = defineEmits<{
 
 const total = computed(() => props.clicksContext.total)
 const start = computed(() => clamp(0, props.clicksContext.clicksStart, total.value))
-const inputStart = computed(() => props.resettable ? -1 : start.value)
+const dragStart = computed(() => props.resettable ? -1 : start.value)
 const length = computed(() => total.value - start.value + 1)
 const current = computed({
   get() {
@@ -46,22 +46,13 @@ const isReset = computed(() => props.resettable && current.value < 0)
 const clicksRange = computed(() => range(start.value, total.value + 1))
 const sliderEl = ref<HTMLElement>()
 
-function onMousedown() {
-  if (props.readonly)
-    return
-  if (props.resettable)
-    return
-  if (current.value < 0 || current.value > total.value)
-    current.value = 0
-}
-
 function syncCurrentFromPointer(event: PointerEvent) {
   if (props.readonly || !(event.buttons & 1) || !sliderEl.value)
     return
   const rect = sliderEl.value.getBoundingClientRect()
   const ratio = clamp(0, (event.clientX - rect.left) / Math.max(1, rect.width), 1)
-  const next = Math.round(inputStart.value + ratio * (total.value - inputStart.value))
-  current.value = clamp(inputStart.value, next, total.value)
+  const next = Math.round(dragStart.value + ratio * (total.value - dragStart.value))
+  current.value = clamp(dragStart.value, next, total.value)
 }
 
 function syncCurrentFromVisibleBlock(event: PointerEvent) {
@@ -121,7 +112,8 @@ function onPointerDown(event: PointerEvent) {
         border="y main" of-hidden relative
         :class="[
           i === 0 ? 'rounded-l border-l' : '',
-          i === total && +i !== +current ? 'rounded-r border-r' : '',
+          i === total ? 'border-r' : '',
+          i === total && +i !== +current ? 'rounded-r' : '',
         ]"
         :style="{ width: length > 0 ? `${1 / length * 100}%` : '100%' }"
       >
@@ -145,34 +137,6 @@ function onPointerDown(event: PointerEvent) {
           {{ i }}
         </div>
       </div>
-      <input
-        v-model="current"
-        class="range"
-        type="range" :min="inputStart" :max="total" :step="1"
-        absolute inset-0 z-label op0
-        :class="readonly ? 'pointer-events-none' : ''"
-        :style="{ '--thumb-width': `${1 / (length + 1) * 100}%` }"
-        @mousedown="onMousedown"
-        @focus="event => (event.currentTarget as HTMLElement)?.blur()"
-      >
     </div>
   </div>
 </template>
-
-<style scoped>
-.range {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-}
-.range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 100%;
-  width: var(--thumb-width, 0.5rem);
-}
-
-.range::-moz-range-thumb {
-  height: 100%;
-  width: var(--thumb-width, 0.5rem);
-}
-</style>

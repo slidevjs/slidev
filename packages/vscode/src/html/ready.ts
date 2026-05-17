@@ -41,9 +41,7 @@ export function generateReadyHtml(port: number, mode: PreviewMode, hashRoute: bo
         if (data && data.target === 'slidev') {
           if (data.sender === 'vscode')
             iframe.contentWindow.postMessage(data, '*')
-          else if (data.type === 'command')
-            vscode.postMessage(data)
-          else if (data.type === 'overview-scroll')
+          else if (data.type === 'command' || data.type === 'overview-scroll')
             vscode.postMessage(data)
           else
             vscode.postMessage({

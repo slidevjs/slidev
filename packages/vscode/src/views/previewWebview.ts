@@ -73,7 +73,7 @@ export const usePreviewWebview = defineService(() => {
           }
           else {
             initializedClientId.value = data.clientId
-            if (previewMode.value === 'slide' && config['preview-sync'] && initializedClientId.value === data.clientId && focusedSlideNo.value != null)
+            if (previewMode.value === 'slide' && config['preview-sync'] && focusedSlideNo.value != null)
               postSlidevMessage('navigate', { no: focusedSlideNo.value })
           }
         }

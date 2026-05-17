@@ -47,9 +47,9 @@ export const useFocusedSlide = defineService(() => {
   })
   const overviewAnchors = computed(() => {
     const info = projectInfo.value
-    const slides = info?.project.data.slides
-    if (!info || !slides)
+    if (!info)
       return []
+    const slides = info.project.data.slides
     return info.md.slides
       .map((source): OverviewAnchor | null => {
         const displayedSource = getFirstDisplayedChild(source)
@@ -65,9 +65,8 @@ export const useFocusedSlide = defineService(() => {
       .sort((a, b) => a.no - b.no)
   })
   const viewportSlideNo = computed(() => {
-    const info = projectInfo.value
     const range = visibleRanges.value[0]
-    if (!info || !range)
+    if (!range)
       return null
     const start = getFractionalVisibleLine(range.start)
     const end = getFractionalVisibleLine(range.end)
@@ -139,12 +138,14 @@ export const useFocusedSlide = defineService(() => {
   }
 
   function revealViewportSlide(no: number) {
+    const textEditor = editor.value
+    if (!textEditor)
+      return
     const line = interpolate(overviewAnchors.value.map(anchor => ({
       x: anchor.no,
       y: anchor.line,
     })), no)
-    const textEditor = editor.value
-    if (line == null || !textEditor)
+    if (line == null)
       return
     const position = new Position(Math.round(line), 0)
     textEditor.revealRange(new Range(position, position), TextEditorRevealType.InCenter)

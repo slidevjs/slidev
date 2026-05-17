@@ -29,7 +29,7 @@ const overviewCardWidth = computed(() => {
   if (!isPreviewMode.value)
     return cardWidth
   if (isEmbeddedPreviewMode.value)
-    return windowSize.width.value - 16
+    return Math.max(0, windowSize.width.value - 16)
   return Math.min(900, Math.max(320, windowSize.width.value - 160))
 })
 const overviewSlideHeight = computed(() => overviewCardWidth.value / slideAspect.value)
