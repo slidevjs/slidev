@@ -123,7 +123,7 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
         meta: [
           { 'http-equiv': 'Content-Type', 'content': 'text/html; charset=UTF-8' },
           { property: 'slidev:version', content: version },
-          { property: 'slidev:entry', content: mode === 'dev' && slash(entry) },
+          { property: 'slidev:entry', content: mode === 'dev' ? slash(entry) : null },
           { name: 'description', content: description },
           { name: 'author', content: author ? toAttrValue(author) : null },
           { name: 'keywords', content: keywords ? toAttrValue(Array.isArray(keywords) ? keywords.join(', ') : keywords) : null },
@@ -154,6 +154,6 @@ export default async function setupIndexHtml({ mode, entry, clientRoot, userRoot
 
   main = main.replace('<!-- body -->', body)
 
-  const html = await transformHtmlTemplate(unhead, main)
+  const html = transformHtmlTemplate(unhead, main)
   return html
 }

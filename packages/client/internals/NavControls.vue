@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import CustomNavControls from '#slidev/custom-nav-controls'
 import { computed, ref, shallowRef } from 'vue'
+import CustomNavControls from '#slidev/custom-nav-controls'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { configs } from '../env'

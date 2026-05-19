@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TitleRenderer from '#slidev/title-renderer'
 import Fuse from 'fuse.js'
 import { computed, ref, watch } from 'vue'
+import TitleRenderer from '#slidev/title-renderer'
 import { useNav } from '../composables/useNav'
 import { activeElement, showGotoDialog } from '../state'
 

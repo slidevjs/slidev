@@ -1,10 +1,10 @@
 import type { CodeRunner, CodeRunnerOutput, CodeRunnerOutputs, CodeRunnerOutputText } from '@slidev/types'
 import type { CodeToHastOptions } from 'shiki'
 import type ts from 'typescript'
-import deps from '#slidev/monaco-run-deps'
-import setups from '#slidev/setups/code-runners'
 import { createSingletonPromise } from '@antfu/utils'
 import { ref } from 'vue'
+import deps from '#slidev/monaco-run-deps'
+import setups from '#slidev/setups/code-runners'
 import { configs } from '../env'
 
 export default createSingletonPromise(async () => {
