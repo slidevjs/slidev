@@ -37,5 +37,8 @@
     "@antfu/utils": "catalog:frontend",
     "@slidev/types": "workspace:*",
     "yaml": "catalog:prod"
+  },
+  "devDependencies": {
+    "tsdown-stale-guard": "catalog:dev"
   }
 }

@@ -45,5 +45,8 @@
     "vite-plugin-vue-server-ref": "catalog:prod",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend"
+  },
+  "devDependencies": {
+    "tsdown-stale-guard": "catalog:dev"
   }
 }

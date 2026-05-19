@@ -64,6 +64,7 @@
     "taze": "catalog:dev",
     "tinyexec": "catalog:prod",
     "tsdown": "catalog:dev",
+    "tsnapi": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "vite": "catalog:prod",

@@ -38,6 +38,8 @@ catalogs:
     simple-git-hooks: ^2.13.1
     taze: ^19.12.0
     tsdown: ^0.22.0
+    tsdown-stale-guard: ^0.1.2
+    tsnapi: ^0.3.3
     tsx: ^4.22.2
     typescript: ^6.0.3
     undici: ^8.3.0
