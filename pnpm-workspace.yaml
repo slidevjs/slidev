@@ -23,7 +23,7 @@ catalogs:
   dev:
     '@antfu/eslint-config': ^9.0.0
     bumpp: ^11.1.0
-    cypress: ^14.5.4
+    cypress: ^15.15.0
     eslint: ^10.4.0
     eslint-plugin-format: ^2.0.1
     lint-staged: ^17.0.5
