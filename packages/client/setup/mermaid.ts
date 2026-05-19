@@ -1,6 +1,6 @@
 import type { MermaidConfig } from 'mermaid'
-import setups from '#slidev/setups/mermaid'
 import { createSingletonPromise } from '@antfu/utils'
+import setups from '#slidev/setups/mermaid'
 
 export default createSingletonPromise(async () => {
   const setupReturn: MermaidConfig = {

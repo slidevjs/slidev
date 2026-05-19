@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SlidevContextNav } from '../composables/useNav'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
 import { computed, reactive, shallowRef, useTemplateRef } from 'vue'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { injectionSlideElement, injectionSlidevContext } from '../constants'
 import { configs, slideHeight, slideWidth } from '../env'
 import { getSlideClass } from '../utils'

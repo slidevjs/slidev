@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SlideRoute } from '@slidev/types'
-import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { recomputeAllPoppers } from 'floating-vue'
 import { computed, shallowRef, TransitionGroup, watchEffect } from 'vue'
+import { GlobalBottom, GlobalTop } from '#slidev/global-layers'
 import { createFixedClicks } from '../composables/useClicks'
 import { useNav } from '../composables/useNav'
 import { usePreloadImages } from '../composables/usePreloadImages'

@@ -1,7 +1,7 @@
 import type { SlideRoute } from '@slidev/types'
-import { slides } from '#slidev/slides'
 import { tryOnMounted } from '@vueuse/core'
 import { computed, watch } from 'vue'
+import { slides } from '#slidev/slides'
 import { useSlideContext } from '../context'
 
 export { slides }
