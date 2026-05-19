@@ -3,6 +3,7 @@ import { throttledWatch, useEventListener } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import { useDynamicSlideInfo } from '../composables/useSlideInfo'
+import { parseSideEditorContent } from '../logic/sideEditor'
 import { activeElement, editorHeight, editorWidth, isInputting, showEditor, isEditorVertical as vertical } from '../state'
 import IconButton from './IconButton.vue'
 import ShikiEditor from './ShikiEditor.vue'
@@ -10,8 +11,6 @@ import ShikiEditor from './ShikiEditor.vue'
 const props = defineProps<{
   resize?: boolean
 }>()
-
-const RE_FRONTMATTER_BLOCK = /^---\n([\s\S]*?)\n---\n/
 
 const { currentSlideNo, openInEditor } = useNav()
 
@@ -38,11 +37,7 @@ watch(
 async function save() {
   dirty.value = false
 
-  let frontmatterRaw: string | undefined
-  const contentOnly = content.value.trim().replace(RE_FRONTMATTER_BLOCK, (_, f) => {
-    frontmatterRaw = f
-    return ''
-  })
+  const { content: contentOnly, frontmatterRaw } = parseSideEditorContent(content.value)
 
   await update({
     note: note.value || undefined,

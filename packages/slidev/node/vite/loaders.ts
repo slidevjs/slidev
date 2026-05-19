@@ -107,7 +107,7 @@ export function createSlidesLoader(
                 slide.source.frontmatterDoc = parsed
             }
           }
-          if (body.note)
+          if (body.note != null)
             slide.note = slide.source.note = body.note
           if (body.frontmatter) {
             updateFrontmatterPatch(slide.source, body.frontmatter)
