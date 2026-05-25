@@ -39,3 +39,30 @@ seoMeta:
 ```
 
 It will use [playwright](https://playwright.dev/) to capture the first slide and save it as `./og-image.png` (same as `slidev export`). You may also commit the generated image to your repository to avoid the auto-generation. Or if you generate it on CI, you might also want to setup the playwright environment.
+
+## CI Environment
+
+When generating the OG image on CI (e.g. GitHub Actions), the runner may not have the fonts required to render your slides correctly. Non-Latin characters such as Japanese, Chinese, or Korean will appear as boxes (tofu) if the system fonts are missing.
+
+### Install system fonts
+
+On Ubuntu-based runners, install the Noto CJK fonts before building:
+
+```yaml
+- name: Install CJK fonts
+  run: sudo apt-get install -y fonts-noto-cjk
+```
+
+### Use web fonts
+
+Alternatively, configure your slides to use a web font that supports your language. Slidev will wait for all web fonts to finish loading before capturing the screenshot.
+
+```md
+---
+fonts:
+  sans: Noto Sans JP
+---
+```
+
+> [!TIP]
+> You can commit the generated `og-image.png` to your repository. Slidev will reuse the committed image instead of re-generating it on every build, which avoids the font issue entirely and speeds up your CI.
