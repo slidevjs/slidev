@@ -46,11 +46,14 @@ When generating the OG image on CI (e.g. GitHub Actions), the runner may not hav
 
 ### Install system fonts
 
-On Ubuntu-based runners, install the Noto CJK fonts before building:
+On Ubuntu-based runners, install the Noto CJK fonts before building. Make sure to install fonts **before** running `playwright install`:
 
 ```yaml
 - name: Install CJK fonts
   run: sudo apt-get install -y fonts-noto-cjk
+
+- name: Install Playwright browsers
+  run: pnpm exec playwright install chromium --with-deps
 ```
 
 ### Use web fonts
