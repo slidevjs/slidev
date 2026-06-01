@@ -1,11 +1,14 @@
 import type { ResolvedFontOptions, SourceSlideInfo } from '@slidev/types'
 import type MarkdownExit from 'markdown-exit'
 import type { Connect, GeneralImportGlobOptions } from 'vite'
-import { relative, win32 } from 'node:path'
+import { createHash } from 'node:crypto'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative, win32 } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
+import { toAtFS } from './resolver'
 
 const RE_WHITESPACE_ONLY = /^\s*$/
 const RE_QUOTED_STRING = /^(['"])(.*)\1$/
@@ -115,15 +118,41 @@ function getImportGlobRelativePath(from: string, to: string) {
   )
 }
 
-export function makeAbsoluteImportGlob(
+function resolveImportGlobProxyModule(proxyBase: string, content: string) {
+  const hash = createHash('sha256').update(content).digest('hex').slice(0, 10)
+  return `${proxyBase}.${hash}.ts`
+}
+
+export function createMakeAbsoluteImportGlob(baseRoot: string) {
+  const proxyModules = new Map<string, string>()
+  const proxyBasename = 'node_modules/.slidev/virtual/import-glob'
+  const proxyBase = slash(join(baseRoot, proxyBasename))
+
+  return function makeAbsoluteImportGlob(
+    globs: string[],
+    options: Partial<GeneralImportGlobOptions> = {},
+  ) {
+    // Vite does not treat /@slidev/* as a real filesystem importer. Emit
+    // import.meta.glob from a proxy file so Vite resolves imports from disk.
+    const content = `export default ${makeAbsoluteImportGlobExpression(dirname(proxyBase), globs, options, baseRoot)}\n`
+    const proxyModule = resolveImportGlobProxyModule(proxyBase, content)
+    if (proxyModules.get(proxyModule) !== content) {
+      mkdirSync(dirname(proxyModule), { recursive: true })
+      writeFileSync(proxyModule, content, 'utf-8')
+      proxyModules.set(proxyModule, content)
+    }
+    return toAtFS(proxyModule)
+  }
+}
+
+export type MakeAbsoluteImportGlob = ReturnType<typeof createMakeAbsoluteImportGlob>
+
+function makeAbsoluteImportGlobExpression(
   self: string,
   globs: string[],
   options: Partial<GeneralImportGlobOptions> = {},
   baseRoot?: string,
 ) {
-  // Vite's import.meta.glob only supports relative paths. On Windows, though,
-  // resolving drive-letter paths from a virtual /@slidev module can drop the
-  // drive prefix. Use Vite's root-relative form for those paths instead.
   const root = baseRoot && globs.some(glob => RE_WINDOWS_DRIVE.test(slash(glob)))
     ? baseRoot
     : undefined
