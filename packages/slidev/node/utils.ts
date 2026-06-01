@@ -134,7 +134,7 @@ export function createMakeAbsoluteImportGlob(baseRoot: string) {
   ) {
     // Vite does not treat /@slidev/* as a real filesystem importer. Emit
     // import.meta.glob from a proxy file so Vite resolves imports from disk.
-    const content = `export default ${makeAbsoluteImportGlobExpression(dirname(proxyBase), globs, options, baseRoot)}\n`
+    const content = `export default ${makeAbsoluteImportGlobExpression(dirname(proxyBase), globs, options)}\n`
     const proxyModule = resolveImportGlobProxyModule(proxyBase, content)
     if (proxyModules.get(proxyModule) !== content) {
       mkdirSync(dirname(proxyModule), { recursive: true })
@@ -151,21 +151,16 @@ function makeAbsoluteImportGlobExpression(
   self: string,
   globs: string[],
   options: Partial<GeneralImportGlobOptions> = {},
-  baseRoot?: string,
 ) {
-  const root = baseRoot && globs.some(glob => RE_WINDOWS_DRIVE.test(slash(glob)))
-    ? baseRoot
-    : undefined
   const relativeGlobs = globs.map((glob) => {
-    const relativeGlob = getImportGlobRelativePath(root ?? self, glob)
-    return root && !relativeGlob.startsWith('.') && !RE_WINDOWS_DRIVE.test(relativeGlob)
+    const relativeGlob = getImportGlobRelativePath(self, glob)
+    return !relativeGlob.startsWith('.') && !RE_WINDOWS_DRIVE.test(relativeGlob)
       ? `./${relativeGlob}`
       : relativeGlob
   })
   const opts: GeneralImportGlobOptions = {
     eager: true,
     exhaustive: true,
-    ...(root ? { base: '/' } : {}),
     ...options,
   }
   return `import.meta.glob(${JSON.stringify(relativeGlobs)}, ${JSON.stringify(opts)})`
