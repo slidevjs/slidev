@@ -3,12 +3,13 @@ import { createHash } from 'node:crypto'
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { slash } from '@antfu/utils'
 import MarkdownExit from 'markdown-exit'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
-import { getRoots } from '../packages/slidev/node/resolver'
+import { getRoots, toAtFS } from '../packages/slidev/node/resolver'
 import { createMakeAbsoluteImportGlob, generateCoollabsFontsUrl, generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
 describe('utils', () => {
@@ -107,10 +108,10 @@ describe('utils', () => {
       expect(proxyUrl).toMatch(/^\/@fs\/.*\/node_modules\/\.slidev\/virtual\/import-glob\.[a-f0-9]{10}\.ts$/)
       expect(secondProxyUrl).toMatch(/^\/@fs\/.*\/node_modules\/\.slidev\/virtual\/import-glob\.[a-f0-9]{10}\.ts$/)
       expect(secondProxyUrl).not.toBe(proxyUrl)
-      const content = readFileSync(proxyUrl.slice('/@fs'.length), 'utf-8')
-      const secondContent = readFileSync(secondProxyUrl.slice('/@fs'.length), 'utf-8')
-      expect(proxyUrl).toBe(`/@fs${slash(join(root, `node_modules/.slidev/virtual/import-glob.${createHash('sha256').update(content).digest('hex').slice(0, 10)}.ts`))}`)
-      expect(secondProxyUrl).toBe(`/@fs${slash(join(root, `node_modules/.slidev/virtual/import-glob.${createHash('sha256').update(secondContent).digest('hex').slice(0, 10)}.ts`))}`)
+      const content = readFileSync(fileURLToPath(`file://${proxyUrl.slice('/@fs'.length)}`), 'utf-8')
+      const secondContent = readFileSync(fileURLToPath(`file://${secondProxyUrl.slice('/@fs'.length)}`), 'utf-8')
+      expect(proxyUrl).toBe(toAtFS(join(root, `node_modules/.slidev/virtual/import-glob.${createHash('sha256').update(content).digest('hex').slice(0, 10)}.ts`)))
+      expect(secondProxyUrl).toBe(toAtFS(join(root, `node_modules/.slidev/virtual/import-glob.${createHash('sha256').update(secondContent).digest('hex').slice(0, 10)}.ts`)))
       expect(content)
         .toBe('export default import.meta.glob(["../../../setup/main.ts"], {"eager":true,"exhaustive":true,"import":"default"})\n')
       expect(secondContent)
