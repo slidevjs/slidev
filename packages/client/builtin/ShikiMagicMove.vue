@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { KeyedTokensInfo } from 'shiki-magic-move/types'
+import type { KeyedTokensInfo } from '@shikijs/magic-move/types'
 import type { PropType } from 'vue'
 import { sleep } from '@antfu/utils'
+import { ShikiMagicMovePrecompiled } from '@shikijs/magic-move/vue'
 import { useClipboard } from '@vueuse/core'
 import lz from 'lz-string'
-import { ShikiMagicMovePrecompiled } from 'shiki-magic-move/vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import { CLICKS_MAX } from '../constants'
