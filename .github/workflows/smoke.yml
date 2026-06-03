@@ -137,13 +137,16 @@ jobs:
           spec: cypress/e2e/examples/smoke.spec.ts
 
       - name: Install globally
-        # pnpm v11's `strictDepBuilds: true` default refuses to run
-        # `playwright-chromium`'s postinstall unless it's allow-listed.
+        # - pnpm v11's `strictDepBuilds: true` default refuses to run
+        #   `playwright-chromium`'s postinstall without an explicit allow-list.
+        # - pnpm v11 also isolates each `pnpm add -g` invocation into its own
+        #   directory, so `@slidev/cli` and `@slidev/theme-seriph` have to be
+        #   installed in the *same* call for slidev's global theme resolver
+        #   to find the theme.
         env:
           EXTRA: ${{ matrix.pm == 'pnpm' && '--allow-build=playwright-chromium' || '' }}
         run: |
-          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium $EXTRA
-          ${{ matrix.pm }} i -g @slidev/theme-seriph
+          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium @slidev/theme-seriph $EXTRA
         if: ${{ matrix.pm != 'yarn' }}
 
       - name: Create slide file
