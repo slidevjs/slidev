@@ -1,7 +1,7 @@
 import type { SlideInfo } from '@slidev/types'
+import { toKeyedTokens } from '@shikijs/magic-move/core'
 import { defineCodeblockTransformer } from '@slidev/types'
 import lz from 'lz-string'
-import { toKeyedTokens } from 'shiki-magic-move/core'
 import { resolveSnippetImport } from '../snippet'
 import { normalizeRangeStr } from '../utils'
 

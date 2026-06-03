@@ -28,6 +28,7 @@ const INCLUDE_LOCAL = INCLUDE_GLOBAL.map(i => `@slidev/cli > @slidev/client > ${
 // @keep-sorted
 const EXCLUDE_GLOBAL = [
   '@antfu/utils',
+  '@shikijs/magic-move/vue',
   '@shikijs/monaco',
   '@shikijs/vitepress-twoslash/client',
   '@slidev/client',
@@ -49,7 +50,6 @@ const EXCLUDE_GLOBAL = [
   'fuse.js',
   'mermaid',
   'monaco-editor',
-  'shiki-magic-move/vue',
   'shiki',
   'shiki/core',
   'vue-demi',
