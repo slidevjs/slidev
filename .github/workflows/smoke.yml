@@ -137,14 +137,17 @@ jobs:
           spec: cypress/e2e/examples/smoke.spec.ts
 
       - name: Install globally
-        # - pnpm v11's `strictDepBuilds: true` default refuses to run
-        #   `playwright-chromium`'s postinstall without an explicit allow-list.
-        # - pnpm v11 also isolates each `pnpm add -g` invocation into its own
-        #   directory, so `@slidev/cli` and `@slidev/theme-seriph` have to be
-        #   installed in the *same* call for slidev's global theme resolver
-        #   to find the theme.
+        # pnpm v11 changes affecting this step:
+        # - `strictDepBuilds: true` is now default → allow-list
+        #   `playwright-chromium`'s postinstall explicitly.
+        # - Each `pnpm add -g` call goes into its own isolated dir, and the
+        #   default `isolated` node-linker symlinks packages to the virtual
+        #   store, so slidev's `findDepPkgJsonPath` (which walks up from
+        #   `import.meta.url`'s realpath) cannot reach a sibling-installed
+        #   theme. Forcing `--node-linker=hoisted` lays the cli + theme out
+        #   as a flat `node_modules/` so the upward lookup succeeds.
         env:
-          EXTRA: ${{ matrix.pm == 'pnpm' && '--allow-build=playwright-chromium' || '' }}
+          EXTRA: ${{ matrix.pm == 'pnpm' && '--allow-build=playwright-chromium --node-linker=hoisted' || '' }}
         run: |
           ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium @slidev/theme-seriph $EXTRA
         if: ${{ matrix.pm != 'yarn' }}
