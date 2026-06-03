@@ -1,7 +1,7 @@
 import type { RootsInfo } from '@slidev/types'
 import { existsSync, lstatSync, readdirSync, readlinkSync } from 'node:fs'
 import { copyFile, readFile } from 'node:fs/promises'
-import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseNi, run } from '@antfu/ni'
@@ -62,7 +62,12 @@ export function findInvocationNodeModulesPath(argv1: string | undefined): string
     if (!stat.isSymbolicLink())
       return undefined
     const target = readlinkSync(current)
-    current = isAbsolute(target) ? target : resolve(dirname(current), target)
+    // `readlinkSync` returns the target verbatim — possibly with the *wrong*
+    // separator on Windows (e.g. a target written with `/` by a cross-platform
+    // tool). Resolve through the symlink's directory in every case so the
+    // separator-sensitive `node_modules` scan below sees a platform-normalized
+    // path.
+    current = resolve(dirname(current), target)
     const idx = current.lastIndexOf(segment)
     if (idx >= 0)
       return current.slice(0, idx + 1 + 'node_modules'.length)
