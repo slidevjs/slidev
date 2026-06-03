@@ -35,14 +35,15 @@ const cliRoot = fileURLToPath(new URL('..', import.meta.url))
  *   `.bin` symlink before populating argv[1].
  *
  * Returns the trailing `node_modules` directory of that path, or `undefined`
- * if argv[1] doesn't pass through one.
+ * if `argv1` doesn't pass through one.
+ *
+ * Exported for tests.
  */
-function findInvocationNodeModulesPath(): string | undefined {
-  const start = process.argv[1]
-  if (!start)
+export function findInvocationNodeModulesPath(argv1: string | undefined): string | undefined {
+  if (!argv1)
     return undefined
   // Direct hit on the literal path passed to Node.
-  const direct = resolve(start)
+  const direct = resolve(argv1)
   const segment = `${sep}node_modules${sep}`
   const directIdx = direct.lastIndexOf(segment)
   if (directIdx >= 0)
@@ -80,8 +81,10 @@ function findInvocationNodeModulesPath(): string | undefined {
  * when multiple packages are listed in one call. Walking the parent of the
  * cli's install group lets us discover packages that landed in sibling
  * groups (e.g. a theme installed alongside `@slidev/cli`).
+ *
+ * Exported for tests.
  */
-function computeInvocationSearchPaths(ownNodeModules: string | undefined): string[] {
+export function computeInvocationSearchPaths(ownNodeModules: string | undefined): string[] {
   if (!ownNodeModules)
     return []
   const paths = [ownNodeModules]
@@ -110,7 +113,7 @@ function computeInvocationSearchPaths(ownNodeModules: string | undefined): strin
   return paths
 }
 
-const invocationNodeModules = findInvocationNodeModulesPath()
+const invocationNodeModules = findInvocationNodeModulesPath(process.argv[1])
 const invocationSearchPaths = computeInvocationSearchPaths(invocationNodeModules)
 
 export const isInstalledGlobally: { value?: boolean } = {}
