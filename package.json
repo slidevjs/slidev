@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "52.15.2",
+  "version": "52.16.0",
   "private": true,
   "packageManager": "pnpm@11.5.1",
   "engines": {
