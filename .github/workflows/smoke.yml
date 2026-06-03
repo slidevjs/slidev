@@ -79,6 +79,13 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
 
+      # pnpm v11 stores globally-installed binaries in `$PNPM_HOME/bin` instead
+      # of directly in `$PNPM_HOME`; without this, `pnpm i -g` aborts with
+      # "configured global bin directory is not in PATH".
+      - name: Add pnpm global bin to PATH
+        run: echo "$PNPM_HOME/bin" >> "$GITHUB_PATH"
+        shell: bash
+
       - name: Install
         run: nci
 
@@ -130,8 +137,12 @@ jobs:
           spec: cypress/e2e/examples/smoke.spec.ts
 
       - name: Install globally
+        # pnpm v11's `strictDepBuilds: true` default refuses to run
+        # `playwright-chromium`'s postinstall unless it's allow-listed.
+        env:
+          EXTRA: ${{ matrix.pm == 'pnpm' && '--allow-build=playwright-chromium' || '' }}
         run: |
-          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium
+          ${{ matrix.pm }} i -g /tmp/slidev-pkgs/cli.tgz playwright-chromium $EXTRA
           ${{ matrix.pm }} i -g @slidev/theme-seriph
         if: ${{ matrix.pm != 'yarn' }}
 
