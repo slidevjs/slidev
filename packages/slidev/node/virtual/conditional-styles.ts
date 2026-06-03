@@ -1,21 +1,21 @@
 import type { VirtualModuleTemplate } from './types'
 import { join } from 'node:path'
 import { resolveImportUrl } from '../resolver'
-import { makeAbsoluteImportGlob } from '../utils'
 
 const id = '/@slidev/conditional-styles'
 
 export const templateConditionalStyles: VirtualModuleTemplate = {
   id,
-  async getContent({ data, roots, userRoot }) {
+  async getContent({ data, roots }) {
     const imports: string[] = []
 
     for (const root of roots) {
-      imports.push(makeAbsoluteImportGlob(id, [
+      const importPath = this.makeAbsoluteImportGlob([
         join(root, 'styles/index.{ts,js,css}'),
         join(root, 'styles.{ts,js,css}'),
         join(root, 'style.{ts,js,css}'),
-      ], {}, userRoot))
+      ])
+      imports.push(`import ${JSON.stringify(importPath)}`)
     }
 
     if (data.features.katex)
