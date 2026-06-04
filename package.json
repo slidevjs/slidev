@@ -27,6 +27,9 @@
     "test": "vitest test",
     "prepare": "simple-git-hooks"
   },
+  "dependencies": {
+    "lodash-es": "catalog:"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@antfu/ni": "catalog:prod",
@@ -87,8 +90,5 @@
     "**/*.{js,ts,vue,json}": [
       "eslint --fix --cache"
     ]
-  },
-  "dependencies": {
-    "lodash-es": "catalog:"
   }
 }
