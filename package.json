@@ -87,5 +87,8 @@
     "**/*.{js,ts,vue,json}": [
       "eslint --fix --cache"
     ]
+  },
+  "dependencies": {
+    "lodash-es": "catalog:"
   }
 }

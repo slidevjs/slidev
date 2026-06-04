@@ -209,3 +209,5 @@ allowBuilds:
   simple-git-hooks: true
   typeit: true
   unrs-resolver: true
+catalog:
+  lodash-es: 4.18.0
