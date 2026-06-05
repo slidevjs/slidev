@@ -209,3 +209,5 @@ allowBuilds:
   simple-git-hooks: true
   typeit: true
   unrs-resolver: true
+catalog:
+  picomatch: 2.3.2
