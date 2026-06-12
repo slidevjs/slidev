@@ -3,16 +3,19 @@ import { assertBasePathNavigation, startBasePathServer, stopBasePathServer } fro
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3041',
+    baseUrl: 'http://127.0.0.1:4173/deck',
     chromeWebSecurity: false,
-    specPattern: 'cypress/e2e/**/*.spec.*',
+    specPattern: 'cypress/e2e/examples/base-path.spec.ts',
     supportFile: false,
-    setupNodeEvents(on) {
+    async setupNodeEvents(on, config) {
+      on('after:run', stopBasePathServer)
       on('task', {
         assertBasePathNavigation,
         startBasePathServer,
         stopBasePathServer,
       })
+      await startBasePathServer()
+      return config
     },
   },
 })
