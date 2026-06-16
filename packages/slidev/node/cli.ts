@@ -368,6 +368,11 @@ cli.command(
       choices: ['hash', 'history'],
       describe: 'override routerMode in the built output (hash for subdirectory deploys like GitHub Pages)',
     })
+    .option('standalone-bundle', {
+      type: 'boolean',
+      default: false,
+      describe: 'generate standalone single-file HTML bundle (works offline via file://)',
+    })
     .option('inspect', {
       default: false,
       type: 'boolean',
@@ -376,7 +381,7 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode, 'standalone-bundle': standaloneBundle } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
