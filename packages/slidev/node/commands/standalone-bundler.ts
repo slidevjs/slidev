@@ -176,7 +176,7 @@ function transformToCommonJS(code: string, modulePath: string): string {
     const searchFrom = pStartIdx + pFunctionStart.length
     const nextVarMatch = code.substring(searchFrom).match(/\},([A-Z][a-z]*=)/)
 
-    if (nextVarMatch) {
+    if (nextVarMatch && nextVarMatch.index !== undefined) {
       const pEndIdx = searchFrom + nextVarMatch.index + 1
       const before = code.substring(0, pStartIdx)
       const after = code.substring(pEndIdx)

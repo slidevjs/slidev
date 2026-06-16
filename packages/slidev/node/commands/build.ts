@@ -132,7 +132,7 @@ export async function build(
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
   // Generate standalone bundle if enabled
-  if (args.standaloneBundle) {
+  if (args['standalone-bundle']) {
     const { createStandaloneBundle } = await import('./standalone-bundler')
     const standalonePath = resolve(outDir, 'index-standalone.html')
     await createStandaloneBundle(outDir, standalonePath)

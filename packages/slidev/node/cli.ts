@@ -381,7 +381,7 @@ cli.command(
     .strict()
     .help(),
   async (args) => {
-    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode, 'standalone-bundle': standaloneBundle } = args
+    const { entry, theme, base, download, out, inspect, 'without-notes': withoutNotes, 'router-mode': routerMode } = args
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
