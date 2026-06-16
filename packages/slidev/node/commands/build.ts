@@ -131,6 +131,13 @@ export async function build(
   if (!existsSync(redirectsPath))
     await fs.writeFile(redirectsPath, `${config.base}*    ${config.base}index.html   200\n`, 'utf-8')
 
+  // Generate standalone bundle if enabled
+  if (args.standaloneBundle) {
+    const { createStandaloneBundle } = await import('./standalone-bundler')
+    const standalonePath = resolve(outDir, 'index-standalone.html')
+    await createStandaloneBundle(outDir, standalonePath)
+  }
+
   if ([true, 'true', 'auto'].includes(options.data.config.download)) {
     const { exportSlides, getExportOptions } = await import('./export')
 
