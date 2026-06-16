@@ -368,17 +368,21 @@ export async function createStandaloneBundle(
   // Load HTML
   let html = await fs.readFile(path.join(buildDir, 'index.html'), 'utf-8')
 
-  // Remove external script/link tags
+  // Remove external script/link tags (handle both ./assets and /assets paths)
   html = html.replace(
-    /<script[^>]*\bsrc\s*=\s*["']\.\/assets\/[^"']+["'][^>]*><\/script>/g,
+    /<script[^>]*\bsrc\s*=\s*["'][./]*assets\/[^"']+["'][^>]*><\/script>/gi,
     '',
   )
-  html = html.replace(/<link[^>]*\brel\s*=\s*["']modulepreload["'][^>]*>/g, '')
+  html = html.replace(
+    /<script[^>]*\bsrc\s*=\s*["'][./]*assets\/[^"']+["'][^>]*\/>/gi,
+    '',
+  )
+  html = html.replace(/<link[^>]*\brel\s*=\s*["']modulepreload["'][^>]*>/gi, '')
 
-  // Inline CSS from <link> tags
-  const cssMatches = [...html.matchAll(/<link[^>]*href="\.\/([^"]+\.css)"[^>]*>/g)]
+  // Inline CSS from <link> tags (handle both ./assets and /assets paths)
+  const cssMatches = [...html.matchAll(/<link[^>]*href=["'][./]*(assets\/[^"]+\.css|[^"]+\.css)["'][^>]*>/gi)]
   for (const match of cssMatches) {
-    const cssPath = match[1]
+    const cssPath = match[1].startsWith('assets/') ? match[1] : `assets/${match[1]}`
     try {
       const css = await fs.readFile(path.join(buildDir, cssPath), 'utf-8')
       html = html.replace(match[0], `<style>\n${css}\n</style>`)
