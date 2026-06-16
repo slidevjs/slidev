@@ -25,4 +25,5 @@ export interface BuildArgs extends ExportArgs {
   'download'?: boolean
   'inspect': boolean
   'without-notes'?: boolean
+  'standalone-bundle'?: boolean
 }
