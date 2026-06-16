@@ -184,6 +184,36 @@ function transformToCommonJS(code: string, modulePath: string): string {
     }
   }
 
+  // Remove/stub the CSS/module preload function that creates link elements
+  // This function tries to dynamically load CSS/JS files which breaks standalone mode
+  // Pattern: ,X=function(e,t,n){...document.createElement(`link`)...Unable to preload CSS...}
+  // Variable name changes (F, N, etc.) so we search by content
+  const preloadErrorMarker = 'Unable to preload CSS'
+  if (code.includes(preloadErrorMarker)) {
+    const errorIdx = code.indexOf(preloadErrorMarker)
+    // Search backwards for the function definition (pattern: ,VAR=function(e,t,n){)
+    const beforeError = code.substring(Math.max(0, errorIdx - 5000), errorIdx)
+    const funcMatch = beforeError.match(/([,;])(\w+)=function\((\w+),(\w+),(\w+)\)\{/)
+
+    if (funcMatch) {
+      const funcStart = errorIdx - beforeError.length + funcMatch.index
+      const varName = funcMatch[2]
+
+      // Find the end of this function
+      const searchFrom = funcStart + funcMatch[0].length
+      const nextVarMatch = code.substring(searchFrom).match(/\}(?:,|\);)(?:[A-Z]|function)/)
+
+      if (nextVarMatch && nextVarMatch.index !== undefined) {
+        const funcEnd = searchFrom + nextVarMatch.index + 1
+        const before = code.substring(0, funcStart)
+        const after = code.substring(funcEnd)
+        // Replace with stub that just calls the loader
+        const params = `${funcMatch[3]},${funcMatch[4]},${funcMatch[5]}`
+        code = `${before},${varName}=function(${params}){return Promise.resolve().then(${funcMatch[3]})}${after}`
+      }
+    }
+  }
+
   return code
 }
 
@@ -207,10 +237,30 @@ export async function createStandaloneBundle(
     throw new Error('[Slidev Standalone] Entry module not found')
   }
 
+  // Collect CSS files referenced in modules before transformation
+  const cssFilesInModules = new Set<string>()
+  for (const [, { code }] of modules.entries()) {
+    const cssRefs = code.match(/["']\.\/([\w/-]+\.css)["']/g)
+    if (cssRefs) {
+      for (const ref of cssRefs) {
+        const cssFile = ref.slice(2, -1) // Remove quotes and ./
+        cssFilesInModules.add(cssFile)
+      }
+    }
+  }
+
   // Transform modules to CommonJS
   const moduleCodeObject: Record<string, string> = {}
   for (const [modulePath, { code }] of modules.entries()) {
     let transformed = transformToCommonJS(code, modulePath)
+
+    // Remove CSS import statements (CSS is inlined in <head>)
+    // Remove: import './path/to/file.css'
+    transformed = transformed.replace(/import\s+["']\.\/[^"']+\.css["']\s*;?/g, '')
+    // Remove: const x = __require('./path/to/file.css')
+    transformed = transformed.replace(/const\s+\w+\s*=\s*__require\(['"]\.\/[^'"]+\.css['"]\)\s*;?/g, '')
+    // Remove standalone: __require('./path/to/file.css')
+    transformed = transformed.replace(/__require\(['"]\.\/[^'"]+\.css['"]\)\s*;?/g, '')
 
     // Expose Xt array globally for entry module
     if (modulePath === entryModule) {
@@ -395,17 +445,7 @@ export async function createStandaloneBundle(
     }
   }
 
-  // Inline CSS referenced in modules
-  const cssFilesInModules = new Set<string>()
-  for (const [, { code }] of modules.entries()) {
-    const cssRefs = code.match(/["']\.\/([\w/-]+\.css)["']/g)
-    if (cssRefs) {
-      for (const ref of cssRefs) {
-        const cssFile = ref.slice(2, -1) // Remove quotes and ./
-        cssFilesInModules.add(cssFile)
-      }
-    }
-  }
+  // CSS files were already collected earlier, now inline them
 
   let inlinedCssStyles = ''
   for (const cssFile of cssFilesInModules) {
