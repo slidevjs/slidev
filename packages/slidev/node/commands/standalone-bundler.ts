@@ -15,10 +15,142 @@
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import https from 'node:https'
+import http from 'node:http'
 
 interface ModuleInfo {
   code: string
   size: number
+}
+
+/**
+ * Download external image and convert to data URL
+ */
+async function downloadImageAsDataURL(url: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const client = url.startsWith('https:') ? https : http
+
+    const request = client.get(url, (response) => {
+      // Follow redirects
+      if (response.statusCode === 301 || response.statusCode === 302 || response.statusCode === 307 || response.statusCode === 308) {
+        const redirectUrl = response.headers.location
+        if (redirectUrl) {
+          console.log(`[Slidev Standalone]   → Following redirect to: ${redirectUrl}`)
+          downloadImageAsDataURL(redirectUrl).then(resolve)
+          return
+        }
+      }
+
+      if (response.statusCode !== 200) {
+        console.warn(`[Slidev Standalone] Failed to download image: ${url} (${response.statusCode})`)
+        resolve(null)
+        return
+      }
+
+      const chunks: Buffer[] = []
+      response.on('data', chunk => chunks.push(chunk))
+      response.on('end', () => {
+        const buffer = Buffer.concat(chunks)
+        const contentType = response.headers['content-type'] || 'image/jpeg'
+        const base64 = buffer.toString('base64')
+        const dataURL = `data:${contentType};base64,${base64}`
+        resolve(dataURL)
+      })
+      response.on('error', (error) => {
+        console.warn(`[Slidev Standalone] Error downloading image: ${url}`, error.message)
+        resolve(null)
+      })
+    })
+
+    request.on('error', (error) => {
+      console.warn(`[Slidev Standalone] Error downloading image: ${url}`, error.message)
+      resolve(null)
+    })
+
+    // Set timeout
+    request.setTimeout(30000, () => {
+      request.destroy()
+      console.warn(`[Slidev Standalone] Timeout downloading image: ${url}`)
+      resolve(null)
+    })
+  })
+}
+
+/**
+ * Find all external image URLs in HTML and CSS
+ */
+function findExternalImageURLs(html: string): Set<string> {
+  const urls = new Set<string>()
+
+  // Find images in img src attributes
+  const imgMatches = html.matchAll(/<img[^>]*\bsrc\s*=\s*["'](https?:\/\/[^"']+)["']/gi)
+  for (const match of imgMatches) {
+    urls.add(match[1])
+  }
+
+  // Find images in CSS background properties
+  const bgMatches = html.matchAll(/background(?:-image)?\s*:\s*[^;}]*url\(\s*["']?(https?:\/\/[^"')]+)["']?\s*\)/gi)
+  for (const match of bgMatches) {
+    urls.add(match[1])
+  }
+
+  // Find images in style attributes
+  const styleMatches = html.matchAll(/style\s*=\s*["']([^"']*background[^"']*)["']/gi)
+  for (const match of styleMatches) {
+    const styleContent = match[1]
+    const urlMatches = styleContent.matchAll(/url\(\s*["']?(https?:\/\/[^"')]+)["']?\s*\)/gi)
+    for (const urlMatch of urlMatches) {
+      urls.add(urlMatch[1])
+    }
+  }
+
+  // Find URLs in frontmatter data (background: https://...)
+  // These get processed by Vue's handleBackground() at runtime
+  // Format can be: background:`https://...` or background: https://...
+  const frontmatterBgMatches = html.matchAll(/background\s*:\s*`?(https?:\/\/[^`'")\s\n,}]+)/gi)
+  for (const match of frontmatterBgMatches) {
+    urls.add(match[1])
+  }
+
+  return urls
+}
+
+/**
+ * Replace external image URLs with data URLs in HTML
+ */
+function replaceImageURLs(html: string, urlMap: Map<string, string>): string {
+  let result = html
+
+  for (const [originalURL, dataURL] of urlMap.entries()) {
+    // Escape special regex characters in URL
+    const escapedURL = originalURL.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+    // Replace in frontmatter background field (with backticks or quotes)
+    result = result.replace(
+      new RegExp(`(background\\s*:\\s*[\`'"])${escapedURL}([\`'"])`, 'gi'),
+      `$1${dataURL}$2`
+    )
+
+    // Replace in img src attributes
+    result = result.replace(
+      new RegExp(`(<img[^>]*\\bsrc\\s*=\\s*["'])${escapedURL}(["'])`, 'gi'),
+      `$1${dataURL}$2`
+    )
+
+    // Replace in CSS url() - with quotes
+    result = result.replace(
+      new RegExp(`(url\\(\\s*["'])${escapedURL}(["']\\s*\\))`, 'gi'),
+      `$1${dataURL}$2`
+    )
+
+    // Replace in CSS url() - without quotes
+    result = result.replace(
+      new RegExp(`(url\\(\\s*)${escapedURL}(\\s*\\))`, 'gi'),
+      `$1${dataURL}$2`
+    )
+  }
+
+  return result
 }
 
 /**
@@ -482,6 +614,45 @@ export async function createStandaloneBundle(
 
   const escapedInitScript = initScript.replace(/\$/g, '$$$$')
   html = html.replace('</body>', `${escapedInitScript}\n</body>`)
+
+  // Download and inline external images (AFTER module system is injected)
+  console.log('[Slidev Standalone] Scanning for external images...')
+  const externalImageURLs = findExternalImageURLs(html)
+
+  // Clean URLs - remove any that contain newlines or invalid characters
+  const cleanedURLs = new Set<string>()
+  for (const url of externalImageURLs) {
+    // Only keep URLs without newlines or other whitespace issues
+    if (!url.includes('\n') && !url.includes('\r') && url.match(/^https?:\/\/[^\s]+$/)) {
+      cleanedURLs.add(url)
+    }
+  }
+
+  if (cleanedURLs.size > 0) {
+    console.log(`[Slidev Standalone] Found ${cleanedURLs.size} external image(s), downloading...`)
+    const urlMap = new Map<string, string>()
+
+    for (const url of cleanedURLs) {
+      console.log(`[Slidev Standalone] Downloading: ${url}`)
+      const dataURL = await downloadImageAsDataURL(url)
+      if (dataURL) {
+        urlMap.set(url, dataURL)
+        const sizeKB = (dataURL.length / 1024).toFixed(2)
+        console.log(`[Slidev Standalone] ✓ Inlined (${sizeKB} KB)`)
+      }
+      else {
+        console.warn(`[Slidev Standalone] ✗ Failed to download, will remain as external URL`)
+      }
+    }
+
+    if (urlMap.size > 0) {
+      html = replaceImageURLs(html, urlMap)
+      console.log(`[Slidev Standalone] Successfully inlined ${urlMap.size} image(s)`)
+    }
+  }
+  else {
+    console.log('[Slidev Standalone] No external images found')
+  }
 
   // Write output
   await fs.writeFile(outputPath, html, 'utf-8')
