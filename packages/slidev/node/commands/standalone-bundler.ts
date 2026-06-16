@@ -379,6 +379,9 @@ export async function createStandaloneBundle(
   )
   html = html.replace(/<link[^>]*\brel\s*=\s*["']modulepreload["'][^>]*>/gi, '')
 
+  // Remove external preload links (images, fonts, etc.) that break standalone mode
+  html = html.replace(/<link[^>]*\brel\s*=\s*["']preload["'][^>]*\bhref\s*=\s*["']https?:\/\/[^"']*["'][^>]*>/gi, '')
+
   // Inline CSS from <link> tags (handle both ./assets and /assets paths)
   const cssMatches = [...html.matchAll(/<link[^>]*href=["'][./]*(assets\/[^"]+\.css|[^"]+\.css)["'][^>]*>/gi)]
   for (const match of cssMatches) {
