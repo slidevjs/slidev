@@ -262,6 +262,14 @@ export async function createStandaloneBundle(
     // Remove standalone: __require('./path/to/file.css')
     transformed = transformed.replace(/__require\(['"]\.\/[^'"]+\.css['"]\)\s*;?/g, '')
 
+    // Fix router for file:// protocol - change to hash-based routing
+    // Pattern: history:XX(`/`) where XX is the history function variable (e.g., Ne, Oe, etc.)
+    // Replace with a minimal router implementation that uses hash-based navigation
+    transformed = transformed.replace(
+      /history:(\w+)\(`\/`\)/g,
+      'history:{push:(t)=>location.hash=t,replace:(t)=>location.hash=t,go:()=>{},back:()=>{},forward:()=>{},listen:()=>()=>{},createHref:(t)=>\'#\'+t,location:{pathname:location.hash.slice(1)||"/"}}',
+    )
+
     // Expose Xt array globally for entry module
     if (modulePath === entryModule) {
       transformed = transformed.replace(/([,;])Xt=Array\((\d+)\)/g, '$1Xt=window.Xt=Array($2)')
