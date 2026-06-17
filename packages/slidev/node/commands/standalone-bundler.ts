@@ -234,8 +234,13 @@ function transformToCommonJS(code: string, modulePath: string): string {
     },
   )
 
-  // Transform dynamic imports: import('./mod')
-  code = code.replace(/import\s*\(\s*(['"`])([^'"`]+)\1\s*\)/g, (m, q, importPath) => {
+  // Transform side-effect imports: import './mod' or import "./mod"
+  code = code.replace(/import\s*["']([^"']+)["']\s*;?/g, (m, modPath) => {
+    return `__require('${modPath}');`
+  })
+
+  // Transform dynamic imports: import('./mod'), import("./mod"), import(`./mod`)
+  code = code.replace(/import\s*\(\s*([`'"])([^`'"]+)\1\s*\)/g, (m, q, importPath) => {
     let resolvedPath = importPath
 
     // Resolve relative paths
@@ -407,6 +412,14 @@ export async function createStandaloneBundle(
       transformed = transformed.replace(/([,;])Xt=Array\((\d+)\)/g, '$1Xt=window.Xt=Array($2)')
     }
 
+    // Fix __vite__mapDeps paths: strip "assets/" prefix from dependency arrays
+    // Modules with dynamic imports have local __vite__mapDeps with hardcoded paths like:
+    // m.f=["assets/c4Diagram-xxx.js", ...] - these need to become ["c4Diagram-xxx.js", ...]
+    transformed = transformed.replace(
+      /"assets\//g,
+      '"',
+    )
+
     moduleCodeObject[modulePath] = transformed
   }
 
@@ -538,7 +551,21 @@ export async function createStandaloneBundle(
   };
 
   // Vite stubs
-  window.__vite__mapDeps = function() { return []; };
+  // __vite__mapDeps: Maps dependency indices to file paths
+  // Each module that uses dynamic imports has its own local __vite__mapDeps
+  // with a dependency map (m.f). This stub normalizes paths for standalone bundles
+  // by stripping "assets/" prefix since all modules are at the root level.
+  window.__vite__mapDeps = function(indexes, depMap, depCache) {
+    if (!depMap || !indexes) return [];
+    return indexes.map(function(i) {
+      var path = depMap[i];
+      // Strip "assets/" prefix for standalone bundle (modules are flattened)
+      if (path && path.startsWith("assets/")) {
+        path = path.substring(7); // Remove "assets/"
+      }
+      return path;
+    });
+  };
   window.__vitePreload = function(loader) {
     return Promise.resolve().then(function() {
       var result = typeof loader === "function" ? loader() : loader;
