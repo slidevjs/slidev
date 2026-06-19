@@ -21,6 +21,7 @@ The Slidev skill provides Claude Code with knowledge about:
 - **Layouts** - Built-in layouts, slots, global layers
 - **Presenter Mode** - Recording, timer, remote access
 - **Exporting** - PDF, PPTX, PNG, SPA hosting
+- **Slide Structure Operations** - Swap, move, and delete slides by index via a bundled script
 
 ## Usage
 
@@ -31,6 +32,7 @@ Once installed, Claude Code will automatically use Slidev knowledge when:
 - Setting up animations and transitions
 - Configuring themes and layouts
 - Exporting presentations
+- Reordering, swapping, or deleting slides
 
 ### Example Prompts
 
@@ -48,6 +50,18 @@ Set up click animations to reveal bullet points one by one
 
 ```
 Configure the presentation for PDF export with speaker notes
+```
+
+```
+Swap slides 3 and 7
+```
+
+```
+Move slide 5 before slide 2
+```
+
+```
+Delete slide 4
 ```
 
 ## Documentation
