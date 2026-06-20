@@ -153,6 +153,93 @@ function replaceImageURLs(html: string, urlMap: Map<string, string>): string {
   return result
 }
 
+function findMatchingFunctionBrace(code: string, openingBraceIndex: number): number {
+  let depth = 0
+  let quote: '"' | '\'' | '`' | null = null
+  let escaped = false
+  let lineComment = false
+  let blockComment = false
+
+  for (let i = openingBraceIndex; i < code.length; i++) {
+    const char = code[i]
+    const next = code[i + 1]
+
+    if (lineComment) {
+      if (char === '\n')
+        lineComment = false
+      continue
+    }
+
+    if (blockComment) {
+      if (char === '*' && next === '/') {
+        blockComment = false
+        i++
+      }
+      continue
+    }
+
+    if (quote) {
+      if (escaped) {
+        escaped = false
+        continue
+      }
+      if (char === '\\') {
+        escaped = true
+        continue
+      }
+      if (char === quote)
+        quote = null
+      continue
+    }
+
+    if (char === '/' && next === '/') {
+      lineComment = true
+      i++
+      continue
+    }
+
+    if (char === '/' && next === '*') {
+      blockComment = true
+      i++
+      continue
+    }
+
+    if (char === '"' || char === '\'' || char === '`') {
+      quote = char
+      continue
+    }
+
+    if (char === '{') {
+      depth++
+      continue
+    }
+
+    if (char === '}') {
+      depth--
+      if (depth === 0)
+        return i
+    }
+  }
+
+  return -1
+}
+
+function replaceFunctionAssignmentBody(
+  code: string,
+  functionStartIndex: number,
+  replacement: string,
+): string {
+  const openingBraceIndex = code.indexOf('{', functionStartIndex)
+  if (openingBraceIndex === -1)
+    return code
+
+  const closingBraceIndex = findMatchingFunctionBrace(code, openingBraceIndex)
+  if (closingBraceIndex === -1)
+    return code
+
+  return `${code.substring(0, functionStartIndex)}${replacement}${code.substring(closingBraceIndex + 1)}`
+}
+
 /**
  * Recursively load all JavaScript modules from the build output
  */
@@ -310,15 +397,11 @@ function transformToCommonJS(code: string, modulePath: string): string {
   const pStartIdx = code.indexOf(pFunctionStart)
 
   if (pStartIdx !== -1) {
-    const searchFrom = pStartIdx + pFunctionStart.length
-    const nextVarMatch = code.substring(searchFrom).match(/\},([A-Z][a-z]*=)/)
-
-    if (nextVarMatch && nextVarMatch.index !== undefined) {
-      const pEndIdx = searchFrom + nextVarMatch.index + 1
-      const before = code.substring(0, pStartIdx)
-      const after = code.substring(pEndIdx)
-      code = `${before},P=function(e,t,n){return Promise.resolve().then(e)}${after}`
-    }
+    code = replaceFunctionAssignmentBody(
+      code,
+      pStartIdx,
+      ',P=function(e,t,n){return Promise.resolve().then(e)}',
+    )
   }
 
   // Remove/stub the CSS/module preload function that creates link elements
@@ -335,19 +418,13 @@ function transformToCommonJS(code: string, modulePath: string): string {
     if (funcMatch) {
       const funcStart = errorIdx - beforeError.length + funcMatch.index
       const varName = funcMatch[2]
+      const params = `${funcMatch[3]},${funcMatch[4]},${funcMatch[5]}`
 
-      // Find the end of this function
-      const searchFrom = funcStart + funcMatch[0].length
-      const nextVarMatch = code.substring(searchFrom).match(/\}(?:,|\);)(?:[A-Z]|function)/)
-
-      if (nextVarMatch && nextVarMatch.index !== undefined) {
-        const funcEnd = searchFrom + nextVarMatch.index + 1
-        const before = code.substring(0, funcStart)
-        const after = code.substring(funcEnd)
-        // Replace with stub that just calls the loader
-        const params = `${funcMatch[3]},${funcMatch[4]},${funcMatch[5]}`
-        code = `${before},${varName}=function(${params}){return Promise.resolve().then(${funcMatch[3]})}${after}`
-      }
+      code = replaceFunctionAssignmentBody(
+        code,
+        funcStart,
+        `${funcMatch[1]}${varName}=function(${params}){return Promise.resolve().then(${funcMatch[3]})}`,
+      )
     }
   }
 

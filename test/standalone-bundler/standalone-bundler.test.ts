@@ -5,7 +5,11 @@
  * for file:// protocol compatibility.
  */
 
+import fs from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { createStandaloneBundle } from '../../packages/slidev/node/commands/standalone-bundler'
 
 /**
  * Transform ES module code to CommonJS (extracted from standalone-bundler.ts)
@@ -416,6 +420,56 @@ describe('standalone-bundler', () => {
       const output = transformToCommonJS(input, './a/b/test.js')
 
       expect(output).toContain('Promise.resolve(window.__require(\'./a/parent.js\'))')
+    })
+  })
+
+  describe('bundle generation', () => {
+    it('should preserve slide loader bindings when stubbing Vite preload helpers', async () => {
+      const buildDir = await fs.mkdtemp(path.join(os.tmpdir(), 'slidev-standalone-bundler-'))
+      const assetsDir = path.join(buildDir, 'assets')
+      await fs.mkdir(assetsDir, { recursive: true })
+      await fs.writeFile(
+        path.join(buildDir, 'index.html'),
+        [
+          '<!DOCTYPE html>',
+          '<html>',
+          '<head></head>',
+          '<body>',
+          '<div id="app"></div>',
+          '<script type="module" src="./assets/index-fixture.js"></script>',
+          '</body>',
+          '</html>',
+        ].join(''),
+      )
+      await fs.writeFile(
+        path.join(assetsDir, 'index-fixture.js'),
+        [
+          'const kt={},Dt={};',
+          'const f=(e)=>e;',
+          'const x=(e)=>e;',
+          'const jt={},Nt={};',
+          'const __vite__mapDeps=(e)=>e;',
+          'const Bt=(e,t)=>f({loader:t});',
+          'const It=`modulepreload`,Lt=function(e,t){return new URL(e,t).href},Rt={},N=function(e,t,n){',
+          'let r=Promise.resolve(t&&t.map(t=>{let o=document.createElement(`link`);o.rel=It;o.href=t;',
+          'return new Promise((e,n)=>{o.addEventListener(`load`,e);o.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}));',
+          'function i(e){throw e}',
+          'return r.then(t=>e().catch(i))',
+          '},zt=[,,],Vt=async()=>{try{return zt[0]??=await N(()=>import(`./slidev/md-one.js`),__vite__mapDeps([0]),import.meta.url)}catch(e){return Dt}},Ht=async()=>{try{return zt[1]??=await N(()=>import(`./md-two.js`),__vite__mapDeps([1]),import.meta.url)}catch(e){return Dt}},P=x([{no:1,meta:jt,load:Vt,component:Bt(0,Vt)},{no:2,meta:Nt,load:Ht,component:Bt(1,Ht)}]);',
+        ].join(''),
+      )
+      await fs.writeFile(path.join(assetsDir, 'md-two.js'), 'export default {}')
+      await fs.mkdir(path.join(assetsDir, 'slidev'), { recursive: true })
+      await fs.writeFile(path.join(assetsDir, 'slidev', 'md-one.js'), 'export default {}')
+
+      const outputPath = path.join(buildDir, 'index-standalone.html')
+      await createStandaloneBundle(buildDir, outputPath)
+
+      const html = await fs.readFile(outputPath, 'utf-8')
+      expect(html).toContain('Vt=async')
+      expect(html).toContain('Ht=async')
+      expect(html).toContain('load:Vt')
+      expect(html).toContain('load:Ht')
     })
   })
 })
