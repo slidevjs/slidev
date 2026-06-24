@@ -292,6 +292,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/mickaelalvs/slidev-addon-livecode',
   },
+  {
+    id: 'slidev-addon-second-screen',
+    name: 'Second Screen',
+    description: 'Open presentation on a second screen from presenter view with automatic fullscreen and visual status indicator.',
+    tags: ['Navigation', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-second-screen',
+  },
   // Add yours here!
   {
     id: '',
