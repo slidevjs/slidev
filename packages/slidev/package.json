@@ -113,6 +113,7 @@
     "uqr": "catalog:prod",
     "vite": "catalog:prod",
     "vite-plugin-inspect": "catalog:prod",
+    "vite-plugin-pwa": "catalog:prod",
     "vite-plugin-remote-assets": "catalog:prod",
     "vite-plugin-static-copy": "catalog:prod",
     "vite-plugin-vue-server-ref": "catalog:prod",

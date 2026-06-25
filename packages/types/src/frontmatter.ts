@@ -227,6 +227,12 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   wakeLock?: boolean | 'dev' | 'build'
   /**
+   * Enable offline support: a service worker precaches all deck assets on first
+   * load so a served deck works fully offline afterward. Heavy; opt-in.
+   * @default false
+   */
+  offline?: boolean | 'dev' | 'build'
+  /**
    * Force the filename used when exporting the presentation.
    * The extension, e.g. .pdf, gets automatically added.
    *

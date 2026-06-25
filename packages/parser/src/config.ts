@@ -47,6 +47,7 @@ export function getDefaultConfig(): SlidevConfig {
     editor: true,
     contextMenu: null,
     wakeLock: true,
+    offline: false,
     remote: false,
     mdc: false,
     comark: false,
