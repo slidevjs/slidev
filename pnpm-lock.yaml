@@ -5,6 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 catalogs:
+  default:
+    picomatch:
+      specifier: 2.3.2
+      version: 2.3.2
   demo:
     '@vue/compiler-sfc':
       specifier: ^3.5.35
@@ -460,6 +464,10 @@ patchedDependencies:
 importers:
 
   .:
+    dependencies:
+      picomatch:
+        specifier: 'catalog:'
+        version: 2.3.2
     devDependencies:
       '@antfu/eslint-config':
         specifier: catalog:dev
@@ -906,7 +914,7 @@ importers:
     devDependencies:
       tsdown-stale-guard:
         specifier: catalog:dev
-        version: 0.1.2(tsdown@0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3)))
+        version: 0.1.2(tsdown@0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3)))
 
   packages/slidev:
     dependencies:
@@ -7010,6 +7018,10 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
+  picomatch@2.3.2:
+    resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
+    engines: {node: '>=8.6'}
+
   picomatch@4.0.4:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
@@ -10052,14 +10064,6 @@ snapshots:
       - '@emnapi/runtime'
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
-    dependencies:
-      '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-    optional: true
-
   '@rolldown/binding-wasm32-wasi@1.0.3':
     dependencies:
       '@emnapi/core': 1.10.0
@@ -10722,7 +10726,7 @@ snapshots:
       eslint: 10.4.1(jiti@2.7.0)
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10769,8 +10773,8 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.56.1
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.8.0
-      tinyglobby: 0.2.16
+      semver: 7.8.1
+      tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -13757,7 +13761,7 @@ snapshots:
   markdown-it-async@2.2.0:
     dependencies:
       '@types/markdown-it': 14.1.2
-      markdown-it: 14.1.1
+      markdown-it: 14.2.0
     optional: true
 
   markdown-it-footnote@4.0.0: {}
@@ -14693,6 +14697,8 @@ snapshots:
 
   picomatch@2.3.1: {}
 
+  picomatch@2.3.2: {}
+
   picomatch@4.0.4: {}
 
   pify@2.3.0: {}
@@ -15055,29 +15061,6 @@ snapshots:
       '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
       '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
       '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
-      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
-      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-    optional: true
-
-  rolldown@1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2):
-    dependencies:
-      '@oxc-project/types': 0.110.0
-      '@rolldown/pluginutils': 1.0.0-rc.1
-    optionalDependencies:
-      '@rolldown/binding-android-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-x64': 1.0.0-rc.1
-      '@rolldown/binding-freebsd-x64': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
-      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
-      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
     transitivePeerDependencies:
@@ -15614,13 +15597,6 @@ snapshots:
       tsdown: 0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3))
       yaml: 2.9.0
 
-  tsdown-stale-guard@0.1.2(tsdown@0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3))):
-    dependencies:
-      cac: 7.0.0
-      logs-sdk: 0.0.6
-      tsdown: 0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3))
-      yaml: 2.9.0
-
   tsdown@0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3)):
     dependencies:
       ansis: 4.3.0
@@ -15642,33 +15618,6 @@ snapshots:
       tsx: 4.22.4
       typescript: 6.0.3
       unrun: 0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12)
-    transitivePeerDependencies:
-      - '@ts-macro/tsc'
-      - '@typescript/native-preview'
-      - oxc-resolver
-      - vue-tsc
-
-  tsdown@0.22.1(tsx@4.22.4)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.3(typescript@6.0.3)):
-    dependencies:
-      ansis: 4.3.0
-      cac: 7.0.0
-      defu: 6.1.7
-      empathic: 2.0.1
-      hookable: 6.1.1
-      import-without-cache: 0.4.0
-      obug: 2.1.1
-      picomatch: 4.0.4
-      rolldown: 1.0.3
-      rolldown-plugin-dts: 0.25.1(rolldown@1.0.3)(typescript@6.0.3)(vue-tsc@3.3.3(typescript@6.0.3))
-      semver: 7.8.0
-      tinyexec: 1.1.2
-      tinyglobby: 0.2.16
-      tree-kill: 1.2.2
-      unconfig-core: 7.5.0
-    optionalDependencies:
-      tsx: 4.22.4
-      typescript: 6.0.3
-      unrun: 0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12)
     transitivePeerDependencies:
       - '@ts-macro/tsc'
       - '@typescript/native-preview'
@@ -15970,16 +15919,6 @@ snapshots:
   unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12):
     dependencies:
       rolldown: 1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
-    optionalDependencies:
-      synckit: 0.11.12
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-    optional: true
-
-  unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12):
-    dependencies:
-      rolldown: 1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
     optionalDependencies:
       synckit: 0.11.12
     transitivePeerDependencies:

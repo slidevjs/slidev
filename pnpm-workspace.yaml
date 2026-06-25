@@ -40,6 +40,17 @@ linkWorkspacePackages: true
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
+allowBuilds:
+  '@vscode/vsce-sign': true
+  cypress: true
+  esbuild: true
+  keytar: true
+  playwright-chromium: true
+  simple-git-hooks: true
+  typeit: true
+  unrs-resolver: true
+catalog:
+  picomatch: 2.3.2
 catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.35
@@ -200,12 +211,3 @@ catalogs:
     volar-service-yaml: ^0.0.71
     vscode-uri: ^3.1.0
     yaml-language-server: ^1.23.0
-allowBuilds:
-  '@vscode/vsce-sign': true
-  cypress: true
-  esbuild: true
-  keytar: true
-  playwright-chromium: true
-  simple-git-hooks: true
-  typeit: true
-  unrs-resolver: true
