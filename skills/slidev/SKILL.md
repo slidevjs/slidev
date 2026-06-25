@@ -187,3 +187,19 @@ Presenter notes go here
 - Documentation: https://sli.dev
 - Theme Gallery: https://sli.dev/resources/theme-gallery
 - Showcases: https://sli.dev/resources/showcases
+
+## Slide Structure Operations
+
+Use the bundled script to swap, reorder, or delete slides by 1-based index. Never do these operations manually with the Edit tool — Slidev's compound separators (`---\nlayout: x\n---`) make manual edits error-prone and expensive in tokens.
+
+```bash
+python3 .claude/skills/slidev/scripts/slide_ops.py swap N M           # swap slides N and M
+python3 .claude/skills/slidev/scripts/slide_ops.py move N after M     # move slide N to after slide M
+python3 .claude/skills/slidev/scripts/slide_ops.py move N before M    # move slide N to before slide M
+python3 .claude/skills/slidev/scripts/slide_ops.py remove N           # delete slide N
+```
+
+- N and M are 1-based slide numbers
+- Handles both simple `---` and compound `---\nlayout: x\n---` separators correctly
+- Responds to natural language: "swap slides 3 and 7", "move slide 5 before slide 2", "delete slide 4"
+- Confirm slide numbers first with: `grep -n "^---$\|^layout:" slides.md | head -40`
