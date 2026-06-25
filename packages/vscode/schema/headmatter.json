@@ -450,6 +450,24 @@
           "description": "Enable wake lock",
           "markdownDescription": "Enable wake lock"
         },
+        "offline": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "const": "dev"
+            },
+            {
+              "type": "string",
+              "const": "build"
+            }
+          ],
+          "description": "Enable offline support: a service worker precaches all deck assets on first load so a served deck works fully offline afterward. Heavy; opt-in.",
+          "markdownDescription": "Enable offline support: a service worker precaches all deck assets on first\nload so a served deck works fully offline afterward. Heavy; opt-in.",
+          "default": false
+        },
         "exportFilename": {
           "type": [
             "string",
