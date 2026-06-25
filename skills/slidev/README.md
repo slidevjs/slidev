@@ -18,7 +18,7 @@ The Slidev skill provides Claude Code with knowledge about:
 - **Animations** - Click animations, transitions, motion effects
 - **Code Features** - Line highlighting, Monaco editor, code groups, magic-move
 - **Diagrams** - Mermaid, PlantUML, LaTeX math
-- **Layouts** - Built-in layouts, slots, global layers
+- **Layouts** - Built-in layouts, slots, global layers, content-fit guidance
 - **Presenter Mode** - Recording, timer, remote access
 - **Exporting** - PDF, PPTX, PNG, SPA hosting
 
