@@ -1,11 +1,34 @@
 catalogMode: prefer
 ignoreWorkspaceRootCheck: true
+minimumReleaseAgeExclude:
+  # Shiki v4.2.0 cohort and `@shikijs/magic-move` (rename of `shiki-magic-move`)
+  # all ship together from antfu's monorepo; pnpm v11's 24h `minimumReleaseAge`
+  # default would otherwise block this install until the cohort matures.
+  - '@iconify/json@2.2.482'
+  - '@shikijs/core@4.2.0'
+  - '@shikijs/engine-javascript@4.2.0'
+  - '@shikijs/engine-oniguruma@4.2.0'
+  - '@shikijs/langs@4.2.0'
+  - '@shikijs/magic-move'
+  - '@shikijs/markdown-it@4.2.0'
+  - '@shikijs/monaco@4.2.0'
+  - '@shikijs/primitive@4.2.0'
+  - '@shikijs/themes@4.2.0'
+  - '@shikijs/twoslash@4.2.0'
+  - '@shikijs/types@4.2.0'
+  - '@shikijs/vitepress-twoslash@4.2.0'
+  - shiki@4.2.0
+
 shamefullyHoist: true
 shellEmulator: true
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - langium
-
+# pnpm v11 evaluates `trustPolicy: no-downgrade` against the *originally-declared*
+# transitive version (before `resolutions`/`overrides` are applied), so long-lived
+# transitives that were once published with provenance flag false positives. Ignore
+# trust downgrades for packages published more than 30 days ago.
+trustPolicyIgnoreAfter: 43200
 packages:
   - packages/*
   - demo/*
@@ -19,75 +42,77 @@ patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:
   demo:
-    '@vue/compiler-sfc': ^3.5.33
+    '@vue/compiler-sfc': ^3.5.35
   dev:
-    '@antfu/eslint-config': ^8.2.0
-    bumpp: ^11.0.1
-    cypress: ^14.5.4
-    eslint: ^10.2.1
+    '@antfu/eslint-config': ^9.0.0
+    bumpp: ^11.1.0
+    cypress: ^15.16.0
+    eslint: ^10.4.1
     eslint-plugin-format: ^2.0.1
-    lint-staged: ^16.4.0
+    lint-staged: ^17.0.7
     nodemon: ^3.1.14
-    ovsx: ^0.10.11
-    playwright-chromium: ^1.59.1
+    ovsx: ^1.0.0
+    playwright-chromium: ^1.60.0
     postcss-nested: ^7.0.2
     prettier: ^3.8.3
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.3
-    semver: ^7.7.4
+    semver: ^7.8.1
     simple-git-hooks: ^2.13.1
-    taze: ^19.11.0
-    tsdown: ^0.18.4
-    tsx: ^4.21.0
-    typescript: ^5.9.3
-    undici: ^8.1.0
-    undici-types: ^8.1.0
+    taze: ^19.14.1
+    tsdown: ^0.22.1
+    tsdown-stale-guard: ^0.1.2
+    tsnapi: ^0.3.3
+    tsx: ^4.22.4
+    typescript: ^6.0.3
+    undici: ^8.3.0
+    undici-types: ^8.3.0
     vitefu: ^1.1.3
-    vitest: ^4.1.5
-    vue-tsc: ^3.2.7
+    vitest: ^4.1.8
+    vue-tsc: ^3.3.3
     zx: ^8.8.5
   docs:
-    oxc-minify: ^0.128.0
+    oxc-minify: ^0.134.0
     typeit: 8.1.0
     vitepress: ^2.0.0-alpha.17
     vitepress-plugin-group-icons: ^1.7.5
-    vitepress-plugin-llms: ^1.12.1
+    vitepress-plugin-llms: ^1.13.1
   frontend:
     '@antfu/utils': ^9.3.0
     '@fix-webm-duration/fix': ^1.0.1
-    '@shikijs/engine-javascript': ^4.0.2
-    '@shikijs/markdown-it': ^4.0.2
+    '@shikijs/engine-javascript': ^4.2.0
+    '@shikijs/magic-move': ^4.2.0
+    '@shikijs/markdown-it': ^4.2.0
     '@slidev/rough-notation': ^0.1.0
-    '@unhead/vue': ^2.1.13
-    '@unocss/reset': ^66.6.8
-    '@vueuse/core': ^14.2.1
-    '@vueuse/math': ^14.2.1
+    '@unhead/vue': ^3.1.1
+    '@unocss/reset': ^66.7.0
+    '@vueuse/core': ^14.3.0
+    '@vueuse/math': ^14.3.0
     '@vueuse/motion': ^3.0.3
     drauu: ^1.0.0
     file-saver: ^2.0.5
     floating-vue: ^5.2.2
-    fuse.js: ^7.3.0
-    katex: ^0.16.45
+    fuse.js: ^7.4.1
+    katex: ^0.17.0
     lz-string: ^1.5.0
-    mermaid: ^11.14.0
+    mermaid: ^11.15.0
     nanotar: ^0.3.0
     plantuml-encoder: ^1.4.0
     recordrtc: ^5.6.2
-    shiki: ^4.0.2
-    shiki-magic-move: ^1.3.0
+    shiki: ^4.2.0
     tm-grammars: ^1.31.15
-    unhead: ^2.1.13
-    vue: ^3.5.33
-    vue-router: ^5.0.6
+    unhead: ^3.1.1
+    vue: ^3.5.35
+    vue-router: ^5.1.0
   icons:
-    '@iconify-json/carbon': ^1.2.20
+    '@iconify-json/carbon': ^1.2.22
     '@iconify-json/mdi': ^1.2.3
     '@iconify-json/ph': ^1.2.2
     '@iconify-json/ri': ^1.2.10
     '@iconify-json/svg-spinners': ^1.2.4
-    '@iconify/json': ^2.2.467
+    '@iconify/json': ^2.2.482
   monaco:
-    '@shikijs/monaco': ^4.0.2
+    '@shikijs/monaco': ^4.2.0
     '@typescript/ata': ^0.9.8
     monaco-editor: ^0.55.1
   prod:
@@ -95,13 +120,13 @@ catalogs:
     '@comark/markdown-it': ^0.3.4
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
-    '@shikijs/twoslash': ^4.0.2
-    '@shikijs/vitepress-twoslash': ^4.0.2
-    '@unocss/extractor-mdc': ^66.6.8
-    '@unocss/preset-mini': ^66.6.8
-    '@vitejs/plugin-vue': ^6.0.6
+    '@shikijs/twoslash': ^4.2.0
+    '@shikijs/vitepress-twoslash': ^4.2.0
+    '@unocss/extractor-mdc': ^66.7.0
+    '@unocss/preset-mini': ^66.7.0
+    '@vitejs/plugin-vue': ^6.0.7
     '@vitejs/plugin-vue-jsx': ^5.1.5
-    ansis: ^4.2.0
+    ansis: ^4.3.1
     chokidar: ^5.0.0
     cli-progress: ^3.12.0
     connect: ^3.7.0
@@ -112,8 +137,8 @@ catalogs:
     gray-matter: ^4.0.3
     htmlparser2: ^12.0.0
     is-installed-globally: ^1.0.0
-    jiti: ^2.6.1
-    local-pkg: ^1.1.2
+    jiti: ^2.7.0
+    local-pkg: ^1.2.1
     magic-string: ^0.30.21
     magic-string-stack: ^1.1.0
     markdown-exit: ^1.0.0-beta.9
@@ -130,22 +155,22 @@ catalogs:
     public-ip: ^8.0.0
     resolve-from: ^5.0.0
     resolve-global: ^2.0.0
-    semver: ^7.7.4
+    semver: ^7.8.1
     sirv: ^3.0.2
     source-map-js: ^1.2.1
-    tinyexec: ^1.1.1
-    unocss: ^66.6.8
+    tinyexec: ^1.2.4
+    unocss: ^66.7.0
     unplugin-icons: ^23.0.1
-    unplugin-vue-components: ^32.0.0
-    unplugin-vue-markdown: ^30.0.0
+    unplugin-vue-components: ^32.1.0
+    unplugin-vue-markdown: ^32.0.0
     untun: ^0.1.3
     uqr: ^0.1.3
-    vite: ^8.0.10
-    vite-plugin-inspect: ^11.3.3
+    vite: ^8.0.16
+    vite-plugin-inspect: ^11.4.1
     vite-plugin-remote-assets: ^2.1.0
     vite-plugin-static-copy: ^4.1.0
     vite-plugin-vue-server-ref: ^1.0.0
-    yaml: ^2.8.3
+    yaml: ^2.9.0
     yargs: ^18.0.0
   themes:
     '@slidev/theme-default': ^0.25.0
@@ -156,7 +181,7 @@ catalogs:
     '@types/file-saver': ^2.0.7
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.8
-    '@types/node': ^25.6.0
+    '@types/node': ^25.9.1
     '@types/picomatch': ^4.0.3
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9
@@ -171,16 +196,16 @@ catalogs:
     prettier: ^2.8.8
     reactive-vscode: ^1.0.2
     ts-json-schema-generator: ^2.9.0
-    volar-service-prettier: ^0.0.64
-    volar-service-yaml: ^0.0.64
+    volar-service-prettier: ^0.0.71
+    volar-service-yaml: ^0.0.71
     vscode-uri: ^3.1.0
-    yaml-language-server: ^1.22.0
-onlyBuiltDependencies:
-  - '@vscode/vsce-sign'
-  - cypress
-  - esbuild
-  - keytar
-  - playwright-chromium
-  - simple-git-hooks
-  - typeit
-  - unrs-resolver
+    yaml-language-server: ^1.23.0
+allowBuilds:
+  '@vscode/vsce-sign': true
+  cypress: true
+  esbuild: true
+  keytar: true
+  playwright-chromium: true
+  simple-git-hooks: true
+  typeit: true
+  unrs-resolver: true

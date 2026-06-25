@@ -281,6 +281,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/andreas-taranetz/slidev-addon-animated-text',
   },
+  {
+    id: 'slidev-addon-livecode',
+    name: 'Live embedded VS Code IDE',
+    description: 'Live VS Code IDE sessions in your Slidev presentations, powered by coderaft',
+    tags: ['Component', 'Integration', 'Tool', 'IDE'],
+    author: {
+      name: 'Mickaël Alves',
+      link: 'https://mickaelalves.dev/',
+    },
+    repo: 'https://github.com/mickaelalvs/slidev-addon-livecode',
+  },
   // Add yours here!
   {
     id: '',

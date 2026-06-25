@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TitleRenderer from '#slidev/title-renderer'
 import Fuse from 'fuse.js'
 import { computed, ref, watch } from 'vue'
+import TitleRenderer from '#slidev/title-renderer'
 import { useNav } from '../composables/useNav'
 import { activeElement, showGotoDialog } from '../state'
 
@@ -136,7 +136,7 @@ watch(activeElement, () => {
       >
     </div>
     <div
-      v-if="result.length > 0"
+      v-if="showGotoDialog && result.length > 0"
       ref="list"
       class="autocomplete-list"
       shadow="~"

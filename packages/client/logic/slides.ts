@@ -1,7 +1,7 @@
 import type { SlideRoute } from '@slidev/types'
-import { slides } from '#slidev/slides'
 import { tryOnMounted } from '@vueuse/core'
 import { computed, watch } from 'vue'
+import { slides } from '#slidev/slides'
 import { useSlideContext } from '../context'
 
 export { slides }
@@ -20,7 +20,8 @@ export function getSlidePath(
   if (typeof route === 'number' || typeof route === 'string')
     route = getSlide(route)!
   const no = route.meta.slide?.frontmatter.routeAlias ?? route.no
-  return exporting ? `/export/${no}` : presenter ? `/presenter/${no}` : `/${no}`
+  const path = exporting ? `export/${no}` : presenter ? `presenter/${no}` : `${no}`
+  return `${import.meta.env.BASE_URL}${path}`
 }
 
 export function useIsSlideActive() {

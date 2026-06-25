@@ -70,6 +70,7 @@ export default defineConfig({
           compilerOptions: {
             resolveJsonModule: true,
             moduleResolution: /* Bundler */ 100,
+            ignoreDeprecations: '6.0',
           },
         },
       }),

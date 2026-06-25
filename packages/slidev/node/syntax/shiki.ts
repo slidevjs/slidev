@@ -15,6 +15,9 @@ export default async function MarkdownItShiki({ data: { config }, mode, utils: {
     return transformerTwoslash({
       explicitTrigger: true,
       twoslashOptions: {
+        compilerOptions: {
+          ignoreDeprecations: '6.0',
+        },
         handbookOptions: {
           noErrorValidation: true,
         },

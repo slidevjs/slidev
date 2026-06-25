@@ -29,7 +29,7 @@ describe('md parser', () => {
 
   for (const file of files) {
     it(basename(file), async () => {
-      const data = await load(userRoot, file)
+      const data = await load({ userRoot, roots: [userRoot] }, file)
 
       expect(stringify(data.entry).trim()).toEqual(replaceCRLF(data.entry.raw.trim()))
 

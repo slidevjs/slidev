@@ -22,12 +22,12 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:modelValue'])
 
-const { isPrintMode } = useNav()
+const { isEmbedded, isPrintMode } = useNav()
 
 const code = useVModel(props, 'modelValue', emit)
 
 const { $renderContext, $clicksContext } = useSlideContext()
-const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.value))
+const disabled = computed(() => !['slide', 'presenter'].includes($renderContext.value) && !($renderContext.value === 'overview' && isEmbedded.value))
 
 const autorun = isPrintMode.value ? 'once' : props.autorun
 const isRunning = ref(autorun)

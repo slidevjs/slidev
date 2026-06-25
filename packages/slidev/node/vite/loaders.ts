@@ -1,6 +1,6 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
-import type { LoadResult } from 'rollup'
-import type { ModuleNode, Plugin, ViteDevServer } from 'vite'
+import type { ModuleNode, Plugin, Rolldown, ViteDevServer } from 'vite'
+import type { VirtualModuleContext } from '../virtual/types'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
 import equal from 'fast-deep-equal'
@@ -9,7 +9,7 @@ import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/katex'
 import markdownItLink from '../syntax/link'
-import { getBodyJson, updateFrontmatterPatch } from '../utils'
+import { createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
@@ -34,6 +34,7 @@ export function createSlidesLoader(
   const hmrSlidesIndexes = new Set<number>()
   let server: ViteDevServer | undefined
   let skipHmr: { filePath: string, fileContent: string } | null = null
+  const makeAbsoluteImportGlob = createMakeAbsoluteImportGlob(options.userRoot)
 
   interface ResolvedSourceIds {
     md: string[]
@@ -107,7 +108,7 @@ export function createSlidesLoader(
                 slide.source.frontmatterDoc = parsed
             }
           }
-          if (body.note)
+          if (body.note != null)
             slide.note = slide.source.note = body.note
           if (body.frontmatter) {
             updateFrontmatterPatch(slide.source, body.frontmatter)
@@ -282,11 +283,15 @@ export function createSlidesLoader(
       },
     },
 
-    async load(id): Promise<LoadResult> {
+    async load(id): Promise<Rolldown.LoadResult> {
       const template = templates.find(i => i.id === id)
       if (template) {
+        const templateContext: VirtualModuleContext = {
+          resolve: this.resolve.bind(this),
+          makeAbsoluteImportGlob,
+        }
         return {
-          code: await template.getContent.call(this, options),
+          code: await template.getContent.call(templateContext, options),
           map: { mappings: '' },
         }
       }
@@ -362,6 +367,7 @@ export function createSlidesLoader(
               `    frontmatter,`,
               `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
               `    start: ${JSON.stringify(slide.source.start)},`,
+              `    sourceIndex: ${JSON.stringify(slide.source.index)},`,
               `    id: ${idx},`,
               `    no: ${no},`,
               '  },',

@@ -1,7 +1,7 @@
-import setups from '#slidev/setups/shiki'
 import { createSingletonPromise } from '@antfu/utils'
 import { createJavaScriptRegexEngine } from '@shikijs/engine-javascript'
 import { createBundledHighlighter, createSingletonShorthands } from 'shiki/core'
+import setups from '#slidev/setups/shiki'
 import { resolveShikiOptions, shikiContext } from './shiki-options'
 
 export default createSingletonPromise(async () => {

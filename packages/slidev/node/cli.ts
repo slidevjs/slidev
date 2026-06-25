@@ -18,7 +18,7 @@ import { createServer } from './commands/serve'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveOptions } from './options'
 import { parser } from './parser'
-import { getRoots, isInstalledGlobally, resolveEntry } from './resolver'
+import { isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
 
@@ -143,7 +143,6 @@ cli.command(
           server: {
             port,
             strictPort: true,
-            open,
             host,
             // @ts-expect-error Vite <= 4
             force,
@@ -158,7 +157,7 @@ cli.command(
         {
           async loadData(loadedSource) {
             const { data: oldData, entry } = options
-            const loaded = await parser.load(options.userRoot, entry, loadedSource, 'dev')
+            const loaded = await parser.load(options, entry, loadedSource, 'dev')
 
             const themeRaw = theme || loaded.headmatter.theme as string || 'default'
             if (options.themeRaw !== themeRaw) {
@@ -206,8 +205,20 @@ cli.command(
         publicIp = await import('public-ip').then(r => r.publicIpv4())
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
+      if (open)
+        await openSlidevInBrowser()
 
       return options
+    }
+
+    async function openSlidevInBrowser() {
+      const url = `http://localhost:${port}${base}`
+      try {
+        await openBrowser(url)
+      }
+      catch {
+        console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
     }
 
     async function openTunnel(port: number) {
@@ -231,7 +242,7 @@ cli.command(
         name: 'o',
         fullname: 'open',
         action() {
-          openBrowser(`http://localhost:${port}${base}`)
+          openSlidevInBrowser()
         },
       },
       {
@@ -416,8 +427,8 @@ cli.command(
           }),
         async ({ entry: entryRaw, dir, theme: themeInput }) => {
           const entry = await resolveEntry(entryRaw)
-          const roots = await getRoots(entry)
-          const data = await parser.load(roots.userRoot, entry)
+          const options = await resolveOptions({ entry }, 'dev')
+          const data = await parser.load(options, entry)
           let themeRaw = themeInput || data.headmatter.theme as string | null | undefined
           themeRaw = themeRaw === null ? 'none' : (themeRaw || 'default')
           if (themeRaw === 'none') {

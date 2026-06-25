@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ClicksContext, RenderContext, SlideRoute } from '@slidev/types'
 import type { CSSProperties, PropType } from 'vue'
-import { SlideBottom, SlideTop } from '#slidev/global-layers'
 import { provideLocal } from '@vueuse/core'
 import { computed, ref, toRef } from 'vue'
+import { SlideBottom, SlideTop } from '#slidev/global-layers'
 import { injectionClicksContext, injectionCurrentPage, injectionFrontmatter, injectionRenderContext, injectionRoute, injectionSlideZoom } from '../constants'
 import { configs } from '../env'
 import { getSlideClass } from '../utils'

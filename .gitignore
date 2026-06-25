@@ -4,6 +4,8 @@
 .nuxt
 .output
 .slidev
+.ghfs
+.omo
 .vite-inspect
 *-export
 *.local

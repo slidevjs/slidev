@@ -1,7 +1,7 @@
 import type { SlideRoute } from '@slidev/types'
 import type { ComputedRef, Ref } from 'vue'
-import configs from '#slidev/configs'
 import { watchEffect } from 'vue'
+import configs from '#slidev/configs'
 
 const loaded = new Set<string>()
 const loading = new Set<string>()

@@ -2,8 +2,8 @@
 
 import type { ContextMenuItem } from '@slidev/types'
 import type { ComputedRef } from 'vue'
-import setups from '#slidev/setups/context-menu'
 import { computed } from 'vue'
+import setups from '#slidev/setups/context-menu'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
 import { fullscreen, showEditor, toggleOverview } from '../state'

@@ -1,9 +1,9 @@
 import type { RootsInfo } from '@slidev/types'
-import { existsSync } from 'node:fs'
+import { existsSync, lstatSync, readdirSync, readlinkSync } from 'node:fs'
 import { copyFile, readFile } from 'node:fs/promises'
-import { dirname, join, relative, resolve } from 'node:path'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseNi, run } from '@antfu/ni'
 import { ensurePrefix, slash } from '@antfu/utils'
 import { underline, yellow } from 'ansis'
@@ -17,6 +17,109 @@ const RE_PATH_SEPARATOR = /[/\\]/
 const RE_SAFE_PKG_NAME = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/
 
 const cliRoot = fileURLToPath(new URL('..', import.meta.url))
+
+/**
+ * Detect the `node_modules/` directory the running slidev binary was
+ * dispatched from. The simple `findDepPkgJsonPath(name, cliRoot)` walk fails
+ * in pnpm v11+ global installs because `cliRoot` is the realpath inside the
+ * content-addressable store, with no path back to the install directory. The
+ * invocation path (`process.argv[1]`), however, is one of:
+ *
+ * - `{PNPM_HOME}/v11/{hash}/node_modules/@slidev/cli/bin/slidev.mjs` — pnpm
+ *   v11 globals dispatch through a shell shim in `{PNPM_HOME}/bin/` that exec's
+ *   `node` with this argv[1].
+ * - `{globals}/node_modules/@slidev/cli/bin/slidev.mjs` — npm/yarn globals,
+ *   where the bin is a fs symlink and the resolved script path keeps the
+ *   `node_modules` segment.
+ * - `./node_modules/.bin/slidev` — local project, where Node resolves the
+ *   `.bin` symlink before populating argv[1].
+ *
+ * Returns the trailing `node_modules` directory of that path, or `undefined`
+ * if `argv1` doesn't pass through one.
+ *
+ * Exported for tests.
+ */
+export function findInvocationNodeModulesPath(argv1: string | undefined): string | undefined {
+  if (!argv1)
+    return undefined
+  // Direct hit on the literal path passed to Node.
+  const direct = resolve(argv1)
+  const segment = `${sep}node_modules${sep}`
+  const directIdx = direct.lastIndexOf(segment)
+  if (directIdx >= 0)
+    return direct.slice(0, directIdx + 1 + 'node_modules'.length)
+  // Fall back to following an fs symlink chain (covers the legacy `.bin`
+  // symlink layout where argv[1] is a path *to* the symlink itself).
+  let current = direct
+  for (let i = 0; i < 16; i++) {
+    let stat
+    try {
+      stat = lstatSync(current)
+    }
+    catch {
+      return undefined
+    }
+    if (!stat.isSymbolicLink())
+      return undefined
+    const target = readlinkSync(current)
+    // `readlinkSync` returns the target verbatim — possibly with the *wrong*
+    // separator on Windows (e.g. a target written with `/` by a cross-platform
+    // tool). Resolve through the symlink's directory in every case so the
+    // separator-sensitive `node_modules` scan below sees a platform-normalized
+    // path.
+    current = resolve(dirname(current), target)
+    const idx = current.lastIndexOf(segment)
+    if (idx >= 0)
+      return current.slice(0, idx + 1 + 'node_modules'.length)
+  }
+  return undefined
+}
+
+/**
+ * Candidate `node_modules` directories to search when slidev is installed
+ * globally. Always includes the invocation's own `node_modules` (the install
+ * group `@slidev/cli` lives in), plus every sibling install group's
+ * `node_modules` so cross-group lookups can succeed.
+ *
+ * pnpm v11 lays globals out as `{root}/v11/{hash}/node_modules/...`; each
+ * `pnpm add -g <pkg>` invocation creates its own `{hash}` directory even
+ * when multiple packages are listed in one call. Walking the parent of the
+ * cli's install group lets us discover packages that landed in sibling
+ * groups (e.g. a theme installed alongside `@slidev/cli`).
+ *
+ * Exported for tests.
+ */
+export function computeInvocationSearchPaths(ownNodeModules: string | undefined): string[] {
+  if (!ownNodeModules)
+    return []
+  const paths = [ownNodeModules]
+  const installDir = dirname(ownNodeModules)
+  const globalRoot = dirname(installDir)
+  if (!globalRoot || globalRoot === installDir)
+    return paths
+  let siblings: string[]
+  try {
+    siblings = readdirSync(globalRoot)
+  }
+  catch {
+    return paths
+  }
+  for (const sib of siblings) {
+    const sibInstall = join(globalRoot, sib)
+    if (sibInstall === installDir)
+      continue
+    const sibNm = join(sibInstall, 'node_modules')
+    try {
+      if (lstatSync(sibNm).isDirectory())
+        paths.push(sibNm)
+    }
+    catch { }
+  }
+  return paths
+}
+
+const invocationNodeModules = findInvocationNodeModulesPath(process.argv[1])
+const invocationSearchPaths = computeInvocationSearchPaths(invocationNodeModules)
 
 export const isInstalledGlobally: { value?: boolean } = {}
 
@@ -45,6 +148,14 @@ export async function resolveImportPath(importName: string, ensure = false) {
   catch { }
 
   if (isInstalledGlobally.value) {
+    for (const nm of invocationSearchPaths) {
+      try {
+        return await resolvePath(importName, {
+          url: pathToFileURL(`${nm}${sep}`),
+        })
+      }
+      catch { }
+    }
     try {
       return resolveGlobal(importName)
     }
@@ -74,6 +185,14 @@ export async function findGlobalPkgRoot(name: string, ensure = false) {
   const localPath = await findDepPkgJsonPath(name, cliRoot)
   if (localPath)
     return dirname(localPath)
+  for (const nm of invocationSearchPaths) {
+    const direct = join(nm, ...name.split('/'), 'package.json')
+    if (existsSync(direct))
+      return dirname(direct)
+    const walked = await findDepPkgJsonPath(name, nm)
+    if (walked)
+      return dirname(walked)
+  }
   const yarnPath = join(globalDirs.yarn.packages, name)
   if (existsSync(`${yarnPath}/package.json`))
     return yarnPath
@@ -244,6 +363,13 @@ export async function getRoots(entry?: string): Promise<RootsInfo> {
   const userRoot = dirname(entry)
   isInstalledGlobally.value
     = slash(relative(userRoot, process.argv[1])).includes('/.pnpm/')
+      // pnpm v11 isolated globals don't expose a `.pnpm/` segment in argv[1]
+      // and aren't detected by `is-installed-globally` (which only knows npm
+      // and yarn). The cli's bin is symlinked into an install-group
+      // `node_modules/` that's outside the user's workspace, so use that as
+      // the global-mode signal.
+      || (invocationNodeModules != null
+        && slash(relative(userRoot, invocationNodeModules)).startsWith('..'))
       || (await import('is-installed-globally')).default
   const clientRoot = await findPkgRoot('@slidev/client', cliRoot, true)
   const closestPkgRoot = dirname(await findClosestPkgJsonPath(userRoot) || userRoot)

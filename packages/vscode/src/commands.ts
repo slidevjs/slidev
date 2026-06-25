@@ -136,6 +136,8 @@ export function useCommands() {
   useCommand('slidev.preview-next-click', () => usePreviewWebview().nextClick())
   useCommand('slidev.preview-prev-slide', () => usePreviewWebview().prevSlide())
   useCommand('slidev.preview-next-slide', () => usePreviewWebview().nextSlide())
+  useCommand('slidev.show-slide-preview', () => usePreviewWebview().setPreviewMode('slide'))
+  useCommand('slidev.show-overview-preview', () => usePreviewWebview().setPreviewMode('overview'))
 
   useCommand('slidev.enable-preview-sync', () => (config.update('preview-sync', true, ConfigurationTarget.Global)))
   useCommand('slidev.disable-preview-sync', () => (config.update('preview-sync', false, ConfigurationTarget.Global)))
