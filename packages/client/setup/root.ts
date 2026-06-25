@@ -5,6 +5,7 @@ import setups from '#slidev/setups/root'
 import { createFixedClicks } from '../composables/useClicks'
 import { useEmbeddedControl } from '../composables/useEmbeddedCtrl'
 import { useNav } from '../composables/useNav'
+import { canDrivePresenter, claimPresenterDriver, setPresenterDriverIdentity } from '../composables/usePresenterDriver'
 import { usePrintStyles } from '../composables/usePrintStyles'
 import { injectionClicksContext, injectionCurrentPage, injectionRenderContext, injectionSlidevContext, TRUST_ORIGINS } from '../constants'
 import { configs, slidesTitle } from '../env'
@@ -12,7 +13,7 @@ import { getSlidePath } from '../logic/slides'
 import { makeId } from '../logic/utils'
 import { hmrSkipTransition, syncDirections } from '../state'
 import { initDrawingState } from '../state/drawings'
-import { initSharedState, onPatch, patch } from '../state/shared'
+import { initSharedState, onPatch, patch, sharedState } from '../state/shared'
 
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
@@ -59,6 +60,7 @@ export default function setupRoot() {
 
   const id = `${location.origin}_${makeId()}`
   const syncType = computed(() => isPresenter.value ? 'presenter' : 'viewer')
+  watch(syncType, type => setPresenterDriverIdentity(id, type), { immediate: true })
 
   // update shared state
   function updateSharedState() {
@@ -73,6 +75,12 @@ export default function setupRoot() {
     // we allow Presenter mode, or Viewer mode from trusted origins to update the shared state
     if (!isPresenter.value && !TRUST_ORIGINS.includes(location.host.split(':')[0]))
       return
+    if (isPresenter.value) {
+      if (!canDrivePresenter())
+        return
+      if (!sharedState.activeDriver?.id)
+        claimPresenterDriver()
+    }
 
     patch('page', +currentSlideNo.value)
     patch('clicks', clicksContext.value.current)
