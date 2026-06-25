@@ -327,6 +327,10 @@ export function createSlidesLoader(
             frontmatter: undefined,
             source: undefined,
             importChain: undefined,
+            // The runtime image preloader reads `slide.images`, but `source` is
+            // stripped just above — carry the extracted image URLs onto the client
+            // slide so runtime preloading actually receives them.
+            images: slide.images ?? slide.source?.images,
             // remove raw content in build, optimize the bundle size
             ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
           }
