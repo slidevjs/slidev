@@ -1,6 +1,6 @@
 import type { SlideRoute } from '@slidev/types'
 import type { ComputedRef, Ref } from 'vue'
-import { watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import configs from '#slidev/configs'
 
 const loaded = new Set<string>()
@@ -17,6 +17,20 @@ function resolveUrl(url: string): string {
 const RETRY_LIMIT = 2
 const retries = new Map<string, number>()
 
+const preloadedCount = ref(0)
+const totalImagesCount = ref(0)
+
+/**
+ * Progress of slide-image preloading, from 0 to 1 (1 when every preloadable
+ * image in the deck has loaded, or when the deck has no images).
+ */
+export const preloadProgress = computed(() =>
+  totalImagesCount.value === 0 ? 1 : preloadedCount.value / totalImagesCount.value,
+)
+
+/** Whether all preloadable slide images have finished loading. */
+export const preloadComplete = computed(() => preloadProgress.value >= 1)
+
 function preloadImage(url: string): void {
   const resolved = resolveUrl(url)
   if (loaded.has(resolved) || loading.has(resolved))
@@ -27,6 +41,7 @@ function preloadImage(url: string): void {
     loading.delete(resolved)
     loaded.add(resolved)
     retries.delete(resolved)
+    preloadedCount.value = loaded.size
   }
   img.onerror = () => {
     loading.delete(resolved)
@@ -60,6 +75,19 @@ export function usePreloadImages(
     return
 
   const ahead = (typeof config === 'object' && config?.ahead) || 3
+
+  // Track total preloadable images across the deck for progress reporting
+  watchEffect(() => {
+    const all = slides.value
+    if (!all?.length)
+      return
+    const urls = new Set<string>()
+    for (const route of all) {
+      for (const url of route.meta?.slide?.images ?? [])
+        urls.add(resolveUrl(url))
+    }
+    totalImagesCount.value = urls.size
+  })
 
   // Preload current + prev + next + look-ahead window
   watchEffect(() => {
