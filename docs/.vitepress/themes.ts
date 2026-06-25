@@ -659,6 +659,29 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-tahta',
+    name: 'Tahta',
+    description: 'A design system for Slidev — design tokens, components, and 13 themeable style variants with themed chart palettes and role-color cards. WCAG-AA contrast, ECharts, and frontmatter-driven layouts (no CSS).',
+    author: {
+      name: 'Cagdas Salur',
+      link: 'https://github.com/zcag',
+    },
+    repo: 'https://github.com/zcag/tahta',
+    link: 'https://tahta.cagdas.io',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/01.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/02.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/03.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/04.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/05.png',
+      'https://cdn.jsdelivr.net/gh/zcag/tahta@1dd8357/docs/screenshots/06.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+    ],
+  },
   // Add yours here!
   {
     id: '',
