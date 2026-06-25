@@ -1,3 +1,5 @@
+/// <reference types="vite-plugin-pwa/client" />
+
 declare module '*.md' {
   // with unplugin-vue-markdown, markdowns can be treat as Vue components
   import type { ComponentOptions } from 'vue'
