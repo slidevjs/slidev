@@ -1,6 +1,7 @@
 import type { CodeblockTransformer, ResolvedSlidevOptions } from '@slidev/types'
 import type MagicString from 'magic-string'
 import type MarkdownExit from 'markdown-exit'
+import type { TypstCompiler } from './typst-math'
 import MarkdownItComark from '@comark/markdown-it'
 import { taskLists as MarkdownItTaskList } from '@hedgedoc/markdown-it-plugins'
 // @ts-expect-error missing types
@@ -23,7 +24,7 @@ export async function useMarkdownItPlugins(
   markdownTransformMap: Map<string, MagicString>,
   codeblockTransformers: (CodeblockTransformer | false)[],
 ) {
-  const { data: { features, config }, utils: { katexOptions } } = options
+  const { data: { features, config }, utils: { katexOptions, typstCompiler } } = options
 
   md.use(MarkdownItSnippet, options)
   // @ts-expect-error @shikijs/markdown-it types expect MarkdownItAsync, but MarkdownExit is API-compatible
@@ -34,8 +35,8 @@ export async function useMarkdownItPlugins(
   md.use(MarkdownItEscapeInlineCode)
   md.use(MarkdownItFootnote)
   md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
-  if (features.typstMath)
-    md.use(MarkdownItTypstMath)
+  if (features.typstMath && typstCompiler)
+    md.use(MarkdownItTypstMath, typstCompiler as TypstCompiler)
   else if (features.katex)
     md.use(MarkdownItKatex, katexOptions)
   md.use(MarkdownItVDrag, markdownTransformMap)

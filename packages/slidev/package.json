@@ -41,9 +41,13 @@
     "start": "tsx node/cli.ts"
   },
   "peerDependencies": {
+    "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc2",
     "playwright-chromium": "^1.10.0"
   },
   "peerDependenciesMeta": {
+    "@myriaddreamin/typst-ts-node-compiler": {
+      "optional": true
+    },
     "playwright-chromium": {
       "optional": true
     }
@@ -52,7 +56,6 @@
     "@antfu/ni": "catalog:prod",
     "@antfu/utils": "catalog:frontend",
     "@comark/markdown-it": "catalog:prod",
-    "@myriaddreamin/typst-ts-node-compiler": "catalog:prod",
     "@iconify-json/carbon": "catalog:icons",
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",
@@ -124,6 +127,7 @@
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
+    "@myriaddreamin/typst-ts-node-compiler": "catalog:prod",
     "@types/picomatch": "catalog:types",
     "@types/plantuml-encoder": "catalog:types"
   }

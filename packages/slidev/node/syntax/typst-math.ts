@@ -14,9 +14,13 @@
  * $...$ / $$...$$ delimiter syntax is the same; only the renderer changes.
  */
 
+import type { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler'
 import type { MarkdownExit, Token } from 'markdown-exit'
-import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler'
+import { yellow } from 'ansis'
+import { resolve } from 'mlly'
 import { escapeVueInCode, normalizeRangeStr } from './utils'
+
+export type TypstCompiler = InstanceType<typeof NodeCompiler>
 
 const RE_TYPST_BLOCK_INFO = /^\{([\w*,|-]+)\}\s*(\{[^}]*\})?/
 
@@ -36,8 +40,9 @@ function isValidDelim(state: any, pos: number) {
     prevChar === 0x20 /* " " */
     || prevChar === 0x09 /* \t */
     || (nextChar >= 0x30 /* "0" */ && nextChar <= 0x39) /* "9" */
-  )
+  ) {
     can_close = false
+  }
 
   if (nextChar === 0x20 /* " " */ || nextChar === 0x09 /* \t */)
     can_open = false
@@ -165,116 +170,138 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 }
 
 // ---------------------------------------------------------------------------
-// Typst compiler singleton — one instance for the entire build
+// Loading the optional native compiler
 // ---------------------------------------------------------------------------
 
-let _compiler: InstanceType<typeof NodeCompiler> | null = null
-
-function getCompiler(): InstanceType<typeof NodeCompiler> {
-  if (!_compiler)
-    _compiler = NodeCompiler.create()
-  return _compiler
-}
+const PACKAGE_NAME = '@myriaddreamin/typst-ts-node-compiler'
 
 /**
- * Extract just the <math ...>...</math> fragment from Typst's HTML output.
- * The body() method wraps content in a <div>; inside we expect either:
- *   - inline: <p><math>...</math></p>
- *   - block:  <math display="block">...</math>
+ * Dynamically load the (optional) Typst compiler package. It is a native
+ * NAPI addon and an optional peer dependency, so it is loaded on demand with
+ * the same multi-root resolution strategy used for `playwright-chromium`.
+ *
+ * Returns a ready-to-use `NodeCompiler` instance, or throws a helpful error
+ * instructing the user how to install the package.
  */
-function extractMathFragment(body: string, displayMode: boolean): string {
-  // Strip surrounding whitespace
-  const trimmed = body.trim()
+export async function loadTypstCompiler(roots: string[] = []): Promise<TypstCompiler> {
+  let mod: typeof import('@myriaddreamin/typst-ts-node-compiler') | undefined
 
-  if (displayMode) {
-    // Block math: <div>\n  <math display="block">...</math>\n</div>
-    const m = trimmed.match(/<math\b[^>]*>([\s\S]*?)<\/math>/)
-    if (m) {
-      // Reconstruct the full <math> tag including attributes
-      const attrM = trimmed.match(/<(math\b[^>]*)>/)
-      return `<math ${attrM ? attrM[1].slice(4) : 'display="block"'}>`.replace(/<math  *>/, '<math display="block">').concat(m[1], '</math>')
+  // 1. resolve relative to the user's project roots (theme/addon/user)
+  for (const root of roots) {
+    try {
+      mod = await import(await resolve(PACKAGE_NAME, { url: root }))
+      break
     }
-    return trimmed
+    catch {}
   }
-  else {
-    // Inline math: <div><p><math>...</math></p></div>
-    const m = trimmed.match(/<math\b[^>]*>[\s\S]*?<\/math>/)
-    return m ? m[0] : trimmed
+
+  // 2. fall back to the @slidev/cli installation
+  if (!mod) {
+    try {
+      mod = await import(PACKAGE_NAME)
+    }
+    catch {}
   }
+
+  if (!mod) {
+    throw new Error(
+      `[slidev] Typst math rendering requires the "${PACKAGE_NAME}" package. `
+      + `Install it with \`npm i -D ${PACKAGE_NAME}\` or remove \`mathRenderer: typst\` from your headmatter.`,
+    )
+  }
+
+  return mod.NodeCompiler.create()
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+
+// Matches the outermost <math ...>...</math> element, capturing its tag so we
+// can keep attributes like `display="block"`. Typst never nests a top-level
+// <math> inside another, so a non-greedy match on the first/last is safe.
+const RE_MATH_ELEMENT = /<math\b[^>]*>[\s\S]*?<\/math>/
+
+/**
+ * Extract the `<math>…</math>` fragment from Typst's full HTML body output.
+ *
+ * `body()` wraps content in a `<div>`, with inline math additionally wrapped
+ * in a `<p>`. We only want the `<math>` element itself (attributes included),
+ * which both browsers and Vue render directly.
+ */
+function extractMathFragment(body: string): string {
+  return body.match(RE_MATH_ELEMENT)?.[0] ?? ''
 }
 
 /**
- * Render a single Typst math expression to a MathML HTML fragment.
- * Uses the shared NodeCompiler instance (no subprocess overhead).
+ * Format a Typst diagnostic list into a single readable warning string.
  */
-function renderTypstMath(content: string, displayMode: boolean): string {
-  const compiler = getCompiler()
+function formatDiagnostics(diagnostics: Array<{ message?: string }> | undefined): string {
+  if (!diagnostics?.length)
+    return 'unknown error'
+  return diagnostics.map(d => d.message ?? String(d)).join('\n  ')
+}
 
-  // Typst block math uses $ ... $ (with whitespace = display mode).
-  // We always wrap in display/inline form ourselves.
+/**
+ * Render a single Typst math expression to a MathML HTML fragment using the
+ * shared compiler instance. On error, logs a diagnostic and returns a visible
+ * inline error placeholder so the slide keeps building.
+ */
+function renderTypstMath(compiler: TypstCompiler, content: string, displayMode: boolean): string {
+  // Typst uses whitespace inside `$ … $` to mean display (block) mode.
   const source = displayMode ? `$ ${content} $` : `$${content}$`
 
   const result = compiler.tryHtml({ mainFileContent: source })
 
-  if (result.hasError()) {
-    // Return error placeholder that's visible but doesn't break the slide
-    const escaped = content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    return `<span class="typst-math-error" title="Typst math error">${escaped}</span>`
+  if (result.hasError() || !result.result) {
+    const error = result.takeError()
+    const detail = formatDiagnostics(error?.shortDiagnostics as Array<{ message?: string }>)
+    console.warn(yellow(`[slidev] Failed to render Typst math: ${content}\n  ${detail}`))
+    const escaped = content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    return `<span class="slidev-typst-math-error" title="Typst math error: ${escaped}">${escaped}</span>`
   }
 
-  const body = result.result!.body()
-  return escapeVueInCode(extractMathFragment(body, displayMode))
+  return escapeVueInCode(extractMathFragment(result.result.body()))
 }
 
 // ---------------------------------------------------------------------------
-// CSS — extracted once from Typst and baked in as a constant
+// CSS
 // ---------------------------------------------------------------------------
 
 /**
- * The MathML CSS that Typst emits with every HTML document.
- * It is identical regardless of the expression content, so we extract it
- * once at module load time and expose it for the virtual CSS module.
+ * The MathML CSS that Typst emits with every HTML document is identical
+ * regardless of the expression content, so we extract it once and cache it
+ * for injection by the conditional-styles virtual module.
  */
-let _typstMathCss: string | null = null
+const RE_STYLE_ELEMENT = /<style>([\s\S]*?)<\/style>/
 
-export function getTypstMathCss(): string {
-  if (_typstMathCss !== null)
-    return _typstMathCss
-
-  const compiler = getCompiler()
+export function extractTypstMathCss(compiler: TypstCompiler): string {
   const result = compiler.tryHtml({ mainFileContent: '$x$' })
-  if (result.hasError() || !result.result) {
-    _typstMathCss = ''
-    return _typstMathCss
-  }
-  const html = result.result.html()
-  const m = html.match(/<style>([\s\S]*?)<\/style>/)
-  _typstMathCss = m ? m[1] : ''
-  return _typstMathCss
+  if (result.hasError() || !result.result)
+    return ''
+  return result.result.html().match(RE_STYLE_ELEMENT)?.[1] ?? ''
 }
 
 // ---------------------------------------------------------------------------
 // markdown-it plugin
 // ---------------------------------------------------------------------------
 
-export default function MarkdownItTypstMath(md: MarkdownExit) {
-  const inlineRenderer = (tokens: any[], idx: number) => {
-    return renderTypstMath(tokens[idx].content, false)
+export default function MarkdownItTypstMath(md: MarkdownExit, compiler: TypstCompiler) {
+  const inlineRenderer = (tokens: Token[], idx: number) => {
+    return renderTypstMath(compiler, tokens[idx].content, false)
   }
 
   const blockRenderer = (tokens: Token[], idx: number) => {
     const token = tokens[idx]
-    const [, rangeStr, optionsProp] = RE_TYPST_BLOCK_INFO.exec(token.info) || []
+    const [, rangeStr, optionsProp] = RE_TYPST_BLOCK_INFO.exec(token.info ?? '') || []
     const ranges = normalizeRangeStr(rangeStr)
     const optionsAttr = optionsProp ? `v-bind="${optionsProp}"` : ''
-    const mathHtml = renderTypstMath(token.content, true)
-    // Reuse KaTexBlockWrapper for click-based line highlighting when ranges are
-    // specified. The wrapper only needs to toggle CSS classes on children;
-    // for MathML we target <mtr> rows inside <mtable> (aligned equations).
-    // When no ranges are given, emit the raw MathML directly.
-    if (ranges.length > 0) {
-      return `<KaTexBlockWrapper ${optionsAttr} :ranges='${JSON.stringify(ranges)}'>${mathHtml}</KaTexBlockWrapper>\n`
-    }
+    const mathHtml = renderTypstMath(compiler, token.content, true)
+    // When line ranges are specified (`$$ {1|3|all}`), wrap in the Typst block
+    // wrapper which toggles highlight classes on the MathML <mtr> rows.
+    // Otherwise emit the raw MathML directly.
+    if (ranges.length > 0)
+      return `<TypstBlockWrapper ${optionsAttr} :ranges='${JSON.stringify(ranges)}'>${mathHtml}</TypstBlockWrapper>\n`
     return `${mathHtml}\n`
   }
 
