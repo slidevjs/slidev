@@ -179,6 +179,7 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
     katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
+    typstMath: false,
     monaco: RE_MONACO_BLOCK.test(code)
       ? scanMonacoReferencedMods(code)
       : false,
