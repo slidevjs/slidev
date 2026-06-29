@@ -124,6 +124,7 @@ catalogs:
   prod:
     '@antfu/ni': ^30.3.0
     '@comark/markdown-it': ^0.3.4
+    '@myriaddreamin/typst-ts-node-compiler': 0.8.0-rc2
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@modelcontextprotocol/client': ^2.0.0
