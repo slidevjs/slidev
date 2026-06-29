@@ -52,6 +52,7 @@
     "@antfu/ni": "catalog:prod",
     "@antfu/utils": "catalog:frontend",
     "@comark/markdown-it": "catalog:prod",
+    "@myriaddreamin/typst-ts-node-compiler": "catalog:prod",
     "@iconify-json/carbon": "catalog:icons",
     "@iconify-json/ph": "catalog:icons",
     "@iconify-json/svg-spinners": "catalog:icons",

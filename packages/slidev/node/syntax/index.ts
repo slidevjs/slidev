@@ -15,6 +15,7 @@ import MarkdownItStyleScoped from './scoped'
 import MarkdownItShiki from './shiki'
 import MarkdownItSlotSugar from './slot-sugar'
 import MarkdownItSnippet from './snippet'
+import MarkdownItTypstMath from './typst-math'
 
 export async function useMarkdownItPlugins(
   md: MarkdownExit,
@@ -33,7 +34,9 @@ export async function useMarkdownItPlugins(
   md.use(MarkdownItEscapeInlineCode)
   md.use(MarkdownItFootnote)
   md.use(MarkdownItTaskList, { enabled: true, lineNumber: true, label: true })
-  if (features.katex)
+  if (features.typstMath)
+    md.use(MarkdownItTypstMath)
+  else if (features.katex)
     md.use(MarkdownItKatex, katexOptions)
   md.use(MarkdownItVDrag, markdownTransformMap)
   md.use(MarkdownItSlotSugar)

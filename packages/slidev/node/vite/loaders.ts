@@ -9,6 +9,7 @@ import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/katex'
 import markdownItLink from '../syntax/link'
+import MarkdownItTypstMath from '../syntax/typst-math'
 import { createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
@@ -28,7 +29,9 @@ export function createSlidesLoader(
 
   const notesMd = MarkdownExit({ html: true })
   notesMd.use(markdownItLink)
-  if (data.features.katex)
+  if (data.features.typstMath)
+    notesMd.use(MarkdownItTypstMath)
+  else if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)
 
   const hmrSlidesIndexes = new Set<number>()

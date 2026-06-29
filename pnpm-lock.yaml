@@ -222,6 +222,9 @@ catalogs:
     '@lillallol/outline-pdf':
       specifier: ^4.0.0
       version: 4.0.0
+    '@myriaddreamin/typst-ts-node-compiler':
+      specifier: 0.8.0-rc2
+      version: 0.8.0-rc2
     '@shikijs/twoslash':
       specifier: ^4.2.0
       version: 4.2.0
@@ -937,6 +940,9 @@ importers:
       '@lillallol/outline-pdf':
         specifier: catalog:prod
         version: 4.0.0
+      '@myriaddreamin/typst-ts-node-compiler':
+        specifier: catalog:prod
+        version: 0.8.0-rc2
       '@shikijs/magic-move':
         specifier: catalog:frontend
         version: 4.2.0(shiki@4.2.0)(vue@3.5.35(typescript@6.0.3))
@@ -2127,6 +2133,80 @@ packages:
 
   '@mrdrogdrog/optional@1.2.1':
     resolution: {integrity: sha512-8JdrQautBZ+nxTC29Sp7z/plyONdgPDjCbFTf6Iih5spZKW18EmP2D4zd48wG9Nn0Qpe8f0p9f8/94SlZFl4tQ==}
+
+  '@myriaddreamin/typst-ts-node-compiler-android-arm-eabi@0.8.0-rc2':
+    resolution: {integrity: sha512-cmCyhA6+8mRHlJ/iej9wD1gPz4W0ksSIT/Ng3HeLdQ5TZSxuZXVTL6PJ/arojDe3K20wSuugP/rJ1F6EFR65WA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [android]
+
+  '@myriaddreamin/typst-ts-node-compiler-android-arm64@0.8.0-rc2':
+    resolution: {integrity: sha512-XQPA9TUrnZ869oyALVpp1DSzqLC5EkLZojwDEC91yX1U3NETznI21y7I5FFGQD15lWYEwcrT6lSioUk+zke09A==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@myriaddreamin/typst-ts-node-compiler-darwin-arm64@0.8.0-rc2':
+    resolution: {integrity: sha512-tejO1TlKOe5vqLbd35NWYmFDxp/7bIJ0lbUq+in0sZCTq5vhNsj/zl2XF5417ubJkgKzEBjKqb7xyvea9zP2ng==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@myriaddreamin/typst-ts-node-compiler-darwin-x64@0.8.0-rc2':
+    resolution: {integrity: sha512-LQ+HkUq1MiEApMF0cPO7QW11UZ+ApGZO9t4hsRj3f2yiypqd65oRZcCWMvOCbZm04+wHWDm75s0UIsJLPoLDeg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf@0.8.0-rc2':
+    resolution: {integrity: sha512-709ngjlMZYwGyrqZmFZq5KROOS11dX75wQE/y+MiXPaAbDj1mMbJI2fv1yDip7pm5HoDqANsGF6pkeUOY7xwKQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu@0.8.0-rc2':
+    resolution: {integrity: sha512-aJEnt1tLpSfJBfKDVwBNLiXNA9FcDJAxx2mrzml3qyf3pxShU/LLi6s8kqda3F1AicHN0C3ErEi2zHmGOZhbeQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl@0.8.0-rc2':
+    resolution: {integrity: sha512-dVYE6ln9zVMgVEVnPNMyRNGjKOwyG6/Fe4k1ZIIxxvLxEO3D5KDAQDvAuYKyDLJIET/SwCzCvnIerndremz74A==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu@0.8.0-rc2':
+    resolution: {integrity: sha512-H4/wJfc/Dc4c5U7XUsZFaA5rBiuVCq64Essobol09EDT9K+++PY9B/9P2mcefdhfHrqD7Y5DdvSR3nZubiIfzg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-x64-musl@0.8.0-rc2':
+    resolution: {integrity: sha512-u5TBttiCnGJcB4hJsQ4dJ4MNTsFjK/J+QBQHj/h5bvT1EkuxTZnUuuUOqDf98IOCJj2BceGZbcDES1zOFeVXAA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc@0.8.0-rc2':
+    resolution: {integrity: sha512-aXOQvzpMj6yEvitIKTCAq8lw9TS2cGbHfASInC5Qb7x2Lxf4TzCQ30kYOVkY1PwvkPINjFmGP5TSSxYiwwMGBw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc@0.8.0-rc2':
+    resolution: {integrity: sha512-BFX4tsmmv2s8ZtBLK+i770jUy2AI49H5so1jUqBZReSAf699vGXVqTvE3cgjZzDqDJ47H6jtDi9ZEcv23vNV+A==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@myriaddreamin/typst-ts-node-compiler@0.8.0-rc2':
+    resolution: {integrity: sha512-YFLZ8XKazsv2XcSUMRRsSgC39HiSpuMGdiWnornEIRafP7nzcssMBbH/1iuZP9slnQzcuOqW7yOqk8nFjhKAxw==}
+    engines: {node: '>= 10'}
 
   '@napi-rs/wasm-runtime@0.2.10':
     resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
@@ -9435,6 +9515,53 @@ snapshots:
       '@chevrotain/types': 11.1.1
 
   '@mrdrogdrog/optional@1.2.1': {}
+
+  '@myriaddreamin/typst-ts-node-compiler-android-arm-eabi@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-android-arm64@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-darwin-arm64@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-darwin-x64@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-linux-x64-musl@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc@0.8.0-rc2':
+    optional: true
+
+  '@myriaddreamin/typst-ts-node-compiler@0.8.0-rc2':
+    optionalDependencies:
+      '@myriaddreamin/typst-ts-node-compiler-android-arm-eabi': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-android-arm64': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-darwin-arm64': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-darwin-x64': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-linux-arm-gnueabihf': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-linux-arm64-gnu': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-linux-arm64-musl': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-linux-x64-gnu': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-linux-x64-musl': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-win32-arm64-msvc': 0.8.0-rc2
+      '@myriaddreamin/typst-ts-node-compiler-win32-x64-msvc': 0.8.0-rc2
 
   '@napi-rs/wasm-runtime@0.2.10':
     dependencies:
