@@ -934,9 +934,6 @@ importers:
       '@lillallol/outline-pdf':
         specifier: catalog:prod
         version: 4.0.0
-      '@myriaddreamin/typst-ts-node-compiler':
-        specifier: catalog:prod
-        version: 0.8.0-rc2
       '@shikijs/magic-move':
         specifier: catalog:frontend
         version: 4.2.0(shiki@4.2.0)(vue@3.5.35(typescript@6.0.3))
@@ -1136,6 +1133,9 @@ importers:
       '@hedgedoc/markdown-it-plugins':
         specifier: catalog:prod
         version: 2.1.4(patch_hash=49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90)(markdown-it@14.2.0)
+      '@myriaddreamin/typst-ts-node-compiler':
+        specifier: catalog:prod
+        version: 0.8.0-rc2
       '@types/picomatch':
         specifier: catalog:types
         version: 4.0.3
