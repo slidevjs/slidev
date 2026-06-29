@@ -179,7 +179,7 @@ cli.command(
               return false
             }
 
-            if ((newData.features.katex && !oldData.features.katex) || (newData.features.monaco && !oldData.features.monaco)) {
+            if ((newData.features.katex && !oldData.features.katex) || (newData.features.monaco && !oldData.features.monaco) || (newData.features.typstMath && !oldData.features.typstMath)) {
               console.log(yellow('\n  restarting on feature change\n'))
               restartServer()
               return false
