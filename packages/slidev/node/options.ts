@@ -11,6 +11,7 @@ import { getRoots, resolveEntry, toAtFS } from './resolver'
 import setupIndexHtml from './setups/indexHtml'
 import setupKatex from './setups/katex'
 import setupShiki from './setups/shiki'
+import { loadTypstCompiler } from './syntax/typst-math'
 
 const RE_FILE_EXTENSION = /\.\w+$/
 
@@ -89,6 +90,9 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   return {
     ...await setupShiki(resolved.roots),
     katexOptions: await setupKatex(resolved.roots),
+    typstCompiler: resolved.data.features.typstMath
+      ? await loadTypstCompiler(resolved.roots)
+      : null,
     indexHtml: await setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),

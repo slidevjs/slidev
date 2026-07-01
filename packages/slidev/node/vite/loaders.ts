@@ -1,5 +1,6 @@
 import type { ResolvedSlidevOptions, SlideInfo, SlidePatch, SlidevData, SlidevServerOptions } from '@slidev/types'
 import type { ModuleNode, Plugin, Rolldown, ViteDevServer } from 'vite'
+import type { TypstCompiler } from '../syntax/typst-math'
 import type { VirtualModuleContext } from '../virtual/types'
 import { notNullish, range } from '@antfu/utils'
 import * as parser from '@slidev/parser/fs'
@@ -9,6 +10,7 @@ import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/katex'
 import markdownItLink from '../syntax/link'
+import MarkdownItTypstMath from '../syntax/typst-math'
 import { createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
@@ -28,7 +30,9 @@ export function createSlidesLoader(
 
   const notesMd = MarkdownExit({ html: true })
   notesMd.use(markdownItLink)
-  if (data.features.katex)
+  if (data.features.typstMath && utils.typstCompiler)
+    notesMd.use(MarkdownItTypstMath, utils.typstCompiler as TypstCompiler)
+  else if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)
 
   const hmrSlidesIndexes = new Set<number>()
