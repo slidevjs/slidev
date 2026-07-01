@@ -14,6 +14,9 @@ function resolveUrl(url: string): string {
   return `${base}${url.startsWith('/') ? url : `/${url}`}`
 }
 
+const RETRY_LIMIT = 2
+const retries = new Map<string, number>()
+
 function preloadImage(url: string): void {
   const resolved = resolveUrl(url)
   if (loaded.has(resolved) || loading.has(resolved))
@@ -23,9 +26,17 @@ function preloadImage(url: string): void {
   img.onload = () => {
     loading.delete(resolved)
     loaded.add(resolved)
+    retries.delete(resolved)
   }
   img.onerror = () => {
     loading.delete(resolved)
+    // Retry transient preload failures (e.g. flaky network) instead of silently
+    // giving up; bounded so genuinely-missing assets aren't hammered.
+    const attempts = retries.get(resolved) ?? 0
+    if (attempts < RETRY_LIMIT) {
+      retries.set(resolved, attempts + 1)
+      setTimeout(preloadImage, 1000 * (attempts + 1), url)
+    }
   }
   img.src = resolved
 }

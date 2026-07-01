@@ -127,7 +127,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/slidevjs/slidev' },
-      { icon: 'twitter', link: 'https://twitter.com/slidevjs' },
+      { icon: 'twitter', link: 'https://x.com/slidevjs' },
       { icon: 'discord', link: 'https://chat.sli.dev' },
     ],
 
