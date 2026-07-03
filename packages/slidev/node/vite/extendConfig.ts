@@ -13,6 +13,7 @@ const RE_SLIDEV_VIRTUAL = /^#slidev\/(.*)/
 const RE_MONACO_EDITOR = /\/monaco-editor(?:-core)?\//
 
 const INCLUDE_GLOBAL = [
+  '@fix-webm-duration/fix',
   '@typescript/ata',
   'file-saver',
   'lz-string',
