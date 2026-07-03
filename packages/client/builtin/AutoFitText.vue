@@ -1,9 +1,8 @@
 <!--
-[Experimental]
-
-Think this component as the TextBox you that will see
+Think of this component as the TextBox that you will see
 in PowerPoint or Keynote. It will automatically resize
-the font size based on it's content to fit them in.
+the font size based on its content to fit them in,
+powered by fitty (https://github.com/rikschennink/fitty).
 
 Usage:
 
@@ -11,12 +10,14 @@ Usage:
 
 or
 
-<AutoFitText :max="80" :min="100" v-model="text"/>
+<AutoFitText :max="100" :min="30" v-model="text"/>
 -->
 
 <script setup lang="ts">
-import { useElementSize, useVModel } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import type { FittyInstance } from 'fitty'
+import { useResizeObserver, useVModel } from '@vueuse/core'
+import fitty from 'fitty'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -28,40 +29,59 @@ const props = defineProps({
   min: {
     default: 30,
   },
+  multiLine: {
+    type: Boolean,
+    default: true,
+  },
 })
 
-const emit = defineEmits<{
-  (e: any): void
-}>()
-const container = ref<HTMLDivElement>()
-const inner = ref<HTMLDivElement>()
-const size = ref(100)
-const fontSize = computed(() => `${size.value}px`)
+const emit = defineEmits(['update:modelValue'])
+
 const value = useVModel(props, 'modelValue', emit)
 
-const containerSize = useElementSize(container)
-const innerSize = useElementSize(inner)
+const container = ref<HTMLDivElement>()
+const inner = ref<HTMLDivElement>()
 
-const wrapLen = ref(0)
-const wrap = ref('nowrap')
+let instance: FittyInstance | undefined
 
-watch([container, value, containerSize.width, innerSize.width], async () => {
-  if (!container.value || innerSize.width.value <= 0)
+function init() {
+  instance?.unsubscribe()
+  instance = undefined
+  if (!inner.value)
     return
-  const ratio = containerSize.width.value / innerSize.width.value
-  if (Number.isNaN(ratio) || ratio <= 0)
+  instance = fitty(inner.value, {
+    minSize: props.min,
+    maxSize: props.max,
+    multiLine: props.multiLine,
+  })
+}
+
+onMounted(() => {
+  init()
+  // Refit once web fonts are loaded, as glyph metrics may change
+  document.fonts?.ready.then(() => instance?.fit())
+})
+
+onUnmounted(() => {
+  instance?.unsubscribe()
+  instance = undefined
+})
+
+watch(() => [props.min, props.max, props.multiLine], init)
+
+// Fitty observes content mutations and window resizes on its own,
+// but not resizes of the container itself
+useResizeObserver(container, () => {
+  if (!container.value || container.value.clientWidth <= 0)
     return
-  let newSize = size.value * (containerSize.width.value / innerSize.width.value)
-  if (newSize < props.min) {
-    wrapLen.value = value.value.length
-    wrap.value = ''
-  }
-  else {
-    if (value.value.length < wrapLen.value)
-      wrap.value = 'nowrap'
-  }
-  newSize = Math.max(props.min, Math.min(props.max, newSize))
-  size.value = newSize
+  // If fitty was initialized while the element was hidden (e.g. on a
+  // preloaded slide), its internal state is invalid and refitting can
+  // never recover, so reinitialize it once the container is visible.
+  // A successful fit always leaves an inline font-size on the element.
+  if (inner.value && !inner.value.style.fontSize)
+    init()
+  else
+    instance?.fit()
 })
 </script>
 
@@ -78,11 +98,10 @@ watch([container, value, containerSize.width, innerSize.width], async () => {
 <style scoped>
 .slidev-auto-fit-text {
   overflow: auto;
-  font-size: v-bind(fontSize);
-  white-space: v-bind(wrap);
 }
 
 .slidev-auto-fit-text-inner {
   display: inline-block;
+  white-space: nowrap;
 }
 </style>
