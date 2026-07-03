@@ -1,17 +1,17 @@
 import type { Server } from 'node:http'
+import type { AddressInfo } from 'node:net'
 import { execFileSync } from 'node:child_process'
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { createServer } from 'node:http'
-import { extname, join, normalize } from 'node:path'
+import { extname, join, normalize, sep } from 'node:path'
 import process from 'node:process'
 
 let server: Server | undefined
+let baseUrl: string | undefined
 
 const root = join(import.meta.dirname, 'fixtures/basic/dist')
 const base = '/deck/'
-const port = 4173
-const origin = `http://127.0.0.1:${port}`
 const contentTypes = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
@@ -34,10 +34,18 @@ async function fileExists(file: string) {
   }
 }
 
-export async function startBasePathServer() {
-  if (server)
-    return null
+/**
+ * Builds the basic fixture with a non-root `--base` and serves the static
+ * output (with SPA fallback) on an ephemeral port.
+ *
+ * Returns the served base URL, e.g. `http://127.0.0.1:52341/deck/`.
+ */
+export async function startBasePathServer(): Promise<string> {
+  if (server && baseUrl)
+    return baseUrl
 
+  // Cypress runs its node events inside Electron; strip its env so the
+  // spawned build runs under plain Node.
   const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
@@ -50,7 +58,7 @@ export async function startBasePathServer() {
   })
 
   server = createServer(async (req, res) => {
-    const url = new URL(req.url ?? '/', `http://127.0.0.1:${port}`)
+    const url = new URL(req.url ?? '/', 'http://127.0.0.1')
 
     if (!url.pathname.startsWith(base)) {
       res.writeHead(404).end('Not found')
@@ -59,7 +67,7 @@ export async function startBasePathServer() {
 
     const rel = decodeURIComponent(url.pathname.slice(base.length)) || 'index.html'
     let file = normalize(join(root, rel))
-    if (!file.startsWith(root)) {
+    if (file !== root && !file.startsWith(root + sep)) {
       res.writeHead(403).end('Forbidden')
       return
     }
@@ -71,10 +79,14 @@ export async function startBasePathServer() {
     createReadStream(file).pipe(res)
   })
 
-  return new Promise<null>((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     server!.once('error', reject)
-    server!.listen(port, '127.0.0.1', () => resolve(null))
+    server!.listen(0, '127.0.0.1', resolve)
   })
+
+  const { port } = server.address() as AddressInfo
+  baseUrl = `http://127.0.0.1:${port}${base}`
+  return baseUrl
 }
 
 export function stopBasePathServer() {
@@ -86,38 +98,11 @@ export function stopBasePathServer() {
 
     server.close((error) => {
       server = undefined
+      baseUrl = undefined
       if (error)
         reject(error)
       else
         resolve(null)
     })
   })
-}
-
-export async function assertBasePathNavigation() {
-  await startBasePathServer()
-
-  const expected = `${origin}${base}2`
-  const { chromium } = await import('playwright-chromium')
-  const browser = await chromium.launch({ headless: true })
-
-  try {
-    const page = await browser.newPage()
-    await page.goto(`${origin}${base}1`, { waitUntil: 'domcontentloaded' })
-    await page.waitForSelector('#page-root')
-    await page.keyboard.press('ArrowRight')
-
-    try {
-      await page.waitForFunction(url => location.href === url, expected, { timeout: 5_000 })
-    }
-    catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      throw new Error(`Expected slide navigation to end at ${expected}, got ${page.url()}. ${message}`)
-    }
-
-    return null
-  }
-  finally {
-    await browser.close()
-  }
 }

@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress'
-import { assertBasePathNavigation, startBasePathServer, stopBasePathServer } from './cypress/basePathServer'
+import { startBasePathServer, stopBasePathServer } from './cypress/basePathServer'
 
 export default defineConfig({
   e2e: {
@@ -8,8 +8,8 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.*',
     supportFile: false,
     setupNodeEvents(on) {
+      on('after:run', () => stopBasePathServer())
       on('task', {
-        assertBasePathNavigation,
         startBasePathServer,
         stopBasePathServer,
       })
