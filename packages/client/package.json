@@ -51,6 +51,7 @@
     "ansis": "catalog:prod",
     "drauu": "catalog:frontend",
     "file-saver": "catalog:frontend",
+    "fitty": "catalog:frontend",
     "floating-vue": "catalog:frontend",
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",

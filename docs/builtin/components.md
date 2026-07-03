@@ -42,9 +42,7 @@ Props not related to position are the same as [the `Arrow` component](#arrow).
 
 ## `AutoFitText`
 
-> Experimental
-
-Box inside which the font size will automatically adapt to fit the content. Similar to PowerPoint or Keynote TextBox.
+Box inside which the font size will automatically adapt to fit the content, powered by [fitty](https://github.com/rikschennink/fitty). Similar to PowerPoint or Keynote TextBox.
 
 ### Usage
 
@@ -54,9 +52,10 @@ Box inside which the font size will automatically adapt to fit the content. Simi
 
 Props:
 
-- `max` (`string | number`, default `100`): Maximum font size
-- `min` (`string | number`, default `30`): Minimum font size
-- `modelValue` (`string`, default `''`): text content
+- `max` (`number`, default `100`): Maximum font size in pixels
+- `min` (`number`, default `30`): Minimum font size in pixels
+- `modelValue` (`string`, default `''`): Text content (alternatively, use the default slot)
+- `multiLine` (`boolean`, default `true`): Allow the text to wrap when the minimum font size is reached
 
 ## `LightOrDark`
 

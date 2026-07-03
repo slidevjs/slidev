@@ -138,6 +138,9 @@ catalogs:
     file-saver:
       specifier: ^2.0.5
       version: 2.0.5
+    fitty:
+      specifier: ^2.4.2
+      version: 2.4.2
     floating-vue:
       specifier: ^5.2.2
       version: 5.2.2
@@ -815,6 +818,9 @@ importers:
       file-saver:
         specifier: catalog:frontend
         version: 2.0.5
+      fitty:
+        specifier: catalog:frontend
+        version: 2.4.2
       floating-vue:
         specifier: catalog:frontend
         version: 5.2.2(@nuxt/kit@3.13.0(rollup@4.44.1))(vue@3.5.35(typescript@6.0.3))
@@ -5578,6 +5584,9 @@ packages:
   find-up@5.0.0:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
+
+  fitty@2.4.2:
+    resolution: {integrity: sha512-GNhWgImK4+wEkgEZjBkQMyu5NLSmmryg/CaRP7zYby+TWzCrUou6BHL+iqbjKzJRXMyzuJkH+LBB1+lh4oO77g==}
 
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
@@ -10722,7 +10731,7 @@ snapshots:
       eslint: 10.4.1(jiti@2.7.0)
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10769,8 +10778,8 @@ snapshots:
       '@typescript-eslint/visitor-keys': 8.56.1
       debug: 4.4.3
       minimatch: 10.2.5
-      semver: 7.8.0
-      tinyglobby: 0.2.16
+      semver: 7.8.1
+      tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -12942,6 +12951,8 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
+  fitty@2.4.2: {}
+
   flat-cache@4.0.1:
     dependencies:
       flatted: 3.3.1
@@ -13757,7 +13768,7 @@ snapshots:
   markdown-it-async@2.2.0:
     dependencies:
       '@types/markdown-it': 14.1.2
-      markdown-it: 14.1.1
+      markdown-it: 14.2.0
     optional: true
 
   markdown-it-footnote@4.0.0: {}
