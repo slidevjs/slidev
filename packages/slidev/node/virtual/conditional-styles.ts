@@ -2,7 +2,7 @@ import type { TypstCompiler } from '../syntax/typst-math'
 import type { VirtualModuleTemplate } from './types'
 import { join } from 'node:path'
 import { resolveImportUrl } from '../resolver'
-import { extractTypstMathCss } from '../syntax/typst-math'
+import { resolveTypstMathCss } from '../syntax/typst-math'
 
 const id = '/@slidev/conditional-styles'
 
@@ -23,7 +23,7 @@ export const templateConditionalStyles: VirtualModuleTemplate = {
     if (data.features.typstMath && utils.typstCompiler) {
       // Inject Typst's MathML CSS at runtime via a <style> element so no extra
       // file on disk is needed.
-      const css = extractTypstMathCss(utils.typstCompiler as TypstCompiler)
+      const css = resolveTypstMathCss(utils.typstCompiler as TypstCompiler, data.config.fonts.math)
       const escaped = css.replace(/\\/g, '\\\\').replace(/`/g, '\\`')
       imports.push(`
 const __typstMathStyle = document.createElement('style')

@@ -1,7 +1,7 @@
 import type { TypstCompiler } from './typst-math'
 import MarkdownExit from 'markdown-exit'
 import { beforeAll, describe, expect, it } from 'vitest'
-import MarkdownItTypstMath, { extractTypstMathCss, loadTypstCompiler } from './typst-math'
+import MarkdownItTypstMath, { extractTypstMathCss, loadTypstCompiler, resolveTypstMathCss } from './typst-math'
 
 let compiler: TypstCompiler
 
@@ -66,5 +66,11 @@ describe('typst math', () => {
     const css = extractTypstMathCss(compiler)
     expect(css).toContain('mtable')
     expect(css).toContain('mfrac')
+  })
+
+  it('applies a configured MathML font family', () => {
+    const css = resolveTypstMathCss(compiler, ['"STIX Two Math"', 'math'])
+    expect(css).toContain('mtable')
+    expect(css).toContain('.slidev-layout math, .slidev-layout math * { font-family: "STIX Two Math", math; }')
   })
 })

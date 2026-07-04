@@ -480,6 +480,10 @@ export interface FontOptions {
    */
   mono?: string | string[]
   /**
+   * Math fonts, for browser-rendered MathML.
+   */
+  math?: string | string[]
+  /**
    * Load webfonts for custom CSS (does not apply anywhere by default)
    */
   custom?: string | string[]

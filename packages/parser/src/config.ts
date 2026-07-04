@@ -154,6 +154,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   let sans = toArray(fonts.sans).flatMap(i => i.split(',')).map(i => i.trim())
   let serif = toArray(fonts.serif).flatMap(i => i.split(',')).map(i => i.trim())
   let mono = toArray(fonts.mono).flatMap(i => i.split(',')).map(i => i.trim())
+  let math = toArray(fonts.math).flatMap(i => i.split(',')).map(i => i.trim())
   const weights = toArray(fonts.weights || '200,400,600').flatMap(i => i.toString().split(',')).map(i => i.trim())
   const custom = toArray(fonts.custom).flatMap(i => i.split(',')).map(i => i.trim())
 
@@ -161,7 +162,7 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
   const webfonts = fonts.webfonts
     ? fonts.webfonts
     : fallbacks
-      ? uniq([...sans, ...serif, ...mono, ...custom]).filter(i => !local.includes(i))
+      ? uniq([...sans, ...serif, ...mono, ...math, ...custom]).filter(i => !local.includes(i))
       : []
 
   function toQuoted(font: string) {
@@ -208,12 +209,19 @@ export function resolveFonts(fonts: FontOptions = {}): ResolvedFontOptions {
       '"Courier New"',
       'monospace',
     ])
+    if (math.length > 0) {
+      math = uniq([
+        ...math.map(toQuoted),
+        'math',
+      ])
+    }
   }
 
   return {
     sans,
     serif,
     mono,
+    math,
     webfonts,
     provider,
     local,

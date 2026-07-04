@@ -282,6 +282,13 @@ export function extractTypstMathCss(compiler: TypstCompiler): string {
   return result.result.html().match(RE_STYLE_ELEMENT)?.[1] ?? ''
 }
 
+export function resolveTypstMathCss(compiler: TypstCompiler, mathFonts: string[] = []): string {
+  const css = extractTypstMathCss(compiler)
+  if (mathFonts.length === 0)
+    return css
+  return `${css}\n.slidev-layout math, .slidev-layout math * { font-family: ${mathFonts.join(', ')}; }`
+}
+
 // ---------------------------------------------------------------------------
 // markdown-it plugin
 // ---------------------------------------------------------------------------

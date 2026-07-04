@@ -760,6 +760,21 @@
           "description": "Monospace fonts, for code blocks and etc.",
           "markdownDescription": "Monospace fonts, for code blocks and etc."
         },
+        "math": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Math fonts, for browser-rendered MathML.",
+          "markdownDescription": "Math fonts, for browser-rendered MathML."
+        },
         "custom": {
           "anyOf": [
             {
