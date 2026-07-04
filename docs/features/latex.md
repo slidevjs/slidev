@@ -100,6 +100,20 @@ npm i -D @myriaddreamin/typst-ts-node-compiler
 
 :::
 
+### Math Font
+
+Typst math is rendered as browser-native MathML, so the final font is chosen by the browser unless you override it. Configure the deck-level `fonts.math` option in your headmatter to set the CSS `font-family` used by Typst MathML. This applies to all Typst math output in the slide deck; slide-level overrides are not supported.
+
+```md
+---
+mathRenderer: typst
+fonts:
+  math: STIX Two Math
+---
+```
+
+Unlike `fonts.sans`, `fonts.serif`, and `fonts.mono`, `fonts.math` is not included in the generated webfont request by default. Browser MathML rendering works best with an installed local font that has MathML/OpenType math support, such as `STIX Two Math`, `Latin Modern Math`, `Libertinus Math`, or `Noto Sans Math`. If you load a math font with custom CSS, prefer self-hosting the full font file; webfont providers may serve subsetted files that look correct as text fonts but break MathML layout.
+
 ### Inline
 
 Surround your Typst math with a single `$` on each side:
