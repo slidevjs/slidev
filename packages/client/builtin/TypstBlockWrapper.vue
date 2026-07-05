@@ -1,0 +1,97 @@
+<!--
+Line highlighting for Typst math blocks.
+(auto transformed, you don't need to use this component directly)
+
+Usage:
+$$ {1|3|all}
+  nabla times bold(E) &= - (diff bold(B)) / (diff t) \
+  nabla times bold(B) &= mu_0 bold(J) + mu_0 epsilon_0 (diff bold(E)) / (diff t) \
+  nabla dot bold(E)   &= rho / epsilon_0
+$$
+
+Learn more: https://sli.dev/guide/syntax#latex-line-highlighting
+-->
+
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import { parseRangeString } from '@slidev/parser/utils'
+import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { CLASS_VCLICK_HIDDEN, CLASS_VCLICK_TARGET, CLICKS_MAX } from '../constants'
+import { useSlideContext } from '../context'
+import { makeId } from '../logic/utils'
+import { collectMathmlEquationLines } from './mathml-lines'
+
+const props = defineProps({
+  ranges: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+  finally: {
+    type: [String, Number],
+    default: 'last',
+  },
+  startLine: {
+    type: Number,
+    default: 1,
+  },
+  at: {
+    type: [String, Number],
+    default: '+1',
+  },
+})
+
+const { $clicksContext: clicks } = useSlideContext()
+const el = ref<HTMLDivElement>()
+const id = makeId()
+
+onUnmounted(() => {
+  clicks!.unregister(id)
+})
+
+onMounted(() => {
+  if (!clicks || !props.ranges?.length)
+    return
+
+  const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
+  clicks.register(id, clicksInfo)
+
+  const index = computed(() => clicksInfo ? Math.max(0, clicks.current - clicksInfo.start + 1) : CLICKS_MAX)
+
+  const finallyRange = computed(() => {
+    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+  })
+
+  watchEffect(() => {
+    if (!el.value)
+      return
+
+    let rangeStr = props.ranges[index.value] ?? finallyRange.value
+    const hide = rangeStr === 'hide'
+    el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+    if (hide)
+      rangeStr = props.ranges[index.value + 1] ?? finallyRange.value
+
+    // Each <mtr> row across the equation tables maps to one logical line
+    const lines = collectMathmlEquationLines(el.value)
+    if (!lines.length)
+      return
+
+    const startLine = props.startLine
+    const highlights: number[] = parseRangeString(lines.length + startLine - 1, rangeStr)
+    lines.forEach((line, idx) => {
+      const highlighted = highlights.includes(idx + startLine)
+      line.forEach((node) => {
+        node.classList.toggle(CLASS_VCLICK_TARGET, true)
+        node.classList.toggle('highlighted', highlighted)
+        node.classList.toggle('dishonored', !highlighted)
+      })
+    })
+  })
+})
+</script>
+
+<template>
+  <div ref="el" class="slidev-typst-wrapper">
+    <slot />
+  </div>
+</template>

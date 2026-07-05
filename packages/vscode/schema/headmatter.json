@@ -395,6 +395,16 @@
           "markdownDescription": "Attributes to apply to the HTML element",
           "default": {}
         },
+        "mathRenderer": {
+          "type": "string",
+          "enum": [
+            "katex",
+            "typst"
+          ],
+          "description": "Math renderer to use for $...$ and $$...$$ expressions.\n\n- `'katex'` (default): render with KaTeX (LaTeX syntax)\n- `'typst'`: render with the official Typst compiler (Typst math syntax),   outputting native MathML. Requires `@myriaddreamin/typst-ts-node-compiler`.",
+          "markdownDescription": "Math renderer to use for $...$ and $$...$$ expressions.\n\n- `'katex'` (default): render with KaTeX (LaTeX syntax)\n- `'typst'`: render with the official Typst compiler (Typst math syntax),\n  outputting native MathML. Requires `@myriaddreamin/typst-ts-node-compiler`.",
+          "default": "katex"
+        },
         "comark": {
           "type": "boolean",
           "description": "Suppport Comark syntax\n\nhttps://comark.dev/syntax/markdown",
@@ -749,6 +759,21 @@
           ],
           "description": "Monospace fonts, for code blocks and etc.",
           "markdownDescription": "Monospace fonts, for code blocks and etc."
+        },
+        "math": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Math fonts, for browser-rendered MathML.",
+          "markdownDescription": "Math fonts, for browser-rendered MathML."
         },
         "custom": {
           "anyOf": [

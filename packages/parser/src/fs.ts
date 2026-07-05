@@ -148,11 +148,18 @@ export async function load(
   if (slides[0]?.title)
     headmatter.title ??= slides[0].title
 
+  const features = detectFeatures(slides.map(s => s.source.raw).join(''))
+  const usingTypstMath = headmatter.mathRenderer === 'typst'
+  if (usingTypstMath) {
+    features.typstMath = true
+    features.katex = false
+  }
+
   return {
     slides,
     entry,
     headmatter,
-    features: detectFeatures(slides.map(s => s.source.raw).join('')),
+    features,
     markdownFiles,
     watchFiles,
   }

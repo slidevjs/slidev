@@ -198,6 +198,16 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   htmlAttrs?: Record<string, string>
   /**
+   * Math renderer to use for $...$ and $$...$$ expressions.
+   *
+   * - `'katex'` (default): render with KaTeX (LaTeX syntax)
+   * - `'typst'`: render with the official Typst compiler (Typst math syntax),
+   *   outputting native MathML. Requires `@myriaddreamin/typst-ts-node-compiler`.
+   *
+   * @default 'katex'
+   */
+  mathRenderer?: 'katex' | 'typst'
+  /**
    * Suppport Comark syntax
    *
    * https://comark.dev/syntax/markdown
@@ -469,6 +479,10 @@ export interface FontOptions {
    * Monospace fonts, for code blocks and etc.
    */
   mono?: string | string[]
+  /**
+   * Math fonts, for browser-rendered MathML.
+   */
+  math?: string | string[]
   /**
    * Load webfonts for custom CSS (does not apply anywhere by default)
    */
