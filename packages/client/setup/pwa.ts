@@ -1,24 +1,24 @@
 import { ref } from 'vue'
 
-export const offlineCaching = ref(false)
-export const offlineReady = ref(false)
+export const pwaCaching = ref(false)
+export const pwaReady = ref(false)
 
 export async function setupPWA() {
-  if (!__SLIDEV_FEATURE_OFFLINE__)
+  if (!__SLIDEV_FEATURE_PWA__)
     return
 
   const { registerSW } = await import('virtual:pwa-register')
 
-  offlineCaching.value = true
+  pwaCaching.value = true
 
   registerSW({
     immediate: true,
     onOfflineReady() {
-      offlineCaching.value = false
-      offlineReady.value = true
+      pwaCaching.value = false
+      pwaReady.value = true
       // Auto-dismiss "ready" indicator after 4 seconds
       setTimeout(() => {
-        offlineReady.value = false
+        pwaReady.value = false
       }, 4000)
     },
     onRegisteredSW(_swUrl, _registration) {

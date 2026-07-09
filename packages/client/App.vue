@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
 import { themeVars } from './env'
-import OfflineIndicator from './internals/OfflineIndicator.vue'
+import PwaIndicator from './internals/PwaIndicator.vue'
 import setupRoot from './setup/root'
 
 setupRoot()
@@ -14,5 +14,5 @@ watchEffect(() => {
 
 <template>
   <RouterView />
-  <OfflineIndicator v-if="__SLIDEV_FEATURE_OFFLINE__" />
+  <PwaIndicator v-if="__SLIDEV_FEATURE_PWA__" />
 </template>

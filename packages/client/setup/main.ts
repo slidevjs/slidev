@@ -44,6 +44,6 @@ export default async function setupMain(app: App) {
   for (const setup of setups)
     await setup(context)
 
-  if (__SLIDEV_FEATURE_OFFLINE__)
+  if (__SLIDEV_FEATURE_PWA__)
     setupPWA()
 }

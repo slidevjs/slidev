@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { offlineCaching, offlineReady } from '../setup/pwa'
+import { pwaCaching, pwaReady } from '../setup/pwa'
 </script>
 
 <template>
-  <Transition name="slidev-offline-fade">
+  <Transition name="slidev-pwa-fade">
     <div
-      v-if="offlineCaching || offlineReady"
-      class="slidev-offline-indicator"
-      :class="{ ready: offlineReady }"
+      v-if="pwaCaching || pwaReady"
+      class="slidev-pwa-indicator"
+      :class="{ ready: pwaReady }"
     >
-      <span v-if="offlineCaching">Caching for offline…</span>
-      <span v-else-if="offlineReady">Ready offline</span>
+      <span v-if="pwaCaching">Caching for offline…</span>
+      <span v-else-if="pwaReady">Ready offline</span>
     </div>
   </Transition>
 </template>
 
 <style scoped>
-.slidev-offline-indicator {
+.slidev-pwa-indicator {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
@@ -34,17 +34,17 @@ import { offlineCaching, offlineReady } from '../setup/pwa'
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.slidev-offline-indicator.ready {
+.slidev-pwa-indicator.ready {
   color: #7dce82;
 }
 
-.slidev-offline-fade-enter-active,
-.slidev-offline-fade-leave-active {
+.slidev-pwa-fade-enter-active,
+.slidev-pwa-fade-leave-active {
   transition: opacity 0.35s ease;
 }
 
-.slidev-offline-fade-enter-from,
-.slidev-offline-fade-leave-to {
+.slidev-pwa-fade-enter-from,
+.slidev-pwa-fade-leave-to {
   opacity: 0;
 }
 </style>
