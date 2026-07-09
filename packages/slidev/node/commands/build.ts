@@ -100,7 +100,8 @@ export async function build(
         range: '1',
         width: options.data.config.canvasWidth,
         height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-        routerMode: options.data.config.routerMode,
+        // This renders slides by URL, so memory routing falls back to history.
+        routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
         waitUntil: 'networkidle',
         timeout: args.timeout || 30000,
         perSlide: true,

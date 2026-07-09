@@ -611,7 +611,8 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     wait: wait ?? 0,
     waitUntil: waitUntil === 'none' ? undefined : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
     dark: dark || options.data.config.colorSchema === 'dark',
-    routerMode: options.data.config.routerMode,
+    // Export navigates by URL; memory routing ignores the URL, so fall back to history.
+    routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
     withClicks: withClicks ?? format === 'pptx',

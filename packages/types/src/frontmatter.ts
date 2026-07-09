@@ -100,9 +100,13 @@ export interface HeadmatterConfig extends TransitionOptions {
   /**
    * Router mode for vue-router
    *
+   * - `history`: the slide number is reflected in the URL path
+   * - `hash`: hash-based routing, for static hosts or subdirectory deploys
+   * - `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven "follower" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)
+   *
    * @default 'history'
    */
-  routerMode?: 'hash' | 'history'
+  routerMode?: 'hash' | 'history' | 'memory'
   /**
    * Aspect ratio for slides
    * should be like `16/9` or `1:1`

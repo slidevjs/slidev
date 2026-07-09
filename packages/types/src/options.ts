@@ -50,7 +50,7 @@ export interface SlidevEntryOptions {
   /**
    * Override routerMode at build time
    */
-  routerMode?: 'hash' | 'history'
+  routerMode?: 'hash' | 'history' | 'memory'
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {

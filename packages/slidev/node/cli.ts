@@ -365,8 +365,8 @@ cli.command(
     })
     .option('router-mode', {
       type: 'string',
-      choices: ['hash', 'history'],
-      describe: 'override routerMode in the built output (hash for subdirectory deploys like GitHub Pages)',
+      choices: ['hash', 'history', 'memory'],
+      describe: 'override routerMode in the built output (hash for subdirectory deploys like GitHub Pages; memory keeps the slide number out of the URL, for kiosk/follower decks)',
     })
     .option('inspect', {
       default: false,
@@ -380,7 +380,7 @@ cli.command(
     const { build } = await import('./commands/build')
 
     for (const entryFile of entry as unknown as string[]) {
-      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes, routerMode: routerMode as 'hash' | 'history' | undefined }, 'build')
+      const options = await resolveOptions({ entry: entryFile, theme, inspect, download, base, withoutNotes, routerMode: routerMode as 'hash' | 'history' | 'memory' | undefined }, 'build')
 
       printInfo(options)
       await build(
