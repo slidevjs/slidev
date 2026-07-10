@@ -75,7 +75,6 @@ function play() {
     speed: 50,
     startDelay: 900,
     afterStep: () => {
-      // eslint-disable-next-line unicorn/prefer-dom-node-text-content
       code.value = JSON.parse(JSON.stringify(block.value!.innerText.replace('|', '')))
     },
     afterComplete: () => {
