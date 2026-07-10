@@ -138,6 +138,7 @@ function getDefine(options: Omit<ResolvedSlidevOptions, 'utils'>): Record<string
       __SLIDEV_FEATURE_PRINT__: options.mode === 'export' || (options.mode === 'build' && [true, 'true', 'auto'].includes(options.data.config.download)),
       __SLIDEV_FEATURE_BROWSER_EXPORTER__: matchMode(options.data.config.browserExporter),
       __SLIDEV_FEATURE_WAKE_LOCK__: matchMode(options.data.config.wakeLock),
+      __SLIDEV_FEATURE_PWA__: matchMode(options.data.config.pwa),
       __SLIDEV_HAS_SERVER__: options.mode !== 'build',
     },
     (v, k) => [v, JSON.stringify(k)],

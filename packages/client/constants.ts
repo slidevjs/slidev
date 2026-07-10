@@ -86,6 +86,7 @@ export const HEADMATTER_FIELDS = [
   'comark',
   'contextMenu',
   'wakeLock',
+  'pwa',
   'seoMeta',
   'notesAutoRuby',
   'magicMoveDuration',

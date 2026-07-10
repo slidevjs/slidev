@@ -48,6 +48,7 @@ export function getDefaultConfig(): SlidevConfig {
     mcp: true,
     contextMenu: null,
     wakeLock: true,
+    pwa: false,
     remote: false,
     mdc: false,
     comark: false,

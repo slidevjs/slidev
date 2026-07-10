@@ -8,6 +8,7 @@ import { createVClickDirectives } from '../modules/v-click'
 import { createVDragDirective } from '../modules/v-drag'
 import { createVMarkDirective } from '../modules/v-mark'
 import { createVMotionDirectives } from '../modules/v-motion'
+import { setupPWA } from '../setup/pwa'
 import setupRoutes from '../setup/routes'
 import '../styles'
 
@@ -44,4 +45,7 @@ export default async function setupMain(app: App) {
 
   for (const setup of setups)
     await setup(context)
+
+  if (__SLIDEV_FEATURE_PWA__)
+    setupPWA()
 }

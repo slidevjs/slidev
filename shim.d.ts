@@ -12,6 +12,7 @@ declare global {
   const __SLIDEV_FEATURE_PRINT__: boolean
   const __SLIDEV_FEATURE_BROWSER_EXPORTER__: boolean
   const __SLIDEV_FEATURE_WAKE_LOCK__: boolean
+  const __SLIDEV_FEATURE_PWA__: boolean
   const __SLIDEV_HAS_SERVER__: boolean
 }
 
@@ -29,6 +30,7 @@ declare module '@vue/runtime-core' {
     __SLIDEV_FEATURE_PRINT__: boolean
     __SLIDEV_FEATURE_BROWSER_EXPORTER__: boolean
     __SLIDEV_FEATURE_WAKE_LOCK__: boolean
+    __SLIDEV_FEATURE_PWA__: boolean
     __SLIDEV_HAS_SERVER__: boolean
   }
 }
