@@ -1,8 +1,21 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { basename, dirname, join, resolve } from 'node:path'
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import fg from 'fast-glob'
+
+/**
+ * Whether `key` is a safe bare slide id that can be joined onto `dir` without
+ * escaping it. `loadDrawings` only ever produces numeric keys, so writes
+ * should only ever accept numeric keys too.
+ */
+export function isSafeDrawingKey(dir: string, key: string): boolean {
+  if (!/^\d+$/.test(key))
+    return false
+  const target = join(dir, `${key}.svg`)
+  const rel = relative(dir, target)
+  return !rel.startsWith('..') && !isAbsolute(rel)
+}
 
 function resolveDrawingsDir(options: ResolvedSlidevOptions): string | undefined {
   return options.data.config.drawings.persist
@@ -53,6 +66,11 @@ export async function writeDrawings(options: ResolvedSlidevOptions, drawing: Rec
     Object.entries(drawing).map(async ([key, value]) => {
       if (!value)
         return
+
+      if (!isSafeDrawingKey(dir, key)) {
+        console.warn(`[slidev] Ignoring drawing with unsafe key: ${key}`)
+        return
+      }
 
       const svg = `${SVG_HEAD}\n${value}\n</svg>`
       await fs.writeFile(join(dir, `${key}.svg`), svg, 'utf-8')

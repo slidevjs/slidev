@@ -554,4 +554,11 @@ Some content
     const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
     expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
   })
+
+  it('records an error when a src: import escapes the allowed roots', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
+    const data = await load({ userRoot: root, roots: [root], allowedRoots: [root] }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /escapes the project root/i.test(e.message))).toBe(true)
+  })
 })

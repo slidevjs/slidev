@@ -1,0 +1,5 @@
+# Entry
+
+---
+src: ../outside.md
+---

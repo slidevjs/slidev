@@ -9,6 +9,16 @@ import { slash } from '@antfu/utils'
 import { createJiti } from 'jiti'
 import YAML from 'yaml'
 import { toAtFS } from './resolver'
+import { isAllowedFile } from './vite/importGuard'
+
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape). Shared
+ * containment predicate reused by the snippet (`<<<`) and `src:` deck-file
+ * reads, and by the Vite slide-import guard (`isAllowedFile`).
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return isAllowedFile(filePath, roots)
+}
 
 const RE_WHITESPACE_ONLY = /^\s*$/
 const RE_QUOTED_STRING = /^(['"])(.*)\1$/

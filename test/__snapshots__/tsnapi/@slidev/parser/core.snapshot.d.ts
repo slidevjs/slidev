@@ -25,6 +25,7 @@ export declare function verifyConfig(_: SlidevConfig, _?: SlidevThemeMeta, _?: (
 // #endregion
 
 // #region Other
+export { isPathInsideRoots }
 export { parseAspectRatio }
 export { parseRangeString }
 export { parseTimesplits }
