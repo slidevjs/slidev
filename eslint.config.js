@@ -17,6 +17,7 @@ export default antfu({
   },
   ignores: [
     'skills/**/*.md',
+    'plans/**',
   ],
 })
   .removeRules(
