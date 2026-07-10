@@ -1,7 +1,7 @@
 import type { ResolvedSlidevOptions, SlidevConfig, SlidevData } from '@slidev/types'
 import type { LogLevel, ViteDevServer } from 'vite'
 import type { Argv } from 'yargs'
-import { exec } from 'node:child_process'
+import { execFile } from 'node:child_process'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
@@ -249,7 +249,8 @@ cli.command(
         name: 'e',
         fullname: 'edit',
         action() {
-          exec(`code "${entry}"`)
+          const editor = process.env.EDITOR || 'code'
+          execFile(editor, [entry])
         },
       },
       {
