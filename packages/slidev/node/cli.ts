@@ -413,6 +413,18 @@ cli.command(
 )
 
 cli.command(
+  'mcp [entry]',
+  'Start an MCP (Model Context Protocol) server over stdio for AI agents to inspect and edit the slides',
+  args => commonOptions(args)
+    .strict()
+    .help(),
+  async ({ entry }) => {
+    const { startMcpStdioServer } = await import('./mcp/stdio')
+    await startMcpStdioServer(await resolveEntry(entry))
+  },
+)
+
+cli.command(
   'theme [subcommand]',
   'Theme related operations',
   (command) => {
@@ -711,6 +723,8 @@ function printInfo(
     console.log(`${dim('  slides overview ')}    > ${blue(`${baseUrl}${overviewPath}`)}`)
     if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__)
       console.log(`${dim('  export slides')}       > ${blue(`${baseUrl}/export/`)}`)
+    if (options.mode === 'dev' && options.data.config.mcp !== false)
+      console.log(`${dim('  mcp server (ai)')}     > ${blue(`http://localhost:${bold(port)}/__mcp`)}`)
     if (options.inspect)
       console.log(`${dim('  vite inspector')}      > ${yellow(`${baseUrl}/__inspect/`)}`)
 

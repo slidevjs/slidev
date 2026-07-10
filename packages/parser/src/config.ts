@@ -45,6 +45,7 @@ export function getDefaultConfig(): SlidevConfig {
     htmlAttrs: {},
     transition: null,
     editor: true,
+    mcp: true,
     contextMenu: null,
     wakeLock: true,
     remote: false,
