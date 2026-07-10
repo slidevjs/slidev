@@ -12,6 +12,7 @@ import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
+import { isPathInsideRoots } from './utils'
 
 const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/
@@ -29,6 +30,12 @@ export function injectPreparserExtensionLoader(fn: PreparserExtensionLoader) {
 export interface LoadRootsInfo {
   roots: string[]
   userRoot: string
+  /**
+   * When provided, `src:` includes resolving outside these roots are
+   * rejected (recorded as an error) instead of being loaded. Optional for
+   * backward compatibility with other `@slidev/parser` consumers.
+   */
+  allowedRoots?: string[]
 }
 
 /**
@@ -115,7 +122,24 @@ export async function load(
       }
       delete frontmatterOverride.src
 
-      if (!existsSync(path)) {
+      const ancestorPaths = new Set((importChain ?? []).map(s => s.filepath))
+      if (path === slide.filepath || ancestorPaths.has(path)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Circular import detected for "${slide.frontmatter.src}" (${path})`,
+        })
+        return
+      }
+
+      if (options.allowedRoots && !isPathInsideRoots(path, options.allowedRoots)) {
+        md.errors ??= []
+        md.errors.push({
+          row: slide.start,
+          message: `Imported markdown escapes the project root: ${path}`,
+        })
+      }
+      else if (!existsSync(path)) {
         md.errors ??= []
         md.errors.push({
           row: slide.start,
