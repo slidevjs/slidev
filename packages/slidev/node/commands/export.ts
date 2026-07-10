@@ -139,27 +139,30 @@ export async function exportNotes({
   if (!output.endsWith('.pdf'))
     output = `${output}.pdf`
 
-  await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
-  await page.waitForLoadState('networkidle')
-  await page.emulateMedia({ media: 'screen' })
+  try {
+    await page.goto(`http://localhost:${port}${base}presenter/print`, { waitUntil: 'networkidle', timeout })
+    await page.waitForLoadState('networkidle')
+    await page.emulateMedia({ media: 'screen' })
 
-  if (wait)
-    await page.waitForTimeout(wait)
+    if (wait)
+      await page.waitForTimeout(wait)
 
-  await page.pdf({
-    path: output,
-    margin: {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-    },
-    printBackground: true,
-    preferCSSPageSize: true,
-  })
-
-  progress.stop()
-  browser.close()
+    await page.pdf({
+      path: output,
+      margin: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
+  }
+  finally {
+    progress.stop()
+    await browser.close()
+  }
 
   return output
 }
@@ -204,25 +207,28 @@ export async function exportSlides({
   const progress = createSlidevProgress(!perSlide)
   progress.start(pages.length)
 
-  if (format === 'pdf') {
-    await genPagePdf()
+  try {
+    if (format === 'pdf') {
+      await genPagePdf()
+    }
+    else if (format === 'png') {
+      await genPagePng(output)
+    }
+    else if (format === 'md') {
+      await genPageMd()
+    }
+    else if (format === 'pptx') {
+      const buffers = await genPagePng(false)
+      await genPagePptx(buffers)
+    }
+    else {
+      throw new Error(`[slidev] Unsupported exporting format "${format}"`)
+    }
   }
-  else if (format === 'png') {
-    await genPagePng(output)
+  finally {
+    progress.stop()
+    await browser.close()
   }
-  else if (format === 'md') {
-    await genPageMd()
-  }
-  else if (format === 'pptx') {
-    const buffers = await genPagePng(false)
-    await genPagePptx(buffers)
-  }
-  else {
-    throw new Error(`[slidev] Unsupported exporting format "${format}"`)
-  }
-
-  progress.stop()
-  browser.close()
 
   const relativeOutput = slash(relative('.', output))
   return relativeOutput.startsWith('.') ? relativeOutput : `./${relativeOutput}`
