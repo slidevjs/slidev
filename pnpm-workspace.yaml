@@ -53,7 +53,6 @@ catalogs:
     nodemon: ^3.1.14
     ovsx: ^1.0.2
     playwright-chromium: ^1.61.1
-    postcss-nested: ^7.0.2
     prettier: ^3.9.4
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.3
@@ -67,7 +66,6 @@ catalogs:
     typescript: ^6.0.3
     undici: ^8.7.0
     undici-types: ^8.7.0
-    vitefu: ^1.1.3
     vitest: ^4.1.10
     vue-tsc: ^3.3.7
     zx: ^8.8.5
@@ -152,6 +150,7 @@ catalogs:
     open: ^11.0.0
     pdf-lib: ^1.17.1
     picomatch: ^4.0.5
+    postcss-nested: ^7.0.2
     pptxgenjs: ^4.0.1
     prompts: ^2.4.2
     public-ip: ^8.0.0
@@ -173,6 +172,7 @@ catalogs:
     vite-plugin-remote-assets: ^2.1.0
     vite-plugin-static-copy: ^4.1.1
     vite-plugin-vue-server-ref: ^1.0.0
+    vitefu: ^1.1.3
     yaml: ^2.9.0
     yargs: ^18.0.0
     zod: ^3.25.76
