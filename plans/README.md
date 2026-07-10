@@ -20,21 +20,21 @@ high-confidence security + correctness, then larger refactors. You may cherry-pi
 
 | Plan | Title | Priority | Effort | Risk | Depends on | Status |
 |------|-------|----------|--------|------|------------|--------|
-| 001 | CI type-checks on every PR | P1 | S | LOW | — | TODO |
-| 002 | Cache the pnpm store in CI | P2 | S | LOW | — | TODO |
-| 003 | Aggregate `verify` script + document build-before-test | P2 | S | LOW | — | TODO |
-| 004 | Fix catalog drift (runtime deps on `catalog:dev`) | P2 | S | LOW | — | TODO |
+| 001 | CI type-checks on every PR | P1 | S | LOW | — | DONE (plan file removed) |
+| 002 | Cache the pnpm store in CI | P2 | S | LOW | — | DONE (plan file removed) |
+| 003 | Aggregate `verify` script + document build-before-test | P2 | S | LOW | — | DONE (plan file removed) |
+| 004 | Fix catalog drift (runtime deps on `catalog:dev`) | P2 | S | LOW | — | DONE (plan file removed) |
 | 005 | Add contributor `AGENTS.md` | P3 | S | LOW | — | TODO |
-| 006 | Replace `exec` shell-string with `execFile` (edit shortcut) | P2 | S | LOW | — | TODO |
-| 007 | Guarantee Chromium teardown on export failure | P1 | S | LOW | — | TODO |
-| 008 | Guard against circular `src:` slide imports | P1 | S | LOW | — | TODO |
+| 006 | Replace `exec` shell-string with `execFile` (edit shortcut) | P2 | S | LOW | — | DONE (plan file removed) |
+| 007 | Guarantee Chromium teardown on export failure | P1 | S | LOW | — | DONE (plan file removed) |
+| 008 | Guard against circular `src:` slide imports | P1 | S | LOW | — | DONE (plan file removed) |
 | 009 | `parseRangeString` lower-bound / NaN validation | P2 | S | LOW | — | TODO |
 | 010 | Harden `getSlidePath` against unknown slide | P2 | S | LOW-MED | — | TODO |
 | 011 | 404 on out-of-range slide-patch request | P3 | S | LOW | — | TODO |
 | 012 | Fix no-op HMR `utils` refresh (missing `await`) | P2 | S | LOW | — | TODO |
 | 013 | Free port + cleanup for build's temp servers | P2 | S-M | MED | — | TODO |
-| 014 | Confine deck-controlled file reads (snippets + `src:`) | P1 | M | MED | — | TODO |
-| 015 | Validate paths in dev-server write sinks | P1 | S-M | MED | — | TODO |
+| 014 | Confine deck-controlled file reads (snippets + `src:`) | P1 | M | MED | — | DONE (plan file removed) |
+| 015 | Validate paths in dev-server write sinks | P1 | S-M | MED | — | DONE (plan file removed) |
 | 016 | Confine export output path from deck `exportFilename` | P2 | S | LOW | — | TODO |
 | 017 | Validate WebSocket Origin on privileged ws handlers | P2 | M | MED | — | TODO |
 | 018 | Enforce `--remote` auth server-side (not just client) | P3 | M-L | MED | — | TODO |

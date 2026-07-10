@@ -25,10 +25,14 @@ jobs:
 
       - uses: actions/checkout@v6
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          cache: pnpm
 
       - name: Setup
         run: npm i -g @antfu/ni
@@ -68,16 +72,17 @@ jobs:
 
       - uses: actions/checkout@v6
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
       - name: Use Node.js lts/*
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          cache: pnpm
 
       - name: Setup
         run: npm i -g @antfu/ni
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
 
       # pnpm v11 stores globally-installed binaries in `$PNPM_HOME/bin` instead
       # of directly in `$PNPM_HOME`; without this, `pnpm i -g` aborts with

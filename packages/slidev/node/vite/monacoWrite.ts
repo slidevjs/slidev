@@ -26,7 +26,12 @@ export function createMonacoWriterPlugin({ userRoot }: ResolvedSlidevOptions): P
               console.error(`[Slidev] Unauthorized file write: ${file}`)
               return
             }
-            const filepath = path.join(userRoot, file)
+            const filepath = path.resolve(userRoot, file)
+            const rel = path.relative(userRoot, filepath)
+            if (rel.startsWith('..') || path.isAbsolute(rel)) {
+              console.error(`[slidev] Refusing monaco write outside project root: ${file}`)
+              return
+            }
             // eslint-disable-next-line no-console
             console.log('[Slidev] Writing file:', filepath)
             await fs.writeFile(filepath, content, 'utf-8')

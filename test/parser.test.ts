@@ -546,4 +546,19 @@ Some content
       expect(images).toEqual(['/image.PNG', '/image.JpG', '/image.WEBP'])
     })
   })
+
+  it('detects circular src imports without overflowing', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/circular')
+    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'a.md'))
+    // Must return (not hang / overflow) and record a circular-import diagnostic
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
+  })
+
+  it('records an error when a src: import escapes the allowed roots', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
+    const data = await load({ userRoot: root, roots: [root], allowedRoots: [root] }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.some(e => /escapes the project root/i.test(e.message))).toBe(true)
+  })
 })

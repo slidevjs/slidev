@@ -22,7 +22,16 @@ export async function resolveOptions(
 ): Promise<ResolvedSlidevOptions> {
   const entry = await resolveEntry(entryOptions.entry)
   const rootsInfo = await getRoots(entry)
-  const loaded = await parser.load({ userRoot: rootsInfo.userRoot, roots: [rootsInfo.userRoot] }, entry, undefined, mode)
+  const loaded = await parser.load(
+    {
+      userRoot: rootsInfo.userRoot,
+      roots: [rootsInfo.userRoot],
+      allowedRoots: uniq([rootsInfo.userWorkspaceRoot, rootsInfo.userRoot]),
+    },
+    entry,
+    undefined,
+    mode,
+  )
 
   // Load theme data first, because it may affect the config
   let themeRaw = entryOptions.theme || loaded.headmatter.theme as string | null | undefined

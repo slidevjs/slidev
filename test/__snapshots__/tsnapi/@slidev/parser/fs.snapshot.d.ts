@@ -5,6 +5,7 @@
 export interface LoadRootsInfo {
   roots: string[];
   userRoot: string;
+  allowedRoots?: string[];
 }
 // #endregion
 
@@ -22,6 +23,7 @@ export declare function save(_: SlidevMarkdown): Promise<string>;
 export { detectFeatures }
 export { extractImagesUsage }
 export { getDefaultConfig }
+export { isPathInsideRoots }
 export { parse }
 export { parseAspectRatio }
 export { parseRangeString }

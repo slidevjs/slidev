@@ -5,6 +5,7 @@ import path from 'node:path'
 import { slash } from '@antfu/utils'
 import { yellow } from 'ansis'
 import lz from 'lz-string'
+import { isPathInsideRoots } from '../utils'
 import { regexSlideSourceId } from '../vite/common'
 import { monacoWriterWhitelist } from '../vite/monacoWrite'
 
@@ -107,7 +108,7 @@ function findRegion(lines: Array<string>, regionName: string) {
 // eslint-disable-next-line regexp/no-super-linear-backtracking
 export const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
 
-export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo) {
+export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo, allowedRoots: string[] = [userRoot]) {
   const match = lineText.trimStart().match(RE_SNIPPET_IMPORT)
   if (!match)
     return null
@@ -122,6 +123,10 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
 
   lang = lang.trim() || path.extname(filepath).slice(1)
   meta = meta.trim()
+
+  if (!isPathInsideRoots(src, allowedRoots)) {
+    throw new Error(`Code snippet path escapes the project root: ${src}`)
+  }
 
   const isAFile = fs.existsSync(src) && fs.statSync(src).isFile()
   if (!isAFile) {
@@ -146,7 +151,8 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
   return { content, filepath, lang, meta, src }
 }
 
-export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
+export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
+  const allowedRoots = [...new Set([userWorkspaceRoot, userRoot, ...(roots ?? [])].filter(Boolean))]
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
@@ -167,7 +173,7 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, data: { 
       return false
     }
 
-    const snippet = resolveSnippetImport(lineText, userRoot, slide)
+    const snippet = resolveSnippetImport(lineText, userRoot, slide, allowedRoots)
     if (!snippet)
       return false
 

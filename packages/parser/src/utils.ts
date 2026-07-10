@@ -1,6 +1,19 @@
+import { isAbsolute, relative } from 'node:path'
 import { isNumber, range, uniq } from '@antfu/utils'
 
 export * from './timesplit'
+
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape).
+ * Inlined here (rather than imported from the `slidev` package) because
+ * `@slidev/parser` must stay independent of `@slidev/slidev`.
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return roots.some((root) => {
+    const rel = relative(root, filePath)
+    return rel === '' || (!!rel && !rel.startsWith('..') && !isAbsolute(rel))
+  })
+}
 
 const RE_ASPECT_RATIO_SEPARATOR = /[:/x|]/
 
