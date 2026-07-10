@@ -79,7 +79,7 @@ We recommend using `npm init slidev@latest` to scaffold your project, which cont
 
 To deploy your slides on [GitHub Pages](https://pages.github.com/) via GitHub Actions, follow these steps:
 
-1. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`. (Do not choose `Deploy from a branch` and upload the `dist` directory, which is not recommended.)
+1. In your repository, go to `Settings` > `Pages`. Under `Build and deployment`, select `GitHub Actions`. (Do not choose `Deploy from a branch` and upload the `dist` directory, which is not recommended.) Alternatively, the `enablement: true` option in `configure-pages` can auto-enable Pages for you.
 2. Create `.github/workflows/deploy.yml` with the following content to deploy your slides to GitHub Pages via GitHub Actions.
 
 ::: details deploy.yml
@@ -94,6 +94,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -104,9 +106,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 'lts/*'
 
@@ -120,16 +122,15 @@ jobs:
         run: nr build --base /${{github.event.repository.name}}/
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -139,7 +140,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 ```
 
 :::
@@ -159,7 +160,7 @@ publish = 'dist'
 command = 'npm run build'
 
 [build.environment]
-NODE_VERSION = '20'
+NODE_VERSION = '24'
 
 [[redirects]]
 from = '/*'

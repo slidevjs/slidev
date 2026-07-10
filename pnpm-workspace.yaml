@@ -91,6 +91,7 @@ catalogs:
     '@vueuse/motion': ^3.0.3
     drauu: ^1.0.0
     file-saver: ^2.0.5
+    fitty: ^2.4.2
     floating-vue: ^5.2.2
     fuse.js: ^7.4.1
     katex: ^0.17.0
@@ -120,6 +121,7 @@ catalogs:
     '@comark/markdown-it': ^0.3.4
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
+    '@modelcontextprotocol/sdk': ^1.29.0
     '@shikijs/twoslash': ^4.2.0
     '@shikijs/vitepress-twoslash': ^4.2.0
     '@unocss/extractor-mdc': ^66.7.0
@@ -173,6 +175,7 @@ catalogs:
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.9.0
     yargs: ^18.0.0
+    zod: ^3.25.76
   themes:
     '@slidev/theme-default': ^0.25.0
     '@slidev/theme-seriph': ^0.25.0

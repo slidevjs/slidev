@@ -2,7 +2,7 @@ import type { AppContext } from '@slidev/types'
 import type { App } from 'vue'
 import TwoSlashFloatingVue from '@shikijs/vitepress-twoslash/client'
 import { createHead } from '@unhead/vue/client'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import setups from '#slidev/setups/main'
 import { createVClickDirectives } from '../modules/v-click'
 import { createVDragDirective } from '../modules/v-drag'
@@ -22,9 +22,11 @@ export default async function setupMain(app: App) {
   window.addEventListener('resize', setMaxHeight)
 
   const router = createRouter({
-    history: __SLIDEV_HASH_ROUTE__
-      ? createWebHashHistory(import.meta.env.BASE_URL)
-      : createWebHistory(import.meta.env.BASE_URL),
+    history: __SLIDEV_MEMORY_ROUTE__
+      ? createMemoryHistory(import.meta.env.BASE_URL)
+      : __SLIDEV_HASH_ROUTE__
+        ? createWebHashHistory(import.meta.env.BASE_URL)
+        : createWebHistory(import.meta.env.BASE_URL),
     routes: setupRoutes(),
   })
 

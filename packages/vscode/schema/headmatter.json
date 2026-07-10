@@ -258,10 +258,11 @@
           "type": "string",
           "enum": [
             "hash",
-            "history"
+            "history",
+            "memory"
           ],
-          "description": "Router mode for vue-router",
-          "markdownDescription": "Router mode for vue-router",
+          "description": "Router mode for vue-router\n\n- `history`: the slide number is reflected in the URL path\n- `hash`: hash-based routing, for static hosts or subdirectory deploys\n- `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven \"follower\" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)",
+          "markdownDescription": "Router mode for vue-router\n\n- `history`: the slide number is reflected in the URL path\n- `hash`: hash-based routing, for static hosts or subdirectory deploys\n- `memory`: routing is kept in memory, so the URL never reflects the slide number and cannot be used to navigate — useful for kiosk or externally driven \"follower\" decks (deep-links, `/presenter`, `/overview` and export-by-URL are unavailable)",
           "default": "history"
         },
         "aspectRatio": {
@@ -410,6 +411,12 @@
           "type": "boolean",
           "description": "Enable built-in editor",
           "markdownDescription": "Enable built-in editor",
+          "default": true
+        },
+        "mcp": {
+          "type": "boolean",
+          "description": "Enable the MCP (Model Context Protocol) server endpoint on the dev server, allowing AI agents to inspect and edit the slides",
+          "markdownDescription": "Enable the MCP (Model Context Protocol) server endpoint on the dev server,\nallowing AI agents to inspect and edit the slides",
           "default": true
         },
         "contextMenu": {
