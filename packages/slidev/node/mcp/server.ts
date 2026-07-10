@@ -77,7 +77,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'get-slidev-info',
+    'slidev-get-info',
     {
       title: 'Get deck info',
       description: 'Get an overview of the Slidev deck: entry file, title, slide count, markdown files, and (when a dev server is running) the server URL and current position of the live presentation.',
@@ -108,7 +108,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'list-slides',
+    'slidev-list-slides',
     {
       title: 'List slides',
       description: 'List all slides of the deck with their number, title, layout, and source file. Slides hidden with `hide`/`disabled` frontmatter are not included.',
@@ -121,7 +121,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'get-slide',
+    'slidev-get-slide',
     {
       title: 'Get slide',
       description: 'Get the full source of one slide: frontmatter, Markdown content, and speaker note.',
@@ -144,7 +144,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'update-slide',
+    'slidev-update-slide',
     {
       title: 'Update slide',
       description: 'Update the content, speaker note, and/or frontmatter of a slide. Only the provided fields are changed. Pass an empty string to clear the content or note. In `frontmatter`, only the given keys are patched; pass `null` as a value to delete that key.',
@@ -165,7 +165,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'insert-slide',
+    'slidev-insert-slide',
     {
       title: 'Insert slide',
       description: 'Insert a new slide after an existing slide (into the same markdown file). To add a slide at the very end, pass the last slide number.',
@@ -184,7 +184,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'remove-slide',
+    'slidev-remove-slide',
     {
       title: 'Remove slide',
       description: 'Remove a slide from the deck (deletes it from its source markdown file).',
@@ -199,7 +199,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   )
 
   server.registerTool(
-    'move-slide',
+    'slidev-move-slide',
     {
       title: 'Move slide',
       description: 'Move a slide before or after another slide to reorder the deck. Both slides must be in the same markdown file. To swap two adjacent slides, move one after the other.',
@@ -219,7 +219,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
   if (ctx.nav) {
     const nav = ctx.nav
     server.registerTool(
-      'goto-slide',
+      'slidev-goto-slide',
       {
         title: 'Go to slide',
         description: 'Navigate the live presentation (all connected browsers) to a given slide, e.g. to visually verify a slide after editing it.',

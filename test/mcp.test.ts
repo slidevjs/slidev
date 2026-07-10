@@ -248,25 +248,25 @@ describe('mcp server', () => {
     const { client } = await createServerAndClient()
     const { tools } = await client.listTools()
     expect(tools.map(t => t.name).sort()).toEqual([
-      'get-slide',
-      'get-slidev-info',
-      'insert-slide',
-      'list-slides',
-      'move-slide',
-      'remove-slide',
-      'update-slide',
+      'slidev-get-info',
+      'slidev-get-slide',
+      'slidev-insert-slide',
+      'slidev-list-slides',
+      'slidev-move-slide',
+      'slidev-remove-slide',
+      'slidev-update-slide',
     ])
   })
 
   it('exposes goto-slide only when navigation is available', async () => {
     const { client } = await createServerAndClient({ getState: () => ({ page: 1, clicks: 0 }), go: () => {} })
     const { tools } = await client.listTools()
-    expect(tools.map(t => t.name)).toContain('goto-slide')
+    expect(tools.map(t => t.name)).toContain('slidev-goto-slide')
   })
 
   it('gets deck info', async () => {
     const { client } = await createServerAndClient()
-    const info = JSON.parse(textOf(await client.callTool({ name: 'get-slidev-info', arguments: {} })))
+    const info = JSON.parse(textOf(await client.callTool({ name: 'slidev-get-info', arguments: {} })))
     expect(info.title).toBe('Test Deck')
     expect(info.totalSlides).toBe(6)
     expect(info.theme).toBe('default')
@@ -275,7 +275,7 @@ describe('mcp server', () => {
 
   it('lists slides', async () => {
     const { client } = await createServerAndClient()
-    const slides = JSON.parse(textOf(await client.callTool({ name: 'list-slides', arguments: {} })))
+    const slides = JSON.parse(textOf(await client.callTool({ name: 'slidev-list-slides', arguments: {} })))
     expect(slides).toHaveLength(6)
     expect(slides[1]).toMatchObject({ no: 2, title: 'Slide 2', hasNote: true })
     expect(slides[3]).toMatchObject({ no: 4, title: 'Sub 1', importedBySrcDirective: true })
@@ -283,19 +283,19 @@ describe('mcp server', () => {
 
   it('gets and updates a slide', async () => {
     const { client } = await createServerAndClient()
-    const slide = JSON.parse(textOf(await client.callTool({ name: 'get-slide', arguments: { no: 3 } })))
+    const slide = JSON.parse(textOf(await client.callTool({ name: 'slidev-get-slide', arguments: { no: 3 } })))
     expect(slide).toMatchObject({ no: 3, title: 'Slide 3', layout: 'two-cols' })
 
-    const update = await client.callTool({ name: 'update-slide', arguments: { no: 3, content: '# Slide 3 via MCP' } })
+    const update = await client.callTool({ name: 'slidev-update-slide', arguments: { no: 3, content: '# Slide 3 via MCP' } })
     expect(update.isError).toBeFalsy()
 
-    const updated = JSON.parse(textOf(await client.callTool({ name: 'get-slide', arguments: { no: 3 } })))
+    const updated = JSON.parse(textOf(await client.callTool({ name: 'slidev-get-slide', arguments: { no: 3 } })))
     expect(updated.content).toBe('# Slide 3 via MCP')
   })
 
   it('returns tool errors for invalid calls', async () => {
     const { client } = await createServerAndClient()
-    const result = await client.callTool({ name: 'get-slide', arguments: { no: 99 } })
+    const result = await client.callTool({ name: 'slidev-get-slide', arguments: { no: 99 } })
     expect(result.isError).toBe(true)
     expect(textOf(result)).toMatch(/does not exist/)
   })
@@ -304,14 +304,14 @@ describe('mcp server', () => {
     const go = vi.fn()
     const { client } = await createServerAndClient({ getState: () => ({ page: 2, clicks: 1 }), go })
 
-    const result = await client.callTool({ name: 'goto-slide', arguments: { no: 4 } })
+    const result = await client.callTool({ name: 'slidev-goto-slide', arguments: { no: 4 } })
     expect(result.isError).toBeFalsy()
     expect(go).toHaveBeenCalledWith(4, 0)
 
-    const info = JSON.parse(textOf(await client.callTool({ name: 'get-slidev-info', arguments: {} })))
+    const info = JSON.parse(textOf(await client.callTool({ name: 'slidev-get-info', arguments: {} })))
     expect(info.server).toBeUndefined() // no server url in this harness
 
-    await expect(client.callTool({ name: 'goto-slide', arguments: { no: 99 } }))
+    await expect(client.callTool({ name: 'slidev-goto-slide', arguments: { no: 99 } }))
       .resolves
       .toMatchObject({ isError: true })
   })
