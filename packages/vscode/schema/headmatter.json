@@ -412,6 +412,12 @@
           "markdownDescription": "Enable built-in editor",
           "default": true
         },
+        "mcp": {
+          "type": "boolean",
+          "description": "Enable the MCP (Model Context Protocol) server endpoint on the dev server, allowing AI agents to inspect and edit the slides",
+          "markdownDescription": "Enable the MCP (Model Context Protocol) server endpoint on the dev server,\nallowing AI agents to inspect and edit the slides",
+          "default": true
+        },
         "contextMenu": {
           "anyOf": [
             {

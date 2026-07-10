@@ -84,6 +84,12 @@ Format the markdown file. Note that this won't format the content of the slides,
 
 - `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
 
+## `slidev mcp [entry]` {#mcp}
+
+Start an MCP (Model Context Protocol) server over stdio for AI agents to inspect and edit the slides. See <LinkInline link="features/mcp" />.
+
+- `[entry]` (`string`, default: `slides.md`): path to the slides markdown entry.
+
 ## `slidev theme [subcommand]` {#theme}
 
 Theme-related operations.

@@ -93,6 +93,14 @@ slidev format [entry]
 
 Formats the slides markdown file.
 
+## MCP Server
+
+```bash
+slidev mcp [entry]
+```
+
+Starts an MCP (Model Context Protocol) server over stdio for AI agents to inspect and edit the slides. When a dev server is running, an HTTP MCP endpoint is also available at `http://localhost:<port>/__mcp`. See [tool-mcp](tool-mcp.md).
+
 ## Theme Eject
 
 ```bash

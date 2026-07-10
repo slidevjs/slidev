@@ -217,6 +217,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   editor?: boolean
   /**
+   * Enable the MCP (Model Context Protocol) server endpoint on the dev server,
+   * allowing AI agents to inspect and edit the slides
+   *
+   * @default true
+   */
+  mcp?: boolean
+  /**
    * Enable context menu
    *
    * @default true

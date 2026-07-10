@@ -31,6 +31,7 @@
     "@antfu/eslint-config": "catalog:dev",
     "@antfu/ni": "catalog:prod",
     "@antfu/utils": "catalog:frontend",
+    "@modelcontextprotocol/sdk": "catalog:prod",
     "@shikijs/markdown-it": "catalog:frontend",
     "@slidev/cli": "workspace:*",
     "@slidev/parser": "workspace:*",

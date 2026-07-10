@@ -121,6 +121,7 @@ catalogs:
     '@comark/markdown-it': ^0.3.4
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
+    '@modelcontextprotocol/sdk': ^1.29.0
     '@shikijs/twoslash': ^4.2.0
     '@shikijs/vitepress-twoslash': ^4.2.0
     '@unocss/extractor-mdc': ^66.7.0
@@ -173,6 +174,7 @@ catalogs:
     vite-plugin-vue-server-ref: ^1.0.0
     yaml: ^2.9.0
     yargs: ^18.0.0
+    zod: ^3.25.76
   themes:
     '@slidev/theme-default': ^0.25.0
     '@slidev/theme-seriph': ^0.25.0
