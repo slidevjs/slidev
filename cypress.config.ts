@@ -8,7 +8,9 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.spec.*',
     supportFile: false,
     setupNodeEvents(on) {
-      on('after:run', () => stopBasePathServer())
+      on('after:run', async () => {
+        await stopBasePathServer()
+      })
       on('task', {
         startBasePathServer,
         stopBasePathServer,
