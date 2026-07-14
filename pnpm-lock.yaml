@@ -282,9 +282,6 @@ catalogs:
     magic-string-stack:
       specifier: ^1.1.0
       version: 1.1.0
-    markdown-exit:
-      specifier: ^1.1.0-beta.2
-      version: 1.1.0-beta.2
     markdown-it-footnote:
       specifier: ^4.0.0
       version: 4.0.0
@@ -469,6 +466,9 @@ catalogs:
       specifier: ^1.24.0
       version: 1.24.0
 
+overrides:
+  markdown-exit: ^1.1.0-beta.2
+
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
 
@@ -557,6 +557,9 @@ importers:
       lint-staged:
         specifier: catalog:dev
         version: 17.0.8
+      markdown-exit:
+        specifier: ^1.1.0-beta.2
+        version: 1.1.0-beta.2
       mermaid:
         specifier: catalog:frontend
         version: 11.16.0
@@ -1046,7 +1049,7 @@ importers:
         specifier: catalog:prod
         version: 1.1.0
       markdown-exit:
-        specifier: catalog:prod
+        specifier: ^1.1.0-beta.2
         version: 1.1.0-beta.2
       markdown-it-footnote:
         specifier: catalog:prod
@@ -7423,9 +7426,6 @@ packages:
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
-
-  markdown-exit@1.0.0-beta.9:
-    resolution: {integrity: sha512-5tzrMKMF367amyBly131vm6eGuWRL2DjBqWaFmPzPbLyuxP0XOmyyyroOAIXuBAMF/3kZbbfqOxvW/SotqKqbQ==}
 
   markdown-exit@1.1.0-beta.2:
     resolution: {integrity: sha512-8CzMGVlFZ4DEfnc8KU+4ycUW2SIOuiXqCHD7z51ecVEi/weyc0f2ylQbCm4KoKuVlTZSuMUMnWT0hTyquZ7anQ==}
@@ -16213,16 +16213,6 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  markdown-exit@1.0.0-beta.9:
-    dependencies:
-      '@types/linkify-it': 5.0.0
-      '@types/mdurl': 2.0.0
-      entities: 7.0.1
-      linkify-it: 5.0.1
-      mdurl: 2.0.0
-      punycode.js: 2.3.1
-      uc.micro: 2.1.0
-
   markdown-exit@1.1.0-beta.2:
     dependencies:
       '@types/linkify-it': 5.0.0
@@ -18756,7 +18746,7 @@ snapshots:
       '@mdit-vue/plugin-component': 3.0.2
       '@mdit-vue/plugin-frontmatter': 3.0.2
       '@mdit-vue/types': 3.0.2
-      markdown-exit: 1.0.0-beta.9
+      markdown-exit: 1.1.0-beta.2
       unplugin: 3.0.0
       unplugin-utils: 0.3.1
       vite: 8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)

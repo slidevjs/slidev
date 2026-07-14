@@ -38,6 +38,11 @@ packages:
 strictPeerDependencies: false
 linkWorkspacePackages: true
 
+overrides:
+  # Dedupe `markdown-exit` so `unplugin-vue-markdown` and Slidev share one version,
+  # otherwise the `md` instance passed to `markdownSetup` mismatches our type.
+  markdown-exit: catalog:prod
+
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
 catalogs:

@@ -6,6 +6,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
+      "vitepress/dist/client/theme-default/components/VPMenuLink.vue": ["./docs/.vitepress/shims/VPMenuLink.ts"],
       "@slidev/client": ["./packages/client/index.ts"],
       "@slidev/client/*": ["./packages/client/*"],
       "@slidev/types": ["./packages/types/src/index.ts"],
