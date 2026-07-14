@@ -1,7 +1,7 @@
 import type { SlidevThemeMeta } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { join } from 'node:path'
+import { join } from 'pathe'
 import { satisfies } from 'semver'
 import { version } from '../../package.json'
 import { createResolver } from '../resolver'

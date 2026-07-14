@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPathInsideRoots } from './utils'
+import { isPathInsideRoots } from './fs'
 
 describe('isPathInsideRoots', () => {
   it('accepts a path nested inside a root', () => {

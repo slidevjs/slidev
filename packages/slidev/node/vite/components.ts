@@ -1,5 +1,5 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
-import { join } from 'node:path'
+import { join } from 'pathe'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 

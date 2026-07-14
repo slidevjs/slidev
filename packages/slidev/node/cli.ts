@@ -4,7 +4,6 @@ import type { Argv } from 'yargs'
 import { execFile } from 'node:child_process'
 import fs from 'node:fs/promises'
 import os from 'node:os'
-import path from 'node:path'
 import process from 'node:process'
 import * as readline from 'node:readline'
 import { verifyConfig } from '@slidev/parser'
@@ -12,6 +11,7 @@ import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } fro
 import equal from 'fast-deep-equal'
 import { getPort } from 'get-port-please'
 import openBrowser from 'open'
+import path from 'pathe'
 import yargs from 'yargs'
 import { version } from '../package.json'
 import { createServer } from './commands/serve'
@@ -725,7 +725,7 @@ function printInfo(
     if (options.utils.define.__SLIDEV_FEATURE_BROWSER_EXPORTER__)
       console.log(`${dim('  export slides')}       > ${blue(`${baseUrl}/export/`)}`)
     if (options.mode === 'dev' && options.data.config.mcp !== false)
-      console.log(`${dim('  mcp server (ai)')}     > ${blue(`http://localhost:${bold(port)}/__mcp`)}`)
+      console.log(`${dim('  mcp server    ')}     > ${blue(`http://localhost:${bold(port)}/__mcp`)}`)
     if (options.inspect)
       console.log(`${dim('  vite inspector')}      > ${yellow(`${baseUrl}/__inspect/`)}`)
 

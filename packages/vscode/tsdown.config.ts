@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
 import { copyFile, mkdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { resolvePath } from 'mlly'
+import { join } from 'pathe'
 import { defineConfig } from 'tsdown'
 import { generateCodeblockPatch } from './syntaxes/codeblock-patch.ts'
 

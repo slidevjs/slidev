@@ -303,6 +303,9 @@ catalogs:
     open:
       specifier: ^11.0.0
       version: 11.0.0
+    pathe:
+      specifier: ^2.0.3
+      version: 2.0.3
     pdf-lib:
       specifier: ^1.17.1
       version: 1.17.1
@@ -891,6 +894,9 @@ importers:
       minimist:
         specifier: catalog:prod
         version: 1.2.8
+      pathe:
+        specifier: catalog:prod
+        version: 2.0.3
       prompts:
         specifier: catalog:prod
         version: 2.4.2
@@ -906,6 +912,9 @@ importers:
       minimist:
         specifier: catalog:prod
         version: 1.2.8
+      pathe:
+        specifier: catalog:prod
+        version: 2.0.3
       prompts:
         specifier: catalog:prod
         version: 2.4.2
@@ -918,6 +927,9 @@ importers:
       '@slidev/types':
         specifier: workspace:*
         version: link:../types
+      pathe:
+        specifier: catalog:prod
+        version: 2.0.3
       yaml:
         specifier: catalog:prod
         version: 2.9.0
@@ -1054,6 +1066,9 @@ importers:
       open:
         specifier: catalog:prod
         version: 11.0.0
+      pathe:
+        specifier: catalog:prod
+        version: 2.0.3
       pdf-lib:
         specifier: catalog:prod
         version: 1.17.1
@@ -1254,6 +1269,9 @@ importers:
       ovsx:
         specifier: catalog:dev
         version: 1.0.2(supports-color@8.1.1)
+      pathe:
+        specifier: catalog:prod
+        version: 2.0.3
       picomatch:
         specifier: catalog:vscode
         version: 4.0.5

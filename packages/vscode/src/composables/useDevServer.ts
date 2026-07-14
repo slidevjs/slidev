@@ -1,7 +1,7 @@
 import type { EffectScope, ShallowRef } from 'reactive-vscode'
 import type { Terminal } from 'vscode'
 import type { SlidevProject } from '../projects'
-import { basename } from 'node:path'
+import { basename } from 'pathe'
 import { effectScope, onScopeDispose, shallowRef, useAbsoluteUri, useDisposable } from 'reactive-vscode'
 import { env, window } from 'vscode'
 import { config } from '../configs'

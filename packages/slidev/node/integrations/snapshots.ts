@@ -1,7 +1,7 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { dirname, join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'pathe'
 
 function resolveSnapshotsDir(options: ResolvedSlidevOptions): string {
   return resolve(dirname(options.entry), '.slidev/snapshots')

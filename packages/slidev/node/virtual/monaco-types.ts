@@ -1,9 +1,9 @@
 import type { VirtualModuleTemplate } from './types'
 import { builtinModules } from 'node:module'
 
-import { join, resolve } from 'node:path'
 import { uniq } from '@antfu/utils'
 import fg from 'fast-glob'
+import { join, resolve } from 'pathe'
 import { toAtFS } from '../resolver'
 
 export const templateMonacoTypes: VirtualModuleTemplate = {

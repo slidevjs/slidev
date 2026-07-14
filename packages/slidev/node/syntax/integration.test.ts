@@ -1,6 +1,6 @@
 import type MagicString from 'magic-string-stack'
-import path from 'node:path'
 import MarkdownExit from 'markdown-exit'
+import path from 'pathe'
 import * as shiki from 'shiki'
 import { expect, it } from 'vitest'
 import { useMarkdownItPlugins } from '.'

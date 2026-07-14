@@ -8,11 +8,22 @@ import type {
 } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
+import { dirname, isAbsolute, relative, resolve } from 'pathe'
 import YAML from 'yaml'
 import { detectFeatures, parse, parseRangeString, stringify } from './core'
-import { isPathInsideRoots } from './utils'
+
+/**
+ * Whether `filePath` resolves inside any of `roots` (no `..` escape).
+ * Inlined here (rather than imported from the `slidev` package) because
+ * `@slidev/parser` must stay independent of `@slidev/slidev`.
+ */
+export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
+  return roots.some((root) => {
+    const rel = relative(root, filePath)
+    return rel === '' || (!!rel && !rel.startsWith('..') && !isAbsolute(rel))
+  })
+}
 
 const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/

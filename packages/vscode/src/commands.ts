@@ -1,5 +1,5 @@
-import { relative } from 'node:path'
 import { slash } from '@antfu/utils'
+import { relative } from 'pathe'
 import { useCommand } from 'reactive-vscode'
 import { ConfigurationTarget, window, workspace } from 'vscode'
 import { useDevServer } from './composables/useDevServer'

@@ -1,5 +1,5 @@
 import type { LoadedSlidevData } from '@slidev/parser/fs'
-import { basename } from 'node:path'
+import { basename } from 'pathe'
 
 export function getSlidesTitle(data: LoadedSlidevData): string {
   // If the title is set via headmatter, it has already been the first slide's title

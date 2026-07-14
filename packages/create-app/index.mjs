@@ -3,12 +3,12 @@
 
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
-import path from 'node:path'
 // @ts-check
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
 

@@ -1,5 +1,5 @@
-import path from 'node:path'
 import MarkdownExit from 'markdown-exit'
+import path from 'pathe'
 import { expect, it } from 'vitest'
 import MarkdownItSnippet, { resolveSnippetImport } from './snippet'
 

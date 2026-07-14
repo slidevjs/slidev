@@ -1,6 +1,6 @@
 import type { ResolvedSlidevOptions, SlidevPluginOptions } from '@slidev/types'
 import { existsSync } from 'node:fs'
-import { join } from 'node:path'
+import { join } from 'pathe'
 
 export async function createStaticCopyPlugin(
   { themeRoots, addonRoots }: ResolvedSlidevOptions,

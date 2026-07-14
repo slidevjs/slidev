@@ -15,6 +15,7 @@ export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>;
 
 // #region Functions
 export declare function injectPreparserExtensionLoader(_: PreparserExtensionLoader): void;
+export declare function isPathInsideRoots(_: string, _: string[]): boolean;
 export declare function load(_: LoadRootsInfo, _: string, _?: Record<string, string> | ((_: string) => Promise<string>), _?: string): Promise<LoadedSlidevData>;
 export declare function save(_: SlidevMarkdown): Promise<string>;
 // #endregion
@@ -23,7 +24,6 @@ export declare function save(_: SlidevMarkdown): Promise<string>;
 export { detectFeatures }
 export { extractImagesUsage }
 export { getDefaultConfig }
-export { isPathInsideRoots }
 export { parse }
 export { parseAspectRatio }
 export { parseRangeString }

@@ -91,6 +91,7 @@
     "monaco-editor": "catalog:monaco",
     "obug": "catalog:prod",
     "open": "catalog:prod",
+    "pathe": "catalog:prod",
     "pdf-lib": "catalog:prod",
     "picomatch": "catalog:prod",
     "plantuml-encoder": "catalog:frontend",

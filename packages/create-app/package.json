@@ -30,6 +30,7 @@
   "dependencies": {
     "ansis": "catalog:prod",
     "minimist": "catalog:prod",
+    "pathe": "catalog:prod",
     "prompts": "catalog:prod",
     "tinyexec": "catalog:prod"
   }

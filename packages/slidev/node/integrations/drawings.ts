@@ -1,8 +1,8 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import fg from 'fast-glob'
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'pathe'
 
 /**
  * Whether `key` is a safe bare slide id that can be joined onto `dir` without

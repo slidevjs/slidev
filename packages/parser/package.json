@@ -36,6 +36,7 @@
   "dependencies": {
     "@antfu/utils": "catalog:frontend",
     "@slidev/types": "workspace:*",
+    "pathe": "catalog:prod",
     "yaml": "catalog:prod"
   },
   "devDependencies": {

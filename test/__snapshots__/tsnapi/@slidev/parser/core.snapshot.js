@@ -18,7 +18,6 @@ export function verifyConfig(_, _, _) {}
 // #endregion
 
 // #region Other
-export { isPathInsideRoots }
 export { parseAspectRatio }
 export { parseRangeString }
 export { parseTimesplits }

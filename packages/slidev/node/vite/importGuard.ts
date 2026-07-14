@@ -1,7 +1,7 @@
 import type { Plugin, ResolvedConfig } from 'vite'
 import { existsSync, realpathSync } from 'node:fs'
-import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import path from 'pathe'
 import { parseSync } from 'vite'
 import { templateLegacyTitles } from '../virtual/deprecated'
 import { templateTitleRendererMd } from '../virtual/titles'

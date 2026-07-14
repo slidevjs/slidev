@@ -1,7 +1,7 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import fs from 'node:fs/promises'
-import path from 'node:path'
+import path from 'pathe'
 
 export const monacoWriterWhitelist = new Set<string>()
 

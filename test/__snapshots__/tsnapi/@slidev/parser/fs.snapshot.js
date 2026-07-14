@@ -3,6 +3,7 @@
  */
 // #region Functions
 export function injectPreparserExtensionLoader(_) {}
+export function isPathInsideRoots(_, _) {}
 export async function load(_, _, _, _) {}
 export async function save(_) {}
 // #endregion
@@ -11,7 +12,6 @@ export async function save(_) {}
 export { detectFeatures }
 export { extractImagesUsage }
 export { getDefaultConfig }
-export { isPathInsideRoots }
 export { parse }
 export { parseAspectRatio }
 export { parseRangeString }

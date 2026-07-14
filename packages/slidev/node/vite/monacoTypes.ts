@@ -1,9 +1,9 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin } from 'vite'
 import fs from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
 import { slash } from '@antfu/utils'
 import fg from 'fast-glob'
+import { dirname, resolve } from 'pathe'
 import { findDepPkgJsonPath } from 'vitefu'
 import { toAtFS } from '../resolver'
 

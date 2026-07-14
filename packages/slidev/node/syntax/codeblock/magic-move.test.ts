@@ -1,6 +1,6 @@
-import path from 'node:path'
 import lz from 'lz-string'
 import MarkdownExit from 'markdown-exit'
+import path from 'pathe'
 import * as shiki from 'shiki'
 import { expect, it } from 'vitest'
 import { MarkdownItCodeblocks } from '.'

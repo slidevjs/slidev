@@ -1,5 +1,5 @@
-import { basename } from 'node:path'
 import { slash } from '@antfu/utils'
+import { basename } from 'pathe'
 import { workspace } from 'vscode'
 import { projects } from '../projects'
 

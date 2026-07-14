@@ -1,4 +1,4 @@
-import { resolve, sep } from 'node:path'
+import { resolve, sep } from 'pathe'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   computeInvocationSearchPaths,

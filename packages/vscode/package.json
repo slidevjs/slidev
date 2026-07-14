@@ -633,6 +633,7 @@
     "get-port-please": "catalog:prod",
     "mlly": "catalog:prod",
     "ovsx": "catalog:dev",
+    "pathe": "catalog:prod",
     "picomatch": "catalog:vscode",
     "prettier": "catalog:vscode",
     "reactive-vscode": "catalog:vscode",

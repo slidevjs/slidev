@@ -5,7 +5,6 @@
 export { detectFeatures }
 export { extractImagesUsage }
 export { getDefaultConfig }
-export { isPathInsideRoots }
 export { parse }
 export { parseAspectRatio }
 export { parseRangeString }
