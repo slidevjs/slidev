@@ -26,6 +26,7 @@ export interface SlidevContextNav {
   currentSlideRoute: ComputedRef<SlideRoute>
   currentTransition: ComputedRef<TransitionGroupProps | undefined>
   currentLayout: ComputedRef<string>
+  currentFrontmatter: ComputedRef<Record<string, any>>
 
   nextRoute: ComputedRef<SlideRoute>
   prevRoute: ComputedRef<SlideRoute>
@@ -105,6 +106,7 @@ export function useNavBase(
   const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
+  const currentFrontmatter = computed(() => currentSlideRoute.value.meta.slide.frontmatter)
 
   const clicks = computed(() => clicksContext.value.current)
   const clicksStart = computed(() => clicksContext.value.clicksStart)
@@ -223,6 +225,7 @@ export function useNavBase(
     currentPage: currentSlideNo,
     currentSlideRoute,
     currentLayout,
+    currentFrontmatter,
     currentTransition,
     clicksDirection,
     nextRoute,
