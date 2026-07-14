@@ -71,6 +71,7 @@
     "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "vite": "catalog:prod",
+    "vite-plugin-pwa": "catalog:prod",
     "vitest": "catalog:dev",
     "vue-tsc": "catalog:dev",
     "zx": "catalog:dev"

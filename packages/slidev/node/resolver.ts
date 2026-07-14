@@ -7,7 +7,7 @@ import { parseNi, run } from '@antfu/ni'
 import { ensurePrefix, slash } from '@antfu/utils'
 import { underline, yellow } from 'ansis'
 import globalDirs from 'global-directory'
-import { resolvePath } from 'mlly'
+import { resolve as resolveModuleUrl, resolvePath } from 'mlly'
 import { dirname, join, relative, resolve, sep } from 'pathe'
 import prompts from 'prompts'
 import { resolveGlobal } from 'resolve-global'
@@ -164,6 +164,78 @@ export async function resolveImportPath(importName: string, ensure = false) {
 
   if (ensure)
     throw new Error(`Failed to resolve package "${importName}"`)
+}
+
+/**
+ * Import an optional dependency (typically an optional peer dependency such as
+ * `vite-plugin-pwa`) that the user may or may not have installed. Resolution is
+ * attempted, in order, from the user's project root, the workspace root, the
+ * global registry (when Slidev runs globally), and finally the cli's own
+ * dependencies. Returns `undefined` when the package can't be resolved anywhere.
+ */
+export async function importOptionalDependency<T = any>(name: string): Promise<T | undefined> {
+  const roots: string[] = []
+  try {
+    const { userRoot, userWorkspaceRoot } = await getRoots()
+    roots.push(userRoot)
+    if (userWorkspaceRoot !== userRoot)
+      roots.push(userWorkspaceRoot)
+  }
+  catch { }
+
+  for (const root of roots) {
+    try {
+      return await import(await resolveModuleUrl(name, { url: pathToFileURL(`${root}${sep}`).href }))
+    }
+    catch { }
+  }
+
+  if (isInstalledGlobally.value) {
+    try {
+      return await import(resolveGlobal(name))
+    }
+    catch { }
+  }
+
+  try {
+    return await import(name)
+  }
+  catch { }
+
+  return undefined
+}
+
+/**
+ * Prompt the user to install a missing optional dependency, then install it
+ * with the detected package manager. Exits the process when the user declines
+ * or when stdin isn't interactive (so it can't prompt).
+ *
+ * `purpose` describes why the package is needed, e.g. `The "pwa" option`.
+ */
+export async function promptForOptionalInstallation(pkgName: string, purpose: string): Promise<void> {
+  // Check if stdin is available for prompts (i.e., is a TTY)
+  if (!process.stdin.isTTY) {
+    console.error(
+      `${purpose} requires the "${pkgName}" package, which is not installed, and cannot prompt for installation. `
+      + `Install it with \`npm i -D ${pkgName}\` (or your package manager's equivalent) and try again.`,
+    )
+    process.exit(1)
+  }
+
+  const { confirm } = await prompts({
+    name: 'confirm',
+    initial: 'Y',
+    type: 'confirm',
+    message: `${purpose} requires the "${yellow(pkgName)}" package, which is not installed ${underline(isInstalledGlobally.value ? 'globally' : 'in your project')}. Install it now?`,
+  })
+
+  if (!confirm)
+    process.exit(1)
+
+  if (isInstalledGlobally.value)
+    await run(parseNi, ['-g', pkgName])
+  else
+    await run(parseNi, [pkgName])
 }
 
 /**

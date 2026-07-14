@@ -602,6 +602,9 @@ importers:
       vite:
         specifier: catalog:prod
         version: 8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)
+      vite-plugin-pwa:
+        specifier: catalog:prod
+        version: 1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
       vitest:
         specifier: catalog:dev
         version: 4.1.10(@types/node@25.9.5)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -1145,8 +1148,8 @@ importers:
         specifier: catalog:prod
         version: 11.4.1(@nuxt/kit@3.13.0(rollup@4.62.2))(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
       vite-plugin-pwa:
-        specifier: catalog:prod
-        version: 1.3.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
+        specifier: ^1.0.0
+        version: 1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
       vite-plugin-remote-assets:
         specifier: catalog:prod
         version: 2.1.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -18900,7 +18903,7 @@ snapshots:
     optionalDependencies:
       '@nuxt/kit': 3.13.0(rollup@4.62.2)
 
-  vite-plugin-pwa@1.3.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1):
+  vite-plugin-pwa@1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       pretty-bytes: 6.1.1
