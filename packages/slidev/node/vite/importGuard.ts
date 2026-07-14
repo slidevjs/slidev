@@ -35,6 +35,13 @@ export function createSlideImportGuardPlugin(): Plugin {
 
       const importer = filePathFromId(id) ?? id
       await Promise.all(extractImportSources(code, id).map(async ({ value, start }) => {
+        // Public-directory assets are referenced by root-absolute URL (`/foo.png`)
+        // and served by Vite's public-dir middleware, not module-resolved. Such a
+        // URL is a Vite URL, not a filesystem-absolute path, so exempt it from the
+        // fs.allow check when it maps to an existing file under `config.publicDir`.
+        if (isPublicAsset(value, config))
+          return
+
         const resolved = await this.resolve(value, importer, { skipSelf: true })
         if (!resolved || resolved.external)
           return
@@ -80,6 +87,24 @@ export function filePathFromId(id: string): string | null {
 
 export function isAllowedFile(filePath: string, allowRoots: string[]) {
   return allowRoots.some(root => isFileInRoot(root, filePath))
+}
+
+/**
+ * Whether a static import `value` is a public-directory asset, i.e. a
+ * root-absolute Vite URL (`/foo.png`) that maps to an existing file under
+ * `config.publicDir`. The Vue SFC compiler turns `<img src="/foo.png">` into a
+ * static `import`, but public assets are served by URL rather than
+ * module-resolved, so `/foo.png` is a Vite URL — not a filesystem-absolute path
+ * — and must be exempted from the `server.fs.allow` check.
+ */
+export function isPublicAsset(value: string, config: Pick<ResolvedConfig, 'publicDir'>): boolean {
+  // `publicDir` is `''` when disabled (`publicDir: false`). Vite treats `/@fs/`,
+  // `/@id/`, … as internal URLs, never public assets, so leave those alone.
+  if (!config.publicDir || !value.startsWith('/') || value.startsWith('/@'))
+    return false
+  const publicDir = normalizeFsPath(config.publicDir)
+  const publicPath = normalizeFsPath(path.join(publicDir, cleanUrl(value).slice(1)))
+  return isFileInRoot(publicDir, publicPath) && existsSync(publicPath)
 }
 
 export function extractImportSources(code: string, id: string): ImportSource[] {
