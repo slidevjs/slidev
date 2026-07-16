@@ -303,6 +303,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/L-C-P/slidev-addon-second-screen',
   },
+  {
+    id: 'slidev-addon-sandpack',
+    name: 'Sandpack',
+    description: 'Build stepped, multi-file Sandpack live-code demos from readable Markdown.',
+    tags: ['Code runner', 'React', 'Integration'],
+    author: {
+      name: 'Nir Tamir',
+      link: 'https://github.com/nirtamir2',
+    },
+    repo: 'https://github.com/nirtamir2/slidev-addon-sandpack',
+  },
   // Add yours here!
   {
     id: '',
