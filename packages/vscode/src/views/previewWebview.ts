@@ -191,13 +191,17 @@ export const usePreviewWebview = defineService(() => {
     },
   )
   watch(
-    [() => config['preview-sync'], focusedSlideNo, viewportSlideNo, previewMode],
-    ([enabled, focusedNo, viewportNo, mode]) => {
-      if (enabled && mode === 'slide' && focusedNo != null && previewNavState.no !== focusedNo) {
-        postSlidevMessage('navigate', { no: focusedNo, clicks: 999999 })
+    [
+      () => config['preview-sync'],
+      previewMode,
+      () => previewMode.value === 'slide' ? focusedSlideNo.value : viewportSlideNo.value,
+    ],
+    ([enabled, mode, no]) => {
+      if (enabled && mode === 'slide' && no != null && previewNavState.no !== no) {
+        postSlidevMessage('navigate', { no, clicks: 999999 })
       }
-      else if (enabled && mode === 'overview' && viewportNo != null) {
-        scrollOverviewToSlide(viewportNo)
+      else if (enabled && mode === 'overview' && no != null) {
+        scrollOverviewToSlide(no)
       }
     },
   )
