@@ -46,12 +46,15 @@ function getFileTreeItem(file: string): TreeItem {
 
 export const useProjectsTree = defineService(() => {
   const treeData = computed(() => {
-    return [...projects.values()].map(project => ({
-      treeItem: getProjectTreeItem(project),
-      children: Object.keys(project.data.markdownFiles)
-        .filter(file => file.toLowerCase() !== project.entry.toLowerCase())
-        .map(file => ({ treeItem: getFileTreeItem(file) })),
-    }))
+    return [...projects.values()]
+      .sort((a, b) => a.entry.localeCompare(b.entry, undefined, { numeric: true }))
+      .map(project => ({
+        treeItem: getProjectTreeItem(project),
+        children: Object.keys(project.data.markdownFiles)
+          .filter(file => file.toLowerCase() !== project.entry.toLowerCase())
+          .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+          .map(file => ({ treeItem: getFileTreeItem(file) })),
+      }))
   })
 
   const treeItems = shallowRef<TreeViewNode[]>([])
