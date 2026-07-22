@@ -28,6 +28,17 @@ pnpm run export       # Export to PDF (requires playwright-chromium)
 
 **Verify**: After `pnpm run dev`, confirm slides load at `http://localhost:3030`. After `pnpm run export`, check the output PDF exists in the project root.
 
+## Reference Loading Guidance
+
+This file is an index. For non-trivial decks, load the relevant files from `references/` before writing or editing slides. In particular:
+
+- Dense generated slides, large diagrams, wide tables, or long code: [layout-content-fit](references/layout-content-fit.md), [layout-transform](references/layout-transform.md), [layout-zoom](references/layout-zoom.md), and [code-max-height](references/code-max-height.md)
+- Mermaid diagrams: [diagram-mermaid](references/diagram-mermaid.md) plus [layout-content-fit](references/layout-content-fit.md)
+- Export behavior: [core-exporting](references/core-exporting.md), [build-pdf](references/build-pdf.md), and [core-hosting](references/core-hosting.md)
+- Advanced Markdown syntax: [core-syntax](references/core-syntax.md), [syntax-comark](references/syntax-comark.md), and [syntax-block-frontmatter](references/syntax-block-frontmatter.md)
+
+When creating slides for export, treat a successful build as necessary but not sufficient. Check that visible content fits the slide canvas and remains readable in the browser or exported artifact.
+
 ## Basic Syntax
 
 ```md
@@ -101,6 +112,7 @@ Presenter notes go here
 | Feature | Usage | Reference |
 |---------|-------|-----------|
 | Canvas size | `canvasWidth`, `aspectRatio` | [layout-canvas-size](references/layout-canvas-size.md) |
+| Content fit | Split dense slides, constrain overflow, verify exports | [layout-content-fit](references/layout-content-fit.md) |
 | Zoom slide | `zoom: 0.8` | [layout-zoom](references/layout-zoom.md) |
 | Scale elements | `<Transform :scale="0.5">` | [layout-transform](references/layout-transform.md) |
 | Layout slots | `::right::`, `::default::` | [layout-slots](references/layout-slots.md) |
