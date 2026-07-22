@@ -91,5 +91,8 @@
     "**/*.{js,ts,vue,json}": [
       "eslint --fix --cache"
     ]
+  },
+  "dependencies": {
+    "fast-uri": "catalog:"
   }
 }

@@ -5,6 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 catalogs:
+  default:
+    fast-uri:
+      specifier: 3.1.1
+      version: 3.1.1
   demo:
     '@vue/compiler-sfc':
       specifier: ^3.5.39
@@ -475,6 +479,10 @@ patchedDependencies:
 importers:
 
   .:
+    dependencies:
+      fast-uri:
+        specifier: 'catalog:'
+        version: 3.1.1
     devDependencies:
       '@antfu/eslint-config':
         specifier: catalog:dev
@@ -604,7 +612,7 @@ importers:
         version: 8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)
       vite-plugin-pwa:
         specifier: catalog:prod
-        version: 1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
+        version: 1.3.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
       vitest:
         specifier: catalog:dev
         version: 4.1.10(@types/node@25.9.5)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -942,7 +950,7 @@ importers:
     devDependencies:
       tsdown-stale-guard:
         specifier: catalog:dev
-        version: 0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)))
+        version: 0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)))
 
   packages/slidev:
     dependencies:
@@ -1149,7 +1157,7 @@ importers:
         version: 11.4.1(@nuxt/kit@3.13.0(rollup@4.62.2))(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
       vite-plugin-pwa:
         specifier: ^1.0.0
-        version: 1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
+        version: 1.3.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1)
       vite-plugin-remote-assets:
         specifier: catalog:prod
         version: 2.1.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))
@@ -1241,7 +1249,7 @@ importers:
     devDependencies:
       tsdown-stale-guard:
         specifier: catalog:dev
-        version: 0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)))
+        version: 0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)))
 
   packages/vscode:
     devDependencies:
@@ -6343,8 +6351,8 @@ packages:
   fast-string-width@3.0.2:
     resolution: {integrity: sha512-gX8LrtNEI5hq8DVUfRQMbr5lpaS4nMIWV+7XEbXk2b8kiQIizgnlr12B4dA3ZEx3308ze0O4Q1R+cHts8kyUJg==}
 
-  fast-uri@3.0.1:
-    resolution: {integrity: sha512-MWipKbbYiYI0UC7cl8m/i/IWTqfC8YXsqjzybjddLsFjStroQzsHXkc73JutMvBiXmOvapk+axIl79ig5t55Bw==}
+  fast-uri@3.1.1:
+    resolution: {integrity: sha512-h2r7rcm6Ee/J8o0LD5djLuFVcfbZxhvho4vvsbeV0aMvXjUgqv4YpxpkEx0d68l6+IleVfLAdVEfhR7QNMkGHQ==}
 
   fast-wrap-ansi@0.2.0:
     resolution: {integrity: sha512-rLV8JHxTyhVmFYhBJuMujcrHqOT2cnO5Zxj37qROj23CP39GXubJRBUFF0z8KFK77Uc0SukZUf7JZhsVEQ6n8w==}
@@ -11324,17 +11332,17 @@ snapshots:
       '@tybys/wasm-util': 0.10.1
     optional: true
 
+  '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
+    dependencies:
+      '@emnapi/core': 1.10.0
+      '@emnapi/runtime': 1.10.0
+      '@tybys/wasm-util': 0.10.3
+    optional: true
+
   '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@emnapi/core': 1.11.1
       '@emnapi/runtime': 1.11.1
-      '@tybys/wasm-util': 0.10.3
-    optional: true
-
-  '@napi-rs/wasm-runtime@1.1.6(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
-    dependencies:
-      '@emnapi/core': 1.9.2
-      '@emnapi/runtime': 1.9.2
       '@tybys/wasm-util': 0.10.3
     optional: true
 
@@ -12000,17 +12008,17 @@ snapshots:
   '@rolldown/binding-openharmony-arm64@1.1.5':
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
     optional: true
 
-  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)':
+  '@rolldown/binding-wasm32-wasi@1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
@@ -13607,7 +13615,7 @@ snapshots:
   ajv@8.17.1:
     dependencies:
       fast-deep-equal: 3.1.3
-      fast-uri: 3.0.1
+      fast-uri: 3.1.1
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
@@ -15154,7 +15162,7 @@ snapshots:
     dependencies:
       fast-string-truncated-width: 3.0.3
 
-  fast-uri@3.0.1: {}
+  fast-uri@3.1.1: {}
 
   fast-wrap-ansi@0.2.0:
     dependencies:
@@ -17627,6 +17635,29 @@ snapshots:
     transitivePeerDependencies:
       - oxc-resolver
 
+  rolldown@1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0):
+    dependencies:
+      '@oxc-project/types': 0.110.0
+      '@rolldown/pluginutils': 1.0.0-rc.1
+    optionalDependencies:
+      '@rolldown/binding-android-arm64': 1.0.0-rc.1
+      '@rolldown/binding-darwin-arm64': 1.0.0-rc.1
+      '@rolldown/binding-darwin-x64': 1.0.0-rc.1
+      '@rolldown/binding-freebsd-x64': 1.0.0-rc.1
+      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.1
+      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.1
+      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.1
+      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.1
+      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
+      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
+      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
+      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+    optional: true
+
   rolldown@1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
     dependencies:
       '@oxc-project/types': 0.110.0
@@ -17643,29 +17674,6 @@ snapshots:
       '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
       '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
       '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
-      '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
-      '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-    optional: true
-
-  rolldown@1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2):
-    dependencies:
-      '@oxc-project/types': 0.110.0
-      '@rolldown/pluginutils': 1.0.0-rc.1
-    optionalDependencies:
-      '@rolldown/binding-android-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-arm64': 1.0.0-rc.1
-      '@rolldown/binding-darwin-x64': 1.0.0-rc.1
-      '@rolldown/binding-freebsd-x64': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm-gnueabihf': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-arm64-musl': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-gnu': 1.0.0-rc.1
-      '@rolldown/binding-linux-x64-musl': 1.0.0-rc.1
-      '@rolldown/binding-openharmony-arm64': 1.0.0-rc.1
-      '@rolldown/binding-wasm32-wasi': 1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
       '@rolldown/binding-win32-arm64-msvc': 1.0.0-rc.1
       '@rolldown/binding-win32-x64-msvc': 1.0.0-rc.1
     transitivePeerDependencies:
@@ -18363,6 +18371,13 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.9.3
 
+  tsdown-stale-guard@0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))):
+    dependencies:
+      cac: 7.0.0
+      logs-sdk: 0.0.6
+      tsdown: 0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))
+      yaml: 2.9.0
+
   tsdown-stale-guard@0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))):
     dependencies:
       cac: 7.0.0
@@ -18370,12 +18385,32 @@ snapshots:
       tsdown: 0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))
       yaml: 2.9.0
 
-  tsdown-stale-guard@0.1.2(tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))):
+  tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)):
     dependencies:
+      ansis: 4.3.1
       cac: 7.0.0
-      logs-sdk: 0.0.6
-      tsdown: 0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3))
-      yaml: 2.9.0
+      defu: 6.1.7
+      empathic: 2.0.1
+      hookable: 6.1.1
+      import-without-cache: 0.4.0
+      obug: 2.1.3
+      picomatch: 4.0.5
+      rolldown: 1.1.5
+      rolldown-plugin-dts: 0.27.2(rolldown@1.1.5)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
+      semver: 7.8.5
+      tinyexec: 1.2.4
+      tinyglobby: 0.2.17
+      tree-kill: 1.2.2
+      unconfig-core: 7.5.0
+    optionalDependencies:
+      tsx: 4.23.0
+      typescript: 6.0.3
+      unrun: 0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12)
+    transitivePeerDependencies:
+      - '@ts-macro/tsc'
+      - '@typescript/native-preview'
+      - oxc-resolver
+      - vue-tsc
 
   tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)):
     dependencies:
@@ -18398,33 +18433,6 @@ snapshots:
       tsx: 4.23.0
       typescript: 6.0.3
       unrun: 0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12)
-    transitivePeerDependencies:
-      - '@ts-macro/tsc'
-      - '@typescript/native-preview'
-      - oxc-resolver
-      - vue-tsc
-
-  tsdown@0.22.4(tsx@4.23.0)(typescript@6.0.3)(unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12))(vue-tsc@3.3.7(typescript@6.0.3)):
-    dependencies:
-      ansis: 4.3.1
-      cac: 7.0.0
-      defu: 6.1.7
-      empathic: 2.0.1
-      hookable: 6.1.1
-      import-without-cache: 0.4.0
-      obug: 2.1.3
-      picomatch: 4.0.5
-      rolldown: 1.1.5
-      rolldown-plugin-dts: 0.27.2(rolldown@1.1.5)(typescript@6.0.3)(vue-tsc@3.3.7(typescript@6.0.3))
-      semver: 7.8.5
-      tinyexec: 1.2.4
-      tinyglobby: 0.2.17
-      tree-kill: 1.2.2
-      unconfig-core: 7.5.0
-    optionalDependencies:
-      tsx: 4.23.0
-      typescript: 6.0.3
-      unrun: 0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12)
     transitivePeerDependencies:
       - '@ts-macro/tsc'
       - '@typescript/native-preview'
@@ -18784,9 +18792,9 @@ snapshots:
       rollup: 4.62.2
       vite: 8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0)
 
-  unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12):
+  unrun@0.2.26(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(synckit@0.11.12):
     dependencies:
-      rolldown: 1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      rolldown: 1.0.0-rc.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
     optionalDependencies:
       synckit: 0.11.12
     transitivePeerDependencies:
@@ -18794,9 +18802,9 @@ snapshots:
       - '@emnapi/runtime'
     optional: true
 
-  unrun@0.2.26(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(synckit@0.11.12):
+  unrun@0.2.26(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(synckit@0.11.12):
     dependencies:
-      rolldown: 1.0.0-rc.1(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      rolldown: 1.0.0-rc.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
     optionalDependencies:
       synckit: 0.11.12
     transitivePeerDependencies:
@@ -18903,7 +18911,7 @@ snapshots:
     optionalDependencies:
       '@nuxt/kit': 3.13.0(rollup@4.62.2)
 
-  vite-plugin-pwa@1.3.0(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1):
+  vite-plugin-pwa@1.3.0(supports-color@8.1.1)(vite@8.1.3(@types/node@25.9.5)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.0)(yaml@2.9.0))(workbox-build@7.4.1)(workbox-window@7.4.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       pretty-bytes: 6.1.1
