@@ -16,7 +16,8 @@ import type { PropType, Ref } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { computed, inject, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { CLASS_VCLICK_HIDDEN, CLICKS_MAX } from '../constants'
-import { useSlideContext } from '../context'
+const { $frontmatter } = useSlideContext()
+const isCodeCopy = computed(() => $frontmatter?.codeCopy ?? configs.codeCopy)
 import { configs } from '../env'
 import TitleIcon from '../internals/TitleIcon.vue'
 import { makeId, updateCodeHighlightRange } from '../logic/utils'
@@ -152,7 +153,7 @@ const isBlockTitleShow = computed(() => {
     </div>
     <slot />
     <button
-      v-if="configs.codeCopy"
+      v-if="isCodeCopy"
       class="slidev-code-copy absolute right-0 transition opacity-0 group-hover:opacity-20 hover:!opacity-100"
       :class="isBlockTitleShow ? 'top-10' : 'top-0'"
       :title="copied ? 'Copied' : 'Copy'" @click="copyCode()"
