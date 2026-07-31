@@ -156,8 +156,6 @@ hide: false
 hideInToc: false
 # defines the layout component applied to the slide
 layout: <"cover" if the slide is the first slide, otherwise "default">
-# background of the slide, can be a color ('#fff', 'rgb(...)') or an image URL
-background: undefined # or string
 # custom class(es) added to the slide root element
 class: undefined # or string | string[] | Record<string, unknown>
 # override the title level for the <TitleRenderer> and <Toc> components
