@@ -3,11 +3,11 @@ import type { ComputedRef, Ref, TransitionGroupProps, WritableComputedRef } from
 import type { RouteLocationNormalized, Router } from 'vue-router'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
-import { createSharedComposable } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { createSharedComposable, injectLocal } from '@vueuse/core'
+import { computed, ref, toRaw, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { slides } from '#slidev/slides'
-import { CLICKS_MAX } from '../constants'
+import { CLICKS_MAX, injectionSlidevContext } from '../constants'
 import { configs } from '../env'
 import { useRouteQuery } from '../logic/route'
 import { getSlide, getSlidePath } from '../logic/slides'
@@ -365,7 +365,7 @@ const useNavState = createSharedComposable((): SlidevContextNavState => {
   }
 })
 
-export const useNav = createSharedComposable((): SlidevContextNavFull => {
+const useSharedNav = createSharedComposable((): SlidevContextNavFull => {
   const state = useNavState()
   const router = useRouter()
 
@@ -401,3 +401,16 @@ export const useNav = createSharedComposable((): SlidevContextNavFull => {
     ...state,
   }
 })
+
+export function useNav(): SlidevContextNavFull {
+  const nav = useSharedNav()
+  const context = injectLocal(injectionSlidevContext, undefined)
+  if (!context)
+    return nav
+
+  const localNav = toRaw(context).nav as unknown as SlidevContextNav
+  return {
+    ...nav,
+    ...localNav,
+  }
+}
