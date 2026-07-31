@@ -326,7 +326,7 @@ export const showcases: ShowCaseInfo[] = [
     title: 'Reliability: Manual → Autopilot',
     author: {
       name: 'Severin Neumann',
-      link: 'https://github.com/svrnm/'
+      link: 'https://github.com/svrnm/',
     },
     at: 'Karlsruhe Cloud Native – Summer Edition 2026',
     slidesLink: 'https://ai-sre-talk.vercel.app/',
