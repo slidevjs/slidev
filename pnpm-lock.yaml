@@ -277,8 +277,8 @@ catalogs:
       specifier: ^1.2.1
       version: 1.2.1
     magic-string:
-      specifier: ^1.1.0
-      version: 1.1.0
+      specifier: ^0.30.21
+      version: 0.30.21
     magic-string-stack:
       specifier: ^1.1.0
       version: 1.1.0
@@ -1047,7 +1047,7 @@ importers:
         version: 1.5.0
       magic-string:
         specifier: catalog:prod
-        version: 1.1.0
+        version: 0.30.21
       magic-string-stack:
         specifier: catalog:prod
         version: 1.1.0
