@@ -277,11 +277,11 @@ catalogs:
       specifier: ^1.2.1
       version: 1.2.1
     magic-string:
-      specifier: ^0.30.21
-      version: 0.30.21
-    magic-string-stack:
       specifier: ^1.1.0
       version: 1.1.0
+    magic-string-stack:
+      specifier: ^2.0.0
+      version: 2.0.0
     markdown-it-footnote:
       specifier: ^4.0.0
       version: 4.0.0
@@ -1047,10 +1047,10 @@ importers:
         version: 1.5.0
       magic-string:
         specifier: catalog:prod
-        version: 0.30.21
+        version: 1.1.0
       magic-string-stack:
         specifier: catalog:prod
-        version: 1.1.0
+        version: 2.0.0
       markdown-exit:
         specifier: ^1.1.0-beta.2
         version: 1.1.0-beta.2
@@ -7404,8 +7404,8 @@ packages:
     resolution: {integrity: sha512-CvkkH1i81zl7mmb94DsRiFeG9V2fR2JeuK8yDgS8oiZSFa++wWLEgZ5ufEOyLHbvSbD1gTRKv9NdX69Rnvr9JA==}
     engines: {node: '>=20.19.0'}
 
-  magic-string-stack@1.1.0:
-    resolution: {integrity: sha512-eAjQQ16Woyi71/6gQoLvn9Mte0JDoS5zUV/BMk0Pzs8Fou+nEuo5T0UbLWBhm3mXiK2YnFz2lFpEEVcLcohhVw==}
+  magic-string-stack@2.0.0:
+    resolution: {integrity: sha512-ag1sq2zvWGKeHJLCAJkbi9A2cHEcsKx3wCIyI4mRP5egjR0XhOqfrGs/IcYXQXVQaAIXhVQhBwY6jSLM2WHVCQ==}
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -16357,10 +16357,10 @@ snapshots:
     dependencies:
       magic-string: 0.30.21
 
-  magic-string-stack@1.1.0:
+  magic-string-stack@2.0.0:
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      magic-string: 0.30.21
+      magic-string: 1.1.0
 
   magic-string@0.30.21:
     dependencies:

@@ -18,6 +18,7 @@ minimumReleaseAgeExclude:
   - '@shikijs/types@4.2.0'
   - '@shikijs/vitepress-twoslash@4.2.0'
   - shiki@4.2.0
+  - magic-string-stack@2.0.0
 
 shamefullyHoist: true
 shellEmulator: true
@@ -144,8 +145,8 @@ catalogs:
     is-installed-globally: ^1.0.0
     jiti: ^2.7.0
     local-pkg: ^1.2.1
-    magic-string: ^0.30.21
-    magic-string-stack: ^1.1.0
+    magic-string: ^1.1.0
+    magic-string-stack: ^2.0.0
     markdown-exit: ^1.1.0-beta.2
     markdown-it-footnote: ^4.0.0
     markdown-it-github-alerts: ^1.0.1
