@@ -4,7 +4,7 @@ import type { RouteLocationNormalized, Router } from 'vue-router'
 import { clamp } from '@antfu/utils'
 import { parseRangeString } from '@slidev/parser/utils'
 import { createSharedComposable, injectLocal } from '@vueuse/core'
-import { computed, ref, toRaw, watch } from 'vue'
+import { computed, hasInjectionContext, ref, toRaw, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { slides } from '#slidev/slides'
 import { CLICKS_MAX, injectionSlidevContext } from '../constants'
@@ -404,7 +404,13 @@ const useSharedNav = createSharedComposable((): SlidevContextNavFull => {
 
 export function useNav(): SlidevContextNavFull {
   const nav = useSharedNav()
-  const context = injectLocal(injectionSlidevContext, undefined)
+  // `useNav()` is also called outside of `setup()`, most notably from the
+  // `mounted`/`created` hooks of the `v-motion` and `v-mark` directives.
+  // `injectLocal` throws there, and there is no slide-local context to read
+  // anyway, so fall back to the shared nav.
+  const context = hasInjectionContext()
+    ? injectLocal(injectionSlidevContext, undefined)
+    : undefined
   if (!context)
     return nav
 
