@@ -127,4 +127,14 @@ describe('useNavBase', () => {
     expect(observedNav?.currentSlideRoute.value.meta.slide.frontmatter.title).toBe('Second')
     expect(observedNav?.tocTree.value[1].active).toBe(true)
   })
+
+  it('falls back to the shared nav when there is no injection context', () => {
+    // Directive hooks such as `v-motion`'s and `v-mark`'s `mounted` call
+    // `useNav()` while no component instance is current. There is no
+    // slide-local context to read there, so the shared nav is the answer.
+    vi.stubGlobal('location', { search: '' })
+
+    expect(() => useNav()).not.toThrow()
+    expect(useNav().currentSlideNo.value).toBe(1)
+  })
 })
