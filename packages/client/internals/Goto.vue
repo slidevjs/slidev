@@ -111,7 +111,7 @@ watch(activeElement, () => {
     ref="container"
     class="fixed right-5 transition-all"
     w-90 max-w-90 min-w-90
-    :class="showGotoDialog ? 'top-5' : '-top-20'"
+    :class="showGotoDialog ? 'top-5' : '-top-20 op0 pointer-events-none'"
   >
     <div
       class="bg-main transform"
