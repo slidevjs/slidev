@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { handleBackground } from '@slidev/client/layoutHelper'
+import { handleBackground } from '@slidev/client'
 import { computed } from 'vue'
 
 const props = defineProps({
