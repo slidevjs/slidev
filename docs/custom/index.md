@@ -146,6 +146,8 @@ Also every slide accepts the following configuration in its frontmatter block. T
 clicks: 0
 # custom start clicks count
 clicksStart: 0
+# background image URL, local asset path, or color/gradient
+background: undefined # or string (e.g. 'https://cover.sli.dev' or '/image.png')
 # completely disable and hide the slide
 disabled: false
 # the same as `disabled`
@@ -154,6 +156,8 @@ hide: false
 hideInToc: false
 # defines the layout component applied to the slide
 layout: <"cover" if the slide is the first slide, otherwise "default">
+# custom class(es) added to the slide root element
+class: undefined # or string | string[] | Record<string, unknown>
 # override the title level for the <TitleRenderer> and <Toc> components
 # only if `title` has also been declared
 level: 1

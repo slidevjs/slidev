@@ -22,6 +22,7 @@ export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: 
     smc = new SourceMapConsumer({
       ...sourceMap,
       version: sourceMap.version.toString(),
+      sourcesContent: sourceMap.sourcesContent?.map(content => content ?? ''),
     })
     sourceMapConsumers.set(s, smc)
     return smc

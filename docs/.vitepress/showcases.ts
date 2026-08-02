@@ -322,6 +322,18 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://raw.githubusercontent.com/momo5502/denuvo-slides/refs/heads/master/images/preview.png',
     datetime: '2025-10-03',
   },
+  {
+    title: 'Reliability: Manual → Autopilot',
+    author: {
+      name: 'Severin Neumann',
+      link: 'https://github.com/svrnm/',
+    },
+    at: 'Karlsruhe Cloud Native – Summer Edition 2026',
+    slidesLink: 'https://ai-sre-talk.vercel.app/',
+    sourcesLink: 'https://github.com/bronto-community/ai-sre-talk',
+    cover: 'https://raw.githubusercontent.com/bronto-community/ai-sre-talk/refs/heads/main/preview.png',
+    datetime: '2026-07-28',
+  },
   // Add yours here!
   {
     title: 'Yours?',

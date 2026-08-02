@@ -20,6 +20,7 @@ import lz from 'lz-string'
 import { computed, defineAsyncComponent, nextTick, onMounted, ref } from 'vue'
 import { useNav } from '../composables/useNav'
 import { useSlideContext } from '../context'
+import { configs } from '../env'
 import { makeId } from '../logic/utils'
 
 const props = withDefaults(
@@ -28,6 +29,7 @@ const props = withDefaults(
     diffLz?: string
     lang?: string
     readonly?: boolean
+    lines?: boolean
     lineNumbers?: 'on' | 'off' | 'relative' | 'interval'
     height?: number | string // Posible values: 'initial', 'auto', '100%', '200px', etc.
     editorOptions?: monaco.editor.IEditorOptions
@@ -44,7 +46,7 @@ const props = withDefaults(
     codeLz: '',
     lang: 'typescript',
     readonly: false,
-    lineNumbers: 'off',
+    lines: configs.lineNumbers,
     height: 'initial',
     ata: true,
     runnable: false,
@@ -58,6 +60,7 @@ const CodeRunner = defineAsyncComponent(() => import('../internals/CodeRunner.vu
 const code = ref(lz.decompressFromBase64(props.codeLz).trimEnd())
 const diff = props.diffLz && ref(lz.decompressFromBase64(props.diffLz).trimEnd())
 const isWritable = computed(() => props.writable && !props.readonly && __DEV__)
+const lineNumbers = props.lineNumbers ?? (props.lines ? 'on' : 'off')
 
 const langMap: Record<string, string> = {
   ts: 'typescript',
@@ -106,7 +109,7 @@ onMounted(async () => {
   const commonOptions = {
     automaticLayout: true,
     readOnly: props.readonly,
-    lineNumbers: props.lineNumbers,
+    lineNumbers,
     minimap: { enabled: false },
     overviewRulerBorder: false,
     overviewRulerLanes: 0,
