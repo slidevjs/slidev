@@ -1,4 +1,4 @@
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import { StdioServerTransport } from '@modelcontextprotocol/server/stdio'
 import { version } from '../../package.json'
 import { parser } from '../parser'
 import { getRoots } from '../resolver'

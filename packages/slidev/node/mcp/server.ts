@@ -1,7 +1,7 @@
 import type { Awaitable } from '@antfu/utils'
 import type { LoadedSlidevData } from '@slidev/parser/fs'
 import type { SlideInfo, SlidevConfig } from '@slidev/types'
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { McpServer } from '@modelcontextprotocol/server'
 import { z } from 'zod'
 import { applySlidePatch, insertSlide, moveSlide, removeSlide, resolveSlide } from './operations'
 
@@ -49,7 +49,7 @@ function slideSummary(slide: SlideInfo) {
 
 const noSchema = z.number().int().min(1).describe('Slide number (1-based, as displayed in the presentation)')
 const frontmatterSchema = z
-  .record(z.any())
+  .record(z.string(), z.any())
   .optional()
   .describe('Slide frontmatter (YAML headmatter of the slide) as an object, e.g. { "layout": "two-cols" }')
 
@@ -125,7 +125,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     {
       title: 'Get slide',
       description: 'Get the full source of one slide: frontmatter, Markdown content, and speaker note.',
-      inputSchema: { no: noSchema },
+      inputSchema: z.object({ no: noSchema }),
       annotations: { readOnlyHint: true },
     },
     async ({ no }) => {
@@ -148,12 +148,12 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     {
       title: 'Update slide',
       description: 'Update the content, speaker note, and/or frontmatter of a slide. Only the provided fields are changed. Pass an empty string to clear the content or note. In `frontmatter`, only the given keys are patched; pass `null` as a value to delete that key.',
-      inputSchema: {
+      inputSchema: z.object({
         no: noSchema,
         content: z.string().optional().describe('New Markdown content of the slide (without frontmatter and note)'),
         note: z.string().optional().describe('New speaker note (Markdown, stored as a trailing HTML comment)'),
         frontmatter: frontmatterSchema,
-      },
+      }),
     },
     async ({ no, content, note, frontmatter }) => {
       if (content == null && note == null && frontmatter == null)
@@ -169,12 +169,12 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     {
       title: 'Insert slide',
       description: 'Insert a new slide after an existing slide (into the same markdown file). To add a slide at the very end, pass the last slide number.',
-      inputSchema: {
+      inputSchema: z.object({
         after: z.number().int().min(1).describe('Slide number (1-based) after which the new slide is inserted'),
         content: z.string().describe('Markdown content of the new slide'),
         frontmatter: frontmatterSchema,
         note: z.string().optional().describe('Speaker note of the new slide'),
-      },
+      }),
     },
     async ({ after, content, frontmatter, note }) => {
       const data = await ctx.getData()
@@ -188,7 +188,7 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     {
       title: 'Remove slide',
       description: 'Remove a slide from the deck (deletes it from its source markdown file).',
-      inputSchema: { no: noSchema },
+      inputSchema: z.object({ no: noSchema }),
       annotations: { destructiveHint: true },
     },
     async ({ no }) => {
@@ -203,11 +203,11 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
     {
       title: 'Move slide',
       description: 'Move a slide before or after another slide to reorder the deck. Both slides must be in the same markdown file. To swap two adjacent slides, move one after the other.',
-      inputSchema: {
+      inputSchema: z.object({
         from: z.number().int().min(1).describe('Slide number (1-based) of the slide to move'),
         before: z.number().int().min(1).optional().describe('Move the slide right before this slide number'),
         after: z.number().int().min(1).optional().describe('Move the slide right after this slide number'),
-      },
+      }),
     },
     async ({ from, before, after }) => {
       const data = await ctx.getData()
@@ -223,10 +223,10 @@ export function createSlidevMcpServer(ctx: SlidevMcpContext): McpServer {
       {
         title: 'Go to slide',
         description: 'Navigate the live presentation (all connected browsers) to a given slide, e.g. to visually verify a slide after editing it.',
-        inputSchema: {
+        inputSchema: z.object({
           no: noSchema,
           clicks: z.number().int().min(0).optional().describe('Click animation step to reveal (defaults to 0)'),
-        },
+        }),
         annotations: { idempotentHint: true },
       },
       async ({ no, clicks }) => {
