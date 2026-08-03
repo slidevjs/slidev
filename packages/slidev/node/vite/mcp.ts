@@ -1,7 +1,7 @@
 import type { ResolvedSlidevOptions } from '@slidev/types'
 import type { Plugin, ViteDevServer } from 'vite'
 import type { SlidevMcpContext } from '../mcp/server'
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
+import { NodeStreamableHTTPServerTransport } from '@modelcontextprotocol/node'
 import { version } from '../../package.json'
 import { createSlidevMcpServer } from '../mcp/server'
 import { getServerRefState } from './serverRef'
@@ -61,7 +61,7 @@ export function createMcpPlugin(
         try {
           // Stateless mode: a fresh server + transport pair per request
           const mcp = createSlidevMcpServer(ctx)
-          const transport = new StreamableHTTPServerTransport({
+          const transport = new NodeStreamableHTTPServerTransport({
             sessionIdGenerator: undefined,
           })
           res.on('close', () => {
