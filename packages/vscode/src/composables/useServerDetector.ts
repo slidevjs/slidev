@@ -42,7 +42,7 @@ export const useServerDetector = defineService(() => {
         const text = await (await fetch(url)).text()
         if (!RE_SLIDEV.test(text))
           return false
-        // Use semver to compare in the future
+        // Use verkit to compare in the future
         state.compatMode = !text.match(versionRE)
         const detectedEntry = text.match(entryRE)?.[1]
         if (detectedEntry) {
