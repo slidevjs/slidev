@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import { resolve } from 'pathe'
-import { satisfies } from 'semver'
+import { satisfies } from 'verkit'
 import { version } from '../../package.json'
 import { createResolver, getRoots } from '../resolver'
 

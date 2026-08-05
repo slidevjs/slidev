@@ -333,9 +333,6 @@ catalogs:
     resolve-global:
       specifier: ^2.0.0
       version: 2.0.0
-    semver:
-      specifier: ^7.8.5
-      version: 7.8.5
     sirv:
       specifier: ^3.0.2
       version: 3.0.2
@@ -363,6 +360,9 @@ catalogs:
     uqr:
       specifier: ^0.1.3
       version: 0.1.3
+    verkit:
+      specifier: ^0.3.2
+      version: 0.3.2
     vite:
       specifier: ^8.2.0
       version: 8.2.0
@@ -434,9 +434,6 @@ catalogs:
     '@types/resolve':
       specifier: ^1.20.6
       version: 1.20.6
-    '@types/semver':
-      specifier: ^7.7.1
-      version: 7.7.1
     '@types/yargs':
       specifier: ^17.0.35
       version: 17.0.35
@@ -533,9 +530,6 @@ importers:
       '@types/resolve':
         specifier: catalog:types
         version: 1.20.6
-      '@types/semver':
-        specifier: catalog:types
-        version: 7.7.1
       '@types/yargs':
         specifier: catalog:types
         version: 17.0.35
@@ -1114,9 +1108,6 @@ importers:
       resolve-global:
         specifier: catalog:prod
         version: 2.0.0
-      semver:
-        specifier: catalog:prod
-        version: 7.8.5
       shiki:
         specifier: catalog:frontend
         version: 4.4.1
@@ -1150,6 +1141,9 @@ importers:
       uqr:
         specifier: catalog:prod
         version: 0.1.3
+      verkit:
+        specifier: catalog:prod
+        version: 0.3.2
       vite:
         specifier: catalog:prod
         version: 8.2.0(@types/node@26.1.2)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.1)(yaml@2.9.0)
@@ -4290,9 +4284,6 @@ packages:
 
   '@types/sarif@2.1.7':
     resolution: {integrity: sha512-kRz0VEkJqWLf1LLVN4pT1cg1Z9wAuvI6L97V3m2f5B76Tg8d413ddvLBPTEHAZJlnn4XSvu0FkZtViCQGVyrXQ==}
-
-  '@types/semver@7.7.1':
-    resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
 
   '@types/sinonjs__fake-timers@8.1.1':
     resolution: {integrity: sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==}
@@ -9614,6 +9605,10 @@ packages:
     resolution: {integrity: sha512-w2Eo8LSIIoW7qxNBzT7/17k+bh8plXo7G3dHjEIDqPlnluhzaxr9JX8F28VSYEtDvc1/a3WBDih6xNUZseebXg==}
     engines: {node: '>=18.12.0'}
 
+  verkit@0.3.2:
+    resolution: {integrity: sha512-zj/ob3UsvJGN0whEAKFp53REA5X66hvffVqoCtVQAakJKnKlH+/PcOfMoFwIG/o4rElqLv/ycAFlx8ZlXUorCg==}
+    engines: {node: '>=18.12.0'}
+
   verror@1.10.0:
     resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
@@ -12916,8 +12911,6 @@ snapshots:
   '@types/resolve@1.20.6': {}
 
   '@types/sarif@2.1.7': {}
-
-  '@types/semver@7.7.1': {}
 
   '@types/sinonjs__fake-timers@8.1.1': {}
 
@@ -16588,7 +16581,7 @@ snapshots:
   markdown-it-async@2.2.0:
     dependencies:
       '@types/markdown-it': 14.1.2
-      markdown-it: 14.2.0
+      markdown-it: 14.3.0
     optional: true
 
   markdown-it-footnote@4.0.0: {}
@@ -19308,6 +19301,8 @@ snapshots:
   verkit@0.1.2: {}
 
   verkit@0.3.1: {}
+
+  verkit@0.3.2: {}
 
   verror@1.10.0:
     dependencies:

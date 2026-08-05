@@ -46,7 +46,6 @@
     "@types/prompts": "catalog:types",
     "@types/recordrtc": "catalog:types",
     "@types/resolve": "catalog:types",
-    "@types/semver": "catalog:types",
     "@types/yargs": "catalog:types",
     "@vue/compiler-sfc": "catalog:demo",
     "@vueuse/core": "catalog:frontend",
