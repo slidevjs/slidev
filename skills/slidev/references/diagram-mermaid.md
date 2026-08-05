@@ -38,6 +38,18 @@ C -->|Two| E[Result 2]
 - `gantt` - Gantt charts
 - `pie` - Pie charts
 
+## Fit Guidance
+
+For large Mermaid diagrams:
+
+- Shorten labels before reducing scale.
+- Split unrelated clusters into separate slides.
+- Change graph direction when width or height is the limiting dimension.
+- Use Mermaid `scale` or a local `<Transform>` for the diagram, not whole-slide `zoom`, when surrounding text already fits.
+- Verify the rendered diagram in the browser or exported artifact.
+
+See [layout-content-fit](layout-content-fit.md) for the broader dense-slide workflow.
+
 ## Resources
 
 - Mermaid docs: https://mermaid.js.org/
