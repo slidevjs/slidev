@@ -42,9 +42,13 @@
   },
   "peerDependencies": {
     "playwright-chromium": "^1.10.0",
-    "vite-plugin-pwa": "^1.0.0"
+    "vite-plugin-pwa": "^1.0.0",
+    "@myriaddreamin/typst-ts-node-compiler": "0.8.0-rc3"
   },
   "peerDependenciesMeta": {
+    "@myriaddreamin/typst-ts-node-compiler": {
+      "optional": true
+    },
     "playwright-chromium": {
       "optional": true
     },
@@ -131,6 +135,7 @@
   },
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
+    "@myriaddreamin/typst-ts-node-compiler": "catalog:prod",
     "@types/picomatch": "catalog:types",
     "@types/plantuml-encoder": "catalog:types"
   }

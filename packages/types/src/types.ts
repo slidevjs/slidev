@@ -90,6 +90,10 @@ export type SlidevThemeConfig = Record<string, string | number>
 export interface SlidevDetectedFeatures {
   katex: boolean
   /**
+   * True when `mathRenderer: 'typst'` is set in the headmatter.
+   */
+  typstMath: boolean
+  /**
    * `false` or referenced module specifiers
    */
   monaco: false | {

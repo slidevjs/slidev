@@ -70,6 +70,13 @@ export interface ResolvedSlidevUtils {
   shiki: ShorthandsBundle<string, string>
   shikiOptions: MarkdownItShikiOptions & CodeOptionsThemes
   katexOptions: KatexOptions | null
+  /**
+   * The loaded Typst compiler instance (from
+   * `@myriaddreamin/typst-ts-node-compiler`), when `mathRenderer: typst` is
+   * enabled; otherwise `null`. Typed as `unknown` to avoid a hard dependency
+   * on the optional native package.
+   */
+  typstCompiler: unknown | null
   indexHtml: string
   define: Record<string, string>
   iconsResolvePath: string[]
