@@ -28,7 +28,7 @@ high-confidence security + correctness, then larger refactors. You may cherry-pi
 | 006 | Replace `exec` shell-string with `execFile` (edit shortcut) | P2 | S | LOW | — | DONE (plan file removed) |
 | 007 | Guarantee Chromium teardown on export failure | P1 | S | LOW | — | DONE (plan file removed) |
 | 008 | Guard against circular `src:` slide imports | P1 | S | LOW | — | DONE (plan file removed) |
-| 009 | `parseRangeString` lower-bound / NaN validation | P2 | S | LOW | — | TODO |
+| 009 | `parseRangeString` lower-bound / NaN validation | P2 | S | LOW | — | DONE (plan file removed) |
 | 010 | Harden `getSlidePath` against unknown slide | P2 | S | LOW-MED | — | TODO |
 | 011 | 404 on out-of-range slide-patch request | P3 | S | LOW | — | TODO |
 | 012 | Fix no-op HMR `utils` refresh (missing `await`) | P2 | S | LOW | — | TODO |

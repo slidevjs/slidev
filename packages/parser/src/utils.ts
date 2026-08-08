@@ -3,6 +3,12 @@ import { isNumber, range, uniq } from '@antfu/utils'
 export * from './timesplit'
 
 const RE_ASPECT_RATIO_SEPARATOR = /[:/x|]/
+const RE_RANGE_FRAGMENT = /^(\d+)(?:\s*-\s*(\d*))?$/
+
+function parsePositiveSafeInteger(value: string) {
+  const integer = Number(value)
+  return Number.isSafeInteger(integer) && integer >= 1 ? integer : undefined
+}
 
 /**
  * 1,3-5,8 => [1, 3, 4, 5, 8]
@@ -16,18 +22,26 @@ export function parseRangeString(total: number, rangeStr?: string) {
 
   const indexes: number[] = []
   for (const part of rangeStr.split(/[,;]/g)) {
-    if (!part.includes('-')) {
-      indexes.push(+part)
-    }
-    else {
-      const [start, end] = part.split('-', 2)
-      indexes.push(
-        ...range(+start, !end ? (total + 1) : (+end + 1)),
-      )
-    }
+    const match = RE_RANGE_FRAGMENT.exec(part.trim())
+    if (!match)
+      continue
+
+    const start = parsePositiveSafeInteger(match[1])
+    const end = match[2] === undefined
+      ? start
+      : match[2] === ''
+        ? total
+        : parsePositiveSafeInteger(match[2])
+
+    if (start === undefined || end === undefined || start > end)
+      continue
+
+    const clampedEnd = Math.min(total, end)
+    if (start <= clampedEnd)
+      indexes.push(...range(start, clampedEnd + 1))
   }
 
-  return uniq(indexes).filter(i => i <= total).sort((a, b) => a - b)
+  return uniq(indexes).sort((a, b) => a - b)
 }
 
 /**
