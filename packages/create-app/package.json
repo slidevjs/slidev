@@ -18,6 +18,7 @@
   },
   "files": [
     "index.mjs",
+    "utils.mjs",
     "template"
   ],
   "engines": {

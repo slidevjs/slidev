@@ -11,6 +11,7 @@ import minimist from 'minimist'
 import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
+import { getManualPackageManager, renderReadme } from './utils.mjs'
 
 const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
@@ -137,23 +138,22 @@ async function init() {
     await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
-    writeReadme(pkgManager)
+    const manualPackageManager = getManualPackageManager(pkgManager)
+    writeReadme(manualPackageManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
       console.log(blue(`  cd ${bold(path.relative(cwd, root))}`))
 
-    console.log(blue(`  ${pkgManager} install`))
-    console.log(blue(`  ${pkgManager} run dev`))
+    console.log(blue(`  ${manualPackageManager} install`))
+    console.log(blue(`  ${manualPackageManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
   }
 
-  function writeReadme(pm = 'npm') {
+  function writeReadme(pm) {
     const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
-    const readmeContent = readmeTemplate
-      .replace('npm install', `${pm} install`)
-      .replace('npm run dev', `${pm} run dev`)
+    const readmeContent = renderReadme(readmeTemplate, pm)
     write('README.md', readmeContent)
   }
 }
