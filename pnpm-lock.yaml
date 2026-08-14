@@ -306,6 +306,9 @@ catalogs:
     open:
       specifier: ^11.0.0
       version: 11.0.0
+    package-manager-detector:
+      specifier: ^1.8.0
+      version: 1.8.0
     pathe:
       specifier: ^2.0.3
       version: 2.0.3
@@ -900,6 +903,9 @@ importers:
       minimist:
         specifier: catalog:prod
         version: 1.2.8
+      package-manager-detector:
+        specifier: catalog:prod
+        version: 1.8.0
       pathe:
         specifier: catalog:prod
         version: 2.0.3

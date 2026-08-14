@@ -8,10 +8,10 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
+import { getUserAgent } from 'package-manager-detector/detect'
 import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
-import { getManualPackageManager, renderReadme } from './utils.mjs'
 
 const argv = minimist(process.argv.slice(2))
 const cwd = process.cwd()
@@ -96,21 +96,7 @@ async function init() {
 
   console.log(green('  Done.\n'))
 
-  function getPkgManager() {
-    const pm = []
-    if (typeof Deno !== 'undefined')
-      pm.push('deno')
-    if (typeof Bun !== 'undefined')
-      pm.push('bun')
-    const userAgent = process.env.npm_config_user_agent || ''
-    const execPath = process.env.npm_execpath || ''
-    if (execPath.includes('pnpm') || userAgent.includes('pnpm'))
-      pm.push('pnpm')
-    if (execPath.includes('yarn') || userAgent.includes('yarn'))
-      pm.push('yarn')
-    return pm.length === 1 ? pm[0] : null
-  }
-  const pkgManager = getPkgManager()
+  const pkgManager = getUserAgent() ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}
@@ -138,7 +124,7 @@ async function init() {
     await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
-    const manualPackageManager = getManualPackageManager(pkgManager)
+    const manualPackageManager = pkgManager ?? 'npm'
     writeReadme(manualPackageManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
@@ -151,9 +137,11 @@ async function init() {
     console.log()
   }
 
-  function writeReadme(pm) {
+  function writeReadme(pm = 'npm') {
     const readmeTemplate = fs.readFileSync(path.join(templateDir, 'README.md'), 'utf-8')
-    const readmeContent = renderReadme(readmeTemplate, pm)
+    const readmeContent = readmeTemplate
+      .replace('npm install', `${pm} install`)
+      .replace('npm run dev', `${pm} run dev`)
     write('README.md', readmeContent)
   }
 }
