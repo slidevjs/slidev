@@ -184,7 +184,7 @@ Context values:
 </VDrag>
 ```
 
-See [draggable](draggable.md) for details.
+See [draggable](layout-draggable.md) for details.
 
 ## Component Auto-Import
 
