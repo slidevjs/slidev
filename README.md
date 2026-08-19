@@ -16,6 +16,7 @@ Presentation <b>slide</b>s for <b>dev</b>elopers 🧑‍💻👩‍💻👨‍�
 <a href="https://sli.dev/resources/theme-gallery" target="__blank"><img src="https://img.shields.io/static/v1?label=&message=themes&color=4ec5d4" alt="Themes"></a>
 <br>
 <a href="https://github.com/slidevjs/slidev/stargazers" target="__blank"><img alt="GitHub stars" src="https://img.shields.io/github/stars/slidevjs/slidev?style=social"></a>
+<a href="https://inspect.software/software/slidevjs/slidev"><img src="https://raw.githubusercontent.com/inspect-software/badges/main/v1/s/slidevjs/slidev.svg" alt="inspect.software score badge for slidevjs/slidev" /></a>
 </p>
 
 <p align="center">
