@@ -314,6 +314,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/nirtamir2/slidev-addon-sandpack',
   },
+  {
+    id: 'slidev-addon-studio',
+    name: 'Studio',
+    description: 'Edit slides on the canvas, with every change written back to your Markdown.',
+    tags: ['Editor', 'Tool'],
+    author: {
+      name: 'Daniel Christensen',
+      link: 'https://github.com/BobTheShoplifter',
+    },
+    repo: 'https://github.com/BobTheShoplifter/slidev-addon-studio',
+  },
   // Add yours here!
   {
     id: '',
