@@ -8,7 +8,7 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
-import { getUserAgent } from 'package-manager-detector/detect'
+import { detect } from 'package-manager-detector/detect'
 import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
@@ -96,7 +96,7 @@ async function init() {
 
   console.log(green('  Done.\n'))
 
-  const pkgManager = getUserAgent() ?? 'npm'
+  const pkgManager = await detect().catch(() => undefined) ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}
@@ -109,29 +109,21 @@ async function init() {
   })
 
   if (yes) {
-    const agent = pkgManager || (await prompts({
-      name: 'agent',
-      type: 'select',
-      message: 'Choose the package manager',
-      choices: ['npm', 'yarn', 'pnpm', 'bun', 'deno'].map(i => ({ value: i, title: i })),
-    }).agent)
-
-    if (!agent)
+    if (!pkgManager)
       return
 
-    writeReadme(agent)
-    await x(agent, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
-    await x(agent, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    writeReadme(pkgManager)
+    await x(pkgManager, ['install'], { nodeOptions: { stdio: 'inherit', cwd: root } })
+    await x(pkgManager, ['run', 'dev'], { nodeOptions: { stdio: 'inherit', cwd: root } })
   }
   else {
-    const manualPackageManager = pkgManager ?? 'npm'
-    writeReadme(manualPackageManager)
+    writeReadme(pkgManager)
     console.log(dim('\n  start it later by:\n'))
     if (root !== cwd)
       console.log(blue(`  cd ${bold(path.relative(cwd, root))}`))
 
-    console.log(blue(`  ${manualPackageManager} install`))
-    console.log(blue(`  ${manualPackageManager} run dev`))
+    console.log(blue(`  ${pkgManager} install`))
+    console.log(blue(`  ${pkgManager} run dev`))
     console.log()
     console.log(`  ${cyan('●')} ${blue('■')} ${yellow('▲')}`)
     console.log()
