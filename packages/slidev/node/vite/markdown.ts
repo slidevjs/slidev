@@ -13,7 +13,7 @@ export async function createMarkdownPlugin(
   { markdown: mdOptions }: SlidevPluginOptions,
 ): Promise<Plugin> {
   const markdownTransformMap = new Map<string, MagicString>()
-  const extras = await setupTransformers(options.roots)
+  const extras = await setupTransformers(options.setupRoots)
   const transformers = [
     ...extras.pre,
     ...extras.preCodeblock,
