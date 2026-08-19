@@ -157,6 +157,7 @@ catalogs:
     mlly: ^1.8.2
     obug: ^2.1.4
     open: ^11.0.0
+    package-manager-detector: ^1.8.0
     pathe: ^2.0.3
     pdf-lib: ^1.17.1
     picomatch: ^4.0.5

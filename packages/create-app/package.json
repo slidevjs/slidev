@@ -30,6 +30,7 @@
   "dependencies": {
     "ansis": "catalog:prod",
     "minimist": "catalog:prod",
+    "package-manager-detector": "catalog:prod",
     "pathe": "catalog:prod",
     "prompts": "catalog:prod",
     "tinyexec": "catalog:prod"
