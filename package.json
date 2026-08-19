@@ -90,5 +90,10 @@
     "**/*.{js,ts,vue,json}": [
       "eslint --fix --cache"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "brace-expansion": "5.0.9"
+    }
   }
 }
