@@ -270,14 +270,18 @@ Embed a tweet.
 
 ```md
 <Tweet id="20" />
+<Tweet url="https://x.com/antfu7/status/1389604687502995457" />
 ```
 
 Props:
 
-- `id` (`number | string`, required): id of the tweet
+- `id` (`number | string`): id of the tweet
+- `url` (`string`): full `x.com` or `twitter.com` post URL
 - `scale` (`number | string`, default `1`): transform scale value
 - `conversation` (`string`, default `'none'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
 - `cards` (`'hidden' | 'visible'`, default `'visible'`): [tweet embed parameter](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/embedded-tweet-parameter-reference)
+
+Provide either `id` or `url`. When both are present, `id` takes precedence.
 
 ## `BlueSky`
 
