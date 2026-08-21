@@ -78,13 +78,19 @@ onMounted(() => {
     return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
   })
 
+  let hiddenByRange = false
+
   watchEffect(() => {
     if (!el.value)
       return
 
     let rangeStr = props.ranges[index.value] ?? finallyRange.value
     const hide = rangeStr === 'hide'
-    el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+    // Don't clear a class we didn't set: a `v-click` on the same element owns it
+    if (hide || hiddenByRange) {
+      el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
+      hiddenByRange = hide
+    }
     if (hide)
       rangeStr = props.ranges[index.value + 1] ?? finallyRange.value
 
