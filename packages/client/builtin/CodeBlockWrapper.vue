@@ -86,7 +86,7 @@ onMounted(() => {
 
     let rangeStr = props.ranges[index.value] ?? finallyRange.value
     const hide = rangeStr === 'hide'
-    // Don't clear a class we didn't set: a `v-click` on the same element owns it
+    // Only toggle the class when a `hide` range set it, so a click directive on the same element keeps control
     if (hide || hiddenByRange) {
       el.value.classList.toggle(CLASS_VCLICK_HIDDEN, hide)
       hiddenByRange = hide
