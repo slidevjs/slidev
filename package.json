@@ -77,10 +77,7 @@
   },
   "resolutions": {
     "chokidar": "catalog:prod",
-    "semver": "catalog:dev",
     "typescript": "catalog:dev",
-    "undici": "catalog:dev",
-    "undici-types": "catalog:dev",
     "vite": "catalog:prod"
   },
   "simple-git-hooks": {
