@@ -473,7 +473,7 @@ catalogs:
       version: 1.24.0
 
 overrides:
-  markdown-exit: 1.1.0-beta.2
+  markdown-exit: ^1.2.1
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
@@ -561,8 +561,8 @@ importers:
         specifier: catalog:dev
         version: 17.3.0
       markdown-exit:
-        specifier: 1.1.0-beta.2
-        version: 1.1.0-beta.2
+        specifier: ^1.2.1
+        version: 1.2.1
       mermaid:
         specifier: catalog:frontend
         version: 11.16.1
@@ -1061,8 +1061,8 @@ importers:
         specifier: catalog:prod
         version: 2.0.0
       markdown-exit:
-        specifier: 1.1.0-beta.2
-        version: 1.1.0-beta.2
+        specifier: ^1.2.1
+        version: 1.2.1
       markdown-it-footnote:
         specifier: catalog:prod
         version: 4.0.0
@@ -7474,8 +7474,8 @@ packages:
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
 
-  markdown-exit@1.1.0-beta.2:
-    resolution: {integrity: sha512-8CzMGVlFZ4DEfnc8KU+4ycUW2SIOuiXqCHD7z51ecVEi/weyc0f2ylQbCm4KoKuVlTZSuMUMnWT0hTyquZ7anQ==}
+  markdown-exit@1.2.1:
+    resolution: {integrity: sha512-YJjm+JWANBIlTK6G5KnH8b9PK5bOfvApa1O8bpkap2UW5dmRIWkURT0eZniqxwCK7VP11VysdJyXK6meKtnq0g==}
 
   markdown-it-async@2.2.0:
     resolution: {integrity: sha512-sITME+kf799vMeO/ww/CjH6q+c05f6TLpn6VOmmWCGNqPJzSh+uFgZoMB9s0plNtW6afy63qglNAC3MhrhP/gg==}
@@ -16521,7 +16521,7 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  markdown-exit@1.1.0-beta.2:
+  markdown-exit@1.2.1:
     dependencies:
       '@types/linkify-it': 5.0.0
       '@types/mdurl': 2.0.0
@@ -19086,7 +19086,7 @@ snapshots:
       '@mdit-vue/plugin-component': 3.0.2
       '@mdit-vue/plugin-frontmatter': 3.0.2
       '@mdit-vue/types': 3.0.2
-      markdown-exit: 1.1.0-beta.2
+      markdown-exit: 1.2.1
       unplugin: 3.0.0
       unplugin-utils: 0.3.1
       vite: 8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)

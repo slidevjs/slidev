@@ -8,6 +8,7 @@ minimumReleaseAgeExclude:
   - '@shikijs/magic-move'
   - magic-string-stack@2.0.0
   - verkit@0.3.2
+  - markdown-exit@1.2.1
 
 shamefullyHoist: true
 shellEmulator: true
@@ -135,13 +136,7 @@ catalogs:
     local-pkg: ^1.2.1
     magic-string: ^1.2.0
     magic-string-stack: ^2.0.0
-    # Pinned: markdown-exit@1.2.0 regressed `renderInlineAsync`'s monkey-patch
-    # fallback — when a plugin patches the renderer (e.g. `@comark/markdown-it`,
-    # enabled by `comark: true`) alongside async inline rules (shiki/katex), it
-    # wrongly falls back to the sync `renderInline`, which throws "async rule
-    # detected". This breaks `slidev build` on fresh installs (the smoke test).
-    # Unpin once upstream markdown-exit ships a fix.
-    markdown-exit: 1.1.0-beta.2
+    markdown-exit: ^1.2.1
     markdown-it-footnote: ^4.0.0
     markdown-it-github-alerts: ^1.0.1
     minimist: ^1.2.8
