@@ -5,12 +5,3 @@ shamefullyHoist: true
 # build scripts by default (`strictDepBuilds: true`), so allowlist it up-front.
 allowBuilds:
   playwright-chromium: true
-
-# Dedupe `markdown-exit` so `@slidev/cli` and `unplugin-vue-markdown` (which
-# creates the renderer instance via `createMarkdownExit`) share one copy.
-# Without this, pnpm v11's 24h `minimumReleaseAge` can pin the two consumers to
-# different versions — a recent one for `@slidev/cli` and an older one for
-# `unplugin-vue-markdown`'s looser range — and an outdated `markdown-exit`
-# breaks `slidev build` (e.g. the 1.2.0 `renderInlineAsync` regression).
-overrides:
-  markdown-exit: ^1.2.1

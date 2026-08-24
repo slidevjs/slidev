@@ -355,8 +355,8 @@ catalogs:
       specifier: ^32.1.0
       version: 32.1.0
     unplugin-vue-markdown:
-      specifier: ^32.0.0
-      version: 32.0.0
+      specifier: ^32.1.0
+      version: 32.1.0
     untun:
       specifier: ^0.2.2
       version: 0.2.2
@@ -1140,7 +1140,7 @@ importers:
         version: 32.1.0(@nuxt/kit@3.13.0(rollup@4.62.2)(supports-color@8.1.1))(vue@3.5.41(typescript@6.0.3))
       unplugin-vue-markdown:
         specifier: catalog:prod
-        version: 32.0.0(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
+        version: 32.1.0(esbuild@0.28.0)(rolldown@1.2.1)(rollup@4.62.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
       untun:
         specifier: catalog:prod
         version: 0.2.2
@@ -1228,7 +1228,7 @@ importers:
         version: 23.0.1(@vue/compiler-sfc@3.5.41)
       unplugin-vue-markdown:
         specifier: catalog:prod
-        version: 32.0.0(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
+        version: 32.1.0(esbuild@0.28.0)(rolldown@1.2.1)(rollup@4.62.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
       vite-plugin-inspect:
         specifier: catalog:prod
         version: 12.0.2(@modelcontextprotocol/sdk@1.30.0(supports-color@8.1.1)(zod@4.4.3))(@nuxt/kit@3.13.0(rollup@4.62.2)(supports-color@8.1.1))(cac@7.0.0)(srvx@0.12.4)(typescript@6.0.3)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
@@ -9414,8 +9414,8 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  unplugin-vue-markdown@32.0.0:
-    resolution: {integrity: sha512-K9uiYJF9kvngrN/NRx8fVPZFXiqJR7tbnXQV4mVFxjcsKhuiL6+vVQ5woam59RqeCDprecBmbg+cCGADz0somA==}
+  unplugin-vue-markdown@32.1.0:
+    resolution: {integrity: sha512-lIFBblIxeRjmkj3jgR62YQ9Y5tpXwj9Tx5+rT1vlzqvyQZNoxnGKHdfu+bB8lRFxOd8P9QIOltpOG8bnK5W06w==}
     engines: {node: '>=22'}
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0-0 || ^4.0.0-0 || ^5.0.0-0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
@@ -19081,15 +19081,24 @@ snapshots:
     optionalDependencies:
       '@nuxt/kit': 3.13.0(rollup@4.62.2)(supports-color@8.1.1)
 
-  unplugin-vue-markdown@32.0.0(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)):
+  unplugin-vue-markdown@32.1.0(esbuild@0.28.0)(rolldown@1.2.1)(rollup@4.62.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)):
     dependencies:
       '@mdit-vue/plugin-component': 3.0.2
       '@mdit-vue/plugin-frontmatter': 3.0.2
       '@mdit-vue/types': 3.0.2
       markdown-exit: 1.2.1
-      unplugin: 3.0.0
-      unplugin-utils: 0.3.1
+      unplugin: 3.3.0(esbuild@0.28.0)(rolldown@1.2.1)(rollup@4.62.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0))
+      unplugin-utils: 0.3.2
       vite: 8.2.1(@types/node@26.2.0)(esbuild@0.28.0)(jiti@2.7.0)(terser@5.49.0)(tsx@4.23.12)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - webpack
 
   unplugin@1.16.0:
     dependencies:
