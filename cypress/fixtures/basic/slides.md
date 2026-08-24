@@ -210,3 +210,17 @@ clickAnimation: foo
   <div v-click.none>modifier-none-overrides-frontmatter</div>
   <div v-click.scale>modifier-scale-overrides-frontmatter</div>
 </div>
+
+---
+
+# Page 17
+
+<div class="cy-code-in-vclick">
+<v-click>
+
+```ts {*}
+const answer = 42
+```
+
+</v-click>
+</div>

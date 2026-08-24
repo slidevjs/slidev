@@ -314,4 +314,15 @@ context('Basic', () => {
     cy.get(`${targets}:not(.slidev-vclick-hidden)`)
       .should('have.length', 4)
   })
+
+  it('annotated code block in v-click', () => {
+    goPage(17)
+
+    const wrapper = '#slideshow .slidev-page-17 .cy-code-in-vclick .slidev-code-wrapper'
+
+    cy.get(wrapper).should('have.class', 'slidev-vclick-hidden')
+
+    cy.rightArrow()
+    cy.get(wrapper).should('not.have.class', 'slidev-vclick-hidden')
+  })
 })
