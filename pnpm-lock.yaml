@@ -473,7 +473,7 @@ catalogs:
       version: 1.24.0
 
 overrides:
-  markdown-exit: ^1.1.0-beta.2
+  markdown-exit: 1.1.0-beta.2
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': 49e14003b6caa0b7d164cbe71da573809d375babb2012c0a5ac943573e063c90
@@ -561,7 +561,7 @@ importers:
         specifier: catalog:dev
         version: 17.3.0
       markdown-exit:
-        specifier: ^1.1.0-beta.2
+        specifier: 1.1.0-beta.2
         version: 1.1.0-beta.2
       mermaid:
         specifier: catalog:frontend
@@ -1061,7 +1061,7 @@ importers:
         specifier: catalog:prod
         version: 2.0.0
       markdown-exit:
-        specifier: ^1.1.0-beta.2
+        specifier: 1.1.0-beta.2
         version: 1.1.0-beta.2
       markdown-it-footnote:
         specifier: catalog:prod
@@ -7351,9 +7351,6 @@ packages:
   lightningcss@1.33.0:
     resolution: {integrity: sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==}
     engines: {node: '>= 12.0.0'}
-
-  linkify-it@5.0.1:
-    resolution: {integrity: sha512-wVoTjP4Q6R0NW5hiZkVJaFZPWgtXfoGF+6LucL3/FtiNjmcHhYjEr5f1Kqjirc1nBW07J/ZuRFumqr2oqccEWg==}
 
   linkify-it@5.0.2:
     resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
@@ -16373,10 +16370,6 @@ snapshots:
       lightningcss-win32-arm64-msvc: 1.33.0
       lightningcss-win32-x64-msvc: 1.33.0
 
-  linkify-it@5.0.1:
-    dependencies:
-      uc.micro: 2.1.0
-
   linkify-it@5.0.2:
     dependencies:
       uc.micro: 2.1.0
@@ -16533,7 +16526,7 @@ snapshots:
       '@types/linkify-it': 5.0.0
       '@types/mdurl': 2.0.0
       entities: 7.0.1
-      linkify-it: 5.0.1
+      linkify-it: 5.0.2
       mdurl: 2.0.0
       punycode.js: 2.3.1
       uc.micro: 2.1.0
