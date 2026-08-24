@@ -1,23 +1,11 @@
 catalogMode: prefer
 ignoreWorkspaceRootCheck: true
+minimumReleaseAgeExcludePrune: true
 minimumReleaseAgeExclude:
   # Shiki v4.2.0 cohort and `@shikijs/magic-move` (rename of `shiki-magic-move`)
   # all ship together from antfu's monorepo; pnpm v11's 24h `minimumReleaseAge`
   # default would otherwise block this install until the cohort matures.
-  - '@iconify/json@2.2.482'
-  - '@shikijs/core@4.2.0'
-  - '@shikijs/engine-javascript@4.2.0'
-  - '@shikijs/engine-oniguruma@4.2.0'
-  - '@shikijs/langs@4.2.0'
   - '@shikijs/magic-move'
-  - '@shikijs/markdown-it@4.2.0'
-  - '@shikijs/monaco@4.2.0'
-  - '@shikijs/primitive@4.2.0'
-  - '@shikijs/themes@4.2.0'
-  - '@shikijs/twoslash@4.2.0'
-  - '@shikijs/types@4.2.0'
-  - '@shikijs/vitepress-twoslash@4.2.0'
-  - shiki@4.2.0
   - magic-string-stack@2.0.0
   - verkit@0.3.2
 
@@ -63,7 +51,6 @@ catalogs:
     prettier: ^3.9.6
     prettier-plugin-slidev: ^1.0.5
     rimraf: ^6.1.3
-    semver: ^7.8.5
     simple-git-hooks: ^2.13.1
     taze: ^21.1.0
     tsdown: ^0.22.14
@@ -71,8 +58,6 @@ catalogs:
     tsnapi: ^1.3.0
     tsx: ^4.23.12
     typescript: ^6.0.3
-    undici: ^8.10.0
-    undici-types: ^8.10.0
     vitest: ^4.1.10
     vue-tsc: ^3.3.10
     zx: ^8.8.5
@@ -214,6 +199,7 @@ catalogs:
     volar-service-yaml: ^0.0.71
     vscode-uri: ^3.1.0
     yaml-language-server: ^1.24.0
+catalogPrune: true
 allowBuilds:
   '@vscode/vsce-sign': true
   cypress: true
