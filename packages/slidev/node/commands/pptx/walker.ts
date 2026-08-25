@@ -62,6 +62,12 @@ export function collectSnapshot(options: {
     'transform',
     'writingMode',
     'webkitBackgroundClip',
+    'top',
+    'right',
+    'bottom',
+    'left',
+    'width',
+    'height',
     'overflow',
   ] as const
 
@@ -76,6 +82,20 @@ export function collectSnapshot(options: {
    * snapshot into megabytes crossing the CDP boundary. In practice a few
    * hundred nodes collapse to a few dozen distinct styles.
    */
+  function internPseudo(computed: CSSStyleDeclaration): number {
+    const record: Record<string, string> = {}
+    for (const key of STYLE_KEYS)
+      record[key] = computed[key as any] ?? ''
+    const key = JSON.stringify(record)
+    const existing = styleIndex.get(key)
+    if (existing !== undefined)
+      return existing
+    const index = styles.length
+    styles.push(record)
+    styleIndex.set(key, index)
+    return index
+  }
+
   function internStyle(el: Element): number {
     const computed = getComputedStyle(el)
     const record: Record<string, string> = {}
@@ -100,6 +120,7 @@ export function collectSnapshot(options: {
    * that face in the file, and every recipient would silently get a
    * substitution while the export claimed success.
    */
+  const unplaceablePseudos: string[] = []
   const fontResolution: Record<string, string> = {}
   const probeCanvas = document.createElement('canvas')
   const probeContext = probeCanvas.getContext('2d')!
@@ -357,6 +378,63 @@ export function collectSnapshot(options: {
 
       nodes.push(record)
 
+      // `::before` and `::after` have no DOM node, so a walk over the tree
+      // cannot see them at all. Themes use them for decorative marks - the one
+      // that prompted this was a corporate logo drawn as a background image on
+      // an `::after` - and every one of those was silently missing from the
+      // export.
+      //
+      // Only absolutely positioned pseudos are placeable: their box resolves
+      // against the originating element when it is itself positioned. Anything
+      // else takes part in inline or block flow, where its geometry is not
+      // recoverable from computed style alone, and is reported instead.
+      for (const which of ['::before', '::after']) {
+        const pseudo = getComputedStyle(el, which)
+        if (!pseudo || !pseudo.content || pseudo.content === 'none')
+          continue
+        const paints = pseudo.content !== 'normal'
+          || (pseudo.backgroundImage && pseudo.backgroundImage !== 'none')
+        if (!paints)
+          continue
+        if (pseudo.position !== 'absolute' || computed.position === 'static') {
+          unplaceablePseudos.push(`${el.tagName.toLowerCase()}${which}`)
+          continue
+        }
+
+        const own = el.getBoundingClientRect()
+        const width = Number.parseFloat(pseudo.width) || 0
+        const height = Number.parseFloat(pseudo.height) || 0
+        if (width <= 0 || height <= 0) {
+          unplaceablePseudos.push(`${el.tagName.toLowerCase()}${which}`)
+          continue
+        }
+        const left = pseudo.left === 'auto'
+          ? own.width - Number.parseFloat(pseudo.right || '0') - width
+          : Number.parseFloat(pseudo.left)
+        const top = pseudo.top === 'auto'
+          ? own.height - Number.parseFloat(pseudo.bottom || '0') - height
+          : Number.parseFloat(pseudo.top)
+
+        const box = {
+          left: own.left + left,
+          top: own.top + top,
+          width,
+          height,
+        }
+        const text = pseudo.content.replace(/^["']|["']$/g, '')
+        nodes.push({
+          id: nextId++,
+          parent: id,
+          tag: which === '::before' ? '::BEFORE' : '::AFTER',
+          style: internPseudo(pseudo),
+          rect: relative(box),
+          // Page coordinates as well: a pseudo has no element to point a
+          // screenshot at, so it is captured by clipping the page instead.
+          pageRect: { x: box.left, y: box.top, w: width, h: height },
+          ...(text && pseudo.content !== 'normal' ? { text } : {}),
+        })
+      }
+
       // Descend into the shadow root BEFORE the light children. Mermaid
       // renders into one, so `querySelector('.mermaid svg')` from the document
       // finds nothing at all.
@@ -392,5 +470,5 @@ export function collectSnapshot(options: {
     })
   }
 
-  return { slides, styles, fontResolution } as RawSnapshot
+  return { slides, styles, fontResolution, unplaceablePseudos } as RawSnapshot
 }

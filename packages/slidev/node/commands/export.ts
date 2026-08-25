@@ -575,6 +575,10 @@ export async function exportSlides({
       console.warn(yellow(`  ${result.unparsedColors.length} colour value(s) could not be read, so those fills are missing:`))
       console.warn(dim(`    ${result.unparsedColors.slice(0, 5).join(', ')}`))
     }
+    if (result.unplaceablePseudos.length) {
+      console.warn(yellow(`  ${result.unplaceablePseudos.length} CSS decoration(s) could not be placed and were left out:`))
+      console.warn(dim(`    ${result.unplaceablePseudos.slice(0, 5).join(', ')}`))
+    }
     if (result.fontsNamed.length) {
       console.warn(dim(`  fonts named in this file: ${result.fontsNamed.join(', ')}`))
       console.warn(dim('  a .pptx names fonts rather than embedding them, so recipients need these installed'))

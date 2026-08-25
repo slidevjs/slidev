@@ -69,6 +69,12 @@ const RASTER_TAGS: Record<string, RasterReason> = {
 export interface RasterRequest {
   /** The `data-slidev-export-id` of the element to capture. */
   sourceId: number
+  /**
+   * Page coordinates to clip instead of targeting a locator.
+   *
+   * Set for a pseudo-element, which has no element to select.
+   */
+  clip?: Rect
   /** Hide everything outside this element's own subtree. */
   isolate: boolean
   /** Also hide its children, which is only safe when they are redrawn. */
@@ -499,6 +505,7 @@ class SlideWalker {
   private nodes: IrNode[] = []
   private requests: RasterRequest[] = []
   private rasterArea = 0
+  private pageRects = new Map<number, Rect | undefined>()
   private size: { w: number, h: number }
 
   constructor(
@@ -596,6 +603,7 @@ class SlideWalker {
         sourceId: node.sourceId,
         isolate: node.isolate,
         hideDescendants: node.hideDescendants,
+        clip: this.pageRects.get(node.sourceId),
       })
 
       /**
@@ -617,6 +625,7 @@ class SlideWalker {
   }
 
   private emitRaster(node: RawNode, reason: RasterReason): void {
+    this.pageRects.set(node.id, node.pageRect)
     const isolate = needsIsolation(reason)
     const visible = clipToSlide(node.rect, this.size)
     if (!visible)
@@ -689,6 +698,34 @@ class SlideWalker {
   }
 
   private visit(node: RawNode): void {
+    // A pseudo-element paints either an image or a short string. It has no
+    // children and never contains anything else.
+    if (node.tag === '::BEFORE' || node.tag === '::AFTER') {
+      const style = this.styleOf(node)
+      if (!style)
+        return
+      const reason = rasterReasonFor(node, style)
+      if (reason) {
+        this.emitRaster(node, reason)
+        return
+      }
+      this.emitBox(node, style)
+      if (node.text) {
+        this.nodes.push({
+          kind: 'text',
+          sourceId: node.id,
+          rect: node.rect,
+          elementRect: node.rect,
+          lineCount: 1,
+          align: alignOf(style),
+          valign: 'middle',
+          lineHeight: resolveLineHeight(style),
+          runs: [runFrom(node.text, style, this.fontResolution)],
+        })
+      }
+      return
+    }
+
     if (node.tag === '#text') {
       // Reached only when a text node has no block container of its own, which
       // `visitChildren` already handles. Guarded so a stray one is not lost.

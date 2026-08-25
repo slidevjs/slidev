@@ -53,6 +53,12 @@ const BASE_STYLE: RawStyle = {
   writingMode: 'horizontal-tb',
   webkitBackgroundClip: 'border-box',
   overflow: 'visible',
+  top: 'auto',
+  right: 'auto',
+  bottom: 'auto',
+  left: 'auto',
+  width: 'auto',
+  height: 'auto',
 }
 
 function style(overrides: Partial<RawStyle> = {}): RawStyle {
@@ -80,7 +86,7 @@ function text(id: number, parent: number, value: string, extra: Partial<RawNode>
 
 function snapshot(nodes: RawNode[], styles: RawStyle[]): RawSnapshot {
   const slide: RawSlide = { no: 1, clickIndex: 0, containerId: '001-01', size: { w: 980, h: 552 }, nodes }
-  return { slides: [slide], styles, fontResolution: { 'Inter, sans-serif': 'Inter' } }
+  return { slides: [slide], styles, fontResolution: { 'Inter, sans-serif': 'Inter' }, unplaceablePseudos: [] }
 }
 
 function run(nodes: RawNode[], styles: RawStyle[]) {
@@ -272,6 +278,41 @@ describe('trap 16: --range is applied by the caller, not the page', () => {
     const { slides } = normalize(raw, { notes: new Map() })
     expect(slides[0].no).toBe(7)
     expect(slides[0].containerId).toBe('007-03')
+  })
+})
+
+describe('cSS pseudo-element decorations', () => {
+  it('draws an ::after that paints a background image', () => {
+    const mark = style({
+      position: 'absolute',
+      backgroundImage: 'url(/img/logo.png)',
+      width: '84px',
+      height: '33px',
+    })
+    const rect = { x: 858, y: 493, w: 84, h: 33 }
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, '::AFTER', 1, { rect, pageRect: rect }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE, mark])
+    // A pseudo-element has no DOM node, so a walk over the tree cannot see it.
+    // A corporate logo drawn this way was silently absent from every slide.
+    const raster = slides[0].nodes.find(n => n.kind === 'raster') as any
+    expect(raster).toBeDefined()
+    expect(raster.rect).toEqual(rect)
+    // And no locator can point at it, so the capture clips the page instead.
+    expect(rasterRequests[0].clip).toEqual(rect)
+  })
+
+  it('draws an ::before that paints a string', () => {
+    const quote = style({ position: 'absolute', width: '20px', height: '20px' })
+    const rect = { x: 10, y: 10, w: 20, h: 20 }
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, text: '\u201C' }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, quote])
+    expect(texts(slides[0].nodes)[0].runs[0].text).toBe('\u201C')
   })
 })
 

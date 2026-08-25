@@ -173,7 +173,15 @@ export async function capture(
     try {
       if (request.isolate)
         await isolate(page, request.sourceId, request.hideDescendants)
-      data = await shoot(page, `[${ID_ATTRIBUTE}="${request.sourceId}"]`)
+      data = request.clip
+        // A pseudo-element has no element to point at, so the page is clipped
+        // to the box the walker computed for it instead.
+        ? `data:image/png;base64,${(await page.screenshot({
+          clip: { x: request.clip.x, y: request.clip.y, width: request.clip.w, height: request.clip.h },
+          omitBackground: true,
+          timeout: 10_000,
+        })).toString('base64')}`
+        : await shoot(page, `[${ID_ATTRIBUTE}="${request.sourceId}"]`)
     }
     catch {
       data = undefined

@@ -108,6 +108,12 @@ export interface RawStyle {
   writingMode: string
   webkitBackgroundClip: string
   overflow: string
+  top: string
+  right: string
+  bottom: string
+  left: string
+  width: string
+  height: string
 }
 
 export interface RawNode {
@@ -147,6 +153,13 @@ export interface RawNode {
   fromShadowRoot?: boolean
   /** A `::marker` list bullet, which is a pseudo-element and has no text node. */
   marker?: string
+  /**
+   * Page coordinates, for a node that cannot be pointed at with a selector.
+   *
+   * A `::before` or `::after` has no element of its own, so a screenshot has
+   * to clip the page rather than target a locator.
+   */
+  pageRect?: Rect
 }
 
 export interface RawSlide {
@@ -182,6 +195,14 @@ export interface RawSnapshot {
    * silently gets a substitution.
    */
   fontResolution: Record<string, string>
+  /**
+   * Pseudo-elements that paint something but whose box cannot be resolved from
+   * computed style, because they take part in inline or block flow.
+   *
+   * Reported rather than dropped in silence, so a missing decoration is a line
+   * in the log instead of a mystery.
+   */
+  unplaceablePseudos: string[]
 }
 
 // ---------------------------------------------------------------------------
