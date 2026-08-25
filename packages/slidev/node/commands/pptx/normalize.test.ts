@@ -307,6 +307,27 @@ describe('finding 15: element opacity reaches the fill', () => {
   })
 })
 
+describe('opacity reaches text, not only shapes', () => {
+  it('greys a paragraph that its ancestor dimmed', () => {
+    // Slidev's own stylesheet greys this kind of paragraph with `opacity: 0.5`
+    // rather than a colour. Opacity is compounded down the tree onto elements,
+    // but a text node has no style of its own, so every run lost it and the
+    // paragraph exported solid black.
+    const nodes = [
+      el(0, -1, 'P', 0, { opacity: 0.5 }),
+      text(1, 0, 'a dimmed paragraph', { opacity: 0.5 }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(texts(slides[0].nodes)[0].runs[0].color).toEqual({ r: 0, g: 0, b: 0, a: 0.5 })
+  })
+
+  it('centres a list marker on its line rather than above it', () => {
+    const item = style({ display: 'list-item' })
+    const { slides } = run([el(0, -1, 'LI', 1, { marker: '\u25AA ' })], [BASE_STYLE, item])
+    expect(texts(slides[0].nodes)[0].valign).toBe('middle')
+  })
+})
+
 describe('finding 6: the slide keeps its own background', () => {
   it('carries the container background into the IR', () => {
     const raw = snapshot([el(0, -1, 'DIV', 0)], [BASE_STYLE])

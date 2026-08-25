@@ -314,6 +314,10 @@ export function collectSnapshot(options: {
           rect: relative(bounds),
           glyphRects: rects.map(relative),
           text,
+          // A text node has no style of its own, but it does inherit the
+          // opacity compounded down the tree. Without this every run lost it,
+          // and a paragraph greyed by `opacity` exported solid black.
+          ...(inheritedOpacity < 1 ? { opacity: inheritedOpacity } : {}),
         })
         return
       }

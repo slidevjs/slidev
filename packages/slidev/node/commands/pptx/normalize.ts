@@ -856,8 +856,11 @@ class SlideWalker {
         elementRect: markerRect,
         lineCount: 1,
         align: 'left',
+        // Centred in the line box, which is where a browser puts a marker.
+        // Anchored to the top it rode above its own item's first line.
+        valign: 'middle',
         lineHeight: resolveLineHeight(style),
-        runs: [runFrom(node.marker, style, this.fontResolution)],
+        runs: [runFrom(node.marker, style, this.fontResolution, undefined, node.opacity)],
       })
     }
 
