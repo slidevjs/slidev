@@ -1048,3 +1048,40 @@ describe('a rendered formula is a picture', () => {
     expect(slides[0].nodes.map(node => node.kind)).toEqual(['text'])
   })
 })
+
+describe('gradient text is the picture, not a backdrop for it', () => {
+  it('reports background-clip before background-image', () => {
+    // Gradient text is both at once: a linear-gradient clipped to the glyphs,
+    // with `color` left as a flat fallback for browsers without the clip.
+    // Called a background image it counts as a backdrop, so its own text is
+    // drawn again on top and the fallback color hides the gradient.
+    const gradient = style({
+      backgroundImage: 'linear-gradient(45deg, rgb(78, 197, 212) 10%, rgb(20, 107, 140) 20%)',
+      webkitBackgroundClip: 'text',
+      color: 'rgb(93, 131, 146)',
+    })
+    expect(rasterReasonFor(el(0, -1, 'H1', 1), gradient)).toBe('background-clip-text')
+  })
+
+  it('leaves the text of a real backdrop editable', () => {
+    const backdrop = style({ backgroundImage: 'url(cover.png)' })
+    expect(rasterReasonFor(el(0, -1, 'DIV', 1), backdrop)).toBe('background-image')
+  })
+
+  it('does not draw the heading twice', () => {
+    const gradient = style({
+      backgroundImage: 'linear-gradient(45deg, rgb(78, 197, 212) 10%, rgb(20, 107, 140) 20%)',
+      webkitBackgroundClip: 'text',
+    })
+    const nodes = [
+      el(0, -1, 'H1', 1, { rect: { x: 54, y: 40, w: 870, h: 40 } }),
+      text(1, 0, 'What is Slidev?', { glyphRects: [{ x: 54, y: 36, w: 256, h: 47 }] }),
+      el(2, -1, 'P', 0, { rect: { x: 54, y: 88, w: 700, h: 23 } }),
+      text(3, 2, 'Body copy', { glyphRects: [{ x: 54, y: 88, w: 200, h: 23 }] }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, gradient])
+    expect(slides[0].nodes.filter(n => n.kind === 'raster')).toHaveLength(1)
+    // The body copy survives; only the heading became a picture.
+    expect(texts(slides[0].nodes).map(t => t.runs.map(r => r.text).join(''))).toEqual(['Body copy'])
+  })
+})

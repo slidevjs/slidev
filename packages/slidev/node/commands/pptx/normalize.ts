@@ -143,10 +143,15 @@ export function rasterReasonFor(node: RawNode, style: RawStyle | undefined): Ras
     return tagReason
   if (!style)
     return undefined
-  if (style.backgroundImage && style.backgroundImage !== 'none')
-    return 'background-image'
+  // Before `background-image`, because gradient text is BOTH: a gradient
+  // clipped to the glyphs, with `color` left as a flat fallback. Reported as a
+  // background image it counts as a backdrop, so the text is drawn again over
+  // the picture, and the fallback color hides the gradient it was standing in
+  // for.
   if (style.webkitBackgroundClip === 'text')
     return 'background-clip-text'
+  if (style.backgroundImage && style.backgroundImage !== 'none')
+    return 'background-image'
   if (style.filter && style.filter !== 'none')
     return 'filter'
   if (style.backdropFilter && style.backdropFilter !== 'none')
