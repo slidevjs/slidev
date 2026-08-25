@@ -19,6 +19,44 @@ export const ID_ATTRIBUTE = 'data-slidev-export-id'
 const RESTORE_ATTRIBUTE = 'data-slidev-export-restore'
 
 /**
+ * Install a cached list of every root that can hold a captured element.
+ *
+ * The document plus every open shadow root, found by one tree walk and kept on
+ * `window` for the rest of the export. `isolate` and `restore` both need it,
+ * and both used to be written against `document` alone: the first found its
+ * target through a fresh recursive scan per capture, and the second could not
+ * see inside a shadow root at all, so anything hidden in one stayed hidden.
+ *
+ * Recomputed if a diagram renders late: the count of hosts is cheap to check
+ * against the cache only by rescanning, so instead the cache is simply built
+ * on first use, after every slide has already rendered.
+ */
+async function installRootFinder(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    if ((window as any).__slidevExportRoots)
+      return
+    let cache: (Document | ShadowRoot)[] | undefined
+    ;(window as any).__slidevExportRoots = () => {
+      if (cache)
+        return cache
+      const found: (Document | ShadowRoot)[] = [document]
+      const collect = (root: Document | ShadowRoot) => {
+        for (const el of Array.from(root.querySelectorAll('*'))) {
+          const shadow = (el as any).shadowRoot
+          if (shadow) {
+            found.push(shadow)
+            collect(shadow)
+          }
+        }
+      }
+      collect(document)
+      cache = found
+      return cache
+    }
+  })
+}
+
+/**
  * Hide everything except the target and its ancestors.
  *
  * `locator.screenshot()` CLIPS THE PAGE to the element's box; it does not
@@ -33,25 +71,23 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
   return await page.evaluate(
     ({ id, idAttribute, restoreAttribute, hideDescendants }) => {
       // `document.querySelector` does not pierce shadow DOM, and Mermaid
-      // renders into one. `page.locator` in `shoot()` DOES pierce, so the
-      // screenshot succeeded while isolation silently did nothing, which is
-      // the doubling this whole mechanism exists to prevent.
-      const find = (root: Document | ShadowRoot): Element | null => {
+      // renders into one. `page.locator` DOES pierce, so the screenshot
+      // succeeded while isolation silently did nothing, which is the doubling
+      // this whole mechanism exists to prevent.
+      //
+      // The light DOM is tried first because that is where all but a handful
+      // of elements live, and the shadow roots are found once and cached on
+      // `window` rather than rescanning every element in the document for each
+      // capture, which is a full tree walk per picture on a deck that has none.
+      const roots = (window as any).__slidevExportRoots() as (Document | ShadowRoot)[]
+      let target: Element | null = null
+      for (const root of roots) {
         const hit = root.querySelector(`[${idAttribute}="${id}"]`)
-        if (hit)
-          return hit
-        for (const el of Array.from(root.querySelectorAll('*'))) {
-          const shadow = (el as any).shadowRoot
-          if (shadow) {
-            const nested = find(shadow)
-            if (nested)
-              return nested
-          }
+        if (hit) {
+          target = hit
+          break
         }
-        return null
       }
-
-      const target = find(document)
       if (!target)
         return false
 
@@ -88,17 +124,32 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
         html.style.color = 'transparent'
       }
 
-      let node: Element | null = target
-      while (node && node.parentElement) {
-        for (const sibling of Array.from(node.parentElement.children)) {
-          if (sibling === node)
-            continue
-          hide(sibling)
+      // Climbs THROUGH a shadow boundary. `parentElement` is null at the top
+      // of a shadow tree, so a loop conditioned on it hid nothing at all for a
+      // target inside one, and still reported success: a Mermaid diagram with
+      // a title over it kept the title in its picture and drew it again.
+      let node: Element = target
+      for (;;) {
+        const parent: HTMLElement | null = node.parentElement
+        if (parent) {
+          for (const sibling of Array.from(parent.children)) {
+            if (sibling !== node)
+              hide(sibling)
+          }
+          // The target keeps its own background: for a backdrop that IS the
+          // thing being captured.
+          clear(parent)
+          node = parent
+          continue
         }
-        // The target keeps its own background: for a backdrop that IS the
-        // thing being captured.
-        clear(node.parentElement)
-        node = node.parentElement
+        const root = node.getRootNode() as ShadowRoot
+        if (!root || !root.host)
+          break
+        for (const sibling of Array.from(root.children)) {
+          if (sibling !== node)
+            hide(sibling)
+        }
+        node = root.host
       }
       return true
     },
@@ -115,7 +166,12 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
  */
 async function restore(page: Page): Promise<void> {
   await page.evaluate((restoreAttribute) => {
-    for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}-bg]`))) {
+    // Through the shadow roots as well. `isolate` hides elements inside them,
+    // and a restore that cannot see those left them `visibility: hidden` for
+    // every capture afterwards, including the whole-slide fallbacks.
+    const roots = (window as any).__slidevExportRoots()
+    const all = (selector: string) => roots.flatMap((root: Document | ShadowRoot) => Array.from(root.querySelectorAll(selector)))
+    for (const el of all(`[${restoreAttribute}-bg]`)) {
       const previous = el.getAttribute(`${restoreAttribute}-bg`) ?? ''
       const style = (el as HTMLElement).style
       if (previous)
@@ -124,7 +180,7 @@ async function restore(page: Page): Promise<void> {
         style.removeProperty('background-color')
       el.removeAttribute(`${restoreAttribute}-bg`)
     }
-    for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}-color]`))) {
+    for (const el of all(`[${restoreAttribute}-color]`)) {
       const previous = el.getAttribute(`${restoreAttribute}-color`) ?? ''
       const style = (el as HTMLElement).style
       if (previous)
@@ -133,7 +189,7 @@ async function restore(page: Page): Promise<void> {
         style.removeProperty('color')
       el.removeAttribute(`${restoreAttribute}-color`)
     }
-    for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}]`))) {
+    for (const el of all(`[${restoreAttribute}]`)) {
       const previous = el.getAttribute(restoreAttribute) ?? ''
       const style = (el as HTMLElement).style
       if (previous)
@@ -334,6 +390,8 @@ export async function capture(
     isolationMissed: 0,
     fallbackSlides: [],
   }
+
+  await installRootFinder(page)
 
   const rasterBySource = new Map<number, IrRaster[]>()
   const imagesBySource = new Map<number, IrImage[]>()
