@@ -1,16 +1,11 @@
 /**
- * `SlideIr[]` to a `.pptx` buffer, through `pptxgenjs`.
- *
- * Pure: no DOM, no Playwright, no filesystem. Everything it needs is in the
- * IR, which is plain JSON, so every rule in here is unit-testable by building
- * a fixture and unzipping the result.
- *
- * The three conversions this file owns are the ones most likely to be broken
- * silently by a future edit, so each has a test that asserts on the generated
- * XML rather than on the JavaScript.
+ * `SlideIr[]` to a `.pptx` buffer, through `pptxgenjs`. Pure: no DOM,
+ * Playwright or filesystem, so every rule is unit-testable by building a
+ * fixture and unzipping the result.
  */
 
 import type { Buffer } from 'node:buffer'
+import type PptxGenJS from 'pptxgenjs'
 import type {
   Border,
   IrBox,
@@ -24,17 +19,10 @@ import type {
 import { INCHES_PER_PX, PT_PER_PX } from './ir'
 
 /**
- * Extra width given to a text box beyond its measured glyph bounds.
- *
- * PowerPoint's text metrics are not Chromium's: the same string in the same
- * font at the same size sets to a slightly different width. Without slack, a
- * single-line label that measured 200.0px wide re-wraps in PowerPoint and the
- * slide gains a line nobody asked for.
- *
- * Single-line boxes get the generous value AND `wrap: false`, because they are
- * the case where a wrap is always wrong. Multi-line boxes get a token amount:
- * they are going to re-wrap differently no matter what, and widening them
- * pushes text into the neighbouring column.
+ * Extra width beyond the measured glyph bounds: PowerPoint sets the same
+ * string slightly wider than Chromium, so a tight single-line box re-wraps.
+ * Single-line boxes get the generous value and `wrap: false`; multi-line
+ * boxes re-wrap anyway, and widening them pushes into the next column.
  */
 const SLACK_SINGLE_LINE_PX = 12
 const SLACK_MULTI_LINE_PX = 2
@@ -48,11 +36,8 @@ function hex(color: Rgba): string {
 }
 
 /**
- * CSS alpha (0 opaque..1) to PowerPoint transparency (0 opaque..100).
- *
- * Returned as undefined when fully opaque: `pptxgenjs` tests this field for
- * truthiness, so an explicit 0 and an absent value behave the same, and
- * omitting it keeps the generated XML free of no-op alpha elements.
+ * CSS alpha (0 opaque..1) to PowerPoint transparency (0 opaque..100), or
+ * undefined when fully opaque: `pptxgenjs` tests the field for truthiness.
  */
 function transparency(color: Rgba): number | undefined {
   if (color.a >= 1)
@@ -95,18 +80,17 @@ function runProps(run: IrRun): Record<string, unknown> {
     options.hyperlink = { url: run.link }
   if (run.endsParagraph)
     options.breakLine = true
-  // `softBreakBefore` emits a real <a:br/> inside one paragraph, which is what
-  // a <br> is. The alternative people reach for is a \v in the text, which
-  // PowerPoint renders but Keynote and LibreOffice do not.
+  // `softBreakBefore` emits a real <a:br/> inside one paragraph; a \v in the
+  // text renders in PowerPoint but not in Keynote or LibreOffice.
   if (run.breakBefore)
     options.softBreakBefore = true
   return options
 }
 
-function addText(slide: any, node: IrText): void {
+function addText(slide: PptxGenJS.Slide, node: IrText): void {
   const slack = node.lineCount === 1 ? SLACK_SINGLE_LINE_PX : SLACK_MULTI_LINE_PX
 
-  // Widening a box moves its content unless the origin moves too: a centred
+  // Widening a box moves its content unless the origin moves too: a centered
   // line would drift right by half the slack, a right-aligned one by all of it.
   let x = node.rect.x
   if (node.align === 'center')
@@ -122,36 +106,28 @@ function addText(slide: any, node: IrText): void {
       w: inch(node.rect.w + slack),
       h: inch(node.rect.h),
       align: node.align,
-      // PowerPoint's default text inset is 0.05in top/bottom and 0.1in
-      // left/right. The IR position is glyph bounds, which already excludes
-      // padding, so any inset here is a visible offset.
+      // PowerPoint's default inset is 0.05in/0.1in; the IR position is glyph
+      // bounds, so any inset here is a visible offset.
       margin: 0,
-      // The default is 'middle', which would centre a one-line box inside a
-      // height that was measured from the glyphs themselves.
+      // The default 'middle' would center a one-line box measured from the glyphs.
       valign: node.valign ?? 'top',
-      // No autofit. Autofit rescales type to fit the box, which would undo the
-      // measured font size the moment PowerPoint disagrees about metrics.
+      // Autofit would rescale type the moment PowerPoint disagrees about metrics.
       fit: 'none',
       isTextBox: true,
       wrap: node.lineCount > 1,
-      // Only for text that actually has more than one line. A single-line box
-      // is measured from the glyph ink, which is shorter than the CSS line
-      // box, so asking PowerPoint to lay out the taller line box inside it
-      // shifts the baseline and can clip descenders.
+      // Only for multi-line text: a single-line box is measured from glyph ink,
+      // shorter than the CSS line box, and the taller value clips descenders.
       ...(node.lineCount > 1 ? { lineSpacing: pt(node.lineHeight) } : {}),
     },
   )
 }
 
 /**
- * One side of a border, as its own filled rectangle.
- *
- * Not a line: `pptxgenjs` gives a shape one uniform `line`, and the four-sided
- * form exists only on table cells. Not `addShape(LINE)` either, because a
- * line's stroke is centred on its geometry, so half of a 2px border would sit
- * outside the element box it is supposed to bound.
+ * One side of a border, as its own filled rectangle: `pptxgenjs` gives a shape
+ * one uniform `line`, and `addShape(LINE)` centers its stroke on the geometry,
+ * putting half the border outside the element box.
  */
-function addEdge(slide: any, shapeType: any, box: IrBox, side: 0 | 1 | 2 | 3, border: Border): void {
+function addEdge(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, box: IrBox, side: 0 | 1 | 2 | 3, border: Border): void {
   const { x, y, w, h } = box.rect
   const t = border.width
   const rect
@@ -180,7 +156,7 @@ function sameBorder(a?: Border, b?: Border): boolean {
     && a.color.a === b.color.a
 }
 
-function addBox(slide: any, shapeType: any, node: IrBox): void {
+function addBox(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, node: IrBox): void {
   const borders = node.borders
   const uniform
     = borders
@@ -210,11 +186,8 @@ function addBox(slide: any, shapeType: any, node: IrBox): void {
       color: hex(borders[0].color),
       width: pt(borders[0].width),
       dashType: borders[0].style === 'solid' ? 'solid' : borders[0].style === 'dotted' ? 'sysDot' : 'dash',
-      // `ShapeLineProps extends ShapeFillProps`, so a line takes the same
-      // transparency a fill does. Without it a uniform hairline set in
-      // `rgba(0, 0, 0, 0.1)` came out solid black, while the SAME border with
-      // one side a different width went through `addEdge` and rendered
-      // correctly, which made it look like anything but a missing property.
+      // `ShapeLineProps extends ShapeFillProps`: without `transparency` a
+      // hairline set in `rgba(0, 0, 0, 0.1)` comes out solid black.
       transparency: transparency(borders[0].color),
     }
   }
@@ -231,10 +204,9 @@ function addBox(slide: any, shapeType: any, node: IrBox): void {
   }
 
   if (node.radius) {
-    // `rectRadius` is documented as "values: 0.0 to 1.0". It is not. The
-    // runtime multiplies it by EMU before dividing by the shorter side, so a
-    // value in the documented range rounds to zero and every corner comes out
-    // square. It is an inch measurement like every other coordinate.
+    // `rectRadius` is documented as "values: 0.0 to 1.0" but is an inch
+    // measurement: the runtime multiplies it by EMU before dividing by the
+    // shorter side, so a value in the documented range rounds to zero.
     const shorter = Math.min(node.rect.w, node.rect.h)
     options.rectRadius = inch(Math.min(node.radius, shorter / 2))
     slide.addShape(shapeType.roundRect, options)
@@ -252,7 +224,7 @@ function addBox(slide: any, shapeType: any, node: IrBox): void {
   }
 }
 
-function addPicture(slide: any, node: IrImage | IrRaster): void {
+function addPicture(slide: PptxGenJS.Slide, node: IrImage | IrRaster): void {
   const options: Record<string, unknown> = {
     data: node.data,
     x: inch(node.rect.x),
@@ -265,10 +237,9 @@ function addPicture(slide: any, node: IrImage | IrRaster): void {
       options.altText = node.alt
     if (node.link)
       options.hyperlink = { url: node.link }
-    // `sizing.crop` reads `w`/`h` as the picture's FULL display size and takes
-    // the visible window from `sizing`, which is the opposite way round from
-    // every other option here: the shape ends up at `sizing.w` by `sizing.h`,
-    // and `<a:srcRect>` trims the rest away.
+    // `sizing.crop` reads `w`/`h` as the picture's full display size and the
+    // visible window from `sizing`, the opposite of every other option here;
+    // `<a:srcRect>` trims the rest away.
     if (node.crop) {
       options.w = inch(node.crop.w)
       options.h = inch(node.crop.h)
@@ -282,8 +253,7 @@ function addPicture(slide: any, node: IrImage | IrRaster): void {
     }
   }
   else {
-    // A rasterized element is unreadable to a screen reader without this, and
-    // "why it is a picture" is the most useful thing to say about it.
+    // The reason is the most useful alt text a rasterized element can carry.
     options.altText = `Rendered as an image because of CSS ${node.reason}`
   }
   slide.addImage(options)
@@ -300,22 +270,18 @@ export interface BuildOptions {
 }
 
 /**
- * Build the deck.
- *
- * `PptxGenJS` is passed in rather than imported so this module stays pure and
- * so the caller keeps the existing dynamic `import('pptxgenjs')`, which is
- * what keeps it off the CLI's startup path.
+ * Build the deck. The constructor is passed in so the caller keeps its dynamic
+ * `import('pptxgenjs')`, which keeps the library off the CLI's startup path.
  */
 export async function buildPptx(
-  PptxGenJS: any,
+  Pptx: typeof PptxGenJS,
   slides: SlideIr[],
   options: BuildOptions,
 ): Promise<Buffer> {
-  const pptx = new PptxGenJS()
+  const pptx = new Pptx()
 
-  // Same layout the image exporter defines, deliberately. Changing it here
-  // would silently change `--format pptx` output too, since both read the
-  // deck's canvas size.
+  // Same layout the image exporter defines; changing it here would silently
+  // change `--format pptx` output too.
   const layoutName = `${options.width}x${options.height}`
   pptx.defineLayout({
     name: layoutName,
@@ -336,9 +302,8 @@ export async function buildPptx(
     const slide = pptx.addSlide()
 
     if (ir.fallbackPng) {
-      // Exactly what `--format pptx` produces, for this slide only. A theme
-      // the walker cannot handle degrades to today's behaviour rather than to
-      // a slide that is subtly wrong.
+      // Exactly what `--format pptx` produces, for this slide only: a theme
+      // the walker cannot handle degrades to today's behavior.
       slide.background = { data: ir.fallbackPng }
     }
     else {

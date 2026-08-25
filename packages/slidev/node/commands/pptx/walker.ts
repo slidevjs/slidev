@@ -1,21 +1,14 @@
-import type { RawSnapshot } from './ir'
+import type { RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
 
 /**
- * The one function that runs inside the browser.
+ * The one function that runs inside the browser. Invariant: zero free variables.
+ * Playwright serializes this function's source and evaluates it where none of this
+ * module's imports exist, so everything it needs is nested inside it or passed as a
+ * parameter; `walker.test.ts` enforces this mechanically. The type-only import above
+ * is erased at compile time and is safe.
  *
- * INVARIANT: zero free variables. Everything it needs is nested inside it or
- * passed as a parameter, because Playwright serialises this function's source
- * and evaluates it in a context where none of this module's imports exist.
- * `walker.test.ts` enforces this mechanically; do not rely on remembering it.
- *
- * The type-only import above is erased at compile time and is therefore safe.
- *
- * It is also deliberately DUMB. It extracts facts that only a live layout
- * engine can supply, and makes no decisions at all. Every judgement - what is
- * a paragraph, what has to be rasterized, what colour that really is - lives
- * in `normalize.ts` on the Node side, where it can be unit-tested against a
- * hand-written fixture. An earlier version of this design put ~340 lines of
- * decision-making in here and none of it could be tested.
+ * It extracts facts only a live layout engine can supply and makes no decisions;
+ * every judgement lives in `normalize.ts`, where it can be unit-tested.
  */
 export function collectSnapshot(options: {
   containerSelector: string
@@ -72,18 +65,18 @@ export function collectSnapshot(options: {
     'overflow',
   ] as const
 
-  const styles: any[] = []
+  /** Strips the quotes CSS keeps around a `content` or font family value. */
+  const RE_QUOTES = /^["']|["']$/g
+
+  const styles: RawStyle[] = []
   const styleIndex = new Map<string, number>()
 
   /**
-   * Intern a computed style.
-   *
-   * `getComputedStyle` exposes several hundred properties and a slide has a few
-   * hundred nodes, so serialising a full style per node is what turns a
-   * snapshot into megabytes crossing the CDP boundary. In practice a few
-   * hundred nodes collapse to a few dozen distinct styles.
+   * Intern a computed style: `getComputedStyle` exposes several hundred properties,
+   * so serializing a full style per node turns a snapshot into megabytes crossing
+   * the CDP boundary. A few hundred nodes collapse to a few dozen distinct styles.
    */
-  function internPseudo(computed: CSSStyleDeclaration): number {
+  function intern(computed: CSSStyleDeclaration): number {
     const record: Record<string, string> = {}
     for (const key of STYLE_KEYS)
       record[key] = computed[key as any] ?? ''
@@ -92,34 +85,16 @@ export function collectSnapshot(options: {
     if (existing !== undefined)
       return existing
     const index = styles.length
-    styles.push(record)
-    styleIndex.set(key, index)
-    return index
-  }
-
-  function internStyle(el: Element): number {
-    const computed = getComputedStyle(el)
-    const record: Record<string, string> = {}
-    for (const key of STYLE_KEYS)
-      record[key] = computed[key as any] ?? ''
-    const key = JSON.stringify(record)
-    const existing = styleIndex.get(key)
-    if (existing !== undefined)
-      return existing
-    const index = styles.length
-    styles.push(record)
+    // Complete by construction: every `RawStyle` key comes from `STYLE_KEYS`.
+    styles.push(record as unknown as RawStyle)
     styleIndex.set(key, index)
     return index
   }
 
   /**
-   * Which family a CSS font stack actually resolves to on this machine.
-   *
-   * Measured by rendering a probe string and comparing widths, because
-   * `document.fonts.check()` returns TRUE for families that do not exist. A
-   * deck whose CSS leads with a licensed corporate face would otherwise name
-   * that face in the file, and every recipient would silently get a
-   * substitution while the export claimed success.
+   * Which family a CSS font stack actually resolves to on this machine, measured by
+   * rendering a probe string and comparing widths: `document.fonts.check()` returns
+   * true for families that do not exist.
    */
   const unplaceablePseudos: string[] = []
   const fontResolution: Record<string, string> = {}
@@ -136,17 +111,15 @@ export function collectSnapshot(options: {
   function isAvailable(family: string): boolean {
     for (const base of BASES) {
       probeContext.font = `72px "${family}", ${base}`
-      // A family that does not exist falls through to the base, so an
-      // identical width against EVERY base means it never took effect.
+      // A missing family falls through to the base, so an identical width
+      // against every base means it never took effect.
       if (probeContext.measureText(PROBE).width !== baseWidths[base])
         return true
     }
     return false
   }
 
-  // CSS keywords, not typefaces. Naming one of these in a .pptx asks
-  // PowerPoint for a font called "system-ui", which does not exist anywhere,
-  // so it substitutes its own default and the deck sets in something arbitrary.
+  // CSS keywords, not typefaces; naming one in a .pptx makes PowerPoint substitute its default.
   const GENERIC = [
     'system-ui',
     'ui-sans-serif',
@@ -170,13 +143,13 @@ export function collectSnapshot(options: {
     if (stack in fontResolution)
       return
     for (const raw of stack.split(',')) {
-      const family = raw.trim().replace(/^["']|["']$/g, '')
+      const family = raw.trim().replace(RE_QUOTES, '')
       if (!family)
         continue
       if (GENERIC.includes(family.toLowerCase()) || family.charAt(0) === '-')
         continue
-      // `@fontsource-variable` names its family "Inter Variable", which nobody
-      // has installed under that name. The face people actually have is "Inter".
+      // `@fontsource-variable` names its family "Inter Variable"; the face
+      // people actually have installed is "Inter".
       const cleaned = family.replace(/\s+Variable$/, '')
       if (isAvailable(cleaned)) {
         fontResolution[stack] = cleaned
@@ -187,21 +160,13 @@ export function collectSnapshot(options: {
   }
 
   /**
-   * The nearest painted background colour at or above the slide container.
-   *
-   * Slidev puts `bg-main` on an ancestor rather than on the container itself
-   * depending on the theme, so the first non-transparent colour up the chain is
-   * what the audience actually sees behind the slide.
+   * The nearest painted background color at or above the slide container; themes
+   * can put `bg-main` on an ancestor rather than on the container itself.
    */
   function backgroundOf(container: Element): string | undefined {
-    // Any FULLY transparent colour ends nothing and the walk continues past
-    // it. Matching only the literal `rgba(0, 0, 0, 0)` stopped on
-    // `rgba(255, 255, 255, 0)`, and on the `oklch(... / 0)` a theme authored
-    // in modern syntax computes to, and returned it as the slide background:
-    // the real painted colour further up was then never found at all.
-    //
-    // Read by asking the browser rather than by parsing, because the browser
-    // is what produced the string and knows every syntax it accepts.
+    // Any fully transparent color ends nothing: matching only the literal
+    // `rgba(0, 0, 0, 0)` misses `rgba(255, 255, 255, 0)` and `oklch(... / 0)`.
+    // The browser judges, since it accepts syntaxes no parser here does.
     const probe = document.createElement('canvas').getContext('2d')
     let node: Element | null = container
     while (node) {
@@ -209,8 +174,7 @@ export function collectSnapshot(options: {
       if (color && color !== 'transparent') {
         if (!probe)
           return color
-        // Painting over an opaque backdrop leaves it untouched only when the
-        // colour contributes nothing at all.
+        // Painting over an opaque backdrop leaves it untouched only when the color contributes nothing.
         probe.clearRect(0, 0, 1, 1)
         probe.fillStyle = color
         probe.fillRect(0, 0, 1, 1)
@@ -223,11 +187,8 @@ export function collectSnapshot(options: {
   }
 
   /**
-   * The text an ordinary list marker renders, which the DOM never exposes.
-   *
-   * Ordered lists need the item's ordinal, counted over previous list-item
-   * siblings and offset by the list's `start`, because the marker is a
-   * generated glyph rather than content.
+   * The text an ordinary list marker renders, which the DOM never exposes; ordered
+   * lists need the ordinal counted over previous list-item siblings.
    */
   function markerGlyph(el: Element, listStyleType: string): string {
     const BULLETS: Record<string, string> = {
@@ -261,20 +222,14 @@ export function collectSnapshot(options: {
   }
 
   const containers = Array.from(document.querySelectorAll(options.containerSelector))
-  const slides: any[] = []
+  const slides: RawSlide[] = []
   let nextId = 0
 
   for (const container of containers) {
     const containerRect = container.getBoundingClientRect()
 
-    // A print page stacks every slide into one tall viewport, so a container
-    // that is not being rendered has a zero-sized rect.
-    //
-    // Note that this does NOT implement `--range`. It does not need to: `go`
-    // puts the range in the query and `PrintContainer` renders `v-for="no of
-    // printRange"`, so an out-of-range slide is never in the DOM at all. The
-    // caller filters by slide number anyway, exactly as the image exporter
-    // does, because neither of them should depend on the print route to do it.
+    // A print page stacks every slide into one tall viewport; a container not
+    // being rendered has a zero-sized rect. `--range` is the caller's filter.
     if (containerRect.width === 0 || containerRect.height === 0)
       continue
 
@@ -285,7 +240,7 @@ export function collectSnapshot(options: {
     if (!Number.isFinite(no))
       continue
 
-    const nodes: any[] = []
+    const nodes: RawNode[] = []
 
     function relative(rect: DOMRect | { left: number, top: number, width: number, height: number }) {
       return {
@@ -299,28 +254,23 @@ export function collectSnapshot(options: {
     function walk(node: Node, parent: number, fromShadowRoot: boolean, inheritedOpacity: number): void {
       if (node.nodeType === 3) {
         const text = node.textContent ?? ''
-        // A whitespace-only node is NOT noise. Markup such as
-        // `<span>Hello</span> <span>World</span>` puts the only space between
-        // the two words in its own text node, and dropping it exports
-        // "HelloWorld". Kept when it actually occupies a line box; a collapsed
-        // space between block elements has no rects and is correctly ignored.
+        // A whitespace-only node can hold the only space between two inline
+        // elements; kept when it occupies a line box, ignored when collapsed.
         if (!text)
           return
         const range = document.createRange()
         range.selectNodeContents(node)
         const rects = Array.from(range.getClientRects())
         range.detach()
-        // A node with no boxes is still reported. A newline inside a
-        // `white-space: pre` block is exactly that, and it is the only record
-        // of where one line of a code block ends and the next begins.
+        // A rect-less node still matters when it holds a newline: inside
+        // `white-space: pre` it is the only record of where a line ends.
         if (!rects.length) {
           if (!text.includes('\n'))
             return
           nodes.push({ id: nextId++, parent, tag: '#text', style: -1, rect: { x: 0, y: 0, w: 0, h: 0 }, glyphRects: [], text })
           return
         }
-        // Glyph rects, not the element box. A text box positioned from the
-        // element rect lands offset by the padding and re-wraps.
+        // Glyph rects, not the element box: positioned from the element rect the text lands offset and re-wraps.
         const bounds = {
           left: Math.min(...rects.map(r => r.left)),
           top: Math.min(...rects.map(r => r.top)),
@@ -335,9 +285,7 @@ export function collectSnapshot(options: {
           rect: relative(bounds),
           glyphRects: rects.map(relative),
           text,
-          // A text node has no style of its own, but it does inherit the
-          // opacity compounded down the tree. Without this every run lost it,
-          // and a paragraph greyed by `opacity` exported solid black.
+          // A text node inherits the compounded opacity; without it a greyed paragraph exports solid.
           ...(inheritedOpacity < 1 ? { opacity: inheritedOpacity } : {}),
         })
         return
@@ -350,17 +298,13 @@ export function collectSnapshot(options: {
       const id = nextId++
       const computed = getComputedStyle(el)
 
-      // `display: none` has no box at all; `visibility: hidden` and
-      // `opacity: 0` do. In `print=clicks` mode a not-yet-revealed v-click
-      // element sits in the DOM at opacity 0, and without this it would be
-      // exported onto every click step of the slide.
+      // `visibility: hidden` and `opacity: 0` still have boxes: a not-yet-revealed
+      // v-click element sits at opacity 0 and would export onto every click step.
       if (computed.display === 'none' || computed.visibility === 'hidden')
         return
       const own = Number(computed.opacity)
-      // CSS `opacity` does NOT inherit: a child of a half-transparent wrapper
-      // computes 1 and would export fully opaque, because DrawingML has no
-      // group opacity to stand in for the wrapper. So it is compounded here,
-      // where the tree is still available.
+      // CSS `opacity` does not inherit, and DrawingML has no group opacity to stand
+      // in for a wrapper's, so it is compounded here while the tree is available.
       const effectiveOpacity = inheritedOpacity * (Number.isFinite(own) ? own : 1)
       if (effectiveOpacity === 0)
         return
@@ -369,15 +313,14 @@ export function collectSnapshot(options: {
       resolveStack(computed.fontFamily)
 
       const box = el.getBoundingClientRect()
-      const record: any = {
+      const record: RawNode = {
         id,
         parent,
         tag: el.tagName.toUpperCase(),
-        style: internStyle(el),
+        style: intern(computed),
         rect: relative(box),
-        // Document coordinates too. An element that overflows the slide is
-        // captured as a page clip rather than as itself, and the clip needs a
-        // page-space rectangle.
+        // Document coordinates too: an element overflowing the slide is
+        // captured as a page clip, which needs a page-space rectangle.
         pageRect: {
           x: box.left + window.scrollX,
           y: box.top + window.scrollY,
@@ -387,10 +330,8 @@ export function collectSnapshot(options: {
       }
       if (effectiveOpacity < 1)
         record.opacity = effectiveOpacity
-      // An inline box that wraps is painted once per line, so its background
-      // and borders belong to the fragments rather than to the union rect
-      // `getBoundingClientRect` reports. Only `inline` proper: an inline-block
-      // is a single box that merely sits in a line, and always has one rect.
+      // An inline box that wraps paints once per line, so backgrounds belong to
+      // the fragments. Only `inline` proper: an inline-block has one rect.
       if (computed.display === 'inline') {
         const fragments = Array.from(el.getClientRects())
         if (fragments.length > 1)
@@ -398,9 +339,7 @@ export function collectSnapshot(options: {
       }
       if (fromShadowRoot)
         record.fromShadowRoot = true
-      // KaTeX's own root. Detected by class because that is what it emits;
-      // there is no tag, and the MathML it also writes for screen readers is
-      // display:none, so it never reaches the walk.
+      // KaTeX marks its root by class; the MathML it writes for screen readers is display:none.
       if (el.classList.contains('katex'))
         record.isMath = true
       if (el.tagName.toUpperCase() === 'IMG') {
@@ -415,25 +354,20 @@ export function collectSnapshot(options: {
           record.href = href
       }
       if (el.tagName.toUpperCase() === 'SVG' && el.querySelector('foreignObject'))
-        // Mermaid puts its node labels in <foreignObject> HTML with no <text>
-        // element, so no PowerPoint renderer draws them. The normalizer routes
-        // these to a picture instead of an empty diagram.
+        // Mermaid puts its labels in <foreignObject> HTML with no <text>
+        // element; the normalizer routes these to a picture.
         record.hasForeignObject = true
 
-      // `::marker` is a pseudo-element, so a list bullet has no text node and a
-      // plain DOM walk drops every bullet glyph in the deck.
-      //
-      // Reading `content` alone is not enough: for an ordinary `<ul>` or `<ol>`
-      // Chromium reports it as `normal` and leaves the glyph to
-      // `list-style-type`, so a check for a non-normal `content` recovers ONLY
-      // custom markers and still loses every default bullet in the deck.
+      // `::marker` is a pseudo-element, so a bullet has no text node. Reading
+      // `content` alone recovers only custom markers: Chromium reports it as
+      // `normal` for ordinary lists and leaves the glyph to `list-style-type`.
       if (computed.display === 'list-item') {
         const marker = getComputedStyle(el, '::marker')
         const explicit = marker && marker.content
           && marker.content !== 'none'
           && marker.content !== 'normal'
         if (explicit) {
-          record.marker = marker.content.replace(/^["']|["']$/g, '')
+          record.marker = marker.content.replace(RE_QUOTES, '')
         }
         else if (computed.listStyleType !== 'none') {
           record.marker = markerGlyph(el, computed.listStyleType)
@@ -442,15 +376,9 @@ export function collectSnapshot(options: {
 
       nodes.push(record)
 
-      // `::before` and `::after` have no DOM node, so a walk over the tree
-      // cannot see them at all. Themes use them for decorative marks - the one
-      // that prompted this was a corporate logo drawn as a background image on
-      // an `::after` - and every one of those was silently missing from the
-      // export.
-      //
-      // Only absolutely positioned pseudos are placeable: their box resolves
-      // against the originating element when it is itself positioned. Anything
-      // else takes part in inline or block flow, where its geometry is not
+      // `::before` and `::after` have no DOM node, so a tree walk cannot see
+      // them, and themes use them for decorative marks. Only absolutely
+      // positioned pseudos are placeable: anything in flow has geometry not
       // recoverable from computed style alone, and is reported instead.
       for (const which of ['::before', '::after']) {
         const pseudo = getComputedStyle(el, which)
@@ -472,11 +400,9 @@ export function collectSnapshot(options: {
           unplaceablePseudos.push(`${el.tagName.toLowerCase()}${which}`)
           continue
         }
-        // `auto` on the opposite side too parses to NaN, which spreads through
-        // the whole `pageRect` and loses the decoration to a failed clip with
-        // nothing in the log naming it. Zero is what `auto` resolves to for an
-        // absolutely positioned box with no other constraint, so it degrades
-        // to a placed decoration rather than a missing one.
+        // `auto` parses to NaN, which spreads through the whole `pageRect` and
+        // loses the decoration to a failed clip. Zero is what `auto` resolves
+        // to for an absolutely positioned box with no other constraint.
         const px = (value: string): number => Number.parseFloat(value) || 0
         const left = pseudo.left === 'auto'
           ? own.width - px(pseudo.right) - width
@@ -491,42 +417,36 @@ export function collectSnapshot(options: {
           width,
           height,
         }
-        // DOCUMENT coordinates, not viewport ones. A clip screenshot is taken
-        // later, after other captures have scrolled the page, and the print
-        // route is far taller than the viewport once every click step has its
-        // own container. Viewport coordinates read at measurement time are
-        // stale by then, and Playwright answers "clipped area is empty",
-        // which the caller swallows and the decoration vanishes.
+        // Document coordinates, not viewport ones: the clip screenshot is taken
+        // after other captures have scrolled the page, so viewport coordinates
+        // read at measurement time are stale by then.
         const pageRect = {
           x: box.left + window.scrollX,
           y: box.top + window.scrollY,
           w: width,
           h: height,
         }
-        const text = pseudo.content.replace(/^["']|["']$/g, '')
+        const text = pseudo.content.replace(RE_QUOTES, '')
         nodes.push({
           id: nextId++,
           parent: id,
           tag: which === '::before' ? '::BEFORE' : '::AFTER',
-          style: internPseudo(pseudo),
+          style: intern(pseudo),
           rect: relative(box),
-          // Page coordinates as well: a pseudo has no element to point a
-          // screenshot at, so it is captured by clipping the page instead.
+          // A pseudo has no element to screenshot, so it is captured by clipping the page.
           pageRect,
           ...(text && pseudo.content !== 'normal' ? { text } : {}),
         })
       }
 
-      // Descend into the shadow root BEFORE the light children. Mermaid
-      // renders into one, so `querySelector('.mermaid svg')` from the document
-      // finds nothing at all.
+      // Descend into the shadow root as well; Mermaid renders into one.
       const shadow = (el as any).shadowRoot
       if (shadow) {
         for (const child of Array.from(shadow.childNodes) as Node[])
           walk(child, id, true, effectiveOpacity)
       }
 
-      // Recurse through zero-sized boxes rather than pruning them. A cover
+      // Recurse through zero-sized boxes rather than pruning them: a cover
       // slide commonly hangs its title off a wrapper that measures 0 high.
       for (const child of Array.from(el.childNodes) as Node[])
         walk(child, id, fromShadowRoot, effectiveOpacity)
@@ -538,15 +458,12 @@ export function collectSnapshot(options: {
     slides.push({
       no,
       clickIndex: Number.isFinite(clickIndex) ? clickIndex : 0,
-      // The exact id, not a pattern rebuilt from `no`. With `--with-clicks` a
-      // slide has one container per step, and a prefix match plus `.first()`
+      // The exact id: with `--with-clicks` a prefix match plus `.first()`
       // hands every step a picture of step one.
       containerId: container.id,
       size: { w: containerRect.width, h: containerRect.height },
-      // The slide's own background, which lives on the container and so is
-      // never reached by a walk that starts at its children. Without it every
-      // slide exports onto PowerPoint's default white, which on a dark theme
-      // is light text on a white page.
+      // The container's own background is never reached by a walk that starts
+      // at its children; without it a dark theme exports onto default white.
       background: backgroundOf(container),
       nodes,
     })
