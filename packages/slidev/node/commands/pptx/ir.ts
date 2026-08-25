@@ -314,6 +314,18 @@ export interface IrImage extends IrBase {
   data: string
   alt?: string
   link?: string
+  /**
+   * The region of the image to show, when the slide edge cut it short.
+   *
+   * `rect` is the visible box, but the picture is drawn at its FULL size and
+   * then cropped to that box, exactly as the browser does. Without this the
+   * whole image was squeezed into the clipped box, so an image running off the
+   * bottom of the slide came out vertically compressed rather than cut off.
+   *
+   * All four values are CSS pixels: `w`/`h` the full undipped display size,
+   * `x`/`y` the offset from its top-left corner to `rect`.
+   */
+  crop?: { x: number, y: number, w: number, h: number }
 }
 
 export type RasterReason

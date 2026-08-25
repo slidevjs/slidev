@@ -817,6 +817,11 @@ class SlideWalker {
     const rect = clipToSlide(node.rect, this.size)
     if (!rect)
       return
+    // Clipping the BOX alone squeezed the whole image into it. The slide
+    // container has `overflow: hidden`, so a browser shows the top of an
+    // oversized image and cuts the rest off; scaling it to fit instead came
+    // out vertically compressed and showed content the audience never saw.
+    const clipped = rect.w !== node.rect.w || rect.h !== node.rect.h
     this.push({
       kind: 'image',
       sourceId: node.id,
@@ -824,6 +829,16 @@ class SlideWalker {
       data: node.src,
       alt: node.alt,
       link: this.linkFor(node),
+      ...(clipped
+        ? {
+            crop: {
+              x: rect.x - node.rect.x,
+              y: rect.y - node.rect.y,
+              w: node.rect.w,
+              h: node.rect.h,
+            },
+          }
+        : {}),
     }, node)
   }
 

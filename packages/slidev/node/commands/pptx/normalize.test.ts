@@ -1000,3 +1000,22 @@ describe('a raster that cannot be placed must not swallow its subtree', () => {
     expect(rasterRequests.map(request => request.sourceId)).toEqual([1])
   })
 })
+
+describe('an image cut off by the slide edge is cropped, not squashed', () => {
+  it('keeps the full display size and takes a window out of it', () => {
+    // The slide container has `overflow: hidden`, so a browser shows the top
+    // of an oversized image and cuts the rest off. Clipping the BOX alone
+    // scaled the whole image into it instead, which came out vertically
+    // compressed and showed content the audience never saw.
+    const nodes = [el(0, -1, 'IMG', 0, { rect: { x: 56, y: 40, w: 434, h: 772 }, src: 'a.png' })]
+    const [image] = run(nodes, [BASE_STYLE]).slides[0].nodes as any[]
+    expect(image.rect).toEqual({ x: 56, y: 40, w: 434, h: 512 })
+    expect(image.crop).toEqual({ x: 0, y: 0, w: 434, h: 772 })
+  })
+
+  it('leaves an image that fits uncropped', () => {
+    const nodes = [el(0, -1, 'IMG', 0, { rect: { x: 10, y: 10, w: 100, h: 50 }, src: 'a.png' })]
+    const [image] = run(nodes, [BASE_STYLE]).slides[0].nodes as any[]
+    expect(image.crop).toBeUndefined()
+  })
+})

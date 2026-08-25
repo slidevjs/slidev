@@ -259,6 +259,21 @@ function addPicture(slide: any, node: IrImage | IrRaster): void {
       options.altText = node.alt
     if (node.link)
       options.hyperlink = { url: node.link }
+    // `sizing.crop` reads `w`/`h` as the picture's FULL display size and takes
+    // the visible window from `sizing`, which is the opposite way round from
+    // every other option here: the shape ends up at `sizing.w` by `sizing.h`,
+    // and `<a:srcRect>` trims the rest away.
+    if (node.crop) {
+      options.w = inch(node.crop.w)
+      options.h = inch(node.crop.h)
+      options.sizing = {
+        type: 'crop',
+        x: inch(node.crop.x),
+        y: inch(node.crop.y),
+        w: inch(node.rect.w),
+        h: inch(node.rect.h),
+      }
+    }
   }
   else {
     // A rasterized element is unreadable to a screen reader without this, and
