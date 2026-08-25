@@ -1,14 +1,13 @@
 import type { IrBox, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
 import { describe, expect, it } from 'vitest'
-import { normalize, parseColor, parseLength, parseShadow, rasterReasonFor } from './normalize'
+import { parseColor } from './color'
+import { normalize, parseLength, parseShadow, rasterReasonFor } from './normalize'
 
 /**
- * One named case per trap.
+ * One named case per rule.
  *
- * Every one of these is a bug that already shipped in the Python
- * implementation this was ported from, or one found by reading Slidev's own
- * `demo/starter`. A rule without a case here is a rule nobody will remember
- * the reason for in six months.
+ * Every case here is a defect that reached a rendered deck. A rule without one
+ * is a rule nobody will remember the reason for.
  */
 
 const BASE_STYLE: RawStyle = {
@@ -110,9 +109,9 @@ describe('value parsing', () => {
     expect(parseColor(undefined)).toBeUndefined()
   })
 
-  it('reads the modern colour syntaxes Chromium leaves in computed values', () => {
+  it('reads the modern color syntaxes Chromium leaves in computed values', () => {
     // A theme authored in modern syntax keeps these in the computed value.
-    // Returning undefined for them dropped every fill and text colour on the
+    // Returning undefined for them dropped every fill and text color on the
     // slide with nothing in the log to explain it.
     const red = parseColor('oklch(0.628 0.2577 29.23)')!
     expect(red.r).toBeGreaterThan(248)
@@ -123,7 +122,7 @@ describe('value parsing', () => {
     expect(parseColor('color(srgb 1 0 0)')).toEqual({ r: 255, g: 0, b: 0, a: 1 })
   })
 
-  it('reports a colour it cannot read instead of failing silently', () => {
+  it('reports a color it cannot read instead of failing silently', () => {
     const bad = style({ backgroundColor: 'lab(50% 40 59.5)' })
     const { unparsedColors } = run([el(0, -1, 'DIV', 1)], [BASE_STYLE, bad])
     expect(unparsedColors).toContain('lab(50% 40 59.5)')
@@ -152,7 +151,7 @@ describe('value parsing', () => {
   })
 })
 
-describe('finding 2: <br> becomes a real line break', () => {
+describe('a <br> becomes a real line break', () => {
   it('breaks between the runs either side of it', () => {
     const nodes = [
       el(0, -1, 'DIV', 0),
@@ -218,7 +217,7 @@ describe('code blocks keep their line structure', () => {
   })
 })
 
-describe('finding 4: an inline image survives', () => {
+describe('an inline image survives the text walk', () => {
   it('draws an <img> that sits inside a line of text', () => {
     const inline = style({ display: 'inline' })
     const nodes = [
@@ -235,7 +234,7 @@ describe('finding 4: an inline image survives', () => {
   })
 })
 
-describe('finding 11: the space between inline elements', () => {
+describe('the space between inline elements', () => {
   it('keeps a whitespace-only node between two spans', () => {
     const inline = style({ display: 'inline' })
     const nodes = [
@@ -253,7 +252,7 @@ describe('finding 11: the space between inline elements', () => {
   })
 })
 
-describe('finding 7: inline-level layout containers still lay out', () => {
+describe('inline-level layout containers still lay out as boxes', () => {
   it('does not merge the cells of an inline-flex badge', () => {
     const badge = style({ display: 'inline-flex' })
     const cell = style({ display: 'inline' })
@@ -274,7 +273,7 @@ describe('finding 7: inline-level layout containers still lay out', () => {
   })
 })
 
-describe('finding 8: a list item flows its children as text', () => {
+describe('a list item flows its children as text', () => {
   it('keeps a bold lead-in joined inside an <li>', () => {
     const item = style({ display: 'list-item' })
     const inline = style({ display: 'inline' })
@@ -294,8 +293,8 @@ describe('finding 8: a list item flows its children as text', () => {
   })
 })
 
-describe('finding 15: element opacity reaches the fill', () => {
-  it('folds opacity into the colour alpha', () => {
+describe('element opacity reaches the fill', () => {
+  it('folds opacity into the color alpha', () => {
     const faded = style({ backgroundColor: 'rgb(0, 0, 0)' })
     // Carried on the NODE, compounded down the tree by the walker, because CSS
     // opacity does not inherit and DrawingML has no group opacity to stand in
@@ -345,7 +344,7 @@ describe('paint order follows CSS, not the document', () => {
 describe('opacity reaches text, not only shapes', () => {
   it('greys a paragraph that its ancestor dimmed', () => {
     // Slidev's own stylesheet greys this kind of paragraph with `opacity: 0.5`
-    // rather than a colour. Opacity is compounded down the tree onto elements,
+    // rather than a color. Opacity is compounded down the tree onto elements,
     // but a text node has no style of its own, so every run lost it and the
     // paragraph exported solid black.
     const nodes = [
@@ -356,14 +355,14 @@ describe('opacity reaches text, not only shapes', () => {
     expect(texts(slides[0].nodes)[0].runs[0].color).toEqual({ r: 0, g: 0, b: 0, a: 0.5 })
   })
 
-  it('centres a list marker on its line rather than above it', () => {
+  it('centers a list marker on its line rather than above it', () => {
     const item = style({ display: 'list-item' })
     const { slides } = run([el(0, -1, 'LI', 1, { marker: '\u25AA ' })], [BASE_STYLE, item])
     expect(texts(slides[0].nodes)[0].valign).toBe('middle')
   })
 })
 
-describe('finding 6: the slide keeps its own background', () => {
+describe('the slide keeps its own background', () => {
   it('carries the container background into the IR', () => {
     const raw = snapshot([el(0, -1, 'DIV', 0)], [BASE_STYLE])
     raw.slides[0].background = 'rgb(18, 18, 18)'
@@ -375,16 +374,16 @@ describe('finding 6: the slide keeps its own background', () => {
 })
 
 describe('a shrink-wrapped container leaves no room to wrap', () => {
-  it('widens a centred block whose container is exactly its ink', () => {
-    const centred = style({ textAlign: 'center' })
-    // The container fits the text exactly, which is what a centred statement
+  it('widens a centered block whose container is exactly its ink', () => {
+    const centered = style({ textAlign: 'center' })
+    // The container fits the text exactly, which is what a centered statement
     // block does. PowerPoint sets the same string slightly wider than
     // Chromium, so with no headroom the longest line wraps and the block
     // gains a line.
     const box = { x: 155, y: 192, w: 487, h: 90 }
     const nodes = [
       el(0, -1, 'DIV', 1, { rect: box }),
-      text(1, 0, 'a long centred statement', {
+      text(1, 0, 'a long centered statement', {
         rect: box,
         glyphRects: [
           { x: 155, y: 192, w: 400, h: 30 },
@@ -393,10 +392,10 @@ describe('a shrink-wrapped container leaves no room to wrap', () => {
         ],
       }),
     ]
-    const { slides } = run(nodes, [BASE_STYLE, centred])
+    const { slides } = run(nodes, [BASE_STYLE, centered])
     const out = texts(slides[0].nodes)[0]
     expect(out.rect.w).toBeGreaterThan(487)
-    // Grown about the centre, so the text does not slide sideways.
+    // Grown about the center, so the text does not slide sideways.
     expect(out.rect.x + out.rect.w / 2).toBeCloseTo(155 + 487 / 2, 5)
   })
 
@@ -418,7 +417,7 @@ describe('a shrink-wrapped container leaves no room to wrap', () => {
   })
 })
 
-describe('trap 16: --range is applied by the caller, not the page', () => {
+describe('--range is applied by the caller, not the page', () => {
   it('exposes the slide number so out-of-range slides can be filtered', () => {
     // The print route renders EVERY slide whatever the `range` query says, so
     // out-of-range containers are fully laid out rather than hidden, and an
@@ -434,7 +433,7 @@ describe('trap 16: --range is applied by the caller, not the page', () => {
   })
 })
 
-describe('cSS pseudo-element decorations', () => {
+describe('pseudo-element decorations are drawn', () => {
   it('draws an ::after that paints a background image', () => {
     const mark = style({
       position: 'absolute',
@@ -469,7 +468,7 @@ describe('cSS pseudo-element decorations', () => {
   })
 })
 
-describe('finding 20: line counting tolerates sub-pixel layout', () => {
+describe('line counting tolerates sub-pixel layout', () => {
   it('treats fragments a fraction of a pixel apart as one line', () => {
     const nodes = [
       el(0, -1, 'DIV', 0),
@@ -487,7 +486,7 @@ describe('finding 20: line counting tolerates sub-pixel layout', () => {
   })
 })
 
-describe('trap 3: layout containers are not text blocks', () => {
+describe('layout containers are not text blocks', () => {
   it('keeps grid cells apart instead of concatenating them', () => {
     const grid = style({ display: 'grid' })
     // The cells are INLINE on purpose. CSS blockifies the children of a grid
@@ -512,7 +511,7 @@ describe('trap 3: layout containers are not text blocks', () => {
   })
 })
 
-describe('trap 7: consecutive inline nodes are one anonymous block', () => {
+describe('consecutive inline nodes form one anonymous block', () => {
   it('joins a bold lead-in with the rest of its sentence', () => {
     const inline = style({ display: 'inline' })
     const bold = style({ display: 'inline', fontWeight: '700' })
@@ -537,7 +536,7 @@ describe('trap 7: consecutive inline nodes are one anonymous block', () => {
   })
 })
 
-describe('trap 8: inline decorations paint before their text', () => {
+describe('inline decorations paint before their text', () => {
   it('emits a chip background ahead of the white label on it', () => {
     const chip = style({ display: 'inline', backgroundColor: 'rgb(0, 128, 0)', color: 'rgb(255, 255, 255)' })
     const nodes = [
@@ -569,7 +568,7 @@ describe('trap 8: inline decorations paint before their text', () => {
     // accumulate across the earlier runs and slide the label off its chip.
     expect(out).toHaveLength(1)
     expect(out[0].runs[0].text).toBe('NEW')
-    // Pinned to the chip and centred in it, not to its own ink. However much
+    // Pinned to the chip and centered in it, not to its own ink. However much
     // wider PowerPoint sets the string than the browser did, the label stays
     // evenly inset instead of ending up hard against one edge.
     expect(out[0].rect).toEqual(label)
@@ -589,7 +588,7 @@ describe('trap 8: inline decorations paint before their text', () => {
     ]
     const { slides } = run(nodes, [BASE_STYLE, inline, code])
     // Slidev gives inline code a background, so an unconditional chip split
-    // cut ordinary sentences into three boxes and centred the code span; when
+    // cut ordinary sentences into three boxes and centered the code span; when
     // such a sentence wrapped, the halves overlapped. A chip is a label on its
     // own, not a word in the middle of a line.
     const out = texts(slides[0].nodes)
@@ -598,7 +597,7 @@ describe('trap 8: inline decorations paint before their text', () => {
   })
 })
 
-describe('trap 2: text-transform and letter-spacing are applied', () => {
+describe('text-transform and letter-spacing are applied', () => {
   it('uppercases the run rather than trusting PowerPoint to do it', () => {
     const label = style({ textTransform: 'uppercase', letterSpacing: '2px' })
     const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'section one')]
@@ -611,7 +610,7 @@ describe('trap 2: text-transform and letter-spacing are applied', () => {
   })
 })
 
-describe('trap 6: text is positioned from glyph bounds', () => {
+describe('text is positioned from glyph bounds', () => {
   it('uses the glyph rects for a single line, not the element box', () => {
     const nodes = [
       el(0, -1, 'DIV', 0, { rect: { x: 0, y: 0, w: 500, h: 100 } }),
@@ -652,7 +651,7 @@ describe('trap 6: text is positioned from glyph bounds', () => {
   })
 })
 
-describe('trap 11: list bullets are pseudo-elements', () => {
+describe('list bullets survive as text', () => {
   it('recovers a ::marker glyph that has no text node', () => {
     const item = style({ display: 'list-item' })
     const nodes = [
@@ -668,7 +667,7 @@ describe('trap 11: list bullets are pseudo-elements', () => {
   })
 })
 
-describe('traps 4, 5, 12, 13: what has to become a picture', () => {
+describe('what has to become a picture', () => {
   it('rasterizes a mermaid svg whose labels are foreignObject', () => {
     expect(rasterReasonFor(el(0, -1, 'SVG', 0, { hasForeignObject: true }), BASE_STYLE))
       .toBe('foreign-object')
@@ -738,7 +737,7 @@ describe('a picture with content over it is captured in isolation', () => {
   })
 })
 
-describe('trap 10: only backdrops need isolation', () => {
+describe('only backdrops need their descendants hidden', () => {
   it('isolates a backdrop but not a leaf picture', () => {
     const backdrop = run(
       [el(0, -1, 'DIV', 1), el(1, 0, 'DIV', 0), text(2, 1, 'on top')],
@@ -758,7 +757,7 @@ describe('trap 10: only backdrops need isolation', () => {
   })
 })
 
-describe('tier 4: the safety valve', () => {
+describe('a slide that cannot be rebuilt falls back to an image', () => {
   it('falls back when a slide with text yields none', () => {
     // Every text node sits under an <svg>, so all of it rasterizes.
     const nodes = [el(0, -1, 'SVG', 0), text(1, 0, 'invisible to the walk')]
@@ -811,7 +810,7 @@ describe('tier 4: the safety valve', () => {
   })
 })
 
-describe('trap 16: content outside the slide', () => {
+describe('content outside the slide is clipped', () => {
   it('clips a shape that overflows the slide', () => {
     const wide = style({ backgroundColor: 'rgb(1, 2, 3)' })
     const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 900, y: 0, w: 500, h: 100 } })]

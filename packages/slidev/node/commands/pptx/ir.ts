@@ -1,52 +1,23 @@
 /**
- * The intermediate representation between the rendered DOM and a `.pptx`.
- *
- * Two levels, on purpose:
- *
- * - `RawSnapshot` is what the in-page walker returns. It stays deliberately
- *   close to the DOM and contains no judgement at all, because everything
- *   inside `page.evaluate` is unreachable from a unit test.
- * - `SlideIr` is what the normalizer produces. It stays deliberately close to
- *   what `pptxgenjs` wants, so the builder is a translation rather than a
- *   second round of decisions.
- *
- * Every judgement lives in `normalize.ts`, between the two, as pure functions
- * over plain JSON. That split is the whole reason this is testable without a
- * browser.
- *
- * This file has no imports and no runtime behaviour beyond three constants, so
- * it can be shared with the browser exporter later without moving anything.
+ * Intermediate representation between the rendered DOM and a `.pptx`.
+ * `RawSnapshot` is what the in-page walker returns and stays close to the DOM
+ * (code inside `page.evaluate` is unreachable from unit tests). `SlideIr` is
+ * what the normalizer produces and stays close to what `pptxgenjs` wants.
+ * Every decision lives in `normalize.ts` between the two, as pure functions
+ * over plain JSON, testable without a browser.
  */
 
 /**
- * All geometry is in CANVAS PIXELS: the deck's `canvasWidth` by
- * `round(canvasWidth / aspectRatio)` space, with the origin at the top-left of
- * the slide (NOT of the print page, which stacks every slide into one tall
- * viewport).
- *
- * `exportSlides` sizes the PowerPoint slide as `width / 96` by `height / 96`
- * INCHES, so one CSS pixel is exactly 1/96 inch whatever `canvasWidth` is.
- * That makes the EMU conversion an integer and there is no rounding drift.
- *
- * Do not assume 1px = 1pt. That holds only for a 960px canvas on a 13.333in
- * slide, which is one specific corporate template and not Slidev's default.
+ * All geometry is in canvas pixels: `canvasWidth` by `round(canvasWidth / aspectRatio)`,
+ * origin at the top-left of the slide (not of the print page). `exportSlides`
+ * sizes the PowerPoint slide as `width / 96` by `height / 96` inches, so one
+ * CSS pixel is exactly 1/96 inch. 1px = 1pt does not hold in general.
  */
 export const EMU_PER_PX = 9525 // 914400 EMU per inch / 96 px per inch
 export const INCHES_PER_PX = 1 / 96
 
-/**
- * Points per pixel, for font size, letter spacing and line height.
- *
- * PowerPoint measures type in points and the canvas measures it in pixels, at
- * 96 px per inch against 72 pt per inch. Forgetting this factor makes every
- * font a third too large, which reads as "the export is broken" rather than as
- * a unit bug.
- */
+/** Points per pixel (72 pt per inch against 96 px per inch), for font size, letter spacing and line height. */
 export const PT_PER_PX = 0.75 // 72 / 96
-
-// ---------------------------------------------------------------------------
-// Walker output
-// ---------------------------------------------------------------------------
 
 export interface Rect {
   x: number
@@ -56,15 +27,8 @@ export interface Rect {
 }
 
 /**
- * The computed-style subset the walker captures, as raw CSS strings.
- *
- * Kept as strings because parsing is judgement and judgement belongs on the
- * Node side. Kept to a fixed subset because `getComputedStyle` exposes several
- * hundred properties and serialising all of them for every node is what turns
- * a snapshot into megabytes.
- *
- * Records are INTERNED: `RawNode.style` is an index into `RawSnapshot.styles`.
- * A real slide has a few hundred nodes and a few dozen distinct styles.
+ * The computed-style subset the walker captures, as raw CSS strings; parsing
+ * happens on the Node side. Interned: `RawNode.style` indexes `RawSnapshot.styles`.
  */
 export interface RawStyle {
   display: string
@@ -128,25 +92,11 @@ export interface RawNode {
   style: number
   /** Relative to the slide container, not to the print page. */
   rect: Rect
-  /**
-   * Text nodes only: `Range.getClientRects()`, slide-relative.
-   *
-   * The raw list rather than a bounding box, because the normalizer counts
-   * distinct line-box tops from it. A text box positioned from the ELEMENT
-   * rect rather than from glyph bounds lands offset and re-wraps.
-   */
+  /** Text nodes only: `Range.getClientRects()`, slide-relative. Kept as the raw list so the normalizer can count line boxes; a text box positioned from the element rect lands offset and re-wraps. */
   glyphRects?: Rect[]
   /** Text nodes only: raw `textContent`, before `text-transform` is applied. */
   text?: string
-  /**
-   * One rect per line box, for an inline element whose box spans more than
-   * one line.
-   *
-   * A browser paints an inline element's background and borders once per line
-   * FRAGMENT, not once over the union of them. `getBoundingClientRect()`
-   * returns that union, so a wrapped inline `<code>` came out as one solid
-   * rectangle covering the blank space at the end of every line.
-   */
+  /** One rect per line box for a wrapped inline element. Backgrounds and borders paint per line fragment, not over the `getBoundingClientRect()` union. */
   fragments?: Rect[]
   /** `IMG` only. */
   src?: string
@@ -154,39 +104,17 @@ export interface RawNode {
   alt?: string
   /** `A` only, resolved absolute. */
   href?: string
-  /**
-   * The root of a rendered formula.
-   *
-   * KaTeX sets a formula as dozens of separately positioned spans in its own
-   * metric fonts, with the radicals, braces and fraction rules drawn as bare
-   * boxes. Walked as text it comes apart: glyphs land off their baselines and
-   * every rule disappears. It is a picture or it is nothing.
-   */
+  /** Root of a rendered formula. KaTeX sets it as dozens of positioned spans in its own metric fonts; walked as text the layout falls apart, so it is rasterized whole. */
   isMath?: boolean
-  /**
-   * An `SVG` carrying `<foreignObject>`, which means its labels are HTML with
-   * no `<text>` element. Mermaid renders this way and no PowerPoint renderer
-   * draws it, so it has to be rasterized.
-   */
+  /** An `SVG` carrying `<foreignObject>` (as Mermaid renders), so its labels are HTML. No PowerPoint renderer draws that; it has to be rasterized. */
   hasForeignObject?: boolean
   /** Reached through `el.shadowRoot`. Mermaid diagrams live in one. */
   fromShadowRoot?: boolean
-  /**
-   * Opacity compounded from every ancestor, present only when below 1.
-   *
-   * CSS `opacity` does not inherit, but DrawingML has no group opacity, so the
-   * wrapper's transparency has to be folded into each descendant's own colours
-   * or a dimmed block exports at full strength.
-   */
+  /** Opacity compounded from every ancestor, present only when below 1. DrawingML has no group opacity, so a wrapper's transparency is folded into each descendant's colors. */
   opacity?: number
   /** A `::marker` list bullet, which is a pseudo-element and has no text node. */
   marker?: string
-  /**
-   * Page coordinates, for a node that cannot be pointed at with a selector.
-   *
-   * A `::before` or `::after` has no element of its own, so a screenshot has
-   * to clip the page rather than target a locator.
-   */
+  /** Page coordinates. A `::before` or `::after` has no element of its own, so a screenshot clips the page instead of targeting a locator. */
   pageRect?: Rect
 }
 
@@ -195,16 +123,10 @@ export interface RawSlide {
   no: number
   /** 0-based click step within that slide. */
   clickIndex: number
-  /**
-   * The container's exact DOM id, e.g. `003-02`.
-   *
-   * Kept verbatim so a screenshot can target this step. Rebuilding a selector
-   * from `no` matches every click step of the slide, and taking the first hit
-   * gives every step a picture of step one.
-   */
+  /** The container's exact DOM id, e.g. `003-02`. A selector rebuilt from `no` matches every click step of the slide, so screenshots target this instead. */
   containerId: string
   size: { w: number, h: number }
-  /** The slide's own background colour, as a raw CSS string. */
+  /** The slide's own background color, as a raw CSS string. */
   background?: string
   nodes: RawNode[]
 }
@@ -213,29 +135,14 @@ export interface RawSnapshot {
   slides: RawSlide[]
   styles: RawStyle[]
   /**
-   * CSS font stack as written, mapped to the family the browser actually
-   * resolved it to.
-   *
-   * This has to be measured in the page, by comparing the rendered width of a
-   * probe string against generic bases. `document.fonts.check()` cannot be
-   * used: it returns true for families that do not exist, so a deck whose CSS
-   * leads with a licensed face names that face in the file and every recipient
-   * silently gets a substitution.
+   * CSS font stack as written, mapped to the family the browser actually resolved,
+   * measured by comparing rendered widths in the page. `document.fonts.check()`
+   * cannot be used: it returns true for families that do not exist.
    */
   fontResolution: Record<string, string>
-  /**
-   * Pseudo-elements that paint something but whose box cannot be resolved from
-   * computed style, because they take part in inline or block flow.
-   *
-   * Reported rather than dropped in silence, so a missing decoration is a line
-   * in the log instead of a mystery.
-   */
+  /** Pseudo-elements that paint something but take part in flow, so their box cannot be resolved from computed style. Reported so the loss is logged rather than silent. */
   unplaceablePseudos: string[]
 }
-
-// ---------------------------------------------------------------------------
-// Normalizer output
-// ---------------------------------------------------------------------------
 
 /** Straight (non-premultiplied) alpha, 0 to 1. */
 export interface Rgba {
@@ -261,12 +168,9 @@ export interface IrBox extends IrBase {
   kind: 'box'
   fill?: Rgba
   /**
-   * Top, right, bottom, left. A side is undefined when it has no visible
-   * border.
-   *
-   * Four sides rather than one border because `pptxgenjs` gives a shape a
-   * single uniform `line`; the four-sided form exists only on table cells. The
-   * builder emits each differing side as its own filled rectangle.
+   * Top, right, bottom, left; a side is undefined when it has no visible border.
+   * `pptxgenjs` gives a shape a single uniform `line`, so the builder emits
+   * each differing side as its own filled rectangle.
    */
   borders?: [Border?, Border?, Border?, Border?]
   /** Pixels. The builder converts; `rectRadius` is in inches despite its docs. */
@@ -296,21 +200,13 @@ export interface IrRun {
 }
 
 export interface IrText extends IrBase {
-  /**
-   * Glyph bounds, NOT the element box. See `RawNode.glyphRects`.
-   */
+  /** `rect` is glyph bounds, not the element box. See `RawNode.glyphRects`. */
   kind: 'text'
-  /** Kept for diagnostics and for future placeholder matching. */
   elementRect: Rect
   /** Distinct line-box tops. One means the box must not be allowed to re-wrap. */
   lineCount: number
   align: 'left' | 'center' | 'right' | 'justify'
-  /**
-   * Vertical anchoring inside the box. Defaults to the top, because a box is
-   * normally measured from the glyphs themselves.
-   *
-   * A chip label is the exception: its box is the decoration, not the ink.
-   */
+  /** Defaults to top, since the box is measured from the glyphs; middle is for chip labels, whose box is the decoration rather than the ink. */
   valign?: 'top' | 'middle'
   /** Pixels, with `normal` already resolved to a number. */
   lineHeight: number
@@ -324,15 +220,10 @@ export interface IrImage extends IrBase {
   alt?: string
   link?: string
   /**
-   * The region of the image to show, when the slide edge cut it short.
-   *
-   * `rect` is the visible box, but the picture is drawn at its FULL size and
-   * then cropped to that box, exactly as the browser does. Without this the
-   * whole image was squeezed into the clipped box, so an image running off the
-   * bottom of the slide came out vertically compressed rather than cut off.
-   *
-   * All four values are CSS pixels: `w`/`h` the full undipped display size,
-   * `x`/`y` the offset from its top-left corner to `rect`.
+   * The visible region when the slide edge cuts the image short: draw at full
+   * size, then crop to `rect`, as the browser does; squeezing into the clipped
+   * box would compress it. All values are CSS pixels: `w`/`h` the full display
+   * size, `x`/`y` the offset from its top-left corner to `rect`.
    */
   crop?: { x: number, y: number, w: number, h: number }
 }
@@ -358,22 +249,9 @@ export interface IrRaster extends IrBase {
   /** A PNG `data:` URI, filled in by the capture phase. */
   data: string
   reason: RasterReason
-  /**
-   * Capture with everything else on the page hidden.
-   *
-   * `locator.screenshot()` clips the page to the element's box rather than
-   * isolating the element, so anything overlapping that box lands in the
-   * picture. Whatever we also draw as a shape would then appear twice.
-   */
+  /** Capture with everything else on the page hidden. `locator.screenshot()` clips the page to the element's box rather than isolating the element, so overlapping content would land in the picture and be drawn twice. */
   isolate: boolean
-  /**
-   * Also hide the element's own children while capturing.
-   *
-   * Only correct when those children are walked and redrawn as shapes, which
-   * is true for a backdrop and false for a leaf such as an `<svg>`. Hiding a
-   * leaf's children removes its artwork from the picture and nothing puts it
-   * back, which emptied the decorative chrome out of a themed deck.
-   */
+  /** Also hide the element's own children while capturing. Correct only when they are walked and redrawn as shapes; hiding a leaf's children (e.g. an `<svg>`) removes its artwork from the picture. */
   hideDescendants: boolean
 }
 
@@ -387,23 +265,13 @@ export interface SlideIr {
   containerId: string
   size: { w: number, h: number }
   background?: Rgba
-  /**
-   * Paint order IS array order.
-   *
-   * An inline decoration, such as a `<span>` with a background colour behind
-   * white text, must be emitted before the text it sits behind, or the text
-   * disappears into the page.
-   */
+  /** Paint order is array order: an inline decoration must be emitted before the text it sits behind. */
   nodes: IrNode[]
   note?: string
   /**
-   * The safety valve. When set, `nodes` is ignored and the slide is written as
-   * a single background picture, exactly as `--format pptx` does today.
-   *
-   * Set when the walk failed, when the slide lost all of its text, or when so
-   * much of it rasterized that vectorizing bought nothing. A theme this
-   * heuristic cannot handle degrades to current behaviour rather than to a
-   * broken file.
+   * When set, `nodes` is ignored and the slide is written as a single background
+   * picture, exactly as `--format pptx` does. Set when the walk failed, the
+   * slide lost all of its text, or so much rasterized that vectorizing bought nothing.
    */
   fallbackPng?: string
   fallbackReason?: string

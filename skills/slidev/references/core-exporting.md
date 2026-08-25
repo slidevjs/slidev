@@ -34,7 +34,7 @@ slidev export --format pptx           # each slide as an image
 slidev export --format pptx-editable  # native shapes, selectable text
 ```
 
-`pptx-editable` measures the rendered slides and rebuilds them as PowerPoint shapes. SVG (including Mermaid), canvas, iframes, gradients and CSS filters stay pictures, and any slide that cannot be rebuilt falls back to the image export on its own. Fonts are named, not embedded. `--per-slide` is not supported with it.
+`pptx-editable` measures the rendered slides and rebuilds them as PowerPoint shapes. SVG (including Mermaid), canvas, iframes, KaTeX formulas, gradients and CSS filters stay pictures, and any slide that cannot be rebuilt falls back to the image export on its own. Fonts are named, not embedded. `--per-slide` is not supported with it.
 
 ### PNG Export
 

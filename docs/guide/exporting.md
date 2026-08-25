@@ -80,19 +80,19 @@ If the recipient needs to edit the deck rather than only present it, export it w
 $ slidev export --format pptx-editable
 ```
 
-The slides are measured in the browser and rebuilt as PowerPoint shapes, so text is selectable and editable, boxes can be moved and recoloured, and presenter notes are carried over as usual. This does not replace `--format pptx`, which stays the most visually faithful option.
+The slides are measured in the browser and rebuilt as PowerPoint shapes, so text is selectable and editable, boxes can be moved and recolored, and presenter notes are carried over as usual. This does not replace `--format pptx`, which stays the most visually faithful option.
 
-What stays a picture: anything PowerPoint has no equivalent for. That includes SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
+What stays a picture: anything PowerPoint has no equivalent for. That includes SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, KaTeX formulas, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
 
 If a slide cannot be rebuilt safely, or ends up mostly pictures anyway, it falls back to the same image export used by `--format pptx`, for that slide alone, and the reason is printed.
 
-Two things worth knowing before you send the file on:
+Worth knowing before you send the file on:
 
 - A `.pptx` names fonts, it does not embed them. The export prints which font families it referenced; recipients need those installed or PowerPoint will substitute.
 - PowerPoint does not measure text exactly as a browser does, so a long paragraph may wrap onto a different number of lines.
 - Decorations a theme draws with `::before` or `::after` in normal flow are left out, and the export lists them. Code block line numbers are one of these: they come from a CSS counter, which has no text and no box that a computed style can report.
 
-`--per-slide` is not supported with this format.
+Like `--format pptx`, this exports one slide per click step unless you pass `--with-clicks false`. `--per-slide` is not supported with it.
 
 ### PNGs and Markdown
 

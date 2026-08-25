@@ -160,11 +160,11 @@ describe('text', () => {
     expect(xml).not.toContain('\v')
   })
 
-  it('keeps the midpoint of a centred line when adding slack', async () => {
-    const centred = { ...textNode([{ text: 'x', fontSize: 16, fontFamily: 'Arial' }]), align: 'center' }
-    const xml = await slideXml([slide([centred])])
+  it('keeps the midpoint of a centered line when adding slack', async () => {
+    const centered = { ...textNode([{ text: 'x', fontSize: 16, fontFamily: 'Arial' }]), align: 'center' }
+    const xml = await slideXml([slide([centered])])
     // The box is widened by 12px so PowerPoint's wider metrics do not force a
-    // wrap, so its origin moves left by half of that to hold the centre still.
+    // wrap, so its origin moves left by half of that to hold the center still.
     expect(xml).toContain('x="-57150"') // -6 * 9525
     expect(xml).toContain('cx="2019300"') // 212 * 9525
   })

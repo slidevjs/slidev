@@ -3,25 +3,16 @@ import { describe, expect, it } from 'vitest'
 import { collectSnapshot } from './walker'
 
 /**
- * The walker is serialised by Playwright and evaluated in a page where none of
- * this module's scope exists. A single free variable - an import, a shared
- * constant, a bundler-injected helper - becomes a `ReferenceError` at runtime,
- * on someone else's machine, inside a browser nobody can attach to.
+ * The walker is serialized by Playwright and evaluated in a page where this
+ * module's scope does not exist, so a free variable becomes a `ReferenceError`
+ * inside someone else's browser. The guard has to run the reconstructed
+ * function, not compile it: an undeclared identifier resolves at call time, so
+ * `new Function(source)` accepts a body full of them. The sandbox global is a
+ * Proxy that throws on any identifier outside a browser allowlist.
  *
- * So the guard has to RUN the reconstructed function, not merely compile it.
- * Compiling proves nothing: an undeclared identifier is resolved at call time,
- * so `new Function(source)` accepts a body full of them and reports success.
- * (This test previously did exactly that, and passed happily with a leaked
- * module constant wired into the walker.)
- *
- * The sandbox global is a Proxy that throws on any identifier outside a small
- * browser allowlist, so a free variable fails loudly and by name.
- *
- * These tests do NOT check what the walker extracts. That needs a real layout
- * engine, and jsdom has none: `getBoundingClientRect` returns zeros there, so
- * a DOM test would assert everything sits at the origin and pass even when the
- * walker is broken. The extraction is kept thin for that reason, and the
- * judgement it feeds lives in `normalize.ts`, which is testable.
+ * What the walker extracts is not tested here. jsdom has no layout engine, so
+ * `getBoundingClientRect` returns zeros and a DOM test would pass with every
+ * rect at the origin. The judgement it feeds lives in `normalize.ts`.
  */
 
 /** Globals a browser really provides. Anything else is a leak. */
