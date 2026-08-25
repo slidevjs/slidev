@@ -31,11 +31,13 @@ describe('isUsableDataUri', () => {
  * A page just real enough for the two things that geometry depends on: how far
  * it actually scrolled, and how tall its viewport is.
  */
-function fakePage(options: { documentHeight: number, viewportHeight: number }) {
-  const calls: { clips: { x: number, y: number, width: number, height: number }[], viewports: number[] } = {
-    clips: [],
-    viewports: [],
-  }
+function fakePage(options: { documentHeight: number, viewportHeight: number, box?: { x: number, y: number, width: number, height: number } }) {
+  const calls: {
+    clips: { x: number, y: number, width: number, height: number }[]
+    viewports: number[]
+    locators: string[]
+    elementShots: number
+  } = { clips: [], viewports: [], locators: [], elementShots: 0 }
   let scrollY = 0
   let viewportHeight = options.viewportHeight
   const page = {
@@ -45,18 +47,36 @@ function fakePage(options: { documentHeight: number, viewportHeight: number }) {
       calls.viewports.push(height)
     },
     async evaluate(fn: any, arg: any) {
-      // Only the scroll calls reach here; both are written as a function of
-      // `window`, which this stands in for.
+      // Only scroll calls reach here, and they are told apart by their source
+      // because all three are no-argument functions of `window`, which this
+      // stands in for.
       if (typeof arg === 'number') {
         scrollY = Math.max(0, Math.min(arg, options.documentHeight - viewportHeight))
         return scrollY
       }
-      scrollY = 0
-      return undefined
+      if (String(fn).includes('scrollTo')) {
+        scrollY = 0
+        return undefined
+      }
+      return scrollY
     },
     async screenshot({ clip }: any) {
       calls.clips.push(clip)
       return Buffer.from('png')
+    },
+    locator(selector: string) {
+      calls.locators.push(selector)
+      return {
+        first: () => ({
+          count: async () => (options.box ? 1 : 0),
+          // Viewport-relative, exactly as Playwright reports it.
+          boundingBox: async () => (options.box ? { ...options.box, y: options.box.y - scrollY } : null),
+          screenshot: async () => {
+            calls.elementShots++
+            return Buffer.from('png')
+          },
+        }),
+      }
     },
   }
   return { page: page as unknown as Page, calls, scrollY: () => scrollY }
@@ -113,5 +133,55 @@ describe('clip captures run through a shortened viewport', () => {
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
     await capture(page, [], [])
     expect(calls.viewports).toEqual([])
+  })
+})
+
+describe('an element is captured by clipping the page at its box', () => {
+  const request = (sourceId: number): RasterRequest => ({ sourceId, isolate: false, hideDescendants: false })
+  const slide = (sourceId: number) => ({
+    no: 1,
+    clickIndex: 0,
+    containerId: '001-01',
+    size: { w: 980, h: 552 },
+    nodes: [{ kind: 'raster' as const, sourceId, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason: 'svg' as const, isolate: false, hideDescendants: false }],
+  })
+
+  it('clips rather than calling locator.screenshot', async () => {
+    // `locator.screenshot()` is the obvious call and returns a region from
+    // somewhere else entirely on a print page far taller than its viewport:
+    // Slidev's own starter deck came back with a picture of slide one pasted
+    // into slide four.
+    const { page, calls } = fakePage({
+      documentHeight: 28152,
+      viewportHeight: 28152,
+      box: { x: 100, y: 2049, width: 320, height: 194 },
+    })
+    const report = await capture(page, [slide(166)] as any, [request(166)])
+    expect(calls.elementShots).toBe(0)
+    expect(calls.clips).toEqual([{ x: 100, y: 1, width: 320, height: 194 }])
+    expect(report.rastersCaptured).toBe(1)
+  })
+
+  it('reports a failure when the element is not there', async () => {
+    const { page } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
+    const report = await capture(page, [slide(166)] as any, [request(166)])
+    expect(report.rastersFailed).toBe(1)
+  })
+})
+
+describe('shootClip', () => {
+  it('clamps a box that starts left of the page', async () => {
+    // An absolutely positioned decoration can hang off the left edge, and
+    // Chromium cannot capture a negative origin: it rejects the whole
+    // screenshot, so the picture went missing rather than being trimmed.
+    const { page, calls } = fakePage({ documentHeight: 5000, viewportHeight: 2000 })
+    await shootClip(page, { x: -28, y: 100, w: 320, h: 194 })
+    expect(calls.clips).toEqual([{ x: 0, y: 1, width: 292, height: 194 }])
+  })
+
+  it('gives up on a box with nothing left to capture', async () => {
+    const { page, calls } = fakePage({ documentHeight: 5000, viewportHeight: 2000 })
+    expect(await shootClip(page, { x: -400, y: 100, w: 320, h: 194 })).toBeUndefined()
+    expect(calls.clips).toEqual([])
   })
 })

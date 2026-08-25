@@ -1019,3 +1019,33 @@ describe('an image cut off by the slide edge is cropped, not squashed', () => {
     expect(image.crop).toBeUndefined()
   })
 })
+
+describe('a rendered formula is a picture', () => {
+  it('rasterizes a KaTeX root instead of walking its spans', () => {
+    // KaTeX sets a formula as dozens of separately positioned spans in its own
+    // metric fonts, with radicals, braces and fraction rules drawn as bare
+    // boxes. Walked as text it comes apart: glyphs land off their baselines
+    // and every rule disappears.
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SPAN', 0, { isMath: true, rect: { x: 10, y: 10, w: 200, h: 40 } }),
+      el(2, 1, 'SPAN', 0, { rect: { x: 10, y: 10, w: 20, h: 40 } }),
+      text(3, 2, '3x'),
+      el(4, 0, 'P', 0, { rect: { x: 10, y: 80, w: 200, h: 20 } }),
+      text(5, 4, 'Block', { glyphRects: [{ x: 10, y: 80, w: 60, h: 20 }] }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
+    const math = slides[0].nodes.filter(node => node.kind === 'raster')
+    expect(math).toHaveLength(1)
+    expect((math[0] as any).reason).toBe('math')
+    // Its own spans are not ALSO drawn as text.
+    expect(texts(slides[0].nodes).map(t => t.runs.map(r => r.text).join(''))).toEqual(['Block'])
+    expect(rasterRequests.map(request => request.sourceId)).toEqual([1])
+  })
+
+  it('leaves an ordinary span alone', () => {
+    const nodes = [el(0, -1, 'SPAN', 0), text(1, 0, 'plain')]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(slides[0].nodes.map(node => node.kind)).toEqual(['text'])
+  })
+})

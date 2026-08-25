@@ -348,6 +348,11 @@ export function rasterReasonFor(node: RawNode, style: RawStyle | undefined): Ras
   // diagnosis for something that looks like vector art and is not.
   if (node.hasForeignObject)
     return 'foreign-object'
+  // Before the tag map too: a formula's root is a `<span>`, so nothing else
+  // here would catch it, and its parts are ordinary spans that walk as text
+  // perfectly well while meaning nothing apart.
+  if (node.isMath)
+    return 'math'
   const tagReason = RASTER_TAGS[node.tag]
   if (tagReason)
     return tagReason

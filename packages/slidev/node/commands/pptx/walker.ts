@@ -378,6 +378,11 @@ export function collectSnapshot(options: {
       }
       if (fromShadowRoot)
         record.fromShadowRoot = true
+      // KaTeX's own root. Detected by class because that is what it emits;
+      // there is no tag, and the MathML it also writes for screen readers is
+      // display:none, so it never reaches the walk.
+      if (el.classList.contains('katex'))
+        record.isMath = true
       if (el.tagName.toUpperCase() === 'IMG') {
         record.src = (el as HTMLImageElement).currentSrc || (el as HTMLImageElement).src
         const alt = (el as HTMLImageElement).alt

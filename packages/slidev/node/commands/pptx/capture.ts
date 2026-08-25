@@ -124,18 +124,30 @@ async function restore(page: Page): Promise<void> {
 /**
  * Screenshot an element, or return undefined.
  *
- * Never throws. A detached, zero-sized or slow element makes
- * `locator.screenshot()` reject, and two of the three call sites are the
- * FALLBACK paths, so an unhandled rejection there crashed the whole export at
- * the exact moment it was trying to degrade gracefully.
+ * Never throws. A detached, zero-sized or slow element makes the underlying
+ * screenshot reject, and two of the three call sites are the FALLBACK paths,
+ * so an unhandled rejection there crashed the whole export at the exact
+ * moment it was trying to degrade gracefully.
+ *
+ * `locator.screenshot()` would be the obvious call and is WRONG here. On a
+ * print page far taller than its viewport, and every deck with click steps is
+ * one, it returns a region from somewhere else on the page entirely: Slidev's
+ * own starter deck came back with a picture of slide one pasted into slide
+ * four. Reading the element's live box and clipping the page at it returns the
+ * right pixels, and is the same primitive a pseudo-element already uses.
  */
 async function shoot(page: Page, selector: string): Promise<string | undefined> {
   try {
     const locator = page.locator(selector).first()
     if (!(await locator.count()))
       return undefined
-    const buffer = await locator.screenshot({ omitBackground: true, timeout: 10_000 })
-    return `data:image/png;base64,${buffer.toString('base64')}`
+    const box = await locator.boundingBox()
+    if (!box || box.width <= 0 || box.height <= 0)
+      return undefined
+    // `boundingBox()` is viewport-relative, and `shootClip` wants document
+    // coordinates, so whatever the page is scrolled to has to be added back.
+    const scrollY = await page.evaluate(() => window.scrollY)
+    return await shootClip(page, { x: box.x, y: box.y + scrollY, w: box.width, h: box.height })
   }
   catch {
     return undefined
@@ -173,13 +185,19 @@ const CLIP_VIEWPORT_HEIGHT = 2000
  * browser has been closed".
  */
 export async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
+  // An element can start left of the page, and Chromium cannot capture a
+  // negative origin. Clamping keeps the picture rather than losing it.
+  const x = Math.max(0, clip.x)
+  const w = clip.w - (x - clip.x)
+  if (w <= 0 || clip.h <= 0)
+    return undefined
   try {
     const scrollY = await page.evaluate((y) => {
       window.scrollTo(0, y)
       return window.scrollY
     }, Math.max(0, clip.y - 1))
     const buffer = await page.screenshot({
-      clip: { x: clip.x, y: clip.y - scrollY, width: clip.w, height: clip.h },
+      clip: { x, y: clip.y - scrollY, width: w, height: clip.h },
       omitBackground: true,
       timeout: 10_000,
     })
@@ -245,6 +263,31 @@ export interface CaptureReport {
    */
   isolationMissed: number
   fallbackSlides: { no: number, reason: string }[]
+}
+
+/**
+ * Run every capture through one short, scrollable viewport.
+ *
+ * Resizing reflows the page, so it happens once around all of them rather than
+ * per capture. Boxes are read live inside this viewport, so they stay
+ * consistent with it even on a deck the resize does move.
+ */
+async function throughShortViewport(page: Page, needed: boolean, fn: () => Promise<void>): Promise<void> {
+  if (!needed) {
+    await fn()
+    return
+  }
+  const viewport = page.viewportSize()
+  try {
+    if (viewport && viewport.height > CLIP_VIEWPORT_HEIGHT)
+      await page.setViewportSize({ width: viewport.width, height: CLIP_VIEWPORT_HEIGHT })
+    await fn()
+  }
+  finally {
+    if (viewport)
+      await page.setViewportSize(viewport)
+    await page.evaluate(() => window.scrollTo(0, 0))
+  }
 }
 
 /**
@@ -315,48 +358,30 @@ export async function capture(
     }
   }
 
-  for (const request of requests.filter(request => !request.clip))
-    await fulfil(request)
+  await throughShortViewport(page, !!requests.length || !!imagesBySource.size, async () => {
+    for (const request of requests)
+      await fulfil(request)
 
-  // Every clip together, through one short viewport, because resizing reflows
-  // the page and doing it per request would cost more than the captures.
-  // Element captures are left on the full-height viewport they were measured
-  // through, so only the path that has to scroll is affected.
-  const clips = requests.filter(request => !!request.clip)
-  if (clips.length) {
-    const viewport = page.viewportSize()
-    try {
-      if (viewport && viewport.height > CLIP_VIEWPORT_HEIGHT)
-        await page.setViewportSize({ width: viewport.width, height: CLIP_VIEWPORT_HEIGHT })
-      for (const request of clips)
-        await fulfil(request)
-    }
-    finally {
-      if (viewport)
-        await page.setViewportSize(viewport)
-      await page.evaluate(() => window.scrollTo(0, 0))
-    }
-  }
-
-  for (const [sourceId, nodes] of imagesBySource) {
-    const url = nodes[0].data
-    const data = await fetchImage(page, url)
-    for (const node of nodes) {
-      if (data) {
-        node.data = data
-        report.imagesFetched++
-      }
-      else {
-        // Could not be fetched, or is an SVG that pptxgenjs would embed with a
-        // broken fallback. Either way, a picture of the element is honest.
-        const shot = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
-        if (shot) {
-          node.data = shot
-          report.rastersCaptured++
+    for (const [sourceId, nodes] of imagesBySource) {
+      const url = nodes[0].data
+      const data = await fetchImage(page, url)
+      for (const node of nodes) {
+        if (data) {
+          node.data = data
+          report.imagesFetched++
+        }
+        else {
+          // Could not be fetched, or is an SVG that pptxgenjs would embed with
+          // a broken fallback. Either way, a picture of the element is honest.
+          const shot = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
+          if (shot) {
+            node.data = shot
+            report.rastersCaptured++
+          }
         }
       }
     }
-  }
+  })
 
   // Anything without real image data would reach pptxgenjs as a bare URL or an
   // empty string. It answers with `Image 'data' value lacks a base64 header!`
@@ -374,28 +399,31 @@ export async function capture(
     })
   }
 
-  for (const slide of slides) {
-    if (!slide.fallbackReason)
-      continue
-    // The exact container id. A prefix match plus `.first()` handed every
-    // click step of a slide the picture of step one.
-    const shot = await shoot(page, `[id="${slide.containerId}"]`)
-    if (shot) {
-      slide.fallbackPng = shot
-      report.fallbackSlides.push({ no: slide.no, reason: slide.fallbackReason })
+  await throughShortViewport(page, slides.some(slide => !!slide.fallbackReason), async () => {
+    for (const slide of slides) {
+      if (!slide.fallbackReason)
+        continue
+      // The exact container id. A prefix match plus `.first()` handed every
+      // click step of a slide the picture of step one.
+      const shot = await shoot(page, `[id="${slide.containerId}"]`)
+      if (shot) {
+        slide.fallbackPng = shot
+        report.fallbackSlides.push({ no: slide.no, reason: slide.fallbackReason })
+      }
+      else {
+        // No picture either. The slide falls back to whatever shapes it has,
+        // but `normalize` withheld its raster requests, so its pictures were
+        // already dropped. Clearing the reason here hid that: the slide came
+        // out gutted and the warning that would have explained it was
+        // suppressed.
+        report.fallbackSlides.push({
+          no: slide.no,
+          reason: `${slide.fallbackReason}, and the replacement screenshot failed, so the slide is incomplete`,
+        })
+        slide.fallbackReason = undefined
+      }
     }
-    else {
-      // No picture either. The slide falls back to whatever shapes it has, but
-      // `normalize` withheld its raster requests, so its pictures were already
-      // dropped. Clearing the reason here hid that: the slide came out gutted
-      // and the warning that would have explained it was suppressed.
-      report.fallbackSlides.push({
-        no: slide.no,
-        reason: `${slide.fallbackReason}, and the replacement screenshot failed, so the slide is incomplete`,
-      })
-      slide.fallbackReason = undefined
-    }
-  }
+  })
 
   return report
 }

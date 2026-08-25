@@ -155,6 +155,15 @@ export interface RawNode {
   /** `A` only, resolved absolute. */
   href?: string
   /**
+   * The root of a rendered formula.
+   *
+   * KaTeX sets a formula as dozens of separately positioned spans in its own
+   * metric fonts, with the radicals, braces and fraction rules drawn as bare
+   * boxes. Walked as text it comes apart: glyphs land off their baselines and
+   * every rule disappears. It is a picture or it is nothing.
+   */
+  isMath?: boolean
+  /**
    * An `SVG` carrying `<foreignObject>`, which means its labels are HTML with
    * no `<text>` element. Mermaid renders this way and no PowerPoint renderer
    * draws it, so it has to be rasterized.
@@ -330,6 +339,7 @@ export interface IrImage extends IrBase {
 
 export type RasterReason
   = | 'svg'
+    | 'math'
     | 'foreign-object'
     | 'canvas'
     | 'media'
