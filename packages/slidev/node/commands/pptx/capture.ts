@@ -61,6 +61,18 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
         html.style.visibility = 'hidden'
       }
 
+      // `omitBackground` only drops the browser's DEFAULT backdrop. A slide
+      // container paints its own white, and an ancestor's background is not a
+      // sibling, so hiding siblings alone still captured it. A mostly
+      // transparent element, an `<svg>` arrow spanning half the slide say,
+      // then became an opaque white rectangle that covered everything under it
+      // once PowerPoint painted it in front.
+      const clear = (el: Element) => {
+        const html = el as HTMLElement
+        html.setAttribute(`${restoreAttribute}-bg`, html.style.backgroundColor || '')
+        html.style.backgroundColor = 'transparent'
+      }
+
       // The target's own descendants, but ONLY when they are redrawn as
       // shapes afterwards. That holds for a backdrop, whose children are
       // walked, and not for a leaf such as an `<svg>`, whose children ARE its
@@ -83,6 +95,9 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
             continue
           hide(sibling)
         }
+        // The target keeps its own background: for a backdrop that IS the
+        // thing being captured.
+        clear(node.parentElement)
         node = node.parentElement
       }
       return true
@@ -100,6 +115,15 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
  */
 async function restore(page: Page): Promise<void> {
   await page.evaluate((restoreAttribute) => {
+    for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}-bg]`))) {
+      const previous = el.getAttribute(`${restoreAttribute}-bg`) ?? ''
+      const style = (el as HTMLElement).style
+      if (previous)
+        style.backgroundColor = previous
+      else
+        style.removeProperty('background-color')
+      el.removeAttribute(`${restoreAttribute}-bg`)
+    }
     for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}-color]`))) {
       const previous = el.getAttribute(`${restoreAttribute}-color`) ?? ''
       const style = (el as HTMLElement).style
