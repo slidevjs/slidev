@@ -46,6 +46,7 @@ catalogs:
     cypress: ^15.20.1
     eslint: ^10.8.1
     eslint-plugin-format: ^2.0.1
+    jszip: ^3.10.1
     lint-staged: ^17.3.0
     nodemon: ^3.1.14
     ovsx: ^1.1.1

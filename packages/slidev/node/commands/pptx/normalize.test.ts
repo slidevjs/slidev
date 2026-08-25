@@ -1,0 +1,574 @@
+import type { IrBox, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
+import { describe, expect, it } from 'vitest'
+import { normalize, parseColor, parseLength, parseShadow, rasterReasonFor, takeUnparsedColors } from './normalize'
+
+/**
+ * One named case per trap.
+ *
+ * Every one of these is a bug that already shipped in the Python
+ * implementation this was ported from, or one found by reading Slidev's own
+ * `demo/starter`. A rule without a case here is a rule nobody will remember
+ * the reason for in six months.
+ */
+
+const BASE_STYLE: RawStyle = {
+  display: 'block',
+  position: 'static',
+  visibility: 'visible',
+  opacity: '1',
+  color: 'rgb(0, 0, 0)',
+  backgroundColor: 'rgba(0, 0, 0, 0)',
+  backgroundImage: 'none',
+  fontFamily: 'Inter, sans-serif',
+  fontSize: '16px',
+  fontWeight: '400',
+  fontStyle: 'normal',
+  textAlign: 'start',
+  textDecorationLine: 'none',
+  textTransform: 'none',
+  letterSpacing: 'normal',
+  lineHeight: 'normal',
+  whiteSpace: 'normal',
+  borderTopWidth: '0px',
+  borderTopStyle: 'none',
+  borderTopColor: 'rgb(0, 0, 0)',
+  borderRightWidth: '0px',
+  borderRightStyle: 'none',
+  borderRightColor: 'rgb(0, 0, 0)',
+  borderBottomWidth: '0px',
+  borderBottomStyle: 'none',
+  borderBottomColor: 'rgb(0, 0, 0)',
+  borderLeftWidth: '0px',
+  borderLeftStyle: 'none',
+  borderLeftColor: 'rgb(0, 0, 0)',
+  borderTopLeftRadius: '0px',
+  boxShadow: 'none',
+  filter: 'none',
+  backdropFilter: 'none',
+  mixBlendMode: 'normal',
+  clipPath: 'none',
+  transform: 'none',
+  writingMode: 'horizontal-tb',
+  webkitBackgroundClip: 'border-box',
+  overflow: 'visible',
+}
+
+function style(overrides: Partial<RawStyle> = {}): RawStyle {
+  return { ...BASE_STYLE, ...overrides }
+}
+
+const RECT = { x: 0, y: 0, w: 100, h: 20 }
+
+function el(id: number, parent: number, tag: string, styleIndex: number, extra: Partial<RawNode> = {}): RawNode {
+  return { id, parent, tag, style: styleIndex, rect: RECT, ...extra }
+}
+
+function text(id: number, parent: number, value: string, extra: Partial<RawNode> = {}): RawNode {
+  return {
+    id,
+    parent,
+    tag: '#text',
+    style: -1,
+    rect: RECT,
+    text: value,
+    glyphRects: [RECT],
+    ...extra,
+  }
+}
+
+function snapshot(nodes: RawNode[], styles: RawStyle[]): RawSnapshot {
+  const slide: RawSlide = { no: 1, clickIndex: 0, containerId: '001-01', size: { w: 980, h: 552 }, nodes }
+  return { slides: [slide], styles, fontResolution: { 'Inter, sans-serif': 'Inter' } }
+}
+
+function run(nodes: RawNode[], styles: RawStyle[]) {
+  return normalize(snapshot(nodes, styles), { notes: new Map() })
+}
+
+function texts(nodes: any[]): IrText[] {
+  return nodes.filter(n => n.kind === 'text')
+}
+
+function boxes(nodes: any[]): IrBox[] {
+  return nodes.filter(n => n.kind === 'box')
+}
+
+describe('value parsing', () => {
+  it('reads rgb and rgba', () => {
+    expect(parseColor('rgb(255, 0, 0)')).toEqual({ r: 255, g: 0, b: 0, a: 1 })
+    expect(parseColor('rgba(0, 0, 0, 0.5)')).toEqual({ r: 0, g: 0, b: 0, a: 0.5 })
+    expect(parseColor('transparent')).toEqual({ r: 0, g: 0, b: 0, a: 0 })
+    expect(parseColor(undefined)).toBeUndefined()
+  })
+
+  it('reads the modern colour syntaxes Chromium leaves in computed values', () => {
+    // A theme authored in modern syntax keeps these in the computed value.
+    // Returning undefined for them dropped every fill and text colour on the
+    // slide with nothing in the log to explain it.
+    const red = parseColor('oklch(0.628 0.2577 29.23)')!
+    expect(red.r).toBeGreaterThan(248)
+    expect(red.g).toBeLessThan(8)
+    expect(red.b).toBeLessThan(8)
+
+    expect(parseColor('hsl(120, 100%, 50%)')).toEqual({ r: 0, g: 255, b: 0, a: 1 })
+    expect(parseColor('color(srgb 1 0 0)')).toEqual({ r: 255, g: 0, b: 0, a: 1 })
+  })
+
+  it('records a colour it cannot read instead of failing silently', () => {
+    takeUnparsedColors()
+    expect(parseColor('lab(50% 40 59.5)')).toBeUndefined()
+    expect(takeUnparsedColors()).toContain('lab(50% 40 59.5)')
+    // Draining is what makes the report per-export rather than cumulative.
+    expect(takeUnparsedColors()).toHaveLength(0)
+  })
+
+  it('reads a pixel length, and a percentage against its basis', () => {
+    expect(parseLength('12.5px')).toBe(12.5)
+    expect(parseLength('normal')).toBe(0)
+    // Chromium keeps border-radius as a percentage rather than resolving it, so
+    // `parseFloat` alone turned `50%` on a 200px box into 50px.
+    expect(parseLength('50%', 200)).toBe(100)
+  })
+
+  it('reads a box-shadow into PowerPoint polar form', () => {
+    const shadow = parseShadow('rgba(0, 0, 0, 0.5) 0px 4px 8px 0px')!
+    expect(shadow.blur).toBe(8)
+    expect(shadow.offset).toBe(4)
+    expect(shadow.angle).toBe(90)
+    expect(shadow.color.a).toBe(0.5)
+    // No DrawingML equivalent for either of these.
+    expect(parseShadow('none')).toBeUndefined()
+    expect(parseShadow('rgb(0, 0, 0) 0px 2px 4px inset')).toBeUndefined()
+  })
+})
+
+describe('finding 2: <br> becomes a real line break', () => {
+  it('breaks between the runs either side of it', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'line one'),
+      el(2, 0, 'BR', 1),
+      text(3, 0, 'line two'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, style({ display: 'inline' })])
+    const out = texts(slides[0].nodes)[0]
+    // Without this the two runs are concatenated and export as "line oneline two".
+    expect(out.runs.map(r => r.text)).toEqual(['line one', 'line two'])
+    expect(out.runs[1].breakBefore).toBe(true)
+    expect(out.runs[0].breakBefore).toBeUndefined()
+  })
+})
+
+describe('finding 4: an inline image survives', () => {
+  it('draws an <img> that sits inside a line of text', () => {
+    const inline = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'P', 0),
+      text(1, 0, 'before'),
+      el(2, 0, 'IMG', 1, { src: 'data:image/png;base64,AAAA', alt: 'logo' }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline])
+    // Inline children go to the text grouper, which finds no text under an
+    // IMG, so the image used to vanish from the slide entirely.
+    const images = slides[0].nodes.filter(n => n.kind === 'image')
+    expect(images).toHaveLength(1)
+    expect((images[0] as any).alt).toBe('logo')
+  })
+})
+
+describe('finding 11: the space between inline elements', () => {
+  it('keeps a whitespace-only node between two spans', () => {
+    const inline = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SPAN', 1),
+      text(2, 1, 'Hello'),
+      text(3, 0, ' '),
+      el(4, 0, 'SPAN', 1),
+      text(5, 4, 'World'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline])
+    const out = texts(slides[0].nodes)[0]
+    // Dropping it exported "HelloWorld".
+    expect(out.runs.map(r => r.text).join('')).toBe('Hello World')
+  })
+})
+
+describe('finding 7: inline-level layout containers still lay out', () => {
+  it('does not merge the cells of an inline-flex badge', () => {
+    const badge = style({ display: 'inline-flex' })
+    const cell = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SPAN', 1),
+      el(2, 1, 'SPAN', 2),
+      text(3, 2, 'Left cell'),
+      el(4, 1, 'SPAN', 2),
+      text(5, 4, 'Right cell'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, badge, cell])
+    // `^inline` matched inline-flex, so the walk descended and concatenated
+    // the cells: the trap-3 bug one display value over.
+    const out = texts(slides[0].nodes)
+    expect(out).toHaveLength(2)
+    expect(out.map(t => t.runs[0].text)).toEqual(['Left cell', 'Right cell'])
+  })
+})
+
+describe('finding 8: a list item flows its children as text', () => {
+  it('keeps a bold lead-in joined inside an <li>', () => {
+    const item = style({ display: 'list-item' })
+    const inline = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'LI', 1, { marker: '\u2022 ' }),
+      text(1, 0, 'plain '),
+      el(2, 0, 'B', 2),
+      text(3, 2, 'bold'),
+      text(4, 0, ' tail'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, item, inline])
+    const out = texts(slides[0].nodes)
+    // One marker box plus ONE grouped paragraph. Treating `list-item` as a
+    // layout container fragmented this into four boxes.
+    expect(out).toHaveLength(2)
+    expect(out[1].runs.map(r => r.text)).toEqual(['plain ', 'bold', ' tail'])
+  })
+})
+
+describe('finding 15: element opacity reaches the fill', () => {
+  it('folds opacity into the colour alpha', () => {
+    const faded = style({ backgroundColor: 'rgb(0, 0, 0)', opacity: '0.5' })
+    const nodes = [el(0, -1, 'DIV', 1)]
+    const { slides } = run(nodes, [BASE_STYLE, faded])
+    // DrawingML has no element opacity, only per-fill alpha, so a half
+    // transparent overlay exported fully opaque and hid what was behind it.
+    expect(boxes(slides[0].nodes)[0].fill).toEqual({ r: 0, g: 0, b: 0, a: 0.5 })
+  })
+})
+
+describe('finding 6: the slide keeps its own background', () => {
+  it('carries the container background into the IR', () => {
+    const raw = snapshot([el(0, -1, 'DIV', 0)], [BASE_STYLE])
+    raw.slides[0].background = 'rgb(18, 18, 18)'
+    const { slides } = normalize(raw, { notes: new Map() })
+    // The walk starts at the container's children, so without this every slide
+    // exported onto PowerPoint's white and a dark theme became unreadable.
+    expect(slides[0].background).toEqual({ r: 18, g: 18, b: 18, a: 1 })
+  })
+})
+
+describe('trap 16: --range is applied by the caller, not the page', () => {
+  it('exposes the slide number so out-of-range slides can be filtered', () => {
+    // The print route renders EVERY slide whatever the `range` query says, so
+    // out-of-range containers are fully laid out rather than hidden, and an
+    // exporter that trusts the page exports the whole deck. `no` and
+    // `containerId` are what let the caller drop them, the same way the image
+    // exporter does with `pages.includes(slideNo)`.
+    const raw = snapshot([el(0, -1, 'DIV', 0), text(1, 0, 'content')], [BASE_STYLE])
+    raw.slides[0].no = 7
+    raw.slides[0].containerId = '007-03'
+    const { slides } = normalize(raw, { notes: new Map() })
+    expect(slides[0].no).toBe(7)
+    expect(slides[0].containerId).toBe('007-03')
+  })
+})
+
+describe('finding 20: line counting tolerates sub-pixel layout', () => {
+  it('treats fragments a fraction of a pixel apart as one line', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'one visual line', {
+        glyphRects: [
+          { x: 0, y: 10.4, w: 50, h: 20 },
+          { x: 50, y: 10.6, w: 50, h: 20 },
+        ],
+      }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    // Rounding put these on 10 and 11 and reported two lines, which flips
+    // `wrap` in the builder, the one decision this number exists to make.
+    expect(texts(slides[0].nodes)[0].lineCount).toBe(1)
+  })
+})
+
+describe('trap 3: layout containers are not text blocks', () => {
+  it('keeps grid cells apart instead of concatenating them', () => {
+    const grid = style({ display: 'grid' })
+    // The cells are INLINE on purpose. CSS blockifies the children of a grid
+    // container into grid items whatever their specified display says, so they
+    // are separate boxes. An earlier fixture used block children, which fall
+    // into separate text groups anyway, so it passed even with the rule
+    // disabled and tested nothing.
+    const cell = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+      el(1, 0, 'SPAN', 2),
+      text(2, 1, 'Left cell'),
+      el(3, 0, 'SPAN', 2),
+      text(4, 3, 'Right cell'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, grid, cell])
+    const out = texts(slides[0].nodes)
+    // The original bug produced one run reading "Left cellRight cell".
+    expect(out).toHaveLength(2)
+    expect(out[0].runs[0].text).toBe('Left cell')
+    expect(out[1].runs[0].text).toBe('Right cell')
+  })
+})
+
+describe('trap 7: consecutive inline nodes are one anonymous block', () => {
+  it('joins a bold lead-in with the rest of its sentence', () => {
+    const inline = style({ display: 'inline' })
+    const bold = style({ display: 'inline', fontWeight: '700' })
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'B', 2),
+      text(2, 1, 'A bold lead-in'),
+      text(3, 0, ', and the rest of the sentence'),
+      el(4, 0, 'DIV', 0),
+      text(5, 4, 'A following block.'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline, bold])
+    const out = texts(slides[0].nodes)
+    // Two boxes: the anonymous block, then the nested block. Emitting three
+    // separate shapes made the bold lead-in and the tail lay out from the same
+    // origin and print on top of each other.
+    expect(out).toHaveLength(2)
+    expect(out[0].runs.map(r => r.text)).toEqual(['A bold lead-in', ', and the rest of the sentence'])
+    expect(out[0].runs[0].bold).toBe(true)
+    expect(out[0].runs[1].bold).toBeUndefined()
+    expect(out[1].runs[0].text).toBe('A following block.')
+  })
+})
+
+describe('trap 8: inline decorations paint before their text', () => {
+  it('emits a chip background ahead of the white label on it', () => {
+    const chip = style({ display: 'inline', backgroundColor: 'rgb(0, 128, 0)', color: 'rgb(255, 255, 255)' })
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SPAN', 1),
+      text(2, 1, 'NEW'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, chip])
+    const kinds = slides[0].nodes.map(n => n.kind)
+    // Paint order is array order. Emitted after the text, the chip covers its
+    // own label and white-on-green becomes white-on-white.
+    expect(kinds.indexOf('box')).toBeLessThan(kinds.indexOf('text'))
+    expect(boxes(slides[0].nodes)[0].fill).toEqual({ r: 0, g: 128, b: 0, a: 1 })
+  })
+})
+
+describe('trap 2: text-transform and letter-spacing are applied', () => {
+  it('uppercases the run rather than trusting PowerPoint to do it', () => {
+    const label = style({ textTransform: 'uppercase', letterSpacing: '2px' })
+    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'section one')]
+    const { slides } = run(nodes, [BASE_STYLE, label])
+    const out = texts(slides[0].nodes)[0]
+    // PowerPoint has no text-transform, so an untransformed run exports the
+    // lower-case source text and the slide silently changes.
+    expect(out.runs[0].text).toBe('SECTION ONE')
+    expect(out.runs[0].letterSpacing).toBe(2)
+  })
+})
+
+describe('trap 6: text is positioned from glyph bounds', () => {
+  it('uses the glyph rects, not the element box, and counts line boxes', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'two lines here', {
+        rect: { x: 0, y: 0, w: 500, h: 100 },
+        glyphRects: [
+          { x: 40, y: 10, w: 120, h: 20 },
+          { x: 40, y: 34, w: 90, h: 20 },
+        ],
+      }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    const out = texts(slides[0].nodes)[0]
+    expect(out.rect).toEqual({ x: 40, y: 10, w: 120, h: 44 })
+    // Line count drives `wrap` in the builder: a single-line box must not be
+    // allowed to re-wrap under PowerPoint's wider metrics.
+    expect(out.lineCount).toBe(2)
+  })
+})
+
+describe('trap 11: list bullets are pseudo-elements', () => {
+  it('recovers a ::marker glyph that has no text node', () => {
+    const item = style({ display: 'list-item' })
+    const nodes = [
+      el(0, -1, 'LI', 1, { marker: '• ' }),
+      text(1, 0, 'first point'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, item])
+    const out = texts(slides[0].nodes)
+    // A plain DOM walk drops every bullet in the deck, because ::marker is not
+    // in the tree.
+    expect(out.some(t => t.runs[0].text.includes('•'))).toBe(true)
+    expect(out.some(t => t.runs[0].text === 'first point')).toBe(true)
+  })
+})
+
+describe('traps 4, 5, 12, 13: what has to become a picture', () => {
+  it('rasterizes a mermaid svg whose labels are foreignObject', () => {
+    expect(rasterReasonFor(el(0, -1, 'SVG', 0, { hasForeignObject: true }), BASE_STYLE))
+      .toBe('foreign-object')
+  })
+
+  it('rasterizes svg, canvas and cross-origin iframes', () => {
+    expect(rasterReasonFor(el(0, -1, 'SVG', 0), BASE_STYLE)).toBe('svg')
+    expect(rasterReasonFor(el(0, -1, 'CANVAS', 0), BASE_STYLE)).toBe('canvas')
+    // demo/starter embeds <Tweet>, which is a cross-origin frame the walker
+    // cannot descend into at all.
+    expect(rasterReasonFor(el(0, -1, 'IFRAME', 0), BASE_STYLE)).toBe('iframe')
+  })
+
+  it('rasterizes a css background image and a gradient-filled heading', () => {
+    expect(rasterReasonFor(el(0, -1, 'DIV', 0), style({ backgroundImage: 'url(cover.jpg)' })))
+      .toBe('background-image')
+    expect(rasterReasonFor(el(0, -1, 'H1', 0), style({ webkitBackgroundClip: 'text' })))
+      .toBe('background-clip-text')
+  })
+
+  it('keeps a shadow-root diagram rather than skipping it', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SVG', 0, { fromShadowRoot: true, hasForeignObject: true }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
+    // Mermaid renders into a shadow root, so a document-level query finds
+    // nothing and the diagram vanishes from the export entirely.
+    expect(slides[0].nodes.some(n => n.kind === 'raster')).toBe(true)
+    expect(rasterRequests).toHaveLength(1)
+  })
+})
+
+describe('trap 10: only backdrops need isolation', () => {
+  it('isolates a backdrop but not a leaf picture', () => {
+    const backdrop = run(
+      [el(0, -1, 'DIV', 1), el(1, 0, 'DIV', 0), text(2, 1, 'on top')],
+      [BASE_STYLE, style({ backgroundImage: 'linear-gradient(red, blue)' })],
+    )
+    const raster = backdrop.slides[0].nodes.find(n => n.kind === 'raster') as any
+    // Without hiding siblings, the text bakes into the backdrop picture and is
+    // then drawn again as a shape, doubling every word.
+    expect(raster.isolate).toBe(true)
+    // Its children are still walked, so the text survives as editable text.
+    expect(texts(backdrop.slides[0].nodes)).toHaveLength(1)
+
+    const leaf = run([el(0, -1, 'SVG', 0)], [BASE_STYLE])
+    expect((leaf.slides[0].nodes[0] as any).isolate).toBe(false)
+  })
+})
+
+describe('tier 4: the safety valve', () => {
+  it('falls back when a slide with text yields none', () => {
+    // Every text node sits under an <svg>, so all of it rasterizes.
+    const nodes = [el(0, -1, 'SVG', 0), text(1, 0, 'invisible to the walk')]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(slides[0].fallbackReason).toMatch(/no text could be recovered/)
+  })
+
+  it('falls back when most of the slide had to be rasterized', () => {
+    const big = { x: 0, y: 0, w: 900, h: 500 }
+    const nodes = [
+      el(0, -1, 'SVG', 0, { rect: big }),
+      el(1, -1, 'DIV', 0),
+      text(2, 1, 'a little text'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(slides[0].fallbackReason).toMatch(/rasterized/)
+  })
+
+  it('does not request captures for a slide that is falling back anyway', () => {
+    const nodes = [el(0, -1, 'SVG', 0), text(1, 0, 'invisible to the walk')]
+    const { rasterRequests } = run(nodes, [BASE_STYLE])
+    // The whole slide becomes one picture, so per-element captures would be
+    // paid for and thrown away.
+    expect(rasterRequests).toHaveLength(0)
+  })
+
+  it('leaves an ordinary slide alone', () => {
+    const nodes = [el(0, -1, 'DIV', 0), text(1, 0, 'ordinary content')]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(slides[0].fallbackReason).toBeUndefined()
+  })
+})
+
+describe('trap 16: content outside the slide', () => {
+  it('clips a shape that overflows the slide', () => {
+    const wide = style({ backgroundColor: 'rgb(1, 2, 3)' })
+    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 900, y: 0, w: 500, h: 100 } })]
+    const { slides } = run(nodes, [BASE_STYLE, wide])
+    // A slide container is overflow:hidden, but PowerPoint has no clipping, so
+    // an unclamped shape sits off the canvas where it cannot even be selected.
+    expect(boxes(slides[0].nodes)[0].rect).toEqual({ x: 900, y: 0, w: 80, h: 100 })
+  })
+
+  it('drops a shape that is entirely off the slide', () => {
+    const off = style({ backgroundColor: 'rgb(1, 2, 3)' })
+    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 2000, y: 0, w: 100, h: 100 } })]
+    const { slides } = run(nodes, [BASE_STYLE, off])
+    expect(boxes(slides[0].nodes)).toHaveLength(0)
+  })
+
+  it('does not let a runaway rect blow up the fallback maths', () => {
+    // Slidev's own starter deck has an element measuring tens of millions of
+    // pixels, which reported "104064986954% of the slide had to be rasterized".
+    const huge = { x: 0, y: 0, w: 24_000_000, h: 24_000_000 }
+    const nodes = [el(0, -1, 'CANVAS', 0, { rect: huge }), el(1, -1, 'DIV', 0), text(2, 1, 'hi')]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(slides[0].fallbackReason).toMatch(/^100% of the slide/)
+  })
+})
+
+describe('a full-bleed backdrop does not trigger the fallback', () => {
+  it('keeps the text on a cover slide editable', () => {
+    const cover = style({ backgroundImage: 'url(https://cover.sli.dev)' })
+    const nodes = [
+      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 980, h: 552 } }),
+      el(1, 0, 'H1', 0),
+      text(2, 1, 'Welcome to Slidev'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, cover])
+    // A cover photo covers 100% of the slide by definition, but the title on
+    // top of it is still perfectly vectorizable. Counting isolated backdrops
+    // toward the raster budget sent every deck with a cover straight to the
+    // whole-slide fallback.
+    expect(slides[0].fallbackReason).toBeUndefined()
+    expect(texts(slides[0].nodes)[0].runs[0].text).toBe('Welcome to Slidev')
+  })
+})
+
+describe('fonts', () => {
+  it('names the family the browser actually resolved', () => {
+    const nodes = [el(0, -1, 'DIV', 0), text(1, 0, 'hello')]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(texts(slides[0].nodes)[0].runs[0].fontFamily).toBe('Inter')
+  })
+
+  it('strips the @fontsource Variable suffix when nothing resolved', () => {
+    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'hello')]
+    const styles = [BASE_STYLE, style({ fontFamily: '"Inter Variable", sans-serif' })]
+    const { slides } = run(nodes, styles)
+    // Nobody has a font installed under the name "Inter Variable"; that is a
+    // packaging artifact of @fontsource-variable.
+    expect(texts(slides[0].nodes)[0].runs[0].fontFamily).toBe('Inter')
+  })
+})
+
+describe('boxes', () => {
+  it('ignores a fully transparent background', () => {
+    const nodes = [el(0, -1, 'DIV', 0)]
+    const { slides } = run(nodes, [BASE_STYLE])
+    expect(boxes(slides[0].nodes)).toHaveLength(0)
+  })
+
+  it('keeps one side of a border', () => {
+    const accent = style({ borderLeftWidth: '4px', borderLeftStyle: 'solid', borderLeftColor: 'rgb(0, 128, 0)' })
+    const nodes = [el(0, -1, 'DIV', 1)]
+    const { slides } = run(nodes, [BASE_STYLE, accent])
+    const box = boxes(slides[0].nodes)[0]
+    expect(box.borders?.[3]).toEqual({ width: 4, color: { r: 0, g: 128, b: 0, a: 1 }, style: 'solid' })
+    expect(box.borders?.[0]).toBeUndefined()
+  })
+})

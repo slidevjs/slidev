@@ -25,6 +25,9 @@ catalogs:
     eslint-plugin-format:
       specifier: ^2.0.1
       version: 2.0.1
+    jszip:
+      specifier: ^3.10.1
+      version: 3.10.1
     lint-staged:
       specifier: ^17.3.0
       version: 17.3.0
@@ -1193,6 +1196,9 @@ importers:
       '@types/plantuml-encoder':
         specifier: catalog:types
         version: 1.4.2
+      jszip:
+        specifier: catalog:dev
+        version: 3.10.1
 
   packages/types:
     dependencies:
