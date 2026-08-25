@@ -143,24 +143,43 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
 }
 
 /**
+ * The tallest viewport a clip screenshot is taken through.
+ *
+ * The print route sizes its viewport to the WHOLE deck, and Chromium can only
+ * rasterize a surface so large: past roughly twenty thousand CSS pixels the
+ * capture is silently truncated and every clip below that point answers
+ * "Clipped area is either empty or outside the resulting image". On a fifty
+ * slide deck that is the last third of the presentation, and because the
+ * caller swallows the failure those pictures simply went missing.
+ *
+ * So clips are taken through a short viewport that is scrolled instead. Small
+ * enough to be far under the limit, tall enough to hold any single element
+ * worth capturing whole.
+ */
+const CLIP_VIEWPORT_HEIGHT = 2000
+
+/**
  * Screenshot a rectangle of the document.
  *
- * `clip` is in DOCUMENT coordinates, while Playwright reads it as
- * viewport-relative. The two agree only at scroll origin, and element
- * screenshots scroll their target into view, so the page is returned to the
- * origin first.
+ * `clip` is in DOCUMENT coordinates while Playwright reads it as
+ * viewport-relative, so the region is scrolled to first and the clip is
+ * rebased onto the scroll position the browser actually reached, which is not
+ * the one asked for at the very bottom of the page.
  *
- * `fullPage` would remove the need for that and is wrong here: the print route
- * sizes its viewport to the whole deck, so a full-page capture of a forty
- * slide deck asks Chromium for a bitmap of some twenty-two thousand pixels
- * squared at `deviceScaleFactor: 2`, and the page dies with "Target page,
- * context or browser has been closed".
+ * `fullPage` would avoid the arithmetic and is wrong here for the same reason
+ * the short viewport exists: a full-page capture of a forty slide deck asks
+ * Chromium for a bitmap of some twenty-two thousand pixels squared at
+ * `deviceScaleFactor: 2`, and the page dies with "Target page, context or
+ * browser has been closed".
  */
-async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
+export async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
   try {
-    await page.evaluate(() => window.scrollTo(0, 0))
+    const scrollY = await page.evaluate((y) => {
+      window.scrollTo(0, y)
+      return window.scrollY
+    }, Math.max(0, clip.y - 1))
     const buffer = await page.screenshot({
-      clip: { x: clip.x, y: clip.y, width: clip.w, height: clip.h },
+      clip: { x: clip.x, y: clip.y - scrollY, width: clip.w, height: clip.h },
       omitBackground: true,
       timeout: 10_000,
     })
@@ -266,7 +285,7 @@ export async function capture(
     }
   }
 
-  for (const request of requests) {
+  const fulfil = async (request: RasterRequest): Promise<void> => {
     let data: string | undefined
     try {
       if (request.isolate && !(await isolate(page, request.isolateId ?? request.sourceId, request.hideDescendants)))
@@ -293,6 +312,29 @@ export async function capture(
       else {
         report.rastersFailed++
       }
+    }
+  }
+
+  for (const request of requests.filter(request => !request.clip))
+    await fulfil(request)
+
+  // Every clip together, through one short viewport, because resizing reflows
+  // the page and doing it per request would cost more than the captures.
+  // Element captures are left on the full-height viewport they were measured
+  // through, so only the path that has to scroll is affected.
+  const clips = requests.filter(request => !!request.clip)
+  if (clips.length) {
+    const viewport = page.viewportSize()
+    try {
+      if (viewport && viewport.height > CLIP_VIEWPORT_HEIGHT)
+        await page.setViewportSize({ width: viewport.width, height: CLIP_VIEWPORT_HEIGHT })
+      for (const request of clips)
+        await fulfil(request)
+    }
+    finally {
+      if (viewport)
+        await page.setViewportSize(viewport)
+      await page.evaluate(() => window.scrollTo(0, 0))
     }
   }
 

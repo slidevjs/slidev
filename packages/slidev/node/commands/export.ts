@@ -576,6 +576,10 @@ export async function exportSlides({
       console.warn(yellow(`  slide ${slide.no}: exported as an image (${slide.reason})`))
     if (result.imagesDropped)
       console.warn(yellow(`  ${result.imagesDropped} image(s) could not be read and were left out`))
+    // Silent until now. A failed capture leaves no shape and no picture, so a
+    // decoration just disappeared and nothing in the output said why.
+    if (result.rastersFailed)
+      console.warn(yellow(`  ${result.rastersFailed} element(s) could not be captured as a picture and were left out`))
     if (result.unparsedColors.length) {
       console.warn(yellow(`  ${result.unparsedColors.length} colour value(s) could not be read, so those fills are missing:`))
       console.warn(dim(`    ${result.unparsedColors.slice(0, 5).join(', ')}`))

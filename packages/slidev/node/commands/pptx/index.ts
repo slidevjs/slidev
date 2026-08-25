@@ -43,6 +43,8 @@ export interface EditableExportResult {
   imagesDropped: number
   /** Captures that asked for isolation and could not find their element. */
   isolationMissed: number
+  /** Elements whose screenshot failed, so they are missing from the file. */
+  rastersFailed: number
   /** Colour strings no parser understood, so the user can report them. */
   unparsedColors: string[]
   /** Decorative pseudo-elements whose box could not be resolved. */
@@ -106,6 +108,7 @@ export async function exportPptxEditable(
     fallbackSlides: report.fallbackSlides,
     imagesDropped: report.imagesDropped,
     isolationMissed: report.isolationMissed,
+    rastersFailed: report.rastersFailed,
     unparsedColors,
     unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
     // A pptx NAMES fonts, it does not carry them. Reporting which families the
