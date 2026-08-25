@@ -68,6 +68,16 @@ export async function exportPptxEditable(
 ): Promise<EditableExportResult> {
   await ctx.go('print')
 
+  // Measurement and capture are two separate passes over the page, so anything
+  // still moving between them is measured at one frame and photographed at
+  // another. A theme spinning a logo forever came out cropped and rotated
+  // against its own box. Pausing rather than cancelling keeps a reveal
+  // animation at the end state the deck settled on, which is what the audience
+  // saw; `animation: none` would rewind a fade-in to opacity zero instead.
+  await ctx.page.addStyleTag({
+    content: '*, *::before, *::after { animation-play-state: paused !important; transition: none !important; }',
+  })
+
   const snapshot = await ctx.page.evaluate(collectSnapshot, {
     containerSelector: '.print-slide-container',
     idAttribute: ID_ATTRIBUTE,
