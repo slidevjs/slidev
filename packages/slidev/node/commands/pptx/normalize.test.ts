@@ -468,15 +468,34 @@ describe('tier 4: the safety valve', () => {
     expect(slides[0].fallbackReason).toMatch(/no text could be recovered/)
   })
 
-  it('falls back when most of the slide had to be rasterized', () => {
+  it('falls back when most of the slide is a picture with nothing over it', () => {
     const big = { x: 0, y: 0, w: 900, h: 500 }
+    const away = { x: 905, y: 505, w: 60, h: 20 }
     const nodes = [
       el(0, -1, 'SVG', 0, { rect: big }),
-      el(1, -1, 'DIV', 0),
-      text(2, 1, 'a little text'),
+      el(1, -1, 'DIV', 0, { rect: away }),
+      text(2, 1, 'a caption in the corner', { rect: away, glyphRects: [away] }),
     ]
     const { slides } = run(nodes, [BASE_STYLE])
+    // The caption sits beside the picture rather than on it, so vectorizing
+    // really did recover almost nothing.
     expect(slides[0].fallbackReason).toMatch(/rasterized/)
+  })
+
+  it('keeps a slide whose text sits ON TOP of a full-bleed picture', () => {
+    const full = { x: 0, y: 0, w: 980, h: 552 }
+    const title = { x: 80, y: 200, w: 400, h: 60 }
+    const nodes = [
+      el(0, -1, 'SVG', 0, { rect: full }),
+      el(1, -1, 'H1', 0, { rect: title }),
+      text(2, 1, 'A cover title', { rect: title, glyphRects: [title] }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    // A cover photo or decorative graphic covers the slide by definition. The
+    // title over it vectorizes perfectly, so counting the picture against the
+    // budget threw away the text on every cover slide in the deck.
+    expect(slides[0].fallbackReason).toBeUndefined()
+    expect(texts(slides[0].nodes)[0].runs[0].text).toBe('A cover title')
   })
 
   it('does not request captures for a slide that is falling back anyway', () => {
@@ -514,9 +533,9 @@ describe('trap 16: content outside the slide', () => {
   it('does not let a runaway rect blow up the fallback maths', () => {
     // Slidev's own starter deck has an element measuring tens of millions of
     // pixels, which reported "104064986954% of the slide had to be rasterized".
+    // No text here, so the area rule is the one under test.
     const huge = { x: 0, y: 0, w: 24_000_000, h: 24_000_000 }
-    const nodes = [el(0, -1, 'CANVAS', 0, { rect: huge }), el(1, -1, 'DIV', 0), text(2, 1, 'hi')]
-    const { slides } = run(nodes, [BASE_STYLE])
+    const { slides } = run([el(0, -1, 'CANVAS', 0, { rect: huge })], [BASE_STYLE])
     expect(slides[0].fallbackReason).toMatch(/^100% of the slide/)
   })
 })

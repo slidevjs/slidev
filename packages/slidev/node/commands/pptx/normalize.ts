@@ -264,6 +264,11 @@ export function clipToSlide(rect: Rect, size: { w: number, h: number }): Rect | 
   return { x, y, w: right - x, h: bottom - y }
 }
 
+/** Whether two rects share any area at all. */
+function overlaps(a: Rect, b: Rect): boolean {
+  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+}
+
 function isVisible(color: Rgba | undefined): boolean {
   return !!color && color.a > 0
 }
@@ -547,8 +552,33 @@ class SlideWalker {
   run(): { nodes: IrNode[], requests: RasterRequest[], rasterArea: number, textCount: number } {
     for (const root of this.childrenOf(-1))
       this.visit(root)
-    const textCount = this.nodes.filter(n => n.kind === 'text').length
-    return { nodes: this.nodes, requests: this.requests, rasterArea: this.rasterArea, textCount }
+
+    const texts = this.nodes.filter(n => n.kind === 'text')
+
+    /**
+     * Raster area that bought us nothing.
+     *
+     * A picture with editable text drawn ON TOP of it is not wasted work: a
+     * full-bleed cover photo or a decorative background graphic covers the
+     * whole slide by definition, while the title over it vectorizes perfectly.
+     * Counting those sent every cover slide straight to the whole-slide
+     * fallback and threw away its text.
+     *
+     * So only a raster that nothing was recovered over counts against the
+     * budget. This generalises the rule that used to apply to isolated
+     * backdrops alone, which missed leaf pictures such as a full-bleed `<svg>`.
+     */
+    for (const node of this.nodes) {
+      if (node.kind !== 'raster')
+        continue
+      if (texts.some(text => overlaps(text.rect, node.rect)))
+        continue
+      const visible = clipToSlide(node.rect, this.size)
+      if (visible)
+        this.rasterArea += visible.w * visible.h
+    }
+
+    return { nodes: this.nodes, requests: this.requests, rasterArea: this.rasterArea, textCount: texts.length }
   }
 
   private emitRaster(node: RawNode, reason: RasterReason): void {
@@ -570,12 +600,6 @@ class SlideWalker {
       isolate,
     })
     this.requests.push({ sourceId: node.id, isolate })
-    // An isolated backdrop does NOT count. It covers the slide by definition -
-    // a full-bleed cover photo is 100% of it - but the content painted on top
-    // is still walked and still becomes editable text. Counting it sent every
-    // deck with a cover image straight to the whole-slide fallback.
-    if (!isolate)
-      this.rasterArea += visible.w * visible.h
   }
 
   private emitImage(node: RawNode): void {
