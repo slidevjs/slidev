@@ -512,17 +512,56 @@ function boundsOf(rects: Rect[]): Rect {
  * integers and report one line as two. That flips `wrap` in the builder, which
  * is the exact decision this number exists to make.
  */
-function countLines(rects: Rect[]): number {
-  const tops = rects.map(r => r.y).sort((a, b) => a - b)
-  let lines = 0
-  let last = Number.NEGATIVE_INFINITY
-  for (const top of tops) {
-    if (top - last > 2) {
-      lines++
-      last = top
+/**
+ * Group glyph rects into line boxes by vertical OVERLAP.
+ *
+ * Not by equal top: runs of different sizes on the SAME line have different
+ * tops, because a browser aligns them on the shared baseline. A heading
+ * reading `Needed a **Pros-Cons comparison** in now?` therefore counted four
+ * lines where it has two, and the line spacing derived from that count stacked
+ * its two real lines on top of each other.
+ *
+ * Two rects share a line when they overlap by more than half the shorter one,
+ * which distinguishes a small run sitting inside a large one from the couple
+ * of pixels of ink that adjacent lines can share when leading is tight.
+ */
+function lineGroups(rects: Rect[]): { top: number, bottom: number }[] {
+  const groups: { top: number, bottom: number }[] = []
+  for (const rect of [...rects].sort((a, b) => a.y - b.y)) {
+    const current = groups[groups.length - 1]
+    const overlap = current ? Math.min(current.bottom, rect.y + rect.h) - Math.max(current.top, rect.y) : 0
+    if (current && overlap > 0.5 * Math.min(rect.h, current.bottom - current.top)) {
+      current.bottom = Math.max(current.bottom, rect.y + rect.h)
+      current.top = Math.min(current.top, rect.y)
+    }
+    else {
+      groups.push({ top: rect.y, bottom: rect.y + rect.h })
     }
   }
-  return lines
+  return groups
+}
+
+function countLines(rects: Rect[]): number {
+  return lineGroups(rects).length
+}
+
+/**
+ * How far apart the browser actually set the lines, or undefined for one line.
+ *
+ * The computed `line-height` belongs to the element, while a line box is as
+ * tall as the largest run ON that line. Where those disagree, and they do
+ * whenever a heading mixes sizes, the computed value is far too small and
+ * PowerPoint sets the lines overlapping. The median keeps one unusually tall
+ * line, such as one carrying an inline image, from stretching the rest.
+ */
+export function measuredLineHeight(rects: Rect[]): number | undefined {
+  const groups = lineGroups(rects)
+  if (groups.length < 2)
+    return undefined
+  const gaps = groups.slice(1).map((group, index) => group.top - groups[index].top)
+  gaps.sort((a, b) => a - b)
+  const median = gaps[Math.floor(gaps.length / 2)]
+  return median > 0 ? median : undefined
 }
 
 /**
@@ -1193,7 +1232,7 @@ class SlideWalker {
       lineCount,
       align,
       valign,
-      lineHeight: resolveLineHeight(anchorStyle),
+      lineHeight: measuredLineHeight(rects) ?? resolveLineHeight(anchorStyle),
       runs,
     }, group[0])
   }

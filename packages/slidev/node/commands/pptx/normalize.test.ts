@@ -908,3 +908,49 @@ describe('boxes', () => {
     expect(box.borders?.[0]).toBeUndefined()
   })
 })
+
+describe('lines are grouped by overlap, not by matching tops', () => {
+  it('counts one line when a heading mixes run sizes', () => {
+    // A browser aligns runs of different sizes on a shared BASELINE, so their
+    // rect tops differ while they sit on the same line. Grouping by top
+    // counted `Needed a **Pros-Cons comparison** in now?` as four lines where
+    // it has two, and the spacing that came out of that count set the two real
+    // lines on top of each other.
+    const small = { x: 0, y: 130, w: 120, h: 40 }
+    const large = { x: 120, y: 100, w: 400, h: 100 }
+    const nodes = [
+      el(0, -1, 'H1', 0, { rect: { x: 0, y: 100, w: 520, h: 220 } }),
+      text(1, 0, 'Needed a ', { glyphRects: [small] }),
+      text(2, 0, 'Pros-Cons', { glyphRects: [large] }),
+      text(3, 0, 'comparison', { glyphRects: [{ ...large, y: 220 }] }),
+      text(4, 0, ' in now?', { glyphRects: [{ ...small, y: 250 }] }),
+    ]
+    const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
+    expect(line.lineCount).toBe(2)
+  })
+
+  it('takes the line spacing from the measured line boxes', () => {
+    // The computed `line-height` belongs to the element while a line box is as
+    // tall as its largest run, so a heading mixing sizes reported far too
+    // little leading and PowerPoint overlapped the lines.
+    const nodes = [
+      el(0, -1, 'H1', 0, { rect: { x: 0, y: 0, w: 400, h: 240 } }),
+      text(1, 0, 'first', { glyphRects: [{ x: 0, y: 0, w: 300, h: 100 }] }),
+      text(2, 0, 'second', { glyphRects: [{ x: 0, y: 120, w: 300, h: 100 }] }),
+    ]
+    const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
+    // 120, the distance between the line tops. `line-height: normal` on a
+    // 16px font would have said 19.2.
+    expect(line.lineHeight).toBe(120)
+  })
+
+  it('still separates lines whose ink very nearly touches', () => {
+    const nodes = [
+      el(0, -1, 'P', 0, { rect: { x: 0, y: 0, w: 400, h: 40 } }),
+      text(1, 0, 'one', { glyphRects: [{ x: 0, y: 0, w: 300, h: 20 }] }),
+      text(2, 0, 'two', { glyphRects: [{ x: 0, y: 19, w: 300, h: 20 }] }),
+    ]
+    const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
+    expect(line.lineCount).toBe(2)
+  })
+})
