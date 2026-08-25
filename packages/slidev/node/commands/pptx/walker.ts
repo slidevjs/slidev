@@ -367,6 +367,15 @@ export function collectSnapshot(options: {
       }
       if (effectiveOpacity < 1)
         record.opacity = effectiveOpacity
+      // An inline box that wraps is painted once per line, so its background
+      // and borders belong to the fragments rather than to the union rect
+      // `getBoundingClientRect` reports. Only `inline` proper: an inline-block
+      // is a single box that merely sits in a line, and always has one rect.
+      if (computed.display === 'inline') {
+        const fragments = Array.from(el.getClientRects())
+        if (fragments.length > 1)
+          record.fragments = fragments.map(relative)
+      }
       if (fromShadowRoot)
         record.fromShadowRoot = true
       if (el.tagName.toUpperCase() === 'IMG') {

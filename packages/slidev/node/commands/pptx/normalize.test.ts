@@ -954,3 +954,31 @@ describe('lines are grouped by overlap, not by matching tops', () => {
     expect(line.lineCount).toBe(2)
   })
 })
+
+describe('a wrapped inline box is painted once per line', () => {
+  it('emits one shape per line fragment', () => {
+    // CSS paints an inline element's background once per line FRAGMENT, while
+    // `getBoundingClientRect` reports the union of them. Drawn as that union,
+    // an inline `<code>` running across three lines filled the ragged space at
+    // the end of every line with its own dark background.
+    const inline = style({ display: 'inline', backgroundColor: 'rgb(0, 0, 0)' })
+    const fragments = [
+      { x: 100, y: 0, w: 200, h: 20 },
+      { x: 0, y: 20, w: 300, h: 20 },
+      { x: 0, y: 40, w: 80, h: 20 },
+    ]
+    const nodes = [
+      el(0, -1, 'CODE', 1, { rect: { x: 0, y: 0, w: 300, h: 60 }, fragments }),
+    ]
+    const painted = boxes(run(nodes, [BASE_STYLE, inline]).slides[0].nodes)
+    expect(painted.map(box => box.rect)).toEqual(fragments)
+  })
+
+  it('leaves an unwrapped element as one shape', () => {
+    const filled = style({ backgroundColor: 'rgb(0, 0, 0)' })
+    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 300, h: 60 } })]
+    const painted = boxes(run(nodes, [BASE_STYLE, filled]).slides[0].nodes)
+    expect(painted).toHaveLength(1)
+    expect(painted[0].rect).toEqual({ x: 0, y: 0, w: 300, h: 60 })
+  })
+})

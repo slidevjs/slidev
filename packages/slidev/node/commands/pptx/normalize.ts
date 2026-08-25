@@ -847,20 +847,27 @@ class SlideWalker {
     const radius = parseLength(style.borderTopLeftRadius, Math.min(node.rect.w, node.rect.h))
     if (!isVisible(fill) && !hasBorder)
       return
-    const rect = clipToSlide(node.rect, this.size)
-    if (!rect)
-      return
-    const box: IrBox = { kind: 'box', sourceId: node.id, rect }
-    if (isVisible(fill))
-      box.fill = fill
-    if (hasBorder)
-      box.borders = borders
-    if (radius > 0)
-      box.radius = radius
     const shadow = parseShadow(style.boxShadow)
-    if (shadow)
-      box.shadow = shadow
-    this.push(box, node)
+    // One shape per line fragment for a wrapped inline element, because that
+    // is what a browser paints. Drawn as one rect over the union instead, an
+    // inline `<code>` running across several lines filled the ragged space at
+    // the end of every line with its own background.
+    const boxes = node.fragments?.length ? node.fragments : [node.rect]
+    for (const source of boxes) {
+      const rect = clipToSlide(source, this.size)
+      if (!rect)
+        continue
+      const box: IrBox = { kind: 'box', sourceId: node.id, rect }
+      if (isVisible(fill))
+        box.fill = fill
+      if (hasBorder)
+        box.borders = borders
+      if (radius > 0)
+        box.radius = radius
+      if (shadow)
+        box.shadow = shadow
+      this.push(box, node)
+    }
   }
 
   private visit(node: RawNode): void {

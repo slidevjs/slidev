@@ -138,6 +138,16 @@ export interface RawNode {
   glyphRects?: Rect[]
   /** Text nodes only: raw `textContent`, before `text-transform` is applied. */
   text?: string
+  /**
+   * One rect per line box, for an inline element whose box spans more than
+   * one line.
+   *
+   * A browser paints an inline element's background and borders once per line
+   * FRAGMENT, not once over the union of them. `getBoundingClientRect()`
+   * returns that union, so a wrapped inline `<code>` came out as one solid
+   * rectangle covering the blank space at the end of every line.
+   */
+  fragments?: Rect[]
   /** `IMG` only. */
   src?: string
   /** `IMG` only. */
