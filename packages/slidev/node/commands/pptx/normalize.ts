@@ -118,13 +118,15 @@ export interface NormalizeResult {
 // ---------------------------------------------------------------------------
 
 /**
- * Colour strings no parser understood, for the current `normalize()` call.
+ * Somewhere to record a colour string no parser understood.
  *
- * Reset at the start of every run rather than drained by the caller: drained
- * state leaks into the next export whenever the current one throws before the
- * caller gets to it, and this module claims to be pure.
+ * Passed in rather than held in the module. As module state it was reset at
+ * the start of every run, which is correct for the export itself, but
+ * `parseColor` is exported and any call made outside a run accumulated into
+ * whatever export came next in the same process. A parameter costs one
+ * argument and makes the claim of purity at the top of this file true.
  */
-let unparsedColors = new Set<string>()
+export type UnparsedColors = Set<string> | undefined
 
 function numbers(body: string): number[] {
   return body.split(/[\s,/]+/).filter(Boolean).map((token) => {
@@ -180,7 +182,7 @@ function hueToRgb(h: number, s: number, l: number): [number, number, number] {
  * returning undefined for those silently drops every fill, border and text
  * colour on the slide with nothing in the log to explain it.
  */
-export function parseColor(value: string | undefined): Rgba | undefined {
+export function parseColor(value: string | undefined, unparsed?: UnparsedColors): Rgba | undefined {
   if (!value)
     return undefined
   const text = value.trim()
@@ -189,7 +191,7 @@ export function parseColor(value: string | undefined): Rgba | undefined {
 
   const fn = text.match(/^([a-z-]+)\(([^)]+)\)$/i)
   if (!fn) {
-    unparsedColors.add(text)
+    unparsed?.add(text)
     return undefined
   }
   const name = fn[1].toLowerCase()
@@ -208,13 +210,13 @@ export function parseColor(value: string | undefined): Rgba | undefined {
         a: channels.length > 3 && !Number.isNaN(channels[3]) ? channels[3] : 1,
       }
     }
-    unparsedColors.add(text)
+    unparsed?.add(text)
     return undefined
   }
 
   const parts = numbers(fn[2])
   if (parts.some(Number.isNaN)) {
-    unparsedColors.add(text)
+    unparsed?.add(text)
     return undefined
   }
   const alpha = (index: number) => (parts.length > index ? parts[index] : 1)
@@ -251,7 +253,7 @@ export function parseColor(value: string | undefined): Rgba | undefined {
     return { r, g, b: bb, a: alpha(3) }
   }
 
-  unparsedColors.add(text)
+  unparsed?.add(text)
   return undefined
 }
 
@@ -321,10 +323,10 @@ function withOpacity(color: Rgba | undefined, opacity: number | undefined): Rgba
   return { ...color, a: color.a * Math.max(0, opacity) }
 }
 
-function borderOf(style: RawStyle, side: 'Top' | 'Right' | 'Bottom' | 'Left'): Border | undefined {
+function borderOf(style: RawStyle, side: 'Top' | 'Right' | 'Bottom' | 'Left', unparsed: UnparsedColors): Border | undefined {
   const width = parseLength((style as any)[`border${side}Width`])
   const lineStyle = (style as any)[`border${side}Style`] as string
-  const color = parseColor((style as any)[`border${side}Color`])
+  const color = parseColor((style as any)[`border${side}Color`], unparsed)
   if (width <= 0 || !lineStyle || lineStyle === 'none' || lineStyle === 'hidden' || !isVisible(color))
     return undefined
   return {
@@ -470,7 +472,7 @@ export function fallbackFamily(stack: string): string {
   return 'Arial'
 }
 
-function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, link?: string, opacity?: number): IrRun {
+function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, unparsed: UnparsedColors, link?: string, opacity?: number): IrRun {
   const weight = Number(style.fontWeight)
   const decoration = style.textDecorationLine || ''
   const family = fontResolution[style.fontFamily] || fallbackFamily(style.fontFamily)
@@ -487,7 +489,7 @@ function runFrom(text: string, style: RawStyle, fontResolution: Record<string, s
     run.underline = true
   if (decoration.includes('line-through'))
     run.strike = true
-  const color = withOpacity(parseColor(style.color), opacity)
+  const color = withOpacity(parseColor(style.color, unparsed), opacity)
   if (isVisible(color))
     run.color = color
   const spacing = parseLength(style.letterSpacing)
@@ -575,11 +577,11 @@ export function measuredLineHeight(rects: Rect[]): number | undefined {
  * CSS gives an x/y offset; DrawingML wants an angle and a distance. Multiple
  * shadows and inset shadows have no equivalent and are dropped.
  */
-export function parseShadow(value: string | undefined): IrBox['shadow'] {
+export function parseShadow(value: string | undefined, unparsed?: UnparsedColors): IrBox['shadow'] {
   if (!value || value === 'none' || value.includes('inset'))
     return undefined
   // Any functional colour notation; `rgb()` is already covered by this.
-  const color = parseColor(value.match(/^[a-z-]+\([^)]+\)/i)?.[0])
+  const color = parseColor(value.match(/^[a-z-]+\([^)]+\)/i)?.[0], unparsed)
   if (!isVisible(color))
     return undefined
   const lengths = [...value.matchAll(/(-?[\d.]+)px/g)].map(m => Number(m[1]))
@@ -618,6 +620,7 @@ class SlideWalker {
     slide: RawSlide,
     private styles: RawStyle[],
     private fontResolution: Record<string, string>,
+    private unparsed: UnparsedColors,
   ) {
     this.size = slide.size
     for (const node of slide.nodes) {
@@ -697,9 +700,9 @@ class SlideWalker {
     const style = this.styleOf(node)
     if (!style)
       return false
-    if (isVisible(withOpacity(parseColor(style.backgroundColor), node.opacity)))
+    if (isVisible(withOpacity(parseColor(style.backgroundColor, this.unparsed), node.opacity)))
       return true
-    return (['Top', 'Right', 'Bottom', 'Left'] as const).some(side => borderOf(style, side))
+    return (['Top', 'Right', 'Bottom', 'Left'] as const).some(side => borderOf(style, side, this.unparsed))
   }
 
   private isInline(node: RawNode): boolean {
@@ -776,9 +779,17 @@ class SlideWalker {
 
   /** Whether a picture was actually emitted for this element. */
   private emitRaster(node: RawNode, reason: RasterReason): boolean {
-    this.pageRects.set(node.id, node.pageRect)
-    if (node.tag === '::BEFORE' || node.tag === '::AFTER')
+    // A pseudo-element has no DOM node to point a screenshot at, so it is the
+    // one thing that MUST be captured by clipping the page at coordinates
+    // measured here. Everything else has an id, and is better captured from
+    // its box read live at capture time, which cannot be stale.
+    //
+    // This used to be set for every element, which made the live path dead
+    // code and quietly contradicted the contract `RasterRequest.clip` states.
+    if (node.tag === '::BEFORE' || node.tag === '::AFTER') {
+      this.pageRects.set(node.id, node.pageRect)
       this.originators.set(node.id, node.parent)
+    }
     const isolate = needsIsolation(reason)
     const visible = clipToSlide(node.rect, this.size)
     if (!visible)
@@ -855,12 +866,12 @@ class SlideWalker {
     if (this.boxed.has(node.id))
       return
     this.boxed.add(node.id)
-    const fill = withOpacity(parseColor(style.backgroundColor), node.opacity)
+    const fill = withOpacity(parseColor(style.backgroundColor, this.unparsed), node.opacity)
     const borders: [Border?, Border?, Border?, Border?] = [
-      borderOf(style, 'Top'),
-      borderOf(style, 'Right'),
-      borderOf(style, 'Bottom'),
-      borderOf(style, 'Left'),
+      borderOf(style, 'Top', this.unparsed),
+      borderOf(style, 'Right', this.unparsed),
+      borderOf(style, 'Bottom', this.unparsed),
+      borderOf(style, 'Left', this.unparsed),
     ]
     const hasBorder = borders.some(Boolean)
     // Chromium keeps `border-radius` as a percentage in the computed value, so
@@ -869,7 +880,7 @@ class SlideWalker {
     const radius = parseLength(style.borderTopLeftRadius, Math.min(node.rect.w, node.rect.h))
     if (!isVisible(fill) && !hasBorder)
       return
-    const shadow = parseShadow(style.boxShadow)
+    const shadow = parseShadow(style.boxShadow, this.unparsed)
     // One shape per line fragment for a wrapped inline element, because that
     // is what a browser paints. Drawn as one rect over the union instead, an
     // inline `<code>` running across several lines filled the ragged space at
@@ -913,7 +924,7 @@ class SlideWalker {
           align: alignOf(style),
           valign: 'middle',
           lineHeight: resolveLineHeight(style),
-          runs: [runFrom(node.text, style, this.fontResolution)],
+          runs: [runFrom(node.text, style, this.fontResolution, this.unparsed)],
         }, node)
       }
       return
@@ -975,7 +986,7 @@ class SlideWalker {
         // Anchored to the top it rode above its own item's first line.
         valign: 'middle',
         lineHeight: resolveLineHeight(style),
-        runs: [runFrom(node.marker, style, this.fontResolution, undefined, node.opacity)],
+        runs: [runFrom(node.marker, style, this.fontResolution, this.unparsed, undefined, node.opacity)],
       }, node)
     }
 
@@ -1119,10 +1130,10 @@ class SlideWalker {
     const push = (text: string, style: RawStyle, node: RawNode) => {
       // One empty run per surplus break, so the blank lines survive.
       while (pendingBreaks > 1 && runs.length) {
-        runs.push({ ...runFrom('', style, this.fontResolution, undefined, node.opacity), breakBefore: true })
+        runs.push({ ...runFrom('', style, this.fontResolution, this.unparsed, undefined, node.opacity), breakBefore: true })
         pendingBreaks--
       }
-      const run = runFrom(text, style, this.fontResolution, this.linkFor(node), node.opacity)
+      const run = runFrom(text, style, this.fontResolution, this.unparsed, this.linkFor(node), node.opacity)
       if (pendingBreaks && runs.length)
         run.breakBefore = true
       pendingBreaks = 0
@@ -1278,12 +1289,12 @@ class SlideWalker {
 }
 
 export function normalize(snapshot: RawSnapshot, options: NormalizeOptions): NormalizeResult {
-  unparsedColors = new Set()
+  const unparsedColors = new Set<string>()
   const slides: SlideIr[] = []
   const rasterRequests: RasterRequest[] = []
 
   for (const raw of snapshot.slides) {
-    const walker = new SlideWalker(raw, snapshot.styles, snapshot.fontResolution)
+    const walker = new SlideWalker(raw, snapshot.styles, snapshot.fontResolution, unparsedColors)
     const { nodes, requests, rasterArea, textCount } = walker.run()
 
     const ir: SlideIr = {
@@ -1294,7 +1305,7 @@ export function normalize(snapshot: RawSnapshot, options: NormalizeOptions): Nor
       // The slide's own background. Without it every slide exported onto
       // PowerPoint's default white, so a dark theme came out as light text on
       // a white page.
-      background: parseColor(raw.background),
+      background: parseColor(raw.background, unparsedColors),
       nodes,
       note: options.notes.get(raw.no),
     }
