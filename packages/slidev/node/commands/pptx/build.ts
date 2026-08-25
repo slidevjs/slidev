@@ -210,6 +210,12 @@ function addBox(slide: any, shapeType: any, node: IrBox): void {
       color: hex(borders[0].color),
       width: pt(borders[0].width),
       dashType: borders[0].style === 'solid' ? 'solid' : borders[0].style === 'dotted' ? 'sysDot' : 'dash',
+      // `ShapeLineProps extends ShapeFillProps`, so a line takes the same
+      // transparency a fill does. Without it a uniform hairline set in
+      // `rgba(0, 0, 0, 0.1)` came out solid black, while the SAME border with
+      // one side a different width went through `addEdge` and rendered
+      // correctly, which made it look like anything but a missing property.
+      transparency: transparency(borders[0].color),
     }
   }
 

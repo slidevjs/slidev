@@ -26,8 +26,9 @@ export interface PptxExportContext {
   /**
    * The 1-based slide numbers `--range` selected.
    *
-   * The print route renders EVERY slide whatever the `range` query says, so
-   * this has to be applied here. The image exporter does the same thing with
+   * Belt and braces. `go` puts the range in the query and `PrintContainer`
+   * renders only `printRange`, so the page should already hold nothing else;
+   * the image exporter carries the same defensive filter, as
    * `if (!pages.includes(slideNo)) continue`.
    */
   pages: number[]
@@ -83,8 +84,8 @@ export async function exportPptxEditable(
     idAttribute: ID_ATTRIBUTE,
   })
 
-  // Filtered before normalizing, so out-of-range slides cost no measurement
-  // work and no screenshots.
+  // Filtered before normalizing, so anything the print route did leave in the
+  // page costs no measurement work and no screenshots.
   snapshot.slides = snapshot.slides.filter(slide => ctx.pages.includes(slide.no))
 
   const notes = new Map<number, string | undefined>()
@@ -94,8 +95,12 @@ export async function exportPptxEditable(
   const report = await capture(ctx.page, slides, rasterRequests)
 
   const title = ctx.slides[0]
+  // `?? module` because a bundler or a CJS interop layer can hand back the
+  // constructor itself rather than a namespace with `default` on it, and the
+  // failure is a `TypeError` at the last step of a slow export.
+  const pptxgenjs = await import('pptxgenjs')
   const buffer = await buildPptx(
-    (await import('pptxgenjs')).default,
+    pptxgenjs.default ?? (pptxgenjs as unknown as typeof pptxgenjs.default),
     slides,
     {
       width: ctx.width,
