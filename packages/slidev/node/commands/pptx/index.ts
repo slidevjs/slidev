@@ -1,21 +1,13 @@
 import type { SlideInfo } from '@slidev/types'
 import type { Page } from 'playwright-chromium'
 import fs from 'node:fs/promises'
+import { dim, yellow } from 'ansis'
 import { buildPptx } from './build'
 import { capture, ID_ATTRIBUTE } from './capture'
 import { normalize } from './normalize'
 import { collectSnapshot } from './walker'
 
-/**
- * Everything the editable exporter needs from `exportSlides`, as an explicit
- * object rather than as closure scope.
- *
- * The existing per-format generators are nested closures over `exportSlides`'s
- * locals. Following that pattern would have put this whole feature inside an
- * already 665-line function. Taking a context instead keeps `export.ts` to a
- * five-line change, and matches the shape `plans/023` wants when the per-format
- * extraction eventually happens.
- */
+/** Everything the editable exporter needs from `exportSlides`, as an explicit object rather than closure scope. */
 export interface PptxExportContext {
   page: Page
   slides: SlideInfo[]
@@ -23,14 +15,7 @@ export interface PptxExportContext {
   width: number
   /** Canvas height in pixels. */
   height: number
-  /**
-   * The 1-based slide numbers `--range` selected.
-   *
-   * Belt and braces. `go` puts the range in the query and `PrintContainer`
-   * renders only `printRange`, so the page should already hold nothing else;
-   * the image exporter carries the same defensive filter, as
-   * `if (!pages.includes(slideNo)) continue`.
-   */
+  /** The 1-based slide numbers `--range` selected; the same defensive filter the image exporter carries. */
   pages: number[]
   /** Navigate and wait for the deck to settle. `exportSlides` owns this. */
   go: (no: number | string, clicks?: string) => Promise<void>
@@ -46,7 +31,7 @@ export interface EditableExportResult {
   isolationMissed: number
   /** Elements whose screenshot failed, so they are missing from the file. */
   rastersFailed: number
-  /** Colour strings no parser understood, so the user can report them. */
+  /** Color strings no parser understood, so the user can report them. */
   unparsedColors: string[]
   /** Decorative pseudo-elements whose box could not be resolved. */
   unplaceablePseudos: string[]
@@ -55,13 +40,10 @@ export interface EditableExportResult {
 }
 
 /**
- * Export the deck as PowerPoint with native shapes and editable text.
- *
- * One navigation covers the whole deck: the print route renders every slide,
- * and every click step, into a single tall page, which is also how the image
- * exporter finds its slide indexes. So there is no per-slide loop here, and
- * `--with-clicks` needs no special handling: each step is already its own
- * `.print-slide-container`.
+ * Export the deck as PowerPoint with native shapes and editable text. One
+ * navigation covers everything: the print route renders every slide and click
+ * step into a single tall page, so there is no per-slide loop here and
+ * `--with-clicks` needs no special handling.
  */
 export async function exportPptxEditable(
   ctx: PptxExportContext,
@@ -69,12 +51,9 @@ export async function exportPptxEditable(
 ): Promise<EditableExportResult> {
   await ctx.go('print')
 
-  // Measurement and capture are two separate passes over the page, so anything
-  // still moving between them is measured at one frame and photographed at
-  // another. A theme spinning a logo forever came out cropped and rotated
-  // against its own box. Pausing rather than cancelling keeps a reveal
-  // animation at the end state the deck settled on, which is what the audience
-  // saw; `animation: none` would rewind a fade-in to opacity zero instead.
+  // Measurement and capture are separate passes, so anything still animating is
+  // measured at one frame and photographed at another. Pausing keeps the settled
+  // end state; `animation: none` would rewind a fade-in to opacity zero.
   await ctx.page.addStyleTag({
     content: '*, *::before, *::after { animation-play-state: paused !important; transition: none !important; }',
   })
@@ -84,8 +63,7 @@ export async function exportPptxEditable(
     idAttribute: ID_ATTRIBUTE,
   })
 
-  // Filtered before normalizing, so anything the print route did leave in the
-  // page costs no measurement work and no screenshots.
+  // Filter before normalizing, so leftover pages cost no measurement or screenshots.
   snapshot.slides = snapshot.slides.filter(slide => ctx.pages.includes(slide.no))
 
   const notes = new Map<number, string | undefined>()
@@ -95,9 +73,8 @@ export async function exportPptxEditable(
   const report = await capture(ctx.page, slides, rasterRequests)
 
   const title = ctx.slides[0]
-  // `?? module` because a bundler or a CJS interop layer can hand back the
-  // constructor itself rather than a namespace with `default` on it, and the
-  // failure is a `TypeError` at the last step of a slow export.
+  // A bundler or CJS interop layer can hand back the constructor itself rather
+  // than a namespace with `default` on it.
   const pptxgenjs = await import('pptxgenjs')
   const buffer = await buildPptx(
     pptxgenjs.default ?? (pptxgenjs as unknown as typeof pptxgenjs.default),
@@ -111,9 +88,7 @@ export async function exportPptxEditable(
     },
   )
 
-  // Returned rather than only used here: `exportSlides` prints the path it was
-  // given, so appending the extension locally told the user "exported to
-  // ./slides-export" for a file written as ./slides-export.pptx.
+  // Return the path actually written: `exportSlides` prints the path it was given.
   const written = output.endsWith('.pptx') ? output : `${output}.pptx`
   await fs.writeFile(written, buffer)
 
@@ -126,9 +101,31 @@ export async function exportPptxEditable(
     rastersFailed: report.rastersFailed,
     unparsedColors,
     unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
-    // A pptx NAMES fonts, it does not carry them. Reporting which families the
-    // file asks for is the only way an author learns what recipients need
-    // installed before the deck reaches them looking wrong.
+    // A pptx names fonts, it does not carry them; report what recipients need installed.
     fontsNamed: [...new Set(Object.values(snapshot.fontResolution).filter(Boolean))].sort(),
+  }
+}
+
+/** Print what the export could not do, after the progress bar has stopped. */
+export function reportEditableExport(result: EditableExportResult): void {
+  for (const slide of result.fallbackSlides)
+    console.warn(yellow(`  slide ${slide.no}: exported as an image (${slide.reason})`))
+  if (result.imagesDropped)
+    console.warn(yellow(`  ${result.imagesDropped} image(s) could not be read and were left out`))
+  if (result.rastersFailed)
+    console.warn(yellow(`  ${result.rastersFailed} element(s) could not be captured as a picture and were left out`))
+  if (result.unparsedColors.length) {
+    console.warn(yellow(`  ${result.unparsedColors.length} color value(s) could not be read, so those fills are missing:`))
+    console.warn(dim(`    ${result.unparsedColors.slice(0, 5).join(', ')}`))
+  }
+  if (result.isolationMissed)
+    console.warn(yellow(`  ${result.isolationMissed} picture(s) could not be isolated, so their slide may show doubled text`))
+  if (result.unplaceablePseudos.length) {
+    console.warn(yellow(`  ${result.unplaceablePseudos.length} CSS decoration(s) could not be placed and were left out:`))
+    console.warn(dim(`    ${result.unplaceablePseudos.slice(0, 5).join(', ')}`))
+  }
+  if (result.fontsNamed.length) {
+    console.warn(dim(`  fonts named in this file: ${result.fontsNamed.join(', ')}`))
+    console.warn(dim('  a .pptx names fonts rather than embedding them, so recipients need these installed'))
   }
 }

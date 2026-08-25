@@ -547,54 +547,24 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
 
-  // Native shapes and editable text, rather than one picture per slide.
-  //
-  // The implementation lives in ./pptx so this stays a delegation: the walker,
-  // the normalizer and the builder are each pure and separately testable, and
-  // none of them belongs inside this function.
+  // Native shapes and editable text, rather than one picture per slide. The
+  // walker, normalizer and builder live in ./pptx, so this is a delegation.
   async function genPagePptxEditable() {
     if (perSlide) {
-      // Per-slide mode navigates to one slide at a time and never renders the
-      // print page the measurement depends on. Failing loudly beats writing a
-      // deck that is silently missing every slide but the first.
+      // Per-slide mode never renders the print page the measurement depends
+      // on. Failing beats writing a deck missing every slide but the first.
       throw new Error('[slidev] `--per-slide` is not supported with `--format pptx-editable`')
     }
 
-    const { exportPptxEditable } = await import('./pptx')
+    const { exportPptxEditable, reportEditableExport } = await import('./pptx')
     const result = await exportPptxEditable({ page, slides, width, height, pages, go }, output)
     // So the "exported to ..." line names the file that was actually written.
     output = result.output
 
     // The progress bar repaints on a timer with the cursor hidden, so anything
-    // written while it is running is interleaved with it or overwritten. These
-    // are warnings the author has to actually read.
+    // written while it runs is interleaved with it or overwritten.
     progress.stop()
-
-    // Warnings, not progress: each line is a caveat the author has to know
-    // about before the file reaches anyone else.
-    for (const slide of result.fallbackSlides)
-      console.warn(yellow(`  slide ${slide.no}: exported as an image (${slide.reason})`))
-    if (result.imagesDropped)
-      console.warn(yellow(`  ${result.imagesDropped} image(s) could not be read and were left out`))
-    // Silent until now. A failed capture leaves no shape and no picture, so a
-    // decoration just disappeared and nothing in the output said why.
-    if (result.rastersFailed)
-      console.warn(yellow(`  ${result.rastersFailed} element(s) could not be captured as a picture and were left out`))
-    if (result.unparsedColors.length) {
-      console.warn(yellow(`  ${result.unparsedColors.length} colour value(s) could not be read, so those fills are missing:`))
-      console.warn(dim(`    ${result.unparsedColors.slice(0, 5).join(', ')}`))
-    }
-    if (result.isolationMissed) {
-      console.warn(yellow(`  ${result.isolationMissed} picture(s) could not be isolated, so their slide may show doubled text`))
-    }
-    if (result.unplaceablePseudos.length) {
-      console.warn(yellow(`  ${result.unplaceablePseudos.length} CSS decoration(s) could not be placed and were left out:`))
-      console.warn(dim(`    ${result.unplaceablePseudos.slice(0, 5).join(', ')}`))
-    }
-    if (result.fontsNamed.length) {
-      console.warn(dim(`  fonts named in this file: ${result.fontsNamed.join(', ')}`))
-      console.warn(dim('  a .pptx names fonts rather than embedding them, so recipients need these installed'))
-    }
+    reportEditableExport(result)
   }
 
   // Adds metadata (title, author, keywords) to PDF document, mutating it
