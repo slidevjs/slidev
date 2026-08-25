@@ -36,6 +36,18 @@ import type {
  */
 const RASTER_AREA_LIMIT = 0.6
 
+/**
+ * Fraction of a line's width kept free so PowerPoint does not re-wrap it.
+ *
+ * PowerPoint sets the same string a little wider than Chromium does. When a
+ * container shrink-wraps its text there is no room for that difference, so the
+ * longest line wraps and the block gains a line nobody asked for. The headroom
+ * has to scale with the line: a fixed couple of pixels is nothing on a 500px
+ * line of display type.
+ */
+const WRAP_HEADROOM = 0.02
+const WRAP_HEADROOM_MIN_PX = 4
+
 /** CSS `display` values whose children are laid out, not flowed as text. */
 // Prefix match, so `table` already covers `table-row` and `table-cell`.
 //
@@ -1031,6 +1043,20 @@ class SlideWalker {
     if (!runs.length || !rects.length)
       return
 
+    // Whitespace at the start and end of a LINE collapses away in the browser,
+    // but it survives `replace(/\s+/g, ' ')` and shifts a centred line
+    // sideways by half a space, because markup normally puts each sentence on
+    // its own source line. Every line boundary counts, not just the box edges:
+    // a run after a break opens a new line.
+    runs.forEach((run, index) => {
+      const opensLine = index === 0 || run.breakBefore
+      const closesLine = index === runs.length - 1 || runs[index + 1]?.breakBefore
+      if (opensLine)
+        run.text = run.text.replace(/^ +/, '')
+      if (closesLine)
+        run.text = run.text.replace(/ +$/, '')
+    })
+
     const container = this.byId.get(group[0].parent)
     const containerStyle = container ? this.styleOf(container) : undefined
     const anchorStyle = containerStyle ?? this.inheritedStyle(textNodes[0])!
@@ -1052,6 +1078,20 @@ class SlideWalker {
      */
     let rect = glyphs
     let align = alignOf(anchorStyle)
+
+    /** Widen a box that has no room for PowerPoint's wider metrics. */
+    const withHeadroom = (box: Rect): Rect => {
+      const headroom = box.w - glyphs.w
+      const wanted = Math.max(WRAP_HEADROOM_MIN_PX, glyphs.w * WRAP_HEADROOM)
+      if (headroom >= wanted)
+        return box
+      const extra = wanted - Math.max(0, headroom)
+      // Grown about the anchor, so the text does not slide sideways.
+      const x = align === 'center'
+        ? box.x - extra / 2
+        : align === 'right' ? box.x - extra : box.x
+      return { x, y: box.y, w: box.w + extra, h: box.h }
+    }
     let valign: IrText['valign']
 
     /**
@@ -1074,7 +1114,7 @@ class SlideWalker {
       const right = parseLength(containerStyle.paddingRight)
       const width = container.rect.w - left - right
       if (width > 0) {
-        rect = { x: container.rect.x + left, y: glyphs.y, w: width, h: glyphs.h }
+        rect = withHeadroom({ x: container.rect.x + left, y: glyphs.y, w: width, h: glyphs.h })
       }
     }
 

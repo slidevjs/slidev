@@ -318,6 +318,50 @@ describe('finding 6: the slide keeps its own background', () => {
   })
 })
 
+describe('a shrink-wrapped container leaves no room to wrap', () => {
+  it('widens a centred block whose container is exactly its ink', () => {
+    const centred = style({ textAlign: 'center' })
+    // The container fits the text exactly, which is what a centred statement
+    // block does. PowerPoint sets the same string slightly wider than
+    // Chromium, so with no headroom the longest line wraps and the block
+    // gains a line.
+    const box = { x: 155, y: 192, w: 487, h: 90 }
+    const nodes = [
+      el(0, -1, 'DIV', 1, { rect: box }),
+      text(1, 0, 'a long centred statement', {
+        rect: box,
+        glyphRects: [
+          { x: 155, y: 192, w: 400, h: 30 },
+          { x: 155, y: 222, w: 487, h: 30 },
+          { x: 155, y: 252, w: 380, h: 30 },
+        ],
+      }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, centred])
+    const out = texts(slides[0].nodes)[0]
+    expect(out.rect.w).toBeGreaterThan(487)
+    // Grown about the centre, so the text does not slide sideways.
+    expect(out.rect.x + out.rect.w / 2).toBeCloseTo(155 + 487 / 2, 5)
+  })
+
+  it('leaves a column-constrained paragraph at its container width', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 0, { rect: { x: 0, y: 0, w: 400, h: 60 } }),
+      text(1, 0, 'wrapped body copy', {
+        rect: { x: 0, y: 0, w: 400, h: 60 },
+        glyphRects: [
+          { x: 0, y: 0, w: 380, h: 20 },
+          { x: 0, y: 24, w: 200, h: 20 },
+        ],
+      }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE])
+    // 20px of headroom is already more than the 2% this needs, so widening it
+    // would push the text into whatever sits beside it.
+    expect(texts(slides[0].nodes)[0].rect.w).toBe(400)
+  })
+})
+
 describe('trap 16: --range is applied by the caller, not the page', () => {
   it('exposes the slide number so out-of-range slides can be filtered', () => {
     // The print route renders EVERY slide whatever the `range` query says, so
