@@ -68,6 +68,11 @@ function runProps(run: IrRun): Record<string, unknown> {
     options.strike = true
   if (run.underline)
     options.underline = { style: 'sng' }
+  else if (run.link)
+    // pptxgenjs underlines every hyperlink run unless told otherwise. CSS said
+    // not to: a theme that rules its links with a `border-bottom` already has
+    // that drawn as its own shape, so the default added a second line.
+    options.underline = { style: 'none' }
   if (run.color) {
     options.color = hex(run.color)
     const alpha = transparency(run.color)

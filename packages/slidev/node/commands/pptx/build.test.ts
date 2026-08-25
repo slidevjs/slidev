@@ -211,3 +211,24 @@ describe('slide assembly', () => {
     expect(xml).toContain('<a:t>Selectable</a:t>')
   })
 })
+
+describe('a hyperlink is not underlined unless CSS says so', () => {
+  it('suppresses the underline pptxgenjs adds to every link', async () => {
+    // pptxgenjs writes `u="sng"` for any run carrying a hyperlink unless
+    // `underline` is set. Slidev's own themes rule links with a dashed
+    // `border-bottom`, which is already drawn as its own shape, so the deck
+    // came out with two lines under every link.
+    const xml = await slideXml([
+      slide([textNode([{ text: 'Documentation', fontSize: 16, fontFamily: 'Arial', link: 'https://sli.dev' }])]),
+    ])
+    expect(xml).toContain('u="none"')
+    expect(xml).not.toContain('u="sng"')
+  })
+
+  it('still underlines a run whose CSS asks for it', async () => {
+    const xml = await slideXml([
+      slide([textNode([{ text: 'Documentation', fontSize: 16, fontFamily: 'Arial', link: 'https://sli.dev', underline: true }])]),
+    ])
+    expect(xml).toContain('u="sng"')
+  })
+})
