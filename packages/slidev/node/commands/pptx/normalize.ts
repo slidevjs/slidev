@@ -769,14 +769,15 @@ class SlideWalker {
     return { nodes: this.nodes, requests: this.requests, rasterArea: this.rasterArea, textCount: texts.length }
   }
 
-  private emitRaster(node: RawNode, reason: RasterReason): void {
+  /** Whether a picture was actually emitted for this element. */
+  private emitRaster(node: RawNode, reason: RasterReason): boolean {
     this.pageRects.set(node.id, node.pageRect)
     if (node.tag === '::BEFORE' || node.tag === '::AFTER')
       this.originators.set(node.id, node.parent)
     const isolate = needsIsolation(reason)
     const visible = clipToSlide(node.rect, this.size)
     if (!visible)
-      return
+      return false
     // An element that runs past the slide is captured as a page clip rather
     // than as itself, and placed at that same clipped rectangle so the picture
     // is not squashed. Screenshotting such an element whole is not merely
@@ -805,6 +806,7 @@ class SlideWalker {
       reason,
       isolate,
     }, node)
+    return true
   }
 
   private emitImage(node: RawNode): void {
@@ -878,10 +880,8 @@ class SlideWalker {
       if (!style)
         return
       const reason = rasterReasonFor(node, style)
-      if (reason) {
-        this.emitRaster(node, reason)
+      if (reason && this.emitRaster(node, reason))
         return
-      }
       this.emitBox(node, style)
       if (node.text) {
         this.push({
@@ -908,8 +908,12 @@ class SlideWalker {
 
     const style = this.styleOf(node)
     const reason = rasterReasonFor(node, style)
-    if (reason) {
-      this.emitRaster(node, reason)
+    // A raster that could not be placed leaves NOTHING behind, so treating the
+    // element as rasterized would silently drop its whole subtree. A theme
+    // rotating a decoration through a zero-sized wrapper does exactly that:
+    // the wrapper has no box of its own, while the absolutely positioned art
+    // inside it does, and the entire corner decoration vanished from the deck.
+    if (reason && this.emitRaster(node, reason)) {
       // A leaf such as an <svg> has no shapes worth recovering underneath it.
       // A backdrop does: its children are real content and are drawn as shapes
       // on top of the isolated picture.
@@ -1024,11 +1028,11 @@ class SlideWalker {
     }
     const style = this.styleOf(node)
     const reason = rasterReasonFor(node, style)
-    if (reason) {
-      // An inline <svg> icon inside a sentence still has to become a picture.
-      this.emitRaster(node, reason)
+    // An inline <svg> icon inside a sentence still has to become a picture,
+    // but only if it has a box to be a picture of. Otherwise its subtree is
+    // walked as usual rather than being dropped along with the raster.
+    if (reason && this.emitRaster(node, reason))
       return
-    }
     // A <br> has no text node of its own, so without this marker the text
     // either side of it is concatenated into consecutive runs with no break
     // and `line one<br>line two` exports as "line oneline two".

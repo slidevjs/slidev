@@ -982,3 +982,21 @@ describe('a wrapped inline box is painted once per line', () => {
     expect(painted[0].rect).toEqual({ x: 0, y: 0, w: 300, h: 60 })
   })
 })
+
+describe('a raster that cannot be placed must not swallow its subtree', () => {
+  it('walks into a rotated wrapper that has no box of its own', () => {
+    // A theme rotating a corner decoration puts the transform on a wrapper
+    // with no size, while the artwork inside is absolutely positioned and does
+    // have one. Treating the wrapper as rasterized dropped the whole
+    // decoration: the picture had no area, so nothing was emitted for it
+    // either, and the entire corner vanished from every slide.
+    const rotated = style({ transform: 'matrix(0, 1, -1, 0, 0, 0)', position: 'absolute' })
+    const nodes = [
+      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 0, h: 0 } }),
+      el(1, 0, 'SVG', 0, { rect: { x: 10, y: 20, w: 279, h: 322 } }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE, rotated])
+    expect(slides[0].nodes.map(node => node.sourceId)).toEqual([1])
+    expect(rasterRequests.map(request => request.sourceId)).toEqual([1])
+  })
+})
