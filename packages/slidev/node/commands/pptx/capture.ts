@@ -397,10 +397,22 @@ export async function capture(
         else {
           // Could not be fetched, or is an SVG that pptxgenjs would embed with
           // a broken fallback. Either way, a picture of the element is honest.
-          const shot = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
-          if (shot) {
-            node.data = shot
-            report.rastersCaptured++
+          //
+          // Isolated like any other capture. An `<img>` is mostly transparent
+          // whenever it points at an SVG, so without this the picture carried
+          // whatever the slide painted behind the icon and drew it a second
+          // time on top of the shapes that already say it.
+          try {
+            if (!(await isolate(page, sourceId, false)))
+              report.isolationMissed++
+            const shot = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
+            if (shot) {
+              node.data = shot
+              report.rastersCaptured++
+            }
+          }
+          finally {
+            await restore(page)
           }
         }
       }
