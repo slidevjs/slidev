@@ -9,8 +9,15 @@ import { Buffer } from 'node:buffer'
  * Measurement happens in one `page.evaluate`, but rasterization cannot: an
  * element screenshot has to be driven from Node, and isolating an element for
  * one means mutating the DOM of a live Vue app. So this is deliberately a
- * second phase, run strictly after every measurement is already in hand. No
- * geometry is ever read from a page this module has touched.
+ * second phase, run strictly after every measurement is already in hand.
+ *
+ * What this module does to the page is confined to two kinds of change, and
+ * neither one moves anything: inline `visibility` and `background-color`,
+ * which do not reflow, and the viewport HEIGHT, which the print route's
+ * fixed-size slide containers do not depend on. Its width is never touched,
+ * and width is what `PrintContainer` scales from. So the coordinates the
+ * walker measured stay valid here. A slide sizing itself in `vh` would break
+ * that, and would break the image exporter's own clip arithmetic first.
  */
 
 export const ID_ATTRIBUTE = 'data-slidev-export-id'
@@ -248,7 +255,25 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
  * enough to be far under the limit, tall enough to hold any single element
  * worth capturing whole.
  */
-const CLIP_VIEWPORT_HEIGHT = 2000
+const CLIP_VIEWPORT_MIN_HEIGHT = 2000
+
+/**
+ * A viewport tall enough to hold the tallest thing being captured.
+ *
+ * A fixed two thousand pixels is shorter than a single slide once the deck
+ * sets `canvasWidth: 3840`, where 16:9 makes the slide 2160 tall. Every
+ * full-bleed picture and every whole-slide fallback then asks for a clip
+ * taller than the viewport and fails, silently, which is the exact class of
+ * failure the short viewport was introduced to fix.
+ */
+function clipViewportHeight(slides: SlideIr[], requests: RasterRequest[]): number {
+  const tallest = Math.max(
+    0,
+    ...slides.map(slide => slide.size.h),
+    ...requests.map(request => request.clip?.h ?? 0),
+  )
+  return Math.max(CLIP_VIEWPORT_MIN_HEIGHT, Math.ceil(tallest) + 200)
+}
 
 /**
  * Screenshot a rectangle of the document.
@@ -265,19 +290,22 @@ const CLIP_VIEWPORT_HEIGHT = 2000
  * browser has been closed".
  */
 export async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
-  // An element can start left of the page, and Chromium cannot capture a
-  // negative origin. Clamping keeps the picture rather than losing it.
+  // An element can start left of, or above, the page, and Chromium cannot
+  // capture a negative origin: it rejects the whole screenshot, so the picture
+  // went missing rather than being trimmed. Clamping keeps what there is.
   const x = Math.max(0, clip.x)
+  const y = Math.max(0, clip.y)
   const w = clip.w - (x - clip.x)
-  if (w <= 0 || clip.h <= 0)
+  const h = clip.h - (y - clip.y)
+  if (w <= 0 || h <= 0)
     return undefined
   try {
-    const scrollY = await page.evaluate((y) => {
-      window.scrollTo(0, y)
+    const scrollY = await page.evaluate((top) => {
+      window.scrollTo(0, top)
       return window.scrollY
-    }, Math.max(0, clip.y - 1))
+    }, Math.max(0, y - 1))
     const buffer = await page.screenshot({
-      clip: { x, y: clip.y - scrollY, width: w, height: clip.h },
+      clip: { x, y: y - scrollY, width: w, height: h },
       omitBackground: true,
       timeout: 10_000,
     })
@@ -352,15 +380,15 @@ export interface CaptureReport {
  * per capture. Boxes are read live inside this viewport, so they stay
  * consistent with it even on a deck the resize does move.
  */
-async function throughShortViewport(page: Page, needed: boolean, fn: () => Promise<void>): Promise<void> {
+async function throughShortViewport(page: Page, needed: boolean, height: number, fn: () => Promise<void>): Promise<void> {
   if (!needed) {
     await fn()
     return
   }
   const viewport = page.viewportSize()
   try {
-    if (viewport && viewport.height > CLIP_VIEWPORT_HEIGHT)
-      await page.setViewportSize({ width: viewport.width, height: CLIP_VIEWPORT_HEIGHT })
+    if (viewport && viewport.height > height)
+      await page.setViewportSize({ width: viewport.width, height })
     await fn()
   }
   finally {
@@ -440,40 +468,43 @@ export async function capture(
     }
   }
 
-  await throughShortViewport(page, !!requests.length || !!imagesBySource.size, async () => {
+  const viewportHeight = clipViewportHeight(slides, requests)
+
+  await throughShortViewport(page, !!requests.length || !!imagesBySource.size, viewportHeight, async () => {
     for (const request of requests)
       await fulfil(request)
 
     for (const [sourceId, nodes] of imagesBySource) {
-      const url = nodes[0].data
-      const data = await fetchImage(page, url)
-      for (const node of nodes) {
-        if (data) {
-          node.data = data
-          report.imagesFetched++
+      let data = await fetchImage(page, nodes[0].data)
+      if (data) {
+        report.imagesFetched++
+      }
+      else {
+        // Could not be fetched, or is an SVG that pptxgenjs would embed with a
+        // broken fallback. Either way, a picture of the element is honest.
+        //
+        // Isolated like any other capture. An `<img>` is mostly transparent
+        // whenever it points at an SVG, so without this the picture carried
+        // whatever the slide painted behind the icon and drew it a second time
+        // on top of the shapes that already say it.
+        try {
+          if (!(await isolate(page, sourceId, false)))
+            report.isolationMissed++
+          // Once per ELEMENT, not once per node it produced. One `<img>`
+          // showing on several click steps was isolated and screenshotted
+          // again for each of them, for the same pixels every time.
+          data = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
+          if (data)
+            report.imagesFetched++
         }
-        else {
-          // Could not be fetched, or is an SVG that pptxgenjs would embed with
-          // a broken fallback. Either way, a picture of the element is honest.
-          //
-          // Isolated like any other capture. An `<img>` is mostly transparent
-          // whenever it points at an SVG, so without this the picture carried
-          // whatever the slide painted behind the icon and drew it a second
-          // time on top of the shapes that already say it.
-          try {
-            if (!(await isolate(page, sourceId, false)))
-              report.isolationMissed++
-            const shot = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
-            if (shot) {
-              node.data = shot
-              report.rastersCaptured++
-            }
-          }
-          finally {
-            await restore(page)
-          }
+        finally {
+          await restore(page)
         }
       }
+      if (!data)
+        continue
+      for (const node of nodes)
+        node.data = data
     }
   })
 
@@ -493,7 +524,7 @@ export async function capture(
     })
   }
 
-  await throughShortViewport(page, slides.some(slide => !!slide.fallbackReason), async () => {
+  await throughShortViewport(page, slides.some(slide => !!slide.fallbackReason), viewportHeight, async () => {
     for (const slide of slides) {
       if (!slide.fallbackReason)
         continue
