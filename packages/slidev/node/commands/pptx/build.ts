@@ -128,7 +128,7 @@ function addText(slide: any, node: IrText): void {
       margin: 0,
       // The default is 'middle', which would centre a one-line box inside a
       // height that was measured from the glyphs themselves.
-      valign: 'top',
+      valign: node.valign ?? 'top',
       // No autofit. Autofit rescales type to fit the box, which would undo the
       // measured font size the moment PowerPoint disagrees about metrics.
       fit: 'none',

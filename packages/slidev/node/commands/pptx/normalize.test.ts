@@ -378,7 +378,12 @@ describe('trap 8: inline decorations paint before their text', () => {
     // accumulate across the earlier runs and slide the label off its chip.
     expect(out).toHaveLength(2)
     expect(out[1].runs[0].text).toBe('NEW')
-    expect(out[1].rect.x).toBe(122)
+    // Pinned to the chip and centred in it, not to its own ink. However much
+    // wider PowerPoint sets the string than the browser did, the label stays
+    // evenly inset instead of ending up hard against one edge.
+    expect(out[1].rect).toEqual(label)
+    expect(out[1].align).toBe('center')
+    expect(out[1].valign).toBe('middle')
   })
 })
 

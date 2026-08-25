@@ -256,6 +256,13 @@ export interface IrText extends IrBase {
   /** Distinct line-box tops. One means the box must not be allowed to re-wrap. */
   lineCount: number
   align: 'left' | 'center' | 'right' | 'justify'
+  /**
+   * Vertical anchoring inside the box. Defaults to the top, because a box is
+   * normally measured from the glyphs themselves.
+   *
+   * A chip label is the exception: its box is the decoration, not the ink.
+   */
+  valign?: 'top' | 'middle'
   /** Pixels, with `normal` already resolved to a number. */
   lineHeight: number
   runs: IrRun[]

@@ -912,7 +912,25 @@ class SlideWalker {
      * exact and carry no wrapping risk.
      */
     let rect = glyphs
-    if (lineCount > 1 && container && containerStyle) {
+    let align = alignOf(anchorStyle)
+    let valign: IrText['valign']
+
+    /**
+     * A chip label belongs to its chip, not to its own ink.
+     *
+     * Its background is an absolutely positioned shape, so pinning the text to
+     * the decoration's box and centring it there keeps the label evenly inset
+     * however the font measures. Positioning from the glyphs instead leaves
+     * the label hard against one edge as soon as PowerPoint sets the string
+     * even slightly wider than the browser did.
+     */
+    const decorated = group.length === 1 && group[0].tag !== '#text' && this.hasDecoration(group[0])
+    if (decorated) {
+      rect = group[0].rect
+      align = 'center'
+      valign = 'middle'
+    }
+    else if (lineCount > 1 && container && containerStyle) {
       const left = parseLength(containerStyle.paddingLeft)
       const right = parseLength(containerStyle.paddingRight)
       const width = container.rect.w - left - right
@@ -927,7 +945,8 @@ class SlideWalker {
       rect,
       elementRect: container?.rect ?? glyphs,
       lineCount,
-      align: alignOf(anchorStyle),
+      align,
+      valign,
       lineHeight: resolveLineHeight(anchorStyle),
       runs,
     })
