@@ -194,11 +194,29 @@ export function collectSnapshot(options: {
    * what the audience actually sees behind the slide.
    */
   function backgroundOf(container: Element): string | undefined {
+    // Any FULLY transparent colour ends nothing and the walk continues past
+    // it. Matching only the literal `rgba(0, 0, 0, 0)` stopped on
+    // `rgba(255, 255, 255, 0)`, and on the `oklch(... / 0)` a theme authored
+    // in modern syntax computes to, and returned it as the slide background:
+    // the real painted colour further up was then never found at all.
+    //
+    // Read by asking the browser rather than by parsing, because the browser
+    // is what produced the string and knows every syntax it accepts.
+    const probe = document.createElement('canvas').getContext('2d')
     let node: Element | null = container
     while (node) {
       const color = getComputedStyle(node).backgroundColor
-      if (color && color !== 'transparent' && !/^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(color))
-        return color
+      if (color && color !== 'transparent') {
+        if (!probe)
+          return color
+        // Painting over an opaque backdrop leaves it untouched only when the
+        // colour contributes nothing at all.
+        probe.clearRect(0, 0, 1, 1)
+        probe.fillStyle = color
+        probe.fillRect(0, 0, 1, 1)
+        if (probe.getImageData(0, 0, 1, 1).data[3] !== 0)
+          return color
+      }
       node = node.parentElement
     }
     return undefined
@@ -252,9 +270,11 @@ export function collectSnapshot(options: {
     // A print page stacks every slide into one tall viewport, so a container
     // that is not being rendered has a zero-sized rect.
     //
-    // Note that this does NOT implement `--range`: the print route renders
-    // every slide whatever the `range` query says, so the caller filters by
-    // slide number, exactly as the image exporter does.
+    // Note that this does NOT implement `--range`. It does not need to: `go`
+    // puts the range in the query and `PrintContainer` renders `v-for="no of
+    // printRange"`, so an out-of-range slide is never in the DOM at all. The
+    // caller filters by slide number anyway, exactly as the image exporter
+    // does, because neither of them should depend on the print route to do it.
     if (containerRect.width === 0 || containerRect.height === 0)
       continue
 
@@ -452,12 +472,18 @@ export function collectSnapshot(options: {
           unplaceablePseudos.push(`${el.tagName.toLowerCase()}${which}`)
           continue
         }
+        // `auto` on the opposite side too parses to NaN, which spreads through
+        // the whole `pageRect` and loses the decoration to a failed clip with
+        // nothing in the log naming it. Zero is what `auto` resolves to for an
+        // absolutely positioned box with no other constraint, so it degrades
+        // to a placed decoration rather than a missing one.
+        const px = (value: string): number => Number.parseFloat(value) || 0
         const left = pseudo.left === 'auto'
-          ? own.width - Number.parseFloat(pseudo.right || '0') - width
-          : Number.parseFloat(pseudo.left)
+          ? own.width - px(pseudo.right) - width
+          : px(pseudo.left)
         const top = pseudo.top === 'auto'
-          ? own.height - Number.parseFloat(pseudo.bottom || '0') - height
-          : Number.parseFloat(pseudo.top)
+          ? own.height - px(pseudo.bottom) - height
+          : px(pseudo.top)
 
         const box = {
           left: own.left + left,

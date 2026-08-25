@@ -27,6 +27,7 @@ import { collectSnapshot } from './walker'
 /** Globals a browser really provides. Anything else is a leak. */
 const BROWSER_GLOBALS = new Set([
   'document',
+  'window',
   'getComputedStyle',
   'Array',
   'Boolean',
@@ -50,16 +51,67 @@ function measureTextStub(): { width: number } {
   return { width: 100 }
 }
 
-/** Just enough DOM for the walker to run to completion over zero slides. */
+const RECT = { left: 0, top: 0, width: 100, height: 20 }
+
+/**
+ * A slide container with one element and one text node under it.
+ *
+ * Not decoration: with an empty container list the guard only ever ran the
+ * walker's top-level setup, so every free variable inside `walk` and its
+ * helpers went unnoticed. `window` was one of them, referenced for `scrollX`
+ * and absent from the allowlist, and the suite passed regardless.
+ */
+function containerStub() {
+  const text = { nodeType: 3, textContent: 'hello' }
+  const child: any = {
+    nodeType: 1,
+    tagName: 'DIV',
+    id: '',
+    childNodes: [text],
+    children: [],
+    classList: { contains: () => false },
+    shadowRoot: null,
+    parentElement: null,
+    setAttribute: () => {},
+    getAttribute: () => null,
+    getBoundingClientRect: () => RECT,
+    getClientRects: () => [RECT],
+  }
+  const container: any = {
+    nodeType: 1,
+    tagName: 'DIV',
+    id: '003-02',
+    childNodes: [child],
+    children: [child],
+    classList: { contains: () => false },
+    shadowRoot: null,
+    parentElement: null,
+    setAttribute: () => {},
+    getAttribute: () => null,
+    getBoundingClientRect: () => ({ ...RECT, width: 980, height: 552 }),
+    getClientRects: () => [RECT],
+  }
+  child.parentElement = container
+  return container
+}
+
+/** Just enough DOM for the walker to run to completion. */
 function domStub(querySelectorAllResult: unknown[]) {
   return {
     createElement: () => ({
-      getContext: () => ({ font: '', measureText: measureTextStub }),
+      getContext: () => ({
+        font: '',
+        fillStyle: '',
+        measureText: measureTextStub,
+        clearRect: () => {},
+        fillRect: () => {},
+        getImageData: () => ({ data: [0, 0, 0, 0] }),
+      }),
     }),
     querySelectorAll: () => querySelectorAllResult,
     createRange: () => ({
       selectNodeContents: () => {},
-      getClientRects: () => [],
+      getClientRects: () => [RECT],
       detach: () => {},
     }),
   }
@@ -68,7 +120,22 @@ function domStub(querySelectorAllResult: unknown[]) {
 function runInSandbox(source: string, containers: unknown[] = []): unknown {
   const base: Record<string, unknown> = {
     document: domStub(containers),
-    getComputedStyle: () => ({}),
+    getComputedStyle: () => ({
+      fontFamily: 'Inter, sans-serif',
+      display: 'block',
+      visibility: 'visible',
+      opacity: '1',
+      position: 'static',
+      backgroundColor: 'rgb(255, 255, 255)',
+      listStyleType: 'none',
+      content: 'none',
+      width: '100px',
+      height: '20px',
+      left: 'auto',
+      top: 'auto',
+      right: 'auto',
+      bottom: 'auto',
+    }),
     Array,
     Boolean,
     Error,
@@ -82,6 +149,7 @@ function runInSandbox(source: string, containers: unknown[] = []): unknown {
     String,
     Symbol,
     globalThis: undefined,
+    window: { scrollX: 0, scrollY: 0 },
   }
 
   const sandbox = new Proxy(base, {
@@ -106,6 +174,25 @@ function runInSandbox(source: string, containers: unknown[] = []): unknown {
 describe('walker self-containedness', () => {
   it('runs to completion using only browser globals', () => {
     expect(() => runInSandbox(collectSnapshot.toString())).not.toThrow()
+  })
+
+  it('runs to completion over a real container, not just an empty page', () => {
+    // The empty-page case exercises none of `walk`, which is most of the file.
+    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()]) as any
+    expect(snapshot.slides).toHaveLength(1)
+    expect(snapshot.slides[0].nodes.length).toBeGreaterThan(0)
+  })
+
+  it('fails when a walked node closes over module scope', () => {
+    // The same guard as below, but pinned on a path only a container reaches.
+    const leaked = collectSnapshot
+      .toString()
+      // The record built for every ELEMENT, so it is reached only by walking a
+      // container. Matched on its first field because the compiled source has
+      // two other `const record` declarations, in the style interners, which a
+      // page with no pseudo-elements never runs.
+      .replace(/const record\s*(?:(: any)\s*)?=\s*\{\s*id,/, 'const record = { leaked: LEAKED_FROM_WALK, id,')
+    expect(() => runInSandbox(leaked, [containerStub()])).toThrow(/LEAKED_FROM_WALK/)
   })
 
   it('fails when the walker closes over module scope', () => {
