@@ -29,6 +29,8 @@ const BASE_STYLE: RawStyle = {
   letterSpacing: 'normal',
   lineHeight: 'normal',
   whiteSpace: 'normal',
+  paddingLeft: '0px',
+  paddingRight: '0px',
   borderTopWidth: '0px',
   borderTopStyle: 'none',
   borderTopColor: 'rgb(0, 0, 0)',
@@ -356,6 +358,28 @@ describe('trap 8: inline decorations paint before their text', () => {
     expect(kinds.indexOf('box')).toBeLessThan(kinds.indexOf('text'))
     expect(boxes(slides[0].nodes)[0].fill).toEqual({ r: 0, g: 128, b: 0, a: 1 })
   })
+
+  it('anchors a chip label in its own box so it cannot drift off the chip', () => {
+    const inline = style({ display: 'inline' })
+    const chip = style({ display: 'inline', backgroundColor: 'rgb(0, 128, 0)' })
+    const before = { x: 0, y: 0, w: 120, h: 20 }
+    const label = { x: 122, y: 0, w: 30, h: 20 }
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'SPAN', 1, { rect: before }),
+      text(2, 1, 'C2C.PI.A2A.', { rect: before, glyphRects: [before] }),
+      el(3, 0, 'SPAN', 2, { rect: label }),
+      text(4, 3, 'NEW', { rect: label, glyphRects: [label] }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline, chip])
+    const out = texts(slides[0].nodes)
+    // The chip's background is an absolutely positioned shape while the text
+    // around it flows, so sharing one box lets PowerPoint's metrics
+    // accumulate across the earlier runs and slide the label off its chip.
+    expect(out).toHaveLength(2)
+    expect(out[1].runs[0].text).toBe('NEW')
+    expect(out[1].rect.x).toBe(122)
+  })
 })
 
 describe('trap 2: text-transform and letter-spacing are applied', () => {
@@ -372,22 +396,42 @@ describe('trap 2: text-transform and letter-spacing are applied', () => {
 })
 
 describe('trap 6: text is positioned from glyph bounds', () => {
-  it('uses the glyph rects, not the element box, and counts line boxes', () => {
+  it('uses the glyph rects for a single line, not the element box', () => {
     const nodes = [
-      el(0, -1, 'DIV', 0),
-      text(1, 0, 'two lines here', {
+      el(0, -1, 'DIV', 0, { rect: { x: 0, y: 0, w: 500, h: 100 } }),
+      text(1, 0, 'one line', {
         rect: { x: 0, y: 0, w: 500, h: 100 },
-        glyphRects: [
-          { x: 40, y: 10, w: 120, h: 20 },
-          { x: 40, y: 34, w: 90, h: 20 },
-        ],
+        glyphRects: [{ x: 40, y: 10, w: 120, h: 20 }],
       }),
     ]
     const { slides } = run(nodes, [BASE_STYLE])
     const out = texts(slides[0].nodes)[0]
-    expect(out.rect).toEqual({ x: 40, y: 10, w: 120, h: 44 })
-    // Line count drives `wrap` in the builder: a single-line box must not be
-    // allowed to re-wrap under PowerPoint's wider metrics.
+    // Positioning from the element rect offsets the text by the container's
+    // padding, and its width bears no relation to the ink.
+    expect(out.rect).toEqual({ x: 40, y: 10, w: 120, h: 20 })
+    expect(out.lineCount).toBe(1)
+  })
+
+  it('wraps multi-line text against the container content box', () => {
+    const padded = style({ paddingLeft: '8px', paddingRight: '8px' })
+    const nodes = [
+      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 200, h: 100 } }),
+      text(1, 0, 'two lines here', {
+        rect: { x: 0, y: 0, w: 200, h: 100 },
+        glyphRects: [
+          { x: 8, y: 10, w: 120, h: 20 },
+          { x: 8, y: 34, w: 90, h: 20 },
+        ],
+      }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, padded])
+    const out = texts(slides[0].nodes)[0]
+    // Glyph bounds for wrapped text are the width of the LONGEST LINE, so
+    // handing PowerPoint 120px guarantees a second, tighter wrap: "a short caption" came back over three lines and overflowed its box. The browser
+    // wrapped against the content box, which is 200 less 8px either side.
+    expect(out.rect).toEqual({ x: 8, y: 10, w: 184, h: 44 })
+    // Vertical position still comes from the glyphs, not the element.
+    expect(out.rect.y).toBe(10)
     expect(out.lineCount).toBe(2)
   })
 })
@@ -442,6 +486,42 @@ describe('traps 4, 5, 12, 13: what has to become a picture', () => {
   })
 })
 
+describe('a picture with content over it is captured in isolation', () => {
+  it('isolates a leaf picture that a title is drawn on top of', () => {
+    const full = { x: 0, y: 0, w: 980, h: 552 }
+    const title = { x: 80, y: 200, w: 400, h: 60 }
+    const nodes = [
+      el(0, -1, 'SVG', 0, { rect: full }),
+      el(1, -1, 'H1', 0, { rect: title }),
+      text(2, 1, 'A cover title', { rect: title, glyphRects: [title] }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
+    // `locator.screenshot()` clips the page rather than isolating the element,
+    // so without this the title is baked into the picture AND drawn again as
+    // a shape, printing every line of the slide twice.
+    const raster = slides[0].nodes.find(n => n.kind === 'raster') as any
+    expect(raster.isolate).toBe(true)
+    expect(rasterRequests[0].isolate).toBe(true)
+    // But NOT its own children: an <svg>'s children are its artwork, and
+    // nothing redraws them, so hiding those emptied the decorative chrome out
+    // of a themed deck entirely.
+    expect(rasterRequests[0].hideDescendants).toBe(false)
+  })
+
+  it('leaves a picture alone when nothing is drawn over it', () => {
+    const corner = { x: 0, y: 0, w: 100, h: 100 }
+    const away = { x: 500, y: 400, w: 200, h: 20 }
+    const nodes = [
+      el(0, -1, 'SVG', 0, { rect: corner }),
+      el(1, -1, 'DIV', 0, { rect: away }),
+      text(2, 1, 'caption', { rect: away, glyphRects: [away] }),
+    ]
+    const { rasterRequests } = run(nodes, [BASE_STYLE])
+    // Isolation costs two DOM mutations per capture, so it is not free.
+    expect(rasterRequests[0].isolate).toBe(false)
+  })
+})
+
 describe('trap 10: only backdrops need isolation', () => {
   it('isolates a backdrop but not a leaf picture', () => {
     const backdrop = run(
@@ -452,6 +532,8 @@ describe('trap 10: only backdrops need isolation', () => {
     // Without hiding siblings, the text bakes into the backdrop picture and is
     // then drawn again as a shape, doubling every word.
     expect(raster.isolate).toBe(true)
+    // A backdrop's children ARE walked and redrawn, so hiding them is correct.
+    expect(raster.hideDescendants).toBe(true)
     // Its children are still walked, so the text survives as editable text.
     expect(texts(backdrop.slides[0].nodes)).toHaveLength(1)
 

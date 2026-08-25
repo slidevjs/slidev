@@ -84,6 +84,8 @@ export interface RawStyle {
   letterSpacing: string
   lineHeight: string
   whiteSpace: string
+  paddingLeft: string
+  paddingRight: string
   borderTopWidth: string
   borderTopStyle: string
   borderTopColor: string
@@ -288,15 +290,22 @@ export interface IrRaster extends IrBase {
   data: string
   reason: RasterReason
   /**
-   * Capture this element with its siblings hidden and only its own ancestor
-   * chain revealed.
+   * Capture with everything else on the page hidden.
    *
-   * Needed because `locator.screenshot()` clips the page to the element's box
-   * rather than isolating the element: without hiding siblings, whatever is
-   * painted on top of a backdrop is baked into the backdrop's own picture and
-   * then drawn again as shapes.
+   * `locator.screenshot()` clips the page to the element's box rather than
+   * isolating the element, so anything overlapping that box lands in the
+   * picture. Whatever we also draw as a shape would then appear twice.
    */
   isolate: boolean
+  /**
+   * Also hide the element's own children while capturing.
+   *
+   * Only correct when those children are walked and redrawn as shapes, which
+   * is true for a backdrop and false for a leaf such as an `<svg>`. Hiding a
+   * leaf's children removes its artwork from the picture and nothing puts it
+   * back, which emptied the decorative chrome out of a themed deck.
+   */
+  hideDescendants: boolean
 }
 
 export type IrNode = IrBox | IrText | IrImage | IrRaster

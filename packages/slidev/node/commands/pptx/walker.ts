@@ -39,6 +39,8 @@ export function collectSnapshot(options: {
     'letterSpacing',
     'lineHeight',
     'whiteSpace',
+    'paddingLeft',
+    'paddingRight',
     'borderTopWidth',
     'borderTopStyle',
     'borderTopColor',

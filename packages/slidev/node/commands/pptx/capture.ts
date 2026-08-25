@@ -29,9 +29,9 @@ const RESTORE_ATTRIBUTE = 'data-slidev-export-restore'
  * `visibility` rather than `display`, because `display: none` removes the box
  * and reflows the siblings, which would move the very element being captured.
  */
-async function isolate(page: Page, id: number): Promise<void> {
+async function isolate(page: Page, id: number, hideDescendants: boolean): Promise<void> {
   await page.evaluate(
-    ({ id, idAttribute, restoreAttribute }) => {
+    ({ id, idAttribute, restoreAttribute, hideDescendants }) => {
       const target = document.querySelector(`[${idAttribute}="${id}"]`)
       if (!target)
         return
@@ -42,13 +42,14 @@ async function isolate(page: Page, id: number): Promise<void> {
         html.style.visibility = 'hidden'
       }
 
-      // The target's own DESCENDANTS, first. Hiding only siblings left the
-      // content sitting on top of a backdrop visible, so it was baked into the
-      // backdrop's picture AND drawn again as text shapes, doubling every word
-      // on the slide. `visibility` is inherited but overridable, so the
-      // children go hidden while the element itself keeps painting.
-      for (const child of Array.from(target.children))
-        hide(child)
+      // The target's own descendants, but ONLY when they are redrawn as
+      // shapes afterwards. That holds for a backdrop, whose children are
+      // walked, and not for a leaf such as an `<svg>`, whose children ARE its
+      // artwork: hiding those emptied the decorative chrome out of the slide.
+      if (hideDescendants) {
+        for (const child of Array.from(target.children))
+          hide(child)
+      }
 
       let node: Element | null = target
       while (node && node.parentElement) {
@@ -60,7 +61,7 @@ async function isolate(page: Page, id: number): Promise<void> {
         node = node.parentElement
       }
     },
-    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE },
+    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants },
   )
 }
 
@@ -171,7 +172,7 @@ export async function capture(
     let data: string | undefined
     try {
       if (request.isolate)
-        await isolate(page, request.sourceId)
+        await isolate(page, request.sourceId, request.hideDescendants)
       data = await shoot(page, `[${ID_ATTRIBUTE}="${request.sourceId}"]`)
     }
     catch {

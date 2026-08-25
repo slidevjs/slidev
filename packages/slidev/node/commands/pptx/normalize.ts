@@ -69,7 +69,10 @@ const RASTER_TAGS: Record<string, RasterReason> = {
 export interface RasterRequest {
   /** The `data-slidev-export-id` of the element to capture. */
   sourceId: number
+  /** Hide everything outside this element's own subtree. */
   isolate: boolean
+  /** Also hide its children, which is only safe when they are redrawn. */
+  hideDescendants: boolean
 }
 
 export interface NormalizeOptions {
@@ -542,6 +545,16 @@ class SlideWalker {
     return undefined
   }
 
+  /** Whether an inline element paints something of its own behind its text. */
+  private hasDecoration(node: RawNode): boolean {
+    const style = this.styleOf(node)
+    if (!style)
+      return false
+    if (isVisible(withOpacity(parseColor(style.backgroundColor), style.opacity)))
+      return true
+    return (['Top', 'Right', 'Bottom', 'Left'] as const).some(side => borderOf(style, side))
+  }
+
   private isInline(node: RawNode): boolean {
     if (node.tag === '#text')
       return true
@@ -554,23 +567,45 @@ class SlideWalker {
       this.visit(root)
 
     const texts = this.nodes.filter(n => n.kind === 'text')
+    // Pictures are drawn from their own screenshots, so a picture overlapping
+    // another picture is not the doubling problem below.
+    const drawnOver = this.nodes.filter(n => n.kind === 'text' || n.kind === 'image')
 
-    /**
-     * Raster area that bought us nothing.
-     *
-     * A picture with editable text drawn ON TOP of it is not wasted work: a
-     * full-bleed cover photo or a decorative background graphic covers the
-     * whole slide by definition, while the title over it vectorizes perfectly.
-     * Counting those sent every cover slide straight to the whole-slide
-     * fallback and threw away its text.
-     *
-     * So only a raster that nothing was recovered over counts against the
-     * budget. This generalises the rule that used to apply to isolated
-     * backdrops alone, which missed leaf pictures such as a full-bleed `<svg>`.
-     */
     for (const node of this.nodes) {
       if (node.kind !== 'raster')
         continue
+
+      /**
+       * Anything we ALSO draw as a shape inside this picture's box.
+       *
+       * `locator.screenshot()` clips the page to the element's box rather than
+       * isolating the element, so every overlapping thing lands in the
+       * picture. Drawing it again as a shape then prints it twice, which is
+       * exactly what a cover title over a full-bleed graphic looked like.
+       *
+       * Isolation used to be decided from the CSS reason - backdrops and the
+       * filter family - but that was only ever a proxy for "something is
+       * painted on top of this". Overlap tests the real thing, so a leaf
+       * picture such as a full-bleed `<svg>` is covered too.
+       */
+      const covered = drawnOver.some(other => overlaps(other.rect, node.rect))
+      if (covered)
+        node.isolate = true
+
+      this.requests.push({
+        sourceId: node.sourceId,
+        isolate: node.isolate,
+        hideDescendants: node.hideDescendants,
+      })
+
+      /**
+       * Raster area that bought us nothing.
+       *
+       * A picture with editable text over it is not wasted work: a cover photo
+       * covers the whole slide by definition while the title over it
+       * vectorizes perfectly. Counting those sent every cover slide to the
+       * whole-slide fallback and threw its text away.
+       */
       if (texts.some(text => overlaps(text.rect, node.rect)))
         continue
       const visible = clipToSlide(node.rect, this.size)
@@ -589,6 +624,9 @@ class SlideWalker {
     this.nodes.push({
       kind: 'raster',
       sourceId: node.id,
+      // Its children are walked and redrawn only when it is a backdrop, so
+      // only then is it safe to hide them for the capture.
+      hideDescendants: isolate,
       // The element's FULL rect, not the clipped one. The screenshot is of the
       // whole element, so drawing it into a smaller box squashes the picture
       // and shows content that should have been cropped away. PowerPoint has
@@ -599,7 +637,6 @@ class SlideWalker {
       reason,
       isolate,
     })
-    this.requests.push({ sourceId: node.id, isolate })
   }
 
   private emitImage(node: RawNode): void {
@@ -730,6 +767,19 @@ class SlideWalker {
     }
     for (const child of children) {
       if (this.isInline(child)) {
+        // An inline element carrying its own background or border is a chip,
+        // and its decoration is an absolutely positioned shape while the text
+        // around it is a flowed text box. Left in the same box, any difference
+        // between PowerPoint's metrics and the browser's accumulates across
+        // the earlier runs and slides the label off its own chip.
+        //
+        // Given its own box at its own glyph bounds, the label is anchored to
+        // where the browser actually put it, so the two cannot drift apart.
+        if (this.hasDecoration(child)) {
+          flush()
+          this.emitTextGroup([child])
+          continue
+        }
         group.push(child)
       }
       else {
@@ -846,14 +896,37 @@ class SlideWalker {
     const containerStyle = container ? this.styleOf(container) : undefined
     const anchorStyle = containerStyle ?? this.inheritedStyle(textNodes[0])!
 
+    const glyphs = boundsOf(rects)
+    const lineCount = countLines(rects)
+
+    /**
+     * The box PowerPoint will wrap inside.
+     *
+     * Glyph bounds are the ink, not the wrap width, and for text that already
+     * wrapped they are the width of the LONGEST LINE. Handing PowerPoint that
+     * guarantees a second, tighter wrap: a caption reading "a short caption"
+     * over two lines came back over three and overflowed its box.
+     *
+     * The browser wrapped against the container's content box, so that is the
+     * width to reproduce. Single-line text keeps its glyph bounds, which are
+     * exact and carry no wrapping risk.
+     */
+    let rect = glyphs
+    if (lineCount > 1 && container && containerStyle) {
+      const left = parseLength(containerStyle.paddingLeft)
+      const right = parseLength(containerStyle.paddingRight)
+      const width = container.rect.w - left - right
+      if (width > 0) {
+        rect = { x: container.rect.x + left, y: glyphs.y, w: width, h: glyphs.h }
+      }
+    }
+
     this.nodes.push({
       kind: 'text',
       sourceId: group[0].id,
-      // Glyph bounds, not the element box. Positioning from the element rect
-      // offsets the text by the container's padding and makes it re-wrap.
-      rect: boundsOf(rects),
-      elementRect: container?.rect ?? boundsOf(rects),
-      lineCount: countLines(rects),
+      rect,
+      elementRect: container?.rect ?? glyphs,
+      lineCount,
       align: alignOf(anchorStyle),
       lineHeight: resolveLineHeight(anchorStyle),
       runs,
