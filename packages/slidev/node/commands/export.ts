@@ -565,6 +565,11 @@ export async function exportSlides({
     // So the "exported to ..." line names the file that was actually written.
     output = result.output
 
+    // The progress bar repaints on a timer with the cursor hidden, so anything
+    // written while it is running is interleaved with it or overwritten. These
+    // are warnings the author has to actually read.
+    progress.stop()
+
     // Warnings, not progress: each line is a caveat the author has to know
     // about before the file reaches anyone else.
     for (const slide of result.fallbackSlides)
@@ -574,6 +579,9 @@ export async function exportSlides({
     if (result.unparsedColors.length) {
       console.warn(yellow(`  ${result.unparsedColors.length} colour value(s) could not be read, so those fills are missing:`))
       console.warn(dim(`    ${result.unparsedColors.slice(0, 5).join(', ')}`))
+    }
+    if (result.isolationMissed) {
+      console.warn(yellow(`  ${result.isolationMissed} picture(s) could not be isolated, so their slide may show doubled text`))
     }
     if (result.unplaceablePseudos.length) {
       console.warn(yellow(`  ${result.unplaceablePseudos.length} CSS decoration(s) could not be placed and were left out:`))

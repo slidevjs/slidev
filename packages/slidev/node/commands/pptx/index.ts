@@ -3,7 +3,7 @@ import type { Page } from 'playwright-chromium'
 import fs from 'node:fs/promises'
 import { buildPptx } from './build'
 import { capture, ID_ATTRIBUTE } from './capture'
-import { normalize, takeUnparsedColors } from './normalize'
+import { normalize } from './normalize'
 import { collectSnapshot } from './walker'
 
 /**
@@ -41,6 +41,8 @@ export interface EditableExportResult {
   fontsNamed: string[]
   /** Images that could be neither fetched nor screenshotted. */
   imagesDropped: number
+  /** Captures that asked for isolation and could not find their element. */
+  isolationMissed: number
   /** Colour strings no parser understood, so the user can report them. */
   unparsedColors: string[]
   /** Decorative pseudo-elements whose box could not be resolved. */
@@ -76,7 +78,7 @@ export async function exportPptxEditable(
   const notes = new Map<number, string | undefined>()
   ctx.slides.forEach((slide, index) => notes.set(index + 1, slide.note))
 
-  const { slides, rasterRequests } = normalize(snapshot, { notes })
+  const { slides, rasterRequests, unparsedColors } = normalize(snapshot, { notes })
   const report = await capture(ctx.page, slides, rasterRequests)
 
   const title = ctx.slides[0]
@@ -103,7 +105,8 @@ export async function exportPptxEditable(
     slideCount: slides.length,
     fallbackSlides: report.fallbackSlides,
     imagesDropped: report.imagesDropped,
-    unparsedColors: takeUnparsedColors(),
+    isolationMissed: report.isolationMissed,
+    unparsedColors,
     unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
     // A pptx NAMES fonts, it does not carry them. Reporting which families the
     // file asks for is the only way an author learns what recipients need

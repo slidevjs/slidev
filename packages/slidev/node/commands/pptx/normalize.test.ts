@@ -1,6 +1,6 @@
 import type { IrBox, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
 import { describe, expect, it } from 'vitest'
-import { normalize, parseColor, parseLength, parseShadow, rasterReasonFor, takeUnparsedColors } from './normalize'
+import { normalize, parseColor, parseLength, parseShadow, rasterReasonFor } from './normalize'
 
 /**
  * One named case per trap.
@@ -122,12 +122,13 @@ describe('value parsing', () => {
     expect(parseColor('color(srgb 1 0 0)')).toEqual({ r: 255, g: 0, b: 0, a: 1 })
   })
 
-  it('records a colour it cannot read instead of failing silently', () => {
-    takeUnparsedColors()
-    expect(parseColor('lab(50% 40 59.5)')).toBeUndefined()
-    expect(takeUnparsedColors()).toContain('lab(50% 40 59.5)')
-    // Draining is what makes the report per-export rather than cumulative.
-    expect(takeUnparsedColors()).toHaveLength(0)
+  it('reports a colour it cannot read instead of failing silently', () => {
+    const bad = style({ backgroundColor: 'lab(50% 40 59.5)' })
+    const { unparsedColors } = run([el(0, -1, 'DIV', 1)], [BASE_STYLE, bad])
+    expect(unparsedColors).toContain('lab(50% 40 59.5)')
+    // Per run, not module state: a drained global leaks into the next export
+    // whenever this one throws before the caller collects it.
+    expect(run([el(0, -1, 'DIV', 0)], [BASE_STYLE]).unparsedColors).toHaveLength(0)
   })
 
   it('reads a pixel length, and a percentage against its basis', () => {
@@ -164,6 +165,55 @@ describe('finding 2: <br> becomes a real line break', () => {
     expect(out.runs.map(r => r.text)).toEqual(['line one', 'line two'])
     expect(out.runs[1].breakBefore).toBe(true)
     expect(out.runs[0].breakBefore).toBeUndefined()
+  })
+})
+
+describe('code blocks keep their line structure', () => {
+  it('turns a pre newline into a real line break', () => {
+    const pre = style({ whiteSpace: 'pre' })
+    const inline = style({ display: 'inline', whiteSpace: 'pre' })
+    const nodes = [
+      el(0, -1, 'PRE', 1),
+      el(1, 0, 'SPAN', 2),
+      text(2, 1, 'const a = 1'),
+      // Shiki separates its line spans with a bare newline text node, which
+      // has no client rects of its own.
+      text(3, 0, '\n', { glyphRects: [] }),
+      el(4, 0, 'SPAN', 2),
+      text(5, 4, 'const b = 2'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, pre, inline])
+    const out = texts(slides[0].nodes)[0]
+    // Folded to a space, every multi-line code block exported as one
+    // re-wrapped paragraph, which is core content for a developer slide tool.
+    expect(out.runs.map(r => r.text)).toEqual(['const a = 1', 'const b = 2'])
+    expect(out.runs[1].breakBefore).toBe(true)
+  })
+
+  it('keeps a blank line between two consecutive breaks', () => {
+    const inline = style({ display: 'inline' })
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'first'),
+      el(2, 0, 'BR', 1),
+      el(3, 0, 'BR', 1),
+      text(4, 0, 'second'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline])
+    const out = texts(slides[0].nodes)[0]
+    // `softBreakBefore` is one break per run, so two in a row need an empty
+    // run between them or the blank line silently disappears.
+    expect(out.runs).toHaveLength(3)
+    expect(out.runs[1].text).toBe('')
+    expect(out.runs[1].breakBefore).toBe(true)
+    expect(out.runs[2].breakBefore).toBe(true)
+  })
+
+  it('does not open a box with a leading break', () => {
+    const inline = style({ display: 'inline' })
+    const nodes = [el(0, -1, 'DIV', 0), el(1, 0, 'BR', 1), text(2, 0, 'text')]
+    const { slides } = run(nodes, [BASE_STYLE, inline])
+    expect(texts(slides[0].nodes)[0].runs[0].breakBefore).toBeUndefined()
   })
 })
 
@@ -245,8 +295,11 @@ describe('finding 8: a list item flows its children as text', () => {
 
 describe('finding 15: element opacity reaches the fill', () => {
   it('folds opacity into the colour alpha', () => {
-    const faded = style({ backgroundColor: 'rgb(0, 0, 0)', opacity: '0.5' })
-    const nodes = [el(0, -1, 'DIV', 1)]
+    const faded = style({ backgroundColor: 'rgb(0, 0, 0)' })
+    // Carried on the NODE, compounded down the tree by the walker, because CSS
+    // opacity does not inherit and DrawingML has no group opacity to stand in
+    // for a half-transparent wrapper.
+    const nodes = [el(0, -1, 'DIV', 1, { opacity: 0.5 })]
     const { slides } = run(nodes, [BASE_STYLE, faded])
     // DrawingML has no element opacity, only per-fill alpha, so a half
     // transparent overlay exported fully opaque and hid what was behind it.
@@ -403,28 +456,45 @@ describe('trap 8: inline decorations paint before their text', () => {
   it('anchors a chip label in its own box so it cannot drift off the chip', () => {
     const inline = style({ display: 'inline' })
     const chip = style({ display: 'inline', backgroundColor: 'rgb(0, 128, 0)' })
-    const before = { x: 0, y: 0, w: 120, h: 20 }
     const label = { x: 122, y: 0, w: 30, h: 20 }
     const nodes = [
       el(0, -1, 'DIV', 0),
-      el(1, 0, 'SPAN', 1, { rect: before }),
-      text(2, 1, 'C2C.PI.A2A.', { rect: before, glyphRects: [before] }),
-      el(3, 0, 'SPAN', 2, { rect: label }),
-      text(4, 3, 'NEW', { rect: label, glyphRects: [label] }),
+      el(1, 0, 'SPAN', 2, { rect: label }),
+      text(2, 1, 'NEW', { rect: label, glyphRects: [label] }),
     ]
     const { slides } = run(nodes, [BASE_STYLE, inline, chip])
     const out = texts(slides[0].nodes)
     // The chip's background is an absolutely positioned shape while the text
     // around it flows, so sharing one box lets PowerPoint's metrics
     // accumulate across the earlier runs and slide the label off its chip.
-    expect(out).toHaveLength(2)
-    expect(out[1].runs[0].text).toBe('NEW')
+    expect(out).toHaveLength(1)
+    expect(out[0].runs[0].text).toBe('NEW')
     // Pinned to the chip and centred in it, not to its own ink. However much
     // wider PowerPoint sets the string than the browser did, the label stays
     // evenly inset instead of ending up hard against one edge.
-    expect(out[1].rect).toEqual(label)
-    expect(out[1].align).toBe('center')
-    expect(out[1].valign).toBe('middle')
+    expect(out[0].rect).toEqual(label)
+    expect(out[0].align).toBe('center')
+    expect(out[0].valign).toBe('middle')
+  })
+
+  it('leaves inline code in the middle of a sentence alone', () => {
+    const inline = style({ display: 'inline' })
+    const code = style({ display: 'inline', backgroundColor: 'rgb(240, 240, 240)' })
+    const nodes = [
+      el(0, -1, 'P', 0),
+      text(1, 0, 'Use '),
+      el(2, 0, 'CODE', 2),
+      text(3, 2, 'npm i'),
+      text(4, 0, ' to begin.'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, inline, code])
+    // Slidev gives inline code a background, so an unconditional chip split
+    // cut ordinary sentences into three boxes and centred the code span; when
+    // such a sentence wrapped, the halves overlapped. A chip is a label on its
+    // own, not a word in the middle of a line.
+    const out = texts(slides[0].nodes)
+    expect(out).toHaveLength(1)
+    expect(out[0].runs.map(r => r.text)).toEqual(['Use ', 'npm i', ' to begin.'])
   })
 })
 

@@ -275,7 +275,7 @@ export function collectSnapshot(options: {
       }
     }
 
-    function walk(node: Node, parent: number, fromShadowRoot: boolean): void {
+    function walk(node: Node, parent: number, fromShadowRoot: boolean, inheritedOpacity: number): void {
       if (node.nodeType === 3) {
         const text = node.textContent ?? ''
         // A whitespace-only node is NOT noise. Markup such as
@@ -289,8 +289,15 @@ export function collectSnapshot(options: {
         range.selectNodeContents(node)
         const rects = Array.from(range.getClientRects())
         range.detach()
-        if (!rects.length)
+        // A node with no boxes is still reported. A newline inside a
+        // `white-space: pre` block is exactly that, and it is the only record
+        // of where one line of a code block ends and the next begins.
+        if (!rects.length) {
+          if (!text.includes('\n'))
+            return
+          nodes.push({ id: nextId++, parent, tag: '#text', style: -1, rect: { x: 0, y: 0, w: 0, h: 0 }, glyphRects: [], text })
           return
+        }
         // Glyph rects, not the element box. A text box positioned from the
         // element rect lands offset by the padding and re-wraps.
         const bounds = {
@@ -324,7 +331,13 @@ export function collectSnapshot(options: {
       // exported onto every click step of the slide.
       if (computed.display === 'none' || computed.visibility === 'hidden')
         return
-      if (Number(computed.opacity) === 0)
+      const own = Number(computed.opacity)
+      // CSS `opacity` does NOT inherit: a child of a half-transparent wrapper
+      // computes 1 and would export fully opaque, because DrawingML has no
+      // group opacity to stand in for the wrapper. So it is compounded here,
+      // where the tree is still available.
+      const effectiveOpacity = inheritedOpacity * (Number.isFinite(own) ? own : 1)
+      if (effectiveOpacity === 0)
         return
 
       el.setAttribute(options.idAttribute, String(id))
@@ -337,6 +350,8 @@ export function collectSnapshot(options: {
         style: internStyle(el),
         rect: relative(el.getBoundingClientRect()),
       }
+      if (effectiveOpacity < 1)
+        record.opacity = effectiveOpacity
       if (fromShadowRoot)
         record.fromShadowRoot = true
       if (el.tagName.toUpperCase() === 'IMG') {
@@ -421,6 +436,18 @@ export function collectSnapshot(options: {
           width,
           height,
         }
+        // DOCUMENT coordinates, not viewport ones. A clip screenshot is taken
+        // later, after other captures have scrolled the page, and the print
+        // route is far taller than the viewport once every click step has its
+        // own container. Viewport coordinates read at measurement time are
+        // stale by then, and Playwright answers "clipped area is empty",
+        // which the caller swallows and the decoration vanishes.
+        const pageRect = {
+          x: box.left + window.scrollX,
+          y: box.top + window.scrollY,
+          w: width,
+          h: height,
+        }
         const text = pseudo.content.replace(/^["']|["']$/g, '')
         nodes.push({
           id: nextId++,
@@ -430,7 +457,7 @@ export function collectSnapshot(options: {
           rect: relative(box),
           // Page coordinates as well: a pseudo has no element to point a
           // screenshot at, so it is captured by clipping the page instead.
-          pageRect: { x: box.left, y: box.top, w: width, h: height },
+          pageRect,
           ...(text && pseudo.content !== 'normal' ? { text } : {}),
         })
       }
@@ -441,17 +468,17 @@ export function collectSnapshot(options: {
       const shadow = (el as any).shadowRoot
       if (shadow) {
         for (const child of Array.from(shadow.childNodes) as Node[])
-          walk(child, id, true)
+          walk(child, id, true, effectiveOpacity)
       }
 
       // Recurse through zero-sized boxes rather than pruning them. A cover
       // slide commonly hangs its title off a wrapper that measures 0 high.
       for (const child of Array.from(el.childNodes) as Node[])
-        walk(child, id, fromShadowRoot)
+        walk(child, id, fromShadowRoot, effectiveOpacity)
     }
 
     for (const child of Array.from(container.childNodes) as Node[])
-      walk(child, -1, false)
+      walk(child, -1, false, 1)
 
     slides.push({
       no,

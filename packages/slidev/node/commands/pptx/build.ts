@@ -134,7 +134,11 @@ function addText(slide: any, node: IrText): void {
       fit: 'none',
       isTextBox: true,
       wrap: node.lineCount > 1,
-      lineSpacing: pt(node.lineHeight),
+      // Only for text that actually has more than one line. A single-line box
+      // is measured from the glyph ink, which is shorter than the CSS line
+      // box, so asking PowerPoint to lay out the taller line box inside it
+      // shifts the baseline and can clip descenders.
+      ...(node.lineCount > 1 ? { lineSpacing: pt(node.lineHeight) } : {}),
     },
   )
 }

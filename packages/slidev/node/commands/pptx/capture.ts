@@ -1,5 +1,5 @@
 import type { Page } from 'playwright-chromium'
-import type { IrImage, IrRaster, SlideIr } from './ir'
+import type { IrImage, IrRaster, Rect, SlideIr } from './ir'
 import type { RasterRequest } from './normalize'
 import { Buffer } from 'node:buffer'
 
@@ -29,12 +29,31 @@ const RESTORE_ATTRIBUTE = 'data-slidev-export-restore'
  * `visibility` rather than `display`, because `display: none` removes the box
  * and reflows the siblings, which would move the very element being captured.
  */
-async function isolate(page: Page, id: number, hideDescendants: boolean): Promise<void> {
-  await page.evaluate(
+async function isolate(page: Page, id: number, hideDescendants: boolean): Promise<boolean> {
+  return await page.evaluate(
     ({ id, idAttribute, restoreAttribute, hideDescendants }) => {
-      const target = document.querySelector(`[${idAttribute}="${id}"]`)
+      // `document.querySelector` does not pierce shadow DOM, and Mermaid
+      // renders into one. `page.locator` in `shoot()` DOES pierce, so the
+      // screenshot succeeded while isolation silently did nothing, which is
+      // the doubling this whole mechanism exists to prevent.
+      const find = (root: Document | ShadowRoot): Element | null => {
+        const hit = root.querySelector(`[${idAttribute}="${id}"]`)
+        if (hit)
+          return hit
+        for (const el of Array.from(root.querySelectorAll('*'))) {
+          const shadow = (el as any).shadowRoot
+          if (shadow) {
+            const nested = find(shadow)
+            if (nested)
+              return nested
+          }
+        }
+        return null
+      }
+
+      const target = find(document)
       if (!target)
-        return
+        return false
 
       const hide = (el: Element) => {
         const html = el as HTMLElement
@@ -49,6 +68,12 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
       if (hideDescendants) {
         for (const child of Array.from(target.children))
           hide(child)
+        // A direct text child has no element to hide, so it would still be
+        // baked into the picture and then drawn again as a shape. Its own
+        // colour is what makes it visible.
+        const html = target as HTMLElement
+        html.setAttribute(`${restoreAttribute}-color`, html.style.color || '')
+        html.style.color = 'transparent'
       }
 
       let node: Element | null = target
@@ -60,6 +85,7 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
         }
         node = node.parentElement
       }
+      return true
     },
     { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants },
   )
@@ -74,6 +100,15 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
  */
 async function restore(page: Page): Promise<void> {
   await page.evaluate((restoreAttribute) => {
+    for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}-color]`))) {
+      const previous = el.getAttribute(`${restoreAttribute}-color`) ?? ''
+      const style = (el as HTMLElement).style
+      if (previous)
+        style.color = previous
+      else
+        style.removeProperty('color')
+      el.removeAttribute(`${restoreAttribute}-color`)
+    }
     for (const el of Array.from(document.querySelectorAll(`[${restoreAttribute}]`))) {
       const previous = el.getAttribute(restoreAttribute) ?? ''
       const style = (el as HTMLElement).style
@@ -86,12 +121,60 @@ async function restore(page: Page): Promise<void> {
   }, RESTORE_ATTRIBUTE)
 }
 
+/**
+ * Screenshot an element, or return undefined.
+ *
+ * Never throws. A detached, zero-sized or slow element makes
+ * `locator.screenshot()` reject, and two of the three call sites are the
+ * FALLBACK paths, so an unhandled rejection there crashed the whole export at
+ * the exact moment it was trying to degrade gracefully.
+ */
 async function shoot(page: Page, selector: string): Promise<string | undefined> {
-  const locator = page.locator(selector).first()
-  if (!(await locator.count()))
+  try {
+    const locator = page.locator(selector).first()
+    if (!(await locator.count()))
+      return undefined
+    const buffer = await locator.screenshot({ omitBackground: true, timeout: 10_000 })
+    return `data:image/png;base64,${buffer.toString('base64')}`
+  }
+  catch {
     return undefined
-  const buffer = await locator.screenshot({ omitBackground: true, timeout: 10_000 })
-  return `data:image/png;base64,${buffer.toString('base64')}`
+  }
+}
+
+/**
+ * Screenshot a rectangle of the document.
+ *
+ * `clip` is in DOCUMENT coordinates, which is why `fullPage` is set: without
+ * it Playwright reads the rectangle as viewport-relative and trims it to the
+ * viewport, and the print route is far taller than the viewport as soon as
+ * every click step has its own container.
+ */
+async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
+  try {
+    const buffer = await page.screenshot({
+      fullPage: true,
+      clip: { x: clip.x, y: clip.y, width: clip.w, height: clip.h },
+      omitBackground: true,
+      timeout: 10_000,
+    })
+    return `data:image/png;base64,${buffer.toString('base64')}`
+  }
+  catch {
+    return undefined
+  }
+}
+
+/**
+ * Whether a data URI can be embedded as-is.
+ *
+ * pptxgenjs needs `image/<type>;base64,`. A URL-encoded data URI, which is how
+ * an inline SVG icon is usually written, makes it print "Image `data` value
+ * lacks a base64 header!" and emit nothing at all. SVG is rasterized on this
+ * path regardless, so both cases fall through to a screenshot instead.
+ */
+export function isUsableDataUri(url: string): boolean {
+  return /^data:image\/(?!svg\+xml)[\w.+-]+;base64,/.test(url)
 }
 
 /**
@@ -103,7 +186,7 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
  */
 async function fetchImage(page: Page, url: string): Promise<string | undefined> {
   if (url.startsWith('data:'))
-    return url
+    return isUsableDataUri(url) ? url : undefined
   try {
     const response = await page.context().request.get(url, { timeout: 15_000 })
     if (!response.ok())
@@ -128,6 +211,14 @@ export interface CaptureReport {
   imagesFetched: number
   /** Images that could be neither fetched nor screenshotted. */
   imagesDropped: number
+  /**
+   * Captures that asked for isolation and could not find their element.
+   *
+   * Counted rather than ignored: an isolation that silently does nothing
+   * produces a picture with the slide's own text baked into it, which is then
+   * drawn again as shapes.
+   */
+  isolationMissed: number
   fallbackSlides: { no: number, reason: string }[]
 }
 
@@ -148,6 +239,7 @@ export async function capture(
     rastersFailed: 0,
     imagesFetched: 0,
     imagesDropped: 0,
+    isolationMissed: 0,
     fallbackSlides: [],
   }
 
@@ -171,16 +263,12 @@ export async function capture(
   for (const request of requests) {
     let data: string | undefined
     try {
-      if (request.isolate)
-        await isolate(page, request.sourceId, request.hideDescendants)
+      if (request.isolate && !(await isolate(page, request.isolateId ?? request.sourceId, request.hideDescendants)))
+        report.isolationMissed++
+      // A pseudo-element has no element to point at, so the page is clipped to
+      // the box the walker computed for it instead.
       data = request.clip
-        // A pseudo-element has no element to point at, so the page is clipped
-        // to the box the walker computed for it instead.
-        ? `data:image/png;base64,${(await page.screenshot({
-          clip: { x: request.clip.x, y: request.clip.y, width: request.clip.w, height: request.clip.h },
-          omitBackground: true,
-          timeout: 10_000,
-        })).toString('base64')}`
+        ? await shootClip(page, request.clip)
         : await shoot(page, `[${ID_ATTRIBUTE}="${request.sourceId}"]`)
     }
     catch {

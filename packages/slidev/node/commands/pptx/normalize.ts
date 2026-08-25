@@ -79,6 +79,14 @@ export interface RasterRequest {
   isolate: boolean
   /** Also hide its children, which is only safe when they are redrawn. */
   hideDescendants: boolean
+  /**
+   * The element to isolate against, when it is not the captured node itself.
+   *
+   * A pseudo-element has no DOM node and so no id attribute to find, but its
+   * originating element does, and hiding that element's siblings is what keeps
+   * the surrounding slide out of the clip.
+   */
+  isolateId?: number
 }
 
 export interface NormalizeOptions {
@@ -89,20 +97,22 @@ export interface NormalizeOptions {
 export interface NormalizeResult {
   slides: SlideIr[]
   rasterRequests: RasterRequest[]
+  /** Colour strings no parser understood, so the caller can report them. */
+  unparsedColors: string[]
 }
 
 // ---------------------------------------------------------------------------
 // Value parsing
 // ---------------------------------------------------------------------------
 
-/** Colour strings we could not read, so the caller can say so once. */
-const unparsedColors = new Set<string>()
-
-export function takeUnparsedColors(): string[] {
-  const seen = [...unparsedColors]
-  unparsedColors.clear()
-  return seen
-}
+/**
+ * Colour strings no parser understood, for the current `normalize()` call.
+ *
+ * Reset at the start of every run rather than drained by the caller: drained
+ * state leaks into the next export whenever the current one throws before the
+ * caller gets to it, and this module claims to be pure.
+ */
+let unparsedColors = new Set<string>()
 
 function numbers(body: string): number[] {
   return body.split(/[\s,/]+/).filter(Boolean).map((token) => {
@@ -283,20 +293,20 @@ function isVisible(color: Rgba | undefined): boolean {
 }
 
 /**
- * Fold an element's `opacity` into a colour's own alpha.
+ * Fold an element's effective opacity into a colour's own alpha.
  *
- * DrawingML has no element-level opacity, only per-fill alpha, so an
- * `opacity: 0.5` overlay exported fully opaque and hid whatever sat behind it.
- * Inherited opacity is not compounded: the walker records each element's own
- * computed value, and CSS opacity on an ancestor already applies to the group.
+ * DrawingML has no element-level opacity and no group opacity, only per-fill
+ * alpha, so an `opacity: 0.5` overlay exported fully opaque and hid whatever
+ * sat behind it. The value is compounded down the tree by the walker, because
+ * CSS `opacity` does not inherit: a child of a half-transparent wrapper
+ * computes 1 and would otherwise export at full strength.
  */
-function withOpacity(color: Rgba | undefined, opacity: string | undefined): Rgba | undefined {
+function withOpacity(color: Rgba | undefined, opacity: number | undefined): Rgba | undefined {
   if (!color)
     return undefined
-  const factor = opacity === undefined || opacity === '' ? 1 : Number(opacity)
-  if (!Number.isFinite(factor) || factor >= 1)
+  if (opacity === undefined || !Number.isFinite(opacity) || opacity >= 1)
     return color
-  return { ...color, a: color.a * Math.max(0, factor) }
+  return { ...color, a: color.a * Math.max(0, opacity) }
 }
 
 function borderOf(style: RawStyle, side: 'Top' | 'Right' | 'Bottom' | 'Left'): Border | undefined {
@@ -406,12 +416,47 @@ function alignOf(style: RawStyle | undefined): IrText['align'] {
   }
 }
 
-function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, link?: string): IrRun {
+/**
+ * CSS keywords rather than typefaces. Naming one asks PowerPoint for a font
+ * that exists nowhere, so it substitutes its own default silently.
+ *
+ * The walker already skips these when probing, but when NOTHING in a stack
+ * resolves it reports an empty string, and falling back to the head of the
+ * stack put `system-ui` straight back into the file.
+ */
+const GENERIC_FAMILIES = new Set([
+  'system-ui',
+  'ui-sans-serif',
+  'ui-serif',
+  'ui-monospace',
+  'ui-rounded',
+  'sans-serif',
+  'serif',
+  'monospace',
+  'cursive',
+  'fantasy',
+  'math',
+  'emoji',
+  'fangsong',
+  'inherit',
+  'initial',
+  'unset',
+])
+
+export function fallbackFamily(stack: string): string {
+  for (const raw of stack.split(',')) {
+    const family = raw.trim().replace(/^["']|["']$/g, '').replace(/\s+Variable$/, '')
+    if (!family || family.startsWith('-') || GENERIC_FAMILIES.has(family.toLowerCase()))
+      continue
+    return family
+  }
+  return 'Arial'
+}
+
+function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, link?: string, opacity?: number): IrRun {
   const weight = Number(style.fontWeight)
   const decoration = style.textDecorationLine || ''
-  const family = fontResolution[style.fontFamily]
-    || style.fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '').replace(/\s+Variable$/, '')
-    || 'Arial'
+  const family = fontResolution[style.fontFamily] || fallbackFamily(style.fontFamily)
   const run: IrRun = {
     text: applyTransform(text, style.textTransform),
     fontSize: parseLength(style.fontSize),
@@ -425,7 +470,7 @@ function runFrom(text: string, style: RawStyle, fontResolution: Record<string, s
     run.underline = true
   if (decoration.includes('line-through'))
     run.strike = true
-  const color = withOpacity(parseColor(style.color), style.opacity)
+  const color = withOpacity(parseColor(style.color), opacity)
   if (isVisible(color))
     run.color = color
   const spacing = parseLength(style.letterSpacing)
@@ -506,6 +551,9 @@ class SlideWalker {
   private requests: RasterRequest[] = []
   private rasterArea = 0
   private pageRects = new Map<number, Rect | undefined>()
+  private boxed = new Set<number>()
+  /** Pseudo-element id to the id of the element it belongs to. */
+  private originators = new Map<number, number>()
   private size: { w: number, h: number }
 
   constructor(
@@ -557,7 +605,7 @@ class SlideWalker {
     const style = this.styleOf(node)
     if (!style)
       return false
-    if (isVisible(withOpacity(parseColor(style.backgroundColor), style.opacity)))
+    if (isVisible(withOpacity(parseColor(style.backgroundColor), node.opacity)))
       return true
     return (['Top', 'Right', 'Bottom', 'Left'] as const).some(side => borderOf(style, side))
   }
@@ -604,6 +652,7 @@ class SlideWalker {
         isolate: node.isolate,
         hideDescendants: node.hideDescendants,
         clip: this.pageRects.get(node.sourceId),
+        isolateId: this.originators.get(node.sourceId),
       })
 
       /**
@@ -626,6 +675,8 @@ class SlideWalker {
 
   private emitRaster(node: RawNode, reason: RasterReason): void {
     this.pageRects.set(node.id, node.pageRect)
+    if (node.tag === '::BEFORE' || node.tag === '::AFTER')
+      this.originators.set(node.id, node.parent)
     const isolate = needsIsolation(reason)
     const visible = clipToSlide(node.rect, this.size)
     if (!visible)
@@ -667,7 +718,14 @@ class SlideWalker {
   }
 
   private emitBox(node: RawNode, style: RawStyle): void {
-    const fill = withOpacity(parseColor(style.backgroundColor), style.opacity)
+    // `emitTextGroup` paints every group node and descendant before the text,
+    // and a layout container inside that subtree is then handed to `visit`,
+    // which paints it again. Two opaque fills only waste a shape; two
+    // translucent ones composite and come out visibly darker.
+    if (this.boxed.has(node.id))
+      return
+    this.boxed.add(node.id)
+    const fill = withOpacity(parseColor(style.backgroundColor), node.opacity)
     const borders: [Border?, Border?, Border?, Border?] = [
       borderOf(style, 'Top'),
       borderOf(style, 'Right'),
@@ -742,6 +800,12 @@ class SlideWalker {
       // on top of the isolated picture.
       if (!needsIsolation(reason))
         return
+      // But NOT its own box. The screenshot already contains this element's
+      // background and borders, so drawing them again paints an opaque fill
+      // straight over the picture that was taken to preserve the image, and
+      // composites a translucent one twice.
+      this.visitChildren(node)
+      return
     }
 
     if (style)
@@ -812,7 +876,14 @@ class SlideWalker {
         //
         // Given its own box at its own glyph bounds, the label is anchored to
         // where the browser actually put it, so the two cannot drift apart.
-        if (this.hasDecoration(child)) {
+        //
+        // Only when it is the WHOLE of its container. Slidev styles inline
+        // `<code>` with a background, so an unconditional split cut ordinary
+        // sentences into three boxes and forced the code span to centre; when
+        // such a sentence wrapped, the two halves both laid out from the
+        // container's left edge and overlapped. A chip is a label on its own,
+        // not a word in the middle of a line.
+        if (this.hasDecoration(child) && children.length === 1) {
           flush()
           this.emitTextGroup([child])
           continue
@@ -892,23 +963,59 @@ class SlideWalker {
 
     const runs: IrRun[] = []
     const rects: Rect[] = []
-    let breakPending = false
+
+    /**
+     * Line breaks waiting to be attached to the next run.
+     *
+     * A count, not a flag. `softBreakBefore` is one break per run, so two
+     * consecutive `<br>` need an empty run between them or the blank line
+     * disappears. Held against the NEXT run rather than the previous one, so a
+     * trailing break does not add an empty line at the end of the box.
+     */
+    let pendingBreaks = 0
+
+    const push = (text: string, style: RawStyle, node: RawNode) => {
+      // One empty run per surplus break, so the blank lines survive.
+      while (pendingBreaks > 1 && runs.length) {
+        runs.push({ ...runFrom('', style, this.fontResolution, undefined, node.opacity), breakBefore: true })
+        pendingBreaks--
+      }
+      const run = runFrom(text, style, this.fontResolution, this.linkFor(node), node.opacity)
+      if (pendingBreaks && runs.length)
+        run.breakBefore = true
+      pendingBreaks = 0
+      runs.push(run)
+    }
+
     for (const textNode of textNodes) {
       if (textNode.tag === 'BR') {
-        // Recorded against the NEXT run rather than the previous one, because
-        // a trailing <br> should not add an empty line at the end of the box.
-        if (runs.length)
-          breakPending = true
+        pendingBreaks++
         continue
       }
       const style = this.inheritedStyle(textNode)
       if (!style)
         continue
-      const text = style.whiteSpace.startsWith('pre')
-        ? textNode.text ?? ''
-        : (textNode.text ?? '').replace(/\s+/g, ' ')
-      if (!text)
+      const raw = textNode.text ?? ''
+      if (!raw)
         continue
+
+      // `white-space: pre` keeps its newlines, and they are the ONLY record of
+      // where one line of a code block ends. Shiki renders each line as an
+      // inline span separated by a "\n" text node, so folding those into
+      // spaces joins the whole block into one re-wrapped paragraph.
+      if (style.whiteSpace.startsWith('pre')) {
+        const lines = raw.split('\n')
+        lines.forEach((line, index) => {
+          if (index > 0)
+            pendingBreaks++
+          if (line)
+            push(line, style, textNode)
+        })
+        rects.push(...(textNode.glyphRects ?? []))
+        continue
+      }
+
+      const text = raw.replace(/\s+/g, ' ')
       if (!text.trim()) {
         // A whitespace-only node is the space between two inline elements.
         // Dropping it exports `<span>Hello</span> <span>World</span>` as
@@ -918,12 +1025,7 @@ class SlideWalker {
           runs[runs.length - 1].text += ' '
         continue
       }
-      const run = runFrom(text, style, this.fontResolution, this.linkFor(textNode))
-      if (breakPending) {
-        run.breakBefore = true
-        breakPending = false
-      }
-      runs.push(run)
+      push(text, style, textNode)
       rects.push(...(textNode.glyphRects ?? [textNode.rect]))
     }
     if (!runs.length || !rects.length)
@@ -976,6 +1078,13 @@ class SlideWalker {
       }
     }
 
+    // Clipped like every other emitted node. Text was the one kind that was
+    // not, so anything the browser clipped away landed off the PowerPoint
+    // canvas where it cannot be selected, and still counted toward the text
+    // total that suppresses the whole-slide fallback.
+    if (!clipToSlide(rect, this.size))
+      return
+
     this.nodes.push({
       kind: 'text',
       sourceId: group[0].id,
@@ -999,6 +1108,7 @@ class SlideWalker {
 }
 
 export function normalize(snapshot: RawSnapshot, options: NormalizeOptions): NormalizeResult {
+  unparsedColors = new Set()
   const slides: SlideIr[] = []
   const rasterRequests: RasterRequest[] = []
 
@@ -1041,5 +1151,5 @@ export function normalize(snapshot: RawSnapshot, options: NormalizeOptions): Nor
     slides.push(ir)
   }
 
-  return { slides, rasterRequests }
+  return { slides, rasterRequests, unparsedColors: [...unparsedColors].sort() }
 }

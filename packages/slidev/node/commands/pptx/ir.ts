@@ -151,6 +151,14 @@ export interface RawNode {
   hasForeignObject?: boolean
   /** Reached through `el.shadowRoot`. Mermaid diagrams live in one. */
   fromShadowRoot?: boolean
+  /**
+   * Opacity compounded from every ancestor, present only when below 1.
+   *
+   * CSS `opacity` does not inherit, but DrawingML has no group opacity, so the
+   * wrapper's transparency has to be folded into each descendant's own colours
+   * or a dimmed block exports at full strength.
+   */
+  opacity?: number
   /** A `::marker` list bullet, which is a pseudo-element and has no text node. */
   marker?: string
   /**
