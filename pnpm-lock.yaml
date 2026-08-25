@@ -857,6 +857,9 @@ importers:
       lz-string:
         specifier: catalog:frontend
         version: 1.5.0
+      markdown-it-github-alerts:
+        specifier: catalog:prod
+        version: 1.0.1(markdown-it@14.3.0)
       mermaid:
         specifier: catalog:frontend
         version: 11.16.1

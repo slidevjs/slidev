@@ -56,6 +56,7 @@
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",
     "lz-string": "catalog:frontend",
+    "markdown-it-github-alerts": "catalog:prod",
     "mermaid": "catalog:frontend",
     "monaco-editor": "catalog:monaco",
     "nanotar": "catalog:frontend",
