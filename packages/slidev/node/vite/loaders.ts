@@ -83,13 +83,19 @@ export function createSlidesLoader(
 
         const [, no] = match
         const idx = Number.parseInt(no) - 1
+        const targetSlide = data.slides[idx]
+        if (!targetSlide) {
+          res.statusCode = 404
+          return res.end()
+        }
+
         if (req.method === 'GET') {
-          res.write(JSON.stringify(withRenderedNote(data.slides[idx])))
+          res.write(JSON.stringify(withRenderedNote(targetSlide)))
           return res.end()
         }
         else if (req.method === 'POST') {
           const body: SlidePatch = await getBodyJson(req)
-          const slide = data.slides[idx]
+          const slide = targetSlide
 
           if (body.content && body.content !== slide.source.content)
             hmrSlidesIndexes.add(idx)
