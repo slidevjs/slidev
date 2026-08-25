@@ -6,6 +6,7 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import process from 'node:process'
 import * as readline from 'node:readline'
+import { uniq } from '@antfu/utils'
 import { verifyConfig } from '@slidev/parser'
 import { blue, bold, cyan, cyanBright, dim, gray, green, underline, yellow } from 'ansis'
 import equal from 'fast-deep-equal'
@@ -35,13 +36,18 @@ const CONFIG_RESTART_FIELDS: (keyof SlidevConfig)[] = [
   'seoMeta',
 ]
 
-const FILES_CHANGE_RESTART = [
+// Watched under `setupRoots`, which also covers the project root
+const SETUP_FILES_CHANGE_RESTART = [
   'setup/shiki.ts',
   'setup/katex.ts',
   'setup/preparser.ts',
   'setup/transformers.ts',
   'setup/unocss.ts',
   'setup/vite-plugins.ts',
+]
+
+// Watched under `roots` only
+const FILES_CHANGE_RESTART = [
   'uno.config.ts',
   'unocss.config.ts',
   'vite.config.{js,ts,mjs,mts}',
@@ -315,14 +321,20 @@ cli.command(
       process.stdin.on('keypress', onKeyPress)
     }
 
-    const { roots } = await initServer()
+    const { roots, setupRoots } = await initServer()
     bindShortcut()
 
     // Start watcher to restart server on file changes
     const { watch } = await import('chokidar')
-    const watchGlobs = roots
-      .filter(i => !i.includes('node_modules'))
-      .flatMap(root => FILES_CHANGE_RESTART.map(i => path.join(root, i)))
+    const isWatchable = (root: string) => !root.includes('node_modules')
+    const watchGlobs = uniq([
+      ...roots
+        .filter(isWatchable)
+        .flatMap(root => FILES_CHANGE_RESTART.map(i => path.join(root, i))),
+      ...setupRoots
+        .filter(isWatchable)
+        .flatMap(root => SETUP_FILES_CHANGE_RESTART.map(i => path.join(root, i))),
+    ])
     const watcher = watch(watchGlobs, {
       ignored: ['node_modules', '.git'],
       ignoreInitial: true,
