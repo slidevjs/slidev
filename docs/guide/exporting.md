@@ -90,6 +90,7 @@ Two things worth knowing before you send the file on:
 
 - A `.pptx` names fonts, it does not embed them. The export prints which font families it referenced; recipients need those installed or PowerPoint will substitute.
 - PowerPoint does not measure text exactly as a browser does, so a long paragraph may wrap onto a different number of lines.
+- Decorations a theme draws with `::before` or `::after` in normal flow are left out, and the export lists them. Code block line numbers are one of these: they come from a CSS counter, which has no text and no box that a computed style can report.
 
 `--per-slide` is not supported with this format.
 
