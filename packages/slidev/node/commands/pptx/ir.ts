@@ -69,6 +69,7 @@ export interface Rect {
 export interface RawStyle {
   display: string
   position: string
+  zIndex: string
   visibility: string
   opacity: string
   color: string

@@ -24,6 +24,7 @@ export function collectSnapshot(options: {
   const STYLE_KEYS = [
     'display',
     'position',
+    'zIndex',
     'visibility',
     'opacity',
     'color',

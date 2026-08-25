@@ -14,6 +14,7 @@ import { normalize, parseColor, parseLength, parseShadow, rasterReasonFor } from
 const BASE_STYLE: RawStyle = {
   display: 'block',
   position: 'static',
+  zIndex: 'auto',
   visibility: 'visible',
   opacity: '1',
   color: 'rgb(0, 0, 0)',
@@ -304,6 +305,40 @@ describe('finding 15: element opacity reaches the fill', () => {
     // DrawingML has no element opacity, only per-fill alpha, so a half
     // transparent overlay exported fully opaque and hid what was behind it.
     expect(boxes(slides[0].nodes)[0].fill).toEqual({ r: 0, g: 0, b: 0, a: 0.5 })
+  })
+})
+
+describe('paint order follows CSS, not the document', () => {
+  it('draws a positioned element above in-flow content that comes later', () => {
+    const positioned = style({ position: 'absolute' })
+    const backdrop = style({ backgroundImage: 'url(/img/scenery.png)' })
+    const corner = { x: 900, y: 10, w: 60, h: 20 }
+    const nodes = [
+      // A slide's page counter is the FIRST child of its container, and it is
+      // a positioned <footer> wrapping a plain <div>, so the layer has to come
+      // from the nearest POSITIONED ancestor rather than the nearest styled one.
+      el(0, -1, 'FOOTER', 1, { rect: corner }),
+      el(1, 0, 'DIV', 0, { rect: corner }),
+      text(2, 1, '3 / 35', { rect: corner, glyphRects: [corner] }),
+      // The full-bleed background comes after it in the tree, so array order
+      // painted it straight over the counter and the counter vanished.
+      el(3, -1, 'DIV', 2, { rect: { x: 0, y: 0, w: 980, h: 552 } }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, positioned, backdrop])
+    const kinds = slides[0].nodes.map(n => n.kind)
+    expect(kinds.indexOf('raster')).toBeLessThan(kinds.indexOf('text'))
+  })
+
+  it('keeps document order within one layer', () => {
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+      text(1, 0, 'first'),
+      el(2, -1, 'DIV', 1),
+      text(3, 2, 'second'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, style({ backgroundColor: 'rgb(1, 2, 3)' })])
+    const out = texts(slides[0].nodes)
+    expect(out.map(t => t.runs[0].text)).toEqual(['first', 'second'])
   })
 })
 

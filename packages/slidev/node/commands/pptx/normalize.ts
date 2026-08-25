@@ -564,6 +564,8 @@ class SlideWalker {
   private rasterArea = 0
   private pageRects = new Map<number, Rect | undefined>()
   private boxed = new Set<number>()
+  /** Paint layer per emitted node, parallel to `nodes`. */
+  private layers: { tier: number, z: number }[] = []
   /** Pseudo-element id to the id of the element it belongs to. */
   private originators = new Map<number, number>()
   private size: { w: number, h: number }
@@ -580,6 +582,40 @@ class SlideWalker {
       siblings.push(node)
       this.children.set(node.parent, siblings)
     }
+  }
+
+  /**
+   * Where an element paints, rather than where it sits in the tree.
+   *
+   * CSS paints positioned elements ABOVE in-flow content whatever the document
+   * order says. A slide's page counter is the first child of its container and
+   * is `position: absolute`, so a full-bleed background further down the tree
+   * covered it completely when paint order was taken to be array order.
+   *
+   * Two tiers and a z-index is not the full stacking algorithm, which also has
+   * negative layers, stacking contexts and floats, but it covers what a slide
+   * deck actually does.
+   */
+  private layerOf(node: RawNode): { tier: number, z: number } {
+    // The NEAREST POSITIONED ANCESTOR, not the nearest styled one. A page
+    // counter is a positioned `<footer>` wrapping a plain `<div>`, and reading
+    // the div alone called the whole thing in-flow, so it kept painting
+    // underneath the background it is supposed to sit on.
+    let current: RawNode | undefined = node
+    while (current) {
+      const style = this.styleOf(current)
+      if (style && style.position !== 'static' && style.position !== '') {
+        const z = Number.parseInt(style.zIndex, 10)
+        return { tier: 1, z: Number.isNaN(z) ? 0 : z }
+      }
+      current = this.byId.get(current.parent)
+    }
+    return { tier: 0, z: 0 }
+  }
+
+  private push(node: IrNode, source: RawNode): void {
+    this.nodes.push(node)
+    this.layers.push(this.layerOf(source))
   }
 
   private styleOf(node: RawNode): RawStyle | undefined {
@@ -632,6 +668,15 @@ class SlideWalker {
   run(): { nodes: IrNode[], requests: RasterRequest[], rasterArea: number, textCount: number } {
     for (const root of this.childrenOf(-1))
       this.visit(root)
+
+    // Reordered into CSS paint order before anything reads the array, since
+    // everything downstream, including the overlap tests below and the
+    // builder, treats array order as paint order. A stable sort keeps document
+    // order within a layer, which is what CSS does too.
+    const order = this.nodes.map((node, index) => ({ node, index, layer: this.layers[index] }))
+    order.sort((a, b) =>
+      a.layer.tier - b.layer.tier || a.layer.z - b.layer.z || a.index - b.index)
+    this.nodes = order.map(entry => entry.node)
 
     const texts = this.nodes.filter(n => n.kind === 'text')
     // Pictures are drawn from their own screenshots, so a picture overlapping
@@ -710,7 +755,7 @@ class SlideWalker {
       })
     }
 
-    this.nodes.push({
+    this.push({
       kind: 'raster',
       sourceId: node.id,
       // Its children are walked and redrawn only when it is a backdrop, so
@@ -720,7 +765,7 @@ class SlideWalker {
       data: '',
       reason,
       isolate,
-    })
+    }, node)
   }
 
   private emitImage(node: RawNode): void {
@@ -731,14 +776,14 @@ class SlideWalker {
     const rect = clipToSlide(node.rect, this.size)
     if (!rect)
       return
-    this.nodes.push({
+    this.push({
       kind: 'image',
       sourceId: node.id,
       rect,
       data: node.src,
       alt: node.alt,
       link: this.linkFor(node),
-    })
+    }, node)
   }
 
   private emitBox(node: RawNode, style: RawStyle): void {
@@ -776,7 +821,7 @@ class SlideWalker {
     const shadow = parseShadow(style.boxShadow)
     if (shadow)
       box.shadow = shadow
-    this.nodes.push(box)
+    this.push(box, node)
   }
 
   private visit(node: RawNode): void {
@@ -793,7 +838,7 @@ class SlideWalker {
       }
       this.emitBox(node, style)
       if (node.text) {
-        this.nodes.push({
+        this.push({
           kind: 'text',
           sourceId: node.id,
           rect: node.rect,
@@ -803,7 +848,7 @@ class SlideWalker {
           valign: 'middle',
           lineHeight: resolveLineHeight(style),
           runs: [runFrom(node.text, style, this.fontResolution)],
-        })
+        }, node)
       }
       return
     }
@@ -849,7 +894,7 @@ class SlideWalker {
         w: parseLength(style.fontSize) * 1.2,
         h: resolveLineHeight(style),
       }
-      this.nodes.push({
+      this.push({
         kind: 'text',
         sourceId: node.id,
         rect: markerRect,
@@ -861,7 +906,7 @@ class SlideWalker {
         valign: 'middle',
         lineHeight: resolveLineHeight(style),
         runs: [runFrom(node.marker, style, this.fontResolution, undefined, node.opacity)],
-      })
+      }, node)
     }
 
     this.visitChildren(node)
@@ -1140,7 +1185,7 @@ class SlideWalker {
     if (!clipToSlide(rect, this.size))
       return
 
-    this.nodes.push({
+    this.push({
       kind: 'text',
       sourceId: group[0].id,
       rect,
@@ -1150,7 +1195,7 @@ class SlideWalker {
       valign,
       lineHeight: resolveLineHeight(anchorStyle),
       runs,
-    })
+    }, group[0])
   }
 
   private forEachDescendant(node: RawNode, fn: (node: RawNode) => void): void {
