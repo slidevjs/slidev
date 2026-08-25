@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { resolveTweetId } from './tweet'
+import { resolveTweetId } from './resolveTweetId'
 
 describe('resolveTweetId', () => {
   it('keeps the existing id input', () => {

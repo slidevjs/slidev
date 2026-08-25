@@ -10,7 +10,7 @@ Usage:
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { isDark } from '../logic/dark'
-import { resolveTweetId } from './tweet'
+import { resolveTweetId } from './resolveTweetId'
 
 const props = defineProps<{
   id?: string | number

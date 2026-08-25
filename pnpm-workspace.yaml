@@ -8,6 +8,8 @@ minimumReleaseAgeExclude:
   - '@shikijs/magic-move'
   - magic-string-stack@2.0.0
   - verkit@0.3.2
+  - markdown-exit@1.2.1
+  - unplugin-vue-markdown@32.1.0
 
 shamefullyHoist: true
 shellEmulator: true
@@ -135,7 +137,7 @@ catalogs:
     local-pkg: ^1.2.1
     magic-string: ^1.2.0
     magic-string-stack: ^2.0.0
-    markdown-exit: ^1.1.0-beta.2
+    markdown-exit: ^1.2.1
     markdown-it-footnote: ^4.0.0
     markdown-it-github-alerts: ^1.0.1
     minimist: ^1.2.8
@@ -158,7 +160,7 @@ catalogs:
     unocss: ^66.7.5
     unplugin-icons: ^23.0.1
     unplugin-vue-components: ^32.1.0
-    unplugin-vue-markdown: ^32.0.0
+    unplugin-vue-markdown: ^32.1.0
     untun: ^0.2.2
     uqr: ^0.1.3
     verkit: ^0.4.0
