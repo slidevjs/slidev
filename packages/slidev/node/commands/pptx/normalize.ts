@@ -693,18 +693,30 @@ class SlideWalker {
     const visible = clipToSlide(node.rect, this.size)
     if (!visible)
       return
+    // An element that runs past the slide is captured as a page clip rather
+    // than as itself, and placed at that same clipped rectangle so the picture
+    // is not squashed. Screenshotting such an element whole is not merely
+    // wasteful: Slidev's own starter deck carries one measuring tens of
+    // millions of pixels, and asking Chromium to rasterize it kills the
+    // renderer, which surfaces later as "Target page, context or browser has
+    // been closed".
+    const overflows = visible.w !== node.rect.w || visible.h !== node.rect.h
+    if (overflows && node.pageRect) {
+      this.pageRects.set(node.id, {
+        x: node.pageRect.x + (visible.x - node.rect.x),
+        y: node.pageRect.y + (visible.y - node.rect.y),
+        w: visible.w,
+        h: visible.h,
+      })
+    }
+
     this.nodes.push({
       kind: 'raster',
       sourceId: node.id,
       // Its children are walked and redrawn only when it is a backdrop, so
       // only then is it safe to hide them for the capture.
       hideDescendants: isolate,
-      // The element's FULL rect, not the clipped one. The screenshot is of the
-      // whole element, so drawing it into a smaller box squashes the picture
-      // and shows content that should have been cropped away. PowerPoint has
-      // no clipping, so the honest choice is to place it truthfully and let
-      // the overhang sit off-canvas, exactly as the browser clipped it.
-      rect: node.rect,
+      rect: overflows ? visible : node.rect,
       data: '',
       reason,
       isolate,

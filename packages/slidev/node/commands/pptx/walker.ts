@@ -343,12 +343,22 @@ export function collectSnapshot(options: {
       el.setAttribute(options.idAttribute, String(id))
       resolveStack(computed.fontFamily)
 
+      const box = el.getBoundingClientRect()
       const record: any = {
         id,
         parent,
         tag: el.tagName.toUpperCase(),
         style: internStyle(el),
-        rect: relative(el.getBoundingClientRect()),
+        rect: relative(box),
+        // Document coordinates too. An element that overflows the slide is
+        // captured as a page clip rather than as itself, and the clip needs a
+        // page-space rectangle.
+        pageRect: {
+          x: box.left + window.scrollX,
+          y: box.top + window.scrollY,
+          w: box.width,
+          h: box.height,
+        },
       }
       if (effectiveOpacity < 1)
         record.opacity = effectiveOpacity

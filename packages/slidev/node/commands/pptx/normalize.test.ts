@@ -772,6 +772,25 @@ describe('trap 16: content outside the slide', () => {
     expect(boxes(slides[0].nodes)).toHaveLength(0)
   })
 
+  it('captures a runaway element as a clipped region, not as itself', () => {
+    // Slidev's own starter deck carries an element measuring tens of millions
+    // of pixels. Screenshotting it whole asks Chromium for a bitmap it cannot
+    // allocate, and the renderer dies mid-export; the failure then surfaces
+    // from an unrelated call as "Target page, context or browser has been
+    // closed", which is a miserable thing to debug.
+    // Only the left edge of it is on the slide, so this does not also trip the
+    // whole-slide fallback, which withholds captures by design.
+    const huge = { x: 900, y: 0, w: 24_000_000, h: 300 }
+    const page = { x: 1000, y: 200, w: 24_000_000, h: 300 }
+    const nodes = [el(0, -1, 'CANVAS', 0, { rect: huge, pageRect: page })]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
+    const raster = slides[0].nodes[0] as any
+    // Placed at the clipped rectangle, and captured at the same one, so the
+    // picture is neither squashed nor enormous.
+    expect(raster.rect).toEqual({ x: 900, y: 0, w: 80, h: 300 })
+    expect(rasterRequests[0].clip).toEqual({ x: 1000, y: 200, w: 80, h: 300 })
+  })
+
   it('does not let a runaway rect blow up the fallback maths', () => {
     // Slidev's own starter deck has an element measuring tens of millions of
     // pixels, which reported "104064986954% of the slide had to be rasterized".

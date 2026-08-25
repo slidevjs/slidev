@@ -145,15 +145,21 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
 /**
  * Screenshot a rectangle of the document.
  *
- * `clip` is in DOCUMENT coordinates, which is why `fullPage` is set: without
- * it Playwright reads the rectangle as viewport-relative and trims it to the
- * viewport, and the print route is far taller than the viewport as soon as
- * every click step has its own container.
+ * `clip` is in DOCUMENT coordinates, while Playwright reads it as
+ * viewport-relative. The two agree only at scroll origin, and element
+ * screenshots scroll their target into view, so the page is returned to the
+ * origin first.
+ *
+ * `fullPage` would remove the need for that and is wrong here: the print route
+ * sizes its viewport to the whole deck, so a full-page capture of a forty
+ * slide deck asks Chromium for a bitmap of some twenty-two thousand pixels
+ * squared at `deviceScaleFactor: 2`, and the page dies with "Target page,
+ * context or browser has been closed".
  */
 async function shootClip(page: Page, clip: Rect): Promise<string | undefined> {
   try {
+    await page.evaluate(() => window.scrollTo(0, 0))
     const buffer = await page.screenshot({
-      fullPage: true,
       clip: { x: clip.x, y: clip.y, width: clip.w, height: clip.h },
       omitBackground: true,
       timeout: 10_000,
