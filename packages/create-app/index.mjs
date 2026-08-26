@@ -8,7 +8,7 @@ import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { blue, bold, cyan, dim, green, yellow } from 'ansis'
 import minimist from 'minimist'
-import { detect } from 'package-manager-detector/detect'
+import { getUserAgent } from 'package-manager-detector/detect'
 import path from 'pathe'
 import prompts from 'prompts'
 import { x } from 'tinyexec'
@@ -96,7 +96,7 @@ async function init() {
 
   console.log(green('  Done.\n'))
 
-  const pkgManager = await detect().catch(() => undefined) ?? 'npm'
+  const pkgManager = getUserAgent() ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}
