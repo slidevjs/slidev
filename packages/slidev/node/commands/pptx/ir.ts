@@ -188,6 +188,11 @@ export interface IrRun {
   bold?: boolean
   italic?: boolean
   underline?: boolean
+  /**
+   * How the underline is drawn. A `border-bottom` on inline text is an
+   * underline, and DrawingML can dash one, so it does not need a shape.
+   */
+  underlineStyle?: 'sng' | 'dash' | 'dotted'
   strike?: boolean
   color?: Rgba
   /** Pixels. */

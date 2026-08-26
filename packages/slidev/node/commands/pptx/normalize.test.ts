@@ -1085,3 +1085,51 @@ describe('gradient text is the picture, not a backdrop for it', () => {
     expect(texts(slides[0].nodes).map(t => t.runs.map(r => r.text).join(''))).toEqual(['Body copy'])
   })
 })
+
+describe('an inline rule is an underline, not a shape', () => {
+  const linkStyle = style({
+    display: 'inline',
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'dashed',
+    borderBottomColor: 'rgb(0, 0, 0)',
+  })
+
+  it('draws a dashed border-bottom as a dashed underline', () => {
+    // Slidev rules its links this way. As a separate line it has to be placed
+    // against text PowerPoint may re-lay, cannot follow an edit, and is a
+    // second thing that can draw a line under a link PowerPoint may underline
+    // itself. DrawingML dashes an underline, so none of that is needed.
+    const nodes = [
+      el(0, -1, 'P', 0),
+      el(1, 0, 'A', 1, { href: 'https://sli.dev' }),
+      text(2, 1, 'Why Slidev?'),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, linkStyle])
+    expect(boxes(slides[0].nodes)).toHaveLength(0)
+    const [line] = texts(slides[0].nodes)
+    expect(line.runs[0].underline).toBe(true)
+    expect(line.runs[0].underlineStyle).toBe('dash')
+  })
+
+  it('leaves a bordered box a box', () => {
+    // A bottom border on a BLOCK is a rule under a section, not an underline.
+    const blockRule = style({ borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: 'rgb(0, 0, 0)' })
+    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'Section')]
+    const { slides } = run(nodes, [BASE_STYLE, blockRule])
+    expect(boxes(slides[0].nodes)).toHaveLength(1)
+    expect(texts(slides[0].nodes)[0].runs[0].underline).toBeUndefined()
+  })
+
+  it('leaves a chip alone, because it is more than a rule', () => {
+    const chip = style({
+      display: 'inline',
+      backgroundColor: 'rgb(200, 200, 200)',
+      borderBottomWidth: '1px',
+      borderBottomStyle: 'dashed',
+      borderBottomColor: 'rgb(0, 0, 0)',
+    })
+    const nodes = [el(0, -1, 'P', 0), el(1, 0, 'CODE', 1), text(2, 1, 'npm i')]
+    const { slides } = run(nodes, [BASE_STYLE, chip])
+    expect(boxes(slides[0].nodes).length).toBeGreaterThan(0)
+  })
+})

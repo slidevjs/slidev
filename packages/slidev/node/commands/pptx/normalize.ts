@@ -246,7 +246,7 @@ export function fallbackFamily(stack: string): string {
   return 'Arial'
 }
 
-function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, unparsed: UnparsedColors, link?: string, opacity?: number): IrRun {
+function runFrom(text: string, style: RawStyle, fontResolution: Record<string, string>, unparsed: UnparsedColors, link?: string, opacity?: number, rule?: IrRun['underlineStyle']): IrRun {
   const weight = Number(style.fontWeight)
   const decoration = style.textDecorationLine || ''
   const family = fontResolution[style.fontFamily] || fallbackFamily(style.fontFamily)
@@ -259,8 +259,16 @@ function runFrom(text: string, style: RawStyle, fontResolution: Record<string, s
     run.bold = true
   if (style.fontStyle === 'italic' || style.fontStyle === 'oblique')
     run.italic = true
-  if (decoration.includes('underline'))
+  if (decoration.includes('underline')) {
     run.underline = true
+  }
+  else if (rule) {
+    // An inline `border-bottom` IS an underline. Drawn as a separate line it
+    // has to be positioned against text PowerPoint may re-lay, and it cannot
+    // move when the text is edited, which is the whole point of this format.
+    run.underline = true
+    run.underlineStyle = rule
+  }
   if (decoration.includes('line-through'))
     run.strike = true
   const color = withOpacity(parseColor(style.color, unparsed), opacity)
@@ -764,6 +772,41 @@ function buildSlideIr(
       collectText(child, out)
   }
 
+  /**
+   * The underline an inline element draws with `border-bottom`, if that is all
+   * it draws. Slidev rules its links this way.
+   *
+   * Only when the bottom is the only border and there is no fill: anything
+   * more is a box, and a box has to stay a shape.
+   */
+  function underlineRule(node: RawNode): IrRun['underlineStyle'] | undefined {
+    const style = styleOf(node)
+    if (!style || !isInline(node))
+      return undefined
+    if (isVisible(parseColor(style.backgroundColor, unparsed)))
+      return undefined
+    const bottom = borderOf(style, 'Bottom', unparsed)
+    if (!bottom)
+      return undefined
+    for (const side of ['Top', 'Right', 'Left'] as const) {
+      if (borderOf(style, side, unparsed))
+        return undefined
+    }
+    return bottom.style === 'dashed' ? 'dash' : bottom.style === 'dotted' ? 'dotted' : 'sng'
+  }
+
+  /** The underline rule an ancestor of this text node draws, if any. */
+  function ruleOver(node: RawNode): IrRun['underlineStyle'] | undefined {
+    let current: RawNode | undefined = byId.get(node.parent)
+    while (current) {
+      const rule = underlineRule(current)
+      if (rule)
+        return rule
+      current = byId.get(current.parent)
+    }
+    return undefined
+  }
+
   function emitTextGroup(group: RawNode[]): void {
     // Inline decorations first: paint order is array order, so a chip emitted
     // after its label would cover it.
@@ -772,6 +815,9 @@ function buildSlideIr(
         continue
       // The group node itself too: the chip is usually the outermost inline element in the group.
       const own = styleOf(node)
+      // A node whose only decoration is an underline is drawn by the run.
+      if (underlineRule(node))
+        boxed.add(node.id)
       if (own)
         emitBox(node, own)
       forEachDescendant(node, (descendant) => {
@@ -802,7 +848,7 @@ function buildSlideIr(
         runs.push({ ...runFrom('', style, fontResolution, unparsed, undefined, node.opacity), breakBefore: true })
         pendingBreaks--
       }
-      const newRun = runFrom(text, style, fontResolution, unparsed, linkFor(node), node.opacity)
+      const newRun = runFrom(text, style, fontResolution, unparsed, linkFor(node), node.opacity, ruleOver(node))
       if (pendingBreaks && runs.length)
         newRun.breakBefore = true
       pendingBreaks = 0
