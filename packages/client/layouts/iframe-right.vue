@@ -16,9 +16,9 @@ const scaleInvertPercent = computed(() => `${(1 / (props.scale || 1)) * 100}%`)
     </div>
     <div relative :style="{ width: scaleInvertPercent, height: scaleInvertPercent }">
       <iframe
-        id="frame" class="w-full h-full"
+        id="frame" class="slidev-layout-iframe"
         :src="url"
-        :style="scale ? { transform: `scale(${scale})`, transformOrigin: 'top left' } : {}"
+        :style="scale ? { '--slidev-iframe-scale': scale } : {}"
       />
     </div>
   </div>

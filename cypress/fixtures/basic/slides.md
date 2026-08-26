@@ -224,3 +224,8 @@ const answer = 42
 
 </v-click>
 </div>
+
+---
+layout: iframe
+url: about:blank
+---
