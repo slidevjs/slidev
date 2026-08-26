@@ -18,6 +18,7 @@ import { createServer } from './commands/serve'
 import { getThemeMeta, resolveTheme } from './integrations/themes'
 import { resolveOptions } from './options'
 import { parser } from './parser'
+import { resolvePublicIpv4 } from './publicIp'
 import { isInstalledGlobally, resolveEntry } from './resolver'
 import setupPreparser from './setups/preparser'
 import { updateFrontmatterPatch } from './utils'
@@ -204,7 +205,7 @@ cli.command(
 
       let publicIp: string | undefined
       if (remote)
-        publicIp = await import('public-ip').then(r => r.publicIpv4())
+        publicIp = await resolvePublicIpv4()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -278,7 +279,7 @@ cli.command(
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
-              const publicIp = await import('public-ip').then(r => r.publicIpv4())
+              const publicIp = await resolvePublicIpv4()
               if (publicIp)
                 console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
             })
