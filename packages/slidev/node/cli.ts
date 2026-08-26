@@ -203,14 +203,8 @@ cli.command(
       }
 
       let publicIp: string | undefined
-      if (remote) {
-        try {
-          publicIp = await import('public-ip').then(r => r.publicIpv4())
-        }
-        catch {
-          console.log(yellow('\n  Could not determine the public IP address.\n'))
-        }
-      }
+      if (remote)
+        publicIp = await resolvePublicIp()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -226,6 +220,15 @@ cli.command(
       }
       catch {
         console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
+    }
+
+    async function resolvePublicIp() {
+      try {
+        return await import('public-ip').then(r => r.publicIpv4())
+      }
+      catch {
+        console.log(yellow('\n  Could not determine the public IP address.\n'))
       }
     }
 
@@ -284,7 +287,7 @@ cli.command(
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
-              const publicIp = await import('public-ip').then(r => r.publicIpv4()).catch(() => undefined)
+              const publicIp = await resolvePublicIp()
               if (publicIp)
                 console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
             })
