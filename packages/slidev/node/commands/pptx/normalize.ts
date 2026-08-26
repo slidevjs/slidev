@@ -32,14 +32,29 @@ const RASTER_AREA_LIMIT = 0.6
  * sets the same string a little wider than Chromium, so a shrink-wrapped container
  * gains a wrap. The headroom scales with the line.
  */
+/**
+ * How much loose text a row of chips may hold and still be a row of chips.
+ *
+ * A separator between keys is punctuation; a sentence carrying inline `<code>`
+ * is words, and that stays one editable box.
+ */
+const SEPARATOR_MAX_CHARS = 3
+
 const WRAP_HEADROOM = 0.02
 const WRAP_HEADROOM_MIN_PX = 4
 
-/** CSS `display` values whose children are laid out, not flowed as text. Prefix match: `table` covers `table-row` and `table-cell`. */
-// `list-item` is deliberately absent: a list item flows its children as text,
-// and treating it as a layout container fragments `<li>plain <b>bold</b> tail</li>`
-// into separate boxes. Its ::marker is emitted before the children are visited.
-const LAYOUT_DISPLAY = /^(?:flex|grid|inline-flex|inline-grid|table)/
+/**
+ * CSS `display` values whose children are laid out, not flowed as text.
+ *
+ * `table-cell` and `table-caption` are excluded: a table lays out its rows and
+ * a row its cells, but the CONTENTS of a cell flow like any block, so treating
+ * one as a layout container split `<kbd>right</kbd> / <kbd>space</kbd>` into
+ * three boxes and left the slash sitting on the first key.
+ *
+ * `list-item` is absent for the same reason: it flows its children as text,
+ * and its ::marker is emitted before they are visited.
+ */
+const LAYOUT_DISPLAY = /^(?:flex|grid|inline-flex|inline-grid|table(?!-cell|-caption))/
 
 /**
  * `display` values whose box participates in a line box and whose children flow as
@@ -718,16 +733,43 @@ function buildSlideIr(
         group = []
       }
     }
+    // A chip is padded and spaced by its own box, which flowed text cannot
+    // reproduce: `<kbd>right</kbd> / <kbd>space</kbd>` set as one run drifts
+    // off keys that keep their measured gaps, and two adjacent chips run their
+    // labels together entirely. So each part of a row of chips is placed on
+    // its own glyph bounds instead.
+    //
+    // Only when the row occupies a single line. Fragments can be positioned
+    // exactly while they do not wrap; a wrapping sentence has to flow, or its
+    // halves lay out from the same origin and overlap. That is also what keeps
+    // an ordinary sentence carrying one inline `<code>` in one editable box.
+    // Glyph bounds for a text node: its element rect is not where its ink is.
+    const lineBox = (child: RawNode): Rect =>
+      child.glyphRects?.length ? boundsOf(child.glyphRects) : child.rect
+    const placed = children.filter(child => isInline(child) && lineBox(child).h > 0)
+    // By overlap, not by matching tops: a padded chip's box starts above the
+    // glyph bounds of the text beside it, so equal tops never held here.
+    const oneLine = placed.length > 1 && lineGroups(placed.map(lineBox)).length === 1
+    // Everything outside the chips. A separator is punctuation; a sentence is
+    // words, and a sentence stays one editable box even though its inline
+    // `<code>` drifts by the width of its own padding.
+    const loose = children
+      .filter(child => child.tag === '#text')
+      .map(child => (child.text ?? '').replace(/\s+/g, ''))
+      .join('')
+    const labelRow = oneLine && loose.length <= SEPARATOR_MAX_CHARS
+      && placed.some(child => hasDecoration(child))
+
     for (const child of children) {
       if (isInline(child)) {
         // An inline element carrying its own background or border is a chip: its
         // decoration is a positioned shape, so its label gets its own text box anchored
         // to the glyph bounds, keeping metric differences from sliding the label off
-        // the chip. Only when it is the whole of its container: Slidev styles inline
-        // `<code>` with a background, and an unconditional split overlaps a wrapped sentence.
-        if (hasDecoration(child) && children.length === 1) {
+        // the chip. Only when it stands alone: Slidev styles inline `<code>` with a
+        // background, and an unconditional split overlaps a wrapped sentence.
+        if (labelRow || (hasDecoration(child) && children.length === 1)) {
           flush()
-          emitTextGroup([child])
+          emitTextGroup([child], labelRow)
           continue
         }
         group.push(child)
@@ -807,7 +849,7 @@ function buildSlideIr(
     return undefined
   }
 
-  function emitTextGroup(group: RawNode[]): void {
+  function emitTextGroup(group: RawNode[], fragment = false): void {
     // Inline decorations first: paint order is array order, so a chip emitted
     // after its label would cover it.
     for (const node of group) {
@@ -899,14 +941,20 @@ function buildSlideIr(
     // Whitespace at line boundaries collapses in the browser but survives the
     // fold above and shifts a centered line by half a space. Every line
     // boundary counts, not just the box edges: a run after a break opens a new line.
-    runs.forEach((run, index) => {
-      const opensLine = index === 0 || run.breakBefore
-      const closesLine = index === runs.length - 1 || runs[index + 1]?.breakBefore
-      if (opensLine)
-        run.text = run.text.replace(/^ +/, '')
-      if (closesLine)
-        run.text = run.text.replace(/ +$/, '')
-    })
+    // Not for a fragment: its edges are mid-line, where the browser rendered
+    // the spaces and the glyph bounds include them. Trimming there drew the
+    // text where the leading space had been, putting a separator on the key
+    // beside it.
+    if (!fragment) {
+      runs.forEach((run, index) => {
+        const opensLine = index === 0 || run.breakBefore
+        const closesLine = index === runs.length - 1 || runs[index + 1]?.breakBefore
+        if (opensLine)
+          run.text = run.text.replace(/^ +/, '')
+        if (closesLine)
+          run.text = run.text.replace(/ +$/, '')
+      })
+    }
 
     const container = byId.get(group[0].parent)
     const containerStyle = container ? styleOf(container) : undefined

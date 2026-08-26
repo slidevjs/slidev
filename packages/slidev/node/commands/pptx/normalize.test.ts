@@ -1133,3 +1133,62 @@ describe('an inline rule is an underline, not a shape', () => {
     expect(boxes(slides[0].nodes).length).toBeGreaterThan(0)
   })
 })
+
+describe('a table cell flows its children, it does not lay them out', () => {
+  it('places each key of a shortcut row on its own', () => {
+    // A chip is padded and spaced by its own box, which flowed text cannot
+    // reproduce: the labels run together while the keys keep their gaps.
+    const cell = style({ display: 'table-cell' })
+    const chip = style({ display: 'inline-block', backgroundColor: 'rgb(240, 240, 240)' })
+    const nodes = [
+      el(0, -1, 'TD', 1),
+      el(1, 0, 'KBD', 2, { rect: { x: 69, y: 226, w: 48, h: 27 } }),
+      text(2, 1, 'left', { rect: { x: 73, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 73, y: 233, w: 40, h: 20 }] }),
+      text(3, 0, ' / ', { rect: { x: 117, y: 233, w: 13, h: 20 }, glyphRects: [{ x: 117, y: 233, w: 13, h: 20 }] }),
+      el(4, 0, 'KBD', 2, { rect: { x: 130, y: 226, w: 48, h: 27 } }),
+      text(5, 4, 'shift', { rect: { x: 134, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 134, y: 233, w: 40, h: 20 }] }),
+      el(6, 0, 'KBD', 2, { rect: { x: 186, y: 226, w: 48, h: 27 } }),
+      text(7, 6, 'space', { rect: { x: 190, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 190, y: 233, w: 40, h: 20 }] }),
+    ]
+    const lines = texts(run(nodes, [BASE_STYLE, cell, chip]).slides[0].nodes)
+    expect(lines.map(l => l.runs.map(r => r.text).join(''))).toEqual(['left', ' / ', 'shift', 'space'])
+    // The separator keeps the spaces its glyph bounds were measured across:
+    // trimmed, it drew where the leading space had been, on the key beside it.
+    expect(lines[1].runs[0].text).toBe(' / ')
+  })
+
+  it('keeps a cell of inline content in one text box', () => {
+    // A table lays out its rows and a row its cells, but the contents of a
+    // cell flow like any block. Treated as a layout container,
+    // `<kbd>right</kbd> / <kbd>space</kbd>` became three boxes, and the
+    // separator was positioned from glyph bounds that included the spaces
+    // around it while its own text had them trimmed, so it sat on the key.
+    const cell = style({ display: 'table-cell' })
+    const chip = style({ display: 'inline-block', backgroundColor: 'rgb(240, 240, 240)' })
+    const nodes = [
+      el(0, -1, 'TD', 1),
+      el(1, 0, 'SPAN', 3, { rect: { x: 69, y: 233, w: 48, h: 20 } }),
+      text(2, 1, 'right', { rect: { x: 73, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 73, y: 233, w: 40, h: 20 }] }),
+      text(3, 0, ' / ', { rect: { x: 117, y: 233, w: 13, h: 20 }, glyphRects: [{ x: 117, y: 233, w: 13, h: 20 }] }),
+      el(4, 0, 'SPAN', 3, { rect: { x: 130, y: 233, w: 48, h: 20 } }),
+      text(5, 4, 'space', { rect: { x: 134, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 134, y: 233, w: 40, h: 20 }] }),
+    ]
+    const plain = style({ display: 'inline' })
+    const lines = texts(run(nodes, [BASE_STYLE, cell, chip, plain]).slides[0].nodes)
+    expect(lines).toHaveLength(1)
+    expect(lines[0].runs.map(r => r.text)).toEqual(['right', ' / ', 'space'])
+  })
+
+  it('still lays out the rows of a table', () => {
+    const table = style({ display: 'table' })
+    const nodes = [
+      el(0, -1, 'TABLE', 1),
+      el(1, 0, 'TR', 0, { rect: { x: 0, y: 0, w: 200, h: 20 } }),
+      text(2, 1, 'one', { glyphRects: [{ x: 0, y: 0, w: 60, h: 20 }] }),
+      el(3, 0, 'TR', 0, { rect: { x: 0, y: 30, w: 200, h: 20 } }),
+      text(4, 3, 'two', { glyphRects: [{ x: 0, y: 30, w: 60, h: 20 }] }),
+    ]
+    const lines = texts(run(nodes, [BASE_STYLE, table]).slides[0].nodes)
+    expect(lines.map(l => l.runs.map(r => r.text).join(''))).toEqual(['one', 'two'])
+  })
+})

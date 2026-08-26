@@ -262,10 +262,14 @@ export function collectSnapshot(options: {
         range.selectNodeContents(node)
         const rects = Array.from(range.getClientRects())
         range.detach()
-        // A rect-less node still matters when it holds a newline: inside
-        // `white-space: pre` it is the only record of where a line ends.
+        // A rect-less node still matters twice over: inside `white-space: pre`
+        // a newline is the only record of where a line ends, and a
+        // whitespace-only node is the only record that two inline elements are
+        // separated at all. Chromium reports no rect for the space between two
+        // inline-blocks, and without it `<kbd>shift</kbd> <kbd>space</kbd>`
+        // came out as "shiftspace".
         if (!rects.length) {
-          if (!text.includes('\n'))
+          if (text.trim())
             return
           nodes.push({ id: nextId++, parent, tag: '#text', style: -1, rect: { x: 0, y: 0, w: 0, h: 0 }, glyphRects: [], text })
           return
