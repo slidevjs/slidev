@@ -232,3 +232,35 @@ describe('a hyperlink is not underlined unless CSS says so', () => {
     expect(xml).toContain('u="sng"')
   })
 })
+
+describe('a dashed border keeps its dashes', () => {
+  const dashed = { width: 1, color: BLACK, style: 'dashed' as const }
+
+  it('draws a dashed edge as a line, not a filled bar', async () => {
+    // A filled rectangle cannot carry a dash pattern. Slidev rules its links
+    // with `border-bottom: 1px dashed`, so every link in a deck came out with
+    // a solid bar under it.
+    const xml = await slideXml([
+      slide([{
+        kind: 'box',
+        sourceId: 1,
+        rect: { x: 0, y: 0, w: 100, h: 20 },
+        borders: [undefined, undefined, dashed, undefined],
+      }]),
+    ])
+    expect(xml).toContain('<a:prstDash val="dash"/>')
+    expect(xml).toContain('prst="line"')
+  })
+
+  it('leaves a solid edge as a filled bar', async () => {
+    const xml = await slideXml([
+      slide([{
+        kind: 'box',
+        sourceId: 1,
+        rect: { x: 0, y: 0, w: 100, h: 20 },
+        borders: [undefined, undefined, { width: 1, color: BLACK, style: 'solid' as const }, undefined],
+      }]),
+    ])
+    expect(xml).not.toContain('prst="line"')
+  })
+})

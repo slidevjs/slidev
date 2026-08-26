@@ -144,6 +144,26 @@ function addEdge(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, 
           ? { x, y: y + h - t, w, h: t }
           : { x, y, w: t, h }
 
+  // A filled rectangle cannot carry a dash pattern, so a dashed or dotted rule
+  // came out solid: Slidev rules its links this way, and every link in a deck
+  // gained a solid bar. A line can be dashed, and for a hairline the half
+  // stroke that falls outside the box is well under a pixel.
+  if (border.style !== 'solid') {
+    slide.addShape(shapeType.line, {
+      x: inch(rect.x),
+      y: inch(rect.y),
+      w: inch(side === 0 || side === 2 ? rect.w : 0),
+      h: inch(side === 0 || side === 2 ? 0 : rect.h),
+      line: {
+        color: hex(border.color),
+        transparency: transparency(border.color),
+        width: pt(border.width),
+        dashType: border.style === 'dotted' ? 'sysDot' : 'dash',
+      },
+    })
+    return
+  }
+
   slide.addShape(shapeType.rect, {
     x: inch(rect.x),
     y: inch(rect.y),
