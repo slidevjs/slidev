@@ -141,9 +141,12 @@ describe('fills and borders', () => {
         borders: [thick, undefined, undefined, undefined],
       }]),
     ])
-    // The box plus one edge. pptxgenjs gives a shape a single uniform border,
-    // so a left-accent bar or a single top rule has to be its own rectangle.
-    expect(xml.match(/<p:sp>/g)).toHaveLength(2)
+    // Just the edge. pptxgenjs gives a shape a single uniform border, so a
+    // left-accent bar or a single top rule has to be its own rectangle, and
+    // the box that would have carried it has neither fill nor border left to
+    // draw. Emitting it anyway left PowerPoint to resolve a shape with no fill
+    // and no outline from its default style.
+    expect(xml.match(/<p:sp>/g)).toHaveLength(1)
     expect(xml).toContain('cy="38100"') // the 4px edge: 4 * 9525
   })
 })
@@ -262,5 +265,27 @@ describe('a dashed border keeps its dashes', () => {
       }]),
     ])
     expect(xml).not.toContain('prst="line"')
+  })
+})
+
+describe('a fill is stated, never inherited', () => {
+  it('writes an explicit noFill for a shape that has none', async () => {
+    // pptxgenjs writes `<a:noFill/>` for an ABSENT fill and nothing at all for
+    // `{ type: 'none' }`, so the explicit-looking version was the one that
+    // inherited the default shape style.
+    const xml = await slideXml([
+      slide([{
+        kind: 'box',
+        sourceId: 1,
+        rect: { x: 0, y: 0, w: 100, h: 100 },
+        borders: [
+          { width: 1, color: BLACK, style: 'solid' as const },
+          { width: 1, color: BLACK, style: 'solid' as const },
+          { width: 1, color: BLACK, style: 'solid' as const },
+          { width: 1, color: BLACK, style: 'solid' as const },
+        ],
+      }]),
+    ])
+    expect(xml).toContain('<a:noFill/>')
   })
 })

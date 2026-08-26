@@ -170,7 +170,6 @@ function addEdge(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, 
     w: inch(rect.w),
     h: inch(rect.h),
     fill: { color: hex(border.color), transparency: transparency(border.color) },
-    line: { type: 'none' },
   })
 }
 
@@ -190,21 +189,31 @@ function addBox(slide: PptxGenJS.Slide, shapeType: typeof PptxGenJS.ShapeType, n
       && sameBorder(borders[1], borders[2])
       && sameBorder(borders[2], borders[3])
 
+  // With no fill and no uniform border there is nothing for this shape to
+  // carry: its only border is drawn as its own edge below. Emitting it anyway
+  // left a rectangle with neither fill nor outline specified, which PowerPoint
+  // resolves from its default shape style rather than leaving blank.
+  if (!node.fill && !uniform && !node.shadow) {
+    for (const side of [0, 1, 2, 3] as const) {
+      const border = borders?.[side]
+      if (border && border.width > 0)
+        addEdge(slide, shapeType, node, side, border)
+    }
+    return
+  }
+
   const options: Record<string, unknown> = {
     x: inch(node.rect.x),
     y: inch(node.rect.y),
     w: inch(node.rect.w),
     h: inch(node.rect.h),
-    line: { type: 'none' },
   }
 
-  if (node.fill) {
+  // `fill` and `line` are omitted rather than set to `{ type: 'none' }`.
+  // pptxgenjs writes `<a:noFill/>` for an ABSENT fill and nothing at all for
+  // that object, so the explicit-looking version was the one that inherited.
+  if (node.fill)
     options.fill = { color: hex(node.fill), transparency: transparency(node.fill) }
-  }
-  else {
-    // A shape with no fill still paints white unless told otherwise.
-    options.fill = { type: 'none' }
-  }
 
   if (uniform && borders[0]) {
     options.line = {
