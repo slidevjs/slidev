@@ -4,6 +4,7 @@ import { getPort as getPortPlease } from 'get-port-please'
 import { computed, defineService, onScopeDispose, reactive, watch } from 'reactive-vscode'
 import { config } from '../configs'
 import { activeProject, askAddProject, projects, scannedProjects } from '../projects'
+import { isSamePath } from '../utils/isSamePath'
 import { logger } from '../views/logger'
 
 const versionRE = /<meta (?:name|property)="slidev:version" content="([^"]+)">/
@@ -46,10 +47,12 @@ export const useServerDetector = defineService(() => {
         state.compatMode = !text.match(versionRE)
         const detectedEntry = text.match(entryRE)?.[1]
         if (detectedEntry) {
-          state.entry = detectedEntry
+          const entry = [...projects.keys()]
+            .find(projectEntry => isSamePath(projectEntry, detectedEntry)) ?? detectedEntry
+          state.entry = entry
           logger.info(`[Slidev] Detected Slidev server entry: ${detectedEntry} on port ${port}`)
           if (scannedProjects.value) {
-            askAddProject(detectedEntry, `A Slidev server is detected running on localhost:${port}.`)
+            askAddProject(entry, `A Slidev server is detected running on localhost:${port}.`)
           }
         }
         return true
