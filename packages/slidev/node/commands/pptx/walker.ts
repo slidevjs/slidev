@@ -149,9 +149,14 @@ export function collectSnapshot(options: {
       if (GENERIC.includes(family.toLowerCase()) || family.charAt(0) === '-')
         continue
       // `@fontsource-variable` names its family "Inter Variable"; the face
-      // people actually have installed is "Inter".
+      // people actually have installed is "Inter". So the stack is probed
+      // under the name the page really registered, and only the name written
+      // into the file is stripped. Testing the stripped name first finds
+      // nothing whenever the theme ships the font as a webfont and the machine
+      // has no static copy, which is the usual case, and the whole deck then
+      // falls through to a system face the author never chose.
       const cleaned = family.replace(/\s+Variable$/, '')
-      if (isAvailable(cleaned)) {
+      if (isAvailable(family) || isAvailable(cleaned)) {
         fontResolution[stack] = cleaned
         return
       }

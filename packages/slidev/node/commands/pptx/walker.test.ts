@@ -45,6 +45,17 @@ function measureTextStub(): { width: number } {
   return { width: 100 }
 }
 
+/**
+ * A canvas whose text measurement changes only for the families named, which is
+ * how `isAvailable` tells a font that exists from one that fell through to the
+ * base. Everything else keeps the constant width, so it reads as absent.
+ */
+function installedFonts(...families: string[]) {
+  return function (this: { font: string }): { width: number } {
+    return { width: families.some(f => this.font.includes(`"${f}"`)) ? 140 : 100 }
+  }
+}
+
 const RECT = { left: 0, top: 0, width: 100, height: 20 }
 
 /**
@@ -90,13 +101,13 @@ function containerStub() {
 }
 
 /** Just enough DOM for the walker to run to completion. */
-function domStub(querySelectorAllResult: unknown[]) {
+function domStub(querySelectorAllResult: unknown[], measureText = measureTextStub) {
   return {
     createElement: () => ({
       getContext: () => ({
         font: '',
         fillStyle: '',
-        measureText: measureTextStub,
+        measureText,
         clearRect: () => {},
         fillRect: () => {},
         getImageData: () => ({ data: [0, 0, 0, 0] }),
@@ -111,11 +122,16 @@ function domStub(querySelectorAllResult: unknown[]) {
   }
 }
 
-function runInSandbox(source: string, containers: unknown[] = []): unknown {
+interface SandboxOptions {
+  measureText?: () => { width: number }
+  fontFamily?: string
+}
+
+function runInSandbox(source: string, containers: unknown[] = [], options: SandboxOptions = {}): unknown {
   const base: Record<string, unknown> = {
-    document: domStub(containers),
+    document: domStub(containers, options.measureText),
     getComputedStyle: () => ({
-      fontFamily: 'Inter, sans-serif',
+      fontFamily: options.fontFamily ?? 'Inter, sans-serif',
       display: 'block',
       visibility: 'visible',
       opacity: '1',
@@ -203,6 +219,38 @@ describe('walker self-containedness', () => {
     expect(snapshot).toHaveProperty('slides')
     expect(snapshot).toHaveProperty('styles')
     expect(snapshot).toHaveProperty('fontResolution')
+  })
+
+  it('detects a font the theme ships as a webfont, and names it without the suffix', () => {
+    // `@fontsource-variable/inter` registers the family as "Inter Variable",
+    // so probing the stripped name first asks whether a static "Inter" is
+    // installed. On a machine with no such copy, which is the normal case for
+    // a webfont, nothing in the stack matched and every run in the deck was
+    // written out as a system fallback instead of the theme's own face.
+    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+      fontFamily: '"Inter Variable", Inter, sans-serif',
+      measureText: installedFonts('Inter Variable'),
+    }) as any
+    expect(snapshot.fontResolution['"Inter Variable", Inter, sans-serif']).toBe('Inter')
+  })
+
+  it('still resolves a family installed under its plain name', () => {
+    // The Google Fonts path, which registers "Inter" with no suffix. Every
+    // Slidev-themed deck takes it, which is why the bug above stayed invisible
+    // until a theme shipped its font through `@fontsource`.
+    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+      fontFamily: 'Inter, sans-serif',
+      measureText: installedFonts('Inter'),
+    }) as any
+    expect(snapshot.fontResolution['Inter, sans-serif']).toBe('Inter')
+  })
+
+  it('reports no family when nothing in the stack resolves', () => {
+    const snapshot = runInSandbox(collectSnapshot.toString(), [containerStub()], {
+      fontFamily: '"Human Sans", sans-serif',
+      measureText: installedFonts('Something Else'),
+    }) as any
+    expect(snapshot.fontResolution['"Human Sans", sans-serif']).toBe('')
   })
 
   it('carries no bundler-injected identifiers', () => {
