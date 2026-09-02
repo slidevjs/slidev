@@ -72,6 +72,28 @@ Note that all the slides in the PPTX file will be exported as images, so the tex
 
 In this mode, the `--with-clicks` option is enabled by default. To disable it, pass `--with-clicks false`.
 
+### Editable PPTX
+
+If the recipient needs to edit the deck rather than only present it, export it with native shapes instead of pictures:
+
+```bash
+$ slidev export --format pptx-editable
+```
+
+The slides are measured in the browser and rebuilt as PowerPoint shapes, so text is selectable and editable, boxes can be moved and recolored, and presenter notes are carried over as usual. This does not replace `--format pptx`, which stays the most visually faithful option.
+
+What stays a picture: anything PowerPoint has no equivalent for. That includes SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, KaTeX formulas, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
+
+If a slide cannot be rebuilt safely, or ends up mostly pictures anyway, it falls back to the same image export used by `--format pptx`, for that slide alone, and the reason is printed.
+
+Worth knowing before you send the file on:
+
+- A `.pptx` names fonts, it does not embed them. The export prints which font families it referenced; recipients need those installed or PowerPoint will substitute.
+- PowerPoint does not measure text exactly as a browser does, so a long paragraph may wrap onto a different number of lines.
+- Decorations a theme draws with `::before` or `::after` in normal flow are left out, and the export lists them. Code block line numbers are one of these: they come from a CSS counter, which has no text and no box that a computed style can report.
+
+Like `--format pptx`, this exports one slide per click step unless you pass `--with-clicks false`. `--per-slide` is not supported with it.
+
 ### PNGs and Markdown
 
 When passing in the `--format png` option, Slidev will export PNG images for each slide instead of a PDF:

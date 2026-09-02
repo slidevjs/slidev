@@ -633,7 +633,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'pptx', 'md'],
+      choices: ['pdf', 'png', 'pptx', 'pptx-editable', 'md'],
       describe: 'output format',
     })
     .option('timeout', {

@@ -132,6 +132,7 @@
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
     "@types/picomatch": "catalog:types",
-    "@types/plantuml-encoder": "catalog:types"
+    "@types/plantuml-encoder": "catalog:types",
+    "jszip": "catalog:dev"
   }
 }

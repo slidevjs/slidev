@@ -21,7 +21,7 @@ export interface ExportOptions {
   slides: SlideInfo[]
   port?: number
   base?: string
-  format?: 'pdf' | 'png' | 'pptx' | 'md'
+  format?: 'pdf' | 'png' | 'pptx' | 'pptx-editable' | 'md'
   output?: string
   timeout?: number
   wait?: number
@@ -220,6 +220,9 @@ export async function exportSlides({
     else if (format === 'pptx') {
       const buffers = await genPagePng(false)
       await genPagePptx(buffers)
+    }
+    else if (format === 'pptx-editable') {
+      await genPagePptxEditable()
     }
     else {
       throw new Error(`[slidev] Unsupported exporting format "${format}"`)
@@ -544,6 +547,26 @@ export async function exportSlides({
     await fs.writeFile(output, buffer)
   }
 
+  // Native shapes and editable text, rather than one picture per slide. The
+  // walker, normalizer and builder live in ./pptx, so this is a delegation.
+  async function genPagePptxEditable() {
+    if (perSlide) {
+      // Per-slide mode never renders the print page the measurement depends
+      // on. Failing beats writing a deck missing every slide but the first.
+      throw new Error('[slidev] `--per-slide` is not supported with `--format pptx-editable`')
+    }
+
+    const { exportPptxEditable, reportEditableExport } = await import('./pptx')
+    const result = await exportPptxEditable({ page, slides, width, height, pages, go }, output)
+    // So the "exported to ..." line names the file that was actually written.
+    output = result.output
+
+    // The progress bar repaints on a timer with the cursor hidden, so anything
+    // written while it runs is interleaved with it or overwritten.
+    progress.stop()
+    reportEditableExport(result)
+  }
+
   // Adds metadata (title, author, keywords) to PDF document, mutating it
   function addPdfMetadata(pdf: PDFDocument): void {
     const titleSlide = slides[0]
@@ -612,7 +635,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     slides: options.data.slides,
     total: options.data.slides.length,
     range,
-    format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'md',
+    format: (format || 'pdf') as 'pdf' | 'png' | 'pptx' | 'pptx-editable' | 'md',
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
     waitUntil: waitUntil === 'none' ? undefined : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
@@ -621,7 +644,9 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
     width: options.data.config.canvasWidth,
     height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
-    withClicks: withClicks ?? format === 'pptx',
+    // Both pptx formats default to one slide per click step. Testing the
+    // exact string here silently collapsed click steps for the editable one.
+    withClicks: withClicks ?? !!format?.startsWith('pptx'),
     executablePath,
     withToc: withToc || false,
     perSlide: perSlide || false,
