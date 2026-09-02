@@ -1192,3 +1192,30 @@ describe('a table cell flows its children, it does not lay them out', () => {
     expect(lines.map(l => l.runs.map(r => r.text).join(''))).toEqual(['one', 'two'])
   })
 })
+
+describe('a block box inside an inline run is not folded into the paragraph', () => {
+  // Shiki's `<code>` is `display: inline`, and TwoSlash renders a diagnostic as
+  // a `<div>` inside it. Collecting text through the inline subtree without
+  // testing display ran the message onto the end of the code line it belongs
+  // to: "doubled.value = 2Cannot assign to 'value' because it is a read-only
+  // property." on `demo/starter`.
+  const styles = [
+    style({ display: 'block', whiteSpace: 'pre' }), // 0: <pre>
+    style({ display: 'inline', whiteSpace: 'pre' }), // 1: <code>
+    style({ display: 'block', whiteSpace: 'pre' }), // 2: the diagnostic
+  ]
+  const nodes = [
+    el(1, -1, 'PRE', 0),
+    el(2, 1, 'CODE', 1),
+    text(3, 2, 'doubled.value = 2'),
+    el(4, 2, 'DIV', 2, { rect: { x: 0, y: 30, w: 200, h: 20 } }),
+    text(5, 4, 'Cannot assign to \'value\'.', { rect: { x: 0, y: 30, w: 200, h: 20 }, glyphRects: [{ x: 0, y: 30, w: 200, h: 20 }] }),
+  ]
+
+  it('gives the diagnostic its own text box', () => {
+    const found = texts(run(nodes, styles).slides[0].nodes)
+    const joined = found.map(t => t.runs.map(r => r.text).join('')).join('|')
+    expect(joined).not.toContain('2Cannot assign')
+    expect(found).toHaveLength(2)
+  })
+})

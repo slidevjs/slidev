@@ -805,8 +805,17 @@ function buildSlideIr(
       emitImage(node)
       return
     }
-    // A layout container nested inside an inline run still lays out boxes.
-    if (style && LAYOUT_DISPLAY.test(style.display)) {
+    // Anything that is not inline establishes its own box rather than flowing
+    // with the text around it, so it lays out on its own instead of being
+    // folded into this paragraph. Shiki's `<code>` is `display: inline` and
+    // TwoSlash renders a diagnostic as a `<div>` inside it, which ran the
+    // message onto the end of the code line: "= 2Cannot assign to 'value'".
+    //
+    // Not the same test as `visitChildren` makes. There `LAYOUT_DISPLAY` asks
+    // whether to stop grouping children, which a `table-cell` must not do.
+    // Here the question is only whether this subtree flows with its
+    // surroundings, and no non-inline box does.
+    if (style && !isInline(node)) {
       visit(node)
       return
     }
