@@ -20,5 +20,10 @@ describe('parseTimeString', () => {
     expect(() => parseTimeString('10x')).toThrow('Invalid timestamp unit: x')
     expect(() => parseTimeString('10h:10m:10s')).toThrow('Invalid timestamp format')
     expect(() => parseTimeString('hello 1s world')).toThrow('Unknown timestamp remaining: hello  world')
+    // A unit-less value that isn't a number used to fall through to `Number()`
+    // and yield NaN, which then spread silently into the timer and timesplits.
+    expect(() => parseTimeString('30,5')).toThrow('Invalid timestamp format')
+    expect(() => parseTimeString('1 30')).toThrow('Invalid timestamp format')
+    expect(() => parseTimeString('1.2.3')).toThrow('Invalid timestamp format')
   })
 })
