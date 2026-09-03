@@ -555,6 +555,15 @@ Some content
     expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
   })
 
+  it('records an error when a src: import selects a slide below the first one', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
+  })
+
   it('records an error when a src: import escapes the allowed roots', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/escaping/root')
     const data = await load({ userRoot: root, roots: [root], allowedRoots: [root] }, resolve(root, 'entry.md'))

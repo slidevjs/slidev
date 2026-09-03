@@ -98,6 +98,16 @@ export async function load(
     const directImporter = importers?.at(-1)
     for (const index of parseRangeString(md.slides.length, range)) {
       const subSlide = md.slides[index - 1]
+      if (!subSlide) {
+        // `parseRangeString` only drops indexes above the total, so a range
+        // such as `#0` or `#-3` still reaches here and has no slide.
+        md.errors ??= []
+        md.errors.push({
+          row: 0,
+          message: `Slide ${index} does not exist in "${path}", which has ${md.slides.length} slides`,
+        })
+        continue
+      }
       try {
         await loadSlide(md, subSlide, frontmatterOverride, importers)
       }
