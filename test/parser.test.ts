@@ -414,6 +414,19 @@ Some text
       expect(images).toEqual(['/img1.png', 'https://example.com/img2.jpg', './relative/path.svg'])
     })
 
+    it('ignores the optional title in markdown images', () => {
+      const content = `![alt](/images/photo.jpg "A photo")
+![alt](/images/other.png 'Another')`
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/photo.jpg', '/images/other.png'])
+    })
+
+    it('unwraps angle-bracketed markdown image destinations', () => {
+      const content = '![alt](</images/my photo.jpg>)'
+      const images = extractImagesUsage(content, {})
+      expect(images).toEqual(['/images/my photo.jpg'])
+    })
+
     it('ignores data URLs in markdown images', () => {
       const content = '![inline](data:image/png;base64,abc123)'
       const images = extractImagesUsage(content, {})
