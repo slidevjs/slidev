@@ -85,7 +85,11 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
       ...headmatter.config?.fonts,
       ...headmatter?.fonts,
     }),
-    drawings: resolveDrawings(headmatter.drawings, filepath),
+    drawings: resolveDrawings({
+      ...themeMeta.defaults?.drawings,
+      ...headmatter.config?.drawings,
+      ...headmatter?.drawings,
+    }, filepath),
     htmlAttrs: {
       ...defaultConfig.htmlAttrs,
       ...themeMeta.defaults?.htmlAttrs,
