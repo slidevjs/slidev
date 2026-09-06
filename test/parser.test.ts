@@ -113,6 +113,28 @@ f
       .toEqual({ })
   })
 
+  it('does not take the slide title from a heading inside a code block', async () => {
+    const data = await parse([
+      '```bash',
+      '# Install the CLI',
+      'npm i -g @slidev/cli',
+      '```',
+      '',
+      '## Getting started',
+      '',
+      '---',
+      '',
+      '```bash',
+      '# Only a code comment',
+      '```',
+      '',
+    ].join('\n'), 'file.md')
+
+    expect(data.slides[0].title).toBe('Getting started')
+    expect(data.slides[0].level).toBe(2)
+    expect(data.slides[1].title).toBe(undefined)
+  })
+
   it('ignores slide separators inside HTML comments', async () => {
     const data = await parse(`---
 src: ./pages/one.md
