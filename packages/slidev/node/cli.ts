@@ -203,8 +203,14 @@ cli.command(
       }
 
       let publicIp: string | undefined
-      if (remote)
-        publicIp = await import('public-ip').then(r => r.publicIpv4())
+      if (remote) {
+        try {
+          publicIp = await import('public-ip').then(r => r.publicIpv4())
+        }
+        catch {
+          // Public IP could not be determined (e.g. DNS restricted); LAN IPs are printed instead
+        }
+      }
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -278,9 +284,14 @@ cli.command(
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
-              const publicIp = await import('public-ip').then(r => r.publicIpv4())
-              if (publicIp)
-                console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
+              try {
+                const publicIp = await import('public-ip').then(r => r.publicIpv4())
+                if (publicIp)
+                  console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
+              }
+              catch {
+                // Public IP could not be determined (e.g. DNS restricted)
+              }
             })
         },
       },
