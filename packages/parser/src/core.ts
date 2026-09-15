@@ -104,6 +104,18 @@ function matter(code: string, options: SlidevParserOptions) {
 }
 
 const IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|bmp|tiff?)$/i
+const RE_MD_IMAGE_TITLE = /\s+(?:"[^"]*"|'[^']*')\s*$/
+
+/**
+ * Strip the optional CommonMark title and the angle-bracket form from a
+ * markdown image destination, so `![a](/x.png "Title")` yields `/x.png`.
+ */
+function normalizeMarkdownImageTarget(target: string) {
+  const url = target.trim().replace(RE_MD_IMAGE_TITLE, '').trim()
+  return url.startsWith('<') && url.endsWith('>')
+    ? url.slice(1, -1).trim()
+    : url
+}
 
 /**
  * Extract image URLs from slide content and frontmatter.
@@ -130,10 +142,11 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
   // Strip code blocks to avoid false positives
   const stripped = content.replace(/^```[\s\S]+?^```/gm, '')
 
-  // Markdown images: ![alt](url)
-  for (const [, url] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+  // Markdown images: ![alt](url), ![alt](url "title"), ![alt](<url>)
+  for (const [, target] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+    const url = normalizeMarkdownImageTarget(target)
     if (url && !url.startsWith('data:'))
-      images.add(url.trim())
+      images.add(url)
   }
 
   // Vue component props: src="url", image="url"
