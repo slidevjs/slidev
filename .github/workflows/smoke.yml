@@ -60,9 +60,9 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        pm: [ npm, pnpm ] # yarn not working in this CI
-        hoist: [ true, false ]
+        os: [ubuntu-latest, windows-latest]
+        pm: [npm, pnpm] # yarn not working in this CI
+        hoist: [true, false]
 
     steps:
       - name: Set git to use LF

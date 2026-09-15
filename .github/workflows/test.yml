@@ -18,8 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ lts/* ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        node-version: [lts/*]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         # os: [ubuntu-latest, macos-latest]
       fail-fast: false
 

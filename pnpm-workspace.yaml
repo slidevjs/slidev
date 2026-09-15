@@ -1,92 +1,49 @@
-catalogMode: prefer
 ignoreWorkspaceRootCheck: true
+linkWorkspacePackages: true
+catalogMode: prefer
+catalogPrune: true
+minimumReleaseAge: 0
 minimumReleaseAgeExcludePrune: true
-minimumReleaseAgeExclude:
-  # Shiki v4.2.0 cohort and `@shikijs/magic-move` (rename of `shiki-magic-move`)
-  # all ship together from antfu's monorepo; pnpm v11's 24h `minimumReleaseAge`
-  # default would otherwise block this install until the cohort matures.
-  - '@shikijs/magic-move'
-  - magic-string-stack@2.0.0
-  - verkit@0.3.2
-  - '@oxc-minify/binding-android-arm-eabi@0.150.0'
-  - '@oxc-minify/binding-android-arm64@0.150.0'
-  - '@oxc-minify/binding-darwin-arm64@0.150.0'
-  - '@oxc-minify/binding-darwin-x64@0.150.0'
-  - '@oxc-minify/binding-freebsd-x64@0.150.0'
-  - '@oxc-minify/binding-linux-arm-gnueabihf@0.150.0'
-  - '@oxc-minify/binding-linux-arm-musleabihf@0.150.0'
-  - '@oxc-minify/binding-linux-arm64-gnu@0.150.0'
-  - '@oxc-minify/binding-linux-arm64-musl@0.150.0'
-  - '@oxc-minify/binding-linux-ppc64-gnu@0.150.0'
-  - '@oxc-minify/binding-linux-riscv64-gnu@0.150.0'
-  - '@oxc-minify/binding-linux-riscv64-musl@0.150.0'
-  - '@oxc-minify/binding-linux-s390x-gnu@0.150.0'
-  - '@oxc-minify/binding-linux-x64-gnu@0.150.0'
-  - '@oxc-minify/binding-linux-x64-musl@0.150.0'
-  - '@oxc-minify/binding-openharmony-arm64@0.150.0'
-  - '@oxc-minify/binding-win32-arm64-msvc@0.150.0'
-  - '@oxc-minify/binding-win32-ia32-msvc@0.150.0'
-  - '@oxc-minify/binding-win32-x64-msvc@0.150.0'
-  - '@unhead/bundler@3.4.1'
-  - '@unhead/vue@3.4.1'
-  - '@unocss/cli@66.10.3'
-  - '@unocss/config@66.10.3'
-  - '@unocss/core@66.10.3'
-  - '@unocss/extractor-arbitrary-variants@66.10.3'
-  - '@unocss/extractor-mdc@66.10.3'
-  - '@unocss/inspector@66.10.3'
-  - '@unocss/preset-attributify@66.10.3'
-  - '@unocss/preset-icons@66.10.3'
-  - '@unocss/preset-mini@66.10.3'
-  - '@unocss/preset-tagify@66.10.3'
-  - '@unocss/preset-typography@66.10.3'
-  - '@unocss/preset-uno@66.10.3'
-  - '@unocss/preset-web-fonts@66.10.3'
-  - '@unocss/preset-wind3@66.10.3'
-  - '@unocss/preset-wind4@66.10.3'
-  - '@unocss/preset-wind@66.10.3'
-  - '@unocss/reset@66.10.3'
-  - '@unocss/rollup@66.10.3'
-  - '@unocss/rule-utils@66.10.3'
-  - '@unocss/transformer-attributify-jsx@66.10.3'
-  - '@unocss/transformer-compile-class@66.10.3'
-  - '@unocss/transformer-directives@66.10.3'
-  - '@unocss/transformer-variant-group@66.10.3'
-  - '@unocss/vite@66.10.3'
-  - devframe@0.10.0
-  - magic-string@1.4.1
-  - open@11.0.4
-  - oxc-minify@0.150.0
-  - tm-grammars@1.32.20
-  - unhead@3.4.1
-  - unocss@66.10.3
 
-shamefullyHoist: true
-shellEmulator: true
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - langium
-# pnpm v11 evaluates `trustPolicy: no-downgrade` against the *originally-declared*
-# transitive version (before `resolutions`/`overrides` are applied), so long-lived
-# transitives that were once published with provenance flag false positives. Ignore
-# trust downgrades for packages published more than 30 days ago.
-trustPolicyIgnoreAfter: 43200
+  - undici-types@6.21.0
+
+update:
+  ignoreDeps:
+    - typescript@7
+
+strictPeerDependencies: false
+shamefullyHoist: true
+shellEmulator: true
+
 packages:
   - packages/*
   - demo/*
   - cypress/fixtures/*
   - docs
 
-strictPeerDependencies: false
-linkWorkspacePackages: true
-
 overrides:
-  # Dedupe `markdown-exit` so `unplugin-vue-markdown` and Slidev share one version,
-  # otherwise the `md` instance passed to `markdownSetup` mismatches our type.
   markdown-exit: catalog:prod
+  rollup: ^4.63.3
+  semver: ^7.5.4
+  # Pinning workbox-build to avoid introducing @trickfilm400/rollup-plugin-off-main-thread@3.0.0-pre1
+  workbox-build: ~7.3.0
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
+
+allowBuilds:
+  '@vscode/vsce-sign': true
+  cypress: true
+  esbuild: true
+  keytar: true
+  playwright-chromium: true
+  simple-git-hooks: true
+  typeit: true
+  unrs-resolver: true
+
 catalogs:
   demo:
     '@vue/compiler-sfc': ^3.5.42
@@ -251,16 +208,3 @@ catalogs:
     volar-service-yaml: ^0.0.71
     vscode-uri: ^3.2.0
     yaml-language-server: ^1.24.0
-catalogPrune: true
-allowBuilds:
-  '@vscode/vsce-sign': true
-  cypress: true
-  esbuild: true
-  keytar: true
-  playwright-chromium: true
-  simple-git-hooks: true
-  typeit: true
-  unrs-resolver: true
-update:
-  ignoreDeps:
-    - typescript@7
