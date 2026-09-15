@@ -1,5 +1,5 @@
 <template>
-  <div class="slidev-layout end">
+  <div class="slidev-layout end dark">
     <slot>END</slot>
   </div>
 </template>
