@@ -34,13 +34,17 @@ Use `v-mark.underline` for the underline mark, `v-mark.circle` for the circle ma
 To show a mark for a range of clicks, pass an array with the first and last click:
 
 ```vue
-<span v-mark="[2, 4]">Shown from click 2 through click 3</span>
+<span v-mark="[2, 4]">
+Shown from click 2 through click 3
+</span>
 ```
 
 The end of the range is exclusive, so the mark is hidden again when click 4 is reached. The same range can be used with the object syntax:
 
 ```vue
-<span v-mark="{ at: [2, 4], type: 'circle' }">Marked temporarily</span>
+<span v-mark="{ at: [2, 4], type: 'circle' }">
+Marked temporarily
+</span>
 ```
 
 #### Options

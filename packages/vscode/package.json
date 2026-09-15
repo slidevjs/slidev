@@ -640,7 +640,6 @@
     "tm-grammars": "catalog:frontend",
     "ts-json-schema-generator": "catalog:vscode",
     "volar-service-prettier": "catalog:vscode",
-    "volar-service-yaml": "catalog:vscode",
     "vscode-uri": "catalog:vscode",
     "yaml-language-server": "catalog:vscode"
   }
