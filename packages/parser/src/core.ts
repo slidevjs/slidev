@@ -11,6 +11,7 @@ const RE_TWEET_TAG = /<Tweet\b/
 const RE_BLUESKY_TAG = /<BlueSky\b/
 const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
+const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_BACKTICKS = /^\s*`+/
 const RE_CRLF = /\r?\n/g
 
@@ -140,7 +141,7 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
   }
 
   // Strip code blocks to avoid false positives
-  const stripped = content.replace(/^```[\s\S]+?^```/gm, '')
+  const stripped = content.replace(RE_CODE_BLOCK, '')
 
   // Markdown images: ![alt](url), ![alt](url "title"), ![alt](<url>)
   for (const [, target] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
@@ -202,7 +203,8 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     title = frontmatter.title || frontmatter.name
   }
   else {
-    const match = content.match(RE_HEADING)
+    // `#` lines inside a fenced block are code comments, not the slide title
+    const match = content.replace(RE_CODE_BLOCK, '').match(RE_HEADING)
     title = match?.[2]?.trim()
     level = match?.[1]?.length
   }
