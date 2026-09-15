@@ -287,7 +287,7 @@ cli.command(
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
-              const publicIp = await resolvePublicIp()
+              const publicIp = await import('public-ip').then(r => r.publicIpv4())
               if (publicIp)
                 console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
             })

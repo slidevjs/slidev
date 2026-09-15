@@ -11,6 +11,7 @@ const RE_TWEET_TAG = /<Tweet\b/
 const RE_BLUESKY_TAG = /<BlueSky\b/
 const RE_MERMAID_CODEBLOCK = /^```mermaid/m
 const RE_HEADING = /^(#+) (.*)$/m
+const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_BACKTICKS = /^\s*`+/
 const RE_CRLF = /\r?\n/g
 
@@ -104,6 +105,18 @@ function matter(code: string, options: SlidevParserOptions) {
 }
 
 const IMAGE_EXTENSIONS = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|bmp|tiff?)$/i
+const RE_MD_IMAGE_TITLE = /\s+(?:"[^"]*"|'[^']*')\s*$/
+
+/**
+ * Strip the optional CommonMark title and the angle-bracket form from a
+ * markdown image destination, so `![a](/x.png "Title")` yields `/x.png`.
+ */
+function normalizeMarkdownImageTarget(target: string) {
+  const url = target.trim().replace(RE_MD_IMAGE_TITLE, '').trim()
+  return url.startsWith('<') && url.endsWith('>')
+    ? url.slice(1, -1).trim()
+    : url
+}
 
 /**
  * Extract image URLs from slide content and frontmatter.
@@ -128,12 +141,13 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
   }
 
   // Strip code blocks to avoid false positives
-  const stripped = content.replace(/^```[\s\S]+?^```/gm, '')
+  const stripped = content.replace(RE_CODE_BLOCK, '')
 
-  // Markdown images: ![alt](url)
-  for (const [, url] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+  // Markdown images: ![alt](url), ![alt](url "title"), ![alt](<url>)
+  for (const [, target] of stripped.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)) {
+    const url = normalizeMarkdownImageTarget(target)
     if (url && !url.startsWith('data:'))
-      images.add(url.trim())
+      images.add(url)
   }
 
   // Vue component props: src="url", image="url"
@@ -189,7 +203,8 @@ export function parseSlide(raw: string, options: SlidevParserOptions = {}): Omit
     title = frontmatter.title || frontmatter.name
   }
   else {
-    const match = content.match(RE_HEADING)
+    // `#` lines inside a fenced block are code comments, not the slide title
+    const match = content.replace(RE_CODE_BLOCK, '').match(RE_HEADING)
     title = match?.[2]?.trim()
     level = match?.[1]?.length
   }

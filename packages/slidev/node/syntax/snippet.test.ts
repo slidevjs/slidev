@@ -1,6 +1,7 @@
 import MarkdownExit from 'markdown-exit'
 import path from 'pathe'
 import { expect, it } from 'vitest'
+import { monacoWriterWhitelist } from '../vite/monacoWrite'
 import MarkdownItSnippet, { resolveSnippetImport } from './snippet'
 
 const fixturesRoot = path.join(__dirname, '../../../../test/fixtures/')
@@ -74,4 +75,20 @@ it('throws when a snippet path escapes the allowed roots', () => {
   const slide = { source: { filepath: path.join(fixturesRoot, 'test.md') } } as any
   expect(() => resolveSnippetImport('<<< ../../../../../outside.ts', fixturesRoot, slide, [fixturesRoot]))
     .toThrow(/escapes the project root/)
+})
+
+it('whitelists a {monaco-write} snippet under the path the writer resolves', async () => {
+  monacoWriterWhitelist.clear()
+  const md = MarkdownExit()
+  md.use(MarkdownItSnippet, options)
+
+  const result = await md.renderAsync('<<< @/snippets/snippet.ts {monaco-write}', { id: 'slides.md__slidev_1.md' })
+
+  // createMonacoWriterPlugin does path.resolve(userRoot, file), so the value it
+  // is handed has to resolve back to the file that was read.
+  expect([...monacoWriterWhitelist]).toEqual(['snippets/snippet.ts'])
+  expect(result).toContain('writable="snippets/snippet.ts"')
+  // pathe normalises separators, so this is the writer's path.resolve verbatim.
+  expect(path.resolve(fixturesRoot, [...monacoWriterWhitelist][0]))
+    .toBe(path.join(fixturesRoot, 'snippets/snippet.ts'))
 })
