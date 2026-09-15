@@ -177,14 +177,19 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
     if (!snippet)
       return false
 
-    const { content, filepath, src } = snippet
+    const { content, src } = snippet
     let { lang, meta } = snippet
 
     if (meta.includes('{monaco-write}')) {
-      monacoWriterWhitelist.add(filepath)
+      // The writer resolves whatever it receives against `userRoot`, so hand it
+      // a userRoot-relative path. `filepath` is the raw specifier as typed, and
+      // an `@/` alias or a path relative to the slide resolves elsewhere for
+      // reading than it would for writing.
+      const writePath = slash(path.relative(userRoot, src))
+      monacoWriterWhitelist.add(writePath)
       lang = lang.trim()
       meta = meta.replace('{monaco-write}', '').trim() || '{}'
-      const safeFilepath = JSON.stringify(filepath).slice(1, -1)
+      const safeFilepath = JSON.stringify(writePath).slice(1, -1)
       const encoded = lz.compressToBase64(content)
 
       const token = state.push('html_block', '', 0)

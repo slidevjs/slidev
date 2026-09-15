@@ -46,6 +46,29 @@ export function stringifyMarkdownTokens(tokens: Token[]) {
     .join(' ')
 }
 
+const RE_WORD_CHARS_ONLY = /^[\w-]+$/
+const RE_REGEXP_CHARS = /[.*+?^${}()|[\]\\]/g
+
+export function applyNotesAutoRuby(md: string, notesAutoRuby: Record<string, string | undefined>) {
+  const keys = Object.keys(notesAutoRuby)
+    // Longest first, otherwise a shorter key shadows every key starting with it
+    .sort((a, b) => b.length - a.length)
+    // Add word boundaries to the keys when they are simple alphabets or numbers
+    .map(i => RE_WORD_CHARS_ONLY.test(i) ? `\\b${i}\\b` : i.replace(RE_REGEXP_CHARS, '\\$&'))
+
+  if (!keys.length)
+    return md
+
+  return md.replace(
+    new RegExp(`(${keys.join('|')})`, 'g'),
+    (match) => {
+      if (notesAutoRuby[match])
+        return `<ruby>${match}<rt>${notesAutoRuby[match]}</rt></ruby>`
+      return match
+    },
+  )
+}
+
 export function generateFontParams(options: ResolvedFontOptions) {
   const weights = options.weights
     .flatMap(i => options.italic ? [`0,${i}`, `1,${i}`] : [`${i}`])

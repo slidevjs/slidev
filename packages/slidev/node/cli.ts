@@ -204,7 +204,7 @@ cli.command(
 
       let publicIp: string | undefined
       if (remote)
-        publicIp = await import('public-ip').then(r => r.publicIpv4())
+        publicIp = await resolvePublicIp()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -220,6 +220,15 @@ cli.command(
       }
       catch {
         console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
+    }
+
+    async function resolvePublicIp() {
+      try {
+        return await import('public-ip').then(r => r.publicIpv4())
+      }
+      catch {
+        console.log(yellow('\n  Could not determine the public IP address.\n'))
       }
     }
 

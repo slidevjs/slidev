@@ -7,6 +7,7 @@
 .ghfs
 .omo
 .vite-inspect
+.turbo
 *-export
 *.local
 *.pdf
