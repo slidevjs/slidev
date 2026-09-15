@@ -66,6 +66,7 @@ catalogs:
     tsdown-stale-guard: ^0.1.3
     tsnapi: ^1.5.0
     tsx: ^4.23.13
+    turbo: ^2.10.13
     typescript: ^6.0.3
     vitest: ^5.0.0
     vue-tsc: ^3.3.11
