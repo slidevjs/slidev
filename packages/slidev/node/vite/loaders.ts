@@ -9,7 +9,7 @@ import YAML from 'yaml'
 import { createDataUtils } from '../options'
 import MarkdownItKatex from '../syntax/katex'
 import markdownItLink from '../syntax/link'
-import { createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
+import { applyNotesAutoRuby, createMakeAbsoluteImportGlob, getBodyJson, updateFrontmatterPatch } from '../utils'
 import { templates } from '../virtual'
 import { templateConfigs } from '../virtual/configs'
 import { templateMonacoRunDeps } from '../virtual/monaco-deps'
@@ -17,8 +17,6 @@ import { templateMonacoTypes } from '../virtual/monaco-types'
 import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
-
-const RE_WORD_CHARS_ONLY = /^[\w-]+$/
 
 export function createSlidesLoader(
   options: ResolvedSlidevOptions,
@@ -394,32 +392,14 @@ export function createSlidesLoader(
     const notesAutoRuby: Record<string, string | undefined> = (data.headmatter as any).notesAutoRuby || {}
 
     // Apply [click] marker
-    let md = text
+    const md = text
       // replace [click] marker with span
       .replace(/\[click(?::(\d+))?\]/gi, (_, count = 1) => {
         clickCount += Number(count)
         return `<span class="slidev-note-click-mark" data-clicks="${clickCount}"></span>`
       })
 
-    // Apply notesAutoRuby
-    const keys = Object.keys(notesAutoRuby)
-      .sort((b, a) => b.length - a.length)
-      // Add word boundaries to the keys when they are simple alphabets or numbers
-      .map(i => RE_WORD_CHARS_ONLY.test(i) ? `\\b${i}\\b` : i)
-
-    if (keys.length) {
-      const regex = new RegExp(`(${keys.join('|')})`, 'g')
-      md = md.replace(
-        regex,
-        (match) => {
-          if (notesAutoRuby[match])
-            return `<ruby>${match}<rt>${notesAutoRuby[match]}</rt></ruby>`
-          return match
-        },
-      )
-    }
-
-    const html = notesMd.render(md)
+    const html = notesMd.render(applyNotesAutoRuby(md, notesAutoRuby))
     return html
   }
 
