@@ -51,9 +51,9 @@ async function publish() {
 
   await x('npm', ['run', 'build'], options)
   console.log('\nPublish to VSCE...\n')
-  await retry('Publish to VSCE', () => x('npx', ['@vscode/vsce', 'publish', '--no-dependencies', '-p', process.env.VSCE_TOKEN!], options))
+  await retry('Publish to VSCE', () => x('npx', ['@vscode/vsce', 'publish', '--no-dependencies', '--skip-duplicate', '-p', process.env.VSCE_TOKEN!], options))
   console.log('\nPublish to OVSE...\n')
-  await retry('Publish to OVSX', () => x('npx', ['ovsx', 'publish', '--no-dependencies', '-p', process.env.OVSX_TOKEN!], options))
+  await retry('Publish to OVSX', () => x('npx', ['ovsx', 'publish', '--no-dependencies', '--skip-duplicate', '-p', process.env.OVSX_TOKEN!], options))
 }
 
 publish()
