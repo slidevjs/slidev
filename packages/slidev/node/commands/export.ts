@@ -191,6 +191,12 @@ export async function exportSlides({
 }: ExportOptions) {
   const pages: number[] = parseRangeString(total, range)
 
+  // Writers disagree about who creates the parent directory of `--output`, so
+  // the ones calling `fs.writeFile` directly failed with ENOENT on a path like
+  // `dist/slides.pptx`. Create it here, before the browser starts. `png` gets
+  // only the parent: its `--output` is a directory that `genPagePng` creates.
+  await fs.mkdir(dirname(path.resolve(output)), { recursive: true })
+
   const { chromium } = await importPlaywright()
   const browser = await chromium.launch({
     executablePath,
