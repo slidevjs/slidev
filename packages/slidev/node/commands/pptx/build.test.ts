@@ -30,6 +30,7 @@ function textNode(runs: SlideIr['nodes'][number] extends never ? never : any): a
     kind: 'text',
     sourceId: 1,
     rect: { x: 0, y: 0, w: 200, h: 40 },
+    elementRect: { x: 0, y: 0, w: 200, h: 40 },
     lineCount: 1,
     align: 'left',
     lineHeight: 40,
