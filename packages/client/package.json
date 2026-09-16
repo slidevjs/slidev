@@ -1,7 +1,7 @@
 {
   "name": "@slidev/client",
   "type": "module",
-  "version": "52.19.2",
+  "version": "52.20.1",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -56,6 +56,7 @@
     "fuse.js": "catalog:frontend",
     "katex": "catalog:frontend",
     "lz-string": "catalog:frontend",
+    "markdown-it-github-alerts": "catalog:prod",
     "mermaid": "catalog:frontend",
     "monaco-editor": "catalog:monaco",
     "nanotar": "catalog:frontend",

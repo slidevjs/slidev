@@ -203,14 +203,8 @@ cli.command(
       }
 
       let publicIp: string | undefined
-      if (remote) {
-        try {
-          publicIp = await import('public-ip').then(r => r.publicIpv4())
-        }
-        catch {
-          // Public IP could not be determined (e.g. DNS restricted); LAN IPs are printed instead
-        }
-      }
+      if (remote)
+        publicIp = await resolvePublicIp()
 
       lastRemoteUrl = printInfo(options, port, base, remote, tunnelUrl, publicIp)
       if (open)
@@ -226,6 +220,15 @@ cli.command(
       }
       catch {
         console.log(yellow(`\n  Could not open the browser automatically. Please open ${url} in your browser.\n`))
+      }
+    }
+
+    async function resolvePublicIp() {
+      try {
+        return await import('public-ip').then(r => r.publicIpv4())
+      }
+      catch {
+        console.log(yellow('\n  Could not determine the public IP address.\n'))
       }
     }
 
@@ -284,14 +287,9 @@ cli.command(
               const code = r.renderUnicodeCompact(lastRemoteUrl!)
               console.log(`\n${dim('  QR Code for remote control: ')}\n  ${blue(lastRemoteUrl!)}\n`)
               console.log(code.split('\n').map(i => `  ${i}`).join('\n'))
-              try {
-                const publicIp = await import('public-ip').then(r => r.publicIpv4())
-                if (publicIp)
-                  console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
-              }
-              catch {
-                // Public IP could not be determined (e.g. DNS restricted)
-              }
+              const publicIp = await import('public-ip').then(r => r.publicIpv4())
+              if (publicIp)
+                console.log(`\n${dim(' Public IP: ')}  ${blue(publicIp)}\n`)
             })
         },
       },
@@ -644,7 +642,7 @@ function exportOptions<T>(args: Argv<T>) {
     })
     .option('format', {
       type: 'string',
-      choices: ['pdf', 'png', 'pptx', 'md'],
+      choices: ['pdf', 'png', 'pptx', 'pptx-editable', 'md'],
       describe: 'output format',
     })
     .option('timeout', {

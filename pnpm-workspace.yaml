@@ -27,14 +27,14 @@ packages:
 overrides:
   markdown-exit: catalog:prod
   rollup: ^4.63.3
-  semver: ^7.5.4
+  semver: ^7.8.5
   # vscode-languageserver / vscode-languageclient pin these to exact 3.17.5, which prevents
   # pnpm from deduping against the ^3.17.5 range used elsewhere (resolving to 3.18.3), causing
   # duplicate vscode-languageserver-types instances and type errors in packages/vscode
   vscode-languageserver-protocol: 3.17.5
   vscode-languageserver-types: 3.17.5
   # Pinning workbox-build to avoid introducing @trickfilm400/rollup-plugin-off-main-thread@3.0.0-pre1
-  workbox-build: ~7.3.0
+  workbox-build: 7.3.0
 
 patchedDependencies:
   '@hedgedoc/markdown-it-plugins@2.1.4': patches/@hedgedoc__markdown-it-plugins@2.1.4.patch
@@ -58,6 +58,7 @@ catalogs:
     cypress: ^16.0.0
     eslint: ^10.10.0
     eslint-plugin-format: ^2.0.1
+    jszip: ^3.10.1
     lint-staged: ^17.5.1
     nodemon: ^3.1.14
     ovsx: ^1.2.0
@@ -73,7 +74,7 @@ catalogs:
     tsx: ^4.23.13
     turbo: ^2.10.13
     typescript: ^6.0.3
-    vitest: ^5.0.0
+    vitest: ^5.0.1
     vue-tsc: ^3.3.11
     zx: ^8.8.5
   docs:
@@ -90,7 +91,7 @@ catalogs:
     '@shikijs/markdown-it': ^4.4.3
     '@slidev/rough-notation': ^0.1.0
     '@unhead/vue': ^3.4.1
-    '@unocss/reset': ^66.10.3
+    '@unocss/reset': ^66.10.4
     '@vueuse/core': ^14.4.0
     '@vueuse/math': ^14.4.0
     '@vueuse/motion': ^3.0.3
@@ -131,8 +132,8 @@ catalogs:
     '@modelcontextprotocol/server': ^2.0.0
     '@shikijs/twoslash': ^4.4.3
     '@shikijs/vitepress-twoslash': ^4.4.3
-    '@unocss/extractor-mdc': ^66.10.3
-    '@unocss/preset-mini': ^66.10.3
+    '@unocss/extractor-mdc': ^66.10.4
+    '@unocss/preset-mini': ^66.10.4
     '@vitejs/plugin-vue': ^6.0.9
     '@vitejs/plugin-vue-jsx': ^5.1.6
     ansis: ^4.4.0
@@ -170,15 +171,14 @@ catalogs:
     sirv: ^3.0.2
     source-map-js: ^1.2.1
     tinyexec: ^1.3.1
-    unocss: ^66.10.3
+    unocss: ^66.10.4
     unplugin-icons: ^24.0.0
     unplugin-vue-components: ^32.1.0
     unplugin-vue-markdown: ^32.1.1
     untun: ^0.2.2
     uqr: ^0.1.3
     verkit: ^0.4.0
-    # wait for https://github.com/unocss/unocss/pull/5335
-    vite: ~8.2.0
+    vite: ^8.3.0
     vite-plugin-inspect: ^12.0.2
     vite-plugin-pwa: ^1.3.0
     vite-plugin-remote-assets: ^2.1.0
@@ -197,7 +197,7 @@ catalogs:
     '@types/file-saver': ^2.0.7
     '@types/js-yaml': ^4.0.9
     '@types/katex': ^0.16.8
-    '@types/node': ^26.5.1
+    '@types/node': ^26.6.1
     '@types/picomatch': ^4.0.3
     '@types/plantuml-encoder': ^1.4.2
     '@types/prompts': ^2.4.9

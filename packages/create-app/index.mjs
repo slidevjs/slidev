@@ -96,7 +96,7 @@ async function init() {
 
   console.log(green('  Done.\n'))
 
-  const pkgManager = await detect().catch(() => undefined) ?? 'npm'
+  const pkgManager = await detect().then(r => r.name).catch(() => undefined) ?? 'npm'
 
   /**
    * @type {{ yes: boolean }}

@@ -113,6 +113,28 @@ f
       .toEqual({ })
   })
 
+  it('does not take the slide title from a heading inside a code block', async () => {
+    const data = await parse([
+      '```bash',
+      '# Install the CLI',
+      'npm i -g @slidev/cli',
+      '```',
+      '',
+      '## Getting started',
+      '',
+      '---',
+      '',
+      '```bash',
+      '# Only a code comment',
+      '```',
+      '',
+    ].join('\n'), 'file.md')
+
+    expect(data.slides[0].title).toBe('Getting started')
+    expect(data.slides[0].level).toBe(2)
+    expect(data.slides[1].title).toBe(undefined)
+  })
+
   it('ignores slide separators inside HTML comments', async () => {
     const data = await parse(`---
 src: ./pages/one.md
@@ -560,12 +582,47 @@ Some content
     })
   })
 
+  describe('resolveConfig drawings', () => {
+    it('applies drawings defaults from the theme', () => {
+      const config = resolveConfig({}, { defaults: { drawings: { presenterOnly: true } } } as any)
+      expect(config.drawings).toEqual({
+        enabled: true,
+        persist: false,
+        presenterOnly: true,
+        syncAll: true,
+      })
+    })
+
+    it('applies drawings from the nested `config` headmatter key', () => {
+      const config = resolveConfig({ config: { drawings: { syncAll: false } } })
+      expect(config.drawings.syncAll).toBe(false)
+    })
+
+    it('lets headmatter override the theme defaults', () => {
+      const config = resolveConfig(
+        { drawings: { enabled: false } },
+        { defaults: { drawings: { enabled: true, presenterOnly: true } } } as any,
+      )
+      expect(config.drawings.enabled).toBe(false)
+      expect(config.drawings.presenterOnly).toBe(true)
+    })
+  })
+
   it('detects circular src imports without overflowing', async () => {
     const root = resolve(__dirname, 'fixtures/markdown/circular')
     const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'a.md'))
     // Must return (not hang / overflow) and record a circular-import diagnostic
     const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
     expect(errors.some(e => /circular/i.test(e.message))).toBe(true)
+  })
+
+  it('records an error when a src: import selects a slide below the first one', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/out-of-range')
+    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'entry.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors.map(e => e.message)).toEqual([
+      expect.stringContaining('Slide 0 does not exist'),
+    ])
   })
 
   it('records an error when a src: import escapes the allowed roots', async () => {

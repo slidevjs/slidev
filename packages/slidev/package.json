@@ -1,7 +1,7 @@
 {
   "name": "@slidev/cli",
   "type": "module",
-  "version": "52.19.2",
+  "version": "52.20.1",
   "description": "Presentation slides for developers",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -132,6 +132,7 @@
   "devDependencies": {
     "@hedgedoc/markdown-it-plugins": "catalog:prod",
     "@types/picomatch": "catalog:types",
-    "@types/plantuml-encoder": "catalog:types"
+    "@types/plantuml-encoder": "catalog:types",
+    "jszip": "catalog:dev"
   }
 }
