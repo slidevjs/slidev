@@ -57,6 +57,7 @@ export function getDefaultConfig(): SlidevConfig {
     duration: '30min',
     timer: 'stopwatch',
     magicMoveDuration: 800,
+    shiki: {},
     preloadImages: true,
     clickAnimation: '',
   }
