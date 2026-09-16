@@ -90,5 +90,6 @@ export const HEADMATTER_FIELDS = [
   'seoMeta',
   'notesAutoRuby',
   'magicMoveDuration',
+  'shiki',
   'preloadImages',
 ]

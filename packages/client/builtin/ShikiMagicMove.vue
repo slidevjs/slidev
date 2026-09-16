@@ -180,12 +180,13 @@ onMounted(() => {
       :step="stepIndex"
       :animate="!isPrintMode"
       :options="{
+        stagger: 1,
+        ...configs.shiki?.magicMove,
         globalScale: scale * zoom,
         // Use duration 0 to skip animation instead of using the animate prop,
         // because moving from non-animated to animated causes issues with
         // new elements. Unfortunately, this causes a flash.
         duration: isFirstTick ? 0 : $props.duration,
-        stagger: 1,
       }"
     />
     <button

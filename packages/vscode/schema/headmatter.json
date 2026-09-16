@@ -586,6 +586,12 @@
           "markdownDescription": "Duration for shiki magic move transitions in milliseconds",
           "default": 800
         },
+        "shiki": {
+          "$ref": "#/definitions/ShikiOptions",
+          "description": "Configure Shiki",
+          "markdownDescription": "Configure Shiki",
+          "default": {}
+        },
         "preloadImages": {
           "anyOf": [
             {
@@ -936,6 +942,81 @@
       },
       "description": "The following type should map to unhead MataFlat type",
       "markdownDescription": "The following type should map to unhead MataFlat type"
+    },
+    "ShikiOptions": {
+      "type": "object",
+      "properties": {
+        "magicMove": {
+          "$ref": "#/definitions/ShikiMagicMoveOptions",
+          "description": "Options passed to Shiki Magic Move for customizing code transition animations\n\nSee https://shiki.style/packages/magic-move#options for the full list of options",
+          "markdownDescription": "Options passed to Shiki Magic Move for customizing code transition animations\n\nSee https://shiki.style/packages/magic-move#options for the full list of options",
+          "default": {}
+        }
+      }
+    },
+    "ShikiMagicMoveOptions": {
+      "type": "object",
+      "properties": {
+        "delayMove": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the move animation",
+          "markdownDescription": "Ratio of the duration to delay the move animation",
+          "default": 0.3
+        },
+        "delayLeave": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the leave animation",
+          "markdownDescription": "Ratio of the duration to delay the leave animation",
+          "default": 0
+        },
+        "delayEnter": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the enter animation",
+          "markdownDescription": "Ratio of the duration to delay the enter animation",
+          "default": 0.7
+        },
+        "delayContainer": {
+          "type": "number",
+          "description": "Ratio of the duration to delay the container animation",
+          "markdownDescription": "Ratio of the duration to delay the container animation",
+          "default": 0.4
+        },
+        "easing": {
+          "type": "string",
+          "description": "Easing function, in the CSS `transition-timing-function` format",
+          "markdownDescription": "Easing function, in the CSS `transition-timing-function` format",
+          "default": "ease"
+        },
+        "animateContainer": {
+          "type": "boolean",
+          "description": "Apply animation to the container",
+          "markdownDescription": "Apply animation to the container",
+          "default": false
+        },
+        "containerStyle": {
+          "type": "boolean",
+          "description": "Apply styles (color and background) to the container",
+          "markdownDescription": "Apply styles (color and background) to the container",
+          "default": true
+        },
+        "stagger": {
+          "type": "number",
+          "description": "Stagger the animation of the tokens, in milliseconds",
+          "markdownDescription": "Stagger the animation of the tokens, in milliseconds",
+          "default": 1
+        },
+        "splitTokens": {
+          "type": "boolean",
+          "description": "Split the tokens at the edge of diff chunks",
+          "markdownDescription": "Split the tokens at the edge of diff chunks",
+          "default": false
+        },
+        "enhanceMatching": {
+          "type": "boolean",
+          "description": "Enhance the matching algorithm to match tokens that has same content",
+          "markdownDescription": "Enhance the matching algorithm to match tokens that has same content"
+        }
+      }
     },
     "Frontmatter": {
       "type": "object",
