@@ -62,6 +62,17 @@ export interface SlideInfo extends SlideInfoBase {
    */
   source: SourceSlideInfo
   noteHTML?: string
+  /**
+   * Column index in the 2D grid layout (0-indexed).
+   * A new column starts for each slide that does not have `nested: true` in its frontmatter.
+   * All slides have this set after parsing; `hasGrid` is true when any slide has `gridRow > 0`.
+   */
+  gridCol?: number
+  /**
+   * Row index within the column in the 2D grid layout (0-indexed).
+   * Increments for each consecutive slide with `nested: true` within the same column.
+   */
+  gridRow?: number
 }
 
 /**

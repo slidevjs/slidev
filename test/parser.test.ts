@@ -3,7 +3,7 @@ import { basename, relative, resolve } from 'node:path'
 import { objectMap, slash } from '@antfu/utils'
 import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
-import { extractImagesUsage } from '../packages/parser/src/core'
+import { extractImagesUsage, parseSync } from '../packages/parser/src/core'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
 
 function configDiff(v: SlidevConfig) {
@@ -66,8 +66,10 @@ layout: z
 ---
 c
 ----
+
 d
 ----
+
 e
 
 ---
@@ -80,7 +82,7 @@ f
     expect(data.slides[2].frontmatter)
       .toEqual({ layout: 'z' })
     expect(data.slides[3].frontmatter)
-      .toEqual({ })
+      .toEqual({ nested: true })
   })
 
   it('parse section matter', async () => {
@@ -168,6 +170,76 @@ b
 
     expect(data.slides).toHaveLength(2)
     expect(data.slides.map(s => s.content.trim())).toEqual(['a', 'hidden\n-->\n\nb'])
+  })
+
+  it('parse ---- vertical separator', async () => {
+    const data = await parse(`
+# Column 1
+
+----
+
+# Sub-slide 1A
+
+----
+
+# Sub-slide 1B
+
+---
+
+# Column 2
+
+----
+
+# Sub-slide 2A
+
+---
+
+# Column 3
+`, 'file.md')
+    expect(data.slides.length).toBe(6)
+    expect(data.slides.map(s => s.frontmatter.nested))
+      .toEqual([undefined, true, true, undefined, true, undefined])
+    // Explicit nested: true in frontmatter overrides nothing
+    expect(data.slides[1].frontmatter).toEqual({ nested: true })
+  })
+
+  it.each([parse, parseSync])('preserves vertical separators when saving edited notes (%#)', async (parseMarkdown) => {
+    const markdown = '# Topic\n\n----\n\n# Detail\n\n----\nlayout: center\n---\n\n# More detail\n\n---\n\n# Next topic\n'
+    const data = await parseMarkdown(markdown, 'file.md')
+    expect(data.slides[2].frontmatter).toEqual({ layout: 'center', nested: true })
+    expect(stringify(data)).toBe(markdown)
+    data.slides[1].note = 'Edited note'
+    prettify(data)
+    const saved = stringify(data)
+    const reloaded = await parseMarkdown(saved, 'file.md')
+    expect(reloaded.slides.map(s => s.frontmatter.nested)).toEqual([undefined, true, true, undefined])
+    expect(reloaded.slides[1].note).toBe('Edited note')
+    expect(reloaded.slides[2].frontmatter.layout).toBe('center')
+    expect(saved.match(/^----$/gm)).toHaveLength(2)
+    expect(saved).toContain('----\nlayout: center\n---')
+  })
+
+  it('assigns grid coordinates after loading nested slides', async () => {
+    const filepath = resolve(userRoot, 'grid.md')
+    const data = await load({ userRoot, roots: [userRoot] }, filepath, {
+      [filepath]: '# Topic\n\n----\n\n# Detail\n\n---\n\n# Next topic\n\n---\nnested: true\n---\n\n# More detail\n',
+    })
+    expect(data.slides.map(s => [s.gridCol, s.gridRow])).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]])
+  })
+
+  it.each([parse, parseSync])('preserves empty slides between horizontal separators (%#)', async (parseMarkdown) => {
+    const data = await parseMarkdown('# First\n\n---\n\n---\n\n# Last\n', 'file.md')
+    expect(data.slides.map(s => s.content)).toEqual(['# First', '', '# Last'])
+  })
+
+  it.each(['---\nsrc: ./minimal.md\nnested: true', '----\nsrc: ./minimal.md'])('nests every imported slide with %s', async (frontmatter) => {
+    const filepath = resolve(userRoot, 'grid.md')
+    const imported = resolve(userRoot, 'minimal.md')
+    const data = await load({ userRoot, roots: [userRoot] }, filepath, {
+      [filepath]: `# Chapter\n\n${frontmatter}\n---\n\n---\n\n# Next chapter\n`,
+      [imported]: '# First detail\n\n---\n\n# Second detail\n',
+    })
+    expect(data.slides.map(s => [s.gridCol, s.gridRow])).toEqual([[0, 0], [0, 1], [0, 2], [1, 0]])
   })
 
   async function parseWithExtension(
