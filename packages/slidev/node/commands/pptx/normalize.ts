@@ -329,10 +329,6 @@ function lineGroups(rects: Rect[]): { top: number, bottom: number }[] {
   return groups
 }
 
-function countLines(rects: Rect[]): number {
-  return lineGroups(rects).length
-}
-
 /**
  * How far apart the browser actually set the lines, or undefined for one line. The computed
  * `line-height` is too small whenever a heading mixes sizes; the median keeps one
@@ -642,7 +638,6 @@ function buildSlideIr(
           kind: 'text',
           sourceId: node.id,
           rect: node.rect,
-          elementRect: node.rect,
           lineCount: 1,
           align: alignOf(style),
           valign: 'middle',
@@ -696,7 +691,6 @@ function buildSlideIr(
         kind: 'text',
         sourceId: node.id,
         rect: markerRect,
-        elementRect: markerRect,
         lineCount: 1,
         align: 'left',
         // Centered in the line box, where a browser puts a marker; anchored to
@@ -970,7 +964,7 @@ function buildSlideIr(
     const anchorStyle = containerStyle ?? inheritedStyle(textNodes[0])!
 
     const glyphs = boundsOf(rects)
-    const lineCount = countLines(rects)
+    const lineCount = lineGroups(rects).length
 
     /**
      * The box PowerPoint will wrap inside. Wrapped text's glyph bounds are the width of
@@ -1024,7 +1018,6 @@ function buildSlideIr(
       kind: 'text',
       sourceId: group[0].id,
       rect,
-      elementRect: container?.rect ?? glyphs,
       lineCount,
       align,
       valign,

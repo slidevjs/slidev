@@ -14,8 +14,6 @@ const BASE_STYLE: RawStyle = {
   display: 'block',
   position: 'static',
   zIndex: 'auto',
-  visibility: 'visible',
-  opacity: '1',
   color: 'rgb(0, 0, 0)',
   backgroundColor: 'rgba(0, 0, 0, 0)',
   backgroundImage: 'none',
@@ -52,13 +50,6 @@ const BASE_STYLE: RawStyle = {
   transform: 'none',
   writingMode: 'horizontal-tb',
   webkitBackgroundClip: 'border-box',
-  overflow: 'visible',
-  top: 'auto',
-  right: 'auto',
-  bottom: 'auto',
-  left: 'auto',
-  width: 'auto',
-  height: 'auto',
 }
 
 function style(overrides: Partial<RawStyle> = {}): RawStyle {
@@ -438,8 +429,6 @@ describe('pseudo-element decorations are drawn', () => {
     const mark = style({
       position: 'absolute',
       backgroundImage: 'url(/img/logo.png)',
-      width: '84px',
-      height: '33px',
     })
     const rect = { x: 858, y: 493, w: 84, h: 33 }
     const nodes = [
@@ -457,7 +446,7 @@ describe('pseudo-element decorations are drawn', () => {
   })
 
   it('draws an ::before that paints a string', () => {
-    const quote = style({ position: 'absolute', width: '20px', height: '20px' })
+    const quote = style({ position: 'absolute' })
     const rect = { x: 10, y: 10, w: 20, h: 20 }
     const nodes = [
       el(0, -1, 'DIV', 0),
@@ -691,7 +680,7 @@ describe('what has to become a picture', () => {
   it('keeps a shadow-root diagram rather than skipping it', () => {
     const nodes = [
       el(0, -1, 'DIV', 0),
-      el(1, 0, 'SVG', 0, { fromShadowRoot: true, hasForeignObject: true }),
+      el(1, 0, 'SVG', 0, { hasForeignObject: true }),
     ]
     const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
     // Mermaid renders into a shadow root, so a document-level query finds

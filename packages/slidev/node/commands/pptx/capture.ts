@@ -274,7 +274,6 @@ async function fetchImage(page: Page, url: string): Promise<string | undefined> 
 export interface CaptureReport {
   rastersCaptured: number
   rastersFailed: number
-  imagesFetched: number
   /** Images that could be neither fetched nor screenshotted. */
   imagesDropped: number
   /** Captures that asked for isolation and could not find their element. A silent miss bakes the slide's own text into the picture, which is then drawn again as shapes. */
@@ -314,7 +313,6 @@ export async function capture(
   const report: CaptureReport = {
     rastersCaptured: 0,
     rastersFailed: 0,
-    imagesFetched: 0,
     imagesDropped: 0,
     isolationMissed: 0,
     fallbackSlides: [],
@@ -377,10 +375,7 @@ export async function capture(
 
     for (const [sourceId, nodes] of imagesBySource) {
       let data = await fetchImage(page, nodes[0].data)
-      if (data) {
-        report.imagesFetched++
-      }
-      else {
+      if (!data) {
         // Unfetchable, or an SVG: screenshot the element instead, isolated so
         // the picture does not carry what the slide painted behind it.
         try {
@@ -388,8 +383,6 @@ export async function capture(
             report.isolationMissed++
           // Once per element, not once per node it produced across click steps.
           data = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
-          if (data)
-            report.imagesFetched++
         }
         finally {
           await restore(page)

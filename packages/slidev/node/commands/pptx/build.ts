@@ -83,8 +83,6 @@ function runProps(run: IrRun): Record<string, unknown> {
     options.charSpacing = pt(run.letterSpacing)
   if (run.link)
     options.hyperlink = { url: run.link }
-  if (run.endsParagraph)
-    options.breakLine = true
   // `softBreakBefore` emits a real <a:br/> inside one paragraph; a \v in the
   // text renders in PowerPoint but not in Keynote or LibreOffice.
   if (run.breakBefore)

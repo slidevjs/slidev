@@ -13,7 +13,6 @@
  * sizes the PowerPoint slide as `width / 96` by `height / 96` inches, so one
  * CSS pixel is exactly 1/96 inch. 1px = 1pt does not hold in general.
  */
-export const EMU_PER_PX = 9525 // 914400 EMU per inch / 96 px per inch
 export const INCHES_PER_PX = 1 / 96
 
 /** Points per pixel (72 pt per inch against 96 px per inch), for font size, letter spacing and line height. */
@@ -34,8 +33,6 @@ export interface RawStyle {
   display: string
   position: string
   zIndex: string
-  visibility: string
-  opacity: string
   color: string
   backgroundColor: string
   backgroundImage: string
@@ -72,13 +69,6 @@ export interface RawStyle {
   transform: string
   writingMode: string
   webkitBackgroundClip: string
-  overflow: string
-  top: string
-  right: string
-  bottom: string
-  left: string
-  width: string
-  height: string
 }
 
 export interface RawNode {
@@ -108,8 +98,6 @@ export interface RawNode {
   isMath?: boolean
   /** An `SVG` carrying `<foreignObject>` (as Mermaid renders), so its labels are HTML. No PowerPoint renderer draws that; it has to be rasterized. */
   hasForeignObject?: boolean
-  /** Reached through `el.shadowRoot`. Mermaid diagrams live in one. */
-  fromShadowRoot?: boolean
   /** Opacity compounded from every ancestor, present only when below 1. DrawingML has no group opacity, so a wrapper's transparency is folded into each descendant's colors. */
   opacity?: number
   /** A `::marker` list bullet, which is a pseudo-element and has no text node. */
@@ -160,7 +148,7 @@ export interface Border {
 
 interface IrBase {
   rect: Rect
-  /** The `RawNode.id` this came from. Only for diagnostics. */
+  /** The `RawNode.id` this came from; the capture phase keys screenshots off it, and it also aids diagnostics. */
   sourceId: number
 }
 
@@ -200,14 +188,11 @@ export interface IrRun {
   link?: string
   /** Emit a line break before this run. From `<br>`. */
   breakBefore?: boolean
-  /** This run ends a paragraph. */
-  endsParagraph?: boolean
 }
 
 export interface IrText extends IrBase {
   /** `rect` is glyph bounds, not the element box. See `RawNode.glyphRects`. */
   kind: 'text'
-  elementRect: Rect
   /** Distinct line-box tops. One means the box must not be allowed to re-wrap. */
   lineCount: number
   align: 'left' | 'center' | 'right' | 'justify'

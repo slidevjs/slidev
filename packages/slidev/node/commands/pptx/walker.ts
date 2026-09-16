@@ -18,8 +18,6 @@ export function collectSnapshot(options: {
     'display',
     'position',
     'zIndex',
-    'visibility',
-    'opacity',
     'color',
     'backgroundColor',
     'backgroundImage',
@@ -56,13 +54,6 @@ export function collectSnapshot(options: {
     'transform',
     'writingMode',
     'webkitBackgroundClip',
-    'top',
-    'right',
-    'bottom',
-    'left',
-    'width',
-    'height',
-    'overflow',
   ] as const
 
   /** Strips the quotes CSS keeps around a `content` or font family value. */
@@ -256,7 +247,7 @@ export function collectSnapshot(options: {
       }
     }
 
-    function walk(node: Node, parent: number, fromShadowRoot: boolean, inheritedOpacity: number): void {
+    function walk(node: Node, parent: number, inheritedOpacity: number): void {
       if (node.nodeType === 3) {
         const text = node.textContent ?? ''
         // A whitespace-only node can hold the only space between two inline
@@ -346,8 +337,6 @@ export function collectSnapshot(options: {
         if (fragments.length > 1)
           record.fragments = fragments.map(relative)
       }
-      if (fromShadowRoot)
-        record.fromShadowRoot = true
       // KaTeX marks its root by class; the MathML it writes for screen readers is display:none.
       if (el.classList.contains('katex'))
         record.isMath = true
@@ -452,17 +441,17 @@ export function collectSnapshot(options: {
       const shadow = (el as any).shadowRoot
       if (shadow) {
         for (const child of Array.from(shadow.childNodes) as Node[])
-          walk(child, id, true, effectiveOpacity)
+          walk(child, id, effectiveOpacity)
       }
 
       // Recurse through zero-sized boxes rather than pruning them: a cover
       // slide commonly hangs its title off a wrapper that measures 0 high.
       for (const child of Array.from(el.childNodes) as Node[])
-        walk(child, id, fromShadowRoot, effectiveOpacity)
+        walk(child, id, effectiveOpacity)
     }
 
     for (const child of Array.from(container.childNodes) as Node[])
-      walk(child, -1, false, 1)
+      walk(child, -1, 1)
 
     slides.push({
       no,
