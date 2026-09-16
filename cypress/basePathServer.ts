@@ -7,10 +7,9 @@ import { createServer } from 'node:http'
 import { extname, join, normalize, sep } from 'node:path'
 import process from 'node:process'
 
-let server: Server | undefined
-let baseUrl: string | undefined
+type RouterMode = 'history' | 'hash'
 
-const root = join(import.meta.dirname, 'fixtures/basic/dist')
+const servers = new Map<RouterMode, { server: Server, baseUrl: string }>()
 const base = '/deck/'
 const contentTypes = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -35,14 +34,18 @@ async function fileExists(file: string) {
 }
 
 /**
- * Builds the basic fixture with a non-root `--base` and serves the static
- * output (with SPA fallback) on an ephemeral port.
+ * Builds the basic fixture with a non-root `--base` in the given router mode and
+ * serves the static output (with SPA fallback) on an ephemeral port.
  *
  * Returns the served base URL, e.g. `http://127.0.0.1:52341/deck/`.
  */
-export async function startBasePathServer(): Promise<string> {
-  if (server && baseUrl)
-    return baseUrl
+export async function startBasePathServer(routerMode: RouterMode = 'history'): Promise<string> {
+  const existing = servers.get(routerMode)
+  if (existing)
+    return existing.baseUrl
+
+  const outDir = `dist-${routerMode}`
+  const root = join(import.meta.dirname, 'fixtures/basic', outDir)
 
   // Cypress runs its node events inside Electron; strip its env so the
   // spawned build runs under plain Node.
@@ -51,13 +54,13 @@ export async function startBasePathServer(): Promise<string> {
   delete env.ELECTRON_RUN_AS_NODE
   delete env.NODE_OPTIONS
 
-  execFileSync(pnpm, ['--filter', './cypress/fixtures/basic', 'build', '--base', base], {
+  execFileSync(pnpm, ['--filter', './cypress/fixtures/basic', 'build', '--base', base, '--router-mode', routerMode, '--out', outDir], {
     cwd: join(import.meta.dirname, '..'),
     env,
     stdio: 'inherit',
   })
 
-  server = createServer(async (req, res) => {
+  const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? '/', 'http://127.0.0.1')
 
     if (!url.pathname.startsWith(base)) {
@@ -80,29 +83,24 @@ export async function startBasePathServer(): Promise<string> {
   })
 
   await new Promise<void>((resolve, reject) => {
-    server!.once('error', reject)
-    server!.listen(0, '127.0.0.1', resolve)
+    server.once('error', reject)
+    server.listen(0, '127.0.0.1', resolve)
   })
 
   const { port } = server.address() as AddressInfo
-  baseUrl = `http://127.0.0.1:${port}${base}`
+  const baseUrl = `http://127.0.0.1:${port}${base}`
+  servers.set(routerMode, { server, baseUrl })
   return baseUrl
 }
 
-export function stopBasePathServer() {
-  return new Promise<null>((resolve, reject) => {
-    if (!server) {
-      resolve(null)
-      return
-    }
-
-    server.close((error) => {
-      server = undefined
-      baseUrl = undefined
-      if (error)
-        reject(error)
-      else
-        resolve(null)
-    })
-  })
+export async function stopBasePathServer() {
+  await Promise.all(
+    [...servers.values()].map(({ server }) =>
+      new Promise<void>((resolve, reject) => {
+        server.close(error => (error ? reject(error) : resolve()))
+      }),
+    ),
+  )
+  servers.clear()
+  return null
 }
