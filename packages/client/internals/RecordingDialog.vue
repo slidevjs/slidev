@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { bitRate, frameRate, getFilename, mimeType, recordCamera, recorder, recordingName, resolution } from '../logic/recording'
 import DevicesSelectors from './DevicesSelectors.vue'
 import Modal from './Modal.vue'
+import VideoFormat from './VideoFormat.vue'
 
 const props = defineProps({
   modelValue: {
@@ -19,6 +20,7 @@ const value = useVModel(props, 'modelValue', emit)
 const { startRecording } = recorder
 
 const frameRateOptions = [15, 24, 30, 60]
+const activeTab = ref<'video' | 'audio'>('video')
 const resolutionOptions = [
   { value: '1280x720', label: '720p (1280x720)' },
   { value: '1920x1080', label: '1080p (1920x1080)' },
@@ -61,46 +63,7 @@ async function start() {
           </div>
         </div>
 
-        <div class="form-text">
-          <label for="framerate">Frame Rate</label>
-          <select
-            v-model="frameRate"
-            class="bg-transparent text-current border border-main rounded px-2 py-1"
-            name="framerate"
-          >
-            <option v-for="rate in frameRateOptions" :key="rate" :value="rate">
-              {{ rate }} fps
-            </option>
-          </select>
-        </div>
-
-        <div class="form-text">
-          <label for="resolution">Resolution</label>
-          <select
-            v-model="resolution"
-            class="bg-transparent text-current border border-main rounded px-2 py-1"
-            name="resolution"
-          >
-            <option v-for="res in resolutionOptions" :key="res.value" :value="res.value">
-              {{ res.label }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-text">
-          <label for="bitrate">Bitrate</label>
-          <div class="relative">
-            <input
-              v-model.number="bitRate"
-              type="number"
-              min="1000"
-              step="1000"
-              class="bg-transparent text-current border border-main rounded px-2 py-1 w-full pr-12"
-              name="bitrate"
-            >
-            <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm opacity-50">kbps</span>
-          </div>
-        </div>
+        <VideoFormat />
 
         <div class="form-check">
           <input
@@ -123,7 +86,80 @@ async function start() {
           </div>
         </div>
       </div>
-      <DevicesSelectors />
+
+      <div class="flex flex-col gap-2 py-2">
+        <div class="flex border-b border-main" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            class="px-2 py-1 border-b-2 border-transparent text-sm"
+            :class="activeTab === 'video' ? 'text-primary border-primary' : 'opacity-50'"
+            :aria-selected="activeTab === 'video'"
+            @click="activeTab = 'video'"
+          >
+            Video
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="px-2 py-1 border-b-2 border-transparent text-sm"
+            :class="activeTab === 'audio' ? 'text-primary border-primary' : 'opacity-50'"
+            :aria-selected="activeTab === 'audio'"
+            @click="activeTab = 'audio'"
+          >
+            Audio
+          </button>
+        </div>
+
+        <div v-if="activeTab === 'video'" class="flex flex-col gap-2">
+          <div class="form-text">
+            <label for="framerate">Frame Rate</label>
+            <select
+              v-model="frameRate"
+              class="bg-transparent text-current border border-main rounded px-2 py-1"
+              name="framerate"
+            >
+              <option v-for="rate in frameRateOptions" :key="rate" :value="rate">
+                {{ rate }} fps
+              </option>
+            </select>
+          </div>
+
+          <div class="form-text">
+            <label for="resolution">Resolution</label>
+            <select
+              v-model="resolution"
+              class="bg-transparent text-current border border-main rounded px-2 py-1"
+              name="resolution"
+            >
+              <option v-for="res in resolutionOptions" :key="res.value" :value="res.value">
+                {{ res.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-text">
+            <label for="bitrate">Bitrate</label>
+            <div class="relative">
+              <input
+                v-model.number="bitRate"
+                type="number"
+                min="1000"
+                step="1000"
+                class="bg-transparent text-current border border-main rounded px-2 py-1 w-full pr-12"
+                name="bitrate"
+              >
+              <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm opacity-50">kbps</span>
+            </div>
+          </div>
+
+          <DevicesSelectors section="video" />
+        </div>
+
+        <div v-else class="flex flex-col gap-2">
+          <DevicesSelectors section="audio" />
+        </div>
+      </div>
     </div>
     <div class="flex my-1">
       <button class="slidev-form-button" @click="close">

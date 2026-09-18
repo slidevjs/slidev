@@ -10,12 +10,30 @@ import { currentCamera, currentMic } from '../state'
 type Defined<T> = T extends undefined ? never : T
 type MimeType = Defined<RecorderOptions['mimeType']>
 
+export function getAudioConstraints(
+  deviceId: string,
+  echoCancellation: boolean,
+  noiseSuppression: boolean,
+): MediaTrackConstraints {
+  return {
+    deviceId,
+    echoCancellation,
+    noiseSuppression,
+  }
+}
+
+export function shouldRecreateStream(stream: MediaStream | undefined, recording: boolean) {
+  return !!stream && !recording
+}
+
 export const recordingName = ref('')
 export const recordCamera = ref(true)
 export const mimeType = useLocalStorage<MimeType>('slidev-record-mimetype', 'video/webm')
 export const frameRate = useLocalStorage<number>('slidev-record-framerate', 30)
 export const bitRate = useLocalStorage<number>('slidev-record-bitrate', 8192)
 export const resolution = useLocalStorage<string>('slidev-record-resolution', '1920x1080')
+export const echoCancellation = useLocalStorage('slidev-record-echo-cancellation', true)
+export const noiseSuppression = useLocalStorage('slidev-record-noise-suppression', true)
 
 export const mimeExtMap: Record<string, string> = {
   'video/webm': 'webm',
@@ -123,9 +141,7 @@ export function useRecording() {
             },
         audio: currentMic.value === 'none'
           ? false
-          : {
-              deviceId: currentMic.value,
-            },
+          : getAudioConstraints(currentMic.value, echoCancellation.value, noiseSuppression.value),
       })
     }
   }
@@ -148,6 +164,8 @@ export function useRecording() {
   async function startRecording(customConfig?: RecorderOptions) {
     await ensureDevicesListPermissions()
     const { default: Recorder } = await import('recordrtc')
+    if (shouldRecreateStream(streamCamera.value, recording.value))
+      closeStream(streamCamera)
     await startCameraStream()
 
     const [width, height] = resolution.value.split('x').map(Number)
