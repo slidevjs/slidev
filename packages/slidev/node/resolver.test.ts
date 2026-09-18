@@ -79,6 +79,19 @@ const fsMocks = vi.hoisted(() => {
 
 vi.mock('node:fs', () => fsMocks)
 
+describe('getRoots', () => {
+  it('exposes the closest package.json directory as userProjectRoot', async () => {
+    // `getRoots` memoizes its result, so load a fresh module instance
+    vi.resetModules()
+    const { getRoots: getFreshRoots } = await import('./resolver')
+
+    const roots = await getFreshRoots('/user/project/slides/deck.md')
+
+    expect(roots.userRoot).toBe('/user/project/slides')
+    expect(roots.userProjectRoot).toBe('/user/project')
+  })
+})
+
 describe('createResolver', () => {
   beforeEach(async () => {
     await getRoots('/user/project')

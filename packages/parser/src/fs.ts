@@ -42,6 +42,11 @@ export interface LoadRootsInfo {
   roots: string[]
   userRoot: string
   /**
+   * Roots to look up `setup/*` files in. Defaults to `roots`. Optional for
+   * backward compatibility with other `@slidev/parser` consumers.
+   */
+  setupRoots?: string[]
+  /**
    * When provided, `src:` includes resolving outside these roots are
    * rejected (recorded as an error) instead of being loaded. Optional for
    * backward compatibility with other `@slidev/parser` consumers.
@@ -79,7 +84,7 @@ export async function load(
       hm = lines.slice(1, hEnd).join('\n')
     }
     const o = YAML.parse(hm) as Record<string, unknown> ?? {}
-    extensions = await preparserExtensionLoader(options.roots, o, filepath, mode)
+    extensions = await preparserExtensionLoader(options.setupRoots ?? options.roots, o, filepath, mode)
   }
 
   const markdownFiles: Record<string, SlidevMarkdown> = {}

@@ -26,6 +26,7 @@ export async function resolveOptions(
     {
       userRoot: rootsInfo.userRoot,
       roots: [rootsInfo.userRoot],
+      setupRoots: uniq([rootsInfo.userProjectRoot, rootsInfo.userRoot]),
       allowedRoots: uniq([rootsInfo.userWorkspaceRoot, rootsInfo.userRoot]),
     },
     entry,
@@ -43,10 +44,16 @@ export async function resolveOptions(
   const initialConfig = parser.resolveConfig(initialLoaded.headmatter, themeMeta, entryOptions.entry)
   const addonRoots = await resolveAddons(initialConfig.addons)
   const roots = uniq([...themeRoots, ...addonRoots, rootsInfo.userRoot])
+  // `setup/*` filenames belong to Slidev, so they are also read from the
+  // project root. Without this, every `setup/*` hook is silently skipped when
+  // the entry markdown lives in a subdirectory, because `userRoot` is the
+  // entry's own directory. See #2603.
+  const setupRoots = uniq([...themeRoots, ...addonRoots, rootsInfo.userProjectRoot, rootsInfo.userRoot])
   const loaded = await parser.load(
     {
       userRoot: rootsInfo.userRoot,
       roots,
+      setupRoots,
       allowedRoots: uniq([rootsInfo.userWorkspaceRoot, ...roots]),
     },
     entry,
@@ -78,6 +85,7 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
+    setupRoots,
   })
 
   const data: SlidevData = {
@@ -97,6 +105,7 @@ export async function resolveOptions(
     themeRoots,
     addonRoots,
     roots,
+    setupRoots,
   }
 
   return {
@@ -113,8 +122,8 @@ export async function createDataUtils(resolved: Omit<ResolvedSlidevOptions, 'uti
   let _layouts_cache: Promise<Record<string, string>> | null = null
 
   return {
-    ...await setupShiki(resolved.roots),
-    katexOptions: await setupKatex(resolved.roots),
+    ...await setupShiki(resolved.setupRoots),
+    katexOptions: await setupKatex(resolved.setupRoots),
     indexHtml: await setupIndexHtml(resolved),
     define: getDefine(resolved),
     iconsResolvePath: [resolved.clientRoot, ...resolved.roots].reverse(),

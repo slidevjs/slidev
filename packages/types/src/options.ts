@@ -7,6 +7,12 @@ export interface RootsInfo {
   cliRoot: string
   clientRoot: string
   userRoot: string
+  /**
+   * Directory of the closest `package.json` at or above `userRoot`.
+   * Equals `userRoot` when the entry sits next to the `package.json`,
+   * and is an ancestor of it when the entry lives in a subdirectory.
+   */
+  userProjectRoot: string
   userPkgJson: Record<string, any>
   userWorkspaceRoot: string
 }
@@ -62,6 +68,16 @@ export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {
    * =`[...themeRoots, ...addonRoots, userRoot]` (`clientRoot` excluded)
    */
   roots: string[]
+  /**
+   * Roots to look up `setup/*` files in.
+   * =`[...themeRoots, ...addonRoots, userProjectRoot, userRoot]`
+   *
+   * `setup/*` filenames are owned by Slidev, so they are also read from
+   * `userProjectRoot`. That keeps them working when the entry markdown lives
+   * in a subdirectory of the project. Generically named files (`components/`,
+   * `layouts/`, `styles/`, `uno.config.ts`, `vite.config.ts`) stay on `roots`.
+   */
+  setupRoots: string[]
   mode: 'dev' | 'build' | 'export'
   utils: ResolvedSlidevUtils
 }
