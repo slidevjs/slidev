@@ -263,6 +263,9 @@ catalogs:
     '@fix-webm-duration/fix':
       specifier: ^1.0.1
       version: 1.0.1
+    '@sapphi-red/web-noise-suppressor':
+      specifier: ^0.4.0
+      version: 0.4.0
     '@shikijs/engine-javascript':
       specifier: ^4.4.3
       version: 4.4.3
@@ -957,6 +960,9 @@ importers:
       '@iconify-json/svg-spinners':
         specifier: catalog:icons
         version: 1.2.4
+      '@sapphi-red/web-noise-suppressor':
+        specifier: catalog:frontend
+        version: 0.4.0
       '@shikijs/engine-javascript':
         specifier: catalog:frontend
         version: 4.4.3
@@ -3928,6 +3934,9 @@ packages:
     resolution: {integrity: sha512-+lIKX7O0+IGe7WuhATaAMMeT7B76vfhXH/l9wLQL+nvyhbw2ohYCKIdWL56JfDu75CWt5oKRP4QFH/jkMtBquA==}
     cpu: [x64]
     os: [win32]
+
+  '@sapphi-red/web-noise-suppressor@0.4.0':
+    resolution: {integrity: sha512-vkBEL/VDkbeP3qqSRQFRtPLGa19a38JUzO6J0r5D/MQSumrlERy671DAMaETgY6etXjDCoJcD7JBIaXnuGVtVw==}
 
   '@secretlint/config-creator@10.2.2':
     resolution: {integrity: sha512-BynOBe7Hn3LJjb3CqCHZjeNB09s/vgf0baBaHVw67w7gHF0d25c3ZsZ5+vv8TgwSchRdUCRrbbcq5i2B1fJ2QQ==}
@@ -11767,6 +11776,8 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.63.3':
     optional: true
+
+  '@sapphi-red/web-noise-suppressor@0.4.0': {}
 
   '@secretlint/config-creator@10.2.2':
     dependencies:
