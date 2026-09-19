@@ -156,7 +156,7 @@ async function start() {
           <DevicesSelectors section="video" />
         </div>
 
-        <div v-else class="flex flex-col gap-2">
+        <div v-else class="flex flex-col gap-2 min-w-0">
           <DevicesSelectors section="audio" />
         </div>
       </div>

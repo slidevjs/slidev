@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NoiseSuppressionMode } from '../logic/recording'
 import type { SelectionItem } from './types'
 import { computed } from 'vue'
 import {
@@ -37,11 +38,25 @@ const microphonesItems = computed<SelectionItem<string>[]>(() => [
   })),
 ])
 
+const noiseSuppressionItems: SelectionItem<NoiseSuppressionMode>[] = [
+  { value: 'disabled', display: 'Disabled' },
+  { value: 'browser', display: 'Browser built-in' },
+  { value: 'rnnoise', display: 'RNNoise' },
+  { value: 'gtcrn', display: 'GTCRN' },
+]
+
+const noiseSuppressionHelp: Record<NoiseSuppressionMode, string> = {
+  disabled: 'Keep the original microphone signal without noise suppression.',
+  browser: 'Works reliably across browsers. Recommended for most recordings.',
+  rnnoise: 'Good general-purpose suppression for voice and steady background noise.',
+  gtcrn: 'Useful for heavier or changing background noise, with potentially higher CPU use.',
+}
+
 ensureDevicesListPermissions()
 </script>
 
 <template>
-  <div text-sm flex="~ col gap-2">
+  <div text-sm flex="~ col gap-2" class="min-w-0">
     <template v-if="props.section !== 'audio'">
       <SelectList
         v-model="currentCamera"
@@ -69,13 +84,14 @@ ensureDevicesListPermissions()
         <label for="echo-cancellation">Echo cancellation</label>
       </div>
       <div class="form-check ml-2">
-        <input
-          id="noise-suppression"
+        <SelectList
           v-model="noiseSuppression"
-          name="noise-suppression"
-          type="checkbox"
-        >
-        <label for="noise-suppression">Noise suppression</label>
+          title="Noise suppression"
+          :items="noiseSuppressionItems"
+        />
+        <div class="text-xs opacity-50 leading-4 mt-1 max-w-64 break-words">
+          {{ noiseSuppressionHelp[noiseSuppression] }}
+        </div>
       </div>
     </template>
   </div>
