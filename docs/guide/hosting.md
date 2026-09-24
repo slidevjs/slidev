@@ -161,8 +161,8 @@ To deploy your slides on [Codeberg Pages](https://codeberg.page/) via Forgejo Ac
 ::: details package.json
 ```json
   "scripts": {
-    "build": "slidev build --out _site",
-  }
+  "build": "slidev build --out _site",
+}
 ```
 :::
 
@@ -177,7 +177,7 @@ To deploy your slides on [Codeberg Pages](https://codeberg.page/) via Forgejo Ac
 ```
 :::
 
-5. Create `.forgejo/workflows/deploy.yaml`, copy the following yaml code, then change `<repository-name>` with the actual name of your repository.
+5. Create `.forgejo/workflows/deploy.yaml`, copy the following yaml code. Then, in `deploy.yaml`, change `<repository-name>` with the actual name of your repository.
 
 ::: details .forgejo/workflows/deploy.yaml
 
@@ -190,11 +190,11 @@ jobs:
   publish:
     runs-on: codeberg-tiny
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/setup@v3
-
-      - name: Install Dependencies
-        run: pnpm install
+      - name: Checkout
+        uses: actions/checkout@v7
+        
+      - name: Setup nodejs and pnpm 
+        uses: pnpm/setup@v3
 
       - name: Build
         run: pnpm build --base /<repository-name>/
@@ -209,7 +209,7 @@ jobs:
 :::
 
 6. Commit and push the changes to your repository. The Forgejo Actions workflow will automatically deploy your slides to Codeberg Pages every time you push to the `main` branch.
-7. You can access your slides at `https://<username>..codeberg.page/<repository-name>/`.
+7. You can access your slides at `https://<username>.codeberg.page/<repository-name>/`.
 
 
 ### Netlify
