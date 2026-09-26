@@ -106,7 +106,7 @@ function findRegion(lines: Array<string>, regionName: string) {
 }
 
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-export const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w-]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
+export const RE_SNIPPET_IMPORT = /^<<<[ \t]*(\S.*?)(#[\w\-=;*!]+)?[ \t]*(?:[ \t](\S+?))?[ \t]*(\{.*)?$/
 
 export function resolveSnippetImport(lineText: string, userRoot: string, slide: SlideInfo, allowedRoots: string[] = [userRoot]) {
   const match = lineText.trimStart().match(RE_SNIPPET_IMPORT)
@@ -137,18 +137,160 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
 
   if (regionName) {
     const lines = content.split(RE_NEWLINE)
-    const region = findRegion(lines, regionName.slice(1))
-    if (region) {
-      content = dedent(
-        lines
-          .slice(region.start, region.end)
-          .filter(l => !(region.re.start.test(l) || region.re.end.test(l)))
-          .join('\n'),
-      )
+
+    if (regionName.startsWith('#tag=') || regionName.startsWith('#tags=')) {
+      let incTags: Record<string, boolean> | null = null
+      if (regionName.startsWith('#tag=')) {
+        const tag = regionName.slice('#tag='.length)
+        if (tag && tag !== '!') {
+          incTags = tag.startsWith('!')
+            ? { [tag.slice(1)]: false }
+            : { [tag]: true }
+        }
+      }
+      else if (regionName.startsWith('#tags=')) {
+        const tags = regionName.slice('#tags='.length).split(';')
+        incTags = {}
+        for (const tag of tags) {
+          if (tag && tag !== '!') {
+            incTags[tag.startsWith('!') ? tag.slice(1) : tag] = !tag.startsWith('!')
+          }
+        }
+        if (Object.keys(incTags).length === 0) {
+          incTags = null
+        }
+      }
+
+      if (incTags) {
+        const includedLines = filterLinesByTags(lines, incTags, src)
+        content = dedent(includedLines.join('\n'))
+      }
+    }
+    else {
+      const region = findRegion(lines, regionName.slice(1))
+      if (region) {
+        content = dedent(
+          lines
+            .slice(region.start, region.end)
+            .filter(l => !(region.re.start.test(l) || region.re.end.test(l)))
+            .join('\n'),
+        )
+      }
     }
   }
 
   return { content, filepath, lang, meta, src }
+}
+
+const TAG_DIRECTIVE_RE = /\b(?:tag|(e)nd)::(\S+?)\[\](?=$|[ \r])/m
+
+// The code of this function is an almost identical rewrite of the code of AsciidoctorJS:
+// https://github.com/asciidoctor/asciidoctor.js/blob/07c162c987ef6284274cb95fb01a0357b150d4c4/packages/core/src/reader.js#L1658
+function filterLinesByTags(lines: ReadonlyArray<string>, incTags: Record<string, boolean>, sourceFile: string): ReadonlyArray<string> {
+  const tags = { ...incTags }
+  let select: boolean | undefined
+  let baseSelect: boolean | undefined
+  let wildcard: boolean | undefined
+  if ('**' in tags) {
+    select = baseSelect = tags['**']
+    delete tags['**']
+    if ('*' in tags) {
+      wildcard = tags['*']
+      delete tags['*']
+    }
+    else if (!select && Object.values(tags)[0] === false) {
+      wildcard = true
+    }
+  }
+  else if ('*' in tags) {
+    if (Object.keys(tags)[0] === '*') {
+      select = baseSelect = !(wildcard = tags['*'])
+    }
+    else {
+      select = baseSelect = false
+      wildcard = tags['*']
+    }
+    delete tags['*']
+  }
+  else {
+    select = baseSelect = !Object.values(tags).includes(true)
+  }
+
+  const includedLines: Array<string> = []
+  const tagStack: Array<{
+    tag: string
+    select: boolean
+    lineNumber: number
+  }> = []
+  const tagsSelected = new Set<string>()
+  let activeTag: string | null = null
+
+  for (let idx = 0; idx < lines.length; idx++) {
+    const lineNumber = idx + 1
+    const line = lines[idx]
+    if (line.includes('::') && line.includes('[]')) {
+      const tagDirectiveResult = TAG_DIRECTIVE_RE.exec(line)
+      if (tagDirectiveResult) {
+        const [, isEnd, thisTag] = tagDirectiveResult
+        if (isEnd) {
+          if (thisTag === activeTag) {
+            tagStack.pop()
+            if (tagStack.length === 0) {
+              activeTag = null
+              select = baseSelect
+            }
+            else {
+              activeTag = tagStack[tagStack.length - 1].tag
+              select = tagStack[tagStack.length - 1].select
+            }
+          }
+          else if (thisTag in tags) {
+            const si = tagStack.findLastIndex(({ tag }) => tag === thisTag)
+            if (si >= 0) {
+              tagStack.splice(si, 1)
+              console.warn(`mismatched end tag (expected '${activeTag}' but found '${thisTag}') at line ${lineNumber} of file ${sourceFile}`)
+            }
+            else {
+              console.warn(`unexpected end tag '${thisTag}' at line ${lineNumber} of file ${sourceFile}`)
+            }
+          }
+        }
+        else if (thisTag in tags) {
+          select = tags[thisTag]
+          if (select) {
+            tagsSelected.add(thisTag)
+          }
+          activeTag = thisTag
+          tagStack.push({ tag: activeTag, select, lineNumber })
+        }
+        else if (wildcard !== undefined) {
+          select = activeTag && !select ? false : wildcard
+          activeTag = thisTag
+          tagStack.push({ tag: thisTag, select, lineNumber })
+        }
+        continue
+      }
+    }
+    if (select) {
+      includedLines.push(line)
+    }
+  }
+
+  for (const stackElement of tagStack) {
+    console.warn(
+      `detected unclosed tag '${stackElement.tag}' starting at line ${stackElement.lineNumber} of file ${sourceFile}`,
+    )
+  }
+
+  const missingTags = Object.entries(tags)
+    .filter(([, v]) => v)
+    .map(([k]) => k)
+    .filter(k => !tagsSelected.has(k))
+  if (missingTags.length > 0) {
+    console.warn(`tag${missingTags.length > 1 ? 's' : ''} '${missingTags.join(', ')}' not found in file ${sourceFile}`)
+  }
+
+  return includedLines
 }
 
 export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
