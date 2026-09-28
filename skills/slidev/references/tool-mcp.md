@@ -5,7 +5,7 @@ description: Built-in MCP server for AI agents to inspect, edit, reorder, and na
 
 # MCP Server
 
-Slidev ships a built-in MCP (Model Context Protocol) server exposing structured tools to read, edit, reorder, and navigate a deck. Prefer these tools over raw text edits for slide-level operations (update/insert/remove/move) — they handle Slidev's compound separators correctly and hot-reload the presentation.
+Slidev ships a built-in MCP (Model Context Protocol) server exposing structured tools to read, edit, reorder, and navigate a deck. When available, prefer these tools over raw text edits for slide-level operations (update/insert/remove/move) — they handle Slidev's compound separators correctly and hot-reload the presentation.
 
 ## Usage
 
@@ -16,9 +16,14 @@ http://localhost:<port>/__mcp
 ```
 
 ```bash
-# e.g. for Claude Code
+# Claude Code
 claude mcp add --transport http slidev http://localhost:3030/__mcp
+
+# Codex
+codex mcp add slidev --url http://localhost:3030/__mcp
 ```
+
+Use the port reported by the dev server.
 
 Standalone over stdio (no dev server, operates on files directly):
 
@@ -38,6 +43,10 @@ slidev mcp [entry]
 | `slidev-remove-slide` | Remove a slide |
 | `slidev-move-slide` | Move a slide before/after another to reorder the deck |
 | `slidev-goto-slide` | Navigate the live presentation to a slide (dev server only) |
+
+## Preview
+
+`slidev-goto-slide` accepts a 1-based `no` and an optional `clicks` count (default 0). It navigates all connected browsers but returns no screenshot. Inspect the resulting slide with available browser tools, including an agent's built-in browser when available. Stdio mode has no live navigation.
 
 ## Behavior
 
