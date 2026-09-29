@@ -47,3 +47,34 @@ it('resolves snippet imports before magic move validation', async () => {
   expect(watched).toHaveLength(1)
   expect(watched[0]).toEqual(new Set([0]))
 })
+
+it('keeps step languages containing `#` or `+`', async () => {
+  const md = MarkdownExit({ html: true })
+
+  md.use(MarkdownItCodeblocks, {
+    data: {
+      config: { lineNumbers: false },
+    },
+    utils: {
+      shiki,
+      shikiOptions: { theme: 'nord' },
+    },
+  } as any, [])
+
+  const result = await md.renderAsync([
+    '````md magic-move',
+    '```c#',
+    'var a = 1;',
+    '```',
+    '```c++',
+    'int a = 1;',
+    '```',
+    '````',
+  ].join('\n'))
+
+  const encodedSteps = result.match(/steps-lz=([^ ]+)/)?.[1]?.slice(1, -1)
+  expect(encodedSteps).toBeTruthy()
+
+  const steps = JSON.parse(lz.decompressFromBase64(encodedSteps!)!) as Array<{ lang: string }>
+  expect(steps.map(step => step.lang)).toEqual(['c#', 'c++'])
+})
