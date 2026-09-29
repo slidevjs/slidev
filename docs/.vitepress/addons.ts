@@ -336,6 +336,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
   },
+  {
+    id: 'slidev-addon-archify-explorer',
+    name: 'Archify Explorer',
+    description: 'Open interactive Archify diagrams from static previews in Slidev.',
+    tags: ['Diagram', 'Integration'],
+    author: {
+      name: 'Sergio Valverde',
+      link: 'https://github.com/svg153',
+    },
+    repo: 'https://github.com/svg153/slidev-archify-explorer',
+  },
   // Add yours here!
   {
     id: '',
