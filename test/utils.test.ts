@@ -65,6 +65,16 @@ describe('utils', () => {
     ).toMatchSnapshot()
   })
 
+  it('google-fonts with quoted family names', () => {
+    expect(
+      generateGoogleFontsUrl({
+        webfonts: ['"Helvetica Neue"', '\'PT Serif\''],
+        weights: ['400'],
+        provider: 'google',
+      } as ResolvedFontOptions),
+    ).toBe('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400&family=PT+Serif:wght@400&display=swap')
+  })
+
   it('coollabs-fonts', () => {
     expect(
       generateCoollabsFontsUrl({
