@@ -6,6 +6,7 @@ import { currentCamera, showRecordingDialog } from '../state'
 import DevicesSelectors from './DevicesSelectors.vue'
 import IconButton from './IconButton.vue'
 import MenuButton from './MenuButton.vue'
+import VideoFormat from './VideoFormat.vue'
 
 const {
   recording,
@@ -59,7 +60,11 @@ onMounted(() => {
       </IconButton>
     </template>
     <template #menu>
-      <DevicesSelectors />
+      <DevicesSelectors>
+        <template #video-after>
+          <VideoFormat />
+        </template>
+      </DevicesSelectors>
     </template>
   </MenuButton>
 </template>
