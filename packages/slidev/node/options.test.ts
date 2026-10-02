@@ -45,6 +45,7 @@ describe('resolveOptions', () => {
       clientRoot: '/client',
       userPkgJson: {},
       userRoot: '/project',
+      userProjectRoot: '/project',
       userWorkspaceRoot: '/workspace',
     })
     mocks.resolveTheme.mockResolvedValue(['slidev-theme-test', '/theme'])
@@ -114,6 +115,7 @@ describe('resolveOptions', () => {
     expect(mocks.load).toHaveBeenNthCalledWith(1, {
       allowedRoots: ['/workspace', '/project'],
       roots: ['/project'],
+      setupRoots: ['/project'],
       userRoot: '/project',
     }, '/project/slides.md', undefined, 'dev')
     expect(mocks.resolveTheme).toHaveBeenCalledWith('bootstrap', '/project/slides.md')
@@ -127,6 +129,7 @@ describe('resolveOptions', () => {
     expect(mocks.load).toHaveBeenNthCalledWith(2, {
       allowedRoots: ['/workspace', '/theme', '/addon', '/project'],
       roots: ['/theme', '/addon', '/project'],
+      setupRoots: ['/theme', '/addon', '/project'],
       userRoot: '/project',
     }, '/project/slides.md', undefined, 'dev')
     expect(mocks.resolveConfig).toHaveBeenNthCalledWith(
@@ -140,6 +143,7 @@ describe('resolveOptions', () => {
     expect(mocks.resolveAddons).toHaveBeenCalledTimes(1)
     expect(mocks.resolveConfig).toHaveBeenCalledTimes(2)
     expect(options.roots).toEqual(['/theme', '/addon', '/project'])
+    expect(options.setupRoots).toEqual(['/theme', '/addon', '/project'])
     expect(options.data.config).toBe(finalConfig)
     expect(options.data.config).toMatchObject({
       addons: ['slidev-addon-bootstrap'],
@@ -151,5 +155,40 @@ describe('resolveOptions', () => {
     expect(options.data.config.theme).toBe(options.themeRaw)
     expect(options.data.headmatter).toEqual(reloadedData.headmatter)
     expect(options.data.slides).toEqual(reloadedData.slides)
+  })
+
+  it('looks up setup files in the project root when the entry is in a subdirectory', async () => {
+    mocks.resolveEntry.mockResolvedValue('/project/slides/deck.md')
+    mocks.getRoots.mockResolvedValue({
+      clientRoot: '/client',
+      userPkgJson: {},
+      userRoot: '/project/slides',
+      userProjectRoot: '/project',
+      userWorkspaceRoot: '/workspace',
+    })
+    mocks.load.mockResolvedValue({ headmatter: {}, slides: [] })
+
+    const options = await resolveOptions({ entry: '/project/slides/deck.md' }, 'dev')
+
+    // `roots` is unchanged: generically named directories keep resolving
+    // relative to the entry only
+    expect(options.roots).toEqual(['/theme', '/addon', '/project/slides'])
+    // `setup/*` is additionally read from the project root, at a lower
+    // precedence than the entry's own directory
+    expect(options.setupRoots).toEqual(['/theme', '/addon', '/project', '/project/slides'])
+    expect(mocks.load).toHaveBeenNthCalledWith(1, {
+      allowedRoots: ['/workspace', '/project/slides'],
+      roots: ['/project/slides'],
+      setupRoots: ['/project', '/project/slides'],
+      userRoot: '/project/slides',
+    }, '/project/slides/deck.md', undefined, 'dev')
+  })
+
+  it('keeps setupRoots equal to roots when the entry sits in the project root', async () => {
+    mocks.load.mockResolvedValue({ headmatter: {}, slides: [] })
+
+    const options = await resolveOptions({ entry: '/project/slides.md' }, 'dev')
+
+    expect(options.setupRoots).toEqual(options.roots)
   })
 })

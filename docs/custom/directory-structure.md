@@ -19,6 +19,8 @@ your-slidev/
 
 All of them are optional.
 
+These paths are resolved relative to the directory holding your slides entry, so if you run `slidev slides/deck.md` they are looked up inside `slides/`. The `setup/` directory is the exception: it is also read from your project root (the closest directory with a `package.json`), so shared hooks keep working when the entry lives in a subdirectory. A `setup/` file next to the entry takes precedence over one in the project root.
+
 ## Components
 
 Pattern: `./components/*.{vue,js,ts,jsx,tsx,md}`

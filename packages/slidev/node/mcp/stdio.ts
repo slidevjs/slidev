@@ -1,3 +1,4 @@
+import { uniq } from '@antfu/utils'
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio'
 import { version } from '../../package.json'
 import { parser } from '../parser'
@@ -12,13 +13,17 @@ import { createSlidevMcpServer } from './server'
  * else may be printed to it.
  */
 export async function startMcpStdioServer(entry: string) {
-  const { userRoot } = await getRoots(entry)
+  const { userRoot, userProjectRoot } = await getRoots(entry)
   const server = createSlidevMcpServer({
     version,
     entry,
     // Reload from disk on every tool call, as the files may be edited
     // externally between calls
-    getData: () => parser.load({ userRoot, roots: [userRoot] }, entry),
+    getData: () => parser.load({
+      userRoot,
+      roots: [userRoot],
+      setupRoots: uniq([userProjectRoot, userRoot]),
+    }, entry),
   })
   await server.connect(new StdioServerTransport())
 }

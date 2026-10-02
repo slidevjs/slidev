@@ -5,9 +5,9 @@ function createSetupTemplate(name: string): VirtualModuleTemplate {
   const id = `/@slidev/setups/${name}`
   return {
     id,
-    getContent({ roots }) {
+    getContent({ setupRoots }) {
       const imports: string[] = []
-      const globs = roots.map((root) => {
+      const globs = setupRoots.map((root) => {
         const glob = join(root, `setup/${name}.{ts,js,mts,mjs}`)
         const importName = `__slidev_setup_${imports.length}`
         imports.push(`import ${importName} from ${JSON.stringify(this.makeAbsoluteImportGlob([glob], { import: 'default' }))}`)
