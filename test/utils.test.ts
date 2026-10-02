@@ -21,6 +21,20 @@ describe('utils', () => {
     expect(parseRangeString(10, '1,2-3,5')).toEqual([1, 2, 3, 5])
     expect(parseRangeString(10, '1;2-3;5')).toEqual([1, 2, 3, 5])
     expect(parseRangeString(10, '6-')).toEqual([6, 7, 8, 9, 10])
+    expect(parseRangeString(5, ' 1 ; 3 - 4 ')).toEqual([1, 3, 4])
+  })
+
+  it('rejects invalid page-range fragments', () => {
+    expect(parseRangeString(5, '0,-3,abc,1.5,1e2,+2')).toEqual([])
+    expect(parseRangeString(5, '0-3,3-0,4-2')).toEqual([])
+    expect(parseRangeString(5, `${Number.MAX_SAFE_INTEGER + 1}`)).toEqual([])
+    expect(parseRangeString(5, `1-${Number.MAX_SAFE_INTEGER + 1}`)).toEqual([])
+  })
+
+  it('clamps page ranges before expanding them', () => {
+    expect(parseRangeString(5, '3-99')).toEqual([3, 4, 5])
+    expect(parseRangeString(5, `3-${Number.MAX_SAFE_INTEGER}`)).toEqual([3, 4, 5])
+    expect(parseRangeString(5, '9-')).toEqual([])
   })
 
   it('aspect-ratio', () => {
