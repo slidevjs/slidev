@@ -30,6 +30,14 @@ export interface NavOperations {
   go: (index: number) => void
   goFirst: () => void
   goLast: () => void
+  /** Navigate to the previous column in the 2D grid (no-op when not in grid mode) */
+  goLeft: () => void
+  /** Navigate to the next column in the 2D grid (no-op when not in grid mode) */
+  goRight: () => void
+  /** Navigate to the previous row in the current column (no-op when not in grid mode) */
+  goUp: () => void
+  /** Navigate to the next row in the current column (no-op when not in grid mode) */
+  goDown: () => void
   downloadPDF: () => Promise<void>
   toggleDark: () => void
   toggleOverview: () => void

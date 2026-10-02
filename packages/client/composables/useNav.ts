@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { slides } from '#slidev/slides'
 import { CLICKS_MAX, injectionSlidevContext } from '../constants'
 import { configs } from '../env'
+import { getGridTarget } from '../logic/grid'
 import { useRouteQuery } from '../logic/route'
 import { getSlide, getSlidePath } from '../logic/slides'
 import { getCurrentTransition } from '../logic/transition'
@@ -38,6 +39,13 @@ export interface SlidevContextNav {
   clicksStart: ComputedRef<number>
   clicksTotal: ComputedRef<number>
 
+  /** Whether the presentation uses a 2D grid layout (any slide has `nested: true`) */
+  hasGrid: ComputedRef<boolean>
+  /** Current column index in the 2D grid (0-indexed) */
+  currentGridCol: ComputedRef<number>
+  /** Current row index in the 2D grid (0-indexed) */
+  currentGridRow: ComputedRef<number>
+
   /** The table of content tree */
   tocTree: ComputedRef<TocItem[]>
   /** The direction of the navigation, 1 for forward, -1 for backward */
@@ -61,6 +69,14 @@ export interface SlidevContextNav {
   goFirst: () => Promise<void>
   /** Go to the last slide */
   goLast: () => Promise<void>
+  /** Go to the previous column in the 2D grid (no-op when not in grid mode) */
+  goLeft: () => Promise<void>
+  /** Go to the next column in the 2D grid (no-op when not in grid mode) */
+  goRight: () => Promise<void>
+  /** Go to the previous row in the current column (no-op when not in grid mode) */
+  goUp: () => Promise<void>
+  /** Go to the next row in the current column (no-op when not in grid mode) */
+  goDown: () => Promise<void>
 
   /** Enter presenter mode */
   enterPresenter: () => void
@@ -107,6 +123,10 @@ export function useNavBase(
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
   const currentLayout = computed(() => currentSlideRoute.value.meta?.layout || (currentSlideNo.value === 1 ? 'cover' : 'default'))
   const currentFrontmatter = computed(() => currentSlideRoute.value.meta.slide.frontmatter)
+
+  const hasGrid = computed(() => slides.value.some(s => (s.meta.slide?.gridRow ?? 0) > 0))
+  const currentGridCol = computed(() => currentSlideRoute.value.meta.slide?.gridCol ?? 0)
+  const currentGridRow = computed(() => currentSlideRoute.value.meta.slide?.gridRow ?? 0)
 
   const clicks = computed(() => clicksContext.value.current)
   const clicksStart = computed(() => clicksContext.value.clicksStart)
@@ -185,6 +205,19 @@ export function useNavBase(
     return go(total.value)
   }
 
+  async function goGrid(colDelta: number, rowDelta: number) {
+    if (!hasGrid.value)
+      return
+    const target = getGridTarget(slides.value, currentSlideNo.value, colDelta, rowDelta)
+    if (target)
+      await go(target.no, 0)
+  }
+
+  const goLeft = () => goGrid(-1, 0)
+  const goRight = () => goGrid(1, 0)
+  const goUp = () => goGrid(0, -1)
+  const goDown = () => goGrid(0, 1)
+
   async function go(no: number | string, clicks: number = 0, force = false) {
     hmrSkipTransition.value = false
     const pageChanged = currentSlideNo.value !== no
@@ -236,6 +269,9 @@ export function useNavBase(
     clicksTotal,
     hasNext,
     hasPrev,
+    hasGrid,
+    currentGridCol,
+    currentGridRow,
     tocTree,
     navDirection,
     openInEditor,
@@ -244,6 +280,10 @@ export function useNavBase(
     go,
     goLast,
     goFirst,
+    goLeft,
+    goRight,
+    goUp,
+    goDown,
     nextSlide,
     prevSlide,
     enterPresenter,
@@ -271,6 +311,10 @@ export function useFixedNav(
     goFirst: noop,
     goLast: noop,
     go: noop,
+    goLeft: noop,
+    goRight: noop,
+    goUp: noop,
+    goDown: noop,
   }
 }
 

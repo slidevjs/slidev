@@ -32,6 +32,8 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 | -                                   | <carbon-settings-adjust class="inline-icon-btn"/>                                     | More options                                                    |
 | <kbd>g</kbd>                        | -                                                                                     | Show goto...                                                    |
 
+For decks with nested slides, the arrow keys navigate the slide grid: <kbd>right</kbd> and <kbd>left</kbd> move between columns, while <kbd>down</kbd> and <kbd>up</kbd> move within the current column. Use <kbd>space</kbd> and <kbd>shift</kbd> + <kbd>space</kbd> to move linearly through animations and slides.
+
 > You can [configure the shortcuts](../custom/config-shortcuts).
 
 ## Quick Overview {#quick-overview}
@@ -79,7 +81,7 @@ controls rounded shadow></video>
 
 You can visit an overview of all of your slides by first opening the [Quick Overview panel](#quick-overview) and then clicking the <carbon-list-boxes class="inline-icon-btn"/> on the top right, or by visiting `http://localhost:<port>/overview` directly.
 
-The overview page gives you a linear list of all your slides, with all of your notes on the side. You can double-click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.
+The overview page gives you a list of all your slides, with all of your notes on the side. For decks with nested slides, the overview follows the same two-dimensional grid as the presentation. You can double-click on the notes to edit the notes directly, and drag the clicks sliders to preview the steps in your slides.
 
 ## Notes Editor {#notes-editor}
 
