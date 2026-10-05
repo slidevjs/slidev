@@ -198,3 +198,13 @@ Components from these sources are auto-imported:
 4. `./components/` directory
 
 No import statements needed.
+
+## Custom Components
+
+Create a Vue file such as `components/InteractiveDiagram.vue` to build a reusable visual or interactive element. Components in this directory are auto-imported, so use it directly in a slide:
+
+```md
+<InteractiveDiagram :step="2" />
+```
+
+Use props, slots, and Vue state as needed for the presentation. See [Writing Components](https://sli.dev/guide/component#write) for the directory convention and Vue documentation, or [custom layouts](core-layouts.md#custom-layouts) when the component should wrap a whole slide.

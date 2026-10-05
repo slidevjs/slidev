@@ -29,6 +29,10 @@ For example, register it with your agent:
 claude mcp add --transport http slidev http://localhost:3030/__mcp
 ```
 
+```bash [Codex]
+codex mcp add slidev --url http://localhost:3030/__mcp
+```
+
 ```json [VS Code / Cursor]
 {
   "mcpServers": {
@@ -42,7 +46,7 @@ claude mcp add --transport http slidev http://localhost:3030/__mcp
 
 :::
 
-With the dev server connected, agents can also use the `slidev-goto-slide` tool to navigate all connected browsers to a slide — handy for visually verifying a slide right after editing it. Edits made through the MCP tools are written back to your markdown files and hot-reloaded instantly.
+Use the port reported by your dev server. With the dev server connected, agents can also use the `slidev-goto-slide` tool to navigate all connected browsers to a slide and an optional click state. The tool returns a navigation result, not a screenshot; use the agent's browser tools to inspect the rendered slide. Edits made through the MCP tools are written back to your markdown files and hot-reloaded instantly.
 
 To disable the endpoint, set in your headmatter:
 
