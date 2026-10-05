@@ -102,7 +102,6 @@ const resizeStartRowSize = ref(280)
 
 const RESIZER_LIMITS = {
   minNotesWidth: 240,
-  maxNotesWidth: 720,
   minNotesRowSize: 160,
   maxNotesWidthRatio: 0.7,
   maxNotesRowHeightRatio: 0.75,
@@ -120,10 +119,7 @@ const isNotesOnBottom = computed(() => presenterLayout.value === 1 && !isLayout1
 function clampNotesWidth(width: number) {
   if (!Number.isFinite(width))
     return RESIZER_LIMITS.minNotesWidth
-  return Math.max(
-    RESIZER_LIMITS.minNotesWidth,
-    Math.min(RESIZER_LIMITS.maxNotesWidth, Math.round(width)),
-  )
+  return Math.max(RESIZER_LIMITS.minNotesWidth, Math.round(width))
 }
 
 function updateNotesWidthFromPointer(clientX: number) {
