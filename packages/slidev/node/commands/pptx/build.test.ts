@@ -14,6 +14,7 @@ import { buildPptx } from './build'
  */
 
 const BLACK = { r: 0, g: 0, b: 0, a: 1 }
+const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg=='
 
 function slide(nodes: SlideIr['nodes']): SlideIr {
   return { no: 1, clickIndex: 0, containerId: '001-01', size: { w: 980, h: 552 }, nodes }
@@ -24,6 +25,26 @@ async function slideXml(ir: SlideIr[]): Promise<string> {
   const zip = await JSZip.loadAsync(buffer)
   return await zip.file('ppt/slides/slide1.xml')!.async('string')
 }
+
+describe('native image sizing and opacity', () => {
+  it('writes a cropped picture with native alpha and unchanged source bytes', async () => {
+    const buffer = await buildPptx(PptxGenJS, [slide([{
+      kind: 'image',
+      sourceId: 1,
+      data: PNG,
+      rect: { x: 20, y: 30, w: 180, h: 200 },
+      crop: { x: 220, y: 0, w: 400, h: 200 },
+      opacity: 0.25,
+    }])], { width: 980, height: 552 })
+    const zip = await JSZip.loadAsync(buffer)
+    const xml = await zip.file('ppt/slides/slide1.xml')!.async('string')
+    expect(xml).toContain('<a:srcRect l="55000" r="0" t="0" b="0"/>')
+    expect(xml).toContain('<a:alphaModFix amt="25000"/>')
+    expect(xml).toContain('<a:ext cx="1714500" cy="1905000"/>')
+    const media = Object.values(zip.files).find(file => file.name.endsWith('.png'))!
+    expect(await media.async('base64')).toBe(PNG.split(',')[1])
+  })
+})
 
 function textNode(runs: SlideIr['nodes'][number] extends never ? never : any): any {
   return {

@@ -267,6 +267,8 @@ function addPicture(slide: PptxGenJS.Slide, node: IrImage | IrRaster): void {
     h: inch(node.rect.h),
   }
   if (node.kind === 'image') {
+    if (node.opacity !== undefined)
+      options.transparency = Math.round((1 - node.opacity) * 100)
     if (node.alt)
       options.altText = node.alt
     if (node.link)

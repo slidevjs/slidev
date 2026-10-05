@@ -352,8 +352,26 @@ export function collectSnapshot(options: {
       if (el.classList.contains('katex'))
         record.isMath = true
       if (el.tagName.toUpperCase() === 'IMG') {
-        record.src = (el as HTMLImageElement).currentSrc || (el as HTMLImageElement).src
-        const alt = (el as HTMLImageElement).alt
+        const image = el as HTMLImageElement
+        record.src = image.currentSrc || image.src
+        const inset = (a: string, b: string) => (Number.parseFloat(a) || 0) + (Number.parseFloat(b) || 0)
+        const left = inset(computed.borderLeftWidth, computed.paddingLeft)
+        const right = inset(computed.borderRightWidth, computed.paddingRight)
+        const top = inset(computed.borderTopWidth, computed.paddingTop)
+        const bottom = inset(computed.borderBottomWidth, computed.paddingBottom)
+        record.image = {
+          width: image.naturalWidth,
+          height: image.naturalHeight,
+          contentRect: {
+            x: record.rect.x + left,
+            y: record.rect.y + top,
+            w: Math.max(0, record.rect.w - left - right),
+            h: Math.max(0, record.rect.h - top - bottom),
+          },
+          fit: computed.objectFit,
+          position: computed.objectPosition,
+        }
+        const alt = image.alt
         if (alt)
           record.alt = alt
       }

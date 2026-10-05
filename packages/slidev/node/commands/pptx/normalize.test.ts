@@ -1,4 +1,4 @@
-import type { IrBox, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
+import type { IrBox, IrImage, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
 import { describe, expect, it } from 'vitest'
 import { parseColor } from './color'
 import { normalize, parseLength, parseShadow, rasterReasonFor } from './normalize'
@@ -1016,6 +1016,80 @@ describe('an image cut off by the slide edge is cropped, not squashed', () => {
     const nodes = [el(0, -1, 'IMG', 0, { rect: { x: 10, y: 10, w: 100, h: 50 }, src: 'a.png' })]
     const [image] = run(nodes, [BASE_STYLE]).slides[0].nodes as any[]
     expect(image.crop).toBeUndefined()
+  })
+})
+
+describe('image fitting preserves the source picture', () => {
+  function image(fit: string, position = '50% 50%', extra: Partial<RawNode> = {}) {
+    const rect = { x: 20, y: 20, w: 200, h: 200 }
+    const node = el(0, -1, 'IMG', 0, {
+      rect,
+      src: 'photo.png',
+      image: { contentRect: rect, width: 400, height: 200, fit, position },
+      ...extra,
+    })
+    return run([node], [BASE_STYLE]).slides[0].nodes[0] as IrImage
+  }
+
+  it('crops cover to the requested side without stretching', () => {
+    const found = image('cover', '100% 50%')
+    expect(found.rect).toEqual({ x: 20, y: 20, w: 200, h: 200 })
+    expect(found.crop).toEqual({ x: 200, y: 0, w: 400, h: 200 })
+    expect(found.data).toBe('photo.png')
+  })
+
+  it('positions contained content inside its letterbox', () => {
+    const found = image('contain', '50% 100%')
+    expect(found.rect).toEqual({ x: 20, y: 120, w: 200, h: 100 })
+    expect(found.crop).toBeUndefined()
+  })
+
+  it('leaves fill stretched and keeps none at its intrinsic size', () => {
+    expect(image('fill').crop).toBeUndefined()
+    expect(image('none').crop).toEqual({ x: 100, y: 0, w: 400, h: 200 })
+  })
+
+  it('does not enlarge a scale-down image', () => {
+    const small = { contentRect: { x: 20, y: 20, w: 200, h: 200 }, width: 100, height: 50, fit: 'scale-down', position: '50% 50%' }
+    expect(image('scale-down', undefined, { image: small }).rect).toEqual({ x: 70, y: 95, w: 100, h: 50 })
+    expect(image('scale-down').rect).toEqual({ x: 20, y: 70, w: 200, h: 100 })
+  })
+
+  it('composes a computed edge offset with the slide-edge crop', () => {
+    const contentRect = { x: -20, y: 20, w: 200, h: 200 }
+    const found = image('cover', undefined, {
+      rect: contentRect,
+      image: { contentRect, width: 400, height: 200, fit: 'cover', position: 'calc(100% - 10px) 50%' },
+    })
+    expect(found.rect).toEqual({ x: 0, y: 20, w: 170, h: 200 })
+    expect(found.crop).toEqual({ x: 230, y: 0, w: 400, h: 200 })
+  })
+
+  it('uses the content box rather than painting over padding and borders', () => {
+    const contentRect = { x: 35, y: 40, w: 170, h: 160 }
+    const found = image('contain', undefined, {
+      image: { contentRect, width: 400, height: 200, fit: 'contain', position: '0% 0%' },
+      opacity: 0.25,
+    })
+    expect(found.rect).toEqual({ x: 35, y: 40, w: 170, h: 85 })
+    expect(found.opacity).toBe(0.25)
+  })
+
+  it('omits an object displaced entirely outside its content box', () => {
+    expect(image('fill', '200px 0px')).toBeUndefined()
+  })
+
+  it('requests a screenshot for CSS math it cannot represent natively', () => {
+    const found = image('cover', 'min(10%, 20px) 50%')
+    expect(found.screenshot?.required).toBe(true)
+    expect(found.rect).toEqual({ x: 20, y: 20, w: 200, h: 200 })
+    expect(found.crop).toBeUndefined()
+  })
+
+  it('clips pixel-positioned content to its own content box', () => {
+    const found = image('fill', '10px 20px')
+    expect(found.rect).toEqual({ x: 30, y: 40, w: 190, h: 180 })
+    expect(found.crop).toEqual({ x: 0, y: 0, w: 200, h: 200 })
   })
 })
 

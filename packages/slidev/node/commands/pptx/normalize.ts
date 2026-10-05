@@ -122,6 +122,46 @@ export function clipToSlide(rect: Rect, size: { w: number, h: number }): Rect | 
   return { x, y, w: right - x, h: bottom - y }
 }
 
+/** Computed object-position uses percentages, pixels, or a linear calc of both. */
+function objectOffset(value: string, free: number): number | undefined {
+  const expression = value.startsWith('calc(') ? value.slice(5, -1) : value
+  const terms = expression.replace(/\s/g, '').match(/[+-]?(?:\d*\.)?\d+(?:%|px)/g)
+  if (!terms || terms.join('') !== expression.replace(/\s/g, ''))
+    return undefined
+  return terms.reduce((offset, term) => offset + Number.parseFloat(term) * (term.endsWith('%') ? free / 100 : 1), 0)
+}
+
+/** Full fitted object, before clipping it to the image's own content box. */
+function imageObjectRect(node: RawNode): Rect | undefined {
+  const image = node.image
+  if (!image)
+    return node.rect
+  const content = image.contentRect
+  let w = content.w
+  let h = content.h
+  if (image.fit !== 'fill' && image.width > 0 && image.height > 0) {
+    const contain = Math.min(w / image.width, h / image.height)
+    const factor = image.fit === 'cover'
+      ? Math.max(w / image.width, h / image.height)
+      : image.fit === 'none' ? 1 : image.fit === 'scale-down' ? Math.min(1, contain) : contain
+    w = image.width * factor
+    h = image.height * factor
+  }
+  const positions = image.position.match(/calc\([^)]*\)|\S+/g) ?? []
+  if (positions.length !== 2)
+    return undefined
+  const x = objectOffset(positions[0], content.w - w)
+  const y = objectOffset(positions[1], content.h - h)
+  if (x === undefined || y === undefined)
+    return undefined
+  return {
+    x: content.x + x,
+    y: content.y + y,
+    w,
+    h,
+  }
+}
+
 /** Whether two rects share any area at all. */
 function overlaps(a: Rect, b: Rect): boolean {
   return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
@@ -560,13 +600,23 @@ function buildSlideIr(
   function emitImage(node: RawNode): void {
     if (!node.src)
       return
-    // Clipped like every other shape, or a partly off-slide image lands outside the canvas.
-    const rect = clipToSlide(node.rect, size)
+    const fitted = imageObjectRect(node)
+    // Valid CSS math outside the linear forms above still exports through the
+    // existing screenshot path, without aborting the rest of the deck.
+    const object = fitted ?? node.rect
+    const content = fitted ? (node.image?.contentRect ?? node.rect) : node.rect
+    const x = Math.max(object.x, content.x)
+    const y = Math.max(object.y, content.y)
+    const w = Math.min(object.x + object.w, content.x + content.w) - x
+    const h = Math.min(object.y + object.h, content.y + content.h) - y
+    // CSS clips the fitted object to its content box, then the slide clips it again.
+    const rect = clipToSlide({ x, y, w, h }, size)
     if (!rect)
       return
     // Show the visible part of an oversized image and crop the rest, as
     // `overflow: hidden` does; scaling it to fit would compress it.
-    const clipped = rect.w !== node.rect.w || rect.h !== node.rect.h
+    const clipped = rect.w !== object.w || rect.h !== object.h
+    const screenshot = clipToSlide(node.rect, size)
     push({
       kind: 'image',
       sourceId: node.id,
@@ -574,13 +624,17 @@ function buildSlideIr(
       data: node.src,
       alt: node.alt,
       link: linkFor(node),
+      opacity: node.opacity,
+      ...(screenshot
+        ? { screenshot: { rect: screenshot, clip: { x: screenshot.x - node.rect.x, y: screenshot.y - node.rect.y, w: screenshot.w, h: screenshot.h }, required: !fitted } }
+        : {}),
       ...(clipped
         ? {
             crop: {
-              x: rect.x - node.rect.x,
-              y: rect.y - node.rect.y,
-              w: node.rect.w,
-              h: node.rect.h,
+              x: rect.x - object.x,
+              y: rect.y - object.y,
+              w: object.w,
+              h: object.h,
             },
           }
         : {}),
