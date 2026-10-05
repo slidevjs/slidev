@@ -9,9 +9,11 @@ Export presentations to PDF, PPTX, PNG, or Markdown.
 
 ## Browser Exporter
 
-Access at `http://localhost:3030/export`:
+Open `/export` at the running dev server URL (usually `http://localhost:3030/export`):
 - Select format and options
 - Preview and download
+
+Browser PPTX export produces image slides. Use the CLI for editable PPTX.
 
 ## CLI Export
 
@@ -36,6 +38,8 @@ slidev export --format pptx-editable  # native shapes, selectable text
 
 `pptx-editable` measures the rendered slides and rebuilds them as PowerPoint shapes. SVG (including Mermaid), canvas, iframes, KaTeX formulas, gradients and CSS filters stay pictures, and any slide that cannot be rebuilt falls back to the image export on its own. Fonts are named, not embedded. `--per-slide` is not supported with it.
 
+Choose the format according to the requested appearance and editability. Inspect the exported PPTX in an available presentation viewer, including representative text and complex visuals, and check export warnings for image fallbacks. Browser preview alone does not establish the PPTX's rendering or which elements remain editable.
+
 ### PNG Export
 
 ```bash
@@ -53,7 +57,7 @@ slidev export --format md
 
 ### With Click Steps
 
-Export each click as separate page:
+Export click states as separate static slides/pages, not native PowerPoint animations. This is enabled by default for both PPTX formats; pass `--with-clicks false` to disable it. For other formats, enable it with:
 ```bash
 slidev export --with-clicks
 ```
@@ -128,16 +132,20 @@ export:
 
 ## Troubleshooting
 
+### Browser Errors
+
+If `playwright-chromium` is missing, install it with the project's package manager. A missing browser executable, failed asset, or navigation timeout has a different cause; inspect the error before changing dependencies. Use the browser installation command below or `--executable-path` when the error concerns the browser executable.
+
 ### Missing Content
 
-Increase wait time:
+Check for failed assets and rendering errors. If content needs more time to finish, increase wait time:
 ```bash
 slidev export --wait 3000 --timeout 60000
 ```
 
 ### Wrong Global Layer State
 
-Use `--per-slide` or use `slide-top.vue` instead of `global-top.vue`.
+For formats that support it, use `--per-slide`. For `pptx-editable`, which does not support this flag, use `slide-top.vue` instead of `global-top.vue` when the content needs per-slide context.
 
 ### Broken Emojis
 

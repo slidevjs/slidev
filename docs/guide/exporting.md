@@ -14,7 +14,7 @@ However, interactive features in your slides may not be available in the exporte
 
 Slidev provides a UI in the browser for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
 
-In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file.
+In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file. For editable PPTX, use the [CLI](#editable-pptx).
 
 Note that browsers other than **modern Chromium-based browsers** may not work well with the exporting UI. If you encounter any issues, please try use the CLI instead.
 
@@ -82,7 +82,7 @@ $ slidev export --format pptx-editable
 
 The slides are measured in the browser and rebuilt as PowerPoint shapes, so text is selectable and editable, boxes can be moved and recolored, and presenter notes are carried over as usual. This does not replace `--format pptx`, which stays the most visually faithful option.
 
-What stays a picture: anything PowerPoint has no equivalent for. That includes SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, KaTeX formulas, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
+The current exporter captures some content as pictures, including SVG (so Mermaid diagrams and icons), `<canvas>`, `<iframe>`, videos, KaTeX formulas, CSS gradients, `filter`, `backdrop-filter`, `mix-blend-mode` and `clip-path`. Only the element concerned becomes a picture, not the whole slide.
 
 If a slide cannot be rebuilt safely, or ends up mostly pictures anyway, it falls back to the same image export used by `--format pptx`, for that slide alone, and the reason is printed.
 
@@ -92,7 +92,9 @@ Worth knowing before you send the file on:
 - PowerPoint does not measure text exactly as a browser does, so a long paragraph may wrap onto a different number of lines.
 - Decorations a theme draws with `::before` or `::after` in normal flow are left out, and the export lists them. Code block line numbers are one of these: they come from a CSS counter, which has no text and no box that a computed style can report.
 
-Like `--format pptx`, this exports one slide per click step unless you pass `--with-clicks false`. `--per-slide` is not supported with it.
+Like `--format pptx`, this exports one slide per click step unless you pass `--with-clicks false`. These are separate static slides, not native PowerPoint animations. `--per-slide` is not supported with it.
+
+Review the exported file in your presentation viewer, including text wrapping, complex visuals, and the elements you need to edit. Check the export warnings for image fallbacks; a correct browser preview does not guarantee identical PowerPoint rendering.
 
 ### PNGs and Markdown
 
@@ -114,7 +116,7 @@ Here are some common options you can use with the `slidev export` command. For a
 
 ### Export Clicks Steps
 
-By default, Slidev exports one page per slide with clicks animations disabled. If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
+PDF, PNG, and Markdown exports default to one page per slide with click animations disabled. Both PPTX formats default to a separate slide for each click step; pass `--with-clicks false` to disable this. To enable click steps for other formats, pass the `--with-clicks` option:
 
 ```bash
 $ slidev export --with-clicks
@@ -240,6 +242,10 @@ Here is a basic example that covers all backgrounds in the application:
 ```
 
 ## Troubleshooting
+
+### Browser Errors
+
+If the error reports a missing `playwright-chromium` package, install the [CLI prerequisite](#cli). If the package is present but its browser executable is missing, install Chromium using Playwright or select an installed browser with [`--executable-path`](#executable-path). For navigation timeouts or failed assets, investigate the page and resources before reinstalling dependencies.
 
 ### Missing Content or Animation not Finished
 
