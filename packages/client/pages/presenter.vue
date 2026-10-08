@@ -395,6 +395,7 @@ onMounted(() => {
             class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
             :style="{ fontSize: `${presenterNotesFontSize}em` }"
             :clicks-context="clicksContext"
+            auto-scroll
           />
           <div border-t border-main />
           <div class="py-1 px-2 text-sm transition" :class="inFocus ? '' : 'op25'">

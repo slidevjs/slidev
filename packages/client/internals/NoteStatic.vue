@@ -7,6 +7,7 @@ const props = defineProps<{
   no: number
   class?: string
   clicksContext?: ClicksContext
+  autoScroll?: boolean
 }>()
 
 const { info } = useSlideInfo(props.no)
@@ -18,5 +19,6 @@ const { info } = useSlideInfo(props.no)
     :note="info?.note"
     :note-html="info?.noteHTML"
     :clicks-context="clicksContext"
+    :auto-scroll="autoScroll"
   />
 </template>
