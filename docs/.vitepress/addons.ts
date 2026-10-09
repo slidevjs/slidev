@@ -336,6 +336,39 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
   },
+  {
+    id: 'slidev-addon-audience-filter',
+    name: 'Audience Filter',
+    description: 'Show or hide slides per audience via showFor/hideFor frontmatter, with an audience switch in the presenter view.',
+    tags: ['Tool', 'Presenter'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-audience-filter',
+  },
+  {
+    id: 'slidev-addon-autofit',
+    name: 'Autofit',
+    description: 'Automatically scales slide content down until it fits, like the "shrink text on overflow" option in PowerPoint.',
+    tags: ['Layout'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-autofit',
+  },
+  {
+    id: 'slidev-addon-obs',
+    name: 'OBS',
+    description: 'Switch OBS Studio scenes per slide via obs-websocket (v4 and v5).',
+    tags: ['Integration', 'Tool'],
+    author: {
+      name: 'Denis Sowa',
+      link: 'https://github.com/L-C-P',
+    },
+    repo: 'https://github.com/L-C-P/slidev-addon-obs',
+  },
   // Add yours here!
   {
     id: '',
