@@ -16,7 +16,10 @@ import { initSharedState, onPatch, patch } from '../state/shared'
 
 export default function setupRoot() {
   const app = getCurrentInstance()!.appContext.app
-
+  document.documentElement.style.setProperty(
+    '--slidev-body-font',
+    configs.fonts[configs.fonts.body].join(', '),
+  )
   const context = reactive({
     nav: useNav(),
     configs,

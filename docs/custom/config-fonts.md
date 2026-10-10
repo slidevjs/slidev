@@ -20,6 +20,24 @@ And that's all.
 
 Fonts will be **imported automatically from a provider via CDN, by default it is [Google Fonts](https://fonts.google.com/)**. That means you can use any fonts available on Google Fonts directly.
 
+## Body Font
+
+- Options: `sans` | `serif` | `mono`
+- Default: `sans`
+
+By default, the base text of your slides uses the `sans` font. Set `fonts.body` to choose which font role the base text uses instead:
+
+```yaml
+---
+fonts:
+  # use the serif font for the base text
+  body: serif
+  serif: Robot Slab
+---
+```
+
+This only changes the base text. The `font-sans`, `font-serif` and `font-mono` utility classes keep using their own fonts.
+
 ## Local Fonts
 
 By default, Slidev assumes all the fonts specified via `fonts` configurations come from Google Fonts. If you want to use local fonts, specify the `fonts.local` to opt-out the auto-importing.
