@@ -39,4 +39,4 @@ $ slidev build --download
 When using the download option, you can also provide the export options via:
 
 - [CLI export options](/builtin/cli#export)
-- [Headmatter export options](/custom/#frontmatter-configures)
+- [Headmatter export options](/custom/#headmatter)
