@@ -108,6 +108,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   routerMode?: 'hash' | 'history' | 'memory'
   /**
+   * Ignore repeated forward navigation within this many milliseconds.
+   * The first advance is immediate. Set to 0 to disable.
+   *
+   * @default 0
+   */
+  advanceDebounce?: number
+  /**
    * Aspect ratio for slides
    * should be like `16/9` or `1:1`
    *

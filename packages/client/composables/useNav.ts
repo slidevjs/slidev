@@ -102,6 +102,20 @@ export function useNavBase(
 
   const navDirection = ref(0)
   const clicksDirection = ref(0)
+  let lastAdvance = Number.NEGATIVE_INFINITY
+
+  function acceptAdvance() {
+    const interval = configs.advanceDebounce
+    if (isPrint.value || !Number.isFinite(interval) || interval <= 0)
+      return true
+
+    const now = performance.now()
+    if (now - lastAdvance < interval)
+      return false
+
+    lastAdvance = now
+    return true
+  }
 
   const currentPath = computed(() => getSlidePath(currentSlideRoute.value, isPresenter.value))
   const currentSlideNo = computed(() => currentSlideRoute.value.no)
@@ -142,14 +156,17 @@ export function useNavBase(
   )
 
   async function next() {
+    if (!acceptAdvance())
+      return
     clicksDirection.value = 1
     if (clicksTotal.value <= queryClicks.value)
-      await nextSlide()
+      await advanceSlide()
     else
       queryClicks.value += 1
   }
 
   async function prev() {
+    lastAdvance = Number.NEGATIVE_INFINITY
     clicksDirection.value = -1
     if (queryClicks.value <= clicksStart.value)
       await prevSlide(true)
@@ -158,9 +175,16 @@ export function useNavBase(
   }
 
   async function nextSlide(lastClicks = false) {
+    if (!acceptAdvance())
+      return
+    await advanceSlide(lastClicks)
+  }
+
+  // Internal navigation must not consume or reset the suppression window.
+  async function advanceSlide(lastClicks = false) {
     clicksDirection.value = 1
     if (currentSlideNo.value < slides.value.length) {
-      await go(
+      await navigate(
         currentSlideNo.value + 1,
         lastClicks && !isPrint.value ? CLICKS_MAX : undefined,
       )
@@ -168,6 +192,7 @@ export function useNavBase(
   }
 
   async function prevSlide(lastClicks = false) {
+    lastAdvance = Number.NEGATIVE_INFINITY
     clicksDirection.value = -1
     if (currentSlideNo.value > 1) {
       await go(
@@ -186,6 +211,11 @@ export function useNavBase(
   }
 
   async function go(no: number | string, clicks: number = 0, force = false) {
+    lastAdvance = Number.NEGATIVE_INFINITY
+    await navigate(no, clicks, force)
+  }
+
+  async function navigate(no: number | string, clicks: number = 0, force = false) {
     hmrSkipTransition.value = false
     const pageChanged = currentSlideNo.value !== no
     const clicksChanged = clicks !== queryClicks.value

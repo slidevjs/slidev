@@ -20,6 +20,15 @@ function replaceCRLF(s: string) {
   return s.replace(/\r\n/g, '\n')
 }
 
+describe('advance debounce config', () => {
+  it('is disabled by default and resolves deck and nested config values', () => {
+    expect(getDefaultConfig().advanceDebounce).toBe(0)
+    expect(resolveConfig({}).advanceDebounce).toBe(0)
+    expect(resolveConfig({ advanceDebounce: 100 }).advanceDebounce).toBe(100)
+    expect(resolveConfig({ config: { advanceDebounce: 250 } }).advanceDebounce).toBe(250)
+  })
+})
+
 describe('md parser', () => {
   const userRoot = resolve(__dirname, 'fixtures/markdown')
   const files = fg.sync('*.md', {
