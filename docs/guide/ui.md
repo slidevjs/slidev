@@ -34,6 +34,20 @@ In Play mode, move your mouse to the bottom left corner of the page, you can see
 
 > You can [configure the shortcuts](../custom/config-shortcuts).
 
+### Suppressing accidental advances
+
+If your presentation remote sometimes sends two advances for one press, set `advanceDebounce` in the [headmatter](/custom/#headmatter):
+
+```yaml
+---
+advanceDebounce: 100 # milliseconds; defaults to 0 (disabled)
+---
+```
+
+The first advance happens immediately. Further `next()` or `nextSlide()` calls within the window are ignored, including keyboard shortcuts, navigation buttons, and custom controls using these methods. They share one window across click animations and slide changes. Ignored advances do not extend the window or run later. An advance at or after the end of the window is accepted.
+
+Backward navigation and explicit jumps remain immediate and reset the window. Printing and exporting are unaffected. A held key still uses Slidev's normal auto-repeat; repeat actions within the configured window are ignored. Choose a window shorter than the interval between your intentional advances. Set it to `0` to restore unrestricted navigation.
+
 ## Quick Overview {#quick-overview}
 
 By pressing <kbd>o</kbd> or clicking the <carbon-apps class="inline-icon-btn"/> button in the navigation bar, you can have an overview of your slides so you can jump between them easily.
