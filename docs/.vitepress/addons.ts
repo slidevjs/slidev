@@ -336,6 +336,17 @@ export const community: AddonInfo[] = [
     },
     repo: 'https://github.com/maxkurze1/slidev-addon-gsap',
   },
+  {
+    id: 'slidev-addon-ai-chatbot',
+    name: 'AI Chatbot',
+    description: 'Add an AI chat assistant to your slides that answers audience questions from your own content, in 80+ languages.',
+    tags: ['Component', 'Integration', 'AI'],
+    author: {
+      name: 'Asyntai',
+      link: 'https://asyntai.com/documentation/integrations/slidev/',
+    },
+    repo: 'https://github.com/asyntai/slidev-addon-ai-chatbot',
+  },
   // Add yours here!
   {
     id: '',
