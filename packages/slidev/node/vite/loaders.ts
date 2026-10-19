@@ -38,7 +38,8 @@ export async function createSlidesLoader(
       }
       try {
         return noteHighlighter.codeToHtml(str, { lang, themes: { light: 'github-light', dark: 'github-dark' } })
-      } catch {
+      }
+      catch {
         return `<pre><code class="language-${lang}">${str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`
       }
     },
