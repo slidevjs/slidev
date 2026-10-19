@@ -17,6 +17,7 @@ import { templateMonacoTypes } from '../virtual/monaco-types'
 import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
+import { createNoteHighlight, NOTE_SHIKI_LANGS, NOTE_SHIKI_THEMES } from './note-highlight'
 
 export async function createSlidesLoader(
   options: ResolvedSlidevOptions,
@@ -26,23 +27,13 @@ export async function createSlidesLoader(
 
   // Pre-load a Shiki highlighter for note code blocks.
   const noteHighlighter: any = await utils.shiki.getSingletonHighlighter({
-    langs: ['css', 'ts', 'typescript', 'kotlin', 'html', 'go', 'js', 'javascript', 'json', 'bash', 'md', 'vue', 'python', 'rust', 'java', 'c', 'cpp', 'yaml', 'toml', 'sql', 'diff', 'markdown'],
-    themes: ['github-light', 'github-dark'],
+    langs: NOTE_SHIKI_LANGS,
+    themes: Object.values(NOTE_SHIKI_THEMES),
   })
 
   const notesMd = MarkdownExit({
     html: true,
-    highlight: (str: string, lang: string) => {
-      if (!lang) {
-        return `<pre><code>${str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`
-      }
-      try {
-        return noteHighlighter.codeToHtml(str, { lang, themes: { light: 'github-light', dark: 'github-dark' } })
-      }
-      catch {
-        return `<pre><code class="language-${lang}">${str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`
-      }
-    },
+    highlight: createNoteHighlight(noteHighlighter),
   })
   notesMd.use(markdownItLink)
   if (data.features.katex)
