@@ -33,6 +33,13 @@ Install the Slidev skill to your AI coding agent:
 npx skills add slidevjs/slidev
 ```
 
+If you use [Claude Code](https://code.claude.com/), you can also install the skill as a plugin from the Slidev marketplace:
+
+```bash
+/plugin marketplace add slidevjs/slidev
+/plugin install slidev@slidev-plugins
+```
+
 The source code of the skill is [here](https://github.com/slidevjs/slidev/tree/main/skills/slidev).
 
 ### Example Prompts
