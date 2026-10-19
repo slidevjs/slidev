@@ -2,7 +2,6 @@
 import type { ClicksContext } from '@slidev/types'
 import { computed, nextTick, onMounted, ref, shallowRef, watch, watchEffect } from 'vue'
 import { CLICKS_MAX } from '../constants'
-import { useSlideInfo } from '../composables/useSlideInfo'
 
 const props = withDefaults(
   defineProps<{
@@ -169,6 +168,15 @@ watchEffect(() => {
 })
 </script>
 
+<script lang="ts">
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+</script>
+
 <template>
   <div class="slidev-note-tabs">
     <div role="tablist" class="slidev-note-tabs__bar" aria-label="Notes view">
@@ -243,15 +251,6 @@ watchEffect(() => {
   </div>
 </template>
 
-<script lang="ts">
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-</script>
-
 <style>
 .slidev-note-tabs {
   display: flex;
@@ -278,7 +277,9 @@ function escapeHtml(s: string): string {
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: opacity 0.15s ease, background 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease;
 }
 
 .slidev-note-tabs__tab:hover {
@@ -364,8 +365,13 @@ function escapeHtml(s: string): string {
 }
 
 @keyframes slidev-note-skeleton {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.9; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 .slidev-note__source :deep(pre.shiki) {
