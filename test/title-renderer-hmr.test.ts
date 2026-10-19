@@ -1,13 +1,12 @@
-import type { HotPayload } from 'vite'
 /**
- * Regression / repro for https://github.com/slidevjs/slidev/issues/2784
+ * Regression for https://github.com/slidevjs/slidev/issues/2784
  *
- * On Vite 8, Slidev's slides loader always adds `/@slidev/title-renderer.md` to the
- * HMR module list whenever any slide content changes. When that virtual module is
- * present in the client module graph but not `isSelfAccepting` (common until import
- * analysis runs — the state observed in the browser for #2784), Vite's HMR
- * propagation dead-ends and sends `{ type: 'full-reload' }` instead of a hot update.
+ * On Vite 8, invalidating `/@slidev/title-renderer.md` when it is present in the
+ * client module graph but not `isSelfAccepting` dead-ends HMR and forces a full
+ * page reload. Title-renderer only embeds slide titles, so body-only edits must
+ * not invalidate it.
  */
+import type { HotPayload } from 'vite'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -36,6 +35,12 @@ interface HmrCapture {
   fullReloads: Array<Extract<HotPayload, { type: 'full-reload' }>>
   slideUpdates: number
   moduleSnapshots: Array<Array<{ id: string | null, isSelfAccepting: boolean | undefined }>>
+}
+
+function titleRendererInvalidated(capture: HmrCapture) {
+  return capture.moduleSnapshots.some(snapshot =>
+    snapshot.some(m => m.id === TITLE_RENDERER_MD),
+  )
 }
 
 async function createReproServer(entry: string) {
@@ -124,7 +129,7 @@ describe('title-renderer HMR (#2784)', () => {
     await waitFor(() => capture.slideUpdates > 0 || capture.fullReloads.length > 0)
 
     expect(capture.slideUpdates, 'Slidev should still emit slidev:update-slide').toBeGreaterThan(0)
-
+    expect(titleRendererInvalidated(capture), 'body-only edits must not invalidate title-renderer.md').toBe(false)
     expect(
       capture.fullReloads,
       [
@@ -132,6 +137,27 @@ describe('title-renderer HMR (#2784)', () => {
         `HMR modules seen: ${JSON.stringify(capture.moduleSnapshots)}`,
       ].join(' '),
     ).toEqual([])
+  }, 20_000)
+
+  it('still invalidates title-renderer.md when a slide title changes', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'slidev-title-renderer-hmr-title-'))
+    const entry = join(dir, 'slides.md')
+    await writeFile(entry, ENTRY_MD)
+
+    const { server, capture } = await createReproServer(entry)
+    cleanups.push(async () => {
+      await server.close()
+      await rm(dir, { recursive: true, force: true })
+    })
+
+    await server.environments.client.moduleGraph.ensureEntryFromUrl(TITLE_RENDERER_MD)
+
+    // Second slide title comes from its heading (no per-slide frontmatter title).
+    await writeFile(entry, ENTRY_MD.replace('# Second', '# Second Renamed'))
+    await waitFor(() => capture.slideUpdates > 0 || titleRendererInvalidated(capture))
+
+    expect(capture.slideUpdates).toBeGreaterThan(0)
+    expect(titleRendererInvalidated(capture)).toBe(true)
   }, 20_000)
 })
 
