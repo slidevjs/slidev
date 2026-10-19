@@ -18,13 +18,31 @@ import { templateSlides, VIRTUAL_SLIDE_PREFIX } from '../virtual/slides'
 import { templateTitleRendererMd } from '../virtual/titles'
 import { regexSlideFacadeId, regexSlideReqPath, regexSlideSourceId } from './common'
 
-export function createSlidesLoader(
+export async function createSlidesLoader(
   options: ResolvedSlidevOptions,
   serverOptions: SlidevServerOptions,
-): Plugin {
+): Promise<Plugin> {
   const { data, mode, utils, withoutNotes } = options
 
-  const notesMd = MarkdownExit({ html: true })
+  // Pre-load a Shiki highlighter for note code blocks.
+  const noteHighlighter: any = await utils.shiki.getSingletonHighlighter({
+    langs: ['css', 'ts', 'typescript', 'kotlin', 'html', 'go', 'js', 'javascript', 'json', 'bash', 'md', 'vue', 'python', 'rust', 'java', 'c', 'cpp', 'yaml', 'toml', 'sql', 'diff', 'markdown'],
+    themes: ['github-light', 'github-dark'],
+  })
+
+  const notesMd = MarkdownExit({
+    html: true,
+    highlight: (str: string, lang: string) => {
+      if (!lang) {
+        return `<pre><code>${str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`
+      }
+      try {
+        return noteHighlighter.codeToHtml(str, { lang, themes: { light: 'github-light', dark: 'github-dark' } })
+      } catch {
+        return `<pre><code class="language-${lang}">${str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`
+      }
+    },
+  })
   notesMd.use(markdownItLink)
   if (data.features.katex)
     notesMd.use(MarkdownItKatex, utils.katexOptions)

@@ -308,6 +308,42 @@ function escapeHtml(s: string): string {
   margin-top: 0;
 }
 
+/* Rendered tab: code blocks wrap instead of horizontal scroll */
+.slidev-note pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: hidden;
+}
+
+/* Light mode contrast fix */
+.slidev-note pre {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Dark mode contrast fix */
+@media (prefers-color-scheme: dark) {
+  .slidev-note pre {
+    background-color: #1f2937;
+    color: #e5e7eb;
+  }
+}
+
+.dark .slidev-note pre {
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+/* Shiki blocks in notes: dark mode override */
+.dark .slidev-note .shiki {
+  background-color: var(--shiki-dark-bg, #121212) !important;
+  color: var(--shiki-dark, #dbd7caee) !important;
+}
+
+.dark .slidev-note .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
 .slidev-note__loading {
   display: flex;
   flex-direction: column;

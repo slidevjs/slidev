@@ -28,8 +28,8 @@ export function resolveShikiOptions(options: (ShikiSetupReturn | void)[]) {
   // No theme at all, apply the default
   if (!mergedOptions.theme && !mergedOptions.themes) {
     mergedOptions.themes = {
-      dark: 'vitesse-dark',
-      light: 'vitesse-light',
+      dark: 'github-dark',
+      light: 'github-light',
     }
   }
 
