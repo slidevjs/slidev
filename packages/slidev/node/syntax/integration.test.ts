@@ -161,3 +161,37 @@ graph TD
     "
   `)
 })
+
+it('mdc with task list items does not render stray characters', async () => {
+  const md = MarkdownExit({ html: true })
+  const map = new Map<string, MagicString>()
+
+  await useMarkdownItPlugins(md, {
+    userRoot: path.join(__dirname, '../../../../test/fixtures/'),
+    data: {
+      watchFiles: {},
+      slides: [{
+        index: 0,
+        source: { filepath: path.join(__dirname, '../../../../test/fixtures/test.md') },
+      }],
+      config: { mdc: true },
+      features: {},
+    },
+    utils: {
+      shiki,
+      shikiOptions: { theme: 'nord' },
+      katexOptions: {},
+    },
+  } as any, map, [])
+
+  const result = await md.renderAsync(`
+- [x] checked item
+- [ ] unchecked item
+- regular [span]{.custom} item
+`)
+
+  expect(result).toContain('checked=""')
+  expect(result).not.toContain('<span>x</span>')
+  expect(result).not.toContain('<span></span>')
+  expect(result).toContain('<span class="custom">span</span>')
+})
