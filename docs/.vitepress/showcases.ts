@@ -334,6 +334,17 @@ export const showcases: ShowCaseInfo[] = [
     cover: 'https://raw.githubusercontent.com/bronto-community/ai-sre-talk/refs/heads/main/preview.png',
     datetime: '2026-07-28',
   },
+  {
+    title: 'Postgres restore drills: proving your backups actually restore',
+    author: {
+      name: 'Super Lede',
+      link: 'https://backupdrill.com',
+    },
+    at: 'Self-published deck',
+    slidesLink: 'https://backupdrill.com/talks/restore-drills',
+    cover: 'https://backupdrill.com/talks/restore-drills/cover.png',
+    datetime: '2026-10-22',
+  },
   // Add yours here!
   {
     title: 'Yours?',
