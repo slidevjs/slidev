@@ -23,7 +23,7 @@ useHead({ title: `Overview - ${slidesTitle}` })
 
 const currentRoute = useRoute()
 const router = useRouter()
-const { openInEditor, slides, isEmbedded } = useNav()
+const { openInEditor, slides, isEmbedded, hasGrid } = useNav()
 const isPreviewMode = computed(() => currentRoute.query.mode === 'preview')
 const isEmbeddedPreviewMode = computed(() => isPreviewMode.value && isEmbedded.value)
 const overviewCardWidth = computed(() => {
@@ -33,6 +33,9 @@ const overviewCardWidth = computed(() => {
     return Math.max(0, windowSize.width.value - 16)
   return Math.min(900, Math.max(320, windowSize.width.value - 160))
 })
+// Embedded previews stay linear to preserve editor scroll synchronization.
+const showGrid = computed(() => hasGrid.value && !isEmbeddedPreviewMode.value)
+const gridColumnCount = computed(() => (slides.value.at(-1)?.meta.slide?.gridCol ?? 0) + 1)
 const overviewSlideHeight = computed(() => overviewCardWidth.value / slideAspect.value)
 
 const blocks: Map<number, HTMLElement> = reactive(new Map())
@@ -86,19 +89,23 @@ function wordCount(str: string) {
 }
 
 function checkActiveBlocks() {
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight
-  let active: { idx: number, visibleHeight: number } | undefined
+  const viewport = scroller.value?.getBoundingClientRect()
+  if (!viewport)
+    return
+  let active: { idx: number, visibleArea: number } | undefined
   const fullyVisible: number[] = []
 
   for (const [idx, el] of blocks.entries()) {
     const rect = el.getBoundingClientRect()
-    const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0))
-    if (visibleHeight === 0)
+    const visibleHeight = Math.max(0, Math.min(rect.bottom, viewport.bottom) - Math.max(rect.top, viewport.top))
+    const visibleWidth = Math.max(0, Math.min(rect.right, viewport.right) - Math.max(rect.left, viewport.left))
+    const visibleArea = visibleHeight * visibleWidth
+    if (visibleArea === 0)
       continue
-    if (visibleHeight >= rect.height)
+    if (visibleHeight >= rect.height && visibleWidth >= rect.width)
       fullyVisible.push(idx)
-    if (!active || visibleHeight > active.visibleHeight)
-      active = { idx, visibleHeight }
+    if (!active || visibleArea > active.visibleArea)
+      active = { idx, visibleArea }
   }
 
   activeBlocks.value = fullyVisible.length ? fullyVisible : active ? [active.idx] : []
@@ -128,7 +135,7 @@ function openSlideInBrowser(path: string) {
 function scrollToSlide(idx: number) {
   const el = blocks.get(idx)
   if (el)
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
 }
 
 function getSlidePreviewTop(idx: number) {
@@ -346,16 +353,18 @@ onUnmounted(() => {
     </nav>
     <main
       ref="scroller"
-      class="flex-1 h-full of-auto"
-      :style="`grid-template-columns: repeat(auto-fit,minmax(${cardWidth}px,1fr))`"
+      class="flex-1 min-w-0 h-full of-auto"
+      :class="showGrid ? 'grid content-start' : ''"
+      :style="showGrid ? { gridTemplateColumns: `repeat(${gridColumnCount}, ${isPreviewMode ? overviewCardWidth + 80 : 900}px)` } : undefined"
       @scroll="onOverviewScroll"
     >
       <div
         v-for="(route, idx) of slides"
         :key="route.no"
-        :ref="el => blocks.set(idx, el as any)"
+        :ref="el => el ? blocks.set(idx, el as HTMLElement) : blocks.delete(idx)"
+        :style="showGrid ? { gridColumn: (route.meta.slide?.gridCol ?? 0) + 1, gridRow: (route.meta.slide?.gridRow ?? 0) + 1 } : undefined"
         class="overview-slide-block relative of-hidden flex gap-4 min-h-50"
-        :class="[idx === 0 && !isEmbeddedPreviewMode ? 'pt2' : '', isEmbeddedPreviewMode ? 'justify-center' : 'border-t border-main']"
+        :class="[!isEmbeddedPreviewMode && (showGrid ? route.meta.slide?.gridRow === 0 : idx === 0) ? 'pt2' : '', isEmbeddedPreviewMode ? 'justify-center' : 'border-t border-main', showGrid ? 'border-r' : '']"
       >
         <div
           v-if="!isEmbeddedPreviewMode"
@@ -387,7 +396,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div
-          class="flex flex-col"
+          class="flex flex-col shrink-0"
           :class="isEmbeddedPreviewMode ? 'my1 gap-0' : 'my5 gap-2'"
           :style="{ width: `${overviewCardWidth}px` }"
         >
@@ -449,7 +458,7 @@ onUnmounted(() => {
         <NoteEditable
           v-if="!isPreviewMode"
           :no="route.no"
-          class="relative z-1 max-w-250 w-250 text-lg rounded p3"
+          class="relative z-1 max-w-250 w-250 min-w-0 text-lg rounded p3"
           :auto-height="true"
           :highlight="activeSlide === route"
           :editing="edittingNote === route.no"

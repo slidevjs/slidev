@@ -204,11 +204,16 @@ export function createSlidesLoader(
         const a = data.slides[i]
         const b = newData.slides[i]
 
+        if (a.gridCol !== b.gridCol || a.gridRow !== b.gridRow)
+          moduleIds.add(templateSlides.id)
+
         if (
           !hmrSlidesIndexes.has(i)
           && a.content.trim() === b.content.trim()
           && a.title?.trim() === b.title?.trim()
           && equal(a.frontmatter, b.frontmatter)
+          && a.gridCol === b.gridCol
+          && a.gridRow === b.gridRow
         ) {
           if (a.note !== b.note) {
             ctx.server.hot.send(

@@ -193,6 +193,23 @@ export async function load(
   if (slides[0]?.title)
     headmatter.title ??= slides[0].title
 
+  // Nested slides continue down the current column; other slides start a new one.
+  let col = 0
+  let row = 0
+  for (let i = 0; i < slides.length; i++) {
+    if (i > 0) {
+      if (slides[i].frontmatter.nested) {
+        row++
+      }
+      else {
+        row = 0
+        col++
+      }
+    }
+    slides[i].gridCol = col
+    slides[i].gridRow = row
+  }
+
   return {
     slides,
     entry,
