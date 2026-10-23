@@ -682,6 +682,30 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-sketch',
+    name: 'Sketch',
+    description: 'A creative hand-drawn doodle and sketch theme for Slidev with authentic paper textures, doodle assets, and custom components.',
+    author: {
+      name: 'Yuluo',
+      link: 'https://github.com/yuluo-yx',
+    },
+    repo: 'https://github.com/yuluo-yx/slidev-theme-sketch',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/1.png',
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/2.png',
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/4.png',
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/5.png',
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/6.png',
+      'https://cdn.jsdelivr.net/gh/yuluo-yx/slidev-theme-sketch@main/screenshots/7.png',
+    ],
+    tags: [
+      'light',
+      'sketch',
+      'hand-drawn',
+      'doodle',
+    ],
+  },
   // Add yours here!
   {
     id: '',
