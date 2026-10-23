@@ -9,9 +9,13 @@ import { loadSetups } from '../setups/load'
 import { loadModule } from '../utils'
 
 export default async function setupUnocss(
-  { clientRoot, roots, data, utils }: ResolvedSlidevOptions,
+  { clientRoot, roots, setupRoots, data, utils }: ResolvedSlidevOptions,
 ) {
   function loadFileConfigs(root: string) {
+    // `uno.config.ts` is not a Slidev-specific filename, so it stays on
+    // `roots` and is never picked up from the surrounding project root.
+    if (!roots.includes(root))
+      return []
     return [
       resolve(root, 'uno.config.ts'),
       resolve(root, 'unocss.config.ts'),
@@ -38,7 +42,7 @@ export default async function setupUnocss(
       safelist: await loadModule(resolve(clientRoot, '.generated/unocss-tokens.ts')),
     } satisfies VitePluginConfig,
     (await loadModule<{ default: VitePluginConfig }>(resolve(clientRoot, 'uno.config.ts'))).default,
-    ...await loadSetups<UnoSetup>(roots, 'unocss.ts', [], loadFileConfigs),
+    ...await loadSetups<UnoSetup>(setupRoots, 'unocss.ts', [], loadFileConfigs),
   ].filter(Boolean) as VitePluginConfig<Theme>[]
 
   const config = mergeConfigs(configs)
