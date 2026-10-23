@@ -9,14 +9,21 @@ export function resolveAssetUrl(url: string) {
   return url
 }
 
-export function handleBackground(background?: string, dim = false, backgroundSize = 'cover'): CSSProperties {
+/**
+ * Text color to use over a background image.
+ *
+ * `light` forces white text, `dark` leaves the theme's text color in place.
+ */
+export type BackgroundText = 'light' | 'dark'
+
+export function handleBackground(background?: string, dim = false, backgroundSize = 'cover', text: BackgroundText = 'light'): CSSProperties {
   const isColor = background && (background[0] === '#' || background.startsWith('rgb'))
 
   const style = {
     background: isColor
       ? background
       : undefined,
-    color: (background && !isColor)
+    color: (background && !isColor && text !== 'dark')
       ? 'white'
       : undefined,
     backgroundImage: isColor
