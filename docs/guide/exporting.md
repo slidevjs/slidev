@@ -108,6 +108,22 @@ You can also compile a markdown file composed of compiled png using `--format md
 $ slidev export --format md
 ```
 
+## Presenter Notes {#presenter-notes}
+
+To print your presenter notes separately from the slides, use [`slidev export-notes`](../builtin/cli#export-notes). This requires the same [Playwright installation](#cli) as slide exports.
+
+```bash
+$ slidev export-notes
+```
+
+By default, this creates `./slides-export-notes.pdf`. The PDF includes the notes, slide titles, and slide numbers for slides with notes. Slides without notes and slide previews are not included.
+
+To use a different entry file or output filename:
+
+```bash
+$ slidev export-notes talk.md --output speaker-notes.pdf
+```
+
 ## Options
 
 Here are some common options you can use with the `slidev export` command. For a full list of options, see the [CLI documentation](../builtin/cli#export).
