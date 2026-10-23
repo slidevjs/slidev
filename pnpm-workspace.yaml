@@ -124,7 +124,7 @@ catalogs:
     monaco-editor: ^0.56.0
   prod:
     '@antfu/ni': ^30.6.0
-    '@comark/markdown-it': ^0.3.4
+    '@comark/markdown-it': ^0.4.0
     '@hedgedoc/markdown-it-plugins': ^2.1.4
     '@lillallol/outline-pdf': ^4.0.0
     '@modelcontextprotocol/client': ^2.3.1
