@@ -1,7 +1,7 @@
-import type { IrBox, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
+import type { IrBox, IrNode, IrRaster, IrText, RawNode, RawSlide, RawSnapshot, RawStyle } from './ir'
 import { describe, expect, it } from 'vitest'
 import { parseColor } from './color'
-import { normalize, parseLength, parseShadow, rasterReasonFor } from './normalize'
+import { contentPaintsImage, contentText, normalize, parseLength, parseShadow, rasterReasonFor } from './normalize'
 
 /**
  * One named case per rule.
@@ -91,6 +91,10 @@ function snapshot(nodes: RawNode[], styles: RawStyle[]): RawSnapshot {
 
 function run(nodes: RawNode[], styles: RawStyle[]) {
   return normalize(snapshot(nodes, styles), { notes: new Map() })
+}
+
+function isRaster(node: IrNode): node is IrRaster {
+  return node.kind === 'raster'
 }
 
 function texts(nodes: any[]): IrText[] {
@@ -461,10 +465,123 @@ describe('pseudo-element decorations are drawn', () => {
     const rect = { x: 10, y: 10, w: 20, h: 20 }
     const nodes = [
       el(0, -1, 'DIV', 0),
-      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, text: '\u201C' }),
+      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, content: '"\u201C"' }),
     ]
     const { slides } = run(nodes, [BASE_STYLE, quote])
     expect(texts(slides[0].nodes)[0].runs[0].text).toBe('\u201C')
+  })
+
+  it('draws a counter as the text the browser generated, not as its CSS', () => {
+    const number = style({ position: 'absolute', width: '10px', height: '20px' })
+    const rect = { x: 10, y: 10, w: 10, h: 20 }
+    const nodes = [
+      el(0, -1, 'LI', 0),
+      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, content: 'counter(step)', generatedText: '1' }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, number])
+    // `getComputedStyle` reports `content: counter(step)` as written, never the
+    // number drawn. Read as a string, every step of a numbered list showed the
+    // literal "counter(step)" over its own text.
+    expect(texts(slides[0].nodes).map(t => t.runs[0].text)).toEqual(['1'])
+    expect(slides[0].nodes.some(n => n.kind === 'raster')).toBe(false)
+  })
+
+  it('falls back to a picture of a counter whose generated text could not be read', () => {
+    const number = style({ position: 'absolute', width: '10px', height: '20px' })
+    const rect = { x: 10, y: 10, w: 10, h: 20 }
+    const nodes = [
+      el(0, -1, 'LI', 0),
+      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, content: 'counter(step)' }),
+    ]
+    const { slides, rasterRequests } = run(nodes, [BASE_STYLE, number])
+    // Without the layout tree the number exists only as pixels; a picture of it
+    // beats both the literal CSS and nothing.
+    expect(texts(slides[0].nodes)).toHaveLength(0)
+    expect(slides[0].nodes.find(isRaster)?.reason).toBe('generated-content')
+    expect(rasterRequests[0].clip).toEqual(rect)
+  })
+
+  it('draws content that mixes an image with text as a picture, even when its text was read', () => {
+    const label = style({ position: 'absolute', width: '60px', height: '20px' })
+    const rect = { x: 10, y: 10, w: 60, h: 20 }
+    const nodes = [
+      el(0, -1, 'P', 0),
+      el(1, 0, '::BEFORE', 1, { rect, pageRect: rect, content: 'url("icon.svg") "label"', generatedText: 'label' }),
+    ]
+    const { slides } = run(nodes, [BASE_STYLE, label])
+    // The layout tree has text only for the string; drawn as that text, the icon
+    // beside it was silently lost.
+    expect(texts(slides[0].nodes)).toHaveLength(0)
+    expect(slides[0].nodes.find(isRaster)?.reason).toBe('generated-content')
+  })
+})
+
+describe('pseudo-element content paints an image only through an image function', () => {
+  it('treats counters, counter styles and attr() as text', () => {
+    expect(contentPaintsImage('counter(step)')).toBe(false)
+    // `symbols()` styles a counter's text; Chromium lays out "B" for it.
+    expect(contentPaintsImage('counter(step, symbols(cyclic "A" "B"))')).toBe(false)
+    expect(contentPaintsImage('counters(n, ".", symbols(cyclic "*"))')).toBe(false)
+    expect(contentPaintsImage('attr(data-tag) " \u2192"')).toBe(false)
+  })
+
+  it('finds an image, also inside a counter style', () => {
+    expect(contentPaintsImage('url("icon.svg") "label"')).toBe(true)
+    expect(contentPaintsImage('linear-gradient(red, blue)')).toBe(true)
+    expect(contentPaintsImage('counter(step, symbols(cyclic url("a.svg")))')).toBe(true)
+  })
+
+  it('ignores function-like text inside strings', () => {
+    expect(contentPaintsImage('"url(not an image)"')).toBe(false)
+  })
+})
+
+describe('pseudo-element content is text only when it is all strings', () => {
+  it('reads a single string', () => {
+    expect(contentText('"\u2022"')).toBe('\u2022')
+  })
+
+  it('joins adjacent strings', () => {
+    expect(contentText('"a" "b"')).toBe('ab')
+  })
+
+  it('unescapes quotes and backslashes', () => {
+    expect(contentText(String.raw`"say \"hi\" \\ there"`)).toBe('say "hi" \\ there')
+  })
+
+  it('unescapes a hex escape, eating the space that ends it', () => {
+    expect(contentText(String.raw`"\a b"`)).toBe('\nb')
+  })
+
+  it('accepts single quotes', () => {
+    expect(contentText(`'x'`)).toBe('x')
+  })
+
+  it('rejects a counter, alone or after a string', () => {
+    expect(contentText('counter(step)')).toBeUndefined()
+    expect(contentText('counters(n, ".")')).toBeUndefined()
+    expect(contentText('"Step " counter(x)')).toBeUndefined()
+  })
+
+  it('rejects the keywords that paint no text', () => {
+    expect(contentText('normal')).toBeUndefined()
+    expect(contentText('none')).toBeUndefined()
+    expect(contentText(undefined)).toBeUndefined()
+  })
+
+  it('replaces a code point that is not a character, as CSS does', () => {
+    expect(contentText(String.raw`"\110000"`)).toBe('\uFFFD')
+    expect(contentText(String.raw`"\0"`)).toBe('\uFFFD')
+    expect(contentText(String.raw`"\d800"`)).toBe('\uFFFD')
+  })
+
+  it('ends a hex escape at any one whitespace, and joins an escaped newline', () => {
+    expect(contentText('"\\a\tb"')).toBe('\nb')
+    expect(contentText('"a\\\nb"')).toBe('ab')
+  })
+
+  it('rejects a string broken by a raw newline', () => {
+    expect(contentText('"a\nb"')).toBeUndefined()
   })
 })
 
