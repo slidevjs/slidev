@@ -1,4 +1,4 @@
-import type { Page } from 'playwright-chromium'
+import type { CDPSession, Page } from 'playwright-chromium'
 import type { IrImage, IrRaster, Rect, SlideIr } from './ir'
 import type { RasterRequest } from './normalize'
 import { Buffer } from 'node:buffer'
@@ -12,6 +12,110 @@ import { Buffer } from 'node:buffer'
  */
 
 export const ID_ATTRIBUTE = 'data-slidev-export-id'
+
+/** The parts of a CDP `DOMSnapshot.captureSnapshot` result read here. */
+export interface DomSnapshot {
+  strings: string[]
+  documents: {
+    nodes: {
+      parentIndex?: number[]
+      attributes?: number[][]
+      pseudoType?: { index: number[], value: number[] }
+    }
+    layout: { nodeIndex: number[], text: number[] }
+  }[]
+}
+
+/**
+ * The text Chromium laid out for each `::before` and `::after`, keyed
+ * `${id}::BEFORE` by the walker's id on the element that owns it. A CSS counter's
+ * number exists only here: the DOM has no node for it and `getComputedStyle`
+ * reports `content: counter(step)` as written. Keyed by id, not by position, so
+ * any number of lists on a page stay apart.
+ */
+export function generatedTextFrom(snapshot: DomSnapshot, idAttribute: string): Map<string, string> {
+  const result = new Map<string, string>()
+  const { strings } = snapshot
+  // The first document is the page; the walker does not enter iframes either.
+  const doc = snapshot.documents[0]
+  const pseudo = doc?.nodes.pseudoType
+  if (!doc || !pseudo)
+    return result
+
+  const layoutText = new Map<number, string>()
+  doc.layout.nodeIndex.forEach((node, i) => {
+    const text = doc.layout.text[i]
+    if (text >= 0)
+      layoutText.set(node, (layoutText.get(node) ?? '') + strings[text])
+  })
+
+  const types = new Map<number, string>()
+  pseudo.index.forEach((node, i) => {
+    const type = strings[pseudo.value[i]]
+    if (type === 'before' || type === 'after')
+      types.set(node, type)
+  })
+
+  // Only a pseudo-element's own layout text: Chromium lays out each piece of
+  // `content` (`"Step " counter(x)` is a box, `Step ` and `7`) on the
+  // pseudo-element itself. Its descendants are left out, because a `::marker`
+  // nested in a `display: list-item` decoration is a separate box, not its text.
+  const parents = doc.nodes.parentIndex ?? []
+  for (const [node, type] of types) {
+    const text = layoutText.get(node)
+    const attributes = doc.nodes.attributes?.[parents[node]] ?? []
+    for (let i = 0; i < attributes.length; i += 2) {
+      if (text && strings[attributes[i]] === idAttribute)
+        result.set(`${strings[attributes[i + 1]]}::${type.toUpperCase()}`, text)
+    }
+  }
+  return result
+}
+
+/** Settle `promise`, or reject once `ms` have passed: Playwright gives CDP calls no timeout. */
+function within<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`no answer within ${ms} ms`)), ms)
+  })
+  return Promise.race([promise, deadline]).finally(() => clearTimeout(timer))
+}
+
+/**
+ * Read the live page's generated text over CDP (see `generatedTextFrom`). Must
+ * run right after the walk, while every element still carries its id and before
+ * capture mutates the DOM. Undefined when CDP is unavailable (a non-Chromium
+ * browser), or the call fails or does not answer in time; counters then fall
+ * back to pictures.
+ */
+export async function readGeneratedText(
+  page: Page,
+  limits = { snapshotMs: 15_000, detachMs: 1_000 },
+): Promise<Map<string, string> | undefined> {
+  // One budget for opening the session and taking the snapshot.
+  const deadline = Date.now() + limits.snapshotMs
+  const opening = page.context().newCDPSession(page)
+  let session: CDPSession
+  try {
+    session = await within(opening, deadline - Date.now())
+  }
+  catch {
+    // A session that opens after the deadline is still released.
+    opening.then(late => within(late.detach(), limits.detachMs)).catch(() => {})
+    return undefined
+  }
+  try {
+    const snapshot = await within(session.send('DOMSnapshot.captureSnapshot', { computedStyles: [] }), deadline - Date.now())
+    return generatedTextFrom(snapshot, ID_ATTRIBUTE)
+  }
+  catch {
+    return undefined
+  }
+  finally {
+    // Best effort: a session left open is released with the page.
+    await within(session.detach(), limits.detachMs).catch(() => {})
+  }
+}
 
 /** Marks an element this module hid, and remembers what to put back. */
 const RESTORE_ATTRIBUTE = 'data-slidev-export-restore'
@@ -280,6 +384,8 @@ export interface CaptureReport {
   /** Captures that asked for isolation and could not find their element. A silent miss bakes the slide's own text into the picture, which is then drawn again as shapes. */
   isolationMissed: number
   fallbackSlides: { no: number, reason: string }[]
+  /** `::before`/`::after` content that reached the file as a picture: a counter whose text could not be read, or an image in `content`. */
+  generatedContentPictures: number
 }
 
 /**
@@ -318,6 +424,7 @@ export async function capture(
     imagesDropped: 0,
     isolationMissed: 0,
     fallbackSlides: [],
+    generatedContentPictures: 0,
   }
 
   await installRootFinder(page)
@@ -438,6 +545,13 @@ export async function capture(
       }
     }
   })
+
+  // Counted last: failed captures are gone by now, and a slide written as one picture ignores its nodes.
+  report.generatedContentPictures = slides
+    .filter(slide => !slide.fallbackPng)
+    .flatMap(slide => slide.nodes)
+    .filter(node => node.kind === 'raster' && node.reason === 'generated-content')
+    .length
 
   return report
 }

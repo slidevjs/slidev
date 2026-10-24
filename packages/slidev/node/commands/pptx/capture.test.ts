@@ -1,8 +1,10 @@
 import type { Page } from 'playwright-chromium'
+import type { DomSnapshot } from './capture'
+import type { SlideIr } from './ir'
 import type { RasterRequest } from './normalize'
 import { Buffer } from 'node:buffer'
 import { describe, expect, it } from 'vitest'
-import { capture, isUsableDataUri, shootClip } from './capture'
+import { capture, generatedTextFrom, isUsableDataUri, readGeneratedText, shootClip } from './capture'
 
 /**
  * `capture.ts` needs a live browser, so only its pure predicates are unit
@@ -24,6 +26,171 @@ describe('isUsableDataUri', () => {
     // pptxgenjs writes a broken raster fallback for SVG from Node, so these
     // are screenshotted rather than embedded.
     expect(isUsableDataUri('data:image/svg+xml;base64,PHN2Zz4=')).toBe(false)
+  })
+})
+
+interface SnapshotNode {
+  name: string
+  parent?: number
+  /** Attributes as written, e.g. the walker's id. */
+  attrs?: Record<string, string>
+  pseudo?: string
+  /** One entry per layout object the node owns, in order; null for a box with no text. */
+  layout?: (string | null)[]
+}
+
+/**
+ * A `DOMSnapshot.captureSnapshot` result in the shape Chromium returns: one
+ * flattened, interned table per document, with nodes in document order. A
+ * pseudo-element owns several layout objects: its box, then one per text piece
+ * of its `content` (`"Step " counter(x)` is a box, `Step ` and `7`).
+ */
+function domSnapshot(list: SnapshotNode[]): DomSnapshot {
+  const strings: string[] = []
+  const intern = (value: string): number => {
+    const at = strings.indexOf(value)
+    return at >= 0 ? at : strings.push(value) - 1
+  }
+  const pseudoNodes = list.flatMap((node, i) => node.pseudo ? [i] : [])
+  const layout = list.flatMap((node, i) => (node.layout ?? []).map(text => ({ node: i, text })))
+  return {
+    strings,
+    documents: [{
+      nodes: {
+        parentIndex: list.map(node => node.parent ?? -1),
+        attributes: list.map(node => Object.entries(node.attrs ?? {}).flatMap(([k, v]) => [intern(k), intern(v)])),
+        pseudoType: { index: pseudoNodes, value: pseudoNodes.map(i => intern(list[i].pseudo!)) },
+      },
+      layout: {
+        nodeIndex: layout.map(entry => entry.node),
+        text: layout.map(entry => entry.text === null ? -1 : intern(entry.text)),
+      },
+    }],
+  }
+}
+
+const ID = 'data-slidev-export-id'
+
+/**
+ * The number a CSS counter draws is not in the DOM or in any computed style;
+ * only the layout tree has it. A wrong mapping here puts one item's number on
+ * another, so it is keyed by the walker's element id, never by position.
+ */
+describe('generatedTextFrom', () => {
+  it('reads a counter by the id of the element that owns it', () => {
+    const snapshot = domSnapshot([
+      { name: 'OL' },
+      { name: 'LI', parent: 0, attrs: { [ID]: '7' } },
+      { name: '::before', parent: 1, pseudo: 'before', layout: [null, '1'] },
+      { name: 'LI', parent: 0, attrs: { [ID]: '9' } },
+      { name: '::before', parent: 3, pseudo: 'before', layout: [null, '2'] },
+    ])
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['7::BEFORE', '1'], ['9::BEFORE', '2']]))
+  })
+
+  it('keeps two lists apart when their items read the same', () => {
+    // A second list restarts at 1, and its first item says "Run" like the first
+    // list's second item: neither the text nor the order may decide the match.
+    const snapshot = domSnapshot([
+      { name: 'LI', attrs: { [ID]: '2' } },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '2'] },
+      { name: '#text', parent: 0, layout: ['Run'] },
+      { name: 'LI', attrs: { [ID]: '5' } },
+      { name: '::before', parent: 3, pseudo: 'before', layout: [null, '1'] },
+      { name: '#text', parent: 3, layout: ['Run'] },
+    ])
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['2::BEFORE', '2'], ['5::BEFORE', '1']]))
+  })
+
+  it('joins the pieces of a string and a counter', () => {
+    const snapshot = domSnapshot([
+      { name: 'DIV', attrs: { [ID]: '3' } },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, 'Step ', '7'] },
+    ])
+    expect(generatedTextFrom(snapshot, ID).get('3::BEFORE')).toBe('Step 7')
+  })
+
+  it('leaves out a marker nested in the decoration', () => {
+    // A `::before` with `display: list-item` owns a `::marker` of its own; its
+    // bullet is a separate box, and read as text it landed after the label.
+    const snapshot = domSnapshot([
+      { name: 'P', attrs: { [ID]: '3' } },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, 'label'] },
+      { name: '::marker', parent: 1, pseudo: 'marker', layout: [null, '• '] },
+    ])
+    expect(generatedTextFrom(snapshot, ID).get('3::BEFORE')).toBe('label')
+  })
+
+  it('keys ::after apart from ::before', () => {
+    const snapshot = domSnapshot([
+      { name: 'A', attrs: { [ID]: '4' } },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '['] },
+      { name: '::after', parent: 0, pseudo: 'after', layout: [null, '↗'] },
+    ])
+    expect(generatedTextFrom(snapshot, ID)).toEqual(new Map([['4::BEFORE', '['], ['4::AFTER', '↗']]))
+  })
+
+  it('skips pseudo-elements the walker never stamped, and other pseudo types', () => {
+    const snapshot = domSnapshot([
+      { name: 'LI' },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '1'] },
+      { name: 'LI', attrs: { [ID]: '6' } },
+      { name: '::marker', parent: 2, pseudo: 'marker', layout: [null, '1. '] },
+    ])
+    expect(generatedTextFrom(snapshot, ID).size).toBe(0)
+  })
+
+  it('returns nothing for a page without pseudo-elements', () => {
+    const snapshot = domSnapshot([{ name: 'P', attrs: { [ID]: '0' } }, { name: '#text', parent: 0, layout: ['hi'] }])
+    delete snapshot.documents[0].nodes.pseudoType
+    expect(generatedTextFrom(snapshot, ID).size).toBe(0)
+  })
+})
+
+/** A page whose CDP session answers `send` and `detach` with the promises given. */
+function cdpPage(send: () => Promise<unknown>, detach: () => Promise<void> = async () => {}): Page {
+  return { context: () => ({ newCDPSession: async () => ({ send, detach }) }) } as unknown as Page
+}
+
+/**
+ * Playwright gives CDP calls no timeout of their own, so a renderer that never
+ * answers would hold the export forever, past the fallback it is meant to reach.
+ */
+describe('readGeneratedText', () => {
+  it('falls back when the snapshot never answers', async () => {
+    const page = cdpPage(() => new Promise(() => {}))
+    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toBeUndefined()
+  })
+
+  it('falls back when the snapshot fails', async () => {
+    const page = cdpPage(async () => {
+      throw new Error('DOMSnapshot.captureSnapshot: not supported')
+    })
+    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toBeUndefined()
+  })
+
+  it('still detaches a session that arrives after the deadline', async () => {
+    let resolveSession!: (session: unknown) => void
+    let detached = 0
+    const page = { context: () => ({ newCDPSession: () => new Promise((resolve) => {
+      resolveSession = resolve
+    }) }) } as unknown as Page
+    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toBeUndefined()
+    // Left attached, it would hold a CDP session open until the page closes.
+    resolveSession({ send: async () => ({}), detach: async () => {
+      detached++
+    } })
+    await new Promise(resolve => setTimeout(resolve, 0))
+    expect(detached).toBe(1)
+  })
+
+  it('returns the snapshot even when detaching never finishes', async () => {
+    const snapshot = domSnapshot([
+      { name: 'LI', attrs: { [ID]: '1' } },
+      { name: '::before', parent: 0, pseudo: 'before', layout: [null, '1'] },
+    ])
+    const page = cdpPage(async () => snapshot, () => new Promise(() => {}))
+    expect(await readGeneratedText(page, { snapshotMs: 20, detachMs: 20 })).toEqual(new Map([['1::BEFORE', '1']]))
   })
 })
 
@@ -166,6 +333,51 @@ describe('an element is captured by clipping the page at its box', () => {
     const { page } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
     const report = await capture(page, [slide(166)] as any, [request(166)])
     expect(report.rastersFailed).toBe(1)
+  })
+})
+
+/**
+ * The warning reports pictures that reached the file, so a counter whose capture
+ * failed, or a slide replaced by its whole-slide picture, is not counted.
+ */
+describe('generated-content pictures are counted when they reach the file', () => {
+  const request = (sourceId: number): RasterRequest => ({ sourceId, isolate: false, hideDescendants: false })
+  const slide = (reason: 'generated-content' | 'svg', extra: object = {}) => ({
+    no: 1,
+    clickIndex: 0,
+    containerId: '001-01',
+    size: { w: 980, h: 552 },
+    nodes: [{ kind: 'raster' as const, sourceId: 7, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason, isolate: false, hideDescendants: false }],
+    ...extra,
+  })
+  const box = { x: 0, y: 0, width: 10, height: 10 }
+
+  it('counts a captured counter', async () => {
+    const { page } = fakePage({ documentHeight: 552, viewportHeight: 552, box })
+    const report = await capture(page, [slide('generated-content')] as SlideIr[], [request(7)])
+    expect(report.generatedContentPictures).toBe(1)
+  })
+
+  it('does not count a counter whose capture failed', async () => {
+    const { page } = fakePage({ documentHeight: 552, viewportHeight: 552 })
+    const report = await capture(page, [slide('generated-content')] as SlideIr[], [request(7)])
+    expect(report.rastersFailed).toBe(1)
+    expect(report.generatedContentPictures).toBe(0)
+  })
+
+  it('does not count pictures taken for other reasons', async () => {
+    const { page } = fakePage({ documentHeight: 552, viewportHeight: 552, box })
+    const report = await capture(page, [slide('svg')] as SlideIr[], [request(7)])
+    expect(report.generatedContentPictures).toBe(0)
+  })
+
+  it('does not count a slide exported as one picture', async () => {
+    const { page } = fakePage({ documentHeight: 552, viewportHeight: 552, box })
+    const fallback = slide('generated-content', { fallbackReason: 'mostly pictures' })
+    fallback.nodes[0].data = 'data:image/png;base64,iVBORw0KGgo='
+    const report = await capture(page, [fallback] as SlideIr[], [])
+    expect(report.fallbackSlides).toHaveLength(1)
+    expect(report.generatedContentPictures).toBe(0)
   })
 })
 
