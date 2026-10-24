@@ -9,6 +9,7 @@ exports[`md parser > frontmatter.md > config 1`] = `
     "syncAll": true,
   },
   "fonts": {
+    "body": "sans",
     "italic": false,
     "local": [],
     "mono": [
@@ -564,6 +565,7 @@ exports[`md parser > mdc.md > config 1`] = `
     "syncAll": true,
   },
   "fonts": {
+    "body": "sans",
     "italic": false,
     "local": [],
     "mono": [
@@ -689,6 +691,7 @@ exports[`md parser > minimal.md > config 1`] = `
     "syncAll": true,
   },
   "fonts": {
+    "body": "sans",
     "italic": false,
     "local": [],
     "mono": [
@@ -915,6 +918,7 @@ exports[`md parser > multi-entries.md > config 1`] = `
     "syncAll": true,
   },
   "fonts": {
+    "body": "sans",
     "italic": false,
     "local": [],
     "mono": [
