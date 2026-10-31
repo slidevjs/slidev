@@ -554,6 +554,11 @@ export const community: ThemeInfo[] = [
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/5.png',
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/6.png',
       'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/7.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/8.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/9.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/10.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/11.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-nord/HEAD/example-export/12.png',
     ],
     tags: [
       'dark',
