@@ -30,3 +30,12 @@ export function updateCodeHighlightRange(
     }
   }
 }
+
+/**
+ * Google Slides' "Present" keys: Cmd+Enter (macOS) and Ctrl+F5 (Windows/Linux).
+ * Checks the modifier flag on the event itself, because clickers (e.g. Logitech Spotlight)
+ * send it without a separate modifier keydown, which `useMagicKeys` combos miss.
+ */
+export function isPresentShortcut(e: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey'>) {
+  return (e.key === 'Enter' && e.metaKey) || (e.key === 'F5' && e.ctrlKey)
+}

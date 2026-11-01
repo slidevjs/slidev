@@ -7,6 +7,7 @@ import { watch } from 'vue'
 import { useNav } from '../composables/useNav'
 import setupShortcuts from '../setup/shortcuts'
 import { fullscreen, isInputting, isOnFocus, magicKeys, shortcutsEnabled, shortcutsLocked } from '../state'
+import { isPresentShortcut } from './utils'
 
 export function registerShortcuts() {
   const { isPrintMode } = useNav()
@@ -23,6 +24,10 @@ export function registerShortcuts() {
   })
 
   strokeShortcut('f', () => fullscreen.toggle())
+  strokeShortcut(isPresentShortcut, (ev) => {
+    ev.preventDefault() // Ctrl+F5 would otherwise reload the page
+    fullscreen.toggle()
+  })
 
   function shortcut(key: string | Ref<boolean>, fn: Fn, autoRepeat = false) {
     if (typeof key === 'string')
@@ -47,12 +52,12 @@ export function registerShortcuts() {
     return watch(source, trigger, { flush: 'sync' })
   }
 
-  function strokeShortcut(key: KeyFilter, fn: Fn) {
+  function strokeShortcut(key: KeyFilter, fn: (ev: KeyboardEvent) => void) {
     return onKeyStroke(key, (ev) => {
       if (!enabled.value)
         return
       if (!ev.repeat)
-        fn()
+        fn(ev)
     })
   }
 }
