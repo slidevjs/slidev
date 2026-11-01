@@ -682,6 +682,33 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-tokyo-night-storm',
+    name: 'Tokyo Night Storm',
+    description: 'A dark-only theme using the Tokyo Night Storm palette',
+    author: {
+      name: 'David Ollerhead',
+      link: 'https://github.com/oller',
+    },
+    repo: 'https://github.com/oller/slidev-theme-tokyo-night-storm',
+    previews: [
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/1.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/2.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/3.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/4.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/5.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/6.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/7.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/8.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/9.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/10.png',
+      'https://raw.githubusercontent.com/oller/slidev-theme-tokyo-night-storm/HEAD/example-export/11.png',
+    ],
+    tags: [
+      'dark',
+      'tokyo-night',
+    ],
+  },
   // Add yours here!
   {
     id: '',
