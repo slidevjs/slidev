@@ -707,6 +707,10 @@ export const community: ThemeInfo[] = [
     tags: [
       'dark',
       'tokyo-night',
+      'tokyo-night-storm',
+      'tokyo',
+      'night',
+      'storm'
     ],
   },
   // Add yours here!
