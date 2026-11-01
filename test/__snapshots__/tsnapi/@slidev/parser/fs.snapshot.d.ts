@@ -26,6 +26,7 @@ export interface TimesplitOutput {
 // #endregion
 
 // #region Types
+export type ExportClickStep = number | [number, number];
 export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>;
 // #endregion
 
@@ -33,6 +34,7 @@ export type LoadedSlidevData = Omit<SlidevData, 'config' | 'themeMeta'>;
 export declare function detectFeatures(_: string): SlidevDetectedFeatures;
 export declare function extractImagesUsage(_: string, _: Record<string, any>): string[];
 export declare function getDefaultConfig(): SlidevConfig;
+export declare function getExportClickSteps(_: boolean | ExportClickStep[], _: number, _: number): number[];
 export declare function injectPreparserExtensionLoader(_: PreparserExtensionLoader): void;
 export declare function isPathInsideRoots(_: string, _: string[]): boolean;
 export declare function load(_: LoadRootsInfo, _: string, _?: Record<string, string> | ((_: string) => Promise<string>), _?: string): Promise<LoadedSlidevData>;
@@ -49,9 +51,11 @@ export declare function parseTimeString(_: string | number): {
 export declare function prettify(_: SlidevMarkdown): SlidevMarkdown;
 export declare function prettifySlide(_: SourceSlideInfo): SourceSlideInfo;
 export declare function resolveConfig(_: any, _?: SlidevThemeMeta, _?: string, _?: boolean): SlidevConfig;
+export declare function resolveExportClicks(_: unknown, _: boolean): boolean | ExportClickStep[];
 export declare function resolveFonts(_?: FontOptions): ResolvedFontOptions;
 export declare function save(_: SlidevMarkdown): Promise<string>;
 export declare function stringify(_: SlidevMarkdown): string;
 export declare function stringifySlide(_: SourceSlideInfo, _?: number): string;
+export declare function validateExportClicks(_: unknown): string | undefined;
 export declare function verifyConfig(_: SlidevConfig, _?: SlidevThemeMeta, _?: (_: string) => void): void;
 // #endregion

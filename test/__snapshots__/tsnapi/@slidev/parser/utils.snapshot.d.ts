@@ -16,7 +16,12 @@ export interface TimesplitOutput {
 }
 // #endregion
 
+// #region Types
+export type ExportClickStep = number | [number, number];
+// #endregion
+
 // #region Functions
+export declare function getExportClickSteps(_: boolean | ExportClickStep[], _: number, _: number): number[];
 export declare function parseAspectRatio(_: string | number): number;
 export declare function parseRangeString(_: number, _?: string): number[];
 export declare function parseTimesplits(_: TimesplitInput[]): TimesplitOutput[];
@@ -24,4 +29,6 @@ export declare function parseTimeString(_: string | number): {
   seconds: number;
   relative: boolean;
 };
+export declare function resolveExportClicks(_: unknown, _: boolean): boolean | ExportClickStep[];
+export declare function validateExportClicks(_: unknown): string | undefined;
 // #endregion

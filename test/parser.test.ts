@@ -5,6 +5,7 @@ import fg from 'fast-glob'
 import { describe, expect, it } from 'vitest'
 import { extractImagesUsage } from '../packages/parser/src/core'
 import { getDefaultConfig, load, parse, prettify, resolveConfig, stringify } from '../packages/parser/src/fs'
+import { getExportClickSteps, resolveExportClicks } from '../packages/parser/src/utils'
 
 function configDiff(v: SlidevConfig) {
   const defaults = getDefaultConfig()
@@ -606,6 +607,49 @@ Some content
       expect(config.drawings.enabled).toBe(false)
       expect(config.drawings.presenterOnly).toBe(true)
     })
+  })
+
+  it('export-clicks', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/export-clicks')
+    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'slides.md'))
+    expect(data.headmatter.export).toEqual({ withClicks: false })
+
+    const steps = (withClicks: boolean) => data.slides.map(({ frontmatter }) => getExportClickSteps(
+      resolveExportClicks(frontmatter.exportClicks, withClicks),
+      frontmatter.clicksStart ?? 0,
+      frontmatter.clicks ?? 3,
+    ))
+
+    expect(steps(false)).toEqual([
+      [3],
+      [3],
+      [0, 1, 2, 3],
+      [0, 2, 5],
+      [1, 2, 3],
+      [0, 3],
+      [2, 3],
+      [],
+    ])
+    expect(steps(true)).toEqual([
+      [0, 1, 2, 3],
+      [3],
+      [0, 1, 2, 3],
+      [0, 2, 5],
+      [1, 2, 3],
+      [0, 3],
+      [2, 3],
+      [],
+    ])
+  })
+
+  it('reports invalid exportClicks values', async () => {
+    const root = resolve(__dirname, 'fixtures/markdown/export-clicks')
+    const data = await load({ userRoot: root, roots: [root] }, resolve(root, 'invalid.md'))
+    const errors = Object.values(data.markdownFiles).flatMap(md => md.errors ?? [])
+    expect(errors).toEqual([
+      { row: 2, message: expect.stringContaining('Invalid `exportClicks` value "foo"') },
+      { row: 8, message: expect.stringContaining('Invalid `exportClicks` value [1,"two",3]') },
+    ])
   })
 
   it('detects circular src imports without overflowing', async () => {

@@ -8,7 +8,7 @@ import { slash } from '@antfu/utils'
 import MarkdownExit from 'markdown-exit'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
-import { parseAspectRatio, parseRangeString } from '../packages/parser/src'
+import { getExportClickSteps, parseAspectRatio, parseRangeString, resolveExportClicks, validateExportClicks } from '../packages/parser/src'
 import { getRoots, toAtFS } from '../packages/slidev/node/resolver'
 import { createMakeAbsoluteImportGlob, generateCoollabsFontsUrl, generateGoogleFontsUrl, stringifyMarkdownTokens, updateFrontmatterPatch } from '../packages/slidev/node/utils'
 
@@ -21,6 +21,46 @@ describe('utils', () => {
     expect(parseRangeString(10, '1,2-3,5')).toEqual([1, 2, 3, 5])
     expect(parseRangeString(10, '1;2-3;5')).toEqual([1, 2, 3, 5])
     expect(parseRangeString(10, '6-')).toEqual([6, 7, 8, 9, 10])
+  })
+
+  it('export-clicks', () => {
+    expect(resolveExportClicks(undefined, false)).toBe(false)
+    expect(resolveExportClicks(undefined, true)).toBe(true)
+    expect(resolveExportClicks(null, true)).toBe(true)
+    expect(resolveExportClicks(false, true)).toBe(false)
+    expect(resolveExportClicks(true, false)).toBe(true)
+    expect(resolveExportClicks([5, 0, 2, 2], false)).toEqual([0, 2, 2, 5])
+    expect(resolveExportClicks('0,2-3', false)).toEqual([0, [2, 3]])
+    expect(resolveExportClicks('3; 1-2', false)).toEqual([[1, 2], 3])
+    expect(resolveExportClicks(['0', '2-3'], false)).toEqual([0, [2, 3]])
+    expect(resolveExportClicks('last', false)).toEqual([Infinity])
+    expect(resolveExportClicks([0, 'last'], false)).toEqual([0, Infinity])
+    expect(resolveExportClicks('2-', false)).toEqual([[2, Infinity]])
+    expect(resolveExportClicks('all', false)).toBe(true)
+    expect(resolveExportClicks('none', true)).toEqual([])
+    expect(resolveExportClicks([], true)).toEqual([])
+    expect(resolveExportClicks('', true)).toEqual([])
+    expect(resolveExportClicks([1.5, -1, 2], false)).toEqual([2])
+    expect(resolveExportClicks('foo', true)).toBe(true)
+    expect(resolveExportClicks('foo', false)).toBe(false)
+
+    expect(validateExportClicks(undefined)).toBeUndefined()
+    expect(validateExportClicks(true)).toBeUndefined()
+    expect(validateExportClicks('0,2-3,last')).toBeUndefined()
+    expect(validateExportClicks([])).toBeUndefined()
+    expect(validateExportClicks('foo')).toMatch(/Invalid `exportClicks` value "foo"/)
+    expect(validateExportClicks([1, 'two'])).toMatch(/Invalid `exportClicks` value \[1,"two"\]/)
+
+    expect(getExportClickSteps(false, 0, 3)).toEqual([3])
+    expect(getExportClickSteps(true, 0, 3)).toEqual([0, 1, 2, 3])
+    expect(getExportClickSteps(true, 2, 3)).toEqual([2, 3])
+    expect(getExportClickSteps([], 0, 3)).toEqual([])
+    expect(getExportClickSteps([0, 2, 5], 0, 3)).toEqual([0, 2, 3])
+    expect(getExportClickSteps([0, 2, 5, 99], 1, 3)).toEqual([1, 2, 3])
+    expect(getExportClickSteps([0, 2, 5], 0, 0)).toEqual([0])
+    expect(getExportClickSteps([0, Infinity], 0, 3)).toEqual([0, 3])
+    expect(getExportClickSteps([[2, Infinity]], 0, 4)).toEqual([2, 3, 4])
+    expect(getExportClickSteps([[0, 1], [1, 2]], 0, 4)).toEqual([0, 1, 2])
   })
 
   it('aspect-ratio', () => {

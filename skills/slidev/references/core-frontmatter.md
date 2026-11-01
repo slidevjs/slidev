@@ -33,6 +33,7 @@ class: text-white
 ---
 clicks: 5                   # Total clicks for this slide
 clicksStart: 0              # Starting click number
+exportClicks: [0, 2, last]  # Click steps to export, overrides --with-clicks ([] skips the slide)
 ---
 ```
 
