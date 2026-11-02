@@ -710,7 +710,7 @@ export const community: ThemeInfo[] = [
       'tokyo-night-storm',
       'tokyo',
       'night',
-      'storm'
+      'storm',
     ],
   },
   // Add yours here!
