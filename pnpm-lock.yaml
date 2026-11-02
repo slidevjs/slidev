@@ -379,8 +379,8 @@ catalogs:
       specifier: ^30.6.0
       version: 30.6.0
     '@comark/markdown-it':
-      specifier: ^0.3.4
-      version: 0.3.4
+      specifier: ^0.4.0
+      version: 0.4.0
     '@hedgedoc/markdown-it-plugins':
       specifier: ^2.1.4
       version: 2.1.4
@@ -1145,7 +1145,7 @@ importers:
         version: 9.3.0
       '@comark/markdown-it':
         specifier: catalog:prod
-        version: 0.3.4(@types/markdown-it@14.2.0)(markdown-it@14.3.2)
+        version: 0.4.0(@types/markdown-it@14.2.0)(markdown-it@14.3.2)
       '@iconify-json/carbon':
         specifier: catalog:icons
         version: 1.2.28
@@ -2223,8 +2223,8 @@ packages:
   '@colordx/core@7.3.0':
     resolution: {integrity: sha512-LVzTTPhX7wpy7TkGjouA9zbbCBIw92RGm7ZQqSKFE0oYE3sMx2FGXz90eVpgw7k/+wrrY+qJ86nHXifZWMS5jA==}
 
-  '@comark/markdown-it@0.3.4':
-    resolution: {integrity: sha512-btB+klvBi08qRZGeSLbykfD2ROxhLLQJ4+uDI7FjL560ztlzTtBlGmqe6zP49mW/Yp9y39kSWeRS46iEFpGa0w==}
+  '@comark/markdown-it@0.4.0':
+    resolution: {integrity: sha512-GsNpVqjaYgq7x7DSG7VHP3Y8A9HRrsPCVwmhvR4M9jqMiC9bkmcMN5EHc9SEvpRwMXP02HIKA6C8y6KLUkUtPQ==}
     peerDependencies:
       '@types/markdown-it': '*'
       markdown-it: ^14.0.0
@@ -10348,7 +10348,7 @@ snapshots:
 
   '@colordx/core@7.3.0': {}
 
-  '@comark/markdown-it@0.3.4(@types/markdown-it@14.2.0)(markdown-it@14.3.2)':
+  '@comark/markdown-it@0.4.0(@types/markdown-it@14.2.0)(markdown-it@14.3.2)':
     dependencies:
       '@types/markdown-it': 14.2.0
       js-yaml: 4.3.2
