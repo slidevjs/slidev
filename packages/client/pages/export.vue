@@ -55,7 +55,7 @@ function doPrint() {
   setTimeout(window.print, 100)
 }
 
-// slides with `exportClicks: false` only have their final state (see SlidesShow.vue),
+// slides with `exportClicks: last` only have their final state (see SlidesShow.vue),
 // so only a list of steps needs filtering here (an empty one skips the slide)
 function shouldCaptureClick() {
   const route = slides.value[currentSlideNo.value - 1]

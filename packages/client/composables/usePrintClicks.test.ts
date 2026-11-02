@@ -59,7 +59,7 @@ describe('usePrintClicks', () => {
   })
 
   it('overrides the with-clicks option with exportClicks', () => {
-    expect(pages({ exportClicks: false }, true, 3)).toEqual([3])
+    expect(pages({ exportClicks: 'last' }, true, 3)).toEqual([3])
     expect(pages({ exportClicks: true }, false, 3)).toEqual([0, 1, 2, 3])
   })
 

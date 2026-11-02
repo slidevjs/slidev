@@ -14,7 +14,7 @@ export:
 </v-clicks>
 
 ---
-exportClicks: false
+exportClicks: last
 ---
 
 # Final state only

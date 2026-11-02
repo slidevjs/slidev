@@ -148,7 +148,7 @@ clicks: 0
 clicksStart: 0
 # click steps to export, overriding the `withClicks` export option
 # Learn more: https://sli.dev/features/export-clicks
-exportClicks: undefined # or boolean | (number | string)[] | string
+exportClicks: undefined # or true | 'last' | (number | string)[] | string
 # background image URL, local asset path, or color/gradient
 background: undefined # or string (e.g. 'https://cover.sli.dev' or '/image.png')
 # completely disable and hide the slide

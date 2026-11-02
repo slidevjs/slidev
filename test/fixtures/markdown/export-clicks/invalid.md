@@ -11,3 +11,9 @@ exportClicks: [1, 'two', 3]
 ---
 
 # Partially invalid
+
+---
+exportClicks: false
+---
+
+# Boolean

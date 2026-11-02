@@ -37,8 +37,8 @@ export function parseRangeString(total: number, rangeStr?: string) {
 export type ExportClickStep = number | [number, number]
 
 function parseExportClicks(value: unknown): { steps: boolean | ExportClickStep[], invalid: string[] } {
-  if (typeof value === 'boolean')
-    return { steps: value, invalid: [] }
+  if (value === true)
+    return { steps: true, invalid: [] }
   const parts = (Array.isArray(value) ? value : [value])
     .flatMap(part => String(part).split(/[,;]/g))
     .map(part => part.trim())
@@ -66,6 +66,9 @@ function parseExportClicks(value: unknown): { steps: boolean | ExportClickStep[]
     else
       steps.push([+start, end === '' ? Infinity : +end])
   }
+  // `last` alone is the same as not exporting clicks
+  if (steps.length === 1 && steps[0] === Infinity)
+    return { steps: false, invalid }
   steps.sort((a, b) => (typeof a === 'number' ? a : a[0]) - (typeof b === 'number' ? b : b[0]))
   return { steps, invalid }
 }
@@ -74,7 +77,7 @@ function parseExportClicks(value: unknown): { steps: boolean | ExportClickStep[]
  * Resolves the `exportClicks` frontmatter of a slide against the `withClicks` export option.
  * Invalid parts are dropped, see `validateExportClicks`.
  *
- * undefined => withClicks, true/false => itself, [] => [] (skip the slide),
+ * undefined => withClicks, true => true, 'last' => false, [] => [] (skip the slide),
  * [5, 0, 2] => [0, 2, 5], '1-3,5-,last' => [[1, 3], [5, Infinity], Infinity]
  */
 export function resolveExportClicks(exportClicks: unknown, withClicks: boolean): boolean | ExportClickStep[] {
@@ -94,7 +97,7 @@ export function validateExportClicks(exportClicks: unknown): string | undefined 
     return
   const { invalid } = parseExportClicks(exportClicks)
   if (invalid.length)
-    return `Invalid \`exportClicks\` value ${JSON.stringify(exportClicks)}: expected true, false, or click steps like "0,2-3,last"`
+    return `Invalid \`exportClicks\` value ${JSON.stringify(exportClicks)}: expected true, last, or click steps like "0,2-3,last"`
 }
 
 /**

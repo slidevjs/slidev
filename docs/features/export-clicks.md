@@ -14,36 +14,34 @@ description: |
 
 By default, Slidev exports every slide as a single page in its final state, and with the `--with-clicks` option as one page per click step. You can override this for individual slides with the `exportClicks` option in their frontmatter:
 
+<!-- eslint-skip -->
+
 ```md
 ---
-exportClicks: false
+exportClicks: last
 ---
 
 # One page in the final state, even with `--with-clicks`
 
 ---
-
 exportClicks: true
 ---
 
 # One page per click step, even without `--with-clicks`
 
 ---
-
 exportClicks: [0, 2, 4]
 ---
 
 # One page each for click 0, 2 and 4
 
 ---
-
 exportClicks: '0,2-4,last'
 ---
 
 # The same, plus a page for the final state
 
 ---
-
 exportClicks: []
 ---
 

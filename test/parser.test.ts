@@ -649,6 +649,7 @@ Some content
     expect(errors).toEqual([
       { row: 2, message: expect.stringContaining('Invalid `exportClicks` value "foo"') },
       { row: 8, message: expect.stringContaining('Invalid `exportClicks` value [1,"two",3]') },
+      { row: 14, message: expect.stringContaining('Invalid `exportClicks` value false') },
     ])
   })
 
