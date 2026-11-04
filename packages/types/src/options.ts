@@ -51,6 +51,9 @@ export interface SlidevEntryOptions {
    * Override routerMode at build time
    */
   routerMode?: 'hash' | 'history' | 'memory'
+
+  singleFile?: boolean
+  dark?: boolean
 }
 
 export interface ResolvedSlidevOptions extends RootsInfo, SlidevEntryOptions {

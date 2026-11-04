@@ -3,7 +3,24 @@ export interface CommonArgs {
   theme?: string
 }
 
+export interface HtmlExportOptions {
+  allowRemote?: boolean
+  maxBytes?: number
+  images?: {
+    maxWidth?: number
+    maxHeight?: number
+    quality?: number
+  }
+}
+
 export interface ExportArgs extends CommonArgs {
+  'html'?: HtmlExportOptions
+  'allow-remote'?: boolean
+  'max-bytes'?: number
+  'image-max-width'?: number
+  'image-max-height'?: number
+  'image-quality'?: number
+  'without-notes'?: boolean
   'output'?: string
   'format'?: string
   'timeout'?: number
