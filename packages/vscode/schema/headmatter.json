@@ -248,10 +248,12 @@
             "dark",
             "light",
             "all",
-            "auto"
+            "auto",
+            "light dark",
+            "dark light"
           ],
-          "description": "Force slides color schema",
-          "markdownDescription": "Force slides color schema",
+          "description": "Color scheme for slides. Use `auto` to follow the system preference, `light` or `dark` to force a scheme, or `light dark` / `dark light` to choose a default while allowing users to switch.",
+          "markdownDescription": "Color scheme for slides. Use `auto` to follow the system preference,\n`light` or `dark` to force a scheme, or `light dark` / `dark light`\nto choose a default while allowing users to switch.",
           "default": "auto"
         },
         "routerMode": {

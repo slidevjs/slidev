@@ -1,4 +1,4 @@
-import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, TocItem } from '@slidev/types'
+import type { ExportArgs, ResolvedSlidevOptions, SlideInfo, SlidevConfig, TocItem } from '@slidev/types'
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import process from 'node:process'
@@ -40,6 +40,12 @@ export interface ExportOptions {
   perSlide?: boolean
   scale?: number
   omitBackground?: boolean
+}
+
+export function resolveExportDarkMode(dark: boolean | undefined, colorSchema: SlidevConfig['colorSchema']) {
+  if (colorSchema === 'light dark' || colorSchema === 'dark light')
+    return dark ?? colorSchema === 'dark light'
+  return dark || colorSchema === 'dark'
 }
 
 interface ExportPngResult {
@@ -639,7 +645,7 @@ export function getExportOptions(args: ExportArgs, options: ResolvedSlidevOption
     timeout: timeout ?? 30000,
     wait: wait ?? 0,
     waitUntil: waitUntil === 'none' ? undefined : (waitUntil ?? 'networkidle') as 'networkidle' | 'load' | 'domcontentloaded',
-    dark: dark || options.data.config.colorSchema === 'dark',
+    dark: resolveExportDarkMode(dark, options.data.config.colorSchema),
     // Export navigates by URL; memory routing ignores the URL, so fall back to history.
     routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
     width: options.data.config.canvasWidth,
