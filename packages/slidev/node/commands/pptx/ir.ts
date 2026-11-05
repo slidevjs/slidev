@@ -102,6 +102,8 @@ export interface RawNode {
   src?: string
   /** `IMG` only. */
   alt?: string
+  /** Intrinsic image size and CSS object geometry; the content box excludes padding and borders. */
+  image?: { width: number, height: number, contentRect: Rect, fit: string, position: string }
   /** `A` only, resolved absolute. */
   href?: string
   /** Root of a rendered formula. KaTeX sets it as dozens of positioned spans in its own metric fonts; walked as text the layout falls apart, so it is rasterized whole. */
@@ -224,8 +226,15 @@ export interface IrImage extends IrBase {
   data: string
   alt?: string
   link?: string
+  /** Effective element/ancestor opacity, applied only when embedding the original image. */
+  opacity?: number
   /**
-   * The visible region when the slide edge cuts the image short: draw at full
+   * Screenshot destination and element-relative clip; required for unsupported object geometry.
+   * A screenshot already includes CSS fitting and opacity; any native box keeps its decoration.
+   */
+  screenshot?: { rect: Rect, clip: Rect, required?: boolean }
+  /**
+   * The visible region when the content box or slide clips the fitted image: draw at full
    * size, then crop to `rect`, as the browser does; squeezing into the clipped
    * box would compress it. All values are CSS pixels: `w`/`h` the full display
    * size, `x`/`y` the offset from its top-left corner to `rect`.

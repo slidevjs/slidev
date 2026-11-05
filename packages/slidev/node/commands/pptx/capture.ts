@@ -6,8 +6,8 @@ import { Buffer } from 'node:buffer'
 /**
  * The only Playwright glue in the exporter. Rasterization runs as a second phase,
  * after every measurement is in hand, because isolating an element for a screenshot
- * means mutating the DOM of the live app. Only inline `visibility`/`background-color`
- * (no reflow) and the viewport height are touched; width is what `PrintContainer`
+ * means mutating the DOM of the live app. Only paint styles (no reflow) and the
+ * viewport height are touched; width is what `PrintContainer`
  * scales from, so the coordinates the walker measured stay valid here.
  */
 
@@ -52,9 +52,9 @@ async function installRootFinder(page: Page): Promise<void> {
  * be captured and then drawn again as shapes. `visibility` rather than `display`:
  * `display: none` reflows and moves the target.
  */
-async function isolate(page: Page, id: number, hideDescendants: boolean): Promise<boolean> {
+async function isolate(page: Page, id: number, hideDescendants: boolean, hideDecoration = false): Promise<boolean> {
   return await page.evaluate(
-    ({ id, idAttribute, restoreAttribute, hideDescendants }) => {
+    ({ id, idAttribute, restoreAttribute, hideDescendants, hideDecoration }) => {
       // `document.querySelector` does not pierce shadow DOM while `page.locator` does,
       // so the screenshot succeeds even when isolation silently misses a shadow-DOM target.
       const roots = (window as any).__slidevExportRoots() as (Document | ShadowRoot)[]
@@ -68,6 +68,17 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
       }
       if (!target)
         return false
+
+      // When an image has a native box, capture only its image content. The box
+      // carries decoration, including shadows outside the screenshot bounds.
+      // Preserve border widths and padding so this cannot move the content.
+      if (hideDecoration) {
+        const html = target as HTMLElement
+        html.setAttribute(`${restoreAttribute}-decoration`, html.style.cssText)
+        html.style.setProperty('background-color', 'transparent', 'important')
+        html.style.setProperty('border-color', 'transparent', 'important')
+        html.style.setProperty('box-shadow', 'none', 'important')
+      }
 
       const hide = (el: Element) => {
         const html = el as HTMLElement
@@ -120,7 +131,7 @@ async function isolate(page: Page, id: number, hideDescendants: boolean): Promis
       }
       return true
     },
-    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants },
+    { id, idAttribute: ID_ATTRIBUTE, restoreAttribute: RESTORE_ATTRIBUTE, hideDescendants, hideDecoration },
   )
 }
 
@@ -161,6 +172,10 @@ async function restore(page: Page): Promise<void> {
         style.removeProperty('visibility')
       el.removeAttribute(restoreAttribute)
     }
+    for (const el of all(`[${restoreAttribute}-decoration]`)) {
+      (el as HTMLElement).style.cssText = el.getAttribute(`${restoreAttribute}-decoration`) ?? ''
+      el.removeAttribute(`${restoreAttribute}-decoration`)
+    }
   }, RESTORE_ATTRIBUTE)
 }
 
@@ -170,7 +185,7 @@ async function restore(page: Page): Promise<void> {
  * far taller than its viewport it returns a region from elsewhere on the page
  * entirely, so the element's live box is read and the page clipped at it instead.
  */
-async function shoot(page: Page, selector: string): Promise<string | undefined> {
+async function shoot(page: Page, selector: string, clip?: Rect): Promise<string | undefined> {
   try {
     const locator = page.locator(selector).first()
     if (!(await locator.count()))
@@ -180,7 +195,12 @@ async function shoot(page: Page, selector: string): Promise<string | undefined> 
       return undefined
     // `boundingBox()` is viewport-relative; `shootClip` wants document coordinates.
     const scrollY = await page.evaluate(() => window.scrollY)
-    return await shootClip(page, { x: box.x, y: box.y + scrollY, w: box.width, h: box.height })
+    return await shootClip(page, {
+      x: box.x + (clip?.x ?? 0),
+      y: box.y + scrollY + (clip?.y ?? 0),
+      w: clip?.w ?? box.width,
+      h: clip?.h ?? box.height,
+    })
   }
   catch {
     return undefined
@@ -324,6 +344,7 @@ export async function capture(
 
   const rasterBySource = new Map<number, IrRaster[]>()
   const imagesBySource = new Map<number, IrImage[]>()
+  const nativeBoxSources = new Set<number>()
   for (const slide of slides) {
     for (const node of slide.nodes) {
       if (node.kind === 'raster') {
@@ -335,6 +356,9 @@ export async function capture(
         const list = imagesBySource.get(node.sourceId) ?? []
         list.push(node)
         imagesBySource.set(node.sourceId, list)
+      }
+      else if (node.kind === 'box') {
+        nativeBoxSources.add(node.sourceId)
       }
     }
   }
@@ -376,7 +400,7 @@ export async function capture(
       await fulfil(request)
 
     for (const [sourceId, nodes] of imagesBySource) {
-      let data = await fetchImage(page, nodes[0].data)
+      let data = nodes[0].screenshot?.required ? undefined : await fetchImage(page, nodes[0].data)
       if (data) {
         report.imagesFetched++
       }
@@ -384,21 +408,28 @@ export async function capture(
         // Unfetchable, or an SVG: screenshot the element instead, isolated so
         // the picture does not carry what the slide painted behind it.
         try {
-          if (!(await isolate(page, sourceId, false)))
+          if (!(await isolate(page, sourceId, false, nativeBoxSources.has(sourceId))))
             report.isolationMissed++
           // Once per element, not once per node it produced across click steps.
-          data = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`)
-          if (data)
+          data = await shoot(page, `[${ID_ATTRIBUTE}="${sourceId}"]`, nodes[0].screenshot?.clip)
+          if (data) {
             report.imagesFetched++
+            for (const node of nodes) {
+              // The screenshot already includes the fitted image and its alpha.
+              // Its bounds are the visible element box, not the fitted object.
+              if (node.screenshot)
+                node.rect = node.screenshot.rect
+              delete node.crop
+              delete node.opacity
+            }
+          }
         }
         finally {
           await restore(page)
         }
       }
-      if (!data)
-        continue
       for (const node of nodes)
-        node.data = data
+        node.data = data ?? ''
     }
   })
 
