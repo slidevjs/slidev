@@ -47,4 +47,4 @@ Create in project root:
 
 ## Export Note
 
-When global layers depend on navigation state, use `--per-slide` for export formats that support it. Editable PPTX does not support this option; use `slide-top.vue` and `slide-bottom.vue` for per-slide content instead.
+Use `--per-slide` export option when global layers depend on navigation state (not supported with `pptx-editable`; use `slide-top.vue`/`slide-bottom.vue` instead).

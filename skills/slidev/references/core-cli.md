@@ -42,7 +42,7 @@ slidev build [entry]
 Options:
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--out` | dist | Output directory; relative paths resolve from the entry file's directory |
+| `--out` | dist | Output directory |
 | `--base` | / | Base URL for deployment |
 | `--download` | false | Include PDF download |
 | `--theme` | - | Override theme |
@@ -69,13 +69,12 @@ Options:
 | `--timeout` | 30000 | Timeout per slide (ms) |
 | `--range` | - | Slide range (e.g., 1,4-7) |
 | `--dark` | false | Export dark mode |
-| `--with-clicks` | true for PPTX formats; false otherwise | Export click steps as separate slides/pages |
+| `--with-clicks` | false (true for PPTX) | Include click steps |
 | `--with-toc` | false | PDF table of contents |
 | `--wait` | 0 | Wait ms before export |
 | `--wait-until` | networkidle | Wait condition |
 | `--omit-background` | false | Transparent background |
 | `--executable-path` | - | Browser path |
-| `--scale` | 2 | Scale factor for image export |
 
 Examples:
 ```bash
