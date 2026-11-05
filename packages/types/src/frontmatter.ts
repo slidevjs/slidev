@@ -493,6 +493,12 @@ export interface FontOptions {
    */
   mono?: string | string[]
   /**
+   * Font family role to use by default for the page body
+   *
+   * @default 'sans'
+   */
+  body?: 'sans' | 'serif' | 'mono'
+  /**
    * Load webfonts for custom CSS (does not apply anywhere by default)
    */
   custom?: string | string[]
