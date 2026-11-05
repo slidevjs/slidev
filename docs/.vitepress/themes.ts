@@ -682,6 +682,29 @@ export const community: ThemeInfo[] = [
       'light',
     ],
   },
+  {
+    id: 'slidev-theme-pixel',
+    name: 'Pixel',
+    description: 'A minimalist, typographic theme: black and white, monospace accents, terminal-style cards, and a random pixel grid on section slides, unique on every load.',
+    author: {
+      name: 'Noe Romano',
+      link: 'https://github.com/romanoe',
+    },
+    repo: 'https://github.com/romanoe/slidev-theme-pixel',
+    previews: [
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/cover.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/section.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/two-cols.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/image-full.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/photowall.png',
+      'https://cdn.jsdelivr.net/gh/romanoe/slidev-theme-pixel@d175c07/screenshots/grid.png',
+    ],
+    tags: [
+      'dark',
+      'light',
+      'minimalism',
+    ],
+  },
   // Add yours here!
   {
     id: '',
