@@ -14,7 +14,7 @@ However, interactive features in your slides may not be available in the exporte
 
 Slidev provides a UI in the browser for exporting your slides. You can access it by clicking the "Export" button in "More options" menu in the [navigation bar](./ui#navigation-bar), or go to `http://localhost:<port>/export` directly.
 
-In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file.
+In the UI, you can export the slides as PDF, or capture the slides as images and download them as a PPTX or zip file. Editable PPTX is only available via the [CLI](#editable-pptx).
 
 Note that browsers other than **modern Chromium-based browsers** may not work well with the exporting UI. If you encounter any issues, please try use the CLI instead.
 
@@ -114,7 +114,7 @@ Here are some common options you can use with the `slidev export` command. For a
 
 ### Export Clicks Steps
 
-By default, Slidev exports one page per slide with clicks animations disabled. If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
+By default, Slidev exports one page per slide with clicks animations disabled (except for PPTX formats, which export one slide per click step). If you want to export slides with multiple steps into multiple pages, pass the `--with-clicks` option:
 
 ```bash
 $ slidev export --with-clicks
