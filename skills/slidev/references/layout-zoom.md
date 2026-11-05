@@ -33,7 +33,14 @@ zoom: 0.8
 - Make text more readable
 - Adjust for different content densities
 
+## Fit Guidance
+
+Use `zoom` after choosing the slide structure. If only one object is too large, prefer a local `<Transform>` around that object. If the slide contains independent ideas, split it into multiple slides instead of shrinking everything.
+
+Do not use one fixed `zoom` value as a substitute for checking the rendered output. Text, diagrams, and tables still need to remain readable after export.
+
 ## Related Features
 
+- Content fit workflow: Use [layout-content-fit](layout-content-fit.md)
 - Scale all slides: Use `canvasWidth` / `aspectRatio` in headmatter
 - Scale elements: Use `<Transform>` component
