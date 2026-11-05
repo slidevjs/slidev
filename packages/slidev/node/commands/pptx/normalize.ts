@@ -153,6 +153,14 @@ export function rasterReasonFor(node: RawNode, style: RawStyle | undefined): Ras
   // here would catch it.
   if (node.isMath)
     return 'math'
+  // A pseudo-element `content` the layout tree's text cannot stand for: an
+  // image in it (`url()`, a gradient) has no text at all, and a counter read
+  // without the layout tree is only `counter(name)`. A picture is the faithful
+  // copy left.
+  if ((node.tag === '::BEFORE' || node.tag === '::AFTER') && node.content && node.content !== 'normal'
+    && (contentPaintsImage(node.content) || (node.generatedText === undefined && contentText(node.content) === undefined))) {
+    return 'generated-content'
+  }
   const tagReason = RASTER_TAGS[node.tag]
   if (tagReason)
     return tagReason
@@ -180,6 +188,78 @@ export function rasterReasonFor(node: RawNode, style: RawStyle | undefined): Ras
   if (style.writingMode && style.writingMode !== 'horizontal-tb')
     return 'writing-mode'
   return undefined
+}
+
+/** CSS `content` functions that produce text; `symbols()` is a counter style, though an image in its arguments still counts. */
+const TEXT_FUNCTIONS = new Set(['counter', 'counters', 'attr', 'symbols'])
+const WHITESPACE = /[ \t\n\r\f]/
+const NEWLINE = /[\n\r\f]/
+
+/**
+ * The text a pseudo-element's computed `content` paints, when it is made only of
+ * CSS strings, which Chromium serializes quoted and escaped. Anything else
+ * (`counter()`, `counters()`, a keyword) has no text to read and returns undefined.
+ */
+export function contentText(content: string | undefined): string | undefined {
+  if (!content)
+    return undefined
+  let text = ''
+  let i = 0
+  let strings = 0
+  while (i < content.length) {
+    const quote = content[i]
+    if (WHITESPACE.test(quote)) {
+      i++
+      continue
+    }
+    if (quote !== '"' && quote !== '\'')
+      return undefined
+    i++
+    while (i < content.length && content[i] !== quote) {
+      // A raw newline ends a CSS string early, which makes it invalid.
+      if (NEWLINE.test(content[i]))
+        return undefined
+      if (content[i] !== '\\') {
+        text += content[i++]
+        continue
+      }
+      const next = content[i + 1] ?? ''
+      const hex = /^[0-9a-f]{1,6}/i.exec(content.slice(i + 1))
+      if (hex) {
+        const code = Number.parseInt(hex[0], 16)
+        // Zero, a surrogate, or past the last code point is U+FFFD in CSS.
+        text += code === 0 || (code >= 0xD800 && code <= 0xDFFF) || code > 0x10FFFF ? '\uFFFD' : String.fromCodePoint(code)
+        i += 1 + hex[0].length
+        // One whitespace ends a hex escape and is not part of the text; CRLF counts as one.
+        if (content.startsWith('\r\n', i))
+          i += 2
+        else if (WHITESPACE.test(content[i] ?? ''))
+          i++
+      }
+      else if (NEWLINE.test(next)) {
+        // An escaped newline continues the string onto the next line.
+        i += content.startsWith('\r\n', i + 1) ? 3 : 2
+      }
+      else {
+        text += next
+        i += 2
+      }
+    }
+    if (i >= content.length)
+      return undefined
+    i++
+    strings++
+  }
+  return strings ? text : undefined
+}
+
+/**
+ * Whether `content` draws an image (`url()`, `image-set()`, a gradient), which
+ * no text can stand for. Counters and their styles, `attr()` and quote keywords are text.
+ */
+export function contentPaintsImage(content: string): boolean {
+  const outsideStrings = content.replace(/"(?:[^"\\]|\\[\s\S])*"|'(?:[^'\\]|\\[\s\S])*'/g, '')
+  return [...outsideStrings.matchAll(/([a-z-]+)\(/gi)].some(([, name]) => !TEXT_FUNCTIONS.has(name.toLowerCase()))
 }
 
 /**
@@ -637,7 +717,9 @@ function buildSlideIr(
       if (reason && emitRaster(node, reason))
         return
       emitBox(node, style)
-      if (node.text) {
+      // What the browser drew, when it could be read; otherwise the strings `content` holds.
+      const text = node.generatedText ?? contentText(node.content)
+      if (text) {
         push({
           kind: 'text',
           sourceId: node.id,
@@ -647,7 +729,7 @@ function buildSlideIr(
           align: alignOf(style),
           valign: 'middle',
           lineHeight: resolveLineHeight(style),
-          runs: [runFrom(node.text, style, fontResolution, unparsed)],
+          runs: [runFrom(text, style, fontResolution, unparsed)],
         }, node)
       }
       return

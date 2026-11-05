@@ -3,7 +3,7 @@ import type { Page } from 'playwright-chromium'
 import fs from 'node:fs/promises'
 import { dim, yellow } from 'ansis'
 import { buildPptx } from './build'
-import { capture, ID_ATTRIBUTE } from './capture'
+import { capture, ID_ATTRIBUTE, readGeneratedText } from './capture'
 import { normalize } from './normalize'
 import { collectSnapshot } from './walker'
 
@@ -35,6 +35,8 @@ export interface EditableExportResult {
   unparsedColors: string[]
   /** Decorative pseudo-elements whose box could not be resolved. */
   unplaceablePseudos: string[]
+  /** `::before`/`::after` content exported as a picture: a counter whose text could not be read, or an image in `content`. */
+  generatedContentPictures: number
   /** The path actually written, extension included. */
   output: string
 }
@@ -62,6 +64,20 @@ export async function exportPptxEditable(
     containerSelector: '.print-slide-container',
     idAttribute: ID_ATTRIBUTE,
   })
+
+  // Right after the walk, while every element still carries its id: a CSS
+  // counter's number is in the layout tree and nowhere the walker can reach.
+  // The two reads are not atomic, so this assumes a settled page: a script that
+  // changes the DOM in between (paused CSS animations do not stop one) could make
+  // them disagree.
+  const generated = await readGeneratedText(ctx.page)
+  for (const slide of snapshot.slides) {
+    for (const node of slide.nodes) {
+      const text = (node.tag === '::BEFORE' || node.tag === '::AFTER') ? generated?.get(`${node.parent}${node.tag}`) : undefined
+      if (text !== undefined)
+        node.generatedText = text
+    }
+  }
 
   // Filter before normalizing, so leftover pages cost no measurement or screenshots.
   snapshot.slides = snapshot.slides.filter(slide => ctx.pages.includes(slide.no))
@@ -101,6 +117,7 @@ export async function exportPptxEditable(
     rastersFailed: report.rastersFailed,
     unparsedColors,
     unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
+    generatedContentPictures: report.generatedContentPictures,
     // A pptx names fonts, it does not carry them; report what recipients need installed.
     fontsNamed: [...new Set(Object.values(snapshot.fontResolution).filter(Boolean))].sort(),
   }
@@ -124,6 +141,8 @@ export function reportEditableExport(result: EditableExportResult): void {
     console.warn(yellow(`  ${result.unplaceablePseudos.length} CSS decoration(s) could not be placed and were left out:`))
     console.warn(dim(`    ${result.unplaceablePseudos.slice(0, 5).join(', ')}`))
   }
+  if (result.generatedContentPictures)
+    console.warn(yellow(`  ${result.generatedContentPictures} CSS decoration(s) with generated content, such as counter numbers, were exported as pictures`))
   if (result.fontsNamed.length) {
     console.warn(dim(`  fonts named in this file: ${result.fontsNamed.join(', ')}`))
     console.warn(dim('  a .pptx names fonts rather than embedding them, so recipients need these installed'))

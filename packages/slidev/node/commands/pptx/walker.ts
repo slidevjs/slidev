@@ -435,7 +435,6 @@ export function collectSnapshot(options: {
           w: width,
           h: height,
         }
-        const text = pseudo.content.replace(RE_QUOTES, '')
         nodes.push({
           id: nextId++,
           parent: id,
@@ -444,7 +443,8 @@ export function collectSnapshot(options: {
           rect: relative(box),
           // A pseudo has no element to screenshot, so it is captured by clipping the page.
           pageRect,
-          ...(text && pseudo.content !== 'normal' ? { text } : {}),
+          // Raw: whether it is text or a counter is decided in `normalize.ts`.
+          ...(pseudo.content !== 'normal' ? { content: pseudo.content } : {}),
         })
       }
 
