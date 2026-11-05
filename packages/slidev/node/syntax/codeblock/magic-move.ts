@@ -7,7 +7,7 @@ import { normalizeRangeStr } from '../utils'
 
 const RE_MAGIC_MOVE_INFO = /^(?:md|markdown) magic-move\s*(?:\[([^\]]*)\])?\s*(\{[^}]*\})?/
 // eslint-disable-next-line regexp/no-super-linear-backtracking
-const RE_CODE_BLOCK = /^```([\w'-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
+const RE_CODE_BLOCK = /^```([\w'#+-]+)?(?:[ \t]*|[ \t][ \w\t'-]*)(?:\[([^\]]*)\])?[ \t]*(?:\{([\w*,|-]+)\}[ \t]*(\{[^}]*\})?([^\r\n]*))?\r?\n((?:(?!^```)[\s\S])*?)^```$/gm
 const RE_INNER_CODE_FENCE = /^```/
 const RE_LINES_TRUE = /\blines: *true\b/
 const RE_LINES_FALSE = /\blines: *false\b/

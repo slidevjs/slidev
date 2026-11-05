@@ -47,3 +47,32 @@ class: text-center
 
 Cover Page
 ```
+
+## Importing Multiple Slides
+
+When an external markdown file contains multiple slides, frontmatter next to `src` applies to **every imported slide**, not just the first one. This also applies when you [import specific slides](/features/importing-slides#importing-specific-slides).
+
+For example, the following sets `class: text-center` on every slide imported from `./chapter.md`:
+
+```md [./slides.md]
+---
+src: ./chapter.md
+class: text-center
+---
+```
+
+To configure only the first imported slide, put the frontmatter in the imported file itself. For example, put `clicks: 4` in `./chapter.md` so that only its first slide requires four clicks:
+
+```md [./chapter.md]
+---
+clicks: 4
+---
+
+# Chapter Opening
+
+---
+
+# Next Slide
+```
+
+Putting `clicks: 4` next to `src` instead would override the click count of every imported slide, including slides that define their own `clicks` value.

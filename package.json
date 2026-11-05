@@ -2,7 +2,7 @@
   "type": "module",
   "version": "53.0.0",
   "private": true,
-  "packageManager": "pnpm@12.4.2",
+  "packageManager": "pnpm@12.15.0",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -26,11 +26,12 @@
     "release": "bumpp package.json packages/*/package.json docs/package.json --all -x \"zx scripts/update-versions.mjs\"",
     "test": "vitest test",
     "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm test",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks && skills experimental_sync -y -r"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@antfu/ni": "catalog:prod",
+    "@antfu/skills": "catalog:agentic",
     "@antfu/utils": "catalog:frontend",
     "@modelcontextprotocol/client": "catalog:prod",
     "@shikijs/markdown-it": "catalog:frontend",
@@ -63,6 +64,7 @@
     "rimraf": "catalog:dev",
     "shiki": "catalog:frontend",
     "simple-git-hooks": "catalog:dev",
+    "skills": "catalog:agentic",
     "taze": "catalog:dev",
     "tinyexec": "catalog:prod",
     "tsdown": "catalog:dev",
