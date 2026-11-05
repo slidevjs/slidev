@@ -9,7 +9,7 @@ import { downloadPDF } from '../utils'
 import { currentOverviewPage, downOverviewPage, nextOverviewPage, prevOverviewPage, upOverviewPage } from './../logic/overview'
 
 export default function setupShortcuts() {
-  const { go, goFirst, goLast, next, nextSlide, prev, prevSlide } = useNav()
+  const { go, goFirst, goLast, next, nextSlide, prev, prevSlide, goLeft, goRight, goUp, goDown, hasGrid } = useNav()
   const { drawingEnabled } = useDrawings()
   const { escape, space, shift, left, right, up, down, enter, d, g, o, '`': backtick } = magicKeys
 
@@ -21,6 +21,10 @@ export default function setupShortcuts() {
     go,
     goFirst,
     goLast,
+    goLeft,
+    goRight,
+    goUp,
+    goDown,
     downloadPDF,
     toggleDark,
     toggleOverview,
@@ -34,14 +38,17 @@ export default function setupShortcuts() {
   let shortcuts: ShortcutOptions[] = [
     { name: 'next_space', key: and(space, not(shift)), fn: next, autoRepeat: true },
     { name: 'prev_space', key: and(space, shift), fn: prev, autoRepeat: true },
-    { name: 'next_right', key: and(right, not(shift), navViaArrowKeys), fn: next, autoRepeat: true },
-    { name: 'prev_left', key: and(left, not(shift), navViaArrowKeys), fn: prev, autoRepeat: true },
+    // In grid mode: left/right navigate between columns; up/down navigate within a column.
+    // In linear mode: left/right navigate clicks/slides; up/down jump between slides.
+    { name: 'next_right', key: and(right, not(shift), navViaArrowKeys), fn: () => hasGrid.value ? goRight() : next(), autoRepeat: true },
+    { name: 'prev_left', key: and(left, not(shift), navViaArrowKeys), fn: () => hasGrid.value ? goLeft() : prev(), autoRepeat: true },
     { name: 'next_page_key', key: 'pageDown', fn: next, autoRepeat: true },
     { name: 'prev_page_key', key: 'pageUp', fn: prev, autoRepeat: true },
-    { name: 'next_down', key: and(down, navViaArrowKeys), fn: nextSlide, autoRepeat: true },
-    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: prevSlide, autoRepeat: true },
-    { name: 'next_shift', key: and(right, shift), fn: nextSlide, autoRepeat: true },
-    { name: 'prev_shift', key: and(left, shift), fn: prevSlide, autoRepeat: true },
+    { name: 'next_down', key: and(down, navViaArrowKeys), fn: () => hasGrid.value ? goDown() : nextSlide(), autoRepeat: true },
+    { name: 'prev_up', key: and(up, navViaArrowKeys), fn: () => hasGrid.value ? goUp() : prevSlide(), autoRepeat: true },
+    // In grid mode: shift+right/left do linear next/prev (click-aware); in linear mode: jump to next/prev slide
+    { name: 'next_shift', key: and(right, shift, navViaArrowKeys), fn: () => hasGrid.value ? next() : nextSlide(), autoRepeat: true },
+    { name: 'prev_shift', key: and(left, shift, navViaArrowKeys), fn: () => hasGrid.value ? prev() : prevSlide(), autoRepeat: true },
     { name: 'toggle_dark', key: and(d, not(drawingEnabled)), fn: toggleDark },
     { name: 'toggle_overview', key: and(or(o, backtick), not(drawingEnabled)), fn: toggleOverview },
     { name: 'hide_overview', key: and(escape, not(drawingEnabled)), fn: () => showOverview.value = false },

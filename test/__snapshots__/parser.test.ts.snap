@@ -95,6 +95,8 @@ fonts:
   serif: Mate SC
   mono: Fira Code
 ",
+    "gridCol": 0,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -165,6 +167,8 @@ fonts:
   duration: 12
 layout: center
 ",
+    "gridCol": 1,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 1,
     "level": 1,
@@ -225,6 +229,8 @@ This is note
     "content": "# Morning",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 2,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 2,
     "level": 1,
@@ -263,6 +269,8 @@ Hey",
     },
     "frontmatterRaw": "layout: text
 ",
+    "gridCol": 3,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 3,
     "level": undefined,
@@ -320,6 +328,8 @@ Also part of the code block
 \`\`\`",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 4,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 4,
     "level": undefined,
@@ -383,6 +393,8 @@ Also part of the code block
 # The first yaml block should be treated as frontmatter
 layout: from yaml
 ",
+    "gridCol": 5,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 5,
     "level": undefined,
@@ -436,6 +448,8 @@ Content 2",
     },
     "frontmatterRaw": "layout: cover
 ",
+    "gridCol": 6,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 6,
     "level": undefined,
@@ -500,6 +514,8 @@ layout: should not from yaml 2
 Content 3",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 7,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 7,
     "level": 1,
@@ -633,6 +649,8 @@ exports[`md parser > mdc.md > slides 1`] = `
     },
     "frontmatterRaw": "comark: true
 ",
+    "gridCol": 0,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -761,6 +779,8 @@ console.log('Hello World')
 \`\`\`",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 0,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 0,
     "level": 1,
@@ -824,6 +844,8 @@ console.log('Hello World')
 - Yo",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 1,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 1,
     "level": 1,
@@ -873,6 +895,8 @@ console.log('Hello World')
     "content": "Nice to meet you",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 2,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 2,
     "level": undefined,
@@ -980,6 +1004,8 @@ exports[`md parser > multi-entries.md > slides 1`] = `
     "content": "# Page 1",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 0,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -1067,6 +1093,8 @@ src: sub/page1.md
     },
     "frontmatterRaw": "layout: cover
 ",
+    "gridCol": 1,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -1186,6 +1214,8 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#34",
     },
     "frontmatterRaw": undefined,
+    "gridCol": 2,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -1314,6 +1344,8 @@ background: https://sli.dev/demo-cover.png#34
     },
     "frontmatterRaw": "layout: cover
 ",
+    "gridCol": 3,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -1453,6 +1485,8 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#14",
     },
     "frontmatterRaw": undefined,
+    "gridCol": 4,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -1772,6 +1806,8 @@ src: /sub/page1.md
     },
     "frontmatterRaw": "layout: cover
 ",
+    "gridCol": 5,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -2117,6 +2153,8 @@ layout: cover
       "background": "https://sli.dev/demo-cover.png#14",
     },
     "frontmatterRaw": undefined,
+    "gridCol": 6,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -2471,6 +2509,8 @@ src: ../sub/pages3-4.md
     },
     "frontmatterRaw": "layout: cover
 ",
+    "gridCol": 7,
+    "gridRow": 0,
     "importChain": [
       {
         "content": "",
@@ -2836,6 +2876,8 @@ layout: cover
 $x+2$",
     "frontmatter": {},
     "frontmatterRaw": undefined,
+    "gridCol": 8,
+    "gridRow": 0,
     "importChain": undefined,
     "index": 8,
     "level": 1,

@@ -50,6 +50,11 @@ export function stringify(data: SlidevMarkdown) {
 }
 
 export function stringifySlide(data: SourceSlideInfo, idx = 0) {
+  if (idx > 0 && data.frontmatter.nested && !data.frontmatterDoc?.get('nested')) {
+    return data.raw.startsWith('---')
+      ? data.raw.replace(/^----?/, '----')
+      : `----\n${ensurePrefix('\n', data.raw)}`
+  }
   return (data.raw.startsWith('---') || idx === 0)
     ? data.raw
     : `---\n${ensurePrefix('\n', data.raw)}`
@@ -241,6 +246,7 @@ export async function parse(
   let start = 0
   let contentStart = 0
   let inHtmlComment = false
+  let pendingNested = false
 
   async function slice(end: number) {
     if (start === end)
@@ -254,6 +260,9 @@ export async function parse(
       contentStart,
       end,
     }
+    if (pendingNested)
+      slide.frontmatter.nested ??= true
+    pendingNested = false
     if (extensions) {
       for (const e of extensions) {
         if (e.transformSlide) {
@@ -297,10 +306,13 @@ export async function parse(
 
     if (line.startsWith('---')) {
       await slice(i)
+      pendingNested = line === '----'
+      if (pendingNested)
+        start = contentStart = i + 1
 
       const next = lines[i + 1]
       // found frontmatter, skip next dash
-      if (line[3] !== '-' && next?.trim()) {
+      if ((line[3] !== '-' || pendingNested) && next?.trim()) {
         start = i
         for (i += 1; i < lines.length; i++) {
           if (lines[i].trimEnd() === '---')
@@ -347,6 +359,7 @@ export function parseSync(
   let start = 0
   let contentStart = 0
   let inHtmlComment = false
+  let pendingNested = false
 
   function slice(end: number) {
     if (start === end)
@@ -360,6 +373,9 @@ export function parseSync(
       contentStart,
       end,
     }
+    if (pendingNested)
+      slide.frontmatter.nested ??= true
+    pendingNested = false
     slides.push(slide)
     start = end + 1
     contentStart = end + 1
@@ -375,10 +391,13 @@ export function parseSync(
 
     if (line.startsWith('---')) {
       slice(i)
+      pendingNested = line === '----'
+      if (pendingNested)
+        start = contentStart = i + 1
 
       const next = lines[i + 1]
       // found frontmatter, skip next dash
-      if (line[3] !== '-' && next?.trim()) {
+      if ((line[3] !== '-' || pendingNested) && next?.trim()) {
         start = i
         for (i += 1; i < lines.length; i++) {
           if (lines[i].trimEnd() === '---')
