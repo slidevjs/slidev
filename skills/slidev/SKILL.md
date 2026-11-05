@@ -26,7 +26,21 @@ pnpm run build        # Build static SPA
 pnpm run export       # Export to PDF (requires playwright-chromium)
 ```
 
-**Verify**: After `pnpm run dev`, confirm slides load at `http://localhost:3030`. After `pnpm run export`, check the output PDF exists in the project root.
+Use the existing project's scripts and package manager. Read the dev server's reported URL; port 3030 is the default, but another port may be selected.
+
+## Authoring and Preview
+
+Preserve an existing deck's theme and conventions when making focused edits. Choose the composition and tools that serve the material; built-in layouts are starting points, and custom Vue components, layouts, and CSS can extend them.
+
+Load references for the features you need:
+
+- Visual composition: [image layouts](references/core-layouts.md#image-layouts), [custom layouts](references/core-layouts.md#custom-layouts), [fonts](references/core-headmatter.md#fonts), [theme configuration](references/core-headmatter.md#theme--appearance), [scoped CSS](references/style-scoped.md), and [custom Vue components](references/core-components.md#custom-components). Put custom Vue components in `components/` and local images in `public/`, referenced as `/image.png`.
+- Explanations and interaction: [click reveals](references/core-animations.md), [Magic Move](references/code-magic-move.md), [Mermaid](references/diagram-mermaid.md), or [runnable code](references/editor-monaco-run.md), as appropriate.
+- Delivery: [exporting](references/core-exporting.md) for PDF/PPTX/images; [hosting](references/core-hosting.md) when publishing a web presentation is requested.
+
+Use available browser tools, including an agent's built-in browser when available, to review the rendered slides and relevant click states. After editing, inspect the hot-reloaded result and refine the affected slides. [MCP navigation](references/tool-mcp.md) can select a slide and click state, but does not capture its appearance. Without browser tools, inspect exported slide images with available image tools and state any checks that remain unavailable.
+
+When export is requested, inspect the exported artifact too; see [exporting](references/core-exporting.md) for format-specific checks and limitations.
 
 ## Basic Syntax
 
@@ -148,7 +162,7 @@ Presenter notes go here
 | OG image | `seoMeta.ogImage` or `og-image.png` | [build-og-image](references/build-og-image.md) |
 | SEO tags | `seoMeta:` | [build-seo-meta](references/build-seo-meta.md) |
 
-**Export prerequisite**: `pnpm add -D playwright-chromium` is required for PDF/PPTX/PNG export. If export fails with a browser error, install this dependency first.
+**Export prerequisite**: CLI export uses `playwright-chromium`. If it is missing, add it using the project's package manager. For browser launch, timeout, or rendering errors, diagnose the reported cause; see [export troubleshooting](references/core-exporting.md#troubleshooting).
 
 ### Editor & Tools
 

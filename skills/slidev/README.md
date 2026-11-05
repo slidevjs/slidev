@@ -1,6 +1,6 @@
-# Slidev Skills for Claude Code
+# Slidev Skill for AI Coding Agents
 
-Agent skills that help Claude Code understand and work with [Slidev](https://sli.dev) presentations.
+An agent skill that helps AI coding agents understand and work with [Slidev](https://sli.dev) presentations.
 
 ## Installation
 
@@ -8,11 +8,17 @@ Agent skills that help Claude Code understand and work with [Slidev](https://sli
 npx skills add slidevjs/slidev
 ```
 
-This will add the Slidev skill to your Claude Code configuration.
+Run this from your presentation project and choose your agent in the installer, or target Codex directly:
+
+```bash
+npx skills add slidevjs/slidev --agent codex --skill slidev
+```
+
+In Codex, you can invoke the installed skill explicitly with `$slidev`.
 
 ## What's Included
 
-The Slidev skill provides Claude Code with knowledge about:
+The Slidev skill provides knowledge about:
 
 - **Core Syntax** - Markdown syntax, slide separators, frontmatter
 - **Animations** - Click animations, transitions, motion effects
@@ -24,7 +30,7 @@ The Slidev skill provides Claude Code with knowledge about:
 
 ## Usage
 
-Once installed, Claude Code will automatically use Slidev knowledge when:
+Once installed, your agent can use Slidev knowledge when:
 
 - Creating new presentations
 - Adding slides with code examples
