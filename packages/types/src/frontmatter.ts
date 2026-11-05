@@ -92,11 +92,13 @@ export interface HeadmatterConfig extends TransitionOptions {
    */
   lineNumbers?: boolean
   /**
-   * Force slides color schema
+   * Color scheme for slides. Use `auto` to follow the system preference,
+   * `light` or `dark` to force a scheme, or `light dark` / `dark light`
+   * to choose a default while allowing users to switch.
    *
    * @default 'auto'
    */
-  colorSchema?: 'dark' | 'light' | 'all' | 'auto'
+  colorSchema?: 'dark' | 'light' | 'all' | 'auto' | 'light dark' | 'dark light'
   /**
    * Router mode for vue-router
    *

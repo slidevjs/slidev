@@ -5,11 +5,18 @@ import { configs } from '../env'
 const preferredDark = usePreferredDark()
 const store = useLocalStorage('slidev-color-schema', 'auto')
 
-export const isColorSchemaConfigured = computed(() => configs.colorSchema !== 'auto')
+export const isColorSchemaConfigured = computed(() => configs.colorSchema === 'dark' || configs.colorSchema === 'light')
 export const isDark = computed<boolean>({
   get() {
     if (isColorSchemaConfigured.value)
       return configs.colorSchema === 'dark'
+    if (configs.colorSchema === 'light dark' || configs.colorSchema === 'dark light') {
+      if (store.value === 'dark')
+        return true
+      if (store.value === 'light')
+        return false
+      return configs.colorSchema === 'dark light'
+    }
     return store.value === 'auto'
       ? preferredDark.value
       : store.value === 'dark'
@@ -17,6 +24,10 @@ export const isDark = computed<boolean>({
   set(v) {
     if (isColorSchemaConfigured.value)
       return
+    if (configs.colorSchema === 'light dark' || configs.colorSchema === 'dark light') {
+      store.value = v ? 'dark' : 'light'
+      return
+    }
     store.value = v === preferredDark.value
       ? 'auto'
       : v ? 'dark' : 'light'

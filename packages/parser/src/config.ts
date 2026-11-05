@@ -115,7 +115,7 @@ export function resolveConfig(headmatter: any, themeMeta: SlidevThemeMeta = {}, 
   if (config.highlighter === 'prism')
     throw new Error(`[slidev] "prism" support has been dropped. Please use "highlighter: shiki" instead`)
 
-  if (config.colorSchema !== 'dark' && config.colorSchema !== 'light')
+  if (!['dark', 'light', 'auto', 'light dark', 'dark light'].includes(config.colorSchema))
     config.colorSchema = 'auto'
   if (themeColorSchema && config.colorSchema === 'auto')
     config.colorSchema = themeColorSchema
@@ -141,7 +141,7 @@ export function verifyConfig(
     : undefined
 
   if (themeColorSchema && config.colorSchema !== themeColorSchema)
-    warn(`Color schema "${config.colorSchema}" does not supported by the theme`)
+    warn(`Color schema "${config.colorSchema}" is not supported by the theme`)
 
   if (themeHightlighter && config.highlighter !== themeHightlighter)
     warn(`Syntax highlighter "${config.highlighter}" does not supported by the theme`)
