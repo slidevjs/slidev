@@ -23,8 +23,12 @@ export function normalizeSingleAtValue(at: RawSingleAtValue): NormalizedSingleCl
 }
 
 export function normalizeRangeAtValue(at: RawAtValue): NormalizedRangeClickValue {
-  if (Array.isArray(at))
-    return [normalizeSingleAtValue(at[0])!, normalizeSingleAtValue(at[1])!]
+  if (Array.isArray(at)) {
+    return [
+      normalizeSingleAtValue(at[0])!,
+      normalizeSingleAtValue(at[1])!,
+    ]
+  }
   return null
 }
 

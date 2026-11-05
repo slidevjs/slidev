@@ -22,7 +22,9 @@ export function useViewTransition() {
     if (fromNo != null && fromNo === toNo)
       return
     const transitionType = fromNo != null && toNo != null && fromNo !== toNo
-      && ((fromNo < toNo ? fromMeta?.transition : toMeta?.transition) ?? configs.transition)
+      && ((fromNo < toNo
+        ? fromMeta?.transition
+        : toMeta?.transition) ?? configs.transition)
     if (transitionType !== 'view-transition') {
       isViewTransition.value = false
       return

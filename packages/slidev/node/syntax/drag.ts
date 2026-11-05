@@ -38,7 +38,9 @@ export default function MarkdownItVDrag(md: MarkdownExit, markdownTransformMap: 
       if (!smc)
         return line
       const mapped = smc.originalPositionFor({ line: line + 1, column: 0 }).line
-      return mapped == null || mapped <= 0 ? null : mapped - 1
+      return mapped == null || mapped <= 0
+        ? null
+        : mapped - 1
     }
     function toMarkdownSource(map: [number, number], idx: number) {
       const start = toOriginalPos(map[0]) ?? map[0]

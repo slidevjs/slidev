@@ -57,7 +57,9 @@ export function stringifySlide(data: SourceSlideInfo, idx = 0) {
 
 export function prettifySlide(data: SourceSlideInfo) {
   const trimed = data.content.trim()
-  data.content = trimed ? `\n${data.content.trim()}\n` : ''
+  data.content = trimed
+    ? `\n${data.content.trim()}\n`
+    : ''
   data.raw = data.frontmatterDoc?.contents
     ? data.frontmatterStyle === 'yaml'
       ? `\`\`\`yaml\n${data.frontmatterDoc.toString().trim()}\n\`\`\`\n${data.content}`
@@ -93,7 +95,9 @@ function matter(code: string, options: SlidevParserOptions) {
       })
   }
 
-  const doc = raw && !options.noParseYAML ? YAML.parseDocument(raw) : undefined
+  const doc = raw && !options.noParseYAML
+    ? YAML.parseDocument(raw)
+    : undefined
 
   return {
     type,
@@ -174,7 +178,9 @@ export function extractImagesUsage(content: string, frontmatter: Record<string, 
 export function detectFeatures(code: string): SlidevDetectedFeatures {
   return {
     katex: !!code.match(RE_DOLLAR_INLINE) || !!code.match(RE_DOLLAR_BLOCK),
-    monaco: RE_MONACO_BLOCK.test(code) ? scanMonacoReferencedMods(code) : false,
+    monaco: RE_MONACO_BLOCK.test(code)
+      ? scanMonacoReferencedMods(code)
+      : false,
     tweet: !!code.match(RE_TWEET_TAG),
     bluesky: !!code.match(RE_BLUESKY_TAG),
     mermaid: !!code.match(RE_MERMAID_CODEBLOCK),

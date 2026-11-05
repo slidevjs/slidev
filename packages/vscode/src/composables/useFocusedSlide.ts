@@ -30,7 +30,9 @@ export const useFocusedSlide = defineService(() => {
       const slide = md.slides.find(s => line <= s.end)
       return slide || md.slides.at(-1)!
     },
-    (newVal, oldVal) => newVal?.filepath === oldVal?.filepath ? 30 : 150,
+    (newVal, oldVal) => newVal?.filepath === oldVal?.filepath
+      ? 30
+      : 150,
   )
 
   const displayedSourceSlide = computed(() => {
@@ -43,7 +45,9 @@ export const useFocusedSlide = defineService(() => {
     if (!slides || !displayedSourceSlide.value)
       return null
     const index = slides.findIndex(s => s.source === displayedSourceSlide.value)
-    return index < 0 ? null : index + 1
+    return index < 0
+      ? null
+      : index + 1
   })
   const overviewAnchors = computed(() => {
     const info = projectInfo.value

@@ -72,10 +72,14 @@ onMounted(() => {
   const clicksInfo = clicks.calculateSince(props.at, props.ranges.length - 1)
   clicks.register(id, clicksInfo)
 
-  const index = computed(() => clicksInfo ? Math.max(0, clicks.current - clicksInfo.start + 1) : CLICKS_MAX)
+  const index = computed(() => clicksInfo
+    ? Math.max(0, clicks.current - clicksInfo.start + 1)
+    : CLICKS_MAX)
 
   const finallyRange = computed(() => {
-    return props.finally === 'last' ? props.ranges.at(-1) : props.finally.toString()
+    return props.finally === 'last'
+      ? props.ranges.at(-1)
+      : props.finally.toString()
   })
 
   let hiddenByRange = false

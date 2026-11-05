@@ -336,7 +336,9 @@ export function createSlidesLoader(
             // slide so runtime preloading actually receives them.
             images: slide.images ?? slide.source?.images,
             // remove raw content in build, optimize the bundle size
-            ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+            ...(mode === 'build'
+              ? { raw: '', content: '', note: '' }
+              : {}),
           }
           const fontmatter = getFrontmatter(idx)
 
@@ -369,7 +371,9 @@ export function createSlidesLoader(
               '  slide: {',
               `    ...(${JSON.stringify(slideBase)}),`,
               `    frontmatter,`,
-              `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
+              `    filepath: ${JSON.stringify(mode === 'dev'
+                ? slide.source.filepath
+                : '')},`,
               `    start: ${JSON.stringify(slide.source.start)},`,
               `    sourceIndex: ${JSON.stringify(slide.source.index)},`,
               `    id: ${idx},`,

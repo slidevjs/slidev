@@ -8,7 +8,9 @@ const props = defineProps({
   },
 })
 
-const themes = computed(() => props.collection === 'official' ? official : community)
+const themes = computed(() => props.collection === 'official'
+  ? official
+  : community)
 </script>
 
 <template>

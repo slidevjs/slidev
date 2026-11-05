@@ -13,10 +13,14 @@ it('all syntax combined', async () => {
     userRoot: path.join(__dirname, '../../../../test/fixtures/'),
     data: {
       watchFiles: {},
-      slides: [{
-        index: 0,
-        source: { filepath: path.join(__dirname, '../../../../test/fixtures/test.md') },
-      }],
+      slides: [
+        {
+          index: 0,
+          source: {
+            filepath: path.join(__dirname, '../../../../test/fixtures/test.md'),
+          },
+        },
+      ],
       config: {},
       features: { katex: true },
     },

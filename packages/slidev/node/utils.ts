@@ -54,7 +54,9 @@ export function applyNotesAutoRuby(md: string, notesAutoRuby: Record<string, str
     // Longest first, otherwise a shorter key shadows every key starting with it
     .sort((a, b) => b.length - a.length)
     // Add word boundaries to the keys when they are simple alphabets or numbers
-    .map(i => RE_WORD_CHARS_ONLY.test(i) ? `\\b${i}\\b` : i.replace(RE_REGEXP_CHARS, '\\$&'))
+    .map(i => RE_WORD_CHARS_ONLY.test(i)
+      ? `\\b${i}\\b`
+      : i.replace(RE_REGEXP_CHARS, '\\$&'))
 
   if (!keys.length)
     return md
@@ -71,7 +73,9 @@ export function applyNotesAutoRuby(md: string, notesAutoRuby: Record<string, str
 
 export function generateFontParams(options: ResolvedFontOptions) {
   const weights = options.weights
-    .flatMap(i => options.italic ? [`0,${i}`, `1,${i}`] : [`${i}`])
+    .flatMap(i => options.italic
+      ? [`0,${i}`, `1,${i}`]
+      : [`${i}`])
     .sort()
     .join(';')
   const fontParams = options.webfonts

@@ -9,7 +9,9 @@ export async function createRemoteAssetsPlugin(
 
   const { VitePluginRemoteAssets, DefaultRules } = await import('vite-plugin-remote-assets')
   return VitePluginRemoteAssets({
-    resolveMode: id => id.endsWith('index.html') ? 'relative' : '@fs',
+    resolveMode: id => id.endsWith('index.html')
+      ? 'relative'
+      : '@fs',
     awaitDownload: mode === 'build',
     ...pluginOptions.remoteAssets,
     rules: [

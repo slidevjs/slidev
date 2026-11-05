@@ -160,7 +160,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
   const width = ref(pos[2])
   const x0 = ref(pos[0] + pos[2] / 2)
 
-  const rotate = ref(isArrow ? 0 : (pos[4] ?? 0))
+  const rotate = ref(isArrow
+    ? 0
+    : (pos[4] ?? 0))
   const rotateRad = computed(() => rotate.value * Math.PI / 180)
   const rotateSin = computed(() => Math.sin(rotateRad.value))
   const rotateCos = computed(() => Math.cos(rotateRad.value))
@@ -189,7 +191,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
         set: v => !autoHeight && (configuredHeight.value = v),
       })
     : configuredHeight
-  const configuredY0 = autoHeight ? ref(pos[1]) : ref(pos[1] + pos[3] / 2)
+  const configuredY0 = autoHeight
+    ? ref(pos[1])
+    : ref(pos[1] + pos[3] / 2)
   const y0 = autoHeight
     ? computed({
         get: () => configuredY0.value + height.value / 2,
@@ -205,7 +209,9 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
         left: `${x0.value - width.value / 2}px`,
         top: `${y0.value - height.value / 2}px`,
         width: `${width.value}px`,
-        height: autoHeight ? undefined : `${height.value}px`,
+        height: autoHeight
+          ? undefined
+          : `${height.value}px`,
         transformOrigin: 'center center',
         transform: `rotate(${rotate.value}deg)`,
       } satisfies CSSProperties
@@ -220,10 +226,14 @@ export function useDragElement(directive: DirectiveBinding | null, posRaw?: stri
       [x0, y0, width, height, rotate],
       ([x0, y0, w, h, r]) => {
         let posStr = [x0 - w / 2, y0 - h / 2, w].map(Math.round).join()
-        if (autoHeight)
-          posStr += dataSource === 'directive' ? ',NaN' : ',_'
-        else
+        if (autoHeight) {
+          posStr += dataSource === 'directive'
+            ? ',NaN'
+            : ',_'
+        }
+        else {
           posStr += `,${Math.round(h)}`
+        }
         if (Math.round(r) !== 0)
           posStr += `,${Math.round(r)}`
 

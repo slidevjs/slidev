@@ -64,7 +64,9 @@ export async function build(
 
   // copy or generate ogImage if it's a relative path, skip if not
   if (options.data.config.seoMeta?.ogImage === 'auto' || options.data.config.seoMeta?.ogImage?.startsWith('.')) {
-    const filename = options.data.config.seoMeta?.ogImage === 'auto' ? 'og-image.png' : options.data.config.seoMeta.ogImage
+    const filename = options.data.config.seoMeta?.ogImage === 'auto'
+      ? 'og-image.png'
+      : options.data.config.seoMeta.ogImage
     const projectOgImagePath = resolve(options.userRoot, filename)
     const outputOgImagePath = resolve(outDir, filename)
 
@@ -101,7 +103,9 @@ export async function build(
         width: options.data.config.canvasWidth,
         height: Math.round(options.data.config.canvasWidth / options.data.config.aspectRatio),
         // This renders slides by URL, so memory routing falls back to history.
-        routerMode: options.data.config.routerMode === 'memory' ? 'history' : options.data.config.routerMode,
+        routerMode: options.data.config.routerMode === 'memory'
+          ? 'history'
+          : options.data.config.routerMode,
         waitUntil: 'networkidle',
         timeout: args.timeout || 30000,
         perSlide: true,

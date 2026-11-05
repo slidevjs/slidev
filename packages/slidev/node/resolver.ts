@@ -245,7 +245,11 @@ export async function findPkgRoot(dep: string, parent: string, ensure: true): Pr
 export async function findPkgRoot(dep: string, parent: string, ensure?: boolean): Promise<string | undefined>
 export async function findPkgRoot(dep: string, parent: string, ensure = false) {
   const pkgJsonPath = await findDepPkgJsonPath(dep, parent)
-  const path = pkgJsonPath ? dirname(pkgJsonPath) : isInstalledGlobally.value ? await findGlobalPkgRoot(dep, false) : undefined
+  const path = pkgJsonPath
+    ? dirname(pkgJsonPath)
+    : isInstalledGlobally.value
+      ? await findGlobalPkgRoot(dep, false)
+      : undefined
   if (ensure && !path)
     throw new Error(`Failed to resolve package "${dep}"`)
   return path
@@ -335,10 +339,18 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     // local path
     if (name[0] === '/')
       return [name, name]
-    if (name.startsWith('@/'))
-      return [name, resolve(userRoot, name.slice(2))]
-    if (name[0] === '.' || (name[0] !== '@' && name.includes('/')))
-      return [name, resolve(dirname(importer), name)]
+    if (name.startsWith('@/')) {
+      return [
+        name,
+        resolve(userRoot, name.slice(2)),
+      ]
+    }
+    if (name[0] === '.' || (name[0] !== '@' && name.includes('/'))) {
+      return [
+        name,
+        resolve(dirname(importer), name),
+      ]
+    }
 
     // Validate that the name is a safe npm package name before resolving
     if (!RE_SAFE_PKG_NAME.test(name))
@@ -363,7 +375,9 @@ export function createResolver(type: 'theme' | 'addon', officials: Record<string
     }
 
     // fallback to prompt install
-    const pkgName = officials[name] ?? (name[0] === '@' ? name : `slidev-${type}-${name}`)
+    const pkgName = officials[name] ?? (name[0] === '@'
+      ? name
+      : `slidev-${type}-${name}`)
     await promptForInstallation(pkgName)
     return [pkgName, await findPkgRoot(pkgName, importer, true)]
   }

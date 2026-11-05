@@ -8,8 +8,12 @@ export default defineCodeblockTransformer(async ({ info, code, options: { data: 
   if (!match)
     return
   const [, options] = match
-  const optionsProp = options ? `v-bind="${options}"` : ''
+  const optionsProp = options
+    ? `v-bind="${options}"`
+    : ''
   const encoded = encodePlantUml(code.trim())
-  const serverProp = plantUmlServer === undefined ? '' : ` server=${JSON.stringify(plantUmlServer)}`
+  const serverProp = plantUmlServer === undefined
+    ? ''
+    : ` server=${JSON.stringify(plantUmlServer)}`
   return `<PlantUml ${optionsProp} code="${encoded}"${serverProp} />`
 })

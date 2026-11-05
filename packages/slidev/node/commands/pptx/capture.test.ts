@@ -37,7 +37,12 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
     viewports: number[]
     locators: string[]
     elementShots: number
-  } = { clips: [], viewports: [], locators: [], elementShots: 0 }
+  } = {
+    clips: [],
+    viewports: [],
+    locators: [],
+    elementShots: 0,
+  }
   let scrollY = 0
   let viewportHeight = options.viewportHeight
   const page = {
@@ -70,7 +75,9 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
         first: () => ({
           count: async () => (options.box ? 1 : 0),
           // Viewport-relative, exactly as Playwright reports it.
-          boundingBox: async () => (options.box ? { ...options.box, y: options.box.y - scrollY } : null),
+          boundingBox: async () => (options.box
+            ? { ...options.box, y: options.box.y - scrollY }
+            : null),
           screenshot: async () => {
             calls.elementShots++
             return Buffer.from('png')
@@ -79,7 +86,11 @@ function fakePage(options: { documentHeight: number, viewportHeight: number, box
       }
     },
   }
-  return { page: page as unknown as Page, calls, scrollY: () => scrollY }
+  return {
+    page: page as unknown as Page,
+    calls,
+    scrollY: () => scrollY,
+  }
 }
 
 describe('a clip is taken relative to the scroll the page actually reached', () => {
@@ -89,7 +100,14 @@ describe('a clip is taken relative to the scroll the page actually reached', () 
     // ended up, not from where it was asked to go.
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 2000 })
     return shootClip(page, { x: 100, y: 20000, w: 300, h: 150 }).then(() => {
-      expect(calls.clips).toEqual([{ x: 100, y: 1, width: 300, height: 150 }])
+      expect(calls.clips).toEqual([
+        {
+          x: 100,
+          y: 1,
+          width: 300,
+          height: 150,
+        },
+      ])
     })
   })
 
@@ -101,14 +119,28 @@ describe('a clip is taken relative to the scroll the page actually reached', () 
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 2000 })
     return shootClip(page, { x: 0, y: 28100, w: 100, h: 50 }).then(() => {
       // Scroll stops at 26152, so the region is 1948 down the viewport.
-      expect(calls.clips).toEqual([{ x: 0, y: 1948, width: 100, height: 50 }])
+      expect(calls.clips).toEqual([
+        {
+          x: 0,
+          y: 1948,
+          width: 100,
+          height: 50,
+        },
+      ])
     })
   })
 })
 
 describe('clip captures run through a shortened viewport', () => {
   const request = (sourceId: number, clip?: { x: number, y: number, w: number, h: number }): RasterRequest =>
-    ({ sourceId, isolate: false, hideDescendants: false, ...(clip ? { clip } : {}) })
+    ({
+      sourceId,
+      isolate: false,
+      hideDescendants: false,
+      ...(clip
+        ? { clip }
+        : {}),
+    })
 
   it('shortens the viewport for the clips and puts it back', async () => {
     // The print route sizes its viewport to the WHOLE deck, and past roughly
@@ -116,14 +148,28 @@ describe('clip captures run through a shortened viewport', () => {
     // clip in the last third of a long deck failed and its picture vanished
     // with nothing in the log to say so.
     const { page, calls } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
-    const slides = [{
-      no: 1,
-      clickIndex: 0,
-      containerId: '001-01',
-      size: { w: 980, h: 552 },
-      nodes: [{ kind: 'raster' as const, sourceId: 1, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason: 'svg' as const, isolate: false, hideDescendants: false }],
-    }]
-    const report = await capture(page, slides as any, [request(1, { x: 0, y: 20000, w: 10, h: 10 })])
+    const slides = [
+      {
+        no: 1,
+        clickIndex: 0,
+        containerId: '001-01',
+        size: { w: 980, h: 552 },
+        nodes: [
+          {
+            kind: 'raster' as const,
+            sourceId: 1,
+            rect: { x: 0, y: 0, w: 10, h: 10 },
+            data: '',
+            reason: 'svg' as const,
+            isolate: false,
+            hideDescendants: false,
+          },
+        ],
+      },
+    ]
+    const report = await capture(page, slides as any, [
+      request(1, { x: 0, y: 20000, w: 10, h: 10 }),
+    ])
     expect(calls.viewports).toEqual([2000, 28152])
     expect(report.rastersCaptured).toBe(1)
     expect(report.rastersFailed).toBe(0)
@@ -143,7 +189,17 @@ describe('an element is captured by clipping the page at its box', () => {
     clickIndex: 0,
     containerId: '001-01',
     size: { w: 980, h: 552 },
-    nodes: [{ kind: 'raster' as const, sourceId, rect: { x: 0, y: 0, w: 10, h: 10 }, data: '', reason: 'svg' as const, isolate: false, hideDescendants: false }],
+    nodes: [
+      {
+        kind: 'raster' as const,
+        sourceId,
+        rect: { x: 0, y: 0, w: 10, h: 10 },
+        data: '',
+        reason: 'svg' as const,
+        isolate: false,
+        hideDescendants: false,
+      },
+    ],
   })
 
   it('clips rather than calling locator.screenshot', async () => {
@@ -154,17 +210,37 @@ describe('an element is captured by clipping the page at its box', () => {
     const { page, calls } = fakePage({
       documentHeight: 28152,
       viewportHeight: 28152,
-      box: { x: 100, y: 2049, width: 320, height: 194 },
+      box: {
+        x: 100,
+        y: 2049,
+        width: 320,
+        height: 194,
+      },
     })
-    const report = await capture(page, [slide(166)] as any, [request(166)])
+    const report = await capture(page, [
+      slide(166),
+    ] as any, [
+      request(166),
+    ])
     expect(calls.elementShots).toBe(0)
-    expect(calls.clips).toEqual([{ x: 100, y: 1, width: 320, height: 194 }])
+    expect(calls.clips).toEqual([
+      {
+        x: 100,
+        y: 1,
+        width: 320,
+        height: 194,
+      },
+    ])
     expect(report.rastersCaptured).toBe(1)
   })
 
   it('reports a failure when the element is not there', async () => {
     const { page } = fakePage({ documentHeight: 28152, viewportHeight: 28152 })
-    const report = await capture(page, [slide(166)] as any, [request(166)])
+    const report = await capture(page, [
+      slide(166),
+    ] as any, [
+      request(166),
+    ])
     expect(report.rastersFailed).toBe(1)
   })
 })
@@ -176,7 +252,9 @@ describe('shootClip', () => {
     // screenshot, so the picture went missing rather than being trimmed.
     const { page, calls } = fakePage({ documentHeight: 5000, viewportHeight: 2000 })
     await shootClip(page, { x: -28, y: 100, w: 320, h: 194 })
-    expect(calls.clips).toEqual([{ x: 0, y: 1, width: 292, height: 194 }])
+    expect(calls.clips).toEqual([
+      { x: 0, y: 1, width: 292, height: 194 },
+    ])
   })
 
   it('gives up on a box with nothing left to capture', async () => {

@@ -285,7 +285,12 @@ export const community: AddonInfo[] = [
     id: 'slidev-addon-livecode',
     name: 'Live embedded VS Code IDE',
     description: 'Live VS Code IDE sessions in your Slidev presentations, powered by coderaft',
-    tags: ['Component', 'Integration', 'Tool', 'IDE'],
+    tags: [
+      'Component',
+      'Integration',
+      'Tool',
+      'IDE',
+    ],
     author: {
       name: 'Mickaël Alves',
       link: 'https://mickaelalves.dev/',

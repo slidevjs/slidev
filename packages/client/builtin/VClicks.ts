@@ -76,12 +76,14 @@ export default defineComponent({
       if (this.fade)
         modifiers.fade = true
 
-      return withDirectives(node, [[
-        click,
-        value,
-        '',
-        modifiers,
-      ]])
+      return withDirectives(node, [
+        [
+          click,
+          value,
+          '',
+          modifiers,
+        ],
+      ])
     }
 
     const openAllTopLevelSlots = <T extends VNodeArrayChildren | VNode[]>(children: T): T => {
@@ -130,7 +132,9 @@ export default defineComponent({
         return applyDirective(
           vNode,
           isRelative
-            ? delta >= 0 ? `+${delta}` : `${delta}`
+            ? delta >= 0
+              ? `+${delta}`
+              : `${delta}`
             : thisShowIdx,
         )
       })
@@ -143,24 +147,37 @@ export default defineComponent({
 
     if (this.handleSpecialElements) {
       // handle ul, ol list
-      if (elements.length === 1 && listTags.includes(elements[0].type as string) && Array.isArray(elements[0].children))
-        return h(elements[0], {}, [...mapChildren(elements[0].children), lastGap()])
+      if (elements.length === 1 && listTags.includes(elements[0].type as string) && Array.isArray(elements[0].children)) {
+        return h(elements[0], {}, [
+          ...mapChildren(elements[0].children),
+          lastGap(),
+        ])
+      }
 
       if (elements.length === 1 && elements[0].type as string === 'table') {
         const tableNode = elements[0]
         if (Array.isArray(tableNode.children)) {
           return h(tableNode, {}, tableNode.children.map((i) => {
-            if (!isVNode(i))
+            if (!isVNode(i)) {
               return i
-            else if (i.type === 'tbody' && Array.isArray(i.children))
-              return h(i, {}, [...mapChildren(i.children), lastGap()])
-            else
+            }
+            else if (i.type === 'tbody' && Array.isArray(i.children)) {
+              return h(i, {}, [
+                ...mapChildren(i.children),
+                lastGap(),
+              ])
+            }
+            else {
               return h(i)
+            }
           }))
         }
       }
     }
 
-    return [...mapChildren(elements), lastGap()]
+    return [
+      ...mapChildren(elements),
+      lastGap(),
+    ]
   },
 })
