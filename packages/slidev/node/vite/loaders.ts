@@ -280,6 +280,7 @@ export function createSlidesLoader(
 
     resolveId: {
       order: 'pre',
+      filter: { id: /^\/@slidev\/|__slidev_/ },
       handler(id) {
         if (id.startsWith('/@slidev/') || id.includes('__slidev_'))
           return id

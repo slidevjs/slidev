@@ -3,6 +3,8 @@ import { templateImportContextUtils, templateInitContext, templateInjectionMarke
 
 const RE_EXPORT_DEFAULT_OBJECT = /export\s+default\s+\{/
 const RE_INJECT_OPTION = /.*inject\s*:\s*([[{])/
+const RE_VUE_FILE = /\.vue$/
+const RE_CLIENT_FILE = /\/(?:@slidev\/client|packages\/client)\//
 
 /**
  * Inject `$slidev` into the script block of a Vue component
@@ -11,9 +13,9 @@ export function createContextInjectionPlugin(): Plugin {
   return {
     name: 'slidev:context-injection',
     transform: {
-      // TODO: static filter
+      filter: { id: { include: RE_VUE_FILE, exclude: RE_CLIENT_FILE } },
       async handler(code, id) {
-        if (!id.endsWith('.vue') || id.includes('/@slidev/client/') || id.includes('/packages/client/'))
+        if (!RE_VUE_FILE.test(id) || RE_CLIENT_FILE.test(id))
           return
         if (code.includes(templateInjectionMarker) || code.includes('useSlideContext()'))
           return code // Assume that the context is already imported and used
