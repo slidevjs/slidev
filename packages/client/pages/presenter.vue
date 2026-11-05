@@ -102,7 +102,6 @@ const resizeStartRowSize = ref(280)
 
 const RESIZER_LIMITS = {
   minNotesWidth: 240,
-  maxNotesWidth: 720,
   minNotesRowSize: 160,
   maxNotesWidthRatio: 0.7,
   maxNotesRowHeightRatio: 0.75,
@@ -120,10 +119,7 @@ const isNotesOnBottom = computed(() => presenterLayout.value === 1 && !isLayout1
 function clampNotesWidth(width: number) {
   if (!Number.isFinite(width))
     return RESIZER_LIMITS.minNotesWidth
-  return Math.max(
-    RESIZER_LIMITS.minNotesWidth,
-    Math.min(RESIZER_LIMITS.maxNotesWidth, Math.round(width)),
-  )
+  return Math.max(RESIZER_LIMITS.minNotesWidth, Math.round(width))
 }
 
 function updateNotesWidthFromPointer(clientX: number) {
@@ -395,6 +391,7 @@ onMounted(() => {
             class="w-full max-w-full h-full overflow-auto p-2 lg:p-4"
             :style="{ fontSize: `${presenterNotesFontSize}em` }"
             :clicks-context="clicksContext"
+            auto-scroll
           />
           <div border-t border-main />
           <div class="py-1 px-2 text-sm transition" :class="inFocus ? '' : 'op25'">

@@ -14,10 +14,14 @@ it('resolves snippet imports before magic move validation', async () => {
     userRoot,
     data: {
       watchFiles,
-      slides: [{
-        index: 0,
-        source: { filepath: path.join(userRoot, 'test.md') },
-      }],
+      slides: [
+        {
+          index: 0,
+          source: {
+            filepath: path.join(userRoot, 'test.md'),
+          },
+        },
+      ],
       config: { lineNumbers: false },
     },
     utils: {

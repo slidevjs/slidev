@@ -41,7 +41,9 @@ const containerSize = useElementSize(container)
 const slideElement = ref<HTMLElement | null>(null)
 
 const width = computed(() => props.width ?? containerSize.width.value)
-const height = computed(() => props.width ? props.width / slideAspect.value : containerSize.height.value)
+const height = computed(() => props.width
+  ? props.width / slideAspect.value
+  : containerSize.height.value)
 
 const scale = computed(() => {
   if (slideScale.value && !isPrintMode.value)

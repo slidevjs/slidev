@@ -10,7 +10,9 @@ const emit = defineEmits<{
 }>()
 
 const el = ref<HTMLDivElement>()
-const shadow = computed(() => el.value ? (el.value.shadowRoot || el.value.attachShadow({ mode: 'open' })) : null)
+const shadow = computed(() => el.value
+  ? (el.value.shadowRoot || el.value.attachShadow({ mode: 'open' }))
+  : null)
 watchEffect(() => {
   if (shadow.value && props.innerHtml) {
     emit('shadow', shadow.value)

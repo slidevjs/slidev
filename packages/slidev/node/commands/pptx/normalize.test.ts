@@ -62,13 +62,23 @@ const BASE_STYLE: RawStyle = {
 }
 
 function style(overrides: Partial<RawStyle> = {}): RawStyle {
-  return { ...BASE_STYLE, ...overrides }
+  return {
+    ...BASE_STYLE,
+    ...overrides,
+  }
 }
 
 const RECT = { x: 0, y: 0, w: 100, h: 20 }
 
 function el(id: number, parent: number, tag: string, styleIndex: number, extra: Partial<RawNode> = {}): RawNode {
-  return { id, parent, tag, style: styleIndex, rect: RECT, ...extra }
+  return {
+    id,
+    parent,
+    tag,
+    style: styleIndex,
+    rect: RECT,
+    ...extra,
+  }
 }
 
 function text(id: number, parent: number, value: string, extra: Partial<RawNode> = {}): RawNode {
@@ -85,12 +95,25 @@ function text(id: number, parent: number, value: string, extra: Partial<RawNode>
 }
 
 function snapshot(nodes: RawNode[], styles: RawStyle[]): RawSnapshot {
-  const slide: RawSlide = { no: 1, clickIndex: 0, containerId: '001-01', size: { w: 980, h: 552 }, nodes }
-  return { slides: [slide], styles, fontResolution: { 'Inter, sans-serif': 'Inter' }, unplaceablePseudos: [] }
+  const slide: RawSlide = {
+    no: 1,
+    clickIndex: 0,
+    containerId: '001-01',
+    size: { w: 980, h: 552 },
+    nodes,
+  }
+  return {
+    slides: [slide],
+    styles,
+    fontResolution: { 'Inter, sans-serif': 'Inter' },
+    unplaceablePseudos: [],
+  }
 }
 
 function run(nodes: RawNode[], styles: RawStyle[]) {
-  return normalize(snapshot(nodes, styles), { notes: new Map() })
+  return normalize(snapshot(nodes, styles), {
+    notes: new Map(),
+  })
 }
 
 function texts(nodes: any[]): IrText[] {
@@ -124,11 +147,15 @@ describe('value parsing', () => {
 
   it('reports a color it cannot read instead of failing silently', () => {
     const bad = style({ backgroundColor: 'lab(50% 40 59.5)' })
-    const { unparsedColors } = run([el(0, -1, 'DIV', 1)], [BASE_STYLE, bad])
+    const { unparsedColors } = run([
+      el(0, -1, 'DIV', 1),
+    ], [BASE_STYLE, bad])
     expect(unparsedColors).toContain('lab(50% 40 59.5)')
     // Per run, not module state: a drained global leaks into the next export
     // whenever this one throws before the caller collects it.
-    expect(run([el(0, -1, 'DIV', 0)], [BASE_STYLE]).unparsedColors).toHaveLength(0)
+    expect(run([
+      el(0, -1, 'DIV', 0),
+    ], [BASE_STYLE]).unparsedColors).toHaveLength(0)
   })
 
   it('reads a pixel length, and a percentage against its basis', () => {
@@ -159,7 +186,10 @@ describe('a <br> becomes a real line break', () => {
       el(2, 0, 'BR', 1),
       text(3, 0, 'line two'),
     ]
-    const { slides } = run(nodes, [BASE_STYLE, style({ display: 'inline' })])
+    const { slides } = run(nodes, [
+      BASE_STYLE,
+      style({ display: 'inline' }),
+    ])
     const out = texts(slides[0].nodes)[0]
     // Without this the two runs are concatenated and export as "line oneline two".
     expect(out.runs.map(r => r.text)).toEqual(['line one', 'line two'])
@@ -211,7 +241,11 @@ describe('code blocks keep their line structure', () => {
 
   it('does not open a box with a leading break', () => {
     const inline = style({ display: 'inline' })
-    const nodes = [el(0, -1, 'DIV', 0), el(1, 0, 'BR', 1), text(2, 0, 'text')]
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      el(1, 0, 'BR', 1),
+      text(2, 0, 'text'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, inline])
     expect(texts(slides[0].nodes)[0].runs[0].breakBefore).toBeUndefined()
   })
@@ -299,7 +333,9 @@ describe('element opacity reaches the fill', () => {
     // Carried on the NODE, compounded down the tree by the walker, because CSS
     // opacity does not inherit and DrawingML has no group opacity to stand in
     // for a half-transparent wrapper.
-    const nodes = [el(0, -1, 'DIV', 1, { opacity: 0.5 })]
+    const nodes = [
+      el(0, -1, 'DIV', 1, { opacity: 0.5 }),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, faded])
     // DrawingML has no element opacity, only per-fill alpha, so a half
     // transparent overlay exported fully opaque and hid what was behind it.
@@ -318,10 +354,15 @@ describe('paint order follows CSS, not the document', () => {
       // from the nearest POSITIONED ancestor rather than the nearest styled one.
       el(0, -1, 'FOOTER', 1, { rect: corner }),
       el(1, 0, 'DIV', 0, { rect: corner }),
-      text(2, 1, '3 / 35', { rect: corner, glyphRects: [corner] }),
+      text(2, 1, '3 / 35', {
+        rect: corner,
+        glyphRects: [corner],
+      }),
       // The full-bleed background comes after it in the tree, so array order
       // painted it straight over the counter and the counter vanished.
-      el(3, -1, 'DIV', 2, { rect: { x: 0, y: 0, w: 980, h: 552 } }),
+      el(3, -1, 'DIV', 2, {
+        rect: { x: 0, y: 0, w: 980, h: 552 },
+      }),
     ]
     const { slides } = run(nodes, [BASE_STYLE, positioned, backdrop])
     const kinds = slides[0].nodes.map(n => n.kind)
@@ -335,7 +376,10 @@ describe('paint order follows CSS, not the document', () => {
       el(2, -1, 'DIV', 1),
       text(3, 2, 'second'),
     ]
-    const { slides } = run(nodes, [BASE_STYLE, style({ backgroundColor: 'rgb(1, 2, 3)' })])
+    const { slides } = run(nodes, [
+      BASE_STYLE,
+      style({ backgroundColor: 'rgb(1, 2, 3)' }),
+    ])
     const out = texts(slides[0].nodes)
     expect(out.map(t => t.runs[0].text)).toEqual(['first', 'second'])
   })
@@ -357,16 +401,22 @@ describe('opacity reaches text, not only shapes', () => {
 
   it('centers a list marker on its line rather than above it', () => {
     const item = style({ display: 'list-item' })
-    const { slides } = run([el(0, -1, 'LI', 1, { marker: '\u25AA ' })], [BASE_STYLE, item])
+    const { slides } = run([
+      el(0, -1, 'LI', 1, { marker: '\u25AA ' }),
+    ], [BASE_STYLE, item])
     expect(texts(slides[0].nodes)[0].valign).toBe('middle')
   })
 })
 
 describe('the slide keeps its own background', () => {
   it('carries the container background into the IR', () => {
-    const raw = snapshot([el(0, -1, 'DIV', 0)], [BASE_STYLE])
+    const raw = snapshot([
+      el(0, -1, 'DIV', 0),
+    ], [BASE_STYLE])
     raw.slides[0].background = 'rgb(18, 18, 18)'
-    const { slides } = normalize(raw, { notes: new Map() })
+    const { slides } = normalize(raw, {
+      notes: new Map(),
+    })
     // The walk starts at the container's children, so without this every slide
     // exported onto PowerPoint's white and a dark theme became unreadable.
     expect(slides[0].background).toEqual({ r: 18, g: 18, b: 18, a: 1 })
@@ -401,7 +451,9 @@ describe('a shrink-wrapped container leaves no room to wrap', () => {
 
   it('leaves a column-constrained paragraph at its container width', () => {
     const nodes = [
-      el(0, -1, 'DIV', 0, { rect: { x: 0, y: 0, w: 400, h: 60 } }),
+      el(0, -1, 'DIV', 0, {
+        rect: { x: 0, y: 0, w: 400, h: 60 },
+      }),
       text(1, 0, 'wrapped body copy', {
         rect: { x: 0, y: 0, w: 400, h: 60 },
         glyphRects: [
@@ -424,10 +476,15 @@ describe('--range is applied by the caller, not the page', () => {
     // exporter that trusts the page exports the whole deck. `no` and
     // `containerId` are what let the caller drop them, the same way the image
     // exporter does with `pages.includes(slideNo)`.
-    const raw = snapshot([el(0, -1, 'DIV', 0), text(1, 0, 'content')], [BASE_STYLE])
+    const raw = snapshot([
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'content'),
+    ], [BASE_STYLE])
     raw.slides[0].no = 7
     raw.slides[0].containerId = '007-03'
-    const { slides } = normalize(raw, { notes: new Map() })
+    const { slides } = normalize(raw, {
+      notes: new Map(),
+    })
     expect(slides[0].no).toBe(7)
     expect(slides[0].containerId).toBe('007-03')
   })
@@ -559,7 +616,10 @@ describe('inline decorations paint before their text', () => {
     const nodes = [
       el(0, -1, 'DIV', 0),
       el(1, 0, 'SPAN', 2, { rect: label }),
-      text(2, 1, 'NEW', { rect: label, glyphRects: [label] }),
+      text(2, 1, 'NEW', {
+        rect: label,
+        glyphRects: [label],
+      }),
     ]
     const { slides } = run(nodes, [BASE_STYLE, inline, chip])
     const out = texts(slides[0].nodes)
@@ -600,7 +660,10 @@ describe('inline decorations paint before their text', () => {
 describe('text-transform and letter-spacing are applied', () => {
   it('uppercases the run rather than trusting PowerPoint to do it', () => {
     const label = style({ textTransform: 'uppercase', letterSpacing: '2px' })
-    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'section one')]
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+      text(1, 0, 'section one'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, label])
     const out = texts(slides[0].nodes)[0]
     // PowerPoint has no text-transform, so an untransformed run exports the
@@ -613,10 +676,14 @@ describe('text-transform and letter-spacing are applied', () => {
 describe('text is positioned from glyph bounds', () => {
   it('uses the glyph rects for a single line, not the element box', () => {
     const nodes = [
-      el(0, -1, 'DIV', 0, { rect: { x: 0, y: 0, w: 500, h: 100 } }),
+      el(0, -1, 'DIV', 0, {
+        rect: { x: 0, y: 0, w: 500, h: 100 },
+      }),
       text(1, 0, 'one line', {
         rect: { x: 0, y: 0, w: 500, h: 100 },
-        glyphRects: [{ x: 40, y: 10, w: 120, h: 20 }],
+        glyphRects: [
+          { x: 40, y: 10, w: 120, h: 20 },
+        ],
       }),
     ]
     const { slides } = run(nodes, [BASE_STYLE])
@@ -630,7 +697,9 @@ describe('text is positioned from glyph bounds', () => {
   it('wraps multi-line text against the container content box', () => {
     const padded = style({ paddingLeft: '8px', paddingRight: '8px' })
     const nodes = [
-      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 200, h: 100 } }),
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 0, y: 0, w: 200, h: 100 },
+      }),
       text(1, 0, 'two lines here', {
         rect: { x: 0, y: 0, w: 200, h: 100 },
         glyphRects: [
@@ -708,7 +777,10 @@ describe('a picture with content over it is captured in isolation', () => {
     const nodes = [
       el(0, -1, 'SVG', 0, { rect: full }),
       el(1, -1, 'H1', 0, { rect: title }),
-      text(2, 1, 'A cover title', { rect: title, glyphRects: [title] }),
+      text(2, 1, 'A cover title', {
+        rect: title,
+        glyphRects: [title],
+      }),
     ]
     const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
     // `locator.screenshot()` clips the page rather than isolating the element,
@@ -729,7 +801,10 @@ describe('a picture with content over it is captured in isolation', () => {
     const nodes = [
       el(0, -1, 'SVG', 0, { rect: corner }),
       el(1, -1, 'DIV', 0, { rect: away }),
-      text(2, 1, 'caption', { rect: away, glyphRects: [away] }),
+      text(2, 1, 'caption', {
+        rect: away,
+        glyphRects: [away],
+      }),
     ]
     const { rasterRequests } = run(nodes, [BASE_STYLE])
     // Isolation costs two DOM mutations per capture, so it is not free.
@@ -740,8 +815,15 @@ describe('a picture with content over it is captured in isolation', () => {
 describe('only backdrops need their descendants hidden', () => {
   it('isolates a backdrop but not a leaf picture', () => {
     const backdrop = run(
-      [el(0, -1, 'DIV', 1), el(1, 0, 'DIV', 0), text(2, 1, 'on top')],
-      [BASE_STYLE, style({ backgroundImage: 'linear-gradient(red, blue)' })],
+      [
+        el(0, -1, 'DIV', 1),
+        el(1, 0, 'DIV', 0),
+        text(2, 1, 'on top'),
+      ],
+      [
+        BASE_STYLE,
+        style({ backgroundImage: 'linear-gradient(red, blue)' }),
+      ],
     )
     const raster = backdrop.slides[0].nodes.find(n => n.kind === 'raster') as any
     // Without hiding siblings, the text bakes into the backdrop picture and is
@@ -752,7 +834,9 @@ describe('only backdrops need their descendants hidden', () => {
     // Its children are still walked, so the text survives as editable text.
     expect(texts(backdrop.slides[0].nodes)).toHaveLength(1)
 
-    const leaf = run([el(0, -1, 'SVG', 0)], [BASE_STYLE])
+    const leaf = run([
+      el(0, -1, 'SVG', 0),
+    ], [BASE_STYLE])
     expect((leaf.slides[0].nodes[0] as any).isolate).toBe(false)
   })
 })
@@ -760,7 +844,10 @@ describe('only backdrops need their descendants hidden', () => {
 describe('a slide that cannot be rebuilt falls back to an image', () => {
   it('falls back when a slide with text yields none', () => {
     // Every text node sits under an <svg>, so all of it rasterizes.
-    const nodes = [el(0, -1, 'SVG', 0), text(1, 0, 'invisible to the walk')]
+    const nodes = [
+      el(0, -1, 'SVG', 0),
+      text(1, 0, 'invisible to the walk'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE])
     expect(slides[0].fallbackReason).toMatch(/no text could be recovered/)
   })
@@ -771,7 +858,10 @@ describe('a slide that cannot be rebuilt falls back to an image', () => {
     const nodes = [
       el(0, -1, 'SVG', 0, { rect: big }),
       el(1, -1, 'DIV', 0, { rect: away }),
-      text(2, 1, 'a caption in the corner', { rect: away, glyphRects: [away] }),
+      text(2, 1, 'a caption in the corner', {
+        rect: away,
+        glyphRects: [away],
+      }),
     ]
     const { slides } = run(nodes, [BASE_STYLE])
     // The caption sits beside the picture rather than on it, so vectorizing
@@ -785,7 +875,10 @@ describe('a slide that cannot be rebuilt falls back to an image', () => {
     const nodes = [
       el(0, -1, 'SVG', 0, { rect: full }),
       el(1, -1, 'H1', 0, { rect: title }),
-      text(2, 1, 'A cover title', { rect: title, glyphRects: [title] }),
+      text(2, 1, 'A cover title', {
+        rect: title,
+        glyphRects: [title],
+      }),
     ]
     const { slides } = run(nodes, [BASE_STYLE])
     // A cover photo or decorative graphic covers the slide by definition. The
@@ -796,7 +889,10 @@ describe('a slide that cannot be rebuilt falls back to an image', () => {
   })
 
   it('does not request captures for a slide that is falling back anyway', () => {
-    const nodes = [el(0, -1, 'SVG', 0), text(1, 0, 'invisible to the walk')]
+    const nodes = [
+      el(0, -1, 'SVG', 0),
+      text(1, 0, 'invisible to the walk'),
+    ]
     const { rasterRequests } = run(nodes, [BASE_STYLE])
     // The whole slide becomes one picture, so per-element captures would be
     // paid for and thrown away.
@@ -804,7 +900,10 @@ describe('a slide that cannot be rebuilt falls back to an image', () => {
   })
 
   it('leaves an ordinary slide alone', () => {
-    const nodes = [el(0, -1, 'DIV', 0), text(1, 0, 'ordinary content')]
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'ordinary content'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE])
     expect(slides[0].fallbackReason).toBeUndefined()
   })
@@ -813,7 +912,11 @@ describe('a slide that cannot be rebuilt falls back to an image', () => {
 describe('content outside the slide is clipped', () => {
   it('clips a shape that overflows the slide', () => {
     const wide = style({ backgroundColor: 'rgb(1, 2, 3)' })
-    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 900, y: 0, w: 500, h: 100 } })]
+    const nodes = [
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 900, y: 0, w: 500, h: 100 },
+      }),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, wide])
     // A slide container is overflow:hidden, but PowerPoint has no clipping, so
     // an unclamped shape sits off the canvas where it cannot even be selected.
@@ -822,7 +925,11 @@ describe('content outside the slide is clipped', () => {
 
   it('drops a shape that is entirely off the slide', () => {
     const off = style({ backgroundColor: 'rgb(1, 2, 3)' })
-    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 2000, y: 0, w: 100, h: 100 } })]
+    const nodes = [
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 2000, y: 0, w: 100, h: 100 },
+      }),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, off])
     expect(boxes(slides[0].nodes)).toHaveLength(0)
   })
@@ -836,8 +943,15 @@ describe('content outside the slide is clipped', () => {
     // Only the left edge of it is on the slide, so this does not also trip the
     // whole-slide fallback, which withholds captures by design.
     const huge = { x: 900, y: 0, w: 24_000_000, h: 300 }
-    const page = { x: 1000, y: 200, w: 24_000_000, h: 300 }
-    const nodes = [el(0, -1, 'CANVAS', 0, { rect: huge, pageRect: page })]
+    const page = {
+      x: 1000,
+      y: 200,
+      w: 24_000_000,
+      h: 300,
+    }
+    const nodes = [
+      el(0, -1, 'CANVAS', 0, { rect: huge, pageRect: page }),
+    ]
     const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
     const raster = slides[0].nodes[0] as any
     // Placed at the clipped rectangle, and captured at the same one, so the
@@ -850,8 +964,15 @@ describe('content outside the slide is clipped', () => {
     // Slidev's own starter deck has an element measuring tens of millions of
     // pixels, which reported "104064986954% of the slide had to be rasterized".
     // No text here, so the area rule is the one under test.
-    const huge = { x: 0, y: 0, w: 24_000_000, h: 24_000_000 }
-    const { slides } = run([el(0, -1, 'CANVAS', 0, { rect: huge })], [BASE_STYLE])
+    const huge = {
+      x: 0,
+      y: 0,
+      w: 24_000_000,
+      h: 24_000_000,
+    }
+    const { slides } = run([
+      el(0, -1, 'CANVAS', 0, { rect: huge }),
+    ], [BASE_STYLE])
     expect(slides[0].fallbackReason).toMatch(/^100% of the slide/)
   })
 })
@@ -860,7 +981,9 @@ describe('a full-bleed backdrop does not trigger the fallback', () => {
   it('keeps the text on a cover slide editable', () => {
     const cover = style({ backgroundImage: 'url(https://cover.sli.dev)' })
     const nodes = [
-      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 980, h: 552 } }),
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 0, y: 0, w: 980, h: 552 },
+      }),
       el(1, 0, 'H1', 0),
       text(2, 1, 'Welcome to Slidev'),
     ]
@@ -876,14 +999,23 @@ describe('a full-bleed backdrop does not trigger the fallback', () => {
 
 describe('fonts', () => {
   it('names the family the browser actually resolved', () => {
-    const nodes = [el(0, -1, 'DIV', 0), text(1, 0, 'hello')]
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+      text(1, 0, 'hello'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE])
     expect(texts(slides[0].nodes)[0].runs[0].fontFamily).toBe('Inter')
   })
 
   it('strips the @fontsource Variable suffix when nothing resolved', () => {
-    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'hello')]
-    const styles = [BASE_STYLE, style({ fontFamily: '"Inter Variable", sans-serif' })]
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+      text(1, 0, 'hello'),
+    ]
+    const styles = [
+      BASE_STYLE,
+      style({ fontFamily: '"Inter Variable", sans-serif' }),
+    ]
     const { slides } = run(nodes, styles)
     // Nobody has a font installed under the name "Inter Variable"; that is a
     // packaging artifact of @fontsource-variable.
@@ -893,17 +1025,25 @@ describe('fonts', () => {
 
 describe('boxes', () => {
   it('ignores a fully transparent background', () => {
-    const nodes = [el(0, -1, 'DIV', 0)]
+    const nodes = [
+      el(0, -1, 'DIV', 0),
+    ]
     const { slides } = run(nodes, [BASE_STYLE])
     expect(boxes(slides[0].nodes)).toHaveLength(0)
   })
 
   it('keeps one side of a border', () => {
     const accent = style({ borderLeftWidth: '4px', borderLeftStyle: 'solid', borderLeftColor: 'rgb(0, 128, 0)' })
-    const nodes = [el(0, -1, 'DIV', 1)]
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, accent])
     const box = boxes(slides[0].nodes)[0]
-    expect(box.borders?.[3]).toEqual({ width: 4, color: { r: 0, g: 128, b: 0, a: 1 }, style: 'solid' })
+    expect(box.borders?.[3]).toEqual({
+      width: 4,
+      color: { r: 0, g: 128, b: 0, a: 1 },
+      style: 'solid',
+    })
     expect(box.borders?.[0]).toBeUndefined()
   })
 })
@@ -918,11 +1058,25 @@ describe('lines are grouped by overlap, not by matching tops', () => {
     const small = { x: 0, y: 130, w: 120, h: 40 }
     const large = { x: 120, y: 100, w: 400, h: 100 }
     const nodes = [
-      el(0, -1, 'H1', 0, { rect: { x: 0, y: 100, w: 520, h: 220 } }),
-      text(1, 0, 'Needed a ', { glyphRects: [small] }),
-      text(2, 0, 'Pros-Cons', { glyphRects: [large] }),
-      text(3, 0, 'comparison', { glyphRects: [{ ...large, y: 220 }] }),
-      text(4, 0, ' in now?', { glyphRects: [{ ...small, y: 250 }] }),
+      el(0, -1, 'H1', 0, {
+        rect: { x: 0, y: 100, w: 520, h: 220 },
+      }),
+      text(1, 0, 'Needed a ', {
+        glyphRects: [small],
+      }),
+      text(2, 0, 'Pros-Cons', {
+        glyphRects: [large],
+      }),
+      text(3, 0, 'comparison', {
+        glyphRects: [
+          { ...large, y: 220 },
+        ],
+      }),
+      text(4, 0, ' in now?', {
+        glyphRects: [
+          { ...small, y: 250 },
+        ],
+      }),
     ]
     const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
     expect(line.lineCount).toBe(2)
@@ -933,9 +1087,19 @@ describe('lines are grouped by overlap, not by matching tops', () => {
     // tall as its largest run, so a heading mixing sizes reported far too
     // little leading and PowerPoint overlapped the lines.
     const nodes = [
-      el(0, -1, 'H1', 0, { rect: { x: 0, y: 0, w: 400, h: 240 } }),
-      text(1, 0, 'first', { glyphRects: [{ x: 0, y: 0, w: 300, h: 100 }] }),
-      text(2, 0, 'second', { glyphRects: [{ x: 0, y: 120, w: 300, h: 100 }] }),
+      el(0, -1, 'H1', 0, {
+        rect: { x: 0, y: 0, w: 400, h: 240 },
+      }),
+      text(1, 0, 'first', {
+        glyphRects: [
+          { x: 0, y: 0, w: 300, h: 100 },
+        ],
+      }),
+      text(2, 0, 'second', {
+        glyphRects: [
+          { x: 0, y: 120, w: 300, h: 100 },
+        ],
+      }),
     ]
     const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
     // 120, the distance between the line tops. `line-height: normal` on a
@@ -945,9 +1109,19 @@ describe('lines are grouped by overlap, not by matching tops', () => {
 
   it('still separates lines whose ink very nearly touches', () => {
     const nodes = [
-      el(0, -1, 'P', 0, { rect: { x: 0, y: 0, w: 400, h: 40 } }),
-      text(1, 0, 'one', { glyphRects: [{ x: 0, y: 0, w: 300, h: 20 }] }),
-      text(2, 0, 'two', { glyphRects: [{ x: 0, y: 19, w: 300, h: 20 }] }),
+      el(0, -1, 'P', 0, {
+        rect: { x: 0, y: 0, w: 400, h: 40 },
+      }),
+      text(1, 0, 'one', {
+        glyphRects: [
+          { x: 0, y: 0, w: 300, h: 20 },
+        ],
+      }),
+      text(2, 0, 'two', {
+        glyphRects: [
+          { x: 0, y: 19, w: 300, h: 20 },
+        ],
+      }),
     ]
     const [line] = texts(run(nodes, [BASE_STYLE]).slides[0].nodes)
     expect(line.lineCount).toBe(2)
@@ -967,7 +1141,10 @@ describe('a wrapped inline box is painted once per line', () => {
       { x: 0, y: 40, w: 80, h: 20 },
     ]
     const nodes = [
-      el(0, -1, 'CODE', 1, { rect: { x: 0, y: 0, w: 300, h: 60 }, fragments }),
+      el(0, -1, 'CODE', 1, {
+        rect: { x: 0, y: 0, w: 300, h: 60 },
+        fragments,
+      }),
     ]
     const painted = boxes(run(nodes, [BASE_STYLE, inline]).slides[0].nodes)
     expect(painted.map(box => box.rect)).toEqual(fragments)
@@ -975,7 +1152,11 @@ describe('a wrapped inline box is painted once per line', () => {
 
   it('leaves an unwrapped element as one shape', () => {
     const filled = style({ backgroundColor: 'rgb(0, 0, 0)' })
-    const nodes = [el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 300, h: 60 } })]
+    const nodes = [
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 0, y: 0, w: 300, h: 60 },
+      }),
+    ]
     const painted = boxes(run(nodes, [BASE_STYLE, filled]).slides[0].nodes)
     expect(painted).toHaveLength(1)
     expect(painted[0].rect).toEqual({ x: 0, y: 0, w: 300, h: 60 })
@@ -991,8 +1172,12 @@ describe('a raster that cannot be placed must not swallow its subtree', () => {
     // either, and the entire corner vanished from every slide.
     const rotated = style({ transform: 'matrix(0, 1, -1, 0, 0, 0)', position: 'absolute' })
     const nodes = [
-      el(0, -1, 'DIV', 1, { rect: { x: 0, y: 0, w: 0, h: 0 } }),
-      el(1, 0, 'SVG', 0, { rect: { x: 10, y: 20, w: 279, h: 322 } }),
+      el(0, -1, 'DIV', 1, {
+        rect: { x: 0, y: 0, w: 0, h: 0 },
+      }),
+      el(1, 0, 'SVG', 0, {
+        rect: { x: 10, y: 20, w: 279, h: 322 },
+      }),
     ]
     const { slides, rasterRequests } = run(nodes, [BASE_STYLE, rotated])
     expect(slides[0].nodes.map(node => node.sourceId)).toEqual([1])
@@ -1006,14 +1191,24 @@ describe('an image cut off by the slide edge is cropped, not squashed', () => {
     // of an oversized image and cuts the rest off. Clipping the BOX alone
     // scaled the whole image into it instead, which came out vertically
     // compressed and showed content the audience never saw.
-    const nodes = [el(0, -1, 'IMG', 0, { rect: { x: 56, y: 40, w: 434, h: 772 }, src: 'a.png' })]
+    const nodes = [
+      el(0, -1, 'IMG', 0, {
+        rect: { x: 56, y: 40, w: 434, h: 772 },
+        src: 'a.png',
+      }),
+    ]
     const [image] = run(nodes, [BASE_STYLE]).slides[0].nodes as any[]
     expect(image.rect).toEqual({ x: 56, y: 40, w: 434, h: 512 })
     expect(image.crop).toEqual({ x: 0, y: 0, w: 434, h: 772 })
   })
 
   it('leaves an image that fits uncropped', () => {
-    const nodes = [el(0, -1, 'IMG', 0, { rect: { x: 10, y: 10, w: 100, h: 50 }, src: 'a.png' })]
+    const nodes = [
+      el(0, -1, 'IMG', 0, {
+        rect: { x: 10, y: 10, w: 100, h: 50 },
+        src: 'a.png',
+      }),
+    ]
     const [image] = run(nodes, [BASE_STYLE]).slides[0].nodes as any[]
     expect(image.crop).toBeUndefined()
   })
@@ -1027,11 +1222,22 @@ describe('a rendered formula is a picture', () => {
     // and every rule disappears.
     const nodes = [
       el(0, -1, 'DIV', 0),
-      el(1, 0, 'SPAN', 0, { isMath: true, rect: { x: 10, y: 10, w: 200, h: 40 } }),
-      el(2, 1, 'SPAN', 0, { rect: { x: 10, y: 10, w: 20, h: 40 } }),
+      el(1, 0, 'SPAN', 0, {
+        isMath: true,
+        rect: { x: 10, y: 10, w: 200, h: 40 },
+      }),
+      el(2, 1, 'SPAN', 0, {
+        rect: { x: 10, y: 10, w: 20, h: 40 },
+      }),
       text(3, 2, '3x'),
-      el(4, 0, 'P', 0, { rect: { x: 10, y: 80, w: 200, h: 20 } }),
-      text(5, 4, 'Block', { glyphRects: [{ x: 10, y: 80, w: 60, h: 20 }] }),
+      el(4, 0, 'P', 0, {
+        rect: { x: 10, y: 80, w: 200, h: 20 },
+      }),
+      text(5, 4, 'Block', {
+        glyphRects: [
+          { x: 10, y: 80, w: 60, h: 20 },
+        ],
+      }),
     ]
     const { slides, rasterRequests } = run(nodes, [BASE_STYLE])
     const math = slides[0].nodes.filter(node => node.kind === 'raster')
@@ -1043,7 +1249,10 @@ describe('a rendered formula is a picture', () => {
   })
 
   it('leaves an ordinary span alone', () => {
-    const nodes = [el(0, -1, 'SPAN', 0), text(1, 0, 'plain')]
+    const nodes = [
+      el(0, -1, 'SPAN', 0),
+      text(1, 0, 'plain'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE])
     expect(slides[0].nodes.map(node => node.kind)).toEqual(['text'])
   })
@@ -1074,10 +1283,22 @@ describe('gradient text is the picture, not a backdrop for it', () => {
       webkitBackgroundClip: 'text',
     })
     const nodes = [
-      el(0, -1, 'H1', 1, { rect: { x: 54, y: 40, w: 870, h: 40 } }),
-      text(1, 0, 'What is Slidev?', { glyphRects: [{ x: 54, y: 36, w: 256, h: 47 }] }),
-      el(2, -1, 'P', 0, { rect: { x: 54, y: 88, w: 700, h: 23 } }),
-      text(3, 2, 'Body copy', { glyphRects: [{ x: 54, y: 88, w: 200, h: 23 }] }),
+      el(0, -1, 'H1', 1, {
+        rect: { x: 54, y: 40, w: 870, h: 40 },
+      }),
+      text(1, 0, 'What is Slidev?', {
+        glyphRects: [
+          { x: 54, y: 36, w: 256, h: 47 },
+        ],
+      }),
+      el(2, -1, 'P', 0, {
+        rect: { x: 54, y: 88, w: 700, h: 23 },
+      }),
+      text(3, 2, 'Body copy', {
+        glyphRects: [
+          { x: 54, y: 88, w: 200, h: 23 },
+        ],
+      }),
     ]
     const { slides } = run(nodes, [BASE_STYLE, gradient])
     expect(slides[0].nodes.filter(n => n.kind === 'raster')).toHaveLength(1)
@@ -1114,7 +1335,10 @@ describe('an inline rule is an underline, not a shape', () => {
   it('leaves a bordered box a box', () => {
     // A bottom border on a BLOCK is a rule under a section, not an underline.
     const blockRule = style({ borderBottomWidth: '1px', borderBottomStyle: 'solid', borderBottomColor: 'rgb(0, 0, 0)' })
-    const nodes = [el(0, -1, 'DIV', 1), text(1, 0, 'Section')]
+    const nodes = [
+      el(0, -1, 'DIV', 1),
+      text(1, 0, 'Section'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, blockRule])
     expect(boxes(slides[0].nodes)).toHaveLength(1)
     expect(texts(slides[0].nodes)[0].runs[0].underline).toBeUndefined()
@@ -1128,7 +1352,11 @@ describe('an inline rule is an underline, not a shape', () => {
       borderBottomStyle: 'dashed',
       borderBottomColor: 'rgb(0, 0, 0)',
     })
-    const nodes = [el(0, -1, 'P', 0), el(1, 0, 'CODE', 1), text(2, 1, 'npm i')]
+    const nodes = [
+      el(0, -1, 'P', 0),
+      el(1, 0, 'CODE', 1),
+      text(2, 1, 'npm i'),
+    ]
     const { slides } = run(nodes, [BASE_STYLE, chip])
     expect(boxes(slides[0].nodes).length).toBeGreaterThan(0)
   })
@@ -1142,13 +1370,39 @@ describe('a table cell flows its children, it does not lay them out', () => {
     const chip = style({ display: 'inline-block', backgroundColor: 'rgb(240, 240, 240)' })
     const nodes = [
       el(0, -1, 'TD', 1),
-      el(1, 0, 'KBD', 2, { rect: { x: 69, y: 226, w: 48, h: 27 } }),
-      text(2, 1, 'left', { rect: { x: 73, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 73, y: 233, w: 40, h: 20 }] }),
-      text(3, 0, ' / ', { rect: { x: 117, y: 233, w: 13, h: 20 }, glyphRects: [{ x: 117, y: 233, w: 13, h: 20 }] }),
-      el(4, 0, 'KBD', 2, { rect: { x: 130, y: 226, w: 48, h: 27 } }),
-      text(5, 4, 'shift', { rect: { x: 134, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 134, y: 233, w: 40, h: 20 }] }),
-      el(6, 0, 'KBD', 2, { rect: { x: 186, y: 226, w: 48, h: 27 } }),
-      text(7, 6, 'space', { rect: { x: 190, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 190, y: 233, w: 40, h: 20 }] }),
+      el(1, 0, 'KBD', 2, {
+        rect: { x: 69, y: 226, w: 48, h: 27 },
+      }),
+      text(2, 1, 'left', {
+        rect: { x: 73, y: 233, w: 40, h: 20 },
+        glyphRects: [
+          { x: 73, y: 233, w: 40, h: 20 },
+        ],
+      }),
+      text(3, 0, ' / ', {
+        rect: { x: 117, y: 233, w: 13, h: 20 },
+        glyphRects: [
+          { x: 117, y: 233, w: 13, h: 20 },
+        ],
+      }),
+      el(4, 0, 'KBD', 2, {
+        rect: { x: 130, y: 226, w: 48, h: 27 },
+      }),
+      text(5, 4, 'shift', {
+        rect: { x: 134, y: 233, w: 40, h: 20 },
+        glyphRects: [
+          { x: 134, y: 233, w: 40, h: 20 },
+        ],
+      }),
+      el(6, 0, 'KBD', 2, {
+        rect: { x: 186, y: 226, w: 48, h: 27 },
+      }),
+      text(7, 6, 'space', {
+        rect: { x: 190, y: 233, w: 40, h: 20 },
+        glyphRects: [
+          { x: 190, y: 233, w: 40, h: 20 },
+        ],
+      }),
     ]
     const lines = texts(run(nodes, [BASE_STYLE, cell, chip]).slides[0].nodes)
     expect(lines.map(l => l.runs.map(r => r.text).join(''))).toEqual(['left', ' / ', 'shift', 'space'])
@@ -1167,11 +1421,30 @@ describe('a table cell flows its children, it does not lay them out', () => {
     const chip = style({ display: 'inline-block', backgroundColor: 'rgb(240, 240, 240)' })
     const nodes = [
       el(0, -1, 'TD', 1),
-      el(1, 0, 'SPAN', 3, { rect: { x: 69, y: 233, w: 48, h: 20 } }),
-      text(2, 1, 'right', { rect: { x: 73, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 73, y: 233, w: 40, h: 20 }] }),
-      text(3, 0, ' / ', { rect: { x: 117, y: 233, w: 13, h: 20 }, glyphRects: [{ x: 117, y: 233, w: 13, h: 20 }] }),
-      el(4, 0, 'SPAN', 3, { rect: { x: 130, y: 233, w: 48, h: 20 } }),
-      text(5, 4, 'space', { rect: { x: 134, y: 233, w: 40, h: 20 }, glyphRects: [{ x: 134, y: 233, w: 40, h: 20 }] }),
+      el(1, 0, 'SPAN', 3, {
+        rect: { x: 69, y: 233, w: 48, h: 20 },
+      }),
+      text(2, 1, 'right', {
+        rect: { x: 73, y: 233, w: 40, h: 20 },
+        glyphRects: [
+          { x: 73, y: 233, w: 40, h: 20 },
+        ],
+      }),
+      text(3, 0, ' / ', {
+        rect: { x: 117, y: 233, w: 13, h: 20 },
+        glyphRects: [
+          { x: 117, y: 233, w: 13, h: 20 },
+        ],
+      }),
+      el(4, 0, 'SPAN', 3, {
+        rect: { x: 130, y: 233, w: 48, h: 20 },
+      }),
+      text(5, 4, 'space', {
+        rect: { x: 134, y: 233, w: 40, h: 20 },
+        glyphRects: [
+          { x: 134, y: 233, w: 40, h: 20 },
+        ],
+      }),
     ]
     const plain = style({ display: 'inline' })
     const lines = texts(run(nodes, [BASE_STYLE, cell, chip, plain]).slides[0].nodes)
@@ -1183,10 +1456,22 @@ describe('a table cell flows its children, it does not lay them out', () => {
     const table = style({ display: 'table' })
     const nodes = [
       el(0, -1, 'TABLE', 1),
-      el(1, 0, 'TR', 0, { rect: { x: 0, y: 0, w: 200, h: 20 } }),
-      text(2, 1, 'one', { glyphRects: [{ x: 0, y: 0, w: 60, h: 20 }] }),
-      el(3, 0, 'TR', 0, { rect: { x: 0, y: 30, w: 200, h: 20 } }),
-      text(4, 3, 'two', { glyphRects: [{ x: 0, y: 30, w: 60, h: 20 }] }),
+      el(1, 0, 'TR', 0, {
+        rect: { x: 0, y: 0, w: 200, h: 20 },
+      }),
+      text(2, 1, 'one', {
+        glyphRects: [
+          { x: 0, y: 0, w: 60, h: 20 },
+        ],
+      }),
+      el(3, 0, 'TR', 0, {
+        rect: { x: 0, y: 30, w: 200, h: 20 },
+      }),
+      text(4, 3, 'two', {
+        glyphRects: [
+          { x: 0, y: 30, w: 60, h: 20 },
+        ],
+      }),
     ]
     const lines = texts(run(nodes, [BASE_STYLE, table]).slides[0].nodes)
     expect(lines.map(l => l.runs.map(r => r.text).join(''))).toEqual(['one', 'two'])
@@ -1208,8 +1493,15 @@ describe('a block box inside an inline run is not folded into the paragraph', ()
     el(1, -1, 'PRE', 0),
     el(2, 1, 'CODE', 1),
     text(3, 2, 'doubled.value = 2'),
-    el(4, 2, 'DIV', 2, { rect: { x: 0, y: 30, w: 200, h: 20 } }),
-    text(5, 4, 'Cannot assign to \'value\'.', { rect: { x: 0, y: 30, w: 200, h: 20 }, glyphRects: [{ x: 0, y: 30, w: 200, h: 20 }] }),
+    el(4, 2, 'DIV', 2, {
+      rect: { x: 0, y: 30, w: 200, h: 20 },
+    }),
+    text(5, 4, 'Cannot assign to \'value\'.', {
+      rect: { x: 0, y: 30, w: 200, h: 20 },
+      glyphRects: [
+        { x: 0, y: 30, w: 200, h: 20 },
+      ],
+    }),
   ]
 
   it('gives the diagnostic its own text box', () => {

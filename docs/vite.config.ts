@@ -37,7 +37,12 @@ export default defineConfig({
         './node_modules/@slidev/client/builtin',
       ],
       extensions: ['vue', 'md'],
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.md\?vue/],
+      include: [
+        /\.vue$/,
+        /\.vue\?vue/,
+        /\.md$/,
+        /\.md\?vue/,
+      ],
       resolvers: [
         IconsResolver({
           prefix: '',

@@ -3,7 +3,9 @@ import { Advanced, Guides } from './pages'
 
 function removeHash(link: string) {
   const idx = link.lastIndexOf('#')
-  return idx < 0 ? link : link.slice(0, idx)
+  return idx < 0
+    ? link
+    : link.slice(0, idx)
 }
 
 function getGuideTitle(id: string) {

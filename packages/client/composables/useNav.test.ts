@@ -14,13 +14,17 @@ vi.mock('#slidev/slides', async () => {
       {
         no: 1,
         meta: {
-          slide: { frontmatter: { title: 'First' } },
+          slide: {
+            frontmatter: { title: 'First' },
+          },
         },
       },
       {
         no: 2,
         meta: {
-          slide: { frontmatter: { title: 'Second' } },
+          slide: {
+            frontmatter: { title: 'Second' },
+          },
         },
       },
     ]),
@@ -37,7 +41,9 @@ vi.mock('../env', async () => {
 
 vi.mock('../state', async () => {
   const { ref } = await import('vue')
-  return { hmrSkipTransition: ref(false) }
+  return {
+    hmrSkipTransition: ref(false),
+  }
 })
 
 vi.mock('vue-router', async () => {

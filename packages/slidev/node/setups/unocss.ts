@@ -19,7 +19,9 @@ export default async function setupUnocss(
       if (!existsSync(i))
         return undefined
       const loaded = await loadModule(i) as VitePluginConfig | { default: VitePluginConfig }
-      return 'default' in loaded ? loaded.default : loaded
+      return 'default' in loaded
+        ? loaded.default
+        : loaded
     })
   }
 

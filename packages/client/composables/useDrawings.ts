@@ -58,7 +58,9 @@ export const useDrawings = createSharedComposable(() => {
 
   const drauuOptions: DrauuOptions = reactive({
     brush,
-    acceptsInputTypes: computed(() => (drawingEnabled.value && (!configs.drawings.presenterOnly || isPresenter.value)) ? undefined : ['pen' as const]),
+    acceptsInputTypes: computed(() => (drawingEnabled.value && (!configs.drawings.presenterOnly || isPresenter.value))
+      ? undefined
+      : ['pen' as const]),
     coordinateTransform: false,
   })
 

@@ -152,7 +152,13 @@ export function resolveSnippetImport(lineText: string, userRoot: string, slide: 
 }
 
 export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWorkspaceRoot, roots, data: { watchFiles, slides } }: ResolvedSlidevOptions) {
-  const allowedRoots = [...new Set([userWorkspaceRoot, userRoot, ...(roots ?? [])].filter(Boolean))]
+  const allowedRoots = [
+    ...new Set([
+      userWorkspaceRoot,
+      userRoot,
+      ...(roots ?? []),
+    ].filter(Boolean)),
+  ]
   md.block.ruler.before('fence', 'snippet_import', (state, startLine, _endLine, silent) => {
     const pos = state.bMarks[startLine] + state.tShift[startLine]
     const max = state.eMarks[startLine]
@@ -166,7 +172,9 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
       return true
 
     const slideNo = state.env.id?.match(regexSlideSourceId)
-    const slide = slideNo ? slides[slideNo[1] - 1] : null
+    const slide = slideNo
+      ? slides[slideNo[1] - 1]
+      : null
 
     if (!slide) {
       console.warn(yellow(`[markdown-it-snippet] Snippet syntax is not supported in ${state.env.id || 'unknown source'}. Skipped.`))
@@ -202,11 +210,20 @@ export default function MarkdownItSnippet(md: MarkdownExit, { userRoot, userWork
 
       const token = state.push('fence', 'code', 0)
       token.info = `${lang} ${meta}`.trim()
-      token.content = content.endsWith('\n') ? content : `${content}\n`
+      token.content = content.endsWith('\n')
+        ? content
+        : `${content}\n`
       token.map = [startLine, startLine + 1]
     }
 
     state.line = startLine + 1
     return true
-  }, { alt: ['paragraph', 'reference', 'blockquote', 'list'] })
+  }, {
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
+  })
 }

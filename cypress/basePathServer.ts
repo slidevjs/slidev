@@ -49,12 +49,24 @@ export async function startBasePathServer(routerMode: RouterMode = 'history'): P
 
   // Cypress runs its node events inside Electron; strip its env so the
   // spawned build runs under plain Node.
-  const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
+  const pnpm = process.platform === 'win32'
+    ? 'pnpm.cmd'
+    : 'pnpm'
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
   delete env.NODE_OPTIONS
 
-  execFileSync(pnpm, ['--filter', './cypress/fixtures/basic', 'build', '--base', base, '--router-mode', routerMode, '--out', outDir], {
+  execFileSync(pnpm, [
+    '--filter',
+    './cypress/fixtures/basic',
+    'build',
+    '--base',
+    base,
+    '--router-mode',
+    routerMode,
+    '--out',
+    outDir,
+  ], {
     cwd: join(import.meta.dirname, '..'),
     env,
     stdio: 'inherit',
@@ -95,9 +107,13 @@ export async function startBasePathServer(routerMode: RouterMode = 'history'): P
 
 export async function stopBasePathServer() {
   await Promise.all(
-    [...servers.values()].map(({ server }) =>
+    [
+      ...servers.values(),
+    ].map(({ server }) =>
       new Promise<void>((resolve, reject) => {
-        server.close(error => (error ? reject(error) : resolve()))
+        server.close(error => (error
+          ? reject(error)
+          : resolve()))
       }),
     ),
   )

@@ -69,12 +69,12 @@ Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /
 
 Options:
 
-- `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#frontmatter-configures) or use `[entry]-export`): path to the output.
+- `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#headmatter) or use `[entry]-export`): path to the output.
 - `--format` (`'pdf', 'png', 'pptx', 'pptx-editable', 'md'`, default: `'pdf'`): output format. `pptx` exports each slide as an image; `pptx-editable` rebuilds them as native PowerPoint shapes with selectable text.
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.
-- `--with-clicks`, `-c` (`boolean`, default: `false`): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
+- `--with-clicks`, `-c` (`boolean`, default: `true` for PPTX formats, `false` otherwise): export pages for every click animation (see https://sli.dev/guide/animations.html#click-animation).
 - `--theme`, `-t` (`string`): override theme.
 - `--omit-background` (`boolean`, default: `false`): remove the default browser background
 

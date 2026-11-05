@@ -212,6 +212,18 @@ When the build runs with Zephyr enabled, your app is deployed and Zephyr Cloud r
 Zephyr Cloud is a bit different from most hosting providers: every `build` run triggers a deployment.
 :::
 
+### deed.page {#deed-page}
+
+[deed.page](https://deed.page) hosts static sites without an account. Build your slides, pack the `dist` folder and upload it with one HTTP `PUT`:
+
+```bash
+npm run build
+tar -C dist -czf slides.tar.gz .
+curl -T slides.tar.gz -H "X-Spa: 1" "https://deed.page/v1/sites?slug=my-slides"
+```
+
+The `X-Spa: 1` header serves `index.html` for unknown paths, so links to individual slides such as `/2` or `/presenter/1` keep working. The response contains the live `https://my-slides.deed.page/` URL and a token; send the token as `Authorization: Bearer <token>` to publish updates to the same slug. See the [deed.page docs](https://deed.page/docs) for limits and larger uploads.
+
 ### Host on Docker {#docker}
 
 If you need a rapid way to run a presentation with containers, you can use the prebuilt [docker image](https://hub.docker.com/r/tangramor/slidev) maintained by [tangramor](https://github.com/tangramor), or build your own.

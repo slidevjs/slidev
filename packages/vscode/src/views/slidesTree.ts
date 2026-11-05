@@ -52,10 +52,18 @@ export const useSlidesTree = defineService(() => {
     const createNode = (slide: SourceSlideInfo) => {
       const isFirstSlide = data.entry.slides.findIndex(s => s === slide) === 0
       const layoutName = slide.frontmatter.layout || (isFirstSlide ? 'cover' : 'default')
-      const slideNo = slide.imports ? 0 : data.slides.findIndex(s => s.source === slide) + 1
-      const label = slide.imports ? '' : `${slideNo}. ${slide.title || '(Untitled)'}`
-      const description = slide.imports ? toRelativePath(slide.imports[0].filepath) : undefined
-      const icon = slide.imports ? 'link-external' : layoutIconMap[layoutName] ?? 'window'
+      const slideNo = slide.imports
+        ? 0
+        : data.slides.findIndex(s => s.source === slide) + 1
+      const label = slide.imports
+        ? ''
+        : `${slideNo}. ${slide.title || '(Untitled)'}`
+      const description = slide.imports
+        ? toRelativePath(slide.imports[0].filepath)
+        : undefined
+      const icon = slide.imports
+        ? 'link-external'
+        : layoutIconMap[layoutName] ?? 'window'
       const collapsibleState = slide.imports ? TreeItemCollapsibleState.Expanded : TreeItemCollapsibleState.None
 
       const node: SlidesTreeNode = {
@@ -121,7 +129,9 @@ export const useSlidesTree = defineService(() => {
           }
           const targetIndex = target.slideIndex
           const targetMarkdown = data.markdownFiles[target.markdownPath]
-          const oldSlides = targetMarkdown.slides.map(s => slides.includes(s) ? null : s)
+          const oldSlides = targetMarkdown.slides.map(s => slides.includes(s)
+            ? null
+            : s)
           const before = oldSlides.slice(0, targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
           const after = oldSlides.slice(targetIndex + 1).filter(Boolean) as SourceSlideInfo[]
           const newTargetMarkdown = {

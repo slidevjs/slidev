@@ -11,7 +11,9 @@ function resolveUrl(url: string): string {
   if (url.startsWith('http') || url.startsWith('//'))
     return url
   const base = (import.meta.env.BASE_URL || '/').replace(RE_TRAILING_SLASH, '')
-  return `${base}${url.startsWith('/') ? url : `/${url}`}`
+  return `${base}${url.startsWith('/')
+    ? url
+    : `/${url}`}`
 }
 
 const RETRY_LIMIT = 2
@@ -25,7 +27,9 @@ const totalImagesCount = ref(0)
  * image in the deck has loaded, or when the deck has no images).
  */
 export const preloadProgress = computed(() =>
-  totalImagesCount.value === 0 ? 1 : preloadedCount.value / totalImagesCount.value,
+  totalImagesCount.value === 0
+    ? 1
+    : preloadedCount.value / totalImagesCount.value,
 )
 
 /** Whether all preloadable slide images have finished loading. */

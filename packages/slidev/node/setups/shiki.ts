@@ -16,13 +16,15 @@ export default async function setupShiki(roots: string[]) {
   const optionsRaw = await loadSetups<ShikiSetup>(
     roots,
     'shiki.ts',
-    [{
+    [
+      {
       /** @deprecated */
-      async loadTheme(path: string) {
-        console.warn('[slidev] `loadTheme` in `setup/shiki.ts` is deprecated. Pass directly the theme name it\'s supported by Shiki. For custom themes, load it manually via `JSON.parse(fs.readFileSync(path, \'utf-8\'))` and pass the raw JSON object instead.')
-        return JSON.parse(await fs.readFile(path, 'utf-8'))
+        async loadTheme(path: string) {
+          console.warn('[slidev] `loadTheme` in `setup/shiki.ts` is deprecated. Pass directly the theme name it\'s supported by Shiki. For custom themes, load it manually via `JSON.parse(fs.readFileSync(path, \'utf-8\'))` and pass the raw JSON object instead.')
+          return JSON.parse(await fs.readFile(path, 'utf-8'))
+        },
       },
-    }],
+    ],
   )
   const { options, languageInput, themeInput } = resolveShikiOptions(optionsRaw)
 

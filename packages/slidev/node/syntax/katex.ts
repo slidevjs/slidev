@@ -23,8 +23,12 @@ function isValidDelim(state: any, pos: number) {
   let can_open = true
   let can_close = true
 
-  const prevChar = pos > 0 ? state.src.charCodeAt(pos - 1) : -1
-  const nextChar = pos + 1 <= max ? state.src.charCodeAt(pos + 1) : -1
+  const prevChar = pos > 0
+    ? state.src.charCodeAt(pos - 1)
+    : -1
+  const nextChar = pos + 1 <= max
+    ? state.src.charCodeAt(pos + 1)
+    : -1
 
   // Check non-whitespace conditions for opening and closing, and
   // check that closing delimeter isn't followed by a number
@@ -168,7 +172,9 @@ const math_block: RuleBlock = function (state, start, end, silent) {
   else {
     token.info = firstLine
     token.content = state.getLines(start + 1, next, state.tShift[start], true)
-      + (lastLine && lastLine.trim() ? lastLine : '')
+      + (lastLine && lastLine.trim()
+        ? lastLine
+        : '')
   }
 
   token.map = [start, state.line]
@@ -212,13 +218,20 @@ export default function MarkdownItKatex(md: MarkdownExit, options: KatexOptions)
     const token = tokens[idx]
     const [, rangeStr, options] = RE_KATEX_BLOCK_INFO.exec(token.info) || []
     const ranges = normalizeRangeStr(rangeStr)
-    const optionsProp = options ? `v-bind="${options}"` : ''
+    const optionsProp = options
+      ? `v-bind="${options}"`
+      : ''
     return `<KaTexBlockWrapper ${optionsProp} :ranges='${JSON.stringify(ranges)}'>${katexBlock(tokens[idx].content)}</KaTexBlockWrapper>\n`
   }
 
   md.inline.ruler.after('escape', 'math_inline', math_inline)
   md.block.ruler.after('blockquote', 'math_block', math_block, {
-    alt: ['paragraph', 'reference', 'blockquote', 'list'],
+    alt: [
+      'paragraph',
+      'reference',
+      'blockquote',
+      'list',
+    ],
   })
   md.renderer.rules.math_inline = inlineRenderer
   md.renderer.rules.math_block = blockRenderer

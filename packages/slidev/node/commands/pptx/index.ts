@@ -89,7 +89,9 @@ export async function exportPptxEditable(
   )
 
   // Return the path actually written: `exportSlides` prints the path it was given.
-  const written = output.endsWith('.pptx') ? output : `${output}.pptx`
+  const written = output.endsWith('.pptx')
+    ? output
+    : `${output}.pptx`
   await fs.writeFile(written, buffer)
 
   return {
@@ -100,9 +102,13 @@ export async function exportPptxEditable(
     isolationMissed: report.isolationMissed,
     rastersFailed: report.rastersFailed,
     unparsedColors,
-    unplaceablePseudos: [...new Set(snapshot.unplaceablePseudos ?? [])].sort(),
+    unplaceablePseudos: [
+      ...new Set(snapshot.unplaceablePseudos ?? []),
+    ].sort(),
     // A pptx names fonts, it does not carry them; report what recipients need installed.
-    fontsNamed: [...new Set(Object.values(snapshot.fontResolution).filter(Boolean))].sort(),
+    fontsNamed: [
+      ...new Set(Object.values(snapshot.fontResolution).filter(Boolean)),
+    ].sort(),
   }
 }
 

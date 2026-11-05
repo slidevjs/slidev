@@ -12,10 +12,14 @@ const options = {
   roots: [fixturesRoot],
   data: {
     watchFiles: {},
-    slides: [{
-      index: 0,
-      source: { filepath: path.join(fixturesRoot, 'test.md') },
-    }],
+    slides: [
+      {
+        index: 0,
+        source: {
+          filepath: path.join(fixturesRoot, 'test.md'),
+        },
+      },
+    ],
   },
 } as any
 
@@ -66,13 +70,21 @@ it('not transform in code block', async () => {
 })
 
 it('resolves a snippet path that stays inside the allowed roots', () => {
-  const slide = { source: { filepath: path.join(fixturesRoot, 'test.md') } } as any
+  const slide = {
+    source: {
+      filepath: path.join(fixturesRoot, 'test.md'),
+    },
+  } as any
   const result = resolveSnippetImport('<<< @/snippets/snippet.ts#snippet', fixturesRoot, slide, [fixturesRoot])
   expect(result?.src).toBe(path.join(fixturesRoot, 'snippets/snippet.ts').replaceAll('\\', '/'))
 })
 
 it('throws when a snippet path escapes the allowed roots', () => {
-  const slide = { source: { filepath: path.join(fixturesRoot, 'test.md') } } as any
+  const slide = {
+    source: {
+      filepath: path.join(fixturesRoot, 'test.md'),
+    },
+  } as any
   expect(() => resolveSnippetImport('<<< ../../../../../outside.ts', fixturesRoot, slide, [fixturesRoot]))
     .toThrow(/escapes the project root/)
 })

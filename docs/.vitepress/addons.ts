@@ -216,26 +216,15 @@ export const community: AddonInfo[] = [
     repo: 'https://github.com/whitphx/slidev-addon-window-mockup',
   },
   {
-    id: 'slidev-addon-bpmn',
-    name: 'BPMN viewer',
-    description: 'Visualize bpmn-files in your slidev',
+    id: 'slidev-addon-diagram-js',
+    name: 'BPMN, DMN & more',
+    description: 'Display diagrams like BPMN, DMN, Wardley Maps and Event Storming in your slidev',
     tags: ['Component'],
     author: {
       name: 'emaarco',
       link: 'https://github.com/emaarco',
     },
-    repo: 'https://github.com/emaarco/slidev-addon-bpmn',
-  },
-  {
-    id: 'slidev-addon-dmn',
-    name: 'DMN viewer',
-    description: 'Display DMN decision tables and DRD diagrams in your slidev',
-    tags: ['Component'],
-    author: {
-      name: 'emaarco',
-      link: 'https://github.com/emaarco',
-    },
-    repo: 'https://github.com/emaarco/slidev-addon-dmn',
+    repo: 'https://github.com/emaarco/slidev-addon-diagram-js',
   },
   {
     id: 'slidev-addon-p5',
@@ -285,7 +274,12 @@ export const community: AddonInfo[] = [
     id: 'slidev-addon-livecode',
     name: 'Live embedded VS Code IDE',
     description: 'Live VS Code IDE sessions in your Slidev presentations, powered by coderaft',
-    tags: ['Component', 'Integration', 'Tool', 'IDE'],
+    tags: [
+      'Component',
+      'Integration',
+      'Tool',
+      'IDE',
+    ],
     author: {
       name: 'Mickaël Alves',
       link: 'https://mickaelalves.dev/',
@@ -368,6 +362,28 @@ export const community: AddonInfo[] = [
       link: 'https://github.com/L-C-P',
     },
     repo: 'https://github.com/L-C-P/slidev-addon-obs',
+  },
+  {
+    id: 'slidev-addon-archify-explorer',
+    name: 'Archify Explorer',
+    description: 'Open interactive Archify diagrams from static previews in Slidev.',
+    tags: ['Diagram', 'Integration'],
+    author: {
+      name: 'Sergio Valverde',
+      link: 'https://github.com/svg153',
+    },
+    repo: 'https://github.com/svg153/slidev-archify-explorer',
+  },
+  {
+    id: 'slidev-addon-logi-spotlight',
+    name: 'Logi Spotlight',
+    description: 'Start the presentation from a Logitech Spotlight clicker and get its timer vibrations, like in Google Slides.',
+    tags: ['Integration'],
+    author: {
+      name: 'Erik Zaadi',
+      link: 'https://github.com/erikzaadi',
+    },
+    repo: 'https://github.com/erikzaadi/slidev-addon-logi-spotlight',
   },
   // Add yours here!
   {

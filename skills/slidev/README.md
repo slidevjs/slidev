@@ -10,6 +10,10 @@ npx skills add slidevjs/slidev
 
 This will add the Slidev skill to your Claude Code configuration.
 
+## Requirements
+
+Slidev itself needs [Node.js](https://nodejs.org) >= 22.12.0 and a package manager (pnpm recommended). The skill tells the agent to check for both before creating a project.
+
 ## What's Included
 
 The Slidev skill provides Claude Code with knowledge about:

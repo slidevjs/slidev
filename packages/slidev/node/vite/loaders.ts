@@ -200,6 +200,12 @@ export function createSlidesLoader(
 
       const length = Math.min(data.slides.length, newData.slides.length)
 
+      // Only titles are baked into `/@slidev/title-renderer.md`. Invalidating that
+      // virtual module on every content change dead-ends HMR under Vite 8 when the
+      // module is not self-accepting (#2784). Skip it unless a title (or slide count) changed.
+      const titlesChanged = data.slides.length !== newData.slides.length
+        || range(length).some(i => data.slides[i].title?.trim() !== newData.slides[i].title?.trim())
+
       for (let i = 0; i < length; i++) {
         const a = data.slides[i]
         const b = newData.slides[i]
@@ -236,7 +242,7 @@ export function createSlidesLoader(
       Object.assign(data, newData)
       Object.assign(utils, createDataUtils(options))
 
-      if (hmrSlidesIndexes.size > 0)
+      if (titlesChanged)
         moduleIds.add(templateTitleRendererMd.id)
 
       for (const idx of hmrSlidesIndexes) {
@@ -336,7 +342,9 @@ export function createSlidesLoader(
             // slide so runtime preloading actually receives them.
             images: slide.images ?? slide.source?.images,
             // remove raw content in build, optimize the bundle size
-            ...(mode === 'build' ? { raw: '', content: '', note: '' } : {}),
+            ...(mode === 'build'
+              ? { raw: '', content: '', note: '' }
+              : {}),
           }
           const fontmatter = getFrontmatter(idx)
 
@@ -369,7 +377,9 @@ export function createSlidesLoader(
               '  slide: {',
               `    ...(${JSON.stringify(slideBase)}),`,
               `    frontmatter,`,
-              `    filepath: ${JSON.stringify(mode === 'dev' ? slide.source.filepath : '')},`,
+              `    filepath: ${JSON.stringify(mode === 'dev'
+                ? slide.source.filepath
+                : '')},`,
               `    start: ${JSON.stringify(slide.source.start)},`,
               `    sourceIndex: ${JSON.stringify(slide.source.index)},`,
               `    id: ${idx},`,

@@ -6,6 +6,7 @@ import { computed } from 'vue'
 import setups from '#slidev/setups/context-menu'
 import { useDrawings } from '../composables/useDrawings'
 import { useNav } from '../composables/useNav'
+import { configs } from '../env'
 import { fullscreen, showEditor, toggleOverview } from '../state'
 
 // @unocss-include
@@ -79,6 +80,7 @@ export default () => {
         icon: 'i-carbon:pen',
         label: drawingEnabled.value ? 'Hide drawing toolbar' : 'Show drawing toolbar',
         action: () => (drawingEnabled.value = !drawingEnabled.value),
+        show: __SLIDEV_FEATURE_DRAWINGS__ && (!configs.drawings.presenterOnly || isPresenter.value),
       },
       {
         icon: 'i-carbon:apps',

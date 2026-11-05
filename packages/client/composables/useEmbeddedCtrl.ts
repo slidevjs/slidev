@@ -31,7 +31,13 @@ export function useEmbeddedControl() {
 
   if (nav.isEmbedded.value) {
     throttledWatch(
-      [nav.currentSlideNo, nav.clicks, nav.hasNext, nav.hasPrev, nav.hasPrimarySlide],
+      [
+        nav.currentSlideNo,
+        nav.clicks,
+        nav.hasNext,
+        nav.hasPrev,
+        nav.hasPrimarySlide,
+      ],
       ([no, clicks, hasNext, hasPrev, hasPrimarySlide]) => {
         if (!hasPrimarySlide)
           return
