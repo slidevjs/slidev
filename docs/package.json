@@ -1,7 +1,7 @@
 {
   "name": "@slidev/docs",
   "type": "module",
-  "version": "53.0.0",
+  "version": "53.1.0",
   "license": "MIT",
   "funding": "https://github.com/sponsors/antfu",
   "homepage": "https://sli.dev",
