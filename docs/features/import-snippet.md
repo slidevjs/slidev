@@ -46,3 +46,15 @@ Note that you can use `{*}` as a placeholder of <LinkInline link="features/line-
 ```md
 <<< @/snippets/snippet.js {*}{lines:true}
 ```
+
+If you want to include (or skip) several parts of a file, [Asciidoc tags](https://docs.asciidoctor.org/asciidoc/latest/directives/include-tagged-regions/) are also supported, using the following syntax:
+
+```md
+<<< @/snippets/snippet.js#tag=foo
+```
+
+or
+
+```md
+<<< @/snippets/snippet.js#tags=foo;bar
+```
