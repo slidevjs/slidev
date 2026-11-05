@@ -14,6 +14,7 @@ const RE_HEADING = /^(#+) (.*)$/m
 const RE_CODE_BLOCK = /^```[\s\S]+?^```/gm
 const RE_LEADING_BACKTICKS = /^\s*`+/
 const RE_CRLF = /\r?\n/g
+const RE_BOM = /^﻿/
 
 export interface SlidevParserOptions {
   noParseYAML?: boolean
@@ -241,6 +242,8 @@ export async function parse(
   extensions?: SlidevPreparserExtension[],
   options: SlidevParserOptions = {},
 ): Promise<SlidevMarkdown> {
+  // a leading UTF-8 BOM would hide the headmatter, as the first line no longer starts with `---`
+  markdown = markdown.replace(RE_BOM, '')
   const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 
@@ -347,6 +350,7 @@ export function parseSync(
   filepath: string,
   options: SlidevParserOptions = {},
 ): SlidevMarkdown {
+  markdown = markdown.replace(RE_BOM, '')
   const lines = markdown.split(options.preserveCR ? '\n' : RE_CRLF)
   const slides: SourceSlideInfo[] = []
 

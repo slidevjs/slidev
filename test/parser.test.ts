@@ -138,6 +138,19 @@ f
     expect(data.slides[1].title).toBe(undefined)
   })
 
+  it('ignores a leading UTF-8 BOM', async () => {
+    const markdown = '﻿---\ntheme: seriph\ntitle: Hello\n---\n\n# Slide 1\n\n---\n\n# Slide 2\n'
+
+    const data = await parse(markdown, 'file.md')
+    expect(data.slides.map(i => i.content.trim())).toEqual(['# Slide 1', '# Slide 2'])
+    expect(data.slides[0].frontmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+
+    const userRoot = resolve(__dirname, 'fixtures/markdown')
+    const filepath = slash(resolve(userRoot, 'bom.md'))
+    const loaded = await load({ userRoot, roots: [userRoot] }, filepath, { [filepath]: markdown })
+    expect(loaded.headmatter).toEqual({ theme: 'seriph', title: 'Hello' })
+  })
+
   it('ignores slide separators inside HTML comments', async () => {
     const data = await parse(`---
 src: ./pages/one.md

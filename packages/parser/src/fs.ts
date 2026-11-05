@@ -25,7 +25,7 @@ export function isPathInsideRoots(filePath: string, roots: string[]): boolean {
   })
 }
 
-const RE_FRONTMATTER_START = /^---(?:[^-].*)?$/
+const RE_FRONTMATTER_START = /^﻿?---(?:[^-].*)?$/
 const RE_BLANK_LINE = /^\s*$/
 const RE_FRONTMATTER_END = /^---$/
 const RE_CRLF = /\r?\n/g
