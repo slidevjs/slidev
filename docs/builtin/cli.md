@@ -70,7 +70,12 @@ Export slides to PDF (or other format). See <LinkInline link="guide/exporting" /
 Options:
 
 - `--output` (`string`, default: use `exportFilename` (see https://sli.dev/custom/#headmatter) or use `[entry]-export`): path to the output.
-- `--format` (`'pdf', 'png', 'pptx', 'pptx-editable', 'md'`, default: `'pdf'`): output format. `pptx` exports each slide as an image; `pptx-editable` rebuilds them as native PowerPoint shapes with selectable text.
+- `--format` (`'pdf', 'png', 'pptx', 'pptx-editable', 'md', 'html'`, default: `'pdf'`): output format. `pptx` exports each slide as an image; `pptx-editable` rebuilds them as native PowerPoint shapes with selectable text. `html` creates one interactive, standalone file without Playwright.
+- `--without-notes` (`boolean`, HTML only): exclude speaker notes from the HTML artifact.
+- `--allow-remote` (`boolean`, default: `false`, HTML only): retain HTTP(S) resources and online embeds instead of downloading them. Export warns that connectivity is required. Use `--no-allow-remote` to override a headmatter opt-in.
+- `--max-bytes` (`number`, HTML only): maximum final HTML file size in bytes; an oversized export fails without replacing an existing file.
+- `--image-max-width`, `--image-max-height` (`number`, HTML only): maximum embedded raster image dimensions without upscaling.
+- `--image-quality` (`number`, HTML only): JPEG/WebP/AVIF quality from 1 to 100. Image processing is opt-in and does not modify sources.
 - `--timeout` (`number`, default: `30000`): timeout for rendering the print page (see https://playwright.dev/docs/api/class-page#page-goto).
 - `--range` (`string`): page ranges to export (example: `'1,4-5,6'`).
 - `--dark` (`boolean`, default: `false`): export as dark theme.

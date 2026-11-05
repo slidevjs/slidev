@@ -77,6 +77,16 @@ export async function resolveOptions(
   if (entryOptions.routerMode)
     config.routerMode = entryOptions.routerMode
 
+  if (entryOptions.singleFile) {
+    config.routerMode = 'hash'
+    config.download = false
+    config.pwa = false
+    config.preloadImages = false
+    config.wakeLock = false
+    if (entryOptions.dark)
+      config.colorSchema = 'dark'
+  }
+
   debug({
     ...rootsInfo,
     ...entryOptions,

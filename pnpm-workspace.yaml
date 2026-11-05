@@ -45,6 +45,7 @@ allowBuilds:
   esbuild: true
   keytar: true
   playwright-chromium: true
+  sharp: true
   simple-git-hooks: true
   typeit: true
   unrs-resolver: true
@@ -157,19 +158,25 @@ catalogs:
     markdown-it-github-alerts: ^1.0.1
     minimist: ^1.2.8
     mlly: ^1.8.2
+    mrmime: ^2.0.1
     obug: ^3.0.0
     open: ^11.0.4
     package-manager-detector: ^1.9.0
+    parse5: ^7.3.0
     pathe: ^2.0.3
     pdf-lib: ^1.17.1
     picomatch: ^4.0.7
+    postcss: ^8.5.31
     postcss-nested: ^9.0.1
+    postcss-value-parser: ^4.2.0
     pptxgenjs: ^4.0.1
     prompts: ^2.4.2
     public-ip: ^8.0.0
     resolve-global: ^2.0.0
+    sharp: ^0.34.5
     sirv: ^3.0.2
     source-map-js: ^1.2.2
+    srcset: ^5.0.3
     tinyexec: ^1.3.1
     unocss: ^66.12.0
     unplugin-icons: ^24.0.0
@@ -182,6 +189,7 @@ catalogs:
     vite-plugin-inspect: ^12.1.0
     vite-plugin-pwa: ^2.0.0
     vite-plugin-remote-assets: ^2.1.0
+    vite-plugin-singlefile: ^2.3.4
     vite-plugin-static-copy: ^4.1.1
     vite-plugin-vue-server-ref: ^1.0.0
     vitefu: ^1.1.3

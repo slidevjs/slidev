@@ -4,9 +4,9 @@ outline: deep
 
 # Exporting
 
-Usually the slides are displayed in a web browser, but you can also export them to PDF, PPTX, PNG, or Markdown files for sharing or printing. This feature is available through the CLI command [`slidev export`](../builtin/cli#export).
+Usually the slides are displayed in a web browser, but you can also export them to PDF, PPTX, PNG, Markdown, or standalone HTML files for sharing or printing. This feature is available through the CLI command [`slidev export`](../builtin/cli#export).
 
-However, interactive features in your slides may not be available in the exported files. You can build and host your slides as a web application to keep the interactivity. See [Building and Hosting](./hosting) for more information.
+Interactive features may not be available in static exports. Standalone HTML preserves local interactivity without hosting. You can also build and host your slides as a web application. See [Building and Hosting](./hosting) for more information.
 
 ## The Browser Exporter <Badge> Recommended </Badge> {#browser}
 
@@ -49,6 +49,76 @@ $ deno add -D npm:playwright-chromium
 :::
 
 ## Formats
+
+### Standalone HTML
+
+Export the presentation as one interactive HTML file that recipients can open directly in a modern browser, without installing Slidev or running a server:
+
+```bash
+$ slidev export --format html
+$ slidev export --format html --output presentation.html --without-notes
+```
+
+HTML export uses the production build pipeline and does **not** require Playwright. JavaScript, CSS, supported static assets, fonts, and local media are embedded in the file. Identical asset payloads are stored only once. Navigation uses hash routing; click reveals, animations, and local component interactions remain interactive.
+
+Speaker notes are included by default, just as in a normal build. Use `--without-notes` before distributing a deck with private notes. Review redistribution rights for embedded fonts, images, and media.
+
+#### File Size and Images
+
+Set a hard limit on the final, uncompressed HTML file size, in bytes:
+
+```bash
+$ slidev export --format html --max-bytes 8000000
+$ slidev export --format html --max-bytes 8000000 --image-max-width 1920 --image-max-height 1080 --image-quality 85
+```
+
+Or configure defaults in headmatter:
+
+```yaml
+---
+export:
+  html:
+    maxBytes: 8000000
+    images:
+      maxWidth: 1920
+      maxHeight: 1080
+      quality: 85
+---
+```
+
+CLI flags override individual headmatter settings. No size cap or image transformation is enabled by default. `maxBytes` includes base64 encoding, application code, fonts, and all other HTML overhead. Exactly the specified number of bytes is allowed. An oversized export fails with asset-size diagnostics and preserves an existing destination file; it never silently lowers quality or removes content.
+
+Image dimensions are positive integers and preserve aspect ratio without upscaling. `quality` is an integer from 1 to 100 for JPEG, WebP, and AVIF. PNG resizing is lossless; SVG and animated images are not rasterized or flattened. Resizing JPEG requires an explicit quality. WebP/AVIF use lossless encoding when no quality is specified. Sources are never modified, and audio/video are not recompressed. A deck containing large media may not fit the requested budget.
+
+#### Online Resources
+
+By default, HTML export embeds supported static resources and rejects known live embeds. To retain online resources, enable `allowRemote`:
+
+```bash
+$ slidev export --format html --allow-remote
+```
+
+Or configure the headmatter:
+
+```yaml
+---
+export:
+  html:
+    allowRemote: true
+---
+```
+
+With this option, HTTP(S) resources remain online instead of being downloaded. This includes remote images, fonts, stylesheets, scripts, media, and embedded documents. YouTube, Tweets, BlueSky, and remote iframes are permitted. Protocol-relative resource URLs use HTTPS. Local assets remain embedded. Export prints a connectivity warning, and the resulting file is not guaranteed to work offline. Remote services can still reject embedding through their own browser policies.
+
+Use `--no-allow-remote` to override a headmatter opt-in. The option applies only to HTML export. Image processing applies only to embedded images, and `maxBytes` measures the HTML file, not its retained remote resources. Missing local assets, local embedded documents, `srcdoc`, unresolved worker/application chunks, and custom CSP/base tags remain errors.
+
+#### Offline Limitations
+
+Without `allowRemote`, known live embeds such as YouTube, Tweets, and iframes, external scripts, and embedded documents are rejected. Configured web-font stylesheets and other supported declared static resources are downloaded during export, so the build machine may need internet access. Downloads are bounded to 30 seconds per resource, 32 MiB per resource, and 128 MiB total.
+
+Normal hyperlinks remain links. Arbitrary component-generated network requests, dynamically constructed asset paths, nested external resources inside custom assets, and cross-window presenter synchronization are not guaranteed offline. Use local data and supported static asset references, and test the delivered HTML with networking disabled. Standalone HTML is not a PWA and does not include service workers, hosting redirects, or an automatically generated PDF.
+
+HTML exports the whole deck with its reveals. Print-only flags such as `--range`, `--with-clicks`, `--with-toc`, `--per-slide`, and rendering timing/scale options do not apply. Explicit HTML-only flags are rejected for other export formats.
 
 ### PDF
 

@@ -45,9 +45,13 @@ high-confidence security + correctness, then larger refactors. You may cherry-pi
 | 023 | Decompose god functions in `export.ts`/`cli.ts` | P3 | L | MED | 022 | TODO |
 | 024 | Incremental HMR parse cache | P3 | L | MED | — | TODO |
 | 025 | Guard `skills/`-vs-`docs/` drift in CI | P3 | S-M | LOW | — | TODO |
+| 026 | Standalone interactive HTML export | P2 | L | MED-HIGH | — | DONE (implemented; baseline workflow lint remains) |
 
 Status values: `TODO` | `IN PROGRESS` | `DONE` | `BLOCKED` (one-line reason) |
 `REJECTED` (one-line rationale).
+
+Plan [026](026-standalone-html-export.md) is a separately requested feature proposal,
+prepared on 2026-11-04 against Slidev v53.0.0, not part of the July audit above.
 
 ## Recommended first wave
 

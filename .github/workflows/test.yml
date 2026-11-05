@@ -104,6 +104,9 @@ jobs:
       - name: Hack Cypress
         run: cp pnpm-lock.yaml package-lock.json
 
+      - name: Standalone HTML smoke
+        run: pnpm test:html
+
       - name: Cypress
         uses: cypress-io/github-action@18016a55674bd02cabf197de5762a1710cb5577c # v7.4.9
         with:
